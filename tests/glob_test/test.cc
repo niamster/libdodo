@@ -18,7 +18,7 @@ hook(dodoBase *base,
 	__collectedData data = sql->getCollectedData();
 	data.pre_limNumber = "70";
 	data.pre_fieldsNames[0] = std::string((char *)yep);
-	//sql->restore();
+	sql->restore();
 }
 
 void 
