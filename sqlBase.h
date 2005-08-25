@@ -1,0 +1,98 @@
+/***************************************************************************
+ *            sqlBase.h
+ *
+ *  Mon Jul 18 19:13:33 2005
+ *  Copyright  2005  Ni@m
+ *  niam.niam@gmail.com
+ ****************************************************************************/
+
+/*
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+ 
+#ifndef _SQLBASE_H_
+#define _SQLBASE_H_
+
+#include "directives.h"
+#include "types.h"
+#include "sqlBaseEx.h"
+#include "dodoBase.h"
+#include "tools.h"
+#include "base.h"
+
+namespace dodo
+{
+	struct __sqlStatements 
+	{
+		std::string str;
+	};
+
+	/**
+	* class to provide wide abilities for sql manipulations
+	*/
+	class sqlBase : virtual public dodoBase, virtual public base
+	{
+		friend class sqlBaseEx;///class of exception
+		public:
+			virtual sqlBase *getSelf();
+			/*
+			* constructors and destructors
+			*/
+			sqlBase();	
+			virtual ~sqlBase();
+			/**
+			* performs query collect from collected data;
+			* it doesn't clean collected data
+			*/
+			virtual std::string queryCollect() const;///collect data into query
+			/**
+			* returns string in exist()
+			*/	
+			static std::string exists(std::string statement);
+			static std::string noexists(std::string statement);
+		
+		protected:		
+			static inline std::string escapeFields(const std::string &a_data);
+			static inline std::string escapeFieldsNames(const std::string &a_data);
+			/**
+			* functions to collect data into query after
+			*/		
+			virtual void selectCollect() const;
+			virtual void insertCollect() const;
+			virtual void insertSelectCollect() const;
+			virtual void updateCollect() const;     
+			virtual void delCollect() const;
+			virtual void useCollect() const;
+			virtual void subCollect() const;///union(union all), minus, intersect
+			/**
+			* adds to the end of request additional data collection for query
+			*/
+			virtual void additionalCollect(unsigned int qTypeTocheck, std::string collectedString) const;
+			/**
+			* return string that consists of collected data for request inside
+			*/
+			virtual std::string insideAddCollect(unsigned int sqlAddEnumArr[], __sqlStatements sqlAddArr[], int qTypeShift) const;
+			/**
+			* return string that consists of collected data for request inside(DB-dependent)
+			*/
+			virtual std::string insideAddCollect(std::list<std::string> &statements, int qTypeShift) const;
+		
+			///creates string from fields' names and 'em values
+			static std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames);
+			
+			mutable std::string request;///ready sql statement
+	};
+};
+#endif /* _SQLBASE_H_ */
