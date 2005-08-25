@@ -55,7 +55,6 @@ int main(int argc, char **argv)
 		
 		pp.setSqlInfo("test","",3306,"","Dmitrik");
 		pp.connect();
-		
 		std::vector<std::string> fields;
 		fields.push_back("date");
 		fields.push_back("operation");
