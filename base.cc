@@ -344,6 +344,14 @@ base::use(std::string db)
 }
 
 //-------------------------------------------------------------------
+void
+base::truncate(std::string table)
+{
+	qType = TRUNCATE;
+	pre_table = table;
+	show = false;
+}
+//-------------------------------------------------------------------
 
 void 
 base::where(std::string where) const

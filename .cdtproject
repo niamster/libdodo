@@ -7,7 +7,7 @@
 <data>
 <item id="org.eclipse.cdt.core.pathentry">
 <pathentry include="/opt/mysql/include/mysql/" kind="inc" path="" system="true"/>
-<pathentry base-path="libdodo" include="" kind="inc" path=""/>
+<pathentry base-path="libdodo" excluding=".svn/|tests/" include="" kind="inc" path="" system="true"/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
 <pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>

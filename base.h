@@ -74,7 +74,8 @@ namespace dodo
 		INSERT_SELECT,
 		UPDATE,
 		DELETE,
-		USE
+		USE,
+		TRUNCATE
 	};
 	enum sqlAddSelEnum
 	{
@@ -278,6 +279,10 @@ namespace dodo
 			* change db
 			*/
 			virtual void use(std::string db);
+			/**
+			 * truncates table
+			 */
+			 virtual void truncate(std::string table);
 			/**
 			* add where statement
 			*/
