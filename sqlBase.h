@@ -76,6 +76,7 @@ namespace dodo
 			virtual void delCollect() const;
 			virtual void useCollect() const;
 			virtual void subCollect() const;///union(union all), minus, intersect
+			virtual void truncateCollect() const;
 			/**
 			* adds to the end of request additional data collection for query
 			*/

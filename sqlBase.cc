@@ -350,6 +350,14 @@ sqlBase::subCollect() const
 
 //-------------------------------------------------------------------
 
+void 
+sqlBase::truncateCollect() const
+{
+	request = "truncate " + pre_table;
+}
+
+//-------------------------------------------------------------------
+
 std::string
 sqlBase::queryCollect() const
 {	
@@ -382,6 +390,10 @@ sqlBase::queryCollect() const
 		case MINUS:
 		case INTERSECT:
 			subCollect();
+			additionalActions = false;
+			break;
+		case TRUNCATE:
+			truncateCollect();
 			additionalActions = false;
 			break;
 		default:
