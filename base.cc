@@ -344,6 +344,7 @@ base::use(std::string db)
 }
 
 //-------------------------------------------------------------------
+
 void
 base::truncate(std::string table)
 {
@@ -351,6 +352,43 @@ base::truncate(std::string table)
 	pre_table = table;
 	show = false;
 }
+
+//-------------------------------------------------------------------
+
+void 
+base::renameDb(std::string db)
+{
+	qType = RENAME_DB;
+	pre_order = db;
+	show = false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+base::renameTable(std::string table, 
+				std::string db)
+{
+	qType = RENAME_TABLE;
+	pre_table = table;
+	pre_order = db;
+	show = false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+base::renameField(std::string field, 
+				std::string table, 
+				std::string db)
+{
+	qType = RENAME_FIELD;
+	pre_tableTo = field;
+	pre_table = table;
+	pre_order = db;
+	show = false;
+}
+
 //-------------------------------------------------------------------
 
 void 

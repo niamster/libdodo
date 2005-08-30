@@ -75,7 +75,10 @@ namespace dodo
 		UPDATE,
 		DELETE,
 		USE,
-		TRUNCATE
+		TRUNCATE,
+		RENAME_DB,
+		RENAME_TABLE,
+		RENAME_FIELD
 	};
 	enum sqlAddSelEnum
 	{
@@ -280,6 +283,18 @@ namespace dodo
 			*/
 			virtual void use(std::string db);
 			/**
+			 * renames database
+			*/
+			virtual void renameDb(std::string db);
+			/**
+			 * renames table
+			*/
+			virtual void renameTable(std::string table, std::string db="");
+			/**
+			 * renames field
+			*/ 
+			virtual void renameField(std::string field, std::string table, std::string db="");
+			/**
 			 * truncates table
 			 */
 			 virtual void truncate(std::string table);
@@ -373,13 +388,14 @@ namespace dodo
 			virtual void cleanCollect() const;///clean collected data
 			/**
 			* collected data
+			* some of variables can be used not only as they are named. See comments/ Some variables can hold another data, to save space
 			*/
 			mutable std::string pre_where;///string of where statement
 			mutable stringArr pre_fieldsNames;///array of string with fields' names(can be used for `insert_select` as pre_fieldsNamesTo)
 			mutable stringArr pre_fieldsVal;///array of string with fields' values(accordingly to pre_fieldsNames)(can be used for `insert_select` as pre_fieldsNamesFrom)
 			mutable std::string pre_table;///string of table name(can be used for `insert_select` as tableFrom)
-			mutable std::string pre_tableTo;///string of tableTo name(insert_select)
-			mutable std::string pre_order;///string of order statement
+			mutable std::string pre_tableTo;///string of tableTo name(insert_select)(also can be used as 'field' for renameField)
+			mutable std::string pre_order;///string of order statement(also can be used as 'db' for renameField,renameDb,renametable)
 			mutable std::string pre_having;///string of having statement
 			mutable std::string pre_group;///string of group statement
 			mutable std::string pre_limOffset;///number for offset in limit

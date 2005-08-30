@@ -27,7 +27,7 @@ journal(dodoBase *base,
 		void *yep)
 {
 	mysqlpp *child = reinterpret_cast<mysqlpp *>(base);
-	
+
 	switch (child->getQType())
 	{
 		case INSERT:
