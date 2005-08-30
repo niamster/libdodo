@@ -78,7 +78,10 @@ namespace dodo
 		TRUNCATE,
 		RENAME_DB,
 		RENAME_TABLE,
-		RENAME_FIELD
+		RENAME_FIELD,
+		DELETE_DB,
+		DELETE_TABLE,
+		DELETE_FIELD
 	};
 	enum sqlAddSelEnum
 	{
@@ -295,6 +298,18 @@ namespace dodo
 			*/ 
 			virtual void renameField(std::string field, std::string table, std::string db="");
 			/**
+			 * deletes database
+			*/
+			virtual void deleteDb(std::string db);
+			/**
+			 * deletes table
+			*/
+			virtual void deleteTable(std::string table, std::string db="");
+			/**
+			 * deletes field
+			*/ 
+			virtual void deleteField(std::string field, std::string table, std::string db="");			
+			/**
 			 * truncates table
 			 */
 			 virtual void truncate(std::string table);
@@ -393,9 +408,9 @@ namespace dodo
 			mutable std::string pre_where;///string of where statement
 			mutable stringArr pre_fieldsNames;///array of string with fields' names(can be used for `insert_select` as pre_fieldsNamesTo)
 			mutable stringArr pre_fieldsVal;///array of string with fields' values(accordingly to pre_fieldsNames)(can be used for `insert_select` as pre_fieldsNamesFrom)
-			mutable std::string pre_table;///string of table name(can be used for `insert_select` as tableFrom)
-			mutable std::string pre_tableTo;///string of tableTo name(insert_select)(also can be used as 'field' for renameField)
-			mutable std::string pre_order;///string of order statement(also can be used as 'db' for renameField,renameDb,renametable)
+			mutable std::string pre_table;///string of table name(can be used for `insert_select` as tableFrom)also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table)
+			mutable std::string pre_tableTo;///string of tableTo name(insert_select)(also can be used as 'field' for rename(delete)Field)
+			mutable std::string pre_order;///string of order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table)
 			mutable std::string pre_having;///string of having statement
 			mutable std::string pre_group;///string of group statement
 			mutable std::string pre_limOffset;///number for offset in limit

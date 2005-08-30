@@ -392,6 +392,41 @@ base::renameField(std::string field,
 //-------------------------------------------------------------------
 
 void 
+base::deleteDb(std::string db)
+{
+	qType = DELETE_DB;
+	pre_order = db;
+	show = false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+base::deleteTable(std::string table, 
+				std::string db)
+{
+	qType = DELETE_TABLE;
+	pre_table = table;
+	pre_order = db;
+	show = false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+base::deleteField(std::string field, 
+				std::string table, 
+				std::string db)
+{
+	qType = DELETE_FIELD;
+	pre_tableTo = field;
+	pre_table = table;
+	pre_order = db;
+	show = false;
+}
+//-------------------------------------------------------------------
+
+void 
 base::where(std::string where) const
 {
 	pre_where = where;
