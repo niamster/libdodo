@@ -1,12 +1,10 @@
 Implement in sqlBase:
 
 	rename table, db, field;
+	create db, table, field;
+	remove db, table, field;
 	
 add support for berkley db(just try =))
-
-add possibility to create db, table, field;
-add possibility to drop them
-
 
 and inplement them all at first i sqlBase!!
 

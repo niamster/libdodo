@@ -41,8 +41,10 @@ dummyHook(dodoBase *base, void *data)
 
 //-------------------------------------------------------------------
 
-xexec::xexec():safeHooks(true)
+xexec::xexec() : safeHooks(true)
 {
+	preExec.execDisabled = false;
+	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -79,8 +81,7 @@ xexec::setStatXExec(std::vector<__execItem> &list,
 		unsigned int position,
 		bool stat) const
 {
-	position--;
-	if (position <= list.size())
+	if ((position-1) <= list.size())
 		list[position].enabled = stat;	
 }
 
@@ -90,7 +91,7 @@ inline void
 xexec::delXExec(std::vector<__execItem> &list, 
 		unsigned int position) const
 {
-	position--;
+	--position;
 	if (list[position].present && (position <= list.size()))
 	{
 		list[position].func = dummyHook;
@@ -107,7 +108,7 @@ xexec::addPreExec(inExec func,
  				dodoBase *obj,
 				void *data) const
 {
-	return addXExec(preExec,func,obj,data);
+	return addXExec(preExec.exec,func,obj,data);
 }
 
 //-------------------------------------------------------------------
@@ -115,7 +116,7 @@ xexec::addPreExec(inExec func,
 void 
 xexec::disablePreExec(unsigned int position) const
 {
-	setStatXExec(preExec,position,false);
+	setStatXExec(preExec.exec,position,false);
 }
 
 //-------------------------------------------------------------------
@@ -123,7 +124,7 @@ xexec::disablePreExec(unsigned int position) const
 void 
 xexec::delPreExec(unsigned int position) const
 {
-	delXExec(preExec,position);
+	delXExec(preExec.exec,position);
 }
 
 //-------------------------------------------------------------------
@@ -131,7 +132,7 @@ xexec::delPreExec(unsigned int position) const
 void 
 xexec::enablePreExec(unsigned int position) const
 {
-	setStatXExec(preExec,position,true);
+	setStatXExec(preExec.exec,position,true);
 }
 
 //-------------------------------------------------------------------
@@ -141,7 +142,7 @@ xexec::addPostExec(inExec func,
  				dodoBase *obj,
 				void *data) const
 {
-	addXExec(postExec,func,obj,data);
+	addXExec(postExec.exec,func,obj,data);
 }
 
 //-------------------------------------------------------------------
@@ -149,7 +150,7 @@ xexec::addPostExec(inExec func,
 void 
 xexec::disablePostExec(unsigned int position) const
 {
-	setStatXExec(postExec,position,false);
+	setStatXExec(postExec.exec,position,false);
 }
 
 //-------------------------------------------------------------------
@@ -157,7 +158,7 @@ xexec::disablePostExec(unsigned int position) const
 void 
 xexec::delPostExec(unsigned int position) const
 {
-	delXExec(postExec,position);
+	delXExec(postExec.exec,position);
 }
 
 //-------------------------------------------------------------------
@@ -165,18 +166,7 @@ xexec::delPostExec(unsigned int position) const
 void 
 xexec::enablePostExec(unsigned int position) const
 {
-	setStatXExec(postExec,position,true);
-}
-
-//-------------------------------------------------------------------
-
-inline void 
-xexec::setStatAllXExec(std::vector<__execItem> &list,
-				bool stat) const
-{
-	register std::vector<__execItem>::iterator i(list.begin()),j(list.end());
-	for (;i!=j;++i)
-		i->enabled = stat;
+	setStatXExec(postExec.exec,position,true);
 }
 
 //-------------------------------------------------------------------
@@ -184,7 +174,7 @@ xexec::setStatAllXExec(std::vector<__execItem> &list,
 void 
 xexec::enableAllPreExec() const
 {
-	setStatAllXExec(preExec,true);
+	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -192,7 +182,7 @@ xexec::enableAllPreExec() const
 void
 xexec::enableAllPostExec() const
 {
-	setStatAllXExec(postExec,true);
+	postExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -200,7 +190,7 @@ xexec::enableAllPostExec() const
 void 
 xexec::disableAllPreExec() const
 {
-	setStatAllXExec(preExec,false);	
+	preExec.execDisabled = true;
 }
 
 //-------------------------------------------------------------------
@@ -208,7 +198,25 @@ xexec::disableAllPreExec() const
 void 
 xexec::disableAllPostExec() const
 {
-	setStatAllXExec(postExec,false);
+	postExec.execDisabled = true;
+}
+
+//-------------------------------------------------------------------
+
+void 
+xexec::disableAll() const
+{
+	postExec.execDisabled = true;
+	preExec.execDisabled = true;
+}
+
+//-------------------------------------------------------------------
+
+void 
+xexec::enableAll() const
+{
+	postExec.execDisabled = false;
+	preExec.execDisabled = false;
 }
 
 //-------------------------------------------------------------------
@@ -219,7 +227,7 @@ xexec::replacePostExec(unsigned int position,
  				dodoBase *obj,
 				void *data) const
 {
-	return replaceXExec(postExec,position,func,obj,data);
+	return replaceXExec(postExec.exec,position,func,obj,data);
 }
 
 //-------------------------------------------------------------------
@@ -230,7 +238,7 @@ xexec::replacePreExec(unsigned int position,
  				dodoBase *obj,
 				void *data) const
 {
-	return replaceXExec(preExec,position,func,obj,data);
+	return replaceXExec(preExec.exec,position,func,obj,data);
 }
 
 //-------------------------------------------------------------------
@@ -242,7 +250,7 @@ xexec::replaceXExec(std::vector<__execItem> &list,
  			dodoBase *obj,
 			void *data) const
 {
-	position--;
+	--position;
 	if (position <= list.size())
 	{
 		list[position].func = func;
@@ -257,9 +265,11 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 
 //-------------------------------------------------------------------
 void 
-xexec::performXExec(std::vector<__execItem> &list) const
+xexec::performXExec(__execItemList &list) const
 {
-	std::vector<__execItem>::const_iterator i(list.begin()),j(list.end());
+	if (list.execDisabled)
+		return ;
+	std::vector<__execItem>::const_iterator i(list.exec.begin()),j(list.exec.end());
 	for (;i!=j;++i)
 		if (i->present && i->enabled)
 		{

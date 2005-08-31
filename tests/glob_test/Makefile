@@ -1,5 +1,7 @@
+GCC_PATH=/opt/gcc-3.4.3/
+
 LIBTOOL = libtool
-CXX = g++
+CXX = $(GCC_PATH)/bin/g++
 CFLAGS=-O3 -march=pentium4
 
 override DEFINES:=$(DEFINES)

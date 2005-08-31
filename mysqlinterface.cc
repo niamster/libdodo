@@ -187,7 +187,7 @@ mysqlpp::unsetMyAddDelSt(unsigned int statement)
 #else
 	bool
 #endif 
-mysqlpp::connect() const
+mysqlpp::connect(unsigned long type) const
 {
 	if (connected)
 		disconnect();
@@ -198,7 +198,7 @@ mysqlpp::connect() const
 		sqlInfo.db.size()==0?NULL:sqlInfo.db.c_str(),
 		sqlInfo.port,
 		sqlInfo.socket.size()==0?NULL:sqlInfo.socket.c_str(),
-		CLIENT_MULTI_STATEMENTS))
+		type))
 	{
 		connected = false;
 		err = "mysql_real_connect(): ";

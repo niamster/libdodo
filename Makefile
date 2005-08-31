@@ -1,5 +1,6 @@
-LIBTOOL = libtool
-CXX = g++
+GCC_PATH=/opt/gcc-3.4.3/
+
+CXX = $(GCC_PATH)/bin/g++
 CFLAGS=-O3 -fmove-all-movables -march=pentium4
 OBJECTS=base.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o
 
@@ -20,7 +21,7 @@ VERSION = 0
 MINOR = 1
 
 $(LIBRARY): $(OBJECTS)
-	$(LIBTOOL) --mode=link $(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,lib$@.so.$(VERSION).$(MINOR) -o lib$@.so.$(VERSION).$(MINOR) $^
+	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,lib$@.so.$(VERSION).$(MINOR) -o lib$@.so.$(VERSION).$(MINOR) $^
 	ln -fs lib$@.so.$(VERSION).$(MINOR) lib$@.so
 	ldconfig -n ./
 .cc.o:

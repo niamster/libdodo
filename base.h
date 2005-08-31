@@ -74,14 +74,22 @@ namespace dodo
 		INSERT_SELECT,
 		UPDATE,
 		DELETE,
+		
 		USE,
+		
 		TRUNCATE,
+		
 		RENAME_DB,
 		RENAME_TABLE,
 		RENAME_FIELD,
+		
 		DELETE_DB,
 		DELETE_TABLE,
-		DELETE_FIELD
+		DELETE_FIELD,
+		
+		CREATE_DB,
+		CREATE_TABLE,
+		CREATE_FIELD		
 	};
 	enum sqlAddSelEnum
 	{
@@ -308,7 +316,19 @@ namespace dodo
 			/**
 			 * deletes field
 			*/ 
-			virtual void deleteField(std::string field, std::string table, std::string db="");			
+			virtual void deleteField(std::string field, std::string table, std::string db="");
+			/**
+			 * creates database
+			*/
+			virtual void createDb(std::string db);
+			/**
+			 * creates table
+			*/
+			virtual void createTable(std::string table, std::string db="");
+			/**
+			 * creates field
+			*/ 
+			virtual void createField(std::string field, std::string table, std::string db="");						
 			/**
 			 * truncates table
 			 */

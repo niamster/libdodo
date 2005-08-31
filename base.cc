@@ -424,6 +424,43 @@ base::deleteField(std::string field,
 	pre_order = db;
 	show = false;
 }
+
+//-------------------------------------------------------------------
+
+void 
+base::createDb(std::string db)
+{
+	qType = CREATE_DB;
+	pre_order = db;
+	show = false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+base::createTable(std::string table, 
+				std::string db)
+{
+	qType = CREATE_TABLE;
+	pre_table = table;
+	pre_order = db;
+	show = false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+base::createField(std::string field, 
+				std::string table, 
+				std::string db)
+{
+	qType = CREATE_FIELD;
+	pre_tableTo = field;
+	pre_table = table;
+	pre_order = db;
+	show = false;
+}
+
 //-------------------------------------------------------------------
 
 void 

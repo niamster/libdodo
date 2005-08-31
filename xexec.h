@@ -52,6 +52,12 @@ namespace dodo
 		bool restore;///to restore or not data after execution
 	};
 
+	struct __execItemList
+	{
+		std::vector<__execItem> exec;
+		bool execDisabled;
+	};
+
 	/**
 	* class to provide wide abilities exec manipulations
 	* pre, post execs.
@@ -82,15 +88,22 @@ namespace dodo
 			* enable or disable hooks
 			* usefull when u don't want to make cyclic hook using for examle exec in hook from the class that called that hook
 			* in that case u have to disable
+			* if u called disable(enable)Post(Pre)Exec and then enable(disable)AllPre(Post)Exec = it won't be enabled(disabled)[it'll keep it's state!!!]
 			*/
 			virtual void disablePostExec(unsigned int position) const;
 			virtual void disablePreExec(unsigned int position) const;
+			
 			virtual void enablePostExec(unsigned int position) const;
 			virtual void enablePreExec(unsigned int position) const;
+			
 			virtual void enableAllPreExec() const;
 			virtual void enableAllPostExec() const;
 			virtual void disableAllPreExec() const;
 			virtual void disableAllPostExec() const;
+			
+			virtual void disableAll() const;
+			virtual void enableAll() const;
+			
 			/**
 			* prevent recursive hooks if u for example call exec in hook, if safeHooks disabled, all hooks set to this class will be called
 			*/
@@ -120,17 +133,16 @@ namespace dodo
 			* set state(enable/disable) for XExec(all XExecs) 
 			*/
 			inline virtual void setStatXExec(std::vector<__execItem> &list, unsigned int position, bool stat) const;
-			inline virtual void setStatAllXExec(std::vector<__execItem> &list, bool stat) const;
+			inline virtual void setStatAllXExec(__execItemList &xExec, bool stat) const;
 			/**
 			* perform enabled functions from the list
 			*/
-			virtual void performXExec(std::vector<__execItem> &list) const;
+			virtual void performXExec(__execItemList &list) const;
 			
-			mutable std::vector<__execItem> preExec;///functions executed before exec
-			mutable std::vector<__execItem> postExec;///functions executed after exec
+			mutable __execItemList preExec;///functions executed before exec
+			mutable __execItemList postExec;///functions executed after exec
 		
 			mutable bool safeHooks;///enable\disable other hooks when executing hook
-
 	};
 };
 
