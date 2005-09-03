@@ -2,7 +2,6 @@ Implement in sqlBase:
 
 	rename table, db, field;
 	create db, table, field;
-	remove db, table, field;
 	
 add support for berkley db(just try =))
 
@@ -25,8 +24,6 @@ SHOW INDEX FROM tbl_name [FROM db_name]
 SHOW PRIVILEGES
 SHOW [OPEN] TABLES [FROM db_name] [LIKE 'pattern']
 
-
-DROP DATABASE [IF EXISTS] db_name
 
 
 ALTER {DATABASE | SCHEMA} [db_name]

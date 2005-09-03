@@ -337,7 +337,7 @@ sqlBase::delCollect() const
 void 
 sqlBase::useCollect() const
 {
-	request = "use " + sqlInfo.db;
+	request = "use `" + sqlInfo.db + "`";
 }
 
 //-------------------------------------------------------------------
@@ -353,10 +353,83 @@ sqlBase::subCollect() const
 void 
 sqlBase::truncateCollect() const
 {
-	request = "truncate " + pre_table;
+	request = "truncate `" + pre_table + "`";
 }
 
 //-------------------------------------------------------------------
+
+void 
+sqlBase::delBaseCollect() const
+{
+	request = "drop database `" + pre_order + "`";
+}
+
+//-------------------------------------------------------------------
+
+void 
+sqlBase::delTableCollect() const
+{
+	request = "drop table `" + pre_table + "`";
+}
+
+//-------------------------------------------------------------------
+
+void 
+sqlBase::delFieldCollect() const
+{
+	request = "alter `" + pre_order + "` drop `" + pre_table + "`";
+}
+//-------------------------------------------------------------------
+
+void 
+sqlBase::renameBaseCollect() const
+{
+	request = "";
+}
+
+//-------------------------------------------------------------------
+
+void 
+sqlBase::renameTableCollect() const
+{
+	request = "rename `" + pre_table + "` to `" + pre_having + "`";
+}
+
+//-------------------------------------------------------------------
+
+void 
+sqlBase::renameFieldCollect() const
+{
+	request = "";
+}
+
+//-------------------------------------------------------------------
+
+void 
+sqlBase::createBaseCollect() const
+{
+	request = "create database `" + pre_order + "`";
+	if (strlen(pre_having.c_str()) != 0)
+		request += " character set " + pre_having + "`";
+}
+//-------------------------------------------------------------------
+
+void 
+sqlBase::createTableCollect() const
+{
+	request = "";
+}
+
+//-------------------------------------------------------------------
+
+void 
+sqlBase::createFieldCollect() const
+{
+	request = "";
+}
+
+//-------------------------------------------------------------------
+
 
 std::string
 sqlBase::queryCollect() const
@@ -394,6 +467,42 @@ sqlBase::queryCollect() const
 			break;
 		case TRUNCATE:
 			truncateCollect();
+			additionalActions = false;
+			break;
+		case RENAME_DB:
+			renameBaseCollect();
+			additionalActions = false;
+			break;
+		case RENAME_TABLE:
+			renameTableCollect();
+			additionalActions = false;
+			break;
+		case RENAME_FIELD:
+			renameFieldCollect();
+			additionalActions = false;
+			break;
+		case DELETE_DB:
+			delBaseCollect();
+			additionalActions = false;
+			break;
+		case DELETE_TABLE:
+			delTableCollect();
+			additionalActions = false;
+			break;
+		case DELETE_FIELD:
+			delFieldCollect();
+			additionalActions = false;
+			break;
+		case CREATE_DB:
+			createBaseCollect();
+			additionalActions = false;
+			break;
+		case CREATE_TABLE:
+			createTableCollect();
+			additionalActions = false;
+			break;
+		case CREATE_FIELD:
+			createFieldCollect();
 			additionalActions = false;
 			break;
 		default:

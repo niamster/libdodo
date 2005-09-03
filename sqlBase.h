@@ -77,6 +77,15 @@ namespace dodo
 			virtual void useCollect() const;
 			virtual void subCollect() const;///union(union all), minus, intersect
 			virtual void truncateCollect() const;
+			virtual void delBaseCollect() const;
+			virtual void delTableCollect() const;
+			virtual void delFieldCollect() const;
+			virtual void renameBaseCollect() const;
+			virtual void renameTableCollect() const;
+			virtual void renameFieldCollect() const;
+			virtual void createBaseCollect() const;
+			virtual void createTableCollect() const;
+			virtual void createFieldCollect() const;
 			/**
 			* adds to the end of request additional data collection for query
 			*/

@@ -356,36 +356,38 @@ base::truncate(std::string table)
 //-------------------------------------------------------------------
 
 void 
-base::renameDb(std::string db)
+base::renameDb(std::string db,
+			std::string to_db)
 {
 	qType = RENAME_DB;
 	pre_order = db;
+	pre_having = to_db;
 	show = false;
 }
 
 //-------------------------------------------------------------------
 
 void 
-base::renameTable(std::string table, 
-				std::string db)
+base::renameTable(std::string table,
+				std::string to_table)
 {
 	qType = RENAME_TABLE;
 	pre_table = table;
-	pre_order = db;
+	pre_having = to_table;
 	show = false;
 }
 
 //-------------------------------------------------------------------
 
 void 
-base::renameField(std::string field, 
-				std::string table, 
-				std::string db)
+base::renameField(std::string field,
+				std::string to_field, 
+				std::string table)
 {
 	qType = RENAME_FIELD;
 	pre_tableTo = field;
+	pre_having = to_field;
 	pre_table = table;
-	pre_order = db;
 	show = false;
 }
 
@@ -402,12 +404,10 @@ base::deleteDb(std::string db)
 //-------------------------------------------------------------------
 
 void 
-base::deleteTable(std::string table, 
-				std::string db)
+base::deleteTable(std::string table)
 {
 	qType = DELETE_TABLE;
 	pre_table = table;
-	pre_order = db;
 	show = false;
 }
 
@@ -415,49 +415,45 @@ base::deleteTable(std::string table,
 
 void 
 base::deleteField(std::string field, 
-				std::string table, 
-				std::string db)
+				std::string table)
 {
 	qType = DELETE_FIELD;
 	pre_tableTo = field;
 	pre_table = table;
-	pre_order = db;
 	show = false;
 }
 
 //-------------------------------------------------------------------
 
 void 
-base::createDb(std::string db)
+base::createDb(std::string db,
+			std::string charset)
 {
 	qType = CREATE_DB;
 	pre_order = db;
+	pre_having = charset;
 	show = false;
 }
 
 //-------------------------------------------------------------------
 
 void 
-base::createTable(std::string table, 
-				std::string db)
+base::createTable(__tableInfo &tableInfo)
 {
 	qType = CREATE_TABLE;
-	pre_table = table;
-	pre_order = db;
+	//pre_tableInfo = tableInfo;
 	show = false;
 }
 
 //-------------------------------------------------------------------
 
 void 
-base::createField(std::string field, 
-				std::string table, 
-				std::string db)
+base::createField(__fieldInfo &field, 
+				std::string table)
 {
 	qType = CREATE_FIELD;
-	pre_tableTo = field;
+	//pre_fieldInfo = fieldInfo;
 	pre_table = table;
-	pre_order = db;
 	show = false;
 }
 

@@ -151,7 +151,7 @@ namespace dodo
 		unsigned int port;
 	};
 	/**
-	* data that could be retrieved from class(to modyficate)
+	* data that could be retrieved from class(to modyficate)[contains references]
 	*/
 	struct __collectedData
 	{
@@ -195,7 +195,9 @@ namespace dodo
 		int &qUpShift;
 		int &qDelShift;		
 	};
-
+	/**
+	* structure that contains backup of collected data
+	*/
 	struct __collectedDataP
 	{	
 		std::string pre_where;	
@@ -218,7 +220,40 @@ namespace dodo
 		int qInsShift;
 		int qUpShift;
 		int qDelShift;		
-	};	
+	};
+	/**
+	* structure that holds info for field creation
+	*/
+	struct __fieldInfo
+	{
+		std::string name;
+		unsigned int type;
+		unsigned int length;///is valuable for all except [DATE, TIME, TIMESTAMP, DATETIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
+		unsigned int flag;/// default = NULL; set it with '|' : |= NOT_NULL, AUTO_INCR, KEY, PRIM_KEY, COMMENT, REFERENCE; 
+		std::string comment;
+		/**
+		* for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
+		* for [ON DELETE or ON UPDATE] use on flag (RESTRICT or CASCADE or SET NULL or NO ACTION or SET DEFAULT)
+		*/
+		std::string ref_table;
+		stringArr refFields;
+		
+	};
+	/*
+	* structure that holds info about table
+	*/
+	struct __tableInfo
+	{
+		std::string name;
+		std::list<__fieldInfo> fields;
+		unsigned int flag;///default - none; can be |= KEY, PRI_KEY, INDEX, UNIQUE
+		stringArr keys;
+		stringArr primKeys;
+		stringArr indexes;
+		stringArr uniq;
+		
+		
+	};
 	/**
 	* class to provide wide abilities for sql manipulations
 	*/
@@ -296,15 +331,15 @@ namespace dodo
 			/**
 			 * renames database
 			*/
-			virtual void renameDb(std::string db);
+			virtual void renameDb(std::string db, std::string to_db);
 			/**
 			 * renames table
 			*/
-			virtual void renameTable(std::string table, std::string db="");
+			virtual void renameTable(std::string table, std::string to_table);
 			/**
 			 * renames field
 			*/ 
-			virtual void renameField(std::string field, std::string table, std::string db="");
+			virtual void renameField(std::string field, std::string to_field, std::string table);
 			/**
 			 * deletes database
 			*/
@@ -312,23 +347,23 @@ namespace dodo
 			/**
 			 * deletes table
 			*/
-			virtual void deleteTable(std::string table, std::string db="");
+			virtual void deleteTable(std::string table);
 			/**
 			 * deletes field
 			*/ 
-			virtual void deleteField(std::string field, std::string table, std::string db="");
+			virtual void deleteField(std::string field, std::string table);
 			/**
 			 * creates database
 			*/
-			virtual void createDb(std::string db);
+			virtual void createDb(std::string db, std::string charset="");
 			/**
 			 * creates table
 			*/
-			virtual void createTable(std::string table, std::string db="");
+			virtual void createTable(__tableInfo &tableInfo);
 			/**
 			 * creates field
 			*/ 
-			virtual void createField(std::string field, std::string table, std::string db="");						
+			virtual void createField(__fieldInfo &fieldInfo, std::string table);						
 			/**
 			 * truncates table
 			 */
@@ -431,11 +466,13 @@ namespace dodo
 			mutable std::string pre_table;///string of table name(can be used for `insert_select` as tableFrom)also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table)
 			mutable std::string pre_tableTo;///string of tableTo name(insert_select)(also can be used as 'field' for rename(delete)Field)
 			mutable std::string pre_order;///string of order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table)
-			mutable std::string pre_having;///string of having statement
+			mutable std::string pre_having;///string of having statement(also can be used as ['charset' for db creation] [table/field/database for rename])
 			mutable std::string pre_group;///string of group statement
 			mutable std::string pre_limOffset;///number for offset in limit
 			mutable std::string pre_limNumber;///number for limit
 			mutable stringArr pre_subQ;///array of statements for subquery
+			mutable __tableInfo pre_tableInfo;///for creation
+			mutable __fieldInfo pre_fieldInfo;///for creation
 			
 			mutable __sqlInfo sqlInfo;///data to connect to server
 			
