@@ -86,6 +86,7 @@ namespace dodo
 			virtual void createBaseCollect() const;
 			virtual void createTableCollect() const;
 			virtual void createFieldCollect() const;
+			inline virtual std::string fieldCollect(__rowInfo &row);
 			/**
 			* adds to the end of request additional data collection for query
 			*/

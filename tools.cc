@@ -34,7 +34,7 @@ tools::getSelf()
 
 //-------------------------------------------------------------------
 
-void 
+inline void 
 tools::addF(int &flag, 
 	unsigned int statement)
 {
@@ -43,7 +43,7 @@ tools::addF(int &flag,
 
 //-------------------------------------------------------------------
 
-void 
+inline void 
 tools::removeF(int &flag, 
 		unsigned int statement)
 {
@@ -118,3 +118,25 @@ tools::implode(const stringArr &fields,
 	
 	return temp;	
 }
+
+//-------------------------------------------------------------------
+
+inline std::string 
+tools::lToString(long number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%d",number);
+	return std::string(temp);
+}
+
+//-------------------------------------------------------------------
+
+inline std::string 
+dToString(double number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%f",number);
+	return std::string(temp);	
+}
+
+//-------------------------------------------------------------------

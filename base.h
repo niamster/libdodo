@@ -222,37 +222,94 @@ namespace dodo
 		int qDelShift;		
 	};
 	/**
+	* Data types; with '**' need range; with '*' may have range
+	*/
+	enum baseDataTypesEnum
+	{
+		TINYINT,///*; The signed range is -128 to 127. The unsigned range is 0 to 255.
+		SMALLINT,///*; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
+		MEDIUMINT,///*; The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215.
+		INT,///*; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
+		BIGINT,///*; The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615.
+		FLOAT,///*; Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38.
+		DOUBLE,///*; Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
+		DECIMAL,///**; An unpacked(the number is stored as a string) fixed-point number. 
+		DATE,///The supported range is '1000-01-01' to '9999-12-31'.
+		TIME,///The range is '-838:59:59' to '838:59:59'
+		TIMESTAMP,///*; The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself.
+		/**
+		* TIMESTAMP(14) 	YYYYMMDDHHMMSS
+		* TIMESTAMP(12) 	YYMMDDHHMMSS
+		* TIMESTAMP(10) 	YYMMDDHHMM
+		* TIMESTAMP(8) 		YYYYMMDD
+		* TIMESTAMP(6) 		YYMMDD
+		* TIMESTAMP(4) 		YYMM
+		* TIMESTAMP(2) 		YY
+		*/
+		CHAR,///**; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
+		VARCHAR,///**; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
+		TINYBLOB,///A column with a maximum length of 255 (2^8 - 1) characters.
+		BLOB,///A column with a maximum length of 65,535 (2^16 -1) characters.
+		MEDIUMBLOB,///A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
+		LONGBLOB,///A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
+		ENUM,///An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65,535 distinct values.
+		SET,///A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
+	};
+	/**
+	*  
+	*/
+	enum fieldType
+	{
+		_NULL,
+		NOT_NULL = 2,
+		AUTO_INCR = 4,
+		KEY = 8,
+		PRIM_KEY = 16
+	};
+	/**
 	* structure that holds info for field creation
 	*/
-	struct __fieldInfo
+	struct __rowInfo
 	{
+		__rowInfo();
+		
 		std::string name;
-		unsigned int type;
-		unsigned int length;///is valuable for all except [DATE, TIME, TIMESTAMP, DATETIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
-		unsigned int flag;/// default = NULL; set it with '|' : |= NOT_NULL, AUTO_INCR, KEY, PRIM_KEY, COMMENT, REFERENCE; 
-		std::string comment;
+		int type;///use baseDataTypesEnum
+		int length;///is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
+		int flag;/// default = NULL; set it with '|' : |= NOT_NULL, AUTO_INCR, KEY, PRIM_KEY, REFERENCE; 
 		/**
 		* for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
 		* for [ON DELETE or ON UPDATE] use on flag (RESTRICT or CASCADE or SET NULL or NO ACTION or SET DEFAULT)
 		*/
-		std::string ref_table;
-		stringArr refFields;
+		std::string refTable;
+		std::string defaultVal;		
 		
+		stringArr refFields;
+		stringArr set_enum;
+		
+		std::string comment;
+		std::string charset;
 	};
 	/*
 	* structure that holds info about table
 	*/
 	struct __tableInfo
 	{
+		__tableInfo();
+		
 		std::string name;
-		std::list<__fieldInfo> fields;
-		unsigned int flag;///default - none; can be |= KEY, PRI_KEY, INDEX, UNIQUE
+		std::list<__rowInfo> fields;
+		
 		stringArr keys;
 		stringArr primKeys;
 		stringArr indexes;
 		stringArr uniq;
 		
+		long autoIncr;
+		long avgRowLen;
 		
+		std::string comment;
+		std::string charset;
 	};
 	/**
 	* class to provide wide abilities for sql manipulations
@@ -363,7 +420,7 @@ namespace dodo
 			/**
 			 * creates field
 			*/ 
-			virtual void createField(__fieldInfo &fieldInfo, std::string table);						
+			virtual void createField(__rowInfo &fieldInfo, std::string table);						
 			/**
 			 * truncates table
 			 */
@@ -446,8 +503,20 @@ namespace dodo
 			*/
 			virtual void store();
 			virtual void restore();
-			
+			/**
+			* set default values
+			*/
+			inline virtual void initTableInfo(__tableInfo &table);
+			inline virtual void initRowInfo(__rowInfo &field);			
 		protected:
+			/**
+			* resolve baseDataTypesEnum into string
+			*/
+			inline virtual std::string stringType(int type);
+			/**
+			* chek for range; return : if must 1; may have 0; mustn't have -1;
+			*/
+			inline virtual int chkRange(int type);
 			/**
 			* backuped collected data
 			*/
@@ -472,7 +541,7 @@ namespace dodo
 			mutable std::string pre_limNumber;///number for limit
 			mutable stringArr pre_subQ;///array of statements for subquery
 			mutable __tableInfo pre_tableInfo;///for creation
-			mutable __fieldInfo pre_fieldInfo;///for creation
+			mutable __rowInfo pre_fieldInfo;///for creation
 			
 			mutable __sqlInfo sqlInfo;///data to connect to server
 			

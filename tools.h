@@ -39,11 +39,20 @@ namespace dodo
 	{
 		public:
 			virtual tools *getSelf();
+			
+			/**
+			* converts long to string
+			*/
+			inline static std::string lToString(long number);
+			/**
+			* converts double to string
+			*/
+			inline static std::string dToString(double number);
 			/**
 			* adds/removes option to flag
 			*/
-			static void addF(int &flag, unsigned int statement);
-			static void removeF(int &flag, unsigned int statement);
+			inline static void addF(int &flag, unsigned int statement);
+			inline static void removeF(int &flag, unsigned int statement);
 			
 			static void replace(pchar needle, pchar replacement, std::string &data);
 		

@@ -26,6 +26,22 @@
 
 using namespace dodo;
 
+//-------------------------------------------------------------------
+
+__tableInfo::__tableInfo()
+{
+	autoIncr = -1;
+	avgRowLen = -1;
+}
+
+//-------------------------------------------------------------------
+
+__rowInfo::__rowInfo()
+{
+	type = -1;
+	length = -1;
+	flag = -1;
+}
 
 //-------------------------------------------------------------------
 
@@ -448,7 +464,7 @@ base::createTable(__tableInfo &tableInfo)
 //-------------------------------------------------------------------
 
 void 
-base::createField(__fieldInfo &field, 
+base::createField(__rowInfo &field, 
 				std::string table)
 {
 	qType = CREATE_FIELD;
@@ -473,10 +489,8 @@ void
 base::limit(unsigned int a_number) const
 {
 	tools::addF(qShift,1<<LIMIT);
-	
-	char temp[SIZEOFNUM];
-	sprintf(temp,"%d",a_number);
-	pre_limNumber = temp;
+
+	pre_limNumber = tools::lToString(a_number);
 }
 //-------------------------------------------------------------------
 
@@ -485,9 +499,7 @@ base::offset(unsigned int a_number) const
 {
 	tools::addF(qShift,1<<OFFSET);
 	
-	char temp[SIZEOFNUM];
-	sprintf(temp,"%d",a_number);	
-	pre_limOffset = temp;
+	pre_limOffset = tools::lToString(a_number);
 }
 
 //-------------------------------------------------------------------
@@ -681,7 +693,7 @@ base::cleanCollect() const
 	qDbDepSelShift = EMPTY;			
 	qDbDepInsShift = EMPTY;
 	qDbDepUpShift = EMPTY;
-	qDbDepDelShift = EMPTY;	
+	qDbDepDelShift = EMPTY;
 }
 
 //-------------------------------------------------------------------
@@ -785,3 +797,126 @@ base::restore()
 }
 
 //-------------------------------------------------------------------
+
+inline void 
+base::initTableInfo(__tableInfo &table)
+{
+	table.autoIncr = -1;
+	table.avgRowLen = -1;
+	
+	table.name.clear();
+	
+	table.charset.clear();
+	table.comment.clear();
+	table.keys.clear();
+	table.primKeys.clear();
+	table.indexes.clear();
+	table.uniq.clear();
+	
+	table.fields.clear();
+}
+
+//-------------------------------------------------------------------
+inline void 
+base::initRowInfo(__rowInfo &row)
+{
+	row.type = -1;
+	row.length = -1;
+	row.flag = -1;
+	
+	row.name.clear();
+	
+	row.charset.clear();
+	row.comment.clear();
+	row.refTable.clear();
+	row.refFields.clear();
+	row.set_enum.clear();
+	row.defaultVal.clear();
+}		
+	
+//-------------------------------------------------------------------
+
+inline std::string
+base::stringType(int type)
+{
+	switch (type)
+	{
+		case INT:
+			return std::string("INT");
+		case DATE:
+			return std::string("DATE");
+		case VARCHAR:
+			return std::string("VARCHAR");
+		case TIMESTAMP:
+			return std::string("TIMESTAMP");
+		case TIME:
+			return std::string("TIME");
+		case TINYINT:
+			return std::string("TINYINT");
+		case SMALLINT:
+			return std::string("SMALLINT");
+		case MEDIUMINT:
+			return std::string("MEDIUMINT");
+		case BIGINT:
+			return std::string("BIGINT");
+		case FLOAT:
+			return std::string("FLOAT");
+		case DOUBLE:
+			return std::string("DOUBLE");
+		case DECIMAL:
+			return std::string("DECIMAL");
+		case CHAR:
+			return std::string("CHAR");
+		case TINYBLOB:
+			return std::string("TINYBLOB");
+		case BLOB:
+			return std::string("BLOB");
+		case MEDIUMBLOB:
+			return std::string("MEDIUMBLOB");
+		case LONGBLOB:
+			return std::string("LONGBLOB");
+		case ENUM:
+			return std::string("ENUM");
+		case SET:
+			return std::string("SET");
+		default :
+			return std::string("");
+	}
+}
+	
+//-------------------------------------------------------------------
+
+inline int 
+base::chkRange(int type)
+{
+	switch (type)
+	{
+		case DATE:
+		case TIME:
+		case TINYBLOB:
+		case BLOB:
+		case MEDIUMBLOB:
+		case LONGBLOB:
+		case ENUM:
+		case SET:
+			return -1;
+		case INT:
+		case TINYINT:
+		case SMALLINT:
+		case MEDIUMINT:
+		case BIGINT:
+		case FLOAT:
+		case DOUBLE:
+		case TIMESTAMP:
+			return 0;
+		case VARCHAR:
+		case CHAR:
+		case DECIMAL:
+			return 1;
+		default :
+			return -1;
+	}	
+}
+
+//-------------------------------------------------------------------
+
