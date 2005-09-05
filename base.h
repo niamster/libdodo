@@ -260,11 +260,9 @@ namespace dodo
 	*/
 	enum fieldTypeEnum
 	{
-		_NULL = 0,
-		NOT_NULL = 2,
+		_NULL = 2,
 		AUTO_INCREMENT = 4,
-		KEY = 8,
-		PRIMARY_KEY = 16
+		KEY = 8
 	};
 	/**
 	* reference onfield
@@ -288,7 +286,7 @@ namespace dodo
 		std::string name;
 		int type;///use baseDataTypesEnum
 		int length;///is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
-		int flag;/// default = NULL; set it with '|' : |= NOT_NULL, AUTO_INCR, KEY, PRIM_KEY, REFERENCE; 
+		int flag;/// default = NULL; set it with '|' : |= NOT_NULL, AUTO_INCR, KEY; 
 		/**
 		* for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
 		* for [ON DELETE or ON UPDATE] use on flag (RESTRICT or CASCADE or SET NULL or NO ACTION or SET DEFAULT)
@@ -339,10 +337,12 @@ namespace dodo
 			base();	
 			virtual ~base();
 
-			///next functions just modify internal data, but don't make a query. that's usefull to make preExec or postExec
-			///it is safe to call them any times. u'll never get '... limit 10 limit 3' in  this case data will be replaced => '... limit 3'
-			///this is to all functions? that collect data. If u set `where statement` with select u can replace it with 'where' function;
-			///and in any time u can unset additional statement with callin' same function with `un` preffix (unlimit,..)
+			/**
+			* next functions just modify internal data, but don't make a query. that's usefull to make preExec or postExec
+			* it is safe to call them any times. u'll never get '... limit 10 limit 3' in  this case data will be replaced => '... limit 3'
+			* this is to all functions? that collect data. If u set `where statement` with select u can replace it with 'where' function;
+			* and in any time u can unset additional statement with callin' same function with `un` preffix (unlimit,..)
+			*/
 			/**
 			* sets info for mysql database
 			*/
@@ -521,8 +521,8 @@ namespace dodo
 			/**
 			* set default values
 			*/
-			inline virtual void initTableInfo(__tableInfo &table);
-			inline virtual void initRowInfo(__fieldInfo &field);			
+			inline void initTableInfo(__tableInfo &table);
+			inline void initRowInfo(__fieldInfo &field);			
 		protected:
 			/**
 			* resolve baseDataTypesEnum into string

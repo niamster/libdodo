@@ -56,6 +56,22 @@ int main(int argc, char **argv)
 		
 		pp.setSqlInfo("test","",3306,"","Dmitrik");
 		pp.connect();
+		
+		__fieldInfo fi;
+		fi.comment = " !!";
+		fi.onDelete = SET_DEFAULT;
+		fi.name = "field";
+		cout << fi.flag << endl;
+		fi.flag |= AUTO_INCREMENT|KEY;
+		fi.type = CHAR;
+		fi.length = 10;
+		
+		pp.createField(fi,"table");
+		
+		cout << endl << pp.queryCollect() << endl;
+		exit(0);
+		
+		
 		std::vector<std::string> fields;
 		fields.push_back("date");
 		fields.push_back("operation");

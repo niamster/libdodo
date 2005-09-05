@@ -132,8 +132,7 @@ namespace dodo
 			/**
 			* set state(enable/disable) for XExec(all XExecs) 
 			*/
-			inline virtual void setStatXExec(std::vector<__execItem> &list, unsigned int position, bool stat) const;
-			inline virtual void setStatAllXExec(__execItemList &xExec, bool stat) const;
+			virtual void setStatXExec(std::vector<__execItem> &list, unsigned int position, bool stat) const;
 			/**
 			* perform enabled functions from the list
 			*/

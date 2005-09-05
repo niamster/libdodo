@@ -63,7 +63,7 @@ __fieldInfo::__fieldInfo()
 {
 	type = -1;
 	length = -1;
-	flag = -1;
+	flag = 0;
 	onDelete = -1;
 	onUpdate = -1;
 }
@@ -869,7 +869,7 @@ base::initRowInfo(__fieldInfo &row)
 {
 	row.type = -1;
 	row.length = -1;
-	row.flag = -1;	
+	row.flag = 0;	
 	row.onDelete = -1;
 	row.onUpdate = -1;
 	

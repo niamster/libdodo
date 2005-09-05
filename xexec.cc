@@ -76,12 +76,13 @@ xexec::addXExec(std::vector<__execItem> &list,
 
 //-------------------------------------------------------------------
 
-inline void 
+void 
 xexec::setStatXExec(std::vector<__execItem> &list, 
 		unsigned int position,
 		bool stat) const
 {
-	if ((position-1) <= list.size())
+	--position;
+	if ((position) <= list.size())
 		list[position].enabled = stat;	
 }
 

@@ -560,17 +560,18 @@ sqlBase::fieldCollect(__fieldInfo &row) const
 {
 	register int type = row.type, flag = row.flag;
 	std::string resRow(" `" + row.name + "` " + stringType(type));
-	resRow.append(row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):" ");
-	resRow.append((chkRange(type)>0 && type>0)?(" ("+ tools::lToString(row.length) +") "):" ");
-	resRow.append((_NULL&flag==_NULL)?" NULL ":" NOT NULL ");
+	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):" ");
+	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):" ");
+	resRow.append((strlen(row.charset.c_str())>0)?(" character set " + row.charset):" ");
+	resRow.append(((_NULL&flag)==_NULL)?" NULL ":" NOT NULL ");
 	resRow.append((strlen(row.defaultVal.c_str())>0)?("default '" + row.defaultVal + "' "):" ");
-	resRow.append((AUTO_INCREMENT&flag==AUTO_INCREMENT)?" AUTO_INCREMENT ":" ");
-	resRow.append((KEY&flag==KEY)?((PRIMARY_KEY&flag==PRIMARY_KEY)?" PRIMARY KEY ":" KEY "):" ");
+	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?" AUTO_INCREMENT ":" ");
+	resRow.append(((KEY&flag)==KEY)?" KEY ":" ");	
 	resRow.append((strlen(row.comment.c_str())>0)?(" comment '" + row.comment + "' "):" ");
 	if (strlen(row.refTable.c_str())>0)
 	{
 		resRow.append(" references `" + row.refTable + "`");
-		resRow.append(row.refFields.empty()?("(" + tools::implode(row.set_enum,escapeFieldsNames,",") +" )"):" ");
+		resRow.append(!row.refFields.empty()?("(" + tools::implode(row.set_enum,escapeFieldsNames,",") +" )"):" ");
 		resRow.append((row.onDelete>=0)?(" on delete " + stringReference(row.onDelete)):" ");
 		resRow.append((row.onUpdate>=0)?(" on update " + stringReference(row.onUpdate)):" ");
 	}
