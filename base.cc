@@ -36,11 +36,58 @@ __tableInfo::__tableInfo()
 
 //-------------------------------------------------------------------
 
-__rowInfo::__rowInfo()
+const __tableInfo &
+__tableInfo::operator=(__tableInfo &from)
+{
+	name = from.name;
+	
+	std::vector<__fieldInfo>::iterator j = from.fields.end();
+	for (std::vector<__fieldInfo>::iterator i=from.fields.begin();i!=j;++i)
+		fields.push_back(*i);
+	
+	keys = from.keys;
+	primKeys = from.primKeys;
+	indexes = from.indexes;
+	uniq = from.uniq;
+	
+	autoIncr = from.autoIncr;
+	avgRowLen = from.avgRowLen;
+	
+	comment = from.comment;
+	charset = from.charset;
+}
+
+//-------------------------------------------------------------------
+
+__fieldInfo::__fieldInfo()
 {
 	type = -1;
 	length = -1;
 	flag = -1;
+	onDelete = -1;
+	onUpdate = -1;
+}
+
+//-------------------------------------------------------------------
+
+const __fieldInfo &
+__fieldInfo::operator=(__fieldInfo &from)
+{
+	name = from.name;
+	type = from.type;
+	length = from.length;
+	flag = from.flag;
+
+	refTable = from.refTable;
+	onDelete = from.onDelete;
+	onUpdate = from.onUpdate;
+	refFields = from.refFields;
+
+	defaultVal = from.defaultVal;
+	set_enum = from.set_enum;
+
+	comment = from.comment;
+	charset = from.charset;
 }
 
 //-------------------------------------------------------------------
@@ -457,18 +504,18 @@ void
 base::createTable(__tableInfo &tableInfo)
 {
 	qType = CREATE_TABLE;
-	//pre_tableInfo = tableInfo;
+	pre_tableInfo = tableInfo;
 	show = false;
 }
 
 //-------------------------------------------------------------------
 
 void 
-base::createField(__rowInfo &field, 
+base::createField(__fieldInfo &row, 
 				std::string table)
 {
 	qType = CREATE_FIELD;
-	//pre_fieldInfo = fieldInfo;
+	pre_fieldInfo = row;
 	pre_table = table;
 	show = false;
 }
@@ -818,11 +865,13 @@ base::initTableInfo(__tableInfo &table)
 
 //-------------------------------------------------------------------
 inline void 
-base::initRowInfo(__rowInfo &row)
+base::initRowInfo(__fieldInfo &row)
 {
 	row.type = -1;
 	row.length = -1;
-	row.flag = -1;
+	row.flag = -1;	
+	row.onDelete = -1;
+	row.onUpdate = -1;
 	
 	row.name.clear();
 	
@@ -832,12 +881,12 @@ base::initRowInfo(__rowInfo &row)
 	row.refFields.clear();
 	row.set_enum.clear();
 	row.defaultVal.clear();
-}		
+}
 	
 //-------------------------------------------------------------------
 
 inline std::string
-base::stringType(int type)
+base::stringType(int type) const
 {
 	switch (type)
 	{
@@ -887,7 +936,7 @@ base::stringType(int type)
 //-------------------------------------------------------------------
 
 inline int 
-base::chkRange(int type)
+base::chkRange(int type) const
 {
 	switch (type)
 	{
@@ -920,3 +969,22 @@ base::chkRange(int type)
 
 //-------------------------------------------------------------------
 
+inline std::string 
+base::stringReference(int type) const
+{
+	switch (type)
+	{
+		case RESTRICT:
+			return std::string("restrict");
+		case CASCADE:
+			return std::string("cascade");
+		case SET_NULL:
+			return std::string("set null");
+		case NO_ACTION:
+			return std::string("no action");
+		case SET_DEFAULT:
+			return std::string("set default");
+	}
+}
+
+//-------------------------------------------------------------------

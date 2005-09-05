@@ -256,23 +256,35 @@ namespace dodo
 		SET,///A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
 	};
 	/**
-	*  
+	*  type of field
 	*/
-	enum fieldType
+	enum fieldTypeEnum
 	{
-		_NULL,
+		_NULL = 0,
 		NOT_NULL = 2,
-		AUTO_INCR = 4,
+		AUTO_INCREMENT = 4,
 		KEY = 8,
-		PRIM_KEY = 16
+		PRIMARY_KEY = 16
+	};
+	/**
+	* reference onfield
+	*/
+	enum refFieldEnum
+	{
+		RESTRICT = 0,
+		CASCADE,
+		SET_NULL,
+		NO_ACTION,
+		SET_DEFAULT
 	};
 	/**
 	* structure that holds info for field creation
 	*/
-	struct __rowInfo
+	struct __fieldInfo
 	{
-		__rowInfo();
-		
+		__fieldInfo();
+		const __fieldInfo &operator=(__fieldInfo &from);
+
 		std::string name;
 		int type;///use baseDataTypesEnum
 		int length;///is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
@@ -281,14 +293,16 @@ namespace dodo
 		* for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
 		* for [ON DELETE or ON UPDATE] use on flag (RESTRICT or CASCADE or SET NULL or NO ACTION or SET DEFAULT)
 		*/
-		std::string refTable;
-		std::string defaultVal;		
-		
+		std::string refTable;///table on what is reference. next are only valuable if it set!
 		stringArr refFields;
-		stringArr set_enum;
+		int onDelete;///look for refFieldEnum
+		int onUpdate;///look for refFieldEnum
+
+		std::string defaultVal;///default value
+		stringArr set_enum;///array of statement for SET or ENUM
 		
-		std::string comment;
-		std::string charset;
+		std::string comment;///comment for field
+		std::string charset;///charset
 	};
 	/*
 	* structure that holds info about table
@@ -296,20 +310,21 @@ namespace dodo
 	struct __tableInfo
 	{
 		__tableInfo();
-		
+		const __tableInfo &operator=(__tableInfo &from);
+			
 		std::string name;
-		std::list<__rowInfo> fields;
+		std::vector<__fieldInfo> fields;///array of __fieldInfo
 		
-		stringArr keys;
-		stringArr primKeys;
-		stringArr indexes;
-		stringArr uniq;
+		stringArr keys;///array of keys in table (field names)
+		stringArr primKeys;///array of primary keys in table (field names)
+		stringArr indexes;///array of indexes in table (field names)
+		stringArr uniq;///array of unique in table (field names)
 		
-		long autoIncr;
-		long avgRowLen;
+		long autoIncr;///auto-increment value (as for start)
+		long avgRowLen;///avarage row length
 		
-		std::string comment;
-		std::string charset;
+		std::string comment;///comment for table
+		std::string charset;///charset
 	};
 	/**
 	* class to provide wide abilities for sql manipulations
@@ -420,7 +435,7 @@ namespace dodo
 			/**
 			 * creates field
 			*/ 
-			virtual void createField(__rowInfo &fieldInfo, std::string table);						
+			virtual void createField(__fieldInfo &fieldInfo, std::string table);						
 			/**
 			 * truncates table
 			 */
@@ -507,16 +522,20 @@ namespace dodo
 			* set default values
 			*/
 			inline virtual void initTableInfo(__tableInfo &table);
-			inline virtual void initRowInfo(__rowInfo &field);			
+			inline virtual void initRowInfo(__fieldInfo &field);			
 		protected:
 			/**
 			* resolve baseDataTypesEnum into string
 			*/
-			inline virtual std::string stringType(int type);
+			inline virtual std::string stringType(int type) const;
 			/**
-			* chek for range; return : if must 1; may have 0; mustn't have -1;
+			* check for range; return : if must 1; may have 0; mustn't have -1;
 			*/
-			inline virtual int chkRange(int type);
+			inline virtual int chkRange(int type) const;
+			/**
+			* resolve refFieldEnum into string
+			*/
+			inline virtual std::string stringReference(int type) const;
 			/**
 			* backuped collected data
 			*/
@@ -541,7 +560,7 @@ namespace dodo
 			mutable std::string pre_limNumber;///number for limit
 			mutable stringArr pre_subQ;///array of statements for subquery
 			mutable __tableInfo pre_tableInfo;///for creation
-			mutable __rowInfo pre_fieldInfo;///for creation
+			mutable __fieldInfo pre_fieldInfo;///for creation
 			
 			mutable __sqlInfo sqlInfo;///data to connect to server
 			
