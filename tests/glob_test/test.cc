@@ -61,32 +61,46 @@ int main(int argc, char **argv)
 		fi.comment = " !!";
 		fi.onDelete = SET_DEFAULT;
 		fi.name = "field";
-		cout << fi.flag << endl;
 		fi.flag |= AUTO_INCREMENT|KEY;
 		fi.type = CHAR;
 		fi.length = 10;
 		
 		pp.createField(fi,"table");
 		
-		cout << endl << pp.queryCollect() << endl;
-		exit(0);
+		//cout << endl << pp.queryCollect() << endl;
+		//exit(0);
 		
 		
 		std::vector<std::string> fields;
 		fields.push_back("date");
 		fields.push_back("operation");
-		
+				
 		std::vector<std::string> values;
 		values.push_back("20\"05`''-'07-08");
 		values.push_back("mu");
 		pp.limit(10);
 		pp.offset(23);
-		pp.insertSelect("test1","test2",fields,values);
+		
+		std::vector<stringArr> aa;
+		aa.push_back(values);
+		aa.push_back(values);
+		
+		assocArr arr;
+		arr["date"] = "20\"05`''-'07-08";
+		arr["operation"] = "mu";
+		std::vector<assocArr> assA;
+		assA.push_back(arr);
+		arr["date"] = "20\"05`''-'07-08";
+		arr["operation"] = "me";
+		assA.push_back(arr);
+		
+		pp.insert("t",assA);
+		//pp.insertSelect("test1","test2",fields,values);
 		//pp.insert("test1",values,fields);
 		pp.setAddInsSt(INSERT_IGNORE);
 		pp.setAddSelSt(SELECT_DISTINCT);
 		pp.setMyAddSelSt(SELECT_BIG_RESULT);
-		pp.exec();
+		//pp.exec();
 		cout << endl << pp.queryCollect() << endl;
 		exit(0);
 	//	for (int o=0;o<1000000;o++)

@@ -225,7 +225,18 @@ sqlBase::selectCollect() const
 void 
 sqlBase::insertCollect() const
 {
-	std::string fieldsPart = tools::implode(pre_fieldsVal,&dodo::sqlBase::escapeFields,",","'");
+	stringArr fieldsVPart;
+	{
+		std::vector<stringArr>::iterator i = pre_fieldsVal.begin(), j = pre_fieldsVal.end();
+	
+		for (;i!=j;++i)
+			fieldsVPart.push_back(tools::implode(*i,&dodo::sqlBase::escapeFields,",","'"));
+	}
+	stringArr::iterator i = fieldsVPart.begin(), j = fieldsVPart.end()-1;
+	std::string fieldsPart;
+	for (;i!=j;++i)
+		fieldsPart.append("(" + *i + "),");
+	fieldsPart.append("(" + *i + ")");
 	
 	std::string temp = insideAddCollect(sqlAddInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
@@ -243,7 +254,7 @@ sqlBase::insertCollect() const
 		;
 	#endif	
 	
-	sprintf(t_request,"insert %s into %s values (%s)",temp.c_str(),tempFNP.c_str(),fieldsPart.c_str());
+	sprintf(t_request,"insert %s into %s values %s",temp.c_str(),tempFNP.c_str(),fieldsPart.c_str());
 	
 	request = t_request;
 	
@@ -257,7 +268,7 @@ sqlBase::insertSelectCollect() const
 {
 	
 	std::string fieldsPartTo = tools::implode(pre_fieldsNames,&dodo::sqlBase::escapeFieldsNames,",","`");
-	std::string fieldsPartFrom = tools::implode(pre_fieldsVal,&dodo::sqlBase::escapeFieldsNames,",","`");
+	std::string fieldsPartFrom = tools::implode(*(pre_fieldsVal.begin()),&dodo::sqlBase::escapeFieldsNames,",","`");
 	
 	std::string tempI = insideAddCollect(sqlAddInsEnumArr,sqlAddInsArr,qInsShift);
 	tempI.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
@@ -286,7 +297,7 @@ sqlBase::insertSelectCollect() const
 void
 sqlBase::updateCollect() const
 {
-	std::string setPart = fieldsValName(pre_fieldsVal, pre_fieldsNames);
+	std::string setPart = fieldsValName(*(pre_fieldsVal.begin()), pre_fieldsNames);
 	
 	std::string temp = insideAddCollect(sqlAddUpEnumArr,sqlAddUpArr,qUpShift);
 	temp.append(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));
@@ -539,8 +550,8 @@ sqlBase::escapeFields(const std::string &a_data)
 	std::string temp(a_data);
 	tools::replace("\\","\\\\",temp);
 	tools::replace("\n","\\n",temp);
-	tools::replace("\'","\\'",temp);
-	return a_data;
+	tools::replace("'","\\'",temp);
+	return temp;
 }
 
 //-------------------------------------------------------------------

@@ -51,6 +51,8 @@ namespace dodo
 	typedef char* pchar;
 	
 	typedef std::vector<std::string> stringArr;
+	
+	typedef std::map<std::string, std::string> assocArr;
 
 	typedef std::string (*escape)(const std::string &);
 	

@@ -30,7 +30,7 @@
 #include "sqlBaseEx.h"
 #include "dodoBase.h"
 #include "tools.h"
-#include "base.h"
+#include "dbBase.h"
 
 namespace dodo
 {
@@ -42,7 +42,7 @@ namespace dodo
 	/**
 	* class to provide wide abilities for sql manipulations
 	*/
-	class sqlBase : virtual public dodoBase, virtual public base
+	class sqlBase : virtual public dodoBase, virtual public dbBase
 	{
 		friend class sqlBaseEx;///class of exception
 		public:

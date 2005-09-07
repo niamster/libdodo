@@ -2,7 +2,7 @@ GCC_PATH=/opt/gcc-3.4.3/
 
 CXX = $(GCC_PATH)/bin/g++
 CFLAGS=-O3 -fmove-all-movables -march=pentium4
-OBJECTS=base.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o
+OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o
 
 override DEFINES:=$(DEFINES)
 
@@ -19,6 +19,8 @@ LIBRARY=dodo
 VERSION = 0
 
 MINOR = 1
+
+all: $(LIBRARY)
 
 $(LIBRARY): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,lib$@.so.$(VERSION).$(MINOR) -o lib$@.so.$(VERSION).$(MINOR) $^
