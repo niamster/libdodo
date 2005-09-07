@@ -39,7 +39,7 @@ namespace dodo
 		FALSE = 0,
 		TRUE = 1
 	};	
-	
+
 	#ifdef UNICODE
 		static short size_of_char = sizeof(char)*2;
 	#else
