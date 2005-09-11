@@ -77,16 +77,16 @@ static 	__sqlStatements sqlAddSelArr[3] =
 
 //-------------------------------------------------------------------
 
-sqlBase::sqlBase()
-{	
-	request.reserve(100);
+sqlBase *sqlBase::getSelf()
+{
+	return this;
 }
 
 //-------------------------------------------------------------------
 
-sqlBase *sqlBase::getSelf()
-{
-	return this;
+sqlBase::sqlBase() : preventFraming(false)
+{	
+	request.reserve(100);
 }
 
 //-------------------------------------------------------------------
@@ -99,7 +99,8 @@ sqlBase::~sqlBase()
 
 std::string
 sqlBase::fieldsValName(const stringArr &fieldsVal, 
-					const stringArr &fieldsNames)
+					const stringArr &fieldsNames,
+					const std::string &frame)
 {
 	std::string temp;
 	
@@ -108,10 +109,10 @@ sqlBase::fieldsValName(const stringArr &fieldsVal,
 	register unsigned int o(fn<=fv?fn:fv);
 	
 	stringArr::const_iterator i(fieldsNames.begin()), k(fieldsVal.begin());
-
+		
 	for (register unsigned int j(0);j<o-1;++i,++k,++j)
-		temp.append('`' + escapeFieldsNames(*i) + "`='" + escapeFields(*k) + "',");	
-	temp.append('`' + escapeFields(*i) + "`='" + escapeFieldsNames(*k) + '\'');
+		temp.append(*i + "=" + frame + escapeFields(*k) + frame + ",");	
+	temp.append(*i + "=" + frame + escapeFields(*k) + frame);
 	
 	return temp;
 }
@@ -192,12 +193,12 @@ sqlBase::insideAddCollect(std::list<std::string> &statements,
 void 
 sqlBase::selectCollect() const 
 {
-	std::string temp = insideAddCollect(sqlAddSelEnumArr,sqlAddSelArr,qSelShift);
+	std::string temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
 	
 	if (pre_table.size()>0)
 	{
-		temp.append(tools::implode(pre_fieldsNames,&dodo::sqlBase::escapeFieldsNames,",","`"));
+		temp.append(tools::implode(pre_fieldsNames,","));
 		pchar t_request = new char[temp.size()+pre_table.size()+18];	
 		if (t_request == 0)
 		#ifndef NO_EX
@@ -206,7 +207,7 @@ sqlBase::selectCollect() const
 			;
 		#endif		
 
-		sprintf(t_request,"select %s from `%s`",temp.c_str(),pre_table.c_str());		
+		sprintf(t_request,"select %s from %s",temp.c_str(),pre_table.c_str());		
 		
 		request = t_request;
 	
@@ -214,7 +215,7 @@ sqlBase::selectCollect() const
 	}
 	else
 	{
-		temp.append(tools::implode(pre_fieldsNames,&dodo::sqlBase::escapeFieldsNames,",","'"));
+		temp.append(tools::implode(pre_fieldsNames,","));
 		request = "select ";
 		request.append(temp);
 	}
@@ -229,8 +230,12 @@ sqlBase::insertCollect() const
 	{
 		std::vector<stringArr>::iterator i = pre_fieldsVal.begin(), j = pre_fieldsVal.end();
 	
+		char frame[] = "'";
+		if (preventFraming)
+			frame[0] = ' ';
+			
 		for (;i!=j;++i)
-			fieldsVPart.push_back(tools::implode(*i,&dodo::sqlBase::escapeFields,",","'"));
+			fieldsVPart.push_back(tools::implode(*i,&dodo::sqlBase::escapeFields,",",frame));
 	}
 	stringArr::iterator i = fieldsVPart.begin(), j = fieldsVPart.end()-1;
 	std::string fieldsPart;
@@ -238,13 +243,13 @@ sqlBase::insertCollect() const
 		fieldsPart.append("(" + *i + "),");
 	fieldsPart.append("(" + *i + ")");
 	
-	std::string temp = insideAddCollect(sqlAddInsEnumArr,sqlAddInsArr,qInsShift);
+	std::string temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
 	
 	std::string tempFNP('`'+pre_table+'`');
 	
 	if (pre_fieldsNames.size() != 0)
-		tempFNP.append(" ("+tools::implode(pre_fieldsNames,&dodo::sqlBase::escapeFieldsNames,",","`")+") ");
+		tempFNP.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
 	
 	pchar t_request = new char[temp.size()+tempFNP.size()+fieldsPart.size()+24];
 	if (t_request == 0)
@@ -267,12 +272,12 @@ void
 sqlBase::insertSelectCollect() const
 {
 	
-	std::string fieldsPartTo = tools::implode(pre_fieldsNames,&dodo::sqlBase::escapeFieldsNames,",","`");
-	std::string fieldsPartFrom = tools::implode(*(pre_fieldsVal.begin()),&dodo::sqlBase::escapeFieldsNames,",","`");
+	std::string fieldsPartTo = tools::implode(pre_fieldsNames,",");
+	std::string fieldsPartFrom = tools::implode(*(pre_fieldsVal.begin()),",");
 	
-	std::string tempI = insideAddCollect(sqlAddInsEnumArr,sqlAddInsArr,qInsShift);
+	std::string tempI = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	tempI.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
-	std::string tempS = insideAddCollect(sqlAddSelEnumArr,sqlAddSelArr,qSelShift);
+	std::string tempS = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	tempS.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
 	
 	std::string tempFPT = tempS + fieldsPartFrom;
@@ -285,7 +290,7 @@ sqlBase::insertSelectCollect() const
 		;
 	#endif	
 	
-	sprintf(t_request,"insert %s into `%s` (%s) select %s from `%s`",tempI.c_str(),pre_tableTo.c_str(),fieldsPartTo.c_str(),tempFPT.c_str(),pre_table.c_str());
+	sprintf(t_request,"insert %s into %s (%s) select %s from %s",tempI.c_str(),pre_tableTo.c_str(),fieldsPartTo.c_str(),tempFPT.c_str(),pre_table.c_str());
 	
 	request = t_request;
 	
@@ -299,12 +304,10 @@ sqlBase::updateCollect() const
 {
 	std::string setPart = fieldsValName(*(pre_fieldsVal.begin()), pre_fieldsNames);
 	
-	std::string temp = insideAddCollect(sqlAddUpEnumArr,sqlAddUpArr,qUpShift);
+	std::string temp = insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
 	temp.append(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));
-	
-	std::string tempFNP(" `"+pre_table+"` ");
 
-	temp.append(tempFNP);
+	temp.append(pre_table);
 
 	pchar t_request = new char[temp.size()+setPart.size()+13];	
 	if (t_request == 0)
@@ -326,7 +329,7 @@ sqlBase::updateCollect() const
 void
 sqlBase::delCollect() const
 {
-	std::string temp = insideAddCollect(sqlAddDelEnumArr,sqlAddDelArr,qDelShift);
+	std::string temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 	
 	pchar t_request = new char[pre_table.size()+temp.size()+16];
@@ -336,7 +339,7 @@ sqlBase::delCollect() const
 	#else
 		;
 	#endif
-	sprintf(t_request,"delete %s from `%s`",temp.c_str(),pre_table.c_str());
+	sprintf(t_request,"delete %s from %s",temp.c_str(),pre_table.c_str());
 	
 	request = t_request;
 	
@@ -348,7 +351,7 @@ sqlBase::delCollect() const
 void 
 sqlBase::useCollect() const
 {
-	request = "use `" + sqlInfo.db + "`";
+	request = "use " + sqlInfo.db;
 }
 
 //-------------------------------------------------------------------
@@ -364,7 +367,7 @@ sqlBase::subCollect() const
 void 
 sqlBase::truncateCollect() const
 {
-	request = "truncate `" + pre_table + "`";
+	request = "truncate " + pre_table;
 }
 
 //-------------------------------------------------------------------
@@ -372,7 +375,7 @@ sqlBase::truncateCollect() const
 void 
 sqlBase::delBaseCollect() const
 {
-	request = "drop database `" + pre_order + "`";
+	request = "drop database " + pre_order;
 }
 
 //-------------------------------------------------------------------
@@ -380,7 +383,7 @@ sqlBase::delBaseCollect() const
 void 
 sqlBase::delTableCollect() const
 {
-	request = "drop table `" + pre_table + "`";
+	request = "drop table " + pre_table;
 }
 
 //-------------------------------------------------------------------
@@ -388,7 +391,7 @@ sqlBase::delTableCollect() const
 void 
 sqlBase::delFieldCollect() const
 {
-	request = "alter `" + pre_order + "` drop `" + pre_table + "`";
+	request = "alter " + pre_order + " drop " + pre_table;
 }
 //-------------------------------------------------------------------
 
@@ -403,7 +406,7 @@ sqlBase::renameBaseCollect() const
 void 
 sqlBase::renameTableCollect() const
 {
-	request = "rename `" + pre_table + "` to `" + pre_having + "`";
+	request = "rename " + pre_table + " to " + pre_having;
 }
 
 //-------------------------------------------------------------------
@@ -419,16 +422,22 @@ sqlBase::renameFieldCollect() const
 void 
 sqlBase::createBaseCollect() const
 {
-	request = "create database `" + pre_order + "`";
+	request = "create database " + pre_order;
 	if (strlen(pre_having.c_str()) != 0)
-		request += " character set " + pre_having + "`";
+		request.append(" character set " + pre_having);
 }
 //-------------------------------------------------------------------
 
 void 
 sqlBase::createTableCollect() const
 {
-	request = "";
+/*	request = "create table " + pre_tableInfo.name;
+	std::vector<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end())-1;
+	for (;i!=j;++i)
+		request.append(*i + ",");
+	request.append(*i);
+	request.append(!pre_tableInfo.keys.empty()?("primary key" + tools::implode(pre_tableInfo.keys,",")):"");
+*/	
 }
 
 //-------------------------------------------------------------------
@@ -436,7 +445,7 @@ sqlBase::createTableCollect() const
 void 
 sqlBase::createFieldCollect() const
 {
-	request = "alter table `" + pre_table + "` add " + fieldCollect(pre_fieldInfo);
+	request = "alter table " + pre_table + " add " + fieldCollect(pre_fieldInfo);
 }
 
 //-------------------------------------------------------------------
@@ -557,34 +566,24 @@ sqlBase::escapeFields(const std::string &a_data)
 //-------------------------------------------------------------------
 
 inline std::string 
-sqlBase::escapeFieldsNames(const std::string &a_data)
-{ 
-	std::string temp(a_data);
-	tools::replace("`","``",temp);
-	return temp;
-}
-
-//-------------------------------------------------------------------
-
-inline std::string 
 sqlBase::fieldCollect(__fieldInfo &row) const
 {
 	register int type = row.type, flag = row.flag;
-	std::string resRow(" `" + row.name + "` " + stringType(type));
-	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):" ");
-	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):" ");
+	std::string resRow(row.name + stringType(type));
+	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):"");
+	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):"");
 	resRow.append((strlen(row.charset.c_str())>0)?(" character set " + row.charset):" ");
 	resRow.append(((_NULL&flag)==_NULL)?" NULL ":" NOT NULL ");
-	resRow.append((strlen(row.defaultVal.c_str())>0)?("default '" + row.defaultVal + "' "):" ");
-	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?" AUTO_INCREMENT ":" ");
-	resRow.append(((KEY&flag)==KEY)?" KEY ":" ");	
-	resRow.append((strlen(row.comment.c_str())>0)?(" comment '" + row.comment + "' "):" ");
+	resRow.append((strlen(row.defaultVal.c_str())>0)?("default '" + row.defaultVal + "' "):"");
+	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?" AUTO_INCREMENT ":"");
+	resRow.append(((KEY&flag)==KEY)?" KEY ":"");	
+	resRow.append((strlen(row.comment.c_str())>0)?(" comment '" + row.comment + "' "):"");
 	if (strlen(row.refTable.c_str())>0)
 	{
-		resRow.append(" references `" + row.refTable + "`");
-		resRow.append(!row.refFields.empty()?("(" + tools::implode(row.set_enum,escapeFieldsNames,",") +" )"):" ");
-		resRow.append((row.onDelete>=0)?(" on delete " + stringReference(row.onDelete)):" ");
-		resRow.append((row.onUpdate>=0)?(" on update " + stringReference(row.onUpdate)):" ");
+		resRow.append(" references " + row.refTable);
+		resRow.append(!row.refFields.empty()?("(" + tools::implode(row.set_enum,",") +" )"):"");
+		resRow.append((row.onDelete>=0)?(" on delete " + stringReference(row.onDelete)):"");
+		resRow.append((row.onUpdate>=0)?(" on update " + stringReference(row.onUpdate)):"");
 	}
 	return resRow;
 }

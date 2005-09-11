@@ -185,3 +185,113 @@ select_statement:
     
     
     DROP INDEX index_name ON tbl_name
+    
+    
+    [_ENV] => Array
+        (
+            [REDIRECT_STATUS] => 200
+            [HTTP_HOST] => temp.niam.mu
+            [HTTP_USER_AGENT] => Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.7) Gecko/20050414 Firefox/1.0.3
+            [HTTP_ACCEPT] => text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+            [HTTP_ACCEPT_LANGUAGE] => en-us,en;q=0.5
+            [HTTP_ACCEPT_ENCODING] => gzip,deflate
+            [HTTP_ACCEPT_CHARSET] => ISO-8859-1,utf-8;q=0.7,*;q=0.7
+            [HTTP_KEEP_ALIVE] => 300
+            [HTTP_CONNECTION] => keep-alive
+            [HTTP_REFERER] => http://temp.niam.mu/local-info/test.php
+            [CONTENT_TYPE] => application/x-www-form-urlencoded
+            [CONTENT_LENGTH] => 7
+            [PATH] => /bin:/sbin:/usr/bin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/sbin:/usr/sbin
+            [SERVER_SIGNATURE] => 
+Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1 Server at temp.niam.mu Port 80
+
+
+            [SERVER_SOFTWARE] => Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1
+            [SERVER_NAME] => temp.niam.mu
+            [SERVER_ADDR] => 192.168.0.201
+            [SERVER_PORT] => 80
+            [REMOTE_ADDR] => 192.168.0.201
+            [DOCUMENT_ROOT] => /mnt/media/parampampam/www/temp
+            [SERVER_ADMIN] => niam.niam@gmail.com
+            [SCRIPT_FILENAME] => /mnt/media/parampampam/www/temp/local-info/test.php
+            [REMOTE_PORT] => 46020
+            [REDIRECT_QUERY_STRING] => sdf=d
+            [REDIRECT_URL] => /local-info/test.php
+            [GATEWAY_INTERFACE] => CGI/1.1
+            [SERVER_PROTOCOL] => HTTP/1.1
+            [REQUEST_METHOD] => POST
+            [QUERY_STRING] => sdf=d
+            [REQUEST_URI] => /local-info/test.php?sdf=d
+            [SCRIPT_NAME] => /local-info/test.php
+            [PATH_INFO] => 
+            [PATH_TRANSLATED] => 
+            [ORIG_PATH_TRANSLATED] => /mnt/media/parampampam/www/temp/local-info/test.php
+            [ORIG_PATH_INFO] => /local-info/test.php
+            [ORIG_SCRIPT_NAME] => /cgi-bin/php
+            [ORIG_SCRIPT_FILENAME] => /opt/php/bin/php
+        )
+
+    [HTTP_ENV_VARS] => Array
+        (
+            [REDIRECT_STATUS] => 200
+            [HTTP_HOST] => temp.niam.mu
+            [HTTP_USER_AGENT] => Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.7) Gecko/20050414 Firefox/1.0.3
+            [HTTP_ACCEPT] => text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
+            [HTTP_ACCEPT_LANGUAGE] => en-us,en;q=0.5
+            [HTTP_ACCEPT_ENCODING] => gzip,deflate
+            [HTTP_ACCEPT_CHARSET] => ISO-8859-1,utf-8;q=0.7,*;q=0.7
+            [HTTP_KEEP_ALIVE] => 300
+            [HTTP_CONNECTION] => keep-alive
+            [HTTP_REFERER] => http://temp.niam.mu/local-info/test.php
+            [CONTENT_TYPE] => application/x-www-form-urlencoded
+            [CONTENT_LENGTH] => 7
+            [PATH] => /bin:/sbin:/usr/bin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/sbin:/usr/sbin
+            [SERVER_SIGNATURE] => 
+Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1 Server at temp.niam.mu Port 80
+
+
+            [SERVER_SOFTWARE] => Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1
+            [SERVER_NAME] => temp.niam.mu
+            [SERVER_ADDR] => 192.168.0.201
+            [SERVER_PORT] => 80
+            [REMOTE_ADDR] => 192.168.0.201
+            [DOCUMENT_ROOT] => /mnt/media/parampampam/www/temp
+            [SERVER_ADMIN] => niam.niam@gmail.com
+            [SCRIPT_FILENAME] => /mnt/media/parampampam/www/temp/local-info/test.php
+            [REMOTE_PORT] => 46020
+            [REDIRECT_QUERY_STRING] => sdf=d
+            [REDIRECT_URL] => /local-info/test.php
+            [GATEWAY_INTERFACE] => CGI/1.1
+            [SERVER_PROTOCOL] => HTTP/1.1
+            [REQUEST_METHOD] => POST
+            [QUERY_STRING] => sdf=d
+            [REQUEST_URI] => /local-info/test.php?sdf=d
+            [SCRIPT_NAME] => /local-info/test.php
+            [PATH_INFO] => 
+            [PATH_TRANSLATED] => 
+            [ORIG_PATH_TRANSLATED] => /mnt/media/parampampam/www/temp/local-info/test.php
+            [ORIG_PATH_INFO] => /local-info/test.php
+            [ORIG_SCRIPT_NAME] => /cgi-bin/php
+            [ORIG_SCRIPT_FILENAME] => /opt/php/bin/php
+        )
+    [HTTP_POST_VARS] => Array
+        (
+            [asd] => adf
+        )
+
+    [HTTP_GET_VARS] => Array
+        (
+            [sdf] => d
+        )
+    [HTTP_POST_FILES] => Array
+        (
+            [sd] => Array
+                (
+                    [name] => xchat-gnome-0.5.tar.gz
+                    [type] => 
+                    [tmp_name] => 
+                    [error] => 1
+                    [size] => 0
+                )
+
+        )    

@@ -41,6 +41,9 @@ namespace dodo
 
 	/**
 	* class to provide wide abilities for sql manipulations
+	* be carefull!!! all data become escaped and fremed with <'>. Fields' names are not framed with <`> to prevent "`count(*)`" or smth else
+	* when u are usin' select wo table_name field names are not escaped and framed!!
+	* If u want to prevent data framin' set sqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
 	*/
 	class sqlBase : virtual public dodoBase, virtual public dbBase
 	{
@@ -63,9 +66,9 @@ namespace dodo
 			static std::string exists(std::string statement);
 			static std::string noexists(std::string statement);
 		
+			bool preventFraming;
 		protected:		
 			static inline std::string escapeFields(const std::string &a_data);
-			static inline std::string escapeFieldsNames(const std::string &a_data);
 			/**
 			* functions to collect data into query after
 			*/		
@@ -101,7 +104,7 @@ namespace dodo
 			virtual std::string insideAddCollect(std::list<std::string> &statements, int qTypeShift) const;
 		
 			///creates string from fields' names and 'em values
-			static std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames);
+			static std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &frame="'");
 			
 			mutable std::string request;///ready sql statement
 	};
