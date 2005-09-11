@@ -199,7 +199,7 @@ sqlBase::selectCollect() const
 	if (pre_table.size()>0)
 	{
 		temp.append(tools::implode(pre_fieldsNames,","));
-		pchar t_request = new char[temp.size()+pre_table.size()+18];	
+		pchar t_request = new char[temp.size()+pre_table.size()+14];	
 		if (t_request == 0)
 		#ifndef NO_EX
 			throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	
@@ -246,12 +246,12 @@ sqlBase::insertCollect() const
 	std::string temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
 	
-	std::string tempFNP('`'+pre_table+'`');
+	std::string tempFNP(pre_table);
 	
 	if (pre_fieldsNames.size() != 0)
 		tempFNP.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
 	
-	pchar t_request = new char[temp.size()+tempFNP.size()+fieldsPart.size()+24];
+	pchar t_request = new char[temp.size()+tempFNP.size()+fieldsPart.size()+22];
 	if (t_request == 0)
 	#ifndef NO_EX
 		throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	
@@ -273,7 +273,7 @@ sqlBase::insertSelectCollect() const
 {
 	
 	std::string fieldsPartTo = tools::implode(pre_fieldsNames,",");
-	std::string fieldsPartFrom = tools::implode(*(pre_fieldsVal.begin()),",");
+	std::string fieldsPartFrom = tools::implode(pre_fieldsVal.front(),",");
 	
 	std::string tempI = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	tempI.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
@@ -302,7 +302,7 @@ sqlBase::insertSelectCollect() const
 void
 sqlBase::updateCollect() const
 {
-	std::string setPart = fieldsValName(*(pre_fieldsVal.begin()), pre_fieldsNames);
+	std::string setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames);
 	
 	std::string temp = insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
 	temp.append(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));
@@ -332,7 +332,7 @@ sqlBase::delCollect() const
 	std::string temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 	
-	pchar t_request = new char[pre_table.size()+temp.size()+16];
+	pchar t_request = new char[pre_table.size()+temp.size()+14];
 	if (t_request == 0)
 	#ifndef NO_EX
 		throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	

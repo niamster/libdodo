@@ -24,11 +24,11 @@
 	$select = array(
 					'date','operation'
 					);
-	for ($i=0;$i<100000;$i++)
+	for ($i=0;$i<1000;$i++)
 	{
-		/*$DB->select('log',$select,"`id`<20 or `operation`='mu'");
+		$DB->select('log',$select,"`id`<20 or `operation`='mu'");
 		$DB->exec();
-		$DB->getAssocArray();*/
+		$DB->getAssocArray();
 		$DB->insert('log',$arr);
 		$DB->exec();
 		$arr['operation'] = 'um';		
