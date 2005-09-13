@@ -315,7 +315,6 @@ namespace dodo
 		
 		stringArr keys;///array of keys in table (field names)
 		stringArr primKeys;///array of primary keys in table (field names)
-		stringArr indexes;///array of indexes in table (field names)
 		stringArr uniq;///array of unique in table (field names)
 		
 		long autoIncr;///auto-increment value (as for start)

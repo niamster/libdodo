@@ -46,8 +46,6 @@ __tableInfo::operator=(__tableInfo &from)
 		fields.push_back(*i);
 	
 	keys = from.keys;
-	primKeys = from.primKeys;
-	indexes = from.indexes;
 	uniq = from.uniq;
 	
 	autoIncr = from.autoIncr;
@@ -918,7 +916,6 @@ dbBase::initTableInfo(__tableInfo &table)
 	table.comment.clear();
 	table.keys.clear();
 	table.primKeys.clear();
-	table.indexes.clear();
 	table.uniq.clear();
 	
 	table.fields.clear();

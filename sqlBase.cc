@@ -431,13 +431,21 @@ sqlBase::createBaseCollect() const
 void 
 sqlBase::createTableCollect() const
 {
-/*	request = "create table " + pre_tableInfo.name;
-	std::vector<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end())-1;
-	for (;i!=j;++i)
-		request.append(*i + ",");
-	request.append(*i);
-	request.append(!pre_tableInfo.keys.empty()?("primary key" + tools::implode(pre_tableInfo.keys,",")):"");
-*/	
+	request = "create table " + pre_tableInfo.name + "(";
+	{
+		std::vector<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end()-1);
+		for (;i!=j;++i)
+			request.append(fieldCollect(*i) + ",");
+		request.append(fieldCollect(*i));
+	}
+	request.append(!pre_tableInfo.primKeys.empty()?(", primary key" + tools::implode(pre_tableInfo.primKeys,",")):"");
+	request.append(!pre_tableInfo.keys.empty()?(", key " + tools::implode(pre_tableInfo.keys,",")):"");
+	request.append(!pre_tableInfo.uniq.empty()?(", unique key " + tools::implode(pre_tableInfo.uniq,",")):"");
+	request.append(pre_tableInfo.avgRowLen>0?(", avg_row_length = " + tools::lToString(pre_tableInfo.avgRowLen)):"");
+	request.append(pre_tableInfo.autoIncr>0?(", auto_increment = " + tools::lToString(pre_tableInfo.autoIncr)):"");
+	request.append(!pre_tableInfo.comment.empty()?(", comment = " + pre_tableInfo.comment):"");	
+	request.append(!pre_tableInfo.charset.empty()?(", character set = " + pre_tableInfo.charset):"");	
+	
 }
 
 //-------------------------------------------------------------------
