@@ -98,7 +98,7 @@ mysqlpp::setMyAddInsSt(unsigned int statement)
 			break;
 		
 	}*/
-	tools::addF(qDbDepInsShift,2<<(statement-1));
+	addF(qDbDepInsShift,1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -112,7 +112,7 @@ mysqlpp::setMyAddUpSt(unsigned int statement)
 			break;
 		
 	}*/
-	tools::addF(qDbDepUpShift,2<<(statement-1));	
+	addF(qDbDepUpShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -124,14 +124,14 @@ mysqlpp::setMyAddSelSt(unsigned int statement)
 	{
 		case SELECT_DISTINCT:
 		case SELECT_ALL:
-			tools::removeF(qSelShift,2<<(SELECT_ALL-1));
-			tools::removeF(qSelShift,2<<(SELECT_DISTINCT-1));
+			removeF(qSelShift,2<<(SELECT_ALL-1));
+			removeF(qSelShift,2<<(SELECT_DISTINCT-1));
 			break;
 		default:
 			break;
 		
 	}
-	tools::addF(qDbDepSelShift,2<<(statement-1));	
+	addF(qDbDepSelShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -145,7 +145,7 @@ mysqlpp::setMyAddDelSt(unsigned int statement)
 			break;
 		
 	}*/
-	tools::addF(qDbDepDelShift,2<<(statement-1));
+	addF(qDbDepDelShift,1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -153,7 +153,7 @@ mysqlpp::setMyAddDelSt(unsigned int statement)
 void 
 mysqlpp::unsetMyAddInsSt(unsigned int statement)
 {
-	tools::removeF(qDbDepInsShift,2<<(statement-1));
+	removeF(qDbDepInsShift,1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -161,7 +161,7 @@ mysqlpp::unsetMyAddInsSt(unsigned int statement)
 void 
 mysqlpp::unsetMyAddUpSt(unsigned int statement)
 {
-	tools::removeF(qDbDepUpShift,2<<(statement-1));	
+	removeF(qDbDepUpShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -169,7 +169,7 @@ mysqlpp::unsetMyAddUpSt(unsigned int statement)
 void 
 mysqlpp::unsetMyAddSelSt(unsigned int statement)
 {
-	tools::removeF(qDbDepSelShift,2<<(statement-1));	
+	removeF(qDbDepSelShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -177,7 +177,7 @@ mysqlpp::unsetMyAddSelSt(unsigned int statement)
 void 
 mysqlpp::unsetMyAddDelSt(unsigned int statement)
 {
-	tools::removeF(qDbDepDelShift,2<<(statement-1));	
+	removeF(qDbDepDelShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------

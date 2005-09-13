@@ -35,6 +35,12 @@
 
 namespace dodo
 {
+	/**
+	* adds/removes option to flag
+	*/
+	#define addF(flag,statement) (flag)|=(statement)
+	#define removeF(flag,statement) (flag)&=(~(statement))
+	
 	class tools : virtual public dodoBase
 	{
 		public:
@@ -48,18 +54,19 @@ namespace dodo
 			* converts double to string
 			*/
 			static std::string dToString(double number);
-			/**
-			* adds/removes option to flag
-			*/
-			static void addF(int &flag, unsigned int statement);
-			static void removeF(int &flag, unsigned int statement);
 			
 			static void replace(pchar needle, pchar replacement, std::string &data);
 		
+			///makes array of strings from string using separtator
+			static stringArr explode(std::string fields, std::string separator);
+		
 			///makes string of fields, separated with separator; frame = symbol, that is used to frame the field
 			static std::string implode(const stringArr &fields, escape escapeF, std::string separator, std::string frame);
-			static std::string implode(const stringArr &fields, std::string separator);
 			static std::string implode(const stringArr &fields, escape escapeF, std::string separator);
+			static std::string implode(const stringArr &fields, std::string separator);
+			static std::string implode(const stringArr &fields, std::string separator, std::string frame);
+		private:
+			inline static std::string dummy(const std::string &data);
 	};
 };
 #endif /* _TOOLS_H */

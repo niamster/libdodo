@@ -68,7 +68,7 @@ namespace dodo
 		
 			bool preventFraming;
 		protected:		
-			static inline std::string escapeFields(const std::string &a_data);
+			inline static std::string escapeFields(const std::string &a_data);
 			/**
 			* functions to collect data into query after
 			*/		

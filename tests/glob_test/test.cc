@@ -72,6 +72,10 @@ int main(int argc, char **argv)
 		
 		
 		std::vector<std::string> fields;
+		
+		fields = tools::explode("pp.asccccddPocstExec(journalhc,(void *)\"joufcnal\");","c");
+		//cout << fields[0];
+		exit(0);
 		fields.push_back("date");
 		fields.push_back("operation");
 				
@@ -80,6 +84,8 @@ int main(int argc, char **argv)
 		values.push_back("mu");
 		pp.limit(10);
 		pp.offset(23);
+		pp.offset(3);
+		pp.unlimit();
 		
 		std::vector<stringArr> aa;
 		aa.push_back(values);
@@ -102,7 +108,7 @@ int main(int argc, char **argv)
 		pp.setMyAddSelSt(SELECT_BIG_RESULT);
 		//pp.exec();
 		cout << endl << pp.queryCollect() << endl;
-		exit(0);
+		//exit(0);
 	//	for (int o=0;o<1000000;o++)
 		{
 			pp.insert("log",values,fields);
@@ -110,11 +116,11 @@ int main(int argc, char **argv)
 			cout << pp.queryCollect() << endl;
 			//	pp.exec();
 		}
-		pp.select("log",fields);
+		pp.select("log",fields,"id>1");
 
 		//pp.select("",fields);
 		cout << pp.queryCollect() << endl;
-
+		exit(0);
 		std::vector<std::string> uni;
 		uni.push_back(pp.queryCollect());
 		uni.push_back(pp.queryCollect());

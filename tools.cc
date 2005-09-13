@@ -26,6 +26,12 @@
 
 using namespace dodo;
 
+inline std::string
+tools::dummy(const std::string &data)
+{
+	return data;
+}
+
 tools *
 tools::getSelf()
 {
@@ -35,30 +41,12 @@ tools::getSelf()
 //-------------------------------------------------------------------
 
 void 
-tools::addF(int &flag, 
-	unsigned int statement)
-{
-	flag |= statement;
-}
-
-//-------------------------------------------------------------------
-
-void 
-tools::removeF(int &flag, 
-		unsigned int statement)
-{
-	flag &= ~statement-1;
-}
-
-//-------------------------------------------------------------------
-
-void 
 tools::replace(pchar needle, 
 		pchar replacement,
 		std::string &data)
 {
-	register unsigned int i(0),j(strlen(needle)),k(strlen(replacement)),size(data.size());
-	while (i<=size)
+	register unsigned int i(0),j(strlen(needle)),k(strlen(replacement));
+	while (true)
 	{
 		i = data.find(needle,i);
 		if (i==std::string::npos)
@@ -70,6 +58,26 @@ tools::replace(pchar needle,
 
 //-------------------------------------------------------------------
 
+stringArr 
+tools::explode(std::string fields, 
+			std::string separator)
+{
+	register unsigned int i(0), j(0), sep_size(strlen(separator.c_str()));
+	stringArr arr;
+	while (true)
+	{
+		i = fields.find(separator,i);
+		arr.push_back(fields.substr(j,i-j));
+		if (i==std::string::npos)
+			break;
+		i += sep_size;
+		j = i;
+	}
+	return arr;
+}
+
+//-------------------------------------------------------------------
+
 std::string
 tools::implode(const stringArr &fields,
 		escape escapeF, 
@@ -77,13 +85,22 @@ tools::implode(const stringArr &fields,
 		std::string frame)
 {
 	std::string temp, fs(frame + separator);
-	stringArr::const_iterator i(fields.begin()), j(fields.end());
+	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);
 	
-	for (;i!=j-1;++i)
+	for (;i!=j;++i)
 		temp.append(frame + escapeF(*i) + fs);
 	temp.append(frame + escapeF(*i) + frame);
 	
 	return temp;
+}
+//-------------------------------------------------------------------
+
+std::string
+tools::implode(const stringArr &fields,
+		std::string separator,
+		std::string frame)
+{	
+	return implode(fields,&dummy,separator,frame);
 }
 
 //-------------------------------------------------------------------
@@ -92,14 +109,7 @@ std::string
 tools::implode(const stringArr &fields,
 		std::string separator)
 {
-	std::string temp;
-	stringArr::const_iterator i(fields.begin()), j(fields.end());
-	
-	for (;i!=j-1;++i)
-		temp.append(*i + separator);
-	temp.append(*i);
-	
-	return temp;
+	return implode(fields,&dummy,separator);
 }
 
 //-------------------------------------------------------------------
@@ -110,9 +120,9 @@ tools::implode(const stringArr &fields,
 		std::string separator)
 {
 	std::string temp;
-	stringArr::const_iterator i(fields.begin()), j(fields.end());
+	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);
 	
-	for (;i!=j-1;++i)
+	for (;i!=j;++i)
 		temp.append(escapeF(*i) + separator);
 	temp.append(escapeF(*i));
 	

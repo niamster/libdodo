@@ -242,7 +242,7 @@ dbBase::select(std::string a_table,
 	pre_fieldsNames = a_fieldsNames;
 	if (strlen(a_where.c_str()) != 0)
 	{
-		tools::addF(qShift,1<<WHERE);
+		addF(qShift,1<<WHERE);
 		pre_where = a_where;
 	}
 	
@@ -365,7 +365,7 @@ dbBase::insertSelect(std::string a_tableTo,
 	
 	if (strlen(a_where.c_str()) != 0)
 	{
-		tools::addF(qShift,1<<WHERE);
+		addF(qShift,1<<WHERE);
 		pre_where = a_where;
 	}
 	
@@ -398,7 +398,7 @@ dbBase::update(std::string a_table,
 	
 	if (strlen(a_where.c_str()) != 0)
 	{
-		tools::addF(qShift,1<<WHERE);
+		addF(qShift,1<<WHERE);
 		pre_where = a_where;
 	}	
 	
@@ -421,7 +421,7 @@ dbBase::update(std::string a_table,
 
 	if (strlen(a_where.c_str()) != 0)
 	{
-		tools::addF(qShift,1<<WHERE);
+		addF(qShift,1<<WHERE);
 		pre_where = a_where;
 	}	
 	
@@ -440,7 +440,7 @@ dbBase::del(std::string a_table,
 
 	if (a_where.size() != 0)
 	{
-		tools::addF(qShift,1<<WHERE);
+		addF(qShift,1<<WHERE);
 		pre_where = a_where;
 	}
 	
@@ -588,7 +588,7 @@ dbBase::where(std::string where) const
 {
 	pre_where = where;
 
-	tools::addF(qShift,1<<WHERE);
+	addF(qShift,1<<WHERE);
 }
 
 //-------------------------------------------------------------------
@@ -596,7 +596,7 @@ dbBase::where(std::string where) const
 void 
 dbBase::limit(unsigned int a_number) const
 {
-	tools::addF(qShift,1<<LIMIT);
+	addF(qShift,1<<LIMIT);
 
 	pre_limNumber = tools::lToString(a_number);
 }
@@ -605,7 +605,7 @@ dbBase::limit(unsigned int a_number) const
 void 
 dbBase::offset(unsigned int a_number) const
 {
-	tools::addF(qShift,1<<OFFSET);
+	addF(qShift,1<<OFFSET);
 	
 	pre_limOffset = tools::lToString(a_number);
 }
@@ -617,7 +617,7 @@ dbBase::order(std::string order) const
 {
 	pre_order = order;
 
-	tools::addF(qShift,1<<ORDERBY);
+	addF(qShift,1<<ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -627,7 +627,7 @@ dbBase::group(std::string group) const
 {	
 	pre_group = group;
 
-	tools::addF(qShift,1<<GROUPBY);
+	addF(qShift,1<<GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -637,7 +637,7 @@ dbBase::having(std::string having) const
 {
 	pre_having = having;
 
-	tools::addF(qShift,1<<HAVING);
+	addF(qShift,1<<HAVING);
 }
 
 
@@ -646,7 +646,7 @@ dbBase::having(std::string having) const
 void 
 dbBase::unwhere() const
 {
-	tools::removeF(qShift,1<<WHERE);	
+	removeF(qShift,1<<WHERE);	
 }
 
 //-------------------------------------------------------------------
@@ -654,7 +654,7 @@ dbBase::unwhere() const
 void 
 dbBase::unlimit() const
 {
-	tools::removeF(qShift,1<<LIMIT);
+	removeF(qShift,1<<LIMIT);
 }
 
 //-------------------------------------------------------------------
@@ -662,7 +662,7 @@ dbBase::unlimit() const
 void 
 dbBase::unoffset() const
 {
-	tools::removeF(qShift,1<<OFFSET);
+	removeF(qShift,1<<OFFSET);
 }
 
 //-------------------------------------------------------------------
@@ -670,7 +670,7 @@ dbBase::unoffset() const
 void 
 dbBase::unorder() const
 {
-	tools::removeF(qShift,1<<ORDERBY);
+	removeF(qShift,1<<ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -678,7 +678,7 @@ dbBase::unorder() const
 void 
 dbBase::ungroup() const
 {	
-	tools::removeF(qShift,1<<GROUPBY);
+	removeF(qShift,1<<GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -686,7 +686,7 @@ dbBase::ungroup() const
 void 
 dbBase::unhaving() const
 {
-	tools::removeF(qShift,1<<HAVING);
+	removeF(qShift,1<<HAVING);
 }
 
 
@@ -702,7 +702,7 @@ dbBase::setAddInsSt(unsigned int statement)
 			break;
 		
 	}*/
-	tools::addF(qInsShift,1<<statement);
+	addF(qInsShift,1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -716,7 +716,7 @@ dbBase::setAddUpSt(unsigned int statement)
 			break;
 		
 	}*/
-	tools::addF(qUpShift,1<<statement);	
+	addF(qUpShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -728,14 +728,14 @@ dbBase::setAddSelSt(unsigned int statement)
 	{
 		case SELECT_DISTINCT:
 		case SELECT_ALL:
-			tools::removeF(qSelShift,1<<SELECT_ALL);
-			tools::removeF(qSelShift,1<<SELECT_DISTINCT);
+			removeF(qSelShift,1<<SELECT_ALL);
+			removeF(qSelShift,1<<SELECT_DISTINCT);
 			break;
 		default:
 			break;
 		
 	}
-	tools::addF(qSelShift,1<<statement);	
+	addF(qSelShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -749,7 +749,7 @@ dbBase::setAddDelSt(unsigned int statement)
 			break;
 		
 	}*/
-	tools::addF(qDelShift,1<<statement);
+	addF(qDelShift,1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -757,7 +757,7 @@ dbBase::setAddDelSt(unsigned int statement)
 void 
 dbBase::unsetAddInsSt(unsigned int statement)
 {
-	tools::removeF(qInsShift,1<<statement);
+	removeF(qInsShift,1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -765,7 +765,7 @@ dbBase::unsetAddInsSt(unsigned int statement)
 void 
 dbBase::unsetAddUpSt(unsigned int statement)
 {
-	tools::removeF(qUpShift,1<<statement);	
+	removeF(qUpShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -773,7 +773,7 @@ dbBase::unsetAddUpSt(unsigned int statement)
 void 
 dbBase::unsetAddSelSt(unsigned int statement)
 {
-	tools::removeF(qSelShift,1<<statement);	
+	removeF(qSelShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -781,7 +781,7 @@ dbBase::unsetAddSelSt(unsigned int statement)
 void 
 dbBase::unsetAddDelSt(unsigned int statement)
 {
-	tools::removeF(qDelShift,1<<statement);	
+	removeF(qDelShift,1<<statement);	
 }
 
 //-------------------------------------------------------------------
