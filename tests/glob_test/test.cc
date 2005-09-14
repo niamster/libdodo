@@ -50,9 +50,9 @@ int main(int argc, char **argv)
 	try
 	{
 		int pos = pp.addPreExec(hook,&pp,(void *)"id");
-		//pp.addPostExec(journal,(void *)"journal");
+		pp.addPostExec(&journal,&pp,(void *)"journal");
 		
-		//pp.delPreExec(pos);
+		pp.delPreExec(pos);
 		
 		pp.setSqlInfo("test","",3306,"","Dmitrik");
 		pp.connect();
@@ -66,22 +66,17 @@ int main(int argc, char **argv)
 		fi.length = 10;
 		
 		pp.createField(fi,"table");
-		
-		//cout << endl << pp.queryCollect() << endl;
-		//exit(0);
+		pp.exec();
 		
 		
 		std::vector<std::string> fields;
 		
-		fields = tools::explode("pp.asccccddPocstExec(journalhc,(void *)\"joufcnal\");","c");
-		//cout << fields[0];
-		exit(0);
 		fields.push_back("date");
 		fields.push_back("operation");
-				
 		std::vector<std::string> values;
 		values.push_back("20\"05`''-'07-08");
 		values.push_back("mu");
+
 		pp.limit(10);
 		pp.offset(23);
 		pp.offset(3);
@@ -101,26 +96,21 @@ int main(int argc, char **argv)
 		assA.push_back(arr);
 		
 		pp.insert("t",assA);
-		//pp.insertSelect("test1","test2",fields,values);
+		pp.insertSelect("test1","test2",fields,values);
 		//pp.insert("test1",values,fields);
 		pp.setAddInsSt(INSERT_IGNORE);
 		pp.setAddSelSt(SELECT_DISTINCT);
 		pp.setMyAddSelSt(SELECT_BIG_RESULT);
-		//pp.exec();
+		pp.exec();
 		cout << endl << pp.queryCollect() << endl;
-		//exit(0);
-	//	for (int o=0;o<1000000;o++)
+		for (int o=0;o<1000000;o++)
 		{
 			pp.insert("log",values,fields);
-			//pp.delPreExec(pos);		
 			cout << pp.queryCollect() << endl;
-			//	pp.exec();
+			pp.exec();
 		}
 		pp.select("log",fields,"id>1");
 
-		//pp.select("",fields);
-		cout << pp.queryCollect() << endl;
-		exit(0);
 		std::vector<std::string> uni;
 		uni.push_back(pp.queryCollect());
 		uni.push_back(pp.queryCollect());
@@ -131,11 +121,9 @@ int main(int argc, char **argv)
 		uni_all.push_back(pp.queryCollect());
 		pp.subquery(uni_all,UNION_ALL);
 		
-		cout << pp.queryCollect() << endl;
-
-		//pp.order("id desc");
-		//pp.limit(5);
-		//pp.setAddSelSt(SELECT_DISTINCT);
+		pp.order("id desc");
+		pp.limit(5);
+		pp.setAddSelSt(SELECT_DISTINCT);
 		
 		
 		
