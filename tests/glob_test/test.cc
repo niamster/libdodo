@@ -49,8 +49,12 @@ int main(int argc, char **argv)
 	mysqlpp pp;
 	try
 	{
-		int pos = pp.addPreExec(hook,&pp,(void *)"id");
-		pp.addPostExec(&journal,&pp,(void *)"journal");
+		int pos = pp.myAddPreExec(hook,(void *)"id");
+		pp.myAddPostExec(&journal,(void *)"journal");
+		/*
+		 * int pos = pp.addPreExec(hook,&pp,(void *)"id");
+		 * pp.addPostExec(&journal,&pp,(void *)"journal");
+		 */
 		
 		pp.delPreExec(pos);
 		

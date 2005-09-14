@@ -126,6 +126,8 @@ namespace dodo
 			*/
 			virtual bool exec() const;
 			
+			virtual int myAddPostExec(inExec func, void *data) const;
+			virtual int myAddPreExec(inExec func, void *data) const;
 		private:
 			/**
 			 * executes request

@@ -345,13 +345,13 @@ namespace dodo
 			/**
 			* sets info for mysql database
 			*/
-			void setSqlInfo(std::string db, std::string host, unsigned int port, std::string user, std::string password, std::string socket = "") const;
+			void setSqlInfo(std::string db, std::string host, unsigned int port, std::string user, std::string password, std::string socket = std::string("")) const;
 			/**
 			 * table - (char*)/(string); if length(table)==0 => 'from `table`' doesn't use 
 			 * fields - array of (char*)/(string)
 			 * where - (char*)/(string)
 		   */
-			virtual void select(std::string table, const stringArr &fieldsNames, std::string where = "") const;
+			virtual void select(std::string table, const stringArr &fieldsNames, std::string where = std::string("")) const;
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
@@ -382,7 +382,7 @@ namespace dodo
 			* table(To/From) - (char*)/(string)
 			* fieldsNames - array of (char*)/(string)
 			*/
-			virtual void insertSelect(std::string tableTo, std::string tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = "", std::string where = "");
+			virtual void insertSelect(std::string tableTo, std::string tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = stringArr(), std::string where = std::string(""));
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
@@ -390,19 +390,19 @@ namespace dodo
 			 * value => field's value
 			 * where - (char*)/(string)
 		   */
-			virtual void update(std::string table, const assocArr &fields, const std::string where = "");			
+			virtual void update(std::string table, const assocArr &fields, const std::string where = std::string(""));			
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 			 * where - (char*)/(string)
 		   */
-			virtual void update(std::string table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string where = "");
+			virtual void update(std::string table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string where = std::string(""));
 			/**
 			 * table - (char*)/(string)
 			 * where - (char*)/(string)
 			*/       
-			virtual void del(std::string table, std::string where = "");
+			virtual void del(std::string table, std::string where = std::string(""));
 			/**
 			* subquery
 			*/
@@ -438,7 +438,7 @@ namespace dodo
 			/**
 			 * creates database
 			*/
-			virtual void createDb(std::string db, std::string charset="");
+			virtual void createDb(std::string db, std::string charset=std::string(""));
 			/**
 			 * creates table
 			*/

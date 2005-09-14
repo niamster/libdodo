@@ -365,3 +365,23 @@ mysqlpp::getErr() const
 {
 	return err;
 }
+
+//-------------------------------------------------------------------
+
+int 
+mysqlpp::myAddPostExec(inExec func, 
+					void *data) const
+{
+	xexec::addPostExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+mysqlpp::myAddPreExec(inExec func, 
+					void *data) const
+{
+	addPreExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
