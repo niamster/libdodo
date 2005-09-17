@@ -32,12 +32,6 @@ tools::dummy(const std::string &data)
 	return data;
 }
 
-tools *
-tools::getSelf()
-{
-	return this;
-}
-
 //-------------------------------------------------------------------
 
 void 

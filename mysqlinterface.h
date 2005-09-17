@@ -70,11 +70,11 @@ namespace dodo
 	*	class to work with mysql through c++
 	*	usage: see test.cc
 	*/
-	class mysqlpp : virtual public dodoBase, virtual public sqlBase, virtual public xexec
+	class mysqlpp : public sqlBase, public xexec
 	{
 		friend class mysqlppEx;///class of exception
 		public:
-			virtual mysqlpp *getSelf();
+			virtual dodoBase *getSelf();
 		
 			mysqlpp();
 			mysqlpp(mysqlpp *a_mypp);

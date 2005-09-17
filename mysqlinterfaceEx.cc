@@ -36,6 +36,8 @@
 		
 	}
 	
+	//-------------------------------------------------------------------
+	
 	mysqlppEx::mysqlppEx(mysqlppExR a_reason, 
 						mysqlpp *a_obj,
 						unsigned long a_line, 
@@ -56,9 +58,28 @@
 		resolvers[3] = &dummyMysqlppResolve;
 	}
 	
+	//-------------------------------------------------------------------
+	
 	mysqlppEx::~mysqlppEx()
 	{
 	}
+	//-------------------------------------------------------------------
+	
+	baseEx *
+	mysqlppEx::getSelf()
+	{
+		return dynamic_cast<baseEx *>(this);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	mysqlppEx::getExID()
+	{
+		return MYSQL_EX;
+	}	
+	
+	//-------------------------------------------------------------------
 	
 	/**
 	* specify type of exception and function to resolve it. u can combine reasons with '|'
@@ -80,6 +101,8 @@
 			resolvers[3] = a_resF;
 	}
 	
+	//-------------------------------------------------------------------
+	
 	void 
 	mysqlppEx::resolve()
 	{
@@ -99,5 +122,7 @@
 				break;	
 		}
 	}
+	
+	//-------------------------------------------------------------------
 
 #endif

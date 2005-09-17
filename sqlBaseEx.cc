@@ -34,6 +34,8 @@
 		
 	}
 	
+	//-------------------------------------------------------------------
+		
 	sqlBaseEx::sqlBaseEx(sqlBaseExR a_reason, 
 						sqlBase *a_obj,
 						unsigned long a_line, 
@@ -45,10 +47,30 @@
 		resolvers[1] = &dummySqlBaseExResolve;
 	}
 	
+	//-------------------------------------------------------------------
+	
 	sqlBaseEx::~sqlBaseEx()
 	{
 	}
 	
+	//-------------------------------------------------------------------
+		
+	baseEx *
+	sqlBaseEx::getSelf()
+	{
+		return dynamic_cast<baseEx *>(this);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	sqlBaseEx::getExID()
+	{
+		return SQLBASE_EX;
+	}
+	
+	//-------------------------------------------------------------------
+			
 	/**
 	* specify type of exception and function to resolve it. u can combine reasons with '|'
 	* tries to resolve problem with own function
@@ -65,6 +87,8 @@
 			resolvers[0] = a_resF;
 	}
 	
+	//-------------------------------------------------------------------
+		
 	void 
 	sqlBaseEx::resolve()
 	{
@@ -78,5 +102,7 @@
 				break;
 		}
 	}
-
+	
+	//-------------------------------------------------------------------
+	
 #endif

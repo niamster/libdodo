@@ -64,7 +64,10 @@
 		class sqlBaseEx : virtual public baseEx
 		{
 			public:
-	
+			
+				virtual baseEx *getSelf();
+				virtual int getExID();
+				
 				sqlBaseEx(sqlBaseExR reason, sqlBase *obj, unsigned long line, std::string file);
 				virtual ~sqlBaseEx();
 				virtual void setResolve(sqlBaseExR, sqlBaseExResolver);///try to resolve by own function

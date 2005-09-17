@@ -33,6 +33,14 @@
 	namespace dodo
 	{	
 		///base class for excaptions. it contais basic stats and have to be derived
+		
+		enum exIdEnum
+		{
+			BASE_EX,
+			MYSQL_EX,
+			SQLBASE_EX
+		};
+		
 		class baseEx
 		{
 			public:		
@@ -44,6 +52,9 @@
 					UNSAFE = 10,
 					CRITICAL = 100
 				};
+				
+				virtual baseEx *getSelf();
+				virtual int getExID();		
 				
 				baseEx(unsigned long line, std::string file);
 			

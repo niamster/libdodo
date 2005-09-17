@@ -138,9 +138,10 @@ __collectedData::__collectedData(
 
 //-------------------------------------------------------------------
 
-dbBase *dbBase::getSelf()
+dodoBase *
+dbBase::getSelf()
 {
-	return this;
+	return dynamic_cast<dodoBase *>(this);
 }
 
 //-------------------------------------------------------------------

@@ -1,4 +1,4 @@
-GCC_PATH=/opt/gcc-3.4.3/bin/
+#GCC_PATH=/opt/gcc-3.4.3/bin/
 
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -fmove-all-movables -march=pentium4

@@ -77,9 +77,10 @@ static 	__sqlStatements sqlAddSelArr[3] =
 
 //-------------------------------------------------------------------
 
-sqlBase *sqlBase::getSelf()
+dodoBase *
+sqlBase::getSelf()
 {
-	return this;
+	return dynamic_cast<dodoBase *>(this);
 }
 
 //-------------------------------------------------------------------

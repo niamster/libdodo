@@ -45,11 +45,11 @@ namespace dodo
 	* when u are usin' select wo table_name field names are not escaped and framed!!
 	* If u want to prevent data framin' set sqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
 	*/
-	class sqlBase : virtual public dodoBase, virtual public dbBase
+	class sqlBase : public dbBase
 	{
 		friend class sqlBaseEx;///class of exception
 		public:
-			virtual sqlBase *getSelf();
+			virtual dodoBase *getSelf();
 			/*
 			* constructors and destructors
 			*/

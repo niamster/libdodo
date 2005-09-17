@@ -27,9 +27,10 @@
 
 using namespace dodo;
 
-mysqlpp *mysqlpp::getSelf()
+dodoBase *
+mysqlpp::getSelf()
 {
-	return this;
+	return dynamic_cast<dodoBase *>(this);
 }
 
 //-------------------------------------------------------------------
@@ -201,7 +202,8 @@ mysqlpp::connect(unsigned long type) const
 		type))
 	{
 		connected = false;
-		err = "mysql_real_connect(): ";
+		err = "Query was: " + request + "\n";
+		err.append("mysql_real_connect(): ");
 		err.append(mysql_error(mysql));
 		#ifndef NO_EX
 			throw mysqlppEx(MYSQL_CONNECT,(mysqlpp *)this,__LINE__,__FILE__);
@@ -236,7 +238,8 @@ mysqlpp::_exec() const
 	
 	if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
 	{
-		err = "mysql_real_query(): ";
+		err = "Query was: " + request + "\n";
+		err.append("mysql_real_query(): ");
 		err.append(mysql_error(mysql));
 		#ifndef NO_EX
 			throw mysqlppEx(MYSQL_QUERY,(mysqlpp *)this,__LINE__,__FILE__);
@@ -255,7 +258,8 @@ mysqlpp::_exec() const
 	mysqlRes = mysql_store_result(mysql);
 	if (mysqlRes == NULL)
 	{
-		err = "mysql_store_result(): ";
+		err = "Query was: " + request + "\n";
+		err.append("mysql_store_result(): ");
 		err.append(mysql_error(mysql));
 		#ifndef NO_EX
 			throw mysqlppEx(MYSQL_STORE,(mysqlpp *)this,__LINE__,__FILE__);

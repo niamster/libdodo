@@ -41,10 +41,10 @@ namespace dodo
 	#define addF(flag,statement) (flag)|=(statement)
 	#define removeF(flag,statement) (flag)&=(~(statement))
 	
-	class tools : virtual public dodoBase
+	class tools
 	{
 		public:
-			virtual tools *getSelf();
+			//virtual tools *getSelf();
 			
 			/**
 			* converts long to string

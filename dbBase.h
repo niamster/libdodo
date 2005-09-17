@@ -326,10 +326,10 @@ namespace dodo
 	/**
 	* class to provide wide abilities for sql manipulations
 	*/
-	class dbBase : virtual public dodoBase
+	class dbBase : public dodoBase
 	{
 		public:
-			virtual dbBase *getSelf();
+			virtual dodoBase *getSelf();
 			/*
 			* constructors and destructors
 			*/

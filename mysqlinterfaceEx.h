@@ -64,6 +64,9 @@
 		{
 			public:
 	
+				virtual baseEx *getSelf();
+				virtual int getExID();
+	
 				mysqlppEx(mysqlppExR reason, mysqlpp *obj, unsigned long line, std::string file);
 				virtual ~mysqlppEx();
 				virtual void setResolve(mysqlppExR,mysqlppExResolver);///try to resolve by own function

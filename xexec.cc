@@ -26,12 +26,6 @@
 
 using namespace dodo;
 
-xexec *
-xexec::getSelf()
-{
-	return this;
-}
-
 //-------------------------------------------------------------------
 
 void 

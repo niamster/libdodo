@@ -62,10 +62,9 @@ namespace dodo
 	* class to provide wide abilities exec manipulations
 	* pre, post execs.
 	*/
-	class xexec : virtual public dodoBase
+	class xexec
 	{
 		public:
-			virtual xexec *getSelf();
 			/*
 			* constructors and destructors
 			*/
