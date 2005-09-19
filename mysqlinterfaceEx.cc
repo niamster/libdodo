@@ -82,9 +82,9 @@
 	//-------------------------------------------------------------------
 	
 	/**
-	* specify type of exception and function to resolve it. u can combine reasons with '|'
-	* tries to resolve problem with own function
-	*/
+	 * specify type of exception and function to resolve it. u can combine reasons with '|'
+	 * tries to resolve problem with own function
+	 */
 	void 
 	mysqlppEx::setResolve(mysqlppExR a_reason, 
 							mysqlppExResolver a_resF)

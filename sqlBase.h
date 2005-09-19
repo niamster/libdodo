@@ -34,44 +34,40 @@
 
 namespace dodo
 {
-	struct __sqlStatements 
-	{
-		std::string str;
-	};
-
+	
 	/**
-	* class to provide wide abilities for sql manipulations
-	* be carefull!!! all data become escaped and fremed with <'>. Fields' names are not framed with <`> to prevent "`count(*)`" or smth else
-	* when u are usin' select wo table_name field names are not escaped and framed!!
-	* If u want to prevent data framin' set sqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
-	*/
+	 * class to provide wide abilities for sql manipulations
+	 * be carefull!!! all data become escaped and fremed with <'>. Fields' names are not framed with <`> to prevent "`count(*)`" or smth else
+	 * when u are usin' select wo table_name field names are not escaped and framed!!
+	 * If u want to prevent data framin' set sqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
+	 */
 	class sqlBase : public dbBase
 	{
 		friend class sqlBaseEx;///class of exception
 		public:
 			virtual dodoBase *getSelf();
 			/*
-			* constructors and destructors
-			*/
+			 * constructors and destructors
+			 */
 			sqlBase();	
 			virtual ~sqlBase();
 			/**
-			* performs query collect from collected data;
-			* it doesn't clean collected data
-			*/
+			 * performs query collect from collected data;
+			 * it doesn't clean collected data
+			 */
 			virtual std::string queryCollect() const;///collect data into query
 			/**
-			* returns string in exist()
-			*/	
-			static std::string exists(std::string statement);
-			static std::string noexists(std::string statement);
+			 * returns string in exist()
+			 */	
+			static std::string exists(const std::string &statement);
+			static std::string noexists(const std::string &statement);
 		
 			bool preventFraming;
 		protected:		
 			inline static std::string escapeFields(const std::string &a_data);
 			/**
-			* functions to collect data into query after
-			*/		
+			 * functions to collect data into query after
+			 */		
 			virtual void selectCollect() const;
 			virtual void insertCollect() const;
 			virtual void insertSelectCollect() const;
@@ -91,16 +87,16 @@ namespace dodo
 			virtual void createFieldCollect() const;
 			inline virtual std::string fieldCollect(__fieldInfo &row) const;
 			/**
-			* adds to the end of request additional data collection for query
-			*/
+			 * adds to the end of request additional data collection for query
+			 */
 			virtual void additionalCollect(unsigned int qTypeTocheck, std::string collectedString) const;
 			/**
-			* return string that consists of collected data for request inside
-			*/
-			virtual std::string insideAddCollect(unsigned int sqlAddEnumArr[], __sqlStatements sqlAddArr[], int qTypeShift) const;
+			 * return string that consists of collected data for request inside
+			 */
+			virtual std::string insideAddCollect(unsigned int sqlAddEnumArr[], __statements sqlAddArr[], int qTypeShift) const;
 			/**
-			* return string that consists of collected data for request inside(DB-dependent)
-			*/
+			 * return string that consists of collected data for request inside(DB-dependent)
+			 */
 			virtual std::string insideAddCollect(std::list<std::string> &statements, int qTypeShift) const;
 		
 			///creates string from fields' names and 'em values

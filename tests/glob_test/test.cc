@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 		pp.debug(storage);//shows result
 
 	}
-/*	catch(mysqlppEx ex)
+	catch(mysqlppEx ex)
 	{
 		cout << "MYexception was in: " << ex.reason << " in " << ex.file.c_str() << " at " << ex.line << endl;
 		ex.setResolve(MYSQL_QUERY,resolver);
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 	catch(sqlBaseEx ex)
 	{
 		cout << "MYexception was in: " << ex.reason << " in " << ex.file.c_str() << " at " << ex.line << endl;
-	}*/
+	}
 	
 	/* can be:
     catch(baseEx &ex)///!!!!!!!!for base cought must be reference!!!

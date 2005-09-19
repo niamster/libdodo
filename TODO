@@ -1,297 +1,96 @@
-Implement in sqlBase:
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-	rename table, db, field;
-	create db, table, field;
+std::string
+cgicc::form_urlencode(const std::string& src)
+{
+  std::string result;
+  std::string::const_iterator iter;
+  
+  for(iter = src.begin(); iter != src.end(); ++iter) {
+    switch(*iter) {
+    case ' ':
+      result.append(1, '+');
+      break;
+      // alnum
+    case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
+    case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
+    case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
+    case 'V': case 'W': case 'X': case 'Y': case 'Z':
+    case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
+    case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
+    case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
+    case 'v': case 'w': case 'x': case 'y': case 'z':
+    case '0': case '1': case '2': case '3': case '4': case '5': case '6':
+    case '7': case '8': case '9':
+      // mark
+    case '-': case '_': case '.': case '!': case '~': case '*': case '\'': 
+    case '(': case ')':
+      result.append(1, *iter);
+      break;
+      // escape
+    default:
+      result.append(1, '%');
+      result.append(charToHex(*iter));
+      break;
+    }
+  }
+  
+  return result;
+}
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+std::string
+cgicc::form_urldecode(const std::string& src)
+{
+  std::string result;
+  std::string::const_iterator iter;
+  char c;
+
+  for(iter = src.begin(); iter != src.end(); ++iter) {
+    switch(*iter) {
+    case '+':
+      result.append(1, ' ');
+      break;
+    case '%':
+	// Don't assume well-formed input
+	if(std::distance(iter, src.end()) >= 2
+	   && std::isxdigit(*(iter + 1)) && std::isxdigit(*(iter + 2))) {
+	    c = *++iter;
+	    result.append(1, hexToChar(c, *++iter));
+	}
+	// Just pass the % through untouched
+	else {
+	    result.append(1, '%');
+	}
+	break;
+    
+    default:
+      result.append(1, *iter);
+      break;
+    }
+  }
+  
+  return result;
+}
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+
+int main()
+{
+	printf("Content-type: text/html\nX-Powered-By: libdodo/0.0.1\n\n");
+
+	printf("!!%s!!",getenv("HTTP_POST_FILES")==NULL?"NULL":"SET");
+
 	
-add support for berkley db(just try =))
-
-and inplement them all at first i sqlBase!!
-
-
-SQL Statements: 
-
-to get field info:
-SHOW FIELDS FROM `log` [FROM db_name] LIKE 'id' 
-
-ALTER TABLE `log` CHANGE `id` `id` INT( 11 ) NOT NULL AUTO_INCREMENT 
-
-SHOW [FULL] COLUMNS FROM tbl_name [FROM db_name] [LIKE 'pattern']
-SHOW CREATE DATABASE db_name
-SHOW CREATE TABLE tbl_name
-SHOW DATABASES [LIKE 'pattern']
-SHOW GRANTS FOR user
-SHOW INDEX FROM tbl_name [FROM db_name]
-SHOW PRIVILEGES
-SHOW [OPEN] TABLES [FROM db_name] [LIKE 'pattern']
-
-
-
-ALTER {DATABASE | SCHEMA} [db_name]
-    alter_specification [, alter_specification] ...
-
-alter_specification:
-    [DEFAULT] CHARACTER SET charset_name
-  | [DEFAULT] COLLATE collation_name
-  
-ALTER [IGNORE] TABLE tbl_name
-    alter_specification [, alter_specification] ...
-
-alter_specification:
-    ADD [COLUMN] column_definition [FIRST | AFTER col_name ]
-  | ADD [COLUMN] (column_definition,...)
-  | ADD INDEX [index_name] [index_type] (index_col_name,...)
-  | ADD [CONSTRAINT [symbol]]
-        PRIMARY KEY [index_type] (index_col_name,...)
-  | ADD [CONSTRAINT [symbol]]
-        UNIQUE [index_name] [index_type] (index_col_name,...)
-  | ADD [FULLTEXT|SPATIAL] [index_name] (index_col_name,...)
-  | ADD [CONSTRAINT [symbol]]
-        FOREIGN KEY [index_name] (index_col_name,...)
-        [reference_definition]
-  | ALTER [COLUMN] col_name {SET DEFAULT literal | DROP DEFAULT}
-  | CHANGE [COLUMN] old_col_name column_definition
-        [FIRST|AFTER col_name]
-  | MODIFY [COLUMN] column_definition [FIRST | AFTER col_name]
-  | DROP [COLUMN] col_name
-  | DROP PRIMARY KEY
-  | DROP INDEX index_name
-  | DROP FOREIGN KEY fk_symbol
-  | DISABLE KEYS
-  | ENABLE KEYS
-  | RENAME [TO] new_tbl_name
-  | ORDER BY col_name
-  | CONVERT TO CHARACTER SET charset_name [COLLATE collation_name]
-  | [DEFAULT] CHARACTER SET charset_name [COLLATE collation_name]
-  | DISCARD TABLESPACE
-  | IMPORT TABLESPACE
-  | table_options
-
-ALTER TABLE
-
-
-CREATE {DATABASE | SCHEMA} [IF NOT EXISTS] db_name
-    [create_specification [, create_specification] ...]
-
-create_specification:
-    [DEFAULT] CHARACTER SET charset_name
-  | [DEFAULT] COLLATE collation_name
-  
-  CREATE [UNIQUE|FULLTEXT|SPATIAL] INDEX index_name
-    [USING index_type]
-    ON tbl_name (index_col_name,...)
-
-index_col_name:
-    col_name [(length)] [ASC | DESC]
-    
-
-    CREATE [TEMPORARY] TABLE [IF NOT EXISTS] tbl_name
-    [(create_definition,...)]
-    [table_options] [select_statement]
-
-Or:
-
-CREATE [TEMPORARY] TABLE [IF NOT EXISTS] tbl_name
-    [(] LIKE old_tbl_name [)];
-
-create_definition:
-    column_definition
-  | [CONSTRAINT [symbol]] PRIMARY KEY [index_type] (index_col_name,...)
-  | KEY [index_name] [index_type] (index_col_name,...)
-  | INDEX [index_name] [index_type] (index_col_name,...)
-  | [CONSTRAINT [symbol]] UNIQUE [INDEX]
-        [index_name] [index_type] (index_col_name,...)
-  | [FULLTEXT|SPATIAL] [INDEX] [index_name] (index_col_name,...)
-  | [CONSTRAINT [symbol]] FOREIGN KEY
-        [index_name] (index_col_name,...) [reference_definition]
-  | CHECK (expr)
-
-column_definition:
-    col_name type [NOT NULL | NULL] [DEFAULT default_value]
-        [AUTO_INCREMENT] [[PRIMARY] KEY] [COMMENT 'string']
-        [reference_definition]
-
-type:
-    TINYINT[(length)] [UNSIGNED] [ZEROFILL]
-  | SMALLINT[(length)] [UNSIGNED] [ZEROFILL]
-  | MEDIUMINT[(length)] [UNSIGNED] [ZEROFILL]
-  | INT[(length)] [UNSIGNED] [ZEROFILL]
-  | INTEGER[(length)] [UNSIGNED] [ZEROFILL]
-  | BIGINT[(length)] [UNSIGNED] [ZEROFILL]
-  | REAL[(length,decimals)] [UNSIGNED] [ZEROFILL]
-  | DOUBLE[(length,decimals)] [UNSIGNED] [ZEROFILL]
-  | FLOAT[(length,decimals)] [UNSIGNED] [ZEROFILL]
-  | DECIMAL(length,decimals) [UNSIGNED] [ZEROFILL]
-  | NUMERIC(length,decimals) [UNSIGNED] [ZEROFILL]
-  | DATE
-  | TIME
-  | TIMESTAMP
-  | DATETIME
-  | CHAR(length) [BINARY | ASCII | UNICODE]
-  | VARCHAR(length) [BINARY]
-  | TINYBLOB
-  | BLOB
-  | MEDIUMBLOB
-  | LONGBLOB
-  | TINYTEXT
-  | TEXT
-  | MEDIUMTEXT
-  | LONGTEXT
-  | ENUM(value1,value2,value3,...)
-  | SET(value1,value2,value3,...)
-  | spatial_type
-
-index_col_name:
-    col_name [(length)] [ASC | DESC]
-
-reference_definition:
-    REFERENCES tbl_name [(index_col_name,...)]
-               [MATCH FULL | MATCH PARTIAL | MATCH SIMPLE]
-               [ON DELETE reference_option]
-               [ON UPDATE reference_option]
-
-reference_option:
-    RESTRICT | CASCADE | SET NULL | NO ACTION | SET DEFAULT
-
-table_options: table_option [table_option] ...
-
-table_option:
-    {ENGINE|TYPE} = {BDB|HEAP|ISAM|InnoDB|MERGE|MRG_MYISAM|MYISAM}
-  | AUTO_INCREMENT = value
-  | AVG_ROW_LENGTH = value
-  | CHECKSUM = {0 | 1}
-  | COMMENT = 'string'
-  | MAX_ROWS = value
-  | MIN_ROWS = value
-  | PACK_KEYS = {0 | 1 | DEFAULT}
-  | PASSWORD = 'string'
-  | DELAY_KEY_WRITE = {0 | 1}
-  | ROW_FORMAT = {DEFAULT|DYNAMIC|FIXED|COMPRESSED|REDUNDANT|COMPACT}
-  | RAID_TYPE = { 1 | STRIPED | RAID0 }
-        RAID_CHUNKS = value
-        RAID_CHUNKSIZE = value
-  | UNION = (tbl_name[,tbl_name]...)
-  | INSERT_METHOD = { NO | FIRST | LAST }
-  | DATA DIRECTORY = 'absolute path to directory'
-  | INDEX DIRECTORY = 'absolute path to directory'
-  | [DEFAULT] CHARACTER SET charset_name [COLLATE collation_name]
-
-select_statement:
-    [IGNORE | REPLACE] [AS] SELECT ...   (Some legal select statement)
-    
-    
-    DROP [TEMPORARY] TABLE [IF EXISTS]
-    tbl_name [, tbl_name] ...
-    [RESTRICT | CASCADE]
-    
-    
-    DROP INDEX index_name ON tbl_name
-    
-    
-    [_ENV] => Array
-        (
-            [REDIRECT_STATUS] => 200
-            [HTTP_HOST] => temp.niam.mu
-            [HTTP_USER_AGENT] => Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.7) Gecko/20050414 Firefox/1.0.3
-            [HTTP_ACCEPT] => text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
-            [HTTP_ACCEPT_LANGUAGE] => en-us,en;q=0.5
-            [HTTP_ACCEPT_ENCODING] => gzip,deflate
-            [HTTP_ACCEPT_CHARSET] => ISO-8859-1,utf-8;q=0.7,*;q=0.7
-            [HTTP_KEEP_ALIVE] => 300
-            [HTTP_CONNECTION] => keep-alive
-            [HTTP_REFERER] => http://temp.niam.mu/local-info/test.php
-            [CONTENT_TYPE] => application/x-www-form-urlencoded
-            [CONTENT_LENGTH] => 7
-            [PATH] => /bin:/sbin:/usr/bin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/sbin:/usr/sbin
-            [SERVER_SIGNATURE] => 
-Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1 Server at temp.niam.mu Port 80
-
-
-            [SERVER_SOFTWARE] => Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1
-            [SERVER_NAME] => temp.niam.mu
-            [SERVER_ADDR] => 192.168.0.201
-            [SERVER_PORT] => 80
-            [REMOTE_ADDR] => 192.168.0.201
-            [DOCUMENT_ROOT] => /mnt/media/parampampam/www/temp
-            [SERVER_ADMIN] => niam.niam@gmail.com
-            [SCRIPT_FILENAME] => /mnt/media/parampampam/www/temp/local-info/test.php
-            [REMOTE_PORT] => 46020
-            [REDIRECT_QUERY_STRING] => sdf=d
-            [REDIRECT_URL] => /local-info/test.php
-            [GATEWAY_INTERFACE] => CGI/1.1
-            [SERVER_PROTOCOL] => HTTP/1.1
-            [REQUEST_METHOD] => POST
-            [QUERY_STRING] => sdf=d
-            [REQUEST_URI] => /local-info/test.php?sdf=d
-            [SCRIPT_NAME] => /local-info/test.php
-            [PATH_INFO] => 
-            [PATH_TRANSLATED] => 
-            [ORIG_PATH_TRANSLATED] => /mnt/media/parampampam/www/temp/local-info/test.php
-            [ORIG_PATH_INFO] => /local-info/test.php
-            [ORIG_SCRIPT_NAME] => /cgi-bin/php
-            [ORIG_SCRIPT_FILENAME] => /opt/php/bin/php
-        )
-
-    [HTTP_ENV_VARS] => Array
-        (
-            [REDIRECT_STATUS] => 200
-            [HTTP_HOST] => temp.niam.mu
-            [HTTP_USER_AGENT] => Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.7) Gecko/20050414 Firefox/1.0.3
-            [HTTP_ACCEPT] => text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5
-            [HTTP_ACCEPT_LANGUAGE] => en-us,en;q=0.5
-            [HTTP_ACCEPT_ENCODING] => gzip,deflate
-            [HTTP_ACCEPT_CHARSET] => ISO-8859-1,utf-8;q=0.7,*;q=0.7
-            [HTTP_KEEP_ALIVE] => 300
-            [HTTP_CONNECTION] => keep-alive
-            [HTTP_REFERER] => http://temp.niam.mu/local-info/test.php
-            [CONTENT_TYPE] => application/x-www-form-urlencoded
-            [CONTENT_LENGTH] => 7
-            [PATH] => /bin:/sbin:/usr/bin:/usr/sbin:/usr/local/sbin:/bin:/usr/bin:/sbin:/usr/sbin
-            [SERVER_SIGNATURE] => 
-Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1 Server at temp.niam.mu Port 80
-
-
-            [SERVER_SOFTWARE] => Apache/2.0.54 (Unix) DAV/2 SVN/1.2.1
-            [SERVER_NAME] => temp.niam.mu
-            [SERVER_ADDR] => 192.168.0.201
-            [SERVER_PORT] => 80
-            [REMOTE_ADDR] => 192.168.0.201
-            [DOCUMENT_ROOT] => /mnt/media/parampampam/www/temp
-            [SERVER_ADMIN] => niam.niam@gmail.com
-            [SCRIPT_FILENAME] => /mnt/media/parampampam/www/temp/local-info/test.php
-            [REMOTE_PORT] => 46020
-            [REDIRECT_QUERY_STRING] => sdf=d
-            [REDIRECT_URL] => /local-info/test.php
-            [GATEWAY_INTERFACE] => CGI/1.1
-            [SERVER_PROTOCOL] => HTTP/1.1
-            [REQUEST_METHOD] => POST
-            [QUERY_STRING] => sdf=d
-            [REQUEST_URI] => /local-info/test.php?sdf=d
-            [SCRIPT_NAME] => /local-info/test.php
-            [PATH_INFO] => 
-            [PATH_TRANSLATED] => 
-            [ORIG_PATH_TRANSLATED] => /mnt/media/parampampam/www/temp/local-info/test.php
-            [ORIG_PATH_INFO] => /local-info/test.php
-            [ORIG_SCRIPT_NAME] => /cgi-bin/php
-            [ORIG_SCRIPT_FILENAME] => /opt/php/bin/php
-        )
-    [HTTP_POST_VARS] => Array
-        (
-            [asd] => adf
-        )
-
-    [HTTP_GET_VARS] => Array
-        (
-            [sdf] => d
-        )
-    [HTTP_POST_FILES] => Array
-        (
-            [sd] => Array
-                (
-                    [name] => xchat-gnome-0.5.tar.gz
-                    [type] => 
-                    [tmp_name] => 
-                    [error] => 1
-                    [size] => 0
-                )
-
-        )    
+	int i=0;
+	while (environ[i])
+		printf("%s<br>",environ[i++]);
+	
+    	int cl = atoi(getenv("CONTENT_LENGTH"));
+	char *post = (char *)malloc(cl);
+	fread(post,cl,1,stdin);
+	printf("<hr>%s",post);
+	return 0;
+}   

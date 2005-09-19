@@ -53,8 +53,8 @@ tools::replace(pchar needle,
 //-------------------------------------------------------------------
 
 stringArr 
-tools::explode(std::string fields, 
-			std::string separator)
+tools::explode(const std::string &fields, 
+			const std::string &separator)
 {
 	register unsigned int i(0), j(0), sep_size(strlen(separator.c_str()));
 	stringArr arr;
@@ -75,8 +75,8 @@ tools::explode(std::string fields,
 std::string
 tools::implode(const stringArr &fields,
 		escape escapeF, 
-		std::string separator,
-		std::string frame)
+		const std::string &separator,
+		const std::string &frame)
 {
 	std::string temp, fs(frame + separator);
 	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);
@@ -91,8 +91,8 @@ tools::implode(const stringArr &fields,
 
 std::string
 tools::implode(const stringArr &fields,
-		std::string separator,
-		std::string frame)
+		const std::string &separator,
+		const std::string &frame)
 {	
 	return implode(fields,&dummy,separator,frame);
 }
@@ -101,7 +101,7 @@ tools::implode(const stringArr &fields,
 
 std::string
 tools::implode(const stringArr &fields,
-		std::string separator)
+		const std::string &separator)
 {
 	return implode(fields,&dummy,separator);
 }
@@ -111,7 +111,7 @@ tools::implode(const stringArr &fields,
 std::string 
 tools::implode(const stringArr &fields, 
 		escape escapeF, 
-		std::string separator)
+		const std::string &separator)
 {
 	std::string temp;
 	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);

@@ -33,14 +33,14 @@ using namespace dodo;
 * do not edit it please.
 * sqlBase use them in such way, as they are
 */
-static const __sqlStatements sqlQStArr[] = 
+static const __statements sqlQStArr[] = 
 {
 	{" union "},
 	{" union all "},
 	{" minus "},
 	{" intersect "}
 };
-static 	__sqlStatements sqlAddArr[] = 
+static 	__statements sqlAddArr[] = 
 {
 	{""},
 	{" where "},
@@ -53,22 +53,22 @@ static 	__sqlStatements sqlAddArr[] =
 ///////////////////////////////////
 //	These statements don't need additional statement
 ///////////////////////////////////
-static 	__sqlStatements sqlAddInsArr[2] = 
+static 	__statements sqlAddInsArr[2] = 
 {
 	{""},
 	{" ignore "},
 };
-static 	__sqlStatements sqlAddUpArr[2] = 
+static 	__statements sqlAddUpArr[2] = 
 {
 	{""},
 	{" ignore "},
 };
-static 	__sqlStatements sqlAddDelArr[2] = 
+static 	__statements sqlAddDelArr[2] = 
 {
 	{""},
 	{" ignore "},
 };	
-static 	__sqlStatements sqlAddSelArr[3] = 
+static 	__statements sqlAddSelArr[3] = 
 {
 	{""},
 	{" distinct "},
@@ -121,7 +121,7 @@ sqlBase::fieldsValName(const stringArr &fieldsVal,
 //-------------------------------------------------------------------
 
 std::string 
-sqlBase::exists(std::string statement)
+sqlBase::exists(const std::string &statement)
 {
 	return std::string("exists("+statement+')');
 }
@@ -129,7 +129,7 @@ sqlBase::exists(std::string statement)
 //-------------------------------------------------------------------
 
 std::string 
-sqlBase::noexists(std::string statement)
+sqlBase::noexists(const std::string &statement)
 {
 	return std::string("not exists("+statement+')');
 }
@@ -151,7 +151,7 @@ sqlBase::additionalCollect(unsigned int qTypeTocheck,
 
 std::string 
 sqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
-						__sqlStatements sqlAddArr[],
+						__statements sqlAddArr[],
 						int qTypeShift) const
 {
 	if (qTypeShift == EMPTY)

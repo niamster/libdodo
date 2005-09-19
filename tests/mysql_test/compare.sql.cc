@@ -6,9 +6,9 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+	mysqlpp pp;	
 	try
 	{
-		mysqlpp pp;	
 		pp.setSqlInfo(string("test"),string(""),3306,string(""),string("Dmitrik"));
 		pp.connect();		
 		

@@ -51,17 +51,17 @@ namespace dodo
 		OFFSET,
 	};	
 	/**
-	* some statements can't be togather in one query. They are marcked specially
-	* for more security before applying one, remove other;
-	* example: 
-	* in select statement : [ALL | DISTINCT]
-	* so to set ALL u should remove from flag DISTINCTROW
-	* ----
-	* qSelShift &= ~DISTINCT-1;
-	* qSelShift |= ALL;
-	* ----
-	* or to use functions removeF and addF
-	*/
+	 * some statements can't be togather in one query. They are marcked specially
+	 * for more security before applying one, remove other;
+	 * example: 
+	 * in select statement : [ALL | DISTINCT]
+ 	 * so to set ALL u should remove from flag DISTINCTROW
+	 * ----
+	 * qSelShift &= ~DISTINCT-1;
+	 * qSelShift |= ALL;
+	 * ----
+	 * or to use functions removeF and addF
+	 */
 	enum qStEnum///do not shuffle!!
 	{
 		UNION,
@@ -109,8 +109,8 @@ namespace dodo
 		INSERT_IGNORE = 1,
 	};
 	/**
-	* arrays of positions of "statement" for complete realization. In sql wersion - see sqlBase;
-	*/	
+	 * arrays of positions of "statement" for complete realization. In sql wersion - see sqlBase;
+	 */	
 	static unsigned int addInsEnumArr[] = 
 	{
 		INSERT_IGNORE,
@@ -129,8 +129,8 @@ namespace dodo
 		SELECT_ALL
 	};
 	/**
-	* data that could be retrieved from result
-	*/
+	 * data that could be retrieved from result
+	 */
 	struct __sqlStorage
 	{
 		__sqlStorage(std::vector<stringArr> rows, stringArr fields);
@@ -139,8 +139,8 @@ namespace dodo
 	};	
 	
 	/**
-	* data to connect to server
-	*/
+	 * data to connect to server
+	 */
 	struct __sqlInfo
 	{
 		std::string db;
@@ -151,8 +151,8 @@ namespace dodo
 		unsigned int port;
 	};
 	/**
-	* data that could be retrieved from class(to modyficate)[contains references]
-	*/
+	 * data that could be retrieved from class(to modyficate)[contains references]
+	 */
 	struct __collectedData
 	{
 		__collectedData(std::string &pre_where,
@@ -196,8 +196,8 @@ namespace dodo
 		int &qDelShift;		
 	};
 	/**
-	* structure that contains backup of collected data
-	*/
+	 * structure that contains backup of collected data
+	 */
 	struct __collectedDataP
 	{	
 		std::string pre_where;	
@@ -222,8 +222,8 @@ namespace dodo
 		int qDelShift;		
 	};
 	/**
-	* Data types; with '**' need range; with '*' may have range
-	*/
+	 * Data types; with '**' need range; with '*' may have range
+	 */
 	enum baseDataTypesEnum
 	{
 		TINYINT,///*; The signed range is -128 to 127. The unsigned range is 0 to 255.
@@ -238,14 +238,14 @@ namespace dodo
 		TIME,///The range is '-838:59:59' to '838:59:59'
 		TIMESTAMP,///*; The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself.
 		/**
-		* TIMESTAMP(14) 	YYYYMMDDHHMMSS
-		* TIMESTAMP(12) 	YYMMDDHHMMSS
-		* TIMESTAMP(10) 	YYMMDDHHMM
-		* TIMESTAMP(8) 		YYYYMMDD
-		* TIMESTAMP(6) 		YYMMDD
-		* TIMESTAMP(4) 		YYMM
-		* TIMESTAMP(2) 		YY
-		*/
+		 * TIMESTAMP(14) 	YYYYMMDDHHMMSS
+		 * TIMESTAMP(12) 	YYMMDDHHMMSS
+		 * TIMESTAMP(10) 	YYMMDDHHMM
+		 * TIMESTAMP(8) 		YYYYMMDD
+		 * TIMESTAMP(6) 		YYMMDD
+		 * TIMESTAMP(4) 		YYMM
+		 * TIMESTAMP(2) 		YY
+		 */
 		CHAR,///**; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
 		VARCHAR,///**; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
 		TINYBLOB,///A column with a maximum length of 255 (2^8 - 1) characters.
@@ -256,8 +256,8 @@ namespace dodo
 		SET,///A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
 	};
 	/**
-	*  type of field
-	*/
+	 *  type of field
+	 */
 	enum fieldTypeEnum
 	{
 		_NULL = 2,
@@ -265,8 +265,8 @@ namespace dodo
 		KEY = 8
 	};
 	/**
-	* reference onfield
-	*/
+	 * reference onfield
+	 */
 	enum refFieldEnum
 	{
 		RESTRICT = 0,
@@ -276,8 +276,8 @@ namespace dodo
 		SET_DEFAULT
 	};
 	/**
-	* structure that holds info for field creation
-	*/
+	 * structure that holds info for field creation
+	 */
 	struct __fieldInfo
 	{
 		__fieldInfo();
@@ -303,8 +303,8 @@ namespace dodo
 		std::string charset;///charset
 	};
 	/*
-	* structure that holds info about table
-	*/
+	 * structure that holds info about table
+	 */
 	struct __tableInfo
 	{
 		__tableInfo();
@@ -324,184 +324,184 @@ namespace dodo
 		std::string charset;///charset
 	};
 	/**
-	* class to provide wide abilities for sql manipulations
-	*/
+	 * class to provide wide abilities for sql manipulations
+	 */
 	class dbBase : public dodoBase
 	{
 		public:
 			virtual dodoBase *getSelf();
 			/*
-			* constructors and destructors
-			*/
+			 * constructors and destructors
+		 	 */
 			dbBase();	
 			virtual ~dbBase();
 
 			/**
-			* next functions just modify internal data, but don't make a query. that's usefull to make preExec or postExec
-			* it is safe to call them any times. u'll never get '... limit 10 limit 3' in  this case data will be replaced => '... limit 3'
-			* this is to all functions? that collect data. If u set `where statement` with select u can replace it with 'where' function;
-			* and in any time u can unset additional statement with callin' same function with `un` preffix (unlimit,..)
-			*/
+			 * next functions just modify internal data, but don't make a query. that's usefull to make preExec or postExec
+			 * it is safe to call them any times. u'll never get '... limit 10 limit 3' in  this case data will be replaced => '... limit 3'
+			 * this is to all functions? that collect data. If u set `where statement` with select u can replace it with 'where' function;
+			 * and in any time u can unset additional statement with callin' same function with `un` preffix (unlimit,..)
+			 */
 			/**
-			* sets info for mysql database
-			*/
-			void setSqlInfo(std::string db, std::string host, unsigned int port, std::string user, std::string password, std::string socket = std::string("")) const;
+			 * sets info for mysql database
+			 */
+			void setSqlInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &socket = std::string("")) const;
 			/**
 			 * table - (char*)/(string); if length(table)==0 => 'from `table`' doesn't use 
 			 * fields - array of (char*)/(string)
 			 * where - (char*)/(string)
-		   */
-			virtual void select(std::string table, const stringArr &fieldsNames, std::string where = std::string("")) const;
+		     */
+			virtual void select(const std::string &table, const stringArr &fieldsNames, const std::string &where = std::string("")) const;
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
 			 * key => field's name
 			 * value => field's value
-		   */
-			virtual void insert(std::string table, const assocArr &fields);
+		     */
+			virtual void insert(const std::string &table, const assocArr &fields);
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of array((char*)/(string))
 			 * 			key => field's name
 			 * 			value => field's value
-		   */
-			virtual void insert(std::string table, const std::vector<assocArr> &fields);
+		     */
+			virtual void insert(const std::string &table, const std::vector<assocArr> &fields);
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
-		   */
-			virtual void insert(std::string table, const stringArr &fieldsVal, const stringArr &fieldsNames = stringArr());
+		     */
+			virtual void insert(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames = stringArr());
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of array((char*)/(string))
 			 * fieldsNames - array of (char*)/(string)
-		   */
-			virtual void insert(std::string table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = stringArr());			
+		     */
+			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = stringArr());			
 			/**
-			* table(To/From) - (char*)/(string)
-			* fieldsNames - array of (char*)/(string)
-			*/
-			virtual void insertSelect(std::string tableTo, std::string tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = stringArr(), std::string where = std::string(""));
+			 * table(To/From) - (char*)/(string)
+			 * fieldsNames - array of (char*)/(string)
+			 */
+			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = stringArr(), const std::string &where = std::string(""));
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
 			 * key => field's name
 			 * value => field's value
 			 * where - (char*)/(string)
-		   */
-			virtual void update(std::string table, const assocArr &fields, const std::string where = std::string(""));			
+		     */
+			virtual void update(const std::string &table, const assocArr &fields, const std::string &where = std::string(""));			
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 			 * where - (char*)/(string)
-		   */
-			virtual void update(std::string table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string where = std::string(""));
+		     */
+			virtual void update(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &where = std::string(""));
 			/**
 			 * table - (char*)/(string)
 			 * where - (char*)/(string)
-			*/       
-			virtual void del(std::string table, std::string where = std::string(""));
+			 */       
+			virtual void del(const std::string &table, const std::string &where = std::string(""));
 			/**
-			* subquery
-			*/
+			 * subquery
+			 */
 			virtual void subquery(const stringArr &sub, int type=UNION/*UNION_ALL,MINUS,INTERSECT*/);
 			/**
-			* change db
-			*/
-			virtual void use(std::string db);
+			 * change db
+			 */
+			virtual void use(const std::string &db);
 			/**
 			 * renames database
-			*/
-			virtual void renameDb(std::string db, std::string to_db);
+			 */
+			virtual void renameDb(const std::string &db, const std::string &to_db);
 			/**
 			 * renames table
-			*/
-			virtual void renameTable(std::string table, std::string to_table);
+			 */
+			virtual void renameTable(const std::string &table, const std::string &to_table);
 			/**
 			 * renames field
-			*/ 
-			virtual void renameField(std::string field, std::string to_field, std::string table);
+			 */ 
+			virtual void renameField(const std::string &field, const std::string &to_field, const std::string &table);
 			/**
 			 * deletes database
-			*/
-			virtual void deleteDb(std::string db);
+			 */
+			virtual void deleteDb(const std::string &db);
 			/**
 			 * deletes table
-			*/
-			virtual void deleteTable(std::string table);
+			 */
+			virtual void deleteTable(const std::string &table);
 			/**
 			 * deletes field
-			*/ 
-			virtual void deleteField(std::string field, std::string table);
+			 */ 
+			virtual void deleteField(const std::string &field, const std::string &table);
 			/**
 			 * creates database
-			*/
-			virtual void createDb(std::string db, std::string charset=std::string(""));
+			 */
+			virtual void createDb(const std::string &db, const std::string &charset=std::string(""));
 			/**
 			 * creates table
-			*/
+			 */
 			virtual void createTable(__tableInfo &tableInfo);
 			/**
 			 * creates field
-			*/ 
-			virtual void createField(__fieldInfo &fieldInfo, std::string table);						
+			 */ 
+			virtual void createField(__fieldInfo &fieldInfo, const std::string &table);						
 			/**
 			 * truncates table
 			 */
-			 virtual void truncate(std::string table);
+			 virtual void truncate(const std::string &table);
 			/**
-			* add where statement
-			*/
-			virtual void where(std::string where) const;
+			 * add where statement
+			 */
+			virtual void where(const std::string &where) const;
 			/**
 			 * sets limit for request
-			*/
+			 */
 			virtual void limit(unsigned int number) const;
 			/**
 			 * sets offset for request
-			*/
+			 */
 			virtual void offset(unsigned int number) const;			
 			/**
 			 * sets order for request
-			*/
-			virtual void order(std::string order) const;
+			 */
+			virtual void order(const std::string &order) const;
 			/**
 			 * sets group for request
-			*/
-			virtual void group(std::string group) const;
+			 */
+			virtual void group(const std::string &group) const;
 			/**
 			 * sets having for request
-			*/
-			virtual void having(std::string having) const;
+			 */
+			virtual void having(const std::string &having) const;
 			/**
-			* unsets where statement
-			*/
+			 * unsets where statement
+			 */
 			virtual void unwhere() const;
 			/**
 			 * unsets limit for request
-			*/
+			 */
 			virtual void unlimit() const;
 			/**
 			 * unsets offset for request
-			*/
+			 */
 			virtual void unoffset() const;			
 			/**
 			 * unsets order for request
-			*/
+			 */
 			virtual void unorder() const;
 			/**
 			 * unsets group for request
-			*/
+			 */
 			virtual void ungroup() const;
 			/**
 			 * unsets having for request
-			*/
+			 */
 			virtual void unhaving() const;		
 			/**
-			* functions to set(unset) additional parameters for standart qTypes
-			*/
+			 * functions to set(unset) additional parameters for standart qTypes
+			 */
 			virtual void setAddInsSt(unsigned int statement);
 			virtual void setAddUpSt(unsigned int statement);
 			virtual void setAddSelSt(unsigned int statement);
@@ -510,55 +510,51 @@ namespace dodo
 			virtual void unsetAddInsSt(unsigned int statement);
 			virtual void unsetAddUpSt(unsigned int statement);
 			virtual void unsetAddSelSt(unsigned int statement);
-			virtual void unsetAddDelSt(unsigned int statement);			
+			virtual void unsetAddDelSt(unsigned int statement);
 			/**
-			* shows results from storage
-			*/
-			virtual void debug(__sqlStorage &result) const;
-			/**
-			* detect what type of request was(will be) performed
-			*/
+			 * detect what type of request was(will be) performed
+			 */
 			virtual int getQType() const;
 			/**
-			* function that return structure with pointers to internal data(not copy).
-			* it is used for postExec and preExec functions. For modyfication.
-			*/
+			 * function that return structure with pointers to internal data(not copy).
+			 * it is used for postExec and preExec functions. For modyfication.
+			 */
 			virtual __collectedData getCollectedData();			
 			/**
-			* functions to store collected data into temp struct and restore from it.
-			*/
+			 * functions to store collected data into temp struct and restore from it.
+			 */
 			virtual void store();
 			virtual void restore();
 			/**
-			* set default values
-			*/
+			 * set default values
+			 */
 			inline void initTableInfo(__tableInfo &table);
 			inline void initRowInfo(__fieldInfo &field);			
 		protected:
 			/**
-			* resolve baseDataTypesEnum into string
-			*/
+			 * resolve baseDataTypesEnum into string
+			 */
 			inline virtual std::string stringType(int type) const;
 			/**
-			* check for range; return : if must 1; may have 0; mustn't have -1;
-			*/
+			 * check for range; return : if must 1; may have 0; mustn't have -1;
+			 */
 			inline virtual int chkRange(int type) const;
 			/**
-			* resolve refFieldEnum into string
-			*/
+			 * resolve refFieldEnum into string
+			 */
 			inline virtual std::string stringReference(int type) const;
 			/**
-			* backuped collected data
-			*/
+			 * backuped collected data
+			 */
 			mutable __collectedDataP backup;		
 			/**
-			* frees collected data
-			*/
+			 * frees collected data
+			 */
 			virtual void cleanCollect() const;///clean collected data
 			/**
-			* collected data
-			* some of variables can be used not only as they are named. See comments/ Some variables can hold another data, to save space
-			*/
+			 * collected data
+			 * some of variables can be used not only as they are named. See comments/ Some variables can hold another data, to save space
+			 */
 			mutable std::string pre_where;///string of where statement
 			mutable stringArr pre_fieldsNames;///array of string with fields' names(can be used for `insert_select` as pre_fieldsNamesTo)
 			mutable std::vector<stringArr> pre_fieldsVal;///array of string with fields' values(accordingly to pre_fieldsNames)(can be used for `insert_select` as pre_fieldsNamesFrom)

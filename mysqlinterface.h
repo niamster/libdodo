@@ -67,9 +67,9 @@ namespace dodo
 	};
 	
 	/**
-	*	class to work with mysql through c++
-	*	usage: see test.cc
-	*/
+ 	 *	class to work with mysql through c++
+	 *	usage: see test.cc
+	 */
 	class mysqlpp : public sqlBase, public xexec
 	{
 		friend class mysqlppEx;///class of exception
@@ -81,16 +81,16 @@ namespace dodo
 			virtual ~mysqlpp();	
 		
 			/**
-			* type - type of connection - se mySQL documentation for more!
-			* 	CLIENT_COMPRESS 	Use compression protocol.
-			*	CLIENT_FOUND_ROWS 	Return the number of found (matched) rows, not the number of affected rows.
-			*	CLIENT_IGNORE_SPACE 	Allow spaces after function names. Makes all functions names reserved words.
-			*	CLIENT_INTERACTIVE 	Allow interactive_timeout seconds (instead of wait_timeout seconds) of inactivity before closing the connection. The client's session wait_timeout variable is set to the value of the session interactive_timeout variable.
-			*	CLIENT_LOCAL_FILES 	Enable LOAD DATA LOCAL handling.
-			*	CLIENT_MULTI_STATEMENTS 	Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
-			*	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
-			*	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
-			*/ 
+			 * type - type of connection - se mySQL documentation for more!
+			 * 	CLIENT_COMPRESS 	Use compression protocol.
+			 *	CLIENT_FOUND_ROWS 	Return the number of found (matched) rows, not the number of affected rows.
+			 *	CLIENT_IGNORE_SPACE 	Allow spaces after function names. Makes all functions names reserved words.
+			 *	CLIENT_INTERACTIVE 	Allow interactive_timeout seconds (instead of wait_timeout seconds) of inactivity before closing the connection. The client's session wait_timeout variable is set to the value of the session interactive_timeout variable.
+			 *	CLIENT_LOCAL_FILES 	Enable LOAD DATA LOCAL handling.
+			 *	CLIENT_MULTI_STATEMENTS 	Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
+			 *	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
+			 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
+			 */ 
 			#ifndef NO_EX
 				void connect(unsigned long type=CLIENT_MULTI_STATEMENTS) const;
 			#else				
@@ -108,8 +108,8 @@ namespace dodo
 			virtual __sqlStorage fetch();
 		
 			/**
-			* functions to set(unset) additional parameters for standart qTypes
-			*/
+			 * functions to set(unset) additional parameters for standart qTypes
+			 */
 			virtual void setMyAddInsSt(unsigned int statement);
 			virtual void setMyAddUpSt(unsigned int statement);
 			virtual void setMyAddSelSt(unsigned int statement);
@@ -122,8 +122,8 @@ namespace dodo
 
 			virtual std::string getErr() const;///get err statement
 			/**
-			* executes request
-			*/
+			 * executes request
+			 */
 			virtual bool exec() const;
 			
 			virtual int myAddPostExec(inExec func, void *data) const;
@@ -131,7 +131,7 @@ namespace dodo
 		private:
 			/**
 			 * executes request
-			*/
+			 */
 			bool _exec() const;		
 		
 			virtual void addSQL();

@@ -36,18 +36,18 @@
 	{
 		
 		/**
-		* class to catch and resolve exceptions in string
-		* by default it does nothing
-		* but u can define functions for resolving
-		* for example to resolve problem with MEMORY_OVER:
-		*		void someF(stringEx *strEx)
-		*		{
-		*			///do smth
-		*		}
-		*		setResolve(MEMORY_OVER, someF);
-		*	u also can combine reasons with '|'
-		*   if u want to reset to default use NULL;
-		*/
+		 * class to catch and resolve exceptions in string
+		 * by default it does nothing
+		 * but u can define functions for resolving
+		 * for example to resolve problem with MEMORY_OVER:
+		 *		void someF(stringEx *strEx)
+		 *		{
+		 *			///do smth
+		 *		}
+		 *		setResolve(MEMORY_OVER, someF);
+		 *	u also can combine reasons with '|'
+		 *   if u want to reset to default use NULL;
+		 */
 		
 		///reasons of exception
 		enum sqlBaseExR

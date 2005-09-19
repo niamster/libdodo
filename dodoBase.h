@@ -31,12 +31,12 @@ namespace dodo
 	{
 		public:
 			/**
-			* get Own; use it for dynamic_cast
-			*/
+		 	 * get Own; use it for dynamic_cast
+			 */
 			virtual dodoBase *getSelf();
 			/**
-			* constructor/destructor
-			*/
+			 * constructor/destructor
+			 */
 			dodoBase();
 			~dodoBase();
 	};

@@ -1,8 +1,8 @@
-#GCC_PATH=/opt/gcc-3.4.3/bin/
+GCC_PATH=/opt/gcc-3.4.3/bin/
 
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -fmove-all-movables -march=pentium4
-OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o
+OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o cgi.o
 
 override DEFINES:=$(DEFINES)
 

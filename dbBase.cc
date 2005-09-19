@@ -211,29 +211,10 @@ dbBase::~dbBase()
 
 //-------------------------------------------------------------------
 
-void
-dbBase::debug(__sqlStorage &result) const
-{
-	unsigned int i(0),j(0);
-	std::cout << "--Result--" << std::endl << "rows=" << result.rows.size() << "\tfields=" << result.fields.size() << std::endl;
-	for (;j<result.fields.size();++j)
-		std::cout << result.fields[j] << '\t';
-	std::cout << std::endl;
-	for (;i<result.rows.size();++i)
-	{
-		std::cout << std::endl;
-		for (j=0;j<result.fields.size();++j)
-			std::cout << result.rows[i][j] << '\t';
-	}
-	std::cout << std::endl;
-}
-
-//-------------------------------------------------------------------
-
 void 
-dbBase::select(std::string a_table,
+dbBase::select(const std::string &a_table,
 			    const stringArr &a_fieldsNames,
-			    const std::string a_where) const 
+			    const std::string &a_where) const 
 {
 	qType = SELECT;
 	
@@ -251,7 +232,7 @@ dbBase::select(std::string a_table,
 //-------------------------------------------------------------------
 
 void 
-dbBase::insert(std::string a_table, 
+dbBase::insert(const std::string &a_table, 
 				const assocArr &a_fields)
 {
 	qType = INSERT;
@@ -277,7 +258,7 @@ dbBase::insert(std::string a_table,
 //-------------------------------------------------------------------
 
 void 
-dbBase::insert(std::string a_table, 
+dbBase::insert(const std::string &a_table, 
 				const std::vector<assocArr> &a_fields)
 {
 	qType = INSERT;
@@ -312,7 +293,7 @@ dbBase::insert(std::string a_table,
 //-------------------------------------------------------------------
 
 void 
-dbBase::insert(std::string a_table,
+dbBase::insert(const std::string &a_table,
 			    const stringArr &a_fieldsVal, 
 			    const stringArr &a_fieldsNames)
 {
@@ -328,7 +309,7 @@ dbBase::insert(std::string a_table,
 //-------------------------------------------------------------------
 
 void 
-dbBase::insert(std::string a_table, 
+dbBase::insert(const std::string &a_table, 
 				const std::vector<stringArr> &a_fieldsVal, 
 				const stringArr &a_fieldsNames)
 {
@@ -349,11 +330,11 @@ dbBase::insert(std::string a_table,
 //-------------------------------------------------------------------
 
 void 
-dbBase::insertSelect(std::string a_tableTo, 
-					std::string a_tableFrom, 
+dbBase::insertSelect(const std::string &a_tableTo, 
+					const std::string &a_tableFrom, 
 					const stringArr &a_fieldsNamesTo,
 					const stringArr &a_fieldsNamesFrom,
-					std::string a_where)
+					const std::string &a_where)
 {
 	qType = INSERT_SELECT;
 	
@@ -373,9 +354,9 @@ dbBase::insertSelect(std::string a_tableTo,
 
 //-------------------------------------------------------------------
 void 
-dbBase::update(std::string a_table, 
+dbBase::update(const std::string &a_table, 
 				const assocArr &a_fields, 
-				const std::string a_where)
+				const std::string &a_where)
 {
 	qType = UPDATE;
 	
@@ -407,10 +388,10 @@ dbBase::update(std::string a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::update(std::string a_table,
+dbBase::update(const std::string &a_table,
 			   const stringArr &a_fieldsVal, 
 			   const stringArr &a_fieldsNames, 
-			   std::string a_where)
+			   const std::string &a_where)
 {
 	qType = UPDATE;
 	
@@ -430,8 +411,8 @@ dbBase::update(std::string a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::del(std::string a_table, 
-			std::string a_where)
+dbBase::del(const std::string &a_table, 
+			const std::string &a_where)
 {
 	qType = DELETE;
 
@@ -459,7 +440,7 @@ dbBase::subquery(const stringArr &sub,
 //-------------------------------------------------------------------
 
 void 
-dbBase::use(std::string db)
+dbBase::use(const std::string &db)
 {
 	qType = USE;
 	sqlInfo.db = db;
@@ -469,7 +450,7 @@ dbBase::use(std::string db)
 //-------------------------------------------------------------------
 
 void
-dbBase::truncate(std::string table)
+dbBase::truncate(const std::string &table)
 {
 	qType = TRUNCATE;
 	pre_table = table;
@@ -479,8 +460,8 @@ dbBase::truncate(std::string table)
 //-------------------------------------------------------------------
 
 void 
-dbBase::renameDb(std::string db,
-			std::string to_db)
+dbBase::renameDb(const std::string &db,
+			const std::string &to_db)
 {
 	qType = RENAME_DB;
 	pre_order = db;
@@ -491,8 +472,8 @@ dbBase::renameDb(std::string db,
 //-------------------------------------------------------------------
 
 void 
-dbBase::renameTable(std::string table,
-				std::string to_table)
+dbBase::renameTable(const std::string &table,
+				const std::string &to_table)
 {
 	qType = RENAME_TABLE;
 	pre_table = table;
@@ -503,9 +484,9 @@ dbBase::renameTable(std::string table,
 //-------------------------------------------------------------------
 
 void 
-dbBase::renameField(std::string field,
-				std::string to_field, 
-				std::string table)
+dbBase::renameField(const std::string &field,
+				const std::string &to_field, 
+				const std::string &table)
 {
 	qType = RENAME_FIELD;
 	pre_tableTo = field;
@@ -517,7 +498,7 @@ dbBase::renameField(std::string field,
 //-------------------------------------------------------------------
 
 void 
-dbBase::deleteDb(std::string db)
+dbBase::deleteDb(const std::string &db)
 {
 	qType = DELETE_DB;
 	pre_order = db;
@@ -527,7 +508,7 @@ dbBase::deleteDb(std::string db)
 //-------------------------------------------------------------------
 
 void 
-dbBase::deleteTable(std::string table)
+dbBase::deleteTable(const std::string &table)
 {
 	qType = DELETE_TABLE;
 	pre_table = table;
@@ -537,8 +518,8 @@ dbBase::deleteTable(std::string table)
 //-------------------------------------------------------------------
 
 void 
-dbBase::deleteField(std::string field, 
-				std::string table)
+dbBase::deleteField(const std::string &field, 
+				const std::string &table)
 {
 	qType = DELETE_FIELD;
 	pre_tableTo = field;
@@ -549,8 +530,8 @@ dbBase::deleteField(std::string field,
 //-------------------------------------------------------------------
 
 void 
-dbBase::createDb(std::string db,
-			std::string charset)
+dbBase::createDb(const std::string &db,
+			const std::string &charset)
 {
 	qType = CREATE_DB;
 	pre_order = db;
@@ -572,7 +553,7 @@ dbBase::createTable(__tableInfo &tableInfo)
 
 void 
 dbBase::createField(__fieldInfo &row, 
-				std::string table)
+				const std::string &table)
 {
 	qType = CREATE_FIELD;
 	pre_fieldInfo = row;
@@ -583,7 +564,7 @@ dbBase::createField(__fieldInfo &row,
 //-------------------------------------------------------------------
 
 void 
-dbBase::where(std::string where) const
+dbBase::where(const std::string &where) const
 {
 	pre_where = where;
 
@@ -612,7 +593,7 @@ dbBase::offset(unsigned int a_number) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::order(std::string order) const
+dbBase::order(const std::string &order) const
 {
 	pre_order = order;
 
@@ -622,7 +603,7 @@ dbBase::order(std::string order) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::group(std::string group) const
+dbBase::group(const std::string &group) const
 {	
 	pre_group = group;
 
@@ -632,7 +613,7 @@ dbBase::group(std::string group) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::having(std::string having) const
+dbBase::having(const std::string &having) const
 {
 	pre_having = having;
 
@@ -806,12 +787,12 @@ dbBase::cleanCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbBase::setSqlInfo(std::string db,
-	std::string host,
+dbBase::setSqlInfo(const std::string &db,
+	const std::string &host,
 	unsigned int port, 
-	std::string user, 
-	std::string password,
-	std::string socket) const
+	const std::string &user, 
+	const std::string &password,
+	const std::string &socket) const
 {
 	sqlInfo.port = port;
 	sqlInfo.db = db;

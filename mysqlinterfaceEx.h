@@ -33,18 +33,18 @@
 	namespace dodo
 	{
 		/**
-		* class to catch and resolve exceptions in flush
-		* by default it does nothing
-		* but u can define functions for resolving
-		* for example to resolve problem with NOT_ENOUGH_FREE_SPACE:
-		*		void someF(stringEx *strEx)
-		*		{
-		*			///do smth
-		*		}
-		*		setResolve(NOT_ENOUGH_FREE_SPACE, someF);
-		*	u also can combine reasons with '|'
-		*   if u want to reset to default use NULL;
-		*/	
+		 * class to catch and resolve exceptions in flush
+		 * by default it does nothing
+		 * but u can define functions for resolving
+		 * for example to resolve problem with NOT_ENOUGH_FREE_SPACE:
+		 *		void someF(stringEx *strEx)
+		 *		{
+		 *			///do smth
+		 *		}
+		 *		setResolve(NOT_ENOUGH_FREE_SPACE, someF);
+		 *	u also can combine reasons with '|'
+		 *   if u want to reset to default use NULL;
+		 */	
 		
 		///reasons of exception
 		enum mysqlppExR

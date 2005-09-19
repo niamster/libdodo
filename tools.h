@@ -36,35 +36,34 @@
 namespace dodo
 {
 	/**
-	* adds/removes option to flag
-	*/
+	 * adds/removes option to flag
+	 */
 	#define addF(flag,statement) (flag)|=(statement)
 	#define removeF(flag,statement) (flag)&=(~(statement))
 	
 	class tools
 	{
 		public:
-			//virtual tools *getSelf();
 			
 			/**
-			* converts long to string
-			*/
+			 * converts long to string
+			 */
 			static std::string lToString(long number);
 			/**
-			* converts double to string
-			*/
+			 * converts double to string
+			 */
 			static std::string dToString(double number);
 			
 			static void replace(pchar needle, pchar replacement, std::string &data);
 		
 			///makes array of strings from string using separtator
-			static stringArr explode(std::string fields, std::string separator);
+			static stringArr explode(const std::string &fields, const std::string &separator);
 		
 			///makes string of fields, separated with separator; frame = symbol, that is used to frame the field
-			static std::string implode(const stringArr &fields, escape escapeF, std::string separator, std::string frame);
-			static std::string implode(const stringArr &fields, escape escapeF, std::string separator);
-			static std::string implode(const stringArr &fields, std::string separator);
-			static std::string implode(const stringArr &fields, std::string separator, std::string frame);
+			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, const std::string &frame);
+			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator);
+			static std::string implode(const stringArr &fields, const std::string &separator);
+			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame);
 		private:
 			inline static std::string dummy(const std::string &data);
 	};

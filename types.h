@@ -57,5 +57,10 @@ namespace dodo
 	typedef std::string (*escape)(const std::string &);
 	
 	#define SIZEOFNUM 32
+	
+	struct __statements 
+	{
+		char *str;
+	};
 }
 #endif /* _TYPES_H */

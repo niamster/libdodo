@@ -25,24 +25,25 @@
 #ifndef _DIRECTIVES_H_
 #define _DIRECTIVES_H_
 
+#define LIBDODO_VERSION "libdodo/0.0.2"
 
 /**
-* !!!!note!!!!!
-* please read notes before uncommentin'!!!
-*/
+ * !!!!note!!!!!
+ * please read notes before uncommentin'!!!
+ */
 
 
 /** 
-* compile or use without exceptions. usage of exception depends of library compiled options; 
-* if u compiled library with exeptions u have to work with 'em;
-* if u compiled library without exeptions u have to work without 'em;
-*/
+ * compile or use without exceptions. usage of exception depends of library compiled options; 
+ * if u compiled library with exeptions u have to work with 'em;
+ * if u compiled library without exeptions u have to work without 'em;
+ */
 //#define NO_EX
 
 /**
-* removes some checks
-* 1) check for request completeness
-*/
+ * removes some checks
+ * 1) check for request completeness
+ */
 #define FAST
 
 //#define UNICODE

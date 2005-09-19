@@ -36,12 +36,12 @@
 namespace dodo
 {
 	/**
-	* first argument = class object; second - data needed for hook
-	*/
+	 * first argument = class object; second - data needed for hook
+	 */
 	typedef void (*inExec)(dodoBase *, void *);
 	/**
-	* a node for Xexec
-	*/
+	 * a node for Xexec
+	 */
 	struct __execItem
 	{
 		inExec func;///function to execute
@@ -59,24 +59,24 @@ namespace dodo
 	};
 
 	/**
-	* class to provide wide abilities exec manipulations
-	* pre, post execs.
-	*/
+	 * class to provide wide abilities exec manipulations
+	 * pre, post execs.
+	 */
 	class xexec
 	{
 		public:
 			/*
-			* constructors and destructors
-			*/
+			 * constructors and destructors
+			 */
 			xexec();	
 			virtual ~xexec();
 			/**
-			* functions to set(delete,replace) functions that will be executed before or after the exec call.
-			* they return number in list where function is set
-			* when u delete function from list, position of others don't change
-			* be carefull!! data are not copied!!!
-			* if restore param is set to false, data after callback function won't be restored
-			*/
+			 * functions to set(delete,replace) functions that will be executed before or after the exec call.
+			 * they return number in list where function is set
+			 * when u delete function from list, position of others don't change
+			 * be carefull!! data are not copied!!!
+			 * if restore param is set to false, data after callback function won't be restored
+			 */
 			virtual int addPostExec(inExec func, dodoBase *obj, void *data) const;
 			virtual int addPreExec(inExec func, dodoBase *obj, void *data) const;
 			virtual void delPostExec(unsigned int position) const;
@@ -84,11 +84,11 @@ namespace dodo
 			virtual bool replacePostExec(unsigned int position, inExec func, dodoBase *obj, void *data) const;
 			virtual bool replacePreExec(unsigned int position, inExec func, dodoBase *obj, void *data) const;			
 			/**
-			* enable or disable hooks
-			* usefull when u don't want to make cyclic hook using for examle exec in hook from the class that called that hook
-			* in that case u have to disable
-			* if u called disable(enable)Post(Pre)Exec and then enable(disable)AllPre(Post)Exec = it won't be enabled(disabled)[it'll keep it's state!!!]
-			*/
+			 * enable or disable hooks
+			 * usefull when u don't want to make cyclic hook using for examle exec in hook from the class that called that hook
+			 * in that case u have to disable
+			 * if u called disable(enable)Post(Pre)Exec and then enable(disable)AllPre(Post)Exec = it won't be enabled(disabled)[it'll keep it's state!!!]
+			 */
 			virtual void disablePostExec(unsigned int position) const;
 			virtual void disablePreExec(unsigned int position) const;
 			
@@ -104,37 +104,37 @@ namespace dodo
 			virtual void enableAll() const;
 			
 			/**
-			* prevent recursive hooks if u for example call exec in hook, if safeHooks disabled, all hooks set to this class will be called
-			*/
+			 * prevent recursive hooks if u for example call exec in hook, if safeHooks disabled, all hooks set to this class will be called
+			 */
 			virtual void setSafeHooks(bool state) const;
 			/**
-			* executes smth. with given function(perform xexec)
-			* !!!you must overload it!
-			*
-			*bool 
-			*	derivedClass::exec() const
-			*	{
-			*		performXExec(preExec);
-			*		///execute 
-			*		performXExec(postExec);
-			*	}
-			*
-			*/
+			 * executes smth. with given function(perform xexec)
+			 * !!!you must overload it!
+			 *
+			 *bool 
+			 *	derivedClass::exec() const
+			 *	{
+			 *		performXExec(preExec);
+			 *		///execute 
+			 *		performXExec(postExec);
+			 *	}
+			 *
+			 */
 			virtual bool exec() const;
 		protected:
 			/**
-			* adds/deletes/replaces XExec to list
-			*/
+			 * adds/deletes/replaces XExec to list
+			 */
 			inline virtual int addXExec(std::vector<__execItem> &list, inExec func, dodoBase *obj, void *data) const;
 			inline virtual void delXExec(std::vector<__execItem> &list, unsigned int position) const;
 			inline virtual bool replaceXExec(std::vector<__execItem> &list, unsigned int position, inExec func, dodoBase *obj, void *data) const;
 			/**
-			* set state(enable/disable) for XExec(all XExecs) 
-			*/
+			 * set state(enable/disable) for XExec(all XExecs) 
+			 */
 			virtual void setStatXExec(std::vector<__execItem> &list, unsigned int position, bool stat) const;
 			/**
-			* perform enabled functions from the list
-			*/
+			 * perform enabled functions from the list
+			 */
 			virtual void performXExec(__execItemList &list) const;
 			
 			mutable __execItemList preExec;///functions executed before exec

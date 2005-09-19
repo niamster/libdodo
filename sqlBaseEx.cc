@@ -72,9 +72,9 @@
 	//-------------------------------------------------------------------
 			
 	/**
-	* specify type of exception and function to resolve it. u can combine reasons with '|'
-	* tries to resolve problem with own function
-	*/
+	 * specify type of exception and function to resolve it. u can combine reasons with '|'
+	 * tries to resolve problem with own function
+	 */
 	void 
 	sqlBaseEx::setResolve(sqlBaseExR a_reason, 
 							sqlBaseExResolver a_resF)
