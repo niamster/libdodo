@@ -2,17 +2,18 @@ GCC_PATH=/opt/gcc-3.4.3/bin/
 
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -fmove-all-movables -march=pentium4
-OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o cgi.o
+OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o cgi.o regexp.o
 
-override DEFINES:=$(DEFINES)
+override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT -DPCRE_EXT $(DEFINES)
 
-override CPPFLAGS:=-I/opt/mysql/include/mysql/ $(CPPFLAGS)
-override LDFLAGS:=-L/opt/mysql/lib/mysql -L./ $(LDFLAGS)
+MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
+MOD_MYSQL_LD:=-L/opt/mysql/lib/mysql -lmysqlclient
 
-override LIBS:=-lmysqlclient $(LIBS)
+MOD_PCRE_CPP:=-I/opt/pcre/include
+MOD_PCRE_LD:=-L/opt/pcre/lib -lpcre
 
-DODO_INCLUDE=-I./ 
-DODO_LIBRARY=-L./
+override CPPFLAGS:=-I./ $(MOD_MYSQL_CPP) $(MOD_PCRE_CPP) $(CPPFLAGS)
+override LDFLAGS:= -L./ $(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(LDFLAGS)
 
 LIBRARY=dodo
 
@@ -27,7 +28,7 @@ $(LIBRARY): $(OBJECTS)
 	ln -fs lib$@.so.$(VERSION).$(MINOR) lib$@.so
 	ldconfig -n ./
 .cc.o:
-	$(CXX) $(CPPFLAGS) $(CFLAGS) -fpic -c $^
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fpic -c $^
 	strip -d $@
 	
 clean:

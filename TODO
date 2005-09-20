@@ -88,7 +88,7 @@ int main()
 	while (environ[i])
 		printf("%s<br>",environ[i++]);
 	
-    	int cl = atoi(getenv("CONTENT_LENGTH"));
+    int cl = atoi(getenv("CONTENT_LENGTH"));
 	char *post = (char *)malloc(cl);
 	fread(post,cl,1,stdin);
 	printf("<hr>%s",post);

@@ -94,8 +94,6 @@ int main(int argc, char **argv)
 		pp.offset(23);
 		pp.offset(3);//change offset value
 		pp.unlimit();//no limits!! =)
-
-
 				
 		assocArr arr;
 		arr["date"] = "20\"05`''-'07-08";
@@ -145,7 +143,6 @@ int main(int argc, char **argv)
 		pp.exec();
 		
 		__sqlStorage storage = pp.fetch();//get result
-		pp.debug(storage);//shows result
 
 	}
 	catch(mysqlppEx ex)

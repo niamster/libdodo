@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 	 */
 	
 	cout << "\n\n" << cgi.METHOD_GET["sdsd"] << "\n\n";
-
+	cout << "\n\n" << cgi.ENVIRONMENT["REMOTE_ADDR"] << "\n\n";
+	
 	return 0;
 }

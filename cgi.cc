@@ -51,7 +51,8 @@ cgipp::cgipp(bool silent, assocArr &a_headers)
 	makeEnv();
 	
 	detectMethod();
-//	makePost();
+
+	makePost();
 	makeGet();
 }
 
@@ -144,7 +145,29 @@ cgipp::printHeaders()
 	
 	for (;i!=j;++i)
 		std::cout << i->first << ": " << i->second << "\n";
+	std::cout << "\n\n";
+	std::cout.flush();
 }
 
 //-------------------------------------------------------------------
 
+void 
+cgipp::makePost()
+{
+	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
+		return ;
+	
+	register int cl = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
+	register char *post = new char[cl*size_of_char];
+	fread(post,cl,1,stdin);
+	
+	std::cout << post << "!!!!!!!!<hr>";
+	
+	stringArr postPartd = tools::explode(post,"-----------------------------");
+	
+	stringArr::iterator 	i(postPartd.begin()),j(postPartd.end());
+	for (;i!=j;++i)
+		std::cout << *i << "<hr>";
+}
+
+//-------------------------------------------------------------------

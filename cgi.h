@@ -111,6 +111,11 @@ namespace dodo
 	/**
 	 * class to provide simple work with info that passes to cgi
 	 * u can get POST/GET variable; any ENV variable;
+	 * BE CAREFULL:
+	 * 	when usin' POST:
+	 * 		POST, whaen script was called contains in stdin; 
+	 * 		do not read stdin before contructin' object of this class!
+	 * 		please contruct object of this class in the begin of your program; it will prevent any situations;
 	 */
 	class cgipp
 	{
@@ -198,7 +203,7 @@ namespace dodo
 			 * fills properties of the class
 			 */
 			void makeGet();
-			//void makePost();///also fills postFiles if detected
+			void makePost();///also fills postFiles if detected
 			void makeEnv();
 			void initHeaders(assocArr &a_headers);
 	};
