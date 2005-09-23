@@ -177,12 +177,13 @@ cgipp::makePost()
 	else
 	{
 		
-		char *separator = new char[58*size_of_char];
-		strncpy(separator,post,57);
+		char *separator = new char[60*size_of_char];
+		strncpy(separator,post,59);
 
 		std::string bPost;
 		bPost.assign(post,cl);
 		delete [] post;
+		
 		stringArr postPartd = tools::explode(bPost,separator);
 		
 		stringArr::iterator i(postPartd.begin()),j(postPartd.end());
@@ -191,12 +192,13 @@ cgipp::makePost()
 		regexp exp2;
 		regexp exp1;
 		
-		exp2.match("Content-Disposition:[\\s]*form-data;[\\s]*name=\"(.*)\";[\\s]*filename=\"(.*)\"[\\s]*Content-Type:[\\s]*application/octet-stream[\\s]*(.*)","");		
+		exp2.match("Content-Disposition:[\\s]*form-data;[\\s]*name=\"(.*)\";[\\s]*filename=\"(.*)\"[\\s]*Content-Type:[\\s]*([a-zA-Z-/]*)[\\s]*(.*)","");		
 		exp1.match("Content-Disposition:[\\s]*form-data;[\\s]*name=\"(.*)\"[\\s]*(.*)","");
 		
 		for (;i!=j;++i)
 			if (exp2.reMatch(*i,pocket))///file matched
 			{
+				std::cout << pocket[3].size();
 			}
 			else
 				if (exp1.reMatch(*i,pocket))
