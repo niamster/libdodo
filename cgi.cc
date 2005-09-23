@@ -113,7 +113,7 @@ cgipp::makeGet()
 	stringArr temp;
 	for(;i!=j;++i)
 	{
-		temp = tools::explode(*i,"=");
+		temp = tools::explode(*i,&decode64,"=");
 		if (temp.size() > 1)
 			METHOD_GET.methodArr[temp[0]] = temp[1];
 	}
@@ -161,13 +161,120 @@ cgipp::makePost()
 	register char *post = new char[cl*size_of_char];
 	fread(post,cl,1,stdin);
 	
-	std::cout << post << "!!!!!!!!<hr>";
-	
-	stringArr postPartd = tools::explode(post,"-----------------------------");
-	
-	stringArr::iterator 	i(postPartd.begin()),j(postPartd.end());
-	for (;i!=j;++i)
-		std::cout << *i << "<hr>";
+	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
+	{
+		stringArr postPair = tools::explode(post,"&");
+		delete [] post;	
+		stringArr::iterator i(postPair.begin()), j(postPair.end());
+		stringArr temp;
+		for(;i!=j;++i)
+		{
+			temp = tools::explode(*i,&decode64,"=");
+			if (temp.size() > 1)
+				METHOD_POST.methodArr[temp[0]] = temp[1];
+		}		
+	}
+	else
+	{
+		
+		char *separator = new char[58*size_of_char];
+		strncpy(separator,post,57);
+
+		std::string bPost;
+		bPost.assign(post,cl);
+		delete [] post;
+		stringArr postPartd = tools::explode(bPost,separator);
+		
+		stringArr::iterator i(postPartd.begin()),j(postPartd.end());
+		
+		stringArr pocket;
+		regexp exp2;
+		regexp exp1;
+		
+		exp2.match("Content-Disposition:[\\s]*form-data;[\\s]*name=\"(.*)\";[\\s]*filename=\"(.*)\"[\\s]*Content-Type:[\\s]*application/octet-stream[\\s]*(.*)","");		
+		exp1.match("Content-Disposition:[\\s]*form-data;[\\s]*name=\"(.*)\"[\\s]*(.*)","");
+		
+		for (;i!=j;++i)
+			if (exp2.reMatch(*i,pocket))///file matched
+			{
+			}
+			else
+				if (exp1.reMatch(*i,pocket))
+					METHOD_POST.methodArr[pocket[0]] = pocket[1];
+	}	
 }
 
 //-------------------------------------------------------------------
+
+std::string 
+cgipp::decode64(const std::string &string)
+{
+	std::string result;
+	std::string::const_iterator i(string.begin()),j(string.end());
+	char c;
+
+	for(;i!=j;++i) 
+	{
+		switch(*i) 
+		{
+			case '+':
+				result.append(1, ' ');
+				break;
+			case '%':
+				if(std::distance(i, j) >= 2 && std::isxdigit(*(i + 1)) && std::isxdigit(*(i + 2))) 
+				{
+					c = *++i;
+					result.append(1, hexToChar(c, *++i));
+				}
+				else 
+					result.append(1, '%');
+				break;
+			default:
+				result.append(1, *i);
+		}
+	}
+	return result;	
+}
+
+char 
+cgipp::hexToChar(const char &first,
+				const char &second
+				)
+{
+	int val=0;
+	switch (first)
+	{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			val = (16*(int(first)-48));
+			break;
+		default:
+			val = (16*(int(first)-55));
+	}  
+	switch (second)
+	{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			val += (int(second)-48);
+		break;
+		default:
+			val += (int(second)-55);
+	}   
+	return char(val);
+}

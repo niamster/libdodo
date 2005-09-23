@@ -58,6 +58,7 @@ namespace dodo
 		
 			///makes array of strings from string using separtator
 			static stringArr explode(const std::string &fields, const std::string &separator);
+			static stringArr explode(const std::string &fields, escape escapeF, const std::string &separator);
 		
 			///makes string of fields, separated with separator; frame = symbol, that is used to frame the field
 			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, const std::string &frame);

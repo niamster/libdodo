@@ -424,7 +424,7 @@ void
 sqlBase::createBaseCollect() const
 {
 	request = "create database " + pre_order;
-	if (strlen(pre_having.c_str()) != 0)
+	if (pre_having.size() != 0)
 		request.append(" character set " + pre_having);
 }
 //-------------------------------------------------------------------
@@ -538,7 +538,7 @@ sqlBase::queryCollect() const
 			additionalActions = false;
 	}
 	#ifndef FAST
-		if (strlen(request.c_str())==0)
+		if (request.size()==0)
 		#ifndef NO_EX
 			throw sqlBaseEx(SQLBASE_EMPTY_REQUEST, (sqlBase *)this,__LINE__,__FILE__);	
 		#else
@@ -581,13 +581,13 @@ sqlBase::fieldCollect(__fieldInfo &row) const
 	std::string resRow(row.name + stringType(type));
 	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):"");
 	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):"");
-	resRow.append((strlen(row.charset.c_str())>0)?(" character set " + row.charset):" ");
+	resRow.append((row.charset.size()>0)?(" character set " + row.charset):" ");
 	resRow.append(((_NULL&flag)==_NULL)?" NULL ":" NOT NULL ");
-	resRow.append((strlen(row.defaultVal.c_str())>0)?("default '" + row.defaultVal + "' "):"");
+	resRow.append((row.defaultVal.size()>0)?("default '" + row.defaultVal + "' "):"");
 	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?" AUTO_INCREMENT ":"");
 	resRow.append(((KEY&flag)==KEY)?" KEY ":"");	
-	resRow.append((strlen(row.comment.c_str())>0)?(" comment '" + row.comment + "' "):"");
-	if (strlen(row.refTable.c_str())>0)
+	resRow.append((row.comment.size()>0)?(" comment '" + row.comment + "' "):"");
+	if (row.refTable.size()>0)
 	{
 		resRow.append(" references " + row.refTable);
 		resRow.append(!row.refFields.empty()?("(" + tools::implode(row.set_enum,",") +" )"):"");

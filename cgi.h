@@ -27,6 +27,7 @@
 
 #include "tools.h"
 #include "types.h"
+#include "regexp.h"
 
 #ifndef _CGI_H_
 #define _CGI_H_
@@ -186,26 +187,31 @@ namespace dodo
 			 */
 			 //virtual std::string request(const std::string &varName, int first = GET);
 			 
-			 /**
-			  * print cgi headers; u can change 'em modyfing HEADERS array
-			  */
-			void printHeaders();
+			/**
+			 * print cgi headers; u can change 'em modyfing HEADERS array
+			 */
+			virtual void printHeaders();
 			
 			assocArr HEADERS;
+			/**
+			 * base64 decode
+			 */
+			static std::string decode64(const std::string &string);
+			static char hexToChar(const char &first,const char &second);	
 		protected:
 			
 			int method;///can be any from requestMethodEnum
 			std::map<std::string, cgiFilesUp> postFiles;///holds array of cgiFilesUp if one or more files were uploaded
 			
-			void detectMethod();///writes detected method to method property
+			virtual void detectMethod();///writes detected method to method property
 			
 			/**
 			 * fills properties of the class
 			 */
-			void makeGet();
-			void makePost();///also fills postFiles if detected
-			void makeEnv();
-			void initHeaders(assocArr &a_headers);
+			virtual void makeGet();
+			virtual void makePost();///also fills postFiles if detected
+			virtual void makeEnv();
+			virtual void initHeaders(assocArr &a_headers);
 	};
 
 }

@@ -53,21 +53,31 @@ tools::replace(pchar needle,
 //-------------------------------------------------------------------
 
 stringArr 
-tools::explode(const std::string &fields, 
+tools::explode(const std::string &fields,
+			escape escapeF,
 			const std::string &separator)
 {
-	register unsigned int i(0), j(0), sep_size(strlen(separator.c_str()));
+	register unsigned int i(0), j(0), sep_size(separator.size());
 	stringArr arr;
 	while (true)
 	{
 		i = fields.find(separator,i);
-		arr.push_back(fields.substr(j,i-j));
+		arr.push_back(escapeF(fields.substr(j,i-j)));
 		if (i==std::string::npos)
 			break;
 		i += sep_size;
 		j = i;
 	}
 	return arr;
+}
+
+//-------------------------------------------------------------------
+
+stringArr 
+tools::explode(const std::string &fields, 
+			const std::string &separator)
+{
+	return explode(fields,&dummy,separator);
 }
 
 //-------------------------------------------------------------------

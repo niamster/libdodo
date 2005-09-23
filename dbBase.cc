@@ -220,7 +220,7 @@ dbBase::select(const std::string &a_table,
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
-	if (strlen(a_where.c_str()) != 0)
+	if (a_where.size() != 0)
 	{
 		addF(qShift,1<<WHERE);
 		pre_where = a_where;
@@ -343,7 +343,7 @@ dbBase::insertSelect(const std::string &a_tableTo,
 	pre_fieldsNames = a_fieldsNamesTo;
 	pre_fieldsVal.push_back(a_fieldsNamesFrom);
 	
-	if (strlen(a_where.c_str()) != 0)
+	if (a_where.size() != 0)
 	{
 		addF(qShift,1<<WHERE);
 		pre_where = a_where;
@@ -376,7 +376,7 @@ dbBase::update(const std::string &a_table,
 	}
 	pre_fieldsVal.push_back(temp);
 	
-	if (strlen(a_where.c_str()) != 0)
+	if (a_where.size() != 0)
 	{
 		addF(qShift,1<<WHERE);
 		pre_where = a_where;
@@ -399,7 +399,7 @@ dbBase::update(const std::string &a_table,
 	pre_fieldsNames = a_fieldsNames;
 	pre_fieldsVal.push_back(a_fieldsVal);	
 
-	if (strlen(a_where.c_str()) != 0)
+	if (a_where.size() != 0)
 	{
 		addF(qShift,1<<WHERE);
 		pre_where = a_where;

@@ -18,8 +18,15 @@ int main(int argc, char **argv)
 	 cgi.printHeaders();
 	 */
 	
-	cout << "\n\n" << cgi.METHOD_GET["sdsd"] << "\n\n";
-	cout << "\n\n" << cgi.ENVIRONMENT["REMOTE_ADDR"] << "\n\n";
+	//cout << "\n\n" << cgi.METHOD_GET["sdsd"] << "\n\n";
+	cout << cgi.METHOD_POST["a"] << "<br>";
+	cout << cgi.METHOD_POST["e"] << "<br>";
+	//cout << "\n\n" << cgi.ENVIRONMENT["REMOTE_ADDR"] << "\n\n";
+	
+	regexp expr;
+	stringArr pock;
+	expr.match("a([0-9]+)","a4565aaa",pock);
+	//cout << pock[0];
 	
 	return 0;
 }
