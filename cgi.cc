@@ -198,7 +198,7 @@ cgipp::makePost()
 		for (;i!=j;++i)
 			if (exp2.reMatch(*i,pocket))///file matched
 			{
-				std::cout << pocket[3].size();
+				std::cout << pocket[3];
 			}
 			else
 				if (exp1.reMatch(*i,pocket))

@@ -96,17 +96,23 @@ regexp::reMatch(const std::string &sample,
 			return false;
 		subs *= 3;
 		subs += 3;
+		
 		int *oVector = new int[subs];
 		int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 		if (rc<=0)
 			return false;
 		const char *subString;
 		int res;
+		std::string temp;
 		for (int j=1;j<rc;++j)
 		{
 			res = pcre_get_substring(sample.c_str(),oVector,rc,j,&subString);
 			if (res>0)
-				pockets.push_back(subString);
+			{
+				subs = j*2;
+				temp.assign(subString,oVector[subs+1]-oVector[subs]);
+				pockets.push_back(temp);
+			}
 			else
 				return false;
 		}
