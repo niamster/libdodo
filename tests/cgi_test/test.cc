@@ -19,9 +19,9 @@ int main(int argc, char **argv)
 	 */
 	
 	//cout << "\n\n" << cgi.METHOD_GET["sdsd"] << "\n\n";
-	cout << cgi.METHOD_POST["a"] << "<br>";
-	cout << cgi.METHOD_POST["e"] << "<br>";
-	//cout << "\n\n" << cgi.ENVIRONMENT["REMOTE_ADDR"] << "\n\n";
+	cout << "!" << cgi.METHOD_POST["a"] << "!<br>";
+	cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
+	cout << "!" << cgi.ENVIRONMENT["CONTENT_TYPE"] << "<br>";
 	
 	regexp expr;
 	stringArr pock;

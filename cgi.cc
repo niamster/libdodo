@@ -66,6 +66,16 @@ cgipp::~cgipp()
 //-------------------------------------------------------------------
 
 void 
+cgipp::cleanTmp()
+{
+	std::map<std::string, cgiFilesUp>::iterator i(postFiles.begin()),j(postFiles.end());
+	for (;i!=j;++i)
+		unlink(i->second.tmp_name.c_str());
+}
+
+//-------------------------------------------------------------------
+
+void 
 cgipp::detectMethod()
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"GET") == 0)
@@ -158,7 +168,7 @@ cgipp::makePost()
 		return ;
 	
 	register int cl = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
-	register char *post = new char[cl*size_of_char];
+	register char *post = new char[(cl+1)*size_of_char];
 	fread(post,cl,1,stdin);
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
@@ -177,32 +187,72 @@ cgipp::makePost()
 	else
 	{
 		
-		char *separator = new char[60*size_of_char];
-		strncpy(separator,post,59);
+		//register char *separator = new char[59*size_of_char];
+		//strncpy(separator,post,58);
 
 		std::string bPost;
 		bPost.assign(post,cl);
 		delete [] post;
 		
-		stringArr postPartd = tools::explode(bPost,separator);
+		register int temp0;
+		temp0 = ENVIRONMENT.methodArr["CONTENT_TYPE"].find("boundary=");
+		stringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT.methodArr["CONTENT_TYPE"].substr(temp0+9));
 		
 		stringArr::iterator i(postPartd.begin()),j(postPartd.end());
-		
-		stringArr pocket;
-		regexp exp2;
-		regexp exp1;
-		
-		exp2.match("Content-Disposition:[\\s]*form-data;[\\s]*name=\"(.*)\";[\\s]*filename=\"(.*)\"[\\s]*Content-Type:[\\s]*([a-zA-Z-/]*)[\\s]*(.*)","");		
-		exp1.match("Content-Disposition:[\\s]*form-data;[\\s]*name=\"(.*)\"[\\s]*(.*)","");
-		
+
+		register int temp1;
+		char *ptr = new char[strlen(post_files_tmp_dir)+17];
 		for (;i!=j;++i)
-			if (exp2.reMatch(*i,pocket))///file matched
+			if (i->find("filename")!=std::string::npos)///file
 			{
-				std::cout << pocket[3];
+				if ((temp0 = i->find("name=\"")) == std::string::npos)
+					continue;
+				temp0 += 6;	
+				temp1 = i->find("\"",temp0);
+				
+				std::string post_name = i->substr(temp0,temp1-temp0);
+				
+				cgiFilesUp file;
+				
+				temp0 = i->find("filename=\"",temp1);
+				temp0 += 10;	
+				temp1 = i->find("\"",temp0);
+				if (temp0==temp1)
+					continue;
+				
+				file.name = i->substr(temp0,temp1-temp0);
+				
+				temp0 = i->find("Content-Type: ",temp1);
+				temp0 += 14;	
+				temp1 = i->find("\r\n",temp0);
+				file.type = i->substr(temp0,temp1-temp0);
+				
+				std::string tmp_name = post_files_tmp_dir;
+				tmp_name.append("dodo_post_XXXXXX");
+				ptr = mktemp((char*)tmp_name.c_str());
+				
+				if (ptr == NULL)	
+					continue;
+							
+				file.tmp_name = ptr;
+				
+				file.size = i->substr(temp1+4).size()-2;
+				
+				FILE *tmp = fopen(ptr,"w+");
+				fwrite(i->substr(temp1+4).c_str(),file.size,1,tmp);
+				fclose(tmp);
+				
+				postFiles[post_name] = file;
 			}
-			else
-				if (exp1.reMatch(*i,pocket))
-					METHOD_POST.methodArr[pocket[0]] = pocket[1];
+			else///simply post
+			{
+				if ((temp0 = i->find("name=\"")) == std::string::npos)
+					continue;
+				temp0 += 6;		
+				temp1 = i->find("\"",temp0);
+								
+				METHOD_POST.methodArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);///damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
+			}
 	}	
 }
 

@@ -96,8 +96,12 @@ namespace dodo
 		std::string type;
 		std::string tmp_name;
 		unsigned long size;
-		int error;
 	};
+	
+	/**
+	 * do not forget trailing symbol!!! for OS comliance!
+	 */
+	static char *post_files_tmp_dir = "/tmp/";
 
 	/**
 	 * request type
@@ -212,6 +216,11 @@ namespace dodo
 			virtual void makePost();///also fills postFiles if detected
 			virtual void makeEnv();
 			virtual void initHeaders(assocArr &a_headers);
+			
+			/**
+			 * deletes temp files that were created if POST_FILES were present
+			 */
+			virtual void cleanTmp();
 	};
 
 }
