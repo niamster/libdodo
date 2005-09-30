@@ -28,7 +28,9 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 
-std::string 
+#define __UNDEFINED__ "_undefined_"
+
+std::string
 cgipp::__method::operator [](const std::string &varName)
 {
 	assocArr::iterator i(methodArr.begin()),j(methodArr.end());
@@ -36,7 +38,7 @@ cgipp::__method::operator [](const std::string &varName)
 	for (;i!=j;++i)
 		if (strcmp(varName.c_str(),i->first.c_str()) == 0)
 			return i->second;
-	return "_undefined_";
+	return __UNDEFINED__;
 }
 
 //-------------------------------------------------------------------
@@ -109,7 +111,7 @@ cgipp::makeEnv()
 	for (register int i=0;i<len;++i)
 	{
 		env = getenv(HTTP_ENV[i].str);
-		ENVIRONMENT.methodArr[HTTP_ENV[i].str] = (env==NULL)?"_undefined_":env;
+		ENVIRONMENT.methodArr[HTTP_ENV[i].str] = (env==NULL)?__UNDEFINED__:env;
 	}
 }
 
@@ -186,17 +188,13 @@ cgipp::makePost()
 	}
 	else
 	{
-		
-		//register char *separator = new char[59*size_of_char];
-		//strncpy(separator,post,58);
-
 		std::string bPost;
 		bPost.assign(post,cl);
 		delete [] post;
 		
 		register int temp0;
-		temp0 = ENVIRONMENT.methodArr["CONTENT_TYPE"].find("boundary=");
-		stringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT.methodArr["CONTENT_TYPE"].substr(temp0+9));
+		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
+		stringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT["CONTENT_TYPE"].substr(temp0+9));
 		
 		stringArr::iterator i(postPartd.begin()),j(postPartd.end());
 
@@ -238,8 +236,26 @@ cgipp::makePost()
 				
 				file.size = i->substr(temp1+4).size()-2;
 				
-				FILE *tmp = fopen(ptr,"w+");
+				file.error = NONE;
+				
+				FILE *tmp = fopen(ptr,"w+b");
+				if (tmp == NULL)
+					switch(errno)
+					{
+						case EACCES:
+						case EISDIR:
+							file.error = ACCESS_DENY;
+							break;
+						case ENAMETOOLONG:
+						case ENOTDIR:
+							file.error = BAD_FILE_NAME;
+							break;
+						case ENOMEM:
+							file.error = NO_SPACE;
+					}
 				fwrite(i->substr(temp1+4).c_str(),file.size,1,tmp);
+				if (errno == ENOMEM)
+						file.error = NO_SPACE;
 				fclose(tmp);
 				
 				postFiles[post_name] = file;
@@ -288,6 +304,8 @@ cgipp::decode64(const std::string &string)
 	return result;	
 }
 
+//-------------------------------------------------------------------
+
 char 
 cgipp::hexToChar(const char &first,
 				const char &second
@@ -330,3 +348,46 @@ cgipp::hexToChar(const char &first,
 	}   
 	return char(val);
 }
+
+//-------------------------------------------------------------------
+
+cgiFilesUp 
+cgipp::getFile(const std::string &varName)
+{
+	return postFiles[varName];
+}
+
+//-------------------------------------------------------------------
+
+dodo::cgipp::__method &
+cgipp::operator[](int method)
+{
+	if (method == POST)
+		return METHOD_POST;
+	else
+		return METHOD_GET;
+}
+
+//-------------------------------------------------------------------
+
+std::string
+cgipp::request(const std::string &varName, 
+				int first)
+{
+	std::string temp0 = METHOD_GET[varName];
+	std::string temp1 = METHOD_POST[varName];
+	
+	if (first == GET)
+		if (strcmp(temp0.c_str(),__UNDEFINED__) != 0)
+			return temp0;
+		else
+			return temp1;
+	else
+		if (strcmp(temp1.c_str(),__UNDEFINED__) != 0)
+			return temp1;
+		else
+			return temp0;
+		
+}
+
+//-------------------------------------------------------------------

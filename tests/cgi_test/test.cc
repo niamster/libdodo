@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	
 	regexp expr;
 	stringArr pock;
-	expr.match("a([0-9]+)","a4565aaa",pock);
+	expr.match("a([0-9]+)(.*)","dsdasa4565aaa",pock);
 	//cout << pock[0];
 	
 	return 0;

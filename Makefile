@@ -4,7 +4,8 @@ CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -fmove-all-movables -march=pentium4
 OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o cgi.o regexp.o
 
-override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT -DPCRE_EXT $(DEFINES)
+override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT
+# -DPCRE_EXT $(DEFINES)
 
 MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
 MOD_MYSQL_LD:=-L/opt/mysql/lib/mysql -lmysqlclient

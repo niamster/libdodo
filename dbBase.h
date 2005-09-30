@@ -345,13 +345,13 @@ namespace dodo
 			/**
 			 * sets info for mysql database
 			 */
-			void setSqlInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &socket = std::string("")) const;
+			void setSqlInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &socket = __string__) const;
 			/**
 			 * table - (char*)/(string); if length(table)==0 => 'from `table`' doesn't use 
 			 * fields - array of (char*)/(string)
 			 * where - (char*)/(string)
 		     */
-			virtual void select(const std::string &table, const stringArr &fieldsNames, const std::string &where = std::string("")) const;
+			virtual void select(const std::string &table, const stringArr &fieldsNames, const std::string &where = __string__) const;
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
@@ -371,18 +371,18 @@ namespace dodo
 			 * fieldsVal - array of (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 		     */
-			virtual void insert(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames = stringArr());
+			virtual void insert(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames = __stringarry__);
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of array((char*)/(string))
 			 * fieldsNames - array of (char*)/(string)
 		     */
-			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = stringArr());			
+			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarry__);			
 			/**
 			 * table(To/From) - (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 			 */
-			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = stringArr(), const std::string &where = std::string(""));
+			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = __stringarry__, const std::string &where = __string__);
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
@@ -390,19 +390,19 @@ namespace dodo
 			 * value => field's value
 			 * where - (char*)/(string)
 		     */
-			virtual void update(const std::string &table, const assocArr &fields, const std::string &where = std::string(""));			
+			virtual void update(const std::string &table, const assocArr &fields, const std::string &where = __string__);			
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 			 * where - (char*)/(string)
 		     */
-			virtual void update(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &where = std::string(""));
+			virtual void update(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &where = __string__);
 			/**
 			 * table - (char*)/(string)
 			 * where - (char*)/(string)
 			 */       
-			virtual void del(const std::string &table, const std::string &where = std::string(""));
+			virtual void del(const std::string &table, const std::string &where = __string__);
 			/**
 			 * subquery
 			 */
@@ -438,7 +438,7 @@ namespace dodo
 			/**
 			 * creates database
 			 */
-			virtual void createDb(const std::string &db, const std::string &charset=std::string(""));
+			virtual void createDb(const std::string &db, const std::string &charset = __string__);
 			/**
 			 * creates table
 			 */

@@ -29,13 +29,23 @@ using namespace dodo;
 regexp::regexp() : icase(false),
 					extended_reg(true)
 {
-	
+	#ifdef PCRE_EXT
+		
+	#else
+		code = new regex_t;
+	#endif		
 }
 
 //-------------------------------------------------------------------
 
 regexp::~regexp()
 {
+	#ifdef PCRE_EXT
+		
+	#else
+		regfree(code);
+		delete code;
+	#endif	
 }
 
 //-------------------------------------------------------------------
@@ -61,7 +71,7 @@ regexp::match(const std::string &pattern,
 				const std::string &sample, 
 				stringArr &pockets)
 {
-	int bits;
+	int bits(0);
 	
 	#ifdef PCRE_EXT
 		if (extended_reg)
@@ -76,7 +86,12 @@ regexp::match(const std::string &pattern,
 		if (code == NULL)
 			return false;
 	#else
-	
+		if (extended_reg)
+			bits|=REG_EXTENDED;
+		if (icase)
+			bits|=REG_ICASE;
+		if (regcomp(code, pattern.c_str(),bits) != 0)
+			return false;
 	#endif
 	
 	return reMatch(sample,pockets);
@@ -89,9 +104,10 @@ regexp::reMatch(const std::string &sample,
 				stringArr &pockets)
 {
 	pockets.clear();
+	int subs;
 	
 	#ifdef PCRE_EXT
-		int subs = pcre_info(code,NULL,NULL);
+		subs = pcre_info(code,NULL,NULL);
 		if (subs<0)
 			return false;
 		subs *= 3;
@@ -117,9 +133,13 @@ regexp::reMatch(const std::string &sample,
 				return false;
 		}
 	#else
-	
+		subs = code->re_nsub+1;
+		regmatch_t *pmatch = new regmatch_t[subs];
+		regexec(code,sample.c_str(),subs,pmatch,0);
+		for (int i(1); i<subs;++i)
+			std::cout << "!" << pmatch[i].rm_so << "!" << pmatch[i].rm_eo << "\n";
+		delete [] pmatch;
 	#endif
-	
 }
 
 //-------------------------------------------------------------------

@@ -24,6 +24,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "tools.h"
 #include "types.h"
@@ -86,7 +87,16 @@ namespace dodo
 	 * "Content-type",
 	 * "X-Powered-By"
 	 */
-	 
+	/**
+	 * errors that could happen durin' savin' postFile
+	 */ 
+	enum errPostFileEnum
+	{
+		NONE,///everythin' is OK
+		ACCESS_DENY,///no permissions to create file
+		BAD_FILE_NAME,///too long
+		NO_SPACE
+	}; 
 	/**
 	 * structure that defines node about uploaded file
 	 */
@@ -96,6 +106,7 @@ namespace dodo
 		std::string type;
 		std::string tmp_name;
 		unsigned long size;
+		int error;///see 
 	};
 	
 	/**
@@ -159,23 +170,16 @@ namespace dodo
 			/**
 			 * get cgiFilesUp by name from post request
 			 */
-			//virtual cgiFilesUp getFile(const std::string &varName);
+			virtual cgiFilesUp getFile(const std::string &varName);
 			/**
 			 * get method type; see requestMethodEnum
 			 */ 
 			virtual int getMethod();
-			/**
-			 * encode/decode URL
-			 */
-			//virtual std::string encodeURL(const std::string &url);
-			//virtual std::string decodeURL(const std::string &url);
 			
 			/**
 			 * to have access like classObj[POST]["name"]
-			 * if GET_POST specified from GET will be searched first
-			 * if not GET/POST/GET_POST - GET will be placed
 			 */
-			//virtual std::string operator[](int method);
+			virtual dodo::cgipp::__method &operator[](int method);
 			
 			/**
 			 * get specific variables (from POST, GET or ENV)
@@ -189,7 +193,7 @@ namespace dodo
 			 * if first is set to GET - from GET will be searched for; any else - from POST;
 			 * it can prevent if 'variable names' are same as in POST as in GET
 			 */
-			 //virtual std::string request(const std::string &varName, int first = GET);
+			 virtual std::string request(const std::string &varName, int first = GET);
 			 
 			/**
 			 * print cgi headers; u can change 'em modyfing HEADERS array

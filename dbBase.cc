@@ -969,7 +969,7 @@ dbBase::stringType(int type) const
 		case SET:
 			return std::string("SET");
 		default :
-			return std::string("");
+			return __string__;
 	}
 }
 	

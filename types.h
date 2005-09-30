@@ -50,6 +50,8 @@ namespace dodo
 	
 	typedef char* pchar;
 	
+	static const std::string __string__ = "";
+	
 	typedef std::vector<std::string> stringArr;
 	static stringArr __stringarry__;
 	
