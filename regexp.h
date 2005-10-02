@@ -42,6 +42,16 @@
 
 namespace dodo
 {
+	
+	/**
+	 * 
+	 */
+	struct __regexMatch
+	{
+		int begin;
+		int end;
+	};
+	
 	/**
 	 * class that covers REGEXP routine;
 	 * usin' define flags u can compile with POSIX regex or with PCRE;
@@ -62,38 +72,48 @@ namespace dodo
 	 		/**
 	 		 * set whether to use Extended or basic regex; Extended by default
 	 		 */ 
-	 		void extended(bool extended); 
+	 		void extended(bool extended) const; 
 	 		/**
 	 		 * not active by default
 	 		 */
-	 		void  ignoreCase(bool ignore);
+	 		void  ignoreCase(bool ignore) const;
 	 		/**
 	 		 * matches and set matched pieces in '()' to pockets or return false;
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
-	 		bool match(const std::string &pattern, const std::string &sample, stringArr &pockets = __stringarry__);
+	 		bool match(const std::string &pattern, const std::string &sample, stringArr &pockets = __stringarry__) const;
 	 		/**
-	 		 * matches and set matched pieces in '()' to pockets usin' pattern from `exec` or return false; faster than usage `exec` for some times with the same pattern
+	 		 * matches and set matched pieces in '()' to pockets usin' pattern from `match` or return false; faster than usage `exec` for some times with the same pattern
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
-	 		bool reMatch(const std::string &sample, stringArr &pockets = __stringarry__);
+	 		bool reMatch(const std::string &sample, stringArr &pockets = __stringarry__) const;
 	 		/**
 	 		 * replaces in sample from pieces usin' pattern
+	 		 * if amount of pockets more than replacements  - replacemet will stop
 	 		 */
-	 		//std::string replace(const std::string &pattern, const std::string &sample, const stringArr &matches);
+	 		std::string replace(const std::string &pattern, const std::string &sample, const stringArr &replacements) const;
+	 		/**
+	 		 * replaces in sample from pieces usin' pattern;faster than usage `replace` for some times with the same pattern
+	 		 * if amount of pockets more than replacements  - replacemet will stop
+	 		 */
+	 		std::string reReplace(const std::string &sample, const stringArr &replacements) const;
 	 		
 	 	protected:
 	 	
-	 		bool icase;
-	 		bool extended_reg;
+	 		bool boundMatch(const std::string &sample) const;
+	 		bool compile(const std::string &pattern) const;
+	 	
+	 		mutable bool icase;
+	 		mutable bool extended_reg;
 			#ifdef PCRE_EXT
-				pcre *code;
+				mutable pcre *code;
 			#else
-				regex_t *code;
+				mutable regex_t *code;
 			#endif	 		
 	 		
+			mutable std::vector<__regexMatch> boundaries;
 	 };
 };
 

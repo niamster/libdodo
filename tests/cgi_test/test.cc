@@ -22,11 +22,18 @@ int main(int argc, char **argv)
 	cout << "!" << cgi.METHOD_POST["a"] << "!<br>";
 	cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
 	cout << "!" << cgi.ENVIRONMENT["CONTENT_TYPE"] << "<br>";
-	
 	regexp expr;
 	stringArr pock;
-	expr.match("a([0-9]+)(.*)","dsdasa4565aaa",pock);
-	//cout << pock[0];
+	expr.match("(.*)a([0-9]+)(f*)(a*)(b*)","dsdasa4565aaa",pock);
+	cout << pock[0] << "\n";
+	cout << pock[1] << "\n";
+	cout << pock[2] << "\n";
+	cout << pock[3] << "\n";
+	cout << pock[4] << "\n";
 	
+	stringArr a;
+	a.push_back("!!!");
+	a.push_back("@@");
+	cout << expr.reReplace("dsdasa4565aaa",a) << "\n";
 	return 0;
 }

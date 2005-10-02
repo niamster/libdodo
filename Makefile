@@ -1,11 +1,11 @@
-GCC_PATH=/opt/gcc-3.4.3/bin/
+#GCC_PATH=/opt/gcc-3.4.3/bin/
+GCC_PATH=/opt/gcc-4.0.1/bin/
 
 CXX = $(GCC_PATH)g++
-CFLAGS=-O2 -fmove-all-movables -march=pentium4
+CFLAGS=-O2 -march=pentium4
 OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBaseEx.o sqlBase.o baseEx.o mysqlinterface.o mysqlinterfaceEx.o cgi.o regexp.o
 
-override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT
-# -DPCRE_EXT $(DEFINES)
+override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT -DPCRE_EXT $(DEFINES)
 
 MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
 MOD_MYSQL_LD:=-L/opt/mysql/lib/mysql -lmysqlclient
