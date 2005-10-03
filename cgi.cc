@@ -43,7 +43,12 @@ cgipp::__method::operator [](const std::string &varName)
 
 //-------------------------------------------------------------------
 
-cgipp::cgipp(bool silent, assocArr &a_headers)
+__cookies::__cookies(bool a_secure) : secure(a_secure)
+{
+}
+
+cgipp::cgipp(bool silent, 
+			assocArr &a_headers)
 {	
 	initHeaders(a_headers);
 	
@@ -55,7 +60,8 @@ cgipp::cgipp(bool silent, assocArr &a_headers)
 	detectMethod();
 
 	makePost();
-	makeGet();
+	make(COOKIES,ENVIRONMENT["HTTP_COOKIE"],"; ");
+	make(METHOD_GET,ENVIRONMENT["QUERY_STRING"]);
 }
 
 //-------------------------------------------------------------------
@@ -68,9 +74,9 @@ cgipp::~cgipp()
 //-------------------------------------------------------------------
 
 void 
-cgipp::cleanTmp()
+cgipp::cleanTmp() const
 {
-	std::map<std::string, cgiFilesUp>::iterator i(postFiles.begin()),j(postFiles.end());
+	std::map<std::string, __cgiFilesUp>::iterator i(postFiles.begin()),j(postFiles.end());
 	for (;i!=j;++i)
 		unlink(i->second.tmp_name.c_str());
 }
@@ -78,7 +84,7 @@ cgipp::cleanTmp()
 //-------------------------------------------------------------------
 
 void 
-cgipp::detectMethod()
+cgipp::detectMethod() const
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"GET") == 0)
 		method = GET;
@@ -94,15 +100,33 @@ cgipp::detectMethod()
 //-------------------------------------------------------------------
 
 int 
-cgipp::getMethod()
+cgipp::getMethod() const
 {
 	return method;
 }
 
 //-------------------------------------------------------------------
 
+void 
+cgipp::make(__method &val,
+			const std::string &string,
+			char *delim) const
+{
+	stringArr getPair = tools::explode(string,delim);
+	stringArr::iterator i(getPair.begin()), j(getPair.end());
+	stringArr temp;
+	for(;i!=j;++i)
+	{
+		temp = tools::explode(*i,&decode64,"=");
+		if (temp.size() > 1)
+			val.methodArr[temp[0]] = temp[1];
+	}	
+}
+
+//-------------------------------------------------------------------
+
 void
-cgipp::makeEnv()
+cgipp::makeEnv() const
 {
 	register int len = sizeof(HTTP_ENV)/sizeof(__statements);
 	
@@ -117,24 +141,8 @@ cgipp::makeEnv()
 
 //-------------------------------------------------------------------
 
-void
-cgipp::makeGet()
-{
-	stringArr getPair = tools::explode(ENVIRONMENT.methodArr["QUERY_STRING"],"&");
-	stringArr::iterator i(getPair.begin()), j(getPair.end());
-	stringArr temp;
-	for(;i!=j;++i)
-	{
-		temp = tools::explode(*i,&decode64,"=");
-		if (temp.size() > 1)
-			METHOD_GET.methodArr[temp[0]] = temp[1];
-	}
-}
-
-//-------------------------------------------------------------------
-
 void 
-cgipp::initHeaders(assocArr &a_headers)
+cgipp::initHeaders(assocArr &a_headers) const
 {
 	HEADERS["Content-type"] = "text/html";
 	HEADERS["X-Powered-By"] = LIBDODO_VERSION;
@@ -151,12 +159,29 @@ cgipp::initHeaders(assocArr &a_headers)
 //-------------------------------------------------------------------
 
 void 
-cgipp::printHeaders()
+cgipp::printHeaders() const
 {
 	assocArr::iterator i(HEADERS.begin()),j(HEADERS.end());
 	
 	for (;i!=j;++i)
 		std::cout << i->first << ": " << i->second << "\n";
+	if (cookiesSet.size()>0)
+	{
+		std::vector<__cookies>::iterator i(cookiesSet.begin()),j(cookiesSet.end());
+		for (;i!=j;++i)
+		{
+			std::cout << "Set-Cookie: ";
+			std::cout << i->name << "=" << i->value << "; ";
+			if (i->path.size() > 0)	
+				std::cout << "path=" << i->path << "; ";
+			if (i->exDate.size() > 0)	
+				std::cout << "expires=" << i->exDate << "; ";
+			if (i->domain.size() > 0)
+				std::cout << "domain=" << i->domain << "; ";
+			if (i->secure)
+				std::cout << "secure";
+		}
+	}
 	std::cout << "\n\n";
 	std::cout.flush();
 }
@@ -164,7 +189,7 @@ cgipp::printHeaders()
 //-------------------------------------------------------------------
 
 void 
-cgipp::makePost()
+cgipp::makePost() const
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
 		return ;
@@ -175,16 +200,8 @@ cgipp::makePost()
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
 	{
-		stringArr postPair = tools::explode(post,"&");
+		make(METHOD_POST,post);
 		delete [] post;	
-		stringArr::iterator i(postPair.begin()), j(postPair.end());
-		stringArr temp;
-		for(;i!=j;++i)
-		{
-			temp = tools::explode(*i,&decode64,"=");
-			if (temp.size() > 1)
-				METHOD_POST.methodArr[temp[0]] = temp[1];
-		}		
 	}
 	else
 	{
@@ -210,7 +227,7 @@ cgipp::makePost()
 				
 				std::string post_name = i->substr(temp0,temp1-temp0);
 				
-				cgiFilesUp file;
+				__cgiFilesUp file;
 				
 				temp0 = i->find("filename=\"",temp1);
 				temp0 += 10;	
@@ -308,8 +325,7 @@ cgipp::decode64(const std::string &string)
 
 char 
 cgipp::hexToChar(const char &first,
-				const char &second
-				)
+				const char &second)
 {
 	int val=0;
 	switch (first)
@@ -351,8 +367,8 @@ cgipp::hexToChar(const char &first,
 
 //-------------------------------------------------------------------
 
-cgiFilesUp 
-cgipp::getFile(const std::string &varName)
+__cgiFilesUp 
+cgipp::getFile(const std::string &varName) const
 {
 	return postFiles[varName];
 }
@@ -360,7 +376,7 @@ cgipp::getFile(const std::string &varName)
 //-------------------------------------------------------------------
 
 dodo::cgipp::__method &
-cgipp::operator[](int method)
+cgipp::operator[](int method) const
 {
 	if (method == POST)
 		return METHOD_POST;
@@ -372,7 +388,7 @@ cgipp::operator[](int method)
 
 std::string
 cgipp::request(const std::string &varName, 
-				int first)
+				int first) const
 {
 	std::string temp0 = METHOD_GET[varName];
 	std::string temp1 = METHOD_POST[varName];
@@ -388,6 +404,25 @@ cgipp::request(const std::string &varName,
 		else
 			return temp0;
 		
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgipp::setCookie(const std::string &name, 
+				const std::string &value, 
+				const std::string &exDate, 
+				const std::string &path, 
+				const std::string &domain, 
+				bool secure) const
+{
+	__cookies temp(secure);
+	temp.name = name;
+	temp.value = value;
+	temp.exDate = exDate;
+	temp.path = path;
+	temp.domain = domain;
+	cookiesSet.push_back(temp);
 }
 
 //-------------------------------------------------------------------

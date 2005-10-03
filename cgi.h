@@ -38,7 +38,7 @@ namespace dodo
 	/**
 	 * these variables will be in ENV
 	 */
-	__statements HTTP_ENV[30] = 
+	__statements HTTP_ENV[33] = 
 	{		
 		"REQUEST_METHOD",
 		"REQUEST_URI",
@@ -50,6 +50,7 @@ namespace dodo
 				
 		"HTTP_HOST",
 		"HTTP_USER_AGENT",
+		"HTTP_COOKIE",
 		"HTTP_ACCEPT",
 		"HTTP_ACCEPT_LANGUAGE",
 		"HTTP_ACCEPT_ENCODING",
@@ -57,6 +58,8 @@ namespace dodo
 		"HTTP_KEEP_ALIVE",
 		"HTTP_CONNECTION",
 		"HTTP_REFERER",
+		"HTTP_VIA",
+		"HTTP_X_FORWARDED_FOR",
 		
 		"REMOTE_ADDR",
 		"REMOTE_PORT",
@@ -100,7 +103,7 @@ namespace dodo
 	/**
 	 * structure that defines node about uploaded file
 	 */
-	struct cgiFilesUp
+	struct __cgiFilesUp
 	{
 		std::string name;
 		std::string type;
@@ -108,7 +111,21 @@ namespace dodo
 		unsigned long size;
 		int error;///see 
 	};
-	
+	/**
+	 * 
+	 */
+	struct __cookies
+	{
+		__cookies(bool secure);
+		
+		std::string name;
+		std::string value;
+		
+		std::string exDate;///date of expire
+		std::string path;
+		std::string domain;
+		bool secure;///false by default
+	}; 
 	/**
 	 * do not forget trailing symbol!!! for OS comliance!
 	 */
@@ -161,7 +178,7 @@ namespace dodo
 			/**
 			 * override/add some headers to outputtin'
 			 * if silent set to true, no header will be printed durin' constructin'; u may call printHeadrs later.
-			 * it's usefull if u want to modify them; defoult headers are in headers array
+			 * it's usefull if u want to modify them; default headers are in headers array; or u want to set cookies;
 			 * if headers will pass to contructor u may silent set to false and modyfied headers will be printed
 			 */
 			cgipp(bool silent = false, assocArr &headers = assocArr());
@@ -170,61 +187,72 @@ namespace dodo
 			/**
 			 * get cgiFilesUp by name from post request
 			 */
-			virtual cgiFilesUp getFile(const std::string &varName);
+			virtual __cgiFilesUp getFile(const std::string &varName) const;
 			/**
 			 * get method type; see requestMethodEnum
 			 */ 
-			virtual int getMethod();
+			virtual int getMethod() const;
 			
 			/**
 			 * to have access like classObj[POST]["name"]
 			 */
-			virtual dodo::cgipp::__method &operator[](int method);
+			virtual dodo::cgipp::__method &operator[](int method) const;
 			
 			/**
-			 * get specific variables (from POST, GET or ENV)
+			 * get specific variables (from POST, GET, ENV or COOKIE)
 			 */
-			__method METHOD_POST;
-			__method METHOD_GET;
-			__method ENVIRONMENT;
+			mutable __method METHOD_POST;
+			mutable __method METHOD_GET;
+			mutable __method ENVIRONMENT;
+			mutable __method COOKIES;
 			
 			/**
 			 * merges results from POST and GET;
 			 * if first is set to GET - from GET will be searched for; any else - from POST;
 			 * it can prevent if 'variable names' are same as in POST as in GET
 			 */
-			 virtual std::string request(const std::string &varName, int first = GET);
+			 virtual std::string request(const std::string &varName, int first = GET) const;
 			 
 			/**
 			 * print cgi headers; u can change 'em modyfing HEADERS array
+			 * cookie header's part is prits too!!!
 			 */
-			virtual void printHeaders();
+			virtual void printHeaders() const;
 			
-			assocArr HEADERS;
+			mutable assocArr HEADERS;
 			/**
 			 * base64 decode
 			 */
 			static std::string decode64(const std::string &string);
 			static char hexToChar(const char &first,const char &second);	
+			
+			/**
+			 * sets cookie;
+			 */
+			virtual void setCookie(const std::string &name, const std::string &value, const std::string &exDate=__string__, const std::string &path=__string__, const std::string &domain=__string__, bool secure=false) const;
 		protected:
+			/**
+			 * cookies specied data
+			 */
+			mutable std::vector<__cookies> cookiesSet;
+			mutable int method;///can be any from requestMethodEnum
+			mutable std::map<std::string, __cgiFilesUp> postFiles;///holds array of cgiFilesUp if one or more files were uploaded
 			
-			int method;///can be any from requestMethodEnum
-			std::map<std::string, cgiFilesUp> postFiles;///holds array of cgiFilesUp if one or more files were uploaded
-			
-			virtual void detectMethod();///writes detected method to method property
+			virtual void detectMethod() const;///writes detected method to method property
 			
 			/**
 			 * fills properties of the class
 			 */
-			virtual void makeGet();
-			virtual void makePost();///also fills postFiles if detected
-			virtual void makeEnv();
-			virtual void initHeaders(assocArr &a_headers);
+			virtual void makePost() const;///also fills postFiles if detected
+			virtual void makeEnv() const;
+			virtual void initHeaders(assocArr &a_headers) const;
 			
 			/**
 			 * deletes temp files that were created if POST_FILES were present
 			 */
-			virtual void cleanTmp();
+			virtual void cleanTmp() const;
+			
+			virtual void make(__method &val,const std::string &string, char *delim = "&") const;
 	};
 
 }

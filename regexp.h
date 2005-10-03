@@ -72,11 +72,12 @@ namespace dodo
 	 		/**
 	 		 * set whether to use Extended or basic regex; Extended by default
 	 		 */ 
-	 		void extended(bool extended) const; 
+	 		mutable bool extended;
 	 		/**
+	 		 * ignore case
 	 		 * not active by default
 	 		 */
-	 		void  ignoreCase(bool ignore) const;
+	 		mutable bool icase;
 	 		/**
 	 		 * matches and set matched pieces in '()' to pockets or return false;
 	 		 * pockets clears before fillin'
@@ -105,8 +106,6 @@ namespace dodo
 	 		bool boundMatch(const std::string &sample) const;
 	 		bool compile(const std::string &pattern) const;
 	 	
-	 		mutable bool icase;
-	 		mutable bool extended_reg;
 			#ifdef PCRE_EXT
 				mutable pcre *code;
 			#else

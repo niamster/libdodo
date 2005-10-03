@@ -27,7 +27,7 @@
 using namespace dodo;
 
 regexp::regexp() : icase(false),
-					extended_reg(true)
+					extended(true)
 {
 	#ifdef PCRE_EXT
 		
@@ -46,22 +46,6 @@ regexp::~regexp()
 		regfree(code);
 		delete code;
 	#endif	
-}
-
-//-------------------------------------------------------------------
-
-void 
-regexp::extended(bool a_extended) const
-{
-	extended_reg = a_extended;
-}
-
-//-------------------------------------------------------------------
-
-void  
-regexp::ignoreCase(bool a_ignore) const
-{
-	icase = a_ignore;
 }
 
 //-------------------------------------------------------------------
@@ -163,7 +147,7 @@ regexp::compile(const std::string &pattern) const
 	register int bits(0);
 	
 	#ifdef PCRE_EXT
-		if (extended_reg)
+		if (extended)
 			bits|=PCRE_EXTENDED;
 		if (icase)
 			bits|=PCRE_CASELESS;
@@ -175,7 +159,7 @@ regexp::compile(const std::string &pattern) const
 		if (code == NULL)
 			return false;
 	#else
-		if (extended_reg)
+		if (extended)
 			bits|=REG_EXTENDED;
 		if (icase)
 			bits|=REG_ICASE;

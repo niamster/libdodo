@@ -18,9 +18,9 @@ override LDFLAGS:= -L./ $(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(LDFLAGS)
 
 LIBRARY=dodo
 
-VERSION = 0
+VERSION = 0.0
 
-MINOR = 1
+MINOR = 3
 
 all: $(LIBRARY)
 
