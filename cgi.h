@@ -224,7 +224,9 @@ namespace dodo
 			 * base64 decode
 			 */
 			static std::string decode64(const std::string &string);
-			static char hexToChar(const char &first,const char &second);	
+			static std::string encode64(const std::string &string);
+			static char hexToChar(const char &first, const char &second);
+			static std::string charToHex(const char &first);
 			
 			/**
 			 * sets cookie;

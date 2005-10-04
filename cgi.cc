@@ -322,7 +322,41 @@ cgipp::decode64(const std::string &string)
 }
 
 //-------------------------------------------------------------------
-
+std::string
+cgipp::encode64(const std::string &string)
+{
+	std::string result;
+	std::string::const_iterator i(string.begin()), j(string.end());
+	
+	for(;i!=j;++i) 
+	{
+		switch(*i) 
+	    {
+		    case ' ':
+				result.append(1, '+');
+				break;
+			case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
+			case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
+			case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
+			case 'V': case 'W': case 'X': case 'Y': case 'Z':
+			case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
+			case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
+			case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
+			case 'v': case 'w': case 'x': case 'y': case 'z':
+			case '0': case '1': case '2': case '3': case '4': case '5': case '6':
+			case '7': case '8': case '9':
+			case '-': case '_': case '.': case '!': case '~': case '*': case '\'': 
+			case '(': case ')':
+				result.append(1, *i);
+				break;
+			default:
+				result.append(1, '%');
+				result.append(charToHex(*i));
+				break;
+	    }
+	}
+	return result;
+}
 char 
 cgipp::hexToChar(const char &first,
 				const char &second)
@@ -363,6 +397,18 @@ cgipp::hexToChar(const char &first,
 			val += (int(second)-55);
 	}   
 	return char(val);
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+cgipp::charToHex(const char &first)
+{
+	char *temp = new char[2*size_of_char];
+	sprintf(temp,"%X",first);
+	std::string temp1(temp);
+	delete [] temp;
+	return temp1;
 }
 
 //-------------------------------------------------------------------
@@ -418,7 +464,7 @@ cgipp::setCookie(const std::string &name,
 {
 	__cookies temp(secure);
 	temp.name = name;
-	temp.value = value;
+	temp.value = encode64(value);
 	temp.exDate = exDate;
 	temp.path = path;
 	temp.domain = domain;
