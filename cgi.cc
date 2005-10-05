@@ -68,7 +68,7 @@ cgipp::cgipp(bool silent,
 
 cgipp::~cgipp()
 {
-	
+	cleanTmp();
 }
 
 //-------------------------------------------------------------------
@@ -357,6 +357,9 @@ cgipp::encode64(const std::string &string)
 	}
 	return result;
 }
+
+//-------------------------------------------------------------------
+
 char 
 cgipp::hexToChar(const char &first,
 				const char &second)
@@ -404,11 +407,9 @@ cgipp::hexToChar(const char &first,
 std::string 
 cgipp::charToHex(const char &first)
 {
-	char *temp = new char[2*size_of_char];
+	char temp[3*size_of_char];
 	sprintf(temp,"%X",first);
-	std::string temp1(temp);
-	delete [] temp;
-	return temp1;
+	return std::string(temp);
 }
 
 //-------------------------------------------------------------------

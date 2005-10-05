@@ -56,6 +56,10 @@ namespace dodo
 	 * class that covers REGEXP routine;
 	 * usin' define flags u can compile with POSIX regex or with PCRE;
 	 * PCRE is much faster, but it cannot be on your computer, but POSIX regex have to be(i hope!)
+	 * 
+	 *  if string is not matchin' fully the pattern - it don't want to execute it(return false)
+	 * 
+	 * NOTE!!!!!!! POSIX bugs: don't support binary test sting;
 	 */
 	 
 	 
@@ -93,11 +97,13 @@ namespace dodo
 	 		/**
 	 		 * replaces in sample from pieces usin' pattern
 	 		 * if amount of pockets more than replacements  - replacemet will stop
+	 		 * if pattern is not matched - the sample will be returned
 	 		 */
 	 		std::string replace(const std::string &pattern, const std::string &sample, const stringArr &replacements) const;
 	 		/**
 	 		 * replaces in sample from pieces usin' pattern;faster than usage `replace` for some times with the same pattern
 	 		 * if amount of pockets more than replacements  - replacemet will stop
+	 		 * if pattern is not matched - the sample will be returned
 	 		 */
 	 		std::string reReplace(const std::string &sample, const stringArr &replacements) const;
 	 		
@@ -109,10 +115,11 @@ namespace dodo
 			#ifdef PCRE_EXT
 				mutable pcre *code;
 			#else
-				mutable regex_t *code;
+				mutable regex_t code;
+				mutable bool notCompiled;
 			#endif	 		
 	 		
-			mutable std::vector<__regexMatch> boundaries;
+			mutable std::list<__regexMatch> boundaries;
 	 };
 };
 

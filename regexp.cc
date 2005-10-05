@@ -30,9 +30,8 @@ regexp::regexp() : icase(false),
 					extended(true)
 {
 	#ifdef PCRE_EXT
-		
 	#else
-		code = new regex_t;
+		notCompiled = true;
 	#endif		
 }
 
@@ -41,10 +40,9 @@ regexp::regexp() : icase(false),
 regexp::~regexp()
 {
 	#ifdef PCRE_EXT
-		
 	#else
-		regfree(code);
-		delete code;
+		if (!notCompiled)
+			regfree(&code);
 	#endif	
 }
 
@@ -57,7 +55,7 @@ regexp::match(const std::string &pattern,
 {
 	if (!compile(pattern))
 		return false;
-	
+
 	return reMatch(sample,pockets);
 }
 
@@ -70,7 +68,7 @@ regexp::reMatch(const std::string &sample,
 	pockets.clear();
 	if (!boundMatch(sample))
 		return false;
-	std::vector<__regexMatch>::const_iterator i(boundaries.begin()),j(boundaries.end());
+	std::list<__regexMatch>::const_iterator i(boundaries.begin()),j(boundaries.end());
 	for (;i!=j;++i)
 		pockets.push_back(sample.substr(i->begin,i->end-i->begin));
 }
@@ -120,9 +118,9 @@ regexp::boundMatch(const std::string &sample) const
 		delete [] oVector;
 		return true;
 	#else
-		subs = code->re_nsub+1;
+		subs = code.re_nsub+1;
 		regmatch_t *pmatch = new regmatch_t[subs];
-		res = regexec(code,sample.c_str(),subs,pmatch,0);
+		res = regexec(&code,sample.c_str(),subs,pmatch,0);
 		if (res != 0)
 		{
 			delete [] pmatch;
@@ -163,9 +161,15 @@ regexp::compile(const std::string &pattern) const
 			bits|=REG_EXTENDED;
 		if (icase)
 			bits|=REG_ICASE;
-		if (regcomp(code, pattern.c_str(),bits) != 0)
+		if (notCompiled)
+			notCompiled = false;
+		else
+			regfree(&code);
+		if (regcomp(&code, pattern.c_str(),bits) != 0)
 			return false;
-	#endif	
+	#endif
+	
+	return true;
 }
 
 //-------------------------------------------------------------------
@@ -188,8 +192,8 @@ regexp::reReplace(const std::string &sample,
 				const stringArr &replacements) const
 {
 	if (!boundMatch(sample))
-		return false;
-	std::vector<__regexMatch>::const_iterator i(boundaries.begin()),j(boundaries.end());
+		return sample;
+	std::list<__regexMatch>::const_iterator i(boundaries.begin()),j(boundaries.end());
 	stringArr::const_iterator k(replacements.begin());
 	register int amount = replacements.size();
 	std::string temp(sample);
