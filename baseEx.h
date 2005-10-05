@@ -38,7 +38,9 @@
 		{
 			BASE_EX,
 			MYSQL_EX,
-			SQLBASE_EX
+			SQLBASE_EX,
+			CGIPP_EX,
+			REGEXP_EX
 		};
 		
 		class baseEx

@@ -25,9 +25,63 @@
 #ifndef _SOCKETPP_H_
 #define _SOCKETPP_H_
 
+#ifdef WIN
+	#include <winsock.h>
+#else
+	#include <sys/socket.h>
+#endif
+
 namespace dodo
 {
+	/**
+	 * type of service
+	 */
+	enum socketModeEnum
+	{
+		CLIENT_MODE,
+		SERVER_MODE
+	};
 	
+	enum socketTransferTypeEnum
+	{
+		TCP,
+		UDP
+	};
+	/**
+	 * class that takes ugly routine with sockets
+	 * 
+	 */
+	class socketpp
+	{
+		public:
+			/**
+			 * constructors/destructors
+			 */
+			socketpp();
+			~socketpp();
+			/**
+			 * set buffer size
+			 */	
+			virtual void setBufferSize(unsigned long buffSize);
+
+			/**
+			 * send, recieve
+			 */
+			virtual bool send(void *data);
+			virtual bool recieve(void *data);
+			
+			/**
+			 * number of connections that can recieve
+			 */
+			 unsigned long numberOfConn;
+		protected:
+		
+			/**
+			 * size of buffer for transfers
+			 * in bytes. default - 1024 bytes
+			 */		
+			unsigned long buffSize;					
+	};
 };
 
 #endif /*SOCKETPP_H_*/

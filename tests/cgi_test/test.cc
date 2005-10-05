@@ -1,4 +1,4 @@
-#include <cgi.h>
+#include <cgipp.h>
 
 using namespace dodo;
 

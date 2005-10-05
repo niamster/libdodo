@@ -90,6 +90,12 @@ regexp::boundMatch(const std::string &sample) const
 		subs += 3;
 		
 		register int *oVector = new int[subs];
+		if (oVector == NULL)
+		#ifndef NO_EX
+			throw regexpEx(REGEXP_MEMORY_OVER,(regexp *)this,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif
 		register int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 		if (rc<=0)
 		{
@@ -120,6 +126,12 @@ regexp::boundMatch(const std::string &sample) const
 	#else
 		subs = code.re_nsub+1;
 		regmatch_t *pmatch = new regmatch_t[subs];
+		if (pmatch == NULL)
+		#ifndef NO_EX
+			throw regexpEx(REGEXP_MEMORY_OVER,(regexp *)this,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif		
 		res = regexec(&code,sample.c_str(),subs,pmatch,0);
 		if (res != 0)
 		{
