@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexp.cc
+ *            flushSocket.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _SOCKETPP_H_
-#define _SOCKETPP_H_
+#ifndef _FLUSHSOCKET_H_
+#define _FLUSHSOCKET_H_
 
 #ifdef WIN
 	#include <winsock.h>
@@ -51,7 +51,7 @@ namespace dodo
 	 * class that takes ugly routine with sockets
 	 * 
 	 */
-	class socketpp
+	class flushSocket
 	{
 		public:
 			/**

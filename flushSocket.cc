@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexp.cc
+ *            flushSocket.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -22,6 +22,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#include "socketpp.h"
+#include "flushSocket.h"
 
 using namespace dodo;
