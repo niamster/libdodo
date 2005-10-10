@@ -33,14 +33,14 @@ using namespace dodo;
 * do not edit it please.
 * sqlBase use them in such way, as they are
 */
-static const __statements sqlQStArr[] = 
+static const __statements sqlQStArr[4] = 
 {
 	{" union "},
 	{" union all "},
 	{" minus "},
 	{" intersect "}
 };
-static 	__statements sqlAddArr[] = 
+static 	__statements sqlAddArr[7] = 
 {
 	{""},
 	{" where "},
@@ -157,7 +157,7 @@ sqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
 	if (qTypeShift == EMPTY)
 		return "";
 	std::string temp;
-	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(std::string);
+	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
 	register unsigned int temp_bit(0);
 	for (register unsigned int i=0;i<=arrLen;++i)
 	{

@@ -111,19 +111,19 @@ namespace dodo
 	/**
 	 * arrays of positions of "statement" for complete realization. In sql wersion - see sqlBase;
 	 */	
-	static unsigned int addInsEnumArr[] = 
+	static unsigned int addInsEnumArr[1] = 
 	{
 		INSERT_IGNORE,
 	};
-	static unsigned int addUpEnumArr[] = 
+	static unsigned int addUpEnumArr[1] = 
 	{
 		UPDATE_IGNORE,
 	};
-	static unsigned int addDelEnumArr[] = 
+	static unsigned int addDelEnumArr[1] = 
 	{
 		DELETE_IGNORE,
 	};
-	static unsigned int addSelEnumArr[] = 
+	static unsigned int addSelEnumArr[2] = 
 	{
 		SELECT_DISTINCT,
 		SELECT_ALL

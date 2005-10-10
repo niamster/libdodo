@@ -40,7 +40,8 @@
 			MYSQL_EX,
 			SQLBASE_EX,
 			CGIPP_EX,
-			REGEXP_EX
+			REGEXP_EX,
+			FLUSHDISK_EX
 		};
 		
 		class baseEx

@@ -61,6 +61,8 @@ namespace dodo
 	
 	#define SIZEOFNUM 32
 	
+	#define FILE_DELIM "/"
+	
 	struct __statements 
 	{
 		char *str;
