@@ -51,35 +51,50 @@ namespace dodo
 		READ_WRITE_TRUNCATE
 	};
 	
-	enum flushDiskFileTypeEnum
+	enum flushDiskFileToCreateEnum
 	{
-		FILE_FILE,
+		REG_FILE,
 		TMP_FILE,
 		FIFO_FILE///use this type, if u want to create. if fifo is already created, no sense to create it again. if file is created it will not create it again; it is a check for file existanse, so if it's already created, it'll be slower!
 	};
 	
+	enum flushDiskFileTypeEnum
+	{
+		REGULAR_FILE,
+		UNIX_SOCKET,
+		SYMBOLIC_LINK,
+		BLOCK_DEVICE,
+		DIRECTORY,
+		CHARACTER_DEVICE,
+		FIFO
+	};
+	
 	enum permissionModesEnum
 	{
+		NONE = 0,
+		
 		OWNER_READ_ACCESS = 2,
 		GROUP_READ_ACCESS = 4,
-		ALL_READ_ACCESS = 8,
+		OTHER_READ_ACCESS = 8,
 		
 		OWNER_WRITE_ACCESS = 16,
 		GROUP_WRITE_ACCESS = 32,
-		ALL_WRITE_ACCESS = 64,
+		OTHER_WRITE_ACCESS = 64,
 		
 		OWNER_EXECUTE_ACCESS = 128,
 		GROUP_EXECUTE_ACCESS = 256,
-		ALL_EXECUTE_ACCESS = 512,
+		OTHER_EXECUTE_ACCESS = 512,
 				
 		STICKY_ACCESS = 1024,
 		
 		SUID_ACCESS = 2048,
 		SGID_ACCESS = 4096,
 		
-		OWNER_ALL_ACCESS = 14,
-		GROUP_ALL_ACCESS = 112,
-		ALL_ALL_ACCESS = 896,
+		OWNER_ALL_ACCESS = 146,
+		GROUP_ALL_ACCESS = 292,
+		OTHER_ALL_ACCESS = 584,
+		
+		ALL_ALL_ACCESS = 1022
 		
 		
 	};
@@ -103,7 +118,7 @@ namespace dodo
 		friend class flushDiskEx;///class of exception
 		public:
 			///constructors and destructors
-			flushDisk(flushDiskFileTypeEnum type = FILE_FILE, const std::string &path = __string__, bool persisistant = true);
+			flushDisk(flushDiskFileToCreateEnum type = REG_FILE, const std::string &path = __string__, bool persisistant = true);
 			flushDisk(bool persisistant);///if u want to work with temp file.
 			virtual ~flushDisk();
 			
@@ -114,7 +129,7 @@ namespace dodo
 			 * read functions. first argument - buffer, second - position
 			 * returns false if nothing was read
 			 */
-			virtual bool read(std::string &data, unsigned long pos = 0);///reads to string; return false if eof
+			virtual bool readString(std::string &data, unsigned long pos = 0);///reads to string; return false if eof
 			virtual bool read(void *data, unsigned long pos = 0);///reads to void*; return false if eof		
 			
 			/**
@@ -122,7 +137,7 @@ namespace dodo
 			 * first argument - buffer, second - position(if u want to add to end of the file set 'append' to true)
 			 * returns false if exists, copy to buffer content of the node
 			 */
-			virtual bool write(const std::string &, unsigned long pos = 0);///writes string
+			virtual bool writeString(const std::string &, unsigned long pos = 0);///writes string
 			virtual bool write(const void * const , unsigned long pos = 0);///writes void*
 
 			/**
@@ -143,31 +158,38 @@ namespace dodo
 			 * change mode
 			 * rmdir
 			 */
-			virtual bool unlink(const std::string &path);
-			virtual bool rename(const std::string &oldPath, const std::string &newPath);
-			virtual bool link(const std::string &oldPath, const std::string &newPath);
-			virtual bool symlink(const std::string &oldPath, const std::string &newPath);
-			virtual bool chown(const std::string &path, int uid);
-			virtual bool chgrp(const std::string &path, int gid);
-			virtual bool touch(const std::string &path, int time=-1);///now by default
-			virtual bool mkdir(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
-			virtual bool chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
-			virtual bool rmdir(const std::string &path);///recursive
+			/**
+			 * in next functions(if u compiled library with exceptions) i used empty flushDisk class copy to make them static and to use defined exception class
+			 */
+			static bool unlink(const std::string &path);///also empty directory
+			static bool rename(const std::string &oldPath, const std::string &newPath);
+			static bool link(const std::string &oldPath, const std::string &newPath);
+			static bool symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)
+			static bool chown(const std::string &path, int uid);
+			static bool chgrp(const std::string &path, int gid);
+			static bool touch(const std::string &path, int time=-1);///now by default
+			static bool mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);///see permissionModesEnum; use | to combine; force - if created already - nothing to say
+			static bool chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
+			static bool rmdir(const std::string &path);///recursive
+			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
+			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
 			
 			unsigned long size;///size of data
 			bool persistant;///type of "connection"
 			std::string path;///file name; for files only;
 			bool over;///indicates whether overright; for files,tmp_files only
-			flushDiskFileTypeEnum fileType;/// whether temp or not
+			flushDiskFileToCreateEnum fileType;/// whether temp or not
 			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 			flushDiskModesEnum mode;///mode to open file
 			
 			std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
 			bool bufferize;///false by default
 			
+			bool normalize;///only for std::string, write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
+			
 		protected:
 		
-			mode_t getPermission(int permission);
+			static mode_t getPermission(int permission);
 			
 			FILE *file;///file handler
 			bool opened;///indicates whether file opens or not

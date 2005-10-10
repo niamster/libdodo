@@ -57,8 +57,8 @@ namespace dodo
 			/**
 			 * constructors/destructors
 			 */
-			socketpp();
-			~socketpp();
+			flushSocket();
+			~flushSocket();
 			/**
 			 * set buffer size
 			 */	
