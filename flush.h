@@ -1,7 +1,7 @@
 /***************************************************************************
- *            flushSocket.h
+ *            flush.h
  *
- *  Thu Oct 04 02:02:24 2005
+ *  Tue Oct 11 00:19:57 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -15,71 +15,39 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Library General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
-#ifndef _FLUSHSOCKET_H_
-#define _FLUSHSOCKET_H_
+#ifndef _FLUSH_H_
+#define _FLUSH_H_
 
-#include "types.h"
 #include "directives.h"
-#include "flush.h"
-
-#ifdef WIN
-	#include <winsock.h>
-#else
-	#include <sys/socket.h>
-#endif
+#include "xexec.h"
+#include "types.h"
 
 namespace dodo
 {
-	/**
-	 * type of service
-	 */
-	enum socketModeEnum
-	{
-		CLIENT_MODE,
-		SERVER_MODE
-	};
-	
-	enum socketTransferTypeEnum
-	{
-		TCP,
-		UDP
-	};
-	/**
-	 * class that takes ugly routine with sockets
-	 * 
-	 */
-	class flushSocket : public flush
+	class flush : public xexec
 	{
 		public:
+		
 			/**
-			 * constructors/destructors
+			 * constructors, destructors
 			 */
-			flushSocket();
-			~flushSocket();
-			/**
-			 * set buffer size
-			 */	
-			virtual void setBufferSize(unsigned long buffSize);
-
-			/**
-			 * send, recieve
-			 */
-			virtual bool send(void *data);
-			virtual bool recieve(void *data);
+			flush();
+			virtual ~flush();
 			
-			/**
-			 * number of connections that can recieve
-			 */
-			 unsigned long numberOfConn;
-		protected:				
+			unsigned long size;///size of data
+			std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
+			bool bufferize;///false by default; set true, if u r usin' xexec(hooks)
+			bool normalize;///only for std::string, write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
+		protected:
+		
+			bool opened;///indicates whether file(connection) opened or not
 	};
 };
 
-#endif /*SOCKETPP_H_*/
+#endif /*FLUSH_H_*/

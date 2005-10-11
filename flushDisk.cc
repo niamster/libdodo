@@ -1,7 +1,7 @@
 /***************************************************************************
  *            flushDisk.cc
  *
- *  Wed Feb 23 01:44:18 2005
+ *  Wed Oct 8 01:44:18 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -30,15 +30,11 @@ flushDisk dummyEx;
 
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
 					const std::string &a_path, 
-					bool a_pers) : persistant(a_pers), 
-									size(1), 
-									opened(false), 
+					bool a_pers) : persistant(a_pers),
 									mode(READ_WRITE), 
 									over(false), 
 									fileType(type),
-									bufferize(false),
 									path(a_path),
-									normalize(true),
 									append(false)
 {
 	if (persistant)
@@ -47,14 +43,10 @@ flushDisk::flushDisk(flushDiskFileToCreateEnum type,
 
 //-------------------------------------------------------------------
 
-flushDisk::flushDisk(bool a_pers) : persistant(a_pers), 
-									size(1), 
-									opened(false), 
+flushDisk::flushDisk(bool a_pers) : persistant(a_pers),
 									mode(READ_WRITE), 
 									over(false),
-									bufferize(false),
 									fileType(TMP_FILE),
-									normalize(true),
 									append(false)
 {
 	if (persistant)

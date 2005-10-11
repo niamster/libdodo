@@ -1,7 +1,7 @@
 /***************************************************************************
  *            flushDisk.h
  *
- *  Tue Feb 22 08:19:57 2005
+ *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -39,6 +39,7 @@
 #include "directives.h"
 #include "flushDiskEx.h"
 #include "types.h"
+#include "flush.h"
 
 namespace dodo
 {
@@ -113,7 +114,7 @@ namespace dodo
 	 * 	for string size is one.
 	 */
 	
-	class flushDisk
+	class flushDisk : public flush
 	{
 		friend class flushDiskEx;///class of exception
 		public:
@@ -174,25 +175,18 @@ namespace dodo
 			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
 			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
 			
-			unsigned long size;///size of data
 			bool persistant;///type of "connection"
 			std::string path;///file name; for files only;
 			bool over;///indicates whether overright; for files,tmp_files only
 			flushDiskFileToCreateEnum fileType;/// whether temp or not
 			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 			flushDiskModesEnum mode;///mode to open file
-			
-			std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
-			bool bufferize;///false by default
-			
-			bool normalize;///only for std::string, write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
-			
+						
 		protected:
 		
 			static mode_t getPermission(int permission);
 			
 			FILE *file;///file handler
-			bool opened;///indicates whether file opens or not
 	};
 };
 
