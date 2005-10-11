@@ -30,6 +30,12 @@
 
 namespace dodo
 {
+	enum flushOperationTypeEnum
+	{
+		FLUSH_READ,
+		FLUSH_WRITE
+	};
+	
 	class flush : public xexec
 	{
 		public:
@@ -44,6 +50,7 @@ namespace dodo
 			std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
 			bool bufferize;///false by default; set true, if u r usin' xexec(hooks)
 			bool normalize;///only for std::string, write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
+			flushOperationTypeEnum operType;///to detect in xexec what type of operation
 		protected:
 		
 			bool opened;///indicates whether file(connection) opened or not

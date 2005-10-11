@@ -235,12 +235,16 @@ bool
 flushDisk::read(void *a_void, 
 				unsigned long a_pos)
 {
+	operType = FLUSH_READ;
 	a_pos *= size;
 	if (!opened)
 		open();
 	fseek(file,a_pos,SEEK_SET);
-
+	
+	performXExec(preExec);
+	///execute 
 	size_t read_bytes = fread(a_void,size,1,file);
+	performXExec(postExec);
 
 	if (bufferize)
 		buffer.assign((char *)a_void);
@@ -320,6 +324,7 @@ bool
 flushDisk::write(const void *const a_buf, 
 				unsigned long a_pos)
 {	
+	operType = FLUSH_WRITE;
 	if (!opened)
 		open();
 	if (append)
@@ -361,7 +366,10 @@ flushDisk::write(const void *const a_buf,
 		a_pos *= size;
 		fseek(file,a_pos,SEEK_SET);
 	}
+	performXExec(preExec);
+	///execute 
 	read_bytes = fwrite(a_buf,size,1,file);
+	performXExec(postExec);
 
 	#ifndef NO_EX
 		switch (errno)
