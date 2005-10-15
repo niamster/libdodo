@@ -320,16 +320,8 @@ flushDisk::write(const void *const a_buf,
 	std::string stringToWrite((char *)a_buf);
 		
 	if (normalize)
-	{
-		register long delta = size - stringToWrite.size();
-		if (delta>0)
-			for (register unsigned long i=0;i<delta;++i)
-				stringToWrite.append(" ");
-		else
-			if (delta<0)
-				stringToWrite.resize(size);
-	}
-	
+		tools::normalize(stringToWrite,size);
+			
 	if (bufferize)
 		buffer.assign(stringToWrite);
 	

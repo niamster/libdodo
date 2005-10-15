@@ -66,6 +66,9 @@ namespace dodo
 			static std::string implode(const stringArr &fields, const std::string &separator);
 			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame);
 			
+			///sets string to size; if it's bigger than size - cut from right; if shotter - adds `symbol` to make it longer
+			static void normalize(std::string &a_string, unsigned long size, char adds = ' ');
+			
 		private:
 			inline static std::string dummy(const std::string &data);
 	};
