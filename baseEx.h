@@ -41,7 +41,8 @@
 			SQLBASE_EX,
 			CGIPP_EX,
 			REGEXP_EX,
-			FLUSHDISK_EX
+			FLUSHDISK_EX,
+			FLUSHSOCKET_EX
 		};
 		
 		class baseEx

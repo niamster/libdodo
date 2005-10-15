@@ -284,14 +284,6 @@ xexec::performXExec(__execItemList &list) const
 
 //-------------------------------------------------------------------
 
-void 
-xexec::setSafeHooks(bool state) const
-{
-	safeHooks = state;
-}
-
-//-------------------------------------------------------------------
-
 bool 
 xexec::exec() const
 {

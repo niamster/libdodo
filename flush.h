@@ -46,14 +46,14 @@ namespace dodo
 			flush();
 			virtual ~flush();
 			
-			unsigned long size;///size of data
-			std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
-			bool bufferize;///false by default; set true, if u r usin' xexec(hooks)
-			bool normalize;///only for std::string, write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
-			flushOperationTypeEnum operType;///to detect in xexec what type of operation
+			mutable unsigned long size;///size of data
+			mutable std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
+			mutable bool bufferize;///false by default; set true, if u r usin' xexec(hooks)
+			mutable bool normalize;///only for write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
+			mutable flushOperationTypeEnum operType;///to detect in xexec what type of operation
 		protected:
 		
-			bool opened;///indicates whether file(connection) opened or not
+			mutable bool opened;///indicates whether file(connection) opened or not
 	};
 };
 

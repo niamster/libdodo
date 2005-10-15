@@ -42,7 +42,8 @@
 
 /**
  * removes some checks
- * 1) check for request completeness
+ * 1) check for request completeness(sqlBase)
+ * 2) some checks that now is not needed, but in future releases will be neded, but set for now for more compability with newly writed code
  */
 #define FAST
 

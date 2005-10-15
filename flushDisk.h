@@ -39,6 +39,7 @@
 #include "directives.h"
 #include "flushDiskEx.h"
 #include "types.h"
+#include "tools.h"
 #include "flush.h"
 
 namespace dodo
@@ -119,19 +120,25 @@ namespace dodo
 		friend class flushDiskEx;///class of exception
 		public:
 			///constructors and destructors
-			flushDisk(flushDiskFileToCreateEnum type = REG_FILE, const std::string &path = __string__, bool persisistant = true);
-			flushDisk(bool persisistant);///if u want to work with temp file.
+			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path
 			virtual ~flushDisk();
 			
-			virtual bool open();///if opened previous file, closes it		
+			/**
+			 * closes previous opened file
+			 * also creates file if it does not exists!
+			 * if u want to create pipe, but regular file was created with the same name - false will be returned
+			 * if u want to create regular file, but pipe was created with the same name - false will be returned
+			 * if it's not temp file and PATH is not set - false will be returned
+			 */
+			virtual bool open(const std::string &path = __string__) const;///if opened previous file, closes it		
 		
-			virtual bool close();///closes file
+			virtual bool close() const;///closes file
 			/**
 			 * read functions. first argument - buffer, second - position
 			 * returns false if nothing was read
 			 */
-			virtual bool readString(std::string &data, unsigned long pos = 0);///reads to string; return false if eof
-			virtual bool read(void *data, unsigned long pos = 0);///reads to void*; return false if eof		
+			virtual bool readString(std::string &data, unsigned long pos = 0) const;///reads to string; return false if eof
+			virtual bool read(void *data, unsigned long pos = 0) const;///reads to void*; return false if eof		
 			
 			/**
 			 * write functions
@@ -175,18 +182,19 @@ namespace dodo
 			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
 			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
 			
-			bool persistant;///type of "connection"
-			std::string path;///file name; for files only;
 			bool over;///indicates whether overright; for files,tmp_files only
-			flushDiskFileToCreateEnum fileType;/// whether temp or not
 			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
-			flushDiskModesEnum mode;///mode to open file
+			mutable flushDiskModesEnum mode;///mode to open file
 						
+			virtual std::string getPath() const;
+
+			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
 		protected:
+			mutable std::string path;///file name; for files only;
 		
 			static mode_t getPermission(int permission);
 			
-			FILE *file;///file handler
+			mutable FILE *file;///file handler
 	};
 };
 

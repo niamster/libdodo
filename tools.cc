@@ -146,7 +146,7 @@ tools::lToString(long number)
 //-------------------------------------------------------------------
 
 std::string 
-dToString(double number)
+tools::dToString(double number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%f",number);

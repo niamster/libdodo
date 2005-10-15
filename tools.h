@@ -65,6 +65,7 @@ namespace dodo
 			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator);
 			static std::string implode(const stringArr &fields, const std::string &separator);
 			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame);
+			
 		private:
 			inline static std::string dummy(const std::string &data);
 	};

@@ -62,7 +62,7 @@ namespace dodo
 			static std::string exists(const std::string &statement);
 			static std::string noexists(const std::string &statement);
 		
-			bool preventFraming;
+			bool preventFraming;///to frame or not with `'` fields values in insert...
 		protected:		
 			inline static std::string escapeFields(const std::string &a_data);
 			/**

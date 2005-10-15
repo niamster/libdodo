@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushDiskEx.cc
+ *            flushSocketEx.cc
  *
  *  Mon Feb 21 03:11:23 2005
  *  Copyright  2005  Ni@m
@@ -22,22 +22,22 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#include "flushDiskEx.h"
+#include "flushSocketEx.h"
 
 #ifndef NO_EX
 	
 	using namespace dodo;
 	
 	static void 
-	dummyFlushDiskResolve(flushDiskEx *a_ex)
+	dummyFlushDiskResolve(flushSocketEx *a_ex)
 	{
 		
 	}
 	
 	//-------------------------------------------------------------------
 	
-	flushDiskEx::flushDiskEx(flushDiskExR a_reason, 
-						flushDisk *a_obj,
+	flushSocketEx::flushSocketEx(flushSocketExR a_reason, 
+						flushSocket *a_obj,
 						unsigned long a_line, 
 						std::string a_file) : reason (a_reason),
 						baseEx(a_line,a_file)
@@ -45,9 +45,10 @@
 		obj = a_obj;
 		switch (reason)
 		{
-			case FLUSHDISK_IOERROR:
-			case FLUSHDISK_NOT_ENOUGH_FREE_SPACE:
-			case FLUSHDISK_MEMORY_OVER:
+			case FLUSHSOCKET_ACCESS_DENIED:
+			case FLUSHSOCKET_UNKNOWN_PROTOCOL:
+			case FLUSHSOCKET_MEMORY_OVER:
+			case FLUSHSOCKET_TOO_MANY_OPEN_FILE:
 				state = CRITICAL;
 				break;			
 		}
@@ -57,22 +58,17 @@
 		resolvers[3] = &dummyFlushDiskResolve;
 		resolvers[4] = &dummyFlushDiskResolve;
 		resolvers[5] = &dummyFlushDiskResolve;
-		resolvers[6] = &dummyFlushDiskResolve;
-		resolvers[7] = &dummyFlushDiskResolve;
-		resolvers[8] = &dummyFlushDiskResolve;
-		resolvers[9] = &dummyFlushDiskResolve;
-		resolvers[10] = &dummyFlushDiskResolve;
 	}
 	
 	//-------------------------------------------------------------------
 	
-	flushDiskEx::~flushDiskEx()
+	flushSocketEx::~flushSocketEx()
 	{
 	}
 	//-------------------------------------------------------------------
 	
 	baseEx *
-	flushDiskEx::getSelf()
+	flushSocketEx::getSelf()
 	{
 		return dynamic_cast<baseEx *>(this);
 	}
@@ -80,9 +76,9 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	flushDiskEx::getExID()
+	flushSocketEx::getExID()
 	{
-		return FLUSHDISK_EX;
+		return FLUSHSOCKET_EX;
 	}	
 	
 	//-------------------------------------------------------------------
@@ -92,75 +88,50 @@
 	 * tries to resolve problem with own function
 	 */
 	void 
-	flushDiskEx::setResolve(flushDiskExR a_reason, 
-							flushDiskExResolver a_resF)
+	flushSocketEx::setResolve(flushSocketExR a_reason, 
+							flushSocketExResolver a_resF)
 	{
 		if (a_resF == NULL)
 			a_resF = &dummyFlushDiskResolve;
-		if ((FLUSHDISK_NOT_ENOUGH_FREE_SPACE & a_reason) == FLUSHDISK_NOT_ENOUGH_FREE_SPACE)
+		if ((FLUSHSOCKET_NOT_SUPPORTED_ADDR_FAMILY & a_reason) == FLUSHSOCKET_NOT_SUPPORTED_ADDR_FAMILY)
 			resolvers[0] = a_resF;
-		if ((FLUSHDISK_ACCESS_DENIED & a_reason) == FLUSHDISK_ACCESS_DENIED)
+		if ((FLUSHSOCKET_ACCESS_DENIED & a_reason) == FLUSHSOCKET_ACCESS_DENIED)
 			resolvers[1] = a_resF;
-		if ((FLUSHDISK_FILE_TOO_BIG & a_reason) == FLUSHDISK_FILE_TOO_BIG)
+		if ((FLUSHSOCKET_UNKNOWN_PROTOCOL & a_reason) == FLUSHSOCKET_UNKNOWN_PROTOCOL)
 			resolvers[2] = a_resF;
-		if ((FLUSHDISK_INTERRUPTED & a_reason) == FLUSHDISK_INTERRUPTED)
+		if ((FLUSHSOCKET_TOO_MANY_OPEN_FILE & a_reason) == FLUSHSOCKET_TOO_MANY_OPEN_FILE)
 			resolvers[3] = a_resF;
-		if ((FLUSHDISK_IOERROR & a_reason) == FLUSHDISK_IOERROR)
+		if ((FLUSHSOCKET_PROTO_NOT_SUPPORTED_WITHIN_DOMAIN & a_reason) == FLUSHSOCKET_PROTO_NOT_SUPPORTED_WITHIN_DOMAIN)
 			resolvers[4] = a_resF;
-		if ((FLUSHDISK_TOO_MANY_OPEN_FILE & a_reason) == FLUSHDISK_TOO_MANY_OPEN_FILE)
+		if ((FLUSHSOCKET_MEMORY_OVER & a_reason) == FLUSHSOCKET_MEMORY_OVER)
 			resolvers[5] = a_resF;
-		if ((FLUSHDISK_FILENAME_TOO_LONG & a_reason) == FLUSHDISK_FILENAME_TOO_LONG)
-			resolvers[6] = a_resF;
-		if ((FLUSHDISK_NO_SUCH_FILE & a_reason) == FLUSHDISK_NO_SUCH_FILE)
-			resolvers[7] = a_resF;
-		if ((FLUSHDISK_READ_ONLY_FS & a_reason) == FLUSHDISK_READ_ONLY_FS)
-			resolvers[8] = a_resF;
-		if ((FLUSHDISK_WRONG_FILE_NAME & a_reason) == FLUSHDISK_WRONG_FILE_NAME)
-			resolvers[9] = a_resF;
-		if ((FLUSHDISK_MEMORY_OVER & a_reason) == FLUSHDISK_MEMORY_OVER)
-			resolvers[10] = a_resF;
 	}
 	
 	//-------------------------------------------------------------------
 	
 	void 
-	flushDiskEx::resolve()
+	flushSocketEx::resolve()
 	{
 		switch (reason)
 		{
-			case FLUSHDISK_NOT_ENOUGH_FREE_SPACE:
+			case FLUSHSOCKET_NOT_SUPPORTED_ADDR_FAMILY:
 				resolvers[0](this);
 				break;
-			case FLUSHDISK_ACCESS_DENIED:
+			case FLUSHSOCKET_ACCESS_DENIED:
 				resolvers[1](this);
 				break;			
-			case FLUSHDISK_FILE_TOO_BIG:
+			case FLUSHSOCKET_UNKNOWN_PROTOCOL:
 				resolvers[2](this);
 				break;	
-			case FLUSHDISK_INTERRUPTED:
+			case FLUSHSOCKET_TOO_MANY_OPEN_FILE:
 				resolvers[3](this);
 				break;
-			case FLUSHDISK_IOERROR:
+			case FLUSHSOCKET_PROTO_NOT_SUPPORTED_WITHIN_DOMAIN:
 				resolvers[4](this);
 				break;			
-			case FLUSHDISK_TOO_MANY_OPEN_FILE:
+			case FLUSHSOCKET_MEMORY_OVER:
 				resolvers[5](this);
-				break;	
-			case FLUSHDISK_FILENAME_TOO_LONG:
-				resolvers[6](this);
 				break;
-			case FLUSHDISK_NO_SUCH_FILE:
-				resolvers[7](this);
-				break;			
-			case FLUSHDISK_READ_ONLY_FS:
-				resolvers[8](this);
-				break;	
-			case FLUSHDISK_WRONG_FILE_NAME:
-				resolvers[9](this);
-				break;
-			case FLUSHDISK_MEMORY_OVER:
-				resolvers[10](this);
-				break;		
 		}
 	}
 	

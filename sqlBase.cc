@@ -303,7 +303,10 @@ sqlBase::insertSelectCollect() const
 void
 sqlBase::updateCollect() const
 {
-	std::string setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames);
+	char frame[] = "'";
+	if (preventFraming)
+		frame[0] = ' ';
+	std::string setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames,frame);
 	
 	std::string temp = insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
 	temp.append(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));

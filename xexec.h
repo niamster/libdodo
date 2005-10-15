@@ -106,7 +106,7 @@ namespace dodo
 			/**
 			 * prevent recursive hooks if u for example call exec in hook, if safeHooks disabled, all hooks set to this class will be called
 			 */
-			virtual void setSafeHooks(bool state) const;
+			 mutable bool safeHooks;///enable\disable other hooks when executing hook
 			/**
 			 * executes smth. with given function(perform xexec)
 			 * !!!you must overload it!
@@ -139,8 +139,6 @@ namespace dodo
 			
 			mutable __execItemList preExec;///functions executed before exec
 			mutable __execItemList postExec;///functions executed after exec
-		
-			mutable bool safeHooks;///enable\disable other hooks when executing hook
 	};
 };
 

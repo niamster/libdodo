@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushDiskEx.h
+ *            flushSocketEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _FLUSHDISKEX_H_
-#define _FLUSHDISKEX_H_
+#ifndef _FLUSHSOCKETEX_H_
+#define _FLUSHSOCKETEX_H_
 
 #include "directives.h"
 #include "baseEx.h"
@@ -47,45 +47,40 @@
 		*/	
 		
 		///reasons of exception
-		enum flushDiskExR
+		enum flushSocketExR
 		{
-			FLUSHDISK_NOT_ENOUGH_FREE_SPACE = 2,
-			FLUSHDISK_ACCESS_DENIED = 4,
-			FLUSHDISK_FILE_TOO_BIG = 8,
-			FLUSHDISK_INTERRUPTED = 16,
-			FLUSHDISK_IOERROR = 32,
-			FLUSHDISK_TOO_MANY_OPEN_FILE = 64,
-			FLUSHDISK_FILENAME_TOO_LONG = 128,
-			FLUSHDISK_NO_SUCH_FILE = 256,
-			FLUSHDISK_READ_ONLY_FS = 512,
-			FLUSHDISK_WRONG_FILE_NAME = 1024,
-			FLUSHDISK_MEMORY_OVER = 2046,
+			FLUSHSOCKET_NOT_SUPPORTED_ADDR_FAMILY = 2,
+			FLUSHSOCKET_ACCESS_DENIED = 4,
+			FLUSHSOCKET_UNKNOWN_PROTOCOL = 8,
+			FLUSHSOCKET_TOO_MANY_OPEN_FILE = 64,
+			FLUSHSOCKET_PROTO_NOT_SUPPORTED_WITHIN_DOMAIN = 128,
+			FLUSHSOCKET_MEMORY_OVER = 256,
 		};
 		
-		class flushDisk;
-		class flushDiskEx;
+		class flushSocket;
+		class flushSocketEx;
 			
-		typedef void (*flushDiskExResolver)(flushDiskEx*);
+		typedef void (*flushSocketExResolver)(flushSocketEx*);
 		
-		class flushDiskEx :virtual public baseEx
+		class flushSocketEx :virtual public baseEx
 		{
 			public:
 	
 				virtual baseEx *getSelf();
 				virtual int getExID();
 	
-				flushDiskEx(flushDiskExR reason, flushDisk *obj, unsigned long line, std::string file);
-				virtual ~flushDiskEx();
-				virtual void setResolve(flushDiskExR,flushDiskExResolver);///try to resolve by own function
+				flushSocketEx(flushSocketExR reason, flushSocket *obj, unsigned long line, std::string file);
+				virtual ~flushSocketEx();
+				virtual void setResolve(flushSocketExR,flushSocketExResolver);///try to resolve by own function
 				virtual void resolve();//try to resolve
 			
-				flushDiskExR reason;///reason
+				flushSocketExR reason;///reason
 			
-				flushDisk *obj;///where exception appeared	
+				flushSocket *obj;///where exception appeared	
 			
 			private:
 				
-				flushDiskExResolver resolvers[11];///functions - solvers			
+				flushSocketExResolver resolvers[6];///functions - solvers			
 		};
 	};
 
