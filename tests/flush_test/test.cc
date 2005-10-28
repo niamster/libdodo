@@ -30,13 +30,13 @@ int main(int argc, char **argv)
 	cout << "\n\n" << str << "\n\n";
 
 
-/*	flushDisk::rmdir("asas");
+//	flushDisk::rm("asas");
 	
-	flushDisk::mkdir("asas");
-	flushDisk::symlink("asas","A");
+	flushDisk::mkdir("asas");//,OWNER_ALL_ACCESS,false);
+	flushDisk::symlink("test","A");
 	flushDisk::chmod("test",ALL_ALL_ACCESS);
 	
-	cout << flushDisk::getPermissions("Makefile");*/
+	cout << flushDisk::getPermissions("Makefile");
 	
 	return 0;
 }

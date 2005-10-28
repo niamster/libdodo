@@ -163,7 +163,7 @@ tools::normalize(std::string &a_string,
 	register long delta = size - a_string.size();
 	if (delta>0)
 		for (register unsigned long i=0;i<delta;++i)
-			a_string.append(adds);
+			a_string.append(1,adds);
 	else
 		if (delta<0)
 			a_string.resize(size);

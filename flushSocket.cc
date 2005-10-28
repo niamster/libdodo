@@ -41,7 +41,7 @@ flushSocket::flushSocket(socketDomainEnum domain,
 						socketTransferTypeEnum type, 
 						unsigned int protocol) : numberOfConn(1)
 {
-	connections = new int [numberOfConn];
+	connections = new int [1];
 	makeSocket(domain,type,protocol);
 }
 
@@ -65,6 +65,10 @@ flushSocket::makeSocket(socketDomainEnum domain,
 		case IPV4:
 			real_domain = PF_INET;
 			break;
+		case IPX:
+			real_domain = PF_IPX;
+			break;
+	#ifndef WIN
 		case UNIX_SOCKET:
 			real_domain = PF_UNIX;
 			break;
@@ -74,12 +78,10 @@ flushSocket::makeSocket(socketDomainEnum domain,
 		case PACKET:
 			real_domain = PF_PACKET;
 			break;
-		case IPX:
-			real_domain = PF_IPX;
-			break;
 		case NETLINK:
 			real_domain = PF_NETLINK;
 			break;
+	#endif
 	}
 	switch (type)
 	{

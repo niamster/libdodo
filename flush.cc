@@ -30,7 +30,8 @@ using namespace dodo;
 flush::flush(): size(1), 
 				opened(false), 
 				bufferize(false),
-				normalize(true)
+				normalize(true),
+				operType(FLUSH_NONE)
 {
 }
 

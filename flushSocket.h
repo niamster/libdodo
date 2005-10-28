@@ -30,8 +30,6 @@
 #include "flush.h"
 #include "flushSocketEx.h"
 
-#include <errno.h>
-
 #ifdef WIN
 	#include <winsock.h>
 #else
@@ -49,12 +47,14 @@ namespace dodo
 	
 	enum socketDomainEnum
 	{
-		UNIX_SOCKET,
 		IPV4,
-		IPV6,
-		PACKET,
 		IPX,
+	#ifndef WIN	
+		UNIX_SOCKET,
+		IPV6,		
+		PACKET,
 		NETLINK
+	#endif
 	};
 	/**
 	 * class that takes ugly routine with sockets

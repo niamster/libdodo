@@ -30,10 +30,10 @@
 #include <map>
 #include <list>
 #include <iostream>
+#include <errno.h>
 
 namespace dodo
 {
-
 	enum BOOL
 	{
 		FALSE = 0,

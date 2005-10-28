@@ -25,15 +25,19 @@
 #ifndef _FLUSHDISK_H_
 #define _FLUSHDISK_H_
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <utime.h>
+#include <time.h>
+	
 #ifndef WIN
-	#include <errno.h>
-	#include <sys/types.h>
-	#include <sys/stat.h>
-	#include <fcntl.h>
 	#include <unistd.h>
-	#include <dirent.h>
-	#include <utime.h>
-	#include <time.h>
+#endif
+
+#ifdef WIN
+	#include <io.h>
 #endif
 
 #include "directives.h"
@@ -57,7 +61,9 @@ namespace dodo
 	{
 		REG_FILE,
 		TMP_FILE,
-		FIFO_FILE///use this type, if u want to create. if fifo is already created, no sense to create it again. if file is created it will not create it again; it is a check for file existanse, so if it's already created, it'll be slower!
+		#ifndef WIN
+			FIFO_FILE///use this type, if u want to create. if fifo is already created, no sense to create it again. if file is created it will not create it again; it is a check for file existanse, so if it's already created, it'll be slower!
+		#endif
 	};
 	
 	enum flushDiskFileTypeEnum
@@ -76,29 +82,39 @@ namespace dodo
 		NONE = 0,
 		
 		OWNER_READ_ACCESS = 2,
-		GROUP_READ_ACCESS = 4,
-		OTHER_READ_ACCESS = 8,
+		#ifndef WIN
+			GROUP_READ_ACCESS = 4,
+			OTHER_READ_ACCESS = 8,
+		#endif
 		
 		OWNER_WRITE_ACCESS = 16,
-		GROUP_WRITE_ACCESS = 32,
-		OTHER_WRITE_ACCESS = 64,
+		#ifndef WIN
+			GROUP_WRITE_ACCESS = 32,
+			OTHER_WRITE_ACCESS = 64,
+		#endif
 		
-		OWNER_EXECUTE_ACCESS = 128,
-		GROUP_EXECUTE_ACCESS = 256,
-		OTHER_EXECUTE_ACCESS = 512,
-				
-		STICKY_ACCESS = 1024,
+		#ifndef WIN
+			OWNER_EXECUTE_ACCESS = 128,
+			GROUP_EXECUTE_ACCESS = 256,
+			OTHER_EXECUTE_ACCESS = 512,
+					
+			STICKY_ACCESS = 1024,
+			
+			SUID_ACCESS = 2048,
+			SGID_ACCESS = 4096,
+			
+			OWNER_ALL_ACCESS = 146,
+			GROUP_ALL_ACCESS = 292,
+			OTHER_ALL_ACCESS = 584,
+			
+			ALL_ALL_ACCESS = 1022
+		#endif		
 		
-		SUID_ACCESS = 2048,
-		SGID_ACCESS = 4096,
-		
-		OWNER_ALL_ACCESS = 146,
-		GROUP_ALL_ACCESS = 292,
-		OTHER_ALL_ACCESS = 584,
-		
-		ALL_ALL_ACCESS = 1022
-		
-		
+	};
+	
+	enum flushDiskOperationTypeEnum///edition to flushOperationTypeEnum
+	{
+		FLUSH_DISK_ERASE
 	};
 	
 	/**
@@ -151,6 +167,8 @@ namespace dodo
 			/**
 			 * delete functions
 			 * erase info on position
+			 * 
+			 * NOTE for xexec  - no call for pre/postExec is performed, but only operation type is set, 'cos it's only special type of write!!
 			 */
 			virtual bool erase(unsigned long pos);///erase on position
 			
@@ -171,16 +189,27 @@ namespace dodo
 			 */
 			static bool unlink(const std::string &path);///also empty directory
 			static bool rename(const std::string &oldPath, const std::string &newPath);
-			static bool link(const std::string &oldPath, const std::string &newPath);
-			static bool symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)
-			static bool chown(const std::string &path, int uid);
-			static bool chgrp(const std::string &path, int gid);
 			static bool touch(const std::string &path, int time=-1);///now by default
 			static bool mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);///see permissionModesEnum; use | to combine; force - if created already - nothing to say
-			static bool chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
-			static bool rmdir(const std::string &path);///recursive
-			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
+			static bool rm(const std::string &path);///recursive
 			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
+			static bool chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
+			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
+			
+			static long getSize(const std::string &path);///in bytes; if no such file or directory - will return -1!
+
+			static int getAccTime(const std::string &path);///timestamp
+			static int getModTime(const std::string &path);///timestemp
+			
+			#ifndef WIN
+				static bool link(const std::string &oldPath, const std::string &newPath);
+				static bool symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)
+				static bool chown(const std::string &path, int uid);
+				static bool chgrp(const std::string &path, int gid);
+				
+				static int getUserOwner(const std::string &path);
+				static int getGroupOwner(const std::string &path);
+			#endif
 			
 			bool over;///indicates whether overright; for files,tmp_files only
 			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
@@ -191,9 +220,9 @@ namespace dodo
 			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
 		protected:
 			mutable std::string path;///file name; for files only;
-		
-			static mode_t getPermission(int permission);
 			
+			static int getPermission(int permission);
+					
 			mutable FILE *file;///file handler
 	};
 };
