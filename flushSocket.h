@@ -29,6 +29,8 @@
 #include "directives.h"
 #include "flush.h"
 #include "flushSocketEx.h"
+#include "flushDiskEx.h"
+#include "flushDisk.h"
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -37,33 +39,37 @@
 #ifdef WIN
 	#include <winsock.h>
 #else
+	#include <sys/un.h>
 	#include <sys/socket.h>
 #endif
 
 namespace dodo
 {
+	
+	#ifndef WIN
+		#define UNIX_SOCKET_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
+	#endif
 	/**
 	 * type of socket to use
 	 */
 	enum socketTransferTypeEnum
 	{
-		STREAM,
-		DATAGRAM,
-		RAW
+		STREAM,///Sequenced, reliable, connection-based byte streams
+		DATAGRAM,///Connectionless, unreliable datagrams of fixed maximum length
+		RAW,///Raw protocol interface
+		PACKET,///Linux specific way of getting packets at the dev level.  For writing rarp and other similar things on the user level
 	};
 	
 	/**
 	 * type of domain
+	 * as response for more type of protocol and address famaly will increase - i'll add. i don't think that u use appletalk or ipx! as for start - these !
 	 */
 	enum socketDomainEnum
 	{
 		IPV4,
-		IPX,
+		IPV6,		
 	#ifndef WIN	
 		UNIX_SOCKET,
-		IPV6,		
-		PACKET,
-		NETLINK
 	#endif
 	};
 	/**
@@ -126,7 +132,7 @@ namespace dodo
 			 */
 			virtual bool connect(const std::string &host, unsigned int port);
 			#ifndef WIN
-				virtual bool connect(const std::string &path);
+				virtual bool connect(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			#endif
 			
 			/**

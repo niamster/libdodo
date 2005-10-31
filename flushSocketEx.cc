@@ -58,6 +58,13 @@
 		resolvers[3] = &dummyFlushDiskResolve;
 		resolvers[4] = &dummyFlushDiskResolve;
 		resolvers[5] = &dummyFlushDiskResolve;
+		resolvers[6] = &dummyFlushDiskResolve;
+		resolvers[7] = &dummyFlushDiskResolve;
+		resolvers[8] = &dummyFlushDiskResolve;
+		resolvers[9] = &dummyFlushDiskResolve;
+		resolvers[10] = &dummyFlushDiskResolve;
+		resolvers[11] = &dummyFlushDiskResolve;
+		resolvers[12] = &dummyFlushDiskResolve;
 	}
 	
 	//-------------------------------------------------------------------
@@ -105,6 +112,20 @@
 			resolvers[4] = a_resF;
 		if ((FLUSHSOCKET_MEMORY_OVER & a_reason) == FLUSHSOCKET_MEMORY_OVER)
 			resolvers[5] = a_resF;
+		if ((FLUSHSOCKET_NO_FREE_PORTS & a_reason) == FLUSHSOCKET_NO_FREE_PORTS)
+			resolvers[6] = a_resF;
+		if ((FLUSHSOCKET_ALREADY_USED & a_reason) == FLUSHSOCKET_ALREADY_USED)
+			resolvers[7] = a_resF;
+		if ((FLUSHSOCKET_CONNECTION_REFUSED & a_reason) == FLUSHSOCKET_CONNECTION_REFUSED)
+			resolvers[8] = a_resF;
+		if ((FLUSHSOCKET_NETWORK_UNREACHABLE & a_reason) == FLUSHSOCKET_NETWORK_UNREACHABLE)
+			resolvers[9] = a_resF;
+		if ((FLUSHSOCKET_ALREADY_CONNECTED & a_reason) == FLUSHSOCKET_ALREADY_CONNECTED)
+			resolvers[10] = a_resF;
+		if ((FLUSHSOCKET_SYSTEM_FAULT & a_reason) == FLUSHSOCKET_SYSTEM_FAULT)
+			resolvers[11] = a_resF;
+		if ((FLUSHSOCKET_NOT_A_SOCKET & a_reason) == FLUSHSOCKET_NOT_A_SOCKET)
+			resolvers[12] = a_resF;
 	}
 	
 	//-------------------------------------------------------------------
@@ -131,6 +152,27 @@
 				break;			
 			case FLUSHSOCKET_MEMORY_OVER:
 				resolvers[5](this);
+				break;
+			case FLUSHSOCKET_NO_FREE_PORTS:
+				resolvers[6](this);
+				break;
+			case FLUSHSOCKET_ALREADY_USED:
+				resolvers[7](this);
+				break;			
+			case FLUSHSOCKET_CONNECTION_REFUSED:
+				resolvers[8](this);
+				break;	
+			case FLUSHSOCKET_NETWORK_UNREACHABLE:
+				resolvers[9](this);
+				break;
+			case FLUSHSOCKET_ALREADY_CONNECTED:
+				resolvers[10](this);
+				break;			
+			case FLUSHSOCKET_SYSTEM_FAULT:
+				resolvers[11](this);
+				break;			
+			case FLUSHSOCKET_NOT_A_SOCKET:
+				resolvers[12](this);
 				break;
 		}
 	}

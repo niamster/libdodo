@@ -55,6 +55,13 @@
 			FLUSHSOCKET_TOO_MANY_OPEN_FILE = 64,
 			FLUSHSOCKET_PROTO_NOT_SUPPORTED_WITHIN_DOMAIN = 128,
 			FLUSHSOCKET_MEMORY_OVER = 256,
+			FLUSHSOCKET_NO_FREE_PORTS = 512,
+			FLUSHSOCKET_ALREADY_USED = 1024,
+			FLUSHSOCKET_CONNECTION_REFUSED = 2048,
+			FLUSHSOCKET_NETWORK_UNREACHABLE = 4096,
+			FLUSHSOCKET_ALREADY_CONNECTED = 8192,
+			FLUSHSOCKET_SYSTEM_FAULT = 16384,///also: when use unix_socket - file exists, but not a socket
+			FLUSHSOCKET_NOT_A_SOCKET = 32768,
 		};
 		
 		class flushSocket;
@@ -80,7 +87,7 @@
 			
 			private:
 				
-				flushSocketExResolver resolvers[6];///functions - solvers			
+				flushSocketExResolver resolvers[13];///functions - solvers			
 		};
 	};
 

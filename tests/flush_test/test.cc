@@ -38,5 +38,15 @@ int main(int argc, char **argv)
 	
 	cout << flushDisk::getPermissions("Makefile");
 	
+	std::vector<__fileInfo> dir;
+	
+	cout << endl; 
+	if (flushDisk::getDirInfo("/",dir))
+	{
+		cout << endl << dir.size() << endl;
+		for (std::vector<__fileInfo>::iterator i=dir.begin();i!=dir.end();++i)
+			cout << i->size << "!" << i->name << endl; 
+	}
+	
 	return 0;
 }

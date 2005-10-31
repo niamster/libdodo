@@ -59,6 +59,9 @@
 <pathentry include="/opt/mysql/include/mysql" kind="inc" path="" system="true"/>
 <pathentry base-path="libdodo" include="" kind="inc" path="" system="true"/>
 <pathentry include="/opt/pcre/include" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/sys" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/net" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/netinet" kind="inc" path="" system="true"/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
 <pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>

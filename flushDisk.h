@@ -31,6 +31,7 @@
 #include <dirent.h>
 #include <utime.h>
 #include <time.h>
+#include <libgen.h>
 	
 #ifndef WIN
 	#include <unistd.h>
@@ -48,6 +49,7 @@
 
 namespace dodo
 {
+	#define FILE_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
 	
 	///modes of open file:
 	enum flushDiskModesEnum
@@ -69,7 +71,7 @@ namespace dodo
 	enum flushDiskFileTypeEnum
 	{
 		REGULAR_FILE,
-		UNIX_SOCKET,
+		LOCAL_SOCKET,
 		SYMBOLIC_LINK,
 		BLOCK_DEVICE,
 		DIRECTORY,
@@ -125,6 +127,18 @@ namespace dodo
 	 *	size - size of data to read/write in bytes(for string - length)
 	 * 	for string size is one.
 	 */
+	
+	struct __fileInfo
+	{
+		std::string name;
+		int perm;
+		int type;
+		long size;
+		int modTime;
+		int accTime;
+		int gid;
+		int uid;
+	};
 	
 	class flushDisk : public flush
 	{
@@ -186,7 +200,7 @@ namespace dodo
 			static bool rename(const std::string &oldPath, const std::string &newPath);
 			static bool touch(const std::string &path, int time=-1);///now by default
 			static bool mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);///see permissionModesEnum; use | to combine; force - if created already - nothing to say
-			static bool rm(const std::string &path);///recursive
+			static bool rm(const std::string &path);///recursive; now is not WIN compatible
 			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
 			static bool chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
 			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
@@ -206,6 +220,9 @@ namespace dodo
 				static int getGroupOwner(const std::string &path);
 			#endif
 			
+			static bool getFileInfo(const std::string &path, __fileInfo &file);///if no such file - false will be returned
+			static bool getDirInfo(const std::string &path, std::vector<__fileInfo> &dir);///if it'not a dir - false will be returned and nothing write to 'dir' paramether!;now is not WIN compatible
+			
 			bool over;///indicates whether overright; for files,tmp_files only
 			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 			mutable flushDiskModesEnum mode;///mode to open file
@@ -213,13 +230,14 @@ namespace dodo
 			virtual std::string getPath() const;
 
 			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
-		protected:
-			mutable std::string path;///file name; for files only;
 			
 			static int getPermission(int permission);
+		protected:
+			mutable std::string path;///file name; for files only;
 					
 			mutable FILE *file;///file handler
 	};
+
 };
 
 #endif
