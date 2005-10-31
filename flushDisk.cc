@@ -61,10 +61,6 @@ flushDisk::close() const
 			
 		///execute
 		register int ret = fclose(file);
-				
-		#ifndef FLUSH_DISK_WO_XEXEC
-			performXExec(postExec);
-		#endif
 		
 		#ifndef NO_EX
 			switch (ret)
@@ -91,7 +87,11 @@ flushDisk::close() const
 					return false;
 			}			
 		#endif		
-			
+		
+		#ifndef FLUSH_DISK_WO_XEXEC
+			performXExec(postExec);
+		#endif
+					
 		opened = false;
 	}
 }
@@ -242,10 +242,6 @@ flushDisk::open(const std::string &a_path) const
 		}
 	}
 	
-	#ifndef FLUSH_DISK_WO_XEXEC
-		performXExec(postExec);
-	#endif
-	
 	if (file == NULL)
 	#ifndef NO_EX
 		switch (errno)
@@ -286,6 +282,10 @@ flushDisk::open(const std::string &a_path) const
 		}			
 	#endif
 	
+	#ifndef FLUSH_DISK_WO_XEXEC
+		performXExec(postExec);
+	#endif
+		
 	opened = true;
 }
 
@@ -325,10 +325,6 @@ flushDisk::read(void *a_void,
 		;			
 	#endif
 	
-	#ifndef FLUSH_DISK_WO_XEXEC		
-		performXExec(postExec);
-	#endif
-	
 	#ifndef NO_EX
 		switch (errno)
 		{
@@ -354,7 +350,11 @@ flushDisk::read(void *a_void,
 		}
 	
 	#endif
-
+	
+	#ifndef FLUSH_DISK_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+	
 	if (bufferize)
 		buffer.assign((char *)a_void,size);
 	
@@ -448,10 +448,6 @@ flushDisk::write(const void *const a_buf,
 	#else
 		;
 	#endif
-	
-	#ifndef FLUSH_DISK_WO_XEXEC
-		performXExec(postExec);
-	#endif
 			
 	#ifndef NO_EX
 		switch (errno)
@@ -508,7 +504,11 @@ flushDisk::write(const void *const a_buf,
 				return false;				
 		}		
 	#endif
-		
+	
+	#ifndef FLUSH_DISK_WO_XEXEC
+		performXExec(postExec);
+	#endif
+			
 	return true;	
 }
 
@@ -517,10 +517,6 @@ flushDisk::write(const void *const a_buf,
 bool
 flushDisk::erase(unsigned long a_pos)
 {
-	#ifndef FLUSH_DISK_WO_XEXEC
-		operType = FLUSH_OTHER_OPERATION + FLUSH_DISK_ERASE;
-	#endif
-	
 	register char *empty = new char;
 	if (empty == NULL)
 		#ifndef NO_EX

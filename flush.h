@@ -42,6 +42,7 @@ namespace dodo
 	
 	/**
 	 * preExec - before operation, postExec - after operation and before checks(can be exeptions).
+	 * flushOperationTypeEnum - such operations have handlers for xexec. position of preExec - before action, postExec - after action, after check of goodness of operation, so if error occured - postExec won't be called
 	 */
 	class flush : public xexec
 	{

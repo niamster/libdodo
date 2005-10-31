@@ -30,6 +30,10 @@
 #include "flush.h"
 #include "flushSocketEx.h"
 
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
 #ifdef WIN
 	#include <winsock.h>
 #else
@@ -38,6 +42,9 @@
 
 namespace dodo
 {
+	/**
+	 * type of socket to use
+	 */
 	enum socketTransferTypeEnum
 	{
 		STREAM,
@@ -45,6 +52,9 @@ namespace dodo
 		RAW
 	};
 	
+	/**
+	 * type of domain
+	 */
 	enum socketDomainEnum
 	{
 		IPV4,
@@ -104,10 +114,21 @@ namespace dodo
 			 *	pim     103     PIM             # Protocol Independent Multicast
 			 * 
 			 */
-			flushSocket(unsigned long numberOfConn, socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);
-			flushSocket(socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);
+			flushSocket(unsigned long numberOfConn, socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);///for server
+			flushSocket(socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);///for client
 			~flushSocket();
-
+			
+			/**
+			 * connect. 
+			 * first - net connection
+			 * second - local connectioin
+			 * if u use unix-socket - it will create it. 
+			 */
+			virtual bool connect(const std::string &host, unsigned int port);
+			#ifndef WIN
+				virtual bool connect(const std::string &path);
+			#endif
+			
 			/**
 			 * send, recieve
 			 */
@@ -115,6 +136,10 @@ namespace dodo
 		//	virtual bool recieve(void *data);
 			
 		//	virtual bool listen(int &id);
+			
+		//	virtual socketDomainEnum getDomain();
+		//	virtual socketTransferTypeEnum getType();
+		//	virtual int getProtocol();
 		protected:				
 
 			/**
@@ -123,10 +148,14 @@ namespace dodo
 			 
 			 virtual void makeSocket(socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);
 			 
-			 unsigned long numberOfConn;///default number of connection = 1
+			 long numberOfConn;///default number of connection = 1
 			 
 			 int *connections;///aray with connections.
 			 int socket;///id of socket
+			 
+			socketDomainEnum domain;
+			socketTransferTypeEnum type;
+			unsigned int protocol;
 	};
 };
 

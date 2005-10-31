@@ -325,6 +325,8 @@ namespace dodo
 	};
 	/**
 	 * class to provide wide abilities for sql manipulations
+	 * 
+	 * NOTE for xexec = u may use store/restore in hook if you want to leave data unchanged after it!
 	 */
 	class dbBase : public dodoBase
 	{

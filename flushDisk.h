@@ -112,11 +112,6 @@ namespace dodo
 		
 	};
 	
-	enum flushDiskOperationTypeEnum///edition to flushOperationTypeEnum
-	{
-		FLUSH_DISK_ERASE
-	};
-	
 	/**
      * u may have two types of reading/writing 
 	 * 	1)persistant - file opens when class constructs or where function setPersistant(true) was called. if parameter is false, file closes.
@@ -168,7 +163,7 @@ namespace dodo
 			 * delete functions
 			 * erase info on position
 			 * 
-			 * NOTE for xexec  - no call for pre/postExec is performed, but only operation type is set, 'cos it's only special type of write!!
+			 * NOTE for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
 			 */
 			virtual bool erase(unsigned long pos);///erase on position
 			
