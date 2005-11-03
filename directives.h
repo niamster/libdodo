@@ -54,4 +54,23 @@
 
 //#define WIN ///if u use window system
 
+
+///socket default timeouts
+#define RECIEVE_TIMEOUT 100
+#define SEND_TIMEOUT 100
+
+///default values of buffer for io operations(flush*)
+#define INSIZE 1024
+#define OUTSIZE 1024	
+
+///default values of socket buffer for io operations(flush*)
+#define SOCKET_INSIZE 1024
+#define SOCKET_OUTSIZE 1024	
+
+
+///if set the defuault operaton timeout for socket will not set in constructor!
+#define SOCKET_SYSTEM_DEFAULT_TIMEOUT
+///if set the default buffer size for socket will not set in constructor!
+#define SOCKET_SYSTEM_DEFAULT_BUFFER_SIZE
+
 #endif /* _DIRECTIVES_H */

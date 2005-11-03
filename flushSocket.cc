@@ -29,29 +29,51 @@ using namespace dodo;
 flushDisk dummySockEx(REG_FILE);///to throw ex in this class
 
 flushSocket::flushSocket(unsigned long a_numberOfConn, 
-						socketDomainEnum a_domain, 
+						socketProtoFamilyEnum a_family, 
 						socketTransferTypeEnum a_type, 
 						unsigned int a_protocol) : numberOfConn(a_numberOfConn),
-						domain(a_domain),
+						family(a_family),
 						type(a_type),
-						protocol(a_protocol)
+						protocol(a_protocol),
+						socket(-1),
+						recieveTimeout(RECIEVE_TIMEOUT),
+						sendTimeout(SEND_TIMEOUT),
+						inSocketBuffer(SOCKET_INSIZE),
+						outSocketBuffer(SOCKET_OUTSIZE)
 {
 	connections = new int [numberOfConn];
-	makeSocket(a_domain,a_type,a_protocol);
+	makeSocket(a_family,a_type,a_protocol);
+	#ifndef SOCKET_SYSTEM_DEFAULT_BUFFER_SIZE
+		acceptBufferSize();
+	#endif
+	#ifndef SOCKET_SYSTEM_DEFAULT_TIMEOUT
+		acceptTimeout();
+	#endif
 }
 
 //-------------------------------------------------------------------
 
-flushSocket::flushSocket(socketDomainEnum a_domain, 
+flushSocket::flushSocket(socketProtoFamilyEnum a_family, 
 						socketTransferTypeEnum a_type, 
 						unsigned int a_protocol) : numberOfConn(-1),
-						domain(a_domain),
+						family(a_family),
 						type(a_type),
-						protocol(a_protocol)
+						protocol(a_protocol),
+						socket(-1),
+						recieveTimeout(RECIEVE_TIMEOUT),
+						sendTimeout(SEND_TIMEOUT),
+						inSocketBuffer(SOCKET_INSIZE),
+						outSocketBuffer(SOCKET_OUTSIZE)
 						
 {
 	connections = new int [1];
-	makeSocket(a_domain,a_type,a_protocol);
+	makeSocket(a_family,a_type,a_protocol);
+	#ifndef SOCKET_SYSTEM_DEFAULT_BUFFER_SIZE
+		acceptBufferSize();
+	#endif
+	#ifndef SOCKET_SYSTEM_DEFAULT_TIMEOUT
+		acceptTimeout();
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -64,7 +86,7 @@ flushSocket::~flushSocket()
 //-------------------------------------------------------------------
 
 void 
-flushSocket::makeSocket(socketDomainEnum domain, 
+flushSocket::makeSocket(socketProtoFamilyEnum domain, 
 						socketTransferTypeEnum type,
 						unsigned int protocol)
 {
@@ -72,31 +94,34 @@ flushSocket::makeSocket(socketDomainEnum domain,
 	
 	switch (domain)
 	{
-		case IPV4:
+		case PROTO_FAMILY_IPV4:
 			real_domain = PF_INET;
 			break;
-		case IPV6:
+		case PROTO_FAMILY_IPV6:
 			real_domain = PF_INET6;
 			break;
+		case PROTO_FAMILY_PACKET:
+			real_domain = PF_PACKET;
+			break;
 	#ifndef WIN
-		case UNIX_SOCKET:
+		case PROTO_FAMILY_UNIX_SOCKET:
 			real_domain = PF_UNIX;
 			break;
 	#endif
 	}
 	switch (type)
 	{
-		case STREAM:
+		case TRANSFER_TYPE_STREAM:
 			real_type = SOCK_STREAM;
 			break;
-		case DATAGRAM:
+		case TRANSFER_TYPE_DATAGRAM:
 			real_type = SOCK_DGRAM;
 			break;
-		case RAW:
+		case TRANSFER_TYPE_RAW:
 			real_type = SOCK_RAW;
 			break;
 	#ifndef WIN			
-		case PACKET:
+		case TRANSFER_TYPE_PACKET:
 			real_type = SOCK_PACKET;
 	#endif
 	}	
@@ -144,7 +169,7 @@ flushSocket::connect(const std::string &host,
 {
 	struct sockaddr_in sa;
 	
-	if (domain == IPV6)
+	if (family == PROTO_FAMILY_IPV6)
 		sa.sin_family = AF_INET6;
 	else
 		sa.sin_family = AF_INET;
@@ -204,50 +229,14 @@ flushSocket::connect(const std::string &host,
 
 //-------------------------------------------------------------------
 
-bool 
-flushSocket::connect(const std::string &path)
-{
-
-	struct stat st;
-	if (::lstat(path.c_str(),&st) == -1)
-	#ifndef NO_EX
-		switch (errno)
-		{
-			case EACCES:
-				throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummySockEx,__LINE__,__FILE__);
-			case EIO:
-				throw flushDiskEx(FLUSHDISK_IOERROR,&dummySockEx,__LINE__,__FILE__);
-			case EINTR:
-				throw flushDiskEx(FLUSHDISK_INTERRUPTED, &dummySockEx,__LINE__,__FILE__);
-			case ENAMETOOLONG:
-				throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummySockEx,__LINE__,__FILE__);
-			case ELOOP:
-			case ENOTDIR:
-				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummySockEx,__LINE__,__FILE__);	
-			case ENOMEM:
-				throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummySockEx,__LINE__,__FILE__);
-		}
-	#else
-		switch (errno)
-		{					
-			case EACCES:
-			case EIO:
-			case EINTR:
-			case ENAMETOOLONG:
-			case ELOOP:
-			case ENOTDIR:
-			case ENOMEM:
-				return false;					
-		}							
-	#endif
-	if (errno != ENOENT)
+#ifndef WIN
+	
+	bool 
+	flushSocket::connect(const std::string &path)
 	{
-		if (!S_ISSOCK(st.st_mode))
-			throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
-	}
-	else
-	{
-		if (mknod(path.c_str(),flushDisk::getPermission(UNIX_SOCKET_PERM),S_IFSOCK)==-1)
+	
+		struct stat st;
+		if (::lstat(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			switch (errno)
 			{
@@ -256,91 +245,245 @@ flushSocket::connect(const std::string &path)
 				case EIO:
 					throw flushDiskEx(FLUSHDISK_IOERROR,&dummySockEx,__LINE__,__FILE__);
 				case EINTR:
-					throw flushDiskEx(FLUSHDISK_INTERRUPTED,&dummySockEx,__LINE__,__FILE__);
-				case ENOSPC:
-				case ENOMEM:
-					throw flushDiskEx(FLUSHDISK_NOT_ENOUGH_FREE_SPACE,&dummySockEx,__LINE__,__FILE__);
-				case EMFILE:
-				case ENFILE:
-					throw flushDiskEx(FLUSHDISK_TOO_MANY_OPEN_FILE,&dummySockEx,__LINE__,__FILE__);
+					throw flushDiskEx(FLUSHDISK_INTERRUPTED, &dummySockEx,__LINE__,__FILE__);
 				case ENAMETOOLONG:
 					throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummySockEx,__LINE__,__FILE__);
-				case ENOENT:
-					throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummySockEx,__LINE__,__FILE__);	
-				case EROFS:
-					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummySockEx,__LINE__,__FILE__);		
+				case ELOOP:
+				case ENOTDIR:
+					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummySockEx,__LINE__,__FILE__);	
+				case ENOMEM:
+					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummySockEx,__LINE__,__FILE__);
+			}
+		#else
+			switch (errno)
+			{					
+				case EACCES:
+				case EIO:
+				case EINTR:
+				case ENAMETOOLONG:
+				case ELOOP:
+				case ENOTDIR:
+				case ENOMEM:
+					return false;					
+			}							
+		#endif
+		if (errno != ENOENT)
+		{
+			if (!S_ISSOCK(st.st_mode))
+				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+		}
+		else
+		{
+			if (mknod(path.c_str(),flushDisk::getPermission(UNIX_SOCKET_PERM),S_IFSOCK)==-1)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EACCES:
+						throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummySockEx,__LINE__,__FILE__);
+					case EIO:
+						throw flushDiskEx(FLUSHDISK_IOERROR,&dummySockEx,__LINE__,__FILE__);
+					case EINTR:
+						throw flushDiskEx(FLUSHDISK_INTERRUPTED,&dummySockEx,__LINE__,__FILE__);
+					case ENOSPC:
+					case ENOMEM:
+						throw flushDiskEx(FLUSHDISK_NOT_ENOUGH_FREE_SPACE,&dummySockEx,__LINE__,__FILE__);
+					case EMFILE:
+					case ENFILE:
+						throw flushDiskEx(FLUSHDISK_TOO_MANY_OPEN_FILE,&dummySockEx,__LINE__,__FILE__);
+					case ENAMETOOLONG:
+						throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummySockEx,__LINE__,__FILE__);
+					case ENOENT:
+						throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummySockEx,__LINE__,__FILE__);	
+					case EROFS:
+						throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummySockEx,__LINE__,__FILE__);		
+				}
+			#else
+				switch (errno)
+				{
+					case EROFS:
+					case EACCES:
+					case EIO:
+					case EINTR:
+					case ENOSPC:
+					case ENOMEM:
+					case EMFILE:
+					case ENFILE:
+					case ENAMETOOLONG:
+					case ENOENT:
+						return false;					
+				}
+			#endif				
+		}	
+		
+		struct sockaddr_un sa;
+		
+		strcpy(sa.sun_path,path.c_str());
+		sa.sun_family = AF_UNIX;
+	
+		if (::connect(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa))==-1)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EAFNOSUPPORT:
+					throw flushSocketEx(FLUSHSOCKET_NOT_SUPPORTED_ADDR_FAMILY,(flushSocket *)this,__LINE__,__FILE__);
+				case EACCES:
+				case EPERM:
+					throw flushSocketEx(FLUSHSOCKET_ACCESS_DENIED,(flushSocket *)this,__LINE__,__FILE__);
+				case EADDRINUSE:
+					throw flushSocketEx(FLUSHSOCKET_ALREADY_USED,(flushSocket *)this,__LINE__,__FILE__);
+				case EAGAIN:
+					throw flushSocketEx(FLUSHSOCKET_NO_FREE_PORTS,(flushSocket *)this,__LINE__,__FILE__);	
+				case EALREADY:
+				case EBADF:
+				case EFAULT:
+				case ETIMEDOUT:
+				case EINPROGRESS:
+					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+				case ECONNREFUSED:
+					throw flushSocketEx(FLUSHSOCKET_CONNECTION_REFUSED,(flushSocket *)this,__LINE__,__FILE__);
+				case EISCONN:
+					throw flushSocketEx(FLUSHSOCKET_ALREADY_CONNECTED,(flushSocket *)this,__LINE__,__FILE__);
+				case ENETUNREACH:
+					throw flushSocketEx(FLUSHSOCKET_NETWORK_UNREACHABLE,(flushSocket *)this,__LINE__,__FILE__);
+				case ENOTSOCK:
+					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
 			}
 		#else
 			switch (errno)
 			{
-				case EROFS:
+				case EAFNOSUPPORT:
 				case EACCES:
-				case EIO:
-				case EINTR:
-				case ENOSPC:
-				case ENOMEM:
-				case EMFILE:
-				case ENFILE:
-				case ENAMETOOLONG:
-				case ENOENT:
+				case EPERM:
+				case EADDRINUSE:
+				case EAGAIN:
+				case EALREADY:
+				case EBADF:
+				case EFAULT:
+				case ETIMEDOUT:
+				case EINPROGRESS:
+				case ECONNREFUSED:
+				case EISCONN:
+				case ENETUNREACH:
+				case ENOTSOCK:				
 					return false;					
-			}
-		#endif				
-	}	
-	
-	struct sockaddr_un sa;
-	
-	strcpy(sa.sun_path,path.c_str());
-	sa.sun_family = AF_UNIX;
+			}							
+		#endif		
+	}
 
-	if (::connect(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa))==-1)
-	#ifndef NO_EX
-		switch (errno)
-		{
-			case EAFNOSUPPORT:
-				throw flushSocketEx(FLUSHSOCKET_NOT_SUPPORTED_ADDR_FAMILY,(flushSocket *)this,__LINE__,__FILE__);
-			case EACCES:
-			case EPERM:
-				throw flushSocketEx(FLUSHSOCKET_ACCESS_DENIED,(flushSocket *)this,__LINE__,__FILE__);
-			case EADDRINUSE:
-				throw flushSocketEx(FLUSHSOCKET_ALREADY_USED,(flushSocket *)this,__LINE__,__FILE__);
-			case EAGAIN:
-				throw flushSocketEx(FLUSHSOCKET_NO_FREE_PORTS,(flushSocket *)this,__LINE__,__FILE__);	
-			case EALREADY:
-			case EBADF:
-			case EFAULT:
-			case ETIMEDOUT:
-			case EINPROGRESS:
-				throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
-			case ECONNREFUSED:
-				throw flushSocketEx(FLUSHSOCKET_CONNECTION_REFUSED,(flushSocket *)this,__LINE__,__FILE__);
-			case EISCONN:
-				throw flushSocketEx(FLUSHSOCKET_ALREADY_CONNECTED,(flushSocket *)this,__LINE__,__FILE__);
-			case ENETUNREACH:
-				throw flushSocketEx(FLUSHSOCKET_NETWORK_UNREACHABLE,(flushSocket *)this,__LINE__,__FILE__);
-			case ENOTSOCK:
-				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
-		}
-	#else
-		switch (errno)
-		{
-			case EAFNOSUPPORT:
-			case EACCES:
-			case EPERM:
-			case EADDRINUSE:
-			case EAGAIN:
-			case EALREADY:
-			case EBADF:
-			case EFAULT:
-			case ETIMEDOUT:
-			case EINPROGRESS:
-			case ECONNREFUSED:
-			case EISCONN:
-			case ENETUNREACH:
-			case ENOTSOCK:				
-				return false;					
-		}							
-	#endif		
+#endif
+
+//-------------------------------------------------------------------
+
+void 
+flushSocket::acceptBufferSize()
+{
+	if (socket!=-1)
+	{
+		if (setsockopt(socket,SOL_SOCKET,SO_SNDBUF,&outSocketBuffer,sizeof(unsigned long))==-1)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+				case ENOTSOCK:
+					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+			}
+		#else
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+				case ENOTSOCK:
+					return ;					
+			}							
+		#endif
+		
+		if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&inSocketBuffer,sizeof(unsigned long))==-1)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+				case ENOTSOCK:
+					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+			}
+		#else
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+				case ENOTSOCK:
+					return ;					
+			}							
+		#endif			
+		
+	}
+}
+
+//-------------------------------------------------------------------
+
+void 
+flushSocket::acceptTimeout()
+{
+	if (socket!=-1)
+	{
+		timeval val;
+		
+		val.tv_sec = sendTimeout/100;
+		val.tv_usec = sendTimeout%100;
+		if (setsockopt(socket,SOL_SOCKET,SO_SNDTIMEO,&val,sizeof(unsigned long))==-1)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+				case ENOTSOCK:
+					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+			}
+		#else
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+				case ENOTSOCK:
+					return ;					
+			}							
+		#endif
+		
+		val.tv_sec = recieveTimeout/100;
+		val.tv_usec = recieveTimeout%100;
+		if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&val,sizeof(unsigned long))==-1)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+				case ENOTSOCK:
+					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+			}
+		#else
+			switch (errno)
+			{
+				case EBADF:
+				case EFAULT:
+				case ENOPROTOOPT:
+				case ENOTSOCK:
+					return ;					
+			}							
+		#endif			
+		
+	}	
 }
 
 //-------------------------------------------------------------------

@@ -118,8 +118,12 @@ flushDisk::open(const std::string &a_path) const
 	#ifndef FLUSH_DISK_WO_XEXEC	
 		performXExec(preExec);	
 	#endif
-
-	umask(flushDisk::getPermission(FILE_PERM));	
+	
+	#ifndef WIN
+		umask(flushDisk::getPermission(FILE_PERM));	
+	#else
+		_umask(flushDisk::getPermission(FILE_PERM));	
+	#endif		
 
 	///execute
 	if (fileType == TMP_FILE)
@@ -306,7 +310,7 @@ flushDisk::read(void *a_void,
 	
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
-		a_pos *= size;		
+		a_pos *= inSize;		
 		fseek(file,a_pos,SEEK_SET);
 	}
 	
@@ -316,13 +320,13 @@ flushDisk::read(void *a_void,
 	
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
-		fread(a_void,size,1,file);
+		fread(a_void,inSize,1,file);
 	else
 	#ifndef WIN
 		#ifndef FAST
 			if (fileType == FIFO_FILE)
 		#endif
-				fgets((char *)a_void,size,file);
+				fgets((char *)a_void,inSize,file);
 	#else
 		;			
 	#endif
@@ -358,7 +362,7 @@ flushDisk::read(void *a_void,
 	#endif
 	
 	if (bufferize)
-		buffer.assign((char *)a_void,size);
+		buffer.assign((char *)a_void,inSize);
 	
 	return true;	
 }
@@ -369,10 +373,10 @@ bool
 flushDisk::readString(std::string &a_str, 
 				unsigned long a_pos) const
 {
-	register char *data = new char[size+1];
-	memset(data,0,size);
+	register char *data = new char[inSize+1];
+	memset(data,0,inSize);
 	register bool result = this->read((void *)data,a_pos);
-	a_str.assign(data,size);
+	a_str.assign(data,inSize);
 	delete [] data;
 	return result;
 }
@@ -402,7 +406,7 @@ flushDisk::write(const void *const a_buf,
 	std::string stringToWrite((char *)a_buf);
 		
 	if (normalize)
-		tools::normalize(stringToWrite,size);
+		tools::normalize(stringToWrite,outSize);
 			
 	if (bufferize)
 		buffer.assign(stringToWrite);
@@ -410,18 +414,18 @@ flushDisk::write(const void *const a_buf,
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
 		register size_t read_bytes;
-		register unsigned long pos = a_pos*size;
+		a_pos *= outSize;
 		if (!over && !append)
 		{		
-			register char *t_buffer = new char[size*size_of_char];
+			register char *t_buffer = new char[outSize*size_of_char];
 			if (t_buffer == NULL)
 				#ifndef NO_EX
 					throw flushDiskEx(FLUSHDISK_MEMORY_OVER, this,__LINE__,__FILE__);	
 				#else
 					return false;
 				#endif
-			fseek(file,pos,SEEK_SET);
-			read_bytes = fread(t_buffer,size,1,file);
+			fseek(file,a_pos,SEEK_SET);
+			read_bytes = fread(t_buffer,outSize,1,file);
 			delete [] t_buffer;
 		}
 			
@@ -431,7 +435,7 @@ flushDisk::write(const void *const a_buf,
 		if (append)
 			fseek(file,0,SEEK_END);
 		else
-			fseek(file,pos,SEEK_SET);
+			fseek(file,a_pos,SEEK_SET);
 	}
 	
 	#ifndef FLUSH_DISK_WO_XEXEC
@@ -440,7 +444,7 @@ flushDisk::write(const void *const a_buf,
 	
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
-		fwrite(stringToWrite.c_str(),size,1,file);
+		fwrite(stringToWrite.c_str(),outSize,1,file);
 	else
 	#ifndef WIN
 		#ifndef FAST

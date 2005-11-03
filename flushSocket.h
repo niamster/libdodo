@@ -44,8 +44,7 @@
 #endif
 
 namespace dodo
-{
-	
+{	
 	#ifndef WIN
 		#define UNIX_SOCKET_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
 	#endif
@@ -54,24 +53,43 @@ namespace dodo
 	 */
 	enum socketTransferTypeEnum
 	{
-		STREAM,///Sequenced, reliable, connection-based byte streams
-		DATAGRAM,///Connectionless, unreliable datagrams of fixed maximum length
-		RAW,///Raw protocol interface
-		PACKET,///Linux specific way of getting packets at the dev level.  For writing rarp and other similar things on the user level
+		TRANSFER_TYPE_STREAM,///Sequenced, reliable, connection-based byte streams
+		TRANSFER_TYPE_DATAGRAM,///Connectionless, unreliable datagrams of fixed maximum length
+		TRANSFER_TYPE_RAW,///Raw protocol interface
+		TRANSFER_TYPE_PACKET,///Linux specific way of getting packets at the dev level.  For writing rarp and other similar things on the user level
 	};
 	
 	/**
 	 * type of domain
 	 * as response for more type of protocol and address famaly will increase - i'll add. i don't think that u use appletalk or ipx! as for start - these !
 	 */
-	enum socketDomainEnum
+	enum socketProtoFamilyEnum
 	{
-		IPV4,
-		IPV6,		
+		PROTO_FAMILY_IPV4,
+		PROTO_FAMILY_IPV6,
+		PROTO_FAMILY_PACKET,		
 	#ifndef WIN	
-		UNIX_SOCKET,
+		PROTO_FAMILY_UNIX_SOCKET,
 	#endif
 	};
+	
+	/**
+	 * Options for socket
+	 */
+	 enum socketOptionsEnum
+	 {
+	 	SOCKET_KEEP_ALIVE,///Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+	 	SOCKET_REUSE_ADDRESS,
+	 	SOCKET_DONOT_USE_GATEWAY,
+	 	SOCKET_BROADCAST,///Permits  sending of broadcast messages, if this is supported by the protocol.
+	 	SOCKET_OOB_INLINE,///out-of-band(marked urgent) data keep inline in recieve operation
+	 	/**
+	 	 * send unsent messages in socket queue if close called
+	 	 */
+	 	SOCKET_GRACEFUL_CLOSE,///close returns immediately, but any unsent data is transmitted (after close returns).
+	 	SOCKET_HARD_CLOSE,///close returns immediately, and any unsent data is discarded.
+	 	SOCKET_WAIT_CLOSE,///close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+	 };
 	/**
 	 * class that takes ugly routine with sockets
 	 * 
@@ -85,43 +103,17 @@ namespace dodo
 			 * some of them:
 			 *  ip      0       IP              # internet protocol, pseudo protocol number
 			 *	icmp    1       ICMP            # internet control message protocol
-			 *	igmp    2       IGMP            # Internet Group Management
 			 *	ggp     3       GGP             # gateway-gateway protocol
-			 *	ipencap 4       IP-ENCAP        # IP encapsulated in IP (officially ``IP'')
 			 *	st      5       ST              # ST datagram mode
 			 *	tcp     6       TCP             # transmission control protocol
 			 *	egp     8       EGP             # exterior gateway protocol
-			 *	pup     12      PUP             # PARC universal packet protocol
 			 *	udp     17      UDP             # user datagram protocol
-			 *	hmp     20      HMP             # host monitoring protocol
-			 *	xns-idp 22      XNS-IDP         # Xerox NS IDP
-			 *	rdp     27      RDP             # "reliable datagram" protocol
-			 *	iso-tp4 29      ISO-TP4         # ISO Transport Protocol class 4
-			 *	xtp     36      XTP             # Xpress Tranfer Protocol
-			 *	ddp     37      DDP             # Datagram Delivery Protocol
-			 *	idpr-cmtp 38    IDPR-CMTP       # IDPR Control Message Transport
 			 *	ipv6    41      IPv6            # IPv6
-			 *	ipv6-route 43   IPv6-Route      # Routing Header for IPv6
-			 *	ipv6-frag 44    IPv6-Frag       # Fragment Header for IPv6
 			 *	idrp    45      IDRP            # Inter-Domain Routing Protocol
-			 *	rsvp    46      RSVP            # Reservation Protocol
-			 *	gre     47      GRE             # General Routing Encapsulation
-			 *	esp     50      ESP             # Encap Security Payload for IPv6
-			 *	ah      51      AH              # Authentication Header for IPv6
-			 *	skip    57      SKIP            # SKIP
 			 *	ipv6-icmp 58    IPv6-ICMP       # ICMP for IPv6
-			 *	ipv6-nonxt 59   IPv6-NoNxt      # No Next Header for IPv6
-			 *	ipv6-opts 60    IPv6-Opts       # Destination Options for IPv6
-			 *	rspf    73      RSPF            # Radio Shortest Path First.
-			 *	vmtp    81      VMTP            # Versatile Message Transport
-			 *	ospf    89      OSPFIGP         # Open Shortest Path First IGP
-			 *	ipip    94      IPIP            # IP-within-IP Encapsulation Protocol
-			 *	encap   98      ENCAP           # Yet Another IP encapsulation
-			 *	pim     103     PIM             # Protocol Independent Multicast
-			 * 
 			 */
-			flushSocket(unsigned long numberOfConn, socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);///for server
-			flushSocket(socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);///for client
+			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for server
+			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for client
 			~flushSocket();
 			
 			/**
@@ -146,20 +138,34 @@ namespace dodo
 		//	virtual socketDomainEnum getDomain();
 		//	virtual socketTransferTypeEnum getType();
 		//	virtual int getProtocol();
+		
+			/**
+			 * 
+			 */
+			 //void setSockOption(socketOptionsEnum option);
+			 
+			 void acceptBufferSize();///accept value from size property to socket(set by default. call this if you changed)
+			 void acceptTimeout();///accept value from size property to socket(set by default. call this if you changed)
+			 
+			 unsigned long recieveTimeout;///in microseconds
+			 unsigned long sendTimeout;///in microseconds
+			 
+			 int inSocketBuffer;
+			 int outSocketBuffer;
 		protected:				
 
 			/**
 			 * number of connections that can recieve
 			 */
 			 
-			 virtual void makeSocket(socketDomainEnum domain, socketTransferTypeEnum type, unsigned int protocol);
+			 virtual void makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
 			 
 			 long numberOfConn;///default number of connection = 1
 			 
 			 int *connections;///aray with connections.
 			 int socket;///id of socket
 			 
-			socketDomainEnum domain;
+			socketProtoFamilyEnum family;
 			socketTransferTypeEnum type;
 			unsigned int protocol;
 	};

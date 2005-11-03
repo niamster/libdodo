@@ -27,7 +27,8 @@
 using namespace dodo;
 
 
-flush::flush(): size(1), 
+flush::flush(): inSize(INSIZE), 
+				outSize(OUTSIZE),
 				opened(false), 
 				bufferize(false),
 				normalize(true),
