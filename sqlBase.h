@@ -63,7 +63,9 @@ namespace dodo
 			static std::string noexists(const std::string &statement);
 		
 			bool preventFraming;///to frame or not with `'` fields values in insert...
+			
 		protected:		
+		
 			inline static std::string escapeFields(const std::string &a_data);
 			/**
 			 * functions to collect data into query after

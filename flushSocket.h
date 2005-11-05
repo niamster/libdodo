@@ -48,6 +48,7 @@ namespace dodo
 	#ifndef WIN
 		#define UNIX_SOCKET_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
 	#endif
+	
 	/**
 	 * type of socket to use
 	 */
@@ -78,23 +79,26 @@ namespace dodo
 	 */
 	 enum socketOptionsEnum
 	 {
-	 	SOCKET_KEEP_ALIVE,///Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-	 	SOCKET_REUSE_ADDRESS,
-	 	SOCKET_DONOT_USE_GATEWAY,
-	 	SOCKET_BROADCAST,///Permits  sending of broadcast messages, if this is supported by the protocol.
-	 	SOCKET_OOB_INLINE,///out-of-band(marked urgent) data keep inline in recieve operation
-	 	/**
-	 	 * send unsent messages in socket queue if close called
-	 	 */
-	 	SOCKET_GRACEFUL_CLOSE,///close returns immediately, but any unsent data is transmitted (after close returns).
-	 	SOCKET_HARD_CLOSE,///close returns immediately, and any unsent data is discarded.
-	 	SOCKET_WAIT_CLOSE,///close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+	 	SOCKET_KEEP_ALIVE=2,///Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+	 	SOCKET_REUSE_ADDRESS=4,	 	
+	 	SOCKET_DONOT_USE_GATEWAY=8, 	
+	 	SOCKET_BROADCAST=16,///Permits  sending of broadcast messages, if this is supported by the protocol. 	
+	 	SOCKET_OOB_INLINE=32,///out-of-band(marked urgent) data keep inline in recieve operation
+	 };
+	 /**
+	  * send unsent messages in socket queue if close called
+	  */
+	 enum socketLingerOption
+	 { 
+	 	SOCKET_GRACEFUL_CLOSE=64,///close returns immediately, but any unsent data is transmitted (after close returns).
+	 	SOCKET_HARD_CLOSE=128,///close returns immediately, and any unsent data is discarded.
+	 	SOCKET_WAIT_CLOSE=256,///close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	 };
 	/**
 	 * class that takes ugly routine with sockets
 	 * 
 	 */
-	class flushSocket : public flush
+	class flushSocket : protected flush
 	{
 		public:
 			/**
@@ -140,34 +144,49 @@ namespace dodo
 		//	virtual int getProtocol();
 		
 			/**
-			 * 
+			 * set socket options.
 			 */
-			 //void setSockOption(socketOptionsEnum option);
+			void setSockOption(socketOptionsEnum option, bool flag);
+			void setLingerSocketOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
 			 
-			 void acceptBufferSize();///accept value from size property to socket(set by default. call this if you changed)
-			 void acceptTimeout();///accept value from size property to socket(set by default. call this if you changed)
+			void setInBufferSize(int bytes);///accept value to socket; size of socket buffer!
+			void setOutBufferSize(int bytes);///accept value to socket; size of socket buffer!
+			int getInBufferSize();
+			int getOutBufferSize();
+						
+			void setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+			void setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+			unsigned long getInTimeout();
+			unsigned long getOutTimeout();
+			
+			/**
+			 * socketOptionsEnum or socketLingerOption
+			 */
+			bool getSocketOpts(int option);
+			
+		private:				
+
+			unsigned long inTimeout;///in microseconds
+			unsigned long outTimeout;///in microseconds
 			 
-			 unsigned long recieveTimeout;///in microseconds
-			 unsigned long sendTimeout;///in microseconds
+			int inSocketBuffer;
+			int outSocketBuffer;
 			 
-			 int inSocketBuffer;
-			 int outSocketBuffer;
-		protected:				
+			virtual void makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
 
 			/**
 			 * number of connections that can recieve
-			 */
+			 */			 
+			long numberOfConn;///default number of connection = 1
 			 
-			 virtual void makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
-			 
-			 long numberOfConn;///default number of connection = 1
-			 
-			 int *connections;///aray with connections.
-			 int socket;///id of socket
+			int *connections;///aray with connections.
+			int socket;///id of socket
 			 
 			socketProtoFamilyEnum family;
 			socketTransferTypeEnum type;
 			unsigned int protocol;
+			
+			int socketOpts;
 	};
 };
 

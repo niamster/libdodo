@@ -36,8 +36,8 @@ flushSocket::flushSocket(unsigned long a_numberOfConn,
 						type(a_type),
 						protocol(a_protocol),
 						socket(-1),
-						recieveTimeout(RECIEVE_TIMEOUT),
-						sendTimeout(SEND_TIMEOUT),
+						inTimeout(RECIEVE_TIMEOUT),
+						outTimeout(SEND_TIMEOUT),
 						inSocketBuffer(SOCKET_INSIZE),
 						outSocketBuffer(SOCKET_OUTSIZE)
 {
@@ -60,8 +60,8 @@ flushSocket::flushSocket(socketProtoFamilyEnum a_family,
 						type(a_type),
 						protocol(a_protocol),
 						socket(-1),
-						recieveTimeout(RECIEVE_TIMEOUT),
-						sendTimeout(SEND_TIMEOUT),
+						inTimeout(RECIEVE_TIMEOUT),
+						outTimeout(SEND_TIMEOUT),
 						inSocketBuffer(SOCKET_INSIZE),
 						outSocketBuffer(SOCKET_OUTSIZE)
 						
@@ -224,7 +224,9 @@ flushSocket::connect(const std::string &host,
 			case ENOTSOCK:				
 				return false;					
 		}							
-	#endif		
+	#endif
+	
+	opened = true;
 }
 
 //-------------------------------------------------------------------
@@ -367,7 +369,9 @@ flushSocket::connect(const std::string &host,
 				case ENOTSOCK:				
 					return false;					
 			}							
-		#endif		
+		#endif	
+		
+		opened = true;
 	}
 
 #endif
@@ -375,115 +379,304 @@ flushSocket::connect(const std::string &host,
 //-------------------------------------------------------------------
 
 void 
-flushSocket::acceptBufferSize()
+flushSocket::setInBufferSize(int bytes)
 {
-	if (socket!=-1)
-	{
-		if (setsockopt(socket,SOL_SOCKET,SO_SNDBUF,&outSocketBuffer,sizeof(unsigned long))==-1)
-		#ifndef NO_EX
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
-				case ENOTSOCK:
-					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
-			}
-		#else
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-				case ENOTSOCK:
-					return ;					
-			}							
-		#endif
-		
-		if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&inSocketBuffer,sizeof(unsigned long))==-1)
-		#ifndef NO_EX
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
-				case ENOTSOCK:
-					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
-			}
-		#else
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-				case ENOTSOCK:
-					return ;					
-			}							
-		#endif			
-		
-	}
+	if (socket == -1)
+		return ;
+	
+	inSocketBuffer = bytes;
+	
+	if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&inSocketBuffer,size_of_long)==-1)
+	#ifndef NO_EX
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+				throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+			case ENOTSOCK:
+				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+		}
+	#else
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+			case ENOTSOCK:
+				return ;					
+		}							
+	#endif			
+}
+
+//-------------------------------------------------------------------
+
+int
+flushSocket::getInBufferSize()
+{
+	return inSocketBuffer;
 }
 
 //-------------------------------------------------------------------
 
 void 
-flushSocket::acceptTimeout()
+flushSocket::setOutBufferSize(int bytes)
 {
-	if (socket!=-1)
+	if (socket == -1)
+		return ;
+	
+	outSocketBuffer = bytes;
+	
+	if (setsockopt(socket,SOL_SOCKET,SO_SNDBUF,&outSocketBuffer,size_of_long)==-1)
+	#ifndef NO_EX
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+				throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+			case ENOTSOCK:
+				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+		}
+	#else
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+			case ENOTSOCK:
+				return ;					
+		}							
+	#endif			
+}
+
+//-------------------------------------------------------------------
+
+int
+flushSocket::getOutBufferSize()
+{
+	return outSocketBuffer;
+}
+
+//-------------------------------------------------------------------
+
+void 
+flushSocket::setInTimeout(unsigned long microseconds)
+{
+	if (socket == -1)
+		return ;
+
+	inTimeout = microseconds;
+
+	timeval val;
+	val.tv_sec = inTimeout/100;
+	val.tv_usec = inTimeout%100;
+	
+	if (setsockopt(socket,SOL_SOCKET,SO_SNDTIMEO,&val,size_of_long)==-1)
+	#ifndef NO_EX
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+				throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+			case ENOTSOCK:
+				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+		}
+	#else
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+			case ENOTSOCK:
+				return ;					
+		}							
+	#endif
+}
+
+
+//-------------------------------------------------------------------
+
+unsigned long 
+flushSocket::getInTimeout()
+{
+	return inTimeout;
+}
+
+//-------------------------------------------------------------------
+
+void 
+flushSocket::setOutTimeout(unsigned long microseconds)
+{
+	if (socket == -1)
+		return ;
+
+	outTimeout = microseconds;
+
+	timeval val;
+	val.tv_sec = inTimeout/100;
+	val.tv_usec = inTimeout%100;
+	
+	if (setsockopt(socket,SOL_SOCKET,SO_SNDTIMEO,&val,size_of_long)==-1)
+	#ifndef NO_EX
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+				throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+			case ENOTSOCK:
+				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+		}
+	#else
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+			case ENOTSOCK:
+				return ;					
+		}							
+	#endif
+}
+
+
+//-------------------------------------------------------------------
+
+unsigned long 
+flushSocket::getOutTimeout()
+{
+	return outTimeout;
+}
+
+//-------------------------------------------------------------------
+
+bool
+flushSocket::getSocketOpts(int option)
+{
+	if  ( (option&socketOpts) == option)
+		return true;
+	return false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+flushSocket::setSockOption(socketOptionsEnum option, 
+							bool flag)
+{
+	if (socket == -1)
+		return ;
+	
+	register int sockFlag(1);
+	
+	if (!flag)
+		sockFlag = 0;
+	
+	register int real_option;
+	
+	switch (option)
 	{
-		timeval val;
+		case SOCKET_KEEP_ALIVE:
+			real_option = SO_KEEPALIVE;
+			break;
+		case SOCKET_REUSE_ADDRESS:
+			real_option = SO_REUSEADDR;
+			break;
+		case SOCKET_DONOT_USE_GATEWAY:
+			real_option = SO_DONTROUTE;
+			break;
+		case SOCKET_BROADCAST:
+			real_option = SO_BROADCAST;
+			break;
+		case SOCKET_OOB_INLINE:
+			real_option = SO_OOBINLINE;
+			break;
+	}
+	
 		
-		val.tv_sec = sendTimeout/100;
-		val.tv_usec = sendTimeout%100;
-		if (setsockopt(socket,SOL_SOCKET,SO_SNDTIMEO,&val,sizeof(unsigned long))==-1)
-		#ifndef NO_EX
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
-				case ENOTSOCK:
-					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
-			}
-		#else
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-				case ENOTSOCK:
-					return ;					
-			}							
-		#endif
+	if (setsockopt(socket,SOL_SOCKET,real_option,&sockFlag,size_of_int)==-1)
+	#ifndef NO_EX
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+				throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+			case ENOTSOCK:
+				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+		}
+	#else
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+			case ENOTSOCK:
+				return ;					
+		}							
+	#endif	
+	
+	if (!flag)
+		removeF(socketOpts,option);
+	else
+		addF(socketOpts,option);				
+}
+
+//-------------------------------------------------------------------
+
+void 
+flushSocket::setLingerSocketOption(socketLingerOption option,
+									int seconds)
+{	
+	if (socket == -1)
+		return ;
 		
-		val.tv_sec = recieveTimeout/100;
-		val.tv_usec = recieveTimeout%100;
-		if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&val,sizeof(unsigned long))==-1)
-		#ifndef NO_EX
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-					throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
-				case ENOTSOCK:
-					throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
-			}
-		#else
-			switch (errno)
-			{
-				case EBADF:
-				case EFAULT:
-				case ENOPROTOOPT:
-				case ENOTSOCK:
-					return ;					
-			}							
-		#endif			
-		
-	}	
+	linger lin;
+	
+	switch (option)
+	{
+		case SOCKET_GRACEFUL_CLOSE:
+			lin.l_onoff = 0;
+			break;
+		case SOCKET_HARD_CLOSE:
+			lin.l_onoff = 1;
+			lin.l_linger = 0;
+			break;
+		case SOCKET_WAIT_CLOSE:
+			lin.l_onoff = 1;
+			lin.l_linger = seconds;
+			break;
+	}
+
+	if (setsockopt(socket,SOL_SOCKET,SO_LINGER,&lin,sizeof(linger))==-1)
+	#ifndef NO_EX
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+				throw flushSocketEx(FLUSHSOCKET_SYSTEM_FAULT,(flushSocket *)this,__LINE__,__FILE__);
+			case ENOTSOCK:
+				throw flushSocketEx(FLUSHSOCKET_NOT_A_SOCKET,(flushSocket *)this,__LINE__,__FILE__);
+		}
+	#else
+		switch (errno)
+		{
+			case EBADF:
+			case EFAULT:
+			case ENOPROTOOPT:
+			case ENOTSOCK:
+				return ;					
+		}							
+	#endif
+	
+	removeF(socketOpts,SOCKET_GRACEFUL_CLOSE);
+	removeF(socketOpts,SOCKET_HARD_CLOSE);
+	removeF(socketOpts,SOCKET_WAIT_CLOSE);
+	
+	addF(socketOpts,option);
 }
 
 //-------------------------------------------------------------------

@@ -533,6 +533,7 @@ namespace dodo
 			inline void initTableInfo(__tableInfo &table);
 			inline void initRowInfo(__fieldInfo &field);			
 		protected:
+		
 			/**
 			 * resolve baseDataTypesEnum into string
 			 */
@@ -548,6 +549,8 @@ namespace dodo
 			/**
 			 * backuped collected data
 			 */
+		private:
+		
 			mutable __collectedDataP backup;		
 			/**
 			 * frees collected data

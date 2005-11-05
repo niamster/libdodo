@@ -48,6 +48,10 @@ namespace dodo
 	
 	static short size_of_pointer = sizeof(void *);
 	
+	static short size_of_int = sizeof(int);
+	
+	static short size_of_long = sizeof(long);
+	
 	typedef char* pchar;
 	
 	static const std::string __string__ = "";

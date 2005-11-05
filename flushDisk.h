@@ -140,7 +140,7 @@ namespace dodo
 		int uid;
 	};
 	
-	class flushDisk : public flush
+	class flushDisk : protected flush
 	{
 		friend class flushDiskEx;///class of exception
 		public:
@@ -232,7 +232,7 @@ namespace dodo
 			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
 			
 			static int getPermission(int permission);
-		protected:
+		private:
 			mutable std::string path;///file name; for files only;
 					
 			mutable FILE *file;///file handler

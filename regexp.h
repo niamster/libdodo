@@ -113,6 +113,8 @@ namespace dodo
 	 		bool boundMatch(const std::string &sample) const;
 	 		bool compile(const std::string &pattern) const;
 	 	
+	 	private:
+	 	
 			#ifdef PCRE_EXT
 				mutable pcre *code;
 			#else
