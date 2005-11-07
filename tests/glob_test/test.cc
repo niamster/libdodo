@@ -5,13 +5,6 @@ using namespace dodo;
 using namespace std;
 
 void 
-resolver(mysqlppEx* my)
-{
-	cout << "!!!!\n";
-	cout << endl << my->obj->getErr() << endl;
-}
-
-void 
 hook(dodoBase *base, 
 	void *yep)
 {
@@ -145,31 +138,9 @@ int main(int argc, char **argv)
 		__sqlStorage storage = pp.fetch();//get result
 
 	}
-	catch(mysqlppEx ex)
-	{
-		cout << "MYexception was in: " << ex.reason << " in " << ex.file.c_str() << " at " << ex.line << endl;
-		ex.setResolve(MYSQL_QUERY,resolver);
-		ex.resolve();
-	}
-	catch(sqlBaseEx ex)
-	{
-		cout << "MYexception was in: " << ex.reason << " in " << ex.file.c_str() << " at " << ex.line << endl;
-	}
-	
-	/* can be:
-    catch(baseEx &ex)///!!!!!!!!for base cought must be reference!!!
+    catch(baseEx ex)
     {	
-		if (ex.getExID() == MYSQL_EX)
-		{
-		        mysqlppEx *t_ex;
-		        t_ex = dynamic_cast<mysqlppEx*> (ex.getSelf());
-		        t_ex->setResolve(MYSQL_QUERY,resolver);///for function resolver look upper
-		        t_ex->resolve();
-		}
-       // ...
-        else
-			cout << "OOOPS, not cought by stringEx\n";
+		cout << "OOOPS";
     }
-	*/
 	return 0;
 }

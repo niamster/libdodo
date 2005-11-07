@@ -32,19 +32,6 @@
 
 	namespace dodo
 	{
-		/**
-		 * class to catch and resolve exceptions in flush
-		 * by default it does nothing
-		 * but u can define functions for resolving
-		 * for example to resolve problem with NOT_ENOUGH_FREE_SPACE:
-		 *		void someF(stringEx *strEx)
-		 *		{
-		 *			///do smth
-		 *		}
-		 *		setResolve(NOT_ENOUGH_FREE_SPACE, someF);
-		 *	u also can combine reasons with '|'
-		 *   if u want to reset to default use NULL;
-		 */	
 		
 		///reasons of exception
 		enum cgippExR
@@ -52,31 +39,11 @@
 			CGIPP_MEMORY_OVER = 1
 		};
 		
-		class cgipp;
-		class cgippEx;
-			
-		typedef void (*cgippExResolver)(cgippEx*);
+		#define CGIPP_MEMORY_OVER_STR "Not anough memmory"
 		
-		class cgippEx : virtual public baseEx
+		enum cgippFunctionsID
 		{
-			public:
-	
-				virtual baseEx *getSelf();
-				virtual int getExID();
-	
-				cgippEx(cgippExR reason, cgipp *obj, unsigned long line, std::string file);
-				virtual ~cgippEx();
-				virtual void setResolve(cgippExR,cgippExResolver);///try to resolve by own function
-				virtual void resolve();//try to resolve
-			
-				cgippExR reason;///reason
-			
-				cgipp *obj;///where exception appeared	
-			
-			private:
-				
-				cgippExResolver resolvers[1];///functions - solvers
-				
+			CGIPP_MAKEPOST,
 		};
 	};
 

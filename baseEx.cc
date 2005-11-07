@@ -28,35 +28,21 @@
 
 	using namespace dodo;
 	
-	baseEx::baseEx(unsigned long functionID, 
+	baseEx::baseEx(unsigned long a_errModule,
+					unsigned long functionID, 
 					unsigned long errnoSource, 
 					unsigned long a_errno, 
 					std::string a_errstr,
 					unsigned long a_line, 
 					std::string a_file) : line(a_line),
 									file(a_file),
-									errno(a_errno),
-									errstr(a_errstr),
+									baseErrno(a_errno),
+									baseErrstr(a_errstr),
 									funcID(functionID),
-									errnoSource(errnoSource)
+									errnoSource(errnoSource),
+									errModule(a_errModule)
 	{
 		state = UNKNOWN;
-	}
-	
-	//-------------------------------------------------------------------
-	
-	baseEx *
-	baseEx::getSelf()
-	{
-		return this;
-	}
-	
-	//-------------------------------------------------------------------
-	
-	int 
-	baseEx::getExID()
-	{
-		return BASE_EX;
 	}
 	
 	//-------------------------------------------------------------------

@@ -1,3 +1,5 @@
+throw baseEx(ERRMODULE_CGIPP,CGIPP_MAKEPOST,ERR_LIBDODO,CGIPP_MEMORY_OVER,CGIPP_MEMORY_OVER_STR,__LINE__,__FILE__);
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 std::string

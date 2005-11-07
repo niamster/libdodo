@@ -32,7 +32,7 @@ flush::flush(): inSize(INSIZE),
 				opened(false), 
 				bufferize(false),
 				normalize(true),
-				operType(FLUSH_NONE)
+				operType(FLUSH_OPER_NONE)
 {
 }
 

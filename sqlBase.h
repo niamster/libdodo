@@ -43,9 +43,8 @@ namespace dodo
 	 */
 	class sqlBase : public dbBase
 	{
-		friend class sqlBaseEx;///class of exception
 		public:
-			virtual dodoBase *getSelf();
+		
 			/*
 			 * constructors and destructors
 			 */

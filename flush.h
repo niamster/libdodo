@@ -33,7 +33,7 @@ namespace dodo
 
 	enum flushOperationTypeEnum///for xExec
 	{
-		FLUSH_NONE
+		FLUSH_OPER_NONE
 	};
 	
 	/**

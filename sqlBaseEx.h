@@ -34,21 +34,6 @@
 
 	namespace dodo
 	{
-		
-		/**
-		 * class to catch and resolve exceptions in string
-		 * by default it does nothing
-		 * but u can define functions for resolving
-		 * for example to resolve problem with MEMORY_OVER:
-		 *		void someF(stringEx *strEx)
-		 *		{
-		 *			///do smth
-		 *		}
-		 *		setResolve(MEMORY_OVER, someF);
-		 *	u also can combine reasons with '|'
-		 *   if u want to reset to default use NULL;
-		 */
-		
 		///reasons of exception
 		enum sqlBaseExR
 		{
@@ -56,31 +41,20 @@
 			SQLBASE_EMPTY_REQUEST
 		};
 		
-		class sqlBase;
-		class sqlBaseEx;
+		#define SQLBASE_MEMORY_OVER_STR "Not anough memmory"
+		#define SQLBASE_EMPTY_REQUEST_STR "Query is empty. are you sure?"
 		
-		typedef void (*sqlBaseExResolver)(sqlBaseEx*);
-		
-		class sqlBaseEx : virtual public baseEx
+		enum flushSocketFunctionsID
 		{
-			public:
+			SQLBASE_SELECTCOLLECT,
+			SQLBASE_INSERTCOLLECT,
+			SQLBASE_INSERTSELECTCOLLECT,
+			SQLBASE_UPDATECOLLECT,
+			SQLBASE_DELCOLLECT,
+			SQLBASE_QUERYCOLLECT
 			
-				virtual baseEx *getSelf();
-				virtual int getExID();
-				
-				sqlBaseEx(sqlBaseExR reason, sqlBase *obj, unsigned long line, std::string file);
-				virtual ~sqlBaseEx();
-				virtual void setResolve(sqlBaseExR, sqlBaseExResolver);///try to resolve by own function
-				virtual void resolve();//try to resolve
-			
-				sqlBaseExR reason;///reason
-			
-				sqlBase *obj;///string where exception appeared	
-			
-			private:
-				
-				sqlBaseExResolver resolvers[2];///functions - solvers	
 		};
+		
 	};
 
 #endif	

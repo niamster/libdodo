@@ -66,7 +66,6 @@ namespace dodo
 	 
 	 class regexp
 	 {
-	 	
 	 	public:
 	 	
 	 		/**

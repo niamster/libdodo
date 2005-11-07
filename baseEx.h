@@ -32,22 +32,6 @@
 
 	namespace dodo
 	{	
-		///base class for excaptions. it contais basic stats and have to be derived
-		
-		/**
-		 * ID's of exHandlers
-		 */
-		enum exIdEnum
-		{
-			BASE_EX,
-			MYSQL_EX,
-			SQLBASE_EX,
-			CGIPP_EX,
-			REGEXP_EX,
-			FLUSHDISK_EX,
-			FLUSHSOCKET_EX
-		};
-		
 		/**
 		 * WHERE number of error was got.
 		 */
@@ -58,7 +42,20 @@
 			ERR_MYSQL,
 			ERR_H_ERRNO
 		};
-		
+
+		/**
+		 * if source is ERR_LIBDODO, u can match errno usin' errorModuleEnum. see *Ex headers for err numbers
+		 */
+		enum errorModuleEnum
+		{
+			ERRMODULE_FLUSHSOCKET,
+			ERRMODULE_CGIPP,
+			ERRMODULE_FLUSHDISK,
+			ERRMODULE_MYSQLPP,
+			ERRMODULE_REGEXP,
+			ERRMODULE_SQLBASE
+		};	
+			
 		class baseEx
 		{
 			public:		
@@ -70,17 +67,16 @@
 					UNSAFE = 10,
 					CRITICAL = 100
 				};
-				
-				virtual baseEx *getSelf();
-				virtual int getExID();		
-				
-				baseEx(unsigned long functionID, unsigned long errnoSource, unsigned long errno, std::string errstr, unsigned long line, std::string file);
+
+				baseEx(unsigned long errModule, unsigned long functionID, unsigned long errnoSource, unsigned long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
+			
+				unsigned long errModule;
 			
 				unsigned long funcID;
 				unsigned long errnoSource;			
 			
-				unsigned long errno;
-				std::string errstr;
+				unsigned long baseErrno;
+				std::string baseErrstr;
 				
 				unsigned long line;///line, where problem detected
 				std::string file;

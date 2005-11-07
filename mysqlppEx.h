@@ -1,7 +1,7 @@
 /***************************************************************************
- *            flushSocketEx.h
+ *            mysqlppEx.h
  *
- *  Mon Feb 21 03:03:47 2005
+ *  Thu Jul  7 00:25:19 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -15,15 +15,15 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _FLUSHSOCKETEX_H_
-#define _FLUSHSOCKETEX_H_
+#ifndef _MYSQLPPEX_H_
+#define _MYSQLPPEX_H_
 
 #include "directives.h"
 #include "baseEx.h"
@@ -32,35 +32,14 @@
 
 	namespace dodo
 	{
-		///reasons of exception
-		enum flushSocketExR
+		
+		enum mysqlppFunctionsID
 		{
-			FLUSHSOCKET_MEMORY_OVER = 1,
-			FLUSHSOCKET_NO_SOCKET_CREATED
-		};
-		
-		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR "No socket was created =(. Please try to run `init` function"
-		#define FLUSHSOCKET_MEMORY_OVER_STR "Not anough memmory"
-		
-		enum flushSocketFunctionsID
-		{
-			FLUSHSOCKET_MAKESOCKET,
-			FLUSHSOCKET_CONNECT,
-			FLUSHSOCKET_MAKEUNIXSOCKET,
-			FLUSHSOCKET_SETINBUFFERSIZE,
-			FLUSHSOCKET_SETOUTBUFFERSIZE,
-			FLUSHSOCKET_SETINTIMEOUT,
-			FLUSHSOCKET_SETOUTTIMEOUT,
-			FLUSHSOCKET_SETSOCKOPT,
-			FLUSHSOCKET_SETLINGERSOCKOPT,
-			FLUSHSOCKET_GETHOSTINFO,
-			FLUSHSOCKET_BINDNLISTEN,
-//			FLUSHSOCKET_,		
-			
-		};
-		
+			MYSQLPP_CONNECT,
+			MYSQLPP_EXEC,
+		};		
 	};
 
-#endif	
-	
 #endif
+
+#endif /* _MYSQLINTERFACEEX_H */

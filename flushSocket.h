@@ -29,7 +29,6 @@
 #include "directives.h"
 #include "flush.h"
 #include "flushSocketEx.h"
-#include "flushDiskEx.h"
 #include "flushDisk.h"
 
 #include <sys/types.h>
@@ -124,11 +123,8 @@ namespace dodo
 	 */
 	class flushSocket : protected flush
 	{
-		friend class flushSocketEx;
 		
 		public:
-		
-			dodoBase *getSelf();
 		
 			/**
 			 * constructors/destructors
@@ -147,7 +143,6 @@ namespace dodo
 			 */
 			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for server
 			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for client
-			flushSocket();///only for exeptions in static members
 			~flushSocket();
 			
 			
@@ -227,7 +222,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							setLingerSocketOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
+							setLingerSockOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
 			
 			/**
 			 * The maximum buffer size for stream sockets is 262144 bytes

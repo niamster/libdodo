@@ -31,63 +31,47 @@
 #ifndef NO_EX
 
 	namespace dodo
-	{
-		/**
-		* class to catch and resolve exceptions in flush
-		* by default it does nothing
-		* but u can define functions for resolving
-		* for example to resolve problem with NOT_ENOUGH_FREE_SPACE:
-		*		void someF(stringEx *strEx)
-		*		{
-		*			///do smth
-		*		}
-		*		setResolve(NOT_ENOUGH_FREE_SPACE, someF);
-		*	u also can combine reasons with '|'
-		*   if u want to reset to default use NULL;
-		*/	
+	{	
 		
 		///reasons of exception
 		enum flushDiskExR
 		{
-			FLUSHDISK_NOT_ENOUGH_FREE_SPACE = 1,
-			FLUSHDISK_ACCESS_DENIED,
-			FLUSHDISK_FILE_TOO_BIG,
-			FLUSHDISK_INTERRUPTED,
-			FLUSHDISK_IOERROR,
-			FLUSHDISK_TOO_MANY_OPEN_FILE,
-			FLUSHDISK_FILENAME_TOO_LONG,
-			FLUSHDISK_NO_SUCH_FILE,
-			FLUSHDISK_READ_ONLY_FS,
-			FLUSHDISK_WRONG_FILE_NAME,
-			FLUSHDISK_MEMORY_OVER,
-			FLUSHDISK_CANNOT_OVEWRITE,
-			FLUSHDISK_UNKNOWN
+			FLUSHDISK_MEMORY_OVER = 1,
+			FLUSHDISK_WRONG_FILENAME,
+			FLUSHDISK_CANNOT_OVEWRITE
 		};
 		
-		class flushDisk;
-		class flushDiskEx;
-			
-		typedef void (*flushDiskExResolver)(flushDiskEx*);
+		#define FLUSHDISK_MEMORY_OVER_STR "Not anough memmory"
+		#define FLUSHDISK_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define FLUSHDISK_CANNOT_OVEWRITE_STR "You set option not to overwrite, but try to do that =)"
 		
-		class flushDiskEx :virtual public baseEx
+		enum flushDiskFunctionsID
 		{
-			public:
-	
-				virtual baseEx *getSelf();
-				virtual int getExID();
-	
-				flushDiskEx(flushDiskExR reason, flushDisk *obj, unsigned long line, std::string file);
-				virtual ~flushDiskEx();
-				virtual void setResolve(flushDiskExR,flushDiskExResolver);///try to resolve by own function
-				virtual void resolve();//try to resolve
-			
-				flushDiskExR reason;///reason
-			
-				flushDisk *obj;///where exception appeared	
-			
-			private:
-				
-				flushDiskExResolver resolvers[13];///functions - solvers			
+			FLUSHDISK_CLOSE,
+			FLUSHDISK_OPEN,
+			FLUSHDISK_READ,
+			FLUSHDISK_WRITE,
+			FLUSHDISK_READSTRING,
+			FLUSHDISK_ERASE,
+			FLUSHDISK_UNLINK,
+			FLUSHDISK_RENAME,
+			FLUSHDISK_LINK,
+			FLUSHDISK_SYMLINK,
+			FLUSHDISK_CHOWN,
+			FLUSHDISK_CHGRP,
+			FLUSHDISK_GETUSEROWNER,
+			FLUSHDISK_GETGROUPOWNER,
+			FLUSHDISK_TOUCH,
+			FLUSHDISK_MKDIR,
+			FLUSHDISK_CHMOD,
+			FLUSHDISK_RM,
+			FLUSHDISK_GETPERMISSIONS,
+			FLUSHDISK_GETFILETYPE,
+			FLUSHDISK_GETSIZE,
+			FLUSHDISK_GETACCTIME,
+			FLUSHDISK_GETMODTIME,
+			FLUSHDISK_GETFILEINFO,
+			FLUSHDISK_GETDIRINFO,
 		};
 	};
 

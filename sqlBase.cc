@@ -77,14 +77,6 @@ static 	__statements sqlAddSelArr[3] =
 
 //-------------------------------------------------------------------
 
-dodoBase *
-sqlBase::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 sqlBase::sqlBase() : preventFraming(false)
 {	
 	request.reserve(100);
@@ -201,12 +193,12 @@ sqlBase::selectCollect() const
 	{
 		temp.append(tools::implode(pre_fieldsNames,","));
 		pchar t_request = new char[temp.size()+pre_table.size()+14];	
-		if (t_request == 0)
-		#ifndef NO_EX
-			throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	
-		#else
-			;
-		#endif		
+		if (t_request == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SQLBASE,SQLBASE_SELECTCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+			#else
+				return ;
+			#endif		
 
 		sprintf(t_request,"select %s from %s",temp.c_str(),pre_table.c_str());		
 		
@@ -253,12 +245,12 @@ sqlBase::insertCollect() const
 		tempFNP.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
 	
 	pchar t_request = new char[temp.size()+tempFNP.size()+fieldsPart.size()+22];
-	if (t_request == 0)
-	#ifndef NO_EX
-		throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	
-	#else
-		;
-	#endif	
+	if (t_request == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_INSERTCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+		#else
+			return ;
+		#endif	
 	
 	sprintf(t_request,"insert %s into %s values %s",temp.c_str(),tempFNP.c_str(),fieldsPart.c_str());
 	
@@ -284,12 +276,12 @@ sqlBase::insertSelectCollect() const
 	std::string tempFPT = tempS + fieldsPartFrom;
 		
 	pchar t_request = new char[tempI.size()+pre_tableTo.size()+fieldsPartTo.size()+tempFPT.size()+pre_table.size()+35];
-	if (t_request == 0)
-	#ifndef NO_EX
-		throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	
-	#else
-		;
-	#endif	
+	if (t_request == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_INSERTSELECTCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+		#else
+			;
+		#endif	
 	
 	sprintf(t_request,"insert %s into %s (%s) select %s from %s",tempI.c_str(),pre_tableTo.c_str(),fieldsPartTo.c_str(),tempFPT.c_str(),pre_table.c_str());
 	
@@ -314,12 +306,12 @@ sqlBase::updateCollect() const
 	temp.append(pre_table);
 
 	pchar t_request = new char[temp.size()+setPart.size()+13];	
-	if (t_request == 0)
-	#ifndef NO_EX
-		throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	
-	#else
-		;
-	#endif
+	if (t_request == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_UPDATECOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+		#else
+			return ;
+		#endif
 	
 	sprintf(t_request,"update %s set %s",temp.c_str(),setPart.c_str());
 
@@ -337,12 +329,12 @@ sqlBase::delCollect() const
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 	
 	pchar t_request = new char[pre_table.size()+temp.size()+14];
-	if (t_request == 0)
-	#ifndef NO_EX
-		throw sqlBaseEx(SQLBASE_MEMORY_OVER, (sqlBase *)this,__LINE__,__FILE__);	
-	#else
-		;
-	#endif
+	if (t_request == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_DELCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+		#else
+			return ;
+		#endif
 	sprintf(t_request,"delete %s from %s",temp.c_str(),pre_table.c_str());
 	
 	request = t_request;
@@ -542,11 +534,11 @@ sqlBase::queryCollect() const
 	}
 	#ifndef FAST
 		if (request.size()==0)
-		#ifndef NO_EX
-			throw sqlBaseEx(SQLBASE_EMPTY_REQUEST, (sqlBase *)this,__LINE__,__FILE__);	
-		#else
-			return "";
-		#endif	
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SQLBASE,SQLBASE_QUERYCOLLECT,ERR_LIBDODO,SQLBASE_EMPTY_REQUEST,SQLBASE_EMPTY_REQUEST_STR,__LINE__,__FILE__);	
+			#else
+				return "";
+			#endif	
 	#endif
 	if (additionalActions)
 	{
@@ -560,6 +552,7 @@ sqlBase::queryCollect() const
 		additionalCollect(LIMIT,pre_limNumber);
 		additionalCollect(OFFSET,pre_limOffset);
 	}
+	
 	return request;
 }
 

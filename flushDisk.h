@@ -53,10 +53,10 @@ namespace dodo
 	
 	enum flushDiskOperationTypeEnum///for xExec
 	{
-		FLUSH_READ,
-		FLUSH_WRITE,
-		FLUSH_OPEN,
-		FLUSH_CLOSE
+		FLUSHDISK_OPER_READ,
+		FLUSHDISK_OPER_WRITE,
+		FLUSHDISK_OPER_OPEN,
+		FLUSHDISK_OPER_CLOSE
 	};
 	
 	///modes of open file:
@@ -153,14 +153,9 @@ namespace dodo
 	
 	class flushDisk : protected flush
 	{
-		friend class flushDiskEx;///class of exception
-		
 		public:
 		
-			dodoBase *getSelf();
-		
 			///constructors and destructors
-			flushDisk();///for exeptions in static members!
 			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path
 			virtual ~flushDisk();
 			

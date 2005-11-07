@@ -32,19 +32,6 @@
 
 	namespace dodo
 	{
-		/**
-		 * class to catch and resolve exceptions in flush
-		 * by default it does nothing
-		 * but u can define functions for resolving
-		 * for example to resolve problem with NOT_ENOUGH_FREE_SPACE:
-		 *		void someF(stringEx *strEx)
-		 *		{
-		 *			///do smth
-		 *		}
-		 *		setResolve(NOT_ENOUGH_FREE_SPACE, someF);
-		 *	u also can combine reasons with '|'
-		 *   if u want to reset to default use NULL;
-		 */	
 		
 		///reasons of exception
 		enum regexpExR
@@ -52,31 +39,12 @@
 			REGEXP_MEMORY_OVER = 1
 		};
 		
-		class regexp;
-		class regexpEx;
-			
-		typedef void (*regexpExResolver)(regexpEx*);
-		
-		class regexpEx : virtual public baseEx
+		#define REGEXP_MEMORY_OVER_STR "Not anough memmory"
+				
+		enum regexpFunctionsID
 		{
-			public:
-	
-				virtual baseEx *getSelf();
-				virtual int getExID();
-	
-				regexpEx(regexpExR reason, regexp *obj, unsigned long line, std::string file);
-				virtual ~regexpEx();
-				virtual void setResolve(regexpExR,regexpExResolver);///try to resolve by own function
-				virtual void resolve();//try to resolve
+			REGEXP_BOUNDMATCH,
 			
-				regexpExR reason;///reason
-			
-				regexp *obj;///where exception appeared	
-			
-			private:
-				
-				regexpExResolver resolvers[1];///functions - solvers
-				
 		};
 	};
 
