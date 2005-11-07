@@ -38,7 +38,7 @@
  * if u compiled library with exeptions u have to work with 'em;
  * if u compiled library without exeptions u have to work without 'em;
  */
-#define NO_EX
+//#define NO_EX
 
 /**
  * removes some checks
