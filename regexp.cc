@@ -94,7 +94,7 @@ regexp::boundMatch(const std::string &sample) const
 		#ifndef NO_EX
 			throw regexpEx(REGEXP_MEMORY_OVER,(regexp *)this,__LINE__,__FILE__);
 		#else
-			return ;
+			return false;
 		#endif
 		register int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 		if (rc<=0)

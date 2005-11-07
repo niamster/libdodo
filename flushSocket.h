@@ -35,6 +35,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 
 #ifdef WIN
 	#include <winsock.h>
@@ -84,6 +85,9 @@ namespace dodo
 	 	SOCKET_DONOT_USE_GATEWAY=8, 	
 	 	SOCKET_BROADCAST=16,///Permits  sending of broadcast messages, if this is supported by the protocol. 	
 	 	SOCKET_OOB_INLINE=32,///out-of-band(marked urgent) data keep inline in recieve operation
+	 	#ifdef SO_REUSEPORT
+		 	SOCKET_REUSE_PORT=512,
+		#endif
 	 };
 	 /**
 	  * send unsent messages in socket queue if close called
@@ -94,13 +98,38 @@ namespace dodo
 	 	SOCKET_HARD_CLOSE=128,///close returns immediately, and any unsent data is discarded.
 	 	SOCKET_WAIT_CLOSE=256,///close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	 };
+	 
+	 /**
+	  * info about host
+	  */
+	 struct __hostInfo
+	 {
+	 	std::string name;
+	 	stringArr aliases;
+	 	stringArr addresses;
+	 };
+	 
+	/**
+	 * info about service
+	 */
+	struct __servInfo
+	{
+	 	std::string name;
+	 	stringArr aliases;
+		int port;	
+	}; 
 	/**
 	 * class that takes ugly routine with sockets
 	 * 
 	 */
 	class flushSocket : protected flush
 	{
+		friend class flushSocketEx;
+		
 		public:
+		
+			dodoBase *getSelf();
+		
 			/**
 			 * constructors/destructors
 			 * for protocols see /etc/protocols (*nix) or man protocols
@@ -118,19 +147,60 @@ namespace dodo
 			 */
 			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for server
 			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for client
+			flushSocket();///only for exeptions in static members
 			~flushSocket();
 			
+			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							init();///initialize socket and defualt options; in/out buf size; in/out timeouts; u can change 'em before call it!
+			
 			/**
-			 * connect. 
+			 * connect. for client part
+			 * host - ip address; call getHostInfo to get address' for it.
 			 * first - net connection
 			 * second - local connectioin
 			 * if u use unix-socket - it will create it. 
 			 */
-			virtual bool connect(const std::string &host, unsigned int port);
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							connect(const std::string &host, unsigned int port);
 			#ifndef WIN
-				virtual bool connect(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								connect(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			#endif
 			
+			/**
+			 * connect. for server part
+			 * host - ip address; call getHostInfo to get address' for it.
+			 * first - net connection
+			 * second - local connectioin
+			 * if u use unix-socket - it will create it. 
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							bindNListen(const std::string &host, unsigned int port);///host - can be '*' -> any address
+			#ifndef WIN
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								bindNListen(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+			#endif			
 			/**
 			 * send, recieve
 			 */
@@ -146,16 +216,49 @@ namespace dodo
 			/**
 			 * set socket options.
 			 */
-			void setSockOption(socketOptionsEnum option, bool flag);
-			void setLingerSocketOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
-			 
-			void setInBufferSize(int bytes);///accept value to socket; size of socket buffer!
-			void setOutBufferSize(int bytes);///accept value to socket; size of socket buffer!
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setSockOption(socketOptionsEnum option, bool flag);
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setLingerSocketOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
+			
+			/**
+			 * The maximum buffer size for stream sockets is 262144 bytes
+			 */ 
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setInBufferSize(int bytes);///accept value to socket; size of socket buffer!
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setOutBufferSize(int bytes);///accept value to socket; size of socket buffer!
 			int getInBufferSize();
 			int getOutBufferSize();
-						
-			void setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
-			void setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+				
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
 			unsigned long getInTimeout();
 			unsigned long getOutTimeout();
 			
@@ -164,15 +267,42 @@ namespace dodo
 			 */
 			bool getSocketOpts(int option);
 			
+			/**
+			 * get info about given host
+			 */
+			static __hostInfo getHostInfo(std::string &host);
+			
+			/**
+			 * get info about service(port, protocol...)
+			 */
+			static __servInfo getServiceInfo(std::string &service, std::string &protocol);
+			static __servInfo getServiceInfo(int port, std::string &protocol);
+			 
 		private:				
+
+			#ifndef WIN
+			
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								mkUnixSocket(const std::string &path);
+								
+			#endif	
 
 			unsigned long inTimeout;///in microseconds
 			unsigned long outTimeout;///in microseconds
 			 
 			int inSocketBuffer;
 			int outSocketBuffer;
-			 
-			virtual void makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
+			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
 
 			/**
 			 * number of connections that can recieve

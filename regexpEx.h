@@ -49,7 +49,7 @@
 		///reasons of exception
 		enum regexpExR
 		{
-			REGEXP_MEMORY_OVER = 2
+			REGEXP_MEMORY_OVER = 1
 		};
 		
 		class regexp;

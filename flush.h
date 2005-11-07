@@ -31,21 +31,16 @@
 namespace dodo
 {
 
-	enum flushOperationTypeEnum
+	enum flushOperationTypeEnum///for xExec
 	{
-		FLUSH_NONE,
-		FLUSH_READ,
-		FLUSH_WRITE,
-		FLUSH_OPEN,
-		FLUSH_CLOSE,
-		FLUSH_OTHER_OPERATION /// can be used with derived classes as FLUSH_OTHER_OPERAION + FLUSH_DISK_ERASE, where FLUSH_DISK_ERASE = 1
+		FLUSH_NONE
 	};
 	
 	/**
 	 * preExec - before operation, postExec - after operation and before checks(can be exeptions).
 	 * flushOperationTypeEnum - such operations have handlers for xexec. position of preExec - before action, postExec - after action, after check of goodness of operation, so if error occured - postExec won't be called
 	 */
-	class flush : public xexec
+	class flush : public xexec, public dodoBase
 	{
 		public:
 		

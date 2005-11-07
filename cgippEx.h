@@ -49,7 +49,7 @@
 		///reasons of exception
 		enum cgippExR
 		{
-			CGIPP_MEMORY_OVER = 2
+			CGIPP_MEMORY_OVER = 1
 		};
 		
 		class cgipp;

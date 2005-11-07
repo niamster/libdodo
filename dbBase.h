@@ -260,9 +260,9 @@ namespace dodo
 	 */
 	enum fieldTypeEnum
 	{
-		_NULL = 2,
-		AUTO_INCREMENT = 4,
-		KEY = 8
+		_NULL = 1,
+		AUTO_INCREMENT,
+		KEY
 	};
 	/**
 	 * reference onfield
@@ -373,18 +373,18 @@ namespace dodo
 			 * fieldsVal - array of (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 		     */
-			virtual void insert(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames = __stringarry__);
+			virtual void insert(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames = __stringarray__);
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of array((char*)/(string))
 			 * fieldsNames - array of (char*)/(string)
 		     */
-			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarry__);			
+			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarray__);			
 			/**
 			 * table(To/From) - (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 			 */
-			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = __stringarry__, const std::string &where = __string__);
+			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = __stringarray__, const std::string &where = __string__);
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
@@ -549,7 +549,6 @@ namespace dodo
 			/**
 			 * backuped collected data
 			 */
-		private:
 		
 			mutable __collectedDataP backup;		
 			/**

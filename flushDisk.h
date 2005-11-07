@@ -51,6 +51,14 @@ namespace dodo
 {
 	#define FILE_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
 	
+	enum flushDiskOperationTypeEnum///for xExec
+	{
+		FLUSH_READ,
+		FLUSH_WRITE,
+		FLUSH_OPEN,
+		FLUSH_CLOSE
+	};
+	
 	///modes of open file:
 	enum flushDiskModesEnum
 	{
@@ -115,6 +123,21 @@ namespace dodo
 	};
 	
 	/**
+	 * info about single file
+	 */
+	struct __fileInfo
+	{
+		std::string name;
+		int perm;
+		int type;
+		long size;
+		int modTime;
+		int accTime;
+		int gid;
+		int uid;
+	};	
+	
+	/**
      * u may have two types of reading/writing 
 	 * 	1)persistant - file opens when class constructs or where function setPersistant(true) was called. if parameter is false, file closes.
 	 * 		if you want to work persistant with temp file, u should leave call constructor (bool,bool)
@@ -128,23 +151,16 @@ namespace dodo
 	 * 	for string size is one.
 	 */
 	
-	struct __fileInfo
-	{
-		std::string name;
-		int perm;
-		int type;
-		long size;
-		int modTime;
-		int accTime;
-		int gid;
-		int uid;
-	};
-	
 	class flushDisk : protected flush
 	{
 		friend class flushDiskEx;///class of exception
+		
 		public:
+		
+			dodoBase *getSelf();
+		
 			///constructors and destructors
+			flushDisk();///for exeptions in static members!
 			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path
 			virtual ~flushDisk();
 			
@@ -155,23 +171,53 @@ namespace dodo
 			 * if u want to create regular file, but pipe was created with the same name - false will be returned
 			 * if it's not temp file and PATH is not set - false will be returned
 			 */
-			virtual bool open(const std::string &path = __string__) const;///if opened previous file, closes it		
-		
-			virtual bool close() const;///closes file
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif			 
+							open(const std::string &path = __string__) const;///if opened previous file, closes it		
+			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							close() const;///closes file
 			/**
 			 * read functions. first argument - buffer, second - position
 			 * returns false if nothing was read
 			 */
-			virtual bool readString(std::string &data, unsigned long pos = 0) const;///reads to string; return false if eof
-			virtual bool read(void *data, unsigned long pos = 0) const;///reads to void*; return false if eof		
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							readString(std::string &data, unsigned long pos = 0) const;///reads to string; return false if eof
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							read(void *data, unsigned long pos = 0) const;///reads to void*; return false if eof		
 			
 			/**
 			 * write functions
 			 * first argument - buffer, second - position(if u want to add to end of the file set 'append' to true)
 			 * returns false if exists, copy to buffer content of the node
 			 */
-			virtual bool writeString(const std::string &, unsigned long pos = 0);///writes string
-			virtual bool write(const void * const , unsigned long pos = 0);///writes void*
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							writeString(const std::string &, unsigned long pos = 0);///writes string
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							write(const void * const , unsigned long pos = 0);///writes void*
 
 			/**
 			 * delete functions
@@ -179,7 +225,12 @@ namespace dodo
 			 * 
 			 * NOTE for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
 			 */
-			virtual bool erase(unsigned long pos);///erase on position
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							erase(unsigned long pos);///erase on position
 			
 			/**
 			 * delete file/dir
@@ -196,13 +247,43 @@ namespace dodo
 			/**
 			 * in next functions(if u compiled library with exceptions) i used empty flushDisk class copy to make them static and to use defined exception class
 			 */
-			static bool unlink(const std::string &path);///also empty directory
-			static bool rename(const std::string &oldPath, const std::string &newPath);
-			static bool touch(const std::string &path, int time=-1);///now by default
-			static bool mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);///see permissionModesEnum; use | to combine; force - if created already - nothing to say
-			static bool rm(const std::string &path);///recursive; now is not WIN compatible
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							unlink(const std::string &path);///also empty directory
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							rename(const std::string &oldPath, const std::string &newPath);
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							touch(const std::string &path, int time=-1);///now by default
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);///see permissionModesEnum; use | to combine; force - if created already - nothing to say
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							rm(const std::string &path);///recursive; now is not WIN compatible
 			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
-			static bool chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
 			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
 			
 			static long getSize(const std::string &path);///in bytes; if no such file or directory - will return -1!
@@ -211,17 +292,39 @@ namespace dodo
 			static int getModTime(const std::string &path);///timestemp
 			
 			#ifndef WIN
-				static bool link(const std::string &oldPath, const std::string &newPath);
-				static bool symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)
-				static bool chown(const std::string &path, int uid);
-				static bool chgrp(const std::string &path, int gid);
+			
+				#ifndef NO_EX
+					static void 
+				#else
+					static bool 
+				#endif
+								link(const std::string &oldPath, const std::string &newPath);
+				#ifndef NO_EX
+					static void 
+				#else
+					static bool 
+				#endif
+								symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)
+				#ifndef NO_EX
+					static void 
+				#else
+					static bool 
+				#endif
+								chown(const std::string &path, int uid);
+				#ifndef NO_EX
+					static void 
+				#else
+					static bool 
+				#endif
+								chgrp(const std::string &path, int gid);
 				
 				static int getUserOwner(const std::string &path);
 				static int getGroupOwner(const std::string &path);
+				
 			#endif
 			
-			static bool getFileInfo(const std::string &path, __fileInfo &file);///if no such file - false will be returned
-			static bool getDirInfo(const std::string &path, std::vector<__fileInfo> &dir);///if it'not a dir - false will be returned and nothing write to 'dir' paramether!;now is not WIN compatible
+			static __fileInfo getFileInfo(const std::string &path);///if no such file - empty will be returned
+			static std::vector<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!;now is not WIN compatible
 			
 			bool over;///indicates whether overright; for files,tmp_files only
 			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only

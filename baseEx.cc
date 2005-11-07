@@ -28,9 +28,17 @@
 
 	using namespace dodo;
 	
-	baseEx::baseEx(unsigned long a_line, 
+	baseEx::baseEx(unsigned long functionID, 
+					unsigned long errnoSource, 
+					unsigned long a_errno, 
+					std::string a_errstr,
+					unsigned long a_line, 
 					std::string a_file) : line(a_line),
-									file(a_file)
+									file(a_file),
+									errno(a_errno),
+									errstr(a_errstr),
+									funcID(functionID),
+									errnoSource(errnoSource)
 	{
 		state = UNKNOWN;
 	}

@@ -45,7 +45,7 @@ namespace dodo
 {
 	
 	/**
-	 * 
+	 * begin and of part of matched data
 	 */
 	struct __regexMatch
 	{
@@ -88,13 +88,13 @@ namespace dodo
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
-	 		bool match(const std::string &pattern, const std::string &sample, stringArr &pockets = __stringarry__) const;
+	 		bool match(const std::string &pattern, const std::string &sample, stringArr &pockets = __stringarray__) const;
 	 		/**
 	 		 * matches and set matched pieces in '()' to pockets usin' pattern from `match` or return false; faster than usage `exec` for some times with the same pattern
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
-	 		bool reMatch(const std::string &sample, stringArr &pockets = __stringarry__) const;
+	 		bool reMatch(const std::string &sample, stringArr &pockets = __stringarray__) const;
 	 		/**
 	 		 * replaces in sample from pieces usin' pattern
 	 		 * if amount of pockets more than replacements  - replacemet will stop

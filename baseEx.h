@@ -34,6 +34,9 @@
 	{	
 		///base class for excaptions. it contais basic stats and have to be derived
 		
+		/**
+		 * ID's of exHandlers
+		 */
 		enum exIdEnum
 		{
 			BASE_EX,
@@ -43,6 +46,17 @@
 			REGEXP_EX,
 			FLUSHDISK_EX,
 			FLUSHSOCKET_EX
+		};
+		
+		/**
+		 * WHERE number of error was got.
+		 */
+		enum errnoSourceEnum
+		{
+			ERR_LIBDODO,
+			ERR_ERRNO,
+			ERR_MYSQL,
+			ERR_H_ERRNO
 		};
 		
 		class baseEx
@@ -60,8 +74,14 @@
 				virtual baseEx *getSelf();
 				virtual int getExID();		
 				
-				baseEx(unsigned long line, std::string file);
+				baseEx(unsigned long functionID, unsigned long errnoSource, unsigned long errno, std::string errstr, unsigned long line, std::string file);
 			
+				unsigned long funcID;
+				unsigned long errnoSource;			
+			
+				unsigned long errno;
+				std::string errstr;
+				
 				unsigned long line;///line, where problem detected
 				std::string file;
 				baseExStat state;///state of problem

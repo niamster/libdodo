@@ -65,6 +65,9 @@
 		resolvers[10] = &dummyFlushDiskResolve;
 		resolvers[11] = &dummyFlushDiskResolve;
 		resolvers[12] = &dummyFlushDiskResolve;
+		resolvers[13] = &dummyFlushDiskResolve;
+		resolvers[14] = &dummyFlushDiskResolve;
+		resolvers[15] = &dummyFlushDiskResolve;
 	}
 	
 	//-------------------------------------------------------------------
@@ -125,7 +128,13 @@
 		if ((FLUSHSOCKET_SYSTEM_FAULT & a_reason) == FLUSHSOCKET_SYSTEM_FAULT)
 			resolvers[11] = a_resF;
 		if ((FLUSHSOCKET_NOT_A_SOCKET & a_reason) == FLUSHSOCKET_NOT_A_SOCKET)
-			resolvers[12] = a_resF;
+			resolvers[12] = a_resF;		
+		if ((FLUSHSOCKET_NOT_FOUND & a_reason) == FLUSHSOCKET_NOT_FOUND)
+			resolvers[13] = a_resF;
+		if ((FLUSHSOCKET_NAMESERVER_ERR & a_reason) == FLUSHSOCKET_NAMESERVER_ERR)
+			resolvers[14] = a_resF;
+		if ((FLUSHSOCKET_UNKNOWN & a_reason) == FLUSHSOCKET_UNKNOWN)
+			resolvers[16] = a_resF;
 	}
 	
 	//-------------------------------------------------------------------
@@ -173,6 +182,15 @@
 				break;			
 			case FLUSHSOCKET_NOT_A_SOCKET:
 				resolvers[12](this);
+				break;			
+			case FLUSHSOCKET_NOT_FOUND:
+				resolvers[13](this);
+				break;			
+			case FLUSHSOCKET_NAMESERVER_ERR:
+				resolvers[14](this);
+				break;			
+			case FLUSHSOCKET_UNKNOWN:
+				resolvers[15](this);
 				break;
 		}
 	}

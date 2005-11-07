@@ -57,9 +57,10 @@ namespace dodo
 	static const std::string __string__ = "";
 	
 	typedef std::vector<std::string> stringArr;
-	static stringArr __stringarry__;
+	static stringArr __stringarray__;
 	
 	typedef std::map<std::string, std::string> assocArr;
+	static assocArr __assocarray__;
 
 	typedef std::string (*escape)(const std::string &);
 	

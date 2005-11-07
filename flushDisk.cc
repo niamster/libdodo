@@ -27,7 +27,23 @@
 using namespace dodo;
 
 
-flushDisk dummyDiskEx(REG_FILE);///to throw ex in static members
+flushDisk dummyDiskEx;///to throw ex in static members
+
+//-------------------------------------------------------------------
+
+dodoBase *
+flushDisk::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
+flushDisk::flushDisk()
+{
+}
+
+//-------------------------------------------------------------------
 
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
 					const std::string &a_path) : mode(READ_WRITE), 
@@ -47,7 +63,11 @@ flushDisk::~flushDisk()
 
 //-------------------------------------------------------------------
 
-bool
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
 flushDisk::close() const 
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
@@ -75,18 +95,11 @@ flushDisk::close() const
 				case EPIPE:
 				case ENXIO:
 					throw flushDiskEx(FLUSHDISK_IOERROR, (flushDisk *)this,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN, (flushDisk *)this,__LINE__,__FILE__);
 			}
 		#else
-			switch (ret)
-			{
-				case EFBIG:
-				case EINTR:
-				case ENOSPC:
-				case EIO:
-				case EPIPE:
-				case ENXIO:
-					return false;
-			}			
+			return false;
 		#endif		
 		
 		#ifndef FLUSH_DISK_WO_XEXEC
@@ -95,11 +108,19 @@ flushDisk::close() const
 					
 		opened = false;
 	}
+	
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------
 
-bool
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
 flushDisk::open(const std::string &a_path) const
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
@@ -131,7 +152,11 @@ flushDisk::open(const std::string &a_path) const
 	else
 	{
 		if (path.size() == 0)
-			return false;
+			#ifndef NO_EX
+				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,(flushDisk *)this,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
 		else
 		{
 			#ifndef WIN
@@ -161,19 +186,11 @@ flushDisk::open(const std::string &a_path) const
 						throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,(flushDisk *)this,__LINE__,__FILE__);	
 					case ENOMEM:
 						throw flushDiskEx(FLUSHDISK_MEMORY_OVER,(flushDisk *)this,__LINE__,__FILE__);
+					default:
+						throw flushDiskEx(FLUSHDISK_UNKNOWN, (flushDisk *)this,__LINE__,__FILE__);
 				}
 			#else
-				switch (errno)
-				{					
-					case EACCES:
-					case EIO:
-					case EINTR:
-					case ENAMETOOLONG:
-					case ELOOP:
-					case ENOTDIR:
-					case ENOMEM:
-						return false;					
-				}							
+				return false;							
 			#endif
 			else
 				exists = true;
@@ -181,47 +198,40 @@ flushDisk::open(const std::string &a_path) const
 				if (fileType == FIFO_FILE)
 				{
 					if (exists && !S_ISFIFO(st.st_mode))
-						return false;
+						#ifndef NO_EX
+							throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,(flushDisk *)this,__LINE__,__FILE__);
+						#else
+							return false;
+						#endif
 					if (!exists)
 						if (mkfifo(path.c_str(),flushDisk::getPermission(FILE_PERM)) == -1)
-						#ifndef NO_EX
-							switch (errno)
-							{
-								case EACCES:
-									throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,(flushDisk *)this,__LINE__,__FILE__);
-								case EIO:
-									throw flushDiskEx(FLUSHDISK_IOERROR,(flushDisk *)this,__LINE__,__FILE__);
-								case EINTR:
-									throw flushDiskEx(FLUSHDISK_INTERRUPTED, (flushDisk *)this,__LINE__,__FILE__);
-								case ENOSPC:
-								case ENOMEM:
-									throw flushDiskEx(FLUSHDISK_NOT_ENOUGH_FREE_SPACE,(flushDisk *)this,__LINE__,__FILE__);
-								case EMFILE:
-								case ENFILE:
-									throw flushDiskEx(FLUSHDISK_TOO_MANY_OPEN_FILE,(flushDisk *)this,__LINE__,__FILE__);
-								case ENAMETOOLONG:
-									throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,(flushDisk *)this,__LINE__,__FILE__);
-								case ENOENT:
-									throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,(flushDisk *)this,__LINE__,__FILE__);	
-								case EROFS:
-									throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,(flushDisk *)this,__LINE__,__FILE__);		
-							}
-						#else
-							switch (errno)
-							{
-								case EROFS:
-								case EACCES:
-								case EIO:
-								case EINTR:
-								case ENOSPC:
-								case ENOMEM:
-								case EMFILE:
-								case ENFILE:
-								case ENAMETOOLONG:
-								case ENOENT:
-									return false;					
-							}
-						#endif					
+							#ifndef NO_EX
+								switch (errno)
+								{
+									case EACCES:
+										throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,(flushDisk *)this,__LINE__,__FILE__);
+									case EIO:
+										throw flushDiskEx(FLUSHDISK_IOERROR,(flushDisk *)this,__LINE__,__FILE__);
+									case EINTR:
+										throw flushDiskEx(FLUSHDISK_INTERRUPTED, (flushDisk *)this,__LINE__,__FILE__);
+									case ENOSPC:
+									case ENOMEM:
+										throw flushDiskEx(FLUSHDISK_NOT_ENOUGH_FREE_SPACE,(flushDisk *)this,__LINE__,__FILE__);
+									case EMFILE:
+									case ENFILE:
+										throw flushDiskEx(FLUSHDISK_TOO_MANY_OPEN_FILE,(flushDisk *)this,__LINE__,__FILE__);
+									case ENAMETOOLONG:
+										throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,(flushDisk *)this,__LINE__,__FILE__);
+									case ENOENT:
+										throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,(flushDisk *)this,__LINE__,__FILE__);	
+									case EROFS:
+										throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,(flushDisk *)this,__LINE__,__FILE__);	
+									default:
+										throw flushDiskEx(FLUSHDISK_UNKNOWN, (flushDisk *)this,__LINE__,__FILE__);	
+								}
+							#else
+								return false;		
+							#endif					
 				}
 				else
 			#endif
@@ -230,7 +240,11 @@ flushDisk::open(const std::string &a_path) const
 				#else
 					if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && st.st_mode!=_S_IFREG )
 				#endif
-					return false;
+						#ifndef NO_EX
+							throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,(flushDisk *)this,__LINE__,__FILE__);
+						#else
+							return false;
+			#endif
 			switch (mode)
 			{
 				case READ_WRITE:
@@ -269,23 +283,12 @@ flushDisk::open(const std::string &a_path) const
 			case ENOENT:
 				throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,(flushDisk *)this,__LINE__,__FILE__);	
 			case EROFS:
-				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,(flushDisk *)this,__LINE__,__FILE__);		
+				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,(flushDisk *)this,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN, (flushDisk *)this,__LINE__,__FILE__);		
 		}
 	#else
-		switch (errno)
-		{
-			case EROFS:
-			case EACCES:
-			case EIO:
-			case EINTR:
-			case ENOSPC:
-			case ENOMEM:
-			case EMFILE:
-			case ENFILE:
-			case ENAMETOOLONG:
-			case ENOENT:
-				return false;					
-		}			
+		return false;
 	#endif
 	
 	#ifndef FLUSH_DISK_WO_XEXEC
@@ -293,11 +296,19 @@ flushDisk::open(const std::string &a_path) const
 	#endif
 		
 	opened = true;
+	
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
 flushDisk::read(void *a_void, 
 				unsigned long a_pos) const
 {
@@ -341,20 +352,12 @@ flushDisk::read(void *a_void,
 			case ENOMEM:
 				throw flushDiskEx(FLUSHDISK_NOT_ENOUGH_FREE_SPACE,(flushDisk *)this,__LINE__,__FILE__);
 			case EOVERFLOW:
-				throw flushDiskEx(FLUSHDISK_FILE_TOO_BIG,(flushDisk *)this,__LINE__,__FILE__);			
+				throw flushDiskEx(FLUSHDISK_FILE_TOO_BIG,(flushDisk *)this,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN, (flushDisk *)this,__LINE__,__FILE__);			
 		}
-	#else
-		switch (errno)
-		{
-			case EIO:
-			case EINTR:
-			case ENOMEM:
-			case EOVERFLOW:
-				if (!persistant)
-					close();				
-				return false;
-		}
-	
+	#else	
+		return false;
 	#endif
 	
 	#ifndef FLUSH_DISK_WO_XEXEC		
@@ -364,26 +367,44 @@ flushDisk::read(void *a_void,
 	if (bufferize)
 		buffer.assign((char *)a_void,inSize);
 	
-	return true;	
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
 flushDisk::readString(std::string &a_str, 
 				unsigned long a_pos) const
 {
 	register char *data = new char[inSize+1];
 	memset(data,0,inSize);
-	register bool result = this->read((void *)data,a_pos);
+
+	#ifdef NO_EX
+		register bool result = 
+	#endif
+	
+	this->read((void *)data,a_pos);
 	a_str.assign(data,inSize);
 	delete [] data;
-	return result;
+	
+	#ifdef NO_EX	
+		return result;
+	#endif
 }
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
 flushDisk::writeString(const std::string &a_buf, 
 				unsigned long a_pos)
 {	
@@ -392,7 +413,11 @@ flushDisk::writeString(const std::string &a_buf,
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
 flushDisk::write(const void *const a_buf, 
 				unsigned long a_pos)
 {	
@@ -430,7 +455,11 @@ flushDisk::write(const void *const a_buf,
 		}
 			
 		if (!over && read_bytes != 0)
-			return false;
+			#ifndef NO_EX
+				throw flushDiskEx(FLUSHDISK_CANNOT_OVEWRITE, this,__LINE__,__FILE__);	
+			#else
+				return false;
+			#endif
 		
 		if (append)
 			fseek(file,0,SEEK_END);
@@ -467,18 +496,12 @@ flushDisk::write(const void *const a_buf,
 			case EOVERFLOW:
 				throw flushDiskEx(FLUSHDISK_FILE_TOO_BIG,this,__LINE__,__FILE__);	
 			case EROFS:
-				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,this,__LINE__,__FILE__);		
+				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,this,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN, (flushDisk *)this,__LINE__,__FILE__);		
 		}	
 	#else
-		switch (errno)
-		{
-			case EIO:
-			case EINTR:
-			case ENOMEM:
-			case EOVERFLOW:	
-			case EROFS:
-				return false;				
-		}		
+		return false;
 	#endif
 	
 	if (fflush(file) != 0)
@@ -496,31 +519,30 @@ flushDisk::write(const void *const a_buf,
 			case EFBIG:
 				throw flushDiskEx(FLUSHDISK_FILE_TOO_BIG,this,__LINE__,__FILE__);	
 			case EROFS:
-				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,this,__LINE__,__FILE__);		
+				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,this,__LINE__,__FILE__);	
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN, (flushDisk *)this,__LINE__,__FILE__);	
 		}	
 	#else
-		switch (errno)
-		{
-			case EIO:
-			case EAGAIN:
-			case EINTR:
-			case ENOSPC:
-			case EFBIG:	
-			case EROFS:
-				return false;				
-		}		
+		return false;
 	#endif
 	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);
 	#endif
 			
-	return true;	
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------
 
-bool
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
 flushDisk::erase(unsigned long a_pos)
 {
 	register char *empty = new char;
@@ -531,15 +553,26 @@ flushDisk::erase(unsigned long a_pos)
 			return false;
 		#endif		
 
-	register bool ret = this->write(empty,a_pos);
+	#ifdef NO_EX
+		register bool result = 
+	#endif
+	
+	this->write(empty,a_pos);
+	
 	delete empty;
 	
-	return ret;
+	#ifdef NO_EX
+		return result;
+	#endif
 }
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
 flushDisk::unlink(const std::string &path)
 {
 	register int status(0);
@@ -561,16 +594,11 @@ flushDisk::unlink(const std::string &path)
 					throw flushDiskEx(FLUSHDISK_INTERRUPTED, &dummyDiskEx,__LINE__,__FILE__);
 				case ENAMETOOLONG:
 					throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
 			}	
 		#else
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case EACCES:
-				case ENAMETOOLONG:
-					return false;				
-			}		
+			return false;
 		#endif
 	
 	#ifndef WIN
@@ -612,40 +640,35 @@ flushDisk::unlink(const std::string &path)
 			case ENOTEMPTY:
 				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
 			case EROFS:
-				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);		
+				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);		
 		}
 	#else
-		switch (errno)
-		{
-			case EACCES:
-			case EPERM:
-			case EIO:
-			case EINTR:
-			case ENOSPC:
-			case ENOMEM:
-			case EMFILE:
-			case ENFILE:
-			case ENAMETOOLONG:
-			case ENOENT:
-			case EISDIR:
-			case ELOOP:
-			case ENOTDIR:
-			case EROFS:
-				return false;				
-		}		
+		return false;
 	#endif
-		
-	return true;
+			
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
 flushDisk::rename(const std::string &oldPath, 
 				const std::string &newPath)
 {
 	if (::rename(oldPath.c_str(),newPath.c_str()) != -1)
-		return true;
+		#ifdef NO_EX
+			return true;
+		#else
+			return ;
+		#endif
 		
 	#ifndef NO_EX
 		switch (errno)
@@ -667,25 +690,16 @@ flushDisk::rename(const std::string &oldPath,
 			case ENOENT:
 				throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummyDiskEx,__LINE__,__FILE__);	
 			case EROFS:
-				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);		
+				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);		
 		}	
 	#else
-		switch (errno)
-		{
-			case EIO:
-			case EINTR:
-			case EACCES:
-			case ENOMEM:
-			case ENOSPC:
-			case EMFILE:
-			case ENFILE:
-			case ENAMETOOLONG:
-			case EOVERFLOW:
-			case ENOENT:
-			case ENOTDIR:
-			case EROFS:
-				return false;				
-		}		
+		return false;
+	#endif	
+	
+	#ifdef NO_EX
+		return true;
 	#endif			
 }
 
@@ -693,12 +707,20 @@ flushDisk::rename(const std::string &oldPath,
 
 #ifndef WIN
 
-	bool 
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif  
 	flushDisk::link(const std::string &oldPath, 
 					const std::string &newPath)
 	{
 		if  (::link(oldPath.c_str(),newPath.c_str()) != -1)
-			return true;
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif
 			
 		#ifndef NO_EX
 			switch (errno)
@@ -724,31 +746,25 @@ flushDisk::rename(const std::string &oldPath,
 						throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
 				case EROFS:
 					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
 			}	
 		#else
-			switch (errno)
-			{
-				case EEXIST:
-				case EIO:
-				case EINTR:
-				case EACCES:
-				case ENOMEM:
-				case ENOSPC:
-				case EMFILE:
-				case ENFILE:
-				case ENAMETOOLONG:
-				case EOVERFLOW:
-				case ENOTDIR:
-				case ENOENT:
-				case EROFS:
-					return false;				
-			}		
+			return false;
+		#endif		
+		
+		#ifdef NO_EX
+			return true;
 		#endif	
 	}
 	
 	//-------------------------------------------------------------------
 	
-	bool 
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif  
 	flushDisk::symlink(const std::string &oldPath, 
 						const std::string &newPath, 
 						bool force)
@@ -757,8 +773,12 @@ flushDisk::rename(const std::string &oldPath,
 		{
 			struct stat st;
 			if (::lstat(newPath.c_str(),&st) != -1)
-				if (!S_ISLNK(st.st_mode))
-					return false;
+				if (!S_ISLNK(st.st_mode))			
+					#ifdef NO_EX
+						return true;
+					#else
+						throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
+					#endif
 				else
 					if (::unlink(newPath.c_str()) == -1)
 					#ifndef NO_EX
@@ -788,31 +808,20 @@ flushDisk::rename(const std::string &oldPath,
 							case ENOTEMPTY:
 								throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
 							case EROFS:
-								throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);		
+								throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+							default:
+								throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);			
 						}
 					#else
-						switch (errno)
-						{
-							case EACCES:
-							case EPERM:
-							case EIO:
-							case EINTR:
-							case ENOSPC:
-							case ENOMEM:
-							case EMFILE:
-							case ENFILE:
-							case ENAMETOOLONG:
-							case ENOENT:
-							case EISDIR:
-							case ELOOP:
-							case ENOTDIR:
-							case EROFS:
-								return false;				
-						}		
+						return false;
 					#endif				
 		}
 		if (::symlink(oldPath.c_str(),newPath.c_str()) != -1)
-			return true;
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif
 			
 		#ifndef NO_EX
 			switch (errno)
@@ -837,36 +846,35 @@ flushDisk::rename(const std::string &oldPath,
 						throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
 				case EROFS:
 					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
 			}	
 		#else
-			switch (errno)
-			{
-				case EEXIST:
-				case EIO:
-				case EINTR:
-				case EACCES:
-				case ENOMEM:
-				case ENOSPC:
-				case EMFILE:
-				case ENFILE:
-				case ENAMETOOLONG:
-				case EOVERFLOW:
-				case ENOTDIR:
-				case ENOENT:
-				case EROFS:
-					return false;				
-			}		
+			return false;
+		#endif	
+		
+		#ifdef NO_EX
+			return true;
 		#endif		
 	}					
 	
 	//-------------------------------------------------------------------
 	
-	bool 
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif  
 	flushDisk::chown(const std::string &path, 
 					int uid)
 	{
 		if (::chown(path.c_str(),uid,-1)!=-1)
-			return true;
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif
+			
 		#ifndef NO_EX
 			switch (errno)
 			{
@@ -887,35 +895,36 @@ flushDisk::rename(const std::string &oldPath,
 				case ENOENT:
 					throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummyDiskEx,__LINE__,__FILE__);	
 				case EROFS:
-					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);		
+					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);			
 			}	
 		#else
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case EACCES:
-				case ENOMEM:
-				case ENOSPC:
-				case EMFILE:
-				case ENFILE:
-				case ENAMETOOLONG:
-				case EOVERFLOW:
-				case ENOENT:
-				case EROFS:
-					return false;				
-			}		
-		#endif		
+			return false;
+		#endif	
+		
+		#ifdef NO_EX
+			return true;
+		#endif			
 	}				
 	
 	//-------------------------------------------------------------------
 	
-	bool 
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif  
 	flushDisk::chgrp(const std::string &path, 
 					int gid)
 	{
 		if (::chown(path.c_str(),-1,gid) != -1)
-			return true;
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif
+			
 		#ifndef NO_EX
 			switch (errno)
 			{
@@ -937,23 +946,15 @@ flushDisk::rename(const std::string &oldPath,
 					throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummyDiskEx,__LINE__,__FILE__);
 				case EROFS:
 					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
 			}	
 		#else
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case EACCES:
-				case ENOMEM:
-				case ENOSPC:
-				case EMFILE:
-				case ENFILE:
-				case ENAMETOOLONG:
-				case EOVERFLOW:
-				case ENOENT:
-				case EROFS:
-					return false;				
-			}		
+			return false;
+		#endif
+		
+		#ifdef NO_EX
+			return true;
 		#endif		
 	}
 	
@@ -980,23 +981,13 @@ flushDisk::rename(const std::string &oldPath,
 					case ENOTDIR:
 						throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 					case ENOMEM:
-						throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+						throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);	
 				}
 			#else
-				switch (errno)
-				{					
-					case EACCES:
-					case EIO:
-					case EINTR:
-					case ENAMETOOLONG:
-					case ELOOP:
-					case ENOTDIR:
-					case ENOMEM:
-						return -1;					
-				}							
+				return -1;		
 			#endif
-			return -1;
 		}
+		
 		return st.st_uid;
 	}
 	
@@ -1026,27 +1017,21 @@ flushDisk::rename(const std::string &oldPath,
 						throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
 				}
 			#else
-				switch (errno)
-				{					
-					case EACCES:
-					case EIO:
-					case EINTR:
-					case ENAMETOOLONG:
-					case ELOOP:
-					case ENOTDIR:
-					case ENOMEM:
-						return -1;					
-				}							
+				return -1;				
 			#endif
-			return -1;
 		}
+		
 		return st.st_gid;		
 	}
 #endif
 						
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif  
 flushDisk::touch(const std::string &path,
 				 int a_time)
 {
@@ -1055,7 +1040,12 @@ flushDisk::touch(const std::string &path,
 	utimbuf temp = {a_time, a_time};
 	
 	if (::utime(path.c_str(),&temp)!=-1)
-		return true;
+		#ifdef NO_EX
+			return true;
+		#else
+			return ;
+		#endif
+			
 	#ifndef NO_EX
 		switch (errno)
 		{
@@ -1069,37 +1059,93 @@ flushDisk::touch(const std::string &path,
 				throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummyDiskEx,__LINE__,__FILE__);
 			case EROFS:
 				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
 		}	
 	#else
-		switch (errno)
-		{
-			case EINTR:
-			case EACCES:
-			case ENAMETOOLONG:
-			case ENOENT:
-			case EROFS:
-				return false;				
-		}		
+		return false;
+	#endif
+		
+	#ifdef NO_EX
+		return true;
 	#endif		
 }
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif  
 flushDisk::mkdir(const std::string &path, 
 				int permissions,
 				bool force)
 {
 	#ifndef WIN
 		if (::mkdir(path.c_str(),getPermission(permissions))!=-1)
-			return true;
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif
 	#else
 		if (::_mkdir(path.c_str(),getPermission(permissions))!=-1)
-			return true;
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif
 	#endif
 		
-	if ( (errno == EEXIST) && force )
-		return true;
+	if ( force && (errno == EEXIST) )
+	{
+		#ifndef WIN
+			struct stat st;
+			if (::lstat(path.c_str(),&st) == -1)
+		#else
+			struct _stat st;
+			if (::_stat(path.c_str(),&st) == -1)	
+		#endif
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EACCES:
+					throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummyDiskEx,__LINE__,__FILE__);
+				case EIO:
+					throw flushDiskEx(FLUSHDISK_IOERROR,&dummyDiskEx,__LINE__,__FILE__);
+				case EINTR:
+					throw flushDiskEx(FLUSHDISK_INTERRUPTED, &dummyDiskEx,__LINE__,__FILE__);
+				case ENAMETOOLONG:
+					throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
+				case ELOOP:
+				case ENOTDIR:
+					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
+				case ENOMEM:
+					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
+			}
+		#else
+			return false;		
+		#endif
+		
+		#ifndef WIN
+			if (S_ISDIR(st.st_mode))
+				#ifdef NO_EX
+					return true;
+				#else
+					return ;
+				#endif
+		#else
+			if(st.st_mode!=_S_IFREG)		
+				#ifdef NO_EX
+					return true;
+				#else
+					return ;
+				#endif
+		#endif
+	}
 		
 	#ifndef NO_EX
 		switch (errno)
@@ -1124,38 +1170,41 @@ flushDisk::mkdir(const std::string &path,
 				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
 			case EEXIST:
 				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
 		}	
 	#else
-		switch (errno)
-		{
-			case EEXIST:
-			case EIO:
-			case EINTR:
-			case EACCES:
-			case ENOMEM:
-			case ENOSPC:
-			case EMFILE:
-			case ENFILE:
-			case ENAMETOOLONG:
-			case EOVERFLOW:
-			case ENOENT:
-			case EROFS:
-				return false;				
-		}		
-	#endif		
+		return false;
+	#endif
+	
+	#ifdef NO_EX
+		return true;
+	#endif			
 }
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif  
 flushDisk::chmod(const std::string &path, int permissions)
 {
 	#ifndef WIN
 		if (::chmod(path.c_str(),getPermission(permissions))!=-1)
-			return true;
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif
 	#else
 		if (::_chmod(path.c_str(),getPermission(permissions))!=-1)
-			return true;	
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif	
 	#endif
 	
 	#ifndef NO_EX
@@ -1179,23 +1228,15 @@ flushDisk::chmod(const std::string &path, int permissions)
 				throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummyDiskEx,__LINE__,__FILE__);
 			case EROFS:
 				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
 		}	
 	#else
-		switch (errno)
-		{
-			case EIO:
-			case EINTR:
-			case EACCES:
-			case ENOMEM:
-			case ENOSPC:
-			case EMFILE:
-			case ENFILE:
-			case ENAMETOOLONG:
-			case EOVERFLOW:
-			case ENOENT:
-			case EROFS:
-				return false;				
-		}		
+		return false;
+	#endif	
+	
+	#ifdef NO_EX
+		return true;
 	#endif		
 }
 
@@ -1255,7 +1296,11 @@ flushDisk::getPermission(int permission)
 
 //-------------------------------------------------------------------
 
-bool 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
 flushDisk::rm(const std::string &path)
 {
 	struct stat st;
@@ -1276,20 +1321,13 @@ flushDisk::rm(const std::string &path)
 				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 			case ENOMEM:
 				throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);	
 		}
 	#else
-		switch (errno)
-		{					
-			case EACCES:
-			case EIO:
-			case EINTR:
-			case ENAMETOOLONG:
-			case ELOOP:
-			case ENOTDIR:
-			case ENOMEM:
-				return false;					
-		}							
-	#endif		
+		return false;	
+	#endif	
+		
 	if (!S_ISDIR(st.st_mode))
 		if (::unlink(path.c_str()) == -1)
 		{
@@ -1317,28 +1355,19 @@ flushDisk::rm(const std::string &path)
 					case ENOTDIR:
 						throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
 					case EROFS:
-						throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);		
+						throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+					default:
+						throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);			
 				}
 			#else
-				switch (errno)
-				{
-					case EACCES:
-					case EPERM:
-					case EIO:
-					case EINTR:
-					case ENOSPC:
-					case ENOMEM:
-					case EMFILE:
-					case ENFILE:
-					case ENAMETOOLONG:
-					case EISDIR:
-					case ELOOP:
-					case ENOTDIR:
-					case EROFS:
-						return false;				
-				}		
-			#endif
-			return true;
+				return false;
+			#endif			
+			
+			#ifdef NO_EX
+				return true;
+			#else
+				return ;
+			#endif	
 		}
 	
 	DIR *directory = opendir(path.c_str());
@@ -1364,25 +1393,22 @@ flushDisk::rm(const std::string &path)
 					throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
 				case EROFS:
 					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
-				case ENOENT:
-					return true;
+				case ENOENT:			
+					#ifdef NO_EX
+						return true;
+					#else
+						return ;
+					#endif
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);		
 			}	
 		#else
 			switch (errno)
 			{
-				case EIO:
-				case EINTR:
-				case EACCES:
-				case ENOMEM:
-				case ENOSPC:
-				case EMFILE:
-				case ENFILE:
-				case ENAMETOOLONG:
-				case EOVERFLOW:
-				case EROFS:
-					return false;
 				case ENOENT:
-					return true;				
+					return true;
+				default:
+					return false;				
 			}		
 		#endif			
 	}
@@ -1416,19 +1442,11 @@ flushDisk::rm(const std::string &path)
 					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 				case ENOMEM:
 					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
 			}
 		#else
-			switch (errno)
-			{					
-				case EACCES:
-				case EIO:
-				case EINTR:
-				case ENAMETOOLONG:
-				case ELOOP:
-				case ENOTDIR:
-				case ENOMEM:
-					return false;					
-			}							
+			return false;		
 		#endif
 		if (S_ISDIR(st.st_mode))
 			flushDisk::rm(attached.c_str());
@@ -1458,26 +1476,12 @@ flushDisk::rm(const std::string &path)
 					case ENOTDIR:
 						throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);
 					case EROFS:
-						throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);		
+						throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+					default:
+						throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);		
 				}
 			#else
-				switch (errno)
-				{
-					case EACCES:
-					case EPERM:
-					case EIO:
-					case EINTR:
-					case ENOSPC:
-					case ENOMEM:
-					case EMFILE:
-					case ENFILE:
-					case ENAMETOOLONG:
-					case EISDIR:
-					case ELOOP:
-					case ENOTDIR:
-					case EROFS:
-						return false;				
-				}		
+				return false;
 			#endif
 	}
 	if (::rmdir(path.c_str()) == -1)
@@ -1499,26 +1503,17 @@ flushDisk::rm(const std::string &path)
 			case ENAMETOOLONG:
 				throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
 			case EROFS:
-				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);		
+				throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);		
 		}	
 	#else
-		switch (errno)
-		{
-			case EIO:
-			case EINTR:
-			case EACCES:
-			case ENOMEM:
-			case ENOSPC:
-			case EMFILE:
-			case ENFILE:
-			case ENAMETOOLONG:
-			case EOVERFLOW:
-			case EROFS:
-				return false;				
-		}		
-	#endif
+		return false;	
+	#endif	
 	
-	return true;
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------
@@ -1533,36 +1528,29 @@ flushDisk::getPermissions(const std::string &path)
 		struct _stat st;
 		if (::_stat(path.c_str(),&st) == -1)	
 	#endif
-	#ifndef NO_EX
-		switch (errno)
-		{
-			case EACCES:
-				throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummyDiskEx,__LINE__,__FILE__);
-			case EIO:
-				throw flushDiskEx(FLUSHDISK_IOERROR,&dummyDiskEx,__LINE__,__FILE__);
-			case EINTR:
-				throw flushDiskEx(FLUSHDISK_INTERRUPTED,&dummyDiskEx,__LINE__,__FILE__);
-			case ENAMETOOLONG:
-				throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
-			case ELOOP:
-			case ENOTDIR:
-				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
-			case ENOMEM:
-				throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
-		}
-	#else
-		switch (errno)
-		{					
-			case EACCES:
-			case EIO:
-			case EINTR:
-			case ENAMETOOLONG:
-			case ELOOP:
-			case ENOTDIR:
-			case ENOMEM:
-				return -1;					
-		}							
-	#endif
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EACCES:
+					throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummyDiskEx,__LINE__,__FILE__);
+				case EIO:
+					throw flushDiskEx(FLUSHDISK_IOERROR,&dummyDiskEx,__LINE__,__FILE__);
+				case EINTR:
+					throw flushDiskEx(FLUSHDISK_INTERRUPTED,&dummyDiskEx,__LINE__,__FILE__);
+				case ENAMETOOLONG:
+					throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
+				case ELOOP:
+				case ENOTDIR:
+					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
+				case ENOMEM:
+					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
+			}
+		#else
+			return (permissionModesEnum)-1;
+		#endif
+		
 	register int mode(NONE);
 	
 	#ifndef WIN
@@ -1623,36 +1611,28 @@ flushDisk::getFileType(const std::string &path)
 		struct _stat st;
 		if (::_stat(path.c_str(),&st) == -1)	
 	#endif
-	#ifndef NO_EX
-		switch (errno)
-		{
-			case EACCES:
-				throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummyDiskEx,__LINE__,__FILE__);
-			case EIO:
-				throw flushDiskEx(FLUSHDISK_IOERROR,&dummyDiskEx,__LINE__,__FILE__);
-			case EINTR:
-				throw flushDiskEx(FLUSHDISK_INTERRUPTED,&dummyDiskEx,__LINE__,__FILE__);
-			case ENAMETOOLONG:
-				throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
-			case ELOOP:
-			case ENOTDIR:
-				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
-			case ENOMEM:
-				throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
-		}
-	#else
-		switch (errno)
-		{					
-			case EACCES:
-			case EIO:
-			case EINTR:
-			case ENAMETOOLONG:
-			case ELOOP:
-			case ENOTDIR:
-			case ENOMEM:
-				return -1;					
-		}							
-	#endif
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EACCES:
+					throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummyDiskEx,__LINE__,__FILE__);
+				case EIO:
+					throw flushDiskEx(FLUSHDISK_IOERROR,&dummyDiskEx,__LINE__,__FILE__);
+				case EINTR:
+					throw flushDiskEx(FLUSHDISK_INTERRUPTED,&dummyDiskEx,__LINE__,__FILE__);
+				case ENAMETOOLONG:
+					throw flushDiskEx(FLUSHDISK_FILENAME_TOO_LONG,&dummyDiskEx,__LINE__,__FILE__);
+				case ELOOP:
+				case ENOTDIR:
+					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
+				case ENOMEM:
+					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
+			}
+		#else
+			return (flushDiskFileTypeEnum)-1;
+		#endif
 	
 	#ifndef WIN
 		st.st_mode &= ~(S_IRWXU|S_IRWXG|S_IRWXO|S_ISUID|S_ISGID|S_ISVTX);
@@ -1726,20 +1706,13 @@ flushDisk::getSize(const std::string &path)
 					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 				case ENOMEM:
 					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
 			}
 		#else
-			switch (errno)
-			{					
-				case EACCES:
-				case EIO:
-				case EINTR:
-				case ENAMETOOLONG:
-				case ELOOP:
-				case ENOTDIR:
-				case ENOMEM:
-					return -1;					
-			}							
+			return -1;		
 		#endif
+		
 		return -1;
 	}
 	return st.st_size;	
@@ -1774,20 +1747,13 @@ flushDisk::getAccTime(const std::string &path)
 					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 				case ENOMEM:
 					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
 			}
 		#else
-			switch (errno)
-			{					
-				case EACCES:
-				case EIO:
-				case EINTR:
-				case ENAMETOOLONG:
-				case ELOOP:
-				case ENOTDIR:
-				case ENOMEM:
-					return -1;					
-			}							
+			return -1;			
 		#endif
+		
 		return -1;
 	}
 	return (int)st.st_atim.tv_sec;		
@@ -1822,20 +1788,13 @@ flushDisk::getModTime(const std::string &path)
 					throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 				case ENOMEM:
 					throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
 			}
 		#else
-			switch (errno)
-			{					
-				case EACCES:
-				case EIO:
-				case EINTR:
-				case ENAMETOOLONG:
-				case ELOOP:
-				case ENOTDIR:
-				case ENOMEM:
-					return -1;					
-			}							
+			return -1;		
 		#endif
+		
 		return -1;
 	}
 	return (int)st.st_mtim.tv_sec;		
@@ -1843,10 +1802,11 @@ flushDisk::getModTime(const std::string &path)
 
 //-------------------------------------------------------------------
 
-bool 
-flushDisk::getFileInfo(const std::string &path, 
-						__fileInfo &file)
+__fileInfo 
+flushDisk::getFileInfo(const std::string &path)
 {
+	__fileInfo file;	
+	
 	struct stat st;
 	if (::lstat(path.c_str(),&st) == -1)
 	#ifndef NO_EX
@@ -1865,22 +1825,11 @@ flushDisk::getFileInfo(const std::string &path,
 				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 			case ENOMEM:
 				throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
-			case ENOENT:
-				return false;				
+			default:
+				return file;				
 		}
 	#else
-		switch (errno)
-		{					
-			case EACCES:
-			case EIO:
-			case EINTR:
-			case ENAMETOOLONG:
-			case ELOOP:
-			case ENOTDIR:
-			case ENOMEM:
-			case ENOENT:
-				return false;					
-		}							
+		return file;		
 	#endif
 	
 	file.name.assign(basename((char *)path.c_str()));
@@ -1892,22 +1841,23 @@ flushDisk::getFileInfo(const std::string &path,
 	file.uid = flushDisk::getUserOwner(path);
 	file.gid = flushDisk::getGroupOwner(path);
 	
-	return true;
+	return file;
 }
 
 //-------------------------------------------------------------------
 
-bool 
-flushDisk::getDirInfo(const std::string &path, 
-					std::vector<__fileInfo> &dir)
+std::vector<__fileInfo> 
+flushDisk::getDirInfo(const std::string &path)
 {
-	dir.clear();
+	std::vector<__fileInfo> dir;
 	
 	struct stat st;
 	if (::lstat(path.c_str(),&st) == -1)
 	#ifndef NO_EX
 		switch (errno)
 		{
+			case ENOENT:
+				return dir;
 			case EACCES:
 				throw flushDiskEx(FLUSHDISK_ACCESS_DENIED,&dummyDiskEx,__LINE__,__FILE__);
 			case EIO:
@@ -1921,22 +1871,14 @@ flushDisk::getDirInfo(const std::string &path,
 				throw flushDiskEx(FLUSHDISK_WRONG_FILE_NAME,&dummyDiskEx,__LINE__,__FILE__);	
 			case ENOMEM:
 				throw flushDiskEx(FLUSHDISK_MEMORY_OVER,&dummyDiskEx,__LINE__,__FILE__);
+			default:
+				throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);;
 		}
 	#else
-		switch (errno)
-		{					
-			case EACCES:
-			case EIO:
-			case EINTR:
-			case ENAMETOOLONG:
-			case ELOOP:
-			case ENOTDIR:
-			case ENOMEM:
-				return false;					
-		}							
+		return dir;				
 	#endif	
 	if (!S_ISDIR(st.st_mode))
-		return false;
+		return dir;
 	
 	DIR *directory = opendir(path.c_str());
 	
@@ -1963,28 +1905,15 @@ flushDisk::getDirInfo(const std::string &path,
 					throw flushDiskEx(FLUSHDISK_NO_SUCH_FILE,&dummyDiskEx,__LINE__,__FILE__);
 				case EROFS:
 					throw flushDiskEx(FLUSHDISK_READ_ONLY_FS,&dummyDiskEx,__LINE__,__FILE__);
+				default:
+					throw flushDiskEx(FLUSHDISK_UNKNOWN,&dummyDiskEx,__LINE__,__FILE__);
 			}	
 		#else
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case EACCES:
-				case ENOMEM:
-				case ENOSPC:
-				case EMFILE:
-				case ENFILE:
-				case ENAMETOOLONG:
-				case EOVERFLOW:
-				case ENOENT:
-				case EROFS:
-					return false;				
-			}		
+			return dir;
 		#endif			
 	}
 	
 	dirent *dd;
-	__fileInfo file;
 	std::string attached;
 	
 	while ( (dd=readdir(directory)) != NULL)
@@ -1992,11 +1921,10 @@ flushDisk::getDirInfo(const std::string &path,
 		if ( (strcmp(dd->d_name,".") == 0) || (strcmp(dd->d_name,"..") == 0))
 			continue;
 		attached.assign(path + FILE_DELIM + dd->d_name);
-		if (flushDisk::getFileInfo(attached,file))
-			dir.push_back(file);
+			dir.push_back(flushDisk::getFileInfo(attached));
 	}
 	
-	return true;	
+	return dir;	
 }
 
 //-------------------------------------------------------------------

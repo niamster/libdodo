@@ -68,9 +68,4 @@
 #define SOCKET_OUTSIZE 1024	
 
 
-///if set the defuault operaton timeout for socket will not set in constructor!
-#define SOCKET_SYSTEM_DEFAULT_TIMEOUT
-///if set the default buffer size for socket will not set in constructor!
-#define SOCKET_SYSTEM_DEFAULT_BUFFER_SIZE
-
 #endif /* _DIRECTIVES_H */

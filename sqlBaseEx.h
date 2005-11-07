@@ -52,7 +52,7 @@
 		///reasons of exception
 		enum sqlBaseExR
 		{
-			SQLBASE_MEMORY_OVER = 2,///not enough memmory
+			SQLBASE_MEMORY_OVER = 1,///not enough memmory
 			SQLBASE_EMPTY_REQUEST
 		};
 		

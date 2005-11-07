@@ -62,6 +62,8 @@
 		resolvers[8] = &dummyFlushDiskResolve;
 		resolvers[9] = &dummyFlushDiskResolve;
 		resolvers[10] = &dummyFlushDiskResolve;
+		resolvers[11] = &dummyFlushDiskResolve;
+		resolvers[12] = &dummyFlushDiskResolve;
 	}
 	
 	//-------------------------------------------------------------------
@@ -119,6 +121,10 @@
 			resolvers[9] = a_resF;
 		if ((FLUSHDISK_MEMORY_OVER & a_reason) == FLUSHDISK_MEMORY_OVER)
 			resolvers[10] = a_resF;
+		if ((FLUSHDISK_CANNOT_OVEWRITE & a_reason) == FLUSHDISK_CANNOT_OVEWRITE)
+			resolvers[11] = a_resF;
+		if ((FLUSHDISK_UNKNOWN & a_reason) == FLUSHDISK_UNKNOWN)
+			resolvers[12] = a_resF;
 	}
 	
 	//-------------------------------------------------------------------
@@ -160,7 +166,13 @@
 				break;
 			case FLUSHDISK_MEMORY_OVER:
 				resolvers[10](this);
+				break;	
+			case FLUSHDISK_CANNOT_OVEWRITE:
+				resolvers[11](this);
 				break;		
+			case FLUSHDISK_UNKNOWN:
+				resolvers[12](this);
+				break;			
 		}
 	}
 	
