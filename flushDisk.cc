@@ -109,12 +109,6 @@ flushDisk::open(const std::string &a_path) const
 		performXExec(preExec);	
 	#endif
 	
-	#ifndef WIN
-		umask(flushDisk::getPermission(FILE_PERM));	
-	#else
-		_umask(flushDisk::getPermission(FILE_PERM));	
-	#endif		
-
 	///execute
 	if (fileType == TMP_FILE)
 		file = tmpfile();
@@ -141,11 +135,14 @@ flushDisk::open(const std::string &a_path) const
 			#else
 				if (::_stat(path.c_str(),&st)==-1)
 			#endif
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;							
-				#endif
+			{
+				if (errno != ENOENT)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;							
+					#endif
+			}
 			else
 				exists = true;
 				
@@ -178,6 +175,7 @@ flushDisk::open(const std::string &a_path) const
 						#else
 							return false;
 			#endif
+							
 			switch (mode)
 			{
 				case READ_WRITE:
@@ -896,11 +894,19 @@ flushDisk::rm(const std::string &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(),&st) == -1)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-	#else
-		return false;	
-	#endif	
+		if (errno != ENOENT)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;							
+			#endif
+		else
+			#ifndef NO_EX
+				return ;
+			#else
+				return false;							
+			#endif
+				
 		
 	if (!S_ISDIR(st.st_mode))
 		if (::unlink(path.c_str()) == -1)

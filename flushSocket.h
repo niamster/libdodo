@@ -56,8 +56,7 @@ namespace dodo
 	{
 		TRANSFER_TYPE_STREAM,///Sequenced, reliable, connection-based byte streams
 		TRANSFER_TYPE_DATAGRAM,///Connectionless, unreliable datagrams of fixed maximum length
-		TRANSFER_TYPE_RAW,///Raw protocol interface
-		TRANSFER_TYPE_PACKET,///Linux specific way of getting packets at the dev level.  For writing rarp and other similar things on the user level
+		TRANSFER_TYPE_RAW,/// you have to send with the data headers or any other info!
 	};
 	
 	/**
@@ -67,8 +66,7 @@ namespace dodo
 	enum socketProtoFamilyEnum
 	{
 		PROTO_FAMILY_IPV4,
-		PROTO_FAMILY_IPV6,
-		PROTO_FAMILY_PACKET,		
+		PROTO_FAMILY_IPV6,		
 	#ifndef WIN	
 		PROTO_FAMILY_UNIX_SOCKET,
 	#endif
@@ -116,13 +114,18 @@ namespace dodo
 	 	std::string name;
 	 	stringArr aliases;
 		int port;	
-	}; 
+	};
+	
+	class flushSocketExchange;///to make flushSocket and flushSocketExchange mutual friends
+	
 	/**
-	 * class that takes ugly routine with sockets
-	 * 
+	 * class that takes ugly routine with sockets;
+	 * exchange of data is flushSocketExchange class' task
+	 * this class can establish connections; the below class can send/recieve data!
 	 */
-	class flushSocket : protected flush
+	class flushSocket : public flush
 	{
+		friend class flushSocketExchange;
 		
 		public:
 		
@@ -145,34 +148,27 @@ namespace dodo
 			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for client
 			~flushSocket();
 			
-			
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							init();///initialize socket and defualt options; in/out buf size; in/out timeouts; u can change 'em before call it!
-			
 			/**
 			 * connect. for client part
 			 * host - ip address; call getHostInfo to get address' for it.
 			 * first - net connection
 			 * second - local connectioin
-			 * if u use unix-socket - it will create it. 
+			 * if u use unix-socket - it will create it.
+			 * u do not have to construct flushSocketExchange!! the function will construct it!
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							connect(const std::string &host, unsigned int port);
+							connect(const std::string &host, unsigned int port, flushSocketExchange *exchange, bool immortal=false);
 			#ifndef WIN
 				#ifndef NO_EX
 					virtual void 
 				#else
 					virtual bool 
 				#endif
-								connect(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+								connect(const std::string &path, flushSocketExchange *exchange, bool immortal=false);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			#endif
 			
 			/**
@@ -196,18 +192,93 @@ namespace dodo
 				#endif
 								bindNListen(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			#endif			
+					
+			/**
+			 * get info about given host
+			 */
+			static __hostInfo getHostInfo(const std::string &host);
+			
+			/**
+			 * get info about service(port, protocol...)
+			 */
+			static __servInfo getServiceInfo(const std::string &service, const std::string &protocol);
+			static __servInfo getServiceInfo(int port, const std::string &protocol);
+			
+			/**
+			 * closes main stream; if it is called, all accepted//connected childs will be closed; but if u want to mark it as immortal, set 'true' to 'connect' or 'accept' function!
+			 */
+			virtual void close();
+			
+		private:				
+
+			#ifndef WIN
+			
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								makeUnixSocket(const std::string &path);
+								
+			#endif	
+			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
+
+			/**
+			 * closes socket with given descriptor
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							_close(int socket);
+
+			/**
+			 * number of connections that can recieve
+			 */			 
+			long numberOfConn;///number of connection for client = -1
+			 
+			bool *aliveConnections;
+			flushSocketExchange *accepted;///array of pointers to accepted connections; to close 'em if close is called in this class
+			
+			int socket;///id of socket
+			 
+			
+			socketProtoFamilyEnum family;
+			socketTransferTypeEnum type;
+			unsigned int protocol;
+	};
+	
+	/**
+	 * class used for send/recieve data
+	 */
+	 class flushSocketExchange : public flush
+	 {
+	 	
+	 	friend class flushSocket;
+	 	
+		private:
+	 	
+			flushSocketExchange(flushSocket *connector);
+		
+		public:
+		
+			~flushSocketExchange();
+		
+								
 			/**
 			 * send, recieve
 			 */
 		//	virtual bool send(void *data);
 		//	virtual bool recieve(void *data);
+		// virtual bool close();
 			
-		//	virtual bool listen(int &id);
-			
-		//	virtual socketDomainEnum getDomain();
-		//	virtual socketTransferTypeEnum getType();
-		//	virtual int getProtocol();
-		
 			/**
 			 * set socket options.
 			 */
@@ -263,56 +334,22 @@ namespace dodo
 			bool getSocketOpts(int option);
 			
 			/**
-			 * get info about given host
+			 * closes this stream
 			 */
-			static __hostInfo getHostInfo(std::string &host);
+			virtual void close();
 			
-			/**
-			 * get info about service(port, protocol...)
-			 */
-			static __servInfo getServiceInfo(std::string &service, std::string &protocol);
-			static __servInfo getServiceInfo(int port, std::string &protocol);
-			 
-		private:				
-
-			#ifndef WIN
+		protected:
+					
+			int socketOpts;
 			
-				#ifndef NO_EX
-					virtual void 
-				#else
-					virtual bool 
-				#endif
-								mkUnixSocket(const std::string &path);
-								
-			#endif	
-
 			unsigned long inTimeout;///in microseconds
 			unsigned long outTimeout;///in microseconds
 			 
 			int inSocketBuffer;
 			int outSocketBuffer;
 			
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
-
-			/**
-			 * number of connections that can recieve
-			 */			 
-			long numberOfConn;///default number of connection = 1
-			 
-			int *connections;///aray with connections.
 			int socket;///id of socket
-			 
-			socketProtoFamilyEnum family;
-			socketTransferTypeEnum type;
-			unsigned int protocol;
-			
-			int socketOpts;
-	};
+	 };
 };
 
 #endif /*SOCKETPP_H_*/

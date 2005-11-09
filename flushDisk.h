@@ -151,7 +151,7 @@ namespace dodo
 	 * 	for string size is one.
 	 */
 	
-	class flushDisk : protected flush
+	class flushDisk : public flush
 	{
 		public:
 		
