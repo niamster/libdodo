@@ -8,12 +8,12 @@ void
 hook(dodoBase *base, 
 	void *yep)
 {
-	sqlBase *sql = dynamic_cast<sqlBase *>(base->getSelf());
+	/*sqlBase *sql = dynamic_cast<sqlBase *>(base->getSelf());
 	sql->store();
 	__collectedData data = sql->getCollectedData();
 	data.pre_limNumber = "70";
 	data.pre_fieldsNames[0] = std::string((char *)yep);
-	//sql->restore();
+	//sql->restore();*/
 }
 
 void 
@@ -49,7 +49,6 @@ int main(int argc, char **argv)
 		 * int pos = pp.addPreExec(hook,&pp,(void *)"id");
 		 * pp.addPostExec(&journal,&pp,(void *)"journal");
 		 */
-		
 		//pp.delPreExec(pos);//removes hook!!
 		
 		pp.setSqlInfo("test","",3306,"","Dmitrik");
@@ -140,7 +139,7 @@ int main(int argc, char **argv)
 	}
     catch(baseEx ex)
     {	
-		cout << "OOOPS";
+		cout << "OOOPS" << ex.file << ex.baseErrstr;
     }
 	return 0;
 }

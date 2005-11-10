@@ -99,7 +99,7 @@ xexec::delXExec(std::vector<__execItem> &list,
 //-------------------------------------------------------------------
 
 int 
-xexec::addPreExec(inExec func,
+xexec::_addPreExec(inExec func,
  				dodoBase *obj,
 				void *data) const
 {
@@ -133,7 +133,7 @@ xexec::enablePreExec(unsigned int position) const
 //-------------------------------------------------------------------
 
 int 
-xexec::addPostExec(inExec func, 
+xexec::_addPostExec(inExec func, 
  				dodoBase *obj,
 				void *data) const
 {

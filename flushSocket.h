@@ -56,7 +56,7 @@ namespace dodo
 	{
 		TRANSFER_TYPE_STREAM,///Sequenced, reliable, connection-based byte streams
 		TRANSFER_TYPE_DATAGRAM,///Connectionless, unreliable datagrams of fixed maximum length
-		TRANSFER_TYPE_RAW,/// you have to send with the data headers or any other info!
+		TRANSFER_TYPE_RAW,/// you have to send with the data headers or any other info! chose protocol and you'll have access to headers of that proto. If you'll chose RAW - you have to create IP header by yourself!
 	};
 	
 	/**
@@ -131,7 +131,7 @@ namespace dodo
 		
 			/**
 			 * constructors/destructors
-			 * for protocols see /etc/protocols (*nix) or man protocols
+			 * for protocols see /etc/protocols (*nix) or man protocols or /usr/include/netinet/in.h
 			 * some of them:
 			 *  ip      0       IP              # internet protocol, pseudo protocol number
 			 *	icmp    1       ICMP            # internet control message protocol
@@ -143,9 +143,12 @@ namespace dodo
 			 *	ipv6    41      IPv6            # IPv6
 			 *	idrp    45      IDRP            # Inter-Domain Routing Protocol
 			 *	ipv6-icmp 58    IPv6-ICMP       # ICMP for IPv6
+			 * 	raw		255		RAW				# Raw IP packets
+			 * 
+			 * umay leave protocol = 0(as default) for TRANSFER_TYPE_STREAM or TRANSFER_TYPE_DATAGRAM, but sometimes you should pass it for TRANSFER_TYPE_RAW
 			 */
-			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for server
-			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol);///for client
+			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol=0);///for server
+			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol=0);///for client
 			~flushSocket();
 			
 			/**
@@ -161,14 +164,14 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect(const std::string &host, unsigned int port, flushSocketExchange *exchange, bool immortal=false);
+							connect(const std::string &host, unsigned int port, flushSocketExchange &exchange);
 			#ifndef WIN
 				#ifndef NO_EX
 					virtual void 
 				#else
 					virtual bool 
 				#endif
-								connect(const std::string &path, flushSocketExchange *exchange, bool immortal=false);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+								connect(const std::string &path, flushSocketExchange &exchange);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			#endif
 			
 			/**
@@ -197,17 +200,22 @@ namespace dodo
 			 * get info about given host
 			 */
 			static __hostInfo getHostInfo(const std::string &host);
+			/**
+			 * get name of localhost
+			 */
+			static std::string getLocalName();
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							setLocalName(const std::string &host);
 			
 			/**
 			 * get info about service(port, protocol...)
 			 */
 			static __servInfo getServiceInfo(const std::string &service, const std::string &protocol);
 			static __servInfo getServiceInfo(int port, const std::string &protocol);
-			
-			/**
-			 * closes main stream; if it is called, all accepted//connected childs will be closed; but if u want to mark it as immortal, set 'true' to 'connect' or 'accept' function!
-			 */
-			virtual void close();
 			
 		private:				
 
@@ -230,25 +238,15 @@ namespace dodo
 							makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
 
 			/**
-			 * closes socket with given descriptor
+			 * closes main socket for server part(called only in destructor)
 			 */
-			#ifndef NO_EX
-				static void 
-			#else
-				static bool 
-			#endif
-							_close(int socket);
-
+			void _close(); 
 			/**
 			 * number of connections that can recieve
 			 */			 
 			long numberOfConn;///number of connection for client = -1
-			 
-			bool *aliveConnections;
-			flushSocketExchange *accepted;///array of pointers to accepted connections; to close 'em if close is called in this class
 			
 			int socket;///id of socket
-			 
 			
 			socketProtoFamilyEnum family;
 			socketTransferTypeEnum type;
@@ -257,6 +255,8 @@ namespace dodo
 	
 	/**
 	 * class used for send/recieve data
+	 * you may use it's functions only after passing it to connect(accept)
+	 * otherwise you'll recieve exeptions about socket(or false) from all of this' class' methods
 	 */
 	 class flushSocketExchange : public flush
 	 {
@@ -264,11 +264,10 @@ namespace dodo
 	 	friend class flushSocket;
 	 	
 		private:
-	 	
-			flushSocketExchange(flushSocket *connector);
 		
 		public:
 		
+			flushSocketExchange();
 			~flushSocketExchange();
 		
 								
@@ -277,7 +276,6 @@ namespace dodo
 			 */
 		//	virtual bool send(void *data);
 		//	virtual bool recieve(void *data);
-		// virtual bool close();
 			
 			/**
 			 * set socket options.
@@ -335,10 +333,17 @@ namespace dodo
 			
 			/**
 			 * closes this stream
-			 */
-			virtual void close();
+			 */			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							close();
 			
 		protected:
+
+			virtual void init(flushSocket *connector, int socket);
 					
 			int socketOpts;
 			
@@ -348,7 +353,11 @@ namespace dodo
 			int inSocketBuffer;
 			int outSocketBuffer;
 			
-			int socket;///id of socket
+			int socket;///id of socket	
+					
+			socketProtoFamilyEnum family;
+			socketTransferTypeEnum type;
+			unsigned int protocol;
 	 };
 };
 

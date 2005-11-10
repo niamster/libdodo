@@ -35,13 +35,9 @@ int main(int argc, char **argv)
 			
 		}
 	}
-	catch(mysqlppEx ex)
+	catch(baseEx ex)
 	{
-		printf("MYexception was in:%d; in %s at %d\n",ex.reason,ex.file.c_str(),ex.line);
-	}
-	catch(sqlBaseEx ex)
-	{
-		printf("BASEexception was in:%d; in %s at %d\n",ex.reason,ex.file.c_str(),ex.line);
+		printf("BASEexception was in: in %s at %d\n",ex.file.c_str(),ex.line);
 	}	
 	return 0;
 }

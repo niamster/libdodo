@@ -77,8 +77,8 @@ namespace dodo
 			 * be carefull!! data are not copied!!!
 			 * if restore param is set to false, data after callback function won't be restored
 			 */
-			virtual int addPostExec(inExec func, dodoBase *obj, void *data) const;
-			virtual int addPreExec(inExec func, dodoBase *obj, void *data) const;
+			virtual int _addPostExec(inExec func, dodoBase *obj, void *data) const;
+			virtual int _addPreExec(inExec func, dodoBase *obj, void *data) const;
 			virtual void delPostExec(unsigned int position) const;
 			virtual void delPreExec(unsigned int position) const;
 			virtual bool replacePostExec(unsigned int position, inExec func, dodoBase *obj, void *data) const;
