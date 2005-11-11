@@ -46,6 +46,24 @@ flushDisk::~flushDisk()
 
 //-------------------------------------------------------------------
 
+int 
+flushDisk::addPostExec(inExec func, 
+					void *data) const
+{
+	_addPostExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushDisk::addPreExec(inExec func, 
+					void *data) const
+{
+	_addPreExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
 #ifndef NO_EX
 	void 
 #else

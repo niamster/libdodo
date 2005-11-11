@@ -28,6 +28,12 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 
+flushSocket::flushSocket(flushSocket &fs)
+{
+}
+
+//-------------------------------------------------------------------
+
 flushSocket::flushSocket(unsigned long a_numberOfConn, 
 						socketProtoFamilyEnum a_family, 
 						socketTransferTypeEnum a_type, 
@@ -36,7 +42,7 @@ flushSocket::flushSocket(unsigned long a_numberOfConn,
 						type(a_type),
 						protocol(a_protocol),
 						socket(-1)
-{
+{	
 }
 
 //-------------------------------------------------------------------
@@ -62,6 +68,7 @@ flushSocket::~flushSocket()
 }
 
 //-------------------------------------------------------------------
+
 
 #ifndef NO_EX
 	void 
@@ -108,7 +115,7 @@ flushSocket::makeSocket(socketProtoFamilyEnum domain,
 	#else
 		return false;			
 	#endif	
-		
+	
 	#ifdef NO_EX
 		return true;
 	#endif
@@ -124,14 +131,7 @@ flushSocket::makeSocket(socketProtoFamilyEnum domain,
 flushSocket::connect(const std::string &host, 
 					unsigned int port, 
 					flushSocketExchange &exchange)
-{
-	if (opened)
-		#ifndef NO_EX
-			return ;
-		#else
-			return false;
-		#endif
-			
+{	
 	if (numberOfConn != -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
@@ -139,14 +139,12 @@ flushSocket::connect(const std::string &host,
 			return false;
 		#endif
 		
-	makeSocket(family,type,protocol);	
-			
-	if (socket == -1)
-		#ifdef NO_EX
+	#ifdef NO_EX
+		if (!makeSocket(family,type,protocol);)
 			return false;
-		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#endif
+	#else
+		makeSocket(family,type,protocol);;
+	#endif
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -238,28 +236,19 @@ flushSocket::connect(const std::string &host,
 	flushSocket::connect(const std::string &path, 
 					flushSocketExchange &exchange)
 	{
-		if (opened)
-			#ifndef NO_EX
-				return ;
-			#else
-				return false;
-			#endif
-			
 		if (numberOfConn != -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
-		
-		makeSocket(family,type,protocol);	
-		
-		if (socket == -1)
-			#ifdef NO_EX
+			
+		#ifdef NO_EX
+			if (!makeSocket(family,type,protocol);)
 				return false;
-			#else
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-			#endif
+		#else
+			makeSocket(family,type,protocol);;
+		#endif
 	
 		#ifdef NO_EX
 			if (!makeUnixSocket(path))
@@ -394,14 +383,12 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 			return false;
 		#endif
 		
-	makeSocket(family,type,protocol);	
-	
-	if (socket == -1)
-		#ifdef NO_EX
+	#ifdef NO_EX
+		if (!makeSocket(family,type,protocol);)
 			return false;
-		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#endif
+	#else
+		makeSocket(family,type,protocol);;
+	#endif
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -484,26 +471,24 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 				return false;
 			#endif
 		
-		makeSocket(family,type,protocol);	
-		
-		if (socket == -1)
-			#ifdef NO_EX
+		#ifdef NO_EX
+			if (!makeSocket(family,type,protocol);)
 				return false;
-			#else
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-			#endif
+		#else
+			makeSocket(family,type,protocol);;
+		#endif
 
-			#ifdef NO_EX
-				if (!makeUnixSocket(path))
-					return false;
-			#else
-				makeUnixSocket(path);
-			#endif
-			
-			struct sockaddr_un sa;
-			
-			strcpy(sa.sun_path,path.c_str());
-			sa.sun_family = AF_UNIX;	
+		#ifdef NO_EX
+			if (!makeUnixSocket(path))
+				return false;
+		#else
+			makeUnixSocket(path);
+		#endif
+		
+		struct sockaddr_un sa;
+		
+		strcpy(sa.sun_path,path.c_str());
+		sa.sun_family = AF_UNIX;	
 			
 		if (::bind(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa.sun_family))==-1)
 			#ifndef NO_EX
@@ -577,6 +562,12 @@ flushSocket::_close()
 }
 
 //-------------------------------------------------------------------
+
+flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
+{
+}
+//-------------------------------------------------------------------
+
 
 flushSocketExchange::flushSocketExchange(): inTimeout(RECIEVE_TIMEOUT),
 											outTimeout(SEND_TIMEOUT),
@@ -928,6 +919,8 @@ void
 flushSocketExchange::init(flushSocket *connector, 
 						int a_socket)
 {
+	close();
+	
 	family = connector->family;
 	type = connector->type;
 	protocol = connector->protocol;

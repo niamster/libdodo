@@ -158,6 +158,12 @@ namespace dodo
 			///constructors and destructors
 			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path
 			virtual ~flushDisk();
+
+			/**
+			 * for xExec
+			 */			
+			virtual int addPostExec(inExec func, void *data) const;
+			virtual int addPreExec(inExec func, void *data) const;
 			
 			/**
 			 * closes previous opened file

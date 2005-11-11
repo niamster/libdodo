@@ -127,6 +127,13 @@ namespace dodo
 	{
 		friend class flushSocketExchange;
 		
+		private:
+				
+			/**
+			 * to prevent copying (pass to functions ...)
+			 */		
+			flushSocket(flushSocket &fs);
+		
 		public:
 		
 			/**
@@ -219,6 +226,9 @@ namespace dodo
 			
 		private:				
 
+			/**
+			 * creates socket on the disk(file)
+			 */
 			#ifndef WIN
 			
 				#ifndef NO_EX
@@ -230,6 +240,9 @@ namespace dodo
 								
 			#endif	
 			
+			/**
+			 * creates socket with given data
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
@@ -265,6 +278,11 @@ namespace dodo
 	 	
 		private:
 		
+			/**
+			 * to prevent copying (pass to functions ...)
+			 */
+			flushSocketExchange(flushSocketExchange &fse);
+			
 		public:
 		
 			flushSocketExchange();
