@@ -26,6 +26,12 @@
 
 using namespace dodo;
 
+dodoBase *
+flushDisk::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
 //-------------------------------------------------------------------
 
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
@@ -446,13 +452,6 @@ flushDisk::write(const void *const a_buf,
 		return false;
 	#endif
 	
-	if (fflush(file) != 0)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-	#else
-		return false;
-	#endif
-	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);
 	#endif
@@ -492,6 +491,22 @@ flushDisk::erase(unsigned long a_pos)
 	#endif
 }
 
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushDisk::flush()
+{
+	if (fflush(file) != 0)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+	#else
+		return false;
+	#endif	
+}
 //-------------------------------------------------------------------
 
 #ifndef NO_EX

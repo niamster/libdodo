@@ -8,12 +8,18 @@ void
 hook(dodoBase *base, 
 	void *yep)
 {
-	/*sqlBase *sql = dynamic_cast<sqlBase *>(base->getSelf());
-	sql->store();
-	__collectedData data = sql->getCollectedData();
-	data.pre_limNumber = "70";
-	data.pre_fieldsNames[0] = std::string((char *)yep);
-	//sql->restore();*/
+	mysqlpp *sql = dynamic_cast<mysqlpp *>(base);
+	
+	if (sql->operType == MYSQLPP_OPER_EXEC)
+	{
+		sql->store();
+		__collectedData data = sql->getCollectedData();
+		cout << "table was" <<data.pre_table << endl;
+		data.pre_table = "ti";
+		data.pre_limNumber = "70";
+		data.pre_fieldsNames[0] = std::string((char *)yep);
+		//sql->restore();
+	}
 }
 
 void 
@@ -43,11 +49,11 @@ int main(int argc, char **argv)
 	mysqlpp pp;
 	try
 	{
-		int pos = pp.myAddPreExec(hook,(void *)"id");
-		//pp.myAddPostExec(&journal,(void *)"journal");
+		int pos = pp.addPreExec(hook,(void *)"id");
+		//pp.ddPostExec(&journal,(void *)"journal");
 		/*
-		 * int pos = pp.addPreExec(hook,&pp,(void *)"id");
-		 * pp.addPostExec(&journal,&pp,(void *)"journal");
+		 * int pos = pp.addPreExec(hook,(void *)"id");
+		 * pp.addPostExec(&journal,(void *)"journal");
 		 */
 		//pp.delPreExec(pos);//removes hook!!
 		
@@ -139,7 +145,7 @@ int main(int argc, char **argv)
 	}
     catch(baseEx ex)
     {	
-		cout << "OOOPS" << ex.file << ex.baseErrstr;
+		cout << ex.file << endl << ex.baseErrstr << endl;
     }
 	return 0;
 }

@@ -35,7 +35,8 @@ dummyHook(dodoBase *base, void *data)
 
 //-------------------------------------------------------------------
 
-xexec::xexec() : safeHooks(true)
+xexec::xexec() : safeHooks(true),
+				operType(XEXEC_NONE)
 {
 	preExec.execDisabled = false;
 	postExec.execDisabled = false;

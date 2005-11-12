@@ -26,8 +26,6 @@
 
 using namespace dodo;
 
-//-------------------------------------------------------------------
-
 __tableInfo::__tableInfo()
 {
 	autoIncr = -1;

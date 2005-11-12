@@ -154,7 +154,12 @@ namespace dodo
 	class flushDisk : public flush
 	{
 		public:
-		
+
+			/**
+			 * returns this, casted to dodoBase *
+			 */
+			virtual dodoBase *getSelf();
+							
 			///constructors and destructors
 			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path
 			virtual ~flushDisk();
@@ -232,7 +237,15 @@ namespace dodo
 				virtual bool 
 			#endif
 							erase(unsigned long pos);///erase on position
-			
+			/**
+			 * flushes to disk
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							flush();
 			/**
 			 * delete file/dir
 			 * rename file/dir

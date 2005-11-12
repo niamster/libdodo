@@ -29,6 +29,7 @@
 #include "directives.h"
 #include "types.h"
 #include "regexpEx.h"
+#include "dodoBase.h"
 
 #ifdef PCRE_EXT
 	
@@ -64,10 +65,15 @@ namespace dodo
 	 */
 	 
 	 
-	 class regexp
+	 class regexp : public dodoBase
 	 {
 	 	public:
-	 	
+
+			/**
+			 * returns this, casted to dodoBase *
+			 */
+			virtual dodoBase *getSelf();
+						 	
 	 		/**
 	 		 * constructor/destructor
 	 		 */

@@ -26,6 +26,12 @@
 
 using namespace dodo;
 
+dodoBase *
+flushSocket::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
 //-------------------------------------------------------------------
 
 flushSocket::flushSocket(flushSocket &fs)
@@ -36,11 +42,9 @@ flushSocket::flushSocket(flushSocket &fs)
 
 flushSocket::flushSocket(unsigned long a_numberOfConn, 
 						socketProtoFamilyEnum a_family, 
-						socketTransferTypeEnum a_type, 
-						unsigned int a_protocol) : numberOfConn(a_numberOfConn),
+						socketTransferTypeEnum a_type) : numberOfConn(a_numberOfConn),
 						family(a_family),
 						type(a_type),
-						protocol(a_protocol),
 						socket(-1)
 {	
 }
@@ -48,11 +52,9 @@ flushSocket::flushSocket(unsigned long a_numberOfConn,
 //-------------------------------------------------------------------
 
 flushSocket::flushSocket(socketProtoFamilyEnum a_family, 
-						socketTransferTypeEnum a_type, 
-						unsigned int a_protocol) : numberOfConn(-1),
+						socketTransferTypeEnum a_type) : numberOfConn(-1),
 						family(a_family),
 						type(a_type),
-						protocol(a_protocol),
 						socket(-1)
 						
 {
@@ -62,9 +64,9 @@ flushSocket::flushSocket(socketProtoFamilyEnum a_family,
 
 flushSocket::~flushSocket()
 {
-	if (numberOfConn != -1)
+	if (numberOfConn!=-1)
 		if (opened)
-			_close();
+				_close();
 }
 
 //-------------------------------------------------------------------
@@ -75,13 +77,11 @@ flushSocket::~flushSocket()
 #else
 	bool
 #endif
-flushSocket::makeSocket(socketProtoFamilyEnum domain, 
-						socketTransferTypeEnum type,
-						unsigned int protocol)
+flushSocket::makeSocket()
 {
 	int real_domain, real_type;
 	
-	switch (domain)
+	switch (family)
 	{
 		case PROTO_FAMILY_IPV4:
 			real_domain = PF_INET;
@@ -89,11 +89,11 @@ flushSocket::makeSocket(socketProtoFamilyEnum domain,
 		case PROTO_FAMILY_IPV6:
 			real_domain = PF_INET6;
 			break;
-	#ifndef WIN
-		case PROTO_FAMILY_UNIX_SOCKET:
-			real_domain = PF_UNIX;
-			break;
-	#endif
+		#ifndef WIN
+			case PROTO_FAMILY_UNIX_SOCKET:
+				real_domain = PF_UNIX;
+				break;
+		#endif
 	}
 	switch (type)
 	{
@@ -103,12 +103,9 @@ flushSocket::makeSocket(socketProtoFamilyEnum domain,
 		case TRANSFER_TYPE_DATAGRAM:
 			real_type = SOCK_DGRAM;
 			break;
-		case TRANSFER_TYPE_RAW:
-			real_type = SOCK_RAW;
-			break;
 	}	
 	
-	socket = ::socket(real_domain,real_type,protocol);
+	socket = ::socket(real_domain,real_type,0);
 	if (socket == -1)
 	#ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
@@ -140,10 +137,10 @@ flushSocket::connect(const std::string &host,
 		#endif
 		
 	#ifdef NO_EX
-		if (!makeSocket(family,type,protocol);)
+		if (!makeSocket())
 			return false;
 	#else
-		makeSocket(family,type,protocol);;
+		makeSocket();
 	#endif
 	
 	if (family == PROTO_FAMILY_IPV6)
@@ -177,12 +174,30 @@ flushSocket::connect(const std::string &host,
 			#endif
 	}
 	
-	exchange.init(this,socket);
+	exchange.init(socket);
 	
 	opened = true;
 		
 	#ifdef NO_EX
 		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocket::connect(const __connInfo &destinaton, 
+					flushSocketExchange &exchange)
+{
+	#ifdef NO_EX
+		if (!connect(destinaton.host,destinaton.port,exchange))
+			return false;
+	#else
+		connect(destinaton.host,destinaton.port,exchange);
 	#endif
 }
 
@@ -244,10 +259,10 @@ flushSocket::connect(const std::string &host,
 			#endif
 			
 		#ifdef NO_EX
-			if (!makeSocket(family,type,protocol);)
+			if (!makeSocket())
 				return false;
 		#else
-			makeSocket(family,type,protocol);;
+			makeSocket();
 		#endif
 	
 		#ifdef NO_EX
@@ -269,7 +284,7 @@ flushSocket::connect(const std::string &host,
 				return false;		
 			#endif	
 		
-		exchange.init(this,socket);
+		exchange.init(socket);
 	
 		opened = true;
 		
@@ -306,8 +321,19 @@ flushSocket::getHostInfo(const std::string &host)
 		info.aliases.push_back(ent->h_aliases[i++]);
 	
 	i = 0;	
-	while (ent->h_addr_list[i] != NULL)	
-		info.addresses.push_back(inet_ntoa(*( (struct in_addr *)ent->h_addr_list[i++]) ));
+	char temp[INET6_ADDRSTRLEN];
+	while (ent->h_addr_list[i] != NULL)
+	{
+		if (inet_ntop(AF_INET,ent->h_addr_list[i++],temp,15)==NULL)
+			if (errno == ENOSPC)
+			{
+				if (inet_ntop(AF_INET6,ent->h_addr_list[i++],temp,INET6_ADDRSTRLEN) == NULL)
+					continue;
+			}
+			else
+				continue;			
+		info.addresses.push_back(temp);
+	}
 	
 	return info;	
 }
@@ -384,10 +410,10 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 		#endif
 		
 	#ifdef NO_EX
-		if (!makeSocket(family,type,protocol);)
+		if (!makeSocket())
 			return false;
 	#else
-		makeSocket(family,type,protocol);;
+		makeSocket();
 	#endif
 	
 	if (family == PROTO_FAMILY_IPV6)
@@ -413,15 +439,12 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 	{
 		struct sockaddr_in sa;
 		
-		if (family == PROTO_FAMILY_IPV6)
-			sa.sin_family = AF_INET6;
-		else
-			sa.sin_family = AF_INET;
+		sa.sin_family = AF_INET;
 		sa.sin_port = htons(port);
 		if (strcmp(host.c_str(),"*") == 0)
 			sa.sin_addr.s_addr = htonl(INADDR_ANY);
 		else
-			inet_aton(host.c_str(),&sa.sin_addr);
+			inet_pton(AF_INET,host.c_str(),&sa.sin_addr);
 
 		if (::bind(socket,(struct sockaddr *)&sa,sizeof(sa))==-1)
 			#ifndef NO_EX
@@ -444,6 +467,22 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 		return true;
 	#endif	
 
+}
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocket::bindNListen(const __connInfo &destinaton)
+{
+	#ifdef NO_EX
+		if (!bindNListen(destinaton.host,destinaton.port))
+			return false;
+	#else
+		bindNListen(destinaton.host,destinaton.port);
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -472,10 +511,10 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 			#endif
 		
 		#ifdef NO_EX
-			if (!makeSocket(family,type,protocol);)
+			if (!makeSocket())
 				return false;
 		#else
-			makeSocket(family,type,protocol);;
+			makeSocket();
 		#endif
 
 		#ifdef NO_EX
@@ -563,9 +602,131 @@ flushSocket::_close()
 
 //-------------------------------------------------------------------
 
+bool 
+flushSocket::accept(flushSocketExchange &exchange, 
+					__connInfo &info)
+{
+	if (numberOfConn == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	if (!opened)	
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_ACCEPT_WO_BIND,FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	register int sock;
+	info.host.clear();
+	
+	switch (family)
+	{
+		case PROTO_FAMILY_IPV4:
+			{
+				struct sockaddr_in sa;
+				register socklen_t len;
+				
+				sock = ::accept(socket,(sockaddr *)&sa,&len);
+				if (sock == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+				
+				char temp[15];
+				if (inet_ntop(AF_INET,&(sa.sin_addr),temp,15) != NULL)
+					info.host.assign(temp);
+				info.port = ntohs(sa.sin_port);
+			}
+				
+			break;
+		case PROTO_FAMILY_IPV6:
+			{
+				struct sockaddr_in6 sa;
+				register socklen_t len;
+				
+				sock = ::accept(socket,(sockaddr *)&sa,&len);
+				if (sock == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+									
+				char temp[INET6_ADDRSTRLEN];
+				if (inet_ntop(AF_INET6,&(sa.sin6_addr),temp,INET6_ADDRSTRLEN) != NULL)
+					info.host.assign(temp);
+				info.port = ntohs(sa.sin6_port);	
+			}
+			break;
+		case PROTO_FAMILY_UNIX_SOCKET:
+				sock = ::accept(socket,NULL,NULL);
+				if (sock == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif				
+			break;
+	}
+		
+	exchange.init(sock);
+	
+	return true;
+}
+
+//-------------------------------------------------------------------
+
+bool 
+flushSocket::accept(flushSocketExchange &exchange)
+{
+	if (numberOfConn == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	if (!opened)	
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_ACCEPT_WO_BIND,FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	register int sock = ::accept(socket,NULL,NULL);
+
+	if (sock == -1)	
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
+	exchange.init(sock);
+	
+	return true;
+}
+
+//-------------------------------------------------------------------
+
+dodoBase *
+flushSocketExchange::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
 flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 {
 }
+
 //-------------------------------------------------------------------
 
 
@@ -916,14 +1077,9 @@ flushSocketExchange::close()
 //-------------------------------------------------------------------
 
 void 
-flushSocketExchange::init(flushSocket *connector, 
-						int a_socket)
+flushSocketExchange::init(int a_socket)
 {
 	close();
-	
-	family = connector->family;
-	type = connector->type;
-	protocol = connector->protocol;
 	
 	socket = a_socket;
 	

@@ -31,11 +31,6 @@
 namespace dodo
 {
 
-	enum flushOperationTypeEnum///for xExec
-	{
-		FLUSH_OPER_NONE
-	};
-	
 	/**
 	 * preExec - before operation, postExec - after operation and before checks(can be exeptions).
 	 * flushOperationTypeEnum - such operations have handlers for xexec. position of preExec - before action, postExec - after action, after check of goodness of operation, so if error occured - postExec won't be called
@@ -43,7 +38,12 @@ namespace dodo
 	class flush : public xexec, public dodoBase
 	{
 		public:
-		
+
+			/**
+			 * returns this, casted to dodoBase *
+			 */
+			virtual dodoBase *getSelf();
+							
 			/**
 			 * constructors, destructors
 			 */
@@ -55,7 +55,7 @@ namespace dodo
 			mutable std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
 			mutable bool bufferize;///false by default; set true, if u r usin' xexec(hooks)
 			mutable bool normalize;///only for write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
-			mutable int operType;///to detect in xexec what type of operation
+
 		protected:
 		
 			mutable bool opened;///indicates whether file(connection) opened or not

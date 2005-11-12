@@ -39,6 +39,7 @@ namespace dodo
 	 * first argument = class object; second - data needed for hook
 	 */
 	typedef void (*inExec)(dodoBase *, void *);
+
 	/**
 	 * a node for Xexec
 	 */
@@ -52,10 +53,21 @@ namespace dodo
 		bool restore;///to restore or not data after execution
 	};
 
+	/**
+	 * vector of hooks
+	 */
 	struct __execItemList
 	{
 		std::vector<__execItem> exec;
 		bool execDisabled;
+	};
+	
+	/**
+	 * the very default value of operation type!!!
+	 */
+	enum xexecOperTypeEnum
+	{
+		XEXEC_NONE,
 	};
 
 	/**
@@ -65,6 +77,7 @@ namespace dodo
 	class xexec
 	{
 		public:
+					
 			/*
 			 * constructors and destructors
 			 */
@@ -121,6 +134,9 @@ namespace dodo
 			 *
 			 */
 			virtual bool exec() const;
+			
+			mutable int operType;///detect operation type
+			
 		protected:
 			/**
 			 * adds/deletes/replaces XExec to list

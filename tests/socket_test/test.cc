@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	
 	try
 	{
-		flushSocket sock(/*1,*/PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM,6);
+		flushSocket sock(1,PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
 		//sock.bindNListen("127.0.0.1",7777);
 		
 		flushSocketExchange ex1;
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 		copyTest2(&ex1);///ok
 		
 		
-		sock.connect("127.0.0.1",21,ex1);
+/*		sock.connect("127.0.0.1",21,ex1);
 		ex1.close();
 		
 		sock.connect("127.0.0.1",21,ex1);
@@ -42,6 +42,17 @@ int main(int argc, char **argv)
 		flushSocketExchange ex2;
 		///flushSocketExchange ex2 = ex1; err
 		sock.connect("127.0.0.1",21,ex2);
+*/
+		__connInfo info;
+		sock.bindNListen("192.168.0.201",7777);
+		while (true)
+		{
+			if (sock.accept(ex1,info))
+			{
+				cout << info.port;
+				break;
+			}
+		}
 		
 		
 		//flushSocket::setLocalName("BUBU");

@@ -56,7 +56,6 @@ namespace dodo
 	{
 		TRANSFER_TYPE_STREAM,///Sequenced, reliable, connection-based byte streams
 		TRANSFER_TYPE_DATAGRAM,///Connectionless, unreliable datagrams of fixed maximum length
-		TRANSFER_TYPE_RAW,/// you have to send with the data headers or any other info! chose protocol and you'll have access to headers of that proto. If you'll chose RAW - you have to create IP header by yourself!
 	};
 	
 	/**
@@ -113,7 +112,16 @@ namespace dodo
 	{
 	 	std::string name;
 	 	stringArr aliases;
-		int port;	
+		int port;
+	};
+	
+	/**
+	 * you may use it for connect() method or accept()[info about remote connected host]
+	 */
+	struct __connInfo
+	{
+		std::string host;
+		int port;
 	};
 	
 	class flushSocketExchange;///to make flushSocket and flushSocketExchange mutual friends
@@ -135,27 +143,17 @@ namespace dodo
 			flushSocket(flushSocket &fs);
 		
 		public:
-		
+
+			/**
+			 * returns this, casted to dodoBase *
+			 */
+			virtual dodoBase *getSelf();
+					
 			/**
 			 * constructors/destructors
-			 * for protocols see /etc/protocols (*nix) or man protocols or /usr/include/netinet/in.h
-			 * some of them:
-			 *  ip      0       IP              # internet protocol, pseudo protocol number
-			 *	icmp    1       ICMP            # internet control message protocol
-			 *	ggp     3       GGP             # gateway-gateway protocol
-			 *	st      5       ST              # ST datagram mode
-			 *	tcp     6       TCP             # transmission control protocol
-			 *	egp     8       EGP             # exterior gateway protocol
-			 *	udp     17      UDP             # user datagram protocol
-			 *	ipv6    41      IPv6            # IPv6
-			 *	idrp    45      IDRP            # Inter-Domain Routing Protocol
-			 *	ipv6-icmp 58    IPv6-ICMP       # ICMP for IPv6
-			 * 	raw		255		RAW				# Raw IP packets
-			 * 
-			 * umay leave protocol = 0(as default) for TRANSFER_TYPE_STREAM or TRANSFER_TYPE_DATAGRAM, but sometimes you should pass it for TRANSFER_TYPE_RAW
 			 */
-			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol=0);///for server
-			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type, unsigned int protocol=0);///for client
+			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type);///for server
+			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type);///for client
 			~flushSocket();
 			
 			/**
@@ -172,6 +170,12 @@ namespace dodo
 				virtual bool 
 			#endif
 							connect(const std::string &host, unsigned int port, flushSocketExchange &exchange);
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							connect(const __connInfo &destinaton, flushSocketExchange &exchange);///the same as previous, but more pretty. alias.
 			#ifndef WIN
 				#ifndef NO_EX
 					virtual void 
@@ -194,6 +198,13 @@ namespace dodo
 				virtual bool 
 			#endif
 							bindNListen(const std::string &host, unsigned int port);///host - can be '*' -> any address
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							bindNListen(const __connInfo &destinaton);///the same as previous, but more pretty. alias.
+						
 			#ifndef WIN
 				#ifndef NO_EX
 					virtual void 
@@ -202,11 +213,22 @@ namespace dodo
 				#endif
 								bindNListen(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			#endif			
-					
+			
+			/**
+			 * accepts incommin' connectins(as for server)
+			 * on accept - return true;
+			 * if was defined NO_EX - no way to detect error
+			 * also returns info about connected host
+			 * with PROTO_FAMILY_UNIX_SOCKET `host` will be always empty, so you may use second function
+			 */
+			virtual bool accept(flushSocketExchange &exchange, __connInfo &info);
+			virtual bool accept(flushSocketExchange &exchange);///if you don't want to know anythin' about remote; not just alias. a little bit faster!
+			
 			/**
 			 * get info about given host
 			 */
 			static __hostInfo getHostInfo(const std::string &host);
+			
 			/**
 			 * get name of localhost
 			 */
@@ -248,7 +270,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							makeSocket(socketProtoFamilyEnum domain, socketTransferTypeEnum type, unsigned int protocol);
+							makeSocket();
 
 			/**
 			 * closes main socket for server part(called only in destructor)
@@ -263,7 +285,6 @@ namespace dodo
 			
 			socketProtoFamilyEnum family;
 			socketTransferTypeEnum type;
-			unsigned int protocol;
 	};
 	
 	/**
@@ -284,7 +305,15 @@ namespace dodo
 			flushSocketExchange(flushSocketExchange &fse);
 			
 		public:
-		
+
+			/**
+			 * returns this, casted to dodoBase *
+			 */
+			virtual dodoBase *getSelf();
+					
+			/**
+			 * constructors/destructors
+			 */		
 			flushSocketExchange();
 			~flushSocketExchange();
 		
@@ -361,7 +390,7 @@ namespace dodo
 			
 		protected:
 
-			virtual void init(flushSocket *connector, int socket);
+			virtual void init(int socket);
 					
 			int socketOpts;
 			
@@ -371,11 +400,7 @@ namespace dodo
 			int inSocketBuffer;
 			int outSocketBuffer;
 			
-			int socket;///id of socket	
-					
-			socketProtoFamilyEnum family;
-			socketTransferTypeEnum type;
-			unsigned int protocol;
+			int socket;///id of socket
 	 };
 };
 

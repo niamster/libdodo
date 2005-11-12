@@ -32,6 +32,11 @@
 
 	namespace dodo
 	{
+		/**
+		 * next both for flushSocket and flushSocketExchanger
+		 */
+		
+		
 		///reasons of exception
 		enum flushSocketExR
 		{
@@ -39,12 +44,16 @@
 			FLUSHSOCKET_NO_SOCKET_CREATED,
 			FLUSHSOCKET_CANNOT_BIND,
 			FLUSHSOCKET_CANNOT_CONNECT,
+			FLUSHSOCKET_CANNOT_ACCEPT,
+			FLUSHSOCKET_ACCEPT_WO_BIND
 		};
 		
-		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR "No socket was created =(. Please try to run `init` function"
+		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR "No socket was created =(."
 		#define FLUSHSOCKET_MEMORY_OVER_STR "Not anough memmory"
 		#define FLUSHSOCKET_CANNOT_BIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
 		#define FLUSHSOCKET_CANNOT_CONNECT_STR "You cannot <connect> with this constructor; choose another one!"
+		#define FLUSHSOCKET_CANNOT_ACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
+		#define FLUSHSOCKET_ACCEPT_WO_BIND_STR "You try to accept without called bindNListen or bindNListen failed"
 		
 		enum flushSocketFunctionsID
 		{
@@ -61,8 +70,8 @@
 			FLUSHSOCKET_BINDNLISTEN,
 			FLUSHSOCKET__CLOSE,		
 			FLUSHSOCKET_CLOSE,
-			FLUSHSOCKET_SETLOCALNAME
-			
+			FLUSHSOCKET_SETLOCALNAME,
+			FLUSHSOCKET_ACCEPT,
 		};
 		
 	};

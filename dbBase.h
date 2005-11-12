@@ -331,6 +331,10 @@ namespace dodo
 	class dbBase : public dodoBase
 	{
 		public:
+		
+			/**
+			 * returns this, casted to dodoBase *
+			 */
 			virtual dodoBase *getSelf();
 			/*
 			 * constructors and destructors

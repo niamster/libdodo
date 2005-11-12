@@ -26,6 +26,14 @@
 
 using namespace dodo;
 
+dodoBase *
+regexp::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
 regexp::regexp() : icase(false),
 					extended(true)
 {

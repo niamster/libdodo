@@ -44,7 +44,12 @@ namespace dodo
 	class sqlBase : public dbBase
 	{
 		public:
-		
+
+			/**
+			 * returns this, casted to dodoBase *
+			 */
+			virtual dodoBase *getSelf();
+							
 			/*
 			 * constructors and destructors
 			 */
@@ -61,7 +66,7 @@ namespace dodo
 			static std::string exists(const std::string &statement);
 			static std::string noexists(const std::string &statement);
 		
-			bool preventFraming;///to frame or not with `'` fields values in insert...
+			bool preventFraming;///to frame or not with `'` fields values in insert and update; false by default
 			
 		protected:		
 		
