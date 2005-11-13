@@ -154,11 +154,6 @@ namespace dodo
 	class flushDisk : public flush
 	{
 		public:
-
-			/**
-			 * returns this, casted to dodoBase *
-			 */
-			virtual dodoBase *getSelf();
 							
 			///constructors and destructors
 			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path

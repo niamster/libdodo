@@ -38,11 +38,6 @@ namespace dodo
 	class flush : public xexec, public dodoBase
 	{
 		public:
-
-			/**
-			 * returns this, casted to dodoBase *
-			 */
-			virtual dodoBase *getSelf();
 							
 			/**
 			 * constructors, destructors

@@ -26,10 +26,17 @@
 
 using namespace dodo;
 
-dodoBase *
-flushSocket::getSelf()
+__initialAccept::__initialAccept() : socket(-1), 
+									family((socketProtoFamilyEnum)-1), 
+									type((socketTransferTypeEnum)-1)
 {
-	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
+__initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket), family(init.family), type(init.type)
+{
+	init.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -45,8 +52,11 @@ flushSocket::flushSocket(unsigned long a_numberOfConn,
 						socketTransferTypeEnum a_type) : numberOfConn(a_numberOfConn),
 						family(a_family),
 						type(a_type),
-						socket(-1)
-{	
+						socket(-1),
+						accepted(a_numberOfConn)
+{
+	if (type == TRANSFER_TYPE_DATAGRAM)
+		numberOfConn = 1;
 }
 
 //-------------------------------------------------------------------
@@ -55,7 +65,8 @@ flushSocket::flushSocket(socketProtoFamilyEnum a_family,
 						socketTransferTypeEnum a_type) : numberOfConn(-1),
 						family(a_family),
 						type(a_type),
-						socket(-1)
+						socket(-1),
+						accepted(0)
 						
 {
 }
@@ -64,9 +75,9 @@ flushSocket::flushSocket(socketProtoFamilyEnum a_family,
 
 flushSocket::~flushSocket()
 {
-	if (numberOfConn!=-1)
+	if (numberOfConn!=-1 && type==TRANSFER_TYPE_STREAM)
 		if (opened)
-				_close();
+			_close(socket);
 }
 
 //-------------------------------------------------------------------
@@ -454,13 +465,15 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 			#endif			
 	}	
 
-	if (::listen(socket,numberOfConn)==-1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif	
-	
+	if (type == TRANSFER_TYPE_STREAM)
+	{
+		if (::listen(socket,numberOfConn)==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif	
+	}
 	opened = true;
 		
 	#ifdef NO_EX
@@ -586,24 +599,40 @@ flushSocket::setLocalName(const std::string &host)
 
 //-------------------------------------------------------------------
 
-void
-flushSocket::_close()
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocket::_close(int socket)
 {
 	#ifndef WIN
-		::shutdown(socket,SHUT_RDWR);
+		if (::shutdown(socket,SHUT_RDWR)==-1)
 	#else
-		::shutdown(socket,SD_BOTH);
+		if (::shutdown(socket,SD_BOTH)==-1)
+	#endif
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET__CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif			
+	
+	if (::close(socket)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET__CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
+	#ifdef NO_EX
+		return true;
 	#endif			
-	
-	::close(socket);
-	
-	opened = false;	
 }
 
 //-------------------------------------------------------------------
 
 bool 
-flushSocket::accept(flushSocketExchange &exchange, 
+flushSocket::accept(__initialAccept &init, 
 					__connInfo &info)
 {
 	if (numberOfConn == -1)
@@ -613,6 +642,18 @@ flushSocket::accept(flushSocketExchange &exchange,
 			return false;
 		#endif
 	
+	if (type != TRANSFER_TYPE_STREAM)
+	{
+		init.socket = socket;
+		init.type = type;
+		init.family = family;
+			
+		return true;
+	}
+	
+	if (accepted == 0)
+		return false;
+			
 	if (!opened)	
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_ACCEPT_WO_BIND,FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
@@ -628,9 +669,9 @@ flushSocket::accept(flushSocketExchange &exchange,
 		case PROTO_FAMILY_IPV4:
 			{
 				struct sockaddr_in sa;
-				register socklen_t len;
-				
+				register socklen_t len = sizeof(sockaddr_in);
 				sock = ::accept(socket,(sockaddr *)&sa,&len);
+				
 				if (sock == -1)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -648,7 +689,7 @@ flushSocket::accept(flushSocketExchange &exchange,
 		case PROTO_FAMILY_IPV6:
 			{
 				struct sockaddr_in6 sa;
-				register socklen_t len;
+				register socklen_t len = sizeof(sockaddr_in6);
 				
 				sock = ::accept(socket,(sockaddr *)&sa,&len);
 				if (sock == -1)
@@ -674,8 +715,12 @@ flushSocket::accept(flushSocketExchange &exchange,
 					#endif				
 			break;
 	}
-		
-	exchange.init(sock);
+	
+	init.socket = sock;
+	init.type = type;
+	init.family = family;
+	
+	--accepted;
 	
 	return true;
 }
@@ -683,7 +728,7 @@ flushSocket::accept(flushSocketExchange &exchange,
 //-------------------------------------------------------------------
 
 bool 
-flushSocket::accept(flushSocketExchange &exchange)
+flushSocket::accept(__initialAccept &init)
 {
 	if (numberOfConn == -1)
 		#ifndef NO_EX
@@ -691,6 +736,18 @@ flushSocket::accept(flushSocketExchange &exchange)
 		#else
 			return false;
 		#endif
+	
+	if (type != TRANSFER_TYPE_STREAM)
+	{
+		init.socket = socket;
+		init.type = type;
+		init.family = family;
+		
+		return true;
+	}			
+	
+	if (accepted == 0)
+		return false;
 	
 	if (!opened)	
 		#ifndef NO_EX
@@ -707,24 +764,31 @@ flushSocket::accept(flushSocketExchange &exchange)
 		#else
 			return false;
 		#endif
+	
+	init.socket = sock;
+	init.type = type;
+	init.family = family;
 		
-	exchange.init(sock);
+	--accepted;
 	
 	return true;
 }
 
 //-------------------------------------------------------------------
 
-dodoBase *
-flushSocketExchange::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 {
+	socket = fse.socket;
+	socketOpts = fse.socketOpts;
+	inTimeout = fse.inTimeout;
+	outTimeout = fse.outTimeout;
+	inSocketBuffer = fse.inSocketBuffer;
+	outSocketBuffer = fse.outSocketBuffer;
+	lingerOpts = fse.lingerOpts;
+	
+	opened = fse.opened;
+	
+	fse.opened = false;
 }
 
 //-------------------------------------------------------------------
@@ -733,8 +797,34 @@ flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 flushSocketExchange::flushSocketExchange(): inTimeout(RECIEVE_TIMEOUT),
 											outTimeout(SEND_TIMEOUT),
 											inSocketBuffer(SOCKET_INSIZE),
-											outSocketBuffer(SOCKET_OUTSIZE)
+											outSocketBuffer(SOCKET_OUTSIZE),
+											socket(-1),
+											lingerOpts(SOCKET_LINGER_OPTION),
+											lingerSeconds(SOCKET_LINGER_PERIOD)
 {
+}
+
+//-------------------------------------------------------------------
+
+flushSocketExchange::flushSocketExchange(__initialAccept &a_init): inTimeout(RECIEVE_TIMEOUT),
+											outTimeout(SEND_TIMEOUT),
+											inSocketBuffer(SOCKET_INSIZE),
+											outSocketBuffer(SOCKET_OUTSIZE),
+											socket(-1),
+											lingerOpts(SOCKET_LINGER_OPTION),
+											lingerSeconds(SOCKET_LINGER_PERIOD)
+{
+	init(a_init.socket);
+}
+//-------------------------------------------------------------------
+
+void
+flushSocketExchange::init(__initialAccept &a_init)
+{
+	family = a_init.family;
+	type = a_init.type;
+	
+	init(a_init.socket);
 }
 
 //-------------------------------------------------------------------
@@ -998,7 +1088,7 @@ flushSocketExchange::setLingerSockOption(socketLingerOption option,
 		#else
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SETLINGERSOCKOPT,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#endif
-		
+	
 	linger lin;
 	
 	switch (option)
@@ -1022,13 +1112,10 @@ flushSocketExchange::setLingerSockOption(socketLingerOption option,
 		#else
 			return false;	
 		#endif
-	
-	removeF(socketOpts,SOCKET_GRACEFUL_CLOSE);
-	removeF(socketOpts,SOCKET_HARD_CLOSE);
-	removeF(socketOpts,SOCKET_WAIT_CLOSE);
-	
-	addF(socketOpts,option);	
 		
+	lingerOpts = option;
+	lingerSeconds = seconds;		
+	
 	#ifdef NO_EX
 		return true;
 	#endif	
@@ -1048,48 +1135,63 @@ flushSocketExchange::close()
 		return ;
 	#else
 		return true;
-	#endif			
-
-	#ifndef WIN
-		if (::shutdown(socket,SHUT_RDWR)==-1)
-	#else
-		if (::shutdown(socket,SD_BOTH)==-1)
 	#endif
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif			
 	
-	if (::close(socket)==-1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
+	#ifdef NO_EX
+		register bool result = 
+	#endif
+	flushSocket::_close(socket);
 	
 	opened = false;
 			
 	#ifdef NO_EX
-		return true;
-	#endif				
+		return result;
+	#endif			
 }
 //-------------------------------------------------------------------
 
 void 
 flushSocketExchange::init(int a_socket)
 {
-	close();
+	if (socket != a_socket)
+	{
+		close();
 	
-	socket = a_socket;
+		socket = a_socket;
 	
-	setInBufferSize(inSize);
-	setOutBufferSize(outSize);
-	setInTimeout(inTimeout);
-	setOutTimeout(outTimeout);
+		setInBufferSize(inSize);
+		setOutBufferSize(outSize);
+		setInTimeout(inTimeout);
+		setOutTimeout(outTimeout);
+		
+		setLingerSockOption(lingerOpts,lingerSeconds);
 	
-	opened = true;
+		opened = true;
+	}
 }
 
 //-------------------------------------------------------------------
 
+bool 
+flushSocketExchange::alive()
+{
+	return opened;
+}
+
+//-------------------------------------------------------------------
+
+socketLingerOption 
+flushSocketExchange::getLingerOption()
+{
+	return lingerOpts;
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushSocketExchange::getLingerPeriod()
+{
+	return lingerSeconds;
+}
+
+//-------------------------------------------------------------------

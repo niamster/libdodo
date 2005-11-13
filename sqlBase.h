@@ -44,11 +44,6 @@ namespace dodo
 	class sqlBase : public dbBase
 	{
 		public:
-
-			/**
-			 * returns this, casted to dodoBase *
-			 */
-			virtual dodoBase *getSelf();
 							
 			/*
 			 * constructors and destructors

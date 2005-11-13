@@ -67,5 +67,11 @@
 #define SOCKET_INSIZE 1024
 #define SOCKET_OUTSIZE 1024	
 
+///amount of seconds for linger
+#define SOCKET_LINGER_PERIOD 1
+#define SOCKET_LINGER_OPTION SOCKET_WAIT_CLOSE
+
+///Use not blockable sockets by default; that's means, accept doesn't block operation
+#define SOCKET_NONBLOCK
 
 #endif /* _DIRECTIVES_H */

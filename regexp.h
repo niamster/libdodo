@@ -68,11 +68,6 @@ namespace dodo
 	 class regexp : public dodoBase
 	 {
 	 	public:
-
-			/**
-			 * returns this, casted to dodoBase *
-			 */
-			virtual dodoBase *getSelf();
 						 	
 	 		/**
 	 		 * constructor/destructor

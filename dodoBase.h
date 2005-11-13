@@ -30,16 +30,6 @@ namespace dodo
 	class dodoBase
 	{
 		public:
-		
-			/**
-			 * returns this, casted to dodoBase *
-			 * 
-			 * 		sometimes it's useful, if u have `class a: public b, public c {...}` and `class b: public d {...}`
-			 * 		also u have void func(d *);
-			 * 		u want to cast `d` to `b`, so you need getSelf() function; due to it's virtuality, it'll find proper class!!
-			 * 
-			 */
-			virtual dodoBase *getSelf();
 					
 			/**
 			 * constructor/destructor

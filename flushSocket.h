@@ -76,8 +76,8 @@ namespace dodo
 	 */
 	 enum socketOptionsEnum
 	 {
-	 	SOCKET_KEEP_ALIVE=2,///Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-	 	SOCKET_REUSE_ADDRESS=4,	 	
+	 	SOCKET_KEEP_ALIVE=2,///(*default*)Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+	 	SOCKET_REUSE_ADDRESS=4,///(*default*) 	
 	 	SOCKET_DONOT_USE_GATEWAY=8, 	
 	 	SOCKET_BROADCAST=16,///Permits  sending of broadcast messages, if this is supported by the protocol. 	
 	 	SOCKET_OOB_INLINE=32,///out-of-band(marked urgent) data keep inline in recieve operation
@@ -92,7 +92,7 @@ namespace dodo
 	 { 
 	 	SOCKET_GRACEFUL_CLOSE=64,///close returns immediately, but any unsent data is transmitted (after close returns).
 	 	SOCKET_HARD_CLOSE=128,///close returns immediately, and any unsent data is discarded.
-	 	SOCKET_WAIT_CLOSE=256,///close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+	 	SOCKET_WAIT_CLOSE=256,///(*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	 };
 	 
 	 /**
@@ -127,6 +127,27 @@ namespace dodo
 	class flushSocketExchange;///to make flushSocket and flushSocketExchange mutual friends
 	
 	/**
+	 * it's passes to accept call, and then inits flushSocketExchange;
+	 */
+	class __initialAccept
+	{
+		friend class flushSocketExchange;
+		friend class flushSocket;
+		
+		public:			
+		
+			__initialAccept();
+			__initialAccept(__initialAccept &init);///if you want to copy it, the object, from what was copy is not be able to init new session; you have to reinit it with accept call!
+		
+		
+		private:
+				
+			int socket;
+			socketProtoFamilyEnum family;
+			socketTransferTypeEnum type;			
+	};
+		
+	/**
 	 * class that takes ugly routine with sockets;
 	 * exchange of data is flushSocketExchange class' task
 	 * this class can establish connections; the below class can send/recieve data!
@@ -143,18 +164,13 @@ namespace dodo
 			flushSocket(flushSocket &fs);
 		
 		public:
-
-			/**
-			 * returns this, casted to dodoBase *
-			 */
-			virtual dodoBase *getSelf();
 					
 			/**
 			 * constructors/destructors
 			 */
-			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type);///for server
+			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type);///for server; for TRANSFER_TYPE_DATAGRAM internally number of connections overrides to 1!
 			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type);///for client
-			~flushSocket();
+			virtual ~flushSocket();
 			
 			/**
 			 * connect. for client part
@@ -220,9 +236,10 @@ namespace dodo
 			 * if was defined NO_EX - no way to detect error
 			 * also returns info about connected host
 			 * with PROTO_FAMILY_UNIX_SOCKET `host` will be always empty, so you may use second function
+			 * with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
 			 */
-			virtual bool accept(flushSocketExchange &exchange, __connInfo &info);
-			virtual bool accept(flushSocketExchange &exchange);///if you don't want to know anythin' about remote; not just alias. a little bit faster!
+			virtual bool accept(__initialAccept &init, __connInfo &info);
+			virtual bool accept(__initialAccept &init);///if you don't want to know anythin' about remote; not just alias. a little bit faster!
 			
 			/**
 			 * get info about given host
@@ -233,6 +250,10 @@ namespace dodo
 			 * get name of localhost
 			 */
 			static std::string getLocalName();
+			
+			/**
+			 * sets local name
+			 */
 			#ifndef NO_EX
 				static void 
 			#else
@@ -245,6 +266,16 @@ namespace dodo
 			 */
 			static __servInfo getServiceInfo(const std::string &service, const std::string &protocol);
 			static __servInfo getServiceInfo(int port, const std::string &protocol);
+			
+			/*
+			virtual bool getBlock();
+
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif						
+							setBlock();*/
 			
 		private:				
 
@@ -275,49 +306,59 @@ namespace dodo
 			/**
 			 * closes main socket for server part(called only in destructor)
 			 */
-			void _close(); 
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			 
+							_close(int socket); 
 			/**
 			 * number of connections that can recieve
 			 */			 
 			long numberOfConn;///number of connection for client = -1
+			long accepted;///how many was accepted
+			
+			//bool block;
 			
 			int socket;///id of socket
 			
 			socketProtoFamilyEnum family;
 			socketTransferTypeEnum type;
+			
+			int socketOpts;
 	};
 	
 	/**
 	 * class used for send/recieve data
 	 * you may use it's functions only after passing it to connect(accept)
 	 * otherwise you'll recieve exeptions about socket(or false) from all of this' class' methods
+	 * if you'll init this class again with another connection = previous will be closed
 	 */
 	 class flushSocketExchange : public flush
 	 {
 	 	
 	 	friend class flushSocket;
 	 	
-		private:
-		
-			/**
-			 * to prevent copying (pass to functions ...)
-			 */
-			flushSocketExchange(flushSocketExchange &fse);
-			
 		public:
-
-			/**
-			 * returns this, casted to dodoBase *
-			 */
-			virtual dodoBase *getSelf();
 					
 			/**
 			 * constructors/destructors
-			 */		
+			 */	
 			flushSocketExchange();
-			~flushSocketExchange();
+			flushSocketExchange(flushSocketExchange &fse);///init with the same object; object that inited new u can use for future connections; u can safely pass it to the functions;
+			flushSocketExchange(__initialAccept &init);///init with accept given data
+			virtual ~flushSocketExchange();
+	
+			/**
+			 * init 
+			 */
+			virtual void init(__initialAccept &init);///init with accept given data
 		
-								
+			/**
+			 * indicates, whether connection alive or not
+			 */
+			virtual bool alive();
+			
 			/**
 			 * send, recieve
 			 */
@@ -340,6 +381,9 @@ namespace dodo
 			#endif
 							setLingerSockOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
 			
+			virtual socketLingerOption getLingerOption();
+			virtual int getLingerPeriod();///only for SOCKET_WAIT_CLOSE
+			
 			/**
 			 * The maximum buffer size for stream sockets is 262144 bytes
 			 */ 
@@ -355,8 +399,9 @@ namespace dodo
 				virtual bool 
 			#endif
 							setOutBufferSize(int bytes);///accept value to socket; size of socket buffer!
-			int getInBufferSize();
-			int getOutBufferSize();
+			
+			virtual int getInBufferSize();
+			virtual int getOutBufferSize();
 				
 			#ifndef NO_EX
 				virtual void 
@@ -370,13 +415,14 @@ namespace dodo
 				virtual bool 
 			#endif
 							setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
-			unsigned long getInTimeout();
-			unsigned long getOutTimeout();
+			
+			virtual unsigned long getInTimeout();
+			virtual unsigned long getOutTimeout();
 			
 			/**
-			 * socketOptionsEnum or socketLingerOption
+			 * socketOptionsEnum
 			 */
-			bool getSocketOpts(int option);
+			virtual bool getSocketOpts(int option);
 			
 			/**
 			 * closes this stream
@@ -393,6 +439,10 @@ namespace dodo
 			virtual void init(int socket);
 					
 			int socketOpts;
+			socketLingerOption lingerOpts;
+			int lingerSeconds;
+			
+			//bool block;
 			
 			unsigned long inTimeout;///in microseconds
 			unsigned long outTimeout;///in microseconds
@@ -401,6 +451,9 @@ namespace dodo
 			int outSocketBuffer;
 			
 			int socket;///id of socket
+			
+			socketProtoFamilyEnum family;
+			socketTransferTypeEnum type;			
 	 };
 };
 

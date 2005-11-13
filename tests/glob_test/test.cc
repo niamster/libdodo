@@ -8,9 +8,9 @@ void
 hook(dodoBase *base, 
 	void *yep)
 {
-	mysqlpp *sql = dynamic_cast<mysqlpp *>(base);
-	
-	if (sql->operType == MYSQLPP_OPER_EXEC)
+//	mysqlpp *sql = dynamic_cast<mysqlpp *>(base);
+	dbBase *sql = dynamic_cast<dbBase *>(base);
+/*	if (sql->operType == MYSQLPP_OPER_EXEC)
 	{
 		sql->store();
 		__collectedData data = sql->getCollectedData();
@@ -19,7 +19,7 @@ hook(dodoBase *base,
 		data.pre_limNumber = "70";
 		data.pre_fieldsNames[0] = std::string((char *)yep);
 		//sql->restore();
-	}
+	}*/
 }
 
 void 

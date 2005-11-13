@@ -26,15 +26,6 @@
 
 using namespace dodo;
 
-
-dodoBase *
-flush::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flush::flush(): inSize(INSIZE), 
 				outSize(OUTSIZE),
 				opened(false), 

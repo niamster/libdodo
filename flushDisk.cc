@@ -26,14 +26,6 @@
 
 using namespace dodo;
 
-dodoBase *
-flushDisk::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
 					const std::string &a_path) : mode(READ_WRITE), 
 									over(false), 
