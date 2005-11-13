@@ -34,17 +34,21 @@
                         unsigned long a_errno,
                         std::string a_errstr,
                         unsigned long a_line,
-                        std::string a_file) : line(a_line),
-                                            file(a_file),
-                                            baseErrno(a_errno),
-                                            baseErrstr(a_errstr),
+                        std::string a_file) : errModule(a_errModule),
                                             funcID(functionID),
                                             errnoSource(errnoSource),
-                                            errModule(a_errModule)
+                                            baseErrno(a_errno),
+                                            baseErrstr(a_errstr),
+                                            line(a_line),
+                                            file(a_file)
         {
                 state = UNKNOWN;
         }
 
-        //-------------------------------------------------------------------
-
+		//-------------------------------------------------------------------
+				
+		baseEx::operator const char *()
+		{
+			return baseErrstr.c_str();
+		}
 #endif

@@ -29,7 +29,7 @@ $(LIBRARY): $(OBJECTS)
 	ln -fs lib$@.so.$(VERSION).$(MINOR) lib$@.so
 	ldconfig -n ./
 .cc.o:
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -Wall -fPIC -c $^
 	strip -d $@
 	
 clean:

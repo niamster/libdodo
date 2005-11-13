@@ -25,6 +25,8 @@ int main(int argc, char **argv)
 		//flushDisk flush(FIFO_FILE,"my.dat");
 		flushDisk flush(REG_FILE,"my.dat");
 		
+		std::cout << typeid(flush).name();
+		
 		//flushDisk flush(true);///in tmp file
 		flush.open();
 		flush.inSize = flush.outSize = 10;
@@ -38,11 +40,10 @@ int main(int argc, char **argv)
 	
 	
 		flushDisk::rm("asas");
-//		flushDisk::rm("log");
+		flushDisk::rm("log");
 
 		flushDisk::mkdir("asas");//,OWNER_ALL_ACCESS,false);
 
-		
 		flushDisk::rename("asas","hiho");	
 		
 		flushDisk::symlink("test","A");

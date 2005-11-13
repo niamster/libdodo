@@ -69,6 +69,15 @@
 				};
 
 				baseEx(unsigned long errModule, unsigned long functionID, unsigned long errnoSource, unsigned long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
+				
+				/**
+				 * returns string str explanation
+				 * 	catch(baseEx ex)
+				 *	{
+				 *		cout << ex << endl;
+				 *	}
+				 */
+				operator const char *();
 			
 				unsigned long errModule;
 			

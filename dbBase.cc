@@ -51,6 +51,8 @@ __tableInfo::operator=(__tableInfo &from)
 	
 	comment = from.comment;
 	charset = from.charset;
+	
+	return from;
 }
 
 //-------------------------------------------------------------------
@@ -83,7 +85,9 @@ __fieldInfo::operator=(__fieldInfo &from)
 	set_enum = from.set_enum;
 
 	comment = from.comment;
-	charset = from.charset;
+	charset = from.charset;	
+	
+	return from;
 }
 
 //-------------------------------------------------------------------
@@ -134,10 +138,19 @@ __collectedData::__collectedData(
 {
 }
 
+//-------------------------------------------------------------------
+
+dodoBase * const 
+dbBase::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
 
 //-------------------------------------------------------------------
 
 dbBase::dbBase() :show(false),
+
+					qType(-1),
 
 					qShift(EMPTY),
 
@@ -145,8 +158,6 @@ dbBase::dbBase() :show(false),
 					qInsShift(EMPTY),
 					qUpShift(EMPTY),
 					qDelShift(EMPTY),
-
-					qType(-1),
 
 					qDbDepSelShift(EMPTY),
 					qDbDepInsShift(EMPTY),
@@ -1015,6 +1026,8 @@ dbBase::stringReference(int type) const
 			return std::string("no action");
 		case SET_DEFAULT:
 			return std::string("set default");
+		default:
+			return __string__;
 	}
 }
 

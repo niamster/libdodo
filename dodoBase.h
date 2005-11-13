@@ -32,10 +32,15 @@ namespace dodo
 		public:
 					
 			/**
+			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 */		
+			virtual dodoBase * const getSelf();
+					
+			/**
 			 * constructor/destructor
 			 */
 			dodoBase();
-			~dodoBase();
+			virtual ~dodoBase();
 	};
 };
 

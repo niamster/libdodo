@@ -26,8 +26,8 @@
 
 using namespace dodo;
 
-regexp::regexp() : icase(false),
-					extended(true)
+regexp::regexp() : extended(true),
+					icase(false)
 {
 	#ifdef PCRE_EXT
 	#else

@@ -41,6 +41,14 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket), f
 
 //-------------------------------------------------------------------
 
+dodoBase * const 
+flushSocket::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
 flushSocket::flushSocket(flushSocket &fs)
 {
 }
@@ -49,10 +57,8 @@ flushSocket::flushSocket(flushSocket &fs)
 
 flushSocket::flushSocket(unsigned long a_numberOfConn, 
 						socketProtoFamilyEnum a_family, 
-						socketTransferTypeEnum a_type) : numberOfConn(a_numberOfConn),
-						family(a_family),
-						type(a_type),
-						socket(-1),
+						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
+						numberOfConn(a_numberOfConn),
 						accepted(a_numberOfConn)
 {
 	if (type == TRANSFER_TYPE_DATAGRAM)
@@ -62,12 +68,9 @@ flushSocket::flushSocket(unsigned long a_numberOfConn,
 //-------------------------------------------------------------------
 
 flushSocket::flushSocket(socketProtoFamilyEnum a_family, 
-						socketTransferTypeEnum a_type) : numberOfConn(-1),
-						family(a_family),
-						type(a_type),
-						socket(-1),
+						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
+						numberOfConn(-1),
 						accepted(0)
-						
 {
 }
 
@@ -82,7 +85,6 @@ flushSocket::~flushSocket()
 
 //-------------------------------------------------------------------
 
-
 #ifndef NO_EX
 	void 
 #else
@@ -90,7 +92,7 @@ flushSocket::~flushSocket()
 #endif
 flushSocket::makeSocket()
 {
-	int real_domain, real_type;
+	int real_domain(PF_INET), real_type(TRANSFER_TYPE_STREAM);
 	
 	switch (family)
 	{
@@ -308,8 +310,6 @@ flushSocket::connect(const __connInfo &destinaton,
 
 //-------------------------------------------------------------------
 
-//-------------------------------------------------------------------
-
 __hostInfo 
 flushSocket::getHostInfo(const std::string &host)
 {
@@ -427,6 +427,8 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 		makeSocket();
 	#endif
 	
+	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
+	
 	if (family == PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
@@ -474,6 +476,7 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 				return false;
 			#endif	
 	}
+	
 	opened = true;
 		
 	#ifdef NO_EX
@@ -481,6 +484,7 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 	#endif	
 
 }
+
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
@@ -536,6 +540,8 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 		#else
 			makeUnixSocket(path);
 		#endif
+		
+		setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
 		
 		struct sockaddr_un sa;
 		
@@ -661,7 +667,7 @@ flushSocket::accept(__initialAccept &init,
 			return false;
 		#endif
 	
-	register int sock;
+	register int sock(-1);
 	info.host.clear();
 	
 	switch (family)
@@ -779,6 +785,7 @@ flushSocket::accept(__initialAccept &init)
 flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 {
 	socket = fse.socket;
+	
 	socketOpts = fse.socketOpts;
 	inTimeout = fse.inTimeout;
 	outTimeout = fse.outTimeout;
@@ -793,29 +800,58 @@ flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 
 //-------------------------------------------------------------------
 
-
-flushSocketExchange::flushSocketExchange(): inTimeout(RECIEVE_TIMEOUT),
-											outTimeout(SEND_TIMEOUT),
-											inSocketBuffer(SOCKET_INSIZE),
-											outSocketBuffer(SOCKET_OUTSIZE),
-											socket(-1),
-											lingerOpts(SOCKET_LINGER_OPTION),
-											lingerSeconds(SOCKET_LINGER_PERIOD)
+flushSocketOptions::flushSocketOptions(socketProtoFamilyEnum a_family, 
+										socketTransferTypeEnum a_type): inTimeout(RECIEVE_TIMEOUT),
+																	outTimeout(SEND_TIMEOUT),
+																	inSocketBuffer(SOCKET_INSIZE),
+																	outSocketBuffer(SOCKET_OUTSIZE),
+																	socket(-1),
+																	family(a_family),
+																	type(a_type),
+																	lingerOpts(SOCKET_LINGER_OPTION),
+																	lingerSeconds(SOCKET_LINGER_PERIOD)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange(__initialAccept &a_init): inTimeout(RECIEVE_TIMEOUT),
-											outTimeout(SEND_TIMEOUT),
-											inSocketBuffer(SOCKET_INSIZE),
-											outSocketBuffer(SOCKET_OUTSIZE),
-											socket(-1),
-											lingerOpts(SOCKET_LINGER_OPTION),
-											lingerSeconds(SOCKET_LINGER_PERIOD)
+flushSocketOptions::flushSocketOptions(): inTimeout(RECIEVE_TIMEOUT),
+										outTimeout(SEND_TIMEOUT),
+										inSocketBuffer(SOCKET_INSIZE),
+										outSocketBuffer(SOCKET_OUTSIZE),
+										socket(-1),
+										lingerOpts(SOCKET_LINGER_OPTION),
+										lingerSeconds(SOCKET_LINGER_PERIOD)
+{
+}
+
+//-------------------------------------------------------------------
+
+dodoBase * const 
+flushSocketExchange::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
+flushSocketExchange::flushSocketExchange()
+{
+}
+
+//-------------------------------------------------------------------
+
+flushSocketExchange::flushSocketExchange(__initialAccept &a_init)
 {
 	init(a_init.socket);
 }
+//-------------------------------------------------------------------
+
+flushSocketExchange::~flushSocketExchange()
+{
+	close();
+}
+
 //-------------------------------------------------------------------
 
 void
@@ -829,19 +865,12 @@ flushSocketExchange::init(__initialAccept &a_init)
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::~flushSocketExchange()
-{
-	close();
-}
-
-//-------------------------------------------------------------------
-
 #ifndef NO_EX
 	void 
 #else
 	bool
 #endif
-flushSocketExchange::setInBufferSize(int bytes)
+flushSocketOptions::setInBufferSize(int bytes)
 {
 	if (socket == -1)
 		#ifdef NO_EX
@@ -867,7 +896,7 @@ flushSocketExchange::setInBufferSize(int bytes)
 //-------------------------------------------------------------------
 
 int
-flushSocketExchange::getInBufferSize()
+flushSocketOptions::getInBufferSize()
 {
 	return inSocketBuffer;
 }
@@ -879,7 +908,7 @@ flushSocketExchange::getInBufferSize()
 #else
 	bool
 #endif
-flushSocketExchange::setOutBufferSize(int bytes)
+flushSocketOptions::setOutBufferSize(int bytes)
 {
 	if (socket == -1)
 		#ifdef NO_EX
@@ -905,7 +934,7 @@ flushSocketExchange::setOutBufferSize(int bytes)
 //-------------------------------------------------------------------
 
 int
-flushSocketExchange::getOutBufferSize()
+flushSocketOptions::getOutBufferSize()
 {
 	return outSocketBuffer;
 }
@@ -917,7 +946,7 @@ flushSocketExchange::getOutBufferSize()
 #else
 	bool
 #endif 
-flushSocketExchange::setInTimeout(unsigned long microseconds)
+flushSocketOptions::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
 		#ifdef NO_EX
@@ -948,7 +977,7 @@ flushSocketExchange::setInTimeout(unsigned long microseconds)
 //-------------------------------------------------------------------
 
 unsigned long 
-flushSocketExchange::getInTimeout()
+flushSocketOptions::getInTimeout()
 {
 	return inTimeout;
 }
@@ -960,7 +989,7 @@ flushSocketExchange::getInTimeout()
 #else
 	bool
 #endif
-flushSocketExchange::setOutTimeout(unsigned long microseconds)
+flushSocketOptions::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
 		#ifdef NO_EX
@@ -991,7 +1020,7 @@ flushSocketExchange::setOutTimeout(unsigned long microseconds)
 //-------------------------------------------------------------------
 
 unsigned long 
-flushSocketExchange::getOutTimeout()
+flushSocketOptions::getOutTimeout()
 {
 	return outTimeout;
 }
@@ -999,7 +1028,7 @@ flushSocketExchange::getOutTimeout()
 //-------------------------------------------------------------------
 
 bool
-flushSocketExchange::getSocketOpts(int option)
+flushSocketOptions::getSocketOpts(int option)
 {
 	if  ( (option&socketOpts) == option)
 		return true;
@@ -1013,7 +1042,7 @@ flushSocketExchange::getSocketOpts(int option)
 #else
 	bool
 #endif
-flushSocketExchange::setSockOption(socketOptionsEnum option, 
+flushSocketOptions::setSockOption(socketOptionsEnum option, 
 							bool flag)
 {
 	if (socket == -1)
@@ -1079,7 +1108,7 @@ flushSocketExchange::setSockOption(socketOptionsEnum option,
 #else
 	bool
 #endif
-flushSocketExchange::setLingerSockOption(socketLingerOption option,
+flushSocketOptions::setLingerSockOption(socketLingerOption option,
 									int seconds)
 {	
 	if (socket == -1)
@@ -1159,12 +1188,13 @@ flushSocketExchange::init(int a_socket)
 	
 		socket = a_socket;
 	
-		setInBufferSize(inSize);
-		setOutBufferSize(outSize);
+		setInBufferSize(inSocketBuffer);
+		setOutBufferSize(outSocketBuffer);
+		
 		setInTimeout(inTimeout);
 		setOutTimeout(outTimeout);
 		
-		setLingerSockOption(lingerOpts,lingerSeconds);
+		setLingerSockOption(lingerOpts,lingerSeconds);	
 	
 		opened = true;
 	}
@@ -1181,7 +1211,7 @@ flushSocketExchange::alive()
 //-------------------------------------------------------------------
 
 socketLingerOption 
-flushSocketExchange::getLingerOption()
+flushSocketOptions::getLingerOption()
 {
 	return lingerOpts;
 }
@@ -1189,9 +1219,145 @@ flushSocketExchange::getLingerOption()
 //-------------------------------------------------------------------
 
 int 
-flushSocketExchange::getLingerPeriod()
+flushSocketOptions::getLingerPeriod()
 {
 	return lingerSeconds;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::send(const char * const data)
+{
+	
+	unsigned int iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
+	int n(0), sent(0);
+	
+	for (unsigned int i=0;i<iter;++i)
+	{
+		n = 0;
+		while (sent<outSize)
+		{
+			n = ::send(socket,data+sent,outSize,0);
+			if (n==-1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;	
+				#endif
+			sent += n;
+		}
+	}
+	
+	if (rest>0)
+	{
+		n = 0;
+		while (sent<rest)
+		{
+			n = ::send(socket,data+sent,rest,0);
+			if (n==-1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;	
+				#endif
+			sent += n;
+		}		
+	}
+	
+	#ifdef NO_EX
+		return true;
+	#endif		
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::sendString(const std::string &data)
+{
+	return this->send(data.c_str());
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::recieve(char * const data)
+{
+	
+	unsigned int iter = inSize/inSocketBuffer, rest = inSize%inSocketBuffer;
+	int n(0), recieved(0);
+	
+	for (unsigned int i=0;i<iter;++i)
+	{
+		n = 0;
+		n = ::recv(socket,data+recieved,inSize,0);
+		if (n==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;	
+			#endif
+		recieved += n;
+	}
+	
+	if (rest>0)
+	{
+		n = ::recv(socket,data+recieved,rest,0);
+		if (n==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;	
+			#endif
+	}
+	
+	#ifdef NO_EX
+		return true;
+	#endif		
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::recieveString(std::string &data)
+{	
+	register char *t_data = new char[inSize+1];
+	if (t_data == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHSOCKET_RECIEVESTRING,ERR_LIBDODO,FLUSHSOCKET_MEMORY_OVER,FLUSHSOCKET_MEMORY_OVER_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
+	memset(t_data,0,inSize);
+
+	#ifdef NO_EX
+		register bool result = 
+	#endif
+	
+	this->recieve(t_data);
+	data.assign(t_data,inSize);
+	delete [] t_data;
+	
+	#ifdef NO_EX	
+		return result;
+	#endif
 }
 
 //-------------------------------------------------------------------

@@ -44,6 +44,11 @@ namespace dodo
 	class sqlBase : public dbBase
 	{
 		public:
+					
+			/**
+			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 */		
+			virtual dodoBase * const getSelf();
 							
 			/*
 			 * constructors and destructors

@@ -26,12 +26,49 @@
 
 using namespace dodo;
 
+#ifdef WIN
+	#define FSTAT ::_stat
+	#define SSTAT struct _stat
+	#define _REGULARFILE _S_IFREG
+	#define _DIRECTORY _S_IFDIR
+	#define FRMDIR ::_rmdir
+	#define FUNLINK ::_unlink
+	#define PERM_READ _S_IREAD
+	#define PERM_WRITE	_S_IWRITE
+	
+#else
+	#define FSTAT ::lstat
+	#define SSTAT struct stat
+	#define _REGULARFILE S_IFREG
+	#define _DIRECTORY S_IFDIR
+	#define FRMDIR ::rmdir
+	#define FUNLINK ::unlink
+	#define PERM_READ S_IRUSR
+	#define PERM_WRITE S_IWUSR	
+#endif
+
+//-------------------------------------------------------------------
+
+dodoBase * const 
+flushDisk::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
-					const std::string &a_path) : mode(READ_WRITE), 
-									over(false), 
-									fileType(type),
-									path(a_path),
-									append(false)
+					const std::string &a_path) : over(false), 
+												mode(READ_WRITE), 
+												fileType(type),
+												path(a_path),
+												append(false)
+{
+}
+
+//-------------------------------------------------------------------
+
+flushDisk::flushDisk(flushDisk &fd)
 {
 }
 
@@ -48,7 +85,7 @@ int
 flushDisk::addPostExec(inExec func, 
 					void *data) const
 {
-	_addPostExec(func, (dodoBase *)this, data);
+	return _addPostExec(func, (dodoBase *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -57,7 +94,7 @@ int
 flushDisk::addPreExec(inExec func, 
 					void *data) const
 {
-	_addPreExec(func, (dodoBase *)this, data);
+	return _addPreExec(func, (dodoBase *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -111,6 +148,7 @@ flushDisk::open(const std::string &a_path) const
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_OPEN;
 	#endif
+	
 	#ifndef WIN
 		if (a_path.size()!=0 && strcmp(a_path.c_str(),path.c_str())!=0)
 	#else
@@ -138,19 +176,10 @@ flushDisk::open(const std::string &a_path) const
 			#endif
 		else
 		{
-			#ifndef WIN
-				struct stat st;
-			#else
-				struct _stat st;
-			#endif	
-			
+			SSTAT st;
 			bool exists(false);
 			
-			#ifndef WIN
-				if (::lstat(path.c_str(),&st)==-1)
-			#else
-				if (::_stat(path.c_str(),&st)==-1)
-			#endif
+			if (FSTAT(path.c_str(),&st)==-1)
 			{
 				if (errno != ENOENT)
 					#ifndef NO_EX
@@ -163,6 +192,7 @@ flushDisk::open(const std::string &a_path) const
 				exists = true;
 				
 			#ifndef WIN
+			
 				if (fileType == FIFO_FILE)
 				{
 					if (exists && !S_ISFIFO(st.st_mode))
@@ -180,17 +210,14 @@ flushDisk::open(const std::string &a_path) const
 							#endif					
 				}
 				else
+				
 			#endif
-				#ifndef WIN
-					if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && !S_ISREG(st.st_mode) )
-				#else
-					if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && st.st_mode!=_S_IFREG )
-				#endif
-						#ifndef NO_EX
-							throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
-						#else
-							return false;
-			#endif
+				if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && (_REGULARFILE&st.st_mode) != _REGULARFILE)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
 							
 			switch (mode)
 			{
@@ -234,7 +261,7 @@ flushDisk::open(const std::string &a_path) const
 #else
 	bool
 #endif
-flushDisk::read(void *a_void, 
+flushDisk::read(void * const a_void, 
 				unsigned long a_pos) const
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
@@ -308,12 +335,13 @@ flushDisk::readString(std::string &a_str,
 				unsigned long a_pos) const
 {
 	register char *data = new char[inSize+1];
-		if (data == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTRING,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
+	if (data == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTRING,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
 	memset(data,0,inSize);
 
 	#ifdef NO_EX
@@ -369,7 +397,7 @@ flushDisk::write(const void *const a_buf,
 	
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
-		register size_t read_bytes;
+		register size_t read_bytes(-1);
 		a_pos *= outSize;
 		if (!over && !append)
 		{		
@@ -493,11 +521,11 @@ flushDisk::erase(unsigned long a_pos)
 flushDisk::flush()
 {
 	if (fflush(file) != 0)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-	#else
-		return false;
-	#endif	
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+		#else
+			return false;
+		#endif	
 }
 //-------------------------------------------------------------------
 
@@ -509,30 +537,21 @@ flushDisk::flush()
 flushDisk::unlink(const std::string &path)
 {
 	register int status(0);
-	#ifndef WIN
-		struct stat st;
-		if (::lstat(path.c_str(),&st) == -1)
-	#else
-		struct _stat st;
-		if (::_stat(path.c_str(),&st) == -1)	
-	#endif
+	SSTAT st;
+
+	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_UNLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 	
-	#ifndef WIN
-		if (S_ISDIR(st.st_mode))
-			status = ::rmdir(path.c_str());
-		else
-			status = ::unlink(path.c_str());
-	#else
-		if (st.st_mode != _S_IFDIR)
-			status = ::_rmdir(path.c_str());
-		else
-			status = ::_unlink(path.c_str());		
-	#endif	
+
+	if ((_DIRECTORY&st.st_mode) == _DIRECTORY)
+		status = FRMDIR(path.c_str());
+	else
+		status = FUNLINK(path.c_str());		
+
 	if (status == -1)
 	#ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_UNLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -555,18 +574,12 @@ flushDisk::unlink(const std::string &path)
 flushDisk::rename(const std::string &oldPath, 
 				const std::string &newPath)
 {
-	if (::rename(oldPath.c_str(),newPath.c_str()) != -1)
+	if (::rename(oldPath.c_str(),newPath.c_str()) == -1)
 		#ifdef NO_EX
-			return true;
+			return false;
 		#else
-			return ;
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RENAME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#endif
-		
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RENAME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-	#else
-		return false;
-	#endif	
 	
 	#ifdef NO_EX
 		return true;
@@ -575,6 +588,61 @@ flushDisk::rename(const std::string &oldPath,
 
 //-------------------------------------------------------------------
 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif  
+flushDisk::symlink(const std::string &oldPath, 
+					const std::string &newPath, 
+					bool force)
+{
+	if (force)
+	{
+		SSTAT st;
+		if (FSTAT(newPath.c_str(),&st) != -1)
+		#ifndef WIN
+			if (!S_ISLNK(st.st_mode))			
+				#ifdef NO_EX
+					return false;
+				#else
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+				#endif
+		#else
+			if (true)
+			{
+			}
+		#endif
+			else
+				if (FUNLINK(newPath.c_str()) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+				#else
+					return false;
+				#endif				
+	}
+	#ifndef WIN
+
+		if (::symlink(oldPath.c_str(),newPath.c_str()) == -1)
+			#ifdef NO_EX
+				return false;
+			#else
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#endif
+	
+	#else
+	
+	
+	
+	#endif		
+	
+	#ifdef NO_EX
+		return true;
+	#endif		
+}					
+
+//-------------------------------------------------------------------
+	
 #ifndef WIN
 
 	#ifndef NO_EX
@@ -585,18 +653,12 @@ flushDisk::rename(const std::string &oldPath,
 	flushDisk::link(const std::string &oldPath, 
 					const std::string &newPath)
 	{
-		if  (::link(oldPath.c_str(),newPath.c_str()) != -1)
+		if  (::link(oldPath.c_str(),newPath.c_str()) == -1)
 			#ifdef NO_EX
-				return true;
+				return false;
 			#else
-				return ;
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_LINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
 			#endif
-			
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_LINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-		#else
-			return false;
-		#endif		
 		
 		#ifdef NO_EX
 			return true;
@@ -610,69 +672,16 @@ flushDisk::rename(const std::string &oldPath,
 	#else
 		bool
 	#endif  
-	flushDisk::symlink(const std::string &oldPath, 
-						const std::string &newPath, 
-						bool force)
-	{
-		if (force)
-		{
-			struct stat st;
-			if (::lstat(newPath.c_str(),&st) != -1)
-				if (!S_ISLNK(st.st_mode))			
-					#ifdef NO_EX
-						return true;
-					#else
-						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
-					#endif
-				else
-					if (::unlink(newPath.c_str()) == -1)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-					#else
-						return false;
-					#endif				
-		}
-		if (::symlink(oldPath.c_str(),newPath.c_str()) != -1)
-			#ifdef NO_EX
-				return true;
-			#else
-				return ;
-			#endif
-			
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);		
-		#else
-			return false;
-		#endif	
-		
-		#ifdef NO_EX
-			return true;
-		#endif		
-	}					
-	
-	//-------------------------------------------------------------------
-	
-	#ifndef NO_EX
-		void 
-	#else
-		bool
-	#endif  
 	flushDisk::chown(const std::string &path, 
 					int uid)
 	{
-		if (::chown(path.c_str(),uid,-1)!=-1)
+		if (::chown(path.c_str(),uid,-1) == -1)
 			#ifdef NO_EX
-				return true;
+				return false;
 			#else
-				return ;
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CHOWN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#endif
 			
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CHOWN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);		
-		#else
-			return false;
-		#endif	
-		
 		#ifdef NO_EX
 			return true;
 		#endif			
@@ -688,19 +697,13 @@ flushDisk::rename(const std::string &oldPath,
 	flushDisk::chgrp(const std::string &path, 
 					int gid)
 	{
-		if (::chown(path.c_str(),-1,gid) != -1)
+		if (::chown(path.c_str(),-1,gid) == -1)
 			#ifdef NO_EX
-				return true;
+				return false;
 			#else
-				return ;
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CHGRP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#endif
-			
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CHGRP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);		
-		#else
-			return false;
-		#endif
-		
+
 		#ifdef NO_EX
 			return true;
 		#endif		
@@ -713,13 +716,11 @@ flushDisk::rename(const std::string &oldPath,
 	{
 		struct stat st;
 		if (::lstat(path.c_str(),&st) == -1)
-		{
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETUSEROWNER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return -1;		
 			#endif
-		}
 		
 		return st.st_uid;
 	}
@@ -731,13 +732,11 @@ flushDisk::rename(const std::string &oldPath,
 	{
 		struct stat st;
 		if (::lstat(path.c_str(),&st) == -1)
-		{
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETGROUPOWNER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
 			#else
 				return -1;				
 			#endif
-		}
 		
 		return st.st_gid;		
 	}
@@ -755,9 +754,18 @@ flushDisk::touch(const std::string &path,
 {
 	if (a_time==-1)
 		a_time = time(NULL);
-	utimbuf temp = {a_time, a_time};
 	
-	if (::utime(path.c_str(),&temp)!=-1)
+	#ifndef WIN
+		utimbuf temp = {a_time, a_time};
+	#else
+		_utimbuf temp = {a_time, a_time};
+	#endif
+	
+	#ifndef WIN
+		if (::utime(path.c_str(),&temp) == -1)
+	#else
+		if (::_utime(path.c_str(),&temp) == -1)	
+	#endif
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_TOUCH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
 		#else
@@ -788,34 +796,20 @@ flushDisk::mkdir(const std::string &path,
 	{
 		if (force && (errno == EEXIST) )
 		{
-			#ifndef WIN
-				struct stat st;
-				if (::lstat(path.c_str(),&st) == -1)
-			#else
-				struct _stat st;
-				if (::_stat(path.c_str(),&st) == -1)	
-			#endif
+			SSTAT st;
+			if (FSTAT(path.c_str(),&st) == -1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_MKDIR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
-			
-			#ifndef WIN
-				if (S_ISDIR(st.st_mode))
-					#ifdef NO_EX
-						return true;
-					#else
-						return ;
-					#endif
-			#else
-				if(st.st_mode!=_S_IFREG)		
-					#ifdef NO_EX
-						return true;
-					#else
-						return ;
-					#endif
-			#endif
+				
+			if((_DIRECTORY&st.st_mode) == _DIRECTORY)		
+				#ifdef NO_EX
+					return true;
+				#else
+					return ;
+				#endif
 		}
 		else
 			#ifndef NO_EX
@@ -824,6 +818,7 @@ flushDisk::mkdir(const std::string &path,
 				return false;
 			#endif
 	}
+	
 	#ifdef NO_EX
 		return true;
 	#endif			
@@ -862,11 +857,7 @@ flushDisk::getPermission(int permission)
 	register int mode(0);
 	
 	if ((OWNER_READ_ACCESS & permission) == OWNER_READ_ACCESS)
-		#ifndef WIN
-			mode |= S_IRUSR;	
-		#else
-			mode |= _S_IREAD;
-		#endif
+		mode |= PERM_READ;
 		
 	#ifndef WIN
 		if ((GROUP_READ_ACCESS & permission) == GROUP_READ_ACCESS)
@@ -876,11 +867,7 @@ flushDisk::getPermission(int permission)
 	#endif
 			
 	if ((OWNER_WRITE_ACCESS & permission) == OWNER_WRITE_ACCESS)
-		#ifndef WIN
-			mode |= S_IWUSR;
-		#else
-			mode |= _S_IWRITE;
-		#endif
+		mode |= PERM_WRITE;
 		
 	#ifndef WIN	
 		if ((GROUP_WRITE_ACCESS & permission) == GROUP_WRITE_ACCESS)
@@ -917,8 +904,8 @@ flushDisk::getPermission(int permission)
 #endif 
 flushDisk::rm(const std::string &path)
 {
-	struct stat st;
-	if (::lstat(path.c_str(),&st) == -1)
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)	
 		if (errno != ENOENT)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -931,73 +918,108 @@ flushDisk::rm(const std::string &path)
 			#else
 				return false;							
 			#endif
-				
-		
-	if (!S_ISDIR(st.st_mode))
-		if (::unlink(path.c_str()) == -1)
-		{
+
+	if ( (_DIRECTORY&st.st_mode) != _DIRECTORY)
+		if (FUNLINK(path.c_str()) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif			
-			
+		else	
 			#ifdef NO_EX
 				return true;
 			#else
 				return ;
-			#endif	
-		}
-	
-	DIR *directory = opendir(path.c_str());
-	
-	if (directory == NULL)
-	{
-		#ifndef NO_EX
-			if (errno == ENOENT)
-					return ;
-			else
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);		
-		#else
-			if (errno == ENOENT)
-				return true;		
-		#endif			
-	}
-	
-	dirent *dd;
+			#endif
+			
 	std::string attached;
 	
-	while ( (dd=readdir(directory)) != NULL)
-	{
-		if ( (strcmp(dd->d_name,".") == 0) || (strcmp(dd->d_name,"..") == 0))
-			continue;
-		attached.assign(path+FILE_DELIM+dd->d_name);
-		#ifndef WIN
-			if (::lstat(attached.c_str(),&st) == -1)		
-		#else
-			if (::_stat(attached.c_str(),&st) == -1)		
-		#endif
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;		
-		#endif
-		if (S_ISDIR(st.st_mode))
-			flushDisk::rm(attached.c_str());
-		else
-			if (::unlink(attached.c_str()) == -1)
+	#ifndef WIN
+	
+		DIR *directory = opendir(path.c_str());
+		
+		if (directory == NULL)
+		{
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				if (errno == ENOENT)
+						return ;
+				else
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);		
 			#else
-				return false;
-			#endif
-	}
-	if (::rmdir(path.c_str()) == -1)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+				if (errno == ENOENT)
+					return true;		
+			#endif			
+		}
+		
+		dirent *dd;
+		
+		while ( (dd=readdir(directory)) != NULL)
+		{
+			if ( (strcmp(dd->d_name,".") == 0) || (strcmp(dd->d_name,"..") == 0))
+				continue;
+			attached.assign(path+FILE_DELIM+dd->d_name);
+			
+			if (::lstat(attached.c_str(),&st) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;		
+				#endif
+				
+			if (S_ISDIR(st.st_mode))
+				flushDisk::rm(attached.c_str());
+			else
+				if (::unlink(attached.c_str()) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+		}
+		
+		closedir(directory);
+		
 	#else
-		return false;	
-	#endif	
+	
+		struct _finddata_t dir;
+		long file = _findfirst(path.c_str(), &c_file );
+		
+		if (file == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+			#else
+				return false;	
+			#endif
+			
+		while(_findnext(file, &c_file ) == 0)
+		{
+			if ( (strcmp(c_file.name,".") == 0) || (strcmp(c_file.name,"..") == 0))
+				continue;
+			attached.assign(path+FILE_DELIM+c_file.name);
+			
+			if ( (_A_SUBDIR&c_file.attrib) == _A_SUBDIR)
+				flushDisk::rm(attached.c_str());
+			else
+				if (::_unlink(attached.c_str()) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif			
+		}
+			
+		_findclose(file);	
+		
+	#endif
+	
+	
+	if (FRMDIR(path.c_str()) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+		#else
+			return false;	
+		#endif	
 	
 	#ifdef NO_EX
 		return true;
@@ -1009,13 +1031,8 @@ flushDisk::rm(const std::string &path)
 permissionModesEnum 
 flushDisk::getPermissions(const std::string &path)
 {
-	#ifndef WIN
-		struct stat st;
-		if (::lstat(path.c_str(),&st) == -1)
-	#else
-		struct _stat st;
-		if (::_stat(path.c_str(),&st) == -1)	
-	#endif
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETPERMISSIONS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1024,11 +1041,7 @@ flushDisk::getPermissions(const std::string &path)
 		
 	register int mode(NONE);
 	
-	#ifndef WIN
-		if ((S_IRUSR & st.st_mode) == S_IRUSR)
-	#else
-		if ((_S_IREAD & st.st_mode) == _S_IREAD)
-	#endif
+	if ((PERM_READ & st.st_mode) == PERM_READ)
 		mode |= OWNER_READ_ACCESS;	
 		
 	#ifndef WIN
@@ -1037,12 +1050,8 @@ flushDisk::getPermissions(const std::string &path)
 		if ((S_IROTH & st.st_mode) == S_IROTH)
 			mode |= OTHER_READ_ACCESS;
 	#endif	
-		
-	#ifndef WIN	
-		if ((S_IWUSR & st.st_mode) == S_IWUSR)
-	#else
-		if ((_S_IWRITE & st.st_mode) == _S_IWRITE)		
-	#endif
+	
+	if ((PERM_WRITE & st.st_mode) == PERM_WRITE)		
 		mode |= OWNER_WRITE_ACCESS;
 	
 	#ifndef WIN
@@ -1075,13 +1084,8 @@ flushDisk::getPermissions(const std::string &path)
 flushDiskFileTypeEnum 
 flushDisk::getFileType(const std::string &path)
 {
-	#ifndef WIN
-		struct stat st;
-		if (::lstat(path.c_str(),&st) == -1)
-	#else
-		struct _stat st;
-		if (::_stat(path.c_str(),&st) == -1)	
-	#endif
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILETYPE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1094,18 +1098,12 @@ flushDisk::getFileType(const std::string &path)
 	
 	switch (st.st_mode)
 	{
-		#ifndef	WIN
-			case S_IFREG:
-		#else
-			case _S_IFREG:
-		#endif
+		case _REGULARFILE:
 			return REGULAR_FILE;
-		#ifndef WIN
-			case S_IFDIR:
-		#else
-			case _S_IFDIR:
-		#endif
+			
+		case _DIRECTORY:
 			return DIRECTORY;
+			
 		#ifndef WIN
 			case S_IFLNK:
 				return SYMBOLIC_LINK;
@@ -1118,6 +1116,7 @@ flushDisk::getFileType(const std::string &path)
 			case S_IFIFO:
 				return FIFO;
 		#endif
+		
 		default:
 			return (flushDiskFileTypeEnum)-1;
 	}
@@ -1136,22 +1135,14 @@ flushDisk::getPath() const
 long
 flushDisk::getSize(const std::string &path)
 {
-	#ifndef WIN
-		struct stat st;
-		if (::lstat(path.c_str(),&st) == -1)
-	#else
-		struct _stat st;
-		if (::_stat(path.c_str(),&st) == -1)	
-	#endif
-	{
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETSIZE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return -1;		
 		#endif
-		
-		return -1;
-	}
+
 	return st.st_size;	
 }
 
@@ -1160,13 +1151,8 @@ flushDisk::getSize(const std::string &path)
 int 
 flushDisk::getAccTime(const std::string &path)
 {
-	#ifndef WIN
-		struct stat st;
-		if (::lstat(path.c_str(),&st) == -1)
-	#else
-		struct _stat st;
-		if (::_stat(path.c_str(),&st) == -1)	
-	#endif
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETACCTIME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1181,13 +1167,8 @@ flushDisk::getAccTime(const std::string &path)
 int 
 flushDisk::getModTime(const std::string &path)
 {
-	#ifndef WIN
-		struct stat st;
-		if (::lstat(path.c_str(),&st) == -1)
-	#else
-		struct _stat st;
-		if (::_stat(path.c_str(),&st) == -1)	
-	#endif
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETMODTIME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1204,13 +1185,13 @@ flushDisk::getFileInfo(const std::string &path)
 {
 	__fileInfo file;	
 	
-	struct stat st;
-	if (::lstat(path.c_str(),&st) == -1)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-	#else
-		return file;		
-	#endif
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return file;		
+		#endif
 	
 	file.name.assign(basename((char *)path.c_str()));
 	file.type = flushDisk::getFileType(path);
@@ -1218,8 +1199,10 @@ flushDisk::getFileInfo(const std::string &path)
 	file.accTime = flushDisk::getAccTime(path);
 	file.modTime = flushDisk::getModTime(path);
 	file.size = flushDisk::getSize(path);
-	file.uid = flushDisk::getUserOwner(path);
-	file.gid = flushDisk::getGroupOwner(path);
+	#ifndef WIN	
+		file.uid = flushDisk::getUserOwner(path);
+		file.gid = flushDisk::getGroupOwner(path);
+	#endif
 	
 	return file;
 }
@@ -1231,37 +1214,117 @@ flushDisk::getDirInfo(const std::string &path)
 {
 	std::vector<__fileInfo> dir;
 	
-	struct stat st;
-	if (::lstat(path.c_str(),&st) == -1)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETDIRINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-	#else
-		return dir;				
-	#endif	
-	if (!S_ISDIR(st.st_mode))
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETDIRINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return dir;				
+		#endif	
+	
+	if ((_DIRECTORY&st.st_mode) != _DIRECTORY)
 		return dir;
 	
-	DIR *directory = opendir(path.c_str());
+	#ifndef WIN
 	
-	if (directory == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETDIRINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-		#else
-			return dir;
-		#endif			
-	
-	dirent *dd;
-	std::string attached;
-	
-	while ( (dd=readdir(directory)) != NULL)
-	{
-		if ( (strcmp(dd->d_name,".") == 0) || (strcmp(dd->d_name,"..") == 0))
-			continue;
-		attached.assign(path + FILE_DELIM + dd->d_name);
+		DIR *directory = opendir(path.c_str());
+		
+		if (directory == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETDIRINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+			#else
+				return dir;
+			#endif			
+		
+		dirent *dd;
+		std::string attached;
+		
+		while ( (dd=readdir(directory)) != NULL)
+		{
+			if ( (strcmp(dd->d_name,".") == 0) || (strcmp(dd->d_name,"..") == 0))
+				continue;
+			attached.assign(path + FILE_DELIM + dd->d_name);
 			dir.push_back(flushDisk::getFileInfo(attached));
-	}
+		}
 	
+	#else
+	
+		struct _finddata_t dir;
+		long file = _findfirst(path.c_str(), &c_file);
+		
+		if (file == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+			#else
+				return false;	
+			#endif
+			
+		while(_findnext(file, &c_file ) == 0)
+		{
+			if ( (strcmp(c_file.name,".") == 0) || (strcmp(c_file.name,"..") == 0))
+				continue;
+			attached.assign(path+FILE_DELIM+c_file.name);
+			dir.push_back(flushDisk::getFileInfo(attached));
+			
+			if ( (_A_SUBDIR&c_file.attrib) == _A_SUBDIR)
+				flushDisk::rm(attached.c_str());		
+		}
+			
+		_findclose(file);
+			
+	#endif
+		
 	return dir;	
 }
 
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void
+#else
+	bool
+#endif
+flushDisk::followSymlink(const std::string &path, std::string &original)
+{
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FOLLOWSYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;		
+		#endif
+	
+	#ifndef WIN
+		char buffer[4096];
+	#else
+		char buffer[_MAX_PATH];
+	#endif
+	
+	#ifndef WIN
+	
+		if (!S_ISLNK(st.st_mode))			
+			#ifdef NO_EX
+				return false;
+			#else
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+			#endif	
+		
+		if (::readlink(path.c_str(),buffer,4096) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FOLLOWSYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;		
+			#endif	
+		
+		original.assign(buffer);
+		
+	#else		
+		
+	#endif	
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+	
 //-------------------------------------------------------------------

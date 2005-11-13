@@ -133,8 +133,11 @@ namespace dodo
 		long size;
 		int modTime;
 		int accTime;
-		int gid;
-		int uid;
+		
+		#ifndef WIN	
+			int gid;
+			int uid;
+		#endif
 	};	
 	
 	/**
@@ -153,7 +156,16 @@ namespace dodo
 	
 	class flushDisk : public flush
 	{
+		private:
+		
+			flushDisk(flushDisk &fd);///to prevent from copyin'
+		
 		public:
+					
+			/**
+			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 */		
+			virtual dodoBase * const getSelf();
 							
 			///constructors and destructors
 			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path
@@ -200,7 +212,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							read(void *data, unsigned long pos = 0) const;///reads to void*; return false if eof		
+							read(void * const data, unsigned long pos = 0) const;///reads to void*; return false if eof		
 			
 			/**
 			 * write functions
@@ -212,13 +224,13 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							writeString(const std::string &, unsigned long pos = 0);///writes string
+							writeString(const std::string &data, unsigned long pos = 0);///writes string
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							write(const void * const , unsigned long pos = 0);///writes void*
+							write(const void * const data, unsigned long pos = 0);///writes void*
 
 			/**
 			 * delete functions
@@ -300,6 +312,20 @@ namespace dodo
 			static int getAccTime(const std::string &path);///timestamp
 			static int getModTime(const std::string &path);///timestemp
 			
+			#ifndef NO_EX
+				static void
+			#else
+				static bool
+			#endif
+								followSymlink(const std::string &path, std::string &original);///now not windows compatible
+							
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)///now not windows compatible
+			
 			#ifndef WIN
 			
 				#ifndef NO_EX
@@ -308,12 +334,6 @@ namespace dodo
 					static bool 
 				#endif
 								link(const std::string &oldPath, const std::string &newPath);
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif
-								symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)
 				#ifndef NO_EX
 					static void 
 				#else
@@ -344,7 +364,9 @@ namespace dodo
 			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
 			
 			static int getPermission(int permission);
+			
 		private:
+		
 			mutable std::string path;///file name; for files only;
 					
 			mutable FILE *file;///file handler

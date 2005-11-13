@@ -26,6 +26,14 @@
 
 using namespace dodo;
 
+dodoBase * const 
+dodoBase::getSelf()
+{
+	return this;
+}
+
+//-------------------------------------------------------------------
+
 dodoBase::dodoBase()
 {
 }

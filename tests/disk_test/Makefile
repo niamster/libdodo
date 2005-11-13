@@ -1,5 +1,5 @@
 #GCC_PATH=/opt/gcc-3.4.3/bin/
-GCC_PATH=/opt/gcc-4.0.1/bin/
+#GCC_PATH=/opt/gcc-4.0.1/bin/
 
 LIBTOOL = libtool
 CXX = $(GCC_PATH)g++

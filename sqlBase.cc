@@ -77,6 +77,14 @@ static 	__statements sqlAddSelArr[3] =
 
 //-------------------------------------------------------------------
 
+dodoBase * const 
+sqlBase::getSelf()
+{
+	return dynamic_cast<dodoBase *>(this);
+}
+
+//-------------------------------------------------------------------
+
 sqlBase::sqlBase() : preventFraming(false)
 {	
 	request.reserve(100);

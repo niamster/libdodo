@@ -8,8 +8,8 @@ void
 hook(dodoBase *base, 
 	void *yep)
 {
-//	mysqlpp *sql = dynamic_cast<mysqlpp *>(base);
-	dbBase *sql = dynamic_cast<dbBase *>(base);
+	mysqlpp *sql = dynamic_cast<mysqlpp *>(base->getSelf());
+//	dbBase *sql = dynamic_cast<dbBase *>(base);
 /*	if (sql->operType == MYSQLPP_OPER_EXEC)
 	{
 		sql->store();

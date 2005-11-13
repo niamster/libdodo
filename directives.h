@@ -56,16 +56,16 @@
 
 
 ///socket default timeouts
-#define RECIEVE_TIMEOUT 100
-#define SEND_TIMEOUT 100
+#define RECIEVE_TIMEOUT 1000
+#define SEND_TIMEOUT 1000
 
 ///default values of buffer for io operations(flush*)
 #define INSIZE 1024
 #define OUTSIZE 1024	
 
 ///default values of socket buffer for io operations(flush*)
-#define SOCKET_INSIZE 1024
-#define SOCKET_OUTSIZE 1024	
+#define SOCKET_INSIZE 10240
+#define SOCKET_OUTSIZE 10240
 
 ///amount of seconds for linger
 #define SOCKET_LINGER_PERIOD 1

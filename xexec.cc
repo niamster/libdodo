@@ -138,7 +138,7 @@ xexec::_addPostExec(inExec func,
  				dodoBase *obj,
 				void *data) const
 {
-	addXExec(postExec.exec,func,obj,data);
+	return addXExec(postExec.exec,func,obj,data);
 }
 
 //-------------------------------------------------------------------
@@ -291,6 +291,8 @@ xexec::exec() const
 	performXExec(preExec);
 	///execute 
 	performXExec(postExec);
+	
+	return true;
 }
 
 //-------------------------------------------------------------------

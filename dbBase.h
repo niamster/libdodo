@@ -108,6 +108,7 @@ namespace dodo
 	{
 		INSERT_IGNORE = 1,
 	};
+	
 	/**
 	 * arrays of positions of "statement" for complete realization. In sql wersion - see sqlBase;
 	 */	
@@ -331,6 +332,12 @@ namespace dodo
 	class dbBase : public dodoBase
 	{
 		public:
+					
+			/**
+			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 */		
+			virtual dodoBase * const getSelf();
+			
 			/*
 			 * constructors and destructors
 		 	 */
@@ -347,12 +354,14 @@ namespace dodo
 			 * sets info for mysql database
 			 */
 			void setSqlInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &socket = __string__) const;
+			
 			/**
 			 * table - (char*)/(string); if length(table)==0 => 'from `table`' doesn't use 
 			 * fields - array of (char*)/(string)
 			 * where - (char*)/(string)
 		     */
 			virtual void select(const std::string &table, const stringArr &fieldsNames, const std::string &where = __string__) const;
+			
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
@@ -360,6 +369,7 @@ namespace dodo
 			 * value => field's value
 		     */
 			virtual void insert(const std::string &table, const assocArr &fields);
+			
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of array((char*)/(string))
@@ -367,23 +377,27 @@ namespace dodo
 			 * 			value => field's value
 		     */
 			virtual void insert(const std::string &table, const std::vector<assocArr> &fields);
+			
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 		     */
 			virtual void insert(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames = __stringarray__);
+			
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of array((char*)/(string))
 			 * fieldsNames - array of (char*)/(string)
 		     */
 			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarray__);			
+			
 			/**
 			 * table(To/From) - (char*)/(string)
 			 * fieldsNames - array of (char*)/(string)
 			 */
 			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = __stringarray__, const std::string &where = __string__);
+			
 			/**
 			 * table - (char*)/(string)
 			 * fields - array of (char*)/(string)
@@ -392,6 +406,7 @@ namespace dodo
 			 * where - (char*)/(string)
 		     */
 			virtual void update(const std::string &table, const assocArr &fields, const std::string &where = __string__);			
+			
 			/**
 			 * table - (char*)/(string)
 			 * fieldsVal - array of (char*)/(string)
@@ -399,107 +414,133 @@ namespace dodo
 			 * where - (char*)/(string)
 		     */
 			virtual void update(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &where = __string__);
+			
 			/**
 			 * table - (char*)/(string)
 			 * where - (char*)/(string)
 			 */       
 			virtual void del(const std::string &table, const std::string &where = __string__);
+			
 			/**
 			 * subquery
 			 */
 			virtual void subquery(const stringArr &sub, int type=UNION/*UNION_ALL,MINUS,INTERSECT*/);
+			
 			/**
 			 * change db
 			 */
 			virtual void use(const std::string &db);
+			
 			/**
 			 * renames database
 			 */
 			virtual void renameDb(const std::string &db, const std::string &to_db);
+			
 			/**
 			 * renames table
 			 */
 			virtual void renameTable(const std::string &table, const std::string &to_table);
+			
 			/**
 			 * renames field
 			 */ 
 			virtual void renameField(const std::string &field, const std::string &to_field, const std::string &table);
+			
 			/**
 			 * deletes database
 			 */
 			virtual void deleteDb(const std::string &db);
+			
 			/**
 			 * deletes table
 			 */
 			virtual void deleteTable(const std::string &table);
+			
 			/**
 			 * deletes field
 			 */ 
 			virtual void deleteField(const std::string &field, const std::string &table);
+			
 			/**
 			 * creates database
 			 */
 			virtual void createDb(const std::string &db, const std::string &charset = __string__);
+			
 			/**
 			 * creates table
 			 */
 			virtual void createTable(__tableInfo &tableInfo);
+			
 			/**
 			 * creates field
 			 */ 
 			virtual void createField(__fieldInfo &fieldInfo, const std::string &table);						
+			
 			/**
 			 * truncates table
 			 */
 			 virtual void truncate(const std::string &table);
+			 
 			/**
 			 * add where statement
 			 */
 			virtual void where(const std::string &where) const;
+			
 			/**
 			 * sets limit for request
 			 */
 			virtual void limit(unsigned int number) const;
+			
 			/**
 			 * sets offset for request
 			 */
-			virtual void offset(unsigned int number) const;			
+			virtual void offset(unsigned int number) const;		
+				
 			/**
 			 * sets order for request
 			 */
 			virtual void order(const std::string &order) const;
+			
 			/**
 			 * sets group for request
 			 */
 			virtual void group(const std::string &group) const;
+			
 			/**
 			 * sets having for request
 			 */
 			virtual void having(const std::string &having) const;
+			
 			/**
 			 * unsets where statement
 			 */
 			virtual void unwhere() const;
+			
 			/**
 			 * unsets limit for request
 			 */
 			virtual void unlimit() const;
+			
 			/**
 			 * unsets offset for request
 			 */
-			virtual void unoffset() const;			
+			virtual void unoffset() const;		
+				
 			/**
 			 * unsets order for request
 			 */
 			virtual void unorder() const;
+			
 			/**
 			 * unsets group for request
 			 */
 			virtual void ungroup() const;
+			
 			/**
 			 * unsets having for request
 			 */
 			virtual void unhaving() const;		
+			
 			/**
 			 * functions to set(unset) additional parameters for standart qTypes
 			 */
@@ -512,20 +553,24 @@ namespace dodo
 			virtual void unsetAddUpSt(unsigned int statement);
 			virtual void unsetAddSelSt(unsigned int statement);
 			virtual void unsetAddDelSt(unsigned int statement);
+			
 			/**
 			 * detect what type of request was(will be) performed
 			 */
 			virtual int getQType() const;
+			
 			/**
 			 * function that return structure with pointers to internal data(not copy).
 			 * it is used for postExec and preExec functions. For modyfication.
 			 */
 			virtual __collectedData getCollectedData();			
+			
 			/**
 			 * functions to store collected data into temp struct and restore from it.
 			 */
 			virtual void store();
 			virtual void restore();
+			
 			/**
 			 * set default values
 			 */
@@ -537,23 +582,27 @@ namespace dodo
 			 * resolve baseDataTypesEnum into string
 			 */
 			inline virtual std::string stringType(int type) const;
+			
 			/**
 			 * check for range; return : if must 1; may have 0; mustn't have -1;
 			 */
 			inline virtual int chkRange(int type) const;
+			
 			/**
 			 * resolve refFieldEnum into string
 			 */
 			inline virtual std::string stringReference(int type) const;
+			
 			/**
 			 * backuped collected data
 			 */
-		
 			mutable __collectedDataP backup;		
+			
 			/**
 			 * frees collected data
 			 */
 			virtual void cleanCollect() const;///clean collected data
+			
 			/**
 			 * collected data
 			 * some of variables can be used not only as they are named. See comments/ Some variables can hold another data, to save space

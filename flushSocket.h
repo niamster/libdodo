@@ -76,8 +76,8 @@ namespace dodo
 	 */
 	 enum socketOptionsEnum
 	 {
-	 	SOCKET_KEEP_ALIVE=2,///(*default*)Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-	 	SOCKET_REUSE_ADDRESS=4,///(*default*) 	
+	 	SOCKET_KEEP_ALIVE=2,///Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+	 	SOCKET_REUSE_ADDRESS=4,/// 	
 	 	SOCKET_DONOT_USE_GATEWAY=8, 	
 	 	SOCKET_BROADCAST=16,///Permits  sending of broadcast messages, if this is supported by the protocol. 	
 	 	SOCKET_OOB_INLINE=32,///out-of-band(marked urgent) data keep inline in recieve operation
@@ -90,9 +90,9 @@ namespace dodo
 	  */
 	 enum socketLingerOption
 	 { 
-	 	SOCKET_GRACEFUL_CLOSE=64,///close returns immediately, but any unsent data is transmitted (after close returns).
-	 	SOCKET_HARD_CLOSE=128,///close returns immediately, and any unsent data is discarded.
-	 	SOCKET_WAIT_CLOSE=256,///(*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+	 	SOCKET_GRACEFUL_CLOSE,///close returns immediately, but any unsent data is transmitted (after close returns).
+	 	SOCKET_HARD_CLOSE,///close returns immediately, and any unsent data is discarded.
+	 	SOCKET_WAIT_CLOSE,///(*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	 };
 	 
 	 /**
@@ -124,7 +124,100 @@ namespace dodo
 		int port;
 	};
 	
-	class flushSocketExchange;///to make flushSocket and flushSocketExchange mutual friends
+	/**
+	 * class that have same options as for flushSocketExchange as for flushSocket
+	 */
+	class flushSocketOptions
+	{
+		
+		friend class flushSocket;
+		friend class flushSocketExchange;
+		
+		protected:
+		
+			///constructor
+			flushSocketOptions(socketProtoFamilyEnum family, socketTransferTypeEnum type);
+			flushSocketOptions();
+		
+		public:
+				
+			/**
+			 * set socket options.
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setSockOption(socketOptionsEnum option, bool flag);
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setLingerSockOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
+			
+			virtual socketLingerOption getLingerOption();
+			virtual int getLingerPeriod();///only for SOCKET_WAIT_CLOSE
+			
+			/**
+			 * The maximum buffer size for stream sockets is 262144 bytes
+			 */ 
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setInBufferSize(int bytes);///accept value to socket; size of socket buffer!
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setOutBufferSize(int bytes);///accept value to socket; size of socket buffer!
+			
+			virtual int getInBufferSize();
+			virtual int getOutBufferSize();
+				
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+			
+			virtual unsigned long getInTimeout();
+			virtual unsigned long getOutTimeout();
+			
+			/**
+			 * socketOptionsEnum
+			 */
+			virtual bool getSocketOpts(int option);
+			
+		protected:
+			
+			socketProtoFamilyEnum family;
+			socketTransferTypeEnum type;
+					
+			int socketOpts;
+			socketLingerOption lingerOpts;
+			int lingerSeconds;
+			
+			unsigned long inTimeout;///in microseconds
+			unsigned long outTimeout;///in microseconds
+			 
+			int inSocketBuffer;
+			int outSocketBuffer;
+			
+			int socket;///id of socket		
+				
+	};
 	
 	/**
 	 * it's passes to accept call, and then inits flushSocketExchange;
@@ -152,7 +245,7 @@ namespace dodo
 	 * exchange of data is flushSocketExchange class' task
 	 * this class can establish connections; the below class can send/recieve data!
 	 */
-	class flushSocket : public flush
+	class flushSocket : protected flush, public flushSocketOptions
 	{
 		friend class flushSocketExchange;
 		
@@ -164,6 +257,11 @@ namespace dodo
 			flushSocket(flushSocket &fs);
 		
 		public:
+					
+			/**
+			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 */		
+			virtual dodoBase * const getSelf();
 					
 			/**
 			 * constructors/destructors
@@ -317,15 +415,6 @@ namespace dodo
 			 */			 
 			long numberOfConn;///number of connection for client = -1
 			long accepted;///how many was accepted
-			
-			//bool block;
-			
-			int socket;///id of socket
-			
-			socketProtoFamilyEnum family;
-			socketTransferTypeEnum type;
-			
-			int socketOpts;
 	};
 	
 	/**
@@ -334,12 +423,17 @@ namespace dodo
 	 * otherwise you'll recieve exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection = previous will be closed
 	 */
-	 class flushSocketExchange : public flush
+	 class flushSocketExchange : public flush, public flushSocketOptions
 	 {
 	 	
 	 	friend class flushSocket;
 	 	
 		public:
+					
+			/**
+			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 */		
+			virtual dodoBase * const getSelf();
 					
 			/**
 			 * constructors/destructors
@@ -361,69 +455,37 @@ namespace dodo
 			
 			/**
 			 * send, recieve
-			 */
-		//	virtual bool send(void *data);
-		//	virtual bool recieve(void *data);
-			
-			/**
-			 * set socket options.
-			 */
+			 * 
+			 * sends no longer than inSize,outSize;
+			 * if inSize,outSize bigger than socket buf - sends with few iterations
+			 * 
+			 */			
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							setSockOption(socketOptionsEnum option, bool flag);
+							send(const char * const data);
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif				
+							sendString(const std::string &data);
+			
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							setLingerSockOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
-			
-			virtual socketLingerOption getLingerOption();
-			virtual int getLingerPeriod();///only for SOCKET_WAIT_CLOSE
-			
-			/**
-			 * The maximum buffer size for stream sockets is 262144 bytes
-			 */ 
+							recieve(char * const data);
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
-			#endif
-							setInBufferSize(int bytes);///accept value to socket; size of socket buffer!
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							setOutBufferSize(int bytes);///accept value to socket; size of socket buffer!
-			
-			virtual int getInBufferSize();
-			virtual int getOutBufferSize();
-				
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
-			
-			virtual unsigned long getInTimeout();
-			virtual unsigned long getOutTimeout();
-			
-			/**
-			 * socketOptionsEnum
-			 */
-			virtual bool getSocketOpts(int option);
-			
+			#endif				
+							recieveString(std::string &data);
+						
 			/**
 			 * closes this stream
 			 */			
@@ -434,26 +496,12 @@ namespace dodo
 			#endif
 							close();
 			
-		protected:
-
-			virtual void init(int socket);
+		protected:	
 					
-			int socketOpts;
-			socketLingerOption lingerOpts;
-			int lingerSeconds;
-			
-			//bool block;
-			
-			unsigned long inTimeout;///in microseconds
-			unsigned long outTimeout;///in microseconds
-			 
-			int inSocketBuffer;
-			int outSocketBuffer;
-			
-			int socket;///id of socket
-			
-			socketProtoFamilyEnum family;
-			socketTransferTypeEnum type;			
+			/**
+			 * inits this class' data
+			 */		
+			virtual void init(int socket);		
 	 };
 };
 
