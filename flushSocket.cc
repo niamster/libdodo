@@ -1237,6 +1237,9 @@ flushSocketExchange::send(const char * const data)
 	unsigned int iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
 	int n(0), sent(0);
 	
+	if (normalize)
+		tools::normalize(stringToWrite,outSize);	
+		
 	for (unsigned int i=0;i<iter;++i)
 	{
 		n = 0;
@@ -1322,6 +1325,9 @@ flushSocketExchange::recieve(char * const data)
 				return false;	
 			#endif
 	}
+	
+	if (bufferize)
+		buffer.assign((char *)data,inSize);
 	
 	#ifdef NO_EX
 		return true;

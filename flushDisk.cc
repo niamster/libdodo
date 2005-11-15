@@ -170,7 +170,7 @@ flushDisk::open(const std::string &a_path) const
 	{
 		if (path.size() == 0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -183,7 +183,7 @@ flushDisk::open(const std::string &a_path) const
 			{
 				if (errno != ENOENT)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;							
 					#endif
@@ -197,14 +197,14 @@ flushDisk::open(const std::string &a_path) const
 				{
 					if (exists && !S_ISFIFO(st.st_mode))
 						#ifndef NO_EX
-							throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+							throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 						#else
 							return false;
 						#endif
 					if (!exists)
 						if (mkfifo(path.c_str(),flushDisk::getPermission(FILE_PERM)) == -1)
 							#ifndef NO_EX
-								throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+								throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 							#else
 								return false;		
 							#endif					
@@ -214,7 +214,7 @@ flushDisk::open(const std::string &a_path) const
 			#endif
 				if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && (_REGULARFILE&st.st_mode) != _REGULARFILE)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -238,7 +238,7 @@ flushDisk::open(const std::string &a_path) const
 	
 	if (file == NULL)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -267,9 +267,6 @@ flushDisk::read(void * const a_void,
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_READ;
 	#endif
-	
-	if (!opened)
-		open();
 	
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
@@ -383,9 +380,6 @@ flushDisk::write(const void *const a_buf,
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_WRITE;
 	#endif
-	
-	if (!opened)
-		open();
 	
 	std::string stringToWrite((char *)a_buf);
 		

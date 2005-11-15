@@ -21,7 +21,8 @@ void copyTest2(flushSocketExchange *fse)
 
 void process(flushSocketExchange &fse)
 {
-	fse.inSize = 1;
+	fse.inSize = 2;
+	fse.setInBufferSize(1);
 	cout << fse.getOutTimeout() << endl;
 	
 	fse.outSize = 7;

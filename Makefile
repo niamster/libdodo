@@ -3,7 +3,7 @@
 
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -march=pentium4
-OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBase.o baseEx.o mysqlpp.o cgipp.o regexp.o flush.o flushSocket.o flushDisk.o
+OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBase.o baseEx.o mysqlpp.o cgipp.o regexp.o flush.o flushSocket.o flushDisk.o flushSTD.o
 
 override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT -DPCRE_EXT $(DEFINES)
 

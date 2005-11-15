@@ -141,17 +141,10 @@ namespace dodo
 	};	
 	
 	/**
-     * u may have two types of reading/writing 
-	 * 	1)persistant - file opens when class constructs or where function setPersistant(true) was called. if parameter is false, file closes.
-	 * 		if you want to work persistant with temp file, u should leave call constructor (bool,bool)
-	 *	2)file opens every time u want ro read write
 	 *	by default mode is READ_WRITE
-	 *	reading/writing with string count{setNumberOfElements(long)} - number of characters(by default = 1)
-	 *		if u once specified number of characters, u don't have to specify again
 	 *	when u writing on the nonempty place by default it is error
 	 *		u may specify that by 'over'
-	 *	size - size of data to read/write in bytes(for string - length)
-	 * 	for string size is one.
+	 *	size(In/Out) - size of data to (read/write) in bytes(for string - length)
 	 */
 	
 	class flushDisk : public flush
@@ -191,15 +184,18 @@ namespace dodo
 			#endif			 
 							open(const std::string &path = __string__) const;///if opened previous file, closes it		
 			
+			/**
+			 * closes file
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							close() const;///closes file
+							close() const;
+							
 			/**
 			 * read functions. first argument - buffer, second - position
-			 * returns false if nothing was read
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -217,7 +213,6 @@ namespace dodo
 			/**
 			 * write functions
 			 * first argument - buffer, second - position(if u want to add to end of the file set 'append' to true)
-			 * returns false if exists, copy to buffer content of the node
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -233,7 +228,6 @@ namespace dodo
 							write(const void * const data, unsigned long pos = 0);///writes void*
 
 			/**
-			 * delete functions
 			 * erase info on position
 			 * 
 			 * NOTE for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
@@ -254,57 +248,72 @@ namespace dodo
 			#endif
 							flush();
 			/**
-			 * delete file/dir
+			 * delete file/dir (empty)
 			 * rename file/dir
-			 * link file
-			 * symbolic link
-			 * chown
-			 * chgrp
-			 * touch
-			 * mkdir
+			 * touch (sets access/modify time)
+			 * make dir
+			 * remove file/dir (possible not empty)
+			 * get file type
 			 * change mode
-			 * rmdir
+			 * get permissions
+			 * get size
+			 * get access time
+			 * get modyfication time
+			 * resolve symlink
+			 * symbolic link
+			 * link file
+			 * change owner
+			 * change group
+			 * get owner
+			 * get group
+			 * get file info
+			 * get dir info
 			 */
-			/**
-			 * in next functions(if u compiled library with exceptions) i used empty flushDisk class copy to make them static and to use defined exception class
-			 */
+			  
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							unlink(const std::string &path);///also empty directory
+			
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							rename(const std::string &oldPath, const std::string &newPath);
+			
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							touch(const std::string &path, int time=-1);///now by default
+			
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);///see permissionModesEnum; use | to combine; force - if created already - nothing to say
+			
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							rm(const std::string &path);///recursive; now is not WIN compatible
+							rm(const std::string &path);///recursive;
+							
 			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
+			
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
+							
 			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
 			
 			static long getSize(const std::string &path);///in bytes; if no such file or directory - will return -1!
@@ -318,6 +327,7 @@ namespace dodo
 				static bool
 			#endif
 								followSymlink(const std::string &path, std::string &original);///now not windows compatible
+								
 							
 			#ifndef NO_EX
 				static void 
@@ -325,6 +335,7 @@ namespace dodo
 				static bool 
 			#endif
 							symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)///now not windows compatible
+			
 			
 			#ifndef WIN
 			
@@ -334,12 +345,14 @@ namespace dodo
 					static bool 
 				#endif
 								link(const std::string &oldPath, const std::string &newPath);
+								
 				#ifndef NO_EX
 					static void 
 				#else
 					static bool 
 				#endif
 								chown(const std::string &path, int uid);
+								
 				#ifndef NO_EX
 					static void 
 				#else
@@ -348,24 +361,30 @@ namespace dodo
 								chgrp(const std::string &path, int gid);
 				
 				static int getUserOwner(const std::string &path);
+				
 				static int getGroupOwner(const std::string &path);
 				
 			#endif
 			
 			static __fileInfo getFileInfo(const std::string &path);///if no such file - empty will be returned
+			
 			static std::vector<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!;now is not WIN compatible
+			
 			
 			bool over;///indicates whether overright; for files,tmp_files only
 			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 			mutable flushDiskModesEnum mode;///mode to open file
-						
+			
+			/**
+			 * returns path of the opened file
+			 */			
 			virtual std::string getPath() const;
 
 			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
 			
-			static int getPermission(int permission);
-			
 		private:
+		
+			static int getPermission(int permission);
 		
 			mutable std::string path;///file name; for files only;
 					
