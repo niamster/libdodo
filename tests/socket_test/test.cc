@@ -26,23 +26,27 @@ hook(dodoBase *base,
 	flushSTD *st = dynamic_cast<flushSTD *>(base->getSelf());
 	if (st->operType == FLUSHSTD_OPER_WRITE)
 	{
-		st->buffer = "1234567890";
-		st->outSize = 10;
+		char q[100];
+		int *a;
+		a = (int *)(st->buffer.c_str());
+		sprintf(q,"!!%d!!\n",*a);
+		st->buffer.assign(q);
 	}
 }
 
 void process(flushSocketExchange &fse)
 {
-	
 	flushSTD st;
-	st.outSize = 3;
 	st.addPreExec(&hook,NULL);
+//	st.outSize = 7;
+	int a = 10;
+	st.write((char *)&a);
+	st.flush();
+	
 	fse.inSize = 2;
 	fse.setInBufferSize(1);
-	st.write("qs1");
-//	cout << fse.getOutTimeout() << endl;
 	
-	fse.outSize = 7;
+//	fse.outSize = 7;
 	fse.sendString("dasdasd");
 	
 	std::string q;
@@ -68,6 +72,7 @@ int main(int argc, char **argv)
 #else
 	#define CONNECTION_LIMIT 1
 #endif
+
 
 	try
 	{

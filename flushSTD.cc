@@ -168,24 +168,19 @@ flushSTD::write(const char *const aa_buf)
 	#ifndef FLUSH_STD_WO_XEXEC
 		operType = FLUSHSTD_OPER_WRITE;
 	#endif
-			
+	
+	register long oldOutSize = outSize;
+	if (autoOutSize)
+		outSize = strlen(aa_buf);
+
 	buffer.assign(aa_buf, outSize);
 		
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(preExec);
 	#endif
-	
-	char *a_buf	= new char [outSize];
-	if (a_buf == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_LIBDODO,FLUSHSTD_MEMORY_OVER,FLUSHSTD_MEMORY_OVER_STR,__LINE__,__FILE__);
-		#else
-			return false;	
-		#endif
-	memcpy(a_buf,buffer.c_str(),outSize);
 		
 	///execute 
-	fwrite(a_buf,outSize,1,stdout);
+	fwrite(buffer.c_str(),outSize,1,stdout);
 				
 	#ifndef NO_EX
 		switch (errno)
@@ -201,11 +196,11 @@ flushSTD::write(const char *const aa_buf)
 		return false;
 	#endif
 	
-	delete [] a_buf;
-	
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(postExec);
 	#endif
+	
+	outSize = oldOutSize;
 			
 	#ifdef NO_EX
 		return true;

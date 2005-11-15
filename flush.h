@@ -34,6 +34,29 @@ namespace dodo
 	/**
 	 * preExec - before operation, postExec - after operation and before checks(can be exeptions).
 	 * flushOperationTypeEnum - such operations have handlers for xexec. position of preExec - before action, postExec - after action, after check of goodness of operation, so if error occured - postExec won't be called
+	 * 
+	 * by default, write/read functions take (char *), so if you wabt to erite smth else:
+	 * 
+	 * 
+	 *	struct test
+	 *	{
+	 *		std::string r;
+	 *		int s;
+	 *	};
+	 * 
+	 * 
+	 * 	test l;
+	 *	l.r = "struct to char*";
+	 *	l.s = 1;
+	 *	
+	 *	char *dd;
+	 *	dd = (char *)&l;
+	 *
+	 *	test *p;
+	 *	p = (test *)dd;
+	 *	cout << p->r << "!@#" << p->s << "\n";
+	 * 
+	 * 
 	 */
 	class flush : public xexec, public dodoBase
 	{
@@ -50,8 +73,17 @@ namespace dodo
 			flush();
 			virtual ~flush();
 			
-			mutable unsigned long inSize;///size of data; size of buffer
-			mutable unsigned long outSize;///size of data; size of buffer
+			mutable long inSize;///size of data; size of buffer
+			mutable long outSize;///size of data; size of buffer
+			
+			/**
+			 * for streams, if you set, for example, outSize 10, and try to write 2, you'll have 2 your bytes and 8 strange bytes,
+			 * so if you want to autodetect this, set to true; 
+			 * only for strings(c-strings, std::string); true by default
+			 * 
+			 * after postExec(even it wasn't performed) old value of outSize will be returned!
+			 */
+			mutable bool autoOutSize;///before preExec!
 			
 			mutable std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
 

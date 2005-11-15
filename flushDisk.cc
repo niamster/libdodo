@@ -373,27 +373,22 @@ flushDisk::writeString(const std::string &a_buf,
 #else
 	bool
 #endif 
-flushDisk::write(const char *const aa_buf, 
+flushDisk::write(const char *const a_buf, 
 				unsigned long a_pos)
 {	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_WRITE;
 	#endif
-
-	buffer.assign(aa_buf, outSize);
+	
+	register long oldOutSize = outSize;
+	if (autoOutSize)
+		outSize = strlen(a_buf);
+		
+	buffer.assign(a_buf, outSize);
 			
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(preExec);
 	#endif
-	
-	char *a_buf	= new char [outSize];
-	if (a_buf == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);
-		#else
-			return false;	
-		#endif
-	memcpy(a_buf,buffer.c_str(),outSize);
 		
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
@@ -443,13 +438,13 @@ flushDisk::write(const char *const aa_buf,
 	
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
-		fwrite(a_buf,outSize,1,file);
+		fwrite(buffer.c_str(),outSize,1,file);
 	else
 	#ifndef WIN
 		#ifndef FAST
 			if (fileType == FIFO_FILE)
 		#endif
-				fputs(a_buf,file);
+				fputs(buffer.c_str(),file);
 	#else
 		;
 	#endif
@@ -468,11 +463,11 @@ flushDisk::write(const char *const aa_buf,
 		return false;
 	#endif
 	
-	delete [] a_buf;
-	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);
 	#endif
+	
+	outSize = oldOutSize;
 			
 	#ifdef NO_EX
 		return true;

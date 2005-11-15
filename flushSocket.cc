@@ -1147,7 +1147,7 @@ flushSocketOptions::setSockOption(socketOptionsEnum option,
 	if (!flag)
 		sockFlag = 0;
 	
-	register int real_option;
+	register int real_option(0);
 	
 	switch (option)
 	{
@@ -1333,37 +1333,32 @@ flushSocketOptions::getLingerPeriod()
 #else
 	bool
 #endif
-flushSocketExchange::send(const char * const a_data)
+flushSocketExchange::send(const char * const data)
 {
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_SEND;
 	#endif
-
-	buffer.assign(a_data,outSize);
+	
+	register long oldOutSize = outSize;
+	if (autoOutSize)
+		outSize = strlen(data);
+		
+	buffer.assign(data,outSize);
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif
 		
-	char *data 	= new char [outSize];
-	if (data == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_LIBDODO,FLUSHSOCKET_MEMORY_OVER,FLUSHSOCKET_MEMORY_OVER_STR,__LINE__,__FILE__);
-		#else
-			return false;	
-		#endif
-	memcpy(data,buffer.c_str(),outSize);
-		
-	unsigned int iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
-	int n(0), sent(0);	
+	register long iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
+	register long n(0), sent(0);	
 				
-	for (unsigned int i=0;i<iter;++i)
+	for (long i=0;i<iter;++i)
 	{
 		n = 0;
 		while (sent<outSize)
 		{
-			n = ::send(socket,data+sent,outSize,0);
+			n = ::send(socket,buffer.c_str()+sent,outSize,0);
 			if (n==-1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1379,7 +1374,7 @@ flushSocketExchange::send(const char * const a_data)
 		n = 0;
 		while (sent<rest)
 		{
-			n = ::send(socket,data+sent,rest,0);
+			n = ::send(socket,buffer.c_str()+sent,rest,0);
 			if (n==-1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1389,12 +1384,12 @@ flushSocketExchange::send(const char * const a_data)
 			sent += n;
 		}		
 	}
-		
-	delete [] data;	
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
 	#endif
+		
+	outSize = oldOutSize;	
 		
 	#ifdef NO_EX
 		return true;
@@ -1431,10 +1426,10 @@ flushSocketExchange::recieve(char * const data)
 		performXExec(preExec);
 	#endif
 		
-	unsigned int iter = inSize/inSocketBuffer, rest = inSize%inSocketBuffer;
-	int n(0), recieved(0);
+	register long iter = inSize/inSocketBuffer, rest = inSize%inSocketBuffer;
+	register long n(0), recieved(0);
 	
-	for (unsigned int i=0;i<iter;++i)
+	for (int i=0;i<iter;++i)
 	{
 		n = 0;
 		n = ::recv(socket,data+recieved,inSize,0);
