@@ -51,6 +51,8 @@
 
 //#define FLUSH_DISK_WO_XEXEC = faster, if u don't want to use it!
 //#define MYSQLPP_WO_XEXEC
+//#define FLUSH_STD_WO_XEXEC
+//#define FLUSH_SOCKET_WO_XEXEC
 
 //#define WIN ///if u use window system
 

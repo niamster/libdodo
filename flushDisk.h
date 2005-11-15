@@ -149,6 +149,9 @@ namespace dodo
 	
 	class flushDisk : public flush
 	{
+		
+		friend class flushSocket;
+		
 		private:
 		
 			flushDisk(flushDisk &fd);///to prevent from copyin'
@@ -208,7 +211,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							read(void * const data, unsigned long pos = 0) const;///reads to void*; return false if eof		
+							read(char * const data, unsigned long pos = 0) const;///reads to void*; return false if eof		
 			
 			/**
 			 * write functions
@@ -225,7 +228,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							write(const void * const data, unsigned long pos = 0);///writes void*
+							write(const char * const data, unsigned long pos = 0);///writes void*
 
 			/**
 			 * erase info on position

@@ -1,7 +1,7 @@
 /***************************************************************************
  *            flushSTD.cc
  *
- *  Wed Oct 8 01:44:18 2005
+ *  Tue Nov 15 21:19:57 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -26,9 +26,6 @@
 
 using namespace dodo;
 
-#define FLUSHSTDIN 0
-#define FLUSHSTDOUT 1
-
 dodoBase * const 
 flushSTD::getSelf()
 {
@@ -51,7 +48,6 @@ flushSTD::flushSTD(flushSTD &fd)
 
 flushSTD::~flushSTD()
 {
-	close();
 }
 
 //-------------------------------------------------------------------
@@ -79,112 +75,18 @@ flushSTD::addPreExec(inExec func,
 #else
 	bool
 #endif
-flushSTD::close() const 
+flushSTD::read(char * const a_void) const
 {
-	#ifndef FLUSH_DISK_WO_XEXEC
-		operType = FLUSHDISK_OPER_CLOSE;
+	#ifndef FLUSH_STD_WO_XEXEC
+		operType = FLUSHSTD_OPER_READ;
 	#endif
 	
-	if (opened)
-	{
-		#ifndef FLUSH_DISK_WO_XEXEC
-			performXExec(preExec);
-		#endif
-			
-		///execute
-		if (fclose(file[FLUSHSTDIN]) != 0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif		
-			
-		if (fclose(file[FLUSHSTDOUT]) != 0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif			
-			
-		#ifndef FLUSH_DISK_WO_XEXEC
-			performXExec(postExec);
-		#endif
-					
-		opened = false;
-	}
-	
-	#ifdef NO_EX
-		return true;
-	#endif
-}
-
-//-------------------------------------------------------------------
-
-#ifndef NO_EX
-	void 
-#else
-	bool
-#endif
-flushSTD::open(const std::string &a_path) const
-{
-	#ifndef FLUSH_DISK_WO_XEXEC
-		operType = FLUSHDISK_OPER_OPEN;
-	#endif
-	
-	if (opened)
-		close();
-		
-	#ifndef FLUSH_DISK_WO_XEXEC	
-		performXExec(preExec);	
-	#endif
-				
-	file[FLUSHSTDIN] = fopen(stdin,"r");
-	file[FLUSHSTDOUT] = fopen(stdin,"w");
-	
-	if (file[FLUSHSTDIN] == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
-		
-	if (file[FLUSHSTDOUT] == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
-			
-	#ifndef FLUSH_DISK_WO_XEXEC
-		performXExec(postExec);
-	#endif
-		
-	opened = true;
-	
-	#ifdef NO_EX
-		return true;
-	#endif	
-}
-
-//-------------------------------------------------------------------
-
-#ifndef NO_EX
-	void 
-#else
-	bool
-#endif
-flushSTD::read(void * const a_void) const
-{
-	#ifndef FLUSH_DISK_WO_XEXEC
-		operType = FLUSHDISK_OPER_READ;
-	#endif
-	
-	#ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
 	///execute 
-	fread(a_void,inSize,1,file[FLUSHSTDIN]);
+	fread(a_void,inSize,1,stdin);
 	
 	#ifndef NO_EX
 		switch (errno)
@@ -193,18 +95,17 @@ flushSTD::read(void * const a_void) const
 			case EINTR:
 			case ENOMEM:
 			case EOVERFLOW:
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		}
 	#else	
 		return false;
 	#endif
 	
-	#ifndef FLUSH_DISK_WO_XEXEC		
+	buffer.assign(a_void,inSize);
+			
+	#ifndef FLUSH_STD_WO_XEXEC		
 		performXExec(postExec);
 	#endif
-	
-	if (bufferize)
-		buffer.assign((char *)a_void,inSize);
 	
 	#ifdef NO_EX
 		return true;
@@ -223,7 +124,7 @@ flushSTD::readString(std::string &a_str) const
 	register char *data = new char[inSize+1];
 	if (data == NULL)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTRING,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTRING,ERR_LIBDODO,FLUSHSTD_MEMORY_OVER,FLUSHSTD_MEMORY_OVER_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -234,7 +135,7 @@ flushSTD::readString(std::string &a_str) const
 		register bool result = 
 	#endif
 	
-	this->read((void *)data);
+	this->read(data);
 	a_str.assign(data,inSize);
 	delete [] data;
 	
@@ -262,26 +163,29 @@ flushSTD::writeString(const std::string &a_buf)
 #else
 	bool
 #endif 
-flushSTD::write(const void *const a_buf)
+flushSTD::write(const char *const aa_buf)
 {	
-	#ifndef FLUSH_DISK_WO_XEXEC
-		operType = FLUSHDISK_OPER_WRITE;
+	#ifndef FLUSH_STD_WO_XEXEC
+		operType = FLUSHSTD_OPER_WRITE;
 	#endif
-	
-	std::string stringToWrite((char *)a_buf);
-		
-	if (normalize)
-		tools::normalize(stringToWrite,outSize);
 			
-	if (bufferize)
-		buffer.assign(stringToWrite);
+	buffer.assign(aa_buf, outSize);
 		
-	#ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
+	char *a_buf	= new char [outSize];
+	if (a_buf == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_LIBDODO,FLUSHSTD_MEMORY_OVER,FLUSHSTD_MEMORY_OVER_STR,__LINE__,__FILE__);
+		#else
+			return false;	
+		#endif
+	memcpy(a_buf,buffer.c_str(),outSize);
+		
 	///execute 
-	fwrite(stringToWrite.c_str(),outSize,1,file[FLUSHSTDOUT]);
+	fwrite(a_buf,outSize,1,stdout);
 				
 	#ifndef NO_EX
 		switch (errno)
@@ -291,13 +195,15 @@ flushSTD::write(const void *const a_buf)
 			case ENOMEM:
 			case EOVERFLOW:
 			case EROFS:
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		}	
 	#else
 		return false;
 	#endif
 	
-	#ifndef FLUSH_DISK_WO_XEXEC
+	delete [] a_buf;
+	
+	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(postExec);
 	#endif
 			
@@ -315,9 +221,9 @@ flushSTD::write(const void *const a_buf)
 #endif
 flushSTD::flush()
 {
-	if (fflush(file[FLUSHSTDOUT]) != 0)
+	if (fflush(stdout) != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
 		#else
 			return false;
 		#endif	

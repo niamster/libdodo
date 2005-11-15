@@ -109,13 +109,13 @@ flushDisk::close() const
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_CLOSE;
 	#endif
-	
-	if (opened)
-	{
-		#ifndef FLUSH_DISK_WO_XEXEC
-			performXExec(preExec);
-		#endif
+
+	#ifndef FLUSH_DISK_WO_XEXEC
+		performXExec(preExec);
+	#endif
 			
+	if (opened)
+	{			
 		///execute
 		if (fclose(file) != 0)
 			#ifndef NO_EX
@@ -149,6 +149,10 @@ flushDisk::open(const std::string &a_path) const
 		operType = FLUSHDISK_OPER_OPEN;
 	#endif
 	
+	#ifndef FLUSH_DISK_WO_XEXEC	
+		performXExec(preExec);	
+	#endif
+		
 	#ifndef WIN
 		if (a_path.size()!=0 && strcmp(a_path.c_str(),path.c_str())!=0)
 	#else
@@ -158,10 +162,6 @@ flushDisk::open(const std::string &a_path) const
 		
 	if (opened)
 		close();
-	
-	#ifndef FLUSH_DISK_WO_XEXEC	
-		performXExec(preExec);	
-	#endif
 	
 	///execute
 	if (fileType == TMP_FILE)
@@ -261,11 +261,15 @@ flushDisk::open(const std::string &a_path) const
 #else
 	bool
 #endif
-flushDisk::read(void * const a_void, 
+flushDisk::read(char * const a_void, 
 				unsigned long a_pos) const
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_READ;
+	#endif
+	
+	#ifndef FLUSH_DISK_WO_XEXEC
+		performXExec(preExec);
 	#endif
 	
 	if (fileType == REG_FILE || fileType == TMP_FILE)
@@ -279,10 +283,6 @@ flushDisk::read(void * const a_void,
 			#endif
 	}
 	
-	#ifndef FLUSH_DISK_WO_XEXEC
-		performXExec(preExec);
-	#endif
-	
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 		fread(a_void,inSize,1,file);
@@ -291,7 +291,7 @@ flushDisk::read(void * const a_void,
 		#ifndef FAST
 			if (fileType == FIFO_FILE)
 		#endif
-				fgets((char *)a_void,inSize,file);
+				fgets(a_void,inSize,file);
 	#else
 		;			
 	#endif
@@ -309,13 +309,12 @@ flushDisk::read(void * const a_void,
 		return false;
 	#endif
 	
+	buffer.assign(a_void,inSize);
+	
 	#ifndef FLUSH_DISK_WO_XEXEC		
 		performXExec(postExec);
 	#endif
-	
-	if (bufferize)
-		buffer.assign((char *)a_void,inSize);
-	
+		
 	#ifdef NO_EX
 		return true;
 	#endif	
@@ -345,7 +344,7 @@ flushDisk::readString(std::string &a_str,
 		register bool result = 
 	#endif
 	
-	this->read((void *)data,a_pos);
+	this->read(data,a_pos);
 	a_str.assign(data,inSize);
 	delete [] data;
 	
@@ -374,21 +373,28 @@ flushDisk::writeString(const std::string &a_buf,
 #else
 	bool
 #endif 
-flushDisk::write(const void *const a_buf, 
+flushDisk::write(const char *const aa_buf, 
 				unsigned long a_pos)
 {	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_WRITE;
 	#endif
-	
-	std::string stringToWrite((char *)a_buf);
-		
-	if (normalize)
-		tools::normalize(stringToWrite,outSize);
+
+	buffer.assign(aa_buf, outSize);
 			
-	if (bufferize)
-		buffer.assign(stringToWrite);
+	#ifndef FLUSH_DISK_WO_XEXEC
+		performXExec(preExec);
+	#endif
 	
+	char *a_buf	= new char [outSize];
+	if (a_buf == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);
+		#else
+			return false;	
+		#endif
+	memcpy(a_buf,buffer.c_str(),outSize);
+		
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
 		register size_t read_bytes(-1);
@@ -435,19 +441,15 @@ flushDisk::write(const void *const a_buf,
 				#endif
 	}
 	
-	#ifndef FLUSH_DISK_WO_XEXEC
-		performXExec(preExec);
-	#endif
-	
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
-		fwrite(stringToWrite.c_str(),outSize,1,file);
+		fwrite(a_buf,outSize,1,file);
 	else
 	#ifndef WIN
 		#ifndef FAST
 			if (fileType == FIFO_FILE)
 		#endif
-				fputs(stringToWrite.c_str(),file);
+				fputs(a_buf,file);
 	#else
 		;
 	#endif
@@ -465,6 +467,8 @@ flushDisk::write(const void *const a_buf,
 	#else
 		return false;
 	#endif
+	
+	delete [] a_buf;
 	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);

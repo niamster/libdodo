@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _FLUSHDISK_H_
-#define _FLUSHDISK_H_
+#ifndef _FLUSHSTD_H_
+#define _FLUSHSTD_H_
 
 #include "directives.h"
 #include "flushSTDEx.h"
@@ -67,27 +67,8 @@ namespace dodo
 			 * for xExec
 			 */			
 			virtual int addPostExec(inExec func, void *data) const;
-			virtual int addPreExec(inExec func, void *data) const;
+			virtual int addPreExec(inExec func, void *data) const;	
 			
-			/**
-			 * closes previous opened streams
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif			 
-							open() const;///if opened previous file, closes it		
-			
-			/**
-			 * closes stream
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							close() const;
 			/**
 			 * read functions. first argument - buffer, second - position
 			 * returns false if nothing was read
@@ -103,7 +84,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							read(void * const data) const;///reads to void*; return false if eof		
+							read(char * const data) const;///reads to void*; return false if eof		
 			
 			/**
 			 * write functions
@@ -121,7 +102,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							write(const void * const data);///writes void*
+							write(const char * const data);///writes void*
 
 			/**
 			 * flushes to output
@@ -131,10 +112,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							flush();			
-		private:
-					
-			mutable FILE *file[2];///file handlers for stdin and stdout
+							flush();
 	};
 
 };

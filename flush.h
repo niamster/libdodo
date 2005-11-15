@@ -54,9 +54,6 @@ namespace dodo
 			mutable unsigned long outSize;///size of data; size of buffer
 			
 			mutable std::string buffer;///before readin' or after writin' the storege sets to buffer if next option is set to true(bufferize); usefull for xExec
-			
-			mutable bool bufferize;///false by default; set true, if u r usin' xexec(hooks)
-			mutable bool normalize;///only for write mode, if string, that is going to write is less than set size, will left space with ' '; it will prevent 'unknowns' in file. true by default
 
 		protected:
 		

@@ -49,6 +49,18 @@ namespace dodo
 		#define UNIX_SOCKET_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
 	#endif
 	
+	enum flushSocketOperationTypeEnum///for xExec
+	{
+		FLUSHSOCKET_OPER_RECIEVE,
+		FLUSHSOCKET_OPER_SEND,
+		FLUSHSOCKET_OPER_CONNECT,
+		FLUSHSOCKET_OPER_CONNECT_UNIX,
+		FLUSHSOCKET_OPER_BINDNLISTEN,
+		FLUSHSOCKET_OPER_BINDNLISTEN_UNIX,
+		FLUSHSOCKET_OPER_CLOSE,
+		FLUSHSOCKET_OPER_ACCEPT,
+	};	
+	
 	/**
 	 * type of socket to use
 	 */
@@ -257,7 +269,13 @@ namespace dodo
 			flushSocket(flushSocket &fs);
 		
 		public:
-					
+			
+			/**
+			 * for xExec
+			 */			
+			virtual int addPostExec(inExec func, void *data) const;
+			virtual int addPreExec(inExec func, void *data) const;	
+								
 			/**
 			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
 			 */		
@@ -434,7 +452,13 @@ namespace dodo
 			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
 			 */		
 			virtual dodoBase * const getSelf();
-					
+			
+			/**
+			 * for xExec
+			 */			
+			virtual int addPostExec(inExec func, void *data) const;
+			virtual int addPreExec(inExec func, void *data) const;	
+								
 			/**
 			 * constructors/destructors
 			 */	

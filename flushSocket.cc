@@ -85,6 +85,24 @@ flushSocket::~flushSocket()
 
 //-------------------------------------------------------------------
 
+int 
+flushSocket::addPostExec(inExec func, 
+					void *data) const
+{
+	return _addPostExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushSocket::addPreExec(inExec func, 
+					void *data) const
+{
+	return _addPreExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
 #ifndef NO_EX
 	void 
 #else
@@ -141,14 +159,22 @@ flushSocket::makeSocket()
 flushSocket::connect(const std::string &host, 
 					unsigned int port, 
 					flushSocketExchange &exchange)
-{	
+{			
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_CONNECT;
+	#endif
+	
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		performXExec(preExec);
+	#endif
+	
 	if (numberOfConn != -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
-		
+			
 	#ifdef NO_EX
 		if (!makeSocket())
 			return false;
@@ -190,6 +216,10 @@ flushSocket::connect(const std::string &host,
 	exchange.init(socket);
 	
 	opened = true;
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
 		
 	#ifdef NO_EX
 		return true;
@@ -263,14 +293,22 @@ flushSocket::connect(const __connInfo &destinaton,
 	#endif 
 	flushSocket::connect(const std::string &path, 
 					flushSocketExchange &exchange)
-	{
+	{		
+		#ifndef FLUSH_SOCKET_WO_XEXEC
+			operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
+		#endif
+		
+		#ifndef FLUSH_SOCKET_WO_XEXEC
+			performXExec(preExec);
+		#endif
+		
 		if (numberOfConn != -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
-			
+				
 		#ifdef NO_EX
 			if (!makeSocket())
 				return false;
@@ -300,6 +338,10 @@ flushSocket::connect(const __connInfo &destinaton,
 		exchange.init(socket);
 	
 		opened = true;
+			
+		#ifndef FLUSH_SOCKET_WO_XEXEC		
+			performXExec(postExec);
+		#endif
 		
 		#ifdef NO_EX
 			return true;
@@ -405,7 +447,15 @@ flushSocket::getServiceInfo(int port,
 	bool
 #endif
 flushSocket::bindNListen(const std::string &host, unsigned int port)
-{
+{		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_BINDNLISTEN;
+	#endif
+	
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		performXExec(preExec);
+	#endif
+	
 	if (opened)
 		#ifndef NO_EX
 			return ;
@@ -419,7 +469,7 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 		#else
 			return false;
 		#endif
-		
+			
 	#ifdef NO_EX
 		if (!makeSocket())
 			return false;
@@ -478,6 +528,10 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 	}
 	
 	opened = true;
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
 		
 	#ifdef NO_EX
 		return true;
@@ -512,7 +566,15 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 		bool
 	#endif
 	flushSocket::bindNListen(const std::string &path)
-	{
+	{		
+		#ifndef FLUSH_SOCKET_WO_XEXEC
+			operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
+		#endif
+		
+		#ifndef FLUSH_SOCKET_WO_XEXEC
+			performXExec(preExec);
+		#endif
+		
 		if (opened)
 			#ifndef NO_EX
 				return ;
@@ -526,7 +588,7 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 			#else
 				return false;
 			#endif
-		
+			
 		#ifdef NO_EX
 			if (!makeSocket())
 				return false;
@@ -563,6 +625,10 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 			#endif	
 		
 		opened = true;
+			
+		#ifndef FLUSH_SOCKET_WO_XEXEC		
+			performXExec(postExec);
+		#endif
 			
 		#ifdef NO_EX
 			return true;
@@ -640,14 +706,22 @@ flushSocket::_close(int socket)
 bool 
 flushSocket::accept(__initialAccept &init, 
 					__connInfo &info)
-{
+{		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_ACCEPT;
+	#endif
+	
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		performXExec(preExec);
+	#endif
+	
 	if (numberOfConn == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
-	
+		
 	if (type != TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
@@ -727,6 +801,10 @@ flushSocket::accept(__initialAccept &init,
 	init.family = family;
 	
 	--accepted;
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
 	
 	return true;
 }
@@ -735,14 +813,22 @@ flushSocket::accept(__initialAccept &init,
 
 bool 
 flushSocket::accept(__initialAccept &init)
-{
+{		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_ACCEPT;
+	#endif
+	
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		performXExec(preExec);
+	#endif
+	
 	if (numberOfConn == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
-	
+		
 	if (type != TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
@@ -776,6 +862,10 @@ flushSocket::accept(__initialAccept &init)
 	init.family = family;
 		
 	--accepted;
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
 	
 	return true;
 }
@@ -1158,7 +1248,15 @@ flushSocketOptions::setLingerSockOption(socketLingerOption option,
 	bool
 #endif
 flushSocketExchange::close()
-{
+{		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_CLOSE;
+	#endif
+	
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		performXExec(preExec);
+	#endif
+	
 	if (!opened)
 	#ifndef NO_EX
 		return ;
@@ -1172,6 +1270,10 @@ flushSocketExchange::close()
 	flushSocket::_close(socket);
 	
 	opened = false;
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
 			
 	#ifdef NO_EX
 		return result;
@@ -1231,15 +1333,31 @@ flushSocketOptions::getLingerPeriod()
 #else
 	bool
 #endif
-flushSocketExchange::send(const char * const data)
+flushSocketExchange::send(const char * const a_data)
 {
-	
-	unsigned int iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
-	int n(0), sent(0);
-	
-	if (normalize)
-		tools::normalize(stringToWrite,outSize);	
 		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_SEND;
+	#endif
+
+	buffer.assign(a_data,outSize);
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		performXExec(preExec);
+	#endif
+		
+	char *data 	= new char [outSize];
+	if (data == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_LIBDODO,FLUSHSOCKET_MEMORY_OVER,FLUSHSOCKET_MEMORY_OVER_STR,__LINE__,__FILE__);
+		#else
+			return false;	
+		#endif
+	memcpy(data,buffer.c_str(),outSize);
+		
+	unsigned int iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
+	int n(0), sent(0);	
+				
 	for (unsigned int i=0;i<iter;++i)
 	{
 		n = 0;
@@ -1271,7 +1389,13 @@ flushSocketExchange::send(const char * const data)
 			sent += n;
 		}		
 	}
-	
+		
+	delete [] data;	
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+		
 	#ifdef NO_EX
 		return true;
 	#endif		
@@ -1298,7 +1422,15 @@ flushSocketExchange::sendString(const std::string &data)
 #endif
 flushSocketExchange::recieve(char * const data)
 {
+		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_RECIEVE;
+	#endif
 	
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		performXExec(preExec);
+	#endif
+		
 	unsigned int iter = inSize/inSocketBuffer, rest = inSize%inSocketBuffer;
 	int n(0), recieved(0);
 	
@@ -1326,8 +1458,11 @@ flushSocketExchange::recieve(char * const data)
 			#endif
 	}
 	
-	if (bufferize)
-		buffer.assign((char *)data,inSize);
+	buffer.assign(data,inSize);
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
 	
 	#ifdef NO_EX
 		return true;
@@ -1364,6 +1499,24 @@ flushSocketExchange::recieveString(std::string &data)
 	#ifdef NO_EX	
 		return result;
 	#endif
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushSocketExchange::addPostExec(inExec func, 
+					void *data) const
+{
+	return _addPostExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushSocketExchange::addPreExec(inExec func, 
+					void *data) const
+{
+	return _addPreExec(func, (dodoBase *)this, data);
 }
 
 //-------------------------------------------------------------------

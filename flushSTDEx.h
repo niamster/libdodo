@@ -1,7 +1,7 @@
 /***************************************************************************
- *            flushDiskEx.h
+ *            flushSTD.h
  *
- *  Mon Feb 21 03:03:47 2005
+ *  Tue Nov 15 21:19:57 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -34,46 +34,21 @@
 	{	
 		
 		///reasons of exception
-		enum flushDiskExR
+		enum flushSTDExR
 		{
-			FLUSHDISK_MEMORY_OVER = 1,
-			FLUSHDISK_WRONG_FILENAME,
-			FLUSHDISK_CANNOT_OVEWRITE
+			FLUSHSTD_MEMORY_OVER = 1,
 		};
 		
-		#define FLUSHDISK_MEMORY_OVER_STR "Not anough memmory"
-		#define FLUSHDISK_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
-		#define FLUSHDISK_CANNOT_OVEWRITE_STR "You set option not to overwrite, but try to do that =)"
+		#define FLUSHSTD_MEMORY_OVER_STR "Not anough memmory"
 		
-		enum flushDiskFunctionsID
+		enum flushSTDFunctionsID
 		{
-			FLUSHDISK_CLOSE,
-			FLUSHDISK_OPEN,
-			FLUSHDISK_READ,
-			FLUSHDISK_WRITE,
-			FLUSHDISK_FLUSH,
-			FLUSHDISK_READSTRING,
-			FLUSHDISK_ERASE,
-			FLUSHDISK_UNLINK,
-			FLUSHDISK_RENAME,
-			FLUSHDISK_LINK,
-			FLUSHDISK_SYMLINK,
-			FLUSHDISK_CHOWN,
-			FLUSHDISK_CHGRP,
-			FLUSHDISK_GETUSEROWNER,
-			FLUSHDISK_GETGROUPOWNER,
-			FLUSHDISK_TOUCH,
-			FLUSHDISK_MKDIR,
-			FLUSHDISK_CHMOD,
-			FLUSHDISK_RM,
-			FLUSHDISK_GETPERMISSIONS,
-			FLUSHDISK_GETFILETYPE,
-			FLUSHDISK_GETSIZE,
-			FLUSHDISK_GETACCTIME,
-			FLUSHDISK_GETMODTIME,
-			FLUSHDISK_GETFILEINFO,
-			FLUSHDISK_GETDIRINFO,
-			FLUSHDISK_FOLLOWSYMLINK,
+			FLUSHSTD_CLOSE,
+			FLUSHSTD_OPEN,
+			FLUSHSTD_READ,
+			FLUSHSTD_WRITE,
+			FLUSHSTD_FLUSH,
+			FLUSHSTD_READSTRING,
 		};
 	};
 
