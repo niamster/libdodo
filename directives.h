@@ -65,9 +65,13 @@
 #define INSIZE 1024
 #define OUTSIZE 1024	
 
-///default values of socket buffer for io operations(flush*)
+///default values of socket buffer for io operations(flushSocket)
 #define SOCKET_INSIZE 10240
 #define SOCKET_OUTSIZE 10240
+
+///default values of stdin/out buffer for io operations(flushSTD)
+#define STD_INSIZE 1024000
+#define STD_OUTSIZE 1024000
 
 ///amount of seconds for linger
 #define SOCKET_LINGER_PERIOD 1

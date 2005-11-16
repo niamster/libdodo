@@ -34,7 +34,8 @@ flushSTD::getSelf()
 
 //-------------------------------------------------------------------
 
-flushSTD::flushSTD()
+flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),
+						outSTDBuffer(STD_OUTSIZE)
 {
 }
 
@@ -85,21 +86,69 @@ flushSTD::read(char * const a_void) const
 		performXExec(preExec);
 	#endif
 	
-	///execute 
-	fread(a_void,inSize,1,stdin);
+	int sizeToRead = inSize;
 	
-	#ifndef NO_EX
-		switch (errno)
-		{
-			case EIO:
-			case EINTR:
-			case ENOMEM:
-			case EOVERFLOW:
-				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		}
-	#else	
-		return false;
-	#endif
+	if (inSize>inSTDBuffer)
+		sizeToRead = inSTDBuffer;	
+	
+	///execute 
+	register long iter = inSize/inSTDBuffer, rest = inSize%inSTDBuffer;
+	register long n(0), recieved(0);
+	
+	for (int i=0;i<iter;++i)
+	{
+		n = 0;
+		n = fread(a_void+recieved,sizeToRead,1,stdin);
+		if (n==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+			
+		recieved += sizeToRead;
+	}
+	
+	if (rest>0)
+		if (fread(a_void+recieved,rest,1,stdin)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+
 	
 	buffer.assign(a_void,inSize);
 			
@@ -168,34 +217,82 @@ flushSTD::write(const char *const aa_buf)
 	#ifndef FLUSH_STD_WO_XEXEC
 		operType = FLUSHSTD_OPER_WRITE;
 	#endif
-	
-	register long oldOutSize = outSize;
+		
+	register long oldOutSize = outSize;		
 	if (autoOutSize)
 		outSize = strlen(aa_buf);
-
-	buffer.assign(aa_buf, outSize);
+				
+	buffer.assign(aa_buf, outSize);		
 		
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(preExec);
 	#endif
 		
-	///execute 
-	fwrite(buffer.c_str(),outSize,1,stdout);
-				
-	#ifndef NO_EX
-		switch (errno)
-		{
-			case EIO:
-			case EINTR:
-			case ENOMEM:
-			case EOVERFLOW:
-			case EROFS:
-				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		}	
-	#else
-		return false;
-	#endif
+	if (autoOutSize)
+		outSize = buffer.size();
 	
+	int sizeToSend = outSize;
+	
+	if (outSize>outSTDBuffer)
+		sizeToSend = outSTDBuffer;
+	
+	///execute 
+	register long iter = outSize/outSTDBuffer, rest = outSize%outSTDBuffer;
+	register long n(0), sent(0);
+	
+	for (long i=0;i<iter;++i)
+	{
+		n = 0;
+		n = fwrite(buffer.c_str()+sent,sizeToSend,1,stdout);
+		if (n==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+		sent += sizeToSend;
+	}
+
+	if (rest>0)
+		if (fwrite(buffer.c_str()+sent,rest,1,stdout)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+			
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(postExec);
 	#endif
@@ -210,16 +307,18 @@ flushSTD::write(const char *const aa_buf)
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+        void
 #else
-	bool
+        bool
 #endif
 flushSTD::flush()
 {
-	if (fflush(stdout) != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-		#else
-			return false;
-		#endif	
+        if (fflush(stdout) != 0)
+                #ifndef NO_EX
+                        throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+                #else
+                        return false;
+                #endif
 }
+
+//-------------------------------------------------------------------

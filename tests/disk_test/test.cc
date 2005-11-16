@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 		
 		//flushDisk flush(true);///in tmp file
 		flush.open();
-		flush.inSize = flush.outSize = 10;
+	//	flush.autoOutSize = false;flush.inSize = flush.outSize = 10;
 		
 		flush.writeString("!1234567890-!!",0);
 		

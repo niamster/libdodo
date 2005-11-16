@@ -303,10 +303,19 @@ flushDisk::read(char * const a_void,
 			case EINTR:
 			case ENOMEM:
 			case EOVERFLOW:
+			case EROFS:
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}	
+	#else			
+		switch (errno)
+		{
+			case EIO:
+			case EINTR:
+			case ENOMEM:
+			case EOVERFLOW:	
+			case EROFS:
+				return false;
 		}
-	#else	
-		return false;
 	#endif
 	
 	buffer.assign(a_void,inSize);
@@ -385,11 +394,14 @@ flushDisk::write(const char *const a_buf,
 		outSize = strlen(a_buf);
 		
 	buffer.assign(a_buf, outSize);
-			
+				
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(preExec);
 	#endif
 		
+	if (autoOutSize)
+		outSize = buffer.size();
+	
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
 		register size_t read_bytes(-1);
@@ -459,8 +471,16 @@ flushDisk::write(const char *const a_buf,
 			case EROFS:
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		}	
-	#else
-		return false;
+	#else			
+		switch (errno)
+		{
+			case EIO:
+			case EINTR:
+			case ENOMEM:
+			case EOVERFLOW:	
+			case EROFS:
+				return false;
+		}
 	#endif
 	
 	#ifndef FLUSH_DISK_WO_XEXEC

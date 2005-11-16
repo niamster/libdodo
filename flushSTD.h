@@ -112,7 +112,14 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							flush();
+							flush();		
+			
+			/**
+			 * sometimes, when you ouput/input from some pther programs, you have bounds in input/output buffer
+			 * this parameters will help you by default, they are too large, so you don't have to change it
+			 */				 
+			int inSTDBuffer;
+			int outSTDBuffer;
 	};
 
 };

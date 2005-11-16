@@ -371,7 +371,7 @@ namespace dodo
 			
 			static __fileInfo getFileInfo(const std::string &path);///if no such file - empty will be returned
 			
-			static std::vector<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!;now is not WIN compatible
+			static std::vector<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
 			
 			
 			bool over;///indicates whether overright; for files,tmp_files only

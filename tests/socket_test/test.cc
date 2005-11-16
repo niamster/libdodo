@@ -1,5 +1,4 @@
 #include <flushSocket.h>
-#include <flushSTD.h>
 using namespace dodo;
 
 using namespace std;
@@ -19,34 +18,14 @@ void copyTest2(flushSocketExchange *fse)
 	cout << fse->getOutBufferSize() << endl;
 }
 
-void 
-hook(dodoBase *base, 
-	void *yep)
-{
-	flushSTD *st = dynamic_cast<flushSTD *>(base->getSelf());
-	if (st->operType == FLUSHSTD_OPER_WRITE)
-	{
-		char q[100];
-		int *a;
-		a = (int *)(st->buffer.c_str());
-		sprintf(q,"!!%d!!\n",*a);
-		st->buffer.assign(q);
-	}
-}
 
 void process(flushSocketExchange &fse)
 {
-	flushSTD st;
-	st.addPreExec(&hook,NULL);
-//	st.outSize = 7;
-	int a = 10;
-	st.write((char *)&a);
-	st.flush();
-	
 	fse.inSize = 2;
 	fse.setInBufferSize(1);
 	
 //	fse.outSize = 7;
+//	fse.autoOutSize = false;
 	fse.sendString("dasdasd");
 	
 	std::string q;
