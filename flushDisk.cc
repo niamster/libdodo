@@ -59,10 +59,10 @@ flushDisk::getSelf()
 
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
 					const std::string &a_path) : over(false), 
+												append(false),
 												mode(READ_WRITE), 
 												fileType(type),
-												path(a_path),
-												append(false)
+												path(a_path)
 {
 }
 

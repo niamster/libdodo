@@ -36,8 +36,8 @@ flush::getSelf()
 
 flush::flush(): inSize(INSIZE), 
 				outSize(OUTSIZE),
-				opened(false),
-				autoOutSize(true)
+				autoOutSize(true),
+				opened(false)
 {
 }
 

@@ -891,27 +891,33 @@ flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 //-------------------------------------------------------------------
 
 flushSocketOptions::flushSocketOptions(socketProtoFamilyEnum a_family, 
-										socketTransferTypeEnum a_type): inTimeout(RECIEVE_TIMEOUT),
+										socketTransferTypeEnum a_type): family(a_family),
+																	type(a_type),
+																	lingerOpts(SOCKET_LINGER_OPTION),
+																	lingerSeconds(SOCKET_LINGER_PERIOD),
+																	inTimeout(RECIEVE_TIMEOUT),
 																	outTimeout(SEND_TIMEOUT),
 																	inSocketBuffer(SOCKET_INSIZE),
 																	outSocketBuffer(SOCKET_OUTSIZE),
-																	socket(-1),
-																	family(a_family),
-																	type(a_type),
-																	lingerOpts(SOCKET_LINGER_OPTION),
-																	lingerSeconds(SOCKET_LINGER_PERIOD)
+																	socket(-1)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushSocketOptions::flushSocketOptions(): inTimeout(RECIEVE_TIMEOUT),
+flushSocketOptions::flushSocketOptions(): lingerOpts(SOCKET_LINGER_OPTION),
+										lingerSeconds(SOCKET_LINGER_PERIOD),
+										inTimeout(RECIEVE_TIMEOUT),
 										outTimeout(SEND_TIMEOUT),
 										inSocketBuffer(SOCKET_INSIZE),
 										outSocketBuffer(SOCKET_OUTSIZE),
-										socket(-1),
-										lingerOpts(SOCKET_LINGER_OPTION),
-										lingerSeconds(SOCKET_LINGER_PERIOD)
+										socket(-1)
+{
+}
+
+//-------------------------------------------------------------------
+
+flushSocketOptions::~flushSocketOptions()
 {
 }
 

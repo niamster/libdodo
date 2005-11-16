@@ -139,7 +139,7 @@ std::string
 tools::lToString(long number)
 {
 	char temp[SIZEOFNUM];
-	sprintf(temp,"%d",number);
+	sprintf(temp,"%ld",number);
 	return std::string(temp);
 }
 

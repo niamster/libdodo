@@ -150,6 +150,7 @@ namespace dodo
 			///constructor
 			flushSocketOptions(socketProtoFamilyEnum family, socketTransferTypeEnum type);
 			flushSocketOptions();
+			virtual ~flushSocketOptions();
 		
 		public:
 				
@@ -252,6 +253,8 @@ namespace dodo
 			socketTransferTypeEnum type;			
 	};
 		
+		
+	class flushSocketExchange;	
 	/**
 	 * class that takes ugly routine with sockets;
 	 * exchange of data is flushSocketExchange class' task

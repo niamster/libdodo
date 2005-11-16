@@ -71,6 +71,7 @@ regexp::reMatch(const std::string &sample,
 	std::list<__regexMatch>::const_iterator i(boundaries.begin()),j(boundaries.end());
 	for (;i!=j;++i)
 		pockets.push_back(sample.substr(i->begin,i->end-i->begin));
+	return true;
 }
 
 //-------------------------------------------------------------------
