@@ -1341,6 +1341,7 @@ flushSocketExchange::send(const char * const data)
 	#endif
 
 	register long oldOutSize = outSize;
+	
 	if (autoOutSize)
 		outSize = strlen(data);
 		
@@ -1349,15 +1350,9 @@ flushSocketExchange::send(const char * const data)
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif	
-	
 
 	if (autoOutSize)
-		outSize = buffer.size();
-		
-	int sizeToSend = outSize;
-
-	if (outSize>outSocketBuffer)
-		sizeToSend = outSocketBuffer;			
+		outSize = buffer.size();		
 	
 	register long iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
 	register long n(0), sent(0);	
@@ -1367,7 +1362,7 @@ flushSocketExchange::send(const char * const data)
 		n = 0;
 		while (sent<outSize)
 		{
-			n = ::send(socket,buffer.c_str()+sent,sizeToSend,0);
+			n = ::send(socket,buffer.c_str()+sent,outSize,0);
 			if (n==-1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1433,12 +1428,7 @@ flushSocketExchange::recieve(char * const data)
 	
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
-	#endif
-	
-	int sizeToRead = inSize;
-	
-	if (inSize>inSocketBuffer)
-		sizeToRead = inSocketBuffer;	
+	#endif	
 				
 	register long iter = inSize/inSocketBuffer, rest = inSize%inSocketBuffer;
 	register long n(0), recieved(0);
@@ -1446,7 +1436,7 @@ flushSocketExchange::recieve(char * const data)
 	for (int i=0;i<iter;++i)
 	{
 		n = 0;
-		n = ::recv(socket,data+recieved,sizeToRead,0);
+		n = ::recv(socket,data+recieved,inSize,0);
 		if (n==-1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);

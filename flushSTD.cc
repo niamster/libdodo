@@ -86,20 +86,13 @@ flushSTD::read(char * const a_void) const
 		performXExec(preExec);
 	#endif
 	
-	int sizeToRead = inSize;
-	
-	if (inSize>inSTDBuffer)
-		sizeToRead = inSTDBuffer;	
-	
 	///execute 
 	register long iter = inSize/inSTDBuffer, rest = inSize%inSTDBuffer;
-	register long n(0), recieved(0);
+	register long recieved(0);
 	
 	for (int i=0;i<iter;++i)
 	{
-		n = 0;
-		n = fread(a_void+recieved,sizeToRead,1,stdin);
-		if (n==0)
+		if (fread(a_void+recieved,inSize,1,stdin)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -122,7 +115,7 @@ flushSTD::read(char * const a_void) const
 				}
 			#endif
 			
-		recieved += sizeToRead;
+		recieved += inSize;
 	}
 	
 	if (rest>0)
@@ -231,20 +224,13 @@ flushSTD::write(const char *const aa_buf)
 	if (autoOutSize)
 		outSize = buffer.size();
 	
-	int sizeToSend = outSize;
-	
-	if (outSize>outSTDBuffer)
-		sizeToSend = outSTDBuffer;
-	
 	///execute 
 	register long iter = outSize/outSTDBuffer, rest = outSize%outSTDBuffer;
-	register long n(0), sent(0);
+	register long sent(0);
 	
 	for (long i=0;i<iter;++i)
 	{
-		n = 0;
-		n = fwrite(buffer.c_str()+sent,sizeToSend,1,stdout);
-		if (n==0)
+		if (fwrite(buffer.c_str()+sent,outSize,1,stdout)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -266,7 +252,7 @@ flushSTD::write(const char *const aa_buf)
 						return false;
 				}
 			#endif
-		sent += sizeToSend;
+		sent += outSize;
 	}
 
 	if (rest>0)
