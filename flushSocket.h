@@ -191,22 +191,26 @@ namespace dodo
 			
 			virtual int getInBufferSize();
 			virtual int getOutBufferSize();
-				
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
 			
-			virtual unsigned long getInTimeout();
-			virtual unsigned long getOutTimeout();
+			#ifndef WIN
+				
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+				
+				virtual unsigned long getInTimeout();
+				virtual unsigned long getOutTimeout();
+			
+			#endif
 			
 			/**
 			 * socketOptionsEnum
@@ -228,7 +232,11 @@ namespace dodo
 			int inSocketBuffer;
 			int outSocketBuffer;
 			
-			int socket;///id of socket		
+			#ifndef WIN
+				int socket;///id of socket		
+			#else
+				SOCKET socket;
+			#endif
 				
 	};
 	

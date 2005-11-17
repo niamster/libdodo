@@ -20,7 +20,7 @@ LIBRARY=dodo
 
 VERSION = 0.0
 
-MINOR = 3
+MINOR = 6
 
 all: $(LIBRARY)
 

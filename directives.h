@@ -25,7 +25,7 @@
 #ifndef _DIRECTIVES_H_
 #define _DIRECTIVES_H_
 
-#define LIBDODO_VERSION "libdodo/0.0.3"
+#define LIBDODO_VERSION "libdodo/0.0.6"
 
 /**
  * !!!!note!!!!!

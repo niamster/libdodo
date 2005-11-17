@@ -40,7 +40,8 @@
 			ERR_LIBDODO,
 			ERR_ERRNO,
 			ERR_MYSQL,
-			ERR_H_ERRNO
+			ERR_H_ERRNO,
+			ERR_WINSOCK
 		};
 
 		/**
