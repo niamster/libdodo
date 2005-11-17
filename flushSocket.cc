@@ -1339,7 +1339,8 @@ flushSocketOptions::getLingerPeriod()
 #else
 	bool
 #endif
-flushSocketExchange::send(const char * const data)
+flushSocketExchange::send(const char * const data, 
+						bool urgent)
 {
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
@@ -1363,19 +1364,23 @@ flushSocketExchange::send(const char * const data)
 	register long iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
 	register long n(0), sent(0);	
 		
+	register int flag = 0;	
+	if (urgent)	
+		flag = MSG_OOB;
+		
 	for (long i=0;i<iter;++i)
 	{
 		n = 0;
 		while (sent<outSize)
 		{
-			n = ::send(socket,buffer.c_str()+sent,outSize,0);
+			n = ::send(socket,buffer.c_str()+sent,inSocketBuffer,flag);
 			if (n==-1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
 					return false;	
 				#endif
-			sent += n;
+			sent += inSocketBuffer;
 		}
 	}
 	
@@ -1384,7 +1389,7 @@ flushSocketExchange::send(const char * const data)
 		n = 0;
 		while (sent<rest)
 		{
-			n = ::send(socket,buffer.c_str()+sent,rest,0);
+			n = ::send(socket,buffer.c_str()+sent,rest,flag);
 			if (n==-1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1413,9 +1418,10 @@ flushSocketExchange::send(const char * const data)
 #else
 	bool
 #endif
-flushSocketExchange::sendString(const std::string &data)
+flushSocketExchange::sendString(const std::string &data, 
+						bool urgent)
 {
-	return this->send(data.c_str());
+	return this->send(data.c_str(),urgent);
 }
 
 //-------------------------------------------------------------------
@@ -1425,7 +1431,8 @@ flushSocketExchange::sendString(const std::string &data)
 #else
 	bool
 #endif
-flushSocketExchange::recieve(char * const data)
+flushSocketExchange::recieve(char * const data, 
+							bool urgent)
 {
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
@@ -1438,11 +1445,15 @@ flushSocketExchange::recieve(char * const data)
 				
 	register long iter = inSize/inSocketBuffer, rest = inSize%inSocketBuffer;
 	register long n(0), recieved(0);
-	
+		
+	register int flag = 0;	
+	if (urgent)	
+		flag = MSG_OOB;
+			
 	for (int i=0;i<iter;++i)
 	{
 		n = 0;
-		n = ::recv(socket,data+recieved,inSize,0);
+		n = ::recv(socket,data+recieved,inSocketBuffer,flag);
 		if (n==-1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1453,15 +1464,12 @@ flushSocketExchange::recieve(char * const data)
 	}
 	
 	if (rest>0)
-	{
-		n = ::recv(socket,data+recieved,rest,0);
-		if (n==-1)
+		if (::recv(socket,data+recieved,rest,flag)==-1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;	
 			#endif
-	}
 	
 	buffer.assign(data,inSize);
 			
@@ -1481,7 +1489,8 @@ flushSocketExchange::recieve(char * const data)
 #else
 	bool
 #endif
-flushSocketExchange::recieveString(std::string &data)
+flushSocketExchange::recieveString(std::string &data, 
+								bool urgent)
 {	
 	register char *t_data = new char[inSize+1];
 	if (t_data == NULL)
@@ -1497,7 +1506,7 @@ flushSocketExchange::recieveString(std::string &data)
 		register bool result = 
 	#endif
 	
-	this->recieve(t_data);
+	this->recieve(t_data,urgent);
 	data.assign(t_data,inSize);
 	delete [] t_data;
 	

@@ -49,6 +49,7 @@ namespace dodo
 			 * converts long to string
 			 */
 			static std::string lToString(long number);
+			
 			/**
 			 * converts double to string
 			 */

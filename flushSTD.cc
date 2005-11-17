@@ -92,7 +92,7 @@ flushSTD::read(char * const a_void) const
 	
 	for (int i=0;i<iter;++i)
 	{
-		if (fread(a_void+recieved,inSize,1,stdin)==0)
+		if (fread(a_void+recieved,inSTDBuffer,1,stdin)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -115,7 +115,7 @@ flushSTD::read(char * const a_void) const
 				}
 			#endif
 			
-		recieved += inSize;
+		recieved += inSTDBuffer;
 	}
 	
 	if (rest>0)
@@ -230,7 +230,7 @@ flushSTD::write(const char *const aa_buf)
 	
 	for (long i=0;i<iter;++i)
 	{
-		if (fwrite(buffer.c_str()+sent,outSize,1,stdout)==0)
+		if (fwrite(buffer.c_str()+sent,outSTDBuffer,1,stdout)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -252,7 +252,7 @@ flushSTD::write(const char *const aa_buf)
 						return false;
 				}
 			#endif
-		sent += outSize;
+		sent += outSTDBuffer;
 	}
 
 	if (rest>0)

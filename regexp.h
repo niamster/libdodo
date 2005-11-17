@@ -63,8 +63,6 @@ namespace dodo
 	 * 
 	 * NOTE!!!!!!! POSIX bugs: don't support binary test sting;
 	 */
-	 
-	 
 	 class regexp : public dodoBase
 	 {
 	 	public:

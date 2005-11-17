@@ -492,26 +492,26 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							send(const char * const data);
+							send(const char * const data, bool urgent = false);///urgent = true -> Sends out-of-band data
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif				
-							sendString(const std::string &data);
+							sendString(const std::string &data, bool urgent = false);///urgent = true -> Sends out-of-band data
 			
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							recieve(char * const data);
+							recieve(char * const data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif				
-							recieveString(std::string &data);
+							recieveString(std::string &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
 						
 			/**
 			 * closes this stream

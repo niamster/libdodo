@@ -38,6 +38,7 @@ namespace dodo
 	{
 		EMPTY = 0
 	};
+	
 	///////////////////////////////////
 	//	These statements need additional statement
 	///////////////////////////////////	
@@ -50,6 +51,7 @@ namespace dodo
 		LIMIT,
 		OFFSET,
 	};	
+	
 	/**
 	 * some statements can't be togather in one query. They are marcked specially
 	 * for more security before applying one, remove other;
@@ -91,19 +93,23 @@ namespace dodo
 		CREATE_TABLE,
 		CREATE_FIELD		
 	};
+	
 	enum addSelEnum
 	{
 		SELECT_DISTINCT = 1,///dup1
 		SELECT_ALL///dup1
 	};
+	
 	enum addDelEnum
 	{
 		DELETE_IGNORE = 1,
 	};
+	
 	enum addUpEnum
 	{
 		UPDATE_IGNORE = 1,
 	};
+	
 	enum addInsEnum
 	{
 		INSERT_IGNORE = 1,
@@ -116,19 +122,23 @@ namespace dodo
 	{
 		INSERT_IGNORE,
 	};
+	
 	static unsigned int addUpEnumArr[1] = 
 	{
 		UPDATE_IGNORE,
 	};
+	
 	static unsigned int addDelEnumArr[1] = 
 	{
 		DELETE_IGNORE,
 	};
+	
 	static unsigned int addSelEnumArr[2] = 
 	{
 		SELECT_DISTINCT,
 		SELECT_ALL
 	};
+	
 	/**
 	 * data that could be retrieved from result
 	 */
@@ -151,6 +161,7 @@ namespace dodo
 		std::string socket;
 		unsigned int port;
 	};
+	
 	/**
 	 * data that could be retrieved from class(to modyficate)[contains references]
 	 */
@@ -196,6 +207,7 @@ namespace dodo
 		int &qUpShift;
 		int &qDelShift;		
 	};
+	
 	/**
 	 * structure that contains backup of collected data
 	 */
@@ -222,6 +234,7 @@ namespace dodo
 		int qUpShift;
 		int qDelShift;		
 	};
+	
 	/**
 	 * Data types; with '**' need range; with '*' may have range
 	 */
@@ -256,6 +269,7 @@ namespace dodo
 		ENUM,///An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65,535 distinct values.
 		SET,///A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
 	};
+	
 	/**
 	 *  type of field
 	 */
@@ -265,6 +279,7 @@ namespace dodo
 		AUTO_INCREMENT,
 		KEY
 	};
+	
 	/**
 	 * reference onfield
 	 */
@@ -276,6 +291,7 @@ namespace dodo
 		NO_ACTION,
 		SET_DEFAULT
 	};
+	
 	/**
 	 * structure that holds info for field creation
 	 */
@@ -303,6 +319,7 @@ namespace dodo
 		std::string comment;///comment for field
 		std::string charset;///charset
 	};
+	
 	/*
 	 * structure that holds info about table
 	 */
@@ -324,6 +341,7 @@ namespace dodo
 		std::string comment;///comment for table
 		std::string charset;///charset
 	};
+	
 	/**
 	 * class to provide wide abilities for sql manipulations
 	 * 
