@@ -64,8 +64,8 @@ namespace dodo
 	{
 		READ_ONLY,
 		READ_WRITE,
-		READ_WRITE_TRUNCATE,
-		APPEND
+		READ_WRITE_TRUNCATE,///if exists = truncates
+		APPEND///for readin' and writin' to the end; you may skip par `pos` for write
 	};
 	
 	enum flushDiskFileToCreateEnum

@@ -230,7 +230,7 @@ flushDisk::open(const std::string &a_path) const
 					file = fopen(path.c_str(),"w+");
 					break;
 				case APPEND:
-					file = fopen(path.c_str(),"w+");
+					file = fopen(path.c_str(),"a+");
 					append = true;
 					break;
 				case READ_ONLY:
