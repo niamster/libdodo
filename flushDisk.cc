@@ -228,7 +228,11 @@ flushDisk::open(const std::string &a_path) const
 					break;
 				case READ_WRITE_TRUNCATE:
 					file = fopen(path.c_str(),"w+");
-					break;		
+					break;
+				case APPEND:
+					file = fopen(path.c_str(),"w+");
+					append = true;
+					break;
 				case READ_ONLY:
 				default:
 					file = fopen(path.c_str(),"r");			
@@ -272,16 +276,13 @@ flushDisk::read(char * const a_void,
 		performXExec(preExec);
 	#endif
 	
-	if (fileType == REG_FILE || fileType == TMP_FILE)
-	{
-		a_pos *= inSize;		
-		if (fseek(file,a_pos,SEEK_SET) == -1)
+	if (fileType == REG_FILE || fileType == TMP_FILE)	
+		if (fseek(file,a_pos*inSize,SEEK_SET) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
-	}
 	
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
@@ -1340,4 +1341,150 @@ flushDisk::followSymlink(const std::string &path, std::string &original)
 	#endif
 }
 	
+//-------------------------------------------------------------------
+
+std::string 
+flushDisk::getFileContent(const std::string &path)
+{
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __string__;		
+		#endif
+		
+	if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+		#else
+			return __string__;
+		#endif	
+
+	FILE *file = fopen(path.c_str(),"r");			
+	
+	if (file == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __string__;
+		#endif
+	
+	register char buffer[INSIZE];
+	
+	register long iter = st.st_size/INSIZE, rest = st.st_size%INSIZE;
+	std::string retS = "";	
+	
+	register int i(0);	
+	for (;i<iter;++i)
+	{
+		if (fseek(file,i*INSIZE,SEEK_SET) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return retS;
+			#endif
+			
+		if (fread(buffer,INSIZE,1,file)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return retS;
+				}
+			#endif
+
+		retS.append(buffer,INSIZE);
+	}
+	if (rest>0)
+	{
+		if (fseek(file,i*INSIZE,SEEK_SET) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return retS;
+			#endif
+					
+		if (fread(buffer,rest,1,file)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return retS;
+				}
+			#endif
+			
+		retS.append(buffer,rest);	
+	}
+	
+	return retS;	
+}
+
+//-------------------------------------------------------------------
+
+stringArr 
+flushDisk::getFileContentArr(const std::string &path)
+{
+	SSTAT st;
+	if (FSTAT(path.c_str(),&st) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENTARR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __stringarray__;		
+		#endif
+		
+	if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENTARR,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+		#else
+			return __stringarray__;
+		#endif
+
+	FILE *file = fopen(path.c_str(),"r");			
+	
+	if (file == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENTARR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __string__;
+		#endif
+		
+	register char buffer[DISK_MAXLINELEN];	
+	stringArr arr;
+	
+	while (fgets(buffer,DISK_MAXLINELEN,file)!=NULL)
+		arr.push_back(buffer);
+	
+	return arr;
+		
+}
+
 //-------------------------------------------------------------------

@@ -238,6 +238,7 @@ namespace dodo
 				SOCKET socket;
 			#endif
 				
+			bool block;///now is only *nix compatible
 	};
 	
 	/**

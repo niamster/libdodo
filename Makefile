@@ -1,5 +1,5 @@
-#GCC_PATH=/opt/gcc-3.4.3/bin/
-GCC_PATH=/opt/gcc-4.0.1/bin/
+GCC_PATH=/opt/gcc-3.4.3/bin/
+#GCC_PATH=/opt/gcc-4.0.1/bin/
 
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -march=pentium4

@@ -64,7 +64,8 @@ namespace dodo
 	{
 		READ_ONLY,
 		READ_WRITE,
-		READ_WRITE_TRUNCATE
+		READ_WRITE_TRUNCATE,
+		APPEND
 	};
 	
 	enum flushDiskFileToCreateEnum
@@ -251,6 +252,8 @@ namespace dodo
 			#endif
 							flush();
 			/**
+			 * get file content
+			 * get file content into array - per line for node
 			 * delete file/dir (empty)
 			 * rename file/dir
 			 * touch (sets access/modify time)
@@ -272,6 +275,10 @@ namespace dodo
 			 * get file info
 			 * get dir info
 			 */
+			 
+			static std::string getFileContent(const std::string &path);
+			
+			static stringArr getFileContentArr(const std::string &path);
 			  
 			#ifndef NO_EX
 				static void 
@@ -375,7 +382,6 @@ namespace dodo
 			
 			
 			bool over;///indicates whether overright; for files,tmp_files only
-			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 			mutable flushDiskModesEnum mode;///mode to open file
 			
 			/**
@@ -386,6 +392,8 @@ namespace dodo
 			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
 			
 		private:
+
+			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 		
 			static int getPermission(int permission);
 		

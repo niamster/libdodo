@@ -55,6 +55,10 @@ int main(int argc, char **argv)
 
 	try
 	{
+		flushSocket sock1(PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
+		flushSocketExchange ex1;
+		sock1.connect("127.0.0.1",1234,ex1);
+		
 		flushSocket sock(CONNECTION_LIMIT,PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
 		//sock.bindNListen("127.0.0.1",7777);
 		

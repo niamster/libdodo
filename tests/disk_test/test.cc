@@ -9,6 +9,14 @@ int main(int argc, char **argv)
 
 	try
 	{	
+		//cout << flushDisk::getFileContent("test.cc");
+		stringArr arr = flushDisk::getFileContentArr("test.cc");
+		
+		for (int i=0;i<arr.size();i++)
+		{
+			cout << arr[i];
+		}
+		
 		flushDisk::unlink("my.dat");
 	}
 	catch(baseEx ex)
@@ -19,11 +27,14 @@ int main(int argc, char **argv)
 	{
 		cout << "not exists\n";
 	}
-	
+	exit(0);
 	try
 	{
 		//flushDisk flush(FIFO_FILE,"my.dat");
 		flushDisk flush(REG_FILE,"my.dat");
+		
+		cout << flushDisk::getFileContent("test.cc");
+		
 		
 		std::cout << typeid(flush).name();
 		

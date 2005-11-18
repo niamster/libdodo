@@ -61,6 +61,9 @@
 #define RECIEVE_TIMEOUT 1000
 #define SEND_TIMEOUT 1000
 
+///for flushDisk::getFileContentArr
+#define DISK_MAXLINELEN 10240
+
 ///default values of buffer for io operations(flush*)
 #define INSIZE 1024
 #define OUTSIZE 1024	

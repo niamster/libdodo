@@ -1539,7 +1539,7 @@ flushSocketExchange::send(const char * const data,
 	if (urgent)	
 		flag = MSG_OOB;
 		
-	for (long i=0;i<iter;++i)
+	for (register long i=0;i<iter;++i)
 	{
 		n = 0;
 		while (sent<outSize)
@@ -1637,7 +1637,7 @@ flushSocketExchange::recieve(char * const data,
 	if (urgent)	
 		flag = MSG_OOB;
 			
-	for (int i=0;i<iter;++i)
+	for (register long i=0;i<iter;++i)
 	{
 		n = 0;
 		n = ::recv(socket,data+recieved,inSocketBuffer,flag);

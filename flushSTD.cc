@@ -90,7 +90,7 @@ flushSTD::read(char * const a_void) const
 	register long iter = inSize/inSTDBuffer, rest = inSize%inSTDBuffer;
 	register long recieved(0);
 	
-	for (int i=0;i<iter;++i)
+	for (register long i=0;i<iter;++i)
 	{
 		if (fread(a_void+recieved,inSTDBuffer,1,stdin)==0)
 			#ifndef NO_EX
@@ -228,7 +228,7 @@ flushSTD::write(const char *const aa_buf)
 	register long iter = outSize/outSTDBuffer, rest = outSize%outSTDBuffer;
 	register long sent(0);
 	
-	for (long i=0;i<iter;++i)
+	for (register long i=0;i<iter;++i)
 	{
 		if (fwrite(buffer.c_str()+sent,outSTDBuffer,1,stdout)==0)
 			#ifndef NO_EX
