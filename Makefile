@@ -13,8 +13,10 @@ MOD_MYSQL_LD:=-L/opt/mysql/lib/mysql -lmysqlclient
 MOD_PCRE_CPP:=-I/opt/pcre/include
 MOD_PCRE_LD:=-L/opt/pcre/lib -lpcre
 
+MOD_DL_LD:=-ldl
+
 override CPPFLAGS:=-I./ $(MOD_MYSQL_CPP) $(MOD_PCRE_CPP) $(CPPFLAGS)
-override LDFLAGS:= -L./ $(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(LDFLAGS)
+override LDFLAGS:= -L./ $(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(MOD_DL_LD) $(LDFLAGS)
 
 LIBRARY=dodo
 

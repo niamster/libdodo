@@ -393,7 +393,7 @@ namespace dodo
 			
 		private:
 
-			bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
+			mutable bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 		
 			static int getPermission(int permission);
 		

@@ -41,7 +41,8 @@
 			ERR_ERRNO,
 			ERR_MYSQL,
 			ERR_H_ERRNO,
-			ERR_WINSOCK
+			ERR_WINSOCK,
+			ERR_DYNLOAD
 		};
 
 		/**
@@ -56,6 +57,7 @@
 			ERRMODULE_REGEXP,
 			ERRMODULE_SQLBASE,
 			ERRMODULE_FLUSHSTD,
+			ERRMODULE_XEXEC
 		};	
 			
 		class baseEx

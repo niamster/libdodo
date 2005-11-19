@@ -27,11 +27,13 @@
 
 #include <string>
 #include <vector>
-#include <functional>
+//#include <functional>
+#include <dlfcn.h>
 
 #include "directives.h"
 #include "types.h"
 #include "dodoBase.h"
+#include "xexecEx.h"
 
 namespace dodo
 {
@@ -71,6 +73,18 @@ namespace dodo
 	};
 
 	/**
+	 * this structure initXexecModule function must return!
+	 */
+	struct xexecExMod
+	{
+		char *name;///name of module
+		char *discription;///discription
+		char *hook;///name of function
+	};
+
+	typedef xexecExMod (*initXexecModule)();
+
+	/**
 	 * class to provide wide abilities exec manipulations
 	 * pre, post execs.
 	 */
@@ -92,6 +106,9 @@ namespace dodo
 			 */
 			virtual int _addPostExec(inExec func, dodoBase *obj, void *data) const;
 			virtual int _addPreExec(inExec func, dodoBase *obj, void *data) const;
+			virtual int _addPostExecModule(dodoBase *obj, std::string module, void *data) const;
+			virtual int _addPreExecModule(dodoBase *obj, std::string module, void *data) const;
+						
 			virtual void delPostExec(unsigned int position) const;
 			virtual void delPreExec(unsigned int position) const;
 			virtual bool replacePostExec(unsigned int position, inExec func, dodoBase *obj, void *data) const;
@@ -138,16 +155,24 @@ namespace dodo
 			mutable int operType;///detect operation type
 			
 		protected:
+			
 			/**
 			 * adds/deletes/replaces XExec to list
 			 */
 			inline virtual int addXExec(std::vector<__execItem> &list, inExec func, dodoBase *obj, void *data) const;
 			inline virtual void delXExec(std::vector<__execItem> &list, unsigned int position) const;
 			inline virtual bool replaceXExec(std::vector<__execItem> &list, unsigned int position, inExec func, dodoBase *obj, void *data) const;
+			
 			/**
 			 * set state(enable/disable) for XExec(all XExecs) 
 			 */
 			virtual void setStatXExec(std::vector<__execItem> &list, unsigned int position, bool stat) const;
+			
+			/**
+			 * loads from external object
+			 */
+			inline virtual int addXExecModule(std::vector<__execItem> &list, dodoBase *obj, std::string module, void *data) const;
+			
 			/**
 			 * perform enabled functions from the list
 			 */
@@ -155,6 +180,9 @@ namespace dodo
 			
 			mutable __execItemList preExec;///functions executed before exec
 			mutable __execItemList postExec;///functions executed after exec
+			
+			mutable void *handles[XEXEC_MAXMODULES];
+			mutable int handlesOpened;
 	};
 };
 

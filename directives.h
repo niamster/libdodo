@@ -61,6 +61,9 @@
 #define RECIEVE_TIMEOUT 1000
 #define SEND_TIMEOUT 1000
 
+///how many modules can init per object
+#define XEXEC_MAXMODULES 10
+
 ///for flushDisk::getFileContentArr
 #define DISK_MAXLINELEN 10240
 

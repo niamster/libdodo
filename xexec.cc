@@ -36,7 +36,8 @@ dummyHook(dodoBase *base, void *data)
 //-------------------------------------------------------------------
 
 xexec::xexec() : safeHooks(true),
-				operType(XEXEC_NONE)
+				operType(XEXEC_NONE),
+				handlesOpened(0)
 {
 	preExec.execDisabled = false;
 	postExec.execDisabled = false;
@@ -46,6 +47,8 @@ xexec::xexec() : safeHooks(true),
 
 xexec::~xexec()
 {	
+	for (register int i(0);i<handlesOpened;++i)
+		dlclose(handles[i]);
 }
 
 //-------------------------------------------------------------------
@@ -293,6 +296,61 @@ xexec::exec() const
 	performXExec(postExec);
 	
 	return true;
+}
+
+//-------------------------------------------------------------------
+
+int 
+xexec::addXExecModule(std::vector<__execItem> &list, 
+				dodoBase *obj, 
+				std::string module, 
+				void *data) const
+{
+	__execItem temp;
+	
+	temp.data = data;
+	temp.obj = obj;
+	temp.present = true;
+	temp.enabled = true;
+
+	handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
+	if (handles[handlesOpened] == NULL)
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	
+	initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
+	if (init == NULL)
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	
+	inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
+	if (init == NULL)
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+
+	temp.func = in;
+	
+	list.push_back(temp);
+	++handlesOpened;
+
+	return list.size();		
+}
+
+//-------------------------------------------------------------------
+
+int 
+xexec::_addPostExecModule(dodoBase *obj, 
+						std::string module, 
+						void *data) const
+{
+	return addXExecModule(postExec.exec,obj,module,data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+xexec::_addPreExecModule(dodoBase *obj, 
+						std::string module, 
+						void *data) const
+{
+	return addXExecModule(preExec.exec,obj,module,data);
 }
 
 //-------------------------------------------------------------------
