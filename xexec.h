@@ -77,9 +77,9 @@ namespace dodo
 	 */
 	struct xexecExMod
 	{
-		char *name;///name of module
-		char *discription;///discription
-		char *hook;///name of function
+		char name[20];///name of module
+		char discription[40];///discription
+		char hook[20];///name of function
 	};
 
 	typedef xexecExMod (*initXexecModule)();
@@ -154,6 +154,7 @@ namespace dodo
 			
 			mutable int operType;///detect operation type
 			
+			static xexecExMod getModuleInfo(const std::string &module);
 		protected:
 			
 			/**

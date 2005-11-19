@@ -315,16 +315,28 @@ xexec::addXExecModule(std::vector<__execItem> &list,
 
 	handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
 	if (handles[handlesOpened] == NULL)
+	#ifndef NO_EX
 		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	#else
+		return -1;
+	#endif
 	
 	initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
 	if (init == NULL)
+	#ifndef NO_EX
 		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	#else
+		return -1;
+	#endif	
 	
 	inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
-	if (init == NULL)
+	if (in == NULL)
+	#ifndef NO_EX
 		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-
+	#else
+		return -1;
+	#endif
+	
 	temp.func = in;
 	
 	list.push_back(temp);
@@ -353,4 +365,36 @@ xexec::_addPreExec(const std::string &module,
 	return addXExecModule(preExec.exec,obj,module,data);
 }
 
+//-------------------------------------------------------------------
+
+xexecExMod 
+xexec::getModuleInfo(const std::string &module)
+{
+	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	if (handle == NULL)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	#else
+		return -1;
+	#endif
+		
+	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
+	if (init == NULL)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	#else
+		return -1;
+	#endif
+		
+	xexecExMod mod = init();
+	
+	if (dlclose(handle)!=0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
+	
+	return mod;	
+}
 //-------------------------------------------------------------------

@@ -9,6 +9,9 @@ int main(int argc, char **argv)
 	try
 	{
 		flushSTD st;
+		
+		cout << flushSTD::getModuleInfo("./module").name;
+		
 		int pos = st.addPreExec("./module",NULL);
 	
 		int a = 10;

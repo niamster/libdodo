@@ -32,18 +32,11 @@
 
 	namespace dodo
 	{
-		
-		///reasons of exception
-		enum xexecExR
-		{
-			REGEXP_MEMORY_OVER = 1
-		};
-		
-		#define REGEXP_MEMORY_OVER_STR "Not anough memmory"
 				
 		enum xexecFunctionsID
 		{
 			XEXEC_ADDXEXECMODULE,
+			XEXEC_GETMODULEINFO
 			
 		};
 	};

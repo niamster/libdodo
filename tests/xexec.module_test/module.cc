@@ -26,14 +26,11 @@ extern "C"
 	initXexecModule()
 	{
 		xexecExMod module;
-		module.name = (char *)malloc(5);
+		
 		strcpy(module.name,"test");
-		
-		module.discription = (char *)malloc(12);
 		strcpy(module.discription,"test module");
-		
-		module.hook = (char *)malloc(5);
 		strcpy(module.hook,"hook");
+		
 		return module;
 	}
 
