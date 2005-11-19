@@ -303,7 +303,7 @@ xexec::exec() const
 int 
 xexec::addXExecModule(std::vector<__execItem> &list, 
 				dodoBase *obj, 
-				std::string module, 
+				const std::string &module, 
 				void *data) const
 {
 	__execItem temp;
@@ -336,9 +336,9 @@ xexec::addXExecModule(std::vector<__execItem> &list,
 //-------------------------------------------------------------------
 
 int 
-xexec::_addPostExecModule(dodoBase *obj, 
-						std::string module, 
-						void *data) const
+xexec::_addPostExec(const std::string &module, 
+					dodoBase *obj, 
+					void *data) const
 {
 	return addXExecModule(postExec.exec,obj,module,data);
 }
@@ -346,9 +346,9 @@ xexec::_addPostExecModule(dodoBase *obj,
 //-------------------------------------------------------------------
 
 int 
-xexec::_addPreExecModule(dodoBase *obj, 
-						std::string module, 
-						void *data) const
+xexec::_addPreExec(const std::string &module, 
+				dodoBase *obj,
+				void *data) const
 {
 	return addXExecModule(preExec.exec,obj,module,data);
 }

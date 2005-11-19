@@ -287,7 +287,9 @@ namespace dodo
 			 */			
 			virtual int addPostExec(inExec func, void *data) const;
 			virtual int addPreExec(inExec func, void *data) const;	
-								
+			virtual int addPostExec(const std::string &, void *data) const;
+			virtual int addPreExec(const std::string &, void *data) const;	
+											
 			/**
 			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
 			 */		
@@ -470,7 +472,9 @@ namespace dodo
 			 */			
 			virtual int addPostExec(inExec func, void *data) const;
 			virtual int addPreExec(inExec func, void *data) const;	
-								
+			virtual int addPostExec(const std::string &, void *data) const;
+			virtual int addPreExec(const std::string &, void *data) const;	
+											
 			/**
 			 * constructors/destructors
 			 */	

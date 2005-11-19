@@ -106,8 +106,8 @@ namespace dodo
 			 */
 			virtual int _addPostExec(inExec func, dodoBase *obj, void *data) const;
 			virtual int _addPreExec(inExec func, dodoBase *obj, void *data) const;
-			virtual int _addPostExecModule(dodoBase *obj, std::string module, void *data) const;
-			virtual int _addPreExecModule(dodoBase *obj, std::string module, void *data) const;
+			virtual int _addPostExec(const std::string &module, dodoBase *obj, void *data) const;
+			virtual int _addPreExec(const std::string &module, dodoBase *obj, void *data) const;
 						
 			virtual void delPostExec(unsigned int position) const;
 			virtual void delPreExec(unsigned int position) const;
@@ -171,7 +171,7 @@ namespace dodo
 			/**
 			 * loads from external object
 			 */
-			inline virtual int addXExecModule(std::vector<__execItem> &list, dodoBase *obj, std::string module, void *data) const;
+			inline virtual int addXExecModule(std::vector<__execItem> &list, dodoBase *obj, const std::string &module, void *data) const;
 			
 			/**
 			 * perform enabled functions from the list

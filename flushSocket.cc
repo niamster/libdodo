@@ -116,6 +116,24 @@ flushSocket::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
+int 
+flushSocket::addPostExec(const std::string &module, 
+					void *data) const
+{
+	return _addPostExec(module, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushSocket::addPreExec(const std::string &module, 
+					void *data) const
+{
+	return _addPreExec(module, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
 #ifndef NO_EX
 	void 
 #else
@@ -1730,6 +1748,24 @@ flushSocketExchange::addPreExec(inExec func,
 					void *data) const
 {
 	return _addPreExec(func, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushSocketExchange::addPostExec(const std::string &module, 
+					void *data) const
+{
+	return _addPostExec(module, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
+flushSocketExchange::addPreExec(const std::string &module, 
+					void *data) const
+{
+	return _addPreExec(module, (dodoBase *)this, data);
 }
 
 //-------------------------------------------------------------------

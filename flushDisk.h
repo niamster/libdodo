@@ -173,7 +173,9 @@ namespace dodo
 			 */			
 			virtual int addPostExec(inExec func, void *data) const;
 			virtual int addPreExec(inExec func, void *data) const;
-			
+			virtual int addPostExec(const std::string &module, void *data) const;
+			virtual int addPreExec(const std::string &module, void *data) const;
+						
 			/**
 			 * closes previous opened file
 			 * also creates file if it does not exists!

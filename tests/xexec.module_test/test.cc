@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	try
 	{
 		flushSTD st;
-		int pos = st._addPreExecModule(&st,"./module",NULL);
+		int pos = st.addPreExec("./module",NULL);
 	
 		int a = 10;
 		st.write((char *)&a);

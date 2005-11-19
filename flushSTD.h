@@ -68,7 +68,9 @@ namespace dodo
 			 */			
 			virtual int addPostExec(inExec func, void *data) const;
 			virtual int addPreExec(inExec func, void *data) const;	
-			
+			virtual int addPostExec(const std::string &module, void *data) const;
+			virtual int addPreExec(const std::string &module, void *data) const;	
+					
 			/**
 			 * read functions. first argument - buffer, second - position
 			 * returns false if nothing was read
