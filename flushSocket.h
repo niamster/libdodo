@@ -390,7 +390,7 @@ namespace dodo
 				static bool 
 			#endif			
 							setLocalName(const std::string &host);
-			
+								
 			/**
 			 * get info about service(port, protocol...)
 			 */

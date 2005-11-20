@@ -757,6 +757,8 @@ flushSocket::getLocalName()
 	return temp0;
 }
 
+//-------------------------------------------------------------------
+
 #ifndef NO_EX
 	void 
 #else

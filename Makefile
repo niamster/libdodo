@@ -1,9 +1,12 @@
-GCC_PATH=/opt/gcc-3.4.3/bin/
-#GCC_PATH=/opt/gcc-4.0.1/bin/
+CC_PATH=/opt/gcc-3.4.3/bin/
+#CC_PATH=/opt/gcc-4.0.1/bin/
+#CC_PATH=/opt/intel/cc/9.0/bin/
 
-CXX = $(GCC_PATH)g++
+CXX = $(CC_PATH)g++
+#CXX = $(CC_PATH)icc
+
 CFLAGS=-O2 -march=pentium4
-OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBase.o baseEx.o mysqlpp.o cgipp.o regexp.o flush.o flushSocket.o flushDisk.o flushSTD.o
+OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBase.o baseEx.o mysqlpp.o cgipp.o regexp.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o
 
 override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT -DPCRE_EXT $(DEFINES)
 

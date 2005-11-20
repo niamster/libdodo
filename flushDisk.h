@@ -254,6 +254,9 @@ namespace dodo
 			#endif
 							flush();
 			/**
+			 * copy file/
+			 * basename => "/usr/lib" => "lib"
+			 * dirname => "/usr/lib" => "/usr"
 			 * get file content
 			 * get file content into array - per line for node
 			 * delete file/dir (empty)
@@ -277,6 +280,17 @@ namespace dodo
 			 * get file info
 			 * get dir info
 			 */
+
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							copy(const std::string &from, const std::string &to, bool force=false);///if `to` already exists and it's file and force=true - overwrite!
+			
+			static std::string basename(const std::string &path);
+			
+			static std::string dirname(const std::string &path);
 			 
 			static std::string getFileContent(const std::string &path);
 			
@@ -394,14 +408,14 @@ namespace dodo
 			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
 			
 		private:
-
-			mutable bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 		
 			static int getPermission(int permission);
 		
 			mutable std::string path;///file name; for files only;
 					
 			mutable FILE *file;///file handler
+			
+			mutable bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
 	};
 
 };

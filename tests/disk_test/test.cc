@@ -6,34 +6,33 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-
 	try
 	{	
-		//cout << flushDisk::getFileContent("test.cc");
+		/*cout << flushDisk::getFileContent("test.cc");
+		flushDisk::copy("test.cc","tect.cc.copy");
 		stringArr arr = flushDisk::getFileContentArr("test.cc");
 		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
-		}
+		}*/
 		
 		flushDisk::unlink("my.dat");
 	}
 	catch(baseEx ex)
 	{
-		cout << ex.baseErrstr << endl;
+		cout << ex.baseErrstr << "\t" << ex.line << endl;
 	}
 	catch(...)
 	{
 		cout << "not exists\n";
 	}
-	exit(0);
 	try
 	{
 		//flushDisk flush(FIFO_FILE,"my.dat");
-		flushDisk flush(REG_FILE,"my.dat");
+/*		flushDisk flush(REG_FILE,"my.dat");
 		
-		cout << flushDisk::getFileContent("test.cc");
+		//cout << flushDisk::getFileContent("test.cc");
 		
 		
 		std::cout << typeid(flush).name();
@@ -41,7 +40,7 @@ int main(int argc, char **argv)
 		//flushDisk flush(true);///in tmp file
 		flush.open();
 	//	flush.autoOutSize = false;flush.inSize = flush.outSize = 10;
-		
+		flush.over = true;
 		flush.writeString("!1234567890-!!",0);
 		
 		string str;
@@ -63,6 +62,8 @@ int main(int argc, char **argv)
 		cout << flushDisk::getPermissions("Makefile");
 		
 		cout << endl; 
+*/
+
 		std::vector<__fileInfo> dir = flushDisk::getDirInfo("/");
 		
 		if (dir.size() > 0)

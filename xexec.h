@@ -27,8 +27,12 @@
 
 #include <string>
 #include <vector>
-//#include <functional>
-#include <dlfcn.h>
+
+#ifndef WIN
+
+	#include <dlfcn.h>
+
+#endif
 
 #include "directives.h"
 #include "types.h"

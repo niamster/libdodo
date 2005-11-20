@@ -58,11 +58,11 @@ flushDisk::getSelf()
 //-------------------------------------------------------------------
 
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
-					const std::string &a_path) : over(false), 
-												append(false),
+					const std::string &a_path) : over(false),
 												mode(READ_WRITE), 
 												fileType(type),
-												path(a_path)
+												path(a_path), 
+												append(false)
 {
 }
 
@@ -1224,8 +1224,7 @@ flushDisk::getFileInfo(const std::string &path)
 		#else
 			return file;		
 		#endif
-	
-	file.name.assign(basename((char *)path.c_str()));
+	file.name.assign(::basename((char *)path.c_str()));
 	file.type = flushDisk::getFileType(path);
 	file.perm = flushDisk::getPermissions(path);
 	file.accTime = flushDisk::getAccTime(path);
@@ -1245,7 +1244,6 @@ std::vector<__fileInfo>
 flushDisk::getDirInfo(const std::string &path)
 {
 	std::vector<__fileInfo> dir;
-	
 	SSTAT st;
 	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
@@ -1316,7 +1314,8 @@ flushDisk::getDirInfo(const std::string &path)
 #else
 	bool
 #endif
-flushDisk::followSymlink(const std::string &path, std::string &original)
+flushDisk::followSymlink(const std::string &path, 
+						std::string &original)
 {
 	SSTAT st;
 	if (FSTAT(path.c_str(),&st) == -1)
@@ -1326,11 +1325,7 @@ flushDisk::followSymlink(const std::string &path, std::string &original)
 			return false;		
 		#endif
 	
-	#ifndef WIN
-		char buffer[4096];
-	#else
-		char buffer[_MAX_PATH];
-	#endif
+	char buffer[MAXPATHLEN];
 	
 	#ifndef WIN
 	
@@ -1341,7 +1336,7 @@ flushDisk::followSymlink(const std::string &path, std::string &original)
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 			#endif	
 		
-		if (::readlink(path.c_str(),buffer,4096) == -1)
+		if (::readlink(path.c_str(),buffer,MAXPATHLEN) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FOLLOWSYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -1380,7 +1375,6 @@ flushDisk::getFileContent(const std::string &path)
 		#endif	
 
 	FILE *file = fopen(path.c_str(),"r");			
-	
 	if (file == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1462,6 +1456,13 @@ flushDisk::getFileContent(const std::string &path)
 			
 		retS.append(buffer,rest);	
 	}
+
+	if (fclose(file) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return retS;
+		#endif
 	
 	return retS;	
 }
@@ -1486,8 +1487,7 @@ flushDisk::getFileContentArr(const std::string &path)
 			return __stringarray__;
 		#endif
 
-	FILE *file = fopen(path.c_str(),"r");			
-	
+	FILE *file = fopen(path.c_str(),"r");
 	if (file == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENTARR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1500,9 +1500,249 @@ flushDisk::getFileContentArr(const std::string &path)
 	
 	while (fgets(buffer,DISK_MAXLINELEN,file)!=NULL)
 		arr.push_back(buffer);
-	
+		
+	if (fclose(file) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENTARR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return arr;
+		#endif	
+		
 	return arr;
 		
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+flushDisk::basename(const std::string &path)
+{
+	return ::basename((char *)path.c_str());
+}
+
+//-------------------------------------------------------------------
+			
+std::string 
+flushDisk::dirname(const std::string &path)
+{
+	return ::dirname((char *)path.c_str());
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif
+flushDisk::copy(const std::string &from, 
+				const std::string &to, 
+				bool force)
+{
+	SSTAT st;
+	if (FSTAT(from.c_str(),&st) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;		
+		#endif
+		
+	if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+
+	register long iter = st.st_size/INSIZE, rest = st.st_size%INSIZE;
+
+	if (FSTAT(to.c_str(),&st) == -1)
+	{
+		if (errno != ENOENT)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;		
+			#endif
+	}
+	else
+	{
+		if ((_REGULARFILE&st.st_mode) != _REGULARFILE)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		if ( !force )
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+	}
+	
+	FILE *fromFile = fopen(from.c_str(),"r");			
+	if (fromFile == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	FILE *toFile = fopen(to.c_str(),"w+");
+	if (toFile == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	register char buffer[INSIZE];
+	
+	register int i(0);	
+	for (;i<iter;++i)
+	{
+		if (fseek(fromFile,i*INSIZE,SEEK_SET) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return retS;
+			#endif
+		
+		if (fseek(toFile,i*INSIZE,SEEK_SET) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return retS;
+			#endif
+						
+		if (fread(buffer,INSIZE,1,fromFile)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+
+		if (fwrite(buffer,INSIZE,1,toFile)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+	}
+	if (rest>0)
+	{
+		if (fseek(fromFile,i*INSIZE,SEEK_SET) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return retS;
+			#endif
+		
+		if (fseek(toFile,i*INSIZE,SEEK_SET) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return retS;
+			#endif
+								
+		if (fread(buffer,rest,1,fromFile)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+
+		if (fwrite(buffer,rest,1,toFile)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif					
+	}
+		
+	if (fclose(fromFile) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	if (fclose(toFile) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+					
+	#ifdef NO_EX
+		return true;
+	#endif		
 }
 
 //-------------------------------------------------------------------

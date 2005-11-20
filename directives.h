@@ -83,7 +83,7 @@
 #define SOCKET_LINGER_PERIOD 1
 #define SOCKET_LINGER_OPTION SOCKET_WAIT_CLOSE
 
-///Use not blockable sockets by default; that's means, accept doesn't block operation
-#define SOCKET_NONBLOCK
+///max length of the file path
+#define MAXPATHLEN 4096
 
 #endif /* _DIRECTIVES_H */

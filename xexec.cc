@@ -313,29 +313,35 @@ xexec::addXExecModule(std::vector<__execItem> &list,
 	temp.present = true;
 	temp.enabled = true;
 
-	handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
-	if (handles[handlesOpened] == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif
+	#ifndef WIN
 	
-	initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
-	if (init == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
+		if (handles[handlesOpened] == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
+		
+		initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
+		if (init == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif	
+		
+		inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
+		if (in == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
+		
 	#else
-		return -1;
+		
 	#endif	
-	
-	inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
-	if (in == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif
 	
 	temp.func = in;
 	
