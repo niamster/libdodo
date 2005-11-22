@@ -186,7 +186,12 @@ namespace dodo
 			mutable __execItemList preExec;///functions executed before exec
 			mutable __execItemList postExec;///functions executed after exec
 			
-			mutable void *handles[XEXEC_MAXMODULES];
+			#ifndef WIN
+				mutable void *handles[XEXEC_MAXMODULES];
+			#else
+				mutable HMODULE handles[XEXEC_MAXMODULES];
+			#endif
+			
 			mutable int handlesOpened;
 	};
 };

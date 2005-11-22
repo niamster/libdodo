@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
 		
 		//sock.bindNListen("127.0.0.1",7777);
-		sock.bindNListen("fe:80:00:00:00:00:00:00:02:e0:18:ff:fe:db:23:98",7777);
+		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",true);
 		
 		flushSocketExchange conn1[CONNECTION_LIMIT];

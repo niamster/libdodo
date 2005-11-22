@@ -31,7 +31,13 @@
 	#include <sys/resource.h>
 	#include <pwd.h>
 	#include <grp.h>
+#else
+	#include <direct.h>
 #endif
+
+
+#include <stdlib.h>
+#include <stdio.h>
 
 #include <errno.h>
 

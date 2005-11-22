@@ -31,7 +31,11 @@ systemTools::getWorkingDir()
 {
 	char wd[MAXPATHLEN];
 	
-	if (getcwd(wd,MAXPATHLEN) == NULL)
+	#ifndef WIN
+		if (getcwd(wd,MAXPATHLEN) == NULL)
+	#else
+		if (_getcwd(wd,MAXPATHLEN) == NULL)
+	#endif
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETWORKINGDIR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -50,7 +54,11 @@ systemTools::getWorkingDir()
 #endif 
 systemTools::setWorkingDir(const std::string &path)
 {
-	if (chdir(path.c_str()) == -1)
+	#ifndef WIN
+		if (chdir(path.c_str()) == -1)
+	#else
+		if (chdir(path.c_str()) == -1)
+	#endif
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETWORKINGDIR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else

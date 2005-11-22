@@ -578,7 +578,7 @@ flushDisk::unlink(const std::string &path)
 	register int status(0);
 	SSTAT st;
 
-	if (FSTAT(path.c_str(),&st) == -1)=
+	if (FSTAT(path.c_str(),&st) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_UNLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
