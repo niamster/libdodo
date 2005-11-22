@@ -557,7 +557,11 @@ flushDisk::flush()
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
 		#else
 			return false;
-		#endif	
+		#endif
+			
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 //-------------------------------------------------------------------
 
@@ -1492,7 +1496,7 @@ flushDisk::getFileContentArr(const std::string &path)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENTARR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
-			return __string__;
+			return __stringarray__;
 		#endif
 		
 	register char buffer[DISK_MAXLINELEN];	
@@ -1607,14 +1611,14 @@ flushDisk::copy(const std::string &from,
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return retS;
+				return false;
 			#endif
 		
 		if (fseek(toFile,i*INSIZE,SEEK_SET) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return retS;
+				return false;
 			#endif
 						
 		if (fread(buffer,INSIZE,1,fromFile)==0)
@@ -1669,14 +1673,14 @@ flushDisk::copy(const std::string &from,
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return retS;
+				return false;
 			#endif
 		
 		if (fseek(toFile,i*INSIZE,SEEK_SET) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return retS;
+				return false;
 			#endif
 								
 		if (fread(buffer,rest,1,fromFile)==0)

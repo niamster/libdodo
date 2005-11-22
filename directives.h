@@ -25,6 +25,8 @@
 #ifndef _DIRECTIVES_H_
 #define _DIRECTIVES_H_
 
+#include <stdio.h>
+
 #define LIBDODO_VERSION "libdodo/0.0.6"
 
 /**
@@ -84,6 +86,6 @@
 #define SOCKET_LINGER_OPTION SOCKET_WAIT_CLOSE
 
 ///max length of the file path
-#define MAXPATHLEN 4096
+#define MAXPATHLEN FILENAME_MAX
 
 #endif /* _DIRECTIVES_H */

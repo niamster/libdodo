@@ -45,7 +45,8 @@
 			FLUSHSOCKET_CANNOT_BIND,
 			FLUSHSOCKET_CANNOT_CONNECT,
 			FLUSHSOCKET_CANNOT_ACCEPT,
-			FLUSHSOCKET_ACCEPT_WO_BIND
+			FLUSHSOCKET_ACCEPT_WO_BIND,
+			FLUSHSOCKET_WRONG_PARAMETHER
 		};
 		
 		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR "No socket was created =(."
@@ -54,7 +55,7 @@
 		#define FLUSHSOCKET_CANNOT_CONNECT_STR "You cannot <connect> with this constructor; choose another one!"
 		#define FLUSHSOCKET_CANNOT_ACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
 		#define FLUSHSOCKET_ACCEPT_WO_BIND_STR "You try to accept without called bindNListen or bindNListen failed"
-		
+		#define FLUSHSOCKET_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
 		enum flushSocketFunctionsID
 		{
 			FLUSHSOCKET_MAKESOCKET,

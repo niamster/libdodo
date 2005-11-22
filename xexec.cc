@@ -306,6 +306,9 @@ xexec::addXExecModule(std::vector<__execItem> &list,
 				const std::string &module, 
 				void *data) const
 {
+	if (handlesOpened == XEXEC_MAXMODULES)
+		return -1;
+	
 	__execItem temp;
 	
 	temp.data = data;
@@ -381,7 +384,7 @@ xexec::getModuleInfo(const std::string &module)
 	#ifndef NO_EX
 		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 	#else
-		return -1;
+		return xexecExMod();
 	#endif
 		
 	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
@@ -389,7 +392,7 @@ xexec::getModuleInfo(const std::string &module)
 	#ifndef NO_EX
 		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 	#else
-		return -1;
+		return xexecExMod();
 	#endif
 		
 	xexecExMod mod = init();
@@ -398,7 +401,7 @@ xexec::getModuleInfo(const std::string &module)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 		#else
-			return -1;
+			return xexecExMod();
 		#endif
 	
 	return mod;	

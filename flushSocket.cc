@@ -156,6 +156,12 @@ flushSocket::makeSocket()
 				real_domain = PF_UNIX;
 				break;
 		#endif
+		default:
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return false;			
+			#endif			
 	}
 	switch (type)
 	{
@@ -165,6 +171,12 @@ flushSocket::makeSocket()
 		case TRANSFER_TYPE_DATAGRAM:
 			real_type = SOCK_DGRAM;
 			break;
+		default:
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return false;			
+			#endif	
 	}	
 	
 	socket = ::socket(real_domain,real_type,0);
@@ -942,6 +954,12 @@ flushSocket::accept(__initialAccept &init,
 					#endif				
 				break;
 		#endif
+		default:
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return false;			
+			#endif	
 	}
 	
 	init.socket = sock;
@@ -1353,6 +1371,12 @@ flushSocketOptions::setSockOption(socketOptionsEnum option,
 				real_option = SO_REUSEPORT;
 				break;
 		#endif
+		default:
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SETSOCKOPT,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return false;			
+			#endif	
 	}
 	
 	#ifndef WIN
@@ -1412,6 +1436,12 @@ flushSocketOptions::setLingerSockOption(socketLingerOption option,
 			lin.l_onoff = 1;
 			lin.l_linger = seconds;
 			break;
+		default:
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SETLINGERSOCKOPT,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return false;			
+			#endif	
 	}
 
 	#ifndef WIN

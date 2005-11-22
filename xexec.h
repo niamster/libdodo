@@ -110,8 +110,8 @@ namespace dodo
 			 */
 			virtual int _addPostExec(inExec func, dodoBase *obj, void *data) const;
 			virtual int _addPreExec(inExec func, dodoBase *obj, void *data) const;
-			virtual int _addPostExec(const std::string &module, dodoBase *obj, void *data) const;
-			virtual int _addPreExec(const std::string &module, dodoBase *obj, void *data) const;
+			virtual int _addPostExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+			virtual int _addPreExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 						
 			virtual void delPostExec(unsigned int position) const;
 			virtual void delPreExec(unsigned int position) const;

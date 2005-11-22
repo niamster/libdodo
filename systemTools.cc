@@ -71,7 +71,7 @@ systemTools::setWorkingDir(const std::string &path)
 	#else
 		bool 
 	#endif			
-	systemTools::getUsageinfo(__usage &info)
+	systemTools::getUsageInfo(__usage &info)
 	{
 		rusage use;
 		if (getrusage(RUSAGE_SELF,&use) == -1)
@@ -206,4 +206,379 @@ systemTools::setWorkingDir(const std::string &path)
 
 	//-------------------------------------------------------------------
 	
+	int 
+	systemTools::getPriority(uidTypeEnum type)
+	{
+		register int prio = getpriority(PRIO_PROCESS,getUID(type));
+		if (prio == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETPRIORITY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif
+			
+		return prio;	
+	}
+
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif	
+	systemTools::setPriority(uidTypeEnum type,
+							int prio)
+	{
+		if (setpriority(PRIO_PROCESS,getUID(type),prio) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETPRIORITY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		#ifdef NO_EX
+			return true;
+		#endif	
+	}
+	
+	//-------------------------------------------------------------------
+
+	int 
+	systemTools::getUID(uidTypeEnum type)
+	{
+		switch (type)
+		{
+			case SYSTEM_UID:
+				return getuid();
+			case SYSTEM_EUID:
+				return geteuid();
+			default:
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				#else
+					return -1;
+				#endif	
+		}
+	}
+
+	//-------------------------------------------------------------------
+				
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::setUID(uidTypeEnum type, 
+						int uid)
+	{
+		register int res(0);
+		
+		switch (type)
+		{
+			case SYSTEM_UID:
+				res = setuid(uid);
+			case SYSTEM_EUID:
+				res = seteuid(uid);
+			default:
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				#else
+					return false;
+				#endif		
+		}
+		
+		if (res == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETUID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		#ifdef NO_EX
+			return true;
+		#endif							
+	}
+	
+	//-------------------------------------------------------------------
+
+	int 
+	systemTools::getGID(uidTypeEnum type)
+	{
+		switch (type)
+		{
+			case SYSTEM_UID:
+				return getgid();
+			case SYSTEM_EUID:
+				return getegid();
+			default:
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				#else
+					return -1;
+				#endif	
+		}
+	}
+
+	//-------------------------------------------------------------------
+				
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::setGID(uidTypeEnum type, 
+						int uid)
+	{
+		register int res(0);
+		
+		switch (type)
+		{
+			case SYSTEM_UID:
+				res = setgid(uid);
+			case SYSTEM_EUID:
+				res = setegid(uid);
+			default:
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				#else
+					return false;
+				#endif		
+		}
+		
+		if (res == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		#ifdef NO_EX
+			return true;
+		#endif							
+	}
+		
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::getUserInfo(__userInfo &info, 
+				int uid)
+	{
+		passwd *in = getpwuid(uid);
+		if (in == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		fillUserInfo(info,in);
+
+		#ifdef NO_EX
+			return true;
+		#endif
+		
+	}
+	
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::getUserInfo(__userInfo &info, 
+				const std::string &uid)
+	{
+		passwd *in = getpwnam(uid.c_str());
+		if (in == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		fillUserInfo(info,in);
+
+		#ifdef NO_EX
+			return true;
+		#endif
+		
+	}	
+	
+	//-------------------------------------------------------------------
+	
+			
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::getUsers(std::vector<__userInfo> &users)
+	{
+		users.clear();
+		
+		passwd *in;
+		
+		__userInfo info;
+		
+		while ( (in=getpwent())!=NULL )
+			users.push_back(fillUserInfo(info,in));
+			
+		switch (errno)
+		{
+			case EIO:
+			case EMFILE:
+			case ENFILE:
+			case ENOMEM:
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+			
+		}
+		
+		endpwent();
+		
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	
+	//-------------------------------------------------------------------
+	
+	__userInfo & 
+	systemTools::fillUserInfo(__userInfo &info, 
+							passwd *in)
+	{
+		info.gid = in->pw_gid;
+		info.home = in->pw_dir;
+		info.name = in->pw_name;
+		info.pass = in->pw_passwd;
+		info.realName = in->pw_gecos;
+		info.shell = in->pw_shell;
+		info.uid = in->pw_uid;
+		
+		return info;
+	}
+	
+	//-------------------------------------------------------------------
+	
+	__groupInfo &
+	systemTools::fillGroupInfo(__groupInfo &info, 
+							group *pw)
+	{
+		info.gid = pw->gr_gid;
+		info.name = pw->gr_name;
+		
+		info.members.clear();
+		
+		register int i(0);
+		
+		while (pw->gr_mem[i] != NULL)
+			info.members.push_back(pw->gr_mem[i++]);
+		
+		return info;
+	}
+	
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::getGroupInfo(__groupInfo &info, 
+				int uid)
+	{
+		group *in = getgrgid(uid);
+		if (in == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		fillGroupInfo(info,in);
+
+		#ifdef NO_EX
+			return true;
+		#endif
+		
+	}
+	
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::getGroupInfo(__groupInfo &info, 
+				const std::string &uid)
+	{
+		group *in = getgrnam(uid.c_str());
+		if (in == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		fillGroupInfo(info,in);
+
+		#ifdef NO_EX
+			return true;
+		#endif
+		
+	}	
+	
+	//-------------------------------------------------------------------
+	
+			
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif			
+	systemTools::getGroups(std::vector<__groupInfo> &users)
+	{
+		users.clear();
+		
+		group *in;
+		
+		__groupInfo info;
+		
+		while ( (in=getgrent())!=NULL )
+			users.push_back(fillGroupInfo(info,in));
+			
+		switch (errno)
+		{
+			case EIO:
+			case EMFILE:
+			case ENFILE:
+			case EINTR:
+			case ENOMEM:
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+			
+		}
+		
+		endgrent();
+		
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	
+	//-------------------------------------------------------------------
+
 #endif
