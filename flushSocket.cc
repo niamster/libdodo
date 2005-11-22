@@ -68,6 +68,8 @@ flushSocket::flushSocket(unsigned long a_numberOfConn,
 		WSADATA wsaData;
   		WSAStartup(MAKEWORD(2,2), &wsaData);
   	#endif
+  	
+	makeSocket();
 }
 
 //-------------------------------------------------------------------
@@ -81,6 +83,8 @@ flushSocket::flushSocket(socketProtoFamilyEnum a_family,
 		WSADATA wsaData;
   		WSAStartup(MAKEWORD(2,2), &wsaData);
   	#endif	
+  	
+  	makeSocket();	
 }
 
 //-------------------------------------------------------------------
@@ -90,6 +94,9 @@ flushSocket::~flushSocket()
 	if (numberOfConn!=-1 && type==TRANSFER_TYPE_STREAM)
 		if (opened)
 			_close(socket);
+	
+	if (numberOfConn!=-1 && unixSock.size()!=0)
+		flushDisk::unlink(unixSock);
 	
 	#ifdef WIN
 		WSACleanup();
@@ -209,7 +216,7 @@ flushSocket::makeSocket()
 	bool
 #endif
 flushSocket::connect(const std::string &host, 
-					unsigned int port, 
+					int port, 
 					flushSocketExchange &exchange)
 {			
 	#ifndef FLUSH_SOCKET_WO_XEXEC
@@ -226,13 +233,6 @@ flushSocket::connect(const std::string &host,
 		#else
 			return false;
 		#endif
-			
-	#ifdef NO_EX
-		if (!makeSocket())
-			return false;
-	#else
-		makeSocket();
-	#endif
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -318,43 +318,7 @@ flushSocket::connect(const __connInfo &destinaton,
 
 #ifndef WIN
 
-	#ifndef NO_EX
-		void 
-	#else
-		bool
-	#endif
-	flushSocket::makeUnixSocket(const std::string &path)
-	{
-		struct stat st;
-		if (::lstat(path.c_str(),&st) == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-			#else
-				return false;		
-			#endif
-		if (errno != ENOENT)
-		{
-			if (!S_ISSOCK(st.st_mode))
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif
-		}
-		else
-			if (mknod(path.c_str(),flushDisk::getPermission(UNIX_SOCKET_PERM),S_IFSOCK)==-1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif				
-		
-		#ifdef NO_EX
-			return true;
-		#endif			
-	}
-
-//-------------------------------------------------------------------
+	//-------------------------------------------------------------------
 	
 	#ifndef NO_EX
 		void 
@@ -378,20 +342,6 @@ flushSocket::connect(const __connInfo &destinaton,
 			#else
 				return false;
 			#endif
-				
-		#ifdef NO_EX
-			if (!makeSocket())
-				return false;
-		#else
-			makeSocket();
-		#endif
-	
-		#ifdef NO_EX
-			if (!makeUnixSocket(path))
-				return false;
-		#else
-			makeUnixSocket(path);
-		#endif
 		
 		struct sockaddr_un sa;
 		
@@ -532,7 +482,7 @@ flushSocket::getServiceInfo(int port,
 #else
 	bool
 #endif
-flushSocket::bindNListen(const std::string &host, unsigned int port)
+flushSocket::bindNListen(const std::string &host, int port)
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_BINDNLISTEN;
@@ -555,13 +505,6 @@ flushSocket::bindNListen(const std::string &host, unsigned int port)
 		#else
 			return false;
 		#endif
-			
-	#ifdef NO_EX
-		if (!makeSocket())
-			return false;
-	#else
-		makeSocket();
-	#endif
 	
 	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
 	
@@ -669,7 +612,8 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 	#else
 		bool
 	#endif
-	flushSocket::bindNListen(const std::string &path)
+	flushSocket::bindNListen(const std::string &path,
+							bool force)
 	{		
 		#ifndef FLUSH_SOCKET_WO_XEXEC
 			operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
@@ -692,20 +636,20 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 			#else
 				return false;
 			#endif
-			
-		#ifdef NO_EX
-			if (!makeSocket())
-				return false;
-		#else
-			makeSocket();
-		#endif
 
-		#ifdef NO_EX
-			if (!makeUnixSocket(path))
-				return false;
-		#else
-			makeUnixSocket(path);
-		#endif
+		if (force)
+		{
+			struct stat st;
+            if (::lstat(path.c_str(),&st) != -1)
+				if (S_ISSOCK(st.st_mode))
+					flushDisk::unlink(path);
+				else
+					#ifndef NO_EX
+							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_FILENAME,FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);
+					#else
+						return false;	
+					#endif
+		}
 		
 		setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
 		
@@ -713,7 +657,7 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 		
 		strcpy(sa.sun_path,path.c_str());
 		sa.sun_family = AF_UNIX;	
-			
+		
 		if (::bind(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa.sun_family))==-1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -727,6 +671,8 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 			#else
 				return false;
 			#endif	
+		
+		unixSock = path;
 		
 		opened = true;
 			

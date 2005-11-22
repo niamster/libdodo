@@ -54,13 +54,8 @@ int main(int argc, char **argv)
 
 
 	try
-	{
-		flushSocket sock1(PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
-		flushSocketExchange ex1;
-		sock1.connect("127.0.0.1",1234,ex1);
-		
-		flushSocket sock(CONNECTION_LIMIT,PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
-		//sock.bindNListen("127.0.0.1",7777);
+	{		
+		flushSocket sock(CONNECTION_LIMIT,/*PROTO_FAMILY_IPV4*/PROTO_FAMILY_IPV6/*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
 		
 /*		flushSocketExchange ex1;
 		copyTest0(ex1);///ok
@@ -79,9 +74,13 @@ int main(int argc, char **argv)
 */
 		__connInfo info;
 		__initialAccept fake;
-		sock.bindNListen("192.168.0.201",7777);
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
+		
+		//sock.bindNListen("127.0.0.1",7777);
+		sock.bindNListen("fe:80:00:00:00:00:00:00:02:e0:18:ff:fe:db:23:98",7777);
+		//sock.bindNListen("./sock",true);
+		
 		flushSocketExchange conn1[CONNECTION_LIMIT];
 		int i = 0;
 		

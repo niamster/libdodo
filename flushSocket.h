@@ -315,7 +315,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect(const std::string &host, unsigned int port, flushSocketExchange &exchange);
+							connect(const std::string &host, int port, flushSocketExchange &exchange);
 			#ifndef NO_EX
 				virtual void 
 			#else
@@ -343,7 +343,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const std::string &host, unsigned int port);///host - can be '*' -> any address
+							bindNListen(const std::string &host, int port);///host - can be '*' -> any address
 			#ifndef NO_EX
 				virtual void 
 			#else
@@ -357,7 +357,7 @@ namespace dodo
 				#else
 					virtual bool 
 				#endif
-								bindNListen(const std::string &path);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+								bindNListen(const std::string &path, bool force = false);///if socket is already created and force = true and it's a socket - delete it!!
 			#endif			
 			
 			/**
@@ -407,21 +407,7 @@ namespace dodo
 			#endif						
 							setBlock();*/
 			
-		private:				
-
-			/**
-			 * creates socket on the disk(file)
-			 */
-			#ifndef WIN
-			
-				#ifndef NO_EX
-					virtual void 
-				#else
-					virtual bool 
-				#endif
-								makeUnixSocket(const std::string &path);
-								
-			#endif	
+		private:
 			
 			/**
 			 * creates socket with given data
@@ -447,6 +433,10 @@ namespace dodo
 			 */			 
 			long numberOfConn;///number of connection for client = -1
 			long accepted;///how many was accepted
+			
+			#ifndef WIN
+				std::string unixSock;///to remember, 'cos have to unlink in destructor
+			#endif
 	};
 	
 	/**

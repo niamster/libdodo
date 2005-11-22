@@ -8,14 +8,14 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		/*cout << flushDisk::getFileContent("test.cc");
-		flushDisk::copy("test.cc","tect.cc.copy");
+		cout << flushDisk::getFileContent("test.cc");
+		flushDisk::copy("test.cc","tect.cc.copy",true);
 		stringArr arr = flushDisk::getFileContentArr("test.cc");
 		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
-		}*/
+		}
 		
 		flushDisk::unlink("my.dat");
 	}
@@ -30,9 +30,9 @@ int main(int argc, char **argv)
 	try
 	{
 		//flushDisk flush(FIFO_FILE,"my.dat");
-/*		flushDisk flush(REG_FILE,"my.dat");
+		flushDisk flush(REG_FILE,"my.dat");
 		
-		//cout << flushDisk::getFileContent("test.cc");
+		cout << flushDisk::getFileContent("test.cc");
 		
 		
 		std::cout << typeid(flush).name();
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 		cout << flushDisk::getPermissions("Makefile");
 		
 		cout << endl; 
-*/
+
 
 		std::vector<__fileInfo> dir = flushDisk::getDirInfo("/");
 		

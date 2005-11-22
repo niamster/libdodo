@@ -35,7 +35,6 @@ using namespace dodo;
 	#define FUNLINK ::_unlink
 	#define PERM_READ _S_IREAD
 	#define PERM_WRITE	_S_IWRITE
-	
 #else
 	#define FSTAT ::lstat
 	#define SSTAT struct stat
@@ -230,7 +229,11 @@ flushDisk::open(const std::string &a_path) const
 				else
 				
 			#endif
-				if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && (_REGULARFILE&st.st_mode) != _REGULARFILE)
+				#ifdef WIN
+					if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && (_REGULARFILE&st.st_mode) != _REGULARFILE)
+				#else
+					if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && !S_ISREG(st.st_mode))
+				#endif
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 					#else
@@ -575,15 +578,18 @@ flushDisk::unlink(const std::string &path)
 	register int status(0);
 	SSTAT st;
 
-	if (FSTAT(path.c_str(),&st) == -1)
+	if (FSTAT(path.c_str(),&st) == -1)=
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_UNLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
-	
-
-	if ((_DIRECTORY&st.st_mode) == _DIRECTORY)
+		
+	#ifdef WIN
+		if ((_DIRECTORY&st.st_mode) == _DIRECTORY)
+	#else
+		if (S_ISDIR(st.st_mode))
+	#endif
 		status = FRMDIR(path.c_str());
 	else
 		status = FUNLINK(path.c_str());		
@@ -840,12 +846,16 @@ flushDisk::mkdir(const std::string &path,
 					return false;
 				#endif
 				
-			if((_DIRECTORY&st.st_mode) == _DIRECTORY)		
-				#ifdef NO_EX
-					return true;
+				#ifdef WIN
+					if ((_DIRECTORY&st.st_mode) == _DIRECTORY)
 				#else
-					return ;
-				#endif
+					if (S_ISDIR(st.st_mode))
+				#endif	
+					#ifdef NO_EX
+						return true;
+					#else
+						return ;
+					#endif
 		}
 		else
 			#ifndef NO_EX
@@ -955,7 +965,11 @@ flushDisk::rm(const std::string &path)
 				return false;							
 			#endif
 
-	if ( (_DIRECTORY&st.st_mode) != _DIRECTORY)
+	#ifdef WIN
+		if ((_DIRECTORY&st.st_mode) != _DIRECTORY)
+	#else
+		if (!S_ISDIR(st.st_mode))
+	#endif
 		if (FUNLINK(path.c_str()) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_RM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1256,7 +1270,11 @@ flushDisk::getDirInfo(const std::string &path)
 			return dir;				
 		#endif	
 	
-	if ((_DIRECTORY&st.st_mode) != _DIRECTORY)
+		#ifdef WIN
+			if ((_DIRECTORY&st.st_mode) != _DIRECTORY)
+		#else
+			if (!S_ISDIR(st.st_mode))
+		#endif
 		return dir;
 	
 	#ifndef WIN
@@ -1370,8 +1388,12 @@ flushDisk::getFileContent(const std::string &path)
 		#else
 			return __string__;		
 		#endif
-		
-	if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+	
+	#ifdef WIN	
+		if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+	#else
+		if (!S_ISREG(st.st_mode))
+	#endif
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENT,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 		#else
@@ -1484,7 +1506,11 @@ flushDisk::getFileContentArr(const std::string &path)
 			return __stringarray__;		
 		#endif
 		
-	if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+	#ifdef WIN	
+		if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+	#else
+		if (!S_ISREG(st.st_mode))
+	#endif
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_GETFILECONTENTARR,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 		#else
@@ -1551,7 +1577,11 @@ flushDisk::copy(const std::string &from,
 			return false;		
 		#endif
 		
-	if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+	#ifdef WIN	
+		if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+	#else
+		if (!S_ISREG(st.st_mode))
+	#endif
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 		#else
@@ -1571,7 +1601,11 @@ flushDisk::copy(const std::string &from,
 	}
 	else
 	{
-		if ((_REGULARFILE&st.st_mode) != _REGULARFILE)
+		#ifdef WIN	
+			if ( (_REGULARFILE&st.st_mode) != _REGULARFILE)
+		#else
+			if (!S_ISREG(st.st_mode))
+		#endif
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 			#else
