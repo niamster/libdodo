@@ -36,18 +36,12 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#ifdef WIN
-	#include <winsock.h>
-#else
-	#include <sys/un.h>
-	#include <sys/socket.h>
-#endif
+#include <sys/un.h>
+#include <sys/socket.h>
 
 namespace dodo
 {	
-	#ifndef WIN
-		#define UNIX_SOCKET_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
-	#endif
+	#define UNIX_SOCKET_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
 	
 	enum flushSocketOperationTypeEnum///for xExec
 	{
@@ -78,9 +72,7 @@ namespace dodo
 	{
 		PROTO_FAMILY_IPV4,
 		PROTO_FAMILY_IPV6,		
-	#ifndef WIN	
 		PROTO_FAMILY_UNIX_SOCKET,
-	#endif
 	};
 	
 	/**
@@ -192,25 +184,23 @@ namespace dodo
 			virtual int getInBufferSize();
 			virtual int getOutBufferSize();
 			
-			#ifndef WIN
 				
-				#ifndef NO_EX
-					virtual void 
-				#else
-					virtual bool 
-				#endif
-								setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
-				#ifndef NO_EX
-					virtual void 
-				#else
-					virtual bool 
-				#endif
-								setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
-				
-				virtual unsigned long getInTimeout();
-				virtual unsigned long getOutTimeout();
-			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
 			#endif
+							setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+			
+			virtual unsigned long getInTimeout();
+			virtual unsigned long getOutTimeout();
+			
 			
 			/**
 			 * socketOptionsEnum
@@ -231,12 +221,8 @@ namespace dodo
 			 
 			int inSocketBuffer;
 			int outSocketBuffer;
-			
-			#ifndef WIN
-				int socket;///id of socket		
-			#else
-				SOCKET socket;
-			#endif
+
+			int socket;///id of socket
 				
 			bool block;///now is only *nix compatible
 	};
@@ -322,14 +308,12 @@ namespace dodo
 				virtual bool 
 			#endif
 							connect(const __connInfo &destinaton, flushSocketExchange &exchange);///the same as previous, but more pretty. alias.
-			#ifndef WIN
-				#ifndef NO_EX
-					virtual void 
-				#else
-					virtual bool 
-				#endif
-								connect(const std::string &path, flushSocketExchange &exchange);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
 			#endif
+							connect(const std::string &path, flushSocketExchange &exchange);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			
 			/**
 			 * connect. for server part
@@ -351,14 +335,12 @@ namespace dodo
 			#endif
 							bindNListen(const __connInfo &destinaton);///the same as previous, but more pretty. alias.
 						
-			#ifndef WIN
-				#ifndef NO_EX
-					virtual void 
-				#else
-					virtual bool 
-				#endif
-								bindNListen(const std::string &path, bool force = false);///if socket is already created and force = true and it's a socket - delete it!!
-			#endif			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							bindNListen(const std::string &path, bool force = false);///if socket is already created and force = true and it's a socket - delete it!!			
 			
 			/**
 			 * accepts incommin' connectins(as for server)
@@ -434,9 +416,7 @@ namespace dodo
 			long numberOfConn;///number of connection for client = -1
 			long accepted;///how many was accepted
 			
-			#ifndef WIN
-				std::string unixSock;///to remember, 'cos have to unlink in destructor
-			#endif
+			std::string unixSock;///to remember, 'cos have to unlink in destructor
 	};
 	
 	/**

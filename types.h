@@ -66,11 +66,7 @@ namespace dodo
 	
 	#define SIZEOFNUM 32
 	
-	#ifndef WIN
-		#define FILE_DELIM "/"
-	#else
-		#define FILE_DELIM "\\"	
-	#endif
+	#define FILE_DELIM "/"
 	
 	struct __statements 
 	{

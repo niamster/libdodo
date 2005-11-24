@@ -48,11 +48,8 @@ xexec::xexec() : safeHooks(true),
 xexec::~xexec()
 {	
 	for (register int i(0);i<handlesOpened;++i)
-		#ifndef WIN
-			dlclose(handles[i]);
-		#else
-			FreeLibrary(handles[i]);
-		#endif	
+		dlclose(handles[i]);
+
 }
 
 //-------------------------------------------------------------------
@@ -319,60 +316,31 @@ xexec::addXExecModule(std::vector<__execItem> &list,
 	temp.obj = obj;
 	temp.present = true;
 	temp.enabled = true;
-
-	#ifndef WIN
 	
-		handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
-		if (handles[handlesOpened] == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif
-		
-		initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
-		if (init == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif	
-		
-		inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
-		if (in == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif
-		
+	handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
+	if (handles[handlesOpened] == NULL)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 	#else
-		
-		handles[handlesOpened] = LoadLibrary(module.c_str());
-		if (handles[handlesOpened] == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_WINLOAD,GetLastError(),"Can not load library.",__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif
-				
-		initXexecModule init = (initXexecModule)GetProcAddress(handles[handlesOpened], "initXexecModule");
-		if (init == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_WINLOAD,GetLastError(),"Can not get proc from library.",__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif	
-		
-		inExec in = (inExec)GetProcAddress(handles[handlesOpened], init().hook);
-		if (in == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_WINLOAD,GetLastError(),"Can not get proc from library.",__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif
-						
+		return -1;
+	#endif
+	
+	initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
+	if (init == NULL)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	#else
+		return -1;
 	#endif	
+	
+	inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
+	if (in == NULL)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	#else
+		return -1;
+	#endif
+
 	
 	temp.func = in;
 	
@@ -407,62 +375,30 @@ xexec::_addPreExec(const std::string &module,
 xexecExMod 
 xexec::getModuleInfo(const std::string &module)
 {
-	
-	#ifndef WIN
-	
-		void *handle = dlopen(module.c_str(), RTLD_LAZY);
-		if (handle == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return xexecExMod();
-		#endif
-			
-		initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
-		if (init == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return xexecExMod();
-		#endif
-			
-		xexecExMod mod = init();
-		
-		if (dlclose(handle)!=0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-			#else
-				return xexecExMod();
-			#endif
-	
+	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	if (handle == NULL)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 	#else
-
-		HMODULE handle = LoadLibrary(module.c_str());
-		if (handle == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,GetLastError(),"Can not load library.",__LINE__,__FILE__);
-		#else
-			return xexecExMod();
-		#endif
-			
-		initXexecModule init = (initXexecModule)GetProcAddress(handle, "initXexecModule");
-		if (init == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,GetLastError(),"Can not get proc from library.",__LINE__,__FILE__);
-		#else
-			return xexecExMod();
-		#endif
-			
-		xexecExMod mod = init();
-		
-		if (FreeLibrary(handle)!=0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,GetLastError(),"Can not get proc from library.",__LINE__,__FILE__);
-			#else
-				return xexecExMod();
-			#endif
-		
+		return xexecExMod();
 	#endif
+		
+	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
+	if (init == NULL)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+	#else
+		return xexecExMod();
+	#endif
+		
+	xexecExMod mod = init();
+	
+	if (dlclose(handle)!=0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return xexecExMod();
+		#endif
 	
 	return mod;	
 }

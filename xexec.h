@@ -28,11 +28,7 @@
 #include <string>
 #include <vector>
 
-#ifndef WIN
-
-	#include <dlfcn.h>
-
-#endif
+#include <dlfcn.h>
 
 #include "directives.h"
 #include "types.h"
@@ -186,12 +182,7 @@ namespace dodo
 			mutable __execItemList preExec;///functions executed before exec
 			mutable __execItemList postExec;///functions executed after exec
 			
-			#ifndef WIN
-				mutable void *handles[XEXEC_MAXMODULES];
-			#else
-				mutable HMODULE handles[XEXEC_MAXMODULES];
-			#endif
-			
+			mutable void *handles[XEXEC_MAXMODULES];
 			mutable int handlesOpened;
 	};
 };

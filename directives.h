@@ -56,9 +56,6 @@
 //#define FLUSH_STD_WO_XEXEC
 //#define FLUSH_SOCKET_WO_XEXEC
 
-//#define WIN ///if u use window system
-
-
 ///socket default timeouts
 #define RECIEVE_TIMEOUT 1000
 #define SEND_TIMEOUT 1000

@@ -32,14 +32,8 @@
 #include <utime.h>
 #include <time.h>
 #include <libgen.h>
-	
-#ifndef WIN
-	#include <unistd.h>
-#endif
+#include <unistd.h>
 
-#ifdef WIN
-	#include <io.h>
-#endif
 
 #include "directives.h"
 #include "flushDiskEx.h"
@@ -72,9 +66,7 @@ namespace dodo
 	{
 		REG_FILE,
 		TMP_FILE,
-		#ifndef WIN
-			FIFO_FILE///use this type, if u want to create. if fifo is already created, no sense to create it again. if file is created it will not create it again; it is a check for file existanse, so if it's already created, it'll be slower!
-		#endif
+		FIFO_FILE///use this type, if u want to create. if fifo is already created, no sense to create it again. if file is created it will not create it again; it is a check for file existanse, so if it's already created, it'll be slower!
 	};
 	
 	enum flushDiskFileTypeEnum
@@ -93,33 +85,27 @@ namespace dodo
 		NONE = 0,
 		
 		OWNER_READ_ACCESS = 2,
-		#ifndef WIN
-			GROUP_READ_ACCESS = 4,
-			OTHER_READ_ACCESS = 8,
-		#endif
+		GROUP_READ_ACCESS = 4,
+		OTHER_READ_ACCESS = 8,
 		
 		OWNER_WRITE_ACCESS = 16,
-		#ifndef WIN
-			GROUP_WRITE_ACCESS = 32,
-			OTHER_WRITE_ACCESS = 64,
-		#endif
+		GROUP_WRITE_ACCESS = 32,
+		OTHER_WRITE_ACCESS = 64,
 		
-		#ifndef WIN
-			OWNER_EXECUTE_ACCESS = 128,
-			GROUP_EXECUTE_ACCESS = 256,
-			OTHER_EXECUTE_ACCESS = 512,
-					
-			STICKY_ACCESS = 1024,
-			
-			SUID_ACCESS = 2048,
-			SGID_ACCESS = 4096,
-			
-			OWNER_ALL_ACCESS = 146,
-			GROUP_ALL_ACCESS = 292,
-			OTHER_ALL_ACCESS = 584,
-			
-			ALL_ALL_ACCESS = 1022
-		#endif		
+		OWNER_EXECUTE_ACCESS = 128,
+		GROUP_EXECUTE_ACCESS = 256,
+		OTHER_EXECUTE_ACCESS = 512,
+				
+		STICKY_ACCESS = 1024,
+		
+		SUID_ACCESS = 2048,
+		SGID_ACCESS = 4096,
+		
+		OWNER_ALL_ACCESS = 146,
+		GROUP_ALL_ACCESS = 292,
+		OTHER_ALL_ACCESS = 584,
+		
+		ALL_ALL_ACCESS = 1022
 		
 	};
 	
@@ -134,11 +120,8 @@ namespace dodo
 		long size;
 		int modTime;
 		int accTime;
-		
-		#ifndef WIN	
-			int gid;
-			int uid;
-		#endif
+		int gid;
+		int uid;
 	};	
 	
 	/**
@@ -362,35 +345,30 @@ namespace dodo
 			#endif
 							symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)///now not windows compatible
 			
-			
-			#ifndef WIN
-			
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif
-								link(const std::string &oldPath, const std::string &newPath);
-								
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif
-								chown(const std::string &path, int uid);
-								
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif
-								chgrp(const std::string &path, int gid);
-				
-				static int getUserOwner(const std::string &path);
-				
-				static int getGroupOwner(const std::string &path);
-				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
 			#endif
+							link(const std::string &oldPath, const std::string &newPath);
+							
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							chown(const std::string &path, int uid);
+							
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							chgrp(const std::string &path, int gid);
+			
+			static int getUserOwner(const std::string &path);
+			
+			static int getGroupOwner(const std::string &path);
 			
 			static __fileInfo getFileInfo(const std::string &path);///if no such file - empty will be returned
 			

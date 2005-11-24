@@ -41,9 +41,7 @@
 			ERR_ERRNO,
 			ERR_MYSQL,
 			ERR_H_ERRNO,
-			ERR_WINSOCK,
 			ERR_DYNLOAD,
-			ERR_WINLOAD
 		};
 
 		/**

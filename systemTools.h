@@ -25,15 +25,11 @@
 #ifndef _SYSTEM_H_
 #define _SYSTEM_H_
 
-#ifndef WIN
-	#include <unistd.h>
-	#include <sys/time.h>
-	#include <sys/resource.h>
-	#include <pwd.h>
-	#include <grp.h>
-#else
-	#include <direct.h>
-#endif
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/resource.h>
+#include <pwd.h>
+#include <grp.h>
 
 
 #include <stdlib.h>
@@ -48,75 +44,70 @@
 namespace dodo
 {
 
-	#ifndef WIN
-	
-		/**
-		 * contains info about process
-		 */
-		struct __usage
-		{
-			long time;///in miliseconds
-			long mem;///in bytes
-		};
-	
-		/**
-		 * system limits
-		 */
-		struct __limits
-		{
-			unsigned long current;///can use current process
-			unsigned long max;///max amount
-		};
-	
-		/**
-		 * used with __limits in `getSystemLimits`
-		 */
-		enum systemToolsLimitEnum
-		{
-			SYSTEM_CPUTIME,
-			SYSTEM_MAXFILESIZE,
-			SYSTEM_MAXMEMUSAGE,
-			SYSTEM_MAXSTACK,
-			SYSTEM_MAXPROC,
-			SYSTEM_MAXOPENFILES
-		}; 
-	
-		/**
-		 * real - what ID started process, effective - what ID's permissions process has
-		 */
-		enum uidTypeEnum
-		{
-			SYSTEM_UID,
-			SYSTEM_EUID
-		};
-		
-		/**
-		 * user info
-		 */
-		struct	__userInfo
-		{
-			std::string name;
-			std::string pass;
-			int uid;
-			int gid;
-			std::string realName;
-			std::string home;
-			std::string shell;
-		};
-		
-		/**
-		 * group info
-		 */
-		struct	__groupInfo
-		{
-			std::string name;
-			int gid;
-			stringArr members;
-		};
-				
-	#endif
+	/**
+	 * contains info about process
+	 */
+	struct __usage
+	{
+		long time;///in miliseconds
+		long mem;///in bytes
+	};
 
+	/**
+	 * system limits
+	 */
+	struct __limits
+	{
+		unsigned long current;///can use current process
+		unsigned long max;///max amount
+	};
+
+	/**
+	 * used with __limits in `getSystemLimits`
+	 */
+	enum systemToolsLimitEnum
+	{
+		SYSTEM_CPUTIME,
+		SYSTEM_MAXFILESIZE,
+		SYSTEM_MAXMEMUSAGE,
+		SYSTEM_MAXSTACK,
+		SYSTEM_MAXPROC,
+		SYSTEM_MAXOPENFILES
+	}; 
+
+	/**
+	 * real - what ID started process, effective - what ID's permissions process has
+	 */
+	enum uidTypeEnum
+	{
+		SYSTEM_UID,
+		SYSTEM_EUID
+	};
 	
+	/**
+	 * user info
+	 */
+	struct	__userInfo
+	{
+		std::string name;
+		std::string pass;
+		int uid;
+		int gid;
+		std::string realName;
+		std::string home;
+		std::string shell;
+	};
+	
+	/**
+	 * group info
+	 */
+	struct	__groupInfo
+	{
+		std::string name;
+		int gid;
+		stringArr members;
+	};
+
 	/**
 	 * provides misc system operations, gets diff info about system
 	 * most *nix compatible
@@ -140,158 +131,153 @@ namespace dodo
 				static bool 
 			#endif			
 							setWorkingDir(const std::string &path);
+				
+			/**
+			 * displays system usage with current process
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getUsageInfo(__usage &info);
+			
+			/**
+			 * get limits from systemToolsLimitEnum
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getLimit(systemToolsLimitEnum type,  __limits &lim);
+			/**
+			 * sets limits from systemToolsLimitEnum
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							setLimit(systemToolsLimitEnum type, const __limits &lim);
+			
+			/**
+			 * gets priority of current process for uidTypeEnum
+			 */		
+			static int getPriority(uidTypeEnum type);///if NO_EX set -> -1 will return!
 
-			#ifndef WIN
-				
-				/**
-				 * displays system usage with current process
-				 */
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getUsageInfo(__usage &info);
-				
-				/**
-				 * get limits from systemToolsLimitEnum
-				 */
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getLimit(systemToolsLimitEnum type,  __limits &lim);
-				/**
-				 * sets limits from systemToolsLimitEnum
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								setLimit(systemToolsLimitEnum type, const __limits &lim);
-				
-				/**
-				 * gets priority of current process for uidTypeEnum
-				 */		
-				static int getPriority(uidTypeEnum type);///if NO_EX set -> -1 will return!
-
-				/**
-				 * sets priority of current process (nice) for uidTypeEnum
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								setPriority(uidTypeEnum type, int prio);
-								
-				/**
-				 * gets effective/real user id;
-				 */		
-				static int getUID(uidTypeEnum type);///returns -1 on error, if NO_EX was set
-				
-				/**
-				 * sets effective/real user id;
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								setUID(uidTypeEnum type, int uid);	
-								
-				/**
-				 * gets effective/real group id;
-				 */		
-				static int getGID(uidTypeEnum type);///returns -1 on error, if NO_EX was set
-				
-				/**
-				 * sets effective/real group id;
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								setGID(uidTypeEnum type, int gid);		
-				
-				/**
-				 * gets user info
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getUserInfo(__userInfo &info, int uid);	
-											
-				/**
-				 * gets user info
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getUserInfo(__userInfo &info, const std::string &uid);			
-								
-				/**
-				 * gets users of the system
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getUsers(std::vector<__userInfo> &info);
-				
-				/**
-				 * gets user info
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getGroupInfo(__groupInfo &info, int gid);	
-											
-				/**
-				 * gets user info
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getGroupInfo(__groupInfo &info, const std::string &gid);			
-								
-				/**
-				 * gets users of the system
-				 */				
-				#ifndef NO_EX
-					static void 
-				#else
-					static bool 
-				#endif			
-								getGroups(std::vector<__groupInfo> &info);								
-				
-			protected:
-				
-				/**
-				 * fills __userInfo with passws
-				 */
-				static __userInfo &fillUserInfo(__userInfo &info, passwd *pw);
-				
-				/**
-				 * fills __groupInfo with groups
-				 */
-				static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
+			/**
+			 * sets priority of current process (nice) for uidTypeEnum
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							setPriority(uidTypeEnum type, int prio);
+							
+			/**
+			 * gets effective/real user id;
+			 */		
+			static int getUID(uidTypeEnum type);///returns -1 on error, if NO_EX was set
+			
+			/**
+			 * sets effective/real user id;
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							setUID(uidTypeEnum type, int uid);	
+							
+			/**
+			 * gets effective/real group id;
+			 */		
+			static int getGID(uidTypeEnum type);///returns -1 on error, if NO_EX was set
+			
+			/**
+			 * sets effective/real group id;
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							setGID(uidTypeEnum type, int gid);		
+			
+			/**
+			 * gets user info
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getUserInfo(__userInfo &info, int uid);	
+										
+			/**
+			 * gets user info
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getUserInfo(__userInfo &info, const std::string &uid);			
+							
+			/**
+			 * gets users of the system
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getUsers(std::vector<__userInfo> &info);
+			
+			/**
+			 * gets user info
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getGroupInfo(__groupInfo &info, int gid);	
+										
+			/**
+			 * gets user info
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getGroupInfo(__groupInfo &info, const std::string &gid);			
+							
+			/**
+			 * gets users of the system
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							getGroups(std::vector<__groupInfo> &info);								
+			
+		protected:
+			
+			/**
+			 * fills __userInfo with passws
+			 */
+			static __userInfo &fillUserInfo(__userInfo &info, passwd *pw);
+			
+			/**
+			 * fills __groupInfo with groups
+			 */
+			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
 																						
-			#endif
-
-		
 	};
 
 };

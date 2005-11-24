@@ -31,11 +31,7 @@ systemTools::getWorkingDir()
 {
 	char wd[MAXPATHLEN];
 	
-	#ifndef WIN
-		if (getcwd(wd,MAXPATHLEN) == NULL)
-	#else
-		if (_getcwd(wd,MAXPATHLEN) == NULL)
-	#endif
+	if (getcwd(wd,MAXPATHLEN) == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETWORKINGDIR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -54,11 +50,7 @@ systemTools::getWorkingDir()
 #endif 
 systemTools::setWorkingDir(const std::string &path)
 {
-	#ifndef WIN
-		if (chdir(path.c_str()) == -1)
-	#else
-		if (chdir(path.c_str()) == -1)
-	#endif
+	if (chdir(path.c_str()) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETWORKINGDIR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -72,521 +64,518 @@ systemTools::setWorkingDir(const std::string &path)
 
 //-------------------------------------------------------------------
 
-#ifndef WIN
 	
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getUsageInfo(__usage &info)
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getUsageInfo(__usage &info)
+{
+	rusage use;
+	if (getrusage(RUSAGE_SELF,&use) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSAGEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
+	info.time = use.ru_utime.tv_sec*100 + use.ru_utime.tv_usec;
+	info.mem = use.ru_maxrss*1024;
+
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getLimit(systemToolsLimitEnum type, 
+					__limits &lim)
+{
+	rlimit limit;
+	
+	int realRes(0);
+	
+	switch (type)
 	{
-		rusage use;
-		if (getrusage(RUSAGE_SELF,&use) == -1)
+		case SYSTEM_CPUTIME:
+			realRes = RLIMIT_CPU;
+			break;
+		case SYSTEM_MAXFILESIZE:
+			realRes = RLIMIT_FSIZE;
+			break;
+		case SYSTEM_MAXMEMUSAGE:
+			realRes = RLIMIT_DATA;
+			break;
+		case SYSTEM_MAXSTACK:
+			realRes = RLIMIT_STACK;
+			break;
+		case SYSTEM_MAXPROC:
+			realRes = RLIMIT_NPROC;
+			break;
+		case SYSTEM_MAXOPENFILES:
+			realRes = RLIMIT_OFILE;
+			break;
+		default:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSAGEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETLIMIT,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;
-			#endif
-			
-		info.time = use.ru_utime.tv_sec*100 + use.ru_utime.tv_usec;
-		info.mem = use.ru_maxrss*1024;
-
-		#ifdef NO_EX
-			return true;
-		#endif
+			#endif				
 	}
+	
+	if (getrlimit(realRes,&limit) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETLIMIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
 
-	//-------------------------------------------------------------------
+	lim.current = limit.rlim_cur;
+	lim.max = limit.rlim_max;			
 
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getLimit(systemToolsLimitEnum type, 
-						__limits &lim)
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::setLimit(systemToolsLimitEnum type, 
+					const __limits &lim)
+{
+	rlimit limit;
+	
+	int realRes(0);
+	
+	switch (type)
 	{
-		rlimit limit;
-		
-		int realRes(0);
-		
-		switch (type)
-		{
-			case SYSTEM_CPUTIME:
-				realRes = RLIMIT_CPU;
-				break;
-			case SYSTEM_MAXFILESIZE:
-				realRes = RLIMIT_FSIZE;
-				break;
-			case SYSTEM_MAXMEMUSAGE:
-				realRes = RLIMIT_DATA;
-				break;
-			case SYSTEM_MAXSTACK:
-				realRes = RLIMIT_STACK;
-				break;
-			case SYSTEM_MAXPROC:
-				realRes = RLIMIT_NPROC;
-				break;
-			case SYSTEM_MAXOPENFILES:
-				realRes = RLIMIT_OFILE;
-				break;
-			default:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETLIMIT,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-				#else
-					return false;
-				#endif				
-		}
-		
-		if (getrlimit(realRes,&limit) == -1)
+		case SYSTEM_CPUTIME:
+			realRes = RLIMIT_CPU;
+			break;
+		case SYSTEM_MAXFILESIZE:
+			realRes = RLIMIT_FSIZE;
+			break;
+		case SYSTEM_MAXMEMUSAGE:
+			realRes = RLIMIT_DATA;
+			break;
+		case SYSTEM_MAXSTACK:
+			realRes = RLIMIT_STACK;
+			break;
+		case SYSTEM_MAXPROC:
+			realRes = RLIMIT_NPROC;
+			break;
+		case SYSTEM_MAXOPENFILES:
+			realRes = RLIMIT_OFILE;
+			break;
+		default:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETLIMIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETLIMIT,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;
-			#endif
-
-		lim.current = limit.rlim_cur;
-		lim.max = limit.rlim_max;			
-
-		#ifdef NO_EX
-			return true;
-		#endif
+			#endif				
 	}
 	
-	//-------------------------------------------------------------------
+
+	limit.rlim_cur = lim.current;
+	limit.rlim_max = lim.max;		
 	
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::setLimit(systemToolsLimitEnum type, 
-						const __limits &lim)
-	{
-		rlimit limit;
-		
-		int realRes(0);
-		
-		switch (type)
-		{
-			case SYSTEM_CPUTIME:
-				realRes = RLIMIT_CPU;
-				break;
-			case SYSTEM_MAXFILESIZE:
-				realRes = RLIMIT_FSIZE;
-				break;
-			case SYSTEM_MAXMEMUSAGE:
-				realRes = RLIMIT_DATA;
-				break;
-			case SYSTEM_MAXSTACK:
-				realRes = RLIMIT_STACK;
-				break;
-			case SYSTEM_MAXPROC:
-				realRes = RLIMIT_NPROC;
-				break;
-			case SYSTEM_MAXOPENFILES:
-				realRes = RLIMIT_OFILE;
-				break;
-			default:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETLIMIT,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-				#else
-					return false;
-				#endif				
-		}
-		
+	if (setrlimit(realRes,&limit) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETLIMIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif			
 
-		limit.rlim_cur = lim.current;
-		limit.rlim_max = lim.max;		
-		
-		if (setrlimit(realRes,&limit) == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETLIMIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif			
+	#ifdef NO_EX
+		return true;
+	#endif
+}
 
-		#ifdef NO_EX
-			return true;
+//-------------------------------------------------------------------
+
+int 
+systemTools::getPriority(uidTypeEnum type)
+{
+	register int prio = getpriority(PRIO_PROCESS,getUID(type));
+	if (prio == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETPRIORITY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return -1;
 		#endif
-	}
+		
+	return prio;	
+}
 
-	//-------------------------------------------------------------------
-	
-	int 
-	systemTools::getPriority(uidTypeEnum type)
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif	
+systemTools::setPriority(uidTypeEnum type,
+						int prio)
+{
+	if (setpriority(PRIO_PROCESS,getUID(type),prio) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETPRIORITY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+int 
+systemTools::getUID(uidTypeEnum type)
+{
+	switch (type)
 	{
-		register int prio = getpriority(PRIO_PROCESS,getUID(type));
-		if (prio == -1)
+		case SYSTEM_UID:
+			return getuid();
+		case SYSTEM_EUID:
+			return geteuid();
+		default:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETPRIORITY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return -1;
-			#endif
+			#endif	
+	}
+}
+
+//-------------------------------------------------------------------
 			
-		return prio;	
-	}
-
-	//-------------------------------------------------------------------
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::setUID(uidTypeEnum type, 
+					int uid)
+{
+	register int res(0);
 	
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif	
-	systemTools::setPriority(uidTypeEnum type,
-							int prio)
+	switch (type)
 	{
-		if (setpriority(PRIO_PROCESS,getUID(type),prio) == -1)
+		case SYSTEM_UID:
+			res = setuid(uid);
+		case SYSTEM_EUID:
+			res = seteuid(uid);
+		default:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETPRIORITY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;
-			#endif
-
-		#ifdef NO_EX
-			return true;
-		#endif	
+			#endif		
 	}
 	
-	//-------------------------------------------------------------------
-
-	int 
-	systemTools::getUID(uidTypeEnum type)
-	{
-		switch (type)
-		{
-			case SYSTEM_UID:
-				return getuid();
-			case SYSTEM_EUID:
-				return geteuid();
-			default:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-				#else
-					return -1;
-				#endif	
-		}
-	}
-
-	//-------------------------------------------------------------------
-				
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::setUID(uidTypeEnum type, 
-						int uid)
-	{
-		register int res(0);
-		
-		switch (type)
-		{
-			case SYSTEM_UID:
-				res = setuid(uid);
-			case SYSTEM_EUID:
-				res = seteuid(uid);
-			default:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-				#else
-					return false;
-				#endif		
-		}
-		
-		if (res == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETUID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-
-		#ifdef NO_EX
-			return true;
-		#endif							
-	}
-	
-	//-------------------------------------------------------------------
-
-	int 
-	systemTools::getGID(uidTypeEnum type)
-	{
-		switch (type)
-		{
-			case SYSTEM_UID:
-				return getgid();
-			case SYSTEM_EUID:
-				return getegid();
-			default:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-				#else
-					return -1;
-				#endif	
-		}
-	}
-
-	//-------------------------------------------------------------------
-				
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::setGID(uidTypeEnum type, 
-						int uid)
-	{
-		register int res(0);
-		
-		switch (type)
-		{
-			case SYSTEM_UID:
-				res = setgid(uid);
-			case SYSTEM_EUID:
-				res = setegid(uid);
-			default:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-				#else
-					return false;
-				#endif		
-		}
-		
-		if (res == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-
-		#ifdef NO_EX
-			return true;
-		#endif							
-	}
-		
-	//-------------------------------------------------------------------
-	
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getUserInfo(__userInfo &info, 
-				int uid)
-	{
-		passwd *in = getpwuid(uid);
-		if (in == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-
-		fillUserInfo(info,in);
-
-		#ifdef NO_EX
-			return true;
+	if (res == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETUID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
 		#endif
-		
+
+	#ifdef NO_EX
+		return true;
+	#endif							
+}
+
+//-------------------------------------------------------------------
+
+int 
+systemTools::getGID(uidTypeEnum type)
+{
+	switch (type)
+	{
+		case SYSTEM_UID:
+			return getgid();
+		case SYSTEM_EUID:
+			return getegid();
+		default:
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif	
+	}
+}
+
+//-------------------------------------------------------------------
+			
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::setGID(uidTypeEnum type, 
+					int uid)
+{
+	register int res(0);
+	
+	switch (type)
+	{
+		case SYSTEM_UID:
+			res = setgid(uid);
+		case SYSTEM_EUID:
+			res = setegid(uid);
+		default:
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif		
 	}
 	
-	//-------------------------------------------------------------------
+	if (res == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	#ifdef NO_EX
+		return true;
+	#endif							
+}
 	
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getUserInfo(__userInfo &info, 
-				const std::string &uid)
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getUserInfo(__userInfo &info, 
+			int uid)
+{
+	passwd *in = getpwuid(uid);
+	if (in == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	fillUserInfo(info,in);
+
+	#ifdef NO_EX
+		return true;
+	#endif
+	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getUserInfo(__userInfo &info, 
+			const std::string &uid)
+{
+	passwd *in = getpwnam(uid.c_str());
+	if (in == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	fillUserInfo(info,in);
+
+	#ifdef NO_EX
+		return true;
+	#endif
+	
+}	
+
+//-------------------------------------------------------------------
+
+		
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getUsers(std::vector<__userInfo> &users)
+{
+	users.clear();
+	
+	passwd *in;
+	
+	__userInfo info;
+	
+	while ( (in=getpwent())!=NULL )
+		users.push_back(fillUserInfo(info,in));
+		
+	switch (errno)
 	{
-		passwd *in = getpwnam(uid.c_str());
-		if (in == NULL)
+		case EIO:
+		case EMFILE:
+		case ENFILE:
+		case ENOMEM:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
+		
+	}
+	
+	endpwent();
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
 
-		fillUserInfo(info,in);
+//-------------------------------------------------------------------
 
-		#ifdef NO_EX
-			return true;
+__userInfo & 
+systemTools::fillUserInfo(__userInfo &info, 
+						passwd *in)
+{
+	info.gid = in->pw_gid;
+	info.home = in->pw_dir;
+	info.name = in->pw_name;
+	info.pass = in->pw_passwd;
+	info.realName = in->pw_gecos;
+	info.shell = in->pw_shell;
+	info.uid = in->pw_uid;
+	
+	return info;
+}
+
+//-------------------------------------------------------------------
+
+__groupInfo &
+systemTools::fillGroupInfo(__groupInfo &info, 
+						group *pw)
+{
+	info.gid = pw->gr_gid;
+	info.name = pw->gr_name;
+	
+	info.members.clear();
+	
+	register int i(0);
+	
+	while (pw->gr_mem[i] != NULL)
+		info.members.push_back(pw->gr_mem[i++]);
+	
+	return info;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getGroupInfo(__groupInfo &info, 
+			int uid)
+{
+	group *in = getgrgid(uid);
+	if (in == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
 		#endif
-		
-	}	
+
+	fillGroupInfo(info,in);
+
+	#ifdef NO_EX
+		return true;
+	#endif
 	
-	//-------------------------------------------------------------------
-	
-			
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getUsers(std::vector<__userInfo> &users)
-	{
-		users.clear();
-		
-		passwd *in;
-		
-		__userInfo info;
-		
-		while ( (in=getpwent())!=NULL )
-			users.push_back(fillUserInfo(info,in));
-			
-		switch (errno)
-		{
-			case EIO:
-			case EMFILE:
-			case ENFILE:
-			case ENOMEM:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif
-			
-		}
-		
-		endpwent();
-		
-		#ifdef NO_EX
-			return true;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getGroupInfo(__groupInfo &info, 
+			const std::string &uid)
+{
+	group *in = getgrnam(uid.c_str());
+	if (in == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
 		#endif
-	}
+
+	fillGroupInfo(info,in);
+
+	#ifdef NO_EX
+		return true;
+	#endif
 	
-	//-------------------------------------------------------------------
+}	
+
+//-------------------------------------------------------------------
+
+		
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::getGroups(std::vector<__groupInfo> &users)
+{
+	users.clear();
 	
-	__userInfo & 
-	systemTools::fillUserInfo(__userInfo &info, 
-							passwd *in)
+	group *in;
+	
+	__groupInfo info;
+	
+	while ( (in=getgrent())!=NULL )
+		users.push_back(fillGroupInfo(info,in));
+		
+	switch (errno)
 	{
-		info.gid = in->pw_gid;
-		info.home = in->pw_dir;
-		info.name = in->pw_name;
-		info.pass = in->pw_passwd;
-		info.realName = in->pw_gecos;
-		info.shell = in->pw_shell;
-		info.uid = in->pw_uid;
-		
-		return info;
-	}
-	
-	//-------------------------------------------------------------------
-	
-	__groupInfo &
-	systemTools::fillGroupInfo(__groupInfo &info, 
-							group *pw)
-	{
-		info.gid = pw->gr_gid;
-		info.name = pw->gr_name;
-		
-		info.members.clear();
-		
-		register int i(0);
-		
-		while (pw->gr_mem[i] != NULL)
-			info.members.push_back(pw->gr_mem[i++]);
-		
-		return info;
-	}
-	
-	//-------------------------------------------------------------------
-	
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getGroupInfo(__groupInfo &info, 
-				int uid)
-	{
-		group *in = getgrgid(uid);
-		if (in == NULL)
+		case EIO:
+		case EMFILE:
+		case ENFILE:
+		case EINTR:
+		case ENOMEM:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
-
-		fillGroupInfo(info,in);
-
-		#ifdef NO_EX
-			return true;
-		#endif
 		
 	}
 	
-	//-------------------------------------------------------------------
+	endgrent();
 	
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getGroupInfo(__groupInfo &info, 
-				const std::string &uid)
-	{
-		group *in = getgrnam(uid.c_str());
-		if (in == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
+	#ifdef NO_EX
+		return true;
+	#endif
+}
 
-		fillGroupInfo(info,in);
-
-		#ifdef NO_EX
-			return true;
-		#endif
-		
-	}	
-	
-	//-------------------------------------------------------------------
-	
-			
-	#ifndef NO_EX
-		void 
-	#else
-		bool 
-	#endif			
-	systemTools::getGroups(std::vector<__groupInfo> &users)
-	{
-		users.clear();
-		
-		group *in;
-		
-		__groupInfo info;
-		
-		while ( (in=getgrent())!=NULL )
-			users.push_back(fillGroupInfo(info,in));
-			
-		switch (errno)
-		{
-			case EIO:
-			case EMFILE:
-			case ENFILE:
-			case EINTR:
-			case ENOMEM:
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif
-			
-		}
-		
-		endgrent();
-		
-		#ifdef NO_EX
-			return true;
-		#endif
-	}
-	
-	//-------------------------------------------------------------------
-
-#endif
+//-------------------------------------------------------------------
