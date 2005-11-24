@@ -1,4 +1,4 @@
-CC_PATH=/opt/gcc-3.4.3/bin/
+#CC_PATH=/opt/gcc-3.4.3/bin/
 #CC_PATH=/opt/gcc-4.0.1/bin/
 #CC_PATH=/opt/intel/cc/9.0/bin/
 
@@ -25,7 +25,7 @@ LIBRARY=dodo
 
 VERSION = 0.0
 
-MINOR = 6
+MINOR = 7
 
 all: $(LIBRARY)
 

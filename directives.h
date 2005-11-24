@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 
-#define LIBDODO_VERSION "libdodo/0.0.6"
+#define LIBDODO_VERSION "libdodo/0.0.7"
 
 /**
  * !!!!note!!!!!
