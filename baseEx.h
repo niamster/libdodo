@@ -33,7 +33,7 @@
 	namespace dodo
 	{	
 		/**
-		 * WHERE number of error was got.
+		 * @enum errnoSourceEnum describes names of sources, where code of error got
 		 */
 		enum errnoSourceEnum
 		{
@@ -45,7 +45,7 @@
 		};
 
 		/**
-		 * if source is ERR_LIBDODO, u can match errno usin' errorModuleEnum. see *Ex headers for err numbers
+		 * @enum errorModuleEnum describes names of modules where exception was thrown
 		 */
 		enum errorModuleEnum
 		{
@@ -60,22 +60,28 @@
 			ERRMODULE_SYSTEMTOOLS
 		};	
 			
+		/**
+		 * @class baseEx
+		 * describes exception that was thrown
+		 */	
 		class baseEx
 		{
 			public:		
-			
-				enum baseExStat///basic stats in exception
-				{
-					UNKNOWN = -10,
-					SAFE = 0,
-					UNSAFE = 10,
-					CRITICAL = 100
-				};
-
+				
+				/**
+				 * constructor
+				 * @param errModule in what module was thrown
+				 * @param functionID in what function was thrown[see *Ex.h headers for IDs]
+				 * @param errnoSource where error code and string was taken
+				 * @param baseErrno error code
+				 * @param baseErrstr describes error code
+				 * @param line line, where was thrown
+				 * @param file file, where was thrown
+				 */			
 				baseEx(unsigned long errModule, unsigned long functionID, unsigned long errnoSource, unsigned long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
 				
 				/**
-				 * returns string str explanation
+				 * @return string that describes error
 				 * 	catch(baseEx ex)
 				 *	{
 				 *		cout << ex << endl;
@@ -83,17 +89,15 @@
 				 */
 				operator const char *();
 			
-				unsigned long errModule;
+				unsigned long errModule;///< in what module was thrown
+				unsigned long funcID;///< in what function was thrown[see *Ex.h headers for IDs]
+				unsigned long errnoSource;///< 	where error code and string was taken	
 			
-				unsigned long funcID;
-				unsigned long errnoSource;			
-			
-				unsigned long baseErrno;
-				std::string baseErrstr;
+				unsigned long baseErrno;///< error code
+				std::string baseErrstr;///< describes error code
 				
-				unsigned long line;///line, where problem detected
-				std::string file;
-				baseExStat state;///state of problem
+				unsigned long line;///< line, where was thrown
+				std::string file;///< file, where was thrown
 		};
 	};
 

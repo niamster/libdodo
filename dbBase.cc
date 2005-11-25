@@ -25,6 +25,38 @@
 #include "dbBase.h"
 
 using namespace dodo;
+	
+/**
+ * arrays of positions of "statement" for complete realization. In sql wersion - see sqlBase;
+ */	
+static unsigned int addInsEnumArr[1] = 
+{
+	INSERT_IGNORE,
+};
+
+//-------------------------------------------------------------------
+
+static unsigned int addUpEnumArr[1] = 
+{
+	UPDATE_IGNORE,
+};
+
+//-------------------------------------------------------------------
+
+static unsigned int addDelEnumArr[1] = 
+{
+	DELETE_IGNORE,
+};
+
+//-------------------------------------------------------------------
+
+static unsigned int addSelEnumArr[2] = 
+{
+	SELECT_DISTINCT,
+	SELECT_ALL
+};
+	
+//-------------------------------------------------------------------
 
 __tableInfo::__tableInfo()
 {
@@ -888,45 +920,6 @@ dbBase::restore()
 
 //-------------------------------------------------------------------
 
-inline void 
-dbBase::initTableInfo(__tableInfo &table)
-{
-	table.autoIncr = -1;
-	table.avgRowLen = -1;
-	
-	table.name.clear();
-	
-	table.charset.clear();
-	table.comment.clear();
-	table.keys.clear();
-	table.primKeys.clear();
-	table.uniq.clear();
-	
-	table.fields.clear();
-}
-
-//-------------------------------------------------------------------
-inline void 
-dbBase::initRowInfo(__fieldInfo &row)
-{
-	row.type = -1;
-	row.length = -1;
-	row.flag = 0;	
-	row.onDelete = -1;
-	row.onUpdate = -1;
-	
-	row.name.clear();
-	
-	row.charset.clear();
-	row.comment.clear();
-	row.refTable.clear();
-	row.refFields.clear();
-	row.set_enum.clear();
-	row.defaultVal.clear();
-}
-	
-//-------------------------------------------------------------------
-
 inline std::string
 dbBase::stringType(int type) const
 {
@@ -1031,4 +1024,43 @@ dbBase::stringReference(int type) const
 	}
 }
 
+//-------------------------------------------------------------------
+
+inline void 
+dbBase::initTableInfo(__tableInfo &table)
+{
+	table.autoIncr = -1;
+	table.avgRowLen = -1;
+	
+	table.name.clear();
+	
+	table.charset.clear();
+	table.comment.clear();
+	table.keys.clear();
+	table.primKeys.clear();
+	table.uniq.clear();
+	
+	table.fields.clear();
+}
+
+//-------------------------------------------------------------------
+
+inline void
+dbBase::initRowInfo(__fieldInfo &field)
+{
+	field.type = -1;
+	field.length = -1;
+	field.flag = 0;	
+	field.onDelete = -1;
+	field.onUpdate = -1;
+	
+	field.name.clear();
+	
+	field.charset.clear();
+	field.comment.clear();
+	field.refTable.clear();
+	field.refFields.clear();
+	field.set_enum.clear();
+	field.defaultVal.clear();
+}
 //-------------------------------------------------------------------
