@@ -55,35 +55,25 @@ flushSocket::flushSocket(flushSocket &fs)
 
 //-------------------------------------------------------------------
 
-flushSocket::flushSocket(unsigned long a_numberOfConn, 
+flushSocket::flushSocket(bool a_server, 
 						socketProtoFamilyEnum a_family, 
 						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
-						numberOfConn(a_numberOfConn)
+						server(a_server)
 {
-	if (type == TRANSFER_TYPE_DATAGRAM)
-		numberOfConn = 1;
-  	
+
 	makeSocket();
 }
 
-//-------------------------------------------------------------------
-
-flushSocket::flushSocket(socketProtoFamilyEnum a_family, 
-						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
-						numberOfConn(-1)
-{
-  	makeSocket();	
-}
 
 //-------------------------------------------------------------------
 
 flushSocket::~flushSocket()
 {
-	if (numberOfConn!=-1 && type==TRANSFER_TYPE_STREAM)
+	if (server && type==TRANSFER_TYPE_STREAM)
 		if (opened)
 			_close(socket);
 	
-	if (numberOfConn!=-1 && unixSock.size()!=0)
+	if (server && unixSock.size()!=0)
 		flushDisk::unlink(unixSock);
 }
 
@@ -200,7 +190,7 @@ flushSocket::connect(const std::string &host,
 		performXExec(preExec);
 	#endif
 	
-	if (numberOfConn != -1)
+	if (server)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 		#else
@@ -287,7 +277,7 @@ flushSocket::connect(const std::string &path,
 		performXExec(preExec);
 	#endif
 	
-	if (numberOfConn != -1)
+	if (server)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 		#else
@@ -415,7 +405,9 @@ flushSocket::getServiceInfo(int port,
 #else
 	bool
 #endif
-flushSocket::bindNListen(const std::string &host, int port)
+flushSocket::bindNListen(const std::string &host, 
+						int port,
+						int numberOfConnections)
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_BINDNLISTEN;
@@ -432,7 +424,7 @@ flushSocket::bindNListen(const std::string &host, int port)
 			return false;
 		#endif
 			
-	if (numberOfConn == -1)
+	if (!server)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_CANNOT_BIND,FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
 		#else
@@ -480,7 +472,7 @@ flushSocket::bindNListen(const std::string &host, int port)
 	}	
 
 	if (type == TRANSFER_TYPE_STREAM)
-		if (::listen(socket,numberOfConn)==-1)
+		if (::listen(socket,numberOfConnections)==-1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -506,13 +498,14 @@ flushSocket::bindNListen(const std::string &host, int port)
 #else
 	bool
 #endif
-flushSocket::bindNListen(const __connInfo &destinaton)
+flushSocket::bindNListen(const __connInfo &destinaton, 
+						int numberOfConnections)
 {
 	#ifdef NO_EX
-		if (!bindNListen(destinaton.host,destinaton.port))
+		if (!bindNListen(destinaton.host,destinaton.port,numberOfConnections))
 			return false;
 	#else
-		bindNListen(destinaton.host,destinaton.port);
+		bindNListen(destinaton.host,destinaton.port,numberOfConnections);
 	#endif
 }
 
@@ -524,6 +517,7 @@ flushSocket::bindNListen(const __connInfo &destinaton)
 	bool
 #endif
 flushSocket::bindNListen(const std::string &path,
+							int numberOfConnections,
 							bool force)
 	{		
 		#ifndef FLUSH_SOCKET_WO_XEXEC
@@ -541,7 +535,7 @@ flushSocket::bindNListen(const std::string &path,
 				return false;
 			#endif
 		
-		if (numberOfConn == -1)
+		if (!server)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_CANNOT_BIND,FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
 			#else
@@ -576,7 +570,7 @@ flushSocket::bindNListen(const std::string &path,
 				return false;
 			#endif
 	
-		if (::listen(socket,numberOfConn)==-1)
+		if (::listen(socket,numberOfConnections)==-1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -681,7 +675,7 @@ flushSocket::accept(__initialAccept &init,
 		performXExec(preExec);
 	#endif
 	
-	if (numberOfConn == -1)
+	if (!server)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
 		#else
@@ -793,7 +787,7 @@ flushSocket::accept(__initialAccept &init)
 		performXExec(preExec);
 	#endif
 	
-	if (numberOfConn == -1)
+	if (!server)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
 		#else

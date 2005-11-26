@@ -282,8 +282,7 @@ namespace dodo
 			/**
 			 * constructors/destructors
 			 */
-			flushSocket(unsigned long numberOfConn, socketProtoFamilyEnum family, socketTransferTypeEnum type);///for server; for TRANSFER_TYPE_DATAGRAM internally number of connections overrides to 1!
-			flushSocket(socketProtoFamilyEnum family, socketTransferTypeEnum type);///for client
+			flushSocket(bool server, socketProtoFamilyEnum family, socketTransferTypeEnum type);///for server; for TRANSFER_TYPE_DATAGRAM internally number of connections overrides to 1!
 			virtual ~flushSocket();
 			
 			/**
@@ -325,20 +324,20 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const std::string &host, int port);///host - can be '*' -> any address
+							bindNListen(const std::string &host, int port, int numberOfConnections);///host - can be '*' -> any address
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const __connInfo &destinaton);///the same as previous, but more pretty. alias.
+							bindNListen(const __connInfo &destinaton, int numberOfConnections);///the same as previous, but more pretty. alias.
 						
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const std::string &path, bool force = false);///if socket is already created and force = true and it's a socket - delete it!!			
+							bindNListen(const std::string &path, int numberOfConnections, bool force = false);///if socket is already created and force = true and it's a socket - delete it!!			
 			
 			/**
 			 * accepts incommin' connectins(as for server)
@@ -408,10 +407,8 @@ namespace dodo
 				static bool 
 			#endif			 
 							_close(int socket); 
-			/**
-			 * number of connections that can recieve
-			 */			 
-			long numberOfConn;///number of connection for client = -1
+	 
+			bool server;
 			
 			std::string unixSock;///to remember, 'cos have to unlink in destructor
 	};
