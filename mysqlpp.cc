@@ -364,7 +364,11 @@
 	//-------------------------------------------------------------------
 	
 
-	bool
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif
 	mysqlpp::exec() const
 	{
 		#ifndef MYSQLPP_WO_XEXEC
@@ -385,8 +389,6 @@
 		
 		#ifdef NO_EX
 			return result;
-		#else
-			return true;
 		#endif
 	}
 	

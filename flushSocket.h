@@ -41,6 +41,7 @@
 
 namespace dodo
 {	
+	
 	/**
 	 * @enum flushSocketOperationTypeEnum describes type of operation for hook
 	 */

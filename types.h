@@ -34,12 +34,26 @@
 
 namespace dodo
 {
-	enum BOOL
+
+	/**
+	 * diferent predifined types
+	 */
+	
+	typedef char* pchar;
+
+	typedef std::vector<std::string> stringArr;///< array of strings
+
+	typedef std::map<std::string, std::string> assocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
+	
+	struct __statements 
 	{
-		FALSE = 0,
-		TRUE = 1
+		char *str;
 	};	
 
+	/**
+	 * diferent predifined constants
+	 */
+	
 	#ifdef UNICODE
 		static short size_of_char = sizeof(char)*2;
 	#else
@@ -51,26 +65,12 @@ namespace dodo
 	static short size_of_int = sizeof(int);
 	
 	static short size_of_long = sizeof(long);
-	
-	typedef char* pchar;
-	
+
 	static const std::string __string__ = "";
 	
-	typedef std::vector<std::string> stringArr;
 	static stringArr __stringarray__;
 	
-	typedef std::map<std::string, std::string> assocArr;
 	static assocArr __assocarray__;
 
-	typedef std::string (*escape)(const std::string &);
-	
-	#define SIZEOFNUM 32
-	
-	#define FILE_DELIM "/"
-	
-	struct __statements 
-	{
-		char *str;
-	};
 }
 #endif /* _TYPES_H */

@@ -46,7 +46,7 @@ namespace dodo
 {
 	
 	/**
-	 * begin and of part of matched data
+	 * @struct __regexMatch indicates begin and end of matched data
 	 */
 	struct __regexMatch
 	{
@@ -55,72 +55,98 @@ namespace dodo
 	};
 	
 	/**
-	 * class that covers REGEXP routine;
-	 * usin' define flags u can compile with POSIX regex or with PCRE;
-	 * PCRE is much faster, but it cannot be on your computer, but POSIX regex have to be(i hope!)
+	 * !class regexp that covers REGEXP routine using different regex libs
+	 * @note PCRE is much faster
+	 * both POSIX and PCRE don't support binary patterns
+	 * if string is not matchin' fully the pattern - it don't want to execute it(return false)
 	 * 
-	 *  if string is not matchin' fully the pattern - it don't want to execute it(return false)
-	 * 
-	 * NOTE!!!!!!! POSIX bugs: don't support binary test sting;
+	 * POSIX doesn't support binary test sting;
 	 */
-	 class regexp : public dodoBase
+	 class regexp
 	 {
 	 	public:
 						 	
 	 		/**
-	 		 * constructor/destructor
+	 		 * constructor
 	 		 */
 	 		regexp();
-	 		virtual ~regexp();
+	 		
 	 		/**
-	 		 * set whether to use Extended or basic regex; Extended by default
-	 		 */ 
-	 		mutable bool extended;
-	 		/**
-	 		 * ignore case
-	 		 * not active by default
+	 		 * destructor
 	 		 */
-	 		mutable bool icase;
+	 		virtual ~regexp();
+	 		
+	 		mutable bool extended;///< set whether to use extended or basic regex; extended by default
+
+	 		mutable bool icase;///< ignore case; not active by default
+
 	 		/**
-	 		 * matches and set matched pieces in '()' to pockets or return false;
+	 		 * @return true if matched
+	 		 * @param pattern is regex pattern
+	 		 * @param sample is a test string
+	 		 * @param pockets is array that will be filled with matched in '()' 
+	 		 * @note set matched pieces in '()' to pockets
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
 	 		bool match(const std::string &pattern, const std::string &sample, stringArr &pockets = __stringarray__) const;
+
 	 		/**
-	 		 * matches and set matched pieces in '()' to pockets usin' pattern from `match` or return false; faster than usage `exec` for some times with the same pattern
+	 		 * matches with pattern prviously given with match method; if patterns are similar - faster!
+	 		 * @return true if matched
+	 		 * @param sample is a test string
+	 		 * @param pockets is array that will be filled with matched in '()' 
+	 		 * @note set matched pieces in '()' to pockets
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
 	 		bool reMatch(const std::string &sample, stringArr &pockets = __stringarray__) const;
+	 		
 	 		/**
 	 		 * replaces in sample from pieces usin' pattern
-	 		 * if amount of pockets more than replacements  - replacemet will stop
+	 		 * @return string with replacements
+	 		 * @param pattern is regex pattern
+	 		 * @param sample is a test string
+	 		 * @param replacements is array that will fill parts with matched in '()' 
+	 		 * @note if amount of pockets more than replacements  - replacemet will stop
 	 		 * if pattern is not matched - the sample will be returned
 	 		 */
 	 		std::string replace(const std::string &pattern, const std::string &sample, const stringArr &replacements) const;
+	 		
 	 		/**
-	 		 * replaces in sample from pieces usin' pattern;faster than usage `replace` for some times with the same pattern
-	 		 * if amount of pockets more than replacements  - replacemet will stop
+	 		 * matches with pattern prviously given with replace method; if patterns are similar - faster!
+	 		 * replaces in sample from pieces usin' pattern
+	 		 * @return string with replacements
+	 		 * @param pattern is regex pattern
+	 		 * @param sample is a test string
+	 		 * @param replacements is array that will fill parts with matched in '()' 
+	 		 * @note if amount of pockets more than replacements  - replacemet will stop
 	 		 * if pattern is not matched - the sample will be returned
 	 		 */
 	 		std::string reReplace(const std::string &sample, const stringArr &replacements) const;
 	 		
 	 	protected:
 	 	
+	 		/**
+	 		 * generate list of boundaries matched in sample by pattern
+	 		 */
 	 		bool boundMatch(const std::string &sample) const;
+	 		
+	 		/**
+	 		 * compile pattern
+	 		 */
 	 		bool compile(const std::string &pattern) const;
 	 	
 	 	private:
 	 	
 			#ifdef PCRE_EXT
-				mutable pcre *code;
+				mutable pcre *code;///< compiled pattern
 			#else
-				mutable regex_t code;
-				mutable bool notCompiled;
+				mutable regex_t code;///< compiled pattern
+				mutable bool notCompiled;///< indicates, if not compiled
 			#endif	 		
 	 		
-			mutable std::list<__regexMatch> boundaries;
+			mutable std::list<__regexMatch> boundaries;///< list of buondaries matched in sample by pattern
 	 };
 };
 

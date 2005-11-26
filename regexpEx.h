@@ -33,14 +33,22 @@
 	namespace dodo
 	{
 		
-		///reasons of exception
+		/**
+		 * libdodo defined errors
+		 */
 		enum regexpExR
 		{
 			REGEXP_MEMORY_OVER = 1
 		};
 		
+		/**
+		 * libdodo defined errors' explanation
+		 */			
 		#define REGEXP_MEMORY_OVER_STR "Not anough memmory"
-				
+		
+		/**
+		 * ID of function where exception was thrown
+		 */					
 		enum regexpFunctionsID
 		{
 			REGEXP_BOUNDMATCH,

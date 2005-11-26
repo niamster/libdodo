@@ -33,8 +33,10 @@
 
 namespace dodo
 {
-	
-	enum flushSTDOperationTypeEnum///for xExec
+	/**
+	 * @enum flushSTDOperationTypeEnum describes type of operation for hook
+	 */
+	enum flushSTDOperationTypeEnum
 	{
 		FLUSHSTD_OPER_READ,
 		FLUSHSTD_OPER_WRITE,
@@ -43,68 +45,113 @@ namespace dodo
 	};
 	
 	/**
-	 * 
+	 * @class flushSTD performs actions with stdin/out.
+	 * @note it's usefull when you are using in/out operations through some proxy -> for example inetd!
 	 */
 	
 	class flushSTD : public flush
 	{
 		private:
-		
-			flushSTD(flushSTD &fd);///to prevent from copyin'
+			
+			/**
+			 * constructor
+			 * to prevent from copying
+			 */
+			flushSTD(flushSTD &fd);
 		
 		public:
-					
+													
 			/**
-			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
-			 */		
+			 * @return self, casted to base class - dodoBase; 
+			 * usefull to cast from child to parent;
+			 * used in hooks
+			 */	
 			virtual dodoBase * const getSelf();
 							
-			///constructors and destructors
+			/**
+			 * constructor
+			 */
 			flushSTD();
+			
+			/**
+			 * destructor
+			 */
 			virtual ~flushSTD();
 
 			/**
-			 * for xExec
+			 * adds hook after the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
 			 */			
 			virtual int addPostExec(inExec func, void *data) const;
-			virtual int addPreExec(inExec func, void *data) const;	
-			virtual int addPostExec(const std::string &module, void *data) const;
-			virtual int addPreExec(const std::string &module, void *data) const;	
-					
-			/**
-			 * read functions. first argument - buffer, second - position
-			 * returns false if nothing was read
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							readString(std::string &data) const;///reads to string; return false if eof
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							read(char * const data) const;///reads to void*; return false if eof		
 			
 			/**
-			 * write functions
-			 * first argument - buffer, second - position(if u want to add to end of the file set 'append' to true)
-			 * returns false if exists, copy to buffer content of the node
+			 * adds hook before the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(inExec func, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPostExec(const std::string &module, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(const std::string &module, void *data) const;
+					
+			/**
+			 * read
+			 * @param data is filled with read string
+			 * if inSize bigger than buffer size - reads with few iterations
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							writeString(const std::string &data);///writes string
+							readString(std::string &data) const;
+			/**
+			 * read
+			 * @param data is filled with read data
+			 * if inSize bigger than buffer size - reads with few iterations
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							write(const char * const data);///writes void*
+							read(char * const data) const;
+			
+			/**
+			 * write
+			 * @param data is string that will be written
+			 * if outSize bigger than buffer size - writes with few iterations
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							writeString(const std::string &data);
+							
+			/**
+			 * write
+			 * @param data is data that will be written
+			 * if outSize bigger than buffer size - writes with few iterations
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							write(const char * const data);
 
 			/**
 			 * flushes to output
@@ -117,11 +164,12 @@ namespace dodo
 							flush();		
 			
 			/**
-			 * sometimes, when you ouput/input from some pther programs, you have bounds in input/output buffer
-			 * this parameters will help you by default, they are too large, so you don't have to change it
+			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer
+			 * this parameters will help you;
+			 * by default, they are too large, so you don't have to change it
 			 */				 
-			int inSTDBuffer;
-			int outSTDBuffer;
+			int inSTDBuffer;///< input buffer
+			int outSTDBuffer;///< output buffer
 	};
 
 };

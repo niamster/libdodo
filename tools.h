@@ -36,41 +36,100 @@
 namespace dodo
 {
 	/**
-	 * adds/removes option to flag
+	 * @def adds bit flag to statement
 	 */
 	#define addF(flag,statement) (flag)|=(statement)
+	/**
+	 * @def removes bit flag to statement
+	 */
 	#define removeF(flag,statement) (flag)&=(~(statement))
-	
+
+	/**
+	 * @typedef that describes function that will escapes parts in explode/implode
+	 * @return converted string
+	 */
+	typedef std::string (*escape)(const std::string &);
+		
+	/**
+	 * @class tools present different usefull functions
+	 */
 	class tools
 	{
 		public:
 			
 			/**
-			 * converts long to string
+			 * @return converted long to string
+			 * @param number is number to convert
 			 */
 			static std::string lToString(long number);
 			
 			/**
-			 * converts double to string
+			 * @return converted double to string
+			 * @param number is number to convert
 			 */
 			static std::string dToString(double number);
 			
+			/**
+			 * replaces nodes in string
+			 * @param needle indicates what to replace in string
+			 * @param replacement indicates with what to replace
+			 * @param data specifies wher to replace
+			 */
 			static void replace(pchar needle, pchar replacement, std::string &data);
 		
-			///makes array of strings from string using separtator
+			/**
+			 * @return array of strings made from string using separtator
+			 * @param fields is string to explode
+			 * @param separator is value that separates parts
+			 */
 			static stringArr explode(const std::string &fields, const std::string &separator);
+					
+			/**
+			 * @return array of strings made from string using separtator
+			 * @param escapeF is callback function that will process with every made node
+			 * @param fields is string to explode
+			 * @param separator is value that separates parts
+			 */
 			static stringArr explode(const std::string &fields, escape escapeF, const std::string &separator);
-		
-			///makes string of fields, separated with separator; frame = symbol, that is used to frame the field
+			
+			/**
+			 * @return string of fields, separated with separator;
+			 * @param fields is an array of nodes that will fiil the result string
+			 * @param escapeF is callback function that will process with every node
+			 * @param separator is value that separates parts
+			 * @param frame is node that will cover node [frame='; node => 'node']
+			 */
 			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, const std::string &frame);
+			
+			/**
+			 * @return string of fields, separated with separator;
+			 * @param fields is an array of nodes that will fiil the result string
+			 * @param escapeF is callback function that will process with every node
+			 * @param separator is value that separates parts
+			 */
 			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator);
+			
+			/**
+			 * @return string of fields, separated with separator;
+			 * @param fields is an array of nodes that will fiil the result string
+			 * @param separator is value that separates parts
+			 */
 			static std::string implode(const stringArr &fields, const std::string &separator);
+			
+			/**
+			 * @return string of fields, separated with separator;
+			 * @param fields is an array of nodes that will fiil the result string
+			 * @param separator is value that separates parts
+			 * @param frame is node that will cover node [frame='; node => 'node']
+			 */
 			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame);
 			
-			///sets string to size; if it's bigger than size - cut from right; if shotter - adds `symbol` to make it longer
-			static void normalize(std::string &a_string, unsigned long size, char adds = ' ');
-			
 		private:
+			
+			/**
+			 * dummy callback function for implode/explode
+			 * nothing does with passed data
+			 */
 			inline static std::string dummy(const std::string &data);
 	};
 };

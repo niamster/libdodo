@@ -33,6 +33,9 @@
 	namespace dodo
 	{
 		
+		/**
+		 * ID of function where exception was thrown
+		 */			
 		enum mysqlppFunctionsID
 		{
 			MYSQLPP_CONNECT,
@@ -42,4 +45,4 @@
 
 #endif
 
-#endif /* _MYSQLINTERFACEEX_H */
+#endif

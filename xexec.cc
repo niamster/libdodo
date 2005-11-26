@@ -223,11 +223,10 @@ xexec::enableAll() const
 
 bool 
 xexec::replacePostExec(unsigned int position, 
-				inExec func, 
- 				dodoBase *obj,
+				inExec func,
 				void *data) const
 {
-	return replaceXExec(postExec.exec,position,func,obj,data);
+	return replaceXExec(postExec.exec,position,func,data);
 }
 
 //-------------------------------------------------------------------
@@ -235,10 +234,9 @@ xexec::replacePostExec(unsigned int position,
 bool 
 xexec::replacePreExec(unsigned int position, 
 				inExec func,
- 				dodoBase *obj,
 				void *data) const
 {
-	return replaceXExec(preExec.exec,position,func,obj,data);
+	return replaceXExec(preExec.exec,position,func,data);
 }
 
 //-------------------------------------------------------------------
@@ -246,8 +244,7 @@ xexec::replacePreExec(unsigned int position,
 inline bool 
 xexec::replaceXExec(std::vector<__execItem> &list, 
 			unsigned int position, 
-			inExec func, 
- 			dodoBase *obj,
+			inExec func,
 			void *data) const
 {
 	--position;
@@ -255,7 +252,6 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 	{
 		list[position].func = func;
 		list[position].data = data;
-		list[position].obj = obj;
 		list[position].present = true;
 		return true;
 	}
@@ -285,18 +281,6 @@ xexec::performXExec(__execItemList &list) const
 				enableAllPreExec();
 			}
 		}
-}
-
-//-------------------------------------------------------------------
-
-bool 
-xexec::exec() const
-{
-	performXExec(preExec);
-	///execute 
-	performXExec(postExec);
-	
-	return true;
 }
 
 //-------------------------------------------------------------------

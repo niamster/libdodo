@@ -169,7 +169,7 @@ sqlBase::noexists(const std::string &statement)
 
 void 
 sqlBase::additionalCollect(unsigned int qTypeTocheck, 
-						std::string collectedString) const
+						const std::string &collectedString) const
 {
 	if (qShift == EMPTY)
 		return ;
@@ -492,7 +492,6 @@ sqlBase::createFieldCollect() const
 }
 
 //-------------------------------------------------------------------
-
 
 std::string
 sqlBase::queryCollect() const

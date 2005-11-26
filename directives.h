@@ -34,6 +34,15 @@
  * please read notes before uncommentin'!!!
  */
 
+/**
+ * is used for converting from number to string
+ */
+#define SIZEOFNUM 32
+
+/**
+ * delimiter in disk operations
+ */
+#define FILE_DELIM "/"
 
 /** 
  * compile without exceptions.

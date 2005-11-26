@@ -33,15 +33,23 @@
 	namespace dodo
 	{	
 		
-		///reasons of exception
+		/**
+		 * libdodo defined errors
+		 */
 		enum systemExR
 		{
 			SYSTEMTOOLS_MEMORY_OVER = 1,
 			SYSTEMTOOLS_WRONG_PARAMETHER,
 		};
-			
+		
+		/**
+		 * libdodo defined errors' explanation
+		 */				
 		#define SYSTEMTOOLS_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
-				
+		
+		/**
+		 * ID of function where exception was thrown
+		 */					
 		enum systemFunctionsID
 		{
 			SYSTEMTOOLS_SETWORKINGDIR,

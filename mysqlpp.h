@@ -41,8 +41,9 @@
 	
 	namespace dodo
 	{
+		
 		/**
-		 * type of actions that you can handle with xexec! see sqlBase for more details.
+		 * @enum mysqlppOperTypeEnum describes type of operation for hook
 		 */
 		enum mysqlppOperTypeEnum
 		{
@@ -51,24 +52,36 @@
 			MYSQLPP_OPER_DISCONNECT
 		};
 		
+		/**
+		 * @enum mysqlAddSelEnum describes mySQL additional statement for SELECT
+		 */
 		enum mysqlAddSelEnum
 		{
 			SELECT_STRAIGHT_JOIN = 1,
 			SELECT_SMALL_RESULT,
 			SELECT_BIG_RESULT,
 		};
-		
+
+		/**
+		 * @enum mysqlAddDelEnum describes mySQL additional statement for DELETE
+		 */		
 		enum mysqlAddDelEnum
 		{
 			DELETE_LOW_PRIORITY = 1,
 			DELETE_QUICK
 		};
-		
+
+		/**
+		 * @enum mysqlAddUpEnum describes mySQL additional statement for UPDATE
+		 */		
 		enum mysqlAddUpEnum
 		{
 			UPDATE_LOW_PRIORITY = 1,
 		};
-		
+
+		/**
+		 * @enum mysqlAddInsEnum describes mySQL additional statement for INSERT
+		 */		
 		enum mysqlAddInsEnum
 		{
 			INSERT_DELAYED = 1,
@@ -77,29 +90,39 @@
 		};
 		
 		/**
-	 	 *	class to work with mysql through c++
-		 *	usage: see test.cc
+	 	 *	@class mysqlpp is an interface to mysql db through sql-,database- independent interfaces
 		 */
-		 
-		 //position of preExec - before action, postExec - after action, after check of goodness of operation, so if error occured - postExec won't be called
 		class mysqlpp : public sqlBase, public xexec
 		{
 			private :
-			
+				/**
+				 * constructor
+				 * to prevent from copying
+				 */
 				mysqlpp(mysqlpp &a_mypp);
 			
 			public:
 					
 				/**
-				 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
-				 */		
+				 * @return self, casted to base class - dodoBase; 
+				 * usefull to cast from child to parent;
+				 * used in hooks
+				 */	
 				virtual dodoBase * const getSelf();
-
+				
+				/**
+				 * constructor
+				 */
 				mysqlpp();
+				
+				/**
+				 * destructor
+				 */
 				virtual ~mysqlpp();	
 			
 				/**
-				 * type - type of connection - se mySQL documentation for more!
+				 * connect to database
+				 * @param type is type of connection - see mySQL documentation for more!
 				 * 	CLIENT_COMPRESS 	Use compression protocol.
 				 *	CLIENT_FOUND_ROWS 	Return the number of found (matched) rows, not the number of affected rows.
 				 *	CLIENT_IGNORE_SPACE 	Allow spaces after function names. Makes all functions names reserved words.
@@ -115,43 +138,134 @@
 					virtual bool 
 				#endif
 								connect(unsigned long type=CLIENT_MULTI_STATEMENTS) const;
-			
+				
+				/**
+				 * disconnect from database
+				 */
 				virtual void disconnect() const;
-			
+				
+				/**
+				 * @return amount of affected rows(update,delete...)
+				 */
 				virtual unsigned int affectedRowsCount();
-				virtual unsigned int rowsCount();
+				
+				/**
+				 * @return amount of rows got from request(select ...)
+				 */
+				virtual unsigned int rowsCount();				
+				
+				/**
+				 * @return amount of fields got from request(select ...)
+				 */
 				virtual unsigned int fieldsCount();
-			
+				
+				/**
+				 * @return array of rows got from request
+				 */
 				virtual std::vector<stringArr> fetchRow();
+				
+				/**
+				 * @return array of fields got from request
+				 */
 				virtual stringArr fetchField();
+				
+				/**
+				 * @return structure that holds array of rows and array of fields got from request
+				 */
 				virtual __sqlStorage fetch();
 			
 				/**
-				 * functions to set(unset) additional parameters for standart qTypes
+				 * set additional mysql-specific statement for INSERT
+				 * @param statement describes additional statement
 				 */
-				virtual void setMyAddInsSt(mysqlAddInsEnum statement);
+				virtual void setMyAddInsSt(mysqlAddInsEnum statement);			
+				
+				/**
+				 * set additional mysql-specific statement for UPDATE
+				 * @param statement describes additional statement
+				 */
 				virtual void setMyAddUpSt(mysqlAddUpEnum statement);
+				
+				/**
+				 * set additional mysql-specific statement for SELECT
+				 * @param statement describes additional statement
+				 */
 				virtual void setMyAddSelSt(mysqlAddSelEnum statement);
+				
+				/**
+				 * set additional mysql-specific statement for DELETE
+				 * @param statement describes additional statement
+				 */
 				virtual void setMyAddDelSt(mysqlAddDelEnum statement);
 				
+				/**
+				 * unset additional mysql-specific statement for INSERT
+				 * @param statement describes additional statement
+				 */
 				virtual void unsetMyAddInsSt(mysqlAddInsEnum statement);
+				
+				/**
+				 * unset additional mysql-specific statement for UPDATE
+				 * @param statement describes additional statement
+				 */
 				virtual void unsetMyAddUpSt(mysqlAddUpEnum statement);
+				
+				/**
+				 * unset additional mysql-specific statement for SELECT
+				 * @param statement describes additional statement
+				 */
 				virtual void unsetMyAddSelSt(mysqlAddSelEnum statement);
+				
+				/**
+				 * unset additional mysql-specific statement for DELETE
+				 * @param statement describes additional statement
+				 */
 				virtual void unsetMyAddDelSt(mysqlAddDelEnum statement);
 
 				/**
-				 * executes request
-				 */
-				virtual bool exec() const;
+				 * executes collected request
+				 */				
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								exec() const;
 				
+				/**
+				 * adds hook after the operation by callback
+				 * @param func is a pointer to function
+				 * @param data is pointer to data toy want to pass to hook
+				 */			
 				virtual int addPostExec(inExec func, void *data) const;
-				virtual int addPreExec(inExec func, void *data) const;	
+				
+				/**
+				 * adds hook before the operation by callback
+				 * @param func is a pointer to function
+				 * @param data is pointer to data toy want to pass to hook
+				 */
+				virtual int addPreExec(inExec func, void *data) const;
+				
+				/**
+				 * adds hook after the operation by callback
+				 * @param module is a path to module, whrere hook exists
+				 * @param data is pointer to data toy want to pass to hook
+				 */
 				virtual int addPostExec(const std::string &module, void *data) const;
+				
+				/**
+				 * adds hook after the operation by callback
+				 * @param module is a path to module, whrere hook exists
+				 * @param data is pointer to data toy want to pass to hook
+				 */
 				virtual int addPreExec(const std::string &module, void *data) const;
 				
 			private:
+			
 				/**
 				 * executes request
+				 * pure mysql actions
+				 * in function without `_` hooks are calling
 				 */
 				#ifndef NO_EX
 					virtual void 
@@ -159,16 +273,19 @@
 					virtual bool 
 				#endif
 								_exec() const;		
-			
-				virtual void addSQL();
-			
-				mutable bool connected;//connected or not
-				mutable bool empty;//for detectin' whether mysqlResult is empty or not
 				
-				mutable MYSQL *mysql;
-				mutable MYSQL_RES *mysqlRes;
-				mutable MYSQL_ROW mysqlRow;
-				mutable MYSQL_FIELD *mysqlFields;
+				/**
+				 * inits addidtional mySQL specific statements
+				 */
+				virtual void addSQL();
+				
+				mutable bool connected;///< connected or not
+				mutable bool empty;///< for detectin' whether mysqlResult is empty or not
+				
+				mutable MYSQL *mysql;///< handler fo mysql connections
+				mutable MYSQL_RES *mysqlRes;///< pointer to result
+				mutable MYSQL_ROW mysqlRow;///< pointer to rows
+				mutable MYSQL_FIELD *mysqlFields;///< pointer to fields
 		};
 	};
 #endif

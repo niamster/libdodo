@@ -34,16 +34,25 @@
 
 	namespace dodo
 	{
-		///reasons of exception
+		
+		/**
+		 * libdodo defined errors
+		 */
 		enum sqlBaseExR
 		{
 			SQLBASE_MEMORY_OVER = 1,///not enough memmory
 			SQLBASE_EMPTY_REQUEST
 		};
 		
+		/**
+		 * libdodo defined errors' explanation
+		 */			
 		#define SQLBASE_MEMORY_OVER_STR "Not anough memmory"
 		#define SQLBASE_EMPTY_REQUEST_STR "Query is empty. are you sure?"
 		
+		/**
+		 * ID of function where exception was thrown
+		 */			
 		enum flushSocketFunctionsID
 		{
 			SQLBASE_SELECTCOLLECT,

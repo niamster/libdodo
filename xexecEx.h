@@ -32,7 +32,10 @@
 
 	namespace dodo
 	{
-				
+		
+		/**
+		 * ID of function where exception was thrown
+		 */					
 		enum xexecFunctionsID
 		{
 			XEXEC_ADDXEXECMODULE,

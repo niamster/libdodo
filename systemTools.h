@@ -45,25 +45,25 @@ namespace dodo
 {
 
 	/**
-	 * contains info about process
+	 * @struct __usage contains info about process
 	 */
 	struct __usage
 	{
-		long time;///in miliseconds
-		long mem;///in bytes
+		long time;///<  amount of processor time of execution in miliseconds
+		long mem;///< amount of memmory usage in bytes
 	};
 
 	/**
-	 * system limits
+	 * @struct __limits describes system limits
 	 */
 	struct __limits
 	{
-		unsigned long current;///can use current process
-		unsigned long max;///max amount
+		unsigned long current;///< can use current process
+		unsigned long max;///< max amount
 	};
 
 	/**
-	 * used with __limits in `getSystemLimits`
+	 * @enum systemToolsLimitEnum describes what type of limits you can get
 	 */
 	enum systemToolsLimitEnum
 	{
@@ -76,7 +76,9 @@ namespace dodo
 	}; 
 
 	/**
-	 * real - what ID started process, effective - what ID's permissions process has
+	 * @enum uidTypeEnum describes type of UID
+	 * @note real - what ID started process
+	 * effective - what ID's permissions process has
 	 */
 	enum uidTypeEnum
 	{
@@ -85,32 +87,31 @@ namespace dodo
 	};
 	
 	/**
-	 * user info
+	 * @struct	__userInfo contains user info
 	 */
 	struct	__userInfo
 	{
-		std::string name;
-		std::string pass;
-		int uid;
-		int gid;
-		std::string realName;
-		std::string home;
-		std::string shell;
+		std::string name;///< user's name 
+		std::string pass;///< user's password
+		int uid;///< user's id
+		int gid;///< user's group
+		std::string realName;///< user's real name
+		std::string home;///< user's home directory
+		std::string shell;///< user's default shell
 	};
 	
 	/**
-	 * group info
+	 * @struct __groupInfo contains group info
 	 */
-	struct	__groupInfo
+	struct __groupInfo
 	{
-		std::string name;
-		int gid;
-		stringArr members;
+		std::string name;///< name of the group
+		int gid;///< group id
+		stringArr members;///< list of group members
 	};
 
 	/**
-	 * provides misc system operations, gets diff info about system
-	 * most *nix compatible
+	 * @class systemTools provides misc system operations, gets diff info about system
 	 */
 	class systemTools
 	{
@@ -118,12 +119,13 @@ namespace dodo
 		public:			
 		
 			/**
-			 * gets current working directory
+			 * @return current working directory
 			 */
 			static std::string getWorkingDir();
 			
 			/**
-			 * sets current working directory (cd path) 
+			 * set current working directory (cd path) 
+			 * @param path is path where to go
 			 */
 			#ifndef NO_EX
 				static void 
@@ -133,7 +135,8 @@ namespace dodo
 							setWorkingDir(const std::string &path);
 				
 			/**
-			 * displays system usage with current process
+			 * get system usage with current process
+			 * @param info will be filled with system usage info
 			 */
 			#ifndef NO_EX
 				static void 
@@ -144,6 +147,8 @@ namespace dodo
 			
 			/**
 			 * get limits from systemToolsLimitEnum
+			 * @param type is type of info to get
+			 * @param lim will be filled with requested values
 			 */
 			#ifndef NO_EX
 				static void 
@@ -151,8 +156,11 @@ namespace dodo
 				static bool 
 			#endif			
 							getLimit(systemToolsLimitEnum type,  __limits &lim);
+							
 			/**
-			 * sets limits from systemToolsLimitEnum
+			 * set limits from systemToolsLimitEnum
+			 * @param type is type of info to set
+			 * @param lim will fill with requested values
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -162,12 +170,16 @@ namespace dodo
 							setLimit(systemToolsLimitEnum type, const __limits &lim);
 			
 			/**
-			 * gets priority of current process for uidTypeEnum
+			 * @return priority of current process for uidTypeEnum
+			 * @param type is type of UID to use
+			 * @note if error occured and if NO_EX set -> -1 will return
 			 */		
-			static int getPriority(uidTypeEnum type);///if NO_EX set -> -1 will return!
+			static int getPriority(uidTypeEnum type);
 
 			/**
-			 * sets priority of current process (nice) for uidTypeEnum
+			 * sets priority of current process (nice)
+			 * @param type is type of UID to use
+			 * @param prio is value of priority
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -177,12 +189,16 @@ namespace dodo
 							setPriority(uidTypeEnum type, int prio);
 							
 			/**
-			 * gets effective/real user id;
+			 * @return user id of the current process
+			 * @param type is type of UID to use
+			 * @note if error occured and if NO_EX set -> -1 will return
 			 */		
-			static int getUID(uidTypeEnum type);///returns -1 on error, if NO_EX was set
+			static int getUID(uidTypeEnum type);
 			
 			/**
-			 * sets effective/real user id;
+			 * set user id of the current process
+			 * @param type is type of UID to use
+			 * @param uid is user's id
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -192,12 +208,16 @@ namespace dodo
 							setUID(uidTypeEnum type, int uid);	
 							
 			/**
-			 * gets effective/real group id;
+			 * get group id of the current process
+			 * @param type is type of UID to use
+			 * @note if error occured and if NO_EX set -> -1 will return
 			 */		
-			static int getGID(uidTypeEnum type);///returns -1 on error, if NO_EX was set
+			static int getGID(uidTypeEnum type);
 			
 			/**
-			 * sets effective/real group id;
+			 * sets group id of the current process
+			 * @param type is type of UID to use
+			 * @param gid is group id
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -208,6 +228,8 @@ namespace dodo
 			
 			/**
 			 * gets user info
+			 * @param info will be filled with user's info
+			 * @param uid is user's id about what to get info
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -218,6 +240,8 @@ namespace dodo
 										
 			/**
 			 * gets user info
+			 * @param info will be filled with user's info
+			 * @param name is user's login name about what to get info
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -228,6 +252,7 @@ namespace dodo
 							
 			/**
 			 * gets users of the system
+			 * @param info will be filled with array of users' info
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -237,7 +262,9 @@ namespace dodo
 							getUsers(std::vector<__userInfo> &info);
 			
 			/**
-			 * gets user info
+			 * gets group info
+			 * @param info will be filled with group's info
+			 * @param name is group's id name about what to get info
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -247,7 +274,9 @@ namespace dodo
 							getGroupInfo(__groupInfo &info, int gid);	
 										
 			/**
-			 * gets user info
+			 * gets group info
+			 * @param info will be filled with user's info
+			 * @param name is group's name about what to get info
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -257,7 +286,8 @@ namespace dodo
 							getGroupInfo(__groupInfo &info, const std::string &gid);			
 							
 			/**
-			 * gets users of the system
+			 * gets group of the system
+			 * @param info will be filled with array of group' info
 			 */				
 			#ifndef NO_EX
 				static void 
@@ -269,12 +299,12 @@ namespace dodo
 		protected:
 			
 			/**
-			 * fills __userInfo with passws
+			 * fills __userInfo with values from passwd structure
 			 */
 			static __userInfo &fillUserInfo(__userInfo &info, passwd *pw);
 			
 			/**
-			 * fills __groupInfo with groups
+			 * fills __groupInfo with values from group structure
 			 */
 			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
 																						
