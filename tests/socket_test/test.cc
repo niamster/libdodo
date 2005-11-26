@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 
 	try
 	{		
-		flushSocket sock(CONNECTION_LIMIT,/*PROTO_FAMILY_IPV4*/PROTO_FAMILY_IPV6/*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
+		flushSocket sock(true,/*PROTO_FAMILY_IPV4*/PROTO_FAMILY_IPV6/*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
 		
 /*		flushSocketExchange ex1;
 		copyTest0(ex1);///ok
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
 		
-		//sock.bindNListen("127.0.0.1",7777);
+		sock.bindNListen("127.0.0.1",7777,CONNECTION_LIMIT);
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",true);
 		

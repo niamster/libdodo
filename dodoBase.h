@@ -27,19 +27,28 @@
 
 namespace dodo
 {
+	/**
+	 * @class dodoBase is used in some cases when different class must be linked
+	 */
 	class dodoBase
 	{
 		public:
 					
 			/**
-			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
-			 */		
+			 * @return self
+			 * usefull to cast from child to parent;
+			 * used in hooks
+			 */			
 			virtual dodoBase * const getSelf();
 					
 			/**
-			 * constructor/destructor
+			 * constructor
 			 */
 			dodoBase();
+			
+			/**
+			 * destructor
+			 */
 			virtual ~dodoBase();
 	};
 };

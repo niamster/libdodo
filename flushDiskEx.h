@@ -33,7 +33,9 @@
 	namespace dodo
 	{	
 		
-		///reasons of exception
+		/**
+		 * libdodo defined errors
+		 */
 		enum flushDiskExR
 		{
 			FLUSHDISK_MEMORY_OVER = 1,
@@ -41,10 +43,16 @@
 			FLUSHDISK_CANNOT_OVEWRITE
 		};
 		
+		/**
+		 * libdodo defined errors' explanation
+		 */		
 		#define FLUSHDISK_MEMORY_OVER_STR "Not anough memmory"
 		#define FLUSHDISK_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 		#define FLUSHDISK_CANNOT_OVEWRITE_STR "You set option not to overwrite, but try to do that =)"
 		
+		/**
+		 * ID of function where exception was thrown
+		 */
 		enum flushDiskFunctionsID
 		{
 			FLUSHDISK_CLOSE,

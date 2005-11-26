@@ -41,9 +41,10 @@
 
 namespace dodo
 {	
-	#define UNIX_SOCKET_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
-	
-	enum flushSocketOperationTypeEnum///for xExec
+	/**
+	 * @enum flushSocketOperationTypeEnum describes type of operation for hook
+	 */
+	enum flushSocketOperationTypeEnum
 	{
 		FLUSHSOCKET_OPER_RECIEVE,
 		FLUSHSOCKET_OPER_SEND,
@@ -56,17 +57,16 @@ namespace dodo
 	};	
 	
 	/**
-	 * type of socket to use
+	 * @enum socketTransferTypeEnum type of socket to use
 	 */
 	enum socketTransferTypeEnum
 	{
-		TRANSFER_TYPE_STREAM,///Sequenced, reliable, connection-based byte streams
-		TRANSFER_TYPE_DATAGRAM,///Connectionless, unreliable datagrams of fixed maximum length
+		TRANSFER_TYPE_STREAM,///< Sequenced, reliable, connection-based byte streams
+		TRANSFER_TYPE_DATAGRAM,///< Connectionless, unreliable datagrams of fixed maximum length
 	};
 	
 	/**
-	 * type of domain
-	 * as response for more type of protocol and address famaly will increase - i'll add. i don't think that u use appletalk or ipx! as for start - these !
+	 * @enum socketProtoFamilyEnum describes type of domain of socket to use
 	 */
 	enum socketProtoFamilyEnum
 	{
@@ -76,50 +76,52 @@ namespace dodo
 	};
 	
 	/**
-	 * Options for socket
+	 * @enum socketOptionsEnum defines options for socket
 	 */
 	 enum socketOptionsEnum
 	 {
-	 	SOCKET_KEEP_ALIVE=2,///Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-	 	SOCKET_REUSE_ADDRESS=4,/// 	
-	 	SOCKET_DONOT_USE_GATEWAY=8, 	
-	 	SOCKET_BROADCAST=16,///Permits  sending of broadcast messages, if this is supported by the protocol. 	
-	 	SOCKET_OOB_INLINE=32,///out-of-band(marked urgent) data keep inline in recieve operation
+	 	SOCKET_KEEP_ALIVE=2,///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+	 	SOCKET_REUSE_ADDRESS=4,///<  should allow reuse of local addresses	
+	 	SOCKET_DONOT_USE_GATEWAY=8,///< Requests  that outgoing messages bypass the standard routing facilities.	
+	 	SOCKET_BROADCAST=16,///< Permits  sending of broadcast messages, if this is supported by the protocol. 	
+	 	SOCKET_OOB_INLINE=32,///< out-of-band(marked urgent) data keep inline in recieve operation
 	 	#ifdef SO_REUSEPORT
 		 	SOCKET_REUSE_PORT=512,
 		#endif
 	 };
+	 
 	 /**
-	  * send unsent messages in socket queue if close called
+	  * @enum socketLingerOption defines linger options for socket
 	  */
 	 enum socketLingerOption
 	 { 
-	 	SOCKET_GRACEFUL_CLOSE,///close returns immediately, but any unsent data is transmitted (after close returns).
-	 	SOCKET_HARD_CLOSE,///close returns immediately, and any unsent data is discarded.
-	 	SOCKET_WAIT_CLOSE,///(*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+	 	SOCKET_GRACEFUL_CLOSE,///< close returns immediately, but any unsent data is transmitted (after close returns).
+	 	SOCKET_HARD_CLOSE,///< close returns immediately, and any unsent data is discarded.
+	 	SOCKET_WAIT_CLOSE,///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	 };
 	 
 	 /**
-	  * info about host
+	  * @struct __hostInfo describes info about host
 	  */
 	 struct __hostInfo
 	 {
-	 	std::string name;
-	 	stringArr aliases;
-	 	stringArr addresses;
+	 	std::string name;///< original name of the host
+	 	stringArr aliases;///< aliases of the host
+	 	stringArr addresses;///< addresses of the host
 	 };
 	 
 	/**
-	 * info about service
+	 * @struct __servInfo describes info about service
 	 */
 	struct __servInfo
 	{
-	 	std::string name;
-	 	stringArr aliases;
-		int port;
+	 	std::string name;///< original name of the service
+	 	stringArr aliases;///< sevice's aliases
+		int port;///< port of service
 	};
 	
 	/**
+	 * @struct __connInfo describes connections info
 	 * you may use it for connect() method or accept()[info about remote connected host]
 	 */
 	struct __connInfo
@@ -129,7 +131,7 @@ namespace dodo
 	};
 	
 	/**
-	 * class that have same options as for flushSocketExchange as for flushSocket
+	 * @class flushSocketOptions defines options for socket connections
 	 */
 	class flushSocketOptions
 	{
@@ -139,15 +141,29 @@ namespace dodo
 		
 		protected:
 		
-			///constructor
+			/**
+			 * constructor
+			 * @param family is family of the socket
+			 * @param type is type of the socket
+			 */
 			flushSocketOptions(socketProtoFamilyEnum family, socketTransferTypeEnum type);
+			
+			/**
+			 * constructor
+			 */			
 			flushSocketOptions();
+			
+			/**
+			 * destructor
+			 */
 			virtual ~flushSocketOptions();
 		
 		public:
 				
 			/**
-			 * set socket options.
+			 * set socket options
+			 * @param options is option to set to socket
+			 * @param flag indicates whether to set or unset option
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -155,78 +171,120 @@ namespace dodo
 				virtual bool 
 			#endif
 							setSockOption(socketOptionsEnum option, bool flag);
+			
+			/**
+			 * set linger option
+			 * @param option is linger option
+			 * @param seconds how long to wait(for SOCKET_WAIT_CLOSE only)
+			 */				
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							setLingerSockOption(socketLingerOption option, int seconds=1);///seconds is used only for SOCKET_WAIT_CLOSE
-			
-			virtual socketLingerOption getLingerOption();
-			virtual int getLingerPeriod();///only for SOCKET_WAIT_CLOSE
+							setLingerSockOption(socketLingerOption option, int seconds=1);
 			
 			/**
-			 * The maximum buffer size for stream sockets is 262144 bytes
+			 * @return linger option that was set
+			 */
+			virtual socketLingerOption getLingerOption();
+			
+			/**
+			 * @return amount of seconds to wait(for SOCKET_WAIT_CLOSE only)
+			 */
+			virtual int getLingerPeriod();
+			
+			/**
+			 * sets incoming buffer size of socket
+			 * @param bytes is size of buffer in bytes
 			 */ 
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							setInBufferSize(int bytes);///accept value to socket; size of socket buffer!
+							setInBufferSize(int bytes);
+
+			/**
+			 * sets outgoing buffer size of socket
+			 * @param bytes is size of buffer in bytes
+			 */ 
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							setOutBufferSize(int bytes);///accept value to socket; size of socket buffer!
+							setOutBufferSize(int bytes);
 			
+			/**
+			 * @return incoming buffer size of socket
+			 */
 			virtual int getInBufferSize();
+			
+			/**
+			 * @return outgoing buffer size of socket
+			 */
 			virtual int getOutBufferSize();
-			
-				
+
+			/**
+			 * sets incomming operation timeout of socket
+			 * @param microseconds is amount of time to wait for action
+			 */ 
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							setInTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+							setInTimeout(unsigned long microseconds);
+
+			/**
+			 * sets outgoing operation timeout of socket
+			 * @param microseconds is amount of time to wait for action
+			 */ 
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							setOutTimeout(unsigned long microseconds);///accept value to socket; timeout for operation
+							setOutTimeout(unsigned long microseconds);
 			
+			/**
+			 * @return incomming operation timeout of socket
+			 */
 			virtual unsigned long getInTimeout();
+			
+			/**
+			 * @return outgoing operation timeout of socket
+			 */
 			virtual unsigned long getOutTimeout();
 			
 			
 			/**
-			 * socketOptionsEnum
+			 * @return true if socket option was set
 			 */
 			virtual bool getSocketOpts(int option);
 			
 		protected:
 			
-			socketProtoFamilyEnum family;
-			socketTransferTypeEnum type;
+			socketProtoFamilyEnum family;///< socket family
+			socketTransferTypeEnum type;///< socket type
 					
-			int socketOpts;
-			socketLingerOption lingerOpts;
-			int lingerSeconds;
+			int socketOpts;///< socket options
 			
-			unsigned long inTimeout;///in microseconds
-			unsigned long outTimeout;///in microseconds
+			socketLingerOption lingerOpts;///< socket linger option
+			int lingerSeconds;///< socket linger timeout
+			
+			unsigned long inTimeout;///< incomming operation timeout of socket; in microseconds
+			unsigned long outTimeout;///< outgoing operation timeout of socket; in microseconds
 			 
-			int inSocketBuffer;
-			int outSocketBuffer;
+			int inSocketBuffer;///< incoming buffer size of socket; in bytes
+			int outSocketBuffer;///< outgoing buffer size of socket; in bytes
 
-			int socket;///id of socket
+			int socket;///< id of socket
 	};
 	
 	/**
-	 * it's passes to accept call, and then inits flushSocketExchange;
+	 * @class __initialAccept holds info that passes to accept call, and then inits flushSocketExchange;
 	 */
 	class __initialAccept
 	{
@@ -235,23 +293,32 @@ namespace dodo
 		
 		public:			
 		
+			/**
+			 * constructor
+			 */
 			__initialAccept();
-			__initialAccept(__initialAccept &init);///if you want to copy it, the object, from what was copy is not be able to init new session; you have to reinit it with accept call!
+			
+			/**
+			 * copy constructor
+			 * @note if you want to copy it, the object, from what was copy is not be able to init new session => you have to reinit it with accept method!
+			 */
+			__initialAccept(__initialAccept &init);
 		
 		
 		private:
 				
-			int socket;
-			socketProtoFamilyEnum family;
-			socketTransferTypeEnum type;			
+			int socket;///< id of socket
+			
+			socketProtoFamilyEnum family;///< socket family
+			socketTransferTypeEnum type;///< socket type			
 	};
 		
 		
-	class flushSocketExchange;	
+	class flushSocketExchange;
+	
 	/**
-	 * class that takes ugly routine with sockets;
-	 * exchange of data is flushSocketExchange class' task
-	 * this class can establish connections; the below class can send/recieve data!
+	 * @class flushSocket performs communication actions!!
+	 * exchange of data is flushSocketExchange class' task; ou init it with connect or accept methods
 	 */
 	class flushSocket : protected flush, public flushSocketOptions
 	{
@@ -260,38 +327,66 @@ namespace dodo
 		private:
 				
 			/**
-			 * to prevent copying (pass to functions ...)
+			 * connstructor
+			 * to prevent copying
 			 */		
 			flushSocket(flushSocket &fs);
 		
 		public:
-			
-			/**
-			 * for xExec
-			 */			
-			virtual int addPostExec(inExec func, void *data) const;
-			virtual int addPreExec(inExec func, void *data) const;	
-			virtual int addPostExec(const std::string &, void *data) const;
-			virtual int addPreExec(const std::string &, void *data) const;	
 											
 			/**
-			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 * @return self, casted to base class - dodoBase; 
+			 * usefull to cast from child to parent;
+			 * used in hooks
 			 */		
-			virtual dodoBase * const getSelf();
-					
+			virtual dodoBase * const getSelf();	
+		
 			/**
-			 * constructors/destructors
+			 * constructors
+			 * @param server indicates what type of oject will be
+			 * @param family is family of the socket
+			 * @param type is type of the socket
 			 */
-			flushSocket(bool server, socketProtoFamilyEnum family, socketTransferTypeEnum type);///for server; for TRANSFER_TYPE_DATAGRAM internally number of connections overrides to 1!
+			flushSocket(bool server, socketProtoFamilyEnum family, socketTransferTypeEnum type);
+			
+			/**
+			 * destructor
+			 */
 			virtual ~flushSocket();
 			
 			/**
+			 * adds hook after the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */			
+			virtual int addPostExec(inExec func, void *data) const;
+			
+			/**
+			 * adds hook before the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(inExec func, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPostExec(const std::string &module, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(const std::string &module, void *data) const;
+						
+			/**
 			 * connect. for client part
-			 * host - ip address; call getHostInfo to get address' for it.
-			 * first - net connection
-			 * second - local connectioin
-			 * if u use unix-socket - it will create it.
-			 * u do not have to construct flushSocketExchange!! the function will construct it!
+			 * @param host is ip address where to connect
+			 * @param port is port where to connect
+			 * @param exchange is reference to oject that will perform communication actions
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -299,12 +394,25 @@ namespace dodo
 				virtual bool 
 			#endif
 							connect(const std::string &host, int port, flushSocketExchange &exchange);
+						
+			/**
+			 * connect. for client part
+			 * @param destinaton is structure that describes destination
+			 * @param exchange is reference to oject that will perform communication actions
+			 * the same as previous, but more pretty
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							connect(const __connInfo &destinaton, flushSocketExchange &exchange);///the same as previous, but more pretty. alias.
+							connect(const __connInfo &destinaton, flushSocketExchange &exchange);
+						
+			/**
+			 * connect. for client part
+			 * @param path is path to unix socket
+			 * @param exchange is reference to oject that will perform communication actions
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
@@ -314,24 +422,35 @@ namespace dodo
 			
 			/**
 			 * connect. for server part
-			 * host - ip address; call getHostInfo to get address' for it.
-			 * first - net connection
-			 * second - local connectioin
-			 * if u use unix-socket - it will create it. 
+			 * @param host is ip address that would be listen; can be '*' -> any address
+			 * @param port is port where to listen
+			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const std::string &host, int port, int numberOfConnections);///host - can be '*' -> any address
+							bindNListen(const std::string &host, int port, int numberOfConnections);
+			
+			/**
+			 * connect. for server part
+			 * @param destinaton is structure that describes destination
+			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
+			 * the same as previous, but more pretty
+			 */							
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const __connInfo &destinaton, int numberOfConnections);///the same as previous, but more pretty. alias.
-						
+							bindNListen(const __connInfo &destinaton, int numberOfConnections);
+
+			/**
+			 * connect. for server part
+			 * @param path is path to unix socket
+			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
+			 */						
 			#ifndef NO_EX
 				virtual void 
 			#else
@@ -340,28 +459,38 @@ namespace dodo
 							bindNListen(const std::string &path, int numberOfConnections, bool force = false);///if socket is already created and force = true and it's a socket - delete it!!			
 			
 			/**
-			 * accepts incommin' connectins(as for server)
-			 * on accept - return true;
-			 * if was defined NO_EX - no way to detect error
-			 * also returns info about connected host
-			 * with PROTO_FAMILY_UNIX_SOCKET `host` will be always empty, so you may use second function
-			 * with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
+			 * accepts incommin' connections(as for server)
+			 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
+			 * @param init will be filled with info that will init flushSocketExchange object
+			 * @param info is info about connected host
+			 * @note if was defined NO_EX - no way to detect error
+			 * with PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
 			 */
 			virtual bool accept(__initialAccept &init, __connInfo &info);
-			virtual bool accept(__initialAccept &init);///if you don't want to know anythin' about remote; not just alias. a little bit faster!
 			
 			/**
-			 * get info about given host
+			 * accepts incommin' connections(as for server)
+			 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
+			 * @param init will be filled with info that will init flushSocketExchange object
+			 * @note if was defined NO_EX - no way to detect error
+			 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
+			 */
+			virtual bool accept(__initialAccept &init);
+			
+			/**
+			 * @return info about given host
+			 * @param host points to host about what info would be given
 			 */
 			static __hostInfo getHostInfo(const std::string &host);
 			
 			/**
-			 * get name of localhost
+			 * @return name of local host
 			 */
 			static std::string getLocalName();
 			
 			/**
 			 * sets local name
+			 * @param host is new  name of the host
 			 */
 			#ifndef NO_EX
 				static void 
@@ -371,20 +500,18 @@ namespace dodo
 							setLocalName(const std::string &host);
 								
 			/**
-			 * get info about service(port, protocol...)
+			 * @return info about service
+			 * @param service is service name
+			 * @param protocol specifies protocol of service(tcp, udp ..)
 			 */
 			static __servInfo getServiceInfo(const std::string &service, const std::string &protocol);
+								
+			/**
+			 * @return info about service
+			 * @param port is port of service
+			 * @param protocol specifies protocol of service(tcp, udp ..)
+			 */
 			static __servInfo getServiceInfo(int port, const std::string &protocol);
-			
-			/*
-			virtual bool getBlock();
-
-			#ifndef NO_EX
-				static void 
-			#else
-				static bool 
-			#endif						
-							setBlock();*/
 			
 		private:
 			
@@ -399,7 +526,7 @@ namespace dodo
 							makeSocket();
 
 			/**
-			 * closes main socket for server part(called only in destructor)
+			 * closes connection for socket
 			 */
 			#ifndef NO_EX
 				static void 
@@ -408,13 +535,13 @@ namespace dodo
 			#endif			 
 							_close(int socket); 
 	 
-			bool server;
+			bool server;///< indicates whether server object or not
 			
 			std::string unixSock;///to remember, 'cos have to unlink in destructor
 	};
 	
 	/**
-	 * class used for send/recieve data
+	 * @class flushSocketExchange used for communication[send/recieve data]
 	 * you may use it's functions only after passing it to connect(accept)
 	 * otherwise you'll recieve exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection = previous will be closed
@@ -426,63 +553,126 @@ namespace dodo
 	 	
 		public:
 					
-			/**
-			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
-			 */		
-			virtual dodoBase * const getSelf();
-			
-			/**
-			 * for xExec
-			 */			
-			virtual int addPostExec(inExec func, void *data) const;
-			virtual int addPreExec(inExec func, void *data) const;	
-			virtual int addPostExec(const std::string &, void *data) const;
-			virtual int addPreExec(const std::string &, void *data) const;	
 											
 			/**
-			 * constructors/destructors
+			 * @return self, casted to base class - dodoBase; 
+			 * usefull to cast from child to parent;
+			 * used in hooks
+			 */		
+			virtual dodoBase * const getSelf();
+											
+			/**
+			 * constructor
 			 */	
 			flushSocketExchange();
-			flushSocketExchange(flushSocketExchange &fse);///init with the same object; object that inited new u can use for future connections; u can safely pass it to the functions;
-			flushSocketExchange(__initialAccept &init);///init with accept given data
-			virtual ~flushSocketExchange();
-	
+			
 			/**
-			 * init 
+			 * copy constructor
+			 * @note object that inited new object of this class you can use for future connections; 
+			 * you can safely pass it to the functions;
+			 */	
+			flushSocketExchange(flushSocketExchange &fse);
+
+			/**
+			 * constructor
+			 * @param init is initial data[got from accept method]
+			 * @note object that inited new object of this class you can use for future connections; 
+			 */	
+			flushSocketExchange(__initialAccept &init);
+			
+			/**
+			 * destructor
 			 */
-			virtual void init(__initialAccept &init);///init with accept given data
+			virtual ~flushSocketExchange();
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */			
+			virtual int addPostExec(inExec func, void *data) const;
+			
+			/**
+			 * adds hook before the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(inExec func, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPostExec(const std::string &module, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(const std::string &module, void *data) const;
+				
+			/**
+			 * init oject with given data
+			 * @param init is initial data[got from accept method]
+			 */
+			virtual void init(__initialAccept &init);
 		
 			/**
-			 * indicates, whether connection alive or not
+			 * @return true if connection is alive
 			 */
 			virtual bool alive();
 			
 			/**
-			 * send, recieve
-			 * 
-			 * sends no longer than inSize,outSize;
-			 * if inSize,outSize bigger than socket buf - sends with few iterations
-			 * 
+			 * send
+			 * @param data is data that would be sent
+			 * @param urgent -> send out-of-band data
+			 * @note sends no longer than outSize
+			 * if outSize bigger than socket buffer size - sends with few iterations
 			 */			
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							send(const char * const data, bool urgent = false);///urgent = true -> Sends out-of-band data
+							send(const char * const data, bool urgent = false);
+			
+			/**
+			 * send
+			 * @param data is string that would be sent
+			 * @param urgent -> send out-of-band data
+			 * @note sends no longer than outSize
+			 * if outSize bigger than socket buffer size - sends with few iterations
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif				
-							sendString(const std::string &data, bool urgent = false);///urgent = true -> Sends out-of-band data
+							sendString(const std::string &data, bool urgent = false);
 			
+			/**
+			 * recieve
+			 * @param data is data that would be recieved
+			 * @param urgent -> recieves out-of-band data
+			 * @note recieves no longer than inSize
+			 * if outSize bigger than socket buffer size - recieves with few iterations
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							recieve(char * const data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
+							recieve(char * const data, bool urgent = false);
+			
+			/**
+			 * recieve
+			 * @param data is string that would be recieved
+			 * @param urgent -> recieves out-of-band data
+			 * @note recieves no longer than inSize
+			 * if outSize bigger than socket buffer size - recieves with few iterations
+			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
@@ -491,7 +681,7 @@ namespace dodo
 							recieveString(std::string &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
 						
 			/**
-			 * closes this stream
+			 * closes this socket
 			 */			
 			#ifndef NO_EX
 				virtual void 
@@ -504,6 +694,7 @@ namespace dodo
 					
 			/**
 			 * inits this class' data
+			 * @param socket is id of socket
 			 */		
 			virtual void init(int socket);		
 	 };

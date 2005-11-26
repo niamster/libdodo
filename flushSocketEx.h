@@ -33,11 +33,12 @@
 	namespace dodo
 	{
 		/**
-		 * next both for flushSocket and flushSocketExchanger
+		 * next for flushSocket*
 		 */
 		
-		
-		///reasons of exception
+		/**
+		 * libdodo defined errors
+		 */
 		enum flushSocketExR
 		{
 			FLUSHSOCKET_MEMORY_OVER = 1,
@@ -50,6 +51,9 @@
 			FLUSHSOCKET_WRONG_FILENAME,
 		};
 		
+		/**
+		 * libdodo defined errors' explanation
+		 */			
 		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR "No socket was created =(."
 		#define FLUSHSOCKET_MEMORY_OVER_STR "Not anough memmory"
 		#define FLUSHSOCKET_CANNOT_BIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
@@ -59,6 +63,9 @@
 		#define FLUSHSOCKET_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
 		#define FLUSHSOCKET_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 		
+		/**
+		 * ID of function where exception was thrown
+		 */		
 		enum flushSocketFunctionsID
 		{
 			FLUSHSOCKET_MAKESOCKET,

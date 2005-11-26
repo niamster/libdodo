@@ -36,9 +36,7 @@
 
 
 /** 
- * compile or use without exceptions. usage of exception depends of library compiled options; 
- * if u compiled library with exeptions u have to work with 'em;
- * if u compiled library without exeptions u have to work without 'em;
+ * compile without exceptions.
  */
 //#define NO_EX
 
@@ -51,38 +49,57 @@
 
 //#define UNICODE
 
+/**
+ * use modules without hooks. faster a little bit.
+ */
 //#define FLUSH_DISK_WO_XEXEC = faster, if u don't want to use it!
 //#define MYSQLPP_WO_XEXEC
 //#define FLUSH_STD_WO_XEXEC
 //#define FLUSH_SOCKET_WO_XEXEC
 
-///socket default timeouts
+/**
+ * socket default timeouts
+ */
 #define RECIEVE_TIMEOUT 1000
 #define SEND_TIMEOUT 1000
 
-///how many modules can init per object
+/**
+ * how many modules can xexec init per object
+ */
 #define XEXEC_MAXMODULES 10
 
-///for flushDisk::getFileContentArr
+/**
+ * for flushDisk::getFileContentArr
+ */
 #define DISK_MAXLINELEN 10240
 
-///default values of buffer for io operations(flush*)
+/**
+ * default values of buffer for io operations(flush*)
+ */
 #define INSIZE 1024
 #define OUTSIZE 1024	
 
-///default values of socket buffer for io operations(flushSocket)
+/**
+ * default values of socket buffer for io operations(flushSocket)
+ */
 #define SOCKET_INSIZE 10240
 #define SOCKET_OUTSIZE 10240
 
-///default values of stdin/out buffer for io operations(flushSTD)
+/**
+ * default values of stdin/out buffer for io operations(flushSTD)
+ */
 #define STD_INSIZE 1024000
 #define STD_OUTSIZE 1024000
 
-///amount of seconds for linger
+/**
+ * amount of seconds for linger
+ */
 #define SOCKET_LINGER_PERIOD 1
 #define SOCKET_LINGER_OPTION SOCKET_WAIT_CLOSE
 
-///max length of the file path
+/**
+ * max length of the file path
+ */
 #define MAXPATHLEN FILENAME_MAX
 
 #endif /* _DIRECTIVES_H */

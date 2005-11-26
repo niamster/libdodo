@@ -43,9 +43,15 @@
 
 namespace dodo
 {
+	/**
+	 * @def FILE_PERM describes file permissions for newly created file(pipe)
+	 */
 	#define FILE_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
 	
-	enum flushDiskOperationTypeEnum///for xExec
+	/**
+	 * @enum flushDiskOperationTypeEnum describes type of operation for hook
+	 */
+	enum flushDiskOperationTypeEnum
 	{
 		FLUSHDISK_OPER_READ,
 		FLUSHDISK_OPER_WRITE,
@@ -53,22 +59,30 @@ namespace dodo
 		FLUSHDISK_OPER_CLOSE
 	};
 	
-	///modes of open file:
+	/**
+	 * @enum flushDiskModesEnum descibes modes to open file
+	 */
 	enum flushDiskModesEnum
 	{
-		READ_ONLY,
-		READ_WRITE,
-		READ_WRITE_TRUNCATE,///if exists = truncates
-		APPEND///for readin' and writin' to the end; you may skip par `pos` for write
+		READ_ONLY,///< error if not exists file
+		READ_WRITE,///< creates if not exists
+		READ_WRITE_TRUNCATE,///< if exists = truncates
+		APPEND///< for readin'; writin' to the end; you may skip parameter `pos` for write method
 	};
 	
+	/**
+	 * @enum flushDiskFileToCreateEnum describes file type you can create
+	 */
 	enum flushDiskFileToCreateEnum
 	{
-		REG_FILE,
-		TMP_FILE,
-		FIFO_FILE///use this type, if u want to create. if fifo is already created, no sense to create it again. if file is created it will not create it again; it is a check for file existanse, so if it's already created, it'll be slower!
+		REG_FILE,///< regular file
+		TMP_FILE,///< temporary file. will be deleted after you exit program(or close it)
+		FIFO_FILE///< FIFO file
 	};
 	
+	/**
+	 * @enum flushDiskFileTypeEnum indicates file type; you recieve it from getFileInfo and relative methods
+	 */
 	enum flushDiskFileTypeEnum
 	{
 		REGULAR_FILE,
@@ -80,6 +94,9 @@ namespace dodo
 		FIFO
 	};
 	
+	/**
+	 * @enum permissionModesEnum describes permissions you can set/get to/from file
+	 */
 	enum permissionModesEnum
 	{
 		NONE = 0,
@@ -110,25 +127,22 @@ namespace dodo
 	};
 	
 	/**
-	 * info about single file
+	 * @struct __fileInfo contains info about single file
 	 */
 	struct __fileInfo
 	{
-		std::string name;
-		int perm;
-		int type;
-		long size;
-		int modTime;
-		int accTime;
-		int gid;
-		int uid;
+		std::string name;///< file name
+		int perm;///< file permissions
+		int type;///< file type
+		long size;///< file size
+		int modTime;///< modyfication time
+		int accTime;///< access time
+		int gid;///< group id of the file
+		int uid;///< user id of the file
 	};	
 	
 	/**
-	 *	by default mode is READ_WRITE
-	 *	when u writing on the nonempty place by default it is error
-	 *		u may specify that by 'over'
-	 *	size(In/Out) - size of data to (read/write) in bytes(for string - length)
+	 * @class flushDisk allows disk I/O manipulations
 	 */
 	
 	class flushDisk : public flush
@@ -138,33 +152,68 @@ namespace dodo
 		
 		private:
 		
-			flushDisk(flushDisk &fd);///to prevent from copyin'
+			/**
+			 * cosrtructor prevents from copyin'
+			 */
+			flushDisk(flushDisk &fd);
 		
 		public:
 					
 			/**
-			 * return self, casted to base class - dodoBase; usefull to cast from child to parent;
+			 * @return self, casted to base class - dodoBase; 
+			 * usefull to cast from child to parent;
+			 * used in hooks
 			 */		
 			virtual dodoBase * const getSelf();
 							
-			///constructors and destructors
-			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);///if type == TMP_FILE, u don't have to specify path
+			/**
+			 * constructor
+			 * @param type describes type of file with what manipulation will be made
+			 * @param path is path to the file
+			 * 
+			 * if type == TMP_FILE, u don't have to specify path
+			 */
+			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);
+			
+			/**
+			 * destructor
+			 */
 			virtual ~flushDisk();
 
 			/**
-			 * for xExec
+			 * adds hook after the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
 			 */			
 			virtual int addPostExec(inExec func, void *data) const;
+			
+			/**
+			 * adds hook before the operation by callback
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
 			virtual int addPreExec(inExec func, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
 			virtual int addPostExec(const std::string &module, void *data) const;
+			
+			/**
+			 * adds hook after the operation by callback
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 */
 			virtual int addPreExec(const std::string &module, void *data) const;
 						
 			/**
-			 * closes previous opened file
-			 * also creates file if it does not exists!
-			 * if u want to create pipe, but regular file was created with the same name - false will be returned
-			 * if u want to create regular file, but pipe was created with the same name - false will be returned
-			 * if it's not temp file and PATH is not set - false will be returned
+			 * opens file
+			 * @param path describes path to file
+			 * closes previous opened file if needed
+			 * if u want to create pipe, but not a pipe was created with the same name - false will be returned
+			 * if u want to create regular file, but not regular file was created with the same name - false will be returned
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -184,14 +233,21 @@ namespace dodo
 							close() const;
 							
 			/**
-			 * read functions. first argument - buffer, second - position
+			 * read string
+			 * @param data will be filled with data
+			 * @param pos indicates position in file
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							readString(std::string &data, unsigned long pos = 0) const;///reads to string; return false if eof
+							readString(std::string &data, unsigned long pos = 0) const;
+			/**
+			 * read data
+			 * @param data will be filled with data
+			 * @param pos indicates position in file
+			 */							
 			#ifndef NO_EX
 				virtual void 
 			#else
@@ -200,33 +256,40 @@ namespace dodo
 							read(char * const data, unsigned long pos = 0) const;///reads to void*; return false if eof		
 			
 			/**
-			 * write functions
-			 * first argument - buffer, second - position(if u want to add to end of the file set 'append' to true)
+			 * write string
+			 * @param data will be written to file
+			 * @param pos indicates position in file
+			 */	
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							writeString(const std::string &data, unsigned long pos = 0);
+										
+			/**
+			 * write string
+			 * @param data will be written to file
+			 * @param pos indicates position in file
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							writeString(const std::string &data, unsigned long pos = 0);///writes string
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							write(const char * const data, unsigned long pos = 0);///writes void*
+							write(const char * const data, unsigned long pos = 0);
 
 			/**
-			 * erase info on position
-			 * 
-			 * NOTE for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
+			 * erase node on position
+			 * @param pos indicates position in file
+			 * @note for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							erase(unsigned long pos);///erase on position
+							erase(unsigned long pos);
 			/**
 			 * flushes to disk
 			 */
@@ -236,56 +299,62 @@ namespace dodo
 				virtual bool 
 			#endif
 							flush();
+			
 			/**
-			 * copy file/
-			 * basename => "/usr/lib" => "lib"
-			 * dirname => "/usr/lib" => "/usr"
-			 * get file content
-			 * get file content into array - per line for node
-			 * delete file/dir (empty)
-			 * rename file/dir
-			 * touch (sets access/modify time)
-			 * make dir
-			 * remove file/dir (possible not empty)
-			 * get file type
-			 * change mode
-			 * get permissions
-			 * get size
-			 * get access time
-			 * get modyfication time
-			 * resolve symlink
-			 * symbolic link
-			 * link file
-			 * change owner
-			 * change group
-			 * get owner
-			 * get group
-			 * get file info
-			 * get dir info
+			 * copy file
+			 * @param from specifies input file
+			 * @param to specifies output file
+			 * @param false indicates to overwrite
 			 */
-
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							copy(const std::string &from, const std::string &to, bool force=false);///if `to` already exists and it's file and force=true - overwrite!
+							copy(const std::string &from, const std::string &to, bool force=false);
 			
+			/**
+			 * @return basename of node
+			 * @param is path to node
+			 * basename => "/usr/lib" => "lib"
+			 */
 			static std::string basename(const std::string &path);
 			
+			/**
+			 * @return dirname of node			 
+			 * @param is path to node
+			 * dirname => "/usr/lib" => "/usr"
+			 */
 			static std::string dirname(const std::string &path);
-			 
-			static std::string getFileContent(const std::string &path);
 			
+			/**
+			 * @return file content in string
+			 * @param path is path to file
+			 */ 
+			static std::string getFileContent(const std::string &path);
+
+			/**
+			 * @return file content in array of strings
+			 * @param path is path to file
+			 */ 			
 			static stringArr getFileContentArr(const std::string &path);
-			  
+			
+			/**
+			 * deletes file or notempty directory
+			 * @param path is path to node
+			 */  
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							unlink(const std::string &path);///also empty directory
-			
+							
+			/**
+			 * rename file
+			 * @param from specifies input file
+			 * @param to specifies output file
+			 */		
 			#ifndef NO_EX
 				static void 
 			#else
@@ -293,6 +362,11 @@ namespace dodo
 			#endif
 							rename(const std::string &oldPath, const std::string &newPath);
 			
+			/**
+			 * sets access and modyfiacation time of file
+			 * @param path is path to file
+			 * @param time is timestams; if not specified -> now
+			 */
 			#ifndef NO_EX
 				static void 
 			#else
@@ -300,65 +374,126 @@ namespace dodo
 			#endif
 							touch(const std::string &path, int time=-1);///now by default
 			
+			/**
+			 * make directory
+			 * @param path is path of directory to create
+			 * @param permissions is new permissions; use | to combine; see permissionModesEnum
+			 * @param force if it is true and directory already exists do not say anything
+			 */
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);///see permissionModesEnum; use | to combine; force - if created already - nothing to say
+							mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);
 			
+			/**
+			 * delete files, non empty directory
+			 * @param path indicates the path to remove
+			 */
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							rm(const std::string &path);///recursive;
-							
-			static flushDiskFileTypeEnum getFileType(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned; if unknown file/device on `path` - also -1 will be returned
+							rm(const std::string &path);
 			
+			/**
+			 * @return type of file; if error occured and lib was compiled without exceptions -> -1 will be returned;
+			 * @param path is path to node
+			 */				
+			static flushDiskFileTypeEnum getFileType(const std::string &path);
+			
+			/**
+			 * changes permissions
+			 * @param path is path to node
+			 * @param permissions is ne permissions; use | to combine; see permissionModesEnum
+			 */
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							chmod(const std::string &path, int permissions);///see permissionModesEnum; use | to combine
-							
-			static permissionModesEnum getPermissions(const std::string &path);///if error occured and lib was compiled without exceptions -> -1 will be returned
+							chmod(const std::string &path, int permissions);
 			
-			static long getSize(const std::string &path);///in bytes; if no such file or directory - will return -1!
-
-			static int getAccTime(const std::string &path);///timestamp
-			static int getModTime(const std::string &path);///timestemp
+			/**
+			 * @return node permissions; if error occured and lib was compiled without exceptions -> -1 will be returned
+			 * @param path is path to node
+			 */				
+			static permissionModesEnum getPermissions(const std::string &path);
 			
+			/**
+			 * @return file size; if no such file or directory and lib was compiled without exceptions - will return -1
+			 * @param path indicates path what to describe
+			 */
+			static long getSize(const std::string &path);///in bytes; 
+			
+			/**
+			 * @return node access time
+			 * @param path indicates path what to describe
+			 */
+			static int getAccTime(const std::string &path);			
+			
+			/**
+			 * @return node modyfication time
+			 * @param path indicates path what to describe
+			 */
+			static int getModTime(const std::string &path);
+			
+			/**
+			 * gets original path of the file that link is set
+			 * @param path indicates path what to describe
+			 * @param original will be filled with path to file that link is set
+			 */
 			#ifndef NO_EX
 				static void
 			#else
 				static bool
 			#endif
-								followSymlink(const std::string &path, std::string &original);///now not windows compatible
+								followSymlink(const std::string &path, std::string &original);
 								
-							
+			/**
+			 * creates symbolic link
+			 * @param oldPath indicates original file path
+			 * @param newPath indicates path to symlink
+			 * @param force if is set to true link exists already - nothing to say, but replace
+			 */				
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							symlink(const std::string &oldPath, const std::string &newPath, bool force = true);///force - if created already - nothing to say, but replace(only if file to replaceis symlink too!!!)///now not windows compatible
-			
+							symlink(const std::string &oldPath, const std::string &newPath, bool force = true);
+
+			/**
+			 * creates link
+			 * @param oldPath indicates original file path
+			 * @param newPath indicates path to link
+			 */				
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							link(const std::string &oldPath, const std::string &newPath);
-							
+			
+			/**
+			 * change owner of the node
+			 * @param path indacate the path of node where to change owner
+			 * @param uid indicates user id
+			 */				
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
 							chown(const std::string &path, int uid);
-							
+			
+			/**
+			 * change group owner of the node
+			 * @param path indacate the path of node where to change group owner
+			 * @param uid indicates group id
+			 */									
 			#ifndef NO_EX
 				static void 
 			#else
@@ -366,34 +501,54 @@ namespace dodo
 			#endif
 							chgrp(const std::string &path, int gid);
 			
+			/**
+			 * @return user id of the node
+			 * @param path indicates path where to get info
+			 */
 			static int getUserOwner(const std::string &path);
-			
+
+			/**
+			 * @return group id of the node
+			 * @param path indicates path where to get info
+			 */			
 			static int getGroupOwner(const std::string &path);
 			
+			/**
+			 * @return file info; see __fileInfo
+			 * @param path indicates path where to get info
+			 */
 			static __fileInfo getFileInfo(const std::string &path);///if no such file - empty will be returned
-			
+
+			/**
+			 * @return file dir; see __fileInfo
+			 * @param path indicates path where to get info
+			 */
 			static std::vector<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
 			
 			
-			bool over;///indicates whether overright; for files,tmp_files only
-			mutable flushDiskModesEnum mode;///mode to open file
+			bool over;///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files,tmp_files only
+			mutable flushDiskModesEnum mode;///< mode to open file; if you change it then you have to reopen!
 			
 			/**
-			 * returns path of the opened file
+			 * @return path of the opened file
 			 */			
 			virtual std::string getPath() const;
 
-			mutable flushDiskFileToCreateEnum fileType;/// see flushDiskFileToCreateEnum; if u change the ty u have to reopen!
+			mutable flushDiskFileToCreateEnum fileType;///< type of file; if you change then it you have to reopen!
 			
 		private:
 		
+			/**
+			 * @return system understandable permissions
+			 * @param permission is user understandable permissions
+			 */
 			static int getPermission(int permission);
 		
-			mutable std::string path;///file name; for files only;
+			mutable std::string path;///< file name
 					
-			mutable FILE *file;///file handler
+			mutable FILE *file;///< file handler
 			
-			mutable bool append;///if true, will append to the end of the file, even pos is set. false by default; for files only
+			mutable bool append;///< if true, will append to the end of the file, even pos is set.
 	};
 
 };
