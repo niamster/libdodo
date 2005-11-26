@@ -223,8 +223,6 @@ namespace dodo
 			int outSocketBuffer;
 
 			int socket;///id of socket
-				
-			bool block;///now is only *nix compatible
 	};
 	
 	/**
@@ -414,7 +412,6 @@ namespace dodo
 			 * number of connections that can recieve
 			 */			 
 			long numberOfConn;///number of connection for client = -1
-			long accepted;///how many was accepted
 			
 			std::string unixSock;///to remember, 'cos have to unlink in destructor
 	};

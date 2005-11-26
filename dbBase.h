@@ -207,7 +207,7 @@ namespace dodo
 	{	
 		std::string pre_where;///< where statement of the request	
 		stringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-		std::vector<stringArr> &pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+		std::vector<stringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
 		std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
 		std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
 		std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
@@ -707,34 +707,34 @@ namespace dodo
 			 * collected data
 			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
 			 */
-			std::string pre_where;///< where statement of the request	
-			stringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-			std::vector<stringArr> &pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-			std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-			std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-			std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
-			std::string pre_group;///< group statement
-			std::string pre_limNumber;///< limit of result
-			std::string pre_limOffset;///< offset of requested result
-			stringArr pre_subQ;///< subquery
+			mutable std::string pre_where;///< where statement of the request	
+			mutable stringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
+			mutable std::vector<stringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+			mutable std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+			mutable std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
+			mutable std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+			mutable std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
+			mutable std::string pre_group;///< group statement
+			mutable std::string pre_limNumber;///< limit of result
+			mutable std::string pre_limOffset;///< offset of requested result
+			mutable stringArr pre_subQ;///< subquery
 			
-			int qType;///< type of operation
+			mutable bool show;///< is request was with result(show,select)
+						
+			mutable int qType;///< type of operation
 			
-			int qShift;///< indicates if AddEnum's values was set [can be or'ed with | ]
+			mutable int qShift;///< indicates if AddEnum's values was set [can be or'ed with | ]
 			
-			int qSelShift;///< additional select statements
-			int qInsShift;///< additional insert statements
-			int qUpShift;///< additional update statements
-			int qDelShift;///< additional delete statements					 
+			mutable int qSelShift;///< additional select statements
+			mutable int qInsShift;///< additional insert statements
+			mutable int qUpShift;///< additional update statements
+			mutable int qDelShift;///< additional delete statements					 
 			 
 			 
 			mutable __tableInfo pre_tableInfo;///< info about table to create
 			mutable __fieldInfo pre_fieldInfo;///< info about field to create
 			
 			mutable __sqlInfo sqlInfo;///< data to connect to server
-			
-			mutable bool show;///< is request was with result(show,select)
 			
 			/*
 			 * additional statements for query, db-dependent, that can be implemented in derived class; 

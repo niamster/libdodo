@@ -25,38 +25,6 @@
 #include "dbBase.h"
 
 using namespace dodo;
-	
-/**
- * arrays of positions of "statement" for complete realization. In sql wersion - see sqlBase;
- */	
-static unsigned int addInsEnumArr[1] = 
-{
-	INSERT_IGNORE,
-};
-
-//-------------------------------------------------------------------
-
-static unsigned int addUpEnumArr[1] = 
-{
-	UPDATE_IGNORE,
-};
-
-//-------------------------------------------------------------------
-
-static unsigned int addDelEnumArr[1] = 
-{
-	DELETE_IGNORE,
-};
-
-//-------------------------------------------------------------------
-
-static unsigned int addSelEnumArr[2] = 
-{
-	SELECT_DISTINCT,
-	SELECT_ALL
-};
-	
-//-------------------------------------------------------------------
 
 __tableInfo::__tableInfo()
 {
@@ -180,7 +148,7 @@ dbBase::getSelf()
 
 //-------------------------------------------------------------------
 
-dbBase::dbBase() :show(false),
+dbBase::dbBase() : show(false),
 
 					qType(-1),
 

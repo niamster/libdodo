@@ -58,8 +58,7 @@ flushSocket::flushSocket(flushSocket &fs)
 flushSocket::flushSocket(unsigned long a_numberOfConn, 
 						socketProtoFamilyEnum a_family, 
 						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
-						numberOfConn(a_numberOfConn),
-						accepted(a_numberOfConn)
+						numberOfConn(a_numberOfConn)
 {
 	if (type == TRANSFER_TYPE_DATAGRAM)
 		numberOfConn = 1;
@@ -71,8 +70,7 @@ flushSocket::flushSocket(unsigned long a_numberOfConn,
 
 flushSocket::flushSocket(socketProtoFamilyEnum a_family, 
 						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
-						numberOfConn(-1),
-						accepted(0)
+						numberOfConn(-1)
 {
   	makeSocket();	
 }
@@ -698,9 +696,6 @@ flushSocket::accept(__initialAccept &init,
 			
 		return true;
 	}
-	
-	if (accepted == 0)
-		return false;
 			
 	if (!opened)	
 		#ifndef NO_EX
@@ -777,8 +772,6 @@ flushSocket::accept(__initialAccept &init,
 	init.socket = sock;
 	init.type = type;
 	init.family = family;
-	
-	--accepted;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -816,9 +809,6 @@ flushSocket::accept(__initialAccept &init)
 		return true;
 	}			
 	
-	if (accepted == 0)
-		return false;
-	
 	if (!opened)	
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_ACCEPT_WO_BIND,FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
@@ -838,8 +828,6 @@ flushSocket::accept(__initialAccept &init)
 	init.socket = sock;
 	init.type = type;
 	init.family = family;
-		
-	--accepted;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
