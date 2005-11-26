@@ -80,7 +80,8 @@ namespace dodo
 	{
 		char name[20];///< name of module
 		char discription[40];///< discription of module
-		char hook[20];///name of function in module that will be a hook
+		char hook[20];///< name of function in module that will be a hook
+		bool preExec;///< if true as preExec is set otherwise as postExec [OPTIONAL]; it doen't matter if you call method that specifies what type of hook it will be
 	};
 	
 	/**
@@ -160,7 +161,18 @@ namespace dodo
 			 * @attention data is not copied!!!
 			 */
 			virtual int _addPreExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
-						
+
+			/**
+			 * set function from module that will be executed before/after the main action call
+			 * the type of hook[pre/post] is defined in module
+			 * @return number in list where function is set
+			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+			 * @param obj is pouinter to object that is uses this hook
+			 * @param data is pointer to data that will pass to hook
+			 * @attention data is not copied!!!
+			 */
+			virtual int _addExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+			
 			/**
 			 * deletes hook from list
 			 * @param position is position in list of hooks[returned from addPostExec]

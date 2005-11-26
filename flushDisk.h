@@ -181,7 +181,17 @@ namespace dodo
 			virtual ~flushDisk();
 
 			/**
+			 * set function from module that will be executed before/after the main action call
+			 * the type of hook[pre/post] is defined in module
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */			
+			virtual int addExec(const std::string &module, void *data) const;
+			
+			/**
 			 * adds hook after the operation by callback
+			 * @return number in list where function is set
 			 * @param func is a pointer to function
 			 * @param data is pointer to data toy want to pass to hook
 			 */			
@@ -189,6 +199,7 @@ namespace dodo
 			
 			/**
 			 * adds hook before the operation by callback
+			 * @return number in list where function is set
 			 * @param func is a pointer to function
 			 * @param data is pointer to data toy want to pass to hook
 			 */
@@ -196,6 +207,7 @@ namespace dodo
 			
 			/**
 			 * adds hook after the operation by callback
+			 * @return number in list where function is set
 			 * @param module is a path to module, whrere hook exists
 			 * @param data is pointer to data toy want to pass to hook
 			 */
@@ -203,6 +215,7 @@ namespace dodo
 			
 			/**
 			 * adds hook after the operation by callback
+			 * @return number in list where function is set
 			 * @param module is a path to module, whrere hook exists
 			 * @param data is pointer to data toy want to pass to hook
 			 */

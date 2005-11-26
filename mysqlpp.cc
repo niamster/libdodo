@@ -427,6 +427,16 @@
 	{
 		return _addPreExec(module, (dodoBase *)this, data);
 	}
+
+	//-------------------------------------------------------------------
+	
+	int 
+	mysqlpp::addExec(const std::string &module, 
+						void *data) const
+	{
+		return _addExec(module, (dodoBase *)this, data);
+	}
+	
 	
 	//-------------------------------------------------------------------
 	

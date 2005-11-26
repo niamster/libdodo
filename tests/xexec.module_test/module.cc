@@ -30,6 +30,7 @@ extern "C"
 		strcpy(module.name,"test");
 		strcpy(module.discription,"test module");
 		strcpy(module.hook,"hook");
+		module.preExec = true;///preffered
 		
 		return module;
 	}

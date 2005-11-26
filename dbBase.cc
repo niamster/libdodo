@@ -804,6 +804,21 @@ dbBase::setSqlInfo(const std::string &db,
 	sqlInfo.socket = socket;
 }
 
+//-------------------------------------------------------------------
+
+void 
+dbBase::setSqlInfo(const __sqlInfo &info) const
+{
+	sqlInfo.port = info.port;
+	sqlInfo.db = info.db;
+	sqlInfo.host = info.host;
+	sqlInfo.user = info.user;
+	sqlInfo.password = info.password;
+	sqlInfo.socket = info.socket;	
+}
+
+//-------------------------------------------------------------------
+
 int 
 dbBase::getQType() const
 {

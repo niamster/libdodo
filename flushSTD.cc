@@ -81,6 +81,15 @@ flushSTD::addPostExec(const std::string &module,
 //-------------------------------------------------------------------
 
 int 
+flushSTD::addExec(const std::string &module, 
+					void *data) const
+{
+	return _addExec(module, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
+int 
 flushSTD::addPreExec(const std::string &module, 
 					void *data) const
 {

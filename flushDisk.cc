@@ -96,6 +96,15 @@ flushDisk::addPreExec(const std::string &module,
 
 //-------------------------------------------------------------------
 
+int 
+flushDisk::addExec(const std::string &module, 
+					void *data) const
+{
+	return _addExec(module, (dodoBase *)this, data);
+}
+
+//-------------------------------------------------------------------
+
 #ifndef NO_EX
 	void 
 #else

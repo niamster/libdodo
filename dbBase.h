@@ -391,6 +391,12 @@ namespace dodo
 			 * @param socket is path to unix socket
 			 */
 			void setSqlInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &socket = __string__) const;
+
+			/**
+			 * sets info for database
+			 * @param info is info for database
+			 */
+			void setSqlInfo(const __sqlInfo &info) const;
 			
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use 
