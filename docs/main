@@ -32,6 +32,9 @@ libdodo consists of such modules as:
 	systemTools
 		different system tools [system, evironment info, ...]
 	
+	timeTools
+		different time/date manipulations
+	
 	tools
 		different functions [trim, implode/explode, ...]
 		

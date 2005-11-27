@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGITOOLSEX_H_
-#define _CGITOOLSEX_H_
+#ifndef _TIMETOOLSEX_H_
+#define _TIMETOOLSEX_H_
 
 #include "directives.h"
 #include "baseEx.h"
@@ -32,28 +32,16 @@
 
 	namespace dodo
 	{
-		
-		/**
-		 * libdodo defined errors
-		 */
-		enum cgiToolsExR
-		{
-			CGITOOLS_MEMORY_OVER = 1
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */	
-		#define CGITOOLS_MEMORY_OVER_STR "Not anough memmory"
-		
 		/**
 		 * ID of function where exception was thrown
 		 */			
-		enum cgiToolsFunctionsID
+		enum timeToolsFunctionsID
 		{
-			CGITOOLS_MAKEPOST,
+			TIMETOOLS_GETBYFORMAT,
+			TIMETOOLS_NOW,
+			TIMETOOLS_MAKETIME,
 		};
 	};
 
 #endif
-#endif /*CGITOOLSEX_H_*/
+#endif /*_TIMETOOLSEX_H_*/
