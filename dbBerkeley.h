@@ -128,6 +128,12 @@
 				 */
 				virtual int addPreExec(const std::string &module, void *data) const;
 				
+				/**
+				 * overloads from base class
+				 * @param db is a path to database
+				 */
+				virtual void setSqlInfo(const std::string &db);
+				
 			private:
 			
 				/**
@@ -142,6 +148,7 @@
 				#endif
 								_exec() const;		
 				
+				DB *bdb;
 		};
 	};
 #endif

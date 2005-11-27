@@ -42,6 +42,7 @@
 			ERR_MYSQL,
 			ERR_H_ERRNO,
 			ERR_DYNLOAD,
+			ERR_BERKELEY,
 		};
 
 		/**

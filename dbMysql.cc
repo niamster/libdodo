@@ -190,12 +190,12 @@
 		#endif
 		
 		if (!mysql_real_connect(mysql,
-			sqlInfo.host.size()==0?NULL:sqlInfo.host.c_str(),
-			sqlInfo.user.size()==0?NULL:sqlInfo.user.c_str(),
-			sqlInfo.password.size()==0?NULL:sqlInfo.password.c_str(),
-			sqlInfo.db.size()==0?NULL:sqlInfo.db.c_str(),
-			sqlInfo.port,
-			sqlInfo.socket.size()==0?NULL:sqlInfo.socket.c_str(),
+			dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
+			dbInfo.user.size()==0?NULL:dbInfo.user.c_str(),
+			dbInfo.password.size()==0?NULL:dbInfo.password.c_str(),
+			dbInfo.db.size()==0?NULL:dbInfo.db.c_str(),
+			dbInfo.port,
+			dbInfo.path.size()==0?NULL:dbInfo.path.c_str(),
 			type))
 		{
 			connected = false;

@@ -445,7 +445,7 @@ void
 dbBase::use(const std::string &db)
 {
 	qType = USE;
-	sqlInfo.db = db;
+	dbInfo.db = db;
 	show = false;
 }
 
@@ -789,32 +789,32 @@ dbBase::cleanCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbBase::setSqlInfo(const std::string &db,
+dbBase::setDbInfo(const std::string &db,
 	const std::string &host,
 	unsigned int port, 
 	const std::string &user, 
 	const std::string &password,
-	const std::string &socket) const
+	const std::string &path) const
 {
-	sqlInfo.port = port;
-	sqlInfo.db = db;
-	sqlInfo.host = host;
-	sqlInfo.user = user;
-	sqlInfo.password = password;
-	sqlInfo.socket = socket;
+	dbInfo.port = port;
+	dbInfo.db = db;
+	dbInfo.host = host;
+	dbInfo.user = user;
+	dbInfo.password = password;
+	dbInfo.path = path;
 }
 
 //-------------------------------------------------------------------
 
 void 
-dbBase::setSqlInfo(const __sqlInfo &info) const
+dbBase::setDbInfo(const __dbInfo &info) const
 {
-	sqlInfo.port = info.port;
-	sqlInfo.db = info.db;
-	sqlInfo.host = info.host;
-	sqlInfo.user = info.user;
-	sqlInfo.password = info.password;
-	sqlInfo.socket = info.socket;	
+	dbInfo.port = info.port;
+	dbInfo.db = info.db;
+	dbInfo.host = info.host;
+	dbInfo.user = info.user;
+	dbInfo.password = info.password;
+	dbInfo.path = info.path;	
 }
 
 //-------------------------------------------------------------------

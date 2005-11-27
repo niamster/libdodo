@@ -386,7 +386,7 @@ dbSqlBase::delCollect() const
 void 
 dbSqlBase::useCollect() const
 {
-	request = "use " + sqlInfo.db;
+	request = "use " + dbInfo.db;
 }
 
 //-------------------------------------------------------------------

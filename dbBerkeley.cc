@@ -39,6 +39,13 @@
 	
 	dbBerkeley::dbBerkeley()
 	{
+		register int result = db_create(&bdb, NULL, 0);
+		if (result!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_DBBERKELEY,DBMYSQL_CONSTRUCTOR,ERR_BERKELEY,result,db_strerror(result),__LINE__,__FILE__);
+			#else
+				;
+			#endif		
 	}
 	
 	//-------------------------------------------------------------------
@@ -52,6 +59,15 @@
 	dbBerkeley::~dbBerkeley()
 	{
 	}
+	
+	//-------------------------------------------------------------------
+	
+	void 
+	dbBerkeley::setSqlInfo(const std::string &db)
+	{
+		dbInfo.path = db;
+	}
+
 	//-------------------------------------------------------------------
 	
 	#ifndef NO_EX

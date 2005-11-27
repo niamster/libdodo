@@ -140,13 +140,13 @@ namespace dodo
 	/**
 	 * @struct __sqlInfo that contains connection optioins to server
 	 */
-	struct __sqlInfo
+	struct __dbInfo
 	{
 		std::string db;///< database name
 		std::string host;///< hostname
 		std::string user;///< username
 		std::string password;///< password
-		std::string socket;///< unix socket
+		std::string path;///< path to db or unix socket
 		unsigned int port;///< port
 	};
 	
@@ -390,13 +390,13 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			void setSqlInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &socket = __string__) const;
+			virtual void setDbInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &path = __string__) const;
 
 			/**
 			 * sets info for database
 			 * @param info is info for database
 			 */
-			void setSqlInfo(const __sqlInfo &info) const;
+			virtual void setDbInfo(const __dbInfo &dbInfo) const;
 			
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use 
@@ -740,7 +740,7 @@ namespace dodo
 			mutable __tableInfo pre_tableInfo;///< info about table to create
 			mutable __fieldInfo pre_fieldInfo;///< info about field to create
 			
-			mutable __sqlInfo sqlInfo;///< data to connect to server
+			mutable __dbInfo dbInfo;///< data to connect to server
 			
 			/*
 			 * additional statements for query, db-dependent, that can be implemented in derived class; 

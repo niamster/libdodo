@@ -36,7 +36,11 @@
 		/**
 		 * ID of function where exception was thrown
 		 */			
-	
+		enum dbBerkeleyFunctionsID
+		{
+			DBMYSQL_CONSTRUCTOR,
+			
+		};		
 	};
 
 #endif
