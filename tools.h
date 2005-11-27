@@ -58,6 +58,22 @@ namespace dodo
 		public:
 			
 			/**
+			 * removes symbols from the end of give string
+			 * @return processed string
+			 * @param data is string to process
+			 * @param symbol is symbol to remove
+			 */
+			static std::string rTrim(const std::string &data, char symbol=' ');
+			
+			/**
+			 * removes symbols from the begin of give string
+			 * @return processed string
+			 * @param data is string to process
+			 * @param symbol is symbol to remove
+			 */
+			static std::string lTrim(const std::string &data, char symbol=' ');
+						
+			/**
 			 * @return converted long to string
 			 * @param number is number to convert
 			 */

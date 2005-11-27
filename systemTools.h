@@ -37,6 +37,8 @@
 
 #include <errno.h>
 
+#include <iostream>
+
 #include "directives.h"
 #include "systemToolsEx.h"
 #include "types.h"
@@ -118,6 +120,24 @@ namespace dodo
 					
 		public:			
 		
+			/**
+			 * prints message to stderr end exits from program
+			 * @param message is message to print
+			 * @param status indicate with what status to exit
+			 */
+			static void die(const std::string &message, int status = 1);
+			
+			/**
+			 * changes root(/) to new
+			 * @param path indicates where to change root(/) directory
+			 * @note you will appear in the root(/)
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							changeRoot(const std::string &path);		
 			/**
 			 * @return current working directory
 			 */

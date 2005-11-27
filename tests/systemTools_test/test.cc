@@ -1,4 +1,5 @@
 #include <systemTools.h>
+#include <tools.h>
 
 using namespace dodo;
 
@@ -30,6 +31,10 @@ int main(int argc, char **argv)
 			cout << info[i].name << endl;	
 	}
 		
+	cout << systemTools::getWorkingDir() << endl;	
+	
+	systemTools::die(tools::rTrim("    dsgdfhhdf    "));
+
 	cout << systemTools::getWorkingDir();	
 		
 	return 0;

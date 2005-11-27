@@ -94,6 +94,34 @@ systemTools::getUsageInfo(__usage &info)
 	void 
 #else
 	bool 
+#endif 
+systemTools::changeRoot(const std::string &path)
+{
+	#ifndef NO_EX
+		setWorkingDir(path);
+	#else
+		if(!setWorkingDir(path))
+			return false;
+	#endif 	
+	
+	if (chroot(path.c_str()) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_CHANGEROOT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
 #endif			
 systemTools::getLimit(systemToolsLimitEnum type, 
 					__limits &lim)
@@ -576,6 +604,16 @@ systemTools::getGroups(std::vector<__groupInfo> &users)
 	#ifdef NO_EX
 		return true;
 	#endif
+}
+
+//-------------------------------------------------------------------
+
+void 
+systemTools::die(const std::string &message, 
+				int status)
+{
+	std::cerr << message << std::endl;
+	_exit(status);
 }
 
 //-------------------------------------------------------------------

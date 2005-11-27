@@ -154,3 +154,33 @@ tools::dToString(double number)
 }
 
 //-------------------------------------------------------------------
+
+std::string 
+tools::lTrim(const std::string &data, 
+			char symbol)
+{
+	register int size = data.size(), i(0);
+	
+	for (;i<size;++i)
+		if (data[i]!=symbol)
+			break;
+	
+	return data.substr(i,size-i);		
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::rTrim(const std::string &data, 
+			char symbol)
+{
+	register int i(data.size());
+	
+	for (;i>0;--i)
+		if (data[i]!=symbol)
+			break;
+	
+	return data.substr(0,i);	
+}
+
+//-------------------------------------------------------------------
