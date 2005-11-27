@@ -1,5 +1,5 @@
 /***************************************************************************
- *            mysqlpp.cc
+ *            dbMysql.cc
  *
  *  Thu Apr  30 13:45:19 2005
  *  Copyright  2005  Ni@m
@@ -24,12 +24,12 @@
 
 #ifdef MYSQL_EXT
 
-	#include "mysqlpp.h"
+	#include "dbMysql.h"
 	
 	using namespace dodo;
 
 	dodoBase * const 
-	mysqlpp::getSelf()
+	dbMysql::getSelf()
 	{
 		return dynamic_cast<dodoBase *>(this);
 	}
@@ -37,7 +37,7 @@
 	//-------------------------------------------------------------------
 
 	
-	mysqlpp::mysqlpp() : connected(false),
+	dbMysql::dbMysql() : connected(false),
 						empty(true)
 	{
 		mysql = mysql_init(NULL);
@@ -46,13 +46,13 @@
 	
 	//-------------------------------------------------------------------
 	
-	mysqlpp::mysqlpp(mysqlpp &a_mypp)
+	dbMysql::dbMysql(dbMysql &a_mypp)
 	{
 	}
 	
 	//-------------------------------------------------------------------
 	
-	mysqlpp::~mysqlpp()
+	dbMysql::~dbMysql()
 	{
 		if (!empty)
 			mysql_free_result(mysqlRes);
@@ -62,7 +62,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::addSQL()
+	dbMysql::addSQL()
 	{
 		sqlDbDepAddInsArr.push_back(" delayed ");
 		sqlDbDepAddInsArr.push_back(" low_priority ");
@@ -81,7 +81,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::setMyAddInsSt(mysqlAddInsEnum statement)
+	dbMysql::setMyAddInsSt(mysqlAddInsEnum statement)
 	{
 		/*switch (statement)
 		{
@@ -96,7 +96,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::setMyAddUpSt(mysqlAddUpEnum statement)
+	dbMysql::setMyAddUpSt(mysqlAddUpEnum statement)
 	{
 		/*switch (statement)
 		{
@@ -110,7 +110,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::setMyAddSelSt(mysqlAddSelEnum statement)
+	dbMysql::setMyAddSelSt(mysqlAddSelEnum statement)
 	{
 		switch (statement)
 		{
@@ -129,7 +129,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::setMyAddDelSt(mysqlAddDelEnum statement)
+	dbMysql::setMyAddDelSt(mysqlAddDelEnum statement)
 	{
 		/*switch (statement)
 		{
@@ -143,7 +143,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::unsetMyAddInsSt(mysqlAddInsEnum statement)
+	dbMysql::unsetMyAddInsSt(mysqlAddInsEnum statement)
 	{
 		removeF(qDbDepInsShift,1<<statement);
 	}
@@ -151,7 +151,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::unsetMyAddUpSt(mysqlAddUpEnum statement)
+	dbMysql::unsetMyAddUpSt(mysqlAddUpEnum statement)
 	{
 		removeF(qDbDepUpShift,1<<statement);	
 	}
@@ -159,7 +159,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::unsetMyAddSelSt(mysqlAddSelEnum statement)
+	dbMysql::unsetMyAddSelSt(mysqlAddSelEnum statement)
 	{
 		removeF(qDbDepSelShift,1<<statement);	
 	}
@@ -167,7 +167,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::unsetMyAddDelSt(mysqlAddDelEnum statement)
+	dbMysql::unsetMyAddDelSt(mysqlAddDelEnum statement)
 	{
 		removeF(qDbDepDelShift,1<<statement);	
 	}
@@ -179,13 +179,13 @@
 	#else
 		bool
 	#endif
-	mysqlpp::connect(unsigned long type) const
+	dbMysql::connect(unsigned long type) const
 	{
 		if (connected)
 			disconnect();
 			
-		#ifndef MYSQLPP_WO_XEXEC
-			operType = MYSQLPP_OPER_CONNECT;
+		#ifndef DBMYSQL_WO_XEXEC
+			operType = DBMYSQL_OPER_CONNECT;
 			performXExec(preExec);
 		#endif
 		
@@ -200,13 +200,13 @@
 		{
 			connected = false;
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_MYSQLPP,MYSQLPP_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 		}
 		
-		#ifndef MYSQLPP_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 			performXExec(postExec);
 		#endif
 		
@@ -220,18 +220,18 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	mysqlpp::disconnect() const
+	dbMysql::disconnect() const
 	{
 		if (connected)
 		{
-			#ifndef MYSQLPP_WO_XEXEC
-				operType = MYSQLPP_OPER_DISCONNECT;
+			#ifndef DBMYSQL_WO_XEXEC
+				operType = DBMYSQL_OPER_DISCONNECT;
 				performXExec(preExec);
 			#endif
 			
 	     	mysql_close(mysql);
 
-			#ifndef MYSQLPP_WO_XEXEC
+			#ifndef DBMYSQL_WO_XEXEC
 				performXExec(preExec);
 			#endif
 	     	
@@ -246,13 +246,13 @@
 	#else
 		bool
 	#endif
-	mysqlpp::_exec() const
+	dbMysql::_exec() const
 	{	
 		queryCollect();
 		
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_MYSQLPP,MYSQLPP_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -271,7 +271,7 @@
 		mysqlRes = mysql_store_result(mysql);
 		if (mysqlRes == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_MYSQLPP,MYSQLPP_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -284,7 +284,7 @@
 	//-------------------------------------------------------------------
 	
 	std::vector<stringArr>
-	mysqlpp::fetchRow()
+	dbMysql::fetchRow()
 	{	
 		register unsigned  numFields = mysql_num_fields(mysqlRes);	
 		
@@ -315,7 +315,7 @@
 	//-------------------------------------------------------------------
 	
 	stringArr
-	mysqlpp::fetchField()
+	dbMysql::fetchField()
 	{	
 		unsigned int numFields = mysql_num_fields(mysqlRes);	
 		mysqlFields = mysql_fetch_fields(mysqlRes);
@@ -332,7 +332,7 @@
 	//-------------------------------------------------------------------
 	
 	__sqlStorage 
-	mysqlpp::fetch()
+	dbMysql::fetch()
 	{
 		return __sqlStorage(fetchRow(), fetchField());
 	}
@@ -340,7 +340,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	mysqlpp::rowsCount()
+	dbMysql::rowsCount()
 	{
 		return mysql_num_rows(mysqlRes);
 	}
@@ -348,7 +348,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	mysqlpp::fieldsCount()
+	dbMysql::fieldsCount()
 	{
 		return mysql_num_fields(mysqlRes);
 	}
@@ -356,7 +356,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int
-	mysqlpp::affectedRowsCount()
+	dbMysql::affectedRowsCount()
 	{
 		return mysql_affected_rows(mysql);
 	}
@@ -369,10 +369,10 @@
 	#else
 		bool
 	#endif
-	mysqlpp::exec() const
+	dbMysql::exec() const
 	{
-		#ifndef MYSQLPP_WO_XEXEC
-			operType = MYSQLPP_OPER_EXEC;
+		#ifndef DBMYSQL_WO_XEXEC
+			operType = DBMYSQL_OPER_EXEC;
 			performXExec(preExec);
 		#endif
 		
@@ -381,7 +381,7 @@
 		#endif	
 			_exec(); 
 		
-		#ifndef MYSQLPP_WO_XEXEC		
+		#ifndef DBMYSQL_WO_XEXEC		
 			performXExec(postExec);
 		#endif
 		
@@ -395,7 +395,7 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	mysqlpp::addPostExec(inExec func, 
+	dbMysql::addPostExec(inExec func, 
 						void *data) const
 	{
 		return _addPostExec(func, (dodoBase *)this, data);
@@ -404,7 +404,7 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	mysqlpp::addPreExec(inExec func, 
+	dbMysql::addPreExec(inExec func, 
 						void *data) const
 	{
 		return _addPreExec(func, (dodoBase *)this, data);
@@ -413,7 +413,7 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	mysqlpp::addPostExec(const std::string &module, 
+	dbMysql::addPostExec(const std::string &module, 
 						void *data) const
 	{
 		return _addPostExec(module, (dodoBase *)this, data);
@@ -422,7 +422,7 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	mysqlpp::addPreExec(const std::string &module, 
+	dbMysql::addPreExec(const std::string &module, 
 						void *data) const
 	{
 		return _addPreExec(module, (dodoBase *)this, data);
@@ -431,7 +431,7 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	mysqlpp::addExec(const std::string &module, 
+	dbMysql::addExec(const std::string &module, 
 						void *data) const
 	{
 		return _addExec(module, (dodoBase *)this, data);

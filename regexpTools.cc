@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexp.cc
+ *            regexpTools.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -22,11 +22,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#include "regexp.h"
+#include "regexpTools.h"
 
 using namespace dodo;
 
-regexp::regexp() : extended(true),
+regexpTools::regexpTools() : extended(true),
 					icase(false)
 {
 	#ifdef PCRE_EXT
@@ -37,7 +37,7 @@ regexp::regexp() : extended(true),
 
 //-------------------------------------------------------------------
 
-regexp::~regexp()
+regexpTools::~regexpTools()
 {
 	#ifdef PCRE_EXT
 	#else
@@ -49,7 +49,7 @@ regexp::~regexp()
 //-------------------------------------------------------------------
 
 bool 
-regexp::match(const std::string &pattern, 
+regexpTools::match(const std::string &pattern, 
 				const std::string &sample, 
 				stringArr &pockets) const
 {
@@ -62,7 +62,7 @@ regexp::match(const std::string &pattern,
 //-------------------------------------------------------------------
 
 bool
-regexp::reMatch(const std::string &sample, 
+regexpTools::reMatch(const std::string &sample, 
 				stringArr &pockets) const
 {
 	pockets.clear();
@@ -77,7 +77,7 @@ regexp::reMatch(const std::string &sample,
 //-------------------------------------------------------------------
 
 bool
-regexp::boundMatch(const std::string &sample) const
+regexpTools::boundMatch(const std::string &sample) const
 {
 	register int subs, res;
 	__regexMatch bound;
@@ -93,7 +93,7 @@ regexp::boundMatch(const std::string &sample) const
 		register int *oVector = new int[subs];
 		if (oVector == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_REGEXP,REGEXP_BOUNDMATCH,ERR_LIBDODO,REGEXP_MEMORY_OVER,REGEXP_MEMORY_OVER_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_REGEXPTOOLS,REGEXPTOOLS_BOUNDMATCH,ERR_LIBDODO,REGEXPTOOLS_MEMORY_OVER,REGEXPTOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -129,7 +129,7 @@ regexp::boundMatch(const std::string &sample) const
 		regmatch_t *pmatch = new regmatch_t[subs];
 		if (pmatch == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_REGEXP,REGEXP_BOUNDMATCH,ERR_LIBDODO,REGEXP_MEMORY_OVER,REGEXP_MEMORY_OVER_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_REGEXPTOOLS,REGEXPTOOLS_BOUNDMATCH,ERR_LIBDODO,REGEXPTOOLS_MEMORY_OVER,REGEXPTOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif		
@@ -153,7 +153,7 @@ regexp::boundMatch(const std::string &sample) const
 //-------------------------------------------------------------------
 
 bool 
-regexp::compile(const std::string &pattern) const
+regexpTools::compile(const std::string &pattern) const
 {
 	register int bits(0);
 	
@@ -188,7 +188,7 @@ regexp::compile(const std::string &pattern) const
 //-------------------------------------------------------------------
 
 std::string 
-regexp::replace(const std::string &pattern, 
+regexpTools::replace(const std::string &pattern, 
 				const std::string &sample, 
 				const stringArr &replacements) const
 {
@@ -201,7 +201,7 @@ regexp::replace(const std::string &pattern,
 //-------------------------------------------------------------------
 
 std::string 
-regexp::reReplace(const std::string &sample, 
+regexpTools::reReplace(const std::string &sample, 
 				const stringArr &replacements) const
 {
 	if (!boundMatch(sample))

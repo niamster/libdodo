@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgipp.h
+ *            cgiTools.h
  *
  *  Sat Sep  17 21:55:19 2005
  *  Copyright  2005  Ni@m
@@ -27,10 +27,10 @@
 
 #include "tools.h"
 #include "types.h"
-#include "cgippEx.h"
+#include "cgiToolsEx.h"
 
-#ifndef _CGIPP_H_
-#define _CGIPP_H_
+#ifndef _CGITOOLS_H_
+#define _CGITOOLS_H_
 
 namespace dodo
 {
@@ -150,7 +150,7 @@ namespace dodo
 	 */
 
 	/**
-	 * @class cgipp
+	 * @class cgiTools
 	 * provides simple work with info that passes to cgi program
 	 * u can get POST/GET variables; any ENV variable;
 	 * @note when usin' POST:
@@ -159,7 +159,7 @@ namespace dodo
 	 * 		please contruct object of this class in the begin of your program; 
 	 * 		it will prevent any situations;
 	 */
-	class cgipp
+	class cgiTools
 	{
 		public:
 								
@@ -169,7 +169,7 @@ namespace dodo
 			 */
 			class __method
 			{
-				friend class cgipp;
+				friend class cgiTools;
 				
 				public:
 				
@@ -191,12 +191,12 @@ namespace dodo
 			 * 
 			 * @note you cant print headers after they have been printed with printHeaders method 
 			 */
-			cgipp(bool silent = false, assocArr &headers = __assocarray__);
+			cgiTools(bool silent = false, assocArr &headers = __assocarray__);
 			
 			/**
 			 * destructor
 			 */
-			virtual ~cgipp();
+			virtual ~cgiTools();
 			
 			/**
 			 * @return cgiFilesUp
@@ -214,7 +214,7 @@ namespace dodo
 			 * @param method is indicates what reference would be returned
 			 * example: classObj[POST]["name"]
 			 */
-			virtual dodo::cgipp::__method &operator[](requestMethodEnum method) const;
+			virtual dodo::cgiTools::__method &operator[](requestMethodEnum method) const;
 			
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)

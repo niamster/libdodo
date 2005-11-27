@@ -1,5 +1,5 @@
 
-#include <mysqlpp.h>
+#include <dbMysql.h>
 
 using namespace dodo;
 using namespace std;
@@ -8,7 +8,7 @@ void
 hook(dodoBase *base, 
 	void *yep)
 {
-	mysqlpp *sql = dynamic_cast<mysqlpp *>(base->getSelf());
+	dbMysql *sql = dynamic_cast<dbMysql *>(base->getSelf());
 //	dbBase *sql = dynamic_cast<dbBase *>(base);
 /*	if (sql->operType == MYSQLPP_OPER_EXEC)
 	{
@@ -26,7 +26,7 @@ void
 journal(dodoBase *base, 
 		void *yep)
 {
-	mysqlpp *child = dynamic_cast<mysqlpp *>(base);
+	dbMysql *child = dynamic_cast<dbMysql *>(base);
 
 	switch (child->getQType())
 	{
@@ -44,9 +44,9 @@ int main(int argc, char **argv)
 {	
 	//============
 	/**
-	* testin' mysqlpp!!
+	* testin' dbMysql!!
 	*/
-	mysqlpp pp;
+	dbMysql pp;
 	try
 	{
 		int pos = pp.addPreExec(hook,(void *)"id");

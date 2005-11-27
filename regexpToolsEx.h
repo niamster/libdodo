@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexpEx.h
+ *            regexpToolsEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _REGEXPEX_H_
-#define _REGEXPEX_H_
+#ifndef _REGEXPTOOLSEX_H_
+#define _REGEXPTOOLSEX_H_
 
 #include "directives.h"
 #include "baseEx.h"
@@ -36,25 +36,25 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum regexpExR
+		enum regexpToolsExR
 		{
-			REGEXP_MEMORY_OVER = 1
+			REGEXPTOOLS_MEMORY_OVER = 1
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */			
-		#define REGEXP_MEMORY_OVER_STR "Not anough memmory"
+		#define REGEXPTOOLS_MEMORY_OVER_STR "Not anough memmory"
 		
 		/**
 		 * ID of function where exception was thrown
 		 */					
-		enum regexpFunctionsID
+		enum regexpToolsFunctionsID
 		{
-			REGEXP_BOUNDMATCH,
+			REGEXPTOOLS_BOUNDMATCH,
 			
 		};
 	};
 
 #endif
-#endif /*REGEXPEX_H_*/
+#endif /*REGEXPTOOLSEX_H_*/

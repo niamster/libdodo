@@ -1,5 +1,5 @@
 /***************************************************************************
- *            sqlBaseEx.h
+ *            dbSqlBaseEx.h
  *
  *  Mon Jul 18 20:25:14 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _SQLBASEEX_H_
-#define _SQLBASEEX_H_
+#ifndef _DBSQLBASEEX_H_
+#define _DBSQLBASEEX_H_
 
 #include "directives.h"
 #include "baseEx.h"
@@ -38,29 +38,29 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum sqlBaseExR
+		enum dbSqlBaseExR
 		{
-			SQLBASE_MEMORY_OVER = 1,///not enough memmory
-			SQLBASE_EMPTY_REQUEST
+			DBSQLBASE_MEMORY_OVER = 1,///not enough memmory
+			DBSQLBASE_EMPTY_REQUEST
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */			
-		#define SQLBASE_MEMORY_OVER_STR "Not anough memmory"
-		#define SQLBASE_EMPTY_REQUEST_STR "Query is empty. are you sure?"
+		#define DBSQLBASE_MEMORY_OVER_STR "Not anough memmory"
+		#define DBSQLBASE_EMPTY_REQUEST_STR "Query is empty. are you sure?"
 		
 		/**
 		 * ID of function where exception was thrown
 		 */			
 		enum flushSocketFunctionsID
 		{
-			SQLBASE_SELECTCOLLECT,
-			SQLBASE_INSERTCOLLECT,
-			SQLBASE_INSERTSELECTCOLLECT,
-			SQLBASE_UPDATECOLLECT,
-			SQLBASE_DELCOLLECT,
-			SQLBASE_QUERYCOLLECT
+			DBSQLBASE_SELECTCOLLECT,
+			DBSQLBASE_INSERTCOLLECT,
+			DBSQLBASE_INSERTSELECTCOLLECT,
+			DBSQLBASE_UPDATECOLLECT,
+			DBSQLBASE_DELCOLLECT,
+			DBSQLBASE_QUERYCOLLECT
 			
 		};
 		
@@ -68,4 +68,4 @@
 
 #endif	
 
-#endif /* _SQLBASEEX_H */
+#endif /* _DBSQLBASEEX_H */

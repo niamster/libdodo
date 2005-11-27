@@ -1,4 +1,4 @@
-#include <cgipp.h>
+#include <cgiTools.h>
 
 using namespace dodo;
 
@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 	cgipp cgi(false,head);*/
 	
 	///second type
-	cgipp cgi(true,head); /// or cgipp cgi(true);
+	cgiTools cgi(true,head); /// or cgipp cgi(true);
 	//cgi.HEADERS["Content-type"] = "image/jpg";
 	cgi.setCookie("test","Ni@m");
 	cgi.printHeaders();

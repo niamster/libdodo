@@ -1,5 +1,5 @@
 /***************************************************************************
- *            sqlBase.cc
+ *            dbSqlBase.cc
  *
  *  Mon Jul 18 19:30:55 2005
  *  Copyright  2005  Ni@m
@@ -22,11 +22,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#include "sqlBase.h"
+#include "dbSqlBase.h"
 
 using namespace dodo;
 /**
- * arrays of positions of "statement" for complete realization. In sql wersion - see sqlBase;
+ * arrays of positions of "statement" for complete realization. In sql wersion - see dbSqlBase;
  */	
 static unsigned int addInsEnumArr[1] = 
 {
@@ -62,7 +62,7 @@ static unsigned int addSelEnumArr[2] =
 ///////////////////////////////////		
 /**
 * do not edit it please.
-* sqlBase use them in such way, as they are
+* dbSqlBase use them in such way, as they are
 */
 static const __statements sqlQStArr[4] = 
 {
@@ -109,28 +109,28 @@ static 	__statements sqlAddSelArr[3] =
 //-------------------------------------------------------------------
 
 dodoBase * const 
-sqlBase::getSelf()
+dbSqlBase::getSelf()
 {
 	return dynamic_cast<dodoBase *>(this);
 }
 
 //-------------------------------------------------------------------
 
-sqlBase::sqlBase() : preventFraming(false)
+dbSqlBase::dbSqlBase() : preventFraming(false)
 {	
 	request.reserve(100);
 }
 
 //-------------------------------------------------------------------
 
-sqlBase::~sqlBase()
+dbSqlBase::~dbSqlBase()
 {	
 }
 
 //-------------------------------------------------------------------
 
 std::string
-sqlBase::fieldsValName(const stringArr &fieldsVal, 
+dbSqlBase::fieldsValName(const stringArr &fieldsVal, 
 					const stringArr &fieldsNames,
 					const std::string &frame)
 {
@@ -152,7 +152,7 @@ sqlBase::fieldsValName(const stringArr &fieldsVal,
 //-------------------------------------------------------------------
 
 std::string 
-sqlBase::exists(const std::string &statement)
+dbSqlBase::exists(const std::string &statement)
 {
 	return std::string("exists("+statement+')');
 }
@@ -160,7 +160,7 @@ sqlBase::exists(const std::string &statement)
 //-------------------------------------------------------------------
 
 std::string 
-sqlBase::noexists(const std::string &statement)
+dbSqlBase::noexists(const std::string &statement)
 {
 	return std::string("not exists("+statement+')');
 }
@@ -168,7 +168,7 @@ sqlBase::noexists(const std::string &statement)
 //-------------------------------------------------------------------
 
 void 
-sqlBase::additionalCollect(unsigned int qTypeTocheck, 
+dbSqlBase::additionalCollect(unsigned int qTypeTocheck, 
 						const std::string &collectedString) const
 {
 	if (qShift == EMPTY)
@@ -181,7 +181,7 @@ sqlBase::additionalCollect(unsigned int qTypeTocheck,
 //-------------------------------------------------------------------
 
 std::string 
-sqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
+dbSqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
 						__statements sqlAddArr[],
 						int qTypeShift) const
 {
@@ -202,7 +202,7 @@ sqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
 //-------------------------------------------------------------------
 
 std::string 
-sqlBase::insideAddCollect(std::list<std::string> &statements, 
+dbSqlBase::insideAddCollect(std::list<std::string> &statements, 
 						int qTypeShift) const
 {
 	if (qTypeShift == EMPTY)
@@ -223,7 +223,7 @@ sqlBase::insideAddCollect(std::list<std::string> &statements,
 //-------------------------------------------------------------------
 
 void 
-sqlBase::selectCollect() const 
+dbSqlBase::selectCollect() const 
 {
 	std::string temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
@@ -234,7 +234,7 @@ sqlBase::selectCollect() const
 		pchar t_request = new char[temp.size()+pre_table.size()+14];	
 		if (t_request == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SQLBASE,SQLBASE_SELECTCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+				throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_SELECTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
 			#else
 				return ;
 			#endif		
@@ -256,7 +256,7 @@ sqlBase::selectCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::insertCollect() const
+dbSqlBase::insertCollect() const
 {
 	stringArr fieldsVPart;
 	{
@@ -267,7 +267,7 @@ sqlBase::insertCollect() const
 			frame[0] = ' ';
 			
 		for (;i!=j;++i)
-			fieldsVPart.push_back(tools::implode(*i,&dodo::sqlBase::escapeFields,",",frame));
+			fieldsVPart.push_back(tools::implode(*i,&dodo::dbSqlBase::escapeFields,",",frame));
 	}
 	stringArr::iterator i = fieldsVPart.begin(), j = fieldsVPart.end()-1;
 	std::string fieldsPart;
@@ -286,7 +286,7 @@ sqlBase::insertCollect() const
 	pchar t_request = new char[temp.size()+tempFNP.size()+fieldsPart.size()+22];
 	if (t_request == NULL)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_INSERTCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_INSERTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
 		#else
 			return ;
 		#endif	
@@ -301,7 +301,7 @@ sqlBase::insertCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::insertSelectCollect() const
+dbSqlBase::insertSelectCollect() const
 {
 	
 	std::string fieldsPartTo = tools::implode(pre_fieldsNames,",");
@@ -317,7 +317,7 @@ sqlBase::insertSelectCollect() const
 	pchar t_request = new char[tempI.size()+pre_tableTo.size()+fieldsPartTo.size()+tempFPT.size()+pre_table.size()+35];
 	if (t_request == NULL)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_INSERTSELECTCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_INSERTSELECTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
 		#else
 			;
 		#endif	
@@ -332,7 +332,7 @@ sqlBase::insertSelectCollect() const
 //-------------------------------------------------------------------
 
 void
-sqlBase::updateCollect() const
+dbSqlBase::updateCollect() const
 {
 	char frame[] = "'";
 	if (preventFraming)
@@ -347,7 +347,7 @@ sqlBase::updateCollect() const
 	pchar t_request = new char[temp.size()+setPart.size()+13];	
 	if (t_request == NULL)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_UPDATECOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_UPDATECOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
 		#else
 			return ;
 		#endif
@@ -362,7 +362,7 @@ sqlBase::updateCollect() const
 //-------------------------------------------------------------------
 
 void
-sqlBase::delCollect() const
+dbSqlBase::delCollect() const
 {
 	std::string temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
@@ -370,7 +370,7 @@ sqlBase::delCollect() const
 	pchar t_request = new char[pre_table.size()+temp.size()+14];
 	if (t_request == NULL)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SQLBASE,SQLBASE_DELCOLLECT,ERR_LIBDODO,SQLBASE_MEMORY_OVER,SQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
+			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_DELCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
 		#else
 			return ;
 		#endif
@@ -384,7 +384,7 @@ sqlBase::delCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::useCollect() const
+dbSqlBase::useCollect() const
 {
 	request = "use " + sqlInfo.db;
 }
@@ -392,7 +392,7 @@ sqlBase::useCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::subCollect() const
+dbSqlBase::subCollect() const
 {
 	request = tools::implode(pre_subQ,sqlQStArr[qType].str);
 }
@@ -400,7 +400,7 @@ sqlBase::subCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::truncateCollect() const
+dbSqlBase::truncateCollect() const
 {
 	request = "truncate " + pre_table;
 }
@@ -408,7 +408,7 @@ sqlBase::truncateCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::delBaseCollect() const
+dbSqlBase::delBaseCollect() const
 {
 	request = "drop database " + pre_order;
 }
@@ -416,7 +416,7 @@ sqlBase::delBaseCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::delTableCollect() const
+dbSqlBase::delTableCollect() const
 {
 	request = "drop table " + pre_table;
 }
@@ -424,14 +424,14 @@ sqlBase::delTableCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::delFieldCollect() const
+dbSqlBase::delFieldCollect() const
 {
 	request = "alter " + pre_order + " drop " + pre_table;
 }
 //-------------------------------------------------------------------
 
 void 
-sqlBase::renameBaseCollect() const
+dbSqlBase::renameBaseCollect() const
 {
 	request = "";
 }
@@ -439,7 +439,7 @@ sqlBase::renameBaseCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::renameTableCollect() const
+dbSqlBase::renameTableCollect() const
 {
 	request = "rename " + pre_table + " to " + pre_having;
 }
@@ -447,7 +447,7 @@ sqlBase::renameTableCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::renameFieldCollect() const
+dbSqlBase::renameFieldCollect() const
 {
 	request = "";
 }
@@ -455,7 +455,7 @@ sqlBase::renameFieldCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::createBaseCollect() const
+dbSqlBase::createBaseCollect() const
 {
 	request = "create database " + pre_order;
 	if (pre_having.size() != 0)
@@ -464,7 +464,7 @@ sqlBase::createBaseCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::createTableCollect() const
+dbSqlBase::createTableCollect() const
 {
 	request = "create table " + pre_tableInfo.name + "(";
 	{
@@ -486,7 +486,7 @@ sqlBase::createTableCollect() const
 //-------------------------------------------------------------------
 
 void 
-sqlBase::createFieldCollect() const
+dbSqlBase::createFieldCollect() const
 {
 	request = "alter table " + pre_table + " add " + fieldCollect(pre_fieldInfo);
 }
@@ -494,7 +494,7 @@ sqlBase::createFieldCollect() const
 //-------------------------------------------------------------------
 
 std::string
-sqlBase::queryCollect() const
+dbSqlBase::queryCollect() const
 {	
 	register bool additionalActions = true, select = false;
 	switch (qType)
@@ -573,7 +573,7 @@ sqlBase::queryCollect() const
 	#ifndef FAST
 		if (request.size()==0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SQLBASE,SQLBASE_QUERYCOLLECT,ERR_LIBDODO,SQLBASE_EMPTY_REQUEST,SQLBASE_EMPTY_REQUEST_STR,__LINE__,__FILE__);	
+				throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_QUERYCOLLECT,ERR_LIBDODO,DBSQLBASE_EMPTY_REQUEST,DBSQLBASE_EMPTY_REQUEST_STR,__LINE__,__FILE__);	
 			#else
 				return "";
 			#endif	
@@ -597,7 +597,7 @@ sqlBase::queryCollect() const
 //-------------------------------------------------------------------
 
 inline std::string 
-sqlBase::escapeFields(const std::string &a_data)
+dbSqlBase::escapeFields(const std::string &a_data)
 { 
 	std::string temp(a_data);
 	tools::replace("\\","\\\\",temp);
@@ -609,7 +609,7 @@ sqlBase::escapeFields(const std::string &a_data)
 //-------------------------------------------------------------------
 
 inline std::string 
-sqlBase::fieldCollect(__fieldInfo &row) const
+dbSqlBase::fieldCollect(__fieldInfo &row) const
 {
 	register int type = row.type, flag = row.flag;
 	std::string resRow(row.name + stringType(type));

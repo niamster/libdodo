@@ -1,7 +1,7 @@
 /***************************************************************************
- *            mysqlppEx.h
+ *            cgiToolsEx.h
  *
- *  Thu Jul  7 00:25:19 2005
+ *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,9 +21,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
-#ifndef _MYSQLPPEX_H_
-#define _MYSQLPPEX_H_
+
+#ifndef _CGITOOLSEX_H_
+#define _CGITOOLSEX_H_
 
 #include "directives.h"
 #include "baseEx.h"
@@ -33,16 +33,19 @@
 	namespace dodo
 	{
 		
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum mysqlppFunctionsID
+		///reasons of exception
+		enum cgiToolsExR
 		{
-			MYSQLPP_CONNECT,
-			MYSQLPP_EXEC,
-		};		
+			CGITOOLS_MEMORY_OVER = 1
+		};
+		
+		#define CGITOOLS_MEMORY_OVER_STR "Not anough memmory"
+		
+		enum cgiToolsFunctionsID
+		{
+			CGITOOLS_MAKEPOST,
+		};
 	};
 
 #endif
-
-#endif
+#endif /*CGITOOLSEX_H_*/

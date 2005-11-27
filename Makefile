@@ -6,7 +6,7 @@ CXX = $(CC_PATH)g++
 #CXX = $(CC_PATH)icc
 
 CFLAGS=-O2 -march=pentium4
-OBJECTS=dbBase.o dodoBase.o tools.o xexec.o sqlBase.o baseEx.o mysqlpp.o cgipp.o regexp.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o
+OBJECTS=dbBase.o dodoBase.o tools.o xexec.o dbSqlBase.o baseEx.o dbMysql.o cgiTools.o regexpTools.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o
 
 override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT -DPCRE_EXT $(DEFINES)
 

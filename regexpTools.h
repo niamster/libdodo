@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexp.h
+ *            regexpTools.h
  *
  *  Thu Sep 20 01:39:24 2005
  *  Copyright  2005  Ni@m
@@ -28,7 +28,7 @@
 
 #include "directives.h"
 #include "types.h"
-#include "regexpEx.h"
+#include "regexpToolsEx.h"
 #include "dodoBase.h"
 
 #ifdef PCRE_EXT
@@ -55,26 +55,26 @@ namespace dodo
 	};
 	
 	/**
-	 * !class regexp that covers REGEXP routine using different regex libs
+	 * !class regexpTools that covers REGEXP routine using different regex libs
 	 * @note PCRE is much faster
 	 * both POSIX and PCRE don't support binary patterns
 	 * if string is not matchin' fully the pattern - it don't want to execute it(return false)
 	 * 
 	 * POSIX doesn't support binary test sting;
 	 */
-	 class regexp
+	 class regexpTools
 	 {
 	 	public:
 						 	
 	 		/**
 	 		 * constructor
 	 		 */
-	 		regexp();
+	 		regexpTools();
 	 		
 	 		/**
 	 		 * destructor
 	 		 */
-	 		virtual ~regexp();
+	 		virtual ~regexpTools();
 	 		
 	 		mutable bool extended;///< set whether to use extended or basic regex; extended by default
 

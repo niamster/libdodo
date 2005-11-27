@@ -1,7 +1,7 @@
 /***************************************************************************
- *            cgippEx.h
+ *            dbMysqlEx.h
  *
- *  Wed Oct 5 16:25:14 2005
+ *  Thu Jul  7 00:25:19 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,9 +21,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
-#ifndef _CGIPPEX_H_
-#define _CGIPPEX_H_
+ 
+#ifndef _DBMYSQLEX_H_
+#define _DBMYSQLEX_H_
 
 #include "directives.h"
 #include "baseEx.h"
@@ -33,19 +33,16 @@
 	namespace dodo
 	{
 		
-		///reasons of exception
-		enum cgippExR
+		/**
+		 * ID of function where exception was thrown
+		 */			
+		enum dbMysqlFunctionsID
 		{
-			CGIPP_MEMORY_OVER = 1
-		};
-		
-		#define CGIPP_MEMORY_OVER_STR "Not anough memmory"
-		
-		enum cgippFunctionsID
-		{
-			CGIPP_MAKEPOST,
-		};
+			DBMYSQL_CONNECT,
+			DBMYSQL_EXEC,
+		};		
 	};
 
 #endif
-#endif /*CGIPPEX_H_*/
+
+#endif

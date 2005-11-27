@@ -2,7 +2,7 @@ Brief overview of libdodo's modules
 
 libdodo consists of such modules as:
 
-	cgipp
+	cgiTools
 		server side `scripting`; [presents requests, headers, cookies, ...]
 	
 	flush
@@ -20,12 +20,13 @@ libdodo consists of such modules as:
 	dbBase
 		system SQL independent interface to communicate with database
 		
-		sqlBase
+		dbSqlBase
 			convertions to SQL for SQLbase databases
 		
-			mysqlpp[*]
+			dbMysql[*]
 				communication with mySQL database
-	regexp
+				
+	regexpTools
 		regexp operations [match, replace]
 	
 	systemTools

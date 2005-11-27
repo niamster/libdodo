@@ -1,5 +1,5 @@
 /***************************************************************************
- *            sqlBase.h
+ *            dbSqlBase.h
  *
  *  Mon Jul 18 19:13:33 2005
  *  Copyright  2005  Ni@m
@@ -22,12 +22,12 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _SQLBASE_H_
-#define _SQLBASE_H_
+#ifndef _DBSQLBASE_H_
+#define _DBSQLBASE_H_
 
 #include "directives.h"
 #include "types.h"
-#include "sqlBaseEx.h"
+#include "dbSqlBaseEx.h"
 #include "dodoBase.h"
 #include "tools.h"
 #include "dbBase.h"
@@ -39,9 +39,9 @@ namespace dodo
 	 * class to provide wide abilities for sql manipulations
 	 * be carefull!!! all data become escaped and fremed with <'>. Fields' names are not framed with <`> to prevent "`count(*)`" or smth else
 	 * when u are usin' select wo table_name field names are not escaped and framed!!
-	 * If u want to prevent data framin' set sqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
+	 * If u want to prevent data framin' set dbSqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
 	 */
-	class sqlBase : public dbBase
+	class dbSqlBase : public dbBase
 	{
 		public:
 					
@@ -55,12 +55,12 @@ namespace dodo
 			/*
 			 * constructor
 			 */
-			sqlBase();	
+			dbSqlBase();	
 			
 			/**
 			 * destructor
 			 */
-			virtual ~sqlBase();
+			virtual ~dbSqlBase();
 			
 			/**
 			 * @return constructed query from collected data;
@@ -215,4 +215,4 @@ namespace dodo
 			mutable std::string request;///< ready sql statement
 	};
 };
-#endif /* _SQLBASE_H_ */
+#endif /* _DBSQLBASE_H_ */

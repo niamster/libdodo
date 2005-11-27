@@ -1,4 +1,4 @@
-#include <regexp.h>
+#include <regexpTools.h>
 
 using namespace dodo;
 
@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {	
-	regexp expr;
+	regexpTools expr;
 	stringArr pock;
 
 	cout << "<hr>pattern: (.*)a([0-9]+)(f*)(a*)(b*)<br> test string: dsdasa4565aaa<br> pockets: <br>";

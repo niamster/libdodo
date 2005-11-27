@@ -1,5 +1,5 @@
 /***************************************************************************
- *            mysqlpp.h
+ *            dbMysql.h
  *
  *  Thu Apr  30 13:45:19 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _MYSQLPP_H_
-#define _MYSQLPP_H_
+#ifndef _DBMYSQL_H_
+#define _DBMYSQL_H_
 
 #ifdef MYSQL_EXT
 	
@@ -34,8 +34,8 @@
 	#include <mysql.h>
 	
 	#include "directives.h"
-	#include "mysqlppEx.h"
-	#include "sqlBase.h"
+	#include "dbMysqlEx.h"
+	#include "dbSqlBase.h"
 	#include "tools.h"
 	#include "xexec.h"
 	
@@ -43,13 +43,13 @@
 	{
 		
 		/**
-		 * @enum mysqlppOperTypeEnum describes type of operation for hook
+		 * @enum dbMysqlOperTypeEnum describes type of operation for hook
 		 */
-		enum mysqlppOperTypeEnum
+		enum dbMysqlOperTypeEnum
 		{
-			MYSQLPP_OPER_CONNECT,
-			MYSQLPP_OPER_EXEC,
-			MYSQLPP_OPER_DISCONNECT
+			DBMYSQL_OPER_CONNECT,
+			DBMYSQL_OPER_EXEC,
+			DBMYSQL_OPER_DISCONNECT
 		};
 		
 		/**
@@ -90,16 +90,16 @@
 		};
 		
 		/**
-	 	 * @class mysqlpp is an interface to mysql db through sql-,database- independent interfaces
+	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
 		 */
-		class mysqlpp : public sqlBase, public xexec
+		class dbMysql : public dbSqlBase, public xexec
 		{
 			private :
 				/**
 				 * constructor
 				 * to prevent from copying
 				 */
-				mysqlpp(mysqlpp &a_mypp);
+				dbMysql(dbMysql &a_mypp);
 			
 			public:
 					
@@ -113,12 +113,12 @@
 				/**
 				 * constructor
 				 */
-				mysqlpp();
+				dbMysql();
 				
 				/**
 				 * destructor
 				 */
-				virtual ~mysqlpp();	
+				virtual ~dbMysql();	
 			
 				/**
 				 * connect to database

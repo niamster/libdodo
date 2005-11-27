@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgipp.cc
+ *            cgiTools.cc
  *
  *  Sat Sep  18 17:18:19 2005
  *  Copyright  2005  Ni@m
@@ -22,7 +22,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#include "cgipp.h"
+#include "cgiTools.h"
 
 using namespace dodo;
 
@@ -31,7 +31,7 @@ using namespace dodo;
 #define __UNDEFINED__ "_undefined_"
 
 std::string
-cgipp::__method::operator [](const std::string &varName)
+cgiTools::__method::operator [](const std::string &varName)
 {
 	assocArr::iterator i(methodArr.begin()),j(methodArr.end());
 	
@@ -49,7 +49,7 @@ __cookies::__cookies(bool a_secure) : secure(a_secure)
 
 //-------------------------------------------------------------------
 
-cgipp::cgipp(bool silent, 
+cgiTools::cgiTools(bool silent, 
 			assocArr &a_headers)
 {	
 	initHeaders(a_headers);
@@ -68,7 +68,7 @@ cgipp::cgipp(bool silent,
 
 //-------------------------------------------------------------------
 
-cgipp::~cgipp()
+cgiTools::~cgiTools()
 {
 	cleanTmp();
 }
@@ -76,7 +76,7 @@ cgipp::~cgipp()
 //-------------------------------------------------------------------
 
 void 
-cgipp::cleanTmp() const
+cgiTools::cleanTmp() const
 {
 	std::map<std::string, __cgiFilesUp>::iterator i(postFiles.begin()),j(postFiles.end());
 	for (;i!=j;++i)
@@ -86,7 +86,7 @@ cgipp::cleanTmp() const
 //-------------------------------------------------------------------
 
 void 
-cgipp::detectMethod() const
+cgiTools::detectMethod() const
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"GET") == 0)
 		method = GET;
@@ -102,7 +102,7 @@ cgipp::detectMethod() const
 //-------------------------------------------------------------------
 
 int 
-cgipp::getMethod() const
+cgiTools::getMethod() const
 {
 	return method;
 }
@@ -110,7 +110,7 @@ cgipp::getMethod() const
 //-------------------------------------------------------------------
 
 void 
-cgipp::make(__method &val,
+cgiTools::make(__method &val,
 			const std::string &string,
 			char *delim) const
 {
@@ -128,7 +128,7 @@ cgipp::make(__method &val,
 //-------------------------------------------------------------------
 
 void
-cgipp::makeEnv() const
+cgiTools::makeEnv() const
 {
 	register int len = sizeof(HTTP_ENV)/sizeof(__statements);
 	
@@ -144,7 +144,7 @@ cgipp::makeEnv() const
 //-------------------------------------------------------------------
 
 void 
-cgipp::initHeaders(assocArr &a_headers) const
+cgiTools::initHeaders(assocArr &a_headers) const
 {
 	HEADERS["Content-type"] = "text/html";
 	HEADERS["X-Powered-By"] = LIBDODO_VERSION;
@@ -161,7 +161,7 @@ cgipp::initHeaders(assocArr &a_headers) const
 //-------------------------------------------------------------------
 
 void 
-cgipp::printHeaders() const
+cgiTools::printHeaders() const
 {
 	assocArr::iterator i(HEADERS.begin()),j(HEADERS.end());
 	
@@ -195,7 +195,7 @@ cgipp::printHeaders() const
 #else
 	bool
 #endif
-cgipp::makePost() const
+cgiTools::makePost() const
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
 		#ifndef NO_EX
@@ -208,7 +208,7 @@ cgipp::makePost() const
 	register char *post = new char[(cl+1)*size_of_char];
 	if (post == NULL)
 	#ifndef NO_EX
-		throw baseEx(ERRMODULE_CGIPP,CGIPP_MAKEPOST,ERR_LIBDODO,CGIPP_MEMORY_OVER,CGIPP_MEMORY_OVER_STR,__LINE__,__FILE__);
+		throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
 	#else
 		return false;
 	#endif	
@@ -235,7 +235,7 @@ cgipp::makePost() const
 		char *ptr = new char[strlen(post_files_tmp_dir)+17];
 		if (ptr == NULL)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGIPP,CGIPP_MAKEPOST,ERR_LIBDODO,CGIPP_MEMORY_OVER,CGIPP_MEMORY_OVER_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -315,7 +315,7 @@ cgipp::makePost() const
 //-------------------------------------------------------------------
 
 std::string 
-cgipp::decode64(const std::string &string)
+cgiTools::decode64(const std::string &string)
 {
 	std::string result;
 	std::string::const_iterator i(string.begin()),j(string.end());
@@ -346,7 +346,7 @@ cgipp::decode64(const std::string &string)
 
 //-------------------------------------------------------------------
 std::string
-cgipp::encode64(const std::string &string)
+cgiTools::encode64(const std::string &string)
 {
 	std::string result;
 	std::string::const_iterator i(string.begin()), j(string.end());
@@ -384,7 +384,7 @@ cgipp::encode64(const std::string &string)
 //-------------------------------------------------------------------
 
 char 
-cgipp::hexToChar(const char &first,
+cgiTools::hexToChar(const char &first,
 				const char &second)
 {
 	int val=0;
@@ -428,7 +428,7 @@ cgipp::hexToChar(const char &first,
 //-------------------------------------------------------------------
 
 std::string 
-cgipp::charToHex(const char &first)
+cgiTools::charToHex(const char &first)
 {
 	char temp[3*size_of_char];
 	sprintf(temp,"%X",first);
@@ -438,15 +438,15 @@ cgipp::charToHex(const char &first)
 //-------------------------------------------------------------------
 
 __cgiFilesUp 
-cgipp::getFile(const std::string &varName) const
+cgiTools::getFile(const std::string &varName) const
 {
 	return postFiles[varName];
 }
 
 //-------------------------------------------------------------------
 
-dodo::cgipp::__method &
-cgipp::operator[](requestMethodEnum method) const
+dodo::cgiTools::__method &
+cgiTools::operator[](requestMethodEnum method) const
 {
 	if (method == POST)
 		return METHOD_POST;
@@ -457,7 +457,7 @@ cgipp::operator[](requestMethodEnum method) const
 //-------------------------------------------------------------------
 
 std::string
-cgipp::request(const std::string &varName, 
+cgiTools::request(const std::string &varName, 
 				requestMethodEnum first) const
 {
 	std::string temp0 = METHOD_GET[varName];
@@ -479,7 +479,7 @@ cgipp::request(const std::string &varName,
 //-------------------------------------------------------------------
 
 void 
-cgipp::setCookie(const std::string &name, 
+cgiTools::setCookie(const std::string &name, 
 				const std::string &value, 
 				const std::string &exDate, 
 				const std::string &path, 

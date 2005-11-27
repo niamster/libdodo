@@ -1,4 +1,4 @@
-#include <mysqlpp.h>
+#include <dbMysql.h>
 
 using namespace dodo;
 
@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	mysqlpp pp;	
+	dbMysql pp;	
 	try
 	{
 		pp.setSqlInfo(string("test"),string(""),3306,string(""),string("Dmitrik"));
