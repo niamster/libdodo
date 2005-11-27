@@ -6,9 +6,9 @@ CXX = $(CC_PATH)g++
 #CXX = $(CC_PATH)icc
 
 CFLAGS=-O2 -march=pentium4
-OBJECTS=dbBase.o dodoBase.o tools.o xexec.o dbSqlBase.o baseEx.o dbMysql.o cgiTools.o regexpTools.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o timeTools.o
+OBJECTS=dbBase.o dodoBase.o tools.o xexec.o dbSqlBase.o baseEx.o dbMysql.o cgiTools.o regexpTools.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o timeTools.o dbBerkeley.o
 
-override DEFINES:=-DLIB_COMPILE -DMYSQL_EXT -DPCRE_EXT $(DEFINES)
+override DEFINES:=-DMYSQL_EXT -DPCRE_EXT -DBERKELEY_EXT $(DEFINES)
 
 MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
 MOD_MYSQL_LD:=-L/opt/mysql/lib/mysql -lmysqlclient
@@ -18,8 +18,14 @@ MOD_PCRE_LD:=-L/opt/pcre/lib -lpcre
 
 MOD_DL_LD:=-ldl
 
-override CPPFLAGS:=-I./ $(MOD_MYSQL_CPP) $(MOD_PCRE_CPP) $(CPPFLAGS)
-override LDFLAGS:= -L./ $(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(MOD_DL_LD) $(LDFLAGS)
+MOD_BERKELEY_CPP:=-I/opt/bdb/include/
+MOD_BERKELEY_LD:=-L/opt/bdb/lib/ -db
+
+MODS_CPP:=$(MOD_MYSQL_CPP) $(MOD_PCRE_CPP) $(MOD_BERKELEY_CPP)
+MODS_LD:=$(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(MOD_DL_LD) $(MOD_BERKELEY_LD)
+
+override CPPFLAGS:=-I./ $(MODS_CPP) $(CPPFLAGS)
+override LDFLAGS:= -L./ $(MODS_LD) $(LDFLAGS)
 
 LIBRARY=dodo
 

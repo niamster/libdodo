@@ -62,9 +62,10 @@
  * use modules without hooks. faster a little bit.
  */
 //#define FLUSH_DISK_WO_XEXEC = faster, if u don't want to use it!
-//#define MYSQLPP_WO_XEXEC
+//#define DBMYSQL_WO_XEXEC
 //#define FLUSH_STD_WO_XEXEC
 //#define FLUSH_SOCKET_WO_XEXEC
+//#define DBBERKELEY_WO_XEXEC
 
 /**
  * socket default timeouts
