@@ -19,7 +19,7 @@ MOD_PCRE_LD:=-L/opt/pcre/lib -lpcre
 MOD_DL_LD:=-ldl
 
 MOD_BERKELEY_CPP:=-I/opt/bdb/include/
-MOD_BERKELEY_LD:=-L/opt/bdb/lib/ -db
+MOD_BERKELEY_LD:=-L/opt/bdb/lib/ -ldb
 
 MODS_CPP:=$(MOD_MYSQL_CPP) $(MOD_PCRE_CPP) $(MOD_BERKELEY_CPP)
 MODS_LD:=$(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(MOD_DL_LD) $(MOD_BERKELEY_LD)

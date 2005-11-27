@@ -192,7 +192,6 @@ flushDisk::open(const std::string &a_path) const
 			}
 			else
 				exists = true;
-				
 			
 			if (fileType == FIFO_FILE)
 			{
@@ -211,12 +210,14 @@ flushDisk::open(const std::string &a_path) const
 						#endif					
 			}
 			else
+			{
 				if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && !S_ISREG(st.st_mode))
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
+			}
 							
 			switch (mode)
 			{
@@ -245,6 +246,9 @@ flushDisk::open(const std::string &a_path) const
 		#else
 			return false;
 		#endif
+	
+	if (fileType == REG_FILE)
+		flushDisk::chmod(path,FILE_PERM);
 	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);

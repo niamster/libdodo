@@ -39,6 +39,7 @@
 		enum dbBerkeleyFunctionsID
 		{
 			DBMYSQL_CONSTRUCTOR,
+			DBMYSQL_CONNECT,
 			
 		};		
 	};

@@ -34,6 +34,7 @@
 	#include "dbBase.h"
 	#include "tools.h"
 	#include "xexec.h"
+	#include "flushDisk.h"
 	
 	namespace dodo
 	{
@@ -134,6 +135,40 @@
 				 */
 				virtual void setSqlInfo(const std::string &db);
 				
+				/**
+				 * open database
+				 * @param flags indicates how to open database
+				 * @note flags:
+				 * 		DB_CREATE
+				 * 		    Create the database. If the database does not already exist and the DB_CREATE flag is not specified, the DB->open will fail. 
+				 * 		DB_DIRTY_READ
+				 * 		    Support dirty reads; that is, read operations on the database may request the return of modified but not yet committed data. This flag must be specified on all DB handles used to perform dirty reads or database updates, otherwise requests for dirty reads may not be honored and the read may block. 
+				 * 		DB_EXCL
+				 * 		    Return an error if the database already exists. The DB_EXCL flag is only meaningful when specified with the DB_CREATE flag. 
+				 * 		DB_NOMMAP
+				 * 		    Do not map this database into process memory (see the DB_ENV->set_mp_mmapsize method for further information). 
+				 * 		DB_RDONLY
+				 * 		    Open the database for reading only. Any attempt to modify items in the database will fail, regardless of the actual permissions of any underlying files. 
+				 * 		DB_THREAD
+				 * 		    Cause the DB handle returned by DB->open to be free-threaded; that is, concurrently usable by multiple threads in the address space. 
+				 * 		DB_TRUNCATE
+				 * 			The DB_TRUNCATE flag cannot be lock or transaction-protected, and it is an error to specify it in a locking or transaction-protected environment.
+				 * 
+				 * @param type
+				 * @note flags:
+				 * 		The type parameter is of type DBTYPE, and must be set to one of DB_BTREE, DB_HASH, DB_QUEUE, DB_RECNO, or DB_UNKNOWN. 
+				 * 		If type is DB_UNKNOWN, the database must already exist and DB->open will automatically determine its type.
+				 * 
+				 * @param mode specifies permissions to newly created database file
+				 * @note see flushDisk for more info
+				 */
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif
+								connect(int flags, int type=DB_UNKNOWN, int mode=OWNER_ALL_ACCESS);				
+				
 			private:
 			
 				/**
@@ -148,7 +183,7 @@
 				#endif
 								_exec() const;		
 				
-				DB *bdb;
+				DB *bdb;///< handler to database
 		};
 	};
 #endif

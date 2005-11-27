@@ -45,7 +45,7 @@
 				throw baseEx(ERRMODULE_DBBERKELEY,DBMYSQL_CONSTRUCTOR,ERR_BERKELEY,result,db_strerror(result),__LINE__,__FILE__);
 			#else
 				;
-			#endif		
+			#endif
 	}
 	
 	//-------------------------------------------------------------------
@@ -155,7 +155,30 @@
 	{
 		return _addExec(module, (dodoBase *)this, data);
 	}
+
+	//-------------------------------------------------------------------
 	
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif	
+	dbBerkeley::connect(int flags, int type, int mode)
+	{
+		register int result = bdb->open(bdb, 
+										NULL, 
+										dbInfo.path.c_str(), 
+										dbInfo.db.size()>0?dbInfo.db.c_str():NULL, 
+										(DBTYPE)type, 
+										flags, 
+										((DB_CREATE&flags)==DB_CREATE)?flushDisk::getPermission(mode):0);
+		if (result!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_DBBERKELEY,DBMYSQL_CONSTRUCTOR,ERR_BERKELEY,result,db_strerror(result),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+	}
 	
 	//-------------------------------------------------------------------
 	

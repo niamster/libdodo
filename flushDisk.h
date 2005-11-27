@@ -46,7 +46,7 @@ namespace dodo
 	/**
 	 * @def FILE_PERM describes file permissions for newly created file(pipe)
 	 */
-	#define FILE_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS)
+	#define FILE_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS|OWNER_EXECUTE_ACCESS)
 	
 	/**
 	 * @enum flushDiskOperationTypeEnum describes type of operation for hook
@@ -548,14 +548,14 @@ namespace dodo
 			virtual std::string getPath() const;
 
 			mutable flushDiskFileToCreateEnum fileType;///< type of file; if you change then it you have to reopen!
-			
-		private:
 		
 			/**
 			 * @return system understandable permissions
 			 * @param permission is user understandable permissions
 			 */
 			static int getPermission(int permission);
+						
+		private:
 		
 			mutable std::string path;///< file name
 					
