@@ -45,6 +45,8 @@
 		enum dbBerkeleyOperTypeEnum
 		{
 			DBBERKELEY_OPER_EXEC,
+			DBBERKELEY_OPER_CONNECT,
+			DBBERKELEY_OPER_DISCONNECT,
 		};		
 		
 		/**
@@ -131,9 +133,10 @@
 				
 				/**
 				 * overloads from base class
-				 * @param db is a path to database
+				 * @param path is a path to database
+				 * @param db is database name
 				 */
-				virtual void setSqlInfo(const std::string &db);
+				virtual void setDbInfo(const std::string &path, const std::string &db=__string__);
 				
 				/**
 				 * open database
@@ -167,7 +170,17 @@
 				#else
 					virtual bool 
 				#endif
-								connect(int flags, int type=DB_UNKNOWN, int mode=OWNER_ALL_ACCESS);				
+								connect(int flags, int type=DB_UNKNOWN, int mode=OWNER_ALL_ACCESS) const;				
+				
+				/**
+				 * disconnect from database
+				 */
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif				 
+								disconnect() const;
 				
 			private:
 			
@@ -183,7 +196,8 @@
 				#endif
 								_exec() const;		
 				
-				DB *bdb;///< handler to database
+				mutable DB *bdb;///< handler to database
+				mutable bool connected;///< connected or not
 		};
 	};
 #endif

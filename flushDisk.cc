@@ -247,7 +247,7 @@ flushDisk::open(const std::string &a_path) const
 			return false;
 		#endif
 	
-	if (fileType == REG_FILE)
+	if (fileType == REG_FILE || fileType == TMP_FILE)
 		flushDisk::chmod(path,FILE_PERM);
 	
 	#ifndef FLUSH_DISK_WO_XEXEC

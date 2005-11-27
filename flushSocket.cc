@@ -508,7 +508,7 @@ flushSocket::bindNListen(const std::string &host,
 	bool
 #endif
 flushSocket::bindNListen(const __connInfo &destinaton, 
-						int numberOfConnections)
+						int numberOfConnections) 
 {
 	#ifdef NO_EX
 		if (!bindNListen(destinaton.host,destinaton.port,numberOfConnections))
@@ -674,7 +674,7 @@ flushSocket::_close(int socket)
 
 bool 
 flushSocket::accept(__initialAccept &init, 
-					__connInfo &info)
+					__connInfo &info) const
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_ACCEPT;
@@ -786,7 +786,7 @@ flushSocket::accept(__initialAccept &init,
 //-------------------------------------------------------------------
 
 bool 
-flushSocket::accept(__initialAccept &init)
+flushSocket::accept(__initialAccept &init) const
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_ACCEPT;
@@ -961,7 +961,7 @@ flushSocketOptions::setInBufferSize(int bytes)
 //-------------------------------------------------------------------
 
 int
-flushSocketOptions::getInBufferSize()
+flushSocketOptions::getInBufferSize() const
 {
 	return inSocketBuffer;
 }
@@ -999,7 +999,7 @@ flushSocketOptions::setOutBufferSize(int bytes)
 //-------------------------------------------------------------------
 
 int
-flushSocketOptions::getOutBufferSize()
+flushSocketOptions::getOutBufferSize() const
 {
 	return outSocketBuffer;
 }
@@ -1042,7 +1042,7 @@ flushSocketOptions::setInTimeout(unsigned long microseconds)
 //-------------------------------------------------------------------
 
 unsigned long 
-flushSocketOptions::getInTimeout()
+flushSocketOptions::getInTimeout() const
 {
 	return inTimeout;
 }
@@ -1085,7 +1085,7 @@ flushSocketOptions::setOutTimeout(unsigned long microseconds)
 //-------------------------------------------------------------------
 
 unsigned long 
-flushSocketOptions::getOutTimeout()
+flushSocketOptions::getOutTimeout() const
 {
 	return outTimeout;
 }
@@ -1093,7 +1093,7 @@ flushSocketOptions::getOutTimeout()
 //-------------------------------------------------------------------
 
 bool
-flushSocketOptions::getSocketOpts(int option)
+flushSocketOptions::getSocketOpts(int option) const
 {
 	if  ( (option&socketOpts) == option)
 		return true;
@@ -1233,7 +1233,7 @@ flushSocketOptions::setLingerSockOption(socketLingerOption option,
 #else
 	bool
 #endif
-flushSocketExchange::close()
+flushSocketExchange::close() const
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_CLOSE;
@@ -1265,6 +1265,7 @@ flushSocketExchange::close()
 		return result;
 	#endif			
 }
+
 //-------------------------------------------------------------------
 
 void 
@@ -1291,7 +1292,7 @@ flushSocketExchange::init(int a_socket)
 //-------------------------------------------------------------------
 
 bool 
-flushSocketExchange::alive()
+flushSocketExchange::alive() const
 {
 	return opened;
 }
@@ -1299,7 +1300,7 @@ flushSocketExchange::alive()
 //-------------------------------------------------------------------
 
 socketLingerOption 
-flushSocketOptions::getLingerOption()
+flushSocketOptions::getLingerOption() const
 {
 	return lingerOpts;
 }
@@ -1307,7 +1308,7 @@ flushSocketOptions::getLingerOption()
 //-------------------------------------------------------------------
 
 int 
-flushSocketOptions::getLingerPeriod()
+flushSocketOptions::getLingerPeriod() const
 {
 	return lingerSeconds;
 }
@@ -1320,7 +1321,7 @@ flushSocketOptions::getLingerPeriod()
 	bool
 #endif
 flushSocketExchange::send(const char * const data, 
-						bool urgent)
+						bool urgent) const
 {
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
@@ -1399,7 +1400,7 @@ flushSocketExchange::send(const char * const data,
 	bool
 #endif
 flushSocketExchange::sendString(const std::string &data, 
-						bool urgent)
+						bool urgent) const
 {
 	return this->send(data.c_str(),urgent);
 }
@@ -1412,7 +1413,7 @@ flushSocketExchange::sendString(const std::string &data,
 	bool
 #endif
 flushSocketExchange::recieve(char * const data, 
-							bool urgent)
+							bool urgent) const
 {
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
@@ -1470,7 +1471,7 @@ flushSocketExchange::recieve(char * const data,
 	bool
 #endif
 flushSocketExchange::recieveString(std::string &data, 
-								bool urgent)
+								bool urgent) const
 {	
 	register char *t_data = new char[inSize+1];
 	if (t_data == NULL)

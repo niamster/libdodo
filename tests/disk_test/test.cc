@@ -42,8 +42,6 @@ int main(int argc, char **argv)
 	//	flush.autoOutSize = false;flush.inSize = flush.outSize = 10;
 		flush.over = true;
 		flush.writeString("!1234567890-!!",0);
-		
-		exit(0);
 				
 		string str;
 	

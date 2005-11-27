@@ -484,7 +484,7 @@ cgiTools::setCookie(const std::string &name,
 				const std::string &exDate, 
 				const std::string &path, 
 				const std::string &domain, 
-				bool secure) const
+				bool secure)
 {
 	__cookies temp(secure);
 	temp.name = name;

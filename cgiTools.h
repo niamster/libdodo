@@ -275,7 +275,7 @@ namespace dodo
 			 * @param domain is cookie's domain
 			 * @param secure is indicates if cookie is secure; false by default
 			 */
-			virtual void setCookie(const std::string &name, const std::string &value, const std::string &exDate=__string__, const std::string &path=__string__, const std::string &domain=__string__, bool secure=false) const;
+			virtual void setCookie(const std::string &name, const std::string &value, const std::string &exDate=__string__, const std::string &path=__string__, const std::string &domain=__string__, bool secure=false);
 		
 		protected:
 					

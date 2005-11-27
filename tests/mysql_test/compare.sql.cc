@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	dbMysql pp;	
 	try
 	{
-		pp.setSqlInfo(string("test"),string(""),3306,string(""),string("Dmitrik"));
+		pp.setDbInfo(string("test"),string(""),3306,string(""),string("Dmitrik"));
 		pp.connect();		
 		
 		map<string,string> arr;

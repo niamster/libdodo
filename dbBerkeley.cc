@@ -37,7 +37,7 @@
 	//-------------------------------------------------------------------
 
 	
-	dbBerkeley::dbBerkeley()
+	dbBerkeley::dbBerkeley() : connected(false)
 	{
 		register int result = db_create(&bdb, NULL, 0);
 		if (result!=0)
@@ -58,14 +58,17 @@
 	
 	dbBerkeley::~dbBerkeley()
 	{
+		disconnect();
 	}
 	
 	//-------------------------------------------------------------------
 	
 	void 
-	dbBerkeley::setSqlInfo(const std::string &db)
+	dbBerkeley::setDbInfo(const std::string &path,
+							const std::string &db)
 	{
-		dbInfo.path = db;
+		dbInfo.db = db;
+		dbInfo.path = path;
 	}
 
 	//-------------------------------------------------------------------
@@ -163,8 +166,16 @@
 	#else
 		bool
 	#endif	
-	dbBerkeley::connect(int flags, int type, int mode)
+	dbBerkeley::connect(int flags, int type, int mode) const
 	{
+		if (connected)
+			disconnect();
+			
+		#ifndef DBBERKELEY_WO_XEXEC
+			operType = DBBERKELEY_OPER_CONNECT;
+			performXExec(preExec);
+		#endif
+		
 		register int result = bdb->open(bdb, 
 										NULL, 
 										dbInfo.path.c_str(), 
@@ -174,12 +185,52 @@
 										((DB_CREATE&flags)==DB_CREATE)?flushDisk::getPermission(mode):0);
 		if (result!=0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBBERKELEY,DBMYSQL_CONSTRUCTOR,ERR_BERKELEY,result,db_strerror(result),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBBERKELEY,DBMYSQL_CONNECT,ERR_BERKELEY,result,db_strerror(result),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
+		
+		connected = true;	
+			
+		#ifndef DBBERKELEY_WO_XEXEC		
+			performXExec(postExec);
+		#endif			
 	}
 	
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif
+	dbBerkeley::disconnect() const
+	{
+		if (connected)
+		{
+			#ifndef DBBERKELEY_WO_XEXEC
+				operType = DBBERKELEY_OPER_DISCONNECT;
+				performXExec(preExec);
+			#endif
+
+			register int result = bdb->close(bdb,0);
+
+			if (result!=0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_DBBERKELEY,DBMYSQL_DISCONNECT,ERR_BERKELEY,result,db_strerror(result),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+			
+			connected = false;	
+				
+			#ifndef DBBERKELEY_WO_XEXEC		
+				performXExec(postExec);
+			#endif			
+			
+		}
+	}
+		
 	//-------------------------------------------------------------------
 	
 #endif

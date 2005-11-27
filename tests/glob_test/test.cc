@@ -1,4 +1,3 @@
-
 #include <dbMysql.h>
 
 using namespace dodo;
@@ -57,7 +56,7 @@ int main(int argc, char **argv)
 		 */
 		//pp.delPreExec(pos);//removes hook!!
 		
-		pp.setSqlInfo("test","",3306,"","Dmitrik");
+		pp.setDbInfo("test","",3306,"","Dmitrik");
 		pp.connect();
 		
 		/* create field

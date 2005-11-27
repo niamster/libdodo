@@ -40,7 +40,7 @@
 		{
 			DBMYSQL_CONSTRUCTOR,
 			DBMYSQL_CONNECT,
-			
+			DBMYSQL_DISCONNECT,
 		};		
 	};
 

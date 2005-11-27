@@ -188,12 +188,12 @@ namespace dodo
 			/**
 			 * @return linger option that was set
 			 */
-			virtual socketLingerOption getLingerOption();
+			virtual socketLingerOption getLingerOption() const;
 			
 			/**
 			 * @return amount of seconds to wait(for SOCKET_WAIT_CLOSE only)
 			 */
-			virtual int getLingerPeriod();
+			virtual int getLingerPeriod() const;
 			
 			/**
 			 * sets incoming buffer size of socket
@@ -220,12 +220,12 @@ namespace dodo
 			/**
 			 * @return incoming buffer size of socket
 			 */
-			virtual int getInBufferSize();
+			virtual int getInBufferSize() const;
 			
 			/**
 			 * @return outgoing buffer size of socket
 			 */
-			virtual int getOutBufferSize();
+			virtual int getOutBufferSize() const;
 
 			/**
 			 * sets incomming operation timeout of socket
@@ -252,34 +252,34 @@ namespace dodo
 			/**
 			 * @return incomming operation timeout of socket
 			 */
-			virtual unsigned long getInTimeout();
+			virtual unsigned long getInTimeout() const;
 			
 			/**
 			 * @return outgoing operation timeout of socket
 			 */
-			virtual unsigned long getOutTimeout();
+			virtual unsigned long getOutTimeout() const;
 			
 			
 			/**
 			 * @return true if socket option was set
 			 */
-			virtual bool getSocketOpts(int option);
+			virtual bool getSocketOpts(int option) const;
 			
 		protected:
 			
-			socketProtoFamilyEnum family;///< socket family
-			socketTransferTypeEnum type;///< socket type
+			mutable socketProtoFamilyEnum family;///< socket family
+			mutable socketTransferTypeEnum type;///< socket type
 					
-			int socketOpts;///< socket options
+			mutable int socketOpts;///< socket options
 			
-			socketLingerOption lingerOpts;///< socket linger option
-			int lingerSeconds;///< socket linger timeout
+			mutable socketLingerOption lingerOpts;///< socket linger option
+			mutable int lingerSeconds;///< socket linger timeout
 			
-			unsigned long inTimeout;///< incomming operation timeout of socket; in microseconds
-			unsigned long outTimeout;///< outgoing operation timeout of socket; in microseconds
+			mutable unsigned long inTimeout;///< incomming operation timeout of socket; in microseconds
+			mutable unsigned long outTimeout;///< outgoing operation timeout of socket; in microseconds
 			 
-			int inSocketBuffer;///< incoming buffer size of socket; in bytes
-			int outSocketBuffer;///< outgoing buffer size of socket; in bytes
+			mutable int inSocketBuffer;///< incoming buffer size of socket; in bytes
+			mutable int outSocketBuffer;///< outgoing buffer size of socket; in bytes
 
 			int socket;///< id of socket
 	};
@@ -480,7 +480,7 @@ namespace dodo
 			 * @note if was defined NO_EX - no way to detect error
 			 * with PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
 			 */
-			virtual bool accept(__initialAccept &init, __connInfo &info);
+			virtual bool accept(__initialAccept &init, __connInfo &info) const;
 			
 			/**
 			 * accepts incommin' connections(as for server)
@@ -489,7 +489,7 @@ namespace dodo
 			 * @note if was defined NO_EX - no way to detect error
 			 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
 			 */
-			virtual bool accept(__initialAccept &init);
+			virtual bool accept(__initialAccept &init) const;
 			
 			/**
 			 * @return info about given host
@@ -549,9 +549,9 @@ namespace dodo
 			#endif			 
 							_close(int socket); 
 	 
-			bool server;///< indicates whether server object or not
+			mutable bool server;///< indicates whether server object or not
 			
-			std::string unixSock;///to remember, 'cos have to unlink in destructor
+			mutable std::string unixSock;///to remember, 'cos have to unlink in destructor
 	};
 	
 	/**
@@ -649,7 +649,7 @@ namespace dodo
 			/**
 			 * @return true if connection is alive
 			 */
-			virtual bool alive();
+			virtual bool alive() const;
 			
 			/**
 			 * send
@@ -663,7 +663,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							send(const char * const data, bool urgent = false);
+							send(const char * const data, bool urgent = false) const;
 			
 			/**
 			 * send
@@ -677,7 +677,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							sendString(const std::string &data, bool urgent = false);
+							sendString(const std::string &data, bool urgent = false) const;
 			
 			/**
 			 * recieve
@@ -691,7 +691,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							recieve(char * const data, bool urgent = false);
+							recieve(char * const data, bool urgent = false) const;
 			
 			/**
 			 * recieve
@@ -705,7 +705,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							recieveString(std::string &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
+							recieveString(std::string &data, bool urgent = false) const;///urgent = true -> Receipt  of out-of-band data
 						
 			/**
 			 * closes this socket
@@ -715,7 +715,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							close();
+							close() const;
 			
 		protected:	
 					
