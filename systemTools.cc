@@ -617,3 +617,14 @@ systemTools::die(const std::string &message,
 }
 
 //-------------------------------------------------------------------
+
+void 
+systemTools::sleep(unsigned long period)
+{
+	if (period<1000000)
+		::usleep(period);
+	else
+		::sleep(period/1000000);
+}
+
+//-------------------------------------------------------------------

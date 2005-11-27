@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 	}
 		
 	cout << systemTools::getWorkingDir() << endl;	
-	
+
 	systemTools::die(tools::rTrim("    dsgdfhhdf    "));
 
 	cout << systemTools::getWorkingDir();	

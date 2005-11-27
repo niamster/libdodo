@@ -1,0 +1,41 @@
+Brief overview of libdodo's modules
+
+libdodo consists of such modules as:
+
+	cgipp
+		server side `scripting`; [presents requests, headers, cookies, ...]
+	
+	flush
+		system of classes that works with input/output
+		
+		flushDisk[*]
+			disk operations [read,write,file/dir operations, ...]
+			
+		flushSocket[*]
+			network operations [client/server connection and communication]
+		
+		flushSTD[*]
+			stdin/stdout operations controlled in/out put
+		
+	dbBase
+		system SQL independent interface to communicate with database
+		
+		sqlBase
+			convertions to SQL for SQLbase databases
+		
+			mysqlpp[*]
+				communication with mySQL database
+	regexp
+		regexp operations [match, replace]
+	
+	systemTools
+		different system tools [system, evironment info, ...]
+	
+	tools
+		different functions [trim, implode/explode, ...]
+		
+	xexec
+		pre/post exec operations in other modules(marked with [*]) in different actions
+	
+All libdodo methods throw exceptions on errors; 
+you can compile it without exceptions, in this case you may chek by return values, but sometimes it's danger.

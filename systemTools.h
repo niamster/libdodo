@@ -121,6 +121,12 @@ namespace dodo
 		public:			
 		
 			/**
+			 * suspend for given microseconds
+			 * @param period is time in microseconds
+			 */
+			static void sleep(unsigned long period);
+		
+			/**
 			 * prints message to stderr end exits from program
 			 * @param message is message to print
 			 * @param status indicate with what status to exit
