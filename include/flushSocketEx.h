@@ -25,8 +25,9 @@
 #ifndef _FLUSHSOCKETEX_H_
 #define _FLUSHSOCKETEX_H_
 
-#include "directives.h"
-#include "baseEx.h"
+#include <directives.h>
+
+#include <baseEx.h>
 
 #ifndef NO_EX
 

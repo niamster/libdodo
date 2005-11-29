@@ -25,11 +25,12 @@
 #ifndef _FLUSHSTD_H_
 #define _FLUSHSTD_H_
 
-#include "directives.h"
-#include "flushSTDEx.h"
-#include "types.h"
-#include "tools.h"
-#include "flush.h"
+#include <directives.h>
+
+#include <flushSTDEx.h>
+#include <types.h>
+#include <tools.h>
+#include <flush.h>
 
 namespace dodo
 {

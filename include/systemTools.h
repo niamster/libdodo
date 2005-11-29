@@ -30,18 +30,16 @@
 #include <sys/resource.h>
 #include <pwd.h>
 #include <grp.h>
-
-
 #include <stdlib.h>
 #include <stdio.h>
-
 #include <errno.h>
 
 #include <iostream>
 
-#include "directives.h"
-#include "systemToolsEx.h"
-#include "types.h"
+#include <directives.h>
+
+#include <systemToolsEx.h>
+#include <types.h>
 
 namespace dodo
 {

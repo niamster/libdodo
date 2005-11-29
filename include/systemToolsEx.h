@@ -25,8 +25,9 @@
 #ifndef _SYSTEMEX_H_
 #define _SYSTEMEX_H_
 
-#include "directives.h"
-#include "baseEx.h"
+#include <directives.h>
+
+#include <baseEx.h>
 
 #ifndef NO_EX
 

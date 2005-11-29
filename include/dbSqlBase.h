@@ -25,12 +25,13 @@
 #ifndef _DBSQLBASE_H_
 #define _DBSQLBASE_H_
 
-#include "directives.h"
-#include "types.h"
-#include "dbSqlBaseEx.h"
-#include "dodoBase.h"
-#include "tools.h"
-#include "dbBase.h"
+#include <directives.h>
+
+#include <types.h>
+#include <dbSqlBaseEx.h>
+#include <dodoBase.h>
+#include <tools.h>
+#include <dbBase.h>
 
 namespace dodo
 {

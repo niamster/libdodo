@@ -25,7 +25,8 @@
 #ifndef _BASEEX_H_
 #define _BASEEX_H_
 
-#include "directives.h"
+#include <directives.h>
+
 #include <string>
 
 #ifndef NO_EX

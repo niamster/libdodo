@@ -30,14 +30,14 @@
 	#include <string.h>
 		
 	#include <sys/socket.h>
-	
 	#include <mysql.h>
 	
-	#include "directives.h"
-	#include "dbMysqlEx.h"
-	#include "dbSqlBase.h"
-	#include "tools.h"
-	#include "xexec.h"
+	#include "directives.h>
+	
+	#include <dbMysqlEx.h>
+	#include <dbSqlBase.h>
+	#include <tools.h>
+	#include <xexec.h>
 	
 	namespace dodo
 	{

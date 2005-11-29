@@ -30,10 +30,11 @@
 
 #include <dlfcn.h>
 
-#include "directives.h"
-#include "types.h"
-#include "dodoBase.h"
-#include "xexecEx.h"
+#include <directives.h>
+
+#include <types.h>
+#include <dodoBase.h>
+#include <xexecEx.h>
 
 namespace dodo
 {

@@ -29,6 +29,9 @@
 
 #define LIBDODO_VERSION "libdodo/0.0.8"
 
+#define MYSQL_EXT
+#define PCRE_EXT
+
 /**
  * !!!!note!!!!!
  * please read notes before uncommentin'!!!

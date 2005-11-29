@@ -25,9 +25,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "tools.h"
-#include "types.h"
-#include "cgiToolsEx.h"
+#include <directives.h>
+
+#include <tools.h>
+#include <types.h>
+#include <cgiToolsEx.h>
 
 #ifndef _CGITOOLS_H_
 #define _CGITOOLS_H_

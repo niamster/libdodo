@@ -25,10 +25,12 @@
 #ifndef _DBSQLBASEEX_H_
 #define _DBSQLBASEEX_H_
 
-#include "directives.h"
-#include "baseEx.h"
 #include <vector>
 #include <string>
+
+#include <directives.h>
+
+#include <baseEx.h>
 
 #ifndef NO_EX
 

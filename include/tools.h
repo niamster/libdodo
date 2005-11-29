@@ -28,10 +28,10 @@
 #include <string>
 #include <vector>
 
+#include <directives.h>
 
-#include "directives.h"
-#include "types.h"
-#include "dodoBase.h"
+#include <types.h>
+#include <dodoBase.h>
 
 namespace dodo
 {

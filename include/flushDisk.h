@@ -35,11 +35,12 @@
 #include <unistd.h>
 
 
-#include "directives.h"
-#include "flushDiskEx.h"
-#include "types.h"
-#include "tools.h"
-#include "flush.h"
+#include <directives.h>
+
+#include <flushDiskEx.h>
+#include <types.h>
+#include <tools.h>
+#include <flush.h>
 
 namespace dodo
 {

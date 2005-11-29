@@ -25,8 +25,9 @@
 #ifndef _XEXECEX_H_
 #define _XEXECEX_H_
 
-#include "directives.h"
-#include "baseEx.h"
+#include <directives.h>
+
+#include <baseEx.h>
 
 #ifndef NO_EX
 

@@ -26,10 +26,11 @@
 #ifndef _REGEXP_H_
 #define _REGEXP_H_
 
-#include "directives.h"
-#include "types.h"
-#include "regexpToolsEx.h"
-#include "dodoBase.h"
+#include <directives.h>
+
+#include <types.h>
+#include <regexpToolsEx.h>
+#include <dodoBase.h>
 
 #ifdef PCRE_EXT
 	

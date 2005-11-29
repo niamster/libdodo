@@ -28,9 +28,10 @@
 #include <time.h>
 #include <stdlib.h>
 
-#include "directives.h"
-#include "types.h"
-#include "timeToolsEx.h"
+#include <directives.h>
+
+#include <types.h>
+#include <timeToolsEx.h>
 
 namespace dodo
 {
