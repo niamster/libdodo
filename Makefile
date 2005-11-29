@@ -5,6 +5,8 @@
 CXX = $(CC_PATH)g++
 #CXX = $(CC_PATH)icc
 
+DEBUG=-g
+
 CFLAGS=-O2 -march=pentium4
 OBJECTS=dbBase.o dodoBase.o tools.o xexec.o dbSqlBase.o baseEx.o dbMysql.o cgiTools.o regexpTools.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o timeTools.o
 
@@ -40,8 +42,8 @@ $(LIBRARY): $(OBJECTS)
 	ln -fs lib$@.so.$(VERSION).$(MINOR) lib$@.so
 	ldconfig -n ./
 .cc.o:
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -Wall -fPIC -c $^
-	strip -d $@
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -Wall -fPIC -c $^
+	#strip -d $@
 	
 clean:
 	rm -rf *.o *.so* *.lo .libs

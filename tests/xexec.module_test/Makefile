@@ -1,8 +1,11 @@
-GCC_PATH=/opt/gcc-3.4.3/bin/
+#GCC_PATH=/opt/gcc-3.4.3/bin/
+#GCC_PATH=/opt/gcc-4.0.1/bin/
 
 LIBTOOL = libtool
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -march=pentium4
+
+DEBUG=-g
 
 override DEFINES:=$(DEFINES)
 
@@ -10,9 +13,10 @@ override CPPFLAGS:=-I../../ $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@ 
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
 
 module: module.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -Wall -shared -ldodo $^ -o $@ 
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -Wall -shared -ldodo $^ -o $@ 
+	
 clean:
-	rm -rf test .libs
+	rm -rf test module .libs 

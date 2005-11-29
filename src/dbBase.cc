@@ -361,7 +361,7 @@ dbBase::update(const std::string &a_table,
 				const std::string &a_where)
 {
 	qType = UPDATE;
-	
+        
 	pre_table = a_table;
 	
 	assocArr::const_iterator i(a_fields.begin()),j(a_fields.end());

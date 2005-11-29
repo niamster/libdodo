@@ -9,10 +9,13 @@ MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
 
 override DEFINES:=-DMYSQL_EXT $(DEFINES)
 
-override CPPFLAGS:=-I../../ $(MOD_MYSQL_CPP)  $(CPPFLAGS)
+DEBUG=-g
+
+override CPPFLAGS:=-I../../ $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
-compare.sql: compare.sql.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@ 
+test: test.cc
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
+
 clean:
 	rm -rf compare.sql .libs
