@@ -25,14 +25,14 @@
 #ifndef _DBMYSQL_H_
 #define _DBMYSQL_H_
 
+#include <directives.h>
+
 #ifdef MYSQL_EXT
 	
 	#include <string.h>
 		
 	#include <sys/socket.h>
 	#include <mysql.h>
-	
-	#include "directives.h>
 	
 	#include <dbMysqlEx.h>
 	#include <dbSqlBase.h>
@@ -90,6 +90,19 @@
 		};
 		
 		/**
+		 * @struct __mysqlSSLOptions describes mySQL options to establish ssl connection
+		 * @note any unused SSL parameters may be given empty
+		 */
+		struct __mysqlSSLOptions
+		{
+			std::string key;///< the pathname to the key file
+			std::string cert;///< the pathname to the certificate file.
+			std::string ca;///< the pathname to the certificate authority file.
+			std::string capath;///< the pathname to a directory that contains trusted SSL CA certificates in pem format.
+			std::string cipher;///< a list of allowable ciphers to use for SSL encryption.
+		};
+		
+		/**
 	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
 		 */
 		class dbMysql : public dbSqlBase, public xexec
@@ -123,6 +136,7 @@
 				/**
 				 * connect to database
 				 * @param type is type of connection - see mySQL documentation for more!
+				 * @param options is options for ssl connection. see __mysqlSSLOptions for more details
 				 * 	CLIENT_COMPRESS 	Use compression protocol.
 				 *	CLIENT_FOUND_ROWS 	Return the number of found (matched) rows, not the number of affected rows.
 				 *	CLIENT_IGNORE_SPACE 	Allow spaces after function names. Makes all functions names reserved words.
@@ -137,7 +151,7 @@
 				#else
 					virtual bool 
 				#endif
-								connect(unsigned long type=CLIENT_MULTI_STATEMENTS) const;
+								connect(unsigned long type=CLIENT_MULTI_STATEMENTS, const __mysqlSSLOptions &options = __mysqlSSLOptions) const;
 				
 				/**
 				 * disconnect from database
@@ -273,6 +287,23 @@
 				 */
 				virtual int addPreExec(const std::string &module, void *data) const;
 				
+				/**
+				 * sets sessions charset
+				 * @param charset indicates what type of charset would be used for session
+				 */
+				virtual void setCharset(const std::string &charset);
+				
+				/**
+				 * sets connection timeout
+				 * @param connection timeout in seconds
+				 */
+				virtual void setConnectTimeout(unsigned int time);
+				 
+				/**
+				 * @return current session charset
+				 */ 
+				virtual std::string getCharset(); 
+				 
 			private:
 			
 				/**

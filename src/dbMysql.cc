@@ -179,7 +179,8 @@
 	#else
 		bool
 	#endif
-	dbMysql::connect(unsigned long type) const
+	dbMysql::connect(unsigned long type,
+					const __mysqlSSLOptions &options) const
 	{
 		if (connected)
 			disconnect();
@@ -188,6 +189,13 @@
 			operType = DBMYSQL_OPER_CONNECT;
 			performXExec(preExec);
 		#endif
+		
+		mysql_ssl_set(mysql,
+		options.key.size()==0?NULL:options.key.c_str(),
+		options.cert.size()==0?NULL:options.cert.c_str(),
+		options.ca.size()==0?NULL:options.ca.c_str(),
+		options.capath.size()==0?NULL:options.capath.c_str(),
+		options.cipher.size()==0?NULL:options.cipher.c_str());
 		
 		if (!mysql_real_connect(mysql,
 			dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
@@ -436,8 +444,33 @@
 	{
 		return _addExec(module, (dodoBase *)this, data);
 	}
+
+	//-------------------------------------------------------------------
 	
+	void 
+	dbMysql::setCharset(const std::string &charset)
+	{
+		mysql_options(mysql,MYSQL_READ_DEFAULT_FILE,charset.c_str());
+	}
 	
+	//-------------------------------------------------------------------
+	
+	void 
+	dbMysql::setConnectTimeout(unsigned int time)
+	{
+		mysql_options(mysql,MYSQL_OPT_CONNECT_TIMEOUT,&time);
+	}
+
+	//-------------------------------------------------------------------
+	
+	std::string 
+	dbMysql::getCharset()
+	{
+		return mysql_character_set_name(mysql);
+	}
+	
+	//-------------------------------------------------------------------
+	//-------------------------------------------------------------------
 	//-------------------------------------------------------------------
 	
 #endif

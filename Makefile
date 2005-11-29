@@ -7,10 +7,14 @@ CXX = $(CC_PATH)g++
 
 DEBUG=-g
 
-CFLAGS=-O2 -march=pentium4
+CFLAGS=-O3 -march=pentium4
 OBJECTS=dbBase.o dodoBase.o tools.o xexec.o dbSqlBase.o baseEx.o dbMysql.o cgiTools.o regexpTools.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o timeTools.o
 
-override DEFINES:=-DMYSQL_EXT -DPCRE_EXT $(DEFINES)
+override DEFINES:=$(DEFINES)
+
+override PREFIX=/temp/libdodo
+
+###########################################################
 
 MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
 MOD_MYSQL_LD:=-L/opt/mysql/lib/mysql -lmysqlclient
@@ -26,24 +30,36 @@ MOD_DL_LD:=-ldl
 MODS_CPP:=$(MOD_MYSQL_CPP) $(MOD_PCRE_CPP)
 MODS_LD:=$(MOD_MYSQL_LD) $(MOD_PCRE_LD) $(MOD_DL_LD)
 
-override CPPFLAGS:=-I./ $(MODS_CPP) $(CPPFLAGS)
+###########################################################
+
+override CPPFLAGS:=-I./include $(MODS_CPP) $(CPPFLAGS)
 override LDFLAGS:= -L./ $(MODS_LD) $(LDFLAGS)
 
+VPATH=src
+
 LIBRARY=dodo
-
 VERSION = 0.0
-
 MINOR = 8
 
 all: $(LIBRARY)
 
 $(LIBRARY): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,lib$@.so.$(VERSION).$(MINOR) -o lib$@.so.$(VERSION).$(MINOR) $^
-	ln -fs lib$@.so.$(VERSION).$(MINOR) lib$@.so
-	ldconfig -n ./
+	@echo ""
+	@echo ""
+	@echo "Now you can run 'make install'. [PREFIX=$(PREFIX)] - override if you want"
 .cc.o:
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -Wall -fPIC -c $^
 	#strip -d $@
+
+install:
+	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include
+	cp lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/
+	cp -rf include/* $(PREFIX)/include/
+	ln -fs $(PREFIX)/lib/lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/lib$@.so
+	@echo ""
+	@echo ""
+	@echo "Use libdodo with pleasure"
 	
 clean:
 	rm -rf *.o *.so* *.lo .libs

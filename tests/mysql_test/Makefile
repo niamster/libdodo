@@ -7,7 +7,7 @@ CFLAGS=-O2 -march=pentium4
 
 MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
 
-override DEFINES:=-DMYSQL_EXT $(DEFINES)
+override DEFINES:=$(DEFINES)
 
 DEBUG=-g
 
