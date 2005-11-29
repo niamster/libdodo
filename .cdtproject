@@ -3,6 +3,10 @@
 
 <cdtproject id="org.eclipse.cdt.make.core.make">
 <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser">
+<attribute key="addr2line" value="addr2line"/>
+<attribute key="c++filt" value="c++filt"/>
+</extension>
 <extension id="org.eclipse.cdt.core.domsourceindexer" point="org.eclipse.cdt.core.CIndexer"/>
 <data>
 <item id="scannerConfiguration">
@@ -61,8 +65,7 @@
 <pathentry include="/usr/include/sys" kind="inc" path="" system="true"/>
 <pathentry include="/usr/include/net" kind="inc" path="" system="true"/>
 <pathentry include="/usr/include/netinet" kind="inc" path="" system="true"/>
-<pathentry base-path="libdodo" include="include" kind="inc" path="include" system="true"/>
-<pathentry include="/mnt/media/projects/workspace/libdodo/include" kind="inc" path="include" system="true"/>
+<pathentry base-path="libdodo" include="include" kind="inc" path="" system="true"/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
 <pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
