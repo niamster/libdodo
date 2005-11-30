@@ -36,8 +36,13 @@ dummyHook(dodoBase *base, void *data)
 //-------------------------------------------------------------------
 
 xexec::xexec() : safeHooks(true),
-				operType(XEXEC_NONE),
-				handlesOpened(0)
+				operType(XEXEC_NONE)
+				
+				#ifdef DL_EXT
+				
+					,handlesOpened(0)
+					
+				#endif
 {
 	preExec.execDisabled = false;
 	postExec.execDisabled = false;
@@ -47,9 +52,12 @@ xexec::xexec() : safeHooks(true),
 
 xexec::~xexec()
 {	
-	for (register int i(0);i<handlesOpened;++i)
-		dlclose(handles[i]);
-
+	#ifdef DL_EXT
+	
+		for (register int i(0);i<handlesOpened;++i)
+			dlclose(handles[i]);
+			
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -285,164 +293,168 @@ xexec::performXExec(__execItemList &list) const
 
 //-------------------------------------------------------------------
 
-int 
-xexec::addXExecModule(std::vector<__execItem> &list, 
-				dodoBase *obj, 
-				const std::string &module, 
-				void *data) const
-{
-	if (handlesOpened == XEXEC_MAXMODULES)
-		return -1;
-	
-	__execItem temp;
-	
-	temp.data = data;
-	temp.obj = obj;
-	temp.present = true;
-	temp.enabled = true;
-	
-	handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
-	if (handles[handlesOpened] == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif
-	
-	initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
-	if (init == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif	
-	
-	inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
-	if (in == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif
+#ifdef DL_EXT
 
-	
-	temp.func = in;
-	
-	list.push_back(temp);
-	++handlesOpened;
-
-	return list.size();		
-}
-
-//-------------------------------------------------------------------
-
-int 
-xexec::_addPostExec(const std::string &module, 
+	int 
+	xexec::addXExecModule(std::vector<__execItem> &list, 
 					dodoBase *obj, 
+					const std::string &module, 
 					void *data) const
-{
-	return addXExecModule(postExec.exec,obj,module,data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-xexec::_addPreExec(const std::string &module, 
-				dodoBase *obj,
-				void *data) const
-{
-	return addXExecModule(preExec.exec,obj,module,data);
-}
-
-//-------------------------------------------------------------------
-
-xexecExMod 
-xexec::getModuleInfo(const std::string &module)
-{
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
-	if (handle == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return xexecExMod();
-	#endif
+	{
+		if (handlesOpened == XEXEC_MAXMODULES)
+			return -1;
 		
-	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
-	if (init == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return xexecExMod();
-	#endif
+		__execItem temp;
 		
-	xexecExMod mod = init();
+		temp.data = data;
+		temp.obj = obj;
+		temp.present = true;
+		temp.enabled = true;
+		
+		handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
+		if (handles[handlesOpened] == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
+		
+		initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
+		if (init == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif	
+		
+		inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
+		if (in == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
 	
-	if (dlclose(handle)!=0)
+		
+		temp.func = in;
+		
+		list.push_back(temp);
+		++handlesOpened;
+	
+		return list.size();		
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	xexec::_addPostExec(const std::string &module, 
+						dodoBase *obj, 
+						void *data) const
+	{
+		return addXExecModule(postExec.exec,obj,module,data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	xexec::_addPreExec(const std::string &module, 
+					dodoBase *obj,
+					void *data) const
+	{
+		return addXExecModule(preExec.exec,obj,module,data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	xexecExMod 
+	xexec::getModuleInfo(const std::string &module)
+	{
+		void *handle = dlopen(module.c_str(), RTLD_LAZY);
+		if (handle == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 		#else
 			return xexecExMod();
 		#endif
-	
-	return mod;	
-}
-
-//-------------------------------------------------------------------
-
-int 
-xexec::_addExec(const std::string &module, 
-				dodoBase *obj,
-				void *data) const
-{
-	if (handlesOpened == XEXEC_MAXMODULES)
-		return -1;
-	
-	__execItem temp;
-	
-	temp.data = data;
-	temp.obj = obj;
-	temp.present = true;
-	temp.enabled = true;
-	
-	handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
-	if (handles[handlesOpened] == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif
-	
-	initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
-	if (init == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif	
-	
-	xexecExMod info = init();
-	
-	inExec in = (inExec)dlsym(handles[handlesOpened], info.hook);
-	if (in == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-	#else
-		return -1;
-	#endif
-
-	
-	temp.func = in;
-	if (info.preExec)
-		preExec.exec.push_back(temp);
-	else
-		postExec.exec.push_back(temp);
+			
+		initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
+		if (init == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return xexecExMod();
+		#endif
+			
+		xexecExMod mod = init();
 		
-	++handlesOpened;
+		if (dlclose(handle)!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecExMod();
+			#endif
+		
+		return mod;	
+	}
 	
-	if (info.preExec)
-		return preExec.exec.size();
-	else
-		return postExec.exec.size();
-}
+	//-------------------------------------------------------------------
+	
+	int 
+	xexec::_addExec(const std::string &module, 
+					dodoBase *obj,
+					void *data) const
+	{
+		if (handlesOpened == XEXEC_MAXMODULES)
+			return -1;
+		
+		__execItem temp;
+		
+		temp.data = data;
+		temp.obj = obj;
+		temp.present = true;
+		temp.enabled = true;
+		
+		handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
+		if (handles[handlesOpened] == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
+		
+		initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
+		if (init == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif	
+		
+		xexecExMod info = init();
+		
+		inExec in = (inExec)dlsym(handles[handlesOpened], info.hook);
+		if (in == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
+	
+		
+		temp.func = in;
+		if (info.preExec)
+			preExec.exec.push_back(temp);
+		else
+			postExec.exec.push_back(temp);
+			
+		++handlesOpened;
+		
+		if (info.preExec)
+			return preExec.exec.size();
+		else
+			return postExec.exec.size();
+	}
+	
+	//-------------------------------------------------------------------
 
-//-------------------------------------------------------------------
+#endif

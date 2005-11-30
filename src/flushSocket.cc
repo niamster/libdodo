@@ -97,30 +97,34 @@ flushSocket::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-int 
-flushSocket::addPostExec(const std::string &module, 
-					void *data) const
-{
-	return _addPostExec(module, (dodoBase *)this, data);
-}
+#ifdef DL_EXT
 
-//-------------------------------------------------------------------
+	int 
+	flushSocket::addPostExec(const std::string &module, 
+						void *data) const
+	{
+		return _addPostExec(module, (dodoBase *)this, data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	flushSocket::addPreExec(const std::string &module, 
+						void *data) const
+	{
+		return _addPreExec(module, (dodoBase *)this, data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	flushSocket::addExec(const std::string &module, 
+						void *data) const
+	{
+		return _addExec(module, (dodoBase *)this, data);
+	}
 
-int 
-flushSocket::addPreExec(const std::string &module, 
-					void *data) const
-{
-	return _addPreExec(module, (dodoBase *)this, data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-flushSocket::addExec(const std::string &module, 
-					void *data) const
-{
-	return _addExec(module, (dodoBase *)this, data);
-}
+#endif
 
 //-------------------------------------------------------------------
 
@@ -1516,29 +1520,33 @@ flushSocketExchange::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-int 
-flushSocketExchange::addPostExec(const std::string &module, 
-					void *data) const
-{
-	return _addPostExec(module, (dodoBase *)this, data);
-}
+#ifdef DL_EXT
 
-//-------------------------------------------------------------------
+	int 
+	flushSocketExchange::addPostExec(const std::string &module, 
+						void *data) const
+	{
+		return _addPostExec(module, (dodoBase *)this, data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	flushSocketExchange::addPreExec(const std::string &module, 
+						void *data) const
+	{
+		return _addPreExec(module, (dodoBase *)this, data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	flushSocketExchange::addExec(const std::string &module, 
+						void *data) const
+	{
+		return _addExec(module, (dodoBase *)this, data);
+	}
 
-int 
-flushSocketExchange::addPreExec(const std::string &module, 
-					void *data) const
-{
-	return _addPreExec(module, (dodoBase *)this, data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-flushSocketExchange::addExec(const std::string &module, 
-					void *data) const
-{
-	return _addExec(module, (dodoBase *)this, data);
-}
+#endif
 
 //-------------------------------------------------------------------

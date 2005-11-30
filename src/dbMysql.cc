@@ -420,31 +420,35 @@
 	
 	//-------------------------------------------------------------------
 	
-	int 
-	dbMysql::addPostExec(const std::string &module, 
-						void *data) const
-	{
-		return _addPostExec(module, (dodoBase *)this, data);
-	}
+	#ifdef DL_EXT
 	
-	//-------------------------------------------------------------------
+		int 
+		dbMysql::addPostExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPostExec(module, (dodoBase *)this, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		dbMysql::addPreExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPreExec(module, (dodoBase *)this, data);
+		}
 	
-	int 
-	dbMysql::addPreExec(const std::string &module, 
-						void *data) const
-	{
-		return _addPreExec(module, (dodoBase *)this, data);
-	}
-
-	//-------------------------------------------------------------------
+		//-------------------------------------------------------------------
+		
+		int 
+		dbMysql::addExec(const std::string &module, 
+							void *data) const
+		{
+			return _addExec(module, (dodoBase *)this, data);
+		}
 	
-	int 
-	dbMysql::addExec(const std::string &module, 
-						void *data) const
-	{
-		return _addExec(module, (dodoBase *)this, data);
-	}
-
+	#endif
+	
 	//-------------------------------------------------------------------
 	
 	void 
@@ -469,8 +473,6 @@
 		return mysql_character_set_name(mysql);
 	}
 	
-	//-------------------------------------------------------------------
-	//-------------------------------------------------------------------
 	//-------------------------------------------------------------------
 	
 #endif

@@ -25,12 +25,16 @@
 #ifndef _XEXEC_H_
 #define _XEXEC_H_
 
+#include <directives.h>
+
 #include <string>
 #include <vector>
 
-#include <dlfcn.h>
+#ifdef DL_EXT
 
-#include <directives.h>
+	#include <dlfcn.h>
+
+#endif	
 
 #include <types.h>
 #include <dodoBase.h>
@@ -74,21 +78,25 @@ namespace dodo
 		XEXEC_NONE,
 	};
 
-	/**
-	 * @struct xexecExMod must be returned from initXexecModule in the module
-	 */
-	struct xexecExMod
-	{
-		char name[20];///< name of module
-		char discription[40];///< discription of module
-		char hook[20];///< name of function in module that will be a hook
-		bool preExec;///< if true as preExec is set otherwise as postExec [OPTIONAL]; it doen't matter if you call method that specifies what type of hook it will be
-	};
+	#ifdef DL_EXT
 	
-	/**
-	 * @typedef describes function in module that must return info for the hook
-	 */
-	typedef xexecExMod (*initXexecModule)();
+		/**
+		 * @struct xexecExMod must be returned from initXexecModule in the module
+		 */
+		struct xexecExMod
+		{
+			char name[20];///< name of module
+			char discription[40];///< discription of module
+			char hook[20];///< name of function in module that will be a hook
+			bool preExec;///< if true as preExec is set otherwise as postExec [OPTIONAL]; it doen't matter if you call method that specifies what type of hook it will be
+		};
+		
+		/**
+		 * @typedef describes function in module that must return info for the hook
+		 */
+		typedef xexecExMod (*initXexecModule)();
+	
+	#endif
 	
 	/**
 	 * example of exec function that performs xexec
@@ -143,36 +151,40 @@ namespace dodo
 			 */
 			virtual int _addPreExec(inExec func, dodoBase *obj, void *data) const;
 			
-			/**
-			 * set function from module that will be executed after  the main action call
-			 * @return number in list where function is set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param data is pointer to data that will pass to hook
-			 * @attention data is not copied!!!
-			 */
-			virtual int _addPostExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+			#ifdef DL_EXT
+						
+				/**
+				 * set function from module that will be executed after  the main action call
+				 * @return number in list where function is set
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param obj is pouinter to object that is uses this hook
+				 * @param data is pointer to data that will pass to hook
+				 * @attention data is not copied!!!
+				 */
+				virtual int _addPostExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 			
-			/**
-			 * set function from module that will be executed before  the main action call
-			 * @return number in list where function is set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param data is pointer to data that will pass to hook
-			 * @attention data is not copied!!!
-			 */
-			virtual int _addPreExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
-
-			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param data is pointer to data that will pass to hook
-			 * @attention data is not copied!!!
-			 */
-			virtual int _addExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				/**
+				 * set function from module that will be executed before  the main action call
+				 * @return number in list where function is set
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param obj is pouinter to object that is uses this hook
+				 * @param data is pointer to data that will pass to hook
+				 * @attention data is not copied!!!
+				 */
+				virtual int _addPreExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+	
+				/**
+				 * set function from module that will be executed before/after the main action call
+				 * the type of hook[pre/post] is defined in module
+				 * @return number in list where function is set
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param obj is pouinter to object that is uses this hook
+				 * @param data is pointer to data that will pass to hook
+				 * @attention data is not copied!!!
+				 */
+				virtual int _addExec(const std::string &module, dodoBase *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+			
+			#endif
 			
 			/**
 			 * deletes hook from list
@@ -269,11 +281,15 @@ namespace dodo
 			
 			mutable int operType;///< operation type set by main action; can be used in hook to determine type of action
 			
-			/**
-			 * @return info about module
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 */
-			static xexecExMod getModuleInfo(const std::string &module);
+			#ifdef DL_EXT
+			
+				/**
+				 * @return info about module
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 */
+				static xexecExMod getModuleInfo(const std::string &module);
+			
+			#endif
 			
 		protected:
 		
@@ -312,16 +328,20 @@ namespace dodo
 			 */
 			virtual void setStatXExec(std::vector<__execItem> &list, unsigned int position, bool stat) const;
 			
-			/**
-			 * set function from  module that will be executed before  the main action call
-			 * @return number in list where function is set
-			 * @param list describes list where hook will be set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param data is pointer to data that will pass to hook
-			 * @attention data is not copied!!!
-			 */
-			inline virtual int addXExecModule(std::vector<__execItem> &list, dodoBase *obj, const std::string &module, void *data) const;
+			#ifdef DL_EXT
+			
+				/**
+				 * set function from  module that will be executed before  the main action call
+				 * @return number in list where function is set
+				 * @param list describes list where hook will be set
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param obj is pouinter to object that is uses this hook
+				 * @param data is pointer to data that will pass to hook
+				 * @attention data is not copied!!!
+				 */
+				inline virtual int addXExecModule(std::vector<__execItem> &list, dodoBase *obj, const std::string &module, void *data) const;
+			
+			#endif
 			
 			/**
 			 * perform enabled hooks from the list
@@ -332,8 +352,12 @@ namespace dodo
 			mutable __execItemList preExec;///< list of hooks executed before exec
 			mutable __execItemList postExec;///< list of hooks executed after exec
 			
-			mutable void *handles[XEXEC_MAXMODULES];///< handles to modules
-			mutable int handlesOpened;///< amount of opened handles to modules
+			#ifdef DL_EXT
+			
+				mutable void *handles[XEXEC_MAXMODULES];///< handles to modules
+				mutable int handlesOpened;///< amount of opened handles to modules
+				
+			#endif	
 	};
 };
 

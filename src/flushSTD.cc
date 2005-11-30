@@ -71,30 +71,34 @@ flushSTD::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-int 
-flushSTD::addPostExec(const std::string &module, 
-					void *data) const
-{
-	return _addPostExec(module, (dodoBase *)this, data);
-}
+#ifdef DL_EXT
 
-//-------------------------------------------------------------------
+	int 
+	flushSTD::addPostExec(const std::string &module, 
+						void *data) const
+	{
+		return _addPostExec(module, (dodoBase *)this, data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	flushSTD::addExec(const std::string &module, 
+						void *data) const
+	{
+		return _addExec(module, (dodoBase *)this, data);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	int 
+	flushSTD::addPreExec(const std::string &module, 
+						void *data) const
+	{
+		return _addPreExec(module, (dodoBase *)this, data);
+	}
 
-int 
-flushSTD::addExec(const std::string &module, 
-					void *data) const
-{
-	return _addExec(module, (dodoBase *)this, data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-flushSTD::addPreExec(const std::string &module, 
-					void *data) const
-{
-	return _addPreExec(module, (dodoBase *)this, data);
-}
+#endif
 
 //-------------------------------------------------------------------
 

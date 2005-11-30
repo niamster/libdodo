@@ -1,5 +1,4 @@
+To compile use make
+To install make install
 
-
-THIS LIBRARY CAN BE USED ONLY WITH gcc 3.4.* or compliant!!
-
-SOME FEATURES ARE MISSED IN PREVIOUS VERSIONS
+Please, edit directeves.mk for custom configuration!

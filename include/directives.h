@@ -31,6 +31,8 @@
 
 #define MYSQL_EXT
 #define PCRE_EXT
+#define LIBXML2_EXT
+#define DL_EXT
 
 /**
  * !!!!note!!!!!

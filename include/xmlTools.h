@@ -1,9 +1,9 @@
 /***************************************************************************
- *            xexecEx.h
+ *            xmlTools.h
  *
- *  Wed Oct 5 16:25:14 2005
- *  Copyright  2005  Ni@m
- *  niam.niam@gmail.com
+ *  Tue Nov 29 23:31:55 2005
+ *  Copyright  2005  User
+ *  Email
  ****************************************************************************/
 
 /*
@@ -21,33 +21,53 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
-#ifndef _XEXECEX_H_
-#define _XEXECEX_H_
+ 
+#ifndef _XMLTOOLS_H_
+#define _XMLTOOLS_H_
 
 #include <directives.h>
 
-#include <baseEx.h>
+#ifdef LIBXML2_EXT
 
-#ifndef NO_EX
-
+	#include <types.h>
+		
 	namespace dodo
 	{
+	
+		/**
+		 * @struct __node describes xml tree realization
+		 */
+		struct __node
+		{
+			std::string name;///< name of the node [[tag]]
+			
+			std::vector<__node> children;///< vector of children's realisation
+			assocArr attributes;///< hash of attributes
+			std::string value;///< value of the node
+		};
+	
+		/**
+		 * @struct __nodeDef describes xml tree definition
+		 */
+		struct __nodeDef
+		{
+			std::string name;///< name of the node [[tag]]
+			
+			std::vector<__nodeDef> children;///< vector of children's definitions
+			unsigned long chLimit;///< limit of children to search for
+			
+			stringArr attributes;///< attrributes to take from node
+		};
 		
 		/**
-		 * ID of function where exception was thrown
-		 */					
-		enum xexecFunctionsID
+		 * @class xmlTools provides user friendly communication with XML.
+		 */
+		class xmlTools
 		{
-			#ifdef DL_EXT
-			
-				XEXEC_ADDXEXECMODULE,
-				XEXEC_GETMODULEINFO
-				
-			#endif
-			
 		};
-	};
+	}	
 
 #endif
-#endif /*REGEXPEX_H_*/
+
+
+#endif /* _XMLTOOLS_H */
