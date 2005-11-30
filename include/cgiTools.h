@@ -163,6 +163,7 @@ namespace dodo
 	 */
 	class cgiTools
 	{
+		
 		public:
 								
 			/**

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            timeToolsEx.h
+ *            cgiToolsEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _TIMETOOLSEX_H_
-#define _TIMETOOLSEX_H_
+#ifndef _XMLTOOLSEX_H_
+#define _XMLTOOLSEX_H_
 
 #include <directives.h>
 
@@ -37,13 +37,13 @@
 		/**
 		 * ID of function where exception was thrown
 		 */			
-		enum timeToolsFunctionsID
+		enum xmlToolsFunctionsID
 		{
-			TIMETOOLS_GETBYFORMAT,
-			TIMETOOLS_NOW,
-			TIMETOOLS_MAKETIME,
+			XMLTOOLS_PARCEFILE,
+			XMLTOOLS_PARCE,
 		};
 	};
 
 #endif
-#endif /*_TIMETOOLSEX_H_*/
+#endif 
+

@@ -2,8 +2,8 @@
  *            xmlTools.h
  *
  *  Tue Nov 29 23:31:55 2005
- *  Copyright  2005  User
- *  Email
+ *  Copyright  2005  Ni@m
+ *  niam.niam@gmail.com
  ****************************************************************************/
 
 /*
@@ -29,8 +29,14 @@
 
 #ifdef LIBXML2_EXT
 
+	#include <string>
+	
+	#include <libxml/xmlmemory.h>
+	#include <libxml/parser.h>
+
 	#include <types.h>
-		
+	#include <xmlToolsEx.h>
+	
 	namespace dodo
 	{
 	
@@ -51,10 +57,12 @@
 		 */
 		struct __nodeDef
 		{
+			__nodeDef();
+			
 			std::string name;///< name of the node [[tag]]
 			
 			std::vector<__nodeDef> children;///< vector of children's definitions
-			unsigned long chLimit;///< limit of children to search for
+			long chLimit;///< limit of children to search for[-1 for unlimit, default]
 			
 			stringArr attributes;///< attrributes to take from node
 		};
@@ -64,6 +72,45 @@
 		 */
 		class xmlTools
 		{
+			
+			public: 
+				
+				/**
+				 * constructor
+				 */
+				xmlTools();
+				
+				/**
+				 * destructor
+				 */
+				virtual ~xmlTools();
+				
+				/**
+				 * parces XML using __nodeDef XML explanation
+				 * @return parced into __node structure given XML
+				 * @param definition describes structure of XML
+				 * @param file path XML file to parce
+				 * @param chLimit is limit of children to search for[-1 for unlimit, default]
+				 */
+				virtual __node parceFile(const __nodeDef &definition, const std::string &file, long chLimit=-1);
+				
+			protected:
+				
+				/**
+				 * parces XML using __nodeDef XML explanation
+				 * @return parced into __node structure given XML
+				 * @param definition describes structure of XML
+				 * @param chLimit is limit of children to search for[-1 for unlimit, default]
+				 */
+				virtual __node parce(const __nodeDef &definition, long chLimit);
+				
+				virtual __node parce(const __nodeDef &definition, xmlNodePtr chNode, long chLimit);
+				
+				xmlDocPtr document;
+				xmlNodePtr node;
+				xmlErrorPtr error;
+				
+				unsigned long parceLevel;
 		};
 	}	
 
