@@ -226,3 +226,22 @@ tools::lTrim(const std::string &data,
 }
 
 //-------------------------------------------------------------------
+
+std::string 
+tools::trim(const std::string &data, 
+			char symbols[], 
+			int symCount)
+{
+	return rTrim(lTrim(data,symbols,symCount),symbols,symCount);
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::trim(const std::string &data, 
+			char symbol)
+{
+	return rTrim(lTrim(data,symbol),symbol);
+}
+
+//-------------------------------------------------------------------
