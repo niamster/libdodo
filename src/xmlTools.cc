@@ -34,7 +34,7 @@ using namespace dodo;
 	
 	//-------------------------------------------------------------------
 	  
-	xmlTools::xmlTools() : parceLevel(0)
+	xmlTools::xmlTools()
 	{
 	}
 	 
@@ -47,51 +47,170 @@ using namespace dodo;
 	//-------------------------------------------------------------------
 	
 	__node 
-	xmlTools::parceFile(const __nodeDef &definition, 
-						const std::string &file, 
-						long chLimit)
+	xmlTools::parseFile(const __nodeDef &definition, 
+						const std::string &file)
 	{
 		document = xmlParseFile(file.c_str());
 		if (document == NULL)
 			#ifndef NO_EX
+			{
 				error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
 			#else
-				return __node;
+				return __node();
 			#endif
 		
-		return parce(definition, chLimit);
+		__node node = parse(definition);
+		
+		xmlFreeDoc(document);
+		
+		return node;
 	}
 
 	//-------------------------------------------------------------------
 
 	__node 
-	xmlTools::parce(const __nodeDef &definition, 
-						long chLimit)
+	xmlTools::parse(const __nodeDef &definition)
 	{
 		xmlNodePtr chNode = xmlDocGetRootElement(document);
 		if (chNode == NULL)
 			#ifndef NO_EX
+			{
 				error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
 			#else
-				return __node;
+				return __node();
 			#endif
 		
-		return parce(definition, chNode, chLimit);
+		__node node;
+		
+		if (xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str())==0)	
+		{
+			node.name.assign((char *)chNode->name);
+			xChar = xmlNodeListGetString(document,chNode->children,1);
+			if (xChar!=NULL)
+			{
+				node.value.assign((char *)xChar);
+				xmlFree(xChar);
+			}			
+			
+			iAttr = definition.attributes.begin();
+			jAttr = definition.attributes.end();
+			for (;iAttr!=jAttr;++iAttr)
+			{
+				xChar = xmlGetProp(chNode,(xmlChar *)iAttr->c_str());
+				if (xChar!=NULL)
+				{
+					node.attributes[*iAttr] = (char *)xChar;
+					xmlFree(xChar);
+				}
+			}
+			
+			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+			for (;i!=j;++i)
+					node.children.push_back(parse(*i,chNode->children,definition.chLimit));
+		}
+		else
+		{
+			chNode = chNode->children;
+			while (chNode!=NULL)
+			{
+				if (xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str())==0)	
+				{
+					node.name.assign((char *)chNode->name);
+					xChar = xmlNodeListGetString(document,chNode->children,1);
+					if (xChar!=NULL)
+					{
+						node.value.assign((char *)xChar);
+						xmlFree(xChar);
+					}			
+					
+					iAttr = definition.attributes.begin();
+					jAttr = definition.attributes.end();
+					for (;iAttr!=jAttr;++iAttr)
+					{
+						xChar = xmlGetProp(chNode,(xmlChar *)iAttr->c_str());
+						if (xChar!=NULL)
+						{
+							node.attributes[*iAttr] = (char *)xChar;
+							xmlFree(xChar);
+						}
+					}
+					
+					std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+					for (;i!=j;++i)
+							node.children.push_back(parse(*i,chNode->children,definition.chLimit));
+					
+					break;
+				}
+				
+				chNode = chNode->next;
+			}
+		}
+		
+		xmlFreeNode(chNode);
+		
+		return node;
 	}
 
 	//-------------------------------------------------------------------
 
-	__node 
-	xmlTools::parce(const __nodeDef &definition, 
-					xmlNodePtr chNode, 
+	std::vector<__node>
+	xmlTools::parse(const __nodeDef &definition, 
+					const xmlNodePtr chNode, 
 					long chLimit)
 	{
+		if (chNode == NULL)
+			return std::vector<__node>();
+		
+		xmlNodePtr node = chNode;
+		
 		__node sample;
+		std::vector<__node> sampleArr;
+
+		while (node != NULL)				
+		{
+			if (xmlStrcmp(node->name,(xmlChar *)definition.name.c_str())!=0)
+			{
+				node = node->next;
+				continue;		
+			}
+
+			sample.attributes.clear();
+			
+			sample.name.assign((char *)node->name);
+			xChar = xmlNodeListGetString(document,node->children,1);
+			if (xChar!=NULL)
+			{
+				sample.value.assign((char *)xChar);
+				xmlFree(xChar);
+			}
+	
+			iAttr = definition.attributes.begin();
+			jAttr = definition.attributes.end();
+			for (;iAttr!=jAttr;++iAttr)
+			{
+				xChar = xmlGetProp(node,(xmlChar *)iAttr->c_str());
+				if (xChar!=NULL)
+				{
+					sample.attributes[*iAttr] = (char *)xChar;
+					xmlFree(xChar);
+				}
+			}
+	
+			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+			
+			for (;i!=j;++i)
+				sample.children.push_back(parse(*i,node->children,definition.chLimit));
+			
+			sampleArr.push_back(sample);
+					
+			node = node->next;
+		}
 		
-		
-		return sample;
+		return sampleArr;
 	}
 
 	//-------------------------------------------------------------------

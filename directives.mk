@@ -31,6 +31,6 @@ MOD_DL_LD:=-ldl
 ##uncomment #define LIBXML2_EXT in include/directives.h
 
 MOD_LIBXML2_CPP:=-I/usr/include/libxml2/
-MOD_LIBXML2_LD:=--lxml2
+MOD_LIBXML2_LD:=-lxml2
 
 ##############################

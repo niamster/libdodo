@@ -32,6 +32,7 @@ all: $(LIBRARY)
 
 $(LIBRARY): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,lib$@.so.$(VERSION).$(MINOR) -o lib$@.so.$(VERSION).$(MINOR) $^
+	ln -sf lib$(LIBRARY).so.$(VERSION).$(MINOR) lib$@.so
 	@echo ""
 	@echo ""
 	@echo "Now you can run 'make install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"

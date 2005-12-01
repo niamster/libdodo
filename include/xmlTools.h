@@ -39,7 +39,7 @@
 	
 	namespace dodo
 	{
-	
+		
 		/**
 		 * @struct __node describes xml tree realization
 		 */
@@ -47,7 +47,7 @@
 		{
 			std::string name;///< name of the node [[tag]]
 			
-			std::vector<__node> children;///< vector of children's realisation
+			std::vector< std::vector<__node> > children;///< vector of children's realisation
 			assocArr attributes;///< hash of attributes
 			std::string value;///< value of the node
 		};
@@ -90,27 +90,35 @@
 				 * @return parced into __node structure given XML
 				 * @param definition describes structure of XML
 				 * @param file path XML file to parce
-				 * @param chLimit is limit of children to search for[-1 for unlimit, default]
+				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __node parceFile(const __nodeDef &definition, const std::string &file, long chLimit=-1);
+				virtual __node parseFile(const __nodeDef &definition, const std::string &file);
 				
 			protected:
 				
 				/**
-				 * parces XML using __nodeDef XML explanation
+				 * parces XML using __nodeDef XML explanation using internal built data
 				 * @return parced into __node structure given XML
 				 * @param definition describes structure of XML
-				 * @param chLimit is limit of children to search for[-1 for unlimit, default]
 				 */
-				virtual __node parce(const __nodeDef &definition, long chLimit);
+				virtual __node parse(const __nodeDef &definition);
+
+				/**
+				 * parces XML using __nodeDef XML explanation
+				 * @return parced into __node structure given XMLnode
+				 * @param definition describes structure of XML
+				 * @param chNode is XML tree node
+				 * @param chLimit is limit of children to search for
+				 */				
+				virtual std::vector<__node> parse(const __nodeDef &definition, const xmlNodePtr chNode, long chLimit);
 				
-				virtual __node parce(const __nodeDef &definition, xmlNodePtr chNode, long chLimit);
+				xmlDocPtr document;///< XML Document
+				xmlNodePtr node;///< XML node
+				xmlErrorPtr error;///< libxml2 error buffer
 				
-				xmlDocPtr document;
-				xmlNodePtr node;
-				xmlErrorPtr error;
+				stringArr::const_iterator iAttr,jAttr;///< iterators for attributes[to save memmory and improve performance]
 				
-				unsigned long parceLevel;
+				xmlChar *xChar;///< for internal calculations
 		};
 	}	
 
