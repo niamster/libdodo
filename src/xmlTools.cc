@@ -21,12 +21,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
+
 #include <xmlTools.h>
 
 #ifdef LIBXML2_EXT
-
-using namespace dodo;
+	
+	using namespace dodo;
  
 	__nodeDef::__nodeDef(): chLimit(-1)
 	{
@@ -73,7 +74,7 @@ using namespace dodo;
 	__node 
 	xmlTools::parse(const __nodeDef &definition)
 	{
-		xmlNodePtr chNode = xmlDocGetRootElement(document);
+		register xmlNodePtr chNode = xmlDocGetRootElement(document);
 		if (chNode == NULL)
 			#ifndef NO_EX
 			{
@@ -165,17 +166,25 @@ using namespace dodo;
 		if (chNode == NULL)
 			return std::vector<__node>();
 		
-		xmlNodePtr node = chNode;
+		register xmlNodePtr node = chNode;
 		
 		__node sample;
 		std::vector<__node> sampleArr;
 
-		while (node != NULL)				
-		{
+		while ( node!=NULL )
+		{			
 			if (xmlStrcmp(node->name,(xmlChar *)definition.name.c_str())!=0)
 			{
 				node = node->next;
 				continue;		
+			}
+
+			if (chLimit!=-1)
+			{
+				if (chLimit<=0)
+					return sampleArr;
+				
+				--chLimit;
 			}
 
 			sample.attributes.clear();

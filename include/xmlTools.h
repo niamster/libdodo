@@ -42,12 +42,13 @@
 		
 		/**
 		 * @struct __node describes xml tree realization
+		 * @note children[x][y] =>> [x] describes vector of xml nodes[y] that are realisation of __nodeDef::children[x] definition
 		 */
 		struct __node
 		{
 			std::string name;///< name of the node [[tag]]
 			
-			std::vector< std::vector<__node> > children;///< vector of children's realisation
+			std::vector< std::vector<__node> > children;///< vector of children's realisation;
 			assocArr attributes;///< hash of attributes
 			std::string value;///< value of the node
 		};
@@ -57,6 +58,9 @@
 		 */
 		struct __nodeDef
 		{
+			/**
+			 * constructor
+			 */
 			__nodeDef();
 			
 			std::string name;///< name of the node [[tag]]
@@ -116,9 +120,9 @@
 				xmlNodePtr node;///< XML node
 				xmlErrorPtr error;///< libxml2 error buffer
 				
-				stringArr::const_iterator iAttr,jAttr;///< iterators for attributes[to save memmory and improve performance]
+				stringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes[make recursions less hungry]
 				
-				xmlChar *xChar;///< for internal calculations
+				xmlChar *xChar;///< for internal calculations [make recursions less hungry]
 		};
 	}	
 

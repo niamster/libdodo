@@ -22,9 +22,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifdef MYSQL_EXT
+#include <dbMysql.h>
 
-	#include <dbMysql.h>
+#ifdef MYSQL_EXT
 	
 	using namespace dodo;
 
@@ -462,7 +462,7 @@
 	void 
 	dbMysql::setConnectTimeout(unsigned int time)
 	{
-		mysql_options(mysql,MYSQL_OPT_CONNECT_TIMEOUT,&time);
+		mysql_options(mysql,MYSQL_OPT_CONNECT_TIMEOUT,(char *)&time);
 	}
 
 	//-------------------------------------------------------------------

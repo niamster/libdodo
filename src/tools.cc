@@ -174,13 +174,55 @@ std::string
 tools::rTrim(const std::string &data, 
 			char symbol)
 {
-	register int i(data.size());
+	register int i(data.size()-1);
 	
-	for (;i>0;--i)
+	for (;i>=0;--i)
 		if (data[i]!=symbol)
 			break;
 	
-	return data.substr(0,i);	
+	return data.substr(0,i+1);	
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::rTrim(const std::string &data, 
+			char symbols[], 
+			int symCount)
+{
+	register int i(data.size()-1),j,empty;
+	
+	for (;i>=0;--i)
+	{
+		for (j=0,empty=0;j<symCount;++j)
+			if (data[i]!=symbols[j])
+				++empty;
+		if (empty == symCount)
+			break;
+	}
+	
+	return data.substr(0,i+1);
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::lTrim(const std::string &data, 
+			char symbols[], 
+			int symCount)
+{
+	register int size = data.size(),i(0),empty,j;
+	
+	for (;i<size;++i)
+	{
+		for (j=0,empty=0;j<symCount;++j)
+			if (data[i]!=symbols[j])
+				++empty;
+		if (empty == symCount)
+			break;
+	}
+	
+	return data.substr(i,size-i);		
 }
 
 //-------------------------------------------------------------------

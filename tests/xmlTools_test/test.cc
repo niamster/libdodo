@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 		
 		def.name = "bebe";
 		
-		def.chLimit = 0;
+		//def.chLimit = 1;
 		
 		def.children.push_back(def);
 		
@@ -28,7 +28,9 @@ int main(int argc, char **argv)
 		
 		cout << node.attributes["id"] << endl;
 		cout << node.name << endl;
-		cout << node.value << endl;
+		cout << tools::lTrim(tools::rTrim(node.value," \n\t\r",4)," \n\t\r",4) << endl;
+		
+		cout << node.children[0].size() << endl;
 		
 		cout << node.children[0][0].attributes["id"] << endl;
 		cout << node.children[0][0].value << endl;

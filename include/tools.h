@@ -58,7 +58,25 @@ namespace dodo
 		public:
 			
 			/**
-			 * removes symbols from the end of give string
+			 * removes symbols[given array] from the end of given string
+			 * @return processed string
+			 * @param data is string to process
+			 * @param symbols is an array of symbols to remove
+			 * @param symCount is amount of symbols in @param symbols
+			 */
+			static std::string rTrim(const std::string &data, char symbols[], int symCount);
+			
+			/**
+			 * removes symbols[given array] from the begin of given string
+			 * @return processed string
+			 * @param data is string to process
+			 * @param symbols is an array of symbols to remove
+			 * @param symCount is amount of symbols in @param symbols
+			 */
+			static std::string lTrim(const std::string &data, char symbols[], int symCount);
+						
+			/**
+			 * removes symbols from the end of given string
 			 * @return processed string
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
@@ -66,7 +84,7 @@ namespace dodo
 			static std::string rTrim(const std::string &data, char symbol=' ');
 			
 			/**
-			 * removes symbols from the begin of give string
+			 * removes symbols from the begin of given string
 			 * @return processed string
 			 * @param data is string to process
 			 * @param symbol is symbol to remove

@@ -151,7 +151,7 @@
 				#else
 					virtual bool 
 				#endif
-								connect(unsigned long type=CLIENT_MULTI_STATEMENTS, const __mysqlSSLOptions &options = __mysqlSSLOptions) const;
+								connect(unsigned long type=CLIENT_MULTI_STATEMENTS, const __mysqlSSLOptions &options = __mysqlSSLOptions()) const;
 				
 				/**
 				 * disconnect from database
