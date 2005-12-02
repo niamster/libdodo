@@ -347,16 +347,19 @@ flushSocket::getHostInfo(const std::string &host)
 	
 	i = 0;	
 	char temp[INET6_ADDRSTRLEN];
+
 	while (ent->h_addr_list[i] != NULL)
 	{
-		if (inet_ntop(AF_INET,ent->h_addr_list[i++],temp,15)==NULL)
-			if (errno == ENOSPC)
-			{
+		switch (ent->h_addrtype)
+		{
+			case AF_INET:
+				if (inet_ntop(AF_INET,ent->h_addr_list[i++],temp,15)==NULL)
+					continue;
+			case AF_INET6:
 				if (inet_ntop(AF_INET6,ent->h_addr_list[i++],temp,INET6_ADDRSTRLEN) == NULL)
 					continue;
-			}
-			else
-				continue;			
+		}
+
 		info.addresses.push_back(temp);
 	}
 	
