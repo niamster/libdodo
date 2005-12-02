@@ -121,6 +121,12 @@ namespace dodo
 		 */
 		__cookies(bool secure);
 		
+		/**
+		 * constructor
+		 * @note  defines struct data with user data
+		 */
+		__cookies(const std::string &name, const std::string &value, const std::string &exDate, const std::string &path, const std::string &domain, bool secure);
+		
 		std::string name;///< name of cookie
 		std::string value;///< value of cookie
 		
@@ -279,6 +285,8 @@ namespace dodo
 			 * @param secure is indicates if cookie is secure; false by default
 			 */
 			virtual void setCookie(const std::string &name, const std::string &value, const std::string &exDate=__string__, const std::string &path=__string__, const std::string &domain=__string__, bool secure=false);
+		
+			virtual void setCookie(const __cookies &cookie);
 		
 		protected:
 					

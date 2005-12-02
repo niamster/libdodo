@@ -43,6 +43,22 @@ cgiTools::__method::operator [](const std::string &varName)
 
 //-------------------------------------------------------------------
 
+__cookies::__cookies(const std::string &a_name, 
+					const std::string &a_value, 
+					const std::string &a_exDate, 
+					const std::string &a_path, 
+					const std::string &a_domain, 
+					bool a_secure) : name(a_name),
+									value(a_value),
+									exDate(a_exDate),
+									path(a_path),
+									domain(a_domain),
+									secure(a_secure)
+{
+}
+
+//-------------------------------------------------------------------
+
 __cookies::__cookies(bool a_secure) : secure(a_secure)
 {
 }
@@ -496,3 +512,23 @@ cgiTools::setCookie(const std::string &name,
 }
 
 //-------------------------------------------------------------------
+
+void 
+cgiTools::setCookie(const __cookies &cookie)
+{
+	cookiesSet.push_back(cookie);	
+}
+
+//-------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+\
+
