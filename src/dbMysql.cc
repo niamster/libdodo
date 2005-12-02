@@ -28,6 +28,26 @@
 	
 	using namespace dodo;
 
+	__mysqlSSLOptions::__mysqlSSLOptions()
+	{
+	}
+
+	//-------------------------------------------------------------------
+	
+	__mysqlSSLOptions::__mysqlSSLOptions(const std::string &a_key, 
+						const std::string &a_cert, 
+						const std::string &a_ca, 
+						const std::string &a_capath, 
+						const std::string &a_cipher) : key(a_key),
+									cert(a_cert),
+									ca(a_ca),
+									capath(a_capath),
+									cipher(a_cipher)
+	{
+	}
+
+	//-------------------------------------------------------------------
+
 	dodoBase * const 
 	dbMysql::getSelf()
 	{

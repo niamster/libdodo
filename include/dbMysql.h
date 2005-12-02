@@ -95,6 +95,17 @@
 		 */
 		struct __mysqlSSLOptions
 		{
+			/**
+			 * constructor
+			 */
+			__mysqlSSLOptions();
+			
+			/**
+			 * constructor
+			 * @note defines structure data with user data
+			 */
+			__mysqlSSLOptions(const std::string &key, const std::string &cert = __string__, const std::string &ca = __string__, const std::string &capath = __string__, const std::string &cipher = __string__);
+			
 			std::string key;///< the pathname to the key file
 			std::string cert;///< the pathname to the certificate file.
 			std::string ca;///< the pathname to the certificate authority file.
