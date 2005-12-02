@@ -23,6 +23,9 @@ int main(int argc, char **argv)
 
 	try
 	{
+		cout << flushSocket::getHostInfo("niam.mu").name << endl;
+		cout << flushSTD::inputterInfo().host << endl;
+		
 		flushSTD st;
 		int pos = st.addPreExec(&hook,NULL);
 		//st.outSize = 7;

@@ -31,6 +31,7 @@
 #include <types.h>
 #include <tools.h>
 #include <flush.h>
+#include <flushSocket.h>
 
 namespace dodo
 {
@@ -78,6 +79,12 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~flushSTD();
+
+			/**
+			 * @return info about source of inputting
+			 * @note it can be used to get info foreign `inputter` if you ar usin'g inetd
+			 */
+			static __connInfo inputterInfo();
 
 			/**
 			 * adds hook after the operation by callback
