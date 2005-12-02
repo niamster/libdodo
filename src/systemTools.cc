@@ -628,3 +628,25 @@ systemTools::sleep(unsigned long period)
 }
 
 //-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::atExit(void (*func)())
+{
+	if (atexit(func)!=0)
+	#ifndef NO_EX
+		throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_ATEXIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+	#else
+		return false;
+	#endif
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+

@@ -47,15 +47,6 @@ namespace dodo
 {
 	
 	/**
-	 * @struct __regexMatch indicates begin and end of matched data
-	 */
-	struct __regexMatch
-	{
-		int begin;
-		int end;
-	};
-	
-	/**
 	 * !class regexpTools that covers REGEXP routine using different regex libs
 	 * @note PCRE is much faster
 	 * both POSIX and PCRE don't support binary patterns
@@ -128,6 +119,15 @@ namespace dodo
 	 		
 	 	protected:
 	 	
+			/**
+			 * @struct __regexMatch indicates begin and end of matched data
+			 */
+			struct __regexMatch
+			{
+				int begin;
+				int end;
+			};
+		 	
 	 		/**
 	 		 * generate list of boundaries matched in sample by pattern
 	 		 */

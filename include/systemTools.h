@@ -119,6 +119,17 @@ namespace dodo
 		public:			
 		
 			/**
+			 * registers functions that will be called on normal program exit
+			 * @note you can register more than one
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							atExit(void (*func)());
+		
+			/**
 			 * suspend for given microseconds
 			 * @param period is time in microseconds
 			 */

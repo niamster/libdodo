@@ -140,7 +140,7 @@ tools::lToString(long number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%ld",number);
-	return std::string(temp);
+	return temp;
 }
 
 //-------------------------------------------------------------------
@@ -150,7 +150,7 @@ tools::dToString(double number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%f",number);
-	return std::string(temp);	
+	return temp;	
 }
 
 //-------------------------------------------------------------------
