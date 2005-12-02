@@ -38,6 +38,24 @@ __mktime::__mktime() : sec(0),
 
 //-------------------------------------------------------------------
 
+__mktime::__mktime(unsigned int a_sec, 
+					unsigned int a_min, 
+					unsigned int a_hour, 
+					unsigned int a_day, 
+					unsigned int a_month, 
+					unsigned int a_year, 
+					bool a_daylight) : sec(a_sec),
+						min(a_min),
+						hour(a_hour),
+						day(a_day),
+						month(a_month),
+						year(a_year),
+						daylight(a_daylight)
+{
+}
+
+//-------------------------------------------------------------------
+
 std::string 
 timeTools::byFormat(const std::string &format, 
 						long timestamp,
@@ -144,7 +162,7 @@ timeTools::makeTime(const __mktime &timeInfo)
 	tTime.tm_min = timeInfo.min;
 	tTime.tm_hour = timeInfo.hour;
 	tTime.tm_mday = timeInfo.day;
-	tTime.tm_mon = timeInfo.month;
+	tTime.tm_mon = timeInfo.month-1;
 	tTime.tm_year = timeInfo.year;
 	tTime.tm_isdst = timeInfo.daylight?1:0;
 	
@@ -177,7 +195,7 @@ timeTools::makeTime(long seconds,
 	timeInfo.min = tTime->tm_min;
 	timeInfo.hour = tTime->tm_hour;
 	timeInfo.day = tTime->tm_mday;
-	timeInfo.month = tTime->tm_mon;
+	timeInfo.month = tTime->tm_mon+1;
 	timeInfo.year = tTime->tm_year;
 	timeInfo.daylight = (tTime->tm_isdst>0)?true:false;
 		

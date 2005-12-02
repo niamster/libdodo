@@ -72,12 +72,18 @@ namespace dodo
 		 */
 		__mktime();
 		
-		int sec;///< Seconds [0,60]
-		int min;///< Minutes [0,59]
-		int hour;///< Hour [0,23]
-		int day;///< Day of month [1,31]
-		int month;///< Month of year [0,11]
-		int year;///< Years since 1900
+		/**
+		 * constructor
+		 * @note set structure's data with user data
+		 */
+		__mktime(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight=true); 
+		
+		unsigned int sec;///< Seconds [0,60]
+		unsigned int min;///< Minutes [0,59]
+		unsigned int hour;///< Hour [0,23]
+		unsigned int day;///< Day of month [1,31]
+		unsigned int month;///< Month of year [1,12]
+		unsigned int year;///< Years since 1900
 		
 		bool daylight;///< Daylight Savings flag; true by default
 	};
