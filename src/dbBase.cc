@@ -26,6 +26,28 @@
 
 using namespace dodo;
 
+__dbInfo::__dbInfo(const std::string &a_db, 
+					const std::string &a_host, 
+					const std::string &a_user, 
+					const std::string &a_password, 
+					const std::string &a_path, 
+					int a_port) : db(a_db),
+								host(a_host),
+								user(a_user),
+								password(a_password),
+								path(a_path),
+								port(a_port)
+{
+}
+
+//-------------------------------------------------------------------
+
+__dbInfo::__dbInfo()
+{
+}
+
+//-------------------------------------------------------------------
+
 __tableInfo::__tableInfo()
 {
 	autoIncr = -1;

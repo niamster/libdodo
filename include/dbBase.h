@@ -143,6 +143,18 @@ namespace dodo
 	 */
 	struct __dbInfo
 	{
+		
+		/**
+		 * constructor
+		 */
+		__dbInfo();
+		
+		/**
+		 * constructor
+		 * @note defines structure data with user data
+		 */
+		__dbInfo(const std::string &db, const std::string &host, const std::string &user, const std::string &password, const std::string &path, int port);
+		
 		std::string db;///< database name
 		std::string host;///< hostname
 		std::string user;///< username
