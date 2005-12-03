@@ -95,6 +95,13 @@ namespace dodo
 	{
 		
 		public:
+			
+			/**
+			 * @return number of days in the month [detecting leap year]
+			 * @param year is to detect leap year
+			 * @param month is describes month where to calculate number of days
+			 */
+			static unsigned short int daysInMonth(unsigned int year, unsigned short int month);
 			 
 			/**
 			 * @return formated time[date...]

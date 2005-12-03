@@ -203,3 +203,50 @@ timeTools::makeTime(long seconds,
 }
 
 //-------------------------------------------------------------------
+
+unsigned short int 
+timeTools::daysInMonth(unsigned int year, 
+					unsigned short int month)
+{
+	register unsigned short int day;
+	
+	switch (month) 
+	{
+		case 1:
+		case 3:
+		case 5:
+		case 7:
+		case 8:
+		case 10:
+		case 12:
+			day = 31;
+			break;
+			
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			day = 30;
+			break;
+			
+		case 2:
+		{
+			register unsigned int isleap = 0;
+			if (year % 4 == 0) 
+			{
+				isleap = 1;
+				if ( year % 100 == 0 && year % 400 != 0)
+					isleap = 0;
+			}
+			if (isleap == 1)
+				day = 29;
+			else
+				day = 28;
+			break;
+		}
+	}
+	
+	return day;	
+}
+
+//-------------------------------------------------------------------

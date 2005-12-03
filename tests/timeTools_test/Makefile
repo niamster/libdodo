@@ -9,7 +9,7 @@ DEBUG=-g
 
 override DEFINES:=$(DEFINES)
 
-override CPPFLAGS:=-I../../ $(CPPFLAGS)
+override CPPFLAGS:=-I../../include $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc
