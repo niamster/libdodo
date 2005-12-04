@@ -98,7 +98,7 @@
 				 */
 				virtual __node parseFile(const __nodeDef &definition, const std::string &file);
 				
-				bool icase;///< whether to check attributes' names and nodes names with(out) case matching; with case(false) by default
+				bool icase;///< whether to check nodes names with(out) case matching; with case(false) by default
 				
 			protected:
 				
@@ -121,12 +121,18 @@
 				xmlDocPtr document;///< XML Document
 				xmlNodePtr node;///< XML node
 				xmlErrorPtr error;///< libxml2 error buffer
-				
+
 				stringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes[make recursions less hungry]
 				
 				xmlChar *xChar;///< for internal calculations [make recursions less hungry]
 				
 				int result;///< to set result from different operations
+				
+				/**
+				 * 
+				 */
+				static void errHandler(void *data, xmlErrorPtr error);
+				
 		};
 	}	
 

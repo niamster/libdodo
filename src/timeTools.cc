@@ -208,7 +208,7 @@ unsigned short int
 timeTools::daysInMonth(unsigned int year, 
 					unsigned short int month)
 {
-	register unsigned short int day;
+	register unsigned short int day(0);
 	
 	switch (month) 
 	{

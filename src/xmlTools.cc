@@ -37,6 +37,7 @@
 	  
 	xmlTools::xmlTools() : icase(false)
 	{
+		xmlSetStructuredErrorFunc(NULL, xmlTools::errHandler);
 	}
 	 
 	//-------------------------------------------------------------------
@@ -95,6 +96,7 @@
 		if (result==0)	
 		{
 			node.name.assign((char *)chNode->name);
+			
 			xChar = xmlNodeListGetString(document,chNode->children,1);
 			if (xChar!=NULL)
 			{
@@ -184,11 +186,9 @@
 		while ( node!=NULL )
 		{			
 			if (icase)
-				result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
+				result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
 			else
 				result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
-			
-			std::cout << node->name << "\t" << definition.name << "\t" << result<<  std::endl;
 			
 			if (result!=0)
 			{
@@ -237,6 +237,14 @@
 		}
 		
 		return sampleArr;
+	}
+
+	//-------------------------------------------------------------------
+	
+	void
+	xmlTools::errHandler(void *data, 
+						xmlErrorPtr error)
+	{
 	}
 
 	//-------------------------------------------------------------------

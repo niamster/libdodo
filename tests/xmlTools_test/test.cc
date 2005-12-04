@@ -43,5 +43,9 @@ int main(int argc, char **argv)
 	{
 		cout << ex << "\t" << ex.line << endl;
 	}
+	catch(...)
+	{
+		cout << "WTF";
+	}
 	return 0;
 }

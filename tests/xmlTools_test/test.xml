@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<test id="df">
-	<test id="ddff">asd</test>
+<test id="df" toto="1">
+	<toto:test id="ddff">asd</toto:test>
 	<tesT id="ffdda">asddsa</tesT>
 	<bebe>
 		dsd
@@ -8,4 +8,4 @@
 		<bebe id="ffdda">asddsa</bebe>	
 	</bebe>
 	haha
-</test>
+</tenst>
