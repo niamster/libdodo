@@ -35,7 +35,7 @@
 	
 	//-------------------------------------------------------------------
 	  
-	xmlTools::xmlTools()
+	xmlTools::xmlTools() : icase(false)
 	{
 	}
 	 
@@ -87,7 +87,12 @@
 		
 		__node node;
 		
-		if (xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str())==0)	
+		if (icase)
+			result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
+		else
+			result = xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str());
+		
+		if (result==0)	
 		{
 			node.name.assign((char *)chNode->name);
 			xChar = xmlNodeListGetString(document,chNode->children,1);
@@ -118,7 +123,12 @@
 			chNode = chNode->children;
 			while (chNode!=NULL)
 			{
-				if (xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str())==0)	
+				if (icase)
+					result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
+				else
+					result = xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str());
+				
+				if (result==0)
 				{
 					node.name.assign((char *)chNode->name);
 					xChar = xmlNodeListGetString(document,chNode->children,1);
@@ -173,7 +183,14 @@
 
 		while ( node!=NULL )
 		{			
-			if (xmlStrcmp(node->name,(xmlChar *)definition.name.c_str())!=0)
+			if (icase)
+				result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
+			else
+				result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
+			
+			std::cout << node->name << "\t" << definition.name << "\t" << result<<  std::endl;
+			
+			if (result!=0)
 			{
 				node = node->next;
 				continue;		

@@ -195,6 +195,13 @@ namespace dodo
 			 */				 
 			int inSTDBuffer;///< input buffer
 			int outSTDBuffer;///< output buffer
+			
+			bool err;///< redirect output to stderr; false by default
+		
+		protected: 
+		
+			FILE *desc;///< descriptor that is needed for redirection
+		
 	};
 
 };

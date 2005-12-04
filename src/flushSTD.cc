@@ -35,7 +35,8 @@ flushSTD::getSelf()
 //-------------------------------------------------------------------
 
 flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),
-						outSTDBuffer(STD_OUTSIZE)
+						outSTDBuffer(STD_OUTSIZE),
+						err(false)
 {
 }
 
@@ -259,9 +260,13 @@ flushSTD::write(const char *const aa_buf)
 	register long iter = outSize/outSTDBuffer, rest = outSize%outSTDBuffer;
 	register long sent(0);
 	
+	desc = stdout;
+	if (err)
+		desc = stderr;
+	
 	for (register long i=0;i<iter;++i)
 	{
-		if (fwrite(buffer.c_str()+sent,outSTDBuffer,1,stdout)==0)
+		if (fwrite(buffer.c_str()+sent,outSTDBuffer,1,desc)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -287,7 +292,7 @@ flushSTD::write(const char *const aa_buf)
 	}
 
 	if (rest>0)
-		if (fwrite(buffer.c_str()+sent,rest,1,stdout)==0)
+		if (fwrite(buffer.c_str()+sent,rest,1,desc)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -330,12 +335,16 @@ flushSTD::write(const char *const aa_buf)
 #endif
 flushSTD::flush()
 {
-        if (fflush(stdout) != 0)
-                #ifndef NO_EX
-                        throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-                #else
-                        return false;
-                #endif
+	desc = stdout;
+	if (err)
+		desc = stderr;
+
+    if (fflush(desc) != 0)
+        #ifndef NO_EX
+                throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+        #else
+                return false;
+        #endif
 }
 
 //-------------------------------------------------------------------

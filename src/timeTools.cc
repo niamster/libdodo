@@ -136,7 +136,7 @@ timeTools::datesArr(long dateFrom,
 	
 	if (dateFrom > dateTo)
 	{
-	    long tmp = dateFrom;
+	    register long tmp = dateFrom;
 	    dateFrom = dateTo;
 	    dateTo = tmp;
 	}

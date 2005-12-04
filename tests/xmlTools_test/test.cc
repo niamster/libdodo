@@ -11,6 +11,7 @@ int main(int argc, char **argv)
 	try
 	{
 		xmlTools tool;
+		tool.icase = true;
 		
 		__nodeDef def;
 		
@@ -18,7 +19,7 @@ int main(int argc, char **argv)
 		attr.push_back("id");
 		def.attributes = attr;
 		
-		def.name = "bebe";
+		def.name = "test";
 		
 		//def.chLimit = 1;
 		
@@ -32,11 +33,11 @@ int main(int argc, char **argv)
 		
 		cout << node.children[0].size() << endl;
 		
-		cout << node.children[0][0].attributes["id"] << endl;
+		/*cout << node.children[0][0].attributes["id"] << endl;
 		cout << node.children[0][0].value << endl;
 		
 		cout << node.children[0][1].attributes["id"] << endl;
-		cout << node.children[0][1].value << endl;
+		cout << node.children[0][1].value << endl;*/
 	}
 	catch(baseEx ex)
 	{
