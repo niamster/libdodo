@@ -49,8 +49,15 @@
 			std::string name;///< name of the node [[tag]]
 			
 			std::vector< std::vector<__node> > children;///< vector of children's realisation;
+			
 			assocArr attributes;///< hash of attributes
+			
 			std::string value;///< value of the node
+			
+			std::string ns;///< namespace of the node
+			std::string nsHref;///< uri "value" <URI>
+			std::string nsDef;///< namespace that this node defines
+			std::string nsDefHref;///< namespace's value <URI> that this node defines
 		};
 	
 		/**
@@ -68,7 +75,9 @@
 			std::vector<__nodeDef> children;///< vector of children's definitions
 			long chLimit;///< limit of children to search for[-1 for unlimit, default]
 			
-			stringArr attributes;///< attrributes to take from node
+			stringArr attributes;///< attrributes to take from node; if empty - take all
+			
+			std::string ns;///< namespace of the node; if empty - skips
 		};
 		
 		/**
@@ -121,6 +130,7 @@
 				xmlDocPtr document;///< XML Document
 				xmlNodePtr node;///< XML node
 				xmlErrorPtr error;///< libxml2 error buffer
+				xmlAttr *attribute;
 
 				stringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes[make recursions less hungry]
 				

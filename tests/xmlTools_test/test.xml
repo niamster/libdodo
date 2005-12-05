@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<toto:test id="df" toto="1">
-	<test id="ddff">asd</test>
-	<tesT id="ffdda">asddsa</tesT>
+<edi:test xmlns:edi="http://ecommerce.org/shema" id="df">
+	<test id="dddasfasdhsff" do="sd">asd</test>
+	<edi:tesT id="ffdda">asddsa</edi:tesT>
 	<bebe>
 		dsd
-		<bebe id="ddff">asd</bebe>
+		<bebe id="ddffssssssdfdddasdfsdgshssd">asd</bebe>
 		<bebe id="ffdda">asddsa</bebe>	
 	</bebe>
 	haha
-</toto:test>
+</edi:test>

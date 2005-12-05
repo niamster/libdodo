@@ -88,84 +88,104 @@
 		
 		__node node;
 		
-		if (icase)
-			result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
-		else
-			result = xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str());
-		
-		if (result==0)	
+		while (chNode!=NULL)
 		{
-			node.name.assign((char *)chNode->name);
+			if (icase)
+				result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
+			else
+				result = xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str());
 			
-			std::cout << chNode->ns->href << std::endl;
-			
-			xChar = xmlNodeListGetString(document,chNode->children,1);
-			if (xChar!=NULL)
+			if (result==0)
 			{
-				node.value.assign((char *)xChar);
-				xmlFree(xChar);
-			}			
-			
-			iAttr = definition.attributes.begin();
-			jAttr = definition.attributes.end();
-			for (;iAttr!=jAttr;++iAttr)
-			{
-				xChar = xmlGetProp(chNode,(xmlChar *)iAttr->c_str());
-				if (xChar!=NULL)
+				if (definition.ns.size()>0)
 				{
-					node.attributes[*iAttr] = (char *)xChar;
-					xmlFree(xChar);
-				}
-			}
-			
-			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
-			for (;i!=j;++i)
-					node.children.push_back(parse(*i,chNode->children,definition.chLimit));
-		}
-		else
-		{
-			chNode = chNode->children;
-			while (chNode!=NULL)
-			{
-				if (icase)
-					result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
-				else
-					result = xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str());
-				
-				if (result==0)
-				{
-					node.name.assign((char *)chNode->name);
-					xChar = xmlNodeListGetString(document,chNode->children,1);
-					if (xChar!=NULL)
+					if (chNode->ns==NULL)
 					{
-						node.value.assign((char *)xChar);
-						xmlFree(xChar);
-					}			
-					
-					iAttr = definition.attributes.begin();
-					jAttr = definition.attributes.end();
-					for (;iAttr!=jAttr;++iAttr)
-					{
-						xChar = xmlGetProp(chNode,(xmlChar *)iAttr->c_str());
-						if (xChar!=NULL)
-						{
-							node.attributes[*iAttr] = (char *)xChar;
-							xmlFree(xChar);
-						}
+						chNode = chNode->next;
+						continue;
 					}
 					
-					std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
-					for (;i!=j;++i)
-							node.children.push_back(parse(*i,chNode->children,definition.chLimit));
-					
-					break;
+					if (icase)
+						result = xmlStrcasecmp(chNode->ns->prefix,(xmlChar *)definition.ns.c_str());
+					else
+						result = xmlStrcmp(chNode->ns->prefix,(xmlChar *)definition.ns.c_str());
+	
+					if (result!=0)
+					{
+						chNode = chNode->next;
+						continue;
+					}
 				}
 				
-				chNode = chNode->next;
+				node.name.assign((char *)chNode->name);
+				
+				xChar = xmlNodeListGetString(document,chNode->children,1);
+				if (xChar!=NULL)
+				{
+					node.value.assign((char *)xChar);
+					xmlFree(xChar);
+				}
+							
+				if (chNode->ns!=NULL)
+				{
+					node.ns = (char *)chNode->ns->prefix;
+					node.nsHref = (char *)chNode->ns->href;
+				}
+				
+				if (chNode->nsDef!=NULL)
+				{
+					node.nsDef = (char *)chNode->nsDef->prefix;
+					node.nsDefHref = (char *)chNode->nsDef->href;
+				}
+				
+				attribute = chNode->properties;
+				jAttr = definition.attributes.end();
+				
+				while (attribute!=NULL)
+				{
+					if (definition.attributes.size()>0)
+					{
+						iAttr = definition.attributes.begin();
+						for (;iAttr!=jAttr;++iAttr)
+						{
+							if (icase)
+								result = xmlStrcasecmp(attribute->name,(xmlChar *)iAttr->c_str());
+							else
+								result = xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str());
+							
+							if (result==0)
+							{
+								xChar = xmlGetProp(chNode,attribute->name);
+								if (xChar!=NULL)
+								{
+									node.attributes[(char *)attribute->name] = (char *)xChar;
+									xmlFree(xChar);
+								}
+							}
+                        }
+					}
+					else
+					{
+						xChar = xmlGetProp(chNode,attribute->name);
+						if (xChar!=NULL)
+						{
+							node.attributes[(char *)attribute->name] = (char *)xChar;
+							xmlFree(xChar);
+						}						
+					}
+					
+					attribute = attribute->next;
+				}
+				
+				std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+				for (;i!=j;++i)
+						node.children.push_back(parse(*i,chNode->children,definition.chLimit));
+				
+				break;
 			}
+			
+			chNode = chNode->next;
 		}
-		
-		xmlFreeNode(chNode);
 		
 		return node;
 	}
@@ -185,7 +205,7 @@
 		__node sample;
 		std::vector<__node> sampleArr;
 
-		while ( node!=NULL )
+		while (node!=NULL)
 		{			
 			if (icase)
 				result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
@@ -206,8 +226,38 @@
 				--chLimit;
 			}
 
-			sample.attributes.clear();
+			if (definition.ns.size()>0)
+			{
+				if (node->ns==NULL)
+				{
+					node = node->next;
+					continue;
+				}
+				
+				if (icase)
+					result = xmlStrcasecmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
+				else
+					result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
+
+				if (result!=0)
+				{
+					node = node->next;
+					continue;
+				}
+			}
 			
+			if (node->ns!=NULL)
+			{
+				sample.ns = (char *)node->ns->prefix;
+				sample.nsHref = (char *)node->ns->href;
+			}
+			
+			if (node->nsDef!=NULL)
+			{
+				sample.nsDef = (char *)node->nsDef->prefix;
+				sample.nsDefHref = (char *)node->nsDef->href;
+			}
+
 			sample.name.assign((char *)node->name);
 			xChar = xmlNodeListGetString(document,node->children,1);
 			if (xChar!=NULL)
@@ -215,17 +265,46 @@
 				sample.value.assign((char *)xChar);
 				xmlFree(xChar);
 			}
-	
-			iAttr = definition.attributes.begin();
+			
+			sample.attributes.clear();
+			
+			attribute = node->properties;
 			jAttr = definition.attributes.end();
-			for (;iAttr!=jAttr;++iAttr)
+			
+			while (attribute!=NULL)
 			{
-				xChar = xmlGetProp(node,(xmlChar *)iAttr->c_str());
-				if (xChar!=NULL)
+				if (definition.attributes.size()>0)
 				{
-					sample.attributes[*iAttr] = (char *)xChar;
-					xmlFree(xChar);
+					iAttr = definition.attributes.begin();
+					for (;iAttr!=jAttr;++iAttr)
+					{
+						if (icase)
+							result = xmlStrcasecmp(attribute->name,(xmlChar *)iAttr->c_str());
+						else
+							result = xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str());
+						
+						if (result==0)
+						{
+							xChar = xmlGetProp(node,attribute->name);
+							if (xChar!=NULL)
+							{
+								sample.attributes[(char *)attribute->name] = (char *)xChar;
+								xmlFree(xChar);
+							}
+						}
+                    }
 				}
+				else
+				{
+					xChar = xmlGetProp(node,attribute->name);
+					if (xChar!=NULL)
+					{
+						sample.attributes[(char *)attribute->name] = (char *)xChar;
+						xmlFree(xChar);
+					}						
+				}
+				
+				attribute = attribute->next;
 			}
 	
 			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());

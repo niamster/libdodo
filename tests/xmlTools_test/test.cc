@@ -16,28 +16,30 @@ int main(int argc, char **argv)
 		__nodeDef def;
 		
 		stringArr attr;
-		attr.push_back("id");
+		attr.push_back("iD");
 		def.attributes = attr;
 		
 		def.name = "test";
 		
 		//def.chLimit = 1;
+
+//		def.ns = "edi";
 		
 		def.children.push_back(def);
 		
 		__node node = tool.parseFile(def,"./test.xml");
 		
 		cout << node.attributes["id"] << endl;
-		cout << node.name << endl;
-		cout << tools::lTrim(tools::rTrim(node.value," \n\t\r",4)," \n\t\r",4) << endl;
+		//cout << node.name << endl;
+		//cout << tools::trim(node.value," \n\t\r",4) << endl;
 		
-		cout << node.children[0].size() << endl;
+		//cout << node.children[0][0].attributes.size() << endl;
 		
-		/*cout << node.children[0][0].attributes["id"] << endl;
+/*		cout << node.children[0][0].attributes["id"] << endl;
 		cout << node.children[0][0].value << endl;
 		
 		cout << node.children[0][1].attributes["id"] << endl;
-		cout << node.children[0][1].value << endl;*/
+		cout << node.children[0][0].ns << endl;*/
 	}
 	catch(baseEx ex)
 	{
