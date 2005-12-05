@@ -97,6 +97,8 @@
 		{
 			node.name.assign((char *)chNode->name);
 			
+			std::cout << chNode->ns->href << std::endl;
+			
 			xChar = xmlNodeListGetString(document,chNode->children,1);
 			if (xChar!=NULL)
 			{
