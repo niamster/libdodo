@@ -29,6 +29,24 @@
 	
 	using namespace dodo;
  
+	__xmlInfo::__xmlInfo(const std::string &a_version, 
+		 				const std::string &a_encoding, 
+	 					const std::string &a_root, 
+	 					int a_compression): version(a_version),
+	 								encoding(a_encoding),
+	 								root(a_root),
+	 								compression(a_compression)
+ 	{
+ 	}
+ 	
+	//-------------------------------------------------------------------
+ 
+	__xmlInfo::__xmlInfo()
+	{
+	}
+ 
+	//-------------------------------------------------------------------
+ 
 	__nodeDef::__nodeDef(): chLimit(-1)
 	{
 	}
@@ -37,6 +55,7 @@
 	  
 	xmlTools::xmlTools() : icaseNames(false)
 	{
+		xmlInitParser();
 		xmlSetStructuredErrorFunc(NULL, xmlTools::errHandler);
 	}
 	 
@@ -44,6 +63,7 @@
 	 
 	xmlTools::~xmlTools()
 	{
+		xmlCleanupParser();
 	}
 	 
 	//-------------------------------------------------------------------
@@ -52,8 +72,6 @@
 	xmlTools::parseFile(const __nodeDef &definition, 
 						const std::string &file)
 	{
-		xmlInitParser();
-		
 		document = xmlParseFile(file.c_str());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -67,8 +85,6 @@
 		
 		__node sample = parse(definition);
 		
-		xmlCleanupParser();
-		
 		xmlFreeDoc(document);
 		
 		return sample;
@@ -80,22 +96,18 @@
 	xmlTools::parseBuffer(const __nodeDef &definition, 
 						const std::string &buffer)
 	{
-		xmlInitParser();
-		
 		document = xmlParseMemory(buffer.c_str(),buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
 			{
 				error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
 				return __node();
 			#endif
 		
 		__node sample = parse(definition);
-		
-		xmlCleanupParser();
 		
 		xmlFreeDoc(document);
 		
@@ -151,7 +163,7 @@
 					result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
 			}
 			else
-				if (node->type != 1)
+				if (node->type != XML_ELEMENT_NODE)
 				{
 					node = node->next;
 					continue;
@@ -159,7 +171,7 @@
 			
 			if (result==0)
 			{
-				getNodeInfo(definition,node,sample);
+				getNodeInfo(node,sample);
 				
 				getAttributes(definition,node,sample.attributes);
 				
@@ -230,7 +242,7 @@
 					result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
 			}
 			else
-				if (node->type != 1)
+				if (node->type != XML_ELEMENT_NODE)
 				{
 					node = node->next;
 					continue;
@@ -242,7 +254,7 @@
 				continue;		
 			}
 		
-			getNodeInfo(definition,node,sample);
+			getNodeInfo(node,sample);
 
 			sample.attributes.clear();
 			getAttributes(definition,node,sample.attributes);
@@ -318,8 +330,28 @@
 	//-------------------------------------------------------------------
 
 	void 
-	xmlTools::getNodeInfo(const __nodeDef &definition, 
-							const xmlNodePtr node, 
+	xmlTools::getAttributes(const xmlNodePtr node, 
+							assocArr &attributes)
+	{
+		attribute = node->properties;
+		
+		while (attribute!=NULL)
+		{
+			xChar = xmlGetProp(node,attribute->name);
+			if (xChar!=NULL)
+			{
+				attributes[(char *)attribute->name] = (char *)xChar;
+				xmlFree(xChar);
+			}	
+			
+			attribute = attribute->next;
+		}		
+	}
+
+	//-------------------------------------------------------------------
+
+	void 
+	xmlTools::getNodeInfo(const xmlNodePtr node, 
 							__node &resNode)
 	{
 		if (node->ns!=NULL)
@@ -346,5 +378,159 @@
 	}
 	
 	//-------------------------------------------------------------------
+	
+	__xmlInfo 
+	xmlTools::getXMLFileInfo(const std::string &file)
+	{
+		document = xmlParseFile(file.c_str());
+		if (document == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLFILEINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return __xmlInfo();
+			#endif		
+			
+		return __xmlInfo((char *)document->version,(char *)document->encoding,(char *)document->children->name,document->compression);
+	}
+
+	//-------------------------------------------------------------------
+	
+	__xmlInfo 
+	xmlTools::getXMLBufferInfo(const std::string &buffer)
+	{
+		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		if (document == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLBUFFERINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return __xmlInfo();
+			#endif		
+			
+		return __xmlInfo((char *)document->version,(char *)document->encoding,(char *)document->children->name,document->compression);
+	}
+
+	//-------------------------------------------------------------------	
+	
+	std::vector<__node> 
+	xmlTools::parse(xmlNodePtr node)
+	{
+		std::vector<__node> sample;
+		__node one;
+		
+		while (node!=NULL)
+		{
+			if (node->type != XML_ELEMENT_NODE)
+			{
+				node = node->next;
+				continue;
+			}
+										
+			getNodeInfo(node,one);
+			
+			getAttributes(node,one.attributes);
+			
+			one.children.push_back(parse(node->children));
+			
+			sample.push_back(one);
+			
+			initNode(one);
+			
+			node = node->next;
+		}
+		
+		return sample;		
+	}
+
+	//-------------------------------------------------------------------	
+		
+	void 
+	xmlTools::initNode(__node &node)
+	{
+		node.attributes.clear();
+		node.children.clear();
+		node.name.clear();
+		node.ns.clear();
+		node.nsDef.clear();
+		node.nsDefHref.clear();
+		node.nsHref.clear();
+		node.value.clear();
+	}
+	
+	//-------------------------------------------------------------------
+	
+	__node 
+	xmlTools::parseFile(const std::string &file)
+	{
+		document = xmlParseFile(file.c_str());
+		if (document == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return __node();
+			#endif
+			
+		xmlNodePtr node = xmlDocGetRootElement(document);
+		if (node == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return __node();
+			#endif
+					
+		__node sample = parse(node)[0];
+		
+		xmlFreeDoc(document);
+		
+		return sample;
+	}
+	 
+	//-------------------------------------------------------------------
+	
+	__node 
+	xmlTools::parseBuffer(const std::string &buffer)
+	{
+		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		if (document == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return __node();
+			#endif
+			
+		xmlNodePtr node = xmlDocGetRootElement(document);
+		if (node == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return __node();
+			#endif
+					
+		__node sample = parse(node)[0];
+		
+		xmlFreeDoc(document);
+		
+		return sample;
+	}
+	
+	//-------------------------------------------------------------------
+
 	
 #endif

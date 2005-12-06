@@ -9,9 +9,9 @@ MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
 
 override DEFINES:=$(DEFINES)
 
-DEBUG=-g
+#DEBUG=-g
 
-override CPPFLAGS:=-I../../ $(CPPFLAGS)
+override CPPFLAGS:=-I../../include $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc

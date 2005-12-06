@@ -40,6 +40,11 @@
  */
 
 /**
+ *  describes file permissions for newly created file(pipe) with open method
+ */
+#define FILE_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS|OWNER_EXECUTE_ACCESS)
+
+/**
  * is used for converting from number to string
  */
 #define SIZEOFNUM 32

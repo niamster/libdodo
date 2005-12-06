@@ -5,7 +5,7 @@ LIBTOOL = libtool
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -march=pentium4
 
-DEBUG=-g
+#DEBUG=-g
 
 override DEFINES:=$(DEFINES)
 

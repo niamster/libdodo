@@ -45,11 +45,6 @@
 namespace dodo
 {
 	/**
-	 * @def FILE_PERM describes file permissions for newly created file(pipe)
-	 */
-	#define FILE_PERM (OWNER_READ_ACCESS|OWNER_WRITE_ACCESS|OWNER_EXECUTE_ACCESS)
-	
-	/**
 	 * @enum flushDiskOperationTypeEnum describes type of operation for hook
 	 */
 	enum flushDiskOperationTypeEnum

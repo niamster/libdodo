@@ -81,6 +81,29 @@
 		};
 		
 		/**
+		 * @struct __xmlInfo desribes info got about given XML document
+		 */
+		struct __xmlInfo
+		{
+			/**
+			 * constructor
+			 */
+			__xmlInfo();
+			
+			/**
+			 * constructor
+			 * @note initializes with user values
+			 */
+			__xmlInfo(const std::string &version, const std::string &encoding, const std::string &root, int compression);
+			 
+			std::string version;///< version of XML document
+			std::string encoding;///< encoding of XML document
+			std::string root;///< name of the root element of XML document
+			
+			int compression;///< compression of XML document
+		}; 
+		 
+		/**
 		 * @class xmlTools provides user friendly communication with XML.
 		 */
 		class xmlTools
@@ -111,14 +134,54 @@
 				 * parces XML using __nodeDef XML explanation from buffer
 				 * @return parced into __node structure given XML
 				 * @param definition describes structure of XML
-				 * @param file path XML file to parce
+				 * @param buffer contains XML to parce
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
 				virtual __node parseBuffer(const __nodeDef &definition, const std::string &buffer);
-							
+				
+				/**
+				 * parces XML using __nodeDef XML explanation from file
+				 * @param definition describes structure of XML
+				 * @param file path XML file to parce
+				 * @note the first given definition is as root for XML document, even it isn't really like that in document
+				 */
+				virtual __node parseFile(const std::string &file);
+				
+				/**
+				 * parces XML using __nodeDef XML explanation from buffer
+				 * @return parced into __node structure given XML
+				 * @param buffer contains XML to parce
+				 * @note the first given definition is as root for XML document, even it isn't really like that in document
+				 */
+				virtual __node parseBuffer(const std::string &buffer);
+											
 				bool icaseNames;///< whether to check nodes names and attributes' names with(out) case matching; with case(false) by default
 				
+				/**
+				 * @return got info about XML from file
+				 * @param file path XML file to parce
+				 */
+				virtual __xmlInfo getXMLFileInfo(const std::string &file);
+				
+				/**
+				 * @return got info about XML from buffer
+				 * @param buffer contains XML to parce
+				 */
+				virtual __xmlInfo getXMLBufferInfo(const std::string &buffer);
+						
+				/**
+				 * clears params of the give node
+				 */
+				virtual void initNode(__node &node);
+												
 			protected:
+				
+				/**
+				 * parces whole XML
+				 * @return parced into __node structure given XML
+				 * @param node is XML tree node
+				 */
+				virtual std::vector<__node> parse(xmlNodePtr node);
 				
 				/**
 				 * parces XML using __nodeDef XML explanation using internal built data
@@ -138,6 +201,13 @@
 				
 				/**
 				 * gets attributes from node
+				 * @param node describes the node content
+				 * @param attributes describes array of got attributes
+				 */
+				virtual void getAttributes(const xmlNodePtr node, assocArr &attributes);
+				
+				/**
+				 * gets attributes from node
 				 * @param definition describes definitions of the node
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
@@ -146,11 +216,10 @@
 				
 				/**
 				 * get diff info from node
-				 * @param definition describes definitions of the node
 				 * @param node describes the node content
 				 * @param sample describes node that contains result data
 				 */
-				virtual void getNodeInfo(const __nodeDef &definition, const xmlNodePtr node, __node &sample);
+				virtual void getNodeInfo(const xmlNodePtr node, __node &sample);
 				
 				xmlDocPtr document;///< XML Document
 				xmlErrorPtr error;///< libxml2 error buffer
