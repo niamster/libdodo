@@ -35,7 +35,7 @@
 	
 	//-------------------------------------------------------------------
 	  
-	xmlTools::xmlTools() : icase(false)
+	xmlTools::xmlTools() : icaseNames(false)
 	{
 		xmlSetStructuredErrorFunc(NULL, xmlTools::errHandler);
 	}
@@ -52,6 +52,8 @@
 	xmlTools::parseFile(const __nodeDef &definition, 
 						const std::string &file)
 	{
+		xmlInitParser();
+		
 		document = xmlParseFile(file.c_str());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -63,20 +65,50 @@
 				return __node();
 			#endif
 		
-		__node node = parse(definition);
+		__node sample = parse(definition);
+		
+		xmlCleanupParser();
 		
 		xmlFreeDoc(document);
 		
-		return node;
+		return sample;
 	}
-
+	 
+	//-------------------------------------------------------------------
+	
+	__node 
+	xmlTools::parseBuffer(const __nodeDef &definition, 
+						const std::string &buffer)
+	{
+		xmlInitParser();
+		
+		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		if (document == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return __node();
+			#endif
+		
+		__node sample = parse(definition);
+		
+		xmlCleanupParser();
+		
+		xmlFreeDoc(document);
+		
+		return sample;
+	}
+	
 	//-------------------------------------------------------------------
 
 	__node 
 	xmlTools::parse(const __nodeDef &definition)
 	{
-		register xmlNodePtr chNode = xmlDocGetRootElement(document);
-		if (chNode == NULL)
+		xmlNodePtr node = xmlDocGetRootElement(document);
+		if (node == NULL)
 			#ifndef NO_EX
 			{
 				error = xmlGetLastError();
@@ -86,108 +118,62 @@
 				return __node();
 			#endif
 		
-		__node node;
+		__node sample;
 		
-		while (chNode!=NULL)
-		{
-			if (icase)
-				result = xmlStrcasecmp(chNode->name,(xmlChar *)definition.name.c_str());
+		do
+		{			
+			if (definition.ns.size()>0)
+			{
+				if (node->ns==NULL)
+				{
+					node = node->next;
+					continue;
+				}
+				
+				if (icaseNames)
+					result = xmlStrcasecmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
+				else
+					result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
+	
+				if (result!=0)
+				{
+					node = node->next;
+					continue;
+				}
+			}
+			
+			result = 0;
+			if (definition.name.size()>0)
+			{			
+				if (icaseNames)
+					result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
+				else
+					result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
+			}
 			else
-				result = xmlStrcmp(chNode->name,(xmlChar *)definition.name.c_str());
+				if (node->type != 1)
+				{
+					node = node->next;
+					continue;
+				}
 			
 			if (result==0)
 			{
-				if (definition.ns.size()>0)
-				{
-					if (chNode->ns==NULL)
-					{
-						chNode = chNode->next;
-						continue;
-					}
-					
-					if (icase)
-						result = xmlStrcasecmp(chNode->ns->prefix,(xmlChar *)definition.ns.c_str());
-					else
-						result = xmlStrcmp(chNode->ns->prefix,(xmlChar *)definition.ns.c_str());
-	
-					if (result!=0)
-					{
-						chNode = chNode->next;
-						continue;
-					}
-				}
+				getNodeInfo(definition,node,sample);
 				
-				node.name.assign((char *)chNode->name);
-				
-				xChar = xmlNodeListGetString(document,chNode->children,1);
-				if (xChar!=NULL)
-				{
-					node.value.assign((char *)xChar);
-					xmlFree(xChar);
-				}
-							
-				if (chNode->ns!=NULL)
-				{
-					node.ns = (char *)chNode->ns->prefix;
-					node.nsHref = (char *)chNode->ns->href;
-				}
-				
-				if (chNode->nsDef!=NULL)
-				{
-					node.nsDef = (char *)chNode->nsDef->prefix;
-					node.nsDefHref = (char *)chNode->nsDef->href;
-				}
-				
-				attribute = chNode->properties;
-				jAttr = definition.attributes.end();
-				
-				while (attribute!=NULL)
-				{
-					if (definition.attributes.size()>0)
-					{
-						iAttr = definition.attributes.begin();
-						for (;iAttr!=jAttr;++iAttr)
-						{
-							if (icase)
-								result = xmlStrcasecmp(attribute->name,(xmlChar *)iAttr->c_str());
-							else
-								result = xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str());
-							
-							if (result==0)
-							{
-								xChar = xmlGetProp(chNode,attribute->name);
-								if (xChar!=NULL)
-								{
-									node.attributes[(char *)attribute->name] = (char *)xChar;
-									xmlFree(xChar);
-								}
-							}
-                        }
-					}
-					else
-					{
-						xChar = xmlGetProp(chNode,attribute->name);
-						if (xChar!=NULL)
-						{
-							node.attributes[(char *)attribute->name] = (char *)xChar;
-							xmlFree(xChar);
-						}						
-					}
-					
-					attribute = attribute->next;
-				}
+				getAttributes(definition,node,sample.attributes);
 				
 				std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
 				for (;i!=j;++i)
-						node.children.push_back(parse(*i,chNode->children,definition.chLimit));
-				
+						sample.children.push_back(parse(*i,node->children,definition.chLimit));
 				break;
 			}
 			
-			chNode = chNode->next;
+			node = node->next;
 		}
+		while (node!=NULL);
 		
-		return node;
+		return sample;
 	}
 
 	//-------------------------------------------------------------------
@@ -205,19 +191,8 @@
 		__node sample;
 		std::vector<__node> sampleArr;
 
-		while (node!=NULL)
-		{			
-			if (icase)
-				result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
-			else
-				result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
-			
-			if (result!=0)
-			{
-				node = node->next;
-				continue;		
-			}
-
+		do
+		{
 			if (chLimit!=-1)
 			{
 				if (chLimit<=0)
@@ -225,7 +200,7 @@
 				
 				--chLimit;
 			}
-
+			
 			if (definition.ns.size()>0)
 			{
 				if (node->ns==NULL)
@@ -234,11 +209,11 @@
 					continue;
 				}
 				
-				if (icase)
+				if (icaseNames)
 					result = xmlStrcasecmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
 				else
 					result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
-
+	
 				if (result!=0)
 				{
 					node = node->next;
@@ -246,66 +221,31 @@
 				}
 			}
 			
-			if (node->ns!=NULL)
+			result = 0;
+			if (definition.name.size()>0)
 			{
-				sample.ns = (char *)node->ns->prefix;
-				sample.nsHref = (char *)node->ns->href;
-			}
-			
-			if (node->nsDef!=NULL)
-			{
-				sample.nsDef = (char *)node->nsDef->prefix;
-				sample.nsDefHref = (char *)node->nsDef->href;
-			}
-
-			sample.name.assign((char *)node->name);
-			xChar = xmlNodeListGetString(document,node->children,1);
-			if (xChar!=NULL)
-			{
-				sample.value.assign((char *)xChar);
-				xmlFree(xChar);
-			}
-			
-			sample.attributes.clear();
-			
-			attribute = node->properties;
-			jAttr = definition.attributes.end();
-			
-			while (attribute!=NULL)
-			{
-				if (definition.attributes.size()>0)
-				{
-					iAttr = definition.attributes.begin();
-					for (;iAttr!=jAttr;++iAttr)
-					{
-						if (icase)
-							result = xmlStrcasecmp(attribute->name,(xmlChar *)iAttr->c_str());
-						else
-							result = xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str());
-						
-						if (result==0)
-						{
-							xChar = xmlGetProp(node,attribute->name);
-							if (xChar!=NULL)
-							{
-								sample.attributes[(char *)attribute->name] = (char *)xChar;
-								xmlFree(xChar);
-							}
-						}
-                    }
-				}
+				if (icaseNames)
+					result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
 				else
-				{
-					xChar = xmlGetProp(node,attribute->name);
-					if (xChar!=NULL)
-					{
-						sample.attributes[(char *)attribute->name] = (char *)xChar;
-						xmlFree(xChar);
-					}						
-				}
-				
-				attribute = attribute->next;
+					result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
 			}
+			else
+				if (node->type != 1)
+				{
+					node = node->next;
+					continue;
+				}
+			
+			if (result!=0)
+			{
+				node = node->next;
+				continue;		
+			}
+		
+			getNodeInfo(definition,node,sample);
+
+			sample.attributes.clear();
+			getAttributes(definition,node,sample.attributes);
 	
 			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
 			
@@ -313,10 +253,10 @@
 				sample.children.push_back(parse(*i,node->children,definition.chLimit));
 			
 			sampleArr.push_back(sample);
-					
+			
 			node = node->next;
 		}
-		
+		while (node!=NULL);
 		return sampleArr;
 	}
 
@@ -329,5 +269,82 @@
 	}
 
 	//-------------------------------------------------------------------
+	
+	void 
+	xmlTools::getAttributes(const __nodeDef &definition, 
+						const xmlNodePtr node,
+						assocArr &attributes)
+	{
+		attribute = node->properties;
+		jAttr = definition.attributes.end();
+		
+		while (attribute!=NULL)
+		{
+			if (definition.attributes.size()>0)
+			{
+				iAttr = definition.attributes.begin();
+				for (;iAttr!=jAttr;++iAttr)
+				{
+					if (icaseNames)
+						result = xmlStrcasecmp(attribute->name,(xmlChar *)iAttr->c_str());
+					else
+						result = xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str());
+					
+					if (result==0)
+					{
+						xChar = xmlGetProp(node,attribute->name);
+						if (xChar!=NULL)
+						{
+							attributes[iAttr->c_str()] = (char *)xChar;
+							xmlFree(xChar);
+						}
+					}
+                }
+			}
+			else
+			{
+				xChar = xmlGetProp(node,attribute->name);
+				if (xChar!=NULL)
+				{
+					attributes[(char *)attribute->name] = (char *)xChar;
+					xmlFree(xChar);
+				}						
+			}
+			
+			attribute = attribute->next;
+		}		
+	}
 
+	//-------------------------------------------------------------------
+
+	void 
+	xmlTools::getNodeInfo(const __nodeDef &definition, 
+							const xmlNodePtr node, 
+							__node &resNode)
+	{
+		if (node->ns!=NULL)
+		{
+			resNode.ns = (char *)node->ns->prefix;
+			resNode.nsHref = (char *)node->ns->href;
+		}
+		
+		if (node->nsDef!=NULL)
+		{
+			resNode.nsDef = (char *)node->nsDef->prefix;
+			resNode.nsDefHref = (char *)node->nsDef->href;
+		}
+
+		if (node->name!=NULL)
+			resNode.name.assign((char *)node->name);
+		
+		xChar = xmlNodeListGetString(document,node->children,1);
+		if (xChar!=NULL)
+		{
+			resNode.value.assign((char *)xChar);
+			xmlFree(xChar);
+		}		
+	}
+	
+	//-------------------------------------------------------------------
+	
 #endif

@@ -70,7 +70,7 @@
 			 */
 			__nodeDef();
 			
-			std::string name;///< name of the node [[tag]]
+			std::string name;///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
 			
 			std::vector<__nodeDef> children;///< vector of children's definitions
 			long chLimit;///< limit of children to search for[-1 for unlimit, default]
@@ -99,7 +99,7 @@
 				virtual ~xmlTools();
 				
 				/**
-				 * parces XML using __nodeDef XML explanation
+				 * parces XML using __nodeDef XML explanation from file
 				 * @return parced into __node structure given XML
 				 * @param definition describes structure of XML
 				 * @param file path XML file to parce
@@ -107,7 +107,16 @@
 				 */
 				virtual __node parseFile(const __nodeDef &definition, const std::string &file);
 				
-				bool icase;///< whether to check nodes names with(out) case matching; with case(false) by default
+				/**
+				 * parces XML using __nodeDef XML explanation from buffer
+				 * @return parced into __node structure given XML
+				 * @param definition describes structure of XML
+				 * @param file path XML file to parce
+				 * @note the first given definition is as root for XML document, even it isn't really like that in document
+				 */
+				virtual __node parseBuffer(const __nodeDef &definition, const std::string &buffer);
+							
+				bool icaseNames;///< whether to check nodes names and attributes' names with(out) case matching; with case(false) by default
 				
 			protected:
 				
@@ -127,19 +136,33 @@
 				 */				
 				virtual std::vector<__node> parse(const __nodeDef &definition, const xmlNodePtr chNode, long chLimit);
 				
-				xmlDocPtr document;///< XML Document
-				xmlNodePtr node;///< XML node
-				xmlErrorPtr error;///< libxml2 error buffer
-				xmlAttr *attribute;
-
-				stringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes[make recursions less hungry]
-				
-				xmlChar *xChar;///< for internal calculations [make recursions less hungry]
-				
-				int result;///< to set result from different operations
+				/**
+				 * gets attributes from node
+				 * @param definition describes definitions of the node
+				 * @param node describes the node content
+				 * @param attributes describes array of got attributes
+				 */
+				virtual void getAttributes(const __nodeDef &definition, const xmlNodePtr node, assocArr &attributes);
 				
 				/**
-				 * 
+				 * get diff info from node
+				 * @param definition describes definitions of the node
+				 * @param node describes the node content
+				 * @param sample describes node that contains result data
+				 */
+				virtual void getNodeInfo(const __nodeDef &definition, const xmlNodePtr node, __node &sample);
+				
+				xmlDocPtr document;///< XML Document
+				xmlErrorPtr error;///< libxml2 error buffer
+				xmlAttr *attribute;///< XML attributes
+				stringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes
+				xmlChar *xChar;///< for internal calculations; to store results
+				int result;///< to set result from different operations; to store results
+				
+				/**
+				 * catches libxml2 warnings
+				 * @param data is user-defined data
+				 * @param error is error descriptor
 				 */
 				static void errHandler(void *data, xmlErrorPtr error);
 				
