@@ -52,6 +52,25 @@ tools::replace(pchar needle,
 
 //-------------------------------------------------------------------
 
+tools::tools()
+{
+	#ifdef CODECONV_EXT	
+		convSet	= false;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+tools::~tools()
+{
+	#ifdef CODECONV_EXT	
+		if(convSet)
+			iconv_close(conv);
+	#endif
+}
+
+//-------------------------------------------------------------------
+
 stringArr 
 tools::explode(const std::string &fields,
 			escape escapeF,
@@ -245,3 +264,79 @@ tools::trim(const std::string &data,
 }
 
 //-------------------------------------------------------------------
+
+#ifdef CODECONV_EXT
+
+	std::string 
+	tools::codesetConversion(const std::string &buffer, 
+						const std::string &toCode, 
+						const std::string &fromCode)
+	{
+		conv = iconv_open(toCode.c_str(),fromCode.c_str());
+		if (conv == (iconv_t)(-1))
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return buffer;
+			#endif
+		
+		in = buffer.size();
+		out = in*2;
+		char *outBuffer = new char[out];
+		
+		inFake = (char *)buffer.c_str();
+		outFake = outBuffer;
+		
+		if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
+			#ifndef NO_EX
+			{
+				delete [] outBuffer;
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}
+			#else
+				return buffer;
+			#endif
+		
+		result.assign(outBuffer, out);
+
+		delete [] outBuffer;
+		
+		return result;
+	}
+
+	//-------------------------------------------------------------------
+	
+	std::string 
+	tools::reCodesetConversion(const std::string &buffer)
+	{
+		if (!convSet)
+			return buffer;
+		
+		in = buffer.size();
+		out = in*2;
+		char *outBuffer = new char[out];
+		
+		inFake = (char *)buffer.c_str();
+		outFake = outBuffer;
+		
+		if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
+			#ifndef NO_EX
+			{
+				delete [] outBuffer;
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_RECODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}
+			#else
+				return buffer;
+			#endif
+		
+		result.assign(outFake, out);
+		
+		delete [] outBuffer;
+		
+		return result;			
+	}
+	
+#endif	
+
+//-------------------------------------------------------------------
+

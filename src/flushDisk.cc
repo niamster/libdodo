@@ -968,8 +968,6 @@ flushDisk::rm(const std::string &path,
 			
 			closedir(directory);
 		
-			
-			
 			if (::rmdir(path.c_str()) == -1)
 				if (errno != ENOENT || !force)
 					#ifndef NO_EX
@@ -1425,9 +1423,12 @@ flushDisk::copy(const std::string &from,
 {
 	std::string to = a_to;
 	
-	if (strcmp(::basename((char *)to.c_str()),"..")==0 || strcmp(::basename((char *)to.c_str()),".")==0)
-		to = ::basename((char *)from.c_str());
-		
+	{	
+		char *temp = ::basename((char *)to.c_str());
+		if (strcmp(temp,"..")==0 || strcmp(temp,".")==0)
+			to = temp + std::string(FILE_DELIM) + ::basename((char *)from.c_str());
+	}	
+	
 	struct stat stFrom, stTo;
 	
 	if (::lstat(from.c_str(),&stFrom) == -1)
@@ -1664,8 +1665,11 @@ flushDisk::copyDir(const std::string &from,
 {
 	std::string to = a_to;
 	
-	if (strcmp(::basename((char *)to.c_str()),"..")==0 || strcmp(::basename((char *)to.c_str()),".")==0)
-		to = ::basename((char *)from.c_str());
+	{	
+		char *temp = ::basename((char *)to.c_str());
+		if (strcmp(temp,"..")==0 || strcmp(temp,".")==0)
+			to = temp + std::string(FILE_DELIM) + ::basename((char *)from.c_str());
+	}	
 	
 	struct stat stFrom, stTo;
 	

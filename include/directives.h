@@ -33,6 +33,7 @@
 #define PCRE_EXT
 #define LIBXML2_EXT
 #define DL_EXT
+#define CODECONV_EXT
 
 /**
  * !!!!note!!!!!

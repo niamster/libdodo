@@ -32,6 +32,11 @@
 
 #include <types.h>
 #include <dodoBase.h>
+#include <toolsEx.h>
+
+#ifdef CODECONV_EXT
+	#include <iconv.h>
+#endif
 
 namespace dodo
 {
@@ -57,6 +62,16 @@ namespace dodo
 	{
 		public:
 						
+			/**
+			 * constructor
+			 */			
+			tools();
+			
+			/**
+			 * destructor
+			 */			
+			virtual ~tools();
+			
 			/**
 			 * removes symbols from the end and from the begin of given string
 			 * @return processed string
@@ -175,7 +190,46 @@ namespace dodo
 			 */
 			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame);
 			
+			#ifdef CODECONV_EXT
+				
+				/**
+				 * converts from one codeset to another
+				 * @return converted string
+				 * @param buffer contains string to convert
+				 * @param toCode indicates codeset in what perform conversion
+				 * @param fromCode indicates codeset in what buffer coded; if skip - try to autodetect
+				 * @note if compiled without exeptions - on error buffer will be returned
+				 */
+				virtual std::string codesetConversion(const std::string &buffer, const std::string &toCode, const std::string &fromCode);
+
+				/**
+				 * converts from one codeset to another
+				 * @return converted string
+				 * @param buffer contains string to convert
+				 * @note you may use it you called once codeSetConvert method. it'll be faster for future conversions
+				 * usefull if you have only one type of conversion
+				 * if compiled without exeptions - on error buffer will be returned
+				 */
+				virtual std::string reCodesetConversion(const std::string &buffer);
+				
+			 #endif
+			 
 		private:
+			
+			#ifdef CODECONV_EXT
+			
+				iconv_t conv;///< discriptor for code conversions
+				bool convSet;///< indicates whether codeset was set
+				
+				size_t in;///< inbytesleft paramether for iconv
+				size_t out;///< outbytesleft paramether for iconv
+				
+				std::string result;///< to store temporary result
+				
+				char *inFake;///< to protect incomming string
+				char *outFake;///< to protect outgoing string
+				
+			#endif
 			
 			/**
 			 * dummy callback function for implode/explode

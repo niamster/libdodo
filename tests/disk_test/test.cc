@@ -8,14 +8,15 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		cout << flushDisk::getFileContent("test.cc");
-		flushDisk::copy("test.cc","tect.cc.copy",true);
-		stringArr arr = flushDisk::getFileContentArr("test.cc");
+		//cout << flushDisk::getFileContent("test.cc");
+		//flushDisk::copy("test.cc","test.cc.copy",true);
+		//flushDisk::copy("/tmp","./",true);
+		/*stringArr arr = flushDisk::getFileContentArr("test.cc");
 		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
-		}
+		}*/
 		
 		flushDisk::unlink("my.dat");
 	}
@@ -32,14 +33,10 @@ int main(int argc, char **argv)
 		//flushDisk flush(FIFO_FILE,"my.dat");
 		flushDisk flush(REG_FILE,"my.dat");
 		
-		cout << flushDisk::getFileContent("test.cc");
-		
-		
-		std::cout << typeid(flush).name();
 		
 		//flushDisk flush(true);///in tmp file
 		flush.open();
-	//	flush.autoOutSize = false;flush.inSize = flush.outSize = 10;
+		//flush.autoOutSize = false;flush.inSize = flush.outSize = 10;
 		flush.over = true;
 		flush.writeString("!1234567890-!!",0);
 		
@@ -48,15 +45,13 @@ int main(int argc, char **argv)
 		flush.readString(str,0);
 		cout << "\n\n" << str << "\n\n";
 	
-	
-		flushDisk::rm("asas");
-		flushDisk::rm("log");
+		flushDisk::rm("./tmp");
 
-		flushDisk::mkdir("asas");//,OWNER_ALL_ACCESS,false);
+		flushDisk::mkdir("testDir");//,OWNER_ALL_ACCESS,false);
 
-		flushDisk::rename("asas","hiho");	
+		flushDisk::rename("testDir","DirTest");	
 		
-		flushDisk::symlink("test","A");
+		flushDisk::symlink("test","TEST");
 		flushDisk::chmod("test",ALL_ALL_ACCESS);
 		
 		cout << flushDisk::getPermissions("Makefile");

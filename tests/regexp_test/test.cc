@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	regexpTools expr;
 	stringArr pock;
 
-	cout << "<hr>pattern: (.*)a([0-9]+)(f*)(a*)(b*)<br> test string: dsdasa4565aaa<br> pockets: <br>";
+	cout << "\npattern: (.*)a([0-9]+)(f*)(a*)(b*)<br> test string: dsdasa4565aaa<br> pockets: \n";
 	
 	if (expr.match("(.*)a([0-9]+)(f*)(a*)(b*)","dsdasa",pock)/*4565aaa",pock)*/)
 	{
@@ -22,11 +22,11 @@ int main(int argc, char **argv)
 	else
 		cout << "not matched";
 	
-	cout << "<hr>Replacemets: a-> '!!!', '@@'=> result:<br>";
+	cout << "\nReplacemets: a-> '!!!', '@@'=> result:\n";
 	
 	stringArr a;
 	a.push_back("!!!");
 	a.push_back("@@");
-	cout << expr.reReplace("dsdasa4565aaa",a) << "<br>";
+	cout << expr.reReplace("dsdasa4565aaa",a) << "\n";
 	return 0;
 }

@@ -8,8 +8,8 @@ int main(int argc, char **argv)
 {
 	
 	///first type
-	assocArr head;
-	/*head["Content-type"] = "image/png";
+	/*assocArr head;
+	head["Content-type"] = "image/png";
 	cgipp cgi(false,head);*/
 	
 	///second type
