@@ -41,7 +41,8 @@
 		{
 			FLUSHDISK_MEMORY_OVER = 1,
 			FLUSHDISK_WRONG_FILENAME,
-			FLUSHDISK_CANNOT_OVEWRITE
+			FLUSHDISK_CANNOT_OVEWRITE,
+			FLUSHDISK_DESTINATION_EXISTS,
 		};
 		
 		/**
@@ -50,6 +51,7 @@
 		#define FLUSHDISK_MEMORY_OVER_STR "Not anough memmory"
 		#define FLUSHDISK_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 		#define FLUSHDISK_CANNOT_OVEWRITE_STR "You set option not to overwrite, but try to do that =)"
+		#define FLUSHDISK_DESTINATION_EXISTS_STR "Destination file/dir/etc. exists. Won't overvrite"
 		
 		/**
 		 * ID of function where exception was thrown
@@ -85,7 +87,8 @@
 			FLUSHDISK_FOLLOWSYMLINK,
 			FLUSHDISK_GETFILECONTENT,
 			FLUSHDISK_GETFILECONTENTARR,
-			FLUSHDISK_COPY
+			FLUSHDISK_COPY,
+			FLUSHDISK_COPYDIR,
 		};
 	};
 

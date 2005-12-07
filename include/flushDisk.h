@@ -34,7 +34,6 @@
 #include <libgen.h>
 #include <unistd.h>
 
-
 #include <directives.h>
 
 #include <flushDiskEx.h>
@@ -314,10 +313,10 @@ namespace dodo
 							flush();
 			
 			/**
-			 * copy file
-			 * @param from specifies input file
-			 * @param to specifies output file
-			 * @param false indicates to overwrite
+			 * copy file/empty dir/fifo...
+			 * @param from specifies input file/empty dir/fifo...
+			 * @param to specifies output file/empty dir/fifo...
+			 * @param force indicates to overwrite
 			 */
 			#ifndef NO_EX
 				static void 
@@ -326,6 +325,20 @@ namespace dodo
 			#endif
 							copy(const std::string &from, const std::string &to, bool force=false);
 			
+			/**
+			 * copy file/Dir
+			 * @param from specifies input file/Dir
+			 * @param to specifies output file/Dir
+			 * @param force indicates to overwrite
+			 * @note if `to` exists - error
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							copyDir(const std::string &from, const std::string &to, bool force=false);
+										
 			/**
 			 * @return basename of node
 			 * @param is path to node
@@ -355,13 +368,14 @@ namespace dodo
 			/**
 			 * deletes file or notempty directory
 			 * @param path is path to node
+			 * @param force if it is true and nothing already exists do not say anything
 			 */  
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							unlink(const std::string &path);///also empty directory
+							unlink(const std::string &path, bool force=true);///also empty directory
 							
 			/**
 			 * rename file
@@ -403,13 +417,14 @@ namespace dodo
 			/**
 			 * delete files, non empty directory
 			 * @param path indicates the path to remove
+			 * @param force if it is true and nothing already exists do not say anything
 			 */
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							rm(const std::string &path);
+							rm(const std::string &path, bool force=true);
 			
 			/**
 			 * @return type of file; if error occured and lib was compiled without exceptions -> -1 will be returned;
