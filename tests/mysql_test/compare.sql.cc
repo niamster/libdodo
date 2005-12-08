@@ -24,9 +24,12 @@ int main(int argc, char **argv)
 		{
 			pp.select("log",select,"`id`<20 or `operation`='mu'");
 			pp.exec();
+			
 			pp.fetch();
+			
 			pp.insert("log",arr);
 			pp.exec();
+			
 			arr["operation"] = "um";
 			pp.update("log",arr);
 			arr["operation"] = "mu";

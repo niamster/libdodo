@@ -244,6 +244,7 @@ dbBase::select(const std::string &a_table,
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
+	
 	if (a_where.size() != 0)
 	{
 		addF(qShift,1<<WHERE);
@@ -263,7 +264,8 @@ dbBase::insert(const std::string &a_table,
 	
 	pre_table = a_table;
 	
-	assocArr::const_iterator i(a_fields.begin()),j(a_fields.end());
+	i = a_fields.begin();
+	j = a_fields.end();
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
@@ -276,6 +278,7 @@ dbBase::insert(const std::string &a_table,
 		temp.push_back((*i).second);				
 	}
 	pre_fieldsVal.push_back(temp);
+	
 	show = false;
 }
 
@@ -289,25 +292,23 @@ dbBase::insert(const std::string &a_table,
 	
 	pre_table = a_table;
 	
-	std::vector<assocArr>::const_iterator i(a_fields.begin()),j(a_fields.end());
-	assocArr::const_iterator v,b;
-
+	std::vector<assocArr>::const_iterator v(a_fields.begin()),b(a_fields.end());
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 
-	b = i->end();
-	for (v=i->begin();v!=b;++v)	
-		pre_fieldsNames.push_back((*v).first);
+	j = b->end();
+	for (i=v->begin();i!=j;++i)	
+		pre_fieldsNames.push_back((*j).first);
 
 	stringArr temp;
 	
-	for (;i!=j;++i)
+	for (;b!=v;++b)
 	{
-		b = i->end();
+		j = v->end();
 		temp.clear();
-		for (v=i->begin();v!=b;++v)
-			temp.push_back((*v).second);
+		for (i=v->begin();i!=j;++i)
+			temp.push_back((*i).second);
 		pre_fieldsVal.push_back(temp);	
 	}
 
@@ -342,10 +343,11 @@ dbBase::insert(const std::string &a_table,
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
 	
-	std::vector<stringArr>::const_iterator i(a_fieldsVal.begin()),j(a_fieldsVal.end());
+	k = a_fieldsVal.begin();
+	l = a_fieldsVal.end();;
 	
-	for(;i!=j;++i)
-		pre_fieldsVal.push_back(*i);
+	for(;k!=l;++k)
+		pre_fieldsVal.push_back(*k);
 	
 	show = false;	
 	
@@ -386,7 +388,8 @@ dbBase::update(const std::string &a_table,
         
 	pre_table = a_table;
 	
-	assocArr::const_iterator i(a_fields.begin()),j(a_fields.end());
+	i = a_fields.begin();
+	j = a_fields.end();
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
@@ -1068,4 +1071,5 @@ dbBase::initRowInfo(__fieldInfo &field)
 	field.set_enum.clear();
 	field.defaultVal.clear();
 }
+
 //-------------------------------------------------------------------

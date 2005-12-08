@@ -68,7 +68,8 @@ regexpTools::reMatch(const std::string &sample,
 	pockets.clear();
 	if (!boundMatch(sample))
 		return false;
-	std::list<__regexMatch>::const_iterator i(boundaries.begin()),j(boundaries.end());
+	i = boundaries.begin();
+	j = boundaries.end();
 	for (;i!=j;++i)
 		pockets.push_back(sample.substr(i->begin,i->end-i->begin));
 	return true;
@@ -80,10 +81,10 @@ bool
 regexpTools::boundMatch(const std::string &sample) const
 {
 	register int subs, res;
-	__regexMatch bound;
 	boundaries.clear();
 	
 	#ifdef PCRE_EXT
+	
 		subs = pcre_info(code,NULL,NULL);
 		if (subs<0)
 			return false;
@@ -122,9 +123,13 @@ regexpTools::boundMatch(const std::string &sample) const
 			}
 			pcre_free_substring(subString);
 		}
+		
 		delete [] oVector;
+		
 		return true;
+		
 	#else
+	
 		subs = code.re_nsub+1;
 		regmatch_t *pmatch = new regmatch_t[subs];
 		if (pmatch == NULL)
@@ -145,8 +150,11 @@ regexpTools::boundMatch(const std::string &sample) const
 			bound.end = pmatch[i].rm_eo;
 			boundaries.push_back(bound);
 		}
+		
 		delete [] pmatch;
+		
 		return true;
+		
 	#endif	
 }
 
@@ -158,6 +166,7 @@ regexpTools::compile(const std::string &pattern) const
 	register int bits(0);
 	
 	#ifdef PCRE_EXT
+	
 		if (extended)
 			bits|=PCRE_EXTENDED;
 		if (icase)
@@ -169,7 +178,9 @@ regexpTools::compile(const std::string &pattern) const
 		code = pcre_compile(pattern.c_str(), bits, &error, &errOffset, NULL);
 		if (code == NULL)
 			return false;
+			
 	#else
+	
 		if (extended)
 			bits|=REG_EXTENDED;
 		if (icase)
@@ -180,6 +191,7 @@ regexpTools::compile(const std::string &pattern) const
 			regfree(&code);
 		if (regcomp(&code, pattern.c_str(),bits) != 0)
 			return false;
+			
 	#endif
 	
 	return true;
@@ -206,12 +218,17 @@ regexpTools::reReplace(const std::string &sample,
 {
 	if (!boundMatch(sample))
 		return sample;
-	std::list<__regexMatch>::const_iterator i(boundaries.begin()),j(boundaries.end());
+	
+	i = boundaries.begin();
+	j = boundaries.end();
+	
 	stringArr::const_iterator k(replacements.begin());
 	register int amount = replacements.size();
 	std::string temp(sample);
+	
 	for (register int o(0);o<amount && i!=j;++i,++o,++k)
 		temp.replace(i->begin,i->end-i->begin,*k);
+		
 	return temp;
 }
 

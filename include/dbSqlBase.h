@@ -203,7 +203,7 @@ namespace dodo
 			 * @param statement is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(std::list<std::string> &statements, int qTypeShift) const;
+			virtual std::string insideAddCollect(stringArr &statements, int qTypeShift) const;
 		
 			/**
 			 * @return string from fields' names and 'em values
@@ -211,9 +211,28 @@ namespace dodo
 			 * @param fieldsNames is array of names
 			 * @param frame is value with what values will be framed
 			 */
-			static std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &frame="'");
+			virtual std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &frame="'") const;
 			
 			mutable std::string request;///< ready sql statement
+		
+		protected :
+			
+			/**
+			 * @note share vars
+			 */
+			mutable std::string temp;///< to store temporary data
+			mutable std::string temp_;///< to store temporary data
+			mutable unsigned int temp_bit;///< to store temporary data
+			
+			mutable bool additionalActions;///< indicates whether to make additional actions [where, limit]
+			mutable bool selectAction;///< indicates type of request
+			
+			mutable stringArr::const_iterator i;///< iterator for array of strings
+			mutable stringArr::const_iterator j;///< iterator for array of strings
+			
+			mutable char *t_request;///< temporary places request
+			mutable stringArr fieldsVPart;///< temporary places request's parts
+			
 	};
 };
 #endif /* _DBSQLBASE_H_ */

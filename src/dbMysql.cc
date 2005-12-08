@@ -314,6 +314,9 @@
 	std::vector<stringArr>
 	dbMysql::fetchRow()
 	{	
+		if (empty)
+			return std::vector<stringArr>();
+		
 		register unsigned  numFields = mysql_num_fields(mysqlRes);	
 		
 		std::vector<stringArr> rows;
@@ -345,6 +348,9 @@
 	stringArr
 	dbMysql::fetchField()
 	{	
+		if (empty)
+			return stringArr();
+			
 		unsigned int numFields = mysql_num_fields(mysqlRes);	
 		mysqlFields = mysql_fetch_fields(mysqlRes);
 		

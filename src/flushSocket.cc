@@ -1349,7 +1349,9 @@ flushSocketExchange::send(const char * const data,
 	if (autoOutSize)
 		outSize = buffer.size();		
 	
-	register long iter = outSize/outSocketBuffer, rest = outSize%outSocketBuffer;
+	iter = outSize/outSocketBuffer;
+	rest = outSize%outSocketBuffer;
+	
 	register long n(0), sent(0);	
 		
 	register int flag = 0;	
@@ -1431,7 +1433,9 @@ flushSocketExchange::recieve(char * const data,
 		performXExec(preExec);
 	#endif	
 				
-	register long iter = inSize/inSocketBuffer, rest = inSize%inSocketBuffer;
+	iter = inSize/inSocketBuffer;
+	rest = inSize%inSocketBuffer;
+	
 	register long n(0), recieved(0);
 		
 	register int flag = 0;	

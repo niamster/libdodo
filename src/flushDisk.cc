@@ -953,7 +953,7 @@ flushDisk::rm(const std::string &path,
 					#ifndef NO_EX
 						flushDisk::rm(attached.c_str());
 					#else
-						if (1flushDisk::rm(attached.c_str()))
+						if (flushDisk::rm(attached.c_str()))
 							return false;
 					#endif
 				else

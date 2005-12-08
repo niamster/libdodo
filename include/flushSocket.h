@@ -732,7 +732,13 @@ namespace dodo
 			 * inits this class' data
 			 * @param socket is id of socket
 			 */		
-			virtual void init(int socket);		
+			virtual void init(int socket);	
+
+			/**
+			 * @note share vars
+			 */			
+			mutable long iter;///< amount of iterations to do to operate with data
+			mutable long rest;///< amount of data that is needed to operate at last	
 	 };
 };
 

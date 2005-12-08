@@ -186,7 +186,7 @@ timeTools::makeTime(long seconds,
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_TIMETOOLS,TIMETOOLS_MAKETIME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
-			return __mktime;
+			return __mktime();
 		#endif
 	
 	__mktime timeInfo;

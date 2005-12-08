@@ -221,6 +221,9 @@
 				 */
 				virtual void getNodeInfo(const xmlNodePtr node, __node &sample);
 				
+				/**
+				 * @note share vars
+				 */
 				xmlDocPtr document;///< XML Document
 				xmlErrorPtr error;///< libxml2 error buffer
 				xmlAttr *attribute;///< XML attributes

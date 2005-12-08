@@ -201,6 +201,12 @@ namespace dodo
 		protected: 
 		
 			FILE *desc;///< descriptor that is needed for redirection
+			
+			/**
+			 * @note share vars
+			 */
+			mutable long iter;///< amount of iterations to do to operate with data
+			mutable long rest;///< amount of data that is needed to operate at last
 		
 	};
 

@@ -760,15 +760,24 @@ namespace dodo
 			 * these arrays take part after generalSQL statements !!! See (mysqlpp::addSQL()) for more details
 			 * every in this class has 1 empty("") element
 			 */
-			mutable std::list<std::string> sqlDbDepAddSelArr;///< additional SELECT statement
-			mutable std::list<std::string> sqlDbDepAddInsArr;///< additional INSERT statement
-			mutable std::list<std::string> sqlDbDepAddUpArr;///< additional UPDATE statement
-			mutable std::list<std::string> sqlDbDepAddDelArr;///< additional DELETE statement
+			mutable stringArr sqlDbDepAddSelArr;///< additional SELECT statement
+			mutable stringArr sqlDbDepAddInsArr;///< additional INSERT statement
+			mutable stringArr sqlDbDepAddUpArr;///< additional UPDATE statement
+			mutable stringArr sqlDbDepAddDelArr;///< additional DELETE statement
 			
 			mutable int qDbDepSelShift;///< value to shift query template for specific			
 			mutable int qDbDepInsShift;///< value to shift query template for specific
 			mutable int qDbDepUpShift;///< value to shift query template for specific
-			mutable int qDbDepDelShift;///< value to shift query template for specific			
+			mutable int qDbDepDelShift;///< value to shift query template for specific
+			
+			/**
+			 * @note share vars
+			 */
+			mutable assocArr::const_iterator i;///< iterator for "hash"
+			mutable assocArr::const_iterator j;///< iterator for "hash"
+			
+			mutable std::vector<stringArr>::const_iterator k;///< iterator for "hash"
+			mutable std::vector<stringArr>::const_iterator l;///< iterator for "hash"
 	};
 };
 

@@ -24,6 +24,7 @@
 	$select = array(
 					'date','operation'
 					);
+					
 	for ($i=0;$i<1000;$i++)
 	{
 		$DB->select('log',$select,"`id`<20 or `operation`='mu'");

@@ -132,19 +132,20 @@ dbSqlBase::~dbSqlBase()
 std::string
 dbSqlBase::fieldsValName(const stringArr &fieldsVal, 
 					const stringArr &fieldsNames,
-					const std::string &frame)
+					const std::string &frame) const
 {
-	std::string temp;
+	temp.clear();
 	
 	register unsigned int fn(fieldsNames.size()),fv(fieldsVal.size());
 	
 	register unsigned int o(fn<=fv?fn:fv);
 	
-	stringArr::const_iterator i(fieldsNames.begin()), k(fieldsVal.begin());
+	i = fieldsNames.begin();
+	j = fieldsVal.begin();
 		
-	for (register unsigned int j(0);j<o-1;++i,++k,++j)
-		temp.append(*i + "=" + frame + escapeFields(*k) + frame + ",");	
-	temp.append(*i + "=" + frame + escapeFields(*k) + frame);
+	for (register unsigned int k(0);k<o-1;++i,++k,++j)
+		temp.append(*i + "=" + frame + escapeFields(*j) + frame + ",");	
+	temp.append(*i + "=" + frame + escapeFields(*j) + frame);
 	
 	return temp;
 }
@@ -173,6 +174,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 {
 	if (qShift == EMPTY)
 		return ;
+		
 	register int tempQTypeTocheck = 1<<qTypeTocheck;
 	if ((tempQTypeTocheck & qShift)==tempQTypeTocheck)
 		request.append(sqlAddArr[qTypeTocheck].str+collectedString);
@@ -187,36 +189,47 @@ dbSqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
 {
 	if (qTypeShift == EMPTY)
 		return "";
-	std::string temp;
+		
+	temp_.clear();
+	
 	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
-	register unsigned int temp_bit(0);
+	temp_bit = 0;
+	
 	for (register unsigned int i=0;i<=arrLen;++i)
 	{
 		temp_bit = 1<<sqlAddEnumArr[i];
 		if ((temp_bit & qTypeShift)==temp_bit)
-			temp.append(sqlAddArr[sqlAddEnumArr[i]].str);
+			temp_.append(sqlAddArr[sqlAddEnumArr[i]].str);
 	}
-	return temp;
+	
+	return temp_;
 }
 
 //-------------------------------------------------------------------
 
 std::string 
-dbSqlBase::insideAddCollect(std::list<std::string> &statements, 
+dbSqlBase::insideAddCollect(stringArr &statements, 
 						int qTypeShift) const
 {
 	if (qTypeShift == EMPTY)
 		return "";
-	std::string temp;
-	register unsigned int temp_bit(0), k(0);
-	register std::list<std::string>::const_iterator i(statements.begin()),j(statements.end());
+		
+	temp_.clear();
+
+	register unsigned int k(0);
+	temp_bit = 0;
+	
+	i = statements.begin();
+	j = statements.end();
+	
 	for (;i!=j;++i,++k)
 	{
 		temp_bit = 1<<k;
 		if ((temp_bit & qTypeShift)==temp_bit)
-			temp.append(*i);
+			temp_.append(*i);
 	}
-	return temp;
+	
+	return temp_;
 	
 }
 
@@ -225,13 +238,13 @@ dbSqlBase::insideAddCollect(std::list<std::string> &statements,
 void 
 dbSqlBase::selectCollect() const 
 {
-	std::string temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
+	temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
 	
 	if (pre_table.size()>0)
 	{
 		temp.append(tools::implode(pre_fieldsNames,","));
-		pchar t_request = new char[temp.size()+pre_table.size()+14];	
+		t_request = new char[temp.size()+pre_table.size()+14];	
 		if (t_request == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_SELECTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
@@ -258,32 +271,35 @@ dbSqlBase::selectCollect() const
 void 
 dbSqlBase::insertCollect() const
 {
-	stringArr fieldsVPart;
-	{
-		std::vector<stringArr>::iterator i = pre_fieldsVal.begin(), j = pre_fieldsVal.end();
+	fieldsVPart.clear();
+
+	k = pre_fieldsVal.begin();
+	l = pre_fieldsVal.end();
+
+	char frame[] = "'";
+	if (preventFraming)
+		frame[0] = ' ';
+		
+	for (;k!=l;++k)
+		fieldsVPart.push_back(tools::implode(*k,&dodo::dbSqlBase::escapeFields,",",frame));
 	
-		char frame[] = "'";
-		if (preventFraming)
-			frame[0] = ' ';
-			
-		for (;i!=j;++i)
-			fieldsVPart.push_back(tools::implode(*i,&dodo::dbSqlBase::escapeFields,",",frame));
-	}
-	stringArr::iterator i = fieldsVPart.begin(), j = fieldsVPart.end()-1;
+	i = fieldsVPart.begin();
+	j = fieldsVPart.end()-1;
+	
 	std::string fieldsPart;
 	for (;i!=j;++i)
 		fieldsPart.append("(" + *i + "),");
 	fieldsPart.append("(" + *i + ")");
 	
-	std::string temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
+	temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
 	
-	std::string tempFNP(pre_table);
+	temp_ = pre_table;
 	
 	if (pre_fieldsNames.size() != 0)
-		tempFNP.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
+		temp_.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
 	
-	pchar t_request = new char[temp.size()+tempFNP.size()+fieldsPart.size()+22];
+	t_request = new char[temp.size()+temp_.size()+fieldsPart.size()+22];
 	if (t_request == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_INSERTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
@@ -291,7 +307,7 @@ dbSqlBase::insertCollect() const
 			return ;
 		#endif	
 	
-	sprintf(t_request,"insert %s into %s values %s",temp.c_str(),tempFNP.c_str(),fieldsPart.c_str());
+	sprintf(t_request,"insert %s into %s values %s",temp.c_str(),temp_.c_str(),fieldsPart.c_str());
 	
 	request = t_request;
 	
@@ -307,14 +323,15 @@ dbSqlBase::insertSelectCollect() const
 	std::string fieldsPartTo = tools::implode(pre_fieldsNames,",");
 	std::string fieldsPartFrom = tools::implode(pre_fieldsVal.front(),",");
 	
-	std::string tempI = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
-	tempI.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
+	temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
+	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
+	
 	std::string tempS = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	tempS.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
 	
-	std::string tempFPT = tempS + fieldsPartFrom;
+	tempS.append(fieldsPartFrom);
 		
-	pchar t_request = new char[tempI.size()+pre_tableTo.size()+fieldsPartTo.size()+tempFPT.size()+pre_table.size()+35];
+	t_request = new char[temp.size()+pre_tableTo.size()+fieldsPartTo.size()+tempS.size()+pre_table.size()+35];
 	if (t_request == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_INSERTSELECTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
@@ -322,7 +339,7 @@ dbSqlBase::insertSelectCollect() const
 			;
 		#endif	
 	
-	sprintf(t_request,"insert %s into %s (%s) select %s from %s",tempI.c_str(),pre_tableTo.c_str(),fieldsPartTo.c_str(),tempFPT.c_str(),pre_table.c_str());
+	sprintf(t_request,"insert %s into %s (%s) select %s from %s",temp.c_str(),pre_tableTo.c_str(),fieldsPartTo.c_str(),tempS.c_str(),pre_table.c_str());
 	
 	request = t_request;
 	
@@ -337,14 +354,15 @@ dbSqlBase::updateCollect() const
 	char frame[] = "'";
 	if (preventFraming)
 		frame[0] = ' ';
+		
 	std::string setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames,frame);
 	
-	std::string temp = insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
-	temp.append(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));
+	insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
+	temp.assign(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));
 
 	temp.append(pre_table);
 
-	pchar t_request = new char[temp.size()+setPart.size()+13];	
+	t_request = new char[temp.size()+setPart.size()+13];	
 	if (t_request == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_UPDATECOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
@@ -364,10 +382,10 @@ dbSqlBase::updateCollect() const
 void
 dbSqlBase::delCollect() const
 {
-	std::string temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
+	temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 	
-	pchar t_request = new char[pre_table.size()+temp.size()+14];
+	t_request = new char[pre_table.size()+temp.size()+14];
 	if (t_request == NULL)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_DELCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
@@ -473,6 +491,7 @@ dbSqlBase::createTableCollect() const
 			request.append(fieldCollect(*i) + ",");
 		request.append(fieldCollect(*i));
 	}
+	
 	request.append(!pre_tableInfo.primKeys.empty()?(", primary key" + tools::implode(pre_tableInfo.primKeys,",")):"");
 	request.append(!pre_tableInfo.keys.empty()?(", key " + tools::implode(pre_tableInfo.keys,",")):"");
 	request.append(!pre_tableInfo.uniq.empty()?(", unique key " + tools::implode(pre_tableInfo.uniq,",")):"");
@@ -496,12 +515,14 @@ dbSqlBase::createFieldCollect() const
 std::string
 dbSqlBase::queryCollect() const
 {	
-	register bool additionalActions = true, select = false;
+	additionalActions = true;
+	selectAction = false;
+	
 	switch (qType)
 	{
 		case SELECT:
 			selectCollect();
-			select = true;
+			selectAction = true;
 			break;
 		case INSERT:
 			insertCollect();
@@ -518,7 +539,7 @@ dbSqlBase::queryCollect() const
 			break;
 		case INSERT_SELECT:
 			insertSelectCollect();
-			select = true;
+			selectAction = true;
 			break;
 		case UNION:
 		case UNION_ALL:
@@ -581,7 +602,7 @@ dbSqlBase::queryCollect() const
 	if (additionalActions)
 	{
 		additionalCollect(WHERE,pre_where);
-		if (select)
+		if (selectAction)
 		{
 			additionalCollect(GROUPBY,pre_group);
 			additionalCollect(HAVING,pre_having);
@@ -600,9 +621,11 @@ inline std::string
 dbSqlBase::escapeFields(const std::string &a_data)
 { 
 	std::string temp(a_data);
+	
 	tools::replace("\\","\\\\",temp);
 	tools::replace("\n","\\n",temp);
 	tools::replace("'","\\'",temp);
+	
 	return temp;
 }
 
@@ -613,6 +636,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 {
 	register int type = row.type, flag = row.flag;
 	std::string resRow(row.name + stringType(type));
+	
 	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):"");
 	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):"");
 	resRow.append((row.charset.size()>0)?(" character set " + row.charset):" ");
@@ -621,6 +645,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?" AUTO_INCREMENT ":"");
 	resRow.append(((KEY&flag)==KEY)?" KEY ":"");	
 	resRow.append((row.comment.size()>0)?(" comment '" + row.comment + "' "):"");
+	
 	if (row.refTable.size()>0)
 	{
 		resRow.append(" references " + row.refTable);
@@ -628,6 +653,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 		resRow.append((row.onDelete>=0)?(" on delete " + stringReference(row.onDelete)):"");
 		resRow.append((row.onUpdate>=0)?(" on update " + stringReference(row.onUpdate)):"");
 	}
+	
 	return resRow;
 }
 

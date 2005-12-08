@@ -1,5 +1,5 @@
 #GCC_PATH=/opt/gcc-3.4.3/bin/
-#GCC_PATH=/opt/gcc-4.0.1/bin/
+GCC_PATH=/opt/gcc-4.0.1/bin/
 
 LIBTOOL = libtool
 CXX = $(GCC_PATH)g++
@@ -11,11 +11,14 @@ override DEFINES:=$(DEFINES)
 
 #DEBUG=-g
 
-override CPPFLAGS:=-I../../include $(CPPFLAGS)
+override CPPFLAGS:=-I../../include $(MOD_MYSQL_CPP) $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
 
+compare: compare.sql.cc
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
+	
 clean:
-	rm -rf compare.sql .libs
+	rm -rf test compare .libs

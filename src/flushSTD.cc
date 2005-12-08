@@ -119,7 +119,9 @@ flushSTD::read(char * const a_void) const
 	#endif
 	
 	///execute 
-	register long iter = inSize/inSTDBuffer, rest = inSize%inSTDBuffer;
+	long iter = inSize/inSTDBuffer;
+	rest = inSize%inSTDBuffer;
+	
 	register long recieved(0);
 	
 	for (register long i=0;i<iter;++i)
@@ -257,7 +259,9 @@ flushSTD::write(const char *const aa_buf)
 		outSize = buffer.size();
 	
 	///execute 
-	register long iter = outSize/outSTDBuffer, rest = outSize%outSTDBuffer;
+	iter = outSize/outSTDBuffer;
+	rest = outSize%outSTDBuffer;
+	
 	register long sent(0);
 	
 	desc = stdout;
