@@ -53,7 +53,8 @@
 	
 	//-------------------------------------------------------------------
 	  
-	xmlTools::xmlTools() : icaseNames(false)
+	xmlTools::xmlTools() : icaseNames(false), 
+							document(NULL)
 	{
 		xmlInitParser();
 		xmlSetStructuredErrorFunc(NULL, xmlTools::errHandler);
@@ -65,7 +66,27 @@
 	{
 		xmlCleanupParser();
 	}
-	 
+
+	//-------------------------------------------------------------------
+	
+	__node 
+	xmlTools::reParse(const __nodeDef &definition)
+	{
+		if (document == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_REPARCE,ERR_LIBDODO,XMLTOOLS_NOT_PARCED_BEFORE,XMLTOOLS_NOT_PARCED_BEFORE_STR,__LINE__,__FILE__);
+			#else
+				return __node();
+			#endif
+		
+		__node sample = parse(definition);
+		
+		xmlFreeDoc(document);
+		document = NULL;
+		
+		return sample;		
+	}
+	
 	//-------------------------------------------------------------------
 	
 	__node 
@@ -86,6 +107,7 @@
 		__node sample = parse(definition);
 		
 		xmlFreeDoc(document);
+		document = NULL;
 		
 		return sample;
 	}
@@ -110,6 +132,7 @@
 		__node sample = parse(definition);
 		
 		xmlFreeDoc(document);
+		document = NULL;
 		
 		return sample;
 	}
@@ -492,6 +515,7 @@
 		__node sample = parse(node)[0];
 		
 		xmlFreeDoc(document);
+		document = NULL;
 		
 		return sample;
 	}
@@ -526,6 +550,7 @@
 		__node sample = parse(node)[0];
 		
 		xmlFreeDoc(document);
+		document = NULL;
 		
 		return sample;
 	}

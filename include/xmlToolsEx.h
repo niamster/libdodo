@@ -33,7 +33,19 @@
 
 	namespace dodo
 	{
+		/**
+		 * libdodo defined errors
+		 */
+		enum xmlToolsExR
+		{
+			XMLTOOLS_NOT_PARCED_BEFORE = 1,
+		};
 		
+		/**
+		 * libdodo defined errors' explanation
+		 */			
+		#define XMLTOOLS_NOT_PARCED_BEFORE_STR "The document haven't been parced before."
+				
 		/**
 		 * ID of function where exception was thrown
 		 */			
@@ -45,6 +57,7 @@
 			XMLTOOLS_GETXMLBUFFERINFO,
 			XMLTOOLS_PARCEBUFFER,
 			XMLTOOLS_GETXMLFILEINFO,
+			XMLTOOLS_REPARCE,
 			
 		};
 	};

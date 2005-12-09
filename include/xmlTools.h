@@ -154,6 +154,14 @@
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
 				virtual __node parseBuffer(const std::string &buffer);
+
+				/**
+				 * parces XML using __nodeDef XML explanation with xml you have once parced; faster
+				 * @return parced into __node structure given XML
+				 * @param definition describes structure of XML
+				 * @note the first given definition is as root for XML document, even it isn't really like that in document
+				 */
+				virtual __node reParse(const __nodeDef &definition);
 											
 				bool icaseNames;///< whether to check nodes names and attributes' names with(out) case matching; with case(false) by default
 				
