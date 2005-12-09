@@ -138,6 +138,56 @@
 	}
 	
 	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif	
+	xmlTools::parseFileInt(const std::string &file)
+	{
+		document = xmlParseFile(file.c_str());
+		if (document == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILEINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return false;
+			#endif
+		
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	 
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif		
+	xmlTools::parseBufferInt(const std::string &buffer)
+	{
+		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		if (document == NULL)
+			#ifndef NO_EX
+			{
+				error = xmlGetLastError();
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFERINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+			}
+			#else
+				return false;
+			#endif
+		
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+		
+	//-------------------------------------------------------------------
 
 	__node 
 	xmlTools::parse(const __nodeDef &definition)

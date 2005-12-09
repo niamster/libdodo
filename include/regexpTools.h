@@ -117,6 +117,12 @@ namespace dodo
 	 		 */
 	 		std::string reReplace(const std::string &sample, const stringArr &replacements) const;
 	 		
+	 		/**
+	 		 * compile pattern [if you want to use reReplace/reMatch wo calling replace/match before]
+	 		 * @param pattern is regex pattern
+	 		 */
+	 		bool compile(const std::string &pattern) const;
+	 			 		
 	 	protected:
 	 	
 			/**
@@ -132,11 +138,6 @@ namespace dodo
 	 		 * generate list of boundaries matched in sample by pattern
 	 		 */
 	 		bool boundMatch(const std::string &sample) const;
-	 		
-	 		/**
-	 		 * compile pattern
-	 		 */
-	 		bool compile(const std::string &pattern) const;
 	 	
 	 	private:
 	 	

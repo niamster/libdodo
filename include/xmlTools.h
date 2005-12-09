@@ -122,42 +122,64 @@
 				virtual ~xmlTools();
 				
 				/**
-				 * parces XML using __nodeDef XML explanation from file
-				 * @return parced into __node structure given XML
+				 * parses XML from file if you want to use reParse wo calling parseFile/parseBuffer
+				 * @param file contains XML to parse
+				 */
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif						 
+								parseFileInt(const std::string &file);
+				
+				/**
+				 * parses XML from buffer if you want to use reParse wo calling parseFile/parseBuffer
+				 * @param buffer contains XML to parcse
+				 */
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif						 
+								parseBufferInt(const std::string &buffer);
+								
+				/**
+				 * parses XML using __nodeDef XML explanation from file
+				 * @return parsed into __node structure given XML
 				 * @param definition describes structure of XML
-				 * @param file path XML file to parce
+				 * @param file path XML file to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
 				virtual __node parseFile(const __nodeDef &definition, const std::string &file);
 				
 				/**
-				 * parces XML using __nodeDef XML explanation from buffer
-				 * @return parced into __node structure given XML
+				 * parses XML using __nodeDef XML explanation from buffer
+				 * @return parsed into __node structure given XML
 				 * @param definition describes structure of XML
-				 * @param buffer contains XML to parce
+				 * @param buffer contains XML to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
 				virtual __node parseBuffer(const __nodeDef &definition, const std::string &buffer);
 				
 				/**
-				 * parces XML using __nodeDef XML explanation from file
+				 * parses XML using __nodeDef XML explanation from file
 				 * @param definition describes structure of XML
-				 * @param file path XML file to parce
+				 * @param file path XML file to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
 				virtual __node parseFile(const std::string &file);
 				
 				/**
-				 * parces XML using __nodeDef XML explanation from buffer
-				 * @return parced into __node structure given XML
-				 * @param buffer contains XML to parce
+				 * parses XML using __nodeDef XML explanation from buffer
+				 * @return parsed into __node structure given XML
+				 * @param buffer contains XML to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
 				virtual __node parseBuffer(const std::string &buffer);
 
 				/**
-				 * parces XML using __nodeDef XML explanation with xml you have once parced; faster
-				 * @return parced into __node structure given XML
+				 * parses XML using __nodeDef XML explanation with xml you have once parsed; faster
+				 * @return parsed into __node structure given XML
 				 * @param definition describes structure of XML
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
@@ -167,13 +189,13 @@
 				
 				/**
 				 * @return got info about XML from file
-				 * @param file path XML file to parce
+				 * @param file path XML file to parse
 				 */
 				virtual __xmlInfo getXMLFileInfo(const std::string &file);
 				
 				/**
 				 * @return got info about XML from buffer
-				 * @param buffer contains XML to parce
+				 * @param buffer contains XML to parse
 				 */
 				virtual __xmlInfo getXMLBufferInfo(const std::string &buffer);
 						
@@ -185,22 +207,22 @@
 			protected:
 				
 				/**
-				 * parces whole XML
-				 * @return parced into __node structure given XML
+				 * parses whole XML
+				 * @return parsed into __node structure given XML
 				 * @param node is XML tree node
 				 */
 				virtual std::vector<__node> parse(xmlNodePtr node);
 				
 				/**
-				 * parces XML using __nodeDef XML explanation using internal built data
-				 * @return parced into __node structure given XML
+				 * parses XML using __nodeDef XML explanation using internal built data
+				 * @return parsed into __node structure given XML
 				 * @param definition describes structure of XML
 				 */
 				virtual __node parse(const __nodeDef &definition);
 
 				/**
-				 * parces XML using __nodeDef XML explanation
-				 * @return parced into __node structure given XMLnode
+				 * parses XML using __nodeDef XML explanation
+				 * @return parsed into __node structure given XMLnode
 				 * @param definition describes structure of XML
 				 * @param chNode is XML tree node
 				 * @param chLimit is limit of children to search for

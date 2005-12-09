@@ -216,7 +216,7 @@ namespace dodo
 				 * @return converted string
 				 * @param buffer contains string to convert
 				 * @param toCode indicates codeset in what perform conversion
-				 * @param fromCode indicates codeset in what buffer coded; if skip - try to autodetect
+				 * @param fromCode indicates codeset in what buffer coded
 				 * @note if compiled without exeptions - on error buffer will be returned
 				 */
 				virtual std::string codesetConversion(const std::string &buffer, const std::string &toCode, const std::string &fromCode);
@@ -230,6 +230,19 @@ namespace dodo
 				 * if compiled without exeptions - on error buffer will be returned
 				 */
 				virtual std::string reCodesetConversion(const std::string &buffer);
+				
+				/**
+				 * set params for convertion [if you want to use reCodesetConversion wo calling codesetConversion before]
+				 * @param toCode indicates codeset in what perform conversion
+				 * @param fromCode indicates codeset in what buffer coded
+				 */
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif		
+								codeSet(const std::string &toCode, const std::string &fromCode);
+				
 				
 			 #endif
 			 

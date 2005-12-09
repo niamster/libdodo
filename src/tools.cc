@@ -267,18 +267,35 @@ tools::trim(const std::string &data,
 
 #ifdef CODECONV_EXT
 
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif		
+	tools::codeSet(const std::string &toCode, 
+					const std::string &fromCode)
+	{
+		conv = iconv_open(toCode.c_str(),fromCode.c_str());
+		if (conv == (iconv_t)(-1))
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+			
+		#ifdef NO_EX
+			return true;
+		#endif		
+	}
+
+	//-------------------------------------------------------------------
+	
 	std::string 
 	tools::codesetConversion(const std::string &buffer, 
 						const std::string &toCode, 
 						const std::string &fromCode)
 	{
-		conv = iconv_open(toCode.c_str(),fromCode.c_str());
-		if (conv == (iconv_t)(-1))
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return buffer;
-			#endif
+		codeSet(toCode,fromCode);
 		
 		in = buffer.size();
 		out = in*2;
