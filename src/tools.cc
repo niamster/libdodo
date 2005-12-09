@@ -54,7 +54,7 @@ tools::replace(pchar needle,
 
 tools::tools()
 {
-	#ifdef CODECONV_EXT	
+	#ifdef CODECONV_EXT
 		convSet	= false;
 	#endif
 }
@@ -283,6 +283,13 @@ tools::trim(const std::string &data,
 		in = buffer.size();
 		out = in*2;
 		char *outBuffer = new char[out];
+		if (outBuffer==NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSION,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
+			#else
+				return buffer;
+			#endif
+			
 		
 		inFake = (char *)buffer.c_str();
 		outFake = outBuffer;
@@ -294,7 +301,10 @@ tools::trim(const std::string &data,
 				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			}
 			#else
+			{
+				delete [] outBuffer;
 				return buffer;
+			}
 			#endif
 		
 		result.assign(outBuffer, out);
@@ -315,7 +325,13 @@ tools::trim(const std::string &data,
 		in = buffer.size();
 		out = in*2;
 		char *outBuffer = new char[out];
-		
+		if (outBuffer == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_RECODESETCONVERSION,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
+			#else
+				return buffer;
+			#endif
+					
 		inFake = (char *)buffer.c_str();
 		outFake = outBuffer;
 		
@@ -326,7 +342,10 @@ tools::trim(const std::string &data,
 				throw baseEx(ERRMODULE_TOOLS,TOOLS_RECODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			}
 			#else
+			{
+				delete [] outBuffer;
 				return buffer;
+			}
 			#endif
 		
 		result.assign(outFake, out);
@@ -340,3 +359,122 @@ tools::trim(const std::string &data,
 
 //-------------------------------------------------------------------
 
+	#ifdef ZLIB_EXT
+	
+		std::string 
+		tools::zCompress(const std::string &buffer, 
+						unsigned short level, 
+						zlibCompressionStrategyEnum type)
+		{
+			strm.zalloc = Z_NULL;
+			strm.zfree = Z_NULL;
+			strm.opaque = Z_NULL;
+			
+			if ( (ret=deflateInit2(&strm,level,Z_DEFLATED,15,level,type))<0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+				#else
+					return buffer;
+				#endif
+				
+			strm.avail_in =  buffer.size();
+			strm.next_in = (Bytef *)buffer.c_str();
+			
+			byteBuf = new Bytef[ZLIB_CHUNK];
+			if (byteBuf == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESS,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
+			#else
+				return buffer;
+			#endif
+			
+			strBuf.clear();
+
+			do
+			{	
+				strm.avail_out = ZLIB_CHUNK;
+				strm.next_out = byteBuf;
+			
+				if ( (ret=deflate(&strm,Z_FINISH))<0)
+					#ifndef NO_EX
+					{
+						delete [] byteBuf;
+						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+					}
+					#else
+					{
+						delete [] byteBuf;
+						return buffer;
+					}
+					#endif
+					
+				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
+			}
+			while (strm.avail_out==0);
+			
+			deflateEnd(&strm);
+			delete [] byteBuf;
+			
+			return strBuf;
+		}
+
+		//-------------------------------------------------------------------
+	
+		std::string 
+		tools::zDecompress(const std::string &buffer)
+		{
+			strm.zalloc = Z_NULL;
+			strm.zfree = Z_NULL;
+			strm.opaque = Z_NULL;
+			
+			if ( (ret=inflateInit2(&strm,15))<0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+				#else
+					return buffer;
+				#endif
+
+
+			byteBuf = new Bytef[ZLIB_CHUNK];
+			if (byteBuf == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESS,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
+			#else
+				return buffer;
+			#endif
+
+			strm.avail_in = buffer.size();
+			strm.next_in = (Bytef *)buffer.c_str();
+						
+			strBuf.clear();
+
+			do
+			{	
+				strm.avail_out = ZLIB_CHUNK;
+				strm.next_out = byteBuf;
+			
+				if ( (ret=inflate(&strm,Z_NO_FLUSH))<0)
+					#ifndef NO_EX
+					{
+						delete [] byteBuf;
+						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+					}
+					#else
+					{
+						delete [] byteBuf;
+						return buffer;
+					}
+					#endif
+					
+				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
+			}
+			while (strm.avail_out==0); 
+
+			inflateEnd(&strm);
+			delete [] byteBuf;
+			
+			return strBuf;
+		}	
+	#endif
+
+//-------------------------------------------------------------------

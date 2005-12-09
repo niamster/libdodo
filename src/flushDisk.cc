@@ -359,6 +359,7 @@ flushDisk::readString(std::string &a_str,
 	
 	this->read(data,a_pos);
 	a_str.assign(data,inSize);
+	
 	delete [] data;
 	
 	#ifdef NO_EX	
@@ -410,6 +411,7 @@ flushDisk::write(const char *const a_buf,
 	{
 		register size_t read_bytes(-1);
 		a_pos *= outSize;
+		
 		if (!over && !append)
 		{		
 			register char *t_buffer = new char[outSize*size_of_char];
@@ -419,12 +421,20 @@ flushDisk::write(const char *const a_buf,
 				#else
 					return false;
 				#endif
+				
 			if (fseek(file,a_pos,SEEK_SET) == -1)
 				#ifndef NO_EX
+				{
+					delete [] t_buffer;
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}
 				#else
+				{
+					delete [] t_buffer;
 					return false;
+				}
 				#endif
+				
 			read_bytes = fread(t_buffer,outSize,1,file);
 			delete [] t_buffer;
 		}

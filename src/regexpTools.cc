@@ -68,10 +68,12 @@ regexpTools::reMatch(const std::string &sample,
 	pockets.clear();
 	if (!boundMatch(sample))
 		return false;
+		
 	i = boundaries.begin();
 	j = boundaries.end();
 	for (;i!=j;++i)
 		pockets.push_back(sample.substr(i->begin,i->end-i->begin));
+		
 	return true;
 }
 
@@ -80,7 +82,6 @@ regexpTools::reMatch(const std::string &sample,
 bool
 regexpTools::boundMatch(const std::string &sample) const
 {
-	register int subs, res;
 	boundaries.clear();
 	
 	#ifdef PCRE_EXT
@@ -98,12 +99,14 @@ regexpTools::boundMatch(const std::string &sample) const
 			#else
 				return false;
 			#endif
+			
 		register int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 		if (rc<=0)
 		{
 			delete [] oVector;
 			return false;
 		}
+		
 		register const char *subString;
 		for (register int j=1;j<rc;++j)
 		{
@@ -137,7 +140,8 @@ regexpTools::boundMatch(const std::string &sample) const
 				throw baseEx(ERRMODULE_REGEXPTOOLS,REGEXPTOOLS_BOUNDMATCH,ERR_LIBDODO,REGEXPTOOLS_MEMORY_OVER,REGEXPTOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
 			#else
 				return false;
-			#endif		
+			#endif	
+				
 		res = regexec(&code,sample.c_str(),subs,pmatch,0);
 		if (res != 0)
 		{
@@ -205,7 +209,7 @@ regexpTools::replace(const std::string &pattern,
 				const stringArr &replacements) const
 {
 	if (!compile(pattern))
-		return false;
+		return sample;
 	
 	return reReplace(sample,replacements);
 }
@@ -223,10 +227,11 @@ regexpTools::reReplace(const std::string &sample,
 	j = boundaries.end();
 	
 	stringArr::const_iterator k(replacements.begin());
-	register int amount = replacements.size();
-	std::string temp(sample);
+	subs = replacements.size();
 	
-	for (register int o(0);o<amount && i!=j;++i,++o,++k)
+	temp.assign(sample);
+	
+	for (res = 0;res<subs && i!=j;++i,++res,++k)
 		temp.replace(i->begin,i->end-i->begin,*k);
 		
 	return temp;

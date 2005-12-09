@@ -34,11 +34,17 @@
 #define LIBXML2_EXT
 #define DL_EXT
 #define CODECONV_EXT
+#define ZLIB_EXT
+
+
 
 /**
  * !!!!note!!!!!
  * please read notes before uncommentin'!!!
  */
+
+
+#define ZLIB_CHUNK 100
 
 /**
  *  describes file permissions for newly created file(pipe) with open method

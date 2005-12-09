@@ -392,6 +392,7 @@ dbSqlBase::delCollect() const
 		#else
 			return ;
 		#endif
+		
 	sprintf(t_request,"delete %s from %s",temp.c_str(),pre_table.c_str());
 	
 	request = t_request;

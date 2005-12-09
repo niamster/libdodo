@@ -31,7 +31,7 @@
         baseEx::baseEx(unsigned long a_errModule, 
         				unsigned long functionID,
                         unsigned long errnoSource,
-                        unsigned long a_errno,
+                        long a_errno,
                         std::string a_errstr,
                         unsigned long a_line,
                         std::string a_file) : errModule(a_errModule),

@@ -155,6 +155,11 @@ namespace dodo
 			mutable std::list<__regexMatch>::const_iterator j;///< iterator for list of buondaries matched in sample by pattern
 	
 			mutable __regexMatch bound;///< temporary to save bound
+			
+			mutable int subs;///< amount of subezpressions
+			mutable int res;///< result
+			
+			mutable std::string temp;///< store temporary result
 	 };
 };
 

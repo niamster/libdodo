@@ -44,6 +44,7 @@
 			ERR_H_ERRNO,
 			ERR_DYNLOAD,
 			ERR_LIBXML2,
+			ERR_ZLIB
 		};
 
 		/**
@@ -83,7 +84,7 @@
 				 * @param line line, where was thrown
 				 * @param file file, where was thrown
 				 */			
-				baseEx(unsigned long errModule, unsigned long functionID, unsigned long errnoSource, unsigned long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
+				baseEx(unsigned long errModule, unsigned long functionID, unsigned long errnoSource, long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
 				
 				/**
 				 * @return string that describes error

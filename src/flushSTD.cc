@@ -119,7 +119,7 @@ flushSTD::read(char * const a_void) const
 	#endif
 	
 	///execute 
-	long iter = inSize/inSTDBuffer;
+	iter = inSize/inSTDBuffer;
 	rest = inSize%inSTDBuffer;
 	
 	register long recieved(0);

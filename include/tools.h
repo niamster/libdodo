@@ -38,6 +38,10 @@
 	#include <iconv.h>
 #endif
 
+#ifdef ZLIB_EXT
+	#include <zlib.h>
+#endif
+
 namespace dodo
 {
 	/**
@@ -54,6 +58,21 @@ namespace dodo
 	 * @return converted string
 	 */
 	typedef std::string (*escape)(const std::string &);
+		
+	 #ifdef ZLIB_EXT
+	 
+	 	/**
+	 	 * @enum zlibCompressionStrategyEnum
+	 	 */
+	 	enum zlibCompressionStrategyEnum
+	 	{
+	 		FILTRED_COMRESSION=1,
+	 		HUFFMAN_COMRESSION,
+	 		RLE_COMRESSION,
+	 		FIXED_COMRESSION
+	 	};
+	 
+	 #endif		
 		
 	/**
 	 * @class tools present different usefull functions
@@ -214,6 +233,28 @@ namespace dodo
 				
 			 #endif
 			 
+			 #ifdef ZLIB_EXT
+			 	
+			 	/**
+			 	 * @return compressed buffer
+			 	 * @param buffer contains data to compress
+			 	 * @param level is level to compress [1..9]
+			 	 * @param type descibes compression strategy
+				 * @note if compiled without exeptions - on error buffer will be returned
+			 	 */
+			 	virtual std::string zCompress(const std::string &buffer, unsigned short level=6, zlibCompressionStrategyEnum type=HUFFMAN_COMRESSION);
+			 	
+			 	/**
+			 	 * @return decompressed buffer
+			 	 * @param buffer contains data to compress
+			 	 * @param level is level to compress [1..9]
+			 	 * @param type descibes compression strategy
+				 * @note if compiled without exeptions - on error buffer will be returned
+			 	 */
+			 	virtual std::string zDecompress(const std::string &buffer);
+			 
+			 #endif
+			 
 		private:
 			
 			#ifdef CODECONV_EXT
@@ -230,6 +271,16 @@ namespace dodo
 				char *outFake;///< to protect outgoing string
 				
 			#endif
+			
+			#ifdef ZLIB_EXT
+			 
+			 	z_stream strm;///< zLib structure
+			 	int ret;///< to set return value
+			 	
+			 	std::string strBuf;///< to store result
+			 	Bytef *byteBuf;///< to store result
+			 
+			 #endif
 			
 			/**
 			 * dummy callback function for implode/explode

@@ -617,9 +617,15 @@ flushSocket::getLocalName()
 	
 	if (::gethostname(temp1,255)==-1)
 	#ifndef NO_EX
+	{
+		delete [] temp1;
 		throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETLOCALNAME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+	}
 	#else
+	{
+		delete [] temp1;
 		return temp0;
+	}
 	#endif		
 	
 	temp0.assign(temp1,255);
@@ -1500,6 +1506,7 @@ flushSocketExchange::recieveString(std::string &data,
 	
 	this->recieve(t_data,urgent);
 	data.assign(t_data,inSize);
+	
 	delete [] t_data;
 	
 	#ifdef NO_EX	

@@ -228,6 +228,7 @@ cgiTools::makePost() const
 	#else
 		return false;
 	#endif	
+	
 	fread(post,cl,1,stdin);
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
@@ -251,9 +252,15 @@ cgiTools::makePost() const
 		char *ptr = new char[strlen(post_files_tmp_dir)+17];
 		if (ptr == NULL)
 		#ifndef NO_EX
+		{
+			delete [] post;	
 			throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
+		}
 		#else
+		{
+			delete [] post;	
 			return false;
+		}
 		#endif
 		
 		for (;i!=j;++i)
