@@ -68,6 +68,8 @@ regexpTools::reMatch(const std::string &sample,
 	pockets.clear();
 	if (!boundMatch(sample))
 		return false;
+	
+	pockets.reserve(boundaries.size());
 		
 	i = boundaries.begin();
 	j = boundaries.end();

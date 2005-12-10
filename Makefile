@@ -6,7 +6,23 @@ CXX = $(CC_PATH)g++
 #CXX = $(CC_PATH)icc
 
 CFLAGS=-O3 -march=pentium4
-OBJECTS=dbBase.o dodoBase.o tools.o xexec.o dbSqlBase.o baseEx.o dbMysql.o cgiTools.o regexpTools.o flush.o flushSocket.o flushDisk.o flushSTD.o systemTools.o timeTools.o xmlTools.o
+OBJECTS=dbBase.o \
+		dodoBase.o \
+		tools.o \
+		xexec.o \
+		dbSqlBase.o \
+		baseEx.o \
+		dbMysql.o \
+		cgiTools.o \
+		regexpTools.o \
+		flush.o \
+		flushSocket.o \
+		flushDisk.o \
+		flushSTD.o \
+		systemTools.o \
+		timeTools.o \
+		xmlTools.o \
+		dbSqlite.o
 
 ###########################################################
 

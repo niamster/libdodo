@@ -38,13 +38,15 @@
 	{
 		
 		/**
-		 * @enum dbMysqlOperTypeEnum describes type of operation for hook
+		 * @enum dbSqliteOperTypeEnum describes type of operation for hook
 		 */
 		enum dbSqliteOperTypeEnum
 		{
 			DBSQLITE_OPER_CONNECT,
 			DBSQLITE_OPER_EXEC,
-			DBSQLITE_OPER_DISCONNECT
+			DBSQLITE_OPER_DISCONNECT,
+			DBSQLITE_OPER_FETCHROW,
+			DBSQLITE_OPER_FETCHFIELD,
 		};
 		
 		/**
@@ -76,7 +78,7 @@
 		};
 		
 		/**
-	 	 * @class dbSqlite is an interface to mysql db through sql-,database- independent interfaces
+	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
 		 */
 		class dbSqlite : public dbSqlBase, public xexec
 		{
@@ -152,52 +154,52 @@
 				virtual __sqlStorage fetch();
 			
 				/**
-				 * set additional mysql-specific statement for INSERT
+				 * set additional sqlite-specific statement for INSERT
 				 * @param statement describes additional statement
 				 */
-				virtual void setMyAddInsSt(mysqlAddInsEnum statement);			
+				virtual void setLiteAddInsSt(sqliteAddInsEnum statement);			
 				
 				/**
-				 * set additional mysql-specific statement for UPDATE
+				 * set additional sqlite-specific statement for UPDATE
 				 * @param statement describes additional statement
 				 */
-				virtual void setMyAddUpSt(mysqlAddUpEnum statement);
+				virtual void setLiteAddUpSt(sqliteAddUpEnum statement);
 				
 				/**
-				 * set additional mysql-specific statement for SELECT
+				 * set additional sqlite-specific statement for SELECT
 				 * @param statement describes additional statement
 				 */
-				virtual void setMyAddSelSt(mysqlAddSelEnum statement);
+				virtual void setLiteAddSelSt(sqliteAddSelEnum statement);
 				
 				/**
-				 * set additional mysql-specific statement for DELETE
+				 * set additional sqlite-specific statement for DELETE
 				 * @param statement describes additional statement
 				 */
-				virtual void setMyAddDelSt(mysqlAddDelEnum statement);
+				virtual void setLiteAddDelSt(sqliteAddDelEnum statement);
 				
 				/**
-				 * unset additional mysql-specific statement for INSERT
+				 * unset additional sqlite-specific statement for INSERT
 				 * @param statement describes additional statement
 				 */
-				virtual void unsetMyAddInsSt(mysqlAddInsEnum statement);
+				virtual void unsetLiteAddInsSt(sqliteAddInsEnum statement);
 				
 				/**
-				 * unset additional mysql-specific statement for UPDATE
+				 * unset additional sqlite-specific statement for UPDATE
 				 * @param statement describes additional statement
 				 */
-				virtual void unsetMyAddUpSt(mysqlAddUpEnum statement);
+				virtual void unsetLiteAddUpSt(sqliteAddUpEnum statement);
 				
 				/**
-				 * unset additional mysql-specific statement for SELECT
+				 * unset additional sqlite-specific statement for SELECT
 				 * @param statement describes additional statement
 				 */
-				virtual void unsetMyAddSelSt(mysqlAddSelEnum statement);
+				virtual void unsetLiteAddSelSt(sqliteAddSelEnum statement);
 				
 				/**
-				 * unset additional mysql-specific statement for DELETE
+				 * unset additional sqlite-specific statement for DELETE
 				 * @param statement describes additional statement
 				 */
-				virtual void unsetMyAddDelSt(mysqlAddDelEnum statement);
+				virtual void unsetLiteAddDelSt(sqliteAddDelEnum statement);
 
 				/**
 				 * executes collected request
@@ -253,29 +255,12 @@
 					virtual int addPreExec(const std::string &module, void *data) const;
 				
 				#endif
-				
-				/**
-				 * sets sessions charset
-				 * @param charset indicates what type of charset would be used for session
-				 */
-				virtual void setCharset(const std::string &charset);
-				
-				/**
-				 * sets connection timeout
-				 * @param connection timeout in seconds
-				 */
-				virtual void setConnectTimeout(unsigned int time);
-				 
-				/**
-				 * @return current session charset
-				 */ 
-				virtual std::string getCharset(); 
 				 
 			private:
 			
 				/**
 				 * executes request
-				 * pure mysql actions
+				 * pure sqlite actions
 				 * in function without `_` hooks are calling
 				 */
 				#ifndef NO_EX
@@ -291,7 +276,10 @@
 				virtual void addSQL();
 				
 				mutable bool connected;///< connected or not
-				mutable bool empty;///< for detectin' whether mysqlResult is empty or not
+				mutable bool empty;///< for detectin' whether result is empty or not
+				
+				std::vector<stringArr> rows;///< to store rows
+				stringArr fields;///< to store fields
 		};
 	};
 #endif

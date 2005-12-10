@@ -33,11 +33,13 @@ using namespace dodo;
 std::string
 cgiTools::__method::operator [](const std::string &varName)
 {
-	assocArr::iterator i(methodArr.begin()),j(methodArr.end());
+	i = methodArr.begin();
+	j = methodArr.end();
 	
 	for (;i!=j;++i)
 		if (strcmp(varName.c_str(),i->first.c_str()) == 0)
 			return i->second;
+			
 	return __UNDEFINED__;
 }
 
@@ -167,7 +169,8 @@ cgiTools::initHeaders(assocArr &a_headers) const
 	
 	if (a_headers.size() > 0)
 	{
-		assocArr::iterator i(a_headers.begin()),j(a_headers.end());
+		i = a_headers.begin();
+		j = a_headers.end();
 	
 		for (;i!=j;++i)
 			HEADERS[i->first] = i->second;	
@@ -179,10 +182,12 @@ cgiTools::initHeaders(assocArr &a_headers) const
 void 
 cgiTools::printHeaders() const
 {
-	assocArr::iterator i(HEADERS.begin()),j(HEADERS.end());
+	 i = HEADERS.begin();
+	 j = HEADERS.end();
 	
 	for (;i!=j;++i)
 		std::cout << i->first << ": " << i->second << std::endl;
+		
 	if (cookiesSet.size()>0)
 	{
 		std::vector<__cookies>::iterator i(cookiesSet.begin()),j(cookiesSet.end());
@@ -251,16 +256,16 @@ cgiTools::makePost() const
 		register unsigned int temp1;
 		char *ptr = new char[strlen(post_files_tmp_dir)+17];
 		if (ptr == NULL)
-		#ifndef NO_EX
-		{
-			delete [] post;	
-			throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-		}
-		#else
-		{
-			delete [] post;	
-			return false;
-		}
+			#ifndef NO_EX
+			{
+				delete [] post;	
+				throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
+			}
+			#else
+			{
+				delete [] post;	
+				return false;
+			}
 		#endif
 		
 		for (;i!=j;++i)
@@ -341,27 +346,27 @@ std::string
 cgiTools::decode64(const std::string &string)
 {
 	std::string result;
-	std::string::const_iterator i(string.begin()),j(string.end());
+	std::string::const_iterator o(string.begin()),k(string.end());
 	char c;
 
-	for(;i!=j;++i) 
+	for(;o!=k;++o) 
 	{
-		switch(*i) 
+		switch(*o) 
 		{
 			case '+':
 				result.append(1, ' ');
 				break;
 			case '%':
-				if(std::distance(i, j) >= 2 && std::isxdigit(*(i + 1)) && std::isxdigit(*(i + 2))) 
+				if(std::distance(o, k) >= 2 && std::isxdigit(*(o + 1)) && std::isxdigit(*(o + 2))) 
 				{
-					c = *++i;
-					result.append(1, hexToChar(c, *++i));
+					c = *++o;
+					result.append(1, hexToChar(c, *++o));
 				}
 				else 
 					result.append(1, '%');
 				break;
 			default:
-				result.append(1, *i);
+				result.append(1, *o);
 		}
 	}
 	return result;	
@@ -372,11 +377,11 @@ std::string
 cgiTools::encode64(const std::string &string)
 {
 	std::string result;
-	std::string::const_iterator i(string.begin()), j(string.end());
+	std::string::const_iterator o(string.begin()),k(string.end());
 	
-	for(;i!=j;++i) 
+	for(;o!=k;++o) 
 	{
-		switch(*i) 
+		switch(*o) 
 	    {
 		    case ' ':
 				result.append(1, '+');
@@ -393,11 +398,11 @@ cgiTools::encode64(const std::string &string)
 			case '7': case '8': case '9':
 			case '-': case '_': case '.': case '!': case '~': case '*': case '\'': 
 			case '(': case ')':
-				result.append(1, *i);
+				result.append(1, *o);
 				break;
 			default:
 				result.append(1, '%');
-				result.append(charToHex(*i));
+				result.append(charToHex(*o));
 				break;
 	    }
 	}
@@ -445,6 +450,7 @@ cgiTools::hexToChar(const char &first,
 		default:
 			val += (int(second)-55);
 	}   
+	
 	return char(val);
 }
 
@@ -455,6 +461,7 @@ cgiTools::charToHex(const char &first)
 {
 	char temp[3*size_of_char];
 	sprintf(temp,"%X",first);
+	
 	return std::string(temp);
 }
 
@@ -527,15 +534,4 @@ cgiTools::setCookie(const __cookies &cookie)
 }
 
 //-------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-\
 

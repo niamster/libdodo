@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbMysql.cc
+ *            dbSqlite.cc
  *
  *  Thu Apr  30 13:45:19 2005
  *  Copyright  2005  Ni@m
@@ -22,34 +22,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <dbMysql.h>
+#include <dbSqlite.h>
 
-#ifdef MYSQL_EXT
+#ifdef SQLITE_EXT
 	
 	using namespace dodo;
 
-	__mysqlSSLOptions::__mysqlSSLOptions()
-	{
-	}
-
-	//-------------------------------------------------------------------
-	
-	__mysqlSSLOptions::__mysqlSSLOptions(const std::string &a_key, 
-						const std::string &a_cert, 
-						const std::string &a_ca, 
-						const std::string &a_capath, 
-						const std::string &a_cipher) : key(a_key),
-									cert(a_cert),
-									ca(a_ca),
-									capath(a_capath),
-									cipher(a_cipher)
-	{
-	}
-
-	//-------------------------------------------------------------------
-
 	dodoBase * const 
-	dbMysql::getSelf()
+	dbSqlite::getSelf()
 	{
 		return dynamic_cast<dodoBase *>(this);
 	}
@@ -57,25 +37,24 @@
 	//-------------------------------------------------------------------
 
 	
-	dbMysql::dbMysql() : connected(false),
+	dbSqlite::dbSqlite() : connected(false),
 						empty(true)
 	{
-		mysql = mysql_init(NULL);
 		addSQL();
 	}
 	
 	//-------------------------------------------------------------------
 	
-	dbMysql::dbMysql(dbMysql &a_mypp)
+	dbSqlite::dbSqlite(dbSqlite &a_pp)
 	{
 	}
 	
 	//-------------------------------------------------------------------
 	
-	dbMysql::~dbMysql()
+	dbSqlite::~dbSqlite()
 	{
 		if (!empty)
-			mysql_free_result(mysqlRes);
+			;
 			
 		disconnect();
 	}
@@ -83,26 +62,21 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::addSQL()
+	dbSqlite::addSQL()
 	{
-		sqlDbDepAddInsArr.push_back(" delayed ");
-		sqlDbDepAddInsArr.push_back(" low_priority ");
-		sqlDbDepAddInsArr.push_back(" high_priority ");
+		/*sqlDbDepAddInsArr.push_back(" delayed ");
 		
-		sqlDbDepAddSelArr.push_back(" straight_join ");
-		sqlDbDepAddSelArr.push_back(" sql_small_result ");
 		sqlDbDepAddSelArr.push_back(" sql_big_result ");
 		
 		sqlDbDepAddUpArr.push_back(" low_priority ");
 	
-		sqlDbDepAddDelArr.push_back(" low_priority ");
-		sqlDbDepAddDelArr.push_back(" quick ");	
+		sqlDbDepAddDelArr.push_back(" quick ");	*/
 	}
 	
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddInsSt(mysqlAddInsEnum statement)
+	dbSqlite::setLiteAddInsSt(sqliteAddInsEnum statement)
 	{
 		/*switch (statement)
 		{
@@ -117,7 +91,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddUpSt(mysqlAddUpEnum statement)
+	dbSqlite::setLiteAddUpSt(sqliteAddUpEnum statement)
 	{
 		/*switch (statement)
 		{
@@ -131,7 +105,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddSelSt(mysqlAddSelEnum statement)
+	dbSqlite::setLiteAddSelSt(sqliteAddSelEnum statement)
 	{
 		switch (statement)
 		{
@@ -150,7 +124,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddDelSt(mysqlAddDelEnum statement)
+	dbSqlite::setLiteAddDelSt(sqliteAddDelEnum statement)
 	{
 		/*switch (statement)
 		{
@@ -164,7 +138,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddInsSt(mysqlAddInsEnum statement)
+	dbSqlite::unsetLiteAddInsSt(sqliteAddInsEnum statement)
 	{
 		removeF(qDbDepInsShift,1<<statement);
 	}
@@ -172,7 +146,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddUpSt(mysqlAddUpEnum statement)
+	dbSqlite::unsetLiteAddUpSt(sqliteAddUpEnum statement)
 	{
 		removeF(qDbDepUpShift,1<<statement);	
 	}
@@ -180,7 +154,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddSelSt(mysqlAddSelEnum statement)
+	dbSqlite::unsetLiteAddSelSt(sqliteAddSelEnum statement)
 	{
 		removeF(qDbDepSelShift,1<<statement);	
 	}
@@ -188,7 +162,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddDelSt(mysqlAddDelEnum statement)
+	dbSqlite::unsetLiteAddDelSt(sqliteAddDelEnum statement)
 	{
 		removeF(qDbDepDelShift,1<<statement);	
 	}
@@ -200,42 +174,19 @@
 	#else
 		bool
 	#endif
-	dbMysql::connect(unsigned long type,
-					const __mysqlSSLOptions &options) const
+	dbSqlite::connect() const
 	{
 		if (connected)
 			disconnect();
 			
-		#ifndef DBMYSQL_WO_XEXEC
-			operType = DBMYSQL_OPER_CONNECT;
+		#ifndef DBSQLITE_WO_XEXEC
+			operType = DBSQLITE_OPER_CONNECT;
 			performXExec(preExec);
 		#endif
 		
-		mysql_ssl_set(mysql,
-		options.key.size()==0?NULL:options.key.c_str(),
-		options.cert.size()==0?NULL:options.cert.c_str(),
-		options.ca.size()==0?NULL:options.ca.c_str(),
-		options.capath.size()==0?NULL:options.capath.c_str(),
-		options.cipher.size()==0?NULL:options.cipher.c_str());
 		
-		if (!mysql_real_connect(mysql,
-			dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
-			dbInfo.user.size()==0?NULL:dbInfo.user.c_str(),
-			dbInfo.password.size()==0?NULL:dbInfo.password.c_str(),
-			dbInfo.db.size()==0?NULL:dbInfo.db.c_str(),
-			dbInfo.port,
-			dbInfo.path.size()==0?NULL:dbInfo.path.c_str(),
-			type))
-		{
-			connected = false;
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-		}
 		
-		#ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
 		#endif
 		
@@ -249,18 +200,18 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::disconnect() const
+	dbSqlite::disconnect() const
 	{
 		if (connected)
 		{
-			#ifndef DBMYSQL_WO_XEXEC
-				operType = DBMYSQL_OPER_DISCONNECT;
+			#ifndef DBSQLITE_WO_XEXEC
+				operType = DBSQLITE_OPER_DISCONNECT;
 				performXExec(preExec);
 			#endif
 			
-	     	mysql_close(mysql);
+			
 
-			#ifndef DBMYSQL_WO_XEXEC
+			#ifndef DBSQLITE_WO_XEXEC
 				performXExec(postExec);
 			#endif
 	     	
@@ -275,35 +226,11 @@
 	#else
 		bool
 	#endif
-	dbMysql::_exec() const
+	dbSqlite::_exec() const
 	{	
 		queryCollect();
 		
-		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
 		
-		if (!show)	
-			#ifndef NO_EX
-				return ;
-			#else
-				return true;
-			#endif
-		
-		if (!empty)
-			mysql_free_result(mysqlRes);
-		empty = false;
-		
-		mysqlRes = mysql_store_result(mysql);
-		if (mysqlRes == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
 		
 		#ifdef NO_EX
 			return true;
@@ -313,37 +240,21 @@
 	//-------------------------------------------------------------------
 	
 	std::vector<stringArr>
-	dbMysql::fetchRow()
+	dbSqlite::fetchRow()
 	{
 			
-		#ifndef DBMYSQL_WO_XEXEC
-			operType = DBMYSQL_OPER_FETCHROW;
+		#ifndef DBSQLITE_WO_XEXEC
+			operType = DBSQLITE_OPER_FETCHROW;
 			performXExec(preExec);
 		#endif		
 			
 		if (empty || !show)
 			return std::vector<stringArr>();
-		
-		numFields = mysql_num_fields(mysqlRes);	
-		
-		rows.empty();
-		rows.reserve(mysql_num_rows(mysqlRes));
-		
-		register unsigned long *length, j;
-		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
-		{		
-			length = mysql_fetch_lengths(mysqlRes);
-			fields.clear();
-			fields.reserve(numFields);
-			for (j=0;j<numFields;j++)
-			{
-				rowPart.assign(mysqlRow[j]?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
-				fields.push_back(rowPart);
-			}
-			rows.push_back(fields);
-		}
+			
+		rows.clear();
+		rows.reserve(0);
 
-		#ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
 		#endif
 				
@@ -353,28 +264,22 @@
 	//-------------------------------------------------------------------
 	
 	stringArr
-	dbMysql::fetchField()
+	dbSqlite::fetchField()
 	{	
-		#ifndef DBMYSQL_WO_XEXEC
-			operType = DBMYSQL_OPER_FETCHFIELD;
+		#ifndef DBSQLITE_WO_XEXEC
+			operType = DBSQLITE_OPER_FETCHFIELD;
 			performXExec(preExec);
 		#endif
 					
 		if (empty || !show)
 			return stringArr();
 			
-		numFields = mysql_num_fields(mysqlRes);	
-		mysqlFields = mysql_fetch_fields(mysqlRes);
-		
 		fields.clear();
-		fields.reserve(numFields);
-		
-		for (register unsigned int i(0);i<numFields;i++)
-			fields.push_back(mysqlFields[i].name);
+		fields.reserve(0);
 
-		#ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
-		#endif
+		#endif			
 					
 		return fields;
 	}
@@ -382,7 +287,7 @@
 	//-------------------------------------------------------------------
 	
 	__sqlStorage 
-	dbMysql::fetch()
+	dbSqlite::fetch()
 	{
 		return __sqlStorage(fetchRow(), fetchField());
 	}
@@ -390,34 +295,34 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	dbMysql::rowsCount()
+	dbSqlite::rowsCount()
 	{
 		if (empty || !show)
 			return 0;
 		else	
-			return mysql_num_rows(mysqlRes);
+			return 0;
 	}
 	
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	dbMysql::fieldsCount()
+	dbSqlite::fieldsCount()
 	{
 		if (empty || !show)
 			return 0;
 		else	
-			return mysql_num_fields(mysqlRes);
+			return 0;
 	}
 	
 	//-------------------------------------------------------------------
 	
 	unsigned int
-	dbMysql::affectedRowsCount()
+	dbSqlite::affectedRowsCount()
 	{
 		if (empty || show)
 			return 0;
 		else	
-			return mysql_affected_rows(mysql);
+			return 0;
 	}
 	
 	//-------------------------------------------------------------------
@@ -428,10 +333,10 @@
 	#else
 		bool
 	#endif
-	dbMysql::exec() const
+	dbSqlite::exec() const
 	{
-		#ifndef DBMYSQL_WO_XEXEC
-			operType = DBMYSQL_OPER_EXEC;
+		#ifndef DBSQLITE_WO_XEXEC
+			operType = DBSQLITE_OPER_EXEC;
 			performXExec(preExec);
 		#endif
 		
@@ -440,7 +345,7 @@
 		#endif	
 			_exec(); 
 		
-		#ifndef DBMYSQL_WO_XEXEC		
+		#ifndef DBSQLITE_WO_XEXEC		
 			performXExec(postExec);
 		#endif
 		
@@ -454,7 +359,7 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	dbMysql::addPostExec(inExec func, 
+	dbSqlite::addPostExec(inExec func, 
 						void *data) const
 	{
 		return _addPostExec(func, (dodoBase *)this, data);
@@ -463,7 +368,7 @@
 	//-------------------------------------------------------------------
 	
 	int 
-	dbMysql::addPreExec(inExec func, 
+	dbSqlite::addPreExec(inExec func, 
 						void *data) const
 	{
 		return _addPreExec(func, (dodoBase *)this, data);
@@ -474,7 +379,7 @@
 	#ifdef DL_EXT
 	
 		int 
-		dbMysql::addPostExec(const std::string &module, 
+		dbSqlite::addPostExec(const std::string &module, 
 							void *data) const
 		{
 			return _addPostExec(module, (dodoBase *)this, data);
@@ -483,7 +388,7 @@
 		//-------------------------------------------------------------------
 		
 		int 
-		dbMysql::addPreExec(const std::string &module, 
+		dbSqlite::addPreExec(const std::string &module, 
 							void *data) const
 		{
 			return _addPreExec(module, (dodoBase *)this, data);
@@ -492,37 +397,13 @@
 		//-------------------------------------------------------------------
 		
 		int 
-		dbMysql::addExec(const std::string &module, 
+		dbSqlite::addExec(const std::string &module, 
 							void *data) const
 		{
 			return _addExec(module, (dodoBase *)this, data);
 		}
 	
 	#endif
-	
-	//-------------------------------------------------------------------
-	
-	void 
-	dbMysql::setCharset(const std::string &charset)
-	{
-		mysql_options(mysql,MYSQL_READ_DEFAULT_FILE,charset.c_str());
-	}
-	
-	//-------------------------------------------------------------------
-	
-	void 
-	dbMysql::setConnectTimeout(unsigned int time)
-	{
-		mysql_options(mysql,MYSQL_OPT_CONNECT_TIMEOUT,(char *)&time);
-	}
-
-	//-------------------------------------------------------------------
-	
-	std::string 
-	dbMysql::getCharset()
-	{
-		return mysql_character_set_name(mysql);
-	}
 	
 	//-------------------------------------------------------------------
 	

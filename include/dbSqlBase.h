@@ -196,14 +196,14 @@ namespace dodo
 			 * @param sqlAddArr is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(unsigned int sqlAddEnumArr[], __statements sqlAddArr[], int qTypeShift) const;
+			virtual std::string insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift) const;
 			
 			/**
 			 * @return string constructed from collected additional statements(DB-dependent)
 			 * @param statement is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(stringArr &statements, int qTypeShift) const;
+			virtual std::string insideAddCollect(const stringArr &statements, int qTypeShift) const;
 		
 			/**
 			 * @return string from fields' names and 'em values

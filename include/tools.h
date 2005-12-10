@@ -277,11 +277,10 @@ namespace dodo
 				
 				size_t in;///< inbytesleft paramether for iconv
 				size_t out;///< outbytesleft paramether for iconv
-				
-				std::string result;///< to store temporary result
-				
 				char *inFake;///< to protect incomming string
 				char *outFake;///< to protect outgoing string
+								
+				std::string result;///< to store temporary result
 				
 			#endif
 			

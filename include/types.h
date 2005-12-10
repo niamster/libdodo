@@ -32,6 +32,8 @@
 #include <iostream>
 #include <errno.h>
 
+#include <directives.h>
+
 namespace dodo
 {
 

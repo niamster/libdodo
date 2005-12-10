@@ -81,6 +81,7 @@
  */
 //#define FLUSH_DISK_WO_XEXEC = faster, if u don't want to use it!
 //#define DBMYSQL_WO_XEXEC
+//#define DBSQLITE_WO_XEXEC
 //#define FLUSH_STD_WO_XEXEC
 //#define FLUSH_SOCKET_WO_XEXEC
 //#define DBBERKELEY_WO_XEXEC

@@ -183,8 +183,8 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 //-------------------------------------------------------------------
 
 std::string 
-dbSqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
-						__statements sqlAddArr[],
+dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
+						const __statements sqlAddArr[],
 						int qTypeShift) const
 {
 	if (qTypeShift == EMPTY)
@@ -208,7 +208,7 @@ dbSqlBase::insideAddCollect(unsigned int sqlAddEnumArr[],
 //-------------------------------------------------------------------
 
 std::string 
-dbSqlBase::insideAddCollect(stringArr &statements, 
+dbSqlBase::insideAddCollect(const stringArr &statements, 
 						int qTypeShift) const
 {
 	if (qTypeShift == EMPTY)

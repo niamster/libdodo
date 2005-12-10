@@ -190,6 +190,9 @@ namespace dodo
 					
 				protected:
 					
+					assocArr::iterator i;///< iterator for methodArr(from begin)
+					assocArr::iterator j///< iterator for methodArr(indicates end)
+					;
 					assocArr methodArr;///< real array
 			};
 		
@@ -336,6 +339,9 @@ namespace dodo
 			 * deletes temp files that were created if POST files were present
 			 */
 			virtual void cleanTmp() const;
+			
+			mutable assocArr::iterator i;///< iterator
+			mutable assocArr::iterator j;///< iterator
 	};
 
 }

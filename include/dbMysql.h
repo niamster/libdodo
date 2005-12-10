@@ -345,6 +345,12 @@
 				mutable MYSQL_RES *mysqlRes;///< pointer to result
 				mutable MYSQL_ROW mysqlRow;///< pointer to rows
 				mutable MYSQL_FIELD *mysqlFields;///< pointer to fields
+				
+				std::vector<stringArr> rows;///< to store rows
+				stringArr fields;///< to store fields
+				std::string rowPart;///< to store row node
+					
+				unsigned int numFields;///< number of fields
 		};
 	};
 #endif

@@ -140,7 +140,7 @@ namespace dodo
 			 * @return second that describes __mktime
 			 * @timeInfo holds parameters about time that will be converted into seconds
 			 */
-			 static long makeTime(const __mktime &timeInfo);
+			static long makeTime(const __mktime &timeInfo);
 			 
 			/**
 			 * @return parameter about given time
