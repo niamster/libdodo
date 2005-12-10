@@ -12,16 +12,17 @@ extern "C"
 		xexecObjTypeEnum type,
 		void *yep)
 	{
-		std::cout << type;
-		
-		flushSTD *st = (flushSTD *)base;
-		if (st->operType == FLUSHSTD_OPER_WRITE)
+		if (type == XEXECOBJ_FLUSHSTD)
 		{
-			char q[100];
-			int *a;
-			a = (int *)(st->buffer.c_str());
-			sprintf(q,"!!%d!!\n",*a);
-			st->buffer.assign(q);
+			flushSTD *st = (flushSTD *)base;
+			if (st->operType == FLUSHSTD_OPER_WRITE)
+			{
+				char q[100];
+				int *a;
+				a = (int *)(st->buffer.c_str());
+				sprintf(q,"!!%d!!\n",*a);
+				st->buffer.assign(q);
+			}
 		}
 	}
 	
@@ -36,6 +37,12 @@ extern "C"
 		module.preExec = true;///preffered
 		
 		return module;
+	}
+
+	void
+	deinitXexecModule()
+	{
+		std::cout << "deactivation.";
 	}
 
 };

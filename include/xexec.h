@@ -109,6 +109,11 @@ namespace dodo
 		 * @typedef describes function in module that must return info for the hook
 		 */
 		typedef xexecExMod (*initXexecModule)();
+
+		/**
+		 * @typedef describes function in module that will be called during module unloading
+		 */
+		typedef void (*deinitXexecModule)();
 	
 	#endif
 	
