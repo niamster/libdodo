@@ -26,14 +26,6 @@
 
 using namespace dodo;
 
-dodoBase * const 
-flush::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flush::flush(): inSize(INSIZE), 
 				outSize(OUTSIZE),
 				autoOutSize(true),

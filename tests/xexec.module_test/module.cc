@@ -8,10 +8,10 @@ extern "C"
 {
 
 	void
-	hook(dodoBase *base, 
+	hook(void *base, 
 		void *yep)
 	{
-		flushSTD *st = dynamic_cast<flushSTD *>(base->getSelf());
+		flushSTD *st = (flushSTD *)base;
 		if (st->operType == FLUSHSTD_OPER_WRITE)
 		{
 			char q[100];

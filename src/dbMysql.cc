@@ -45,14 +45,6 @@
 									cipher(a_cipher)
 	{
 	}
-
-	//-------------------------------------------------------------------
-
-	dodoBase * const 
-	dbMysql::getSelf()
-	{
-		return dynamic_cast<dodoBase *>(this);
-	}
 	
 	//-------------------------------------------------------------------
 
@@ -457,7 +449,7 @@
 	dbMysql::addPostExec(inExec func, 
 						void *data) const
 	{
-		return _addPostExec(func, (dodoBase *)this, data);
+		return _addPostExec(func, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -466,7 +458,7 @@
 	dbMysql::addPreExec(inExec func, 
 						void *data) const
 	{
-		return _addPreExec(func, (dodoBase *)this, data);
+		return _addPreExec(func, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -477,7 +469,7 @@
 		dbMysql::addPostExec(const std::string &module, 
 							void *data) const
 		{
-			return _addPostExec(module, (dodoBase *)this, data);
+			return _addPostExec(module, (void *)this, data);
 		}
 		
 		//-------------------------------------------------------------------
@@ -486,7 +478,7 @@
 		dbMysql::addPreExec(const std::string &module, 
 							void *data) const
 		{
-			return _addPreExec(module, (dodoBase *)this, data);
+			return _addPreExec(module, (void *)this, data);
 		}
 	
 		//-------------------------------------------------------------------
@@ -495,7 +487,7 @@
 		dbMysql::addExec(const std::string &module, 
 							void *data) const
 		{
-			return _addExec(module, (dodoBase *)this, data);
+			return _addExec(module, (void *)this, data);
 		}
 	
 	#endif

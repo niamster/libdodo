@@ -62,13 +62,6 @@ namespace dodo
 			flushSTD(flushSTD &fd);
 		
 		public:
-													
-			/**
-			 * @return self, casted to base class - dodoBase; 
-			 * usefull to cast from child to parent;
-			 * used in hooks
-			 */	
-			virtual dodoBase * const getSelf();
 							
 			/**
 			 * constructor

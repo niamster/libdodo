@@ -30,7 +30,6 @@
 
 #include <types.h>
 #include <regexpToolsEx.h>
-#include <dodoBase.h>
 
 #ifdef PCRE_EXT
 	

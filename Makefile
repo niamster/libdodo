@@ -7,7 +7,6 @@ CXX = $(CC_PATH)g++
 
 CFLAGS=-O3 -march=pentium4
 OBJECTS=dbBase.o \
-		dodoBase.o \
 		tools.o \
 		xexec.o \
 		dbSqlBase.o \

@@ -335,13 +335,6 @@ namespace dodo
 			flushSocket(flushSocket &fs);
 		
 		public:
-											
-			/**
-			 * @return self, casted to base class - dodoBase; 
-			 * usefull to cast from child to parent;
-			 * used in hooks
-			 */		
-			virtual dodoBase * const getSelf();	
 		
 			/**
 			 * constructors
@@ -571,14 +564,6 @@ namespace dodo
 	 	friend class flushSocket;
 	 	
 		public:
-					
-											
-			/**
-			 * @return self, casted to base class - dodoBase; 
-			 * usefull to cast from child to parent;
-			 * used in hooks
-			 */		
-			virtual dodoBase * const getSelf();
 											
 			/**
 			 * constructor

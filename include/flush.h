@@ -36,16 +36,9 @@ namespace dodo
 	 * @class flush is a base class for I/O operations.
 	 * all I/O operations are blockable => read/write inSize/outSize block.
 	 */
-	class flush : public xexec, public dodoBase
+	class flush : public xexec
 	{
 		public:
-					
-			/**
-			 * @return self, casted to base class - dodoBase; 
-			 * usefull to cast from child to parent;
-			 * used in hooks
-			 */		
-			virtual dodoBase * const getSelf();
 							
 			/**
 			 * constructor

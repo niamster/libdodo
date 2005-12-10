@@ -31,7 +31,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <dodoBase.h>
 #include <toolsEx.h>
 
 #ifdef CODECONV_EXT

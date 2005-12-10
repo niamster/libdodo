@@ -41,14 +41,6 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket), f
 
 //-------------------------------------------------------------------
 
-dodoBase * const 
-flushSocket::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flushSocket::flushSocket(flushSocket &fs)
 {
 }
@@ -83,7 +75,7 @@ int
 flushSocket::addPostExec(inExec func, 
 					void *data) const
 {
-	return _addPostExec(func, (dodoBase *)this, data);
+	return _addPostExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -92,7 +84,7 @@ int
 flushSocket::addPreExec(inExec func, 
 					void *data) const
 {
-	return _addPreExec(func, (dodoBase *)this, data);
+	return _addPreExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -103,7 +95,7 @@ flushSocket::addPreExec(inExec func,
 	flushSocket::addPostExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPostExec(module, (dodoBase *)this, data);
+		return _addPostExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -112,7 +104,7 @@ flushSocket::addPreExec(inExec func,
 	flushSocket::addPreExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPreExec(module, (dodoBase *)this, data);
+		return _addPreExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -121,7 +113,7 @@ flushSocket::addPreExec(inExec func,
 	flushSocket::addExec(const std::string &module, 
 						void *data) const
 	{
-		return _addExec(module, (dodoBase *)this, data);
+		return _addExec(module, (void *)this, data);
 	}
 
 #endif
@@ -888,14 +880,6 @@ flushSocketOptions::~flushSocketOptions()
 
 //-------------------------------------------------------------------
 
-dodoBase * const 
-flushSocketExchange::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flushSocketExchange::flushSocketExchange()
 {
 }
@@ -1316,11 +1300,6 @@ flushSocketOptions::getLingerPeriod() const
 flushSocketExchange::send(const char * const data, 
 						bool urgent) const
 {
-		
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-		operType = FLUSHSOCKET_OPER_SEND;
-	#endif
-
 	register long oldOutSize = outSize;
 	
 	if (autoOutSize)
@@ -1329,6 +1308,7 @@ flushSocketExchange::send(const char * const data,
 	buffer.assign(data,outSize);
 				
 	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_SEND;
 		performXExec(preExec);
 	#endif	
 
@@ -1497,7 +1477,7 @@ int
 flushSocketExchange::addPostExec(inExec func, 
 					void *data) const
 {
-	return _addPostExec(func, (dodoBase *)this, data);
+	return _addPostExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -1506,7 +1486,7 @@ int
 flushSocketExchange::addPreExec(inExec func, 
 					void *data) const
 {
-	return _addPreExec(func, (dodoBase *)this, data);
+	return _addPreExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -1517,7 +1497,7 @@ flushSocketExchange::addPreExec(inExec func,
 	flushSocketExchange::addPostExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPostExec(module, (dodoBase *)this, data);
+		return _addPostExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -1526,7 +1506,7 @@ flushSocketExchange::addPreExec(inExec func,
 	flushSocketExchange::addPreExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPreExec(module, (dodoBase *)this, data);
+		return _addPreExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -1535,7 +1515,7 @@ flushSocketExchange::addPreExec(inExec func,
 	flushSocketExchange::addExec(const std::string &module, 
 						void *data) const
 	{
-		return _addExec(module, (dodoBase *)this, data);
+		return _addExec(module, (void *)this, data);
 	}
 
 #endif

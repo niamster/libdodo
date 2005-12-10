@@ -29,7 +29,7 @@ using namespace dodo;
 //-------------------------------------------------------------------
 
 void 
-dummyHook(dodoBase *base, void *data)
+dummyHook(void *base, void *data)
 {
 }
 
@@ -65,7 +65,7 @@ xexec::~xexec()
 inline int 
 xexec::addXExec(std::vector<__execItem> &list, 
 		inExec func,
- 		dodoBase *obj,
+ 		void *obj,
 		void *data) const
 {
 	__execItem temp;
@@ -113,7 +113,7 @@ xexec::delXExec(std::vector<__execItem> &list,
 
 int 
 xexec::_addPreExec(inExec func,
- 				dodoBase *obj,
+ 				void *obj,
 				void *data) const
 {
 	return addXExec(preExec.exec,func,obj,data);
@@ -147,7 +147,7 @@ xexec::enablePreExec(unsigned int position) const
 
 int 
 xexec::_addPostExec(inExec func, 
- 				dodoBase *obj,
+ 				void *obj,
 				void *data) const
 {
 	return addXExec(postExec.exec,func,obj,data);
@@ -297,7 +297,7 @@ xexec::performXExec(__execItemList &list) const
 
 	int 
 	xexec::addXExecModule(std::vector<__execItem> &list, 
-					dodoBase *obj, 
+					void *obj, 
 					const std::string &module, 
 					void *data) const
 	{
@@ -348,7 +348,7 @@ xexec::performXExec(__execItemList &list) const
 	
 	int 
 	xexec::_addPostExec(const std::string &module, 
-						dodoBase *obj, 
+						void *obj, 
 						void *data) const
 	{
 		return addXExecModule(postExec.exec,obj,module,data);
@@ -358,7 +358,7 @@ xexec::performXExec(__execItemList &list) const
 	
 	int 
 	xexec::_addPreExec(const std::string &module, 
-					dodoBase *obj,
+					void *obj,
 					void *data) const
 	{
 		return addXExecModule(preExec.exec,obj,module,data);
@@ -401,14 +401,13 @@ xexec::performXExec(__execItemList &list) const
 	
 	int 
 	xexec::_addExec(const std::string &module, 
-					dodoBase *obj,
+					void *obj,
 					void *data) const
 	{
 		if (handlesOpened == XEXEC_MAXMODULES)
 			return -1;
 		
 		__execItem temp;
-		
 		temp.data = data;
 		temp.obj = obj;
 		temp.present = true;

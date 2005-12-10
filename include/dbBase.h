@@ -29,7 +29,6 @@
 
 #include <types.h>
 #include <dbSqlBaseEx.h>
-#include <dodoBase.h>
 #include <tools.h>
 
 namespace dodo
@@ -368,16 +367,9 @@ namespace dodo
 	 * 
 	 * @note for xexec => you may use store/restore methods in hook if you want to leave data unchanged after it!
 	 */
-	class dbBase : public dodoBase
+	class dbBase
 	{
 		public:
-					
-			/**
-			 * @return self, casted to base class - dodoBase; 
-			 * usefull to cast from child to parent;
-			 * used in hooks
-			 */		
-			virtual dodoBase * const getSelf();
 			
 			/*
 			 * constructor

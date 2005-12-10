@@ -26,14 +26,6 @@
 
 using namespace dodo;
 
-dodoBase * const 
-flushSTD::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),
 						outSTDBuffer(STD_OUTSIZE),
 						err(false)
@@ -58,7 +50,7 @@ int
 flushSTD::addPostExec(inExec func, 
 					void *data) const
 {
-	return _addPostExec(func, (dodoBase *)this, data);
+	return _addPostExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -67,7 +59,7 @@ int
 flushSTD::addPreExec(inExec func, 
 					void *data) const
 {
-	return _addPreExec(func, (dodoBase *)this, data);
+	return _addPreExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -78,7 +70,7 @@ flushSTD::addPreExec(inExec func,
 	flushSTD::addPostExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPostExec(module, (dodoBase *)this, data);
+		return _addPostExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -87,7 +79,7 @@ flushSTD::addPreExec(inExec func,
 	flushSTD::addExec(const std::string &module, 
 						void *data) const
 	{
-		return _addExec(module, (dodoBase *)this, data);
+		return _addExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -96,7 +88,7 @@ flushSTD::addPreExec(inExec func,
 	flushSTD::addPreExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPreExec(module, (dodoBase *)this, data);
+		return _addPreExec(module, (void *)this, data);
 	}
 
 #endif
@@ -237,18 +229,15 @@ flushSTD::writeString(const std::string &a_buf)
 	bool
 #endif 
 flushSTD::write(const char *const aa_buf)
-{	
-	#ifndef FLUSH_STD_WO_XEXEC
-		operType = FLUSHSTD_OPER_WRITE;
-	#endif
-		
+{
 	register long oldOutSize = outSize;		
 	if (autoOutSize)
 		outSize = strlen(aa_buf);
-				
+		
 	buffer.assign(aa_buf, outSize);		
 		
 	#ifndef FLUSH_STD_WO_XEXEC
+		operType = FLUSHSTD_OPER_WRITE;
 		performXExec(preExec);
 	#endif
 		

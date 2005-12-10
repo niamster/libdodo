@@ -162,14 +162,6 @@ __collectedData::__collectedData(
 
 //-------------------------------------------------------------------
 
-dodoBase * const 
-dbBase::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 dbBase::dbBase() : show(false),
 
 					qType(-1),

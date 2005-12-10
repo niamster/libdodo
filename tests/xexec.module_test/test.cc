@@ -10,12 +10,18 @@ int main(int argc, char **argv)
 	{
 		flushSTD st;
 		
+		st.autoOutSize = false;
+		st.outSize = sizeof(int);
+		
 		cout << flushSTD::getModuleInfo("./module").name;
 		
 		int pos = st.addPreExec("./module",NULL);
 	
 		int a = 10;
 		st.write((char *)&a);
+		
+		cout << endl << st.buffer << endl;
+		
 		st.flush();
 	}
 	catch(baseEx ex)

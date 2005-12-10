@@ -26,16 +26,6 @@
 
 using namespace dodo;
 
-//-------------------------------------------------------------------
-
-dodoBase * const 
-flushDisk::getSelf()
-{
-	return dynamic_cast<dodoBase *>(this);
-}
-
-//-------------------------------------------------------------------
-
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
 					const std::string &a_path) : over(false),
 												mode(READ_WRITE), 
@@ -64,7 +54,7 @@ int
 flushDisk::addPostExec(inExec func, 
 					void *data) const
 {
-	return _addPostExec(func, (dodoBase *)this, data);
+	return _addPostExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -73,7 +63,7 @@ int
 flushDisk::addPreExec(inExec func, 
 					void *data) const
 {
-	return _addPreExec(func, (dodoBase *)this, data);
+	return _addPreExec(func, (void *)this, data);
 }
 
 //-------------------------------------------------------------------
@@ -84,7 +74,7 @@ flushDisk::addPreExec(inExec func,
 	flushDisk::addPostExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPostExec(module, (dodoBase *)this, data);
+		return _addPostExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -93,7 +83,7 @@ flushDisk::addPreExec(inExec func,
 	flushDisk::addPreExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPreExec(module, (dodoBase *)this, data);
+		return _addPreExec(module, (void *)this, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -102,7 +92,7 @@ flushDisk::addPreExec(inExec func,
 	flushDisk::addExec(const std::string &module, 
 						void *data) const
 	{
-		return _addExec(module, (dodoBase *)this, data);
+		return _addExec(module, (void *)this, data);
 	}
 
 #endif
@@ -383,11 +373,7 @@ flushDisk::writeString(const std::string &a_buf,
 #endif 
 flushDisk::write(const char *const a_buf, 
 				unsigned long a_pos)
-{	
-	#ifndef FLUSH_DISK_WO_XEXEC
-		operType = FLUSHDISK_OPER_WRITE;
-	#endif
-	
+{
 	register long oldOutSize = outSize;
 	if (autoOutSize)
 		outSize = strlen(a_buf);
@@ -395,6 +381,7 @@ flushDisk::write(const char *const a_buf,
 	buffer.assign(a_buf, outSize);
 				
 	#ifndef FLUSH_DISK_WO_XEXEC
+		operType = FLUSHDISK_OPER_WRITE;
 		performXExec(preExec);
 	#endif
 		

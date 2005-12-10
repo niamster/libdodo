@@ -29,7 +29,6 @@
 
 #include <types.h>
 #include <dbSqlBaseEx.h>
-#include <dodoBase.h>
 #include <tools.h>
 #include <dbBase.h>
 
@@ -45,13 +44,6 @@ namespace dodo
 	class dbSqlBase : public dbBase
 	{
 		public:
-					
-			/**
-			 * @return self, casted to base class - dodoBase; 
-			 * usefull to cast from child to parent;
-			 * used in hooks
-			 */		
-			virtual dodoBase * const getSelf();
 							
 			/*
 			 * constructor
