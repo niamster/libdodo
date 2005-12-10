@@ -20,12 +20,12 @@ int main(int argc, char **argv)
 		select.push_back("date");
 		select.push_back("operation");
 		
-		for (int i=0;i<1000;i++)
+		for (int i=0;i<3000;i++)
 		{
 			pp.select("log",select,"`id`<20 or `operation`='mu'");
 			pp.exec();
 			
-			//pp.fetch();
+			pp.fetch();
 			
 			pp.insert("log",arr);
 			pp.exec();

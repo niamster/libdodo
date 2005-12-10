@@ -7,7 +7,7 @@ void
 hook(dodoBase *base, 
 	void *yep)
 {
-	flushSTD *st = dynamic_cast<flushSTD *>(base->getSelf());
+/*	flushSTD *st = dynamic_cast<flushSTD *>(base->getSelf());
 	if (st->operType == FLUSHSTD_OPER_WRITE)
 	{
 		char q[100];
@@ -15,7 +15,7 @@ hook(dodoBase *base,
 		a = (int *)(st->buffer.c_str());
 		sprintf(q,"!!%d!!\n",*a);
 		st->buffer.assign(q);
-	}
+	}*/
 }
 
 int main(int argc, char **argv)

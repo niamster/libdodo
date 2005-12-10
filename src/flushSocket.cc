@@ -339,18 +339,19 @@ flushSocket::getHostInfo(const std::string &host)
 	while (ent->h_aliases[i] != NULL)	
 		info.aliases.push_back(ent->h_aliases[i++]);
 	
-	i = 0;	
+	i = -1;	
 	char temp[INET6_ADDRSTRLEN];
 
-	while (ent->h_addr_list[i] != NULL)
+	while (ent->h_addr_list[i] != NULL && ++i)
 	{
 		switch (ent->h_addrtype)
 		{
 			case AF_INET:
-				if (inet_ntop(AF_INET,ent->h_addr_list[i++],temp,15)==NULL)
+				if (inet_ntop(AF_INET,ent->h_addr_list[i],temp,15)==NULL)
 					continue;
+					
 			case AF_INET6:
-				if (inet_ntop(AF_INET6,ent->h_addr_list[i++],temp,INET6_ADDRSTRLEN) == NULL)
+				if (inet_ntop(AF_INET6,ent->h_addr_list[i],temp,INET6_ADDRSTRLEN) == NULL)
 					continue;
 		}
 

@@ -11,13 +11,13 @@ int main(int argc, char **argv)
 
 	cout << "\npattern: (.*)a([0-9]+)(f*)(a*)(b*)<br> test string: dsdasa4565aaa<br> pockets: \n";
 	
-	if (expr.match("(.*)a([0-9]+)(f*)(a*)(b*)","dsdasa",pock)/*4565aaa",pock)*/)
+	if (expr.match("(.*)a([0-9]+)(f*)(a*)(b*)",/*"dsdasa",pock)*/"ssa4565aaa",pock))
 	{
-		cout << pock[0] << "<br>";
-		cout << pock[1] << "<br>";
-		cout << pock[2] << "<br>";
-		cout << pock[3] << "<br>";
-		cout << pock[4] << "<br>";
+		cout << pock[0] << "\n";
+		cout << pock[1] << "\n";
+		cout << pock[2] << "\n";
+		cout << pock[3] << "\n";
+		cout << pock[4] << "\n";
 	}
 	else
 		cout << "not matched";

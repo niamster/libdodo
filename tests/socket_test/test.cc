@@ -43,19 +43,11 @@ void process(flushSocketExchange &fse)
 
 int main(int argc, char **argv)
 {
-
-//#define DATAGRAM
-
-#ifndef DATAGRAM
-	#define CONNECTION_LIMIT 2
-#else
-	#define CONNECTION_LIMIT 1
-#endif
-
-
+	
+//#define DATAGRAM	
 	try
 	{		
-		flushSocket sock(true,/*PROTO_FAMILY_IPV4*/PROTO_FAMILY_IPV6/*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
+		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
 		
 /*		flushSocketExchange ex1;
 		copyTest0(ex1);///ok
@@ -77,18 +69,14 @@ int main(int argc, char **argv)
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
 		
-		sock.bindNListen("127.0.0.1",7777,CONNECTION_LIMIT);
+		sock.bindNListen("127.0.0.1",7777,2);
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",true);
 		
-		flushSocketExchange conn1[CONNECTION_LIMIT];
+		flushSocketExchange conn1[20];
 		int i = 0;
 		
-		#ifdef DATAGRAM
-			while(true)
-		#else
-			while (i<CONNECTION_LIMIT+1)
-		#endif
+		while(true)
 		{
 			if (sock.accept(fake,info))
 			{
@@ -105,17 +93,18 @@ int main(int argc, char **argv)
 		
 		//flushSocket::setLocalName("BUBU");
 		
-		cout << flushSocket::getLocalName() << endl;
+		/*cout << flushSocket::getLocalName() << endl;
 		cout << flushSocket::getHostInfo("192.168.0.1").addresses[0] << endl;
 		
 		flushSocket *pointer[10];
 		pointer[0] = &sock;
-		cout << pointer[0]->getHostInfo("elessar.mu").addresses[0] << endl;
+		cout << pointer[0]->getHostInfo("elessar.mu").addresses[0] << endl;*/
 		
 	}
 	catch(baseEx ex)
 	{
 		cout << ex << "\t" << ex.line << endl;
 	}
+	
 	return 0;
 }

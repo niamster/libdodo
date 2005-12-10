@@ -1,5 +1,5 @@
 #GCC_PATH=/opt/gcc-3.4.3/bin/
-#GCC_PATH=/opt/gcc-4.0.1/bin/
+GCC_PATH=/opt/gcc-4.0.1/bin/
 
 LIBTOOL = libtool
 CXX = $(GCC_PATH)g++
@@ -9,7 +9,7 @@ CFLAGS=-O2 -march=pentium4
 
 override DEFINES:=$(DEFINES)
 
-override CPPFLAGS:=-I../../include $(CPPFLAGS)
+override CPPFLAGS:=-I../../include -I/opt/pcre/include $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc
