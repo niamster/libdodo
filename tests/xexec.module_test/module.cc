@@ -9,8 +9,11 @@ extern "C"
 
 	void
 	hook(void *base, 
+		xexecObjTypeEnum type,
 		void *yep)
 	{
+		std::cout << type;
+		
 		flushSTD *st = (flushSTD *)base;
 		if (st->operType == FLUSHSTD_OPER_WRITE)
 		{

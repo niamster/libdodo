@@ -50,7 +50,7 @@ int
 flushSTD::addPostExec(inExec func, 
 					void *data) const
 {
-	return _addPostExec(func, (void *)this, data);
+	return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
 }
 
 //-------------------------------------------------------------------
@@ -59,7 +59,7 @@ int
 flushSTD::addPreExec(inExec func, 
 					void *data) const
 {
-	return _addPreExec(func, (void *)this, data);
+	return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
 }
 
 //-------------------------------------------------------------------
@@ -70,7 +70,7 @@ flushSTD::addPreExec(inExec func,
 	flushSTD::addPostExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPostExec(module, (void *)this, data);
+		return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -79,7 +79,7 @@ flushSTD::addPreExec(inExec func,
 	flushSTD::addExec(const std::string &module, 
 						void *data) const
 	{
-		return _addExec(module, (void *)this, data);
+		return _addExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
 	}
 	
 	//-------------------------------------------------------------------
@@ -88,7 +88,7 @@ flushSTD::addPreExec(inExec func,
 	flushSTD::addPreExec(const std::string &module, 
 						void *data) const
 	{
-		return _addPreExec(module, (void *)this, data);
+		return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
 	}
 
 #endif

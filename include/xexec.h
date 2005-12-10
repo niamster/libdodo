@@ -41,12 +41,26 @@
 
 namespace dodo
 {
+	
+	/**
+	 * @enum xexecObjTypeEnum describes object that passes to module
+	 */
+	enum xexecObjTypeEnum
+	{
+		XEXECOBJ_DBMYSQL,
+		XEXECOBJ_DBSQLITE,
+		XEXECOBJ_FLUSHSTD,
+		XEXECOBJ_DISK,
+		XEXECOBJ_SOCKET,
+		XEXECOBJ_SOCKETEXCHANGE,
+	};
+	
 	/**
 	 * @typedef that describes function that will be called as hook
 	 * @param first is pointer class object that uses hook; 
 	 * @param second is data needed for hook
 	 */
-	typedef void (*inExec)(void *, void *);
+	typedef void (*inExec)(void *, xexecObjTypeEnum, void *);
 
 	/**
 	 * @struct __execItem describes a node for Xexec
@@ -54,6 +68,7 @@ namespace dodo
 	struct __execItem
 	{
 		inExec func;///< function to execute
+		xexecObjTypeEnum type;///< type of object that passes to hook
 		void *data;///< data passed to func
 		void *obj;///< pointer to object that uses hook
 		bool present;///< if false = deleted
@@ -138,7 +153,7 @@ namespace dodo
 			 * @param data is pointer to data that will pass to hook
 			 * @attention data is not copied!!!
 			 */
-			virtual int _addPostExec(inExec func, void *obj, void *data) const;
+			virtual int _addPostExec(inExec func, void *obj, xexecObjTypeEnum type, void *data) const;
 			
 			/**
 			 * set function that will be executed before  the main action call
@@ -148,7 +163,7 @@ namespace dodo
 			 * @param data is pointer to data that will pass to hook
 			 * @attention data is not copied!!!
 			 */
-			virtual int _addPreExec(inExec func, void *obj, void *data) const;
+			virtual int _addPreExec(inExec func, void *obj, xexecObjTypeEnum type, void *data) const;
 			
 			#ifdef DL_EXT
 						
@@ -160,7 +175,7 @@ namespace dodo
 				 * @param data is pointer to data that will pass to hook
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPostExec(const std::string &module, void *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				virtual int _addPostExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 			
 				/**
 				 * set function from module that will be executed before  the main action call
@@ -170,7 +185,7 @@ namespace dodo
 				 * @param data is pointer to data that will pass to hook
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPreExec(const std::string &module, void *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				virtual int _addPreExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 	
 				/**
 				 * set function from module that will be executed before/after the main action call
@@ -181,7 +196,7 @@ namespace dodo
 				 * @param data is pointer to data that will pass to hook
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addExec(const std::string &module, void *obj, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				virtual int _addExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 			
 			#endif
 			
@@ -301,7 +316,7 @@ namespace dodo
 			 * @param data is pointer to data that will pass to hook
 			 * @attention data is not copied!!!
 			 */			
-			inline virtual int addXExec(std::vector<__execItem> &list, inExec func, void *obj, void *data) const;
+			inline virtual int addXExec(std::vector<__execItem> &list, inExec func, void *obj, xexecObjTypeEnum type, void *data) const;
 									
 			/**
 			 * deletes hook from list
@@ -338,7 +353,7 @@ namespace dodo
 				 * @param data is pointer to data that will pass to hook
 				 * @attention data is not copied!!!
 				 */
-				inline virtual int addXExecModule(std::vector<__execItem> &list, void *obj, const std::string &module, void *data) const;
+				inline virtual int addXExecModule(std::vector<__execItem> &list, void *obj, xexecObjTypeEnum type, const std::string &module, void *data) const;
 			
 			#endif
 			

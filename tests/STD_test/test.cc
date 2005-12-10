@@ -4,10 +4,11 @@ using namespace dodo;
 using namespace std;
 
 void 
-hook(dodoBase *base, 
+hook(void *base,
+	xexecObjTypeEnum type, 
 	void *yep)
 {
-/*	flushSTD *st = dynamic_cast<flushSTD *>(base->getSelf());
+	flushSTD *st = (flushSTD *)base;
 	if (st->operType == FLUSHSTD_OPER_WRITE)
 	{
 		char q[100];
@@ -15,7 +16,7 @@ hook(dodoBase *base,
 		a = (int *)(st->buffer.c_str());
 		sprintf(q,"!!%d!!\n",*a);
 		st->buffer.assign(q);
-	}*/
+	}
 }
 
 int main(int argc, char **argv)
