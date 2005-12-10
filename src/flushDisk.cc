@@ -157,9 +157,6 @@ flushDisk::open(const std::string &a_path) const
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_OPEN;
-	#endif
-	
-	#ifndef FLUSH_DISK_WO_XEXEC	
 		performXExec(preExec);	
 	#endif
 
@@ -277,9 +274,6 @@ flushDisk::read(char * const a_void,
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_READ;
-	#endif
-	
-	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	

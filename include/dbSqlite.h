@@ -1,7 +1,7 @@
 /***************************************************************************
- *            dbMysql.h
+ *            dbSqlite.h
  *
- *  Thu Apr  30 13:45:19 2005
+ *  Sat Dec 10 06:45:19 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -22,17 +22,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _DBMYSQL_H_
-#define _DBMYSQL_H_
+#ifndef _DBSQLITE_H_
+#define _DBSQLITE_H_
 
 #include <directives.h>
 
-#ifdef MYSQL_EXT
-		
-	#include <sys/socket.h>
-	#include <mysql.h>
+#ifdef SQLITE_EXT
 	
-	#include <dbMysqlEx.h>
+	#include <dbSqliteEx.h>
 	#include <dbSqlBase.h>
 	#include <tools.h>
 	#include <xexec.h>
@@ -43,87 +40,52 @@
 		/**
 		 * @enum dbMysqlOperTypeEnum describes type of operation for hook
 		 */
-		enum dbMysqlOperTypeEnum
+		enum dbSqliteOperTypeEnum
 		{
-			DBMYSQL_OPER_CONNECT,
-			DBMYSQL_OPER_EXEC,
-			DBMYSQL_OPER_DISCONNECT,
-			DBMYSQL_OPER_FETCHROW,
-			DBMYSQL_OPER_FETCHFIELD,
+			DBSQLITE_OPER_CONNECT,
+			DBSQLITE_OPER_EXEC,
+			DBSQLITE_OPER_DISCONNECT
 		};
 		
 		/**
-		 * @enum mysqlAddSelEnum describes mySQL additional statement for SELECT
+		 * @enum sqliteAddSelEnum describes SQLite additional statement for SELECT
 		 */
-		enum mysqlAddSelEnum
+		enum sqliteAddSelEnum
 		{
-			SELECT_STRAIGHT_JOIN = 1,
-			SELECT_SMALL_RESULT,
-			SELECT_BIG_RESULT,
 		};
 
 		/**
-		 * @enum mysqlAddDelEnum describes mySQL additional statement for DELETE
+		 * @enum sqliteAddDelEnum describes SQLite additional statement for DELETE
 		 */		
-		enum mysqlAddDelEnum
+		enum sqliteAddDelEnum
 		{
-			DELETE_LOW_PRIORITY = 1,
-			DELETE_QUICK
 		};
 
 		/**
-		 * @enum mysqlAddUpEnum describes mySQL additional statement for UPDATE
+		 * @enum sqliteAddUpEnum describes SQLite additional statement for UPDATE
 		 */		
-		enum mysqlAddUpEnum
+		enum sqliteAddUpEnum
 		{
-			UPDATE_LOW_PRIORITY = 1,
 		};
 
 		/**
-		 * @enum mysqlAddInsEnum describes mySQL additional statement for INSERT
+		 * @enum sqliteAddInsEnum describes SQLite additional statement for INSERT
 		 */		
-		enum mysqlAddInsEnum
+		enum sqliteAddInsEnum
 		{
-			INSERT_DELAYED = 1,
-			INSERT_LOW_PRIORITY,
-			INSERT_HIGH_PRIORITY,
 		};
 		
 		/**
-		 * @struct __mysqlSSLOptions describes mySQL options to establish ssl connection
-		 * @note any unused SSL parameters may be given empty
+	 	 * @class dbSqlite is an interface to mysql db through sql-,database- independent interfaces
 		 */
-		struct __mysqlSSLOptions
-		{
-			/**
-			 * constructor
-			 */
-			__mysqlSSLOptions();
-			
-			/**
-			 * constructor
-			 * @note defines structure data with user data
-			 */
-			__mysqlSSLOptions(const std::string &key, const std::string &cert = __string__, const std::string &ca = __string__, const std::string &capath = __string__, const std::string &cipher = __string__);
-			
-			std::string key;///< the pathname to the key file
-			std::string cert;///< the pathname to the certificate file.
-			std::string ca;///< the pathname to the certificate authority file.
-			std::string capath;///< the pathname to a directory that contains trusted SSL CA certificates in pem format.
-			std::string cipher;///< a list of allowable ciphers to use for SSL encryption.
-		};
-		
-		/**
-	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
-		 */
-		class dbMysql : public dbSqlBase, public xexec
+		class dbSqlite : public dbSqlBase, public xexec
 		{
 			private :
 				/**
 				 * constructor
 				 * to prevent from copying
 				 */
-				dbMysql(dbMysql &a_mypp);
+				dbSqlite(dbSqlite &a_pp);
 			
 			public:
 					
@@ -137,32 +99,22 @@
 				/**
 				 * constructor
 				 */
-				dbMysql();
+				dbSqlite();
 				
 				/**
 				 * destructor
 				 */
-				virtual ~dbMysql();	
+				virtual ~dbSqlite();	
 			
 				/**
 				 * connect to database
-				 * @param type is type of connection - see mySQL documentation for more!
-				 * @param options is options for ssl connection. see __mysqlSSLOptions for more details
-				 * 	CLIENT_COMPRESS 	Use compression protocol.
-				 *	CLIENT_FOUND_ROWS 	Return the number of found (matched) rows, not the number of affected rows.
-				 *	CLIENT_IGNORE_SPACE 	Allow spaces after function names. Makes all functions names reserved words.
-				 *	CLIENT_INTERACTIVE 	Allow interactive_timeout seconds (instead of wait_timeout seconds) of inactivity before closing the connection. The client's session wait_timeout variable is set to the value of the session interactive_timeout variable.
-				 *	CLIENT_LOCAL_FILES 	Enable LOAD DATA LOCAL handling.
-				 *	CLIENT_MULTI_STATEMENTS 	Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
-				 *	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
-				 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
 				 */	
 				#ifndef NO_EX
 					virtual void 
 				#else
 					virtual bool 
 				#endif
-								connect(unsigned long type=CLIENT_MULTI_STATEMENTS, const __mysqlSSLOptions &options = __mysqlSSLOptions()) const;
+								connect() const;
 				
 				/**
 				 * disconnect from database
@@ -334,17 +286,12 @@
 								_exec() const;		
 				
 				/**
-				 * inits addidtional mySQL specific statements
+				 * inits additional SQLite specific statements
 				 */
 				virtual void addSQL();
 				
 				mutable bool connected;///< connected or not
 				mutable bool empty;///< for detectin' whether mysqlResult is empty or not
-				
-				mutable MYSQL *mysql;///< handler fo mysql connections
-				mutable MYSQL_RES *mysqlRes;///< pointer to result
-				mutable MYSQL_ROW mysqlRow;///< pointer to rows
-				mutable MYSQL_FIELD *mysqlFields;///< pointer to fields
 		};
 	};
 #endif

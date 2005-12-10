@@ -197,9 +197,6 @@ flushSocket::connect(const std::string &host,
 {			
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_CONNECT;
-	#endif
-	
-	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
@@ -284,9 +281,6 @@ flushSocket::connect(const std::string &path,
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
-	#endif
-	
-	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
@@ -427,9 +421,6 @@ flushSocket::bindNListen(const std::string &host,
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_BINDNLISTEN;
-	#endif
-	
-	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
@@ -538,9 +529,6 @@ flushSocket::bindNListen(const std::string &path,
 	{		
 		#ifndef FLUSH_SOCKET_WO_XEXEC
 			operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
-		#endif
-		
-		#ifndef FLUSH_SOCKET_WO_XEXEC
 			performXExec(preExec);
 		#endif
 		
@@ -691,9 +679,6 @@ flushSocket::accept(__initialAccept &init,
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_ACCEPT;
-	#endif
-	
-	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
@@ -803,9 +788,6 @@ flushSocket::accept(__initialAccept &init) const
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_ACCEPT;
-	#endif
-	
-	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
@@ -1250,9 +1232,6 @@ flushSocketExchange::close() const
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_CLOSE;
-	#endif
-	
-	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
@@ -1433,9 +1412,6 @@ flushSocketExchange::recieve(char * const data,
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_RECIEVE;
-	#endif
-	
-	#ifndef FLUSH_SOCKET_WO_XEXEC
 		performXExec(preExec);
 	#endif	
 				

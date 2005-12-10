@@ -260,7 +260,7 @@
 	     	mysql_close(mysql);
 
 			#ifndef DBMYSQL_WO_XEXEC
-				performXExec(preExec);
+				performXExec(postExec);
 			#endif
 	     	
 		 	connected = false;
@@ -313,7 +313,13 @@
 	
 	std::vector<stringArr>
 	dbMysql::fetchRow()
-	{	
+	{
+			
+		#ifndef DBMYSQL_WO_XEXEC
+			operType = DBMYSQL_OPER_FETCHROW;
+			performXExec(preExec);
+		#endif		
+			
 		if (empty)
 			return std::vector<stringArr>();
 		
@@ -339,7 +345,11 @@
 			}
 			rows.push_back(row);
 		}
-	
+
+		#ifndef DBMYSQL_WO_XEXEC
+			performXExec(postExec);
+		#endif
+				
 		return rows;
 	}
 	
@@ -348,6 +358,11 @@
 	stringArr
 	dbMysql::fetchField()
 	{	
+		#ifndef DBMYSQL_WO_XEXEC
+			operType = DBMYSQL_OPER_FETCHFIELD;
+			performXExec(preExec);
+		#endif
+					
 		if (empty)
 			return stringArr();
 			
@@ -359,7 +374,11 @@
 		
 		for (register unsigned int i(0);i<numFields;i++)
 			fields.push_back(mysqlFields[i].name);
-		
+
+		#ifndef DBMYSQL_WO_XEXEC
+			performXExec(postExec);
+		#endif
+					
 		return fields;
 	}
 	

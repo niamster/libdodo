@@ -37,6 +37,19 @@ MOD_CODECONV_DEF:=-DCODECONV_EXT
 
 MOD_ZLIB_DEF:=-DZLIB_EXT
 
+#############
+
+MOD_SQLITE_DEF:=-DSQLITE_EXT
+MOD_SQLITE_CPP:=-I/opt/sqllite/include
+MOD_SQLITE_LD:=-L/opt/sqllite/lib/ -lsqlite3
+
 ##############################
 
-override DEFINES:=$(MOD_MYSQL_DEF) $(MOD_PCRE_DEF) $(MOD_DL_DEF) $(MOD_LIBXML2_DEF) $(MOD_CODECONV_DEF) $(MOD_ZLIB_DEF) $(DEFINES)
+override DEFINES:=$(MOD_MYSQL_DEF) \
+					$(MOD_PCRE_DEF) \
+					$(MOD_DL_DEF) \
+					$(MOD_LIBXML2_DEF) \
+					$(MOD_CODECONV_DEF) \
+					$(MOD_ZLIB_DEF) \
+					$(MOD_SQLITE_DEF) \
+					$(DEFINES)

@@ -35,15 +35,16 @@
 #define DL_EXT
 #define CODECONV_EXT
 #define ZLIB_EXT
-
-
+#define SQLITE_EXT
 
 /**
  * !!!!note!!!!!
  * please read notes before uncommentin'!!!
  */
 
-
+/**
+ * size of block to use with zLib de/compression
+ */
 #define ZLIB_CHUNK 100
 
 /**

@@ -112,9 +112,6 @@ flushSTD::read(char * const a_void) const
 {
 	#ifndef FLUSH_STD_WO_XEXEC
 		operType = FLUSHSTD_OPER_READ;
-	#endif
-	
-	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(preExec);
 	#endif
 	
