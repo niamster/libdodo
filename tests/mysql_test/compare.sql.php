@@ -29,7 +29,7 @@
 	{
 		$DB->select('log',$select,"`id`<20 or `operation`='mu'");
 		$DB->exec();
-		$DB->getAssocArray();
+		//$DB->getAssocArray();
 		$DB->insert('log',$arr);
 		$DB->exec();
 		$arr['operation'] = 'um';		

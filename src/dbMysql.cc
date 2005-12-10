@@ -326,7 +326,7 @@
 		
 		numFields = mysql_num_fields(mysqlRes);	
 		
-		rows.empty();
+		rows.clear();
 		rows.reserve(mysql_num_rows(mysqlRes));
 		
 		register unsigned long *length, j;
