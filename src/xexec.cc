@@ -57,7 +57,7 @@ xexec::~xexec()
 		for (register int i(0);i<handlesOpened;++i)
 		{
 			deinit = (deinitXexecModule)dlsym(handles[i], "deinitXexecModule");
-			if (init == NULL)
+			if (deinit == NULL)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_XEXEC,XEXEC_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 				#else
