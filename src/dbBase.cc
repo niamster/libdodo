@@ -926,7 +926,8 @@ dbBase::stringType(int type) const
 	switch (type)
 	{
 		case INT:
-			return std::string("INT");
+		case INTEGER:
+			return std::string("INTEGER");
 		case DATE:
 			return std::string("DATE");
 		case VARCHAR:
@@ -945,8 +946,9 @@ dbBase::stringType(int type) const
 			return std::string("BIGINT");
 		case FLOAT:
 			return std::string("FLOAT");
+		case REAL:
 		case DOUBLE:
-			return std::string("DOUBLE");
+			return std::string("REAL");
 		case DECIMAL:
 			return std::string("DECIMAL");
 		case CHAR:
@@ -984,12 +986,14 @@ dbBase::chkRange(int type) const
 		case ENUM:
 		case SET:
 			return -1;
+		case INTEGER:
 		case INT:
 		case TINYINT:
 		case SMALLINT:
 		case MEDIUMINT:
 		case BIGINT:
 		case FLOAT:
+		case REAL:
 		case DOUBLE:
 		case TIMESTAMP:
 			return 0;

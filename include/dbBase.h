@@ -248,10 +248,10 @@ namespace dodo
 		TINYINT,///< *; The signed range is -128 to 127. The unsigned range is 0 to 255.
 		SMALLINT,///< *; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
 		MEDIUMINT,///< *; The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215.
-		INT,///< *; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
+		INTEGER, INT,///< *; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
 		BIGINT,///< *; The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615.
 		FLOAT,///< *; Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38.
-		DOUBLE,///< *; Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
+		REAL, DOUBLE,///< *; [DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
 		DECIMAL,///< **; An unpacked(the number is stored as a string) fixed-point number. 
 		DATE,///< The supported range is '1000-01-01' to '9999-12-31'.
 		TIME,///< The range is '-838:59:59' to '838:59:59'

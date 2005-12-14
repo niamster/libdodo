@@ -350,50 +350,54 @@
 	
 	//-------------------------------------------------------------------
 	
-	int 
-	dbSqlite::addPostExec(inExec func, 
-						void *data) const
-	{
-		return _addPostExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
-	}
-	
-	//-------------------------------------------------------------------
-	
-	int 
-	dbSqlite::addPreExec(inExec func, 
-						void *data) const
-	{
-		return _addPreExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
-	}
-	
-	//-------------------------------------------------------------------
-	
-	#ifdef DL_EXT
+	#ifndef DBSQLITE_WO_XEXEC
 	
 		int 
-		dbSqlite::addPostExec(const std::string &module, 
+		dbSqlite::addPostExec(inExec func, 
 							void *data) const
 		{
-			return _addPostExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+			return _addPostExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		int 
-		dbSqlite::addPreExec(const std::string &module, 
+		dbSqlite::addPreExec(inExec func, 
 							void *data) const
 		{
-			return _addPreExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+			return _addPreExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
 		}
-	
+		
 		//-------------------------------------------------------------------
 		
-		int 
-		dbSqlite::addExec(const std::string &module, 
-							void *data) const
-		{
-			return _addExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
-		}
+		#ifdef DL_EXT
+		
+			int 
+			dbSqlite::addPostExec(const std::string &module, 
+								void *data) const
+			{
+				return _addPostExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+			}
+			
+			//-------------------------------------------------------------------
+			
+			int 
+			dbSqlite::addPreExec(const std::string &module, 
+								void *data) const
+			{
+				return _addPreExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+			}
+		
+			//-------------------------------------------------------------------
+			
+			int 
+			dbSqlite::addExec(const std::string &module, 
+								void *data) const
+			{
+				return _addExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+			}
+		
+		#endif
 	
 	#endif
 	

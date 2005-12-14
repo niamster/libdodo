@@ -50,50 +50,54 @@ flushDisk::~flushDisk()
 
 //-------------------------------------------------------------------
 
-int 
-flushDisk::addPostExec(inExec func, 
-					void *data) const
-{
-	return _addPostExec(func, (void *)this, XEXECOBJ_DISK, data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-flushDisk::addPreExec(inExec func, 
-					void *data) const
-{
-	return _addPreExec(func, (void *)this, XEXECOBJ_DISK, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
+#ifndef FLUSH_DISK_WO_XEXEC
 
 	int 
-	flushDisk::addPostExec(const std::string &module, 
+	flushDisk::addPostExec(inExec func, 
 						void *data) const
 	{
-		return _addPostExec(module, (void *)this, XEXECOBJ_DISK, data);
+		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHDISK, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
 	int 
-	flushDisk::addPreExec(const std::string &module, 
+	flushDisk::addPreExec(inExec func, 
 						void *data) const
 	{
-		return _addPreExec(module, (void *)this, XEXECOBJ_DISK, data);
+		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHDISK, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
-	int 
-	flushDisk::addExec(const std::string &module, 
-						void *data) const
-	{
-		return _addExec(module, (void *)this, XEXECOBJ_DISK, data);
-	}
+	#ifdef DL_EXT
+	
+		int 
+		flushDisk::addPostExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushDisk::addPreExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushDisk::addExec(const std::string &module, 
+							void *data) const
+		{
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data);
+		}
+	
+	#endif
 
 #endif
 
@@ -1213,14 +1217,16 @@ flushDisk::followSymlink(const std::string &path,
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 		#endif	
 	
-	if (::readlink(path.c_str(),buffer,MAXPATHLEN) == -1)
+	int count = 0;
+	
+	if ( (count = ::readlink(path.c_str(),buffer,MAXPATHLEN)) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_FOLLOWSYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif	
 	
-	original.assign(buffer);
+	original.assign(buffer,count);
 	
 	#ifdef NO_EX
 		return true;
@@ -1428,7 +1434,7 @@ flushDisk::copy(const std::string &from,
 		#else
 			return false;		
 		#endif
-
+		
 	if (::lstat(to.c_str(),&stTo) == -1)
 	{
 		if (errno != ENOENT)
@@ -1442,12 +1448,13 @@ flushDisk::copy(const std::string &from,
 	{
 		if (force)
 		{
-			#ifndef NO_EX
-				flushDisk::rm(to);
-			#else
-				if (!flushDisk::rm(to))
-					return false;
-			#endif
+			if (!S_ISDIR(stTo.st_mode))
+				#ifndef NO_EX
+					flushDisk::rm(to,force);
+				#else
+					if (!flushDisk::rm(to,force))
+						return false;
+				#endif
 		}
 		else
 			#ifndef NO_EX
@@ -1456,6 +1463,7 @@ flushDisk::copy(const std::string &from,
 				return false;		
 			#endif
 	}	
+	
 	if (!S_ISREG(stFrom.st_mode))
 	{
 		if (S_ISDIR(stFrom.st_mode))
@@ -1468,12 +1476,34 @@ flushDisk::copy(const std::string &from,
 				#endif			
 		}
 		else
-			if (::mknod(to.c_str(),stFrom.st_mode,0)==-1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;		
-				#endif	
+			if (S_ISLNK(stFrom.st_mode))
+			{
+				register char buffer[MAXPATHLEN];
+				register int count = 0;
+	
+				if ( (count = ::readlink(from.c_str(),buffer,MAXPATHLEN)) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;		
+					#endif
+				
+				buffer[count] = '\0';
+					
+				if (::symlink(buffer,to.c_str()) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;		
+					#endif					
+			}
+			else
+				if (::mknod(to.c_str(),stFrom.st_mode,0)==-1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;		
+					#endif	
 	}
 	else
 	{
@@ -1497,17 +1527,19 @@ flushDisk::copy(const std::string &from,
 		
 		register char buffer[INSIZE];
 		
-		register int i(0);	
+		register int i(0),j;
 		for (;i<iter;++i)
 		{
-			if (fseek(fromFile,i*INSIZE,SEEK_SET) == -1)
+			j = i*INSIZE;
+			
+			if (fseek(fromFile,j,SEEK_SET) == -1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
 			
-			if (fseek(toFile,i*INSIZE,SEEK_SET) == -1)
+			if (fseek(toFile,j,SEEK_SET) == -1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
@@ -1562,14 +1594,15 @@ flushDisk::copy(const std::string &from,
 		}
 		if (rest>0)
 		{
-			if (fseek(fromFile,i*INSIZE,SEEK_SET) == -1)
+			j = i*INSIZE;
+			if (fseek(fromFile,j,SEEK_SET) == -1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
 			
-			if (fseek(toFile,i*INSIZE,SEEK_SET) == -1)
+			if (fseek(toFile,j,SEEK_SET) == -1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
@@ -1677,41 +1710,42 @@ flushDisk::copyDir(const std::string &from,
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPYDIR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return false;		
+				return false;
 			#endif
 	}
 	else
 		if (force)
 		{
-			#ifndef NO_EX
-				flushDisk::rm(to);
-			#else
-				if (!flushDisk::rm(to))
-					return false;
-			#endif
+			if (!S_ISDIR(stTo.st_mode))
+				#ifndef NO_EX
+					flushDisk::rm(to,force);
+				#else
+					if (!flushDisk::rm(to,force))
+						return false;
+				#endif
 		}
 		else
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPYDIR,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
-			#else
-				return false;		
-			#endif
-	
+	        #ifndef NO_EX
+	                throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPYDIR,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+	        #else
+	                return false;		
+	        #endif	
+	        
 	if (!S_ISDIR(stFrom.st_mode))
 	{
 		#ifndef NO_EX
-			flushDisk::copy(from,to,false);
+			flushDisk::copy(from,to,force);
 		#else
-			if (!flushDisk::copy(from,to,false))
+			if (!flushDisk::copy(from,to,force))
 				return false;
 		#endif
 	}
 	else
 	{
 		#ifndef NO_EX
-			flushDisk::mkdir(to,flushDisk::getPermissions(from));
+			flushDisk::mkdir(to,flushDisk::getPermissions(from),true);
 		#else
-			if(!flushDisk::mkdir(to,flushDisk::getPermissions(from)))
+			if(!flushDisk::mkdir(to,flushDisk::getPermissions(from)),true)
 				return false;		
 		#endif
 	

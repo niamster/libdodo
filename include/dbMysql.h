@@ -250,48 +250,52 @@
 				#endif
 								exec() const;
 				
-				/**
-				 * adds hook after the operation by callback
-			 	 * @return number in list where function is set
-				 * @param func is a pointer to function
-				 * @param data is pointer to data toy want to pass to hook
-				 */			
-				virtual int addPostExec(inExec func, void *data) const;
+				#ifndef DBMYSQL_WO_XEXEC
 				
-				/**
-				 * adds hook before the operation by callback
-			 	 * @return number in list where function is set
-				 * @param func is a pointer to function
-				 * @param data is pointer to data toy want to pass to hook
-				 */
-				virtual int addPreExec(inExec func, void *data) const;
-				
-				#ifdef DL_EXT
-
 					/**
-					 * set function from module that will be executed before/after the main action call
-					 * the type of hook[pre/post] is defined in module
-					 * @return number in list where function is set
+					 * adds hook after the operation by callback
+				 	 * @return number in list where function is set
 					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
 					 */			
-					virtual int addExec(const std::string &module, void *data) const;
-				
-					/**
-					 * adds hook after the operation by callback
-				 	 * @return number in list where function is set
-					 * @param module is a path to module, whrere hook exists
-					 * @param data is pointer to data toy want to pass to hook
-					 */
-					virtual int addPostExec(const std::string &module, void *data) const;
+					virtual int addPostExec(inExec func, void *data) const;
 					
 					/**
-					 * adds hook after the operation by callback
+					 * adds hook before the operation by callback
 				 	 * @return number in list where function is set
-					 * @param module is a path to module, whrere hook exists
+					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
 					 */
-					virtual int addPreExec(const std::string &module, void *data) const;
+					virtual int addPreExec(inExec func, void *data) const;
+					
+					#ifdef DL_EXT
+	
+						/**
+						 * set function from module that will be executed before/after the main action call
+						 * the type of hook[pre/post] is defined in module
+						 * @return number in list where function is set
+						 * @param func is a pointer to function
+						 * @param data is pointer to data toy want to pass to hook
+						 */			
+						virtual int addExec(const std::string &module, void *data) const;
+					
+						/**
+						 * adds hook after the operation by callback
+					 	 * @return number in list where function is set
+						 * @param module is a path to module, whrere hook exists
+						 * @param data is pointer to data toy want to pass to hook
+						 */
+						virtual int addPostExec(const std::string &module, void *data) const;
+						
+						/**
+						 * adds hook after the operation by callback
+					 	 * @return number in list where function is set
+						 * @param module is a path to module, whrere hook exists
+						 * @param data is pointer to data toy want to pass to hook
+						 */
+						virtual int addPreExec(const std::string &module, void *data) const;
+					
+					#endif
 				
 				#endif
 				

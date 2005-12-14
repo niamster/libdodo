@@ -71,50 +71,54 @@ flushSocket::~flushSocket()
 
 //-------------------------------------------------------------------
 
-int 
-flushSocket::addPostExec(inExec func, 
-					void *data) const
-{
-	return _addPostExec(func, (void *)this, XEXECOBJ_SOCKET, data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-flushSocket::addPreExec(inExec func, 
-					void *data) const
-{
-	return _addPreExec(func, (void *)this, XEXECOBJ_SOCKET, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
+#ifndef FLUSH_SOCKET_WO_XEXEC
 
 	int 
-	flushSocket::addPostExec(const std::string &module, 
+	flushSocket::addPostExec(inExec func, 
 						void *data) const
 	{
-		return _addPostExec(module, (void *)this, XEXECOBJ_SOCKET, data);
+		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
 	int 
-	flushSocket::addPreExec(const std::string &module, 
+	flushSocket::addPreExec(inExec func, 
 						void *data) const
 	{
-		return _addPreExec(module, (void *)this, XEXECOBJ_SOCKET, data);
+		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
-	int 
-	flushSocket::addExec(const std::string &module, 
-						void *data) const
-	{
-		return _addExec(module, (void *)this, XEXECOBJ_SOCKET, data);
-	}
+	#ifdef DL_EXT
+	
+		int 
+		flushSocket::addPostExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushSocket::addPreExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushSocket::addExec(const std::string &module, 
+							void *data) const
+		{
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+		}
+	
+	#endif
 
 #endif
 
@@ -1473,50 +1477,54 @@ flushSocketExchange::recieveString(std::string &data,
 
 //-------------------------------------------------------------------
 
-int 
-flushSocketExchange::addPostExec(inExec func, 
-					void *data) const
-{
-	return _addPostExec(func, (void *)this, XEXECOBJ_SOCKETEXCHANGE, data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-flushSocketExchange::addPreExec(inExec func, 
-					void *data) const
-{
-	return _addPreExec(func, (void *)this, XEXECOBJ_SOCKETEXCHANGE, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
+#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
 
 	int 
-	flushSocketExchange::addPostExec(const std::string &module, 
+	flushSocketExchange::addPostExec(inExec func, 
 						void *data) const
 	{
-		return _addPostExec(module, (void *)this, XEXECOBJ_SOCKETEXCHANGE, data);
+		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
 	int 
-	flushSocketExchange::addPreExec(const std::string &module, 
+	flushSocketExchange::addPreExec(inExec func, 
 						void *data) const
 	{
-		return _addPreExec(module, (void *)this, XEXECOBJ_SOCKETEXCHANGE, data);
+		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
-	int 
-	flushSocketExchange::addExec(const std::string &module, 
-						void *data) const
-	{
-		return _addExec(module, (void *)this, XEXECOBJ_SOCKETEXCHANGE, data);
-	}
+	#ifdef DL_EXT
+	
+		int 
+		flushSocketExchange::addPostExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushSocketExchange::addPreExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushSocketExchange::addExec(const std::string &module, 
+							void *data) const
+		{
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+		}
+	
+	#endif
 
 #endif
 

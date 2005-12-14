@@ -445,50 +445,54 @@
 	
 	//-------------------------------------------------------------------
 	
-	int 
-	dbMysql::addPostExec(inExec func, 
-						void *data) const
-	{
-		return _addPostExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
-	}
-	
-	//-------------------------------------------------------------------
-	
-	int 
-	dbMysql::addPreExec(inExec func, 
-						void *data) const
-	{
-		return _addPreExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
-	}
-	
-	//-------------------------------------------------------------------
-	
-	#ifdef DL_EXT
+	#ifndef DBMYSQL_WO_XEXEC
 	
 		int 
-		dbMysql::addPostExec(const std::string &module, 
+		dbMysql::addPostExec(inExec func, 
 							void *data) const
 		{
-			return _addPostExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+			return _addPostExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		int 
-		dbMysql::addPreExec(const std::string &module, 
+		dbMysql::addPreExec(inExec func, 
 							void *data) const
 		{
-			return _addPreExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+			return _addPreExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
 		}
-	
+		
 		//-------------------------------------------------------------------
 		
-		int 
-		dbMysql::addExec(const std::string &module, 
-							void *data) const
-		{
-			return _addExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
-		}
+		#ifdef DL_EXT
+		
+			int 
+			dbMysql::addPostExec(const std::string &module, 
+								void *data) const
+			{
+				return _addPostExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+			}
+			
+			//-------------------------------------------------------------------
+			
+			int 
+			dbMysql::addPreExec(const std::string &module, 
+								void *data) const
+			{
+				return _addPreExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+			}
+		
+			//-------------------------------------------------------------------
+			
+			int 
+			dbMysql::addExec(const std::string &module, 
+								void *data) const
+			{
+				return _addExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+			}
+		
+		#endif
 	
 	#endif
 	

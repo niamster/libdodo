@@ -84,7 +84,7 @@
 //#define DBSQLITE_WO_XEXEC
 //#define FLUSH_STD_WO_XEXEC
 //#define FLUSH_SOCKET_WO_XEXEC
-//#define DBBERKELEY_WO_XEXEC
+//#define FLUSH_SOCKETEXCHANGE_WO_XEXEC
 
 /**
  * socket default timeouts
@@ -105,8 +105,8 @@
 /**
  * default values of buffer for io operations(flush*)
  */
-#define INSIZE 1024
-#define OUTSIZE 1024	
+#define INSIZE 4096
+#define OUTSIZE 4096	
 
 /**
  * default values of socket buffer for io operations(flushSocket)

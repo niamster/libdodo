@@ -46,50 +46,54 @@ flushSTD::~flushSTD()
 
 //-------------------------------------------------------------------
 
-int 
-flushSTD::addPostExec(inExec func, 
-					void *data) const
-{
-	return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
-}
-
-//-------------------------------------------------------------------
-
-int 
-flushSTD::addPreExec(inExec func, 
-					void *data) const
-{
-	return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
+#ifndef FLUSH_STD_WO_XEXEC
 
 	int 
-	flushSTD::addPostExec(const std::string &module, 
+	flushSTD::addPostExec(inExec func, 
 						void *data) const
 	{
-		return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
 	int 
-	flushSTD::addExec(const std::string &module, 
+	flushSTD::addPreExec(inExec func, 
 						void *data) const
 	{
-		return _addExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
 	}
 	
 	//-------------------------------------------------------------------
 	
-	int 
-	flushSTD::addPreExec(const std::string &module, 
-						void *data) const
-	{
-		return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
-	}
+	#ifdef DL_EXT
+	
+		int 
+		flushSTD::addPostExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushSTD::addExec(const std::string &module, 
+							void *data) const
+		{
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+		}
+		
+		//-------------------------------------------------------------------
+		
+		int 
+		flushSTD::addPreExec(const std::string &module, 
+							void *data) const
+		{
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+		}
+	
+	#endif
 
 #endif
 
