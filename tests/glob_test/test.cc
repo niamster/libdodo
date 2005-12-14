@@ -4,6 +4,11 @@
 using namespace dodo;
 using namespace std;
 
+void
+baseHandler(errorModuleEnum module, baseEx *ex, void *data)
+{
+	cout << "baseHandler: " << ex->baseErrstr << endl;
+}
 
 int main(int argc, char **argv)
 {	
@@ -11,6 +16,8 @@ int main(int argc, char **argv)
 	try
 	{
 		tools tl;
+		
+		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		
 		//cout << flushDisk::getFileContent("test.cc");
 		
@@ -23,14 +30,13 @@ int main(int argc, char **argv)
 		for (register int i(0);i<9999;++i)
 			tl.reCodesetConversion(flushDisk::getFileContent("test.cc"));*/
 	
-		cout << flushDisk::getFileContent("Makefile").size() << endl;
-		cout << tl.zCompress(flushDisk::getFileContent("Makefile"),9).size() << endl;
+		cout << flushDisk::getFileContent("Nakefile").size() << endl;
+		//cout << tl.zCompress(flushDisk::getFileContent("Makefile"),9).size() << endl;
 	
 		//cout << tl.zDecompress(tl.zCompress(flushDisk::getFileContent("test.cc")));
 	}
     catch(baseEx ex)
-    {	
-		cout << endl << ex << ex.line << "\t" << ex.baseErrno << endl;
+    {
     }
     catch(std::exception ex)
     {

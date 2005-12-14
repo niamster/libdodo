@@ -65,6 +65,15 @@
 			ERRMODULE_LIBXML2,
 			ERRMODULE_TOOLS,
 		};	
+
+#define AM_MODULES 12
+		
+		class baseEx;///< to make typedef before class declaration
+		
+		/**
+		 * @typedef describes function that can handle error
+		 */
+		typedef void (*errorHandler)(errorModuleEnum, baseEx *, void *);
 			
 		/**
 		 * @class baseEx
@@ -84,7 +93,7 @@
 				 * @param line line, where was thrown
 				 * @param file file, where was thrown
 				 */			
-				baseEx(unsigned long errModule, unsigned long functionID, unsigned long errnoSource, long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
+				baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
 				
 				/**
 				 * @return string that describes error
@@ -95,15 +104,41 @@
 				 */
 				operator const char *();
 			
-				unsigned long errModule;///< in what module was thrown
+				errorModuleEnum errModule;///< in what module was thrown
 				unsigned long funcID;///< in what function was thrown[see *Ex.h headers for IDs]
-				unsigned long errnoSource;///< 	where error code and string was taken	
+				errnoSourceEnum errnoSource;///< 	where error code and string was taken	
 			
 				unsigned long baseErrno;///< error code
 				std::string baseErrstr;///< describes error code
 				
 				unsigned long line;///< line, where was thrown
 				std::string file;///< file, where was thrown
+				
+				/**
+				 * set handler on error for specific module
+				 * @param module indicates for what module to set handler
+				 * @param handler is function that will be called when error occured[in catch]
+				 * @param data is data that will be passed to handler
+				 */
+				static void setErrorHandler(errorModuleEnum module, errorHandler handler, void *data);
+
+				/**
+				 * set handlers on error for all modules
+				 * @param handler is function that will be called when error occured[in catch]
+				 * @param data is data that will be passed to handler
+				 */
+				static void setErrorHandlers(errorHandler handler, void *data);
+				
+				/**
+				 * remove handler on error for specific module
+				 * @param module indicates for what module to set handler
+				 */
+				static void unsetErrorHandler(errorModuleEnum module);
+
+				/**
+				 * unset handlers on error for all modules
+				 */
+				static void unsetErrorHandlers();
 		};
 	};
 

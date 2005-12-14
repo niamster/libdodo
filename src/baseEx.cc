@@ -26,28 +26,86 @@
 
 #ifndef NO_EX
 
-        using namespace dodo;
+    using namespace dodo;
 
-        baseEx::baseEx(unsigned long a_errModule, 
-        				unsigned long functionID,
-                        unsigned long errnoSource,
-                        long a_errno,
-                        std::string a_errstr,
-                        unsigned long a_line,
-                        std::string a_file) : errModule(a_errModule),
-                                            funcID(functionID),
-                                            errnoSource(errnoSource),
-                                            baseErrno(a_errno),
-                                            baseErrstr(a_errstr),
-                                            line(a_line),
-                                            file(a_file)
-        {
-        }
+	static errorHandler handlers[AM_MODULES];///< handlers
+	static bool handlerSet[AM_MODULES];///< indicates whether handler was set
+	static void * handlerData[AM_MODULES];///< data that will be passed to handler
 
-		//-------------------------------------------------------------------
-				
-		baseEx::operator const char *()
+    baseEx::baseEx(errorModuleEnum a_errModule, 
+    				unsigned long functionID,
+                    errnoSourceEnum errnoSource,
+                    long a_errno,
+                    std::string a_errstr,
+                    unsigned long a_line,
+                    std::string a_file) : errModule(a_errModule),
+                                        funcID(functionID),
+                                        errnoSource(errnoSource),
+                                        baseErrno(a_errno),
+                                        baseErrstr(a_errstr),
+                                        line(a_line),
+                                        file(a_file)
+    {
+    	if (handlerSet[errModule])
+    		handlers[errModule](errModule, this, handlerData[errModule]);
+    }
+
+	//-------------------------------------------------------------------
+			
+	baseEx::operator const char *()
+	{
+		return baseErrstr.c_str();
+	}
+
+	//-------------------------------------------------------------------
+	
+	void
+	baseEx::setErrorHandler(errorModuleEnum module,
+							errorHandler handler,
+							void *data)
+	{
+		handlers[module] = handler;
+		handlerSet[module] = true;
+		handlerData[module] = data;
+	}
+	
+	//-------------------------------------------------------------------
+	
+	void 
+	baseEx::setErrorHandlers(errorHandler handler, 
+							void *data)
+	{
+		for (register int i(0);i<AM_MODULES;++i)
 		{
-			return baseErrstr.c_str();
+			handlers[i] = handler;
+			handlerSet[i] = true;
+			handlerData[i] = data;
 		}
+	}
+	
+	//-------------------------------------------------------------------
+			
+	void 
+	baseEx::unsetErrorHandler(errorModuleEnum module)
+	{
+		handlers[module] = NULL;
+		handlerSet[module] = false;
+		handlerData[module] = NULL;			
+	}
+	
+	//-------------------------------------------------------------------
+	
+	void 
+	baseEx::unsetErrorHandlers()
+	{
+		for (register int i(0);i<AM_MODULES;++i)
+		{
+			handlers[i] = NULL;
+			handlerSet[i] = false;
+			handlerData[i] = NULL;
+		}			
+	}
+			
+	//-------------------------------------------------------------------
+		
 #endif
