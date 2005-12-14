@@ -74,19 +74,30 @@ tools::~tools()
 stringArr 
 tools::explode(const std::string &fields,
 			escape escapeF,
-			const std::string &separator)
+			const std::string &separator, 
+			int limit)
 {
 	register unsigned int i(0), j(0), sep_size(separator.size());
+	register int k(0);
 	stringArr arr;
 	while (true)
 	{
+		if (limit!=-1)
+		{
+			if (k>limit)
+				break;
+			++k;
+		}
+		
 		i = fields.find(separator,i);
 		arr.push_back(escapeF(fields.substr(j,i-j)));
 		if (i==std::string::npos)
 			break;
+			
 		i += sep_size;
 		j = i;
 	}
+	
 	return arr;
 }
 
@@ -94,9 +105,10 @@ tools::explode(const std::string &fields,
 
 stringArr 
 tools::explode(const std::string &fields, 
-			const std::string &separator)
+			const std::string &separator,
+			int limit)
 {
-	return explode(fields,&dummy,separator);
+	return explode(fields,&dummy,separator,limit);
 }
 
 //-------------------------------------------------------------------
@@ -105,13 +117,24 @@ std::string
 tools::implode(const stringArr &fields,
 		escape escapeF, 
 		const std::string &separator,
-		const std::string &frame)
+		const std::string &frame,
+		int limit)
 {
+	register int k(0);
+	
 	std::string temp, fs(frame + separator);
 	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);
 	
 	for (;i!=j;++i)
+	{
+		if (limit!=-1)
+		{
+			if (k>limit)
+				return temp;
+			++k;
+		}		
 		temp.append(frame + escapeF(*i) + fs);
+	}
 	temp.append(frame + escapeF(*i) + frame);
 	
 	return temp;
@@ -121,18 +144,20 @@ tools::implode(const stringArr &fields,
 std::string
 tools::implode(const stringArr &fields,
 		const std::string &separator,
-		const std::string &frame)
+		const std::string &frame,
+		int limit)
 {	
-	return implode(fields,&dummy,separator,frame);
+	return implode(fields,&dummy,separator,frame,limit);
 }
 
 //-------------------------------------------------------------------
 
 std::string
 tools::implode(const stringArr &fields,
-		const std::string &separator)
+		const std::string &separator,
+		int limit)
 {
-	return implode(fields,&dummy,separator);
+	return implode(fields,&dummy,separator,limit);
 }
 
 //-------------------------------------------------------------------
@@ -140,13 +165,24 @@ tools::implode(const stringArr &fields,
 std::string 
 tools::implode(const stringArr &fields, 
 		escape escapeF, 
-		const std::string &separator)
+		const std::string &separator,
+		int limit)
 {
+	register int k(0);	
+	
 	std::string temp;
 	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);
 	
 	for (;i!=j;++i)
+	{
+		if (limit!=-1)
+		{
+			if (k>limit)
+				return temp;
+			++k;
+		}
 		temp.append(escapeF(*i) + separator);
+	}
 	temp.append(escapeF(*i));
 	
 	return temp;	

@@ -165,16 +165,18 @@ namespace dodo
 			 * @return array of strings made from string using separtator
 			 * @param fields is string to explode
 			 * @param separator is value that separates parts
+			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static stringArr explode(const std::string &fields, const std::string &separator);
+			static stringArr explode(const std::string &fields, const std::string &separator, int limit=-1);
 					
 			/**
 			 * @return array of strings made from string using separtator
 			 * @param escapeF is callback function that will process with every made node
 			 * @param fields is string to explode
 			 * @param separator is value that separates parts
+			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static stringArr explode(const std::string &fields, escape escapeF, const std::string &separator);
+			static stringArr explode(const std::string &fields, escape escapeF, const std::string &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -182,31 +184,35 @@ namespace dodo
 			 * @param escapeF is callback function that will process with every node
 			 * @param separator is value that separates parts
 			 * @param frame is node that will cover node [frame='; node => 'node']
+			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, const std::string &frame);
+			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, const std::string &frame, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
 			 * @param fields is an array of nodes that will fiil the result string
 			 * @param escapeF is callback function that will process with every node
 			 * @param separator is value that separates parts
+			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator);
+			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
 			 * @param fields is an array of nodes that will fiil the result string
 			 * @param separator is value that separates parts
+			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, const std::string &separator);
+			static std::string implode(const stringArr &fields, const std::string &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
 			 * @param fields is an array of nodes that will fiil the result string
 			 * @param separator is value that separates parts
 			 * @param frame is node that will cover node [frame='; node => 'node']
+			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame);
+			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame, int limit=-1);
 			
 			#ifdef CODECONV_EXT
 				

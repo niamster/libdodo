@@ -79,7 +79,7 @@
 /**
  * use modules without hooks. faster a little bit.
  */
-//#define FLUSH_DISK_WO_XEXEC = faster, if u don't want to use it!
+//#define FLUSH_DISK_WO_XEXEC = a little bit faster, if u don't want to use it!
 //#define DBMYSQL_WO_XEXEC
 //#define DBSQLITE_WO_XEXEC
 //#define FLUSH_STD_WO_XEXEC
