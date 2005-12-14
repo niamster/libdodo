@@ -1420,11 +1420,11 @@ flushDisk::copy(const std::string &from,
 {
 	std::string to = a_to;
 	
-	{	
-		char *temp = ::basename((char *)to.c_str());
-		if (strcmp(temp,"..")==0 || strcmp(temp,".")==0)
-			to = temp + std::string(FILE_DELIM) + ::basename((char *)from.c_str());
-	}	
+	char *baseTo = ::basename((char *)to.c_str());
+	char *baseFrom = ::basename((char *)from.c_str());
+	
+	if (strcmp(baseTo,"..")==0 || strcmp(baseTo,".")==0)
+		to = baseTo + std::string(FILE_DELIM) + baseFrom;
 	
 	struct stat stFrom, stTo;
 	
@@ -1449,12 +1449,22 @@ flushDisk::copy(const std::string &from,
 		if (force)
 		{
 			if (!S_ISDIR(stTo.st_mode))
-				#ifndef NO_EX
-					flushDisk::rm(to,force);
-				#else
-					if (!flushDisk::rm(to,force))
+			{
+				if (::unlink(to.c_str()) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_UNLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
 						return false;
-				#endif
+					#endif
+			}
+			else
+				if (::rmdir(to.c_str()) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_UNLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+			
 		}
 		else
 			#ifndef NO_EX
@@ -1462,7 +1472,7 @@ flushDisk::copy(const std::string &from,
 			#else
 				return false;		
 			#endif
-	}	
+	}
 	
 	if (!S_ISREG(stFrom.st_mode))
 	{
@@ -1516,7 +1526,7 @@ flushDisk::copy(const std::string &from,
 			#else
 				return false;
 			#endif
-	
+			
 		FILE *toFile = fopen(to.c_str(),"w+");
 		if (toFile == NULL)
 			#ifndef NO_EX
@@ -1715,7 +1725,7 @@ flushDisk::copyDir(const std::string &from,
 	}
 	else
 		if (force)
-		{
+		{	
 			if (!S_ISDIR(stTo.st_mode))
 				#ifndef NO_EX
 					flushDisk::rm(to,force);
@@ -1725,12 +1735,12 @@ flushDisk::copyDir(const std::string &from,
 				#endif
 		}
 		else
-	        #ifndef NO_EX
-	                throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPYDIR,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPYDIR,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 	        #else
-	                return false;		
-	        #endif	
-	        
+				return false;		
+			#endif
+			
 	if (!S_ISDIR(stFrom.st_mode))
 	{
 		#ifndef NO_EX
@@ -1779,9 +1789,9 @@ flushDisk::copyDir(const std::string &from,
 			attachedFrom.assign(from+FILE_DELIM+dd->d_name);
 			
 			#ifndef NO_EX
-				flushDisk::copyDir(attachedFrom,attachedTo);
+				flushDisk::copyDir(attachedFrom,attachedTo,force);
 			#else
-				if (!flushDisk::copyDir(attachedFrom,attachedTo))
+				if (!flushDisk::copyDir(attachedFrom,attachedTo,force))
 					return false;
 			#endif
 		}
