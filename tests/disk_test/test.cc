@@ -17,7 +17,8 @@ int main(int argc, char **argv)
 		{
 			cout << arr[i];
 		}*/
-		flushDisk::copyDir("/root","./tmp",true);
+		flushDisk::copy("/root","./tmp",true);
+		flushDisk::copy("/root","./tmp/",true);
 		//flushDisk::unlink("my.dat");
 	}
 	catch(baseEx ex)
@@ -28,7 +29,6 @@ int main(int argc, char **argv)
 	{
 		cout << "not exists\n";
 	}
-	exit(0);
 	try
 	{
 		//flushDisk flush(FIFO_FILE,"my.dat");

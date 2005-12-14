@@ -293,7 +293,7 @@ cgiTools::makePost() const
 				temp1 = i->find("\n",temp0);
 				file.type = i->substr(temp0,temp1-temp0);
 				
-				std::string tmp_name = post_files_tmp_dir + std::string(FILE_DELIM);
+				std::string tmp_name = post_files_tmp_dir + std::string(1,FILE_DELIM);
 				tmp_name.append("dodo_post_XXXXXX");
 				ptr = mktemp((char*)tmp_name.c_str());
 				

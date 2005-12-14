@@ -1396,7 +1396,15 @@ flushDisk::getFileContentArr(const std::string &path)
 std::string 
 flushDisk::basename(const std::string &path)
 {
-	return ::basename((char *)path.c_str());
+	char tempB[MAXPATHLEN];
+		
+	strcpy(tempB,path.c_str());
+	
+	::basename((char *)path.c_str());
+	
+	std::string result(tempB);
+	
+	return result;
 }
 
 //-------------------------------------------------------------------
@@ -1404,7 +1412,15 @@ flushDisk::basename(const std::string &path)
 std::string 
 flushDisk::dirname(const std::string &path)
 {
-	return ::dirname((char *)path.c_str());
+	char tempB[MAXPATHLEN];	
+	
+	strcpy(tempB,path.c_str());
+	
+	::dirname((char *)path.c_str());
+	
+	std::string result(tempB);
+	
+	return result;
 }
 
 //-------------------------------------------------------------------
@@ -1420,11 +1436,14 @@ flushDisk::copy(const std::string &from,
 {
 	std::string to = a_to;
 	
-	char *baseTo = ::basename((char *)to.c_str());
-	char *baseFrom = ::basename((char *)from.c_str());
-	
-	if (strcmp(baseTo,"..")==0 || strcmp(baseTo,".")==0)
-		to = baseTo + std::string(FILE_DELIM) + baseFrom;
+	{
+		char tempB[MAXPATHLEN];	
+			
+		strcpy(tempB,to.c_str());
+		char *toT = ::basename(tempB);
+		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.length()-1] == FILE_DELIM)
+			to = toT + std::string(1,FILE_DELIM) + ::basename((char *)from.c_str());
+	}
 	
 	struct stat stFrom, stTo;
 	
@@ -1699,11 +1718,14 @@ flushDisk::copyDir(const std::string &from,
 {
 	std::string to = a_to;
 	
-	{	
-		char *temp = ::basename((char *)to.c_str());
-		if (strcmp(temp,"..")==0 || strcmp(temp,".")==0)
-			to = temp + std::string(FILE_DELIM) + ::basename((char *)from.c_str());
-	}	
+	{
+		char tempB[MAXPATHLEN];	
+			
+		strcpy(tempB,to.c_str());
+		char *toT = ::basename(tempB);
+		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.length()-1] == FILE_DELIM)
+			to = toT + std::string(1,FILE_DELIM) + ::basename((char *)from.c_str());
+	}
 	
 	struct stat stFrom, stTo;
 	
@@ -1725,14 +1747,13 @@ flushDisk::copyDir(const std::string &from,
 	}
 	else
 		if (force)
-		{	
-			if (!S_ISDIR(stTo.st_mode))
-				#ifndef NO_EX
-					flushDisk::rm(to,force);
-				#else
-					if (!flushDisk::rm(to,force))
-						return false;
-				#endif
+		{
+			#ifndef NO_EX
+				flushDisk::rm(to,force);
+			#else
+				if (!flushDisk::rm(to,force))
+					return false;
+			#endif
 		}
 		else
 			#ifndef NO_EX
@@ -1740,7 +1761,7 @@ flushDisk::copyDir(const std::string &from,
 	        #else
 				return false;		
 			#endif
-			
+	
 	if (!S_ISDIR(stFrom.st_mode))
 	{
 		#ifndef NO_EX
@@ -1752,12 +1773,12 @@ flushDisk::copyDir(const std::string &from,
 	}
 	else
 	{
-		#ifndef NO_EX
-			flushDisk::mkdir(to,flushDisk::getPermissions(from),true);
-		#else
-			if(!flushDisk::mkdir(to,flushDisk::getPermissions(from)),true)
+		if (::mkdir(to.c_str(),stFrom.st_mode) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_COPYDIR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+			#else
 				return false;		
-		#endif
+			#endif
 	
 		std::string attachedFrom,attachedTo;
 		
@@ -1787,7 +1808,7 @@ flushDisk::copyDir(const std::string &from,
 				
 			attachedTo.assign(to+FILE_DELIM+dd->d_name);
 			attachedFrom.assign(from+FILE_DELIM+dd->d_name);
-			
+
 			#ifndef NO_EX
 				flushDisk::copyDir(attachedFrom,attachedTo,force);
 			#else

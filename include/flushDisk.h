@@ -314,6 +314,7 @@ namespace dodo
 			 * @param from specifies input file/empty dir/fifo...
 			 * @param to specifies output file/empty dir/fifo...
 			 * @param force indicates to overwrite
+			 * @note works as cp[but for files and empty dirs]
 			 */
 			#ifndef NO_EX
 				static void 
@@ -327,7 +328,7 @@ namespace dodo
 			 * @param from specifies input file/Dir
 			 * @param to specifies output file/Dir
 			 * @param force indicates to overwrite
-			 * @note if `to` exists - error
+			 * @note works as cp
 			 */
 			#ifndef NO_EX
 				static void 

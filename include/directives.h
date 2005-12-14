@@ -60,7 +60,7 @@
 /**
  * delimiter in disk operations
  */
-#define FILE_DELIM "/"
+#define FILE_DELIM '/'
 
 /** 
  * compile without exceptions.
