@@ -28,10 +28,13 @@
 
     using namespace dodo;
 
-	static errorHandler handlers[AM_MODULES];///< handlers
-	static bool handlerSet[AM_MODULES];///< indicates whether handler was set
-	static void * handlerData[AM_MODULES];///< data that will be passed to handler
-
+	extern "C"
+	{
+		static errorHandler handlers[AM_MODULES];///< handlers
+		static bool handlerSet[AM_MODULES];///< indicates whether handler was set
+		static void * handlerData[AM_MODULES];///< data that will be passed to handler
+	};
+	
     baseEx::baseEx(errorModuleEnum a_errModule, 
     				unsigned long functionID,
                     errnoSourceEnum errnoSource,
