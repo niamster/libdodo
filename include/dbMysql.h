@@ -116,7 +116,12 @@
 		/**
 	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
 		 */
-		class dbMysql : public dbSqlBase, public xexec
+		class dbMysql : public dbSqlBase
+		
+		#ifndef DBMYSQL_WO_XEXEC
+										, public xexec
+		#endif
+		
 		{
 			private :
 				/**

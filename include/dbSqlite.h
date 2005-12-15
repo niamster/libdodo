@@ -80,7 +80,12 @@
 		/**
 	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
 		 */
-		class dbSqlite : public dbSqlBase, public xexec
+		class dbSqlite : public dbSqlBase
+		
+		#ifndef DBSQLITE_WO_XEXEC
+										, public xexec
+		#endif
+		
 		{
 			private :
 				/**

@@ -178,45 +178,6 @@ dbBase::dbBase() : show(false),
 					qDbDepUpShift(EMPTY),
 					qDbDepDelShift(EMPTY)
 {
-	
-	sqlDbDepAddSelArr.push_back("");
-	sqlDbDepAddInsArr.push_back("");
-	sqlDbDepAddUpArr.push_back("");
-	sqlDbDepAddDelArr.push_back("");	
-	
-	pre_group.reserve(15);
-	backup.pre_group.reserve(15);
-	
-	pre_limNumber.reserve(15);
-	backup.pre_limNumber.reserve(15);
-	
-	pre_limOffset.reserve(15);
-	backup.pre_limOffset.reserve(15);	
-	
-	pre_having.reserve(15);
-	backup.pre_having.reserve(15);
-	
-	pre_where.reserve(30);
-	backup.pre_where.reserve(30);
-	
-	pre_table.reserve(10);
-	backup.pre_table.reserve(10);
-	
-	pre_tableTo.reserve(10);
-	backup.pre_tableTo.reserve(10);
-	
-	pre_order.reserve(15);
-	backup.pre_order.reserve(15);
-	
-	pre_fieldsNames.reserve(10);
-	backup.pre_fieldsNames.reserve(10);
-	
-	pre_fieldsVal.reserve(10);
-	backup.pre_fieldsVal.reserve(10);
-	
-	pre_subQ.reserve(100);
-	backup.pre_subQ.reserve(100);
-	
 }
 
 //-------------------------------------------------------------------
@@ -845,7 +806,7 @@ dbBase::getQType() const
 //-------------------------------------------------------------------
 
 __collectedData 
-dbBase::getCollectedData()
+dbBase::collectedData()
 {
 	return __collectedData(
 	pre_where,
@@ -866,56 +827,6 @@ dbBase::getCollectedData()
 	qUpShift,	
 	qDelShift	
 	);
-}
-
-//-------------------------------------------------------------------
-
-void 
-dbBase::store()
-{
-	backup.pre_where = pre_where;
-	backup.pre_fieldsNames = pre_fieldsNames;
-	backup.pre_fieldsVal = pre_fieldsVal;
-	backup.pre_table = pre_table;
-	backup.pre_tableTo = pre_tableTo;
-	backup.pre_order = pre_order;
-	backup.pre_group = pre_group;
-	backup.pre_having = pre_having;
-	backup.pre_limNumber = pre_limNumber;
-	backup.pre_limOffset = pre_limOffset;
-	backup.pre_subQ = pre_subQ;
-
-	backup.qType = qType;	
-	backup.qShift = qShift;
-	backup.qSelShift = qSelShift;	
-	backup.qInsShift = qInsShift;	
-	backup.qUpShift = qUpShift;	
-	backup.qDelShift = qDelShift;	
-}
-
-//-------------------------------------------------------------------
-
-void 
-dbBase::restore()
-{
-	pre_group = backup.pre_group;
-	pre_having = backup.pre_having;
-	pre_where = backup.pre_where;
-	pre_table = backup.pre_table;
-	pre_tableTo = backup.pre_tableTo;
-	pre_order = backup.pre_order;
-	pre_fieldsNames = backup.pre_fieldsNames;
-	pre_fieldsVal = backup.pre_fieldsVal;
-	pre_limNumber = backup.pre_limNumber;
-	pre_limOffset = backup.pre_limOffset;
-	pre_subQ = backup.pre_subQ;
-	
-	qShift = backup.qShift;
-	qType = backup.qType;
-	qSelShift = backup.qSelShift;
-	qInsShift = backup.qInsShift;
-	qUpShift = backup.qUpShift;
-	qDelShift = backup.qDelShift;	
 }
 
 //-------------------------------------------------------------------

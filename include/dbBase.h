@@ -164,6 +164,7 @@ namespace dodo
 	
 	/**
 	 * @struct __collectedData contains data that could be retrieved from class(to modyficate)[contains references]
+	 * @note u can access to data directly from class, but this is more comfortable
 	 */
 	struct __collectedData
 	{
@@ -211,34 +212,7 @@ namespace dodo
 		int &qUpShift;///< additional update statements
 		int &qDelShift;///< additional delete statements		
 	};
-	
-	/**
-	 * @struct __collectedData contains data that backups data in class, if you want to restore it after hook(see xexec)
-	 */
-	struct __collectedDataP
-	{	
-		std::string pre_where;///< where statement of the request	
-		stringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-		std::vector<stringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-		std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-		std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-		std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-		std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
-		std::string pre_group;///< group statement
-		std::string pre_limNumber;///< limit of result
-		std::string pre_limOffset;///< offset of requested result
-		stringArr pre_subQ;///< subquery
 		
-		int qType;///< type of operation
-		
-		int qShift;///< indicates if AddEnum's values was set [can be or'ed with | ]
-		
-		int qSelShift;///< additional select statements
-		int qInsShift;///< additional insert statements
-		int qUpShift;///< additional update statements
-		int qDelShift;///< additional delete statements		
-	};
-	
 	/**
 	 * @enum baseDataTypesEnum defines Data types; 
 	 * with '**' need range; with '*' may have range
@@ -665,17 +639,7 @@ namespace dodo
 			 * @return structure with references to internal collected request data(not copy).
 			 * @note it may be used for postExec and preExec functions.
 			 */
-			virtual __collectedData getCollectedData();			
-			
-			/**
-			 * stores collected data into temp struct
-			 */
-			virtual void store();
-			
-			/**
-			 * restores collected data from temp struct
-			 */
-			virtual void restore();
+			virtual __collectedData collectedData();
 			
 			/**
 			 * set default values for table (if you want safelly reuse)
@@ -706,8 +670,6 @@ namespace dodo
 			 * @param type indicates the type of reference
 			 */
 			inline virtual std::string stringReference(int type) const;
-			
-			mutable __collectedDataP backup;///< contains backuped data
 			
 			/**
 			 * frees collected data

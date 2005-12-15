@@ -141,6 +141,11 @@ namespace dodo
 	 */
 	
 	class flushDisk : public flush
+	
+	#ifndef FLUSH_DISK_WO_XEXEC
+								, public xexec
+	#endif
+	
 	{
 		
 		friend class flushSocket;

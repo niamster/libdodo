@@ -36,7 +36,7 @@ namespace dodo
 	 * @class flush is a base class for I/O operations.
 	 * all I/O operations are blockable => read/write inSize/outSize block.
 	 */
-	class flush : public xexec
+	class flush
 	{
 		public:
 							

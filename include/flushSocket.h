@@ -322,7 +322,12 @@ namespace dodo
 	 * @class flushSocket performs communication actions!!
 	 * exchange of data is flushSocketExchange class' task; ou init it with connect or accept methods
 	 */
-	class flushSocket : protected flush, public flushSocketOptions
+	class flushSocket : protected flush, public flushSocketOptions	
+	
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+								, public xexec
+	#endif
+	
 	{
 		friend class flushSocketExchange;
 		
@@ -562,7 +567,13 @@ namespace dodo
 	 * otherwise you'll recieve exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection = previous will be closed
 	 */
-	 class flushSocketExchange : public flush, public flushSocketOptions
+	class flushSocketExchange : public flush, public flushSocketOptions	
+	
+	#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
+								, public xexec
+	#endif
+	
+	 
 	 {
 	 	
 	 	friend class flushSocket;

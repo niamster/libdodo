@@ -51,7 +51,13 @@ namespace dodo
 	 * @note it's usefull when you are using in/out operations through some proxy -> for example inetd!
 	 */
 	
-	class flushSTD : public flush
+	class flushSTD : public flush	
+	
+	#ifndef FLUSH_STD_WO_XEXEC
+								, public xexec
+	#endif
+	
+	
 	{
 		private:
 			
