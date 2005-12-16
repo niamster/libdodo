@@ -195,7 +195,7 @@
 				/**
 				 * @return structure that holds array of rows and array of fields got from request
 				 */
-				virtual __sqlStorage fetch();
+				virtual __dbStorage fetch();
 			
 				/**
 				 * set additional mysql-specific statement for INSERT

@@ -347,10 +347,10 @@
 	
 	//-------------------------------------------------------------------
 	
-	__sqlStorage 
+	__dbStorage 
 	dbMysql::fetch()
 	{
-		return __sqlStorage(fetchRow(), fetchField());
+		return __dbStorage(fetchRow(), fetchField());
 	}
 	
 	//-------------------------------------------------------------------

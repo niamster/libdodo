@@ -190,10 +190,10 @@
 	
 	//-------------------------------------------------------------------
 	
-	__sqlStorage 
+	__dbStorage 
 	dbSqlite::fetch()
 	{
-		return __sqlStorage(fetchRow(), fetchField());
+		return __dbStorage(fetchRow(), fetchField());
 	}
 	
 	//-------------------------------------------------------------------
@@ -334,6 +334,7 @@
 			if (liteData->first)
 				liteData->data->fields.push_back(azColName[i]);
 		}
+		
 		liteData->data->rows.push_back(liteData->data->rowPart);
 		
 		if (liteData->first)

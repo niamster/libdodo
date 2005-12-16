@@ -134,7 +134,7 @@
 				/**
 				 * @return structure that holds array of rows and array of fields got from request
 				 */
-				virtual __sqlStorage fetch();
+				virtual __dbStorage fetch();
 			
 				/**
 				 * executes collected request

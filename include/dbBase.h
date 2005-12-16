@@ -121,9 +121,9 @@ namespace dodo
 	};
 	
 	/**
-	 * @struct __sqlStorage contains data that could be retrieved from result [select...]
+	 * @struct __dbStorage contains data that could be retrieved from result [select...]
 	 */
-	struct __sqlStorage
+	struct __dbStorage
 	{
 		/**
 		 * constructor
@@ -131,7 +131,7 @@ namespace dodo
 		 * @param rows
 		 * @param fields
 		 */
-		__sqlStorage(std::vector<stringArr> rows, stringArr fields);
+		__dbStorage(std::vector<stringArr> rows, stringArr fields);
 		
 		std::vector<stringArr> rows;///< array of rows returned in request
 		stringArr fields;///< array of fields returned in request

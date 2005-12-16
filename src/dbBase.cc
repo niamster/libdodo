@@ -114,7 +114,7 @@ __fieldInfo::operator=(__fieldInfo &from)
 
 //-------------------------------------------------------------------
 
-__sqlStorage::__sqlStorage(std::vector<stringArr> a_rows, stringArr a_fields) : rows(a_rows), 
+__dbStorage::__dbStorage(std::vector<stringArr> a_rows, stringArr a_fields) : rows(a_rows), 
 																				fields(a_fields)
 {
 }
