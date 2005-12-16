@@ -307,7 +307,7 @@
 			fields.reserve(numFields);
 			for (j=0;j<numFields;j++)
 			{
-				rowPart.assign(mysqlRow[j]?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
+				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
 				fields.push_back(rowPart);
 			}
 			rows.push_back(fields);

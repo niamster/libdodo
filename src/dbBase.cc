@@ -227,8 +227,8 @@ dbBase::insert(const std::string &a_table,
 	
 	for (;i!=j;++i)
 	{
-		pre_fieldsNames.push_back((*i).first);
-		temp.push_back((*i).second);				
+		pre_fieldsNames.push_back(i->first);
+		temp.push_back(i->second);				
 	}
 	pre_fieldsVal.push_back(temp);
 	
@@ -249,10 +249,10 @@ dbBase::insert(const std::string &a_table,
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
-
+	
 	j = b->end();
 	for (i=v->begin();i!=j;++i)	
-		pre_fieldsNames.push_back((*j).first);
+		pre_fieldsNames.push_back(i->first);
 
 	stringArr temp;
 	
@@ -261,7 +261,7 @@ dbBase::insert(const std::string &a_table,
 		j = v->end();
 		temp.clear();
 		for (i=v->begin();i!=j;++i)
-			temp.push_back((*i).second);
+			temp.push_back(i->second);
 		pre_fieldsVal.push_back(temp);	
 	}
 

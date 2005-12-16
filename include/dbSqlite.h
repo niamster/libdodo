@@ -207,12 +207,7 @@
 				#else
 					virtual bool 
 				#endif
-								_exec() const;		
-				
-				/**
-				 * inits additional SQLite specific statements
-				 */
-				virtual void addSQL();
+								_exec() const;
 				
 				mutable sqlite3 *lite;///< handle to DB
 				
