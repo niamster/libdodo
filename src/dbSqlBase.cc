@@ -208,7 +208,7 @@ dbSqlBase::insideAddCollect(const stringArr &statements,
 		
 	temp_.clear();
 
-	register unsigned int k(0);
+	register unsigned int k(1);
 	temp_bit = 0;
 	
 	i = statements.begin();

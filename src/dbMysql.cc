@@ -108,7 +108,6 @@
 	void 
 	dbMysql::setMyAddUpSt(mysqlAddUpEnum statement)
 	{
-
 		addF(qDbDepUpShift,1<<statement);	
 	}
 	
@@ -117,8 +116,6 @@
 	void 
 	dbMysql::setMyAddSelSt(mysqlAddSelEnum statement)
 	{
-
-		
 		addF(qDbDepSelShift,1<<statement);	
 	}
 	
@@ -127,7 +124,6 @@
 	void 
 	dbMysql::setMyAddDelSt(mysqlAddDelEnum statement)
 	{
-
 		addF(qDbDepDelShift,1<<statement);
 	}
 	
