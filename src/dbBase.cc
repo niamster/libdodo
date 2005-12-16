@@ -250,13 +250,13 @@ dbBase::insert(const std::string &a_table,
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 	
-	j = b->end();
-	for (i=v->begin();i!=j;++i)	
+	j = v->end();
+	for (i=v->begin();i!=j;++i)
 		pre_fieldsNames.push_back(i->first);
 
 	stringArr temp;
 	
-	for (;b!=v;++b)
+	for (;v!=b;++v)
 	{
 		j = v->end();
 		temp.clear();
