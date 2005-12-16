@@ -872,6 +872,14 @@ dbBase::stringType(int type) const
 			return std::string("MEDIUMBLOB");
 		case LONGBLOB:
 			return std::string("LONGBLOB");
+		case TINYTEXT:
+			return std::string("TINYTEXT");
+		case TEXT:
+			return std::string("TEXT");
+		case MEDIUMTEXT:
+			return std::string("MEDIUMTEXT");
+		case LONGTEXT:
+			return std::string("LONGTEXT");
 		case ENUM:
 			return std::string("ENUM");
 		case SET:
@@ -894,6 +902,10 @@ dbBase::chkRange(int type) const
 		case BLOB:
 		case MEDIUMBLOB:
 		case LONGBLOB:
+		case TINYTEXT:
+		case TEXT:
+		case MEDIUMTEXT:
+		case LONGTEXT:
 		case ENUM:
 		case SET:
 			return -1;

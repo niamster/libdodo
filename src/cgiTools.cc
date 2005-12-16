@@ -228,11 +228,11 @@ cgiTools::makePost() const
 	register int cl = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
 	register char *post = new char[(cl+1)*size_of_char];
 	if (post == NULL)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-	#else
-		return false;
-	#endif	
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
 	
 	fread(post,cl,1,stdin);
 	

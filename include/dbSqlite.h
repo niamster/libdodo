@@ -29,6 +29,8 @@
 
 #ifdef SQLITE_EXT
 	
+	#include <sqlite3.h>
+	
 	#include <dbSqliteEx.h>
 	#include <dbSqlBase.h>
 	#include <tools.h>
@@ -75,6 +77,17 @@
 		 */		
 		enum sqliteAddInsEnum
 		{
+		};
+		
+		class dbSqlite;///< to make struct with this class before class declaration
+		
+		/**
+		 * @struct __sqliteCallbackData passes to callback function
+		 */
+		struct __sqliteCallbackData
+		{
+			dbSqlite *data;
+			bool first;
 		};
 		
 		/**
@@ -277,11 +290,20 @@
 				 */
 				virtual void addSQL();
 				
-				mutable bool connected;///< connected or not
-				mutable bool empty;///< for detectin' whether result is empty or not
+				mutable sqlite3 *lite;///< handle to DB
 				
-				std::vector<stringArr> rows;///< to store rows
-				stringArr fields;///< to store fields
+				mutable bool connected;///< connected or not
+				
+				static int sqlite_callback(void *data, int argc, char **argv, char **azColName);///< callback function to work with got sql's data 
+				mutable __sqliteCallbackData callBackData;
+				
+				
+				mutable int rowsNum;///< number of columns in the query result
+				mutable int fieldsNum;///< number of fields in the query result
+				
+				mutable std::vector<stringArr> rows;///< to store rows
+				mutable stringArr fields;///< to store fields
+				mutable stringArr rowPart;///< to set temporary row content
 		};
 	};
 #endif

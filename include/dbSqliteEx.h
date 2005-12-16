@@ -32,14 +32,17 @@
 #ifndef NO_EX
 
 	namespace dodo
-	{
-		
+	{		
 		/**
 		 * ID of function where exception was thrown
 		 */			
 		enum dbSqliteFunctionsID
 		{
-
+			DBSQLITE_DISCONNECT,
+			DBSQLITE_CONNECT,
+			DBSQLITE__EXEC,
+			DBSQLITE_DESTRUCTOR,
+			
 		};		
 	};
 

@@ -353,7 +353,7 @@
 		#endif
 					
 		if (empty || !show)
-			return stringArr();
+			return __stringarray__;
 			
 		numFields = mysql_num_fields(mysqlRes);	
 		mysqlFields = mysql_fetch_fields(mysqlRes);

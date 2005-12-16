@@ -3,25 +3,10 @@ using namespace dodo;
 
 using namespace std;
 
-void copyTest0(flushSocketExchange fse)
+bool
+process(flushSocketExchange fse)
 {
-	cout << fse.getOutBufferSize() << endl;
-}
-
-void copyTest1(flushSocketExchange &fse)
-{
-	cout << fse.getOutBufferSize() << endl;
-}
-
-void copyTest2(flushSocketExchange *fse)
-{
-	cout << fse->getOutBufferSize() << endl;
-}
-
-
-void process(flushSocketExchange &fse)
-{
-	fse.inSize = 2;
+	fse.inSize = 4;
 	fse.setInBufferSize(1);
 	
 //	fse.outSize = 7;
@@ -33,11 +18,14 @@ void process(flushSocketExchange &fse)
 	{
 		fse.recieveString(q);
 		cout << q << endl;
+		if (q.compare("exit")==0)
+			return false;
 	}
 	catch (baseEx ex)
 	{
 		cout << ex << endl;
 	}
+	return true;
 	
 }
 
@@ -47,12 +35,7 @@ int main(int argc, char **argv)
 //#define DATAGRAM	
 	try
 	{		
-		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
-		
-/*		flushSocketExchange ex1;
-		copyTest0(ex1);///ok
-		copyTest1(ex1);///ok
-		copyTest2(&ex1);///ok*/
+		flushSocket sock(true,/*PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//**/PROTO_FAMILY_UNIX_SOCKET,TRANSFER_TYPE_STREAM);
 		
 		
 /*		sock.connect("127.0.0.1",21,ex1);
@@ -69,24 +52,21 @@ int main(int argc, char **argv)
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
 		
-		sock.bindNListen("127.0.0.1",7777,2);
+		//sock.bindNListen("127.0.0.1",7777,2);
 		//sock.bindNListen("::",7777);
-		//sock.bindNListen("./sock",true);
+		sock.bindNListen("./sock",true);
 		
-		flushSocketExchange conn1[20];
+		flushSocketExchange conn1;
 		int i = 0;
 		
 		while(true)
 		{
 			if (sock.accept(fake,info))
 			{
-				conn1[i].init(fake);
-				#ifdef DATAGRAM
-					process(conn1[i]);
-				#else
-					process(conn1[i++]);
-				#endif
+				conn1.init(fake);
 				cout << info.port << endl;
+				if (!process(conn1))
+					break;
 			}
 		}
 		

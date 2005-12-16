@@ -30,8 +30,11 @@
 
 	
 	dbSqlite::dbSqlite() : connected(false),
-						empty(true)
+							rowsNum(-1),
+							fieldsNum(-1)
 	{
+		auto_increment = " autoincrement ";
+		
 		addSQL();
 	}
 	
@@ -45,9 +48,6 @@
 	
 	dbSqlite::~dbSqlite()
 	{
-		if (!empty)
-			;
-			
 		disconnect();
 	}
 	
@@ -176,7 +176,18 @@
 			performXExec(preExec);
 		#endif
 		
-		
+			if (sqlite3_open(dbInfo.path.c_str(),&lite)!=SQLITE_OK)
+				#ifndef NO_EX
+				{
+					sqlite3_close(lite);
+					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_CONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+				}
+				#else
+				{
+					sqlite3_close(lite);
+					return ;
+				}
+				#endif		
 		
 		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
@@ -201,7 +212,12 @@
 				performXExec(preExec);
 			#endif
 			
-			
+			if (sqlite3_close(lite)!=SQLITE_OK)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_DISCONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+				#else
+					return ;
+				#endif
 
 			#ifndef DBSQLITE_WO_XEXEC
 				performXExec(postExec);
@@ -220,9 +236,22 @@
 	#endif
 	dbSqlite::_exec() const
 	{	
-		queryCollect();
+		queryCollect();			
+
+		callBackData.data = (dbSqlite *)this;
+		callBackData.first = true;
 		
-		
+		rowsNum = 0;
+		fieldsNum = 0;
+		fields.clear();
+		rows.clear();
+
+		if (sqlite3_exec(lite,request.c_str(),sqlite_callback,(void *)&callBackData, NULL)!=SQLITE_OK)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+			#else
+				return ;
+			#endif
 		
 		#ifdef NO_EX
 			return true;
@@ -234,17 +263,13 @@
 	std::vector<stringArr>
 	dbSqlite::fetchRow()
 	{
-			
 		#ifndef DBSQLITE_WO_XEXEC
 			operType = DBSQLITE_OPER_FETCHROW;
 			performXExec(preExec);
 		#endif		
 			
-		if (empty || !show)
+		if (!show)
 			return std::vector<stringArr>();
-			
-		rows.clear();
-		rows.reserve(0);
 
 		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
@@ -263,11 +288,8 @@
 			performXExec(preExec);
 		#endif
 					
-		if (empty || !show)
-			return stringArr();
-			
-		fields.clear();
-		fields.reserve(0);
+		if (!show)
+			return __stringarray__;
 
 		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
@@ -289,8 +311,8 @@
 	unsigned int 
 	dbSqlite::rowsCount()
 	{
-		if (empty || !show)
-			return 0;
+		if (!show)
+			return rowsNum;
 		else	
 			return 0;
 	}
@@ -300,8 +322,8 @@
 	unsigned int 
 	dbSqlite::fieldsCount()
 	{
-		if (empty || !show)
-			return 0;
+		if (!show)
+			return fieldsNum;
 		else	
 			return 0;
 	}
@@ -311,8 +333,8 @@
 	unsigned int
 	dbSqlite::affectedRowsCount()
 	{
-		if (empty || show)
-			return 0;
+		if (show)
+			return rowsNum;
 		else	
 			return 0;
 	}
@@ -400,6 +422,38 @@
 		#endif
 	
 	#endif
+	
+	//-------------------------------------------------------------------	
+	
+	int 
+	dbSqlite::sqlite_callback(void *data, 
+							int argc, 
+							char **argv, 
+							char **azColName)
+	{
+		__sqliteCallbackData *liteData = (__sqliteCallbackData *)data;
+		
+		liteData->data->rowPart.clear();
+		liteData->data->rowPart.reserve(argc);
+		
+		++liteData->data->rowsNum;
+		
+		for (register int i(0);i<argc;++i)
+		{
+			liteData->data->rowPart.push_back(argv[i]!=NULL?argv[i]:"NULL");
+			if (liteData->first)
+				liteData->data->fields.push_back(azColName[i]);
+		}
+		liteData->data->rows.push_back(liteData->data->rowPart);
+		
+		if (liteData->first)
+		{
+			liteData->data->fieldsNum = argc;
+			liteData->first = false;
+		}
+		
+		return 0;
+	}
 	
 	//-------------------------------------------------------------------
 	

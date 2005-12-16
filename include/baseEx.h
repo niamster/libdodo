@@ -44,7 +44,8 @@
 			ERR_H_ERRNO,
 			ERR_DYNLOAD,
 			ERR_LIBXML2,
-			ERR_ZLIB
+			ERR_ZLIB,
+			ERR_SQLITE,
 		};
 
 		/**
@@ -64,9 +65,10 @@
 			ERRMODULE_TIMETOOLS,
 			ERRMODULE_LIBXML2,
 			ERRMODULE_TOOLS,
+			ERRMODULE_DBSQLITE,
 		};	
 
-#define AM_MODULES 12
+#define AM_MODULES 13
 		
 		class baseEx;///< to make typedef before class declaration
 		

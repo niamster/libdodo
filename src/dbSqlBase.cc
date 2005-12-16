@@ -110,7 +110,7 @@ static 	__statements sqlAddSelArr[3] =
 
 dbSqlBase::dbSqlBase() : preventFraming(false)
 {	
-	request.reserve(100);
+	auto_increment = " auto_increment ";
 }
 
 //-------------------------------------------------------------------
@@ -493,6 +493,7 @@ dbSqlBase::createTableCollect() const
 	request.append(!pre_tableInfo.comment.empty()?(", comment = " + pre_tableInfo.comment):"");	
 	request.append(!pre_tableInfo.charset.empty()?(", character set = " + pre_tableInfo.charset):"");	
 	
+	request.append(")");
 }
 
 //-------------------------------------------------------------------
@@ -628,15 +629,15 @@ inline std::string
 dbSqlBase::fieldCollect(__fieldInfo &row) const
 {
 	register int type = row.type, flag = row.flag;
-	std::string resRow(row.name + stringType(type));
+	std::string resRow(row.name + " " + stringType(type));
 	
 	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):"");
 	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):"");
 	resRow.append((row.charset.size()>0)?(" character set " + row.charset):" ");
-	resRow.append(((_NULL&flag)==_NULL)?" NULL ":" NOT NULL ");
+	resRow.append(((_NULL&flag)==_NULL)?" null ":" not null ");
 	resRow.append((row.defaultVal.size()>0)?("default '" + row.defaultVal + "' "):"");
-	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?" AUTO_INCREMENT ":"");
-	resRow.append(((KEY&flag)==KEY)?" KEY ":"");	
+	resRow.append(((KEY&flag)==KEY)?" primary key ":"");
+	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?auto_increment:"");
 	resRow.append((row.comment.size()>0)?(" comment '" + row.comment + "' "):"");
 	
 	if (row.refTable.size()>0)

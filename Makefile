@@ -29,7 +29,8 @@ include directives.mk
 
 MODS_CPP:=$(MOD_MYSQL_CPP) \
 			$(MOD_PCRE_CPP) \
-			$(MOD_LIBXML2_CPP)
+			$(MOD_LIBXML2_CPP)\
+			$(MOD_SQLITE_CPP)
 
 MODS_LD:=$(MOD_MYSQL_LD) \
 			$(MOD_PCRE_LD) \

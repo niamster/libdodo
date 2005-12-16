@@ -245,6 +245,10 @@ namespace dodo
 		BLOB,///< A column with a maximum length of 65,535 (2^16 -1) characters.
 		MEDIUMBLOB,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
 		LONGBLOB,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
+		TINYTEXT,///< A column with a maximum length of 255 (2^8 - 1) characters.
+		TEXT,///< A column with a maximum length of 65,535 (2^16 -1) characters.
+		MEDIUMTEXT,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
+		LONGTEXT,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
 		ENUM,///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65,535 distinct values.
 		SET,///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
 	};
