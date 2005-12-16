@@ -1,5 +1,5 @@
 #CC_PATH=/opt/gcc-3.4.3/bin/
-CC_PATH=/opt/gcc-4.0.1/bin/
+#CC_PATH=/opt/gcc-4.0.1/bin/
 #CC_PATH=/opt/intel/cc/9.0/bin/
 
 CXX = $(CC_PATH)g++
@@ -71,6 +71,6 @@ install:
 	@echo "Use libdodo with pleasure"
 	
 clean:
-	rm -rf *.o *.so* *.lo .libs
+	rm -rf *.o *.so*
 
 force : clean $(LIBRARY)

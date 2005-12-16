@@ -16,4 +16,4 @@ test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
 	
 clean:
-	rm -rf test .libs
+	rm -rf test
