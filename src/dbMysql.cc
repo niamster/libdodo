@@ -96,13 +96,10 @@
 	void 
 	dbMysql::setMyAddInsSt(mysqlAddInsEnum statement)
 	{
-		/*switch (statement)
-		{
-			break;
-			default:
-				break;
-			
-		}*/
+		removeF(qDbDepInsShift,1<<INSERT_DELAYED);
+		removeF(qDbDepInsShift,1<<INSERT_LOW_PRIORITY);
+		removeF(qDbDepInsShift,1<<INSERT_HIGH_PRIORITY);
+		
 		addF(qDbDepInsShift,1<<statement);
 	}
 	
@@ -111,12 +108,7 @@
 	void 
 	dbMysql::setMyAddUpSt(mysqlAddUpEnum statement)
 	{
-		/*switch (statement)
-		{
-			default:
-				break;
-			
-		}*/
+
 		addF(qDbDepUpShift,1<<statement);	
 	}
 	
@@ -125,17 +117,8 @@
 	void 
 	dbMysql::setMyAddSelSt(mysqlAddSelEnum statement)
 	{
-		switch (statement)
-		{
-			case SELECT_DISTINCT:
-			case SELECT_ALL:
-				removeF(qSelShift,2<<(SELECT_ALL-1));
-				removeF(qSelShift,2<<(SELECT_DISTINCT-1));
-				break;
-			default:
-				break;
-			
-		}
+
+		
 		addF(qDbDepSelShift,1<<statement);	
 	}
 	
@@ -144,12 +127,7 @@
 	void 
 	dbMysql::setMyAddDelSt(mysqlAddDelEnum statement)
 	{
-		/*switch (statement)
-		{
-			default:
-				break;
-			
-		}*/
+
 		addF(qDbDepDelShift,1<<statement);
 	}
 	

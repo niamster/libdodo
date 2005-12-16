@@ -51,34 +51,6 @@
 			DBSQLITE_OPER_FETCHFIELD,
 		};
 		
-		/**
-		 * @enum sqliteAddSelEnum describes SQLite additional statement for SELECT
-		 */
-		enum sqliteAddSelEnum
-		{
-		};
-
-		/**
-		 * @enum sqliteAddDelEnum describes SQLite additional statement for DELETE
-		 */		
-		enum sqliteAddDelEnum
-		{
-		};
-
-		/**
-		 * @enum sqliteAddUpEnum describes SQLite additional statement for UPDATE
-		 */		
-		enum sqliteAddUpEnum
-		{
-		};
-
-		/**
-		 * @enum sqliteAddInsEnum describes SQLite additional statement for INSERT
-		 */		
-		enum sqliteAddInsEnum
-		{
-		};
-		
 		class dbSqlite;///< to make struct with this class before class declaration
 		
 		/**
@@ -164,54 +136,6 @@
 				 */
 				virtual __sqlStorage fetch();
 			
-				/**
-				 * set additional sqlite-specific statement for INSERT
-				 * @param statement describes additional statement
-				 */
-				virtual void setLiteAddInsSt(sqliteAddInsEnum statement);			
-				
-				/**
-				 * set additional sqlite-specific statement for UPDATE
-				 * @param statement describes additional statement
-				 */
-				virtual void setLiteAddUpSt(sqliteAddUpEnum statement);
-				
-				/**
-				 * set additional sqlite-specific statement for SELECT
-				 * @param statement describes additional statement
-				 */
-				virtual void setLiteAddSelSt(sqliteAddSelEnum statement);
-				
-				/**
-				 * set additional sqlite-specific statement for DELETE
-				 * @param statement describes additional statement
-				 */
-				virtual void setLiteAddDelSt(sqliteAddDelEnum statement);
-				
-				/**
-				 * unset additional sqlite-specific statement for INSERT
-				 * @param statement describes additional statement
-				 */
-				virtual void unsetLiteAddInsSt(sqliteAddInsEnum statement);
-				
-				/**
-				 * unset additional sqlite-specific statement for UPDATE
-				 * @param statement describes additional statement
-				 */
-				virtual void unsetLiteAddUpSt(sqliteAddUpEnum statement);
-				
-				/**
-				 * unset additional sqlite-specific statement for SELECT
-				 * @param statement describes additional statement
-				 */
-				virtual void unsetLiteAddSelSt(sqliteAddSelEnum statement);
-				
-				/**
-				 * unset additional sqlite-specific statement for DELETE
-				 * @param statement describes additional statement
-				 */
-				virtual void unsetLiteAddDelSt(sqliteAddDelEnum statement);
-
 				/**
 				 * executes collected request
 				 */				
