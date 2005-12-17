@@ -18,6 +18,8 @@ int main(int argc, char **argv)
 		tools tl;
 		
 		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
+		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
+			cout << "WTF";
 		
 		//cout << flushDisk::getFileContent("test.cc");
 		
@@ -42,6 +44,7 @@ int main(int argc, char **argv)
     {
     	cout << endl << ex.what() << endl;
     }
+    
 	return 0;
 }
 

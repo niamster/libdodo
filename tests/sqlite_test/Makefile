@@ -5,18 +5,17 @@ LIBTOOL = libtool
 CXX = $(GCC_PATH)g++
 CFLAGS=-O2 -march=pentium4
 
+MOD_MYSQL_CPP:=-I/opt/sqllite/include/
+
 override DEFINES:=$(DEFINES)
 
 #DEBUG=-g
 
-override CPPFLAGS:=-I../../include $(CPPFLAGS)
+override CPPFLAGS:=-I../../include $(MOD_MYSQL_CPP) $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
 
-module: module.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -Wall -shared -ldodo $^ -o $@ 
-
 clean:
-	rm -fr test module
+	rm -rf test

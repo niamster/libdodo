@@ -59,7 +59,7 @@
 		 */
 		enum errorModuleEnum
 		{
-			ERRMODULE_FLUSHSOCKET,
+			ERRMODULE_FLUSHSOCKET = 0,
 			ERRMODULE_CGITOOLS,
 			ERRMODULE_FLUSHDISK,
 			ERRMODULE_DBMYSQL,
@@ -193,7 +193,15 @@
 					 * @param handler is function that will be called when error occured[in catch]
 					 * @param data is data that will be passed to handler
 					 */
-					bool setErrorHandler(errorModuleEnum module, std::string path,	void *data);
+					static bool setErrorHandler(errorModuleEnum module, std::string path,	void *data);
+									
+					/**
+					 * set handler on error for all modules
+					 * @return false on error
+					 * @param handler is function that will be called when error occured[in catch]
+					 * @param data is data that will be passed to handler
+					 */
+					static bool setErrorHandlers(std::string path,	void *data);
 				
 				#endif				
 		};
