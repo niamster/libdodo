@@ -15,7 +15,22 @@ int main(int argc, char **argv)
 		
 		cout << flushSTD::getModuleInfo("./module").name;
 		
-		int pos = st.addPreExec("./module",NULL);
+		//int pos = st.addPreExec("./module",NULL);
+	
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		st.delPreExec(1);st.delPreExec(2);
+		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL)<<endl;
+		//st.delPreExec(pos);
 	
 		int a = 10;
 		st.write((char *)&a);

@@ -12,7 +12,7 @@ extern "C"
 		xexecObjTypeEnum type,
 		void *yep)
 	{
-		if (type == XEXECOBJ_FLUSHSTD)
+		/*if (type == XEXECOBJ_FLUSHSTD)
 		{
 			flushSTD *st = (flushSTD *)base;
 			if (st->operType == FLUSHSTD_OPER_WRITE)
@@ -23,7 +23,8 @@ extern "C"
 				sprintf(q,"!!%d!!\n",*a);
 				st->buffer.assign(q);
 			}
-		}
+		}*/
+		std::cout << "activation\n";
 	}
 	
 	xexecMod 
@@ -42,7 +43,7 @@ extern "C"
 	void
 	deinitXexecModule()
 	{
-		std::cout << "deactivation.";
+		std::cout << "deactivation.\n";
 	}
 
 };

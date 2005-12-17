@@ -398,7 +398,7 @@ namespace dodo
 			#ifdef DL_EXT
 			
 				mutable void *handles[XEXEC_MAXMODULES];///< handles to modules
-				mutable int handlesOpened;///< amount of opened handles to modules
+				mutable int handlesOpened[XEXEC_MAXMODULES];///< map of active modules
 				
 			#endif	
 	};

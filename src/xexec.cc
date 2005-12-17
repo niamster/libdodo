@@ -37,15 +37,16 @@ dummyHook(void *base, xexecObjTypeEnum type, void *data)
 
 xexec::xexec() : safeHooks(true),
 				operType(XEXEC_NONE)
-				
-				#ifdef DL_EXT
-				
-					,handlesOpened(0)
-					
-				#endif
 {
 	preExec.execDisabled = false;
 	postExec.execDisabled = false;
+	
+	#ifdef DL_EXT
+	
+		for (register int i(0);i<XEXEC_MAXMODULES;++i)
+			handlesOpened[i] = -1;
+					
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -55,11 +56,17 @@ xexec::~xexec()
 	#ifdef DL_EXT
 	
 		deinitXexecModule deinit;	
-		for (register int i(0);i<handlesOpened;++i)
+		
+		for (register int i(0);i<XEXEC_MAXMODULES;++i)
 		{
+			if (handlesOpened[i]==-1)
+				continue;
+
 			deinit = (deinitXexecModule)dlsym(handles[i], "deinitXexecModule");
 			if (deinit != NULL)
 				deinit();
+			
+			handlesOpened[i] = -1;
 			
 			dlclose(handles[i]);
 		}
@@ -108,7 +115,31 @@ inline void
 xexec::delXExec(std::vector<__execItem> &list, 
 		unsigned int position) const
 {
+	if (position <= 0)
+		return;
+	
+	#ifdef DL_EXT
+	
+		deinitXexecModule deinit;	
+
+		for (register int o(0);o<XEXEC_MAXMODULES;++o)
+			if (handlesOpened[o]==position)
+			{
+				deinit = (deinitXexecModule)dlsym(handles[o], "deinitXexecModule");
+				if (deinit != NULL)
+					deinit();
+				
+				handlesOpened[o] = -1;
+				
+				dlclose(handles[o]);
+				
+				break;
+			}
+			
+	#endif	
+
 	--position;
+	
 	if (list[position].present && (position <= list.size()))
 	{
 		list[position].func = dummyHook;
@@ -266,7 +297,31 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 			inExec func,
 			void *data) const
 {
+	if (position <= 0)
+		return false;
+		
+	#ifdef DL_EXT
+	
+		deinitXexecModule deinit;	
+		
+		for (register int o(0);o<XEXEC_MAXMODULES;++o)
+			if (handlesOpened[o]==position)
+			{
+				deinit = (deinitXexecModule)dlsym(handles[o], "deinitXexecModule");
+				if (deinit != NULL)
+					deinit();
+				
+				handlesOpened[o] = -1;
+				
+				dlclose(handles[o]);
+				
+				break;
+			}
+			
+	#endif	
+
 	--position;
+	
 	if (position <= list.size())
 	{
 		list[position].func = func;
@@ -284,7 +339,9 @@ xexec::performXExec(__execItemList &list) const
 {
 	if (list.execDisabled)
 		return ;
+		
 	std::vector<__execItem>::const_iterator i(list.exec.begin()),j(list.exec.end());
+	
 	for (;i!=j;++i)
 		if (i->present && i->enabled)
 		{
@@ -320,7 +377,12 @@ xexec::performXExec(__execItemList &list) const
 					const std::string &module, 
 					void *data) const
 	{
-		if (handlesOpened == XEXEC_MAXMODULES)
+		register int i(0);
+		for (;i<XEXEC_MAXMODULES;++i)
+			if (handlesOpened[i] == -1)
+				break;
+		
+		if (i == XEXEC_MAXMODULES)
 			return -1;
 		
 		__execItem temp;
@@ -331,23 +393,23 @@ xexec::performXExec(__execItemList &list) const
 		temp.enabled = true;
 		temp.type = type;
 		
-		handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
-		if (handles[handlesOpened] == NULL)
+		handles[i] = dlopen(module.c_str(), RTLD_LAZY);
+		if (handles[i] == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
 				return -1;
 			#endif
 		
-		initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
+		initXexecModule init = (initXexecModule)dlsym(handles[i], "initXexecModule");
 		if (init == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif	
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif	
 		
-		inExec in = (inExec)dlsym(handles[handlesOpened], init().hook);
+		inExec in = (inExec)dlsym(handles[i], init().hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
@@ -355,13 +417,12 @@ xexec::performXExec(__execItemList &list) const
 				return -1;
 			#endif
 	
-		
 		temp.func = in;
 		
 		list.push_back(temp);
-		++handlesOpened;
-	
-		return list.size();		
+		handlesOpened[i] = list.size();
+		
+		return handlesOpened[i];		
 	}
 	
 	//-------------------------------------------------------------------
@@ -427,7 +488,17 @@ xexec::performXExec(__execItemList &list) const
  					xexecObjTypeEnum type, 
 					void *data) const
 	{
-		if (handlesOpened == XEXEC_MAXMODULES)
+		register int i(0);
+		for (;i<XEXEC_MAXMODULES;++i)
+			if (handlesOpened[i] == -1)
+				break;
+						
+		register int j(0);
+		for (;j<XEXEC_MAXMODULES;++j)
+			if (handlesOpened[j] == -1)
+				break;
+				
+		if (i == XEXEC_MAXMODULES || j == XEXEC_MAXMODULES)
 			return xexecCounts();
 		
 		__execItem temp;
@@ -437,15 +508,23 @@ xexec::performXExec(__execItemList &list) const
 		temp.enabled = true;
 		temp.type = type;
 		
-		handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
-		if (handles[handlesOpened] == NULL)
+		handles[i] = dlopen(module.c_str(), RTLD_LAZY);
+		if (handles[i] == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
 				return xexecCounts();
 			#endif
-		
-		initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
+
+		handles[j] = dlopen(module.c_str(), RTLD_LAZY);
+		if (handles[j] == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecCounts();
+			#endif
+
+		initXexecModule init = (initXexecModule)dlsym(handles[i], "initXexecModule");
 		if (init == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
@@ -455,7 +534,7 @@ xexec::performXExec(__execItemList &list) const
 		
 		xexecMod info = init();
 		
-		inExec in = (inExec)dlsym(handles[handlesOpened], info.hook);
+		inExec in = (inExec)dlsym(handles[i], info.hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
@@ -463,32 +542,33 @@ xexec::performXExec(__execItemList &list) const
 				return xexecCounts();
 			#endif
 	
-		
+
 		temp.func = in;
 		
 		xexecCounts count;
-		
+
 		switch (info.execType)
 		{
-			case XEXECMODULE_PRE:
-				preExec.exec.push_back(temp);
-				count.pre = preExec.exec.size();
-				break;
-				
 			case XEXECMODULE_POST:
 				postExec.exec.push_back(temp);
 				count.post = postExec.exec.size();
+				handlesOpened[i] = count.post;
 				break;
-				
-			case XEXECMODULE_BOTH:
+			
+			case XEXECMODULE_PRE:
 				preExec.exec.push_back(temp);
+				count.pre = preExec.exec.size();
+				handlesOpened[j] = count.pre;
+				break;
+									
+			case XEXECMODULE_BOTH:
 				postExec.exec.push_back(temp);
 				count.post = postExec.exec.size();
 				count.pre = preExec.exec.size();
+				handlesOpened[i] = count.post;
+				handlesOpened[j] = count.pre;
 				break;
 		}
-			
-		++handlesOpened;
 		
 		return count;
 	}
