@@ -200,7 +200,7 @@ namespace dodo
 					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
 					 */			
-					virtual int addExec(const std::string &module, void *data) const;
+					virtual xexecCounts addExec(const std::string &module, void *data) const;
 								
 					/**
 					 * adds hook after the operation by callback

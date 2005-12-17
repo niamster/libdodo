@@ -90,7 +90,7 @@ flushDisk::~flushDisk()
 		
 		//-------------------------------------------------------------------
 		
-		int 
+		xexecCounts 
 		flushDisk::addExec(const std::string &module, 
 							void *data) const
 		{

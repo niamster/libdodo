@@ -26,15 +26,15 @@ extern "C"
 		}
 	}
 	
-	xexecExMod 
+	xexecMod 
 	initXexecModule()
 	{
-		xexecExMod module;
+		xexecMod module;
 		
 		strcpy(module.name,"test");
 		strcpy(module.discription,"test module");
 		strcpy(module.hook,"hook");
-		module.preExec = true;///preffered
+		module.execType = XEXECMODULE_PRE;
 		
 		return module;
 	}

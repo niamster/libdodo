@@ -111,7 +111,7 @@ flushSocket::~flushSocket()
 		
 		//-------------------------------------------------------------------
 		
-		int 
+		xexecCounts 
 		flushSocket::addExec(const std::string &module, 
 							void *data) const
 		{
@@ -1517,7 +1517,7 @@ flushSocketExchange::recieveString(std::string &data,
 		
 		//-------------------------------------------------------------------
 		
-		int 
+		xexecCounts 
 		flushSocketExchange::addExec(const std::string &module, 
 							void *data) const
 		{

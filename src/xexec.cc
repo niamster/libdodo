@@ -53,19 +53,14 @@ xexec::xexec() : safeHooks(true),
 xexec::~xexec()
 {	
 	#ifdef DL_EXT
+	
 		deinitXexecModule deinit;	
 		for (register int i(0);i<handlesOpened;++i)
 		{
 			deinit = (deinitXexecModule)dlsym(handles[i], "deinitXexecModule");
-			if (deinit == NULL)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_XEXEC,XEXEC_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-				#else
-					return -1;
-				#endif
+			if (deinit != NULL)
+				deinit();
 			
-			deinit();
-				
 			dlclose(handles[i]);
 		}
 			
@@ -311,6 +306,13 @@ xexec::performXExec(__execItemList &list) const
 
 #ifdef DL_EXT
 
+	xexecCounts::xexecCounts() : pre(-1),
+								post(-1)
+	{
+	}
+
+	//-------------------------------------------------------------------
+
 	int 
 	xexec::addXExecModule(std::vector<__execItem> &list, 
 					void *obj,  
@@ -386,26 +388,26 @@ xexec::performXExec(__execItemList &list) const
 	
 	//-------------------------------------------------------------------
 	
-	xexecExMod 
+	xexecMod 
 	xexec::getModuleInfo(const std::string &module)
 	{
 		void *handle = dlopen(module.c_str(), RTLD_LAZY);
 		if (handle == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return xexecExMod();
-		#endif
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecExMod();
+			#endif
 			
 		initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
 		if (init == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return xexecExMod();
-		#endif
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecExMod();
+			#endif
 			
-		xexecExMod mod = init();
+		xexecMod mod = init();
 		
 		if (dlclose(handle)!=0)
 			#ifndef NO_EX
@@ -419,14 +421,14 @@ xexec::performXExec(__execItemList &list) const
 	
 	//-------------------------------------------------------------------
 	
-	int 
+	xexecCounts 
 	xexec::_addExec(const std::string &module, 
 					void *obj, 
  					xexecObjTypeEnum type, 
 					void *data) const
 	{
 		if (handlesOpened == XEXEC_MAXMODULES)
-			return -1;
+			return xexecCounts();
 		
 		__execItem temp;
 		temp.data = data;
@@ -437,43 +439,58 @@ xexec::performXExec(__execItemList &list) const
 		
 		handles[handlesOpened] = dlopen(module.c_str(), RTLD_LAZY);
 		if (handles[handlesOpened] == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-		#else
-			return -1;
-		#endif
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecCounts();
+			#endif
 		
 		initXexecModule init = (initXexecModule)dlsym(handles[handlesOpened], "initXexecModule");
 		if (init == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return xexecCounts();
 			#endif	
 		
-		xexecExMod info = init();
+		xexecMod info = init();
 		
 		inExec in = (inExec)dlsym(handles[handlesOpened], info.hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return xexecCounts();
 			#endif
 	
 		
 		temp.func = in;
-		if (info.preExec)
-			preExec.exec.push_back(temp);
-		else
-			postExec.exec.push_back(temp);
+		
+		xexecCounts count;
+		
+		switch (info.execType)
+		{
+			case XEXECMODULE_PRE:
+				preExec.exec.push_back(temp);
+				count.pre = preExec.exec.size();
+				break;
+				
+			case XEXECMODULE_POST:
+				postExec.exec.push_back(temp);
+				count.post = postExec.exec.size();
+				break;
+				
+			case XEXECMODULE_BOTH:
+				preExec.exec.push_back(temp);
+				postExec.exec.push_back(temp);
+				count.post = postExec.exec.size();
+				count.pre = preExec.exec.size();
+				break;
+		}
 			
 		++handlesOpened;
 		
-		if (info.preExec)
-			return preExec.exec.size();
-		else
-			return postExec.exec.size();
+		return count;
 	}
 	
 	//-------------------------------------------------------------------

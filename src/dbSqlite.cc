@@ -302,7 +302,7 @@
 		
 			//-------------------------------------------------------------------
 			
-			int 
+			xexecCounts 
 			dbSqlite::addExec(const std::string &module, 
 								void *data) const
 			{

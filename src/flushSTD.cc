@@ -77,7 +77,7 @@ flushSTD::~flushSTD()
 		
 		//-------------------------------------------------------------------
 		
-		int 
+		xexecCounts 
 		flushSTD::addExec(const std::string &module, 
 							void *data) const
 		{

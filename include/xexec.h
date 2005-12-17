@@ -95,25 +95,49 @@ namespace dodo
 	#ifdef DL_EXT
 	
 		/**
+		 * @enum execTypeEnum defines what type of exec[pre/post] will be used for module
+		 */
+		enum execTypeEnum
+		{
+			XEXECMODULE_PRE,
+			XEXECMODULE_POST,
+			XEXECMODULE_BOTH,
+		};
+		/**
 		 * @struct xexecExMod must be returned from initXexecModule in the module
 		 */
-		struct xexecExMod
+		struct xexecMod
 		{
 			char name[20];///< name of module
 			char discription[40];///< discription of module
 			char hook[20];///< name of function in module that will be a hook
-			bool preExec;///< if true as preExec is set otherwise as postExec [OPTIONAL]; it doen't matter if you call method that specifies what type of hook it will be
+			execTypeEnum execType;///< type of execType to use; it is skipped if you define module in your program
 		};
 		
 		/**
 		 * @typedef describes function in module that must return info for the hook
 		 */
-		typedef xexecExMod (*initXexecModule)();
+		typedef xexecMod (*initXexecModule)();
 
 		/**
 		 * @typedef describes function in module that will be called during module unloading
 		 */
 		typedef void (*deinitXexecModule)();
+		
+		/**
+		 * @struct xexecCounts describes what position of pre or[and] post exec was set from module;
+		 * @note if not set = -1
+		 */
+		struct xexecCounts
+		{
+			/**
+			 * constructor
+			 */
+			xexecCounts();
+			
+			int pre;///< position of preExec
+			int post;///< position of postExec
+		}; 
 	
 	#endif
 	
@@ -201,7 +225,7 @@ namespace dodo
 				 * @param data is pointer to data that will pass to hook
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				virtual xexecCounts _addExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 			
 			#endif
 			
@@ -306,7 +330,7 @@ namespace dodo
 				 * @return info about module
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 */
-				static xexecExMod getModuleInfo(const std::string &module);
+				static xexecMod getModuleInfo(const std::string &module);
 			
 			#endif
 			

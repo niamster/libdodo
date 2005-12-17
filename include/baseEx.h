@@ -27,6 +27,12 @@
 
 #include <directives.h>
 
+#ifdef DL_EXT
+
+	#include <dlfcn.h>
+
+#endif	
+
 #include <string>
 
 #ifndef NO_EX
@@ -69,7 +75,32 @@
 		};	
 
 #define AM_MODULES 13
+
+		#ifdef DL_EXT
 		
+			/**
+			 * @struct xexecExMod must be returned from initExModule in the module
+			 */
+			struct exMod
+			{
+				char name[20];///< name of module
+				char discription[40];///< discription of module
+				char hook[20];///< name of function in module that will be a hook
+				errorModuleEnum module;///< type of errorModule to use; it is skipped if you define module in your program
+			};
+			
+			/**
+			 * @typedef describes function in module that must return info for the hook
+			 */
+			typedef exMod (*initExModule)();
+	
+			/**
+			 * @typedef describes function in module that will be called during module unloading
+			 */
+			typedef void (*deinitExModule)();
+		
+		#endif
+			
 		class baseEx;///< to make typedef before class declaration
 		
 		/**
@@ -97,6 +128,11 @@
 				 */			
 				baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
 				
+				/**
+				 * destructor
+				 */
+				~baseEx(); 
+				 
 				/**
 				 * @return string that describes error
 				 * 	catch(baseEx ex)
@@ -141,6 +177,25 @@
 				 * unset handlers on error for all modules
 				 */
 				static void unsetErrorHandlers();
+				
+				#ifdef DL_EXT
+				
+					/**
+					 * @return info about module
+					 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+					 */
+					static exMod getModuleInfo(const std::string &module);
+					
+					/**
+					 * set handler on error for specific module
+					 * @return false on error
+					 * @param module indicates for what module to set handler
+					 * @param handler is function that will be called when error occured[in catch]
+					 * @param data is data that will be passed to handler
+					 */
+					bool setErrorHandler(errorModuleEnum module, std::string path,	void *data);
+				
+				#endif				
 		};
 	};
 

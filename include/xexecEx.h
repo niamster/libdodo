@@ -42,8 +42,7 @@
 			#ifdef DL_EXT
 			
 				XEXEC_ADDXEXECMODULE,
-				XEXEC_GETMODULEINFO,
-				XEXEC_DESTRUCTOR
+				XEXEC_GETMODULEINFO
 				
 			#endif
 			

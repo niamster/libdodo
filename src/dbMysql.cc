@@ -459,7 +459,7 @@
 		
 			//-------------------------------------------------------------------
 			
-			int 
+			xexecCounts 
 			dbMysql::addExec(const std::string &module, 
 								void *data) const
 			{
