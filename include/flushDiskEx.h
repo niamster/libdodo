@@ -39,7 +39,6 @@
 		 */
 		enum flushDiskExR
 		{
-			FLUSHDISK_MEMORY_OVER = 1,
 			FLUSHDISK_WRONG_FILENAME,
 			FLUSHDISK_CANNOT_OVEWRITE,
 			FLUSHDISK_DESTINATION_EXISTS,
@@ -47,8 +46,7 @@
 		
 		/**
 		 * libdodo defined errors' explanation
-		 */		
-		#define FLUSHDISK_MEMORY_OVER_STR "Not anough memmory"
+		 */
 		#define FLUSHDISK_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 		#define FLUSHDISK_CANNOT_OVEWRITE_STR "You set option not to overwrite, but try to do that =)"
 		#define FLUSHDISK_DESTINATION_EXISTS_STR "Destination file/dir/etc. exists. Won't overvrite"
@@ -63,8 +61,6 @@
 			FLUSHDISK_READ,
 			FLUSHDISK_WRITE,
 			FLUSHDISK_FLUSH,
-			FLUSHDISK_READSTRING,
-			FLUSHDISK_ERASE,
 			FLUSHDISK_UNLINK,
 			FLUSHDISK_RENAME,
 			FLUSHDISK_LINK,

@@ -191,12 +191,6 @@ flushSTD::read(char * const a_void) const
 flushSTD::readString(std::string &a_str) const
 {
 	register char *data = new char[inSize+1];
-	if (data == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTRING,ERR_LIBDODO,FLUSHSTD_MEMORY_OVER,FLUSHSTD_MEMORY_OVER_STR,__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
 		
 	memset(data,0,inSize);
 

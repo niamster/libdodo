@@ -33,20 +33,6 @@
 
 	namespace dodo
 	{	
-		
-		/**
-		 * libdodo defined errors
-		 */
-		enum flushSTDExR
-		{
-			FLUSHSTD_MEMORY_OVER = 1,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */			
-		#define FLUSHSTD_MEMORY_OVER_STR "Not anough memmory"
-		
 		/**
 		 * ID of function where exception was thrown
 		 */			

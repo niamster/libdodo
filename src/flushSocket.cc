@@ -1452,12 +1452,6 @@ flushSocketExchange::recieveString(std::string &data,
 								bool urgent) const
 {	
 	register char *t_data = new char[inSize+1];
-	if (t_data == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHSOCKET_RECIEVESTRING,ERR_LIBDODO,FLUSHSOCKET_MEMORY_OVER,FLUSHSOCKET_MEMORY_OVER_STR,__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
 		
 	memset(t_data,0,inSize);
 

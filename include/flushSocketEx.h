@@ -42,7 +42,6 @@
 		 */
 		enum flushSocketExR
 		{
-			FLUSHSOCKET_MEMORY_OVER = 1,
 			FLUSHSOCKET_NO_SOCKET_CREATED,
 			FLUSHSOCKET_CANNOT_BIND,
 			FLUSHSOCKET_CANNOT_CONNECT,
@@ -56,7 +55,6 @@
 		 * libdodo defined errors' explanation
 		 */			
 		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR "No socket was created =(."
-		#define FLUSHSOCKET_MEMORY_OVER_STR "Not anough memmory"
 		#define FLUSHSOCKET_CANNOT_BIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
 		#define FLUSHSOCKET_CANNOT_CONNECT_STR "You cannot <connect> with this constructor; choose another one!"
 		#define FLUSHSOCKET_CANNOT_ACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
@@ -84,7 +82,6 @@
 			FLUSHSOCKET_SETLOCALNAME,
 			FLUSHSOCKET_ACCEPT,
 			FLUSHSOCKET_SEND,
-			FLUSHSOCKET_RECIEVESTRING,
 			FLUSHSOCKET_RECIEVE,
 			FLUSHSOCKET_GETLOCALNAME,
 			FLUSHSOCKET_GETSERVICEINFO,

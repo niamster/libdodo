@@ -336,14 +336,7 @@ tools::trim(const std::string &data,
 		in = buffer.size();
 		out = in*2;
 		char *outBuffer = new char[out];
-		if (outBuffer==NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSION,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-			#else
-				return buffer;
-			#endif
-			
-		
+				
 		inFake = (char *)buffer.c_str();
 		outFake = outBuffer;
 		
@@ -378,12 +371,6 @@ tools::trim(const std::string &data,
 		in = buffer.size();
 		out = in*2;
 		char *outBuffer = new char[out];
-		if (outBuffer == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_RECODESETCONVERSION,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-			#else
-				return buffer;
-			#endif
 					
 		inFake = (char *)buffer.c_str();
 		outFake = outBuffer;
@@ -434,12 +421,6 @@ tools::trim(const std::string &data,
 			strm.next_in = (Bytef *)buffer.c_str();
 			
 			byteBuf = new Bytef[ZLIB_CHUNK];
-			if (byteBuf == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESS,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-			#else
-				return buffer;
-			#endif
 			
 			strBuf.clear();
 
@@ -489,12 +470,6 @@ tools::trim(const std::string &data,
 
 
 			byteBuf = new Bytef[ZLIB_CHUNK];
-			if (byteBuf == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESS,ERR_LIBDODO,TOOLS_MEMORY_OVER,TOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-			#else
-				return buffer;
-			#endif
 
 			strm.avail_in = buffer.size();
 			strm.next_in = (Bytef *)buffer.c_str();

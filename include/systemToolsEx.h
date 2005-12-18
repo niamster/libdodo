@@ -39,7 +39,6 @@
 		 */
 		enum systemExR
 		{
-			SYSTEMTOOLS_MEMORY_OVER = 1,
 			SYSTEMTOOLS_WRONG_PARAMETHER,
 		};
 		

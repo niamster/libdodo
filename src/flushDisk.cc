@@ -332,12 +332,6 @@ flushDisk::readString(std::string &a_str,
 				unsigned long a_pos) const
 {
 	register char *data = new char[inSize+1];
-	if (data == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTRING,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
 		
 	memset(data,0,inSize);
 
@@ -400,12 +394,6 @@ flushDisk::write(const char *const a_buf,
 		if (!over && !append)
 		{		
 			register char *t_buffer = new char[outSize*size_of_char];
-			if (t_buffer == NULL)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);	
-				#else
-					return false;
-				#endif
 				
 			if (fseek(file,a_pos,SEEK_SET) == -1)
 				#ifndef NO_EX
@@ -498,13 +486,7 @@ flushDisk::write(const char *const a_buf,
 #endif 
 flushDisk::erase(unsigned long a_pos)
 {
-	register char *empty = new char;
-	if (empty == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_ERASE,ERR_LIBDODO,FLUSHDISK_MEMORY_OVER,FLUSHDISK_MEMORY_OVER_STR,__LINE__,__FILE__);	
-		#else
-			return false;
-		#endif		
+	register char *empty = new char;		
 
 	#ifdef NO_EX
 		register bool result = 
@@ -625,11 +607,11 @@ flushDisk::symlink(const std::string &oldPath,
 				#endif
 			else
 				if (::unlink(newPath.c_str()) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
-				#else
-					return false;
-				#endif				
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_SYMLINK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+					#else
+						return false;
+					#endif				
 	}
 
 	if (::symlink(oldPath.c_str(),newPath.c_str()) == -1)

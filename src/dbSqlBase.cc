@@ -236,13 +236,7 @@ dbSqlBase::selectCollect() const
 	if (pre_table.size()>0)
 	{
 		temp.append(tools::implode(pre_fieldsNames,","));
-		t_request = new char[temp.size()+pre_table.size()+14];	
-		if (t_request == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_SELECTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
-			#else
-				return ;
-			#endif		
+		t_request = new char[temp.size()+pre_table.size()+14];		
 
 		sprintf(t_request,"select %s from %s",temp.c_str(),pre_table.c_str());		
 		
@@ -292,12 +286,6 @@ dbSqlBase::insertCollect() const
 		temp_.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
 	
 	t_request = new char[temp.size()+temp_.size()+fieldsPart.size()+22];
-	if (t_request == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_INSERTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
-		#else
-			return ;
-		#endif	
 	
 	sprintf(t_request,"insert %s into %s values %s",temp.c_str(),temp_.c_str(),fieldsPart.c_str());
 	
@@ -324,12 +312,6 @@ dbSqlBase::insertSelectCollect() const
 	tempS.append(fieldsPartFrom);
 		
 	t_request = new char[temp.size()+pre_tableTo.size()+fieldsPartTo.size()+tempS.size()+pre_table.size()+35];
-	if (t_request == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_INSERTSELECTCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
-		#else
-			;
-		#endif	
 	
 	sprintf(t_request,"insert %s into %s (%s) select %s from %s",temp.c_str(),pre_tableTo.c_str(),fieldsPartTo.c_str(),tempS.c_str(),pre_table.c_str());
 	
@@ -355,12 +337,6 @@ dbSqlBase::updateCollect() const
 	temp.append(pre_table);
 
 	t_request = new char[temp.size()+setPart.size()+13];	
-	if (t_request == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_UPDATECOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
-		#else
-			return ;
-		#endif
 	
 	sprintf(t_request,"update %s set %s",temp.c_str(),setPart.c_str());
 
@@ -378,12 +354,6 @@ dbSqlBase::delCollect() const
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 	
 	t_request = new char[pre_table.size()+temp.size()+14];
-	if (t_request == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_DELCOLLECT,ERR_LIBDODO,DBSQLBASE_MEMORY_OVER,DBSQLBASE_MEMORY_OVER_STR,__LINE__,__FILE__);	
-		#else
-			return ;
-		#endif
 		
 	sprintf(t_request,"delete %s from %s",temp.c_str(),pre_table.c_str());
 	

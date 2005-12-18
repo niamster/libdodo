@@ -226,13 +226,7 @@ cgiTools::makePost() const
 		#endif
 	
 	register int cl = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
-	register char *post = new char[(cl+1)*size_of_char];
-	if (post == NULL)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-		#else
-			return false;
-		#endif	
+	register char *post = new char[(cl+1)*size_of_char];	
 	
 	fread(post,cl,1,stdin);
 	
@@ -255,18 +249,6 @@ cgiTools::makePost() const
 
 		register unsigned int temp1;
 		char *ptr = new char[strlen(post_files_tmp_dir)+17];
-		if (ptr == NULL)
-			#ifndef NO_EX
-			{
-				delete [] post;	
-				throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_LIBDODO,CGITOOLS_MEMORY_OVER,CGITOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-			}
-			#else
-			{
-				delete [] post;	
-				return false;
-			}
-		#endif
 		
 		for (;i!=j;++i)
 			if (i->find("filename")!=std::string::npos)///file

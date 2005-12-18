@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexpToolsEx.h
+ *            toolsEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _REGEXPTOOLSEX_H_
-#define _REGEXPTOOLSEX_H_
+#ifndef _TOOLSEX_H_
+#define _TOOLSEX_H_
 
 #include <directives.h>
 
@@ -35,27 +35,28 @@
 	{
 		
 		/**
-		 * libdodo defined errors
-		 */
-		enum regexpToolsExR
-		{
-			REGEXPTOOLS_MEMORY_OVER = 1
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */			
-		#define REGEXPTOOLS_MEMORY_OVER_STR "Not anough memmory"
-		
-		/**
 		 * ID of function where exception was thrown
-		 */					
-		enum regexpToolsFunctionsID
+		 */			
+		enum toolsFunctionsID
 		{
-			REGEXPTOOLS_BOUNDMATCH,
 			
+			#ifdef CODECONV_EXT
+			
+				TOOLS_CODESETCONVERSION,
+				TOOLS_RECODESETCONVERSION,
+				TOOLS_CODESET,
+			
+			#endif
+			
+			#ifdef ZLIB_EXT
+			
+			
+				TOOLS_ZCOMPRESS,
+				TOOLS_ZDECOMPRESS,
+			
+			#endif
 		};
 	};
 
 #endif
-#endif /*REGEXPTOOLSEX_H_*/
+#endif /*_TIMETOOLSEX_H_*/

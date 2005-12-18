@@ -95,12 +95,6 @@ regexpTools::boundMatch(const std::string &sample) const
 		subs += 3;
 		
 		register int *oVector = new int[subs];
-		if (oVector == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_REGEXPTOOLS,REGEXPTOOLS_BOUNDMATCH,ERR_LIBDODO,REGEXPTOOLS_MEMORY_OVER,REGEXPTOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
 			
 		register int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 		if (rc<=0)
@@ -137,12 +131,6 @@ regexpTools::boundMatch(const std::string &sample) const
 	
 		subs = code.re_nsub+1;
 		regmatch_t *pmatch = new regmatch_t[subs];
-		if (pmatch == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_REGEXPTOOLS,REGEXPTOOLS_BOUNDMATCH,ERR_LIBDODO,REGEXPTOOLS_MEMORY_OVER,REGEXPTOOLS_MEMORY_OVER_STR,__LINE__,__FILE__);
-			#else
-				return false;
-			#endif	
 				
 		res = regexec(&code,sample.c_str(),subs,pmatch,0);
 		if (res != 0)
@@ -150,6 +138,7 @@ regexpTools::boundMatch(const std::string &sample) const
 			delete [] pmatch;
 			return false;
 		}
+		
 		for (register int i(1); i<subs;++i)
 		{
 			bound.begin = pmatch[i].rm_so;

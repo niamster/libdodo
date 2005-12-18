@@ -29,7 +29,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <regexpToolsEx.h>
 
 #ifdef PCRE_EXT
 	

@@ -29,7 +29,6 @@
 
 #include <tools.h>
 #include <types.h>
-#include <cgiToolsEx.h>
 
 #ifndef _CGITOOLS_H_
 #define _CGITOOLS_H_

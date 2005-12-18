@@ -42,14 +42,12 @@
 		 */
 		enum dbSqlBaseExR
 		{
-			DBSQLBASE_MEMORY_OVER = 1,///not enough memmory
 			DBSQLBASE_EMPTY_REQUEST
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
-		 */			
-		#define DBSQLBASE_MEMORY_OVER_STR "Not anough memmory"
+		 */
 		#define DBSQLBASE_EMPTY_REQUEST_STR "Query is empty. are you sure?"
 		
 		/**
@@ -57,11 +55,6 @@
 		 */			
 		enum flushSocketFunctionsID
 		{
-			DBSQLBASE_SELECTCOLLECT,
-			DBSQLBASE_INSERTCOLLECT,
-			DBSQLBASE_INSERTSELECTCOLLECT,
-			DBSQLBASE_UPDATECOLLECT,
-			DBSQLBASE_DELCOLLECT,
 			DBSQLBASE_QUERYCOLLECT
 			
 		};
