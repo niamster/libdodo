@@ -22,6 +22,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#ifndef _CGITOOLS_H_
+#define _CGITOOLS_H_
+
 #include <string.h>
 #include <stdlib.h>
 
@@ -29,9 +32,7 @@
 
 #include <tools.h>
 #include <types.h>
-
-#ifndef _CGITOOLS_H_
-#define _CGITOOLS_H_
+#include <dodoMap.h>
 
 namespace dodo
 {
@@ -170,31 +171,7 @@ namespace dodo
 	{
 		
 		public:
-								
-			/**
-			 * @class __method is a duck for std::map<std::string, std::string> but controlling varName
-			 * if varName's value is not defined - '_undefined_' will be returned
-			 */
-			class __method
-			{
-				friend class cgiTools;
-				
-				public:
-				
-					/**
-					 * @return value by hash or '_undefined_' if not found
-					 * @param varName value of hash that points to the value
-					 */
-					std::string operator[](const std::string &varName);
-					
-				protected:
-					
-					assocArr::iterator i;///< iterator for methodArr(from begin)
-					assocArr::iterator j///< iterator for methodArr(indicates end)
-					;
-					assocArr methodArr;///< real array
-			};
-		
+			
 			/**
 			 * constructor
 			 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.
@@ -225,15 +202,15 @@ namespace dodo
 			 * @param method is indicates what reference would be returned
 			 * example: classObj[POST]["name"]
 			 */
-			virtual dodo::cgiTools::__method &operator[](requestMethodEnum method) const;
+			virtual dodoMap &operator[](requestMethodEnum method) const;
 			
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)
 			 */
-			mutable __method METHOD_POST;///< array of POST variables
-			mutable __method METHOD_GET;///< array of GET variables
-			mutable __method ENVIRONMENT;///< environment variables
-			mutable __method COOKIES;///< coockes sent by browser
+			mutable dodoMap METHOD_POST;///< array of POST variables
+			mutable dodoMap METHOD_GET;///< array of GET variables
+			mutable dodoMap ENVIRONMENT;///< environment variables
+			mutable dodoMap COOKIES;///< coockes sent by browser
 			
 			/**
 			 * @return value of requested variable from POST or GET
@@ -326,7 +303,7 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(__method &val, const std::string &string, char *delim = "&") const;
+			virtual void make(assocArr &val, const std::string &string, char *delim = "&") const;
 		
 		private:	
 		

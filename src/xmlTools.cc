@@ -246,7 +246,7 @@
 			{
 				getNodeInfo(node,sample);
 				
-				getAttributes(definition,node,sample.attributes);
+				getAttributes(definition,node,sample.attributes.realArr);
 				
 				std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
 				for (;i!=j;++i)
@@ -329,8 +329,8 @@
 		
 			getNodeInfo(node,sample);
 
-			sample.attributes.clear();
-			getAttributes(definition,node,sample.attributes);
+			sample.attributes.realArr.clear();
+			getAttributes(definition,node,sample.attributes.realArr);
 	
 			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
 			
@@ -506,7 +506,7 @@
 										
 			getNodeInfo(node,one);
 			
-			getAttributes(node,one.attributes);
+			getAttributes(node,one.attributes.realArr);
 			
 			one.children.push_back(parse(node->children));
 			
@@ -525,7 +525,7 @@
 	void 
 	xmlTools::initNode(__node &node)
 	{
-		node.attributes.clear();
+		node.attributes.realArr.clear();
 		node.children.clear();
 		node.name.clear();
 		node.ns.clear();

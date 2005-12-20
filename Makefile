@@ -21,7 +21,8 @@ OBJECTS=dbBase.o \
 		systemTools.o \
 		timeTools.o \
 		xmlTools.o \
-		dbSqlite.o
+		dbSqlite.o \
+		dodoMap.o
 
 ###########################################################
 
@@ -59,12 +60,12 @@ $(LIBRARY): $(OBJECTS)
 	@echo "Now you can run 'make install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
 .cc.o:
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -Wall -fPIC -c $^
-	#strip -d $@
+	strip -d $@
 
 install:
-	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include
+	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include/libdodo
 	cp lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/
-	cp -rf include/* $(PREFIX)/include/
+	cp -rf include/* $(PREFIX)/include/libdodo/
 	ln -fs $(PREFIX)/lib/lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/lib$@.so
 	@echo ""
 	@echo ""

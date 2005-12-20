@@ -26,25 +26,6 @@
 
 using namespace dodo;
 
-//-------------------------------------------------------------------
-
-#define __UNDEFINED__ "_undefined_"
-
-std::string
-cgiTools::__method::operator [](const std::string &varName)
-{
-	i = methodArr.begin();
-	j = methodArr.end();
-	
-	for (;i!=j;++i)
-		if (strcmp(varName.c_str(),i->first.c_str()) == 0)
-			return i->second;
-			
-	return __UNDEFINED__;
-}
-
-//-------------------------------------------------------------------
-
 __cookies::__cookies(const std::string &a_name, 
 					const std::string &a_value, 
 					const std::string &a_exDate, 
@@ -80,8 +61,8 @@ cgiTools::cgiTools(bool silent,
 	detectMethod();
 
 	makePost();
-	make(COOKIES,ENVIRONMENT["HTTP_COOKIE"],"; ");
-	make(METHOD_GET,ENVIRONMENT["QUERY_STRING"]);
+	make(COOKIES.realArr,ENVIRONMENT["HTTP_COOKIE"],"; ");
+	make(METHOD_GET.realArr,ENVIRONMENT["QUERY_STRING"]);
 }
 
 //-------------------------------------------------------------------
@@ -128,18 +109,19 @@ cgiTools::getMethod() const
 //-------------------------------------------------------------------
 
 void 
-cgiTools::make(__method &val,
+cgiTools::make(assocArr &val,
 			const std::string &string,
 			char *delim) const
 {
 	stringArr getPair = tools::explode(string,delim);
 	stringArr::iterator i(getPair.begin()), j(getPair.end());
 	stringArr temp;
+	
 	for(;i!=j;++i)
 	{
 		temp = tools::explode(*i,&decode64,"=");
 		if (temp.size() > 1)
-			val.methodArr[temp[0]] = temp[1];
+			val[temp[0]] = temp[1];
 	}	
 }
 
@@ -155,7 +137,7 @@ cgiTools::makeEnv() const
 	for (register int i=0;i<len;++i)
 	{
 		env = getenv(HTTP_ENV[i].str);
-		ENVIRONMENT.methodArr[HTTP_ENV[i].str] = (env==NULL)?__UNDEFINED__:env;
+		ENVIRONMENT.realArr[HTTP_ENV[i].str] = (env==NULL)?__UNDEFINED__:env;
 	}
 }
 
@@ -232,7 +214,7 @@ cgiTools::makePost() const
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
 	{
-		make(METHOD_POST,post);
+		make(METHOD_POST.realArr,post);
 		delete [] post;	
 	}
 	else
@@ -317,7 +299,7 @@ cgiTools::makePost() const
 				temp0 += 6;		
 				temp1 = i->find("\"",temp0);
 								
-				METHOD_POST.methodArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);///damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
+				METHOD_POST.realArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);///damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
 	}	
 }
@@ -457,7 +439,7 @@ cgiTools::getFile(const std::string &varName) const
 
 //-------------------------------------------------------------------
 
-dodo::cgiTools::__method &
+dodoMap &
 cgiTools::operator[](requestMethodEnum method) const
 {
 	if (method == POST)

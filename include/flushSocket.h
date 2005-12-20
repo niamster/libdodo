@@ -40,6 +40,9 @@
 #include <sys/un.h>
 #include <sys/socket.h>
 
+#include <net/if.h>
+#include <sys/ioctl.h>
+
 namespace dodo
 {	
 	
@@ -82,13 +85,13 @@ namespace dodo
 	 */
 	 enum socketOptionsEnum
 	 {
-	 	SOCKET_KEEP_ALIVE=2,///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-	 	SOCKET_REUSE_ADDRESS=4,///<  should allow reuse of local addresses	
-	 	SOCKET_DONOT_USE_GATEWAY=8,///< Requests  that outgoing messages bypass the standard routing facilities.	
-	 	SOCKET_BROADCAST=16,///< Permits  sending of broadcast messages, if this is supported by the protocol. 	
-	 	SOCKET_OOB_INLINE=32,///< out-of-band(marked urgent) data keep inline in recieve operation
+	 	SOCKET_KEEP_ALIVE=1,///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+	 	SOCKET_REUSE_ADDRESS,///<  should allow reuse of local addresses	
+	 	SOCKET_DONOT_USE_GATEWAY,///< Requests  that outgoing messages bypass the standard routing facilities.	
+	 	SOCKET_BROADCAST,///< Permits  sending of broadcast messages, if this is supported by the protocol. 	
+	 	SOCKET_OOB_INLINE,///< out-of-band(marked urgent) data keep inline in recieve operation
 	 	#ifdef SO_REUSEPORT
-		 	SOCKET_REUSE_PORT=512,
+		 	SOCKET_REUSE_PORT,
 		#endif
 	 };
 	 
@@ -100,6 +103,20 @@ namespace dodo
 	 	SOCKET_GRACEFUL_CLOSE,///< close returns immediately, but any unsent data is transmitted (after close returns).
 	 	SOCKET_HARD_CLOSE,///< close returns immediately, and any unsent data is discarded.
 	 	SOCKET_WAIT_CLOSE,///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+	 };
+	 
+	 /**
+	  * @struct __ifInfo describes interface info
+	  */
+	 struct __ifInfo
+	 {
+	 	std::string address;///< ip address of the interface
+	 	std::string breadcast;///< broadcast address of the interface
+	 	std::string netmask;///< netmask of the interface
+	 	std::string hwaddr;///< harware address of the interface(MAC)
+	 	
+	 	bool up;///< true if interface is up
+	 	bool loop;///< true is a loopback
 	 };
 	 
 	 /**
@@ -471,13 +488,14 @@ namespace dodo
 			 * connect. for server part
 			 * @param path is path to unix socket
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
+			 * @note if socket is already created and force = true and it's a socket - delete it!!
 			 */						
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const std::string &path, int numberOfConnections, bool force = false);///if socket is already created and force = true and it's a socket - delete it!!			
+							bindNListen(const std::string &path, int numberOfConnections, bool force = false);	
 			
 			/**
 			 * accepts incommin' connections(as for server)
@@ -497,6 +515,11 @@ namespace dodo
 			 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
 			 */
 			virtual bool accept(__initialAccept &init) const;
+			
+			/**
+			 * @return info abou interface
+			 */
+			static __ifInfo getInterfaceInfo(const std::string &interface);
 			
 			/**
 			 * @return info about given host

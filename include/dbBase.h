@@ -59,7 +59,7 @@ namespace dodo
 	 */
 	enum qStEnum
 	{
-		UNION,
+		UNION = 1,
 		UNION_ALL,
 		MINUS,
 		INTERSECT,
@@ -268,7 +268,7 @@ namespace dodo
 	 */
 	enum refFieldEnum
 	{
-		RESTRICT = 0,///< does not allow the action of any of those parent rows
+		RESTRICT = 1,///< does not allow the action of any of those parent rows
 		CASCADE,///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
 		SET_NULL,///< sets NULL on the action of any of those parent rows indicates on set action
 		NO_ACTION,///< noacton on the action of any of those parent rows indicates on set action

@@ -34,7 +34,11 @@ int main(int argc, char **argv)
 	
 //#define DATAGRAM	
 	try
-	{		
+	{	
+		
+		cout << flushSocket::getInterfaceInfo("lo").hwaddr << endl;
+		cout << flushSocket::getInterfaceInfo("eth0").address << endl;
+			
 		flushSocket sock(true,/*PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//**/PROTO_FAMILY_UNIX_SOCKET,TRANSFER_TYPE_STREAM);
 		
 		
@@ -54,7 +58,7 @@ int main(int argc, char **argv)
 		
 		//sock.bindNListen("127.0.0.1",7777,2);
 		//sock.bindNListen("::",7777);
-		sock.bindNListen("./sock",true);
+		sock.bindNListen("./sock",10,true);
 		
 		flushSocketExchange conn1;
 		int i = 0;

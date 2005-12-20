@@ -169,11 +169,11 @@ flushSocket::makeSocket()
 	
 	socket = ::socket(real_domain,real_type,0);
 	if (socket == -1)
-	#ifndef NO_EX
-		throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-	#else
-		return false;			
-	#endif	
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;			
+		#endif	
 	
 	#ifdef NO_EX
 		return true;
@@ -343,7 +343,7 @@ flushSocket::getHostInfo(const std::string &host)
 		switch (ent->h_addrtype)
 		{
 			case AF_INET:
-				if (inet_ntop(AF_INET,ent->h_addr_list[i],temp,15)==NULL)
+				if (inet_ntop(AF_INET,ent->h_addr_list[i],temp,INET_ADDRSTRLEN)==NULL)
 					continue;
 					
 			case AF_INET6:
@@ -548,10 +548,10 @@ flushSocket::bindNListen(const std::string &path,
 			struct stat st;
             if (::lstat(path.c_str(),&st) != -1)
 				if (S_ISSOCK(st.st_mode))
-					flushDisk::unlink(path);
+					flushDisk::unlink(path,true);
 				else
 					#ifndef NO_EX
-							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_FILENAME,FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_FILENAME,FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);
 					#else
 						return false;	
 					#endif
@@ -590,8 +590,97 @@ flushSocket::bindNListen(const std::string &path,
 			return true;
 		#endif		
 	}
-	
 
+//-------------------------------------------------------------------
+
+__ifInfo 
+flushSocket::getInterfaceInfo(const std::string &interface)
+{
+	register int socket = ::socket(PF_INET,SOCK_DGRAM,0);
+	if (socket == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __ifInfo();			
+		#endif
+		
+	ifreq ifr;
+	strcpy(ifr.ifr_name,interface.c_str());
+		
+	__ifInfo info;
+	char add[INET6_ADDRSTRLEN];
+	
+	sockaddr_in sin;
+	
+	if (::ioctl(socket,SIOCGIFADDR,&ifr) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __ifInfo();			
+		#endif
+	
+	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_addr,sizeof(sockaddr));
+	
+	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
+		info.address = add;
+			
+	if (::ioctl(socket,SIOCGIFNETMASK,&ifr) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return info;			
+		#endif
+	
+	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_netmask,sizeof(sockaddr));
+	
+	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
+		info.netmask = add;
+	
+	if (::ioctl(socket,SIOCGIFBRDADDR,&ifr) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return info;			
+		#endif
+	
+	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_broadaddr,sizeof(sockaddr));
+	
+	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
+		info.breadcast = add;
+
+	if (::ioctl(socket,SIOCGIFHWADDR,&ifr) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return info;			
+		#endif
+	
+	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_hwaddr,sizeof(sockaddr));
+	
+	sprintf(add,"%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",ifr.ifr_ifru.ifru_hwaddr.sa_data[0]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[1]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[2]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[3]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[4]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[5]&0xff);
+					
+	info.hwaddr = add;
+
+	if (::ioctl(socket,SIOCGIFFLAGS,&ifr) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return info;			
+		#endif
+	
+	if ((IFF_LOOPBACK&ifr.ifr_ifru.ifru_flags) == IFF_LOOPBACK)
+		info.loop = true;
+
+	if ((IFF_UP&ifr.ifr_ifru.ifru_flags) == IFF_UP)
+		info.up = true;
+		
+	return info;
+}
 //-------------------------------------------------------------------
 
 std::string 
@@ -720,8 +809,8 @@ flushSocket::accept(__initialAccept &init,
 						return false;
 					#endif
 				
-				char temp[15];
-				if (inet_ntop(AF_INET,&(sa.sin_addr),temp,15) != NULL)
+				char temp[INET_ADDRSTRLEN];
+				if (inet_ntop(AF_INET,&(sa.sin_addr),temp,INET_ADDRSTRLEN) != NULL)
 					info.host.assign(temp);
 				info.port = ntohs(sa.sin_port);
 			}
@@ -1146,9 +1235,9 @@ flushSocketOptions::setSockOption(socketOptionsEnum option,
 		#endif	
 	
 	if (!flag)
-		removeF(socketOpts,option);
+		removeF(socketOpts,1<<option);
 	else
-		addF(socketOpts,option);	
+		addF(socketOpts,1<<option);	
 		
 	#ifdef NO_EX
 		return true;

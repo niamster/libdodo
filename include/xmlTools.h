@@ -35,6 +35,8 @@
 	#include <libxml/parser.h>
 
 	#include <types.h>
+	#include <dodoMap.h>	
+
 	#include <xmlToolsEx.h>
 	
 	namespace dodo
@@ -50,7 +52,7 @@
 			
 			std::vector< std::vector<__node> > children;///< vector of children's realisation;
 			
-			assocArr attributes;///< hash of attributes
+			dodoMap attributes;///< hash of attributes
 			
 			std::string value;///< value of the node
 			

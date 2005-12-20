@@ -43,6 +43,11 @@
  */
 
 /**
+ * value for undefined node of dodoMap
+ */
+#define __UNDEFINED__ "_undefined_"
+
+/**
  * size of block to use with zLib de/compression
  */
 #define ZLIB_CHUNK 100
