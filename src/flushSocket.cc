@@ -50,6 +50,7 @@ flushSocket::flushSocket(flushSocket &fs)
 flushSocket::flushSocket(bool a_server, 
 						socketProtoFamilyEnum a_family, 
 						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
+						blockInherited(false),
 						server(a_server)
 {
 
@@ -234,7 +235,8 @@ flushSocket::connect(const std::string &host,
 			#endif
 	}
 	
-	exchange.init(socket);
+	exchange.blocked = blocked;
+	exchange.init(socket,blockInherited);
 	
 	opened = true;
 			
@@ -298,8 +300,9 @@ flushSocket::connect(const std::string &path,
 		#else			
 			return false;		
 		#endif	
-	
-	exchange.init(socket);
+		
+	exchange.blocked = blocked;
+	exchange.init(socket,blockInherited);
 
 	opened = true;
 		
@@ -780,6 +783,8 @@ flushSocket::accept(__initialAccept &init,
 		init.socket = socket;
 		init.type = type;
 		init.family = family;
+		init.blocked = blocked;
+		init.blockInherited = blockInherited;
 			
 		return true;
 	}
@@ -804,7 +809,12 @@ flushSocket::accept(__initialAccept &init,
 				
 				if (sock == -1)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					{
+						if (errno == EINVAL || errno == EWOULDBLOCK)
+							return false;
+						else
+							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					}
 					#else
 						return false;
 					#endif
@@ -826,7 +836,12 @@ flushSocket::accept(__initialAccept &init,
 	
 				if (sock == -1)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					{
+						if (errno == EINVAL || errno == EWOULDBLOCK)
+							return false;
+						else
+							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					}
 					#else
 						return false;
 					#endif
@@ -842,7 +857,12 @@ flushSocket::accept(__initialAccept &init,
 			sock = ::accept(socket,NULL,NULL);
 			if (sock == -1)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					{
+						if (errno == EINVAL || errno == EWOULDBLOCK)
+							return false;
+						else
+							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					}
 				#else
 					return false;
 				#endif				
@@ -859,7 +879,9 @@ flushSocket::accept(__initialAccept &init,
 	init.socket = sock;
 	init.type = type;
 	init.family = family;
-			
+	init.blocked = blocked;
+	init.blockInherited = blockInherited;
+					
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
 	#endif
@@ -889,6 +911,8 @@ flushSocket::accept(__initialAccept &init) const
 		init.socket = socket;
 		init.type = type;
 		init.family = family;
+		init.blocked = blocked;
+		init.blockInherited = blockInherited;
 		
 		return true;
 	}			
@@ -901,10 +925,14 @@ flushSocket::accept(__initialAccept &init) const
 		#endif
 	
 	register int sock = ::accept(socket,NULL,NULL);
-
 	if (sock == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		{
+			if (errno == EINVAL || errno == EWOULDBLOCK)
+				return false;
+			else
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
 		#else
 			return false;
 		#endif
@@ -912,7 +940,9 @@ flushSocket::accept(__initialAccept &init) const
 	init.socket = sock;
 	init.type = type;
 	init.family = family;
-			
+	init.blocked = blocked;
+	init.blockInherited = blockInherited;
+	
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
 	#endif
@@ -932,10 +962,12 @@ flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 	inSocketBuffer = fse.inSocketBuffer;
 	outSocketBuffer = fse.outSocketBuffer;
 	lingerOpts = fse.lingerOpts;
+	blocked = fse.blocked;
 	
 	opened = fse.opened;
 	
 	fse.opened = false;
+	fse.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -949,7 +981,8 @@ flushSocketOptions::flushSocketOptions(socketProtoFamilyEnum a_family,
 																	outTimeout(SEND_TIMEOUT),
 																	inSocketBuffer(SOCKET_INSIZE),
 																	outSocketBuffer(SOCKET_OUTSIZE),
-																	socket(-1)
+																	socket(-1),
+																	blocked(false)
 {
 }
 
@@ -961,7 +994,8 @@ flushSocketOptions::flushSocketOptions(): lingerOpts(SOCKET_LINGER_OPTION),
 										outTimeout(SEND_TIMEOUT),
 										inSocketBuffer(SOCKET_INSIZE),
 										outSocketBuffer(SOCKET_OUTSIZE),
-										socket(-1)
+										socket(-1),
+										blocked(false)
 {
 }
 
@@ -981,8 +1015,17 @@ flushSocketExchange::flushSocketExchange()
 
 flushSocketExchange::flushSocketExchange(__initialAccept &a_init)
 {
-	init(a_init.socket);
+	init(a_init.socket,a_init.blockInherited);
 }
+
+//-------------------------------------------------------------------
+
+bool 
+flushSocketOptions::isBlocked()
+{
+	return blocked;
+}
+
 //-------------------------------------------------------------------
 
 flushSocketExchange::~flushSocketExchange()
@@ -998,7 +1041,47 @@ flushSocketExchange::init(__initialAccept &a_init)
 	family = a_init.family;
 	type = a_init.type;
 	
-	init(a_init.socket);
+	blocked = a_init.blocked;
+	
+	init(a_init.socket, a_init.blockInherited);
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketOptions::block(bool flag)
+{
+	int block = O_NONBLOCK;
+	
+	if (!flag)
+	{
+		block = fcntl(socket,F_GETFL);
+		if (block == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;		
+			#endif		
+		
+		block &= ~O_NONBLOCK;
+	}
+	
+	if (fcntl(socket,F_SETFL,block)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;		
+		#endif		
+
+	blocked = flag;
+	
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -1011,10 +1094,10 @@ flushSocketExchange::init(__initialAccept &a_init)
 flushSocketOptions::setInBufferSize(int bytes)
 {
 	if (socket == -1)
-		#ifdef NO_EX
-			return false;
-		#else
+		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SETINBUFFERSIZE,ERR_LIBDODO,FLUSHSOCKET_NO_SOCKET_CREATED,FLUSHSOCKET_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
+		#else
+			return false;
 		#endif
 	
 	inSocketBuffer = bytes;
@@ -1314,11 +1397,11 @@ flushSocketExchange::close() const
 	#endif
 	
 	if (!opened)
-	#ifndef NO_EX
-		return ;
-	#else
-		return true;
-	#endif
+		#ifndef NO_EX
+			return ;
+		#else
+			return true;
+		#endif
 	
 	#ifdef NO_EX
 		register bool result = 
@@ -1339,7 +1422,8 @@ flushSocketExchange::close() const
 //-------------------------------------------------------------------
 
 void 
-flushSocketExchange::init(int a_socket)
+flushSocketExchange::init(int a_socket, 
+						bool blockInherited)
 {
 	if (socket != a_socket)
 	{
@@ -1354,6 +1438,14 @@ flushSocketExchange::init(int a_socket)
 		setOutTimeout(outTimeout);
 		
 		setLingerSockOption(lingerOpts,lingerSeconds);	
+		
+		if (blocked)
+		{
+			if (blockInherited)
+				block(true);
+			else
+				block(false);
+		}
 	
 		opened = true;
 	}
@@ -1425,7 +1517,12 @@ flushSocketExchange::send(const char * const data,
 			n = ::send(socket,buffer.c_str()+sent,inSocketBuffer,flag);
 			if (n==-1)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				{
+					if (errno == EINVAL || errno == EWOULDBLOCK)
+						return ;
+					else
+						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}
 				#else
 					return false;	
 				#endif
@@ -1441,7 +1538,12 @@ flushSocketExchange::send(const char * const data,
 			n = ::send(socket,buffer.c_str()+sent,rest,flag);
 			if (n==-1)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				{
+					if (errno == EINVAL || errno == EWOULDBLOCK)
+						return ;
+					else
+						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}
 				#else
 					return false;	
 				#endif
@@ -1504,7 +1606,12 @@ flushSocketExchange::recieve(char * const data,
 		n = ::recv(socket,data+recieved,inSocketBuffer,flag);
 		if (n==-1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_RECIEVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			{
+				if (errno == EINVAL || errno == EWOULDBLOCK)
+					return ;
+				else
+					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_RECIEVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}
 			#else
 				return false;	
 			#endif
@@ -1514,7 +1621,12 @@ flushSocketExchange::recieve(char * const data,
 	if (rest>0)
 		if (::recv(socket,data+recieved,rest,flag)==-1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_RECIEVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			{
+				if (errno == EINVAL || errno == EWOULDBLOCK)
+					return ;
+				else
+					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_RECIEVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}
 			#else
 				return false;	
 			#endif

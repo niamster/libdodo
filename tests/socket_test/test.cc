@@ -6,6 +6,9 @@ using namespace std;
 bool
 process(flushSocketExchange fse)
 {
+	if (fse.isBlocked())
+		std::cout << "CHILD BLOCKED\n";
+	
 	fse.inSize = 4;
 	fse.setInBufferSize(1);
 	
@@ -39,7 +42,7 @@ int main(int argc, char **argv)
 		cout << flushSocket::getInterfaceInfo("lo").hwaddr << endl;
 		cout << flushSocket::getInterfaceInfo("eth0").address << endl;
 			
-		flushSocket sock(true,/*PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//**/PROTO_FAMILY_UNIX_SOCKET,TRANSFER_TYPE_STREAM);
+		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
 		
 		
 /*		sock.connect("127.0.0.1",21,ex1);
@@ -55,10 +58,13 @@ int main(int argc, char **argv)
 		__initialAccept fake;
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
+		//sock.blockInherited = true;
 		
-		//sock.bindNListen("127.0.0.1",7777,2);
+		sock.bindNListen("127.0.0.1",7777,3);
 		//sock.bindNListen("::",7777);
-		sock.bindNListen("./sock",10,true);
+		//sock.bindNListen("./sock",10,true);
+		
+		sock.block(true);
 		
 		flushSocketExchange conn1;
 		int i = 0;
@@ -67,6 +73,9 @@ int main(int argc, char **argv)
 		{
 			if (sock.accept(fake,info))
 			{
+				if (sock.isBlocked())
+					std::cout << "PARENT BLOCKED\n";
+					
 				conn1.init(fake);
 				cout << info.port << endl;
 				if (!process(conn1))

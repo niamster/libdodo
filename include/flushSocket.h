@@ -43,6 +43,8 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 
+#include <fcntl.h>
+
 namespace dodo
 {	
 	
@@ -283,6 +285,22 @@ namespace dodo
 			 */
 			virtual bool getSocketOpts(int option) const;
 			
+			/**
+			 * @return true if socked is blocked
+			 */
+			virtual bool isBlocked();
+			
+			/**
+			 * blocks/unblocks socket
+			 * @param flag indicates ehether to block or unblock socket
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							block(bool flag);
+			
 		protected:
 			
 			mutable socketProtoFamilyEnum family;///< socket family
@@ -300,6 +318,8 @@ namespace dodo
 			mutable int outSocketBuffer;///< outgoing buffer size of socket; in bytes
 
 			int socket;///< id of socket
+			
+			bool blocked;///< indicates, whether blocked or not;
 	};
 	
 	/**
@@ -329,7 +349,10 @@ namespace dodo
 			int socket;///< id of socket
 			
 			socketProtoFamilyEnum family;///< socket family
-			socketTransferTypeEnum type;///< socket type			
+			socketTransferTypeEnum type;///< socket type
+			
+			bool blocked;///< if blocked
+			bool blockInherited;///< if block inherited	
 	};
 		
 		
@@ -557,6 +580,8 @@ namespace dodo
 			 */
 			static __servInfo getServiceInfo(int port, const std::string &protocol);
 			
+			bool blockInherited;///< if true - children(flushSocketExchange) became unblocked, if parent(flushSocket) in unblocked; false by default
+			
 		private:
 			
 			/**
@@ -758,8 +783,9 @@ namespace dodo
 			/**
 			 * inits this class' data
 			 * @param socket is id of socket
+			 * @param blockInherited indicates whether to inherit block of parent
 			 */		
-			virtual void init(int socket);	
+			virtual void init(int socket, bool blockInherited);	
 
 			/**
 			 * @note share vars
