@@ -64,6 +64,8 @@
 	 
 	xmlTools::~xmlTools()
 	{
+		xmlFreeDoc(document);
+		
 		xmlCleanupParser();
 	}
 
@@ -72,6 +74,8 @@
 	__node 
 	xmlTools::reParse(const __nodeDef &definition)
 	{
+		xmlFreeDoc(document);
+		
 		if (document == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_REPARCE,ERR_LIBDODO,XMLTOOLS_NOT_PARCED_BEFORE,XMLTOOLS_NOT_PARCED_BEFORE_STR,__LINE__,__FILE__);
@@ -80,9 +84,6 @@
 			#endif
 		
 		__node sample = parse(definition);
-		
-		xmlFreeDoc(document);
-		document = NULL;
 		
 		return sample;		
 	}
@@ -93,6 +94,8 @@
 	xmlTools::parseFile(const __nodeDef &definition, 
 						const std::string &file)
 	{
+		xmlFreeDoc(document);
+		
 		document = xmlParseFile(file.c_str());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -106,9 +109,6 @@
 		
 		__node sample = parse(definition);
 		
-		xmlFreeDoc(document);
-		document = NULL;
-		
 		return sample;
 	}
 	 
@@ -118,6 +118,8 @@
 	xmlTools::parseBuffer(const __nodeDef &definition, 
 						const std::string &buffer)
 	{
+		xmlFreeDoc(document);
+		
 		document = xmlParseMemory(buffer.c_str(),buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -131,9 +133,6 @@
 		
 		__node sample = parse(definition);
 		
-		xmlFreeDoc(document);
-		document = NULL;
-		
 		return sample;
 	}
 	
@@ -146,6 +145,8 @@
 	#endif	
 	xmlTools::parseFileInt(const std::string &file)
 	{
+		xmlFreeDoc(document);
+		
 		document = xmlParseFile(file.c_str());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -342,6 +343,7 @@
 			node = node->next;
 		}
 		while (node!=NULL);
+		
 		return sampleArr;
 	}
 
@@ -607,5 +609,16 @@
 	
 	//-------------------------------------------------------------------
 
+	void 
+	xmlTools::initNodeDef(__nodeDef &node)
+	{
+		node.attributes.clear();
+		node.children.clear();
+		node.name.clear();
+		node.ns.clear();
+		node.chLimit = -1;
+	}
+
+	//-------------------------------------------------------------------
 	
 #endif

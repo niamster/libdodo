@@ -205,6 +205,11 @@
 				 * clears params of the give node
 				 */
 				virtual void initNode(__node &node);
+						
+				/**
+				 * clears params of the give node definition
+				 */				
+				virtual void initNodeDef(__nodeDef &node);
 												
 			protected:
 				

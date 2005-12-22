@@ -26,16 +26,30 @@
 
 using namespace dodo;
 
+dodoMap::dodoMap() : icase(false)
+{
+}
+
+//-------------------------------------------------------------------
+
 std::string
 dodoMap::operator [](const std::string &varName)
 {
 	i = realArr.begin();
 	j = realArr.end();
 	
-	for (;i!=j;++i)
-		if (strcmp(varName.c_str(),i->first.c_str()) == 0)
-			return i->second;
-			
+	if (icase)
+	{
+		for (;i!=j;++i)
+			if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
+				return i->second;		
+	}
+	else
+	{
+		for (;i!=j;++i)
+			if (strcmp(varName.c_str(),i->first.c_str()) == 0)
+				return i->second;
+	}		
 	return __UNDEFINED__;
 }
 

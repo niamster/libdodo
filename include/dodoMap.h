@@ -40,12 +40,19 @@ namespace dodo
 			public:
 			
 				/**
+				 * constructor
+				 */
+				dodoMap();
+			
+				/**
 				 * @return value by hash or '_undefined_' if not found
 				 * @param varName value of hash that points to the value
 				 */
 				std::string operator[](const std::string &varName);
 
 				assocArr realArr;///< real array
+				
+				bool icase;///< whether to react on keys with keys or no; false[react] by default
 				
 			protected:
 				

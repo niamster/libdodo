@@ -21,19 +21,19 @@ int main(int argc, char **argv)
 		attr.push_back("iD");
 		def.attributes = attr;
 		
-		//def.name = "test";
+		def.name = "bebe";
 		
 		//def.chLimit = 1;
 
 		//def.ns = "edi";
 		
-		def.children.push_back(def);
+		//def.children.push_back(def);
 		
-		__node node = tool.parseFile(/*def,*/"./test.xml");
+		__node node = tool.parseFile(def,"./test.xml");
 		
 		cout << node.attributes["iD"] << endl;
 		cout << node.name << endl;
-		cout << tools::trim(node.value," \n\t\r",4) << endl;
+/*		cout << tools::trim(node.value," \n\t\r",4) << endl;
 		
 		cout << node.children[0].size() << endl;
 		
