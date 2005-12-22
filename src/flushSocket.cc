@@ -362,6 +362,31 @@ flushSocket::getHostInfo(const std::string &host)
 
 //-------------------------------------------------------------------
 
+stringArr 
+flushSocket::getInterfacesNames()
+{
+	struct if_nameindex *ifaces = if_nameindex();
+	if (ifaces == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACESNAMES,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __stringarray__;			
+		#endif
+			
+	register int i(-1);
+	stringArr arr;
+	
+	while (ifaces[++i].if_index != 0)
+		arr.push_back(ifaces[i].if_name);
+	
+	if_freenameindex(ifaces);
+	
+	return arr;
+
+}
+
+//-------------------------------------------------------------------
+
 __servInfo 
 flushSocket::getServiceInfo(const std::string &host, 
 						const std::string &protocol)
@@ -404,6 +429,8 @@ flushSocket::getServiceInfo(int port,
 
 	while (ent->s_aliases[i] != NULL)	
 		info.aliases.push_back(ent->s_aliases[i++]);
+	
+	
 		
 	return info;	
 }
@@ -649,7 +676,7 @@ flushSocket::getInterfaceInfo(const std::string &interface)
 	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_broadaddr,sizeof(sockaddr));
 	
 	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
-		info.breadcast = add;
+		info.broadcast = add;
 
 	if (::ioctl(socket,SIOCGIFHWADDR,&ifr) == -1)
 		#ifndef NO_EX
@@ -674,6 +701,13 @@ flushSocket::getInterfaceInfo(const std::string &interface)
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return info;			
+		#endif
+	
+	if (::close(socket)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return info;
 		#endif
 	
 	if ((IFF_LOOPBACK&ifr.ifr_ifru.ifru_flags) == IFF_LOOPBACK)

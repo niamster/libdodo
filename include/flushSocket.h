@@ -113,7 +113,7 @@ namespace dodo
 	 struct __ifInfo
 	 {
 	 	std::string address;///< ip address of the interface
-	 	std::string breadcast;///< broadcast address of the interface
+	 	std::string broadcast;///< broadcast address of the interface
 	 	std::string netmask;///< netmask of the interface
 	 	std::string hwaddr;///< harware address of the interface(MAC)
 	 	
@@ -540,7 +540,13 @@ namespace dodo
 			virtual bool accept(__initialAccept &init) const;
 			
 			/**
-			 * @return info abou interface
+			 * @return a list of interfaces in system
+			 */
+			static stringArr getInterfacesNames(); 
+			
+			/**
+			 * @return info about interface
+			 * @param interface is name of interface about what info is needed
 			 */
 			static __ifInfo getInterfaceInfo(const std::string &interface);
 			

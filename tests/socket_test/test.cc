@@ -38,6 +38,18 @@ int main(int argc, char **argv)
 //#define DATAGRAM	
 	try
 	{	
+		stringArr ifaces = flushSocket::getInterfacesNames();
+		for (int i(0);i<ifaces.size();i++)
+		{
+			try
+			{
+				cout << ifaces[i] << ":\t" << flushSocket::getInterfaceInfo(ifaces[i]).broadcast << endl;	
+			}
+			catch (baseEx ex)
+			{
+				cout << ifaces[i] << ":\t" << ex << endl;
+			}
+		}
 		
 		cout << flushSocket::getInterfaceInfo("lo").hwaddr << endl;
 		cout << flushSocket::getInterfaceInfo("eth0").address << endl;
