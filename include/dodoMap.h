@@ -54,6 +54,11 @@ namespace dodo
 				
 				bool icase;///< whether to react on keys with keys or no; false[react] by default
 				
+				/**
+				 * @return size of the map
+				 */
+				int size();
+				
 			protected:
 				
 				assocArr::iterator i;///< iterator for methodArr(from begin)

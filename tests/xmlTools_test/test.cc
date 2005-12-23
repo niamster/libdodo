@@ -21,33 +21,32 @@ int main(int argc, char **argv)
 		attr.push_back("iD");
 		def.attributes = attr;
 		
-		def.name = "bebe";
+		def.name = "hehe";
 		
 		//def.chLimit = 1;
-
 		//def.ns = "edi";
 		
-		//def.children.push_back(def);
+		__nodeDef def1;
+		def1.name = "bebe";
+		
+		def1.children.push_back(def1);
+		
+		def.children.push_back(def1);
 		
 		__node node = tool.parseFile(def,"./test.xml");
 		
 		cout << node.attributes["iD"] << endl;
 		cout << node.name << endl;
-/*		cout << tools::trim(node.value," \n\t\r",4) << endl;
+		cout << tools::trim(node.value," \n\t\r",4) << endl;
 		
 		cout << node.children[0].size() << endl;
 		
-		//cout << node.children[0][0].attributes.size() << endl;
+		cout << node.children[0][0].attributes.size() << endl;
 		
 		for (int i (0);i<node.children[0].size();i++)
 		{
-			//cout << node.children[0][i].attributes["id"] << endl;
-			cout << tools::trim(node.children[0][i].value," \n\t\r",4) << "##" << node.children[0][i].children[0].size() << endl;
-			for (int j (0);j<node.children[0][i].children[0].size();j++)
-				cout << "\t" << tools::trim(node.children[0][i].children[0][j].value," \n\t\r",4) << "@@" << endl;
+			cout << node.children[0][i].children[0][0].attributes["id"] << endl;
 		}
-/*		cout << node.children[0][1].attributes["id"] << endl;
-		cout << node.children[0][0].ns << endl;*/
 	}
 	catch(baseEx ex)
 	{
