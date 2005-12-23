@@ -195,7 +195,7 @@
 				
 				#endif
 				 
-			private:
+			protected:
 			
 				/**
 				 * executes request
@@ -209,9 +209,13 @@
 				#endif
 								_exec() const;
 				
-				mutable sqlite3 *lite;///< handle to DB
 				
 				mutable bool connected;///< connected or not
+				
+			private:
+				
+				mutable sqlite3 *lite;///< handle to DB
+				
 				
 				static int sqlite_callback(void *data, int argc, char **argv, char **azColName);///< callback function to work with got sql's data 
 				mutable __sqliteCallbackData callBackData;

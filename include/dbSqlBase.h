@@ -209,7 +209,7 @@ namespace dodo
 			
 			mutable std::string auto_increment;///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
 		
-		protected :
+		private:
 			
 			/**
 			 * @note share vars

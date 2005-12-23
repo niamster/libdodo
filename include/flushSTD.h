@@ -204,6 +204,8 @@ namespace dodo
 		protected: 
 		
 			FILE *desc;///< descriptor that is needed for redirection
+		
+		private:
 			
 			/**
 			 * @note share vars

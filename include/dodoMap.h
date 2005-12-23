@@ -59,7 +59,7 @@ namespace dodo
 				 */
 				int size();
 				
-			protected:
+			private:
 				
 				assocArr::iterator i;///< iterator for methodArr(from begin)
 				assocArr::iterator j;///< iterator for methodArr(indicates end)

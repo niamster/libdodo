@@ -257,6 +257,8 @@
 				 * @param sample describes node that contains result data
 				 */
 				virtual void getNodeInfo(const xmlNodePtr node, __node &sample);
+			
+			private:
 				
 				/**
 				 * @note share vars

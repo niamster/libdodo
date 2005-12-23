@@ -321,7 +321,7 @@
 				 */ 
 				virtual std::string getCharset(); 
 				 
-			private:
+			protected:
 			
 				/**
 				 * executes request
@@ -341,6 +341,9 @@
 				virtual void addSQL();
 				
 				mutable bool connected;///< connected or not
+			
+			private:	
+				
 				mutable bool empty;///< for detectin' whether mysqlResult is empty or not
 				
 				mutable MYSQL *mysql;///< handler fo mysql connections

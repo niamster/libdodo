@@ -728,11 +728,19 @@ namespace dodo
 			mutable int qDbDepUpShift;///< value to shift query template for specific
 			mutable int qDbDepDelShift;///< value to shift query template for specific
 			
+		private:	
+			
 			/**
 			 * @note share vars
 			 */
 			mutable assocArr::const_iterator i;///< iterator for "hash"
 			mutable assocArr::const_iterator j;///< iterator for "hash"
+		
+		protected:
+
+			/**
+			 * @note share vars
+			 */
 			
 			mutable std::vector<stringArr>::const_iterator k;///< iterator for "hash"
 			mutable std::vector<stringArr>::const_iterator l;///< iterator for "hash"
