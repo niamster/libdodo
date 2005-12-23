@@ -47,8 +47,8 @@ override LDFLAGS:= -L./ $(MODS_LD) $(LDFLAGS)
 VPATH=src
 
 LIBRARY=dodo
-VERSION = 0.0
-MINOR = 8
+VERSION = 0.1
+MINOR = 1
 
 all: $(LIBRARY)
 

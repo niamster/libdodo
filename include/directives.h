@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 
-#define LIBDODO_VERSION "libdodo/0.0.8"
+#define LIBDODO_VERSION "libdodo/0.1.1"
 
 #define MYSQL_EXT
 #define PCRE_EXT
