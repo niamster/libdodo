@@ -56,6 +56,7 @@
 	xmlTools::xmlTools() : icaseNames(false), 
 							document(NULL)
 	{
+		xmlPedanticParserDefault(0);
 		xmlInitParser();
 		xmlSetStructuredErrorFunc(NULL, xmlTools::errHandler);
 	}
@@ -74,8 +75,7 @@
 	__node 
 	xmlTools::reParse(const __nodeDef &definition)
 	{
-		xmlFreeDoc(document);
-		
+	
 		if (document == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_REPARCE,ERR_LIBDODO,XMLTOOLS_NOT_PARCED_BEFORE,XMLTOOLS_NOT_PARCED_BEFORE_STR,__LINE__,__FILE__);
@@ -83,9 +83,7 @@
 				return __node();
 			#endif
 		
-		__node sample = parse(definition);
-		
-		return sample;		
+		return parse(definition);		
 	}
 	
 	//-------------------------------------------------------------------
@@ -107,9 +105,7 @@
 				return __node();
 			#endif
 		
-		__node sample = parse(definition);
-		
-		return sample;
+		return parse(definition);
 	}
 	 
 	//-------------------------------------------------------------------
@@ -131,9 +127,7 @@
 				return __node();
 			#endif
 		
-		__node sample = parse(definition);
-		
-		return sample;
+		return parse(definition);
 	}
 	
 	//-------------------------------------------------------------------
@@ -172,6 +166,8 @@
 	#endif		
 	xmlTools::parseBufferInt(const std::string &buffer)
 	{
+		xmlFreeDoc(document);
+		
 		document = xmlParseMemory(buffer.c_str(),buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -205,6 +201,8 @@
 			#endif
 		
 		__node sample;
+		
+		register int i(0),j(0); 
 		
 		do
 		{			
@@ -256,6 +254,24 @@
 			}
 			
 			node = node->next;
+			
+			if (node == NULL)
+			{
+				++i;
+				node = xmlDocGetRootElement(document);
+				
+				for (j=0;j<i;++j)
+				{		
+					if (node->type != XML_ELEMENT_NODE)
+					{
+						node = node->next;
+						continue;
+					}
+					
+					node = node->children;
+				}
+			}
+			
 		}
 		while (node!=NULL);
 		
@@ -328,9 +344,9 @@
 				continue;		
 			}
 		
+			initNode(sample);
+		
 			getNodeInfo(node,sample);
-
-			sample.attributes.realArr.clear();
 			getAttributes(definition,node,sample.attributes.realArr);
 	
 			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
@@ -341,6 +357,7 @@
 			sampleArr.push_back(sample);
 			
 			node = node->next;
+			
 		}
 		while (node!=NULL);
 		
@@ -468,7 +485,10 @@
 				return __xmlInfo();
 			#endif		
 			
-		return __xmlInfo((char *)document->version,(char *)document->encoding,(char *)document->children->name,document->compression);
+		return __xmlInfo(document->version!=NULL?(char *)document->version:__string__,
+		document->encoding!=NULL?(char *)document->encoding:__string__,
+		(document->children!=NULL && document->children->name!=NULL)?(char *)document->children->name:__string__,
+		document->compression);
 	}
 
 	//-------------------------------------------------------------------
@@ -542,6 +562,8 @@
 	__node 
 	xmlTools::parseFile(const std::string &file)
 	{
+		xmlFreeDoc(document);
+		
 		document = xmlParseFile(file.c_str());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -566,9 +588,6 @@
 					
 		__node sample = parse(node)[0];
 		
-		xmlFreeDoc(document);
-		document = NULL;
-		
 		return sample;
 	}
 	 
@@ -577,6 +596,8 @@
 	__node 
 	xmlTools::parseBuffer(const std::string &buffer)
 	{
+		xmlFreeDoc(document);
+		
 		document = xmlParseMemory(buffer.c_str(),buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
@@ -600,9 +621,6 @@
 			#endif
 					
 		__node sample = parse(node)[0];
-		
-		xmlFreeDoc(document);
-		document = NULL;
 		
 		return sample;
 	}

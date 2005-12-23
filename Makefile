@@ -66,7 +66,7 @@ install:
 	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include/libdodo
 	cp lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/
 	cp -rf include/* $(PREFIX)/include/libdodo/
-	ln -fs $(PREFIX)/lib/lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/lib$@.so
+	ln -fs $(PREFIX)/lib/lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/lib$(LIBRARY).so
 	@echo ""
 	@echo ""
 	@echo "Use libdodo with pleasure"

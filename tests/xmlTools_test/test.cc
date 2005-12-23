@@ -53,6 +53,10 @@ int main(int argc, char **argv)
 	{
 		cout << ex << "\t" << ex.line << endl;
 	}
+	catch(exception ex)
+	{
+		cout << ex.what();
+	}
 	catch(...)
 	{
 		cout << "WTF";

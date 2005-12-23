@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<edi:test xmlns:edi="http://ecommerce.org/shema" id="df">
+<edi:test xmlns:edi="http://ecommerce.org/shema" id="df">	
 	<test id="dddasfasdhsff" do="sd">asd</test>
-	<edi:tesT id="ffdda">asddsa</edi:tesT>-->
-	<bebe id="kl">dsd
-		<bebe id="ddffssssssdfdddasdfsdgshssd">asd</bebe>
-		<bebe id="ffdda">asddsa</bebe>	
-	</bebe>
-<!--	<![CDATA[
+	<bubu>
+		<hehe>
+			<bebe id="kl">dsd
+				<bebe id="ddffssssssdfdddasdfsdgshssd">asd</bebe>
+				<bebe id="ffdda">asddsa</bebe>	
+			</bebe>
+		</hehe>
+	</bubu>	
+	<edi:tesT id="ffdda">asddsa</edi:tesT>
+	<![CDATA[
 	hahas]]>
-</edi:test>-->
+</edi:test>
