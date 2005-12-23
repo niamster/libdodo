@@ -202,7 +202,7 @@
 		
 		__node sample;
 		
-		register int i(0),j(0); 
+		register int i(0),j(0),k(0); 
 		
 		do
 		{			
@@ -270,6 +270,21 @@
 					
 					node = node->children;
 				}
+			}
+			
+			if (node == NULL)
+			{
+				k++;
+				i = 0;
+				node = xmlDocGetRootElement(document);
+				for (j=0;j<k;++j)
+				{		
+					//if (node->type != XML_ELEMENT_NODE)
+					{
+						node = node->next;
+					//	continue;
+					}					
+				}				
 			}
 			
 		}
