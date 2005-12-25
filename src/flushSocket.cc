@@ -67,7 +67,7 @@ flushSocket::~flushSocket()
 			_close(socket);
 	
 	if (server && unixSock.size()!=0)
-		flushDisk::unlink(unixSock);
+		flushDiskTools::unlink(unixSock);
 }
 
 //-------------------------------------------------------------------
@@ -578,7 +578,7 @@ flushSocket::bindNListen(const std::string &path,
 			struct stat st;
             if (::lstat(path.c_str(),&st) != -1)
 				if (S_ISSOCK(st.st_mode))
-					flushDisk::unlink(path,true);
+					flushDiskTools::unlink(path,true);
 				else
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_FILENAME,FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);

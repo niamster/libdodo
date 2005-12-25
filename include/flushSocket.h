@@ -30,7 +30,7 @@
 #include <types.h>
 #include <flush.h>
 #include <flushSocketEx.h>
-#include <flushDisk.h>
+#include <flushDiskTools.h>
 
 #include <sys/types.h>
 #include <netinet/in.h>

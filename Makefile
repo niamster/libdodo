@@ -6,6 +6,7 @@ CXX = $(CC_PATH)g++
 #CXX = $(CC_PATH)icc
 
 CFLAGS=-O3 -march=pentium4
+
 OBJECTS=dbBase.o \
 		tools.o \
 		xexec.o \
@@ -16,13 +17,14 @@ OBJECTS=dbBase.o \
 		regexpTools.o \
 		flush.o \
 		flushSocket.o \
+		flushDiskTools.o \
 		flushDisk.o \
 		flushSTD.o \
 		systemTools.o \
 		timeTools.o \
 		xmlTools.o \
 		dbSqlite.o \
-		dodoMap.o
+		dodoMap.o 
 
 ###########################################################
 

@@ -35,6 +35,8 @@ int main(int argc, char **argv)
 		
 		__node node = tool.parseFile(def,"./test.xml");
 		
+		cout << node.value << endl;
+		
 		cout << node.attributes["iD"] << endl;
 		cout << node.name << endl;
 		cout << tools::trim(node.value," \n\t\r",4) << endl;
