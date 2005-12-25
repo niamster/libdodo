@@ -16,6 +16,9 @@ OBJECTS=dbBase.o \
 		cgiTools.o \
 		regexpTools.o \
 		flush.o \
+		flushSocketOptions.o \
+		flushSocketExchange.o \
+		flushSocketTools.o \
 		flushSocket.o \
 		flushDiskTools.o \
 		flushDisk.o \

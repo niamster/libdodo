@@ -1,4 +1,5 @@
 #include <flushSocket.h>
+#include <flushSocketTools.h>
 using namespace dodo;
 
 using namespace std;
@@ -38,12 +39,12 @@ int main(int argc, char **argv)
 //#define DATAGRAM	
 	try
 	{	
-		stringArr ifaces = flushSocket::getInterfacesNames();
+		stringArr ifaces = flushSocketTools::getInterfacesNames();
 		for (int i(0);i<ifaces.size();i++)
 		{
 			try
 			{
-				cout << ifaces[i] << ":\t" << flushSocket::getInterfaceInfo(ifaces[i]).broadcast << endl;	
+				cout << ifaces[i] << ":\t" << flushSocketTools::getInterfaceInfo(ifaces[i]).broadcast << endl;	
 			}
 			catch (baseEx ex)
 			{
@@ -51,8 +52,8 @@ int main(int argc, char **argv)
 			}
 		}
 		
-		cout << flushSocket::getInterfaceInfo("lo").hwaddr << endl;
-		cout << flushSocket::getInterfaceInfo("eth0").address << endl;
+		cout << flushSocketTools::getInterfaceInfo("lo").hwaddr << endl;
+		cout << flushSocketTools::getInterfaceInfo("eth0").address << endl;
 			
 		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
 		
@@ -96,12 +97,12 @@ int main(int argc, char **argv)
 		}
 		
 		
-		//flushSocket::setLocalName("BUBU");
+		//flushSocketTools::setLocalName("BUBU");
 		
-		/*cout << flushSocket::getLocalName() << endl;
-		cout << flushSocket::getHostInfo("192.168.0.1").addresses[0] << endl;
+		/*cout << flushSocketTools::getLocalName() << endl;
+		cout << flushSocketTools::getHostInfo("192.168.0.1").addresses[0] << endl;
 		
-		flushSocket *pointer[10];
+		flushSocketTools *pointer[10];
 		pointer[0] = &sock;
 		cout << pointer[0]->getHostInfo("elessar.mu").addresses[0] << endl;*/
 		

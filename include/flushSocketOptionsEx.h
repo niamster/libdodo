@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocketEx.h
+ *            flushSocketOptionsEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _FLUSHSOCKETEX_H_
-#define _FLUSHSOCKETEX_H_
+#ifndef _FLUSHSOCKETOPTIONSEX_H_
+#define _FLUSHSOCKETOPTIONSEX_H_
 
 #include <directives.h>
 
@@ -34,46 +34,37 @@
 	namespace dodo
 	{
 		/**
-		 * next for flushSocket*
+		 * next for flushSocketOptions
 		 */
 		
 		/**
 		 * libdodo defined errors
 		 */
-		enum flushSocketExR
+		enum flushSocketOptionsExR
 		{
-			FLUSHSOCKET_NO_SOCKET_CREATED,
-			FLUSHSOCKET_CANNOT_BIND,
-			FLUSHSOCKET_CANNOT_CONNECT,
-			FLUSHSOCKET_CANNOT_ACCEPT,
-			FLUSHSOCKET_ACCEPT_WO_BIND,
-			FLUSHSOCKET_WRONG_PARAMETHER,
-			FLUSHSOCKET_WRONG_FILENAME,
+			FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,
+			FLUSHSOCKETOPTIONS_WRONG_PARAMETHER,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */			
-		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR "No socket was created =(."
-		#define FLUSHSOCKET_CANNOT_BIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
-		#define FLUSHSOCKET_CANNOT_CONNECT_STR "You cannot <connect> with this constructor; choose another one!"
-		#define FLUSHSOCKET_CANNOT_ACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
-		#define FLUSHSOCKET_ACCEPT_WO_BIND_STR "You try to accept without called bindNListen or bindNListen failed"
-		#define FLUSHSOCKET_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
-		#define FLUSHSOCKET_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR "No socket was created =(."
+		#define FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
 		
 		/**
 		 * ID of function where exception was thrown
 		 */		
-		enum flushSocketFunctionsID
+		enum flushSocketOptionsFunctionsID
 		{
-			FLUSHSOCKET_MAKESOCKET,
-			FLUSHSOCKET_CONNECT,
-			FLUSHSOCKET_MAKEUNIXSOCKET,
-			FLUSHSOCKET_BINDNLISTEN,
-			FLUSHSOCKET_ACCEPT,
-			FLUSHSOCKET_SEND,
-			FLUSHSOCKET_RECIEVE,
+			FLUSHSOCKETOPTIONS_SETINBUFFERSIZE,
+			FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE,
+			FLUSHSOCKETOPTIONS_SETINTIMEOUT,
+			FLUSHSOCKETOPTIONS_SETOUTTIMEOUT,
+			FLUSHSOCKETOPTIONS_SETSOCKOPT,
+			FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT,
+			FLUSHSOCKETOPTIONS_BLOCK,
+			FLUSHSOCKETOPTIONS__CLOSE,	
 		};
 		
 	};

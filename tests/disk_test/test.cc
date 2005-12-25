@@ -8,18 +8,18 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		//cout << flushDisk::getFileContent("test.cc");
-		//flushDisk::copy("test.cc","test.cc.copy",true);
-		//flushDisk::copy("/tmp","./",true);
-		/*stringArr arr = flushDisk::getFileContentArr("test.cc");
+		//cout << flushDiskTools::getFileContent("test.cc");
+		//flushDiskTools::copy("test.cc","test.cc.copy",true);
+		//flushDiskTools::copy("/tmp","./",true);
+		/*stringArr arr = flushDiskTools::getFileContentArr("test.cc");
 		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
 		}*/
-		flushDisk::copy("/root","./tmp",true);
-		flushDisk::copy("/root","./tmp/",true);
-		//flushDisk::unlink("my.dat");
+		flushDiskTools::copy("/root","./tmp",true);
+		flushDiskTools::copy("/root","./tmp/",true);
+		//flushDiskTools::unlink("my.dat");
 	}
 	catch(baseEx ex)
 	{
@@ -46,21 +46,21 @@ int main(int argc, char **argv)
 		flush.readString(str,0);
 		cout << "\n\n" << str << "\n\n";
 	
-		flushDisk::rm("./tmp");
+		flushDiskTools::rm("./tmp");
 
-		flushDisk::mkdir("testDir");//,OWNER_ALL_ACCESS,false);
+		flushDiskTools::mkdir("testDir");//,OWNER_ALL_ACCESS,false);
 
-		flushDisk::rename("testDir","DirTest");	
+		flushDiskTools::rename("testDir","DirTest");	
 		
-		flushDisk::symlink("test","TEST");
-		flushDisk::chmod("test",ALL_ALL_ACCESS);
+		flushDiskTools::symlink("test","TEST");
+		flushDiskTools::chmod("test",ALL_ALL_ACCESS);
 		
-		cout << flushDisk::getPermissions("Makefile");
+		cout << flushDiskTools::getPermissions("Makefile");
 		
 		cout << endl; 
 
 
-		std::vector<__fileInfo> dir = flushDisk::getDirInfo("/");
+		std::vector<__fileInfo> dir = flushDiskTools::getDirInfo("/");
 		
 		if (dir.size() > 0)
 		{
