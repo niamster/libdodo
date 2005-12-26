@@ -278,7 +278,7 @@ flushSocketExchange::sendString(const std::string &data,
 #else
 	bool
 #endif
-flushSocketExchange::recieve(char * const data, 
+flushSocketExchange::receive(char * const data, 
 							bool urgent) const
 {
 		
@@ -290,7 +290,7 @@ flushSocketExchange::recieve(char * const data,
 	iter = inSize/inSocketBuffer;
 	rest = inSize%inSocketBuffer;
 	
-	register long n(0), recieved(0);
+	register long n(0), received(0);
 		
 	register int flag = 0;	
 	if (urgent)	
@@ -299,7 +299,7 @@ flushSocketExchange::recieve(char * const data,
 	for (register long i=0;i<iter;++i)
 	{
 		n = 0;
-		n = ::recv(socket,data+recieved,inSocketBuffer,flag);
+		n = ::recv(socket,data+received,inSocketBuffer,flag);
 		if (n==-1)
 			#ifndef NO_EX
 			{
@@ -311,11 +311,11 @@ flushSocketExchange::recieve(char * const data,
 			#else
 				return false;	
 			#endif
-		recieved += n;
+		received += n;
 	}
 	
 	if (rest>0)
-		if (::recv(socket,data+recieved,rest,flag)==-1)
+		if (::recv(socket,data+received,rest,flag)==-1)
 			#ifndef NO_EX
 			{
 				if (errno == EINVAL || errno == EWOULDBLOCK)
@@ -345,7 +345,7 @@ flushSocketExchange::recieve(char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::recieveString(std::string &data, 
+flushSocketExchange::receiveString(std::string &data, 
 								bool urgent) const
 {	
 	register char *t_data = new char[inSize+1];
@@ -356,7 +356,7 @@ flushSocketExchange::recieveString(std::string &data,
 		register bool result = 
 	#endif
 	
-	this->recieve(t_data,urgent);
+	this->receive(t_data,urgent);
 	data.assign(t_data,inSize);
 	
 	delete [] t_data;

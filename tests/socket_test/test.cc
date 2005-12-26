@@ -20,7 +20,7 @@ process(flushSocketExchange fse)
 	std::string q;
 	try
 	{
-		fse.recieveString(q);
+		fse.receiveString(q);
 		cout << q << endl;
 		if (q.compare("exit")==0)
 			return false;

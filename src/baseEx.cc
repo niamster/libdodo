@@ -30,14 +30,38 @@
 
 	extern "C"
 	{
-		static errorHandler __handlers[AM_MODULES];///< handlers
-		static bool __handlerSet[AM_MODULES];///< indicates whether handler was set
-		static void * __handlerData[AM_MODULES];///< data that will be passed to handler
+		static errorHandler __handlersEx[AM_MODULES];///< handlers
+		static bool __handlerSetEx[AM_MODULES] = {false,
+												false,
+												false,
+												false,
+												false,
+												false,
+												false,
+												false,
+												false,
+												false,
+												false,
+												false,
+												false};///< indicates whether handler was set
+		static void * __handlerDataEx[AM_MODULES];///< data that will be passed to handler
 		
 		#ifdef DL_EXT
 		
-			static void *__handles[AM_MODULES];///< handles to modules
-			static bool __handlesOpened[AM_MODULES];///< map of opened modules
+			static void *__handlesEx[AM_MODULES];///< handles to modules
+			static bool __handlesOpenedEx[AM_MODULES] = {false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false};///< map of opened modules
 			
 		#endif			
 		
@@ -59,8 +83,8 @@
                                         line(a_line),
                                         file(a_file)
     {
-    	if (__handlerSet[errModule])
-    		__handlers[errModule](errModule, this, __handlerData[errModule]);
+    	if (__handlerSetEx[errModule])
+    		__handlersEx[errModule](errModule, this, __handlerDataEx[errModule]);
     }
 
 	//-------------------------------------------------------------------
@@ -73,16 +97,16 @@
 			
 			for (register int i(0);i<AM_MODULES;++i)
 			{
-				if (!__handlesOpened[i])
+				if (!__handlesOpenedEx[i])
 					continue;
 				
-				deinit = (deinitExModule)dlsym(__handles[i], "deinitExModule");
+				deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				__handlesOpened[i] = false;	
+				__handlesOpenedEx[i] = false;	
 				
-				dlclose(__handles[i]);
+				dlclose(__handlesEx[i]);
 			}
 				
 		#endif		
@@ -104,24 +128,24 @@
 	{
 		#ifdef DL_EXT
 			
-			if (__handlesOpened[module])
+			if (__handlesOpenedEx[module])
 			{
 				deinitExModule deinit;	
 				
-				deinit = (deinitExModule)dlsym(__handles[module], "deinitExModule");
+				deinit = (deinitExModule)dlsym(__handlesEx[module], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				dlclose(__handles[module]);
+				dlclose(__handlesEx[module]);
 				
-				__handlesOpened[module] = false;
+				__handlesOpenedEx[module] = false;
 			}	
 		
 		#endif
 		
-		__handlers[module] = handler;
-		__handlerSet[module] = true;
-		__handlerData[module] = data;
+		__handlersEx[module] = handler;
+		__handlerSetEx[module] = true;
+		__handlerDataEx[module] = data;
 	}
 	
 	//-------------------------------------------------------------------
@@ -138,22 +162,22 @@
 		{
 			#ifdef DL_EXT
 				
-				if (__handlesOpened[i])
+				if (__handlesOpenedEx[i])
 				{
-					deinit = (deinitExModule)dlsym(__handles[i], "deinitExModule");
+					deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
 					if (deinit != NULL)
 						deinit();
 						
-					dlclose(__handles[i]);
+					dlclose(__handlesEx[i]);
 					
-					__handlesOpened[i] = false;
+					__handlesOpenedEx[i] = false;
 				}	
 			
 			#endif
 					
-			__handlers[i] = handler;
-			__handlerSet[i] = true;
-			__handlerData[i] = data;
+			__handlersEx[i] = handler;
+			__handlerSetEx[i] = true;
+			__handlerDataEx[i] = data;
 		}
 	}
 	
@@ -164,24 +188,24 @@
 	{
 		#ifdef DL_EXT
 			
-			if (__handlesOpened[module])
+			if (__handlesOpenedEx[module])
 			{
 				deinitExModule deinit;	
 				
-				deinit = (deinitExModule)dlsym(__handles[module], "deinitExModule");
+				deinit = (deinitExModule)dlsym(__handlesEx[module], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				dlclose(__handles[module]);
+				dlclose(__handlesEx[module]);
 				
-				__handlesOpened[module] = false;
+				__handlesOpenedEx[module] = false;
 			}	
 		
 		#endif		
 		
-		__handlers[module] = NULL;
-		__handlerSet[module] = false;
-		__handlerData[module] = NULL;			
+		__handlersEx[module] = NULL;
+		__handlerSetEx[module] = false;
+		__handlerDataEx[module] = NULL;			
 	}
 	
 	//-------------------------------------------------------------------
@@ -197,22 +221,22 @@
 		{
 			#ifdef DL_EXT
 				
-				if (__handlesOpened[i])
+				if (__handlesOpenedEx[i])
 				{
-					deinit = (deinitExModule)dlsym(__handles[i], "deinitExModule");
+					deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
 					if (deinit != NULL)
 						deinit();
 						
-					dlclose(__handles[i]);
+					dlclose(__handlesEx[i]);
 					
-					__handlesOpened[i] = false;
+					__handlesOpenedEx[i] = false;
 				}	
 			
 			#endif
 					
-			__handlers[i] = NULL;
-			__handlerSet[i] = false;
-			__handlerData[i] = NULL;			
+			__handlersEx[i] = NULL;
+			__handlerSetEx[i] = false;
+			__handlerDataEx[i] = NULL;			
 		}			
 	}
 			
@@ -231,34 +255,34 @@
 			for (register int i(0);i<AM_MODULES;++i)
 			{
 				
-				if (__handlesOpened[i])
+				if (__handlesOpenedEx[i])
 				{
-					deinit = (deinitExModule)dlsym(__handles[i], "deinitExModule");
+					deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
 					if (deinit != NULL)
 						deinit();
 						
-					dlclose(__handles[i]);
+					dlclose(__handlesEx[i]);
 					
-					__handlesOpened[i] = false;
+					__handlesOpenedEx[i] = false;
 				}	
 				
-				__handles[i] = dlopen(path.c_str(), RTLD_LAZY);
-				if (__handles[i] == NULL)
+				__handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
+				if (__handlesEx[i] == NULL)
 					return false;
 				
-				init = (initExModule)dlsym(__handles[i], "initExModule");
+				init = (initExModule)dlsym(__handlesEx[i], "initExModule");
 				if (init == NULL)
 					return false;
 				
-				in = (errorHandler)dlsym(__handles[i], init().hook);
+				in = (errorHandler)dlsym(__handlesEx[i], init().hook);
 				if (in == NULL)
 					return false;
 			
-				__handlesOpened[i] = true;
+				__handlesOpenedEx[i] = true;
 	
-				__handlers[i] = in;
-				__handlerSet[i] = true;
-				__handlerData[i] = data;
+				__handlersEx[i] = in;
+				__handlerSetEx[i] = true;
+				__handlerDataEx[i] = data;
 			
 			}
 			
@@ -274,34 +298,34 @@
 		{
 			deinitExModule deinit;
 
-			if (__handlesOpened[module])
+			if (__handlesOpenedEx[module])
 			{
-				deinit = (deinitExModule)dlsym(__handles[module], "deinitExModule");
+				deinit = (deinitExModule)dlsym(__handlesEx[module], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				dlclose(__handles[module]);
+				dlclose(__handlesEx[module]);
 				
-				__handlesOpened[module] = false;
+				__handlesOpenedEx[module] = false;
 			}
 			
-			__handles[module] = dlopen(path.c_str(), RTLD_LAZY);
-			if (__handles[module] == NULL)
+			__handlesEx[module] = dlopen(path.c_str(), RTLD_LAZY);
+			if (__handlesEx[module] == NULL)
 				return false;
 			
-			initExModule init = (initExModule)dlsym(__handles[module], "initExModule");
+			initExModule init = (initExModule)dlsym(__handlesEx[module], "initExModule");
 			if (init == NULL)
 				return false;
 			
-			errorHandler in = (errorHandler)dlsym(__handles[module], init().hook);
+			errorHandler in = (errorHandler)dlsym(__handlesEx[module], init().hook);
 			if (in == NULL)
 				return false;
 		
-			__handlesOpened[module] = true;
+			__handlesOpenedEx[module] = true;
 
-			__handlers[module] = in;
-			__handlerSet[module] = true;
-			__handlerData[module] = data;
+			__handlersEx[module] = in;
+			__handlerSetEx[module] = true;
+			__handlerDataEx[module] = data;
 		
 			return true;		
 		}

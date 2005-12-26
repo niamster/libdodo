@@ -27,13 +27,14 @@
 
 #include <unistd.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <sys/resource.h>
 #include <pwd.h>
 #include <grp.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-
+#include <signal.h>
 #include <iostream>
 
 #include <directives.h>
@@ -74,6 +75,42 @@ namespace dodo
 		SYSTEM_MAXPROC,
 		SYSTEM_MAXOPENFILES
 	}; 
+	
+	/**
+	 * @typedef describes handler function on signal
+	 */
+	typedef void (*signalhandler)(int, siginfo_t *, void *);
+
+	/**
+	 * @enum systemSygnalsEnum describes system signals
+	 */
+	enum systemSygnalsEnum
+	{
+		SIGNAL_HANGUP=1,
+		SIGNAL_INTERRUPT=2,
+		SIGNAL_QUIT=3,
+		SIGNAL_ILLEGAL_INSTRUCTION=4,
+		SIGNAL_TRACE_TRAP=5,
+		SIGNAL_ABORT=6,
+		SIGNAL_BUS_FAULT=7,
+		SIGNAL_FLOATINGPOINT_FAULT=8,
+		SIGNAL_KILL=9,
+		SIGNAL_USER_DEFINED1=10,
+		SIGNAL_SEGMENTATION_FAULT=11,
+		SIGNAL_USER_DEFINED2=12,
+		SIGNAL_PIPE_FAULT=13,
+		SIGNAL_ALARM=14,
+		SIGNAL_TERMINATION=15,
+		SIGNAL_STACK_FAULT=16,
+		SIGNAL_CHILD_CHANGED=17,
+		SIGNAL_CONTINUE=18,
+		SIGNAL_STOP=19,
+		SIGNAL_KEYBOARD_STOP=20,
+		SIGNAL_CPULIMIT_EXCEEDED=24,
+		SIGNAL_FILESIZE_EXCEEDED=25,
+		SIGNAL_BAD_SYSCALL=31
+	};
+	
 
 	/**
 	 * @enum uidTypeEnum describes type of UID
@@ -330,7 +367,68 @@ namespace dodo
 				static bool 
 			#endif			
 							getGroups(std::vector<__groupInfo> &info);								
+			/**
+			 * @return PID of current process
+			 */
+			static int getPID();
 			
+			/**
+			 * @return parent PID of current process
+			 */
+			static int getParentPID();
+
+			/**
+			 * @return group PID of current process
+			 */
+			static int getGroupPID();
+			
+			/**
+			 * @return group PID of given PID
+			 * @param pid is process id from what to get group PID
+			 */
+			static int getGroupPID(int pid);
+			
+			/**
+			 * sets group PID of current process
+			 * @param pgid specifies the group PID where to move current process
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							setGroupPID(int gpid);
+			
+			/**
+			 * sets group PID of given process
+			 * @param pid specifies what pid to move
+			 * @param pgid specifies the group PID where to move current process
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							setGroupPID(int pid, int gpid);
+			
+			/**
+			 * set signal handler
+			 * @param signal is signal on what set handler
+			 * @param handler is function that will be called
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							setSignalHandler(systemSygnalsEnum signal, signalhandler handler);
+			
+			/**
+			 * determines whether handler was set on signal
+			 * @param is signal on what set handler
+			 */
+			static bool isSignalHandled(systemSygnalsEnum signal);
+											
 		protected:
 			
 			/**

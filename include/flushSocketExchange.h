@@ -89,9 +89,9 @@ namespace dodo
 	};
 		
 	/**
-	 * @class flushSocketExchange used for communication[send/recieve data]
+	 * @class flushSocketExchange used for communication[send/receive data]
 	 * you may use it's functions only after passing it to connect(accept)
-	 * otherwise you'll recieve exeptions about socket(or false) from all of this' class' methods
+	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection = previous will be closed
 	 */
 	class flushSocketExchange : public flush, public flushSocketOptions	
@@ -220,32 +220,32 @@ namespace dodo
 							sendString(const std::string &data, bool urgent = false) const;
 			
 			/**
-			 * recieve
-			 * @param data is data that would be recieved
-			 * @param urgent -> recieves out-of-band data
-			 * @note recieves no longer than inSize
-			 * if outSize bigger than socket buffer size - recieves with few iterations
+			 * receive
+			 * @param data is data that would be received
+			 * @param urgent -> receives out-of-band data
+			 * @note receives no longer than inSize
+			 * if outSize bigger than socket buffer size - receives with few iterations
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							recieve(char * const data, bool urgent = false) const;
+							receive(char * const data, bool urgent = false) const;
 			
 			/**
-			 * recieve
-			 * @param data is string that would be recieved
-			 * @param urgent -> recieves out-of-band data
-			 * @note recieves no longer than inSize
-			 * if outSize bigger than socket buffer size - recieves with few iterations
+			 * receive
+			 * @param data is string that would be received
+			 * @param urgent -> receives out-of-band data
+			 * @note receives no longer than inSize
+			 * if outSize bigger than socket buffer size - receives with few iterations
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif				
-							recieveString(std::string &data, bool urgent = false) const;///urgent = true -> Receipt  of out-of-band data
+							receiveString(std::string &data, bool urgent = false) const;///urgent = true -> Receipt  of out-of-band data
 						
 			/**
 			 * closes this socket

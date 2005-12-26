@@ -25,7 +25,7 @@
 #include <systemTools.h>
 
 using namespace dodo;
-
+	
 std::string 
 systemTools::getWorkingDir()
 {
@@ -650,3 +650,130 @@ systemTools::atExit(void (*func)())
 
 //-------------------------------------------------------------------
 
+int
+systemTools::getPID()
+{
+	return getpid();
+}
+
+//-------------------------------------------------------------------
+
+int
+systemTools::getParentPID()
+{
+	return getppid();	
+}
+
+//-------------------------------------------------------------------
+
+int 
+systemTools::getGroupPID()
+{
+	return getpgrp();
+}
+
+//-------------------------------------------------------------------
+			
+int 
+systemTools::getGroupPID(int pid)
+{
+	register int pgid = getpgid(pid);
+	if (pgid==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPPID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#endif		
+	
+	return -1;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::setGroupPID(int gpid)
+{
+	if (setpgid(0,gpid)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGROUPPID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif			
+systemTools::setGroupPID(int pid,
+						int gpid)
+{
+	if (setpgid(pid,gpid)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGROUPPID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif
+systemTools::setSignalHandler(systemSygnalsEnum signal, 
+							signalhandler handler)
+{
+	struct sigaction act;
+	act.sa_sigaction = handler;
+	act.sa_flags = SA_SIGINFO|SA_NODEFER;
+//	act.sa_handler = handler;
+	
+	if (sigaction(signal,&act,NULL)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+bool 
+systemTools::isSignalHandled(systemSygnalsEnum signal)
+{
+	struct sigaction act;
+	if (sigaction(signal,NULL,&act)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	if (act.sa_sigaction!=NULL || act.sa_handler!=NULL)	
+		return true;
+	else
+		return false;
+}
+
+//-------------------------------------------------------------------
