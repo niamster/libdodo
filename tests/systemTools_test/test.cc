@@ -5,30 +5,37 @@ using namespace dodo;
 using namespace std;
 
 static bool cought = false;
+static int number = 1;
 
 void 
 signaler(int, siginfo_t *, void *)
 {
-	cout << "HAHA =)";
+	cout << "\nHAHA =)\n";
 	cout.flush();
 	cought = true;
+	number++;
 }
 
 int main(int argc, char **argv)
 {
 	
-	systemTools::setSignalHandler(SIGNAL_KILL,signaler);
-/*	if (systemTools::isSignalHandled(SIGNAL_HANGUP))
+	cout << systemTools::getPID() << endl;
+	
+	systemTools::setSignalHandler(SIGNAL_HANGUP,signaler);
+	//systemTools::unsetSignalHandler(SIGNAL_HANGUP);
+	
+	if (systemTools::isSignalHandled(SIGNAL_HANGUP))
 		cout << "SET ... !\n";
 	else
-		cout << "NOT SET ... !\n";*/
+		cout << "NOT SET ... !\n";
 		
 	while (true)
 	{
-		//if (cought)
+		cout << "\r" << number;
+		if (cought)
 		{
 			cought = false;
-			cout << "HEHE =)\n";
+			cout << "\nHEHE =)\n";
 			cout.flush();
 		}
 		

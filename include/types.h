@@ -74,5 +74,6 @@ namespace dodo
 	
 	static assocArr __assocarray__;
 
-}
+};
+
 #endif /* _TYPES_H */

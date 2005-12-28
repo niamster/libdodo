@@ -160,6 +160,7 @@ namespace dodo
 			
 			mutable std::string temp;///< store temporary result
 	 };
+
 };
 
 #endif /*REGEXP_*/

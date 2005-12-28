@@ -402,7 +402,7 @@ namespace dodo
 				
 			#endif	
 	};
-};
 
+};
 
 #endif

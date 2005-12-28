@@ -425,9 +425,20 @@ namespace dodo
 			
 			/**
 			 * determines whether handler was set on signal
-			 * @param is signal on what set handler
+			 * @param is signal is on what set handler
 			 */
 			static bool isSignalHandled(systemSygnalsEnum signal);
+			
+			/**
+			 * removes signal handler
+			 * @param is signal is from what unset handler
+			 */			
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif			
+							unsetSignalHandler(systemSygnalsEnum signal);
 											
 		protected:
 			

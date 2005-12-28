@@ -76,9 +76,10 @@
 			ERRMODULE_FLUSHSOCKETOPTIONS,
 			ERRMODULE_FLUSHSOCKETEXCHANGE,
 			ERRMODULE_FLUSHSOCKETTOOLS,
+			ERRMODULE_SYSTEMTHREADS,
 		};	
 
-#define AM_MODULES 13
+#define AM_MODULES 18
 
 		#ifdef DL_EXT
 		
@@ -209,6 +210,7 @@
 				
 				#endif				
 		};
+
 	};
 
 #endif	

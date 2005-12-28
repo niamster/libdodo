@@ -274,6 +274,7 @@ namespace dodo
 			mutable long iter;///< amount of iterations to do to operate with data
 			mutable long rest;///< amount of data that is needed to operate at last	
 	 };
+
 };
 
 #endif /*SOCKETPP_H_*/

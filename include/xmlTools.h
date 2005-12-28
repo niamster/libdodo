@@ -278,7 +278,7 @@
 				static void errHandler(void *data, xmlErrorPtr error);
 				
 		};
-	}	
+	};	
 
 #endif
 

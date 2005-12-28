@@ -112,7 +112,7 @@ timeTools::week(long date,
 	stringArr week;
 	register long mon = date - (daynum-1)*86400;
 	
-	for (register int i(0);i<7;++i,mon+=86400)
+	for (register short int i(0);i<7;++i,mon+=86400)
 		week.push_back(timeTools::byFormat(format,mon,local));
 	
 	return week;	

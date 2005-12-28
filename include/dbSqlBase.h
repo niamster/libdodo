@@ -228,5 +228,7 @@ namespace dodo
 			mutable stringArr fieldsVPart;///< temporary places request's parts
 			
 	};
+
 };
+
 #endif /* _DBSQLBASE_H_ */

@@ -1,13 +1,13 @@
-#CC_PATH=/opt/gcc-3.4.3/bin/
-#CC_PATH=/opt/gcc-4.0.1/bin/
-#CC_PATH=/opt/intel/cc/9.0/bin/
+#CC_PATH:=/opt/gcc-3.4.3/bin/
+#CC_PATH:=/opt/gcc-4.0.1/bin/
+#CC_PATH:=/opt/intel/cc/9.0/bin/
 
-CXX = $(CC_PATH)g++
-#CXX = $(CC_PATH)icc
+CXX:=$(CC_PATH)g++
+#CXX:=$(CC_PATH)icc
 
-CFLAGS=-O3 -march=pentium4
+CFLAGS:=-O3 -march=pentium4
 
-OBJECTS=dbBase.o \
+OBJECTS:=dbBase.o \
 		tools.o \
 		xexec.o \
 		dbSqlBase.o \
@@ -27,7 +27,8 @@ OBJECTS=dbBase.o \
 		timeTools.o \
 		xmlTools.o \
 		dbSqlite.o \
-		dodoMap.o 
+		dodoMap.o \
+		systemThreads.o
 
 ###########################################################
 
@@ -49,11 +50,11 @@ MODS_LD:=$(MOD_MYSQL_LD) \
 override CPPFLAGS:=-I./include $(MODS_CPP) $(CPPFLAGS)
 override LDFLAGS:= -L./ $(MODS_LD) $(LDFLAGS)
 
-VPATH=src
+VPATH:=src
 
-LIBRARY=dodo
-VERSION = 0.1
-MINOR = 1
+LIBRARY:=dodo
+VERSION:=0.1
+MINOR:=1
 
 all: $(LIBRARY)
 
@@ -62,7 +63,7 @@ $(LIBRARY): $(OBJECTS)
 	ln -sf lib$(LIBRARY).so.$(VERSION).$(MINOR) lib$@.so
 	@echo ""
 	@echo ""
-	@echo "Now you can run 'make install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
+	@echo "Now you can run 'gmake install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
 .cc.o:
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -Wall -fPIC -c $^
 	strip -d $@

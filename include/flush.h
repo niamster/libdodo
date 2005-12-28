@@ -66,6 +66,7 @@ namespace dodo
 		
 			mutable bool opened;///< indicates whether file(connection) opened or not
 	};
+
 };
 
 #endif /*FLUSH_H_*/

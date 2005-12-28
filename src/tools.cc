@@ -340,7 +340,11 @@ tools::trim(const std::string &data,
 		inFake = (char *)buffer.c_str();
 		outFake = outBuffer;
 		
-		if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#ifdef BSD
+			if (iconv(conv,(const char **)&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#else
+			if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#endif
 			#ifndef NO_EX
 			{
 				delete [] outBuffer;
@@ -375,7 +379,11 @@ tools::trim(const std::string &data,
 		inFake = (char *)buffer.c_str();
 		outFake = outBuffer;
 		
-		if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#ifdef BSD
+			if (iconv(conv,(const char **)&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#else
+			if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#endif
 			#ifndef NO_EX
 			{
 				delete [] outBuffer;

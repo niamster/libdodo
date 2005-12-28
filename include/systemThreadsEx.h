@@ -1,7 +1,7 @@
 /***************************************************************************
- *            dodoMap.h
+ *            systemThreadsEx.h
  *
- *  Mon Dec 20 23:55:19 2005
+ *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -22,49 +22,38 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _DODOMAP_H_
-#define _DODOMAP_H_
+#ifndef _SYSTEMTHREADSEX_H_
+#define _SYSTEMTHREADSEX_H_
 
 #include <directives.h>
-#include <types.h>
 
-namespace dodo
-{
+#include <baseEx.h>
 
+#ifndef NO_EX
+
+	namespace dodo
+	{
 		/**
-		 * @class dodoMap is a duck for std::map<std::string, std::string> but controlling varName
-		 * if varName's value is not defined - '_undefined_' will be returned
+		 * libdodo defined errors
 		 */
-		class dodoMap
+		enum systemThreadsExR
 		{
-			public:
 			
-				/**
-				 * constructor
-				 */
-				dodoMap();
-			
-				/**
-				 * @return value by hash or '_undefined_' if not found
-				 * @param varName value of hash that points to the value
-				 */
-				std::string operator[](const std::string &varName);
-
-				assocArr realArr;///< real array
-				
-				bool icase;///< whether to react on keys with keys or no; false[react] by default
-				
-				/**
-				 * @return size of the map
-				 */
-				int size();
-				
-			private:
-				
-				assocArr::iterator i;///< iterator for methodArr(from begin)
-				assocArr::iterator j;///< iterator for methodArr(indicates end)
 		};
+		
+		/**
+		 * libdodo defined errors' explanation
+		 */
+				
+		/**
+		 * ID of function where exception was thrown
+		 */			
+		enum systemThreadsFunctionsID
+		{
+			
+		};
+	};
 
-}
+#endif
+#endif 
 
-#endif /*DODOMAP_H_*/

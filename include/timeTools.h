@@ -149,6 +149,7 @@ namespace dodo
 			 */ 
 			static __mktime makeTime(long seconds, bool local = true); 
 	};
+
 };
 
 #endif /*TIMETOOLS_H_*/

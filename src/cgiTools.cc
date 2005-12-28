@@ -257,15 +257,13 @@ cgiTools::makePost() const
 				temp1 = i->find("\n",temp0);
 				file.type = i->substr(temp0,temp1-temp0);
 				
-				std::string tmp_name = post_files_tmp_dir + std::string(1,FILE_DELIM);
-				tmp_name.append("dodo_post_XXXXXX");
-				ptr = mktemp((char*)tmp_name.c_str());
+				ptr = tempnam((post_files_tmp_dir + std::string(1,FILE_DELIM)).c_str(),"dodo_post_");
 				
 				if (ptr == NULL)	
 					continue;
 							
 				file.tmp_name = ptr;
-				
+							
 				file.size = i->substr(temp1+4).size()-2;
 				
 				file.error = NONE;
@@ -285,6 +283,7 @@ cgiTools::makePost() const
 						case ENOMEM:
 							file.error = NO_SPACE;
 					}
+				free(ptr);
 				fwrite(i->substr(temp1+4).c_str(),file.size,1,tmp);
 				if (errno == ENOMEM)
 						file.error = NO_SPACE;

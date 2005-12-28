@@ -305,5 +305,6 @@ namespace dodo
 			 */
 			inline static std::string dummy(const std::string &data);
 	};
+
 };
 #endif /* _TOOLS_H */

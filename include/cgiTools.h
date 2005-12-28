@@ -320,6 +320,6 @@ namespace dodo
 			mutable assocArr::iterator j;///< iterator
 	};
 
-}
+};
 
 #endif /*CGI_H_*/

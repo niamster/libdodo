@@ -43,7 +43,8 @@
 			DBSQLITE__EXEC,
 			DBSQLITE_DESTRUCTOR,
 			
-		};		
+		};	
+			
 	};
 
 #endif

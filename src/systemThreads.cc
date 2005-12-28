@@ -1,7 +1,7 @@
 /***************************************************************************
- *            xexecEx.h
+ *            systemThreads.cc
  *
- *  Wed Oct 5 16:25:14 2005
+ *  Wed Nov 30 22:02:16 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -22,33 +22,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _XEXECEX_H_
-#define _XEXECEX_H_
 
-#include <directives.h>
-
-#include <baseEx.h>
-
-#ifndef NO_EX
-
-	namespace dodo
-	{
-		
-		/**
-		 * ID of function where exception was thrown
-		 */					
-		enum xexecFunctionsID
-		{
-			#ifdef DL_EXT
-			
-				XEXEC_ADDXEXECMODULE,
-				XEXEC_GETMODULEINFO
-				
-			#endif
-			
-		};
-		
-	};
-
-#endif
-#endif /*REGEXPEX_H_*/
+#include <systemThreads.h>
+	
+using namespace dodo;

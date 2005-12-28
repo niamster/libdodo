@@ -228,7 +228,9 @@
 				mutable stringArr fields;///< to store fields
 				mutable stringArr rowPart;///< to set temporary row content
 		};
+
 	};
+	
 #endif
 
 #endif

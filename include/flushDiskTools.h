@@ -97,8 +97,8 @@ namespace dodo
 		int perm;///< file permissions
 		int type;///< file type
 		long size;///< file size
-		int modTime;///< modyfication time
-		int accTime;///< access time
+		long modTime;///< modyfication time
+		long accTime;///< access time
 		int gid;///< group id of the file
 		int uid;///< user id of the file
 	};	
@@ -263,13 +263,13 @@ namespace dodo
 			 * @return node access time
 			 * @param path indicates path what to describe
 			 */
-			static int getAccTime(const std::string &path);			
+			static long getAccTime(const std::string &path);			
 			
 			/**
 			 * @return node modyfication time
 			 * @param path indicates path what to describe
 			 */
-			static int getModTime(const std::string &path);
+			static long getModTime(const std::string &path);
 			
 			/**
 			 * gets original path of the file that link is set

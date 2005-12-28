@@ -357,7 +357,9 @@
 					
 				unsigned int numFields;///< number of fields
 		};
+		
 	};
+	
 #endif
 
 #endif

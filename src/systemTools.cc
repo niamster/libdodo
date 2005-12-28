@@ -148,7 +148,11 @@ systemTools::getLimit(systemToolsLimitEnum type,
 			realRes = RLIMIT_NPROC;
 			break;
 		case SYSTEM_MAXOPENFILES:
-			realRes = RLIMIT_OFILE;
+			#ifdef __USE_BSD
+				realRes = RLIMIT_NOFILE;
+			#else
+				realRes = RLIMIT_OFILE;
+			#endif
 			break;
 		default:
 			#ifndef NO_EX
@@ -743,7 +747,6 @@ systemTools::setSignalHandler(systemSygnalsEnum signal,
 	struct sigaction act;
 	act.sa_sigaction = handler;
 	act.sa_flags = SA_SIGINFO|SA_NODEFER;
-//	act.sa_handler = handler;
 	
 	if (sigaction(signal,&act,NULL)==-1)
 		#ifndef NO_EX
@@ -774,6 +777,30 @@ systemTools::isSignalHandled(systemSygnalsEnum signal)
 		return true;
 	else
 		return false;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif 
+systemTools::unsetSignalHandler(systemSygnalsEnum signal)
+{
+	struct sigaction act;
+	act.sa_sigaction = NULL;
+		
+	if (sigaction(signal,&act,NULL)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_UNSETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+	
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------

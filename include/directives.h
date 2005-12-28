@@ -29,6 +29,17 @@
 
 #define LIBDODO_VERSION "libdodo/0.1.1"
 
+/**
+ * system define; default - linux
+ */
+
+//#define BSD
+
+
+/**
+ * modules defines
+ */
+ 
 #define MYSQL_EXT
 #define PCRE_EXT
 #define LIBXML2_EXT
@@ -36,6 +47,10 @@
 #define CODECONV_EXT
 #define ZLIB_EXT
 #define SQLITE_EXT
+
+/**
+ * other options
+ */
 
 /**
  * !!!!note!!!!!

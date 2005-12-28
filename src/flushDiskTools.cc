@@ -569,7 +569,7 @@ flushDiskTools::getSize(const std::string &path)
 
 //-------------------------------------------------------------------
 
-int 
+long
 flushDiskTools::getAccTime(const std::string &path)
 {
 	struct stat st;
@@ -580,12 +580,12 @@ flushDiskTools::getAccTime(const std::string &path)
 			return -1;			
 		#endif
 		
-	return (int)st.st_atim.tv_sec;		
+	return st.st_atime;		
 }
 
 //-------------------------------------------------------------------
 
-int 
+long 
 flushDiskTools::getModTime(const std::string &path)
 {
 	struct stat st;
@@ -596,7 +596,7 @@ flushDiskTools::getModTime(const std::string &path)
 			return -1;		
 		#endif
 		
-	return (int)st.st_mtim.tv_sec;		
+	return st.st_mtime;		
 }
 
 //-------------------------------------------------------------------

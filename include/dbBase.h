@@ -745,6 +745,7 @@ namespace dodo
 			mutable std::vector<stringArr>::const_iterator k;///< iterator for "hash"
 			mutable std::vector<stringArr>::const_iterator l;///< iterator for "hash"
 	};
+
 };
 
 #endif /* _DBBASE_H_ */
