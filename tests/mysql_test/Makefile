@@ -2,6 +2,7 @@
 #GCC_PATH:=/opt/gcc-4.0.1/bin/
 
 CXX:=$(GCC_PATH)g++
+
 CFLAGS:=-O2 -march=pentium4
 
 MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql

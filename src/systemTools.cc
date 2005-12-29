@@ -25,6 +25,40 @@
 #include <systemTools.h>
 
 using namespace dodo;
+
+#ifdef DL_EXT
+
+	extern "C"
+	{
+			static void *__handlesSig[23];///< handles to modules
+			static bool __handlesOpenedSig[23] = {false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false,
+														false};///< map of opened modules
+						
+		
+	};
+	
+#endif
 	
 std::string 
 systemTools::getWorkingDir()
@@ -741,14 +775,14 @@ systemTools::setGroupPID(int pid,
 #else
 	bool 
 #endif
-systemTools::setSignalHandler(systemSygnalsEnum signal, 
+systemTools::setSignalHandler(systemSignalsEnum signal, 
 							signalhandler handler)
 {
 	struct sigaction act;
 	act.sa_sigaction = handler;
 	act.sa_flags = SA_SIGINFO|SA_NODEFER;
 	
-	if (sigaction(signal,&act,NULL)==-1)
+	if (sigaction(systemTools::toRealSignal(signal),&act,NULL)==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -763,10 +797,10 @@ systemTools::setSignalHandler(systemSygnalsEnum signal,
 //-------------------------------------------------------------------
 
 bool 
-systemTools::isSignalHandled(systemSygnalsEnum signal)
+systemTools::isSignalHandled(systemSignalsEnum signal)
 {
 	struct sigaction act;
-	if (sigaction(signal,NULL,&act)==-1)
+	if (sigaction(systemTools::toRealSignal(signal),NULL,&act)==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -786,12 +820,12 @@ systemTools::isSignalHandled(systemSygnalsEnum signal)
 #else
 	bool 
 #endif 
-systemTools::unsetSignalHandler(systemSygnalsEnum signal)
+systemTools::unsetSignalHandler(systemSignalsEnum signal)
 {
 	struct sigaction act;
 	act.sa_sigaction = NULL;
 		
-	if (sigaction(signal,&act,NULL)==-1)
+	if (sigaction(systemTools::toRealSignal(signal),&act,NULL)==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_UNSETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -801,6 +835,96 @@ systemTools::unsetSignalHandler(systemSygnalsEnum signal)
 	#ifdef NO_EX
 		return true;
 	#endif	
+}
+
+//-------------------------------------------------------------------
+
+sigMod 
+systemTools::getModuleInfo(const std::string &module)
+{
+		void *handle = dlopen(module.c_str(), RTLD_LAZY);
+		if (handle == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecExMod();
+			#endif
+			
+		initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
+		if (init == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return sigMod();
+			#endif
+			
+		sigMod mod = init();
+		
+		if (dlclose(handle)!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return mod;
+			#endif
+		
+		return mod;		
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif 
+systemTools::setSignalHandler(systemSignalsEnum signal, 
+							const std::string &path)
+{
+}
+
+//-------------------------------------------------------------------
+
+int 
+systemTools::toRealSignal(systemSignalsEnum signal)
+{
+	switch (signal)
+	{
+		case SIGNAL_HANGUP:
+		case SIGNAL_INTERRUPT:
+		case SIGNAL_QUIT:
+		case SIGNAL_ILLEGAL_INSTRUCTION:
+		case SIGNAL_TRACE_TRAP:
+		case SIGNAL_ABORT:
+		case SIGNAL_BUS_FAULT:
+		case SIGNAL_FLOATINGPOINT_FAULT:
+			return signal+1;
+		
+		case SIGNAL_USER_DEFINED1:
+		case SIGNAL_SEGMENTATION_FAULT:
+		case SIGNAL_USER_DEFINED2:
+		case SIGNAL_PIPE_FAULT:
+		case SIGNAL_ALARM:
+		case SIGNAL_TERMINATION:
+		case SIGNAL_STACK_FAULT:
+		case SIGNAL_CHILD_CHANGED:
+		case SIGNAL_CONTINUE:
+			return signal+2;
+
+		case SIGNAL_KEYBOARD_STOP:
+			return 20;
+			
+		case SIGNAL_CPULIMIT_EXCEEDED:
+			return 24;
+			
+		case SIGNAL_FILESIZE_EXCEEDED:
+			return 25;
+			
+		case SIGNAL_BAD_SYSCALL:
+			return 31;
+			
+		default:
+			return 0;
+	}
 }
 
 //-------------------------------------------------------------------

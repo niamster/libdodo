@@ -3,7 +3,7 @@
 #CC_PATH:=/opt/intel/cc/9.0/bin/
 
 CXX:=$(CC_PATH)g++
-#CXX:=$(CC_PATH)icc
+#CXX:=$(CC_PATH)icpc
 
 CFLAGS:=-O3 -march=pentium4
 

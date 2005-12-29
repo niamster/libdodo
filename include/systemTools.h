@@ -84,33 +84,30 @@ namespace dodo
 	/**
 	 * @enum systemSygnalsEnum describes system signals
 	 */
-	enum systemSygnalsEnum
+	enum systemSignalsEnum
 	{
-		SIGNAL_HANGUP=1,
-		SIGNAL_INTERRUPT=2,
-		SIGNAL_QUIT=3,
-		SIGNAL_ILLEGAL_INSTRUCTION=4,
-		SIGNAL_TRACE_TRAP=5,
-		SIGNAL_ABORT=6,
-		SIGNAL_BUS_FAULT=7,
-		SIGNAL_FLOATINGPOINT_FAULT=8,
-		SIGNAL_KILL=9,
-		SIGNAL_USER_DEFINED1=10,
-		SIGNAL_SEGMENTATION_FAULT=11,
-		SIGNAL_USER_DEFINED2=12,
-		SIGNAL_PIPE_FAULT=13,
-		SIGNAL_ALARM=14,
-		SIGNAL_TERMINATION=15,
-		SIGNAL_STACK_FAULT=16,
-		SIGNAL_CHILD_CHANGED=17,
-		SIGNAL_CONTINUE=18,
-		SIGNAL_STOP=19,
-		SIGNAL_KEYBOARD_STOP=20,
-		SIGNAL_CPULIMIT_EXCEEDED=24,
-		SIGNAL_FILESIZE_EXCEEDED=25,
-		SIGNAL_BAD_SYSCALL=31
+		SIGNAL_HANGUP = 0,
+		SIGNAL_INTERRUPT,
+		SIGNAL_QUIT,
+		SIGNAL_ILLEGAL_INSTRUCTION,
+		SIGNAL_TRACE_TRAP,
+		SIGNAL_ABORT,
+		SIGNAL_BUS_FAULT,
+		SIGNAL_FLOATINGPOINT_FAULT,
+		SIGNAL_USER_DEFINED1,
+		SIGNAL_SEGMENTATION_FAULT,
+		SIGNAL_USER_DEFINED2,
+		SIGNAL_PIPE_FAULT,
+		SIGNAL_ALARM,
+		SIGNAL_TERMINATION,
+		SIGNAL_STACK_FAULT,
+		SIGNAL_CHILD_CHANGED,
+		SIGNAL_CONTINUE,
+		SIGNAL_KEYBOARD_STOP,
+		SIGNAL_CPULIMIT_EXCEEDED,
+		SIGNAL_FILESIZE_EXCEEDED,
+		SIGNAL_BAD_SYSCALL
 	};
-	
 
 	/**
 	 * @enum uidTypeEnum describes type of UID
@@ -146,6 +143,32 @@ namespace dodo
 		int gid;///< group id
 		stringArr members;///< list of group members
 	};
+
+	#ifdef DL_EXT
+	
+		/**
+		 * @struct sigMod must be returned from initSigModule in the module
+		 */
+		struct sigMod
+		{
+			char name[20];///< name of module
+			char discription[40];///< discription of module
+			char hook[20];///< name of function in module that will be a hook
+			systemSignalsEnum module;///< type of errorModule to use; it is skipped if you define module in your program
+		};
+		
+		/**
+		 * @typedef describes function in module that must return info for the hook
+		 */
+		typedef sigMod (*initSigModule)();
+
+		/**
+		 * @typedef describes function in module that will be called during module unloading
+		 */
+		typedef void (*deinitSigModule)();
+	
+	#endif
+
 
 	/**
 	 * @class systemTools provides misc system operations, gets diff info about system
@@ -421,13 +444,13 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							setSignalHandler(systemSygnalsEnum signal, signalhandler handler);
+							setSignalHandler(systemSignalsEnum signal, signalhandler handler);
 			
 			/**
 			 * determines whether handler was set on signal
 			 * @param is signal is on what set handler
 			 */
-			static bool isSignalHandled(systemSygnalsEnum signal);
+			static bool isSignalHandled(systemSignalsEnum signal);
 			
 			/**
 			 * removes signal handler
@@ -438,9 +461,34 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							unsetSignalHandler(systemSygnalsEnum signal);
-											
+							unsetSignalHandler(systemSignalsEnum signal);
+							
+			#ifdef DL_EXT
+			
+				/**
+				 * @return info about module
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 */
+				static sigMod getModuleInfo(const std::string &module);
+				
+				/**
+				 * set handler on signal for specific module
+				 * @param module indicates for what module to set handler
+				 * @param handler is function that will be called when error occured[in catch]
+				 * @param data is data that will be passed to handler
+				 */
+				#ifndef NO_EX
+					static void 
+				#else
+					static bool 
+				#endif				 
+								setSignalHandler(systemSignalsEnum signal, const std::string &path);
+			
+			#endif											
+				
 		protected:
+			
+			static int toRealSignal(systemSignalsEnum signal);
 			
 			/**
 			 * fills __userInfo with values from passwd structure

@@ -71,8 +71,8 @@ namespace dodo
 		xexecObjTypeEnum type;///< type of object that passes to hook
 		void *data;///< data passed to func
 		void *obj;///< pointer to object that uses hook
-		bool present;///< if false = deleted
 		bool enabled;///< disable or enable hook
+		int position;///< position in list[not really in list, but that is returned to user]
 	};
 
 	/**
@@ -233,13 +233,13 @@ namespace dodo
 			 * deletes hook from list
 			 * @param position is position in list of hooks[returned from addPostExec]
 			 */
-			virtual void delPostExec(unsigned int position) const;
+			virtual void delPostExec(int position) const;
 						
 			/**
 			 * deletes hook from list
 			 * @param position is position in list of hooks[returned from addPreExec]
 			 */
-			virtual void delPreExec(unsigned int position) const;
+			virtual void delPreExec(int position) const;
 						
 			/**
 			 * replaces hook from list with another
@@ -247,7 +247,7 @@ namespace dodo
 			 * @param func is reference to functions that will be called as a hook
 			 * @param data is pointer to data that will pass to hook
 			 */
-			virtual bool replacePostExec(unsigned int position, inExec func, void *data) const;
+			virtual bool replacePostExec(int position, inExec func, void *data) const;
 						
 			/**
 			 * replaces hook from list
@@ -255,33 +255,33 @@ namespace dodo
 			 * @param func is reference to functions that will be called as a hook
 			 * @param data is pointer to data that will pass to hook
 			 */
-			virtual bool replacePreExec(unsigned int position, inExec func, void *data) const;
+			virtual bool replacePreExec(int position, inExec func, void *data) const;
 						
 			/**
 			 * disable hook
 			 * @param position is position in list of hooks[returned from addPostExec]
 			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
 			 */
-			virtual void disablePostExec(unsigned int position) const;
+			virtual void disablePostExec(int position) const;
 						
 			/**
 			 * disable hook
 			 * @param position is position in list of hooks[returned from addPreExec]
 			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
 			 */
-			virtual void disablePreExec(unsigned int position) const;
+			virtual void disablePreExec(int position) const;
 						
 			/**
 			 * enable hook
 			 * @param position is position in list of hooks[returned from addPostExec]
 			 */			
-			virtual void enablePostExec(unsigned int position) const;
+			virtual void enablePostExec(int position) const;
 						
 			/**
 			 * enable hook
 			 * @param position is position in list of hooks[returned from addPreExec]
 			 */
-			virtual void enablePreExec(unsigned int position) const;		
+			virtual void enablePreExec(int position) const;		
 							
 			/**
 			 * enable all PreExec hooks
@@ -337,6 +337,14 @@ namespace dodo
 		protected:
 		
 			/**
+			 * @return true if found
+			 * @param list describes list where to search
+			 * @param position is position in list of hooks
+			 * @param iter is iterator that is specified with position
+			 */
+			bool getXexec(std::vector<__execItem> &list, int position, std::vector<__execItem>::iterator &iter) const;
+		
+			/**
 			 * set function that will be executed before  the main action call
 			 * @return number in list where function is set
 			 * @param list describes list where hook will be set
@@ -352,7 +360,7 @@ namespace dodo
 			 * @param list describes list where is set hook
 			 * @param position is position in list of hooks
 			 */
-			inline virtual void delXExec(std::vector<__execItem> &list, unsigned int position) const;
+			inline virtual void delXExec(std::vector<__execItem> &list, int position) const;
 						
 			/**
 			 * replaces hook from list
@@ -361,7 +369,7 @@ namespace dodo
 			 * @param func is reference to functions that will be called as a hook
 			 * @param data is pointer to data that will pass to hook
 			 */			
-			inline virtual bool replaceXExec(std::vector<__execItem> &list, unsigned int position, inExec func, void *data) const;
+			inline virtual bool replaceXExec(std::vector<__execItem> &list, int position, inExec func, void *data) const;
 			
 			/**
 			 * set state(enable/disable) for XExec
@@ -369,7 +377,7 @@ namespace dodo
 			 * @param position is position in list where to set state
 			 * @param stat indicates what state to set
 			 */
-			virtual void setStatXExec(std::vector<__execItem> &list, unsigned int position, bool stat) const;
+			virtual void setStatXExec(std::vector<__execItem> &list, int position, bool stat) const;
 			
 			#ifdef DL_EXT
 			
@@ -394,6 +402,14 @@ namespace dodo
 			
 			mutable __execItemList preExec;///< list of hooks executed before exec
 			mutable __execItemList postExec;///< list of hooks executed after exec
+			
+			mutable int execs;
+			
+			mutable std::vector<__execItem>::iterator i;///< iterator for list
+			mutable std::vector<__execItem>::iterator j;///< iterator for list
+			mutable std::vector<__execItem>::iterator k;///< iterator for list
+			
+			mutable __execItem temp;///< temp storage for hook
 			
 			#ifdef DL_EXT
 			

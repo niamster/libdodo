@@ -245,7 +245,7 @@
 	#ifdef DL_EXT
 	
 		bool 
-		baseEx::setErrorHandlers(std::string path,
+		baseEx::setErrorHandlers(const std::string &path,
 							void *data)
 		{
 			initExModule init;
@@ -293,7 +293,7 @@
 			
 		bool 
 		baseEx::setErrorHandler(errorModuleEnum module,
-							std::string path,
+							const std::string &path,
 							void *data)
 		{
 			deinitExModule deinit;
@@ -346,7 +346,7 @@
 			exMod mod = init();
 			
 			if (dlclose(handle)!=0)
-				return exMod();
+				return mod;
 			
 			return mod;	
 		}

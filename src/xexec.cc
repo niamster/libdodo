@@ -36,14 +36,15 @@ dummyHook(void *base, xexecObjTypeEnum type, void *data)
 //-------------------------------------------------------------------
 
 xexec::xexec() : safeHooks(true),
-				operType(XEXEC_NONE)
+				operType(XEXEC_NONE),
+				execs(0)
 {
 	preExec.execDisabled = false;
 	postExec.execDisabled = false;
 	
 	#ifdef DL_EXT
 	
-		for (register int i(0);i<XEXEC_MAXMODULES;++i)
+		for (register short int i(0);i<XEXEC_MAXMODULES;++i)
 			handlesOpened[i] = -1;
 					
 	#endif
@@ -83,37 +84,34 @@ xexec::addXExec(std::vector<__execItem> &list,
  		xexecObjTypeEnum type,
 		void *data) const
 {
-	__execItem temp;
-	
 	temp.data = data;
 	temp.obj = obj;
 	temp.func = func;
-	temp.present = true;
+	temp.position = ++execs;
 	temp.enabled = true;
 	temp.type = type;
 	
 	list.push_back(temp);
 
-	return list.size();	
+	return temp.position;	
 }
 
 //-------------------------------------------------------------------
 
 void 
 xexec::setStatXExec(std::vector<__execItem> &list, 
-		unsigned int position,
+		int position,
 		bool stat) const
 {
-	--position;
-	if ((position) <= list.size())
-		list[position].enabled = stat;	
+	if (getXexec(list,position,k))
+		k->enabled = stat;
 }
 
 //-------------------------------------------------------------------
 
 inline void 
 xexec::delXExec(std::vector<__execItem> &list, 
-		unsigned int position) const
+				int position) const
 {
 	if (position <= 0)
 		return;
@@ -122,7 +120,7 @@ xexec::delXExec(std::vector<__execItem> &list,
 	
 		deinitXexecModule deinit;	
 
-		for (register int o(0);o<XEXEC_MAXMODULES;++o)
+		for (register short int o(0);o<XEXEC_MAXMODULES;++o)
 			if (handlesOpened[o]==position)
 			{
 				deinit = (deinitXexecModule)dlsym(handles[o], "deinitXexecModule");
@@ -137,16 +135,9 @@ xexec::delXExec(std::vector<__execItem> &list,
 			}
 			
 	#endif	
-
-	--position;
 	
-	if (list[position].present && (position <= list.size()))
-	{
-		list[position].func = dummyHook;
-		list[position].obj = NULL;
-		list[position].data = NULL;
-		list[position].present = false;
-	}
+	if (getXexec(list,position,k))
+		list.erase(k);
 }
 
 //-------------------------------------------------------------------
@@ -163,7 +154,7 @@ xexec::_addPreExec(inExec func,
 //-------------------------------------------------------------------
 
 void 
-xexec::disablePreExec(unsigned int position) const
+xexec::disablePreExec(int position) const
 {
 	setStatXExec(preExec.exec,position,false);
 }
@@ -171,7 +162,7 @@ xexec::disablePreExec(unsigned int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::delPreExec(unsigned int position) const
+xexec::delPreExec(int position) const
 {
 	delXExec(preExec.exec,position);
 }
@@ -179,7 +170,7 @@ xexec::delPreExec(unsigned int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::enablePreExec(unsigned int position) const
+xexec::enablePreExec(int position) const
 {
 	setStatXExec(preExec.exec,position,true);
 }
@@ -198,7 +189,7 @@ xexec::_addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 void 
-xexec::disablePostExec(unsigned int position) const
+xexec::disablePostExec(int position) const
 {
 	setStatXExec(postExec.exec,position,false);
 }
@@ -206,7 +197,7 @@ xexec::disablePostExec(unsigned int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::delPostExec(unsigned int position) const
+xexec::delPostExec(int position) const
 {
 	delXExec(postExec.exec,position);
 }
@@ -214,7 +205,7 @@ xexec::delPostExec(unsigned int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::enablePostExec(unsigned int position) const
+xexec::enablePostExec(int position) const
 {
 	setStatXExec(postExec.exec,position,true);
 }
@@ -272,7 +263,7 @@ xexec::enableAll() const
 //-------------------------------------------------------------------
 
 bool 
-xexec::replacePostExec(unsigned int position, 
+xexec::replacePostExec(int position, 
 				inExec func,
 				void *data) const
 {
@@ -282,7 +273,7 @@ xexec::replacePostExec(unsigned int position,
 //-------------------------------------------------------------------
 
 bool 
-xexec::replacePreExec(unsigned int position, 
+xexec::replacePreExec(int position, 
 				inExec func,
 				void *data) const
 {
@@ -293,7 +284,7 @@ xexec::replacePreExec(unsigned int position,
 
 inline bool 
 xexec::replaceXExec(std::vector<__execItem> &list, 
-			unsigned int position, 
+			int position, 
 			inExec func,
 			void *data) const
 {
@@ -304,7 +295,7 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 	
 		deinitXexecModule deinit;	
 		
-		for (register int o(0);o<XEXEC_MAXMODULES;++o)
+		for (register short int o(0);o<XEXEC_MAXMODULES;++o)
 			if (handlesOpened[o]==position)
 			{
 				deinit = (deinitXexecModule)dlsym(handles[o], "deinitXexecModule");
@@ -319,14 +310,13 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 			}
 			
 	#endif	
-
-	--position;
 	
-	if (position <= list.size())
+	if (getXexec(list,position,k))
 	{
-		list[position].func = func;
-		list[position].data = data;
-		list[position].present = true;
+		k->func = func;
+		k->data = data;
+		k->enabled = true;
+		
 		return true;
 	}
 	else
@@ -340,10 +330,11 @@ xexec::performXExec(__execItemList &list) const
 	if (list.execDisabled)
 		return ;
 		
-	std::vector<__execItem>::const_iterator i(list.exec.begin()),j(list.exec.end());
+	i = list.exec.begin();
+	j = list.exec.end();
 	
 	for (;i!=j;++i)
-		if (i->present && i->enabled)
+		if (i->enabled)
 		{
 			if (safeHooks)
 			{
@@ -377,7 +368,7 @@ xexec::performXExec(__execItemList &list) const
 					const std::string &module, 
 					void *data) const
 	{
-		register int i(0);
+		register short int i(0);
 		for (;i<XEXEC_MAXMODULES;++i)
 			if (handlesOpened[i] == -1)
 				break;
@@ -385,11 +376,9 @@ xexec::performXExec(__execItemList &list) const
 		if (i == XEXEC_MAXMODULES)
 			return -1;
 		
-		__execItem temp;
-		
 		temp.data = data;
 		temp.obj = obj;
-		temp.present = true;
+		temp.position = ++execs;
 		temp.enabled = true;
 		temp.type = type;
 		
@@ -420,9 +409,9 @@ xexec::performXExec(__execItemList &list) const
 		temp.func = in;
 		
 		list.push_back(temp);
-		handlesOpened[i] = list.size();
+		handlesOpened[i] = temp.position;
 		
-		return handlesOpened[i];		
+		return temp.position;		
 	}
 	
 	//-------------------------------------------------------------------
@@ -474,7 +463,7 @@ xexec::performXExec(__execItemList &list) const
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return xexecExMod();
+				return mod;
 			#endif
 		
 		return mod;	
@@ -488,23 +477,21 @@ xexec::performXExec(__execItemList &list) const
  					xexecObjTypeEnum type, 
 					void *data) const
 	{
-		register int i(0);
+		register short int i(0);
 		for (;i<XEXEC_MAXMODULES;++i)
 			if (handlesOpened[i] == -1)
 				break;
 						
-		register int j(0);
+		register short int j(0);
 		for (;j<XEXEC_MAXMODULES;++j)
 			if (handlesOpened[j] == -1)
 				break;
 				
 		if (i == XEXEC_MAXMODULES || j == XEXEC_MAXMODULES)
 			return xexecCounts();
-		
-		__execItem temp;
+
 		temp.data = data;
 		temp.obj = obj;
-		temp.present = true;
 		temp.enabled = true;
 		temp.type = type;
 		
@@ -550,21 +537,28 @@ xexec::performXExec(__execItemList &list) const
 		switch (info.execType)
 		{
 			case XEXECMODULE_POST:
+				temp.position = ++execs;
 				postExec.exec.push_back(temp);
-				count.post = postExec.exec.size();
-				handlesOpened[i] = count.post;
+				count.post = temp.position;
+				handlesOpened[i] = temp.position;
 				break;
 			
 			case XEXECMODULE_PRE:
+				temp.position = ++execs;
 				preExec.exec.push_back(temp);
-				count.pre = preExec.exec.size();
-				handlesOpened[j] = count.pre;
+				count.pre = temp.position;
+				handlesOpened[j] = temp.position;
 				break;
 									
 			case XEXECMODULE_BOTH:
+				temp.position = ++execs;
 				postExec.exec.push_back(temp);
-				count.post = postExec.exec.size();
-				count.pre = preExec.exec.size();
+				count.post = temp.position;
+				
+				temp.position = ++execs;
+				preExec.exec.push_back(temp);		
+				count.pre = temp.position;
+				
 				handlesOpened[i] = count.post;
 				handlesOpened[j] = count.pre;
 				break;
@@ -576,3 +570,25 @@ xexec::performXExec(__execItemList &list) const
 	//-------------------------------------------------------------------
 
 #endif
+
+//-------------------------------------------------------------------
+
+bool 
+xexec::getXexec(std::vector<__execItem> &list, 
+				int position, 
+				std::vector<__execItem>::iterator &iter) const
+{
+	i = list.begin();
+	j = list.end();
+	
+	for (;i!=j;++i)
+		if (i->position == position)
+		{
+			iter = i;
+			return true;
+		}
+	
+	return false;
+}
+
+//-------------------------------------------------------------------

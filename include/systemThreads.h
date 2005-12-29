@@ -27,9 +27,21 @@
 
 #include <directives.h>
 
+#include <pthread.h>
 	
 namespace dodo
 {
+
+	/**
+	 * @struct __thredInfo describes thread
+	 */
+	struct __thredInfo
+	{
+		pthread_t thread;///< thread descriptor
+		void *data;///< data that will be passed on run
+		bool isRunning;///< whether thread is running
+		
+	};
 
 };
 

@@ -79,12 +79,12 @@
 			ERRMODULE_SYSTEMTHREADS,
 		};	
 
-#define AM_MODULES 18
+		#define AM_MODULES 18
 
 		#ifdef DL_EXT
 		
 			/**
-			 * @struct xexecExMod must be returned from initExModule in the module
+			 * @struct exMod must be returned from initExModule in the module
 			 */
 			struct exMod
 			{
@@ -195,18 +195,18 @@
 					 * set handler on error for specific module
 					 * @return false on error
 					 * @param module indicates for what module to set handler
-					 * @param handler is function that will be called when error occured[in catch]
+					 * @param path is path to module from what function will be called when error occured[in catch]
 					 * @param data is data that will be passed to handler
 					 */
-					static bool setErrorHandler(errorModuleEnum module, std::string path,	void *data);
+					static bool setErrorHandler(errorModuleEnum module, const std::string &path, void *data);
 									
 					/**
 					 * set handler on error for all modules
 					 * @return false on error
-					 * @param handler is function that will be called when error occured[in catch]
+					 * @param handler is path to module from what function will be called when error occured[in catch]
 					 * @param data is data that will be passed to handler
 					 */
-					static bool setErrorHandlers(std::string path,	void *data);
+					static bool setErrorHandlers(const std::string &path, void *data);
 				
 				#endif				
 		};
