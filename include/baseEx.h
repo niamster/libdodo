@@ -91,7 +91,6 @@
 				char name[20];///< name of module
 				char discription[40];///< discription of module
 				char hook[20];///< name of function in module that will be a hook
-				errorModuleEnum module;///< type of errorModule to use; it is skipped if you define module in your program
 			};
 			
 			/**

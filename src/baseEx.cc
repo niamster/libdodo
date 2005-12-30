@@ -127,7 +127,7 @@
 							void *data)
 	{
 		#ifdef DL_EXT
-			
+		
 			if (__handlesOpenedEx[module])
 			{
 				deinitExModule deinit;	
@@ -139,6 +139,7 @@
 				dlclose(__handlesEx[module]);
 				
 				__handlesOpenedEx[module] = false;
+				__handlesEx[module] = NULL;
 			}	
 		
 		#endif
@@ -171,6 +172,7 @@
 					dlclose(__handlesEx[i]);
 					
 					__handlesOpenedEx[i] = false;
+					__handlesEx[i] = NULL;
 				}	
 			
 			#endif
@@ -199,6 +201,7 @@
 				dlclose(__handlesEx[module]);
 				
 				__handlesOpenedEx[module] = false;
+				__handlesEx[module] = NULL;
 			}	
 		
 		#endif		
@@ -230,6 +233,7 @@
 					dlclose(__handlesEx[i]);
 					
 					__handlesOpenedEx[i] = false;
+					__handlesEx[i] = NULL;
 				}	
 			
 			#endif
@@ -264,6 +268,7 @@
 					dlclose(__handlesEx[i]);
 					
 					__handlesOpenedEx[i] = false;
+					__handlesEx[i] = NULL;
 				}	
 				
 				__handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
@@ -307,6 +312,7 @@
 				dlclose(__handlesEx[module]);
 				
 				__handlesOpenedEx[module] = false;
+				__handlesEx[module] = NULL;
 			}
 			
 			__handlesEx[module] = dlopen(path.c_str(), RTLD_LAZY);

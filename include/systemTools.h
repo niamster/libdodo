@@ -79,7 +79,7 @@ namespace dodo
 	/**
 	 * @typedef describes handler function on signal
 	 */
-	typedef void (*signalhandler)(int, siginfo_t *, void *);
+	typedef void (*signalHandler)(int, siginfo_t *, void *);
 
 	/**
 	 * @enum systemSygnalsEnum describes system signals
@@ -154,7 +154,6 @@ namespace dodo
 			char name[20];///< name of module
 			char discription[40];///< discription of module
 			char hook[20];///< name of function in module that will be a hook
-			systemSignalsEnum module;///< type of errorModule to use; it is skipped if you define module in your program
 		};
 		
 		/**
@@ -444,7 +443,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							setSignalHandler(systemSignalsEnum signal, signalhandler handler);
+							setSignalHandler(systemSignalsEnum signal, signalHandler handler);
 			
 			/**
 			 * determines whether handler was set on signal
@@ -472,18 +471,17 @@ namespace dodo
 				static sigMod getModuleInfo(const std::string &module);
 				
 				/**
-				 * set handler on signal for specific module
-				 * @param module indicates for what module to set handler
-				 * @param handler is function that will be called when error occured[in catch]
-				 * @param data is data that will be passed to handler
+				 * set handler on signal from specific module
+				 * @param signal indicates for what signal to set handler
+				 * @param @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 */
 				#ifndef NO_EX
 					static void 
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(systemSignalsEnum signal, const std::string &path);
-			
+								setSignalHandler(systemSignalsEnum signal, const std::string &module);
+
 			#endif											
 				
 		protected:

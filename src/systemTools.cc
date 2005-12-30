@@ -32,28 +32,28 @@ using namespace dodo;
 	{
 			static void *__handlesSig[23];///< handles to modules
 			static bool __handlesOpenedSig[23] = {false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false};///< map of opened modules
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false,
+													false};///< map of opened modules
 						
 		
 	};
@@ -776,8 +776,27 @@ systemTools::setGroupPID(int pid,
 	bool 
 #endif
 systemTools::setSignalHandler(systemSignalsEnum signal, 
-							signalhandler handler)
+							signalHandler handler)
 {
+	
+	#ifdef DL_EXT
+	
+		deinitSigModule deinit;
+		
+		if (__handlesOpenedSig[signal])
+		{
+			deinit = (deinitSigModule)dlsym(__handlesSig[signal], "deinitSigModule");
+			if (deinit != NULL)
+				deinit();
+				
+			dlclose(__handlesSig[signal]);
+			
+			__handlesOpenedSig[signal] = false;
+			__handlesSig[signal] = NULL;
+		}	
+	
+	#endif	
+	
 	struct sigaction act;
 	act.sa_sigaction = handler;
 	act.sa_flags = SA_SIGINFO|SA_NODEFER;
@@ -822,6 +841,24 @@ systemTools::isSignalHandled(systemSignalsEnum signal)
 #endif 
 systemTools::unsetSignalHandler(systemSignalsEnum signal)
 {
+	#ifdef DL_EXT
+	
+		deinitSigModule deinit;
+		
+		if (__handlesOpenedSig[signal])
+		{
+			deinit = (deinitSigModule)dlsym(__handlesSig[signal], "deinitSigModule");
+			if (deinit != NULL)
+				deinit();
+				
+			dlclose(__handlesSig[signal]);
+			
+			__handlesOpenedSig[signal] = false;
+			__handlesSig[signal] = NULL;
+		}	
+	
+	#endif
+	
 	struct sigaction act;
 	act.sa_sigaction = NULL;
 		
@@ -839,48 +876,106 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 
 //-------------------------------------------------------------------
 
-sigMod 
-systemTools::getModuleInfo(const std::string &module)
-{
-		void *handle = dlopen(module.c_str(), RTLD_LAZY);
-		if (handle == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-			#else
-				return xexecExMod();
-			#endif
+#ifdef DL_EXT
+
+	sigMod 
+	systemTools::getModuleInfo(const std::string &module)
+	{
+			void *handle = dlopen(module.c_str(), RTLD_LAZY);
+			if (handle == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return xexecExMod();
+				#endif
+				
+			initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
+			if (init == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return sigMod();
+				#endif
+				
+			sigMod mod = init();
 			
-		initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
+			if (dlclose(handle)!=0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return mod;
+				#endif
+			
+			return mod;		
+	}
+	
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif 
+	systemTools::setSignalHandler(systemSignalsEnum signal, 
+								const std::string &path)
+	{
+		deinitSigModule deinit;
+		
+		if (__handlesOpenedSig[signal])
+		{
+			deinit = (deinitSigModule)dlsym(__handlesSig[signal], "deinitSigModule");
+			if (deinit != NULL)
+				deinit();
+				
+			dlclose(__handlesSig[signal]);
+			
+			__handlesOpenedSig[signal] = false;
+			__handlesSig[signal] = NULL;
+		}
+		
+		__handlesSig[signal] = dlopen(path.c_str(), RTLD_LAZY);
+		if (__handlesSig[signal] == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		initSigModule init = (initSigModule)dlsym(__handlesSig[signal], "initSigModule");
 		if (init == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return sigMod();
+				return false;
 			#endif
-			
-		sigMod mod = init();
 		
-		if (dlclose(handle)!=0)
+		signalHandler in = (signalHandler)dlsym(__handlesSig[signal], init().hook);
+		if (in == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return mod;
+				return false;
+			#endif
+	
+		struct sigaction act;
+		act.sa_sigaction = in;
+		act.sa_flags = SA_SIGINFO|SA_NODEFER;
+		
+		if (sigaction(systemTools::toRealSignal(signal),&act,NULL)==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
 			#endif
 		
-		return mod;		
-}
+		__handlesOpenedSig[signal] = true;
+		
+		#ifdef NO_EX
+			return true;
+		#endif					
+	}
 
-//-------------------------------------------------------------------
-
-#ifndef NO_EX
-	void 
-#else
-	bool 
-#endif 
-systemTools::setSignalHandler(systemSignalsEnum signal, 
-							const std::string &path)
-{
-}
+#endif
 
 //-------------------------------------------------------------------
 
