@@ -974,7 +974,77 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 			return true;
 		#endif					
 	}
-
+	
+	//-------------------------------------------------------------------
+	
+	#ifndef NO_EX
+		void 
+	#else
+		bool 
+	#endif 
+	systemTools::setSignalHandler(const std::string &path)
+	{
+		
+		void *handle = dlopen(path.c_str(), RTLD_LAZY);
+		if (handle == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
+		if (init == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+			
+		sigMod	mod = init();	
+		
+		deinitSigModule deinit;
+		
+		if (__handlesOpenedSig[mod.signal])
+		{
+			deinit = (deinitSigModule)dlsym(__handlesSig[mod.signal], "deinitSigModule");
+			if (deinit != NULL)
+				deinit();
+				
+			dlclose(__handlesSig[mod.signal]);
+			
+			__handlesOpenedSig[mod.signal] = false;
+			__handlesSig[mod.signal] = NULL;
+		}
+		
+		__handlesSig[mod.signal] = handle;
+		
+		signalHandler in = (signalHandler)dlsym(__handlesSig[mod.signal], mod.hook);
+		if (in == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+	
+		struct sigaction act;
+		act.sa_sigaction = in;
+		act.sa_flags = SA_SIGINFO|SA_NODEFER;
+		
+		if (sigaction(systemTools::toRealSignal(mod.signal),&act,NULL)==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		__handlesOpenedSig[mod.signal] = true;
+		
+		#ifdef NO_EX
+			return true;
+		#endif					
+	}
+	
 #endif
 
 //-------------------------------------------------------------------

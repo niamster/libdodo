@@ -337,6 +337,52 @@
 		}
 		
 		//-------------------------------------------------------------------
+			
+		bool 
+		baseEx::setErrorHandler(const std::string &path,
+							void *data)
+		{
+			
+			void *handler = dlopen(path.c_str(), RTLD_LAZY);
+			if (handler == NULL)
+				return false;
+			
+			initExModule init = (initExModule)dlsym(handler, "initExModule");
+			if (init == NULL)
+				return false;			
+			
+			exMod mod = init();
+			
+			deinitExModule deinit;
+
+			if (__handlesOpenedEx[mod.module])
+			{
+				deinit = (deinitExModule)dlsym(__handlesEx[mod.module], "deinitExModule");
+				if (deinit != NULL)
+					deinit();
+					
+				dlclose(__handlesEx[mod.module]);
+				
+				__handlesOpenedEx[mod.module] = false;
+				__handlesEx[mod.module] = NULL;
+			}
+
+			__handlesEx[mod.module] = handler;
+			
+			errorHandler in = (errorHandler)dlsym(__handlesEx[mod.module], mod.hook);
+			if (in == NULL)
+				return false;
+		
+			__handlesOpenedEx[mod.module] = true;
+
+			__handlersEx[mod.module] = in;
+			__handlerSetEx[mod.module] = true;
+			__handlerDataEx[mod.module] = data;
+		
+			return true;		
+		}
+				
+		//-------------------------------------------------------------------
 		
 		exMod 
 		baseEx::getModuleInfo(const std::string &module)

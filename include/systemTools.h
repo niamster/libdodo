@@ -154,6 +154,7 @@ namespace dodo
 			char name[20];///< name of module
 			char discription[40];///< discription of module
 			char hook[20];///< name of function in module that will be a hook
+			systemSignalsEnum signal;///< on what signal to set handler
 		};
 		
 		/**
@@ -481,6 +482,18 @@ namespace dodo
 					static bool 
 				#endif				 
 								setSignalHandler(systemSignalsEnum signal, const std::string &module);
+
+				/**
+				 * set handler on signal from specific module
+				 * @param signal indicates for what signal to set handler
+				 * @param @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 */
+				#ifndef NO_EX
+					static void 
+				#else
+					static bool 
+				#endif				 
+								setSignalHandler(const std::string &module);
 
 			#endif											
 				

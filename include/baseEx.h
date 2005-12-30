@@ -91,6 +91,7 @@
 				char name[20];///< name of module
 				char discription[40];///< discription of module
 				char hook[20];///< name of function in module that will be a hook
+				errorModuleEnum module;///< for what module set handler
 			};
 			
 			/**
@@ -198,6 +199,14 @@
 					 * @param data is data that will be passed to handler
 					 */
 					static bool setErrorHandler(errorModuleEnum module, const std::string &path, void *data);
+					
+					/**
+					 * set handler on error for specific module
+					 * @return false on error
+					 * @param path is path to module from what function will be called when error occured[in catch]
+					 * @param data is data that will be passed to handler
+					 */
+					static bool setErrorHandler(const std::string &path, void *data);
 									
 					/**
 					 * set handler on error for all modules
