@@ -243,6 +243,7 @@ namespace dodo
 						
 			/**
 			 * replaces hook from list with another
+			 * @return false if nothing to replace
 			 * @param position is position in list of hooks[returned from addPostExec]
 			 * @param func is reference to functions that will be called as a hook
 			 * @param data is pointer to data that will pass to hook
@@ -251,6 +252,7 @@ namespace dodo
 						
 			/**
 			 * replaces hook from list
+			 * @return false if nothing to replace
 			 * @param position is position in list of hooks[returned from addPreExec]
 			 * @param func is reference to functions that will be called as a hook
 			 * @param data is pointer to data that will pass to hook
@@ -342,7 +344,7 @@ namespace dodo
 			 * @param position is position in list of hooks
 			 * @param iter is iterator that is specified with position
 			 */
-			bool getXexec(std::vector<__execItem> &list, int position, std::vector<__execItem>::iterator &iter) const;
+			virtual bool getXexec(std::vector<__execItem> &list, int position, std::vector<__execItem>::iterator &iter) const;
 		
 			/**
 			 * set function that will be executed before  the main action call

@@ -43,7 +43,8 @@ MODS_LD:=$(MOD_MYSQL_LD) \
 			$(MOD_PCRE_LD) \
 			$(MOD_DL_LD) \
 			$(MOD_LIBXML2_LD) \
-			$(MOD_SQLITE_LD)
+			$(MOD_SQLITE_LD) \
+			$(MOD_PTHREAD_LD)
 
 ###########################################################
 

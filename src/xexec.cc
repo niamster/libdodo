@@ -26,8 +26,6 @@
 
 using namespace dodo;
 
-//-------------------------------------------------------------------
-
 void 
 dummyHook(void *base, xexecObjTypeEnum type, void *data)
 {
@@ -113,9 +111,6 @@ inline void
 xexec::delXExec(std::vector<__execItem> &list, 
 				int position) const
 {
-	if (position <= 0)
-		return;
-	
 	#ifdef DL_EXT
 	
 		deinitXexecModule deinit;	
@@ -288,9 +283,6 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 			inExec func,
 			void *data) const
 {
-	if (position <= 0)
-		return false;
-		
 	#ifdef DL_EXT
 	
 		deinitXexecModule deinit;	
