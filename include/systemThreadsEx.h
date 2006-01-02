@@ -39,12 +39,14 @@
 		enum systemThreadsExR
 		{
 			SYSTEMTHREADS_ISRUNNING,
+			SYSTEMTHREADS_ISNOTRUNNING,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */
 		#define SYSTEMTHREADS_ISRUNNING_STR "The thread is currently running. Please wait."
+		#define SYSTEMTHREADS_ISNOTRUNNING_STR "The thread is currently not running."
 			
 		/**
 		 * ID of function where exception was thrown
@@ -54,6 +56,7 @@
 			SYSTEMTHREADS_REPLACETHREAD,
 			SYSTEMTHREADS_RUNTHREAD,
 			SYSTEMTHREADS_DELTHREAD,
+			SYSTEMTHREADS_WAITTHREAD,
 		};
 	};
 

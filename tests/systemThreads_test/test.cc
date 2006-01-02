@@ -21,12 +21,14 @@ int main(int argc, char **argv)
 		systemThreads th;
 		int pos = th.addThread(thread,(void *)"HIHI");
 		th.runThread(pos);
+		
 		cout << endl << endl << "STARTED" << endl;
+		cout << timeTools::now();
 		cout.flush();
 		
-		cout << timeTools::now();
+		th.waitThread(pos);
 		
-		systemTools::sleep(10000);
+		//systemTools::sleep(5);
 	}
 	catch(baseEx ex)
 	{

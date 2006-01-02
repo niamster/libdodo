@@ -106,6 +106,34 @@ namespace dodo
 			 */			
 			virtual bool runThread(int position, bool force=false);
 			
+			/**
+			 * waits for thread's termination
+			 * @param position indicates for what thread to wait
+			 * @param data points on data that thread returned
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 	
+							waitThread(int position, void **data=NULL);
+
+			/**
+			 * waits for all registered threads' termination
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 	
+							wait();
+			
+			/**
+			 * returns from thread and sets return data
+			 * @param data points on data that thread returned
+			 */
+			static void returnFromThread(void *data);			
+			
 		protected:
 		
 			/**

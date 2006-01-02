@@ -178,3 +178,83 @@ systemThreads::runThread(int position,
 }
 
 //-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemThreads::waitThread(int position,
+						void **data)
+{
+	if (getThread(position,k))
+	{
+		if (!k->isRunning)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAITTHREAD,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+			
+		if (pthread_join(k->thread,data)!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAITTHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		k->isRunning = false;
+				
+	
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	
+	#ifdef NO_EX
+		return false;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemThreads::wait()
+{
+	i = threads.begin();
+	j = threads.end();
+	
+	
+	for (;i!=j;++i)
+	{
+		if (!i->isRunning)
+			continue;
+		
+		if (pthread_join(i->thread,NULL)!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAITTHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		i->isRunning = false;
+	}
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+void 
+systemThreads::returnFromThread(void *data)
+{
+	pthread_exit(data);
+}
+
+//-------------------------------------------------------------------
