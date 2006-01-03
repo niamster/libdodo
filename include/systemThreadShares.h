@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _SYSTEMTHREADS_H_
-#define _SYSTEMTHREADS_H_
+#ifndef _SYSTEMTHREADSHARES_H_
+#define _SYSTEMTHREADSHARES_H_
 
 #include <directives.h>
 
@@ -44,6 +44,7 @@ namespace dodo
 		void *data;///< data that will be shared
 		int position;///< position in queue
 		pthread_mutex_t mutex;///< lock
+		bool isLocked;///< whether share is locked
 	};
 
 	/**

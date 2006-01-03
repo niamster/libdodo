@@ -101,7 +101,7 @@ xexec::setStatXExec(std::vector<__execItem> &list,
 		int position,
 		bool stat) const
 {
-	if (getXexec(list,position,k))
+	if (getXexec(list,position))
 		k->enabled = stat;
 }
 
@@ -131,7 +131,7 @@ xexec::delXExec(std::vector<__execItem> &list,
 			
 	#endif	
 	
-	if (getXexec(list,position,k))
+	if (getXexec(list,position))
 		list.erase(k);
 }
 
@@ -303,7 +303,7 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 			
 	#endif	
 	
-	if (getXexec(list,position,k))
+	if (getXexec(list,position))
 	{
 		k->func = func;
 		k->data = data;
@@ -567,8 +567,7 @@ xexec::performXExec(__execItemList &list) const
 
 bool 
 xexec::getXexec(std::vector<__execItem> &list, 
-				int position, 
-				std::vector<__execItem>::iterator &iter) const
+				int position) const
 {
 	i = list.begin();
 	j = list.end();
@@ -576,7 +575,7 @@ xexec::getXexec(std::vector<__execItem> &list,
 	for (;i!=j;++i)
 		if (i->position == position)
 		{
-			iter = i;
+			k = i;
 			return true;
 		}
 	

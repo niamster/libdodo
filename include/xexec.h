@@ -344,7 +344,7 @@ namespace dodo
 			 * @param position is position in list of hooks
 			 * @param iter is iterator that is specified with position
 			 */
-			virtual bool getXexec(std::vector<__execItem> &list, int position, std::vector<__execItem>::iterator &iter) const;
+			virtual bool getXexec(std::vector<__execItem> &list, int position) const;
 		
 			/**
 			 * set function that will be executed before  the main action call
@@ -409,7 +409,7 @@ namespace dodo
 			
 			mutable std::vector<__execItem>::iterator i;///< iterator for list
 			mutable std::vector<__execItem>::iterator j;///< iterator for list
-			mutable std::vector<__execItem>::iterator k;///< iterator for list
+			mutable std::vector<__execItem>::iterator k;///< iterator for list[for matched]
 			
 			mutable __execItem temp;///< temp storage for hook
 			

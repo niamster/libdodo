@@ -37,6 +37,8 @@ systemThreadShares::~systemThreadShares()
 {
 }
 
+//-------------------------------------------------------------------
+
 bool 
 systemThreadShares::getShared(int position)
 {
@@ -60,7 +62,14 @@ systemThreadShares::addShared(void *data)
 {
 	shared.data = data;
 	shared.position = ++sharedNum;
-	
+	shared.isLocked = false;
+	if (pthread_mutex_init(&(n->mutex),NULL)!=0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return -1;
+		#endif
+				
 	shareds.push_back(shared);
 	
 	return shared.position;
@@ -76,30 +85,37 @@ systemThreadShares::addShared(void *data)
 systemThreadShares::delShared(int position,
 						bool force)
 {
-/*	if (getThread(position))
+	if (getShared(position))
 	{
-		if (k->isRunning)
+		if (n->isLocked)
 		{
 			if (!force)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DELTHREAD,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_LIBDODO,SYSTEMTHREADSHARES_ISALREADYLOCKED,SYSTEMTHREADSHARES_ISALREADYLOCKED_STR,__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
 			else
 			{
-				if (pthread_cancel(k->thread)!=0)
+				if (pthread_mutex_unlock(&(n->mutex))!=0)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DELTHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
 				
-				k->isRunning = false;
+				n->isLocked = false;
 			}
 		}
-			
-		threads.erase(k);
+		
+		if (pthread_mutex_destroy(&(n->mutex))!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+								
+		shareds.erase(n);
 		
 		#ifdef NO_EX
 			return true;
@@ -107,10 +123,10 @@ systemThreadShares::delShared(int position,
 	}
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DELTHREAD,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
-		#endif*/
+		#endif
 }
 
 //-------------------------------------------------------------------
