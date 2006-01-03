@@ -49,10 +49,9 @@ namespace dodo
 		pthread_t thread;///< thread descriptor
 		void *data;///< data that will be passed on run
 		bool isRunning;///< whether thread is running
-		int position;///< position in queue;
+		int position;///< position in queue
 		threadFunc func;///< function to execute
 	};
-
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
@@ -84,28 +83,62 @@ namespace dodo
 			 * @param force if is set to true stops execution if this thread is running
 			 * @note - exception if it's currently running
 			 */
-			virtual bool delThread(int position, bool force);
-
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 
+							delThread(int position, bool force);
+							
 			/**
 			 * replaces function to became a thread[not executing]
-			 * @return false if nothing to replace
 			 * @param position indicates on thread to replace
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 * @param force if is set to true stops execution if this thread is running
 			 * @note - exception if it's currently running
 			 */
-			virtual bool replaceThread(int position, threadFunc func, void *data, bool force);
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 
+							replaceThread(int position, threadFunc func, void *data, bool force);
 			
 			/**
 			 * executes thread
-			 * @return false if nothing to run
 			 * @param position indicates what thread to run
 			 * @param force if is set to true permits execution even if this thread is running
 			 * @note - exception if it's currently running
-			 */			
-			virtual bool runThread(int position, bool force=false);
-			
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 
+							runThread(int position, bool force=false);
+
+			/**
+			 * stops thread
+			 * @param position indicates what thread to stop
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 		
+							stopThread(int position);
+
+			/**
+			 * stops all registered threads
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 		
+							stop();
+										
 			/**
 			 * waits for thread's termination
 			 * @param position indicates for what thread to wait
@@ -117,7 +150,13 @@ namespace dodo
 				virtual bool 
 			#endif						 	
 							waitThread(int position, void **data=NULL);
-
+										
+			/**
+			 * @return true if thread is running
+			 * @param position indicates for what thread to indicate
+			 */
+			virtual bool isRunning(int position);
+							
 			/**
 			 * waits for all registered threads' termination
 			 */
@@ -142,15 +181,15 @@ namespace dodo
 			 * @param position describes position of wanted thread
 			 * @param iter is iterator that points on found thread
 			 */
-			virtual bool getThread(int position, std::vector<__threadInfo>::iterator &iter);
-		
+			virtual bool getThread(int position);
+						
 			std::vector<__threadInfo> threads;///< vector of threads
 			__threadInfo thread;///< temp storage for thread
 			int threadNum;///< number of registered threads
-			
+
 			std::vector<__threadInfo>::iterator i;///< iterator for list of threads
 			std::vector<__threadInfo>::iterator j;///< iterator for list of threads
-			std::vector<__threadInfo>::iterator k;///< iterator for list of threads
+			std::vector<__threadInfo>::iterator k;///< iterator for list of threads[for matched]
 	};
 
 };

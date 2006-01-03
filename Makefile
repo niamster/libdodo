@@ -28,7 +28,8 @@ OBJECTS:=dbBase.o \
 		xmlTools.o \
 		dbSqlite.o \
 		dodoMap.o \
-		systemThreads.o
+		systemThreads.o \
+		systemThreadShares.o
 
 ###########################################################
 

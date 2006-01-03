@@ -12,6 +12,8 @@ thread(void *data)
 	cout << endl << endl << (char *)data << endl;
 	cout << timeTools::now();
 	cout.flush();
+	long i = -1000000000;
+	while (i<1000000000){i++;}
 }
 
 int main(int argc, char **argv)
@@ -26,9 +28,15 @@ int main(int argc, char **argv)
 		cout << timeTools::now();
 		cout.flush();
 		
-		th.waitThread(pos);
+		while (true)
+		{
+			th.waitThread(pos);
+			//break;
+		}
 		
 		//systemTools::sleep(5);
+		
+		//th.stopThread(pos);
 	}
 	catch(baseEx ex)
 	{

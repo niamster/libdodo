@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadsEx.h
+ *            systemThreadSharesEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSEX_H_
-#define _SYSTEMTHREADSEX_H_
+#ifndef _SYSTEMTHREADSHARESEX_H_
+#define _SYSTEMTHREADSHARESEX_H_
 
 #include <directives.h>
 
@@ -36,33 +36,24 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum systemThreadsExR
+		enum systemThreadSharessExR
 		{
-			SYSTEMTHREADS_ISALREADYRUNNING,
-			SYSTEMTHREADS_ISNOTRUNNING,
-			SYSTEMTHREADS_NOTFOUND
+			SYSTEMTHREADSHARESS_ISALREADYLOCKED,
+			SYSTEMTHREADSHARESS_NOTFOUND
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */
-		#define SYSTEMTHREADS_ISALREADYRUNNING_STR "The thread is currently running. Please wait."
-		#define SYSTEMTHREADS_ISNOTRUNNING_STR "The thread is currently not running."
-		#define SYSTEMTHREADS_NOTFOUND_STR "Thread not found."
+		#define SYSTEMTHREADSHARES_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
+		#define SYSTEMTHREADSHARES_NOTFOUND_STR "Share not found."
 			
 		/**
 		 * ID of function where exception was thrown
 		 */			
-		enum systemThreadsFunctionsID
+		enum systemThreadThreadsFunctionsID
 		{
-			SYSTEMTHREADS_REPLACETHREAD,
-			SYSTEMTHREADS_RUNTHREAD,
-			SYSTEMTHREADS_DELTHREAD,
-			SYSTEMTHREADS_WAITTHREAD,
-			SYSTEMTHREADS_STOPTHREAD,
-			SYSTEMTHREADS_STOP,
-			SYSTEMTHREADS_WAIT,
-			SYSTEMTHREADS_ISRUNNING,
+			SYSTEMTHREADSHARESS_,
 		};
 	};
 
