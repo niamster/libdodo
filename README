@@ -1,4 +1,4 @@
-To compile use make
-To install make install
+To compile use gmake
+To install gmake install
 
 Please, edit directeves.mk and include/directives.h for custom configuration!

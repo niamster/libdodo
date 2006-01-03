@@ -831,7 +831,7 @@ dbBase::collectedData()
 
 //-------------------------------------------------------------------
 
-inline std::string
+std::string
 dbBase::stringType(int type) const
 {
 	switch (type)
@@ -891,7 +891,7 @@ dbBase::stringType(int type) const
 	
 //-------------------------------------------------------------------
 
-inline int 
+int 
 dbBase::chkRange(int type) const
 {
 	switch (type)
@@ -931,7 +931,7 @@ dbBase::chkRange(int type) const
 
 //-------------------------------------------------------------------
 
-inline std::string 
+std::string 
 dbBase::stringReference(int type) const
 {
 	switch (type)
@@ -953,7 +953,7 @@ dbBase::stringReference(int type) const
 
 //-------------------------------------------------------------------
 
-inline void 
+void 
 dbBase::initTableInfo(__tableInfo &table)
 {
 	table.autoIncr = -1;
@@ -972,7 +972,7 @@ dbBase::initTableInfo(__tableInfo &table)
 
 //-------------------------------------------------------------------
 
-inline void
+void
 dbBase::initRowInfo(__fieldInfo &field)
 {
 	field.type = -1;

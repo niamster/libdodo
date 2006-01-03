@@ -75,7 +75,7 @@ xexec::~xexec()
 
 //-------------------------------------------------------------------
 
-inline int 
+int 
 xexec::addXExec(std::vector<__execItem> &list, 
 		inExec func,
  		void *obj, 
@@ -107,7 +107,7 @@ xexec::setStatXExec(std::vector<__execItem> &list,
 
 //-------------------------------------------------------------------
 
-inline void 
+void 
 xexec::delXExec(std::vector<__execItem> &list, 
 				int position) const
 {
@@ -277,7 +277,7 @@ xexec::replacePreExec(int position,
 
 //-------------------------------------------------------------------
 
-inline bool 
+bool 
 xexec::replaceXExec(std::vector<__execItem> &list, 
 			int position, 
 			inExec func,

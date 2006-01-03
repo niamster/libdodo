@@ -53,7 +53,7 @@
 		/**
 		 * ID of function where exception was thrown
 		 */			
-		enum flushSocketFunctionsID
+		enum dbSqlBaseFunctionsID
 		{
 			DBSQLBASE_QUERYCOLLECT
 			

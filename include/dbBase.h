@@ -648,12 +648,12 @@ namespace dodo
 			/**
 			 * set default values for table (if you want safelly reuse)
 			 */
-			inline void initTableInfo(__tableInfo &table);
+			void initTableInfo(__tableInfo &table);
 			
 			/**
 			 * set default values for field (if you want safelly reuse)
 			 */
-			inline void initRowInfo(__fieldInfo &field);	
+			void initRowInfo(__fieldInfo &field);	
 					
 		protected:
 		
@@ -661,19 +661,19 @@ namespace dodo
 			 * @return sql compliant data type
 			 * @param type indicates the data type
 			 */
-			inline virtual std::string stringType(int type) const;
+			virtual std::string stringType(int type) const;
 			
 			/**
 			 * @return : if type must have range = 1; if may have = 0; if mustn't have = -1;
 			 * @param type indicates the data type
 			 */
-			inline virtual int chkRange(int type) const;
+			virtual int chkRange(int type) const;
 			
 			/**
 			 * @return sql compliant references statements
 			 * @param type indicates the type of reference
 			 */
-			inline virtual std::string stringReference(int type) const;
+			virtual std::string stringReference(int type) const;
 			
 			/**
 			 * frees collected data

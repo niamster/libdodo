@@ -25,6 +25,7 @@
 #include <dbSqlBase.h>
 
 using namespace dodo;
+
 /**
  * arrays of positions of "statement" for complete realization. In sql wersion - see dbSqlBase;
  */	
@@ -581,7 +582,7 @@ dbSqlBase::queryCollect() const
 
 //-------------------------------------------------------------------
 
-inline std::string 
+inline std::string
 dbSqlBase::escapeFields(const std::string &a_data)
 { 
 	std::string temp(a_data);
@@ -595,7 +596,7 @@ dbSqlBase::escapeFields(const std::string &a_data)
 
 //-------------------------------------------------------------------
 
-inline std::string 
+std::string 
 dbSqlBase::fieldCollect(__fieldInfo &row) const
 {
 	register int type = row.type, flag = row.flag;

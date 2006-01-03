@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 	dbMysql pp;	
 	try
 	{
-		pp.setDbInfo(string("test"),string(""),3306,string(""),string("Dmitrik"));
+		pp.setDbInfo(string("test"),string(""),0,string(""),string("Dmitrik"),"/tmp/mysql.sock");
 		pp.connect();		
 		
 		map<string,string> arr;
@@ -20,22 +20,20 @@ int main(int argc, char **argv)
 		select.push_back("date");
 		select.push_back("operation");
 		
-		for (int i=0;i<1000;i++)
+		for (int i=0;i<3000;i++)
 		{
 			pp.select("log",select,"`id`<20 or `operation`='mu'");
 			pp.exec();
-			
 			pp.fetch();
 			
 			pp.insert("log",arr);
 			pp.exec();
 			
-			arr["operation"] = "um";
+/*			arr["operation"] = "um";
 			pp.update("log",arr);
 			arr["operation"] = "mu";
 			pp.limit(50);
-			pp.exec();
-			
+			pp.exec();*/		
 		}
 	}
 	catch(baseEx ex)
