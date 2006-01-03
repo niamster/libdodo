@@ -36,7 +36,7 @@ flushSocketOptions::flushSocketOptions(socketProtoFamilyEnum a_family,
 																	inSocketBuffer(SOCKET_INSIZE),
 																	outSocketBuffer(SOCKET_OUTSIZE),
 																	socket(-1),
-																	blocked(false)
+																	blocked(true)
 {
 }
 
@@ -78,7 +78,7 @@ flushSocketOptions::block(bool flag)
 {
 	int block = O_NONBLOCK;
 	
-	if (!flag)
+	if (flag)
 	{
 		block = fcntl(socket,F_GETFL);
 		if (block == -1)

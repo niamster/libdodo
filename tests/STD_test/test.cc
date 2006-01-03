@@ -1,4 +1,5 @@
 #include <flushSTD.h>
+#include <flushSocketTools.h>
 
 using namespace dodo;
 using namespace std;
@@ -24,10 +25,11 @@ int main(int argc, char **argv)
 
 	try
 	{
-		cout << flushSocket::getHostInfo("niam.mu").name << endl;
+		cout << flushSocketTools::getHostInfo("niam.mu").name << endl;
 		cout << flushSTD::inputterInfo().host << endl;
 		
 		flushSTD st;
+		st.block(false);
 		int pos = st.addPreExec(&hook,NULL);
 		//st.outSize = 7;
 		//st.autoOutSize = false;
@@ -39,7 +41,7 @@ int main(int argc, char **argv)
 		
 		string o;
 		
-		st.inSize = 1;
+		st.inSize = 33;
 		st.inSTDBuffer = 2;
 		
 		st.readString(o);

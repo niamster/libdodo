@@ -200,10 +200,28 @@ namespace dodo
 			int outSTDBuffer;///< output buffer
 			
 			bool err;///< redirect output to stderr; false by default
-		
+			
+			/**
+			 * @return true if stream is blocked
+			 */
+			virtual bool isBlocked();
+			
+			/**
+			 * blocks/unblocks stream
+			 * @param flag indicates whether to block or unblock stream
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							block(bool flag);
+									
 		protected: 
 		
 			FILE *desc;///< descriptor that is needed for redirection
+						
+			bool blocked;///< indicates, whether blocked or not;
 		
 		private:
 			

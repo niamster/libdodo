@@ -28,7 +28,8 @@ using namespace dodo;
 
 flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),
 						outSTDBuffer(STD_OUTSIZE),
-						err(false)
+						err(false),
+						blocked(true)
 {
 }
 
@@ -386,6 +387,86 @@ flushSTD::inputterInfo()
 			return info;
 			
 	}
+}
+
+//-------------------------------------------------------------------
+
+bool 
+flushSTD::isBlocked()
+{
+	return blocked;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSTD::block(bool flag)
+{
+	int block[3] = {O_NONBLOCK, O_NONBLOCK, O_NONBLOCK};
+	
+	if (flag)
+	{
+		block[0] = fcntl(0,F_GETFL);
+		if (block[0] == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;		
+			#endif		
+		
+		block[0] &= ~O_NONBLOCK;
+			
+		block[1] = fcntl(1,F_GETFL);
+		if (block[1] == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;		
+			#endif
+		
+		block[1] &= ~O_NONBLOCK;
+				
+		block[2] = fcntl(2,F_GETFL);
+		if (block[2] == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;		
+			#endif	
+								
+		block[2] &= ~O_NONBLOCK;
+	}
+	
+	if (fcntl(0,F_SETFL,block[0])==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;		
+		#endif		
+	
+	if (fcntl(1,F_SETFL,block[1])==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;		
+		#endif		
+		
+	if (fcntl(2,F_SETFL,block[2])==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;		
+		#endif	
+		
+	blocked = flag;
+	
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------
