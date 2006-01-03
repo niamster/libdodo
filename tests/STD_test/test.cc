@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 		cout << flushSTD::inputterInfo().host << endl;
 		
 		flushSTD st;
-		st.block(false);
+//		st.block(true);
 		int pos = st.addPreExec(&hook,NULL);
 		//st.outSize = 7;
 		//st.autoOutSize = false;
@@ -42,9 +42,9 @@ int main(int argc, char **argv)
 		string o;
 		
 		st.inSize = 33;
-		st.inSTDBuffer = 2;
+		st.inSTDBuffer = 200;
 		
-		st.readString(o);
+		st.readStreamString(o);
 		
 		st.disablePreExec(pos);
 		st.writeString(o);

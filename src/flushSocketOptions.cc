@@ -446,4 +446,5 @@ flushSocketOptions::_close(int socket)
 		return true;
 	#endif			
 }
+
 //-------------------------------------------------------------------

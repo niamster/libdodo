@@ -129,7 +129,7 @@ flushSTD::read(char * const a_void) const
 					case ENOMEM:
 					case EOVERFLOW:
 					case EROFS:
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
 				switch (errno)
@@ -156,7 +156,7 @@ flushSTD::read(char * const a_void) const
 					case ENOMEM:
 					case EOVERFLOW:
 					case EROFS:
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
 				switch (errno)
@@ -467,6 +467,149 @@ flushSTD::block(bool flag)
 	#ifdef NO_EX
 		return true;
 	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSTD::readStream(char * const a_void) const
+{
+	#ifndef FLUSH_STD_WO_XEXEC
+		operType = FLUSHSTD_OPER_READSTREAM;
+		performXExec(preExec);
+	#endif
+
+	///execute
+	if (fgets(a_void,inSTDBuffer+1,stdin)==0)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
+					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}	
+		#else			
+			switch (errno)
+			{
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:	
+				case EROFS:
+					return false;
+			}
+		#endif
+	
+	buffer.assign(a_void);
+			
+	#ifndef FLUSH_STD_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+	
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSTD::readStreamString(std::string &a_str) const
+{
+	register char *data = new char[inSize+1];
+		
+	memset(data,0,inSize);
+
+	#ifdef NO_EX
+		register bool result = 
+	#endif
+	
+	this->readStream(data);
+	a_str.assign(data);
+	delete [] data;
+	
+	#ifdef NO_EX	
+		return result;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSTD::writeStreamString(const std::string &a_buf)
+{	
+	return this->writeStream(a_buf.c_str());	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
+flushSTD::writeStream(const char *const aa_buf)
+{
+	buffer.assign(aa_buf);		
+		
+	#ifndef FLUSH_STD_WO_XEXEC
+		operType = FLUSHSTD_OPER_WRITESTREAM;
+		performXExec(preExec);
+	#endif
+	
+	///execute 
+	desc = stdout;
+	if (err)
+		desc = stderr;
+	
+	if (buffer.size()>outSTDBuffer)
+		buffer.resize(outSTDBuffer);
+		
+	if (fputs(buffer.c_str(),desc)==EOF)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
+					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}	
+		#else			
+			switch (errno)
+			{
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:	
+				case EROFS:
+					return false;
+			}
+		#endif
+			
+	#ifndef FLUSH_STD_WO_XEXEC
+		performXExec(postExec);
+	#endif
+			
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------

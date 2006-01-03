@@ -42,6 +42,8 @@ namespace dodo
 	{
 		FLUSHSTD_OPER_READ,
 		FLUSHSTD_OPER_WRITE,
+		FLUSHSTD_OPER_READSTREAM,
+		FLUSHSTD_OPER_WRITESTREAM,
 		FLUSHSTD_OPER_OPEN,
 		FLUSHSTD_OPER_CLOSE
 	};
@@ -180,7 +182,54 @@ namespace dodo
 				virtual bool 
 			#endif
 							write(const char * const data);
-
+							
+			/**
+			 * read from stream - null-terminated string
+			 * @param data is filled with read string
+			 * max size of string is inSTDBuffer
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							readStreamString(std::string &data) const;
+			/**
+			 * read from stream - null-terminated string
+			 * @param data is filled with read data
+			 * max size of string is inSTDBuffer
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							readStream(char * const data) const;
+			
+			/**
+			 * write to stream - null-terminated string
+			 * @param data is string that will be written
+			 * max size of string is outSTDBuffer
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							writeStreamString(const std::string &data);
+							
+			/**
+			 * write to stream - null-terminated string
+			 * @param data is data that will be written
+			 * max size of string is outSTDBuffer
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							writeStream(const char * const data);
+							
 			/**
 			 * flushes to output
 			 */
