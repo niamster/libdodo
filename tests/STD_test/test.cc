@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		st.readStreamString(o);
 		
 		st.disablePreExec(pos);
-		st.writeString(o);
+		st.writeStreamString(o);
 	}
 	catch(baseEx ex)
 	{

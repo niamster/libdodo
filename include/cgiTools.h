@@ -229,31 +229,6 @@ namespace dodo
 			mutable assocArr HEADERS;///< array of header that will be printed with printHeaders method
 			
 			/**
-			 * @return base64 decoded string
-			 * @param string to decode
-			 */
-			static std::string decode64(const std::string &string);
-
-			/**
-			 * @return base64 encoded string
-			 * @param string to encode
-			 */			
-			static std::string encode64(const std::string &string);
-			
-			/**
-			 * @return converted from HEX
-			 * @param first is first part of HEX
-			 * @param seconf is second part of HEX
-			 */
-			static char hexToChar(const char &first, const char &second);
-			
-			/**
-			 * @return converted to HEX
-			 * @param first is char to convert
-			 */
-			static std::string charToHex(const char &first);
-			
-			/**
 			 * sets cookie. the cookies are printed with printHeaders method
 			 * 
 			 * @param name is name of cookie

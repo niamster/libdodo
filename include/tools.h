@@ -272,7 +272,32 @@ namespace dodo
 			 	virtual std::string zDecompress(const std::string &buffer);
 			 
 			 #endif
-			 
+			
+			/**
+			 * @return base64 decoded string
+			 * @param string to decode
+			 */
+			static std::string decode64(const std::string &string);
+
+			/**
+			 * @return base64 encoded string
+			 * @param string to encode
+			 */			
+			static std::string encode64(const std::string &string);
+			
+			/**
+			 * @return converted from HEX
+			 * @param first is first part of HEX
+			 * @param seconf is second part of HEX
+			 */
+			static char hexToChar(const char &first, const char &second);
+			
+			/**
+			 * @return converted to HEX
+			 * @param first is char to convert
+			 */
+			static std::string charToHex(const char &first);
+						 
 		private:
 			
 			#ifdef CODECONV_EXT

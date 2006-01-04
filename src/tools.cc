@@ -514,3 +514,132 @@ tools::trim(const std::string &data,
 	#endif
 
 //-------------------------------------------------------------------
+
+std::string 
+tools::decode64(const std::string &string)
+{
+	std::string result;
+	std::string::const_iterator o(string.begin()),k(string.end());
+	char c;
+
+	for(;o!=k;++o) 
+	{
+		switch(*o) 
+		{
+			case '+':
+				result.append(1, ' ');
+				break;
+			case '%':
+				if(std::distance(o, k) >= 2 && std::isxdigit(*(o + 1)) && std::isxdigit(*(o + 2))) 
+				{
+					c = *++o;
+					result.append(1, tools::hexToChar(c, *++o));
+				}
+				else 
+					result.append(1, '%');
+				break;
+			default:
+				result.append(1, *o);
+		}
+	}
+	
+	return result;	
+}
+
+//-------------------------------------------------------------------
+
+std::string
+tools::encode64(const std::string &string)
+{
+	std::string result;
+	std::string::const_iterator o(string.begin()),k(string.end());
+	
+	for(;o!=k;++o) 
+	{
+		switch(*o) 
+	    {
+		    case ' ':
+				result.append(1, '+');
+				break;
+			case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
+			case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
+			case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
+			case 'V': case 'W': case 'X': case 'Y': case 'Z':
+			case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
+			case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
+			case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
+			case 'v': case 'w': case 'x': case 'y': case 'z':
+			case '0': case '1': case '2': case '3': case '4': case '5': case '6':
+			case '7': case '8': case '9':
+			case '-': case '_': case '.': case '!': case '~': case '*': case '\'': 
+			case '(': case ')':
+				result.append(1, *o);
+				break;
+			default:
+				result.append(1, '%');
+				result.append(tools::charToHex(*o));
+				break;
+	    }
+	}
+	
+	return result;
+}
+
+//-------------------------------------------------------------------
+
+char 
+tools::hexToChar(const char &first,
+				const char &second)
+{
+	int val=0;
+	switch (first)
+	{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			val = (16*(int(first)-48));
+			break;
+		default:
+			val = (16*(int(first)-55));
+	}  
+	switch (second)
+	{
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			val += (int(second)-48);
+		break;
+		default:
+			val += (int(second)-55);
+	}   
+	
+	return char(val);
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::charToHex(const char &first)
+{
+	char temp[3*size_of_char];
+	sprintf(temp,"%X",first);
+	
+	return std::string(temp);
+}
+
+//-------------------------------------------------------------------
+

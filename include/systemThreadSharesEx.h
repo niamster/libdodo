@@ -54,6 +54,7 @@
 		enum systemThreadThreadsFunctionsID
 		{
 			SYSTEMTHREADSHARES_DELSHARED,
+			SYSTEMTHREADSHARES_ADDSHARED,
 		};
 	};
 

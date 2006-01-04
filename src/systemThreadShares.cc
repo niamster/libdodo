@@ -65,7 +65,7 @@ systemThreadShares::addShared(void *data)
 	shared.isLocked = false;
 	if (pthread_mutex_init(&(n->mutex),NULL)!=0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_ADDSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return -1;
 		#endif
