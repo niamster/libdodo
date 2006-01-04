@@ -40,7 +40,7 @@ systemThreads::~systemThreads()
 //-------------------------------------------------------------------
 
 int 
-systemThreads::addThread(threadFunc func,
+systemThreads::add(threadFunc func,
 						void *data)
 {
 	thread.data = data;
@@ -79,7 +79,7 @@ systemThreads::getThread(int position)
 #else
 	bool
 #endif
-systemThreads::delThread(int position,
+systemThreads::del(int position,
 						bool force)
 {
 	if (getThread(position))
@@ -88,7 +88,7 @@ systemThreads::delThread(int position,
 		{
 			if (!force)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DELTHREAD,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DEL,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
@@ -96,7 +96,7 @@ systemThreads::delThread(int position,
 			{
 				if (pthread_cancel(k->thread)!=0)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DELTHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -113,7 +113,7 @@ systemThreads::delThread(int position,
 	}
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DELTHREAD,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DEL,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -126,7 +126,7 @@ systemThreads::delThread(int position,
 #else
 	bool
 #endif 
-systemThreads::replaceThread(int position, 
+systemThreads::replace(int position, 
 						threadFunc func, 
 						void *data,
 						bool force)
@@ -137,7 +137,7 @@ systemThreads::replaceThread(int position,
 		{
 			if (!force)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_REPLACETHREAD,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_REPLACE,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
@@ -145,7 +145,7 @@ systemThreads::replaceThread(int position,
 			{
 				if (pthread_cancel(k->thread)!=0)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_REPLACETHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_REPLACE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -163,7 +163,7 @@ systemThreads::replaceThread(int position,
 	}
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_REPLACETHREAD,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_REPLACE,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -177,21 +177,21 @@ systemThreads::replaceThread(int position,
 #else
 	bool
 #endif
-systemThreads::runThread(int position, 
+systemThreads::run(int position, 
 						bool force)
 {
 	if (getThread(position))
 	{
 		if (k->isRunning && !force)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUNTHREAD,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 			
 		if (pthread_create(&(k->thread),NULL,k->func,k->data)!=0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUNTHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -204,7 +204,7 @@ systemThreads::runThread(int position,
 	}
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUNTHREAD,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif	
@@ -217,21 +217,21 @@ systemThreads::runThread(int position,
 #else
 	bool
 #endif
-systemThreads::waitThread(int position,
+systemThreads::wait(int position,
 						void **data)
 {
 	if (getThread(position))
 	{
 		if (!k->isRunning)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAITTHREAD,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 			
 		if (pthread_join(k->thread,data)!=0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAITTHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -244,7 +244,7 @@ systemThreads::waitThread(int position,
 	}
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAITTHREAD,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif	
@@ -298,20 +298,20 @@ systemThreads::returnFromThread(void *data)
 #else
 	bool
 #endif
-systemThreads::stopThread(int position)
+systemThreads::stop(int position)
 {
 	if (getThread(position))
 	{
 		if (!k->isRunning)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOPTHREAD,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOP,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 			
 		if (pthread_cancel(k->thread)!=0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOPTHREAD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -324,7 +324,7 @@ systemThreads::stopThread(int position)
 	}
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOPTHREAD,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOP,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif	

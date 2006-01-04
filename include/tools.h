@@ -277,13 +277,13 @@ namespace dodo
 			 * @return base64 decoded string
 			 * @param string to decode
 			 */
-			static std::string decode64(const std::string &string);
+			static std::string decodeBase64(const std::string &string);
 
 			/**
 			 * @return base64 encoded string
 			 * @param string to encode
 			 */			
-			static std::string encode64(const std::string &string);
+			static std::string encodeBase64(const std::string &string);
 			
 			/**
 			 * @return converted from HEX

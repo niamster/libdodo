@@ -75,7 +75,7 @@ namespace dodo
 			 * @param func indicates function to be executed
 			 * @paraqm data describes data to be passed to func
 			 */
-			virtual int addThread(threadFunc func, void *data);
+			virtual int add(threadFunc func, void *data);
 			
 			/**
 			 * removes registered thread
@@ -88,7 +88,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							delThread(int position, bool force);
+							del(int position, bool force=false);
 							
 			/**
 			 * replaces function to became a thread[not executing]
@@ -103,7 +103,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							replaceThread(int position, threadFunc func, void *data, bool force);
+							replace(int position, threadFunc func, void *data, bool force=false);
 			
 			/**
 			 * executes thread
@@ -116,7 +116,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							runThread(int position, bool force=false);
+							run(int position, bool force=false);
 
 			/**
 			 * stops thread
@@ -127,7 +127,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 		
-							stopThread(int position);
+							stop(int position);
 
 			/**
 			 * stops all registered threads
@@ -149,7 +149,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 	
-							waitThread(int position, void **data=NULL);
+							wait(int position, void **data=NULL);
 										
 			/**
 			 * @return true if thread is running

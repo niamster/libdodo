@@ -58,14 +58,14 @@ systemThreadShares::getShared(int position)
 //-------------------------------------------------------------------
 
 int 
-systemThreadShares::addShared(void *data)
+systemThreadShares::add(void *data)
 {
 	shared.data = data;
 	shared.position = ++sharedNum;
 	shared.isLocked = false;
 	if (pthread_mutex_init(&(n->mutex),NULL)!=0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_ADDSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_ADD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return -1;
 		#endif
@@ -82,7 +82,7 @@ systemThreadShares::addShared(void *data)
 #else
 	bool
 #endif
-systemThreadShares::delShared(int position,
+systemThreadShares::del(int position,
 						bool force)
 {
 	if (getShared(position))
@@ -91,7 +91,7 @@ systemThreadShares::delShared(int position,
 		{
 			if (!force)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_LIBDODO,SYSTEMTHREADSHARES_ISALREADYLOCKED,SYSTEMTHREADSHARES_ISALREADYLOCKED_STR,__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_ISALREADYLOCKED,SYSTEMTHREADSHARES_ISALREADYLOCKED_STR,__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
@@ -99,7 +99,7 @@ systemThreadShares::delShared(int position,
 			{
 				if (pthread_mutex_unlock(&(n->mutex))!=0)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -110,7 +110,7 @@ systemThreadShares::delShared(int position,
 		
 		if (pthread_mutex_destroy(&(n->mutex))!=0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -123,7 +123,7 @@ systemThreadShares::delShared(int position,
 	}
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DELSHARED,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif

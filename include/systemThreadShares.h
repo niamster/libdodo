@@ -69,7 +69,7 @@ namespace dodo
 			 * @return position of shared in queue
 			 * @paraqm data describes data to be shared
 			 */
-			virtual int addShared(void *data);
+			virtual int add(void *data);
 			
 			/**
 			 * removes registered shared[do not deletes data]
@@ -78,11 +78,19 @@ namespace dodo
 			 * @note - exception if it's currently locked
 			 */
 			#ifndef NO_EX
-				virtual void 
+				virtual void
 			#else
 				virtual bool 
 			#endif						 
-							delShared(int position, bool force);
+							del(int position, bool force=false);
+			
+			#ifndef NO_EX
+				virtual void
+			#else
+				virtual bool 
+			#endif						 
+							lock(int position, void *data, bool force=false);
+			
 			
 		protected:
 

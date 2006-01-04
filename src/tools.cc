@@ -516,7 +516,7 @@ tools::trim(const std::string &data,
 //-------------------------------------------------------------------
 
 std::string 
-tools::decode64(const std::string &string)
+tools::decodeBase64(const std::string &string)
 {
 	std::string result;
 	std::string::const_iterator o(string.begin()),k(string.end());
@@ -549,7 +549,7 @@ tools::decode64(const std::string &string)
 //-------------------------------------------------------------------
 
 std::string
-tools::encode64(const std::string &string)
+tools::encodeBase64(const std::string &string)
 {
 	std::string result;
 	std::string::const_iterator o(string.begin()),k(string.end());
