@@ -31,6 +31,7 @@
 #include <systemThreadSharesEx.h>
 
 #include <pthread.h>
+#include <time.h>
 #include <vector>
 
 namespace dodo
@@ -95,15 +96,27 @@ namespace dodo
 			 * lock and return shared data [if locked and force==false, wait until unlocked]
 			 * @param position indicates on shared to return
 			 * @param data points on shared data or NULL in error case
-			 * @param force if is set to true get if this shared is locked
+			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(
+			 * @note if microseconds==0 - infinite sleep
 			 */
 			#ifndef NO_EX
 				virtual void
 			#else
 				virtual bool 
 			#endif						 
-							lock(int position, void *data, bool force=false);
+							lock(int position, void *data, unsigned long microseconds=0);
+							
 			
+			/**
+			 * lock and return shared data [if locked and force==false, wait until unlocked]
+			 * @param position indicates on shared to return
+			 */
+			#ifndef NO_EX
+				virtual void
+			#else
+				virtual bool 
+			#endif						 
+							unlock(int position);			
 			
 		protected:
 

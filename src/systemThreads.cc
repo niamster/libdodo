@@ -50,6 +50,9 @@ systemThreads::~systemThreads()
 	
 	for (;i!=j;++i)
 	{
+		if (!i->isRunning)
+			continue;
+		
 		switch (i->action)
 		{
 			case THREAD_KEEP_ALIVE:

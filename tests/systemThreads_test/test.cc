@@ -15,6 +15,7 @@ thread(void *data)
 	cout.flush();
 	long i = -1000000000;
 	while (i<1000000000){i++;}
+	cout << endl << timeTools::now() << endl;
 }
 
 int main(int argc, char **argv)
@@ -22,18 +23,20 @@ int main(int argc, char **argv)
 	try
 	{
 		systemThreads th;
-		int pos = th.addThread(thread,(void *)"HIHI");
-		th.runThread(pos);
+		int pos[2];
+		pos[0] = th.add(thread,(void *)"HIHI");
+		pos[1] = th.add(thread,(void *)"HOHO");
+		
+		th.run(pos[0]);
+		th.run(pos[1]);
+		
+		//thread((void *)"HIHI");
+		//thread((void *)"HOHO");
 		
 		cout << endl << endl << "STARTED" << endl;
-		cout << timeTools::now();
+		cout << timeTools::now() << endl;
 		cout.flush();
 		
-		while (true)
-		{
-			th.waitThread(pos);
-			//break;
-		}
 		
 		//systemTools::sleep(5);
 		
