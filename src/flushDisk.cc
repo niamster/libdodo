@@ -278,6 +278,8 @@ flushDisk::read(char * const a_void,
 			#else
 				return false;
 			#endif
+
+	memset(a_void,'\0',inSize);
 	
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
@@ -332,8 +334,6 @@ flushDisk::readString(std::string &a_str,
 				unsigned long a_pos) const
 {
 	register char *data = new char[inSize+1];
-		
-	memset(data,0,inSize);
 
 	#ifdef NO_EX
 		register bool result = 
@@ -372,19 +372,12 @@ flushDisk::writeString(const std::string &a_buf,
 flushDisk::write(const char *const a_buf, 
 				unsigned long a_pos)
 {
-	register long oldOutSize = outSize;
-	if (autoOutSize)
-		outSize = strlen(a_buf);
-		
 	buffer.assign(a_buf, outSize);
 				
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_WRITE;
 		performXExec(preExec);
 	#endif
-		
-	if (autoOutSize)
-		outSize = buffer.size();
 	
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
@@ -469,8 +462,6 @@ flushDisk::write(const char *const a_buf,
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);
 	#endif
-	
-	outSize = oldOutSize;
 			
 	#ifdef NO_EX
 		return true;
@@ -529,5 +520,6 @@ flushDisk::getPath() const
 {
 	return path;
 }
+
 //-------------------------------------------------------------------
 

@@ -112,6 +112,8 @@ flushSTD::read(char * const a_void) const
 		performXExec(preExec);
 	#endif
 	
+	memset(a_void,'\0',inSize);
+	
 	///execute 
 	iter = inSize/inSTDBuffer;
 	rest = inSize%inSTDBuffer;
@@ -192,8 +194,6 @@ flushSTD::read(char * const a_void) const
 flushSTD::readString(std::string &a_str) const
 {
 	register char *data = new char[inSize+1];
-		
-	memset(data,0,inSize);
 
 	#ifdef NO_EX
 		register bool result = 
@@ -229,19 +229,12 @@ flushSTD::writeString(const std::string &a_buf)
 #endif 
 flushSTD::write(const char *const aa_buf)
 {
-	register long oldOutSize = outSize;		
-	if (autoOutSize)
-		outSize = strlen(aa_buf);
-		
 	buffer.assign(aa_buf, outSize);		
 		
 	#ifndef FLUSH_STD_WO_XEXEC
 		operType = FLUSHSTD_OPER_WRITE;
 		performXExec(preExec);
 	#endif
-		
-	if (autoOutSize)
-		outSize = buffer.size();
 	
 	///execute 
 	iter = outSize/outSTDBuffer;
@@ -308,8 +301,6 @@ flushSTD::write(const char *const aa_buf)
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(postExec);
 	#endif
-	
-	outSize = oldOutSize;
 			
 	#ifdef NO_EX
 		return true;
@@ -484,6 +475,8 @@ flushSTD::readStream(char * const a_void) const
 		performXExec(preExec);
 	#endif
 
+	memset(a_void,'\0',inSTDBuffer);
+
 	///execute
 	if (fgets(a_void,inSTDBuffer+1,stdin)==NULL)
 		#ifndef NO_EX
@@ -529,8 +522,6 @@ flushSTD::readStream(char * const a_void) const
 flushSTD::readStreamString(std::string &a_str) const
 {
 	register char *data = new char[inSTDBuffer+1];
-		
-	memset(data,0,inSTDBuffer);
 
 	#ifdef NO_EX
 		register bool result = 
@@ -590,7 +581,7 @@ flushSTD::writeStream(const char *const aa_buf)
 	if (err)
 		desc = stderr;
 	
-	register char buff[outSTDBuffer+1];
+	register char *buff = new char[outSTDBuffer+1];
 	
 	for (register long i=0;i<iter;++i)
 	{
@@ -606,6 +597,7 @@ flushSTD::writeStream(const char *const aa_buf)
 					case ENOMEM:
 					case EOVERFLOW:
 					case EROFS:
+						delete [] buff;
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
@@ -616,6 +608,7 @@ flushSTD::writeStream(const char *const aa_buf)
 					case ENOMEM:
 					case EOVERFLOW:	
 					case EROFS:
+						delete [] buff;
 						return false;
 				}
 			#endif
@@ -637,6 +630,7 @@ flushSTD::writeStream(const char *const aa_buf)
 					case ENOMEM:
 					case EOVERFLOW:
 					case EROFS:
+						delete [] buff;
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
@@ -647,10 +641,13 @@ flushSTD::writeStream(const char *const aa_buf)
 					case ENOMEM:
 					case EOVERFLOW:	
 					case EROFS:
+						delete [] buff;
 						return false;
 				}
 			#endif
 	}
+	
+	delete [] buff;
 			
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(postExec);

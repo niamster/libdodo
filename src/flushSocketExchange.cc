@@ -181,20 +181,12 @@ flushSocketExchange::alive() const
 flushSocketExchange::send(const char * const data, 
 						bool urgent) const
 {
-	register long oldOutSize = outSize;
-	
-	if (autoOutSize)
-		outSize = strlen(data);
-		
 	buffer.assign(data,outSize);
 				
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_SEND;
 		performXExec(preExec);
 	#endif	
-
-	if (autoOutSize)
-		outSize = buffer.size();		
 	
 	iter = outSize/outSocketBuffer;
 	rest = outSize%outSocketBuffer;
@@ -251,8 +243,6 @@ flushSocketExchange::send(const char * const data,
 		performXExec(postExec);
 	#endif
 		
-	outSize = oldOutSize;	
-		
 	#ifdef NO_EX
 		return true;
 	#endif		
@@ -286,6 +276,8 @@ flushSocketExchange::receive(char * const data,
 		operType = FLUSHSOCKETEXCHANGE_OPER_RECIEVE;
 		performXExec(preExec);
 	#endif	
+	
+	memset(data,'\0',inSize);
 				
 	iter = inSize/inSocketBuffer;
 	rest = inSize%inSocketBuffer;
@@ -349,8 +341,6 @@ flushSocketExchange::receiveString(std::string &data,
 								bool urgent) const
 {	
 	register char *t_data = new char[inSize+1];
-		
-	memset(t_data,0,inSize);
 
 	#ifdef NO_EX
 		register bool result = 

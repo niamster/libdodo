@@ -53,13 +53,6 @@ namespace dodo
 			mutable long inSize;///< size of data block;
 			mutable long outSize;///< size of data block;
 			
-			/**
-			 * for streams, if you set, for example, outSize 10, and try to write 2, you'll have 2 your bytes and 8 strange bytes,
-			 * so if you want to autodetect this, set to true; 
-			 * only for strings(c-strings; std::string);
-			 */
-			mutable bool autoOutSize;///< true by default
-			
 			mutable std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
 
 		protected:
