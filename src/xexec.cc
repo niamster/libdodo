@@ -67,7 +67,10 @@ xexec::~xexec()
 			
 			handlesOpened[i] = -1;
 			
-			dlclose(handles[i]);
+			if (dlclose(handles[i])!=0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_XEXEC,XEXEC_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#endif				
 		}
 			
 	#endif
@@ -124,7 +127,10 @@ xexec::delXExec(std::vector<__execItem> &list,
 				
 				handlesOpened[o] = -1;
 				
-				dlclose(handles[o]);
+				if (dlclose(handles[o])!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_XEXEC,XEXEC_DELXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+					#endif
 				
 				break;
 			}
@@ -296,7 +302,10 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 				
 				handlesOpened[o] = -1;
 				
-				dlclose(handles[o]);
+				if (dlclose(handles[o])!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_XEXEC,XEXEC_REPLACEXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+					#endif
 				
 				break;
 			}

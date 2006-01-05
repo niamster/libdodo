@@ -52,6 +52,13 @@ namespace dodo
 	 */
 	class systemThreadShares
 	{
+		private:
+		
+			/**
+			 * copy constructor
+			 */
+			systemThreadShares(systemThreadShares &sts);
+			
 		public:
 		
 			/**
@@ -84,6 +91,12 @@ namespace dodo
 			#endif						 
 							del(int position, bool force=false);
 			
+			/**
+			 * lock and return shared data [if locked and force==false, wait until unlocked]
+			 * @param position indicates on shared to return
+			 * @param data points on shared data or NULL in error case
+			 * @param force if is set to true get if this shared is locked
+			 */
 			#ifndef NO_EX
 				virtual void
 			#else
@@ -104,7 +117,7 @@ namespace dodo
 			
 			std::vector<__shareInfo> shareds;///< vector of threads
 			__shareInfo shared;///< temp storage for thread
-			int sharedNum;///< number of registered threads
+			int sharedNum;///< number of registered threads			
 						
 			std::vector<__shareInfo>::iterator l;///< iterator for list of shared data
 			std::vector<__shareInfo>::iterator m;///< iterator for list of shared data

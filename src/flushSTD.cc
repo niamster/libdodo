@@ -277,6 +277,7 @@ flushSTD::write(const char *const aa_buf)
 						return false;
 				}
 			#endif
+			
 		sent += outSTDBuffer;
 	}
 
@@ -484,7 +485,7 @@ flushSTD::readStream(char * const a_void) const
 	#endif
 
 	///execute
-	if (fgets(a_void,inSTDBuffer+1,stdin)==0)
+	if (fgets(a_void,inSTDBuffer+1,stdin)==NULL)
 		#ifndef NO_EX
 			switch (errno)
 			{
@@ -506,7 +507,7 @@ flushSTD::readStream(char * const a_void) const
 					return false;
 			}
 		#endif
-	
+		
 	buffer.assign(a_void);
 			
 	#ifndef FLUSH_STD_WO_XEXEC		
@@ -527,9 +528,9 @@ flushSTD::readStream(char * const a_void) const
 #endif
 flushSTD::readStreamString(std::string &a_str) const
 {
-	register char *data = new char[inSize+1];
+	register char *data = new char[inSTDBuffer+1];
 		
-	memset(data,0,inSize);
+	memset(data,0,inSTDBuffer);
 
 	#ifdef NO_EX
 		register bool result = 
@@ -576,32 +577,80 @@ flushSTD::writeStream(const char *const aa_buf)
 	desc = stdout;
 	if (err)
 		desc = stderr;
+
+	int outSize = strlen(aa_buf);
 	
-	if (buffer.size()>outSTDBuffer)
-		buffer.resize(outSTDBuffer);
+	///execute 
+	iter = outSize/outSTDBuffer;
+	rest = outSize%outSTDBuffer;
+	
+	register long sent(0);
+	
+	desc = stdout;
+	if (err)
+		desc = stderr;
+	
+	register char buff[outSTDBuffer+1];
+	
+	for (register long i=0;i<iter;++i)
+	{
+		strncpy(buff,buffer.c_str()+sent,outSTDBuffer);
+		buff[outSTDBuffer] = '\0';
 		
-	if (fputs(buffer.c_str(),desc)==EOF)
-		#ifndef NO_EX
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
-					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			}	
-		#else			
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:	
-				case EROFS:
-					return false;
-			}
-		#endif
+		if (fputs(buff,desc)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+			
+		sent += outSTDBuffer;
+	}
+
+	if (rest>0)
+	{		
+		strncpy(buff,buffer.c_str()+sent,rest);
+		buff[rest] = '\0';
+		
+		if (fputs(buff,desc)==0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+	}
 			
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(postExec);

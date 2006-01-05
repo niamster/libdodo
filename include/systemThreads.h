@@ -40,7 +40,17 @@ namespace dodo
 	 * @typedef describes function to be passed as thread
 	 */
 	typedef void *(*threadFunc)(void *);
-
+	
+	/**
+	 * @enum systemThreadOnDestructEnum describes what to do with thread if class destructs
+	 */
+	enum systemThreadOnDestructEnum
+	{
+		THREAD_KEEP_ALIVE,
+		THREAD_STOP,
+		THREAD_WAIT
+	};
+	
 	/**
 	 * @struct __thredInfo describes thread
 	 */
@@ -51,14 +61,24 @@ namespace dodo
 		bool isRunning;///< whether thread is running
 		int position;///< position in queue
 		threadFunc func;///< function to execute
+		int stackSize;///< amount of stack for thread[in bytes]
+		systemThreadOnDestructEnum action;///< action on class destruction
 	};
+
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
 	class systemThreads
 	{
-		public:
+		private:
 		
+			/**
+			 * copy constructor
+			 */
+			systemThreads(systemThreads &st);
+
+		public:
+			
 			/**
 			 * constructor
 			 */
@@ -75,7 +95,7 @@ namespace dodo
 			 * @param func indicates function to be executed
 			 * @paraqm data describes data to be passed to func
 			 */
-			virtual int add(threadFunc func, void *data);
+			virtual int add(threadFunc func, void *data, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
 			
 			/**
 			 * removes registered thread
@@ -186,6 +206,7 @@ namespace dodo
 			std::vector<__threadInfo> threads;///< vector of threads
 			__threadInfo thread;///< temp storage for thread
 			int threadNum;///< number of registered threads
+			pthread_attr_t attr;///< attribute that indicates joinability
 
 			std::vector<__threadInfo>::iterator i;///< iterator for list of threads
 			std::vector<__threadInfo>::iterator j;///< iterator for list of threads

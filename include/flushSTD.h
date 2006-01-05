@@ -186,7 +186,7 @@ namespace dodo
 			/**
 			 * read from stream - null-terminated string
 			 * @param data is filled with read string
-			 * max size of string is inSTDBuffer
+			 * max size of data is inSTDBuffer
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -197,7 +197,7 @@ namespace dodo
 			/**
 			 * read from stream - null-terminated string
 			 * @param data is filled with read data
-			 * max size of string is inSTDBuffer
+			 * max size of data is inSTDBuffer
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -209,7 +209,6 @@ namespace dodo
 			/**
 			 * write to stream - null-terminated string
 			 * @param data is string that will be written
-			 * max size of string is outSTDBuffer
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -221,7 +220,6 @@ namespace dodo
 			/**
 			 * write to stream - null-terminated string
 			 * @param data is data that will be written
-			 * max size of string is outSTDBuffer
 			 */
 			#ifndef NO_EX
 				virtual void 

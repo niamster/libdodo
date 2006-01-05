@@ -42,16 +42,18 @@ int main(int argc, char **argv)
 		string o;
 		
 		st.inSize = 33;
-		st.inSTDBuffer = 200;
+		st.inSTDBuffer = 20;
 		
 		st.readStreamString(o);
 		
 		st.disablePreExec(pos);
 		st.writeStreamString(o);
+		st.writeStreamString("\nexiting\n");
 	}
 	catch(baseEx ex)
 	{
 		cout << ex << "\t" << ex.line << endl;
 	}
+	
 	return 0;
 }

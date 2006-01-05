@@ -27,6 +27,12 @@
 	
 using namespace dodo;
 
+systemThreadShares::systemThreadShares(systemThreadShares &sts)
+{
+}
+
+//-------------------------------------------------------------------
+
 systemThreadShares::systemThreadShares() : sharedNum(0)
 {
 }
@@ -35,6 +41,13 @@ systemThreadShares::systemThreadShares() : sharedNum(0)
 
 systemThreadShares::~systemThreadShares()
 {
+	l = shareds.begin();
+	m = shareds.end();
+	
+	for (;l!=m;++l)
+	{
+		pthread_mutex_destroy(&(l->mutex));
+	}	
 }
 
 //-------------------------------------------------------------------
@@ -63,6 +76,7 @@ systemThreadShares::add(void *data)
 	shared.data = data;
 	shared.position = ++sharedNum;
 	shared.isLocked = false;
+	
 	if (pthread_mutex_init(&(n->mutex),NULL)!=0)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_ADD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -131,3 +145,46 @@ systemThreadShares::del(int position,
 
 //-------------------------------------------------------------------
 
+#ifndef NO_EX
+	void
+#else
+	bool 
+#endif						 
+systemThreadShares::lock(int position, 
+						void *data, 
+						bool force)
+{
+	data = NULL;
+	
+	if (getShared(position))
+	{
+		if (n->isLocked && !force)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_LIBDODO,SYSTEMTHREADSHARES_ISALREADYLOCKED,SYSTEMTHREADSHARES_ISALREADYLOCKED_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		if (pthread_mutex_lock(&(n->mutex))!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+								
+		n->isLocked = true;
+		data = n->data;
+		
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+}
+							
+//-------------------------------------------------------------------

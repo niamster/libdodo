@@ -27,27 +27,70 @@
 	
 using namespace dodo;
 
+systemThreads::systemThreads(systemThreads &st)
+{
+}
+
+//-------------------------------------------------------------------
+
 systemThreads::systemThreads() : threadNum(0)
 {
+	pthread_attr_init(&attr);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 }
 
 //-------------------------------------------------------------------
 
 systemThreads::~systemThreads()
 {
+	pthread_attr_destroy(&attr);
+	
+	i = threads.begin();
+	j = threads.end();
+	
+	for (;i!=j;++i)
+	{
+		switch (i->action)
+		{
+			case THREAD_KEEP_ALIVE:
+				if (pthread_detach(i->thread)!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#endif
+				break;
+				
+			case THREAD_STOP:
+				if (pthread_cancel(i->thread)!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#endif
+				break;
+			
+			case THREAD_WAIT:
+			default:
+				if (pthread_join(i->thread,NULL)!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#endif			
+		}
+	}	
 }
 
 //-------------------------------------------------------------------
 
 int 
 systemThreads::add(threadFunc func,
-						void *data)
+						void *data,
+						systemThreadOnDestructEnum action,
+						int stackSize)
 {
 	thread.data = data;
 	thread.func = func;
 	thread.isRunning = false;
 	thread.position = ++threadNum;
 	thread.thread = 0;
+	thread.stackSize = stackSize;
+	thread.action = action;
 	
 	threads.push_back(thread);
 	
@@ -188,8 +231,15 @@ systemThreads::run(int position,
 			#else
 				return false;
 			#endif
+
+		if (pthread_attr_setstacksize(&attr,k->stackSize)!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
 			
-		if (pthread_create(&(k->thread),NULL,k->func,k->data)!=0)
+		if (pthread_create(&(k->thread),&attr,k->func,k->data)!=0)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
