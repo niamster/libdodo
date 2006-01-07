@@ -63,6 +63,8 @@ cgiTools::cgiTools(bool silent,
 	makePost();
 	make(COOKIES.realArr,ENVIRONMENT["HTTP_COOKIE"],"; ");
 	make(METHOD_GET.realArr,ENVIRONMENT["QUERY_STRING"]);
+	
+	getPair.clear();
 }
 
 //-------------------------------------------------------------------
@@ -113,13 +115,15 @@ cgiTools::make(assocArr &val,
 			const std::string &string,
 			char *delim) const
 {
-	stringArr getPair = tools::explode(string,delim);
-	stringArr::iterator i(getPair.begin()), j(getPair.end());
+	getPair = tools::explode(string,delim);
+	l = getPair.begin();
+	m = getPair.end();
+	
 	stringArr temp;
 	
-	for(;i!=j;++i)
+	for(;l!=m;++l)
 	{
-		temp = tools::explode(*i,&tools::decodeBase64,"=");
+		temp = tools::explode(*l,&tools::decodeBase64Static,"=");
 		if (temp.size() > 1)
 			val[temp[0]] = temp[1];
 	}	
@@ -328,19 +332,19 @@ std::string
 cgiTools::request(const std::string &varName, 
 				requestMethodEnum first) const
 {
-	std::string temp0 = METHOD_GET[varName];
-	std::string temp1 = METHOD_POST[varName];
+	met0 = METHOD_GET[varName];
+	met1 = METHOD_POST[varName];
 	
 	if (first == GET)
-		if (strcmp(temp0.c_str(),__UNDEFINED__) != 0)
-			return temp0;
+		if (strcmp(met0.c_str(),__UNDEFINED__) != 0)
+			return met0;
 		else
-			return temp1;
+			return met1;
 	else
-		if (strcmp(temp1.c_str(),__UNDEFINED__) != 0)
-			return temp1;
+		if (strcmp(met1.c_str(),__UNDEFINED__) != 0)
+			return met1;
 		else
-			return temp0;
+			return met0;
 		
 }
 
@@ -356,7 +360,7 @@ cgiTools::setCookie(const std::string &name,
 {
 	__cookies temp(secure);
 	temp.name = name;
-	temp.value = tools::encodeBase64(value);
+	temp.value = tls.encodeBase64(value);
 	temp.exDate = exDate;
 	temp.path = path;
 	temp.domain = domain;

@@ -303,6 +303,59 @@ tools::trim(const std::string &data,
 
 #ifdef CODECONV_EXT
 
+	//-------------------------------------------------------------------
+	
+	std::string 
+	tools::codesetConversionStatic(const std::string &buffer, 
+						const std::string &toCode, 
+						const std::string &fromCode)
+	{
+		iconv_t conv = iconv_open(toCode.c_str(),fromCode.c_str());
+		if (conv == (iconv_t)(-1))
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSIONSTATIC,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+				
+		register size_t in, out;
+		register char *inFake, *outFake;
+		
+		in = buffer.size();
+		out = in*2;
+		char *outBuffer = new char[out];
+				
+		inFake = (char *)buffer.c_str();
+		outFake = outBuffer;
+		
+		#ifdef BSD
+			if (iconv(conv,(const char **)&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#else
+			if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
+		#endif
+			#ifndef NO_EX
+			{
+				delete [] outBuffer;
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSIONSTATIC,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}
+			#else
+			{
+				delete [] outBuffer;
+				return buffer;
+			}
+			#endif
+			
+		std::string result;
+		result.assign(outBuffer, out);
+
+		delete [] outBuffer;
+		
+		return result;
+	}
+	
+	//-------------------------------------------------------------------
+	
 	#ifndef NO_EX
 		void 
 	#else
@@ -409,6 +462,8 @@ tools::trim(const std::string &data,
 
 	#ifdef ZLIB_EXT
 	
+		//-------------------------------------------------------------------
+	
 		std::string 
 		tools::zCompress(const std::string &buffer, 
 						unsigned short level, 
@@ -510,7 +565,127 @@ tools::trim(const std::string &data,
 			delete [] byteBuf;
 			
 			return strBuf;
-		}	
+		}
+		
+		//-------------------------------------------------------------------
+		
+		std::string 
+		tools::zCompressStatic(const std::string &buffer, 
+						unsigned short level, 
+						zlibCompressionStrategyEnum type)
+		{
+		 	z_stream strm;
+		 	int ret;
+		 	
+		 	std::string strBuf;
+		 	Bytef *byteBuf;
+			 				
+			strm.zalloc = Z_NULL;
+			strm.zfree = Z_NULL;
+			strm.opaque = Z_NULL;
+			
+			if ( (ret=deflateInit2(&strm,level,Z_DEFLATED,15,level,type))<0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+				#else
+					return buffer;
+				#endif
+				
+			strm.avail_in =  buffer.size();
+			strm.next_in = (Bytef *)buffer.c_str();
+			
+			byteBuf = new Bytef[ZLIB_CHUNK];
+			
+			strBuf.clear();
+
+			do
+			{	
+				strm.avail_out = ZLIB_CHUNK;
+				strm.next_out = byteBuf;
+			
+				if ( (ret=deflate(&strm,Z_FINISH))<0)
+					#ifndef NO_EX
+					{
+						delete [] byteBuf;
+						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+					}
+					#else
+					{
+						delete [] byteBuf;
+						return buffer;
+					}
+					#endif
+					
+				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
+			}
+			while (strm.avail_out==0);
+			
+			deflateEnd(&strm);
+			delete [] byteBuf;
+			
+			return strBuf;
+		}
+
+		//-------------------------------------------------------------------
+	
+		std::string 
+		tools::zDecompressStatic(const std::string &buffer)
+		{
+		 	z_stream strm;
+		 	int ret;
+		 	
+		 	std::string strBuf;
+		 	Bytef *byteBuf;
+		 				
+			strm.zalloc = Z_NULL;
+			strm.zfree = Z_NULL;
+			strm.opaque = Z_NULL;
+			
+			if ( (ret=inflateInit2(&strm,15))<0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+				#else
+					return buffer;
+				#endif
+
+
+			byteBuf = new Bytef[ZLIB_CHUNK];
+
+			strm.avail_in = buffer.size();
+			strm.next_in = (Bytef *)buffer.c_str();
+						
+			strBuf.clear();
+
+			do
+			{	
+				strm.avail_out = ZLIB_CHUNK;
+				strm.next_out = byteBuf;
+			
+				if ( (ret=inflate(&strm,Z_NO_FLUSH))<0)
+					#ifndef NO_EX
+					{
+						delete [] byteBuf;
+						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+					}
+					#else
+					{
+						delete [] byteBuf;
+						return buffer;
+					}
+					#endif
+					
+				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
+			}
+			while (strm.avail_out==0); 
+
+			inflateEnd(&strm);
+			delete [] byteBuf;
+			
+			return strBuf;
+		}
+		
+		//-------------------------------------------------------------------		
+				
 	#endif
 
 //-------------------------------------------------------------------
@@ -518,8 +693,9 @@ tools::trim(const std::string &data,
 std::string 
 tools::decodeBase64(const std::string &string)
 {
-	std::string result;
-	std::string::const_iterator o(string.begin()),k(string.end());
+	o = string.begin();
+	k = string.end();
+	
 	char c;
 
 	for(;o!=k;++o) 
@@ -551,8 +727,8 @@ tools::decodeBase64(const std::string &string)
 std::string
 tools::encodeBase64(const std::string &string)
 {
-	std::string result;
-	std::string::const_iterator o(string.begin()),k(string.end());
+	o = string.begin();
+	k = string.end();
 	
 	for(;o!=k;++o) 
 	{
@@ -643,3 +819,75 @@ tools::charToHex(const char &first)
 
 //-------------------------------------------------------------------
 
+std::string 
+tools::decodeBase64Static(const std::string &string)
+{
+	std::string result;
+	std::string::const_iterator o(string.begin()),k(string.end());
+	
+	char c;
+
+	for(;o!=k;++o) 
+	{
+		switch(*o) 
+		{
+			case '+':
+				result.append(1, ' ');
+				break;
+			case '%':
+				if(std::distance(o, k) >= 2 && std::isxdigit(*(o + 1)) && std::isxdigit(*(o + 2))) 
+				{
+					c = *++o;
+					result.append(1, tools::hexToChar(c, *++o));
+				}
+				else 
+					result.append(1, '%');
+				break;
+			default:
+				result.append(1, *o);
+		}
+	}
+	
+	return result;	
+}
+
+//-------------------------------------------------------------------
+
+std::string
+tools::encodeBase64Static(const std::string &string)
+{
+	std::string result;
+	std::string::const_iterator o(string.begin()),k(string.end());
+	
+	for(;o!=k;++o) 
+	{
+		switch(*o) 
+	    {
+		    case ' ':
+				result.append(1, '+');
+				break;
+			case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
+			case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
+			case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
+			case 'V': case 'W': case 'X': case 'Y': case 'Z':
+			case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
+			case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
+			case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
+			case 'v': case 'w': case 'x': case 'y': case 'z':
+			case '0': case '1': case '2': case '3': case '4': case '5': case '6':
+			case '7': case '8': case '9':
+			case '-': case '_': case '.': case '!': case '~': case '*': case '\'': 
+			case '(': case ')':
+				result.append(1, *o);
+				break;
+			default:
+				result.append(1, '%');
+				result.append(tools::charToHex(*o));
+				break;
+	    }
+	}
+	
+	return result;
+}
+
+//-------------------------------------------------------------------

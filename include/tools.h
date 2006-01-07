@@ -224,6 +224,16 @@ namespace dodo
 				 * @param fromCode indicates codeset in what buffer coded
 				 * @note if compiled without exeptions - on error buffer will be returned
 				 */
+				static std::string codesetConversionStatic(const std::string &buffer, const std::string &toCode, const std::string &fromCode);
+								
+				/**
+				 * converts from one codeset to another
+				 * @return converted string
+				 * @param buffer contains string to convert
+				 * @param toCode indicates codeset in what perform conversion
+				 * @param fromCode indicates codeset in what buffer coded
+				 * @note if compiled without exeptions - on error buffer will be returned
+				 */
 				virtual std::string codesetConversion(const std::string &buffer, const std::string &toCode, const std::string &fromCode);
 
 				/**
@@ -270,21 +280,51 @@ namespace dodo
 				 * @note if compiled without exeptions - on error buffer will be returned
 			 	 */
 			 	virtual std::string zDecompress(const std::string &buffer);
-			 
+			 	
+			 	/**
+			 	 * @return compressed buffer
+			 	 * @param buffer contains data to compress
+			 	 * @param level is level to compress [1..9]
+			 	 * @param type descibes compression strategy
+				 * @note if compiled without exeptions - on error buffer will be returned
+			 	 */
+			 	static std::string zCompressStatic(const std::string &buffer, unsigned short level=6, zlibCompressionStrategyEnum type=HUFFMAN_COMRESSION);
+			 	
+			 	/**
+			 	 * @return decompressed buffer
+			 	 * @param buffer contains data to compress
+			 	 * @param level is level to compress [1..9]
+			 	 * @param type descibes compression strategy
+				 * @note if compiled without exeptions - on error buffer will be returned
+			 	 */
+			 	static std::string zDecompressStatic(const std::string &buffer);
+			 				 
 			 #endif
 			
 			/**
 			 * @return base64 decoded string
 			 * @param string to decode
 			 */
-			static std::string decodeBase64(const std::string &string);
+			virtual std::string decodeBase64(const std::string &string);
 
 			/**
 			 * @return base64 encoded string
 			 * @param string to encode
 			 */			
-			static std::string encodeBase64(const std::string &string);
+			virtual std::string encodeBase64(const std::string &string);
 			
+			/**
+			 * @return base64 decoded string
+			 * @param string to decode
+			 */
+			static std::string decodeBase64Static(const std::string &string);
+
+			/**
+			 * @return base64 encoded string
+			 * @param string to encode
+			 */			
+			static std::string encodeBase64Static(const std::string &string);
+						
 			/**
 			 * @return converted from HEX
 			 * @param first is first part of HEX
@@ -309,8 +349,6 @@ namespace dodo
 				size_t out;///< outbytesleft paramether for iconv
 				char *inFake;///< to protect incomming string
 				char *outFake;///< to protect outgoing string
-								
-				std::string result;///< to store temporary result
 				
 			#endif
 			
@@ -323,12 +361,18 @@ namespace dodo
 			 	Bytef *byteBuf;///< to store result
 			 
 			 #endif
-			
+								
+			std::string result;///< to store temporary result
+							
 			/**
 			 * dummy callback function for implode/explode
 			 * nothing does with passed data
 			 */
 			inline static std::string dummy(const std::string &data);
+
+			std::string::const_iterator o;///< iterator for string
+			std::string::const_iterator k;///< iterator for string
+					
 	};
 
 };

@@ -293,6 +293,15 @@ namespace dodo
 			
 			mutable assocArr::iterator i;///< iterator
 			mutable assocArr::iterator j;///< iterator
+			
+			mutable tools tls;///< tools
+			
+			mutable stringArr getPair;///< temporary storage for URL encoding
+			mutable stringArr::iterator l;///<iterator for array of strings
+			mutable stringArr::iterator m;///<iterator for array of strings
+			
+			mutable std::string met0;///< temporary stores method for request class method
+			mutable std::string met1;///< temporary stores method for request class method
 	};
 
 };

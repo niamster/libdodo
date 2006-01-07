@@ -55,13 +55,8 @@ namespace dodo
 	/**
 	 * diferent predifined constants
 	 */
-	
-	#ifdef UNICODE
-		static short size_of_char = sizeof(char)*2;
-	#else
-		static short size_of_char = sizeof(char);
-	#endif
-	
+	static short size_of_char = sizeof(char);
+
 	static short size_of_pointer = sizeof(void *);
 	
 	static short size_of_int = sizeof(int);
