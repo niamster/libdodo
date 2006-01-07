@@ -1,12 +1,18 @@
 #include <flushSocket.h>
 #include <flushSocketTools.h>
+#include <systemThreads.h>
+#include <systemThreadShares.h>
+
 using namespace dodo;
 
 using namespace std;
 
-bool
-process(flushSocketExchange fse)
+void *
+process(void *data)
 {
+	flushSocketExchange *t_fse = (flushSocketExchange *)data;
+	flushSocketExchange fse(*t_fse);
+	
 	if (fse.isBlocked())
 		std::cout << "CHILD BLOCKED\n";
 	
@@ -23,20 +29,19 @@ process(flushSocketExchange fse)
 	{
 		fse.receiveStreamString(q);
 		cout << q << q.size() << endl;
-		if (q.compare("exit")==0)
-			return false;
+//		if (q.compare("exit")==0)
+//			return false;
 	}
 	catch (baseEx ex)
 	{
 		cout << "Smth happened!" << ex << endl;
 	}
 	
-	return true;
+//	return true;
 }
 
 int main(int argc, char **argv)
 {
-	
 //#define DATAGRAM	
 	try
 	{	
@@ -83,6 +88,13 @@ int main(int argc, char **argv)
 		
 		flushSocketExchange conn1;
 		int i = 0;
+
+		systemThreads th;
+		systemThreadShares sh;
+		
+		int shPos = sh.add((void *)&conn1);
+		
+		int pos = th.add(process,(void *)&conn1);
 		
 		while(true)
 		{
@@ -93,8 +105,9 @@ int main(int argc, char **argv)
 					
 				conn1.init(fake);
 				cout << info.port << endl;
-				if (!process(conn1))
-					break;
+				th.run(pos,true);
+				//if (!process(conn1))
+				//	break;
 			}
 		}
 		

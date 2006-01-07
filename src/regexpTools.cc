@@ -91,6 +91,7 @@ regexpTools::boundMatch(const std::string &sample) const
 		subs = pcre_info(code,NULL,NULL);
 		if (subs<0)
 			return false;
+			
 		subs *= 3;
 		subs += 3;
 		
