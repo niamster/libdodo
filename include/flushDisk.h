@@ -44,6 +44,8 @@ namespace dodo
 	{
 		FLUSHDISK_OPER_READ,
 		FLUSHDISK_OPER_WRITE,
+		FLUSHDISK_OPER_READSTREAM,
+		FLUSHDISK_OPER_WRITESTREAM,
 		FLUSHDISK_OPER_OPEN,
 		FLUSHDISK_OPER_CLOSE
 	};
@@ -200,7 +202,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							read(char * const data, unsigned long pos = 0) const;///reads to void*; return false if eof		
+							read(char * const data, unsigned long pos = 0) const;	
 			
 			/**
 			 * write string
@@ -225,7 +227,56 @@ namespace dodo
 				virtual bool 
 			#endif
 							write(const char * const data, unsigned long pos = 0);
-
+							
+			/**
+			 * read string - null[or \n]-terminated string
+			 * @param data will be filled with data
+			 * @param pos indicates position in file [string that has pos-1 strings before]
+			 * @note max size is inSize
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							readStreamString(std::string &data, unsigned long pos = 0) const;
+			/**
+			 * read data - null[or \n]-terminated string
+			 * @param data will be filled with data
+			 * @param pos indicates position in file [string that has pos-1 strings before]
+			 * @note max size is inSize
+			 */							
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							readStream(char * const data, unsigned long pos = 0) const;
+			
+			/**
+			 * write string - null-terminated string [append only]
+			 * @param data will be written to file
+			 * @note max size is outSize
+			 */	
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							writeStreamString(const std::string &data);
+										
+			/**
+			 * write string - null-terminated string [append only]
+			 * @param data will be written to file
+			 * @note max size is outSize
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							writeStream(const char * const data);
+							
 			/**
 			 * erase node on position
 			 * @param pos indicates position in file
@@ -256,6 +307,8 @@ namespace dodo
 			virtual std::string getPath() const;
 
 			mutable flushDiskFileToCreateEnum fileType;///< type of file; if you change then it you have to reopen!
+
+			mutable bool append;///< if true, will append to the end of the file, even pos is set.
 			
 									
 		private:
@@ -263,8 +316,6 @@ namespace dodo
 			mutable std::string path;///< file name
 					
 			mutable FILE *file;///< file handler
-			
-			mutable bool append;///< if true, will append to the end of the file, even pos is set.
 	};
 
 };

@@ -12,25 +12,26 @@ process(flushSocketExchange fse)
 	
 	fse.inSize = 4;
 	fse.setInBufferSize(1);
+	fse.setOutBufferSize(1);
 	
 //	fse.outSize = 7;
 //	fse.autoOutSize = false;
-	fse.sendString("dasdasd");
+	fse.sendStreamString("dasdasd");
 	
-	std::string q;
+	std::string q = "";
 	try
 	{
-		fse.receiveString(q);
-		cout << q << endl;
+		fse.receiveStreamString(q);
+		cout << q << q.size() << endl;
 		if (q.compare("exit")==0)
 			return false;
 	}
 	catch (baseEx ex)
 	{
-		cout << ex << endl;
+		cout << "Smth happened!" << ex << endl;
 	}
-	return true;
 	
+	return true;
 }
 
 int main(int argc, char **argv)
@@ -71,6 +72,7 @@ int main(int argc, char **argv)
 		__initialAccept fake;
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
+		
 		//sock.blockInherited = true;
 		
 		sock.bindNListen("127.0.0.1",7777,3);

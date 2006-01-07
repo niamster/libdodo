@@ -50,8 +50,8 @@ namespace dodo
 			 */
 			virtual ~flush();
 			
-			mutable long inSize;///< size of data block;
-			mutable long outSize;///< size of data block;
+			mutable unsigned long inSize;///< size of data block;
+			mutable unsigned long outSize;///< size of data block;
 			
 			mutable std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
 

@@ -151,7 +151,7 @@ flushSocketExchange::init(int a_socket,
 		
 		setLingerSockOption(lingerOpts,lingerSeconds);	
 		
-		if (blocked)
+		if (!blocked)
 		{
 			if (blockInherited)
 				block(true);
@@ -190,19 +190,19 @@ flushSocketExchange::send(const char * const data,
 	
 	iter = outSize/outSocketBuffer;
 	rest = outSize%outSocketBuffer;
-	
-	register long n(0), sent(0);	
+
+	sent_recieved = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
 		
-	for (register long i=0;i<iter;++i)
+	for (register unsigned long i=0;i<iter;++i)
 	{
 		n = 0;
-		while (sent<outSize)
+		while (sent_recieved<outSize)
 		{
-			n = ::send(socket,buffer.c_str()+sent,inSocketBuffer,flag);
+			n = ::send(socket,buffer.c_str()+sent_recieved,inSocketBuffer,flag);
 			if (n==-1)
 				#ifndef NO_EX
 				{
@@ -214,16 +214,17 @@ flushSocketExchange::send(const char * const data,
 				#else
 					return false;	
 				#endif
-			sent += inSocketBuffer;
+				
+			sent_recieved += inSocketBuffer;
 		}
 	}
 	
 	if (rest>0)
 	{
 		n = 0;
-		while (sent<rest)
+		while (sent_recieved<rest)
 		{
-			n = ::send(socket,buffer.c_str()+sent,rest,flag);
+			n = ::send(socket,buffer.c_str()+sent_recieved,rest,flag);
 			if (n==-1)
 				#ifndef NO_EX
 				{
@@ -235,7 +236,8 @@ flushSocketExchange::send(const char * const data,
 				#else
 					return false;	
 				#endif
-			sent += n;
+				
+			sent_recieved += n;
 		}		
 	}
 			
@@ -281,17 +283,18 @@ flushSocketExchange::receive(char * const data,
 				
 	iter = inSize/inSocketBuffer;
 	rest = inSize%inSocketBuffer;
-	
-	register long n(0), received(0);
+
+	sent_recieved = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
 			
-	for (register long i=0;i<iter;++i)
+	for (register unsigned long i=0;i<iter;++i)
 	{
 		n = 0;
-		n = ::recv(socket,data+received,inSocketBuffer,flag);
+		
+		n = ::recv(socket,data+sent_recieved,inSocketBuffer,flag);
 		if (n==-1)
 			#ifndef NO_EX
 			{
@@ -303,11 +306,12 @@ flushSocketExchange::receive(char * const data,
 			#else
 				return false;	
 			#endif
-		received += n;
+			
+		sent_recieved += n;
 	}
 	
 	if (rest>0)
-		if (::recv(socket,data+received,rest,flag)==-1)
+		if (::recv(socket,data+sent_recieved,rest,flag)==-1)
 			#ifndef NO_EX
 			{
 				if (errno == EINVAL || errno == EWOULDBLOCK)
@@ -360,6 +364,8 @@ flushSocketExchange::receiveString(std::string &data,
 
 #ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
 
+	//-------------------------------------------------------------------
+
 	int 
 	flushSocketExchange::addPostExec(inExec func, 
 						void *data) const
@@ -407,6 +413,177 @@ flushSocketExchange::receiveString(std::string &data,
 	
 	#endif
 
+	//-------------------------------------------------------------------
+
 #endif
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::sendStream(const char * const data, 
+						bool urgent) const
+{
+	buffer.assign(data);
+				
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM;
+		performXExec(preExec);
+	#endif	
+	
+	register unsigned long outSize = buffer.size();
+	
+	iter = outSize/outSocketBuffer;
+	rest = outSize%outSocketBuffer;
+
+	sent_recieved = 0;
+		
+	register int flag = 0;	
+	if (urgent)	
+		flag = MSG_OOB;
+		
+	for (register unsigned long i=0;i<iter;++i)
+	{
+		n = 0;
+		while (sent_recieved<outSize)
+		{
+			n = ::send(socket,buffer.c_str()+sent_recieved,inSocketBuffer,flag);
+			if (n==-1)
+				#ifndef NO_EX
+				{
+					if (errno == EINVAL || errno == EWOULDBLOCK)
+						return ;
+					else
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SENDSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}
+				#else
+					return false;	
+				#endif
+				
+			sent_recieved += inSocketBuffer;
+		}
+	}
+	
+	if (rest>0)
+	{
+		n = 0;
+		while (sent_recieved<rest)
+		{
+			n = ::send(socket,buffer.c_str()+sent_recieved,rest,flag);
+			if (n==-1)
+				#ifndef NO_EX
+				{
+					if (errno == EINVAL || errno == EWOULDBLOCK)
+						return ;
+					else
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SENDSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}
+				#else
+					return false;	
+				#endif
+				
+			sent_recieved += n;
+		}		
+	}
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+		
+	#ifdef NO_EX
+		return true;
+	#endif		
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::sendStreamString(const std::string &data, 
+						bool urgent) const
+{
+	return this->sendStream(data.c_str(),urgent);
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::receiveStream(char * const data, 
+							bool urgent) const
+{
+		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKETEXCHANGE_OPER_RECIEVESTREAM;
+		performXExec(preExec);
+	#endif	
+	
+	memset(data,'\0',inSocketBuffer);
+		
+	n = 0;	
+		
+	register int flag = 0;	
+	if (urgent)	
+		flag = MSG_OOB;
+
+	if ((n = ::recv(socket,data,inSocketBuffer,flag))==-1)
+		#ifndef NO_EX
+		{
+			if (errno == EINVAL || errno == EWOULDBLOCK)
+				return ;
+			else
+				throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECIEVESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
+		#else
+			return false;	
+		#endif
+		
+	data[n] = '\0';
+		
+	buffer.assign(data,n);
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+	
+	#ifdef NO_EX
+		return true;
+	#endif		
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocketExchange::receiveStreamString(std::string &data, 
+								bool urgent) const
+{	
+	register char *t_data = new char[inSize+1];
+
+	#ifdef NO_EX
+		register bool result = 
+	#endif
+	
+	this->receiveStream(t_data,urgent);
+	data.assign(t_data);
+	
+	delete [] t_data;
+	
+	#ifdef NO_EX	
+		return result;
+	#endif
+}
 
 //-------------------------------------------------------------------

@@ -52,6 +52,8 @@ namespace dodo
 	{
 		FLUSHSOCKETEXCHANGE_OPER_RECIEVE,
 		FLUSHSOCKETEXCHANGE_OPER_SEND,
+		FLUSHSOCKETEXCHANGE_OPER_RECIEVESTREAM,
+		FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM,
 		FLUSHSOCKETEXCHANGE_OPER_CLOSE,
 	};	
 	
@@ -224,7 +226,7 @@ namespace dodo
 			 * @param data is data that would be received
 			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
-			 * if outSize bigger than socket buffer size - receives with few iterations
+			 * if inSize bigger than socket buffer size - receives with few iterations
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -238,7 +240,7 @@ namespace dodo
 			 * @param data is string that would be received
 			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
-			 * if outSize bigger than socket buffer size - receives with few iterations
+			 * if inSize bigger than socket buffer size - receives with few iterations
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -246,6 +248,66 @@ namespace dodo
 				virtual bool 
 			#endif				
 							receiveString(std::string &data, bool urgent = false) const;///urgent = true -> Receipt  of out-of-band data
+
+			/**
+			 * send - null-terminated string
+			 * @param data is data that would be sent
+			 * @param urgent -> send out-of-band data
+			 * @note sends no longer than outSize
+			 * if outSize bigger than socket buffer size - sends with few iterations
+			 * max data size is outSocketBuffer
+			 */			
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							sendStream(const char * const data, bool urgent = false) const;
+			
+			/**
+			 * send - null-terminated string
+			 * @param data is string that would be sent
+			 * @param urgent -> send out-of-band data
+			 * @note sends no longer than outSize
+			 * if outSize bigger than socket buffer size - sends with few iterations
+			 * max data size is outSocketBuffer
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif				
+							sendStreamString(const std::string &data, bool urgent = false) const;
+			
+			/**
+			 * receive - null-terminated string
+			 * @param data is data that would be received
+			 * @param urgent -> receives out-of-band data
+			 * @note receives no longer than inSize
+			 * if inSize bigger than socket buffer size - receives with few iterations
+			 * max data size is inSocketBuffer
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							receiveStream(char * const data, bool urgent = false) const;
+			
+			/**
+			 * receive - null-terminated string
+			 * @param data is string that would be received
+			 * @param urgent -> receives out-of-band data
+			 * @note receives no longer than inSize
+			 * if inSize bigger than socket buffer size - receives with few iterations
+			 * max data size is inSocketBuffer
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif				
+							receiveStreamString(std::string &data, bool urgent = false) const;///urgent = true -> Receipt  of out-of-band data
 						
 			/**
 			 * closes this socket
@@ -271,8 +333,11 @@ namespace dodo
 			/**
 			 * @note share vars
 			 */			
-			mutable long iter;///< amount of iterations to do to operate with data
-			mutable long rest;///< amount of data that is needed to operate at last	
+			mutable unsigned long iter;///< amount of iterations to do to operate with data
+			mutable unsigned long rest;///< amount of data that is needed to operate at last
+			mutable unsigned long sent_recieved;///< amount of data that totally received/sent
+			mutable long n;///< amount of data that received/sent by one transaction
+			
 	 };
 
 };

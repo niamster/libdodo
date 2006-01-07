@@ -184,7 +184,7 @@ namespace dodo
 							write(const char * const data);
 							
 			/**
-			 * read from stream - null-terminated string
+			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read string
 			 * max size of data is inSTDBuffer
 			 */
@@ -195,7 +195,7 @@ namespace dodo
 			#endif
 							readStreamString(std::string &data) const;
 			/**
-			 * read from stream - null-terminated string
+			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
 			 * max size of data is inSTDBuffer
 			 */
@@ -209,6 +209,7 @@ namespace dodo
 			/**
 			 * write to stream - null-terminated string
 			 * @param data is string that will be written
+			 * @note max data size is outSTDBuffer
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -220,6 +221,7 @@ namespace dodo
 			/**
 			 * write to stream - null-terminated string
 			 * @param data is data that will be written
+			 * @note max data size is outSTDBuffer
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -275,8 +277,9 @@ namespace dodo
 			/**
 			 * @note share vars
 			 */
-			mutable long iter;///< amount of iterations to do to operate with data
-			mutable long rest;///< amount of data that is needed to operate at last
+			mutable unsigned long iter;///< amount of iterations to do to operate with data
+			mutable unsigned long rest;///< amount of data that is needed to operate at last
+			mutable unsigned long sent_recieved;///< amount of data that totally received/sent
 		
 	};
 

@@ -1,4 +1,5 @@
 #include <flushDisk.h>
+#include <flushDiskTools.h>
 
 using namespace dodo;
 
@@ -17,8 +18,8 @@ int main(int argc, char **argv)
 		{
 			cout << arr[i];
 		}*/
-		flushDiskTools::copy("/root","./tmp",true);
-		flushDiskTools::copy("/root","./tmp/",true);
+		//flushDiskTools::copy("/root","./tmp",true);
+		//flushDiskTools::copy("/root","./tmp/",true);
 		//flushDiskTools::unlink("my.dat");
 	}
 	catch(baseEx ex)
@@ -31,22 +32,36 @@ int main(int argc, char **argv)
 	}
 	try
 	{
+		flushDiskTools::unlink("my.dat");
+		
 		//flushDisk flush(FIFO_FILE,"my.dat");
 		flushDisk flush(REG_FILE,"my.dat");
 		
 		
 		//flushDisk flush(true);///in tmp file
 		flush.open();
-		//flush.autoOutSize = false;flush.inSize = flush.outSize = 10;
+		//flush.inSize = flush.outSize = 13;
 		flush.over = true;
-		flush.writeString("!1234567890-!!",0);
+		
+//		flush.append = true;
+		
+		flush.writeStreamString("!1234567890#!!");
+//		flush.writeStreamString("!1234567890-!!");
+//		flush.writeStreamString("!1234567890@!!");
+		flush.writeStreamString("!1234567890$!!");
+
+
 		
 		string str;
 	
-		flush.readString(str,0);
-		cout << "\n\n" << str << "\n\n";
+//		flush.readStreamString(str,0);
+//		cout << "\n\n" << str << "\n\n";
+
+		//flush.readString(str,0);
+		//cout << "\n\n" << str << "\n\n";
+
 	
-		flushDiskTools::rm("./tmp");
+		/*flushDiskTools::rm("./tmp");
 
 		flushDiskTools::mkdir("testDir");//,OWNER_ALL_ACCESS,false);
 
@@ -67,7 +82,7 @@ int main(int argc, char **argv)
 			cout << endl << dir.size() << endl;
 			for (std::vector<__fileInfo>::iterator i=dir.begin();i!=dir.end();++i)
 				cout << i->size << "!" << i->name << endl; 
-		}
+		}*/
 	}
 	catch(baseEx ex)
 	{

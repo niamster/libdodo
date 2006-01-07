@@ -41,6 +41,7 @@
 		{
 			FLUSHDISK_WRONG_FILENAME,
 			FLUSHDISK_CANNOT_OVEWRITE,
+			FLUSHDISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION,
 		};
 		
 		/**
@@ -48,6 +49,7 @@
 		 */
 		#define FLUSHDISK_WRONG_FILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 		#define FLUSHDISK_CANNOT_OVEWRITE_STR "You set option not to overwrite, but try to do that =)"
+		#define FLUSHDISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR "Given file couldn't reach given position. File is short."
 		
 		/**
 		 * ID of function where exception was thrown
@@ -58,6 +60,8 @@
 			FLUSHDISK_OPEN,
 			FLUSHDISK_READ,
 			FLUSHDISK_WRITE,
+			FLUSHDISK_READSTREAM,
+			FLUSHDISK_WRITESTREAM,
 			FLUSHDISK_FLUSH,
 		};
 	};

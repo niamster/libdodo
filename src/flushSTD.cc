@@ -118,11 +118,11 @@ flushSTD::read(char * const a_void) const
 	iter = inSize/inSTDBuffer;
 	rest = inSize%inSTDBuffer;
 	
-	register long recieved(0);
+	sent_recieved = 0;
 	
-	for (register long i=0;i<iter;++i)
+	for (register unsigned long i=0;i<iter;++i)
 	{
-		if (fread(a_void+recieved,inSTDBuffer,1,stdin)==0)
+		if (fread(a_void+sent_recieved,inSTDBuffer,1,stdin)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -145,11 +145,11 @@ flushSTD::read(char * const a_void) const
 				}
 			#endif
 			
-		recieved += inSTDBuffer;
+		sent_recieved += inSTDBuffer;
 	}
 	
 	if (rest>0)
-		if (fread(a_void+recieved,rest,1,stdin)==0)
+		if (fread(a_void+sent_recieved,rest,1,stdin)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -240,15 +240,15 @@ flushSTD::write(const char *const aa_buf)
 	iter = outSize/outSTDBuffer;
 	rest = outSize%outSTDBuffer;
 	
-	register long sent(0);
+	sent_recieved = 0;
 	
 	desc = stdout;
 	if (err)
 		desc = stderr;
 	
-	for (register long i=0;i<iter;++i)
+	for (register unsigned long i=0;i<iter;++i)
 	{
-		if (fwrite(buffer.c_str()+sent,outSTDBuffer,1,desc)==0)
+		if (fwrite(buffer.c_str()+sent_recieved,outSTDBuffer,1,desc)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -271,11 +271,11 @@ flushSTD::write(const char *const aa_buf)
 				}
 			#endif
 			
-		sent += outSTDBuffer;
+		sent_recieved += outSTDBuffer;
 	}
 
 	if (rest>0)
-		if (fwrite(buffer.c_str()+sent,rest,1,desc)==0)
+		if (fwrite(buffer.c_str()+sent_recieved,rest,1,desc)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -569,13 +569,13 @@ flushSTD::writeStream(const char *const aa_buf)
 	if (err)
 		desc = stderr;
 
-	int outSize = strlen(aa_buf);
+	register unsigned long outSize = strlen(aa_buf);
 	
 	///execute 
 	iter = outSize/outSTDBuffer;
 	rest = outSize%outSTDBuffer;
 	
-	register long sent(0);
+	sent_recieved = 0;
 	
 	desc = stdout;
 	if (err)
@@ -583,9 +583,9 @@ flushSTD::writeStream(const char *const aa_buf)
 	
 	register char *buff = new char[outSTDBuffer+1];
 	
-	for (register long i=0;i<iter;++i)
+	for (register unsigned long i=0;i<iter;++i)
 	{
-		strncpy(buff,buffer.c_str()+sent,outSTDBuffer);
+		strncpy(buff,buffer.c_str()+sent_recieved,outSTDBuffer);
 		buff[outSTDBuffer] = '\0';
 		
 		if (fputs(buff,desc)==0)
@@ -613,12 +613,12 @@ flushSTD::writeStream(const char *const aa_buf)
 				}
 			#endif
 			
-		sent += outSTDBuffer;
+		sent_recieved += outSTDBuffer;
 	}
 
 	if (rest>0)
 	{		
-		strncpy(buff,buffer.c_str()+sent,rest);
+		strncpy(buff,buffer.c_str()+sent_recieved,rest);
 		buff[rest] = '\0';
 		
 		if (fputs(buff,desc)==0)

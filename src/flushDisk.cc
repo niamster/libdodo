@@ -29,9 +29,9 @@ using namespace dodo;
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
 					const std::string &a_path) : over(false),
 												mode(READ_WRITE), 
-												fileType(type),
-												path(a_path), 
-												append(false)
+												fileType(type), 
+												append(false),
+												path(a_path)
 {
 }
 
@@ -271,14 +271,14 @@ flushDisk::read(char * const a_void,
 		performXExec(preExec);
 	#endif
 	
-	if (fileType == REG_FILE || fileType == TMP_FILE)	
+	if (fileType == REG_FILE || fileType == TMP_FILE)
 		if (fseek(file,a_pos*inSize,SEEK_SET) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
-
+	
 	memset(a_void,'\0',inSize);
 	
 	///execute 
@@ -288,16 +288,17 @@ flushDisk::read(char * const a_void,
 		#ifndef FAST
 			if (fileType == FIFO_FILE)
 		#endif
-				fgets(a_void,inSize,file);
+				fgets(a_void,inSize+1,file);
 	
 	#ifndef NO_EX
 		switch (errno)
 		{
 			case EIO:
 			case EINTR:
-			case ENOMEM:
+			case EBADF:
 			case EOVERFLOW:
-			case EROFS:
+			case ENOMEM:
+			case ENXIO:
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		}	
 	#else			
@@ -305,9 +306,10 @@ flushDisk::read(char * const a_void,
 		{
 			case EIO:
 			case EINTR:
+			case EBADF:
+			case EOVERFLOW:
 			case ENOMEM:
-			case EOVERFLOW:	
-			case EROFS:
+			case ENXIO:
 				return false;
 		}
 	#endif
@@ -381,46 +383,49 @@ flushDisk::write(const char *const a_buf,
 	
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 	{
-		register size_t read_bytes(-1);
 		a_pos *= outSize;
 		
-		if (!over && !append)
-		{		
-			register char *t_buffer = new char[outSize*size_of_char];
+		if (!append)
+		{	
+			if (!over)
+			{
+				register size_t read_bytes(0);
+				char *t_buf = new char[outSize];
 				
-			if (fseek(file,a_pos,SEEK_SET) == -1)
-				#ifndef NO_EX
-				{
-					delete [] t_buffer;
-					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}
-				#else
-				{
-					delete [] t_buffer;
-					return false;
-				}
-				#endif
+				if (fseek(file,a_pos,SEEK_SET) == -1)
+					#ifndef NO_EX
+					{
+						delete [] t_buf;
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					}
+					#else
+					{
+						delete [] t_buf;
+						return false;
+					}
+					#endif
+					
+				read_bytes = fread(t_buf,outSize,1,file);
 				
-			read_bytes = fread(t_buffer,outSize,1,file);
-			delete [] t_buffer;
-		}
+				delete [] t_buf;
+				
+				if (read_bytes != 0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_LIBDODO,FLUSHDISK_CANNOT_OVEWRITE,FLUSHDISK_CANNOT_OVEWRITE_STR,__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+			}	
 			
-		if (!over && read_bytes != 0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_LIBDODO,FLUSHDISK_CANNOT_OVEWRITE,FLUSHDISK_CANNOT_OVEWRITE_STR,__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-		
-		if (append)
-			if (fseek(file,0,SEEK_END) == -1)
+			if (fseek(file,a_pos,SEEK_SET) == -1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
+		}
 		else
-			if (fseek(file,a_pos,SEEK_SET) == -1)
+			if (fseek(file,0,SEEK_END) == -1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
@@ -440,21 +445,29 @@ flushDisk::write(const char *const a_buf,
 	#ifndef NO_EX
 		switch (errno)
 		{
+			case EFBIG:
 			case EIO:
 			case EINTR:
-			case ENOMEM:
+			case EBADF:
 			case EOVERFLOW:
-			case EROFS:
+			case ENOSPC:
+			case EPIPE:
+			case ENOMEM:
+			case ENXIO:
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		}	
 	#else			
 		switch (errno)
 		{
+			case EFBIG:
 			case EIO:
 			case EINTR:
+			case EBADF:
+			case EOVERFLOW:
+			case ENOSPC:
+			case EPIPE:
 			case ENOMEM:
-			case EOVERFLOW:	
-			case EROFS:
+			case ENXIO:
 				return false;
 		}
 	#endif
@@ -477,7 +490,9 @@ flushDisk::write(const char *const a_buf,
 #endif 
 flushDisk::erase(unsigned long a_pos)
 {
-	register char *empty = new char;		
+	register char *empty = new char[outSize];
+	
+	memset(empty,0,outSize);
 
 	#ifdef NO_EX
 		register bool result = 
@@ -485,7 +500,7 @@ flushDisk::erase(unsigned long a_pos)
 	
 	this->write(empty,a_pos);
 	
-	delete empty;
+	delete [] empty;
 	
 	#ifdef NO_EX
 		return result;
@@ -523,3 +538,238 @@ flushDisk::getPath() const
 
 //-------------------------------------------------------------------
 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushDisk::readStream(char * const a_void, 
+				unsigned long a_pos) const
+{
+	#ifndef FLUSH_DISK_WO_XEXEC
+		operType = FLUSHDISK_OPER_READSTREAM;
+		performXExec(preExec);
+	#endif
+	
+	if (fileType == REG_FILE || fileType == TMP_FILE)
+	{
+		if (fseek(file,0,SEEK_SET) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+			
+		for (register unsigned long i(0);i<a_pos;++i)
+		{
+			if (fgets(a_void,inSize,file)==NULL)
+			{
+				#ifndef NO_EX
+					switch (errno)
+					{
+						case EIO:
+						case EINTR:
+						case EBADF:
+						case EOVERFLOW:
+						case ENOMEM:
+						case ENXIO:
+							throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					}	
+				#else			
+					switch (errno)
+					{
+						case EIO:
+						case EINTR:
+						case EBADF:
+						case EOVERFLOW:
+						case ENOMEM:
+						case ENXIO:
+							return false;
+					}
+				#endif
+				
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_LIBDODO,FLUSHDISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION,FLUSHDISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR,__LINE__,__FILE__);
+				#else
+					return false;
+				#endif				
+			}
+		}
+	}
+	
+	memset(a_void,'\0',inSize);
+	
+	///execute 
+	if (fgets(a_void,inSize,file)==NULL)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOMEM:
+				case ENXIO:
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}	
+		#else			
+			switch (errno)
+			{
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOMEM:
+				case ENXIO:
+					return false;
+			}
+		#endif
+	
+	buffer.assign(a_void);
+	
+	#ifndef FLUSH_DISK_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+		
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushDisk::readStreamString(std::string &a_str, 
+				unsigned long a_pos) const
+{
+	register char *data = new char[inSize+1];
+
+	#ifdef NO_EX
+		register bool result = 
+	#endif
+	
+	this->readStream(data,a_pos);
+	a_str.assign(data);
+	
+	delete [] data;
+	
+	#ifdef NO_EX	
+		return result;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushDisk::writeStreamString(const std::string &a_buf)
+{	
+	return this->writeStream(a_buf.c_str());	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
+flushDisk::writeStream(const char *const a_buf)
+{
+	buffer.assign(a_buf);
+				
+	#ifndef FLUSH_DISK_WO_XEXEC
+		operType = FLUSHDISK_OPER_WRITESTREAM;
+		performXExec(preExec);
+	#endif
+	
+	if (fseek(file,0,SEEK_END) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+	if (buffer.size()>outSize)
+		buffer.resize(outSize);
+	
+	///execute 
+	if (fputs(buffer.c_str(),file) < 0)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}	
+		#else			
+			switch (errno)
+			{
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
+					return false;
+			}
+		#endif
+
+	if (fputc('\n',file) < 0)
+		#ifndef NO_EX
+			switch (errno)
+			{
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
+					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}	
+		#else			
+			switch (errno)
+			{
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
+					return false;
+			}
+		#endif
+		
+	#ifndef FLUSH_DISK_WO_XEXEC
+		performXExec(postExec);
+	#endif
+			
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
