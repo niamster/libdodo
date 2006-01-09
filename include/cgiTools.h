@@ -170,8 +170,16 @@ namespace dodo
 	class cgiTools
 	{
 		
-		public:
+		private:
 			
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			cgiTools(cgiTools &ct);
+		
+		public:
+					
 			/**
 			 * constructor
 			 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.

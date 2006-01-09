@@ -78,6 +78,14 @@ namespace dodo
 	 */
 	class tools
 	{
+		private:
+
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */			
+			tools(tools &tls);
+		
 		public:
 						
 			/**
@@ -368,7 +376,7 @@ namespace dodo
 			 * dummy callback function for implode/explode
 			 * nothing does with passed data
 			 */
-			inline static std::string dummy(const std::string &data);
+			inline static std::string dummyTools(const std::string &data);
 
 			std::string::const_iterator o;///< iterator for string
 			std::string::const_iterator k;///< iterator for string

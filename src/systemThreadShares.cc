@@ -143,24 +143,17 @@ systemThreadShares::del(int position,
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
-	void
-#else
-	bool 
-#endif						 
-systemThreadShares::lock(int position, 
-						void *data, 
+void *						 
+systemThreadShares::lock(int position,
 						unsigned long microseconds)
 {
-	data = NULL;
-	
 	if (getShared(position))
 	{
 		if (n->isLocked)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_LIBDODO,SYSTEMTHREADSHARES_ISALREADYLOCKED,SYSTEMTHREADSHARES_ISALREADYLOCKED_STR,__LINE__,__FILE__);
 			#else
-				return false;
+				return NULL;
 			#endif
 			
 		if (microseconds == 0)
@@ -169,7 +162,7 @@ systemThreadShares::lock(int position,
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
-					return false;
+					return NULL;
 				#endif
 		}
 		else
@@ -182,22 +175,18 @@ systemThreadShares::lock(int position,
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
-					return false;
+					return NULL;
 				#endif			
 		}
-								
-		n->isLocked = true;
-		data = n->data;
 		
-		#ifdef NO_EX
-			return true;
-		#endif
+		n->isLocked = true;
+		return n->data;
 	}
 	else
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
-			return false;
+			return NULL;
 		#endif	
 }
 							

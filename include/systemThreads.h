@@ -30,6 +30,7 @@
 #include <types.h>
 #include <systemThreadsEx.h>
 
+#include <signal.h>
 #include <pthread.h>
 #include <vector>
 
@@ -56,13 +57,21 @@ namespace dodo
 	 */
 	struct __threadInfo
 	{
+		/**
+		 * contructor
+		 */
+		__threadInfo();
+		 
 		pthread_t thread;///< thread descriptor
 		void *data;///< data that will be passed on run
 		bool isRunning;///< whether thread is running
-		int position;///< position in queue
+		bool detached;///< if thread is detached
+		unsigned long position;///< position in queue
 		threadFunc func;///< function to execute
 		int stackSize;///< amount of stack for thread[in bytes]
 		systemThreadOnDestructEnum action;///< action on class destruction
+		unsigned long executed;///< amount of times thread was executed
+		unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
 	};
 
 	/**
@@ -74,6 +83,7 @@ namespace dodo
 		
 			/**
 			 * copy constructor
+			 * to prevent copying
 			 */
 			systemThreads(systemThreads &st);
 
@@ -95,7 +105,7 @@ namespace dodo
 			 * @param func indicates function to be executed
 			 * @paraqm data describes data to be passed to func
 			 */
-			virtual int add(threadFunc func, void *data, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+			virtual unsigned long add(threadFunc func, void *data, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
 			
 			/**
 			 * removes registered thread
@@ -108,7 +118,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							del(int position, bool force=false);
+							del(unsigned long position, bool force=false);
 							
 			/**
 			 * replaces function to became a thread[not executing]
@@ -123,7 +133,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							replace(int position, threadFunc func, void *data, bool force=false);
+							replace(unsigned long position, threadFunc func, void *data, bool force=false);
 			
 			/**
 			 * executes thread
@@ -136,7 +146,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							run(int position, bool force=false);
+							run(unsigned long position, bool force=false);
 
 			/**
 			 * stops thread
@@ -147,7 +157,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 		
-							stop(int position);
+							stop(unsigned long position);
 
 			/**
 			 * stops all registered threads
@@ -169,13 +179,13 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 	
-							wait(int position, void **data=NULL);
+							wait(unsigned long position, void **data=NULL);
 										
 			/**
 			 * @return true if thread is running
 			 * @param position indicates for what thread to indicate
 			 */
-			virtual bool isRunning(int position);
+			virtual bool isRunning(unsigned long position);
 							
 			/**
 			 * waits for all registered threads' termination
@@ -193,19 +203,36 @@ namespace dodo
 			 */
 			static void returnFromThread(void *data);			
 			
+			/**
+			 * sweep threads if their time are already passed
+			 */
+			virtual void sweepTrash();
+			
+			/**
+			 * set maximum execution time
+			 * @param position indicates for what thread to set limit
+			 * @param limit indicates the thread's limit on executions
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif			
+							setExecutionLimit(unsigned long position, unsigned long limit=1); 
+										
 		protected:
-		
+			
 			/**
 			 * searches threads by position
 			 * @return true if found
 			 * @param position describes position of wanted thread
 			 * @param iter is iterator that points on found thread
 			 */
-			virtual bool getThread(int position);
+			virtual bool getThread(unsigned long position);
 						
 			std::vector<__threadInfo> threads;///< vector of threads
 			__threadInfo thread;///< temp storage for thread
-			int threadNum;///< number of registered threads
+			unsigned long threadNum;///< number of registered threads
 			pthread_attr_t attr;///< attribute that indicates joinability
 
 			std::vector<__threadInfo>::iterator i;///< iterator for list of threads

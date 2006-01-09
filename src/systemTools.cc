@@ -1063,25 +1063,37 @@ systemTools::toRealSignal(systemSignalsEnum signal)
 	switch (signal)
 	{
 		case SIGNAL_HANGUP:
+			return 1;
 		case SIGNAL_INTERRUPT:
+			return 2;
 		case SIGNAL_QUIT:
+			return 3;
 		case SIGNAL_ILLEGAL_INSTRUCTION:
-		case SIGNAL_TRACE_TRAP:
+			return 4;
 		case SIGNAL_ABORT:
+			return 6;
 		case SIGNAL_BUS_FAULT:
+			return 7;
 		case SIGNAL_FLOATINGPOINT_FAULT:
-			return signal+1;
-		
+			return 8;
 		case SIGNAL_USER_DEFINED1:
+			return 10;
 		case SIGNAL_SEGMENTATION_FAULT:
+			return 11;
 		case SIGNAL_USER_DEFINED2:
+			return 12;
 		case SIGNAL_PIPE_FAULT:
+			return 13;
 		case SIGNAL_ALARM:
+			return 14;
 		case SIGNAL_TERMINATION:
+			return 15;
 		case SIGNAL_STACK_FAULT:
+			return 16;
 		case SIGNAL_CHILD_CHANGED:
+			return 17;
 		case SIGNAL_CONTINUE:
-			return signal+2;
+			return 18;
 
 		case SIGNAL_KEYBOARD_STOP:
 			return 20;

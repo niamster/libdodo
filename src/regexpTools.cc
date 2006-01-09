@@ -26,6 +26,12 @@
 
 using namespace dodo;
 
+regexpTools::regexpTools(regexpTools &rt)
+{
+}
+
+//-------------------------------------------------------------------
+
 regexpTools::regexpTools() : extended(true),
 					icase(false)
 {

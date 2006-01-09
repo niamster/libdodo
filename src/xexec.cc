@@ -26,13 +26,6 @@
 
 using namespace dodo;
 
-void 
-dummyHook(void *base, xexecObjTypeEnum type, void *data)
-{
-}
-
-//-------------------------------------------------------------------
-
 xexec::xexec() : safeHooks(true),
 				operType(XEXEC_NONE),
 				execs(0)

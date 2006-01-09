@@ -82,7 +82,6 @@ namespace dodo
 	#endif
 	
 	{
-		
 		friend class flushSocket;
 		
 		private:

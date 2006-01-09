@@ -27,6 +27,22 @@
 	
 using namespace dodo;
 
+static void
+dummySystemThreads(int signal)
+{
+}
+
+//-------------------------------------------------------------------
+
+__threadInfo::__threadInfo() : thread(0),
+								isRunning(false),
+								executed(0),
+								executeLimit(0)
+{
+}
+
+//-------------------------------------------------------------------
+
 systemThreads::systemThreads(systemThreads &st)
 {
 }
@@ -35,8 +51,24 @@ systemThreads::systemThreads(systemThreads &st)
 
 systemThreads::systemThreads() : threadNum(0)
 {
+	struct sigaction act;
+	act.sa_handler = dummySystemThreads;
+	act.sa_flags = 0;
+	
+	if (sigaction(5,&act,NULL)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_CONSTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
+	
+	sigset_t signal_mask;
+	sigemptyset(&signal_mask);
+	sigaddset(&signal_mask,5);
+	
+	pthread_sigmask(SIG_BLOCK,&signal_mask,NULL);
+	
 	pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 }
 
 //-------------------------------------------------------------------
@@ -50,7 +82,7 @@ systemThreads::~systemThreads()
 	
 	for (;i!=j;++i)
 	{
-		if (!i->isRunning)
+		if (!i->isRunning || i->detached)
 			continue;
 		
 		switch (i->action)
@@ -81,17 +113,17 @@ systemThreads::~systemThreads()
 
 //-------------------------------------------------------------------
 
-int 
+unsigned long 
 systemThreads::add(threadFunc func,
 						void *data,
+						bool detached,
 						systemThreadOnDestructEnum action,
 						int stackSize)
 {
+	thread.detached = detached;
 	thread.data = data;
 	thread.func = func;
-	thread.isRunning = false;
 	thread.position = ++threadNum;
-	thread.thread = 0;
 	thread.stackSize = stackSize;
 	thread.action = action;
 	
@@ -103,7 +135,7 @@ systemThreads::add(threadFunc func,
 //-------------------------------------------------------------------
 
 bool 
-systemThreads::getThread(int position)
+systemThreads::getThread(unsigned long position)
 {
 	i = threads.begin();
 	j = threads.end();
@@ -125,7 +157,7 @@ systemThreads::getThread(int position)
 #else
 	bool
 #endif
-systemThreads::del(int position,
+systemThreads::del(unsigned long position,
 						bool force)
 {
 	if (getThread(position))
@@ -172,7 +204,7 @@ systemThreads::del(int position,
 #else
 	bool
 #endif 
-systemThreads::replace(int position, 
+systemThreads::replace(unsigned long position, 
 						threadFunc func, 
 						void *data,
 						bool force)
@@ -223,17 +255,33 @@ systemThreads::replace(int position,
 #else
 	bool
 #endif
-systemThreads::run(int position, 
+systemThreads::run(unsigned long position, 
 						bool force)
 {
 	if (getThread(position))
 	{
+		if (k->executeLimit>0 && (k->executeLimit<=k->executed))
+		{
+			threads.erase(k);
+			
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_LIBDODO,SYSTEMTHREADS_SWEPT,SYSTEMTHREADS_SWEPT_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif				
+		}
+		
 		if (k->isRunning && !force)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
+
+		if (k->detached)
+			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+		else
+			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
 		if (pthread_attr_setstacksize(&attr,k->stackSize)!=0)
 			#ifndef NO_EX
@@ -250,6 +298,7 @@ systemThreads::run(int position,
 			#endif
 		
 		k->isRunning = true;
+		++(k->executed);
 				
 		#ifdef NO_EX
 			return true;
@@ -270,7 +319,7 @@ systemThreads::run(int position,
 #else
 	bool
 #endif
-systemThreads::wait(int position,
+systemThreads::wait(unsigned long position,
 						void **data)
 {
 	if (getThread(position))
@@ -278,6 +327,13 @@ systemThreads::wait(int position,
 		if (!k->isRunning)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		if (k->detached)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_LIBDODO,SYSTEMTHREADS_ISDETACHED,SYSTEMTHREADS_ISDETACHED_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -318,7 +374,7 @@ systemThreads::wait()
 	
 	for (;i!=j;++i)
 	{
-		if (!i->isRunning)
+		if (!i->isRunning || i->detached)
 			continue;
 		
 		if (pthread_join(i->thread,NULL)!=0)
@@ -340,7 +396,7 @@ systemThreads::wait()
 
 void 
 systemThreads::returnFromThread(void *data)
-{
+{	
 	pthread_exit(data);
 }
 
@@ -351,7 +407,7 @@ systemThreads::returnFromThread(void *data)
 #else
 	bool
 #endif
-systemThreads::stop(int position)
+systemThreads::stop(unsigned long position)
 {
 	if (getThread(position))
 	{
@@ -419,10 +475,77 @@ systemThreads::stop()
 
 
 bool
-systemThreads::isRunning(int position)
+systemThreads::isRunning(unsigned long position)
 {
 	if (getThread(position))
-		return k->isRunning;
+	{
+		if (!k->isRunning)
+			return false;
+		
+		if (pthread_kill(k->thread,5)!=0)	
+		{
+			if (errno == ESRCH || errno == EAGAIN)
+				return false;
+
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif			
+		}
+		
+		return true;
+		
+	}
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+}
+
+//-------------------------------------------------------------------
+
+void
+systemThreads::sweepTrash()
+{
+	i = threads.begin();
+	j = threads.end();
+	
+	for (;i!=j;++i)
+	{
+		if (i->isRunning)
+		{			
+			if (pthread_kill(k->thread,5)!=0)
+			{
+				if (errno != ESRCH && errno != EAGAIN)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						break;
+					#endif			
+			}
+			else
+				continue;
+		}
+				
+		if (k->executeLimit>0 && (k->executeLimit<=k->executed))
+			threads.erase(k);
+	}	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemThreads::setExecutionLimit(unsigned long position, unsigned long limit)
+{
+	if (getThread(position))
+		k->executeLimit = limit;
 	else
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);

@@ -111,6 +111,14 @@
 		class xmlTools
 		{
 			
+			private: 
+				
+				/**
+				 * copy constructor
+			 	 * to prevent copying
+				 */
+				xmlTools(xmlTools &xt);
+							
 			public: 
 				
 				/**

@@ -57,6 +57,7 @@ namespace dodo
 		
 			/**
 			 * copy constructor
+			 * to prevent copying
 			 */
 			systemThreadShares(systemThreadShares &sts);
 			
@@ -99,12 +100,7 @@ namespace dodo
 			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(
 			 * @note if microseconds==0 - infinite sleep
 			 */
-			#ifndef NO_EX
-				virtual void
-			#else
-				virtual bool 
-			#endif						 
-							lock(int position, void *data, unsigned long microseconds=0);
+			virtual void *lock(int position, unsigned long microseconds=0);
 							
 			
 			/**

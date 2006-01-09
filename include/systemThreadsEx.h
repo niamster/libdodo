@@ -40,7 +40,9 @@
 		{
 			SYSTEMTHREADS_ISALREADYRUNNING,
 			SYSTEMTHREADS_ISNOTRUNNING,
-			SYSTEMTHREADS_NOTFOUND
+			SYSTEMTHREADS_NOTFOUND,
+			SYSTEMTHREADS_ISDETACHED,
+			SYSTEMTHREADS_SWEPT,
 		};
 		
 		/**
@@ -49,6 +51,8 @@
 		#define SYSTEMTHREADS_ISALREADYRUNNING_STR "The thread is currently running. Please wait."
 		#define SYSTEMTHREADS_ISNOTRUNNING_STR "The thread is currently not running."
 		#define SYSTEMTHREADS_NOTFOUND_STR "Thread not found."
+		#define SYSTEMTHREADS_ISDETACHED_STR "Thread is detached. Cannot join."
+		#define SYSTEMTHREADS_SWEPT_STR "Limit of execution exceeded. Thread swept."
 			
 		/**
 		 * ID of function where exception was thrown
@@ -61,7 +65,8 @@
 			SYSTEMTHREADS_WAIT,
 			SYSTEMTHREADS_STOP,
 			SYSTEMTHREADS_ISRUNNING,
-			SYSTEMTHREADS_DESTRUCTOR
+			SYSTEMTHREADS_DESTRUCTOR,
+			SYSTEMTHREADS_CONSTRUCTOR,
 		};
 	};
 

@@ -127,11 +127,22 @@ namespace dodo
 			 * @note object that inited new object of this class you can use for future connections; 
 			 */	
 			flushSocketExchange(__initialAccept &init);
-			
+		
 			/**
 			 * destructor
 			 */
 			virtual ~flushSocketExchange();
+
+			/**
+			 * @return copy of object
+			 */
+			virtual flushSocketExchange *createCopy();
+					
+			/**
+			 * deletes copy of object
+			 * @param copy is copy of object to delete
+			 */		
+			static void deleteCopy(flushSocketExchange *copy);
 			
 			#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
 					

@@ -48,6 +48,12 @@ __cookies::__cookies(bool a_secure) : secure(a_secure)
 
 //-------------------------------------------------------------------
 
+cgiTools::cgiTools(cgiTools &ct)
+{
+}
+
+//-------------------------------------------------------------------
+
 cgiTools::cgiTools(bool silent, 
 			assocArr &a_headers)
 {	

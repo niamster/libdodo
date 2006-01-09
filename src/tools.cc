@@ -27,27 +27,15 @@
 using namespace dodo;
 
 inline std::string
-tools::dummy(const std::string &data)
+tools::dummyTools(const std::string &data)
 {
 	return data;
 }
 
 //-------------------------------------------------------------------
 
-void 
-tools::replace(pchar needle, 
-		pchar replacement,
-		std::string &data)
+tools::tools(tools &tls)
 {
-	register unsigned int i(0),j(strlen(needle)),k(strlen(replacement));
-	while (true)
-	{
-		i = data.find(needle,i);
-		if (i==std::string::npos)
-			break;
-		data.replace(i,j,replacement,0,k);
-		i += k;
-	}
 }
 
 //-------------------------------------------------------------------
@@ -103,12 +91,30 @@ tools::explode(const std::string &fields,
 
 //-------------------------------------------------------------------
 
+void 
+tools::replace(pchar needle, 
+		pchar replacement,
+		std::string &data)
+{
+	register unsigned int i(0),j(strlen(needle)),k(strlen(replacement));
+	while (true)
+	{
+		i = data.find(needle,i);
+		if (i==std::string::npos)
+			break;
+		data.replace(i,j,replacement,0,k);
+		i += k;
+	}
+}
+
+//-------------------------------------------------------------------
+
 stringArr 
 tools::explode(const std::string &fields, 
 			const std::string &separator,
 			int limit)
 {
-	return explode(fields,&dummy,separator,limit);
+	return explode(fields,&dummyTools,separator,limit);
 }
 
 //-------------------------------------------------------------------
@@ -147,7 +153,7 @@ tools::implode(const stringArr &fields,
 		const std::string &frame,
 		int limit)
 {	
-	return implode(fields,&dummy,separator,frame,limit);
+	return implode(fields,&dummyTools,separator,frame,limit);
 }
 
 //-------------------------------------------------------------------
@@ -157,7 +163,7 @@ tools::implode(const stringArr &fields,
 		const std::string &separator,
 		int limit)
 {
-	return implode(fields,&dummy,separator,limit);
+	return implode(fields,&dummyTools,separator,limit);
 }
 
 //-------------------------------------------------------------------

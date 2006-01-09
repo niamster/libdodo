@@ -7,42 +7,57 @@ using namespace dodo;
 
 using namespace std;
 
+systemThreadShares sh;
+#define EXIT_POS 1
+
 void *
 process(void *data)
 {
-	flushSocketExchange *t_fse = (flushSocketExchange *)data;
-	flushSocketExchange fse(*t_fse);
+	flushSocketExchange *fse = (flushSocketExchange *)data;
 	
-	if (fse.isBlocked())
+/*	int *pos;
+	sh.lock(1,(void *)pos);
+	cout << "!!!" << *pos << "!!!\n";
+	sh.unlock(1);*/
+	
+	if (fse->isBlocked())
+	{
 		std::cout << "CHILD BLOCKED\n";
+		cout.flush();
+	}
 	
-	fse.inSize = 4;
-	fse.setInBufferSize(1);
-	fse.setOutBufferSize(1);
+	fse->inSize = 4;
+	fse->setInBufferSize(4);
+	fse->setOutBufferSize(4);
 	
-//	fse.outSize = 7;
-//	fse.autoOutSize = false;
-	fse.sendStreamString("dasdasd");
+	fse->outSize = 7;
+	fse->sendStreamString("dasdasd");
 	
-	std::string q = "";
+	std::string rec = "";
 	try
 	{
-		fse.receiveStreamString(q);
-		cout << q << q.size() << endl;
-//		if (q.compare("exit")==0)
-//			return false;
+		fse->receiveStreamString(rec);
+		cout << rec << rec.size() << endl;
+		cout.flush();
+		if (rec.compare("exit")==0)
+		{
+			bool *exit_st;
+			exit_st = (bool *)sh.lock(EXIT_POS);
+			*exit_st = true;
+			sh.unlock(EXIT_POS);
+		}
 	}
 	catch (baseEx ex)
 	{
 		cout << "Smth happened!" << ex << endl;
+		cout.flush();
 	}
 	
-//	return true;
+	flushSocketExchange::deleteCopy(fse);
 }
 
 int main(int argc, char **argv)
 {
-//#define DATAGRAM	
 	try
 	{	
 		stringArr ifaces = flushSocketTools::getInterfacesNames();
@@ -76,41 +91,58 @@ int main(int argc, char **argv)
 		__connInfo info;
 		__initialAccept fake;
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
-		sock.setLingerSockOption(SOCKET_HARD_CLOSE);
+		sock.setLingerSockOption(SOCKET_HARD_CLOSE);	
+		sock.blockInherited = false;
 		
-		//sock.blockInherited = true;
-		
+		sock.block(false);
+				
 		sock.bindNListen("127.0.0.1",7777,3);
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",10,true);
 		
-		sock.block(true);
-		
-		flushSocketExchange conn1;
-		int i = 0;
+		flushSocketExchange conn;
+
+		bool exit_st(false);
 
 		systemThreads th;
-		systemThreadShares sh;
+		std::vector<int> positions;
 		
-		int shPos = sh.add((void *)&conn1);
+		sh.add((void *)&exit_st);
 		
-		int pos = th.add(process,(void *)&conn1);
-		
-		while(true)
+		while(!exit_st)
 		{
 			if (sock.accept(fake,info))
 			{
 				if (sock.isBlocked())
+				{
 					std::cout << "PARENT BLOCKED\n";
+					cout.flush();
+				}
 					
-				conn1.init(fake);
-				cout << info.port << endl;
-				th.run(pos,true);
-				//if (!process(conn1))
-				//	break;
+				conn.init(fake);
+				positions.push_back(th.add(process,(void *)conn.createCopy()));
+				th.run(positions.back());
+				th.setExecutionLimit(positions.back());
+				
+				try
+				{
+					if (th.isRunning(1))
+					{
+						std::cout << "WOW\n";
+						cout.flush();
+					}
+				}
+				catch(baseEx ex)
+				{
+					cout << ex << "\t" << ex.line << endl;
+					cout.flush();
+				}				
+					
+				th.sweepTrash();
 			}
 		}
 		
+		th.wait();
 		
 		//flushSocketTools::setLocalName("BUBU");
 		
@@ -125,6 +157,7 @@ int main(int argc, char **argv)
 	catch(baseEx ex)
 	{
 		cout << ex << "\t" << ex.line << endl;
+		cout.flush();
 	}
 	
 	return 0;

@@ -46,6 +46,13 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
 flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 {
 	socket = fse.socket;
+	opened = fse.opened;
+	
+	fse.opened = false;
+	fse.socket = -1;
+			
+	family = fse.family;
+	type = fse.type;		
 	
 	socketOpts = fse.socketOpts;
 	inTimeout = fse.inTimeout;
@@ -53,12 +60,8 @@ flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 	inSocketBuffer = fse.inSocketBuffer;
 	outSocketBuffer = fse.outSocketBuffer;
 	lingerOpts = fse.lingerOpts;
+	lingerSeconds = fse.lingerSeconds;
 	blocked = fse.blocked;
-	
-	opened = fse.opened;
-	
-	fse.opened = false;
-	fse.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -154,10 +157,12 @@ flushSocketExchange::init(int a_socket,
 		if (!blocked)
 		{
 			if (blockInherited)
-				block(true);
-			else
 				block(false);
+			else
+				block(true);
 		}
+		else
+			block(false);
 	
 		opened = true;
 	}
@@ -546,7 +551,7 @@ flushSocketExchange::receiveStream(char * const data,
 		#else
 			return false;	
 		#endif
-		
+
 	data[n] = '\0';
 		
 	buffer.assign(data,n);
@@ -587,3 +592,40 @@ flushSocketExchange::receiveStreamString(std::string &data,
 }
 
 //-------------------------------------------------------------------
+
+flushSocketExchange *
+flushSocketExchange::createCopy()
+{
+	flushSocketExchange *copy = new flushSocketExchange;
+	
+	copy->socket = socket;
+	copy->opened = opened;	
+
+	opened = false;
+	socket = -1;
+	
+	copy->family = family;
+	copy->type = type;	
+	
+	copy->socketOpts = socketOpts;
+	copy->inTimeout = inTimeout;
+	copy->outTimeout = outTimeout;
+	copy->inSocketBuffer = inSocketBuffer;
+	copy->outSocketBuffer = outSocketBuffer;
+	copy->lingerOpts = lingerOpts;
+	copy->lingerSeconds = lingerSeconds;
+	copy->blocked = blocked;
+	
+	return copy;
+}
+
+//-------------------------------------------------------------------
+					
+void 
+flushSocketExchange::deleteCopy(flushSocketExchange *copy)
+{
+	delete copy;
+}
+
+//-------------------------------------------------------------------
+

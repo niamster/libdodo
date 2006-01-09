@@ -54,6 +54,15 @@ namespace dodo
 	 */
 	 class regexpTools
 	 {
+	 	
+	 	private:
+						 	
+	 		/**
+	 		 * copy constructor
+			 * to prevent copying
+	 		 */
+	 		regexpTools(regexpTools &rt);
+	 			 	
 	 	public:
 						 	
 	 		/**
