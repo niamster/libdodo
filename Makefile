@@ -62,13 +62,14 @@ all: $(LIBRARY)
 
 $(LIBRARY): $(OBJECTS)
 	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,lib$@.so.$(VERSION).$(MINOR) -o lib$@.so.$(VERSION).$(MINOR) $^
+	strip -d --strip-unneeded lib$(LIBRARY).so.$(VERSION).$(MINOR)
 	ln -sf lib$(LIBRARY).so.$(VERSION).$(MINOR) lib$@.so
 	@echo ""
 	@echo ""
 	@echo "Now you can run 'gmake install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
 .cc.o:
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -Wall -fPIC -c $^
-	strip -d $@
+	strip -d --strip-unneeded $@
 
 install:
 	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include/libdodo
