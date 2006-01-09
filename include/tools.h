@@ -313,40 +313,56 @@ namespace dodo
 			 * @return base64 decoded string
 			 * @param string to decode
 			 */
-			virtual std::string decodeBase64(const std::string &string);
+			static std::string decodeURL(const std::string &string);
 
 			/**
 			 * @return base64 encoded string
 			 * @param string to encode
 			 */			
-			virtual std::string encodeBase64(const std::string &string);
-			
-			/**
-			 * @return base64 decoded string
-			 * @param string to decode
-			 */
-			static std::string decodeBase64Static(const std::string &string);
-
-			/**
-			 * @return base64 encoded string
-			 * @param string to encode
-			 */			
-			static std::string encodeBase64Static(const std::string &string);
+			static std::string encodeURL(const std::string &string);
 						
 			/**
 			 * @return converted from HEX
 			 * @param first is first part of HEX
 			 * @param seconf is second part of HEX
 			 */
-			static char hexToChar(const char &first, const char &second);
+			static char hexToChar(char first, char second);
 			
 			/**
 			 * @return converted to HEX
 			 * @param first is char to convert
 			 */
-			static std::string charToHex(const char &first);
-						 
+			static void charToHex(char result[3], char first);
+			
+			/**
+			 * @return encoded string with ASCII85 method
+			 * @param string is data to encode
+			 */
+			static std::string encodeASCII85(const std::string &string);
+			
+			/**
+			 * @return decoded string from ASCII85 method
+			 * @param string is data to decode
+			 */
+			static std::string decodeASCII85(const std::string &string);
+						
 		private:
+			
+			/**
+			 * encodes tuple to ASCII85 and stores to string
+			 * @param string is storage for encoded symbol[append]
+			 * @param tuple is part of decoded data
+			 * @param count is amount of encoded data
+			 */
+			static void _encodeASCII85(std::string &result, unsigned long tuple, int count);
+
+			/**
+			 * encodes tuple from ASCII85 and stores to string
+			 * @param string is storage for encoded symbol[append]
+			 * @param tuple is part of encoded data
+			 * @param count is amount of encoded data
+			 */
+			static void _decodeASCII85(std::string &result, unsigned long tuple, int count);
 			
 			#ifdef CODECONV_EXT
 			
@@ -376,11 +392,7 @@ namespace dodo
 			 * dummy callback function for implode/explode
 			 * nothing does with passed data
 			 */
-			inline static std::string dummyTools(const std::string &data);
-
-			std::string::const_iterator o;///< iterator for string
-			std::string::const_iterator k;///< iterator for string
-					
+			inline static std::string dummyTools(const std::string &data);			
 	};
 
 };

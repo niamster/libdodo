@@ -15,27 +15,34 @@ int main(int argc, char **argv)
 
 	try
 	{
-		tools tl;
+		//tools tl;
 		
-		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
+		/*baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
-			cout << "WTF";
+			cout << "WTF";*/
 		
-		//cout << flushDisk::getFileContent("test.cc");
+		//cout << flushDiskTools::getFileContent("test.cc");
 		
 		//cout << "Что происходит?" << endl;
 		
 		/*for (register int i(0);i<10000;++i)
-			tl.codesetConversion(flushDisk::getFileContent("test.cc"),"cp1251","utf-8");*/
+			tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");*/
 		
-		/*tl.codesetConversion(flushDisk::getFileContent("test.cc"),"cp1251","utf-8");
+		/*tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
 		for (register int i(0);i<9999;++i)
-			tl.reCodesetConversion(flushDisk::getFileContent("test.cc"));*/
+			tl.reCodesetConversion(flushDiskTools::getFileContent("test.cc"));*/
 	
-		cout << flushDisk::getFileContent("Nakefile").size() << endl;
+		//cout << flushDiskTools::getFileContent("Makefile").size() << endl;
 		//cout << tl.zCompress(flushDisk::getFileContent("Makefile"),9).size() << endl;
 	
 		//cout << tl.zDecompress(tl.zCompress(flushDisk::getFileContent("test.cc")));
+		
+		cout << tools::decodeURL(tools::encodeURL("HEY, that's works!")) << endl;
+		cout << tools::encodeURL("HEY, that's works!") << endl;
+		
+		cout << tools::encodeASCII85("HEY, that's works!") << endl;
+		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's works!")) << endl;
+	
 	}
     catch(baseEx ex)
     {

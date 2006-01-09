@@ -129,7 +129,7 @@ cgiTools::make(assocArr &val,
 	
 	for(;l!=m;++l)
 	{
-		temp = tools::explode(*l,&tools::decodeBase64Static,"=");
+		temp = tools::explode(*l,&tools::decodeURL,"=");
 		if (temp.size() > 1)
 			val[temp[0]] = temp[1];
 	}	
@@ -366,7 +366,7 @@ cgiTools::setCookie(const std::string &name,
 {
 	__cookies temp(secure);
 	temp.name = name;
-	temp.value = tls.encodeBase64(value);
+	temp.value = tools::encodeURL(value);
 	temp.exDate = exDate;
 	temp.path = path;
 	temp.domain = domain;

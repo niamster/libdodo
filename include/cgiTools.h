@@ -302,8 +302,6 @@ namespace dodo
 			mutable assocArr::iterator i;///< iterator
 			mutable assocArr::iterator j;///< iterator
 			
-			mutable tools tls;///< tools
-			
 			mutable stringArr getPair;///< temporary storage for URL encoding
 			mutable stringArr::iterator l;///<iterator for array of strings
 			mutable stringArr::iterator m;///<iterator for array of strings

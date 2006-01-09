@@ -35,6 +35,19 @@
 	{
 		
 		/**
+		 * libdodo defined errors
+		 */
+		enum toolsExR
+		{
+			TOOLS_BAD_ASCII85 = 1,
+		};
+		
+		/**
+		 * libdodo defined errors' explanation
+		 */	
+		#define TOOLS_BAD_ASCII85_STR "Bad character in ASCII85."
+		
+		/**
 		 * ID of function where exception was thrown
 		 */			
 		enum toolsFunctionsID
@@ -57,6 +70,8 @@
 				TOOLS_ZDECOMPRESSSTATIC,
 			
 			#endif
+			
+				TOOLS_DECODEASCII85,
 		};
 		
 	};
