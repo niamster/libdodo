@@ -221,6 +221,13 @@ namespace dodo
 							setExecutionLimit(unsigned long position, unsigned long limit=1); 
 										
 		protected:
+
+										
+			/**
+			 * @return true if thread is running
+			 * @param position indicates for what thread to indicate
+			 */
+			virtual bool _isRunning(std::vector<__threadInfo>::iterator &position);
 			
 			/**
 			 * searches threads by position

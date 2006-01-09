@@ -124,6 +124,8 @@ int main(int argc, char **argv)
 				th.run(positions.back());
 				th.setExecutionLimit(positions.back());
 				
+				th.sweepTrash();
+				
 				try
 				{
 					if (th.isRunning(1))
@@ -136,9 +138,7 @@ int main(int argc, char **argv)
 				{
 					cout << ex << "\t" << ex.line << endl;
 					cout.flush();
-				}				
-					
-				th.sweepTrash();
+				}
 			}
 		}
 		

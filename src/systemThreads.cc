@@ -82,7 +82,7 @@ systemThreads::~systemThreads()
 	
 	for (;i!=j;++i)
 	{
-		if (!i->isRunning || i->detached)
+		if (!_isRunning(i) || i->detached)
 			continue;
 		
 		switch (i->action)
@@ -162,7 +162,7 @@ systemThreads::del(unsigned long position,
 {
 	if (getThread(position))
 	{
-		if (k->isRunning)
+		if (_isRunning(k))
 		{
 			if (!force)
 				#ifndef NO_EX
@@ -178,8 +178,6 @@ systemThreads::del(unsigned long position,
 					#else
 						return false;
 					#endif
-				
-				k->isRunning = false;
 			}
 		}
 			
@@ -211,7 +209,7 @@ systemThreads::replace(unsigned long position,
 {
 	if (getThread(position))
 	{
-		if (k->isRunning)
+		if (_isRunning(k))
 		{
 			if (!force)
 				#ifndef NO_EX
@@ -271,7 +269,7 @@ systemThreads::run(unsigned long position,
 			#endif				
 		}
 		
-		if (k->isRunning && !force)
+		if (_isRunning(k) && !force)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_LIBDODO,SYSTEMTHREADS_ISALREADYRUNNING,SYSTEMTHREADS_ISALREADYRUNNING_STR,__LINE__,__FILE__);
 			#else
@@ -324,7 +322,7 @@ systemThreads::wait(unsigned long position,
 {
 	if (getThread(position))
 	{
-		if (!k->isRunning)
+		if (!_isRunning(k))
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
 			#else
@@ -374,7 +372,7 @@ systemThreads::wait()
 	
 	for (;i!=j;++i)
 	{
-		if (!i->isRunning || i->detached)
+		if (!_isRunning(i) || i->detached)
 			continue;
 		
 		if (pthread_join(i->thread,NULL)!=0)
@@ -411,7 +409,7 @@ systemThreads::stop(unsigned long position)
 {
 	if (getThread(position))
 	{
-		if (!k->isRunning)
+		if (!_isRunning(k))
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOP,ERR_LIBDODO,SYSTEMTHREADS_ISNOTRUNNING,SYSTEMTHREADS_ISNOTRUNNING_STR,__LINE__,__FILE__);
 			#else
@@ -453,7 +451,7 @@ systemThreads::stop()
 	
 	for (;i!=j;++i)
 	{
-		if (!i->isRunning)
+		if (!_isRunning(i))
 			continue;
 		
 		if (pthread_cancel(i->thread)!=0)
@@ -478,31 +476,40 @@ bool
 systemThreads::isRunning(unsigned long position)
 {
 	if (getThread(position))
-	{
-		if (!k->isRunning)
-			return false;
-		
-		if (pthread_kill(k->thread,5)!=0)	
-		{
-			if (errno == ESRCH || errno == EAGAIN)
-				return false;
-
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif			
-		}
-		
-		return true;
-		
-	}
+		return _isRunning(k);
 	else
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif	
+}
+
+//-------------------------------------------------------------------
+
+bool 
+systemThreads::_isRunning(std::vector<__threadInfo>::iterator &position)
+{
+	if (!position->isRunning)
+		return false;
+	
+	if (pthread_kill(position->thread,5)!=0)	
+	{
+		if (errno == ESRCH || errno == EAGAIN)
+		{
+			position->isRunning = false;
+			
+			return false;
+		}
+
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS__ISRUNNING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif			
+	}
+	
+	return true;	
 }
 
 //-------------------------------------------------------------------
@@ -515,23 +522,11 @@ systemThreads::sweepTrash()
 	
 	for (;i!=j;++i)
 	{
-		if (i->isRunning)
-		{			
-			if (pthread_kill(k->thread,5)!=0)
-			{
-				if (errno != ESRCH && errno != EAGAIN)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						break;
-					#endif			
-			}
-			else
-				continue;
-		}
+		if (_isRunning(i))
+			continue;
 				
-		if (k->executeLimit>0 && (k->executeLimit<=k->executed))
-			threads.erase(k);
+		if (i->executeLimit>0 && (i->executeLimit<=i->executed))
+			threads.erase(i);
 	}	
 }
 
