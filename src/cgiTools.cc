@@ -120,8 +120,9 @@ void
 cgiTools::make(assocArr &val,
 			const std::string &string,
 			char *delim) const
-{
-	getPair = tools::explode(string,delim);
+{	
+	getPair = tools::explode(tools::decodeURL(string),delim);
+	
 	l = getPair.begin();
 	m = getPair.end();
 	
@@ -129,7 +130,7 @@ cgiTools::make(assocArr &val,
 	
 	for(;l!=m;++l)
 	{
-		temp = tools::explode(*l,&tools::decodeURL,"=");
+		temp = tools::explode(*l,"=");
 		if (temp.size() > 1)
 			val[temp[0]] = temp[1];
 	}	
