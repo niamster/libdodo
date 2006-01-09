@@ -36,10 +36,13 @@
 
 namespace dodo
 {
+
+	#define HTTP_ENV_SIZE 34
+	
 	/**
 	 * @var array of names that would be in ENV array[environment of http demon]
 	 */
-	__statements HTTP_ENV[33] = 
+	__statements HTTP_ENV[HTTP_ENV_SIZE] = 
 	{		
 		"REQUEST_METHOD",
 		"REQUEST_URI",
@@ -48,6 +51,7 @@ namespace dodo
 		
 		"CONTENT_TYPE",
 		"CONTENT_LENGTH",
+		"CONTENT_TRANSFER_ENCODING",
 				
 		"HTTP_HOST",
 		"HTTP_USER_AGENT",

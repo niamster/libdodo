@@ -35,13 +35,15 @@ int main(int argc, char **argv)
 		//cout << flushDiskTools::getFileContent("Makefile").size() << endl;
 		//cout << tl.zCompress(flushDisk::getFileContent("Makefile"),9).size() << endl;
 	
-		//cout << tl.zDecompress(tl.zCompress(flushDisk::getFileContent("test.cc")));
+		//cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
 		
 		cout << tools::decodeURL(tools::encodeURL("HEY, that's works!")) << endl;
 		cout << tools::encodeURL("HEY, that's works!") << endl;
 		
 		cout << tools::encodeASCII85("HEY, that's works!") << endl;
 		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's works!")) << endl;
+		cout << "size of test.cc ASCII85-encoded : " <<  tools::encodeASCII85(flushDiskTools::getFileContent("test.cc")).size() << endl;
+		
 	
 	}
     catch(baseEx ex)

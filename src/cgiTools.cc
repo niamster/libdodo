@@ -140,11 +140,9 @@ cgiTools::make(assocArr &val,
 void
 cgiTools::makeEnv() const
 {
-	register int len = sizeof(HTTP_ENV)/sizeof(__statements);
-	
 	register char *env;
 	
-	for (register int i=0;i<len;++i)
+	for (register int i=0;i<HTTP_ENV_SIZE;++i)
 	{
 		env = getenv(HTTP_ENV[i].str);
 		ENVIRONMENT.realArr[HTTP_ENV[i].str] = (env==NULL)?__UNDEFINED__:env;
@@ -232,6 +230,10 @@ cgiTools::makePost() const
 		std::string bPost;
 		bPost.assign(post,cl);
 		delete [] post;
+		
+		if (strcasecmp(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"].c_str(),"base64")==0)
+		{
+		}
 		
 		register unsigned int temp0;
 		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
