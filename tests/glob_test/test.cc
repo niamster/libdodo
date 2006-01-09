@@ -37,8 +37,8 @@ int main(int argc, char **argv)
 	
 		//cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
 		
-		cout << tools::decodeURL(tools::encodeURL("HEY, that's works!")) << endl;
-		cout << tools::encodeURL("HEY, that's works!") << endl;
+		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's works!")) << endl;
+		cout << tools::encodeURL("@!()HEY, that's works!") << endl;
 		
 		cout << tools::encodeASCII85("HEY, that's works!") << endl;
 		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's works!")) << endl;

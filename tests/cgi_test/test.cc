@@ -8,12 +8,12 @@ int main(int argc, char **argv)
 {
 	
 	///first type
-	/*assocArr head;
-	head["Content-type"] = "image/png";
-	cgipp cgi(false,head);*/
+//	assocArr head;
+//	head["Content-type"] = "text/html";
+//	cgiTools cgi(false,head);
 	
 	///second type
-	cgiTools cgi(true,head); /// or cgipp cgi(true);
+	cgiTools cgi(true);
 	//cgi.HEADERS["Content-type"] = "image/jpg";
 	cgi.setCookie("test","Ni@m");
 	cgi.printHeaders();
@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 	cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
 	cout << "!" << cgi.ENVIRONMENT["QUERY_STRING"] << "<br>";
 	cout << "!" << cgi.COOKIES["test"] << "<br>";
-	cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
+	//cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
 	
 	return 0;
 }

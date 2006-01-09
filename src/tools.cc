@@ -713,7 +713,8 @@ char
 tools::hexToChar(const char first,
 				const char second)
 {
-	int val=0;
+	register int val=0;
+	
 	switch (first)
 	{
 		case '0':
@@ -731,7 +732,7 @@ tools::hexToChar(const char first,
 			
 		default:
 			val = (16*(int(first)-55));
-	}  
+	}
 	
 	switch (second)
 	{
@@ -750,7 +751,7 @@ tools::hexToChar(const char first,
 		
 		default:
 			val += (int(second)-55);
-	}   
+	}
 	
 	return char(val);
 }
@@ -781,10 +782,14 @@ tools::decodeURL(const std::string &string)
 				break;
 				
 			case '%':
-				if((k-o) >= 2 && std::isxdigit(string[o+1]) && std::isxdigit(string[o+2])) 
-					result.append(1, tools::hexToChar(string[++o], string[++o]));
+				if((k-o) >= 2 && std::isxdigit(string[o+1]) && std::isxdigit(string[o+2]))
+				{
+					result.append(1, tools::hexToChar(string[o+1], string[o+2]));
+					o += 2;
+				}
 				else 
 					result.append(1, '%');
+					
 				break;
 				
 			default:
