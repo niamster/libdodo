@@ -39,6 +39,20 @@ static unsigned long powASCII85[] = {
 
 //-------------------------------------------------------------------
 
+/**
+ * for base64 encoding
+ */
+static const char base64EncodeTr[]="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+//-------------------------------------------------------------------
+
+/**
+ * for base64 decoding
+ */
+static const char base64DecodeTr[]="|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQRSTUVW$$$$$$XYZ[\\]^_`abcdefghijklmnopq";
+
+//-------------------------------------------------------------------
+
 inline std::string
 tools::dummyTools(const std::string &data)
 {
@@ -1034,6 +1048,113 @@ tools::decodeASCII85(const std::string &string)
 			result.append(1,string[k]);
 			
 	}	
+	
+	return result;
+}
+
+//-------------------------------------------------------------------
+
+void 
+tools::_encodeBase64(unsigned char in[3], 
+					unsigned char out[4], 
+					int len)
+{
+    out[0] = base64EncodeTr[in[0] >> 2];
+    out[1] = base64EncodeTr[((in[0]&0x03) << 4) | ((in[1]&0xf0) >> 4)];
+    out[2] = (unsigned char)(len>1?base64EncodeTr[((in[1]&0x0f) << 2) | ((in[2]&0xc0) >> 6) ]:'=');
+    out[3] = (unsigned char)(len>2?base64EncodeTr[in[2]&0x3f ]:'=');    
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::encodeBase64(const std::string &string)
+{
+	register unsigned long j = string.size();
+	register unsigned char in[3], out[4];
+	register unsigned short i, len;
+	std::string result;
+	
+	for (register unsigned long k(0);k<j;)
+	{
+        len = 0;
+        for(i=0;i<3;++i) 
+        {
+        	++k;
+        	if (k <= j)
+        	{
+				in[i] = string[k-1];
+				++len;
+        	}
+            else
+                in[i] = 0;
+        }
+        
+        if(len > 0) 
+        {
+            _encodeBase64(in,out,len);
+            for(i=0;i<4;++i) 
+                result.append(1,out[i]);
+        }
+	}
+	
+	result.append("\r\n");
+	
+	return result;
+}
+
+//-------------------------------------------------------------------
+
+void 
+tools::_decodeBase64(unsigned char in[4], 
+					unsigned char out[3])
+{
+    out[0] = (unsigned char )(in[0] << 2 | in[1] >> 4);
+    out[1] = (unsigned char )(in[1] << 4 | in[2] >> 2);
+    out[2] = (unsigned char )(((in[2] << 6) & 0xc0) | in[3]);	
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::decodeBase64(const std::string &string)
+{
+	register unsigned long j = string.size();	
+    register unsigned char in[4], out[3], v;
+    register unsigned short i, len;
+	std::string result;
+	
+	for (register unsigned long k(0);k<j;)
+	{
+		len = 0;
+        for(len=0,i=0;i<4 && k<j;++i) 
+        {
+            v = 0;
+            while(k < j && v == 0) 
+            {
+                v = string[k++];
+                v = (unsigned char)((v<43||v>122)?0:base64DecodeTr[v-43]);
+                if(v) 
+                    v = (unsigned char)((v == '$')?0:v-61);
+            }
+            
+            if(k < j) 
+            {
+                ++len;
+                if(v)
+					in[i] = (unsigned char)(v-1);
+            }
+            else
+                in[i] = 0;
+        }
+        
+        if(len > 0) 
+        {
+            _decodeBase64(in,out);
+            for( i = 0; i < len-1;++i)
+            	result.append(1,out[i]);
+        }
+	}
 	
 	return result;
 }

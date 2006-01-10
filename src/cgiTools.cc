@@ -196,7 +196,7 @@ cgiTools::printHeaders() const
 				std::cout << "secure";
 		}
 	}
-	std::cout << std::endl << std::endl;
+	std::cout << "\r\n\r\n";
 	std::cout.flush();
 }
 

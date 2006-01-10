@@ -345,8 +345,35 @@ namespace dodo
 			 * @param string is data to decode
 			 */
 			static std::string decodeASCII85(const std::string &string);
-						
+			
+			/**
+			 * @return encoded string with base64 method
+			 * @param string is data to encode
+			 */
+			static std::string encodeBase64(const std::string &string);
+			
+			/**
+			 * @return decoded string from base64method
+			 * @param string is data to decode
+			 */
+			static std::string decodeBase64(const std::string &string);
+									
 		private:
+			
+			/**
+			 * decode block from base64
+			 * @param in demonstrates input block
+			 * @param in demonstrates result block
+			 */
+			static void _decodeBase64(unsigned char in[4], unsigned char out[3]);
+						
+			/**
+			 * encode block to base64
+			 * @param in demonstrates input block
+			 * @param in demonstrates result block
+			 * @param len is length of 'in' block
+			 */
+			static void _encodeBase64(unsigned char in[3], unsigned char out[4], int len);
 			
 			/**
 			 * encodes tuple to ASCII85 and stores to string

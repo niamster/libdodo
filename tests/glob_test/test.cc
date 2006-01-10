@@ -37,14 +37,19 @@ int main(int argc, char **argv)
 	
 		//cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
 		
-		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's works!")) << endl;
-		cout << tools::encodeURL("@!()HEY, that's works!") << endl;
+		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
+		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
 		
-		cout << tools::encodeASCII85("HEY, that's works!") << endl;
-		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's works!")) << endl;
-		cout << "size of test.cc ASCII85-encoded : " <<  tools::encodeASCII85(flushDiskTools::getFileContent("test.cc")).size() << endl;
+		cout << "real size of test is : " << flushDiskTools::getSize("test") << endl;
 		
-	
+		cout << tools::encodeASCII85("HEY, that's working!") << endl;
+		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's working!")) << endl;
+		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(flushDiskTools::getFileContent("test")).size() << endl;
+		
+		cout << tools::encodeBase64("HEY, that's working!") << endl;
+		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
+		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;
+			
 	}
     catch(baseEx ex)
     {
