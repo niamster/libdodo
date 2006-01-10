@@ -652,12 +652,13 @@ systemThreads::running()
 	return amount;		
 }
 
-	//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 	
 #ifdef DL_EXT
 	
 	systemThreadsMod 
-	systemThreads::getModuleInfo(const std::string &module)
+	systemThreads::getModuleInfo(const std::string &module, 
+								void *toInit)
 	{
 		void *handle = dlopen(module.c_str(), RTLD_LAZY);
 		if (handle == NULL)
@@ -675,7 +676,7 @@ systemThreads::running()
 				return xexecExMod();
 			#endif
 			
-		systemThreadsMod mod = init();
+		systemThreadsMod mod = init(toInit);
 		
 		if (dlclose(handle)!=0)
 			#ifndef NO_EX
@@ -691,10 +692,11 @@ systemThreads::running()
 	
 	unsigned long 
 	systemThreads::add(const std::string &module,
-							void *data,
-							bool detached,
-							systemThreadOnDestructEnum action,
-							int stackSize)
+						void *data,
+						void *toInit,
+						bool detached,
+						systemThreadOnDestructEnum action,
+						int stackSize)
 	{
 		
 		
@@ -721,7 +723,7 @@ systemThreads::running()
 				return -1;
 			#endif	
 		
-		systemThreadsMod temp = init();
+		systemThreadsMod temp = init(toInit);
 		
 		threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
 		if (in == NULL)
@@ -743,7 +745,8 @@ systemThreads::running()
 	
 	unsigned long 
 	systemThreads::add(const std::string &module,
-							void *data)
+							void *data, 
+							void *toInit)
 	{
 		thread.data = data;
 		thread.position = ++threadNum;
@@ -764,7 +767,7 @@ systemThreads::running()
 				return -1;
 			#endif	
 		
-		systemThreadsMod temp = init();
+		systemThreadsMod temp = init(toInit);
 		
 		threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
 		if (in == NULL)
@@ -784,8 +787,6 @@ systemThreads::running()
 		
 		return thread.position;
 	}
-
-	//-------------------------------------------------------------------
 
 #endif
 

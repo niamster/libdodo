@@ -393,27 +393,30 @@ flushSocketExchange::receiveString(std::string &data,
 	
 		int 
 		flushSocketExchange::addPostExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		int 
 		flushSocketExchange::addPreExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
 		flushSocketExchange::addExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
 		}
 	
 	#endif

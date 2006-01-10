@@ -159,7 +159,7 @@ namespace dodo
 		/**
 		 * @typedef describes function in module that must return info for the hook
 		 */
-		typedef sigMod (*initSigModule)();
+		typedef sigMod (*initSigModule)(void *);
 
 		/**
 		 * @typedef describes function in module that will be called during module unloading
@@ -473,32 +473,35 @@ namespace dodo
 				/**
 				 * @return info about module
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param toInit indicates data that will path to initialize function
 				 */
-				static sigMod getModuleInfo(const std::string &module);
+				static sigMod getModuleInfo(const std::string &module, void *toInit = NULL);
 				
 				/**
 				 * set handler on signal from specific module
 				 * @param signal indicates for what signal to set handler
 				 * @param @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param toInit indicates data that will path to initialize function
 				 */
 				#ifndef NO_EX
 					static void 
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(systemSignalsEnum signal, const std::string &module);
+								setSignalHandler(systemSignalsEnum signal, const std::string &module, void *toInit = NULL);
 
 				/**
 				 * set handler on signal from specific module
 				 * @param signal indicates for what signal to set handler
 				 * @param @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param toInit indicates data that will path to initialize function
 				 */
 				#ifndef NO_EX
 					static void 
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(const std::string &module);
+								setSignalHandler(const std::string &module, void *toInit = NULL);
 
 			#endif											
 				

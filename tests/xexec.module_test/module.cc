@@ -12,30 +12,46 @@ extern "C"
 		xexecObjTypeEnum type,
 		void *yep)
 	{
-		/*if (type == XEXECOBJ_FLUSHSTD)
+		if (type == XEXECOBJ_FLUSHSTD)
 		{
+			std::cout << "flushSTD module\t";
+			
 			flushSTD *st = (flushSTD *)base;
 			if (st->operType == FLUSHSTD_OPER_WRITE)
 			{
 				char q[100];
 				int *a;
+				
 				a = (int *)(st->buffer.c_str());
-				sprintf(q,"!!%d!!\n",*a);
+				sprintf(q,"%d\n",*a*3);
 				st->buffer.assign(q);
 			}
-		}*/
+		}
 		std::cout << "activation\n";
+	}
+
+	void
+	empty(void *base, 
+		xexecObjTypeEnum type,
+		void *yep)
+	{
+	
+		std::cout << "empty activation\n";
 	}
 	
 	xexecMod 
-	initXexecModule()
-	{
+	initXexecModule(void *data)
+	{	
 		xexecMod module;
 		
 		strcpy(module.name,"test");
 		strcpy(module.discription,"test module");
-		strcpy(module.hook,"hook");
 		module.execType = XEXECMODULE_PRE;
+		
+		if (data == NULL)
+			strcpy(module.hook,"empty");
+		else
+			strcpy(module.hook,"hook");
 		
 		return module;
 	}

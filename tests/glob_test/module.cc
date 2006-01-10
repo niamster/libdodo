@@ -16,7 +16,7 @@ extern "C"
 	}
 	
 	exMod 
-	initExModule()
+	initExModule(void *data)
 	{
 		exMod module;
 		

@@ -378,7 +378,8 @@ xexec::performXExec(__execItemList &list) const
 					void *obj,  
  					xexecObjTypeEnum type,
 					const std::string &module, 
-					void *data) const
+					void *data, 
+					void *toInit) const
 	{
 		temp.data = data;
 		temp.obj = obj;
@@ -402,7 +403,7 @@ xexec::performXExec(__execItemList &list) const
 				return -1;
 			#endif	
 		
-		inExec in = (inExec)dlsym(temp.handle, init().hook);
+		inExec in = (inExec)dlsym(temp.handle, init(toInit).hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
@@ -423,9 +424,10 @@ xexec::performXExec(__execItemList &list) const
 	xexec::_addPostExec(const std::string &module, 
 						void *obj, 
  						xexecObjTypeEnum type, 
-						void *data) const
+						void *data, 
+						void *toInit) const
 	{
-		return addXExecModule(postExec.exec,obj,type,module,data);
+		return addXExecModule(postExec.exec,obj,type,module,data,toInit);
 	}
 	
 	//-------------------------------------------------------------------
@@ -434,15 +436,17 @@ xexec::performXExec(__execItemList &list) const
 	xexec::_addPreExec(const std::string &module, 
 					void *obj,
  					xexecObjTypeEnum type, 
-					void *data) const
+					void *data, 
+					void *toInit) const
 	{
-		return addXExecModule(preExec.exec,obj,type,module,data);
+		return addXExecModule(preExec.exec,obj,type,module,data,toInit);
 	}
 	
 	//-------------------------------------------------------------------
 	
 	xexecMod 
-	xexec::getModuleInfo(const std::string &module)
+	xexec::getModuleInfo(const std::string &module, 
+						void *toInit)
 	{
 		void *handle = dlopen(module.c_str(), RTLD_LAZY);
 		if (handle == NULL)
@@ -460,7 +464,7 @@ xexec::performXExec(__execItemList &list) const
 				return xexecExMod();
 			#endif
 			
-		xexecMod mod = init();
+		xexecMod mod = init(toInit);
 		
 		if (dlclose(handle)!=0)
 			#ifndef NO_EX
@@ -478,7 +482,8 @@ xexec::performXExec(__execItemList &list) const
 	xexec::_addExec(const std::string &module, 
 					void *obj, 
  					xexecObjTypeEnum type, 
-					void *data) const
+					void *data, 
+					void *toInit) const
 	{
 		temp.data = data;
 		temp.obj = obj;
@@ -501,7 +506,7 @@ xexec::performXExec(__execItemList &list) const
 				return xexecCounts();
 			#endif	
 		
-		xexecMod info = init();
+		xexecMod info = init(toInit);
 		
 		inExec in = (inExec)dlsym(temp.handle, info.hook);
 		if (in == NULL)
@@ -543,8 +548,6 @@ xexec::performXExec(__execItemList &list) const
 		
 		return count;
 	}
-	
-	//-------------------------------------------------------------------
 
 #endif
 

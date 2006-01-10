@@ -98,7 +98,7 @@
 			/**
 			 * @typedef describes function in module that must return info for the hook
 			 */
-			typedef exMod (*initExModule)();
+			typedef exMod (*initExModule)(void *);
 	
 			/**
 			 * @typedef describes function in module that will be called during module unloading
@@ -189,8 +189,9 @@
 					/**
 					 * @return info about module
 					 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+					 * @param toInit indicates data that will path to initialize function
 					 */
-					static exMod getModuleInfo(const std::string &module);
+					static exMod getModuleInfo(const std::string &module, void *toInit = NULL);
 					
 					/**
 					 * set handler on error for specific module
@@ -198,24 +199,27 @@
 					 * @param module indicates for what module to set handler
 					 * @param path is path to module from what function will be called when error occured[in catch]
 					 * @param data is data that will be passed to handler
+					 * @param toInit indicates data that will path to initialize function
 					 */
-					static bool setErrorHandler(errorModuleEnum module, const std::string &path, void *data);
+					static bool setErrorHandler(errorModuleEnum module, const std::string &path, void *data, void *toInit = NULL);
 					
 					/**
 					 * set handler on error for specific module
 					 * @return false on error
 					 * @param path is path to module from what function will be called when error occured[in catch]
 					 * @param data is data that will be passed to handler
+					 * @param toInit indicates data that will path to initialize function
 					 */
-					static bool setErrorHandler(const std::string &path, void *data);
+					static bool setErrorHandler(const std::string &path, void *data, void *toInit = NULL);
 									
 					/**
 					 * set handler on error for all modules
 					 * @return false on error
 					 * @param handler is path to module from what function will be called when error occured[in catch]
 					 * @param data is data that will be passed to handler
+					 * @param toInit indicates data that will path to initialize function
 					 */
-					static bool setErrorHandlers(const std::string &path, void *data);
+					static bool setErrorHandlers(const std::string &path, void *data, void *toInit = NULL);
 				
 				#endif				
 		};

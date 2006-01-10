@@ -443,27 +443,30 @@
 		
 			int 
 			dbMysql::addPostExec(const std::string &module, 
-								void *data) const
+								void *data,
+								void *toInit) const
 			{
-				return _addPostExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+				return _addPostExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
 			}
 			
 			//-------------------------------------------------------------------
 			
 			int 
 			dbMysql::addPreExec(const std::string &module, 
-								void *data) const
+								void *data,
+								void *toInit) const
 			{
-				return _addPreExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+				return _addPreExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
 			}
 		
 			//-------------------------------------------------------------------
 			
 			xexecCounts 
 			dbMysql::addExec(const std::string &module, 
-								void *data) const
+								void *data,
+								void *toInit) const
 			{
-				return _addExec(module, (void *)this, XEXECOBJ_DBMYSQL, data);
+				return _addExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
 			}
 		
 		#endif

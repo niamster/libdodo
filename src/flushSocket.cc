@@ -81,27 +81,30 @@ flushSocket::~flushSocket()
 	
 		int 
 		flushSocket::addPostExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		int 
 		flushSocket::addPreExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
 		flushSocket::addExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
 		}
 	
 	#endif

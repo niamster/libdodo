@@ -884,7 +884,8 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 #ifdef DL_EXT
 
 	sigMod 
-	systemTools::getModuleInfo(const std::string &module)
+	systemTools::getModuleInfo(const std::string &module, 
+								void *toInit)
 	{
 			void *handle = dlopen(module.c_str(), RTLD_LAZY);
 			if (handle == NULL)
@@ -902,7 +903,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 					return sigMod();
 				#endif
 				
-			sigMod mod = init();
+			sigMod mod = init(toInit);
 			
 			if (dlclose(handle)!=0)
 				#ifndef NO_EX
@@ -922,7 +923,8 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 		bool 
 	#endif 
 	systemTools::setSignalHandler(systemSignalsEnum signal, 
-								const std::string &path)
+								const std::string &path, 
+								void *toInit)
 	{
 		deinitSigModule deinit;
 		
@@ -954,7 +956,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 				return false;
 			#endif
 		
-		signalHandler in = (signalHandler)dlsym(__handlesSig[signal], init().hook);
+		signalHandler in = (signalHandler)dlsym(__handlesSig[signal], init(toInit).hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -987,7 +989,8 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 	#else
 		bool 
 	#endif 
-	systemTools::setSignalHandler(const std::string &path)
+	systemTools::setSignalHandler(const std::string &path, 
+								void *toInit)
 	{
 		
 		void *handle = dlopen(path.c_str(), RTLD_LAZY);
@@ -1006,7 +1009,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 				return false;
 			#endif
 			
-		sigMod	mod = init();	
+		sigMod mod = init(toInit);	
 		
 		deinitSigModule deinit;
 		

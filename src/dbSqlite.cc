@@ -286,27 +286,30 @@
 		
 			int 
 			dbSqlite::addPostExec(const std::string &module, 
-								void *data) const
+								void *data,
+								void *toInit) const
 			{
-				return _addPostExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+				return _addPostExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
 			}
 			
 			//-------------------------------------------------------------------
 			
 			int 
 			dbSqlite::addPreExec(const std::string &module, 
-								void *data) const
+								void *data,
+								void *toInit) const
 			{
-				return _addPreExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+				return _addPreExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
 			}
 		
 			//-------------------------------------------------------------------
 			
 			xexecCounts 
 			dbSqlite::addExec(const std::string &module, 
-								void *data) const
+								void *data,
+								void *toInit) const
 			{
-				return _addExec(module, (void *)this, XEXECOBJ_DBSQLITE, data);
+				return _addExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
 			}
 		
 		#endif

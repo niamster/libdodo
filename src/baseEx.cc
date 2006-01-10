@@ -262,7 +262,8 @@
 	
 		bool 
 		baseEx::setErrorHandlers(const std::string &path,
-							void *data)
+							void *data, 
+							void *toInit)
 		{
 			initExModule init;
 			errorHandler in;
@@ -291,7 +292,7 @@
 				if (init == NULL)
 					return false;
 				
-				in = (errorHandler)dlsym(__handlesEx[i], init().hook);
+				in = (errorHandler)dlsym(__handlesEx[i], init(toInit).hook);
 				if (in == NULL)
 					return false;
 			
@@ -311,7 +312,8 @@
 		bool 
 		baseEx::setErrorHandler(errorModuleEnum module,
 							const std::string &path,
-							void *data)
+							void *data, 
+							void *toInit)
 		{
 			deinitExModule deinit;
 
@@ -335,7 +337,7 @@
 			if (init == NULL)
 				return false;
 			
-			errorHandler in = (errorHandler)dlsym(__handlesEx[module], init().hook);
+			errorHandler in = (errorHandler)dlsym(__handlesEx[module], init(toInit).hook);
 			if (in == NULL)
 				return false;
 		
@@ -352,7 +354,8 @@
 			
 		bool 
 		baseEx::setErrorHandler(const std::string &path,
-							void *data)
+							void *data, 
+							void *toInit)
 		{
 			
 			void *handler = dlopen(path.c_str(), RTLD_LAZY);
@@ -363,7 +366,7 @@
 			if (init == NULL)
 				return false;			
 			
-			exMod mod = init();
+			exMod mod = init(toInit);
 			
 			deinitExModule deinit;
 
@@ -397,7 +400,8 @@
 		//-------------------------------------------------------------------
 		
 		exMod 
-		baseEx::getModuleInfo(const std::string &module)
+		baseEx::getModuleInfo(const std::string &module, 
+							void *toInit)
 		{
 			void *handle = dlopen(module.c_str(), RTLD_LAZY);
 			if (handle == NULL)
@@ -407,15 +411,13 @@
 			if (init == NULL)
 				return exMod();
 				
-			exMod mod = init();
+			exMod mod = init(toInit);
 			
 			if (dlclose(handle)!=0)
 				return mod;
 			
 			return mod;	
 		}
-		
-		//-------------------------------------------------------------------
 	
 	#endif	
 			

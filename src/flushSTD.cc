@@ -71,27 +71,30 @@ flushSTD::~flushSTD()
 	
 		int 
 		flushSTD::addPostExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
 		flushSTD::addExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		int 
 		flushSTD::addPreExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data);
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
 		}
 	
 	#endif

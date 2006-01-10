@@ -170,24 +170,27 @@ namespace dodo
 					 * @return number in list where function is set
 					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
+					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data) const;
+					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL) const;
 							
 					/**
 					 * adds hook after the operation by callback
 					 * @return number in list where function is set
 					 * @param module is a path to module, whrere hook exists
 					 * @param data is pointer to data toy want to pass to hook
+					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data) const;
+					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
 					
 					/**
 					 * adds hook after the operation by callback
 					 * @return number in list where function is set
 					 * @param module is a path to module, whrere hook exists
 					 * @param data is pointer to data toy want to pass to hook
+					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data) const;
+					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL) const;
 					
 				#endif	
 			

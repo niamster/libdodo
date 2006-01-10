@@ -9,14 +9,11 @@ int main(int argc, char **argv)
 	try
 	{
 		flushSTD st;
-		
-		st.autoOutSize = false;
+
 		st.outSize = sizeof(int);
 		
 		cout << flushSTD::getModuleInfo("./module").name;
 		
-		//int pos = st.addPreExec("./module",NULL);
-	
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;
@@ -27,10 +24,10 @@ int main(int argc, char **argv)
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;
-		st.delPreExec(1);st.delPreExec(2);
+		st.delPreExec(1);
+		st.delPreExec(2);
 		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		//st.delPreExec(pos);
+		cout << st.addPreExec("./module",NULL,(void *)"perform")<<endl;
 	
 		int a = 10;
 		st.write((char *)&a);

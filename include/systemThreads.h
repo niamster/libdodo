@@ -97,7 +97,7 @@ namespace dodo
 		/**
 		 * @typedef describes function in module that must return info for the hook
 		 */
-		typedef systemThreadsMod (*initSystemThreadsModule)();
+		typedef systemThreadsMod (*initSystemThreadsModule)(void *);
 
 		/**
 		 * @typedef describes function in module that will be called during module unloading
@@ -271,25 +271,28 @@ namespace dodo
 				 * @return position of thread in queue
 				 * @param module indicates mudule where is function to be executed
 				 * @param data describes data to be passed to func
+				 * @param toInit indicates data that will path to initialize function
 				 * @param detached indicates whether thread will be detached
 				 * @param action describes action with thread on destruction if thread is running
 				 * @param stackSize describes stack siae of the thread
 				 */
-				virtual unsigned long add(const std::string &module, void *data, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+				virtual unsigned long add(const std::string &module, void *data, void *toInit = NULL, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
 				
 				/**
 				 * adds function to became a thread[not executing] from module
 				 * @return position of thread in queue
 				 * @param module indicates mudule where is function to be executed
 				 * @param data describes data to be passed to func
+				 * @param toInit indicates data that will path to initialize function
 				 */
-				virtual unsigned long add(const std::string &module, void *data);
+				virtual unsigned long add(const std::string &module, void *data, void *toInit = NULL);
 			
 				/**
 				 * @return info about module
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param toInit indicates data that will path to initialize function
 				 */
-				static systemThreadsMod getModuleInfo(const std::string &module);
+				static systemThreadsMod getModuleInfo(const std::string &module, void *toInit = NULL);
 			
 			#endif
 										

@@ -74,27 +74,30 @@ flushDisk::~flushDisk()
 	
 		int 
 		flushDisk::addPostExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data);
+			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		int 
 		flushDisk::addPreExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data);
+			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data, toInit);
 		}
 		
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
 		flushDisk::addExec(const std::string &module, 
-							void *data) const
+							void *data,
+							void *toInit) const
 		{
-			return _addExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data);
+			return _addExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data, toInit);
 		}
 	
 	#endif
