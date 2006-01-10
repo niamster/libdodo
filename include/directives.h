@@ -27,7 +27,11 @@
 
 #include <stdio.h>
 
-#define LIBDODO_VERSION "libdodo/0.1.1"
+#define LIBRARY "libdodo"
+
+#define MAJOR "0"
+#define MINOR "4"
+#define RELEASE "0"
 
 /**
  * system define; default - linux
@@ -111,11 +115,6 @@
  */
 #define RECIEVE_TIMEOUT 1000
 #define SEND_TIMEOUT 1000
-
-/**
- * how many modules can xexec init per object
- */
-#define XEXEC_MAXMODULES 10
 
 /**
  * for flushDisk::getFileContentArr

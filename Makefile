@@ -5,7 +5,7 @@
 CXX:=$(CC_PATH)g++
 #CXX:=$(CC_PATH)icpc
 
-CFLAGS:=-O3 -march=pentium4
+CFLAGS:=-O3 -march=pentium4 -Wall
 
 OBJECTS:=dbBase.o \
 		tools.o \
@@ -54,28 +54,30 @@ override LDFLAGS:= -L./ $(MODS_LD) $(LDFLAGS)
 
 VPATH:=src
 
-LIBRARY:=dodo
-VERSION:=0.1
+LIBRARY:="libdodo"
+
+MAJOR:=0
 MINOR:=1
+RELEASE:=1
 
 all: $(LIBRARY)
 
 $(LIBRARY): $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,lib$@.so.$(VERSION).$(MINOR) -o lib$@.so.$(VERSION).$(MINOR) $^
-	strip -d --strip-unneeded lib$(LIBRARY).so.$(VERSION).$(MINOR)
-	ln -sf lib$(LIBRARY).so.$(VERSION).$(MINOR) lib$@.so
+	$(CXX) $(LDFLAGS) $(LIBS) $(CFLAGS) -shared -Wl,-soname,$@.so.$(MAJOR).$(MINOR).$(RELEASE) -o $@.so.$(MAJOR).$(MINOR).$(RELEASE) $^
+	strip -d --strip-unneeded $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE)
+	ln -sf $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $@.so
 	@echo ""
 	@echo ""
 	@echo "Now you can run 'gmake install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
 .cc.o:
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -Wall -fPIC -c $^
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
 	strip -d --strip-unneeded $@
 
 install:
-	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include/libdodo
-	cp lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/
-	cp -rf include/* $(PREFIX)/include/libdodo/
-	ln -fs $(PREFIX)/lib/lib$(LIBRARY).so.$(VERSION).$(MINOR) $(PREFIX)/lib/lib$(LIBRARY).so
+	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include/$(LIBRARY)
+	cp $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $(PREFIX)/lib/
+	cp -rf include/* $(PREFIX)/include/$(LIBRARY)/
+	ln -fs $(PREFIX)/lib/$(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $(PREFIX)/lib/$(LIBRARY).so
 	@echo ""
 	@echo ""
 	@echo "Use libdodo with pleasure"

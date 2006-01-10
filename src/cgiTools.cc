@@ -156,7 +156,7 @@ void
 cgiTools::initHeaders(assocArr &a_headers) const
 {
 	HEADERS["Content-type"] = "text/html";
-	HEADERS["X-Powered-By"] = LIBDODO_VERSION;
+	HEADERS["X-Powered-By"] = LIBRARY "/" MAJOR "." MINOR "." RELEASE ;
 	
 	if (a_headers.size() > 0)
 	{

@@ -73,6 +73,10 @@ namespace dodo
 		void *obj;///< pointer to object that uses hook
 		bool enabled;///< disable or enable hook
 		int position;///< position in list[not really in list, but that is returned to user]
+		
+		#ifdef DL_EXT
+			void *handle;///< handle to module
+		#endif
 	};
 
 	/**
@@ -411,14 +415,7 @@ namespace dodo
 			mutable std::vector<__execItem>::iterator j;///< iterator for list
 			mutable std::vector<__execItem>::iterator k;///< iterator for list[for matched]
 			
-			mutable __execItem temp;///< temp storage for hook
-			
-			#ifdef DL_EXT
-			
-				mutable void *handles[XEXEC_MAXMODULES];///< handles to modules
-				mutable int handlesOpened[XEXEC_MAXMODULES];///< map of active modules
-				
-			#endif	
+			mutable __execItem temp;///< temp storage for hook	
 	};
 
 };
