@@ -566,4 +566,44 @@ systemThreads::running()
 	return amount;		
 }
 
+	//-------------------------------------------------------------------
+	
+#ifdef DL_EXT
+	
+	systemThreadsMod 
+	systemThreads::getModuleInfo(const std::string &module)
+	{
+		void *handle = dlopen(module.c_str(), RTLD_LAZY);
+		if (handle == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecExMod();
+			#endif
+			
+		initSystemThreadsModule init = (initSystemThreadsModule)dlsym(handle, "initSystemThreadsModule");
+		if (init == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return xexecExMod();
+			#endif
+			
+		systemThreadsMod mod = init();
+		
+		if (dlclose(handle)!=0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return mod;
+			#endif
+		
+		return mod;	
+	}
+
+	//-------------------------------------------------------------------
+
+#endif
+
 //-------------------------------------------------------------------
+

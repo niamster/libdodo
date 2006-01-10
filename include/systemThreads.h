@@ -72,8 +72,40 @@ namespace dodo
 		systemThreadOnDestructEnum action;///< action on class destruction
 		unsigned long executed;///< amount of times thread was executed
 		unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
+		
+		#ifdef DL_EXT
+			void *handle;///< handle to module
+		#endif		
 	};
+	
+	#ifdef DL_EXT
+	
+		/**
+		 * @struct systemThreadsMod must be returned from initSystemThreadsModule in the module
+		 */
+		struct systemThreadsMod
+		{
+			char name[64];///< name of module
+			char discription[256];///< discription of module
+			char hook[64];///< name of function in module that will be a hook
+			unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
+			bool detached;///< if thread is detached
+			int stackSize;///< amount of stack for thread[in bytes]
+			systemThreadOnDestructEnum action;///< action on class destruction			
+		};
+		
+		/**
+		 * @typedef describes function in module that must return info for the hook
+		 */
+		typedef systemThreadsMod (*initSystemThreadsModule)();
 
+		/**
+		 * @typedef describes function in module that will be called during module unloading
+		 */
+		typedef void (*deinitSystemThreadsModule)();
+	
+	#endif
+	
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
@@ -224,6 +256,17 @@ namespace dodo
 				virtual bool 
 			#endif			
 							setExecutionLimit(unsigned long position, unsigned long limit=1); 
+
+			
+			#ifdef DL_EXT
+			
+				/**
+				 * @return info about module
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 */
+				static systemThreadsMod getModuleInfo(const std::string &module);
+			
+			#endif
 										
 		protected:
 

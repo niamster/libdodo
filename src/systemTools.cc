@@ -30,11 +30,8 @@ using namespace dodo;
 
 	extern "C"
 	{
-			static void *__handlesSig[23];///< handles to modules
-			static bool __handlesOpenedSig[23] = {false,
-													false,
-													false,
-													false,
+			static void *__handlesSig[20];///< handles to modules
+			static bool __handlesOpenedSig[20] = {false,
 													false,
 													false,
 													false,

@@ -150,9 +150,9 @@ namespace dodo
 		 */
 		struct sigMod
 		{
-			char name[20];///< name of module
-			char discription[40];///< discription of module
-			char hook[20];///< name of function in module that will be a hook
+			char name[64];///< name of module
+			char discription[256];///< discription of module
+			char hook[64];///< name of function in module that will be a hook
 			systemSignalsEnum signal;///< on what signal to set handler
 		};
 		

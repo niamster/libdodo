@@ -107,14 +107,15 @@ namespace dodo
 			XEXECMODULE_POST,
 			XEXECMODULE_BOTH,
 		};
+		
 		/**
 		 * @struct xexecExMod must be returned from initXexecModule in the module
 		 */
 		struct xexecMod
 		{
-			char name[20];///< name of module
-			char discription[40];///< discription of module
-			char hook[20];///< name of function in module that will be a hook
+			char name[64];///< name of module
+			char discription[256];///< discription of module
+			char hook[64];///< name of function in module that will be a hook
 			execTypeEnum execType;///< type of execType to use; it is skipped if you define module in your program
 		};
 		
