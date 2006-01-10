@@ -5,6 +5,7 @@ using namespace dodo;
 using namespace std;
 
 static bool cought = false;
+static bool run = true;
 static int number = 1;
 
 void 
@@ -16,12 +17,19 @@ signaler(int, siginfo_t *, void *)
 	number++;
 }
 
+void 
+exit(int, siginfo_t *, void *)
+{
+	run = false;
+}
+
 int main(int argc, char **argv)
 {
 	
 	cout << systemTools::getPID() << endl;
 	
 	systemTools::setSignalHandler(SIGNAL_HANGUP,signaler);
+	systemTools::setSignalHandler(SIGNAL_INTERRUPT,exit);
 	//systemTools::unsetSignalHandler(SIGNAL_HANGUP);
 	
 	if (systemTools::isSignalHandled(SIGNAL_HANGUP))
@@ -29,7 +37,7 @@ int main(int argc, char **argv)
 	else
 		cout << "NOT SET ... !\n";
 		
-	while (true)
+	while (run)
 	{
 		cout << "\r" << number;
 		if (cought)

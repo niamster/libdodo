@@ -1,4 +1,5 @@
 #include <dbSqlite.h>
+#include <flushDiskTools.h>
 
 using namespace dodo;
 
@@ -10,13 +11,16 @@ int main(int argc, char **argv)
 	try
 	{
 		
+		flushDiskTools::unlink("test.lite",true);
+		
 		__dbInfo info;
+		
 		info.path = "test.lite";
 		
 		pp.setDbInfo(info);
 		pp.connect();	
 
-/*		__fieldInfo fi;
+		__fieldInfo fi;
 		fi.name = "date";
 		fi.type = TEXT;
 		
@@ -35,8 +39,7 @@ int main(int argc, char **argv)
 		
 		pp.createTable(ti);
 		cout << pp.queryCollect();
-		pp.exec();*/
-
+		pp.exec();
 		
 		map<string,string> arr;
 		arr["date"] = "2005-07-08";
@@ -46,7 +49,7 @@ int main(int argc, char **argv)
 		select.push_back("date");
 		select.push_back("operation");
 		
-		/*for (int i=0;i<1000;i++)
+		for (int i=0;i<10;i++)
 		{
 			pp.select("leg",select,"`id`<20 or `operation`='mu'");
 			pp.exec();
@@ -60,7 +63,7 @@ int main(int argc, char **argv)
 			pp.update("leg",arr);
 			arr["operation"] = "mu";
 			pp.exec();
-		}*/
+		}
 
 		pp.select("leg",select,"`id`<20 or `operation`='mu'");
 		pp.exec();

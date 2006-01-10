@@ -11,6 +11,8 @@ override DEFINES:=$(DEFINES)
 override CPPFLAGS:=-I../../include $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
+all: test module
+
 test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
 

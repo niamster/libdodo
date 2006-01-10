@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 		
 		cout << timeTools::now() << endl;
 		
-		systemTools::sleep(1000000);
+		systemTools::sleep(3);
 		
 		cout << timeTools::now() << endl;
 		

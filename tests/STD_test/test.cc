@@ -15,7 +15,7 @@ hook(void *base,
 		char q[100];
 		int *a;
 		a = (int *)(st->buffer.c_str());
-		sprintf(q,"!!%d!!\n",*a);
+		sprintf(q,"%d",*a);
 		st->buffer.assign(q);
 	}
 }
@@ -29,11 +29,11 @@ int main(int argc, char **argv)
 		cout << flushSTD::inputterInfo().host << endl;
 		
 		flushSTD st;
-//		st.block(true);
+		//st.block(true);
 		int pos = st.addPreExec(&hook,NULL);
-		//st.outSize = 7;
-		//st.autoOutSize = false;
 		//st.outSTDBuffer = 2;
+	
+		st.outSize = sizeof(int);
 	
 		int a = 10;
 		st.write((char *)&a);
