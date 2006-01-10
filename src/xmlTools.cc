@@ -207,78 +207,20 @@
 			#endif
 		
 		__node sample;
+
+		node = findNode(definition,node);
 		
-		register int i(0),j(0); 
+		if (node == NULL)
+			return sample;
+
+		getNodeInfo(node,sample);
 		
-		do
-		{			
-			if (definition.ns.size()>0)
-			{
-				if (node->ns==NULL)
-				{
-					node = node->next;
-					continue;
-				}
-				
-				if (icaseNames)
-					result = xmlStrcasecmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
-				else
-					result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
-	
-				if (result!=0)
-				{
-					node = node->next;
-					continue;
-				}
-			}
-			
-			result = 0;
-			if (definition.name.size()>0)
-			{			
-				if (icaseNames)
-					result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
-				else
-					result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
-			}
-			else
-				if (node->type != XML_ELEMENT_NODE)
-				{
-					node = node->next;
-					continue;
-				}
-			
-			if (result==0)
-			{
-				getNodeInfo(node,sample);
-				
-				getAttributes(definition,node,sample.attributes.realArr);
-				
-				std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
-				for (;i!=j;++i)
-						sample.children.push_back(parse(*i,node->children,definition.chLimit));
-				break;
-			}
-			
-			node = node->next;
-			
-			if (node == NULL)
-			{
-				++i;
-				node = xmlDocGetRootElement(document);
-				
-				for (j=0;j<i;++j)
-				{		
-					if (node->type != XML_ELEMENT_NODE)
-					{
-						node = node->next;
-						continue;
-					}
-					
-					node = node->children;
-				}
-			}
-		}
-		while (node!=NULL);
+		getAttributes(definition,node,sample.attributes.realArr);
+		
+		std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+		for (;i!=j;++i)
+				sample.children.push_back(parse(*i,node->children,definition.chLimit));
+
 		
 		return sample;
 	}
@@ -300,7 +242,13 @@
 
 		do
 		{
-			if (chLimit!=-1)
+			if (node->type != XML_ELEMENT_NODE)
+			{
+				node = node->next;
+				continue;
+			}			
+			
+			if (chLimit != -1)
 			{
 				if (chLimit<=0)
 					return sampleArr;
@@ -308,7 +256,7 @@
 				--chLimit;
 			}
 			
-			if (definition.ns.size()>0)
+			if (definition.ns.size() > 0)
 			{
 				if (node->ns==NULL)
 				{
@@ -321,7 +269,7 @@
 				else
 					result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
 	
-				if (result!=0)
+				if (result != 0)
 				{
 					node = node->next;
 					continue;
@@ -329,21 +277,15 @@
 			}
 			
 			result = 0;
-			if (definition.name.size()>0)
+			if (definition.name.size() > 0)
 			{
 				if (icaseNames)
 					result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
 				else
 					result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
 			}
-			else
-				if (node->type != XML_ELEMENT_NODE)
-				{
-					node = node->next;
-					continue;
-				}
-			
-			if (result!=0)
+				
+			if (result != 0)
 			{
 				node = node->next;
 				continue;		
@@ -364,7 +306,7 @@
 			node = node->next;
 			
 		}
-		while (node!=NULL);
+		while (node != NULL);
 		
 		return sampleArr;
 	}
@@ -387,9 +329,9 @@
 		attribute = node->properties;
 		jAttr = definition.attributes.end();
 		
-		while (attribute!=NULL)
+		while (attribute != NULL)
 		{
-			if (definition.attributes.size()>0)
+			if (definition.attributes.size() > 0)
 			{
 				iAttr = definition.attributes.begin();
 				for (;iAttr!=jAttr;++iAttr)
@@ -399,10 +341,10 @@
 					else
 						result = xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str());
 					
-					if (result==0)
+					if (result == 0)
 					{
 						xChar = xmlGetProp(node,attribute->name);
-						if (xChar!=NULL)
+						if (xChar != NULL)
 						{
 							attributes[iAttr->c_str()] = (char *)xChar;
 							xmlFree(xChar);
@@ -413,7 +355,7 @@
 			else
 			{
 				xChar = xmlGetProp(node,attribute->name);
-				if (xChar!=NULL)
+				if (xChar != NULL)
 				{
 					attributes[(char *)attribute->name] = (char *)xChar;
 					xmlFree(xChar);
@@ -432,7 +374,7 @@
 	{
 		attribute = node->properties;
 		
-		while (attribute!=NULL)
+		while (attribute != NULL)
 		{
 			xChar = xmlGetProp(node,attribute->name);
 			if (xChar!=NULL)
@@ -451,23 +393,23 @@
 	xmlTools::getNodeInfo(const xmlNodePtr node, 
 							__node &resNode)
 	{
-		if (node->ns!=NULL)
+		if (node->ns != NULL)
 		{
 			resNode.ns = (char *)node->ns->prefix;
 			resNode.nsHref = (char *)node->ns->href;
 		}
 		
-		if (node->nsDef!=NULL)
+		if (node->nsDef != NULL)
 		{
 			resNode.nsDef = (char *)node->nsDef->prefix;
 			resNode.nsDefHref = (char *)node->nsDef->href;
 		}
 
-		if (node->name!=NULL)
+		if (node->name != NULL)
 			resNode.name.assign((char *)node->name);
 		
 		xChar = xmlNodeListGetString(document,node->children,1);
-		if (xChar!=NULL)
+		if (xChar != NULL)
 		{
 			resNode.value.assign((char *)xChar);
 			xmlFree(xChar);
@@ -640,6 +582,63 @@
 		node.name.clear();
 		node.ns.clear();
 		node.chLimit = -1;
+	}
+
+	//-------------------------------------------------------------------
+
+	xmlNodePtr
+	xmlTools::findNode(const __nodeDef &definition,
+						xmlNodePtr node)
+	{
+		xmlNodePtr one;
+		bool skip;
+		
+		while (node!=NULL)
+		{
+			if (node->type != XML_ELEMENT_NODE)
+			{
+				node = node->next;
+				continue;
+			}
+
+			skip = false;
+
+			if (definition.ns.size()>0)
+			{
+				if (node->ns == NULL)
+					skip = true;
+				else
+				{
+					if (icaseNames)
+						result = xmlStrcasecmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
+					else
+						result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
+		
+					if (result != 0)
+						skip = true;
+				}
+			}
+			
+			if (!skip && node->name != NULL)
+			{
+				if (icaseNames)
+					result = strcasecmp((char *)node->name,definition.name.c_str());
+				else
+					result = strcmp((char *)node->name,definition.name.c_str());
+				
+				if (result == 0)
+					return node;
+			}
+			
+			one = findNode(definition,node->children);
+			
+			if (one != NULL)
+				return one;
+			
+			node = node->next;
+		}
+		
+		return NULL;
 	}
 
 	//-------------------------------------------------------------------

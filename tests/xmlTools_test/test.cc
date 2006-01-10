@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 		def.name = "hehe";
 		
 		//def.chLimit = 1;
-		//def.ns = "edi";
+		def.ns = "edi";
 		
 		__nodeDef def1;
 		def1.name = "bebe";

@@ -268,6 +268,8 @@
 			
 			private:
 				
+				xmlNodePtr findNode(const __nodeDef &definition, xmlNodePtr node);
+				
 				/**
 				 * @note share vars
 				 */
