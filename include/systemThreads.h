@@ -186,6 +186,11 @@ namespace dodo
 			 * @param position indicates for what thread to indicate
 			 */
 			virtual bool isRunning(unsigned long position);
+			
+			/**
+			 * @return amount of running threads
+			 */
+			virtual unsigned long running();
 							
 			/**
 			 * waits for all registered threads' termination

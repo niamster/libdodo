@@ -550,3 +550,20 @@ systemThreads::setExecutionLimit(unsigned long position, unsigned long limit)
 }
 
 //-------------------------------------------------------------------
+
+unsigned long 
+systemThreads::running()
+{
+	i = threads.begin();
+	j = threads.end();
+	
+	unsigned long amount(0);
+	
+	for (;i!=j;++i)
+		if (_isRunning(i))
+			++amount;
+	
+	return amount;		
+}
+
+//-------------------------------------------------------------------
