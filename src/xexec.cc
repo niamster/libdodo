@@ -141,6 +141,8 @@ xexec::delXExec(std::vector<__execItem> &list,
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_XEXEC,XEXEC_DELXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 					#endif
+				
+				k->handle = NULL;	
 			}
 				
 		#endif			
@@ -313,6 +315,8 @@ xexec::replaceXExec(std::vector<__execItem> &list,
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_XEXEC,XEXEC_DELXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 					#endif
+					
+				k->handle = NULL;	
 			}
 				
 		#endif

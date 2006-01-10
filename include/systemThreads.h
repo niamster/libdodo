@@ -135,7 +135,10 @@ namespace dodo
 			 * adds function to became a thread[not executing]
 			 * @return position of thread in queue
 			 * @param func indicates function to be executed
-			 * @paraqm data describes data to be passed to func
+			 * @param data describes data to be passed to func
+			 * @param detached indicates whether thread will be detached
+			 * @param action describes action with thread on destruction if thread is running
+			 * @param stackSize describes stack siae of the thread
 			 */
 			virtual unsigned long add(threadFunc func, void *data, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
 			
@@ -158,6 +161,9 @@ namespace dodo
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 * @param force if is set to true stops execution if this thread is running
+			 * @param detached indicates whether thread will be detached
+			 * @param action describes action with thread on destruction if thread is running
+			 * @param stackSize describes stack siae of the thread
 			 * @note - exception if it's currently running
 			 */
 			#ifndef NO_EX
@@ -165,7 +171,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							replace(unsigned long position, threadFunc func, void *data, bool force=false);
+							replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
 			
 			/**
 			 * executes thread
@@ -259,6 +265,25 @@ namespace dodo
 
 			
 			#ifdef DL_EXT
+
+				/**
+				 * adds function to became a thread[not executing] from module
+				 * @return position of thread in queue
+				 * @param module indicates mudule where is function to be executed
+				 * @param data describes data to be passed to func
+				 * @param detached indicates whether thread will be detached
+				 * @param action describes action with thread on destruction if thread is running
+				 * @param stackSize describes stack siae of the thread
+				 */
+				virtual unsigned long add(const std::string &module, void *data, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+				
+				/**
+				 * adds function to became a thread[not executing] from module
+				 * @return position of thread in queue
+				 * @param module indicates mudule where is function to be executed
+				 * @param data describes data to be passed to func
+				 */
+				virtual unsigned long add(const std::string &module, void *data);
 			
 				/**
 				 * @return info about module

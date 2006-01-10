@@ -80,6 +80,10 @@ systemThreads::~systemThreads()
 	i = threads.begin();
 	j = threads.end();
 	
+	#ifdef DL_EXT
+		deinitSystemThreadsModule deinit;
+	#endif
+	
 	for (;i!=j;++i)
 	{
 		if (!_isRunning(i) || i->detached)
@@ -99,6 +103,22 @@ systemThreads::~systemThreads()
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#endif
+				
+				#ifdef DL_EXT
+				
+					if (i->handle != NULL)
+					{
+						deinit = (deinitSystemThreadsModule)dlsym(i->handle, "deinitSystemThreadsModule");
+						if (deinit != NULL)
+							deinit();
+						
+						if (dlclose(i->handle)!=0)
+							#ifndef NO_EX
+								throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+							#endif							
+					}
+					
+				#endif
 				break;
 			
 			case THREAD_WAIT:
@@ -106,7 +126,23 @@ systemThreads::~systemThreads()
 				if (pthread_join(i->thread,NULL)!=0)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#endif			
+					#endif
+				
+				#ifdef DL_EXT
+				
+					if (i->handle != NULL)
+					{
+						deinit = (deinitSystemThreadsModule)dlsym(i->handle, "deinitSystemThreadsModule");
+						if (deinit != NULL)
+							deinit();
+						
+						if (dlclose(i->handle)!=0)
+							#ifndef NO_EX
+								throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+							#endif							
+					}
+					
+				#endif								
 		}
 	}	
 }
@@ -126,6 +162,10 @@ systemThreads::add(threadFunc func,
 	thread.position = ++threadNum;
 	thread.stackSize = stackSize;
 	thread.action = action;
+	
+	#ifdef DL_EXT
+		thread.handle = NULL;
+	#endif
 	
 	threads.push_back(thread);
 	
@@ -180,6 +220,26 @@ systemThreads::del(unsigned long position,
 					#endif
 			}
 		}
+
+		#ifdef DL_EXT
+		
+			if (k->handle!=NULL)
+			{
+				deinitSystemThreadsModule deinit;	
+	
+				deinit = (deinitSystemThreadsModule)dlsym(k->handle, "deinitSystemThreadsModule");
+				if (deinit != NULL)
+					deinit();
+				
+				if (dlclose(k->handle)!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DEL,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+					#endif
+					
+				k->handle = NULL;	
+			}
+				
+		#endif
 			
 		threads.erase(k);
 		
@@ -205,7 +265,10 @@ systemThreads::del(unsigned long position,
 systemThreads::replace(unsigned long position, 
 						threadFunc func, 
 						void *data,
-						bool force)
+						bool force,
+						bool detached,
+						systemThreadOnDestructEnum action,
+						int stackSize)
 {
 	if (getThread(position))
 	{
@@ -225,14 +288,37 @@ systemThreads::replace(unsigned long position,
 					#else
 						return false;
 					#endif
-				
-				k->isRunning = false;
 			}
 		}
+
+
+		#ifdef DL_EXT
+		
+			if (k->handle!=NULL)
+			{
+				deinitSystemThreadsModule deinit;	
+	
+				deinit = (deinitSystemThreadsModule)dlsym(k->handle, "deinitSystemThreadsModule");
+				if (deinit != NULL)
+					deinit();
+				
+				if (dlclose(k->handle)!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DEL,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+					#endif
+					
+				k->handle = NULL;	
+			}
+				
+		#endif
 			
 		k->data = data;
 		k->func = func;
-		
+		k->isRunning = false;
+		k->detached = detached;
+		k->stackSize = stackSize;
+		k->action = action;
+			
 		#ifdef NO_EX
 			return true;
 		#endif
@@ -599,6 +685,104 @@ systemThreads::running()
 			#endif
 		
 		return mod;	
+	}
+
+	//-------------------------------------------------------------------
+	
+	unsigned long 
+	systemThreads::add(const std::string &module,
+							void *data,
+							bool detached,
+							systemThreadOnDestructEnum action,
+							int stackSize)
+	{
+		
+		
+		
+		thread.detached = detached;
+		thread.data = data;
+		thread.position = ++threadNum;
+		thread.stackSize = stackSize;
+		thread.action = action;
+		
+		thread.handle = dlopen(module.c_str(), RTLD_LAZY);
+		if (thread.handle == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif
+		
+		initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
+		if (init == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif	
+		
+		systemThreadsMod temp = init();
+		
+		threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
+		if (in == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif
+	
+		thread.executeLimit = temp.executeLimit;
+		thread.func = in;		
+		
+		threads.push_back(thread);
+		
+		return thread.position;
+	}
+
+	//-------------------------------------------------------------------
+	
+	unsigned long 
+	systemThreads::add(const std::string &module,
+							void *data)
+	{
+		thread.data = data;
+		thread.position = ++threadNum;
+		
+		thread.handle = dlopen(module.c_str(), RTLD_LAZY);
+		if (thread.handle == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif
+		
+		initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
+		if (init == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif	
+		
+		systemThreadsMod temp = init();
+		
+		threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
+		if (in == NULL)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+			#else
+				return -1;
+			#endif
+	
+		thread.executeLimit = temp.executeLimit;
+		thread.detached = temp.detached;
+		thread.stackSize = temp.stackSize;
+		thread.action = temp.action;
+		thread.func = in;		
+		
+		threads.push_back(thread);
+		
+		return thread.position;
 	}
 
 	//-------------------------------------------------------------------

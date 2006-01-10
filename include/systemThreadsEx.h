@@ -72,6 +72,7 @@
 			#ifdef DL_EXT
 			
 				SYSTEMTHREADS_GETMODULEINFO,
+				SYSTEMTHREADS_ADD,
 				
 			#endif			
 		};
