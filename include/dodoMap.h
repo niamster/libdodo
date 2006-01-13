@@ -41,6 +41,7 @@ namespace dodo
 						
 			public:
 			
+			
 				/**
 				 * constructor
 				 */
@@ -61,17 +62,13 @@ namespace dodo
 					j = realArr.end();
 					
 					if (icase)
-					{
-						for (;i!=j;++i)
-							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
-								return i->second;		
-					}
+						cmpFunc = strcasecmp;
 					else
-					{
-						for (;i!=j;++i)
-							if (strcmp(varName.c_str(),i->first.c_str()) == 0)
-								return i->second;
-					}
+						cmpFunc = strcmp;
+					
+					for (;i!=j;++i)
+						if (cmpFunc(varName.c_str(),i->first.c_str()) == 0)
+							return i->second;		
 					
 					return type;				
 				}
@@ -90,6 +87,10 @@ namespace dodo
 				anyType type;
 								
 			private:
+				
+				typedef int(*charCmp)(const char *, const char *);
+				
+				charCmp cmpFunc;
 				
 				typename std::map<std::string, anyType>::iterator i;///< iterator for realArr(from begin)
 				typename std::map<std::string, anyType>::iterator j;///< iterator for realArr(indicates end)

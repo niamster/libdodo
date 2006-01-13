@@ -275,6 +275,11 @@
 		__node sample, one;
 		std::vector<__node> sampleArr;
 
+		if (icaseNames)
+			cmpFunc = xmlStrcasecmp;
+		else
+			cmpFunc = xmlStrcmp;
+
 		do
 		{
 			if (node->type != XML_ELEMENT_NODE)
@@ -298,29 +303,15 @@
 					node = node->next;
 					continue;
 				}
-				
-				if (icaseNames)
-					result = xmlStrcasecmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
-				else
-					result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
 	
-				if (result != 0)
+				if (cmpFunc(node->ns->prefix,(xmlChar *)definition.ns.c_str()) != 0)
 				{
 					node = node->next;
 					continue;
 				}
 			}
-			
-			result = 0;
-			if (definition.name.size() > 0)
-			{
-				if (icaseNames)
-					result = xmlStrcasecmp(node->name,(xmlChar *)definition.name.c_str());
-				else
-					result = xmlStrcmp(node->name,(xmlChar *)definition.name.c_str());
-			}
 				
-			if (result != 0)
+			if (cmpFunc(node->name,(xmlChar *)definition.name.c_str()) != 0)
 			{
 				node = node->next;
 				continue;		
@@ -678,7 +669,12 @@
 	{
 		xmlNodePtr one;
 		bool skip;
-		
+
+		if (icaseNames)
+			cmpFunc = xmlStrcasecmp;
+		else
+			cmpFunc = xmlStrcmp;
+					
 		while (node!=NULL)
 		{
 			if (node->type != XML_ELEMENT_NODE)
@@ -694,27 +690,13 @@
 				if (node->ns == NULL)
 					skip = true;
 				else
-				{
-					if (icaseNames)
-						result = xmlStrcasecmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
-					else
-						result = xmlStrcmp(node->ns->prefix,(xmlChar *)definition.ns.c_str());
-		
-					if (result != 0)
+					if (cmpFunc(node->ns->prefix,(xmlChar *)definition.ns.c_str()) != 0)
 						skip = true;
-				}
 			}
 			
 			if (!skip && node->name != NULL)
-			{
-				if (icaseNames)
-					result = strcasecmp((char *)node->name,definition.name.c_str());
-				else
-					result = strcmp((char *)node->name,definition.name.c_str());
-				
-				if (result == 0)
+				if (cmpFunc(node->name,(xmlChar *)definition.name.c_str()) == 0)
 					return node;
-			}
 			
 			one = findNode(definition,node->children);
 			

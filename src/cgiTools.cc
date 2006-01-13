@@ -146,7 +146,7 @@ cgiTools::makeEnv() const
 	for (register int i=0;i<HTTP_ENV_SIZE;++i)
 	{
 		env = getenv(HTTP_ENV[i].str);
-		ENVIRONMENT.realArr[HTTP_ENV[i].str] = (env==NULL)?__UNDEFINED__:env;
+		ENVIRONMENT.realArr[HTTP_ENV[i].str] = (env==NULL)?"NULL":env;
 	}
 }
 
@@ -400,12 +400,12 @@ cgiTools::request(const std::string &varName,
 	met1 = METHOD_POST[varName];
 	
 	if (first == GET)
-		if (strcmp(met0.c_str(),__UNDEFINED__) != 0)
+		if (met0.size() != 0)
 			return met0;
 		else
 			return met1;
 	else
-		if (strcmp(met1.c_str(),__UNDEFINED__) != 0)
+		if (met0.size() != 0)
 			return met1;
 		else
 			return met0;

@@ -271,6 +271,10 @@
 			
 			private:
 				
+				typedef int(*xcharCmp)(const xmlChar *, const xmlChar *);
+				
+				xcharCmp cmpFunc;
+				
 				xmlNodePtr findNode(const __nodeDef &definition, xmlNodePtr node);
 				
 				/**
@@ -281,7 +285,6 @@
 				xmlAttr *attribute;///< XML attributes
 				stringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes
 				xmlChar *xChar;///< for internal calculations; to store results
-				int result;///< to set result from different operations; to store results
 				
 				/**
 				 * catches libxml2 warnings

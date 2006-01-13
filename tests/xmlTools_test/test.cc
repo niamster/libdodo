@@ -31,7 +31,8 @@ int main(int argc, char **argv)
 		def.children["bebe"] = def1;
 		
 		__node node = tool.parseFile(def,"./test.xml");
-		
+		//__node node = tool.parseFile("./test.xml");
+				
 		cout << node.attributes["iD"] << endl;
 		cout << node.name << endl;
 		cout << tools::trim(node.value," \n\t\r",4) << endl;
