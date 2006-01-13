@@ -216,25 +216,80 @@ cgiTools::makePost() const
 			return false;
 		#endif
 	
-	register int cl = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
-	register char *post = new char[(cl+1)*size_of_char];	
+	register unsigned long inSize = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
+	register char *post = new char[POST_BATCH_SIZE];	
+
+	unsigned long iter = inSize/POST_BATCH_SIZE;
+	unsigned long rest = inSize%POST_BATCH_SIZE;
 	
-	fread(post,cl,1,stdin);
+	std::string bPost;
+			
+	for (register unsigned long i=0;i<iter;++i)
+	{
+		if (fread(post,POST_BATCH_SIZE,1,stdin) != POST_BATCH_SIZE)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+		
+		bPost.append(post,POST_BATCH_SIZE);
+	}
+	
+	if (rest>0)
+	{
+		if (fread(post,rest,1,stdin) == 0)
+			#ifndef NO_EX
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:
+					case EROFS:
+						throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				}	
+			#else			
+				switch (errno)
+				{
+					case EIO:
+					case EINTR:
+					case ENOMEM:
+					case EOVERFLOW:	
+					case EROFS:
+						return false;
+				}
+			#endif
+			
+		bPost.append(post,rest);
+	}
+
+	delete [] post;
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
 	{
-		make(METHOD_POST.realArr,post);
-		delete [] post;	
+		make(METHOD_POST.realArr,bPost);
 	}
 	else
 	{
-		std::string bPost;
-		bPost.assign(post,cl);
-		delete [] post;
-		
 		if (strcasecmp(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"].c_str(),"base64")==0)
-		{
-		}
+			bPost = tools::decodeBase64(bPost);
 		
 		register unsigned int temp0;
 		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
@@ -326,7 +381,7 @@ cgiTools::getFile(const std::string &varName) const
 
 //-------------------------------------------------------------------
 
-dodoMap &
+dodoStringMap &
 cgiTools::operator[](requestMethodEnum method) const
 {
 	if (method == POST)

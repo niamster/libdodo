@@ -26,45 +26,74 @@
 #define _DODOMAP_H_
 
 #include <directives.h>
-#include <types.h>
+#include <map>
+#include <string>
 
 namespace dodo
 {
-
 		/**
-		 * @class dodoMap is a duck for std::map<std::string, std::string> but controlling varName
-		 * if varName's value is not defined - '_undefined_' will be returned
+		 * @class dodoMap is a duck for std::map<std::string, any_type> but controlling varName
+		 * if varName's value is not defined - empty anyType will be returned
 		 */
-		class dodoMap
+		template <typename anyType>
+		class __dodoMap
 		{
+						
 			public:
 			
 				/**
 				 * constructor
 				 */
-				dodoMap();
-			
-				/**
-				 * @return value by hash or '_undefined_' if not found
-				 * @param varName value of hash that points to the value
-				 */
-				std::string operator[](const std::string &varName);
-
-				assocArr realArr;///< real array
+				__dodoMap(): icase(false)
+				{
+				}
 				
 				bool icase;///< whether to react on keys with keys or no; false[react] by default
-				
+							
+				/**
+				 * @return value by hash or empty anyType if not found
+				 * @param varName value of hash that points to the value
+				 */			 
+				anyType
+				operator[](const std::string &varName)
+				{
+					i = realArr.begin();
+					j = realArr.end();
+					
+					if (icase)
+					{
+						for (;i!=j;++i)
+							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
+								return i->second;		
+					}
+					else
+					{
+						for (;i!=j;++i)
+							if (strcmp(varName.c_str(),i->first.c_str()) == 0)
+								return i->second;
+					}
+					
+					return type;				
+				}
+								
 				/**
 				 * @return size of the map
 				 */
-				int size();
+				int 
+				size()
+				{
+					return realArr.size();
+				}
 				
+				std::map<std::string, anyType> realArr;///< real array
+				
+				anyType type;
+								
 			private:
 				
-				assocArr::iterator i;///< iterator for methodArr(from begin)
-				assocArr::iterator j;///< iterator for methodArr(indicates end)
+				typename std::map<std::string, anyType>::iterator i;///< iterator for realArr(from begin)
+				typename std::map<std::string, anyType>::iterator j;///< iterator for realArr(indicates end)
 		};
-
-}
+};
 
 #endif /*DODOMAP_H_*/

@@ -34,6 +34,8 @@
 
 #include <directives.h>
 
+#include <dodoMap.h>
+
 namespace dodo
 {
 
@@ -46,6 +48,8 @@ namespace dodo
 	typedef std::vector<std::string> stringArr;///< array of strings
 
 	typedef std::map<std::string, std::string> assocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
+
+	typedef __dodoMap<std::string> dodoStringMap;
 	
 	struct __statements 
 	{

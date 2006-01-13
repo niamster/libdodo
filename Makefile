@@ -27,7 +27,6 @@ OBJECTS:=dbBase.o \
 		timeTools.o \
 		xmlTools.o \
 		dbSqlite.o \
-		dodoMap.o \
 		systemThreads.o \
 		systemThreadShares.o
 

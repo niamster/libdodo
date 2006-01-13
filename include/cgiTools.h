@@ -33,6 +33,7 @@
 #include <tools.h>
 #include <types.h>
 #include <dodoMap.h>
+#include <cgiToolsEx.h>
 
 namespace dodo
 {
@@ -214,22 +215,22 @@ namespace dodo
 			 * @param method is indicates what reference would be returned
 			 * example: classObj[POST]["name"]
 			 */
-			virtual dodoMap &operator[](requestMethodEnum method) const;
+			virtual dodoStringMap &operator[](requestMethodEnum method) const;
 			
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)
 			 */
-			mutable dodoMap METHOD_POST;///< array of POST variables
-			mutable dodoMap METHOD_GET;///< array of GET variables
-			mutable dodoMap ENVIRONMENT;///< environment variables
-			mutable dodoMap COOKIES;///< coockes sent by browser
+			mutable dodoStringMap METHOD_POST;///< array of POST variables
+			mutable dodoStringMap METHOD_GET;///< array of GET variables
+			mutable dodoStringMap ENVIRONMENT;///< environment variables
+			mutable dodoStringMap COOKIES;///< coockes sent by browser
 			
 			/**
 			 * @return value of requested variable from POST or GET
 			 * @param varName name of the variable
 			 * @param first indicates what array will be searched first
 			 */
-			 virtual std::string request(const std::string &varName, requestMethodEnum first = GET) const;
+			 virtual std::string request(const std::string &varName, requestMethodEnum first=GET) const;
 			 
 			/**
 			 * prints cgi headers; 

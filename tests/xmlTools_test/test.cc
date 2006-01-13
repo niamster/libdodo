@@ -19,35 +19,39 @@ int main(int argc, char **argv)
 		
 		stringArr attr;
 		attr.push_back("iD");
-		def.attributes = attr;
-		
-		def.name = "hehe";
-		
+		def.attributes = attr;	
+		def.name = "hehe";	
 		//def.chLimit = 1;
 		def.ns = "edi";
 		
 		__nodeDef def1;
 		def1.name = "bebe";
+		def1.ignoreChildrenDef = true;
 		
-		def1.children.push_back(def1);
-		
-		def.children.push_back(def1);
+		def.children["bebe"] = def1;
 		
 		__node node = tool.parseFile(def,"./test.xml");
-		
-		cout << node.value << endl;
 		
 		cout << node.attributes["iD"] << endl;
 		cout << node.name << endl;
 		cout << tools::trim(node.value," \n\t\r",4) << endl;
+		cout << node.children.size() << endl;
 		
-		cout << node.children[0].size() << endl;
-		
-		cout << node.children[0][0].attributes.size() << endl;
-		
-		for (int i (0);i<node.children[0].size();i++)
+		if (node.children.size()>0)
 		{
-			cout << node.children[0][i].children[0][0].attributes["id"] << endl;
+			cout << node.children.realArr.begin()->first << endl;
+			cout << node.children.realArr.begin()->second.size() << endl;
+		}
+		
+		if (node.children["bebe"].size() > 0)
+		{
+			if (node.children["bebe"][0].children["bebe"].size() > 0)
+				cout << node.children["bebe"][0].children["bebe"][0].value << endl;
+			
+			cout << node.children["bebe"][0].attributes["id"] << endl;
+			
+			if (node.children["bebe"].size() > 1)
+				cout << node.children["bebe"][1].attributes["id"] << endl;
 		}
 	}
 	catch(baseEx ex)

@@ -62,11 +62,6 @@
  */
 
 /**
- * value for undefined node of dodoMap
- */
-#define __UNDEFINED__ "_undefined_"
-
-/**
  * size of block to use with zLib de/compression
  */
 #define ZLIB_CHUNK 100
@@ -120,6 +115,11 @@
  * for flushDisk::getFileContentArr
  */
 #define DISK_MAXLINELEN 10240
+
+/**
+ * size of batch for POST reading in cgiTool
+ */
+#define POST_BATCH_SIZE 1024
 
 /**
  * default values of buffer for io operations(flush*)

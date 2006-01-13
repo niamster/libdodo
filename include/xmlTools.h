@@ -50,9 +50,9 @@
 		{
 			std::string name;///< name of the node [[tag]]
 			
-			std::vector< std::vector<__node> > children;///< vector of children's realisation;
+			__dodoMap< std::vector<__node> > children;///< vector of children's realisation;
 			
-			dodoMap attributes;///< hash of attributes
+			dodoStringMap attributes;///< hash of attributes
 			
 			std::string value;///< value of the node
 			
@@ -74,10 +74,13 @@
 			
 			std::string name;///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
 			
-			std::vector<__nodeDef> children;///< vector of children's definitions
+			std::map<std::string, __nodeDef> children;///< vector of children's definitions
+			
 			long chLimit;///< limit of children to search for[-1 for unlimit, default]
+			bool ignoreChildrenDef;///< if true - parse all children tree if no children difenition; false by default
 			
 			stringArr attributes;///< attrributes to take from node; if empty - take all
+			bool ignoreAttributesDef;///< if true - parse all attributes if no attributes difenition; true by default
 			
 			std::string ns;///< namespace of the node; if empty - skips
 		};
@@ -286,6 +289,9 @@
 				 * @param error is error descriptor
 				 */
 				static void errHandler(void *data, xmlErrorPtr error);
+				
+				std::map<std::string, __nodeDef>::const_iterator i;///< iterator for maf of __nodeDef
+				std::map<std::string, __nodeDef>::const_iterator j;///< iterator for maf of __nodeDef
 				
 		};
 	};	

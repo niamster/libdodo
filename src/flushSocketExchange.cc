@@ -297,8 +297,6 @@ flushSocketExchange::receive(char * const data,
 			
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		n = 0;
-		
 		n = ::recv(socket,data+sent_recieved,inSocketBuffer,flag);
 		if (n==-1)
 			#ifndef NO_EX
@@ -536,8 +534,6 @@ flushSocketExchange::receiveStream(char * const data,
 	#endif	
 	
 	memset(data,'\0',inSocketBuffer);
-		
-	n = 0;	
 		
 	register int flag = 0;	
 	if (urgent)	

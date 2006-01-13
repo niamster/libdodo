@@ -47,7 +47,9 @@
  
 	//-------------------------------------------------------------------
  
-	__nodeDef::__nodeDef(): chLimit(-1)
+	__nodeDef::__nodeDef(): chLimit(-1),
+							ignoreChildrenDef(false),
+							ignoreAttributesDef(true)
 	{
 	}
 	
@@ -217,10 +219,46 @@
 		
 		getAttributes(definition,node,sample.attributes.realArr);
 		
-		std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
-		for (;i!=j;++i)
-				sample.children.push_back(parse(*i,node->children,definition.chLimit));
-
+		if (node->children == NULL)
+			return sample;
+		
+		if (definition.children.size() > 0)
+		{
+			j = definition.children.end();
+			
+			for (i = definition.children.begin();i!=j;++i)
+				sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
+		}
+		else
+		{
+			if (definition.ignoreChildrenDef)
+			{
+				node = node->children;
+				
+				__node one;
+				
+				while (node!=NULL)
+				{
+					if (node->type != XML_ELEMENT_NODE)
+					{
+						node = node->next;
+						continue;
+					}
+												
+					getNodeInfo(node,one);
+					
+					getAttributes(node,one.attributes.realArr);
+					
+					one.children.realArr[(char *)node->name] = parse(node->children);
+					
+					sample.children.realArr[(char *)node->name].push_back(one);
+					
+					initNode(one);
+					
+					node = node->next;
+				}				
+			}
+		}
 		
 		return sample;
 	}
@@ -232,12 +270,9 @@
 					const xmlNodePtr chNode, 
 					long chLimit)
 	{
-		if (chNode == NULL)
-			return std::vector<__node>();
+		register xmlNodePtr node = chNode, subNode;
 		
-		register xmlNodePtr node = chNode;
-		
-		__node sample;
+		__node sample, one;
 		std::vector<__node> sampleArr;
 
 		do
@@ -296,10 +331,41 @@
 			getNodeInfo(node,sample);
 			getAttributes(definition,node,sample.attributes.realArr);
 	
-			std::vector<__nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
-			
-			for (;i!=j;++i)
-				sample.children.push_back(parse(*i,node->children,definition.chLimit));
+			if (definition.children.size() > 0)
+			{
+				std::map<std::string, __nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+				for (;i!=j;++i)
+					sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
+				
+			}
+			else
+			{
+				if (definition.ignoreChildrenDef)
+				{
+					subNode = node->children;
+					
+					while (subNode!=NULL)
+					{
+						if (subNode->type != XML_ELEMENT_NODE)
+						{
+							subNode = subNode->next;
+							continue;
+						}
+													
+						getNodeInfo(subNode,one);
+						
+						getAttributes(subNode,one.attributes.realArr);
+						
+						one.children.realArr[(char *)subNode->name] = parse(subNode->children);
+						
+						sample.children.realArr[(char *)subNode->name].push_back(one);
+						
+						initNode(one);
+						
+						subNode = subNode->next;
+					}				
+				}				
+			}
 			
 			sampleArr.push_back(sample);
 			
@@ -327,43 +393,62 @@
 						assocArr &attributes)
 	{
 		attribute = node->properties;
-		jAttr = definition.attributes.end();
 		
-		while (attribute != NULL)
+		if (definition.attributes.size() > 0)
 		{
-			if (definition.attributes.size() > 0)
+			jAttr = definition.attributes.end();
+			if (icaseNames)
+			{
+				while (attribute != NULL)
+				{
+					iAttr = definition.attributes.begin();
+					for (;iAttr!=jAttr;++iAttr)
+					{	
+						if (xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str()) == 0)
+						{
+							xChar = xmlGetProp(node,attribute->name);
+							if (xChar != NULL)
+							{
+								attributes[iAttr->c_str()] = (char *)xChar;
+								xmlFree(xChar);
+							}
+						}
+	                }
+	                
+	                attribute = attribute->next;
+				}
+			}
+			else
 			{
 				iAttr = definition.attributes.begin();
 				for (;iAttr!=jAttr;++iAttr)
 				{
-					if (icaseNames)
-						result = xmlStrcasecmp(attribute->name,(xmlChar *)iAttr->c_str());
-					else
-						result = xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str());
-					
-					if (result == 0)
+					xChar = xmlGetProp(node,attribute->name);
+					if (xChar != NULL)
 					{
-						xChar = xmlGetProp(node,attribute->name);
-						if (xChar != NULL)
-						{
-							attributes[iAttr->c_str()] = (char *)xChar;
-							xmlFree(xChar);
-						}
+						attributes[iAttr->c_str()] = (char *)xChar;
+						xmlFree(xChar);
 					}
-                }
+				}
 			}
-			else
+		}
+		else
+		{
+			if (definition.ignoreAttributesDef)
 			{
-				xChar = xmlGetProp(node,attribute->name);
-				if (xChar != NULL)
+				while (attribute != NULL)
 				{
-					attributes[(char *)attribute->name] = (char *)xChar;
-					xmlFree(xChar);
-				}						
-			}
-			
-			attribute = attribute->next;
-		}		
+					xChar = xmlGetProp(node,attribute->name);
+					if (xChar!=NULL)
+					{
+						attributes[(char *)attribute->name] = (char *)xChar;
+						xmlFree(xChar);
+					}	
+					
+					attribute = attribute->next;
+				}
+			}						
+		}
 	}
 
 	//-------------------------------------------------------------------
@@ -459,10 +544,11 @@
 
 	//-------------------------------------------------------------------	
 	
-	std::vector<__node> 
+	std::vector<__node>
 	xmlTools::parse(xmlNodePtr node)
 	{
 		std::vector<__node> sample;
+		
 		__node one;
 		
 		while (node!=NULL)
@@ -477,7 +563,7 @@
 			
 			getAttributes(node,one.attributes.realArr);
 			
-			one.children.push_back(parse(node->children));
+			one.children.realArr[(char *)node->name] = parse(node->children);
 			
 			sample.push_back(one);
 			
@@ -495,7 +581,7 @@
 	xmlTools::initNode(__node &node)
 	{
 		node.attributes.realArr.clear();
-		node.children.clear();
+		node.children.realArr.clear();
 		node.name.clear();
 		node.ns.clear();
 		node.nsDef.clear();
@@ -533,7 +619,7 @@
 				return __node();
 			#endif
 					
-		__node sample = parse(node)[0];
+		__node sample = *(parse(node).begin());
 		
 		return sample;
 	}
@@ -567,7 +653,7 @@
 				return __node();
 			#endif
 					
-		__node sample = parse(node)[0];
+		__node sample = *(parse(node).begin());
 		
 		return sample;
 	}

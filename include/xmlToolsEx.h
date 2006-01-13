@@ -44,7 +44,7 @@
 		/**
 		 * libdodo defined errors' explanation
 		 */			
-		#define XMLTOOLS_NOT_PARCED_BEFORE_STR "The document haven't been parced before."
+		#define XMLTOOLS_NOT_PARCED_BEFORE_STR "The document haven't been parsed before."
 				
 		/**
 		 * ID of function where exception was thrown
