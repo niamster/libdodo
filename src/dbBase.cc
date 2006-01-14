@@ -411,7 +411,7 @@ dbBase::del(const std::string &a_table,
 
 void
 dbBase::subquery(const stringArr &sub, 
-				int type)
+				int type) const
 {
 	qType = type;
 	pre_subQ = sub;
@@ -420,7 +420,7 @@ dbBase::subquery(const stringArr &sub,
 //-------------------------------------------------------------------
 
 void 
-dbBase::use(const std::string &db)
+dbBase::use(const std::string &db) const
 {
 	qType = USE;
 	dbInfo.db = db;

@@ -1,5 +1,4 @@
-#include <dbSqlite.h>
-#include <flushDiskTools.h>
+#include <dbPostgresql.h>
 
 using namespace dodo;
 
@@ -7,18 +6,22 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	dbSqlite pp;	
+	dbPostgresql pp;	
+	
 	try
 	{
-		
-		flushDiskTools::unlink("test.lite",true);
-		
 		__dbInfo info;
 		
-		info.path = "test.lite";
+		info.db = "test";
+		info.host = "localhost";
+		info.port = 5432;
+		info.user = "postgres";
 		
 		pp.setDbInfo(info);
 		pp.connect();	
+
+		pp.deleteTable("leg");
+		pp.exec();
 
 		__fieldInfo fi;
 		fi.name = "date";
@@ -34,7 +37,7 @@ int main(int argc, char **argv)
 		
 		fi.name = "id";
 		fi.type = INTEGER;
-		fi.flag = AUTO_INCREMENT|KEY;
+		fi.flag = _NULL;
 		ti.fields.push_back(fi);		
 		
 		pp.createTable(ti);
@@ -51,7 +54,7 @@ int main(int argc, char **argv)
 		
 		for (int i=0;i<10;i++)
 		{
-			pp.select("leg",select,"`id`<20 or `operation`='um'");
+			pp.select("leg",select,"id<20 or operation='um'");
 			pp.exec();
 			
 			pp.fetch();
@@ -65,10 +68,10 @@ int main(int argc, char **argv)
 			pp.exec();
 		}
 
-		pp.select("leg",select,"`id`<20 or `operation`='um'");
+		pp.select("leg",select,"operation='um'");cout << pp.queryCollect() << endl;
 		pp.exec();
 		
-		//cout << pp.fetch().rows.size() << endl;
+		cout << pp.fetch().rows.size() << endl;
 		
 		__dbStorage store = pp.fetch();
 		
@@ -88,7 +91,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex;
+		cout << ex << ex.line;
 	}	
 	return 0;
 }

@@ -51,6 +51,7 @@
 #define CODECONV_EXT
 #define ZLIB_EXT
 #define SQLITE_EXT
+#define POSTGRESQL_EXT
 
 /**
  * other options
@@ -104,6 +105,7 @@
 //#define FLUSH_STD_WO_XEXEC
 //#define FLUSH_SOCKET_WO_XEXEC
 //#define FLUSH_SOCKETEXCHANGE_WO_XEXEC
+//#define DBPOSTGRESQL_WO_XEXEC
 
 /**
  * socket default timeouts

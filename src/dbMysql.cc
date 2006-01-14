@@ -66,9 +66,6 @@
 	
 	dbMysql::~dbMysql()
 	{
-		if (!empty)
-			mysql_free_result(mysqlRes);
-			
 		disconnect();
 	}
 	
@@ -192,14 +189,11 @@
 			dbInfo.port,
 			dbInfo.path.size()==0?NULL:dbInfo.path.c_str(),
 			type))
-		{
-			connected = false;
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-		}
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
 		
 		#ifndef DBMYSQL_WO_XEXEC
 			performXExec(postExec);
@@ -223,6 +217,13 @@
 				operType = DBMYSQL_OPER_DISCONNECT;
 				performXExec(preExec);
 			#endif
+		
+		
+			if (!empty)
+			{
+				empty = true;
+				mysql_free_result(mysqlRes);
+			}
 			
 	     	mysql_close(mysql);
 
@@ -246,13 +247,15 @@
 		queryCollect();
 		
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
+		{
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
+		}
 		
-		if (!show)	
+		if (!show)
 			#ifndef NO_EX
 				return ;
 			#else
@@ -260,8 +263,10 @@
 			#endif
 		
 		if (!empty)
+		{
 			mysql_free_result(mysqlRes);
-		empty = false;
+			empty = true;
+		}
 		
 		mysqlRes = mysql_store_result(mysql);
 		if (mysqlRes == NULL)
@@ -271,6 +276,8 @@
 				return false;
 			#endif
 		
+		empty = false;
+		
 		#ifdef NO_EX
 			return true;
 		#endif
@@ -279,7 +286,7 @@
 	//-------------------------------------------------------------------
 	
 	std::vector<stringArr>
-	dbMysql::fetchRow()
+	dbMysql::fetchRow() const
 	{
 			
 		#ifndef DBMYSQL_WO_XEXEC
@@ -296,16 +303,19 @@
 		rows.reserve(mysql_num_rows(mysqlRes));
 		
 		register unsigned long *length, j;
+		
 		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 		{		
 			length = mysql_fetch_lengths(mysqlRes);
 			fields.clear();
 			fields.reserve(numFields);
+			
 			for (j=0;j<numFields;j++)
 			{
 				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
 				fields.push_back(rowPart);
 			}
+			
 			rows.push_back(fields);
 		}
 
@@ -319,7 +329,7 @@
 	//-------------------------------------------------------------------
 	
 	stringArr
-	dbMysql::fetchField()
+	dbMysql::fetchField() const
 	{	
 		#ifndef DBMYSQL_WO_XEXEC
 			operType = DBMYSQL_OPER_FETCHFIELD;
@@ -348,7 +358,7 @@
 	//-------------------------------------------------------------------
 	
 	__dbStorage 
-	dbMysql::fetch()
+	dbMysql::fetch() const
 	{
 		return __dbStorage(fetchRow(), fetchField());
 	}
@@ -356,7 +366,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	dbMysql::rowsCount()
+	dbMysql::rowsCount() const
 	{
 		if (empty || !show)
 			return 0;
@@ -367,7 +377,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	dbMysql::fieldsCount()
+	dbMysql::fieldsCount() const
 	{
 		if (empty || !show)
 			return 0;
@@ -471,6 +481,8 @@
 		
 		#endif
 	
+		//-------------------------------------------------------------------
+			
 	#endif
 	
 	//-------------------------------------------------------------------
@@ -492,7 +504,7 @@
 	//-------------------------------------------------------------------
 	
 	std::string 
-	dbMysql::getCharset()
+	dbMysql::getCharset() const
 	{
 		return mysql_character_set_name(mysql);
 	}

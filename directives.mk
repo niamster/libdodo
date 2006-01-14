@@ -33,4 +33,9 @@ MOD_SQLITE_LD:=-L/opt/sqllite/lib/ -lsqlite3
 
 MOD_PTHREAD_LD:=-lpthread -pthread
 
+#############
+
+MOD_POSTGRESQL_CPP:=-I/opt/postgresql/include
+MOD_POSTGRESQL_LD:=-L/opt/postgresql/lib/ -lpq
+
 ##############################

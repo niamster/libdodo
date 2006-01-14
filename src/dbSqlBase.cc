@@ -423,7 +423,7 @@ dbSqlBase::renameBaseCollect() const
 void 
 dbSqlBase::renameTableCollect() const
 {
-	request = "rename " + pre_table + " to " + pre_having;
+	request = "alter table " + pre_table + " rename to " + pre_having;
 }
 
 //-------------------------------------------------------------------

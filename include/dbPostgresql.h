@@ -1,7 +1,7 @@
 /***************************************************************************
- *            dbSqlite.h
+ *            dbMysql.h
  *
- *  Sat Dec 10 06:45:19 2005
+ *  Fri Jan  13 19:25:19 2006
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -22,16 +22,16 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _DBSQLITE_H_
-#define _DBSQLITE_H_
+#ifndef _POSTGRESQL_H_
+#define _POSTGRESQL_H_
 
 #include <directives.h>
 
-#ifdef SQLITE_EXT
+#ifdef POSTGRESQL_EXT
 	
-	#include <sqlite3.h>
+	#include <libpq-fe.h>
 	
-	#include <dbSqliteEx.h>
+	#include <dbPostgresqlEx.h>
 	#include <dbSqlBase.h>
 	#include <tools.h>
 	#include <xexec.h>
@@ -40,34 +40,23 @@
 	{
 		
 		/**
-		 * @enum dbSqliteOperTypeEnum describes type of operation for hook
+		 * @enum dbPostgresqlOperTypeEnum describes type of operation for hook
 		 */
-		enum dbSqliteOperTypeEnum
+		enum dbPostgresqlOperTypeEnum
 		{
-			DBSQLITE_OPER_CONNECT,
-			DBSQLITE_OPER_EXEC,
-			DBSQLITE_OPER_DISCONNECT,
-			DBSQLITE_OPER_FETCHROW,
-			DBSQLITE_OPER_FETCHFIELD,
-		};
-		
-		class dbSqlite;///< to make struct with this class before class declaration
-		
-		/**
-		 * @struct __sqliteCallbackData passes to callback function
-		 */
-		struct __sqliteCallbackData
-		{
-			dbSqlite *data;
-			bool first;
+			DBPOSTGRESQL_OPER_CONNECT,
+			DBPOSTGRESQL_OPER_EXEC,
+			DBPOSTGRESQL_OPER_DISCONNECT,
+			DBPOSTGRESQL_OPER_FETCHROW,
+			DBPOSTGRESQL_OPER_FETCHFIELD,
 		};
 		
 		/**
-	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
+	 	 * @class dbPostgresql is an interface to Postgresql db through sql-,database- independent interfaces
 		 */
-		class dbSqlite : public dbSqlBase
+		class dbPostgresql : public dbSqlBase
 		
-		#ifndef DBSQLITE_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 										, public xexec
 		#endif
 		
@@ -78,19 +67,19 @@
 				 * constructor
 				 * to prevent from copying
 				 */
-				dbSqlite(dbSqlite &a_pp);
+				dbPostgresql(dbPostgresql &a_pgpp);
 			
 			public:
 				
 				/**
 				 * constructor
 				 */
-				dbSqlite();
+				dbPostgresql();
 				
 				/**
 				 * destructor
 				 */
-				virtual ~dbSqlite();	
+				virtual ~dbPostgresql();	
 			
 				/**
 				 * connect to database
@@ -136,7 +125,7 @@
 				 * @return structure that holds array of rows and array of fields got from request
 				 */
 				virtual __dbStorage fetch() const;
-			
+
 				/**
 				 * executes collected request
 				 */				
@@ -147,7 +136,7 @@
 				#endif
 								exec() const;
 				
-				#ifndef DBSQLITE_WO_XEXEC
+				#ifndef DBPOSTGRESQL_WO_XEXEC
 				
 					/**
 					 * adds hook after the operation by callback
@@ -182,7 +171,7 @@
 					 	 * @return number in list where function is set
 						 * @param module is a path to module, whrere hook exists
 						 * @param data is pointer to data toy want to pass to hook
-						 * @param toInit indicates data that will path to initialize function
+					 	 * @param toInit indicates data that will path to initialize function
 						 */
 						virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
 						
@@ -206,7 +195,7 @@
 			
 				/**
 				 * executes request
-				 * pure sqlite actions
+				 * pure postgresql actions
 				 * in function without `_` hooks are calling
 				 */
 				#ifndef NO_EX
@@ -216,20 +205,21 @@
 				#endif
 								_exec() const;
 				
-				
-				mutable bool connected;///< connected or not
-				
-			private:
-				
-				mutable sqlite3 *lite;///< handle to DB
-				
-				
-				static int sqlite_callback(void *data, int argc, char **argv, char **azColName);///< callback function to work with got sql's data 
-				mutable __sqliteCallbackData callBackData;
-				
-				mutable stringArr rowPart;///< to set temporary row content
-		};
+			private:	
 
+				mutable bool connected;///< connected or not
+					
+				mutable bool empty;///< for detectin' whether pgResult is empty or not
+	
+				mutable PGconn *conn;///< handle for connection to PG SQL server
+				mutable PGresult *pgResult;///< holds result from request
+				mutable int status;///< status of operation
+				
+				mutable char *temp;///< temp storage for data
+				
+				mutable std::string temp1;///< temp storage for data
+		};
+		
 	};
 	
 #endif

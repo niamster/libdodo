@@ -258,9 +258,9 @@ namespace dodo
 	 */
 	enum fieldFlagEnum
 	{
-		_NULL = 1,///< NULL type
-		AUTO_INCREMENT,///< if is not set by request, will be incremented relatevly to previous
-		KEY///< a key(depends on DB, but possibly index)
+		_NULL = 2,///< NULL type
+		AUTO_INCREMENT = 4,///< if is not set by request, will be incremented relatevly to previous
+		KEY = 8///< a key(depends on DB, but possibly index)
 	};
 	
 	/**
@@ -452,13 +452,13 @@ namespace dodo
 			 * @param sub is array of subqueries
 			 * @param type is type of "subquering"
 			 */
-			virtual void subquery(const stringArr &sub, int type=UNION/*UNION_ALL,MINUS,INTERSECT*/);
+			virtual void subquery(const stringArr &sub, int type=UNION/*UNION_ALL,MINUS,INTERSECT*/) const;
 			
 			/**
 			 * change database
 			 * @param db is name of database where to change
 			 */
-			virtual void use(const std::string &db);
+			virtual void use(const std::string &db) const;
 			
 			/**
 			 * rename database
@@ -727,6 +727,9 @@ namespace dodo
 			mutable int qDbDepInsShift;///< value to shift query template for specific
 			mutable int qDbDepUpShift;///< value to shift query template for specific
 			mutable int qDbDepDelShift;///< value to shift query template for specific
+
+			mutable std::vector<stringArr> rows;///< to store rows
+			mutable stringArr fields;///< to store fields
 			
 		private:	
 			

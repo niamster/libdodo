@@ -83,7 +83,6 @@
 	__node 
 	xmlTools::reParse(const __nodeDef &definition)
 	{
-	
 		if (document == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_REPARCE,ERR_LIBDODO,XMLTOOLS_NOT_PARCED_BEFORE,XMLTOOLS_NOT_PARCED_BEFORE_STR,__LINE__,__FILE__);

@@ -4,13 +4,13 @@
 CXX:=$(GCC_PATH)g++
 CFLAGS:=-O2 -march=pentium4
 
-MOD_SQLITE_CPP:=-I/opt/sqllite/include/
+MOD_POSTGRESQL_CPP:=-I/opt/postgresql/include
 
 override DEFINES:=$(DEFINES)
 
 #DEBUG:=-g
 
-override CPPFLAGS:=-I../../include $(MOD_SQLITE_CPP) $(CPPFLAGS)
+override CPPFLAGS:=-I../../include $(MOD_POSTGRESQL_CPP) $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc

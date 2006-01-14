@@ -29,9 +29,9 @@
 	using namespace dodo;
 
 	
-	dbSqlite::dbSqlite() : connected(false),
-							rowsNum(-1),
-							fieldsNum(-1)
+	dbSqlite::dbSqlite() : rowsNum(-1),
+							fieldsNum(-1),
+							connected(false)
 	{
 		auto_increment = " autoincrement ";
 	}
@@ -66,18 +66,16 @@
 			performXExec(preExec);
 		#endif
 		
-			if (sqlite3_open(dbInfo.path.c_str(),&lite)!=SQLITE_OK)
-				#ifndef NO_EX
-				{
-					sqlite3_close(lite);
-					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_CONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
-				}
-				#else
-				{
-					sqlite3_close(lite);
-					return ;
-				}
-				#endif		
+		if (sqlite3_open(dbInfo.path.c_str(),&lite) != SQLITE_OK)
+		{
+			sqlite3_close(lite);
+			
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_CONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+			#else
+				return ;
+			#endif		
+		}
 		
 		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
@@ -102,7 +100,7 @@
 				performXExec(preExec);
 			#endif
 			
-			if (sqlite3_close(lite)!=SQLITE_OK)
+			if (sqlite3_close(lite) != SQLITE_OK)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_DISCONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 				#else
@@ -151,7 +149,7 @@
 	//-------------------------------------------------------------------
 	
 	std::vector<stringArr>
-	dbSqlite::fetchRow()
+	dbSqlite::fetchRow() const
 	{
 		#ifndef DBSQLITE_WO_XEXEC
 			operType = DBSQLITE_OPER_FETCHROW;
@@ -171,7 +169,7 @@
 	//-------------------------------------------------------------------
 	
 	stringArr
-	dbSqlite::fetchField()
+	dbSqlite::fetchField() const
 	{	
 		#ifndef DBSQLITE_WO_XEXEC
 			operType = DBSQLITE_OPER_FETCHFIELD;
@@ -191,7 +189,7 @@
 	//-------------------------------------------------------------------
 	
 	__dbStorage 
-	dbSqlite::fetch()
+	dbSqlite::fetch() const
 	{
 		return __dbStorage(fetchRow(), fetchField());
 	}
@@ -199,7 +197,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	dbSqlite::rowsCount()
+	dbSqlite::rowsCount() const
 	{
 		if (!show)
 			return rowsNum;
@@ -210,7 +208,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int 
-	dbSqlite::fieldsCount()
+	dbSqlite::fieldsCount() const
 	{
 		if (!show)
 			return fieldsNum;
@@ -314,6 +312,8 @@
 		
 		#endif
 	
+		//-------------------------------------------------------------------
+			
 	#endif
 	
 	//-------------------------------------------------------------------	

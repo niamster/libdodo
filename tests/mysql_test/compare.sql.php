@@ -27,17 +27,17 @@
 					
 	for ($i=0;$i<3000;$i++)
 	{
-		$DB->select('log',$select,"`id`<20 or `operation`='mu'");
+		$DB->select('log',$select,"`id`<20 or `operation`='um'");
 		$DB->exec();	
 		$DB->getAssocArray();
 		
 		$DB->insert('log',$arr);
 		$DB->exec();
 		
-/*		$arr['operation'] = 'um';		
+		$arr['operation'] = 'um';		
 		$DB->update('log',$arr,'1');
 		$arr['operation'] = 'mu';
 		$DB->limit(50);
-		$DB->exec();*/	
+		$DB->exec();	
 	}
 ?>

@@ -123,7 +123,8 @@
 		#endif
 		
 		{
-			private :
+			private:
+			
 				/**
 				 * constructor
 				 * to prevent from copying
@@ -175,27 +176,27 @@
 				/**
 				 * @return amount of rows got from request(select ...)
 				 */
-				virtual unsigned int rowsCount();				
+				virtual unsigned int rowsCount() const;				
 				
 				/**
 				 * @return amount of fields got from request(select ...)
 				 */
-				virtual unsigned int fieldsCount();
+				virtual unsigned int fieldsCount() const;
 				
 				/**
 				 * @return array of rows got from request
 				 */
-				virtual std::vector<stringArr> fetchRow();
+				virtual std::vector<stringArr> fetchRow() const;
 				
 				/**
 				 * @return array of fields got from request
 				 */
-				virtual stringArr fetchField();
+				virtual stringArr fetchField() const;
 				
 				/**
 				 * @return structure that holds array of rows and array of fields got from request
 				 */
-				virtual __dbStorage fetch();
+				virtual __dbStorage fetch() const;
 			
 				/**
 				 * set additional mysql-specific statement for INSERT
@@ -322,7 +323,7 @@
 				/**
 				 * @return current session charset
 				 */ 
-				virtual std::string getCharset(); 
+				virtual std::string getCharset() const;
 				 
 			protected:
 			
@@ -344,7 +345,7 @@
 				virtual void addSQL();
 				
 				mutable bool connected;///< connected or not
-			
+
 			private:	
 				
 				mutable bool empty;///< for detectin' whether mysqlResult is empty or not
@@ -353,12 +354,10 @@
 				mutable MYSQL_RES *mysqlRes;///< pointer to result
 				mutable MYSQL_ROW mysqlRow;///< pointer to rows
 				mutable MYSQL_FIELD *mysqlFields;///< pointer to fields
-				
-				std::vector<stringArr> rows;///< to store rows
-				stringArr fields;///< to store fields
-				std::string rowPart;///< to store row node
+
+				mutable std::string rowPart;///< to store row node
 					
-				unsigned int numFields;///< number of fields
+				mutable unsigned int numFields;///< number of fields
 		};
 		
 	};

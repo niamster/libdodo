@@ -22,18 +22,18 @@ int main(int argc, char **argv)
 		
 		for (int i=0;i<3000;i++)
 		{
-			pp.select("log",select,"`id`<20 or `operation`='mu'");
+			pp.select("log",select,"`id`<20 or `operation`='um'");
 			pp.exec();
 			pp.fetch();
 			
 			pp.insert("log",arr);
 			pp.exec();
 			
-/*			arr["operation"] = "um";
+			arr["operation"] = "um";
 			pp.update("log",arr);
 			arr["operation"] = "mu";
 			pp.limit(50);
-			pp.exec();*/		
+			pp.exec();		
 		}
 	}
 	catch(baseEx ex)
