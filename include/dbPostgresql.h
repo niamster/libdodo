@@ -34,6 +34,7 @@
 	#include <dbPostgresqlEx.h>
 	#include <dbSqlBase.h>
 	#include <tools.h>
+	#include <dbInterface.h>
 	#include <xexec.h>
 	
 	namespace dodo
@@ -54,7 +55,7 @@
 		/**
 	 	 * @class dbPostgresql is an interface to Postgresql db through sql-,database- independent interfaces
 		 */
-		class dbPostgresql : public dbSqlBase
+		class dbPostgresql : public dbSqlBase, public dbInterface
 		
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 										, public xexec
@@ -125,7 +126,12 @@
 				 * @return structure that holds array of rows and array of fields got from request
 				 */
 				virtual __dbStorage fetch() const;
-
+				
+				/**
+				 * @return array that holds assoc array['fiels'=>'value'] got from request
+				 */
+				virtual dodoStringMapArr fetchAssoc() const;
+				
 				/**
 				 * executes collected request
 				 */				
@@ -205,9 +211,7 @@
 				#endif
 								_exec() const;
 				
-			private:	
-
-				mutable bool connected;///< connected or not
+			private:
 					
 				mutable bool empty;///< for detectin' whether pgResult is empty or not
 	
@@ -215,10 +219,9 @@
 				mutable PGresult *pgResult;///< holds result from request
 				mutable int status;///< status of operation
 				
-				mutable char *temp;///< temp storage for data
-				
 				mutable std::string rowPart;///< temp storage for data
 				mutable stringArr rowsPart;///< to store rows
+				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 		};
 		
 	};

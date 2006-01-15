@@ -82,6 +82,15 @@ namespace dodo
 					return realArr.size();
 				}
 				
+				/**
+				 * clears realArr
+				 */
+				void
+				clear()
+				{
+					realArr.clear();
+				}
+				
 				std::map<std::string, anyType> realArr;///< real array
 				
 				anyType type;

@@ -135,7 +135,7 @@ namespace dodo
 		
 		std::vector<stringArr> rows;///< array of rows returned in request
 		stringArr fields;///< array of fields returned in request
-	};	
+	};
 	
 	/**
 	 * @struct __sqlInfo that contains connection optioins to server
@@ -654,7 +654,7 @@ namespace dodo
 			 * set default values for field (if you want safelly reuse)
 			 */
 			void initRowInfo(__fieldInfo &field);	
-					
+				
 		protected:
 		
 			/**
@@ -727,26 +727,15 @@ namespace dodo
 			mutable int qDbDepInsShift;///< value to shift query template for specific
 			mutable int qDbDepUpShift;///< value to shift query template for specific
 			mutable int qDbDepDelShift;///< value to shift query template for specific
-
-			mutable std::vector<stringArr> rows;///< to store rows
-			mutable stringArr fields;///< to store fields
-			
-		private:	
 			
 			/**
 			 * @note share vars
 			 */
 			mutable assocArr::const_iterator i;///< iterator for "hash"
 			mutable assocArr::const_iterator j;///< iterator for "hash"
-		
-		protected:
-
-			/**
-			 * @note share vars
-			 */
+			mutable std::vector<stringArr>::const_iterator k;///< iterator for array of hashes
+			mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes
 			
-			mutable std::vector<stringArr>::const_iterator k;///< iterator for "hash"
-			mutable std::vector<stringArr>::const_iterator l;///< iterator for "hash"
 	};
 
 };

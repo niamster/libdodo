@@ -51,6 +51,8 @@ namespace dodo
 
 	typedef __dodoMap<std::string> dodoStringMap;
 	
+	typedef std::vector<dodoStringMap> dodoStringMapArr;
+	
 	struct __statements 
 	{
 		char *str;

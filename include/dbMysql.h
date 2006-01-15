@@ -116,7 +116,7 @@
 		/**
 	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
 		 */
-		class dbMysql : public dbSqlBase
+		class dbMysql : public dbSqlBase, public dbInterface
 		
 		#ifndef DBMYSQL_WO_XEXEC
 										, public xexec
@@ -197,7 +197,12 @@
 				 * @return structure that holds array of rows and array of fields got from request
 				 */
 				virtual __dbStorage fetch() const;
-			
+				
+				/**
+				 * @return array that holds assoc array['fiels'=>'value'] got from request
+				 */
+				virtual dodoStringMapArr fetchAssoc() const;
+							
 				/**
 				 * set additional mysql-specific statement for INSERT
 				 * @param statement describes additional statement
@@ -343,8 +348,6 @@
 				 * inits addidtional mySQL specific statements
 				 */
 				virtual void addSQL();
-				
-				mutable bool connected;///< connected or not
 
 			private:	
 				
@@ -357,6 +360,7 @@
 
 				mutable std::string rowPart;///< to store row node
 				mutable stringArr rowsPart;///< to store rows
+				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 					
 				mutable unsigned int numFields;///< number of fields
 		};

@@ -28,8 +28,7 @@
 	
 	using namespace dodo;
 	
-	dbPostgresql::dbPostgresql() : connected(false),
-									empty(true)
+	dbPostgresql::dbPostgresql() : empty(true)
 	{
 	}
 	
@@ -200,11 +199,10 @@
 			
 			for (j=0;j<fieldsNum;++j)
 			{
-				temp = PQgetvalue(pgResult,i,j);
-				if (temp!=NULL)
-					rowPart.assign(temp,PQgetlength(pgResult,i,j));
-				else
+				if (PQgetisnull(pgResult,i,j)==1)
 					rowPart.assign("NULL");
+				else
+					rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
 
 				rowsPart.push_back(rowPart);
 			}
@@ -238,10 +236,7 @@
 		fields.reserve(fieldsNum);
 		
 		for (register int i(0);i<fieldsNum;++i)
-		{
-			temp = PQfname(pgResult,i);
-			fields.push_back(temp!=NULL?temp:"NULL");
-		}
+			fields.push_back(PQfname(pgResult,i));
 
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 			performXExec(postExec);
@@ -380,6 +375,42 @@
 	
 	#endif
 	
+	//-------------------------------------------------------------------
+	
+	dodoStringMapArr 
+	dbPostgresql::fetchAssoc() const
+	{
+		if (empty || !show)
+			return dodoStringMapArr();
+		
+		rowsNum = PQntuples(pgResult);
+		fieldsNum = PQnfields(pgResult);
+		
+		rowsFields.clear();
+		rowsFields.reserve(rowsNum);
+		
+		register int j;
+
+		for (register int i(0);i<rowsNum;++i)
+		{
+			rowFieldsPart.clear();
+			
+			for (j=0;j<fieldsNum;++j)
+			{
+				if (PQgetisnull(pgResult,i,j)==1)
+					rowPart.assign("NULL");
+				else
+					rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
+
+				rowFieldsPart.realArr[PQfname(pgResult,i)] = rowPart;
+			}
+			
+			rowsFields.push_back(rowFieldsPart);
+		}
+		
+		return rowsFields;
+	}
+
 	//-------------------------------------------------------------------
 	
 #endif

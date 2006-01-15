@@ -58,8 +58,9 @@ namespace dodo
 	
 	/**
 	 * @typedef that describes function that will be called as hook
-	 * @param first is pointer class object that uses hook; 
-	 * @param second is data needed for hook
+	 * @param first is pointer class object that uses hook
+	 * @param second is type of object that called hook
+	 * @param third is data needed for hook
 	 */
 	typedef void (*inExec)(void *, xexecObjTypeEnum, void *);
 

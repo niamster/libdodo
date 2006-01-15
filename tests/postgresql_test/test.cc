@@ -4,12 +4,20 @@ using namespace dodo;
 
 using namespace std;
 
+void
+hook(void *object, xexecObjTypeEnum type, void *data)
+{
+	cout << "executed" << endl;
+}
+
 int main(int argc, char **argv)
 {
 	dbPostgresql pp;	
 	
 	try
 	{
+		pp.addPreExec(&hook,NULL);
+		
 		__dbInfo info;
 		
 		info.db = "test";

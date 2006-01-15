@@ -30,8 +30,7 @@
 
 	
 	dbSqlite::dbSqlite() : rowsNum(-1),
-							fieldsNum(-1),
-							connected(false)
+							fieldsNum(-1)
 	{
 		auto_increment = " autoincrement ";
 	}
@@ -350,5 +349,33 @@
 	}
 	
 	//-------------------------------------------------------------------
+	
+	dodoStringMapArr 
+	dbSqlite::fetchAssoc() const
+	{
+		if (!show)
+			return dodoStringMapArr();
+		
+		j = fields.end();
+		k = rows.begin();
+		l = rows.end();
+		
+		stringArr::const_iterator o;
+		
+		for (;k!=l;++k)
+		{
+			rowFieldsPart.clear();
+			
+			for (i=fields.begin(), o=k->begin();i!=j;++i,++o)
+				rowFieldsPart.realArr[*i] = *o;
+				
+			rowsFields.push_back(rowFieldsPart);
+		}
+		
+		return rowsFields;
+	}
+
+	//-------------------------------------------------------------------
+	
 	
 #endif

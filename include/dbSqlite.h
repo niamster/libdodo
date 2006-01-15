@@ -34,6 +34,7 @@
 	#include <dbSqliteEx.h>
 	#include <dbSqlBase.h>
 	#include <tools.h>
+	#include <dbInterface.h>
 	#include <xexec.h>
 	
 	namespace dodo
@@ -65,7 +66,7 @@
 		/**
 	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
 		 */
-		class dbSqlite : public dbSqlBase
+		class dbSqlite : public dbSqlBase, public dbInterface
 		
 		#ifndef DBSQLITE_WO_XEXEC
 										, public xexec
@@ -136,7 +137,12 @@
 				 * @return structure that holds array of rows and array of fields got from request
 				 */
 				virtual __dbStorage fetch() const;
-			
+				
+				/**
+				 * @return array that holds assoc array['fiels'=>'value'] got from request
+				 */
+				virtual dodoStringMapArr fetchAssoc() const;
+							
 				/**
 				 * executes collected request
 				 */				
@@ -215,10 +221,7 @@
 					virtual bool 
 				#endif
 								_exec() const;
-				
-				
-				mutable bool connected;///< connected or not
-				
+					
 			private:
 				
 				mutable sqlite3 *lite;///< handle to DB
@@ -228,6 +231,15 @@
 				mutable __sqliteCallbackData callBackData;
 				
 				mutable stringArr rowPart;///< to set temporary row content
+				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
+				
+				/**
+				 * @note share vars
+				 */
+				mutable stringArr::const_iterator i;///< iterator for "hash"
+				mutable stringArr::const_iterator j;///< iterator for "hash"
+				mutable std::vector<stringArr>::const_iterator k;///< iterator for array of hashes
+				mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes				
 		};
 
 	};

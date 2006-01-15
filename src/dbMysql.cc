@@ -49,8 +49,7 @@
 	//-------------------------------------------------------------------
 
 	
-	dbMysql::dbMysql() : connected(false),
-						empty(true)
+	dbMysql::dbMysql() : empty(true)
 	{
 		mysql = mysql_init(NULL);
 		addSQL();
@@ -509,6 +508,40 @@
 		return mysql_character_set_name(mysql);
 	}
 	
+	//-------------------------------------------------------------------
+	
+	dodoStringMapArr 
+	dbMysql::fetchAssoc() const
+	{
+		if (empty || !show)
+			return dodoStringMapArr();
+		
+		numFields = mysql_num_fields(mysqlRes);	
+		mysqlFields = mysql_fetch_fields(mysqlRes);
+
+		rowsFields.reserve(mysql_num_rows(mysqlRes));
+		
+		register unsigned long *length, j;
+		
+		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
+		{		
+			length = mysql_fetch_lengths(mysqlRes);
+			
+			rowFieldsPart.clear();
+			
+			for (j=0;j<numFields;j++)
+			{
+				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
+				
+				rowFieldsPart.realArr[mysqlFields[j].name] = rowPart;
+			}
+			
+			rowsFields.push_back(rowFieldsPart);
+		}
+		
+		return rowsFields;		
+	}
+
 	//-------------------------------------------------------------------
 	
 #endif
