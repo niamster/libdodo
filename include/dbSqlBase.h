@@ -74,6 +74,10 @@ namespace dodo
 			static std::string noexists(const std::string &statement);
 		
 			bool preventFraming;///< to frame or not with `'` fields values in insert and update; false by default
+
+			mutable std::vector<stringArr> rows;///< to store rows
+			mutable stringArr fields;///< to store fields
+			mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
 			
 		protected:		
 		

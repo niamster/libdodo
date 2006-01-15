@@ -49,9 +49,11 @@
 	//-------------------------------------------------------------------
 
 	
-	dbMysql::dbMysql() : empty(true)
+	dbMysql::dbMysql() : empty(true),
+							type(CLIENT_MULTI_STATEMENTS)
 	{
 		mysql = mysql_init(NULL);
+		
 		addSQL();
 	}
 	
@@ -154,7 +156,22 @@
 	{
 		removeF(qDbDepDelShift,1<<statement);	
 	}
-	
+
+	//-------------------------------------------------------------------
+
+	void
+	dbMysql::connectSettings(unsigned long a_type,
+					const __mysqlSSLOptions &options) const
+	{
+		type = a_type;
+		
+		mysql_ssl_set(mysql,
+		options.key.size()==0?NULL:options.key.c_str(),
+		options.cert.size()==0?NULL:options.cert.c_str(),
+		options.ca.size()==0?NULL:options.ca.c_str(),
+		options.capath.size()==0?NULL:options.capath.c_str(),
+		options.cipher.size()==0?NULL:options.cipher.c_str());		
+	}	
 	//-------------------------------------------------------------------
 	
 	#ifndef NO_EX
@@ -162,8 +179,7 @@
 	#else
 		bool
 	#endif
-	dbMysql::connect(unsigned long type,
-					const __mysqlSSLOptions &options) const
+	dbMysql::connect() const
 	{
 		if (connected)
 			disconnect();
@@ -172,13 +188,6 @@
 			operType = DBMYSQL_OPER_CONNECT;
 			performXExec(preExec);
 		#endif
-		
-		mysql_ssl_set(mysql,
-		options.key.size()==0?NULL:options.key.c_str(),
-		options.cert.size()==0?NULL:options.cert.c_str(),
-		options.ca.size()==0?NULL:options.ca.c_str(),
-		options.capath.size()==0?NULL:options.capath.c_str(),
-		options.cipher.size()==0?NULL:options.cipher.c_str());
 		
 		if (!mysql_real_connect(mysql,
 			dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
@@ -217,7 +226,6 @@
 				performXExec(preExec);
 			#endif
 		
-		
 			if (!empty)
 			{
 				empty = true;
@@ -244,7 +252,7 @@
 	dbMysql::_exec() const
 	{	
 		queryCollect();
-		
+
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
 		{
 			#ifndef NO_EX

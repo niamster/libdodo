@@ -32,7 +32,6 @@
 	#include <sqlite3.h>
 	
 	#include <dbSqliteEx.h>
-	#include <dbSqlBase.h>
 	#include <tools.h>
 	#include <dbInterface.h>
 	#include <xexec.h>
@@ -66,7 +65,7 @@
 		/**
 	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
 		 */
-		class dbSqlite : public dbSqlBase, public dbInterface
+		class dbSqlite : public dbInterface
 		
 		#ifndef DBSQLITE_WO_XEXEC
 										, public xexec

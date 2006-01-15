@@ -33,8 +33,8 @@
 	#include <mysql.h>
 	
 	#include <dbMysqlEx.h>
-	#include <dbSqlBase.h>
 	#include <tools.h>
+	#include <dbInterface.h>
 	#include <xexec.h>
 	
 	namespace dodo
@@ -116,7 +116,7 @@
 		/**
 	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
 		 */
-		class dbMysql : public dbSqlBase, public dbInterface
+		class dbMysql : public dbInterface
 		
 		#ifndef DBMYSQL_WO_XEXEC
 										, public xexec
@@ -142,9 +142,8 @@
 				 * destructor
 				 */
 				virtual ~dbMysql();	
-			
-				/**
-				 * connect to database
+				/*
+				 * sets connection settings
 				 * @param type is type of connection - see mySQL documentation for more!
 				 * @param options is options for ssl connection. see __mysqlSSLOptions for more details
 				 * 	CLIENT_COMPRESS 	Use compression protocol.
@@ -155,13 +154,18 @@
 				 *	CLIENT_MULTI_STATEMENTS 	Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
 				 *	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
 				 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
+				 */			
+				void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions()) const;
+			
+				/**
+				 * connect to database
 				 */	
 				#ifndef NO_EX
 					virtual void 
 				#else
 					virtual bool 
 				#endif
-								connect(unsigned long type=CLIENT_MULTI_STATEMENTS, const __mysqlSSLOptions &options = __mysqlSSLOptions()) const;
+								connect() const;
 				
 				/**
 				 * disconnect from database
@@ -363,6 +367,8 @@
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 					
 				mutable unsigned int numFields;///< number of fields
+				
+				mutable unsigned long type;
 		};
 		
 	};

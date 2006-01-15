@@ -29,7 +29,8 @@ OBJECTS:=dbBase.o \
 		dbSqlite.o \
 		systemThreads.o \
 		systemThreadShares.o \
-		dbPostgresql.o
+		dbPostgresql.o \
+		dbInterface.o
 
 ###########################################################
 

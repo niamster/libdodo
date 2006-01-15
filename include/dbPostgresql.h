@@ -32,7 +32,6 @@
 	#include <libpq-fe.h>
 	
 	#include <dbPostgresqlEx.h>
-	#include <dbSqlBase.h>
 	#include <tools.h>
 	#include <dbInterface.h>
 	#include <xexec.h>
@@ -55,7 +54,7 @@
 		/**
 	 	 * @class dbPostgresql is an interface to Postgresql db through sql-,database- independent interfaces
 		 */
-		class dbPostgresql : public dbSqlBase, public dbInterface
+		class dbPostgresql : public dbInterface
 		
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 										, public xexec

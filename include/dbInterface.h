@@ -1,7 +1,7 @@
 /***************************************************************************
  *            dbInterface.h
  *
- *  Thu Apr  30 13:45:19 2005
+ *  Sun Jan  15 19:45:19 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,8 +27,7 @@
 
 #include <directives.h>
 
-#include <dbBase.h>
-#include <types.h>
+#include <dbSqlBase.h>
 
 namespace dodo
 {
@@ -37,16 +36,24 @@ namespace dodo
  	 * @class dbInterface is an interface to mysql db through sql-,database- independent interfaces; 
  	 * you should derive from it if you want to write 'plugin' for your database
 	 */
-	class dbInterface
+	class dbInterface : public dbSqlBase
 	{
+		private:
+			
+			/**
+			 * constructor
+			 * to prevent from copying
+			 */			
+			dbInterface(dbInterface &a_pp);
+		
 		public:
 		
-			dbInterface() : connected(false) {}
+			dbInterface();
 		
 			/**
 			 * destructor
 			 */
-			virtual ~dbInterface(){}
+			virtual ~dbInterface();
 		
 			/**
 			 * connect to database
@@ -56,47 +63,47 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect() const = 0;
+							connect() const;
 			
 			/**
 			 * disconnect from database
 			 */
-			virtual void disconnect() const = 0;
+			virtual void disconnect() const;
 			
 			/**
 			 * @return amount of affected rows(update,delete...)
 			 */
-			virtual unsigned int affectedRowsCount() = 0;
+			virtual unsigned int affectedRowsCount();
 			
 			/**
 			 * @return amount of rows got from request(select ...)
 			 */
-			virtual unsigned int rowsCount() const = 0;				
+			virtual unsigned int rowsCount() const;				
 			
 			/**
 			 * @return amount of fields got from request(select ...)
 			 */
-			virtual unsigned int fieldsCount() const = 0;
+			virtual unsigned int fieldsCount() const;
 			
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual std::vector<stringArr> fetchRow() const = 0;
+			virtual std::vector<stringArr> fetchRow() const;
 			
 			/**
 			 * @return array of fields got from request
 			 */
-			virtual stringArr fetchField() const = 0;
+			virtual stringArr fetchField() const;
 			
 			/**
 			 * @return structure that holds array of rows and array of fields got from request
 			 */
-			virtual __dbStorage fetch() const = 0;
+			virtual __dbStorage fetch() const;
 			
 			/**
 			 * @return array that holds assoc array['fiels'=>'value'] got from request
 			 */
-			virtual dodoStringMapArr fetchAssoc() const = 0;
+			virtual dodoStringMapArr fetchAssoc() const;
 
 			/**
 			 * executes collected request
@@ -106,12 +113,8 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							exec() const = 0;
-
-			mutable std::vector<stringArr> rows;///< to store rows
-			mutable stringArr fields;///< to store fields
-			mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
-		
+							exec() const;
+									
 		protected:
 		
 			mutable bool connected;///< connected or not
