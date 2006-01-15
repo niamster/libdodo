@@ -307,16 +307,16 @@
 		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 		{		
 			length = mysql_fetch_lengths(mysqlRes);
-			fields.clear();
-			fields.reserve(numFields);
+			rowsPart.clear();
+			rowsPart.reserve(numFields);
 			
 			for (j=0;j<numFields;j++)
 			{
 				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
-				fields.push_back(rowPart);
+				rowsPart.push_back(rowPart);
 			}
 			
-			rows.push_back(fields);
+			rows.push_back(rowsPart);
 		}
 
 		#ifndef DBMYSQL_WO_XEXEC

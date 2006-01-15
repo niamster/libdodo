@@ -195,21 +195,21 @@
 
 		for (register int i(0);i<rowsNum;++i)
 		{
-			fields.clear();
-			fields.reserve(fieldsNum);
+			rowsPart.clear();
+			rowsPart.reserve(fieldsNum);
 			
 			for (j=0;j<fieldsNum;++j)
 			{
 				temp = PQgetvalue(pgResult,i,j);
 				if (temp!=NULL)
-					temp1.assign(temp,PQgetlength(pgResult,i,j));
+					rowPart.assign(temp,PQgetlength(pgResult,i,j));
 				else
-					temp1.assign("NULL");
+					rowPart.assign("NULL");
 
-				fields.push_back(temp1);
+				rowsPart.push_back(rowPart);
 			}
 			
-			rows.push_back(fields);
+			rows.push_back(rowsPart);
 		}
 
 		#ifndef DBPOSTGRESQL_WO_XEXEC

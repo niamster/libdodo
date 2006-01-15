@@ -217,7 +217,8 @@
 				
 				mutable char *temp;///< temp storage for data
 				
-				mutable std::string temp1;///< temp storage for data
+				mutable std::string rowPart;///< temp storage for data
+				mutable stringArr rowsPart;///< to store rows
 		};
 		
 	};

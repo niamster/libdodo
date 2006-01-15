@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 			arr["operation"] = "mu";
 			pp.exec();
 		}
-
+		
 		pp.select("leg",select,"operation='um'");cout << pp.queryCollect() << endl;
 		pp.exec();
 		
