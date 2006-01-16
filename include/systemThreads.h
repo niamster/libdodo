@@ -32,7 +32,6 @@
 
 #include <signal.h>
 #include <pthread.h>
-#include <vector>
 
 namespace dodo
 {
@@ -303,7 +302,7 @@ namespace dodo
 			 * @return true if thread is running
 			 * @param position indicates for what thread to indicate
 			 */
-			virtual bool _isRunning(std::vector<__threadInfo>::iterator &position);
+			virtual bool _isRunning(std::list<__threadInfo>::iterator &position);
 			
 			/**
 			 * searches threads by position
@@ -313,14 +312,14 @@ namespace dodo
 			 */
 			virtual bool getThread(unsigned long position);
 						
-			std::vector<__threadInfo> threads;///< vector of threads
+			std::list<__threadInfo> threads;///< vector of threads
 			__threadInfo thread;///< temp storage for thread
 			unsigned long threadNum;///< number of registered threads
 			pthread_attr_t attr;///< attribute that indicates joinability
 
-			std::vector<__threadInfo>::iterator i;///< iterator for list of threads
-			std::vector<__threadInfo>::iterator j;///< iterator for list of threads
-			std::vector<__threadInfo>::iterator k;///< iterator for list of threads[for matched]
+			std::list<__threadInfo>::iterator i;///< iterator for list of threads
+			std::list<__threadInfo>::iterator j;///< iterator for list of threads
+			std::list<__threadInfo>::iterator k;///< iterator for list of threads[for matched]
 	};
 
 };

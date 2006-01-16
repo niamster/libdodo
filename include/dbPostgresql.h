@@ -139,7 +139,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec() const;
+								exec(const std::string &query = __string__) const;
 				
 				#ifndef DBPOSTGRESQL_WO_XEXEC
 				
@@ -192,9 +192,22 @@
 					#endif
 				
 				#endif
-
-				mutable int rowsNum;///< number of columns in the query result
-				mutable int fieldsNum;///< number of fields in the query result
+				
+				/**
+				 * sets sessions charset
+				 * @param charset indicates what type of charset would be used for session
+				 */
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif				 
+								setCharset(const std::string &charset);
+				 
+				/**
+				 * @return current session charset
+				 */ 
+				virtual std::string getCharset() const;
 				 
 			protected:
 			
@@ -208,9 +221,12 @@
 				#else
 					virtual bool 
 				#endif
-								_exec() const;
+								_exec(const std::string &query) const;
 				
 			private:
+				
+				mutable int rowsNum;///< number of columns in the query result
+				mutable int fieldsNum;///< number of fields in the query result
 					
 				mutable bool empty;///< for detectin' whether pgResult is empty or not
 	

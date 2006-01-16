@@ -574,7 +574,7 @@ systemThreads::isRunning(unsigned long position)
 //-------------------------------------------------------------------
 
 bool 
-systemThreads::_isRunning(std::vector<__threadInfo>::iterator &position)
+systemThreads::_isRunning(std::list<__threadInfo>::iterator &position)
 {
 	if (!position->isRunning)
 		return false;

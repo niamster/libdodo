@@ -61,6 +61,8 @@ __tableInfo::operator=(__tableInfo &from)
 {
 	name = from.name;
 	
+	fields.clear();
+	
 	std::vector<__fieldInfo>::iterator j = from.fields.end();
 	for (std::vector<__fieldInfo>::iterator i=from.fields.begin();i!=j;++i)
 		fields.push_back(*i);
@@ -223,7 +225,7 @@ dbBase::insert(const std::string &a_table,
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 	
-	stringArr temp;
+	temp.clear();
 	
 	for (;i!=j;++i)
 	{
@@ -245,7 +247,8 @@ dbBase::insert(const std::string &a_table,
 	
 	pre_table = a_table;
 	
-	std::vector<assocArr>::const_iterator v(a_fields.begin()),b(a_fields.end());
+	v = a_fields.begin();
+	b = a_fields.end();
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
@@ -254,7 +257,7 @@ dbBase::insert(const std::string &a_table,
 	for (i=v->begin();i!=j;++i)
 		pre_fieldsNames.push_back(i->first);
 
-	stringArr temp;
+	temp.clear();
 	
 	for (;v!=b;++v)
 	{
@@ -262,6 +265,7 @@ dbBase::insert(const std::string &a_table,
 		temp.clear();
 		for (i=v->begin();i!=j;++i)
 			temp.push_back(i->second);
+			
 		pre_fieldsVal.push_back(temp);	
 	}
 
@@ -279,6 +283,9 @@ dbBase::insert(const std::string &a_table,
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
+	
+	pre_fieldsVal.clear();
+	
 	pre_fieldsVal.push_back(a_fieldsVal);
 	
 	show = false;	
@@ -320,6 +327,9 @@ dbBase::insertSelect(const std::string &a_tableTo,
 	pre_tableTo = a_tableTo;
 	pre_table = a_tableFrom;
 	pre_fieldsNames = a_fieldsNamesTo;
+	
+	pre_fieldsVal.clear();
+	
 	pre_fieldsVal.push_back(a_fieldsNamesFrom);
 	
 	if (a_where.size() != 0)
@@ -347,7 +357,7 @@ dbBase::update(const std::string &a_table,
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 	
-	stringArr temp;
+	temp.clear();
 	
 	for (;i!=j;++i)
 	{
@@ -377,6 +387,9 @@ dbBase::update(const std::string &a_table,
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
+	
+	pre_fieldsVal.clear();
+	
 	pre_fieldsVal.push_back(a_fieldsVal);	
 
 	if (a_where.size() != 0)

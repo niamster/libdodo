@@ -61,19 +61,16 @@ namespace dodo
 	/**
 	 * diferent predifined constants
 	 */
-	static short size_of_char = sizeof(char);
-
-	static short size_of_pointer = sizeof(void *);
-	
-	static short size_of_int = sizeof(int);
-	
-	static short size_of_long = sizeof(long);
 
 	static const std::string __string__ = "";
-	
+
 	static stringArr __stringarray__;
-	
+
 	static assocArr __assocarray__;
+
+	static std::vector<stringArr> __stringarrayvector__;
+
+	static dodoStringMapArr __dodostringmap__;
 
 };
 

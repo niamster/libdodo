@@ -249,9 +249,12 @@
 	#else
 		bool
 	#endif
-	dbMysql::_exec() const
+	dbMysql::_exec(const std::string &query) const
 	{	
-		queryCollect();
+		if (query.size()==0)
+			queryCollect();			
+		else
+			request = query;
 
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
 		{
@@ -295,14 +298,13 @@
 	std::vector<stringArr>
 	dbMysql::fetchRow() const
 	{
-			
 		#ifndef DBMYSQL_WO_XEXEC
 			operType = DBMYSQL_OPER_FETCHROW;
 			performXExec(preExec);
 		#endif		
 			
 		if (empty || !show)
-			return std::vector<stringArr>();
+			return __stringarrayvector__;
 		
 		numFields = mysql_num_fields(mysqlRes);	
 		
@@ -314,6 +316,7 @@
 		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 		{		
 			length = mysql_fetch_lengths(mysqlRes);
+			
 			rowsPart.clear();
 			rowsPart.reserve(numFields);
 			
@@ -411,7 +414,7 @@
 	#else
 		bool
 	#endif
-	dbMysql::exec() const
+	dbMysql::exec(const std::string &query) const
 	{
 		#ifndef DBMYSQL_WO_XEXEC
 			operType = DBMYSQL_OPER_EXEC;
@@ -421,7 +424,7 @@
 		#ifdef NO_EX
 			bool result = 
 		#endif	
-			_exec(); 
+			_exec(query); 
 		
 		#ifndef DBMYSQL_WO_XEXEC		
 			performXExec(postExec);
@@ -522,25 +525,24 @@
 	dbMysql::fetchAssoc() const
 	{
 		if (empty || !show)
-			return dodoStringMapArr();
+			return __dodostringmap__;
 		
 		numFields = mysql_num_fields(mysqlRes);	
 		mysqlFields = mysql_fetch_fields(mysqlRes);
 
 		rowsFields.reserve(mysql_num_rows(mysqlRes));
 		
+		rowFieldsPart.clear();
+
 		register unsigned long *length, j;
 		
 		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 		{		
 			length = mysql_fetch_lengths(mysqlRes);
 			
-			rowFieldsPart.clear();
-			
 			for (j=0;j<numFields;j++)
 			{
-				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
-				
+				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);			
 				rowFieldsPart.realArr[mysqlFields[j].name] = rowPart;
 			}
 			

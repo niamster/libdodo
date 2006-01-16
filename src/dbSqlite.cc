@@ -121,9 +121,12 @@
 	#else
 		bool
 	#endif
-	dbSqlite::_exec() const
+	dbSqlite::_exec(const std::string &query) const
 	{	
-		queryCollect();			
+		if (query.size()==0)
+			queryCollect();			
+		else
+			request = query;
 
 		callBackData.data = (dbSqlite *)this;
 		callBackData.first = true;
@@ -156,7 +159,7 @@
 		#endif		
 			
 		if (!show)
-			return std::vector<stringArr>();
+			return __stringarrayvector__;
 
 		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
@@ -234,7 +237,7 @@
 	#else
 		bool
 	#endif
-	dbSqlite::exec() const
+	dbSqlite::exec(const std::string &query) const
 	{
 		#ifndef DBSQLITE_WO_XEXEC
 			operType = DBSQLITE_OPER_EXEC;
@@ -244,7 +247,7 @@
 		#ifdef NO_EX
 			bool result = 
 		#endif	
-			_exec(); 
+			_exec(query); 
 		
 		#ifndef DBSQLITE_WO_XEXEC		
 			performXExec(postExec);
@@ -354,18 +357,16 @@
 	dbSqlite::fetchAssoc() const
 	{
 		if (!show)
-			return dodoStringMapArr();
+			return __dodostringmap__;
 		
 		j = fields.end();
 		k = rows.begin();
 		l = rows.end();
 		
-		stringArr::const_iterator o;
+		rowFieldsPart.clear();
 		
 		for (;k!=l;++k)
 		{
-			rowFieldsPart.clear();
-			
 			for (i=fields.begin(), o=k->begin();i!=j;++i,++o)
 				rowFieldsPart.realArr[*i] = *o;
 				

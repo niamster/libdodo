@@ -263,7 +263,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec() const;
+								exec(const std::string &query = __string__) const;
 				
 				#ifndef DBMYSQL_WO_XEXEC
 				
@@ -346,7 +346,7 @@
 				#else
 					virtual bool 
 				#endif
-								_exec() const;		
+								_exec(const std::string &query) const;		
 				
 				/**
 				 * inits addidtional mySQL specific statements

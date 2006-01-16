@@ -113,7 +113,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							exec() const;
+							exec(const std::string &query = __string__) const;
 									
 		protected:
 		

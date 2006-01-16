@@ -86,7 +86,7 @@ xexec::~xexec()
 //-------------------------------------------------------------------
 
 int 
-xexec::addXExec(std::vector<__execItem> &list, 
+xexec::addXExec(std::list<__execItem> &list, 
 		inExec func,
  		void *obj, 
  		xexecObjTypeEnum type,
@@ -111,7 +111,7 @@ xexec::addXExec(std::vector<__execItem> &list,
 //-------------------------------------------------------------------
 
 void 
-xexec::setStatXExec(std::vector<__execItem> &list, 
+xexec::setStatXExec(std::list<__execItem> &list, 
 		int position,
 		bool stat) const
 {
@@ -122,7 +122,7 @@ xexec::setStatXExec(std::vector<__execItem> &list,
 //-------------------------------------------------------------------
 
 void 
-xexec::delXExec(std::vector<__execItem> &list, 
+xexec::delXExec(std::list<__execItem> &list, 
 				int position) const
 {	
 	if (getXexec(list,position))
@@ -294,7 +294,7 @@ xexec::replacePreExec(int position,
 //-------------------------------------------------------------------
 
 bool 
-xexec::replaceXExec(std::vector<__execItem> &list, 
+xexec::replaceXExec(std::list<__execItem> &list, 
 			int position, 
 			inExec func,
 			void *data) const
@@ -374,7 +374,7 @@ xexec::performXExec(__execItemList &list) const
 	//-------------------------------------------------------------------
 
 	int 
-	xexec::addXExecModule(std::vector<__execItem> &list, 
+	xexec::addXExecModule(std::list<__execItem> &list, 
 					void *obj,  
  					xexecObjTypeEnum type,
 					const std::string &module, 
@@ -554,7 +554,7 @@ xexec::performXExec(__execItemList &list) const
 //-------------------------------------------------------------------
 
 bool 
-xexec::getXexec(std::vector<__execItem> &list, 
+xexec::getXexec(std::list<__execItem> &list, 
 				int position) const
 {
 	i = list.begin();

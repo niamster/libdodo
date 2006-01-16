@@ -734,7 +734,9 @@ namespace dodo
 			mutable assocArr::const_iterator j;///< iterator for "hash"
 			mutable std::vector<stringArr>::const_iterator k;///< iterator for array of hashes
 			mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes
-			
+			std::vector<assocArr>::const_iterator v;///< iterator for array of hashes
+			std::vector<assocArr>::const_iterator b;///< iterator for array of hashes
+			stringArr temp;///< temp storage
 	};
 
 };

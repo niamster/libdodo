@@ -123,7 +123,7 @@ flushSocketOptions::setInBufferSize(int bytes)
 	
 	inSocketBuffer = bytes;
 	
-	if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&inSocketBuffer,size_of_long)==-1)
+	if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&inSocketBuffer,sizeof(long))==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETINBUFFERSIZE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -161,7 +161,7 @@ flushSocketOptions::setOutBufferSize(int bytes)
 	
 	outSocketBuffer = bytes;
 	
-	if (setsockopt(socket,SOL_SOCKET,SO_SNDBUF,&outSocketBuffer,size_of_long)==-1)
+	if (setsockopt(socket,SOL_SOCKET,SO_SNDBUF,&outSocketBuffer,sizeof(long))==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -331,7 +331,7 @@ flushSocketOptions::setSockOption(socketOptionsEnum option,
 			#endif	
 	}
 	
-	if (setsockopt(socket,SOL_SOCKET,real_option,&sockFlag,size_of_int)==-1)
+	if (setsockopt(socket,SOL_SOCKET,real_option,&sockFlag,sizeof(int))==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETSOCKOPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else

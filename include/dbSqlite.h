@@ -150,7 +150,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec() const;
+								exec(const std::string &query = __string__) const;
 				
 				#ifndef DBSQLITE_WO_XEXEC
 				
@@ -219,7 +219,7 @@
 				#else
 					virtual bool 
 				#endif
-								_exec() const;
+								_exec(const std::string &query) const;
 					
 			private:
 				
@@ -237,6 +237,7 @@
 				 */
 				mutable stringArr::const_iterator i;///< iterator for "hash"
 				mutable stringArr::const_iterator j;///< iterator for "hash"
+				mutable stringArr::const_iterator o;///< iterator for "hash"
 				mutable std::vector<stringArr>::const_iterator k;///< iterator for array of hashes
 				mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes				
 		};

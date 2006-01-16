@@ -181,7 +181,7 @@ cgiTools::printHeaders() const
 		
 	if (cookiesSet.size()>0)
 	{
-		std::vector<__cookies>::iterator i(cookiesSet.begin()),j(cookiesSet.end());
+		std::list<__cookies>::iterator i(cookiesSet.begin()),j(cookiesSet.end());
 		for (;i!=j;++i)
 		{
 			std::cout << "Set-Cookie: ";

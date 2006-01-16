@@ -124,13 +124,13 @@ namespace dodo
 			 */
 			virtual bool getShared(int position);
 			
-			std::vector<__shareInfo> shareds;///< vector of threads
+			std::list<__shareInfo> shareds;///< vector of threads
 			__shareInfo shared;///< temp storage for thread
 			int sharedNum;///< number of registered threads			
 						
-			std::vector<__shareInfo>::iterator l;///< iterator for list of shared data
-			std::vector<__shareInfo>::iterator m;///< iterator for list of shared data
-			std::vector<__shareInfo>::iterator n;///< iterator for list of shared data[for matched]
+			std::list<__shareInfo>::iterator l;///< iterator for list of shared data
+			std::list<__shareInfo>::iterator m;///< iterator for list of shared data
+			std::list<__shareInfo>::iterator n;///< iterator for list of shared data[for matched]
 	};
 
 };

@@ -295,7 +295,7 @@ namespace dodo
 		
 		private:	
 		
-			mutable std::vector<__cookies> cookiesSet;///< array of cookies nodes
+			mutable std::list<__cookies> cookiesSet;///< array of cookies nodes
 			mutable int method;///< method that recieved program
 			mutable std::map<std::string, __cgiFilesUp> postFiles;///< array of POST files, if one or more files were uploaded
 		

@@ -79,6 +79,8 @@ namespace dodo
 			mutable stringArr fields;///< to store fields
 			mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
 			
+			mutable std::string request;///< ready sql statement
+						
 		protected:		
 		
 			/**
@@ -208,8 +210,6 @@ namespace dodo
 			 * @param frame is value with what values will be framed
 			 */
 			virtual std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &frame="'") const;
-			
-			mutable std::string request;///< ready sql statement
 			
 			mutable std::string auto_increment;///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
 		

@@ -129,9 +129,12 @@
 	#else
 		bool
 	#endif
-	dbPostgresql::_exec() const
+	dbPostgresql::_exec(const std::string &query) const
 	{	
-		queryCollect();
+		if (query.size()==0)
+			queryCollect();			
+		else
+			request = query;
 
 		if (!empty)
 		{
@@ -182,7 +185,7 @@
 		#endif		
 			
 		if (empty || !show)
-			return std::vector<stringArr>();
+			return __stringarrayvector__;
 		
 		rowsNum = PQntuples(pgResult);
 		fieldsNum = PQnfields(pgResult);
@@ -294,7 +297,7 @@
 	#else
 		bool
 	#endif
-	dbPostgresql::exec() const
+	dbPostgresql::exec(const std::string &query) const
 	{
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 			operType = DBPOSTGRESQL_OPER_EXEC;
@@ -304,7 +307,7 @@
 		#ifdef NO_EX
 			bool result = 
 		#endif	
-			_exec(); 
+			_exec(query); 
 		
 		#ifndef DBPOSTGRESQL_WO_XEXEC		
 			performXExec(postExec);
@@ -381,7 +384,7 @@
 	dbPostgresql::fetchAssoc() const
 	{
 		if (empty || !show)
-			return dodoStringMapArr();
+			return __dodostringmap__;
 		
 		rowsNum = PQntuples(pgResult);
 		fieldsNum = PQnfields(pgResult);
@@ -389,12 +392,12 @@
 		rowsFields.clear();
 		rowsFields.reserve(rowsNum);
 		
+		rowFieldsPart.clear();
+		
 		register int j;
 
 		for (register int i(0);i<rowsNum;++i)
 		{
-			rowFieldsPart.clear();
-			
 			for (j=0;j<fieldsNum;++j)
 			{
 				if (PQgetisnull(pgResult,i,j)==1)
@@ -413,4 +416,29 @@
 
 	//-------------------------------------------------------------------
 	
+	#ifndef NO_EX
+		void 
+	#else
+		bool
+	#endif 
+	dbPostgresql::setCharset(const std::string &charset)
+	{
+		if (PQsetClientEncoding(conn, charset.c_str())==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_SETCHARSET,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif		
+	}
+	
+	//-------------------------------------------------------------------
+	
+	std::string 
+	dbPostgresql::getCharset() const
+	{
+		return pg_encoding_to_char(PQclientEncoding(conn));
+	}
+
+	//-------------------------------------------------------------------
+		
 #endif

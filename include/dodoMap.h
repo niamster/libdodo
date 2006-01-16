@@ -41,6 +41,12 @@ namespace dodo
 						
 			public:
 			
+				/**
+				 * copy constructor
+				 */
+				__dodoMap(const __dodoMap &dodoM) : icase(dodoM.icase), realArr(dodoM.realArr)
+				{
+				}
 			
 				/**
 				 * constructor
