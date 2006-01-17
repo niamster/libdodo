@@ -50,15 +50,16 @@ int main(int argc, char **argv)
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
 		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;*/
 		
-		//cout << tools::parseURL("http://hoho:hihi@niam").password << endl;
-		//cout << tools::parseURL("http://hoho:hihi@niam").login << endl;
-		//cout << tools::parseURL("hoho@niam").login << endl;
-		//cout << tools::parseURL("ftp://hoho:hihi@niam").protocol << endl;
+/*		string tt = "ftp://hihi:hoho@niam.mu:32/init.cgi?gonivo=true&work=true";
+
+		cout << tools::parseURL(tt).host << endl;
+		cout << tools::parseURL(tt).login << endl;
+		cout << tools::parseURL(tt).password << endl;
+		cout << tools::parseURL(tt).path << endl;
+		cout << tools::parseURL(tt).port << endl;
+		cout << tools::parseURL(tt).protocol << endl;
+		cout << tools::parseURL(tt).request << endl;*/
 		
-//		cout << tools::parseURL("ftp://hoho:hihi@niam").host << endl;
-cout << tools::parseURL("ftp://:hihi@niam").login << endl;
-cout << tools::parseURL("ftp://:hihi@niam").password << endl;
-		//cout << tools::parseURL("ftp://niam").host << endl;
 			
 	}
     catch(baseEx ex)
