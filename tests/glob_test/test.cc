@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	
 		//cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
 		
-		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
+		/*cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
 		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
 		
 		cout << "real size of test is : " << flushDiskTools::getSize("test") << endl;
@@ -48,7 +48,17 @@ int main(int argc, char **argv)
 		
 		cout << tools::encodeBase64("HEY, that's working!") << endl;
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
-		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;
+		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;*/
+		
+		//cout << tools::parseURL("http://hoho:hihi@niam").password << endl;
+		//cout << tools::parseURL("http://hoho:hihi@niam").login << endl;
+		//cout << tools::parseURL("hoho@niam").login << endl;
+		//cout << tools::parseURL("ftp://hoho:hihi@niam").protocol << endl;
+		
+//		cout << tools::parseURL("ftp://hoho:hihi@niam").host << endl;
+cout << tools::parseURL("ftp://:hihi@niam").login << endl;
+cout << tools::parseURL("ftp://:hihi@niam").password << endl;
+		//cout << tools::parseURL("ftp://niam").host << endl;
 			
 	}
     catch(baseEx ex)

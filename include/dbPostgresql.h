@@ -207,7 +207,7 @@
 				/**
 				 * @return current session charset
 				 */ 
-				virtual std::string getCharset() const;
+				virtual int getCharset() const;
 				 
 			protected:
 			

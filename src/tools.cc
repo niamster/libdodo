@@ -1160,3 +1160,94 @@ tools::decodeBase64(const std::string &string)
 }
 
 //-------------------------------------------------------------------
+
+__url 
+tools::parseURL(const std::string &url)
+{
+	register unsigned int left(url.size()), length(url.size()), begin(0), pos, pos1;
+	
+	bool got[] = {false,//protocol
+					false,//host
+					false,//port
+					false,//path
+					false};//request
+	
+	__url temp;
+	
+	if ((pos = url.find("://",0)) != std::string::npos)
+	{
+		temp.protocol = url.substr(0,pos);
+		
+		begin = pos+3;
+	}
+	
+	if ((pos = url.find('@',begin)) != std::string::npos)
+	{
+		if ((pos1 = url.find(':',begin)) < pos)
+		{
+			temp.login = url.substr(begin,pos1-begin);
+			
+			++pos1;
+			
+			temp.password = url.substr(pos1,pos - pos1);
+		}
+		else	
+			temp.login = url.substr(begin,pos-begin);
+			
+	}
+	
+/*	for (register unsigned int j(0);j<length;++j,--left)
+	{
+		if (!got[0] && url[j] == ':' && left > 2)
+		{
+			if (url[j+1] == '/' && url[j+2] == '/')
+			{
+				temp.protocol = url.substr(begin,j-begin);
+				
+				got[0] = true;
+				j += 2;
+				left -= 2;
+				begin = j + 1;
+			}
+		}
+		else
+		{
+			if (!got[1] && !got[2] && url[j] == ':' && (pos = url.find('@',j)) != std::string::npos)
+			{
+				temp.login = url.substr(begin,j-begin);
+				
+				pos -= ++j;
+				
+				temp.password = url.substr(j,pos);
+				
+				got[0] = got[1] = got[2] = true;
+				begin = j += pos-1;
+				left -= pos;
+			}
+			else
+			{
+				if (!got[1] && url[j] == '@')
+				{
+					temp.login = url.substr(begin,j-begin);
+					
+					got[0] = got[1] = got[2] = true;
+					begin = ++j;
+					--left;
+				}
+				else
+				{
+					if (!got[3] && (pos = url.find(':',j)) == std::string::npos && (pos = url.find('/',j)) == std::string::npos)
+					{
+						temp.host = url.substr(begin);
+						break;
+					}
+				}
+			}
+		}
+		
+	}*/
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------

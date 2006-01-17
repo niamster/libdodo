@@ -72,6 +72,20 @@ namespace dodo
 	 	};
 	 
 	 #endif		
+	
+	/**
+	 * @struct __url describes info that could be retrieved from URL
+	 */
+	struct __url
+	{
+		std::string protocol;
+		std::string host;
+		std::string path;
+		std::string request;
+		std::string login;
+		std::string password;
+		std::string port;
+	};
 		
 	/**
 	 * @class tools present different usefull functions
@@ -357,6 +371,12 @@ namespace dodo
 			 * @param string is data to decode
 			 */
 			static std::string decodeBase64(const std::string &string);
+			
+			/**
+			 * @return struct that contains parts of URL
+			 * @param url describes URL to parse
+			 */
+			static __url parseURL(const std::string &url);
 									
 		private:
 			

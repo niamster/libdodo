@@ -433,10 +433,10 @@
 	
 	//-------------------------------------------------------------------
 	
-	std::string 
+	int 
 	dbPostgresql::getCharset() const
 	{
-		return pg_encoding_to_char(PQclientEncoding(conn));
+		return PQclientEncoding(conn);
 	}
 
 	//-------------------------------------------------------------------
