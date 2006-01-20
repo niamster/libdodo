@@ -282,7 +282,7 @@ namespace dodo
 			 */
 			mutable unsigned long iter;///< amount of iterations to do to operate with data
 			mutable unsigned long rest;///< amount of data that is needed to operate at last
-			mutable unsigned long sent_recieved;///< amount of data that totally received/sent
+			mutable unsigned long sent_received;///< amount of data that totally received/sent
 		
 	};
 

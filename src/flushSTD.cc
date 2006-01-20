@@ -121,11 +121,11 @@ flushSTD::read(char * const a_void) const
 	iter = inSize/inSTDBuffer;
 	rest = inSize%inSTDBuffer;
 	
-	sent_recieved = 0;
+	sent_received = 0;
 	
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		if (fread(a_void+sent_recieved,inSTDBuffer,1,stdin)==0)
+		if (fread(a_void+sent_received,inSTDBuffer,1,stdin)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -148,11 +148,11 @@ flushSTD::read(char * const a_void) const
 				}
 			#endif
 			
-		sent_recieved += inSTDBuffer;
+		sent_received += inSTDBuffer;
 	}
 	
 	if (rest>0)
-		if (fread(a_void+sent_recieved,rest,1,stdin)==0)
+		if (fread(a_void+sent_received,rest,1,stdin)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -243,7 +243,7 @@ flushSTD::write(const char *const aa_buf)
 	iter = outSize/outSTDBuffer;
 	rest = outSize%outSTDBuffer;
 	
-	sent_recieved = 0;
+	sent_received = 0;
 	
 	desc = stdout;
 	if (err)
@@ -251,7 +251,7 @@ flushSTD::write(const char *const aa_buf)
 	
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		if (fwrite(buffer.c_str()+sent_recieved,outSTDBuffer,1,desc)==0)
+		if (fwrite(buffer.c_str()+sent_received,outSTDBuffer,1,desc)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -274,11 +274,11 @@ flushSTD::write(const char *const aa_buf)
 				}
 			#endif
 			
-		sent_recieved += outSTDBuffer;
+		sent_received += outSTDBuffer;
 	}
 
 	if (rest>0)
-		if (fwrite(buffer.c_str()+sent_recieved,rest,1,desc)==0)
+		if (fwrite(buffer.c_str()+sent_received,rest,1,desc)==0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -578,7 +578,7 @@ flushSTD::writeStream(const char *const aa_buf)
 	iter = outSize/outSTDBuffer;
 	rest = outSize%outSTDBuffer;
 	
-	sent_recieved = 0;
+	sent_received = 0;
 	
 	desc = stdout;
 	if (err)
@@ -588,7 +588,7 @@ flushSTD::writeStream(const char *const aa_buf)
 	
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		strncpy(buff,buffer.c_str()+sent_recieved,outSTDBuffer);
+		strncpy(buff,buffer.c_str()+sent_received,outSTDBuffer);
 		buff[outSTDBuffer] = '\0';
 		
 		if (fputs(buff,desc)==0)
@@ -616,12 +616,12 @@ flushSTD::writeStream(const char *const aa_buf)
 				}
 			#endif
 			
-		sent_recieved += outSTDBuffer;
+		sent_received += outSTDBuffer;
 	}
 
 	if (rest>0)
 	{		
-		strncpy(buff,buffer.c_str()+sent_recieved,rest);
+		strncpy(buff,buffer.c_str()+sent_received,rest);
 		buff[rest] = '\0';
 		
 		if (fputs(buff,desc)==0)

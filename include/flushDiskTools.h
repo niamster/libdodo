@@ -43,7 +43,7 @@
 namespace dodo
 {	
 	/**
-	 * @enum flushDiskFileTypeEnum indicates file type; you recieve it from getFileInfo and relative methods
+	 * @enum flushDiskFileTypeEnum indicates file type; you receive it from getFileInfo and relative methods
 	 */
 	enum flushDiskToolsFileTypeEnum
 	{

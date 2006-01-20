@@ -17,7 +17,7 @@ test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
 
 module: module.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -Wall -shared -ldodo $^ -o $@ 
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -Wall -shared -ldodo -fPIC $^ -o $@ 
 	
 clean:
 	rm -rf test module

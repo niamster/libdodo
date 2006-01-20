@@ -196,7 +196,7 @@ flushSocketExchange::send(const char * const data,
 	iter = outSize/outSocketBuffer;
 	rest = outSize%outSocketBuffer;
 
-	sent_recieved = 0;
+	sent_received = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
@@ -205,9 +205,9 @@ flushSocketExchange::send(const char * const data,
 	for (register unsigned long i=0;i<iter;++i)
 	{
 		n = 0;
-		while (sent_recieved<outSize)
+		while (sent_received<outSize)
 		{
-			n = ::send(socket,buffer.c_str()+sent_recieved,inSocketBuffer,flag);
+			n = ::send(socket,buffer.c_str()+sent_received,inSocketBuffer,flag);
 			if (n==-1)
 				#ifndef NO_EX
 				{
@@ -220,16 +220,16 @@ flushSocketExchange::send(const char * const data,
 					return false;	
 				#endif
 				
-			sent_recieved += inSocketBuffer;
+			sent_received += inSocketBuffer;
 		}
 	}
 	
 	if (rest>0)
 	{
 		n = 0;
-		while (sent_recieved<rest)
+		while (sent_received<rest)
 		{
-			n = ::send(socket,buffer.c_str()+sent_recieved,rest,flag);
+			n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
 			if (n==-1)
 				#ifndef NO_EX
 				{
@@ -242,7 +242,7 @@ flushSocketExchange::send(const char * const data,
 					return false;	
 				#endif
 				
-			sent_recieved += n;
+			sent_received += n;
 		}		
 	}
 			
@@ -289,7 +289,7 @@ flushSocketExchange::receive(char * const data,
 	iter = inSize/inSocketBuffer;
 	rest = inSize%inSocketBuffer;
 
-	sent_recieved = 0;
+	sent_received = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
@@ -297,7 +297,7 @@ flushSocketExchange::receive(char * const data,
 			
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		n = ::recv(socket,data+sent_recieved,inSocketBuffer,flag);
+		n = ::recv(socket,data+sent_received,inSocketBuffer,flag);
 		if (n==-1)
 			#ifndef NO_EX
 			{
@@ -310,11 +310,11 @@ flushSocketExchange::receive(char * const data,
 				return false;	
 			#endif
 			
-		sent_recieved += n;
+		sent_received += n;
 	}
 	
 	if (rest>0)
-		if (::recv(socket,data+sent_recieved,rest,flag)==-1)
+		if (::recv(socket,data+sent_received,rest,flag)==-1)
 			#ifndef NO_EX
 			{
 				if (errno == EINVAL || errno == EWOULDBLOCK)
@@ -445,7 +445,7 @@ flushSocketExchange::sendStream(const char * const data,
 	iter = outSize/outSocketBuffer;
 	rest = outSize%outSocketBuffer;
 
-	sent_recieved = 0;
+	sent_received = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
@@ -454,9 +454,9 @@ flushSocketExchange::sendStream(const char * const data,
 	for (register unsigned long i=0;i<iter;++i)
 	{
 		n = 0;
-		while (sent_recieved<outSize)
+		while (sent_received<outSize)
 		{
-			n = ::send(socket,buffer.c_str()+sent_recieved,inSocketBuffer,flag);
+			n = ::send(socket,buffer.c_str()+sent_received,inSocketBuffer,flag);
 			if (n==-1)
 				#ifndef NO_EX
 				{
@@ -469,16 +469,16 @@ flushSocketExchange::sendStream(const char * const data,
 					return false;	
 				#endif
 				
-			sent_recieved += inSocketBuffer;
+			sent_received += inSocketBuffer;
 		}
 	}
 	
 	if (rest>0)
 	{
 		n = 0;
-		while (sent_recieved<rest)
+		while (sent_received<rest)
 		{
-			n = ::send(socket,buffer.c_str()+sent_recieved,rest,flag);
+			n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
 			if (n==-1)
 				#ifndef NO_EX
 				{
@@ -491,7 +491,7 @@ flushSocketExchange::sendStream(const char * const data,
 					return false;	
 				#endif
 				
-			sent_recieved += n;
+			sent_received += n;
 		}		
 	}
 			
