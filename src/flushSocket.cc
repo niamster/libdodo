@@ -49,7 +49,10 @@ flushSocket::~flushSocket()
 {
 	if (server && type==TRANSFER_TYPE_STREAM)
 		if (opened)
-			_close(socket);
+		{
+			::shutdown(socket,SHUT_RDWR);		
+			::close(socket);
+		}
 	
 	if (server && unixSock.size()!=0)
 		flushDiskTools::unlink(unixSock);

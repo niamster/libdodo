@@ -92,18 +92,11 @@ systemThreads::~systemThreads()
 		switch (i->action)
 		{
 			case THREAD_KEEP_ALIVE:
-				if (pthread_detach(i->thread)!=0)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#endif
+				pthread_detach(i->thread);
 				break;
 				
 			case THREAD_STOP:
-				if (pthread_cancel(i->thread)!=0)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#endif
-				
+				pthread_cancel(i->thread);
 				#ifdef DL_EXT
 				
 					if (i->handle != NULL)
@@ -112,10 +105,7 @@ systemThreads::~systemThreads()
 						if (deinit != NULL)
 							deinit();
 						
-						if (dlclose(i->handle)!=0)
-							#ifndef NO_EX
-								throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-							#endif							
+						dlclose(i->handle);						
 					}
 					
 				#endif
@@ -123,10 +113,7 @@ systemThreads::~systemThreads()
 			
 			case THREAD_WAIT:
 			default:
-				if (pthread_join(i->thread,NULL)!=0)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#endif
+				pthread_join(i->thread,NULL);
 				
 				#ifdef DL_EXT
 				
@@ -136,10 +123,7 @@ systemThreads::~systemThreads()
 						if (deinit != NULL)
 							deinit();
 						
-						if (dlclose(i->handle)!=0)
-							#ifndef NO_EX
-								throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-							#endif							
+						dlclose(i->handle);						
 					}
 					
 				#endif								

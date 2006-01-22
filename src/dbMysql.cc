@@ -67,7 +67,13 @@
 	
 	dbMysql::~dbMysql()
 	{
-		disconnect();
+		if (connected)
+		{
+			if (!empty)
+				mysql_free_result(mysqlRes);
+			
+	     	mysql_close(mysql);
+		}
 	}
 	
 	//-------------------------------------------------------------------

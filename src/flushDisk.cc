@@ -45,7 +45,8 @@ flushDisk::flushDisk(flushDisk &fd)
 
 flushDisk::~flushDisk()
 {
-	close();
+	if (opened)
+		fclose(file);
 }
 
 //-------------------------------------------------------------------

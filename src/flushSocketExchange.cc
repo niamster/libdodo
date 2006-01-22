@@ -81,7 +81,8 @@ flushSocketExchange::flushSocketExchange(__initialAccept &a_init)
 
 flushSocketExchange::~flushSocketExchange()
 {
-	close();
+	::shutdown(socket,SHUT_RDWR);		
+	::close(socket);
 }
 
 //-------------------------------------------------------------------

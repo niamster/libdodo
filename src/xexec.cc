@@ -54,11 +54,7 @@ xexec::~xexec()
 			if (deinit != NULL)
 				deinit();
 			
-			if (dlclose(i->handle)!=0)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_XEXEC,XEXEC_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-				#endif				
-				
+			dlclose(i->handle);	
 		}
 		
 		i = postExec.exec.begin();
@@ -73,11 +69,7 @@ xexec::~xexec()
 			if (deinit != NULL)
 				deinit();
 			
-			if (dlclose(i->handle)!=0)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_XEXEC,XEXEC_DESTRUCTOR,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
-				#endif				
-				
+			dlclose(i->handle);	
 		}
 					
 	#endif

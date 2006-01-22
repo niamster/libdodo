@@ -45,7 +45,10 @@
 	
 	dbSqlite::~dbSqlite()
 	{
-		disconnect();
+		if (connected)
+		{
+			qlite3_close(lite);
+		}
 	}
 	
 	//-------------------------------------------------------------------

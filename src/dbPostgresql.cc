@@ -42,7 +42,13 @@
 	
 	dbPostgresql::~dbPostgresql()
 	{
-		disconnect();
+		if (connected)
+		{
+			if (!empty)
+				PQclear(pgResult);
+			
+	     	PQfinish(conn);
+		}
 	}
 	
 	//-------------------------------------------------------------------
