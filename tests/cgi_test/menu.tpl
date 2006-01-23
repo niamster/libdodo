@@ -1,2 +1,3 @@
 HELLO =)
-<(include index.tpl)>rr<(include test.tpl)>
+<(include index.tpl)>
+<(include test.tpl)>

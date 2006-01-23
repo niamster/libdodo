@@ -39,12 +39,14 @@
 		enum cgiPreprocessorExR
 		{
 			CGIPREPROCESSOR_NOTCLOSEDBRACKET,
+			CGIPREPROCESSOR_NOTCLOSEDCOMMENTBRACKET,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */				
-		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Open bracket `<(` was oppened but not closed."		
+		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Open bracket `<(` was oppened but not closed."
+		#define CGIPREPROCESSOR_NOTCLOSEDCOMMENTBRACKET_STR "Comment bracket `<(*`[`*)>`] was oppened(closed) but not closed(opened)."		
 		
 		/**
 		 * ID of function where exception was thrown

@@ -41,13 +41,16 @@ cgiPreprocessor::~cgiPreprocessor()
 std::string 
 cgiPreprocessor::preProcess(const std::string &path) const
 {
-	return process(read(path), path);
+	std::vector<unsigned long> newLine;
+	
+	return process(read(path,newLine), path, newLine);
 }
 
 //-------------------------------------------------------------------
 
 std::string 
-cgiPreprocessor::read(const std::string &path) const
+cgiPreprocessor::read(const std::string &path,
+					std::vector<unsigned long> &newLinePos) const
 {
 	FILE *tpl = fopen(path.c_str(),"r");
 	if (tpl == NULL)
@@ -66,6 +69,13 @@ cgiPreprocessor::read(const std::string &path) const
 	std::string temp;
 		
 	temp.assign(stor,st.st_size);
+	newLinePos.clear();
+	
+	register long i(0);
+	for (;i<st.st_size;++i)
+		if (temp[i] == '\n')
+			newLinePos.push_back(i);
+	newLinePos.push_back(i);
 	
 	delete [] stor;
 	
@@ -76,8 +86,11 @@ cgiPreprocessor::read(const std::string &path) const
 
 std::string 
 cgiPreprocessor::process(const std::string &buffer, 
-						std::string path) const
+						std::string path,
+						const std::vector<unsigned long> &newLinePos) const
 {
+	std::vector<unsigned long> newLine;
+	
 	register unsigned long i(0), j(0), begin(0), k(0);
 	
 	std::string tpl, temp2;
@@ -87,7 +100,7 @@ cgiPreprocessor::process(const std::string &buffer,
 	{	
 		begin = j;
 		
-		i = buffer.find("<(",i);
+		i = buffer.find("<(",begin);
 		if (i == std::string::npos)
 		{
 			tpl.append(buffer.substr(begin));
@@ -98,53 +111,92 @@ cgiPreprocessor::process(const std::string &buffer,
 		
 		i += 2;
 		
+/*		if (buffer[i] == '>')
+		{
+			j = buffer.find("<)>",i);
+			
+			if (j != std::string::npos)
+			{
+				i += 1;
+				tpl.append(buffer.substr(i,j - 1 - i));
+				j += 3;
+				continue;
+			}
+		}*/
+		
+		if (buffer[i] == '*')
+		{	
+			j = buffer.find("*)>",i);
+			
+			if (j != std::string::npos)
+			{
+				j += 3;
+				continue;
+			}
+			else
+				#ifndef NO_EX
+				{
+					sprintf(message,CGIPREPROCESSOR_NOTCLOSEDCOMMENTBRACKET_STR " Line: %li File: %s",getLineNumber(newLinePos,j),path.c_str());
+					throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_NOTCLOSEDCOMMENTBRACKET,message,__LINE__,__FILE__);
+				}
+				#else
+					break;
+				#endif
+		}
+		
 		j = buffer.find(")>",i);
 		if (j == std::string::npos)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_NOTCLOSEDBRACKET,CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR,__LINE__,__FILE__);
+			{
+				sprintf(message,CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR " Line: %li File: %s",getLineNumber(newLinePos,j),path.c_str());
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_NOTCLOSEDBRACKET,message,__LINE__,__FILE__);
+			}
 			#else
 				break;
 			#endif
 		
-		if (buffer[i] == '*' && buffer[j-1] == '*')
-		{
-			j += 2;
-			continue;
-		}
-			
+		if (j > 0 && buffer[j-1] == '*')
+			#ifndef NO_EX
+			{
+				sprintf(message,CGIPREPROCESSOR_NOTCLOSEDCOMMENTBRACKET_STR " Line: %li File: %s",getLineNumber(newLinePos,j),path.c_str());
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_NOTCLOSEDCOMMENTBRACKET,message,__LINE__,__FILE__);
+			}
+			#else
+				break;
+			#endif
+							
 		temp = buffer.substr(i, j - i);
+		
+		if (temp.find("<(") != std::string::npos)
+			#ifndef NO_EX
+			{
+				sprintf(message,CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR " Line: %li File: %s",getLineNumber(newLinePos,j),path.c_str());
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_NOTCLOSEDBRACKET,message,__LINE__,__FILE__);
+			}
+			#else
+				break;
+			#endif
+					
 		j += 2;
-				
+		
 		k = temp.find("include");
 		
 		if (k != std::string::npos)
 		{
-			temp1 = tools::trim(temp.substr(k + 8)," \t\n",3);
+			temp1 = tools::trim(temp.substr(k + 8)," \t\n\"'",5);
 
-			if (temp1[0] != '$')
-				if (strcmp(temp1.c_str(),path.c_str()) != 0 && !recursive(temp1))
-				{
-					processed.push_back(path);
-					tpl.append(process(read(temp1), temp1));
-					processed.pop_back();
-				}
-		}
+			if (temp1[0] == '$')
+				temp1 = global[temp1.substr(1)];
+			
+			if (strcmp(temp1.c_str(),path.c_str()) != 0 && !recursive(temp1))
+			{
+				processed.push_back(path);
+				tpl.append(process(read(temp1, newLine), temp1, newLine));
+				processed.pop_back();
+			}
+		}				
 		else
 			tpl.append(buffer.substr(i - 2,j - i + 2));
-		/*else
-		{
-			k = temp.find("define");
-			if (k != std::string::npos)
-			{
-				temp1 = tools::lTrim(temp.substr(k + 7)," \t",2);
-				k = temp1.find(" ");
-				if (k == std::string::npos)
-					k = temp1.find("\t");
-					
-				defNames.push_back(temp1.substr(0,k));
-				defNames.push_back(tools::lTrim(temp1.substr(k)," \t",2));
-			}
-		}*/
 	}
 	
 	return tpl;
@@ -163,6 +215,32 @@ cgiPreprocessor::recursive(const std::string &path) const
 			return true;
 			
 	return false;		
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgiPreprocessor::assign(const std::string &varName, 
+						const std::string &varVal)
+{
+	global.realArr[varName] = varVal;
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+cgiPreprocessor::getLineNumber(const std::vector<unsigned long> &newLinePos, 
+								unsigned long pos) const
+{	
+	o = newLinePos.begin();
+	p = newLinePos.end();
+	
+	register unsigned long i(0);
+	for (;o!=p;++o,++i)
+		if (pos < *o)
+			return i;
+			
+	return i;	
 }
 
 //-------------------------------------------------------------------

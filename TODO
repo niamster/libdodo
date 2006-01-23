@@ -35,3 +35,18 @@
         PG_GBK,                                         /* GBK (Windows-936) */
         PG_UHC,                                         /* UHC (Windows-949) */
         PG_GB18030,                                     /* GB18030 */
+
+        
+ 
+/*		if (buffer[i] == '>')
+		{
+			j = buffer.find("<)>",i);
+			
+			if (j != std::string::npos)
+			{
+				i += 1;
+				tpl.append(buffer.substr(i,j - 1 - i));
+				j += 3;
+				continue;
+			}
+		}*/       

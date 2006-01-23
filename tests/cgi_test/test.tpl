@@ -1,6 +1,8 @@
-blabla <(include menu.tpl)> HIHI		<(include menu.tpl)> qqq <(include test.tpl)>
+blabla <(include "menu.tpl")> HIHI <(include $main)>
+
+<( not )> parsed  <)>
 
 <(* loop *)>
 <(for i in $c)>
 
-<(done)>
+<(rof)>

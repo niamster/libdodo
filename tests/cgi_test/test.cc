@@ -29,9 +29,17 @@ int main(int argc, char **argv)
 	
 	cout << "\n\n\n";
 	
-	cgiPreprocessor cgipp;
+	try
+	{
+		cgiPreprocessor cgipp;
+		cgipp.assign("main","index.tpl");
 	
-	cout << cgipp.preProcess("test.tpl");
+		cout << cgipp.preProcess("test.tpl");
+	}
+	catch(baseEx ex)
+	{
+		cout << ex;
+	}
 	
 	return 0;
 }
