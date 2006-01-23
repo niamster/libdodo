@@ -47,7 +47,7 @@
 	{
 		if (connected)
 		{
-			qlite3_close(lite);
+			sqlite3_close(lite);
 		}
 	}
 	

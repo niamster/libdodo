@@ -1,4 +1,5 @@
 #include <cgiTools.h>
+#include <cgiPreprocessor.h>
 
 using namespace dodo;
 
@@ -19,12 +20,18 @@ int main(int argc, char **argv)
 	cgi.printHeaders();
 	 
 	
-	cout << "!" << cgi.METHOD_GET["a"] << "!<br>";
+/*	cout << "!" << cgi.METHOD_GET["a"] << "!<br>";
 	cout << "!" << cgi.METHOD_POST["a"] << "!<br>";
 	cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
 	cout << "!" << cgi.ENVIRONMENT["QUERY_STRING"] << "<br>";
-	cout << "!" << cgi.COOKIES["test"] << "<br>";
+	cout << "!" << cgi.COOKIES["test"] << "<br>";*/
 	//cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
+	
+	cout << "\n\n\n";
+	
+	cgiPreprocessor cgipp;
+	
+	cout << cgipp.preProcess("test.tpl");
 	
 	return 0;
 }

@@ -97,7 +97,7 @@ tools::explode(const std::string &fields,
 	stringArr arr;
 	while (true)
 	{
-		if (limit!=-1)
+		if (limit != -1)
 		{
 			if (k>limit)
 				break;
@@ -106,7 +106,7 @@ tools::explode(const std::string &fields,
 		
 		i = fields.find(separator,i);
 		arr.push_back(escapeF(fields.substr(j,i-j)));
-		if (i==std::string::npos)
+		if (i == std::string::npos)
 			break;
 			
 		i += sep_size;
@@ -127,7 +127,7 @@ tools::replace(pchar needle,
 	while (true)
 	{
 		i = data.find(needle,i);
-		if (i==std::string::npos)
+		if (i == std::string::npos)
 			break;
 		data.replace(i,j,replacement,0,k);
 		i += k;
@@ -160,7 +160,7 @@ tools::implode(const stringArr &fields,
 	
 	for (;i!=j;++i)
 	{
-		if (limit!=-1)
+		if (limit != -1)
 		{
 			if (k>limit)
 				return temp;
@@ -208,7 +208,7 @@ tools::implode(const stringArr &fields,
 	
 	for (;i!=j;++i)
 	{
-		if (limit!=-1)
+		if (limit != -1)
 		{
 			if (k>limit)
 				return temp;
@@ -250,7 +250,7 @@ tools::lTrim(const std::string &data,
 	register int size = data.size(), i(0);
 	
 	for (;i<size;++i)
-		if (data[i]!=symbol)
+		if (data[i] != symbol)
 			break;
 	
 	return data.substr(i,size-i);		
@@ -265,7 +265,7 @@ tools::rTrim(const std::string &data,
 	register int i(data.size()-1);
 	
 	for (;i>=0;--i)
-		if (data[i]!=symbol)
+		if (data[i] != symbol)
 			break;
 	
 	return data.substr(0,i+1);	
@@ -283,7 +283,7 @@ tools::rTrim(const std::string &data,
 	for (;i>=0;--i)
 	{
 		for (j=0,empty=0;j<symCount;++j)
-			if (data[i]!=symbols[j])
+			if (data[i] != symbols[j])
 				++empty;
 		if (empty == symCount)
 			break;
@@ -304,7 +304,7 @@ tools::lTrim(const std::string &data,
 	for (;i<size;++i)
 	{
 		for (j=0,empty=0;j<symCount;++j)
-			if (data[i]!=symbols[j])
+			if (data[i] != symbols[j])
 				++empty;
 		if (empty == symCount)
 			break;

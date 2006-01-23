@@ -1,7 +1,7 @@
 
 #DEBUG:=-g
 
-CFLAGS:=-O3 -march=pentium4 -Wall -pipe -Wabi
+CFLAGS:=-O3 -march=pentium4 -Wall -pipe
 
 ##############################
 

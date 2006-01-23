@@ -28,7 +28,8 @@ OBJECTS:=dbBase.o \
 		systemThreads.o \
 		systemThreadShares.o \
 		dbPostgresql.o \
-		dbInterface.o
+		dbInterface.o \
+		cgiPreprocessor.o
 
 ###########################################################
 
