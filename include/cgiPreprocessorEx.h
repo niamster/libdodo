@@ -44,7 +44,7 @@
 		/**
 		 * libdodo defined errors' explanation
 		 */				
-		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Open bracket `<(` was oppened but not closed."
+		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Bracket was oppened(closed) but not closed(opened)."
 		
 		/**
 		 * ID of function where exception was thrown

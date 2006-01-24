@@ -66,10 +66,10 @@ cgiProcessor::process(const std::string &path)
 		if (buffer[i] == '>')
 		{
 			j = buffer.find("<)>",i);
-			
-			i -= 2;
-			j += 3;
+
+			++i;
 			tpl.append(buffer.substr(i,j - i));
+			j += 3;
 			continue;
 		}
 		
