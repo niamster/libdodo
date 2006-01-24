@@ -35,14 +35,20 @@ cgiProcessor::cgiProcessor()
 cgiProcessor::~cgiProcessor()
 {
 }
-
 //-------------------------------------------------------------------
 
 std::string 
 cgiProcessor::process(const std::string &path)
 {
-	std::string buffer = preProcess(path);
-	
+	return _process(preProcess(path), path);
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+cgiProcessor::_process(const std::string &buffer, 
+					const std::string &path)
+{
 	register unsigned long i(0), j(0), begin(0), k(0);
 	std::string temp1;
 	

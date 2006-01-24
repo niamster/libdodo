@@ -69,6 +69,13 @@ namespace dodo
 		protected:	
 			
 			/**
+			 * @return parsed template from preprocessored buffer
+			 * @param path indicates buffer where template stays
+			 * @param path indicates file where template got
+			 */		
+			virtual std::string _process(const std::string &buffer, const std::string &path);
+						
+			/**
 			 * @return true if path is in `processed` list
 			 * @param path desribes what to look up
 			 */
