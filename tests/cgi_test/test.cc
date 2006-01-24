@@ -1,5 +1,5 @@
 #include <cgiTools.h>
-#include <cgiPreprocessor.h>
+#include <cgiProcessor.h>
 
 using namespace dodo;
 
@@ -31,10 +31,10 @@ int main(int argc, char **argv)
 	
 	try
 	{
-		cgiPreprocessor cgipp;
-		cgipp.assign("main","index.tpl");
+		cgiProcessor cgip;
+		cgip.assign("main","index.tpl");
 	
-		cout << cgipp.preProcess("test.tpl");
+		cout << cgip.process("test.tpl");
 	}
 	catch(baseEx ex)
 	{

@@ -1,7 +1,7 @@
 /***************************************************************************
- *            cgiPreprocessorEx.h
+ *            cgiProcessorEx.h
  *
- * Sun Jan 22 19:05:57 2006
+ * Tue Jan 24 19:05:57 2006
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -22,8 +22,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _CGIPREPROCESSOREX_H_
-#define _CGIPREPROCESSOREX_H_
+#ifndef _CGIPROCESSOREX_H_
+#define _CGIPROCESSOREX_H_
 
 #include <directives.h>
 
@@ -36,22 +36,20 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum cgiPreprocessorExR
+		enum cgiProcessorExR
 		{
-			CGIPREPROCESSOR_NOTCLOSEDBRACKET,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */				
-		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Open bracket `<(` was oppened but not closed."
 		
 		/**
 		 * ID of function where exception was thrown
 		 */
-		enum cgiPreprocessorFunctionsID
+		enum cgiProcessorFunctionsID
 		{
-			CGIPREPROCESSOR_PROCESS,
+			CGIPROCESSOR_PROCESS,
 		};
 	};
 
