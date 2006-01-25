@@ -78,7 +78,25 @@ namespace dodo
 					
 					return type;				
 				}
-								
+				
+				/**
+				 * return iterator that points on the begin of the original array
+				 */
+				typename std::map<std::string, anyType>::iterator
+				begin()
+				{
+					return realArr.begin();
+				}
+				
+				/**
+				 * return iterator that points on the begin of the original array
+				 */
+				typename std::map<std::string, anyType>::iterator
+				end()
+				{
+					return realArr.end();
+				}
+												
 				/**
 				 * @return size of the map
 				 */
