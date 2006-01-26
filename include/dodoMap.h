@@ -61,7 +61,7 @@ namespace dodo
 				 * @return value by hash or empty anyType if not found
 				 * @param varName value of hash that points to the value
 				 */			 
-				anyType
+				anyType &
 				operator[](const std::string &varName)
 				{
 					i = realArr.begin();
@@ -96,7 +96,16 @@ namespace dodo
 				{
 					return realArr.end();
 				}
-												
+				
+				/**
+				 * @return true if realArr is empty
+				 */
+				bool
+				empty()
+				{
+					return realArr.empty();
+				}
+				
 				/**
 				 * @return size of the map
 				 */

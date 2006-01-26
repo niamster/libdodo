@@ -71,7 +71,7 @@
 			 * constructor
 			 */
 			__nodeDef();
-			
+				
 			std::string name;///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
 			
 			std::map<std::string, __nodeDef> children;///< vector of children's definitions

@@ -92,7 +92,7 @@ $(LIBRARY): $(OBJECTS)
 	@echo ""
 	@echo "Now you can run 'gmake install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
 .cc.o:
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fvtable-gc -fPIC -c $^
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
 	strip -d --strip-unneeded $@
 
 install:

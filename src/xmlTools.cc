@@ -393,13 +393,13 @@
 				{
 					iAttr = definition.attributes.begin();
 					for (;iAttr!=jAttr;++iAttr)
-					{	
+					{
 						if (xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str()) == 0)
 						{
 							xChar = xmlGetProp(node,attribute->name);
 							if (xChar != NULL)
 							{
-								attributes[iAttr->c_str()] = (char *)xChar;
+								attributes[*iAttr] = (char *)xChar;
 								xmlFree(xChar);
 							}
 						}
@@ -416,7 +416,7 @@
 					xChar = xmlGetProp(node,attribute->name);
 					if (xChar != NULL)
 					{
-						attributes[iAttr->c_str()] = (char *)xChar;
+						attributes[*iAttr] = (char *)xChar;
 						xmlFree(xChar);
 					}
 				}
