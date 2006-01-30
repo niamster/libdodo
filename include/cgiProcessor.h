@@ -35,7 +35,6 @@
 
 namespace dodo
 {
-
 	/**
 	 * prepares template for future parsings
 	 */
@@ -74,6 +73,26 @@ namespace dodo
 			 * @param path indicates file where template got
 			 */		
 			virtual std::string _process(const std::string &buffer, const std::string &path);
+			
+			/**
+			 * processes `if` statement
+			 * @return position of cursor where to continue search
+			 * @param buffer indicates what buffer contains found `if`
+			 * @param start indicates where )> closes if `<( if ... )>` block
+			 * @param statement indicates `if statement`
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
+			
+			/**
+			 * @return position of the exact close block of the statement
+			 * @param buffer indicates what buffer contains found `if`
+			 * @param start indicates where )> closes if `<( if ... )>` block
+			 * @param st is open statement[if, for ...]
+			 * @param ts is close statement[fi, rof ...]
+			 */
+			virtual unsigned long blockEnd(const std::string &buffer, unsigned long start, const std::string &st, const std::string &ts);
 						
 			/**
 			 * @return true if path is in `processed` list

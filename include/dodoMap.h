@@ -124,6 +124,26 @@ namespace dodo
 					realArr.clear();
 				}
 				
+				/**
+				 * @return true if value is set by given key
+				 */
+				 bool
+				 isset(const std::string &varName)
+				 {
+					i = realArr.begin();
+					j = realArr.end();
+					
+					if (icase)
+						cmpFunc = strcasecmp;
+					else
+						cmpFunc = strcmp;
+					
+					for (;i!=j;++i)
+						if (cmpFunc(varName.c_str(),i->first.c_str()) == 0)
+							return true;		
+					
+					return false;				 	
+				 }
 				std::map<std::string, anyType> realArr;///< real array
 				
 				anyType type;

@@ -2,7 +2,55 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 
 <(> not )> parsed  <)>
 
-<(* loop *)>
-<(for i in $c)>
+<(* if statement *)>
 
-<(rof)>
+<(if $test )>
+	blabla
+	<(if $test==hoho )>
+		HOHO
+	<(fi)>
+	<(if $test==hihi )>
+		HIHI
+	<(fi)>	
+	
+	<(if $test )>
+		blabla
+		<(if $test==hoho )>
+			HOHO
+		<(fi)>
+		<(if $test==hihi )>
+			HIHI
+		<(fi)>	
+		<(if false )>
+			WTF?
+		<(fi)>
+	<(fi)>	
+	
+	<(if 3>2 )>
+		3>2
+	<(fi)>
+
+	<(if 3<2 )>
+		3<2
+	<(fi)>
+	
+	<(if 3!2 )>
+		3!2
+	<(fi)>
+	
+	<(if
+		! `false`
+	)>
+		OK!
+	<(fi)>
+	
+	<(if !false )>
+		OK!
+	<(fi)>
+	<(if ! 'false' )>
+		OK!
+	<(fi)>		
+	<(if ! "false" )>
+		OK!
+	<(fi)>	
+<(fi)>

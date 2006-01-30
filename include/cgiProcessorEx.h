@@ -38,18 +38,20 @@
 		 */
 		enum cgiProcessorExR
 		{
+			CGIPREPROCESSOR_WRONGIFSTATEMENT,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */				
+		#define CGIPREPROCESSOR_WRONGIFSTATEMENT_STR "Wrong `if` statemenet."		
 		
 		/**
 		 * ID of function where exception was thrown
 		 */
 		enum cgiProcessorFunctionsID
 		{
-			CGIPROCESSOR_PROCESS,
+			CGIPROCESSOR__PROCESS,
 		};
 	};
 

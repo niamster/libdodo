@@ -33,12 +33,15 @@ int main(int argc, char **argv)
 	{
 		cgiProcessor cgip;
 		cgip.assign("main","index.tpl");
+		cgip.assign("test","hoho");
+		cgip.assign("show","That's works!");
+		
 	
 		cout << cgip.process("test.tpl");
 	}
 	catch(baseEx ex)
 	{
-		cout << ex;
+		cout << ex << " " << ex.line;
 	}
 	
 	return 0;

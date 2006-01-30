@@ -209,7 +209,7 @@ cgiPreprocessor::preProcess(const std::string &path)
 			#else
 				break;
 			#endif
-					
+		
 		j += 2;
 		
 		tpl.append(buffer.substr(i - 2,j - i + 2));
