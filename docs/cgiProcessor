@@ -1,0 +1,45 @@
+cgiProcessor:
+
+elements of syntax:
+
+<(	open bracket
+)>	close bracket
+
+<(*	open bracket for comment
+*)>	close bracket for comment
+
+<(>	open bracket for non-parsing area
+<)>	close bracket for non-parsing area
+
+variables begins from $
+examples: $var	$1var
+
+any of (\t, \n, ", ', `) will be removed from the statement, so "$var" == '$var' == $var == '$var"
+
+blocks:
+	include:
+		<(include $template)>
+
+		<(include template.tpl)>
+
+		includes external template file into current and processes
+
+	
+	if:
+		<(if $a == $b )>
+			that's OK 1
+		<(fi)>
+
+		<(if $b )>
+			that's OK 2
+		<(fi)>
+
+		<(if ! $a )>
+			that's OK 3
+		<(else)>
+			smth else ...
+		<(fi)>
+
+		`if` statement allows `==`,`!`,`!=` for strings and `<=`,`>=`,`<`,`>` for floats(converts from strings)
+
+		`if` statement is false if statement is false(for 2 arguments) or if argument == false(string) or empty(for 1 argument)

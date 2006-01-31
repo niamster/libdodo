@@ -4,6 +4,12 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 
 <(* if statement *)>
 
+		<(if $test!=hoho )>
+			<(print $test)>
+		<(else)>
+			NULL
+		<(fi)>
+
 <(if $test )>
 	blabla
 	<(if $test==hoho )>
@@ -16,10 +22,13 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 	<(if $test )>
 		blabla
 		<(if $test==hoho )>
-			HOHO
+			<(print $test)>
+		<(else)>
+			NULL
 		<(fi)>
-		<(if $test==hihi )>
-			HIHI
+	<(else)>	
+		<(if $test!=hihi )>
+			HOHO
 		<(fi)>	
 		<(if false )>
 			WTF?
@@ -38,15 +47,15 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 		3!2
 	<(fi)>
 	
-	<(if
+	<(
+		if
 		! `false`
 	)>
 		OK!
 	<(fi)>
 	
-	<(if !false )>
-		OK!
-	<(fi)>
+	<(if!false)>OK!<(fi)>
+	
 	<(if ! 'false' )>
 		OK!
 	<(fi)>		
@@ -54,3 +63,8 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 		OK!
 	<(fi)>	
 <(fi)>
+
+
+<(for i in $arr)>
+	<div class="test"><(print $i)></div>
+<(rof)>

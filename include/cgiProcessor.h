@@ -78,12 +78,21 @@ namespace dodo
 			 * processes `if` statement
 			 * @return position of cursor where to continue search
 			 * @param buffer indicates what buffer contains found `if`
-			 * @param start indicates where )> closes if `<( if ... )>` block
-			 * @param statement indicates `if statement`
+			 * @param start indicates where )> closes in `<( if ... )>` block
+			 * @param statement indicates `if` statement
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
 			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
+
+			/**
+			 * processes `include` statement
+			 * @param buffer indicates what buffer contains found `if`
+			 * @param statement indicates `include` statement
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual void _include(const std::string &statement, std::string &tpl, const std::string &path);
 			
 			/**
 			 * @return position of the exact close block of the statement
@@ -118,6 +127,8 @@ namespace dodo
 			
 			std::map<std::string, std::string>::iterator k;///< iterator for map
 			std::map<std::string, std::string>::iterator l;///< iterator for map
+			
+			std::string temp1;///< temporary storage
 
 	};
 

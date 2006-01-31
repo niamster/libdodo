@@ -50,7 +50,6 @@ cgiProcessor::_process(const std::string &buffer,
 					const std::string &path)
 {
 	register unsigned long i(0), j(0), begin(0), k(0);
-	std::string temp1;
 	
 	std::string tpl;
 	
@@ -88,17 +87,7 @@ cgiProcessor::_process(const std::string &buffer,
 		k = temp.find("include");
 		if (k != std::string::npos)
 		{
-			temp1 = tools::trim(temp.substr(k + 8)," \t\n\"'",5);
-
-			if (temp1[0] == '$')
-				temp1 = getVar(temp1.substr(1));
-			
-			if (strcmp(temp1.c_str(),path.c_str()) != 0 && !recursive(temp1))
-			{
-				processed.push_back(path);
-				tpl.append(process(temp1));
-				processed.pop_back();
-			}
+			_include(temp.substr(k + 8),tpl,path);
 		}				
 		else
 		{
@@ -220,8 +209,6 @@ cgiProcessor::_if(const std::string &buffer,
 	
 	register bool accept(invert);
 	
-	std::string temp1;
-	
 	if (temp2.size() != 2)
 	{
 		if (temp2.size() != 1)
@@ -288,10 +275,33 @@ cgiProcessor::_if(const std::string &buffer,
 		}
 	}
 
-	register unsigned long u(blockEnd(buffer,start,"if","fi"));
+	register unsigned long u(blockEnd(buffer,start,"if","fi")), v(0);
+	register bool found(true);
+	
+	try
+	{
+		v = blockEnd(buffer,start,"if","else");
+	}
+	catch(...)
+	{
+		found = false;
+	}
 	
 	if (accept)
-		tpl.append(_process(buffer.substr(start,u - start),path));
+	{
+		if (!found)
+			v = u;
+		
+		tpl.append(_process(buffer.substr(start,v - start),path));
+	}
+	else
+	{	
+		if (found)
+		{
+			v = buffer.find(")>",v) + 2;
+			tpl.append(_process(buffer.substr(v,u - v),path));
+		}
+	}
 	
 	return buffer.find(")>",u) + 2;	
 }
@@ -339,5 +349,24 @@ cgiProcessor::blockEnd(const std::string &buffer,
 	return u;	
 }
 
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::_include(const std::string &statement, 
+						std::string &tpl, 
+						const std::string &path)
+{
+	temp1 = tools::trim(statement," \t\n\"'",5);
+
+	if (temp1[0] == '$')
+		temp1 = getVar(temp1.substr(1));
+	
+	if (strcmp(temp1.c_str(),path.c_str()) != 0 && !recursive(temp1))
+	{
+		processed.push_back(path);
+		tpl.append(process(temp1));
+		processed.pop_back();
+	}	
+}						
 
 //-------------------------------------------------------------------
