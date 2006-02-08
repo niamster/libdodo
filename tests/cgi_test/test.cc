@@ -36,6 +36,11 @@ int main(int argc, char **argv)
 		cgip.assign("test","hoho");
 		cgip.assign("show","That's works!");
 		
+		stringArr arr;
+		arr.push_back("one");
+		arr.push_back("two");
+		arr.push_back("three");
+		cgip.assign("arr",arr);
 	
 		cout << cgip.process("test.tpl");
 	}

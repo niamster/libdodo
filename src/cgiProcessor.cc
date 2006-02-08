@@ -97,7 +97,23 @@ cgiProcessor::_process(const std::string &buffer,
 				j = _if(buffer,j,temp.substr(k + 2),tpl,path);
 			}
 			else
-				tpl.append(buffer.substr(i - 2,j - i + 2));
+			{
+				k = temp.find("print");
+				if (k != std::string::npos)
+				{
+					_print(temp.substr(k + 5),tpl);
+				}
+				else
+				{
+					k = temp.find("for");
+					if(k != std::string::npos)
+					{
+						j = _for(buffer,j,temp.substr(k + 3),tpl,path);
+					}
+					else
+						tpl.append(buffer.substr(i - 2,j - i + 2));
+				}
+			}
 		}
 	}
 	
@@ -118,6 +134,15 @@ cgiProcessor::recursive(const std::string &path)
 			
 	return false;		
 }
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::assign(const std::string &varName, 
+					const stringArr &varVal)
+{
+	globalArrays[varName] = varVal;
+}					
 
 //-------------------------------------------------------------------
 
@@ -215,7 +240,7 @@ cgiProcessor::_if(const std::string &buffer,
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
 			#else
-				return tpl;
+				return start;
 			#endif
 		
 		temp1 = tools::trim(temp2[0]," \t\n",3);
@@ -223,7 +248,7 @@ cgiProcessor::_if(const std::string &buffer,
 		if (temp1[0] == '!')
 		{
 			invert = true;
-			temp1 = tools::trim(temp1.substr(1)," \t\n\"'`",6);
+			temp1 = trim(temp1.substr(1));
 		}		
 		if (temp1[0] == '$')
 			temp1 = getVar(temp1.substr(1));
@@ -235,12 +260,12 @@ cgiProcessor::_if(const std::string &buffer,
 	}
 	else
 	{
-		temp1 = tools::trim(temp2[0]," \t\n\"'`",6);
+		temp1 = trim(temp2[0]);
 		
 		if (temp1[0] == '$')
 			temp1 = getVar(temp1.substr(1));
 		
-		std::string temp3 = tools::trim(temp2[1]," \t\n\"'`",6);
+		std::string temp3 = trim(temp2[1]);
 		
 		if (temp2[1][0] == '$')
 			temp3 = getVar(temp3.substr(1));
@@ -323,7 +348,7 @@ cgiProcessor::blockEnd(const std::string &buffer,
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
 			#else
-				return tpl;
+				return start;
 			#endif
 			
 		b = buffer.find(")>",u + 2);
@@ -356,7 +381,7 @@ cgiProcessor::_include(const std::string &statement,
 						std::string &tpl, 
 						const std::string &path)
 {
-	temp1 = tools::trim(statement," \t\n\"'",5);
+	temp1 = trim(statement);
 
 	if (temp1[0] == '$')
 		temp1 = getVar(temp1.substr(1));
@@ -368,5 +393,114 @@ cgiProcessor::_include(const std::string &statement,
 		processed.pop_back();
 	}	
 }						
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::_print(const std::string &statement, 
+					std::string &tpl)
+{
+	temp1 = trim(statement);
+		
+	
+	if (temp1[0] == '$')
+		tpl.append(getVar(temp1.substr(1)));	
+	else
+		tpl.append(temp1);
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+cgiProcessor::_for(const std::string &buffer,
+				unsigned long start,
+				const std::string &statement,
+				std::string &tpl, 
+				const std::string &path)
+{
+	unsigned long u(blockEnd(buffer,start,"for","rof"));	
+	
+	std::string processBuffer = buffer.substr(start,u - start);
+	
+	unsigned long p = statement.find("$");
+	unsigned long i(p), j(statement.size());
+	
+	for (;i<j;++i)
+		if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
+			break;
+			
+	std::string temp1 = statement.substr(p,i - p).substr(1);
+
+	p = statement.find("in",i + 1);
+	if (p == std::string::npos)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_WRONGFORSTATEMENT,CGIPREPROCESSOR_WRONGFORSTATEMENT_STR,__LINE__,__FILE__);
+		#else
+			return u;
+		#endif
+				
+	stringArr temp = getVarArray(trim(statement.substr(p + 2)).substr(1));
+
+	stringArr::iterator x(temp.begin()), y(temp.end());
+	
+	for (;x!=y;++x)
+	{
+		local[temp1] = *x;
+		tpl.append(_process(buffer.substr(start,u - start),path));
+	}
+	
+	local.erase(temp1);
+	
+	return buffer.find(")>",u) + 2;	
+}					
+
+//-------------------------------------------------------------------
+
+stringArr 
+cgiProcessor::getVarArray(const std::string &varName)
+{
+	o = globalArrays.begin();
+	p = globalArrays.end();
+	
+	for (;o!=p;++o)
+		if (strcmp(varName.c_str(),o->first.c_str()) == 0)
+			return o->second;
+			
+	return __stringarray__;	
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+cgiProcessor::trim(const std::string &statement)
+{
+	temp = tools::trim(statement," \t\n",3);
+	
+	register unsigned long i(temp.size() - 1);
+	
+	if (temp[0] == '\"' && temp[i] == '\"')
+	{
+		temp.erase(i);
+		temp.erase(0);
+	}
+	else
+	{
+		if (temp[0] == '\'' && temp[i] == '\'')
+		{
+			temp.erase(i);
+			temp.erase(0);
+		}
+		else
+		{
+			if (temp[0] == '`' && temp[i] == '`')
+			{
+				temp.erase(i);
+				temp.erase(0);
+			}
+		}
+	}
+	
+	return temp;
+}
 
 //-------------------------------------------------------------------

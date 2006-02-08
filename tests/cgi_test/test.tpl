@@ -64,7 +64,11 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 	<(fi)>	
 <(fi)>
 
+<( print bla-bla )>
+<( print $show )>
 
-<(for i in $arr)>
-	<div class="test"><(print $i)></div>
+<(for $i in $arr)>
+	<(for $b in $arr)>
+		<div class="test"><(print $b)></div>
+	<(rof)>
 <(rof)>

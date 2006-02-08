@@ -64,6 +64,13 @@ namespace dodo
 			 * @param varVal describes value of variable
 			 */
 			virtual void assign(const std::string &varName, const std::string &varVal);
+
+			/**
+			 * sets varable
+			 * @param varName describes name of variable
+			 * @param varVal describes value of variable(array)
+			 */
+			virtual void assign(const std::string &varName, const stringArr &varVal);
 		
 		protected:	
 			
@@ -85,6 +92,25 @@ namespace dodo
 			 */
 			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
 
+			/**
+			 * processes `for` statement
+			 * @return position of cursor where to continue search
+			 * @param buffer indicates what buffer contains found `for`
+			 * @param start indicates where )> closes in `<( for ... )>` block
+			 * @param statement indicates `if` statement
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual unsigned long _for(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
+			
+			/**
+			 * processes `print` statement
+			 * @param statement indicates `print` statement
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual void _print(const std::string &statement, std::string &tpl);
+			
 			/**
 			 * processes `include` statement
 			 * @param buffer indicates what buffer contains found `if`
@@ -114,13 +140,28 @@ namespace dodo
 			 * @param varName describes name of variable
 			 */
 			virtual std::string getVar(const std::string &varName);
+
+			/**
+			 * @return extracted data(e.g. removes pairs of ",',`)
+			 * @param statement describes statement that needs extraction from the pairs of ",',`
+			 */
+			virtual std::string trim(const std::string &statement);
 			
-			std::string temp;///< temp storage
+			/**
+			 * @return var's value
+			 * @param varName describes name of variable
+			 */
+			virtual stringArr getVarArray(const std::string &varName);
 			
 			std::list<std::string> processed;///< vector of files that will be skipped due to recurse
 			
 			std::list<std::string>::iterator i;///< iterator for list
 			std::list<std::string>::iterator j;///< iterator for list
+			
+			std::map<std::string, stringArr> globalArrays;///< set of global variables(arrays)[user-set]
+			
+			std::map<std::string, stringArr>::iterator o;///< iterator for map of string arrays
+			std::map<std::string, stringArr>::iterator p;///< iterator for map of string arrays
 			
 			std::map<std::string, std::string> global;///< set of global variables[user-set]
 			std::map<std::string, std::string> local;///< set of local variables[during parsing]
@@ -128,8 +169,8 @@ namespace dodo
 			std::map<std::string, std::string>::iterator k;///< iterator for map
 			std::map<std::string, std::string>::iterator l;///< iterator for map
 			
-			std::string temp1;///< temporary storage
-
+			std::string temp1;///< temporary storage									
+			std::string temp;///< temp storage
 	};
 
 };
