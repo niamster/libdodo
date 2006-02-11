@@ -14,6 +14,21 @@ elements of syntax:
 variables begins from $
 examples: $var	$1var
 
+possible 4 types of variable:
+	1.string
+	2.array
+	3.hash
+	4.array of hashes
+	
+you may itarate each or directly access to their members;
+for example : 
+			1.first symbol of string: $strVar.0
+			2.second element of array: $arrVar.1
+			3.first symbol of second element of array: $arrVar.1.0
+			4.element named "one" of the hash: $hashVar.one
+			4.element named "one" of the second element in array of hashes: $hashArrVar.1.one
+	
+
 any of (\t, \n, ", ', `) will be removed from the statement, so "$var" == '$var' == $var == '$var"
 
 blocks:

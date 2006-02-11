@@ -139,9 +139,39 @@ cgiProcessor::recursive(const std::string &path)
 
 void 
 cgiProcessor::assign(const std::string &varName, 
+					const std::vector<assocArr> &varVal)
+{
+	global.erase(varName);
+	globalArray.erase(varName);
+	globalHash.erase(varName);
+	
+	globalArrayHash[varName] = varVal;
+}					
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::assign(const std::string &varName, 
+					const assocArr &varVal)
+{
+	global.erase(varName);
+	globalArray.erase(varName);
+	globalArrayHash.erase(varName);
+	
+	globalHash[varName] = varVal;
+}					
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::assign(const std::string &varName, 
 					const stringArr &varVal)
 {
-	globalArrays[varName] = varVal;
+	global.erase(varName);
+	globalHash.erase(varName);
+	globalArrayHash.erase(varName);
+	
+	globalArray[varName] = varVal;
 }					
 
 //-------------------------------------------------------------------
@@ -150,29 +180,11 @@ void
 cgiProcessor::assign(const std::string &varName, 
 						const std::string &varVal)
 {
+	globalArray.erase(varName);
+	globalHash.erase(varName);
+	globalArrayHash.erase(varName);
+	
 	global[varName] = varVal;
-}
-
-//-------------------------------------------------------------------
-
-std::string 
-cgiProcessor::getVar(const std::string &varName)
-{
-	k = local.begin();
-	l = local.end();
-	
-	for (;k!=l;++k)
-		if (strcmp(varName.c_str(),k->first.c_str()) == 0)
-			return k->second;
-
-	k = global.begin();
-	l = global.end();
-	
-	for (;k!=l;++k)
-		if (strcmp(varName.c_str(),k->first.c_str()) == 0)
-			return k->second;
-			
-	return __string__;
 }
 
 //-------------------------------------------------------------------
@@ -438,35 +450,392 @@ cgiProcessor::_for(const std::string &buffer,
 		#else
 			return u;
 		#endif
-				
-	stringArr temp = getVarArray(trim(statement.substr(p + 2)).substr(1));
-
-	stringArr::iterator x(temp.begin()), y(temp.end());
 	
-	for (;x!=y;++x)
+	std::string temp2 = trim(statement.substr(p + 2));
+	std::string temp3 = buffer.substr(start,u - start);
+	
+	u = buffer.find(")>",u) + 2;
+					
+	if (temp2[0] == '$')
 	{
-		local[temp1] = *x;
-		tpl.append(_process(buffer.substr(start,u - start),path));
+		temp2 = temp2.substr(1);
+		
+		stringArr temp = tools::explode(temp2,".");
+		
+		if (temp.size() == 1)
+		{
+			assocArr::iterator k = local.begin();
+			assocArr::iterator l = local.end();		
+			for (;k!=l;++k)
+				if (strcmp(temp2.c_str(),k->first.c_str()) == 0)
+				{
+					register unsigned long i(0),j(k->second.size());
+					for (;i<j;++i)
+					{
+						local[temp1] = std::string(1,k->second[i]);
+						tpl.append(_process(temp3,path));
+					}
+					local.erase(temp1);
+					
+					return u;
+				}
+
+			std::map<std::string, assocArr>::iterator g = localHash.begin();
+			std::map<std::string, assocArr>::iterator h = localHash.end();		
+			for (;g!=h;++g)
+				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
+				{
+					assocArr::iterator k = g->second.begin();
+					assocArr::iterator l = g->second.end();			
+					for (;k!=l;++k)
+					{
+						local[temp1] = k->second;
+						tpl.append(_process(temp3,path));				
+					}
+					local.erase(temp1);
+					
+					return u;
+				}
+		
+			k = global.begin();
+			l = global.end();		
+			for (;k!=l;++k)
+				if (strcmp(temp2.c_str(),k->first.c_str()) == 0)
+				{
+					register unsigned long i(0),j(k->second.size());
+					for (;i<j;++i)
+					{
+						local[temp1] = std::string(1,k->second[i]);
+						tpl.append(_process(temp3,path));
+					}
+					local.erase(temp1);
+					
+					return u;
+				}
+
+			g = globalHash.begin();
+			h = globalHash.end();		
+			for (;g!=h;++g)
+				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
+				{
+					assocArr::iterator k = g->second.begin();
+					assocArr::iterator l = g->second.end();			
+					for (;k!=l;++k)
+					{
+						local[temp1] = k->second;
+						tpl.append(_process(temp3,path));
+					}
+					local.erase(temp1);
+					
+					return u;
+				}
+			
+			std::map<std::string, stringArr>::iterator o = globalArray.begin();
+			std::map<std::string, stringArr>::iterator p = globalArray.end();		
+			for (;o!=p;++o)
+				if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
+				{
+					stringArr::iterator k = o->second.begin();
+					stringArr::iterator l = o->second.end();			
+					for (;k!=l;++k)
+					{
+						local[temp1] = *k;
+						tpl.append(_process(temp3,path));				
+					}
+					local.erase(temp1);
+					
+					return u;
+				}
+				
+			std::map<std::string, std::vector<assocArr> >::iterator d = globalArrayHash.begin();
+			std::map<std::string, std::vector<assocArr> >::iterator f = globalArrayHash.end();		
+			for (;d!=f;++d)
+				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
+				{
+					std::vector<assocArr>::iterator k = d->second.begin();
+					std::vector<assocArr>::iterator l = d->second.end();			
+					for (;k!=l;++k)
+					{
+						localHash[temp1] = *k;
+						tpl.append(_process(temp3,path));				
+					}
+					localHash.erase(temp1);
+					
+					return u;
+				}												
+		}
+		else
+		{
+			if (temp.size() == 2)
+			{
+				std::map<std::string, assocArr>::iterator g = localHash.begin();
+				std::map<std::string, assocArr>::iterator h = localHash.end();		
+				for (;g!=h;++g)
+					if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
+					{
+						assocArr::iterator k = g->second.begin();
+						assocArr::iterator l = g->second.end();			
+						for (;k!=l;++k)
+							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
+							{
+								register unsigned long i(0),j(k->second.size());
+								for (;i<j;++i)
+								{
+									local[temp1] = std::string(1,k->second[i]);
+									tpl.append(_process(temp3,path));
+								}
+								local.erase(temp1);
+								
+								return u;
+							}
+					}
+							
+				g = globalHash.begin();
+				h = globalHash.end();		
+				for (;g!=h;++g)
+					if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
+					{
+						assocArr::iterator k = g->second.begin();
+						assocArr::iterator l = g->second.end();			
+						for (;k!=l;++k)
+							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
+							{
+								register unsigned long i(0),j(k->second.size());
+								for (;i<j;++i)
+								{
+									local[temp1] = std::string(1,k->second[i]);
+									tpl.append(_process(temp3,path));
+								}
+								local.erase(temp1);
+								
+								return u;
+							}
+					}
+					
+				std::map<std::string, stringArr>::iterator o = globalArray.begin();
+				std::map<std::string, stringArr>::iterator p = globalArray.end();		
+				for (;o!=p;++o)
+					if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
+					{
+						register unsigned long pos = atol(temp[1].c_str());
+						if (pos >= 0 && pos <= o->second.size())
+						{
+							register unsigned long i(0),j(o->second[pos].size());
+							for (;i<j;++i)
+							{
+								local[temp1] = std::string(1,o->second[pos][i]);
+								tpl.append(_process(temp3,path));
+							}
+							local.erase(temp1);
+							
+							return u;
+						}
+					}							
+	
+				std::map<std::string, std::vector<assocArr> >::iterator d = globalArrayHash.begin();
+				std::map<std::string, std::vector<assocArr> >::iterator f = globalArrayHash.end();
+				for (;d!=f;++d)
+					if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
+					{
+						register unsigned long pos = atol(temp[1].c_str());
+						if (pos >= 0 && pos <= d->second.size())
+						{
+							assocArr::iterator k = d->second[pos].begin();					
+							assocArr::iterator l = d->second[pos].end();
+							for (;k!=l;++k)
+							{
+									local[temp1] = k->second;
+									tpl.append(_process(temp3,path));		
+							}
+							local.erase(temp1);
+							
+							return u;
+						}
+					}
+			}
+			else	
+			{
+				if (temp.size() == 3)
+				{
+					std::map<std::string, std::vector<assocArr> >::iterator d = globalArrayHash.begin();
+					std::map<std::string, std::vector<assocArr> >::iterator f = globalArrayHash.end();
+					for (;d!=f;++d)
+						if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
+						{
+							register unsigned long pos = atol(temp[1].c_str());
+							if (pos >= 0 && pos <= d->second.size())
+							{
+								assocArr::iterator k = d->second[pos].begin();					
+								assocArr::iterator l = d->second[pos].end();
+								for (;k!=l;++k)
+									if (strcmp(temp[2].c_str(),k->first.c_str()) == 0)
+									{
+										register unsigned long i(0),j(k->second.size());
+										for (;i<j;++i)
+										{
+											local[temp1] = std::string(1,k->second[i]);
+											tpl.append(_process(temp3,path));
+										}
+										local.erase(temp1);
+										
+										return u;
+									}						
+							}
+						}
+				}
+			}
+		}		
+	}
+	else
+	{
+		register unsigned long i(0), j(temp2.size());
+		for (;i<j;++i)
+		{
+			local[temp1] = std::string(1,temp2[i]);
+			tpl.append(_process(temp3,path));			
+		}
+		local.erase(temp1);
+		
+		return u;
 	}
 	
-	local.erase(temp1);
-	
-	return buffer.find(")>",u) + 2;	
+	return u;	
 }					
 
 //-------------------------------------------------------------------
 
-stringArr 
-cgiProcessor::getVarArray(const std::string &varName)
+std::string 
+cgiProcessor::getVar(const std::string &varName)
 {
-	o = globalArrays.begin();
-	p = globalArrays.end();
+	stringArr temp = tools::explode(varName,".");
 	
-	for (;o!=p;++o)
-		if (strcmp(varName.c_str(),o->first.c_str()) == 0)
-			return o->second;
+	if (temp.size() == 1)
+	{
+		k = local.begin();
+		l = local.end();		
+		for (;k!=l;++k)
+			if (strcmp(varName.c_str(),k->first.c_str()) == 0)
+				return k->second;
+	
+		k = global.begin();
+		l = global.end();		
+		for (;k!=l;++k)
+			if (strcmp(varName.c_str(),k->first.c_str()) == 0)
+				return k->second;
+	}
+	else
+	{
+		k = local.begin();
+		l = local.end();		
+		for (;k!=l;++k)
+			if (strcmp(temp[0].c_str(),k->first.c_str()) == 0)
+			{
+				register unsigned long pos = atol(temp[1].c_str());
+				if (pos >= 0 && pos <= k->second.size())
+					return std::string(1,k->second[pos]);
+			}
+
+		g = localHash.begin();
+		h = localHash.end();		
+		for (;g!=h;++g)
+			if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
+			{
+				k = g->second.begin();
+				l = g->second.end();			
+				for (;k!=l;++k)
+					if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
+					{
+						if (temp.size() == 3)
+						{
+							register unsigned long pos = atol(temp[2].c_str());
+							if (pos >= 0 && pos <= k->second.size())
+								return std::string(1,k->second[pos]);
+						}
+						else
+							return k->second;
+					}
+			}
+	
+		k = global.begin();
+		l = global.end();		
+		for (;k!=l;++k)
+			if (strcmp(temp[0].c_str(),k->first.c_str()) == 0)
+			{
+				register unsigned long pos = atol(temp[1].c_str());
+				if (pos >= 0 && pos <= k->second.size())
+					return std::string(1,k->second[pos]);
+			}
+					
+		g = globalHash.begin();
+		h = globalHash.end();		
+		for (;g!=h;++g)
+			if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
+			{
+				k = g->second.begin();
+				l = g->second.end();			
+				for (;k!=l;++k)
+					if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
+					{
+						if (temp.size() == 3)
+						{
+							register unsigned long pos = atol(temp[2].c_str());
+							if (pos >= 0 && pos <= k->second.size())
+								return std::string(1,k->second[pos]);
+						}
+						else
+							return k->second;
+					}
+			}
 			
-	return __stringarray__;	
+		o = globalArray.begin();
+		p = globalArray.end();		
+		for (;o!=p;++o)
+			if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
+			{
+				register unsigned long pos = atol(temp[1].c_str());
+				if (pos >= 0 && pos <= o->second.size())
+				{
+					if (temp.size() == 3)
+					{
+						register unsigned long pos1 = atol(temp[2].c_str());
+						if (pos >= 0 && pos1 <= o->second[pos].size())
+							return std::string(1,o->second[pos][pos1]);
+					}
+					else
+						return o->second[pos];
+				}
+			}							
+		
+		if (temp.size() >= 3)	
+		{
+			d = globalArrayHash.begin();
+			f = globalArrayHash.end();
+			for (;d!=f;++d)
+				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
+				{
+					register unsigned long pos = atol(temp[1].c_str());
+					if (pos >= 0 && pos <= d->second.size())
+					{
+						k = d->second[pos].begin();					
+						l = d->second[pos].end();
+						for (;k!=l;++k)
+							if (strcmp(temp[2].c_str(),k->first.c_str()) == 0)
+							{
+								if (temp.size() == 4)
+								{
+									pos = atol(temp[3].c_str());
+									if (pos >= 0 && pos <= k->second.size())
+										return std::string(1,k->second[pos]);
+								}
+								else
+									return k->second;
+							}						
+					}
+				}
+		}
+	}		
+	
+	return __string__;
 }
 
 //-------------------------------------------------------------------

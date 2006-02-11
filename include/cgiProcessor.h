@@ -71,7 +71,21 @@ namespace dodo
 			 * @param varVal describes value of variable(array)
 			 */
 			virtual void assign(const std::string &varName, const stringArr &varVal);
-		
+
+			/**
+			 * sets varable
+			 * @param varName describes name of variable
+			 * @param varVal describes value of variable(hash)
+			 */
+			virtual void assign(const std::string &varName, const assocArr &varVal);
+
+			/**
+			 * sets varable
+			 * @param varName describes name of variable
+			 * @param varVal describes value of variable(array of hashes)
+			 */
+			virtual void assign(const std::string &varName, const std::vector<assocArr> &varVal);
+								
 		protected:	
 			
 			/**
@@ -147,27 +161,30 @@ namespace dodo
 			 */
 			virtual std::string trim(const std::string &statement);
 			
-			/**
-			 * @return var's value
-			 * @param varName describes name of variable
-			 */
-			virtual stringArr getVarArray(const std::string &varName);
-			
 			std::list<std::string> processed;///< vector of files that will be skipped due to recurse
-			
 			std::list<std::string>::iterator i;///< iterator for list
 			std::list<std::string>::iterator j;///< iterator for list
 			
-			std::map<std::string, stringArr> globalArrays;///< set of global variables(arrays)[user-set]
 			
+			std::map<std::string, stringArr> globalArray;///< set of global variables(arrays)[user-set]
 			std::map<std::string, stringArr>::iterator o;///< iterator for map of string arrays
 			std::map<std::string, stringArr>::iterator p;///< iterator for map of string arrays
 			
-			std::map<std::string, std::string> global;///< set of global variables[user-set]
-			std::map<std::string, std::string> local;///< set of local variables[during parsing]
+			std::map<std::string, assocArr> globalHash;///< set of global variables(hashes)[user-set]
+			std::map<std::string, assocArr>::iterator g;///< iterator for map of maps
+			std::map<std::string, assocArr>::iterator h;///< iterator for map of maps
 			
-			std::map<std::string, std::string>::iterator k;///< iterator for map
-			std::map<std::string, std::string>::iterator l;///< iterator for map
+			std::map<std::string, std::vector<assocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
+			std::map<std::string, assocArr> localHash;///< set of local variables(hashes)
+			std::map<std::string, std::vector<assocArr> >::iterator d;///< iterator for map of maps
+			std::map<std::string, std::vector<assocArr> >::iterator f;///< iterator for map of maps
+			
+			assocArr global;///< set of global variables[user-set]
+			assocArr local;///< set of local variables[during parsing]			
+			assocArr::iterator k;///< iterator for map
+			assocArr::iterator l;///< iterator for map
+			
+			
 			
 			std::string temp1;///< temporary storage									
 			std::string temp;///< temp storage
