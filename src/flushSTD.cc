@@ -173,8 +173,7 @@ flushSTD::read(char * const a_void) const
 					case EROFS:
 						return false;
 				}
-			#endif
-
+			#endif	
 	
 	buffer.assign(a_void,inSize);
 			
@@ -203,9 +202,10 @@ flushSTD::readString(std::string &a_str) const
 	#endif
 	
 	this->read(data);
+
 	a_str.assign(data,inSize);
 	delete [] data;
-	
+		
 	#ifdef NO_EX	
 		return result;
 	#endif

@@ -439,7 +439,6 @@ systemThreads::wait()
 	i = threads.begin();
 	j = threads.end();
 	
-	
 	for (;i!=j;++i)
 	{
 		if (!_isRunning(i) || i->detached)
@@ -563,7 +562,9 @@ systemThreads::_isRunning(std::list<__threadInfo>::iterator &position)
 	if (!position->isRunning)
 		return false;
 	
-	if (pthread_kill(position->thread,5)!=0)	
+	errno = pthread_kill(position->thread,5);
+	
+	if (errno!=0)	
 	{
 		if (errno == ESRCH || errno == EAGAIN)
 		{
