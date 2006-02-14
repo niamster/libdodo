@@ -196,7 +196,8 @@ systemThreads::del(unsigned long position,
 				#endif
 			else
 			{
-				if (pthread_cancel(k->thread)!=0)
+				errno = pthread_cancel(k->thread);
+				if (errno != 0)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
@@ -266,7 +267,8 @@ systemThreads::replace(unsigned long position,
 				#endif
 			else
 			{
-				if (pthread_cancel(k->thread)!=0)
+				errno = pthread_cancel(k->thread);
+				if (errno != 0)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_REPLACE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
@@ -351,14 +353,16 @@ systemThreads::run(unsigned long position,
 		else
 			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
-		if (pthread_attr_setstacksize(&attr,k->stackSize)!=0)
+		errno = pthread_attr_setstacksize(&attr,k->stackSize);
+		if (errno != 0)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 			
-		if (pthread_create(&(k->thread),&attr,k->func,k->data)!=0)
+		errno = pthread_create(&(k->thread),&attr,k->func,k->data);	
+		if (errno != 0)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -405,8 +409,9 @@ systemThreads::wait(unsigned long position,
 			#else
 				return false;
 			#endif
-			
-		if (pthread_join(k->thread,data)!=0)
+		
+		errno = pthread_join(k->thread,data);	
+		if (errno != 0)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -444,7 +449,8 @@ systemThreads::wait()
 		if (!_isRunning(i) || i->detached)
 			continue;
 		
-		if (pthread_join(i->thread,NULL)!=0)
+		errno = pthread_join(i->thread,NULL);
+		if (errno != 0)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -484,8 +490,9 @@ systemThreads::stop(unsigned long position)
 			#else
 				return false;
 			#endif
-			
-		if (pthread_cancel(k->thread)!=0)
+		
+		errno = pthread_cancel(k->thread);	
+		if (errno != 0)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -523,7 +530,8 @@ systemThreads::stop()
 		if (!_isRunning(i))
 			continue;
 		
-		if (pthread_cancel(i->thread)!=0)
+		errno = pthread_cancel(i->thread);
+		if (errno != 0)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_STOP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -561,10 +569,9 @@ systemThreads::_isRunning(std::list<__threadInfo>::iterator &position)
 {
 	if (!position->isRunning)
 		return false;
-	
-	errno = pthread_kill(position->thread,5);
-	
-	if (errno!=0)	
+		
+	errno = pthread_kill(position->thread,5);	
+	if (errno != 0)	
 	{
 		if (errno == ESRCH || errno == EAGAIN)
 		{
@@ -596,8 +603,8 @@ systemThreads::sweepTrash()
 		if (_isRunning(i))
 			continue;
 				
-		if (i->executeLimit>0 && (i->executeLimit<=i->executed))
-			threads.erase(i);
+		if (i->executeLimit > 0 && (i->executeLimit <= i->executed))
+			i = threads.erase(i);
 	}	
 }
 

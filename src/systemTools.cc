@@ -1099,8 +1099,7 @@ systemTools::toRealSignal(systemSignalsEnum signal)
 			return 20;
 			
 		case SIGNAL_CPULIMIT_EXCEEDED:
-			return 24;
-			
+			return 24;			
 		case SIGNAL_FILESIZE_EXCEEDED:
 			return 25;
 			

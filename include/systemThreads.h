@@ -296,8 +296,7 @@ namespace dodo
 			#endif
 										
 		protected:
-
-										
+							
 			/**
 			 * @return true if thread is running
 			 * @param position indicates for what thread to indicate
