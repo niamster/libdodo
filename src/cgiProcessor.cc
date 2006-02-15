@@ -250,7 +250,7 @@ cgiProcessor::_if(const std::string &buffer,
 	{
 		if (temp2.size() != 1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__IF,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
 			#else
 				return start;
 			#endif
@@ -260,10 +260,10 @@ cgiProcessor::_if(const std::string &buffer,
 		if (temp1[0] == '!')
 		{
 			invert = true;
-			temp1 = trim(temp1.substr(1));
-		}		
-		if (temp1[0] == '$')
-			temp1 = getVar(temp1.substr(1));
+			temp1 = temp1.substr(1);
+		}
+				
+		temp1 = getVar(temp1);
 		
 		if (strcmp(temp1.c_str(),"false") != 0 && temp1.size() != 0)
 			accept = !invert;
@@ -272,15 +272,9 @@ cgiProcessor::_if(const std::string &buffer,
 	}
 	else
 	{
-		temp1 = trim(temp2[0]);
+		temp1 = getVar(temp2[0]);
 		
-		if (temp1[0] == '$')
-			temp1 = getVar(temp1.substr(1));
-		
-		std::string temp3 = trim(temp2[1]);
-		
-		if (temp2[1][0] == '$')
-			temp3 = getVar(temp3.substr(1));
+		std::string temp3 = getVar(temp2[1]);
 		
 		if (_float)	
 		{
@@ -358,7 +352,7 @@ cgiProcessor::blockEnd(const std::string &buffer,
 		u = buffer.find("<(",m);
 		if (u == std::string::npos)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
 			#else
 				return start;
 			#endif
@@ -393,10 +387,7 @@ cgiProcessor::_include(const std::string &statement,
 						std::string &tpl, 
 						const std::string &path)
 {
-	temp1 = trim(statement);
-
-	if (temp1[0] == '$')
-		temp1 = getVar(temp1.substr(1));
+	temp1 = getVar(statement);
 	
 	if (strcmp(temp1.c_str(),path.c_str()) != 0 && !recursive(temp1))
 	{
@@ -412,13 +403,7 @@ void
 cgiProcessor::_print(const std::string &statement, 
 					std::string &tpl)
 {
-	temp1 = trim(statement);
-		
-	
-	if (temp1[0] == '$')
-		tpl.append(getVar(temp1.substr(1)));	
-	else
-		tpl.append(temp1);
+	tpl.append(getVar(statement));
 }
 
 //-------------------------------------------------------------------
@@ -446,7 +431,7 @@ cgiProcessor::_for(const std::string &buffer,
 	p = statement.find("in",i + 1);
 	if (p == std::string::npos)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__PROCESS,ERR_LIBDODO,CGIPREPROCESSOR_WRONGFORSTATEMENT,CGIPREPROCESSOR_WRONGFORSTATEMENT_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__FOR,ERR_LIBDODO,CGIPREPROCESSOR_WRONGFORSTATEMENT,CGIPREPROCESSOR_WRONGFORSTATEMENT_STR,__LINE__,__FILE__);
 		#else
 			return u;
 		#endif
@@ -705,8 +690,57 @@ cgiProcessor::_for(const std::string &buffer,
 //-------------------------------------------------------------------
 
 std::string 
-cgiProcessor::getVar(const std::string &varName)
+cgiProcessor::getVar(const std::string &a_varName)
 {
+	std::string varName = trim(a_varName), tempVar;
+	register unsigned long u, b, m(0), ob, cb, i, c;
+	
+	while (true)
+	{
+		ob = 1;
+		cb = 0;
+		
+		u = varName.find("{",m);
+		if (u == std::string::npos)
+			break;
+		
+		c = u;
+		while (true)	
+		{
+			b = varName.find("}",c + 1);
+			if (b == std::string::npos)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_GETVAR,ERR_LIBDODO,CGIPREPROCESSOR_WRONGVARSTATEMENT,CGIPREPROCESSOR_WRONGVARSTATEMENT_STR,__LINE__,__FILE__);
+				#else
+					return u;
+				#endif
+			
+			++cb;
+			
+			for (i=c+1;i<b;++i)	
+				if (varName[i] == '{')
+					++ob;
+
+			c = b;
+			
+			if (cb == ob)		
+				break;
+		}
+		
+		tempVar = trim(varName.substr(u + 1,b - 1 - u));
+		if (tempVar[0] == '$')
+			tempVar = getVar(tempVar);
+		
+		varName.replace(u,b + 1 - u,tempVar,0,tempVar.size());
+							
+		m = b - 1;	
+	}	
+	
+	if (varName[0] != '$')
+		return varName;
+	
+	varName.erase(0,1);
+	
 	stringArr temp = tools::explode(varName,".");
 	
 	if (temp.size() == 1)
@@ -850,21 +884,21 @@ cgiProcessor::trim(const std::string &statement)
 	if (temp[0] == '\"' && temp[i] == '\"')
 	{
 		temp.erase(i);
-		temp.erase(0);
+		temp.erase(0,1);
 	}
 	else
 	{
 		if (temp[0] == '\'' && temp[i] == '\'')
 		{
 			temp.erase(i);
-			temp.erase(0);
+			temp.erase(0,1);
 		}
 		else
 		{
 			if (temp[0] == '`' && temp[i] == '`')
 			{
 				temp.erase(i);
-				temp.erase(0);
+				temp.erase(0,1);
 			}
 		}
 	}

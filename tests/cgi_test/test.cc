@@ -54,6 +54,8 @@ int main(int argc, char **argv)
 		arr2.push_back(arr1);
 		cgip.assign("arr2",arr2);
 	
+		cgip.assign("one","one");
+	
 		cout << cgip.process("test.tpl");
 	}
 	catch(baseEx ex)

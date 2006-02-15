@@ -93,3 +93,6 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 <(for $c in $arr2.1)>
 	|<(print $c)>
 <(rof)>
+
+<(print {$arr2.{0}.{$one}} )>
+<(print $arr2.1.{$arr1.{$one}} )>

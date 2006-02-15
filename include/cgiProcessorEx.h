@@ -40,6 +40,7 @@
 		{
 			CGIPREPROCESSOR_WRONGIFSTATEMENT,
 			CGIPREPROCESSOR_WRONGFORSTATEMENT,
+			CGIPREPROCESSOR_WRONGVARSTATEMENT,
 		};
 		
 		/**
@@ -47,13 +48,17 @@
 		 */				
 		#define CGIPREPROCESSOR_WRONGIFSTATEMENT_STR "Wrong `if` statemenet."
 		#define CGIPREPROCESSOR_WRONGFORSTATEMENT_STR "Wrong `for` statemenet."		
+		#define CGIPREPROCESSOR_WRONGVARSTATEMENT_STR "in variable statement `}` wasn't closed."
 		
 		/**
 		 * ID of function where exception was thrown
 		 */
 		enum cgiProcessorFunctionsID
 		{
-			CGIPROCESSOR__PROCESS,
+			CGIPROCESSOR__IF,
+			CGIPROCESSOR_BLOCKEND,
+			CGIPROCESSOR__FOR,
+			CGIPROCESSOR_GETVAR,
 		};
 	};
 
