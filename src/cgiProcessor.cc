@@ -454,13 +454,22 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;k!=l;++k)
 				if (strcmp(temp2.c_str(),k->first.c_str()) == 0)
 				{
+					assocArr::iterator iter = local.find(temp1);
+					std::string iterVal;
+					if (iter != local.end())
+						iterVal = local[temp1];
+					
 					register unsigned long i(0),j(k->second.size());
 					for (;i<j;++i)
 					{
 						local[temp1] = std::string(1,k->second[i]);
 						tpl.append(_process(temp3,path));
 					}
-					local.erase(temp1);
+					
+					if (iter != local.end())
+						local[temp1] = iterVal;
+					else
+						local.erase(temp1);
 					
 					return u;
 				}
@@ -470,6 +479,11 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;g!=h;++g)
 				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 				{
+					assocArr::iterator iter = local.find(temp1);
+					std::string iterVal;
+					if (iter != local.end())
+						iterVal = local[temp1];					
+					
 					assocArr::iterator k = g->second.begin();
 					assocArr::iterator l = g->second.end();			
 					for (;k!=l;++k)
@@ -477,7 +491,11 @@ cgiProcessor::_for(const std::string &buffer,
 						local[temp1] = k->second;
 						tpl.append(_process(temp3,path));				
 					}
-					local.erase(temp1);
+					
+					if (iter != local.end())
+						local[temp1] = iterVal;
+					else
+						local.erase(temp1);
 					
 					return u;
 				}
@@ -487,13 +505,22 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;k!=l;++k)
 				if (strcmp(temp2.c_str(),k->first.c_str()) == 0)
 				{
+					assocArr::iterator iter = local.find(temp1);
+					std::string iterVal;
+					if (iter != local.end())
+						iterVal = local[temp1];	
+											
 					register unsigned long i(0),j(k->second.size());
 					for (;i<j;++i)
 					{
 						local[temp1] = std::string(1,k->second[i]);
 						tpl.append(_process(temp3,path));
 					}
-					local.erase(temp1);
+					
+					if (iter != local.end())
+						local[temp1] = iterVal;
+					else
+						local.erase(temp1);
 					
 					return u;
 				}
@@ -503,6 +530,11 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;g!=h;++g)
 				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 				{
+					assocArr::iterator iter = local.find(temp1);
+					std::string iterVal;
+					if (iter != local.end())
+						iterVal = local[temp1];	
+											
 					assocArr::iterator k = g->second.begin();
 					assocArr::iterator l = g->second.end();			
 					for (;k!=l;++k)
@@ -510,7 +542,11 @@ cgiProcessor::_for(const std::string &buffer,
 						local[temp1] = k->second;
 						tpl.append(_process(temp3,path));
 					}
-					local.erase(temp1);
+					
+					if (iter != local.end())
+						local[temp1] = iterVal;
+					else
+						local.erase(temp1);
 					
 					return u;
 				}
@@ -520,6 +556,11 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;o!=p;++o)
 				if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
 				{
+					assocArr::iterator iter = local.find(temp1);
+					std::string iterVal;
+					if (iter != local.end())
+						iterVal = local[temp1];	
+											
 					stringArr::iterator k = o->second.begin();
 					stringArr::iterator l = o->second.end();			
 					for (;k!=l;++k)
@@ -527,7 +568,11 @@ cgiProcessor::_for(const std::string &buffer,
 						local[temp1] = *k;
 						tpl.append(_process(temp3,path));				
 					}
-					local.erase(temp1);
+					
+					if (iter != local.end())
+						local[temp1] = iterVal;
+					else
+						local.erase(temp1);
 					
 					return u;
 				}
@@ -537,6 +582,11 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;d!=f;++d)
 				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 				{
+					std::map<std::string, assocArr>::iterator iter = localHash.find(temp1);
+					assocArr iterVal;
+					if (iter != localHash.end())
+						iterVal = localHash[temp1];					
+					
 					std::vector<assocArr>::iterator k = d->second.begin();
 					std::vector<assocArr>::iterator l = d->second.end();			
 					for (;k!=l;++k)
@@ -544,7 +594,11 @@ cgiProcessor::_for(const std::string &buffer,
 						localHash[temp1] = *k;
 						tpl.append(_process(temp3,path));				
 					}
-					localHash.erase(temp1);
+					
+					if (iter != localHash.end())
+						localHash[temp1] = iterVal;
+					else
+						localHash.erase(temp1);
 					
 					return u;
 				}												
@@ -557,19 +611,28 @@ cgiProcessor::_for(const std::string &buffer,
 				std::map<std::string, assocArr>::iterator h = localHash.end();		
 				for (;g!=h;++g)
 					if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
-					{
+					{							
 						assocArr::iterator k = g->second.begin();
 						assocArr::iterator l = g->second.end();			
 						for (;k!=l;++k)
 							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 							{
+								assocArr::iterator iter = local.find(temp1);
+								std::string iterVal;
+								if (iter != local.end())
+									iterVal = local[temp1];	
+																	
 								register unsigned long i(0),j(k->second.size());
 								for (;i<j;++i)
 								{
 									local[temp1] = std::string(1,k->second[i]);
 									tpl.append(_process(temp3,path));
 								}
-								local.erase(temp1);
+					
+								if (iter != local.end())
+									local[temp1] = iterVal;
+								else
+									local.erase(temp1);
 								
 								return u;
 							}
@@ -579,19 +642,28 @@ cgiProcessor::_for(const std::string &buffer,
 				h = globalHash.end();		
 				for (;g!=h;++g)
 					if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
-					{
+					{								
 						assocArr::iterator k = g->second.begin();
 						assocArr::iterator l = g->second.end();			
 						for (;k!=l;++k)
 							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 							{
+								assocArr::iterator iter = local.find(temp1);
+								std::string iterVal;
+								if (iter != local.end())
+									iterVal = local[temp1];	
+																	
 								register unsigned long i(0),j(k->second.size());
 								for (;i<j;++i)
 								{
 									local[temp1] = std::string(1,k->second[i]);
 									tpl.append(_process(temp3,path));
 								}
-								local.erase(temp1);
+								
+								if (iter != local.end())
+									local[temp1] = iterVal;
+								else
+									local.erase(temp1);
 								
 								return u;
 							}
@@ -605,13 +677,22 @@ cgiProcessor::_for(const std::string &buffer,
 						register unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= o->second.size())
 						{
+							assocArr::iterator iter = local.find(temp1);
+							std::string iterVal;
+							if (iter != local.end())
+								iterVal = local[temp1];	
+																
 							register unsigned long i(0),j(o->second[pos].size());
 							for (;i<j;++i)
 							{
 								local[temp1] = std::string(1,o->second[pos][i]);
 								tpl.append(_process(temp3,path));
 							}
-							local.erase(temp1);
+							
+							if (iter != local.end())
+								local[temp1] = iterVal;
+							else
+								local.erase(temp1);
 							
 							return u;
 						}
@@ -625,6 +706,11 @@ cgiProcessor::_for(const std::string &buffer,
 						register unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= d->second.size())
 						{
+							assocArr::iterator iter = local.find(temp1);
+							std::string iterVal;
+							if (iter != local.end())
+								iterVal = local[temp1];	
+																
 							assocArr::iterator k = d->second[pos].begin();					
 							assocArr::iterator l = d->second[pos].end();
 							for (;k!=l;++k)
@@ -632,7 +718,11 @@ cgiProcessor::_for(const std::string &buffer,
 									local[temp1] = k->second;
 									tpl.append(_process(temp3,path));		
 							}
-							local.erase(temp1);
+							
+							if (iter != local.end())
+								local[temp1] = iterVal;
+							else
+								local.erase(temp1);
 							
 							return u;
 						}
@@ -655,13 +745,22 @@ cgiProcessor::_for(const std::string &buffer,
 								for (;k!=l;++k)
 									if (strcmp(temp[2].c_str(),k->first.c_str()) == 0)
 									{
+										assocArr::iterator iter = local.find(temp1);
+										std::string iterVal;
+										if (iter != local.end())
+											iterVal = local[temp1];	
+								
 										register unsigned long i(0),j(k->second.size());
 										for (;i<j;++i)
 										{
 											local[temp1] = std::string(1,k->second[i]);
 											tpl.append(_process(temp3,path));
 										}
-										local.erase(temp1);
+							
+										if (iter != local.end())
+											local[temp1] = iterVal;
+										else
+											local.erase(temp1);
 										
 										return u;
 									}						
@@ -673,13 +772,23 @@ cgiProcessor::_for(const std::string &buffer,
 	}
 	else
 	{
+
+		assocArr::iterator iter = local.find(temp1);
+		std::string iterVal;
+		if (iter != local.end())
+			iterVal = local[temp1];	
+					
 		register unsigned long i(0), j(temp2.size());
 		for (;i<j;++i)
 		{
 			local[temp1] = std::string(1,temp2[i]);
 			tpl.append(_process(temp3,path));			
 		}
-		local.erase(temp1);
+		
+		if (iter != local.end())
+			local[temp1] = iterVal;
+		else
+			local.erase(temp1);
 		
 		return u;
 	}

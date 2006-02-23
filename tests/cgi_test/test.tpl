@@ -67,14 +67,13 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 <( print bla-bla )>
 <( print $show )>
 
-<(*
+
 <(for $i in $arr)>
 	<(for $b in $arr)>
 		<div class="test"><(print $b)></div>
 	<(rof)>
 <(rof)>
 
-*)>
 
 <(print $test )>
 <(print $arr.0.0 )>
@@ -96,3 +95,12 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 
 <(print {$arr2.{0}.{$one}} )>
 <(print $arr2.1.{$arr1.{$one}} )>
+
+<(print namespace: )>
+
+<(for $b in $arr2)>
+	<(for $b in $b)> <(* HERE : `$b in $b` and it's OK! *)>
+		|<(print $b)>
+	<(rof)>
+	|<(print $b.one)>
+<(rof)>
