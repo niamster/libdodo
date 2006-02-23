@@ -33,7 +33,18 @@ for exampe :
 			1.element named "one" of the second element in array of hashes, variable 'varOne' has value "one" : $hashArrVar.1.{$varOne}
 			2.element named "one" of the second element in array of hashes, member "one" of the array 'arrVar' has value "one": $hashArrVar.1.{$arrVar.one}
 
-any of (\t, \n, ", ', `) will be removed from the statement, so "$var" == '$var' == $var == '$var"
+pair of (\t, \n, ", ', `) will be removed from the statement, so "$var" == '$var' == $var == `$var`
+
+namespace:
+	cgiProcessor uses namespaces.
+	for examle:
+		variable define before loop is avalaible after loop
+		<(for $b in $arr2)>
+			<(for $b in $b)> <(* HERE : `$b in $b` and it's OK! *)>
+				|<(print $b)>
+			<(rof)>
+			|<(print $b.one)>
+		<(rof)>		
 
 blocks:
 	include:
