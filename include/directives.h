@@ -30,8 +30,8 @@
 #define LIBRARY "libdodo"
 
 #define MAJOR "0"
-#define MINOR "1"
-#define RELEASE "7"
+#define MINOR "2"
+#define RELEASE "0"
 
 /**
  * system define; default - linux

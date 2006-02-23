@@ -73,8 +73,8 @@ VPATH:=src
 LIBRARY:=libdodo
 
 MAJOR:=0
-MINOR:=1
-RELEASE:=7
+MINOR:=2
+RELEASE:=0
 
 all: $(LIBRARY)
 
