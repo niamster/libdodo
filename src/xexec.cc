@@ -445,7 +445,7 @@ xexec::performXExec(__execItemList &list) const
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return xexecExMod();
+				return xexecMod();
 			#endif
 			
 		initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
@@ -453,7 +453,7 @@ xexec::performXExec(__execItemList &list) const
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return xexecExMod();
+				return xexecMod();
 			#endif
 			
 		xexecMod mod = init(toInit);

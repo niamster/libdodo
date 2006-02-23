@@ -892,7 +892,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 				#else
-					return xexecExMod();
+					return sigMod();
 				#endif
 				
 			initSigModule init = (initSigModule)dlsym(handle, "initSigModule");

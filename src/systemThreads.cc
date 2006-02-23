@@ -59,7 +59,7 @@ systemThreads::systemThreads() : threadNum(0)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_CONSTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
-			return false;
+			;
 		#endif		
 	
 	sigset_t signal_mask;
@@ -625,6 +625,10 @@ systemThreads::setExecutionLimit(unsigned long position, unsigned long limit)
 		#else
 			return false;
 		#endif	
+		
+	#ifdef NO_EX		
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -657,7 +661,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return xexecExMod();
+				return systemThreadsMod();
 			#endif
 			
 		initSystemThreadsModule init = (initSystemThreadsModule)dlsym(handle, "initSystemThreadsModule");
@@ -665,7 +669,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return xexecExMod();
+				return systemThreadsMod();
 			#endif
 			
 		systemThreadsMod mod = init(toInit);
@@ -704,7 +708,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return 0;
 			#endif
 		
 		initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
@@ -712,7 +716,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return 0;
 			#endif	
 		
 		systemThreadsMod temp = init(toInit);
@@ -722,7 +726,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return 0;
 			#endif
 	
 		thread.executeLimit = temp.executeLimit;
@@ -748,7 +752,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return 0;
 			#endif
 		
 		initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
@@ -756,7 +760,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return 0;
 			#endif	
 		
 		systemThreadsMod temp = init(toInit);
@@ -766,7 +770,7 @@ systemThreads::running()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 			#else
-				return -1;
+				return 0;
 			#endif
 	
 		thread.executeLimit = temp.executeLimit;

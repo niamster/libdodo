@@ -821,7 +821,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_GETVAR,ERR_LIBDODO,CGIPREPROCESSOR_WRONGVARSTATEMENT,CGIPREPROCESSOR_WRONGVARSTATEMENT_STR,__LINE__,__FILE__);
 				#else
-					return u;
+					return __string__;
 				#endif
 			
 			++cb;

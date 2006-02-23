@@ -75,7 +75,7 @@
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_CONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 			#else
-				return ;
+				return false;
 			#endif		
 		}
 		
@@ -143,7 +143,7 @@
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 			#else
-				return ;
+				return false;
 			#endif
 		
 		#ifdef NO_EX
