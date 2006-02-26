@@ -255,12 +255,16 @@
 	#else
 		bool
 	#endif
-	dbMysql::_exec(const std::string &query) const
+	dbMysql::_exec(const std::string &query, 
+					bool result) const
 	{	
 		if (query.size()==0)
 			queryCollect();			
 		else
+		{
 			request = query;
+			show = result;
+		}
 
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
 		{
@@ -420,7 +424,8 @@
 	#else
 		bool
 	#endif
-	dbMysql::exec(const std::string &query) const
+	dbMysql::exec(const std::string &query, 
+				bool result) const
 	{
 		#ifndef DBMYSQL_WO_XEXEC
 			operType = DBMYSQL_OPER_EXEC;
@@ -430,7 +435,7 @@
 		#ifdef NO_EX
 			bool result = 
 		#endif	
-			_exec(query); 
+			_exec(query, result); 
 		
 		#ifndef DBMYSQL_WO_XEXEC		
 			performXExec(postExec);

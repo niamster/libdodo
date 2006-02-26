@@ -107,13 +107,15 @@ namespace dodo
 
 			/**
 			 * executes collected request
+			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
+			 * @param result describes whether request returns result[show, select...] or not[delete, update]
 			 */				
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							exec(const std::string &query = __string__) const;
+							exec(const std::string &query = __string__, bool result = false) const;
 									
 		protected:
 		

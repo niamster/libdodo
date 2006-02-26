@@ -124,12 +124,16 @@
 	#else
 		bool
 	#endif
-	dbSqlite::_exec(const std::string &query) const
+	dbSqlite::_exec(const std::string &query, 
+					bool result) const
 	{	
 		if (query.size()==0)
 			queryCollect();			
 		else
+		{
 			request = query;
+			show = result;
+		}
 
 		callBackData.data = (dbSqlite *)this;
 		callBackData.first = true;
@@ -240,7 +244,8 @@
 	#else
 		bool
 	#endif
-	dbSqlite::exec(const std::string &query) const
+	dbSqlite::exec(const std::string &query, 
+					bool result) const
 	{
 		#ifndef DBSQLITE_WO_XEXEC
 			operType = DBSQLITE_OPER_EXEC;
@@ -250,7 +255,7 @@
 		#ifdef NO_EX
 			bool result = 
 		#endif	
-			_exec(query); 
+			_exec(query, result); 
 		
 		#ifndef DBSQLITE_WO_XEXEC		
 			performXExec(postExec);

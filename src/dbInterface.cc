@@ -127,7 +127,8 @@ dbInterface::affectedRowsCount()
 #else
 	bool
 #endif
-dbInterface::exec(const std::string &query) const
+dbInterface::exec(const std::string &query, 
+				bool result) const
 {
 	#ifdef NO_EX
 		return true;

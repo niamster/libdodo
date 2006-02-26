@@ -135,12 +135,16 @@
 	#else
 		bool
 	#endif
-	dbPostgresql::_exec(const std::string &query) const
+	dbPostgresql::_exec(const std::string &query, 
+						bool result) const
 	{	
 		if (query.size()==0)
 			queryCollect();			
 		else
+		{
 			request = query;
+			show = result;
+		}
 
 		if (!empty)
 		{
@@ -303,7 +307,8 @@
 	#else
 		bool
 	#endif
-	dbPostgresql::exec(const std::string &query) const
+	dbPostgresql::exec(const std::string &query, 
+						bool result) const
 	{
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 			operType = DBPOSTGRESQL_OPER_EXEC;
@@ -313,7 +318,7 @@
 		#ifdef NO_EX
 			bool result = 
 		#endif	
-			_exec(query); 
+			_exec(query, result); 
 		
 		#ifndef DBPOSTGRESQL_WO_XEXEC		
 			performXExec(postExec);

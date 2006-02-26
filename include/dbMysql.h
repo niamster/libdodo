@@ -257,13 +257,15 @@
 
 				/**
 				 * executes collected request
+				 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
+				 * @param result describes whether request returns result[show, select...] or not[delete, update]
 				 */				
 				#ifndef NO_EX
 					virtual void 
 				#else
 					virtual bool 
 				#endif
-								exec(const std::string &query = __string__) const;
+								exec(const std::string &query = __string__, bool result = false) const;
 				
 				#ifndef DBMYSQL_WO_XEXEC
 				
@@ -338,7 +340,9 @@
 			
 				/**
 				 * executes request
-				 * pure mysql actions
+				 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
+				 * @param result describes whether request returns result[show, select...] or not[delete, update]
+				 * @note pure mysql actions
 				 * in function without `_` hooks are calling
 				 */
 				#ifndef NO_EX
@@ -346,7 +350,7 @@
 				#else
 					virtual bool 
 				#endif
-								_exec(const std::string &query) const;		
+								_exec(const std::string &query, bool result) const;		
 				
 				/**
 				 * inits addidtional mySQL specific statements
