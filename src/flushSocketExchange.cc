@@ -575,7 +575,7 @@ flushSocketExchange::receiveStream(char * const data,
 flushSocketExchange::receiveStreamString(std::string &data, 
 								bool urgent) const
 {	
-	register char *t_data = new char[inSize+1];
+	register char *t_data = new char[inSocketBuffer+1];
 
 	#ifdef NO_EX
 		register bool result = 

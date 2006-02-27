@@ -108,6 +108,6 @@ install:
 	@echo "Use libdodo with pleasure"
 	
 clean:
-	rm -rf *.o *.so*
+	rm -rf *.o *.so* *.a*
 
 force : clean $(LIBRARY)
