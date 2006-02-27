@@ -226,7 +226,7 @@
 			j = definition.children.end();
 			
 			for (i = definition.children.begin();i!=j;++i)
-				sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
+				sample.children.realArr.insert(sample.children.realArr.end(), std::map<std::string,std::vector<__node> >::value_type(i->first, parse(i->second,node->children,definition.chLimit)));
 		}
 		else
 		{
@@ -248,7 +248,7 @@
 					
 					getAttributes(node,one.attributes.realArr);
 					
-					one.children.realArr[(char *)node->name] = parse(node->children);
+					one.children.realArr.insert(one.children.realArr.end(), std::map<std::string, std::vector<__node> >::value_type((char *)node->name, parse(node->children)));
 					
 					sample.children.realArr[(char *)node->name].push_back(one);
 					
@@ -325,7 +325,7 @@
 			{
 				std::map<std::string, __nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
 				for (;i!=j;++i)
-					sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
+					sample.children.realArr.insert(one.children.realArr.end(), std::map<std::string, std::vector<__node> >::value_type(i->first, parse(i->second,node->children,definition.chLimit)));
 				
 			}
 			else
@@ -346,7 +346,7 @@
 						
 						getAttributes(subNode,one.attributes.realArr);
 						
-						one.children.realArr[(char *)subNode->name] = parse(subNode->children);
+						one.children.realArr.insert(one.children.realArr.end(), std::map<std::string, std::vector<__node> >::value_type((char *)subNode->name, parse(subNode->children)));
 						
 						sample.children.realArr[(char *)subNode->name].push_back(one);
 						
@@ -399,7 +399,7 @@
 							xChar = xmlGetProp(node,attribute->name);
 							if (xChar != NULL)
 							{
-								attributes[*iAttr] = (char *)xChar;
+								attributes.insert(attributes.end(), assocArr::value_type(*iAttr, (char *)xChar));
 								xmlFree(xChar);
 							}
 						}
@@ -416,7 +416,7 @@
 					xChar = xmlGetProp(node,attribute->name);
 					if (xChar != NULL)
 					{
-						attributes[*iAttr] = (char *)xChar;
+						attributes.insert(attributes.end(), assocArr::value_type(*iAttr, (char *)xChar));
 						xmlFree(xChar);
 					}
 				}
@@ -431,7 +431,7 @@
 					xChar = xmlGetProp(node,attribute->name);
 					if (xChar!=NULL)
 					{
-						attributes[(char *)attribute->name] = (char *)xChar;
+						attributes.insert(attributes.end(), assocArr::value_type((char *)attribute->name, (char *)xChar));
 						xmlFree(xChar);
 					}	
 					
@@ -454,7 +454,7 @@
 			xChar = xmlGetProp(node,attribute->name);
 			if (xChar!=NULL)
 			{
-				attributes[(char *)attribute->name] = (char *)xChar;
+				attributes.insert(attributes.end(), assocArr::value_type((char *)attribute->name, (char *)xChar));
 				xmlFree(xChar);
 			}	
 			
@@ -553,7 +553,7 @@
 			
 			getAttributes(node,one.attributes.realArr);
 			
-			one.children.realArr[(char *)node->name] = parse(node->children);
+			one.children.realArr.insert(one.children.realArr.end(), std::map<std::string, std::vector<__node> >::value_type((char *)node->name, parse(node->children)));
 			
 			sample.push_back(one);
 			
