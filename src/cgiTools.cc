@@ -132,7 +132,7 @@ cgiTools::make(assocArr &val,
 	{
 		temp = tools::explode(*l,"=");
 		if (temp.size() > 1)
-			val.insert(val.end(),std::map<std::string,std::string>::value_type(temp[0],temp[1]));
+			val[temp[0]] = temp[1];
 	}	
 }
 
@@ -146,7 +146,7 @@ cgiTools::makeEnv() const
 	for (register int i=0;i<HTTP_ENV_SIZE;++i)
 	{
 		env = getenv(HTTP_ENV[i].str);
-		ENVIRONMENT.realArr.insert(ENVIRONMENT.realArr.end(), std::map<std::string,std::string>::value_type(HTTP_ENV[i].str, (env==NULL)?"NULL":env));
+		ENVIRONMENT.realArr[HTTP_ENV[i].str] = (env==NULL)?"NULL":env;
 	}
 }
 
@@ -155,8 +155,8 @@ cgiTools::makeEnv() const
 void 
 cgiTools::initHeaders(assocArr &a_headers) const
 {
-	HEADERS.insert(HEADERS.end(), std::map<std::string,std::string>::value_type("Content-type", "text/html"));
-	HEADERS.insert(HEADERS.end(), std::map<std::string,std::string>::value_type("X-Powered-By", LIBRARY "/" MAJOR "." MINOR "." RELEASE ));
+	HEADERS["Content-type"] = "text/html";
+	HEADERS["X-Powered-By"] = LIBRARY "/" MAJOR "." MINOR "." RELEASE ;
 	
 	if (a_headers.size() > 0)
 	{
@@ -164,7 +164,7 @@ cgiTools::initHeaders(assocArr &a_headers) const
 		j = a_headers.end();
 	
 		for (;i!=j;++i)
-			HEADERS.insert(HEADERS.end(), std::map<std::string,std::string>::value_type(i->first, i->second));	
+			HEADERS[i->first] = i->second;	
 	}
 }
 
@@ -357,7 +357,7 @@ cgiTools::makePost() const
 						file.error = NO_SPACE;
 				fclose(tmp);
 				
-				postFiles.insert(postFiles.end(), std::map<std::string,__cgiFilesUp>::value_type(post_name, file));
+				postFiles[post_name] = file;
 			}
 			else///simply post
 			{
@@ -366,7 +366,7 @@ cgiTools::makePost() const
 				temp0 += 6;		
 				temp1 = i->find("\"",temp0);
 								
-				METHOD_POST.realArr.insert(METHOD_POST.realArr.end(), std::map<std::string,std::string>::value_type(i->substr(temp0,temp1-temp0), i->substr(temp1+5,i->size()-temp1-7)));
+				METHOD_POST.realArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);///damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
 	}	
 }

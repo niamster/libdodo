@@ -376,7 +376,7 @@
 		for (;k!=l;++k)
 		{
 			for (i=fields.begin(), o=k->begin();i!=j;++i,++o)
-				rowFieldsPart.realArr.insert(rowFieldsPart.realArr.end(), std::map<std::string,std::string>::value_type(*i, *o));
+				rowFieldsPart.realArr[*i] = *o;
 				
 			rowsFields.push_back(rowFieldsPart);
 		}

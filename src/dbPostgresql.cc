@@ -416,7 +416,7 @@
 				else
 					rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
 
-				rowFieldsPart.realArr.insert(rowFieldsPart.realArr.end(), std::map<std::string,std::string>::value_type(PQfname(pgResult,i), rowPart));
+				rowFieldsPart.realArr[PQfname(pgResult,i)] = rowPart;
 			}
 			
 			rowsFields.push_back(rowFieldsPart);

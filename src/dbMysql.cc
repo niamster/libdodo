@@ -267,11 +267,13 @@
 		}
 
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
+		{
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
+		}
 		
 		if (!show)
 			#ifndef NO_EX
@@ -279,7 +281,7 @@
 			#else
 				return true;
 			#endif
-			
+		
 		if (!empty)
 		{
 			mysql_free_result(mysqlRes);
@@ -552,7 +554,7 @@
 			for (j=0;j<numFields;j++)
 			{
 				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);			
-				rowFieldsPart.realArr.insert(rowFieldsPart.realArr.end(), std::map<std::string,std::string>::value_type(mysqlFields[j].name, rowPart));
+				rowFieldsPart.realArr[mysqlFields[j].name] = rowPart;
 			}
 			
 			rowsFields.push_back(rowFieldsPart);
