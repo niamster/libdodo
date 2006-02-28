@@ -49,7 +49,7 @@ flushSocketOptions::flushSocketOptions(): lingerOpts(SOCKET_LINGER_OPTION),
 										inSocketBuffer(SOCKET_INSIZE),
 										outSocketBuffer(SOCKET_OUTSIZE),
 										socket(-1),
-										blocked(false)
+										blocked(true)
 {
 }
 
@@ -76,9 +76,7 @@ flushSocketOptions::isBlocked()
 #endif
 flushSocketOptions::block(bool flag)
 {
-	int block = O_NONBLOCK;
-	
-	block = fcntl(socket,F_GETFL);
+	int block = fcntl(socket,F_GETFL);
 	if (block == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);

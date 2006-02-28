@@ -163,7 +163,7 @@ flushSocketExchange::init(int a_socket,
 				block(true);
 		}
 		else
-			block(false);
+			block(true);
 	
 		opened = true;
 	}
