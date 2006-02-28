@@ -457,7 +457,7 @@ flushSocketExchange::sendStream(const char * const data,
 		n = 0;
 		while (sent_received<outSize)
 		{
-			n = ::send(socket,buffer.c_str()+sent_received,inSocketBuffer,flag);
+			n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,flag);
 			if (n==-1)
 				#ifndef NO_EX
 				{
