@@ -44,13 +44,13 @@ process(void *data)
 		fse->receiveStreamString(rec);
 		cout << rec << rec.size() << endl;
 		cout.flush();
-		/*if (rec.compare("exit")==0)
+		if (rec.compare("exit")==0)
 		{
 			bool *exit_st;
 			exit_st = (bool *)sh.lock(EXIT_POS);
 			*exit_st = true;
 			sh.unlock(EXIT_POS);
-		}*/
+		}
 	}
 	catch (baseEx ex)
 	{
