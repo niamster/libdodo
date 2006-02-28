@@ -78,18 +78,18 @@ flushSocketOptions::block(bool flag)
 {
 	int block = O_NONBLOCK;
 	
+	block = fcntl(socket,F_GETFL);
+	if (block == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;		
+		#endif		
+	
 	if (flag)
-	{
-		block = fcntl(socket,F_GETFL);
-		if (block == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;		
-			#endif		
-		
 		block &= ~O_NONBLOCK;
-	}
+	else
+		block |= O_NONBLOCK;
 	
 	if (fcntl(socket,F_SETFL,block)==-1)
 		#ifndef NO_EX

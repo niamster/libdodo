@@ -25,6 +25,11 @@ process(void *data)
 		std::cout << "CHILD BLOCKED\n";
 		cout.flush();
 	}
+	else
+	{
+		std::cout << "CHILD UNBLOCKED\n";
+		cout.flush();
+	}
 	
 	fse->inSize = 4;
 	fse->setInBufferSize(4);
@@ -39,18 +44,23 @@ process(void *data)
 		fse->receiveStreamString(rec);
 		cout << rec << rec.size() << endl;
 		cout.flush();
-		if (rec.compare("exit")==0)
+		/*if (rec.compare("exit")==0)
 		{
 			bool *exit_st;
 			exit_st = (bool *)sh.lock(EXIT_POS);
 			*exit_st = true;
 			sh.unlock(EXIT_POS);
-		}
+		}*/
 	}
 	catch (baseEx ex)
 	{
 		cout << "Smth happened!" << ex << endl;
 		cout.flush();
+	}
+	catch(...)
+	{
+		cout << "Smth happened!" << endl;
+		cout.flush();		
 	}
 	
 	flushSocketExchange::deleteCopy(fse);
@@ -96,7 +106,7 @@ int main(int argc, char **argv)
 		
 		sock.block(false);
 				
-		sock.bindNListen("127.0.0.1",7777,3);
+		sock.bindNListen("127.0.0.1",7778,3);
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",10,true);
 		
@@ -111,6 +121,8 @@ int main(int argc, char **argv)
 		
 		while(!exit_st)
 		{
+			th.sweepTrash();
+			
 			if (sock.accept(fake,info))
 			{
 				if (sock.isBlocked())
@@ -123,8 +135,6 @@ int main(int argc, char **argv)
 				positions.push_back(th.add(process,(void *)conn.createCopy()));
 				th.run(positions.back());
 				th.setExecutionLimit(positions.back());
-				
-				th.sweepTrash();
 				
 				try
 				{
