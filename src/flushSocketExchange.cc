@@ -441,6 +441,8 @@ flushSocketExchange::sendStream(const char * const data,
 		performXExec(preExec);
 	#endif	
 	
+	buffer.append(1,'\n');
+	
 	register unsigned long outSize = buffer.size();
 	
 	iter = outSize/outSocketBuffer;

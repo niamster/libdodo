@@ -572,6 +572,8 @@ flushSTD::writeStream(const char *const aa_buf)
 	if (err)
 		desc = stderr;
 
+	buffer.append(1,'\n');
+
 	register unsigned long outSize = strlen(aa_buf);
 	
 	///execute 

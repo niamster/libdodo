@@ -38,7 +38,6 @@ flushSocket::flushSocket(bool a_server,
 						blockInherited(false),
 						server(a_server)
 {
-
 	makeSocket();
 }
 
@@ -195,6 +194,12 @@ flushSocket::connect(const std::string &host,
 			return false;
 		#endif
 	
+	if (opened)
+	{
+		opened = false;
+		makeSocket();
+	}
+	
 	if (family == PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
@@ -279,6 +284,12 @@ flushSocket::connect(const std::string &path,
 		#else
 			return false;
 		#endif
+
+	if (opened)
+	{
+		opened = false;
+		makeSocket();
+	}	
 	
 	struct sockaddr_un sa;
 	
@@ -321,13 +332,6 @@ flushSocket::bindNListen(const std::string &host,
 		operType = FLUSHSOCKET_OPER_BINDNLISTEN;
 		performXExec(preExec);
 	#endif
-	
-	if (opened)
-		#ifndef NO_EX
-			return ;
-		#else
-			return false;
-		#endif
 			
 	if (!server)
 		#ifndef NO_EX
@@ -335,6 +339,12 @@ flushSocket::bindNListen(const std::string &host,
 		#else
 			return false;
 		#endif
+
+	if (opened)
+	{
+		opened = false;
+		makeSocket();
+	}
 	
 	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
 	
@@ -430,19 +440,18 @@ flushSocket::bindNListen(const std::string &path,
 			performXExec(preExec);
 		#endif
 		
-		if (opened)
-			#ifndef NO_EX
-				return ;
-			#else
-				return false;
-			#endif
-		
 		if (!server)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_CANNOT_BIND,FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
+
+		if (opened)
+		{
+			opened = false;
+			makeSocket();
+		}
 
 		if (force)
 		{
