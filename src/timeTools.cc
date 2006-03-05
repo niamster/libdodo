@@ -250,3 +250,15 @@ timeTools::daysInMonth(unsigned int year,
 }
 
 //-------------------------------------------------------------------
+
+long 
+timeTools::byFormat(const std::string &format, 
+					const std::string &dt)
+{
+	tm tTime;
+	strptime(dt.c_str(), format.c_str(),&tTime);
+	
+	return ::mktime(&tTime);
+}					
+
+//-------------------------------------------------------------------

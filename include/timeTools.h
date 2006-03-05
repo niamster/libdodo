@@ -111,6 +111,13 @@ namespace dodo
 			 * @note if compiled with NO_EX and error occured empty string will return
 			 */
 			static std::string byFormat(const std::string &format, long timestamp, bool local = true);
+
+			/**
+			 * @return timestamp[amount of seconds from 01.01.1970]
+			 * @param format is string contains format presented above
+			 * @param dt contais formated time[date...]
+			 */
+			static long byFormat(const std::string &format, const std::string &dt);
 			
 			/**
 			 * @return amount of seconds from 00:00:00 UTC, January 1, 1970
