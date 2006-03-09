@@ -29,6 +29,7 @@
 
 #include <types.h>
 #include <systemThreadsEx.h>
+#include <systemTools.h>
 
 #include <signal.h>
 #include <pthread.h>
@@ -294,6 +295,13 @@ namespace dodo
 				static systemThreadsMod getModuleInfo(const std::string &module, void *toInit = NULL);
 			
 			#endif
+			
+				/**
+				 * block or unblock signals to thread
+				 * @param signal indicates what signal to block
+				 * @param block indicates whether to block or unblock
+				 */
+				static void blockSignal(systemSignalsEnum signal, bool block=true);
 										
 		protected:
 							

@@ -504,11 +504,15 @@ namespace dodo
 								setSignalHandler(const std::string &module, void *toInit = NULL);
 
 			#endif											
+
+			/**
+			 * @return signal number that refers to given systemSignalsEnum
+			 * @param signal describes signal to convert
+			 */
+			static int toRealSignal(systemSignalsEnum signal);
 				
 		protected:
-			
-			static int toRealSignal(systemSignalsEnum signal);
-			
+						
 			/**
 			 * fills __userInfo with values from passwd structure
 			 */
