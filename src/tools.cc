@@ -1149,7 +1149,7 @@ tools::parseURL(const std::string &url)
 	    register int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif
@@ -1160,7 +1160,7 @@ tools::parseURL(const std::string &url)
 	    
 	    unsigned long long size = 0;
 
-		bzs.avail_out = src_len * 2;
+		bzs.avail_out = BZIP_CHUNK;
 	    char *dst = (char *)malloc(bzs.avail_out + 1);
 		bzs.next_out = dst;
 	
@@ -1180,8 +1180,6 @@ tools::parseURL(const std::string &url)
 	    if (ret == BZ_STREAM_END || ret == BZ_OK) 
 	    {
 			size = (bzs.total_out_hi32 * (unsigned int) -1) + bzs.total_out_lo32;
-			dst = (char *)realloc(dst, size + 1);
-			dst[size] = '\0';
 			_buffer.assign(dst, size);
 			
 			delete [] src;
@@ -1192,7 +1190,7 @@ tools::parseURL(const std::string &url)
 	    	delete [] src;
 	        free(dst);
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif	        
@@ -1201,7 +1199,7 @@ tools::parseURL(const std::string &url)
 	    ret = BZ2_bzDecompressEnd(&bzs);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif	    

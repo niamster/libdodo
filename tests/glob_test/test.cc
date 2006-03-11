@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 			tl.reCodesetConversion(flushDiskTools::getFileContent("test.cc"));*/
 	
 		//cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		cout << tl.zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		//cout << tl.zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
 	
 		//cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
 		
@@ -60,10 +60,10 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).protocol << endl;
 		cout << tools::parseURL(tt).request << endl;*/
 
-		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
-		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9) << endl;
-		cout << tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9)).size() << endl;	
+//		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
+//		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+for (int i(0);i<10000;++i)
+		tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9));	
 	}
     catch(baseEx ex)
     {
