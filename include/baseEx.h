@@ -136,7 +136,7 @@
 				 * @param line line, where was thrown
 				 * @param file file, where was thrown
 				 */			
-				baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, long baseErrno, std::string baseErrstr, unsigned long line, std::string file);
+				baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, std::string baseErrstr, unsigned long line, std::string file);
 				
 				/**
 				 * destructor

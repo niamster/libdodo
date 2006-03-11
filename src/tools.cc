@@ -1121,75 +1121,93 @@ tools::parseURL(const std::string &url)
 	tools::bzCompress(const std::string &buffer, 
 					unsigned short level, 
 					unsigned short type)
-	{
-		bz_stream str;
+	{		
+		unsigned int len = buffer.size();
+		char *dst = new char[len + 1];
 		
-		str.bzalloc = NULL;
-		str.bzfree = NULL;
-		
-		register int ret = 0;
-		
-		ret = BZ2_bzCompressInit(&str, level, 0, type);
+		register int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif		
 		
-		char *tempBuf = new char[buffer.size() + 1];
-		strcpy(tempBuf,buffer.c_str());
-		
-		str.avail_in = buffer.size();
-		str.next_in = tempBuf;
-		
-		char byteBuf[BZIP_CHUNK];
-		
-		str.next_out = byteBuf;
-		str.avail_out = BZIP_CHUNK;
-		
-		ret = BZ2_bzCompress(&str, BZ_RUN);
-		if (ret != BZ_RUN_OK)
-		{
-			delete [] tempBuf;
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
-			#else
-				return __string__;
-			#endif		
-		}
-		
-		std::string _buffer = "";
-		
-		while (true)
-		{
-			ret = BZ2_bzCompress(&str, BZ_FINISH);
-			if (ret == BZ_STREAM_END)
-			{
-				_buffer.append(str.next_out,str.avail_out);
-				break;
-			}
-				
-			if (ret != BZ_FINISH_OK)
-			{
-				delete [] tempBuf;
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
-				#else
-					return buffer;
-				#endif
-			}
-				
-			_buffer.append(str.next_out,str.avail_out);	
-		}
-		
-		BZ2_bzCompressEnd(&str);
-		
-		delete [] tempBuf;
-		
-		return _buffer;
+		return std::string(dst,len);		
 	}					
 
+	//-------------------------------------------------------------------
+
+	std::string 
+	tools::bzDecompress(const std::string &buffer)
+	{
+	    bz_stream bzs;
+	
+	    bzs.bzalloc = NULL;
+	    bzs.bzfree = NULL;
+	
+	    register int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
+		if (ret != BZ_OK)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+			#else
+				return __string__;
+			#endif
+
+	    int src_len = buffer.size();
+	    char *src = new char[src_len + 1];
+	    memcpy(src,buffer.c_str(),src_len);
+	    
+	    unsigned long long size = 0;
+
+		bzs.avail_out = src_len * 2;
+	    char *dst = (char *)malloc(bzs.avail_out + 1);
+		bzs.next_out = dst;
+	
+	    bzs.next_in = src;
+	    bzs.avail_in = src_len;
+	
+		std::string _buffer;
+	
+	    while ((ret = BZ2_bzDecompress(&bzs)) == BZ_OK && bzs.avail_in > 0)
+	    {
+	        bzs.avail_out = src_len;
+	        size = (bzs.total_out_hi32 * (unsigned int) -1) + bzs.total_out_lo32;
+	        dst = (char *)realloc(dst, size + bzs.avail_out + 1);
+	        bzs.next_out = dst + size;
+	    }
+	
+	    if (ret == BZ_STREAM_END || ret == BZ_OK) 
+	    {
+			size = (bzs.total_out_hi32 * (unsigned int) -1) + bzs.total_out_lo32;
+			dst = (char *)realloc(dst, size + 1);
+			dst[size] = '\0';
+			_buffer.assign(dst, size);
+			
+			delete [] src;
+			free(dst);
+	    } 
+	    else 
+	    {
+	    	delete [] src;
+	        free(dst);
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+			#else
+				return __string__;
+			#endif	        
+	    }
+	
+	    ret = BZ2_bzDecompressEnd(&bzs);
+		if (ret != BZ_OK)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+			#else
+				return __string__;
+			#endif	    
+			
+		return _buffer;
+	}
 
 	//-------------------------------------------------------------------
 

@@ -90,7 +90,7 @@
     baseEx::baseEx(errorModuleEnum a_errModule, 
     				unsigned long functionID,
                     errnoSourceEnum errnoSource,
-                    long a_errno,
+                    int a_errno,
                     std::string a_errstr,
                     unsigned long a_line,
                     std::string a_file) : errModule(a_errModule),

@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 			tl.reCodesetConversion(flushDiskTools::getFileContent("test.cc"));*/
 	
 		//cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		//cout << tl.zCompress(flushDisk::getFileContent("Makefile"),9).size() << endl;
+		cout << tl.zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
 	
 		//cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
 		
@@ -60,12 +60,14 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).protocol << endl;
 		cout << tools::parseURL(tt).request << endl;*/
 
-		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;		
-			
+		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
+		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9) << endl;
+		cout << tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9)).size() << endl;	
 	}
     catch(baseEx ex)
     {
-    	cout << endl << ex.line << "!!" << ex.baseErrno << endl;
+    	cout << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
     }
     catch(std::exception ex)
     {
