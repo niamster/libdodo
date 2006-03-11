@@ -49,4 +49,10 @@ MOD_POSTGRESQL_CPP:=-I/opt/postgresql/include
 MOD_POSTGRESQL_LD:=-L/opt/postgresql/lib/
 MOD_POSTGRESQL_LIB:=-lpq
 
+#############
+
+MOD_BZIP_CPP:=
+MOD_BZIP_LD:=
+MOD_BZIP_LIB:=-lbz2
+
 ##############################

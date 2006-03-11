@@ -26,6 +26,7 @@
 #define _DIRECTIVES_H_
 
 #include <stdio.h>
+#include <unistd.h>
 
 #define LIBRARY "libdodo"
 
@@ -52,6 +53,7 @@
 #define ZLIB_EXT
 #define SQLITE_EXT
 #define POSTGRESQL_EXT
+#define BZIP_EXT
 
 /**
  * other options
@@ -66,6 +68,8 @@
  * size of block to use with zLib de/compression
  */
 #define ZLIB_CHUNK 100
+
+#define BZIP_CHUNK 100
 
 /**
  *  describes file permissions for newly created file(pipe) with open method

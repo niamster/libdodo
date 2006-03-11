@@ -17,9 +17,9 @@ int main(int argc, char **argv)
 		
 		tools tl;
 		
-		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
+		/*baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
-			cout << "WTF";
+			cout << "WTF";*/
 		
 		//cout << flushDiskTools::getFileContent("test.cc");
 		
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
 		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;*/
 		
-		string tt = "ftp://hihi:hoho@niam.mu:32/init.cgi?gonivo=true&work=true";
+		/*string tt = "ftp://hihi:hoho@niam.mu:32/init.cgi?gonivo=true&work=true";
 
 		cout << tools::parseURL(tt).host << endl;
 		cout << tools::parseURL(tt).login << endl;
@@ -58,12 +58,14 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).path << endl;
 		cout << tools::parseURL(tt).port << endl;
 		cout << tools::parseURL(tt).protocol << endl;
-		cout << tools::parseURL(tt).request << endl;
-		
+		cout << tools::parseURL(tt).request << endl;*/
+
+		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;		
 			
 	}
     catch(baseEx ex)
     {
+    	cout << endl << ex.line << "!!" << ex.baseErrno << endl;
     }
     catch(std::exception ex)
     {

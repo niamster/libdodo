@@ -66,12 +66,18 @@
 			
 				TOOLS_ZCOMPRESS,
 				TOOLS_ZDECOMPRESS,			
-				TOOLS_ZCOMPRESSSTATIC,
-				TOOLS_ZDECOMPRESSSTATIC,
 			
 			#endif
 			
 				TOOLS_DECODEASCII85,
+				
+			#ifdef BZIP_EXT
+			
+				TOOLS_BZCOMPRESS,
+				TOOLS_BZDECOMPRESS,							
+			
+			#endif
+				
 		};
 		
 	};

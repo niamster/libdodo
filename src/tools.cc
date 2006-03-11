@@ -367,17 +367,14 @@ tools::trim(const std::string &data,
 		#else
 			if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
 		#endif
+		{
+			delete [] outBuffer;
 			#ifndef NO_EX
-			{
-				delete [] outBuffer;
 				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSIONSTATIC,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			}
 			#else
-			{
-				delete [] outBuffer;
 				return buffer;
-			}
 			#endif
+		}
 			
 		std::string result;
 		result.assign(outBuffer, out);
@@ -431,17 +428,14 @@ tools::trim(const std::string &data,
 		#else
 			if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
 		#endif
+		{
+			delete [] outBuffer;
 			#ifndef NO_EX
-			{
-				delete [] outBuffer;
 				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			}
 			#else
-			{
-				delete [] outBuffer;
 				return buffer;
-			}
 			#endif
+		}
 		
 		result.assign(outBuffer, out);
 
@@ -470,17 +464,14 @@ tools::trim(const std::string &data,
 		#else
 			if (iconv(conv,&inFake,&in,&outFake,&out) == (size_t)(-1))
 		#endif
-			#ifndef NO_EX
 			{
 				delete [] outBuffer;
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_RECODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_RECODESETCONVERSION,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return buffer;
+				#endif
 			}
-			#else
-			{
-				delete [] outBuffer;
-				return buffer;
-			}
-			#endif
 		
 		result.assign(outFake, out);
 		
@@ -493,233 +484,122 @@ tools::trim(const std::string &data,
 
 //-------------------------------------------------------------------
 
-	#ifdef ZLIB_EXT
+#ifdef ZLIB_EXT
 	
-		//-------------------------------------------------------------------
+	//-------------------------------------------------------------------
 	
-		std::string 
-		tools::zCompress(const std::string &buffer, 
-						unsigned short level, 
-						zlibCompressionStrategyEnum type)
-		{
-			strm.zalloc = Z_NULL;
-			strm.zfree = Z_NULL;
-			strm.opaque = Z_NULL;
+	std::string 
+	tools::zCompress(const std::string &buffer, 
+					unsigned short level, 
+					zlibCompressionStrategyEnum type)
+	{
+	 	z_stream strm;
+	 	int ret;
+	 	
+	 	std::string strBuf;
+	 	Bytef *byteBuf;
+		 				
+		strm.zalloc = Z_NULL;
+		strm.zfree = Z_NULL;
+		strm.opaque = Z_NULL;
+		
+		if ( (ret=deflateInit2(&strm,level,Z_DEFLATED,15,level,type))<0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+			#else
+				return buffer;
+			#endif
 			
-			if ( (ret=deflateInit2(&strm,level,Z_DEFLATED,15,level,type))<0)
+		strm.avail_in =  buffer.size();
+		strm.next_in = (Bytef *)buffer.c_str();
+		
+		byteBuf = new Bytef[ZLIB_CHUNK];
+		
+		strBuf.clear();
+
+		do
+		{	
+			strm.avail_out = ZLIB_CHUNK;
+			strm.next_out = byteBuf;
+		
+			if ( (ret=deflate(&strm,Z_FINISH))<0)
+			{
+				delete [] byteBuf;
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
 				#else
 					return buffer;
 				#endif
-				
-			strm.avail_in =  buffer.size();
-			strm.next_in = (Bytef *)buffer.c_str();
-			
-			byteBuf = new Bytef[ZLIB_CHUNK];
-			
-			strBuf.clear();
-
-			do
-			{	
-				strm.avail_out = ZLIB_CHUNK;
-				strm.next_out = byteBuf;
-			
-				if ( (ret=deflate(&strm,Z_FINISH))<0)
-					#ifndef NO_EX
-					{
-						delete [] byteBuf;
-						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
-					}
-					#else
-					{
-						delete [] byteBuf;
-						return buffer;
-					}
-					#endif
-					
-				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
 			}
-			while (strm.avail_out==0);
-			
-			deflateEnd(&strm);
-			delete [] byteBuf;
-			
-			return strBuf;
+				
+			strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
 		}
+		while (strm.avail_out==0);
+		
+		deflateEnd(&strm);
+		delete [] byteBuf;
+		
+		return strBuf;
+	}
 
-		//-------------------------------------------------------------------
-	
-		std::string 
-		tools::zDecompress(const std::string &buffer)
-		{
-			strm.zalloc = Z_NULL;
-			strm.zfree = Z_NULL;
-			strm.opaque = Z_NULL;
-			
-			if ( (ret=inflateInit2(&strm,15))<0)
+	//-------------------------------------------------------------------
+
+	std::string 
+	tools::zDecompress(const std::string &buffer)
+	{
+	 	z_stream strm;
+	 	int ret;
+	 	
+	 	std::string strBuf;
+	 	Bytef *byteBuf;
+	 				
+		strm.zalloc = Z_NULL;
+		strm.zfree = Z_NULL;
+		strm.opaque = Z_NULL;
+		
+		if ( (ret=inflateInit2(&strm,15))<0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+			#else
+				return buffer;
+			#endif
+
+
+		byteBuf = new Bytef[ZLIB_CHUNK];
+
+		strm.avail_in = buffer.size();
+		strm.next_in = (Bytef *)buffer.c_str();
+					
+		strBuf.clear();
+
+		do
+		{	
+			strm.avail_out = ZLIB_CHUNK;
+			strm.next_out = byteBuf;
+		
+			if ( (ret=inflate(&strm,Z_NO_FLUSH))<0)
+			{
+				delete [] byteBuf;
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
 				#else
 					return buffer;
 				#endif
-
-
-			byteBuf = new Bytef[ZLIB_CHUNK];
-
-			strm.avail_in = buffer.size();
-			strm.next_in = (Bytef *)buffer.c_str();
-						
-			strBuf.clear();
-
-			do
-			{	
-				strm.avail_out = ZLIB_CHUNK;
-				strm.next_out = byteBuf;
-			
-				if ( (ret=inflate(&strm,Z_NO_FLUSH))<0)
-					#ifndef NO_EX
-					{
-						delete [] byteBuf;
-						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESS,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
-					}
-					#else
-					{
-						delete [] byteBuf;
-						return buffer;
-					}
-					#endif
-					
-				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
 			}
-			while (strm.avail_out==0); 
-
-			inflateEnd(&strm);
-			delete [] byteBuf;
-			
-			return strBuf;
-		}
-		
-		//-------------------------------------------------------------------
-		
-		std::string 
-		tools::zCompressStatic(const std::string &buffer, 
-						unsigned short level, 
-						zlibCompressionStrategyEnum type)
-		{
-		 	z_stream strm;
-		 	int ret;
-		 	
-		 	std::string strBuf;
-		 	Bytef *byteBuf;
-			 				
-			strm.zalloc = Z_NULL;
-			strm.zfree = Z_NULL;
-			strm.opaque = Z_NULL;
-			
-			if ( (ret=deflateInit2(&strm,level,Z_DEFLATED,15,level,type))<0)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
-				#else
-					return buffer;
-				#endif
 				
-			strm.avail_in =  buffer.size();
-			strm.next_in = (Bytef *)buffer.c_str();
-			
-			byteBuf = new Bytef[ZLIB_CHUNK];
-			
-			strBuf.clear();
-
-			do
-			{	
-				strm.avail_out = ZLIB_CHUNK;
-				strm.next_out = byteBuf;
-			
-				if ( (ret=deflate(&strm,Z_FINISH))<0)
-					#ifndef NO_EX
-					{
-						delete [] byteBuf;
-						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZCOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
-					}
-					#else
-					{
-						delete [] byteBuf;
-						return buffer;
-					}
-					#endif
-					
-				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
-			}
-			while (strm.avail_out==0);
-			
-			deflateEnd(&strm);
-			delete [] byteBuf;
-			
-			return strBuf;
+			strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
 		}
+		while (strm.avail_out==0); 
 
-		//-------------------------------------------------------------------
+		inflateEnd(&strm);
+		delete [] byteBuf;
+		
+		return strBuf;
+	}
 	
-		std::string 
-		tools::zDecompressStatic(const std::string &buffer)
-		{
-		 	z_stream strm;
-		 	int ret;
-		 	
-		 	std::string strBuf;
-		 	Bytef *byteBuf;
-		 				
-			strm.zalloc = Z_NULL;
-			strm.zfree = Z_NULL;
-			strm.opaque = Z_NULL;
+	//-------------------------------------------------------------------		
 			
-			if ( (ret=inflateInit2(&strm,15))<0)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
-				#else
-					return buffer;
-				#endif
-
-
-			byteBuf = new Bytef[ZLIB_CHUNK];
-
-			strm.avail_in = buffer.size();
-			strm.next_in = (Bytef *)buffer.c_str();
-						
-			strBuf.clear();
-
-			do
-			{	
-				strm.avail_out = ZLIB_CHUNK;
-				strm.next_out = byteBuf;
-			
-				if ( (ret=inflate(&strm,Z_NO_FLUSH))<0)
-					#ifndef NO_EX
-					{
-						delete [] byteBuf;
-						throw baseEx(ERRMODULE_TOOLS,TOOLS_ZDECOMPRESSSTATIC,ERR_ZLIB,ret,strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
-					}
-					#else
-					{
-						delete [] byteBuf;
-						return buffer;
-					}
-					#endif
-					
-				strBuf.append((char *)byteBuf,ZLIB_CHUNK-strm.avail_out);
-			}
-			while (strm.avail_out==0); 
-
-			inflateEnd(&strm);
-			delete [] byteBuf;
-			
-			return strBuf;
-		}
-		
-		//-------------------------------------------------------------------		
-				
-	#endif
+#endif
 
 //-------------------------------------------------------------------
 
@@ -1232,3 +1112,88 @@ tools::parseURL(const std::string &url)
 }
 
 //-------------------------------------------------------------------
+
+#ifdef BZIP_EXT
+
+	//-------------------------------------------------------------------
+
+	std::string 
+	tools::bzCompress(const std::string &buffer, 
+					unsigned short level, 
+					unsigned short type)
+	{
+		bz_stream str;
+		
+		str.bzalloc = NULL;
+		str.bzfree = NULL;
+		
+		register int ret = 0;
+		
+		ret = BZ2_bzCompressInit(&str, level, 0, type);
+		if (ret != BZ_OK)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+			#else
+				return __string__;
+			#endif		
+		
+		char *tempBuf = new char[buffer.size() + 1];
+		strcpy(tempBuf,buffer.c_str());
+		
+		str.avail_in = buffer.size();
+		str.next_in = tempBuf;
+		
+		char byteBuf[BZIP_CHUNK];
+		
+		str.next_out = byteBuf;
+		str.avail_out = BZIP_CHUNK;
+		
+		ret = BZ2_bzCompress(&str, BZ_RUN);
+		if (ret != BZ_RUN_OK)
+		{
+			delete [] tempBuf;
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+			#else
+				return __string__;
+			#endif		
+		}
+		
+		std::string _buffer = "";
+		
+		while (true)
+		{
+			ret = BZ2_bzCompress(&str, BZ_FINISH);
+			if (ret == BZ_STREAM_END)
+			{
+				_buffer.append(str.next_out,str.avail_out);
+				break;
+			}
+				
+			if (ret != BZ_FINISH_OK)
+			{
+				delete [] tempBuf;
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,"",__LINE__,__FILE__);
+				#else
+					return buffer;
+				#endif
+			}
+				
+			_buffer.append(str.next_out,str.avail_out);	
+		}
+		
+		BZ2_bzCompressEnd(&str);
+		
+		delete [] tempBuf;
+		
+		return _buffer;
+	}					
+
+
+	//-------------------------------------------------------------------
+
+#endif
+
+//-------------------------------------------------------------------
+

@@ -41,6 +41,10 @@
 	#include <zlib.h>
 #endif
 
+#ifdef BZIP_EXT
+	#include <bzlib.h>
+#endif
+
 namespace dodo
 {
 	/**
@@ -292,34 +296,14 @@ namespace dodo
 			 	 * @param type descibes compression strategy
 				 * @note if compiled without exeptions - on error buffer will be returned
 			 	 */
-			 	virtual std::string zCompress(const std::string &buffer, unsigned short level=6, zlibCompressionStrategyEnum type=HUFFMAN_COMRESSION);
+			 	static std::string zCompress(const std::string &buffer, unsigned short level=6, zlibCompressionStrategyEnum type=HUFFMAN_COMRESSION);
 			 	
 			 	/**
 			 	 * @return decompressed buffer
-			 	 * @param buffer contains data to compress
-			 	 * @param level is level to compress [1..9]
-			 	 * @param type descibes compression strategy
+			 	 * @param buffer contains data to decompress
 				 * @note if compiled without exeptions - on error buffer will be returned
 			 	 */
-			 	virtual std::string zDecompress(const std::string &buffer);
-			 	
-			 	/**
-			 	 * @return compressed buffer
-			 	 * @param buffer contains data to compress
-			 	 * @param level is level to compress [1..9]
-			 	 * @param type descibes compression strategy
-				 * @note if compiled without exeptions - on error buffer will be returned
-			 	 */
-			 	static std::string zCompressStatic(const std::string &buffer, unsigned short level=6, zlibCompressionStrategyEnum type=HUFFMAN_COMRESSION);
-			 	
-			 	/**
-			 	 * @return decompressed buffer
-			 	 * @param buffer contains data to compress
-			 	 * @param level is level to compress [1..9]
-			 	 * @param type descibes compression strategy
-				 * @note if compiled without exeptions - on error buffer will be returned
-			 	 */
-			 	static std::string zDecompressStatic(const std::string &buffer);
+			 	static std::string zDecompress(const std::string &buffer);
 			 				 
 			 #endif
 			
@@ -377,6 +361,28 @@ namespace dodo
 			 * @param url describes URL to parse
 			 */
 			static __url parseURL(const std::string &url);
+			
+			#ifdef BZIP_EXT
+			
+			 	
+			 	/**
+			 	 * @return compressed buffer
+			 	 * @param buffer contains data to compress
+			 	 * @param level is level to compress [1..9]
+			 	 * @param type descibes compression strategy[0..250] => controls how the compression phase behaves when presented with worst case, highly repetitive, input data
+				 * @note if compiled without exeptions - on error buffer will be returned
+				 * Lower values of workFactor reduce the amount of effort the standard algorithm will expend before resorting to the fallback
+			 	 */
+			 	static std::string bzCompress(const std::string &buffer, unsigned short level=6, unsigned short type = 30);
+			 	
+			 	/**
+			 	 * @return decompressed buffer
+			 	 * @param buffer contains data to decompress
+				 * @note if compiled without exeptions - on error buffer will be returned
+			 	 */
+			 	static std::string bzDecompress(const std::string &buffer);			
+			
+			#endif
 									
 		private:
 			
@@ -421,17 +427,11 @@ namespace dodo
 				char *inFake;///< to protect incomming string
 				char *outFake;///< to protect outgoing string
 				
-			#endif
+			#endif		
 			
-			#ifdef ZLIB_EXT
-			 
-			 	z_stream strm;///< zLib structure
-			 	int ret;///< to set return value
-			 	
-			 	std::string strBuf;///< to store result
-			 	Bytef *byteBuf;///< to store result
-			 
-			 #endif
+			#ifdef BZIP_EXT
+			
+			#endif			
 								
 			std::string result;///< to store temporary result
 							

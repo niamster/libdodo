@@ -40,7 +40,8 @@ MODS_CPP:=$(MOD_MYSQL_CPP) \
 			$(MOD_PCRE_CPP) \
 			$(MOD_LIBXML2_CPP)\
 			$(MOD_SQLITE_CPP) \
-			$(MOD_POSTGRESQL_CPP)
+			$(MOD_POSTGRESQL_CPP) \
+			$(MOD_BZIP_CPP)
 
 MODS_LD:=$(MOD_MYSQL_LD) \
 			$(MOD_PCRE_LD) \
@@ -48,7 +49,8 @@ MODS_LD:=$(MOD_MYSQL_LD) \
 			$(MOD_LIBXML2_LD) \
 			$(MOD_SQLITE_LD) \
 			$(MOD_PTHREAD_LD) \
-			$(MOD_POSTGRESQL_LD)
+			$(MOD_POSTGRESQL_LD) \
+			$(MOD_BZIP_LD)
 			
 MODS_LIB:=$(MOD_MYSQL_LIB) \
 			$(MOD_PCRE_LIB) \
@@ -56,7 +58,8 @@ MODS_LIB:=$(MOD_MYSQL_LIB) \
 			$(MOD_LIBXML2_LIB) \
 			$(MOD_SQLITE_LIB) \
 			$(MOD_PTHREAD_LIB) \
-			$(MOD_POSTGRESQL_LIB)
+			$(MOD_POSTGRESQL_LIB) \
+			$(MOD_BZIP_LIB)
 
 ###########################################################
 

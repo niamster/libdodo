@@ -52,6 +52,7 @@
 			ERR_LIBXML2,
 			ERR_ZLIB,
 			ERR_SQLITE,
+			ERR_BZIP,
 		};
 
 		/**
@@ -155,7 +156,7 @@
 				unsigned long funcID;///< in what function was thrown[see *Ex.h headers for IDs]
 				errnoSourceEnum errnoSource;///< 	where error code and string was taken	
 			
-				unsigned long baseErrno;///< error code
+				int baseErrno;///< error code
 				std::string baseErrstr;///< describes error code
 				
 				unsigned long line;///< line, where was thrown
