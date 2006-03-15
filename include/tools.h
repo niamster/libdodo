@@ -383,6 +383,21 @@ namespace dodo
 			 	static std::string bzDecompress(const std::string &buffer);			
 			
 			#endif
+			
+			/**
+			 * sends mail using sendmail
+			 * @param path is path to sendmail
+			 * @param to is mail address where to send
+			 * @param subject is a subject of the letter
+			 * @param message is a message to send
+			 * @param headers - extra headers
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif				
+							mail(const std::string &path, const std::string &to, const std::string &subject, const std::string &message, const std::string &headers = __string__);
 									
 		private:
 			

@@ -1213,3 +1213,42 @@ tools::parseURL(const std::string &url)
 
 //-------------------------------------------------------------------
 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+tools::mail(const std::string &path,
+			const std::string &to, 
+			const std::string &subject, 
+			const std::string &message, 
+			const std::string &headers)
+{
+	FILE *sendmail = popen(path.c_str(), "w");
+
+	if (sendmail == NULL) 
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	fprintf(sendmail, "To: %s\n", to.c_str());
+	fprintf(sendmail, "Subject: %s\n", subject.c_str());
+	if (headers.size() > 0)
+		fprintf(sendmail, "%s\n", headers.c_str());
+	fprintf(sendmail, "\n%s\n", message.c_str());
+
+	if (pclose(sendmail) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------

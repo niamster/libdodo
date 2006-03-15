@@ -77,6 +77,8 @@
 				TOOLS_BZDECOMPRESS,							
 			
 			#endif
+			
+				TOOLS_MAIL,
 				
 		};
 		
