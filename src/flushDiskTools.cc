@@ -1303,3 +1303,16 @@ flushDiskTools::copyDir(const std::string &from,
 }
 
 //-------------------------------------------------------------------
+
+bool 
+flushDiskTools::exists(const std::string &path)
+{
+	struct stat st;
+	
+	if (::lstat(path.c_str(),&st) == 0)
+		return true;
+	
+	return false;
+}
+
+//-------------------------------------------------------------------

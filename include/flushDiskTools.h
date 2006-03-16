@@ -333,6 +333,12 @@ namespace dodo
 							chgrp(const std::string &path, int gid);
 			
 			/**
+			 * @return true if file/directory exists
+			 * @param path is path to file/directory
+			 */				
+			static bool exists(const std::string &path);
+			
+			/**
 			 * @return user id of the node
 			 * @param path indicates path where to get info
 			 */
