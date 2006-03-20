@@ -215,12 +215,12 @@
 				/**
 				 * clears params of the give node
 				 */
-				virtual void initNode(__node &node);
+				static void initNode(__node &node);
 						
 				/**
 				 * clears params of the give node definition
 				 */				
-				virtual void initNodeDef(__nodeDef &node);
+				static void initNodeDef(__nodeDef &node);
 				
 				/**
 				 * frees internal structures
