@@ -170,8 +170,7 @@ namespace dodo
 			std::list<std::string> processed;///< vector of files that will be skipped due to recurse
 			std::list<std::string>::iterator i;///< iterator for list
 			std::list<std::string>::iterator j;///< iterator for list
-			
-			
+		
 			std::map<std::string, stringArr> globalArray;///< set of global variables(arrays)[user-set]
 			std::map<std::string, stringArr>::iterator o;///< iterator for map of string arrays
 			std::map<std::string, stringArr>::iterator p;///< iterator for map of string arrays
@@ -189,9 +188,7 @@ namespace dodo
 			assocArr local;///< set of local variables[during parsing]			
 			assocArr::iterator k;///< iterator for map
 			assocArr::iterator l;///< iterator for map
-			
-			
-			
+				
 			std::string temp1;///< temporary storage									
 			std::string temp;///< temp storage
 	};

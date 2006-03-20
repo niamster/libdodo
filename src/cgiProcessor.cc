@@ -403,7 +403,18 @@ void
 cgiProcessor::_print(const std::string &statement, 
 					std::string &tpl)
 {
-	tpl.append(getVar(statement));
+	stringArr temp = tools::explode(statement,",");
+	if (temp.size() == 1)
+		tpl.append(getVar(statement));	
+	else
+	{
+		if (temp.size() > 1)
+		{
+			stringArr::iterator i(temp.begin()), j(temp.end());
+			for (;i!=j;++i)
+				tpl.append(getVar(*i));
+		}
+	}
 }
 
 //-------------------------------------------------------------------

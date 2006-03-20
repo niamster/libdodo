@@ -110,3 +110,5 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 		<(print $b)> -> <(print $c)>
 	<(rof)>
 <(rof)>	
+
+<(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
