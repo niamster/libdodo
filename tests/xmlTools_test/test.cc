@@ -54,6 +54,9 @@ int main(int argc, char **argv)
 			if (node.children["bebe"].size() > 1)
 				cout << node.children["bebe"][1].attributes["id"] << endl;
 		}
+		
+		tool.clear();
+		
 	}
 	catch(baseEx ex)
 	{

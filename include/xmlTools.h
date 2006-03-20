@@ -221,6 +221,11 @@
 				 * clears params of the give node definition
 				 */				
 				virtual void initNodeDef(__nodeDef &node);
+				
+				/**
+				 * frees internal structures
+				 */
+				virtual void clear();
 												
 			protected:
 				
