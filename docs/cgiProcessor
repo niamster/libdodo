@@ -33,7 +33,7 @@ for example :
 			1.element named "one" of the second element in array of hashes, variable 'varOne' has value "one" : $hashArrVar.1.{$varOne}
 			2.element named "one" of the second element in array of hashes, member "one" of the array 'arrVar' has value "one": $hashArrVar.1.{$arrVar.one}
 
-pair of (\t, \n, ", ', `) will be removed from the statement, so "$var" == '$var' == $var == `$var`
+pair of (", ', `) will be removed from the statement, so "$var" == '$var' == $var == `$var`
 
 namespace:
 	cgiProcessor uses namespaces.
@@ -128,6 +128,7 @@ blocks:
 			
 		print:
 			<(print {$arr2.{0}.{$one}} )>
+			
 			<(print $arr2.1.{$arr1.{$one}} )>
 			
 			you	may combine some values using ',':

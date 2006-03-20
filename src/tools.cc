@@ -1224,7 +1224,7 @@ tools::mail(const std::string &path,
 			const std::string &message, 
 			const std::string &headers)
 {
-	FILE *sendmail = popen(path.c_str(), "w");
+	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
 	if (sendmail == NULL) 
 		#ifndef NO_EX
