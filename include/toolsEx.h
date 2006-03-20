@@ -47,6 +47,15 @@
 		 */	
 		#define TOOLS_BAD_ASCII85_STR "Bad character in ASCII85."
 		
+		#ifdef BZIP_EXT
+		
+			#define TOOLS_BAD_COMPRESSION "Error occured during comression."
+			#define TOOLS_BAD_DECOMPRESSION_INIT "Error occured during preparations for decompression."
+			#define TOOLS_BAD_DECOMPRESSION_FINISH "Error occured during finishing decompression."
+			#define TOOLS_BAD_DECOMPRESSION "Error occured during decompression."
+		
+		#endif
+		
 		/**
 		 * ID of function where exception was thrown
 		 */			
