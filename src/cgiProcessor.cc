@@ -1241,3 +1241,12 @@ cgiProcessor::trim(const std::string &statement)
 }
 
 //-------------------------------------------------------------------
+
+void 
+cgiProcessor::display(const std::string &path)
+{
+	std::cout << this->process(path);
+	std::cout.flush();
+}
+
+//-------------------------------------------------------------------

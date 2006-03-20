@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	
 		cgip.assign("one","one");
 	
-		cout << cgip.process("test.tpl");
+		cgip.display("test.tpl");
 	}
 	catch(baseEx ex)
 	{

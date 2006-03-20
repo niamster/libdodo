@@ -85,7 +85,13 @@ namespace dodo
 			 * @param varVal describes value of variable(array of hashes)
 			 */
 			virtual void assign(const std::string &varName, const std::vector<assocArr> &varVal);
-								
+			
+			/**
+			 * show to stdout parsed template
+			 * @param path indicates path where template stays
+			 */		
+			virtual void display(const std::string &path);
+			
 		protected:	
 			
 			/**
