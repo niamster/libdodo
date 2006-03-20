@@ -347,7 +347,7 @@ systemThreads::run(unsigned long position,
 			#else
 				return false;
 			#endif
-
+		
 		if (k->detached)
 			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 		else

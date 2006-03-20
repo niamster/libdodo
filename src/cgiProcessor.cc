@@ -426,7 +426,28 @@ cgiProcessor::_for(const std::string &buffer,
 		if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
 			break;
 			
-	std::string temp1 = statement.substr(p,i - p).substr(1);
+	std::string varName = statement.substr(p,i - p).substr(1);
+
+
+	std::string keyVal;
+	assocArr::iterator keyIter;
+	register bool key(false);	
+	std::string keyName;
+	
+	p = statement.find("=>",i + 1);
+	if (p != std::string::npos)
+	{
+		key = true;
+		p = statement.find("$",p + 2);
+		
+		i = p;
+		for (;i<j;++i)
+			if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
+				break;		
+		
+		keyName = varName;
+		varName = statement.substr(p,i - p).substr(1);
+	}
 
 	p = statement.find("in",i + 1);
 	if (p == std::string::npos)
@@ -436,40 +457,57 @@ cgiProcessor::_for(const std::string &buffer,
 			return u;
 		#endif
 	
-	std::string temp2 = trim(statement.substr(p + 2));
-	std::string temp3 = buffer.substr(start,u - start);
+	std::string targetVar = trim(statement.substr(p + 2));
+	std::string forSpace = buffer.substr(start,u - start);
 	
 	u = buffer.find(")>",u) + 2;
 					
-	if (temp2[0] == '$')
+	if (targetVar[0] == '$')
 	{
-		temp2 = temp2.substr(1);
+		targetVar = targetVar.substr(1);
 		
-		stringArr temp = tools::explode(temp2,".");
+		stringArr temp = tools::explode(targetVar,".");
 		
 		if (temp.size() == 1)
 		{
 			assocArr::iterator k = local.begin();
 			assocArr::iterator l = local.end();		
 			for (;k!=l;++k)
-				if (strcmp(temp2.c_str(),k->first.c_str()) == 0)
+				if (strcmp(targetVar.c_str(),k->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(temp1);
+					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[temp1];
+						iterVal = local[varName];
+					
+					if (key)
+					{
+						keyIter = local.find(keyName);
+						if (keyIter != local.end())
+							keyVal = local[keyName];
+					}
 					
 					register unsigned long i(0),j(k->second.size());
 					for (;i<j;++i)
 					{
-						local[temp1] = std::string(1,k->second[i]);
-						tpl.append(_process(temp3,path));
+						if (key)
+							local[keyName] = tools::lToString(i);						
+						local[varName] = std::string(1,k->second[i]);							
+						tpl.append(_process(forSpace,path));
 					}
 					
 					if (iter != local.end())
-						local[temp1] = iterVal;
+						local[varName] = iterVal;
 					else
-						local.erase(temp1);
+						local.erase(varName);
+					
+					if (key)
+					{
+						if (keyIter != local.end())
+							local[keyName] = keyVal;
+						else
+							local.erase(keyName);						
+					}
 					
 					return u;
 				}
@@ -479,23 +517,40 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;g!=h;++g)
 				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(temp1);
+					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[temp1];					
+						iterVal = local[varName];					
+
+					if (key)
+					{
+						keyIter = local.find(keyName);
+						if (keyIter != local.end())
+							keyVal = local[keyName];
+					}
 					
 					assocArr::iterator k = g->second.begin();
 					assocArr::iterator l = g->second.end();			
 					for (;k!=l;++k)
-					{
-						local[temp1] = k->second;
-						tpl.append(_process(temp3,path));				
+					{												
+						if (key)
+							local[keyName] = k->first;
+						local[varName] = k->second;
+						tpl.append(_process(forSpace,path));				
 					}
 					
 					if (iter != local.end())
-						local[temp1] = iterVal;
+						local[varName] = iterVal;
 					else
-						local.erase(temp1);
+						local.erase(varName);
+					
+					if (key)
+					{
+						if (keyIter != local.end())
+							local[keyName] = keyVal;
+						else
+							local.erase(keyName);						
+					}
 					
 					return u;
 				}
@@ -503,25 +558,42 @@ cgiProcessor::_for(const std::string &buffer,
 			k = global.begin();
 			l = global.end();		
 			for (;k!=l;++k)
-				if (strcmp(temp2.c_str(),k->first.c_str()) == 0)
+				if (strcmp(targetVar.c_str(),k->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(temp1);
+					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[temp1];	
-											
+						iterVal = local[varName];	
+					
+					if (key)
+					{
+						keyIter = local.find(keyName);
+						if (keyIter != local.end())
+							keyVal = local[keyName];
+					}
+																
 					register unsigned long i(0),j(k->second.size());
 					for (;i<j;++i)
-					{
-						local[temp1] = std::string(1,k->second[i]);
-						tpl.append(_process(temp3,path));
+					{						
+						if (key)
+							local[keyName] = tools::lToString(i);
+						local[varName] = std::string(1,k->second[i]);
+						tpl.append(_process(forSpace,path));
 					}
 					
 					if (iter != local.end())
-						local[temp1] = iterVal;
+						local[varName] = iterVal;
 					else
-						local.erase(temp1);
+						local.erase(varName);
 					
+					if (key)
+					{
+						if (keyIter != local.end())
+							local[keyName] = keyVal;
+						else
+							local.erase(keyName);						
+					}
+										
 					return u;
 				}
 
@@ -530,23 +602,40 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;g!=h;++g)
 				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(temp1);
+					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[temp1];	
-											
+						iterVal = local[varName];	
+					
+					if (key)
+					{
+						keyIter = local.find(keyName);
+						if (keyIter != local.end())
+							keyVal = local[keyName];
+					}
+																
 					assocArr::iterator k = g->second.begin();
 					assocArr::iterator l = g->second.end();			
 					for (;k!=l;++k)
-					{
-						local[temp1] = k->second;
-						tpl.append(_process(temp3,path));
+					{												
+						if (key)
+							local[keyName] = k->first;
+						local[varName] = k->second;
+						tpl.append(_process(forSpace,path));
 					}
 					
 					if (iter != local.end())
-						local[temp1] = iterVal;
+						local[varName] = iterVal;
 					else
-						local.erase(temp1);
+						local.erase(varName);		
+									
+					if (key)
+					{
+						if (keyIter != local.end())
+							local[keyName] = keyVal;
+						else
+							local.erase(keyName);						
+					}
 					
 					return u;
 				}
@@ -556,23 +645,40 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;o!=p;++o)
 				if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(temp1);
+					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[temp1];	
+						iterVal = local[varName];	
+
+					if (key)
+					{
+						keyIter = local.find(keyName);
+						if (keyIter != local.end())
+							keyVal = local[keyName];
+					}
 											
 					stringArr::iterator k = o->second.begin();
 					stringArr::iterator l = o->second.end();			
-					for (;k!=l;++k)
-					{
-						local[temp1] = *k;
-						tpl.append(_process(temp3,path));				
+					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter)
+					{						
+						if (key)
+							local[keyName] = tools::lToString(keyNIter);
+						local[varName] = *k;
+						tpl.append(_process(forSpace,path));				
 					}
 					
 					if (iter != local.end())
-						local[temp1] = iterVal;
+						local[varName] = iterVal;
 					else
-						local.erase(temp1);
+						local.erase(varName);		
+									
+					if (key)
+					{
+						if (keyIter != local.end())
+							local[keyName] = keyVal;
+						else
+							local.erase(keyName);						
+					}
 					
 					return u;
 				}
@@ -582,24 +688,41 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;d!=f;++d)
 				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 				{
-					std::map<std::string, assocArr>::iterator iter = localHash.find(temp1);
+					std::map<std::string, assocArr>::iterator iter = localHash.find(varName);
 					assocArr iterVal;
 					if (iter != localHash.end())
-						iterVal = localHash[temp1];					
-					
+						iterVal = localHash[varName];					
+
+					if (key)
+					{
+						keyIter = local.find(keyName);
+						if (keyIter != local.end())
+							keyVal = local[keyName];
+					}
+										
 					std::vector<assocArr>::iterator k = d->second.begin();
 					std::vector<assocArr>::iterator l = d->second.end();			
-					for (;k!=l;++k)
-					{
-						localHash[temp1] = *k;
-						tpl.append(_process(temp3,path));				
+					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter)
+					{						
+						if (key)
+							local[keyName] = tools::lToString(keyNIter);
+						localHash[varName] = *k;
+						tpl.append(_process(forSpace,path));				
 					}
 					
 					if (iter != localHash.end())
-						localHash[temp1] = iterVal;
+						localHash[varName] = iterVal;
 					else
-						localHash.erase(temp1);
-					
+						localHash.erase(varName);
+									
+					if (key)
+					{
+						if (keyIter != local.end())
+							local[keyName] = keyVal;
+						else
+							local.erase(keyName);						
+					}
+										
 					return u;
 				}												
 		}
@@ -617,23 +740,40 @@ cgiProcessor::_for(const std::string &buffer,
 						for (;k!=l;++k)
 							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 							{
-								assocArr::iterator iter = local.find(temp1);
+								assocArr::iterator iter = local.find(varName);
 								std::string iterVal;
 								if (iter != local.end())
-									iterVal = local[temp1];	
-																	
+									iterVal = local[varName];	
+								
+								if (key)
+								{
+									keyIter = local.find(keyName);
+									if (keyIter != local.end())
+										keyVal = local[keyName];
+								}
+														
 								register unsigned long i(0),j(k->second.size());
 								for (;i<j;++i)
-								{
-									local[temp1] = std::string(1,k->second[i]);
-									tpl.append(_process(temp3,path));
+								{									
+									if (key)
+										local[keyName] = tools::lToString(i);
+									local[varName] = std::string(1,k->second[i]);
+									tpl.append(_process(forSpace,path));
 								}
 					
 								if (iter != local.end())
-									local[temp1] = iterVal;
+									local[varName] = iterVal;
 								else
-									local.erase(temp1);
-								
+									local.erase(varName);
+										
+								if (key)
+								{
+									if (keyIter != local.end())
+										local[keyName] = keyVal;
+									else
+										local.erase(keyName);						
+								}
+												
 								return u;
 							}
 					}
@@ -648,23 +788,40 @@ cgiProcessor::_for(const std::string &buffer,
 						for (;k!=l;++k)
 							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 							{
-								assocArr::iterator iter = local.find(temp1);
+								assocArr::iterator iter = local.find(varName);
 								std::string iterVal;
 								if (iter != local.end())
-									iterVal = local[temp1];	
-																	
+									iterVal = local[varName];	
+								
+								if (key)
+								{
+									keyIter = local.find(keyName);
+									if (keyIter != local.end())
+										keyVal = local[keyName];
+								}
+																									
 								register unsigned long i(0),j(k->second.size());
 								for (;i<j;++i)
-								{
-									local[temp1] = std::string(1,k->second[i]);
-									tpl.append(_process(temp3,path));
+								{									
+									if (key)
+										local[keyName] = tools::lToString(i);
+									local[varName] = std::string(1,k->second[i]);
+									tpl.append(_process(forSpace,path));
 								}
 								
 								if (iter != local.end())
-									local[temp1] = iterVal;
+									local[varName] = iterVal;
 								else
-									local.erase(temp1);
-								
+									local.erase(varName);
+										
+								if (key)
+								{
+									if (keyIter != local.end())
+										local[keyName] = keyVal;
+									else
+										local.erase(keyName);						
+								}
+																
 								return u;
 							}
 					}
@@ -677,23 +834,40 @@ cgiProcessor::_for(const std::string &buffer,
 						register unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= o->second.size())
 						{
-							assocArr::iterator iter = local.find(temp1);
+							assocArr::iterator iter = local.find(varName);
 							std::string iterVal;
 							if (iter != local.end())
-								iterVal = local[temp1];	
-																
+								iterVal = local[varName];	
+								
+							if (key)
+							{
+								keyIter = local.find(keyName);
+								if (keyIter != local.end())
+									keyVal = local[keyName];
+							}
+																								
 							register unsigned long i(0),j(o->second[pos].size());
 							for (;i<j;++i)
-							{
-								local[temp1] = std::string(1,o->second[pos][i]);
-								tpl.append(_process(temp3,path));
+							{								
+								if (key)
+									local[keyName] = tools::lToString(i);
+								local[varName] = std::string(1,o->second[pos][i]);
+								tpl.append(_process(forSpace,path));
 							}
 							
 							if (iter != local.end())
-								local[temp1] = iterVal;
+								local[varName] = iterVal;
 							else
-								local.erase(temp1);
-							
+								local.erase(varName);
+
+							if (key)
+							{
+								if (keyIter != local.end())
+									local[keyName] = keyVal;
+								else
+									local.erase(keyName);						
+							}
+															
 							return u;
 						}
 					}							
@@ -706,24 +880,41 @@ cgiProcessor::_for(const std::string &buffer,
 						register unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= d->second.size())
 						{
-							assocArr::iterator iter = local.find(temp1);
+							assocArr::iterator iter = local.find(varName);
 							std::string iterVal;
 							if (iter != local.end())
-								iterVal = local[temp1];	
-																
+								iterVal = local[varName];	
+								
+							if (key)
+							{
+								keyIter = local.find(keyName);
+								if (keyIter != local.end())
+									keyVal = local[keyName];
+							}
+																							
 							assocArr::iterator k = d->second[pos].begin();					
 							assocArr::iterator l = d->second[pos].end();
 							for (;k!=l;++k)
 							{
-									local[temp1] = k->second;
-									tpl.append(_process(temp3,path));		
+								if (key)
+									local[keyName] = k->first;
+								local[varName] = k->second;
+								tpl.append(_process(forSpace,path));		
 							}
 							
 							if (iter != local.end())
-								local[temp1] = iterVal;
+								local[varName] = iterVal;
 							else
-								local.erase(temp1);
-							
+								local.erase(varName);
+
+							if (key)
+							{
+								if (keyIter != local.end())
+									local[keyName] = keyVal;
+								else
+									local.erase(keyName);						
+							}
+														
 							return u;
 						}
 					}
@@ -745,23 +936,40 @@ cgiProcessor::_for(const std::string &buffer,
 								for (;k!=l;++k)
 									if (strcmp(temp[2].c_str(),k->first.c_str()) == 0)
 									{
-										assocArr::iterator iter = local.find(temp1);
+										assocArr::iterator iter = local.find(varName);
 										std::string iterVal;
 										if (iter != local.end())
-											iterVal = local[temp1];	
+											iterVal = local[varName];	
 								
+										if (key)
+										{
+											keyIter = local.find(keyName);
+											if (keyIter != local.end())
+												keyVal = local[keyName];
+										}		
+																
 										register unsigned long i(0),j(k->second.size());
 										for (;i<j;++i)
 										{
-											local[temp1] = std::string(1,k->second[i]);
-											tpl.append(_process(temp3,path));
+											if (key)
+												local[keyName] = tools::lToString(i);
+											local[varName] = std::string(1,k->second[i]);
+											tpl.append(_process(forSpace,path));
 										}
 							
 										if (iter != local.end())
-											local[temp1] = iterVal;
+											local[varName] = iterVal;
 										else
-											local.erase(temp1);
-										
+											local.erase(varName);
+
+										if (key)
+										{
+											if (keyIter != local.end())
+												local[keyName] = keyVal;
+											else
+												local.erase(keyName);						
+										}
+																	
 										return u;
 									}						
 							}
@@ -773,22 +981,39 @@ cgiProcessor::_for(const std::string &buffer,
 	else
 	{
 
-		assocArr::iterator iter = local.find(temp1);
+		assocArr::iterator iter = local.find(varName);
 		std::string iterVal;
 		if (iter != local.end())
-			iterVal = local[temp1];	
-					
-		register unsigned long i(0), j(temp2.size());
+			iterVal = local[varName];	
+			
+		if (key)
+		{
+			keyIter = local.find(keyName);
+			if (keyIter != local.end())
+				keyVal = local[keyName];
+		}					
+			
+		register unsigned long i(0), j(targetVar.size());
 		for (;i<j;++i)
 		{
-			local[temp1] = std::string(1,temp2[i]);
-			tpl.append(_process(temp3,path));			
+			if (key)
+				local[keyName] = tools::lToString(i);
+			local[varName] = std::string(1,targetVar[i]);
+			tpl.append(_process(forSpace,path));			
 		}
 		
 		if (iter != local.end())
-			local[temp1] = iterVal;
+			local[varName] = iterVal;
 		else
-			local.erase(temp1);
+			local.erase(varName);
+
+		if (key)
+		{
+			if (keyIter != local.end())
+				local[keyName] = keyVal;
+			else
+				local.erase(keyName);						
+		}
 		
 		return u;
 	}

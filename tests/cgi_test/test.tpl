@@ -104,3 +104,9 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 	<(rof)>
 	|<(print $b.one)>
 <(rof)>
+
+<(for $b in $arr2)>
+	<(for $b => $c in $b)>
+		<(print $b)> -> <(print $c)>
+	<(rof)>
+<(rof)>	
