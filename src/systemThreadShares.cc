@@ -79,7 +79,7 @@ systemThreadShares::add(void *data)
 	shared.position = ++sharedNum;
 	shared.isLocked = false;
 	
-	if (pthread_mutex_init(&(shared.mutex),&attr)!=0)
+	if (pthread_mutex_init(&(shared.mutex),&attr) != 0)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_ADD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -162,7 +162,7 @@ systemThreadShares::lock(int position,
 			
 		if (microseconds == 0)
 		{
-			if (pthread_mutex_lock(&(n->mutex))!=0)
+			if (pthread_mutex_lock(&(n->mutex)) != 0)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else
@@ -170,33 +170,49 @@ systemThreadShares::lock(int position,
 				#endif
 		}
 		else
-		{
-			#ifdef __USE_XOPEN2K
-			
-				timespec timeout;
-				timeout.tv_nsec = (microseconds%1000000)*1000;
-				timeout.tv_sec = microseconds/1000000;
-				
-				if (pthread_mutex_timedlock(&(n->mutex), &timeout)!=0)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif			
-			
-			#else
+		{	
+			timeout.tv_nsec = 1000;
+			timeout.tv_sec = 0;
 
-				if (pthread_mutex_lock(&(n->mutex))!=0)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif
-				
-			#endif	
+			register bool locked = true;
+			register unsigned long slept = 0;
+			
+			while (locked)
+			{
+				if (pthread_mutex_lock(&(n->mutex)) != 0)
+				{
+					if (errno == EDEADLK)
+					{
+						if (nanosleep(&timeout, NULL) == -1)
+							#ifndef NO_EX
+								throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+							#else
+								return NULL;
+							#endif
+						
+						slept += 1;	
+						
+						if (slept > microseconds)
+							#ifndef NO_EX
+								throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,SYSTEMTHREADSHARES_CANNOTLOCK,SYSTEMTHREADSHARES_CANNOTLOCK_STR,__LINE__,__FILE__);
+							#else
+								return NULL;
+							#endif
+					}
+					else
+						#ifndef NO_EX
+							throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						#else
+							return NULL;
+						#endif					
+				}
+				else
+					locked = false;
+			}		
 		}
 		
 		n->isLocked = true;
+		
 		return n->data;
 	}
 	else
@@ -220,7 +236,7 @@ systemThreadShares::unlock(int position)
 	{
 		if (n->isLocked)
 		{
-			if (pthread_mutex_unlock(&(n->mutex))!=0)
+			if (pthread_mutex_unlock(&(n->mutex)) != 0)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else

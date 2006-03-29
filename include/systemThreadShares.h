@@ -128,6 +128,7 @@ namespace dodo
 			__shareInfo shared;///< temp storage for thread
 			int sharedNum;///< number of registered threads			
 			pthread_mutexattr_t attr;///attribute for mutex
+			timespec timeout;///timeout to lock mutex
 						
 			std::list<__shareInfo>::iterator l;///< iterator for list of shared data
 			std::list<__shareInfo>::iterator m;///< iterator for list of shared data

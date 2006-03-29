@@ -39,7 +39,8 @@
 		enum systemThreadSharessExR
 		{
 			SYSTEMTHREADSHARES_ISALREADYLOCKED,
-			SYSTEMTHREADSHARES_NOTFOUND
+			SYSTEMTHREADSHARES_NOTFOUND,
+			SYSTEMTHREADSHARES_CANNOTLOCK
 		};
 		
 		/**
@@ -47,6 +48,7 @@
 		 */
 		#define SYSTEMTHREADSHARES_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
 		#define SYSTEMTHREADSHARES_NOTFOUND_STR "Share not found."
+		#define SYSTEMTHREADSHARES_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 			
 		/**
 		 * ID of function where exception was thrown
