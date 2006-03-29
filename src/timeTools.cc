@@ -64,9 +64,9 @@ timeTools::byFormat(const std::string &format,
 	tm *tTime;
 	
 	if (local)
-		tTime = ::localtime(&timestamp);
+		tTime = ::localtime((const time_t *)&timestamp);
 	else
-		tTime = gmtime(&timestamp);
+		tTime = gmtime((const time_t *)&timestamp);
 		
 	if (tTime == NULL)	
 		#ifndef NO_EX
@@ -178,9 +178,9 @@ timeTools::makeTime(long seconds,
 	tm *tTime;
 	
 	if (local)
-		tTime = ::localtime(&seconds);
+		tTime = ::localtime((const time_t *)&seconds);
 	else
-		tTime = gmtime(&seconds);
+		tTime = gmtime((const time_t *)&seconds);
 		
 	if (tTime == NULL)	
 		#ifndef NO_EX

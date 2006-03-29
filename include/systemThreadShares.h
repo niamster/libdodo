@@ -97,7 +97,7 @@ namespace dodo
 			 * lock and return shared data [if locked and force==false, wait until unlocked]
 			 * @param position indicates on shared to return
 			 * @param data points on shared data or NULL in error case
-			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(
+			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
 			 * @note if microseconds==0 - infinite sleep
 			 */
 			virtual void *lock(int position, unsigned long microseconds=0);
@@ -127,6 +127,7 @@ namespace dodo
 			std::list<__shareInfo> shareds;///< vector of threads
 			__shareInfo shared;///< temp storage for thread
 			int sharedNum;///< number of registered threads			
+			pthread_mutexattr_t attr;///attribute for mutex
 						
 			std::list<__shareInfo>::iterator l;///< iterator for list of shared data
 			std::list<__shareInfo>::iterator m;///< iterator for list of shared data

@@ -5,7 +5,7 @@ CFLAGS:=-O3 -march=pentium4 -Wall -pipe
 
 ##############################
 
-override PREFIX:=/tmp/libdodo
+override PREFIX:=/opt/libdodo
 
 ##############################
 

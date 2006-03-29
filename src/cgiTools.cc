@@ -56,7 +56,7 @@ cgiTools::cgiTools(cgiTools &ct)
 
 cgiTools::cgiTools(bool silent, 
 			assocArr &a_headers)
-{	
+{		
 	initHeaders(a_headers);
 	
 	if (!silent)
@@ -298,7 +298,7 @@ cgiTools::makePost() const
 		stringArr::iterator i(postPartd.begin()),j(postPartd.end());
 
 		register unsigned int temp1;
-		char *ptr = new char[strlen(post_files_tmp_dir)+17];
+		char *ptr = new char[postFilesTmpDir.size()+17];
 		
 		for (;i!=j;++i)
 			if (i->find("filename")!=std::string::npos)///file
@@ -325,7 +325,7 @@ cgiTools::makePost() const
 				temp1 = i->find("\n",temp0);
 				file.type = i->substr(temp0,temp1-temp0);
 				
-				ptr = tempnam((post_files_tmp_dir + std::string(1,FILE_DELIM)).c_str(),"dodo_post_");
+				ptr = tempnam((postFilesTmpDir + FILE_DELIM).c_str(),"dodo_post_");
 				
 				if (ptr == NULL)	
 					continue;

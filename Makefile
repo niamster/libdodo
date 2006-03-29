@@ -1,9 +1,6 @@
-#CC_PATH:=/opt/gcc-3.4.3/bin/
-#CC_PATH:=/opt/gcc-4.0.1/bin/
-#CC_PATH:=/opt/intel/cc/9.0/bin/
+#CC_PATH:=/opt/bin/
 
 CXX:=$(CC_PATH)g++
-#CXX:=$(CC_PATH)icpc
 
 OBJECTS:=dbBase.o \
 		tools.o \
@@ -30,7 +27,7 @@ OBJECTS:=dbBase.o \
 		dbPostgresql.o \
 		dbInterface.o \
 		cgiPreprocessor.o \
-		cgiProcessor.o
+		cgiProcessor.o \
 
 ###########################################################
 
@@ -84,9 +81,7 @@ all: $(LIBRARY)
 $(LIBRARY): $(OBJECTS)
 	$(CXX) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.$(MAJOR).$(MINOR).$(RELEASE) -o $@.so.$(MAJOR).$(MINOR).$(RELEASE) $^
 	strip -d --strip-unneeded $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE)
-	
 	ln -sf $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $@.so
-	ldconfig -n ./
 	
 	ar rc $(LIBRARY).a.$(MAJOR).$(MINOR).$(RELEASE) $^
 	ln -sf $(LIBRARY).a.$(MAJOR).$(MINOR).$(RELEASE) $@.a
@@ -98,7 +93,7 @@ $(LIBRARY): $(OBJECTS)
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
 	strip -d --strip-unneeded $@
 
-install:
+install: all
 	mkdir -p $(PREFIX) $(PREFIX)/lib $(PREFIX)/include/$(LIBRARY)
 	cp $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $(PREFIX)/lib/
 	cp -rf include/* $(PREFIX)/include/$(LIBRARY)/

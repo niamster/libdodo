@@ -38,7 +38,7 @@
  * system define; default - linux
  */
 
-//#define BSD
+//#define FREE_BSD
 
 
 /**

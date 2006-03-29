@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 		{
 			try
 			{
-				cout << ifaces[i] << ":\t" << flushSocketTools::getInterfaceInfo(ifaces[i]).broadcast << endl;	
+				cout << ifaces[i] << ":\t" << flushSocketTools::getInterfaceInfo(ifaces[i]).hwaddr << endl;	
 			}
 			catch (baseEx ex)
 			{

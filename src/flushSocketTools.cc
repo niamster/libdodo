@@ -176,18 +176,25 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 	
 	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
 		info.address = add;
+	
+	#ifdef FREE_BSD
 			
-	if (::ioctl(socket,SIOCGIFNETMASK,&ifr) == -1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return info;			
-		#endif
 	
-	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_netmask,sizeof(sockaddr));
+	#else		
+			
+		if (::ioctl(socket,SIOCGIFNETMASK,&ifr) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return info;			
+			#endif
+		
+		memcpy((void *)&sin,&ifr.ifr_ifru.ifru_netmask,sizeof(sockaddr));
+		
+		if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
+			info.netmask = add;
 	
-	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
-		info.netmask = add;
+	#endif
 	
 	if (::ioctl(socket,SIOCGIFBRDADDR,&ifr) == -1)
 		#ifndef NO_EX
@@ -197,20 +204,21 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 		#endif
 	
 	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_broadaddr,sizeof(sockaddr));
+
+	if (::ioctl(socket,SIOCGIFHWADDR,&ifr) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return info;			
+		#endif
 	
-	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
-		info.broadcast = add;
-
-	#ifndef BSD
-
-		if (::ioctl(socket,SIOCGIFHWADDR,&ifr) == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return info;			
-			#endif
+	#ifdef FREE_BSD
 		
-		memcpy((void *)&sin,&ifr.ifr_ifru.ifru_hwaddr,sizeof(sockaddr));
+	
+	#else
+		
+		if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
+			info.broadcast = add;		
 		
 		sprintf(add,"%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",ifr.ifr_ifru.ifru_hwaddr.sa_data[0]&0xff,
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[1]&0xff,
@@ -218,10 +226,10 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[3]&0xff,
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[4]&0xff,
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[5]&0xff);
-						
-		info.hwaddr = add;
 
 	#endif
+
+	info.hwaddr = add;
 
 	if (::ioctl(socket,SIOCGIFFLAGS,&ifr) == -1)
 		#ifndef NO_EX
@@ -237,7 +245,7 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 			return info;
 		#endif
 	
-	#ifdef BSD
+	#ifdef FREE_BSD
 	
 		if ((IFF_LOOPBACK&ifr.ifr_ifru.ifru_flags[0]) == IFF_LOOPBACK)
 			info.loop = true;

@@ -285,6 +285,7 @@ flushDisk::read(char * const a_void,
 	
 	memset(a_void,'\0',inSize);
 	
+	errno = 0;
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 		fread(a_void,inSize,1,file);
@@ -437,6 +438,7 @@ flushDisk::write(const char *const a_buf,
 				#endif
 	}
 	
+	errno = 0;
 	///execute 
 	if (fileType == REG_FILE || fileType == TMP_FILE)
 		fwrite(buffer.c_str(),outSize,1,file);
