@@ -161,7 +161,7 @@ flushDiskTools::link(const std::string &oldPath,
 flushDiskTools::chown(const std::string &path, 
 				int uid)
 {
-	if (::chown(path.c_str(),uid,-1) == -1)
+	if (::chown(path.c_str(),uid,(unsigned int)-1) == -1)
 		#ifdef NO_EX
 			return false;
 		#else
@@ -183,7 +183,7 @@ flushDiskTools::chown(const std::string &path,
 flushDiskTools::chgrp(const std::string &path, 
 				int gid)
 {
-	if (::chown(path.c_str(),-1,gid) == -1)
+	if (::chown(path.c_str(),(unsigned int)-1,gid) == -1)
 		#ifdef NO_EX
 			return false;
 		#else

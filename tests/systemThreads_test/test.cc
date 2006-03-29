@@ -18,7 +18,7 @@ thread(void *data)
 		cout << endl << endl << (char *)data << timeTools::now() << endl;
 		cout.flush();
 		
-		int *timeout = (int *)sh.lock(shPos,100000);
+		int *timeout = (int *)sh.lock(shPos,100);
 		cout << "==" << *timeout << endl;
 		cout.flush();
 		systemTools::sleep(*timeout);
