@@ -62,7 +62,7 @@ namespace dodo
 	enum socketOptionsEnum
 	{
 		SOCKET_KEEP_ALIVE=1,///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-		SOCKET_REUSE_ADDRESS,///<  should allow reuse of local addresses	
+		SOCKET_REUSE_ADDRESS,///<  should allow reuse of local addresses[it's accepted by default]	
 		SOCKET_DONOT_USE_GATEWAY,///< Requests  that outgoing messages bypass the standard routing facilities.	
 		SOCKET_BROADCAST,///< Permits  sending of broadcast messages, if this is supported by the protocol. 	
 		SOCKET_OOB_INLINE,///< out-of-band(marked urgent) data keep inline in recieve operation

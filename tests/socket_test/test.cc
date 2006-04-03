@@ -85,19 +85,16 @@ int main(int argc, char **argv)
 		
 		cout << flushSocketTools::getInterfaceInfo("lo").hwaddr << endl;
 		cout << flushSocketTools::getInterfaceInfo("eth0").address << endl;
+		
+		flushSocket st(false,PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
+		flushSocketExchange exch;
+		st.connectFrom("127.0.0.1","192.168.0.254",21,exch);
+		std::string str;
+		exch.receiveStreamString(str);
+		std::cout << "\ngot:\n" << str << "\n";
 			
 		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
 		
-		
-/*		sock.connect("127.0.0.1",21,ex1);
-		ex1.close();
-		
-		sock.connect("127.0.0.1",21,ex1);
-
-		flushSocketExchange ex2;
-		flushSocketExchange ex2 = ex1;
-		sock.connect("127.0.0.1",21,ex2);
-*/
 		__connInfo info;
 		__initialAccept fake;
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);

@@ -157,6 +157,32 @@ namespace dodo
 			#endif
 						
 			/**
+			 * connect from specific address. for client part
+			 * @param host is ip address where to connect
+			 * @param port is port where to connect
+			 * @param exchange is reference to oject that will perform communication actions
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							connectFrom(const std::string &local, const std::string &host, int port, flushSocketExchange &exchange);
+						
+			/**
+			 * connect from specific address. for client part
+			 * @param destinaton is structure that describes destination
+			 * @param exchange is reference to oject that will perform communication actions
+			 * the same as previous, but more pretty
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							connectFrom(const std::string &local, const __connInfo &destinaton, flushSocketExchange &exchange);
+						
+			/**
 			 * connect. for client part
 			 * @param host is ip address where to connect
 			 * @param port is port where to connect

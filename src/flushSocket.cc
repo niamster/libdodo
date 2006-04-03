@@ -46,7 +46,7 @@ flushSocket::flushSocket(bool a_server,
 
 flushSocket::~flushSocket()
 {
-	if (server && type==TRANSFER_TYPE_STREAM)
+	if (server && type == TRANSFER_TYPE_STREAM)
 		if (opened)
 		{
 			::shutdown(socket,SHUT_RDWR);		
@@ -195,7 +195,7 @@ flushSocket::connect(const std::string &host,
 		#endif
 	
 	if (opened)
-	{
+	{		
 		opened = false;
 		makeSocket();
 	}
@@ -260,6 +260,129 @@ flushSocket::connect(const __connInfo &destinaton,
 			return false;
 	#else
 		connect(destinaton.host,destinaton.port,exchange);
+	#endif
+}
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocket::connectFrom(const std::string &local,
+					const std::string &host, 
+					int port, 
+					flushSocketExchange &exchange)
+{			
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_CONNECT;
+		performXExec(preExec);
+	#endif
+	
+	if (server)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	if (opened)
+	{
+		opened = false;
+		makeSocket();
+	}
+		
+	register int sockFlag(1);
+	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;	
+		#endif
+	
+	addF(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	
+	if (family == PROTO_FAMILY_IPV6)
+	{
+		struct sockaddr_in6 sa;
+		sa.sin6_family = AF_INET6;
+		sa.sin6_flowinfo = 0;
+		sa.sin6_scope_id = 0;
+		sa.sin6_port = htons(0);
+		inet_pton(AF_INET6,local.c_str(),&sa.sin6_addr);
+
+		if (::bind(socket,(struct sockaddr *)&sa,sizeof(sa))==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		sa.sin6_port = htons(port);
+		inet_pton(AF_INET6,host.c_str(),&sa.sin6_addr);
+		
+		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa))==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else			
+				return false;		
+			#endif		
+	}
+	else
+	{
+		struct sockaddr_in sa;
+		sa.sin_family = AF_INET;
+		sa.sin_port = htons(0);
+		inet_aton(local.c_str(),&sa.sin_addr);	
+
+		if (::bind(socket,(struct sockaddr *)&sa,sizeof(sa))==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+
+		sa.sin_port = htons(port);
+		inet_aton(host.c_str(),&sa.sin_addr);	
+		
+		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa))==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else			
+				return false;		
+			#endif
+	}
+	
+	exchange.blocked = blocked;
+	exchange.init(socket,blockInherited);
+	
+	opened = true;
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+		
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+flushSocket::connectFrom(const std::string &local,
+					const __connInfo &destinaton, 
+					flushSocketExchange &exchange)
+{
+	#ifdef NO_EX
+		if (!connectFrom(local,destinaton.host,destinaton.port,exchange))
+			return false;
+	#else
+		connectFrom(local,destinaton.host,destinaton.port,exchange);
 	#endif
 }
 
@@ -342,9 +465,27 @@ flushSocket::bindNListen(const std::string &host,
 
 	if (opened)
 	{
+		if (server && type == TRANSFER_TYPE_STREAM)
+			if (::close(socket)==-1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+							
 		opened = false;
 		makeSocket();
 	}
+	
+	register int sockFlag(1);
+	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;	
+		#endif
+	
+	addF(socketOpts,1<<SOCKET_REUSE_ADDRESS);
 	
 	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
 	
@@ -434,72 +575,90 @@ flushSocket::bindNListen(const __connInfo &destinaton,
 flushSocket::bindNListen(const std::string &path,
 							int numberOfConnections,
 							bool force)
-	{		
-		#ifndef FLUSH_SOCKET_WO_XEXEC
-			operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
-			performXExec(preExec);
-		#endif
-		
-		if (!server)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_CANNOT_BIND,FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-
-		if (opened)
-		{
-			opened = false;
-			makeSocket();
-		}
-
-		if (force)
-		{
-			struct stat st;
-            if (::lstat(path.c_str(),&st) != -1)
-				if (S_ISSOCK(st.st_mode))
-					flushDiskTools::unlink(path,true);
-				else
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_FILENAME,FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);
-					#else
-						return false;	
-					#endif
-		}
-		
-		setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
-		
-		struct sockaddr_un sa;
-		
-		strcpy(sa.sun_path,path.c_str());
-		sa.sun_family = AF_UNIX;	
-		
-		if (::bind(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa.sun_family))==-1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
+{		
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
+		performXExec(preExec);
+	#endif
 	
-		if (::listen(socket,numberOfConnections)==-1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif	
-		
-		unixSock = path;
-		
-		opened = true;
-			
-		#ifndef FLUSH_SOCKET_WO_XEXEC		
-			performXExec(postExec);
+	if (!server)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_CANNOT_BIND,FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
+		#else
+			return false;
 		#endif
-			
-		#ifdef NO_EX
-			return true;
-		#endif		
+
+	if (opened)
+	{
+		if (server && type == TRANSFER_TYPE_STREAM)
+			if (::close(socket)==-1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+		
+		opened = false;
+		makeSocket();
 	}
+
+	if (force)
+	{
+		struct stat st;
+        if (::lstat(path.c_str(),&st) != -1)
+			if (S_ISSOCK(st.st_mode))
+				flushDiskTools::unlink(path,true);
+			else
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_FILENAME,FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);
+				#else
+					return false;	
+				#endif
+	}
+		
+	register int sockFlag(1);
+	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;	
+		#endif
+	
+	addF(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	
+	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
+	
+	struct sockaddr_un sa;
+	
+	strcpy(sa.sun_path,path.c_str());
+	sa.sun_family = AF_UNIX;	
+	
+	if (::bind(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa.sun_family))==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	if (::listen(socket,numberOfConnections)==-1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+	
+	unixSock = path;
+	
+	opened = true;
+		
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+		
+	#ifdef NO_EX
+		return true;
+	#endif		
+}
 
 //-------------------------------------------------------------------
 

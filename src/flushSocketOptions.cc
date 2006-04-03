@@ -304,18 +304,23 @@ flushSocketOptions::setSockOption(socketOptionsEnum option,
 		case SOCKET_KEEP_ALIVE:
 			real_option = SO_KEEPALIVE;
 			break;
+			
 		case SOCKET_REUSE_ADDRESS:
 			real_option = SO_REUSEADDR;
 			break;
+			
 		case SOCKET_DONOT_USE_GATEWAY:
 			real_option = SO_DONTROUTE;
 			break;
+			
 		case SOCKET_BROADCAST:
 			real_option = SO_BROADCAST;
 			break;
+			
 		case SOCKET_OOB_INLINE:
 			real_option = SO_OOBINLINE;
 			break;
+			
 		#ifdef SO_REUSEPORT	
 			case SOCKET_REUSE_PORT:
 				real_option = SO_REUSEPORT;
