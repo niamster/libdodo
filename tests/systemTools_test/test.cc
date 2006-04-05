@@ -28,8 +28,8 @@ int main(int argc, char **argv)
 	
 	cout << systemTools::getPID() << endl;
 	
-	systemTools::setSignalHandler(SIGNAL_HANGUP,signaler);
-	systemTools::setSignalHandler(SIGNAL_INTERRUPT,exit);
+	systemTools::setSignalHandler(SIGNAL_HANGUP,exit);
+	systemTools::setSignalHandler(SIGNAL_INTERRUPT,signaler);
 	//systemTools::unsetSignalHandler(SIGNAL_HANGUP);
 	
 	if (systemTools::isSignalHandled(SIGNAL_HANGUP))

@@ -985,7 +985,7 @@ systemTools::setSignalHandler(systemSignalsEnum signal,
 	
 	struct sigaction act;
 	act.sa_sigaction = handler;
-	act.sa_flags = SA_SIGINFO|SA_NODEFER;
+	act.sa_flags = SA_SIGINFO|SA_RESTART;
 	
 	if (sigemptyset(&act.sa_mask) == -1)
 		#ifndef NO_EX
@@ -1037,7 +1037,7 @@ systemTools::isSignalHandled(systemSignalsEnum signal)
 systemTools::sendSignal(int pid, 
 						systemSignalsEnum signal)
 {
-	if (kill(pid, toRealSignal(signal)) == -1)
+	if (kill(pid, systemTools::toRealSignal(signal)) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SENDSIGNAL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1177,7 +1177,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 	
 		struct sigaction act;
 		act.sa_sigaction = in;
-		act.sa_flags = SA_SIGINFO|SA_NODEFER;
+		act.sa_flags = SA_SIGINFO|SA_RESTART;
 
 		if (sigemptyset(&act.sa_mask) == -1)
 			#ifndef NO_EX
@@ -1261,7 +1261,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 	
 		struct sigaction act;
 		act.sa_sigaction = in;
-		act.sa_flags = SA_SIGINFO|SA_NODEFER;
+		act.sa_flags = SA_SIGINFO|SA_RESTART;
 
 		if (sigemptyset(&act.sa_mask) == -1)
 			#ifndef NO_EX
