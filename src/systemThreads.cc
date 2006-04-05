@@ -27,13 +27,6 @@
 	
 using namespace dodo;
 
-static void
-dummySystemThreads(int signal)
-{
-}
-
-//-------------------------------------------------------------------
-
 __threadInfo::__threadInfo() : thread(0),
 								isRunning(false),
 								executed(0),
@@ -51,23 +44,6 @@ systemThreads::systemThreads(systemThreads &st)
 
 systemThreads::systemThreads() : threadNum(0)
 {
-	struct sigaction act;
-	act.sa_handler = dummySystemThreads;
-	act.sa_flags = 0;
-	
-	if (sigaction(5,&act,NULL)==-1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_CONSTRUCTOR,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			;
-		#endif		
-	
-	sigset_t signal_mask;
-	sigemptyset(&signal_mask);
-	sigaddset(&signal_mask,5);
-	
-	pthread_sigmask(SIG_BLOCK,&signal_mask,NULL);
-	
 	pthread_attr_init(&attr);
 }
 
@@ -570,7 +546,7 @@ systemThreads::_isRunning(std::list<__threadInfo>::iterator &position)
 	if (!position->isRunning)
 		return false;
 		
-	errno = pthread_kill(position->thread,5);	
+	errno = pthread_kill(position->thread,0);	
 	if (errno != 0)	
 	{
 		if (errno == ESRCH || errno == EAGAIN)

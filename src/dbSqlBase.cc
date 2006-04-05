@@ -181,7 +181,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 						int qTypeShift) const
 {
 	if (qTypeShift == EMPTY)
-		return "";
+		return __string__;
 		
 	temp_.clear();
 	
@@ -191,7 +191,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 	for (register unsigned int i=0;i<=arrLen;++i)
 	{
 		temp_bit = 1<<sqlAddEnumArr[i];
-		if ((temp_bit & qTypeShift)==temp_bit)
+		if ((temp_bit & qTypeShift) == temp_bit)
 			temp_.append(sqlAddArr[sqlAddEnumArr[i]].str);
 	}
 	
@@ -205,7 +205,7 @@ dbSqlBase::insideAddCollect(const stringArr &statements,
 						int qTypeShift) const
 {
 	if (qTypeShift == EMPTY)
-		return "";
+		return __string__;
 		
 	temp_.clear();
 
@@ -415,7 +415,7 @@ dbSqlBase::delFieldCollect() const
 void 
 dbSqlBase::renameBaseCollect() const
 {
-	request = "";
+	request = __string__;
 }
 
 //-------------------------------------------------------------------
@@ -431,7 +431,7 @@ dbSqlBase::renameTableCollect() const
 void 
 dbSqlBase::renameFieldCollect() const
 {
-	request = "";
+	request = __string__;
 }
 
 //-------------------------------------------------------------------
@@ -456,13 +456,13 @@ dbSqlBase::createTableCollect() const
 		request.append(fieldCollect(*i));
 	}
 	
-	request.append(!pre_tableInfo.primKeys.empty()?(", primary key" + tools::implode(pre_tableInfo.primKeys,",")):"");
-	request.append(!pre_tableInfo.keys.empty()?(", key " + tools::implode(pre_tableInfo.keys,",")):"");
-	request.append(!pre_tableInfo.uniq.empty()?(", unique key " + tools::implode(pre_tableInfo.uniq,",")):"");
-	request.append(pre_tableInfo.avgRowLen>0?(", avg_row_length = " + tools::lToString(pre_tableInfo.avgRowLen)):"");
-	request.append(pre_tableInfo.autoIncr>0?(", auto_increment = " + tools::lToString(pre_tableInfo.autoIncr)):"");
-	request.append(!pre_tableInfo.comment.empty()?(", comment = " + pre_tableInfo.comment):"");	
-	request.append(!pre_tableInfo.charset.empty()?(", character set = " + pre_tableInfo.charset):"");	
+	request.append(!pre_tableInfo.primKeys.empty()?(", primary key" + tools::implode(pre_tableInfo.primKeys,",")):__string__);
+	request.append(!pre_tableInfo.keys.empty()?(", key " + tools::implode(pre_tableInfo.keys,",")):__string__);
+	request.append(!pre_tableInfo.uniq.empty()?(", unique key " + tools::implode(pre_tableInfo.uniq,",")):__string__);
+	request.append(pre_tableInfo.avgRowLen>0?(", avg_row_length = " + tools::lToString(pre_tableInfo.avgRowLen)):__string__);
+	request.append(pre_tableInfo.autoIncr>0?(", auto_increment = " + tools::lToString(pre_tableInfo.autoIncr)):__string__);
+	request.append(!pre_tableInfo.comment.empty()?(", comment = " + pre_tableInfo.comment):__string__);	
+	request.append(!pre_tableInfo.charset.empty()?(", character set = " + pre_tableInfo.charset):__string__);	
 	
 	request.append(")");
 }
@@ -561,7 +561,7 @@ dbSqlBase::queryCollect() const
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_QUERYCOLLECT,ERR_LIBDODO,DBSQLBASE_EMPTY_REQUEST,DBSQLBASE_EMPTY_REQUEST_STR,__LINE__,__FILE__);	
 			#else
-				return "";
+				return __string__;
 			#endif	
 	#endif
 	if (additionalActions)
@@ -602,21 +602,21 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 	register int type = row.type, flag = row.flag;
 	std::string resRow(row.name + " " + stringType(type));
 	
-	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):"");
-	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):"");
+	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):__string__);
+	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):__string__);
 	resRow.append((row.charset.size()>0)?(" character set " + row.charset):" ");
 	resRow.append(((_NULL&flag)==_NULL)?" null ":" not null ");
-	resRow.append((row.defaultVal.size()>0)?("default '" + row.defaultVal + "' "):"");
+	resRow.append((row.defaultVal.size()>0)?("default '" + row.defaultVal + "' "):__string__);
 	resRow.append(((KEY&flag)==KEY)?" primary key ":"");
-	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?auto_increment:"");
-	resRow.append((row.comment.size()>0)?(" comment '" + row.comment + "' "):"");
+	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?auto_increment:__string__);
+	resRow.append((row.comment.size()>0)?(" comment '" + row.comment + "' "):__string__);
 	
 	if (row.refTable.size()>0)
 	{
 		resRow.append(" references " + row.refTable);
-		resRow.append(!row.refFields.empty()?("(" + tools::implode(row.set_enum,",") +" )"):"");
-		resRow.append((row.onDelete>=0)?(" on delete " + stringReference(row.onDelete)):"");
-		resRow.append((row.onUpdate>=0)?(" on update " + stringReference(row.onUpdate)):"");
+		resRow.append(!row.refFields.empty()?("(" + tools::implode(row.set_enum,",") +" )"):__string__);
+		resRow.append((row.onDelete>=0)?(" on delete " + stringReference(row.onDelete)):__string__);
+		resRow.append((row.onUpdate>=0)?(" on update " + stringReference(row.onUpdate)):__string__);
 	}
 	
 	return resRow;

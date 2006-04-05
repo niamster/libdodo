@@ -225,13 +225,16 @@ flushDisk::open(const std::string &a_path) const
 					if (file == NULL)
 						file = fopen(path.c_str(),"w+");
 					break;
+					
 				case READ_WRITE_TRUNCATE:
 					file = fopen(path.c_str(),"w+");
 					break;
+					
 				case APPEND:
 					file = fopen(path.c_str(),"a+");
 					append = true;
 					break;
+					
 				case READ_ONLY:
 				default:
 					file = fopen(path.c_str(),"r");			

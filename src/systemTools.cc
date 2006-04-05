@@ -782,11 +782,189 @@ systemTools::setGroupPID(int pid,
 	void 
 #else
 	bool 
+#endif 
+systemTools::sigMask(sigset_t *set,
+					int blockSignals)
+{
+	if (blockSignals != -1)
+	{
+		if ((SIGNAL_HANGUP&blockSignals) == SIGNAL_HANGUP)
+			if (sigaddset(set, SIGHUP) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_INTERRUPT&blockSignals) == SIGNAL_INTERRUPT)
+			if (sigaddset(set, SIGINT) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_QUIT&blockSignals) == SIGNAL_QUIT)
+			if (sigaddset(set, SIGQUIT) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_ILLEGAL_INSTRUCTION&blockSignals) == SIGNAL_ILLEGAL_INSTRUCTION)
+			if (sigaddset(set, SIGILL) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_ABORT&blockSignals) == SIGNAL_ABORT)
+			if (sigaddset(set, SIGABRT) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_BUS_FAULT&blockSignals) == SIGNAL_BUS_FAULT)
+			if (sigaddset(set, SIGBUS) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_FLOATINGPOINT_FAULT&blockSignals) == SIGNAL_FLOATINGPOINT_FAULT)
+			if (sigaddset(set, SIGFPE) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_USER_DEFINED1&blockSignals) == SIGNAL_USER_DEFINED1)
+			if (sigaddset(set, SIGUSR1) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+	
+		if ((SIGNAL_SEGMENTATION_FAULT&blockSignals) == SIGNAL_SEGMENTATION_FAULT)
+			if (sigaddset(set, SIGSEGV) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_USER_DEFINED2&blockSignals) == SIGNAL_USER_DEFINED2)
+			if (sigaddset(set, SIGUSR2) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_PIPE_FAULT&blockSignals) == SIGNAL_PIPE_FAULT)
+			if (sigaddset(set, SIGPIPE) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_ALARM&blockSignals) == SIGNAL_ALARM)
+			if (sigaddset(set, SIGALRM) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_TERMINATION&blockSignals) == SIGNAL_TERMINATION)
+			if (sigaddset(set, SIGTERM) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_STACK_FAULT&blockSignals) == SIGNAL_STACK_FAULT)
+			if (sigaddset(set, SIGSTKFLT) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_CHILD_CHANGED&blockSignals) == SIGNAL_CHILD_CHANGED)
+			if (sigaddset(set, SIGCHLD) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_CONTINUE&blockSignals) == SIGNAL_CONTINUE)
+			if (sigaddset(set, SIGCONT) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+							
+		if ((SIGNAL_KEYBOARD_STOP&blockSignals) == SIGNAL_KEYBOARD_STOP)
+			if (sigaddset(set, SIGTSTP) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_CPULIMIT_EXCEEDED&blockSignals) == SIGNAL_CPULIMIT_EXCEEDED)
+			if (sigaddset(set, SIGXCPU) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_FILESIZE_EXCEEDED&blockSignals) == SIGNAL_FILESIZE_EXCEEDED)
+			if (sigaddset(set, SIGXFSZ) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
+			
+		if ((SIGNAL_BAD_SYSCALL&blockSignals) == SIGNAL_BAD_SYSCALL)
+			if (sigaddset(set, SIGSYS) == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif		
+	}
+		
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
 #endif
 systemTools::setSignalHandler(systemSignalsEnum signal, 
-							signalHandler handler)
+							signalHandler handler,
+							int blockSignals)
 {
-	
 	#ifdef DL_EXT
 	
 		deinitSigModule deinit;
@@ -809,7 +987,16 @@ systemTools::setSignalHandler(systemSignalsEnum signal,
 	act.sa_sigaction = handler;
 	act.sa_flags = SA_SIGINFO|SA_NODEFER;
 	
-	if (sigaction(systemTools::toRealSignal(signal),&act,NULL)==-1)
+	if (sigemptyset(&act.sa_mask) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
+		
+	sigMask(&act.sa_mask, blockSignals);
+	
+	if (sigaction(systemTools::toRealSignal(signal),&act,NULL) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -838,6 +1025,24 @@ systemTools::isSignalHandled(systemSignalsEnum signal)
 		return true;
 	else
 		return false;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif 
+systemTools::sendSignal(int pid, 
+						systemSignalsEnum signal)
+{
+	if (kill(pid, toRealSignal(signal)) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SENDSIGNAL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
 }
 
 //-------------------------------------------------------------------
@@ -927,7 +1132,8 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 	#endif 
 	systemTools::setSignalHandler(systemSignalsEnum signal, 
 								const std::string &path, 
-								void *toInit)
+								void *toInit,
+								int blockSignals)
 	{
 		deinitSigModule deinit;
 		
@@ -959,7 +1165,9 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 				return false;
 			#endif
 		
-		signalHandler in = (signalHandler)dlsym(__handlesSig[signal], init(toInit).hook);
+		sigMod mod = init(toInit);
+		
+		signalHandler in = (signalHandler)dlsym(__handlesSig[signal], mod.hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -970,6 +1178,18 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 		struct sigaction act;
 		act.sa_sigaction = in;
 		act.sa_flags = SA_SIGINFO|SA_NODEFER;
+
+		if (sigemptyset(&act.sa_mask) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif		
+		
+		if (blockSignals != -1)	
+			sigMask(&act.sa_mask, blockSignals);
+		else
+			sigMask(&act.sa_mask, mod.blockSignals);
 		
 		if (sigaction(systemTools::toRealSignal(signal),&act,NULL)==-1)
 			#ifndef NO_EX
@@ -993,7 +1213,8 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 		bool 
 	#endif 
 	systemTools::setSignalHandler(const std::string &path, 
-								void *toInit)
+								void *toInit,
+								int blockSignals)
 	{
 		
 		void *handle = dlopen(path.c_str(), RTLD_LAZY);
@@ -1041,6 +1262,18 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 		struct sigaction act;
 		act.sa_sigaction = in;
 		act.sa_flags = SA_SIGINFO|SA_NODEFER;
+
+		if (sigemptyset(&act.sa_mask) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif		
+					
+		if (blockSignals != -1)	
+			sigMask(&act.sa_mask, blockSignals);
+		else
+			sigMask(&act.sa_mask, mod.blockSignals);
 		
 		if (sigaction(systemTools::toRealSignal(mod.signal),&act,NULL)==-1)
 			#ifndef NO_EX
@@ -1066,48 +1299,64 @@ systemTools::toRealSignal(systemSignalsEnum signal)
 	switch (signal)
 	{
 		case SIGNAL_HANGUP:
-			return 1;
+			return SIGHUP;
+			
 		case SIGNAL_INTERRUPT:
-			return 2;
+			return SIGINT;
+			
 		case SIGNAL_QUIT:
-			return 3;
+			return SIGQUIT;
+			
 		case SIGNAL_ILLEGAL_INSTRUCTION:
-			return 4;
+			return SIGILL;
+			
 		case SIGNAL_ABORT:
-			return 6;
+			return SIGABRT;
+			
 		case SIGNAL_BUS_FAULT:
-			return 7;
+			return SIGBUS;
+			
 		case SIGNAL_FLOATINGPOINT_FAULT:
-			return 8;
+			return SIGFPE;
+			
 		case SIGNAL_USER_DEFINED1:
-			return 10;
+			return SIGUSR1;
+			
 		case SIGNAL_SEGMENTATION_FAULT:
-			return 11;
+			return SIGSEGV;
+			
 		case SIGNAL_USER_DEFINED2:
-			return 12;
+			return SIGUSR2;
+			
 		case SIGNAL_PIPE_FAULT:
-			return 13;
+			return SIGPIPE;
+			
 		case SIGNAL_ALARM:
-			return 14;
+			return SIGALRM;
+			
 		case SIGNAL_TERMINATION:
-			return 15;
+			return SIGTERM;
+			
 		case SIGNAL_STACK_FAULT:
-			return 16;
+			return SIGSTKFLT;
+			
 		case SIGNAL_CHILD_CHANGED:
-			return 17;
+			return SIGCHLD;
+			
 		case SIGNAL_CONTINUE:
-			return 18;
+			return SIGCONT;
 
 		case SIGNAL_KEYBOARD_STOP:
-			return 20;
+			return SIGTSTP;
 			
 		case SIGNAL_CPULIMIT_EXCEEDED:
-			return 24;			
+			return SIGXCPU;	
+					
 		case SIGNAL_FILESIZE_EXCEEDED:
-			return 25;
+			return SIGXFSZ;
 			
 		case SIGNAL_BAD_SYSCALL:
-			return 31;
+			return SIGSYS;
 			
 		default:
 			return 0;

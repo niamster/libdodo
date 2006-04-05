@@ -87,25 +87,25 @@ namespace dodo
 	enum systemSignalsEnum
 	{
 		SIGNAL_HANGUP = 0,
-		SIGNAL_INTERRUPT,
-		SIGNAL_QUIT,
-		SIGNAL_ILLEGAL_INSTRUCTION,
-		SIGNAL_ABORT,
-		SIGNAL_BUS_FAULT,
-		SIGNAL_FLOATINGPOINT_FAULT,
-		SIGNAL_USER_DEFINED1,
-		SIGNAL_SEGMENTATION_FAULT,
-		SIGNAL_USER_DEFINED2,
-		SIGNAL_PIPE_FAULT,
-		SIGNAL_ALARM,
-		SIGNAL_TERMINATION,
-		SIGNAL_STACK_FAULT,
-		SIGNAL_CHILD_CHANGED,
-		SIGNAL_CONTINUE,
-		SIGNAL_KEYBOARD_STOP,
-		SIGNAL_CPULIMIT_EXCEEDED,
-		SIGNAL_FILESIZE_EXCEEDED,
-		SIGNAL_BAD_SYSCALL
+		SIGNAL_INTERRUPT = 2,
+		SIGNAL_QUIT = 4,
+		SIGNAL_ILLEGAL_INSTRUCTION = 8,
+		SIGNAL_ABORT = 16,
+		SIGNAL_BUS_FAULT = 32,
+		SIGNAL_FLOATINGPOINT_FAULT = 64,
+		SIGNAL_USER_DEFINED1 = 128,
+		SIGNAL_SEGMENTATION_FAULT = 256,
+		SIGNAL_USER_DEFINED2 = 512,
+		SIGNAL_PIPE_FAULT = 1024,
+		SIGNAL_ALARM = 2048,
+		SIGNAL_TERMINATION = 4096,
+		SIGNAL_STACK_FAULT = 8192,
+		SIGNAL_CHILD_CHANGED = 16384,
+		SIGNAL_CONTINUE = 32768,
+		SIGNAL_KEYBOARD_STOP = 65536,
+		SIGNAL_CPULIMIT_EXCEEDED = 131072,
+		SIGNAL_FILESIZE_EXCEEDED = 262144,
+		SIGNAL_BAD_SYSCALL = 524288,
 	};
 
 	/**
@@ -154,6 +154,7 @@ namespace dodo
 			char discription[256];///< discription of module
 			char hook[64];///< name of function in module that will be a hook
 			systemSignalsEnum signal;///< on what signal to set handler
+			int blockSignals;///< signals to block during signal handling; can be or'ed; -1 - ignore
 		};
 		
 		/**
@@ -443,13 +444,14 @@ namespace dodo
 			 * set signal handler
 			 * @param signal is signal on what set handler
 			 * @param handler is function that will be called
+			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */				
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif
-							setSignalHandler(systemSignalsEnum signal, signalHandler handler);
+							setSignalHandler(systemSignalsEnum signal, signalHandler handler, int blockSignals = -1);
 			
 			/**
 			 * determines whether handler was set on signal
@@ -480,28 +482,30 @@ namespace dodo
 				/**
 				 * set handler on signal from specific module
 				 * @param signal indicates for what signal to set handler
-				 * @param @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param toInit indicates data that will path to initialize function
+			 	 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
 				 */
 				#ifndef NO_EX
 					static void 
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(systemSignalsEnum signal, const std::string &module, void *toInit = NULL);
+								setSignalHandler(systemSignalsEnum signal, const std::string &module, void *toInit = NULL, int blockSignals = -1);
 
 				/**
 				 * set handler on signal from specific module
 				 * @param signal indicates for what signal to set handler
 				 * @param @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param toInit indicates data that will path to initialize function
+			 	 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 				 */
 				#ifndef NO_EX
 					static void 
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(const std::string &module, void *toInit = NULL);
+								setSignalHandler(const std::string &module, void *toInit = NULL, int blockSignals = -1);
 
 			#endif											
 
@@ -510,7 +514,19 @@ namespace dodo
 			 * @param signal describes signal to convert
 			 */
 			static int toRealSignal(systemSignalsEnum signal);
-				
+			
+			/**
+			 * send signal to process
+			 * @param pid indicates where to send signal
+			 * @param is signal is what signal to send
+			 */			
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif					
+							sendSignal(int pid, systemSignalsEnum signal);
+								
 		protected:
 						
 			/**
@@ -522,6 +538,16 @@ namespace dodo
 			 * fills __groupInfo with values from group structure
 			 */
 			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
+			
+			/**
+			 * fills 'set' structure with given signal mask
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif						 
+							sigMask(sigset_t *set, int signal);
 																						
 	};
 

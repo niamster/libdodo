@@ -124,7 +124,9 @@ blocks:
 				<(for $b => $c in $b)>
 					<(print $b)> -> <(print $c)>
 				<(rof)>
-			<(rof)>	
+			<(rof)>
+			
+			`for` statement allows to iterate through array. to get pair 'key=>value' use `=>` operator(see an example).	
 			
 		print:
 			<(print {$arr2.{0}.{$one}} )>
