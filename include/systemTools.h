@@ -175,6 +175,8 @@ namespace dodo
 	 */
 	class systemTools
 	{
+		
+		friend class systemThreads;
 					
 		public:			
 		
@@ -508,12 +510,6 @@ namespace dodo
 								setSignalHandler(const std::string &module, void *toInit = NULL, int blockSignals = -1);
 
 			#endif											
-
-			/**
-			 * @return signal number that refers to given systemSignalsEnum
-			 * @param signal describes signal to convert
-			 */
-			static int toRealSignal(systemSignalsEnum signal);
 			
 			/**
 			 * send signal to process
@@ -526,6 +522,13 @@ namespace dodo
 				static bool 
 			#endif					
 							sendSignal(int pid, systemSignalsEnum signal);
+
+			/**
+			 * block or unblock signals
+			 * @param signal indicates what signals to block/unblock; can be or'ed;
+			 * @param block indicates whether to block or unblock
+			 */
+			static void blockSignal(int signals, bool block=true);
 								
 		protected:
 						
@@ -538,6 +541,12 @@ namespace dodo
 			 * fills __groupInfo with values from group structure
 			 */
 			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
+
+			/**
+			 * @return signal number that refers to given systemSignalsEnum
+			 * @param signal describes signal to convert
+			 */
+			static int toRealSignal(systemSignalsEnum signal);
 			
 			/**
 			 * fills 'set' structure with given signal mask

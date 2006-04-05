@@ -298,10 +298,10 @@ namespace dodo
 			
 				/**
 				 * block or unblock signals to thread
-				 * @param signal indicates what signal to block
+				 * @param signal indicates what signals to block/unblock; can be or'ed;
 				 * @param block indicates whether to block or unblock
 				 */
-				static void blockSignal(systemSignalsEnum signal, bool block=true);
+				static void blockSignal(int signals, bool block=true);
 										
 		protected:
 							

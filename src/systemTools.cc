@@ -1364,3 +1364,20 @@ systemTools::toRealSignal(systemSignalsEnum signal)
 }
 
 //-------------------------------------------------------------------
+
+void 
+systemTools::blockSignal(int signals, 
+							bool block)
+{	
+	sigset_t signal_mask;
+	sigemptyset(&signal_mask);
+	
+	systemTools::sigMask(&signal_mask, signals);
+	
+	if (block)
+		sigprocmask(SIG_BLOCK,&signal_mask,NULL);	
+	else
+		sigprocmask(SIG_UNBLOCK,&signal_mask,NULL);
+}
+
+//-------------------------------------------------------------------

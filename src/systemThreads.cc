@@ -765,12 +765,13 @@ systemThreads::running()
 //-------------------------------------------------------------------
 
 void 
-systemThreads::blockSignal(systemSignalsEnum signal, 
+systemThreads::blockSignal(int signals, 
 							bool block)
 {	
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
-	sigaddset(&signal_mask,systemTools::toRealSignal(signal));
+	
+	systemTools::sigMask(&signal_mask, signals);
 	
 	if (block)
 		pthread_sigmask(SIG_BLOCK,&signal_mask,NULL);	
