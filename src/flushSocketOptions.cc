@@ -110,7 +110,7 @@ flushSocketOptions::block(bool flag)
 #else
 	bool
 #endif
-flushSocketOptions::setInBufferSize(int bytes)
+flushSocketOptions::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
 		#ifndef NO_EX
@@ -135,7 +135,7 @@ flushSocketOptions::setInBufferSize(int bytes)
 
 //-------------------------------------------------------------------
 
-int
+unsigned long 
 flushSocketOptions::getInBufferSize() const
 {
 	return inSocketBuffer;
@@ -148,7 +148,7 @@ flushSocketOptions::getInBufferSize() const
 #else
 	bool
 #endif
-flushSocketOptions::setOutBufferSize(int bytes)
+flushSocketOptions::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
 		#ifdef NO_EX
@@ -173,7 +173,7 @@ flushSocketOptions::setOutBufferSize(int bytes)
 
 //-------------------------------------------------------------------
 
-int
+unsigned long
 flushSocketOptions::getOutBufferSize() const
 {
 	return outSocketBuffer;

@@ -151,7 +151,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							setInBufferSize(int bytes);
+							setInBufferSize(unsigned long bytes);
 
 			/**
 			 * sets outgoing buffer size of socket
@@ -162,17 +162,17 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							setOutBufferSize(int bytes);
+							setOutBufferSize(unsigned long bytes);
 			
 			/**
 			 * @return incoming buffer size of socket
 			 */
-			virtual int getInBufferSize() const;
+			virtual unsigned long  getInBufferSize() const;
 			
 			/**
 			 * @return outgoing buffer size of socket
 			 */
-			virtual int getOutBufferSize() const;
+			virtual unsigned long  getOutBufferSize() const;
 
 			/**
 			 * sets incomming operation timeout of socket
@@ -251,8 +251,8 @@ namespace dodo
 			mutable unsigned long inTimeout;///< incomming operation timeout of socket; in microseconds
 			mutable unsigned long outTimeout;///< outgoing operation timeout of socket; in microseconds
 			 
-			mutable int inSocketBuffer;///< incoming buffer size of socket; in bytes
-			mutable int outSocketBuffer;///< outgoing buffer size of socket; in bytes
+			mutable unsigned long inSocketBuffer;///< incoming buffer size of socket; in bytes
+			mutable unsigned long outSocketBuffer;///< outgoing buffer size of socket; in bytes
 
 			int socket;///< id of socket
 			
