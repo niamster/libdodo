@@ -32,16 +32,19 @@ process(void *data)
 	}
 	
 	fse->inSize = 4;
-	fse->setInBufferSize(4);
-	fse->setOutBufferSize(4);
+	fse->setInBufferSize(1);
+	fse->setOutBufferSize(1);
 	
 	fse->outSize = 7;
-	fse->sendStreamString("dasdasd");
+	//fse->sendStreamString("dasdasd");
+	fse->sendString("dasdasd");
 	
 	std::string rec = "";
 	try
 	{
-		fse->receiveStreamString(rec);
+		//fse->receiveStreamString(rec);
+		fse->receiveString(rec);
+		
 		cout << rec << rec.size() << endl;
 		cout.flush();
 		if (rec.compare("exit")==0)

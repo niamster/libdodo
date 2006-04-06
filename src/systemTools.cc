@@ -778,180 +778,72 @@ systemTools::setGroupPID(int pid,
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
-	void 
-#else
-	bool 
-#endif 
+void
 systemTools::sigMask(sigset_t *set,
 					int blockSignals)
 {
 	if (blockSignals != -1)
 	{
 		if ((SIGNAL_HANGUP&blockSignals) == SIGNAL_HANGUP)
-			if (sigaddset(set, SIGHUP) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGHUP);
 			
 		if ((SIGNAL_INTERRUPT&blockSignals) == SIGNAL_INTERRUPT)
-			if (sigaddset(set, SIGINT) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGINT);
 			
 		if ((SIGNAL_QUIT&blockSignals) == SIGNAL_QUIT)
-			if (sigaddset(set, SIGQUIT) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGQUIT);
 			
 		if ((SIGNAL_ILLEGAL_INSTRUCTION&blockSignals) == SIGNAL_ILLEGAL_INSTRUCTION)
-			if (sigaddset(set, SIGILL) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGILL);
 			
 		if ((SIGNAL_ABORT&blockSignals) == SIGNAL_ABORT)
-			if (sigaddset(set, SIGABRT) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGABRT);
 			
 		if ((SIGNAL_BUS_FAULT&blockSignals) == SIGNAL_BUS_FAULT)
-			if (sigaddset(set, SIGBUS) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGBUS);
 			
 		if ((SIGNAL_FLOATINGPOINT_FAULT&blockSignals) == SIGNAL_FLOATINGPOINT_FAULT)
-			if (sigaddset(set, SIGFPE) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGFPE);
 			
 		if ((SIGNAL_USER_DEFINED1&blockSignals) == SIGNAL_USER_DEFINED1)
-			if (sigaddset(set, SIGUSR1) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGUSR1);
 	
 		if ((SIGNAL_SEGMENTATION_FAULT&blockSignals) == SIGNAL_SEGMENTATION_FAULT)
-			if (sigaddset(set, SIGSEGV) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGSEGV);
 			
 		if ((SIGNAL_USER_DEFINED2&blockSignals) == SIGNAL_USER_DEFINED2)
-			if (sigaddset(set, SIGUSR2) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGUSR2);
 			
 		if ((SIGNAL_PIPE_FAULT&blockSignals) == SIGNAL_PIPE_FAULT)
-			if (sigaddset(set, SIGPIPE) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGPIPE);
 			
 		if ((SIGNAL_ALARM&blockSignals) == SIGNAL_ALARM)
-			if (sigaddset(set, SIGALRM) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGALRM);
 			
 		if ((SIGNAL_TERMINATION&blockSignals) == SIGNAL_TERMINATION)
-			if (sigaddset(set, SIGTERM) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGTERM);
 			
 		if ((SIGNAL_STACK_FAULT&blockSignals) == SIGNAL_STACK_FAULT)
-			if (sigaddset(set, SIGSTKFLT) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGSTKFLT);
 			
 		if ((SIGNAL_CHILD_CHANGED&blockSignals) == SIGNAL_CHILD_CHANGED)
-			if (sigaddset(set, SIGCHLD) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGCHLD);
 			
 		if ((SIGNAL_CONTINUE&blockSignals) == SIGNAL_CONTINUE)
-			if (sigaddset(set, SIGCONT) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGCONT);
 							
 		if ((SIGNAL_KEYBOARD_STOP&blockSignals) == SIGNAL_KEYBOARD_STOP)
-			if (sigaddset(set, SIGTSTP) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGTSTP);
 			
 		if ((SIGNAL_CPULIMIT_EXCEEDED&blockSignals) == SIGNAL_CPULIMIT_EXCEEDED)
-			if (sigaddset(set, SIGXCPU) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGXCPU);
 			
 		if ((SIGNAL_FILESIZE_EXCEEDED&blockSignals) == SIGNAL_FILESIZE_EXCEEDED)
-			if (sigaddset(set, SIGXFSZ) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif	
+			sigaddset(set, SIGXFSZ);
 			
 		if ((SIGNAL_BAD_SYSCALL&blockSignals) == SIGNAL_BAD_SYSCALL)
-			if (sigaddset(set, SIGSYS) == -1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SIGMASK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif		
+			sigaddset(set, SIGSYS);	
 	}
-		
-	#ifdef NO_EX
-		return true;
-	#endif	
 }
 
 //-------------------------------------------------------------------

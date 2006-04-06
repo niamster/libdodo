@@ -44,7 +44,9 @@ int main(int argc, char **argv)
 		st.inSize = 33;
 		st.inSTDBuffer = 20;
 		
-		st.readStreamString(o);
+		st.readString(o);
+		
+		std::cout << o.size() << "\n";
 		
 		st.disablePreExec(pos);
 		st.writeStreamString(o);

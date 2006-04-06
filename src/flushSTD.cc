@@ -122,58 +122,50 @@ flushSTD::read(char * const a_void) const
 	rest = inSize%inSTDBuffer;
 	
 	sent_received = 0;
-	
+
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		if (fread(a_void+sent_received,inSTDBuffer,1,stdin)==0)
-			#ifndef NO_EX
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+		while (true)
+		{
+			if (fread(a_void+sent_received,inSTDBuffer,1,stdin) == 0)
+			{
+				if (errno == EINTR)
+					continue;
+				
+				if (ferror(stdin) != 0)					
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
+					#else			
 						return false;
-				}
-			#endif
+					#endif
+			}
+				
+			break;	
+		}
 			
 		sent_received += inSTDBuffer;
 	}
 	
-	if (rest>0)
-		if (fread(a_void+sent_received,rest,1,stdin)==0)
-			#ifndef NO_EX
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
+	if (rest > 0)
+	{
+		while (true)
+		{
+			if (fread(a_void+sent_received,rest,1,stdin) == 0)
+			{
+				if (errno == EINTR)
+					continue;
+				
+				if (ferror(stdin) != 0)					
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+					#else
 						return false;
-				}
-			#endif	
+					#endif
+			}
+			
+			break;	
+		}
+	}	
 	
 	buffer.assign(a_void,inSize);
 			
@@ -251,55 +243,47 @@ flushSTD::write(const char *const aa_buf)
 	
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		if (fwrite(buffer.c_str()+sent_received,outSTDBuffer,1,desc)==0)
-			#ifndef NO_EX
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+		while (true)
+		{
+			if (fwrite(buffer.c_str()+sent_received,outSTDBuffer,1,desc) == 0)
+			{
+				if (errno == EINTR)
+					continue;
+				
+				if (ferror(desc) != 0)					
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
+					#else			
 						return false;
-				}
-			#endif
+					#endif
+			}
+			
+			break;
+		}
 			
 		sent_received += outSTDBuffer;
 	}
 
-	if (rest>0)
-		if (fwrite(buffer.c_str()+sent_received,rest,1,desc)==0)
-			#ifndef NO_EX
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+	if (rest > 0)
+	{
+		while (true)
+		{
+			if (fwrite(buffer.c_str()+sent_received,rest,1,desc) == 0)
+			{
+				if (errno == EINTR)
+					continue;
+				
+				if (ferror(desc) != 0)					
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
+					#else			
 						return false;
-				}
-			#endif
+					#endif
+			}
+			
+			break;
+		}
+	}
 			
 	#ifndef FLUSH_STD_WO_XEXEC
 		performXExec(postExec);
@@ -325,9 +309,9 @@ flushSTD::flush()
 
     if (fflush(desc) != 0)
         #ifndef NO_EX
-                throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
         #else
-                return false;
+			return false;
         #endif
 }
 
@@ -481,28 +465,23 @@ flushSTD::readStream(char * const a_void) const
 	memset(a_void,'\0',inSTDBuffer);
 
 	///execute
-	if (fgets(a_void,inSTDBuffer+1,stdin)==NULL)
-		#ifndef NO_EX
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
+	while (true)
+	{
+		if (fgets(a_void,inSTDBuffer+1,stdin) == NULL)
+		{
+			if (errno == EINTR)
+				continue;
+			
+			if (ferror(stdin) != 0)				
+				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			}	
-		#else			
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:	
-				case EROFS:
+				#else			
 					return false;
-			}
-		#endif
+				#endif
+		}
+			
+		break;	
+	}
 		
 	buffer.assign(a_void);
 			
@@ -593,30 +572,26 @@ flushSTD::writeStream(const char *const aa_buf)
 		strncpy(buff,buffer.c_str()+sent_received,outSTDBuffer);
 		buff[outSTDBuffer] = '\0';
 		
-		if (fputs(buff,desc)==0)
-			#ifndef NO_EX
-				switch (errno)
+		while (true)
+		{
+			if (fputs(buff,desc) == 0)
+			{
+				if (errno == EINTR)
+					continue;
+				
+				if (ferror(desc) != 0)
 				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-						delete [] buff;
+					delete [] buff;	
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
-						delete [] buff;
+					#else
 						return false;
+					#endif
 				}
-			#endif
+			}
+			
+			break;
+		}
 			
 		sent_received += outSTDBuffer;
 	}
@@ -626,30 +601,26 @@ flushSTD::writeStream(const char *const aa_buf)
 		strncpy(buff,buffer.c_str()+sent_received,rest);
 		buff[rest] = '\0';
 		
-		if (fputs(buff,desc)==0)
-			#ifndef NO_EX
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-						delete [] buff;
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
-						delete [] buff;
+		while (true)
+		{
+			if (fputs(buff,desc) == 0)
+			{
+				if (errno == EINTR)
+					continue;
+				
+				if (ferror(desc) != 0)
+				{	
+					delete [] buff;			
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+					#else
 						return false;
+					#endif
 				}
-			#endif
+			}
+			
+			break;
+		}
 	}
 	
 	delete [] buff;

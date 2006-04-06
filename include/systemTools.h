@@ -551,12 +551,7 @@ namespace dodo
 			/**
 			 * fills 'set' structure with given signal mask
 			 */
-			#ifndef NO_EX
-				static void 
-			#else
-				static bool 
-			#endif						 
-							sigMask(sigset_t *set, int signal);
+			static void sigMask(sigset_t *set, int signal);
 																						
 	};
 
