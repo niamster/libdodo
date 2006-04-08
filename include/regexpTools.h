@@ -79,6 +79,10 @@ namespace dodo
 
 	 		mutable bool icase;///< ignore case; not active by default
 
+			mutable bool greedy;///< Invert greediness of quantifiers; greedy by default
+			
+			mutable bool multiline;///< multiline samples; false by default
+			
 	 		/**
 	 		 * @return true if matched
 	 		 * @param pattern is regex pattern

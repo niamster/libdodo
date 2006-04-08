@@ -33,7 +33,9 @@ regexpTools::regexpTools(regexpTools &rt)
 //-------------------------------------------------------------------
 
 regexpTools::regexpTools() : extended(true),
-					icase(false)
+					icase(false),
+					greedy(true),
+					multiline(false)
 {
 	#ifdef PCRE_EXT
 	#else
@@ -94,8 +96,7 @@ regexpTools::boundMatch(const std::string &sample) const
 	
 	#ifdef PCRE_EXT
 	
-		subs = pcre_info(code,NULL,NULL);
-		if (subs<0)
+		if (pcre_fullinfo(code,NULL,PCRE_INFO_CAPTURECOUNT,&subs) != 0)
 			return false;
 			
 		subs *= 3;
@@ -104,30 +105,18 @@ regexpTools::boundMatch(const std::string &sample) const
 		register int *oVector = new int[subs];
 			
 		register int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
-		if (rc<=0)
+		if (rc <= 0)
 		{
 			delete [] oVector;
 			return false;
 		}
 		
-		register const char *subString;
 		for (register int j=1;j<rc;++j)
 		{
-			res = pcre_get_substring(sample.c_str(),oVector,rc,j,&subString);
-			if (res>0)
-			{
-				subs = j*2;
-				bound.begin = oVector[subs];
-				bound.end = oVector[subs+1];
-				boundaries.push_back(bound);
-			}
-			else
-			{
-				bound.begin = 0;
-				bound.end = 0;
-				boundaries.push_back(bound);				
-			}
-			pcre_free_substring(subString);
+			subs = j*2;
+			bound.begin = oVector[subs];
+			bound.end = oVector[subs+1];
+			boundaries.push_back(bound);
 		}
 		
 		delete [] oVector;
@@ -170,10 +159,13 @@ regexpTools::compile(const std::string &pattern) const
 	#ifdef PCRE_EXT
 	
 		if (extended)
-			bits|=PCRE_EXTENDED;
+			bits |= PCRE_EXTENDED;
 		if (icase)
-			bits|=PCRE_CASELESS;
-		bits|=PCRE_DOTALL;
+			bits |= PCRE_CASELESS;
+		if (!greedy)	
+			bits |= PCRE_UNGREEDY;
+		if (multiline)
+			bits |= PCRE_MULTILINE;
 		
 		register int errOffset(0);
 		register const char *error;
@@ -184,9 +176,11 @@ regexpTools::compile(const std::string &pattern) const
 	#else
 	
 		if (extended)
-			bits|=REG_EXTENDED;
+			bits |= REG_EXTENDED;
 		if (icase)
-			bits|=REG_ICASE;
+			bits |= REG_ICASE;
+		bits |= REG_NEWLINE;	
+			
 		if (notCompiled)
 			notCompiled = false;
 		else
