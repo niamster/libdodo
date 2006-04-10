@@ -822,9 +822,13 @@ systemTools::sigMask(sigset_t *set,
 			
 		if ((SIGNAL_TERMINATION&blockSignals) == SIGNAL_TERMINATION)
 			sigaddset(set, SIGTERM);
+
+		#ifndef	FREEBSD
 			
-		if ((SIGNAL_STACK_FAULT&blockSignals) == SIGNAL_STACK_FAULT)
-			sigaddset(set, SIGSTKFLT);
+			if ((SIGNAL_STACK_FAULT&blockSignals) == SIGNAL_STACK_FAULT)
+				sigaddset(set, SIGSTKFLT);
+				
+		#endif		
 			
 		if ((SIGNAL_CHILD_CHANGED&blockSignals) == SIGNAL_CHILD_CHANGED)
 			sigaddset(set, SIGCHLD);
@@ -1228,9 +1232,13 @@ systemTools::toRealSignal(systemSignalsEnum signal)
 			
 		case SIGNAL_TERMINATION:
 			return SIGTERM;
-			
-		case SIGNAL_STACK_FAULT:
-			return SIGSTKFLT;
+	
+		#ifndef	FREEBSD
+		
+			case SIGNAL_STACK_FAULT:
+				return SIGSTKFLT;
+		
+		#endif
 			
 		case SIGNAL_CHILD_CHANGED:
 			return SIGCHLD;

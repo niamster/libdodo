@@ -174,13 +174,13 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 	
 	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_addr,sizeof(sockaddr));
 	
-	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
-		info.address = add;
-	
 	#ifdef FREE_BSD
 			
 	
 	#else		
+	
+		if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
+			info.address = add;
 			
 		if (::ioctl(socket,SIOCGIFNETMASK,&ifr) == -1)
 			#ifndef NO_EX

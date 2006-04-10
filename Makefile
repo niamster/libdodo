@@ -35,9 +35,11 @@ include directives.mk
 
 MODS_CPP:=$(MOD_MYSQL_CPP) \
 			$(MOD_PCRE_CPP) \
+			$(MOD_DL_CPP) \
 			$(MOD_LIBXML2_CPP)\
 			$(MOD_SQLITE_CPP) \
 			$(MOD_POSTGRESQL_CPP) \
+			$(MOD_PTHREAD_CPP) \
 			$(MOD_BZIP_CPP)
 
 MODS_LD:=$(MOD_MYSQL_LD) \
@@ -64,8 +66,8 @@ include directives.runtime.mk
 
 ###########################################################
 
-override CPPFLAGS:=-I./include $(MODS_CPP) $(CPPFLAGS)
-override LDFLAGS:= -L./ $(MODS_LD) $(LDFLAGS)
+override CPPFLAGS:=-I./include -I/usr/local/include $(MODS_CPP) $(CPPFLAGS)
+override LDFLAGS:= -L./ -L/usr/local/libs $(MODS_LD) $(LDFLAGS)
 override LIBS:=$(MODS_LIB)
 
 VPATH:=src
