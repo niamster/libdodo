@@ -413,7 +413,7 @@
 				iAttr = definition.attributes.begin();
 				for (;iAttr!=jAttr;++iAttr)
 				{
-					xChar = xmlGetProp(node,attribute->name);
+					xChar = xmlGetProp(node,(xmlChar *)iAttr->c_str());
 					if (xChar != NULL)
 					{
 						attributes[*iAttr] = (char *)xChar;

@@ -25,7 +25,9 @@
 #ifndef _DIRECTIVES_H_
 #define _DIRECTIVES_H_
 
-#define __USE_UNIX98
+#ifndef __USE_UNIX98
+	#define __USE_UNIX98
+#endif
 
 #include <stdio.h>
 #include <unistd.h>
