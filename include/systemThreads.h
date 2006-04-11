@@ -141,6 +141,19 @@ namespace dodo
 			 * @param stackSize describes stack siae of the thread
 			 */
 			virtual unsigned long add(threadFunc func, void *data, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+
+		
+			/**
+			 * adds function to became a thread[executing]
+			 * @return position of thread in queue
+			 * @param func indicates function to be executed
+			 * @param data describes data to be passed to func
+			 * @param limit indicates the thread's limit on executions
+			 * @param detached indicates whether thread will be detached
+			 * @param action describes action with thread on destruction if thread is running
+			 * @param stackSize describes stack siae of the thread
+			 */
+			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit=1, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
 			
 			/**
 			 * removes registered thread

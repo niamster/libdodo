@@ -122,6 +122,7 @@ systemThreads::add(threadFunc func,
 	thread.position = ++threadNum;
 	thread.stackSize = stackSize;
 	thread.action = action;
+	thread.executeLimit = -1;
 	
 	#ifdef DL_EXT
 		thread.handle = NULL;
@@ -777,6 +778,57 @@ systemThreads::blockSignal(int signals,
 		pthread_sigmask(SIG_BLOCK,&signal_mask,NULL);	
 	else
 		pthread_sigmask(SIG_UNBLOCK,&signal_mask,NULL);
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+systemThreads::addNRun(threadFunc func,
+						void *data, 
+						unsigned long limit,
+						bool detached,
+						systemThreadOnDestructEnum action,
+						int stackSize)
+{
+	thread.detached = detached;
+	thread.data = data;
+	thread.func = func;
+	thread.position = ++threadNum;
+	thread.stackSize = stackSize;
+	thread.action = action;
+	thread.executeLimit = limit;
+	
+	#ifdef DL_EXT
+		thread.handle = NULL;
+	#endif
+		
+	if (detached)
+		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+	else
+		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
+	errno = pthread_attr_setstacksize(&attr,stackSize);
+	if (errno != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
+	errno = pthread_create(&(k->thread),&attr,k->func,k->data);	
+	if (errno != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	k->isRunning = true;
+	++(k->executed);
+	
+	threads.push_back(thread);
+	
+	return thread.position;
 }
 
 //-------------------------------------------------------------------
