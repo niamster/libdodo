@@ -139,6 +139,9 @@ blocks:
 				<(fi)>
 				<(print @@@)>
 			<(rof)>
+			Outside any loop statement `break` block has the same meaning - stop calculation for block where it was found
+			`break` block may have a strenght - how many blocks[in deep] to break => <(break 2)> => breaks 2 blocks; if not specified - 1 by default
+			`continue` statement outside loop blocks does nothing
 			
 		print:
 			<(print {$arr2.{0}.{$one}} )>

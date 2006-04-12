@@ -127,9 +127,14 @@ namespace dodo
 			 * processes `print` statement
 			 * @param statement indicates `print` statement
 			 * @param tpl indicates string where to add result
-			 * @param path indicates path of current .tpl file
 			 */
 			virtual void _print(const std::string &statement, std::string &tpl);
+			
+			/**
+			 * processes `break` statement
+			 * @param statement indicates `break` statement
+			 */
+			virtual bool _break(const std::string &statement);
 			
 			/**
 			 * processes `include` statement
@@ -192,7 +197,10 @@ namespace dodo
 			std::string temp1;///< temporary storage									
 			std::string temp;///< temp storage
 			
-			bool _break;
+			bool _continueFlag;///< indicates `continue`
+			
+			unsigned int _breakDeepness;///< deepness of the break
+			unsigned int _loopDeepness;///< deepness of the loop
 	};
 
 };

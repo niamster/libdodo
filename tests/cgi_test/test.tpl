@@ -105,13 +105,16 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 	|<(print $b.one)>
 <(rof)>
 
-<(for $b in $arr2)>
-	<(for $b => $c in $b)>
-		<(if $b == two)>
-			<(break)>
-		<(fi)>	
-		<(print $b)> -> <(print $c)>
-	<(rof)>
-<(rof)>	
+<(if true )>	
+	<(for $b in $arr2)>
+		<(for $b => $c in $b)>
+			<(if $b == three)>
+				<(break 3)>
+			<(fi)>
+			<(print $b)> -> <(print $c)>
+		<(rof)>
+		-------
+	<(rof)>	
+<(fi)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
