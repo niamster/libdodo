@@ -316,7 +316,7 @@
 		#endif
 		
 		#ifdef NO_EX
-			bool result = 
+			bool _result = 
 		#endif	
 			_exec(query, result); 
 		
@@ -327,7 +327,7 @@
 		cleanCollect();
 		
 		#ifdef NO_EX
-			return result;
+			return _result;
 		#endif
 	}
 	
@@ -439,7 +439,11 @@
 				throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_SETCHARSET,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
 			#else
 				return false;
-			#endif		
+			#endif
+
+		#ifdef NO_EX
+			return true;
+		#endif					
 	}
 	
 	//-------------------------------------------------------------------

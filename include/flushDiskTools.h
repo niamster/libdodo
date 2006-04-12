@@ -141,6 +141,18 @@ namespace dodo
 				static bool 
 			#endif
 							copyDir(const std::string &from, const std::string &to, bool force=false);
+			
+			/**
+			 * appends string to file
+			 * @param path describes file's path
+			 * @param content describes content will be appended to file
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							append(const std::string &path, const std::string &content);
 										
 			/**
 			 * @return basename of node

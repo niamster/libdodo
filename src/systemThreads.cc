@@ -122,7 +122,7 @@ systemThreads::add(threadFunc func,
 	thread.position = ++threadNum;
 	thread.stackSize = stackSize;
 	thread.action = action;
-	thread.executeLimit = -1;
+	thread.executeLimit = 0;
 	
 	#ifdef DL_EXT
 		thread.handle = NULL;
@@ -810,21 +810,21 @@ systemThreads::addNRun(threadFunc func,
 	errno = pthread_attr_setstacksize(&attr,stackSize);
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADDNRUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 		
-	errno = pthread_create(&(k->thread),&attr,k->func,k->data);	
+	errno = pthread_create(&(thread.thread),&attr,func,data);	
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ADDNRUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 	
-	k->isRunning = true;
-	++(k->executed);
+	thread.isRunning = true;
+	++(thread.executed);
 	
 	threads.push_back(thread);
 	

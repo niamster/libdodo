@@ -368,7 +368,11 @@ cgiTools::makePost() const
 								
 				METHOD_POST.realArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);///damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
-	}	
+	}
+	
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------

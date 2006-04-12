@@ -724,12 +724,14 @@ int
 systemTools::getGroupPID(int pid)
 {
 	register int pgid = getpgid(pid);
-	if (pgid==-1)
+	if (pgid == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPPID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return -1;	
 		#endif		
 	
-	return -1;
+	return pgid;
 }
 
 //-------------------------------------------------------------------
@@ -938,7 +940,12 @@ systemTools::sendSignal(int pid,
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SENDSIGNAL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
-		#endif		
+		#endif	
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+			
 }
 
 //-------------------------------------------------------------------

@@ -253,7 +253,7 @@
 		#endif
 		
 		#ifdef NO_EX
-			bool result = 
+			bool _result = 
 		#endif	
 			_exec(query, result); 
 		
@@ -264,7 +264,7 @@
 		cleanCollect();
 		
 		#ifdef NO_EX
-			return result;
+			return _result;
 		#endif
 	}
 	

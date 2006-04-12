@@ -261,6 +261,10 @@ flushSocket::connect(const __connInfo &destinaton,
 	#else
 		connect(destinaton.host,destinaton.port,exchange);
 	#endif
+
+	#ifdef NO_EX
+		return true;
+	#endif		
 }
 //-------------------------------------------------------------------
 
@@ -383,7 +387,11 @@ flushSocket::connectFrom(const std::string &local,
 			return false;
 	#else
 		connectFrom(local,destinaton.host,destinaton.port,exchange);
-	#endif
+	#endif	
+	
+	#ifdef NO_EX
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------
@@ -563,6 +571,10 @@ flushSocket::bindNListen(const __connInfo &destinaton,
 	#else
 		bindNListen(destinaton.host,destinaton.port,numberOfConnections);
 	#endif
+	
+	#ifdef NO_EX
+		return true;
+	#endif		
 }
 
 //-------------------------------------------------------------------

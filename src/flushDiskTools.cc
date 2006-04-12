@@ -1316,3 +1316,33 @@ flushDiskTools::exists(const std::string &path)
 }
 
 //-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif
+flushDiskTools::append(const std::string &path, 
+						const std::string &content)
+{
+	FILE *file = fopen(path.c_str(),"a+");			
+	if (file == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISKTOOLS,FLUSHDISKTOOLS_APPEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
+	if (fwrite(content.c_str(), content.size(), 1, file) == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHDISKTOOLS,FLUSHDISKTOOLS_APPEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	#ifdef NO_EX
+		return true;
+	#endif		
+}
+
+//-------------------------------------------------------------------

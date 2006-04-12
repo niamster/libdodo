@@ -297,9 +297,9 @@ flushSTD::write(const char *const aa_buf)
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-        void
+	void
 #else
-        bool
+	bool
 #endif
 flushSTD::flush()
 {
@@ -313,6 +313,10 @@ flushSTD::flush()
         #else
 			return false;
         #endif
+
+	#ifdef NO_EX
+		return true;
+	#endif	        
 }
 
 //-------------------------------------------------------------------
