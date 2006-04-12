@@ -127,6 +127,18 @@ blocks:
 			<(rof)>
 			
 			`for` statement allows to iterate through array. to get pair 'key=>value' use `=>` operator(see an example).	
+			in `for` statement you may use `continue` and `break` blocks: 
+			
+			<(for $b in $arr)>
+				<(if $b==2 )>
+					<(continue)>
+				<(fi)>
+				<(print !!!)>
+				<(if $b==4 )>
+					<(break)>
+				<(fi)>
+				<(print @@@)>
+			<(rof)>
 			
 		print:
 			<(print {$arr2.{0}.{$one}} )>

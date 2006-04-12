@@ -191,6 +191,8 @@ namespace dodo
 				
 			std::string temp1;///< temporary storage									
 			std::string temp;///< temp storage
+			
+			bool _break;
 	};
 
 };

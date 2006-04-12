@@ -107,6 +107,9 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 
 <(for $b in $arr2)>
 	<(for $b => $c in $b)>
+		<(if $b == two)>
+			<(break)>
+		<(fi)>	
 		<(print $b)> -> <(print $c)>
 	<(rof)>
 <(rof)>	

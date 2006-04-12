@@ -91,9 +91,9 @@
 #define FILE_DELIM '/'
 
 /** 
- * compile without exceptions.
+ * compile without exceptions[bad practice]
  */
-#define NO_EX
+//#define NO_EX
 
 /**
  * removes some checks

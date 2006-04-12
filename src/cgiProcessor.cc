@@ -51,6 +51,8 @@ cgiProcessor::_process(const std::string &buffer,
 {
 	register unsigned long i(0), j(0), begin(0), k(0);
 	
+	_break = false;
+	
 	std::string tpl;
 	
 	while (true)
@@ -111,10 +113,22 @@ cgiProcessor::_process(const std::string &buffer,
 						j = _for(buffer,j,temp.substr(k + 3),tpl,path);
 					}
 					else
-						tpl.append(buffer.substr(i - 2,j - i + 2));
+					{
+						k = temp.find("break");
+						if(k != std::string::npos)
+						{
+							_break = true;
+							break;
+						}
+						else 
+							tpl.append(buffer.substr(i - 2,j - i + 2));
+					}
 				}
 			}
 		}
+		
+		if (_break)
+			break;
 	}
 	
 	return tpl;
@@ -505,6 +519,12 @@ cgiProcessor::_for(const std::string &buffer,
 							local[keyName] = tools::lToString(i);						
 						local[varName] = std::string(1,k->second[i]);							
 						tpl.append(_process(forSpace,path));
+						
+						if (_break)
+						{
+							_break = false;
+							break;
+						}
 					}
 					
 					if (iter != local.end())
@@ -543,11 +563,17 @@ cgiProcessor::_for(const std::string &buffer,
 					assocArr::iterator k = g->second.begin();
 					assocArr::iterator l = g->second.end();			
 					for (;k!=l;++k)
-					{												
+					{											
 						if (key)
 							local[keyName] = k->first;
 						local[varName] = k->second;
-						tpl.append(_process(forSpace,path));				
+						tpl.append(_process(forSpace,path));		
+						
+						if (_break)
+						{
+							_break = false;
+							break;
+						}		
 					}
 					
 					if (iter != local.end())
@@ -585,11 +611,17 @@ cgiProcessor::_for(const std::string &buffer,
 																
 					register unsigned long i(0),j(k->second.size());
 					for (;i<j;++i)
-					{						
+					{					
 						if (key)
 							local[keyName] = tools::lToString(i);
 						local[varName] = std::string(1,k->second[i]);
 						tpl.append(_process(forSpace,path));
+						
+						if (_break)
+						{
+							_break = false;
+							break;
+						}
 					}
 					
 					if (iter != local.end())
@@ -633,6 +665,12 @@ cgiProcessor::_for(const std::string &buffer,
 							local[keyName] = k->first;
 						local[varName] = k->second;
 						tpl.append(_process(forSpace,path));
+						
+						if (_break)
+						{
+							_break = false;
+							break;
+						}
 					}
 					
 					if (iter != local.end())
@@ -671,11 +709,17 @@ cgiProcessor::_for(const std::string &buffer,
 					stringArr::iterator k = o->second.begin();
 					stringArr::iterator l = o->second.end();			
 					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter)
-					{						
+					{					
 						if (key)
 							local[keyName] = tools::lToString(keyNIter);
 						local[varName] = *k;
-						tpl.append(_process(forSpace,path));				
+						tpl.append(_process(forSpace,path));		
+						
+						if (_break)
+						{
+							_break = false;
+							break;
+						}		
 					}
 					
 					if (iter != local.end())
@@ -714,11 +758,17 @@ cgiProcessor::_for(const std::string &buffer,
 					std::vector<assocArr>::iterator k = d->second.begin();
 					std::vector<assocArr>::iterator l = d->second.end();			
 					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter)
-					{						
+					{		
 						if (key)
 							local[keyName] = tools::lToString(keyNIter);
 						localHash[varName] = *k;
-						tpl.append(_process(forSpace,path));				
+						tpl.append(_process(forSpace,path));			
+						
+						if (_break)
+						{
+							_break = false;
+							break;
+						}	
 					}
 					
 					if (iter != localHash.end())
@@ -765,11 +815,17 @@ cgiProcessor::_for(const std::string &buffer,
 														
 								register unsigned long i(0),j(k->second.size());
 								for (;i<j;++i)
-								{									
+								{						
 									if (key)
 										local[keyName] = tools::lToString(i);
 									local[varName] = std::string(1,k->second[i]);
 									tpl.append(_process(forSpace,path));
+									
+									if (_break)
+									{
+										_break = false;
+										break;
+									}		
 								}
 					
 								if (iter != local.end())
@@ -813,11 +869,17 @@ cgiProcessor::_for(const std::string &buffer,
 																									
 								register unsigned long i(0),j(k->second.size());
 								for (;i<j;++i)
-								{									
+								{							
 									if (key)
 										local[keyName] = tools::lToString(i);
 									local[varName] = std::string(1,k->second[i]);
 									tpl.append(_process(forSpace,path));
+										
+									if (_break)
+									{
+										_break = false;
+										break;
+									}
 								}
 								
 								if (iter != local.end())
@@ -859,11 +921,17 @@ cgiProcessor::_for(const std::string &buffer,
 																								
 							register unsigned long i(0),j(o->second[pos].size());
 							for (;i<j;++i)
-							{								
+							{							
 								if (key)
 									local[keyName] = tools::lToString(i);
 								local[varName] = std::string(1,o->second[pos][i]);
 								tpl.append(_process(forSpace,path));
+								
+								if (_break)
+								{
+									_break = false;
+									break;
+								}	
 							}
 							
 							if (iter != local.end())
@@ -906,11 +974,17 @@ cgiProcessor::_for(const std::string &buffer,
 							assocArr::iterator k = d->second[pos].begin();					
 							assocArr::iterator l = d->second[pos].end();
 							for (;k!=l;++k)
-							{
+							{	
 								if (key)
 									local[keyName] = k->first;
 								local[varName] = k->second;
 								tpl.append(_process(forSpace,path));		
+								
+								if (_break)
+								{
+									_break = false;
+									break;
+								}	
 							}
 							
 							if (iter != local.end())
@@ -966,6 +1040,12 @@ cgiProcessor::_for(const std::string &buffer,
 												local[keyName] = tools::lToString(i);
 											local[varName] = std::string(1,k->second[i]);
 											tpl.append(_process(forSpace,path));
+											
+											if (_break)
+											{
+												_break = false;
+												break;
+											}		
 										}
 							
 										if (iter != local.end())
@@ -1006,11 +1086,17 @@ cgiProcessor::_for(const std::string &buffer,
 			
 		register unsigned long i(0), j(targetVar.size());
 		for (;i<j;++i)
-		{
+		{					
 			if (key)
 				local[keyName] = tools::lToString(i);
 			local[varName] = std::string(1,targetVar[i]);
-			tpl.append(_process(forSpace,path));			
+			tpl.append(_process(forSpace,path));	
+			
+			if (_break)
+			{
+				_break = false;
+				break;
+			}			
 		}
 		
 		if (iter != local.end())
