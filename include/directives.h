@@ -36,7 +36,7 @@
 
 #define MAJOR "0"
 #define MINOR "2"
-#define RELEASE "0"
+#define RELEASE "10"
 
 /**
  * system define; default - linux

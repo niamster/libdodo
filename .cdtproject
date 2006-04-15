@@ -53,11 +53,6 @@
 </profile>
 </item>
 <item id="org.eclipse.cdt.core.pathentry">
-<pathentry include="/opt/gcc-3.4.3/include/c++/3.4.3/backward" kind="inc" path="" system="true"/>
-<pathentry include="/opt/gcc-3.4.3/include/c++/3.4.3/bits" kind="inc" path="" system="true"/>
-<pathentry include="/opt/gcc-3.4.3/include/c++/3.4.3/ext" kind="inc" path="" system="true"/>
-<pathentry include="/opt/gcc-3.4.3/include/c++/3.4.3/i686-pc-linux-gnu/bits" kind="inc" path="" system="true"/>
-<pathentry include="/opt/gcc-3.4.3/include/c++/3.4.3" kind="inc" path="" system="true"/>
 <pathentry include="/usr/include" kind="inc" path="" system="true"/>
 <pathentry include="/usr/include/linux/" kind="inc" path="" system="true"/>
 <pathentry include="/opt/mysql/include/mysql" kind="inc" path="" system="true"/>
@@ -68,7 +63,14 @@
 <pathentry base-path="libdodo" include="include" kind="inc" path="" system="true"/>
 <pathentry include="/usr/include/libxml2/" kind="inc" path="" system="true"/>
 <pathentry include="/opt/sqllite/include" kind="inc" path="" system="true"/>
-<pathentry include="/opt/postresql/include/" kind="inc" path="" system="true"/>
+<pathentry include="/opt/postgresql/include" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.6/include" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.6/include/g++-v3" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.6/include/g++-v3/i686-pc-linux-gnu/bits" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.6/include/g++-v3/ext" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.6/include/g++-v3/bits" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc-lib/i686-pc-linux-gnu/3.3.6/include/g++-v3/backward" kind="inc" path="" system="true"/>
+<pathentry include="/opt/postgresql/include/libpq" kind="inc" path="" system="true"/>
 <pathentry kind="src" path=""/>
 <pathentry kind="out" path=""/>
 <pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>

@@ -76,7 +76,7 @@ LIBRARY:=libdodo
 
 MAJOR:=0
 MINOR:=2
-RELEASE:=0
+RELEASE:=10
 
 all: $(LIBRARY)
 
