@@ -165,20 +165,20 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 	
 	sockaddr_in sin;
 	
-	if (::ioctl(socket,SIOCGIFADDR,&ifr) == -1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return __ifInfo();			
-		#endif
-	
-	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_addr,sizeof(sockaddr));
-	
 	#ifdef FREE_BSD
 			
 	
 	#else		
 	
+		if (::ioctl(socket,SIOCGIFADDR,&ifr) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return __ifInfo();			
+			#endif
+	
+		memcpy((void *)&sin,&ifr.ifr_ifru.ifru_addr,sizeof(sockaddr));
+		
 		if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
 			info.address = add;
 			
