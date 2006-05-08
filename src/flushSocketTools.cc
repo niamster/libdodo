@@ -165,22 +165,22 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 	
 	sockaddr_in sin;
 	
+	if (::ioctl(socket,SIOCGIFADDR,&ifr) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return __ifInfo();			
+		#endif
+
+	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_addr,sizeof(sockaddr));
+	
+	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
+		info.address = add;
+				
 	#ifdef FREE_BSD
 			
 	
 	#else		
-	
-		if (::ioctl(socket,SIOCGIFADDR,&ifr) == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return __ifInfo();			
-			#endif
-	
-		memcpy((void *)&sin,&ifr.ifr_ifru.ifru_addr,sizeof(sockaddr));
-		
-		if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
-			info.address = add;
 			
 		if (::ioctl(socket,SIOCGIFNETMASK,&ifr) == -1)
 			#ifndef NO_EX
@@ -205,21 +205,21 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 	
 	memcpy((void *)&sin,&ifr.ifr_ifru.ifru_broadaddr,sizeof(sockaddr));
 
-	if (::ioctl(socket,SIOCGIFHWADDR,&ifr) == -1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return info;			
-		#endif
-	
+	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
+		info.broadcast = add;	
+				
 	#ifdef FREE_BSD
 		
 	
-	#else
-		
-		if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
-			info.broadcast = add;		
-		
+	#else	
+	
+		if (::ioctl(socket,SIOCGIFHWADDR,&ifr) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return info;			
+			#endif
+						
 		sprintf(add,"%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",ifr.ifr_ifru.ifru_hwaddr.sa_data[0]&0xff,
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[1]&0xff,
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[2]&0xff,
@@ -227,9 +227,9 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[4]&0xff,
 						ifr.ifr_ifru.ifru_hwaddr.sa_data[5]&0xff);
 
-	#endif
+		info.hwaddr = add;
 
-	info.hwaddr = add;
+	#endif
 
 	if (::ioctl(socket,SIOCGIFFLAGS,&ifr) == -1)
 		#ifndef NO_EX

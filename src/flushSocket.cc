@@ -38,7 +38,6 @@ flushSocket::flushSocket(bool a_server,
 						blockInherited(false),
 						server(a_server)
 {
-	makeSocket();
 }
 
 
@@ -193,12 +192,8 @@ flushSocket::connect(const std::string &host,
 		#else
 			return false;
 		#endif
-	
-	if (opened)
-	{		
-		opened = false;
-		makeSocket();
-	}
+		
+	makeSocket();
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -233,8 +228,6 @@ flushSocket::connect(const std::string &host,
 	
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
-	
-	opened = true;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -290,11 +283,7 @@ flushSocket::connectFrom(const std::string &local,
 			return false;
 		#endif
 	
-	if (opened)
-	{
-		opened = false;
-		makeSocket();
-	}
+	makeSocket();
 		
 	register int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
@@ -359,8 +348,6 @@ flushSocket::connectFrom(const std::string &local,
 	
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
-	
-	opened = true;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -415,12 +402,8 @@ flushSocket::connect(const std::string &path,
 		#else
 			return false;
 		#endif
-
-	if (opened)
-	{
-		opened = false;
-		makeSocket();
-	}	
+		
+	makeSocket();
 	
 	struct sockaddr_un sa;
 	
@@ -436,8 +419,6 @@ flushSocket::connect(const std::string &path,
 		
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
-
-	opened = true;
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);

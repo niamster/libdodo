@@ -11,30 +11,34 @@ int main(int argc, char **argv)
 	{
 		pp.setDbInfo(string("test"),"",0,"","Dmitrik","/tmp/mysql.sock");
 		
-		pp.connect();		
-		
-		map<string,string> arr;
-		arr["date"] = "2005-07-08";
-		arr["operation"] = "mu";
-		
-		vector<string> select;
-		select.push_back("date");
-		select.push_back("operation");
-		
-		for (int i=0;i<1000;i++)
+		for (int j=0;j<10;++j)
 		{
-			pp.select("log",select,"`id`<20 or `operation`='mu'");
-			pp.exec();
-			pp.fetch();
+		
+			pp.connect();		
 			
-			pp.insert("log",arr);
-			pp.exec();
-			
-			arr["operation"] = "um";
-			pp.update("log",arr);
+			map<string,string> arr;
+			arr["date"] = "2005-07-08";
 			arr["operation"] = "mu";
-			pp.limit(50);
-			pp.exec();
+			
+			vector<string> select;
+			select.push_back("date");
+			select.push_back("operation");
+			
+			for (int i=0;i<10;i++)
+			{
+				pp.select("log",select,"`id`<20 or `operation`='mu'");
+				pp.exec();
+				pp.fetch();
+				
+				pp.insert("log",arr);
+				pp.exec();
+				
+				arr["operation"] = "um";
+				pp.update("log",arr);
+				arr["operation"] = "mu";
+				pp.limit(50);
+				pp.exec();
+			}
 		}
 	}
 	catch(baseEx ex)

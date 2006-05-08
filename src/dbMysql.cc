@@ -51,9 +51,7 @@
 	
 	dbMysql::dbMysql() : empty(true),
 							type(CLIENT_MULTI_STATEMENTS)
-	{
-		mysql = mysql_init(NULL);
-		
+	{	
 		addSQL();
 	}
 	
@@ -187,13 +185,14 @@
 	#endif
 	dbMysql::connect() const
 	{
-		if (connected)
-			disconnect();
+		disconnect();
 			
 		#ifndef DBMYSQL_WO_XEXEC
 			operType = DBMYSQL_OPER_CONNECT;
 			performXExec(preExec);
 		#endif
+		
+		mysql = mysql_init(NULL);
 		
 		if (!mysql_real_connect(mysql,
 			dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
