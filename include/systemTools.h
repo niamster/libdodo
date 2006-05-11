@@ -99,7 +99,7 @@ namespace dodo
 		SIGNAL_PIPE_FAULT = 1024,
 		SIGNAL_ALARM = 2048,
 		SIGNAL_TERMINATION = 4096,
-		#ifndef FREEBSD
+		#ifndef __FreeBSD__
 			SIGNAL_STACK_FAULT = 8192,
 		#endif
 		SIGNAL_CHILD_CHANGED = 16384,

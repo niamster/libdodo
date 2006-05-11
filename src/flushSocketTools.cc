@@ -177,7 +177,7 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)	
 		info.address = add;
 				
-	#ifdef FREE_BSD
+	#ifdef __FreeBSD__
 			
 	
 	#else		
@@ -208,7 +208,7 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 	if (inet_ntop(AF_INET,&sin.sin_addr,add,INET_ADDRSTRLEN) != NULL)
 		info.broadcast = add;	
 				
-	#ifdef FREE_BSD
+	#ifdef __FreeBSD__
 		
 	
 	#else	
@@ -245,7 +245,7 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 			return info;
 		#endif
 	
-	#ifdef FREE_BSD
+	#ifdef __FreeBSD__
 	
 		if ((IFF_LOOPBACK&ifr.ifr_ifru.ifru_flags[0]) == IFF_LOOPBACK)
 			info.loop = true;

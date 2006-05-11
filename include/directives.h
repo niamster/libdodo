@@ -38,12 +38,6 @@
 #define MINOR "2"
 #define RELEASE "10"
 
-/**
- * system define; default - linux
- */
-
-//#define FREE_BSD
-
 
 /**
  * modules defines
