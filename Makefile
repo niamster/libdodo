@@ -31,6 +31,8 @@ OBJECTS:=dbBase.o \
 
 ###########################################################
 
+DIRECTIVES:=
+
 include directives.mk
 
 MODS_CPP:=$(MOD_MYSQL_CPP) \
@@ -59,12 +61,53 @@ MODS_LIB:=$(MOD_MYSQL_LIB) \
 			$(MOD_PTHREAD_LIB) \
 			$(MOD_POSTGRESQL_LIB) \
 			$(MOD_BZIP_LIB)
-
+			
+			
 ###########################################################
 
 include directives.runtime.mk
 
 ###########################################################
+
+			
+DIRECTIVES:=
+
+ifeq ($(MOD_MYSQL),yes)
+	DIRECTIVES += "\#define MYSQL_EXT\n\n"
+endif
+
+ifeq ($(MOD_PCRE),yes)
+	DIRECTIVES += "\#define PCRE_EXT\n\n"
+endif
+
+ifeq ($(MOD_DL),yes)
+	DIRECTIVES += "\#define DL_EXT\n\n"
+endif
+
+ifeq ($(MOD_LIBXML2),yes)
+	DIRECTIVES += "\#define LIBXML2_EXT\n\n"
+endif
+
+ifeq ($(MOD_SQLITE),yes)
+	DIRECTIVES += "\#define SQLITE_EXT\n\n"
+endif
+
+ifeq ($(MOD_POSTGRESQL),yes)
+	DIRECTIVES += "\#define POSTGRESQL_EXT\n\n"
+endif
+
+ifeq ($(MOD_BZIP),yes)
+	DIRECTIVES += "\#define BZIP_EXT\n\n"
+endif
+
+ifeq ($(MOD_ZLIB),yes)
+	DIRECTIVES += "\#define ZLIB_EXT\n\n"
+endif
+
+ifeq ($(MOD_CODECONV),yes)
+	DIRECTIVES += "\#define CODECONV_EXT\n\n"
+endif
+
 
 override CPPFLAGS:=-I./include -I/usr/local/include $(MODS_CPP) $(CPPFLAGS)
 override LDFLAGS:= -L./ -L/usr/local/libs $(MODS_LD) $(LDFLAGS)
@@ -81,6 +124,7 @@ RELEASE:=10
 all: $(LIBRARY)
 
 $(LIBRARY): $(OBJECTS)
+	echo -e $(DIRECTIVES) > include/directives.runtime.h
 	$(CXX) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.$(MAJOR).$(MINOR).$(RELEASE) -o $@.so.$(MAJOR).$(MINOR).$(RELEASE) $^
 	strip -d --strip-unneeded $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE)
 	ln -sf $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $@.so
@@ -91,8 +135,9 @@ $(LIBRARY): $(OBJECTS)
 	@echo ""
 	@echo ""
 	@echo "Now you can run 'gmake install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
+
 .cc.o:
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
+	$(CXX) $(DEFINES) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
 	strip -d --strip-unneeded $@
 
 install: all

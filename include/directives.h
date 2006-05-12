@@ -25,6 +25,8 @@
 #ifndef _DIRECTIVES_H_
 #define _DIRECTIVES_H_
 
+#include <directives.runtime.h>
+
 #ifndef __USE_UNIX98
 	#define __USE_UNIX98
 #endif
@@ -37,21 +39,6 @@
 #define MAJOR "0"
 #define MINOR "2"
 #define RELEASE "10"
-
-
-/**
- * modules defines
- */
-
-#define MYSQL_EXT
-#define PCRE_EXT
-#define LIBXML2_EXT
-#define DL_EXT
-#define CODECONV_EXT
-#define ZLIB_EXT
-#define SQLITE_EXT
-#define POSTGRESQL_EXT
-#define BZIP_EXT
 
 /**
  * other options
