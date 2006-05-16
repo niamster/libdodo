@@ -92,7 +92,7 @@ tools::explode(const std::string &fields,
 			const std::string &separator, 
 			int limit)
 {
-	register unsigned int i(0), j(0), sep_size(separator.size());
+	register unsigned long i(0), j(0), sep_size(separator.size());
 	register int k(0);
 	stringArr arr;
 	while (true)
@@ -123,7 +123,7 @@ tools::replace(pchar needle,
 		pchar replacement,
 		std::string &data)
 {
-	register unsigned int i(0),j(strlen(needle)),k(strlen(replacement));
+	register unsigned long i(0),j(strlen(needle)),k(strlen(replacement));
 	while (true)
 	{
 		i = data.find(needle,i);
@@ -1044,7 +1044,7 @@ tools::decodeBase64(const std::string &string)
 __url 
 tools::parseURL(const std::string &url)
 {
-	register unsigned int begin(0), pos, pos1;
+	register unsigned long begin(0), pos, pos1;
 	
 	__url temp;
 	

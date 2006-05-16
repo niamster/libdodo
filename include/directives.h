@@ -31,6 +31,14 @@
 	#define __USE_UNIX98
 #endif
 
+#ifndef _REENTRANT
+	#define _REENTRANT
+#endif
+
+#ifndef _GNU_SOURCE
+	#define _GNU_SOURCE
+#endif
+
 #include <stdio.h>
 #include <unistd.h>
 
