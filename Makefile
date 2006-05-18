@@ -1,6 +1,4 @@
-#CC_PATH:=/opt/bin/
 
-CXX:=$(CC_PATH)g++
 
 OBJECTS:=dbBase.o \
 		tools.o \
@@ -29,11 +27,9 @@ OBJECTS:=dbBase.o \
 		cgiPreprocessor.o \
 		cgiProcessor.o \
 
-###########################################################
-
-DIRECTIVES:=
-
 include directives.mk
+
+###########################################################
 
 MODS_CPP:=$(MOD_MYSQL_CPP) \
 			$(MOD_PCRE_CPP) \
@@ -137,7 +133,7 @@ $(LIBRARY): $(OBJECTS)
 	@echo "Now you can run 'gmake install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
 
 .cc.o:
-	$(CXX) $(DEFINES) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
 	strip -d --strip-unneeded $@
 
 install: all

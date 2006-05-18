@@ -1,16 +1,20 @@
-#GCC_PATH:=/opt/gcc-3.4.3/bin/
-#GCC_PATH:=/opt/gcc-4.0.1/bin/
 
-CXX:=$(GCC_PATH)g++
-CFLAGS:=-O2 -march=pentium4
+include ../../directives.mk
 
-MOD_SQLITE_CPP:=-I/opt/sqllite/include/
+###########################################################
 
-override DEFINES:=$(DEFINES)
+MODS_CPP:=$(MOD_MYSQL_CPP) \
+			$(MOD_PCRE_CPP) \
+			$(MOD_DL_CPP) \
+			$(MOD_LIBXML2_CPP)\
+			$(MOD_SQLITE_CPP) \
+			$(MOD_POSTGRESQL_CPP) \
+			$(MOD_PTHREAD_CPP) \
+			$(MOD_BZIP_CPP)
+			
+###########################################################
 
-#DEBUG:=-g
-
-override CPPFLAGS:=-I../../include $(MOD_SQLITE_CPP) $(CPPFLAGS)
+override CPPFLAGS:=-I../../include -I/usr/local/include $(MODS_CPP) $(CPPFLAGS)
 override LDFLAGS:=-L../../ $(LDFLAGS) 
 
 test: test.cc
