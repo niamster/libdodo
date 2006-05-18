@@ -120,11 +120,11 @@ RELEASE:=10
 all: $(LIBRARY)
 
 $(LIBRARY): directives $(OBJECTS)
-	$(CXX) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.$(MAJOR).$(MINOR).$(RELEASE) -o $@.so.$(MAJOR).$(MINOR).$(RELEASE) $^
+	$(CXX) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.$(MAJOR).$(MINOR).$(RELEASE) -o $@.so.$(MAJOR).$(MINOR).$(RELEASE) $(OBJECTS)
 	strip -d --strip-unneeded $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE)
 	ln -sf $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $@.so
 	
-	ar rc $(LIBRARY).a.$(MAJOR).$(MINOR).$(RELEASE) $^
+	ar rc $(LIBRARY).a.$(MAJOR).$(MINOR).$(RELEASE) $(OBJECTS)
 	ln -sf $(LIBRARY).a.$(MAJOR).$(MINOR).$(RELEASE) $@.a
 	
 	@echo ""
