@@ -166,6 +166,7 @@ regexpTools::compile(const std::string &pattern) const
 			bits |= PCRE_UNGREEDY;
 		if (multiline)
 			bits |= PCRE_MULTILINE;
+		bits |= PCRE_DOTALL;	
 		
 		register int errOffset(0);
 		register const char *error;
@@ -179,7 +180,6 @@ regexpTools::compile(const std::string &pattern) const
 			bits |= REG_EXTENDED;
 		if (icase)
 			bits |= REG_ICASE;
-		bits |= REG_NEWLINE;	
 			
 		if (notCompiled)
 			notCompiled = false;

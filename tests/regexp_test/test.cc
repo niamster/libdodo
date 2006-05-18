@@ -8,16 +8,24 @@ int main(int argc, char **argv)
 {	
 	regexpTools expr;
 	stringArr pock;
-
-	cout << "\npattern: (.*)a([0-9]+)(f*)(a*)(b*)<br> test string: dsdasa4565aaa<br> pockets: \n";
 	
-	if (expr.match("(.*)a([0-9]+)(f*)(a*)(b*)",/*"dsdasa",pock)*/"ssa4565aaa",pock))
+	expr.multiline = true;
+
+	std::string sample = "dsdasa4565a\naa";
+
+	std::string pattern = "^(.*)a([0-9]+)(f*)(a*)(.*)$";
+
+	cout << "\npattern: "<<pattern<<"\n\ntest string: "<<sample<<"\n\npockets:\n";
+	
+	if (expr.match(pattern,sample,pock))
 	{
-		cout << pock[0] << "\n";
-		cout << pock[1] << "\n";
-		cout << pock[2] << "\n";
-		cout << pock[3] << "\n";
-		cout << pock[4] << "\n";
+		cout << pock.size() << " ::size\n";
+		
+		cout << pock[0] << " >>0\n";
+		cout << pock[1] << " >>1\n";
+		cout << pock[2] << " >>2\n";
+		cout << pock[3] << " >>3\n";
+		cout << pock[4] << " >>4\n";
 	}
 	else
 		cout << "not matched";
