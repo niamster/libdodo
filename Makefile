@@ -119,8 +119,7 @@ RELEASE:=10
 
 all: $(LIBRARY)
 
-$(LIBRARY): $(OBJECTS)
-	echo -e $(DIRECTIVES) > include/directives.runtime.h
+$(LIBRARY): directives $(OBJECTS)
 	$(CXX) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.$(MAJOR).$(MINOR).$(RELEASE) -o $@.so.$(MAJOR).$(MINOR).$(RELEASE) $^
 	strip -d --strip-unneeded $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE)
 	ln -sf $(LIBRARY).so.$(MAJOR).$(MINOR).$(RELEASE) $@.so
@@ -132,6 +131,9 @@ $(LIBRARY): $(OBJECTS)
 	@echo ""
 	@echo "Now you can run 'gmake install'. [PREFIX=$(PREFIX)] - change it in directives.mk if you want"
 
+directives:
+	echo -e $(DIRECTIVES) > include/directives.runtime.h
+	
 .cc.o:
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) $(DEBUG) -fPIC -c $^
 	strip -d --strip-unneeded $@
