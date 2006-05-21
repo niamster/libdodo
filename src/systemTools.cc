@@ -179,7 +179,7 @@ systemTools::getLimit(systemToolsLimitEnum type,
 			realRes = RLIMIT_NPROC;
 			break;
 		case SYSTEM_MAXOPENFILES:
-			#ifdef FREE_BSD
+			#ifdef __FreeBSD__
 				realRes = RLIMIT_NOFILE;
 			#else
 				realRes = RLIMIT_OFILE;
@@ -240,7 +240,7 @@ systemTools::setLimit(systemToolsLimitEnum type,
 			realRes = RLIMIT_NPROC;
 			break;
 		case SYSTEM_MAXOPENFILES:
-			#ifdef FREE_BSD
+			#ifdef __FreeBSD__
 				realRes = RLIMIT_NOFILE;
 			#else
 				realRes = RLIMIT_OFILE;

@@ -188,7 +188,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
 	temp_bit = 0;
 	
-	for (register unsigned int i=0;i<=arrLen;++i)
+	for (register unsigned int i=0;i<arrLen;++i)
 	{
 		temp_bit = 1<<sqlAddEnumArr[i];
 		if ((temp_bit & qTypeShift) == temp_bit)

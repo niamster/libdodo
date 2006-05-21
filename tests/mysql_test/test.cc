@@ -111,6 +111,8 @@ int main(int argc, char **argv)
 		cout << pp.queryCollect() << endl;
 		//pp.exec();
 		
+		exit(0);
+		
 		pp.insertSelect("test1","test2",fields,values);//insert_select
 		cout << pp.queryCollect() << endl;
 		//pp.exec();
