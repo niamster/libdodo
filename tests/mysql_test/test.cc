@@ -95,10 +95,21 @@ int main(int argc, char **argv)
 		arr["operation"] = "mu";
 		
 		std::vector<assocArr> assA;
+
+///
+        FILE *file = fopen("/bin/ls","r");
+
+        char temp[100];
+
+        fread(temp,100,1,file);
+
+        string str;
+        str.assign(temp,100);
+///
 		
 		assA.push_back(arr);
 		arr["date"] = "20\"05`''-'07-08";
-		arr["operation"] = "me";
+		arr["operation"] = str;
 		assA.push_back(arr);
 		
 		/*additional statement*/

@@ -227,8 +227,7 @@ namespace dodo
 			
 			mutable stringArr::const_iterator i;///< iterator for array of strings
 			mutable stringArr::const_iterator j;///< iterator for array of strings
-			
-			mutable char *t_request;///< temporary places request
+
 			mutable stringArr fieldsVPart;///< temporary places request's parts
 			
 	};

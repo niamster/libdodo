@@ -51,6 +51,7 @@ MOD_SQLITE_LIB:=-lsqlite3
 
 MOD_PTHREAD:=yes
 MOD_PTHREAD_LD:=
+MOD_PTHREAD_CPP:=
 MOD_PTHREAD_LIB:=-lpthread
 
 #############

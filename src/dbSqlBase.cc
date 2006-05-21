@@ -237,13 +237,8 @@ dbSqlBase::selectCollect() const
 	if (pre_table.size()>0)
 	{
 		temp.append(tools::implode(pre_fieldsNames,","));
-		t_request = new char[temp.size()+pre_table.size()+14];		
 
-		sprintf(t_request,"select %s from %s",temp.c_str(),pre_table.c_str());		
-		
-		request = t_request;
-	
-		delete [] t_request;
+		request = "select " + temp + " from " + pre_table;
 	}
 	else
 	{
@@ -275,7 +270,7 @@ dbSqlBase::insertCollect() const
 	
 	std::string fieldsPart;
 	for (;i!=j;++i)
-		fieldsPart.append("(" + *i + "),");
+		fieldsPart.append("(" + *i + "),");	
 	fieldsPart.append("(" + *i + ")");
 	
 	temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
@@ -286,13 +281,7 @@ dbSqlBase::insertCollect() const
 	if (pre_fieldsNames.size() != 0)
 		temp_.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
 	
-	t_request = new char[temp.size()+temp_.size()+fieldsPart.size()+22];
-	
-	sprintf(t_request,"insert %s into %s values %s",temp.c_str(),temp_.c_str(),fieldsPart.c_str());
-	
-	request = t_request;
-	
-	delete [] t_request;
+	request = "insert " + temp + " into " + temp_ + " values " + fieldsPart;
 }
 
 //-------------------------------------------------------------------
@@ -312,13 +301,7 @@ dbSqlBase::insertSelectCollect() const
 	
 	tempS.append(fieldsPartFrom);
 		
-	t_request = new char[temp.size()+pre_tableTo.size()+fieldsPartTo.size()+tempS.size()+pre_table.size()+35];
-	
-	sprintf(t_request,"insert %s into %s (%s) select %s from %s",temp.c_str(),pre_tableTo.c_str(),fieldsPartTo.c_str(),tempS.c_str(),pre_table.c_str());
-	
-	request = t_request;
-	
-	delete [] t_request;	
+	request = "insert " + temp + " into " + pre_tableTo + "("+ fieldsPartTo +") select " + tempS + " from " + pre_table;
 }
 
 //-------------------------------------------------------------------
@@ -337,13 +320,7 @@ dbSqlBase::updateCollect() const
 
 	temp.append(pre_table);
 
-	t_request = new char[temp.size()+setPart.size()+13];	
-	
-	sprintf(t_request,"update %s set %s",temp.c_str(),setPart.c_str());
-
-	request = t_request;
-	
-	delete [] t_request;
+	request = "update " + temp + " set " + setPart;
 }
 
 //-------------------------------------------------------------------
@@ -353,14 +330,8 @@ dbSqlBase::delCollect() const
 {
 	temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
-	
-	t_request = new char[pre_table.size()+temp.size()+14];
-		
-	sprintf(t_request,"delete %s from %s",temp.c_str(),pre_table.c_str());
-	
-	request = t_request;
-	
-	delete [] t_request;
+
+	request = "delete " + temp + "from " + pre_table;
 }
 
 //-------------------------------------------------------------------
@@ -588,7 +559,6 @@ dbSqlBase::escapeFields(const std::string &a_data)
 	std::string temp(a_data);
 	
 	tools::replace("\\","\\\\",temp);
-	tools::replace("\n","\\n",temp);
 	tools::replace("'","\\'",temp);
 	
 	return temp;
