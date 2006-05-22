@@ -137,8 +137,20 @@ dbSqlBase::fieldsValName(const stringArr &fieldsVal,
 	j = fieldsVal.begin();
 		
 	for (register unsigned int k(0);k<o-1;++i,++k,++j)
-		temp.append(*i + "=" + frame + escapeFields(*j) + frame + ",");	
-	temp.append(*i + "=" + frame + escapeFields(*j) + frame);
+	{
+		temp.append(*i);	
+		temp.append("=");	
+		temp.append(frame);	
+		temp.append(escapeFields(*j));	
+		temp.append(frame);	
+		temp.append(",");	
+		
+	}
+	temp.append(*i);	
+	temp.append("=");	
+	temp.append(frame);	
+	temp.append(escapeFields(*j));	
+	temp.append(frame);	
 	
 	return temp;
 }
@@ -170,7 +182,10 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 		
 	register int tempQTypeTocheck = 1<<qTypeTocheck;
 	if ((tempQTypeTocheck & qShift)==tempQTypeTocheck)
-		request.append(sqlAddArr[qTypeTocheck].str+collectedString);
+	{
+		request.append(sqlAddArr[qTypeTocheck].str);
+		request.append(collectedString);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -238,7 +253,10 @@ dbSqlBase::selectCollect() const
 	{
 		temp.append(tools::implode(pre_fieldsNames,","));
 
-		request = "select " + temp + " from " + pre_table;
+		request = "select ";
+		request.append(temp);
+		request.append(" from ");
+		request.append(pre_table);
 	}
 	else
 	{
@@ -270,8 +288,14 @@ dbSqlBase::insertCollect() const
 	
 	std::string fieldsPart;
 	for (;i!=j;++i)
-		fieldsPart.append("(" + *i + "),");	
-	fieldsPart.append("(" + *i + ")");
+	{
+		fieldsPart.append("(");	
+		fieldsPart.append(*i);	
+		fieldsPart.append("),");	
+	}
+	fieldsPart.append("(");	
+	fieldsPart.append(*i);	
+	fieldsPart.append(")");	
 	
 	temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
@@ -279,9 +303,18 @@ dbSqlBase::insertCollect() const
 	temp_ = pre_table;
 	
 	if (pre_fieldsNames.size() != 0)
-		temp_.append(" ("+tools::implode(pre_fieldsNames,",")+") ");
+	{
+		temp_.append(" (");
+		temp_.append(tools::implode(pre_fieldsNames,","));
+		temp_.append(") ");
+	}
 	
-	request = "insert " + temp + " into " + temp_ + " values " + fieldsPart;
+	request = "insert ";
+	request.append(temp);
+	request.append(" into ");
+	request.append(temp_);
+	request.append(" values ");
+	request.append(fieldsPart);
 }
 
 //-------------------------------------------------------------------
@@ -301,7 +334,16 @@ dbSqlBase::insertSelectCollect() const
 	
 	tempS.append(fieldsPartFrom);
 		
-	request = "insert " + temp + " into " + pre_tableTo + "("+ fieldsPartTo +") select " + tempS + " from " + pre_table;
+	request = "insert ";
+	request.append(temp);
+	request.append(" into ");
+	request.append(pre_tableTo);
+	request.append("(");
+	request.append(fieldsPartTo);
+	request.append(") select ");
+	request.append(tempS);
+	request.append(" from ");
+	request.append(pre_table);
 }
 
 //-------------------------------------------------------------------
@@ -320,7 +362,10 @@ dbSqlBase::updateCollect() const
 
 	temp.append(pre_table);
 
-	request = "update " + temp + " set " + setPart;
+	request = "update ";
+	request.append(temp);
+	request.append(" set ");
+	request.append(setPart);
 }
 
 //-------------------------------------------------------------------
@@ -331,7 +376,10 @@ dbSqlBase::delCollect() const
 	temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 
-	request = "delete " + temp + "from " + pre_table;
+	request = "delete ";
+	request.append(temp);
+	request.append("from ");
+	request.append(pre_table);
 }
 
 //-------------------------------------------------------------------
@@ -460,23 +508,29 @@ dbSqlBase::queryCollect() const
 			selectCollect();
 			selectAction = true;
 			break;
+			
 		case INSERT:
 			insertCollect();
 			additionalActions = false;
 			break;
+			
 		case UPDATE:
 			updateCollect();
 			break;
+			
 		case DELETE:
 			delCollect();
 			break;
+			
 		case USE:
 			useCollect();
 			break;
+			
 		case INSERT_SELECT:
 			insertSelectCollect();
 			selectAction = true;
 			break;
+			
 		case UNION:
 		case UNION_ALL:
 		case MINUS:
@@ -484,46 +538,57 @@ dbSqlBase::queryCollect() const
 			subCollect();
 			additionalActions = false;
 			break;
+			
 		case TRUNCATE:
 			truncateCollect();
 			additionalActions = false;
 			break;
+			
 		case RENAME_DB:
 			renameBaseCollect();
 			additionalActions = false;
 			break;
+			
 		case RENAME_TABLE:
 			renameTableCollect();
 			additionalActions = false;
 			break;
+			
 		case RENAME_FIELD:
 			renameFieldCollect();
 			additionalActions = false;
 			break;
+			
 		case DELETE_DB:
 			delBaseCollect();
 			additionalActions = false;
 			break;
+			
 		case DELETE_TABLE:
 			delTableCollect();
 			additionalActions = false;
 			break;
+			
 		case DELETE_FIELD:
 			delFieldCollect();
 			additionalActions = false;
 			break;
+			
 		case CREATE_DB:
 			createBaseCollect();
 			additionalActions = false;
 			break;
+			
 		case CREATE_TABLE:
 			createTableCollect();
 			additionalActions = false;
 			break;
+			
 		case CREATE_FIELD:
 			createFieldCollect();
 			additionalActions = false;
 			break;
+			
 		default:
 			additionalActions = false;
 	}

@@ -25,19 +25,22 @@
 					'date','operation'
 					);
 					
-	for ($i=0;$i<1000;$i++)
+	for ($i=0;$i<100000;$i++)
 	{
 		$DB->select('log',$select,"`id`<20 or `operation`='mu'");
-		$DB->exec();	
-		$DB->getAssocArray();
+		$DB->queryCollect();
+		//$DB->exec();	
+		//$DB->getAssocArray();
 		
 		$DB->insert('log',$arr);
-		$DB->exec();
+		$DB->queryCollect();
+		//$DB->exec();
 		
 		$arr['operation'] = 'um';		
 		$DB->update('log',$arr,'1');
 		$arr['operation'] = 'mu';
 		$DB->limit(50);
-		$DB->exec();	
+		$DB->queryCollect();
+		//$DB->exec();	
 	}
 ?>

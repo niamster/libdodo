@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 	try
 	{
 		
-		int pos = pp.addPreExec(hook,(void *)"id");
+		//int pos = pp.addPreExec(hook,(void *)"id");
 		//pp.addPostExec(&journal,(void *)"journal");
 		//pp.delPreExec(pos);//removes hook!!
 		
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 				
 		assocArr arr;
 		arr["date"] = "20\"05`''-'07-08";
-		arr["operation"] = "mu";
+		arr["operation"] = "m\nu";
 		
 		std::vector<assocArr> assA;
 
@@ -118,9 +118,9 @@ int main(int argc, char **argv)
 		pp.setMyAddSelSt(SELECT_BIG_RESULT);//mySQL features; defined only in this class
 				
 		
-		pp.insert("t",assA);//multiply insert
+		pp.insert("leg",assA);//multiply insert
 		cout << pp.queryCollect() << endl;
-		//pp.exec();
+		pp.exec();
 		
 		exit(0);
 		
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
 	}
     catch(baseEx ex)
     {	
-		cout << ex.file << endl << ex.baseErrstr << endl;
+		//cout << ex.file << endl << ex.baseErrstr << endl;
     }
 	return 0;
 }

@@ -396,6 +396,12 @@ class db_driver_mysql {
             }
     }
 
+	
+	public function queryCollect()
+	{
+		$this->construct($this->cur_data);
+		return $this->cur_query;
+	}
 
     /*========================================================================*/
     // Process a manual query
