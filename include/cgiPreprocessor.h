@@ -27,13 +27,7 @@
 
 #include <directives.h>
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
 #include <types.h>
-#include <tools.h>
-#include <cgiPreprocessorEx.h>
 
 namespace dodo
 {

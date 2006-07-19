@@ -28,11 +28,9 @@
 #include <directives.h>
 
 #ifdef POSTGRESQL_EXT
-	
+
 	#include <libpq-fe.h>
 	
-	#include <dbPostgresqlEx.h>
-	#include <tools.h>
 	#include <dbInterface.h>
 	#include <xexec.h>
 	

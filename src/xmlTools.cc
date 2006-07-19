@@ -27,6 +27,11 @@
 
 #ifdef LIBXML2_EXT
 	
+	#include <libxml/xmlmemory.h>
+	#include <libxml/parser.h>
+
+	#include <xmlToolsEx.h>
+	
 	using namespace dodo;
  
 	__xmlInfo::__xmlInfo(const std::string &a_version, 

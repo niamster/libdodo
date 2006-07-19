@@ -24,6 +24,18 @@
  
 #include <flushSocketExchange.h>
 
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <sys/un.h>
+#include <sys/socket.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+
+#include <flushSocketExchangeEx.h>
+
 using namespace dodo;
 
 __initialAccept::__initialAccept() : socket(-1), 

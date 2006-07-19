@@ -24,6 +24,9 @@
  
 #include <dbSqlBase.h>
 
+#include <dbSqlBaseEx.h>
+#include <tools.h>
+
 using namespace dodo;
 
 /**
@@ -31,29 +34,29 @@ using namespace dodo;
  */	
 static unsigned int addInsEnumArr[1] = 
 {
-	INSERT_IGNORE,
+	DBREQUEST_INSERT_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 static unsigned int addUpEnumArr[1] = 
 {
-	UPDATE_IGNORE,
+	DBREQUEST_UPDATE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 static unsigned int addDelEnumArr[1] = 
 {
-	DELETE_IGNORE,
+	DBREQUEST_DELETE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 static unsigned int addSelEnumArr[2] = 
 {
-	SELECT_DISTINCT,
-	SELECT_ALL
+	DBREQUEST_SELECT_DISTINCT,
+	DBREQUEST_SELECT_ALL
 };	
 
 //-------------------------------------------------------------------
@@ -177,7 +180,7 @@ void
 dbSqlBase::additionalCollect(unsigned int qTypeTocheck, 
 						const std::string &collectedString) const
 {
-	if (qShift == EMPTY)
+	if (qShift == DB_EMPTY)
 		return ;
 		
 	register int tempQTypeTocheck = 1<<qTypeTocheck;
@@ -195,7 +198,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 						const __statements sqlAddArr[],
 						int qTypeShift) const
 {
-	if (qTypeShift == EMPTY)
+	if (qTypeShift == DB_EMPTY)
 		return __string__;
 		
 	temp_.clear();
@@ -219,7 +222,7 @@ std::string
 dbSqlBase::insideAddCollect(const stringArr &statements, 
 						int qTypeShift) const
 {
-	if (qTypeShift == EMPTY)
+	if (qTypeShift == DB_EMPTY)
 		return __string__;
 		
 	temp_.clear();
@@ -504,87 +507,87 @@ dbSqlBase::queryCollect() const
 	
 	switch (qType)
 	{
-		case SELECT:
+		case DBREQUEST_SELECT:
 			selectCollect();
 			selectAction = true;
 			break;
 			
-		case INSERT:
+		case DBREQUEST_INSERT:
 			insertCollect();
 			additionalActions = false;
 			break;
 			
-		case UPDATE:
+		case DBREQUEST_UPDATE:
 			updateCollect();
 			break;
 			
-		case DELETE:
+		case DBREQUEST_DELETE:
 			delCollect();
 			break;
 			
-		case USE:
+		case DBREQUEST_USE:
 			useCollect();
 			break;
 			
-		case INSERT_SELECT:
+		case DBREQUEST_INSERT_SELECT:
 			insertSelectCollect();
 			selectAction = true;
 			break;
 			
-		case UNION:
-		case UNION_ALL:
-		case MINUS:
-		case INTERSECT:
+		case DBREQUEST_UNION:
+		case DBREQUEST_UNION_ALL:
+		case DBREQUEST_MINUS:
+		case DBREQUEST_INTERSECT:
 			subCollect();
 			additionalActions = false;
 			break;
 			
-		case TRUNCATE:
+		case DBREQUEST_TRUNCATE:
 			truncateCollect();
 			additionalActions = false;
 			break;
 			
-		case RENAME_DB:
+		case DBREQUEST_RENAME_DB:
 			renameBaseCollect();
 			additionalActions = false;
 			break;
 			
-		case RENAME_TABLE:
+		case DBREQUEST_RENAME_TABLE:
 			renameTableCollect();
 			additionalActions = false;
 			break;
 			
-		case RENAME_FIELD:
+		case DBREQUEST_RENAME_FIELD:
 			renameFieldCollect();
 			additionalActions = false;
 			break;
 			
-		case DELETE_DB:
+		case DBREQUEST_DELETE_DB:
 			delBaseCollect();
 			additionalActions = false;
 			break;
 			
-		case DELETE_TABLE:
+		case DBREQUEST_DELETE_TABLE:
 			delTableCollect();
 			additionalActions = false;
 			break;
 			
-		case DELETE_FIELD:
+		case DBREQUEST_DELETE_FIELD:
 			delFieldCollect();
 			additionalActions = false;
 			break;
 			
-		case CREATE_DB:
+		case DBREQUEST_CREATE_DB:
 			createBaseCollect();
 			additionalActions = false;
 			break;
 			
-		case CREATE_TABLE:
+		case DBREQUEST_CREATE_TABLE:
 			createTableCollect();
 			additionalActions = false;
 			break;
 			
-		case CREATE_FIELD:
+		case DBREQUEST_CREATE_FIELD:
 			createFieldCollect();
 			additionalActions = false;
 			break;
@@ -602,15 +605,15 @@ dbSqlBase::queryCollect() const
 	#endif
 	if (additionalActions)
 	{
-		additionalCollect(WHERE,pre_where);
+		additionalCollect(DBADDREQUEST_WHERE,pre_where);
 		if (selectAction)
 		{
-			additionalCollect(GROUPBY,pre_group);
-			additionalCollect(HAVING,pre_having);
+			additionalCollect(DBADDREQUEST_GROUPBY,pre_group);
+			additionalCollect(DBADDREQUEST_HAVING,pre_having);
 		}
-		additionalCollect(ORDERBY,pre_order);
-		additionalCollect(LIMIT,pre_limNumber);
-		additionalCollect(OFFSET,pre_limOffset);
+		additionalCollect(DBADDREQUEST_ORDERBY,pre_order);
+		additionalCollect(DBADDREQUEST_LIMIT,pre_limNumber);
+		additionalCollect(DBADDREQUEST_OFFSET,pre_limOffset);
 	}
 	
 	return request;
@@ -640,10 +643,10 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):__string__);
 	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):__string__);
 	resRow.append((row.charset.size()>0)?(" character set " + row.charset):" ");
-	resRow.append(((_NULL&flag)==_NULL)?" null ":" not null ");
+	resRow.append(((FIELDPROP_NULL&flag)==FIELDPROP_NULL)?" null ":" not null ");
 	resRow.append((row.defaultVal.size()>0)?("default '" + row.defaultVal + "' "):__string__);
-	resRow.append(((KEY&flag)==KEY)?" primary key ":"");
-	resRow.append(((AUTO_INCREMENT&flag)==AUTO_INCREMENT)?auto_increment:__string__);
+	resRow.append(((FIELDPROP_KEY&flag)==FIELDPROP_KEY)?" primary key ":"");
+	resRow.append(((FIELDPROP_AUTO_INCREMENT&flag)==FIELDPROP_AUTO_INCREMENT)?auto_increment:__string__);
 	resRow.append((row.comment.size()>0)?(" comment '" + row.comment + "' "):__string__);
 	
 	if (row.refTable.size()>0)

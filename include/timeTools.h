@@ -25,13 +25,9 @@
 #ifndef _TIMETOOLS_H_
 #define _TIMETOOLS_H_
 
-#include <time.h>
-#include <stdlib.h>
-
 #include <directives.h>
 
 #include <types.h>
-#include <timeToolsEx.h>
 
 namespace dodo
 {

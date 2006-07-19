@@ -25,15 +25,11 @@
 #ifndef _CGITOOLS_H_
 #define _CGITOOLS_H_
 
-#include <string.h>
-#include <stdlib.h>
 
 #include <directives.h>
 
-#include <tools.h>
 #include <types.h>
 #include <dodoMap.h>
-#include <cgiToolsEx.h>
 
 namespace dodo
 {
@@ -45,49 +41,49 @@ namespace dodo
 	 */
 	__statements HTTP_ENV[HTTP_ENV_SIZE] = 
 	{		
-		"REQUEST_METHOD",
-		"REQUEST_URI",
+		{"REQUEST_METHOD"},
+		{"REQUEST_URI"},
 		
-		"QUERY_STRING",
+		{"QUERY_STRING"},
 		
-		"CONTENT_TYPE",
-		"CONTENT_LENGTH",
-		"CONTENT_TRANSFER_ENCODING",
+		{"CONTENT_TYPE"},
+		{"CONTENT_LENGTH"},
+		{"CONTENT_TRANSFER_ENCODING"},
 				
-		"HTTP_HOST",
-		"HTTP_USER_AGENT",
-		"HTTP_COOKIE",
-		"HTTP_ACCEPT",
-		"HTTP_ACCEPT_LANGUAGE",
-		"HTTP_ACCEPT_ENCODING",
-		"HTTP_ACCEPT_CHARSET",
-		"HTTP_KEEP_ALIVE",
-		"HTTP_CONNECTION",
-		"HTTP_REFERER",
-		"HTTP_VIA",
-		"HTTP_X_FORWARDED_FOR",
+		{"HTTP_HOST"},
+		{"HTTP_USER_AGENT"},
+		{"HTTP_COOKIE"},
+		{"HTTP_ACCEPT"},
+		{"HTTP_ACCEPT_LANGUAGE"},
+		{"HTTP_ACCEPT_ENCODING"},
+		{"HTTP_ACCEPT_CHARSET"},
+		{"HTTP_KEEP_ALIVE"},
+		{"HTTP_CONNECTION"},
+		{"HTTP_REFERER"},
+		{"HTTP_VIA"},
+		{"HTTP_X_FORWARDED_FOR"},
 		
-		"REMOTE_ADDR",
-		"REMOTE_PORT",
+		{"REMOTE_ADDR"},
+		{"REMOTE_PORT"},
 				
-		"REDIRECT_STATUS",
-		"REDIRECT_QUERY_STRING",
-		"REDIRECT_URL",
+		{"REDIRECT_STATUS"},
+		{"REDIRECT_QUERY_STRING"},
+		{"REDIRECT_URL"},
 		
-		"GATEWAY_INTERFACE",
+		{"GATEWAY_INTERFACE"},
 				
-		"PATH",
+		{"PATH"},
 		
-		"SERVER_SIGNATURE",
-		"SERVER_SOFTWARE",
-		"SERVER_NAME",
-		"SERVER_ADDR",
-		"SERVER_PORT",
-		"SERVER_ADMIN",
-		"SERVER_PROTOCOL",
+		{"SERVER_SIGNATURE"},
+		{"SERVER_SOFTWARE"},
+		{"SERVER_NAME"},
+		{"SERVER_ADDR"},
+		{"SERVER_PORT"},
+		{"SERVER_ADMIN"},
+		{"SERVER_PROTOCOL"},
 		
-		"SCRIPT_FILENAME",
-		"SCRIPT_NAME"
+		{"SCRIPT_FILENAME"},
+		{"SCRIPT_NAME"}
 
 	};
  
@@ -96,10 +92,10 @@ namespace dodo
 	 */ 
 	enum errPostFileEnum
 	{
-		NONE,///< everythin' is OK
-		ACCESS_DENY,///< permissions error
-		BAD_FILE_NAME,///< filename too long
-		NO_SPACE///< not enough space to save the file
+		POSTFILEERR_NONE,///< everythin' is OK
+		POSTFILEERR_ACCESS_DENY,///< permissions error
+		POSTFILEERR_BAD_FILE_NAME,///< filename too long
+		POSTFILEERR_NO_SPACE///< not enough space to save the file
 	}; 
 	
 	/**
@@ -148,9 +144,9 @@ namespace dodo
 	 */
 	enum requestMethodEnum
 	{
-		GET,
-		POST,
-		GET_POST///< if POST but data tranferred in ?name=value&.... format
+		REQUESTMETHOD_GET,
+		REQUESTMETHOD_POST,
+		REQUESTMETHOD_GET_POST///< if POST but data tranferred in ?name=value&.... format
 	};
 
 	
@@ -211,11 +207,11 @@ namespace dodo
 			virtual int getMethod() const;
 			
 			/**
-			 * @return reference to array with given method
+			 * @return reference to array with given method[see requestMethodEnum]
 			 * @param method is indicates what reference would be returned
 			 * example: classObj[POST]["name"]
 			 */
-			virtual dodoStringMap &operator[](requestMethodEnum method) const;
+			virtual dodoStringMap &operator[](short method) const;
 			
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)
@@ -228,9 +224,9 @@ namespace dodo
 			/**
 			 * @return value of requested variable from POST or GET
 			 * @param varName name of the variable
-			 * @param first indicates what array will be searched first
+			 * @param first indicates what array will be searched first[see requestMethodEnum]
 			 */
-			 virtual std::string request(const std::string &varName, requestMethodEnum first=GET) const;
+			 virtual std::string request(const std::string &varName, short first=REQUESTMETHOD_GET) const;
 			 
 			/**
 			 * prints cgi headers; 

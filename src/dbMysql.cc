@@ -23,8 +23,13 @@
  */
 
 #include <dbMysql.h>
-
+	
 #ifdef MYSQL_EXT
+
+	#include <sys/socket.h>
+	
+	#include <dbMysqlEx.h>
+	#include <tools.h>
 	
 	using namespace dodo;
 
@@ -98,9 +103,9 @@
 	void 
 	dbMysql::setMyAddInsSt(mysqlAddInsEnum statement)
 	{
-		removeF(qDbDepInsShift,1<<INSERT_DELAYED);
-		removeF(qDbDepInsShift,1<<INSERT_LOW_PRIORITY);
-		removeF(qDbDepInsShift,1<<INSERT_HIGH_PRIORITY);
+		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_DELAYED);
+		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_LOW_PRIORITY);
+		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_HIGH_PRIORITY);
 		
 		addF(qDbDepInsShift,1<<statement);
 	}

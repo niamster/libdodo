@@ -168,17 +168,17 @@ dbBase::dbBase() : show(false),
 
 					qType(-1),
 
-					qShift(EMPTY),
+					qShift(DB_EMPTY),
 
-					qSelShift(EMPTY),
-					qInsShift(EMPTY),
-					qUpShift(EMPTY),
-					qDelShift(EMPTY),
+					qSelShift(DB_EMPTY),
+					qInsShift(DB_EMPTY),
+					qUpShift(DB_EMPTY),
+					qDelShift(DB_EMPTY),
 
-					qDbDepSelShift(EMPTY),
-					qDbDepInsShift(EMPTY),
-					qDbDepUpShift(EMPTY),
-					qDbDepDelShift(EMPTY)
+					qDbDepSelShift(DB_EMPTY),
+					qDbDepInsShift(DB_EMPTY),
+					qDbDepUpShift(DB_EMPTY),
+					qDbDepDelShift(DB_EMPTY)
 {
 }
 
@@ -195,14 +195,14 @@ dbBase::select(const std::string &a_table,
 			    const stringArr &a_fieldsNames,
 			    const std::string &a_where) const 
 {
-	qType = SELECT;
+	qType = DBREQUEST_SELECT;
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
 	
 	if (a_where.size() != 0)
 	{
-		addF(qShift,1<<WHERE);
+		addF(qShift,1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 	
@@ -215,7 +215,7 @@ void
 dbBase::insert(const std::string &a_table, 
 				const assocArr &a_fields)
 {
-	qType = INSERT;
+	qType = DBREQUEST_INSERT;
 	
 	pre_table = a_table;
 	
@@ -243,7 +243,7 @@ void
 dbBase::insert(const std::string &a_table, 
 				const std::vector<assocArr> &a_fields)
 {
-	qType = INSERT;
+	qType = DBREQUEST_INSERT;
 	
 	pre_table = a_table;
 	
@@ -280,7 +280,7 @@ dbBase::insert(const std::string &a_table,
 			    const stringArr &a_fieldsVal, 
 			    const stringArr &a_fieldsNames)
 {
-	qType = INSERT;
+	qType = DBREQUEST_INSERT;
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
@@ -299,7 +299,7 @@ dbBase::insert(const std::string &a_table,
 				const std::vector<stringArr> &a_fieldsVal, 
 				const stringArr &a_fieldsNames)
 {
-	qType = INSERT;
+	qType = DBREQUEST_INSERT;
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
@@ -323,7 +323,7 @@ dbBase::insertSelect(const std::string &a_tableTo,
 					const stringArr &a_fieldsNamesFrom,
 					const std::string &a_where)
 {
-	qType = INSERT_SELECT;
+	qType = DBREQUEST_INSERT_SELECT;
 	
 	pre_tableTo = a_tableTo;
 	pre_table = a_tableFrom;
@@ -335,7 +335,7 @@ dbBase::insertSelect(const std::string &a_tableTo,
 	
 	if (a_where.size() != 0)
 	{
-		addF(qShift,1<<WHERE);
+		addF(qShift,1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 	
@@ -348,7 +348,7 @@ dbBase::update(const std::string &a_table,
 				const assocArr &a_fields, 
 				const std::string &a_where)
 {
-	qType = UPDATE;
+	qType = DBREQUEST_UPDATE;
         
 	pre_table = a_table;
 	
@@ -369,7 +369,7 @@ dbBase::update(const std::string &a_table,
 	
 	if (a_where.size() != 0)
 	{
-		addF(qShift,1<<WHERE);
+		addF(qShift,1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}	
 	
@@ -384,7 +384,7 @@ dbBase::update(const std::string &a_table,
 			   const stringArr &a_fieldsNames, 
 			   const std::string &a_where)
 {
-	qType = UPDATE;
+	qType = DBREQUEST_UPDATE;
 	
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
@@ -395,7 +395,7 @@ dbBase::update(const std::string &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addF(qShift,1<<WHERE);
+		addF(qShift,1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}	
 	
@@ -408,13 +408,13 @@ void
 dbBase::del(const std::string &a_table, 
 			const std::string &a_where)
 {
-	qType = DELETE;
+	qType = DBREQUEST_DELETE;
 
 	pre_table = a_table;
 
 	if (a_where.size() != 0)
 	{
-		addF(qShift,1<<WHERE);
+		addF(qShift,1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 	
@@ -436,7 +436,7 @@ dbBase::subquery(const stringArr &sub,
 void 
 dbBase::use(const std::string &db) const
 {
-	qType = USE;
+	qType = DBREQUEST_USE;
 	dbInfo.db = db;
 	show = false;
 }
@@ -446,7 +446,7 @@ dbBase::use(const std::string &db) const
 void
 dbBase::truncate(const std::string &table)
 {
-	qType = TRUNCATE;
+	qType = DBREQUEST_TRUNCATE;
 	pre_table = table;
 	show = false;
 }
@@ -457,7 +457,7 @@ void
 dbBase::renameDb(const std::string &db,
 			const std::string &to_db)
 {
-	qType = RENAME_DB;
+	qType = DBREQUEST_RENAME_DB;
 	pre_order = db;
 	pre_having = to_db;
 	show = false;
@@ -469,7 +469,7 @@ void
 dbBase::renameTable(const std::string &table,
 				const std::string &to_table)
 {
-	qType = RENAME_TABLE;
+	qType = DBREQUEST_RENAME_TABLE;
 	pre_table = table;
 	pre_having = to_table;
 	show = false;
@@ -482,7 +482,7 @@ dbBase::renameField(const std::string &field,
 				const std::string &to_field, 
 				const std::string &table)
 {
-	qType = RENAME_FIELD;
+	qType = DBREQUEST_RENAME_FIELD;
 	pre_tableTo = field;
 	pre_having = to_field;
 	pre_table = table;
@@ -494,7 +494,7 @@ dbBase::renameField(const std::string &field,
 void 
 dbBase::deleteDb(const std::string &db)
 {
-	qType = DELETE_DB;
+	qType = DBREQUEST_DELETE_DB;
 	pre_order = db;
 	show = false;
 }
@@ -504,7 +504,7 @@ dbBase::deleteDb(const std::string &db)
 void 
 dbBase::deleteTable(const std::string &table)
 {
-	qType = DELETE_TABLE;
+	qType = DBREQUEST_DELETE_TABLE;
 	pre_table = table;
 	show = false;
 }
@@ -515,7 +515,7 @@ void
 dbBase::deleteField(const std::string &field, 
 				const std::string &table)
 {
-	qType = DELETE_FIELD;
+	qType = DBREQUEST_DELETE_FIELD;
 	pre_tableTo = field;
 	pre_table = table;
 	show = false;
@@ -527,7 +527,7 @@ void
 dbBase::createDb(const std::string &db,
 			const std::string &charset)
 {
-	qType = CREATE_DB;
+	qType = DBREQUEST_CREATE_DB;
 	pre_order = db;
 	pre_having = charset;
 	show = false;
@@ -538,7 +538,7 @@ dbBase::createDb(const std::string &db,
 void 
 dbBase::createTable(__tableInfo &tableInfo)
 {
-	qType = CREATE_TABLE;
+	qType = DBREQUEST_CREATE_TABLE;
 	pre_tableInfo = tableInfo;
 	show = false;
 }
@@ -549,7 +549,7 @@ void
 dbBase::createField(__fieldInfo &row, 
 				const std::string &table)
 {
-	qType = CREATE_FIELD;
+	qType = DBREQUEST_CREATE_FIELD;
 	pre_fieldInfo = row;
 	pre_table = table;
 	show = false;
@@ -562,7 +562,7 @@ dbBase::where(const std::string &where) const
 {
 	pre_where = where;
 
-	addF(qShift,1<<WHERE);
+	addF(qShift,1<<DBADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
@@ -570,7 +570,7 @@ dbBase::where(const std::string &where) const
 void 
 dbBase::limit(unsigned int a_number) const
 {
-	addF(qShift,1<<LIMIT);
+	addF(qShift,1<<DBADDREQUEST_LIMIT);
 
 	pre_limNumber = tools::lToString(a_number);
 }
@@ -579,7 +579,7 @@ dbBase::limit(unsigned int a_number) const
 void 
 dbBase::offset(unsigned int a_number) const
 {
-	addF(qShift,1<<OFFSET);
+	addF(qShift,1<<DBADDREQUEST_OFFSET);
 	
 	pre_limOffset = tools::lToString(a_number);
 }
@@ -591,7 +591,7 @@ dbBase::order(const std::string &order) const
 {
 	pre_order = order;
 
-	addF(qShift,1<<ORDERBY);
+	addF(qShift,1<<DBADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -601,7 +601,7 @@ dbBase::group(const std::string &group) const
 {	
 	pre_group = group;
 
-	addF(qShift,1<<GROUPBY);
+	addF(qShift,1<<DBADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -611,7 +611,7 @@ dbBase::having(const std::string &having) const
 {
 	pre_having = having;
 
-	addF(qShift,1<<HAVING);
+	addF(qShift,1<<DBADDREQUEST_HAVING);
 }
 
 
@@ -620,7 +620,7 @@ dbBase::having(const std::string &having) const
 void 
 dbBase::unwhere() const
 {
-	removeF(qShift,1<<WHERE);	
+	removeF(qShift,1<<DBADDREQUEST_WHERE);	
 }
 
 //-------------------------------------------------------------------
@@ -628,7 +628,7 @@ dbBase::unwhere() const
 void 
 dbBase::unlimit() const
 {
-	removeF(qShift,1<<LIMIT);
+	removeF(qShift,1<<DBADDREQUEST_LIMIT);
 }
 
 //-------------------------------------------------------------------
@@ -636,7 +636,7 @@ dbBase::unlimit() const
 void 
 dbBase::unoffset() const
 {
-	removeF(qShift,1<<OFFSET);
+	removeF(qShift,1<<DBADDREQUEST_OFFSET);
 }
 
 //-------------------------------------------------------------------
@@ -644,7 +644,7 @@ dbBase::unoffset() const
 void 
 dbBase::unorder() const
 {
-	removeF(qShift,1<<ORDERBY);
+	removeF(qShift,1<<DBADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -652,7 +652,7 @@ dbBase::unorder() const
 void 
 dbBase::ungroup() const
 {	
-	removeF(qShift,1<<GROUPBY);
+	removeF(qShift,1<<DBADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -660,7 +660,7 @@ dbBase::ungroup() const
 void 
 dbBase::unhaving() const
 {
-	removeF(qShift,1<<HAVING);
+	removeF(qShift,1<<DBADDREQUEST_HAVING);
 }
 
 
@@ -700,10 +700,10 @@ dbBase::setAddSelSt(unsigned int statement)
 {
 	switch (statement)
 	{
-		case SELECT_DISTINCT:
-		case SELECT_ALL:
-			removeF(qSelShift,1<<SELECT_ALL);
-			removeF(qSelShift,1<<SELECT_DISTINCT);
+		case DBREQUEST_SELECT_DISTINCT:
+		case DBREQUEST_SELECT_ALL:
+			removeF(qSelShift,1<<DBREQUEST_SELECT_ALL);
+			removeF(qSelShift,1<<DBREQUEST_SELECT_DISTINCT);
 			break;
 		default:
 			break;
@@ -765,17 +765,17 @@ dbBase::cleanCollect() const
 {
 	qType = -1;
 	
-	qShift = EMPTY;
+	qShift = DB_EMPTY;
 	
-	qSelShift = EMPTY;			
-	qInsShift = EMPTY;
-	qUpShift = EMPTY;
-	qDelShift = EMPTY;
+	qSelShift = DB_EMPTY;			
+	qInsShift = DB_EMPTY;
+	qUpShift = DB_EMPTY;
+	qDelShift = DB_EMPTY;
 	
-	qDbDepSelShift = EMPTY;			
-	qDbDepInsShift = EMPTY;
-	qDbDepUpShift = EMPTY;
-	qDbDepDelShift = EMPTY;
+	qDbDepSelShift = DB_EMPTY;			
+	qDbDepInsShift = DB_EMPTY;
+	qDbDepUpShift = DB_EMPTY;
+	qDbDepDelShift = DB_EMPTY;
 }
 
 //-------------------------------------------------------------------
@@ -850,53 +850,53 @@ dbBase::stringType(int type) const
 {
 	switch (type)
 	{
-		case INT:
-		case INTEGER:
+		case FIELDTYPE_INT:
+		case FIELDTYPE_INTEGER:
 			return std::string("INTEGER");
-		case DATE:
+		case FIELDTYPE_DATE:
 			return std::string("DATE");
-		case VARCHAR:
+		case FIELDTYPE_VARCHAR:
 			return std::string("VARCHAR");
-		case TIMESTAMP:
+		case FIELDTYPE_TIMESTAMP:
 			return std::string("TIMESTAMP");
-		case TIME:
+		case FIELDTYPE_TIME:
 			return std::string("TIME");
-		case TINYINT:
+		case FIELDTYPE_TINYINT:
 			return std::string("TINYINT");
-		case SMALLINT:
+		case FIELDTYPE_SMALLINT:
 			return std::string("SMALLINT");
-		case MEDIUMINT:
+		case FIELDTYPE_MEDIUMINT:
 			return std::string("MEDIUMINT");
-		case BIGINT:
+		case FIELDTYPE_BIGINT:
 			return std::string("BIGINT");
-		case FLOAT:
+		case FIELDTYPE_FLOAT:
 			return std::string("FLOAT");
-		case REAL:
-		case DOUBLE:
+		case FIELDTYPE_REAL:
+		case FIELDTYPE_DOUBLE:
 			return std::string("REAL");
-		case DECIMAL:
+		case FIELDTYPE_DECIMAL:
 			return std::string("DECIMAL");
-		case CHAR:
+		case FIELDTYPE_CHAR:
 			return std::string("CHAR");
-		case TINYBLOB:
+		case FIELDTYPE_TINYBLOB:
 			return std::string("TINYBLOB");
-		case BLOB:
+		case FIELDTYPE_BLOB:
 			return std::string("BLOB");
-		case MEDIUMBLOB:
+		case FIELDTYPE_MEDIUMBLOB:
 			return std::string("MEDIUMBLOB");
-		case LONGBLOB:
+		case FIELDTYPE_LONGBLOB:
 			return std::string("LONGBLOB");
-		case TINYTEXT:
+		case FIELDTYPE_TINYTEXT:
 			return std::string("TINYTEXT");
-		case TEXT:
+		case FIELDTYPE_TEXT:
 			return std::string("TEXT");
-		case MEDIUMTEXT:
+		case FIELDTYPE_MEDIUMTEXT:
 			return std::string("MEDIUMTEXT");
-		case LONGTEXT:
+		case FIELDTYPE_LONGTEXT:
 			return std::string("LONGTEXT");
-		case ENUM:
+		case FIELDTYPE_ENUM:
 			return std::string("ENUM");
-		case SET:
+		case FIELDTYPE_SET:
 			return std::string("SET");
 		default :
 			return __string__;
@@ -910,33 +910,33 @@ dbBase::chkRange(int type) const
 {
 	switch (type)
 	{
-		case DATE:
-		case TIME:
-		case TINYBLOB:
-		case BLOB:
-		case MEDIUMBLOB:
-		case LONGBLOB:
-		case TINYTEXT:
-		case TEXT:
-		case MEDIUMTEXT:
-		case LONGTEXT:
-		case ENUM:
-		case SET:
+		case FIELDTYPE_DATE:
+		case FIELDTYPE_TIME:
+		case FIELDTYPE_TINYBLOB:
+		case FIELDTYPE_BLOB:
+		case FIELDTYPE_MEDIUMBLOB:
+		case FIELDTYPE_LONGBLOB:
+		case FIELDTYPE_TINYTEXT:
+		case FIELDTYPE_TEXT:
+		case FIELDTYPE_MEDIUMTEXT:
+		case FIELDTYPE_LONGTEXT:
+		case FIELDTYPE_ENUM:
+		case FIELDTYPE_SET:
 			return -1;
-		case INTEGER:
-		case INT:
-		case TINYINT:
-		case SMALLINT:
-		case MEDIUMINT:
-		case BIGINT:
-		case FLOAT:
-		case REAL:
-		case DOUBLE:
-		case TIMESTAMP:
+		case FIELDTYPE_INTEGER:
+		case FIELDTYPE_INT:
+		case FIELDTYPE_TINYINT:
+		case FIELDTYPE_SMALLINT:
+		case FIELDTYPE_MEDIUMINT:
+		case FIELDTYPE_BIGINT:
+		case FIELDTYPE_FLOAT:
+		case FIELDTYPE_REAL:
+		case FIELDTYPE_DOUBLE:
+		case FIELDTYPE_TIMESTAMP:
 			return 0;
-		case VARCHAR:
-		case CHAR:
-		case DECIMAL:
+		case FIELDTYPE_VARCHAR:
+		case FIELDTYPE_CHAR:
+		case FIELDTYPE_DECIMAL:
 			return 1;
 		default :
 			return -1;
@@ -950,15 +950,15 @@ dbBase::stringReference(int type) const
 {
 	switch (type)
 	{
-		case RESTRICT:
+		case REFERENCE_RESTRICT:
 			return std::string("restrict");
-		case CASCADE:
+		case REFERENCE_CASCADE:
 			return std::string("cascade");
-		case SET_NULL:
+		case REFERENCE_SET_NULL:
 			return std::string("set null");
-		case NO_ACTION:
+		case REFERENCE_NO_ACTION:
 			return std::string("no action");
-		case SET_DEFAULT:
+		case REFERENCE_SET_DEFAULT:
 			return std::string("set default");
 		default:
 			return __string__;

@@ -37,20 +37,20 @@ namespace dodo
 	 */
 	enum AddEnum
 	{
-		WHERE = 1,
-		HAVING,
-		GROUPBY,
-		ORDERBY,
-		LIMIT,
-		OFFSET,
+		DBADDREQUEST_WHERE = 1,
+		DBADDREQUEST_HAVING,
+		DBADDREQUEST_GROUPBY,
+		DBADDREQUEST_ORDERBY,
+		DBADDREQUEST_LIMIT,
+		DBADDREQUEST_OFFSET,
 	};	
 
 	/**
-	 * @enum Empty indicates that no action will be performed
+	 * @enum emptyEnum indicates that no action will be performed
 	 */	
-	enum Empty
+	enum emptyEnum
 	{
-		EMPTY = 0
+		DB_EMPTY = 0
 	};	
 	
 	/**
@@ -58,32 +58,32 @@ namespace dodo
 	 */
 	enum qStEnum
 	{
-		UNION = 1,
-		UNION_ALL,
-		MINUS,
-		INTERSECT,
+		DBREQUEST_UNION = 1,
+		DBREQUEST_UNION_ALL,
+		DBREQUEST_MINUS,
+		DBREQUEST_INTERSECT,
 		
-		SELECT,
-		INSERT,
-		INSERT_SELECT,
-		UPDATE,
-		DELETE,
+		DBREQUEST_SELECT,
+		DBREQUEST_INSERT,
+		DBREQUEST_INSERT_SELECT,
+		DBREQUEST_UPDATE,
+		DBREQUEST_DELETE,
 		
-		USE,
+		DBREQUEST_USE,
 		
-		TRUNCATE,
+		DBREQUEST_TRUNCATE,
 		
-		RENAME_DB,
-		RENAME_TABLE,
-		RENAME_FIELD,
+		DBREQUEST_RENAME_DB,
+		DBREQUEST_RENAME_TABLE,
+		DBREQUEST_RENAME_FIELD,
 		
-		DELETE_DB,
-		DELETE_TABLE,
-		DELETE_FIELD,
+		DBREQUEST_DELETE_DB,
+		DBREQUEST_DELETE_TABLE,
+		DBREQUEST_DELETE_FIELD,
 		
-		CREATE_DB,
-		CREATE_TABLE,
-		CREATE_FIELD		
+		DBREQUEST_CREATE_DB,
+		DBREQUEST_CREATE_TABLE,
+		DBREQUEST_CREATE_FIELD		
 	};
 	
 	/**
@@ -91,8 +91,8 @@ namespace dodo
 	 */
 	enum addSelEnum
 	{
-		SELECT_DISTINCT = 1,
-		SELECT_ALL
+		DBREQUEST_SELECT_DISTINCT = 1,
+		DBREQUEST_SELECT_ALL
 	};
 
 	/**
@@ -100,7 +100,7 @@ namespace dodo
 	 */	
 	enum addDelEnum
 	{
-		DELETE_IGNORE = 1,
+		DBREQUEST_DELETE_IGNORE = 1,
 	};
 
 	/**
@@ -108,7 +108,7 @@ namespace dodo
 	 */	
 	enum addUpEnum
 	{
-		UPDATE_IGNORE = 1,
+		DBREQUEST_UPDATE_IGNORE = 1,
 	};
 
 	/**
@@ -116,7 +116,7 @@ namespace dodo
 	 */	
 	enum addInsEnum
 	{
-		INSERT_IGNORE = 1,
+		DBREQUEST_INSERT_IGNORE = 1,
 	};
 	
 	/**
@@ -218,17 +218,17 @@ namespace dodo
 	 */
 	enum baseDataTypesEnum
 	{
-		TINYINT,///< *; The signed range is -128 to 127. The unsigned range is 0 to 255.
-		SMALLINT,///< *; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
-		MEDIUMINT,///< *; The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215.
-		INTEGER, INT,///< *; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
-		BIGINT,///< *; The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615.
-		FLOAT,///< *; Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38.
-		REAL, DOUBLE,///< *; [DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
-		DECIMAL,///< **; An unpacked(the number is stored as a string) fixed-point number. 
-		DATE,///< The supported range is '1000-01-01' to '9999-12-31'.
-		TIME,///< The range is '-838:59:59' to '838:59:59'
-		TIMESTAMP,///< *; The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself.
+		FIELDTYPE_TINYINT,///< *; The signed range is -128 to 127. The unsigned range is 0 to 255.
+		FIELDTYPE_SMALLINT,///< *; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
+		FIELDTYPE_MEDIUMINT,///< *; The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215.
+		FIELDTYPE_INTEGER, FIELDTYPE_INT,///< *; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
+		FIELDTYPE_BIGINT,///< *; The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615.
+		FIELDTYPE_FLOAT,///< *; Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38.
+		FIELDTYPE_REAL, FIELDTYPE_DOUBLE,///< *; [DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
+		FIELDTYPE_DECIMAL,///< **; An unpacked(the number is stored as a string) fixed-point number. 
+		FIELDTYPE_DATE,///< The supported range is '1000-01-01' to '9999-12-31'.
+		FIELDTYPE_TIME,///< The range is '-838:59:59' to '838:59:59'
+		FIELDTYPE_TIMESTAMP,///< *; The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself.
 		/**
 		 * TIMESTAMP(14) 	YYYYMMDDHHMMSS
 		 * TIMESTAMP(12) 	YYMMDDHHMMSS
@@ -238,18 +238,18 @@ namespace dodo
 		 * TIMESTAMP(4) 		YYMM
 		 * TIMESTAMP(2) 		YY
 		 */
-		CHAR,///< **; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
-		VARCHAR,///< **; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
-		TINYBLOB,///< A column with a maximum length of 255 (2^8 - 1) characters.
-		BLOB,///< A column with a maximum length of 65,535 (2^16 -1) characters.
-		MEDIUMBLOB,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
-		LONGBLOB,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
-		TINYTEXT,///< A column with a maximum length of 255 (2^8 - 1) characters.
-		TEXT,///< A column with a maximum length of 65,535 (2^16 -1) characters.
-		MEDIUMTEXT,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
-		LONGTEXT,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
-		ENUM,///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65,535 distinct values.
-		SET,///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
+		FIELDTYPE_CHAR,///< **; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
+		FIELDTYPE_VARCHAR,///< **; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
+		FIELDTYPE_TINYBLOB,///< A column with a maximum length of 255 (2^8 - 1) characters.
+		FIELDTYPE_BLOB,///< A column with a maximum length of 65,535 (2^16 -1) characters.
+		FIELDTYPE_MEDIUMBLOB,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
+		FIELDTYPE_LONGBLOB,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
+		FIELDTYPE_TINYTEXT,///< A column with a maximum length of 255 (2^8 - 1) characters.
+		FIELDTYPE_TEXT,///< A column with a maximum length of 65,535 (2^16 -1) characters.
+		FIELDTYPE_MEDIUMTEXT,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
+		FIELDTYPE_LONGTEXT,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
+		FIELDTYPE_ENUM,///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65,535 distinct values.
+		FIELDTYPE_SET,///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
 	};
 	
 	/**
@@ -257,21 +257,21 @@ namespace dodo
 	 */
 	enum fieldFlagEnum
 	{
-		_NULL = 2,///< NULL type
-		AUTO_INCREMENT = 4,///< if is not set by request, will be incremented relatevly to previous
-		KEY = 8///< a key(depends on DB, but possibly index)
+		FIELDPROP_NULL = 2,///< NULL type
+		FIELDPROP_AUTO_INCREMENT = 4,///< if is not set by request, will be incremented relatevly to previous
+		FIELDPROP_KEY = 8///< a key(depends on DB, but possibly index)
 	};
 	
 	/**
-	 * enum refFieldEnum describes reference type on field [in field creation]
+	 * @enum refFieldEnum describes reference type on field [in field creation]
 	 */
 	enum refFieldEnum
 	{
-		RESTRICT = 1,///< does not allow the action of any of those parent rows
-		CASCADE,///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
-		SET_NULL,///< sets NULL on the action of any of those parent rows indicates on set action
-		NO_ACTION,///< noacton on the action of any of those parent rows indicates on set action
-		SET_DEFAULT///< sets default on the action of any of those parent rows indicates on set action
+		REFERENCE_RESTRICT = 1,///< does not allow the action of any of those parent rows
+		REFERENCE_CASCADE,///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
+		REFERENCE_SET_NULL,///< sets NULL on the action of any of those parent rows indicates on set action
+		REFERENCE_NO_ACTION,///< noacton on the action of any of those parent rows indicates on set action
+		REFERENCE_SET_DEFAULT///< sets default on the action of any of those parent rows indicates on set action
 	};
 	
 	/**
@@ -290,7 +290,7 @@ namespace dodo
 		const __fieldInfo &operator=(__fieldInfo &from);
 
 		std::string name;///< name of the field
-		int type;///< type of field; see baseDataTypesEnum
+		int type;///< type of field[see baseDataTypesEnum]
 		int length;///< length of field; is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
 		int flag;///< default = NULL; set it with '|'; see fieldFlagEnum
 		
@@ -451,7 +451,7 @@ namespace dodo
 			 * @param sub is array of subqueries
 			 * @param type is type of "subquering"
 			 */
-			virtual void subquery(const stringArr &sub, int type=UNION/*UNION_ALL,MINUS,INTERSECT*/) const;
+			virtual void subquery(const stringArr &sub, int type=DBREQUEST_UNION/*DBREQUEST_UNION_ALL,DBREQUEST_MINUS,DBREQUEST_INTERSECT*/) const;
 			
 			/**
 			 * change database

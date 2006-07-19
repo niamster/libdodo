@@ -24,6 +24,12 @@
  
 #include <flushDisk.h>
 
+#include <unistd.h>
+
+#include <flushDiskEx.h>
+#include <tools.h>
+#include <flushDiskTools.h>
+
 using namespace dodo;
 
 flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
@@ -165,7 +171,7 @@ flushDisk::open(const std::string &a_path) const
 		close();
 	
 	///execute
-	if (fileType == TMP_FILE)
+	if (fileType == FILETYPE_TMP_FILE)
 		file = tmpfile();
 	else
 	{
@@ -192,7 +198,7 @@ flushDisk::open(const std::string &a_path) const
 			else
 				exists = true;
 			
-			if (fileType == FIFO_FILE)
+			if (fileType == FILETYPE_FIFO_FILE)
 			{
 				if (exists && !S_ISFIFO(st.st_mode))
 					#ifndef NO_EX
@@ -210,7 +216,7 @@ flushDisk::open(const std::string &a_path) const
 			}
 			else
 			{
-				if ( (fileType == REG_FILE || fileType == TMP_FILE) && exists && !S_ISREG(st.st_mode))
+				if ( (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE) && exists && !S_ISREG(st.st_mode))
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__);
 					#else
@@ -220,22 +226,22 @@ flushDisk::open(const std::string &a_path) const
 							
 			switch (mode)
 			{
-				case READ_WRITE:
+				case OPENMODE_READ_WRITE:
 					file = fopen(path.c_str(),"r+");
 					if (file == NULL)
 						file = fopen(path.c_str(),"w+");
 					break;
 					
-				case READ_WRITE_TRUNCATE:
+				case OPENMODE_READ_WRITE_TRUNCATE:
 					file = fopen(path.c_str(),"w+");
 					break;
 					
-				case APPEND:
+				case OPENMODE_APPEND:
 					file = fopen(path.c_str(),"a+");
 					append = true;
 					break;
 					
-				case READ_ONLY:
+				case OPENMODE_READ_ONLY:
 				default:
 					file = fopen(path.c_str(),"r");			
 			}
@@ -249,7 +255,7 @@ flushDisk::open(const std::string &a_path) const
 			return false;
 		#endif
 	
-	if (fileType == REG_FILE || fileType == TMP_FILE)
+	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 		flushDiskTools::chmod(path,FILE_PERM);
 	
 	#ifndef FLUSH_DISK_WO_XEXEC

@@ -24,6 +24,8 @@
 
 #include <cgiProcessor.h>
 
+#include <cgiProcessorEx.h>
+
 using namespace dodo;
 
 cgiProcessor::cgiProcessor() : _continueFlag(false),

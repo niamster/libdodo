@@ -28,8 +28,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <dbSqlBaseEx.h>
-#include <tools.h>
 #include <dbBase.h>
 
 namespace dodo

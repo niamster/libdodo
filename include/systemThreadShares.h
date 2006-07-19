@@ -28,11 +28,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <systemThreadSharesEx.h>
-
-#include <pthread.h>
-#include <time.h>
-#include <vector>
 
 namespace dodo
 {

@@ -24,6 +24,10 @@
  
 #include <flushSTD.h>
 
+#include <flushSTDEx.h>
+#include <tools.h>
+#include <flushSocket.h>
+
 using namespace dodo;
 
 flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),

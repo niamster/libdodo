@@ -29,19 +29,9 @@
 
 #include <types.h>
 #include <flush.h>
-#include <flushSocketEx.h>
-#include <flushSocketExchange.h>
 #include <flushSocketOptions.h>
-
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
+#include <flushSocketExchange.h>
+#include <xexec.h>
 
 namespace dodo
 {	
@@ -94,10 +84,10 @@ namespace dodo
 			/**
 			 * constructors
 			 * @param server indicates what type of oject will be
-			 * @param family is family of the socket
-			 * @param type is type of the socket
+			 * @param family is family of the socket[see socketProtoFamilyEnum]
+			 * @param type is type of the socket[see socketTransferTypeEnum]
 			 */
-			flushSocket(bool server, socketProtoFamilyEnum family, socketTransferTypeEnum type);
+			flushSocket(bool server, short family, short type);
 			
 			/**
 			 * destructor

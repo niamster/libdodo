@@ -24,6 +24,22 @@
  
 #include <flushSocket.h>
 
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <sys/un.h>
+#include <sys/socket.h>
+#include <net/if.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
+
+#include <flush.h>
+#include <flushSocketEx.h>
+#include <flushSocketExchange.h>
+#include <flushDiskTools.h>
+#include <tools.h>
+
 using namespace dodo;
 
 flushSocket::flushSocket(flushSocket &fs)
@@ -33,8 +49,8 @@ flushSocket::flushSocket(flushSocket &fs)
 //-------------------------------------------------------------------
 
 flushSocket::flushSocket(bool a_server, 
-						socketProtoFamilyEnum a_family, 
-						socketTransferTypeEnum a_type) : flushSocketOptions(a_family,a_type),
+						short a_family, 
+						short a_type) : flushSocketOptions(a_family,a_type),
 						blockInherited(false),
 						server(a_server)
 {

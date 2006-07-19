@@ -25,14 +25,9 @@
 #ifndef _FLUSHDISK_H_
 #define _FLUSHDISK_H_
 
-#include <unistd.h>
-
 #include <directives.h>
 
-#include <flushDiskEx.h>
 #include <types.h>
-#include <tools.h>
-#include <flushDiskTools.h>
 #include <flush.h>
 
 namespace dodo
@@ -55,10 +50,10 @@ namespace dodo
 	 */
 	enum flushDiskModesEnum
 	{
-		READ_ONLY,///< error if not exists file
-		READ_WRITE,///< creates if not exists
-		READ_WRITE_TRUNCATE,///< if exists = truncates
-		APPEND///< for readin'; writin' to the end; you may skip parameter `pos` for write method
+		OPENMODE_READ_ONLY,///< error if not exists file
+		OPENMODE_READ_WRITE,///< creates if not exists
+		OPENMODE_READ_WRITE_TRUNCATE,///< if exists = truncates
+		OPENMODE_APPEND///< for readin'; writin' to the end; you may skip parameter `pos` for write method
 	};
 	
 	/**
@@ -66,9 +61,9 @@ namespace dodo
 	 */
 	enum flushDiskFileToCreateEnum
 	{
-		REG_FILE,///< regular file
-		TMP_FILE,///< temporary file. will be deleted after you exit program(or close it)
-		FIFO_FILE///< FIFO file
+		FILETYPE_REG_FILE,///< regular file
+		FILETYPE_TMP_FILE,///< temporary file. will be deleted after you exit program(or close it)
+		FILETYPE_FIFO_FILE///< FIFO file
 	};
 	
 	/**

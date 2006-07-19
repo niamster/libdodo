@@ -24,6 +24,13 @@
  
 #include <cgiTools.h>
 
+#include <string.h>
+#include <stdlib.h>
+
+#include <cgiToolsEx.h>
+#include <tools.h>
+
+
 using namespace dodo;
 
 __cookies::__cookies(const std::string &a_name, 
@@ -96,13 +103,13 @@ void
 cgiTools::detectMethod() const
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"GET") == 0)
-		method = GET;
+		method = REQUESTMETHOD_GET;
 	else 
 	{
 		if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") == 0 && ENVIRONMENT["REQUEST_METHOD"].empty())
-			method = POST;
+			method = REQUESTMETHOD_POST;
 		else
-			method = GET_POST;
+			method = REQUESTMETHOD_GET_POST;
 	}
 }
 
@@ -334,7 +341,7 @@ cgiTools::makePost() const
 							
 				file.size = i->substr(temp1+4).size()-2;
 				
-				file.error = NONE;
+				file.error = POSTFILEERR_NONE;
 				
 				FILE *tmp = fopen(ptr,"w+b");
 				if (tmp == NULL)
@@ -342,19 +349,19 @@ cgiTools::makePost() const
 					{
 						case EACCES:
 						case EISDIR:
-							file.error = ACCESS_DENY;
+							file.error = POSTFILEERR_ACCESS_DENY;
 							break;
 						case ENAMETOOLONG:
 						case ENOTDIR:
-							file.error = BAD_FILE_NAME;
+							file.error = POSTFILEERR_BAD_FILE_NAME;
 							break;
 						case ENOMEM:
-							file.error = NO_SPACE;
+							file.error = POSTFILEERR_NO_SPACE;
 					}
 				free(ptr);
 				fwrite(i->substr(temp1+4).c_str(),file.size,1,tmp);
 				if (errno == ENOMEM)
-						file.error = NO_SPACE;
+						file.error = POSTFILEERR_NO_SPACE;
 				fclose(tmp);
 				
 				postFiles[post_name] = file;
@@ -386,9 +393,9 @@ cgiTools::getFile(const std::string &varName) const
 //-------------------------------------------------------------------
 
 dodoStringMap &
-cgiTools::operator[](requestMethodEnum method) const
+cgiTools::operator[](short method) const
 {
-	if (method == POST)
+	if (method == REQUESTMETHOD_POST)
 		return METHOD_POST;
 	else
 		return METHOD_GET;
@@ -398,12 +405,12 @@ cgiTools::operator[](requestMethodEnum method) const
 
 std::string
 cgiTools::request(const std::string &varName, 
-				requestMethodEnum first) const
+				short first) const
 {
 	met0 = METHOD_GET[varName];
 	met1 = METHOD_POST[varName];
 	
-	if (first == GET)
+	if (first == REQUESTMETHOD_GET)
 		if (met0.size() != 0)
 			return met0;
 		else

@@ -17,6 +17,8 @@ int main(int argc, char **argv)
 		
 		tools tl;
 		
+		tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root","test","test");
+		
 		/*baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
 			cout << "WTF";*/

@@ -25,21 +25,8 @@
 #ifndef _SYSTEM_H_
 #define _SYSTEM_H_
 
-#include <unistd.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <sys/resource.h>
-#include <pwd.h>
-#include <grp.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <errno.h>
-#include <signal.h>
-#include <iostream>
-
 #include <directives.h>
 
-#include <systemToolsEx.h>
 #include <types.h>
 
 namespace dodo

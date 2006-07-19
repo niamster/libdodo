@@ -25,28 +25,9 @@
 #ifndef _TOOLS_H_
 #define _TOOLS_H_
 
-#include <string>
-#include <vector>
-
 #include <directives.h>
 
 #include <types.h>
-#include <toolsEx.h>
-#include <flushSocket.h>
-#include <flushSocketTools.h>
-#include <regexpTools.h>
-
-#ifdef CODECONV_EXT
-	#include <iconv.h>
-#endif
-
-#ifdef ZLIB_EXT
-	#include <zlib.h>
-#endif
-
-#ifdef BZIP_EXT
-	#include <bzlib.h>
-#endif
 
 namespace dodo
 {
@@ -72,10 +53,10 @@ namespace dodo
 	 	 */
 	 	enum zlibCompressionStrategyEnum
 	 	{
-	 		FILTRED_COMRESSION=1,
-	 		HUFFMAN_COMRESSION,
-	 		RLE_COMRESSION,
-	 		FIXED_COMRESSION
+	 		ZLIB_FILTRED_COMRESSION=1,
+	 		ZLIB_HUFFMAN_COMRESSION,
+	 		ZLIB_RLE_COMRESSION,
+	 		ZLIB_FIXED_COMRESSION
 	 	};
 	 
 	 #endif		
@@ -296,10 +277,10 @@ namespace dodo
 			 	 * @return compressed buffer
 			 	 * @param buffer contains data to compress
 			 	 * @param level is level to compress [1..9]
-			 	 * @param type descibes compression strategy
+			 	 * @param type descibes compression strategy[see zlibCompressionStrategyEnum]
 				 * @note if compiled without exeptions - on error buffer will be returned
 			 	 */
-			 	static std::string zCompress(const std::string &buffer, unsigned short level=6, zlibCompressionStrategyEnum type=HUFFMAN_COMRESSION);
+			 	static std::string zCompress(const std::string &buffer, unsigned short level=6, short type=ZLIB_HUFFMAN_COMRESSION);
 			 	
 			 	/**
 			 	 * @return decompressed buffer
@@ -390,7 +371,7 @@ namespace dodo
 			/**
 			 * sends mail using sendmail
 			 * @param path is path to sendmail
-			 * @param to is mail address where to send
+			 * @param to is mail address where to send[possible multiply separated with coma]
 			 * @param subject is a subject of the letter
 			 * @param message is a message to send
 			 * @param login is a login for auth
@@ -410,17 +391,18 @@ namespace dodo
 			 * @param host is host of smtp server(ip)
 			 * @param type is type of `socketProtoFamilyEnum`
 			 * @param port is port of smtp server
-			 * @param to is mail address where to send
-			 * @param subject is a subject of the letter
+			 * @param to is mail address where to send[possible multiply separated with coma]
+			 * @param from is mail address of sender
+			 * @param subject is a subject of the letter[for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`]
 			 * @param message is a message to send
-			 * @param headers - extra headers
+			 * @param headers - extra headers [each must ends with `\r\n`]
 			 */
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif				
-							mail(const std::string &host, socketProtoFamilyEnum type, int port, const std::string &to, const std::string &subject, const std::string &message, const std::string &login = __string__, const std::string &pass = __string__, const std::string &headers = __string__);
+							mail(const std::string &host, short type, int port, const std::string &to, const std::string &from, const std::string &subject, const std::string &message, const std::string &login = __string__, const std::string &pass = __string__, const std::string &headers = __string__);
 									
 		private:
 			

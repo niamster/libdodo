@@ -29,11 +29,8 @@
 
 #ifdef MYSQL_EXT
 		
-	#include <sys/socket.h>
 	#include <mysql.h>
 	
-	#include <dbMysqlEx.h>
-	#include <tools.h>
 	#include <dbInterface.h>
 	#include <xexec.h>
 	
@@ -57,9 +54,9 @@
 		 */
 		enum mysqlAddSelEnum
 		{
-			SELECT_STRAIGHT_JOIN = 1,
-			SELECT_SMALL_RESULT,
-			SELECT_BIG_RESULT,
+			DBREQUEST_SELECT_STRAIGHT_JOIN = 1,
+			DBREQUEST_SELECT_SMALL_RESULT,
+			DBREQUEST_SELECT_BIG_RESULT,
 		};
 
 		/**
@@ -67,8 +64,8 @@
 		 */		
 		enum mysqlAddDelEnum
 		{
-			DELETE_LOW_PRIORITY = 1,
-			DELETE_QUICK
+			DBREQUEST_DELETE_LOW_PRIORITY = 1,
+			DBREQUEST_DELETE_QUICK
 		};
 
 		/**
@@ -76,7 +73,7 @@
 		 */		
 		enum mysqlAddUpEnum
 		{
-			UPDATE_LOW_PRIORITY = 1,
+			DBREQUEST_UPDATE_LOW_PRIORITY = 1,
 		};
 
 		/**
@@ -84,9 +81,9 @@
 		 */		
 		enum mysqlAddInsEnum
 		{
-			INSERT_DELAYED = 1,
-			INSERT_LOW_PRIORITY,
-			INSERT_HIGH_PRIORITY,
+			DBREQUEST_INSERT_DELAYED = 1,
+			DBREQUEST_INSERT_LOW_PRIORITY,
+			DBREQUEST_INSERT_HIGH_PRIORITY,
 		};
 		
 		/**

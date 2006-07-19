@@ -24,10 +24,19 @@
  
 #include <flushSocketOptions.h>
 
+#include <sys/types.h>
+#include <sys/socket.h>       
+#include <unistd.h>
+#include <fcntl.h>
+
+#include <flushSocketOptionsEx.h>
+#include <flushDiskTools.h>
+#include <tools.h>
+
 using namespace dodo;
 
-flushSocketOptions::flushSocketOptions(socketProtoFamilyEnum a_family, 
-										socketTransferTypeEnum a_type): family(a_family),
+flushSocketOptions::flushSocketOptions(short a_family, 
+										short a_type): family(a_family),
 																	type(a_type),
 																	lingerOpts(SOCKET_LINGER_OPTION),
 																	lingerSeconds(SOCKET_LINGER_PERIOD),
@@ -282,7 +291,7 @@ flushSocketOptions::getSocketOpts(int option) const
 #else
 	bool
 #endif
-flushSocketOptions::setSockOption(socketOptionsEnum option, 
+flushSocketOptions::setSockOption(short option, 
 							bool flag)
 {
 	if (socket == -1)
@@ -358,7 +367,7 @@ flushSocketOptions::setSockOption(socketOptionsEnum option,
 #else
 	bool
 #endif
-flushSocketOptions::setLingerSockOption(socketLingerOption option,
+flushSocketOptions::setLingerSockOption(short option,
 									int seconds)
 {	
 	if (socket == -1)
@@ -408,7 +417,7 @@ flushSocketOptions::setLingerSockOption(socketLingerOption option,
 
 //-------------------------------------------------------------------
 
-socketLingerOption 
+short 
 flushSocketOptions::getLingerOption() const
 {
 	return lingerOpts;

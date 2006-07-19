@@ -24,6 +24,12 @@
 
 #include <baseEx.h>
 
+#ifdef DL_EXT
+
+	#include <dlfcn.h>
+
+#endif	
+
 #ifndef NO_EX
 
     using namespace dodo;

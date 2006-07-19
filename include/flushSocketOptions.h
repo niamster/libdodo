@@ -28,11 +28,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <flushSocketOptionsEx.h>
-#include <flushDiskTools.h>
-
-#include <sys/types.h>
-#include <sys/socket.h>
 
 namespace dodo
 {	
@@ -74,12 +69,12 @@ namespace dodo
 	 /**
 	  * @enum socketLingerOption defines linger options for socket
 	  */
-	 enum socketLingerOption
-	 { 
-	 	SOCKET_GRACEFUL_CLOSE,///< close returns immediately, but any unsent data is transmitted (after close returns).
-	 	SOCKET_HARD_CLOSE,///< close returns immediately, and any unsent data is discarded.
-	 	SOCKET_WAIT_CLOSE,///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
-	 };
+	enum socketLingerOption
+	{ 
+		SOCKET_GRACEFUL_CLOSE,///< close returns immediately, but any unsent data is transmitted (after close returns).
+		SOCKET_HARD_CLOSE,///< close returns immediately, and any unsent data is discarded.
+		SOCKET_WAIT_CLOSE,///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+	};
 
 	/**
 	 * @class flushSocketOptions defines options for socket connections
@@ -94,7 +89,7 @@ namespace dodo
 			 * @param family is family of the socket
 			 * @param type is type of the socket
 			 */
-			flushSocketOptions(socketProtoFamilyEnum family, socketTransferTypeEnum type);
+			flushSocketOptions(short family, short type);
 			
 			/**
 			 * constructor
@@ -118,11 +113,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							setSockOption(socketOptionsEnum option, bool flag);
+							setSockOption(short option, bool flag);
 			
 			/**
 			 * set linger option
-			 * @param option is linger option
+			 * @param option is linger option[see socketLingerOption]
 			 * @param seconds how long to wait(for SOCKET_WAIT_CLOSE only)
 			 */				
 			#ifndef NO_EX
@@ -130,12 +125,12 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							setLingerSockOption(socketLingerOption option, int seconds=1);
+							setLingerSockOption(short option, int seconds=1);
 			
 			/**
-			 * @return linger option that was set
+			 * @return linger option that was set[see socketLingerOption]
 			 */
-			virtual socketLingerOption getLingerOption() const;
+			virtual short getLingerOption() const;
 			
 			/**
 			 * @return amount of seconds to wait(for SOCKET_WAIT_CLOSE only)
@@ -240,12 +235,12 @@ namespace dodo
 			#endif			 
 							_close(int socket); 
 										
-			mutable socketProtoFamilyEnum family;///< socket family
-			mutable socketTransferTypeEnum type;///< socket type
+			mutable short family;///< socket family
+			mutable short type;///< socket type
 					
 			mutable int socketOpts;///< socket options
 			
-			mutable socketLingerOption lingerOpts;///< socket linger option
+			mutable short lingerOpts;///< socket linger option
 			mutable int lingerSeconds;///< socket linger timeout
 			
 			mutable unsigned long inTimeout;///< incomming operation timeout of socket; in microseconds

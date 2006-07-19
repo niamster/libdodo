@@ -30,14 +30,7 @@
 #include <string>
 #include <vector>
 
-#ifdef DL_EXT
-
-	#include <dlfcn.h>
-
-#endif	
-
 #include <types.h>
-#include <xexecEx.h>
 
 namespace dodo
 {

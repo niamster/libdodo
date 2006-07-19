@@ -24,6 +24,13 @@
 
 #include <cgiPreprocessor.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+#include <tools.h>
+#include <cgiPreprocessorEx.h>
+
 using namespace dodo;
 
 cgiPreprocessor::cgiPreprocessor()

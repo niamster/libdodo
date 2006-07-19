@@ -25,20 +25,8 @@
 #ifndef _FLUSHDISKTOOLS_H_
 #define _FLUSHDISKTOOLS_H_
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <dirent.h>
-#include <utime.h>
-#include <time.h>
-#include <libgen.h>
-#include <unistd.h>
-
 #include <directives.h>
-
-#include <flushDiskToolsEx.h>
 #include <types.h>
-#include <tools.h>
 
 namespace dodo
 {	
@@ -47,13 +35,13 @@ namespace dodo
 	 */
 	enum flushDiskToolsFileTypeEnum
 	{
-		REGULAR_FILE,
-		LOCAL_SOCKET,
-		SYMBOLIC_LINK,
-		BLOCK_DEVICE,
-		DIRECTORY,
-		CHARACTER_DEVICE,
-		FIFO
+		FILETYPE_REGULAR_FILE,
+		FILETYPE_LOCAL_SOCKET,
+		FILETYPE_SYMBOLIC_LINK,
+		FILETYPE_BLOCK_DEVICE,
+		FILETYPE_DIRECTORY,
+		FILETYPE_CHARACTER_DEVICE,
+		FILETYPE_FIFO
 	};
 	
 	/**
@@ -61,30 +49,30 @@ namespace dodo
 	 */
 	enum permissionModesEnum
 	{
-		NONE = 0,
+		PERM_NONE = 0,
 		
-		OWNER_READ_ACCESS = 2,
-		GROUP_READ_ACCESS = 4,
-		OTHER_READ_ACCESS = 8,
+		PERM_OWNER_READ_ACCESS = 2,
+		PERM_GROUP_READ_ACCESS = 4,
+		PERM_OTHER_READ_ACCESS = 8,
 		
-		OWNER_WRITE_ACCESS = 16,
-		GROUP_WRITE_ACCESS = 32,
-		OTHER_WRITE_ACCESS = 64,
+		PERM_OWNER_WRITE_ACCESS = 16,
+		PERM_GROUP_WRITE_ACCESS = 32,
+		PERM_OTHER_WRITE_ACCESS = 64,
 		
-		OWNER_EXECUTE_ACCESS = 128,
-		GROUP_EXECUTE_ACCESS = 256,
-		OTHER_EXECUTE_ACCESS = 512,
+		PERM_OWNER_EXECUTE_ACCESS = 128,
+		PERM_GROUP_EXECUTE_ACCESS = 256,
+		PERM_OTHER_EXECUTE_ACCESS = 512,
 				
-		STICKY_ACCESS = 1024,
+		PERM_STICKY_ACCESS = 1024,
 		
-		SUID_ACCESS = 2048,
-		SGID_ACCESS = 4096,
+		PERM_SUID_ACCESS = 2048,
+		PERM_SGID_ACCESS = 4096,
 		
-		OWNER_ALL_ACCESS = 146,
-		GROUP_ALL_ACCESS = 292,
-		OTHER_ALL_ACCESS = 584,
+		PERM_OWNER_ALL_ACCESS = 146,
+		PERM_GROUP_ALL_ACCESS = 292,
+		PERM_OTHER_ALL_ACCESS = 584,
 		
-		ALL_ALL_ACCESS = 1022
+		PERM_ALL_ALL_ACCESS = 1022
 		
 	};
 	
@@ -94,8 +82,8 @@ namespace dodo
 	struct __fileInfo
 	{
 		std::string name;///< file name
-		int perm;///< file permissions
-		int type;///< file type
+		int perm;///< file permissions[see permissionModesEnum]; may be or'ed
+		int type;///< file type[see flushDiskToolsFileTypeEnum]
 		long size;///< file size
 		long modTime;///< modyfication time
 		long accTime;///< access time
@@ -159,7 +147,7 @@ namespace dodo
 			 * @param is path to node
 			 * basename => "/usr/lib" => "lib"
 			 */
-			static std::string basename(const std::string &path);
+			static std::string lastname(const std::string &path);
 			
 			/**
 			 * @return dirname of node			 
@@ -227,7 +215,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							mkdir(const std::string &path, int permissions = OWNER_ALL_ACCESS, bool force = true);
+							mkdir(const std::string &path, int permissions = PERM_OWNER_ALL_ACCESS, bool force = true);
 			
 			/**
 			 * delete files, non empty directory
@@ -245,7 +233,7 @@ namespace dodo
 			 * @return type of file; if error occured and lib was compiled without exceptions -> -1 will be returned;
 			 * @param path is path to node
 			 */				
-			static flushDiskToolsFileTypeEnum getFileType(const std::string &path);
+			static int getFileType(const std::string &path);
 			
 			/**
 			 * changes permissions
@@ -263,7 +251,7 @@ namespace dodo
 			 * @return node permissions; if error occured and lib was compiled without exceptions -> -1 will be returned
 			 * @param path is path to node
 			 */				
-			static permissionModesEnum getPermissions(const std::string &path);
+			static int getPermissions(const std::string &path);
 			
 			/**
 			 * @return file size; if no such file or directory and lib was compiled without exceptions - will return -1

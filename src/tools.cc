@@ -24,6 +24,23 @@
  
 #include <tools.h>
 
+#ifdef CODECONV_EXT
+	#include <iconv.h>
+#endif
+
+#ifdef ZLIB_EXT
+	#include <zlib.h>
+#endif
+
+#ifdef BZIP_EXT
+	#include <bzlib.h>
+#endif
+
+#include <flushSocket.h>
+#include <flushSocketTools.h>
+#include <regexpTools.h>
+#include <toolsEx.h>
+
 using namespace dodo;
 
 /**
@@ -491,7 +508,7 @@ tools::trim(const std::string &data,
 	std::string 
 	tools::zCompress(const std::string &buffer, 
 					unsigned short level, 
-					zlibCompressionStrategyEnum type)
+					short type)
 	{
 	 	z_stream strm;
 	 	int ret;
@@ -1260,9 +1277,10 @@ tools::mail(const std::string &path,
 	bool
 #endif
 tools::mail(const std::string &host,
-			socketProtoFamilyEnum type,
+			short type,
 			int port,
 			const std::string &to, 
+			const std::string &from, 
 			const std::string &subject, 
 			const std::string &message,
 			const std::string &login, 
@@ -1419,6 +1437,35 @@ tools::mail(const std::string &host,
 		}
 	}
 	
+	ex.sendStreamString("MAIL FROM: <" + from + ">\r\n");
+	ex.receiveStreamString(mess);
+		
+	pock = explode(to,",");
+	
+	stringArr::iterator i = pock.begin(), j = pock.end();
+	for (;i!=j;++i)
+	{
+		ex.sendStreamString("RCPT TO: <" + *i + ">\r\n");
+		ex.receiveStreamString(mess);
+	}
+	
+	ex.sendStreamString("DATA\r\n");
+	ex.receiveStreamString(mess);
+	
+	ex.sendStreamString("To: " + to + "\r\n");
+	ex.sendStreamString("From: " + from + "\r\n");
+	ex.sendStreamString("X-Mailer: libdodo\r\n");
+	ex.sendStreamString("Subject: " + subject  + "\r\n");
+	ex.sendStreamString(headers);
+	ex.sendStreamString(message);
+	ex.sendStreamString("\r\n.\r\n");
+	ex.sendStreamString("QUIT\r\n");
+	
+	ex.close();
+	
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------

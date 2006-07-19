@@ -28,17 +28,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <flushSocketToolsEx.h>
-
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
 
 namespace dodo
 {	

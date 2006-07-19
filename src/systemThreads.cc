@@ -26,7 +26,13 @@
 #include <systemThreads.h>
 
 #ifdef PTHREAD_EXT
+	
+	#include <signal.h>
+	#include <pthread.h>
 		
+	#include <systemThreadsEx.h>
+	#include <systemTools.h>
+	
 	using namespace dodo;
 	
 	__threadInfo::__threadInfo() : thread(0),

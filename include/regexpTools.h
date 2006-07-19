@@ -28,8 +28,6 @@
 
 #include <directives.h>
 
-#include <types.h>
-
 #ifdef PCRE_EXT
 	
 	#include <pcre.h>
@@ -40,6 +38,8 @@
 	#include <regex.h>
 	
 #endif
+
+#include <types.h>
 
 namespace dodo
 {

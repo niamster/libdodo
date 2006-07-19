@@ -24,6 +24,18 @@
  
 #include <flushDiskTools.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <utime.h>
+#include <time.h>
+#include <libgen.h>
+#include <unistd.h>
+
+#include <tools.h>
+#include <flushDiskToolsEx.h>
+
 using namespace dodo;
 
 #ifndef NO_EX
@@ -325,35 +337,35 @@ flushDiskTools::getPermission(int permission)
 {
 	register int mode(0);
 	
-	if ((OWNER_READ_ACCESS & permission) == OWNER_READ_ACCESS)
+	if ((PERM_OWNER_READ_ACCESS & permission) == PERM_OWNER_READ_ACCESS)
 		mode |= S_IRUSR;
 		
-	if ((GROUP_READ_ACCESS & permission) == GROUP_READ_ACCESS)
+	if ((PERM_GROUP_READ_ACCESS & permission) == PERM_GROUP_READ_ACCESS)
 		mode |= S_IRGRP;	
-	if ((OTHER_READ_ACCESS & permission) == OTHER_READ_ACCESS)
+	if ((PERM_OTHER_READ_ACCESS & permission) == PERM_OTHER_READ_ACCESS)
 		mode |= S_IROTH;
 			
-	if ((OWNER_WRITE_ACCESS & permission) == OWNER_WRITE_ACCESS)
+	if ((PERM_OWNER_WRITE_ACCESS & permission) == PERM_OWNER_WRITE_ACCESS)
 		mode |= S_IWUSR;
 		
-	if ((GROUP_WRITE_ACCESS & permission) == GROUP_WRITE_ACCESS)
+	if ((PERM_GROUP_WRITE_ACCESS & permission) == PERM_GROUP_WRITE_ACCESS)
 		mode |= S_IWGRP;
-	if ((OTHER_WRITE_ACCESS & permission) == OTHER_WRITE_ACCESS)
+	if ((PERM_OTHER_WRITE_ACCESS & permission) == PERM_OTHER_WRITE_ACCESS)
 		mode |= S_IWOTH;
 		
-	if ((STICKY_ACCESS & permission) == STICKY_ACCESS)
+	if ((PERM_STICKY_ACCESS & permission) == PERM_STICKY_ACCESS)
 		mode |= S_ISVTX;
 			
-	if ((OWNER_EXECUTE_ACCESS & permission) == OWNER_EXECUTE_ACCESS)
+	if ((PERM_OWNER_EXECUTE_ACCESS & permission) == PERM_OWNER_EXECUTE_ACCESS)
 		mode |= S_IXUSR;
-	if ((GROUP_EXECUTE_ACCESS & permission) == GROUP_EXECUTE_ACCESS)
+	if ((PERM_GROUP_EXECUTE_ACCESS & permission) == PERM_GROUP_EXECUTE_ACCESS)
 		mode |= S_IXGRP;
-	if ((OTHER_EXECUTE_ACCESS & permission) == OTHER_EXECUTE_ACCESS)
+	if ((PERM_OTHER_EXECUTE_ACCESS & permission) == PERM_OTHER_EXECUTE_ACCESS)
 		mode |= S_IXOTH;
 		
-	if ((SUID_ACCESS & permission) == SUID_ACCESS)
+	if ((PERM_SUID_ACCESS & permission) == PERM_SUID_ACCESS)
 		mode |= S_ISUID;
-	if ((SGID_ACCESS & permission) == SGID_ACCESS)
+	if ((PERM_SGID_ACCESS & permission) == PERM_SGID_ACCESS)
 		mode |= S_ISGID;		
 
 	return mode;
@@ -465,7 +477,7 @@ flushDiskTools::rm(const std::string &path,
 
 //-------------------------------------------------------------------
 
-permissionModesEnum 
+int 
 flushDiskTools::getPermissions(const std::string &path)
 {
 	struct stat st;
@@ -476,45 +488,45 @@ flushDiskTools::getPermissions(const std::string &path)
 			return (permissionModesEnum)-1;
 		#endif
 		
-	register int mode(NONE);
+	register int mode(PERM_NONE);
 	
 	if ((S_IRUSR & st.st_mode) == S_IRUSR)
-		mode |= OWNER_READ_ACCESS;	
+		mode |= PERM_OWNER_READ_ACCESS;	
 		
 	if ((S_IRGRP & st.st_mode) == S_IRGRP)
-		mode |= GROUP_READ_ACCESS;	
+		mode |= PERM_GROUP_READ_ACCESS;	
 	if ((S_IROTH & st.st_mode) == S_IROTH)
-		mode |= OTHER_READ_ACCESS;
+		mode |= PERM_OTHER_READ_ACCESS;
 	
 	if ((S_IWUSR & st.st_mode) == S_IWUSR)		
-		mode |= OWNER_WRITE_ACCESS;
+		mode |= PERM_OWNER_WRITE_ACCESS;
 	
 	if ((S_IWGRP & st.st_mode) == S_IWGRP)
-		mode |= GROUP_WRITE_ACCESS;
+		mode |= PERM_GROUP_WRITE_ACCESS;
 	if ((S_IWOTH & st.st_mode) == S_IWOTH)
-		mode |= OTHER_WRITE_ACCESS;
+		mode |= PERM_OTHER_WRITE_ACCESS;
 			
 	if ((S_ISVTX & st.st_mode) == S_ISVTX)
-		mode |= STICKY_ACCESS;
+		mode |= PERM_STICKY_ACCESS;
 			
 	if ((S_IXUSR & st.st_mode) == S_IXUSR)
-		mode |= OWNER_EXECUTE_ACCESS;
+		mode |= PERM_OWNER_EXECUTE_ACCESS;
 	if ((S_IXGRP & st.st_mode) == S_IXGRP)
-		mode |= GROUP_EXECUTE_ACCESS;
+		mode |= PERM_GROUP_EXECUTE_ACCESS;
 	if ((S_IXOTH & st.st_mode) == S_IXOTH)
-		mode |= OTHER_EXECUTE_ACCESS;
+		mode |= PERM_OTHER_EXECUTE_ACCESS;
 		
 	if ((S_ISUID & st.st_mode) == S_ISUID)
-		mode |= SUID_ACCESS;
+		mode |= PERM_SUID_ACCESS;
 	if ((S_ISGID & st.st_mode) == S_ISGID)
-		mode |= SGID_ACCESS;		
+		mode |= PERM_SGID_ACCESS;		
 		
-	return (permissionModesEnum)mode;	
+	return mode;	
 }
 
 //-------------------------------------------------------------------
 
-flushDiskToolsFileTypeEnum 
+int 
 flushDiskTools::getFileType(const std::string &path)
 {
 	struct stat st;
@@ -530,24 +542,24 @@ flushDiskTools::getFileType(const std::string &path)
 	switch (st.st_mode)
 	{
 		case S_IFREG:
-			return REGULAR_FILE;
+			return FILETYPE_REGULAR_FILE;
 			
 		case S_IFDIR:
-			return DIRECTORY;
+			return FILETYPE_DIRECTORY;
 			
 		case S_IFLNK:
-			return SYMBOLIC_LINK;
+			return FILETYPE_SYMBOLIC_LINK;
 		case S_IFSOCK:
-			return LOCAL_SOCKET;
+			return FILETYPE_LOCAL_SOCKET;
 		case S_IFBLK:
-			return BLOCK_DEVICE;
+			return FILETYPE_BLOCK_DEVICE;
 		case S_IFCHR:
-			return CHARACTER_DEVICE;
+			return FILETYPE_CHARACTER_DEVICE;
 		case S_IFIFO:
-			return FIFO;
+			return FILETYPE_FIFO;
 			
 		default:
-			return (flushDiskToolsFileTypeEnum)-1;
+			return -1;
 	}
 }
 
@@ -871,7 +883,7 @@ flushDiskTools::getFileContentArr(const std::string &path)
 //-------------------------------------------------------------------
 
 std::string 
-flushDiskTools::basename(const std::string &path)
+flushDiskTools::lastname(const std::string &path)
 {
 	char tempB[MAXPATHLEN];
 		

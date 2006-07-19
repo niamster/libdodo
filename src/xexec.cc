@@ -24,6 +24,14 @@
  
 #include <xexec.h>
 
+#ifdef DL_EXT
+
+	#include <dlfcn.h>
+
+#endif	
+
+#include <xexecEx.h>
+
 using namespace dodo;
 
 xexec::xexec() : safeHooks(true),

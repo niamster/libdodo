@@ -24,6 +24,10 @@
  
 #include <timeTools.h>
 
+#include <time.h>
+#include <stdlib.h>
+#include <timeToolsEx.h>
+
 using namespace dodo;
 
 __mktime::__mktime() : sec(0),

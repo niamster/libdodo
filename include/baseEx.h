@@ -27,12 +27,6 @@
 
 #include <directives.h>
 
-#ifdef DL_EXT
-
-	#include <dlfcn.h>
-
-#endif	
-
 #include <string>
 
 #ifndef NO_EX

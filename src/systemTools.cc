@@ -24,6 +24,20 @@
  
 #include <systemTools.h>
 
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/resource.h>
+#include <pwd.h>
+#include <grp.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
+#include <signal.h>
+#include <iostream>
+
+#include <systemToolsEx.h>
+
 using namespace dodo;
 
 #ifdef DL_EXT

@@ -26,6 +26,9 @@
 
 #ifdef POSTGRESQL_EXT
 	
+	#include <dbPostgresqlEx.h>
+	#include <tools.h>
+	
 	using namespace dodo;
 	
 	dbPostgresql::dbPostgresql() : empty(true)

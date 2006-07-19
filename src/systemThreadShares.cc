@@ -25,6 +25,11 @@
 
 #include <systemThreadShares.h>
 	
+#include <pthread.h>
+#include <time.h>
+
+#include <systemThreadSharesEx.h>
+	
 using namespace dodo;
 
 systemThreadShares::systemThreadShares(systemThreadShares &sts)

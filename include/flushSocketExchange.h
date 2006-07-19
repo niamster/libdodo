@@ -29,18 +29,8 @@
 
 #include <types.h>
 #include <flush.h>
-#include <flushSocketExchangeEx.h>
 #include <flushSocketOptions.h>
-
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/un.h>
-#include <sys/socket.h>
-#include <net/if.h>
-#include <sys/ioctl.h>
-#include <fcntl.h>
+#include <xexec.h>
 
 namespace dodo
 {	
@@ -83,8 +73,8 @@ namespace dodo
 				
 			int socket;///< id of socket
 			
-			socketProtoFamilyEnum family;///< socket family
-			socketTransferTypeEnum type;///< socket type
+			short family;///< socket family[see socketProtoFamilyEnum]
+			short type;///< socket type[see socketTransferTypeEnum]
 			
 			bool blocked;///< if blocked
 			bool blockInherited;///< if block inherited	

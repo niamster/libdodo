@@ -30,11 +30,6 @@
 #ifdef PTHREAD_EXT
 
 	#include <types.h>
-	#include <systemThreadsEx.h>
-	#include <systemTools.h>
-	
-	#include <signal.h>
-	#include <pthread.h>
 	
 	namespace dodo
 	{
@@ -71,7 +66,7 @@
 			unsigned long position;///< position in queue
 			threadFunc func;///< function to execute
 			int stackSize;///< amount of stack for thread[in bytes]
-			systemThreadOnDestructEnum action;///< action on class destruction
+			short action;///< action on class destruction[see systemThreadOnDestructEnum]
 			unsigned long executed;///< amount of times thread was executed
 			unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
 			
@@ -93,7 +88,7 @@
 				unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
 				bool detached;///< if thread is detached
 				int stackSize;///< amount of stack for thread[in bytes]
-				systemThreadOnDestructEnum action;///< action on class destruction			
+				short action;///< action on class destruction[see systemThreadOnDestructEnum]
 			};
 			
 			/**
