@@ -40,6 +40,12 @@
 		enum toolsExR
 		{
 			TOOLS_BAD_ASCII85 = 1,
+			TOOLS_BAD_BZCOMPRESSION,
+			TOOLS_BAD_BZDECOMPRESSION_INIT,
+			TOOLS_BAD_BZDECOMPRESSION_FINISH,
+			TOOLS_BAD_BZDECOMPRESSION,
+			TOOLS_BADMAILHELO,
+			TOOLS_BADMAILAUTH,
 		};
 		
 		/**
@@ -49,12 +55,15 @@
 		
 		#ifdef BZIP_EXT
 		
-			#define TOOLS_BAD_COMPRESSION "Error occured during comression."
-			#define TOOLS_BAD_DECOMPRESSION_INIT "Error occured during preparations for decompression."
-			#define TOOLS_BAD_DECOMPRESSION_FINISH "Error occured during finishing decompression."
-			#define TOOLS_BAD_DECOMPRESSION "Error occured during decompression."
+			#define TOOLS_BAD_BZCOMPRESSION_STR "Error occured during comression."
+			#define TOOLS_BAD_BZDECOMPRESSION_INIT_STR "Error occured during preparations for decompression."
+			#define TOOLS_BAD_BZDECOMPRESSION_FINISH_STR "Error occured during finishing decompression."
+			#define TOOLS_BAD_BZDECOMPRESSION_STR "Error occured during decompression."
 		
 		#endif
+		
+		#define TOOLS_BADMAILHELO_STR "Error occurd while sending EHLO."
+		#define TOOLS_BADMAILAUTH_STR "Error during uthentification."
 		
 		/**
 		 * ID of function where exception was thrown

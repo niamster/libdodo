@@ -32,6 +32,9 @@
 
 #include <types.h>
 #include <toolsEx.h>
+#include <flushSocket.h>
+#include <flushSocketTools.h>
+#include <regexpTools.h>
 
 #ifdef CODECONV_EXT
 	#include <iconv.h>
@@ -390,7 +393,10 @@ namespace dodo
 			 * @param to is mail address where to send
 			 * @param subject is a subject of the letter
 			 * @param message is a message to send
+			 * @param login is a login for auth
+			 * @param pass is a password for auth
 			 * @param headers - extra headers
+			 * @note if login is emty - no auth
 			 */
 			#ifndef NO_EX
 				static void 
@@ -398,6 +404,23 @@ namespace dodo
 				static bool 
 			#endif				
 							mail(const std::string &path, const std::string &to, const std::string &subject, const std::string &message, const std::string &headers = __string__);
+			
+			/**
+			 * sends mail
+			 * @param host is host of smtp server(ip)
+			 * @param type is type of `socketProtoFamilyEnum`
+			 * @param port is port of smtp server
+			 * @param to is mail address where to send
+			 * @param subject is a subject of the letter
+			 * @param message is a message to send
+			 * @param headers - extra headers
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif				
+							mail(const std::string &host, socketProtoFamilyEnum type, int port, const std::string &to, const std::string &subject, const std::string &message, const std::string &login = __string__, const std::string &pass = __string__, const std::string &headers = __string__);
 									
 		private:
 			

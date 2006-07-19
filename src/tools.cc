@@ -1128,7 +1128,7 @@ tools::parseURL(const std::string &url)
 		register int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,ret,TOOLS_BAD_COMPRESSION,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,TOOLS_BAD_BZCOMPRESSION,TOOLS_BAD_BZCOMPRESSION_STR,__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif		
@@ -1149,7 +1149,7 @@ tools::parseURL(const std::string &url)
 	    register int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,TOOLS_BAD_DECOMPRESSION_INIT,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,TOOLS_BAD_BZDECOMPRESSION_INIT,TOOLS_BAD_BZDECOMPRESSION_INIT_STR,__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif
@@ -1190,7 +1190,7 @@ tools::parseURL(const std::string &url)
 	    	delete [] src;
 	        free(dst);
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,TOOLS_BAD_DECOMPRESSION,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,TOOLS_BAD_BZDECOMPRESSION,TOOLS_BAD_BZDECOMPRESSION_STR,__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif	        
@@ -1199,7 +1199,7 @@ tools::parseURL(const std::string &url)
 	    ret = BZ2_bzDecompressEnd(&bzs);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,ret,TOOLS_BAD_DECOMPRESSION_FINISH,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,TOOLS_BAD_BZDECOMPRESSION_FINISH,TOOLS_BAD_BZDECOMPRESSION_FINISH_STR,__LINE__,__FILE__);
 			#else
 				return __string__;
 			#endif	    
@@ -1249,6 +1249,176 @@ tools::mail(const std::string &path,
 	#ifdef NO_EX
 		return true;
 	#endif
+}
+
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+tools::mail(const std::string &host,
+			socketProtoFamilyEnum type,
+			int port,
+			const std::string &to, 
+			const std::string &subject, 
+			const std::string &message,
+			const std::string &login, 
+			const std::string &pass,
+			const std::string &headers)
+{
+	enum authTypeEnum
+	{
+		SMTPAUTH_CRAMMD5 = 2,
+		SMTPAUTH_LOGIN = 4,
+		SMTPAUTH_PLAIN = 8
+	};
+	
+	unsigned short authType = 0;
+	
+	bool auth = (login.length()>0)?true:false;
+	
+	flushSocket fsock(false,type,TRANSFER_TYPE_STREAM);
+	
+	flushSocketExchange ex;
+	
+	fsock.connect(host,port,ex);
+	
+	std::string mess;
+	regexpTools reg;
+	stringArr pock;
+	register bool matched = false;
+	register int code = 0;
+	
+	reg.compile("(\\d+)(.)([^\\r]*)");
+	
+	ex.receiveStreamString(mess);
+	
+	ex.sendStreamString("EHLO " + flushSocketTools::getLocalName() + "\r\n");
+	while (true)
+	{
+		ex.receiveStreamString(mess);
+		matched = reg.reMatch(mess,pock);
+		code = atoi(pock[0].c_str());
+		
+		if (!matched || code != 250)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILHELO,TOOLS_BADMAILHELO_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+			
+		if (auth)	
+		{
+			if (strcasestr(pock[2].c_str(),"CRAM-MD5") != NULL)
+				addF(authType,SMTPAUTH_CRAMMD5);
+				
+			if (strcasestr(pock[2].c_str(),"LOGIN") != NULL)
+				addF(authType,SMTPAUTH_LOGIN);
+				
+			if (strcasestr(pock[2].c_str(),"PLAIN") != NULL)
+				addF(authType,SMTPAUTH_PLAIN);
+		}
+		
+		if (strcmp(tools::trim(pock[1],' ').c_str(),"-"))
+			continue;
+		else
+			break;
+	}
+	
+	if (auth)
+	{
+		if ((SMTPAUTH_CRAMMD5&authType) == SMTPAUTH_CRAMMD5)
+		{
+			ex.sendStreamString("AUTH CRAM-MD5\r\n");
+			ex.receiveStreamString(mess);
+			matched = reg.reMatch(mess,pock);
+			code = atoi(pock[0].c_str());
+			
+			if (!matched || code != 334)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILAUTH,TOOLS_BADMAILAUTH_STR,__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+			
+			std::string response;
+			///create answer
+			
+			ex.sendStreamString(response + "\r\n");
+			ex.receiveStreamString(mess);
+			matched = reg.reMatch(mess,pock);
+			code = atoi(pock[0].c_str());
+			
+			if (!matched || code != 334)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILAUTH,TOOLS_BADMAILAUTH_STR,__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+		}
+		else
+		{
+			if ((SMTPAUTH_LOGIN&authType) == SMTPAUTH_LOGIN)
+			{
+				ex.sendStreamString("AUTH LOGIN\r\n");
+				ex.receiveStreamString(mess);
+				matched = reg.reMatch(mess,pock);
+				code = atoi(pock[0].c_str());
+				
+				if (!matched || code != 334)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILAUTH,TOOLS_BADMAILAUTH_STR,__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+				
+				ex.sendStreamString(encodeBase64(login) + "\r\n");
+				ex.receiveStreamString(mess);
+				matched = reg.reMatch(mess,pock);
+				code = atoi(pock[0].c_str());
+				
+				if (!matched || code != 334)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILAUTH,TOOLS_BADMAILAUTH_STR,__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+				
+				ex.sendStreamString(encodeBase64(pass) + "\r\n");
+				ex.receiveStreamString(mess);
+				matched = reg.reMatch(mess,pock);
+				code = atoi(pock[0].c_str());
+				
+				if (!matched || code != 235)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILAUTH,TOOLS_BADMAILAUTH_STR,__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+			}
+			else
+			{
+				if ((SMTPAUTH_PLAIN&authType) == SMTPAUTH_PLAIN)
+				{
+					ex.sendStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
+					ex.receiveStreamString(mess);
+					matched = reg.reMatch(mess,pock);
+					code = atoi(pock[0].c_str());
+					
+					if (!matched || code != 334)
+						#ifndef NO_EX
+							throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILAUTH,TOOLS_BADMAILAUTH_STR,__LINE__,__FILE__);
+						#else
+							return false;
+						#endif
+				}
+			}
+		}
+	}
+	
 }
 
 //-------------------------------------------------------------------
