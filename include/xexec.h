@@ -55,7 +55,7 @@ namespace dodo
 	 * @param second is type of object that called hook
 	 * @param third is data needed for hook
 	 */
-	typedef void (*inExec)(void *, xexecObjTypeEnum, void *);
+	typedef void (*inExec)(void *, short, void *);
 
 	/**
 	 * @struct __execItem describes a node for Xexec
@@ -63,7 +63,7 @@ namespace dodo
 	struct __execItem
 	{
 		inExec func;///< function to execute
-		xexecObjTypeEnum type;///< type of object that passes to hook
+		short type;///< type of object that passes to hook
 		void *data;///< data passed to func
 		void *obj;///< pointer to object that uses hook
 		bool enabled;///< disable or enable hook
@@ -111,7 +111,7 @@ namespace dodo
 			char name[64];///< name of module
 			char discription[256];///< discription of module
 			char hook[64];///< name of function in module that will be a hook
-			execTypeEnum execType;///< type of execType to use; it is skipped if you define module in your program
+			short execType;///< type of execType to use; it is skipped if you define module in your program[see execTypeEnum]
 		};
 		
 		/**
@@ -179,20 +179,22 @@ namespace dodo
 			 * @return number in list where function is set
 			 * @param func is reference to functions that will be called as a hook
 			 * @param obj is pouinter to object that is uses this hook
+			 * @param type is describes what object called hook[see xexecObjTypeEnum]
 			 * @param data is pointer to data that will pass to hook
 			 * @attention data is not copied!!!
 			 */
-			virtual int _addPostExec(inExec func, void *obj, xexecObjTypeEnum type, void *data) const;
+			virtual int _addPostExec(inExec func, void *obj, short type, void *data) const;
 			
 			/**
 			 * set function that will be executed before  the main action call
 			 * @return number in list where function is set
 			 * @param func is reference to functions that will be called as a hook
 			 * @param obj is pouinter to object that is uses this hook
+			 * @param type is describes what object called hook[see xexecObjTypeEnum]
 			 * @param data is pointer to data that will pass to hook
 			 * @attention data is not copied!!!
 			 */
-			virtual int _addPreExec(inExec func, void *obj, xexecObjTypeEnum type, void *data) const;
+			virtual int _addPreExec(inExec func, void *obj, short type, void *data) const;
 			
 			#ifdef DL_EXT
 						
@@ -201,22 +203,24 @@ namespace dodo
 				 * @return number in list where function is set
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param obj is pouinter to object that is uses this hook
+				 * @param type is describes what object called hook[see xexecObjTypeEnum]
 				 * @param data is pointer to data that will pass to hook
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPostExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data, void *toInit = NULL) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				virtual int _addPostExec(const std::string &module, void *obj, short type, void *data, void *toInit = NULL) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 			
 				/**
 				 * set function from module that will be executed before  the main action call
 				 * @return number in list where function is set
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param obj is pouinter to object that is uses this hook
+				 * @param type is describes what object called hook[see xexecObjTypeEnum]
 				 * @param data is pointer to data that will pass to hook
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPreExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data, void *toInit = NULL) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				virtual int _addPreExec(const std::string &module, void *obj, short type, void *data, void *toInit = NULL) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 	
 				/**
 				 * set function from module that will be executed before/after the main action call
@@ -224,11 +228,12 @@ namespace dodo
 				 * @return number in list where function is set
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param obj is pouinter to object that is uses this hook
+				 * @param type is describes what object called hook[see xexecObjTypeEnum]
 				 * @param data is pointer to data that will pass to hook
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual xexecCounts _addExec(const std::string &module, void *obj, xexecObjTypeEnum type, void *data, void *toInit = NULL) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
+				virtual xexecCounts _addExec(const std::string &module, void *obj, short type, void *data, void *toInit = NULL) const;///if applied modules more than XEXEC_MAXMODULES, will return -1; see directives.h
 			
 			#endif
 			
@@ -356,10 +361,11 @@ namespace dodo
 			 * @param list describes list where hook will be set
 			 * @param func is reference to functions that will be called as a hook
 			 * @param obj is pouinter to object that is uses this hook
+			 * @param type is describes what object called hook[see xexecObjTypeEnum]
 			 * @param data is pointer to data that will pass to hook
 			 * @attention data is not copied!!!
 			 */			
-			virtual int addXExec(std::list<__execItem> &list, inExec func, void *obj, xexecObjTypeEnum type, void *data) const;
+			virtual int addXExec(std::list<__execItem> &list, inExec func, void *obj, short type, void *data) const;
 									
 			/**
 			 * deletes hook from list
@@ -393,11 +399,12 @@ namespace dodo
 				 * @param list describes list where hook will be set
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param obj is pouinter to object that is uses this hook
+				 * @param type is describes what object called hook[see xexecObjTypeEnum]
 				 * @param data is pointer to data that will pass to hook
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int addXExecModule(std::list<__execItem> &list, void *obj, xexecObjTypeEnum type, const std::string &module, void *data, void *toInit = NULL) const;
+				virtual int addXExecModule(std::list<__execItem> &list, void *obj, short type, const std::string &module, void *data, void *toInit = NULL) const;
 			
 			#endif
 			

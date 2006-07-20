@@ -29,7 +29,7 @@
 
 #ifdef LIBXML2_EXT
 
-	#include <string>
+	#include <libxml/xmlmemory.h>
 
 	#include <types.h>
 	#include <dodoMap.h>

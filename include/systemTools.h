@@ -27,6 +27,10 @@
 
 #include <directives.h>
 
+#include <signal.h>
+#include <pwd.h>
+#include <grp.h>
+
 #include <types.h>
 
 namespace dodo
@@ -142,7 +146,7 @@ namespace dodo
 			char name[64];///< name of module
 			char discription[256];///< discription of module
 			char hook[64];///< name of function in module that will be a hook
-			systemSignalsEnum signal;///< on what signal to set handler
+			long signal;///< on what signal to set handler
 			int blockSignals;///< signals to block during signal handling; can be or'ed; -1 - ignore
 		};
 		
@@ -239,7 +243,7 @@ namespace dodo
 			
 			/**
 			 * get limits from systemToolsLimitEnum
-			 * @param type is type of info to get
+			 * @param type is type of info to get[see systemToolsLimitEnum]
 			 * @param lim will be filled with requested values
 			 */
 			#ifndef NO_EX
@@ -247,11 +251,11 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							getLimit(systemToolsLimitEnum type,  __limits &lim);
+							getLimit(short type,  __limits &lim);
 							
 			/**
 			 * set limits from systemToolsLimitEnum
-			 * @param type is type of info to set
+			 * @param type is type of info to set[see systemToolsLimitEnum]
 			 * @param lim will fill with requested values
 			 */				
 			#ifndef NO_EX
@@ -259,18 +263,18 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							setLimit(systemToolsLimitEnum type, const __limits &lim);
+							setLimit(short type, const __limits &lim);
 			
 			/**
 			 * @return priority of current process for uidTypeEnum
-			 * @param type is type of UID to use
+			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @note if error occured and if NO_EX set -> -1 will return
 			 */		
-			static int getPriority(uidTypeEnum type);
+			static int getPriority(short type);
 
 			/**
 			 * sets priority of current process (nice)
-			 * @param type is type of UID to use
+			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @param prio is value of priority
 			 */				
 			#ifndef NO_EX
@@ -278,18 +282,18 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							setPriority(uidTypeEnum type, int prio);
+							setPriority(short type, int prio);
 							
 			/**
 			 * @return user id of the current process
-			 * @param type is type of UID to use
+			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @note if error occured and if NO_EX set -> -1 will return
 			 */		
-			static int getUID(uidTypeEnum type);
+			static int getUID(short type);
 			
 			/**
 			 * set user id of the current process
-			 * @param type is type of UID to use
+			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @param uid is user's id
 			 */				
 			#ifndef NO_EX
@@ -297,18 +301,18 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							setUID(uidTypeEnum type, int uid);	
+							setUID(short type, int uid);	
 							
 			/**
 			 * get group id of the current process
-			 * @param type is type of UID to use
+			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @note if error occured and if NO_EX set -> -1 will return
 			 */		
-			static int getGID(uidTypeEnum type);
+			static int getGID(short type);
 			
 			/**
 			 * sets group id of the current process
-			 * @param type is type of UID to use
+			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @param gid is group id
 			 */				
 			#ifndef NO_EX
@@ -316,7 +320,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							setGID(uidTypeEnum type, int gid);		
+							setGID(short type, int gid);		
 			
 			/**
 			 * gets user info
@@ -433,7 +437,7 @@ namespace dodo
 			
 			/**
 			 * set signal handler
-			 * @param signal is signal on what set handler
+			 * @param signal is signal on what set handler[see systemSignalsEnum]
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */				
@@ -442,24 +446,24 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							setSignalHandler(systemSignalsEnum signal, signalHandler handler, int blockSignals = -1);
+							setSignalHandler(long signal, signalHandler handler, int blockSignals = -1);
 			
 			/**
-			 * determines whether handler was set on signal
+			 * determines whether handler was set on signal[see systemSignalsEnum]
 			 * @param is signal is on what set handler
 			 */
-			static bool isSignalHandled(systemSignalsEnum signal);
+			static bool isSignalHandled(long signal);
 			
 			/**
 			 * removes signal handler
-			 * @param is signal is from what unset handler
+			 * @param is signal is from what unset handler[see systemSignalsEnum]
 			 */			
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif			
-							unsetSignalHandler(systemSignalsEnum signal);
+							unsetSignalHandler(long signal);
 							
 			#ifdef DL_EXT
 			
@@ -472,7 +476,7 @@ namespace dodo
 				
 				/**
 				 * set handler on signal from specific module
-				 * @param signal indicates for what signal to set handler
+				 * @param signal indicates for what signal to set handler[see systemSignalsEnum]
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param toInit indicates data that will path to initialize function
 			 	 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
@@ -482,7 +486,7 @@ namespace dodo
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(systemSignalsEnum signal, const std::string &module, void *toInit = NULL, int blockSignals = -1);
+								setSignalHandler(long signal, const std::string &module, void *toInit = NULL, int blockSignals = -1);
 
 				/**
 				 * set handler on signal from specific module
@@ -503,21 +507,21 @@ namespace dodo
 			/**
 			 * send signal to process
 			 * @param pid indicates where to send signal
-			 * @param is signal is what signal to send
+			 * @param is signal is what signal to send[see systemSignalsEnum]
 			 */			
 			#ifndef NO_EX
 				static void 
 			#else
 				static bool 
 			#endif					
-							sendSignal(int pid, systemSignalsEnum signal);
+							sendSignal(int pid, long signal);
 
 			/**
 			 * block or unblock signals
 			 * @param signal indicates what signals to block/unblock; can be or'ed;
 			 * @param block indicates whether to block or unblock
 			 */
-			static void blockSignal(int signals, bool block=true);
+			static void blockSignal(long signals, bool block=true);
 								
 		protected:
 						
@@ -535,12 +539,12 @@ namespace dodo
 			 * @return signal number that refers to given systemSignalsEnum
 			 * @param signal describes signal to convert
 			 */
-			static int toRealSignal(systemSignalsEnum signal);
+			static int toRealSignal(long signal);
 			
 			/**
 			 * fills 'set' structure with given signal mask
 			 */
-			static void sigMask(sigset_t *set, int signal);
+			static void sigMask(sigset_t *set, long signal);
 																						
 	};
 

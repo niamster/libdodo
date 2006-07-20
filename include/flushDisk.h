@@ -95,7 +95,7 @@ namespace dodo
 			 * 
 			 * if type == TMP_FILE, u don't have to specify path
 			 */
-			flushDisk(flushDiskFileToCreateEnum type, const std::string &path = __string__);
+			flushDisk(short type, const std::string &path = __string__);
 			
 			/**
 			 * destructor
@@ -296,14 +296,14 @@ namespace dodo
 							flush();
 			
 			bool over;///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files,tmp_files only
-			mutable flushDiskModesEnum mode;///< mode to open file; if you change it then you have to reopen!
+			mutable short mode;///< mode to open file; if you change it then you have to reopen!
 			
 			/**
 			 * @return path of the opened file
 			 */			
 			virtual std::string getPath() const;
 
-			mutable flushDiskFileToCreateEnum fileType;///< type of file; if you change then it you have to reopen!
+			mutable short fileType;///< type of file; if you change then it you have to reopen!
 
 			mutable bool append;///< if true, will append to the end of the file, even pos is set.
 			

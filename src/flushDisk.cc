@@ -25,6 +25,8 @@
 #include <flushDisk.h>
 
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <flushDiskEx.h>
 #include <tools.h>
@@ -32,9 +34,9 @@
 
 using namespace dodo;
 
-flushDisk::flushDisk(flushDiskFileToCreateEnum type, 
+flushDisk::flushDisk(short type, 
 					const std::string &a_path) : over(false),
-												mode(READ_WRITE), 
+												mode(OPENMODE_READ_WRITE), 
 												fileType(type), 
 												append(false),
 												path(a_path)
@@ -284,7 +286,7 @@ flushDisk::read(char * const a_void,
 		performXExec(preExec);
 	#endif
 	
-	if (fileType == REG_FILE || fileType == TMP_FILE)
+	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 		if (fseek(file,a_pos*inSize,SEEK_SET) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -296,7 +298,7 @@ flushDisk::read(char * const a_void,
 	
 	errno = 0;
 	///execute 
-	if (fileType == REG_FILE || fileType == TMP_FILE)
+	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 		fread(a_void,inSize,1,file);
 	else
 		#ifndef FAST
@@ -395,7 +397,7 @@ flushDisk::write(const char *const a_buf,
 		performXExec(preExec);
 	#endif
 	
-	if (fileType == REG_FILE || fileType == TMP_FILE)
+	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 	{
 		a_pos *= outSize;
 		
@@ -449,11 +451,11 @@ flushDisk::write(const char *const a_buf,
 	
 	errno = 0;
 	///execute 
-	if (fileType == REG_FILE || fileType == TMP_FILE)
+	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 		fwrite(buffer.c_str(),outSize,1,file);
 	else
 		#ifndef FAST
-			if (fileType == FIFO_FILE)
+			if (fileType == FILETYPE_FIFO_FILE)
 		#endif
 				fputs(buffer.c_str(),file);
 			
@@ -566,7 +568,7 @@ flushDisk::readStream(char * const a_void,
 		performXExec(preExec);
 	#endif
 	
-	if (fileType == REG_FILE || fileType == TMP_FILE)
+	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 	{
 		if (fseek(file,0,SEEK_SET) == -1)
 			#ifndef NO_EX

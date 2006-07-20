@@ -1,5 +1,8 @@
 #include <tools.h>
 #include <flushDisk.h>
+#include <baseEx.h>
+#include <flushDiskTools.h>
+#include <flushSocket.h>
 
 using namespace dodo;
 using namespace std;
@@ -17,29 +20,29 @@ int main(int argc, char **argv)
 		
 		tools tl;
 		
-		tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root","test","test");
+		tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com","test","test");
 		
-		/*baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
+		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
-			cout << "WTF";*/
+			cout << "WTF";
 		
-		//cout << flushDiskTools::getFileContent("test.cc");
+		cout << flushDiskTools::getFileContent("test.cc");
 		
 		//cout << "Что происходит?" << endl;
 		
-		/*for (register int i(0);i<10000;++i)
-			tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");*/
+		for (register int i(0);i<10000;++i)
+			tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
 		
-		/*tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
+		tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
 		for (register int i(0);i<9999;++i)
-			tl.reCodesetConversion(flushDiskTools::getFileContent("test.cc"));*/
+			tl.reCodesetConversion(flushDiskTools::getFileContent("test.cc"));
 	
-		//cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		//cout << tl.zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
+		cout << tl.zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
 	
-		//cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
+		cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
 		
-		/*cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
+		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
 		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
 		
 		cout << "real size of test is : " << flushDiskTools::getSize("test") << endl;
@@ -50,9 +53,9 @@ int main(int argc, char **argv)
 		
 		cout << tools::encodeBase64("HEY, that's working!") << endl;
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
-		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;*/
+		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;
 		
-		/*string tt = "ftp://hihi:hoho@niam.mu:32/init.cgi?gonivo=true&work=true";
+		string tt = "ftp://hihi:hoho@niam.mu:32/init.cgi?gonivo=true&work=true";
 
 		cout << tools::parseURL(tt).host << endl;
 		cout << tools::parseURL(tt).login << endl;
@@ -60,12 +63,12 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).path << endl;
 		cout << tools::parseURL(tt).port << endl;
 		cout << tools::parseURL(tt).protocol << endl;
-		cout << tools::parseURL(tt).request << endl;*/
+		cout << tools::parseURL(tt).request << endl;
 
-//		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-//		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
-for (int i(0);i<10000;++i)
-		tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9));	
+		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
+		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		for (int i(0);i<10000;++i)
+			tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9));	
 	}
     catch(baseEx ex)
     {

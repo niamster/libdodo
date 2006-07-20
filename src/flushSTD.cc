@@ -24,9 +24,15 @@
  
 #include <flushSTD.h>
 
+#include <fcntl.h>
+#include <sys/un.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+
 #include <flushSTDEx.h>
 #include <tools.h>
-#include <flushSocket.h>
 
 using namespace dodo;
 

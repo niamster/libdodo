@@ -28,13 +28,15 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <sys/resource.h>
-#include <pwd.h>
-#include <grp.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include <signal.h>
-#include <iostream>
+
+#ifdef DL_EXT
+
+	#include <dlfcn.h>
+
+#endif	
 
 #include <systemToolsEx.h>
 
@@ -168,7 +170,7 @@ systemTools::changeRoot(const std::string &path)
 #else
 	bool 
 #endif			
-systemTools::getLimit(systemToolsLimitEnum type, 
+systemTools::getLimit(short type, 
 					__limits &lim)
 {
 	rlimit limit;
@@ -229,7 +231,7 @@ systemTools::getLimit(systemToolsLimitEnum type,
 #else
 	bool 
 #endif			
-systemTools::setLimit(systemToolsLimitEnum type, 
+systemTools::setLimit(short type, 
 					const __limits &lim)
 {
 	rlimit limit;
@@ -286,7 +288,7 @@ systemTools::setLimit(systemToolsLimitEnum type,
 //-------------------------------------------------------------------
 
 int 
-systemTools::getPriority(uidTypeEnum type)
+systemTools::getPriority(short type)
 {
 	register int prio = getpriority(PRIO_PROCESS,getUID(type));
 	if (prio == -1)
@@ -306,7 +308,7 @@ systemTools::getPriority(uidTypeEnum type)
 #else
 	bool 
 #endif	
-systemTools::setPriority(uidTypeEnum type,
+systemTools::setPriority(short type,
 						int prio)
 {
 	if (setpriority(PRIO_PROCESS,getUID(type),prio) == -1)
@@ -324,7 +326,7 @@ systemTools::setPriority(uidTypeEnum type,
 //-------------------------------------------------------------------
 
 int 
-systemTools::getUID(uidTypeEnum type)
+systemTools::getUID(short type)
 {
 	switch (type)
 	{
@@ -348,7 +350,7 @@ systemTools::getUID(uidTypeEnum type)
 #else
 	bool 
 #endif			
-systemTools::setUID(uidTypeEnum type, 
+systemTools::setUID(short type, 
 					int uid)
 {
 	register int res(0);
@@ -382,7 +384,7 @@ systemTools::setUID(uidTypeEnum type,
 //-------------------------------------------------------------------
 
 int 
-systemTools::getGID(uidTypeEnum type)
+systemTools::getGID(short type)
 {
 	switch (type)
 	{
@@ -406,7 +408,7 @@ systemTools::getGID(uidTypeEnum type)
 #else
 	bool 
 #endif			
-systemTools::setGID(uidTypeEnum type, 
+systemTools::setGID(short type, 
 					int uid)
 {
 	register int res(0);
@@ -796,7 +798,7 @@ systemTools::setGroupPID(int pid,
 
 void
 systemTools::sigMask(sigset_t *set,
-					int blockSignals)
+					long blockSignals)
 {
 	if (blockSignals != -1)
 	{
@@ -873,7 +875,7 @@ systemTools::sigMask(sigset_t *set,
 #else
 	bool 
 #endif
-systemTools::setSignalHandler(systemSignalsEnum signal, 
+systemTools::setSignalHandler(long signal, 
 							signalHandler handler,
 							int blockSignals)
 {
@@ -923,7 +925,7 @@ systemTools::setSignalHandler(systemSignalsEnum signal,
 //-------------------------------------------------------------------
 
 bool 
-systemTools::isSignalHandled(systemSignalsEnum signal)
+systemTools::isSignalHandled(long signal)
 {
 	struct sigaction act;
 	if (sigaction(systemTools::toRealSignal(signal),NULL,&act)==-1)
@@ -947,7 +949,7 @@ systemTools::isSignalHandled(systemSignalsEnum signal)
 	bool 
 #endif 
 systemTools::sendSignal(int pid, 
-						systemSignalsEnum signal)
+						long signal)
 {
 	if (kill(pid, systemTools::toRealSignal(signal)) == -1)
 		#ifndef NO_EX
@@ -969,7 +971,7 @@ systemTools::sendSignal(int pid,
 #else
 	bool 
 #endif 
-systemTools::unsetSignalHandler(systemSignalsEnum signal)
+systemTools::unsetSignalHandler(long signal)
 {
 	#ifdef DL_EXT
 	
@@ -1047,7 +1049,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 	#else
 		bool 
 	#endif 
-	systemTools::setSignalHandler(systemSignalsEnum signal, 
+	systemTools::setSignalHandler(long signal, 
 								const std::string &path, 
 								void *toInit,
 								int blockSignals)
@@ -1211,7 +1213,7 @@ systemTools::unsetSignalHandler(systemSignalsEnum signal)
 //-------------------------------------------------------------------
 
 int 
-systemTools::toRealSignal(systemSignalsEnum signal)
+systemTools::toRealSignal(long signal)
 {
 	switch (signal)
 	{
@@ -1287,7 +1289,7 @@ systemTools::toRealSignal(systemSignalsEnum signal)
 //-------------------------------------------------------------------
 
 void 
-systemTools::blockSignal(int signals, 
+systemTools::blockSignal(long signals, 
 							bool block)
 {	
 	sigset_t signal_mask;

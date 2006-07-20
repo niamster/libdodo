@@ -89,7 +89,7 @@ int
 xexec::addXExec(std::list<__execItem> &list, 
 		inExec func,
  		void *obj, 
- 		xexecObjTypeEnum type,
+ 		short type,
 		void *data) const
 {
 	temp.data = data;
@@ -156,7 +156,7 @@ xexec::delXExec(std::list<__execItem> &list,
 int 
 xexec::_addPreExec(inExec func,
  				void *obj, 
- 				xexecObjTypeEnum type,
+ 				short type,
 				void *data) const
 {
 	return addXExec(preExec.exec,func,obj,type,data);
@@ -191,7 +191,7 @@ xexec::enablePreExec(int position) const
 int 
 xexec::_addPostExec(inExec func, 
  				void *obj, 
- 				xexecObjTypeEnum type,
+ 				short type,
 				void *data) const
 {
 	return addXExec(postExec.exec,func,obj,type,data);
@@ -376,7 +376,7 @@ xexec::performXExec(__execItemList &list) const
 	int 
 	xexec::addXExecModule(std::list<__execItem> &list, 
 					void *obj,  
- 					xexecObjTypeEnum type,
+ 					short type,
 					const std::string &module, 
 					void *data, 
 					void *toInit) const
@@ -423,7 +423,7 @@ xexec::performXExec(__execItemList &list) const
 	int 
 	xexec::_addPostExec(const std::string &module, 
 						void *obj, 
- 						xexecObjTypeEnum type, 
+ 						short type, 
 						void *data, 
 						void *toInit) const
 	{
@@ -435,7 +435,7 @@ xexec::performXExec(__execItemList &list) const
 	int 
 	xexec::_addPreExec(const std::string &module, 
 					void *obj,
- 					xexecObjTypeEnum type, 
+ 					short type, 
 					void *data, 
 					void *toInit) const
 	{
@@ -481,7 +481,7 @@ xexec::performXExec(__execItemList &list) const
 	xexecCounts 
 	xexec::_addExec(const std::string &module, 
 					void *obj, 
- 					xexecObjTypeEnum type, 
+ 					short type, 
 					void *data, 
 					void *toInit) const
 	{

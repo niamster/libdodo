@@ -80,6 +80,6 @@ MOD_ZLIB_LIB:=
 MOD_CODECONV:=yes
 MOD_CODECONV_CPP:=
 MOD_CODECONV_LD:=
-MOD_CODECONV_LIB:=-lbz2
+MOD_CODECONV_LIB:=
 
 ##############################

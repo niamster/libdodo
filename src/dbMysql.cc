@@ -101,7 +101,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddInsSt(mysqlAddInsEnum statement)
+	dbMysql::setMyAddInsSt(short statement)
 	{
 		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_DELAYED);
 		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_LOW_PRIORITY);
@@ -113,7 +113,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddUpSt(mysqlAddUpEnum statement)
+	dbMysql::setMyAddUpSt(short statement)
 	{
 		addF(qDbDepUpShift,1<<statement);	
 	}
@@ -121,7 +121,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddSelSt(mysqlAddSelEnum statement)
+	dbMysql::setMyAddSelSt(short statement)
 	{
 		addF(qDbDepSelShift,1<<statement);	
 	}
@@ -129,7 +129,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setMyAddDelSt(mysqlAddDelEnum statement)
+	dbMysql::setMyAddDelSt(short statement)
 	{
 		addF(qDbDepDelShift,1<<statement);
 	}
@@ -137,7 +137,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddInsSt(mysqlAddInsEnum statement)
+	dbMysql::unsetMyAddInsSt(short statement)
 	{
 		removeF(qDbDepInsShift,1<<statement);
 	}
@@ -145,7 +145,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddUpSt(mysqlAddUpEnum statement)
+	dbMysql::unsetMyAddUpSt(short statement)
 	{
 		removeF(qDbDepUpShift,1<<statement);	
 	}
@@ -153,7 +153,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddSelSt(mysqlAddSelEnum statement)
+	dbMysql::unsetMyAddSelSt(short statement)
 	{
 		removeF(qDbDepSelShift,1<<statement);	
 	}
@@ -161,7 +161,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::unsetMyAddDelSt(mysqlAddDelEnum statement)
+	dbMysql::unsetMyAddDelSt(short statement)
 	{
 		removeF(qDbDepDelShift,1<<statement);	
 	}

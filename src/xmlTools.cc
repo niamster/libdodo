@@ -27,7 +27,6 @@
 
 #ifdef LIBXML2_EXT
 	
-	#include <libxml/xmlmemory.h>
 	#include <libxml/parser.h>
 
 	#include <xmlToolsEx.h>

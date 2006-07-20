@@ -39,8 +39,8 @@
 using namespace dodo;
 
 __initialAccept::__initialAccept() : socket(-1), 
-									family((socketProtoFamilyEnum)-1), 
-									type((socketTransferTypeEnum)-1)
+									family(-1), 
+									type(-1)
 {
 }
 

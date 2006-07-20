@@ -134,10 +134,10 @@
 				 * @param func indicates function to be executed
 				 * @param data describes data to be passed to func
 				 * @param detached indicates whether thread will be detached
-				 * @param action describes action with thread on destruction if thread is running
+				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 				 * @param stackSize describes stack siae of the thread
 				 */
-				virtual unsigned long add(threadFunc func, void *data, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+				virtual unsigned long add(threadFunc func, void *data, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
 	
 			
 				/**
@@ -147,10 +147,10 @@
 				 * @param data describes data to be passed to func
 				 * @param limit indicates the thread's limit on executions
 				 * @param detached indicates whether thread will be detached
-				 * @param action describes action with thread on destruction if thread is running
+				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 				 * @param stackSize describes stack siae of the thread
 				 */
-				virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit=1, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+				virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit=1, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
 				
 				/**
 				 * removes registered thread
@@ -172,7 +172,7 @@
 				 * @param data describes data to be passed to func
 				 * @param force if is set to true stops execution if this thread is running
 				 * @param detached indicates whether thread will be detached
-				 * @param action describes action with thread on destruction if thread is running
+				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 				 * @param stackSize describes stack siae of the thread
 				 * @note - exception if it's currently running
 				 */
@@ -181,7 +181,7 @@
 				#else
 					virtual bool 
 				#endif						 
-								replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+								replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
 				
 				/**
 				 * executes thread
@@ -286,7 +286,7 @@
 					 * @param action describes action with thread on destruction if thread is running
 					 * @param stackSize describes stack siae of the thread
 					 */
-					virtual unsigned long add(const std::string &module, void *data, void *toInit = NULL, bool detached = false, systemThreadOnDestructEnum action=THREAD_WAIT, int stackSize=2097152);
+					virtual unsigned long add(const std::string &module, void *data, void *toInit = NULL, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
 					
 					/**
 					 * adds function to became a thread[not executing] from module

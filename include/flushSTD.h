@@ -29,6 +29,7 @@
 
 #include <types.h>
 #include <flush.h>
+#include <flushSocket.h>
 
 namespace dodo
 {

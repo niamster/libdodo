@@ -206,51 +206,51 @@
 							
 				/**
 				 * set additional mysql-specific statement for INSERT
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void setMyAddInsSt(mysqlAddInsEnum statement);			
+				virtual void setMyAddInsSt(short statement);			
 				
 				/**
 				 * set additional mysql-specific statement for UPDATE
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void setMyAddUpSt(mysqlAddUpEnum statement);
+				virtual void setMyAddUpSt(short statement);
 				
 				/**
 				 * set additional mysql-specific statement for SELECT
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void setMyAddSelSt(mysqlAddSelEnum statement);
+				virtual void setMyAddSelSt(short statement);
 				
 				/**
 				 * set additional mysql-specific statement for DELETE
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void setMyAddDelSt(mysqlAddDelEnum statement);
+				virtual void setMyAddDelSt(short statement);
 				
 				/**
 				 * unset additional mysql-specific statement for INSERT
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void unsetMyAddInsSt(mysqlAddInsEnum statement);
+				virtual void unsetMyAddInsSt(short statement);
 				
 				/**
 				 * unset additional mysql-specific statement for UPDATE
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void unsetMyAddUpSt(mysqlAddUpEnum statement);
+				virtual void unsetMyAddUpSt(short statement);
 				
 				/**
 				 * unset additional mysql-specific statement for SELECT
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void unsetMyAddSelSt(mysqlAddSelEnum statement);
+				virtual void unsetMyAddSelSt(short statement);
 				
 				/**
 				 * unset additional mysql-specific statement for DELETE
-				 * @param statement describes additional statement
+				 * @param statement describes additional statement[see mysqlAddDelEnum]
 				 */
-				virtual void unsetMyAddDelSt(mysqlAddDelEnum statement);
+				virtual void unsetMyAddDelSt(short statement);
 
 				/**
 				 * executes collected request

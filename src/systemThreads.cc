@@ -27,6 +27,13 @@
 
 #ifdef PTHREAD_EXT
 	
+
+	#ifdef DL_EXT
+	
+		#include <dlfcn.h>
+	
+	#endif	
+
 	#include <signal.h>
 	#include <pthread.h>
 		
@@ -121,7 +128,7 @@
 	systemThreads::add(threadFunc func,
 							void *data,
 							bool detached,
-							systemThreadOnDestructEnum action,
+							short action,
 							int stackSize)
 	{
 		thread.detached = detached;
@@ -237,7 +244,7 @@
 							void *data,
 							bool force,
 							bool detached,
-							systemThreadOnDestructEnum action,
+							short action,
 							int stackSize)
 	{
 		if (getThread(position))
@@ -676,7 +683,7 @@
 							void *data,
 							void *toInit,
 							bool detached,
-							systemThreadOnDestructEnum action,
+							short action,
 							int stackSize)
 		{
 			
@@ -795,7 +802,7 @@
 							void *data, 
 							unsigned long limit,
 							bool detached,
-							systemThreadOnDestructEnum action,
+							short action,
 							int stackSize)
 	{
 		thread.detached = detached;
@@ -841,5 +848,4 @@
 	
 	//-------------------------------------------------------------------
 
-#endif	
-	
+#endif
