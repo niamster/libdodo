@@ -1677,7 +1677,6 @@ tools::mail(const std::string &host,
 			ex.receiveStreamString(mess);
 			matched = reg.reMatch(mess,pock);
 			code = atoi(pock[0].c_str());
-	std::cout << mess << "@@\n\n";
 			
 			if (!matched || code != 334)
 				#ifndef NO_EX
