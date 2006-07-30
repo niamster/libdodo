@@ -346,6 +346,12 @@ namespace dodo
 			 */
 			static __url parseURL(const std::string &url);
 			
+			/**
+			 * @return MD5 hash of string
+			 * @param string indicates string for what generate hash
+			 */
+			static std::string MD5(const std::string &string);
+			
 			#ifdef BZIP_EXT
 			
 			 	
@@ -374,8 +380,6 @@ namespace dodo
 			 * @param to is mail address where to send[possible multiply separated with coma]
 			 * @param subject is a subject of the letter
 			 * @param message is a message to send
-			 * @param login is a login for auth
-			 * @param pass is a password for auth
 			 * @param headers - extra headers
 			 * @note if login is emty - no auth
 			 */
@@ -395,6 +399,8 @@ namespace dodo
 			 * @param from is mail address of sender
 			 * @param subject is a subject of the letter[for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`]
 			 * @param message is a message to send
+			 * @param login is a login for auth
+			 * @param pass is a password for auth
 			 * @param headers - extra headers [each must ends with `\r\n`]
 			 */
 			#ifndef NO_EX
@@ -449,10 +455,41 @@ namespace dodo
 				
 			#endif		
 			
-			#ifdef BZIP_EXT
+			/**
+			 * MD5 structure
+			 */
+			struct MD5_CTX 
+			{
+				unsigned int state[4]; ///< state (ABCD) 
+				unsigned int count[2]; ///< number of bits, modulo 2^64 (lsb first) 
+				unsigned char buffer[64]; ///< input buffer
+			};
 			
-			#endif			
-								
+			/**
+			 * inits MD5 structure
+			 * @param contex describes MD5 structure
+			 */
+			static void MD5Init(MD5_CTX *context);
+			
+			/**
+			 *  MD5 block update operation. Continues an MD5 message-digest
+			 * operation, processing another message block, and updating the context.
+			 */
+			static void MD5Update(MD5_CTX *context, unsigned char *input, unsigned int inputLen);
+			/**
+			 * MD5 basic transformation. Transforms state based on block.
+			 * 
+ 			 */
+			static void MD5Transform(unsigned int state[4], unsigned char block[64]);
+			
+			/**
+			 * MD5 finalization. Ends an MD5 message-digest operation, writing the
+			 * the message digest and zeroizing the context.
+			 * @param digest is digest =)
+			 * @param contex describes MD5 structure
+ 			 */
+			static void MD5Final(unsigned char digest[16], MD5_CTX *context);
+
 			std::string result;///< to store temporary result
 							
 			/**

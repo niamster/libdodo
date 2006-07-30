@@ -44,6 +44,100 @@
 using namespace dodo;
 
 /**
+ * for MD5
+ */
+
+/**
+ * magic numbers =)
+ */
+#define S11 7
+#define S12 12
+#define S13 17
+#define S14 22
+#define S21 5
+#define S22 9
+#define S23 14
+#define S24 20
+#define S31 4
+#define S32 11
+#define S33 16
+#define S34 23
+#define S41 6
+#define S42 10
+#define S43 15
+#define S44 21
+
+//-------------------------------------------------------------------
+
+static unsigned char PADDING[64] = {
+  0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+/**
+ * F, G, H and I are basic MD5 functions.
+ */
+#define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
+
+//-------------------------------------------------------------------
+
+#define G(x, y, z) (((x) & (z)) | ((y) & (~z)))
+
+//-------------------------------------------------------------------
+
+#define H(x, y, z) ((x) ^ (y) ^ (z))
+
+//-------------------------------------------------------------------
+
+#define I(x, y, z) ((y) ^ ((x) | (~z)))
+
+/**
+ * ROTATE_LEFT rotates x left n bits.
+ */
+#define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32-(n))))
+
+/**
+ * FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
+ * Rotation is separate from addition to prevent recomputation.
+ */
+#define FF(a, b, c, d, x, s, ac) \
+		{ \
+			(a) += F ((b), (c), (d)) + (x) + (unsigned int)(ac); \
+			(a) = ROTATE_LEFT ((a), (s)); \
+			(a) += (b); \
+		}
+		
+//-------------------------------------------------------------------
+  		
+#define GG(a, b, c, d, x, s, ac) \
+		{ \
+			(a) += G ((b), (c), (d)) + (x) + (unsigned int)(ac); \
+			(a) = ROTATE_LEFT ((a), (s)); \
+			(a) += (b); \
+  		}
+  		
+//-------------------------------------------------------------------
+
+#define HH(a, b, c, d, x, s, ac) \
+		{ \
+			(a) += H ((b), (c), (d)) + (x) + (unsigned int)(ac); \
+			(a) = ROTATE_LEFT ((a), (s)); \
+			(a) += (b); \
+  		}
+  		
+//-------------------------------------------------------------------
+
+#define II(a, b, c, d, x, s, ac) \
+		{ \
+			(a) += I ((b), (c), (d)) + (x) + (unsigned int)(ac); \
+			(a) = ROTATE_LEFT ((a), (s)); \
+			(a) += (b); \
+		}
+		
+//-------------------------------------------------------------------
+
+/**
  * for ASCII85 decode
  */
 static unsigned long powASCII85[] = {
@@ -1268,6 +1362,189 @@ tools::mail(const std::string &path,
 	#endif
 }
 
+//-------------------------------------------------------------------
+
+void 
+tools::MD5Init(MD5_CTX *context)
+{
+  context->count[0] = context->count[1] = 0;
+
+  context->state[0] = 0x67452301;
+  context->state[1] = 0xefcdab89;
+  context->state[2] = 0x98badcfe;
+  context->state[3] = 0x10325476;
+}
+
+//-------------------------------------------------------------------
+
+void 
+tools::MD5Transform(unsigned int state[4], 
+					unsigned char block[64])
+{
+	unsigned int a = state[0], b = state[1], c = state[2], d = state[3], x[16];
+
+	for (unsigned int i = 0, j = 0; j < 64; ++i, j += 4)
+		x[i] = ((unsigned int)block[j]) | (((unsigned int)block[j+1]) << 8) | (((unsigned int)block[j+2]) << 16) | (((unsigned int)block[j+3]) << 24);
+
+	FF (a, b, c, d, x[ 0], S11, 0xd76aa478);
+	FF (d, a, b, c, x[ 1], S12, 0xe8c7b756);
+	FF (c, d, a, b, x[ 2], S13, 0x242070db);
+	FF (b, c, d, a, x[ 3], S14, 0xc1bdceee);
+	FF (a, b, c, d, x[ 4], S11, 0xf57c0faf);
+	FF (d, a, b, c, x[ 5], S12, 0x4787c62a);
+	FF (c, d, a, b, x[ 6], S13, 0xa8304613);
+	FF (b, c, d, a, x[ 7], S14, 0xfd469501);
+	FF (a, b, c, d, x[ 8], S11, 0x698098d8);
+	FF (d, a, b, c, x[ 9], S12, 0x8b44f7af);
+	FF (c, d, a, b, x[10], S13, 0xffff5bb1);
+	FF (b, c, d, a, x[11], S14, 0x895cd7be);
+	FF (a, b, c, d, x[12], S11, 0x6b901122);
+	FF (d, a, b, c, x[13], S12, 0xfd987193);
+	FF (c, d, a, b, x[14], S13, 0xa679438e);
+	FF (b, c, d, a, x[15], S14, 0x49b40821);
+
+	GG (a, b, c, d, x[ 1], S21, 0xf61e2562); 
+	GG (d, a, b, c, x[ 6], S22, 0xc040b340);
+	GG (c, d, a, b, x[11], S23, 0x265e5a51);
+	GG (b, c, d, a, x[ 0], S24, 0xe9b6c7aa);
+	GG (a, b, c, d, x[ 5], S21, 0xd62f105d);
+	GG (d, a, b, c, x[10], S22,  0x2441453);
+	GG (c, d, a, b, x[15], S23, 0xd8a1e681);
+	GG (b, c, d, a, x[ 4], S24, 0xe7d3fbc8);
+	GG (a, b, c, d, x[ 9], S21, 0x21e1cde6);
+	GG (d, a, b, c, x[14], S22, 0xc33707d6);
+	GG (c, d, a, b, x[ 3], S23, 0xf4d50d87);
+	GG (b, c, d, a, x[ 8], S24, 0x455a14ed);
+	GG (a, b, c, d, x[13], S21, 0xa9e3e905);
+	GG (d, a, b, c, x[ 2], S22, 0xfcefa3f8);
+	GG (c, d, a, b, x[ 7], S23, 0x676f02d9);
+	GG (b, c, d, a, x[12], S24, 0x8d2a4c8a);
+
+	HH (a, b, c, d, x[ 5], S31, 0xfffa3942);
+	HH (d, a, b, c, x[ 8], S32, 0x8771f681);
+	HH (c, d, a, b, x[11], S33, 0x6d9d6122);
+	HH (b, c, d, a, x[14], S34, 0xfde5380c);
+	HH (a, b, c, d, x[ 1], S31, 0xa4beea44);
+	HH (d, a, b, c, x[ 4], S32, 0x4bdecfa9);
+	HH (c, d, a, b, x[ 7], S33, 0xf6bb4b60);
+	HH (b, c, d, a, x[10], S34, 0xbebfbc70);
+	HH (a, b, c, d, x[13], S31, 0x289b7ec6);
+	HH (d, a, b, c, x[ 0], S32, 0xeaa127fa);
+	HH (c, d, a, b, x[ 3], S33, 0xd4ef3085);
+	HH (b, c, d, a, x[ 6], S34,  0x4881d05);
+	HH (a, b, c, d, x[ 9], S31, 0xd9d4d039);
+	HH (d, a, b, c, x[12], S32, 0xe6db99e5);
+	HH (c, d, a, b, x[15], S33, 0x1fa27cf8);
+	HH (b, c, d, a, x[ 2], S34, 0xc4ac5665);
+
+  	II (a, b, c, d, x[ 0], S41, 0xf4292244);
+  	II (d, a, b, c, x[ 7], S42, 0x432aff97);
+	II (c, d, a, b, x[14], S43, 0xab9423a7);
+	II (b, c, d, a, x[ 5], S44, 0xfc93a039);
+	II (a, b, c, d, x[12], S41, 0x655b59c3);
+	II (d, a, b, c, x[ 3], S42, 0x8f0ccc92);
+	II (c, d, a, b, x[10], S43, 0xffeff47d);
+	II (b, c, d, a, x[ 1], S44, 0x85845dd1);
+	II (a, b, c, d, x[ 8], S41, 0x6fa87e4f);
+	II (d, a, b, c, x[15], S42, 0xfe2ce6e0);
+	II (c, d, a, b, x[ 6], S43, 0xa3014314);
+	II (b, c, d, a, x[13], S44, 0x4e0811a1);
+	II (a, b, c, d, x[ 4], S41, 0xf7537e82);
+	II (d, a, b, c, x[11], S42, 0xbd3af235);
+	II (c, d, a, b, x[ 2], S43, 0x2ad7d2bb);
+	II (b, c, d, a, x[ 9], S44, 0xeb86d391);
+
+	state[0] += a;
+	state[1] += b;
+	state[2] += c;
+	state[3] += d;
+}
+
+//-------------------------------------------------------------------
+
+void 
+tools::MD5Final(unsigned char digest[16], 
+				MD5_CTX *context)
+{	
+	unsigned char bits[8];
+	unsigned int index, padLen;
+	
+	unsigned int i, j;
+	
+	for (i = 0, j = 0; j < 8; ++i, j += 4) 
+	{
+		bits[j] = (unsigned char)(context->count[i] & 0xff);
+		bits[j+1] = (unsigned char)((context->count[i] >> 8) & 0xff);
+		bits[j+2] = (unsigned char)((context->count[i] >> 16) & 0xff);
+		bits[j+3] = (unsigned char)((context->count[i] >> 24) & 0xff);
+	}
+
+	index = (unsigned int)((context->count[0] >> 3) & 0x3f);
+	padLen = (index < 56) ? (56 - index) : (120 - index);
+	MD5Update(context, PADDING, padLen);
+
+	MD5Update(context, bits, 8);
+  	
+	for (i = 0, j = 0; j < 16; ++i, j += 4) 
+	{
+		digest[j] = (unsigned char)(context->state[i] & 0xff);
+		digest[j+1] = (unsigned char)((context->state[i] >> 8) & 0xff);
+		digest[j+2] = (unsigned char)((context->state[i] >> 16) & 0xff);
+		digest[j+3] = (unsigned char)((context->state[i] >> 24) & 0xff);
+	}
+  
+	memset(context, 0, sizeof(MD5_CTX));
+}
+
+//-------------------------------------------------------------------
+
+void 
+tools::MD5Update(MD5_CTX *context, 
+				unsigned char *input, 
+				unsigned int inputLen)
+{
+	unsigned int i, index, partLen;
+
+	index = (unsigned int )((context->count[0] >> 3) & 0x3F);
+
+	if ((context->count[0] += (inputLen << 3)) < (inputLen << 3))
+		++context->count[1];
+  	
+	context->count[1] += (inputLen >> 29);
+	
+	partLen = 64 - index;
+
+	if (inputLen >= partLen) 
+	{
+		memcpy(&context->buffer[index], input, partLen);
+			
+ 		MD5Transform(context->state, context->buffer);
+
+		for (i = partLen; i + 63 < inputLen; i += 64)
+			MD5Transform(context->state, &input[i]);
+
+		index = 0;
+	}
+  	else
+		i = 0;
+		
+	memcpy(&context->buffer[index], &input[i], inputLen - i);
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+tools::MD5(const std::string &string)
+{
+	MD5_CTX context;
+	unsigned char digest[16];
+	
+	MD5Init(&context);
+	MD5Update(&context, (unsigned char *)string.c_str(), string.length());
+	MD5Final(digest, &context);
+	
+	return std::string((char *)digest,16);
+}
 
 //-------------------------------------------------------------------
 
@@ -1303,6 +1580,7 @@ tools::mail(const std::string &host,
 	flushSocketExchange ex;
 	
 	fsock.connect(host,port,ex);
+	ex.setInBufferSize(15);
 	
 	std::string mess;
 	regexpTools reg;
@@ -1310,41 +1588,39 @@ tools::mail(const std::string &host,
 	register bool matched = false;
 	register int code = 0;
 	
-	reg.compile("(\\d+)(.)([^\\r]*)");
+	reg.multiline = true;
+	reg.compile("(\\d+)-?(.*)");
 	
 	ex.receiveStreamString(mess);
 	
 	ex.sendStreamString("EHLO " + flushSocketTools::getLocalName() + "\r\n");
-	while (true)
+
+	std::cout << mess << "@@\n\n";
+	ex.receiveStreamString(mess);
+	std::cout << mess << "@@\n\n";
+	matched = reg.reMatch(mess,pock);
+	code = atoi(pock[0].c_str());
+	
+	if (!matched || code != 250)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILHELO,TOOLS_BADMAILHELO_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+		
+	std::cout << mess << "@@\n\n";
+	if (auth)	
 	{
-		ex.receiveStreamString(mess);
-		matched = reg.reMatch(mess,pock);
-		code = atoi(pock[0].c_str());
-		
-		if (!matched || code != 250)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILHELO,TOOLS_BADMAILHELO_STR,__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
+		if (strcasestr(pock[1].c_str(),"CRAM-MD5") != NULL)
+			addF(authType,SMTPAUTH_CRAMMD5);
 			
-		if (auth)	
-		{
-			if (strcasestr(pock[2].c_str(),"CRAM-MD5") != NULL)
-				addF(authType,SMTPAUTH_CRAMMD5);
-				
-			if (strcasestr(pock[2].c_str(),"LOGIN") != NULL)
-				addF(authType,SMTPAUTH_LOGIN);
-				
-			if (strcasestr(pock[2].c_str(),"PLAIN") != NULL)
-				addF(authType,SMTPAUTH_PLAIN);
-		}
-		
-		if (strcmp(tools::trim(pock[1],' ').c_str(),"-"))
-			continue;
-		else
-			break;
+		if (strcasestr(pock[1].c_str(),"LOGIN") != NULL)
+			addF(authType,SMTPAUTH_LOGIN);
+			
+		if (strcasestr(pock[1].c_str(),"PLAIN") != NULL)
+			addF(authType,SMTPAUTH_PLAIN);
 	}
+	std::cout << mess << "@@\n\n";
 	
 	if (auth)
 	{
@@ -1362,13 +1638,52 @@ tools::mail(const std::string &host,
 					return false;
 				#endif
 			
-			std::string response;
-			///create answer
+	std::cout << mess << "@@\n\n";
+			std::string ticket = decodeBase64(pock[1]);
+			        
+			std::string md5pass;
+			if (pass.length() > 64)
+				md5pass = MD5(pass);
+        	else
+        		md5pass = pass;
 			
-			ex.sendStreamString(response + "\r\n");
+			unsigned char ipad[65];
+        	unsigned char opad[65];
+        	
+        	memcpy(ipad,md5pass.c_str(),md5pass.length());
+        	memcpy(opad,md5pass.c_str(),md5pass.length());
+        	
+			for (short i=0; i<64; ++i) 
+			{
+				ipad[i] ^= 0x36;
+				opad[i] ^= 0x5c;
+        	}
+        	
+        	MD5_CTX context;
+			unsigned char digest[16];
+        	
+			MD5Init(&context);
+			MD5Update(&context, ipad, 64);
+			MD5Update(&context, (unsigned char *)ticket.c_str(), ticket.length());
+			MD5Final(digest, &context);
+
+			MD5Init(&context);
+			MD5Update(&context, opad, 64);
+			MD5Update(&context, digest, 16);
+			MD5Final(digest, &context);      	
+			
+			md5pass.clear();
+			for (short i = 0; i < 16; ++i)
+			{
+ 				sprintf((char *)ipad,"%02x", digest[i]);
+				md5pass.append((char *)ipad);
+			}
+	
+			ex.sendStreamString(encodeBase64(login + " " + md5pass) + "\r\n");
 			ex.receiveStreamString(mess);
 			matched = reg.reMatch(mess,pock);
 			code = atoi(pock[0].c_str());
+	std::cout << mess << "@@\n\n";
 			
 			if (!matched || code != 334)
 				#ifndef NO_EX

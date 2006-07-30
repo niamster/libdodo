@@ -17,10 +17,20 @@ int main(int argc, char **argv)
 {	
 	try
 	{
+		cout << "MD5 of \"\"" << endl;
+		string md5 = tools::MD5("");
 		
+		for (int i = 0; i < 16; i++)
+ 			printf ("%02x", (unsigned char)md5[i]);
+ 			
+		cout << endl;
+
+
 		tools tl;
 		
-		tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com","test","test");
+		tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com","test","test","niam","niam");
+		
+		exit(0);
 		
 		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
@@ -53,6 +63,7 @@ int main(int argc, char **argv)
 		
 		cout << tools::encodeBase64("HEY, that's working!") << endl;
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
+		cout << tools::decodeBase64("PDQxMjg3NjA3ODEuMTMzODQ4NjJAd2luZXJyb3JmaXhlci5jb20+") << endl;
 		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;
 		
 		string tt = "ftp://hihi:hoho@niam.mu:32/init.cgi?gonivo=true&work=true";

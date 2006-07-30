@@ -593,7 +593,6 @@ flushSocketExchange::sendStreamString(const std::string &data,
 flushSocketExchange::receiveStream(char * const data, 
 							bool urgent) const
 {
-		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_RECIEVESTREAM;
 		performXExec(preExec);
@@ -650,21 +649,55 @@ flushSocketExchange::receiveStream(char * const data,
 #endif
 flushSocketExchange::receiveStreamString(std::string &data, 
 								bool urgent) const
-{	
-	register char *t_data = new char[inSocketBuffer+1];
+{
+	#ifndef FLUSH_SOCKET_WO_XEXEC
+		operType = FLUSHSOCKETEXCHANGE_OPER_RECIEVESTREAM;
+		performXExec(preExec);
+	#endif	
+	
+	char *tmp = new char[inSocketBuffer];
+	memset(tmp,'\0',inSocketBuffer);
+		
+	register int flag = 0;	
+	if (urgent)	
+		flag = MSG_OOB;
 
+	
+	while (true)
+	{
+		if ((n = ::recv(socket,tmp,inSocketBuffer,flag)) == -1)
+		{
+			if (errno == EINTR)
+				continue;
+			else
+				break;
+					
+			#ifndef NO_EX
+			{
+				if (errno == EINVAL || errno == EWOULDBLOCK)
+					return ;
+				else
+					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECIEVESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			}
+			#else
+				return false;	
+			#endif
+		}
+	
+		tmp[n] = '\0';
+		
+		data.append(tmp,n);
+			
+		buffer.append(tmp,n);	
+	}
+			
+	#ifndef FLUSH_SOCKET_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+	
 	#ifdef NO_EX
-		register bool result = 
-	#endif
-	
-	this->receiveStream(t_data,urgent);
-	data.assign(t_data);
-	
-	delete [] t_data;
-	
-	#ifdef NO_EX	
-		return result;
-	#endif
+		return true;
+	#endif		
 }
 
 //-------------------------------------------------------------------
