@@ -515,7 +515,7 @@ flushSTD::readStream(char * const a_void) const
 #else
 	bool
 #endif
-flushSTD::readStreamString(std::string &a_str) const
+flushSTD::readStreamString(std::string &data) const
 {
 	#ifndef FLUSH_STD_WO_XEXEC
 		operType = FLUSHSTD_OPER_READSTREAM;
@@ -523,7 +523,6 @@ flushSTD::readStreamString(std::string &a_str) const
 	#endif
 
 	char *tmp = new char[inSTDBuffer+1];
-	memset(tmp,'\0',inSTDBuffer+1);
 	
 	data.clear();
 	buffer.clear();
@@ -550,6 +549,8 @@ flushSTD::readStreamString(std::string &a_str) const
 			
 		buffer.append(tmp);	
 	}
+	
+	delete [] tmp;
 			
 	#ifndef FLUSH_STD_WO_XEXEC		
 		performXExec(postExec);

@@ -656,7 +656,6 @@ flushSocketExchange::receiveStreamString(std::string &data,
 	#endif	
 	
 	char *tmp = new char[inSocketBuffer];
-	memset(tmp,'\0',inSocketBuffer);
 		
 	register int flag = 0;	
 	if (urgent)	
@@ -692,6 +691,8 @@ flushSocketExchange::receiveStreamString(std::string &data,
 			
 		buffer.append(tmp,n);	
 	}
+	
+	delete [] tmp;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);

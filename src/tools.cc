@@ -1589,7 +1589,7 @@ tools::mail(const std::string &host,
 	register int code = 0;
 	
 	reg.multiline = true;
-	reg.compile("(\\d+)(-)?(.*)");
+	reg.compile("(\\d+)(.)(.*)");
 	
 	ex.receiveStreamString(mess);
 	
@@ -1606,7 +1606,6 @@ tools::mail(const std::string &host,
 			return false;
 		#endif
 		
-	std::cout << mess << "@@\n\n";
 	if (auth)	
 	{
 		if (strcasestr(pock[2].c_str(),"CRAM-MD5") != NULL)
@@ -1618,7 +1617,8 @@ tools::mail(const std::string &host,
 		if (strcasestr(pock[2].c_str(),"PLAIN") != NULL)
 			addF(authType,SMTPAUTH_PLAIN);
 	}
-	std::cout << mess << "@@\n\n";
+	
+	std::cout << authType << "x22@@\n\n";
 	
 	if (auth)
 	{
