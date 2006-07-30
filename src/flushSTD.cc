@@ -522,8 +522,8 @@ flushSTD::readStreamString(std::string &a_str) const
 		performXExec(preExec);
 	#endif
 
-	char *tmp = new char[inSocketBuffer];
-	memset(tmp,'\0',inSocketBuffer);
+	char *tmp = new char[inSTDBuffer+1];
+	memset(tmp,'\0',inSTDBuffer+1);
 	
 	data.clear();
 	buffer.clear();
