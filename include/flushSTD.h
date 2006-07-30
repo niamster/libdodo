@@ -211,6 +211,7 @@ namespace dodo
 			 * write to stream - null-terminated string
 			 * @param data is string that will be written
 			 * @note max data size is outSTDBuffer
+			 * @note - appends '\n'
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -223,6 +224,7 @@ namespace dodo
 			 * write to stream - null-terminated string
 			 * @param data is data that will be written
 			 * @note max data size is outSTDBuffer
+			 * @note - appends '\n'
 			 */
 			#ifndef NO_EX
 				virtual void 

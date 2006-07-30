@@ -1580,7 +1580,6 @@ tools::mail(const std::string &host,
 	flushSocketExchange ex;
 	
 	fsock.connect(host,port,ex);
-	ex.setInBufferSize(15);
 	
 	std::string mess;
 	regexpTools reg;
@@ -1593,7 +1592,7 @@ tools::mail(const std::string &host,
 	
 	ex.receiveStreamString(mess);
 	
-	ex.sendStreamString("EHLO " + flushSocketTools::getLocalName() + "\r\n");
+	ex.sendStreamString("EHLO " + flushSocketTools::getLocalName() + "\r");
 
 	ex.receiveStreamString(mess);
 	matched = reg.reMatch(mess,pock);
@@ -1618,13 +1617,11 @@ tools::mail(const std::string &host,
 			addF(authType,SMTPAUTH_PLAIN);
 	}
 	
-	std::cout << authType << "x22@@\n\n";
-	
 	if (auth)
 	{
 		if ((SMTPAUTH_CRAMMD5&authType) == SMTPAUTH_CRAMMD5)
 		{
-			ex.sendStreamString("AUTH CRAM-MD5\r\n");
+			ex.sendStreamString("AUTH CRAM-MD5\r");
 			ex.receiveStreamString(mess);
 			matched = reg.reMatch(mess,pock);
 			code = atoi(pock[0].c_str());
@@ -1636,7 +1633,6 @@ tools::mail(const std::string &host,
 					return false;
 				#endif
 			
-	std::cout << mess << "@@\n\n";
 			std::string ticket = decodeBase64(pock[2]);
 			        
 			std::string md5pass;
@@ -1677,7 +1673,7 @@ tools::mail(const std::string &host,
 				md5pass.append((char *)ipad);
 			}
 	
-			ex.sendStreamString(encodeBase64(login + " " + md5pass) + "\r\n");
+			ex.sendStreamString(encodeBase64(login + " " + md5pass) + "\r");
 			ex.receiveStreamString(mess);
 			matched = reg.reMatch(mess,pock);
 			code = atoi(pock[0].c_str());
@@ -1694,7 +1690,7 @@ tools::mail(const std::string &host,
 		{
 			if ((SMTPAUTH_LOGIN&authType) == SMTPAUTH_LOGIN)
 			{
-				ex.sendStreamString("AUTH LOGIN\r\n");
+				ex.sendStreamString("AUTH LOGIN\r");
 				ex.receiveStreamString(mess);
 				matched = reg.reMatch(mess,pock);
 				code = atoi(pock[0].c_str());
@@ -1706,7 +1702,7 @@ tools::mail(const std::string &host,
 						return false;
 					#endif
 				
-				ex.sendStreamString(encodeBase64(login) + "\r\n");
+				ex.sendStreamString(encodeBase64(login) + "\r");
 				ex.receiveStreamString(mess);
 				matched = reg.reMatch(mess,pock);
 				code = atoi(pock[0].c_str());
@@ -1718,7 +1714,7 @@ tools::mail(const std::string &host,
 						return false;
 					#endif
 				
-				ex.sendStreamString(encodeBase64(pass) + "\r\n");
+				ex.sendStreamString(encodeBase64(pass) + "\r");
 				ex.receiveStreamString(mess);
 				matched = reg.reMatch(mess,pock);
 				code = atoi(pock[0].c_str());
@@ -1734,7 +1730,7 @@ tools::mail(const std::string &host,
 			{
 				if ((SMTPAUTH_PLAIN&authType) == SMTPAUTH_PLAIN)
 				{
-					ex.sendStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
+					ex.sendStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r");
 					ex.receiveStreamString(mess);
 					matched = reg.reMatch(mess,pock);
 					code = atoi(pock[0].c_str());
@@ -1750,7 +1746,7 @@ tools::mail(const std::string &host,
 		}
 	}
 	
-	ex.sendStreamString("MAIL FROM: <" + from + ">\r\n");
+	ex.sendStreamString("MAIL FROM: <" + from + ">\r");
 	ex.receiveStreamString(mess);
 		
 	pock = explode(to,",");
@@ -1758,21 +1754,21 @@ tools::mail(const std::string &host,
 	stringArr::iterator i = pock.begin(), j = pock.end();
 	for (;i!=j;++i)
 	{
-		ex.sendStreamString("RCPT TO: <" + *i + ">\r\n");
+		ex.sendStreamString("RCPT TO: <" + *i + ">\r");
 		ex.receiveStreamString(mess);
 	}
 	
 	ex.sendStreamString("DATA\r\n");
 	ex.receiveStreamString(mess);
 	
-	ex.sendStreamString("To: " + to + "\r\n");
-	ex.sendStreamString("From: " + from + "\r\n");
-	ex.sendStreamString("X-Mailer: libdodo\r\n");
-	ex.sendStreamString("Subject: " + subject  + "\r\n");
+	ex.sendStreamString("To: " + to + "\r");
+	ex.sendStreamString("From: " + from + "\r");
+	ex.sendStreamString("X-Mailer: libdodo\r");
+	ex.sendStreamString("Subject: " + subject  + "\r");
 	ex.sendStreamString(headers);
 	ex.sendStreamString(message);
-	ex.sendStreamString("\r\n.\r\n");
-	ex.sendStreamString("QUIT\r\n");
+	ex.sendStreamString("\r\n.\r");
+	ex.sendStreamString("QUIT\r");
 	
 	ex.close();
 	

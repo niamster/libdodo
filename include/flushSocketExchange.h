@@ -260,6 +260,7 @@ namespace dodo
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * max data size is outSocketBuffer
+			 * @note - appends '\n'
 			 */			
 			#ifndef NO_EX
 				virtual void 
@@ -275,6 +276,7 @@ namespace dodo
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * max data size is outSocketBuffer
+			 * @note - appends '\n'
 			 */
 			#ifndef NO_EX
 				virtual void 

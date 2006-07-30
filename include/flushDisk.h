@@ -254,6 +254,7 @@ namespace dodo
 			 * write string - null-terminated string [append only]
 			 * @param data will be written to file
 			 * @note max size is outSize
+			 * @note - appends '\n'
 			 */	
 			#ifndef NO_EX
 				virtual void 
@@ -266,6 +267,7 @@ namespace dodo
 			 * write string - null-terminated string [append only]
 			 * @param data will be written to file
 			 * @note max size is outSize
+			 * @note - appends '\n'
 			 */
 			#ifndef NO_EX
 				virtual void 
