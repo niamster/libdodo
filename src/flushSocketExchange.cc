@@ -661,7 +661,9 @@ flushSocketExchange::receiveStreamString(std::string &data,
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
-
+	
+	data.clear();
+	buffer.clear();
 	
 	while (true)
 	{

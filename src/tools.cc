@@ -1589,15 +1589,13 @@ tools::mail(const std::string &host,
 	register int code = 0;
 	
 	reg.multiline = true;
-	reg.compile("(\\d+)-?(.*)");
+	reg.compile("(\\d+)(-)?(.*)");
 	
 	ex.receiveStreamString(mess);
 	
 	ex.sendStreamString("EHLO " + flushSocketTools::getLocalName() + "\r\n");
 
-	std::cout << mess << "@@\n\n";
 	ex.receiveStreamString(mess);
-	std::cout << mess << "@@\n\n";
 	matched = reg.reMatch(mess,pock);
 	code = atoi(pock[0].c_str());
 	
@@ -1611,13 +1609,13 @@ tools::mail(const std::string &host,
 	std::cout << mess << "@@\n\n";
 	if (auth)	
 	{
-		if (strcasestr(pock[1].c_str(),"CRAM-MD5") != NULL)
+		if (strcasestr(pock[2].c_str(),"CRAM-MD5") != NULL)
 			addF(authType,SMTPAUTH_CRAMMD5);
 			
-		if (strcasestr(pock[1].c_str(),"LOGIN") != NULL)
+		if (strcasestr(pock[2].c_str(),"LOGIN") != NULL)
 			addF(authType,SMTPAUTH_LOGIN);
 			
-		if (strcasestr(pock[1].c_str(),"PLAIN") != NULL)
+		if (strcasestr(pock[2].c_str(),"PLAIN") != NULL)
 			addF(authType,SMTPAUTH_PLAIN);
 	}
 	std::cout << mess << "@@\n\n";
@@ -1639,7 +1637,7 @@ tools::mail(const std::string &host,
 				#endif
 			
 	std::cout << mess << "@@\n\n";
-			std::string ticket = decodeBase64(pock[1]);
+			std::string ticket = decodeBase64(pock[2]);
 			        
 			std::string md5pass;
 			if (pass.length() > 64)

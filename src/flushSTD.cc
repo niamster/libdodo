@@ -517,19 +517,47 @@ flushSTD::readStream(char * const a_void) const
 #endif
 flushSTD::readStreamString(std::string &a_str) const
 {
-	register char *data = new char[inSTDBuffer+1];
+	#ifndef FLUSH_STD_WO_XEXEC
+		operType = FLUSHSTD_OPER_READSTREAM;
+		performXExec(preExec);
+	#endif
 
+	char *tmp = new char[inSocketBuffer];
+	memset(tmp,'\0',inSocketBuffer);
+	
+	data.clear();
+	buffer.clear();
+	
+	///execute
+	while (true)
+	{
+		if (fgets(tmp,inSTDBuffer+1,stdin) == NULL)
+		{
+			if (errno == EINTR)
+				continue;
+			else
+				break;
+			
+			if (ferror(stdin) != 0)				
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else			
+					return false;
+				#endif
+		}
+		
+		data.append(tmp);
+			
+		buffer.append(tmp);	
+	}
+			
+	#ifndef FLUSH_STD_WO_XEXEC		
+		performXExec(postExec);
+	#endif
+	
 	#ifdef NO_EX
-		register bool result = 
-	#endif
-	
-	this->readStream(data);
-	a_str.assign(data);
-	delete [] data;
-	
-	#ifdef NO_EX	
-		return result;
-	#endif
+		return true;
+	#endif	
 }
 
 //-------------------------------------------------------------------
