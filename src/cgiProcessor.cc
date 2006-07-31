@@ -139,7 +139,15 @@ cgiProcessor::_process(const std::string &buffer,
 								}
 							}
 							else
-								tpl.append(buffer.substr(i - 2,j - i + 2));
+							{
+								k = temp.find("assign");
+								if (k != std::string::npos)
+								{
+									_assign(temp.substr(k + 6));
+								}
+								else
+									tpl.append(buffer.substr(i - 2,j - i + 2));
+							}
 						}
 					}
 				}
@@ -506,6 +514,29 @@ cgiProcessor::_break(const std::string &statement)
 	}
 	
 	return false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::_assign(const std::string &statement)
+{
+	stringArr temp = tools::explode(statement,"=",2);
+		
+	if (temp.size() == 0)	
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT_STR,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif
+		
+	std::string varName = trim(temp[0]);	
+		
+	globalArray.erase(varName);
+	globalHash.erase(varName);
+	globalArrayHash.erase(varName);
+	
+	global[varName] = trim(temp[1]);
 }
 
 //-------------------------------------------------------------------

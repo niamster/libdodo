@@ -136,6 +136,12 @@ namespace dodo
 			virtual bool _break(const std::string &statement);
 			
 			/**
+			 * processes `assign` statement
+			 * @param statement indicates `assign` statement
+			 */
+			virtual void _assign(const std::string &statement);
+			
+			/**
 			 * processes `include` statement
 			 * @param buffer indicates what buffer contains found `if`
 			 * @param statement indicates `include` statement
