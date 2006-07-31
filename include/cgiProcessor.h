@@ -188,6 +188,8 @@ namespace dodo
 			std::map<std::string, std::vector<assocArr> >::iterator d;///< iterator for map of maps
 			std::map<std::string, std::vector<assocArr> >::iterator f;///< iterator for map of maps
 			
+			assocArr dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
+			
 			assocArr global;///< set of global variables[user-set]
 			assocArr local;///< set of local variables[during parsing]			
 			assocArr::iterator k;///< iterator for map

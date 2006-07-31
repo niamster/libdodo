@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <cgiTools.h>
 #include <cgiProcessor.h>
 

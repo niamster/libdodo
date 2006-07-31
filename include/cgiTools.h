@@ -137,7 +137,7 @@ namespace dodo
 		bool secure;///< indicates if cookie is secure; false by default
 	}; 
 
-	std::string postFilesTmpDir = "/tmp";///< path of dir, where POST files will be temporary saved [default is /tmp]
+	static std::string postFilesTmpDir = "/tmp";///< path of dir, where POST files will be temporary saved [default is /tmp]
 
 	/**
 	 * @enum requestMethodEnum indicates request type

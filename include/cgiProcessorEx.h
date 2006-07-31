@@ -41,6 +41,7 @@
 			CGIPREPROCESSOR_WRONGIFSTATEMENT,
 			CGIPREPROCESSOR_WRONGFORSTATEMENT,
 			CGIPREPROCESSOR_WRONGVARSTATEMENT,
+			CGIPREPROCESSOR_DODOISRESERVEDVARNAME
 		};
 		
 		/**
@@ -48,7 +49,8 @@
 		 */				
 		#define CGIPREPROCESSOR_WRONGIFSTATEMENT_STR "Wrong `if` statemenet."
 		#define CGIPREPROCESSOR_WRONGFORSTATEMENT_STR "Wrong `for` statemenet."		
-		#define CGIPREPROCESSOR_WRONGVARSTATEMENT_STR "in variable statement `}` wasn't closed."
+		#define CGIPREPROCESSOR_WRONGVARSTATEMENT_STR "In variable statement `}` wasn't closed."
+		#define CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name." 
 		
 		/**
 		 * ID of function where exception was thrown
@@ -59,6 +61,7 @@
 			CGIPROCESSOR_BLOCKEND,
 			CGIPROCESSOR__FOR,
 			CGIPROCESSOR_GETVAR,
+			CGIPROCESSOR_ASSIGN,
 		};
 	};
 

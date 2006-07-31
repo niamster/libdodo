@@ -32,6 +32,7 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 							_breakDeepness(0),
 							_loopDeepness(0)
 {
+	dodo["version"] = std::string(MAJOR) + "." + std::string(MINOR) + "." + std::string(RELEASE);
 }
 
 
@@ -174,6 +175,13 @@ void
 cgiProcessor::assign(const std::string &varName, 
 					const std::vector<assocArr> &varVal)
 {
+	if (strcmp(varName.c_str(),"dodo") == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif	
+	
 	global.erase(varName);
 	globalArray.erase(varName);
 	globalHash.erase(varName);
@@ -187,6 +195,13 @@ void
 cgiProcessor::assign(const std::string &varName, 
 					const assocArr &varVal)
 {
+	if (strcmp(varName.c_str(),"dodo") == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif	
+		
 	global.erase(varName);
 	globalArray.erase(varName);
 	globalArrayHash.erase(varName);
@@ -200,6 +215,13 @@ void
 cgiProcessor::assign(const std::string &varName, 
 					const stringArr &varVal)
 {
+	if (strcmp(varName.c_str(),"dodo") == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif	
+		
 	global.erase(varName);
 	globalHash.erase(varName);
 	globalArrayHash.erase(varName);
@@ -213,6 +235,13 @@ void
 cgiProcessor::assign(const std::string &varName, 
 						const std::string &varVal)
 {
+	if (strcmp(varName.c_str(),"dodo") == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif	
+		
 	globalArray.erase(varName);
 	globalHash.erase(varName);
 	globalArrayHash.erase(varName);
@@ -1287,7 +1316,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 	stringArr temp = tools::explode(varName,".");
 	
 	if (temp.size() == 1)
-	{
+	{	
 		k = local.begin();
 		l = local.end();		
 		for (;k!=l;++k)
@@ -1302,6 +1331,26 @@ cgiProcessor::getVar(const std::string &a_varName)
 	}
 	else
 	{
+		if (strcmp(temp[0].c_str(),"dodo") == 0)
+		{
+			k = dodo.begin();
+			l = dodo.end();		
+			for (;k!=l;++k)
+				if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
+					if (temp.size() == 3)
+					{
+						register unsigned long pos = atol(temp[2].c_str());
+						if (pos >= 0 && pos <= k->second.size())
+							return std::string(1,k->second[pos]);
+						else
+							return __string__;
+					}
+					else
+						return k->second;
+					
+			return __string__;
+		}
+		
 		k = local.begin();
 		l = local.end();		
 		for (;k!=l;++k)
@@ -1310,6 +1359,8 @@ cgiProcessor::getVar(const std::string &a_varName)
 				register unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= k->second.size())
 					return std::string(1,k->second[pos]);
+				else
+					return __string__;
 			}
 
 		g = localHash.begin();
@@ -1327,6 +1378,8 @@ cgiProcessor::getVar(const std::string &a_varName)
 							register unsigned long pos = atol(temp[2].c_str());
 							if (pos >= 0 && pos <= k->second.size())
 								return std::string(1,k->second[pos]);
+							else
+								return __string__;
 						}
 						else
 							return k->second;
@@ -1341,6 +1394,8 @@ cgiProcessor::getVar(const std::string &a_varName)
 				register unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= k->second.size())
 					return std::string(1,k->second[pos]);
+				else
+					return __string__;
 			}
 					
 		g = globalHash.begin();
@@ -1358,6 +1413,8 @@ cgiProcessor::getVar(const std::string &a_varName)
 							register unsigned long pos = atol(temp[2].c_str());
 							if (pos >= 0 && pos <= k->second.size())
 								return std::string(1,k->second[pos]);
+							else
+								return __string__;
 						}
 						else
 							return k->second;
@@ -1377,6 +1434,8 @@ cgiProcessor::getVar(const std::string &a_varName)
 						register unsigned long pos1 = atol(temp[2].c_str());
 						if (pos >= 0 && pos1 <= o->second[pos].size())
 							return std::string(1,o->second[pos][pos1]);
+						else
+							return __string__;
 					}
 					else
 						return o->second[pos];
@@ -1403,6 +1462,8 @@ cgiProcessor::getVar(const std::string &a_varName)
 									pos = atol(temp[3].c_str());
 									if (pos >= 0 && pos <= k->second.size())
 										return std::string(1,k->second[pos]);
+									else
+										return __string__;
 								}
 								else
 									return k->second;
