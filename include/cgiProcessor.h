@@ -202,6 +202,8 @@ namespace dodo
 			
 			unsigned int _breakDeepness;///< deepness of the break
 			unsigned int _loopDeepness;///< deepness of the loop
+			
+			unsigned long iterator;///< count of iteration of a loop
 	};
 
 };

@@ -101,8 +101,10 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 <(for $b in $arr2)>
 	<(for $b in $b)> <(* HERE : `$b in $b` and it's OK! *)>
 		|<(print $b)>
+		<(print $dodo.iterator)>
 	<(rof)>
 	|<(print $b.one)>
+	<(print $dodo.iterator)>
 <(rof)>
 
 <(if true )>	
@@ -113,10 +115,10 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 			<(fi)>
 			<(print $b)> -> <(print $c)>
 		<(rof)>
-		-------
+		-------z
 	<(rof)>	
 <(fi)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 
-<(print $dodo.version)>
+<(print $dodo.version, " ", $dodo)>

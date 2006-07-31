@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 	{
 		cout << "MD5 of \"\"" << endl;
 		string md5 = tools::MD5("");
-		
+
 		for (int i = 0; i < 16; i++)
  			printf ("%02x", (unsigned char)md5[i]);
  			
