@@ -31,7 +31,8 @@ using namespace dodo;
 cgiProcessor::cgiProcessor() : _continueFlag(false),
 							_breakDeepness(0),
 							_loopDeepness(0),
-							iterator(1)
+							iterator(1),
+							namespaceDeepness(1)
 {
 	dodo["version"] = std::string(MAJOR) + "." + std::string(MINOR) + "." + std::string(RELEASE);
 	dodo["iterator"] = "1";
@@ -103,7 +104,13 @@ cgiProcessor::_process(const std::string &buffer,
 			k = temp.find("if");
 			if (k != std::string::npos)
 			{
+				++namespaceDeepness;
+				
 				j = _if(buffer,j,temp.substr(k + 2),tpl,path);
+				
+				cleanNamespace();
+				
+				--namespaceDeepness;
 			}
 			else
 			{
@@ -117,7 +124,15 @@ cgiProcessor::_process(const std::string &buffer,
 					k = temp.find("for");
 					if(k != std::string::npos)
 					{
+						++_loopDeepness;
+						++namespaceDeepness;
+						
 						j = _for(buffer,j,temp.substr(k + 3),tpl,path);
+						
+						cleanNamespace();
+						
+						--namespaceDeepness;
+						--_loopDeepness;
 					}
 					else
 					{
@@ -182,15 +197,18 @@ cgiProcessor::recursive(const std::string &path)
 //-------------------------------------------------------------------
 
 void 
-cgiProcessor::assign(const std::string &varName, 
+cgiProcessor::assign(std::string varName, 
 					const std::vector<assocArr> &varVal)
 {
+	if (varName[0] == '$')
+		varName = varName.substr(1);
+		
 	if (strcmp(varName.c_str(),"dodo") == 0)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
 		#else
 			return ;
-		#endif	
+		#endif
 	
 	global.erase(varName);
 	globalArray.erase(varName);
@@ -202,15 +220,18 @@ cgiProcessor::assign(const std::string &varName,
 //-------------------------------------------------------------------
 
 void 
-cgiProcessor::assign(const std::string &varName, 
+cgiProcessor::assign(std::string varName, 
 					const assocArr &varVal)
 {
+	if (varName[0] == '$')
+		varName = varName.substr(1);
+		
 	if (strcmp(varName.c_str(),"dodo") == 0)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
 		#else
 			return ;
-		#endif	
+		#endif
 		
 	global.erase(varName);
 	globalArray.erase(varName);
@@ -222,9 +243,12 @@ cgiProcessor::assign(const std::string &varName,
 //-------------------------------------------------------------------
 
 void 
-cgiProcessor::assign(const std::string &varName, 
+cgiProcessor::assign(std::string varName, 
 					const stringArr &varVal)
 {
+	if (varName[0] == '$')
+		varName = varName.substr(1);
+		
 	if (strcmp(varName.c_str(),"dodo") == 0)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
@@ -242,9 +266,12 @@ cgiProcessor::assign(const std::string &varName,
 //-------------------------------------------------------------------
 
 void 
-cgiProcessor::assign(const std::string &varName, 
+cgiProcessor::assign(std::string varName, 
 						const std::string &varVal)
 {
+	if (varName[0] == '$')
+		varName = varName.substr(1);
+		
 	if (strcmp(varName.c_str(),"dodo") == 0)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
@@ -532,11 +559,52 @@ cgiProcessor::_assign(const std::string &statement)
 		
 	std::string varName = trim(temp[0]);	
 		
-	globalArray.erase(varName);
-	globalHash.erase(varName);
-	globalArrayHash.erase(varName);
+	if (varName[0] == '$')
+		varName = varName.substr(1);
+		
+	if (strcmp(varName.c_str(),"dodo") == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
+		#else
+			return ;
+		#endif
 	
-	global[varName] = trim(temp[1]);
+	assocArr::iterator i = local.find(varName); 	
+	if (i != local.end())
+		localNamespace[namespaceDeepness][i->first] = i->second;
+	
+	namespaceVars[namespaceDeepness].push_back(varName);
+	local[varName] = getVar(temp[1]);
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::cleanNamespace()
+{
+	c = namespaceVars.find(namespaceDeepness);
+	if (c != namespaceVars.end())
+	{
+		v = localNamespace.find(namespaceDeepness);
+		register bool inLocal = (v != localNamespace.end())?true:false; 
+		
+		x = c->second.begin();
+		z = c->second.end();
+		for (;x!=z;++x)
+			if (inLocal)
+			{
+				k = v->second.find(*x);
+				if (k != v->second.end())
+					local[k->first] = k->second;
+				else
+					local.erase(*x);
+			}
+			else
+				local.erase(*x);
+		
+		namespaceVars.erase(namespaceDeepness);
+		localNamespace.erase(namespaceDeepness);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -610,7 +678,7 @@ cgiProcessor::_for(const std::string &buffer,
 					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[varName];
+						iterVal = iter->second;
 					
 					if (key)
 					{
@@ -618,8 +686,6 @@ cgiProcessor::_for(const std::string &buffer,
 						if (keyIter != local.end())
 							keyVal = local[keyName];
 					}
-					
-					++_loopDeepness;
 					
 					register unsigned long i(0),j(k->second.size());
 					register unsigned long iteratorPrev = iterator;
@@ -645,8 +711,6 @@ cgiProcessor::_for(const std::string &buffer,
 					iterator =  iteratorPrev;
 					dodo["iterator"] = tools::lToString(iteratorPrev);
 					
-					--_loopDeepness;
-					
 					if (iter != local.end())
 						local[varName] = iterVal;
 					else
@@ -671,7 +735,7 @@ cgiProcessor::_for(const std::string &buffer,
 					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[varName];					
+						iterVal = iter->second;					
 
 					if (key)
 					{
@@ -679,8 +743,6 @@ cgiProcessor::_for(const std::string &buffer,
 						if (keyIter != local.end())
 							keyVal = local[keyName];
 					}
-					
-					++_loopDeepness;
 					
 					assocArr::iterator k = g->second.begin();
 					assocArr::iterator l = g->second.end();		
@@ -707,8 +769,6 @@ cgiProcessor::_for(const std::string &buffer,
 					iterator =  iteratorPrev;
 					dodo["iterator"] = tools::lToString(iteratorPrev);
 					
-					--_loopDeepness;
-					
 					if (iter != local.end())
 						local[varName] = iterVal;
 					else
@@ -733,7 +793,7 @@ cgiProcessor::_for(const std::string &buffer,
 					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[varName];	
+						iterVal = iter->second;	
 					
 					if (key)
 					{
@@ -741,8 +801,6 @@ cgiProcessor::_for(const std::string &buffer,
 						if (keyIter != local.end())
 							keyVal = local[keyName];
 					}
-					
-					++_loopDeepness;	
 																
 					register unsigned long i(0),j(k->second.size());
 					register unsigned long iteratorPrev = iterator;
@@ -768,8 +826,6 @@ cgiProcessor::_for(const std::string &buffer,
 					iterator =  iteratorPrev;
 					dodo["iterator"] = tools::lToString(iteratorPrev);
 					
-					--_loopDeepness;
-					
 					if (iter != local.end())
 						local[varName] = iterVal;
 					else
@@ -794,7 +850,7 @@ cgiProcessor::_for(const std::string &buffer,
 					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[varName];	
+						iterVal = iter->second;	
 					
 					if (key)
 					{
@@ -802,8 +858,6 @@ cgiProcessor::_for(const std::string &buffer,
 						if (keyIter != local.end())
 							keyVal = local[keyName];
 					}
-						
-					++_loopDeepness;
 																
 					assocArr::iterator k = g->second.begin();
 					assocArr::iterator l = g->second.end();		
@@ -830,8 +884,6 @@ cgiProcessor::_for(const std::string &buffer,
 					iterator =  iteratorPrev;	
 					dodo["iterator"] = tools::lToString(iteratorPrev);
 					
-					--_loopDeepness;
-					
 					if (iter != local.end())
 						local[varName] = iterVal;
 					else
@@ -856,7 +908,7 @@ cgiProcessor::_for(const std::string &buffer,
 					assocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
-						iterVal = local[varName];	
+						iterVal = iter->second;	
 
 					if (key)
 					{
@@ -864,8 +916,6 @@ cgiProcessor::_for(const std::string &buffer,
 						if (keyIter != local.end())
 							keyVal = local[keyName];
 					}
-					
-					++_loopDeepness;
 											
 					stringArr::iterator k = o->second.begin();
 					stringArr::iterator l = o->second.end();	
@@ -892,8 +942,6 @@ cgiProcessor::_for(const std::string &buffer,
 					iterator =  iteratorPrev;	
 					dodo["iterator"] = tools::lToString(iteratorPrev);	
 					
-					--_loopDeepness;
-					
 					if (iter != local.end())
 						local[varName] = iterVal;
 					else
@@ -918,7 +966,7 @@ cgiProcessor::_for(const std::string &buffer,
 					std::map<std::string, assocArr>::iterator iter = localHash.find(varName);
 					assocArr iterVal;
 					if (iter != localHash.end())
-						iterVal = localHash[varName];					
+						iterVal = iter->second;					
 
 					if (key)
 					{
@@ -926,8 +974,6 @@ cgiProcessor::_for(const std::string &buffer,
 						if (keyIter != local.end())
 							keyVal = local[keyName];
 					}
-					
-					++_loopDeepness;
 										
 					std::vector<assocArr>::iterator k = d->second.begin();
 					std::vector<assocArr>::iterator l = d->second.end();
@@ -954,8 +1000,6 @@ cgiProcessor::_for(const std::string &buffer,
 					
 					iterator =  iteratorPrev;	
 					dodo["iterator"] = tools::lToString(iteratorPrev);
-					
-					--_loopDeepness;
 					
 					if (iter != localHash.end())
 						localHash[varName] = iterVal;
@@ -990,7 +1034,7 @@ cgiProcessor::_for(const std::string &buffer,
 								assocArr::iterator iter = local.find(varName);
 								std::string iterVal;
 								if (iter != local.end())
-									iterVal = local[varName];	
+									iterVal = iter->second;	
 								
 								if (key)
 								{
@@ -998,8 +1042,6 @@ cgiProcessor::_for(const std::string &buffer,
 									if (keyIter != local.end())
 										keyVal = local[keyName];
 								}
-								
-								++_loopDeepness;
 														
 								register unsigned long i(0),j(k->second.size());
 								register unsigned long iteratorPrev = iterator;
@@ -1024,8 +1066,6 @@ cgiProcessor::_for(const std::string &buffer,
 								
 								iterator =  iteratorPrev;	
 								dodo["iterator"] = tools::lToString(iteratorPrev);
-								
-								--_loopDeepness;
 								
 								if (iter != local.end())
 									local[varName] = iterVal;
@@ -1057,7 +1097,7 @@ cgiProcessor::_for(const std::string &buffer,
 								assocArr::iterator iter = local.find(varName);
 								std::string iterVal;
 								if (iter != local.end())
-									iterVal = local[varName];	
+									iterVal = iter->second;	
 								
 								if (key)
 								{
@@ -1065,8 +1105,6 @@ cgiProcessor::_for(const std::string &buffer,
 									if (keyIter != local.end())
 										keyVal = local[keyName];
 								}
-								
-								++_loopDeepness;
 																									
 								register unsigned long i(0),j(k->second.size());
 								register unsigned long iteratorPrev = iterator;
@@ -1091,8 +1129,6 @@ cgiProcessor::_for(const std::string &buffer,
 								
 								iterator =  iteratorPrev;	
 								dodo["iterator"] = tools::lToString(iteratorPrev);
-								
-								--_loopDeepness;
 								
 								if (iter != local.end())
 									local[varName] = iterVal;
@@ -1122,7 +1158,7 @@ cgiProcessor::_for(const std::string &buffer,
 							assocArr::iterator iter = local.find(varName);
 							std::string iterVal;
 							if (iter != local.end())
-								iterVal = local[varName];	
+								iterVal = iter->second;	
 								
 							if (key)
 							{
@@ -1130,9 +1166,7 @@ cgiProcessor::_for(const std::string &buffer,
 								if (keyIter != local.end())
 									keyVal = local[keyName];
 							}
-							
-							++_loopDeepness;
-																								
+																
 							register unsigned long i(0),j(o->second[pos].size());
 							register unsigned long iteratorPrev = iterator;
 							iterator = 1;
@@ -1156,8 +1190,6 @@ cgiProcessor::_for(const std::string &buffer,
 							
 							iterator =  iteratorPrev;	
 							dodo["iterator"] = tools::lToString(iteratorPrev);
-							
-							--_loopDeepness;
 							
 							if (iter != local.end())
 								local[varName] = iterVal;
@@ -1187,7 +1219,7 @@ cgiProcessor::_for(const std::string &buffer,
 							assocArr::iterator iter = local.find(varName);
 							std::string iterVal;
 							if (iter != local.end())
-								iterVal = local[varName];	
+								iterVal = iter->second;	
 								
 							if (key)
 							{
@@ -1195,8 +1227,6 @@ cgiProcessor::_for(const std::string &buffer,
 								if (keyIter != local.end())
 									keyVal = local[keyName];
 							}
-							
-							++_loopDeepness;
 																							
 							assocArr::iterator k = d->second[pos].begin();					
 							assocArr::iterator l = d->second[pos].end();
@@ -1222,8 +1252,6 @@ cgiProcessor::_for(const std::string &buffer,
 							
 							iterator =  iteratorPrev;	
 							dodo["iterator"] = tools::lToString(iteratorPrev);	
-							
-							--_loopDeepness;
 							
 							if (iter != local.end())
 								local[varName] = iterVal;
@@ -1262,7 +1290,7 @@ cgiProcessor::_for(const std::string &buffer,
 										assocArr::iterator iter = local.find(varName);
 										std::string iterVal;
 										if (iter != local.end())
-											iterVal = local[varName];	
+											iterVal = iter->second;	
 								
 										if (key)
 										{
@@ -1270,8 +1298,6 @@ cgiProcessor::_for(const std::string &buffer,
 											if (keyIter != local.end())
 												keyVal = local[keyName];
 										}		
-										
-										++_loopDeepness;
 																
 										register unsigned long i(0),j(k->second.size());
 										register unsigned long iteratorPrev = iterator;
@@ -1296,8 +1322,6 @@ cgiProcessor::_for(const std::string &buffer,
 										
 										iterator =  iteratorPrev;	
 										dodo["iterator"] = tools::lToString(iteratorPrev);
-										
-										--_loopDeepness;
 										
 										if (iter != local.end())
 											local[varName] = iterVal;
@@ -1326,7 +1350,7 @@ cgiProcessor::_for(const std::string &buffer,
 		assocArr::iterator iter = local.find(varName);
 		std::string iterVal;
 		if (iter != local.end())
-			iterVal = local[varName];	
+			iterVal = iter->second;	
 			
 		if (key)
 		{
@@ -1334,8 +1358,6 @@ cgiProcessor::_for(const std::string &buffer,
 			if (keyIter != local.end())
 				keyVal = local[keyName];
 		}					
-		
-		++_loopDeepness;
 			
 		register unsigned long i(0), j(targetVar.size());
 		register unsigned long iteratorPrev = iterator;
@@ -1360,8 +1382,6 @@ cgiProcessor::_for(const std::string &buffer,
 		
 		iterator =  iteratorPrev;	
 		dodo["iterator"] = tools::lToString(iteratorPrev);
-		
-		--_loopDeepness;
 		
 		if (iter != local.end())
 			local[varName] = iterVal;

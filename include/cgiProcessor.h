@@ -62,28 +62,28 @@ namespace dodo
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable
 			 */
-			virtual void assign(const std::string &varName, const std::string &varVal);
+			virtual void assign(std::string varName, const std::string &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array)
 			 */
-			virtual void assign(const std::string &varName, const stringArr &varVal);
+			virtual void assign(std::string varName, const stringArr &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(hash)
 			 */
-			virtual void assign(const std::string &varName, const assocArr &varVal);
+			virtual void assign(std::string varName, const assocArr &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array of hashes)
 			 */
-			virtual void assign(const std::string &varName, const std::vector<assocArr> &varVal);
+			virtual void assign(std::string varName, const std::vector<assocArr> &varVal);
 			
 			/**
 			 * show to stdout parsed template
@@ -140,6 +140,11 @@ namespace dodo
 			 * @param statement indicates `assign` statement
 			 */
 			virtual void _assign(const std::string &statement);
+			
+			/**
+			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
+			 */
+			virtual void cleanNamespace();
 			
 			/**
 			 * processes `include` statement
@@ -210,6 +215,14 @@ namespace dodo
 			unsigned int _loopDeepness;///< deepness of the loop
 			
 			unsigned long iterator;///< count of iteration of a loop
+			
+			unsigned int namespaceDeepness;///< deepness of the namespace
+			std::map<unsigned int, assocArr> localNamespace;///< set of local variables invisible due to overwrite in deeper namespace[user-set] 
+			std::map<unsigned int, stringArr> namespaceVars;///< names of vars in namespaces
+			stringArr::iterator x;///< iterator for namespaceVars content
+			stringArr::iterator z;///< iterator for namespaceVars content
+			std::map<unsigned int, stringArr>::iterator c;///< iterator for namespaceVars 
+			std::map<unsigned int, assocArr>::iterator v;///< iterator for localNamespace
 	};
 
 };

@@ -107,20 +107,30 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 	<(print $dodo.iterator)>
 <(rof)>
 
+<(assign a = bASDA)>
+
 <(if true )>	
+
+	<(assign a = ASDA)>
+
 	<(for $b in $arr2)>
 		<(for $b => $c in $b)>
 			<(if $b == three)>
 				<(break 3)>
 			<(fi)>
 			<(print $b)> -> <(print $c)>
+			
+			<(assign a = SDA)>
+			<(print $a," must be SDA")>
 		<(rof)>
-		-------z
+		-------
 	<(rof)>	
+	
+	<(print $a," must be ASDA")>
+	
 <(fi)>
 
-<(assign a = bASDA)>
-<(print $a)>
+<(print $a," must be bASDA")>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 
