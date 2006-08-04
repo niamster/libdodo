@@ -9,6 +9,11 @@ using namespace std;
 int main(int argc, char **argv)
 {
 	
+	if (cgiTools::cgiFilesInMem)
+		cout << "Set\n";
+	else
+		cout << "Not set\n";
+	
 	///first type
 //	assocArr head;
 //	head["Content-type"] = "text/html";

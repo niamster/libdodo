@@ -33,6 +33,10 @@
 
 using namespace dodo;
 
+bool cgiTools::cgiFilesInMem = true;
+
+//-------------------------------------------------------------------
+
 __cookies::__cookies(const std::string &a_name, 
 					const std::string &a_value, 
 					const std::string &a_exDate, 
@@ -62,7 +66,7 @@ cgiTools::cgiTools(cgiTools &ct)
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent, 
-			assocArr &a_headers)
+			assocArr &a_headers) : _cgiFilesInMem(true)
 {		
 	initHeaders(a_headers);
 	
@@ -96,7 +100,11 @@ cgiTools::cleanTmp() const
 	for (;i!=j;++i)
 	{
 		fclose(i->second.fp);
-		unlink(i->second.tmp_name.c_str());
+		
+		if (_cgiFilesInMem)
+			free(i->second.buf);
+		else
+			unlink(i->second.tmp_name.c_str());
 	}
 }
 
@@ -233,6 +241,8 @@ cgiTools::makePost() const
 	unsigned long rest = inSize%POST_BATCH_SIZE;
 	
 	std::string bPost;
+	
+	_cgiFilesInMem = cgiFilesInMem;
 			
 	for (register unsigned long i=0;i<iter;++i)
 	{
@@ -335,18 +345,35 @@ cgiTools::makePost() const
 				temp1 = i->find("\n",temp0);
 				file.type = i->substr(temp0,temp1-temp0);
 				
-				ptr = tempnam((postFilesTmpDir + FILE_DELIM).c_str(),"dodo_post_");
-				
-				if (ptr == NULL)	
-					continue;
+				if (cgiFilesInMem)
+				{
+					ptr = tempnam((postFilesTmpDir + FILE_DELIM).c_str(),"dodo_post_");
+					
+					if (ptr == NULL)	
+					{
+						file.error = POSTFILEERR_BAD_FILE_NAME;
+						postFiles[post_name] = file;
 						
-				file.tmp_name = ptr;		
+						continue;
+					}
+							
+					file.tmp_name = ptr;
+				}		
 							
 				file.size = i->substr(temp1+4).size()-2;
 				
 				file.error = POSTFILEERR_NONE;
 				
-				file.fp = fopen(ptr,"w+");
+				if (cgiFilesInMem)
+				{
+					file.buf = malloc(file.size);
+					file.fp = fmemopen(file.buf,file.size,"w+");
+				}
+				else
+				{
+					file.fp = fopen(ptr,"w+");				
+					free(ptr);
+				}
 				if (file.fp == NULL)
 					switch(errno)
 					{
@@ -361,7 +388,6 @@ cgiTools::makePost() const
 						case ENOMEM:
 							file.error = POSTFILEERR_NO_SPACE;
 					}
-				free(ptr);
 				fwrite(i->substr(temp1+4).c_str(),file.size,1,file.fp);
 				if (errno == ENOMEM)
 						file.error = POSTFILEERR_NO_SPACE;

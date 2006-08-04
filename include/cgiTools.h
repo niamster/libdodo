@@ -106,10 +106,11 @@ namespace dodo
 	{
 		std::string name;///< real name of the file
 		std::string type;///< MIME type
-		FILE *fp;///< pointer to opened file
+		FILE *fp;///< pointer to opened file[any case - in memory or on disk]
 		std::string tmp_name;///< path where it was temporary saved[empty, if file stored in memory]
 		unsigned long size;///< size of the file
 		int error;///< indicates if error occured
+		void *buf;///< contains file data[if file stored in memory]
 	};
 	
 	/**
@@ -195,6 +196,8 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~cgiTools();
+			
+			static bool cgiFilesInMem;///to store POST files in memory[true by default]
 			
 			/**
 			 * @return cgiFilesUp
@@ -291,6 +294,8 @@ namespace dodo
 			virtual void make(assocArr &val, const std::string &string, char *delim = "&") const;
 		
 		private:	
+		
+			mutable bool _cgiFilesInMem;///< to indicate where POST files stored
 		
 			mutable std::list<__cookies> cookiesSet;///< array of cookies nodes
 			mutable int method;///< method that received program
