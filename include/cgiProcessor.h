@@ -116,12 +116,22 @@ namespace dodo
 			 * @return position of cursor where to continue search
 			 * @param buffer indicates what buffer contains found `for`
 			 * @param start indicates where )> closes in `<( for ... )>` block
-			 * @param statement indicates `if` statement
+			 * @param statement indicates `for` statement
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
 			virtual unsigned long _for(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
-			
+
+			/**
+			 * processes `for` statement
+			 * @return position of cursor where to continue search
+			 * @param buffer indicates what buffer contains found `for`
+			 * @param start indicates where )> closes in `<( namespace ... )>` block
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual unsigned long _ns(const std::string &buffer, unsigned long start, std::string &tpl, const std::string &path);
+						
 			/**
 			 * processes `print` statement
 			 * @param statement indicates `print` statement
@@ -142,11 +152,6 @@ namespace dodo
 			virtual void _assign(const std::string &statement);
 			
 			/**
-			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
-			 */
-			virtual void cleanNamespace();
-			
-			/**
 			 * processes `include` statement
 			 * @param buffer indicates what buffer contains found `if`
 			 * @param statement indicates `include` statement
@@ -154,6 +159,11 @@ namespace dodo
 			 * @param path indicates path of current .tpl file
 			 */
 			virtual void _include(const std::string &statement, std::string &tpl, const std::string &path);
+			
+			/**
+			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
+			 */
+			virtual void cleanNamespace();
 			
 			/**
 			 * @return position of the exact close block of the statement

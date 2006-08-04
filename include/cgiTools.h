@@ -106,7 +106,8 @@ namespace dodo
 	{
 		std::string name;///< real name of the file
 		std::string type;///< MIME type
-		std::string tmp_name;///< path where it was temporary saved
+		FILE *fp;///< pointer to opened file
+		std::string tmp_name;///< path where it was temporary saved[empty, if file stored in memory]
 		unsigned long size;///< size of the file
 		int error;///< indicates if error occured
 	};

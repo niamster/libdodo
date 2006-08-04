@@ -161,7 +161,21 @@ cgiProcessor::_process(const std::string &buffer,
 									_assign(temp.substr(k + 6));
 								}
 								else
-									tpl.append(buffer.substr(i - 2,j - i + 2));
+								{
+									k = temp.find("ns");
+									if (k != std::string::npos)
+									{
+										++namespaceDeepness;
+										
+										j = _ns(buffer,j,tpl,path);
+										
+										cleanNamespace();
+										
+										--namespaceDeepness;
+									}
+									else
+										tpl.append(buffer.substr(i - 2,j - i + 2));
+								}
 							}
 						}
 					}
@@ -610,15 +624,28 @@ cgiProcessor::cleanNamespace()
 //-------------------------------------------------------------------
 
 unsigned long 
+cgiProcessor::_ns(const std::string &buffer,
+				unsigned long start,
+				std::string &tpl, 
+				const std::string &path)
+{
+	register unsigned long u(blockEnd(buffer,start,"ns","sn"));	
+	
+	tpl.append(_process(buffer.substr(start,u - start),path));
+	
+	return buffer.find(")>",u) + 2;
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
 cgiProcessor::_for(const std::string &buffer,
 				unsigned long start,
 				const std::string &statement,
 				std::string &tpl, 
 				const std::string &path)
 {
-	register unsigned long u(blockEnd(buffer,start,"for","rof"));	
-	
-	std::string processBuffer = buffer.substr(start,u - start);
+	register unsigned long u(blockEnd(buffer,start,"for","rof"));
 	
 	register unsigned long p = statement.find("$");
 	register unsigned long i(p), j(statement.size());

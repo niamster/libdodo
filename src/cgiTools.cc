@@ -94,7 +94,10 @@ cgiTools::cleanTmp() const
 {
 	std::map<std::string, __cgiFilesUp>::iterator i(postFiles.begin()),j(postFiles.end());
 	for (;i!=j;++i)
+	{
+		fclose(i->second.fp);
 		unlink(i->second.tmp_name.c_str());
+	}
 }
 
 //-------------------------------------------------------------------
@@ -336,15 +339,15 @@ cgiTools::makePost() const
 				
 				if (ptr == NULL)	
 					continue;
-							
-				file.tmp_name = ptr;
+						
+				file.tmp_name = ptr;		
 							
 				file.size = i->substr(temp1+4).size()-2;
 				
 				file.error = POSTFILEERR_NONE;
 				
-				FILE *tmp = fopen(ptr,"w+b");
-				if (tmp == NULL)
+				file.fp = fopen(ptr,"w+");
+				if (file.fp == NULL)
 					switch(errno)
 					{
 						case EACCES:
@@ -359,10 +362,9 @@ cgiTools::makePost() const
 							file.error = POSTFILEERR_NO_SPACE;
 					}
 				free(ptr);
-				fwrite(i->substr(temp1+4).c_str(),file.size,1,tmp);
+				fwrite(i->substr(temp1+4).c_str(),file.size,1,file.fp);
 				if (errno == ENOMEM)
 						file.error = POSTFILEERR_NO_SPACE;
-				fclose(tmp);
 				
 				postFiles[post_name] = file;
 			}

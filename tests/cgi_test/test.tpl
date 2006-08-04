@@ -131,6 +131,14 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 <(fi)>
 
 <(print $a," must be bASDA")>
+	
+<(ns)>
+		<(ns)>
+			<(assign a = in namespace)>
+			<(print $a," must be `in namespace`")>
+		<(sn)>
+	<(print $a," must be bASDA")>
+<(sn)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 

@@ -6,7 +6,7 @@ CXX:=$(GCC_PATH)g++
 
 CFLAGS:=-O3 -march=pentium4 -Wall -pipe
 
-DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98
+DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_GNU_SOURCE
 
 ##############################
 
