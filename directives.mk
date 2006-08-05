@@ -21,6 +21,13 @@ MOD_MYSQL_LIB:=-lmysqlclient
 
 #############
 
+MOD_FCGI:=yes
+MOD_FCGI_CPP:=-I/opt/fcgi/include
+MOD_FCGI_LD:=-L/opt/fcgi/lib
+MOD_FCGI_LIB:=-lfcgi
+
+#############
+
 MOD_PCRE:=yes
 MOD_PCRE_CPP:=-I/opt/pcre/include
 MOD_PCRE_LD:=-L/opt/pcre/lib

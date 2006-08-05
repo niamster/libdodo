@@ -6,14 +6,9 @@ using namespace dodo;
 
 using namespace std;
 
-int main(int argc, char **argv)
+void 
+cgi()
 {
-	
-	if (cgiTools::cgiFilesInMem)
-		cout << "Set\n";
-	else
-		cout << "Not set\n";
-	
 	///first type
 //	assocArr head;
 //	head["Content-type"] = "text/html";
@@ -67,7 +62,13 @@ int main(int argc, char **argv)
 	catch(baseEx ex)
 	{
 		cout << ex << " " << ex.line;
-	}
+	}	
+}
+
+int main(int argc, char **argv)
+{	
 	
+	cgi();
+		
 	return 0;
 }

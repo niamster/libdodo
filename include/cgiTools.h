@@ -25,7 +25,6 @@
 #ifndef _CGITOOLS_H_
 #define _CGITOOLS_H_
 
-
 #include <directives.h>
 
 #include <types.h>

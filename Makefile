@@ -25,7 +25,8 @@ OBJECTS:=dbBase.o \
 		dbPostgresql.o \
 		dbInterface.o \
 		cgiPreprocessor.o \
-		cgiProcessor.o \
+		cgiFast.o \
+		cgiProcessor.o
 
 include directives.mk
 
@@ -40,6 +41,7 @@ MODS_CPP:=$(MOD_MYSQL_CPP) \
 			$(MOD_PTHREAD_CPP) \
 			$(MOD_BZIP_CPP) \
 			$(MOD_CODECONV_CPP) \
+			$(MOD_FCGI_CPP) \
 			$(MOD_ZLIB_CPP)
 
 MODS_LD:=$(MOD_MYSQL_LD) \
@@ -51,6 +53,7 @@ MODS_LD:=$(MOD_MYSQL_LD) \
 			$(MOD_POSTGRESQL_LD) \
 			$(MOD_BZIP_LD) \
 			$(MOD_CODECONV_LD) \
+			$(MOD_FCGI_LD) \
 			$(MOD_ZLIB_LD)
 			
 MODS_LIB:=$(MOD_MYSQL_LIB) \
@@ -62,6 +65,7 @@ MODS_LIB:=$(MOD_MYSQL_LIB) \
 			$(MOD_POSTGRESQL_LIB) \
 			$(MOD_BZIP_LIB) \
 			$(MOD_CODECONV_LIB) \
+			$(MOD_FCGI_LIB) \
 			$(MOD_ZLIB_LIB)
 			
 ###########################################################
@@ -111,6 +115,10 @@ endif
 
 ifeq ($(MOD_CODECONV),yes)
 	DIRECTIVES += "\#define CODECONV_EXT\n\n"
+endif
+
+ifeq ($(MOD_CODECONV),yes)
+	DIRECTIVES += "\#define FCGI_EXT\n\n"
 endif
 
 
