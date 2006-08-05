@@ -25,10 +25,14 @@
 #include <cgiFast.h>
 
 #ifdef FCGI_EXT
-
-	#include <fastcgi.h>
 	
 	using namespace dodo;
+	
+	cgiFast::cgiFast(cgiFast &cf)
+	{
+	}
+	
+	//-------------------------------------------------------------------
 	
 	cgiFast::cgiFast(bool a_threading) : threading(a_threading)
 	{
@@ -38,6 +42,35 @@
 	
 	cgiFast::~cgiFast()
 	{
+		FCGX_Finish();
 	}
+	
+	//-------------------------------------------------------------------
+	
+	void 
+	cgiFast::print(const std::string &buf)
+	{
+	}
+	
+	//-------------------------------------------------------------------
+	
+	void 
+	cgiFast::setCGIFunction(cgiProc func)
+	{
+		cgiF = func;
+	}
+	
+	//-------------------------------------------------------------------
+	
+	void 
+	cgiFast::listen()
+	{
+		while (true)
+		{
+			cgiF(this);
+		}
+	}
+	
+	//-------------------------------------------------------------------
 
 #endif

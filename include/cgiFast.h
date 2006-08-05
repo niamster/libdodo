@@ -29,14 +29,18 @@
 
 #ifdef FCGI_EXT
 
+	#include <fcgiapp.h>
+	
 	#include <types.h>
 	
 	namespace dodo
 	{
+		class cgiFast;
+		
 		/**
 		 * @typedef that describes function that will be called on new cgi request
 		 */
-		typedef void (*cgiProc)();
+		typedef void (*cgiProc)(cgiFast *);
 		
 		/**
 		 * @class cgiFast
@@ -44,6 +48,16 @@
 		 */
 		class cgiFast
 		{
+			friend class cgiTools;
+			
+			private:
+				
+				/**
+				 * copy constructor
+				 * to prevent copying
+				 */
+				cgiFast(cgiFast &cf);
+			
 			public:
 				
 				/**
@@ -53,11 +67,30 @@
 				cgiFast(bool threading = true);
 				virtual ~cgiFast(); 
 				
+				/**
+				 * sets function that would be called on CGI request
+				 * @param func indicates what function to set
+				 */
+				virtual void setCGIFunction(cgiProc func);
+				
+				/**
+				 * sends buf to specific output[fast-cgi safe]
+				 * @param buf dscribes whet to send to user
+				 */
+				virtual void print(const std::string &buf);
+				
+				/**
+				 * listen for incoming requests
+				 */
+				virtual void listen();
+				
 			private:
 			
 				bool threading;///< threading or not
 				
 				cgiProc cgiF;///< function to be called on new request
+				
+				FCGX_Request request;///< CGI request
 		};
 	};
 

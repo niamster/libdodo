@@ -66,7 +66,11 @@ cgiTools::cgiTools(cgiTools &ct)
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent, 
-			assocArr &a_headers) : _cgiFilesInMem(true)
+			assocArr &a_headers) : _cgiFilesInMem(true),
+									#ifdef FCGI_EXT
+										cgiFastSet(false)
+									#endif	
+				
 {		
 	initHeaders(a_headers);
 	
@@ -83,6 +87,35 @@ cgiTools::cgiTools(bool silent,
 	
 	getPair.clear();
 }
+
+//-------------------------------------------------------------------
+
+#ifdef FCGI_EXT
+
+	cgiTools::cgiTools(cgiFast *a_cf, 
+						bool silent, 
+						assocArr &a_headers) : _cgiFilesInMem(true),
+											cgiFastSet(true),
+											cf(a_cf)
+					
+	{		
+		initHeaders(a_headers);
+		
+		if (!silent)
+			printHeaders();
+		
+		makeEnv();
+		
+		detectMethod();
+	
+		makePost();
+		make(COOKIES.realArr,ENVIRONMENT["HTTP_COOKIE"],"; ");
+		make(METHOD_GET.realArr,ENVIRONMENT["QUERY_STRING"]);
+		
+		getPair.clear();
+	}
+
+#endif	
 
 //-------------------------------------------------------------------
 
@@ -195,27 +228,58 @@ cgiTools::printHeaders() const
 	 j = HEADERS.end();
 	
 	for (;i!=j;++i)
-		std::cout << i->first << ": " << i->second << std::endl;
+		#ifdef FCGI_EXT
+			if (cgiFastSet)
+				cf->print(i->first + ": " + i->second + "\r\n");
+			else
+		#endif		
+				std::cout << i->first << ": " << i->second << "\r\n";
 		
 	if (cookiesSet.size()>0)
 	{
 		std::list<__cookies>::iterator i(cookiesSet.begin()),j(cookiesSet.end());
 		for (;i!=j;++i)
 		{
-			std::cout << "Set-Cookie: ";
-			std::cout << i->name << "=" << i->value << "; ";
-			if (i->path.size() > 0)	
-				std::cout << "path=" << i->path << "; ";
-			if (i->exDate.size() > 0)	
-				std::cout << "expires=" << i->exDate << "; ";
-			if (i->domain.size() > 0)
-				std::cout << "domain=" << i->domain << "; ";
-			if (i->secure)
-				std::cout << "secure";
+			#ifdef FCGI_EXT
+				if (cgiFastSet)
+				{
+					cf->print("Set-Cookie: ");
+					cf->print(i->name + "=" + i->value + "; ");
+					if (i->path.size() > 0)	
+						cf->print("path=" + i->path + "; ");
+					if (i->exDate.size() > 0)	
+						cf->print("expires=" + i->exDate + "; ");
+					if (i->domain.size() > 0)
+						cf->print("domain=" + i->domain + "; ");
+					if (i->secure)
+						cf->print("secure");
+				}
+				else
+			#endif	
+				{	
+					std::cout << "Set-Cookie: ";
+					std::cout << i->name << "=" << i->value << "; ";
+					if (i->path.size() > 0)	
+						std::cout << "path=" << i->path << "; ";
+					if (i->exDate.size() > 0)	
+						std::cout << "expires=" << i->exDate << "; ";
+					if (i->domain.size() > 0)
+						std::cout << "domain=" << i->domain << "; ";
+					if (i->secure)
+						std::cout << "secure";
+				}
 		}
 	}
-	std::cout << "\r\n\r\n";
-	std::cout.flush();
+	
+	#ifdef FCGI_EXT
+		if (cgiFastSet)
+			cf->print("\r\n\r\n");
+		else
+	#endif		
+		{
+			std::cout << "\r\n\r\n";
+			std::cout.flush();
+		}
 }
 
 //-------------------------------------------------------------------

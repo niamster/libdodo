@@ -1,20 +1,22 @@
 #include <baseEx.h>
 #include <cgiTools.h>
 #include <cgiProcessor.h>
+#include <cgiFast.h>
 
 using namespace dodo;
 
 using namespace std;
 
-int main(int argc, char **argv)
-{		
+void 
+cgi(cgiFast *fcgi)
+{
 	///first type
 //	assocArr head;
 //	head["Content-type"] = "text/html";
 //	cgiTools cgi(false,head);
 	
 	///second type
-	cgiTools cgi(true);
+	cgiTools cgi(fcgi, true);
 	//cgi.HEADERS["Content-type"] = "image/jpg";
 	cgi.setCookie("test","Ni@m");
 	cgi.printHeaders();
@@ -32,7 +34,6 @@ int main(int argc, char **argv)
 	try
 	{
 		cgiProcessor cgip;
-		cgip.assign("main","index.tpl");
 		cgip.assign("test","hoho");
 		cgip.assign("show","That's works!");
 		
@@ -62,6 +63,12 @@ int main(int argc, char **argv)
 	{
 		cout << ex << " " << ex.line;
 	}	
+}
+
+int main(int argc, char **argv)
+{	
+	
+	cgi(new cgiFast);
 		
 	return 0;
 }

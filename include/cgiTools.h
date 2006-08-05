@@ -29,6 +29,7 @@
 
 #include <types.h>
 #include <dodoMap.h>
+#include <cgiFast.h>
 
 namespace dodo
 {
@@ -190,6 +191,19 @@ namespace dodo
 			 * @note you cant print headers after they have been printed with printHeaders method 
 			 */
 			cgiTools(bool silent = false, assocArr &headers = __assocarray__);
+					
+			#ifdef FCGI_EXT		
+					
+				/**
+				 * constructor
+				 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.
+				 * @param headers contains array of headers that would pe printed; it's usefull if you set silent=false[prin headers during contructing]
+				 * 
+				 * @note you cant print headers after they have been printed with printHeaders method 
+				 */
+				cgiTools(cgiFast *cf, bool silent = false, assocArr &headers = __assocarray__);
+			
+			#endif
 			
 			/**
 			 * destructor
@@ -314,6 +328,14 @@ namespace dodo
 			
 			mutable std::string met0;///< temporary stores method for request class method
 			mutable std::string met1;///< temporary stores method for request class method
+			
+			#ifdef FCGI_EXT	
+			
+				bool cgiFastSet;///< indicates whether cgiFast was set
+				
+				cgiFast *cf;///< pointer to cgiFast class
+				
+			#endif 
 	};
 
 };
