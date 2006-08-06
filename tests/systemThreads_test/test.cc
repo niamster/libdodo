@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <systemThreads.h>
 #include <systemThreadShares.h>
 #include <systemTools.h>
@@ -35,6 +36,8 @@ thread(void *data)
 	//long i = -1000000000;
 	//while (i<1000000000){i++;}
 	//cout << endl << timeTools::now() << endl;
+	
+	return NULL;
 }
 
 int main(int argc, char **argv)
@@ -52,9 +55,6 @@ int main(int argc, char **argv)
 		
 		th.run(pos[0]);
 		th.run(pos[1]);
-		
-		//thread((void *)"HIHI");
-		//thread((void *)"HOHO");
 		
 		cout << endl << endl << "STARTED" << endl;
 		cout << timeTools::now() << endl;

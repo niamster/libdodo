@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <flushDisk.h>
 #include <flushDiskTools.h>
 
@@ -34,8 +35,8 @@ int main(int argc, char **argv)
 	{
 		flushDiskTools::unlink("my.dat");
 		
-		//flushDisk flush(FIFO_FILE,"my.dat");
-		flushDisk flush(REG_FILE,"my.dat");
+		//flushDisk flush(FILETYPE_FIFO_FILE,"my.dat");
+		flushDisk flush(FILETYPE_REG_FILE,"my.dat");
 		
 		
 		//flushDisk flush(true);///in tmp file
@@ -54,21 +55,21 @@ int main(int argc, char **argv)
 		
 		string str;
 	
-//		flush.readStreamString(str,0);
-//		cout << "\n\n" << str << "\n\n";
+		flush.readStreamString(str,0);
+		cout << "\n\n" << str << "\n\n";
 
-		//flush.readString(str,0);
-		//cout << "\n\n" << str << "\n\n";
+		flush.readString(str,0);
+		cout << "\n\n" << str << "\n\n";
 
 	
-		/*flushDiskTools::rm("./tmp");
+		flushDiskTools::rm("./tmp");
 
-		flushDiskTools::mkdir("testDir");//,OWNER_ALL_ACCESS,false);
+		flushDiskTools::mkdir("testDir");//,PERM_OWNER_ALL_ACCESS,false);
 
 		flushDiskTools::rename("testDir","DirTest");	
 		
 		flushDiskTools::symlink("test","TEST");
-		flushDiskTools::chmod("test",ALL_ALL_ACCESS);
+		flushDiskTools::chmod("test",PERM_ALL_ALL_ACCESS);
 		
 		cout << flushDiskTools::getPermissions("Makefile");
 		
@@ -82,7 +83,7 @@ int main(int argc, char **argv)
 			cout << endl << dir.size() << endl;
 			for (std::vector<__fileInfo>::iterator i=dir.begin();i!=dir.end();++i)
 				cout << i->size << "!" << i->name << endl; 
-		}*/
+		}
 	}
 	catch(baseEx ex)
 	{

@@ -1,6 +1,7 @@
 #include <baseEx.h>
 #include <cgiTools.h>
 #include <cgiProcessor.h>
+#include <tools.h>
 #include <cgiFast.h>
 
 using namespace dodo;
@@ -8,14 +9,8 @@ using namespace dodo;
 using namespace std;
 
 void 
-cgi(cgiFast *fcgi)
+cgi(cgiFastSTD *fcgi)
 {
-	///first type
-//	assocArr head;
-//	head["Content-type"] = "text/html";
-//	cgiTools cgi(false,head);
-	
-	///second type
 	cgiTools cgi(fcgi, true);
 	//cgi.HEADERS["Content-type"] = "image/jpg";
 	cgi.setCookie("test","Ni@m");
@@ -29,11 +24,11 @@ cgi(cgiFast *fcgi)
 	cout << "!" << cgi.COOKIES["test"] << "<br>";*/
 	//cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
 	
-	cout << "\n\n\n";
+	fcgi->print("!!!\n\n\n");
 	
 	try
 	{
-		cgiProcessor cgip;
+		cgiProcessor cgip(fcgi);
 		cgip.assign("test","hoho");
 		cgip.assign("show","That's works!");
 		
@@ -61,14 +56,19 @@ cgi(cgiFast *fcgi)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << " " << ex.line;
+		fcgi->print(ex.baseErrstr + " " + tools::lToString(ex.line));
 	}	
+	
+	fcgi->print("\n\n\n!!!");
 }
 
 int main(int argc, char **argv)
 {	
+	cgiFast cf(false);
 	
-	cgi(new cgiFast);
+	cf.setCGIFunction(&cgi);
+
+	cf.listen();
 		
 	return 0;
 }

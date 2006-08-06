@@ -16,16 +16,17 @@ int main(int argc, char **argv)
 	///second type
 	cgiTools cgi(true);
 	//cgi.HEADERS["Content-type"] = "image/jpg";
+	cgi.HEADERS["Content-type"] = "text/html";
 	cgi.setCookie("test","Ni@m");
 	cgi.printHeaders();
 	 
 	
-/*	cout << "!" << cgi.METHOD_GET["a"] << "!<br>";
+	cout << "!" << cgi.METHOD_GET["a"] << "!<br>";
 	cout << "!" << cgi.METHOD_POST["a"] << "!<br>";
 	cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
 	cout << "!" << cgi.ENVIRONMENT["QUERY_STRING"] << "<br>";
-	cout << "!" << cgi.COOKIES["test"] << "<br>";*/
-	//cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
+	cout << "!" << cgi.COOKIES["test"] << "<br>";
+	cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
 	
 	cout << "\n\n\n";
 	

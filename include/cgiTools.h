@@ -196,12 +196,13 @@ namespace dodo
 					
 				/**
 				 * constructor
+				 * @param cf describes output interface
 				 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.
 				 * @param headers contains array of headers that would pe printed; it's usefull if you set silent=false[prin headers during contructing]
 				 * 
 				 * @note you cant print headers after they have been printed with printHeaders method 
 				 */
-				cgiTools(cgiFast *cf, bool silent = false, assocArr &headers = __assocarray__);
+				cgiTools(cgiFastSTD *cf, bool silent = false, assocArr &headers = __assocarray__);
 			
 			#endif
 			
@@ -333,7 +334,7 @@ namespace dodo
 			
 				bool cgiFastSet;///< indicates whether cgiFast was set
 				
-				cgiFast *cf;///< pointer to cgiFast class
+				cgiFastSTD *cf;///< pointer to cgiFast class
 				
 			#endif 
 	};

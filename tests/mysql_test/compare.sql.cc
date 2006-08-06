@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <dbMysql.h>
 
 using namespace dodo;

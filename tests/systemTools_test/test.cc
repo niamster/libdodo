@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <systemTools.h>
 #include <tools.h>
 
@@ -49,7 +50,7 @@ int main(int argc, char **argv)
 		
 	}
 	
-/*	systemTools::setWorkingDir("/");
+	systemTools::setWorkingDir("/");
 	
 	cout << systemTools::getWorkingDir() << endl;
 	
@@ -75,7 +76,7 @@ int main(int argc, char **argv)
 
 	systemTools::die(tools::rTrim("    dsgdfhhdf    "));
 
-	cout << systemTools::getWorkingDir();*/
+	cout << systemTools::getWorkingDir();
 		
 	return 0;
 }

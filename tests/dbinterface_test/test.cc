@@ -1,3 +1,5 @@
+#include <baseEx.h>
+#include <dbBase.h>
 #include <dbPostgresql.h>
 #include <dbMysql.h>
 #include <dbSqlite.h>
@@ -62,19 +64,19 @@ int main(int argc, char **argv)
 
 		__fieldInfo fi;
 		fi.name = "date";
-		fi.type = TEXT;
+		fi.type = FIELDTYPE_TEXT;
 		
 		__tableInfo ti;
 		ti.name = "leg";
 		ti.fields.push_back(fi);
 		
 		fi.name = "operation";
-		fi.type = TEXT;		
+		fi.type = FIELDTYPE_TEXT;		
 		ti.fields.push_back(fi);
 		
 		fi.name = "id";
-		fi.type = INTEGER;
-		fi.flag = _NULL;
+		fi.type = FIELDTYPE_INTEGER;
+		fi.flag = FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
 		pp->createTable(ti);

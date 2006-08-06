@@ -35,21 +35,68 @@
 	
 	namespace dodo
 	{
-		class cgiFast;
+		class cgiFastSTD
+		{	
+			private:
+				
+				/**
+				 * copy constructor
+				 * to prevent copying
+				 */
+				cgiFastSTD(cgiFastSTD &cf);
+			
+			public:
+				
+				/**
+				 * constructor
+				 * @param request describes CGI request info
+				 */
+				cgiFastSTD(FCGX_Request *request);
+				
+				/**
+				 * destructor
+				 */
+				virtual ~cgiFastSTD(); 
+				
+				/**
+				 * sends buf to specific output[fast-cgi safe]
+				 * @param buf describes what to send to user
+				 */
+				virtual void print(const std::string &buf); 
+				
+				/**
+				 * reads to buf from specific input[fast-cgi safe]
+				 * @param buf describes what to receive from user
+				 */
+				virtual void read(char *buf, unsigned int size); 
+				
+				/**
+				 * gets environment variable[fast-cgi safe]
+				 * @param buf describes what to receive from environment
+				 */
+				virtual char *getenv(char *buf); 
+				
+				/**
+				 * flushes output[fast-cgi safe]
+				 */
+				virtual void flush(); 
+				
+			private:
+
+				FCGX_Request *request;///< CGI request
+		};
 		
 		/**
 		 * @typedef that describes function that will be called on new cgi request
 		 */
-		typedef void (*cgiProc)(cgiFast *);
+		typedef void (*cgiProc)(cgiFastSTD *);
 		
 		/**
 		 * @class cgiFast
 		 * provides cpp wrapper for fast-cgi technology
 		 */
 		class cgiFast
-		{
-			friend class cgiTools;
-			
+		{	
 			private:
 				
 				/**
@@ -60,11 +107,29 @@
 			
 			public:
 				
+				#ifdef PTHREAD_EXT
+				
+					/**
+					 * constructor
+					 * @param threading indicates whether to call new thread on cgi request or proceed a queue
+					 * @param threadsNum indicates how many threads to use in fast-cgi server
+					 */
+					cgiFast(bool threading = true, unsigned int threadsNum = 10);
+					
+				#else
+				
+					/**
+					 * constructor
+					 * @param threading indicates whether to call new thread on cgi request or proceed a queue
+					 * @param threadsNum indicates how many threads to use in fast-cgi server
+					 */
+					cgiFast(bool threading = true, unsigned int threadsNum = 10);
+					
+				#endif				
+				
 				/**
-				 * constructor
-				 * @param threading indicates whether to call new thread on cgi request or proceed a queue
+				 * destructor
 				 */
-				cgiFast(bool threading = true);
 				virtual ~cgiFast(); 
 				
 				/**
@@ -74,23 +139,29 @@
 				virtual void setCGIFunction(cgiProc func);
 				
 				/**
-				 * sends buf to specific output[fast-cgi safe]
-				 * @param buf dscribes whet to send to user
-				 */
-				virtual void print(const std::string &buf);
-				
-				/**
 				 * listen for incoming requests
 				 */
 				virtual void listen();
 				
 			private:
 			
-				bool threading;///< threading or not
+				#ifdef PTHREAD_EXT
+			
+					bool threading;///< threading or not
+					
+					unsigned int threadsNum;///< amount of threads
+					
+					/**
+					 * thread that holds one queue of cgi clients
+					 * @param data indicates what data will be passed to thread
+					 */
+					static void *stackThread(void *data);
+					
+					static pthread_mutex_t accept;///< accept request mutex
 				
-				cgiProc cgiF;///< function to be called on new request
+				#endif
 				
-				FCGX_Request request;///< CGI request
+				static cgiProc cgiF;///< function to be called on new request
 		};
 	};
 

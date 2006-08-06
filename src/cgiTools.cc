@@ -66,8 +66,9 @@ cgiTools::cgiTools(cgiTools &ct)
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent, 
-			assocArr &a_headers) : _cgiFilesInMem(true),
+			assocArr &a_headers) : _cgiFilesInMem(true)
 									#ifdef FCGI_EXT
+										,
 										cgiFastSet(false)
 									#endif	
 				
@@ -92,7 +93,7 @@ cgiTools::cgiTools(bool silent,
 
 #ifdef FCGI_EXT
 
-	cgiTools::cgiTools(cgiFast *a_cf, 
+	cgiTools::cgiTools(cgiFastSTD *a_cf, 
 						bool silent, 
 						assocArr &a_headers) : _cgiFilesInMem(true),
 											cgiFastSet(true),
@@ -196,7 +197,13 @@ cgiTools::makeEnv() const
 	
 	for (register int i=0;i<HTTP_ENV_SIZE;++i)
 	{
-		env = getenv(HTTP_ENV[i].str);
+		#ifdef FCGI_EXT
+			if (cgiFastSet)
+				env = cf->getenv(HTTP_ENV[i].str);
+			else
+		#endif	
+				env = getenv(HTTP_ENV[i].str);
+				
 		ENVIRONMENT.realArr[HTTP_ENV[i].str] = (env==NULL)?"NULL":env;
 	}
 }
@@ -273,7 +280,10 @@ cgiTools::printHeaders() const
 	
 	#ifdef FCGI_EXT
 		if (cgiFastSet)
+		{
 			cf->print("\r\n\r\n");
+			cf->flush();
+		}
 		else
 	#endif		
 		{
@@ -310,28 +320,34 @@ cgiTools::makePost() const
 			
 	for (register unsigned long i=0;i<iter;++i)
 	{
-		if (fread(post,POST_BATCH_SIZE,1,stdin) != POST_BATCH_SIZE)
-			#ifndef NO_EX
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-						throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
-						return false;
-				}
-			#endif
+		
+		#ifdef FCGI_EXT
+			if (cgiFastSet)
+				cf->read(post,POST_BATCH_SIZE);
+			else
+		#endif
+				if (fread(post,POST_BATCH_SIZE,1,stdin) != POST_BATCH_SIZE)
+					#ifndef NO_EX
+						switch (errno)
+						{
+							case EIO:
+							case EINTR:
+							case ENOMEM:
+							case EOVERFLOW:
+							case EROFS:
+								throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						}	
+					#else			
+						switch (errno)
+						{
+							case EIO:
+							case EINTR:
+							case ENOMEM:
+							case EOVERFLOW:	
+							case EROFS:
+								return false;
+						}
+					#endif
 		
 		bPost.append(post,POST_BATCH_SIZE);
 	}

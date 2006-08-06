@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <flushSTD.h>
 
 using namespace dodo;

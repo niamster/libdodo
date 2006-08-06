@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <flushSTD.h>
 #include <flushSocketTools.h>
 
@@ -6,7 +7,7 @@ using namespace std;
 
 void 
 hook(void *base,
-	xexecObjTypeEnum type, 
+	short int type, 
 	void *yep)
 {
 	flushSTD *st = (flushSTD *)base;

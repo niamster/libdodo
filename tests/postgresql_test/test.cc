@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <dbPostgresql.h>
 
 using namespace dodo;
@@ -5,7 +6,7 @@ using namespace dodo;
 using namespace std;
 
 void
-hook(void *object, xexecObjTypeEnum type, void *data)
+hook(void *object, short int type, void *data)
 {
 	cout << "executed" << endl;
 }
@@ -33,19 +34,19 @@ int main(int argc, char **argv)
 
 		__fieldInfo fi;
 		fi.name = "date";
-		fi.type = TEXT;
+		fi.type = FIELDTYPE_TEXT;
 		
 		__tableInfo ti;
 		ti.name = "leg";
 		ti.fields.push_back(fi);
 		
 		fi.name = "operation";
-		fi.type = TEXT;		
+		fi.type = FIELDTYPE_TEXT;		
 		ti.fields.push_back(fi);
 		
 		fi.name = "id";
-		fi.type = INTEGER;
-		fi.flag = _NULL;
+		fi.type = FIELDTYPE_INTEGER;
+		fi.flag = FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
 		pp.createTable(ti);

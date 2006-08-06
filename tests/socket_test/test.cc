@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <flushSocket.h>
 #include <flushSocketTools.h>
 #include <systemThreads.h>
@@ -67,6 +68,8 @@ process(void *data)
 	}
 	
 	flushSocketExchange::deleteCopy(fse);
+	
+	return NULL;
 }
 
 int main(int argc, char **argv)
@@ -74,7 +77,7 @@ int main(int argc, char **argv)
 	try
 	{	
 		stringArr ifaces = flushSocketTools::getInterfacesNames();
-		for (int i(0);i<ifaces.size();i++)
+		for (unsigned int i(0);i<ifaces.size();i++)
 		{
 			try
 			{
@@ -158,12 +161,11 @@ int main(int argc, char **argv)
 		
 		//flushSocketTools::setLocalName("BUBU");
 		
-		/*cout << flushSocketTools::getLocalName() << endl;
+		cout << flushSocketTools::getLocalName() << endl;
 		cout << flushSocketTools::getHostInfo("192.168.0.1").addresses[0] << endl;
 		
-		flushSocketTools *pointer[10];
-		pointer[0] = &sock;
-		cout << pointer[0]->getHostInfo("elessar.mu").addresses[0] << endl;*/
+		flushSocketTools fst;
+		cout << fst.getHostInfo("google.com").addresses[0] << endl;
 		
 	}
 	catch(baseEx ex)

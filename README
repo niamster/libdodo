@@ -1,4 +1,4 @@
-To compile use gmake
-To install gmake install
+To compile use `gmake`
+To install `gmake install`
 
-Please, edit directeves.mk and include/directives.h for custom configuration!
+Please, edit directives.mk and include/directives.h for custom configuration!

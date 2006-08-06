@@ -30,7 +30,7 @@
 #include <types.h>
 #include <tools.h>
 #include <cgiPreprocessor.h>
-
+#include <cgiFast.h>
 
 namespace dodo
 {
@@ -45,6 +45,16 @@ namespace dodo
 			 * constructor
 			 */
 			cgiProcessor();
+						
+			#ifdef FCGI_EXT		
+					
+				/**
+				 * constructor
+				 * @param cf describes output interface 
+				 */
+				cgiProcessor(cgiFastSTD *cf);
+			
+			#endif
 			
 			/**
 			 * destructor
@@ -233,6 +243,14 @@ namespace dodo
 			stringArr::iterator z;///< iterator for namespaceVars content
 			std::map<unsigned int, stringArr>::iterator c;///< iterator for namespaceVars 
 			std::map<unsigned int, assocArr>::iterator v;///< iterator for localNamespace
+			
+			#ifdef FCGI_EXT	
+			
+				bool cgiFastSet;///< indicates whether cgiFast was set
+				
+				cgiFastSTD *cf;///< pointer to cgiFast class
+				
+			#endif 			
 	};
 
 };

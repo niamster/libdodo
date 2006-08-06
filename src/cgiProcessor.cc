@@ -33,10 +33,27 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 							_loopDeepness(0),
 							iterator(1),
 							namespaceDeepness(1)
+							#ifdef FCGI_EXT
+								,
+								cgiFastSet(false)
+							#endif	
 {
 	dodo["version"] = std::string(MAJOR) + "." + std::string(MINOR) + "." + std::string(RELEASE);
 	dodo["iterator"] = "1";
 }
+//-------------------------------------------------------------------
+
+#ifdef FCGI_EXT
+
+	cgiProcessor::cgiProcessor(cgiFastSTD *a_cf) :	cgiFastSet(true),
+												cf(a_cf)
+					
+	{
+		dodo["version"] = std::string(MAJOR) + "." + std::string(MINOR) + "." + std::string(RELEASE);
+		dodo["iterator"] = "1";
+	}
+
+#endif	
 
 
 //-------------------------------------------------------------------
@@ -1688,8 +1705,18 @@ cgiProcessor::trim(const std::string &statement)
 void 
 cgiProcessor::display(const std::string &path)
 {
-	std::cout << this->process(path);
-	std::cout.flush();
+		#ifdef FCGI_EXT
+			if (cgiFastSet)
+			{
+				cf->print(this->process(path));
+				cf->flush();
+			}
+			else
+		#endif
+			{		
+				std::cout << this->process(path);
+				std::cout.flush();
+			}
 }
 
 //-------------------------------------------------------------------

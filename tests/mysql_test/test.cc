@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <dbMysql.h>
 
 using namespace dodo;
@@ -5,11 +6,10 @@ using namespace std;
 
 void 
 hook(void *base,
-	xexecObjTypeEnum type,
+	short int type,
 	void *yep)
 {
 	dbMysql *sql = (dbMysql *)base;
-//	dbBase *sql = (dbBase *)base;
 
 	if (sql->operType == DBMYSQL_OPER_EXEC)
 	{
@@ -25,16 +25,16 @@ hook(void *base,
 
 void 
 journal(void *base, 
-		xexecObjTypeEnum type,
+		short int type,
 		void *yep)
 {
 	dbMysql *child = (dbMysql *)base;
 
 	switch (child->getQType())
 	{
-		case INSERT:
-		case DELETE:
-		case UPDATE:
+		case DBREQUEST_INSERT:
+		case DBREQUEST_DELETE:
+		case DBREQUEST_UPDATE:
 			__collectedData data = child->collectedData();
 			data.pre_table.assign(std::string((char *)yep));
 			child->exec();
@@ -51,25 +51,25 @@ int main(int argc, char **argv)
 	try
 	{
 		
-		//int pos = pp.addPreExec(hook,(void *)"id");
-		//pp.addPostExec(&journal,(void *)"journal");
+		int pos = pp.addPreExec(hook,(void *)"id");
+		pp.addPostExec(&journal,(void *)"journal");
 		//pp.delPreExec(pos);//removes hook!!
 		
 		pp.setDbInfo("test","",3306,"","Dmitrik");
 		pp.connect();
 		
-		/* create field
+		/*create field*/
 		__fieldInfo fi;
 		fi.comment = " !!";
-		fi.onDelete = SET_DEFAULT;
+		fi.onDelete = REFERENCE_SET_DEFAULT;
 		fi.name = "field";
-		fi.flag |= AUTO_INCREMENT|KEY;
-		fi.type = CHAR;
+		fi.flag |= FIELDPROP_AUTO_INCREMENT|FIELDPROP_KEY;
+		fi.type = FIELDTYPE_CHAR;
 		fi.length = 10;
 		
 		pp.createField(fi,"table");
 		pp.exec();
-		*/
+		
 		
 		std::vector<std::string> fields;
 		
@@ -77,9 +77,9 @@ int main(int argc, char **argv)
 		fields.push_back("operation");
 		
 		/* select*/
-		/*pp.select("ta",fields,"a>1");
+		pp.select("ta",fields,"a>1");
 		pp.limit(10);
-		pp.exec();*/
+		pp.exec();
 		
 		std::vector<std::string> values;
 		values.push_back("20\"05`''-'07-08");
@@ -113,9 +113,9 @@ int main(int argc, char **argv)
 		assA.push_back(arr);
 		
 		/*additional statement*/
-		pp.setAddInsSt(INSERT_IGNORE);//base SQL
-		pp.setAddSelSt(SELECT_DISTINCT);//base SQL
-		pp.setMyAddSelSt(SELECT_BIG_RESULT);//mySQL features; defined only in this class
+		pp.setAddInsSt(DBREQUEST_INSERT_IGNORE);//base SQL
+		pp.setAddSelSt(DBREQUEST_SELECT_DISTINCT);//base SQL
+		pp.setMyAddSelSt(DBREQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
 				
 		
 		pp.insert("leg",assA);//multiply insert
@@ -130,13 +130,13 @@ int main(int argc, char **argv)
 		
 		pp.insert("test1",values,fields);//simple insert
 		cout << pp.queryCollect() << endl;
-		//pp.exec();
+		pp.exec();
 		
-		//for (int o=0;o<1000000;o++)
+		for (int o=0;o<1000000;o++)
 		{
 			pp.insert("log",values,fields);
 			cout << pp.queryCollect() << endl;//show query
-			//pp.exec();
+			pp.exec();
 		}
 		
 		pp.select("log",fields,"id>1");
@@ -150,20 +150,20 @@ int main(int argc, char **argv)
 		std::vector<std::string> uni_all;
 		uni_all.push_back(pp.queryCollect());
 		uni_all.push_back(pp.queryCollect());
-		pp.subquery(uni_all,UNION_ALL);
+		pp.subquery(uni_all,DBREQUEST_UNION_ALL);
 		
 		pp.order("id desc");
 		pp.limit(5);
-		pp.setAddSelSt(SELECT_DISTINCT);
+		pp.setAddSelSt(DBREQUEST_SELECT_DISTINCT);
 		cout << pp.queryCollect() << endl;//show query
-		//pp.exec();
+		pp.exec();
 		
 		__dbStorage storage = pp.fetch();//get result
 
 	}
     catch(baseEx ex)
     {	
-		//cout << ex.file << endl << ex.baseErrstr << endl;
+		cout << ex.file << endl << ex.baseErrstr << endl;
     }
 	return 0;
 }

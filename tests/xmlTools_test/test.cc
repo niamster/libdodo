@@ -1,3 +1,4 @@
+#include <baseEx.h>
 #include <xmlTools.h>
 #include <tools.h>
 
