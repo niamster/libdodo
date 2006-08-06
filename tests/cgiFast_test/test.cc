@@ -64,7 +64,7 @@ cgi(cgiFastSTD *fcgi)
 
 int main(int argc, char **argv)
 {	
-	cgiFast cf(false);
+	cgiFast cf;
 	
 	cf.setCGIFunction(&cgi);
 

@@ -45,8 +45,13 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 
 #ifdef FCGI_EXT
 
-	cgiProcessor::cgiProcessor(cgiFastSTD *a_cf) :	cgiFastSet(true),
-												cf(a_cf)
+	cgiProcessor::cgiProcessor(cgiFastSTD *a_cf) : _continueFlag(false),
+													_breakDeepness(0),
+													_loopDeepness(0),
+													iterator(1),
+													namespaceDeepness(1),
+													cgiFastSet(true),
+													cf(a_cf)
 					
 	{
 		dodo["version"] = std::string(MAJOR) + "." + std::string(MINOR) + "." + std::string(RELEASE);
@@ -110,7 +115,7 @@ cgiProcessor::_process(const std::string &buffer,
 		temp = buffer.substr(i, j - i);
 		
 		j += 2;
-		
+	
 		k = temp.find("include");
 		if (k != std::string::npos)
 		{
