@@ -607,7 +607,8 @@ cgiProcessor::_assign(const std::string &statement)
 	
 	assocArr::iterator i = local.find(varName); 	
 	if (i != local.end())
-		localNamespace[namespaceDeepness][i->first] = i->second;
+		if (localNamespace[namespaceDeepness].find(i->first) != localNamespace[namespaceDeepness].end())
+			localNamespace[namespaceDeepness][i->first] = i->second;
 	
 	namespaceVars[namespaceDeepness].push_back(varName);
 	local[varName] = getVar(temp[1]);
