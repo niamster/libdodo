@@ -58,6 +58,13 @@
 	}
 	
 	//-------------------------------------------------------------------
+	
+	__node::__node(): CDATA(false),
+					empty(false)	
+	{
+	}
+	
+	//-------------------------------------------------------------------
 
 	xmlTools::xmlTools(xmlTools &xt)
 	{
@@ -99,6 +106,15 @@
 	
 	//-------------------------------------------------------------------
 	
+	bool 
+	xmlTools::isCDATA(xmlNodePtr node)
+	{
+		
+		return false;
+	}
+	
+	//-------------------------------------------------------------------
+		
 	__node 
 	xmlTools::parseFile(const __nodeDef &definition, 
 						const std::string &file)
@@ -222,9 +238,14 @@
 		
 		getAttributes(definition,node,sample.attributes.realArr);
 		
+		if (xmlIsBlankNode(node) == 1)
+			sample.empty = true;
+		
 		if (node->children == NULL)
 			return sample;
-		
+				
+		sample.CDATA = isCDATA(node);		
+				
 		if (definition.children.size() > 0)
 		{
 			j = definition.children.end();
@@ -240,7 +261,7 @@
 				
 				__node one;
 				
-				while (node!=NULL)
+				while (node != NULL)
 				{
 					if (node->type != XML_ELEMENT_NODE)
 					{
@@ -250,7 +271,12 @@
 												
 					getNodeInfo(node,one);
 					
-					getAttributes(node,one.attributes.realArr);
+					getAttributes(node,one.attributes.realArr);		
+					
+					if (xmlIsBlankNode(node) == 1)
+						one.empty = true;
+					
+					one.CDATA = isCDATA(node);
 					
 					one.children.realArr[(char *)node->name] = parse(node->children);
 					
@@ -324,6 +350,11 @@
 		
 			getNodeInfo(node,sample);
 			getAttributes(definition,node,sample.attributes.realArr);
+					
+			if (xmlIsBlankNode(node) == 1)
+				sample.empty = true;
+			
+			sample.CDATA = isCDATA(node);
 	
 			if (definition.children.size() > 0)
 			{
@@ -349,6 +380,11 @@
 						getNodeInfo(subNode,one);
 						
 						getAttributes(subNode,one.attributes.realArr);
+								
+						if (xmlIsBlankNode(subNode) == 1)
+							one.empty = true;
+						
+						one.CDATA = isCDATA(subNode);
 						
 						one.children.realArr[(char *)subNode->name] = parse(subNode->children);
 						
@@ -456,7 +492,7 @@
 		while (attribute != NULL)
 		{
 			xChar = xmlGetProp(node,attribute->name);
-			if (xChar!=NULL)
+			if (xChar != NULL)
 			{
 				attributes[(char *)attribute->name] = (char *)xChar;
 				xmlFree(xChar);
@@ -545,7 +581,7 @@
 		
 		__node one;
 		
-		while (node!=NULL)
+		while (node != NULL)
 		{
 			if (node->type != XML_ELEMENT_NODE)
 			{
@@ -556,6 +592,11 @@
 			getNodeInfo(node,one);
 			
 			getAttributes(node,one.attributes.realArr);
+					
+			if (xmlIsBlankNode(node) == 1)
+				one.empty = true;
+			
+			one.CDATA = isCDATA(node);
 			
 			one.children.realArr[(char *)node->name] = parse(node->children);
 			
@@ -719,6 +760,178 @@
 	{
 		xmlFreeDoc(document);
 		document = NULL;
+	}
+
+	//-------------------------------------------------------------------
+	
+	std::string 
+	xmlTools::createXML(const __node &root, 
+					const std::string &encoding, 
+					const std::string &version)
+	{
+		if (root.name.empty())
+			return __string__;
+		
+		std::string xml = "<?xml version=" + version + " encoding=" + encoding + "?>\r\n";
+		
+		xml.append("<");
+		
+		if (!root.ns.empty())
+		{
+			xml.append(root.ns);
+			xml.append(":");
+		}
+		
+		xml.append(root.name);
+		xml.append(" ");
+		
+		if (!root.nsDef.empty())
+		{
+			xml.append("xmlns:");
+			xml.append(root.nsDef);
+			xml.append("=\"");
+			xml.append(root.nsDefHref);
+			xml.append("\" ");
+		}
+		
+		std::map<std::string, std::string>::const_iterator i = root.attributes.realArr.begin(), j = root.attributes.realArr.end(); 
+		for (;i!=j;++i)
+		{
+			xml.append(i->first);
+			xml.append("=\"");
+			xml.append(i->second);
+			xml.append("\"");
+		}
+		
+		if (root.empty)
+		{
+			xml.append("/>\r\n");
+			return xml;
+		}
+		
+		xml.append(">\r\n");
+		
+		if (!root.value.empty())
+		{
+			if (root.CDATA)
+			{
+				xml.append("<![CDATA[");
+				xml.append(root.value);
+				xml.append("]]>\r\n");
+			}
+			else
+			{
+				xml.append(root.value);
+				xml.append("\r\n");
+			}
+		}
+		
+		std::map< std::string, std::vector<__node> >::const_iterator o = root.children.realArr.begin(), p = root.children.realArr.end();
+		std::vector<__node>::const_iterator x, y;
+		for (;o!=p;++o)
+		{
+			x = o->second.begin();
+			y = o->second.end();
+			for (;x!=y;++x)
+				xml.append(create(*x));
+		}
+		
+		xml.append("</");
+		
+		if (!root.ns.empty())
+		{
+			xml.append(root.ns);
+			xml.append(":");
+		}		
+		
+		xml.append(root.name);
+		xml.append(">\r\n");
+		
+		return xml;
+	}
+
+	//-------------------------------------------------------------------
+	
+	std::string 
+	xmlTools::create(const __node &node)
+	{
+		if (node.name.empty())
+			return __string__;
+			
+		std::string xml = "<";		
+		
+		if (!node.ns.empty())
+		{
+			xml.append(node.ns);
+			xml.append(":");
+		}
+		
+		xml.append(node.name);
+		xml.append(" ");
+		
+		if (!node.nsDef.empty())
+		{
+			xml.append("xmlns:");
+			xml.append(node.nsDef);
+			xml.append("=\"");
+			xml.append(node.nsDefHref);
+			xml.append("\" ");
+		}
+		
+		std::map<std::string, std::string>::const_iterator i = node.attributes.realArr.begin(), j = node.attributes.realArr.end(); 
+		for (;i!=j;++i)
+		{
+			xml.append(i->first);
+			xml.append("=\"");
+			xml.append(i->second);
+			xml.append("\"");
+		}
+		
+		if (node.empty)
+		{
+			xml.append("/>\r\n");
+			return xml;
+		}
+		
+		xml.append(">\r\n");
+		
+		if (!node.value.empty())
+		{
+			if (node.CDATA)
+			{
+				xml.append("<![CDATA[");
+				xml.append(node.value);
+				xml.append("]]>\r\n");
+			}
+			else
+			{
+				xml.append(node.value);
+				xml.append("\r\n");
+			}
+		}
+		
+		std::map< std::string, std::vector<__node> >::const_iterator o = node.children.realArr.begin(), p = node.children.realArr.end();
+		std::vector<__node>::const_iterator x, y;
+		for (;o!=p;++o)
+		{
+			x = o->second.begin();
+			y = o->second.end();
+			for (;x!=y;++x)
+				xml.append(create(*x));
+		}
+		
+		xml.append("</");
+		
+		if (!node.ns.empty())
+		{
+			xml.append(node.ns);
+			xml.append(":");
+		}		
+		
+		xml.append(node.name);
+		xml.append(">\r\n");
+		
+		return xml;	
 	}
 
 	//-------------------------------------------------------------------

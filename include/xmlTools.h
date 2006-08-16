@@ -43,6 +43,11 @@
 		 */
 		struct __node
 		{
+			/**
+			 * constructor
+			 */
+			__node();
+			
 			std::string name;///< name of the node [[tag]]
 			
 			__dodoMap< std::vector<__node> > children;///< vector of children's realisation;
@@ -55,6 +60,9 @@
 			std::string nsHref;///< uri "value" <URI>
 			std::string nsDef;///< namespace that this node defines
 			std::string nsDefHref;///< namespace's value <URI> that this node defines
+			
+			bool CDATA;///< true if CDATA
+			bool empty;///< true if node doesn't have content : `<node />`
 		};
 	
 		/**
@@ -221,8 +229,29 @@
 				 * frees internal structures
 				 */
 				virtual void clear();
+				
+				/**
+				 * @return XML string
+				 * @param root defines root node of XML document
+				 * @param encoding declears encoding of XML
+				 * @param version declears version of XML
+				 */
+				virtual std::string createXML(const __node &root, const std::string &encoding = "UTF-8", const std::string &version = "1.0"); 
 												
-			protected:
+			protected:		
+					
+				/**
+				 * @return true if content is in CDATA
+				 * @param node is XML tree node
+				 */	
+				bool isCDATA(xmlNodePtr node);
+					
+				/**
+				 * @return XML string
+				 * @param root defines root node of XML document
+				 */
+				virtual std::string create(const __node &node); 
+			
 				
 				/**
 				 * parses whole XML

@@ -71,7 +71,7 @@
 				virtual void read(char *buf, unsigned int size); 
 				
 				/**
-				 * gets environment variable[fast-cgi safe]
+				 * @return environment variable[fast-cgi safe]
 				 * @param buf describes what to receive from environment
 				 */
 				virtual char *getenv(char *buf); 

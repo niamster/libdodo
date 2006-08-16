@@ -58,6 +58,10 @@ int main(int argc, char **argv)
 		
 		tool.clear();
 		
+		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
+		
+		cout  << endl << tool.createXML(tool.parseFile("./test.xml")) << endl << endl;
+		
 	}
 	catch(baseEx ex)
 	{

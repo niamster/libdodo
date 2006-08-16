@@ -127,9 +127,9 @@ namespace dodo
 				/**
 				 * @return true if value is set by given key
 				 */
-				 bool
-				 isset(const std::string &varName)
-				 {
+				bool
+				isset(const std::string &varName)
+				{
 					i = realArr.begin();
 					j = realArr.end();
 					
@@ -143,7 +143,8 @@ namespace dodo
 							return true;		
 					
 					return false;				 	
-				 }
+				}
+				
 				std::map<std::string, anyType> realArr;///< real array
 				
 				anyType type;

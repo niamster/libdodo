@@ -156,9 +156,12 @@
 <(ns)>
 		<(ns)>
 			<(assign a = in namespace)>
+			<(assign b = in namespace)>
 			<(print $a," must be `in namespace`")>
+			<(print $b," must be `in namespace`")>
 		<(sn)>
 	<(print $a," must be bASDA")>
+	<(print $b," must be empty")>
 <(sn)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
