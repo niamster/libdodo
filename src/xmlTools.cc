@@ -107,8 +107,16 @@
 	//-------------------------------------------------------------------
 	
 	bool 
-	xmlTools::isCDATA(xmlNodePtr node)
+	xmlTools::isCDATA(xmlNodePtr chNode)
 	{
+		register xmlNodePtr node = chNode->children;
+		while (node != NULL)
+		{
+			if (node->type == XML_CDATA_SECTION_NODE)
+				return true;
+				
+			node = node->next;	
+		}
 		
 		return false;
 	}
@@ -238,11 +246,11 @@
 		
 		getAttributes(definition,node,sample.attributes.realArr);
 		
-		if (xmlIsBlankNode(node) == 1)
-			sample.empty = true;
-		
 		if (node->children == NULL)
+		{
+			sample.empty = true;
 			return sample;
+		}
 				
 		sample.CDATA = isCDATA(node);		
 				
@@ -273,7 +281,7 @@
 					
 					getAttributes(node,one.attributes.realArr);		
 					
-					if (xmlIsBlankNode(node) == 1)
+					if (node->children == NULL)
 						one.empty = true;
 					
 					one.CDATA = isCDATA(node);
@@ -351,7 +359,7 @@
 			getNodeInfo(node,sample);
 			getAttributes(definition,node,sample.attributes.realArr);
 					
-			if (xmlIsBlankNode(node) == 1)
+			if (node->children == NULL)
 				sample.empty = true;
 			
 			sample.CDATA = isCDATA(node);
@@ -381,7 +389,7 @@
 						
 						getAttributes(subNode,one.attributes.realArr);
 								
-						if (xmlIsBlankNode(subNode) == 1)
+						if (subNode->children == NULL)
 							one.empty = true;
 						
 						one.CDATA = isCDATA(subNode);
@@ -593,7 +601,7 @@
 			
 			getAttributes(node,one.attributes.realArr);
 					
-			if (xmlIsBlankNode(node) == 1)
+			if (node->children == NULL)
 				one.empty = true;
 			
 			one.CDATA = isCDATA(node);
@@ -800,7 +808,7 @@
 			xml.append(i->first);
 			xml.append("=\"");
 			xml.append(i->second);
-			xml.append("\"");
+			xml.append("\" ");
 		}
 		
 		if (root.empty)
@@ -884,7 +892,7 @@
 			xml.append(i->first);
 			xml.append("=\"");
 			xml.append(i->second);
-			xml.append("\"");
+			xml.append("\" ");
 		}
 		
 		if (node.empty)
