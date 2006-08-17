@@ -237,21 +237,20 @@
 				 * @param version declears version of XML
 				 */
 				virtual std::string createXML(const __node &root, const std::string &encoding = "UTF-8", const std::string &version = "1.0"); 
-												
+
+				/**
+				 * @return XML string
+				 * @param root defines root node of XML document
+				 */
+				virtual std::string createNode(const __node &node);
+																
 			protected:		
 					
 				/**
 				 * @return true if content is in CDATA
 				 * @param node is XML tree node
 				 */	
-				bool isCDATA(xmlNodePtr node);
-					
-				/**
-				 * @return XML string
-				 * @param root defines root node of XML document
-				 */
-				virtual std::string create(const __node &node); 
-			
+				bool isCDATA(xmlNodePtr node); 
 				
 				/**
 				 * parses whole XML

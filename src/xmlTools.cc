@@ -782,78 +782,7 @@
 		
 		std::string xml = "<?xml version=" + version + " encoding=" + encoding + "?>\r\n";
 		
-		xml.append("<");
-		
-		if (!root.ns.empty())
-		{
-			xml.append(root.ns);
-			xml.append(":");
-		}
-		
-		xml.append(root.name);
-		xml.append(" ");
-		
-		if (!root.nsDef.empty())
-		{
-			xml.append("xmlns:");
-			xml.append(root.nsDef);
-			xml.append("=\"");
-			xml.append(root.nsDefHref);
-			xml.append("\" ");
-		}
-		
-		std::map<std::string, std::string>::const_iterator i = root.attributes.realArr.begin(), j = root.attributes.realArr.end(); 
-		for (;i!=j;++i)
-		{
-			xml.append(i->first);
-			xml.append("=\"");
-			xml.append(i->second);
-			xml.append("\" ");
-		}
-		
-		if (root.empty)
-		{
-			xml.append("/>\r\n");
-			return xml;
-		}
-		
-		xml.append(">\r\n");
-		
-		if (!root.value.empty())
-		{
-			if (root.CDATA)
-			{
-				xml.append("<![CDATA[");
-				xml.append(root.value);
-				xml.append("]]>\r\n");
-			}
-			else
-			{
-				xml.append(root.value);
-				xml.append("\r\n");
-			}
-		}
-		
-		std::map< std::string, std::vector<__node> >::const_iterator o = root.children.realArr.begin(), p = root.children.realArr.end();
-		std::vector<__node>::const_iterator x, y;
-		for (;o!=p;++o)
-		{
-			x = o->second.begin();
-			y = o->second.end();
-			for (;x!=y;++x)
-				xml.append(create(*x));
-		}
-		
-		xml.append("</");
-		
-		if (!root.ns.empty())
-		{
-			xml.append(root.ns);
-			xml.append(":");
-		}		
-		
-		xml.append(root.name);
-		xml.append(">\r\n");
+		xml.append(createNode(root));
 		
 		return xml;
 	}
@@ -861,7 +790,7 @@
 	//-------------------------------------------------------------------
 	
 	std::string 
-	xmlTools::create(const __node &node)
+	xmlTools::createNode(const __node &node)
 	{
 		if (node.name.empty())
 			return __string__;
@@ -925,7 +854,7 @@
 			x = o->second.begin();
 			y = o->second.end();
 			for (;x!=y;++x)
-				xml.append(create(*x));
+				xml.append(createNode(*x));
 		}
 		
 		xml.append("</");

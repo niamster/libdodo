@@ -49,8 +49,8 @@
 #define LIBRARY "libdodo"
 
 #define MAJOR "0"
-#define MINOR "2"
-#define RELEASE "10"
+#define MINOR "3"
+#define RELEASE "0"
 
 /**
  * other options
