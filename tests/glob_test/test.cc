@@ -28,9 +28,7 @@ int main(int argc, char **argv)
 
 		tools tl;
 		
-		tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com","test","test","scanner","ae$%re!H@");
-		
-		exit(0);
+		//tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com","test","test","scanner","ae$%re!H@");
 		
 		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
@@ -79,7 +77,21 @@ int main(int argc, char **argv)
 		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
 		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
 		for (int i(0);i<10000;++i)
-			tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9));	
+			tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9));
+			
+		std::string t = "abcddF";
+		tools::replace("cd","WW",t);
+		cout << t << endl;	
+		
+		t = "abcddF";
+		stringArr rep, nee;
+		nee.push_back("cd");
+		nee.push_back("ab");
+		rep.push_back("WW");
+		rep.push_back("EE");
+		tools::replace(nee,rep,t);
+		cout << t << endl;
+				
 	}
     catch(baseEx ex)
     {

@@ -230,11 +230,11 @@ tools::explode(const std::string &fields,
 //-------------------------------------------------------------------
 
 void 
-tools::replace(pchar needle, 
-		pchar replacement,
+tools::replace(const std::string &needle, 
+		const std::string &replacement,
 		std::string &data)
 {
-	register unsigned long i(0),j(strlen(needle)),k(strlen(replacement));
+	register unsigned long i(0),j(needle.size()),k(replacement.size());
 	while (true)
 	{
 		i = data.find(needle,i);
@@ -243,6 +243,18 @@ tools::replace(pchar needle,
 		data.replace(i,j,replacement,0,k);
 		i += k;
 	}
+}
+
+//-------------------------------------------------------------------
+
+void 
+tools::replace(const stringArr &needle, 
+		const stringArr &replacement,
+		std::string &data)
+{
+	stringArr::const_iterator i = needle.begin(), j = needle.end(), o = replacement.begin(), p = replacement.end();
+	for (;i!=j&&o!=p;++i,++o)
+		replace(*i, *o, data);
 }
 
 //-------------------------------------------------------------------

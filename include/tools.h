@@ -169,7 +169,15 @@ namespace dodo
 			 * @param replacement indicates with what to replace
 			 * @param data specifies wher to replace
 			 */
-			static void replace(pchar needle, pchar replacement, std::string &data);
+			static void replace(const std::string &needle, const std::string &replacement, std::string &data);
+			
+			/**
+			 * replaces nodes in string
+			 * @param needle indicates what to replace in string
+			 * @param replacement indicates with what to replace
+			 * @param data specifies wher to replace
+			 */
+			static void replace(const stringArr &needle, const stringArr &replacement, std::string &data);
 		
 			/**
 			 * @return array of strings made from string using separtator
