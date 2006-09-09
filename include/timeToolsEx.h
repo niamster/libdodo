@@ -47,4 +47,5 @@
 	};
 
 #endif
-#endif /*_TIMETOOLSEX_H_*/
+
+#endif

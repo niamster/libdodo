@@ -160,4 +160,4 @@ namespace dodo
 		};
 };
 
-#endif /*DODOMAP_H_*/
+#endif

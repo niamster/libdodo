@@ -132,4 +132,4 @@ namespace dodo
 
 };
 
-#endif /* _XMLTOOLS_H */
+#endif

@@ -329,5 +329,4 @@
 
 #endif
 
-
-#endif /* _XMLTOOLS_H */
+#endif

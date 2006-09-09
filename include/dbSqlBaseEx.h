@@ -63,4 +63,4 @@
 
 #endif	
 
-#endif /* _DBSQLBASEEX_H */
+#endif

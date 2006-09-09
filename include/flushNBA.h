@@ -1,8 +1,8 @@
 /***************************************************************************
- *            flush.h
+ *            flushNBA.h
  *
- *  Tue Oct 11 00:19:57 2005
- *  Copyright  2005  Ni@m
+ *  Thu Sep 09 03:21:24 2006
+ *  Copyright  2006  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -15,50 +15,50 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Library General Public License for more details.
+ *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _FLUSH_H_
-#define _FLUSH_H_
+
+
+#ifndef _FLUSHNBA_H_
+#define _FLUSHNBA_H_
 
 #include <directives.h>
 
-#include <xexec.h>
 #include <types.h>
 
 namespace dodo
 {
-
+	
 	/**
-	 * @class flush is a base class for I/O operations.
-	 * all I/O operations are blockable => read/write inSize/outSize block.
+	 * @class flushNBA
 	 */
-	class flush
-	{
-		public:
-							
-			/**
-			 * constructor
-			 */
-			flush();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~flush();
-			
-			mutable unsigned long inSize;///< size of data block;
-			mutable unsigned long outSize;///< size of data block;
-			
-			mutable std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
-
-		protected:
-		
-			mutable bool opened;///< indicates whether file(connection) opened or not
-	};
+	 class flushNBA
+	 {
+	 	
+	 	private:
+						 	
+	 		/**
+	 		 * copy constructor
+			 * to prevent copying
+	 		 */
+	 		flushNBA(flushNBA &rt);
+	 			 	
+	 	public:
+						 	
+	 		/**
+	 		 * constructor
+	 		 */
+	 		flushNBA();
+	 		
+	 		/**
+	 		 * destructor
+	 		 */
+	 		virtual ~flushNBA();
+	 };
 
 };
 

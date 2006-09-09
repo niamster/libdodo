@@ -153,4 +153,4 @@
  */
 #define MAXPATHLEN FILENAME_MAX
 
-#endif /* _DIRECTIVES_H */
+#endif

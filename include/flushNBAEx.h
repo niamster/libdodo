@@ -1,8 +1,8 @@
 /***************************************************************************
- *            flush.h
+ *            flushNBAEx.h
  *
- *  Tue Oct 11 00:19:57 2005
- *  Copyright  2005  Ni@m
+ *  Thu Sep 09 03:41:24 2006
+ *  Copyright  2006  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,45 +21,44 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _FLUSH_H_
-#define _FLUSH_H_
+
+#ifndef FLUSHNBAEX_H_
+#define FLUSHNBAEX_H_
 
 #include <directives.h>
 
-#include <xexec.h>
-#include <types.h>
+#include <baseEx.h>
 
-namespace dodo
-{
+#ifndef NO_EX
 
-	/**
-	 * @class flush is a base class for I/O operations.
-	 * all I/O operations are blockable => read/write inSize/outSize block.
-	 */
-	class flush
+	namespace dodo
 	{
-		public:
-							
-			/**
-			 * constructor
-			 */
-			flush();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~flush();
-			
-			mutable unsigned long inSize;///< size of data block;
-			mutable unsigned long outSize;///< size of data block;
-			
-			mutable std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
-
-		protected:
+		/**
+		 * next for flushNBA
+		 */
 		
-			mutable bool opened;///< indicates whether file(connection) opened or not
+		/**
+		 * libdodo defined errors
+		 */
+		enum flushNBAExR
+		{
+			FLUSHNBA_,
+		};
+		
+		/**
+		 * libdodo defined errors' explanation
+		 */			
+		#define FLUSHNBA_STR ""
+		
+		/**
+		 * ID of function where exception was thrown
+		 */		
+		enum flushNBAFunctionsID
+		{
+			FLUSHNBA_,
+		};
+		
 	};
 
-};
-
+#endif	
 #endif

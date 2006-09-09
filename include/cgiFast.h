@@ -35,6 +35,9 @@
 	
 	namespace dodo
 	{
+		/**
+		 * @class cgiFastSTD provides interface to fast_cgi 
+		 */
 		class cgiFastSTD
 		{	
 			private:
@@ -167,4 +170,4 @@
 
 #endif
 
-#endif /*CGIFAST_H_*/
+#endif

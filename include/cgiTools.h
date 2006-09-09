@@ -341,4 +341,4 @@ namespace dodo
 
 };
 
-#endif /*CGI_H_*/
+#endif

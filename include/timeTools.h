@@ -155,4 +155,4 @@ namespace dodo
 
 };
 
-#endif /*TIMETOOLS_H_*/
+#endif

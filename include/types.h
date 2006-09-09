@@ -74,4 +74,4 @@ namespace dodo
 
 };
 
-#endif /* _TYPES_H */
+#endif

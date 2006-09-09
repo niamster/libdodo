@@ -508,4 +508,4 @@ namespace dodo
 	};
 
 };
-#endif /* _TOOLS_H */
+#endif

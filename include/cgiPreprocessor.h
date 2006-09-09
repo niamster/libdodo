@@ -33,7 +33,7 @@ namespace dodo
 {
 
 	/**
-	 * prepares template for future parsings
+	 * @class cgiPreprocessor prepares template for future parsings
 	 */
 	class cgiPreprocessor
 	{

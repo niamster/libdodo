@@ -2,7 +2,7 @@
  *            dbPostgresqlEx.h
  *
  *  Fri Jan  13 19:25:19 2006
- *  Copyright  2005  Ni@m
+ *  Copyright  2006  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 

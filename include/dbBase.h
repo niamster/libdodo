@@ -741,4 +741,4 @@ namespace dodo
 
 };
 
-#endif /* _DBBASE_H_ */
+#endif

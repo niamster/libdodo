@@ -53,4 +53,5 @@
 	};
 
 #endif
-#endif /*REGEXPEX_H_*/
+
+#endif

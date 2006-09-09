@@ -348,4 +348,4 @@ namespace dodo
 
 };
 
-#endif /*SOCKETPP_H_*/
+#endif

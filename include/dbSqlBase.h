@@ -34,7 +34,7 @@ namespace dodo
 {
 	
 	/**
-	 * class to provide wide abilities for sql manipulations
+	 * @class to provide wide abilities for sql manipulations
 	 * be carefull!!! all data become escaped and fremed with <'>. Fields' names are not framed with <`> to prevent "`count(*)`" or smth else
 	 * when u are usin' select wo table_name field names are not escaped and framed!!
 	 * If u want to prevent data framin' set dbSqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
@@ -232,4 +232,4 @@ namespace dodo
 
 };
 
-#endif /* _DBSQLBASE_H_ */
+#endif

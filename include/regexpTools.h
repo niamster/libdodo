@@ -45,7 +45,7 @@ namespace dodo
 {
 	
 	/**
-	 * !class regexpTools that covers REGEXP routine using different regex libs
+	 * @class regexpTools that covers REGEXP routine using different regex libs
 	 * @note PCRE is much faster
 	 * both POSIX and PCRE don't support binary patterns
 	 * if string is not matchin' fully the pattern - it don't want to execute it(return false)
@@ -176,4 +176,4 @@ namespace dodo
 
 };
 
-#endif /*REGEXP_*/
+#endif
