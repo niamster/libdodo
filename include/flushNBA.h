@@ -31,8 +31,7 @@
 #include <types.h>
 
 namespace dodo
-{
-	
+{ 	
 	/**
 	 * @class flushNBA
 	 */
