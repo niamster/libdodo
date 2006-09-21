@@ -8,7 +8,6 @@ OBJECTS:=dbBase.o \
 		dbMysql.o \
 		cgiTools.o \
 		regexpTools.o \
-		flush.o \
 		flushSocketOptions.o \
 		flushSocketExchange.o \
 		flushSocketTools.o \
@@ -23,7 +22,6 @@ OBJECTS:=dbBase.o \
 		systemThreads.o \
 		systemThreadShares.o \
 		dbPostgresql.o \
-		dbInterface.o \
 		cgiPreprocessor.o \
 		cgiFast.o \
 		cgiProcessor.o

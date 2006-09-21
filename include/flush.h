@@ -40,16 +40,6 @@ namespace dodo
 	{
 		public:
 							
-			/**
-			 * constructor
-			 */
-			flush();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~flush();
-			
 			mutable unsigned long inSize;///< size of data block;
 			mutable unsigned long outSize;///< size of data block;
 			

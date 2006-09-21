@@ -38,23 +38,6 @@ namespace dodo
 	 */
 	class dbInterface : public dbSqlBase
 	{
-		private:
-			
-			/**
-			 * constructor
-			 * to prevent from copying
-			 */			
-			dbInterface(dbInterface &a_pp);
-		
-		public:
-		
-			dbInterface();
-		
-			/**
-			 * destructor
-			 */
-			virtual ~dbInterface();
-		
 			/**
 			 * connect to database
 			 */	
@@ -63,47 +46,47 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect() const;
+							connect() = 0 const;
 			
 			/**
 			 * disconnect from database
 			 */
-			virtual void disconnect() const;
+			virtual void disconnect() = 0 const;
 			
 			/**
 			 * @return amount of affected rows(update,delete...)
 			 */
-			virtual unsigned int affectedRowsCount();
+			virtual unsigned int affectedRowsCount() = 0;
 			
 			/**
 			 * @return amount of rows got from request(select ...)
 			 */
-			virtual unsigned int rowsCount() const;				
+			virtual unsigned int rowsCount() = 0 const;				
 			
 			/**
 			 * @return amount of fields got from request(select ...)
 			 */
-			virtual unsigned int fieldsCount() const;
+			virtual unsigned int fieldsCount() = 0 const;
 			
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual std::vector<stringArr> fetchRow() const;
+			virtual std::vector<stringArr> fetchRow() = 0 const;
 			
 			/**
 			 * @return array of fields got from request
 			 */
-			virtual stringArr fetchField() const;
+			virtual stringArr fetchField() = 0 const;
 			
 			/**
 			 * @return structure that holds array of rows and array of fields got from request
 			 */
-			virtual __dbStorage fetch() const;
+			virtual __dbStorage fetch() = 0 const;
 			
 			/**
 			 * @return array that holds assoc array['fiels'=>'value'] got from request
 			 */
-			virtual dodoStringMapArr fetchAssoc() const;
+			virtual dodoStringMapArr fetchAssoc() = 0 const;
 
 			/**
 			 * executes collected request
@@ -115,7 +98,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							exec(const std::string &query = __string__, bool result = false) const;
+							exec(const std::string &query = __string__, bool result = false) = 0 const;
 									
 		protected:
 		
