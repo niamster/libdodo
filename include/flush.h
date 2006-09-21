@@ -38,6 +38,8 @@ namespace dodo
 	 */
 	class flush
 	{
+		friend class flushNBA;
+		
 		public:
 							
 			mutable unsigned long inSize;///< size of data block;

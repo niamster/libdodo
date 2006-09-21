@@ -32,7 +32,7 @@ flushNBA::flushNBA(flushNBA &rt)
 
 //-------------------------------------------------------------------
 
-flushNBA::flushNBA()
+flushNBA::flushNBA() : descs(0)
 {
 }
 
@@ -44,3 +44,16 @@ flushNBA::~flushNBA()
 
 //-------------------------------------------------------------------
  
+int 
+flushNBA::addFlush(const flush &fl)
+{
+	temp.position = ++descs;
+	temp.in = fl.getInDescriptor();
+	temp.out = fl.getOutDescriptor();
+	
+	desc.push_back(temp);
+	
+	return temp.position; 
+}
+
+//-------------------------------------------------------------------

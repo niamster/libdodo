@@ -29,9 +29,22 @@
 #include <directives.h>
 
 #include <types.h>
+#include <flush.h>
 
 namespace dodo
 { 	
+	
+	/**
+	 * @struct __inOutDescriptors contains in and descriptors of the flush* classes
+	 */
+	struct __inOutDescriptors
+	{
+		int position;///< identificator of pair
+		
+		int in;///< in stream
+		int out;///< out stream
+	};
+	
 	/**
 	 * @class flushNBA
 	 */
@@ -57,6 +70,20 @@ namespace dodo
 	 		 * destructor
 	 		 */
 	 		virtual ~flushNBA();
+	 		
+	 		/**
+	 		 * @return identificator of added stream
+	 		 * @param fl is a reference on stream[flushDisk, flushSTD, flushSocket, flushSocketExchange]
+	 		 */
+	 		virtual int addFlush(const flush &fl);
+	 	
+	 	protected:
+	 	
+	 		std::vector<__inOutDescriptors> desc;///< flush descriptors
+	 	
+	 		int descs;///< descriptors counter
+	 		
+	 		__inOutDescriptors temp;///< temp storage for descriptors
 	 };
 
 };

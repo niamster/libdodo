@@ -67,7 +67,7 @@ namespace dodo
 		void *data;///< data passed to func
 		void *obj;///< pointer to object that uses hook
 		bool enabled;///< disable or enable hook
-		int position;///< position in list[not really in list, but that is returned to user]
+		int position;///< identificator of object
 		
 		#ifdef DL_EXT
 			void *handle;///< handle to module
@@ -417,7 +417,7 @@ namespace dodo
 			mutable __execItemList preExec;///< list of hooks executed before exec
 			mutable __execItemList postExec;///< list of hooks executed after exec
 			
-			mutable int execs;
+			mutable int execs;///< execs counter
 			
 			mutable std::list<__execItem>::iterator i;///< iterator for list
 			mutable std::list<__execItem>::iterator j;///< iterator for list

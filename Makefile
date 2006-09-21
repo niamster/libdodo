@@ -24,7 +24,8 @@ OBJECTS:=dbBase.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \
 		cgiFast.o \
-		cgiProcessor.o
+		cgiProcessor.o \
+		flushNBA.o
 
 ###########################################################
 
