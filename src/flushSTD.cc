@@ -57,6 +57,25 @@ flushSTD::~flushSTD()
 
 //-------------------------------------------------------------------
 
+int
+flushSTD::getInDescriptor() const
+{		
+	return fileno(stdin);
+}
+
+//-------------------------------------------------------------------
+
+int
+flushSTD::getOutDescriptor() const
+{
+	if (err)
+		return fileno(stderr);	
+	else
+		return fileno(stdout);	
+}
+
+//-------------------------------------------------------------------
+
 #ifndef FLUSH_STD_WO_XEXEC
 
 	int 

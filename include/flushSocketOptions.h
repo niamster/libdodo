@@ -28,6 +28,7 @@
 #include <directives.h>
 
 #include <types.h>
+#include <flush.h>
 
 namespace dodo
 {	
@@ -79,7 +80,7 @@ namespace dodo
 	/**
 	 * @class flushSocketOptions defines options for socket connections
 	 */
-	class flushSocketOptions
+	class flushSocketOptions : public flush
 	{
 		
 		protected:
@@ -99,7 +100,17 @@ namespace dodo
 			/**
 			 * destructor
 			 */
-			virtual ~flushSocketOptions();
+			virtual ~flushSocketOptions();		
+				
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
+			
+			/**
+			 * @return descriptor of output stream
+			 */ 
+			virtual int getOutDescriptor() const;
 		
 		public:
 				

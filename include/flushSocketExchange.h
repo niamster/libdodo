@@ -28,7 +28,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <flush.h>
 #include <flushSocketOptions.h>
 #include <xexec.h>
 
@@ -86,7 +85,7 @@ namespace dodo
 	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection = previous will be closed
 	 */
-	class flushSocketExchange : public flush, public flushSocketOptions	
+	class flushSocketExchange : public flushSocketOptions	
 	
 	#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
 								, public xexec

@@ -48,6 +48,16 @@ namespace dodo
 		protected:
 		
 			mutable bool opened;///< indicates whether file(connection) opened or not
+			
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const = 0;
+			
+			/**
+			 * @return descriptor of output stream
+			 */ 
+			virtual int getOutDescriptor() const = 0;
 	};
 
 };

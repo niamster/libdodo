@@ -59,6 +59,28 @@ flushDisk::~flushDisk()
 
 //-------------------------------------------------------------------
 
+int
+flushDisk::getInDescriptor() const
+{
+	if (!opened)
+		return -1;
+		
+	return fileno(file);
+}
+
+//-------------------------------------------------------------------
+
+int
+flushDisk::getOutDescriptor() const
+{
+	if (!opened)
+		return -1;
+		
+	return fileno(file);
+}
+
+//-------------------------------------------------------------------
+
 #ifndef FLUSH_DISK_WO_XEXEC
 
 	int 

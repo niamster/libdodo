@@ -38,6 +38,8 @@ namespace dodo
 	 */
 	class dbInterface : public dbSqlBase
 	{
+		public:
+		
 			/**
 			 * connect to database
 			 */	
@@ -46,12 +48,12 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect() = 0 const;
+							connect() const = 0;
 			
 			/**
 			 * disconnect from database
 			 */
-			virtual void disconnect() = 0 const;
+			virtual void disconnect() const = 0;
 			
 			/**
 			 * @return amount of affected rows(update,delete...)
@@ -61,32 +63,32 @@ namespace dodo
 			/**
 			 * @return amount of rows got from request(select ...)
 			 */
-			virtual unsigned int rowsCount() = 0 const;				
+			virtual unsigned int rowsCount() const = 0;				
 			
 			/**
 			 * @return amount of fields got from request(select ...)
 			 */
-			virtual unsigned int fieldsCount() = 0 const;
+			virtual unsigned int fieldsCount() const = 0;
 			
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual std::vector<stringArr> fetchRow() = 0 const;
+			virtual std::vector<stringArr> fetchRow() const = 0;
 			
 			/**
 			 * @return array of fields got from request
 			 */
-			virtual stringArr fetchField() = 0 const;
+			virtual stringArr fetchField() const = 0;
 			
 			/**
 			 * @return structure that holds array of rows and array of fields got from request
 			 */
-			virtual __dbStorage fetch() = 0 const;
+			virtual __dbStorage fetch() const = 0;
 			
 			/**
 			 * @return array that holds assoc array['fiels'=>'value'] got from request
 			 */
-			virtual dodoStringMapArr fetchAssoc() = 0 const;
+			virtual dodoStringMapArr fetchAssoc() const = 0;
 
 			/**
 			 * executes collected request
@@ -98,7 +100,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							exec(const std::string &query = __string__, bool result = false) = 0 const;
+							exec(const std::string &query = __string__, bool result = false) const = 0;
 									
 		protected:
 		

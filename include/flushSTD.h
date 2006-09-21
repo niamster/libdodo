@@ -271,11 +271,21 @@ namespace dodo
 									
 		protected: 
 		
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
+			
+			/**
+			 * @return descriptor of output stream
+			 */ 
+			virtual int getOutDescriptor() const;	
+		
+		private:
+		
 			FILE *desc;///< descriptor that is needed for redirection
 						
 			bool blocked;///< indicates, whether blocked or not;
-		
-		private:
 			
 			/**
 			 * @note share vars

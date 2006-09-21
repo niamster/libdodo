@@ -101,7 +101,7 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~flushDisk();
-			
+						
 			#ifndef FLUSH_DISK_WO_XEXEC
 			
 				/**
@@ -309,6 +309,17 @@ namespace dodo
 
 			mutable bool append;///< if true, will append to the end of the file, even pos is set.
 			
+		protected:
+			
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
+			
+			/**
+			 * @return descriptor of output stream
+			 */ 
+			virtual int getOutDescriptor() const;			
 									
 		private:
 		

@@ -28,7 +28,6 @@
 #include <directives.h>
 
 #include <types.h>
-#include <flush.h>
 #include <flushSocketOptions.h>
 #include <flushSocketExchange.h>
 #include <xexec.h>
@@ -62,7 +61,7 @@ namespace dodo
 	 * @class flushSocket performs communication actions!!
 	 * exchange of data is flushSocketExchange class' task; ou init it with connect or accept methods
 	 */
-	class flushSocket : protected flush, public flushSocketOptions	
+	class flushSocket : public flushSocketOptions	
 	
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 								, public xexec

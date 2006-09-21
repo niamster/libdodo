@@ -70,6 +70,22 @@ flushSocketOptions::~flushSocketOptions()
 
 //-------------------------------------------------------------------
 
+int
+flushSocketOptions::getInDescriptor() const
+{
+	return socket;
+}
+
+//-------------------------------------------------------------------
+
+int
+flushSocketOptions::getOutDescriptor() const
+{		
+	return socket;
+}
+
+//-------------------------------------------------------------------
+
 bool 
 flushSocketOptions::isBlocked()
 {
