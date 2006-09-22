@@ -31,7 +31,7 @@
 	
 	#include <sqlite3.h>
 	
-	#include <dbInterface.h>
+	#include <dbSqlBase.h>
 	#include <xexec.h>
 	
 	namespace dodo
@@ -63,7 +63,7 @@
 		/**
 	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
 		 */
-		class dbSqlite : public dbInterface
+		class dbSqlite : public dbSqlBase
 		
 		#ifndef DBSQLITE_WO_XEXEC
 										, public xexec

@@ -31,7 +31,7 @@
 
 	#include <libpq-fe.h>
 	
-	#include <dbInterface.h>
+	#include <dbSqlBase.h>
 	#include <xexec.h>
 	
 	namespace dodo
@@ -52,7 +52,7 @@
 		/**
 	 	 * @class dbPostgresql is an interface to Postgresql db through sql-,database- independent interfaces
 		 */
-		class dbPostgresql : public dbInterface
+		class dbPostgresql : public dbSqlBase
 		
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 										, public xexec

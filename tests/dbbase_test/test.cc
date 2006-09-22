@@ -10,7 +10,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	dbInterface *pp;	
+	dbBase *pp;	
 	
 	if (argc == 2)
 	{
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 			pp->exec();
 		}
 		
-		pp->select("leg",select,"operation='um'");cout << pp->queryCollect() << endl;
+		pp->select("leg",select,"operation='um'");
 		pp->exec();
 		
 		__dbStorage store = pp->fetch();

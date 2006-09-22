@@ -29,6 +29,7 @@
 
 #include <types.h>
 #include <tools.h>
+#include <dbInterface.h>
 
 namespace dodo
 {	
@@ -117,48 +118,6 @@ namespace dodo
 	enum addInsEnum
 	{
 		DBREQUEST_INSERT_IGNORE = 1,
-	};
-	
-	/**
-	 * @struct __dbStorage contains data that could be retrieved from result [select...]
-	 */
-	struct __dbStorage
-	{
-		/**
-		 * constructor
-		 * 
-		 * @param rows
-		 * @param fields
-		 */
-		__dbStorage(std::vector<stringArr> rows, stringArr fields);
-		
-		std::vector<stringArr> rows;///< array of rows returned in request
-		stringArr fields;///< array of fields returned in request
-	};
-	
-	/**
-	 * @struct __sqlInfo that contains connection optioins to server
-	 */
-	struct __dbInfo
-	{
-		
-		/**
-		 * constructor
-		 */
-		__dbInfo();
-		
-		/**
-		 * constructor
-		 * @note defines structure data with user data
-		 */
-		__dbInfo(const std::string &db, const std::string &host, const std::string &user, const std::string &password, const std::string &path, int port);
-		
-		std::string db;///< database name
-		std::string host;///< hostname
-		std::string user;///< username
-		std::string password;///< password
-		std::string path;///< path to db or unix socket
-		unsigned int port;///< port
 	};
 	
 	/**
@@ -344,7 +303,7 @@ namespace dodo
 	 * 
 	 * @note for xexec => you may use store/restore methods in hook if you want to leave data unchanged after it!
 	 */
-	class dbBase
+	class dbBase : public dbInterface
 	{
 		public:
 			

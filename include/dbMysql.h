@@ -31,7 +31,7 @@
 		
 	#include <mysql.h>
 	
-	#include <dbInterface.h>
+	#include <dbSqlBase.h>
 	#include <xexec.h>
 	
 	namespace dodo
@@ -113,7 +113,7 @@
 		/**
 	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
 		 */
-		class dbMysql : public dbInterface
+		class dbMysql : public dbSqlBase
 		
 		#ifndef DBMYSQL_WO_XEXEC
 										, public xexec
