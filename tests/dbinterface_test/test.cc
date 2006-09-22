@@ -10,7 +10,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	dbBase *pp;	
+	dbInterface *pp;	
 	
 	if (argc == 2)
 	{
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 		pp->setDbInfo(info);
 		pp->connect();	
 
-		pp->deleteTable("leg");
+		((dbBase *)pp)->deleteTable("leg");
 		
 		try
 		{
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 		fi.flag = FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
-		pp->createTable(ti);
+		((dbBase *)pp)->createTable(ti);
 		pp->exec();
 		
 		map<string,string> arr;
