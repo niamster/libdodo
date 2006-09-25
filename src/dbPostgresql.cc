@@ -33,6 +33,7 @@
 	
 	dbPostgresql::dbPostgresql() : empty(true)
 	{
+		connected = false;
 	}
 	
 	//-------------------------------------------------------------------

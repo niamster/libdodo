@@ -52,6 +52,7 @@ __tableInfo::__tableInfo()
 {
 	autoIncr = -1;
 	avgRowLen = -1;
+	ifNotExists = false;
 }
 
 //-------------------------------------------------------------------
@@ -69,6 +70,7 @@ __tableInfo::operator=(const __tableInfo &from)
 	
 	keys = from.keys;
 	uniq = from.uniq;
+	ifNotExists = from.ifNotExists;
 	
 	autoIncr = from.autoIncr;
 	avgRowLen = from.avgRowLen;

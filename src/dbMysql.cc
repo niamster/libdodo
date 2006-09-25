@@ -57,6 +57,8 @@
 	dbMysql::dbMysql() : empty(true),
 							type(CLIENT_MULTI_STATEMENTS)
 	{	
+		connected = false;
+		
 		addSQL();
 	}
 	

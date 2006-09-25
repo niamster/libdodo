@@ -296,6 +296,8 @@ namespace dodo
 		
 		std::string comment;///< comment string for table
 		std::string charset;///< table's charset
+		
+		bool ifNotExists;///< no warning message if table already exixts [false by default]
 	};
 	
 	/**

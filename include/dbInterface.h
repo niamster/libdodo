@@ -26,6 +26,7 @@
 #define _DBINTERFACE_H_
 
 #include <directives.h>
+#include <types.h>
 
 namespace dodo
 {

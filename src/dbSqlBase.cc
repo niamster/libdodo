@@ -470,7 +470,12 @@ dbSqlBase::createBaseCollect() const
 void 
 dbSqlBase::createTableCollect() const
 {
-	request = "create table " + pre_tableInfo.name + "(";
+	request = "create table "; 
+	
+	request.append(pre_tableInfo.ifNotExists?"if not exists ":__string__);
+	
+	request.append(pre_tableInfo.name + "(");
+	
 	{
 		std::vector<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end()-1);
 		for (;i!=j;++i)
@@ -478,7 +483,7 @@ dbSqlBase::createTableCollect() const
 		request.append(fieldCollect(*i));
 	}
 	
-	request.append(!pre_tableInfo.primKeys.empty()?(", primary key" + tools::implode(pre_tableInfo.primKeys,",")):__string__);
+	request.append(!pre_tableInfo.primKeys.empty()?(", primary key " + tools::implode(pre_tableInfo.primKeys,",")):__string__);
 	request.append(!pre_tableInfo.keys.empty()?(", key " + tools::implode(pre_tableInfo.keys,",")):__string__);
 	request.append(!pre_tableInfo.uniq.empty()?(", unique key " + tools::implode(pre_tableInfo.uniq,",")):__string__);
 	request.append(pre_tableInfo.avgRowLen>0?(", avg_row_length = " + tools::lToString(pre_tableInfo.avgRowLen)):__string__);
