@@ -235,10 +235,10 @@
 	unsigned int
 	dbSqlite::affectedRowsCount()
 	{
-		if (show)
-			return 0;
-		else	
+		if (!show)
 			return rowsNum;
+		else	
+			return 0;
 	}
 	
 	//-------------------------------------------------------------------
