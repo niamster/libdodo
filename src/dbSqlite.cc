@@ -213,7 +213,7 @@
 	unsigned int 
 	dbSqlite::rowsCount() const
 	{
-		if (!show)
+		if (show)
 			return rowsNum;
 		else	
 			return 0;
@@ -224,7 +224,7 @@
 	unsigned int 
 	dbSqlite::fieldsCount() const
 	{
-		if (!show)
+		if (show)
 			return fieldsNum;
 		else	
 			return 0;
@@ -236,9 +236,9 @@
 	dbSqlite::affectedRowsCount()
 	{
 		if (show)
-			return rowsNum;
-		else	
 			return 0;
+		else	
+			return rowsNum;
 	}
 	
 	//-------------------------------------------------------------------
