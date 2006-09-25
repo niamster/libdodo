@@ -24,18 +24,6 @@
  
 #include <tools.h>
 
-#ifdef CODECONV_EXT
-	#include <iconv.h>
-#endif
-
-#ifdef ZLIB_EXT
-	#include <zlib.h>
-#endif
-
-#ifdef BZIP_EXT
-	#include <bzlib.h>
-#endif
-
 #include <flushSocket.h>
 #include <flushSocketTools.h>
 #include <regexpTools.h>

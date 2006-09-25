@@ -57,7 +57,7 @@ __tableInfo::__tableInfo()
 //-------------------------------------------------------------------
 
 const __tableInfo &
-__tableInfo::operator=(__tableInfo &from)
+__tableInfo::operator=(const __tableInfo &from)
 {
 	name = from.name;
 	
@@ -93,7 +93,7 @@ __fieldInfo::__fieldInfo()
 //-------------------------------------------------------------------
 
 const __fieldInfo &
-__fieldInfo::operator=(__fieldInfo &from)
+__fieldInfo::operator=(const __fieldInfo &from)
 {
 	name = from.name;
 	type = from.type;

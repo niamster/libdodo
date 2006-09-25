@@ -246,7 +246,7 @@ namespace dodo
 		/**
 		 * overloaded operator '='
 		 */
-		const __fieldInfo &operator=(__fieldInfo &from);
+		const __fieldInfo &operator=(const __fieldInfo &from);
 
 		std::string name;///< name of the field
 		int type;///< type of field[see baseDataTypesEnum]
@@ -282,7 +282,7 @@ namespace dodo
 		/**
 		 * overloaded operator '='
 		 */
-		const __tableInfo &operator=(__tableInfo &from);
+		const __tableInfo &operator=(const __tableInfo &from);
 			
 		std::string name;///< name of the table
 		std::vector<__fieldInfo> fields;///< array of fields; see__fieldInfo
