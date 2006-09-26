@@ -51,8 +51,10 @@ flushSocket::flushSocket(bool a_server,
 						short a_family, 
 						short a_type) : flushSocketOptions(a_family,a_type),
 						blockInherited(false),
-						server(a_server)
+						server(a_server),
+						socketMade(false)
 {
+	makeSocket();
 }
 
 
@@ -60,12 +62,11 @@ flushSocket::flushSocket(bool a_server,
 
 flushSocket::~flushSocket()
 {
-	if (server && type == TRANSFER_TYPE_STREAM)
-		if (opened)
-		{
-			::shutdown(socket,SHUT_RDWR);		
-			::close(socket);
-		}
+	if (server && opened && type == TRANSFER_TYPE_STREAM)
+		::shutdown(socket,SHUT_RDWR);
+		
+	::close(socket);
+		
 	
 	if (server && unixSock.size()!=0)
 		flushDiskTools::unlink(unixSock);
@@ -136,6 +137,13 @@ flushSocket::~flushSocket()
 #endif
 flushSocket::makeSocket()
 {
+	if (socketMade)
+		#ifndef NO_EX
+			return ;
+		#else
+			return true;			
+		#endif				
+	
 	int real_domain(PF_INET), real_type(TRANSFER_TYPE_STREAM);
 	
 	switch (family)
@@ -179,6 +187,8 @@ flushSocket::makeSocket()
 		#else
 			return false;			
 		#endif	
+		
+	socketMade = true;	
 	
 	#ifdef NO_EX
 		return true;
@@ -209,6 +219,8 @@ flushSocket::connect(const std::string &host,
 		#endif
 		
 	makeSocket();
+	
+	socketMade = false;
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -243,6 +255,8 @@ flushSocket::connect(const std::string &host,
 	
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
+	
+	socket = -1;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -274,6 +288,7 @@ flushSocket::connect(const __connInfo &destinaton,
 		return true;
 	#endif		
 }
+
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
@@ -297,8 +312,10 @@ flushSocket::connectFrom(const std::string &local,
 		#else
 			return false;
 		#endif
-	
+
 	makeSocket();
+	
+	socketMade = false;
 		
 	register int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
@@ -363,6 +380,8 @@ flushSocket::connectFrom(const std::string &local,
 	
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
+	
+	socket = -1;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -420,6 +439,8 @@ flushSocket::connect(const std::string &path,
 		
 	makeSocket();
 	
+	socketMade = false;
+	
 	struct sockaddr_un sa;
 	
 	strcpy(sa.sun_path,path.c_str());
@@ -434,6 +455,8 @@ flushSocket::connect(const std::string &path,
 		
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
+	
+	socket = -1;
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -476,11 +499,15 @@ flushSocket::bindNListen(const std::string &host,
 				#else
 					return false;
 				#endif
+				
+		socketMade = false;
 							
 		opened = false;
 	}
 	
 	makeSocket();
+	
+	socketMade = false;
 	
 	register int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
@@ -607,10 +634,14 @@ flushSocket::bindNListen(const std::string &path,
 					return false;
 				#endif
 		
+		socketMade = false;
+				
 		opened = false;
 	}
 	
 	makeSocket();
+	
+	socketMade = false;
 
 	if (force)
 	{
