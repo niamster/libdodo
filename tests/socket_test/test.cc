@@ -105,13 +105,12 @@ int main(int argc, char **argv)
 		
 		__connInfo info;
 		__initialAccept fake;
+				
+		sock.bindNListen("127.0.0.1",7778,3);
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);	
 		sock.blockInherited = false;
-		
 		sock.block(false);
-				
-		sock.bindNListen("127.0.0.1",7778,3);
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",10,true);
 		

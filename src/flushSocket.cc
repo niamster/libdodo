@@ -478,8 +478,9 @@ flushSocket::bindNListen(const std::string &host,
 				#endif
 							
 		opened = false;
-		makeSocket();
 	}
+	
+	makeSocket();
 	
 	register int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
@@ -607,8 +608,9 @@ flushSocket::bindNListen(const std::string &path,
 				#endif
 		
 		opened = false;
-		makeSocket();
 	}
+	
+	makeSocket();
 
 	if (force)
 	{
