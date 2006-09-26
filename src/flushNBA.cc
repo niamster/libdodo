@@ -64,7 +64,6 @@ flushNBA::makeFalse(int count)
 	for (int i=0;i<count;++i)
 		tempRB.push_back(false);
 }
-
 //-------------------------------------------------------------------
 
 std::vector<bool> 
@@ -72,7 +71,7 @@ flushNBA::isReadable(const std::vector<int> &pos,
 					int timeout)
 {
 	tempRB.clear();
-		
+	
 	int count = -1;
 	
 	fds = new pollfd[pos.size()];
@@ -141,11 +140,83 @@ flushNBA::isReadable(const std::vector<int> &pos,
 
 //-------------------------------------------------------------------
 
+std::vector<bool> 
+flushNBA::isWritable(const std::vector<int> &pos, 
+					int timeout)
+{	tempRB.clear();
+	
+	int count = -1;
+	
+	fds = new pollfd[pos.size()];
+	
+	i = desc.begin();
+	j = desc.end();
+	for (;i!=j;++i)
+	{
+		m = pos.begin();
+		n = pos.end();
+		for (;m!=n;++m)
+		{
+			if (i->position == *m)
+			{
+				++count;
+				
+				fds[count].fd = i->out;
+				fds[count].events = POLLOUT;
+			}
+		}
+	}
+	
+	++count;
+	
+	if (count > 0)
+	{
+		int res = poll(fds,count,timeout);
+		
+		if (res > 0)
+		{
+				for (int i=0;i<count;++i)
+				{
+					if ((POLLOUT&fds[i].revents) == POLLOUT)
+						tempRB.push_back(true);
+					else
+						tempRB.push_back(false);
+				}
+				
+				return tempRB;
+		}
+		else
+		{
+			if (res == 0)
+			{
+				makeFalse(count);
+				
+				return tempRB;
+			}
+			else	
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISWRITABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else			
+					{
+						makeFalse(count);
+						
+						return tempRB;
+					}
+				#endif
+		}		
+	}
+	
+	makeFalse(count);
+	
+	return tempRB;
+}
+
+//-------------------------------------------------------------------
+
 bool 
 flushNBA::isReadable(int pos,
 					int timeout)
-{
-	i = desc.begin();
+{	i = desc.begin();
 	j = desc.end();
 	for (;i!=j;++i)
 		if (i->position == pos)
@@ -204,14 +275,14 @@ flushNBA::isWritable(int pos,
 	for (;i!=j;++i)
 		if (i->position == pos)
 		{
-			fd.fd = i->in;
-			fd.events = POLLIN | POLLPRI;
+			fd.fd = i->out;
+			fd.events = POLLOUT;
 			
 			int res = poll(&fd,1,timeout);
 			
 			if (res > 0)
 			{
-				if ((POLLIN&fd.revents) == POLLIN || (POLLPRI&fd.revents) == POLLPRI)
+				if ((POLLOUT&fd.revents) == POLLOUT)
 					return true;
 				else
 					return false;
@@ -226,7 +297,7 @@ flushNBA::isWritable(int pos,
 					#else			
 						return false;
 					#endif
-			}			
+			}
 		}
 	
 	return false;

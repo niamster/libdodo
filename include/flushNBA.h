@@ -99,7 +99,15 @@ namespace dodo
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 	 		 * @note if timeout is negative - infinit timeout
 	 		 */
-	 		virtual std::vector<bool> isReadable(const std::vector<int> &pos, int timeout = 100);	 		
+	 		virtual std::vector<bool> isReadable(const std::vector<int> &pos, int timeout = 100);
+	 			 			 		
+	 		/**
+	 		 * @return vector of true if flush* is ready to write
+	 		 * @param pos is vector of identificators of streams
+	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
+	 		 * @note if timeout is negative - infinit timeout
+	 		 */
+	 		virtual std::vector<bool> isWritable(const std::vector<int> &pos, int timeout = 100);	 		
 	 		
 	 		/**
 	 		 * @return true if flush* is ready to write
@@ -109,8 +117,12 @@ namespace dodo
 	 		 */
 	 		virtual bool isWritable(int pos, int timeout = 100);
 	 		
-		protected:
+		protected:	 		
 		
+			/**
+			 * @param count decribes with how many 'false' fill 
+			 * @note fill tempRB with false values
+			 */
 			virtual void makeFalse(int count);
 	 	
 	 		std::vector<__inOutDescriptors> desc;///< flush descriptors
