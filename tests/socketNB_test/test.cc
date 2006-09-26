@@ -14,15 +14,15 @@ int main(int argc, char **argv)
 		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
 		
 		__initialAccept fake;
-				
-		sock.bindNListen("127.0.0.1",7778,1);
-		//sock.bindNListen("::",7777);
-		//sock.bindNListen("./sock",10,true);
 
 		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);	
 		sock.blockInherited = true;
 		sock.block(false);
+						
+		sock.bindNListen("127.0.0.1",7778,1);
+		//sock.bindNListen("::",7777);
+		//sock.bindNListen("./sock",10,true);
 				
 		flushSocketExchange conn;
 
@@ -32,9 +32,12 @@ int main(int argc, char **argv)
 		{
 			if (sock.accept(fake))
 			{
-				
-					
 				conn.init(fake);
+				
+				if (conn.isBlocked())
+					cout << "is Blocked" << endl;
+				else
+					cout << "is not Blocked" << endl;
 				
 				int pos = nb.addFlush(conn);
 				

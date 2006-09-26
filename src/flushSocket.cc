@@ -220,8 +220,6 @@ flushSocket::connect(const std::string &host,
 		
 	makeSocket();
 	
-	socketMade = false;
-	
 	if (family == PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
@@ -255,6 +253,8 @@ flushSocket::connect(const std::string &host,
 	
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
+	
+	socketMade = false;
 	
 	socket = -1;
 			
@@ -314,8 +314,6 @@ flushSocket::connectFrom(const std::string &local,
 		#endif
 
 	makeSocket();
-	
-	socketMade = false;
 		
 	register int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
@@ -381,6 +379,8 @@ flushSocket::connectFrom(const std::string &local,
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
 	
+	socketMade = false;
+	
 	socket = -1;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
@@ -439,8 +439,6 @@ flushSocket::connect(const std::string &path,
 		
 	makeSocket();
 	
-	socketMade = false;
-	
 	struct sockaddr_un sa;
 	
 	strcpy(sa.sun_path,path.c_str());
@@ -455,6 +453,8 @@ flushSocket::connect(const std::string &path,
 		
 	exchange.blocked = blocked;
 	exchange.init(socket,blockInherited);
+	
+	socketMade = false;
 	
 	socket = -1;
 		
@@ -492,13 +492,12 @@ flushSocket::bindNListen(const std::string &host,
 
 	if (opened)
 	{
-		if (server && type == TRANSFER_TYPE_STREAM)
-			if (::close(socket)==-1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif
+		if (::close(socket) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
 				
 		socketMade = false;
 							
@@ -506,8 +505,6 @@ flushSocket::bindNListen(const std::string &host,
 	}
 	
 	makeSocket();
-	
-	socketMade = false;
 	
 	register int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
@@ -568,6 +565,8 @@ flushSocket::bindNListen(const std::string &host,
 			#endif		
 	
 	opened = true;
+	
+	socketMade = false;
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -626,13 +625,12 @@ flushSocket::bindNListen(const std::string &path,
 
 	if (opened)
 	{
-		if (server && type == TRANSFER_TYPE_STREAM)
-			if (::close(socket)==-1)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif
+		if (::close(socket) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
 		
 		socketMade = false;
 				
@@ -640,8 +638,6 @@ flushSocket::bindNListen(const std::string &path,
 	}
 	
 	makeSocket();
-	
-	socketMade = false;
 
 	if (force)
 	{
@@ -691,6 +687,8 @@ flushSocket::bindNListen(const std::string &path,
 	unixSock = path;
 	
 	opened = true;
+	
+	socketMade = false;
 		
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
