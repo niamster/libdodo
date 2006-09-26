@@ -89,30 +89,46 @@ namespace dodo
 	 		 * @return true if flush* is ready to read
 	 		 * @param pos is identificator of stream
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
-	 		 * @note if timeout is negative - infiniteve timeout
+	 		 * @note if timeout is negative - infinit timeout
 	 		 */
 	 		virtual bool isReadable(int pos, int timeout = 100);
+	 			 		
+	 		/**
+	 		 * @return vector of true if flush* is ready to read
+	 		 * @param pos is vector of identificators of streams
+	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
+	 		 * @note if timeout is negative - infinit timeout
+	 		 */
+	 		virtual std::vector<bool> isReadable(const std::vector<int> &pos, int timeout = 100);	 		
 	 		
 	 		/**
 	 		 * @return true if flush* is ready to write
 	 		 * @param pos is identificator of stream
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
-	 		 * @note if timeout is negative - infiniteve timeout
+	 		 * @note if timeout is negative - infinit timeout
 	 		 */
 	 		virtual bool isWritable(int pos, int timeout = 100);
 	 		
 		protected:
+		
+			virtual void makeFalse(int count);
 	 	
 	 		std::vector<__inOutDescriptors> desc;///< flush descriptors
 	 	
 	 		int descs;///< descriptors counter
 	 		
-	 		__inOutDescriptors temp;///< temp storage for descriptors
+	 		__inOutDescriptors tempD;///< temp storage for descriptors
 	 	
 	 		std::vector<__inOutDescriptors>::iterator i;///< iterator for desc
 	 		std::vector<__inOutDescriptors>::iterator j;///< iterator for desc
+	 		
+	 		std::vector<int>::const_iterator m;///< iterator for positions
+	 		std::vector<int>::const_iterator n;///< iterator for positions
+	 		
+	 		std::vector<bool> tempRB;///< temporary to save results of avalaibility
 	 		 
 	 		pollfd fd;///< event capture for stream
+	 		pollfd *fds;///< event capture for streams
 	 };
 
 };

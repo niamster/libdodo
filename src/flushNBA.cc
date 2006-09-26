@@ -47,13 +47,96 @@ flushNBA::~flushNBA()
 int 
 flushNBA::addFlush(const flush &fl)
 {
-	temp.position = ++descs;
-	temp.in = fl.getInDescriptor();
-	temp.out = fl.getOutDescriptor();
+	tempD.position = ++descs;
+	tempD.in = fl.getInDescriptor();
+	tempD.out = fl.getOutDescriptor();
 	
-	desc.push_back(temp);
+	desc.push_back(tempD);
 	
-	return temp.position; 
+	return tempD.position; 
+}
+
+//-------------------------------------------------------------------
+
+void 
+flushNBA::makeFalse(int count)
+{	
+	for (int i=0;i<count;++i)
+		tempRB.push_back(false);
+}
+
+//-------------------------------------------------------------------
+
+std::vector<bool> 
+flushNBA::isReadable(const std::vector<int> &pos, 
+					int timeout)
+{
+	tempRB.clear();
+		
+	int count = -1;
+	
+	fds = new pollfd[pos.size()];
+	
+	i = desc.begin();
+	j = desc.end();
+	for (;i!=j;++i)
+	{
+		m = pos.begin();
+		n = pos.end();
+		for (;m!=n;++m)
+		{
+			if (i->position == *m)
+			{
+				++count;
+				
+				fds[count].fd = i->in;
+				fds[count].events = POLLIN | POLLPRI;
+			}
+		}
+	}
+	
+	++count;
+	
+	if (count > 0)
+	{
+		int res = poll(fds,count,timeout);
+		
+		if (res > 0)
+		{
+				for (int i=0;i<count;++i)
+				{
+					if ((POLLIN&fds[i].revents) == POLLIN || (POLLPRI&fds[i].revents) == POLLPRI)
+						tempRB.push_back(true);
+					else
+						tempRB.push_back(false);
+				}
+				
+				return tempRB;
+		}
+		else
+		{
+			if (res == 0)
+			{
+				makeFalse(count);
+				
+				return tempRB;
+			}
+			else	
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISREADABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else			
+					{
+						makeFalse(count);
+						
+						return tempRB;
+					}
+				#endif
+		}		
+	}
+	
+	makeFalse(count);
+	
+	return tempRB;
 }
 
 //-------------------------------------------------------------------

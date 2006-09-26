@@ -130,6 +130,9 @@ int main(int argc, char **argv)
 	catch(baseEx ex)
 	{
 		cout << ex << ex.line;
-	}	
+	}
+
+	delete pp;
+
 	return 0;
 }
