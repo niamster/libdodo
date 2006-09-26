@@ -142,7 +142,7 @@ flushSocket::makeSocket()
 			return ;
 		#else
 			return true;			
-		#endif				
+		#endif
 	
 	int real_domain(PF_INET), real_type(TRANSFER_TYPE_STREAM);
 	
@@ -341,6 +341,10 @@ flushSocket::connectFrom(const std::string &local,
 				return false;
 			#endif
 
+		struct sockaddr_in6 sa;
+		sa.sin6_family = AF_INET6;
+		sa.sin6_flowinfo = 0;
+		sa.sin6_scope_id = 0;
 		sa.sin6_port = htons(port);
 		inet_pton(AF_INET6,host.c_str(),&sa.sin6_addr);
 		
