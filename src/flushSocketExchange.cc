@@ -34,8 +34,6 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <flushSocketExchangeEx.h>
-
 using namespace dodo;
 
 __initialAccept::__initialAccept() : socket(-1), 

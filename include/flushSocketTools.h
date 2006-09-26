@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <flushSocketToolsEx.h>
 #include <types.h>
 
 namespace dodo

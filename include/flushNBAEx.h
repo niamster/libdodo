@@ -38,24 +38,12 @@
 		 */
 		
 		/**
-		 * libdodo defined errors
-		 */
-		enum flushNBAExR
-		{
-			FLUSHNBA_,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */			
-		#define FLUSHNBA_STR ""
-		
-		/**
 		 * ID of function where exception was thrown
 		 */		
 		enum flushNBAFunctionsID
 		{
-			FLUSHNBA_,
+			FLUSHNBA_ISREADABLE,
+			FLUSHNBA_ISWRITABLE,
 		};
 		
 	};

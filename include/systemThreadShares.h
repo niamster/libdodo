@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <systemThreadSharesEx.h>
 #include <types.h>
 
 namespace dodo

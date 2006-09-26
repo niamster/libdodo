@@ -30,6 +30,7 @@
 #include <string>
 #include <vector>
 
+#include <xexecEx.h>
 #include <types.h>
 
 namespace dodo

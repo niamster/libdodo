@@ -31,6 +31,7 @@
 	
 	#include <sqlite3.h>
 	
+	#include <dbSqliteEx.h>	
 	#include <dbSqlBase.h>
 	#include <xexec.h>
 	

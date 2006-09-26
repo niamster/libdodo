@@ -27,8 +27,7 @@
 #ifdef MYSQL_EXT
 
 	#include <sys/socket.h>
-	
-	#include <dbMysqlEx.h>
+
 	#include <tools.h>
 	
 	using namespace dodo;

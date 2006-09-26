@@ -31,7 +31,6 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include <flushSTDEx.h>
 #include <tools.h>
 
 using namespace dodo;

@@ -27,8 +27,6 @@
 	
 #include <pthread.h>
 #include <time.h>
-
-#include <systemThreadSharesEx.h>
 	
 using namespace dodo;
 

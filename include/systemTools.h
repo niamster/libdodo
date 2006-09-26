@@ -31,6 +31,7 @@
 #include <pwd.h>
 #include <grp.h>
 
+#include <systemToolsEx.h>
 #include <types.h>
 
 namespace dodo

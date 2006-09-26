@@ -25,8 +25,7 @@
 #include <dbSqlite.h>
 
 #ifdef SQLITE_EXT
-	
-	#include <dbSqliteEx.h>
+
 	#include <tools.h>
 	
 	using namespace dodo;

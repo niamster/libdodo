@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <flushDiskEx.h>
 #include <types.h>
 #include <flush.h>
 

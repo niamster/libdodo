@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <timeToolsEx.h>
 #include <types.h>
 
 namespace dodo

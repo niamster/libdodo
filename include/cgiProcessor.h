@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <cgiProcessorEx.h>
 #include <types.h>
 #include <tools.h>
 #include <cgiPreprocessor.h>

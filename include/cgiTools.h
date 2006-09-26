@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <cgiToolsEx.h>
 #include <types.h>
 #include <dodoMap.h>
 #include <cgiFast.h>

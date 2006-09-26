@@ -57,3 +57,96 @@ flushNBA::addFlush(const flush &fl)
 }
 
 //-------------------------------------------------------------------
+
+bool 
+flushNBA::isReadable(int pos,
+					int timeout)
+{
+	i = desc.begin();
+	j = desc.end();
+	for (;i!=j;++i)
+		if (i->position == pos)
+		{
+			fd.fd = i->in;
+			fd.events = POLLIN | POLLPRI;
+			
+			int res = poll(&fd,1,timeout);
+			
+			if (res > 0)
+			{
+				if ((POLLIN&fd.revents) == POLLIN || (POLLPRI&fd.revents) == POLLPRI)
+					return true;
+				else
+					return false;
+			}
+			else
+			{
+				if (res == 0)
+					return false;
+				else	
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISREADABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else			
+						return false;
+					#endif
+			}
+		}
+	
+	return false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+flushNBA::delFlush(int pos)
+{
+	i = desc.begin();
+	j = desc.end();
+	for (;i!=j;++i)
+		if (i->position == pos)
+		{
+			desc.erase(i);
+			break;
+		}
+}
+
+//-------------------------------------------------------------------
+
+bool 
+flushNBA::isWritable(int pos,
+					int timeout)
+{
+	i = desc.begin();
+	j = desc.end();
+	for (;i!=j;++i)
+		if (i->position == pos)
+		{
+			fd.fd = i->in;
+			fd.events = POLLIN | POLLPRI;
+			
+			int res = poll(&fd,1,timeout);
+			
+			if (res > 0)
+			{
+				if ((POLLIN&fd.revents) == POLLIN || (POLLPRI&fd.revents) == POLLPRI)
+					return true;
+				else
+					return false;
+			}
+			else
+			{
+				if (res == 0)
+					return false;
+				else	
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISWRITABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else			
+						return false;
+					#endif
+			}			
+		}
+	
+	return false;
+}
+
+//-------------------------------------------------------------------

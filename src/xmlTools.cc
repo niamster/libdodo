@@ -28,8 +28,6 @@
 #ifdef LIBXML2_EXT
 	
 	#include <libxml/parser.h>
-
-	#include <xmlToolsEx.h>
 	
 	using namespace dodo;
  

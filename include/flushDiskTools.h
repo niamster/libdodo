@@ -26,6 +26,8 @@
 #define _FLUSHDISKTOOLS_H_
 
 #include <directives.h>
+
+#include <flushDiskToolsEx.h>
 #include <types.h>
 
 namespace dodo

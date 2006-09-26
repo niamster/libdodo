@@ -38,8 +38,6 @@
 
 #endif	
 
-#include <systemToolsEx.h>
-
 using namespace dodo;
 
 #ifdef DL_EXT

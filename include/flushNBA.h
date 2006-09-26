@@ -28,8 +28,11 @@
 
 #include <directives.h>
 
+#include <flushNBAEx.h>
 #include <types.h>
 #include <flush.h>
+
+#include <poll.h>
 
 namespace dodo
 { 	
@@ -76,14 +79,40 @@ namespace dodo
 	 		 * @param fl is a reference on stream[flushDisk, flushSTD, flushSocket, flushSocketExchange]
 	 		 */
 	 		virtual int addFlush(const flush &fl);
-	 	
-	 	protected:
+	 		
+	 		/**
+	 		 * @param fl is identificator of stream to remove
+	 		 */
+	 		virtual void delFlush(int pos);
+	 		
+	 		/**
+	 		 * @return true if flush* is ready to read
+	 		 * @param pos is identificator of stream
+	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
+	 		 * @note if timeout is negative - infiniteve timeout
+	 		 */
+	 		virtual bool isReadable(int pos, int timeout = 100);
+	 		
+	 		/**
+	 		 * @return true if flush* is ready to write
+	 		 * @param pos is identificator of stream
+	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
+	 		 * @note if timeout is negative - infiniteve timeout
+	 		 */
+	 		virtual bool isWritable(int pos, int timeout = 100);
+	 		
+		protected:
 	 	
 	 		std::vector<__inOutDescriptors> desc;///< flush descriptors
 	 	
 	 		int descs;///< descriptors counter
 	 		
 	 		__inOutDescriptors temp;///< temp storage for descriptors
+	 	
+	 		std::vector<__inOutDescriptors>::iterator i;///< iterator for desc
+	 		std::vector<__inOutDescriptors>::iterator j;///< iterator for desc
+	 		 
+	 		pollfd fd;///< event capture for stream
 	 };
 
 };

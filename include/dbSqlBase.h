@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <dbSqlBaseEx.h>
 #include <types.h>
 #include <dbBase.h>
 

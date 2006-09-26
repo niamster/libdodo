@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <flushSocketOptionsEx.h>
 #include <types.h>
 #include <flush.h>
 

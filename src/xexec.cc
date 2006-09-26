@@ -30,8 +30,6 @@
 
 #endif	
 
-#include <xexecEx.h>
-
 using namespace dodo;
 
 xexec::xexec() : safeHooks(true),

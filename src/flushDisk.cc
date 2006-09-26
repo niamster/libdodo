@@ -28,7 +28,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <flushDiskEx.h>
 #include <tools.h>
 #include <flushDiskTools.h>
 

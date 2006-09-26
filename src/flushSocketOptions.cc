@@ -29,7 +29,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <flushSocketOptionsEx.h>
 #include <flushDiskTools.h>
 #include <tools.h>
 

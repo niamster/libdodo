@@ -58,6 +58,7 @@
 												false,
 												false,
 												false,
+												false,
 												false};///< indicates whether handler was set
 		static void * __handlerDataEx[AM_MODULES];///< data that will be passed to handler
 		
@@ -65,6 +66,7 @@
 		
 			static void *__handlesEx[AM_MODULES];///< handles to modules
 			static bool __handlesOpenedEx[AM_MODULES] = {false,
+														false,
 														false,
 														false,
 														false,

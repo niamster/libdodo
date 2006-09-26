@@ -31,6 +31,7 @@
 		
 	#include <mysql.h>
 	
+	#include <dbMysqlEx.h>	
 	#include <dbSqlBase.h>
 	#include <xexec.h>
 	

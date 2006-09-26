@@ -27,6 +27,7 @@
 
 #include <directives.h>
 
+#include <cgiPreprocessorEx.h>
 #include <types.h>
 
 namespace dodo

@@ -36,8 +36,7 @@
 
 	#include <signal.h>
 	#include <pthread.h>
-		
-	#include <systemThreadsEx.h>
+
 	#include <systemTools.h>
 	
 	using namespace dodo;

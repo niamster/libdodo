@@ -31,6 +31,7 @@
 
 	#include <libpq-fe.h>
 	
+	#include <dbPostgresqlEx.h>	
 	#include <dbSqlBase.h>
 	#include <xexec.h>
 	

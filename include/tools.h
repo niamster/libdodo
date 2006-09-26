@@ -39,6 +39,7 @@
 	#include <bzlib.h>
 #endif
 
+#include <toolsEx.h>
 #include <types.h>
 
 namespace dodo

@@ -27,7 +27,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <cgiToolsEx.h>
 #include <tools.h>
 
 

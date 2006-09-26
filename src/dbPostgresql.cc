@@ -25,8 +25,7 @@
 #include <dbPostgresql.h>
 
 #ifdef POSTGRESQL_EXT
-	
-	#include <dbPostgresqlEx.h>
+
 	#include <tools.h>
 	
 	using namespace dodo;

@@ -31,6 +31,7 @@
 
 	#include <libxml/xmlmemory.h>
 
+	#include <xmlToolsEx.h>
 	#include <types.h>
 	#include <dodoMap.h>
 	

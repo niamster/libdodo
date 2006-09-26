@@ -28,7 +28,8 @@
 #include <directives.h>
 
 #ifdef PTHREAD_EXT
-
+		
+	#include <systemThreadsEx.h>
 	#include <types.h>
 	
 	namespace dodo
