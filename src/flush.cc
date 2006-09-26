@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flush.h
+ *            flush.cc
  *
  *  Tue Oct 11 00:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,57 +21,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-#ifndef _FLUSH_H_
-#define _FLUSH_H_
 
-#include <directives.h>
+#include <flush.h>
 
-#include <xexec.h>
-#include <types.h>
+using namespace dodo;
 
-namespace dodo
+flush::flush(): inSize(INSIZE), 
+				outSize(OUTSIZE),
+				opened(false)
 {
+}
 
-	/**
-	 * @class flush is a base class for I/O operations.
-	 * all I/O operations are blockable => read/write inSize/outSize block.
-	 */
-	class flush
-	{
-		friend class flushNBA;
-		
-		public:
-		
-			/**
-			 * constructor
-			 */
-			flush();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~flush();
-							
-			mutable unsigned long inSize;///< size of data block;
-			mutable unsigned long outSize;///< size of data block;
-			
-			mutable std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
+//-------------------------------------------------------------------
 
-		protected:
-		
-			mutable bool opened;///< indicates whether file(connection) opened or not
-			
-			/**
-			 * @return descriptor of input stream
-			 */
-			virtual int getInDescriptor() const = 0;
-			
-			/**
-			 * @return descriptor of output stream
-			 */ 
-			virtual int getOutDescriptor() const = 0;
-	};
-
-};
-
-#endif
+flush::~flush()
+{
+}

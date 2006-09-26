@@ -82,6 +82,16 @@ namespace dodo
 		public:
 		
 			/**
+			 * constructor
+			 */
+			dbInterface();
+			
+			/**
+			 * destructor
+			 */
+			virtual ~dbInterface();
+		
+			/**
 			 * connect to database
 			 */	
 			#ifndef NO_EX

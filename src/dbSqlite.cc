@@ -35,8 +35,6 @@
 	dbSqlite::dbSqlite() : rowsNum(-1),
 							fieldsNum(-1)
 	{
-		connected = false;
-		
 		auto_increment = " autoincrement ";
 	}
 	

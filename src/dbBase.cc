@@ -63,9 +63,9 @@ __tableInfo::operator=(const __tableInfo &from)
 	name = from.name;
 	
 	fields.clear();
-	
-	std::vector<__fieldInfo>::iterator j = from.fields.end();
-	for (std::vector<__fieldInfo>::iterator i=from.fields.begin();i!=j;++i)
+		
+	std::vector<__fieldInfo>::const_iterator j = from.fields.end();
+	for (std::vector<__fieldInfo>::const_iterator i=from.fields.begin();i!=j;++i)
 		fields.push_back(*i);
 	
 	keys = from.keys;

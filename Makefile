@@ -23,6 +23,8 @@ OBJECTS:=dbBase.o \
 		systemThreadShares.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \
+		flush.o \
+		dbInterface.o \
 		cgiFast.o \
 		cgiProcessor.o \
 		flushNBA.o
