@@ -261,7 +261,7 @@
 	dbMysql::_exec(const std::string &query, 
 					bool result) const
 	{	
-		if (query.size()==0)
+		if (query.size() == 0)
 			queryCollect();			
 		else
 		{

@@ -204,9 +204,6 @@
 					#endif
 				
 				#endif
-
-				mutable int rowsNum;///< number of columns in the query result
-				mutable int fieldsNum;///< number of fields in the query result
 				 
 			protected:
 			
@@ -227,22 +224,25 @@
 			private:
 				
 				mutable sqlite3 *lite;///< handle to DB
+				mutable sqlite3_stmt *liteStmt;///< handlde to sqlite statement[e.g. result]  
+
+				mutable bool empty;///< for detectin' whether liteStmt is empty or not
 				
-				
-				static int sqlite_callback(void *data, int argc, char **argv, char **azColName);///< callback function to work with got sql's data 
-				mutable __sqliteCallbackData callBackData;
+				mutable int result;///< store result for query
 				
 				mutable stringArr rowPart;///< to set temporary row content
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 				
+				mutable unsigned int numFields;///< number of fields
+				
 				/**
 				 * @note share vars
 				 */
-				mutable stringArr::const_iterator i;///< iterator for "hash"
+				/*mutable stringArr::const_iterator i;///< iterator for "hash"
 				mutable stringArr::const_iterator j;///< iterator for "hash"
 				mutable stringArr::const_iterator o;///< iterator for "hash"
 				mutable std::vector<stringArr>::const_iterator k;///< iterator for array of hashes
-				mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes				
+				mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes*/				
 		};
 
 	};

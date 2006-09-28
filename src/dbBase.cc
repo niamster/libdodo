@@ -673,8 +673,8 @@ dbBase::setAddInsSt(unsigned int statement)
 {
 	/*switch (statement)
 	{
-		break;
 		default:
+		
 			break;
 		
 	}*/
@@ -689,6 +689,7 @@ dbBase::setAddUpSt(unsigned int statement)
 	/*switch (statement)
 	{
 		default:
+		
 			break;
 		
 	}*/
@@ -704,10 +705,14 @@ dbBase::setAddSelSt(unsigned int statement)
 	{
 		case DBREQUEST_SELECT_DISTINCT:
 		case DBREQUEST_SELECT_ALL:
+		
 			removeF(qSelShift,1<<DBREQUEST_SELECT_ALL);
 			removeF(qSelShift,1<<DBREQUEST_SELECT_DISTINCT);
+			
 			break;
+			
 		default:
+		
 			break;
 		
 	}
@@ -722,6 +727,7 @@ dbBase::setAddDelSt(unsigned int statement)
 	/*switch (statement)
 	{
 		default:
+		
 			break;
 		
 	}*/
@@ -854,53 +860,100 @@ dbBase::stringType(int type) const
 	{
 		case FIELDTYPE_INT:
 		case FIELDTYPE_INTEGER:
+		
 			return std::string("INTEGER");
+			
 		case FIELDTYPE_DATE:
+		
 			return std::string("DATE");
+			
 		case FIELDTYPE_VARCHAR:
+		
 			return std::string("VARCHAR");
+			
 		case FIELDTYPE_TIMESTAMP:
+		
 			return std::string("TIMESTAMP");
+			
 		case FIELDTYPE_TIME:
+		
 			return std::string("TIME");
+			
 		case FIELDTYPE_TINYINT:
+		
 			return std::string("TINYINT");
+			
 		case FIELDTYPE_SMALLINT:
+		
 			return std::string("SMALLINT");
+			
 		case FIELDTYPE_MEDIUMINT:
+		
 			return std::string("MEDIUMINT");
+			
 		case FIELDTYPE_BIGINT:
+		
 			return std::string("BIGINT");
+			
 		case FIELDTYPE_FLOAT:
+		
 			return std::string("FLOAT");
+			
 		case FIELDTYPE_REAL:
 		case FIELDTYPE_DOUBLE:
+		
 			return std::string("REAL");
+			
 		case FIELDTYPE_DECIMAL:
+		
 			return std::string("DECIMAL");
+			
 		case FIELDTYPE_CHAR:
+		
 			return std::string("CHAR");
+			
 		case FIELDTYPE_TINYBLOB:
+		
 			return std::string("TINYBLOB");
+			
 		case FIELDTYPE_BLOB:
+		
 			return std::string("BLOB");
+			
 		case FIELDTYPE_MEDIUMBLOB:
+		
 			return std::string("MEDIUMBLOB");
+			
 		case FIELDTYPE_LONGBLOB:
+		
 			return std::string("LONGBLOB");
+			
 		case FIELDTYPE_TINYTEXT:
+		
 			return std::string("TINYTEXT");
+			
 		case FIELDTYPE_TEXT:
+		
 			return std::string("TEXT");
+			
 		case FIELDTYPE_MEDIUMTEXT:
+		
 			return std::string("MEDIUMTEXT");
+			
 		case FIELDTYPE_LONGTEXT:
+		
 			return std::string("LONGTEXT");
+			
 		case FIELDTYPE_ENUM:
+		
 			return std::string("ENUM");
+			
 		case FIELDTYPE_SET:
+		
 			return std::string("SET");
-		default :
+			
+		default:
+		
 			return __string__;
 	}
 }
@@ -924,7 +977,9 @@ dbBase::chkRange(int type) const
 		case FIELDTYPE_LONGTEXT:
 		case FIELDTYPE_ENUM:
 		case FIELDTYPE_SET:
+		
 			return -1;
+			
 		case FIELDTYPE_INTEGER:
 		case FIELDTYPE_INT:
 		case FIELDTYPE_TINYINT:
@@ -935,12 +990,17 @@ dbBase::chkRange(int type) const
 		case FIELDTYPE_REAL:
 		case FIELDTYPE_DOUBLE:
 		case FIELDTYPE_TIMESTAMP:
+		
 			return 0;
+			
 		case FIELDTYPE_VARCHAR:
 		case FIELDTYPE_CHAR:
 		case FIELDTYPE_DECIMAL:
+		
 			return 1;
-		default :
+			
+		default:
+		
 			return -1;
 	}	
 }
@@ -953,16 +1013,27 @@ dbBase::stringReference(int type) const
 	switch (type)
 	{
 		case REFERENCE_RESTRICT:
+		
 			return std::string("restrict");
+			
 		case REFERENCE_CASCADE:
+		
 			return std::string("cascade");
+			
 		case REFERENCE_SET_NULL:
+		
 			return std::string("set null");
+			
 		case REFERENCE_NO_ACTION:
+		
 			return std::string("no action");
+			
 		case REFERENCE_SET_DEFAULT:
+		
 			return std::string("set default");
+			
 		default:
+		
 			return __string__;
 	}
 }

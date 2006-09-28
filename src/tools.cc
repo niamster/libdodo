@@ -731,10 +731,13 @@ tools::hexToChar(const char first,
 		case '7':
 		case '8':
 		case '9':
+		
 			val = (16*(int(first)-48));
+			
 			break;
 			
 		default:
+		
 			val = (16*(int(first)-55));
 	}
 	
@@ -750,10 +753,13 @@ tools::hexToChar(const char first,
 		case '7':
 		case '8':
 		case '9':
+		
 			val += (int(second)-48);
+			
 		break;
 		
 		default:
+		
 			val += (int(second)-55);
 	}
 	
@@ -782,10 +788,13 @@ tools::decodeURL(const std::string &string)
 		switch(string[o]) 
 		{
 			case '+':
+			
 				result.append(1, ' ');
+				
 				break;
 				
 			case '%':
+			
 				if((k-o) >= 2 && std::isxdigit(string[o+1]) && std::isxdigit(string[o+2]))
 				{
 					result.append(1, tools::hexToChar(string[o+1], string[o+2]));
@@ -797,6 +806,7 @@ tools::decodeURL(const std::string &string)
 				break;
 				
 			default:
+			
 				result.append(1, string[o]);
 		}
 	}
@@ -819,27 +829,88 @@ tools::encodeURL(const std::string &string)
 		switch(string[i]) 
 	    {
 		    case ' ':
+		    
 				result.append(1, '+');
+				
 				break;
 				
-			case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
-			case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
-			case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
-			case 'V': case 'W': case 'X': case 'Y': case 'Z':
-			case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
-			case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
-			case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
-			case 'v': case 'w': case 'x': case 'y': case 'z':
-			case '0': case '1': case '2': case '3': case '4': case '5': case '6':
-			case '7': case '8': case '9':
-			case '-': case '_': case '.': case '~':
+			case 'A': 
+			case 'B': 
+			case 'C': 
+			case 'D': 
+			case 'E': 
+			case 'F': 
+			case 'G':
+			case 'H': 
+			case 'I': 
+			case 'J': 
+			case 'K': 
+			case 'L': 
+			case 'M': 
+			case 'N':
+			case 'O': 
+			case 'P': 
+			case 'Q': 
+			case 'R': 
+			case 'S': 
+			case 'T': 
+			case 'U':
+			case 'V': 
+			case 'W': 
+			case 'X': 
+			case 'Y': 
+			case 'Z':
+			case 'a': 
+			case 'b': 
+			case 'c': 
+			case 'd': 
+			case 'e': 
+			case 'f': 
+			case 'g':
+			case 'h': 
+			case 'i': 
+			case 'j': 
+			case 'k': 
+			case 'l': 
+			case 'm': 
+			case 'n':
+			case 'o': 
+			case 'p': 
+			case 'q': 
+			case 'r': 
+			case 's': 
+			case 't': 
+			case 'u':
+			case 'v': 
+			case 'w': 
+			case 'x': 
+			case 'y': 
+			case 'z':
+			case '0': 
+			case '1': 
+			case '2': 
+			case '3': 
+			case '4': 
+			case '5': 
+			case '6':
+			case '7': 
+			case '8': 
+			case '9':
+			case '-': 
+			case '_': 
+			case '.': 
+			case '~':
+			
 				result.append(1, string[i]);
+				
 				break;
 				
 			default:
+			
 				result.append(1, '%');
 				tools::charToHex(temp,string[i]);
 				result.append(temp);
+				
 				break;
 	    }
 	}
@@ -888,18 +959,25 @@ tools::encodeASCII85(const std::string &string)
 		switch (count++) 
 		{
 			case 0:	
+			
 				tuple |= (string[k] << 24); 
+				
 				break;
 				
 			case 1: 
+			
 				tuple |= (string[k] << 16); 
+				
 				break;
 				
 			case 2:	
+			
 				tuple |= (string[k] <<  8); 
+				
 				break;
 				
 			case 3:
+			
 				tuple |= string[k];
 				
 				if (tuple == 0)
@@ -909,6 +987,7 @@ tools::encodeASCII85(const std::string &string)
 					
 				tuple = 0;
 				count = 0;
+				
 				break;
 		}
 	}
@@ -931,25 +1010,33 @@ tools::_decodeASCII85(std::string &result,
 	switch (count) 
 	{
 		case 4:
+		
 			result.append(1,(char)(tuple >> 24));
 			result.append(1,(char)(tuple >> 16));
 			result.append(1,(char)(tuple >>  8));
 			result.append(1,(char)(tuple));
+			
 			break;
 			
 		case 3:
+		
 			result.append(1,(char)(tuple >> 24));
 			result.append(1,(char)(tuple >> 16));
 			result.append(1,(char)(tuple >>  8));
+			
 			break;
 			
 		case 2:
+		
 			result.append(1,(char)(tuple >> 24));
 			result.append(1,(char)(tuple >> 16));
+			
 			break;
 			
 		case 1:
+		
 			result.append(1,(char)(tuple >> 24));
+			
 			break;
 		}	
 }
@@ -974,24 +1061,8 @@ tools::decodeASCII85(const std::string &string)
 				{
 					switch(string[++k])
 					{
-						default:
-							if (string[k] < '!' || string[k] > 'u')
-								#ifndef NO_EX
-									throw baseEx(ERRMODULE_TOOLS,TOOLS_DECODEASCII85,ERR_LIBDODO,TOOLS_BAD_ASCII85,TOOLS_BAD_ASCII85_STR,__LINE__,__FILE__);
-								#else
-									return result;
-								#endif
-									
-							tuple += (string[k] - '!') * powASCII85[count++];
-							if (count == 5) 
-							{
-								_decodeASCII85(result,tuple,4);
-								count = 0;
-								tuple = 0;
-							}
-							break;
-							
 						case 'z':
+						
 							if (count != 0) 
 								#ifndef NO_EX
 									throw baseEx(ERRMODULE_TOOLS,TOOLS_DECODEASCII85,ERR_LIBDODO,TOOLS_BAD_ASCII85,TOOLS_BAD_ASCII85_STR,__LINE__,__FILE__);
@@ -1000,9 +1071,11 @@ tools::decodeASCII85(const std::string &string)
 								#endif
 							
 							result.append(4,'\0');
+							
 							break;
 							
 						case '~':
+						
 							if ((k-j) >= 1 && string[++k] == '>') 
 							{
 								if (count > 0) 
@@ -1022,9 +1095,35 @@ tools::decodeASCII85(const std::string &string)
 								return result;
 							#endif
 							
-						case '\n': case '\r': case '\t': case ' ':
-						case '\0': case '\f': case '\b': case 0177:
-							break;						
+						case '\n': 
+						case '\r': 
+						case '\t': 
+						case ' ':
+						case '\0': 
+						case '\f': 
+						case '\b': 
+						case 0177:
+						
+							break;	
+							
+						default:
+						
+							if (string[k] < '!' || string[k] > 'u')
+								#ifndef NO_EX
+									throw baseEx(ERRMODULE_TOOLS,TOOLS_DECODEASCII85,ERR_LIBDODO,TOOLS_BAD_ASCII85,TOOLS_BAD_ASCII85_STR,__LINE__,__FILE__);
+								#else
+									return result;
+								#endif
+									
+							tuple += (string[k] - '!') * powASCII85[count++];
+							if (count == 5) 
+							{
+								_decodeASCII85(result,tuple,4);
+								count = 0;
+								tuple = 0;
+							}
+							
+							break;					
 					}
 				}
 			}

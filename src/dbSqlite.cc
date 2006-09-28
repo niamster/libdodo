@@ -31,8 +31,7 @@
 	using namespace dodo;
 
 	
-	dbSqlite::dbSqlite() : rowsNum(-1),
-							fieldsNum(-1)
+	dbSqlite::dbSqlite() : empty(true)
 	{
 		auto_increment = " autoincrement ";
 	}
@@ -49,6 +48,9 @@
 	{
 		if (connected)
 		{
+			if (!empty)
+				sqlite3_finalize(liteStmt);
+				
 			sqlite3_close(lite);
 		}
 	}
@@ -103,7 +105,13 @@
 				operType = DBSQLITE_OPER_DISCONNECT;
 				performXExec(preExec);
 			#endif
-			
+		
+			if (!empty)
+			{
+				empty = true;
+				sqlite3_finalize(liteStmt);
+			}
+						
 			if (sqlite3_close(lite) != SQLITE_OK)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_DISCONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
@@ -129,7 +137,7 @@
 	dbSqlite::_exec(const std::string &query, 
 					bool result) const
 	{	
-		if (query.size()==0)
+		if (query.size() == 0)
 			queryCollect();			
 		else
 		{
@@ -137,15 +145,13 @@
 			show = result;
 		}
 
-		callBackData.data = (dbSqlite *)this;
-		callBackData.first = true;
-		
-		rowsNum = 0;
-		fieldsNum = 0;
-		fields.clear();
-		rows.clear();
-
-		if (sqlite3_exec(lite,request.c_str(),sqlite_callback,(void *)&callBackData, NULL)!=SQLITE_OK)
+		if (!empty)
+		{
+			sqlite3_finalize(liteStmt);
+			empty = true;
+		}			
+			
+		if (sqlite3_prepare(lite,request.c_str(),request.size(), &liteStmt, NULL)!=SQLITE_OK)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 			#else
@@ -169,6 +175,83 @@
 			
 		if (!show)
 			return __stringarrayvector__;
+
+		sqlite3_reset(liteStmt);
+		
+		numFields = sqlite3_column_count(liteStmt);
+		
+		bool iterate = true;
+		int i = 0;
+		
+		rows.clear();
+		
+		while (iterate)
+		{
+			result = sqlite3_step(plineInfo);
+			switch (result)
+			{
+				case SQLITE_BUSY:
+				
+					continue;
+					
+				case SQLITE_DONE:
+				
+					iterate = false;
+					
+					break;
+					
+				case SQLITE_ERROR:
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+					
+				case SQLITE_ROW:			
+					rowsPart.clear();
+					rowsPart.reserve(numFields);
+					
+					for (i=0;i<numFields;++i)
+						switch (sqlite3_column_type(liteStmt,i)
+						{
+							case SQLITE_INTEGER:
+								
+								rowsPart.push_back(tools::lToString(sqlite3_column_int(liteStmt,i)));
+								
+								break;
+								
+							case SQLITE_FLOAT:
+								
+								rowsPart.push_back(tools::dToString(sqlite3_column_double(liteStmt,i)));
+								
+								break;
+								
+							case SQLITE_TEXT:
+								
+								rowsPart.push_back(sqlite3_column_text(liteStmt,i));
+								
+								break;
+								
+							case SQLITE_INTEGER:
+								
+								rowsPart.push_back(std::string(sqlite3_column_int(liteStmt,i)),sqlite3_column_bytes(liteStmt,i));
+								
+								break;
+								
+							case SQLITE_NULL:
+							default:
+							
+								rowsPart.push_back("NULL");
+								
+								break;	
+						}
+						
+						rows.push_back(rowsPart);
+						
+					break;					
+					
+			}
+		}
 
 		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
@@ -211,7 +294,11 @@
 	dbSqlite::rowsCount() const
 	{
 		if (show)
-			return rowsNum;
+		{
+			sqlite3_reset(liteStmt);
+			
+			return sqlite3_data_count(liteStmt);
+		}
 		else	
 			return 0;
 	}
@@ -222,7 +309,7 @@
 	dbSqlite::fieldsCount() const
 	{
 		if (show)
-			return fieldsNum;
+			return sqlite3_column_count(liteStmt);
 		else	
 			return 0;
 	}
@@ -233,7 +320,7 @@
 	dbSqlite::affectedRowsCount()
 	{
 		if (!show)
-			return rowsNum;
+			return sqlite3_data_count(liteStmt);
 		else	
 			return 0;
 	}
@@ -329,39 +416,6 @@
 	#endif
 	
 	//-------------------------------------------------------------------	
-	
-	int 
-	dbSqlite::sqlite_callback(void *data, 
-							int argc, 
-							char **argv, 
-							char **azColName)
-	{
-		__sqliteCallbackData *liteData = (__sqliteCallbackData *)data;
-		
-		liteData->data->rowPart.clear();
-		liteData->data->rowPart.reserve(argc);
-		
-		++liteData->data->rowsNum;
-		
-		for (register int i(0);i<argc;++i)
-		{
-			liteData->data->rowPart.push_back(argv[i]!=NULL?argv[i]:"NULL");
-			if (liteData->first)
-				liteData->data->fields.push_back(azColName[i]);
-		}
-		
-		liteData->data->rows.push_back(liteData->data->rowPart);
-		
-		if (liteData->first)
-		{
-			liteData->data->fieldsNum = argc;
-			liteData->first = false;
-		}
-		
-		return 0;
-	}
-	
-	//-------------------------------------------------------------------
 	
 	dodoStringMapArr 
 	dbSqlite::fetchAssoc() const

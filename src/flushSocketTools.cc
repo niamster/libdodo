@@ -65,10 +65,12 @@ flushSocketTools::getHostInfo(const std::string &host)
 		switch (ent->h_addrtype)
 		{
 			case AF_INET:
+			
 				if (inet_ntop(AF_INET,ent->h_addr_list[i],temp,INET_ADDRSTRLEN)==NULL)
 					continue;
 					
 			case AF_INET6:
+			
 				if (inet_ntop(AF_INET6,ent->h_addr_list[i],temp,INET6_ADDRSTRLEN) == NULL)
 					continue;
 		}

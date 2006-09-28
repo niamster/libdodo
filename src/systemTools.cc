@@ -178,28 +178,47 @@ systemTools::getLimit(short type,
 	switch (type)
 	{
 		case SYSTEM_CPUTIME:
+		
 			realRes = RLIMIT_CPU;
+			
 			break;
+			
 		case SYSTEM_MAXFILESIZE:
+		
 			realRes = RLIMIT_FSIZE;
+			
 			break;
+			
 		case SYSTEM_MAXMEMUSAGE:
+		
 			realRes = RLIMIT_DATA;
+			
 			break;
+			
 		case SYSTEM_MAXSTACK:
+		
 			realRes = RLIMIT_STACK;
+			
 			break;
+			
 		case SYSTEM_MAXPROC:
+		
 			realRes = RLIMIT_NPROC;
+			
 			break;
+			
 		case SYSTEM_MAXOPENFILES:
+		
 			#ifdef __FreeBSD__
 				realRes = RLIMIT_NOFILE;
 			#else
 				realRes = RLIMIT_OFILE;
 			#endif
+			
 			break;
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETLIMIT,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -239,28 +258,47 @@ systemTools::setLimit(short type,
 	switch (type)
 	{
 		case SYSTEM_CPUTIME:
+		
 			realRes = RLIMIT_CPU;
+			
 			break;
+			
 		case SYSTEM_MAXFILESIZE:
+		
 			realRes = RLIMIT_FSIZE;
+			
 			break;
+			
 		case SYSTEM_MAXMEMUSAGE:
+		
 			realRes = RLIMIT_DATA;
+			
 			break;
+			
 		case SYSTEM_MAXSTACK:
+		
 			realRes = RLIMIT_STACK;
+			
 			break;
+			
 		case SYSTEM_MAXPROC:
+		
 			realRes = RLIMIT_NPROC;
+			
 			break;
+			
 		case SYSTEM_MAXOPENFILES:
+		
 			#ifdef __FreeBSD__
 				realRes = RLIMIT_NOFILE;
 			#else
 				realRes = RLIMIT_OFILE;
 			#endif
+			
 			break;
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETLIMIT,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -329,10 +367,15 @@ systemTools::getUID(short type)
 	switch (type)
 	{
 		case SYSTEM_UID:
+		
 			return getuid();
+			
 		case SYSTEM_EUID:
+		
 			return geteuid();
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -356,10 +399,19 @@ systemTools::setUID(short type,
 	switch (type)
 	{
 		case SYSTEM_UID:
+		
 			res = setuid(uid);
+			
+			break;
+			
 		case SYSTEM_EUID:
+		
 			res = seteuid(uid);
+			
+			break;
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETUID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -387,10 +439,15 @@ systemTools::getGID(short type)
 	switch (type)
 	{
 		case SYSTEM_UID:
+		
 			return getgid();
+			
 		case SYSTEM_EUID:
+		
 			return getegid();
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -414,10 +471,19 @@ systemTools::setGID(short type,
 	switch (type)
 	{
 		case SYSTEM_UID:
+		
 			res = setgid(uid);
+			
+			break;
+			
 		case SYSTEM_EUID:
+		
 			res = setegid(uid);
+			
+			break;
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETGID,ERR_LIBDODO,SYSTEMTOOLS_WRONG_PARAMETHER,SYSTEMTOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -514,6 +580,7 @@ systemTools::getUsers(std::vector<__userInfo> &users)
 		case EMFILE:
 		case ENFILE:
 		case ENOMEM:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETUSERS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -643,6 +710,7 @@ systemTools::getGroups(std::vector<__groupInfo> &users)
 		case ENFILE:
 		case EINTR:
 		case ENOMEM:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPS,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
@@ -1216,42 +1284,55 @@ systemTools::toRealSignal(long signal)
 	switch (signal)
 	{
 		case SIGNAL_HANGUP:
+		
 			return SIGHUP;
 			
 		case SIGNAL_INTERRUPT:
+		
 			return SIGINT;
 			
 		case SIGNAL_QUIT:
+		
 			return SIGQUIT;
 			
 		case SIGNAL_ILLEGAL_INSTRUCTION:
+		
 			return SIGILL;
 			
 		case SIGNAL_ABORT:
+		
 			return SIGABRT;
 			
 		case SIGNAL_BUS_FAULT:
+		
 			return SIGBUS;
 			
 		case SIGNAL_FLOATINGPOINT_FAULT:
+		
 			return SIGFPE;
 			
 		case SIGNAL_USER_DEFINED1:
+		
 			return SIGUSR1;
 			
 		case SIGNAL_SEGMENTATION_FAULT:
+		
 			return SIGSEGV;
 			
 		case SIGNAL_USER_DEFINED2:
+		
 			return SIGUSR2;
 			
 		case SIGNAL_PIPE_FAULT:
+		
 			return SIGPIPE;
 			
 		case SIGNAL_ALARM:
+		
 			return SIGALRM;
 			
 		case SIGNAL_TERMINATION:
+		
 			return SIGTERM;
 	
 		#ifndef	__FreeBSD__
@@ -1262,24 +1343,31 @@ systemTools::toRealSignal(long signal)
 		#endif
 			
 		case SIGNAL_CHILD_CHANGED:
+		
 			return SIGCHLD;
 			
 		case SIGNAL_CONTINUE:
+		
 			return SIGCONT;
 
 		case SIGNAL_KEYBOARD_STOP:
+		
 			return SIGTSTP;
 			
 		case SIGNAL_CPULIMIT_EXCEEDED:
+		
 			return SIGXCPU;	
 					
 		case SIGNAL_FILESIZE_EXCEEDED:
+		
 			return SIGXFSZ;
 			
 		case SIGNAL_BAD_SYSCALL:
+		
 			return SIGSYS;
 			
 		default:
+		
 			return 0;
 	}
 }
