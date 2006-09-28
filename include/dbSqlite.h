@@ -234,6 +234,7 @@
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 				
 				mutable unsigned int numFields;///< number of fields
+				mutable unsigned int numRows;///< number of rows
 
 				mutable std::vector<stringArr> rows;///< to store rows
 				mutable stringArr fields;///< to store fields

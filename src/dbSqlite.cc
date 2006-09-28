@@ -151,12 +151,27 @@
 			empty = true;
 		}			
 			
-		if (sqlite3_prepare(lite,request.c_str(),request.size(), &liteStmt, NULL)!=SQLITE_OK)
+		if (sqlite3_prepare(lite,request.c_str(),request.size(), &liteStmt, NULL) != SQLITE_OK)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
+		
+		if (liteStmt == NULL)	
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+			
+		if (!show)
+			if (sqlite3_step(liteStmt) != SQLITE_DONE)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif	
 		
 		#ifdef NO_EX
 			return true;
@@ -251,8 +266,7 @@
 						
 						rows.push_back(rowsPart);
 						
-					break;					
-					
+					break;
 			}
 		}
 
@@ -307,8 +321,42 @@
 		if (show)
 		{
 			sqlite3_reset(liteStmt);
+		
+			numRows = 0;
+			register bool iterate = true;
 			
-			return sqlite3_data_count(liteStmt);
+			while (iterate)
+			{
+				result = sqlite3_step(liteStmt);
+				switch (result)
+				{
+					case SQLITE_BUSY:
+					
+						continue;
+						
+					case SQLITE_DONE:
+					
+						iterate = false;
+						
+						break;
+						
+					case SQLITE_ERROR:
+					
+						#ifndef NO_EX
+							throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+						#else
+							return false;
+						#endif
+						
+					case SQLITE_ROW:	
+					
+						++numRows;
+							
+						break;
+				}
+			}	
+			
+			return numRows;	
 		}
 		else	
 			return 0;
@@ -331,7 +379,7 @@
 	dbSqlite::affectedRowsCount()
 	{
 		if (!show)
-			return sqlite3_data_count(liteStmt);
+			return sqlite3_changes(lite);
 		else	
 			return 0;
 	}
@@ -470,47 +518,45 @@
 				case SQLITE_ROW:	
 						
 					rowFieldsPart.clear();
-					rowFieldsPart.reserve(numFields);
 					
 					for (i=0;i<numFields;++i)
 						switch (sqlite3_column_type(liteStmt,i))
 						{
 							case SQLITE_INTEGER:
 								
-								rowFieldsPart.realArr[] = tools::lToString(sqlite3_column_int(liteStmt,i));
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::lToString(sqlite3_column_int(liteStmt,i));
 								
 								break;
 								
 							case SQLITE_FLOAT:
 								
-								rowFieldsPart.realArr[] = tools::dToString(sqlite3_column_double(liteStmt,i));
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::dToString(sqlite3_column_double(liteStmt,i));
 								
 								break;
 								
 							case SQLITE_TEXT:
 								
-								rowFieldsPart.realArr[] = (const char *)sqlite3_column_text(liteStmt,i);
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = (const char *)sqlite3_column_text(liteStmt,i);
 								
 								break;
 								
 							case SQLITE_BLOB:
 								
-								rowFieldsPart.realArr[] = std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
 								
 								break;
 								
 							case SQLITE_NULL:
 							default:
 							
-								rowFieldsPart.realArr[] = "NULL";
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = "NULL";
 								
 								break;	
 						}
 						
 						rowsFields.push_back(rowFieldsPart);
 						
-					break;					
-					
+					break;			
 			}
 		}
 		

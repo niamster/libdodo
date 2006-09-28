@@ -559,7 +559,6 @@
 			length = mysql_fetch_lengths(mysqlRes);
 			
 			rowFieldsPart.clear();
-			rowFieldsPart.reserve(numFields);
 			
 			for (j=0;j<numFields;++j)
 			{
