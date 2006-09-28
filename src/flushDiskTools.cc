@@ -541,23 +541,35 @@ flushDiskTools::getFileType(const std::string &path)
 	switch (st.st_mode)
 	{
 		case S_IFREG:
+		
 			return FILETYPE_REGULAR_FILE;
 			
 		case S_IFDIR:
+		
 			return FILETYPE_DIRECTORY;
 			
 		case S_IFLNK:
+		
 			return FILETYPE_SYMBOLIC_LINK;
+			
 		case S_IFSOCK:
+		
 			return FILETYPE_LOCAL_SOCKET;
+			
 		case S_IFBLK:
+		
 			return FILETYPE_BLOCK_DEVICE;
+			
 		case S_IFCHR:
+		
 			return FILETYPE_CHARACTER_DEVICE;
+			
 		case S_IFIFO:
+		
 			return FILETYPE_FIFO;
 			
 		default:
+		
 			return -1;
 	}
 }
@@ -773,6 +785,7 @@ flushDiskTools::getFileContent(const std::string &path)
 					case ENOMEM:
 					case EOVERFLOW:
 					case EROFS:
+					
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISKTOOLS_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
@@ -783,6 +796,7 @@ flushDiskTools::getFileContent(const std::string &path)
 					case ENOMEM:
 					case EOVERFLOW:	
 					case EROFS:
+					
 						return retS;
 				}
 			#endif
@@ -807,6 +821,7 @@ flushDiskTools::getFileContent(const std::string &path)
 					case ENOMEM:
 					case EOVERFLOW:
 					case EROFS:
+					
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISKTOOLS_GETFILECONTENT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
@@ -817,6 +832,7 @@ flushDiskTools::getFileContent(const std::string &path)
 					case ENOMEM:
 					case EOVERFLOW:	
 					case EROFS:
+					
 						return retS;
 				}
 			#endif
@@ -1072,6 +1088,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:
 						case EROFS:
+						
 							throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISKTOOLS_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					}	
 				#else			
@@ -1082,6 +1099,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:	
 						case EROFS:
+						
 							return false;
 					}
 				#endif
@@ -1095,6 +1113,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:
 						case EROFS:
+						
 							throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISKTOOLS_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					}	
 				#else			
@@ -1105,6 +1124,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:	
 						case EROFS:
+						
 							return false;
 					}
 				#endif
@@ -1135,6 +1155,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:
 						case EROFS:
+						
 							throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISKTOOLS_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					}	
 				#else			
@@ -1145,6 +1166,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:	
 						case EROFS:
+						
 							return false;
 					}
 				#endif
@@ -1158,6 +1180,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:
 						case EROFS:
+						
 							throw baseEx(ERRMODULE_FLUSHSTD,FLUSHDISKTOOLS_COPY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					}	
 				#else			
@@ -1168,6 +1191,7 @@ flushDiskTools::copy(const std::string &from,
 						case ENOMEM:
 						case EOVERFLOW:	
 						case EROFS:
+						
 							return false;
 					}
 				#endif					

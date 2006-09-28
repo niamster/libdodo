@@ -82,10 +82,13 @@
 			switch (i->action)
 			{
 				case THREAD_KEEP_ALIVE:
+				
 					pthread_detach(i->thread);
+					
 					break;
 					
 				case THREAD_STOP:
+				
 					pthread_cancel(i->thread);
 					#ifdef DL_EXT
 					
@@ -99,10 +102,12 @@
 						}
 						
 					#endif
+					
 					break;
 				
 				case THREAD_WAIT:
 				default:
+				
 					pthread_join(i->thread,NULL);
 					
 					#ifdef DL_EXT

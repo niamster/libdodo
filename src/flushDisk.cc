@@ -250,22 +250,29 @@ flushDisk::open(const std::string &a_path) const
 			switch (mode)
 			{
 				case OPENMODE_READ_WRITE:
+				
 					file = fopen(path.c_str(),"r+");
 					if (file == NULL)
 						file = fopen(path.c_str(),"w+");
+						
 					break;
 					
 				case OPENMODE_READ_WRITE_TRUNCATE:
+				
 					file = fopen(path.c_str(),"w+");
+					
 					break;
 					
 				case OPENMODE_APPEND:
+				
 					file = fopen(path.c_str(),"a+");
 					append = true;
+					
 					break;
 					
 				case OPENMODE_READ_ONLY:
 				default:
+				
 					file = fopen(path.c_str(),"r");			
 			}
 		}
@@ -336,6 +343,7 @@ flushDisk::read(char * const a_void,
 			case EOVERFLOW:
 			case ENOMEM:
 			case ENXIO:
+			
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		}	
 	#else			
@@ -347,6 +355,7 @@ flushDisk::read(char * const a_void,
 			case EOVERFLOW:
 			case ENOMEM:
 			case ENXIO:
+			
 				return false;
 		}
 	#endif
@@ -492,6 +501,7 @@ flushDisk::write(const char *const a_buf,
 			case EPIPE:
 			case ENOMEM:
 			case ENXIO:
+			
 				throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		}	
 	#else			
@@ -506,6 +516,7 @@ flushDisk::write(const char *const a_buf,
 			case EPIPE:
 			case ENOMEM:
 			case ENXIO:
+			
 				return false;
 		}
 	#endif
@@ -611,6 +622,7 @@ flushDisk::readStream(char * const a_void,
 						case EOVERFLOW:
 						case ENOMEM:
 						case ENXIO:
+						
 							throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					}	
 				#else			
@@ -622,6 +634,7 @@ flushDisk::readStream(char * const a_void,
 						case EOVERFLOW:
 						case ENOMEM:
 						case ENXIO:
+						
 							return false;
 					}
 				#endif
@@ -648,6 +661,7 @@ flushDisk::readStream(char * const a_void,
 				case EOVERFLOW:
 				case ENOMEM:
 				case ENXIO:
+				
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			}	
 		#else			
@@ -659,6 +673,7 @@ flushDisk::readStream(char * const a_void,
 				case EOVERFLOW:
 				case ENOMEM:
 				case ENXIO:
+				
 					return false;
 			}
 		#endif
@@ -752,6 +767,7 @@ flushDisk::writeStream(const char *const a_buf)
 				case EPIPE:
 				case ENOMEM:
 				case ENXIO:
+				
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			}	
 		#else			
@@ -766,6 +782,7 @@ flushDisk::writeStream(const char *const a_buf)
 				case EPIPE:
 				case ENOMEM:
 				case ENXIO:
+				
 					return false;
 			}
 		#endif
@@ -783,6 +800,7 @@ flushDisk::writeStream(const char *const a_buf)
 				case EPIPE:
 				case ENOMEM:
 				case ENXIO:
+				
 					throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			}	
 		#else			
@@ -797,6 +815,7 @@ flushDisk::writeStream(const char *const a_buf)
 				case EPIPE:
 				case ENOMEM:
 				case ENXIO:
+				
 					return false;
 			}
 		#endif

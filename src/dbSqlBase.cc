@@ -512,91 +512,126 @@ dbSqlBase::queryCollect() const
 	switch (qType)
 	{
 		case DBREQUEST_SELECT:
+		
 			selectCollect();
 			selectAction = true;
+			
 			break;
 			
 		case DBREQUEST_INSERT:
+		
 			insertCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_UPDATE:
+		
 			updateCollect();
+			
 			break;
 			
 		case DBREQUEST_DELETE:
+		
 			delCollect();
+			
 			break;
 			
 		case DBREQUEST_USE:
+		
 			useCollect();
+			
 			break;
 			
 		case DBREQUEST_INSERT_SELECT:
+		
 			insertSelectCollect();
 			selectAction = true;
+			
 			break;
 			
 		case DBREQUEST_UNION:
 		case DBREQUEST_UNION_ALL:
 		case DBREQUEST_MINUS:
 		case DBREQUEST_INTERSECT:
+		
 			subCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_TRUNCATE:
+		
 			truncateCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_RENAME_DB:
+		
 			renameBaseCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_RENAME_TABLE:
+		
 			renameTableCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_RENAME_FIELD:
+		
 			renameFieldCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_DELETE_DB:
+		
 			delBaseCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_DELETE_TABLE:
+		
 			delTableCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_DELETE_FIELD:
+		
 			delFieldCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_CREATE_DB:
+		
 			createBaseCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_CREATE_TABLE:
+		
 			createTableCollect();
 			additionalActions = false;
+			
 			break;
 			
 		case DBREQUEST_CREATE_FIELD:
+		
 			createFieldCollect();
 			additionalActions = false;
+			
 			break;
 			
 		default:
+		
 			additionalActions = false;
 	}
 	#ifndef FAST

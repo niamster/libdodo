@@ -334,6 +334,7 @@ cgiTools::makePost() const
 							case ENOMEM:
 							case EOVERFLOW:
 							case EROFS:
+							
 								throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 						}	
 					#else			
@@ -344,6 +345,7 @@ cgiTools::makePost() const
 							case ENOMEM:
 							case EOVERFLOW:	
 							case EROFS:
+							
 								return false;
 						}
 					#endif
@@ -362,6 +364,7 @@ cgiTools::makePost() const
 					case ENOMEM:
 					case EOVERFLOW:
 					case EROFS:
+					
 						throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
@@ -372,6 +375,7 @@ cgiTools::makePost() const
 					case ENOMEM:
 					case EOVERFLOW:	
 					case EROFS:
+					
 						return false;
 				}
 			#endif
@@ -458,14 +462,22 @@ cgiTools::makePost() const
 					{
 						case EACCES:
 						case EISDIR:
+						
 							file.error = POSTFILEERR_ACCESS_DENY;
+							
 							break;
+							
 						case ENAMETOOLONG:
 						case ENOTDIR:
+						
 							file.error = POSTFILEERR_BAD_FILE_NAME;
 							break;
+							
 						case ENOMEM:
+						
 							file.error = POSTFILEERR_NO_SPACE;
+							
+							break;
 					}
 				fwrite(i->substr(temp1+4).c_str(),file.size,1,file.fp);
 				if (errno == ENOMEM)

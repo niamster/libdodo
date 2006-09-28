@@ -326,31 +326,45 @@ flushSocketOptions::setSockOption(short option,
 	switch (option)
 	{
 		case SOCKET_KEEP_ALIVE:
+		
 			real_option = SO_KEEPALIVE;
+			
 			break;
 			
 		case SOCKET_REUSE_ADDRESS:
+		
 			real_option = SO_REUSEADDR;
+			
 			break;
 			
 		case SOCKET_DONOT_USE_GATEWAY:
+		
 			real_option = SO_DONTROUTE;
+			
 			break;
 			
 		case SOCKET_BROADCAST:
+		
 			real_option = SO_BROADCAST;
+			
 			break;
 			
 		case SOCKET_OOB_INLINE:
+		
 			real_option = SO_OOBINLINE;
+			
 			break;
 			
 		#ifdef SO_REUSEPORT	
 			case SOCKET_REUSE_PORT:
+			
 				real_option = SO_REUSEPORT;
+				
 				break;
 		#endif
+		
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETSOCKOPT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -397,16 +411,25 @@ flushSocketOptions::setLingerSockOption(short option,
 	switch (option)
 	{
 		case SOCKET_GRACEFUL_CLOSE:
+		
 			lin.l_onoff = 0;
+			
 			break;
+			
 		case SOCKET_HARD_CLOSE:
+		
 			lin.l_onoff = 1;
 			lin.l_linger = 0;
+			
 			break;
+			
 		case SOCKET_WAIT_CLOSE:
+		
 			lin.l_onoff = 1;
 			lin.l_linger = seconds;
+			
 			break;
+			
 		default:
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);

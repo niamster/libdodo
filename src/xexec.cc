@@ -522,18 +522,23 @@ xexec::performXExec(__execItemList &list) const
 		switch (info.execType)
 		{
 			case XEXECMODULE_POST:
+			
 				temp.position = ++execs;
 				postExec.exec.push_back(temp);
 				count.post = temp.position;
+				
 				break;
 			
 			case XEXECMODULE_PRE:
+			
 				temp.position = ++execs;
 				preExec.exec.push_back(temp);
 				count.pre = temp.position;
+				
 				break;
 									
 			case XEXECMODULE_BOTH:
+			
 				temp.position = ++execs;
 				postExec.exec.push_back(temp);
 				count.post = temp.position;
@@ -541,6 +546,7 @@ xexec::performXExec(__execItemList &list) const
 				temp.position = ++execs;
 				preExec.exec.push_back(temp);		
 				count.pre = temp.position;
+				
 				break;
 		}
 		

@@ -416,19 +416,27 @@ cgiProcessor::_if(const std::string &buffer,
 			switch (oper)
 			{
 				case 1:
+				
 					accept = (first <= second);
+					
 					break;
 					
 				case 2:
+				
 					accept = (first >= second);
+					
 					break;
 					
 				case 3:
+				
 					accept = (first < second);
+					
 					break;
 					
 				case 4:
+				
 					accept = (first > second);
+					
 					break;
 			}
 		}

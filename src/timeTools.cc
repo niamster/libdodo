@@ -222,18 +222,22 @@ timeTools::daysInMonth(unsigned int year,
 		case 8:
 		case 10:
 		case 12:
+		
 			day = 31;
+			
 			break;
 			
 		case 4:
 		case 6:
 		case 9:
 		case 11:
+		
 			day = 30;
+			
 			break;
 			
 		case 2:
-		{
+		
 			register unsigned int isleap = 0;
 			if (year % 4 == 0) 
 			{
@@ -246,7 +250,7 @@ timeTools::daysInMonth(unsigned int year,
 			else
 				day = 28;
 			break;
-		}
+
 	}
 	
 	return day;	

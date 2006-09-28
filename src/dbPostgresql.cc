@@ -171,6 +171,7 @@
 			case PGRES_BAD_RESPONSE:
 			case PGRES_NONFATAL_ERROR:
 			case PGRES_FATAL_ERROR:
+			
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_CONNECT,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
 				#else

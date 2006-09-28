@@ -373,7 +373,7 @@ flushSTD::inputterInfo()
 	switch (len)
 	{
 		case sizeof(sockaddr_in):
-		{
+
 			char temp[15];
 			sockaddr_in *sa4;
 			sa4 = (sockaddr_in *)&sa;
@@ -381,10 +381,9 @@ flushSTD::inputterInfo()
 				info.host.assign(temp);
 			info.port = ntohs(sa4->sin_port);
 			return info;
-		}
 			
 		case sizeof(sockaddr_in6):
-		{
+
 				char temp[INET6_ADDRSTRLEN];
 				sockaddr_in6 *sa6;
 				sa6 = (sockaddr_in6 *)&sa6;
@@ -392,9 +391,9 @@ flushSTD::inputterInfo()
 					info.host.assign(temp);
 				info.port = ntohs(sa6->sin6_port);
 			return info;
-		}
 			
 		default:
+		
 			return info;
 			
 	}
