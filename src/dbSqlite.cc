@@ -184,6 +184,7 @@
 		register unsigned int i = 0;
 		
 		rows.clear();
+		rows.reserve(sqlite3_data_count(liteStmt));
 		
 		while (iterate)
 		{
@@ -271,9 +272,17 @@
 			operType = DBSQLITE_OPER_FETCHFIELD;
 			performXExec(preExec);
 		#endif
-					
+		
 		if (!show)
 			return __stringarray__;
+			
+		numFields = sqlite3_column_count(liteStmt);
+		
+		fields.clear();
+		fields.reserve(numFields);
+		
+		for (register unsigned int i(0);i<numFields;++i)
+			fields.push_back(sqlite3_column_name(liteStmt, i));
 
 		#ifndef DBSQLITE_WO_XEXEC
 			performXExec(postExec);
@@ -425,21 +434,87 @@
 		if (!show)
 			return __dodostringmap__;
 		
-		/*j = fields.end();
-		k = rows.begin();
-		l = rows.end();
+		sqlite3_reset(liteStmt);
 		
-		rowFieldsPart.clear();
+		numFields = sqlite3_column_count(liteStmt);
 		
-		for (;k!=l;++k)
+		register bool iterate = true;
+		register unsigned int i = 0;
+		
+		rowsFields.clear();
+		rowsFields.reserve(sqlite3_data_count(liteStmt));
+		
+		while (iterate)
 		{
-			for (i=fields.begin(), o=k->begin();i!=j;++i,++o)
-				rowFieldsPart.realArr[*i] = *o;
+			result = sqlite3_step(liteStmt);
+			switch (result)
+			{
+				case SQLITE_BUSY:
 				
-			rowsFields.push_back(rowFieldsPart);
+					continue;
+					
+				case SQLITE_DONE:
+				
+					iterate = false;
+					
+					break;
+					
+				case SQLITE_ERROR:
+				
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHASSOC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+					
+				case SQLITE_ROW:	
+						
+					rowFieldsPart.clear();
+					rowFieldsPart.reserve(numFields);
+					
+					for (i=0;i<numFields;++i)
+						switch (sqlite3_column_type(liteStmt,i))
+						{
+							case SQLITE_INTEGER:
+								
+								rowFieldsPart.realArr[] = tools::lToString(sqlite3_column_int(liteStmt,i));
+								
+								break;
+								
+							case SQLITE_FLOAT:
+								
+								rowFieldsPart.realArr[] = tools::dToString(sqlite3_column_double(liteStmt,i));
+								
+								break;
+								
+							case SQLITE_TEXT:
+								
+								rowFieldsPart.realArr[] = (const char *)sqlite3_column_text(liteStmt,i);
+								
+								break;
+								
+							case SQLITE_BLOB:
+								
+								rowFieldsPart.realArr[] = std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
+								
+								break;
+								
+							case SQLITE_NULL:
+							default:
+							
+								rowFieldsPart.realArr[] = "NULL";
+								
+								break;	
+						}
+						
+						rowsFields.push_back(rowFieldsPart);
+						
+					break;					
+					
+			}
 		}
 		
-		return rowsFields;*/
+		return rowsFields;	
 	}
 
 	//-------------------------------------------------------------------

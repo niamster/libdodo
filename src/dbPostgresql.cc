@@ -412,6 +412,9 @@
 
 		for (register int i(0);i<rowsNum;++i)
 		{
+			rowFieldsPart.clear();
+			rowFieldsPart.reserve(numFields);
+			
 			for (j=0;j<fieldsNum;++j)
 			{
 				if (PQgetisnull(pgResult,i,j)==1)

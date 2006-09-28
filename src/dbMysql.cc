@@ -335,7 +335,7 @@
 			rowsPart.clear();
 			rowsPart.reserve(numFields);
 			
-			for (j=0;j<numFields;j++)
+			for (j=0;j<numFields;++j)
 			{
 				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
 				rowsPart.push_back(rowPart);
@@ -370,7 +370,7 @@
 		fields.clear();
 		fields.reserve(numFields);
 		
-		for (register unsigned int i(0);i<numFields;i++)
+		for (register unsigned int i(0);i<numFields;++i)
 			fields.push_back(mysqlFields[i].name);
 
 		#ifndef DBMYSQL_WO_XEXEC
@@ -558,7 +558,10 @@
 		{		
 			length = mysql_fetch_lengths(mysqlRes);
 			
-			for (j=0;j<numFields;j++)
+			rowFieldsPart.clear();
+			rowFieldsPart.reserve(numFields);
+			
+			for (j=0;j<numFields;++j)
 			{
 				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);			
 				rowFieldsPart.realArr[mysqlFields[j].name] = rowPart;

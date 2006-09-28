@@ -231,22 +231,13 @@
 				mutable int result;///< store result for query
 				
 				mutable stringArr rowsPart;///< to store rows
-				//mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
+				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 				
 				mutable unsigned int numFields;///< number of fields
 
 				mutable std::vector<stringArr> rows;///< to store rows
 				mutable stringArr fields;///< to store fields
-				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
-							
-				/**
-				 * @note share vars
-				 */
-				/*mutable stringArr::const_iterator i;///< iterator for "hash"
-				mutable stringArr::const_iterator j;///< iterator for "hash"
-				mutable stringArr::const_iterator o;///< iterator for "hash"
-				mutable std::vector<stringArr>::const_iterator k;///< iterator for array of hashes
-				mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes*/				
+				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'			
 		};
 
 	};
