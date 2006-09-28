@@ -61,7 +61,7 @@ flushNBA::addFlush(const flush &fl)
 void 
 flushNBA::makeFalse(int count)
 {	
-	for (int i=0;i<count;++i)
+	for (register int i=0;i<count;++i)
 		tempRB.push_back(false);
 }
 //-------------------------------------------------------------------
@@ -72,7 +72,7 @@ flushNBA::isReadable(const std::vector<int> &pos,
 {
 	tempRB.clear();
 	
-	int count = -1;
+	register int count = -1;
 	
 	fds = new pollfd[pos.size()];
 	
@@ -98,11 +98,11 @@ flushNBA::isReadable(const std::vector<int> &pos,
 	
 	if (count > 0)
 	{
-		int res = poll(fds,count,timeout);
+		res = poll(fds,count,timeout);
 		
 		if (res > 0)
 		{
-				for (int i=0;i<count;++i)
+				for (register int i=0;i<count;++i)
 				{
 					if ((POLLIN&fds[i].revents) == POLLIN || (POLLPRI&fds[i].revents) == POLLPRI)
 						tempRB.push_back(true);
@@ -145,7 +145,7 @@ flushNBA::isWritable(const std::vector<int> &pos,
 					int timeout)
 {	tempRB.clear();
 	
-	int count = -1;
+	register int count = -1;
 	
 	fds = new pollfd[pos.size()];
 	
@@ -171,11 +171,11 @@ flushNBA::isWritable(const std::vector<int> &pos,
 	
 	if (count > 0)
 	{
-		int res = poll(fds,count,timeout);
+		res = poll(fds,count,timeout);
 		
 		if (res > 0)
 		{
-				for (int i=0;i<count;++i)
+				for (register int i=0;i<count;++i)
 				{
 					if ((POLLOUT&fds[i].revents) == POLLOUT)
 						tempRB.push_back(true);
@@ -278,7 +278,7 @@ flushNBA::isWritable(int pos,
 			fd.fd = i->out;
 			fd.events = POLLOUT;
 			
-			int res = poll(&fd,1,timeout);
+			res = poll(&fd,1,timeout);
 			
 			if (res > 0)
 			{

@@ -240,6 +240,10 @@
 				mutable std::string rowPart;///< temp storage for data
 				mutable stringArr rowsPart;///< to store rows
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
+				
+				mutable std::vector<stringArr> rows;///< to store rows
+				mutable stringArr fields;///< to store fields
+				mutable	dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'				
 		};
 		
 	};

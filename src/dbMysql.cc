@@ -318,6 +318,8 @@
 			
 		if (empty || !show)
 			return __stringarrayvector__;
+			
+		mysql_field_seek(mysqlRes, 0);
 		
 		numFields = mysql_num_fields(mysqlRes);	
 		
@@ -540,6 +542,8 @@
 	{
 		if (empty || !show)
 			return __dodostringmap__;
+		
+		mysql_field_seek(mysqlRes, 0);
 		
 		numFields = mysql_num_fields(mysqlRes);	
 		mysqlFields = mysql_fetch_fields(mysqlRes);

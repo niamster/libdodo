@@ -367,7 +367,11 @@
 				mutable std::string rowPart;///< to store row node
 				mutable stringArr rowsPart;///< to store rows
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
-					
+
+				mutable std::vector<stringArr> rows;///< to store rows
+				mutable stringArr fields;///< to store fields
+				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
+								
 				mutable unsigned int numFields;///< number of fields
 				
 				mutable unsigned long type;

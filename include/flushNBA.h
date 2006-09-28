@@ -141,6 +141,8 @@ namespace dodo
 	 		 
 	 		pollfd fd;///< event capture for stream
 	 		pollfd *fds;///< event capture for streams
+	 		
+	 		int res;///< to hold result 
 	 };
 
 };

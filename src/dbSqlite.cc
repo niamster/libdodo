@@ -180,14 +180,14 @@
 		
 		numFields = sqlite3_column_count(liteStmt);
 		
-		bool iterate = true;
-		int i = 0;
+		register bool iterate = true;
+		register unsigned int i = 0;
 		
 		rows.clear();
 		
 		while (iterate)
 		{
-			result = sqlite3_step(plineInfo);
+			result = sqlite3_step(liteStmt);
 			switch (result)
 			{
 				case SQLITE_BUSY:
@@ -201,18 +201,20 @@
 					break;
 					
 				case SQLITE_ERROR:
+				
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
 					
-				case SQLITE_ROW:			
+				case SQLITE_ROW:	
+						
 					rowsPart.clear();
 					rowsPart.reserve(numFields);
 					
 					for (i=0;i<numFields;++i)
-						switch (sqlite3_column_type(liteStmt,i)
+						switch (sqlite3_column_type(liteStmt,i))
 						{
 							case SQLITE_INTEGER:
 								
@@ -228,13 +230,13 @@
 								
 							case SQLITE_TEXT:
 								
-								rowsPart.push_back(sqlite3_column_text(liteStmt,i));
+								rowsPart.push_back((const char *)sqlite3_column_text(liteStmt,i));
 								
 								break;
 								
-							case SQLITE_INTEGER:
+							case SQLITE_BLOB:
 								
-								rowsPart.push_back(std::string(sqlite3_column_int(liteStmt,i)),sqlite3_column_bytes(liteStmt,i));
+								rowsPart.push_back(std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i)));
 								
 								break;
 								
@@ -423,7 +425,7 @@
 		if (!show)
 			return __dodostringmap__;
 		
-		j = fields.end();
+		/*j = fields.end();
 		k = rows.begin();
 		l = rows.end();
 		
@@ -437,7 +439,7 @@
 			rowsFields.push_back(rowFieldsPart);
 		}
 		
-		return rowsFields;
+		return rowsFields;*/
 	}
 
 	//-------------------------------------------------------------------
