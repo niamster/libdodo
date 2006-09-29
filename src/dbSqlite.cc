@@ -138,7 +138,7 @@
 					bool result) const
 	{	
 		if (query.size() == 0)
-			queryCollect();			
+			queryCollect();
 		else
 		{
 			request = query;
@@ -248,13 +248,13 @@
 								
 							case SQLITE_TEXT:
 								
-								rowsPart.push_back((const char *)sqlite3_column_text(liteStmt,i));
+								rowsPart.push_back(unescapeFields((const char *)sqlite3_column_text(liteStmt,i)));
 								
 								break;
 								
 							case SQLITE_BLOB:
 								
-								rowsPart.push_back(std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i)));
+								rowsPart.push_back(unescapeFields(std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i))));
 								
 								break;
 								
@@ -538,13 +538,13 @@
 								
 							case SQLITE_TEXT:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = (const char *)sqlite3_column_text(liteStmt,i);
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields((const char *)sqlite3_column_text(liteStmt,i));
 								
 								break;
 								
 							case SQLITE_BLOB:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields(std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i)));
 								
 								break;
 								

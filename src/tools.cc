@@ -193,6 +193,7 @@ tools::explode(const std::string &fields,
 	register unsigned long i(0), j(0), sep_size(separator.size());
 	register int k(0);
 	stringArr arr;
+	
 	while (true)
 	{
 		if (limit != -1)
@@ -222,11 +223,13 @@ tools::replace(const std::string &needle,
 		std::string &data)
 {
 	register unsigned long i(0),j(needle.size()),k(replacement.size());
+	
 	while (true)
 	{
 		i = data.find(needle,i);
 		if (i == std::string::npos)
 			break;
+			
 		data.replace(i,j,replacement,0,k);
 		i += k;
 	}

@@ -364,7 +364,6 @@
 				mutable MYSQL_ROW mysqlRow;///< pointer to rows
 				mutable MYSQL_FIELD *mysqlFields;///< pointer to fields
 
-				mutable std::string rowPart;///< to store row node
 				mutable stringArr rowsPart;///< to store rows
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 

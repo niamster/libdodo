@@ -82,7 +82,13 @@ namespace dodo
 			 * @return escaped string
 			 * @param data is string to escape
 			 */
-			inline static std::string escapeFields(const std::string &data);
+			static std::string escapeFields(const std::string &data);
+		
+			/**
+			 * @return unescaped string
+			 * @param data is string to unescape
+			 */
+			static std::string unescapeFields(const std::string &data);
 			
 			/**
 			 * constructs from collected data to SELECT sql statement
@@ -205,8 +211,30 @@ namespace dodo
 			 * @param frame is value with what values will be framed
 			 */
 			virtual std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &frame="'") const;
+	
+			/**
+			 * @return sql compliant data type
+			 * @param type indicates the data type
+			 */
+			virtual std::string stringType(int type) const;
 			
+			/**
+			 * @return : if type must have range = 1; if may have = 0; if mustn't have = -1;
+			 * @param type indicates the data type
+			 */
+			virtual int chkRange(int type) const;
+			
+			/**
+			 * @return sql compliant references statements
+			 * @param type indicates the type of reference
+			 */
+			virtual std::string stringReference(int type) const;
+						
 			mutable std::string auto_increment;///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
+			mutable std::string blob;///< bytea for postgres, blob for others 
+			mutable std::string tinyblob;///< bytea for postgres, blob for others 
+			mutable std::string mediumblob;///< bytea for postgres, blob for others 
+			mutable std::string longblob;///< bytea for postgres, blob for others 
 		
 		private:
 			

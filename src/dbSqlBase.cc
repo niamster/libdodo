@@ -114,6 +114,11 @@ static 	__statements sqlAddSelArr[3] =
 dbSqlBase::dbSqlBase() : preventFraming(false)
 {	
 	auto_increment = " auto_increment ";
+	
+	blob = "blob";
+	tinyblob = "tinyblob";
+	mediumblob = "mediumblob";
+	longblob = "longblob";
 }
 
 //-------------------------------------------------------------------
@@ -660,13 +665,26 @@ dbSqlBase::queryCollect() const
 
 //-------------------------------------------------------------------
 
-inline std::string
-dbSqlBase::escapeFields(const std::string &a_data)
+std::string
+dbSqlBase::unescapeFields(const std::string &data)
 { 
-	std::string temp(a_data);
+	std::string temp = data;
+	
+	tools::replace("\\'","'",temp);
+	tools::replace("\\\\","\\",temp); 
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+std::string
+dbSqlBase::escapeFields(const std::string &data)
+{
+	std::string temp = data;
 	
 	tools::replace("\\","\\\\",temp);
-	tools::replace("'","\\'",temp);
+	tools::replace("'","\\'",temp); 
 	
 	return temp;
 }
@@ -697,6 +715,193 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 	}
 	
 	return resRow;
+}
+
+//-------------------------------------------------------------------
+
+std::string
+dbSqlBase::stringType(int type) const
+{
+	switch (type)
+	{
+		case FIELDTYPE_INT:
+		case FIELDTYPE_INTEGER:
+		
+			return std::string("INTEGER");
+			
+		case FIELDTYPE_DATE:
+		
+			return std::string("DATE");
+			
+		case FIELDTYPE_VARCHAR:
+		
+			return std::string("VARCHAR");
+			
+		case FIELDTYPE_TIMESTAMP:
+		
+			return std::string("TIMESTAMP");
+			
+		case FIELDTYPE_TIME:
+		
+			return std::string("TIME");
+			
+		case FIELDTYPE_TINYINT:
+		
+			return std::string("TINYINT");
+			
+		case FIELDTYPE_SMALLINT:
+		
+			return std::string("SMALLINT");
+			
+		case FIELDTYPE_MEDIUMINT:
+		
+			return std::string("MEDIUMINT");
+			
+		case FIELDTYPE_BIGINT:
+		
+			return std::string("BIGINT");
+			
+		case FIELDTYPE_FLOAT:
+		
+			return std::string("FLOAT");
+			
+		case FIELDTYPE_REAL:
+		case FIELDTYPE_DOUBLE:
+		
+			return std::string("REAL");
+			
+		case FIELDTYPE_DECIMAL:
+		
+			return std::string("DECIMAL");
+			
+		case FIELDTYPE_CHAR:
+		
+			return std::string("CHAR");
+			
+		case FIELDTYPE_TINYBLOB:
+		
+			return tinyblob;
+			
+		case FIELDTYPE_BLOB:
+		
+			return blob;
+			
+		case FIELDTYPE_MEDIUMBLOB:
+		
+			return mediumblob;
+			
+		case FIELDTYPE_LONGBLOB:
+		
+			return longblob;
+			
+		case FIELDTYPE_TINYTEXT:
+		
+			return std::string("TINYTEXT");
+			
+		case FIELDTYPE_TEXT:
+		
+			return std::string("TEXT");
+			
+		case FIELDTYPE_MEDIUMTEXT:
+		
+			return std::string("MEDIUMTEXT");
+			
+		case FIELDTYPE_LONGTEXT:
+		
+			return std::string("LONGTEXT");
+			
+		case FIELDTYPE_ENUM:
+		
+			return std::string("ENUM");
+			
+		case FIELDTYPE_SET:
+		
+			return std::string("SET");
+			
+		default:
+		
+			return __string__;
+	}
+}
+	
+//-------------------------------------------------------------------
+
+int 
+dbSqlBase::chkRange(int type) const
+{
+	switch (type)
+	{
+		case FIELDTYPE_DATE:
+		case FIELDTYPE_TIME:
+		case FIELDTYPE_TINYBLOB:
+		case FIELDTYPE_BLOB:
+		case FIELDTYPE_MEDIUMBLOB:
+		case FIELDTYPE_LONGBLOB:
+		case FIELDTYPE_TINYTEXT:
+		case FIELDTYPE_TEXT:
+		case FIELDTYPE_MEDIUMTEXT:
+		case FIELDTYPE_LONGTEXT:
+		case FIELDTYPE_ENUM:
+		case FIELDTYPE_SET:
+		
+			return -1;
+			
+		case FIELDTYPE_INTEGER:
+		case FIELDTYPE_INT:
+		case FIELDTYPE_TINYINT:
+		case FIELDTYPE_SMALLINT:
+		case FIELDTYPE_MEDIUMINT:
+		case FIELDTYPE_BIGINT:
+		case FIELDTYPE_FLOAT:
+		case FIELDTYPE_REAL:
+		case FIELDTYPE_DOUBLE:
+		case FIELDTYPE_TIMESTAMP:
+		
+			return 0;
+			
+		case FIELDTYPE_VARCHAR:
+		case FIELDTYPE_CHAR:
+		case FIELDTYPE_DECIMAL:
+		
+			return 1;
+			
+		default:
+		
+			return -1;
+	}	
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+dbSqlBase::stringReference(int type) const
+{
+	switch (type)
+	{
+		case REFERENCE_RESTRICT:
+		
+			return std::string("restrict");
+			
+		case REFERENCE_CASCADE:
+		
+			return std::string("cascade");
+			
+		case REFERENCE_SET_NULL:
+		
+			return std::string("set null");
+			
+		case REFERENCE_NO_ACTION:
+		
+			return std::string("no action");
+			
+		case REFERENCE_SET_DEFAULT:
+		
+			return std::string("set default");
+			
+		default:
+		
+			return __string__;
+	}
 }
 
 //-------------------------------------------------------------------

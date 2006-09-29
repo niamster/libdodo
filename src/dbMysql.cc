@@ -336,10 +336,7 @@
 			rowsPart.reserve(numFields);
 			
 			for (j=0;j<numFields;++j)
-			{
-				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
-				rowsPart.push_back(rowPart);
-			}
+				rowsPart.push_back(unescapeFields(std::string((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4)));
 			
 			rows.push_back(rowsPart);
 		}
@@ -561,10 +558,7 @@
 			rowFieldsPart.clear();
 			
 			for (j=0;j<numFields;++j)
-			{
-				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);			
-				rowFieldsPart.realArr[mysqlFields[j].name] = rowPart;
-			}
+				rowFieldsPart.realArr[mysqlFields[j].name] = unescapeFields(std::string((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4));
 			
 			rowsFields.push_back(rowFieldsPart);
 		}

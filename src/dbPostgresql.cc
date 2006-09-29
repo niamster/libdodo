@@ -32,6 +32,10 @@
 	
 	dbPostgresql::dbPostgresql() : empty(true)
 	{
+		blob = "bytea";
+		tinyblob = "bytea";
+		mediumblob = "bytea";
+		longblob = "bytea";
 	}
 	
 	//-------------------------------------------------------------------
@@ -218,7 +222,7 @@
 				if (PQgetisnull(pgResult,i,j)==1)
 					rowPart.assign("NULL");
 				else
-					rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
+					rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));
 
 				rowsPart.push_back(rowPart);
 			}

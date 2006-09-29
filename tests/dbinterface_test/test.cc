@@ -3,6 +3,7 @@
 #include <dbPostgresql.h>
 #include <dbMysql.h>
 #include <dbSqlite.h>
+#include <flushDiskTools.h>
 
 using namespace dodo;
 
@@ -17,11 +18,13 @@ int main(int argc, char **argv)
 		if (strcasecmp(argv[1],"postgres") == 0)
 			pp = new dbPostgresql;
 			
-		if (strcasecmp(argv[1],"mysql") == 0)	
+		else if (strcasecmp(argv[1],"mysql") == 0)	
 			pp = new dbMysql;
 			
-		if (strcasecmp(argv[1],"sqlite") == 0)	
+		else if (strcasecmp(argv[1],"sqlite") == 0)	
 			pp = new dbSqlite;			
+		else
+			return 1;
 	}
 	else
 		return 1;
@@ -79,6 +82,11 @@ int main(int argc, char **argv)
 		fi.flag = FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
+		fi.name = "b";
+		fi.type = FIELDTYPE_BLOB;
+		fi.flag = FIELDPROP_NULL;
+		ti.fields.push_back(fi);		
+		
 		((dbBase *)pp)->createTable(ti);
 		pp->exec();
 		
@@ -89,6 +97,7 @@ int main(int argc, char **argv)
 		vector<string> select;
 		select.push_back("date");
 		select.push_back("operation");
+		select.push_back("b");
 		
 		for (int i=0;i<10;i++)
 		{
@@ -125,11 +134,29 @@ int main(int argc, char **argv)
 				cout << *m << "\t";
 			cout << endl;	
 		}
-		
+
+                arr.clear();
+
+		std::string dt = flushDiskTools::getFileContent("test");
+		flushDiskTools::append("test.1", dt);
+		arr["b"] = tools::encodeBase64(dt);
+		arr["date"] = "2005-07-08";
+		arr["operation"] = "ma";
+
+		pp->insert("leg",arr);
+		pp->exec();
+
+                pp->select("leg",select,"operation='ma'");
+		pp->exec();
+
+		store = pp->fetch();
+
+		if (store.fields.size() == 3 && store.rows.size() > 0)
+			flushDiskTools::append("test.2",tools::decodeBase64((*store.rows.begin())[2]));
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << ex.line;
+		cout << ex << ex.line << endl << endl;
 	}
 
 	delete pp;

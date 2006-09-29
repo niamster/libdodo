@@ -616,24 +616,6 @@ namespace dodo
 			void initRowInfo(__fieldInfo &field);	
 				
 		protected:
-		
-			/**
-			 * @return sql compliant data type
-			 * @param type indicates the data type
-			 */
-			virtual std::string stringType(int type) const;
-			
-			/**
-			 * @return : if type must have range = 1; if may have = 0; if mustn't have = -1;
-			 * @param type indicates the data type
-			 */
-			virtual int chkRange(int type) const;
-			
-			/**
-			 * @return sql compliant references statements
-			 * @param type indicates the type of reference
-			 */
-			virtual std::string stringReference(int type) const;
 			
 			/**
 			 * frees collected data
