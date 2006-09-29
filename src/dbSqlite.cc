@@ -165,6 +165,8 @@
 				return false;
 			#endif
 			
+		empty = false;	
+			
 		if (!show)
 			if (sqlite3_step(liteStmt) != SQLITE_DONE)
 				#ifndef NO_EX
