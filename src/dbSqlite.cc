@@ -129,6 +129,14 @@
 	
 	//-------------------------------------------------------------------
 	
+	void 
+	dbSqlite::setBLOBValues(const stringArr &values)
+	{
+		fields = values;
+	}
+	
+	//-------------------------------------------------------------------
+	
 	#ifndef NO_EX
 		void 
 	#else
@@ -136,13 +144,29 @@
 	#endif
 	dbSqlite::_exec(const std::string &query, 
 					bool result) const
-	{	
+	{
 		if (query.size() == 0)
+		{
 			queryCollect();
+			
+			blobHint = false;
+		}
 		else
 		{
-			request = query;
-			show = result;
+			if (strcmp(query.substr(0,18).c_str(),"dodo:hint:db:blob") == 0)
+			{
+				queryCollect();
+				
+				if (!show)
+					blobHint = true;
+			}
+			else
+			{
+				request = query;
+				show = result;
+				
+				blobHint = false;
+			}
 		}
 
 		if (!empty)
@@ -157,6 +181,38 @@
 			#else
 				return false;
 			#endif
+			
+		if (blobHint)
+		{
+			switch (qType)
+			{
+				case DBREQUEST_UPDATE:
+				case DBREQUEST_INSERT:
+				
+					{
+						stringArr::iterator i(fields.begin()), j(fields.end());
+						for (register int o=1;i!=j;++i,++o)
+							if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_STATIC) != SQLITE_OK)
+								#ifndef NO_EX
+									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+								#else
+									return false;
+								#endif
+					}	
+										
+					break;
+					
+				default:
+					
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_LIBDODO,DBSQLITE_WRONG_HINT_USAGE,DBSQLITE_WRONG_HINT_USAGE_STR,__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+					
+			}
+			
+		}	
 		
 		if (liteStmt == NULL)	
 			#ifndef NO_EX
@@ -248,13 +304,21 @@
 								
 							case SQLITE_TEXT:
 								
-								rowsPart.push_back(unescapeFields((const char *)sqlite3_column_text(liteStmt,i)));
+								rowPart = (const char *)sqlite3_column_text(liteStmt,i);
+								if (preventEscaping)
+									rowsPart.push_back(rowPart);
+								else
+									rowsPart.push_back(unescapeFields(rowPart));
 								
 								break;
 								
 							case SQLITE_BLOB:
 								
-								rowsPart.push_back(unescapeFields(std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i))));
+								rowPart.assign((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
+								if (preventEscaping)
+									rowsPart.push_back(rowPart);
+								else
+									rowsPart.push_back(unescapeFields(rowPart));
 								
 								break;
 								
@@ -538,13 +602,21 @@
 								
 							case SQLITE_TEXT:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields((const char *)sqlite3_column_text(liteStmt,i));
+								rowPart = (const char *)sqlite3_column_text(liteStmt,i);
+								if (preventEscaping)
+									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = rowPart;
+								else
+									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
 								
 								break;
 								
 							case SQLITE_BLOB:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields(std::string((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i)));
+								rowPart.assign((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
+								if (preventEscaping)
+									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = rowPart;
+								else
+									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
 								
 								break;
 								

@@ -219,10 +219,15 @@
 			
 			for (j=0;j<fieldsNum;++j)
 			{
-				if (PQgetisnull(pgResult,i,j)==1)
+				if (PQgetisnull(pgResult,i,j) == 1)
 					rowPart.assign("NULL");
 				else
-					rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));
+				{
+					if (preventEscaping)
+						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
+					else
+						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));
+				}
 
 				rowsPart.push_back(rowPart);
 			}
@@ -423,7 +428,12 @@
 				if (PQgetisnull(pgResult,i,j)==1)
 					rowPart.assign("NULL");
 				else
-					rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
+				{
+					if (preventEscaping)
+						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
+					else
+						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));					
+				}
 
 				rowFieldsPart.realArr[PQfname(pgResult,i)] = rowPart;
 			}

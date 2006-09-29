@@ -74,6 +74,8 @@ namespace dodo
 		
 			bool preventFraming;///< to frame or not with `'` fields values in insert and update; false by default
 			
+			bool preventEscaping;///< to escape{\,'} or not fields' values in insert and update; false by default
+			
 			mutable std::string request;///< ready sql statement
 						
 		protected:		

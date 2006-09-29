@@ -373,6 +373,7 @@ flushSTD::inputterInfo()
 	switch (len)
 	{
 		case sizeof(sockaddr_in):
+		
 			{
 				char temp[15];
 				sockaddr_in *sa4;
@@ -385,6 +386,7 @@ flushSTD::inputterInfo()
 			}
 			
 		case sizeof(sockaddr_in6):
+		
 			{
 				char temp[INET6_ADDRSTRLEN];
 				sockaddr_in6 *sa6;

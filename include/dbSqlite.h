@@ -145,6 +145,11 @@
 				 * executes collected request
 				 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
 				 * @param result describes whether request returns result[show, select...] or not[delete, update]
+				 * @note to insert|update using BLOB values use hint:
+				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
+				 * 		call setBLOBValues method to set blob values according to id
+				 * 		call exec method with query = "dodo:hint:db:blob"
+				 * 		YOU MUST SET preventFraming and preventEscaping to true and by yourself escape and frame with '' non-blob text data
 				 */				
 				#ifndef NO_EX
 					virtual void 
@@ -152,6 +157,11 @@
 					virtual bool 
 				#endif
 								exec(const std::string &query = __string__, bool result = false) const;
+				
+				/**
+				 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
+				 */				
+				virtual void setBLOBValues(const stringArr &values);	
 				
 				#ifndef DBSQLITE_WO_XEXEC
 				
@@ -213,6 +223,11 @@
 				 * @param result describes whether request returns result[show, select...] or not[delete, update]
 				 * @note pure sqlite actions
 				 * in function without `_` hooks are calling
+				 * to insert|update using BLOB values use hint:
+				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
+				 * 		call setBLOBValues method to set blob values according to id
+				 * 		call exec method with query = "dodo:hint:db:blob"
+				 * 		YOU MUST SET preventFraming and preventEscaping to true and by yourself escape and frame with '' non-blob text data
 				 */
 				#ifndef NO_EX
 					virtual void 
@@ -231,10 +246,13 @@
 				mutable int result;///< store result for query
 				
 				mutable stringArr rowsPart;///< to store rows
+				mutable std::string rowPart;///< to set temporary row content
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 				
 				mutable unsigned int numFields;///< number of fields
 				mutable unsigned int numRows;///< number of rows
+				
+				mutable bool blobHint;///< if true - enable blob hint
 
 				mutable std::vector<stringArr> rows;///< to store rows
 				mutable stringArr fields;///< to store fields

@@ -137,14 +137,30 @@ int main(int argc, char **argv)
 
                 arr.clear();
 
+		flushDiskTools::unlink("test.1");
+		flushDiskTools::unlink("test.2");
+
 		std::string dt = flushDiskTools::getFileContent("test");
 		flushDiskTools::append("test.1", dt);
-		arr["b"] = tools::encodeBase64(dt);
-		arr["date"] = "2005-07-08";
-		arr["operation"] = "ma";
 
+		if (strcasecmp(argv[1],"sqlite") == 0)
+                        arr["b"] = "$1";
+		else
+			arr["b"] = tools::encodeBase64(dt);
+		arr["date"] = "'2005-07-08'";
+		arr["operation"] = "'ma'";
+
+		if (strcasecmp(argv[1],"sqlite") == 0)
+		{
+			stringArr blobs;
+			blobs.push_back(dt);
+			((dbSqlite *)pp)->setBLOBValues(blobs);
+		}
+
+                ((dbSqlBase *)pp)->preventFraming = true;
+                ((dbSqlBase *)pp)->preventEscaping = true;
 		pp->insert("leg",arr);
-		pp->exec();
+		pp->exec("dodo:hint:db:blob");
 
                 pp->select("leg",select,"operation='ma'");
 		pp->exec();
@@ -152,7 +168,10 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			flushDiskTools::append("test.2",tools::decodeBase64((*store.rows.begin())[2]));
+			if (strcasecmp(argv[1],"sqlite") == 0)
+                        	flushDiskTools::append("test.2",(*store.rows.begin())[2]);
+			else
+				flushDiskTools::append("test.2",tools::decodeBase64((*store.rows.begin())[2]));
 	}
 	catch(baseEx ex)
 	{

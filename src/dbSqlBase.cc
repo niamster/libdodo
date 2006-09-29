@@ -111,7 +111,8 @@ static 	__statements sqlAddSelArr[3] =
 
 //-------------------------------------------------------------------
 
-dbSqlBase::dbSqlBase() : preventFraming(false)
+dbSqlBase::dbSqlBase() : preventFraming(false),
+						preventEscaping(false)
 {	
 	auto_increment = " auto_increment ";
 	
@@ -148,7 +149,7 @@ dbSqlBase::fieldsValName(const stringArr &fieldsVal,
 		temp.append(*i);	
 		temp.append("=");	
 		temp.append(frame);	
-		temp.append(escapeFields(*j));	
+		temp.append(preventEscaping?*j:escapeFields(*j));	
 		temp.append(frame);	
 		temp.append(",");	
 		
@@ -156,7 +157,7 @@ dbSqlBase::fieldsValName(const stringArr &fieldsVal,
 	temp.append(*i);	
 	temp.append("=");	
 	temp.append(frame);	
-	temp.append(escapeFields(*j));	
+	temp.append(preventEscaping?*j:escapeFields(*j));	
 	temp.append(frame);	
 	
 	return temp;
@@ -288,7 +289,12 @@ dbSqlBase::insertCollect() const
 		frame[0] = ' ';
 		
 	for (;k!=l;++k)
-		fieldsVPart.push_back(tools::implode(*k,&dodo::dbSqlBase::escapeFields,",",frame));
+	{
+		if (preventEscaping)
+			fieldsVPart.push_back(tools::implode(*k,",",frame));
+		else
+			fieldsVPart.push_back(tools::implode(*k,escapeFields,",",frame));
+	}
 	
 	i = fieldsVPart.begin();
 	j = fieldsVPart.end()-1;
@@ -667,7 +673,7 @@ dbSqlBase::queryCollect() const
 
 std::string
 dbSqlBase::unescapeFields(const std::string &data)
-{ 
+{
 	std::string temp = data;
 	
 	tools::replace("\\'","'",temp);
@@ -697,7 +703,10 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 	register int type = row.type, flag = row.flag;
 	std::string resRow(row.name + " " + stringType(type));
 	
-	resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):__string__);
+	if (preventEscaping)
+		resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,",") + ")"):__string__);
+	else
+		resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):__string__);
 	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):__string__);
 	resRow.append((row.charset.size()>0)?(" character set " + row.charset):" ");
 	resRow.append(((FIELDPROP_NULL&flag)==FIELDPROP_NULL)?" null ":" not null ");
