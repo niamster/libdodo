@@ -135,7 +135,15 @@
 	}
 	
 	//-------------------------------------------------------------------
+
+	void 
+	dbPostgresql::setBLOBValues(const stringArr &values)
+	{
+		blobs = values;
+	}
 	
+	//-------------------------------------------------------------------
+		
 	#ifndef NO_EX
 		void 
 	#else
@@ -144,12 +152,28 @@
 	dbPostgresql::_exec(const std::string &query, 
 						bool result) const
 	{	
-		if (query.size()==0)
-			queryCollect();			
+		if (query.size() == 0)
+		{
+			queryCollect();
+			
+			blobHint = false;
+		}			
 		else
 		{
-			request = query;
-			show = result;
+			if (strstr(query.c_str(),"dodo:hint:db:blob") != NULL)
+			{
+				queryCollect();
+				
+				if (!show)
+					blobHint = true;
+			}
+			else
+			{
+				request = query;
+				show = result;
+				
+				blobHint = false;
+			}
 		}
 
 		if (!empty)
@@ -158,14 +182,75 @@
 			empty = true;
 		}
 		
-		pgResult = PQexec(conn,request.c_str());
-		if(pgResult == NULL)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_CONNECT,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-		
+		if (blobHint)
+		{
+			switch (qType)
+			{
+				case DBREQUEST_UPDATE:
+				case DBREQUEST_INSERT:
+				
+					{
+						register long size = blobs.size();
+						
+						register char **values = new char*[size];
+						register int *lengths = new int[size];
+						register int *formats = new int[size];
+						
+						stringArr::iterator i(blobs.begin()), j(blobs.end());
+						for (register int o=0;i!=j;++i,++o)
+						{
+							values[o] = (char *)i->c_str();
+							lengths[o] = i->size();
+							formats[o] = 1;
+						}
+
+						pgResult = PQexecParams(conn,request.c_str(),size,NULL,values,lengths,formats,0);
+						if(pgResult == NULL)
+							#ifndef NO_EX
+							{
+								delete [] values;
+								delete [] lengths;
+								delete [] formats;
+								
+								throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__);
+							}
+							#else
+							{
+								delete [] values;
+								delete [] lengths;
+								delete [] formats;
+								
+								return false;
+							}
+							#endif
+					
+						delete [] values;
+						delete [] lengths;
+						delete [] formats;	
+					}	
+										
+					break;
+					
+				default:
+					
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_LIBDODO,DBPOSTGRESQL_WRONG_HINT_USAGE,DBPOSTGRESQL_WRONG_HINT_USAGE_STR,__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+					
+			}			
+		}
+		else
+		{
+			pgResult = PQexecParams(conn,request.c_str(),0,NULL,NULL,NULL,NULL,1);
+			if(pgResult == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+		}
 		
 		status = PQresultStatus(pgResult);
 
@@ -177,7 +262,7 @@
 			case PGRES_FATAL_ERROR:
 			
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_CONNECT,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif

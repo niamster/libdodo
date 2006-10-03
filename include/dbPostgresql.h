@@ -134,6 +134,14 @@
 				 * executes collected request
 				 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
 				 * @param result describes whether request returns result[show, select...] or not[delete, update]
+				 * @note to insert|update using BLOB values use hint:
+				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
+				 * 		call setBLOBValues method to set blob values according to id
+				 * 		call exec method with query = "dodo:hint:db:blob"
+				 * 		YOU MUST 
+				 * 				set preventFraming and preventEscaping to true 
+				 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
+				 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 				 */				
 				#ifndef NO_EX
 					virtual void 
@@ -209,6 +217,11 @@
 				 * @return current session charset
 				 */ 
 				virtual int getCharset() const;
+				
+				/**
+				 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
+				 */				
+				virtual void setBLOBValues(const stringArr &values);	
 				 
 			protected:
 			
@@ -218,6 +231,14 @@
 				 * @param result describes whether request returns result[show, select...] or not[delete, update]
 				 * @note pure postgresql actions
 				 * in function without `_` hooks are calling
+				 * to insert|update using BLOB values use hint:
+				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
+				 * 		call setBLOBValues method to set blob values according to id
+				 * 		call exec method with query = "dodo:hint:db:blob"
+				 * 		YOU MUST 
+				 * 				set preventFraming and preventEscaping to true 
+				 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
+				 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 				 */
 				#ifndef NO_EX
 					virtual void 
@@ -241,9 +262,13 @@
 				mutable stringArr rowsPart;///< to store rows
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 				
+				mutable bool blobHint;///< if true - enable blob hint
+				
 				mutable std::vector<stringArr> rows;///< to store rows
 				mutable stringArr fields;///< to store fields
-				mutable	dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'				
+				mutable	dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'		
+				
+				mutable stringArr blobs;///< to store blob data		
 		};
 		
 	};

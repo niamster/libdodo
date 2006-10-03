@@ -33,14 +33,27 @@
 
 	namespace dodo
 	{
+
+		/**
+		 * libdodo defined errors
+		 */
+		enum dbPostgresqlExR
+		{
+			DBPOSTGRESQL_WRONG_HINT_USAGE,
+		};
 		
+		/**
+		 * libdodo defined errors' explanation
+		 */				
+		#define DBPOSTGRESQL_WRONG_HINT_USAGE_STR "Wrong hint usage. You used hint where it's not needed."
+					
 		/**
 		 * ID of function where exception was thrown
 		 */			
 		enum dbPostgresqlFunctionsID
 		{
 			DBPOSTGRESQL_CONNECT,
-			DBPOSTGRESQL_EXEC,
+			DBPOSTGRESQL__EXEC,
 			DBPOSTGRESQL_SETCHARSET,
 		};		
 	};

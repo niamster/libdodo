@@ -149,7 +149,10 @@
 				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
 				 * 		call setBLOBValues method to set blob values according to id
 				 * 		call exec method with query = "dodo:hint:db:blob"
-				 * 		YOU MUST SET preventFraming and preventEscaping to true and by yourself escape and frame with '' non-blob text data
+				 * 		YOU MUST 
+				 * 				set preventFraming and preventEscaping to true 
+				 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
+				 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 				 */				
 				#ifndef NO_EX
 					virtual void 
@@ -227,7 +230,10 @@
 				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
 				 * 		call setBLOBValues method to set blob values according to id
 				 * 		call exec method with query = "dodo:hint:db:blob"
-				 * 		YOU MUST SET preventFraming and preventEscaping to true and by yourself escape and frame with '' non-blob text data
+				 * 		YOU MUST 
+				 * 				set preventFraming and preventEscaping to true 
+				 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
+				 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 				 */
 				#ifndef NO_EX
 					virtual void 
@@ -256,7 +262,9 @@
 
 				mutable std::vector<stringArr> rows;///< to store rows
 				mutable stringArr fields;///< to store fields
-				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'			
+				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
+				
+				mutable stringArr blobs;///< to store blob data			
 		};
 
 	};

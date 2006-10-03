@@ -143,24 +143,42 @@ int main(int argc, char **argv)
 		std::string dt = flushDiskTools::getFileContent("test");
 		flushDiskTools::append("test.1", dt);
 
-		if (strcasecmp(argv[1],"sqlite") == 0)
+		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
                         arr["b"] = "$1";
 		else
-			arr["b"] = tools::encodeBase64(dt);
-		arr["date"] = "'2005-07-08'";
-		arr["operation"] = "'ma'";
+			arr["b"] = dt;
 
-		if (strcasecmp(argv[1],"sqlite") == 0)
+		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 		{
 			stringArr blobs;
 			blobs.push_back(dt);
-			((dbSqlite *)pp)->setBLOBValues(blobs);
+
+			if (strcasecmp(argv[1],"sqlite") == 0)
+				((dbSqlite *)pp)->setBLOBValues(blobs);
+			else
+			{
+				if (strcasecmp(argv[1],"postgres") == 0)
+					((dbPostgresql *)pp)->setBLOBValues(blobs);
+			}
+                	
+			((dbSqlBase *)pp)->preventFraming = true;
+               		((dbSqlBase *)pp)->preventEscaping = true;
+		
+			arr["date"] = "'2005-07-08'";
+			arr["operation"] = "'ma'";
+		}
+		else
+		{
+			arr["date"] = "2005-07-08";
+			arr["operation"] = "ma";
 		}
 
-                ((dbSqlBase *)pp)->preventFraming = true;
-                ((dbSqlBase *)pp)->preventEscaping = true;
 		pp->insert("leg",arr);
-		pp->exec("dodo:hint:db:blob");
+
+		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
+			pp->exec("dodo:hint:db:blob");
+		else
+			pp->exec();
 
                 pp->select("leg",select,"operation='ma'");
 		pp->exec();
@@ -168,10 +186,10 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			if (strcasecmp(argv[1],"sqlite") == 0)
+			if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
                         	flushDiskTools::append("test.2",(*store.rows.begin())[2]);
 			else
-				flushDiskTools::append("test.2",tools::decodeBase64((*store.rows.begin())[2]));
+				flushDiskTools::append("test.2",(*store.rows.begin())[2]);
 	}
 	catch(baseEx ex)
 	{

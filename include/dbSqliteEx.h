@@ -37,7 +37,7 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum systemExR
+		enum dbSqliteExR
 		{
 			DBSQLITE_WRONG_HINT_USAGE,
 		};

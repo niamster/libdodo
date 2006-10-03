@@ -132,7 +132,7 @@
 	void 
 	dbSqlite::setBLOBValues(const stringArr &values)
 	{
-		fields = values;
+		blobs = values;
 	}
 	
 	//-------------------------------------------------------------------
@@ -153,7 +153,7 @@
 		}
 		else
 		{
-			if (strcmp(query.substr(0,18).c_str(),"dodo:hint:db:blob") == 0)
+			if (strstr(query.c_str(),"dodo:hint:db:blob") != NULL)
 			{
 				queryCollect();
 				
@@ -190,9 +190,9 @@
 				case DBREQUEST_INSERT:
 				
 					{
-						stringArr::iterator i(fields.begin()), j(fields.end());
+						stringArr::iterator i(blobs.begin()), j(blobs.end());
 						for (register int o=1;i!=j;++i,++o)
-							if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_STATIC) != SQLITE_OK)
+							if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
 								#ifndef NO_EX
 									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 								#else
@@ -211,7 +211,6 @@
 					#endif
 					
 			}
-			
 		}	
 		
 		if (liteStmt == NULL)	
