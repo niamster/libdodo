@@ -77,9 +77,7 @@ namespace dodo
 			bool preventEscaping;///< to escape{\,'} or not fields' values in insert and update; false by default
 			
 			mutable std::string request;///< ready sql statement
-						
-		protected:		
-		
+
 			/**
 			 * @return escaped string
 			 * @param data is string to escape
@@ -90,7 +88,9 @@ namespace dodo
 			 * @return unescaped string
 			 * @param data is string to unescape
 			 */
-			static std::string unescapeFields(const std::string &data);
+			static std::string unescapeFields(const std::string &data);			
+						
+		protected:		
 			
 			/**
 			 * constructs from collected data to SELECT sql statement
@@ -254,6 +254,20 @@ namespace dodo
 			mutable stringArr::const_iterator j;///< iterator for array of strings
 
 			mutable stringArr fieldsVPart;///< temporary places request's parts
+			
+			static const __statements sqlAddSelArr[3];///< `select` additional statement
+			static const __statements sqlAddDelArr[2];///< `delete` additional statement
+			static const __statements sqlAddUpArr[2];///< `update` additional statement
+			static const __statements sqlAddInsArr[2];///< `insert` additional statement
+			
+			static const __statements sqlAddArr[7];///< additional sql statements for queries(where, limit, ...)
+			
+			static const __statements sqlQStArr[4];///< sql statements for complex queries(union, ...)
+			
+			static const unsigned int addSelEnumArr[2];///< array of positions in sqlAddSelArr `select` additional statement
+			static const unsigned int addDelEnumArr[1];///< array of positions in sqlAddDelArr `delete` additional statement
+			static const unsigned int addUpEnumArr[1];///< array of positions in sqlAddUpArr `update` additional statement
+			static const unsigned int addInsEnumArr[1];///< array of positions in sqlAddInsArr `insert` additional statement
 			
 	};
 

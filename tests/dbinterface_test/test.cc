@@ -10,7 +10,7 @@ using namespace dodo;
 using namespace std;
 
 int main(int argc, char **argv)
-{
+{	
 	dbInterface *pp;	
 	
 	if (argc == 2)
@@ -144,7 +144,7 @@ int main(int argc, char **argv)
 		flushDiskTools::append("test.1", dt);
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
-                        arr["b"] = "$1";
+			arr["b"] = "$1";
 		else
 			arr["b"] = dt;
 
@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 			}
                 	
 			((dbSqlBase *)pp)->preventFraming = true;
-               		((dbSqlBase *)pp)->preventEscaping = true;
+            ((dbSqlBase *)pp)->preventEscaping = true;
 		
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";
@@ -180,7 +180,7 @@ int main(int argc, char **argv)
 		else
 			pp->exec();
 
-                pp->select("leg",select,"operation='ma'");
+        pp->select("leg",select,"operation='ma'");
 		pp->exec();
 
 		store = pp->fetch();

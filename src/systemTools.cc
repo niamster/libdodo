@@ -42,34 +42,53 @@ using namespace dodo;
 
 #ifdef DL_EXT
 
-	extern "C"
-	{
-			static void *__handlesSig[20];///< handles to modules
-			static bool __handlesOpenedSig[20] = {false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false,
-													false};///< map of opened modules
+	void *systemTools::handlesSig[] = {NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL};
+											
+	//-------------------------------------------------------------------
+											
+	bool systemTools::handlesOpenedSig[] = {false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false};
 						
-		
-	};
-	
 #endif
+
+//-------------------------------------------------------------------
 	
 std::string 
 systemTools::getWorkingDir()
@@ -949,16 +968,16 @@ systemTools::setSignalHandler(long signal,
 	
 		deinitSigModule deinit;
 		
-		if (__handlesOpenedSig[signal])
+		if (handlesOpenedSig[signal])
 		{
-			deinit = (deinitSigModule)dlsym(__handlesSig[signal], "deinitSigModule");
+			deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
 			if (deinit != NULL)
 				deinit();
 				
-			dlclose(__handlesSig[signal]);
+			dlclose(handlesSig[signal]);
 			
-			__handlesOpenedSig[signal] = false;
-			__handlesSig[signal] = NULL;
+			handlesOpenedSig[signal] = false;
+			handlesSig[signal] = NULL;
 		}	
 	
 	#endif	
@@ -1043,16 +1062,16 @@ systemTools::unsetSignalHandler(long signal)
 	
 		deinitSigModule deinit;
 		
-		if (__handlesOpenedSig[signal])
+		if (handlesOpenedSig[signal])
 		{
-			deinit = (deinitSigModule)dlsym(__handlesSig[signal], "deinitSigModule");
+			deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
 			if (deinit != NULL)
 				deinit();
 				
-			dlclose(__handlesSig[signal]);
+			dlclose(handlesSig[signal]);
 			
-			__handlesOpenedSig[signal] = false;
-			__handlesSig[signal] = NULL;
+			handlesOpenedSig[signal] = false;
+			handlesSig[signal] = NULL;
 		}	
 	
 	#endif
@@ -1122,27 +1141,27 @@ systemTools::unsetSignalHandler(long signal)
 	{
 		deinitSigModule deinit;
 		
-		if (__handlesOpenedSig[signal])
+		if (handlesOpenedSig[signal])
 		{
-			deinit = (deinitSigModule)dlsym(__handlesSig[signal], "deinitSigModule");
+			deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
 			if (deinit != NULL)
 				deinit();
 				
-			dlclose(__handlesSig[signal]);
+			dlclose(handlesSig[signal]);
 			
-			__handlesOpenedSig[signal] = false;
-			__handlesSig[signal] = NULL;
+			handlesOpenedSig[signal] = false;
+			handlesSig[signal] = NULL;
 		}
 		
-		__handlesSig[signal] = dlopen(path.c_str(), RTLD_LAZY);
-		if (__handlesSig[signal] == NULL)
+		handlesSig[signal] = dlopen(path.c_str(), RTLD_LAZY);
+		if (handlesSig[signal] == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 		
-		initSigModule init = (initSigModule)dlsym(__handlesSig[signal], "initSigModule");
+		initSigModule init = (initSigModule)dlsym(handlesSig[signal], "initSigModule");
 		if (init == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1152,7 +1171,7 @@ systemTools::unsetSignalHandler(long signal)
 		
 		sigMod mod = init(toInit);
 		
-		signalHandler in = (signalHandler)dlsym(__handlesSig[signal], mod.hook);
+		signalHandler in = (signalHandler)dlsym(handlesSig[signal], mod.hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1183,7 +1202,7 @@ systemTools::unsetSignalHandler(long signal)
 				return false;
 			#endif
 		
-		__handlesOpenedSig[signal] = true;
+		handlesOpenedSig[signal] = true;
 		
 		#ifdef NO_EX
 			return true;
@@ -1222,21 +1241,21 @@ systemTools::unsetSignalHandler(long signal)
 		
 		deinitSigModule deinit;
 		
-		if (__handlesOpenedSig[mod.signal])
+		if (handlesOpenedSig[mod.signal])
 		{
-			deinit = (deinitSigModule)dlsym(__handlesSig[mod.signal], "deinitSigModule");
+			deinit = (deinitSigModule)dlsym(handlesSig[mod.signal], "deinitSigModule");
 			if (deinit != NULL)
 				deinit();
 				
-			dlclose(__handlesSig[mod.signal]);
+			dlclose(handlesSig[mod.signal]);
 			
-			__handlesOpenedSig[mod.signal] = false;
-			__handlesSig[mod.signal] = NULL;
+			handlesOpenedSig[mod.signal] = false;
+			handlesSig[mod.signal] = NULL;
 		}
 		
-		__handlesSig[mod.signal] = handle;
+		handlesSig[mod.signal] = handle;
 		
-		signalHandler in = (signalHandler)dlsym(__handlesSig[mod.signal], mod.hook);
+		signalHandler in = (signalHandler)dlsym(handlesSig[mod.signal], mod.hook);
 		if (in == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1267,7 +1286,7 @@ systemTools::unsetSignalHandler(long signal)
 				return false;
 			#endif
 		
-		__handlesOpenedSig[mod.signal] = true;
+		handlesOpenedSig[mod.signal] = true;
 		
 		#ifdef NO_EX
 			return true;

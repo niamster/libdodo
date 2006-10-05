@@ -161,14 +161,14 @@ namespace dodo
 		std::string &pre_limOffset;///< offset of requested result
 		stringArr &pre_subQ;///< subquery
 		
-		int &qType;///< type of operation
+		int &qType;///< type of operation[see qStEnum]
 		
-		int &qShift;///< indicates if AddEnum's values was set [can be or'ed with | ]
+		int &qShift;///< indicates if AddEnum's values was set [can be or'ed with | ][see AddEnum]
 		
-		int &qSelShift;///< additional select statements
-		int &qInsShift;///< additional insert statements
-		int &qUpShift;///< additional update statements
-		int &qDelShift;///< additional delete statements		
+		int &qSelShift;///< additional select statements[see addSelEnum]
+		int &qInsShift;///< additional insert statements[see addInsEnum]
+		int &qUpShift;///< additional update statements[see addUpEnum]
+		int &qDelShift;///< additional delete statements[see addDelEnum]		
 	};
 		
 	/**
@@ -251,7 +251,7 @@ namespace dodo
 		std::string name;///< name of the field
 		int type;///< type of field[see baseDataTypesEnum]
 		int length;///< length of field; is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
-		int flag;///< default = NULL; set it with '|'; see fieldFlagEnum
+		int flag;///< default = NULL; set it with '|'[see fieldFlagEnum]
 		
 		/**
 		* @note for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
@@ -259,8 +259,8 @@ namespace dodo
 		*/
 		std::string refTable;///< table on what is reference
 		stringArr refFields;///< array of fields on what is references
-		int onDelete;///< reference on action; see refFieldEnum
-		int onUpdate;///< reference on action; see refFieldEnum
+		int onDelete;///< reference on action[see refFieldEnum]
+		int onUpdate;///< reference on action[see refFieldEnum]
 
 		std::string defaultVal;///< default value of field
 		stringArr set_enum;///< array of statements for SET or ENUM if these type difined
@@ -285,7 +285,7 @@ namespace dodo
 		const __tableInfo &operator=(const __tableInfo &from);
 			
 		std::string name;///< name of the table
-		std::vector<__fieldInfo> fields;///< array of fields; see__fieldInfo
+		std::vector<__fieldInfo> fields;///< array of fields[see__fieldInfo]
 		
 		stringArr keys;///< array of keys in table (field names)
 		stringArr primKeys;///< array of primary keys in table (field names)
@@ -410,7 +410,7 @@ namespace dodo
 			/**
 			 * store query, made from subquery with requested method
 			 * @param sub is array of subqueries
-			 * @param type is type of "subquering"
+			 * @param type is type of "subquering"[see qStEnum]
 			 */
 			virtual void subquery(const stringArr &sub, int type=DBREQUEST_UNION/*DBREQUEST_UNION_ALL,DBREQUEST_MINUS,DBREQUEST_INTERSECT*/) const;
 			
@@ -470,13 +470,13 @@ namespace dodo
 			
 			/**
 			 * creates table
-			 * @param tableInfo => see __tableInfo
+			 * @param tableInfo[see __tableInfo]
 			 */
 			virtual void createTable(__tableInfo &tableInfo);
 			
 			/**
 			 * creates field
-			 * @param fieldInfo => see __fieldInfo
+			 * @param fieldInfo[see __fieldInfo]
 			 * @param table indicates in what table create field
 			 */ 
 			virtual void createField(__fieldInfo &fieldInfo, const std::string &table);						
@@ -555,47 +555,56 @@ namespace dodo
 			virtual void unhaving() const;		
 			
 			/**
-			 * sest additional parameters for INSERT
+			 * sets additional parameters for INSERT
+			 * @param statement indicates what kind of additional parameters to add[see addInsEnum]
 			 */
 			virtual void setAddInsSt(unsigned int statement);
 			
 			/**
 			 * sets additional parameters for UPDATE
+			 * @param statement indicates what kind of additional parameters to add[see addUpEnum]
 			 */
 			virtual void setAddUpSt(unsigned int statement);
 			
 			/**
 			 * sets additional parameters for SELECT
+			 * @param statement indicates what kind of additional parameters to add[see addSelEnum]
 			 */
 			virtual void setAddSelSt(unsigned int statement);
 			
 			/**
 			 * sets additional parameters for DELETE
+			 * @param statement indicates what kind of additional parameters to add[see addDelEnum]
 			 */
 			virtual void setAddDelSt(unsigned int statement);
 			
 			/**
 			 * removes additional parameters for INSERT
+			 * @param statement indicates what kind of additional parameters to remove[see addInsEnum]
 			 */
 			virtual void unsetAddInsSt(unsigned int statement);
 			
 			/**
 			 * removes additional parameters for UPDATE
+			 * @param statement indicates what kind of additional parameters to remove[see addUpEnum]
 			 */
 			virtual void unsetAddUpSt(unsigned int statement);
 			
 			/**
 			 * removes additional parameters for SELECT
+			 * @param statement indicates what kind of additional parameters to remove[see addSelEnum]
 			 */
 			virtual void unsetAddSelSt(unsigned int statement);
 			
 			/**
 			 * removes additional parameters for DELETE
+			 * @param statement indicates what kind of additional parameters to remove[see addDelEnum]
 			 */
 			virtual void unsetAddDelSt(unsigned int statement);
 			
 			/**
 			 * @return type of request was(will be) performed
+			 * @note see qStEnum
 			 */
 			virtual int getQType() const;
 			

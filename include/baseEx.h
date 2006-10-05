@@ -220,7 +220,23 @@
 					 */
 					static bool setErrorHandlers(const std::string &path, void *data, void *toInit = NULL);
 				
-				#endif				
+				#endif
+						
+			protected:
+			
+				static errorHandler handlersEx[AM_MODULES];///< handlers
+				
+				static bool handlerSetEx[AM_MODULES];///< indicates whether handler was set
+				
+				static void *handlerDataEx[AM_MODULES];///< data that will be passed to handler
+				
+				#ifdef DL_EXT
+				
+					static void *handlesEx[AM_MODULES];///< handles to modules
+					
+					static bool handlesOpenedEx[AM_MODULES];//< map of opened modules
+				
+				#endif		
 		};
 
 	};

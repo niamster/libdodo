@@ -546,6 +546,10 @@ namespace dodo
 			 * fills 'set' structure with given signal mask
 			 */
 			static void sigMask(sigset_t *set, long signal);
+			
+			static void *handlesSig[20];///< handles to modules
+			
+			static bool handlesOpenedSig[20];///< map of opened modules
 																						
 	};
 

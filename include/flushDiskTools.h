@@ -209,7 +209,7 @@ namespace dodo
 			/**
 			 * make directory
 			 * @param path is path of directory to create
-			 * @param permissions is new permissions; use | to combine; see permissionModesEnum
+			 * @param permissions is new permissions; use | to combine[see permissionModesEnum]
 			 * @param force if it is true and directory already exists do not say anything
 			 */
 			#ifndef NO_EX
@@ -240,7 +240,7 @@ namespace dodo
 			/**
 			 * changes permissions
 			 * @param path is path to node
-			 * @param permissions is ne permissions; use | to combine; see permissionModesEnum
+			 * @param permissions is ne permissions; use | to combine[see permissionModesEnum]
 			 */
 			#ifndef NO_EX
 				static void 
@@ -353,13 +353,13 @@ namespace dodo
 			static int getGroupOwner(const std::string &path);
 			
 			/**
-			 * @return file info; see __fileInfo
+			 * @return file info[see __fileInfo]
 			 * @param path indicates path where to get info
 			 */
 			static __fileInfo getFileInfo(const std::string &path);///if no such file - empty will be returned
 
 			/**
-			 * @return file dir; see __fileInfo
+			 * @return file dir[see __fileInfo]
 			 * @param path indicates path where to get info
 			 */
 			static std::vector<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!

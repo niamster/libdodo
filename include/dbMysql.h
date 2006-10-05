@@ -142,8 +142,8 @@
 				virtual ~dbMysql();	
 				/*
 				 * sets connection settings
-				 * @param type is type of connection - see mySQL documentation for more!
-				 * @param options is options for ssl connection. see __mysqlSSLOptions for more details
+				 * @param type is type of connection[see mySQL documentation for more]
+				 * @param options is options for ssl connection[see __mysqlSSLOptions for more details]
 				 * 	CLIENT_COMPRESS 	Use compression protocol.
 				 *	CLIENT_FOUND_ROWS 	Return the number of found (matched) rows, not the number of affected rows.
 				 *	CLIENT_IGNORE_SPACE 	Allow spaces after function names. Makes all functions names reserved words.

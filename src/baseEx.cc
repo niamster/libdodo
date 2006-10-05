@@ -30,68 +30,141 @@
 
 #endif	
 
+using namespace dodo;
+
 #ifndef NO_EX
 
-    using namespace dodo;
+	bool baseEx::handlerSetEx[] = {false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false,
+									false};
 
-	extern "C"
-	{
-		static errorHandler __handlersEx[AM_MODULES];///< handlers
-		static bool __handlerSetEx[AM_MODULES] = {false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false,
-												false};///< indicates whether handler was set
-		static void * __handlerDataEx[AM_MODULES];///< data that will be passed to handler
+	//-------------------------------------------------------------------
+	
+	errorHandler baseEx::handlersEx[] = {NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL,
+											NULL};
+
+	//-------------------------------------------------------------------
+	
+	void *baseEx::handlerDataEx[] = {NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL};
+
+	//-------------------------------------------------------------------								
+
+	#ifdef DL_EXT
+	
+		bool baseEx::handlesOpenedEx[] = {false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false,
+											false};
+											
+		//-------------------------------------------------------------------
+
+		void *baseEx::handlesEx[] = {NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL,
+								NULL};
 		
-		#ifdef DL_EXT
-		
-			static void *__handlesEx[AM_MODULES];///< handles to modules
-			static bool __handlesOpenedEx[AM_MODULES] = {false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false,
-														false};///< map of opened modules
-			
-		#endif			
-		
-	};
+	#endif
 	
 	//-------------------------------------------------------------------
 	
@@ -109,8 +182,8 @@
                                         line(a_line),
                                         file(a_file)
     {
-    	if (__handlerSetEx[errModule])
-    		__handlersEx[errModule](errModule, this, __handlerDataEx[errModule]);
+    	if (handlerSetEx[errModule])
+    		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
     }
 
 	//-------------------------------------------------------------------
@@ -123,16 +196,16 @@
 			
 			for (register int i(0);i<AM_MODULES;++i)
 			{
-				if (!__handlesOpenedEx[i])
+				if (!handlesOpenedEx[i])
 					continue;
 				
-				deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
+				deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				__handlesOpenedEx[i] = false;	
+				handlesOpenedEx[i] = false;	
 				
-				dlclose(__handlesEx[i]);
+				dlclose(handlesEx[i]);
 			}
 				
 		#endif		
@@ -154,25 +227,25 @@
 	{
 		#ifdef DL_EXT
 		
-			if (__handlesOpenedEx[module])
+			if (handlesOpenedEx[module])
 			{
 				deinitExModule deinit;	
 				
-				deinit = (deinitExModule)dlsym(__handlesEx[module], "deinitExModule");
+				deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				dlclose(__handlesEx[module]);
+				dlclose(handlesEx[module]);
 				
-				__handlesOpenedEx[module] = false;
-				__handlesEx[module] = NULL;
+				handlesOpenedEx[module] = false;
+				handlesEx[module] = NULL;
 			}	
 		
 		#endif
 		
-		__handlersEx[module] = handler;
-		__handlerSetEx[module] = true;
-		__handlerDataEx[module] = data;
+		handlersEx[module] = handler;
+		handlerSetEx[module] = true;
+		handlerDataEx[module] = data;
 	}
 	
 	//-------------------------------------------------------------------
@@ -189,23 +262,23 @@
 		{
 			#ifdef DL_EXT
 				
-				if (__handlesOpenedEx[i])
+				if (handlesOpenedEx[i])
 				{
-					deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
+					deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
 					if (deinit != NULL)
 						deinit();
 						
-					dlclose(__handlesEx[i]);
+					dlclose(handlesEx[i]);
 					
-					__handlesOpenedEx[i] = false;
-					__handlesEx[i] = NULL;
+					handlesOpenedEx[i] = false;
+					handlesEx[i] = NULL;
 				}	
 			
 			#endif
 					
-			__handlersEx[i] = handler;
-			__handlerSetEx[i] = true;
-			__handlerDataEx[i] = data;
+			handlersEx[i] = handler;
+			handlerSetEx[i] = true;
+			handlerDataEx[i] = data;
 		}
 	}
 	
@@ -216,25 +289,25 @@
 	{
 		#ifdef DL_EXT
 			
-			if (__handlesOpenedEx[module])
+			if (handlesOpenedEx[module])
 			{
 				deinitExModule deinit;	
 				
-				deinit = (deinitExModule)dlsym(__handlesEx[module], "deinitExModule");
+				deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				dlclose(__handlesEx[module]);
+				dlclose(handlesEx[module]);
 				
-				__handlesOpenedEx[module] = false;
-				__handlesEx[module] = NULL;
+				handlesOpenedEx[module] = false;
+				handlesEx[module] = NULL;
 			}	
 		
 		#endif		
 		
-		__handlersEx[module] = NULL;
-		__handlerSetEx[module] = false;
-		__handlerDataEx[module] = NULL;			
+		handlersEx[module] = NULL;
+		handlerSetEx[module] = false;
+		handlerDataEx[module] = NULL;			
 	}
 	
 	//-------------------------------------------------------------------
@@ -250,23 +323,23 @@
 		{
 			#ifdef DL_EXT
 				
-				if (__handlesOpenedEx[i])
+				if (handlesOpenedEx[i])
 				{
-					deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
+					deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
 					if (deinit != NULL)
 						deinit();
 						
-					dlclose(__handlesEx[i]);
+					dlclose(handlesEx[i]);
 					
-					__handlesOpenedEx[i] = false;
-					__handlesEx[i] = NULL;
+					handlesOpenedEx[i] = false;
+					handlesEx[i] = NULL;
 				}	
 			
 			#endif
 					
-			__handlersEx[i] = NULL;
-			__handlerSetEx[i] = false;
-			__handlerDataEx[i] = NULL;			
+			handlersEx[i] = NULL;
+			handlerSetEx[i] = false;
+			handlerDataEx[i] = NULL;			
 		}			
 	}
 			
@@ -286,35 +359,35 @@
 			for (register int i(0);i<AM_MODULES;++i)
 			{
 				
-				if (__handlesOpenedEx[i])
+				if (handlesOpenedEx[i])
 				{
-					deinit = (deinitExModule)dlsym(__handlesEx[i], "deinitExModule");
+					deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
 					if (deinit != NULL)
 						deinit();
 						
-					dlclose(__handlesEx[i]);
+					dlclose(handlesEx[i]);
 					
-					__handlesOpenedEx[i] = false;
-					__handlesEx[i] = NULL;
+					handlesOpenedEx[i] = false;
+					handlesEx[i] = NULL;
 				}	
 				
-				__handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
-				if (__handlesEx[i] == NULL)
+				handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
+				if (handlesEx[i] == NULL)
 					return false;
 				
-				init = (initExModule)dlsym(__handlesEx[i], "initExModule");
+				init = (initExModule)dlsym(handlesEx[i], "initExModule");
 				if (init == NULL)
 					return false;
 				
-				in = (errorHandler)dlsym(__handlesEx[i], init(toInit).hook);
+				in = (errorHandler)dlsym(handlesEx[i], init(toInit).hook);
 				if (in == NULL)
 					return false;
 			
-				__handlesOpenedEx[i] = true;
+				handlesOpenedEx[i] = true;
 	
-				__handlersEx[i] = in;
-				__handlerSetEx[i] = true;
-				__handlerDataEx[i] = data;
+				handlersEx[i] = in;
+				handlerSetEx[i] = true;
+				handlerDataEx[i] = data;
 			
 			}
 			
@@ -331,35 +404,35 @@
 		{
 			deinitExModule deinit;
 
-			if (__handlesOpenedEx[module])
+			if (handlesOpenedEx[module])
 			{
-				deinit = (deinitExModule)dlsym(__handlesEx[module], "deinitExModule");
+				deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				dlclose(__handlesEx[module]);
+				dlclose(handlesEx[module]);
 				
-				__handlesOpenedEx[module] = false;
-				__handlesEx[module] = NULL;
+				handlesOpenedEx[module] = false;
+				handlesEx[module] = NULL;
 			}
 			
-			__handlesEx[module] = dlopen(path.c_str(), RTLD_LAZY);
-			if (__handlesEx[module] == NULL)
+			handlesEx[module] = dlopen(path.c_str(), RTLD_LAZY);
+			if (handlesEx[module] == NULL)
 				return false;
 			
-			initExModule init = (initExModule)dlsym(__handlesEx[module], "initExModule");
+			initExModule init = (initExModule)dlsym(handlesEx[module], "initExModule");
 			if (init == NULL)
 				return false;
 			
-			errorHandler in = (errorHandler)dlsym(__handlesEx[module], init(toInit).hook);
+			errorHandler in = (errorHandler)dlsym(handlesEx[module], init(toInit).hook);
 			if (in == NULL)
 				return false;
 		
-			__handlesOpenedEx[module] = true;
+			handlesOpenedEx[module] = true;
 
-			__handlersEx[module] = in;
-			__handlerSetEx[module] = true;
-			__handlerDataEx[module] = data;
+			handlersEx[module] = in;
+			handlerSetEx[module] = true;
+			handlerDataEx[module] = data;
 		
 			return true;		
 		}
@@ -384,29 +457,29 @@
 			
 			deinitExModule deinit;
 
-			if (__handlesOpenedEx[mod.module])
+			if (handlesOpenedEx[mod.module])
 			{
-				deinit = (deinitExModule)dlsym(__handlesEx[mod.module], "deinitExModule");
+				deinit = (deinitExModule)dlsym(handlesEx[mod.module], "deinitExModule");
 				if (deinit != NULL)
 					deinit();
 					
-				dlclose(__handlesEx[mod.module]);
+				dlclose(handlesEx[mod.module]);
 				
-				__handlesOpenedEx[mod.module] = false;
-				__handlesEx[mod.module] = NULL;
+				handlesOpenedEx[mod.module] = false;
+				handlesEx[mod.module] = NULL;
 			}
 
-			__handlesEx[mod.module] = handler;
+			handlesEx[mod.module] = handler;
 			
-			errorHandler in = (errorHandler)dlsym(__handlesEx[mod.module], mod.hook);
+			errorHandler in = (errorHandler)dlsym(handlesEx[mod.module], mod.hook);
 			if (in == NULL)
 				return false;
 		
-			__handlesOpenedEx[mod.module] = true;
+			handlesOpenedEx[mod.module] = true;
 
-			__handlersEx[mod.module] = in;
-			__handlerSetEx[mod.module] = true;
-			__handlerDataEx[mod.module] = data;
+			handlersEx[mod.module] = in;
+			handlerSetEx[mod.module] = true;
+			handlerDataEx[mod.module] = data;
 		
 			return true;		
 		}

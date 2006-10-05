@@ -28,31 +28,28 @@
 
 using namespace dodo;
 
-/**
- * arrays of positions of "statement" for complete realization. In sql wersion - see dbSqlBase;
- */	
-static unsigned int addInsEnumArr[1] = 
+const unsigned int dbSqlBase::addInsEnumArr[] = 
 {
 	DBREQUEST_INSERT_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
-static unsigned int addUpEnumArr[1] = 
+const unsigned int dbSqlBase::addUpEnumArr[] = 
 {
 	DBREQUEST_UPDATE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
-static unsigned int addDelEnumArr[1] = 
+const unsigned int dbSqlBase::addDelEnumArr[] = 
 {
 	DBREQUEST_DELETE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
-static unsigned int addSelEnumArr[2] = 
+const unsigned int dbSqlBase::addSelEnumArr[] = 
 {
 	DBREQUEST_SELECT_DISTINCT,
 	DBREQUEST_SELECT_ALL
@@ -60,21 +57,17 @@ static unsigned int addSelEnumArr[2] =
 
 //-------------------------------------------------------------------
 
-///////////////////////////////////
-//	These statements need additional statement
-///////////////////////////////////		
-/**
-* do not edit it please.
-* dbSqlBase use them in such way, as they are
-*/
-static const __statements sqlQStArr[4] = 
+const __statements dbSqlBase::sqlQStArr[] = 
 {
 	{" union "},
 	{" union all "},
 	{" minus "},
 	{" intersect "}
 };
-static 	__statements sqlAddArr[7] = 
+
+//-------------------------------------------------------------------
+
+const __statements dbSqlBase::sqlAddArr[] = 
 {
 	{""},
 	{" where "},
@@ -84,25 +77,34 @@ static 	__statements sqlAddArr[7] =
 	{" limit "},
 	{" offset "},
 };
-///////////////////////////////////
-//	These statements don't need additional statement
-///////////////////////////////////
-static 	__statements sqlAddInsArr[2] = 
+
+//-------------------------------------------------------------------
+
+const __statements dbSqlBase::sqlAddInsArr[] = 
 {
 	{""},
 	{" ignore "},
 };
-static 	__statements sqlAddUpArr[2] = 
+
+//-------------------------------------------------------------------
+
+const __statements dbSqlBase::sqlAddUpArr[] = 
 {
 	{""},
 	{" ignore "},
 };
-static 	__statements sqlAddDelArr[2] = 
+
+//-------------------------------------------------------------------
+
+const __statements dbSqlBase::sqlAddDelArr[] = 
 {
 	{""},
 	{" ignore "},
 };	
-static 	__statements sqlAddSelArr[3] = 
+
+//-------------------------------------------------------------------
+
+const __statements dbSqlBase::sqlAddSelArr[] = 
 {
 	{""},
 	{" distinct "},
