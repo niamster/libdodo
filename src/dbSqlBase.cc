@@ -496,11 +496,7 @@ dbSqlBase::createTableCollect() const
 	}
 	
 	request.append(!pre_tableInfo.primKeys.empty()?(", primary key (" + tools::implode(pre_tableInfo.primKeys,",")) + ") ":__string__);
-	request.append(!pre_tableInfo.uniq.empty()?(", unique key " + tools::implode(pre_tableInfo.uniq,",")):__string__);
-	request.append(pre_tableInfo.avgRowLen>0?(", avg_row_length = " + tools::lToString(pre_tableInfo.avgRowLen)):__string__);
-	request.append(pre_tableInfo.autoIncr>0?(", auto_increment = " + tools::lToString(pre_tableInfo.autoIncr)):__string__);
-	request.append(!pre_tableInfo.comment.empty()?(", comment = " + pre_tableInfo.comment):__string__);	
-	request.append(!pre_tableInfo.charset.empty()?(", character set = " + pre_tableInfo.charset):__string__);	
+	request.append(!pre_tableInfo.uniq.empty()?(", unique " + tools::implode(pre_tableInfo.uniq,",")):__string__);	
 	
 	request.append(")");
 }
@@ -709,12 +705,10 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 	else
 		resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):__string__);
 	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):__string__);
-	resRow.append((row.charset.size()>0)?(" character set " + row.charset):" ");
+	resRow.append((row.charset.size()>0)?(" collate " + row.charset):" ");
 	resRow.append(((FIELDPROP_NULL&flag)==FIELDPROP_NULL)?" null ":" not null ");
 	resRow.append((row.defaultVal.size()>0)?("default '" + row.defaultVal + "' "):__string__);
-	resRow.append(((FIELDPROP_KEY&flag)==FIELDPROP_KEY)?" primary key ":"");
-	resRow.append(((FIELDPROP_AUTO_INCREMENT&flag)==FIELDPROP_AUTO_INCREMENT)?auto_increment:__string__);
-	resRow.append((row.comment.size()>0)?(" comment '" + row.comment + "' "):__string__);
+	resRow.append(((FIELDPROP_AUTO_INCREMENT&flag)==FIELDPROP_AUTO_INCREMENT)?" primary key " + auto_increment:__string__);
 	
 	if (row.refTable.size()>0)
 	{

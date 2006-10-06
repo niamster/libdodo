@@ -50,8 +50,6 @@ __dbInfo::__dbInfo()
 
 __tableInfo::__tableInfo()
 {
-	autoIncr = -1;
-	avgRowLen = -1;
 	ifNotExists = false;
 }
 
@@ -71,12 +69,6 @@ __tableInfo::operator=(const __tableInfo &from)
 	primKeys = from.primKeys;
 	uniq = from.uniq;
 	ifNotExists = from.ifNotExists;
-	
-	autoIncr = from.autoIncr;
-	avgRowLen = from.avgRowLen;
-	
-	comment = from.comment;
-	charset = from.charset;
 	
 	return from;
 }
@@ -110,7 +102,6 @@ __fieldInfo::operator=(const __fieldInfo &from)
 	defaultVal = from.defaultVal;
 	set_enum = from.set_enum;
 
-	comment = from.comment;
 	charset = from.charset;	
 	
 	return from;
@@ -852,13 +843,8 @@ dbBase::collectedData()
 void 
 dbBase::initTableInfo(__tableInfo &table)
 {
-	table.autoIncr = -1;
-	table.avgRowLen = -1;
-	
 	table.name.clear();
 	
-	table.charset.clear();
-	table.comment.clear();
 	table.primKeys.clear();
 	table.uniq.clear();
 	
@@ -868,7 +854,7 @@ dbBase::initTableInfo(__tableInfo &table)
 //-------------------------------------------------------------------
 
 void
-dbBase::initRowInfo(__fieldInfo &field)
+dbBase::initFieldInfo(__fieldInfo &field)
 {
 	field.type = -1;
 	field.length = -1;
@@ -879,7 +865,6 @@ dbBase::initRowInfo(__fieldInfo &field)
 	field.name.clear();
 	
 	field.charset.clear();
-	field.comment.clear();
 	field.refTable.clear();
 	field.refFields.clear();
 	field.set_enum.clear();

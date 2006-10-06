@@ -218,7 +218,6 @@ namespace dodo
 	{
 		FIELDPROP_NULL = 2,///< NULL type
 		FIELDPROP_AUTO_INCREMENT = 4,///< if is not set by request, will be incremented relatevly to previous
-		FIELDPROP_KEY = 8///< a key(depends on DB, but possibly index)
 	};
 	
 	/**
@@ -265,8 +264,7 @@ namespace dodo
 		std::string defaultVal;///< default value of field
 		stringArr set_enum;///< array of statements for SET or ENUM if these type difined
 		
-		std::string comment;///< comment string for field
-		std::string charset;///< field's charset
+		std::string charset;///< field's collate charset
 	};
 	
 	/*
@@ -289,12 +287,6 @@ namespace dodo
 		
 		stringArr primKeys;///< array of primary keys in table (field names)
 		stringArr uniq;///< array of unique in table (field names)
-		
-		long autoIncr;///< auto-increment value (as for start)
-		long avgRowLen;///< avarage row length
-		
-		std::string comment;///< comment string for table
-		std::string charset;///< table's charset
 		
 		bool ifNotExists;///< no warning message if table already exixts [false by default]
 	};
@@ -621,7 +613,7 @@ namespace dodo
 			/**
 			 * set default values for field (if you want safelly reuse)
 			 */
-			void initRowInfo(__fieldInfo &field);	
+			void initFieldInfo(__fieldInfo &field);	
 				
 		protected:
 			
