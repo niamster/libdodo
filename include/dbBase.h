@@ -287,7 +287,6 @@ namespace dodo
 		std::string name;///< name of the table
 		std::vector<__fieldInfo> fields;///< array of fields[see__fieldInfo]
 		
-		stringArr keys;///< array of keys in table (field names)
 		stringArr primKeys;///< array of primary keys in table (field names)
 		stringArr uniq;///< array of unique in table (field names)
 		

@@ -68,7 +68,7 @@ __tableInfo::operator=(const __tableInfo &from)
 	for (std::vector<__fieldInfo>::const_iterator i=from.fields.begin();i!=j;++i)
 		fields.push_back(*i);
 	
-	keys = from.keys;
+	primKeys = from.primKeys;
 	uniq = from.uniq;
 	ifNotExists = from.ifNotExists;
 	
@@ -859,7 +859,6 @@ dbBase::initTableInfo(__tableInfo &table)
 	
 	table.charset.clear();
 	table.comment.clear();
-	table.keys.clear();
 	table.primKeys.clear();
 	table.uniq.clear();
 	
