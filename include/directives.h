@@ -46,12 +46,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define LIBRARY "libdodo"
-
-#define MAJOR "0"
-#define MINOR "4"
-#define RELEASE "0"
-
 /**
  * other options
  */
@@ -83,19 +77,12 @@
  */
 #define FILE_DELIM '/'
 
-/** 
- * compile without exceptions[bad practice]
- */
-//#define NO_EX
-
 /**
  * removes some checks
  * 1) check for request completeness(sqlBase)
- * 2) some checks that now is not needed, but in future releases will be neded, but set for now for more compability with newly writed code
  */
 #define FAST
 
-//#define UNICODE
 
 /**
  * use modules without hooks. faster a little bit.

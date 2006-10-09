@@ -21,18 +21,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
+	
 #include <baseEx.h>
 
-#ifdef DL_EXT
-
-	#include <dlfcn.h>
-
-#endif	
-
-using namespace dodo;
-
 #ifndef NO_EX
+
+	#ifdef DL_EXT
+
+		#include <dlfcn.h>
+
+	#endif	
+
+	using namespace dodo;
 
 	bool baseEx::handlerSetEx[] = {false,
 									false,

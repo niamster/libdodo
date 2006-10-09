@@ -53,7 +53,7 @@
 		 */	
 		#define TOOLS_BAD_ASCII85_STR "Bad character in ASCII85."
 		
-		#ifdef BZIP_EXT
+		#ifdef BZIP2_EXT
 		
 			#define TOOLS_BAD_BZCOMPRESSION_STR "Error occured during comression."
 			#define TOOLS_BAD_BZDECOMPRESSION_INIT_STR "Error occured during preparations for decompression."
@@ -71,7 +71,7 @@
 		enum toolsFunctionsID
 		{
 			
-			#ifdef CODECONV_EXT
+			#ifdef ICONV_EXT
 			
 				TOOLS_CODESETCONVERSION,
 				TOOLS_CODESETCONVERSIONSTATIC,
@@ -89,7 +89,7 @@
 			
 				TOOLS_DECODEASCII85,
 				
-			#ifdef BZIP_EXT
+			#ifdef BZIP2_EXT
 			
 				TOOLS_BZCOMPRESS,
 				TOOLS_BZDECOMPRESS,							

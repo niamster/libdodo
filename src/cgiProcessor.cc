@@ -36,7 +36,7 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 								cgiFastSet(false)
 							#endif	
 {
-	dodo["version"] = std::string(MAJOR) + "." + std::string(MINOR) + "." + std::string(RELEASE);
+	dodo["version"] = PACKAGE_STRING;
 	dodo["iterator"] = "1";
 }
 //-------------------------------------------------------------------
@@ -52,7 +52,7 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 													cf(a_cf)
 					
 	{
-		dodo["version"] = std::string(MAJOR) + "." + std::string(MINOR) + "." + std::string(RELEASE);
+		dodo["version"] = PACKAGE_STRING;
 		dodo["iterator"] = "1";
 	}
 

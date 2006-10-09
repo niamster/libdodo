@@ -213,7 +213,7 @@ void
 cgiTools::initHeaders(assocArr &a_headers) const
 {
 	HEADERS["Content-type"] = "text/html";
-	HEADERS["X-Powered-By"] = LIBRARY "/" MAJOR "." MINOR "." RELEASE ;
+	HEADERS["X-Powered-By"] = PACKAGE_NAME "/" PACKAGE_VERSION ;
 	
 	if (a_headers.size() > 0)
 	{

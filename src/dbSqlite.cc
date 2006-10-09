@@ -278,7 +278,7 @@
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 					#else
-						return false;
+						return __stringarrayvector__;
 					#endif
 					
 				case SQLITE_ROW:	
@@ -577,7 +577,7 @@
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHASSOC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
 					#else
-						return false;
+						return __dodostringmap__;
 					#endif
 					
 				case SQLITE_ROW:	

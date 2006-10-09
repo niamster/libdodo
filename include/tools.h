@@ -27,7 +27,7 @@
 
 #include <directives.h>
 
-#ifdef CODECONV_EXT
+#ifdef ICONV_EXT
 	#include <iconv.h>
 #endif
 
@@ -35,7 +35,7 @@
 	#include <zlib.h>
 #endif
 
-#ifdef BZIP_EXT
+#ifdef BZIP2_EXT
 	#include <bzlib.h>
 #endif
 
@@ -245,7 +245,7 @@ namespace dodo
 			 */
 			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame, int limit=-1);
 			
-			#ifdef CODECONV_EXT
+			#ifdef ICONV_EXT
 				
 				/**
 				 * converts from one codeset to another
@@ -373,7 +373,7 @@ namespace dodo
 			 */
 			static std::string MD5(const std::string &string);
 			
-			#ifdef BZIP_EXT
+			#ifdef BZIP2_EXT
 			
 			 	
 			 	/**
@@ -464,7 +464,7 @@ namespace dodo
 			 */
 			static void _decodeASCII85(std::string &result, unsigned long tuple, int count);
 			
-			#ifdef CODECONV_EXT
+			#ifdef ICONV_EXT
 			
 				iconv_t conv;///< discriptor for code conversions
 				bool convSet;///< indicates whether codeset was set
