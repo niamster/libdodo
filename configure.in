@@ -1,0 +1,224 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.60)
+AC_INIT(libdodo, 0.4.0, libdodo.sf.net)
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_LN_S
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+
+rm -f include/directives.runtime.h
+
+# Checks for libraries.
+AC_ARG_ENABLE([sqlite3],
+    AS_HELP_STRING([--enable-sqlite3], [enable sqlite3 support (default=disabled)]), 
+    [MOD_SQLITE="yes"])
+if test "$MOD_SQLITE" = "yes"
+then
+	echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
+	MOD_SQLITE_DIR="/usr"
+	AC_ARG_WITH([sqlite3],
+		AS_HELP_STRING([--with-sqlite3],[use sqlite3 installation dir]),
+		[MOD_SQLITE_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_SQLITE_DIR/include"
+	LDFLAGS=" -L$MOD_SQLITE_DIR/lib"
+	AC_CHECK_LIB([sqlite3], [sqlite3_open])
+fi
+
+AC_ARG_ENABLE([mysql],
+    AS_HELP_STRING([--enable-mysql], [enable mysql support (default=disabled)]), 
+    [MOD_MYSQL="yes"])
+if test "$MOD_MYSQL" = "yes"
+then
+	echo -n -e "#define MYSQL_EXT\n\n" >> include/directives.runtime.h
+	MOD_MYSQL_DIR="/usr"
+	AC_ARG_WITH([mysql],
+		AS_HELP_STRING([--with-mysql],[use mysql installation dir]),
+		[MOD_MYSQL_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_MYSQL_DIR/include"
+	LDFLAGS=" -L$MOD_MYSQL_DIR/lib"
+	AC_CHECK_LIB([mysqlclient], [mysql_init])
+fi
+
+AC_ARG_ENABLE([fcig],
+    AS_HELP_STRING([--enable-fcgi], [enable fast CGI support (default=disabled)]), 
+    [MOD_FCGI="yes"])
+if test "$MOD_FCGI" = "yes"
+then
+	echo -n -e "#define FCGI_EXT\n\n" >> include/directives.runtime.h
+	MOD_FCGI_DIR="/usr"
+	AC_ARG_WITH([fcgi],
+		AS_HELP_STRING([--with-fcgi],[use fast CGI installation dir]),
+		[MOD_FCGI_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_FCGI_DIR/include"
+	LDFLAGS=" -L$MOD_FCGI_DIR/lib"
+	AC_CHECK_LIB([fcgi], [FCGX_Init])
+fi
+
+AC_ARG_ENABLE([pcre],
+    AS_HELP_STRING([--enable-pcre], [enable pcre support (default=disabled)]), 
+    [MOD_PCRE="yes"])
+if test "$MOD_PCRE" = "yes"
+then
+	echo -n -e "#define PCRE_EXT\n\n" >> include/directives.runtime.h
+	MOD_PCRE_DIR="/usr"
+	AC_ARG_WITH([pcre],
+		AS_HELP_STRING([--with-pcre],[use pcre installation dir]),
+		[MOD_PCRE_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_PCRE_DIR/include"
+	LDFLAGS=" -L$MOD_PCRE_DIR/lib"
+	AC_CHECK_LIB([pcre], [pcre_exec])
+fi
+
+AC_ARG_ENABLE([dl],
+    AS_HELP_STRING([--enable-dl], [enable dynamic linking support (default=disabled)]), 
+    [MOD_DL="yes"])
+if test "$MOD_DL" = "yes"
+then
+	echo -n -e "#define DL_EXT\n\n" >> include/directives.runtime.h
+	MOD_DL_DIR="/usr"
+	AC_ARG_WITH([dl],
+		AS_HELP_STRING([--with-dl],[use dl installation dir]),
+		[MOD_DL_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_DL_DIR/include"
+	LDFLAGS=" -L$MOD_DL_DIR/lib"
+	AC_CHECK_LIB([dl], [dlopen])
+fi
+
+AC_ARG_ENABLE([libxml2],
+    AS_HELP_STRING([--enable-libxml2], [enable libxml2 support (default=disabled)]), 
+    [MOD_LIBXML2="yes"])
+if test "$MOD_LIBXML2" = "yes"
+then
+	echo -n -e "#define LIBXML2_EXT\n\n" >> include/directives.runtime.h
+	MOD_LIBXML2_DIR="/usr"
+	AC_ARG_WITH([libxml2],
+		AS_HELP_STRING([--with-libxml2],[use libxml2 installation dir]),
+		[MOD_LIBXML2_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_LIBXML2_DIR/include"
+	LDFLAGS=" -L$MOD_LIBXML2_DIR/lib"
+	AC_CHECK_LIB([xml2], [xmlInitParser])
+fi
+
+AC_ARG_ENABLE([pthread],
+    AS_HELP_STRING([--enable-pthread], [enable pthread support (default=disabled)]), 
+    [MOD_PTHREAD="yes"])
+if test "$MOD_PTHREAD" = "yes"
+then
+	echo -n -e "#define PTHREAD_EXT\n\n" >> include/directives.runtime.h
+	MOD_PTHREAD_DIR="/usr"
+	AC_ARG_WITH([pthread],
+		AS_HELP_STRING([--with-pthread],[use pthread installation dir]),
+		[MOD_PTHREAD_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_PTHREAD_DIR/include"
+	LDFLAGS=" -L$MOD_PTHREAD_DIR/lib"
+	MOD_PTHREAD_LIB="pthread"
+        AC_ARG_WITH([pthread-lib],
+		AS_HELP_STRING([--with-pthread-lib],[use pthread lib(pthread, thr, lthread, c_r) (default=pthread)]),
+		[MOD_PTHREAD_LIB="$withval"])
+
+	AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create])
+fi
+
+AC_ARG_ENABLE([bzip2],
+    AS_HELP_STRING([--enable-bzip2], [enable bzip2 support (default=disabled)]), 
+    [MOD_BZIP="yes"])
+if test "$MOD_BZIP2" = "yes"
+then
+	echo -n -e "#define BZIP2_EXT\n\n" >> include/directives.runtime.h
+	MOD_BZIP2_DIR="/usr"
+	AC_ARG_WITH([bzip2],
+		AS_HELP_STRING([--with-bzip2],[use bzip2 installation dir]),
+		[MOD_BZIP2_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_BZIP2_DIR/include"
+	LDFLAGS=" -L$MOD_BZIP2_DIR/lib"
+	AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress])
+fi
+
+AC_ARG_ENABLE([zlib],
+    AS_HELP_STRING([--enable-zlib], [enable zlib support (default=disabled)]), 
+    [MOD_ZLIB="yes"])
+if test "$MOD_ZLIB" = "yes"
+then
+	echo -n -e "#define ZLIB_EXT\n\n" >> include/directives.runtime.h
+	MOD_ZLIB_DIR="/usr"
+	AC_ARG_WITH([zlib],
+		AS_HELP_STRING([--with-zlib],[use zlib installation dir]),
+		[MOD_ZLIB_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_ZLIB_DIR/include"
+	LDFLAGS=" -L$MOD_ZLIB_DIR/lib"
+	AC_CHECK_LIB([z], [deflateInit2])
+fi
+
+AC_ARG_ENABLE([iconv],
+    AS_HELP_STRING([--enable-iconv], [enable iconv support (default=disabled)]), 
+    [MOD_ICONV="yes"])
+if test "$MOD_ICONV" = "yes"
+then
+	echo -n -e "#define ICONV_EXT\n\n" >> include/directives.runtime.h
+	MOD_ICONV_DIR="/usr"
+	AC_ARG_WITH([sqlite3],
+		AS_HELP_STRING([--with-sqlite3],[use sqlite3 installation dir]),
+		[MOD_ICONV_DIR="$withval"])
+	CPPFLAGS=" -I$MOD_ICONV_DIR/include"
+	LDFLAGS=" -L$MOD_ICONV_DIR/lib"
+	AC_ARG_ENABLE([iconv-lib],
+		AS_HELP_STRING([--enable-iconv-lib], [enable iconv as lib (default=disabled)]),
+		[MOD_ICONV_LIB="yes"])
+        if test "$MOD_ICONV_LIB" = "yes"
+	then
+		AC_CHECK_LIB([iconv], [iconv])
+	fi
+fi
+
+# Checks for header files.
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS([arpa/inet.h fcntl.h netdb.h netinet/in.h stdlib.h string.h sys/ioctl.h sys/socket.h sys/time.h unistd.h utime.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+AC_STRUCT_TM
+
+# Checks for library functions.
+AC_FUNC_CHOWN
+AC_FUNC_CLOSEDIR_VOID
+AC_FUNC_GETPGRP
+AC_PROG_GCC_TRADITIONAL
+AC_FUNC_LSTAT
+AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+AC_FUNC_MALLOC
+AC_FUNC_MKTIME
+AC_FUNC_REALLOC
+AC_FUNC_SELECT_ARGTYPES
+AC_FUNC_STRFTIME
+AC_FUNC_UTIME_NULL
+AC_CHECK_FUNCS([atexit endgrent endpwent getcwd gethostbyname gethostname memset mkdir mkfifo regcomp rmdir select sethostname socket strcasecmp strerror strstr strtoul utime])
+AC_CONFIG_FILES([Makefile
+                 tests/Makefile
+                 tests/STD_test/Makefile
+                 tests/cgiFast_test/Makefile
+                 tests/cgi_test/Makefile
+                 tests/dbinterface_test/Makefile
+                 tests/disk_test/Makefile
+                 tests/glob_test/Makefile
+                 tests/mysql_test/Makefile
+                 tests/postgresql_test/Makefile
+                 tests/regexp_test/Makefile
+                 tests/socketNB_test/Makefile
+                 tests/socketThreads_test/Makefile
+                 tests/socket_test/Makefile
+                 tests/sqlite_test/Makefile
+                 tests/systemThreads_test/Makefile
+                 tests/systemTools_test/Makefile
+                 tests/timeTools_test/Makefile
+                 tests/xexec.module_test/Makefile
+                 tests/xmlTools_test/Makefile])
+AC_OUTPUT

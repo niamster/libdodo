@@ -60,10 +60,9 @@ int main(int argc, char **argv)
 		
 		/*create field*/
 		__fieldInfo fi;
-		fi.comment = " !!";
 		fi.onDelete = REFERENCE_SET_DEFAULT;
 		fi.name = "field";
-		fi.flag |= FIELDPROP_AUTO_INCREMENT|FIELDPROP_KEY;
+		fi.flag |= FIELDPROP_AUTO_INCREMENT;
 		fi.type = FIELDTYPE_CHAR;
 		fi.length = 10;
 		

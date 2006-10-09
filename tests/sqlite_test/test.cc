@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 		
 		fi.name = "id";
 		fi.type = FIELDTYPE_INTEGER;
-		fi.flag = FIELDPROP_AUTO_INCREMENT|FIELDPROP_KEY;
+		fi.flag = FIELDPROP_AUTO_INCREMENT;
 		ti.fields.push_back(fi);		
 		
 		pp.createTable(ti);

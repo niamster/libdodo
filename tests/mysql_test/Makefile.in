@@ -1,0 +1,12 @@
+
+CPPFLAGS:=-I../../include @CPPFLAGS@
+LDFLAGS:=-L../../ @LDFLAGS@ 
+
+test: test.cc
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
+
+compare: compare.sql.cc
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@ 
+	
+clean:
+	rm -rf test compare

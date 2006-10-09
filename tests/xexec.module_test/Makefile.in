@@ -1,14 +1,6 @@
 
-include ../../directives.mk
-
-include ../../directives.runtime.mk
-
-include ../../flags.mk
-			
-###########################################################
-
-override CPPFLAGS:=-I../../include $(CPPFLAGS)
-override LDFLAGS:=-L../../ $(LDFLAGS) 
+CPPFLAGS:=-I../../include @CPPFLAGS@
+LDFLAGS:=-L../../ @LDFLAGS@ 
 
 all: test module
 
