@@ -1,8 +1,14 @@
 
-INSTALL:=@INSTALL@
+prefix:=@prefix@
+exec_prefix:=@exec_prefix@
+mandir:=@mandir@
 LIBDIR:=@libdir@
 INCLUDEDIR:=@includedir@
+
 CXX:=@CXX@
+INSTALL:=@INSTALL@
+LN_S = @LN_S@
+
 CPPFLAGS:=-I./include @CPPFLAGS@
 LDFLAGS:= -L./ @LDFLAGS@
 LIBS:=@LIBS@
@@ -62,18 +68,29 @@ all: @PACKAGE_NAME@
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
 	strip -d --strip-unneeded $@
 
-install: all
-	${INSTALL} -d -m 644 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(LIBDIR)
-	${INSTALL} -d -m 644  include/* $(INCLUDEDIR)/
+install: 
+	${INSTALL} -m 644 -d $(LIBDIR)
+	${INSTALL} -m 644 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(LIBDIR)/
+	${INSTALL} -m 644 -d $(INCLUDEDIR)/
+	cd include; for i in ./*; do ${INSTALL} -m 644 $$i $(INCLUDEDIR)/; done; cd ..
 	
-	$(LN_S) $(LIBDIR)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(LIBDIR)/@PACKAGE_NAME@.so
+	$(LN_S) -f $(LIBDIR)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(LIBDIR)/@PACKAGE_NAME@.so
 	
 	@echo ""
 	@echo ""
 	@echo "Use libdodo with pleasure"
 	@echo ""
 	@echo ""
+
+uninstall:
+	rm -f $(LIBDIR)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@
+	rm -f $(LIBDIR)/@PACKAGE_NAME@.so
+	rmdir $(LIBDIR)
 	
+	cd include; for i in ./*; do rm -f $(INCLUDEDIR)/$$i; done; cd ..
+	rmdir $(INCLUDEDIR)
+	
+	rmdir $(prefix)
 clean:
 	rm -rf *.o *.so* *.a*
 
