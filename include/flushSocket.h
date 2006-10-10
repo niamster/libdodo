@@ -271,6 +271,11 @@ namespace dodo
 			bool blockInherited;///< if true - children(flushSocketExchange) became unblocked, if parent(flushSocket) in unblocked; false by default
 			
 		protected:
+		
+			/**
+			 * restores options on connect/bind 
+			 */
+			virtual void restoreOptions();
 			
 			/**
 			 * creates socket with given data

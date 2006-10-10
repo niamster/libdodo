@@ -130,6 +130,22 @@ flushSocket::~flushSocket()
 
 //-------------------------------------------------------------------
 
+void 
+flushSocket::restoreOptions()
+{	
+	setInBufferSize(inSocketBuffer);
+	setOutBufferSize(outSocketBuffer);
+	
+	setInTimeout(inTimeout);
+	setOutTimeout(outTimeout);
+	
+	setLingerSockOption(lingerOpts,lingerSeconds);	
+	
+	block(blocked);
+}
+
+//-------------------------------------------------------------------
+
 #ifndef NO_EX
 	void 
 #else
@@ -189,6 +205,8 @@ flushSocket::makeSocket()
 		#endif	
 		
 	socketMade = true;	
+	
+	restoreOptions();
 	
 	#ifdef NO_EX
 		return true;
