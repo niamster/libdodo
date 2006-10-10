@@ -101,7 +101,7 @@ namespace dodo
 		SIGNAL_FILESIZE_EXCEEDED = 262144,
 		SIGNAL_BAD_SYSCALL = 524288,
 	};
-
+	
 	/**
 	 * @enum uidTypeEnum describes type of UID
 	 * @note real - what ID started process
@@ -195,7 +195,7 @@ namespace dodo
 			 * suspend for given seconds
 			 * @param period is time in seconds
 			 */
-			static void sleep(unsigned long period);
+			static void sleep(long period);
 					
 			/**
 			 * prints message to stderr end exits from program
@@ -435,6 +435,32 @@ namespace dodo
 				static bool 
 			#endif			
 							setGroupPID(int pid, int gpid);
+			
+			/**
+			 * set timer and onTimer function
+			 * @param timeout is timer period in microseconds
+			 * @param handler is function that will be called
+			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals = -1);
+			
+			/**
+			 * set timer and onTimer function
+			 * @param timeout is timer period in seconds
+			 * @param handler is function that will be called
+			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
+			 */				
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif
+							setTimer(long timeout, signalHandler handler, int blockSignals = -1);
 			
 			/**
 			 * set signal handler

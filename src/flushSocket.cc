@@ -160,7 +160,7 @@ flushSocket::makeSocket()
 			return true;			
 		#endif
 	
-	int real_domain(PF_INET), real_type(TRANSFER_TYPE_STREAM);
+	register int real_domain(PF_INET), real_type(TRANSFER_TYPE_STREAM);
 	
 	switch (family)
 	{

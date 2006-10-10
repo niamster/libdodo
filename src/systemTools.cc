@@ -760,10 +760,10 @@ systemTools::die(const std::string &message,
 void 
 systemTools::microSleep(unsigned long period)
 {
-	if (period<1000000)
+	if (period < 1000000)
 		::usleep(period);
 	else
-		::sleep(period/1000000);
+		::sleep(period / 1000000);
 }
 
 //-------------------------------------------------------------------
@@ -998,6 +998,148 @@ systemTools::setSignalHandler(long signal,
 	if (sigaction(systemTools::toRealSignal(signal),&act,NULL) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETSIGNALHANDLER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif
+systemTools::setMicroTimer(unsigned long timeout, 
+						signalHandler handler,
+						int blockSignals)
+{
+	#ifdef DL_EXT
+	
+		deinitSigModule deinit;
+		
+		if (handlesOpenedSig[signal])
+		{
+			deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
+			if (deinit != NULL)
+				deinit();
+				
+			dlclose(handlesSig[signal]);
+			
+			handlesOpenedSig[signal] = false;
+			handlesSig[signal] = NULL;
+		}	
+	
+	#endif
+	
+	struct sigaction act;
+	act.sa_sigaction = handler;
+	act.sa_flags = SA_SIGINFO|SA_RESTART;
+	
+	if (sigemptyset(&act.sa_mask) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETMICROTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
+		
+	sigMask(&act.sa_mask, blockSignals);
+	
+	register long tSec = 0, tMicrosec = timeout;
+	
+	if (timeout > 1000000)
+	{                
+		tSec = timeout / 1000000;
+		tMicrosec = timeout % 1000000;  
+	}
+	
+	itimerval value;
+	value.it_interval.tv_sec = tSec;
+	value.it_interval.tv_usec = tMicrosec;
+	value.it_value.tv_sec = 0;
+	value.it_value.tv_usec = 0;  
+	
+	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETMICROTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
+	
+	if (sigaction(SIGALRM,&act,NULL) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETMICROTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	#ifdef NO_EX
+		return true;
+	#endif	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool 
+#endif
+systemTools::setTimer(long timeout, 
+						signalHandler handler,
+						int blockSignals)
+{
+	#ifdef DL_EXT
+	
+		deinitSigModule deinit;
+		
+		if (handlesOpenedSig[signal])
+		{
+			deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
+			if (deinit != NULL)
+				deinit();
+				
+			dlclose(handlesSig[signal]);
+			
+			handlesOpenedSig[signal] = false;
+			handlesSig[signal] = NULL;
+		}	
+	
+	#endif
+	
+	struct sigaction act;
+	act.sa_sigaction = handler;
+	act.sa_flags = SA_SIGINFO|SA_RESTART;
+	
+	if (sigemptyset(&act.sa_mask) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
+		
+	sigMask(&act.sa_mask, blockSignals);
+	
+	itimerval value;
+	value.it_interval.tv_sec = timeout;
+	value.it_interval.tv_usec = 0;
+	value.it_value.tv_sec = 0;
+	value.it_value.tv_usec = 0;  
+	
+	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
+	
+	if (sigaction(SIGALRM,&act,NULL) == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif	
