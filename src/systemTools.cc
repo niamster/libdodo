@@ -769,7 +769,7 @@ systemTools::microSleep(unsigned long period)
 //-------------------------------------------------------------------
 
 void 
-systemTools::sleep(unsigned long period)
+systemTools::sleep(long period)
 {
 	::sleep(period);
 }
@@ -1022,16 +1022,16 @@ systemTools::setMicroTimer(unsigned long timeout,
 	
 		deinitSigModule deinit;
 		
-		if (handlesOpenedSig[signal])
+		if (handlesOpenedSig[SIGNAL_ALARM])
 		{
-			deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
+			deinit = (deinitSigModule)dlsym(handlesSig[SIGNAL_ALARM], "deinitSigModule");
 			if (deinit != NULL)
 				deinit();
 				
-			dlclose(handlesSig[signal]);
+			dlclose(handlesSig[SIGNAL_ALARM]);
 			
-			handlesOpenedSig[signal] = false;
-			handlesSig[signal] = NULL;
+			handlesOpenedSig[SIGNAL_ALARM] = false;
+			handlesSig[SIGNAL_ALARM] = NULL;
 		}	
 	
 	#endif
@@ -1097,16 +1097,16 @@ systemTools::setTimer(long timeout,
 	
 		deinitSigModule deinit;
 		
-		if (handlesOpenedSig[signal])
+		if (handlesOpenedSig[SIGNAL_ALARM])
 		{
-			deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
+			deinit = (deinitSigModule)dlsym(handlesSig[SIGNAL_ALARM], "deinitSigModule");
 			if (deinit != NULL)
 				deinit();
 				
-			dlclose(handlesSig[signal]);
+			dlclose(handlesSig[SIGNAL_ALARM]);
 			
-			handlesOpenedSig[signal] = false;
-			handlesSig[signal] = NULL;
+			handlesOpenedSig[SIGNAL_ALARM] = false;
+			handlesSig[SIGNAL_ALARM] = NULL;
 		}	
 	
 	#endif
