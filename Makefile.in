@@ -1,9 +1,10 @@
 
 prefix:=@prefix@
+datarootdir:=@datarootdir@
 exec_prefix:=@exec_prefix@
 mandir:=@mandir@
-LIBDIR:=@libdir@
-INCLUDEDIR:=@includedir@
+libdir:=@libdir@
+includedir:=@includedir@
 
 CXX:=@CXX@
 INSTALL:=@INSTALL@
@@ -69,12 +70,12 @@ all: @PACKAGE_NAME@
 	strip -d --strip-unneeded $@
 
 install: 
-	${INSTALL} -m 644 -d $(LIBDIR)
-	${INSTALL} -m 644 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(LIBDIR)/
-	${INSTALL} -m 644 -d $(INCLUDEDIR)/
-	cd include; for i in ./*; do ${INSTALL} -m 644 $$i $(INCLUDEDIR)/; done; cd ..
+	${INSTALL} -m 755 -d $(libdir)
+	${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/
+	${INSTALL} -m 755 -d $(includedir)/
+	cd include; for i in ./*; do ${INSTALL} -m 755 $$i $(includedir)/; done; cd ..
 	
-	$(LN_S) -f $(LIBDIR)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(LIBDIR)/@PACKAGE_NAME@.so
+	$(LN_S) -f $(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/@PACKAGE_NAME@.so
 	
 	@echo ""
 	@echo ""
@@ -83,12 +84,12 @@ install:
 	@echo ""
 
 uninstall:
-	rm -f $(LIBDIR)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@
-	rm -f $(LIBDIR)/@PACKAGE_NAME@.so
-	rmdir $(LIBDIR)
+	rm -f $(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@
+	rm -f $(libdir)/@PACKAGE_NAME@.so
+	rmdir $(libdir)
 	
-	cd include; for i in ./*; do rm -f $(INCLUDEDIR)/$$i; done; cd ..
-	rmdir $(INCLUDEDIR)
+	cd include; for i in ./*; do rm -f $(includedir)/$$i; done; cd ..
+	rmdir $(includedir)
 	
 	rmdir $(prefix)
 clean:
