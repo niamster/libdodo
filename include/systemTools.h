@@ -356,7 +356,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							getUsers(std::vector<__userInfo> &info);
+							getUsers(dodoArray<__userInfo> &info);
 			
 			/**
 			 * gets group info
@@ -391,7 +391,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							getGroups(std::vector<__groupInfo> &info);								
+							getGroups(dodoArray<__groupInfo> &info);								
 			/**
 			 * @return PID of current process
 			 */

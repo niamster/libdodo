@@ -51,7 +51,7 @@
 			
 			std::string name;///< name of the node [[tag]]
 			
-			__dodoMap< std::vector<__node> > children;///< vector of children's realisation;
+			__dodoMap< dodoArray<__node> > children;///< vector of children's realisation;
 			
 			dodoStringMap attributes;///< hash of attributes
 			
@@ -258,7 +258,7 @@
 				 * @return parsed into __node structure given XML
 				 * @param node is XML tree node
 				 */
-				virtual std::vector<__node> parse(xmlNodePtr node);
+				virtual dodoArray<__node> parse(xmlNodePtr node);
 				
 				/**
 				 * parses XML using __nodeDef XML explanation using internal built data
@@ -274,7 +274,7 @@
 				 * @param chNode is XML tree node
 				 * @param chLimit is limit of children to search for
 				 */				
-				virtual std::vector<__node> parse(const __nodeDef &definition, const xmlNodePtr chNode, long chLimit);
+				virtual dodoArray<__node> parse(const __nodeDef &definition, const xmlNodePtr chNode, long chLimit);
 				
 				/**
 				 * gets attributes from node

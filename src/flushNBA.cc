@@ -66,8 +66,8 @@ flushNBA::makeFalse(int count)
 }
 //-------------------------------------------------------------------
 
-std::vector<bool> 
-flushNBA::isReadable(const std::vector<int> &pos, 
+dodoArray<bool> 
+flushNBA::isReadable(const dodoArray<int> &pos, 
 					int timeout)
 {
 	tempRB.clear();
@@ -140,8 +140,8 @@ flushNBA::isReadable(const std::vector<int> &pos,
 
 //-------------------------------------------------------------------
 
-std::vector<bool> 
-flushNBA::isWritable(const std::vector<int> &pos, 
+dodoArray<bool> 
+flushNBA::isWritable(const dodoArray<int> &pos, 
 					int timeout)
 {	tempRB.clear();
 	

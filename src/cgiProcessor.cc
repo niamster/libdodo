@@ -232,7 +232,7 @@ cgiProcessor::recursive(const std::string &path)
 
 void 
 cgiProcessor::assign(std::string varName, 
-					const std::vector<assocArr> &varVal)
+					const dodoArray<assocArr> &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -333,7 +333,7 @@ cgiProcessor::_if(const std::string &buffer,
 	
 	register unsigned short oper(0);
 	
-	std::vector<std::string> temp2 = tools::explode(statement,"==");
+	dodoArray<std::string> temp2 = tools::explode(statement,"==");
 	if (temp2.size() != 2)
 	{
 		temp2 = tools::explode(statement,"!=");
@@ -1014,8 +1014,8 @@ cgiProcessor::_for(const std::string &buffer,
 					return u;
 				}
 				
-			std::map<std::string, std::vector<assocArr> >::iterator d = globalArrayHash.begin();
-			std::map<std::string, std::vector<assocArr> >::iterator f = globalArrayHash.end();		
+			std::map<std::string, dodoArray<assocArr> >::iterator d = globalArrayHash.begin();
+			std::map<std::string, dodoArray<assocArr> >::iterator f = globalArrayHash.end();		
 			for (;d!=f;++d)
 				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 				{
@@ -1031,8 +1031,8 @@ cgiProcessor::_for(const std::string &buffer,
 							keyVal = local[keyName];
 					}
 										
-					std::vector<assocArr>::iterator k = d->second.begin();
-					std::vector<assocArr>::iterator l = d->second.end();
+					dodoArray<assocArr>::iterator k = d->second.begin();
+					dodoArray<assocArr>::iterator l = d->second.end();
 					register unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter,++iterator)
@@ -1264,8 +1264,8 @@ cgiProcessor::_for(const std::string &buffer,
 						}
 					}							
 	
-				std::map<std::string, std::vector<assocArr> >::iterator d = globalArrayHash.begin();
-				std::map<std::string, std::vector<assocArr> >::iterator f = globalArrayHash.end();
+				std::map<std::string, dodoArray<assocArr> >::iterator d = globalArrayHash.begin();
+				std::map<std::string, dodoArray<assocArr> >::iterator f = globalArrayHash.end();
 				for (;d!=f;++d)
 					if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 					{
@@ -1330,8 +1330,8 @@ cgiProcessor::_for(const std::string &buffer,
 			{
 				if (temp.size() == 3)
 				{
-					std::map<std::string, std::vector<assocArr> >::iterator d = globalArrayHash.begin();
-					std::map<std::string, std::vector<assocArr> >::iterator f = globalArrayHash.end();
+					std::map<std::string, dodoArray<assocArr> >::iterator d = globalArrayHash.begin();
+					std::map<std::string, dodoArray<assocArr> >::iterator f = globalArrayHash.end();
 					for (;d!=f;++d)
 						if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 						{

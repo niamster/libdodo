@@ -489,7 +489,7 @@ dbSqlBase::createTableCollect() const
 	request.append(pre_tableInfo.name + "(");
 	
 	{
-		std::vector<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end()-1);
+		dodoArray<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end()-1);
 		for (;i!=j;++i)
 			request.append(fieldCollect(*i) + ",");
 		request.append(fieldCollect(*i));

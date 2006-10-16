@@ -132,7 +132,7 @@ namespace dodo
 		 */
 		__collectedData(std::string &pre_where,
 		stringArr &pre_fieldsNames,
-		std::vector<stringArr> &pre_fieldsVal,
+		dodoArray<stringArr> &pre_fieldsVal,
 		std::string &pre_table,
 		std::string &pre_tableTo,
 		std::string &pre_order,
@@ -151,7 +151,7 @@ namespace dodo
 		
 		std::string &pre_where;///< where statement of the request	
 		stringArr &pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-		std::vector<stringArr> &pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+		dodoArray<stringArr> &pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
 		std::string &pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
 		std::string &pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
 		std::string &pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
@@ -283,7 +283,7 @@ namespace dodo
 		const __tableInfo &operator=(const __tableInfo &from);
 			
 		std::string name;///< name of the table
-		std::vector<__fieldInfo> fields;///< array of fields[see__fieldInfo]
+		dodoArray<__fieldInfo> fields;///< array of fields[see__fieldInfo]
 		
 		stringArr primKeys;///< array of primary keys in table (field names)
 		stringArr uniq;///< array of unique in table (field names)
@@ -353,7 +353,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const std::string &table, const std::vector<assocArr> &fields);
+			virtual void insert(const std::string &table, const dodoArray<assocArr> &fields);
 			
 			/**
 			 * @param table is table name
@@ -367,7 +367,7 @@ namespace dodo
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarray__);			
+			virtual void insert(const std::string &table, const dodoArray<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarray__);			
 			
 			/**
 			 * @param table(To/From) is table name To/From
@@ -628,7 +628,7 @@ namespace dodo
 			 */
 			mutable std::string pre_where;///< where statement of the request	
 			mutable stringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-			mutable std::vector<stringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+			mutable dodoArray<stringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
 			mutable std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
 			mutable std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
 			mutable std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
@@ -675,10 +675,10 @@ namespace dodo
 			 */
 			mutable assocArr::const_iterator i;///< iterator for "hash"
 			mutable assocArr::const_iterator j;///< iterator for "hash"
-			mutable std::vector<stringArr>::const_iterator k;///< iterator for array of hashes
-			mutable std::vector<stringArr>::const_iterator l;///< iterator for array of hashes
-			std::vector<assocArr>::const_iterator v;///< iterator for array of hashes
-			std::vector<assocArr>::const_iterator b;///< iterator for array of hashes
+			mutable dodoArray<stringArr>::const_iterator k;///< iterator for array of hashes
+			mutable dodoArray<stringArr>::const_iterator l;///< iterator for array of hashes
+			dodoArray<assocArr>::const_iterator v;///< iterator for array of hashes
+			dodoArray<assocArr>::const_iterator b;///< iterator for array of hashes
 			stringArr temp;///< temp storage
 	};
 

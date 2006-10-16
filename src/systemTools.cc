@@ -582,7 +582,7 @@ systemTools::getUserInfo(__userInfo &info,
 #else
 	bool 
 #endif			
-systemTools::getUsers(std::vector<__userInfo> &users)
+systemTools::getUsers(dodoArray<__userInfo> &users)
 {
 	users.clear();
 	
@@ -711,7 +711,7 @@ systemTools::getGroupInfo(__groupInfo &info,
 #else
 	bool 
 #endif			
-systemTools::getGroups(std::vector<__groupInfo> &users)
+systemTools::getGroups(dodoArray<__groupInfo> &users)
 {
 	users.clear();
 	

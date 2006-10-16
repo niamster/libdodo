@@ -30,6 +30,8 @@
 #include <map>
 #include <list>
 #include <iostream>
+#include <deque>
+
 #include <errno.h>
 
 #include <directives.h>
@@ -42,16 +44,24 @@ namespace dodo
 	/**
 	 * diferent predifined types
 	 */
+	 
+	#define USE_DEQUE 
+	
+	#ifdef USE_DEQUE
+		#define dodoArray std::deque
+	#else
+		#define dodoArray std::vector
+	#endif
 	
 	typedef char* pchar;
 
-	typedef std::vector<std::string> stringArr;///< array of strings
+	typedef dodoArray<std::string> stringArr;///< array of strings
 
 	typedef std::map<std::string, std::string> assocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
 
 	typedef __dodoMap<std::string> dodoStringMap;
 	
-	typedef std::vector<dodoStringMap> dodoStringMapArr;
+	typedef dodoArray<dodoStringMap> dodoStringMapArr;
 	
 	struct __statements 
 	{
@@ -68,7 +78,7 @@ namespace dodo
 
 	static assocArr __assocarray__;
 
-	static std::vector<stringArr> __stringarrayvector__;
+	static dodoArray<stringArr> __stringarrayvector__;
 
 	static dodoStringMapArr __dodostringmap__;
 

@@ -269,7 +269,7 @@ tools::implode(const stringArr &fields,
 	register int k(0);
 	
 	std::string temp, fs(frame + separator);
-	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);
+	stringArr::const_iterator i(fields.begin()), j(--fields.end());
 	
 	for (;i!=j;++i)
 	{
@@ -317,7 +317,7 @@ tools::implode(const stringArr &fields,
 	register int k(0);	
 	
 	std::string temp;
-	stringArr::const_iterator i(fields.begin()), j(fields.end()-1);
+	stringArr::const_iterator i(fields.begin()), j(--fields.end());
 	
 	for (;i!=j;++i)
 	{

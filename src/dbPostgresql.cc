@@ -277,7 +277,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	std::vector<stringArr>
+	dodoArray<stringArr>
 	dbPostgresql::fetchRow() const
 	{
 			
@@ -293,14 +293,20 @@
 		fieldsNum = PQnfields(pgResult);
 
 		rows.clear();
-		rows.reserve(rowsNum);
+		
+		#ifndef USE_DEQUE
+			rows.reserve(rowsNum);
+		#endif
 		
 		register int j;
 
 		for (register int i(0);i<rowsNum;++i)
 		{
 			rowsPart.clear();
-			rowsPart.reserve(fieldsNum);
+			
+			#ifndef USE_DEQUE
+				rowsPart.reserve(fieldsNum);
+			#endif
 			
 			for (j=0;j<fieldsNum;++j)
 			{
@@ -343,7 +349,10 @@
 		fieldsNum = PQnfields(pgResult);
 		
 		fields.clear();
-		fields.reserve(fieldsNum);
+		
+		#ifndef USE_DEQUE
+			fields.reserve(fieldsNum);
+		#endif
 		
 		for (register int i(0);i<fieldsNum;++i)
 			fields.push_back(PQfname(pgResult,i));
@@ -498,7 +507,10 @@
 		fieldsNum = PQnfields(pgResult);
 		
 		rowsFields.clear();
-		rowsFields.reserve(rowsNum);
+		
+		#ifndef USE_DEQUE
+			rowsFields.reserve(rowsNum);
+		#endif
 		
 		rowFieldsPart.clear();
 		

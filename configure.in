@@ -35,6 +35,15 @@ then
         CFLAGS="$CFLAGS -pg"
 fi
 
+AC_ARG_ENABLE(deque,
+        AS_HELP_STRING([--enable-deque],[use std::deque instead of std::vector]),
+        [DEQUE="$withval"])
+
+if test "$DEQUE" = "yes"
+then
+	echo -n -e "#define USE_DEQUE\n\n" >> include/directives.runtime.h        
+fi
+
 
 # Checks for libraries.
 	AC_ARG_WITH([sqlite3],

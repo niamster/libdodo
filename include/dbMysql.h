@@ -188,7 +188,7 @@
 				/**
 				 * @return array of rows got from request
 				 */
-				virtual std::vector<stringArr> fetchRow() const;
+				virtual dodoArray<stringArr> fetchRow() const;
 				
 				/**
 				 * @return array of fields got from request
@@ -368,7 +368,7 @@
 				mutable std::string rowPart;///< to set temporary row content
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 
-				mutable std::vector<stringArr> rows;///< to store rows
+				mutable dodoArray<stringArr> rows;///< to store rows
 				mutable stringArr fields;///< to store fields
 				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
 								

@@ -42,9 +42,9 @@ namespace dodo
 		 * @param rows
 		 * @param fields
 		 */
-		__dbStorage(std::vector<stringArr> rows, stringArr fields);
+		__dbStorage(dodoArray<stringArr> rows, stringArr fields);
 		
-		std::vector<stringArr> rows;///< array of rows returned in request
+		dodoArray<stringArr> rows;///< array of rows returned in request
 		stringArr fields;///< array of fields returned in request
 	};
         	
@@ -143,7 +143,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const std::string &table, const std::vector<assocArr> &fields) = 0;
+			virtual void insert(const std::string &table, const dodoArray<assocArr> &fields) = 0;
 			
 			/**
 			 * @param table is table name
@@ -157,7 +157,7 @@ namespace dodo
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const std::string &table, const std::vector<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarray__) = 0;			
+			virtual void insert(const std::string &table, const dodoArray<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarray__) = 0;			
 			
 			/**
 			 * @param table(To/From) is table name To/From
@@ -279,7 +279,7 @@ namespace dodo
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual std::vector<stringArr> fetchRow() const = 0;
+			virtual dodoArray<stringArr> fetchRow() const = 0;
 			
 			/**
 			 * @return array of fields got from request

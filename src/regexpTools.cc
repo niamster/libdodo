@@ -77,7 +77,9 @@ regexpTools::reMatch(const std::string &sample,
 	if (!boundMatch(sample))
 		return false;
 	
-	pockets.reserve(boundaries.size());
+	#ifndef USE_DEQUE
+		pockets.reserve(boundaries.size());
+	#endif
 		
 	i = boundaries.begin();
 	j = boundaries.end();

@@ -308,7 +308,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	std::vector<stringArr>
+	dodoArray<stringArr>
 	dbMysql::fetchRow() const
 	{
 		#ifndef DBMYSQL_WO_XEXEC
@@ -324,7 +324,10 @@
 		numFields = mysql_num_fields(mysqlRes);	
 		
 		rows.clear();
-		rows.reserve(mysql_num_rows(mysqlRes));
+		
+		#ifndef USE_DEQUE
+			rows.reserve(mysql_num_rows(mysqlRes));
+		#endif
 		
 		register unsigned long *length, j;
 		
@@ -333,7 +336,10 @@
 			length = mysql_fetch_lengths(mysqlRes);
 			
 			rowsPart.clear();
-			rowsPart.reserve(numFields);
+			
+			#ifndef USE_DEQUE
+				rowsPart.reserve(numFields);
+			#endif
 			
 			for (j=0;j<numFields;++j)
 			{
@@ -371,7 +377,10 @@
 		mysqlFields = mysql_fetch_fields(mysqlRes);
 		
 		fields.clear();
-		fields.reserve(numFields);
+		
+		#ifndef USE_DEQUE
+			fields.reserve(numFields);
+		#endif
 		
 		for (register unsigned int i(0);i<numFields;++i)
 			fields.push_back(mysqlFields[i].name);
@@ -551,7 +560,9 @@
 		numFields = mysql_num_fields(mysqlRes);	
 		mysqlFields = mysql_fetch_fields(mysqlRes);
 
-		rowsFields.reserve(mysql_num_rows(mysqlRes));
+		#ifndef USE_DEQUE
+			rowsFields.reserve(mysql_num_rows(mysqlRes));
+		#endif
 		
 		rowFieldsPart.clear();
 

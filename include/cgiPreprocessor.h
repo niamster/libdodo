@@ -63,19 +63,19 @@ namespace dodo
 			 * @param newLinePos describes array of newlines' positions
 			 * @param pos describes pos in file
 			 */
-			virtual unsigned long getLineNumber(const std::vector<unsigned long> &newLinePos, unsigned long pos);
+			virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newLinePos, unsigned long pos);
 			
 			/**
 			 * @return file contents
 			 * @param path indicates what to read
 			 * @param newLinePos describes array of newlines' positions
 			 */
-			virtual std::string read(const std::string &path, std::vector<unsigned long> &newLinePos);
+			virtual std::string read(const std::string &path, dodoArray<unsigned long> &newLinePos);
 			
 			std::string temp;///< temp storage
 
-			std::vector<unsigned long>::const_iterator o;///< iterator for vector
-			std::vector<unsigned long>::const_iterator p;///< iterator for vector
+			dodoArray<unsigned long>::const_iterator o;///< iterator for vector
+			dodoArray<unsigned long>::const_iterator p;///< iterator for vector
 
 			char message[128];
 

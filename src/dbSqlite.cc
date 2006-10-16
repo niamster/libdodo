@@ -237,7 +237,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	std::vector<stringArr>
+	dodoArray<stringArr>
 	dbSqlite::fetchRow() const
 	{
 		#ifndef DBSQLITE_WO_XEXEC
@@ -256,7 +256,10 @@
 		register unsigned int i = 0;
 		
 		rows.clear();
-		rows.reserve(sqlite3_data_count(liteStmt));
+		
+		#ifndef USE_DEQUE
+			rows.reserve(sqlite3_data_count(liteStmt));
+		#endif
 		
 		while (iterate)
 		{
@@ -284,7 +287,10 @@
 				case SQLITE_ROW:	
 						
 					rowsPart.clear();
-					rowsPart.reserve(numFields);
+					
+					#ifndef USE_DEQUE
+						rowsPart.reserve(numFields);
+					#endif
 					
 					for (i=0;i<numFields;++i)
 						switch (sqlite3_column_type(liteStmt,i))
@@ -358,7 +364,10 @@
 		numFields = sqlite3_column_count(liteStmt);
 		
 		fields.clear();
-		fields.reserve(numFields);
+		
+		#ifndef USE_DEQUE
+			fields.reserve(numFields);
+		#endif
 		
 		for (register unsigned int i(0);i<numFields;++i)
 			fields.push_back(sqlite3_column_name(liteStmt, i));
@@ -555,7 +564,10 @@
 		register unsigned int i = 0;
 		
 		rowsFields.clear();
-		rowsFields.reserve(sqlite3_data_count(liteStmt));
+		
+		#ifndef USE_DEQUE
+			rowsFields.reserve(sqlite3_data_count(liteStmt));
+		#endif
 		
 		while (iterate)
 		{

@@ -99,7 +99,7 @@ namespace dodo
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 	 		 * @note if timeout is negative - infinit timeout
 	 		 */
-	 		virtual std::vector<bool> isReadable(const std::vector<int> &pos, int timeout = 100);
+	 		virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout = 100);
 	 			 			 		
 	 		/**
 	 		 * @return vector of true if flush* is ready to write
@@ -107,7 +107,7 @@ namespace dodo
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 	 		 * @note if timeout is negative - infinit timeout
 	 		 */
-	 		virtual std::vector<bool> isWritable(const std::vector<int> &pos, int timeout = 100);	 		
+	 		virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout = 100);	 		
 	 		
 	 		/**
 	 		 * @return true if flush* is ready to write
@@ -125,19 +125,19 @@ namespace dodo
 			 */
 			virtual void makeFalse(int count);
 	 	
-	 		std::vector<__inOutDescriptors> desc;///< flush descriptors
+	 		dodoArray<__inOutDescriptors> desc;///< flush descriptors
 	 	
 	 		int descs;///< descriptors counter
 	 		
 	 		__inOutDescriptors tempD;///< temp storage for descriptors
 	 	
-	 		std::vector<__inOutDescriptors>::iterator i;///< iterator for desc
-	 		std::vector<__inOutDescriptors>::iterator j;///< iterator for desc
+	 		dodoArray<__inOutDescriptors>::iterator i;///< iterator for desc
+	 		dodoArray<__inOutDescriptors>::iterator j;///< iterator for desc
 	 		
-	 		std::vector<int>::const_iterator m;///< iterator for positions
-	 		std::vector<int>::const_iterator n;///< iterator for positions
+	 		dodoArray<int>::const_iterator m;///< iterator for positions
+	 		dodoArray<int>::const_iterator n;///< iterator for positions
 	 		
-	 		std::vector<bool> tempRB;///< temporary to save results of avalaibility
+	 		dodoArray<bool> tempRB;///< temporary to save results of avalaibility
 	 		 
 	 		pollfd fd;///< event capture for stream
 	 		pollfd *fds;///< event capture for streams

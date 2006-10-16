@@ -300,7 +300,7 @@
 
 	//-------------------------------------------------------------------
 
-	std::vector<__node>
+	dodoArray<__node>
 	xmlTools::parse(const __nodeDef &definition, 
 					const xmlNodePtr chNode, 
 					long chLimit)
@@ -308,7 +308,7 @@
 		register xmlNodePtr node = chNode, subNode;
 		
 		__node sample, one;
-		std::vector<__node> sampleArr;
+		dodoArray<__node> sampleArr;
 
 		if (icaseNames)
 			cmpFunc = xmlStrcasecmp;
@@ -580,10 +580,10 @@
 
 	//-------------------------------------------------------------------	
 	
-	std::vector<__node>
+	dodoArray<__node>
 	xmlTools::parse(xmlNodePtr node)
 	{
-		std::vector<__node> sample;
+		dodoArray<__node> sample;
 		
 		__node one;
 		
@@ -845,8 +845,8 @@
 			}
 		}
 		
-		std::map< std::string, std::vector<__node> >::const_iterator o = node.children.realArr.begin(), p = node.children.realArr.end();
-		std::vector<__node>::const_iterator x, y;
+		std::map< std::string, dodoArray<__node> >::const_iterator o = node.children.realArr.begin(), p = node.children.realArr.end();
+		dodoArray<__node>::const_iterator x, y;
 		for (;o!=p;++o)
 		{
 			x = o->second.begin();

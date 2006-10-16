@@ -62,8 +62,8 @@ __tableInfo::operator=(const __tableInfo &from)
 	
 	fields.clear();
 		
-	std::vector<__fieldInfo>::const_iterator j = from.fields.end();
-	for (std::vector<__fieldInfo>::const_iterator i=from.fields.begin();i!=j;++i)
+	dodoArray<__fieldInfo>::const_iterator j = from.fields.end();
+	for (dodoArray<__fieldInfo>::const_iterator i=from.fields.begin();i!=j;++i)
 		fields.push_back(*i);
 	
 	primKeys = from.primKeys;
@@ -109,7 +109,7 @@ __fieldInfo::operator=(const __fieldInfo &from)
 
 //-------------------------------------------------------------------
 
-__dbStorage::__dbStorage(std::vector<stringArr> a_rows, stringArr a_fields) : rows(a_rows), 
+__dbStorage::__dbStorage(dodoArray<stringArr> a_rows, stringArr a_fields) : rows(a_rows), 
 																				fields(a_fields)
 {
 }
@@ -119,7 +119,7 @@ __dbStorage::__dbStorage(std::vector<stringArr> a_rows, stringArr a_fields) : ro
 __collectedData::__collectedData(
 					std::string &a_pre_where,
 					stringArr &a_pre_fieldsNames,
-					std::vector<stringArr> &a_pre_fieldsVal,
+					dodoArray<stringArr> &a_pre_fieldsVal,
 					std::string &a_pre_table,
 					std::string &a_pre_tableTo,
 					std::string &a_pre_order,
@@ -230,7 +230,7 @@ dbBase::insert(const std::string &a_table,
 
 void 
 dbBase::insert(const std::string &a_table, 
-				const std::vector<assocArr> &a_fields)
+				const dodoArray<assocArr> &a_fields)
 {
 	qType = DBREQUEST_INSERT;
 	
@@ -285,7 +285,7 @@ dbBase::insert(const std::string &a_table,
 
 void 
 dbBase::insert(const std::string &a_table, 
-				const std::vector<stringArr> &a_fieldsVal, 
+				const dodoArray<stringArr> &a_fieldsVal, 
 				const stringArr &a_fieldsNames)
 {
 	qType = DBREQUEST_INSERT;

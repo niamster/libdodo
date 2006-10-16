@@ -46,7 +46,7 @@ cgiPreprocessor::~cgiPreprocessor()
 
 std::string 
 cgiPreprocessor::read(const std::string &path,
-					std::vector<unsigned long> &newLinePos)
+					dodoArray<unsigned long> &newLinePos)
 {
 	FILE *tpl = fopen(path.c_str(),"r");
 	if (tpl == NULL)
@@ -83,7 +83,7 @@ cgiPreprocessor::read(const std::string &path,
 std::string 
 cgiPreprocessor::preProcess(const std::string &path)
 {	
-	std::vector<unsigned long> newLinePos;
+	dodoArray<unsigned long> newLinePos;
 	
 	std::string buffer = read(path,newLinePos);
 	
@@ -227,7 +227,7 @@ cgiPreprocessor::preProcess(const std::string &path)
 //-------------------------------------------------------------------
 
 unsigned long 
-cgiPreprocessor::getLineNumber(const std::vector<unsigned long> &newLinePos, 
+cgiPreprocessor::getLineNumber(const dodoArray<unsigned long> &newLinePos, 
 								unsigned long pos)
 {	
 	o = newLinePos.begin();

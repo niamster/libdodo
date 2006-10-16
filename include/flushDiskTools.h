@@ -362,7 +362,7 @@ namespace dodo
 			 * @return file dir[see __fileInfo]
 			 * @param path indicates path where to get info
 			 */
-			static std::vector<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
+			static dodoArray<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
 					
 			/**
 			 * @return system understandable permissions

@@ -94,7 +94,7 @@ namespace dodo
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array of hashes)
 			 */
-			virtual void assign(std::string varName, const std::vector<assocArr> &varVal);
+			virtual void assign(std::string varName, const dodoArray<assocArr> &varVal);
 			
 			/**
 			 * show to stdout parsed template
@@ -215,10 +215,10 @@ namespace dodo
 			std::map<std::string, assocArr>::iterator g;///< iterator for map of maps
 			std::map<std::string, assocArr>::iterator h;///< iterator for map of maps
 			
-			std::map<std::string, std::vector<assocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
+			std::map<std::string, dodoArray<assocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
 			std::map<std::string, assocArr> localHash;///< set of local variables(hashes)
-			std::map<std::string, std::vector<assocArr> >::iterator d;///< iterator for map of maps
-			std::map<std::string, std::vector<assocArr> >::iterator f;///< iterator for map of maps
+			std::map<std::string, dodoArray<assocArr> >::iterator d;///< iterator for map of maps
+			std::map<std::string, dodoArray<assocArr> >::iterator f;///< iterator for map of maps
 			
 			assocArr dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
 			

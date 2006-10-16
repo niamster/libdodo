@@ -651,10 +651,10 @@ flushDiskTools::getFileInfo(const std::string &path)
 
 //-------------------------------------------------------------------
 
-std::vector<__fileInfo> 
+dodoArray<__fileInfo> 
 flushDiskTools::getDirInfo(const std::string &path)
 {
-	std::vector<__fileInfo> dir;
+	dodoArray<__fileInfo> dir;
 	struct stat st;
 	if (::lstat(path.c_str(),&st) == -1)
 		#ifndef NO_EX
