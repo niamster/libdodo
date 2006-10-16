@@ -18,7 +18,7 @@ echo "" > include/directives.runtime.h
 
 AC_ARG_ENABLE(debug,
 	AS_HELP_STRING([--enable-debug],[enable debug info]),
-	[DEBUG="$withval"])
+	[DEBUG="$enableval"])
 
 if test "$DEBUG" = "yes"
 then
@@ -28,7 +28,7 @@ fi
 
 AC_ARG_ENABLE(profiling,
         AS_HELP_STRING([--enable-profiling],[enable profiling]),
-        [PROFILING="$withval"])
+        [PROFILING="$enableval"])
 
 if test "$PROFILING" = "yes"
 then
@@ -36,8 +36,8 @@ then
 fi
 
 AC_ARG_ENABLE(deque,
-        AS_HELP_STRING([--enable-deque],[use std::deque instead of std::vector]),
-        [DEQUE="$withval"])
+        AS_HELP_STRING([--disable-deque],[use std::vector instead of std::deque(std::deque used by default)]),
+        [DEQUE="$enableval"], [DEQUE="no"])
 
 if test "$DEQUE" = "yes"
 then

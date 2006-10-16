@@ -1242,6 +1242,8 @@ Optional Features:
   --disable-largefile     omit support for large files
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
+  --disable-deque         use std::vector instead of std::deque(std::deque
+                          used by default)
   --disable-dl-lib        disable dl as lib (default=enabled)
   --enable-zlib-lib       enable zlib as lib (default=disabled)
   --enable-iconv-lib      enable iconv as lib (default=disabled)
@@ -4006,7 +4008,7 @@ echo "" > include/directives.runtime.h
 
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then
-  enableval=$enable_debug; DEBUG="$withval"
+  enableval=$enable_debug; DEBUG="$enableval"
 fi
 
 
@@ -4018,13 +4020,26 @@ fi
 
 # Check whether --enable-profiling was given.
 if test "${enable_profiling+set}" = set; then
-  enableval=$enable_profiling; PROFILING="$withval"
+  enableval=$enable_profiling; PROFILING="$enableval"
 fi
 
 
 if test "$PROFILING" = "yes"
 then
         CFLAGS="$CFLAGS -pg"
+fi
+
+# Check whether --enable-deque was given.
+if test "${enable_deque+set}" = set; then
+  enableval=$enable_deque; DEQUE="$enableval"
+else
+  DEQUE="no"
+fi
+
+
+if test "$DEQUE" = "yes"
+then
+	echo -n -e "#define USE_DEQUE\n\n" >> include/directives.runtime.h
 fi
 
 
