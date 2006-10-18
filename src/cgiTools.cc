@@ -447,12 +447,16 @@ cgiTools::makePost() const
 				
 				file.error = POSTFILEERR_NONE;
 				
-				if (cgiFilesInMem)
-				{
-					file.buf = malloc(file.size);
-					file.fp = fmemopen(file.buf,file.size,"w+");
-				}
-				else
+				#ifndef __FreeBSD__
+
+					if (cgiFilesInMem)
+					{
+						file.buf = malloc(file.size);
+						file.fp = fmemopen(file.buf,file.size,"w+");
+					}
+					else
+
+				#endif
 				{
 					file.fp = fopen(ptr,"w+");				
 					free(ptr);

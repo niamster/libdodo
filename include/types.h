@@ -44,8 +44,6 @@ namespace dodo
 	/**
 	 * diferent predifined types
 	 */
-	 
-	#define USE_DEQUE 
 	
 	#ifdef USE_DEQUE
 		#define dodoArray std::deque
