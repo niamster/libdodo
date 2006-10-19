@@ -511,7 +511,7 @@ flushSTD::readStream(char * const a_void) const
 			
 			if (ferror(stdin) != 0)				
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else			
 					return false;
 				#endif
@@ -538,50 +538,21 @@ flushSTD::readStream(char * const a_void) const
 #else
 	bool
 #endif
-flushSTD::readStreamString(std::string &data) const
+flushSTD::readStreamString(std::string &a_str) const
 {
-	#ifndef FLUSH_STD_WO_XEXEC
-		operType = FLUSHSTD_OPER_READSTREAM;
-		performXExec(preExec);
-	#endif
+  register char *data = new char[inSTDBuffer+1];
 
-	char *tmp = new char[inSTDBuffer+1];
-	
-	data.clear();
-	buffer.clear();
-	
-	///execute
-	while (true)
-	{
-		if (fgets(tmp,inSTDBuffer+1,stdin) == NULL)
-		{
-			if (errno == EINTR)
-				continue;
-			else
-				break;
-			
-			if (ferror(stdin) != 0)				
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else			
-					return false;
-				#endif
-		}
-		
-		data.append(tmp);
-			
-		buffer.append(tmp);	
-	}
-	
-	delete [] tmp;
-			
-	#ifndef FLUSH_STD_WO_XEXEC		
-		performXExec(postExec);
-	#endif
-	
-	#ifdef NO_EX
-		return true;
-	#endif	
+  #ifdef NO_EX
+    register bool result =
+  #endif
+
+  this->readStream(data);
+  a_str.assign(data);
+  delete [] data;
+
+  #ifdef NO_EX
+    return result;
+  #endif
 }
 
 //-------------------------------------------------------------------
@@ -649,7 +620,7 @@ flushSTD::writeStream(const char *const aa_buf)
 				{
 					delete [] buff;	
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -678,7 +649,7 @@ flushSTD::writeStream(const char *const aa_buf)
 				{	
 					delete [] buff;			
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
 					#else
 						return false;
 					#endif

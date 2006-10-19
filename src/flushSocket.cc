@@ -25,6 +25,7 @@
 #include <flushSocket.h>
 
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>

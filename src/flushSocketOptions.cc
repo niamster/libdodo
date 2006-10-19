@@ -355,12 +355,14 @@ flushSocketOptions::setSockOption(short option,
 			
 			break;
 			
-		#ifdef SO_REUSEPORT	
+		#ifdef SO_REUSEPORT
+
 			case SOCKET_REUSE_PORT:
 			
 				real_option = SO_REUSEPORT;
 				
 				break;
+
 		#endif
 		
 		default:
