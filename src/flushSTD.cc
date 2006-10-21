@@ -609,6 +609,7 @@ flushSTD::writeStream(const char *const aa_buf)
 				if (ferror(desc) != 0)
 				{
 					delete [] buff;	
+					
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else

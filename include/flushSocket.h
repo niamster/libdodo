@@ -37,7 +37,6 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <flush.h>
 #include <flushDiskTools.h>
 #include <tools.h>
 #include <flushSocketEx.h>

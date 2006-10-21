@@ -38,10 +38,9 @@
 	#include <bzlib.h>
 #endif
 
+#include <sys/socket.h>
 #include <toolsEx.h>
 #include <types.h>
-#include <flushSocket.h>
-#include <flushSocketTools.h>
 #include <regexpTools.h>
 
 namespace dodo

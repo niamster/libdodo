@@ -1666,36 +1666,114 @@ tools::mail(const std::string &host,
 		SMTPAUTH_PLAIN = 8
 	};
 	
-	unsigned short authType = 0;
+	register unsigned short authType = 0;
 	
-	bool auth = (login.length()>0)?true:false;
+	register bool auth = (login.length()>0)?true:false;
+
+	register int real_domain(PF_INET);
 	
-	flushSocket fsock(false,type,TRANSFER_TYPE_STREAM);
+	switch (type)
+	{
+		case PROTO_FAMILY_IPV4:
+		
+			real_domain = PF_INET;
+			
+			break;
+			
+		case PROTO_FAMILY_IPV6:
+		
+			real_domain = PF_INET6;
+			
+			break;
+			
+		default:
+		
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_LIBDODO,TOOLS_WRONG_PARAMETHER,TOOLS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+			#else
+				return false;			
+			#endif			
+	}
+		
+	register int socket = ::socket(real_domain,SOCK_STREAM,0);
+	if (socket == -1)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;			
+		#endif
 	
-	flushSocketExchange ex;
-	
-	fsock.connect(host,port,ex);
+	if (family == PROTO_FAMILY_IPV6)
+	{
+		struct sockaddr_in6 sa;
+		sa.sin6_family = AF_INET6;
+		sa.sin6_port = htons(port);
+		sa.sin6_flowinfo = 0;
+		sa.sin6_scope_id = 0;
+		inet_pton(AF_INET6,host.c_str(),&sa.sin6_addr);
+		
+		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa))==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else			
+				return false;		
+			#endif		
+	}
+	else
+	{
+		struct sockaddr_in sa;
+		sa.sin_family = AF_INET;
+		sa.sin_port = htons(port);
+		inet_aton(host.c_str(),&sa.sin_addr);
+		
+		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa))==-1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else			
+				return false;		
+			#endif
+	}
 	
 	std::string mess;
-	regexpTools reg;
+	//regexpTools reg;
 	stringArr pock;
 	register bool matched = false;
 	register int code = 0;
+	register char *data = new char[1025];	
 	
-	reg.multiline = true;
-	reg.compile("(\\d+)(.)(.*)");
+	//reg.multiline = true;
+	//reg.compile("(\\d+)(.)(.*)");
 	
-	ex.receiveStreamString(mess);
-	
-	ex.sendStreamString("EHLO " + flushSocketTools::getLocalName() + "\r");
+	memset(data,'\0',1025);
 
-	ex.receiveStreamString(mess);
-	matched = reg.reMatch(mess,pock);
+	while (true)
+	{
+		if ((n = ::recv(socket,data,1025,0)) == -1)
+		{
+			if (errno == EINTR)
+				continue;
+					
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;	
+			#endif
+		}
+		
+		break;	
+	}
+	
+	data[n] = '\0';
+	
+	//ex.sendStreamString("EHLO " + flushSocketTools::getLocalName() + "\r");
+
+	//ex.receiveStreamString(mess);
+	//matched = reg.reMatch(mess,pock);
 	code = atoi(pock[0].c_str());
 	
 	if (!matched || code != 250)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,TOOLS_BADMAILHELO,TOOLS_BADMAILHELO_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_LIBDODO,TOOLS_BADMAILHELO,TOOLS_BADMAILHELO_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -1716,9 +1794,9 @@ tools::mail(const std::string &host,
 	{
 		if ((SMTPAUTH_CRAMMD5&authType) == SMTPAUTH_CRAMMD5)
 		{
-			ex.sendStreamString("AUTH CRAM-MD5\r");
-			ex.receiveStreamString(mess);
-			matched = reg.reMatch(mess,pock);
+			//ex.sendStreamString("AUTH CRAM-MD5\r");
+			//ex.receiveStreamString(mess);
+			//matched = reg.reMatch(mess,pock);
 			code = atoi(pock[0].c_str());
 			
 			if (!matched || code != 334)
@@ -1768,9 +1846,9 @@ tools::mail(const std::string &host,
 				md5pass.append((char *)ipad);
 			}
 	
-			ex.sendStreamString(encodeBase64(login + " " + md5pass) + "\r");
-			ex.receiveStreamString(mess);
-			matched = reg.reMatch(mess,pock);
+			//ex.sendStreamString(encodeBase64(login + " " + md5pass) + "\r");
+			//ex.receiveStreamString(mess);
+			//matched = reg.reMatch(mess,pock);
 			code = atoi(pock[0].c_str());
 			
 			if (!matched || code != 334)
@@ -1784,9 +1862,9 @@ tools::mail(const std::string &host,
 		{
 			if ((SMTPAUTH_LOGIN&authType) == SMTPAUTH_LOGIN)
 			{
-				ex.sendStreamString("AUTH LOGIN\r");
-				ex.receiveStreamString(mess);
-				matched = reg.reMatch(mess,pock);
+				//ex.sendStreamString("AUTH LOGIN\r");
+				//ex.receiveStreamString(mess);
+				//matched = reg.reMatch(mess,pock);
 				code = atoi(pock[0].c_str());
 				
 				if (!matched || code != 334)
@@ -1796,9 +1874,9 @@ tools::mail(const std::string &host,
 						return false;
 					#endif
 				
-				ex.sendStreamString(encodeBase64(login) + "\r");
-				ex.receiveStreamString(mess);
-				matched = reg.reMatch(mess,pock);
+				//ex.sendStreamString(encodeBase64(login) + "\r");
+				//ex.receiveStreamString(mess);
+				//matched = reg.reMatch(mess,pock);
 				code = atoi(pock[0].c_str());
 				
 				if (!matched || code != 334)
@@ -1808,9 +1886,9 @@ tools::mail(const std::string &host,
 						return false;
 					#endif
 				
-				ex.sendStreamString(encodeBase64(pass) + "\r");
-				ex.receiveStreamString(mess);
-				matched = reg.reMatch(mess,pock);
+				//ex.sendStreamString(encodeBase64(pass) + "\r");
+				//ex.receiveStreamString(mess);
+				//matched = reg.reMatch(mess,pock);
 				code = atoi(pock[0].c_str());
 				
 				if (!matched || code != 235)
@@ -1824,9 +1902,9 @@ tools::mail(const std::string &host,
 			{
 				if ((SMTPAUTH_PLAIN&authType) == SMTPAUTH_PLAIN)
 				{
-					ex.sendStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r");
-					ex.receiveStreamString(mess);
-					matched = reg.reMatch(mess,pock);
+					//ex.sendStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r");
+					//ex.receiveStreamString(mess);
+					//matched = reg.reMatch(mess,pock);
 					code = atoi(pock[0].c_str());
 					
 					if (!matched || code != 334)
@@ -1840,31 +1918,31 @@ tools::mail(const std::string &host,
 		}
 	}
 	
-	ex.sendStreamString("MAIL FROM: <" + from + ">\r");
-	ex.receiveStreamString(mess);
+	//ex.sendStreamString("MAIL FROM: <" + from + ">\r");
+	//ex.receiveStreamString(mess);
 		
 	pock = explode(to,",");
 	
 	stringArr::iterator i = pock.begin(), j = pock.end();
 	for (;i!=j;++i)
 	{
-		ex.sendStreamString("RCPT TO: <" + *i + ">\r");
-		ex.receiveStreamString(mess);
+		//ex.sendStreamString("RCPT TO: <" + *i + ">\r");
+		//ex.receiveStreamString(mess);
 	}
 	
-	ex.sendStreamString("DATA\r\n");
-	ex.receiveStreamString(mess);
+	//ex.sendStreamString("DATA\r\n");
+	//ex.receiveStreamString(mess);
 	
-	ex.sendStreamString("To: " + to + "\r");
-	ex.sendStreamString("From: " + from + "\r");
-	ex.sendStreamString("X-Mailer: libdodo\r");
-	ex.sendStreamString("Subject: " + subject  + "\r");
-	ex.sendStreamString(headers);
-	ex.sendStreamString(message);
-	ex.sendStreamString("\r\n.\r");
-	ex.sendStreamString("QUIT\r");
+	//ex.sendStreamString("To: " + to + "\r");
+	//ex.sendStreamString("From: " + from + "\r");
+	//ex.sendStreamString("X-Mailer: libdodo\r");
+	//ex.sendStreamString("Subject: " + subject  + "\r");
+	//ex.sendStreamString(headers);
+	//ex.sendStreamString(message);
+	//ex.sendStreamString("\r\n.\r");
+	//ex.sendStreamString("QUIT\r");
 	
-	ex.close();
+	//ex.close();
 	
 	#ifdef NO_EX
 		return true;

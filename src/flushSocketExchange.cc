@@ -210,22 +210,22 @@ flushSocketExchange::send(const char * const data,
 		batch = 0;
 		while (batch < outSocketBuffer)
 		{
-			n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,flag);
-			if (n == -1)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
-					
-				#ifndef NO_EX
+				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,flag);
+				if (n == -1)
 				{
-					if (errno == EINVAL || errno == EWOULDBLOCK)
-						return ;
-					else
+					if (errno == EINTR)
+						continue;
+						
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;	
+					#endif
 				}
-				#else
-					return false;	
-				#endif
+				
+				break;
 			}
 			
 			batch += n;	
@@ -238,22 +238,22 @@ flushSocketExchange::send(const char * const data,
 		batch = 0;
 		while (batch < rest)
 		{
-			n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
-			if (n == -1)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
-									
-				#ifndef NO_EX
+				n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
+				if (n == -1)
 				{
-					if (errno == EINVAL || errno == EWOULDBLOCK)
-						return ;
-					else
+					if (errno == EINTR)
+						continue;
+										
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;	
+					#endif
 				}
-				#else
-					return false;	
-				#endif
+				
+				break;
 			}
 			
 			batch += n;	
@@ -314,22 +314,22 @@ flushSocketExchange::receive(char * const data,
 		batch = 0;
 		while (batch < inSocketBuffer)
 		{
-			n = ::recv(socket,data+sent_received,inSocketBuffer,flag);
-			if (n == -1)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
-					
-				#ifndef NO_EX
+				n = ::recv(socket,data+sent_received,inSocketBuffer,flag);
+				if (n == -1)
 				{
-					if (errno == EINVAL || errno == EWOULDBLOCK)
-						return ;
-					else
+					if (errno == EINTR)
+						continue;
+						
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;	
+					#endif
 				}
-				#else
-					return false;	
-				#endif
+				
+				break;
 			}
 			
 			batch += n;	
@@ -342,22 +342,27 @@ flushSocketExchange::receive(char * const data,
 		batch = 0;
 		while (batch < rest)
 		{
-			n = ::recv(socket,data+sent_received,rest,flag);
-			if (n == -1)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;				
-				
-				#ifndef NO_EX
+				n = ::recv(socket,data+sent_received,rest,flag);
+				if (n == -1)
 				{
-					if (errno == EINVAL || errno == EWOULDBLOCK)
-						return ;
-					else
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					if (errno == EINTR)
+						continue;				
+					
+					#ifndef NO_EX
+					{
+						if (errno == EINVAL)
+							return ;
+						else
+							throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					}
+					#else
+						return false;	
+					#endif
 				}
-				#else
-					return false;	
-				#endif
+				
+				break;
 			}
 			
 			batch += n;
@@ -497,22 +502,22 @@ flushSocketExchange::sendStream(const char * const data,
 		batch = 0;
 		while (batch < outSocketBuffer)
 		{
-			n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,flag);
-			if (n == -1)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
-					
-				#ifndef NO_EX
+				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,flag);
+				if (n == -1)
 				{
-					if (errno == EINVAL || errno == EWOULDBLOCK)
-						return ;
-					else
+					if (errno == EINTR)
+						continue;
+						
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SENDSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;	
+					#endif
 				}
-				#else
-					return false;	
-				#endif
+				
+				break;
 			}
 			
 			batch += n;	
@@ -525,22 +530,22 @@ flushSocketExchange::sendStream(const char * const data,
 		batch = 0;
 		while (batch < rest)
 		{
-			n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
-			if (n == -1)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
-									
-				#ifndef NO_EX
+				n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
+				if (n == -1)
 				{
-					if (errno == EINVAL || errno == EWOULDBLOCK)
-						return ;
-					else
+					if (errno == EINTR)
+						continue;
+										
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SENDSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;	
+					#endif
 				}
-				#else
-					return false;	
-				#endif
+				
+				break;
 			}
 			
 			batch += n;	
@@ -590,7 +595,6 @@ flushSocketExchange::receiveStream(char * const data,
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
-
 	
 	while (true)
 	{
@@ -600,12 +604,7 @@ flushSocketExchange::receiveStream(char * const data,
 				continue;
 					
 			#ifndef NO_EX
-			{
-				if (errno == EINVAL || errno == EWOULDBLOCK)
-					return ;
-				else
-					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			}
+				throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;	
 			#endif

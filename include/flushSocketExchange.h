@@ -36,9 +36,9 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
+#include <flushSocketOptions.h>
 #include <flushSocketExchangeEx.h>
 #include <types.h>
-#include <flushSocketOptions.h>
 #include <xexec.h>
 
 namespace dodo
@@ -212,6 +212,7 @@ namespace dodo
 			 * @param urgent -> send out-of-band data
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
+			 * signal safe
 			 */			
 			#ifndef NO_EX
 				virtual void 
@@ -226,6 +227,7 @@ namespace dodo
 			 * @param urgent -> send out-of-band data
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
+			 * signal safe
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -240,6 +242,7 @@ namespace dodo
 			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
+			 * signal safe
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -254,6 +257,7 @@ namespace dodo
 			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
+			 * signal safe
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -270,6 +274,7 @@ namespace dodo
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * max data size is outSocketBuffer
 			 * @note - appends '\n'
+			 * signal safe
 			 */			
 			#ifndef NO_EX
 				virtual void 
@@ -286,6 +291,7 @@ namespace dodo
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * max data size is outSocketBuffer
 			 * @note - appends '\n'
+			 * signal safe
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -301,6 +307,7 @@ namespace dodo
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * max data size is inSocketBuffer
+			 * signal safe
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -316,6 +323,7 @@ namespace dodo
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * max data size is inSocketBuffer
+			 * signal safe
 			 */
 			#ifndef NO_EX
 				virtual void 

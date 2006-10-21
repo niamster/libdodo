@@ -144,35 +144,53 @@ flushSocket::makeSocket()
 			return true;			
 		#endif
 	
-	register int real_domain(PF_INET), real_type(TRANSFER_TYPE_STREAM);
+	register int real_domain(PF_INET), real_type(SOCK_STREAM);
 	
 	switch (family)
 	{
 		case PROTO_FAMILY_IPV4:
+		
 			real_domain = PF_INET;
+			
 			break;
+			
 		case PROTO_FAMILY_IPV6:
+		
 			real_domain = PF_INET6;
+			
 			break;
+			
 		case PROTO_FAMILY_UNIX_SOCKET:
+		
 			real_domain = PF_UNIX;
+			
 			break;
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;			
 			#endif			
 	}
+	
 	switch (type)
 	{
 		case TRANSFER_TYPE_STREAM:
+		
 			real_type = SOCK_STREAM;
+			
 			break;
+			
 		case TRANSFER_TYPE_DATAGRAM:
+		
 			real_type = SOCK_DGRAM;
+			
 			break;
+			
 		default:
+		
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
@@ -751,7 +769,7 @@ flushSocket::accept(__initialAccept &init,
 				if (sock == -1)
 					#ifndef NO_EX
 					{
-						if (errno == EINVAL || errno == EWOULDBLOCK)
+						if (errno == EINVAL)
 							return false;
 						else
 							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -778,7 +796,7 @@ flushSocket::accept(__initialAccept &init,
 				if (sock == -1)
 					#ifndef NO_EX
 					{
-						if (errno == EINVAL || errno == EWOULDBLOCK)
+						if (errno == EINVAL)
 							return false;
 						else
 							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -799,7 +817,7 @@ flushSocket::accept(__initialAccept &init,
 			if (sock == -1)
 				#ifndef NO_EX
 					{
-						if (errno == EINVAL || errno == EWOULDBLOCK)
+						if (errno == EINVAL)
 							return false;
 						else
 							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -869,7 +887,7 @@ flushSocket::accept(__initialAccept &init) const
 	if (sock == -1)
 		#ifndef NO_EX
 		{
-			if (errno == EINVAL || errno == EWOULDBLOCK)
+			if (errno == EINVAL)
 				return false;
 			else
 				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);

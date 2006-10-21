@@ -45,6 +45,7 @@
 			TOOLS_BAD_BZDECOMPRESSION,
 			TOOLS_BADMAILHELO,
 			TOOLS_BADMAILAUTH,
+			TOOLS_WRONG_PARAMETHER,
 		};
 		
 		/**
@@ -63,6 +64,7 @@
 		
 		#define TOOLS_BADMAILHELO_STR "Error occurd while sending EHLO."
 		#define TOOLS_BADMAILAUTH_STR "Error during uthentification."
+		#define FTOOLS_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
 		
 		/**
 		 * ID of function where exception was thrown

@@ -211,6 +211,12 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 				
 	#ifdef __FreeBSD__
 		
+		if (::ioctl(socket,SIOCGIFMAC,&ifr) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return info;			
+			#endif
 	
 	#else	
 	
@@ -220,17 +226,17 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 			#else
 				return info;			
 			#endif
-						
-		sprintf(add,"%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",ifr.ifr_ifru.ifru_hwaddr.sa_data[0]&0xff,
-						ifr.ifr_ifru.ifru_hwaddr.sa_data[1]&0xff,
-						ifr.ifr_ifru.ifru_hwaddr.sa_data[2]&0xff,
-						ifr.ifr_ifru.ifru_hwaddr.sa_data[3]&0xff,
-						ifr.ifr_ifru.ifru_hwaddr.sa_data[4]&0xff,
-						ifr.ifr_ifru.ifru_hwaddr.sa_data[5]&0xff);
-
-		info.hwaddr = add;
 
 	#endif
+						
+	sprintf(add,"%.2X:%.2X:%.2X:%.2X:%.2X:%.2X",ifr.ifr_ifru.ifru_hwaddr.sa_data[0]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[1]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[2]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[3]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[4]&0xff,
+					ifr.ifr_ifru.ifru_hwaddr.sa_data[5]&0xff);
+
+	info.hwaddr = add;
 
 	if (::ioctl(socket,SIOCGIFFLAGS,&ifr) == -1)
 		#ifndef NO_EX

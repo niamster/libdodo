@@ -394,7 +394,9 @@ cgiTools::makePost() const
 		stringArr::iterator i(postPartd.begin()),j(postPartd.end());
 
 		register unsigned int temp1;
-		char *ptr = new char[postFilesTmpDir.size()+17];
+		register char *ptr;
+		register int fd;
+		register unsigned short pathLength = postFilesTmpDir.size()+18;
 		
 		for (;i!=j;++i)
 			if (i->find("filename")!=std::string::npos)///file
@@ -421,12 +423,20 @@ cgiTools::makePost() const
 				temp1 = i->find("\n",temp0);
 				file.type = i->substr(temp0,temp1-temp0);
 				
-				if (cgiFilesInMem)
+				#ifndef __FreeBSD__
+				
+				if (!cgiFilesInMem)
+				
+				#endif
 				{
-					ptr = tempnam((postFilesTmpDir + FILE_DELIM).c_str(),"dodo_post_");
+					ptr = new char[pathLength];
+					strncpy(ptr, std::string(postFilesTmpDir + FILE_DELIM + std::string("dodo_post_XXXXXX")).c_str(), pathLength);
+					fd = mkstemp(ptr);
 					
-					if (ptr == NULL)	
+					if (fd == -1)	
 					{
+						delete [] ptr;
+						
 						file.error = POSTFILEERR_BAD_FILE_NAME;
 						postFiles[post_name] = file;
 						
@@ -434,6 +444,8 @@ cgiTools::makePost() const
 					}
 							
 					file.tmp_name = ptr;
+					
+					delete [] ptr;
 				}		
 							
 				file.size = i->substr(temp1+4).size()-2;
@@ -451,7 +463,7 @@ cgiTools::makePost() const
 
 				#endif
 				{
-					file.fp = fopen(ptr,"w+");				
+					file.fp = fdopen(fd,"w+");				
 					free(ptr);
 				}
 				if (file.fp == NULL)
