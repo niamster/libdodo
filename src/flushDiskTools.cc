@@ -933,7 +933,7 @@ flushDiskTools::copy(const std::string &from,
 			
 		strcpy(tempB,to.c_str());
 		char *toT = ::basename(tempB);
-		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.length()-1] == FILE_DELIM)
+		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.size()-1] == FILE_DELIM)
 			to = toT + std::string(1,FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 	
@@ -1223,7 +1223,7 @@ flushDiskTools::copyDir(const std::string &from,
 			
 		strcpy(tempB,to.c_str());
 		char *toT = ::basename(tempB);
-		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.length()-1] == FILE_DELIM)
+		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.size()-1] == FILE_DELIM)
 			to = toT + std::string(1,FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 	

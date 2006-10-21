@@ -39,9 +39,12 @@
 #endif
 
 #include <sys/socket.h>
+
+#include <sys/types.h>
+#include <arpa/inet.h>
+#include <flushSocketOptions.h>
 #include <toolsEx.h>
 #include <types.h>
-#include <regexpTools.h>
 
 namespace dodo
 {
@@ -518,7 +521,62 @@ namespace dodo
 			 * dummy callback function for implode/explode
 			 * nothing does with passed data
 			 */
-			inline static std::string dummyTools(const std::string &data);			
+			inline static std::string dummyTools(const std::string &data);		
+			
+			/**
+			 * sends data through socket
+			 * @param socket is socket descriptor
+			 * @param mess is data to send
+			 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif				
+							sendShortData(int socket, const std::string &mess);		
+							
+			/**
+			 * sends data through socket
+			 * @param socket is socket descriptor
+			 * @param mess is data to send
+			 * @param data what to delete on exception
+			 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
+			 * on exception deletes data
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif				
+							sendShortDataDel(int socket, const std::string &mess, char *data);
+							
+			/**
+			 * sends data through socket
+			 * @param socket is socket descriptor
+			 * @param mess is data to send
+			 * @note mess's length can be more than TOOLS_SHORT_DATA_SIZE bytes
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif				
+							sendLongData(int socket, const std::string &mess);
+							
+			/**
+			 * receives data through socket
+			 * @param socket is socket descriptor
+			 * @param data is where to receive
+			 * @note data's length not more than TOOLS_SHORT_DATA_SIZE bytes
+			 * on exception deletes data
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif				
+							receiveShortDataDel(int socket, char *data);				
 	};
 
 };

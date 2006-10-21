@@ -245,7 +245,7 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 			return info;			
 		#endif
 	
-	if (::close(socket)==-1)
+	if (::close(socket) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
@@ -280,22 +280,21 @@ flushSocketTools::getLocalName()
 	std::string temp0;
 	char *temp1 = new char[256];
 	
-	if (::gethostname(temp1,255)==-1)
-	#ifndef NO_EX
+	if (::gethostname(temp1,255) == -1)
 	{
 		delete [] temp1;
-		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETLOCALNAME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-	}
-	#else
-	{
-		delete [] temp1;
-		return temp0;
-	}
-	#endif		
+		
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETLOCALNAME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else	
+			return temp0;
+		#endif
+	}		
 	
 	temp0.assign(temp1,255);
 	
 	delete [] temp1;
+	
 	return temp0;
 }
 
@@ -308,7 +307,7 @@ flushSocketTools::getLocalName()
 #endif
 flushSocketTools::setLocalName(const std::string &host)
 {
-	if (::sethostname(host.c_str(),host.size())==-1)
+	if (::sethostname(host.c_str(),host.size()) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_SETLOCALNAME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else

@@ -46,6 +46,12 @@
 			TOOLS_BADMAILHELO,
 			TOOLS_BADMAILAUTH,
 			TOOLS_WRONG_PARAMETHER,
+			
+			#ifndef FAST
+				
+				TOOLS_DATA_TOO_LONG
+			
+			#endif
 		};
 		
 		/**
@@ -64,7 +70,8 @@
 		
 		#define TOOLS_BADMAILHELO_STR "Error occurd while sending EHLO."
 		#define TOOLS_BADMAILAUTH_STR "Error during uthentification."
-		#define FTOOLS_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
+		#define TOOLS_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
+		#define TOOLS_DATA_TOO_LONG_STR "Data size is bigger than TOOLS_SHORT_DATA_SIZE."
 		
 		/**
 		 * ID of function where exception was thrown
@@ -97,8 +104,11 @@
 			
 			#endif
 			
-				TOOLS_MAIL,
-				
+			TOOLS_MAIL,
+			TOOLS_SENDSHORTDATA,
+			TOOLS_SENDSHORTDATADEL,	
+			TOOLS_RECEIVESHORTDATADEL,
+			TOOLS_SENDLONGDATA,
 		};
 		
 	};

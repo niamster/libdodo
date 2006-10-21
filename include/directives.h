@@ -134,6 +134,8 @@
 #define SOCKET_LINGER_PERIOD 1
 #define SOCKET_LINGER_OPTION SOCKET_WAIT_CLOSE
 
+#define TOOLS_SHORT_DATA_SIZE 2048
+
 /**
  * max length of the file path
  */
