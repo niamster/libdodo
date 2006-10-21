@@ -146,7 +146,7 @@ namespace dodo
 	{
 		std::string name;///< name of the group
 		int gid;///< group id
-		stringArr members;///< list of group members
+		dodoStringArr members;///< list of group members
 	};
 
 	#ifdef DL_EXT

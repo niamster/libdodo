@@ -83,7 +83,7 @@
 			long chLimit;///< limit of children to search for[-1 for unlimit, default]
 			bool ignoreChildrenDef;///< if true - parse all children tree if no children difenition; false by default
 			
-			stringArr attributes;///< attrributes to take from node; if empty - take all
+			dodoStringArr attributes;///< attrributes to take from node; if empty - take all
 			bool ignoreAttributesDef;///< if true - parse all attributes if no attributes difenition; true by default
 			
 			std::string ns;///< namespace of the node; if empty - skips
@@ -281,7 +281,7 @@
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
 				 */
-				virtual void getAttributes(const xmlNodePtr node, assocArr &attributes);
+				virtual void getAttributes(const xmlNodePtr node, dodoAssocArr &attributes);
 				
 				/**
 				 * gets attributes from node
@@ -289,7 +289,7 @@
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
 				 */
-				virtual void getAttributes(const __nodeDef &definition, const xmlNodePtr node, assocArr &attributes);
+				virtual void getAttributes(const __nodeDef &definition, const xmlNodePtr node, dodoAssocArr &attributes);
 				
 				/**
 				 * get diff info from node
@@ -312,7 +312,7 @@
 				xmlDocPtr document;///< XML Document
 				xmlErrorPtr error;///< libxml2 error buffer
 				xmlAttr *attribute;///< XML attributes
-				stringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes
+				dodoStringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes
 				xmlChar *xChar;///< for internal calculations; to store results
 				
 				/**

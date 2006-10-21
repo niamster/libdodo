@@ -123,12 +123,12 @@
 				/**
 				 * @return array of rows got from request
 				 */
-				virtual dodoArray<stringArr> fetchRow() const;
+				virtual dodoArray<dodoStringArr> fetchRow() const;
 				
 				/**
 				 * @return array of fields got from request
 				 */
-				virtual stringArr fetchField() const;
+				virtual dodoStringArr fetchField() const;
 				
 				/**
 				 * @return structure that holds array of rows and array of fields got from request
@@ -163,7 +163,7 @@
 				/**
 				 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
 				 */				
-				virtual void setBLOBValues(const stringArr &values);	
+				virtual void setBLOBValues(const dodoStringArr &values);	
 				
 				#ifndef DBSQLITE_WO_XEXEC
 				
@@ -250,7 +250,7 @@
 				
 				mutable int result;///< store result for query
 				
-				mutable stringArr rowsPart;///< to store rows
+				mutable dodoStringArr rowsPart;///< to store rows
 				mutable std::string rowPart;///< to set temporary row content
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 				
@@ -259,11 +259,11 @@
 				
 				mutable bool blobHint;///< if true - enable blob hint
 
-				mutable dodoArray<stringArr> rows;///< to store rows
-				mutable stringArr fields;///< to store fields
+				mutable dodoArray<dodoStringArr> rows;///< to store rows
+				mutable dodoStringArr fields;///< to store fields
 				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
 				
-				mutable stringArr blobs;///< to store blob data			
+				mutable dodoStringArr blobs;///< to store blob data			
 		};
 
 	};

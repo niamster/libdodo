@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc, char **argv)
 {		
 	///first type
-//	assocArr head;
+//	dodoAssocArr head;
 //	head["Content-type"] = "text/html";
 //	cgiTools cgi(false,head);
 	
@@ -37,19 +37,19 @@ int main(int argc, char **argv)
 		cgip.assign("test","hoho");
 		cgip.assign("show","That's works!");
 		
-		stringArr arr;
+		dodoStringArr arr;
 		arr.push_back("one");
 		arr.push_back("two");
 		arr.push_back("three");
 		cgip.assign("arr",arr);
 		
-		assocArr arr1;
+		dodoAssocArr arr1;
 		arr1["one"] = "one";
 		arr1["two"] = "two";
 		arr1["three"] = "three";
 		cgip.assign("arr1",arr1);
 		
-		std::vector<assocArr> arr2;
+		std::vector<dodoAssocArr> arr2;
 		arr2.push_back(arr1);
 		arr1["one"] = "three";
 		arr2.push_back(arr1);

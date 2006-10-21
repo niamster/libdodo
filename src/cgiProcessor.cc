@@ -231,7 +231,7 @@ cgiProcessor::recursive(const std::string &path)
 
 void 
 cgiProcessor::assign(std::string varName, 
-					const dodoArray<assocArr> &varVal)
+					const dodoArray<dodoAssocArr> &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -254,7 +254,7 @@ cgiProcessor::assign(std::string varName,
 
 void 
 cgiProcessor::assign(std::string varName, 
-					const assocArr &varVal)
+					const dodoAssocArr &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -277,7 +277,7 @@ cgiProcessor::assign(std::string varName,
 
 void 
 cgiProcessor::assign(std::string varName, 
-					const stringArr &varVal)
+					const dodoStringArr &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -549,14 +549,14 @@ void
 cgiProcessor::_print(const std::string &statement, 
 					std::string &tpl)
 {
-	stringArr temp = tools::explode(statement,",");
+	dodoStringArr temp = tools::explode(statement,",");
 	if (temp.size() == 1)
 		tpl.append(getVar(statement));	
 	else
 	{
 		if (temp.size() > 1)
 		{
-			stringArr::iterator i(temp.begin()), j(temp.end());
+			dodoStringArr::iterator i(temp.begin()), j(temp.end());
 			for (;i!=j;++i)
 				tpl.append(getVar(*i));
 		}
@@ -589,7 +589,7 @@ cgiProcessor::_break(const std::string &statement)
 void 
 cgiProcessor::_assign(const std::string &statement)
 {
-	stringArr temp = tools::explode(statement,"=",2);
+	dodoStringArr temp = tools::explode(statement,"=",2);
 		
 	if (temp.size() == 0)	
 		#ifndef NO_EX
@@ -610,7 +610,7 @@ cgiProcessor::_assign(const std::string &statement)
 			return ;
 		#endif
 	
-	assocArr::iterator i = local.find(varName); 	
+	dodoAssocArr::iterator i = local.find(varName); 	
 	if (i != local.end())
 		if (localNamespace[namespaceDeepness].find(i->first) != localNamespace[namespaceDeepness].end())
 			localNamespace[namespaceDeepness][i->first] = i->second;
@@ -685,7 +685,7 @@ cgiProcessor::_for(const std::string &buffer,
 	std::string varName = statement.substr(p,i - p).substr(1);
 
 	std::string keyVal;
-	assocArr::iterator keyIter;
+	dodoAssocArr::iterator keyIter;
 	register bool key(false);	
 	std::string keyName;
 	
@@ -721,16 +721,16 @@ cgiProcessor::_for(const std::string &buffer,
 	{
 		targetVar = targetVar.substr(1);
 		
-		stringArr temp = tools::explode(targetVar,".");
+		dodoStringArr temp = tools::explode(targetVar,".");
 		
 		if (temp.size() == 1)
 		{
-			assocArr::iterator k = local.begin();
-			assocArr::iterator l = local.end();		
+			dodoAssocArr::iterator k = local.begin();
+			dodoAssocArr::iterator l = local.end();		
 			for (;k!=l;++k)
 				if (strcmp(targetVar.c_str(),k->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(varName);
+					dodoAssocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
 						iterVal = iter->second;
@@ -782,12 +782,12 @@ cgiProcessor::_for(const std::string &buffer,
 					return u;
 				}
 
-			std::map<std::string, assocArr>::iterator g = localHash.begin();
-			std::map<std::string, assocArr>::iterator h = localHash.end();		
+			std::map<std::string, dodoAssocArr>::iterator g = localHash.begin();
+			std::map<std::string, dodoAssocArr>::iterator h = localHash.end();		
 			for (;g!=h;++g)
 				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(varName);
+					dodoAssocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
 						iterVal = iter->second;					
@@ -799,8 +799,8 @@ cgiProcessor::_for(const std::string &buffer,
 							keyVal = local[keyName];
 					}
 					
-					assocArr::iterator k = g->second.begin();
-					assocArr::iterator l = g->second.end();		
+					dodoAssocArr::iterator k = g->second.begin();
+					dodoAssocArr::iterator l = g->second.end();		
 					register unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (;k!=l;++k,++iterator)
@@ -845,7 +845,7 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;k!=l;++k)
 				if (strcmp(targetVar.c_str(),k->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(varName);
+					dodoAssocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
 						iterVal = iter->second;	
@@ -902,7 +902,7 @@ cgiProcessor::_for(const std::string &buffer,
 			for (;g!=h;++g)
 				if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(varName);
+					dodoAssocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
 						iterVal = iter->second;	
@@ -914,8 +914,8 @@ cgiProcessor::_for(const std::string &buffer,
 							keyVal = local[keyName];
 					}
 																
-					assocArr::iterator k = g->second.begin();
-					assocArr::iterator l = g->second.end();		
+					dodoAssocArr::iterator k = g->second.begin();
+					dodoAssocArr::iterator l = g->second.end();		
 					register unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (;k!=l;++k,++iterator)
@@ -955,12 +955,12 @@ cgiProcessor::_for(const std::string &buffer,
 					return u;
 				}
 			
-			std::map<std::string, stringArr>::iterator o = globalArray.begin();
-			std::map<std::string, stringArr>::iterator p = globalArray.end();		
+			std::map<std::string, dodoStringArr>::iterator o = globalArray.begin();
+			std::map<std::string, dodoStringArr>::iterator p = globalArray.end();		
 			for (;o!=p;++o)
 				if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
 				{
-					assocArr::iterator iter = local.find(varName);
+					dodoAssocArr::iterator iter = local.find(varName);
 					std::string iterVal;
 					if (iter != local.end())
 						iterVal = iter->second;	
@@ -972,8 +972,8 @@ cgiProcessor::_for(const std::string &buffer,
 							keyVal = local[keyName];
 					}
 											
-					stringArr::iterator k = o->second.begin();
-					stringArr::iterator l = o->second.end();	
+					dodoStringArr::iterator k = o->second.begin();
+					dodoStringArr::iterator l = o->second.end();	
 					register unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter,++iterator)
@@ -1013,13 +1013,13 @@ cgiProcessor::_for(const std::string &buffer,
 					return u;
 				}
 				
-			std::map<std::string, dodoArray<assocArr> >::iterator d = globalArrayHash.begin();
-			std::map<std::string, dodoArray<assocArr> >::iterator f = globalArrayHash.end();		
+			std::map<std::string, dodoArray<dodoAssocArr> >::iterator d = globalArrayHash.begin();
+			std::map<std::string, dodoArray<dodoAssocArr> >::iterator f = globalArrayHash.end();		
 			for (;d!=f;++d)
 				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 				{
-					std::map<std::string, assocArr>::iterator iter = localHash.find(varName);
-					assocArr iterVal;
+					std::map<std::string, dodoAssocArr>::iterator iter = localHash.find(varName);
+					dodoAssocArr iterVal;
 					if (iter != localHash.end())
 						iterVal = iter->second;					
 
@@ -1030,8 +1030,8 @@ cgiProcessor::_for(const std::string &buffer,
 							keyVal = local[keyName];
 					}
 										
-					dodoArray<assocArr>::iterator k = d->second.begin();
-					dodoArray<assocArr>::iterator l = d->second.end();
+					dodoArray<dodoAssocArr>::iterator k = d->second.begin();
+					dodoArray<dodoAssocArr>::iterator l = d->second.end();
 					register unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter,++iterator)
@@ -1076,17 +1076,17 @@ cgiProcessor::_for(const std::string &buffer,
 		{
 			if (temp.size() == 2)
 			{
-				std::map<std::string, assocArr>::iterator g = localHash.begin();
-				std::map<std::string, assocArr>::iterator h = localHash.end();		
+				std::map<std::string, dodoAssocArr>::iterator g = localHash.begin();
+				std::map<std::string, dodoAssocArr>::iterator h = localHash.end();		
 				for (;g!=h;++g)
 					if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 					{							
-						assocArr::iterator k = g->second.begin();
-						assocArr::iterator l = g->second.end();			
+						dodoAssocArr::iterator k = g->second.begin();
+						dodoAssocArr::iterator l = g->second.end();			
 						for (;k!=l;++k)
 							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 							{
-								assocArr::iterator iter = local.find(varName);
+								dodoAssocArr::iterator iter = local.find(varName);
 								std::string iterVal;
 								if (iter != local.end())
 									iterVal = iter->second;	
@@ -1144,12 +1144,12 @@ cgiProcessor::_for(const std::string &buffer,
 				for (;g!=h;++g)
 					if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 					{								
-						assocArr::iterator k = g->second.begin();
-						assocArr::iterator l = g->second.end();			
+						dodoAssocArr::iterator k = g->second.begin();
+						dodoAssocArr::iterator l = g->second.end();			
 						for (;k!=l;++k)
 							if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 							{
-								assocArr::iterator iter = local.find(varName);
+								dodoAssocArr::iterator iter = local.find(varName);
 								std::string iterVal;
 								if (iter != local.end())
 									iterVal = iter->second;	
@@ -1202,15 +1202,15 @@ cgiProcessor::_for(const std::string &buffer,
 							}
 					}
 					
-				std::map<std::string, stringArr>::iterator o = globalArray.begin();
-				std::map<std::string, stringArr>::iterator p = globalArray.end();		
+				std::map<std::string, dodoStringArr>::iterator o = globalArray.begin();
+				std::map<std::string, dodoStringArr>::iterator p = globalArray.end();		
 				for (;o!=p;++o)
 					if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
 					{
 						register unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= o->second.size())
 						{
-							assocArr::iterator iter = local.find(varName);
+							dodoAssocArr::iterator iter = local.find(varName);
 							std::string iterVal;
 							if (iter != local.end())
 								iterVal = iter->second;	
@@ -1263,15 +1263,15 @@ cgiProcessor::_for(const std::string &buffer,
 						}
 					}							
 	
-				std::map<std::string, dodoArray<assocArr> >::iterator d = globalArrayHash.begin();
-				std::map<std::string, dodoArray<assocArr> >::iterator f = globalArrayHash.end();
+				std::map<std::string, dodoArray<dodoAssocArr> >::iterator d = globalArrayHash.begin();
+				std::map<std::string, dodoArray<dodoAssocArr> >::iterator f = globalArrayHash.end();
 				for (;d!=f;++d)
 					if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 					{
 						register unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= d->second.size())
 						{
-							assocArr::iterator iter = local.find(varName);
+							dodoAssocArr::iterator iter = local.find(varName);
 							std::string iterVal;
 							if (iter != local.end())
 								iterVal = iter->second;	
@@ -1283,8 +1283,8 @@ cgiProcessor::_for(const std::string &buffer,
 									keyVal = local[keyName];
 							}
 																							
-							assocArr::iterator k = d->second[pos].begin();					
-							assocArr::iterator l = d->second[pos].end();
+							dodoAssocArr::iterator k = d->second[pos].begin();					
+							dodoAssocArr::iterator l = d->second[pos].end();
 							register unsigned long iteratorPrev = iterator;
 							iterator = 1;
 							for (;k!=l;++k,++iterator)
@@ -1329,20 +1329,20 @@ cgiProcessor::_for(const std::string &buffer,
 			{
 				if (temp.size() == 3)
 				{
-					std::map<std::string, dodoArray<assocArr> >::iterator d = globalArrayHash.begin();
-					std::map<std::string, dodoArray<assocArr> >::iterator f = globalArrayHash.end();
+					std::map<std::string, dodoArray<dodoAssocArr> >::iterator d = globalArrayHash.begin();
+					std::map<std::string, dodoArray<dodoAssocArr> >::iterator f = globalArrayHash.end();
 					for (;d!=f;++d)
 						if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 						{
 							register unsigned long pos = atol(temp[1].c_str());
 							if (pos >= 0 && pos <= d->second.size())
 							{
-								assocArr::iterator k = d->second[pos].begin();					
-								assocArr::iterator l = d->second[pos].end();
+								dodoAssocArr::iterator k = d->second[pos].begin();					
+								dodoAssocArr::iterator l = d->second[pos].end();
 								for (;k!=l;++k)
 									if (strcmp(temp[2].c_str(),k->first.c_str()) == 0)
 									{
-										assocArr::iterator iter = local.find(varName);
+										dodoAssocArr::iterator iter = local.find(varName);
 										std::string iterVal;
 										if (iter != local.end())
 											iterVal = iter->second;	
@@ -1402,7 +1402,7 @@ cgiProcessor::_for(const std::string &buffer,
 	else
 	{
 
-		assocArr::iterator iter = local.find(varName);
+		dodoAssocArr::iterator iter = local.find(varName);
 		std::string iterVal;
 		if (iter != local.end())
 			iterVal = iter->second;	
@@ -1511,7 +1511,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 	
 	varName.erase(0,1);
 	
-	stringArr temp = tools::explode(varName,".");
+	dodoStringArr temp = tools::explode(varName,".");
 	
 	if (temp.size() == 1)
 	{	

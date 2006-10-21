@@ -81,9 +81,9 @@ int main(int argc, char **argv)
 		
 		__dbStorage store = pp.fetch();
 		
-		std::vector<stringArr>::iterator i(store.rows.begin()), j(store.rows.end());
+		std::vector<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
 		
-		stringArr::iterator m, n;
+		dodoStringArr::iterator m, n;
 		
 		for (;i!=j;i++)
 		{

@@ -204,7 +204,7 @@ namespace dodo
 			 * @param statement is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(const stringArr &statements, int qTypeShift) const;
+			virtual std::string insideAddCollect(const dodoStringArr &statements, int qTypeShift) const;
 		
 			/**
 			 * @return string from fields' names and 'em values
@@ -212,7 +212,7 @@ namespace dodo
 			 * @param fieldsNames is array of names
 			 * @param frame is value with what values will be framed
 			 */
-			virtual std::string fieldsValName(const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &frame="'") const;
+			virtual std::string fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const std::string &frame="'") const;
 	
 			/**
 			 * @return sql compliant data type
@@ -250,10 +250,10 @@ namespace dodo
 			mutable bool additionalActions;///< indicates whether to make additional actions [where, limit]
 			mutable bool selectAction;///< indicates type of request
 			
-			mutable stringArr::const_iterator i;///< iterator for array of strings
-			mutable stringArr::const_iterator j;///< iterator for array of strings
+			mutable dodoStringArr::const_iterator i;///< iterator for array of strings
+			mutable dodoStringArr::const_iterator j;///< iterator for array of strings
 
-			mutable stringArr fieldsVPart;///< temporary places request's parts
+			mutable dodoStringArr fieldsVPart;///< temporary places request's parts
 			
 			static const __statements sqlAddSelArr[3];///< `select` additional statement
 			static const __statements sqlAddDelArr[2];///< `delete` additional statement

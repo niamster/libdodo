@@ -423,7 +423,7 @@
 	void 
 	xmlTools::getAttributes(const __nodeDef &definition, 
 						const xmlNodePtr node,
-						assocArr &attributes)
+						dodoAssocArr &attributes)
 	{
 		attribute = node->properties;
 		
@@ -488,7 +488,7 @@
 
 	void 
 	xmlTools::getAttributes(const xmlNodePtr node, 
-							assocArr &attributes)
+							dodoAssocArr &attributes)
 	{
 		attribute = node->properties;
 		

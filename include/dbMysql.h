@@ -189,12 +189,12 @@
 				/**
 				 * @return array of rows got from request
 				 */
-				virtual dodoArray<stringArr> fetchRow() const;
+				virtual dodoArray<dodoStringArr> fetchRow() const;
 				
 				/**
 				 * @return array of fields got from request
 				 */
-				virtual stringArr fetchField() const;
+				virtual dodoStringArr fetchField() const;
 				
 				/**
 				 * @return structure that holds array of rows and array of fields got from request
@@ -365,12 +365,12 @@
 				mutable MYSQL_ROW mysqlRow;///< pointer to rows
 				mutable MYSQL_FIELD *mysqlFields;///< pointer to fields
 
-				mutable stringArr rowsPart;///< to store rows
+				mutable dodoStringArr rowsPart;///< to store rows
 				mutable std::string rowPart;///< to set temporary row content
 				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
 
-				mutable dodoArray<stringArr> rows;///< to store rows
-				mutable stringArr fields;///< to store fields
+				mutable dodoArray<dodoStringArr> rows;///< to store rows
+				mutable dodoStringArr fields;///< to store fields
 				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
 								
 				mutable unsigned int numFields;///< number of fields

@@ -8,7 +8,7 @@ using namespace std;
 int main(int argc, char **argv)
 {	
 	regexpTools expr;
-	stringArr pock;
+	dodoStringArr pock;
 	
 	expr.multiline = true;
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 	
 	cout << "\nReplacemets: a-> '!!!', '@@'=> result:\n";
 	
-	stringArr a;
+	dodoStringArr a;
 	a.push_back("!!!");
 	a.push_back("@@");
 	cout << expr.reReplace("dsdasa4565aaa",a) << "\n";

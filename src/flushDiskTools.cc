@@ -840,7 +840,7 @@ flushDiskTools::getFileContent(const std::string &path)
 
 //-------------------------------------------------------------------
 
-stringArr 
+dodoStringArr 
 flushDiskTools::getFileContentArr(const std::string &path)
 {
 	struct stat st;
@@ -867,7 +867,7 @@ flushDiskTools::getFileContentArr(const std::string &path)
 		#endif
 		
 	register char buffer[DISK_MAXLINELEN];	
-	stringArr arr;
+	dodoStringArr arr;
 	
 	while (fgets(buffer,DISK_MAXLINELEN,file)!=NULL)
 		arr.push_back(buffer);

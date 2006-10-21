@@ -91,7 +91,7 @@ namespace dodo
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
-	 		bool match(const std::string &pattern, const std::string &sample, stringArr &pockets = __stringarray__) const;
+	 		bool match(const std::string &pattern, const std::string &sample, dodoStringArr &pockets = __stringarray__) const;
 
 	 		/**
 	 		 * matches with pattern prviously given with match method; if patterns are similar - faster!
@@ -102,7 +102,7 @@ namespace dodo
 	 		 * pockets clears before fillin'
 	 		 * first in pocket is not sample - but first match
 	 		 */
-	 		bool reMatch(const std::string &sample, stringArr &pockets = __stringarray__) const;
+	 		bool reMatch(const std::string &sample, dodoStringArr &pockets = __stringarray__) const;
 	 		
 	 		/**
 	 		 * replaces in sample from pieces usin' pattern
@@ -113,7 +113,7 @@ namespace dodo
 	 		 * @note if amount of pockets more than replacements  - replacemet will stop
 	 		 * if pattern is not matched - the sample will be returned
 	 		 */
-	 		std::string replace(const std::string &pattern, const std::string &sample, const stringArr &replacements) const;
+	 		std::string replace(const std::string &pattern, const std::string &sample, const dodoStringArr &replacements) const;
 	 		
 	 		/**
 	 		 * matches with pattern prviously given with replace method; if patterns are similar - faster!
@@ -125,7 +125,7 @@ namespace dodo
 	 		 * @note if amount of pockets more than replacements  - replacemet will stop
 	 		 * if pattern is not matched - the sample will be returned
 	 		 */
-	 		std::string reReplace(const std::string &sample, const stringArr &replacements) const;
+	 		std::string reReplace(const std::string &sample, const dodoStringArr &replacements) const;
 	 		
 	 		/**
 	 		 * compile pattern [if you want to use reReplace/reMatch wo calling replace/match before]

@@ -58,7 +58,7 @@ regexpTools::~regexpTools()
 bool 
 regexpTools::match(const std::string &pattern, 
 				const std::string &sample, 
-				stringArr &pockets) const
+				dodoStringArr &pockets) const
 {
 	if (!compile(pattern))
 		return false;
@@ -70,7 +70,7 @@ regexpTools::match(const std::string &pattern,
 
 bool
 regexpTools::reMatch(const std::string &sample, 
-				stringArr &pockets) const
+				dodoStringArr &pockets) const
 {
 	pockets.clear();
 	if (!boundMatch(sample))
@@ -199,7 +199,7 @@ regexpTools::compile(const std::string &pattern) const
 std::string 
 regexpTools::replace(const std::string &pattern, 
 				const std::string &sample, 
-				const stringArr &replacements) const
+				const dodoStringArr &replacements) const
 {
 	if (!compile(pattern))
 		return sample;
@@ -211,7 +211,7 @@ regexpTools::replace(const std::string &pattern,
 
 std::string 
 regexpTools::reReplace(const std::string &sample, 
-				const stringArr &replacements) const
+				const dodoStringArr &replacements) const
 {
 	if (!boundMatch(sample))
 		return sample;
@@ -219,7 +219,7 @@ regexpTools::reReplace(const std::string &sample,
 	i = boundaries.begin();
 	j = boundaries.end();
 	
-	stringArr::const_iterator k(replacements.begin());
+	dodoStringArr::const_iterator k(replacements.begin());
 	subs = replacements.size();
 	
 	temp.assign(sample);

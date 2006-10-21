@@ -130,8 +130,8 @@ dbSqlBase::~dbSqlBase()
 //-------------------------------------------------------------------
 
 std::string
-dbSqlBase::fieldsValName(const stringArr &fieldsVal, 
-					const stringArr &fieldsNames,
+dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal, 
+					const dodoStringArr &fieldsNames,
 					const std::string &frame) const
 {
 	temp.clear();
@@ -223,7 +223,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 //-------------------------------------------------------------------
 
 std::string 
-dbSqlBase::insideAddCollect(const stringArr &statements, 
+dbSqlBase::insideAddCollect(const dodoStringArr &statements, 
 						int qTypeShift) const
 {
 	if (qTypeShift == DB_EMPTY)

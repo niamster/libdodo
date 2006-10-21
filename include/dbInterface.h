@@ -41,10 +41,10 @@ namespace dodo
 		 * @param rows
 		 * @param fields
 		 */
-		__dbStorage(dodoArray<stringArr> rows, stringArr fields);
+		__dbStorage(dodoArray<dodoStringArr> rows, dodoStringArr fields);
 		
-		dodoArray<stringArr> rows;///< array of rows returned in request
-		stringArr fields;///< array of fields returned in request
+		dodoArray<dodoStringArr> rows;///< array of rows returned in request
+		dodoStringArr fields;///< array of fields returned in request
 	};
         	
 	/**
@@ -126,7 +126,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void select(const std::string &table, const stringArr &fieldsNames, const std::string &where = __string__) const = 0;
+			virtual void select(const std::string &table, const dodoStringArr &fieldsNames, const std::string &where = __string__) const = 0;
 			
 			/**
 			 * @param table is table name
@@ -134,7 +134,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const std::string &table, const assocArr &fields) = 0;
+			virtual void insert(const std::string &table, const dodoAssocArr &fields) = 0;
 			
 			/**
 			 * @param table is table name
@@ -142,27 +142,27 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const std::string &table, const dodoArray<assocArr> &fields) = 0;
+			virtual void insert(const std::string &table, const dodoArray<dodoAssocArr> &fields) = 0;
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames = __stringarray__) = 0;
+			virtual void insert(const std::string &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__) = 0;
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const std::string &table, const dodoArray<stringArr> &fieldsVal, const stringArr &fieldsNames = __stringarray__) = 0;			
+			virtual void insert(const std::string &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__) = 0;			
 			
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const stringArr &fieldsNamesTo, const stringArr &fieldsNamesFrom = __stringarray__, const std::string &where = __string__) = 0;
+			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __stringarray__, const std::string &where = __string__) = 0;
 			
 			/**
 			 * @param table is table name
@@ -171,7 +171,7 @@ namespace dodo
 			 * 			value => field's value
 			 * @param where is where statement for request
 		     */
-			virtual void update(const std::string &table, const assocArr &fields, const std::string &where = __string__) = 0;			
+			virtual void update(const std::string &table, const dodoAssocArr &fields, const std::string &where = __string__) = 0;			
 			
 			/**
 			 * @param table is table name
@@ -179,7 +179,7 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void update(const std::string &table, const stringArr &fieldsVal, const stringArr &fieldsNames, const std::string &where = __string__) = 0;
+			virtual void update(const std::string &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const std::string &where = __string__) = 0;
 			
 			/**
 			 * @param table is table name
@@ -278,12 +278,12 @@ namespace dodo
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual dodoArray<stringArr> fetchRow() const = 0;
+			virtual dodoArray<dodoStringArr> fetchRow() const = 0;
 			
 			/**
 			 * @return array of fields got from request
 			 */
-			virtual stringArr fetchField() const = 0;
+			virtual dodoStringArr fetchField() const = 0;
 			
 			/**
 			 * @return structure that holds array of rows and array of fields got from request

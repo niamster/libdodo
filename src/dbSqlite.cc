@@ -127,7 +127,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbSqlite::setBLOBValues(const stringArr &values)
+	dbSqlite::setBLOBValues(const dodoStringArr &values)
 	{
 		blobs = values;
 	}
@@ -187,7 +187,7 @@
 				case DBREQUEST_INSERT:
 				
 					{
-						stringArr::iterator i(blobs.begin()), j(blobs.end());
+						dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
 						for (register int o=1;i!=j;++i,++o)
 							if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
 								#ifndef NO_EX
@@ -234,7 +234,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	dodoArray<stringArr>
+	dodoArray<dodoStringArr>
 	dbSqlite::fetchRow() const
 	{
 		#ifndef DBSQLITE_WO_XEXEC
@@ -347,7 +347,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	stringArr
+	dodoStringArr
 	dbSqlite::fetchField() const
 	{	
 		#ifndef DBSQLITE_WO_XEXEC

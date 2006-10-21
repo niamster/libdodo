@@ -134,7 +134,7 @@
 	//-------------------------------------------------------------------
 
 	void 
-	dbPostgresql::setBLOBValues(const stringArr &values)
+	dbPostgresql::setBLOBValues(const dodoStringArr &values)
 	{
 		blobs = values;
 	}
@@ -193,7 +193,7 @@
 						register int *size()s = new int[size];
 						register int *formats = new int[size];
 						
-						stringArr::iterator i(blobs.begin()), j(blobs.end());
+						dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
 						for (register int o=0;i!=j;++i,++o)
 						{
 							values[o] = (char *)i->c_str();
@@ -274,7 +274,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	dodoArray<stringArr>
+	dodoArray<dodoStringArr>
 	dbPostgresql::fetchRow() const
 	{
 			
@@ -332,7 +332,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	stringArr
+	dodoStringArr
 	dbPostgresql::fetchField() const
 	{	
 		#ifndef DBPOSTGRESQL_WO_XEXEC

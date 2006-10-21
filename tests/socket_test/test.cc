@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		stringArr ifaces = flushSocketTools::getInterfacesNames();
+		dodoStringArr ifaces = flushSocketTools::getInterfacesNames();
 		for (unsigned int i(0);i<ifaces.size();i++)
 		{
 			try

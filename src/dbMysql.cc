@@ -303,7 +303,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	dodoArray<stringArr>
+	dodoArray<dodoStringArr>
 	dbMysql::fetchRow() const
 	{
 		#ifndef DBMYSQL_WO_XEXEC
@@ -357,7 +357,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	stringArr
+	dodoStringArr
 	dbMysql::fetchField() const
 	{	
 		#ifndef DBMYSQL_WO_XEXEC

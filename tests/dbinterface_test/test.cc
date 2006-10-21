@@ -122,9 +122,9 @@ int main(int argc, char **argv)
 		
 		cout << store.rows.size() << endl;
 		
-		std::vector<stringArr>::iterator i(store.rows.begin()), j(store.rows.end());
+		std::vector<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
 		
-		stringArr::iterator m, n;
+		dodoStringArr::iterator m, n;
 		
 		for (;i!=j;i++)
 		{
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 		{
-			stringArr blobs;
+			dodoStringArr blobs;
 			blobs.push_back(dt);
 
 			if (strcasecmp(argv[1],"sqlite") == 0)

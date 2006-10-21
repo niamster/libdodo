@@ -58,7 +58,7 @@ cgiTools::cgiTools(cgiTools &ct)
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent, 
-			assocArr &a_headers) : _cgiFilesInMem(true)
+			dodoAssocArr &a_headers) : _cgiFilesInMem(true)
 									#ifdef FCGI_EXT
 										,
 										cgiFastSet(false)
@@ -87,7 +87,7 @@ cgiTools::cgiTools(bool silent,
 
 	cgiTools::cgiTools(cgiFastSTD *a_cf, 
 						bool silent, 
-						assocArr &a_headers) : _cgiFilesInMem(true),
+						dodoAssocArr &a_headers) : _cgiFilesInMem(true),
 											cgiFastSet(true),
 											cf(a_cf)
 					
@@ -161,7 +161,7 @@ cgiTools::getMethod() const
 //-------------------------------------------------------------------
 
 void 
-cgiTools::make(assocArr &val,
+cgiTools::make(dodoAssocArr &val,
 			const std::string &string,
 			char *delim) const
 {	
@@ -170,7 +170,7 @@ cgiTools::make(assocArr &val,
 	l = getPair.begin();
 	m = getPair.end();
 	
-	stringArr temp;
+	dodoStringArr temp;
 	
 	for(;l!=m;++l)
 	{
@@ -203,7 +203,7 @@ cgiTools::makeEnv() const
 //-------------------------------------------------------------------
 
 void 
-cgiTools::initHeaders(assocArr &a_headers) const
+cgiTools::initHeaders(dodoAssocArr &a_headers) const
 {
 	HEADERS["Content-type"] = "text/html";
 	HEADERS["X-Powered-By"] = PACKAGE_NAME "/" PACKAGE_VERSION ;
@@ -389,9 +389,9 @@ cgiTools::makePost() const
 		
 		register unsigned int temp0;
 		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
-		stringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT["CONTENT_TYPE"].substr(temp0+9));
+		dodoStringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT["CONTENT_TYPE"].substr(temp0+9));
 		
-		stringArr::iterator i(postPartd.begin()),j(postPartd.end());
+		dodoStringArr::iterator i(postPartd.begin()),j(postPartd.end());
 
 		register unsigned int temp1;
 		register char *ptr;

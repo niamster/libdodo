@@ -194,7 +194,7 @@ namespace dodo
 			 * 
 			 * @note you cant print headers after they have been printed with printHeaders method 
 			 */
-			cgiTools(bool silent = false, assocArr &headers = __assocarray__);
+			cgiTools(bool silent = false, dodoAssocArr &headers = __assocarray__);
 					
 			#ifdef FCGI_EXT		
 					
@@ -206,7 +206,7 @@ namespace dodo
 				 * 
 				 * @note you cant print headers after they have been printed with printHeaders method 
 				 */
-				cgiTools(cgiFastSTD *cf, bool silent = false, assocArr &headers = __assocarray__);
+				cgiTools(cgiFastSTD *cf, bool silent = false, dodoAssocArr &headers = __assocarray__);
 			
 			#endif
 			
@@ -257,7 +257,7 @@ namespace dodo
 			 */
 			virtual void printHeaders() const;
 			
-			mutable assocArr HEADERS;///< array of header that will be printed with printHeaders method
+			mutable dodoAssocArr HEADERS;///< array of header that will be printed with printHeaders method
 			
 			/**
 			 * sets cookie. the cookies are printed with printHeaders method
@@ -298,7 +298,7 @@ namespace dodo
 			/**
 			 * initiates headers with given headers; printed with printHeaders method
 			 */
-			virtual void initHeaders(assocArr &a_headers) const;
+			virtual void initHeaders(dodoAssocArr &a_headers) const;
 
 			/**
 			 * processes :
@@ -309,7 +309,7 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(assocArr &val, const std::string &string, char *delim = "&") const;
+			virtual void make(dodoAssocArr &val, const std::string &string, char *delim = "&") const;
 		
 		private:	
 		
@@ -324,12 +324,12 @@ namespace dodo
 			 */
 			virtual void cleanTmp() const;
 			
-			mutable assocArr::iterator i;///< iterator
-			mutable assocArr::iterator j;///< iterator
+			mutable dodoAssocArr::iterator i;///< iterator
+			mutable dodoAssocArr::iterator j;///< iterator
 			
-			mutable stringArr getPair;///< temporary storage for URL encoding
-			mutable stringArr::iterator l;///<iterator for array of strings
-			mutable stringArr::iterator m;///<iterator for array of strings
+			mutable dodoStringArr getPair;///< temporary storage for URL encoding
+			mutable dodoStringArr::iterator l;///<iterator for array of strings
+			mutable dodoStringArr::iterator m;///<iterator for array of strings
 			
 			mutable std::string met0;///< temporary stores method for request class method
 			mutable std::string met1;///< temporary stores method for request class method

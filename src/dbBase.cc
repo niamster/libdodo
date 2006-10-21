@@ -108,7 +108,7 @@ __fieldInfo::operator=(const __fieldInfo &from)
 
 //-------------------------------------------------------------------
 
-__dbStorage::__dbStorage(dodoArray<stringArr> a_rows, stringArr a_fields) : rows(a_rows), 
+__dbStorage::__dbStorage(dodoArray<dodoStringArr> a_rows, dodoStringArr a_fields) : rows(a_rows), 
 																				fields(a_fields)
 {
 }
@@ -117,8 +117,8 @@ __dbStorage::__dbStorage(dodoArray<stringArr> a_rows, stringArr a_fields) : rows
 
 __collectedData::__collectedData(
 					std::string &a_pre_where,
-					stringArr &a_pre_fieldsNames,
-					dodoArray<stringArr> &a_pre_fieldsVal,
+					dodoStringArr &a_pre_fieldsNames,
+					dodoArray<dodoStringArr> &a_pre_fieldsVal,
 					std::string &a_pre_table,
 					std::string &a_pre_tableTo,
 					std::string &a_pre_order,
@@ -126,7 +126,7 @@ __collectedData::__collectedData(
 					std::string &a_pre_group,
 					std::string &a_pre_limNumber,
 					std::string &a_pre_limOffset,
-					stringArr &a_pre_subQ,
+					dodoStringArr &a_pre_subQ,
 					int &a_qType,
 					int &a_qShift,
 					int &a_qSelShift,
@@ -180,7 +180,7 @@ dbBase::~dbBase()
 
 void 
 dbBase::select(const std::string &a_table,
-			    const stringArr &a_fieldsNames,
+			    const dodoStringArr &a_fieldsNames,
 			    const std::string &a_where) const 
 {
 	qType = DBREQUEST_SELECT;
@@ -201,7 +201,7 @@ dbBase::select(const std::string &a_table,
 
 void 
 dbBase::insert(const std::string &a_table, 
-				const assocArr &a_fields)
+				const dodoAssocArr &a_fields)
 {
 	qType = DBREQUEST_INSERT;
 	
@@ -229,7 +229,7 @@ dbBase::insert(const std::string &a_table,
 
 void 
 dbBase::insert(const std::string &a_table, 
-				const dodoArray<assocArr> &a_fields)
+				const dodoArray<dodoAssocArr> &a_fields)
 {
 	qType = DBREQUEST_INSERT;
 	
@@ -265,8 +265,8 @@ dbBase::insert(const std::string &a_table,
 
 void 
 dbBase::insert(const std::string &a_table,
-			    const stringArr &a_fieldsVal, 
-			    const stringArr &a_fieldsNames)
+			    const dodoStringArr &a_fieldsVal, 
+			    const dodoStringArr &a_fieldsNames)
 {
 	qType = DBREQUEST_INSERT;
 	
@@ -284,8 +284,8 @@ dbBase::insert(const std::string &a_table,
 
 void 
 dbBase::insert(const std::string &a_table, 
-				const dodoArray<stringArr> &a_fieldsVal, 
-				const stringArr &a_fieldsNames)
+				const dodoArray<dodoStringArr> &a_fieldsVal, 
+				const dodoStringArr &a_fieldsNames)
 {
 	qType = DBREQUEST_INSERT;
 	
@@ -307,8 +307,8 @@ dbBase::insert(const std::string &a_table,
 void 
 dbBase::insertSelect(const std::string &a_tableTo, 
 					const std::string &a_tableFrom, 
-					const stringArr &a_fieldsNamesTo,
-					const stringArr &a_fieldsNamesFrom,
+					const dodoStringArr &a_fieldsNamesTo,
+					const dodoStringArr &a_fieldsNamesFrom,
 					const std::string &a_where)
 {
 	qType = DBREQUEST_INSERT_SELECT;
@@ -333,7 +333,7 @@ dbBase::insertSelect(const std::string &a_tableTo,
 //-------------------------------------------------------------------
 void 
 dbBase::update(const std::string &a_table, 
-				const assocArr &a_fields, 
+				const dodoAssocArr &a_fields, 
 				const std::string &a_where)
 {
 	qType = DBREQUEST_UPDATE;
@@ -368,8 +368,8 @@ dbBase::update(const std::string &a_table,
 
 void
 dbBase::update(const std::string &a_table,
-			   const stringArr &a_fieldsVal, 
-			   const stringArr &a_fieldsNames, 
+			   const dodoStringArr &a_fieldsVal, 
+			   const dodoStringArr &a_fieldsNames, 
 			   const std::string &a_where)
 {
 	qType = DBREQUEST_UPDATE;
@@ -412,7 +412,7 @@ dbBase::del(const std::string &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::subquery(const stringArr &sub, 
+dbBase::subquery(const dodoStringArr &sub, 
 				int type) const
 {
 	qType = type;

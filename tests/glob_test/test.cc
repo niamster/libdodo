@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 		cout << t << endl;	
 		
 		t = "abcddF";
-		stringArr rep, nee;
+		dodoStringArr rep, nee;
 		nee.push_back("cd");
 		nee.push_back("ab");
 		rep.push_back("WW");

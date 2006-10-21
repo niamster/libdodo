@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 		
 		__nodeDef def;
 		
-		stringArr attr;
+		dodoStringArr attr;
 		attr.push_back("iD");
 		def.attributes = attr;	
 		def.name = "hehe";	

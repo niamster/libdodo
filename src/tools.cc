@@ -178,7 +178,7 @@ tools::~tools()
 
 //-------------------------------------------------------------------
 
-stringArr 
+dodoStringArr 
 tools::explode(const std::string &fields,
 			escape escapeF,
 			const std::string &separator, 
@@ -186,7 +186,7 @@ tools::explode(const std::string &fields,
 {
 	register unsigned long i(0), j(0), sep_size(separator.size());
 	register int k(0);
-	stringArr arr;
+	dodoStringArr arr;
 	
 	while (true)
 	{
@@ -232,18 +232,18 @@ tools::replace(const std::string &needle,
 //-------------------------------------------------------------------
 
 void 
-tools::replace(const stringArr &needle, 
-		const stringArr &replacement,
+tools::replace(const dodoStringArr &needle, 
+		const dodoStringArr &replacement,
 		std::string &data)
 {
-	stringArr::const_iterator i = needle.begin(), j = needle.end(), o = replacement.begin(), p = replacement.end();
+	dodoStringArr::const_iterator i = needle.begin(), j = needle.end(), o = replacement.begin(), p = replacement.end();
 	for (;i!=j&&o!=p;++i,++o)
 		replace(*i, *o, data);
 }
 
 //-------------------------------------------------------------------
 
-stringArr 
+dodoStringArr 
 tools::explode(const std::string &fields, 
 			const std::string &separator,
 			int limit)
@@ -254,7 +254,7 @@ tools::explode(const std::string &fields,
 //-------------------------------------------------------------------
 
 std::string
-tools::implode(const stringArr &fields,
+tools::implode(const dodoStringArr &fields,
 		escape escapeF, 
 		const std::string &separator,
 		const std::string &frame,
@@ -263,7 +263,7 @@ tools::implode(const stringArr &fields,
 	register int k(0);
 	
 	std::string temp, fs(frame + separator);
-	stringArr::const_iterator i(fields.begin()), j(--fields.end());
+	dodoStringArr::const_iterator i(fields.begin()), j(--fields.end());
 	
 	for (;i!=j;++i)
 	{
@@ -282,7 +282,7 @@ tools::implode(const stringArr &fields,
 //-------------------------------------------------------------------
 
 std::string
-tools::implode(const stringArr &fields,
+tools::implode(const dodoStringArr &fields,
 		const std::string &separator,
 		const std::string &frame,
 		int limit)
@@ -293,7 +293,7 @@ tools::implode(const stringArr &fields,
 //-------------------------------------------------------------------
 
 std::string
-tools::implode(const stringArr &fields,
+tools::implode(const dodoStringArr &fields,
 		const std::string &separator,
 		int limit)
 {
@@ -303,7 +303,7 @@ tools::implode(const stringArr &fields,
 //-------------------------------------------------------------------
 
 std::string 
-tools::implode(const stringArr &fields, 
+tools::implode(const dodoStringArr &fields, 
 		escape escapeF, 
 		const std::string &separator,
 		int limit)
@@ -311,7 +311,7 @@ tools::implode(const stringArr &fields,
 	register int k(0);	
 	
 	std::string temp;
-	stringArr::const_iterator i(fields.begin()), j(--fields.end());
+	dodoStringArr::const_iterator i(fields.begin()), j(--fields.end());
 	
 	for (;i!=j;++i)
 	{
@@ -2112,9 +2112,9 @@ tools::mail(const std::string &host,
 			return false; 
 	#endif
 
-	stringArr pock = explode(to,",");
+	dodoStringArr pock = explode(to,",");
 	
-	stringArr::iterator i = pock.begin(), j = pock.end();
+	dodoStringArr::iterator i = pock.begin(), j = pock.end();
 	for (;i!=j;++i)
 	{
 		mess = "RCPT TO: <" + *i + ">\r\n";

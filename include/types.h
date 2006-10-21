@@ -52,9 +52,9 @@ namespace dodo
 	
 	typedef char* pchar;
 
-	typedef dodoArray<std::string> stringArr;///< array of strings
+	typedef dodoArray<std::string> dodoStringArr;///< array of strings
 
-	typedef std::map<std::string, std::string> assocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
+	typedef std::map<std::string, std::string> dodoAssocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
 
 	typedef __dodoMap<std::string> dodoStringMap;
 	

@@ -72,7 +72,7 @@ flushSocketTools::getHostInfo(const std::string &host)
 
 //-------------------------------------------------------------------
 
-stringArr 
+dodoStringArr 
 flushSocketTools::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
@@ -84,7 +84,7 @@ flushSocketTools::getInterfacesNames()
 		#endif
 			
 	register int i(-1);
-	stringArr arr;
+	dodoStringArr arr;
 	
 	while (ifaces[++i].if_index != 0)
 		arr.push_back(ifaces[i].if_name);

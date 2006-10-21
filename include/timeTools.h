@@ -130,7 +130,7 @@ namespace dodo
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 * @note monday is first in the array
 			 */
-			static stringArr week(long date, const std::string &format, bool local=true); 
+			static dodoStringArr week(long date, const std::string &format, bool local=true); 
 			
 			/**
 			 * @return array of dates between specified period
@@ -140,7 +140,7 @@ namespace dodo
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 * @note you should't set the date in 00:00, add some hours; you can get strange result in periods whe daytime changes
 			 */
-			static stringArr datesArr(long dateFrom, long dateTo, const std::string &format, bool local=true);
+			static dodoStringArr datesArr(long dateFrom, long dateTo, const std::string &format, bool local=true);
 			
 			/**
 			 * @return second that describes __mktime

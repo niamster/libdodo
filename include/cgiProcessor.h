@@ -79,21 +79,21 @@ namespace dodo
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array)
 			 */
-			virtual void assign(std::string varName, const stringArr &varVal);
+			virtual void assign(std::string varName, const dodoStringArr &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(hash)
 			 */
-			virtual void assign(std::string varName, const assocArr &varVal);
+			virtual void assign(std::string varName, const dodoAssocArr &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array of hashes)
 			 */
-			virtual void assign(std::string varName, const dodoArray<assocArr> &varVal);
+			virtual void assign(std::string varName, const dodoArray<dodoAssocArr> &varVal);
 			
 			/**
 			 * show to stdout parsed template
@@ -206,25 +206,25 @@ namespace dodo
 			std::list<std::string>::iterator i;///< iterator for list
 			std::list<std::string>::iterator j;///< iterator for list
 		
-			std::map<std::string, stringArr> globalArray;///< set of global variables(arrays)[user-set]
-			std::map<std::string, stringArr>::iterator o;///< iterator for map of string arrays
-			std::map<std::string, stringArr>::iterator p;///< iterator for map of string arrays
+			std::map<std::string, dodoStringArr> globalArray;///< set of global variables(arrays)[user-set]
+			std::map<std::string, dodoStringArr>::iterator o;///< iterator for map of string arrays
+			std::map<std::string, dodoStringArr>::iterator p;///< iterator for map of string arrays
 			
-			std::map<std::string, assocArr> globalHash;///< set of global variables(hashes)[user-set]
-			std::map<std::string, assocArr>::iterator g;///< iterator for map of maps
-			std::map<std::string, assocArr>::iterator h;///< iterator for map of maps
+			std::map<std::string, dodoAssocArr> globalHash;///< set of global variables(hashes)[user-set]
+			std::map<std::string, dodoAssocArr>::iterator g;///< iterator for map of maps
+			std::map<std::string, dodoAssocArr>::iterator h;///< iterator for map of maps
 			
-			std::map<std::string, dodoArray<assocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
-			std::map<std::string, assocArr> localHash;///< set of local variables(hashes)
-			std::map<std::string, dodoArray<assocArr> >::iterator d;///< iterator for map of maps
-			std::map<std::string, dodoArray<assocArr> >::iterator f;///< iterator for map of maps
+			std::map<std::string, dodoArray<dodoAssocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
+			std::map<std::string, dodoAssocArr> localHash;///< set of local variables(hashes)
+			std::map<std::string, dodoArray<dodoAssocArr> >::iterator d;///< iterator for map of maps
+			std::map<std::string, dodoArray<dodoAssocArr> >::iterator f;///< iterator for map of maps
 			
-			assocArr dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
+			dodoAssocArr dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
 			
-			assocArr global;///< set of global variables[user-set]
-			assocArr local;///< set of local variables[during parsing]			
-			assocArr::iterator k;///< iterator for map
-			assocArr::iterator l;///< iterator for map
+			dodoAssocArr global;///< set of global variables[user-set]
+			dodoAssocArr local;///< set of local variables[during parsing]			
+			dodoAssocArr::iterator k;///< iterator for map
+			dodoAssocArr::iterator l;///< iterator for map
 				
 			std::string temp1;///< temporary storage									
 			std::string temp;///< temp storage
@@ -237,12 +237,12 @@ namespace dodo
 			unsigned long iterator;///< count of iteration of a loop
 			
 			unsigned int namespaceDeepness;///< deepness of the namespace
-			std::map<unsigned int, assocArr> localNamespace;///< set of local variables invisible due to overwrite in deeper namespace[user-set] 
-			std::map<unsigned int, stringArr> namespaceVars;///< names of vars in namespaces
-			stringArr::iterator x;///< iterator for namespaceVars content
-			stringArr::iterator z;///< iterator for namespaceVars content
-			std::map<unsigned int, stringArr>::iterator c;///< iterator for namespaceVars 
-			std::map<unsigned int, assocArr>::iterator v;///< iterator for localNamespace
+			std::map<unsigned int, dodoAssocArr> localNamespace;///< set of local variables invisible due to overwrite in deeper namespace[user-set] 
+			std::map<unsigned int, dodoStringArr> namespaceVars;///< names of vars in namespaces
+			dodoStringArr::iterator x;///< iterator for namespaceVars content
+			dodoStringArr::iterator z;///< iterator for namespaceVars content
+			std::map<unsigned int, dodoStringArr>::iterator c;///< iterator for namespaceVars 
+			std::map<unsigned int, dodoAssocArr>::iterator v;///< iterator for localNamespace
 			
 			#ifdef FCGI_EXT	
 			

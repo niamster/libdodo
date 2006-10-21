@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 		//cout << flushDiskTools::getFileContent("test.cc");
 		//flushDiskTools::copy("test.cc","test.cc.copy",true);
 		//flushDiskTools::copy("/tmp","./",true);
-		/*stringArr arr = flushDiskTools::getFileContentArr("test.cc");
+		/*dodoStringArr arr = flushDiskTools::getFileContentArr("test.cc");
 		
 		for (int i=0;i<arr.size();i++)
 		{

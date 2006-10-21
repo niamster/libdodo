@@ -194,7 +194,7 @@ namespace dodo
 			 * @param replacement indicates with what to replace
 			 * @param data specifies wher to replace
 			 */
-			static void replace(const stringArr &needle, const stringArr &replacement, std::string &data);
+			static void replace(const dodoStringArr &needle, const dodoStringArr &replacement, std::string &data);
 		
 			/**
 			 * @return array of strings made from string using separtator
@@ -202,7 +202,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static stringArr explode(const std::string &fields, const std::string &separator, int limit=-1);
+			static dodoStringArr explode(const std::string &fields, const std::string &separator, int limit=-1);
 					
 			/**
 			 * @return array of strings made from string using separtator
@@ -211,7 +211,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static stringArr explode(const std::string &fields, escape escapeF, const std::string &separator, int limit=-1);
+			static dodoStringArr explode(const std::string &fields, escape escapeF, const std::string &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -221,7 +221,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, const std::string &frame, int limit=-1);
+			static std::string implode(const dodoStringArr &fields, escape escapeF, const std::string &separator, const std::string &frame, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -230,7 +230,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, escape escapeF, const std::string &separator, int limit=-1);
+			static std::string implode(const dodoStringArr &fields, escape escapeF, const std::string &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -238,7 +238,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, const std::string &separator, int limit=-1);
+			static std::string implode(const dodoStringArr &fields, const std::string &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -247,7 +247,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const stringArr &fields, const std::string &separator, const std::string &frame, int limit=-1);
+			static std::string implode(const dodoStringArr &fields, const std::string &separator, const std::string &frame, int limit=-1);
 			
 			#ifdef ICONV_EXT
 				

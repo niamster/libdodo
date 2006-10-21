@@ -89,11 +89,11 @@ int main(int argc, char **argv)
 		pp.offset(3);//change offset value
 //		pp.unlimit();//no limits!! =)
 				
-		assocArr arr;
+		dodoAssocArr arr;
 		arr["date"] = "20\"05`''-'07-08";
 		arr["operation"] = "m\nu";
 		
-		std::vector<assocArr> assA;
+		std::vector<dodoAssocArr> assA;
 
 ///
         FILE *file = fopen("/bin/ls","r");
