@@ -11,13 +11,12 @@ hook(void *base,
 {
 	dbMysql *sql = (dbMysql *)base;
 
-	if (sql->operType == DBMYSQL_OPER_EXEC)
+	if (sql->operType == DBMYSQL_OPER_EXEC && sql->getQType() == DBREQUEST_SELECT)
 	{
 		__collectedData data = sql->collectedData();
 		
-		cout << endl << endl << "table was" << data.pre_table << endl << endl;
+		cout << endl << endl << "table was " << data.pre_table << endl << endl;
 		
-		data.pre_table = "ti";
 		data.pre_limNumber = "70";
 		data.pre_fieldsNames[0] = std::string((char *)yep);
 	}
@@ -52,31 +51,60 @@ int main(int argc, char **argv)
 	{
 		
 		int pos = pp.addPreExec(hook,(void *)"id");
-		pp.addPostExec(&journal,(void *)"journal");
+		//pp.addPostExec(&journal,(void *)"journal");
 		//pp.delPreExec(pos);//removes hook!!
 		
 		pp.setDbInfo("test","",3306,"","Dmitrik");
 		pp.connect();
+
+		__tableInfo ti;
+                ti.name = "tab";
+
+                __fieldInfo fi;
+
+                fi.name = "id";
+                fi.type = FIELDTYPE_INTEGER;
+                fi.flag = FIELDPROP_NULL | FIELDPROP_AUTO_INCREMENT;
+                ti.fields.push_back(fi);
 		
+		fi.name = "dote";
+                fi.flag = 0;
+		fi.type = FIELDTYPE_TEXT;
+                ti.fields.push_back(fi);
+
+		fi.name = "operation";
+		fi.type = FIELDTYPE_TEXT;
+		ti.fields.push_back(fi);
+
+		try
+		{
+                	pp.deleteTable("tab");
+			pp.exec();
+		}
+		catch(...)
+		{
+		}
+		pp.createTable(ti);
+		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
+		pp.exec();
+
 		/*create field*/
-		__fieldInfo fi;
-		fi.onDelete = REFERENCE_SET_DEFAULT;
-		fi.name = "field";
-		fi.flag |= FIELDPROP_AUTO_INCREMENT;
+		fi.name = "fi";
 		fi.type = FIELDTYPE_CHAR;
 		fi.length = 10;
 		
-		pp.createField(fi,"table");
+		pp.createField(fi,"tab");
+		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 		
 		
 		std::vector<std::string> fields;
 		
-		fields.push_back("date");
+		fields.push_back("dote");
 		fields.push_back("operation");
 		
 		/* select*/
-		pp.select("ta",fields,"a>1");
+		pp.select("tab",fields);
 		pp.limit(10);
 		pp.exec();
 		
@@ -90,7 +118,7 @@ int main(int argc, char **argv)
 //		pp.unlimit();//no limits!! =)
 				
 		dodoAssocArr arr;
-		arr["date"] = "20\"05`''-'07-08";
+		arr["dote"] = "20\"05`''-'07-08";
 		arr["operation"] = "m\nu";
 		
 		std::vector<dodoAssocArr> assA;
@@ -107,7 +135,7 @@ int main(int argc, char **argv)
 ///
 		
 		assA.push_back(arr);
-		arr["date"] = "20\"05`''-'07-08";
+		arr["dote"] = "20\"05`''-'07-08";
 		arr["operation"] = str;
 		assA.push_back(arr);
 		
@@ -117,28 +145,26 @@ int main(int argc, char **argv)
 		pp.setMyAddSelSt(DBREQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
 				
 		
-		pp.insert("leg",assA);//multiply insert
+		pp.insert("tab",assA);//multiply insert
 		cout << pp.queryCollect() << endl;
 		pp.exec();
-		
-		exit(0);
 		
 		pp.insertSelect("test1","test2",fields,values);//insert_select
 		cout << pp.queryCollect() << endl;
 		//pp.exec();
 		
-		pp.insert("test1",values,fields);//simple insert
+		pp.insert("tab",values,fields);//simple insert
 		cout << pp.queryCollect() << endl;
 		pp.exec();
 		
 		for (int o=0;o<1000000;o++)
 		{
-			pp.insert("log",values,fields);
-			cout << pp.queryCollect() << endl;//show query
+			pp.insert("tab",values,fields);
+			//cout << pp.queryCollect() << endl;//show query
 			pp.exec();
 		}
 		
-		pp.select("log",fields,"id>1");
+		pp.select("tab",fields,"id>1");
 
 		/* creatin' union with sqlStatement that compiles from  'pp.select("log",fields,"id>1");'*/
 		std::vector<std::string> uni;

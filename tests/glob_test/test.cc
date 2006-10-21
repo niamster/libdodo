@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
 		tools tl;
 		
-		//tools::mail("64.46.38.133",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com","test","test","scanner","ae$%re!H@");
+		//tools::mail("127.0.0.1",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com", "test", "test");
 		
 		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
 		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))

@@ -71,11 +71,11 @@ namespace dodo
 
 	static const std::string __string__ = "";
 
-	static stringArr __stringarray__;
+	static dodoStringArr __stringarray__;
 
-	static assocArr __assocarray__;
+	static dodoAssocArr __assocarray__;
 
-	static dodoArray<stringArr> __stringarrayvector__;
+	static dodoArray<dodoStringArr> __stringarrayvector__;
 
 	static dodoStringMapArr __dodostringmap__;
 
