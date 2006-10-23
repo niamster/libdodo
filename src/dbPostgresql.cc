@@ -243,7 +243,7 @@
 			pgResult = PQexecParams(conn,request.c_str(),0,NULL,NULL,NULL,NULL,1);
 			if(pgResult == NULL)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__,request);
 				#else
 					return false;
 				#endif

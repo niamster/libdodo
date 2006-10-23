@@ -124,6 +124,7 @@ flushSocketExchange::close() const
 	#ifdef NO_EX
 		register bool result = 
 	#endif
+	
 	flushSocketOptions::_close(socket);
 	
 	opened = false;
@@ -143,32 +144,29 @@ void
 flushSocketExchange::init(int a_socket, 
 						bool blockInherited)
 {
-	if (socket != a_socket)
+	close();
+
+	socket = a_socket;
+
+	setInBufferSize(inSocketBuffer);
+	setOutBufferSize(outSocketBuffer);
+	
+	setInTimeout(inTimeout);
+	setOutTimeout(outTimeout);
+	
+	setLingerSockOption(lingerOpts,lingerSeconds);	
+	
+	if (!blocked)
 	{
-		close();
-	
-		socket = a_socket;
-	
-		setInBufferSize(inSocketBuffer);
-		setOutBufferSize(outSocketBuffer);
-		
-		setInTimeout(inTimeout);
-		setOutTimeout(outTimeout);
-		
-		setLingerSockOption(lingerOpts,lingerSeconds);	
-		
-		if (!blocked)
-		{
-			if (blockInherited)
-				block(false);
-			else
-				block(true);
-		}
+		if (blockInherited)
+			block(false);
 		else
 			block(true);
-	
-		opened = true;
 	}
+	else
+		block(true);
+
+	opened = true;
 }
 
 //-------------------------------------------------------------------

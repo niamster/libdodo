@@ -129,7 +129,7 @@
 			#ifndef NO_EX
 			{
 				error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
 				return __node();
@@ -176,7 +176,7 @@
 			#ifndef NO_EX
 			{
 				error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILEINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILEINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
 				return false;
@@ -544,7 +544,7 @@
 			#ifndef NO_EX
 			{
 				error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLFILEINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLFILEINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
 				return __xmlInfo();
@@ -640,7 +640,7 @@
 			#ifndef NO_EX
 			{
 				error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
 				return __node();
@@ -651,7 +651,7 @@
 			#ifndef NO_EX
 			{
 				error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
 				return __node();

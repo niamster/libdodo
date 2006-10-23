@@ -302,8 +302,6 @@ namespace dodo
 			mutable bool server;///< indicates whether server object or not
 			
 			mutable std::string unixSock;///< to remember, 'cos have to unlink in destructor
-			
-			bool socketMade;///< indicate if socket was made 
 	};
 	
 };

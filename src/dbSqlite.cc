@@ -174,7 +174,7 @@
 			
 		if (sqlite3_prepare(lite,request.c_str(),request.size(), &liteStmt, NULL) != SQLITE_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__,request);
 			#else
 				return false;
 			#endif

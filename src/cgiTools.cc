@@ -399,7 +399,7 @@ cgiTools::makePost() const
 		register unsigned short pathLength = postFilesTmpDir.size()+18;
 		
 		for (;i!=j;++i)
-			if (i->find("filename")!=std::string::npos)///file
+			if (i->find("filename")!=std::string::npos)
 			{
 				if ((temp0 = i->find("name=\"")) == std::string::npos)
 					continue;
@@ -494,14 +494,14 @@ cgiTools::makePost() const
 				
 				postFiles[post_name] = file;
 			}
-			else///simply post
+			else
 			{
 				if ((temp0 = i->find("name=\"")) == std::string::npos)
 					continue;
 				temp0 += 6;		
 				temp1 = i->find("\"",temp0);
 								
-				METHOD_POST.realArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);///damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
+				METHOD_POST.realArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);//FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
 	}
 	

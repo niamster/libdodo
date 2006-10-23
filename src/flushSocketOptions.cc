@@ -471,14 +471,14 @@ flushSocketOptions::getLingerPeriod() const
 #endif
 flushSocketOptions::_close(int socket)
 {
-	if (::shutdown(socket,SHUT_RDWR)==-1)
+	if (::shutdown(socket,SHUT_RDWR) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS__CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif			
 	
-	if (::close(socket)==-1)
+	if (::close(socket) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS__CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else

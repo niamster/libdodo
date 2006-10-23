@@ -134,8 +134,7 @@ flushSTD::read(char * const a_void) const
 	#endif
 	
 	memset(a_void,'\0',inSize);
-	
-	///execute 
+	 
 	iter = inSize/inSTDBuffer;
 	rest = inSize%inSTDBuffer;
 	
@@ -248,8 +247,7 @@ flushSTD::write(const char *const aa_buf)
 		operType = FLUSHSTD_OPER_WRITE;
 		performXExec(preExec);
 	#endif
-	
-	///execute 
+	 
 	iter = outSize/outSTDBuffer;
 	rest = outSize%outSTDBuffer;
 	
@@ -491,7 +489,6 @@ flushSTD::readStream(char * const a_void) const
 
 	memset(a_void,'\0',inSTDBuffer);
 
-	///execute
 	while (true)
 	{
 		if (fgets(a_void,inSTDBuffer+1,stdin) == NULL)
@@ -572,8 +569,7 @@ flushSTD::writeStream(const char *const aa_buf)
 		operType = FLUSHSTD_OPER_WRITESTREAM;
 		performXExec(preExec);
 	#endif
-	
-	///execute 
+	 
 	desc = stdout;
 	if (err)
 		desc = stderr;
@@ -581,8 +577,7 @@ flushSTD::writeStream(const char *const aa_buf)
 	buffer.append(1,'\n');
 
 	register unsigned long outSize = strlen(aa_buf);
-	
-	///execute 
+	 
 	iter = outSize/outSTDBuffer;
 	rest = outSize%outSTDBuffer;
 	

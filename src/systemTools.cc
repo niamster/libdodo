@@ -155,7 +155,7 @@ systemTools::changeRoot(const std::string &path)
 	
 	if (chroot(path.c_str()) == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_CHANGEROOT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_CHANGEROOT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__,path);
 		#else
 			return false;
 		#endif

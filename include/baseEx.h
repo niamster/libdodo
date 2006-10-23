@@ -26,6 +26,8 @@
 
 #include <directives.h>
 
+#include <types.h>
+
 #ifdef DL_EXT
 
 	#include <dlfcn.h>
@@ -136,7 +138,7 @@
 				 * @param line line, where was thrown
 				 * @param file file, where was thrown
 				 */			
-				baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, std::string baseErrstr, unsigned long line, std::string file);
+				baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, const std::string &baseErrstr, unsigned long line, const std::string &file, const std::string &message=__string__);
 				
 				/**
 				 * destructor
@@ -161,6 +163,8 @@
 				
 				unsigned long line;///< line, where was thrown
 				std::string file;///< file, where was thrown
+				
+				std::string message;///< custom message
 				
 				/**
 				 * set handler on error for specific module

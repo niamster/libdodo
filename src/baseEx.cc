@@ -165,15 +165,17 @@
     				unsigned long functionID,
                     errnoSourceEnum errnoSource,
                     int a_errno,
-                    std::string a_errstr,
+                    const std::string &a_errstr,
                     unsigned long a_line,
-                    std::string a_file) : errModule(a_errModule),
+                    const std::string &a_file,
+                    const std::string &a_message) : errModule(a_errModule),
                                         funcID(functionID),
                                         errnoSource(errnoSource),
                                         baseErrno(a_errno),
                                         baseErrstr(a_errstr),
                                         line(a_line),
-                                        file(a_file)
+                                        file(a_file),
+                                        message(a_message)
     {
     	if (handlerSetEx[errModule])
     		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);

@@ -267,7 +267,7 @@
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
 		{
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__,request);
 			#else
 				return false;
 			#endif
