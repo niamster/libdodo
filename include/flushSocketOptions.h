@@ -28,8 +28,6 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>       
-#include <sys/types.h>
-#include <sys/socket.h>       
 #include <unistd.h>
 #include <fcntl.h>
 
@@ -269,7 +267,7 @@ namespace dodo
 			mutable unsigned long inSocketBuffer;///< incoming buffer size of socket; in bytes
 			mutable unsigned long outSocketBuffer;///< outgoing buffer size of socket; in bytes
 
-			int socket;///< id of socket
+			mutable int socket;///< id of socket
 			
 			bool blocked;///< indicates, whether blocked or not;
 	};

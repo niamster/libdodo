@@ -83,6 +83,7 @@ flushSocketExchange::~flushSocketExchange()
 	if (opened)
 	{
 		::shutdown(socket,SHUT_RDWR);		
+		
 		::close(socket);
 	}
 }
@@ -126,6 +127,8 @@ flushSocketExchange::close() const
 	#endif
 	
 	flushSocketOptions::_close(socket);
+	
+	socket = -1;
 	
 	opened = false;
 			
