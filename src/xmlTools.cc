@@ -833,12 +833,11 @@
 			{
 				xml.append("<![CDATA[");
 				xml.append(node.value);
-				xml.append("]]>\r\n");
+				xml.append("]]>");
 			}
 			else
 			{
 				xml.append(node.value);
-				xml.append("\r\n");
 			}
 		}
 		

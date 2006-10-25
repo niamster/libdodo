@@ -833,8 +833,7 @@ dbBase::collectedData()
 	qSelShift,
 	qInsShift,	
 	qUpShift,	
-	qDelShift	
-	);
+	qDelShift);
 }
 
 //-------------------------------------------------------------------

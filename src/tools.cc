@@ -1184,8 +1184,6 @@ tools::encodeBase64(const std::string &string)
         }
 	}
 	
-	result.append("\r\n");
-	
 	return result;
 }
 

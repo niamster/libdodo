@@ -79,6 +79,15 @@ namespace dodo
 				}
 				
 				/**
+				 * insert 
+				 */
+				void
+				insert(const std::string &varName, const anyType &varVal)
+				{
+					realArr.insert(make_pair(varName, varVal));
+				}
+				
+				/**
 				 * return iterator that points on the begin of the original array
 				 */
 				typename std::map<std::string, anyType>::iterator
