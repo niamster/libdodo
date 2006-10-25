@@ -139,12 +139,7 @@ flushSocket::makeSocket()
 {
 	if (socket != -1)
 	{
-		if (::shutdown(socket,SHUT_RDWR) == -1)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif	
+		::shutdown(socket,SHUT_RDWR);
 		
 		if (::close(socket) == -1)
 			#ifndef NO_EX

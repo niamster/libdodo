@@ -178,7 +178,7 @@ flushDisk::open(const std::string &a_path) const
 		performXExec(preExec);	
 	#endif
 
-	if (a_path.size()!=0 && strcmp(a_path.c_str(),path.c_str())!=0)
+	if (a_path.size() != 0 && strcmp(a_path.c_str(),path.c_str()) != 0)
 		path = a_path;
 		
 	if (opened)
@@ -229,7 +229,7 @@ flushDisk::open(const std::string &a_path) const
 			}
 			else
 			{
-				if ( (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE) && exists && !S_ISREG(st.st_mode))
+				if ( (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE || FILETYPE_CHAR_FILE) && exists && !S_ISREG(st.st_mode) && !S_ISCHR(st.st_mode))
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_OPEN,ERR_LIBDODO,FLUSHDISK_WRONG_FILENAME,FLUSHDISK_WRONG_FILENAME_STR,__LINE__,__FILE__,path);
 					#else
@@ -275,8 +275,7 @@ flushDisk::open(const std::string &a_path) const
 			return false;
 		#endif
 	
-	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
-		flushDiskTools::chmod(path,FILE_PERM);
+	flushDiskTools::chmod(path,FILE_PERM);
 	
 	#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);

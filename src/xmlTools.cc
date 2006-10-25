@@ -775,7 +775,7 @@
 		if (root.name.empty())
 			return __string__;
 		
-		std::string xml = "<?xml version=" + version + " encoding=" + encoding + "?>\r\n";
+		std::string xml = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
 		
 		xml.append(createNode(root));
 		
@@ -797,7 +797,6 @@
 			xml.append(node.ns);
 			xml.append(":");
 		}
-		
 		xml.append(node.name);
 		xml.append(" ");
 		
@@ -825,7 +824,7 @@
 			return xml;
 		}
 		
-		xml.append(">\r\n");
+		xml.append(">");
 		
 		if (!node.value.empty())
 		{

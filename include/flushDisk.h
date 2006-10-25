@@ -70,7 +70,8 @@ namespace dodo
 	{
 		FILETYPE_REG_FILE,///< regular file
 		FILETYPE_TMP_FILE,///< temporary file. will be deleted after you exit program(or close it)
-		FILETYPE_FIFO_FILE///< FIFO file
+		FILETYPE_FIFO_FILE,///< FIFO file
+		FILETYPE_CHAR_FILE///< CHAR file
 	};
 	
 	/**
