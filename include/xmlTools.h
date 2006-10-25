@@ -39,19 +39,19 @@
 	{
 		
 		/**
-		 * @struct __node describes xml tree realization
-		 * @note children[x][y] =>> [x] describes vector of xml nodes[y] that are realisation of __nodeDef::children[x] definition
+		 * @struct __xmlNode describes xml tree realization
+		 * @note children[x][y] =>> [x] describes vector of xml nodes[y] that are realisation of __xmlNodeDef::children[x] definition
 		 */
-		struct __node
+		struct __xmlNode
 		{
 			/**
 			 * constructor
 			 */
-			__node();
+			__xmlNode();
 			
 			std::string name;///< name of the node [[tag]]
 			
-			__dodoMap< dodoArray<__node> > children;///< vector of children's realisation;
+			__dodoMap< dodoArray<__xmlNode> > children;///< vector of children's realisation;
 			
 			dodoStringMap attributes;///< hash of attributes
 			
@@ -67,18 +67,18 @@
 		};
 	
 		/**
-		 * @struct __nodeDef describes xml tree definition
+		 * @struct __xmlNodeDef describes xml tree definition
 		 */
-		struct __nodeDef
+		struct __xmlNodeDef
 		{
 			/**
 			 * constructor
 			 */
-			__nodeDef();
+			__xmlNodeDef();
 				
 			std::string name;///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
 			
-			std::map<std::string, __nodeDef> children;///< vector of children's definitions
+			std::map<std::string, __xmlNodeDef> children;///< vector of children's definitions
 			
 			long chLimit;///< limit of children to search for[-1 for unlimit, default]
 			bool ignoreChildrenDef;///< if true - parse all children tree if no children difenition; false by default
@@ -161,46 +161,46 @@
 								parseBufferInt(const std::string &buffer);
 								
 				/**
-				 * parses XML using __nodeDef XML explanation from file
-				 * @return parsed into __node structure given XML
+				 * parses XML using __xmlNodeDef XML explanation from file
+				 * @return parsed into __xmlNode structure given XML
 				 * @param definition describes structure of XML
 				 * @param file path XML file to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __node parseFile(const __nodeDef &definition, const std::string &file);
+				virtual __xmlNode parseFile(const __xmlNodeDef &definition, const std::string &file);
 				
 				/**
-				 * parses XML using __nodeDef XML explanation from buffer
-				 * @return parsed into __node structure given XML
+				 * parses XML using __xmlNodeDef XML explanation from buffer
+				 * @return parsed into __xmlNode structure given XML
 				 * @param definition describes structure of XML
 				 * @param buffer contains XML to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __node parseBuffer(const __nodeDef &definition, const std::string &buffer);
+				virtual __xmlNode parseBuffer(const __xmlNodeDef &definition, const std::string &buffer);
 				
 				/**
-				 * parses XML using __nodeDef XML explanation from file
+				 * parses XML using __xmlNodeDef XML explanation from file
 				 * @param definition describes structure of XML
 				 * @param file path XML file to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __node parseFile(const std::string &file);
+				virtual __xmlNode parseFile(const std::string &file);
 				
 				/**
-				 * parses XML using __nodeDef XML explanation from buffer
-				 * @return parsed into __node structure given XML
+				 * parses XML using __xmlNodeDef XML explanation from buffer
+				 * @return parsed into __xmlNode structure given XML
 				 * @param buffer contains XML to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __node parseBuffer(const std::string &buffer);
+				virtual __xmlNode parseBuffer(const std::string &buffer);
 
 				/**
-				 * parses XML using __nodeDef XML explanation with xml you have once parsed; faster
-				 * @return parsed into __node structure given XML
+				 * parses XML using __xmlNodeDef XML explanation with xml you have once parsed; faster
+				 * @return parsed into __xmlNode structure given XML
 				 * @param definition describes structure of XML
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __node reParse(const __nodeDef &definition);
+				virtual __xmlNode reParse(const __xmlNodeDef &definition);
 											
 				bool icaseNames;///< whether to check nodes names and attributes' names with(out) case matching; with case(false) by default
 				
@@ -219,12 +219,12 @@
 				/**
 				 * clears params of the give node
 				 */
-				static void initNode(__node &node);
+				static void initNode(__xmlNode &node);
 						
 				/**
 				 * clears params of the give node definition
 				 */				
-				static void initNodeDef(__nodeDef &node);
+				static void initNodeDef(__xmlNodeDef &node);
 				
 				/**
 				 * frees internal structures
@@ -237,13 +237,13 @@
 				 * @param encoding declears encoding of XML
 				 * @param version declears version of XML
 				 */
-				virtual std::string createXML(const __node &root, const std::string &encoding = "UTF-8", const std::string &version = "1.0"); 
+				virtual std::string createXML(const __xmlNode &root, const std::string &encoding = "UTF-8", const std::string &version = "1.0"); 
 
 				/**
 				 * @return XML string
 				 * @param root defines root node of XML document
 				 */
-				virtual std::string createNode(const __node &node);
+				virtual std::string createNode(const __xmlNode &node);
 																
 			protected:		
 					
@@ -255,26 +255,26 @@
 				
 				/**
 				 * parses whole XML
-				 * @return parsed into __node structure given XML
+				 * @return parsed into __xmlNode structure given XML
 				 * @param node is XML tree node
 				 */
-				virtual dodoArray<__node> parse(xmlNodePtr node);
+				virtual dodoArray<__xmlNode> parse(xmlNodePtr node);
 				
 				/**
-				 * parses XML using __nodeDef XML explanation using internal built data
-				 * @return parsed into __node structure given XML
+				 * parses XML using __xmlNodeDef XML explanation using internal built data
+				 * @return parsed into __xmlNode structure given XML
 				 * @param definition describes structure of XML
 				 */
-				virtual __node parse(const __nodeDef &definition);
+				virtual __xmlNode parse(const __xmlNodeDef &definition);
 
 				/**
-				 * parses XML using __nodeDef XML explanation
-				 * @return parsed into __node structure given XMLnode
+				 * parses XML using __xmlNodeDef XML explanation
+				 * @return parsed into __xmlNode structure given XMLnode
 				 * @param definition describes structure of XML
 				 * @param chNode is XML tree node
 				 * @param chLimit is limit of children to search for
 				 */				
-				virtual dodoArray<__node> parse(const __nodeDef &definition, const xmlNodePtr chNode, long chLimit);
+				virtual dodoArray<__xmlNode> parse(const __xmlNodeDef &definition, const xmlNodePtr chNode, long chLimit);
 				
 				/**
 				 * gets attributes from node
@@ -289,14 +289,14 @@
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
 				 */
-				virtual void getAttributes(const __nodeDef &definition, const xmlNodePtr node, dodoAssocArr &attributes);
+				virtual void getAttributes(const __xmlNodeDef &definition, const xmlNodePtr node, dodoAssocArr &attributes);
 				
 				/**
 				 * get diff info from node
 				 * @param node describes the node content
 				 * @param sample describes node that contains result data
 				 */
-				virtual void getNodeInfo(const xmlNodePtr node, __node &sample);
+				virtual void getNodeInfo(const xmlNodePtr node, __xmlNode &sample);
 			
 			private:
 				
@@ -304,7 +304,7 @@
 				
 				xcharCmp cmpFunc;
 				
-				xmlNodePtr findNode(const __nodeDef &definition, xmlNodePtr node);
+				xmlNodePtr findNode(const __xmlNodeDef &definition, xmlNodePtr node);
 				
 				/**
 				 * @note share vars
@@ -322,8 +322,8 @@
 				 */
 				static void errHandler(void *data, xmlErrorPtr error);
 				
-				std::map<std::string, __nodeDef>::const_iterator i;///< iterator for maf of __nodeDef
-				std::map<std::string, __nodeDef>::const_iterator j;///< iterator for maf of __nodeDef
+				std::map<std::string, __xmlNodeDef>::const_iterator i;///< iterator for maf of __xmlNodeDef
+				std::map<std::string, __xmlNodeDef>::const_iterator j;///< iterator for maf of __xmlNodeDef
 				
 		};
 	};	

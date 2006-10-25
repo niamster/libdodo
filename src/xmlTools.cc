@@ -46,7 +46,7 @@
  
 	//-------------------------------------------------------------------
  
-	__nodeDef::__nodeDef(): chLimit(-1),
+	__xmlNodeDef::__xmlNodeDef(): chLimit(-1),
 							ignoreChildrenDef(false),
 							ignoreAttributesDef(true)
 	{
@@ -54,7 +54,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	__node::__node(): CDATA(false),
+	__xmlNode::__xmlNode(): CDATA(false),
 					empty(false)	
 	{
 	}
@@ -86,14 +86,14 @@
 
 	//-------------------------------------------------------------------
 	
-	__node 
-	xmlTools::reParse(const __nodeDef &definition)
+	__xmlNode 
+	xmlTools::reParse(const __xmlNodeDef &definition)
 	{
 		if (document == NULL)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_REPARCE,ERR_LIBDODO,XMLTOOLS_NOT_PARCED_BEFORE,XMLTOOLS_NOT_PARCED_BEFORE_STR,__LINE__,__FILE__);
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 		
 		return parse(definition);		
@@ -118,8 +118,8 @@
 	
 	//-------------------------------------------------------------------
 		
-	__node 
-	xmlTools::parseFile(const __nodeDef &definition, 
+	__xmlNode 
+	xmlTools::parseFile(const __xmlNodeDef &definition, 
 						const std::string &file)
 	{
 		xmlFreeDoc(document);
@@ -132,7 +132,7 @@
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 		
 		return parse(definition);
@@ -140,8 +140,8 @@
 	 
 	//-------------------------------------------------------------------
 	
-	__node 
-	xmlTools::parseBuffer(const __nodeDef &definition, 
+	__xmlNode 
+	xmlTools::parseBuffer(const __xmlNodeDef &definition, 
 						const std::string &buffer)
 	{
 		xmlFreeDoc(document);
@@ -154,7 +154,7 @@
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 		
 		return parse(definition);
@@ -216,8 +216,8 @@
 		
 	//-------------------------------------------------------------------
 
-	__node 
-	xmlTools::parse(const __nodeDef &definition)
+	__xmlNode 
+	xmlTools::parse(const __xmlNodeDef &definition)
 	{
 		xmlNodePtr node = xmlDocGetRootElement(document);
 		if (node == NULL)
@@ -227,10 +227,10 @@
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 		
-		__node sample;
+		__xmlNode sample;
 
 		node = findNode(definition,node);
 		
@@ -262,7 +262,7 @@
 			{
 				node = node->children;
 				
-				__node one;
+				__xmlNode one;
 				
 				while (node != NULL)
 				{
@@ -297,15 +297,15 @@
 
 	//-------------------------------------------------------------------
 
-	dodoArray<__node>
-	xmlTools::parse(const __nodeDef &definition, 
+	dodoArray<__xmlNode>
+	xmlTools::parse(const __xmlNodeDef &definition, 
 					const xmlNodePtr chNode, 
 					long chLimit)
 	{
 		register xmlNodePtr node = chNode, subNode;
 		
-		__node sample, one;
-		dodoArray<__node> sampleArr;
+		__xmlNode sample, one;
+		dodoArray<__xmlNode> sampleArr;
 
 		if (icaseNames)
 			cmpFunc = xmlStrcasecmp;
@@ -361,7 +361,7 @@
 	
 			if (definition.children.size() > 0)
 			{
-				std::map<std::string, __nodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+				std::map<std::string, __xmlNodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
 				for (;i!=j;++i)
 					sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
 				
@@ -421,7 +421,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	xmlTools::getAttributes(const __nodeDef &definition, 
+	xmlTools::getAttributes(const __xmlNodeDef &definition, 
 						const xmlNodePtr node,
 						dodoAssocArr &attributes)
 	{
@@ -509,7 +509,7 @@
 
 	void 
 	xmlTools::getNodeInfo(const xmlNodePtr node, 
-							__node &resNode)
+							__xmlNode &resNode)
 	{
 		if (node->ns != NULL)
 		{
@@ -577,12 +577,12 @@
 
 	//-------------------------------------------------------------------	
 	
-	dodoArray<__node>
+	dodoArray<__xmlNode>
 	xmlTools::parse(xmlNodePtr node)
 	{
-		dodoArray<__node> sample;
+		dodoArray<__xmlNode> sample;
 		
-		__node one;
+		__xmlNode one;
 		
 		while (node != NULL)
 		{
@@ -616,7 +616,7 @@
 	//-------------------------------------------------------------------	
 		
 	void 
-	xmlTools::initNode(__node &node)
+	xmlTools::initNode(__xmlNode &node)
 	{
 		node.attributes.realArr.clear();
 		node.children.realArr.clear();
@@ -630,7 +630,7 @@
 	
 	//-------------------------------------------------------------------
 	
-	__node 
+	__xmlNode 
 	xmlTools::parseFile(const std::string &file)
 	{
 		xmlFreeDoc(document);
@@ -643,7 +643,7 @@
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 			
 		xmlNodePtr node = xmlDocGetRootElement(document);
@@ -654,17 +654,17 @@
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 					
-		__node sample = *(parse(node).begin());
+		__xmlNode sample = *(parse(node).begin());
 		
 		return sample;
 	}
 	 
 	//-------------------------------------------------------------------
 	
-	__node 
+	__xmlNode 
 	xmlTools::parseBuffer(const std::string &buffer)
 	{
 		xmlFreeDoc(document);
@@ -677,7 +677,7 @@
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 			
 		xmlNodePtr node = xmlDocGetRootElement(document);
@@ -688,10 +688,10 @@
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
-				return __node();
+				return __xmlNode();
 			#endif
 					
-		__node sample = *(parse(node).begin());
+		__xmlNode sample = *(parse(node).begin());
 		
 		return sample;
 	}
@@ -699,7 +699,7 @@
 	//-------------------------------------------------------------------
 
 	void 
-	xmlTools::initNodeDef(__nodeDef &node)
+	xmlTools::initNodeDef(__xmlNodeDef &node)
 	{
 		node.attributes.clear();
 		node.children.clear();
@@ -711,7 +711,7 @@
 	//-------------------------------------------------------------------
 
 	xmlNodePtr
-	xmlTools::findNode(const __nodeDef &definition,
+	xmlTools::findNode(const __xmlNodeDef &definition,
 						xmlNodePtr node)
 	{
 		xmlNodePtr one;
@@ -768,7 +768,7 @@
 	//-------------------------------------------------------------------
 	
 	std::string 
-	xmlTools::createXML(const __node &root, 
+	xmlTools::createXML(const __xmlNode &root, 
 					const std::string &encoding, 
 					const std::string &version)
 	{
@@ -785,7 +785,7 @@
 	//-------------------------------------------------------------------
 	
 	std::string 
-	xmlTools::createNode(const __node &node)
+	xmlTools::createNode(const __xmlNode &node)
 	{
 		if (node.name.empty())
 			return __string__;
@@ -842,8 +842,8 @@
 			}
 		}
 		
-		std::map< std::string, dodoArray<__node> >::const_iterator o = node.children.realArr.begin(), p = node.children.realArr.end();
-		dodoArray<__node>::const_iterator x, y;
+		std::map< std::string, dodoArray<__xmlNode> >::const_iterator o = node.children.realArr.begin(), p = node.children.realArr.end();
+		dodoArray<__xmlNode>::const_iterator x, y;
 		for (;o!=p;++o)
 		{
 			x = o->second.begin();

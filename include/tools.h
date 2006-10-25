@@ -324,13 +324,13 @@ namespace dodo
 			 #endif
 			
 			/**
-			 * @return base64 decoded string
+			 * @return url decoded string
 			 * @param string to decode
 			 */
 			static std::string decodeURL(const std::string &string);
 
 			/**
-			 * @return base64 encoded string
+			 * @return url encoded string
 			 * @param string to encode
 			 */			
 			static std::string encodeURL(const std::string &string);

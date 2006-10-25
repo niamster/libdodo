@@ -4006,6 +4006,9 @@ fi
 
 echo "" > include/directives.runtime.h
 
+CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+LDFLAGS="$LDFLAGS -L/usr/local/lib"
+
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then
   enableval=$enable_debug; DEBUG="$enableval"

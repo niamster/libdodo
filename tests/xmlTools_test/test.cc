@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 		
 		cout << tool.getXMLFileInfo("./test.xml").version;
 		
-		__nodeDef def;
+		__xmlNodeDef def;
 		
 		dodoStringArr attr;
 		attr.push_back("iD");
@@ -25,14 +25,14 @@ int main(int argc, char **argv)
 		//def.chLimit = 1;
 		def.ns = "edi";
 		
-		__nodeDef def1;
+		__xmlNodeDef def1;
 		def1.name = "bebe";
 		def1.ignoreChildrenDef = true;
 		
 		def.children["bebe"] = def1;
 		
-		__node node = tool.parseFile(def,"./test.xml");
-		//__node node = tool.parseFile("./test.xml");
+		__xmlNode node = tool.parseFile(def,"./test.xml");
+		//__xmlNode node = tool.parseFile("./test.xml");
 				
 		cout << node.attributes["iD"] << endl;
 		cout << node.name << endl;
