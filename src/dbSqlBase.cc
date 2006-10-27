@@ -480,24 +480,7 @@ dbSqlBase::createBaseCollect() const
 void 
 dbSqlBase::createIndexCollect() const
 {	
-	request = "create index " + pre_having + " on " + pre_table;
-		
-	switch (pre_indexType)
-	{
-		case INDEXTYPE_BTREE:
-		
-			request.append(" using btree");
-			
-			break;
-			
-		case INDEXTYPE_HASH:
-		
-			request.append(" using hash");
-			
-			break;
-	}
-	
-	request.append(" (" + tools::implode(pre_fieldsNames,",") + ")");
+	request = "create index " + pre_having + " on " + pre_table + " (" + tools::implode(pre_fieldsNames,",") + ")";
 }
 
 //-------------------------------------------------------------------

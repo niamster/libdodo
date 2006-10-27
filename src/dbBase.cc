@@ -127,7 +127,6 @@ __collectedData::__collectedData(
 					std::string &a_pre_limNumber,
 					std::string &a_pre_limOffset,
 					dodoStringArr &a_pre_subQ,
-					short &a_pre_indexType,
 					int &a_qType,
 					int &a_qShift,
 					int &a_qSelShift,
@@ -146,7 +145,6 @@ __collectedData::__collectedData(
 						pre_limNumber(a_pre_limNumber),
 						pre_limOffset(a_pre_limOffset),
 						pre_subQ(a_pre_subQ),
-						pre_indexType(a_pre_indexType),
 						qType(a_qType),
 						qShift(a_qShift),
 						qSelShift(a_qSelShift),
@@ -470,14 +468,12 @@ dbBase::renameTable(const std::string &table,
 void 
 dbBase::createIndex(const std::string &table, 
 					const std::string &field, 
-					const std::string &name, 
-					int indexType)
+					const std::string &name)
 {
 	qType = DBREQUEST_CREATE_INDEX;
 	pre_table = table;
 	pre_fieldsNames.push_back(field);
 	pre_having = name;
-	pre_indexType = indexType;
 	show = false;	
 }
 
@@ -486,14 +482,12 @@ dbBase::createIndex(const std::string &table,
 void 
 dbBase::createIndex(const std::string &table, 
 					const dodoStringArr &fields, 
-					const std::string &name, 
-					int indexType)
+					const std::string &name)
 {
 	qType = DBREQUEST_CREATE_INDEX;
 	pre_table = table;
 	pre_fieldsNames = fields;
 	pre_having = name;
-	pre_indexType = indexType;
 	show = false;	
 }
 
@@ -874,7 +868,6 @@ dbBase::collectedData()
 	pre_limNumber,
 	pre_limOffset,
 	pre_subQ,
-	pre_indexType,
 	qType,
 	qShift,
 	qSelShift,
