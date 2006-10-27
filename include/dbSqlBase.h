@@ -170,9 +170,19 @@ namespace dodo
 			virtual void createBaseCollect() const;
 			
 			/**
-			 * constructs from collected data to CREATE DATABASE sql statement
+			 * constructs from collected data to CREATE TABLE sql statement
 			 */
 			virtual void createTableCollect() const;
+			
+			/**
+			 * constructs from collected data to CREATE INDEX sql statement
+			 */
+			virtual void createIndexCollect() const;
+			
+			/**
+			 * constructs from collected data to DROP INDEX sql statement
+			 */
+			virtual void deleteIndexCollect() const;
 			
 			/**
 			 * constructs from collected data to ALTER TABLE ... ADD sql statement

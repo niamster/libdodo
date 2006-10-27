@@ -446,7 +446,7 @@ dbSqlBase::delFieldCollect() const
 void 
 dbSqlBase::renameBaseCollect() const
 {
-	request = __string__;
+	request = __string__;///< FIXME: make SQL statement
 }
 
 //-------------------------------------------------------------------
@@ -462,7 +462,7 @@ dbSqlBase::renameTableCollect() const
 void 
 dbSqlBase::renameFieldCollect() const
 {
-	request = __string__;
+	request = __string__;///< FIXME: make SQL statement
 }
 
 //-------------------------------------------------------------------
@@ -474,6 +474,40 @@ dbSqlBase::createBaseCollect() const
 	if (pre_having.size() != 0)
 		request.append(" character set " + pre_having);
 }
+
+//-------------------------------------------------------------------
+
+void 
+dbSqlBase::createIndexCollect() const
+{	
+	request = "create index " + pre_having + " on " + pre_table;
+		
+	switch (pre_indexType)
+	{
+		case INDEXTYPE_BTREE:
+		
+			request.append(" using btree");
+			
+			break;
+			
+		case INDEXTYPE_HASH:
+		
+			request.append(" using hash");
+			
+			break;
+	}
+	
+	request.append(" (" + tools::implode(pre_fieldsNames,",") + ")");
+}
+
+//-------------------------------------------------------------------
+
+void 
+dbSqlBase::deleteIndexCollect() const
+{
+	request = "drop index " + pre_having + " on " + pre_table;
+}
+
 //-------------------------------------------------------------------
 
 void 
@@ -575,6 +609,20 @@ dbSqlBase::queryCollect() const
 		case DBREQUEST_RENAME_DB:
 		
 			renameBaseCollect();
+			additionalActions = false;
+			
+			break;
+			
+		case DBREQUEST_CREATE_INDEX:
+
+			createIndexCollect();
+			additionalActions = false;
+			
+			break;
+			
+		case DBREQUEST_DELETE_INDEX:
+		
+			deleteIndexCollect();
 			additionalActions = false;
 			
 			break;

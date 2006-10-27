@@ -84,7 +84,12 @@ int main(int argc, char **argv)
 		catch(...)
 		{
 		}
+
 		pp.createTable(ti);
+		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
+		pp.exec();
+
+		pp.createIndex("tab","id","id");
 		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
@@ -188,7 +193,7 @@ int main(int argc, char **argv)
 	}
     catch(baseEx ex)
     {	
-		cout << ex.file << endl << ex.baseErrstr << endl;
+		cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl;
     }
 	return 0;
 }

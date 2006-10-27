@@ -83,7 +83,10 @@ namespace dodo
 		
 		DBREQUEST_CREATE_DB,
 		DBREQUEST_CREATE_TABLE,
-		DBREQUEST_CREATE_FIELD		
+		DBREQUEST_CREATE_FIELD,
+		
+		DBREQUEST_CREATE_INDEX,
+		DBREQUEST_DELETE_INDEX,	
 	};
 	
 	/**
@@ -140,6 +143,7 @@ namespace dodo
 		std::string &pre_limNumber,
 		std::string &pre_limOffset,
 		dodoStringArr &pre_subQ,
+		short &pre_indexType,
 		int &qType,
 		int &qShift,
 		int &qSelShift,
@@ -159,6 +163,7 @@ namespace dodo
 		std::string &pre_limNumber;///< limit of result
 		std::string &pre_limOffset;///< offset of requested result
 		dodoStringArr &pre_subQ;///< subquery
+		short &pre_indexType;///< type of index
 		
 		int &qType;///< type of operation[see qStEnum]
 		
@@ -229,6 +234,15 @@ namespace dodo
 		REFERENCE_SET_NULL,///< sets NULL on the action of any of those parent rows indicates on set action
 		REFERENCE_NO_ACTION,///< noacton on the action of any of those parent rows indicates on set action
 		REFERENCE_SET_DEFAULT///< sets default on the action of any of those parent rows indicates on set action
+	};
+	
+	/**
+	 * @enum indexTypeEnum describes index type
+	 */
+	enum indexTypeEnum
+	{
+		INDEXTYPE_BTREE,
+		INDEXTYPE_HASH
 	};
 	
 	/**
@@ -409,6 +423,29 @@ namespace dodo
 			 * @param db is name of database where to change
 			 */
 			virtual void use(const std::string &db) const;
+			
+			/**
+			 * create index in table
+			 * @param table is where to create index 
+			 * @param field is field's name to be index
+			 * @param indexType describes type of index[see indexTypeEnum]
+			 */
+			virtual void createIndex(const std::string &table, const std::string &field, const std::string &name, int indexType = INDEXTYPE_BTREE);
+			
+			/**
+			 * create index in table
+			 * @param table is where to create index 
+			 * @param fields is fields' name to be index
+			 * @param indexType describes type of index[see indexTypeEnum]
+			 */
+			virtual void createIndex(const std::string &table, const dodoStringArr &fields, const std::string &name, int indexType = INDEXTYPE_BTREE);
+			
+			/**
+			 * delete index in table
+			 * @param table is where to delete index 
+			 * @param name is index's name
+			 */
+			virtual void deleteIndex(const std::string &table, const std::string &name);
 			
 			/**
 			 * rename database
@@ -626,16 +663,17 @@ namespace dodo
 			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
 			 */
 			mutable std::string pre_where;///< where statement of the request	
-			mutable dodoStringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
+			mutable dodoStringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
 			mutable dodoArray<dodoStringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			mutable std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-			mutable std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
+			mutable std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods, create(delete)Index methods)
+			mutable std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method;)
 			mutable std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-			mutable std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
+			mutable std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
 			mutable std::string pre_group;///< group statement
 			mutable std::string pre_limNumber;///< limit of result
 			mutable std::string pre_limOffset;///< offset of requested result
 			mutable dodoStringArr pre_subQ;///< subquery
+			mutable short pre_indexType;///< type of index
 			
 			mutable bool show;///< is request was with result(show,select)
 						
