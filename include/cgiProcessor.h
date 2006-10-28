@@ -66,6 +66,13 @@ namespace dodo
 			 * @param path indicates path where template stays
 			 */		
 			virtual std::string process(const std::string &path);
+			
+			/**
+			 * @return parsed template from previously called preprocess
+			 * @param path indicates path where template stays
+			 * @note useful in fastCGI
+			 */		
+			virtual std::string reProcess();
 					
 			/**
 			 * sets varable

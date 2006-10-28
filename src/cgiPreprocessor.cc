@@ -82,8 +82,6 @@ cgiPreprocessor::preProcess(const std::string &path)
 	
 	register unsigned long i(0), j(0), begin(0);
 	
-	std::string tpl;
-	
 	while (true)
 	{	
 		begin = j;

@@ -69,7 +69,17 @@ cgiProcessor::~cgiProcessor()
 std::string 
 cgiProcessor::process(const std::string &path)
 {
-	return _process(preProcess(path), path);
+	preProcess(path);
+	
+	return _process(tpl, path);
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+cgiProcessor::reProcess()
+{
+	return _process(tpl, path);
 }
 
 //-------------------------------------------------------------------
