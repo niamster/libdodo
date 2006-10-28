@@ -76,6 +76,21 @@ cgiProcessor::process(const std::string &path)
 
 //-------------------------------------------------------------------
 
+void 
+cgiProcessor::clear()
+{
+	tpl.clear();
+	processed.clear();
+	localHash.clear();
+	local.clear();
+	temp1.clear();
+	temp.clear();
+	localNamespace.clear();
+	namespaceVars.clear();
+}
+
+//-------------------------------------------------------------------
+
 std::string 
 cgiProcessor::reProcess()
 {

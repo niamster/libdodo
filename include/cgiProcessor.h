@@ -68,7 +68,7 @@ namespace dodo
 			virtual std::string process(const std::string &path);
 			
 			/**
-			 * @return parsed template from previously called preprocess
+			 * @return parsed template from previously called preProcess method
 			 * @param path indicates path where template stays
 			 * @note useful in fastCGI
 			 */		
@@ -107,6 +107,13 @@ namespace dodo
 			 * @param path indicates path where template stays
 			 */		
 			virtual void display(const std::string &path);
+			
+			/**
+			 * cleans generated templates, temp variables
+			 * @note useful for fastCGI if you may use reProcess
+			 * doesn't clean user defined variables from assign method
+			 */
+			virtual void clear();
 			
 		protected:	
 			
