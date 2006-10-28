@@ -122,7 +122,7 @@ namespace dodo
 			 * @param path indicates buffer where template stays
 			 * @param path indicates file where template got
 			 */		
-			virtual std::string _process(const std::string &buffer, const std::string &path);
+			virtual std::string _process(const std::string &buffer);
 			
 			/**
 			 * processes `if` statement
@@ -133,7 +133,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
+			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl);
 
 			/**
 			 * processes `for` statement
@@ -144,7 +144,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _for(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
+			virtual unsigned long _for(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl);
 
 			/**
 			 * processes `for` statement
@@ -154,7 +154,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _ns(const std::string &buffer, unsigned long start, std::string &tpl, const std::string &path);
+			virtual unsigned long _ns(const std::string &buffer, unsigned long start, std::string &tpl);
 						
 			/**
 			 * processes `print` statement
@@ -182,7 +182,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual void _include(const std::string &statement, std::string &tpl, const std::string &path);
+			virtual void _include(const std::string &statement, std::string &tpl);
 			
 			/**
 			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten

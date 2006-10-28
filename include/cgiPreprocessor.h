@@ -84,6 +84,7 @@ namespace dodo
 			char message[128];
 
 			std::string tpl;
+			std::string path;
 	};
 
 };

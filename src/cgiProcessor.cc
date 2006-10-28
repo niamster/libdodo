@@ -71,7 +71,7 @@ cgiProcessor::process(const std::string &path)
 {
 	preProcess(path);
 	
-	return _process(tpl, path);
+	return _process(tpl);
 }
 
 //-------------------------------------------------------------------
@@ -94,14 +94,13 @@ cgiProcessor::clear()
 std::string 
 cgiProcessor::reProcess()
 {
-	return _process(tpl, path);
+	return _process(tpl);
 }
 
 //-------------------------------------------------------------------
 
 std::string 
-cgiProcessor::_process(const std::string &buffer, 
-					const std::string &path)
+cgiProcessor::_process(const std::string &buffer)
 {
 	register unsigned long i(0), j(0), begin(0), k(0);
 	
@@ -141,7 +140,7 @@ cgiProcessor::_process(const std::string &buffer,
 		k = temp.find("include");
 		if (k != std::string::npos)
 		{
-			_include(temp.substr(k + 8),tpl,path);
+			_include(temp.substr(k + 8),tpl);
 		}				
 		else
 		{
@@ -150,7 +149,7 @@ cgiProcessor::_process(const std::string &buffer,
 			{
 				++namespaceDeepness;
 				
-				j = _if(buffer,j,temp.substr(k + 2),tpl,path);
+				j = _if(buffer,j,temp.substr(k + 2),tpl);
 				
 				cleanNamespace();
 				
@@ -171,7 +170,7 @@ cgiProcessor::_process(const std::string &buffer,
 						++_loopDeepness;
 						++namespaceDeepness;
 						
-						j = _for(buffer,j,temp.substr(k + 3),tpl,path);
+						j = _for(buffer,j,temp.substr(k + 3),tpl);
 						
 						cleanNamespace();
 						
@@ -211,7 +210,7 @@ cgiProcessor::_process(const std::string &buffer,
 									{
 										++namespaceDeepness;
 										
-										j = _ns(buffer,j,tpl,path);
+										j = _ns(buffer,j,tpl);
 										
 										cleanNamespace();
 										
@@ -350,8 +349,7 @@ unsigned long
 cgiProcessor::_if(const std::string &buffer,
 				unsigned long start,
 				const std::string &statement,
-				std::string &tpl, 
-				const std::string &path)
+				std::string &tpl)
 {
 	register bool _float(false), invert(false);
 	
@@ -488,14 +486,14 @@ cgiProcessor::_if(const std::string &buffer,
 		if (!found)
 			v = u;
 		
-		tpl.append(_process(buffer.substr(start,v - start),path));
+		tpl.append(_process(buffer.substr(start,v - start)));
 	}
 	else
 	{	
 		if (found)
 		{
 			v = buffer.find(")>",v) + 2;
-			tpl.append(_process(buffer.substr(v,u - v),path));
+			tpl.append(_process(buffer.substr(v,u - v)));
 		}
 	}
 	
@@ -555,8 +553,7 @@ cgiProcessor::blockEnd(const std::string &buffer,
 
 void 
 cgiProcessor::_include(const std::string &statement, 
-						std::string &tpl, 
-						const std::string &path)
+						std::string &tpl)
 {
 	temp1 = getVar(statement);
 	
@@ -679,12 +676,11 @@ cgiProcessor::cleanNamespace()
 unsigned long 
 cgiProcessor::_ns(const std::string &buffer,
 				unsigned long start,
-				std::string &tpl, 
-				const std::string &path)
+				std::string &tpl)
 {
 	register unsigned long u(blockEnd(buffer,start,"ns","sn"));	
 	
-	tpl.append(_process(buffer.substr(start,u - start),path));
+	tpl.append(_process(buffer.substr(start,u - start)));
 	
 	return buffer.find(")>",u) + 2;
 }
@@ -695,8 +691,7 @@ unsigned long
 cgiProcessor::_for(const std::string &buffer,
 				unsigned long start,
 				const std::string &statement,
-				std::string &tpl, 
-				const std::string &path)
+				std::string &tpl)
 {
 	register unsigned long u(blockEnd(buffer,start,"for","rof"));
 	
@@ -777,7 +772,7 @@ cgiProcessor::_for(const std::string &buffer,
 						if (key)
 							local[keyName] = tools::lToString(i);						
 						local[varName] = std::string(1,k->second[i]);							
-						tpl.append(_process(forSpace,path));
+						tpl.append(_process(forSpace));
 						
 						if (_breakDeepness > 0)
 						{
@@ -835,7 +830,7 @@ cgiProcessor::_for(const std::string &buffer,
 						if (key)
 							local[keyName] = k->first;
 						local[varName] = k->second;
-						tpl.append(_process(forSpace,path));
+						tpl.append(_process(forSpace));
 						
 						if (_breakDeepness > 0)
 						{
@@ -892,7 +887,7 @@ cgiProcessor::_for(const std::string &buffer,
 						if (key)
 							local[keyName] = tools::lToString(i);
 						local[varName] = std::string(1,k->second[i]);
-						tpl.append(_process(forSpace,path));
+						tpl.append(_process(forSpace));
 						
 						if (_breakDeepness > 0)
 						{
@@ -950,7 +945,7 @@ cgiProcessor::_for(const std::string &buffer,
 						if (key)
 							local[keyName] = k->first;
 						local[varName] = k->second;
-						tpl.append(_process(forSpace,path));
+						tpl.append(_process(forSpace));
 						
 						if (_breakDeepness > 0)
 						{
@@ -1008,7 +1003,7 @@ cgiProcessor::_for(const std::string &buffer,
 						if (key)
 							local[keyName] = tools::lToString(keyNIter);
 						local[varName] = *k;
-						tpl.append(_process(forSpace,path));	
+						tpl.append(_process(forSpace));	
 						
 						if (_breakDeepness > 0)
 						{
@@ -1067,7 +1062,7 @@ cgiProcessor::_for(const std::string &buffer,
 							local[keyName] = tools::lToString(keyNIter);
 						localHash[varName] = *k;
 						
-						tpl.append(_process(forSpace,path));
+						tpl.append(_process(forSpace));
 						
 						if (_breakDeepness > 0)
 						{
@@ -1133,7 +1128,7 @@ cgiProcessor::_for(const std::string &buffer,
 									if (key)
 										local[keyName] = tools::lToString(i);
 									local[varName] = std::string(1,k->second[i]);
-									tpl.append(_process(forSpace,path));
+									tpl.append(_process(forSpace));
 									
 									if (_breakDeepness > 0)
 									{
@@ -1196,7 +1191,7 @@ cgiProcessor::_for(const std::string &buffer,
 									if (key)
 										local[keyName] = tools::lToString(i);
 									local[varName] = std::string(1,k->second[i]);
-									tpl.append(_process(forSpace,path));
+									tpl.append(_process(forSpace));
 										
 									if (_breakDeepness > 0)
 									{
@@ -1257,7 +1252,7 @@ cgiProcessor::_for(const std::string &buffer,
 								if (key)
 									local[keyName] = tools::lToString(i);
 								local[varName] = std::string(1,o->second[pos][i]);
-								tpl.append(_process(forSpace,path));
+								tpl.append(_process(forSpace));
 								
 								if (_breakDeepness > 0)
 								{
@@ -1319,7 +1314,7 @@ cgiProcessor::_for(const std::string &buffer,
 								if (key)
 									local[keyName] = k->first;
 								local[varName] = k->second;
-								tpl.append(_process(forSpace,path));	
+								tpl.append(_process(forSpace));	
 								
 								if (_breakDeepness > 0)
 								{
@@ -1389,7 +1384,7 @@ cgiProcessor::_for(const std::string &buffer,
 											if (key)
 												local[keyName] = tools::lToString(i);
 											local[varName] = std::string(1,k->second[i]);
-											tpl.append(_process(forSpace,path));
+											tpl.append(_process(forSpace));
 											
 											if (_breakDeepness > 0)
 											{
@@ -1449,7 +1444,7 @@ cgiProcessor::_for(const std::string &buffer,
 			if (key)
 				local[keyName] = tools::lToString(i);
 			local[varName] = std::string(1,targetVar[i]);
-			tpl.append(_process(forSpace,path));	
+			tpl.append(_process(forSpace));	
 			
 			if (_breakDeepness > 0)
 			{
