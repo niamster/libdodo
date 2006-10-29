@@ -122,7 +122,7 @@ cgiTools::~cgiTools()
 void 
 cgiTools::cleanTmp() const
 {
-	std::map<std::string, __cgiFilesUp>::iterator i(postFiles.begin()),j(postFiles.end());
+	std::map<std::string, __cgiFilesUp>::iterator i(FILES.begin()),j(FILES.end());
 	for (;i!=j;++i)
 	{
 		fclose(i->second.fp);
@@ -438,7 +438,7 @@ cgiTools::makePost() const
 						delete [] ptr;
 						
 						file.error = POSTFILEERR_BAD_FILE_NAME;
-						postFiles[post_name] = file;
+						FILES.realArr[post_name] = file;
 						
 						continue;
 					}
@@ -492,7 +492,7 @@ cgiTools::makePost() const
 				if (errno == ENOMEM)
 						file.error = POSTFILEERR_NO_SPACE;
 				
-				postFiles[post_name] = file;
+				FILES.realArr[post_name] = file;
 			}
 			else
 			{
@@ -508,14 +508,6 @@ cgiTools::makePost() const
 	#ifdef NO_EX
 		return true;
 	#endif	
-}
-
-//-------------------------------------------------------------------
-
-__cgiFilesUp 
-cgiTools::getFile(const std::string &varName) const
-{
-	return postFiles[varName];
 }
 
 //-------------------------------------------------------------------

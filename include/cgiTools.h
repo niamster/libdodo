@@ -242,6 +242,7 @@ namespace dodo
 			mutable dodoStringMap METHOD_GET;///< array of GET variables
 			mutable dodoStringMap ENVIRONMENT;///< environment variables
 			mutable dodoStringMap COOKIES;///< coockes sent by browser
+			mutable __dodoMap<__cgiFilesUp> FILES;///< array of POST files, if one or more files were uploaded
 			
 			/**
 			 * @return value of requested variable from POST or GET
@@ -317,7 +318,6 @@ namespace dodo
 		
 			mutable std::list<__cookies> cookiesSet;///< array of cookies nodes
 			mutable int method;///< method that received program
-			mutable std::map<std::string, __cgiFilesUp> postFiles;///< array of POST files, if one or more files were uploaded
 		
 			/**
 			 * deletes temp files that were created if POST files were present

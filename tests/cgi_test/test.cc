@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 	cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
 	cout << "!" << cgi.ENVIRONMENT["QUERY_STRING"] << "<br>";
 	cout << "!" << cgi.COOKIES["test"] << "<br>";
-	cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
+	cout << "!" << cgi.FILES["qsadasdaf"].error << "<br>";
 	
 	cout << "\n\n\n";
 	
