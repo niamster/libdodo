@@ -55,10 +55,10 @@ namespace dodo
 			virtual ~cgiPreprocessor();
 			
 			/**
-			 * generates preprocessed template from file
+			 * @return preprocessed template from file
 			 * @param path indicates path where template stays
 			 */		
-			virtual void preProcess(const std::string &path);
+			virtual std::string preProcess(const std::string &path);
 		
 		protected:	
 						
@@ -83,8 +83,6 @@ namespace dodo
 
 			char message[128];
 
-			std::string tpl;
-			std::string path;
 	};
 
 };

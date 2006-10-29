@@ -73,16 +73,16 @@ cgiPreprocessor::read(const std::string &path,
 
 //-------------------------------------------------------------------
 
-void 
-cgiPreprocessor::preProcess(const std::string &a_path)
+std::string 
+cgiPreprocessor::preProcess(const std::string &path)
 {	
-	path = a_path;
-	
 	dodoArray<unsigned long> newLinePos;
 	
 	std::string buffer = read(path,newLinePos);
 	
 	register unsigned long i(0), j(0), begin(0);
+	
+	std::string tpl;
 	
 	while (true)
 	{	
@@ -213,6 +213,8 @@ cgiPreprocessor::preProcess(const std::string &a_path)
 		
 		tpl.append(buffer.substr(i - 2,j - i + 2));
 	}
+	
+	return tpl;
 }
 
 //-------------------------------------------------------------------
