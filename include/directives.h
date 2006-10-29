@@ -82,6 +82,10 @@
  */
 #define FAST
 
+/**
+ * 
+ */
+//#define CGI_SAVEPROCESS
 
 /**
  * use modules without hooks. faster a little bit.

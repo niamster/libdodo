@@ -66,6 +66,17 @@ namespace dodo
 			 * @param path indicates path where template stays
 			 */		
 			virtual std::string process(const std::string &path);
+			
+			/**
+			 * preprocesses template for reProcess
+			 * @param path indicates path where template stays
+			 */
+			virtual void preRePocess(const std::string &path);
+			
+			/**
+			 * @return parsed template from previously preprocessed template[using preRePocess or process[if CGI_SAVEPROCESS defined] methods]
+			 */		
+			virtual std::string reProcess();
 					
 			/**
 			 * sets varable
@@ -100,6 +111,11 @@ namespace dodo
 			 * @param path indicates path where template stays
 			 */		
 			virtual void display(const std::string &path);
+			
+			/**
+			 * show to stdout previously parsed template[using preRePocess or process[if CGI_SAVEPROCESS defined] methods]
+			 */		
+			virtual void reDisplay();
 			
 		protected:	
 			
@@ -251,6 +267,9 @@ namespace dodo
 				cgiFastSTD *cf;///< pointer to cgiFast class
 				
 			#endif 			
+			
+			std::string tmpl;
+			std::string tPath;
 	};
 
 };

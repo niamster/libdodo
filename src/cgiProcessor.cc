@@ -69,7 +69,37 @@ cgiProcessor::~cgiProcessor()
 std::string 
 cgiProcessor::process(const std::string &path)
 {
-	return _process(preProcess(path), path);
+	#ifdef CGI_SAVEPROCESS
+	
+		tPath = path;
+	
+		tmpl = preProcess(path);
+		
+		return _process(tmpl, path);
+	
+	#else
+	
+		return _process(preProcess(path), path);
+	
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+std::string 
+cgiProcessor::reProcess()
+{
+	return _process(tmpl, tPath);
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::preRePocess(const std::string &path)
+{
+	tPath = path;
+	
+	preProcess(path);
 }
 
 //-------------------------------------------------------------------
@@ -1726,6 +1756,25 @@ cgiProcessor::display(const std::string &path)
 		#endif
 			{		
 				std::cout << this->process(path);
+				std::cout.flush();
+			}
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::reDisplay()
+{
+		#ifdef FCGI_EXT
+			if (cgiFastSet)
+			{
+				cf->print(this->reProcess());
+				cf->flush();
+			}
+			else
+		#endif
+			{		
+				std::cout << this->reProcess();
 				std::cout.flush();
 			}
 }
