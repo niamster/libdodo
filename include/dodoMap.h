@@ -43,7 +43,8 @@ namespace dodo
 				/**
 				 * copy constructor
 				 */
-				__dodoMap(const __dodoMap &dodoM) : icase(dodoM.icase), realArr(dodoM.realArr)
+				__dodoMap(const __dodoMap &dodoM) : icase(dodoM.icase), 
+													realArr(dodoM.realArr)
 				{
 				}
 			
@@ -57,7 +58,7 @@ namespace dodo
 				bool icase;///< whether to react on keys with keys or no; false[react] by default
 							
 				/**
-				 * @return value by hash or empty anyType if not found
+				 * @return value of hash by varName or empty anyType if not found
 				 * @param varName value of hash that points to the value
 				 */			 
 				anyType &
@@ -77,12 +78,86 @@ namespace dodo
 					
 					return type;				
 				}
-				
+							
 				/**
-				 * insert 
+				 * @return iterator by hash or end of hash if not found
+				 * @param varName value of hash that points to the value
+				 */			 
+				typename std::map<std::string, anyType>::iterator
+				find(const std::string &varName)
+				{
+					if (icase)
+					{
+						i = realArr.begin();
+						j = realArr.end();
+						
+						for (;i!=j;++i)
+							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
+								return i;		
+						
+						return j;
+					}
+					else
+						return realArr.find(varName);				
+				}
+							
+				/**
+				 * @return const_iterator by hash or end of hash if not found
+				 * @param varName is value of hash that points to the value
+				 */			 
+				typename std::map<std::string, anyType>::const_iterator
+				find(const std::string &varName) const
+				{
+					if (icase)
+					{
+						i = realArr.begin();
+						j = realArr.end();
+						
+						for (;i!=j;++i)
+							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
+								return i;		
+						
+						return j;
+					}
+					else
+						return realArr.find(varName);				
+				}
+							
+				/**
+				 * @return true if found
+				 * @param varName is value of hash that points to the value
+				 */			 
+				typename std::map<std::string, anyType>::const_iterator
+				bfind(const std::string &varName) const
+				{
+					if (icase)
+					{
+						i = realArr.begin();
+						j = realArr.end();
+						
+						for (;i!=j;++i)
+							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
+								return true;		
+						
+						return false;
+					}
+					else
+					{
+						if (realArr.find(varName) != realArr.end())
+							return true;
+						else
+							return false;
+					}				
+				}
+								
+				/**
+				 * insert into hash
+				 * @param varName is value of hash that points to the value
+				 * @param varVal is value of hash by varName 
 				 */
 				void
-				insert(const std::string &varName, const anyType &varVal)
+				insert(const std::string &varName, 
+						const anyType &varVal)
 				{
 					realArr.insert(make_pair(varName, varVal));
 				}
