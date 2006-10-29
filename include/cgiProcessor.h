@@ -66,13 +66,6 @@ namespace dodo
 			 * @param path indicates path where template stays
 			 */		
 			virtual std::string process(const std::string &path);
-			
-			/**
-			 * @return parsed template from previously called preProcess method
-			 * @param path indicates path where template stays
-			 * @note useful in fastCGI
-			 */		
-			virtual std::string reProcess();
 					
 			/**
 			 * sets varable
@@ -108,13 +101,6 @@ namespace dodo
 			 */		
 			virtual void display(const std::string &path);
 			
-			/**
-			 * cleans generated templates, temp variables
-			 * @note useful for fastCGI if you may use reProcess
-			 * doesn't clean user defined variables from assign method
-			 */
-			virtual void clear();
-			
 		protected:	
 			
 			/**
@@ -122,7 +108,7 @@ namespace dodo
 			 * @param path indicates buffer where template stays
 			 * @param path indicates file where template got
 			 */		
-			virtual std::string _process(const std::string &buffer);
+			virtual std::string _process(const std::string &buffer, const std::string &path);
 			
 			/**
 			 * processes `if` statement
@@ -133,7 +119,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl);
+			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
 
 			/**
 			 * processes `for` statement
@@ -144,7 +130,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _for(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl);
+			virtual unsigned long _for(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
 
 			/**
 			 * processes `for` statement
@@ -154,7 +140,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _ns(const std::string &buffer, unsigned long start, std::string &tpl);
+			virtual unsigned long _ns(const std::string &buffer, unsigned long start, std::string &tpl, const std::string &path);
 						
 			/**
 			 * processes `print` statement
@@ -182,7 +168,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual void _include(const std::string &statement, std::string &tpl);
+			virtual void _include(const std::string &statement, std::string &tpl, const std::string &path);
 			
 			/**
 			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
