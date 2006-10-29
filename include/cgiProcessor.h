@@ -70,11 +70,13 @@ namespace dodo
 			/**
 			 * preprocesses template for reProcess
 			 * @param path indicates path where template stays
+			 * @note useful for fastCGI
 			 */
 			virtual void preRePocess(const std::string &path);
 			
 			/**
 			 * @return parsed template from previously preprocessed template[using preRePocess or process[if CGI_SAVEPROCESS defined] methods]
+			 * @note useful for fastCGI
 			 */		
 			virtual std::string reProcess();
 					
@@ -114,8 +116,15 @@ namespace dodo
 			
 			/**
 			 * show to stdout previously parsed template[using preRePocess or process[if CGI_SAVEPROCESS defined] methods]
+			 * @note useful for fastCGI
 			 */		
 			virtual void reDisplay();
+			
+			/**
+			 * clears internal data[assigned vars, etc.]
+			 * @note useful for fastCGI
+			 */
+			virtual void clear();
 			
 		protected:	
 			

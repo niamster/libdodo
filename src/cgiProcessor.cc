@@ -69,6 +69,14 @@ cgiProcessor::~cgiProcessor()
 std::string 
 cgiProcessor::process(const std::string &path)
 {
+	processed.clear();
+	localHash.clear();
+	local.clear();
+	temp1.clear();
+	temp.clear();
+	localNamespace.clear();
+	namespaceVars.clear();
+	
 	#ifdef CGI_SAVEPROCESS
 	
 		tPath = path;
@@ -89,7 +97,34 @@ cgiProcessor::process(const std::string &path)
 std::string 
 cgiProcessor::reProcess()
 {
+	processed.clear();
+	localHash.clear();
+	local.clear();
+	temp1.clear();
+	temp.clear();
+	localNamespace.clear();
+	namespaceVars.clear();
+	
 	return _process(tmpl, tPath);
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgiProcessor::clear()
+{
+	globalArray.clear();
+	globalHash.clear();
+	globalArrayHash.clear();
+	global.clear();
+	
+	processed.clear();
+	localHash.clear();
+	local.clear();
+	temp1.clear();
+	temp.clear();
+	localNamespace.clear();
+	namespaceVars.clear();
 }
 
 //-------------------------------------------------------------------
