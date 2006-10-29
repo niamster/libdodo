@@ -88,6 +88,24 @@ namespace dodo
 				}
 				
 				/**
+				 * return const_iterator that points on the begin of the original array
+				 */
+				typename std::map<std::string, anyType>::const_iterator
+				begin() const
+				{
+					return realArr.begin();
+				}
+				
+				/**
+				 * return const_iterator that points on the begin of the original array
+				 */
+				typename std::map<std::string, anyType>::const_iterator
+				end() const
+				{
+					return realArr.end();
+				}
+				
+				/**
 				 * return iterator that points on the begin of the original array
 				 */
 				typename std::map<std::string, anyType>::iterator

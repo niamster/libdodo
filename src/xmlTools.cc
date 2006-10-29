@@ -618,8 +618,8 @@
 	void 
 	xmlTools::initNode(__xmlNode &node)
 	{
-		node.attributes.realArr.clear();
-		node.children.realArr.clear();
+		node.attributes.clear();
+		node.children.clear();
 		node.name.clear();
 		node.ns.clear();
 		node.nsDef.clear();
@@ -809,7 +809,7 @@
 			xml.append("\" ");
 		}
 		
-		std::map<std::string, std::string>::const_iterator i = node.attributes.realArr.begin(), j = node.attributes.realArr.end(); 
+		std::map<std::string, std::string>::const_iterator i = node.attributes.begin(), j = node.attributes.end(); 
 		for (;i!=j;++i)
 		{
 			xml.append(i->first);
@@ -840,7 +840,7 @@
 			}
 		}
 		
-		std::map< std::string, dodoArray<__xmlNode> >::const_iterator o = node.children.realArr.begin(), p = node.children.realArr.end();
+		std::map< std::string, dodoArray<__xmlNode> >::const_iterator o = node.children.begin(), p = node.children.end();
 		dodoArray<__xmlNode>::const_iterator x, y;
 		for (;o!=p;++o)
 		{

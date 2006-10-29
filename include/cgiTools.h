@@ -218,12 +218,6 @@ namespace dodo
 			static bool cgiFilesInMem;///to store POST files in memory[true by default]
 			
 			/**
-			 * @return cgiFilesUp
-			 * @param varName is name of `input` from POST request
-			 */
-			virtual __cgiFilesUp getFile(const std::string &varName) const;
-			
-			/**
 			 * @return method type
 			 */ 
 			virtual int getMethod() const;
