@@ -116,7 +116,7 @@ cgiTools::~cgiTools()
 //-------------------------------------------------------------------
 
 void 
-cgiTools::cleanTmp() const
+cgiTools::cleanTmp()
 {
 	std::map<std::string, __cgiFilesUp>::iterator i(FILES.begin()),j(FILES.end());
 	for (;i!=j;++i)
@@ -133,7 +133,7 @@ cgiTools::cleanTmp() const
 //-------------------------------------------------------------------
 
 void 
-cgiTools::detectMethod() const
+cgiTools::detectMethod()
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"GET") == 0)
 		method = REQUESTMETHOD_GET;
@@ -159,7 +159,7 @@ cgiTools::getMethod() const
 void 
 cgiTools::make(dodoAssocArr &val,
 			const std::string &string,
-			char *delim) const
+			char *delim)
 {	
 	dodoStringArr getPair = tools::explode(tools::decodeURL(string),delim);
 	
@@ -178,7 +178,7 @@ cgiTools::make(dodoAssocArr &val,
 //-------------------------------------------------------------------
 
 void
-cgiTools::makeEnv() const
+cgiTools::makeEnv()
 {
 	register char *env;
 	
@@ -198,7 +198,7 @@ cgiTools::makeEnv() const
 //-------------------------------------------------------------------
 
 void 
-cgiTools::initHeaders(dodoAssocArr &a_headers) const
+cgiTools::initHeaders(dodoAssocArr &a_headers)
 {
 	HEADERS["Content-type"] = "text/html";
 	HEADERS["X-Powered-By"] = PACKAGE_NAME "/" PACKAGE_VERSION ;
@@ -216,7 +216,7 @@ cgiTools::initHeaders(dodoAssocArr &a_headers) const
 void 
 cgiTools::printHeaders() const
 {
-	dodoAssocArr::iterator i(HEADERS.begin()), j(HEADERS.end());
+	dodoAssocArr::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (;i!=j;++i)
 		#ifdef FCGI_EXT
 			if (cgiFastSet)
@@ -225,9 +225,9 @@ cgiTools::printHeaders() const
 		#endif		
 				std::cout << i->first << ": " << i->second << "\r\n";
 		
-	if (cookiesSet.size()>0)
+	if (cookiesSet.size() > 0)
 	{
-		std::list<__cookies>::iterator i(cookiesSet.begin()),j(cookiesSet.end());
+		std::list<__cookies>::const_iterator i(cookiesSet.begin()),j(cookiesSet.end());
 		for (;i!=j;++i)
 		{
 			#ifdef FCGI_EXT
@@ -282,7 +282,7 @@ cgiTools::printHeaders() const
 #else
 	bool
 #endif
-cgiTools::makePost() const
+cgiTools::makePost()
 {
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
 		#ifndef NO_EX
@@ -504,7 +504,7 @@ cgiTools::makePost() const
 //-------------------------------------------------------------------
 
 dodoStringMap &
-cgiTools::operator[](short method) const
+cgiTools::operator[](short method)
 {
 	if (method == REQUESTMETHOD_POST)
 		return METHOD_POST;
@@ -516,7 +516,7 @@ cgiTools::operator[](short method) const
 
 std::string
 cgiTools::request(const std::string &varName, 
-				short first) const
+				short first)
 {
 	std::string met0 = METHOD_GET[varName];
 	std::string met1 = METHOD_POST[varName];

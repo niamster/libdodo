@@ -76,7 +76,7 @@ flushDisk::getOutDescriptor() const
 
 	int 
 	flushDisk::addPostExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHDISK, data);
 	}
@@ -85,7 +85,7 @@ flushDisk::getOutDescriptor() const
 	
 	int 
 	flushDisk::addPreExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHDISK, data);
 	}
@@ -97,7 +97,7 @@ flushDisk::getOutDescriptor() const
 		int 
 		flushDisk::addPostExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data, toInit);
 		}
@@ -107,7 +107,7 @@ flushDisk::getOutDescriptor() const
 		int 
 		flushDisk::addPreExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data, toInit);
 		}
@@ -117,7 +117,7 @@ flushDisk::getOutDescriptor() const
 		xexecCounts 
 		flushDisk::addExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data, toInit);
 		}
@@ -133,7 +133,7 @@ flushDisk::getOutDescriptor() const
 #else
 	bool
 #endif
-flushDisk::close() const 
+flushDisk::close() 
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_CLOSE;
@@ -171,7 +171,7 @@ flushDisk::close() const
 #else
 	bool
 #endif
-flushDisk::open(const std::string &a_path) const
+flushDisk::open(const std::string &a_path)
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_OPEN;
@@ -296,7 +296,7 @@ flushDisk::open(const std::string &a_path) const
 	bool
 #endif
 flushDisk::read(char * const a_void, 
-				unsigned long a_pos) const
+				unsigned long a_pos)
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_READ;
@@ -367,7 +367,7 @@ flushDisk::read(char * const a_void,
 	bool
 #endif
 flushDisk::readString(std::string &a_str, 
-				unsigned long a_pos) const
+				unsigned long a_pos)
 {
 	register char *data = new char[inSize+1];
 
@@ -580,7 +580,7 @@ flushDisk::getPath() const
 	bool
 #endif
 flushDisk::readStream(char * const a_void, 
-				unsigned long a_pos) const
+				unsigned long a_pos)
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_READSTREAM;
@@ -683,7 +683,7 @@ flushDisk::readStream(char * const a_void,
 	bool
 #endif
 flushDisk::readStreamString(std::string &a_str, 
-				unsigned long a_pos) const
+				unsigned long a_pos)
 {
 	register char *data = new char[inSize+1];
 

@@ -61,7 +61,7 @@
 	#else
 		bool
 	#endif
-	dbPostgresql::connect() const
+	dbPostgresql::connect()
 	{
 		if (connected)
 			disconnect();
@@ -106,7 +106,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbPostgresql::disconnect() const
+	dbPostgresql::disconnect()
 	{
 		if (connected)
 		{
@@ -147,12 +147,14 @@
 		bool
 	#endif
 	dbPostgresql::_exec(const std::string &query, 
-						bool result) const
+						bool result)
 	{	
 		register bool blobHint;
 		
 		if (query.size() == 0)
 		{
+			autoFraming = false;///< FIXME: resolve autoFraming for postgresql
+			
 			queryCollect();
 			
 			blobHint = false;
@@ -399,7 +401,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int
-	dbPostgresql::affectedRowsCount()
+	dbPostgresql::affectedRowsCount() const
 	{
 		if (empty || show)
 			return 0;
@@ -416,7 +418,7 @@
 		bool
 	#endif
 	dbPostgresql::exec(const std::string &query, 
-						bool result) const
+						bool result)
 	{
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 			operType = DBPOSTGRESQL_OPER_EXEC;
@@ -445,7 +447,7 @@
 	
 		int 
 		dbPostgresql::addPostExec(inExec func, 
-							void *data) const
+							void *data)
 		{
 			return _addPostExec(func, (void *)this, XEXECOBJ_DBPOSTGRESQL, data);
 		}
@@ -454,7 +456,7 @@
 		
 		int 
 		dbPostgresql::addPreExec(inExec func, 
-							void *data) const
+							void *data)
 		{
 			return _addPreExec(func, (void *)this, XEXECOBJ_DBPOSTGRESQL, data);
 		}
@@ -466,7 +468,7 @@
 			int 
 			dbPostgresql::addPostExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addPostExec(module, (void *)this, XEXECOBJ_DBPOSTGRESQL, data, toInit);
 			}
@@ -476,7 +478,7 @@
 			int 
 			dbPostgresql::addPreExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addPreExec(module, (void *)this, XEXECOBJ_DBPOSTGRESQL, data, toInit);
 			}
@@ -486,7 +488,7 @@
 			xexecCounts 
 			dbPostgresql::addExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addExec(module, (void *)this, XEXECOBJ_DBPOSTGRESQL, data, toInit);
 			}

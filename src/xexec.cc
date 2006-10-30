@@ -78,7 +78,7 @@ xexec::addXExec(std::list<__execItem> &list,
 		inExec func,
  		void *obj, 
  		short type,
-		void *data) const
+		void *data)
 {
 	__execItem temp;
 	
@@ -103,7 +103,7 @@ xexec::addXExec(std::list<__execItem> &list,
 void 
 xexec::setStatXExec(std::list<__execItem> &list, 
 		int position,
-		bool stat) const
+		bool stat)
 {
 	if (getXexec(list,position))
 		k->enabled = stat;
@@ -113,7 +113,7 @@ xexec::setStatXExec(std::list<__execItem> &list,
 
 void 
 xexec::delXExec(std::list<__execItem> &list, 
-				int position) const
+				int position)
 {	
 	if (getXexec(list,position))
 	{
@@ -147,7 +147,7 @@ int
 xexec::_addPreExec(inExec func,
  				void *obj, 
  				short type,
-				void *data) const
+				void *data)
 {
 	return addXExec(preExec.exec,func,obj,type,data);
 }
@@ -155,7 +155,7 @@ xexec::_addPreExec(inExec func,
 //-------------------------------------------------------------------
 
 void 
-xexec::disablePreExec(int position) const
+xexec::disablePreExec(int position)
 {
 	setStatXExec(preExec.exec,position,false);
 }
@@ -163,7 +163,7 @@ xexec::disablePreExec(int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::delPreExec(int position) const
+xexec::delPreExec(int position)
 {
 	delXExec(preExec.exec,position);
 }
@@ -171,7 +171,7 @@ xexec::delPreExec(int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::enablePreExec(int position) const
+xexec::enablePreExec(int position)
 {
 	setStatXExec(preExec.exec,position,true);
 }
@@ -182,7 +182,7 @@ int
 xexec::_addPostExec(inExec func, 
  				void *obj, 
  				short type,
-				void *data) const
+				void *data)
 {
 	return addXExec(postExec.exec,func,obj,type,data);
 }
@@ -190,7 +190,7 @@ xexec::_addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 void 
-xexec::disablePostExec(int position) const
+xexec::disablePostExec(int position)
 {
 	setStatXExec(postExec.exec,position,false);
 }
@@ -198,7 +198,7 @@ xexec::disablePostExec(int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::delPostExec(int position) const
+xexec::delPostExec(int position)
 {
 	delXExec(postExec.exec,position);
 }
@@ -206,7 +206,7 @@ xexec::delPostExec(int position) const
 //-------------------------------------------------------------------
 
 void 
-xexec::enablePostExec(int position) const
+xexec::enablePostExec(int position)
 {
 	setStatXExec(postExec.exec,position,true);
 }
@@ -246,7 +246,39 @@ xexec::disableAllPostExec() const
 //-------------------------------------------------------------------
 
 void 
-xexec::disableAll() const
+xexec::enableAllPreExec()
+{
+	preExec.execDisabled = false;
+}
+
+//-------------------------------------------------------------------
+
+void
+xexec::enableAllPostExec()
+{
+	postExec.execDisabled = false;
+}
+
+//-------------------------------------------------------------------
+
+void 
+xexec::disableAllPreExec()
+{
+	preExec.execDisabled = true;
+}
+
+//-------------------------------------------------------------------
+
+void 
+xexec::disableAllPostExec()
+{
+	postExec.execDisabled = true;
+}
+
+//-------------------------------------------------------------------
+
+void 
+xexec::disableAll()
 {
 	postExec.execDisabled = true;
 	preExec.execDisabled = true;
@@ -255,7 +287,7 @@ xexec::disableAll() const
 //-------------------------------------------------------------------
 
 void 
-xexec::enableAll() const
+xexec::enableAll()
 {
 	postExec.execDisabled = false;
 	preExec.execDisabled = false;
@@ -266,7 +298,7 @@ xexec::enableAll() const
 bool 
 xexec::replacePostExec(int position, 
 				inExec func,
-				void *data) const
+				void *data)
 {
 	return replaceXExec(postExec.exec,position,func,data);
 }
@@ -276,7 +308,7 @@ xexec::replacePostExec(int position,
 bool 
 xexec::replacePreExec(int position, 
 				inExec func,
-				void *data) const
+				void *data)
 {
 	return replaceXExec(preExec.exec,position,func,data);
 }
@@ -287,7 +319,7 @@ bool
 xexec::replaceXExec(std::list<__execItem> &list, 
 			int position, 
 			inExec func,
-			void *data) const
+			void *data)
 {
 	if (getXexec(list,position))
 	{
@@ -368,7 +400,7 @@ xexec::performXExec(__execItemList &list) const
  					short type,
 					const std::string &module, 
 					void *data, 
-					void *toInit) const
+					void *toInit)
 	{
 		__execItem temp;
 		
@@ -416,7 +448,7 @@ xexec::performXExec(__execItemList &list) const
 						void *obj, 
  						short type, 
 						void *data, 
-						void *toInit) const
+						void *toInit)
 	{
 		return addXExecModule(postExec.exec,obj,type,module,data,toInit);
 	}
@@ -428,7 +460,7 @@ xexec::performXExec(__execItemList &list) const
 					void *obj,
  					short type, 
 					void *data, 
-					void *toInit) const
+					void *toInit)
 	{
 		return addXExecModule(preExec.exec,obj,type,module,data,toInit);
 	}
@@ -474,7 +506,7 @@ xexec::performXExec(__execItemList &list) const
 					void *obj, 
  					short type, 
 					void *data, 
-					void *toInit) const
+					void *toInit)
 	{
 		__execItem temp;
 		
@@ -554,7 +586,7 @@ xexec::performXExec(__execItemList &list) const
 
 bool 
 xexec::getXexec(std::list<__execItem> &list, 
-				int position) const
+				int position)
 {
 	std::list<__execItem>::iterator i(list.begin()), j(list.end());	
 	for (;i!=j;++i)

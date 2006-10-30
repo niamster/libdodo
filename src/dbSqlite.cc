@@ -59,7 +59,7 @@
 	#else
 		bool
 	#endif
-	dbSqlite::connect() const
+	dbSqlite::connect()
 	{
 		if (connected)
 			disconnect();
@@ -94,7 +94,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbSqlite::disconnect() const
+	dbSqlite::disconnect()
 	{
 		if (connected)
 		{
@@ -140,7 +140,7 @@
 		bool
 	#endif
 	dbSqlite::_exec(const std::string &query, 
-					bool result) const
+					bool result)
 	{
 		register bool blobHint;
 		
@@ -542,7 +542,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int
-	dbSqlite::affectedRowsCount()
+	dbSqlite::affectedRowsCount() const
 	{
 		if (!show)
 			return sqlite3_changes(lite);
@@ -559,7 +559,7 @@
 		bool
 	#endif
 	dbSqlite::exec(const std::string &query, 
-					bool result) const
+					bool result)
 	{
 		#ifndef DBSQLITE_WO_XEXEC
 			operType = DBSQLITE_OPER_EXEC;
@@ -588,7 +588,7 @@
 	
 		int 
 		dbSqlite::addPostExec(inExec func, 
-							void *data) const
+							void *data)
 		{
 			return _addPostExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
 		}
@@ -597,7 +597,7 @@
 		
 		int 
 		dbSqlite::addPreExec(inExec func, 
-							void *data) const
+							void *data)
 		{
 			return _addPreExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
 		}
@@ -609,7 +609,7 @@
 			int 
 			dbSqlite::addPostExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addPostExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
 			}
@@ -619,7 +619,7 @@
 			int 
 			dbSqlite::addPreExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addPreExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
 			}
@@ -629,7 +629,7 @@
 			xexecCounts 
 			dbSqlite::addExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
 			}

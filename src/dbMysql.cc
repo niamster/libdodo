@@ -164,7 +164,7 @@
 
 	void
 	dbMysql::connectSettings(unsigned long a_type,
-					const __mysqlSSLOptions &options) const
+					const __mysqlSSLOptions &options)
 	{
 		type = a_type;
 		
@@ -182,7 +182,7 @@
 	#else
 		bool
 	#endif
-	dbMysql::connect() const
+	dbMysql::connect()
 	{
 		disconnect();
 			
@@ -221,7 +221,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::disconnect() const
+	dbMysql::disconnect()
 	{
 		if (connected)
 		{
@@ -254,7 +254,7 @@
 		bool
 	#endif
 	dbMysql::_exec(const std::string &query, 
-					bool result) const
+					bool result)
 	{	
 		if (query.size() == 0)
 		{
@@ -480,7 +480,7 @@
 	//-------------------------------------------------------------------
 	
 	unsigned int
-	dbMysql::affectedRowsCount()
+	dbMysql::affectedRowsCount() const
 	{
 		if (empty || show)
 			return 0;
@@ -497,7 +497,7 @@
 		bool
 	#endif
 	dbMysql::exec(const std::string &query, 
-				bool result) const
+				bool result)
 	{
 		#ifndef DBMYSQL_WO_XEXEC
 			operType = DBMYSQL_OPER_EXEC;
@@ -526,7 +526,7 @@
 	
 		int 
 		dbMysql::addPostExec(inExec func, 
-							void *data) const
+							void *data)
 		{
 			return _addPostExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
 		}
@@ -535,7 +535,7 @@
 		
 		int 
 		dbMysql::addPreExec(inExec func, 
-							void *data) const
+							void *data)
 		{
 			return _addPreExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
 		}
@@ -547,7 +547,7 @@
 			int 
 			dbMysql::addPostExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addPostExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
 			}
@@ -557,7 +557,7 @@
 			int 
 			dbMysql::addPreExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addPreExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
 			}
@@ -567,7 +567,7 @@
 			xexecCounts 
 			dbMysql::addExec(const std::string &module, 
 								void *data,
-								void *toInit) const
+								void *toInit)
 			{
 				return _addExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
 			}

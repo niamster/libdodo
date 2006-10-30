@@ -769,7 +769,7 @@
 	std::string 
 	xmlTools::createXML(const __xmlNode &root, 
 					const std::string &encoding, 
-					const std::string &version)
+					const std::string &version) const
 	{
 		if (root.name.empty())
 			return __string__;
@@ -784,7 +784,7 @@
 	//-------------------------------------------------------------------
 	
 	std::string 
-	xmlTools::createNode(const __xmlNode &node)
+	xmlTools::createNode(const __xmlNode &node) const
 	{
 		if (node.name.empty())
 			return __string__;

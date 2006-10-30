@@ -181,7 +181,7 @@ dbBase::~dbBase()
 void 
 dbBase::select(const std::string &a_table,
 			    const dodoStringArr &a_fieldsNames,
-			    const std::string &a_where) const 
+			    const std::string &a_where) 
 {
 	qType = DBREQUEST_SELECT;
 	
@@ -407,7 +407,7 @@ dbBase::del(const std::string &a_table,
 
 void
 dbBase::subquery(const dodoStringArr &sub, 
-				int type) const
+				int type)
 {
 	qType = type;
 	pre_subQ = sub;
@@ -570,7 +570,7 @@ dbBase::createField(__fieldInfo &row,
 //-------------------------------------------------------------------
 
 void 
-dbBase::where(const std::string &where) const
+dbBase::where(const std::string &where)
 {
 	pre_where = where;
 
@@ -580,7 +580,7 @@ dbBase::where(const std::string &where) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::limit(unsigned int a_number) const
+dbBase::limit(unsigned int a_number)
 {
 	addF(qShift,1<<DBADDREQUEST_LIMIT);
 
@@ -589,7 +589,7 @@ dbBase::limit(unsigned int a_number) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::offset(unsigned int a_number) const
+dbBase::offset(unsigned int a_number)
 {
 	addF(qShift,1<<DBADDREQUEST_OFFSET);
 	
@@ -599,7 +599,7 @@ dbBase::offset(unsigned int a_number) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::order(const std::string &order) const
+dbBase::order(const std::string &order)
 {
 	pre_order = order;
 
@@ -609,7 +609,7 @@ dbBase::order(const std::string &order) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::group(const std::string &group) const
+dbBase::group(const std::string &group)
 {	
 	pre_group = group;
 
@@ -619,7 +619,7 @@ dbBase::group(const std::string &group) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::having(const std::string &having) const
+dbBase::having(const std::string &having)
 {
 	pre_having = having;
 
@@ -630,7 +630,7 @@ dbBase::having(const std::string &having) const
 //-------------------------------------------------------------------
 
 void 
-dbBase::unwhere() const
+dbBase::unwhere()
 {
 	removeF(qShift,1<<DBADDREQUEST_WHERE);	
 }
@@ -638,7 +638,7 @@ dbBase::unwhere() const
 //-------------------------------------------------------------------
 
 void 
-dbBase::unlimit() const
+dbBase::unlimit()
 {
 	removeF(qShift,1<<DBADDREQUEST_LIMIT);
 }
@@ -646,7 +646,7 @@ dbBase::unlimit() const
 //-------------------------------------------------------------------
 
 void 
-dbBase::unoffset() const
+dbBase::unoffset()
 {
 	removeF(qShift,1<<DBADDREQUEST_OFFSET);
 }
@@ -654,7 +654,7 @@ dbBase::unoffset() const
 //-------------------------------------------------------------------
 
 void 
-dbBase::unorder() const
+dbBase::unorder()
 {
 	removeF(qShift,1<<DBADDREQUEST_ORDERBY);
 }
@@ -662,7 +662,7 @@ dbBase::unorder() const
 //-------------------------------------------------------------------
 
 void 
-dbBase::ungroup() const
+dbBase::ungroup()
 {	
 	removeF(qShift,1<<DBADDREQUEST_GROUPBY);
 }
@@ -670,7 +670,7 @@ dbBase::ungroup() const
 //-------------------------------------------------------------------
 
 void 
-dbBase::unhaving() const
+dbBase::unhaving()
 {
 	removeF(qShift,1<<DBADDREQUEST_HAVING);
 }
@@ -779,7 +779,7 @@ dbBase::unsetAddDelSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void 
-dbBase::cleanCollect() const
+dbBase::cleanCollect()
 {
 	qType = -1;
 	
@@ -804,7 +804,7 @@ dbBase::setDbInfo(const std::string &db,
 	unsigned int port, 
 	const std::string &user, 
 	const std::string &password,
-	const std::string &path) const
+	const std::string &path)
 {
 	dbInfo.port = port;
 	dbInfo.db = db;
@@ -817,7 +817,7 @@ dbBase::setDbInfo(const std::string &db,
 //-------------------------------------------------------------------
 
 void 
-dbBase::setDbInfo(const __dbInfo &info) const
+dbBase::setDbInfo(const __dbInfo &info)
 {
 	dbInfo.port = info.port;
 	dbInfo.db = info.db;

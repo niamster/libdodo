@@ -135,7 +135,7 @@ dbSqlBase::~dbSqlBase()
 std::string
 dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal, 
 					const dodoStringArr &fieldsNames,
-					const std::string &frame) const
+					const std::string &frame)
 {
 	std::string temp;
 	
@@ -182,7 +182,7 @@ dbSqlBase::noexists(const std::string &statement)
 
 void 
 dbSqlBase::additionalCollect(unsigned int qTypeTocheck, 
-						const std::string &collectedString) const
+						const std::string &collectedString)
 {
 	if (qShift == DB_EMPTY)
 		return ;
@@ -200,7 +200,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 std::string 
 dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 						const __statements sqlAddArr[],
-						int qTypeShift) const
+						int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
 		return __string__;
@@ -224,7 +224,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 
 std::string 
 dbSqlBase::insideAddCollect(const dodoStringArr &statements, 
-						int qTypeShift) const
+						int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
 		return __string__;
@@ -249,7 +249,7 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::selectCollect() const 
+dbSqlBase::selectCollect() 
 {
 	std::string temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
@@ -274,7 +274,7 @@ dbSqlBase::selectCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::insertCollect() const
+dbSqlBase::insertCollect()
 {
 	dodoStringArr fieldsVPart;
 
@@ -371,7 +371,7 @@ dbSqlBase::insertCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::insertSelectCollect() const
+dbSqlBase::insertSelectCollect()
 {
 	
 	std::string fieldsPartTo = tools::implode(pre_fieldsNames,",");
@@ -400,7 +400,7 @@ dbSqlBase::insertSelectCollect() const
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::updateCollect() const
+dbSqlBase::updateCollect()
 {
 	std::string setPart;
 	
@@ -466,7 +466,7 @@ dbSqlBase::updateCollect() const
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::delCollect() const
+dbSqlBase::delCollect()
 {
 	std::string temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
@@ -480,7 +480,7 @@ dbSqlBase::delCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::subCollect() const
+dbSqlBase::subCollect()
 {
 	request = tools::implode(pre_subQ,sqlQStArr[qType].str);
 }
@@ -488,7 +488,7 @@ dbSqlBase::subCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::truncateCollect() const
+dbSqlBase::truncateCollect()
 {
 	request = "truncate " + pre_table;
 }
@@ -496,7 +496,7 @@ dbSqlBase::truncateCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::delBaseCollect() const
+dbSqlBase::delBaseCollect()
 {
 	request = "drop database " + pre_order;
 }
@@ -504,7 +504,7 @@ dbSqlBase::delBaseCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::delTableCollect() const
+dbSqlBase::delTableCollect()
 {
 	request = "drop table " + pre_table;
 }
@@ -512,14 +512,14 @@ dbSqlBase::delTableCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::delFieldCollect() const
+dbSqlBase::delFieldCollect()
 {
 	request = "alter " + pre_order + " drop " + pre_table;
 }
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::renameBaseCollect() const
+dbSqlBase::renameBaseCollect()
 {
 	request = __string__;///< FIXME: make SQL statement
 }
@@ -527,7 +527,7 @@ dbSqlBase::renameBaseCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::renameTableCollect() const
+dbSqlBase::renameTableCollect()
 {
 	request = "alter table " + pre_table + " rename to " + pre_having;
 }
@@ -535,7 +535,7 @@ dbSqlBase::renameTableCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::renameFieldCollect() const
+dbSqlBase::renameFieldCollect()
 {
 	request = __string__;///< FIXME: make SQL statement
 }
@@ -543,7 +543,7 @@ dbSqlBase::renameFieldCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::createBaseCollect() const
+dbSqlBase::createBaseCollect()
 {
 	request = "create database " + pre_order;
 	if (pre_having.size() != 0)
@@ -553,7 +553,7 @@ dbSqlBase::createBaseCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::createIndexCollect() const
+dbSqlBase::createIndexCollect()
 {	
 	request = "create index " + pre_having + " on " + pre_table + " (" + tools::implode(pre_fieldsNames,",") + ")";
 }
@@ -561,7 +561,7 @@ dbSqlBase::createIndexCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::deleteIndexCollect() const
+dbSqlBase::deleteIndexCollect()
 {
 	request = "drop index " + pre_having + " on " + pre_table;
 }
@@ -569,7 +569,7 @@ dbSqlBase::deleteIndexCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::createTableCollect() const
+dbSqlBase::createTableCollect()
 {
 	request = "create table "; 
 	
@@ -593,7 +593,7 @@ dbSqlBase::createTableCollect() const
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::createFieldCollect() const
+dbSqlBase::createFieldCollect()
 {
 	request = "alter table " + pre_table + " add " + fieldCollect(pre_fieldInfo);
 }
@@ -601,7 +601,7 @@ dbSqlBase::createFieldCollect() const
 //-------------------------------------------------------------------
 
 std::string
-dbSqlBase::queryCollect() const
+dbSqlBase::queryCollect()
 {	
 	register bool additionalActions = true;
 	register bool selectAction = false;
@@ -796,7 +796,7 @@ dbSqlBase::escapeFields(const std::string &data)
 //-------------------------------------------------------------------
 
 std::string 
-dbSqlBase::fieldCollect(__fieldInfo &row) const
+dbSqlBase::fieldCollect(__fieldInfo &row)
 {
 	register int type = row.type, flag = row.flag;
 	std::string resRow(row.name + " " + stringType(type));
@@ -825,7 +825,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row) const
 //-------------------------------------------------------------------
 
 std::string
-dbSqlBase::stringType(int type) const
+dbSqlBase::stringType(int type)
 {
 	switch (type)
 	{
@@ -932,7 +932,7 @@ dbSqlBase::stringType(int type) const
 //-------------------------------------------------------------------
 
 int 
-dbSqlBase::chkRange(int type) const
+dbSqlBase::chkRange(int type)
 {
 	switch (type)
 	{
@@ -979,7 +979,7 @@ dbSqlBase::chkRange(int type) const
 //-------------------------------------------------------------------
 
 std::string 
-dbSqlBase::stringReference(int type) const
+dbSqlBase::stringReference(int type)
 {
 	switch (type)
 	{

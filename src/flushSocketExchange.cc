@@ -108,7 +108,7 @@ flushSocketExchange::init(__initialAccept &a_init)
 #else
 	bool
 #endif
-flushSocketExchange::close() const
+flushSocketExchange::close()
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_CLOSE;
@@ -175,7 +175,7 @@ flushSocketExchange::init(int a_socket,
 //-------------------------------------------------------------------
 
 bool 
-flushSocketExchange::alive() const
+flushSocketExchange::alive()
 {
 	return opened;
 }
@@ -188,7 +188,7 @@ flushSocketExchange::alive() const
 	bool
 #endif
 flushSocketExchange::send(const char * const data, 
-						bool urgent) const
+						bool urgent)
 {
 	buffer.assign(data,outSize);
 				
@@ -281,7 +281,7 @@ flushSocketExchange::send(const char * const data,
 	bool
 #endif
 flushSocketExchange::sendString(const std::string &data, 
-						bool urgent) const
+						bool urgent)
 {
 	return this->send(data.c_str(),urgent);
 }
@@ -294,7 +294,7 @@ flushSocketExchange::sendString(const std::string &data,
 	bool
 #endif
 flushSocketExchange::receive(char * const data, 
-							bool urgent) const
+							bool urgent)
 {
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVE;
@@ -394,7 +394,7 @@ flushSocketExchange::receive(char * const data,
 	bool
 #endif
 flushSocketExchange::receiveString(std::string &data, 
-								bool urgent) const
+								bool urgent)
 {	
 	register char *t_data = new char[inSize+1];
 
@@ -420,7 +420,7 @@ flushSocketExchange::receiveString(std::string &data,
 
 	int 
 	flushSocketExchange::addPostExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
 	}
@@ -429,7 +429,7 @@ flushSocketExchange::receiveString(std::string &data,
 	
 	int 
 	flushSocketExchange::addPreExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
 	}
@@ -441,7 +441,7 @@ flushSocketExchange::receiveString(std::string &data,
 		int 
 		flushSocketExchange::addPostExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
 		}
@@ -451,7 +451,7 @@ flushSocketExchange::receiveString(std::string &data,
 		int 
 		flushSocketExchange::addPreExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
 		}
@@ -461,7 +461,7 @@ flushSocketExchange::receiveString(std::string &data,
 		xexecCounts 
 		flushSocketExchange::addExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
 		}
@@ -480,7 +480,7 @@ flushSocketExchange::receiveString(std::string &data,
 	bool
 #endif
 flushSocketExchange::sendStream(const char * const data, 
-						bool urgent) const
+						bool urgent)
 {
 	buffer.assign(data);
 				
@@ -577,7 +577,7 @@ flushSocketExchange::sendStream(const char * const data,
 	bool
 #endif
 flushSocketExchange::sendStreamString(const std::string &data, 
-						bool urgent) const
+						bool urgent)
 {
 	return this->sendStream(data.c_str(),urgent);
 }
@@ -590,7 +590,7 @@ flushSocketExchange::sendStreamString(const std::string &data,
 	bool
 #endif
 flushSocketExchange::receiveStream(char * const data, 
-							bool urgent) const
+							bool urgent)
 {
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM;
@@ -643,7 +643,7 @@ flushSocketExchange::receiveStream(char * const data,
 	bool
 #endif
 flushSocketExchange::receiveStreamString(std::string &data, 
-								bool urgent) const
+								bool urgent)
 {
   register char *t_data = new char[inSocketBuffer+1];
 

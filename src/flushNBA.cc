@@ -60,16 +60,17 @@ flushNBA::addFlush(const flush &fl)
 //-------------------------------------------------------------------
 
 void 
-flushNBA::makeFalse(int count)
+flushNBA::makeFalse(int count) const
 {	
 	for (register int i=0;i<count;++i)
 		tempRB.push_back(false);
 }
+
 //-------------------------------------------------------------------
 
 dodoArray<bool> 
 flushNBA::isReadable(const dodoArray<int> &pos, 
-					int timeout)
+					int timeout) const
 {
 	tempRB.clear();
 	
@@ -77,7 +78,7 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 	
 	pollfd *fds = new pollfd[pos.size()];
 	
-	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
+	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
@@ -149,14 +150,14 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 
 dodoArray<bool> 
 flushNBA::isWritable(const dodoArray<int> &pos, 
-					int timeout)
+					int timeout) const
 {	tempRB.clear();
 	
 	register int count = -1;
 	
 	pollfd *fds = new pollfd[pos.size()];
 	
-	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
+	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
@@ -228,11 +229,11 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 
 bool 
 flushNBA::isReadable(int pos,
-					int timeout)
+					int timeout) const
 {
 	pollfd fd;
 	
-	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
+	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 		if (i->position == pos)
 		{
@@ -282,11 +283,11 @@ flushNBA::delFlush(int pos)
 
 bool 
 flushNBA::isWritable(int pos,
-					int timeout)
+					int timeout) const
 {
 	pollfd fd;
 	
-	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
+	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 		if (i->position == pos)
 		{

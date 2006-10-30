@@ -69,7 +69,7 @@ flushSTD::getOutDescriptor() const
 
 	int 
 	flushSTD::addPostExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
 	}
@@ -78,7 +78,7 @@ flushSTD::getOutDescriptor() const
 	
 	int 
 	flushSTD::addPreExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
 	}
@@ -90,7 +90,7 @@ flushSTD::getOutDescriptor() const
 		int 
 		flushSTD::addPostExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
 		}
@@ -100,7 +100,7 @@ flushSTD::getOutDescriptor() const
 		xexecCounts 
 		flushSTD::addExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
 		}
@@ -110,7 +110,7 @@ flushSTD::getOutDescriptor() const
 		int 
 		flushSTD::addPreExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
 		}
@@ -126,7 +126,7 @@ flushSTD::getOutDescriptor() const
 #else
 	bool
 #endif
-flushSTD::read(char * const a_void) const
+flushSTD::read(char * const a_void)
 {
 	#ifndef FLUSH_STD_WO_XEXEC
 		operType = FLUSHSTD_OPER_READ;
@@ -202,7 +202,7 @@ flushSTD::read(char * const a_void) const
 #else
 	bool
 #endif
-flushSTD::readString(std::string &a_str) const
+flushSTD::readString(std::string &a_str)
 {
 	register char *data = new char[inSize+1];
 
@@ -396,7 +396,7 @@ flushSTD::inputterInfo()
 //-------------------------------------------------------------------
 
 bool 
-flushSTD::isBlocked()
+flushSTD::isBlocked() const
 {
 	return blocked;
 }
@@ -480,7 +480,7 @@ flushSTD::block(bool flag)
 #else
 	bool
 #endif
-flushSTD::readStream(char * const a_void) const
+flushSTD::readStream(char * const a_void)
 {
 	#ifndef FLUSH_STD_WO_XEXEC
 		operType = FLUSHSTD_OPER_READSTREAM;
@@ -525,7 +525,7 @@ flushSTD::readStream(char * const a_void) const
 #else
 	bool
 #endif
-flushSTD::readStreamString(std::string &a_str) const
+flushSTD::readStreamString(std::string &a_str)
 {
   register char *data = new char[inSTDBuffer+1];
 

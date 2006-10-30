@@ -77,7 +77,7 @@ flushSocketOptions::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 bool 
-flushSocketOptions::isBlocked()
+flushSocketOptions::isBlocked() const
 {
 	return blocked;
 }

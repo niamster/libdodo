@@ -143,14 +143,13 @@
 	//-------------------------------------------------------------------
 	
 	bool 
-	systemThreads::getThread(unsigned long position)
+	systemThreads::getThread(unsigned long position) const
 	{
-		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
-		
+		std::list<__threadInfo>::const_iterator i(threads.begin()), j(threads.end());
 		for (;i!=j;++i)
 			if (i->position == position)
 			{
-				k = i;
+				k = *((std::list<__threadInfo>::iterator *)&i);
 				return true;
 			}
 		
@@ -528,7 +527,7 @@
 	
 	
 	bool
-	systemThreads::isRunning(unsigned long position)
+	systemThreads::isRunning(unsigned long position) const
 	{
 		if (getThread(position))
 			return _isRunning(k);
@@ -543,7 +542,7 @@
 	//-------------------------------------------------------------------
 	
 	bool 
-	systemThreads::_isRunning(std::list<__threadInfo>::iterator &position)
+	systemThreads::_isRunning(std::list<__threadInfo>::iterator &position) const
 	{
 		if (!position->isRunning)
 			return false;
@@ -610,14 +609,13 @@
 	//-------------------------------------------------------------------
 	
 	unsigned long 
-	systemThreads::running()
+	systemThreads::running() const
 	{
-		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
-		
 		unsigned long amount(0);
-		
+
+		std::list<__threadInfo>::const_iterator i(threads.begin()), j(threads.end());		
 		for (;i!=j;++i)
-			if (_isRunning(i))
+			if (_isRunning(*((std::list<__threadInfo>::iterator *)&i)))
 				++amount;
 		
 		return amount;		

@@ -62,7 +62,7 @@ flushSocket::~flushSocket()
 
 	int 
 	flushSocket::addPostExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
 	}
@@ -71,7 +71,7 @@ flushSocket::~flushSocket()
 	
 	int 
 	flushSocket::addPreExec(inExec func, 
-						void *data) const
+						void *data)
 	{
 		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
 	}
@@ -83,7 +83,7 @@ flushSocket::~flushSocket()
 		int 
 		flushSocket::addPostExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
 		}
@@ -93,7 +93,7 @@ flushSocket::~flushSocket()
 		int 
 		flushSocket::addPreExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
 		}
@@ -103,7 +103,7 @@ flushSocket::~flushSocket()
 		xexecCounts 
 		flushSocket::addExec(const std::string &module, 
 							void *data,
-							void *toInit) const
+							void *toInit)
 		{
 			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
 		}
@@ -783,7 +783,7 @@ flushSocket::bindNListen(const std::string &path,
 
 bool 
 flushSocket::accept(__initialAccept &init, 
-					__connInfo &info) const
+					__connInfo &info)
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_ACCEPT;
@@ -911,7 +911,7 @@ flushSocket::accept(__initialAccept &init,
 //-------------------------------------------------------------------
 
 bool 
-flushSocket::accept(__initialAccept &init) const
+flushSocket::accept(__initialAccept &init)
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKET_OPER_ACCEPT;
