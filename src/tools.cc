@@ -178,6 +178,28 @@ tools::~tools()
 
 //-------------------------------------------------------------------
 
+bool 
+tools::isInArray(const dodoStringArr &arr, 
+				const std::string &needle, 
+				bool icase)
+{
+	int(*cmpFunc)(const char *, const char *);
+	
+	if (icase)
+		cmpFunc = strcasecmp;
+	else
+		cmpFunc = strcmp;
+	
+	dodoStringArr::const_iterator i(arr.begin()), j(arr.end());
+	for (;i!=j;++i)
+		if (cmpFunc(i->c_str(), needle.c_str()) == 0)
+			return true;
+			
+	return false;
+}
+
+//-------------------------------------------------------------------
+
 dodoStringArr 
 tools::explode(const std::string &fields,
 			escape escapeF,

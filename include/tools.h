@@ -131,6 +131,14 @@ namespace dodo
 			 * @param symbol is symbol to remove
 			 */
 			static std::string trim(const std::string &data, char symbol=' ');
+			
+			/**
+			 * @return true if needle found in array
+			 * @param arr is where to search
+			 * @param needle is what to search for
+			 * @param icase indicates whether to use or not caseless search
+			 */
+			static bool isInArray(const dodoStringArr &arr, const std::string &needle, bool icase);			
 						
 			/**
 			 * removes symbols[from given array] from the end and from the begin of given string
