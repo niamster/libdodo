@@ -69,8 +69,6 @@ namespace dodo
 		DBREQUEST_UPDATE,
 		DBREQUEST_DELETE,
 		
-		DBREQUEST_USE,
-		
 		DBREQUEST_TRUNCATE,
 		
 		DBREQUEST_RENAME_DB,
@@ -406,12 +404,6 @@ namespace dodo
 			 * @param type is type of "subquering"[see qStEnum]
 			 */
 			virtual void subquery(const dodoStringArr &sub, int type=DBREQUEST_UNION/*DBREQUEST_UNION_ALL,DBREQUEST_MINUS,DBREQUEST_INTERSECT*/) const;
-			
-			/**
-			 * change database
-			 * @param db is name of database where to change
-			 */
-			virtual void use(const std::string &db) const;
 			
 			/**
 			 * create index in table

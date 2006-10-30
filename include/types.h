@@ -49,16 +49,14 @@ namespace dodo
 	#else
 		#define dodoArray std::vector
 	#endif
-	
-	typedef char* pchar;
 
 	typedef dodoArray<std::string> dodoStringArr;///< array of strings
 
 	typedef std::map<std::string, std::string> dodoAssocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
 
-	typedef __dodoMap<std::string> dodoStringMap;
+	typedef __dodoMap<std::string> dodoStringMap;///< hash of strings
 	
-	typedef dodoArray<dodoStringMap> dodoStringMapArr;
+	typedef dodoArray<dodoStringMap> dodoStringMapArr;///< array of hashes of string
 	
 	struct __statements 
 	{

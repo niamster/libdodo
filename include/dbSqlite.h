@@ -62,6 +62,7 @@
 		
 		/**
 	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
+	 	 * @note for autoFraming sqlite must be compiled with SQLITE_ENABLE_COLUMN_METADATA defined
 		 */
 		class dbSqlite : public dbSqlBase
 		

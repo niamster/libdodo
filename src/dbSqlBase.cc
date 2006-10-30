@@ -111,7 +111,8 @@ const __statements dbSqlBase::sqlAddSelArr[] =
 //-------------------------------------------------------------------
 
 dbSqlBase::dbSqlBase() : preventFraming(false),
-						preventEscaping(false)
+						preventEscaping(false),
+						autoFraming(true)
 {	
 	auto_increment = " auto_increment ";
 	
@@ -119,6 +120,8 @@ dbSqlBase::dbSqlBase() : preventFraming(false),
 	tinyblob = "tinyblob";
 	mediumblob = "mediumblob";
 	longblob = "longblob";
+	
+	framingFields.icase = true;
 }
 
 //-------------------------------------------------------------------
@@ -151,7 +154,6 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 		temp.append(preventEscaping?*j:escapeFields(*j));	
 		temp.append(frame);	
 		temp.append(",");	
-		
 	}
 	temp.append(*i);	
 	temp.append("=");	
@@ -282,17 +284,59 @@ dbSqlBase::insertCollect() const
 
 	k = pre_fieldsVal.begin();
 	l = pre_fieldsVal.end();
-
-	char frame[] = "'";
-	if (preventFraming)
-		frame[0] = ' ';
+	
+	std::map<std::string, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 		
-	for (;k!=l;++k)
+	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
+	{	
+		dodoStringArr::iterator t;
+		
+		for (;k!=l;++k)
+		{
+			temp.clear();
+			
+			t = pre_fieldsNames.begin();
+			
+			i = k->begin();
+			j = k->end()-1;
+			for (;i!=j;++i,++t)
+			{
+				if (tools::isInArray(y->second,*t,true))
+				{
+					if (preventEscaping)
+						temp.append("'" + *i + "',");
+					else
+						temp.append("'" + escapeFields(*i) + "',");
+				}
+				else
+					temp.append(*i + ",");
+			}
+			if (tools::isInArray(y->second,*t,true))
+			{
+				if (preventEscaping)
+					temp.append("'" + *i + "'");
+				else
+					temp.append("'" + escapeFields(*i) + "'");
+			}
+			else
+				temp.append(*i);
+			
+			fieldsVPart.push_back(temp);
+		}
+	}
+	else	
 	{
-		if (preventEscaping)
-			fieldsVPart.push_back(tools::implode(*k,",",frame));
-		else
-			fieldsVPart.push_back(tools::implode(*k,escapeFields,",",frame));
+		char frame[] = "'";
+		if (preventFraming)
+			frame[0] = ' ';
+		
+		for (;k!=l;++k)
+		{
+			if (preventEscaping)
+				fieldsVPart.push_back(tools::implode(*k,",",frame));
+			else
+				fieldsVPart.push_back(tools::implode(*k,escapeFields,",",frame));
+		}
 	}
 	
 	i = fieldsVPart.begin();
@@ -363,11 +407,56 @@ dbSqlBase::insertSelectCollect() const
 void
 dbSqlBase::updateCollect() const
 {
-	char frame[] = "'";
-	if (preventFraming)
-		frame[0] = ' ';
+	std::string setPart;
+	
+	std::map<std::string, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 		
-	std::string setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames,frame);
+	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
+	{
+		register unsigned int fn(pre_fieldsNames.size()),fv(pre_fieldsVal.front().size());
+		register unsigned int o(fn<=fv?fn:fv);
+	
+		i = pre_fieldsNames.begin();
+		j = pre_fieldsVal.front().begin();
+		for (register unsigned int k(0);k<o-1;++i,++j,++k)
+		{	
+			if (tools::isInArray(y->second,*i,true))
+			{
+				setPart.append(*i);	
+				setPart.append("='");		
+				setPart.append(preventEscaping?*j:escapeFields(*j));
+				setPart.append("',");
+			}
+			else
+			{
+				setPart.append(*i);	
+				setPart.append("=");		
+				setPart.append(preventEscaping?*j:escapeFields(*j));
+				setPart.append(",");
+			}
+		}	
+		if (tools::isInArray(y->second,*i,true))
+		{
+			setPart.append(*i);	
+			setPart.append("='");		
+			setPart.append(preventEscaping?*j:escapeFields(*j));
+			setPart.append("'");
+		}
+		else
+		{
+			setPart.append(*i);	
+			setPart.append("=");		
+			setPart.append(preventEscaping?*j:escapeFields(*j));
+		}
+	}
+	else
+	{
+		char frame[] = "'";
+		if (preventFraming)
+			frame[0] = ' ';
+					
+		setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames,frame);
+	}
 	
 	insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
 	temp.assign(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));
@@ -392,14 +481,6 @@ dbSqlBase::delCollect() const
 	request.append(temp);
 	request.append("from ");
 	request.append(pre_table);
-}
-
-//-------------------------------------------------------------------
-
-void 
-dbSqlBase::useCollect() const
-{
-	request = "use " + dbInfo.db;
 }
 
 //-------------------------------------------------------------------
@@ -556,12 +637,6 @@ dbSqlBase::queryCollect() const
 		case DBREQUEST_DELETE:
 		
 			delCollect();
-			
-			break;
-			
-		case DBREQUEST_USE:
-		
-			useCollect();
 			
 			break;
 			

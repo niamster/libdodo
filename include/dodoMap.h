@@ -122,33 +122,6 @@ namespace dodo
 					else
 						return realArr.find(varName);				
 				}
-							
-				/**
-				 * @return true if found
-				 * @param varName is value of hash that points to the value
-				 */			 
-				typename std::map<std::string, anyType>::const_iterator
-				bfind(const std::string &varName) const
-				{
-					if (icase)
-					{
-						i = realArr.begin();
-						j = realArr.end();
-						
-						for (;i!=j;++i)
-							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
-								return true;		
-						
-						return false;
-					}
-					else
-					{
-						if (realArr.find(varName) != realArr.end())
-							return true;
-						else
-							return false;
-					}				
-				}
 								
 				/**
 				 * insert into hash
@@ -252,9 +225,7 @@ namespace dodo
 								
 			private:
 				
-				typedef int(*charCmp)(const char *, const char *);
-				
-				charCmp cmpFunc;
+				int(*cmpFunc)(const char *, const char *);
 				
 				typename std::map<std::string, anyType>::iterator i;///< iterator for realArr(from begin)
 				typename std::map<std::string, anyType>::iterator j;///< iterator for realArr(indicates end)

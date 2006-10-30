@@ -144,6 +144,93 @@
 	{
 		if (query.size() == 0)
 		{
+			if (autoFraming)
+			{
+				#ifdef SQLITE_ENABLE_COLUMN_METADATA
+				
+					if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
+					{
+						std::string temp = dbInfo.db + ":" + pre_table;
+						
+						if (!framingFields.isset(temp))
+						{
+							request = "select * from " + pre_table + " limit 1";
+	
+							if (!empty)
+							{
+								sqlite3_finalize(liteStmt);
+								empty = true;
+							}		
+		
+							if (sqlite3_prepare(lite,request.c_str(),request.size(), &liteStmt, NULL) != SQLITE_OK)
+								#ifndef NO_EX
+									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__,request);
+								#else
+									return false;
+								#endif	
+			
+							if (liteStmt == NULL)	
+								#ifndef NO_EX
+									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+								#else
+									return false;
+								#endif
+								
+							empty = false;
+				
+							numFields = sqlite3_column_count(liteStmt);
+							
+							register const char *columnType, *columnName;
+							
+							for (register unsigned int i(0);i<numFields;++i)
+							{	
+								columnName = sqlite3_column_name(liteStmt, i);
+											
+								if (sqlite3_table_column_metadata(lite, 
+															NULL, 
+															pre_table.c_str(),
+															columnName,
+															&columnType,
+															NULL,
+															NULL,
+															NULL,
+															NULL) != SQLITE_OK)
+																#ifndef NO_EX
+																	throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__,request);
+																#else
+																	return false;
+																#endif
+																
+								if (strcasestr(columnType,"char") != NULL || 
+									strcasestr(columnType,"date") != NULL || 
+									strcasestr(columnType,"time") != NULL || 
+									strcasestr(columnType,"blob") != NULL || 
+									strcasestr(columnType,"text") != NULL || 
+									strcasestr(columnType,"enum") != NULL || 
+									strcasestr(columnType,"set") != NULL)
+										rowsPart.push_back(columnName);
+							}
+							
+							if (!empty)
+							{
+								sqlite3_finalize(liteStmt);
+								empty = true;
+							}
+							
+							framingFields.insert(temp, rowsPart);
+							
+							rowsPart.clear();		
+						}
+					}
+					
+				#else
+				
+					autoFraming = false;
+				
+				#endif
+				
+			}
+			
 			queryCollect();
 			
 			blobHint = false;

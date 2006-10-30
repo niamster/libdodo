@@ -257,7 +257,63 @@
 					bool result) const
 	{	
 		if (query.size() == 0)
-			queryCollect();			
+		{
+			if (autoFraming)
+			{
+				if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
+				{
+					std::string temp = dbInfo.db + ":" + pre_table;
+					
+					if (!framingFields.isset(temp))
+					{
+						request = "describe " + pre_table;
+	
+						if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
+							#ifndef NO_EX
+								throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__,request);
+							#else
+								return false;
+							#endif
+			
+						mysqlRes = mysql_store_result(mysql);
+						if (mysqlRes == NULL)
+							#ifndef NO_EX
+								throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+							#else
+								return false;
+							#endif
+							
+						empty = false;
+							
+						mysql_field_seek(mysqlRes, 0);
+	
+						rowsPart.clear();
+
+						while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
+						{	
+							if (strcasestr(mysqlRow[1],"char") != NULL || 
+								strcasestr(mysqlRow[1],"date") != NULL || 
+								strcasestr(mysqlRow[1],"time") != NULL || 
+								strcasestr(mysqlRow[1],"blob") != NULL || 
+								strcasestr(mysqlRow[1],"text") != NULL || 
+								strcasestr(mysqlRow[1],"enum") != NULL || 
+								strcasestr(mysqlRow[1],"set") != NULL)
+									rowsPart.push_back(mysqlRow[0]);
+						}
+						
+						mysql_free_result(mysqlRes);	
+						
+						empty = true;
+						
+						framingFields.insert(temp, rowsPart);
+						
+						rowsPart.clear();		
+					}
+				}
+			}
+			
+			queryCollect();
+		}			
 		else
 		{
 			request = query;
@@ -265,13 +321,11 @@
 		}
 
 		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
-		{
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__,request);
 			#else
 				return false;
 			#endif
-		}
 		
 		if (!show)
 			#ifndef NO_EX

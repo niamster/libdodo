@@ -72,11 +72,13 @@ namespace dodo
 			 */	
 			static std::string noexists(const std::string &statement);
 		
-			bool preventFraming;///< to frame or not with `'` fields values in insert and update; false by default
+			mutable bool preventFraming;///< to frame or not with `'` fields values in insert and update; false by default
 			
-			bool preventEscaping;///< to escape{\,'} or not fields' values in insert and update; false by default
+			mutable bool preventEscaping;///< to escape{\,'} or not fields' values in insert and update; false by default
 			
-			mutable std::string request;///< ready sql statement
+			mutable bool autoFraming;///< detects automatic whether to frame or not; true by default; if preventFraming is set - autoFraming is disabled; if preventEscaping is false - escaping only framed values
+			
+			mutable std::string request;///< ready sql statement with `'` fields values in insert and update; true by default
 
 			/**
 			 * @return escaped string
@@ -116,11 +118,6 @@ namespace dodo
 			 * constructs from collected data to DELETE sql statement
 			 */
 			virtual void delCollect() const;
-			
-			/**
-			 * constructs from collected data to USE sql statement
-			 */
-			virtual void useCollect() const;
 			
 			/**
 			 * constructs from collected data to UNION, MINUS, INTERSECT sql statement
@@ -247,6 +244,8 @@ namespace dodo
 			mutable std::string tinyblob;///< bytea for postgres, blob for others 
 			mutable std::string mediumblob;///< bytea for postgres, blob for others 
 			mutable std::string longblob;///< bytea for postgres, blob for others 
+		
+			mutable __dodoMap<dodoStringArr> framingFields;///< hash of 'db:table' => `array of fields to frame`
 		
 		private:
 			

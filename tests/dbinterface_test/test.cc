@@ -82,8 +82,13 @@ int main(int argc, char **argv)
 		fi.flag = FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
+		fi.name = "d";
+		fi.type = FIELDTYPE_INTEGER;
+		fi.flag = FIELDPROP_NULL;
+		ti.fields.push_back(fi);		
+		
 		fi.name = "b";
-		fi.type = FIELDTYPE_BLOB;
+		fi.type = FIELDTYPE_LONGBLOB;
 		fi.flag = FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
@@ -93,6 +98,7 @@ int main(int argc, char **argv)
 		map<string,string> arr;
 		arr["date"] = "2005-07-08";
 		arr["operation"] = "mu";
+		arr["d"] = "1";
 		
 		vector<string> select;
 		select.push_back("date");
@@ -107,11 +113,15 @@ int main(int argc, char **argv)
 			pp->fetch();
 			
 			pp->insert("leg",arr);
+			cout << ((dbSqlBase *)pp)->queryCollect() << endl;
 			pp->exec();
 			
+			arr["d"] = "d+1";
 			arr["operation"] = "um";
 			pp->update("leg",arr);
+                        cout << ((dbSqlBase *)pp)->queryCollect() << endl;
 			arr["operation"] = "mu";
+			arr["d"] = "1";
 			pp->exec();
 		}
 		
@@ -135,7 +145,7 @@ int main(int argc, char **argv)
 			cout << endl;	
 		}
 
-                arr.clear();
+		arr.clear();
 
 		flushDiskTools::unlink("test.1");
 		flushDiskTools::unlink("test.2");
@@ -162,7 +172,7 @@ int main(int argc, char **argv)
 			}
                 	
 			((dbSqlBase *)pp)->preventFraming = true;
-            ((dbSqlBase *)pp)->preventEscaping = true;
+            		((dbSqlBase *)pp)->preventEscaping = true;
 		
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";
@@ -186,14 +196,11 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
-                        	flushDiskTools::append("test.2",(*store.rows.begin())[2]);
-			else
-				flushDiskTools::append("test.2",(*store.rows.begin())[2]);
+			flushDiskTools::append("test.2",(*store.rows.begin())[2]);	
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << ex.line << endl << endl;
+		cout << ex << endl << ex.message << endl << ex.line << endl << endl;
 	}
 
 	delete pp;

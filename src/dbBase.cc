@@ -421,16 +421,6 @@ dbBase::subquery(const dodoStringArr &sub,
 
 //-------------------------------------------------------------------
 
-void 
-dbBase::use(const std::string &db) const
-{
-	qType = DBREQUEST_USE;
-	dbInfo.db = db;
-	show = false;
-}
-
-//-------------------------------------------------------------------
-
 void
 dbBase::truncate(const std::string &table)
 {
@@ -840,7 +830,7 @@ dbBase::setDbInfo(const __dbInfo &info) const
 	dbInfo.host = info.host;
 	dbInfo.user = info.user;
 	dbInfo.password = info.password;
-	dbInfo.path = info.path;	
+	dbInfo.path = info.path;
 }
 
 //-------------------------------------------------------------------
