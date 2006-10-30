@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
+ 
 #include <dbBase.h>
 
 using namespace dodo;
@@ -207,14 +207,12 @@ dbBase::insert(const std::string &a_table,
 	
 	pre_table = a_table;
 	
-	i = a_fields.begin();
-	j = a_fields.end();
-	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 	
-	temp.clear();
+	dodoStringArr temp;
 	
+	dodoAssocArr::const_iterator i = (a_fields.begin()), j(a_fields.end());
 	for (;i!=j;++i)
 	{
 		pre_fieldsNames.push_back(i->first);
@@ -235,17 +233,16 @@ dbBase::insert(const std::string &a_table,
 	
 	pre_table = a_table;
 	
-	v = a_fields.begin();
-	b = a_fields.end();
+	dodoArray<dodoAssocArr>::const_iterator v(a_fields.begin()), b(a_fields.end());
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 	
-	j = v->end();
-	for (i=v->begin();i!=j;++i)
+	dodoAssocArr::const_iterator i(v->begin()), j(v->end());
+	for (;i!=j;++i)
 		pre_fieldsNames.push_back(i->first);
 
-	temp.clear();
+	dodoStringArr temp;
 	
 	for (;v!=b;++v)
 	{
@@ -292,9 +289,7 @@ dbBase::insert(const std::string &a_table,
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
 	
-	k = a_fieldsVal.begin();
-	l = a_fieldsVal.end();;
-	
+	dodoArray<dodoStringArr>::const_iterator k(a_fieldsVal.begin()), l(a_fieldsVal.end());
 	for(;k!=l;++k)
 		pre_fieldsVal.push_back(*k);
 	
@@ -340,13 +335,12 @@ dbBase::update(const std::string &a_table,
         
 	pre_table = a_table;
 	
-	i = a_fields.begin();
-	j = a_fields.end();
+	dodoAssocArr::const_iterator i(a_fields.begin()), j(a_fields.end());
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 	
-	temp.clear();
+	dodoStringArr temp;
 	
 	for (;i!=j;++i)
 	{

@@ -287,7 +287,9 @@
 							
 						mysql_field_seek(mysqlRes, 0);
 	
-						rowsPart.clear();
+						dodoStringArr  rowsPart;
+						
+						MYSQL_ROW mysqlRow;
 
 						while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 						{	
@@ -306,8 +308,6 @@
 						empty = true;
 						
 						framingFields.insert(temp, rowsPart);
-						
-						rowsPart.clear();		
 					}
 				}
 			}
@@ -370,15 +370,21 @@
 			
 		mysql_field_seek(mysqlRes, 0);
 		
-		numFields = mysql_num_fields(mysqlRes);	
+		register unsigned int numFields = mysql_num_fields(mysqlRes);	
 		
-		rows.clear();
+		dodoArray<dodoStringArr> rows;
 		
 		#ifndef USE_DEQUE
 			rows.reserve(mysql_num_rows(mysqlRes));
 		#endif
 		
 		register unsigned long *length, j;
+		
+		dodoStringArr rowsPart;
+		
+		MYSQL_ROW mysqlRow;
+		
+		std::string rowPart;
 		
 		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 		{		
@@ -422,10 +428,10 @@
 		if (empty || !show)
 			return __stringarray__;
 			
-		numFields = mysql_num_fields(mysqlRes);	
-		mysqlFields = mysql_fetch_fields(mysqlRes);
+		unsigned int numFields = mysql_num_fields(mysqlRes);	
+		MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlRes);
 		
-		fields.clear();
+		dodoStringArr fields;
 		
 		#ifndef USE_DEQUE
 			fields.reserve(numFields);
@@ -606,16 +612,22 @@
 		
 		mysql_field_seek(mysqlRes, 0);
 		
-		numFields = mysql_num_fields(mysqlRes);	
-		mysqlFields = mysql_fetch_fields(mysqlRes);
+		unsigned int numFields = mysql_num_fields(mysqlRes);	
+		MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlRes);
 
+		dodoStringMapArr rowsFields;
+		
 		#ifndef USE_DEQUE
 			rowsFields.reserve(mysql_num_rows(mysqlRes));
 		#endif
 		
-		rowFieldsPart.clear();
+		dodoStringMap rowFieldsPart;
+		
+		std::string rowPart;
 
 		register unsigned long *length, j;
+		
+		MYSQL_ROW mysqlRow;
 		
 		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 		{		

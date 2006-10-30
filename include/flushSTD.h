@@ -294,13 +294,6 @@ namespace dodo
 			FILE *desc;///< descriptor that is needed for redirection
 						
 			bool blocked;///< indicates, whether blocked or not;
-			
-			/**
-			 * @note share vars
-			 */
-			mutable unsigned long iter;///< amount of iterations to do to operate with data
-			mutable unsigned long rest;///< amount of data that is needed to operate at last
-			mutable unsigned long sent_received;///< amount of data that totally received/sent
 	};
 
 };

@@ -128,7 +128,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
@@ -150,7 +150,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
@@ -175,7 +175,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILEINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
@@ -202,7 +202,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFERINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
@@ -223,7 +223,7 @@
 		if (node == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
@@ -251,9 +251,8 @@
 				
 		if (definition.children.size() > 0)
 		{
-			j = definition.children.end();
-			
-			for (i = definition.children.begin();i!=j;++i)
+			std::map<std::string, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+			for (;i!=j;++i)
 				sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
 		}
 		else
@@ -429,17 +428,17 @@
 		
 		if (definition.attributes.size() > 0)
 		{
-			jAttr = definition.attributes.end();
+			dodoStringArr::const_iterator jAttr = definition.attributes.end();
 			if (icaseNames)
 			{
 				while (attribute != NULL)
 				{
-					iAttr = definition.attributes.begin();
+					dodoStringArr::const_iterator iAttr = definition.attributes.begin();
 					for (;iAttr!=jAttr;++iAttr)
 					{
 						if (xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str()) == 0)
 						{
-							xChar = xmlGetProp(node,attribute->name);
+							xmlChar *xChar = xmlGetProp(node,attribute->name);
 							if (xChar != NULL)
 							{
 								attributes[*iAttr] = (char *)xChar;
@@ -453,10 +452,10 @@
 			}
 			else
 			{
-				iAttr = definition.attributes.begin();
+				dodoStringArr::const_iterator iAttr = definition.attributes.begin();
 				for (;iAttr!=jAttr;++iAttr)
 				{
-					xChar = xmlGetProp(node,(xmlChar *)iAttr->c_str());
+					xmlChar *xChar = xmlGetProp(node,(xmlChar *)iAttr->c_str());
 					if (xChar != NULL)
 					{
 						attributes[*iAttr] = (char *)xChar;
@@ -471,7 +470,7 @@
 			{
 				while (attribute != NULL)
 				{
-					xChar = xmlGetProp(node,attribute->name);
+					xmlChar *xChar = xmlGetProp(node,attribute->name);
 					if (xChar!=NULL)
 					{
 						attributes[(char *)attribute->name] = (char *)xChar;
@@ -494,7 +493,7 @@
 		
 		while (attribute != NULL)
 		{
-			xChar = xmlGetProp(node,attribute->name);
+			xmlChar *xChar = xmlGetProp(node,attribute->name);
 			if (xChar != NULL)
 			{
 				attributes[(char *)attribute->name] = (char *)xChar;
@@ -526,7 +525,7 @@
 		if (node->name != NULL)
 			resNode.name.assign((char *)node->name);
 		
-		xChar = xmlNodeListGetString(document,node->children,1);
+		xmlChar *xChar = xmlNodeListGetString(document,node->children,1);
 		if (xChar != NULL)
 		{
 			resNode.value.assign((char *)xChar);
@@ -543,7 +542,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLFILEINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
@@ -565,7 +564,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLBUFFERINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
@@ -639,7 +638,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
@@ -650,7 +649,7 @@
 		if (node == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
 			}
 			#else
@@ -673,7 +672,7 @@
 		if (document == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else
@@ -684,7 +683,7 @@
 		if (node == NULL)
 			#ifndef NO_EX
 			{
-				error = xmlGetLastError();
+				xmlErrorPtr error = xmlGetLastError();
 				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
 			}
 			#else

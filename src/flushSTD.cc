@@ -135,10 +135,10 @@ flushSTD::read(char * const a_void) const
 	
 	memset(a_void,'\0',inSize);
 	 
-	iter = inSize/inSTDBuffer;
-	rest = inSize%inSTDBuffer;
+	register unsigned long iter = inSize/inSTDBuffer;
+	register unsigned long rest = inSize%inSTDBuffer;
 	
-	sent_received = 0;
+	register unsigned long sent_received = 0;
 
 	for (register unsigned long i=0;i<iter;++i)
 	{
@@ -248,10 +248,10 @@ flushSTD::write(const char *const aa_buf)
 		performXExec(preExec);
 	#endif
 	 
-	iter = outSize/outSTDBuffer;
-	rest = outSize%outSTDBuffer;
+	register unsigned long iter = outSize/outSTDBuffer;
+	register unsigned long rest = outSize%outSTDBuffer;
 	
-	sent_received = 0;
+	register unsigned long sent_received = 0;
 	
 	desc = stdout;
 	if (err)
@@ -578,10 +578,10 @@ flushSTD::writeStream(const char *const aa_buf)
 
 	register unsigned long outSize = strlen(aa_buf);
 	 
-	iter = outSize/outSTDBuffer;
-	rest = outSize%outSTDBuffer;
+	register unsigned long iter = outSize/outSTDBuffer;
+	register unsigned long rest = outSize%outSTDBuffer;
 	
-	sent_received = 0;
+	register unsigned long sent_received = 0;
 	
 	desc = stdout;
 	if (err)

@@ -684,17 +684,6 @@ namespace dodo
 			mutable int qDbDepInsShift;///< value to shift query template for specific
 			mutable int qDbDepUpShift;///< value to shift query template for specific
 			mutable int qDbDepDelShift;///< value to shift query template for specific
-			
-			/**
-			 * @note share vars
-			 */
-			mutable dodoAssocArr::const_iterator i;///< iterator for "hash"
-			mutable dodoAssocArr::const_iterator j;///< iterator for "hash"
-			mutable dodoArray<dodoStringArr>::const_iterator k;///< iterator for array of hashes
-			mutable dodoArray<dodoStringArr>::const_iterator l;///< iterator for array of hashes
-			dodoArray<dodoAssocArr>::const_iterator v;///< iterator for array of hashes
-			dodoArray<dodoAssocArr>::const_iterator b;///< iterator for array of hashes
-			dodoStringArr temp;///< temp storage
 	};
 
 };

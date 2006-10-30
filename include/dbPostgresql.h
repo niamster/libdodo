@@ -248,25 +248,11 @@
 								_exec(const std::string &query, bool result) const;
 				
 			private:
-				
-				mutable int rowsNum;///< number of columns in the query result
-				mutable int fieldsNum;///< number of fields in the query result
 					
 				mutable bool empty;///< for detectin' whether pgResult is empty or not
 	
 				mutable PGconn *conn;///< handle for connection to PG SQL server
-				mutable PGresult *pgResult;///< holds result from request
-				mutable int status;///< status of operation
-				
-				mutable std::string rowPart;///< temp storage for data
-				mutable dodoStringArr rowsPart;///< to store rows
-				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
-				
-				mutable bool blobHint;///< if true - enable blob hint
-				
-				mutable dodoArray<dodoStringArr> rows;///< to store rows
-				mutable dodoStringArr fields;///< to store fields
-				mutable	dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'		
+				mutable PGresult *pgResult;///< holds result from request	
 				
 				mutable dodoStringArr blobs;///< to store blob data		
 		};

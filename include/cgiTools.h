@@ -308,7 +308,7 @@ namespace dodo
 		
 		private:	
 		
-			mutable bool _cgiFilesInMem;///< to indicate where POST files stored
+			mutable bool _cgiFilesInMem;///< where POST files stored
 		
 			mutable std::list<__cookies> cookiesSet;///< array of cookies nodes
 			mutable int method;///< method that received program
@@ -317,16 +317,6 @@ namespace dodo
 			 * deletes temp files that were created if POST files were present
 			 */
 			virtual void cleanTmp() const;
-			
-			mutable dodoAssocArr::iterator i;///< iterator
-			mutable dodoAssocArr::iterator j;///< iterator
-			
-			mutable dodoStringArr getPair;///< temporary storage for URL encoding
-			mutable dodoStringArr::iterator l;///<iterator for array of strings
-			mutable dodoStringArr::iterator m;///<iterator for array of strings
-			
-			mutable std::string met0;///< temporary stores method for request class method
-			mutable std::string met1;///< temporary stores method for request class method
 			
 			#ifdef FCGI_EXT	
 			

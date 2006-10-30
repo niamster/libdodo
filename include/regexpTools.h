@@ -158,19 +158,7 @@ namespace dodo
 				mutable bool notCompiled;///< indicates, if not compiled
 			#endif	 		
 	 		
-			/**
-			 * @note share vars
-			 */
 			mutable std::list<__regexMatch> boundaries;///< list of buondaries matched in sample by pattern
-			mutable std::list<__regexMatch>::const_iterator i;///< iterator for list of buondaries matched in sample by pattern
-			mutable std::list<__regexMatch>::const_iterator j;///< iterator for list of buondaries matched in sample by pattern
-	
-			mutable __regexMatch bound;///< temporary to save bound
-			
-			mutable int subs;///< amount of subezpressions
-			mutable int res;///< result
-			
-			mutable std::string temp;///< store temporary result
 	 };
 
 };

@@ -425,11 +425,7 @@ namespace dodo
 			
 			mutable int execs;///< execs counter
 			
-			mutable std::list<__execItem>::iterator i;///< iterator for list
-			mutable std::list<__execItem>::iterator j;///< iterator for list
 			mutable std::list<__execItem>::iterator k;///< iterator for list[for matched]
-			
-			mutable __execItem temp;///< temp storage for hook	
 	};
 
 };

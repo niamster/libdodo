@@ -249,21 +249,6 @@
 
 				mutable bool empty;///< for detectin' whether liteStmt is empty or not
 				
-				mutable int result;///< store result for query
-				
-				mutable dodoStringArr rowsPart;///< to store rows
-				mutable std::string rowPart;///< to set temporary row content
-				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
-				
-				mutable unsigned int numFields;///< number of fields
-				mutable unsigned int numRows;///< number of rows
-				
-				mutable bool blobHint;///< if true - enable blob hint
-
-				mutable dodoArray<dodoStringArr> rows;///< to store rows
-				mutable dodoStringArr fields;///< to store fields
-				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
-				
 				mutable dodoStringArr blobs;///< to store blob data			
 		};
 

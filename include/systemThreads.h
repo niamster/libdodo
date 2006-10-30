@@ -340,12 +340,11 @@
 				virtual bool getThread(unsigned long position);
 							
 				std::list<__threadInfo> threads;///< vector of threads
-				__threadInfo thread;///< temp storage for thread
+
 				unsigned long threadNum;///< number of registered threads
+				
 				pthread_attr_t attr;///< attribute that indicates joinability
-	
-				std::list<__threadInfo>::iterator i;///< iterator for list of threads
-				std::list<__threadInfo>::iterator j;///< iterator for list of threads
+
 				std::list<__threadInfo>::iterator k;///< iterator for list of threads[for matched]
 		};
 	

@@ -77,8 +77,6 @@ cgiTools::cgiTools(bool silent,
 	makePost();
 	make(COOKIES.realArr,ENVIRONMENT["HTTP_COOKIE"],"; ");
 	make(METHOD_GET.realArr,ENVIRONMENT["QUERY_STRING"]);
-	
-	getPair.clear();
 }
 
 //-------------------------------------------------------------------
@@ -104,8 +102,6 @@ cgiTools::cgiTools(bool silent,
 		makePost();
 		make(COOKIES.realArr,ENVIRONMENT["HTTP_COOKIE"],"; ");
 		make(METHOD_GET.realArr,ENVIRONMENT["QUERY_STRING"]);
-		
-		getPair.clear();
 	}
 
 #endif	
@@ -165,10 +161,9 @@ cgiTools::make(dodoAssocArr &val,
 			const std::string &string,
 			char *delim) const
 {	
-	getPair = tools::explode(tools::decodeURL(string),delim);
+	dodoStringArr getPair = tools::explode(tools::decodeURL(string),delim);
 	
-	l = getPair.begin();
-	m = getPair.end();
+	dodoStringArr::iterator l(getPair.begin()), m(getPair.end());
 	
 	dodoStringArr temp;
 	
@@ -210,9 +205,7 @@ cgiTools::initHeaders(dodoAssocArr &a_headers) const
 	
 	if (a_headers.size() > 0)
 	{
-		i = a_headers.begin();
-		j = a_headers.end();
-	
+		dodoAssocArr::iterator i(a_headers.begin()), j(a_headers.end());
 		for (;i!=j;++i)
 			HEADERS[i->first] = i->second;	
 	}
@@ -223,9 +216,7 @@ cgiTools::initHeaders(dodoAssocArr &a_headers) const
 void 
 cgiTools::printHeaders() const
 {
-	 i = HEADERS.begin();
-	 j = HEADERS.end();
-	
+	dodoAssocArr::iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (;i!=j;++i)
 		#ifdef FCGI_EXT
 			if (cgiFastSet)
@@ -527,8 +518,8 @@ std::string
 cgiTools::request(const std::string &varName, 
 				short first) const
 {
-	met0 = METHOD_GET[varName];
-	met1 = METHOD_POST[varName];
+	std::string met0 = METHOD_GET[varName];
+	std::string met1 = METHOD_POST[varName];
 	
 	if (first == REQUESTMETHOD_GET)
 		if (met0.size() != 0)

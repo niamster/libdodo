@@ -545,12 +545,12 @@ tools::trim(const std::string &data,
 	{
 		codeSet(toCode,fromCode);
 		
-		in = buffer.size();
-		out = in*2;
+		register size_t in = buffer.size();
+		register size_t out = in*2;
 		char *outBuffer = new char[out];
 				
-		inFake = (char *)buffer.c_str();
-		outFake = outBuffer;
+		register char *inFake = (char *)buffer.c_str();
+		register char *outFake = outBuffer;
 		
 		#ifdef __FreeBSD__
 			if (iconv(conv,(const char **)&inFake,&in,&outFake,&out) == (size_t)(-1))
@@ -566,6 +566,7 @@ tools::trim(const std::string &data,
 			#endif
 		}
 		
+		std::string result;
 		result.assign(outBuffer, out);
 
 		delete [] outBuffer;
@@ -581,12 +582,12 @@ tools::trim(const std::string &data,
 		if (!convSet)
 			return buffer;
 		
-		in = buffer.size();
-		out = in*2;
-		char *outBuffer = new char[out];
+		register size_t in = buffer.size();
+		register size_t out = in*2;
+		register char *outBuffer = new char[out];
 					
-		inFake = (char *)buffer.c_str();
-		outFake = outBuffer;
+		register char *inFake = (char *)buffer.c_str();
+		register char *outFake = outBuffer;
 		
 		#ifdef __FreeBSD__
 			if (iconv(conv,(const char **)&inFake,&in,&outFake,&out) == (size_t)(-1))
@@ -602,6 +603,7 @@ tools::trim(const std::string &data,
 				#endif
 			}
 		
+		std::string result;
 		result.assign(outFake, out);
 		
 		delete [] outBuffer;

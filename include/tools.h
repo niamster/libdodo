@@ -488,11 +488,6 @@ namespace dodo
 				iconv_t conv;///< discriptor for code conversions
 				bool convSet;///< indicates whether codeset was set
 				
-				size_t in;///< inbytesleft paramether for iconv
-				size_t out;///< outbytesleft paramether for iconv
-				char *inFake;///< to protect incomming string
-				char *outFake;///< to protect outgoing string
-				
 			#endif		
 			
 			/**
@@ -529,8 +524,6 @@ namespace dodo
 			 * @param contex describes MD5 structure
  			 */
 			static void MD5Final(unsigned char digest[16], MD5_CTX *context);
-
-			std::string result;///< to store temporary result
 							
 			/**
 			 * dummy callback function for implode/explode

@@ -350,17 +350,6 @@ namespace dodo
 			 * @param blockInherited indicates whether to inherit block of parent
 			 */		
 			virtual void init(int socket, bool blockInherited);	
-
-		private:
-		
-			/**
-			 * @note share vars
-			 */			
-			mutable unsigned long iter;///< amount of iterations to do to operate with data
-			mutable unsigned long rest;///< amount of data that is needed to operate at last
-			mutable unsigned long sent_received;///< amount of data that totally received/sent
-			mutable long n;///< amount of data that received/sent by one transaction
-			mutable unsigned long batch;///< amount of data that received/sent by group of transaction
 	 };
 
 };

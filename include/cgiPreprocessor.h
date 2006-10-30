@@ -75,13 +75,6 @@ namespace dodo
 			 * @param newLinePos describes array of newlines' positions
 			 */
 			virtual std::string read(const std::string &path, dodoArray<unsigned long> &newLinePos);
-			
-			std::string temp;///< temp storage
-
-			dodoArray<unsigned long>::const_iterator o;///< iterator for vector
-			dodoArray<unsigned long>::const_iterator p;///< iterator for vector
-
-			char message[128];
 
 	};
 

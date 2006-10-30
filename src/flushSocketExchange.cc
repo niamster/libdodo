@@ -197,14 +197,16 @@ flushSocketExchange::send(const char * const data,
 		performXExec(preExec);
 	#endif	
 	
-	iter = outSize/outSocketBuffer;
-	rest = outSize%outSocketBuffer;
+	register unsigned long iter = outSize/outSocketBuffer;
+	register unsigned long rest = outSize%outSocketBuffer;
 
-	sent_received = 0;
+	register unsigned long sent_received = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
+		
+	register unsigned long batch, n;	
 		
 	for (register unsigned long i=0;i<iter;++i)
 	{
@@ -301,14 +303,16 @@ flushSocketExchange::receive(char * const data,
 	
 	memset(data,'\0',inSize);
 				
-	iter = inSize/inSocketBuffer;
-	rest = inSize%inSocketBuffer;
+	register unsigned long iter = inSize/inSocketBuffer;
+	register unsigned long rest = inSize%inSocketBuffer;
 
-	sent_received = 0;
+	register unsigned long sent_received = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
+		
+	register unsigned long batch, n; 
 			
 	for (register unsigned long i=0;i<iter;++i)
 	{
@@ -489,14 +493,16 @@ flushSocketExchange::sendStream(const char * const data,
 	
 	register unsigned long outSize = buffer.size();
 	
-	iter = outSize/outSocketBuffer;
-	rest = outSize%outSocketBuffer;
+	register unsigned long iter = outSize/outSocketBuffer;
+	register unsigned long rest = outSize%outSocketBuffer;
 
-	sent_received = 0;
+	register unsigned long sent_received = 0;
 		
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
+	
+	register unsigned long batch, n;
 		
 	for (register unsigned long i=0;i<iter;++i)
 	{
@@ -596,6 +602,8 @@ flushSocketExchange::receiveStream(char * const data,
 	register int flag = 0;	
 	if (urgent)	
 		flag = MSG_OOB;
+	
+	register unsigned long n;
 	
 	while (true)
 	{

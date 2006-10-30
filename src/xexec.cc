@@ -41,9 +41,7 @@ xexec::~xexec()
 	
 		deinitXexecModule deinit;	
 		
-		i = preExec.exec.begin();
-		j = preExec.exec.end();
-		
+		std::list<__execItem>::iterator i(preExec.exec.begin()), j(preExec.exec.end());
 		for (;i!=j;++i)
 		{
 			if (i->handle == NULL)
@@ -58,7 +56,6 @@ xexec::~xexec()
 		
 		i = postExec.exec.begin();
 		j = postExec.exec.end();
-		
 		for (;i!=j;++i)
 		{
 			if (i->handle == NULL)
@@ -83,6 +80,8 @@ xexec::addXExec(std::list<__execItem> &list,
  		short type,
 		void *data) const
 {
+	__execItem temp;
+	
 	temp.data = data;
 	temp.obj = obj;
 	temp.func = func;
@@ -333,8 +332,7 @@ xexec::performXExec(__execItemList &list) const
 	if (list.execDisabled)
 		return ;
 		
-	i = list.exec.begin();
-	j = list.exec.end();
+	std::list<__execItem>::iterator i(list.exec.begin()), j(list.exec.end());
 	
 	for (;i!=j;++i)
 		if (i->enabled)
@@ -372,6 +370,8 @@ xexec::performXExec(__execItemList &list) const
 					void *data, 
 					void *toInit) const
 	{
+		__execItem temp;
+		
 		temp.data = data;
 		temp.obj = obj;
 		temp.position = ++execs;
@@ -476,6 +476,8 @@ xexec::performXExec(__execItemList &list) const
 					void *data, 
 					void *toInit) const
 	{
+		__execItem temp;
+		
 		temp.data = data;
 		temp.obj = obj;
 		temp.enabled = true;
@@ -554,9 +556,7 @@ bool
 xexec::getXexec(std::list<__execItem> &list, 
 				int position) const
 {
-	i = list.begin();
-	j = list.end();
-	
+	std::list<__execItem>::iterator i(list.begin()), j(list.end());	
 	for (;i!=j;++i)
 		if (i->position == position)
 		{

@@ -142,6 +142,8 @@
 	dbSqlite::_exec(const std::string &query, 
 					bool result) const
 	{
+		register bool blobHint;
+		
 		if (query.size() == 0)
 		{
 			if (autoFraming)
@@ -178,9 +180,11 @@
 								
 							empty = false;
 				
-							numFields = sqlite3_column_count(liteStmt);
+							register unsigned int numFields = sqlite3_column_count(liteStmt);
 							
 							register const char *columnType, *columnName;
+							
+							dodoStringArr temp1;
 							
 							for (register unsigned int i(0);i<numFields;++i)
 							{	
@@ -208,7 +212,7 @@
 									strcasestr(columnType,"text") != NULL || 
 									strcasestr(columnType,"enum") != NULL || 
 									strcasestr(columnType,"set") != NULL)
-										rowsPart.push_back(columnName);
+										temp1.push_back(columnName);
 							}
 							
 							if (!empty)
@@ -217,9 +221,7 @@
 								empty = true;
 							}
 							
-							framingFields.insert(temp, rowsPart);
-							
-							rowsPart.clear();		
+							framingFields.insert(temp, temp1);
 						}
 					}
 					
@@ -334,16 +336,21 @@
 
 		sqlite3_reset(liteStmt);
 		
-		numFields = sqlite3_column_count(liteStmt);
+		register unsigned int numFields = sqlite3_column_count(liteStmt);
 		
 		register bool iterate = true;
 		register unsigned int i = 0;
 		
-		rows.clear();
+		dodoArray<dodoStringArr> rows;
 		
 		#ifndef USE_DEQUE
 			rows.reserve(sqlite3_data_count(liteStmt));
 		#endif
+		
+		dodoStringArr rowsPart;
+		std::string rowPart;
+		
+		register int result;
 		
 		while (iterate)
 		{
@@ -445,9 +452,9 @@
 		if (!show)
 			return __stringarray__;
 			
-		numFields = sqlite3_column_count(liteStmt);
+		register unsigned int numFields = sqlite3_column_count(liteStmt);
 		
-		fields.clear();
+		dodoStringArr fields;
 		
 		#ifndef USE_DEQUE
 			fields.reserve(numFields);
@@ -480,8 +487,9 @@
 		{
 			sqlite3_reset(liteStmt);
 		
-			numRows = 0;
+			register unsigned int numRows = 0;
 			register bool iterate = true;
+			register int result;
 			
 			while (iterate)
 			{
@@ -625,7 +633,7 @@
 			{
 				return _addExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
 			}
-		
+	
 		#endif
 	
 		//-------------------------------------------------------------------
@@ -642,16 +650,20 @@
 		
 		sqlite3_reset(liteStmt);
 		
-		numFields = sqlite3_column_count(liteStmt);
+		register unsigned int numFields = sqlite3_column_count(liteStmt);
 		
 		register bool iterate = true;
 		register unsigned int i = 0;
-		
-		rowsFields.clear();
+
+		dodoStringMapArr rowsFields;
+		dodoStringMap rowFieldsPart;
+		std::string rowPart;
 		
 		#ifndef USE_DEQUE
 			rowsFields.reserve(sqlite3_data_count(liteStmt));
 		#endif
+		
+		register int result;
 		
 		while (iterate)
 		{

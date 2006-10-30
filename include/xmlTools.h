@@ -302,18 +302,12 @@
 				
 				typedef int(*xcharCmp)(const xmlChar *, const xmlChar *);
 				
-				xcharCmp cmpFunc;
+				xcharCmp cmpFunc;///< function to compare
 				
 				xmlNodePtr findNode(const __xmlNodeDef &definition, xmlNodePtr node);
 				
-				/**
-				 * @note share vars
-				 */
 				xmlDocPtr document;///< XML Document
-				xmlErrorPtr error;///< libxml2 error buffer
 				xmlAttr *attribute;///< XML attributes
-				dodoStringArr::const_iterator iAttr,jAttr;///< for internal calculations; iterators for attributes
-				xmlChar *xChar;///< for internal calculations; to store results
 				
 				/**
 				 * catches libxml2 warnings
@@ -321,10 +315,6 @@
 				 * @param error is error descriptor
 				 */
 				static void errHandler(void *data, xmlErrorPtr error);
-				
-				std::map<std::string, __xmlNodeDef>::const_iterator i;///< iterator for maf of __xmlNodeDef
-				std::map<std::string, __xmlNodeDef>::const_iterator j;///< iterator for maf of __xmlNodeDef
-				
 		};
 	};	
 

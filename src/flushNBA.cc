@@ -46,6 +46,8 @@ flushNBA::~flushNBA()
 int 
 flushNBA::addFlush(const flush &fl)
 {
+	__inOutDescriptors tempD;
+	
 	tempD.position = ++descs;
 	tempD.in = fl.getInDescriptor();
 	tempD.out = fl.getOutDescriptor();
@@ -73,14 +75,12 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 	
 	register int count = -1;
 	
-	fds = new pollfd[pos.size()];
+	pollfd *fds = new pollfd[pos.size()];
 	
-	i = desc.begin();
-	j = desc.end();
+	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 	{
-		m = pos.begin();
-		n = pos.end();
+		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
 		for (;m!=n;++m)
 		{
 			if (i->position == *m)
@@ -97,7 +97,7 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 	
 	if (count > 0)
 	{
-		res = poll(fds,count,timeout);
+		register int res = poll(fds,count,timeout);
 		
 		if (res > 0)
 		{
@@ -109,6 +109,8 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 						tempRB.push_back(false);
 				}
 				
+				delete [] fds;
+				
 				return tempRB;
 		}
 		else
@@ -117,6 +119,8 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 			{
 				makeFalse(count);
 				
+				delete [] fds;
+				
 				return tempRB;
 			}
 			else	
@@ -124,6 +128,8 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 					throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISREADABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else			
 					{
+						delete [] fds;
+						
 						makeFalse(count);
 						
 						return tempRB;
@@ -131,6 +137,8 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 				#endif
 		}		
 	}
+	
+	delete [] fds;
 	
 	makeFalse(count);
 	
@@ -146,14 +154,12 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 	
 	register int count = -1;
 	
-	fds = new pollfd[pos.size()];
+	pollfd *fds = new pollfd[pos.size()];
 	
-	i = desc.begin();
-	j = desc.end();
+	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 	{
-		m = pos.begin();
-		n = pos.end();
+		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
 		for (;m!=n;++m)
 		{
 			if (i->position == *m)
@@ -170,7 +176,7 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 	
 	if (count > 0)
 	{
-		res = poll(fds,count,timeout);
+		register int res = poll(fds,count,timeout);
 		
 		if (res > 0)
 		{
@@ -182,12 +188,16 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 						tempRB.push_back(false);
 				}
 				
+				delete [] fds;
+				
 				return tempRB;
 		}
 		else
 		{
 			if (res == 0)
 			{
+				delete [] fds;
+						
 				makeFalse(count);
 				
 				return tempRB;
@@ -197,6 +207,8 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 					throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISWRITABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 				#else			
 					{
+						delete [] fds;
+						
 						makeFalse(count);
 						
 						return tempRB;
@@ -204,6 +216,8 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 				#endif
 		}		
 	}
+	
+	delete [] fds;
 	
 	makeFalse(count);
 	
@@ -215,15 +229,17 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 bool 
 flushNBA::isReadable(int pos,
 					int timeout)
-{	i = desc.begin();
-	j = desc.end();
+{
+	pollfd fd;
+	
+	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 		if (i->position == pos)
 		{
 			fd.fd = i->in;
 			fd.events = POLLIN | POLLPRI;
 			
-			int res = poll(&fd,1,timeout);
+			register int res = poll(&fd,1,timeout);
 			
 			if (res > 0)
 			{
@@ -253,8 +269,7 @@ flushNBA::isReadable(int pos,
 void 
 flushNBA::delFlush(int pos)
 {
-	i = desc.begin();
-	j = desc.end();
+	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 		if (i->position == pos)
 		{
@@ -269,15 +284,16 @@ bool
 flushNBA::isWritable(int pos,
 					int timeout)
 {
-	i = desc.begin();
-	j = desc.end();
+	pollfd fd;
+	
+	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (;i!=j;++i)
 		if (i->position == pos)
 		{
 			fd.fd = i->out;
 			fd.events = POLLOUT;
 			
-			res = poll(&fd,1,timeout);
+			register int res = poll(&fd,1,timeout);
 			
 			if (res > 0)
 			{

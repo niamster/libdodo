@@ -45,8 +45,7 @@ systemThreadShares::systemThreadShares() : sharedNum(0)
 
 systemThreadShares::~systemThreadShares()
 {
-	l = shareds.begin();
-	m = shareds.end();
+	std::list<__shareInfo>::iterator l(shareds.begin()), m(shareds.end());
 	
 	for (;l!=m;++l)
 		pthread_mutex_destroy(&(l->mutex));
@@ -59,8 +58,7 @@ systemThreadShares::~systemThreadShares()
 bool 
 systemThreadShares::getShared(int position)
 {
-	l = shareds.begin();
-	m = shareds.end();
+	std::list<__shareInfo>::iterator l(shareds.begin()), m(shareds.end());
 	
 	for (;l!=m;++l)
 		if (l->position == position)
@@ -77,6 +75,8 @@ systemThreadShares::getShared(int position)
 int 
 systemThreadShares::add(void *data)
 {
+	__shareInfo shared;
+	
 	shared.data = data;
 	shared.position = ++sharedNum;
 	shared.isLocked = false;

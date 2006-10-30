@@ -83,7 +83,7 @@
 						dbInfo.user.size()==0?NULL:dbInfo.user.c_str(),
 						dbInfo.password.size()==0?NULL:dbInfo.password.c_str());
 						
-		status = PQstatus(conn);
+		register int status = PQstatus(conn);
 		
 		if (status != CONNECTION_OK)
 			#ifndef NO_EX
@@ -149,6 +149,8 @@
 	dbPostgresql::_exec(const std::string &query, 
 						bool result) const
 	{	
+		register bool blobHint;
+		
 		if (query.size() == 0)
 		{
 			queryCollect();
@@ -249,7 +251,7 @@
 				#endif
 		}
 		
-		status = PQresultStatus(pgResult);
+		register int status = PQresultStatus(pgResult);
 
 		switch (status)
 		{
@@ -286,16 +288,19 @@
 		if (empty || !show)
 			return __stringarrayvector__;
 		
-		rowsNum = PQntuples(pgResult);
-		fieldsNum = PQnfields(pgResult);
+		register int rowsNum = PQntuples(pgResult);
+		register int fieldsNum = PQnfields(pgResult);
 
-		rows.clear();
+		dodoArray<dodoStringArr> rows;
 		
 		#ifndef USE_DEQUE
 			rows.reserve(rowsNum);
 		#endif
 		
 		register int j;
+		
+		dodoStringArr rowsPart;
+		std::string rowPart;
 
 		for (register int i(0);i<rowsNum;++i)
 		{
@@ -343,9 +348,9 @@
 		if (empty || !show)
 			return __stringarray__;
 
-		fieldsNum = PQnfields(pgResult);
+		register int fieldsNum = PQnfields(pgResult);
 		
-		fields.clear();
+		dodoStringArr fields;
 		
 		#ifndef USE_DEQUE
 			fields.reserve(fieldsNum);
@@ -500,16 +505,17 @@
 		if (empty || !show)
 			return __dodostringmap__;
 		
-		rowsNum = PQntuples(pgResult);
-		fieldsNum = PQnfields(pgResult);
+		register int rowsNum = PQntuples(pgResult);
+		register int fieldsNum = PQnfields(pgResult);
 		
-		rowsFields.clear();
+		dodoStringMapArr rowsFields;
 		
 		#ifndef USE_DEQUE
 			rowsFields.reserve(rowsNum);
 		#endif
 		
-		rowFieldsPart.clear();
+		dodoStringMap rowFieldsPart;
+		std::string rowPart;
 		
 		register int j;
 
@@ -547,7 +553,8 @@
 	#endif 
 	dbPostgresql::setCharset(const std::string &charset)
 	{
-		if (PQsetClientEncoding(conn, charset.c_str())==-1)
+		register int status = PQsetClientEncoding(conn, charset.c_str());
+		if (status == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_SETCHARSET,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
 			#else

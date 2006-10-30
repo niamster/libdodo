@@ -128,20 +128,7 @@ namespace dodo
 	 	
 	 		int descs;///< descriptors counter
 	 		
-	 		__inOutDescriptors tempD;///< temp storage for descriptors
-	 	
-	 		dodoArray<__inOutDescriptors>::iterator i;///< iterator for desc
-	 		dodoArray<__inOutDescriptors>::iterator j;///< iterator for desc
-	 		
-	 		dodoArray<int>::const_iterator m;///< iterator for positions
-	 		dodoArray<int>::const_iterator n;///< iterator for positions
-	 		
 	 		dodoArray<bool> tempRB;///< temporary to save results of avalaibility
-	 		 
-	 		pollfd fd;///< event capture for stream
-	 		pollfd *fds;///< event capture for streams
-	 		
-	 		int res;///< to hold result 
 	 };
 
 };

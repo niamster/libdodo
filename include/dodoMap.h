@@ -64,8 +64,7 @@ namespace dodo
 				anyType &
 				operator[](const std::string &varName)
 				{
-					i = realArr.begin();
-					j = realArr.end();
+					typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
 						cmpFunc = strcasecmp;
@@ -88,8 +87,7 @@ namespace dodo
 				{
 					if (icase)
 					{
-						i = realArr.begin();
-						j = realArr.end();
+						typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
 							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
@@ -110,8 +108,7 @@ namespace dodo
 				{
 					if (icase)
 					{
-						i = realArr.begin();
-						j = realArr.end();
+						typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
 							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
@@ -204,8 +201,7 @@ namespace dodo
 				bool
 				isset(const std::string &varName)
 				{
-					i = realArr.begin();
-					j = realArr.end();
+					typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
 						cmpFunc = strcasecmp;
@@ -226,9 +222,6 @@ namespace dodo
 			private:
 				
 				int(*cmpFunc)(const char *, const char *);
-				
-				typename std::map<std::string, anyType>::iterator i;///< iterator for realArr(from begin)
-				typename std::map<std::string, anyType>::iterator j;///< iterator for realArr(indicates end)
 		};
 };
 

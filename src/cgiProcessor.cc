@@ -57,7 +57,6 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 
 #endif	
 
-
 //-------------------------------------------------------------------
 
 cgiProcessor::~cgiProcessor()
@@ -72,8 +71,6 @@ cgiProcessor::process(const std::string &path)
 	processed.clear();
 	localHash.clear();
 	local.clear();
-	temp1.clear();
-	temp.clear();
 	localNamespace.clear();
 	namespaceVars.clear();
 	
@@ -100,8 +97,6 @@ cgiProcessor::reProcess()
 	processed.clear();
 	localHash.clear();
 	local.clear();
-	temp1.clear();
-	temp.clear();
 	localNamespace.clear();
 	namespaceVars.clear();
 	
@@ -121,8 +116,6 @@ cgiProcessor::clear()
 	processed.clear();
 	localHash.clear();
 	local.clear();
-	temp1.clear();
-	temp.clear();
 	localNamespace.clear();
 	namespaceVars.clear();
 }
@@ -146,6 +139,7 @@ cgiProcessor::_process(const std::string &buffer,
 	register unsigned long i(0), j(0), begin(0), k(0);
 	
 	std::string tpl;
+	std::string temp;
 	
 	while (true)
 	{	
@@ -282,9 +276,7 @@ cgiProcessor::_process(const std::string &buffer,
 bool 
 cgiProcessor::recursive(const std::string &path)
 {
-	i = processed.begin();
-	j = processed.end();
-	
+	std::list<std::string>::iterator i(processed.begin()), j(processed.end());
 	for (;i!=j;++i)
 		if (strcmp(i->c_str(),path.c_str()) == 0)
 			return true;
@@ -452,7 +444,7 @@ cgiProcessor::_if(const std::string &buffer,
 				return start;
 			#endif
 		
-		temp1 = tools::trim(temp2[0]," \t\n",3);
+		std::string temp1 = tools::trim(temp2[0]," \t\n",3);
 		
 		if (temp1[0] == '!')
 		{
@@ -469,7 +461,7 @@ cgiProcessor::_if(const std::string &buffer,
 	}
 	else
 	{
-		temp1 = getVar(temp2[0]);
+		std::string temp1 = getVar(temp2[0]);
 		
 		std::string temp3 = getVar(temp2[1]);
 		
@@ -598,7 +590,7 @@ cgiProcessor::_include(const std::string &statement,
 						std::string &tpl, 
 						const std::string &path)
 {
-	temp1 = getVar(statement);
+	std::string temp1 = getVar(statement);
 	
 	if (strcmp(temp1.c_str(),path.c_str()) != 0 && !recursive(temp1))
 	{
@@ -689,18 +681,17 @@ cgiProcessor::_assign(const std::string &statement)
 void 
 cgiProcessor::cleanNamespace()
 {
-	c = namespaceVars.find(namespaceDeepness);
+	std::map<unsigned int, dodoStringArr>::iterator c = namespaceVars.find(namespaceDeepness);
 	if (c != namespaceVars.end())
 	{
-		v = localNamespace.find(namespaceDeepness);
+		std::map<unsigned int, dodoAssocArr>::iterator v = localNamespace.find(namespaceDeepness);
 		register bool inLocal = (v != localNamespace.end())?true:false; 
 		
-		x = c->second.begin();
-		z = c->second.end();
+		dodoStringArr::iterator x(c->second.begin()), z(c->second.end());
 		for (;x!=z;++x)
 			if (inLocal)
 			{
-				k = v->second.find(*x);
+				dodoAssocArr::iterator k = v->second.find(*x);
 				if (k != v->second.end())
 					local[k->first] = k->second;
 				else
@@ -1583,8 +1574,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 		if (strcmp(varName.c_str(),"dodo") == 0)			
 			return "cgi framework libdodo";
 		
-		k = local.begin();
-		l = local.end();		
+		dodoAssocArr::iterator k(local.begin()), l(local.end());		
 		for (;k!=l;++k)
 			if (strcmp(varName.c_str(),k->first.c_str()) == 0)
 				return k->second;
@@ -1599,8 +1589,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 	{
 		if (strcmp(temp[0].c_str(),"dodo") == 0)
 		{
-			k = dodo.begin();
-			l = dodo.end();		
+			dodoAssocArr::iterator k(local.begin()), l(local.end());	
 			for (;k!=l;++k)
 				if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 					if (temp.size() == 3)
@@ -1617,8 +1606,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 			return __string__;
 		}
 		
-		k = local.begin();
-		l = local.end();		
+		dodoAssocArr::iterator k(local.begin()), l(local.end());		
 		for (;k!=l;++k)
 			if (strcmp(temp[0].c_str(),k->first.c_str()) == 0)
 			{
@@ -1628,9 +1616,8 @@ cgiProcessor::getVar(const std::string &a_varName)
 				else
 					return __string__;
 			}
-
-		g = localHash.begin();
-		h = localHash.end();		
+			
+		std::map<std::string, dodoAssocArr>::iterator g(localHash.begin()), h(localHash.end());		
 		for (;g!=h;++g)
 			if (strcmp(temp[0].c_str(),g->first.c_str()) == 0)
 			{
@@ -1687,8 +1674,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 					}
 			}
 			
-		o = globalArray.begin();
-		p = globalArray.end();		
+		std::map<std::string, dodoStringArr>::iterator o(globalArray.begin()), p(globalArray.end());		
 		for (;o!=p;++o)
 			if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
 			{
@@ -1710,8 +1696,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 		
 		if (temp.size() >= 3)	
 		{
-			d = globalArrayHash.begin();
-			f = globalArrayHash.end();
+			std::map<std::string, dodoArray<dodoAssocArr> >::iterator d(globalArrayHash.begin()), f(globalArrayHash.end());
 			for (;d!=f;++d)
 				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 				{
@@ -1747,7 +1732,7 @@ cgiProcessor::getVar(const std::string &a_varName)
 std::string 
 cgiProcessor::trim(const std::string &statement)
 {
-	temp = tools::trim(statement," \t\n",3);
+	std::string temp = tools::trim(statement," \t\n",3);
 	
 	register unsigned long i(temp.size() - 1);
 	

@@ -123,14 +123,13 @@ namespace dodo
 			 */
 			virtual bool getShared(int position);
 			
-			std::list<__shareInfo> shareds;///< vector of threads
-			__shareInfo shared;///< temp storage for thread
-			int sharedNum;///< number of registered threads			
+			std::list<__shareInfo> shareds;///< vector of shareads
+			
+			int sharedNum;///< number of registered shareads
+						
 			pthread_mutexattr_t attr;///attribute for mutex
 			timespec timeout;///timeout to lock mutex
 						
-			std::list<__shareInfo>::iterator l;///< iterator for list of shared data
-			std::list<__shareInfo>::iterator m;///< iterator for list of shared data
 			std::list<__shareInfo>::iterator n;///< iterator for list of shared data[for matched]
 	};
 

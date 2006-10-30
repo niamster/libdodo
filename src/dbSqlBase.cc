@@ -137,15 +137,13 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 					const dodoStringArr &fieldsNames,
 					const std::string &frame) const
 {
-	temp.clear();
+	std::string temp;
 	
 	register unsigned int fn(fieldsNames.size()),fv(fieldsVal.size());
 	
 	register unsigned int o(fn<=fv?fn:fv);
 	
-	i = fieldsNames.begin();
-	j = fieldsVal.begin();
-		
+	dodoStringArr::const_iterator i(fieldsNames.begin()), j(fieldsVal.begin());
 	for (register unsigned int k(0);k<o-1;++i,++k,++j)
 	{
 		temp.append(*i);	
@@ -207,19 +205,19 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 	if (qTypeShift == DB_EMPTY)
 		return __string__;
 		
-	temp_.clear();
+	std::string temp;
 	
 	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
-	temp_bit = 0;
+	register unsigned int temp_bit = 0;
 	
 	for (register unsigned int i=0;i<arrLen;++i)
 	{
 		temp_bit = 1<<sqlAddEnumArr[i];
 		if ((temp_bit & qTypeShift) == temp_bit)
-			temp_.append(sqlAddArr[sqlAddEnumArr[i]].str);
+			temp.append(sqlAddArr[sqlAddEnumArr[i]].str);
 	}
 	
-	return temp_;
+	return temp;
 }
 
 //-------------------------------------------------------------------
@@ -231,22 +229,20 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 	if (qTypeShift == DB_EMPTY)
 		return __string__;
 		
-	temp_.clear();
+	std::string temp;
 
 	register unsigned int k(1);
-	temp_bit = 0;
+	register unsigned int temp_bit = 0;
 	
-	i = statements.begin();
-	j = statements.end();
-	
+	dodoStringArr::const_iterator i(statements.begin()), j(statements.end());
 	for (;i!=j;++i,++k)
 	{
 		temp_bit = 1<<k;
 		if ((temp_bit & qTypeShift)==temp_bit)
-			temp_.append(*i);
+			temp.append(*i);
 	}
 	
-	return temp_;
+	return temp;
 	
 }
 
@@ -255,7 +251,7 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 void 
 dbSqlBase::selectCollect() const 
 {
-	temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
+	std::string temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
 	
 	if (pre_table.size()>0)
@@ -280,10 +276,9 @@ dbSqlBase::selectCollect() const
 void 
 dbSqlBase::insertCollect() const
 {
-	fieldsVPart.clear();
+	dodoStringArr fieldsVPart;
 
-	k = pre_fieldsVal.begin();
-	l = pre_fieldsVal.end();
+	dodoArray<dodoStringArr>::iterator k(pre_fieldsVal.begin()), l(pre_fieldsVal.end());
 	
 	std::map<std::string, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 		
@@ -291,14 +286,15 @@ dbSqlBase::insertCollect() const
 	{	
 		dodoStringArr::iterator t;
 		
+		std::string temp;
+		
 		for (;k!=l;++k)
 		{
 			temp.clear();
 			
 			t = pre_fieldsNames.begin();
 			
-			i = k->begin();
-			j = k->end()-1;
+			dodoStringArr::const_iterator i(k->begin()), j(k->end()-1);
 			for (;i!=j;++i,++t)
 			{
 				if (tools::isInArray(y->second,*t,true))
@@ -339,10 +335,9 @@ dbSqlBase::insertCollect() const
 		}
 	}
 	
-	i = fieldsVPart.begin();
-	j = fieldsVPart.end()-1;
-	
 	std::string fieldsPart;
+	
+	dodoStringArr::iterator i(fieldsVPart.begin()), j(fieldsVPart.end()-1);
 	for (;i!=j;++i)
 	{
 		fieldsPart.append("(");	
@@ -353,22 +348,22 @@ dbSqlBase::insertCollect() const
 	fieldsPart.append(*i);	
 	fieldsPart.append(")");	
 	
-	temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
+	std::string temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
 	
-	temp_ = pre_table;
+	std::string temp1 = pre_table;
 	
 	if (pre_fieldsNames.size() != 0)
 	{
-		temp_.append(" (");
-		temp_.append(tools::implode(pre_fieldsNames,","));
-		temp_.append(") ");
+		temp1.append(" (");
+		temp1.append(tools::implode(pre_fieldsNames,","));
+		temp1.append(") ");
 	}
 	
 	request = "insert ";
 	request.append(temp);
 	request.append(" into ");
-	request.append(temp_);
+	request.append(temp1);
 	request.append(" values ");
 	request.append(fieldsPart);
 }
@@ -382,7 +377,7 @@ dbSqlBase::insertSelectCollect() const
 	std::string fieldsPartTo = tools::implode(pre_fieldsNames,",");
 	std::string fieldsPartFrom = tools::implode(pre_fieldsVal.front(),",");
 	
-	temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
+	std::string temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
 	
 	std::string tempS = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
@@ -416,8 +411,7 @@ dbSqlBase::updateCollect() const
 		register unsigned int fn(pre_fieldsNames.size()),fv(pre_fieldsVal.front().size());
 		register unsigned int o(fn<=fv?fn:fv);
 	
-		i = pre_fieldsNames.begin();
-		j = pre_fieldsVal.front().begin();
+		dodoStringArr::iterator i(pre_fieldsNames.begin()), j(pre_fieldsVal.front().begin());
 		for (register unsigned int k(0);k<o-1;++i,++j,++k)
 		{	
 			if (tools::isInArray(y->second,*i,true))
@@ -459,7 +453,7 @@ dbSqlBase::updateCollect() const
 	}
 	
 	insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
-	temp.assign(insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift));
+	std::string temp = insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift);
 
 	temp.append(pre_table);
 
@@ -474,7 +468,7 @@ dbSqlBase::updateCollect() const
 void
 dbSqlBase::delCollect() const
 {
-	temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
+	std::string temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 
 	request = "delete ";
@@ -609,8 +603,8 @@ dbSqlBase::createFieldCollect() const
 std::string
 dbSqlBase::queryCollect() const
 {	
-	additionalActions = true;
-	selectAction = false;
+	register bool additionalActions = true;
+	register bool selectAction = false;
 	
 	switch (qType)
 	{

@@ -228,31 +228,18 @@ namespace dodo
 			virtual std::string trim(const std::string &statement);
 			
 			std::list<std::string> processed;///< vector of files that will be skipped due to recurse
-			std::list<std::string>::iterator i;///< iterator for list
-			std::list<std::string>::iterator j;///< iterator for list
 		
 			std::map<std::string, dodoStringArr> globalArray;///< set of global variables(arrays)[user-set]
-			std::map<std::string, dodoStringArr>::iterator o;///< iterator for map of string arrays
-			std::map<std::string, dodoStringArr>::iterator p;///< iterator for map of string arrays
 			
 			std::map<std::string, dodoAssocArr> globalHash;///< set of global variables(hashes)[user-set]
-			std::map<std::string, dodoAssocArr>::iterator g;///< iterator for map of maps
-			std::map<std::string, dodoAssocArr>::iterator h;///< iterator for map of maps
 			
 			std::map<std::string, dodoArray<dodoAssocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
 			std::map<std::string, dodoAssocArr> localHash;///< set of local variables(hashes)
-			std::map<std::string, dodoArray<dodoAssocArr> >::iterator d;///< iterator for map of maps
-			std::map<std::string, dodoArray<dodoAssocArr> >::iterator f;///< iterator for map of maps
 			
 			dodoAssocArr dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
 			
 			dodoAssocArr global;///< set of global variables[user-set]
-			dodoAssocArr local;///< set of local variables[during parsing]			
-			dodoAssocArr::iterator k;///< iterator for map
-			dodoAssocArr::iterator l;///< iterator for map
-				
-			std::string temp1;///< temporary storage									
-			std::string temp;///< temp storage
+			dodoAssocArr local;///< set of local variables[during parsing]
 			
 			bool _continueFlag;///< indicates `continue`
 			
@@ -264,10 +251,6 @@ namespace dodo
 			unsigned int namespaceDeepness;///< deepness of the namespace
 			std::map<unsigned int, dodoAssocArr> localNamespace;///< set of local variables invisible due to overwrite in deeper namespace[user-set] 
 			std::map<unsigned int, dodoStringArr> namespaceVars;///< names of vars in namespaces
-			dodoStringArr::iterator x;///< iterator for namespaceVars content
-			dodoStringArr::iterator z;///< iterator for namespaceVars content
-			std::map<unsigned int, dodoStringArr>::iterator c;///< iterator for namespaceVars 
-			std::map<unsigned int, dodoAssocArr>::iterator v;///< iterator for localNamespace
 			
 			#ifdef FCGI_EXT	
 			

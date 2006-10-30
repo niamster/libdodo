@@ -362,18 +362,6 @@
 				
 				mutable MYSQL *mysql;///< handler fo mysql connections
 				mutable MYSQL_RES *mysqlRes;///< pointer to result
-				mutable MYSQL_ROW mysqlRow;///< pointer to rows
-				mutable MYSQL_FIELD *mysqlFields;///< pointer to fields
-
-				mutable dodoStringArr rowsPart;///< to store rows
-				mutable std::string rowPart;///< to set temporary row content
-				mutable dodoStringMap rowFieldsPart;///< to store rows with fields' names
-
-				mutable dodoArray<dodoStringArr> rows;///< to store rows
-				mutable dodoStringArr fields;///< to store fields
-				mutable dodoStringMapArr rowsFields;///< to store arrau of hashes 'field'=>'row'
-								
-				mutable unsigned int numFields;///< number of fields
 				
 				mutable unsigned long type;
 		};

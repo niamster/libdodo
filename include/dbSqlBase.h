@@ -249,21 +249,6 @@ namespace dodo
 		
 		private:
 			
-			/**
-			 * @note share vars
-			 */
-			mutable std::string temp;///< to store temporary data
-			mutable std::string temp_;///< to store temporary data
-			mutable unsigned int temp_bit;///< to store temporary data
-			
-			mutable bool additionalActions;///< indicates whether to make additional actions [where, limit]
-			mutable bool selectAction;///< indicates type of request
-			
-			mutable dodoStringArr::const_iterator i;///< iterator for array of strings
-			mutable dodoStringArr::const_iterator j;///< iterator for array of strings
-
-			mutable dodoStringArr fieldsVPart;///< temporary places request's parts
-			
 			static const __statements sqlAddSelArr[3];///< `select` additional statement
 			static const __statements sqlAddDelArr[2];///< `delete` additional statement
 			static const __statements sqlAddUpArr[2];///< `update` additional statement

@@ -54,8 +54,7 @@
 	{
 		pthread_attr_destroy(&attr);
 		
-		i = threads.begin();
-		j = threads.end();
+		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 		
 		#ifdef DL_EXT
 			deinitSystemThreadsModule deinit;
@@ -122,6 +121,8 @@
 							short action,
 							int stackSize)
 	{
+		__threadInfo thread;
+		
 		thread.detached = detached;
 		thread.data = data;
 		thread.func = func;
@@ -144,8 +145,7 @@
 	bool 
 	systemThreads::getThread(unsigned long position)
 	{
-		i = threads.begin();
-		j = threads.end();
+		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 		
 		for (;i!=j;++i)
 			if (i->position == position)
@@ -424,9 +424,7 @@
 	#endif
 	systemThreads::wait()
 	{
-		i = threads.begin();
-		j = threads.end();
-		
+		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 		for (;i!=j;++i)
 		{
 			if (!_isRunning(i) || i->detached)
@@ -504,10 +502,7 @@
 	#endif
 	systemThreads::stop()
 	{
-		i = threads.begin();
-		j = threads.end();
-		
-		
+		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 		for (;i!=j;++i)
 		{
 			if (!_isRunning(i))
@@ -578,9 +573,7 @@
 	void
 	systemThreads::sweepTrash()
 	{
-		i = threads.begin();
-		j = threads.end();
-		
+		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 		for (;i!=j;++i)
 		{
 			if (_isRunning(i))
@@ -619,8 +612,7 @@
 	unsigned long 
 	systemThreads::running()
 	{
-		i = threads.begin();
-		j = threads.end();
+		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 		
 		unsigned long amount(0);
 		
@@ -677,8 +669,7 @@
 							short action,
 							int stackSize)
 		{
-			
-			
+			__threadInfo thread;
 			
 			thread.detached = detached;
 			thread.data = data;
@@ -727,6 +718,8 @@
 								void *data, 
 								void *toInit)
 		{
+			__threadInfo thread;
+			
 			thread.data = data;
 			thread.position = ++threadNum;
 			
@@ -796,6 +789,8 @@
 							short action,
 							int stackSize)
 	{
+		__threadInfo thread;
+			
 		thread.detached = detached;
 		thread.data = data;
 		thread.func = func;
