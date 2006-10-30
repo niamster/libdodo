@@ -66,6 +66,23 @@ fi
 		AC_CHECK_HEADER([sqlite3.h], AC_MSG_RESULT([sqlite3 header was found]), AC_MSG_ERROR([sqlite3 header was not found]))
 	fi
 
+	AC_ARG_WITH([postgresql],
+		AS_HELP_STRING([--with-postgresql(=/path)],[use postgresql]),
+		[MOD_POSTGRESQL_DIR="$withval"], [MOD_POSTGRESQL="no"])
+	if test "$MOD_POSTGRESQL" != "no"
+	then
+		if test "$MOD_POSTGRESQL_DIR" = "yes"
+		then
+			MOD_POSTGRESQL_DIR=/usr
+		fi
+		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/directives.runtime.h
+		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib"
+		AC_CHECK_LIB([pq], [PQclear], AC_MSG_RESULT([postgresql lib was found]), AC_MSG_ERROR([postgresql lib was not found]))
+		LIBS="$LIBS -lpq"
+		AC_CHECK_HEADER([libpq-fe.h], AC_MSG_RESULT([postgresql header was found]), AC_MSG_ERROR([postgresql header was not found]))
+	fi
+
 	AC_ARG_WITH([mysql],
 		AS_HELP_STRING([--with-mysql(=/path)],[use mysql]),
 		[MOD_MYSQL_DIR="$withval"], [MOD_MYSQL="no"])

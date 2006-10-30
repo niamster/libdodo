@@ -190,23 +190,23 @@
 						register long size = blobs.size();
 						
 						register char **values = new char*[size];
-						register int *size()s = new int[size];
+						register int *lengths = new int[size];
 						register int *formats = new int[size];
 						
 						dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
 						for (register int o=0;i!=j;++i,++o)
 						{
 							values[o] = (char *)i->c_str();
-							size()s[o] = i->size();
+							lengths[o] = i->size();
 							formats[o] = 1;
 						}
 
-						pgResult = PQexecParams(conn,request.c_str(),size,NULL,values,size()s,formats,0);
+						pgResult = PQexecParams(conn,request.c_str(),size,NULL,values,lengths,formats,0);
 						if(pgResult == NULL)
 							#ifndef NO_EX
 							{
 								delete [] values;
-								delete [] size()s;
+								delete [] lengths;
 								delete [] formats;
 								
 								throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__);
@@ -214,7 +214,7 @@
 							#else
 							{
 								delete [] values;
-								delete [] size()s;
+								delete [] lengths;
 								delete [] formats;
 								
 								return false;
@@ -222,7 +222,7 @@
 							#endif
 					
 						delete [] values;
-						delete [] size()s;
+						delete [] lengths;
 						delete [] formats;	
 					}	
 										
@@ -312,9 +312,9 @@
 				else
 				{
 					if (preventEscaping)
-						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetsize()(pgResult,i,j));
+						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
 					else
-						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetsize()(pgResult,i,j))));
+						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));
 				}
 
 				rowsPart.push_back(rowPart);
@@ -524,9 +524,9 @@
 				else
 				{
 					if (preventEscaping)
-						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetsize()(pgResult,i,j));
+						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
 					else
-						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetsize()(pgResult,i,j))));					
+						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));					
 				}
 
 				rowFieldsPart.realArr[PQfname(pgResult,i)] = rowPart;
