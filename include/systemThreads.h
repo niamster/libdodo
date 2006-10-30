@@ -243,12 +243,12 @@
 				 * @return true if thread is running
 				 * @param position indicates for what thread to indicate
 				 */
-				virtual bool isRunning(unsigned long position);
+				virtual bool isRunning(unsigned long position) const;
 				
 				/**
 				 * @return amount of running threads
 				 */
-				virtual unsigned long running();
+				virtual unsigned long running() const;
 								
 				/**
 				 * waits for all registered threads' termination
@@ -329,7 +329,7 @@
 				 * @return true if thread is running
 				 * @param position indicates for what thread to indicate
 				 */
-				virtual bool _isRunning(std::list<__threadInfo>::iterator &position);
+				virtual bool _isRunning(std::list<__threadInfo>::iterator &position) const;
 				
 				/**
 				 * searches threads by position
@@ -337,7 +337,7 @@
 				 * @param position describes position of wanted thread
 				 * @param iter is iterator that points on found thread
 				 */
-				virtual bool getThread(unsigned long position);
+				virtual bool getThread(unsigned long position) const;
 							
 				std::list<__threadInfo> threads;///< vector of threads
 
@@ -345,7 +345,7 @@
 				
 				pthread_attr_t attr;///< attribute that indicates joinability
 
-				std::list<__threadInfo>::iterator k;///< iterator for list of threads[for matched]
+				mutable std::list<__threadInfo>::iterator k;///< iterator for list of threads[for matched]
 		};
 	
 	};

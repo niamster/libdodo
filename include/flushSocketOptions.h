@@ -228,7 +228,7 @@ namespace dodo
 			/**
 			 * @return true if socked is blocked
 			 */
-			virtual bool isBlocked();
+			virtual bool isBlocked() const;
 			
 			/**
 			 * blocks/unblocks socket
@@ -253,21 +253,21 @@ namespace dodo
 			#endif			 
 							_close(int socket); 
 										
-			mutable short family;///< socket family
-			mutable short type;///< socket type
+			short family;///< socket family
+			short type;///< socket type
 					
-			mutable int socketOpts;///< socket options
+			int socketOpts;///< socket options
 			
-			mutable short lingerOpts;///< socket linger option
-			mutable int lingerSeconds;///< socket linger timeout
+			short lingerOpts;///< socket linger option
+			int lingerSeconds;///< socket linger timeout
 			
-			mutable unsigned long inTimeout;///< incomming operation timeout of socket; in microseconds
-			mutable unsigned long outTimeout;///< outgoing operation timeout of socket; in microseconds
+			unsigned long inTimeout;///< incomming operation timeout of socket; in microseconds
+			unsigned long outTimeout;///< outgoing operation timeout of socket; in microseconds
 			 
-			mutable unsigned long inSocketBuffer;///< incoming buffer size of socket; in bytes
-			mutable unsigned long outSocketBuffer;///< outgoing buffer size of socket; in bytes
+			unsigned long inSocketBuffer;///< incoming buffer size of socket; in bytes
+			unsigned long outSocketBuffer;///< outgoing buffer size of socket; in bytes
 
-			mutable int socket;///< id of socket
+			int socket;///< id of socket
 			
 			bool blocked;///< indicates, whether blocked or not;
 	};

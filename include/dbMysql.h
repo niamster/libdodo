@@ -154,7 +154,7 @@
 				 *	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
 				 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
 				 */			
-				void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions()) const;
+				void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions());
 			
 				/**
 				 * connect to database
@@ -164,17 +164,17 @@
 				#else
 					virtual bool 
 				#endif
-								connect() const;
+								connect();
 				
 				/**
 				 * disconnect from database
 				 */
-				virtual void disconnect() const;
+				virtual void disconnect();
 				
 				/**
 				 * @return amount of affected rows(update,delete...)
 				 */
-				virtual unsigned int affectedRowsCount();
+				virtual unsigned int affectedRowsCount() const;
 				
 				/**
 				 * @return amount of rows got from request(select ...)
@@ -264,7 +264,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const std::string &query = __string__, bool result = false) const;
+								exec(const std::string &query = __string__, bool result = false);
 				
 				#ifndef DBMYSQL_WO_XEXEC
 				
@@ -274,7 +274,7 @@
 					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
 					 */			
-					virtual int addPostExec(inExec func, void *data) const;
+					virtual int addPostExec(inExec func, void *data);
 					
 					/**
 					 * adds hook before the operation by callback
@@ -282,7 +282,7 @@
 					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
 					 */
-					virtual int addPreExec(inExec func, void *data) const;
+					virtual int addPreExec(inExec func, void *data);
 					
 					#ifdef DL_EXT
 	
@@ -294,7 +294,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */			
-						virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL) const;
+						virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
 					
 						/**
 						 * adds hook after the operation by callback
@@ -303,7 +303,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
+						virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
 						
 						/**
 						 * adds hook after the operation by callback
@@ -312,7 +312,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL) const;
+						virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
 					
 					#endif
 				
@@ -349,7 +349,7 @@
 				#else
 					virtual bool 
 				#endif
-								_exec(const std::string &query, bool result) const;		
+								_exec(const std::string &query, bool result);		
 				
 				/**
 				 * inits addidtional mySQL specific statements
@@ -358,12 +358,12 @@
 
 			private:	
 				
-				mutable bool empty;///< for detectin' whether mysqlResult is empty or not
+				bool empty;///< for detectin' whether mysqlResult is empty or not
 				
-				mutable MYSQL *mysql;///< handler fo mysql connections
-				mutable MYSQL_RES *mysqlRes;///< pointer to result
+				MYSQL *mysql;///< handler fo mysql connections
+				MYSQL_RES *mysqlRes;///< pointer to result
 				
-				mutable unsigned long type;
+				unsigned long type;
 		};
 		
 	};

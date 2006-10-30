@@ -58,7 +58,7 @@ namespace dodo
 			 * @return constructed query from collected data;
 			 * it doesn't clean collected data
 			 */
-			virtual std::string queryCollect() const;
+			virtual std::string queryCollect();
 			
 			/**
 			 * @returns string in 'exist()'
@@ -72,13 +72,13 @@ namespace dodo
 			 */	
 			static std::string noexists(const std::string &statement);
 		
-			mutable bool preventFraming;///< to frame or not with `'` fields values in insert and update; false by default
+			bool preventFraming;///< to frame or not with `'` fields values in insert and update; false by default
 			
-			mutable bool preventEscaping;///< to escape{\,'} or not fields' values in insert and update; false by default
+			bool preventEscaping;///< to escape{\,'} or not fields' values in insert and update; false by default
 			
-			mutable bool autoFraming;///< detects automatic whether to frame or not; true by default; if preventFraming is set - autoFraming is disabled; if preventEscaping is false - escaping only framed values
+			bool autoFraming;///< detects automatic whether to frame or not; true by default; if preventFraming is set - autoFraming is disabled; if preventEscaping is false - escaping only framed values
 			
-			mutable std::string request;///< ready sql statement with `'` fields values in insert and update; true by default
+			std::string request;///< ready sql statement with `'` fields values in insert and update; true by default
 
 			/**
 			 * @return escaped string
@@ -97,106 +97,106 @@ namespace dodo
 			/**
 			 * constructs from collected data to SELECT sql statement
 			 */
-			virtual void selectCollect() const;
+			virtual void selectCollect();
 			
 			/**
 			 * constructs from collected data to INSERT sql statement
 			 */
-			virtual void insertCollect() const;
+			virtual void insertCollect();
 			
 			/**
 			 * constructs from collected data to INSERT ... SELECT sql statement
 			 */
-			virtual void insertSelectCollect() const;
+			virtual void insertSelectCollect();
 			
 			/**
 			 * constructs from collected data to UPDATE sql statement
 			 */
-			virtual void updateCollect() const;     
+			virtual void updateCollect();     
 			
 			/**
 			 * constructs from collected data to DELETE sql statement
 			 */
-			virtual void delCollect() const;
+			virtual void delCollect();
 			
 			/**
 			 * constructs from collected data to UNION, MINUS, INTERSECT sql statement
 			 */
-			virtual void subCollect() const;
+			virtual void subCollect();
 			
 			/**
 			 * constructs from collected data to TRUNCATE sql statement
 			 */
-			virtual void truncateCollect() const;
+			virtual void truncateCollect();
 			
 			/**
 			 * constructs from collected data to DROP DATABASE sql statement
 			 */
-			virtual void delBaseCollect() const;
+			virtual void delBaseCollect();
 			
 			/**
 			 * constructs from collected data to DROP TABLE sql statement
 			 */
-			virtual void delTableCollect() const;
+			virtual void delTableCollect();
 			
 			/**
 			 * constructs from collected data to ALTER ... DROP sql statement
 			 */
-			virtual void delFieldCollect() const;
+			virtual void delFieldCollect();
 			
 			/**
 			 * constructs from collected data to RENAME sql statement
 			 * FIXME: implement it!
 			 */
-			virtual void renameBaseCollect() const;
+			virtual void renameBaseCollect();
 			
 			/**
 			 * constructs from collected data to RENAME sql statement
 			 */
-			virtual void renameTableCollect() const;
+			virtual void renameTableCollect();
 			
 			/**
 			 * constructs from collected data to RENAME sql statement
 			 * FIXME: implement it!
 			 */
-			virtual void renameFieldCollect() const;
+			virtual void renameFieldCollect();
 			
 			/**
 			 * constructs from collected data to CREATE DATABASE sql statement
 			 */
-			virtual void createBaseCollect() const;
+			virtual void createBaseCollect();
 			
 			/**
 			 * constructs from collected data to CREATE TABLE sql statement
 			 */
-			virtual void createTableCollect() const;
+			virtual void createTableCollect();
 			
 			/**
 			 * constructs from collected data to CREATE INDEX sql statement
 			 */
-			virtual void createIndexCollect() const;
+			virtual void createIndexCollect();
 			
 			/**
 			 * constructs from collected data to DROP INDEX sql statement
 			 */
-			virtual void deleteIndexCollect() const;
+			virtual void deleteIndexCollect();
 			
 			/**
 			 * constructs from collected data to ALTER TABLE ... ADD sql statement
 			 */
-			virtual void createFieldCollect() const;
+			virtual void createFieldCollect();
 			
 			/**
 			 * constructs from collected data to sql adaptive field info for proper fields representation
 			 */
-			virtual std::string fieldCollect(__fieldInfo &row) const;
+			virtual std::string fieldCollect(__fieldInfo &row);
 			
 			/**
 			 * adds to the end of request additional data collection for query if check passed
 			 * @param qTypeTocheck indicates what type of additional info to check
 			 * @collectedString is string that holds additional statement
 			 */
-			virtual void additionalCollect(unsigned int qTypeTocheck, const std::string &collectedString) const;
+			virtual void additionalCollect(unsigned int qTypeTocheck, const std::string &collectedString);
 			
 			/**
 			 * @return string constructed from collected additional statements
@@ -204,14 +204,14 @@ namespace dodo
 			 * @param sqlAddArr is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift) const;
+			virtual std::string insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift);
 			
 			/**
 			 * @return string constructed from collected additional statements(DB-dependent)
 			 * @param statement is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(const dodoStringArr &statements, int qTypeShift) const;
+			virtual std::string insideAddCollect(const dodoStringArr &statements, int qTypeShift);
 		
 			/**
 			 * @return string from fields' names and 'em values
@@ -219,33 +219,33 @@ namespace dodo
 			 * @param fieldsNames is array of names
 			 * @param frame is value with what values will be framed
 			 */
-			virtual std::string fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const std::string &frame="'") const;
+			virtual std::string fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const std::string &frame="'");
 	
 			/**
 			 * @return sql compliant data type
 			 * @param type indicates the data type
 			 */
-			virtual std::string stringType(int type) const;
+			virtual std::string stringType(int type);
 			
 			/**
 			 * @return : if type must have range = 1; if may have = 0; if mustn't have = -1;
 			 * @param type indicates the data type
 			 */
-			virtual int chkRange(int type) const;
+			virtual int chkRange(int type);
 			
 			/**
 			 * @return sql compliant references statements
 			 * @param type indicates the type of reference
 			 */
-			virtual std::string stringReference(int type) const;
+			virtual std::string stringReference(int type);
 						
-			mutable std::string auto_increment;///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
-			mutable std::string blob;///< bytea for postgres, blob for others 
-			mutable std::string tinyblob;///< bytea for postgres, blob for others 
-			mutable std::string mediumblob;///< bytea for postgres, blob for others 
-			mutable std::string longblob;///< bytea for postgres, blob for others 
+			std::string auto_increment;///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
+			std::string blob;///< bytea for postgres, blob for others 
+			std::string tinyblob;///< bytea for postgres, blob for others 
+			std::string mediumblob;///< bytea for postgres, blob for others 
+			std::string longblob;///< bytea for postgres, blob for others 
 		
-			mutable __dodoMap<dodoStringArr> framingFields;///< hash of 'db:table' => `array of fields to frame`
+			__dodoMap<dodoStringArr> framingFields;///< hash of 'db:table' => `array of fields to frame`
 		
 		private:
 			

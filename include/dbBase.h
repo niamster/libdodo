@@ -324,20 +324,20 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			virtual void setDbInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &path = __string__) const;
+			virtual void setDbInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &path = __string__);
 
 			/**
 			 * sets info for database
 			 * @param info is info for database
 			 */
-			virtual void setDbInfo(const __dbInfo &dbInfo) const;
+			virtual void setDbInfo(const __dbInfo &dbInfo);
 			
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use 
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void select(const std::string &table, const dodoStringArr &fieldsNames, const std::string &where = __string__) const;
+			virtual void select(const std::string &table, const dodoStringArr &fieldsNames, const std::string &where = __string__);
 			
 			/**
 			 * @param table is table name
@@ -403,7 +403,7 @@ namespace dodo
 			 * @param sub is array of subqueries
 			 * @param type is type of "subquering"[see qStEnum]
 			 */
-			virtual void subquery(const dodoStringArr &sub, int type=DBREQUEST_UNION/*DBREQUEST_UNION_ALL,DBREQUEST_MINUS,DBREQUEST_INTERSECT*/) const;
+			virtual void subquery(const dodoStringArr &sub, int type=DBREQUEST_UNION/*DBREQUEST_UNION_ALL,DBREQUEST_MINUS,DBREQUEST_INTERSECT*/);
 			
 			/**
 			 * create index in table
@@ -498,67 +498,67 @@ namespace dodo
 			 * overwites previous is it was defined
 			 * @param where is where statement
 			 */
-			virtual void where(const std::string &where) const;
+			virtual void where(const std::string &where);
 			
 			/**
 			 * sets limit for request
 			 * @param number indicates the number of rows to show
 			 */
-			virtual void limit(unsigned int number) const;
+			virtual void limit(unsigned int number);
 			
 			/**
 			 * sets offset for request
 			 * @param number indicates offset of the reading result
 			 */
-			virtual void offset(unsigned int number) const;		
+			virtual void offset(unsigned int number);		
 				
 			/**
 			 * sets order for request
 			 * @param order is order statement
 			 */
-			virtual void order(const std::string &order) const;
+			virtual void order(const std::string &order);
 			
 			/**
 			 * sets group for request
 			 * @param group is group statement
 			 */
-			virtual void group(const std::string &group) const;
+			virtual void group(const std::string &group);
 			
 			/**
 			 * sets having for request
 			 * @param having is having statement
 			 */
-			virtual void having(const std::string &having) const;
+			virtual void having(const std::string &having);
 			
 			/**
 			 * remove where statement
 			 */
-			virtual void unwhere() const;
+			virtual void unwhere();
 			
 			/**
 			 * remove limit for request
 			 */
-			virtual void unlimit() const;
+			virtual void unlimit();
 			
 			/**
 			 * remove offset for request
 			 */
-			virtual void unoffset() const;		
+			virtual void unoffset();		
 				
 			/**
 			 * remove order for request
 			 */
-			virtual void unorder() const;
+			virtual void unorder();
 			
 			/**
 			 * remove group for request
 			 */
-			virtual void ungroup() const;
+			virtual void ungroup();
 			
 			/**
 			 * remove having for request
 			 */
-			virtual void unhaving() const;		
+			virtual void unhaving();		
 			
 			/**
 			 * sets additional parameters for INSERT
@@ -623,67 +623,67 @@ namespace dodo
 			/**
 			 * set default values for table (if you want safelly reuse)
 			 */
-			void initTableInfo(__tableInfo &table);
+			static void initTableInfo(__tableInfo &table);
 			
 			/**
 			 * set default values for field (if you want safelly reuse)
 			 */
-			void initFieldInfo(__fieldInfo &field);	
+			static void initFieldInfo(__fieldInfo &field);	
 				
 		protected:
 			
 			/**
 			 * frees collected data
 			 */
-			virtual void cleanCollect() const;
+			virtual void cleanCollect();
 			
 			/**
 			 * collected data
 			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
 			 */
-			mutable std::string pre_where;///< where statement of the request	
-			mutable dodoStringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
-			mutable dodoArray<dodoStringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			mutable std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods, create(delete)Index methods)
-			mutable std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-			mutable std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-			mutable std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
-			mutable std::string pre_group;///< group statement
-			mutable std::string pre_limNumber;///< limit of result
-			mutable std::string pre_limOffset;///< offset of requested result
-			mutable dodoStringArr pre_subQ;///< subquery
+			std::string pre_where;///< where statement of the request	
+			dodoStringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
+			dodoArray<dodoStringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+			std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods, create(delete)Index methods)
+			std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
+			std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+			std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
+			std::string pre_group;///< group statement
+			std::string pre_limNumber;///< limit of result
+			std::string pre_limOffset;///< offset of requested result
+			dodoStringArr pre_subQ;///< subquery
 			
-			mutable bool show;///< is request was with result(show,select)
+			bool show;///< is request was with result(show,select)
 						
-			mutable int qType;///< type of operation
+			int qType;///< type of operation
 			
-			mutable int qShift;///< indicates if AddEnum's values was set [can be or'ed with | ]
+			int qShift;///< indicates if AddEnum's values was set [can be or'ed with | ]
 			
-			mutable int qSelShift;///< additional select statements
-			mutable int qInsShift;///< additional insert statements
-			mutable int qUpShift;///< additional update statements
-			mutable int qDelShift;///< additional delete statements					 
+			int qSelShift;///< additional select statements
+			int qInsShift;///< additional insert statements
+			int qUpShift;///< additional update statements
+			int qDelShift;///< additional delete statements					 
 			 
 			 
-			mutable __tableInfo pre_tableInfo;///< info about table to create
-			mutable __fieldInfo pre_fieldInfo;///< info about field to create
+			__tableInfo pre_tableInfo;///< info about table to create
+			__fieldInfo pre_fieldInfo;///< info about field to create
 			
-			mutable __dbInfo dbInfo;///< data to connect to server
+			__dbInfo dbInfo;///< data to connect to server
 			
 			/*
 			 * additional statements for query, db-dependent, that can be implemented in derived class; 
 			 * these arrays take part after generalSQL statements !!! See (mysqlpp::addSQL()) for more details
 			 * every in this class has 1 empty("") element
 			 */
-			mutable dodoStringArr sqlDbDepAddSelArr;///< additional SELECT statement
-			mutable dodoStringArr sqlDbDepAddInsArr;///< additional INSERT statement
-			mutable dodoStringArr sqlDbDepAddUpArr;///< additional UPDATE statement
-			mutable dodoStringArr sqlDbDepAddDelArr;///< additional DELETE statement
+			dodoStringArr sqlDbDepAddSelArr;///< additional SELECT statement
+			dodoStringArr sqlDbDepAddInsArr;///< additional INSERT statement
+			dodoStringArr sqlDbDepAddUpArr;///< additional UPDATE statement
+			dodoStringArr sqlDbDepAddDelArr;///< additional DELETE statement
 			
-			mutable int qDbDepSelShift;///< value to shift query template for specific			
-			mutable int qDbDepInsShift;///< value to shift query template for specific
-			mutable int qDbDepUpShift;///< value to shift query template for specific
-			mutable int qDbDepDelShift;///< value to shift query template for specific
+			int qDbDepSelShift;///< value to shift query template for specific			
+			int qDbDepInsShift;///< value to shift query template for specific
+			int qDbDepUpShift;///< value to shift query template for specific
+			int qDbDepDelShift;///< value to shift query template for specific
 	};
 
 };

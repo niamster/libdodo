@@ -88,17 +88,17 @@
 				#else
 					virtual bool 
 				#endif
-								connect() const;
+								connect();
 				
 				/**
 				 * disconnect from database
 				 */
-				virtual void disconnect() const;
+				virtual void disconnect();
 				
 				/**
 				 * @return amount of affected rows(update,delete...)
 				 */
-				virtual unsigned int affectedRowsCount();
+				virtual unsigned int affectedRowsCount() const;
 				
 				/**
 				 * @return amount of rows got from request(select ...)
@@ -148,7 +148,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const std::string &query = __string__, bool result = false) const;
+								exec(const std::string &query = __string__, bool result = false);
 				
 				#ifndef DBPOSTGRESQL_WO_XEXEC
 				
@@ -158,7 +158,7 @@
 					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
 					 */			
-					virtual int addPostExec(inExec func, void *data) const;
+					virtual int addPostExec(inExec func, void *data);
 					
 					/**
 					 * adds hook before the operation by callback
@@ -166,7 +166,7 @@
 					 * @param func is a pointer to function
 					 * @param data is pointer to data toy want to pass to hook
 					 */
-					virtual int addPreExec(inExec func, void *data) const;
+					virtual int addPreExec(inExec func, void *data);
 					
 					#ifdef DL_EXT
 	
@@ -178,7 +178,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */			
-						virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL) const;
+						virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
 					
 						/**
 						 * adds hook after the operation by callback
@@ -187,7 +187,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
+						virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
 						
 						/**
 						 * adds hook after the operation by callback
@@ -196,7 +196,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL) const;
+						virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
 					
 					#endif
 				
@@ -245,16 +245,16 @@
 				#else
 					virtual bool 
 				#endif
-								_exec(const std::string &query, bool result) const;
+								_exec(const std::string &query, bool result);
 				
 			private:
 					
-				mutable bool empty;///< for detectin' whether pgResult is empty or not
+				bool empty;///< for detectin' whether pgResult is empty or not
 	
-				mutable PGconn *conn;///< handle for connection to PG SQL server
-				mutable PGresult *pgResult;///< holds result from request	
+				PGconn *conn;///< handle for connection to PG SQL server
+				PGresult *pgResult;///< holds result from request	
 				
-				mutable dodoStringArr blobs;///< to store blob data		
+				dodoStringArr blobs;///< to store blob data		
 		};
 		
 	};

@@ -101,7 +101,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */			
-				virtual int addPostExec(inExec func, void *data) const;
+				virtual int addPostExec(inExec func, void *data);
 				
 				/**
 				 * adds hook before the operation by callback
@@ -109,7 +109,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */
-				virtual int addPreExec(inExec func, void *data) const;
+				virtual int addPreExec(inExec func, void *data);
 		
 				#ifdef DL_EXT
 				
@@ -120,7 +120,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -129,7 +129,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * set function from module that will be executed before/after the main action call
@@ -139,7 +139,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
 				
 				#endif
 			
@@ -155,7 +155,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readString(std::string &data) const;
+							readString(std::string &data);
 			/**
 			 * read
 			 * @param data is filled with read data
@@ -166,7 +166,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							read(char * const data) const;
+							read(char * const data);
 			
 			/**
 			 * write
@@ -202,7 +202,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readStreamString(std::string &data) const;
+							readStreamString(std::string &data);
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
@@ -213,7 +213,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readStream(char * const data) const;
+							readStream(char * const data);
 			
 			/**
 			 * write to stream - null-terminated string
@@ -264,7 +264,7 @@ namespace dodo
 			/**
 			 * @return true if stream is blocked
 			 */
-			virtual bool isBlocked();
+			virtual bool isBlocked() const;
 			
 			/**
 			 * blocks/unblocks stream

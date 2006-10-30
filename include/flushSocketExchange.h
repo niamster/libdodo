@@ -151,7 +151,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */			
-				virtual int addPostExec(inExec func, void *data) const;
+				virtual int addPostExec(inExec func, void *data);
 				
 				/**
 				 * adds hook before the operation by callback
@@ -159,7 +159,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */
-				virtual int addPreExec(inExec func, void *data) const;
+				virtual int addPreExec(inExec func, void *data);
 				
 				#ifdef DL_EXT
 	
@@ -171,7 +171,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
 							
 					/**
 					 * adds hook after the operation by callback
@@ -180,7 +180,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -189,7 +189,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
 					
 				#endif	
 			
@@ -204,7 +204,7 @@ namespace dodo
 			/**
 			 * @return true if connection is alive
 			 */
-			virtual bool alive() const;
+			virtual bool alive();
 			
 			/**
 			 * send
@@ -219,7 +219,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							send(const char * const data, bool urgent = false) const;
+							send(const char * const data, bool urgent = false);
 			
 			/**
 			 * send
@@ -234,7 +234,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							sendString(const std::string &data, bool urgent = false) const;
+							sendString(const std::string &data, bool urgent = false);
 			
 			/**
 			 * receive
@@ -247,10 +247,10 @@ namespace dodo
 			#ifndef NO_EX
 				virtual void 
 			#else
-				virtual bool 
+				virtual bool
 			#endif
-							receive(char * const data, bool urgent = false) const;
-			
+							receive(char * const data, bool urgent = false);
+							 
 			/**
 			 * receive
 			 * @param data is string that would be received
@@ -264,7 +264,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							receiveString(std::string &data, bool urgent = false) const;///urgent = true -> Receipt  of out-of-band data
+							receiveString(std::string &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
 
 			/**
 			 * send - null-terminated string
@@ -281,7 +281,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							sendStream(const char * const data, bool urgent = false) const;
+							sendStream(const char * const data, bool urgent = false);
 			
 			/**
 			 * send - null-terminated string
@@ -298,7 +298,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							sendStreamString(const std::string &data, bool urgent = false) const;
+							sendStreamString(const std::string &data, bool urgent = false);
 			
 			/**
 			 * receive - null-terminated string
@@ -314,7 +314,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							receiveStream(char * const data, bool urgent = false) const;
+							receiveStream(char * const data, bool urgent = false);
 			
 			/**
 			 * receive - null-terminated string
@@ -330,7 +330,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							receiveStreamString(std::string &data, bool urgent = false) const;///urgent = true -> Receipt  of out-of-band data
+							receiveStreamString(std::string &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
 						
 			/**
 			 * closes this socket
@@ -340,7 +340,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							close() const;
+							close();
 			
 		protected:	
 					

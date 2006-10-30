@@ -118,7 +118,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */			
-				virtual int addPostExec(inExec func, void *data) const;
+				virtual int addPostExec(inExec func, void *data);
 				
 				/**
 				 * adds hook before the operation by callback
@@ -126,7 +126,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */
-				virtual int addPreExec(inExec func, void *data) const;
+				virtual int addPreExec(inExec func, void *data);
 				
 				#ifdef DL_EXT
 	
@@ -138,7 +138,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
 								
 					/**
 					 * adds hook after the operation by callback
@@ -147,7 +147,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -156,7 +156,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
 					
 				#endif	
 			
@@ -174,7 +174,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif			 
-							open(const std::string &path = __string__) const;///if opened previous file, closes it		
+							open(const std::string &path = __string__);///if opened previous file, closes it		
 			
 			/**
 			 * closes file
@@ -184,7 +184,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							close() const;
+							close();
 							
 			/**
 			 * read string
@@ -196,7 +196,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readString(std::string &data, unsigned long pos = 0) const;
+							readString(std::string &data, unsigned long pos = 0);
 			/**
 			 * read data
 			 * @param data will be filled with data
@@ -207,7 +207,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							read(char * const data, unsigned long pos = 0) const;	
+							read(char * const data, unsigned long pos = 0);	
 			
 			/**
 			 * write string
@@ -244,7 +244,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readStreamString(std::string &data, unsigned long pos = 0) const;
+							readStreamString(std::string &data, unsigned long pos = 0);
 			/**
 			 * read data - null[or \n]-terminated string
 			 * @param data will be filled with data
@@ -256,7 +256,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readStream(char * const data, unsigned long pos = 0) const;
+							readStream(char * const data, unsigned long pos = 0);
 			
 			/**
 			 * write string - null-terminated string [append only]
@@ -306,16 +306,16 @@ namespace dodo
 							flush();
 			
 			bool over;///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files,tmp_files only
-			mutable short mode;///< mode to open file; if you change it then you have to reopen!
+			short mode;///< mode to open file; if you change it then you have to reopen!
 			
 			/**
 			 * @return path of the opened file
 			 */			
 			virtual std::string getPath() const;
 
-			mutable short fileType;///< type of file; if you change then it you have to reopen!
+			short fileType;///< type of file; if you change then it you have to reopen!
 
-			mutable bool append;///< if true, will append to the end of the file, even pos is set.
+			bool append;///< if true, will append to the end of the file, even pos is set.
 			
 		protected:
 			
@@ -331,9 +331,9 @@ namespace dodo
 									
 		private:
 		
-			mutable std::string path;///< file name
+			std::string path;///< file name
 					
-			mutable FILE *file;///< file handler
+			FILE *file;///< file handler
 	};
 
 };

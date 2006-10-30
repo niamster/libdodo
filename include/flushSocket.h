@@ -114,7 +114,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */			
-				virtual int addPostExec(inExec func, void *data) const;
+				virtual int addPostExec(inExec func, void *data);
 				
 				/**
 				 * adds hook before the operation by callback
@@ -122,7 +122,7 @@ namespace dodo
 				 * @param func is a pointer to function
 				 * @param data is pointer to data toy want to pass to hook
 				 */
-				virtual int addPreExec(inExec func, void *data) const;
+				virtual int addPreExec(inExec func, void *data);
 				
 				#ifdef DL_EXT
 	
@@ -134,7 +134,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
 							
 					/**
 					 * adds hook after the operation by callback
@@ -143,7 +143,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -152,7 +152,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL) const;
+					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
 						
 				#endif		
 			
@@ -269,7 +269,7 @@ namespace dodo
 			 * @note if was defined NO_EX - no way to detect error
 			 * with PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
 			 */
-			virtual bool accept(__initialAccept &init, __connInfo &info) const;
+			virtual bool accept(__initialAccept &init, __connInfo &info);
 			
 			/**
 			 * accepts incommin' connections(as for server)
@@ -278,7 +278,7 @@ namespace dodo
 			 * @note if was defined NO_EX - no way to detect error
 			 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
 			 */
-			virtual bool accept(__initialAccept &init) const;
+			virtual bool accept(__initialAccept &init);
 			
 			bool blockInherited;///< if true - children(flushSocketExchange) became unblocked, if parent(flushSocket) in unblocked; false by default
 			
@@ -299,9 +299,9 @@ namespace dodo
 			#endif
 							makeSocket();
 	 
-			mutable bool server;///< indicates whether server object or not
+			bool server;///< indicates whether server object or not
 			
-			mutable std::string unixSock;///< to remember, 'cos have to unlink in destructor
+			std::string unixSock;///< to remember, 'cos have to unlink in destructor
 	};
 	
 };

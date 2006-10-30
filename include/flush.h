@@ -52,14 +52,14 @@ namespace dodo
 			 */
 			virtual ~flush();
 							
-			mutable unsigned long inSize;///< size of data block;
-			mutable unsigned long outSize;///< size of data block;
+			unsigned long inSize;///< size of data block;
+			unsigned long outSize;///< size of data block;
 			
-			mutable std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
+			std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
 
 		protected:
 		
-			mutable bool opened;///< indicates whether file(connection) opened or not
+			bool opened;///< indicates whether file(connection) opened or not
 			
 			/**
 			 * @return descriptor of input stream

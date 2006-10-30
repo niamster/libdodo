@@ -98,12 +98,12 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect() const = 0;
+							connect() = 0;
 			
 			/**
 			 * disconnect from database
 			 */
-			virtual void disconnect() const = 0;
+			virtual void disconnect() = 0;
 			/**
 			 * sets info for database
 			 * @param db is database name
@@ -113,20 +113,20 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			virtual void setDbInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &path = __string__) const = 0;
+			virtual void setDbInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &path = __string__) = 0;
 
 			/**
 			 * sets info for database
 			 * @param info is info for database
 			 */
-			virtual void setDbInfo(const __dbInfo &dbInfo) const = 0;
+			virtual void setDbInfo(const __dbInfo &dbInfo) = 0;
 			
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use 
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void select(const std::string &table, const dodoStringArr &fieldsNames, const std::string &where = __string__) const = 0;
+			virtual void select(const std::string &table, const dodoStringArr &fieldsNames, const std::string &where = __string__) = 0;
 			
 			/**
 			 * @param table is table name
@@ -198,72 +198,72 @@ namespace dodo
 			 * overwites previous is it was defined
 			 * @param where is where statement
 			 */
-			virtual void where(const std::string &where) const = 0;
+			virtual void where(const std::string &where) = 0;
 			
 			/**
 			 * sets limit for request
 			 * @param number indicates the number of rows to show
 			 */
-			virtual void limit(unsigned int number) const = 0;
+			virtual void limit(unsigned int number) = 0;
 			
 			/**
 			 * sets offset for request
 			 * @param number indicates offset of the reading result
 			 */
-			virtual void offset(unsigned int number) const = 0;		
+			virtual void offset(unsigned int number) = 0;		
 				
 			/**
 			 * sets order for request
 			 * @param order is order statement
 			 */
-			virtual void order(const std::string &order) const = 0;
+			virtual void order(const std::string &order) = 0;
 			
 			/**
 			 * sets group for request
 			 * @param group is group statement
 			 */
-			virtual void group(const std::string &group) const = 0;
+			virtual void group(const std::string &group) = 0;
 			
 			/**
 			 * sets having for request
 			 * @param having is having statement
 			 */
-			virtual void having(const std::string &having) const = 0;
+			virtual void having(const std::string &having) = 0;
 			
 			/**
 			 * remove where statement
 			 */
-			virtual void unwhere() const = 0;
+			virtual void unwhere() = 0;
 			
 			/**
 			 * remove limit for request
 			 */
-			virtual void unlimit() const = 0;
+			virtual void unlimit() = 0;
 			
 			/**
 			 * remove offset for request
 			 */
-			virtual void unoffset() const = 0;		
+			virtual void unoffset() = 0;		
 				
 			/**
 			 * remove order for request
 			 */
-			virtual void unorder() const = 0;
+			virtual void unorder() = 0;
 			
 			/**
 			 * remove group for request
 			 */
-			virtual void ungroup() const = 0;
+			virtual void ungroup() = 0;
 			
 			/**
 			 * remove having for request
 			 */
-			virtual void unhaving() const = 0;
+			virtual void unhaving() = 0;
 						
 			/**
 			 * @return amount of affected rows(update,delete...)
 			 */
-			virtual unsigned int affectedRowsCount() = 0;
+			virtual unsigned int affectedRowsCount() const = 0;
 			
 			/**
 			 * @return amount of rows got from request(select ...)
@@ -305,11 +305,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							exec(const std::string &query = __string__, bool result = false) const = 0;
+							exec(const std::string &query = __string__, bool result = false) = 0;
 									
 		protected:
 		
-			mutable bool connected;///< connected or not
+			bool connected;///< connected or not
 		
 	};
 	

@@ -227,23 +227,23 @@ namespace dodo
 			 * @param method is indicates what reference would be returned
 			 * example: classObj[POST]["name"]
 			 */
-			virtual dodoStringMap &operator[](short method) const;
+			virtual dodoStringMap &operator[](short method);
 			
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)
 			 */
-			mutable dodoStringMap METHOD_POST;///< array of POST variables
-			mutable dodoStringMap METHOD_GET;///< array of GET variables
-			mutable dodoStringMap ENVIRONMENT;///< environment variables
-			mutable dodoStringMap COOKIES;///< coockes sent by browser
-			mutable __dodoMap<__cgiFilesUp> FILES;///< array of POST files, if one or more files were uploaded
+			dodoStringMap METHOD_POST;///< array of POST variables
+			dodoStringMap METHOD_GET;///< array of GET variables
+			dodoStringMap ENVIRONMENT;///< environment variables
+			dodoStringMap COOKIES;///< coockes sent by browser
+			__dodoMap<__cgiFilesUp> FILES;///< array of POST files, if one or more files were uploaded
 			
 			/**
 			 * @return value of requested variable from POST or GET
 			 * @param varName name of the variable
 			 * @param first indicates what array will be searched first[see requestMethodEnum]
 			 */
-			 virtual std::string request(const std::string &varName, short first=REQUESTMETHOD_GET) const;
+			 virtual std::string request(const std::string &varName, short first=REQUESTMETHOD_GET);
 			 
 			/**
 			 * prints cgi headers; 
@@ -252,7 +252,7 @@ namespace dodo
 			 */
 			virtual void printHeaders() const;
 			
-			mutable dodoAssocArr HEADERS;///< array of header that will be printed with printHeaders method
+			dodoAssocArr HEADERS;///< array of header that will be printed with printHeaders method
 			
 			/**
 			 * sets cookie. the cookies are printed with printHeaders method
@@ -273,7 +273,7 @@ namespace dodo
 			/**
 			 * writes detected method to method property
 			 */		
-			virtual void detectMethod() const;
+			virtual void detectMethod();
 			
 			/**
 			 * fills POST variable [also files if defined]
@@ -283,17 +283,17 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							makePost() const;
+							makePost();
 			
 			/**
 			 * gets info about environment
 			 */				
-			virtual void makeEnv() const;
+			virtual void makeEnv();
 			
 			/**
 			 * initiates headers with given headers; printed with printHeaders method
 			 */
-			virtual void initHeaders(dodoAssocArr &a_headers) const;
+			virtual void initHeaders(dodoAssocArr &a_headers);
 
 			/**
 			 * processes :
@@ -304,19 +304,19 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(dodoAssocArr &val, const std::string &string, char *delim = "&") const;
+			virtual void make(dodoAssocArr &val, const std::string &string, char *delim = "&");
 		
 		private:	
 		
-			mutable bool _cgiFilesInMem;///< where POST files stored
+			bool _cgiFilesInMem;///< where POST files stored
 		
-			mutable std::list<__cookies> cookiesSet;///< array of cookies nodes
-			mutable int method;///< method that received program
+			std::list<__cookies> cookiesSet;///< array of cookies nodes
+			int method;///< method that received program
 		
 			/**
 			 * deletes temp files that were created if POST files were present
 			 */
-			virtual void cleanTmp() const;
+			virtual void cleanTmp();
 			
 			#ifdef FCGI_EXT	
 			

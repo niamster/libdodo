@@ -16,13 +16,26 @@ int main(int argc, char **argv)
 	if (argc == 2)
 	{
 		if (strcasecmp(argv[1],"postgres") == 0)
-			pp = new dbPostgresql;
+			#ifdef POSTGRESQL_EXT
+				pp = new dbPostgresql;
+			#else
+				return 1;
+			#endif
 			
-		else if (strcasecmp(argv[1],"mysql") == 0)	
-			pp = new dbMysql;
+		else if (strcasecmp(argv[1],"mysql") == 0)
+			#ifdef MYSQL_EXT
+				pp = new dbMysql;
+			#else
+				return 1;
+			#endif
 			
-		else if (strcasecmp(argv[1],"sqlite") == 0)	
-			pp = new dbSqlite;			
+		else if (strcasecmp(argv[1],"sqlite") == 0)
+			#ifdef SQLITE_EXT	
+				pp = new dbSqlite;
+			#else
+				return 1;
+			#endif
+						
 		else
 			return 1;
 	}
@@ -41,13 +54,13 @@ int main(int argc, char **argv)
 			info.port = 5432;
 			info.user = "postgres";
 		}
-		if (strcasecmp(argv[1],"mysql") == 0)
+		else if (strcasecmp(argv[1],"mysql") == 0)
 		{
 			info.path = "/tmp/mysql.sock";
 			info.user = "root";
 			info.password = "Dmitrik";
 		}
-		if (strcasecmp(argv[1],"sqlite") == 0)
+		else if (strcasecmp(argv[1],"sqlite") == 0)
 		{
 			info.path = "test.lite";
 		}				
@@ -119,7 +132,7 @@ int main(int argc, char **argv)
 			arr["d"] = "d+1";
 			arr["operation"] = "um";
 			pp->update("leg",arr);
-                        cout << ((dbSqlBase *)pp)->queryCollect() << endl;
+			cout << ((dbSqlBase *)pp)->queryCollect() << endl;
 			arr["operation"] = "mu";
 			arr["d"] = "1";
 			pp->exec();
@@ -164,15 +177,23 @@ int main(int argc, char **argv)
 			blobs.push_back(dt);
 
 			if (strcasecmp(argv[1],"sqlite") == 0)
-				((dbSqlite *)pp)->setBLOBValues(blobs);
+				#ifdef SQLITE_EXT
+					((dbSqlite *)pp)->setBLOBValues(blobs);
+				#else
+					;
+				#endif
 			else
 			{
 				if (strcasecmp(argv[1],"postgres") == 0)
-					((dbPostgresql *)pp)->setBLOBValues(blobs);
+					#ifdef POSTGRESQL_EXT
+						((dbPostgresql *)pp)->setBLOBValues(blobs);
+					#else
+						;
+					#endif
 			}
                 	
 			((dbSqlBase *)pp)->preventFraming = true;
-            		((dbSqlBase *)pp)->preventEscaping = true;
+            ((dbSqlBase *)pp)->preventEscaping = true;
 		
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";

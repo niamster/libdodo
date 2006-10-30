@@ -237,13 +237,13 @@
 				 * @param encoding declears encoding of XML
 				 * @param version declears version of XML
 				 */
-				virtual std::string createXML(const __xmlNode &root, const std::string &encoding = "UTF-8", const std::string &version = "1.0"); 
+				virtual std::string createXML(const __xmlNode &root, const std::string &encoding = "UTF-8", const std::string &version = "1.0")  const; 
 
 				/**
 				 * @return XML string
 				 * @param root defines root node of XML document
 				 */
-				virtual std::string createNode(const __xmlNode &node);
+				virtual std::string createNode(const __xmlNode &node) const;
 																
 			protected:		
 					
