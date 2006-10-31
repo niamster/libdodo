@@ -150,10 +150,83 @@
 						bool result)
 	{	
 		register bool blobHint;
+		register int status;
 		
 		if (query.size() == 0)
 		{
-			autoFraming = false;///< FIXME: resolve autoFraming for postgresql
+		
+			if (autoFraming)
+			{
+				if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
+				{
+					std::string temp = dbInfo.db + ":" + pre_table;
+					
+					if (!framingFields.isset(temp))
+					{
+						request = "select column_name, data_type from information_schema.columns where table_name='" + pre_table + "'";
+					
+						if (!empty)
+						{
+							PQclear(pgResult);
+							empty = true;
+						}
+							
+						pgResult = PQexecParams(conn,request.c_str(),0,NULL,NULL,NULL,NULL,1);
+						if(pgResult == NULL)
+							#ifndef NO_EX
+								throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__,request);
+							#else
+								return false;
+							#endif
+
+						status = PQresultStatus(pgResult);
+				
+						switch (status)
+						{
+							case PGRES_EMPTY_QUERY:
+							case PGRES_BAD_RESPONSE:
+							case PGRES_NONFATAL_ERROR:
+							case PGRES_FATAL_ERROR:
+							
+								#ifndef NO_EX
+									throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
+								#else
+									return false;
+								#endif
+						}
+						
+						empty = false;
+
+						register int rowsNum = PQntuples(pgResult);
+						char *fieldType;
+						
+						dodoStringArr rowsPart;
+				
+						for (register int i(0);i<rowsNum;++i)
+						{
+							fieldType = PQgetvalue(pgResult,i,1);
+							
+							if (strcasestr(fieldType,"char") != NULL || 
+								strcasestr(fieldType,"date") != NULL || 
+								strcasestr(fieldType,"bytea") != NULL || 
+								strcasestr(fieldType,"array") != NULL || 
+								strcasestr(fieldType,"text") != NULL || 
+								strcasestr(fieldType,"cidr") != NULL || 
+								strcasestr(fieldType,"macaddrcd ") != NULL || 
+								strcasestr(fieldType,"inet") != NULL)
+									rowsPart.push_back(PQgetvalue(pgResult,i,0));
+						}
+					
+						if (!empty)
+						{
+							PQclear(pgResult);
+							empty = true;
+						}							
+							
+						framingFields.insert(temp, rowsPart);												
+					}
+				}
+			}
 			
 			queryCollect();
 			
@@ -253,7 +326,7 @@
 				#endif
 		}
 		
-		register int status = PQresultStatus(pgResult);
+		status = PQresultStatus(pgResult);
 
 		switch (status)
 		{
