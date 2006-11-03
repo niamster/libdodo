@@ -1187,26 +1187,28 @@ tools::encodeBase64(const std::string &string)
 	
 	for (register unsigned long k(0);k<j;)
 	{
-        len = 0;
-        for(i=0;i<3;++i) 
-        {
-        	++k;
-        	if (k <= j)
-        	{
+		len = 0;
+		for(i=0;i<3;++i) 
+		{
+			++k;
+			if (k <= j)
+        		{
 				in[i] = string[k-1];
 				++len;
+        		}
+            		else
+                		in[i] = 0;
         	}
-            else
-                in[i] = 0;
-        }
         
-        if(len > 0) 
-        {
-            _encodeBase64(in,out,len);
-            for(i=0;i<4;++i) 
-                result.append(1,out[i]);
-        }
+        	if(len > 0) 
+        	{
+            		_encodeBase64(in,out,len);
+            		for(i=0;i<4;++i) 
+                	result.append(1,out[i]);
+        	}
 	}
+
+	result.append("\r\n");
 	
 	return result;
 }

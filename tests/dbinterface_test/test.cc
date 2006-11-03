@@ -211,7 +211,7 @@ int main(int argc, char **argv)
 		else
 			pp->exec();
 
-        pp->select("leg",select,"operation='ma'");
+		pp->select("leg",select,"operation='ma'");
 		pp->exec();
 
 		store = pp->fetch();

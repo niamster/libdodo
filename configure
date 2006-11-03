@@ -4011,6 +4011,8 @@ echo "" > include/directives.runtime.h
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
 
+RESULT="\n\n"
+
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then
   enableval=$enable_debug; DEBUG="$enableval"
@@ -4020,6 +4022,10 @@ fi
 if test "$DEBUG" = "yes"
 then
 	CFLAGS="$CFLAGS -g"
+
+	RESULT="$RESULT\nDebug\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nDebug\t\t\t\t\t\tdisabled"
 fi
 
 
@@ -4031,7 +4037,11 @@ fi
 
 if test "$PROFILING" = "yes"
 then
-        CFLAGS="$CFLAGS -pg"
+	CFLAGS="$CFLAGS -pg"
+
+	RESULT="$RESULT\nProfiling\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nProfiling\t\t\t\t\t\tdisabled"
 fi
 
 # Check whether --enable-deque was given.
@@ -4045,6 +4055,10 @@ fi
 if test "$DEQUE" = "yes"
 then
 	echo -n -e "#define USE_DEQUE\n\n" >> include/directives.runtime.h
+
+	RESULT="$RESULT\nDeque\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
 
@@ -4757,6 +4771,94 @@ echo "$as_me: error: sqlite3 header was not found" >&2;}
 fi
 
 
+
+		{ echo "$as_me:$LINENO: checking for sqlite3_table_column_metadata in -lsqlite3" >&5
+echo $ECHO_N "checking for sqlite3_table_column_metadata in -lsqlite3... $ECHO_C" >&6; }
+if test "${ac_cv_lib_sqlite3_sqlite3_table_column_metadata+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lsqlite3  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char sqlite3_table_column_metadata ();
+int
+main ()
+{
+return sqlite3_table_column_metadata ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag" || test ! -s conftest.err'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_sqlite3_sqlite3_table_column_metadata=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_sqlite3_sqlite3_table_column_metadata=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_sqlite3_sqlite3_table_column_metadata" >&5
+echo "${ECHO_T}$ac_cv_lib_sqlite3_sqlite3_table_column_metadata" >&6; }
+if test $ac_cv_lib_sqlite3_sqlite3_table_column_metadata = yes; then
+  RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tenabled"
+else
+  RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled"
+fi
+
+
+		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nSQLite\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -5567,6 +5669,10 @@ echo "$as_me: error: fcgi header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -5837,6 +5943,10 @@ echo "$as_me: error: pcre header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\nPCRE\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nPCRE\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -6117,6 +6227,10 @@ echo "$as_me: error: dl header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -6387,6 +6501,10 @@ echo "$as_me: error: libxml2 header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -6667,6 +6785,10 @@ echo "$as_me: error: pthread header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\npthread\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
+	else
+		RESULT="$RESULT\npthread\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -6937,6 +7059,10 @@ echo "$as_me: error: bzip2 header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -7215,6 +7341,10 @@ echo "$as_me: error: zlib header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\nZLIB\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nZLIB\t\t\t\t\t\tdisabled"
 	fi
 
 
@@ -7493,6 +7623,10 @@ echo "$as_me: error: iconv header was not found" >&2;}
 fi
 
 
+
+		RESULT="$RESULT\niconv\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\niconv\t\t\t\t\t\tdisabled"
 	fi
 
 #check for features
@@ -7506,6 +7640,10 @@ fi
 	if test "$EXCEPTIONS" = "no"
 	then
 		echo -n -e "#define NO_EX\n\n" >> include/directives.runtime.h
+
+		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
 	fi
 
 # Checks for header files.
@@ -9840,3 +9978,5 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
+
+echo -e $RESULT
