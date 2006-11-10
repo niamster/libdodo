@@ -159,7 +159,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const std::string &query = __string__, bool result = false);
+								exec(const dodoString &query = __string__, bool result = false);
 				
 				/**
 				 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
@@ -194,7 +194,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */			
-						virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
+						virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 						/**
 						 * adds hook after the operation by callback
@@ -203,7 +203,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 						 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
+						virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 						
 						/**
 						 * adds hook after the operation by callback
@@ -212,7 +212,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
+						virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 					#endif
 				
@@ -240,7 +240,7 @@
 				#else
 					virtual bool 
 				#endif
-								_exec(const std::string &query, bool result);
+								_exec(const dodoString &query, bool result);
 					
 			private:
 				

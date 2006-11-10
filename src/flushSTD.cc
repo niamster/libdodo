@@ -88,7 +88,7 @@ flushSTD::getOutDescriptor() const
 	#ifdef DL_EXT
 	
 		int 
-		flushSTD::addPostExec(const std::string &module, 
+		flushSTD::addPostExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -98,7 +98,7 @@ flushSTD::getOutDescriptor() const
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
-		flushSTD::addExec(const std::string &module, 
+		flushSTD::addExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -108,7 +108,7 @@ flushSTD::getOutDescriptor() const
 		//-------------------------------------------------------------------
 		
 		int 
-		flushSTD::addPreExec(const std::string &module, 
+		flushSTD::addPreExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -202,7 +202,7 @@ flushSTD::read(char * const a_void)
 #else
 	bool
 #endif
-flushSTD::readString(std::string &a_str)
+flushSTD::readString(dodoString &a_str)
 {
 	register char *data = new char[inSize+1];
 
@@ -227,7 +227,7 @@ flushSTD::readString(std::string &a_str)
 #else
 	bool
 #endif
-flushSTD::writeString(const std::string &a_buf)
+flushSTD::writeString(const dodoString &a_buf)
 {	
 	return this->write(a_buf.c_str());	
 }
@@ -525,7 +525,7 @@ flushSTD::readStream(char * const a_void)
 #else
 	bool
 #endif
-flushSTD::readStreamString(std::string &a_str)
+flushSTD::readStreamString(dodoString &a_str)
 {
   register char *data = new char[inSTDBuffer+1];
 
@@ -549,7 +549,7 @@ flushSTD::readStreamString(std::string &a_str)
 #else
 	bool
 #endif
-flushSTD::writeStreamString(const std::string &a_buf)
+flushSTD::writeStreamString(const dodoString &a_buf)
 {	
 	return this->writeStream(a_buf.c_str());	
 }

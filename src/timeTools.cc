@@ -55,8 +55,8 @@ __mktime::__mktime(unsigned int a_sec,
 
 //-------------------------------------------------------------------
 
-std::string 
-timeTools::byFormat(const std::string &format, 
+dodoString 
+timeTools::byFormat(const dodoString &format, 
 						long timestamp,
 						bool local)
 {
@@ -101,7 +101,7 @@ timeTools::now()
 
 dodoStringArr
 timeTools::week(long date, 
-				const std::string &format,
+				const dodoString &format,
 				bool local)
 {
 	register long daynum = atol(timeTools::byFormat("%w",date,local).c_str());
@@ -122,7 +122,7 @@ timeTools::week(long date,
 dodoStringArr 
 timeTools::datesArr(long dateFrom, 
 					long dateTo, 
-					const std::string &format, 
+					const dodoString &format, 
 					bool local)
 {
 	dodoStringArr result;
@@ -255,8 +255,8 @@ timeTools::daysInMonth(unsigned int year,
 //-------------------------------------------------------------------
 
 long 
-timeTools::byFormat(const std::string &format, 
-					const std::string &dt)
+timeTools::byFormat(const dodoString &format, 
+					const dodoString &dt)
 {
 	tm tTime;
 	strptime(dt.c_str(), format.c_str(),&tTime);

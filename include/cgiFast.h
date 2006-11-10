@@ -64,7 +64,7 @@
 				 * sends buf to specific output[fast-cgi safe]
 				 * @param buf describes what to send to user
 				 */
-				virtual void print(const std::string &buf); 
+				virtual void print(const dodoString &buf); 
 				
 				/**
 				 * reads to buf from specific input[fast-cgi safe]

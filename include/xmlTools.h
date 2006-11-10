@@ -49,18 +49,18 @@
 			 */
 			__xmlNode();
 			
-			std::string name;///< name of the node [[tag]]
+			dodoString name;///< name of the node [[tag]]
 			
 			__dodoMap< dodoArray<__xmlNode> > children;///< vector of children's realisation;
 			
 			dodoStringMap attributes;///< hash of attributes
 			
-			std::string value;///< value of the node
+			dodoString value;///< value of the node
 			
-			std::string ns;///< namespace of the node
-			std::string nsHref;///< uri "value" <URI>
-			std::string nsDef;///< namespace that this node defines
-			std::string nsDefHref;///< namespace's value <URI> that this node defines
+			dodoString ns;///< namespace of the node
+			dodoString nsHref;///< uri "value" <URI>
+			dodoString nsDef;///< namespace that this node defines
+			dodoString nsDefHref;///< namespace's value <URI> that this node defines
 			
 			bool CDATA;///< true if CDATA
 			bool empty;///< true if node doesn't have content : `<node />`
@@ -76,9 +76,9 @@
 			 */
 			__xmlNodeDef();
 				
-			std::string name;///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
+			dodoString name;///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
 			
-			std::map<std::string, __xmlNodeDef> children;///< vector of children's definitions
+			std::map<dodoString, __xmlNodeDef> children;///< vector of children's definitions
 			
 			long chLimit;///< limit of children to search for[-1 for unlimit, default]
 			bool ignoreChildrenDef;///< if true - parse all children tree if no children difenition; false by default
@@ -86,7 +86,7 @@
 			dodoStringArr attributes;///< attrributes to take from node; if empty - take all
 			bool ignoreAttributesDef;///< if true - parse all attributes if no attributes difenition; true by default
 			
-			std::string ns;///< namespace of the node; if empty - skips
+			dodoString ns;///< namespace of the node; if empty - skips
 		};
 		
 		/**
@@ -103,11 +103,11 @@
 			 * constructor
 			 * @note initializes with user values
 			 */
-			__xmlInfo(const std::string &version, const std::string &encoding, const std::string &root, int compression);
+			__xmlInfo(const dodoString &version, const dodoString &encoding, const dodoString &root, int compression);
 			 
-			std::string version;///< version of XML document
-			std::string encoding;///< encoding of XML document
-			std::string root;///< name of the root element of XML document
+			dodoString version;///< version of XML document
+			dodoString encoding;///< encoding of XML document
+			dodoString root;///< name of the root element of XML document
 			
 			int compression;///< compression of XML document
 		}; 
@@ -147,7 +147,7 @@
 				#else
 					virtual bool 
 				#endif						 
-								parseFileInt(const std::string &file);
+								parseFileInt(const dodoString &file);
 				
 				/**
 				 * parses XML from buffer if you want to use reParse wo calling parseFile/parseBuffer
@@ -158,7 +158,7 @@
 				#else
 					virtual bool 
 				#endif						 
-								parseBufferInt(const std::string &buffer);
+								parseBufferInt(const dodoString &buffer);
 								
 				/**
 				 * parses XML using __xmlNodeDef XML explanation from file
@@ -167,7 +167,7 @@
 				 * @param file path XML file to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __xmlNode parseFile(const __xmlNodeDef &definition, const std::string &file);
+				virtual __xmlNode parseFile(const __xmlNodeDef &definition, const dodoString &file);
 				
 				/**
 				 * parses XML using __xmlNodeDef XML explanation from buffer
@@ -176,7 +176,7 @@
 				 * @param buffer contains XML to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __xmlNode parseBuffer(const __xmlNodeDef &definition, const std::string &buffer);
+				virtual __xmlNode parseBuffer(const __xmlNodeDef &definition, const dodoString &buffer);
 				
 				/**
 				 * parses XML using __xmlNodeDef XML explanation from file
@@ -184,7 +184,7 @@
 				 * @param file path XML file to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __xmlNode parseFile(const std::string &file);
+				virtual __xmlNode parseFile(const dodoString &file);
 				
 				/**
 				 * parses XML using __xmlNodeDef XML explanation from buffer
@@ -192,7 +192,7 @@
 				 * @param buffer contains XML to parse
 				 * @note the first given definition is as root for XML document, even it isn't really like that in document
 				 */
-				virtual __xmlNode parseBuffer(const std::string &buffer);
+				virtual __xmlNode parseBuffer(const dodoString &buffer);
 
 				/**
 				 * parses XML using __xmlNodeDef XML explanation with xml you have once parsed; faster
@@ -208,13 +208,13 @@
 				 * @return got info about XML from file
 				 * @param file path XML file to parse
 				 */
-				virtual __xmlInfo getXMLFileInfo(const std::string &file);
+				virtual __xmlInfo getXMLFileInfo(const dodoString &file);
 				
 				/**
 				 * @return got info about XML from buffer
 				 * @param buffer contains XML to parse
 				 */
-				virtual __xmlInfo getXMLBufferInfo(const std::string &buffer);
+				virtual __xmlInfo getXMLBufferInfo(const dodoString &buffer);
 						
 				/**
 				 * clears params of the give node
@@ -237,13 +237,13 @@
 				 * @param encoding declears encoding of XML
 				 * @param version declears version of XML
 				 */
-				virtual std::string createXML(const __xmlNode &root, const std::string &encoding = "UTF-8", const std::string &version = "1.0")  const; 
+				virtual dodoString createXML(const __xmlNode &root, const dodoString &encoding = "UTF-8", const dodoString &version = "1.0")  const; 
 
 				/**
 				 * @return XML string
 				 * @param root defines root node of XML document
 				 */
-				virtual std::string createNode(const __xmlNode &node) const;
+				virtual dodoString createNode(const __xmlNode &node) const;
 																
 			protected:		
 					

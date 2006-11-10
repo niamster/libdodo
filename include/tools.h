@@ -68,7 +68,7 @@ namespace dodo
 	 * @typedef that describes function that will escapes parts in explode/implode
 	 * @return converted string
 	 */
-	typedef std::string (*escape)(const std::string &);
+	typedef dodoString (*escape)(const dodoString &);
 		
 	 #ifdef ZLIB_EXT
 	 
@@ -90,13 +90,13 @@ namespace dodo
 	 */
 	struct __url
 	{
-		std::string protocol;
-		std::string host;
-		std::string path;
-		std::string request;
-		std::string login;
-		std::string password;
-		std::string port;
+		dodoString protocol;
+		dodoString host;
+		dodoString path;
+		dodoString request;
+		dodoString login;
+		dodoString password;
+		dodoString port;
 	};
 		
 	/**
@@ -130,7 +130,7 @@ namespace dodo
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
 			 */
-			static std::string trim(const std::string &data, char symbol=' ');
+			static dodoString trim(const dodoString &data, char symbol=' ');
 			
 			/**
 			 * @return true if needle found in array
@@ -138,7 +138,7 @@ namespace dodo
 			 * @param needle is what to search for
 			 * @param icase indicates whether to use or not caseless search
 			 */
-			static bool isInArray(const dodoStringArr &arr, const std::string &needle, bool icase);			
+			static bool isInArray(const dodoStringArr &arr, const dodoString &needle, bool icase);			
 						
 			/**
 			 * removes symbols[from given array] from the end and from the begin of given string
@@ -147,7 +147,7 @@ namespace dodo
 			 * @param symbols is an array of symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
-			static std::string trim(const std::string &data, char symbols[], int symCount);
+			static dodoString trim(const dodoString &data, char symbols[], int symCount);
 						
 			/**
 			 * removes symbols[from given array] from the end of given string
@@ -156,7 +156,7 @@ namespace dodo
 			 * @param symbols is an array of symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
-			static std::string rTrim(const std::string &data, char symbols[], int symCount);
+			static dodoString rTrim(const dodoString &data, char symbols[], int symCount);
 			
 			/**
 			 * removes symbols[from given array] from the begin of given string
@@ -165,7 +165,7 @@ namespace dodo
 			 * @param symbols is an array of symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
-			static std::string lTrim(const std::string &data, char symbols[], int symCount);
+			static dodoString lTrim(const dodoString &data, char symbols[], int symCount);
 						
 			/**
 			 * removes symbols from the end of given string
@@ -173,7 +173,7 @@ namespace dodo
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
 			 */
-			static std::string rTrim(const std::string &data, char symbol=' ');
+			static dodoString rTrim(const dodoString &data, char symbol=' ');
 			
 			/**
 			 * removes symbols from the begin of given string
@@ -181,19 +181,19 @@ namespace dodo
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
 			 */
-			static std::string lTrim(const std::string &data, char symbol=' ');
+			static dodoString lTrim(const dodoString &data, char symbol=' ');
 						
 			/**
 			 * @return converted long to string
 			 * @param number is number to convert
 			 */
-			static std::string lToString(long number);
+			static dodoString lToString(long number);
 			
 			/**
 			 * @return converted double to string
 			 * @param number is number to convert
 			 */
-			static std::string dToString(double number);
+			static dodoString dToString(double number);
 			
 			/**
 			 * replaces nodes in string
@@ -201,7 +201,7 @@ namespace dodo
 			 * @param replacement indicates with what to replace
 			 * @param data specifies wher to replace
 			 */
-			static void replace(const std::string &needle, const std::string &replacement, std::string &data);
+			static void replace(const dodoString &needle, const dodoString &replacement, dodoString &data);
 			
 			/**
 			 * replaces nodes in string
@@ -209,7 +209,7 @@ namespace dodo
 			 * @param replacement indicates with what to replace
 			 * @param data specifies wher to replace
 			 */
-			static void replace(const dodoStringArr &needle, const dodoStringArr &replacement, std::string &data);
+			static void replace(const dodoStringArr &needle, const dodoStringArr &replacement, dodoString &data);
 		
 			/**
 			 * @return array of strings made from string using separtator
@@ -217,7 +217,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArr explode(const std::string &fields, const std::string &separator, int limit=-1);
+			static dodoStringArr explode(const dodoString &fields, const dodoString &separator, int limit=-1);
 					
 			/**
 			 * @return array of strings made from string using separtator
@@ -226,7 +226,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArr explode(const std::string &fields, escape escapeF, const std::string &separator, int limit=-1);
+			static dodoStringArr explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -236,7 +236,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const dodoStringArr &fields, escape escapeF, const std::string &separator, const std::string &frame, int limit=-1);
+			static dodoString implode(const dodoStringArr &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -245,7 +245,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const dodoStringArr &fields, escape escapeF, const std::string &separator, int limit=-1);
+			static dodoString implode(const dodoStringArr &fields, escape escapeF, const dodoString &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -253,7 +253,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const dodoStringArr &fields, const std::string &separator, int limit=-1);
+			static dodoString implode(const dodoStringArr &fields, const dodoString &separator, int limit=-1);
 			
 			/**
 			 * @return string of fields, separated with separator;
@@ -262,7 +262,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static std::string implode(const dodoStringArr &fields, const std::string &separator, const std::string &frame, int limit=-1);
+			static dodoString implode(const dodoStringArr &fields, const dodoString &separator, const dodoString &frame, int limit=-1);
 			
 			#ifdef ICONV_EXT
 				
@@ -274,7 +274,7 @@ namespace dodo
 				 * @param fromCode indicates codeset in what buffer coded
 				 * @note if compiled without exeptions - on error buffer will be returned
 				 */
-				static std::string codesetConversionStatic(const std::string &buffer, const std::string &toCode, const std::string &fromCode);
+				static dodoString codesetConversionStatic(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
 								
 				/**
 				 * converts from one codeset to another
@@ -284,7 +284,7 @@ namespace dodo
 				 * @param fromCode indicates codeset in what buffer coded
 				 * @note if compiled without exeptions - on error buffer will be returned
 				 */
-				virtual std::string codesetConversion(const std::string &buffer, const std::string &toCode, const std::string &fromCode);
+				virtual dodoString codesetConversion(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
 
 				/**
 				 * converts from one codeset to another
@@ -294,7 +294,7 @@ namespace dodo
 				 * usefull if you have only one type of conversion
 				 * if compiled without exeptions - on error buffer will be returned
 				 */
-				virtual std::string reCodesetConversion(const std::string &buffer);
+				virtual dodoString reCodesetConversion(const dodoString &buffer);
 				
 				/**
 				 * set params for convertion [if you want to use reCodesetConversion wo calling codesetConversion before]
@@ -306,7 +306,7 @@ namespace dodo
 				#else
 					virtual bool 
 				#endif		
-								codeSet(const std::string &toCode, const std::string &fromCode);
+								codeSet(const dodoString &toCode, const dodoString &fromCode);
 				
 				
 			 #endif
@@ -320,14 +320,14 @@ namespace dodo
 			 	 * @param type descibes compression strategy[see zlibCompressionStrategyEnum]
 				 * @note if compiled without exeptions - on error buffer will be returned
 			 	 */
-			 	static std::string zCompress(const std::string &buffer, unsigned short level=6, short type=ZLIB_HUFFMAN_COMRESSION);
+			 	static dodoString zCompress(const dodoString &buffer, unsigned short level=6, short type=ZLIB_HUFFMAN_COMRESSION);
 			 	
 			 	/**
 			 	 * @return decompressed buffer
 			 	 * @param buffer contains data to decompress
 				 * @note if compiled without exeptions - on error buffer will be returned
 			 	 */
-			 	static std::string zDecompress(const std::string &buffer);
+			 	static dodoString zDecompress(const dodoString &buffer);
 			 				 
 			 #endif
 			
@@ -335,13 +335,13 @@ namespace dodo
 			 * @return url decoded string
 			 * @param string to decode
 			 */
-			static std::string decodeURL(const std::string &string);
+			static dodoString decodeURL(const dodoString &string);
 
 			/**
 			 * @return url encoded string
 			 * @param string to encode
 			 */			
-			static std::string encodeURL(const std::string &string);
+			static dodoString encodeURL(const dodoString &string);
 						
 			/**
 			 * @return converted from HEX
@@ -360,37 +360,37 @@ namespace dodo
 			 * @return encoded string with ASCII85 method
 			 * @param string is data to encode
 			 */
-			static std::string encodeASCII85(const std::string &string);
+			static dodoString encodeASCII85(const dodoString &string);
 			
 			/**
 			 * @return decoded string from ASCII85 method
 			 * @param string is data to decode
 			 */
-			static std::string decodeASCII85(const std::string &string);
+			static dodoString decodeASCII85(const dodoString &string);
 			
 			/**
 			 * @return encoded string with base64 method
 			 * @param string is data to encode
 			 */
-			static std::string encodeBase64(const std::string &string);
+			static dodoString encodeBase64(const dodoString &string);
 			
 			/**
 			 * @return decoded string from base64method
 			 * @param string is data to decode
 			 */
-			static std::string decodeBase64(const std::string &string);
+			static dodoString decodeBase64(const dodoString &string);
 			
 			/**
 			 * @return struct that contains parts of URL
 			 * @param url describes URL to parse
 			 */
-			static __url parseURL(const std::string &url);
+			static __url parseURL(const dodoString &url);
 			
 			/**
 			 * @return MD5 hash of string
 			 * @param string indicates string for what generate hash
 			 */
-			static std::string MD5(const std::string &string);
+			static dodoString MD5(const dodoString &string);
 			
 			#ifdef BZIP2_EXT
 			
@@ -403,14 +403,14 @@ namespace dodo
 				 * @note if compiled without exeptions - on error buffer will be returned
 				 * Lower values of workFactor reduce the amount of effort the standard algorithm will expend before resorting to the fallback
 			 	 */
-			 	static std::string bzCompress(const std::string &buffer, unsigned short level=6, unsigned short type = 30);
+			 	static dodoString bzCompress(const dodoString &buffer, unsigned short level=6, unsigned short type = 30);
 			 	
 			 	/**
 			 	 * @return decompressed buffer
 			 	 * @param buffer contains data to decompress
 				 * @note if compiled without exeptions - on error buffer will be returned
 			 	 */
-			 	static std::string bzDecompress(const std::string &buffer);			
+			 	static dodoString bzDecompress(const dodoString &buffer);			
 			
 			#endif
 			
@@ -428,7 +428,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							mail(const std::string &path, const std::string &to, const std::string &subject, const std::string &message, const std::string &headers = __string__);
+							mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __string__);
 			
 			/**
 			 * sends mail
@@ -448,7 +448,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							mail(const std::string &host, short type, int port, const std::string &to, const std::string &from, const std::string &subject, const std::string &message, const std::string &login = __string__, const std::string &pass = __string__, const std::string &headers = __string__);
+							mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __string__, const dodoString &pass = __string__, const dodoString &headers = __string__);
 									
 		private:
 			
@@ -473,7 +473,7 @@ namespace dodo
 			 * @param tuple is part of decoded data
 			 * @param count is amount of encoded data
 			 */
-			static void _encodeASCII85(std::string &result, unsigned long tuple, int count);
+			static void _encodeASCII85(dodoString &result, unsigned long tuple, int count);
 
 			/**
 			 * encodes tuple from ASCII85 and stores to string
@@ -481,7 +481,7 @@ namespace dodo
 			 * @param tuple is part of encoded data
 			 * @param count is amount of encoded data
 			 */
-			static void _decodeASCII85(std::string &result, unsigned long tuple, int count);
+			static void _decodeASCII85(dodoString &result, unsigned long tuple, int count);
 			
 			#ifdef ICONV_EXT
 			
@@ -529,7 +529,7 @@ namespace dodo
 			 * dummy callback function for implode/explode
 			 * nothing does with passed data
 			 */
-			inline static std::string dummyTools(const std::string &data);		
+			inline static dodoString dummyTools(const dodoString &data);		
 			
 			/**
 			 * sends data through socket
@@ -542,7 +542,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							sendShortData(int socket, const std::string &mess);		
+							sendShortData(int socket, const dodoString &mess);		
 							
 			/**
 			 * sends data through socket
@@ -557,7 +557,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							sendShortDataDel(int socket, const std::string &mess, char *data);
+							sendShortDataDel(int socket, const dodoString &mess, char *data);
 							
 			/**
 			 * sends data through socket
@@ -570,7 +570,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							sendLongData(int socket, const std::string &mess);
+							sendLongData(int socket, const dodoString &mess);
 							
 			/**
 			 * receives data through socket

@@ -66,7 +66,7 @@ namespace dodo
 	 */
 	struct __connInfo
 	{
-		std::string host;
+		dodoString host;
 		int port;
 	};
 	
@@ -134,7 +134,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 							
 					/**
 					 * adds hook after the operation by callback
@@ -143,7 +143,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -152,7 +152,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 						
 				#endif		
 			
@@ -169,7 +169,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connectFrom(const std::string &local, const std::string &host, int port, flushSocketExchange &exchange);
+							connectFrom(const dodoString &local, const dodoString &host, int port, flushSocketExchange &exchange);
 						
 			/**
 			 * connect from specific address. for client part
@@ -182,7 +182,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connectFrom(const std::string &local, const __connInfo &destinaton, flushSocketExchange &exchange);
+							connectFrom(const dodoString &local, const __connInfo &destinaton, flushSocketExchange &exchange);
 						
 			/**
 			 * connect. for client part
@@ -195,7 +195,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect(const std::string &host, int port, flushSocketExchange &exchange);
+							connect(const dodoString &host, int port, flushSocketExchange &exchange);
 						
 			/**
 			 * connect. for client part
@@ -220,7 +220,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect(const std::string &path, flushSocketExchange &exchange);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+							connect(const dodoString &path, flushSocketExchange &exchange);///if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			
 			/**
 			 * connect. for server part
@@ -233,7 +233,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const std::string &host, int port, int numberOfConnections);
+							bindNListen(const dodoString &host, int port, int numberOfConnections);
 			
 			/**
 			 * connect. for server part
@@ -259,7 +259,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const std::string &path, int numberOfConnections, bool force = false);	
+							bindNListen(const dodoString &path, int numberOfConnections, bool force = false);	
 			
 			/**
 			 * accepts incommin' connections(as for server)
@@ -301,7 +301,7 @@ namespace dodo
 	 
 			bool server;///< indicates whether server object or not
 			
-			std::string unixSock;///< to remember, 'cos have to unlink in destructor
+			dodoString unixSock;///< to remember, 'cos have to unlink in destructor
 	};
 	
 };

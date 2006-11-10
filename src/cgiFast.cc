@@ -77,7 +77,7 @@
 	#include <tools.h>
 	
 	void 
-	cgiFastSTD::print(const std::string &buf)
+	cgiFastSTD::print(const dodoString &buf)
 	{
 		FCGX_PutStr(buf.c_str(), buf.size(), request->out);
 	}

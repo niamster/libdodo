@@ -35,6 +35,7 @@
 
 #include <directives.h>
 
+#include <dodoString.h>
 #include <dodoMap.h>
 
 namespace dodo
@@ -49,12 +50,13 @@ namespace dodo
 	#else
 		#define dodoArray std::vector
 	#endif
+	
 
-	typedef dodoArray<std::string> dodoStringArr;///< array of strings
+	typedef dodoArray<dodoString> dodoStringArr;///< array of strings
 
-	typedef std::map<std::string, std::string> dodoAssocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
+	typedef std::map<dodoString, dodoString> dodoAssocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
 
-	typedef __dodoMap<std::string> dodoStringMap;///< hash of strings
+	typedef __dodoMap<dodoString> dodoStringMap;///< hash of strings
 	
 	typedef dodoArray<dodoStringMap> dodoStringMapArr;///< array of hashes of string
 	
@@ -67,7 +69,7 @@ namespace dodo
 	 * diferent predifined constants
 	 */
 
-	static const std::string __string__ = "";
+	static const dodoString __string__ = "";
 
 	static dodoStringArr __stringarray__;
 

@@ -626,7 +626,7 @@
 	#ifdef DL_EXT
 		
 		systemThreadsMod 
-		systemThreads::getModuleInfo(const std::string &module, 
+		systemThreads::getModuleInfo(const dodoString &module, 
 									void *toInit)
 		{
 			void *handle = dlopen(module.c_str(), RTLD_LAZY);
@@ -660,7 +660,7 @@
 		//-------------------------------------------------------------------
 		
 		unsigned long 
-		systemThreads::add(const std::string &module,
+		systemThreads::add(const dodoString &module,
 							void *data,
 							void *toInit,
 							bool detached,
@@ -712,7 +712,7 @@
 		//-------------------------------------------------------------------
 		
 		unsigned long 
-		systemThreads::add(const std::string &module,
+		systemThreads::add(const dodoString &module,
 								void *data, 
 								void *toInit)
 		{

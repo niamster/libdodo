@@ -58,19 +58,19 @@ namespace dodo
 			 * @return constructed query from collected data;
 			 * it doesn't clean collected data
 			 */
-			virtual std::string queryCollect();
+			virtual dodoString queryCollect();
 			
 			/**
 			 * @returns string in 'exist()'
 			 * @param statement is sql statement that you want to cover with 'exist()'
 			 */	
-			static std::string exists(const std::string &statement);
+			static dodoString exists(const dodoString &statement);
 			
 			/**
 			 * @returns string in 'not exist()'
 			 * @param statement is sql statement that you want to cover with 'not exist()'
 			 */	
-			static std::string noexists(const std::string &statement);
+			static dodoString noexists(const dodoString &statement);
 		
 			bool preventFraming;///< to frame or not with `'` fields values in insert and update; false by default
 			
@@ -78,19 +78,19 @@ namespace dodo
 			
 			bool autoFraming;///< detects automatic whether to frame or not; true by default; if preventFraming is set - autoFraming is disabled; if preventEscaping is false - escaping only framed values
 			
-			std::string request;///< ready sql statement with `'` fields values in insert and update; true by default
+			dodoString request;///< ready sql statement with `'` fields values in insert and update; true by default
 
 			/**
 			 * @return escaped string
 			 * @param data is string to escape
 			 */
-			static std::string escapeFields(const std::string &data);
+			static dodoString escapeFields(const dodoString &data);
 		
 			/**
 			 * @return unescaped string
 			 * @param data is string to unescape
 			 */
-			static std::string unescapeFields(const std::string &data);			
+			static dodoString unescapeFields(const dodoString &data);			
 						
 		protected:		
 			
@@ -189,14 +189,14 @@ namespace dodo
 			/**
 			 * constructs from collected data to sql adaptive field info for proper fields representation
 			 */
-			virtual std::string fieldCollect(__fieldInfo &row);
+			virtual dodoString fieldCollect(__fieldInfo &row);
 			
 			/**
 			 * adds to the end of request additional data collection for query if check passed
 			 * @param qTypeTocheck indicates what type of additional info to check
 			 * @collectedString is string that holds additional statement
 			 */
-			virtual void additionalCollect(unsigned int qTypeTocheck, const std::string &collectedString);
+			virtual void additionalCollect(unsigned int qTypeTocheck, const dodoString &collectedString);
 			
 			/**
 			 * @return string constructed from collected additional statements
@@ -204,14 +204,14 @@ namespace dodo
 			 * @param sqlAddArr is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift);
+			virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift);
 			
 			/**
 			 * @return string constructed from collected additional statements(DB-dependent)
 			 * @param statement is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual std::string insideAddCollect(const dodoStringArr &statements, int qTypeShift);
+			virtual dodoString insideAddCollect(const dodoStringArr &statements, int qTypeShift);
 		
 			/**
 			 * @return string from fields' names and 'em values
@@ -219,13 +219,13 @@ namespace dodo
 			 * @param fieldsNames is array of names
 			 * @param frame is value with what values will be framed
 			 */
-			virtual std::string fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const std::string &frame="'");
+			virtual dodoString fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &frame="'");
 	
 			/**
 			 * @return sql compliant data type
 			 * @param type indicates the data type
 			 */
-			virtual std::string stringType(int type);
+			virtual dodoString stringType(int type);
 			
 			/**
 			 * @return : if type must have range = 1; if may have = 0; if mustn't have = -1;
@@ -237,13 +237,13 @@ namespace dodo
 			 * @return sql compliant references statements
 			 * @param type indicates the type of reference
 			 */
-			virtual std::string stringReference(int type);
+			virtual dodoString stringReference(int type);
 						
-			std::string auto_increment;///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
-			std::string blob;///< bytea for postgres, blob for others 
-			std::string tinyblob;///< bytea for postgres, blob for others 
-			std::string mediumblob;///< bytea for postgres, blob for others 
-			std::string longblob;///< bytea for postgres, blob for others 
+			dodoString auto_increment;///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
+			dodoString blob;///< bytea for postgres, blob for others 
+			dodoString tinyblob;///< bytea for postgres, blob for others 
+			dodoString mediumblob;///< bytea for postgres, blob for others 
+			dodoString longblob;///< bytea for postgres, blob for others 
 		
 			__dodoMap<dodoStringArr> framingFields;///< hash of 'db:table' => `array of fields to frame`
 		

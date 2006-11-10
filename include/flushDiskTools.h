@@ -93,7 +93,7 @@ namespace dodo
 	 */
 	struct __fileInfo
 	{
-		std::string name;///< file name
+		dodoString name;///< file name
 		int perm;///< file permissions[see permissionModesEnum]; may be or'ed
 		int type;///< file type[see flushDiskToolsFileTypeEnum]
 		long size;///< file size
@@ -126,7 +126,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							copy(const std::string &from, const std::string &to, bool force=false);
+							copy(const dodoString &from, const dodoString &to, bool force=false);
 			
 			/**
 			 * copy file/Dir
@@ -140,7 +140,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							copyDir(const std::string &from, const std::string &to, bool force=false);
+							copyDir(const dodoString &from, const dodoString &to, bool force=false);
 			
 			/**
 			 * appends string to file
@@ -152,33 +152,33 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							append(const std::string &path, const std::string &content);
+							append(const dodoString &path, const dodoString &content);
 										
 			/**
 			 * @return basename of node
 			 * @param is path to node
 			 * basename => "/usr/lib" => "lib"
 			 */
-			static std::string lastname(const std::string &path);
+			static dodoString lastname(const dodoString &path);
 			
 			/**
 			 * @return dirname of node			 
 			 * @param is path to node
 			 * dirname => "/usr/lib" => "/usr"
 			 */
-			static std::string dirname(const std::string &path);
+			static dodoString dirname(const dodoString &path);
 			
 			/**
 			 * @return file content in string
 			 * @param path is path to file
 			 */ 
-			static std::string getFileContent(const std::string &path);
+			static dodoString getFileContent(const dodoString &path);
 
 			/**
 			 * @return file content in array of strings
 			 * @param path is path to file
 			 */ 			
-			static dodoStringArr getFileContentArr(const std::string &path);
+			static dodoStringArr getFileContentArr(const dodoString &path);
 			
 			/**
 			 * deletes file or notempty directory
@@ -190,7 +190,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							unlink(const std::string &path, bool force=true);///also empty directory
+							unlink(const dodoString &path, bool force=true);///also empty directory
 							
 			/**
 			 * rename file
@@ -202,7 +202,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							rename(const std::string &oldPath, const std::string &newPath);
+							rename(const dodoString &oldPath, const dodoString &newPath);
 			
 			/**
 			 * sets access and modyfiacation time of file
@@ -214,7 +214,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							touch(const std::string &path, int time=-1);///now by default
+							touch(const dodoString &path, int time=-1);///now by default
 			
 			/**
 			 * make directory
@@ -227,7 +227,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							mkdir(const std::string &path, int permissions = PERM_OWNER_ALL_ACCESS, bool force = true);
+							mkdir(const dodoString &path, int permissions = PERM_OWNER_ALL_ACCESS, bool force = true);
 			
 			/**
 			 * delete files, non empty directory
@@ -239,13 +239,13 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							rm(const std::string &path, bool force=true);
+							rm(const dodoString &path, bool force=true);
 			
 			/**
 			 * @return type of file; if error occured and lib was compiled without exceptions -> -1 will be returned;
 			 * @param path is path to node
 			 */				
-			static int getFileType(const std::string &path);
+			static int getFileType(const dodoString &path);
 			
 			/**
 			 * changes permissions
@@ -257,31 +257,31 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							chmod(const std::string &path, int permissions);
+							chmod(const dodoString &path, int permissions);
 			
 			/**
 			 * @return node permissions; if error occured and lib was compiled without exceptions -> -1 will be returned
 			 * @param path is path to node
 			 */				
-			static int getPermissions(const std::string &path);
+			static int getPermissions(const dodoString &path);
 			
 			/**
 			 * @return file size; if no such file or directory and lib was compiled without exceptions - will return -1
 			 * @param path indicates path what to describe
 			 */
-			static long getSize(const std::string &path);///in bytes; 
+			static long getSize(const dodoString &path);///in bytes; 
 			
 			/**
 			 * @return node access time
 			 * @param path indicates path what to describe
 			 */
-			static long getAccTime(const std::string &path);			
+			static long getAccTime(const dodoString &path);			
 			
 			/**
 			 * @return node modyfication time
 			 * @param path indicates path what to describe
 			 */
-			static long getModTime(const std::string &path);
+			static long getModTime(const dodoString &path);
 			
 			/**
 			 * gets original path of the file that link is set
@@ -293,7 +293,7 @@ namespace dodo
 			#else
 				static bool
 			#endif
-								followSymlink(const std::string &path, std::string &original);
+								followSymlink(const dodoString &path, dodoString &original);
 								
 			/**
 			 * creates symbolic link
@@ -306,7 +306,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							symlink(const std::string &oldPath, const std::string &newPath, bool force = true);
+							symlink(const dodoString &oldPath, const dodoString &newPath, bool force = true);
 
 			/**
 			 * creates link
@@ -318,7 +318,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							link(const std::string &oldPath, const std::string &newPath);
+							link(const dodoString &oldPath, const dodoString &newPath);
 			
 			/**
 			 * change owner of the node
@@ -330,7 +330,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							chown(const std::string &path, int uid);
+							chown(const dodoString &path, int uid);
 			
 			/**
 			 * change group owner of the node
@@ -342,37 +342,37 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							chgrp(const std::string &path, int gid);
+							chgrp(const dodoString &path, int gid);
 			
 			/**
 			 * @return true if file/directory exists
 			 * @param path is path to file/directory
 			 */				
-			static bool exists(const std::string &path);
+			static bool exists(const dodoString &path);
 			
 			/**
 			 * @return user id of the node
 			 * @param path indicates path where to get info
 			 */
-			static int getUserOwner(const std::string &path);
+			static int getUserOwner(const dodoString &path);
 
 			/**
 			 * @return group id of the node
 			 * @param path indicates path where to get info
 			 */			
-			static int getGroupOwner(const std::string &path);
+			static int getGroupOwner(const dodoString &path);
 			
 			/**
 			 * @return file info[see __fileInfo]
 			 * @param path indicates path where to get info
 			 */
-			static __fileInfo getFileInfo(const std::string &path);///if no such file - empty will be returned
+			static __fileInfo getFileInfo(const dodoString &path);///if no such file - empty will be returned
 
 			/**
 			 * @return file dir[see __fileInfo]
 			 * @param path indicates path where to get info
 			 */
-			static dodoArray<__fileInfo> getDirInfo(const std::string &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
+			static dodoArray<__fileInfo> getDirInfo(const dodoString &path);///if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
 					
 			/**
 			 * @return system understandable permissions

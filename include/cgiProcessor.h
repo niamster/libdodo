@@ -65,54 +65,54 @@ namespace dodo
 			 * @return parsed template from file
 			 * @param path indicates path where template stays
 			 */		
-			virtual std::string process(const std::string &path);
+			virtual dodoString process(const dodoString &path);
 			
 			/**
 			 * preprocesses template for reProcess
 			 * @param path indicates path where template stays
 			 * @note useful for fastCGI
 			 */
-			virtual void preRePocess(const std::string &path);
+			virtual void preRePocess(const dodoString &path);
 			
 			/**
 			 * @return parsed template from previously preprocessed template[using preRePocess or process[if CGI_SAVEPROCESS defined] methods]
 			 * @note useful for fastCGI
 			 */		
-			virtual std::string reProcess();
+			virtual dodoString reProcess();
 					
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable
 			 */
-			virtual void assign(std::string varName, const std::string &varVal);
+			virtual void assign(dodoString varName, const dodoString &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array)
 			 */
-			virtual void assign(std::string varName, const dodoStringArr &varVal);
+			virtual void assign(dodoString varName, const dodoStringArr &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(hash)
 			 */
-			virtual void assign(std::string varName, const dodoAssocArr &varVal);
+			virtual void assign(dodoString varName, const dodoAssocArr &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array of hashes)
 			 */
-			virtual void assign(std::string varName, const dodoArray<dodoAssocArr> &varVal);
+			virtual void assign(dodoString varName, const dodoArray<dodoAssocArr> &varVal);
 			
 			/**
 			 * show to stdout parsed template
 			 * @param path indicates path where template stays
 			 */		
-			virtual void display(const std::string &path);
+			virtual void display(const dodoString &path);
 			
 			/**
 			 * show to stdout previously parsed template[using preRePocess or process[if CGI_SAVEPROCESS defined] methods]
@@ -133,7 +133,7 @@ namespace dodo
 			 * @param path indicates buffer where template stays
 			 * @param path indicates file where template got
 			 */		
-			virtual std::string _process(const std::string &buffer, const std::string &path);
+			virtual dodoString _process(const dodoString &buffer, const dodoString &path);
 			
 			/**
 			 * processes `if` statement
@@ -144,7 +144,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _if(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
+			virtual unsigned long _if(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &tpl, const dodoString &path);
 
 			/**
 			 * processes `for` statement
@@ -155,7 +155,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _for(const std::string &buffer, unsigned long start, const std::string &statement, std::string &tpl, const std::string &path);
+			virtual unsigned long _for(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &tpl, const dodoString &path);
 
 			/**
 			 * processes `for` statement
@@ -165,26 +165,26 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long _ns(const std::string &buffer, unsigned long start, std::string &tpl, const std::string &path);
+			virtual unsigned long _ns(const dodoString &buffer, unsigned long start, dodoString &tpl, const dodoString &path);
 						
 			/**
 			 * processes `print` statement
 			 * @param statement indicates `print` statement
 			 * @param tpl indicates string where to add result
 			 */
-			virtual void _print(const std::string &statement, std::string &tpl);
+			virtual void _print(const dodoString &statement, dodoString &tpl);
 			
 			/**
 			 * processes `break` statement
 			 * @param statement indicates `break` statement
 			 */
-			virtual bool _break(const std::string &statement);
+			virtual bool _break(const dodoString &statement);
 			
 			/**
 			 * processes `assign` statement
 			 * @param statement indicates `assign` statement
 			 */
-			virtual void _assign(const std::string &statement);
+			virtual void _assign(const dodoString &statement);
 			
 			/**
 			 * processes `include` statement
@@ -193,7 +193,7 @@ namespace dodo
 			 * @param tpl indicates string where to add result
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual void _include(const std::string &statement, std::string &tpl, const std::string &path);
+			virtual void _include(const dodoString &statement, dodoString &tpl, const dodoString &path);
 			
 			/**
 			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
@@ -207,34 +207,34 @@ namespace dodo
 			 * @param st is open statement[if, for ...]
 			 * @param ts is close statement[fi, rof ...]
 			 */
-			virtual unsigned long blockEnd(const std::string &buffer, unsigned long start, const std::string &st, const std::string &ts);
+			virtual unsigned long blockEnd(const dodoString &buffer, unsigned long start, const dodoString &st, const dodoString &ts);
 						
 			/**
 			 * @return true if path is in `processed` list
 			 * @param path desribes what to look up
 			 */
-			virtual bool recursive(const std::string &path);		
+			virtual bool recursive(const dodoString &path);		
 			
 			/**
 			 * @return var's value
 			 * @param varName describes name of variable
 			 */
-			virtual std::string getVar(const std::string &varName);
+			virtual dodoString getVar(const dodoString &varName);
 
 			/**
 			 * @return extracted data(e.g. removes pairs of ",',`)
 			 * @param statement describes statement that needs extraction from the pairs of ",',`
 			 */
-			virtual std::string trim(const std::string &statement);
+			virtual dodoString trim(const dodoString &statement);
 			
-			std::list<std::string> processed;///< vector of files that will be skipped due to recurse
+			std::list<dodoString> processed;///< vector of files that will be skipped due to recurse
 		
-			std::map<std::string, dodoStringArr> globalArray;///< set of global variables(arrays)[user-set]
+			std::map<dodoString, dodoStringArr> globalArray;///< set of global variables(arrays)[user-set]
 			
-			std::map<std::string, dodoAssocArr> globalHash;///< set of global variables(hashes)[user-set]
+			std::map<dodoString, dodoAssocArr> globalHash;///< set of global variables(hashes)[user-set]
 			
-			std::map<std::string, dodoArray<dodoAssocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
-			std::map<std::string, dodoAssocArr> localHash;///< set of local variables(hashes)
+			std::map<dodoString, dodoArray<dodoAssocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
+			std::map<dodoString, dodoAssocArr> localHash;///< set of local variables(hashes)
 			
 			dodoAssocArr dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
 			
@@ -260,8 +260,8 @@ namespace dodo
 				
 			#endif 			
 			
-			std::string tmpl;
-			std::string tPath;
+			dodoString tmpl;
+			dodoString tPath;
 	};
 
 };

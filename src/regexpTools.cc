@@ -56,8 +56,8 @@ regexpTools::~regexpTools()
 //-------------------------------------------------------------------
 
 bool 
-regexpTools::match(const std::string &pattern, 
-				const std::string &sample, 
+regexpTools::match(const dodoString &pattern, 
+				const dodoString &sample, 
 				dodoStringArr &pockets)
 {
 	if (!compile(pattern))
@@ -69,7 +69,7 @@ regexpTools::match(const std::string &pattern,
 //-------------------------------------------------------------------
 
 bool
-regexpTools::reMatch(const std::string &sample, 
+regexpTools::reMatch(const dodoString &sample, 
 				dodoStringArr &pockets)
 {
 	pockets.clear();
@@ -90,7 +90,7 @@ regexpTools::reMatch(const std::string &sample,
 //-------------------------------------------------------------------
 
 bool
-regexpTools::boundMatch(const std::string &sample)
+regexpTools::boundMatch(const dodoString &sample)
 {
 	boundaries.clear();
 	
@@ -158,7 +158,7 @@ regexpTools::boundMatch(const std::string &sample)
 //-------------------------------------------------------------------
 
 bool 
-regexpTools::compile(const std::string &pattern)
+regexpTools::compile(const dodoString &pattern)
 {
 	register int bits(0);
 	
@@ -201,9 +201,9 @@ regexpTools::compile(const std::string &pattern)
 
 //-------------------------------------------------------------------
 
-std::string 
-regexpTools::replace(const std::string &pattern, 
-				const std::string &sample, 
+dodoString 
+regexpTools::replace(const dodoString &pattern, 
+				const dodoString &sample, 
 				const dodoStringArr &replacements)
 {
 	if (!compile(pattern))
@@ -214,8 +214,8 @@ regexpTools::replace(const std::string &pattern,
 
 //-------------------------------------------------------------------
 
-std::string 
-regexpTools::reReplace(const std::string &sample, 
+dodoString 
+regexpTools::reReplace(const dodoString &sample, 
 				const dodoStringArr &replacements)
 {
 	if (!boundMatch(sample))
@@ -226,7 +226,7 @@ regexpTools::reReplace(const std::string &sample,
 	dodoStringArr::const_iterator k(replacements.begin());
 	register int subs = replacements.size();
 	
-	std::string temp = sample;
+	dodoString temp = sample;
 	
 	for (register int res = 0;res<subs && i!=j;++i,++res,++k)
 		temp.replace(i->begin,i->end-i->begin,*k);

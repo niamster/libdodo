@@ -81,7 +81,7 @@ flushSocket::~flushSocket()
 	#ifdef DL_EXT
 	
 		int 
-		flushSocket::addPostExec(const std::string &module, 
+		flushSocket::addPostExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -91,7 +91,7 @@ flushSocket::~flushSocket()
 		//-------------------------------------------------------------------
 		
 		int 
-		flushSocket::addPreExec(const std::string &module, 
+		flushSocket::addPreExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -101,7 +101,7 @@ flushSocket::~flushSocket()
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
-		flushSocket::addExec(const std::string &module, 
+		flushSocket::addExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -231,7 +231,7 @@ flushSocket::makeSocket()
 #else
 	bool
 #endif
-flushSocket::connect(const std::string &host, 
+flushSocket::connect(const dodoString &host, 
 					int port, 
 					flushSocketExchange &exchange)
 {			
@@ -337,8 +337,8 @@ flushSocket::connect(const __connInfo &destinaton,
 #else
 	bool
 #endif
-flushSocket::connectFrom(const std::string &local,
-					const std::string &host, 
+flushSocket::connectFrom(const dodoString &local,
+					const dodoString &host, 
 					int port, 
 					flushSocketExchange &exchange)
 {			
@@ -453,7 +453,7 @@ flushSocket::connectFrom(const std::string &local,
 #else
 	bool
 #endif
-flushSocket::connectFrom(const std::string &local,
+flushSocket::connectFrom(const dodoString &local,
 					const __connInfo &destinaton, 
 					flushSocketExchange &exchange)
 {
@@ -475,7 +475,7 @@ flushSocket::connectFrom(const std::string &local,
 #else
 	bool
 #endif 
-flushSocket::connect(const std::string &path, 
+flushSocket::connect(const dodoString &path, 
 				flushSocketExchange &exchange)
 {		
 	#ifndef FLUSH_SOCKET_WO_XEXEC
@@ -535,7 +535,7 @@ flushSocket::connect(const std::string &path,
 #else
 	bool
 #endif
-flushSocket::bindNListen(const std::string &host, 
+flushSocket::bindNListen(const dodoString &host, 
 						int port,
 						int numberOfConnections)
 {		
@@ -677,7 +677,7 @@ flushSocket::bindNListen(const __connInfo &destinaton,
 #else
 	bool
 #endif
-flushSocket::bindNListen(const std::string &path,
+flushSocket::bindNListen(const dodoString &path,
 							int numberOfConnections,
 							bool force)
 {		

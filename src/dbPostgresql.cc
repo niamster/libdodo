@@ -146,7 +146,7 @@
 	#else
 		bool
 	#endif
-	dbPostgresql::_exec(const std::string &query, 
+	dbPostgresql::_exec(const dodoString &query, 
 						bool result)
 	{	
 		register bool blobHint;
@@ -159,7 +159,7 @@
 			{
 				if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
 				{
-					std::string temp = dbInfo.db + ":" + pre_table;
+					dodoString temp = dbInfo.db + ":" + pre_table;
 					
 					if (!framingFields.isset(temp))
 					{
@@ -375,7 +375,7 @@
 		register int j;
 		
 		dodoStringArr rowsPart;
-		std::string rowPart;
+		dodoString rowPart;
 
 		for (register int i(0);i<rowsNum;++i)
 		{
@@ -394,7 +394,7 @@
 					if (preventEscaping)
 						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
 					else
-						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));
+						rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));
 				}
 
 				rowsPart.push_back(rowPart);
@@ -490,7 +490,7 @@
 	#else
 		bool
 	#endif
-	dbPostgresql::exec(const std::string &query, 
+	dbPostgresql::exec(const dodoString &query, 
 						bool result)
 	{
 		#ifndef DBPOSTGRESQL_WO_XEXEC
@@ -539,7 +539,7 @@
 		#ifdef DL_EXT
 		
 			int 
-			dbPostgresql::addPostExec(const std::string &module, 
+			dbPostgresql::addPostExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -549,7 +549,7 @@
 			//-------------------------------------------------------------------
 			
 			int 
-			dbPostgresql::addPreExec(const std::string &module, 
+			dbPostgresql::addPreExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -559,7 +559,7 @@
 			//-------------------------------------------------------------------
 			
 			xexecCounts 
-			dbPostgresql::addExec(const std::string &module, 
+			dbPostgresql::addExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -590,7 +590,7 @@
 		#endif
 		
 		dodoStringMap rowFieldsPart;
-		std::string rowPart;
+		dodoString rowPart;
 		
 		register int j;
 
@@ -607,7 +607,7 @@
 					if (preventEscaping)
 						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
 					else
-						rowPart.assign(unescapeFields(std::string(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));					
+						rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));					
 				}
 
 				rowFieldsPart.realArr[PQfname(pgResult,i)] = rowPart;
@@ -626,7 +626,7 @@
 	#else
 		bool
 	#endif 
-	dbPostgresql::setCharset(const std::string &charset)
+	dbPostgresql::setCharset(const dodoString &charset)
 	{
 		register int status = PQsetClientEncoding(conn, charset.c_str());
 		if (status == -1)

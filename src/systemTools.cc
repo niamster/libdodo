@@ -75,7 +75,7 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 	
-std::string 
+dodoString 
 systemTools::getWorkingDir()
 {
 	char wd[MAXPATHLEN];
@@ -97,7 +97,7 @@ systemTools::getWorkingDir()
 #else
 	bool 
 #endif 
-systemTools::setWorkingDir(const std::string &path)
+systemTools::setWorkingDir(const dodoString &path)
 {
 	if (chdir(path.c_str()) == -1)
 		#ifndef NO_EX
@@ -144,7 +144,7 @@ systemTools::getUsageInfo(__usage &info)
 #else
 	bool 
 #endif 
-systemTools::changeRoot(const std::string &path)
+systemTools::changeRoot(const dodoString &path)
 {
 	#ifndef NO_EX
 		setWorkingDir(path);
@@ -541,7 +541,7 @@ systemTools::getUserInfo(__userInfo &info,
 	bool 
 #endif			
 systemTools::getUserInfo(__userInfo &info, 
-			const std::string &uid)
+			const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
@@ -670,7 +670,7 @@ systemTools::getGroupInfo(__groupInfo &info,
 	bool 
 #endif			
 systemTools::getGroupInfo(__groupInfo &info, 
-			const std::string &uid)
+			const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
@@ -733,7 +733,7 @@ systemTools::getGroups(dodoArray<__groupInfo> &users)
 //-------------------------------------------------------------------
 
 void 
-systemTools::die(const std::string &message, 
+systemTools::die(const dodoString &message, 
 				int status)
 {
 	std::cerr << message << std::endl;
@@ -1223,7 +1223,7 @@ systemTools::unsetSignalHandler(long signal)
 #ifdef DL_EXT
 
 	sigMod 
-	systemTools::getModuleInfo(const std::string &module, 
+	systemTools::getModuleInfo(const dodoString &module, 
 								void *toInit)
 	{
 			void *handle = dlopen(module.c_str(), RTLD_LAZY);
@@ -1262,7 +1262,7 @@ systemTools::unsetSignalHandler(long signal)
 		bool 
 	#endif 
 	systemTools::setSignalHandler(long signal, 
-								const std::string &path, 
+								const dodoString &path, 
 								void *toInit,
 								int blockSignals)
 	{
@@ -1343,7 +1343,7 @@ systemTools::unsetSignalHandler(long signal)
 	#else
 		bool 
 	#endif 
-	systemTools::setSignalHandler(const std::string &path, 
+	systemTools::setSignalHandler(const dodoString &path, 
 								void *toInit,
 								int blockSignals)
 	{

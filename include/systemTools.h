@@ -130,13 +130,13 @@ namespace dodo
 	 */
 	struct	__userInfo
 	{
-		std::string name;///< user's name 
-		std::string pass;///< user's password
+		dodoString name;///< user's name 
+		dodoString pass;///< user's password
 		int uid;///< user's id
 		int gid;///< user's group
-		std::string realName;///< user's real name
-		std::string home;///< user's home directory
-		std::string shell;///< user's default shell
+		dodoString realName;///< user's real name
+		dodoString home;///< user's home directory
+		dodoString shell;///< user's default shell
 	};
 	
 	/**
@@ -144,7 +144,7 @@ namespace dodo
 	 */
 	struct __groupInfo
 	{
-		std::string name;///< name of the group
+		dodoString name;///< name of the group
 		int gid;///< group id
 		dodoStringArr members;///< list of group members
 	};
@@ -214,7 +214,7 @@ namespace dodo
 			 * @param message is message to print
 			 * @param status indicate with what status to exit
 			 */
-			static void die(const std::string &message, int status = 1);
+			static void die(const dodoString &message, int status = 1);
 			
 			/**
 			 * changes root(/) to new
@@ -226,11 +226,11 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							changeRoot(const std::string &path);		
+							changeRoot(const dodoString &path);		
 			/**
 			 * @return current working directory
 			 */
-			static std::string getWorkingDir();
+			static dodoString getWorkingDir();
 			
 			/**
 			 * set current working directory (cd path) 
@@ -241,7 +241,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							setWorkingDir(const std::string &path);
+							setWorkingDir(const dodoString &path);
 				
 			/**
 			 * get system usage with current process
@@ -357,7 +357,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							getUserInfo(__userInfo &info, const std::string &uid);			
+							getUserInfo(__userInfo &info, const dodoString &uid);			
 							
 			/**
 			 * gets users of the system
@@ -392,7 +392,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							getGroupInfo(__groupInfo &info, const std::string &gid);			
+							getGroupInfo(__groupInfo &info, const dodoString &gid);			
 							
 			/**
 			 * gets group of the system
@@ -511,7 +511,7 @@ namespace dodo
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param toInit indicates data that will path to initialize function
 				 */
-				static sigMod getModuleInfo(const std::string &module, void *toInit = NULL);
+				static sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 				
 				/**
 				 * set handler on signal from specific module
@@ -525,7 +525,7 @@ namespace dodo
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(long signal, const std::string &module, void *toInit = NULL, int blockSignals = -1);
+								setSignalHandler(long signal, const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
 				/**
 				 * set handler on signal from specific module
@@ -539,7 +539,7 @@ namespace dodo
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(const std::string &module, void *toInit = NULL, int blockSignals = -1);
+								setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
 			#endif											
 			

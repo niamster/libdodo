@@ -132,12 +132,12 @@ dbSqlBase::~dbSqlBase()
 
 //-------------------------------------------------------------------
 
-std::string
+dodoString
 dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal, 
 					const dodoStringArr &fieldsNames,
-					const std::string &frame)
+					const dodoString &frame)
 {
-	std::string temp;
+	dodoString temp;
 	
 	register unsigned int fn(fieldsNames.size()),fv(fieldsVal.size());
 	
@@ -164,25 +164,25 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 
 //-------------------------------------------------------------------
 
-std::string 
-dbSqlBase::exists(const std::string &statement)
+dodoString 
+dbSqlBase::exists(const dodoString &statement)
 {
-	return std::string("exists("+statement+')');
+	return dodoString("exists("+statement+')');
 }
 
 //-------------------------------------------------------------------
 
-std::string 
-dbSqlBase::noexists(const std::string &statement)
+dodoString 
+dbSqlBase::noexists(const dodoString &statement)
 {
-	return std::string("not exists("+statement+')');
+	return dodoString("not exists("+statement+')');
 }
 
 //-------------------------------------------------------------------
 
 void 
 dbSqlBase::additionalCollect(unsigned int qTypeTocheck, 
-						const std::string &collectedString)
+						const dodoString &collectedString)
 {
 	if (qShift == DB_EMPTY)
 		return ;
@@ -197,7 +197,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 						const __statements sqlAddArr[],
 						int qTypeShift)
@@ -205,7 +205,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 	if (qTypeShift == DB_EMPTY)
 		return __string__;
 		
-	std::string temp;
+	dodoString temp;
 	
 	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
 	register unsigned int temp_bit = 0;
@@ -222,14 +222,14 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 dbSqlBase::insideAddCollect(const dodoStringArr &statements, 
 						int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
 		return __string__;
 		
-	std::string temp;
+	dodoString temp;
 
 	register unsigned int k(1);
 	register unsigned int temp_bit = 0;
@@ -251,7 +251,7 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 void 
 dbSqlBase::selectCollect() 
 {
-	std::string temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
+	dodoString temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
 	
 	if (pre_table.size()>0)
@@ -280,13 +280,13 @@ dbSqlBase::insertCollect()
 
 	dodoArray<dodoStringArr>::iterator k(pre_fieldsVal.begin()), l(pre_fieldsVal.end());
 	
-	std::map<std::string, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
+	std::map<dodoString, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 		
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
 	{	
 		dodoStringArr::iterator t;
 		
-		std::string temp;
+		dodoString temp;
 		
 		for (;k!=l;++k)
 		{
@@ -335,7 +335,7 @@ dbSqlBase::insertCollect()
 		}
 	}
 	
-	std::string fieldsPart;
+	dodoString fieldsPart;
 	
 	dodoStringArr::iterator i(fieldsVPart.begin()), j(fieldsVPart.end()-1);
 	for (;i!=j;++i)
@@ -348,10 +348,10 @@ dbSqlBase::insertCollect()
 	fieldsPart.append(*i);	
 	fieldsPart.append(")");	
 	
-	std::string temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
+	dodoString temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
 	
-	std::string temp1 = pre_table;
+	dodoString temp1 = pre_table;
 	
 	if (pre_fieldsNames.size() != 0)
 	{
@@ -374,13 +374,13 @@ void
 dbSqlBase::insertSelectCollect()
 {
 	
-	std::string fieldsPartTo = tools::implode(pre_fieldsNames,",");
-	std::string fieldsPartFrom = tools::implode(pre_fieldsVal.front(),",");
+	dodoString fieldsPartTo = tools::implode(pre_fieldsNames,",");
+	dodoString fieldsPartFrom = tools::implode(pre_fieldsVal.front(),",");
 	
-	std::string temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
+	dodoString temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
 	
-	std::string tempS = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
+	dodoString tempS = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
 	tempS.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
 	
 	tempS.append(fieldsPartFrom);
@@ -402,9 +402,9 @@ dbSqlBase::insertSelectCollect()
 void
 dbSqlBase::updateCollect()
 {
-	std::string setPart;
+	dodoString setPart;
 	
-	std::map<std::string, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
+	std::map<dodoString, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 		
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
 	{
@@ -453,7 +453,7 @@ dbSqlBase::updateCollect()
 	}
 	
 	insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
-	std::string temp = insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift);
+	dodoString temp = insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift);
 
 	temp.append(pre_table);
 
@@ -468,7 +468,7 @@ dbSqlBase::updateCollect()
 void
 dbSqlBase::delCollect()
 {
-	std::string temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
+	dodoString temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
 
 	request = "delete ";
@@ -600,7 +600,7 @@ dbSqlBase::createFieldCollect()
 
 //-------------------------------------------------------------------
 
-std::string
+dodoString
 dbSqlBase::queryCollect()
 {	
 	register bool additionalActions = true;
@@ -769,10 +769,10 @@ dbSqlBase::queryCollect()
 
 //-------------------------------------------------------------------
 
-std::string
-dbSqlBase::unescapeFields(const std::string &data)
+dodoString
+dbSqlBase::unescapeFields(const dodoString &data)
 {
-	std::string temp = data;
+	dodoString temp = data;
 	
 	tools::replace("\\'","'",temp);
 	tools::replace("\\\\","\\",temp); 
@@ -782,10 +782,10 @@ dbSqlBase::unescapeFields(const std::string &data)
 
 //-------------------------------------------------------------------
 
-std::string
-dbSqlBase::escapeFields(const std::string &data)
+dodoString
+dbSqlBase::escapeFields(const dodoString &data)
 {
-	std::string temp = data;
+	dodoString temp = data;
 	
 	tools::replace("\\","\\\\",temp);
 	tools::replace("'","\\'",temp); 
@@ -795,11 +795,11 @@ dbSqlBase::escapeFields(const std::string &data)
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 dbSqlBase::fieldCollect(__fieldInfo &row)
 {
 	register int type = row.type, flag = row.flag;
-	std::string resRow(row.name + " " + stringType(type));
+	dodoString resRow(row.name + " " + stringType(type));
 	
 	if (preventEscaping)
 		resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,",") + ")"):__string__);
@@ -824,7 +824,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row)
 
 //-------------------------------------------------------------------
 
-std::string
+dodoString
 dbSqlBase::stringType(int type)
 {
 	switch (type)
@@ -832,56 +832,56 @@ dbSqlBase::stringType(int type)
 		case FIELDTYPE_INT:
 		case FIELDTYPE_INTEGER:
 		
-			return std::string("INTEGER");
+			return dodoString("INTEGER");
 			
 		case FIELDTYPE_DATE:
 		
-			return std::string("DATE");
+			return dodoString("DATE");
 			
 		case FIELDTYPE_VARCHAR:
 		
-			return std::string("VARCHAR");
+			return dodoString("VARCHAR");
 			
 		case FIELDTYPE_TIMESTAMP:
 		
-			return std::string("TIMESTAMP");
+			return dodoString("TIMESTAMP");
 			
 		case FIELDTYPE_TIME:
 		
-			return std::string("TIME");
+			return dodoString("TIME");
 			
 		case FIELDTYPE_TINYINT:
 		
-			return std::string("TINYINT");
+			return dodoString("TINYINT");
 			
 		case FIELDTYPE_SMALLINT:
 		
-			return std::string("SMALLINT");
+			return dodoString("SMALLINT");
 			
 		case FIELDTYPE_MEDIUMINT:
 		
-			return std::string("MEDIUMINT");
+			return dodoString("MEDIUMINT");
 			
 		case FIELDTYPE_BIGINT:
 		
-			return std::string("BIGINT");
+			return dodoString("BIGINT");
 			
 		case FIELDTYPE_FLOAT:
 		
-			return std::string("FLOAT");
+			return dodoString("FLOAT");
 			
 		case FIELDTYPE_REAL:
 		case FIELDTYPE_DOUBLE:
 		
-			return std::string("REAL");
+			return dodoString("REAL");
 			
 		case FIELDTYPE_DECIMAL:
 		
-			return std::string("DECIMAL");
+			return dodoString("DECIMAL");
 			
 		case FIELDTYPE_CHAR:
 		
-			return std::string("CHAR");
+			return dodoString("CHAR");
 			
 		case FIELDTYPE_TINYBLOB:
 		
@@ -901,27 +901,27 @@ dbSqlBase::stringType(int type)
 			
 		case FIELDTYPE_TINYTEXT:
 		
-			return std::string("TINYTEXT");
+			return dodoString("TINYTEXT");
 			
 		case FIELDTYPE_TEXT:
 		
-			return std::string("TEXT");
+			return dodoString("TEXT");
 			
 		case FIELDTYPE_MEDIUMTEXT:
 		
-			return std::string("MEDIUMTEXT");
+			return dodoString("MEDIUMTEXT");
 			
 		case FIELDTYPE_LONGTEXT:
 		
-			return std::string("LONGTEXT");
+			return dodoString("LONGTEXT");
 			
 		case FIELDTYPE_ENUM:
 		
-			return std::string("ENUM");
+			return dodoString("ENUM");
 			
 		case FIELDTYPE_SET:
 		
-			return std::string("SET");
+			return dodoString("SET");
 			
 		default:
 		
@@ -978,30 +978,30 @@ dbSqlBase::chkRange(int type)
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 dbSqlBase::stringReference(int type)
 {
 	switch (type)
 	{
 		case REFERENCE_RESTRICT:
 		
-			return std::string("restrict");
+			return dodoString("restrict");
 			
 		case REFERENCE_CASCADE:
 		
-			return std::string("cascade");
+			return dodoString("cascade");
 			
 		case REFERENCE_SET_NULL:
 		
-			return std::string("set null");
+			return dodoString("set null");
 			
 		case REFERENCE_NO_ACTION:
 		
-			return std::string("no action");
+			return dodoString("no action");
 			
 		case REFERENCE_SET_DEFAULT:
 		
-			return std::string("set default");
+			return dodoString("set default");
 			
 		default:
 		

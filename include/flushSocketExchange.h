@@ -171,7 +171,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 							
 					/**
 					 * adds hook after the operation by callback
@@ -180,7 +180,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -189,7 +189,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 				#endif	
 			
@@ -234,7 +234,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							sendString(const std::string &data, bool urgent = false);
+							sendString(const dodoString &data, bool urgent = false);
 			
 			/**
 			 * receive
@@ -264,7 +264,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							receiveString(std::string &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
+							receiveString(dodoString &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
 
 			/**
 			 * send - null-terminated string
@@ -298,7 +298,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							sendStreamString(const std::string &data, bool urgent = false);
+							sendStreamString(const dodoString &data, bool urgent = false);
 			
 			/**
 			 * receive - null-terminated string
@@ -330,7 +330,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							receiveStreamString(std::string &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
+							receiveStreamString(dodoString &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
 						
 			/**
 			 * closes this socket

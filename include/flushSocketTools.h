@@ -47,10 +47,10 @@ namespace dodo
 	  */
 	 struct __ifInfo
 	 {
-	 	std::string address;///< ip address of the interface
-	 	std::string broadcast;///< broadcast address of the interface
-	 	std::string netmask;///< netmask of the interface
-	 	std::string hwaddr;///< harware address of the interface(MAC)
+	 	dodoString address;///< ip address of the interface
+	 	dodoString broadcast;///< broadcast address of the interface
+	 	dodoString netmask;///< netmask of the interface
+	 	dodoString hwaddr;///< harware address of the interface(MAC)
 	 	
 	 	bool up;///< true if interface is up
 	 	bool loop;///< true is a loopback
@@ -61,7 +61,7 @@ namespace dodo
 	  */
 	 struct __hostInfo
 	 {
-	 	std::string name;///< original name of the host
+	 	dodoString name;///< original name of the host
 	 	dodoStringArr aliases;///< aliases of the host
 	 	dodoStringArr addresses;///< addresses of the host
 	 };
@@ -71,7 +71,7 @@ namespace dodo
 	 */
 	struct __servInfo
 	{
-	 	std::string name;///< original name of the service
+	 	dodoString name;///< original name of the service
 	 	dodoStringArr aliases;///< sevice's aliases
 		int port;///< port of service
 	};
@@ -95,18 +95,18 @@ namespace dodo
 			 * @return info about interface
 			 * @param interface is name of interface about what info is needed
 			 */
-			static __ifInfo getInterfaceInfo(const std::string &interface);
+			static __ifInfo getInterfaceInfo(const dodoString &interface);
 			
 			/**
 			 * @return info about given host
 			 * @param host points to host about what info would be given
 			 */
-			static __hostInfo getHostInfo(const std::string &host);
+			static __hostInfo getHostInfo(const dodoString &host);
 			
 			/**
 			 * @return name of local host
 			 */
-			static std::string getLocalName();
+			static dodoString getLocalName();
 			
 			/**
 			 * sets local name
@@ -117,21 +117,21 @@ namespace dodo
 			#else
 				static bool 
 			#endif			
-							setLocalName(const std::string &host);
+							setLocalName(const dodoString &host);
 								
 			/**
 			 * @return info about service
 			 * @param service is service name
 			 * @param protocol specifies protocol of service(tcp, udp ..)
 			 */
-			static __servInfo getServiceInfo(const std::string &service, const std::string &protocol);
+			static __servInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
 								
 			/**
 			 * @return info about service
 			 * @param port is port of service
 			 * @param protocol specifies protocol of service(tcp, udp ..)
 			 */
-			static __servInfo getServiceInfo(int port, const std::string &protocol);
+			static __servInfo getServiceInfo(int port, const dodoString &protocol);
 			
 	};
 	

@@ -55,7 +55,7 @@ namespace dodo
 			unsigned long inSize;///< size of data block;
 			unsigned long outSize;///< size of data block;
 			
-			std::string buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
+			dodoString buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
 
 		protected:
 		

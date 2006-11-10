@@ -103,7 +103,7 @@ namespace dodo
 			 * 
 			 * if type == TMP_FILE, u don't have to specify path
 			 */
-			flushDisk(short type, const std::string &path = __string__);
+			flushDisk(short type, const dodoString &path = __string__);
 			
 			/**
 			 * destructor
@@ -138,7 +138,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 								
 					/**
 					 * adds hook after the operation by callback
@@ -147,7 +147,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -156,7 +156,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
+					virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 				#endif	
 			
@@ -174,7 +174,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif			 
-							open(const std::string &path = __string__);///if opened previous file, closes it		
+							open(const dodoString &path = __string__);///if opened previous file, closes it		
 			
 			/**
 			 * closes file
@@ -196,7 +196,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readString(std::string &data, unsigned long pos = 0);
+							readString(dodoString &data, unsigned long pos = 0);
 			/**
 			 * read data
 			 * @param data will be filled with data
@@ -219,7 +219,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							writeString(const std::string &data, unsigned long pos = 0);
+							writeString(const dodoString &data, unsigned long pos = 0);
 										
 			/**
 			 * write string
@@ -244,7 +244,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readStreamString(std::string &data, unsigned long pos = 0);
+							readStreamString(dodoString &data, unsigned long pos = 0);
 			/**
 			 * read data - null[or \n]-terminated string
 			 * @param data will be filled with data
@@ -269,7 +269,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							writeStreamString(const std::string &data);
+							writeStreamString(const dodoString &data);
 										
 			/**
 			 * write string - null-terminated string [append only]
@@ -311,7 +311,7 @@ namespace dodo
 			/**
 			 * @return path of the opened file
 			 */			
-			virtual std::string getPath() const;
+			virtual dodoString getPath() const;
 
 			short fileType;///< type of file; if you change then it you have to reopen!
 
@@ -331,7 +331,7 @@ namespace dodo
 									
 		private:
 		
-			std::string path;///< file name
+			dodoString path;///< file name
 					
 			FILE *file;///< file handler
 	};

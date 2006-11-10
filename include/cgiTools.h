@@ -108,10 +108,10 @@ namespace dodo
 	 */
 	struct __cgiFilesUp
 	{
-		std::string name;///< real name of the file
-		std::string type;///< MIME type
+		dodoString name;///< real name of the file
+		dodoString type;///< MIME type
 		FILE *fp;///< pointer to opened file[any case - in memory or on disk]
-		std::string tmp_name;///< path where it was temporary saved[empty, if file stored in memory]
+		dodoString tmp_name;///< path where it was temporary saved[empty, if file stored in memory]
 		unsigned long size;///< size of the file
 		int error;///< indicates if error occured
 		void *buf;///< contains file data[if file stored in memory]
@@ -132,18 +132,18 @@ namespace dodo
 		 * constructor
 		 * @note  defines struct data with user data
 		 */
-		__cookies(const std::string &name, const std::string &value, const std::string &exDate, const std::string &path, const std::string &domain, bool secure);
+		__cookies(const dodoString &name, const dodoString &value, const dodoString &exDate, const dodoString &path, const dodoString &domain, bool secure);
 		
-		std::string name;///< name of cookie
-		std::string value;///< value of cookie
+		dodoString name;///< name of cookie
+		dodoString value;///< value of cookie
 		
-		std::string exDate;///< date of expire
-		std::string path;///< cookie's path
-		std::string domain;///< cookie's domain
+		dodoString exDate;///< date of expire
+		dodoString path;///< cookie's path
+		dodoString domain;///< cookie's domain
 		bool secure;///< indicates if cookie is secure; false by default
 	}; 
 
-	static std::string postFilesTmpDir = "/tmp";///< path of dir, where POST files will be temporary saved [default is /tmp]
+	static dodoString postFilesTmpDir = "/tmp";///< path of dir, where POST files will be temporary saved [default is /tmp]
 
 	/**
 	 * @enum requestMethodEnum indicates request type
@@ -243,7 +243,7 @@ namespace dodo
 			 * @param varName name of the variable
 			 * @param first indicates what array will be searched first[see requestMethodEnum]
 			 */
-			 virtual std::string request(const std::string &varName, short first=REQUESTMETHOD_GET);
+			 virtual dodoString request(const dodoString &varName, short first=REQUESTMETHOD_GET);
 			 
 			/**
 			 * prints cgi headers; 
@@ -264,7 +264,7 @@ namespace dodo
 			 * @param domain is cookie's domain
 			 * @param secure is indicates if cookie is secure; false by default
 			 */
-			virtual void setCookie(const std::string &name, const std::string &value, const std::string &exDate=__string__, const std::string &path=__string__, const std::string &domain=__string__, bool secure=false);
+			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate=__string__, const dodoString &path=__string__, const dodoString &domain=__string__, bool secure=false);
 		
 			virtual void setCookie(const __cookies &cookie);
 		
@@ -304,7 +304,7 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(dodoAssocArr &val, const std::string &string, char *delim = "&");
+			virtual void make(dodoAssocArr &val, const dodoString &string, char *delim = "&");
 		
 		private:	
 		

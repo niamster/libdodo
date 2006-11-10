@@ -145,8 +145,8 @@ static const char base64DecodeTr[]="|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQRS
 
 //-------------------------------------------------------------------
 
-inline std::string
-tools::dummyTools(const std::string &data)
+inline dodoString
+tools::dummyTools(const dodoString &data)
 {
 	return data;
 }
@@ -180,7 +180,7 @@ tools::~tools()
 
 bool 
 tools::isInArray(const dodoStringArr &arr, 
-				const std::string &needle, 
+				const dodoString &needle, 
 				bool icase)
 {
 	int(*cmpFunc)(const char *, const char *);
@@ -201,9 +201,9 @@ tools::isInArray(const dodoStringArr &arr,
 //-------------------------------------------------------------------
 
 dodoStringArr 
-tools::explode(const std::string &fields,
+tools::explode(const dodoString &fields,
 			escape escapeF,
-			const std::string &separator, 
+			const dodoString &separator, 
 			int limit)
 {
 	register unsigned long i(0), j(0), sep_size(separator.size());
@@ -221,7 +221,7 @@ tools::explode(const std::string &fields,
 		
 		i = fields.find(separator,i);
 		arr.push_back(escapeF(fields.substr(j,i-j)));
-		if (i == std::string::npos)
+		if (i == dodoString::npos)
 			break;
 			
 		i += sep_size;
@@ -234,16 +234,16 @@ tools::explode(const std::string &fields,
 //-------------------------------------------------------------------
 
 void 
-tools::replace(const std::string &needle, 
-		const std::string &replacement,
-		std::string &data)
+tools::replace(const dodoString &needle, 
+		const dodoString &replacement,
+		dodoString &data)
 {
 	register unsigned long i(0),j(needle.size()),k(replacement.size());
 	
 	while (true)
 	{
 		i = data.find(needle,i);
-		if (i == std::string::npos)
+		if (i == dodoString::npos)
 			break;
 			
 		data.replace(i,j,replacement,0,k);
@@ -256,7 +256,7 @@ tools::replace(const std::string &needle,
 void 
 tools::replace(const dodoStringArr &needle, 
 		const dodoStringArr &replacement,
-		std::string &data)
+		dodoString &data)
 {
 	dodoStringArr::const_iterator i = needle.begin(), j = needle.end(), o = replacement.begin(), p = replacement.end();
 	for (;i!=j&&o!=p;++i,++o)
@@ -266,8 +266,8 @@ tools::replace(const dodoStringArr &needle,
 //-------------------------------------------------------------------
 
 dodoStringArr 
-tools::explode(const std::string &fields, 
-			const std::string &separator,
+tools::explode(const dodoString &fields, 
+			const dodoString &separator,
 			int limit)
 {
 	return explode(fields,&dummyTools,separator,limit);
@@ -275,16 +275,16 @@ tools::explode(const std::string &fields,
 
 //-------------------------------------------------------------------
 
-std::string
+dodoString
 tools::implode(const dodoStringArr &fields,
 		escape escapeF, 
-		const std::string &separator,
-		const std::string &frame,
+		const dodoString &separator,
+		const dodoString &frame,
 		int limit)
 {
 	register int k(0);
 	
-	std::string temp, fs(frame + separator);
+	dodoString temp, fs(frame + separator);
 	dodoStringArr::const_iterator i(fields.begin()), j(--fields.end());
 	
 	for (;i!=j;++i)
@@ -303,10 +303,10 @@ tools::implode(const dodoStringArr &fields,
 }
 //-------------------------------------------------------------------
 
-std::string
+dodoString
 tools::implode(const dodoStringArr &fields,
-		const std::string &separator,
-		const std::string &frame,
+		const dodoString &separator,
+		const dodoString &frame,
 		int limit)
 {	
 	return implode(fields,&dummyTools,separator,frame,limit);
@@ -314,9 +314,9 @@ tools::implode(const dodoStringArr &fields,
 
 //-------------------------------------------------------------------
 
-std::string
+dodoString
 tools::implode(const dodoStringArr &fields,
-		const std::string &separator,
+		const dodoString &separator,
 		int limit)
 {
 	return implode(fields,&dummyTools,separator,limit);
@@ -324,15 +324,15 @@ tools::implode(const dodoStringArr &fields,
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 tools::implode(const dodoStringArr &fields, 
 		escape escapeF, 
-		const std::string &separator,
+		const dodoString &separator,
 		int limit)
 {
 	register int k(0);	
 	
-	std::string temp;
+	dodoString temp;
 	dodoStringArr::const_iterator i(fields.begin()), j(--fields.end());
 	
 	for (;i!=j;++i)
@@ -352,7 +352,7 @@ tools::implode(const dodoStringArr &fields,
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 tools::lToString(long number)
 {
 	char temp[SIZEOFNUM];
@@ -362,7 +362,7 @@ tools::lToString(long number)
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 tools::dToString(double number)
 {
 	char temp[SIZEOFNUM];
@@ -372,8 +372,8 @@ tools::dToString(double number)
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::lTrim(const std::string &data, 
+dodoString 
+tools::lTrim(const dodoString &data, 
 			char symbol)
 {
 	register int size = data.size(), i(0);
@@ -387,8 +387,8 @@ tools::lTrim(const std::string &data,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::rTrim(const std::string &data, 
+dodoString 
+tools::rTrim(const dodoString &data, 
 			char symbol)
 {
 	register int i(data.size()-1);
@@ -402,8 +402,8 @@ tools::rTrim(const std::string &data,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::rTrim(const std::string &data, 
+dodoString 
+tools::rTrim(const dodoString &data, 
 			char symbols[], 
 			int symCount)
 {
@@ -423,8 +423,8 @@ tools::rTrim(const std::string &data,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::lTrim(const std::string &data, 
+dodoString 
+tools::lTrim(const dodoString &data, 
 			char symbols[], 
 			int symCount)
 {
@@ -444,8 +444,8 @@ tools::lTrim(const std::string &data,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::trim(const std::string &data, 
+dodoString 
+tools::trim(const dodoString &data, 
 			char symbols[], 
 			int symCount)
 {
@@ -454,8 +454,8 @@ tools::trim(const std::string &data,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::trim(const std::string &data, 
+dodoString 
+tools::trim(const dodoString &data, 
 			char symbol)
 {
 	return rTrim(lTrim(data,symbol),symbol);
@@ -467,10 +467,10 @@ tools::trim(const std::string &data,
 
 	//-------------------------------------------------------------------
 	
-	std::string 
-	tools::codesetConversionStatic(const std::string &buffer, 
-						const std::string &toCode, 
-						const std::string &fromCode)
+	dodoString 
+	tools::codesetConversionStatic(const dodoString &buffer, 
+						const dodoString &toCode, 
+						const dodoString &fromCode)
 	{
 		iconv_t conv = iconv_open(toCode.c_str(),fromCode.c_str());
 		if (conv == (iconv_t)(-1))
@@ -505,7 +505,7 @@ tools::trim(const std::string &data,
 			#endif
 		}
 			
-		std::string result;
+		dodoString result;
 		result.assign(outBuffer, out);
 
 		delete [] outBuffer;
@@ -520,8 +520,8 @@ tools::trim(const std::string &data,
 	#else
 		bool 
 	#endif		
-	tools::codeSet(const std::string &toCode, 
-					const std::string &fromCode)
+	tools::codeSet(const dodoString &toCode, 
+					const dodoString &fromCode)
 	{
 		conv = iconv_open(toCode.c_str(),fromCode.c_str());
 		if (conv == (iconv_t)(-1))
@@ -538,10 +538,10 @@ tools::trim(const std::string &data,
 
 	//-------------------------------------------------------------------
 	
-	std::string 
-	tools::codesetConversion(const std::string &buffer, 
-						const std::string &toCode, 
-						const std::string &fromCode)
+	dodoString 
+	tools::codesetConversion(const dodoString &buffer, 
+						const dodoString &toCode, 
+						const dodoString &fromCode)
 	{
 		codeSet(toCode,fromCode);
 		
@@ -566,7 +566,7 @@ tools::trim(const std::string &data,
 			#endif
 		}
 		
-		std::string result;
+		dodoString result;
 		result.assign(outBuffer, out);
 
 		delete [] outBuffer;
@@ -576,8 +576,8 @@ tools::trim(const std::string &data,
 
 	//-------------------------------------------------------------------
 	
-	std::string 
-	tools::reCodesetConversion(const std::string &buffer)
+	dodoString 
+	tools::reCodesetConversion(const dodoString &buffer)
 	{
 		if (!convSet)
 			return buffer;
@@ -603,7 +603,7 @@ tools::trim(const std::string &data,
 				#endif
 			}
 		
-		std::string result;
+		dodoString result;
 		result.assign(outFake, out);
 		
 		delete [] outBuffer;
@@ -619,15 +619,15 @@ tools::trim(const std::string &data,
 	
 	//-------------------------------------------------------------------
 	
-	std::string 
-	tools::zCompress(const std::string &buffer, 
+	dodoString 
+	tools::zCompress(const dodoString &buffer, 
 					unsigned short level, 
 					short type)
 	{
 	 	z_stream strm;
 	 	int ret;
 	 	
-	 	std::string strBuf;
+	 	dodoString strBuf;
 	 	Bytef *byteBuf;
 		 				
 		strm.zalloc = Z_NULL;
@@ -675,13 +675,13 @@ tools::trim(const std::string &data,
 
 	//-------------------------------------------------------------------
 
-	std::string 
-	tools::zDecompress(const std::string &buffer)
+	dodoString 
+	tools::zDecompress(const dodoString &buffer)
 	{
 	 	z_stream strm;
 	 	int ret;
 	 	
-	 	std::string strBuf;
+	 	dodoString strBuf;
 	 	Bytef *byteBuf;
 	 				
 		strm.zalloc = Z_NULL;
@@ -798,10 +798,10 @@ tools::charToHex(char result[3],
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::decodeURL(const std::string &string)
+dodoString 
+tools::decodeURL(const dodoString &string)
 {
-	std::string result;
+	dodoString result;
 	register unsigned long o(0),k(string.size());
 
 	for(;o<k;++o) 
@@ -837,10 +837,10 @@ tools::decodeURL(const std::string &string)
 
 //-------------------------------------------------------------------
 
-std::string
-tools::encodeURL(const std::string &string)
+dodoString
+tools::encodeURL(const dodoString &string)
 {
-	std::string result;
+	dodoString result;
 	
 	register unsigned long i(0), j(string.size());
 	register char temp[3];
@@ -942,7 +942,7 @@ tools::encodeURL(const std::string &string)
 //-------------------------------------------------------------------
 
 void
-tools::_encodeASCII85(std::string &result,
+tools::_encodeASCII85(dodoString &result,
 					unsigned long tuple, 
 					int count)
 {
@@ -966,10 +966,10 @@ tools::_encodeASCII85(std::string &result,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::encodeASCII85(const std::string &string)
+dodoString 
+tools::encodeASCII85(const dodoString &string)
 {
-	std::string result("<~");
+	dodoString result("<~");
 	register unsigned long tuple = 0;
 	
 	unsigned short count(0);
@@ -1024,7 +1024,7 @@ tools::encodeASCII85(const std::string &string)
 //-------------------------------------------------------------------
 
 void 
-tools::_decodeASCII85(std::string &result, 
+tools::_decodeASCII85(dodoString &result, 
 					unsigned long tuple, 
 					int count)
 {
@@ -1064,12 +1064,12 @@ tools::_decodeASCII85(std::string &result,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::decodeASCII85(const std::string &string)
+dodoString 
+tools::decodeASCII85(const dodoString &string)
 {
 	register unsigned long j = string.size(), count = 0, tuple = 0;
 	register bool _break = false;
-	std::string result;
+	dodoString result;
 	
 	for (register unsigned long k(0);k<j;++k)
 	{
@@ -1177,13 +1177,13 @@ tools::_encodeBase64(unsigned char in[3],
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::encodeBase64(const std::string &string)
+dodoString 
+tools::encodeBase64(const dodoString &string)
 {
 	register unsigned long j = string.size();
 	register unsigned char in[3], out[4];
 	register unsigned short i, len;
-	std::string result;
+	dodoString result;
 	
 	for (register unsigned long k(0);k<j;)
 	{
@@ -1226,13 +1226,13 @@ tools::_decodeBase64(unsigned char in[4],
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::decodeBase64(const std::string &string)
+dodoString 
+tools::decodeBase64(const dodoString &string)
 {
 	register unsigned long j = string.size();	
     register unsigned char in[4], out[3], v;
     register unsigned short i, len;
-	std::string result;
+	dodoString result;
 	
 	for (register unsigned long k(0);k<j;)
 	{
@@ -1272,20 +1272,20 @@ tools::decodeBase64(const std::string &string)
 //-------------------------------------------------------------------
 
 __url 
-tools::parseURL(const std::string &url)
+tools::parseURL(const dodoString &url)
 {
 	register unsigned long begin(0), pos, pos1;
 	
 	__url temp;
 	
-	if ((pos = url.find("://",0)) != std::string::npos)
+	if ((pos = url.find("://",0)) != dodoString::npos)
 	{
 		temp.protocol = url.substr(0,pos);
 		
 		begin = pos + 3;
 	}
 	
-	if ((pos = url.find('@',begin)) != std::string::npos)
+	if ((pos = url.find('@',begin)) != dodoString::npos)
 	{
 		if ((pos1 = url.find(':',begin)) < pos)
 		{
@@ -1301,7 +1301,7 @@ tools::parseURL(const std::string &url)
 		begin = pos + 1;	
 	}
 
-	if ((pos = url.find('/',begin)) != std::string::npos)
+	if ((pos = url.find('/',begin)) != dodoString::npos)
 	{
 		if ((pos1 = url.find(':',begin)) < pos)
 		{
@@ -1316,7 +1316,7 @@ tools::parseURL(const std::string &url)
 		
 		begin = pos + 1;	
 
-		if ((pos = url.find('?',begin)) != std::string::npos)
+		if ((pos = url.find('?',begin)) != dodoString::npos)
 		{
 			temp.path = url.substr(begin,pos - begin);
 			temp.request = url.substr(pos+1);			
@@ -1347,8 +1347,8 @@ tools::parseURL(const std::string &url)
 
 	//-------------------------------------------------------------------
 
-	std::string 
-	tools::bzCompress(const std::string &buffer, 
+	dodoString 
+	tools::bzCompress(const dodoString &buffer, 
 					unsigned short level, 
 					unsigned short type)
 	{		
@@ -1363,13 +1363,13 @@ tools::parseURL(const std::string &url)
 				return __string__;
 			#endif		
 		
-		return std::string(dst,len);		
+		return dodoString(dst,len);		
 	}					
 
 	//-------------------------------------------------------------------
 
-	std::string 
-	tools::bzDecompress(const std::string &buffer)
+	dodoString 
+	tools::bzDecompress(const dodoString &buffer)
 	{
 	    bz_stream bzs;
 	
@@ -1397,7 +1397,7 @@ tools::parseURL(const std::string &url)
 	    bzs.next_in = src;
 	    bzs.avail_in = src_len;
 	
-		std::string _buffer;
+		dodoString _buffer;
 	
 	    while ((ret = BZ2_bzDecompress(&bzs)) == BZ_OK && bzs.avail_in > 0)
 	    {
@@ -1448,11 +1448,11 @@ tools::parseURL(const std::string &url)
 #else
 	bool
 #endif
-tools::mail(const std::string &path,
-			const std::string &to, 
-			const std::string &subject, 
-			const std::string &message, 
-			const std::string &headers)
+tools::mail(const dodoString &path,
+			const dodoString &to, 
+			const dodoString &subject, 
+			const dodoString &message, 
+			const dodoString &headers)
 {
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
@@ -1652,8 +1652,8 @@ tools::MD5Update(MD5_CTX *context,
 
 //-------------------------------------------------------------------
 
-std::string 
-tools::MD5(const std::string &string)
+dodoString 
+tools::MD5(const dodoString &string)
 {
 	MD5_CTX context;
 	unsigned char digest[16];
@@ -1662,7 +1662,7 @@ tools::MD5(const std::string &string)
 	MD5Update(&context, (unsigned char *)string.c_str(), string.size());
 	MD5Final(digest, &context);
 	
-	return std::string((char *)digest,16);
+	return dodoString((char *)digest,16);
 }
 
 //-------------------------------------------------------------------
@@ -1672,16 +1672,16 @@ tools::MD5(const std::string &string)
 #else
 	bool
 #endif
-tools::mail(const std::string &host,
+tools::mail(const dodoString &host,
 			short type,
 			int port,
-			const std::string &to, 
-			const std::string &from, 
-			const std::string &subject, 
-			const std::string &message,
-			const std::string &login, 
-			const std::string &pass,
-			const std::string &headers)
+			const dodoString &to, 
+			const dodoString &from, 
+			const dodoString &subject, 
+			const dodoString &message,
+			const dodoString &login, 
+			const dodoString &pass,
+			const dodoString &headers)
 {
 	enum authTypeEnum
 	{
@@ -1766,7 +1766,7 @@ tools::mail(const std::string &host,
 			return false;		
 		#endif	
 			
-	std::string mess;
+	dodoString mess;
 	
 	register int code = 0;
 	register char *data = new char[TOOLS_SHORT_DATA_SIZE];
@@ -1795,7 +1795,7 @@ tools::mail(const std::string &host,
 		#endif
 	}	
 	
-	mess = "EHLO " + std::string(data) + "\r\n";
+	mess = "EHLO " + dodoString(data) + "\r\n";
 	#ifdef NO_EX
 		result = 
 	#endif
@@ -1885,9 +1885,9 @@ tools::mail(const std::string &host,
 				#endif
 			}
 			
-			std::string ticket = decodeBase64(data + 4);
+			dodoString ticket = decodeBase64(data + 4);
 			        
-			std::string md5pass;
+			dodoString md5pass;
 			if (pass.size() > 64)
 				md5pass = MD5(pass);
         	else
@@ -2297,7 +2297,7 @@ tools::mail(const std::string &host,
 	bool 
 #endif				
 tools::sendShortDataDel(int socket, 
-				const std::string &mess,
+				const dodoString &mess,
 				char *data)
 {
 	#ifndef FAST
@@ -2343,7 +2343,7 @@ tools::sendShortDataDel(int socket,
 	bool 
 #endif				
 tools::sendShortData(int socket, 
-				const std::string &mess)
+				const dodoString &mess)
 {
 	#ifndef FAST
 	
@@ -2386,7 +2386,7 @@ tools::sendShortData(int socket,
 	bool 
 #endif				
 tools::sendLongData(int socket, 
-					const std::string &mess)
+					const dodoString &mess)
 {
 	register unsigned long outSize = mess.size();	
 	

@@ -103,13 +103,13 @@
 			 * constructor
 			 * @note defines structure data with user data
 			 */
-			__mysqlSSLOptions(const std::string &key, const std::string &cert = __string__, const std::string &ca = __string__, const std::string &capath = __string__, const std::string &cipher = __string__);
+			__mysqlSSLOptions(const dodoString &key, const dodoString &cert = __string__, const dodoString &ca = __string__, const dodoString &capath = __string__, const dodoString &cipher = __string__);
 			
-			std::string key;///< the pathname to the key file
-			std::string cert;///< the pathname to the certificate file.
-			std::string ca;///< the pathname to the certificate authority file.
-			std::string capath;///< the pathname to a directory that contains trusted SSL CA certificates in pem format.
-			std::string cipher;///< a list of allowable ciphers to use for SSL encryption.
+			dodoString key;///< the pathname to the key file
+			dodoString cert;///< the pathname to the certificate file.
+			dodoString ca;///< the pathname to the certificate authority file.
+			dodoString capath;///< the pathname to a directory that contains trusted SSL CA certificates in pem format.
+			dodoString cipher;///< a list of allowable ciphers to use for SSL encryption.
 		};
 		
 		/**
@@ -264,7 +264,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const std::string &query = __string__, bool result = false);
+								exec(const dodoString &query = __string__, bool result = false);
 				
 				#ifndef DBMYSQL_WO_XEXEC
 				
@@ -294,7 +294,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */			
-						virtual xexecCounts addExec(const std::string &module, void *data, void *toInit = NULL);
+						virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 						/**
 						 * adds hook after the operation by callback
@@ -303,7 +303,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPostExec(const std::string &module, void *data, void *toInit = NULL);
+						virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 						
 						/**
 						 * adds hook after the operation by callback
@@ -312,7 +312,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPreExec(const std::string &module, void *data, void *toInit = NULL);
+						virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 					
 					#endif
 				
@@ -322,7 +322,7 @@
 				 * sets sessions charset
 				 * @param charset indicates what type of charset would be used for session
 				 */
-				virtual void setCharset(const std::string &charset);
+				virtual void setCharset(const dodoString &charset);
 				
 				/**
 				 * sets connection timeout
@@ -333,7 +333,7 @@
 				/**
 				 * @return current session charset
 				 */ 
-				virtual std::string getCharset() const;
+				virtual dodoString getCharset() const;
 				 
 			protected:
 			
@@ -349,7 +349,7 @@
 				#else
 					virtual bool 
 				#endif
-								_exec(const std::string &query, bool result);		
+								_exec(const dodoString &query, bool result);		
 				
 				/**
 				 * inits addidtional mySQL specific statements

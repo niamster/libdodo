@@ -130,16 +130,16 @@ namespace dodo
 		 * constructor
 		 * initiates references
 		 */
-		__collectedData(std::string &pre_where,
+		__collectedData(dodoString &pre_where,
 		dodoStringArr &pre_fieldsNames,
 		dodoArray<dodoStringArr> &pre_fieldsVal,
-		std::string &pre_table,
-		std::string &pre_tableTo,
-		std::string &pre_order,
-		std::string &pre_having,
-		std::string &pre_group,
-		std::string &pre_limNumber,
-		std::string &pre_limOffset,
+		dodoString &pre_table,
+		dodoString &pre_tableTo,
+		dodoString &pre_order,
+		dodoString &pre_having,
+		dodoString &pre_group,
+		dodoString &pre_limNumber,
+		dodoString &pre_limOffset,
 		dodoStringArr &pre_subQ,
 		int &qType,
 		int &qShift,
@@ -149,16 +149,16 @@ namespace dodo
 		int &qDelShift		
 		);
 		
-		std::string &pre_where;///< where statement of the request	
+		dodoString &pre_where;///< where statement of the request	
 		dodoStringArr &pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
 		dodoArray<dodoStringArr> &pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-		std::string &pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-		std::string &pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-		std::string &pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-		std::string &pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
-		std::string &pre_group;///< group statement
-		std::string &pre_limNumber;///< limit of result
-		std::string &pre_limOffset;///< offset of requested result
+		dodoString &pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+		dodoString &pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
+		dodoString &pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+		dodoString &pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
+		dodoString &pre_group;///< group statement
+		dodoString &pre_limNumber;///< limit of result
+		dodoString &pre_limOffset;///< offset of requested result
 		dodoStringArr &pre_subQ;///< subquery
 		
 		int &qType;///< type of operation[see qStEnum]
@@ -247,7 +247,7 @@ namespace dodo
 		 */
 		const __fieldInfo &operator=(const __fieldInfo &from);
 
-		std::string name;///< name of the field
+		dodoString name;///< name of the field
 		int type;///< type of field[see baseDataTypesEnum]
 		int length;///< length of field; is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
 		int flag;///< default = NULL; set it with '|'[see fieldFlagEnum]
@@ -256,15 +256,15 @@ namespace dodo
 		* @note for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
 		* for [ON DELETE or ON UPDATE] use on flag (RESTRICT or CASCADE or SET NULL or NO ACTION or SET DEFAULT)
 		*/
-		std::string refTable;///< table on what is reference
+		dodoString refTable;///< table on what is reference
 		dodoStringArr refFields;///< array of fields on what is references
 		int onDelete;///< reference on action[see refFieldEnum]
 		int onUpdate;///< reference on action[see refFieldEnum]
 
-		std::string defaultVal;///< default value of field
+		dodoString defaultVal;///< default value of field
 		dodoStringArr set_enum;///< array of statements for SET or ENUM if these type difined
 		
-		std::string charset;///< field's collate charset
+		dodoString charset;///< field's collate charset
 	};
 	
 	/*
@@ -282,7 +282,7 @@ namespace dodo
 		 */
 		const __tableInfo &operator=(const __tableInfo &from);
 			
-		std::string name;///< name of the table
+		dodoString name;///< name of the table
 		dodoArray<__fieldInfo> fields;///< array of fields[see__fieldInfo]
 		
 		dodoStringArr primKeys;///< array of primary keys in table (field names)
@@ -324,7 +324,7 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			virtual void setDbInfo(const std::string &db, const std::string &host, unsigned int port, const std::string &user, const std::string &password, const std::string &path = __string__);
+			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __string__);
 
 			/**
 			 * sets info for database
@@ -337,7 +337,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void select(const std::string &table, const dodoStringArr &fieldsNames, const std::string &where = __string__);
+			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where = __string__);
 			
 			/**
 			 * @param table is table name
@@ -345,7 +345,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const std::string &table, const dodoAssocArr &fields);
+			virtual void insert(const dodoString &table, const dodoAssocArr &fields);
 			
 			/**
 			 * @param table is table name
@@ -353,27 +353,27 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const std::string &table, const dodoArray<dodoAssocArr> &fields);
+			virtual void insert(const dodoString &table, const dodoArray<dodoAssocArr> &fields);
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const std::string &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__);
+			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__);
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const std::string &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__);			
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__);			
 			
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const std::string &tableTo, const std::string &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __stringarray__, const std::string &where = __string__);
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __stringarray__, const dodoString &where = __string__);
 			
 			/**
 			 * @param table is table name
@@ -382,7 +382,7 @@ namespace dodo
 			 * 			value => field's value
 			 * @param where is where statement for request
 		     */
-			virtual void update(const std::string &table, const dodoAssocArr &fields, const std::string &where = __string__);			
+			virtual void update(const dodoString &table, const dodoAssocArr &fields, const dodoString &where = __string__);			
 			
 			/**
 			 * @param table is table name
@@ -390,13 +390,13 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void update(const std::string &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const std::string &where = __string__);
+			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where = __string__);
 			
 			/**
 			 * @param table is table name
 			 * @param where is where statement for request
 			 */       
-			virtual void del(const std::string &table, const std::string &where = __string__);
+			virtual void del(const dodoString &table, const dodoString &where = __string__);
 			
 			/**
 			 * store query, made from subquery with requested method
@@ -410,35 +410,35 @@ namespace dodo
 			 * @param table is where to create index 
 			 * @param field is field's name to be index
 			 */
-			virtual void createIndex(const std::string &table, const std::string &field, const std::string &name);
+			virtual void createIndex(const dodoString &table, const dodoString &field, const dodoString &name);
 			
 			/**
 			 * create index in table
 			 * @param table is where to create index 
 			 * @param fields is fields' name to be index
 			 */
-			virtual void createIndex(const std::string &table, const dodoStringArr &fields, const std::string &name);
+			virtual void createIndex(const dodoString &table, const dodoStringArr &fields, const dodoString &name);
 			
 			/**
 			 * delete index in table
 			 * @param table is where to delete index 
 			 * @param name is index's name
 			 */
-			virtual void deleteIndex(const std::string &table, const std::string &name);
+			virtual void deleteIndex(const dodoString &table, const dodoString &name);
 			
 			/**
 			 * rename database
 			 * @param db is current name
 			 * @param to_db is new name
 			 */
-			virtual void renameDb(const std::string &db, const std::string &to_db);
+			virtual void renameDb(const dodoString &db, const dodoString &to_db);
 			
 			/**
 			 * renames table
 			 * @param table is current name
 			 * @param to_table is new name
 			 */
-			virtual void renameTable(const std::string &table, const std::string &to_table);
+			virtual void renameTable(const dodoString &table, const dodoString &to_table);
 			
 			/**
 			 * renames field
@@ -446,33 +446,33 @@ namespace dodo
 			 * @param to_field is new name
 			 * @param is table where field is stored
 			 */ 
-			virtual void renameField(const std::string &field, const std::string &to_field, const std::string &table);
+			virtual void renameField(const dodoString &field, const dodoString &to_field, const dodoString &table);
 			
 			/**
 			 * deletes database
 			 * @param db indicates what database to delete
 			 */
-			virtual void deleteDb(const std::string &db);
+			virtual void deleteDb(const dodoString &db);
 			
 			/**
 			 * deletes table
 			 * @param table indicates what table to delete
 			 */
-			virtual void deleteTable(const std::string &table);
+			virtual void deleteTable(const dodoString &table);
 			
 			/**
 			 * deletes field
 			 * @param field indicates what field to delete
 			 * @param table is table where field is stored
 			 */ 
-			virtual void deleteField(const std::string &field, const std::string &table);
+			virtual void deleteField(const dodoString &field, const dodoString &table);
 			
 			/**
 			 * creates database
 			 * @param db is name of new database
 			 * @param charset indicates what type of charset will be used
 			 */
-			virtual void createDb(const std::string &db, const std::string &charset = __string__);
+			virtual void createDb(const dodoString &db, const dodoString &charset = __string__);
 			
 			/**
 			 * creates table
@@ -485,20 +485,20 @@ namespace dodo
 			 * @param fieldInfo[see __fieldInfo]
 			 * @param table indicates in what table create field
 			 */ 
-			virtual void createField(__fieldInfo &fieldInfo, const std::string &table);						
+			virtual void createField(__fieldInfo &fieldInfo, const dodoString &table);						
 			
 			/**
 			 * truncates table
 			 * @param table is name name of table to truncate
 			 */
-			 virtual void truncate(const std::string &table);
+			 virtual void truncate(const dodoString &table);
 			 
 			/**
 			 * add where statement
 			 * overwites previous is it was defined
 			 * @param where is where statement
 			 */
-			virtual void where(const std::string &where);
+			virtual void where(const dodoString &where);
 			
 			/**
 			 * sets limit for request
@@ -516,19 +516,19 @@ namespace dodo
 			 * sets order for request
 			 * @param order is order statement
 			 */
-			virtual void order(const std::string &order);
+			virtual void order(const dodoString &order);
 			
 			/**
 			 * sets group for request
 			 * @param group is group statement
 			 */
-			virtual void group(const std::string &group);
+			virtual void group(const dodoString &group);
 			
 			/**
 			 * sets having for request
 			 * @param having is having statement
 			 */
-			virtual void having(const std::string &having);
+			virtual void having(const dodoString &having);
 			
 			/**
 			 * remove where statement
@@ -641,16 +641,16 @@ namespace dodo
 			 * collected data
 			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
 			 */
-			std::string pre_where;///< where statement of the request	
+			dodoString pre_where;///< where statement of the request	
 			dodoStringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
 			dodoArray<dodoStringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			std::string pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods, create(delete)Index methods)
-			std::string pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-			std::string pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
-			std::string pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
-			std::string pre_group;///< group statement
-			std::string pre_limNumber;///< limit of result
-			std::string pre_limOffset;///< offset of requested result
+			dodoString pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods, create(delete)Index methods)
+			dodoString pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
+			dodoString pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+			dodoString pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
+			dodoString pre_group;///< group statement
+			dodoString pre_limNumber;///< limit of result
+			dodoString pre_limOffset;///< offset of requested result
 			dodoStringArr pre_subQ;///< subquery
 			
 			bool show;///< is request was with result(show,select)

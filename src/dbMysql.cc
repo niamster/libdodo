@@ -33,11 +33,11 @@
 
 	//-------------------------------------------------------------------
 	
-	__mysqlSSLOptions::__mysqlSSLOptions(const std::string &a_key, 
-						const std::string &a_cert, 
-						const std::string &a_ca, 
-						const std::string &a_capath, 
-						const std::string &a_cipher) : key(a_key),
+	__mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key, 
+						const dodoString &a_cert, 
+						const dodoString &a_ca, 
+						const dodoString &a_capath, 
+						const dodoString &a_cipher) : key(a_key),
 									cert(a_cert),
 									ca(a_ca),
 									capath(a_capath),
@@ -253,7 +253,7 @@
 	#else
 		bool
 	#endif
-	dbMysql::_exec(const std::string &query, 
+	dbMysql::_exec(const dodoString &query, 
 					bool result)
 	{	
 		if (query.size() == 0)
@@ -262,7 +262,7 @@
 			{
 				if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
 				{
-					std::string temp = dbInfo.db + ":" + pre_table;
+					dodoString temp = dbInfo.db + ":" + pre_table;
 					
 					if (!framingFields.isset(temp))
 					{
@@ -384,7 +384,7 @@
 		
 		MYSQL_ROW mysqlRow;
 		
-		std::string rowPart;
+		dodoString rowPart;
 		
 		while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
 		{		
@@ -496,7 +496,7 @@
 	#else
 		bool
 	#endif
-	dbMysql::exec(const std::string &query, 
+	dbMysql::exec(const dodoString &query, 
 				bool result)
 	{
 		#ifndef DBMYSQL_WO_XEXEC
@@ -545,7 +545,7 @@
 		#ifdef DL_EXT
 		
 			int 
-			dbMysql::addPostExec(const std::string &module, 
+			dbMysql::addPostExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -555,7 +555,7 @@
 			//-------------------------------------------------------------------
 			
 			int 
-			dbMysql::addPreExec(const std::string &module, 
+			dbMysql::addPreExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -565,7 +565,7 @@
 			//-------------------------------------------------------------------
 			
 			xexecCounts 
-			dbMysql::addExec(const std::string &module, 
+			dbMysql::addExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -581,7 +581,7 @@
 	//-------------------------------------------------------------------
 	
 	void 
-	dbMysql::setCharset(const std::string &charset)
+	dbMysql::setCharset(const dodoString &charset)
 	{
 		mysql_options(mysql,MYSQL_READ_DEFAULT_FILE,charset.c_str());
 	}
@@ -596,7 +596,7 @@
 
 	//-------------------------------------------------------------------
 	
-	std::string 
+	dodoString 
 	dbMysql::getCharset() const
 	{
 		return mysql_character_set_name(mysql);
@@ -623,7 +623,7 @@
 		
 		dodoStringMap rowFieldsPart;
 		
-		std::string rowPart;
+		dodoString rowPart;
 
 		register unsigned long *length, j;
 		

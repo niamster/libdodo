@@ -398,7 +398,7 @@ xexec::performXExec(__execItemList &list) const
 	xexec::addXExecModule(std::list<__execItem> &list, 
 					void *obj,  
  					short type,
-					const std::string &module, 
+					const dodoString &module, 
 					void *data, 
 					void *toInit)
 	{
@@ -444,7 +444,7 @@ xexec::performXExec(__execItemList &list) const
 	//-------------------------------------------------------------------
 	
 	int 
-	xexec::_addPostExec(const std::string &module, 
+	xexec::_addPostExec(const dodoString &module, 
 						void *obj, 
  						short type, 
 						void *data, 
@@ -456,7 +456,7 @@ xexec::performXExec(__execItemList &list) const
 	//-------------------------------------------------------------------
 	
 	int 
-	xexec::_addPreExec(const std::string &module, 
+	xexec::_addPreExec(const dodoString &module, 
 					void *obj,
  					short type, 
 					void *data, 
@@ -468,7 +468,7 @@ xexec::performXExec(__execItemList &list) const
 	//-------------------------------------------------------------------
 	
 	xexecMod 
-	xexec::getModuleInfo(const std::string &module, 
+	xexec::getModuleInfo(const dodoString &module, 
 						void *toInit)
 	{
 		void *handle = dlopen(module.c_str(), RTLD_LAZY);
@@ -502,7 +502,7 @@ xexec::performXExec(__execItemList &list) const
 	//-------------------------------------------------------------------
 	
 	xexecCounts 
-	xexec::_addExec(const std::string &module, 
+	xexec::_addExec(const dodoString &module, 
 					void *obj, 
  					short type, 
 					void *data, 

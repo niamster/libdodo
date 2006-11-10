@@ -25,13 +25,14 @@
 #define _DODOMAP_H_
 
 #include <directives.h>
+
 #include <map>
-#include <string>
+#include <dodoString.h>
 
 namespace dodo
 {
 		/**
-		 * @class dodoMap is a duck for std::map<std::string, any_type> but controlling varName
+		 * @class dodoMap is a duck for std::map<dodoString, any_type> but controlling varName
 		 * if varName's value is not defined - empty anyType will be returned
 		 */
 		template <typename anyType>
@@ -62,9 +63,9 @@ namespace dodo
 				 * @param varName value of hash that points to the value
 				 */			 
 				anyType &
-				operator[](const std::string &varName)
+				operator[](const dodoString &varName)
 				{
-					typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
+					typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
 						cmpFunc = strcasecmp;
@@ -82,12 +83,12 @@ namespace dodo
 				 * @return iterator by hash or end of hash if not found
 				 * @param varName value of hash that points to the value
 				 */			 
-				typename std::map<std::string, anyType>::iterator
-				find(const std::string &varName)
+				typename std::map<dodoString, anyType>::iterator
+				find(const dodoString &varName)
 				{
 					if (icase)
 					{
-						typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
+						typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
 							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
@@ -103,12 +104,12 @@ namespace dodo
 				 * @return const_iterator by hash or end of hash if not found
 				 * @param varName is value of hash that points to the value
 				 */			 
-				typename std::map<std::string, anyType>::const_iterator
-				find(const std::string &varName) const
+				typename std::map<dodoString, anyType>::const_iterator
+				find(const dodoString &varName) const
 				{
 					if (icase)
 					{
-						typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
+						typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
 							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
@@ -126,7 +127,7 @@ namespace dodo
 				 * @param varVal is value of hash by varName 
 				 */
 				void
-				insert(const std::string &varName, 
+				insert(const dodoString &varName, 
 						const anyType &varVal)
 				{
 					realArr.insert(make_pair(varName, varVal));
@@ -135,7 +136,7 @@ namespace dodo
 				/**
 				 * return const_iterator that points on the begin of the original array
 				 */
-				typename std::map<std::string, anyType>::const_iterator
+				typename std::map<dodoString, anyType>::const_iterator
 				begin() const
 				{
 					return realArr.begin();
@@ -144,7 +145,7 @@ namespace dodo
 				/**
 				 * return const_iterator that points on the begin of the original array
 				 */
-				typename std::map<std::string, anyType>::const_iterator
+				typename std::map<dodoString, anyType>::const_iterator
 				end() const
 				{
 					return realArr.end();
@@ -153,7 +154,7 @@ namespace dodo
 				/**
 				 * return iterator that points on the begin of the original array
 				 */
-				typename std::map<std::string, anyType>::iterator
+				typename std::map<dodoString, anyType>::iterator
 				begin()
 				{
 					return realArr.begin();
@@ -162,7 +163,7 @@ namespace dodo
 				/**
 				 * return iterator that points on the begin of the original array
 				 */
-				typename std::map<std::string, anyType>::iterator
+				typename std::map<dodoString, anyType>::iterator
 				end()
 				{
 					return realArr.end();
@@ -199,9 +200,9 @@ namespace dodo
 				 * @return true if value is set by given key
 				 */
 				bool
-				isset(const std::string &varName)
+				isset(const dodoString &varName)
 				{
-					typename std::map<std::string, anyType>::iterator i(realArr.begin()), j(realArr.end());
+					typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
 						cmpFunc = strcasecmp;
@@ -215,7 +216,7 @@ namespace dodo
 					return false;				 	
 				}
 				
-				std::map<std::string, anyType> realArr;///< real array
+				std::map<dodoString, anyType> realArr;///< real array
 				
 				anyType type;
 								

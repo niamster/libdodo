@@ -29,11 +29,11 @@ bool cgiTools::cgiFilesInMem = true;
 
 //-------------------------------------------------------------------
 
-__cookies::__cookies(const std::string &a_name, 
-					const std::string &a_value, 
-					const std::string &a_exDate, 
-					const std::string &a_path, 
-					const std::string &a_domain, 
+__cookies::__cookies(const dodoString &a_name, 
+					const dodoString &a_value, 
+					const dodoString &a_exDate, 
+					const dodoString &a_path, 
+					const dodoString &a_domain, 
 					bool a_secure) : name(a_name),
 									value(a_value),
 									exDate(a_exDate),
@@ -118,7 +118,7 @@ cgiTools::~cgiTools()
 void 
 cgiTools::cleanTmp()
 {
-	std::map<std::string, __cgiFilesUp>::iterator i(FILES.begin()),j(FILES.end());
+	std::map<dodoString, __cgiFilesUp>::iterator i(FILES.begin()),j(FILES.end());
 	for (;i!=j;++i)
 	{
 		fclose(i->second.fp);
@@ -158,7 +158,7 @@ cgiTools::getMethod() const
 
 void 
 cgiTools::make(dodoAssocArr &val,
-			const std::string &string,
+			const dodoString &string,
 			char *delim)
 {	
 	dodoStringArr getPair = tools::explode(tools::decodeURL(string),delim);
@@ -297,7 +297,7 @@ cgiTools::makePost()
 	unsigned long iter = inSize/POST_BATCH_SIZE;
 	unsigned long rest = inSize%POST_BATCH_SIZE;
 	
-	std::string bPost;
+	dodoString bPost;
 	
 	_cgiFilesInMem = cgiFilesInMem;
 			
@@ -390,14 +390,14 @@ cgiTools::makePost()
 		register unsigned short pathLength = postFilesTmpDir.size()+18;
 		
 		for (;i!=j;++i)
-			if (i->find("filename")!=std::string::npos)
+			if (i->find("filename")!=dodoString::npos)
 			{
-				if ((temp0 = i->find("name=\"")) == std::string::npos)
+				if ((temp0 = i->find("name=\"")) == dodoString::npos)
 					continue;
 				temp0 += 6;	
 				temp1 = i->find("\"",temp0);
 				
-				std::string post_name = i->substr(temp0,temp1-temp0);
+				dodoString post_name = i->substr(temp0,temp1-temp0);
 				
 				__cgiFilesUp file;
 				
@@ -421,7 +421,7 @@ cgiTools::makePost()
 				#endif
 				{
 					ptr = new char[pathLength];
-					strncpy(ptr, std::string(postFilesTmpDir + FILE_DELIM + std::string("dodo_post_XXXXXX")).c_str(), pathLength);
+					strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
 					fd = mkstemp(ptr);
 					
 					if (fd == -1)	
@@ -487,7 +487,7 @@ cgiTools::makePost()
 			}
 			else
 			{
-				if ((temp0 = i->find("name=\"")) == std::string::npos)
+				if ((temp0 = i->find("name=\"")) == dodoString::npos)
 					continue;
 				temp0 += 6;		
 				temp1 = i->find("\"",temp0);
@@ -514,12 +514,12 @@ cgiTools::operator[](short method)
 
 //-------------------------------------------------------------------
 
-std::string
-cgiTools::request(const std::string &varName, 
+dodoString
+cgiTools::request(const dodoString &varName, 
 				short first)
 {
-	std::string met0 = METHOD_GET[varName];
-	std::string met1 = METHOD_POST[varName];
+	dodoString met0 = METHOD_GET[varName];
+	dodoString met1 = METHOD_POST[varName];
 	
 	if (first == REQUESTMETHOD_GET)
 		if (met0.size() != 0)
@@ -537,11 +537,11 @@ cgiTools::request(const std::string &varName,
 //-------------------------------------------------------------------
 
 void 
-cgiTools::setCookie(const std::string &name, 
-				const std::string &value, 
-				const std::string &exDate, 
-				const std::string &path, 
-				const std::string &domain, 
+cgiTools::setCookie(const dodoString &name, 
+				const dodoString &value, 
+				const dodoString &exDate, 
+				const dodoString &path, 
+				const dodoString &domain, 
 				bool secure)
 {
 	__cookies temp(secure);

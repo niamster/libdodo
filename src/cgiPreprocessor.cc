@@ -37,8 +37,8 @@ cgiPreprocessor::~cgiPreprocessor()
 
 //-------------------------------------------------------------------
 
-std::string 
-cgiPreprocessor::read(const std::string &path,
+dodoString 
+cgiPreprocessor::read(const dodoString &path,
 					dodoArray<unsigned long> &newLinePos)
 {
 	FILE *tpl = fopen(path.c_str(),"r");
@@ -55,7 +55,7 @@ cgiPreprocessor::read(const std::string &path,
 	fread(stor,st.st_size,1,tpl);
 	fclose(tpl);
 	
-	std::string temp;
+	dodoString temp;
 		
 	temp.assign(stor,st.st_size);
 	newLinePos.clear();
@@ -73,26 +73,26 @@ cgiPreprocessor::read(const std::string &path,
 
 //-------------------------------------------------------------------
 
-std::string 
-cgiPreprocessor::preProcess(const std::string &path)
+dodoString 
+cgiPreprocessor::preProcess(const dodoString &path)
 {	
 	dodoArray<unsigned long> newLinePos;
 	
-	std::string buffer = read(path,newLinePos);
+	dodoString buffer = read(path,newLinePos);
 	
 	register unsigned long i(0), j(0), begin(0);
 	
-	std::string tpl;
+	dodoString tpl;
 	
 	while (true)
 	{	
 		begin = j;
 		
 		i = buffer.find("<(",begin);
-		if (i == std::string::npos)
+		if (i == dodoString::npos)
 		{
 			j = buffer.find(")>",begin);
-			if (j != std::string::npos)
+			if (j != dodoString::npos)
 				#ifndef NO_EX
 				{
 					char message[128];
@@ -108,10 +108,10 @@ cgiPreprocessor::preProcess(const std::string &path)
 		}
 		else
 		{
-			std::string temp = buffer.substr(begin,i - begin);
+			dodoString temp = buffer.substr(begin,i - begin);
 			
 			j = temp.find(")>",begin);
-			if (j != std::string::npos)
+			if (j != dodoString::npos)
 				#ifndef NO_EX
 				{
 					char message[128];
@@ -130,7 +130,7 @@ cgiPreprocessor::preProcess(const std::string &path)
 		if (buffer[i] == '>')
 		{
 			j = buffer.find("<)>",i);			
-			if (j != std::string::npos)
+			if (j != dodoString::npos)
 			{
 				i -= 2;
 				j += 3;
@@ -153,7 +153,7 @@ cgiPreprocessor::preProcess(const std::string &path)
 		if (buffer[i] == '*')
 		{	
 			j = buffer.find("*)>",i);			
-			if (j != std::string::npos)
+			if (j != dodoString::npos)
 			{
 				j += 3;
 				continue;
@@ -171,7 +171,7 @@ cgiPreprocessor::preProcess(const std::string &path)
 		}
 		
 		j = buffer.find(")>",i);
-		if (j == std::string::npos)
+		if (j == dodoString::npos)
 			#ifndef NO_EX
 			{
 				char message[128];
@@ -204,9 +204,9 @@ cgiPreprocessor::preProcess(const std::string &path)
 				break;
 			#endif
 										
-		std::string temp = buffer.substr(i, j - i);
+		dodoString temp = buffer.substr(i, j - i);
 		
-		if (temp.find("<(") != std::string::npos)
+		if (temp.find("<(") != dodoString::npos)
 			#ifndef NO_EX
 			{
 				char message[128];

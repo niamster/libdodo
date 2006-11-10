@@ -26,7 +26,7 @@
 using namespace dodo;
 
 __hostInfo 
-flushSocketTools::getHostInfo(const std::string &host)
+flushSocketTools::getHostInfo(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
 	
@@ -98,8 +98,8 @@ flushSocketTools::getInterfacesNames()
 //-------------------------------------------------------------------
 
 __servInfo 
-flushSocketTools::getServiceInfo(const std::string &host, 
-						const std::string &protocol)
+flushSocketTools::getServiceInfo(const dodoString &host, 
+						const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 	
@@ -123,7 +123,7 @@ flushSocketTools::getServiceInfo(const std::string &host,
 
 __servInfo 
 flushSocketTools::getServiceInfo(int port, 
-						const std::string &protocol)
+						const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 	
@@ -148,7 +148,7 @@ flushSocketTools::getServiceInfo(int port,
 //-------------------------------------------------------------------
 
 __ifInfo 
-flushSocketTools::getInterfaceInfo(const std::string &interface)
+flushSocketTools::getInterfaceInfo(const dodoString &interface)
 {
 	register int socket = ::socket(PF_INET,SOCK_DGRAM,0);
 	if (socket == -1)
@@ -268,10 +268,10 @@ flushSocketTools::getInterfaceInfo(const std::string &interface)
 }
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 flushSocketTools::getLocalName()
 {
-	std::string temp0;
+	dodoString temp0;
 	char *temp1 = new char[256];
 	
 	if (::gethostname(temp1,255) == -1)
@@ -299,7 +299,7 @@ flushSocketTools::getLocalName()
 #else
 	bool
 #endif
-flushSocketTools::setLocalName(const std::string &host)
+flushSocketTools::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(),host.size()) == -1)
 		#ifndef NO_EX

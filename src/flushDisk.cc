@@ -26,7 +26,7 @@
 using namespace dodo;
 
 flushDisk::flushDisk(short type, 
-					const std::string &a_path) : over(false),
+					const dodoString &a_path) : over(false),
 												mode(OPENMODE_READ_WRITE), 
 												fileType(type), 
 												append(false),
@@ -95,7 +95,7 @@ flushDisk::getOutDescriptor() const
 	#ifdef DL_EXT
 	
 		int 
-		flushDisk::addPostExec(const std::string &module, 
+		flushDisk::addPostExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -105,7 +105,7 @@ flushDisk::getOutDescriptor() const
 		//-------------------------------------------------------------------
 		
 		int 
-		flushDisk::addPreExec(const std::string &module, 
+		flushDisk::addPreExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -115,7 +115,7 @@ flushDisk::getOutDescriptor() const
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
-		flushDisk::addExec(const std::string &module, 
+		flushDisk::addExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -171,7 +171,7 @@ flushDisk::close()
 #else
 	bool
 #endif
-flushDisk::open(const std::string &a_path)
+flushDisk::open(const dodoString &a_path)
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 		operType = FLUSHDISK_OPER_OPEN;
@@ -366,7 +366,7 @@ flushDisk::read(char * const a_void,
 #else
 	bool
 #endif
-flushDisk::readString(std::string &a_str, 
+flushDisk::readString(dodoString &a_str, 
 				unsigned long a_pos)
 {
 	register char *data = new char[inSize+1];
@@ -392,7 +392,7 @@ flushDisk::readString(std::string &a_str,
 #else
 	bool
 #endif
-flushDisk::writeString(const std::string &a_buf, 
+flushDisk::writeString(const dodoString &a_buf, 
 				unsigned long a_pos)
 {	
 	return this->write(a_buf.c_str(),a_pos);	
@@ -566,7 +566,7 @@ flushDisk::flush()
 
 //-------------------------------------------------------------------
 
-std::string 
+dodoString 
 flushDisk::getPath() const
 {
 	return path;
@@ -682,7 +682,7 @@ flushDisk::readStream(char * const a_void,
 #else
 	bool
 #endif
-flushDisk::readStreamString(std::string &a_str, 
+flushDisk::readStreamString(dodoString &a_str, 
 				unsigned long a_pos)
 {
 	register char *data = new char[inSize+1];
@@ -708,7 +708,7 @@ flushDisk::readStreamString(std::string &a_str,
 #else
 	bool
 #endif
-flushDisk::writeStreamString(const std::string &a_buf)
+flushDisk::writeStreamString(const dodoString &a_buf)
 {	
 	return this->writeStream(a_buf.c_str());	
 }

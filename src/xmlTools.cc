@@ -28,9 +28,9 @@
 	
 	using namespace dodo;
  
-	__xmlInfo::__xmlInfo(const std::string &a_version, 
-		 				const std::string &a_encoding, 
-	 					const std::string &a_root, 
+	__xmlInfo::__xmlInfo(const dodoString &a_version, 
+		 				const dodoString &a_encoding, 
+	 					const dodoString &a_root, 
 	 					int a_compression): version(a_version),
 	 								encoding(a_encoding),
 	 								root(a_root),
@@ -120,7 +120,7 @@
 		
 	__xmlNode 
 	xmlTools::parseFile(const __xmlNodeDef &definition, 
-						const std::string &file)
+						const dodoString &file)
 	{
 		xmlFreeDoc(document);
 		
@@ -142,7 +142,7 @@
 	
 	__xmlNode 
 	xmlTools::parseBuffer(const __xmlNodeDef &definition, 
-						const std::string &buffer)
+						const dodoString &buffer)
 	{
 		xmlFreeDoc(document);
 		
@@ -167,7 +167,7 @@
 	#else
 		bool 
 	#endif	
-	xmlTools::parseFileInt(const std::string &file)
+	xmlTools::parseFileInt(const dodoString &file)
 	{
 		xmlFreeDoc(document);
 		
@@ -194,7 +194,7 @@
 	#else
 		bool 
 	#endif		
-	xmlTools::parseBufferInt(const std::string &buffer)
+	xmlTools::parseBufferInt(const dodoString &buffer)
 	{
 		xmlFreeDoc(document);
 		
@@ -251,7 +251,7 @@
 				
 		if (definition.children.size() > 0)
 		{
-			std::map<std::string, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+			std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (;i!=j;++i)
 				sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
 		}
@@ -360,7 +360,7 @@
 	
 			if (definition.children.size() > 0)
 			{
-				std::map<std::string, __xmlNodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+				std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
 				for (;i!=j;++i)
 					sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
 				
@@ -536,7 +536,7 @@
 	//-------------------------------------------------------------------
 	
 	__xmlInfo 
-	xmlTools::getXMLFileInfo(const std::string &file)
+	xmlTools::getXMLFileInfo(const dodoString &file)
 	{
 		document = xmlParseFile(file.c_str());
 		if (document == NULL)
@@ -558,7 +558,7 @@
 	//-------------------------------------------------------------------
 	
 	__xmlInfo 
-	xmlTools::getXMLBufferInfo(const std::string &buffer)
+	xmlTools::getXMLBufferInfo(const dodoString &buffer)
 	{
 		document = xmlParseMemory(buffer.c_str(),buffer.size());
 		if (document == NULL)
@@ -630,7 +630,7 @@
 	//-------------------------------------------------------------------
 	
 	__xmlNode 
-	xmlTools::parseFile(const std::string &file)
+	xmlTools::parseFile(const dodoString &file)
 	{
 		xmlFreeDoc(document);
 		
@@ -664,7 +664,7 @@
 	//-------------------------------------------------------------------
 	
 	__xmlNode 
-	xmlTools::parseBuffer(const std::string &buffer)
+	xmlTools::parseBuffer(const dodoString &buffer)
 	{
 		xmlFreeDoc(document);
 		
@@ -766,15 +766,15 @@
 
 	//-------------------------------------------------------------------
 	
-	std::string 
+	dodoString 
 	xmlTools::createXML(const __xmlNode &root, 
-					const std::string &encoding, 
-					const std::string &version) const
+					const dodoString &encoding, 
+					const dodoString &version) const
 	{
 		if (root.name.empty())
 			return __string__;
 		
-		std::string xml = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
+		dodoString xml = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
 		
 		xml.append(createNode(root));
 		
@@ -783,13 +783,13 @@
 
 	//-------------------------------------------------------------------
 	
-	std::string 
+	dodoString 
 	xmlTools::createNode(const __xmlNode &node) const
 	{
 		if (node.name.empty())
 			return __string__;
 			
-		std::string xml = "<";		
+		dodoString xml = "<";		
 		
 		if (!node.ns.empty())
 		{
@@ -808,7 +808,7 @@
 			xml.append("\" ");
 		}
 		
-		std::map<std::string, std::string>::const_iterator i = node.attributes.begin(), j = node.attributes.end(); 
+		std::map<dodoString, dodoString>::const_iterator i = node.attributes.begin(), j = node.attributes.end(); 
 		for (;i!=j;++i)
 		{
 			xml.append(i->first);
@@ -839,7 +839,7 @@
 			}
 		}
 		
-		std::map< std::string, dodoArray<__xmlNode> >::const_iterator o = node.children.begin(), p = node.children.end();
+		std::map< dodoString, dodoArray<__xmlNode> >::const_iterator o = node.children.begin(), p = node.children.end();
 		dodoArray<__xmlNode>::const_iterator x, y;
 		for (;o!=p;++o)
 		{

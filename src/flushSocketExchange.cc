@@ -280,7 +280,7 @@ flushSocketExchange::send(const char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::sendString(const std::string &data, 
+flushSocketExchange::sendString(const dodoString &data, 
 						bool urgent)
 {
 	return this->send(data.c_str(),urgent);
@@ -393,7 +393,7 @@ flushSocketExchange::receive(char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::receiveString(std::string &data, 
+flushSocketExchange::receiveString(dodoString &data, 
 								bool urgent)
 {	
 	register char *t_data = new char[inSize+1];
@@ -439,7 +439,7 @@ flushSocketExchange::receiveString(std::string &data,
 	#ifdef DL_EXT
 	
 		int 
-		flushSocketExchange::addPostExec(const std::string &module, 
+		flushSocketExchange::addPostExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -449,7 +449,7 @@ flushSocketExchange::receiveString(std::string &data,
 		//-------------------------------------------------------------------
 		
 		int 
-		flushSocketExchange::addPreExec(const std::string &module, 
+		flushSocketExchange::addPreExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -459,7 +459,7 @@ flushSocketExchange::receiveString(std::string &data,
 		//-------------------------------------------------------------------
 		
 		xexecCounts 
-		flushSocketExchange::addExec(const std::string &module, 
+		flushSocketExchange::addExec(const dodoString &module, 
 							void *data,
 							void *toInit)
 		{
@@ -576,7 +576,7 @@ flushSocketExchange::sendStream(const char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::sendStreamString(const std::string &data, 
+flushSocketExchange::sendStreamString(const dodoString &data, 
 						bool urgent)
 {
 	return this->sendStream(data.c_str(),urgent);
@@ -642,7 +642,7 @@ flushSocketExchange::receiveStream(char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::receiveStreamString(std::string &data, 
+flushSocketExchange::receiveStreamString(dodoString &data, 
 								bool urgent)
 {
   register char *t_data = new char[inSocketBuffer+1];

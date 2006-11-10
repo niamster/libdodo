@@ -139,7 +139,7 @@
 	#else
 		bool
 	#endif
-	dbSqlite::_exec(const std::string &query, 
+	dbSqlite::_exec(const dodoString &query, 
 					bool result)
 	{
 		register bool blobHint;
@@ -152,7 +152,7 @@
 				
 					if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
 					{
-						std::string temp = dbInfo.db + ":" + pre_table;
+						dodoString temp = dbInfo.db + ":" + pre_table;
 						
 						if (!framingFields.isset(temp))
 						{
@@ -348,7 +348,7 @@
 		#endif
 		
 		dodoStringArr rowsPart;
-		std::string rowPart;
+		dodoString rowPart;
 		
 		register int result;
 		
@@ -558,7 +558,7 @@
 	#else
 		bool
 	#endif
-	dbSqlite::exec(const std::string &query, 
+	dbSqlite::exec(const dodoString &query, 
 					bool result)
 	{
 		#ifndef DBSQLITE_WO_XEXEC
@@ -607,7 +607,7 @@
 		#ifdef DL_EXT
 		
 			int 
-			dbSqlite::addPostExec(const std::string &module, 
+			dbSqlite::addPostExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -617,7 +617,7 @@
 			//-------------------------------------------------------------------
 			
 			int 
-			dbSqlite::addPreExec(const std::string &module, 
+			dbSqlite::addPreExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -627,7 +627,7 @@
 			//-------------------------------------------------------------------
 			
 			xexecCounts 
-			dbSqlite::addExec(const std::string &module, 
+			dbSqlite::addExec(const dodoString &module, 
 								void *data,
 								void *toInit)
 			{
@@ -657,7 +657,7 @@
 
 		dodoStringMapArr rowsFields;
 		dodoStringMap rowFieldsPart;
-		std::string rowPart;
+		dodoString rowPart;
 		
 		#ifndef USE_DEQUE
 			rowsFields.reserve(sqlite3_data_count(liteStmt));

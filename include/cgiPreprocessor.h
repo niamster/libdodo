@@ -58,7 +58,7 @@ namespace dodo
 			 * @return preprocessed template from file
 			 * @param path indicates path where template stays
 			 */		
-			virtual std::string preProcess(const std::string &path);
+			virtual dodoString preProcess(const dodoString &path);
 		
 		protected:	
 						
@@ -74,7 +74,7 @@ namespace dodo
 			 * @param path indicates what to read
 			 * @param newLinePos describes array of newlines' positions
 			 */
-			virtual std::string read(const std::string &path, dodoArray<unsigned long> &newLinePos);
+			virtual dodoString read(const dodoString &path, dodoArray<unsigned long> &newLinePos);
 
 	};
 
