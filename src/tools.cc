@@ -477,7 +477,7 @@ tools::trim(const dodoString &data,
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_TOOLS,TOOLS_CODESETCONVERSIONSTATIC,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
-				return false;
+				return buffer;
 			#endif
 
 				
