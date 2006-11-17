@@ -17,6 +17,12 @@ int main(int argc, char **argv)
 {	
 	try
 	{
+		tools tl;
+		
+		cout << "Что происходит?" << endl;
+		cout << tl.codesetConversion("Что происходит?","cp1251","utf-8") << endl;
+		exit(0);
+		
 		cout << "MD5 of \"\"" << endl;
 		string md5 = tools::MD5("");
 
@@ -25,9 +31,6 @@ int main(int argc, char **argv)
  			
 		cout << endl;
 
-
-		tools tl;
-		
 		//tools::mail("127.0.0.1",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com", "test", "test");
 		
 		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
@@ -36,7 +39,6 @@ int main(int argc, char **argv)
 		
 		cout << flushDiskTools::getFileContent("test.cc");
 		
-		//cout << "Что происходит?" << endl;
 		
 		for (register int i(0);i<10000;++i)
 			tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");

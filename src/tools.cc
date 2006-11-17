@@ -481,11 +481,11 @@ tools::trim(const dodoString &data,
 			#endif
 
 				
-		register size_t in, out;
+		register size_t in, out, outBefore;
 		register char *inFake, *outFake;
 		
 		in = buffer.size();
-		out = in*2;
+		outBefore = out = in*2;
 		char *outBuffer = new char[out];
 				
 		inFake = (char *)buffer.c_str();
@@ -504,9 +504,9 @@ tools::trim(const dodoString &data,
 				return buffer;
 			#endif
 		}
-			
+		
 		dodoString result;
-		result.assign(outBuffer, out);
+		result.assign(outBuffer, outBefore - out);
 
 		delete [] outBuffer;
 		
@@ -547,6 +547,7 @@ tools::trim(const dodoString &data,
 		
 		register size_t in = buffer.size();
 		register size_t out = in*2;
+		register size_t outBefore = out;
 		char *outBuffer = new char[out];
 				
 		register char *inFake = (char *)buffer.c_str();
@@ -567,7 +568,7 @@ tools::trim(const dodoString &data,
 		}
 		
 		dodoString result;
-		result.assign(outBuffer, out);
+		result.assign(outBuffer, outBefore - out);
 
 		delete [] outBuffer;
 		
@@ -584,6 +585,7 @@ tools::trim(const dodoString &data,
 		
 		register size_t in = buffer.size();
 		register size_t out = in*2;
+		register size_t outBefore = out;
 		register char *outBuffer = new char[out];
 					
 		register char *inFake = (char *)buffer.c_str();
@@ -604,7 +606,7 @@ tools::trim(const dodoString &data,
 			}
 		
 		dodoString result;
-		result.assign(outFake, out);
+		result.assign(outFake, outBefore - out);
 		
 		delete [] outBuffer;
 		
