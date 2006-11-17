@@ -19,9 +19,10 @@ int main(int argc, char **argv)
 	{
 		tools tl;
 		
+		cout << tools::decodeBase64("yujl4j3P7uvy4OLg") << endl;
+		exit(0);
 		cout << "Что происходит?" << endl;
 		cout << tl.codesetConversion("Что происходит?","cp1251","utf-8") << endl;
-		exit(0);
 		
 		cout << "MD5 of \"\"" << endl;
 		string md5 = tools::MD5("");

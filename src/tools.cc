@@ -1231,7 +1231,7 @@ tools::_decodeBase64(unsigned char in[4],
 dodoString 
 tools::decodeBase64(const dodoString &string)
 {
-	register unsigned long j = string.size();	
+	register unsigned long j = string.size() + 1;	
     register unsigned char in[4], out[3], v;
     register unsigned short i, len;
 	dodoString result;
