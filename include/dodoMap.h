@@ -216,9 +216,12 @@ namespace dodo
 					return false;				 	
 				}
 				
+                                typedef typename std::map<dodoString, anyType>::const_iterator const_iterator;
+                                typedef typename std::map<dodoString, anyType>::iterator iterator;
+
 				std::map<dodoString, anyType> realArr;///< real array
 				
-				anyType type;
+				anyType type;///< copy of typed
 								
 			private:
 				

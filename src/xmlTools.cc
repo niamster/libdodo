@@ -808,7 +808,7 @@
 			xml.append("\" ");
 		}
 		
-		std::map<dodoString, dodoString>::const_iterator i = node.attributes.begin(), j = node.attributes.end(); 
+		__dodoMap< dodoString>::const_iterator i = node.attributes.begin(), j = node.attributes.end(); 
 		for (;i!=j;++i)
 		{
 			xml.append(i->first);
@@ -839,7 +839,7 @@
 			}
 		}
 		
-		std::map< dodoString, dodoArray<__xmlNode> >::const_iterator o = node.children.begin(), p = node.children.end();
+		__dodoMap< dodoArray<__xmlNode> >::const_iterator o = node.children.begin(), p = node.children.end();
 		dodoArray<__xmlNode>::const_iterator x, y;
 		for (;o!=p;++o)
 		{
