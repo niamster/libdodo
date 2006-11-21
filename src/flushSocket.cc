@@ -212,15 +212,11 @@ flushSocket::makeSocket()
 		#else
 			return false;			
 		#endif
-	
-	#ifdef NO_EX
-		register bool result =
-	#endif
 	 
 	restoreOptions();
 	
 	#ifdef NO_EX
-		return result;
+		return true;
 	#endif
 }
 

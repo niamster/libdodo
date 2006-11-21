@@ -375,9 +375,25 @@ flushDisk::readString(dodoString &a_str,
 		register bool result = 
 	#endif
 	
-	this->read(data,a_pos);
-	a_str.assign(data,inSize);
+	#ifndef NO_EX
+		try
+		{
+	#endif
 	
+	this->read(data,a_pos);
+			
+	#ifndef NO_EX
+		}
+		catch(...)
+		{
+			a_str.assign(data,inSize);
+			delete [] data;
+			
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
+	#endif
+	
+	a_str.assign(data,inSize);
 	delete [] data;
 	
 	#ifdef NO_EX	
@@ -691,9 +707,25 @@ flushDisk::readStreamString(dodoString &a_str,
 		register bool result = 
 	#endif
 	
-	this->readStream(data,a_pos);
-	a_str.assign(data);
+	#ifndef NO_EX
+		try
+		{
+	#endif
 	
+	this->readStream(data,a_pos);
+			
+	#ifndef NO_EX
+		}
+		catch(...)
+		{
+			a_str.assign(data);
+			delete [] data;
+			
+			throw baseEx(ERRMODULE_FLUSHDISK,FLUSHDISK_READSTREAMSTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
+	#endif
+	
+	a_str.assign(data);
 	delete [] data;
 	
 	#ifdef NO_EX	

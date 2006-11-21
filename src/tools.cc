@@ -1793,7 +1793,7 @@ tools::mail(const dodoString &host,
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else	
-			return temp0;
+			return false;
 		#endif
 	}	
 	

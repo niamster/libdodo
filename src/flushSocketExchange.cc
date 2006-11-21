@@ -402,9 +402,25 @@ flushSocketExchange::receiveString(dodoString &data,
 		register bool result = 
 	#endif
 	
-	this->receive(t_data,urgent);
-	data.assign(t_data,inSize);
+	#ifndef NO_EX
+		try
+		{
+	#endif
 	
+	this->receive(t_data,urgent);
+			
+	#ifndef NO_EX
+		}
+		catch(...)
+		{
+			data.assign(t_data,inSize);
+			delete [] t_data;
+			
+			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVESTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
+	#endif
+	
+	data.assign(t_data,inSize);
 	delete [] t_data;
 	
 	#ifdef NO_EX	
@@ -645,20 +661,37 @@ flushSocketExchange::receiveStream(char * const data,
 flushSocketExchange::receiveStreamString(dodoString &data, 
 								bool urgent)
 {
-  register char *t_data = new char[inSocketBuffer+1];
+	register char *t_data = new char[inSocketBuffer+1];
 
-  #ifdef NO_EX
-    register bool result =
-  #endif
+	#ifdef NO_EX
+		register bool result =
+	#endif
 
-  this->receiveStream(t_data,urgent);
-  data.assign(t_data);
+	
+	#ifndef NO_EX
+		try
+		{
+	#endif
+	
+	this->receiveStream(t_data,urgent);
+		
+	#ifndef NO_EX
+		}
+		catch(...)
+		{
+			data.assign(t_data);
+			delete [] t_data;
+			
+			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVESTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
+	#endif
+	  
+	data.assign(t_data);
+	delete [] t_data;
 
-  delete [] t_data;
-
-  #ifdef NO_EX
-    return result;
-  #endif
+	#ifdef NO_EX
+		return result;
+	#endif
 }
 
 //-------------------------------------------------------------------

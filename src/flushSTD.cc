@@ -210,7 +210,23 @@ flushSTD::readString(dodoString &a_str)
 		register bool result = 
 	#endif
 	
-	this->read(data);
+	#ifndef NO_EX
+		try
+		{
+	#endif
+	
+			this->read(data);
+			
+	#ifndef NO_EX
+		}
+		catch(...)
+		{
+			a_str.assign(data,inSize);
+			delete [] data;
+			
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
+	#endif
 
 	a_str.assign(data,inSize);
 	delete [] data;
@@ -527,19 +543,36 @@ flushSTD::readStream(char * const a_void)
 #endif
 flushSTD::readStreamString(dodoString &a_str)
 {
-  register char *data = new char[inSTDBuffer+1];
+	register char *data = new char[inSTDBuffer+1];
 
-  #ifdef NO_EX
-    register bool result =
-  #endif
+	#ifdef NO_EX
+		register bool result =
+	#endif
+	
+	#ifndef NO_EX
+		try
+		{
+	#endif
 
-  this->readStream(data);
-  a_str.assign(data);
-  delete [] data;
+	this->readStream(data);
+			
+	#ifndef NO_EX
+		}
+		catch(...)
+		{
+			a_str.assign(data);
+			delete [] data;
+			
+			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTREAMSTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		}
+	#endif
+	
+	a_str.assign(data);
+	delete [] data;
 
-  #ifdef NO_EX
-    return result;
-  #endif
+	#ifdef NO_EX
+	return result;
+	#endif
 }
 
 //-------------------------------------------------------------------

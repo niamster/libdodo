@@ -21,20 +21,22 @@ LDFLAGS="$LDFLAGS -L/usr/local/lib"
 
 RESULT="\n\n"
 
+AC_SUBST(DEBUG)
+DEBUG="no"
 AC_ARG_ENABLE(debug,
 	AS_HELP_STRING([--enable-debug],[enable debug info]),
 	[DEBUG="$enableval"])
 
 if test "$DEBUG" = "yes"
 then
-	CFLAGS="$CFLAGS -g"
+	CFLAGS="$CFLAGS -g -DDEBUG"
 	
 	RESULT="$RESULT\nDebug\t\t\t\t\t\tenabled"
 else
 	RESULT="$RESULT\nDebug\t\t\t\t\t\tdisabled"
 fi
 
-
+PROFILING="no"
 AC_ARG_ENABLE(profiling,
         AS_HELP_STRING([--enable-profiling],[enable profiling]),
         [PROFILING="$enableval"])

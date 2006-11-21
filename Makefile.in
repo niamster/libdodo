@@ -55,7 +55,7 @@ all: @PACKAGE_NAME@
 
 @PACKAGE_NAME@: $(OBJECTS)
 	$(CXX) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
-	if test "$$DEBUG" = "yes"; then strip -d --strip-unneeded @PACKAGE_NAME@.so.@PACKAGE_VERSION@; fi
+	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded @PACKAGE_NAME@.so.@PACKAGE_VERSION@; fi
 	ln -sf @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $@.so
 	
 	ar rc @PACKAGE_NAME@.a.@PACKAGE_VERSION@ $(OBJECTS)
@@ -67,7 +67,7 @@ all: @PACKAGE_NAME@
 
 .cc.o:
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
-	if test "$$DEBUG" = "yes"; then strip -d --strip-unneeded $@; fi
+	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded $@; fi
 
 install: 
 	${INSTALL} -m 755 -d $(libdir)
