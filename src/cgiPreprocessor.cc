@@ -222,6 +222,8 @@ cgiPreprocessor::preProcess(const dodoString &path)
 		tpl.append(buffer.substr(i - 2,j - i + 2));
 	}
 	
+	linePoss.push_back(newLinePos);
+	
 	return tpl;
 }
 

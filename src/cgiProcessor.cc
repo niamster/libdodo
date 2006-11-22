@@ -74,33 +74,11 @@ cgiProcessor::process(const dodoString &path)
 	localNamespace.clear();
 	namespaceVars.clear();
 	
-	#ifdef CGI_SAVEPROCESS
-	
-		tPath = path;
-	
-		tmpl = preProcess(path);
+	dodoString tmp = _process(preProcess(path), path);
 		
-		return _process(tmpl, path);
+	linePoss.pop_back();
 	
-	#else
-	
-		return _process(preProcess(path), path);
-	
-	#endif
-}
-
-//-------------------------------------------------------------------
-
-dodoString 
-cgiProcessor::reProcess()
-{
-	processed.clear();
-	localHash.clear();
-	local.clear();
-	localNamespace.clear();
-	namespaceVars.clear();
-	
-	return _process(tmpl, tPath);
+	return tmp;
 }
 
 //-------------------------------------------------------------------
@@ -118,16 +96,6 @@ cgiProcessor::clear()
 	local.clear();
 	localNamespace.clear();
 	namespaceVars.clear();
-}
-
-//-------------------------------------------------------------------
-
-void 
-cgiProcessor::preRePocess(const dodoString &path)
-{
-	tPath = path;
-	
-	preProcess(path);
 }
 
 //-------------------------------------------------------------------
@@ -1776,25 +1744,6 @@ cgiProcessor::display(const dodoString &path)
 		#endif
 			{		
 				std::cout << this->process(path);
-				std::cout.flush();
-			}
-}
-
-//-------------------------------------------------------------------
-
-void 
-cgiProcessor::reDisplay()
-{
-		#ifdef FCGI_EXT
-			if (cgiFastSet)
-			{
-				cf->print(this->reProcess());
-				cf->flush();
-			}
-			else
-		#endif
-			{		
-				std::cout << this->reProcess();
 				std::cout.flush();
 			}
 }
