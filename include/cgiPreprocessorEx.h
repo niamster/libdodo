@@ -51,6 +51,7 @@
 		enum cgiPreprocessorFunctionsID
 		{
 			CGIPREPROCESSOR_PROCESS,
+			CGIPREPROCESSOR_READ,
 		};
 	};
 

@@ -43,12 +43,20 @@ cgiPreprocessor::read(const dodoString &path,
 {
 	FILE *tpl = fopen(path.c_str(),"r");
 	if (tpl == NULL)
-		return __string__;
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__,message);
+		#else
+			return __string__;
+		#endif
 	
 	struct stat st;
 
 	if (::lstat(path.c_str(),&st) == -1)
-		return __string__;
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__,message);
+		#else
+			return __string__;
+		#endif
 	
 	char *stor = new char[st.st_size];
 	
@@ -104,6 +112,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 				#endif	
 							
 			tpl.append(buffer.substr(begin));
+			
 			break;
 		}
 		else
@@ -135,6 +144,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 				i -= 2;
 				j += 3;
 				tpl.append(buffer.substr(i,j - i));
+				
 				continue;
 			}
 			else
@@ -156,6 +166,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 			if (j != dodoString::npos)
 			{
 				j += 3;
+				
 				continue;
 			}
 			else
