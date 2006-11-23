@@ -43,14 +43,15 @@
 		/**
 		 * libdodo defined errors' explanation
 		 */				
-		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Bracket was oppened(closed) but not closed(opened)."
+		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)."
 		
 		/**
 		 * ID of function where exception was thrown
 		 */
 		enum cgiPreprocessorFunctionsID
 		{
-			CGIPREPROCESSOR_PROCESS,
+			CGIPREPROCESSOR_PREPROCESS,
+			CGIPREPROCESSOR_READ,
 			CGIPREPROCESSOR_READ,
 		};
 	};

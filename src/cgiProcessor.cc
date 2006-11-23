@@ -67,16 +67,10 @@ cgiProcessor::~cgiProcessor()
 
 dodoString 
 cgiProcessor::process(const dodoString &path)
-{
-	processed.clear();
-	localHash.clear();
-	local.clear();
-	localNamespace.clear();
-	namespaceVars.clear();
-	
-	dodoString tmp = _process(preProcess(path), path);
-		
-	linePoss.pop_back();
+{	
+	std::string tmp = _process(preProcess(path), path);
+
+	newLinePositions.pop_back();
 	
 	return tmp;
 }
@@ -131,6 +125,16 @@ cgiProcessor::_process(const dodoString &buffer,
 			++i;
 			tpl.append(buffer.substr(i,j - i));
 			j += 3;
+			
+			continue;
+		}
+
+		if (buffer[i] == '*')
+		{
+			j = buffer.find("*)>",i);
+
+			j += 3;
+			
 			continue;
 		}
 		
@@ -143,7 +147,7 @@ cgiProcessor::_process(const dodoString &buffer,
 		k = temp.find("include");
 		if (k != dodoString::npos)
 		{
-			_include(temp.substr(k + 8),tpl,path);
+			_include(temp.substr(k + 8),tpl,j,path);
 		}				
 		else
 		{
@@ -163,7 +167,7 @@ cgiProcessor::_process(const dodoString &buffer,
 				k = temp.find("print");
 				if (k != dodoString::npos)
 				{
-					_print(temp.substr(k + 5),tpl);
+					_print(temp.substr(k + 5),tpl,j,path);
 				}
 				else
 				{
@@ -185,7 +189,7 @@ cgiProcessor::_process(const dodoString &buffer,
 						k = temp.find("break");
 						if(k != dodoString::npos)
 						{
-							if (_break(temp.substr(k + 5)))
+							if (_break(temp.substr(k + 5),j,path))
 								break;
 						}
 						else
@@ -204,7 +208,7 @@ cgiProcessor::_process(const dodoString &buffer,
 								k = temp.find("assign");
 								if (k != dodoString::npos)
 								{
-									_assign(temp.substr(k + 6));
+									_assign(temp.substr(k + 6),j,path);
 								}
 								else
 								{
@@ -407,10 +411,14 @@ cgiProcessor::_if(const dodoString &buffer,
 	{
 		if (temp2.size() != 1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__IF,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
+			{
+				char message[128];
+				sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__IF,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__,message);
+			}
 			#else
 				return start;
-			#endif
+			#endif	
 		
 		dodoString temp1 = tools::trim(temp2[0]," \t\n",3);
 		
@@ -420,7 +428,7 @@ cgiProcessor::_if(const dodoString &buffer,
 			temp1 = temp1.substr(1);
 		}
 				
-		temp1 = getVar(temp1);
+		temp1 = getVar(temp1,start,path);
 		
 		if (strcmp(temp1.c_str(),"false") != 0 && temp1.size() != 0)
 			accept = !invert;
@@ -429,9 +437,9 @@ cgiProcessor::_if(const dodoString &buffer,
 	}
 	else
 	{
-		dodoString temp1 = getVar(temp2[0]);
+		dodoString temp1 = getVar(temp2[0],start,path);
 		
-		dodoString temp3 = getVar(temp2[1]);
+		dodoString temp3 = getVar(temp2[1],start,path);
 		
 		if (_float)	
 		{
@@ -471,12 +479,12 @@ cgiProcessor::_if(const dodoString &buffer,
 		}
 	}
 
-	register unsigned long u(blockEnd(buffer,start,"if","fi")), v(0);
+	register unsigned long u(blockEnd(buffer,start,"if","fi",path)), v(0);
 	register bool found(true);
 	
 	try
 	{
-		v = blockEnd(buffer,start,"if","else");
+		v = blockEnd(buffer,start,"if","else",path);
 	}
 	catch(...)
 	{
@@ -508,7 +516,8 @@ unsigned long
 cgiProcessor::blockEnd(const dodoString &buffer, 
 						unsigned long start, 
 						const dodoString &st, 
-						const dodoString &ts)
+						const dodoString &ts,
+						const dodoString &path)
 {
 	register unsigned long u, m(start), _st(1), b, p, stLen(st.size()), tsLen(ts.size());
 
@@ -517,7 +526,11 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 		u = buffer.find("<(",m);
 		if (u == dodoString::npos)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
+			{
+				char message[128];
+				sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__,message);
+			}
 			#else
 				return start;
 			#endif
@@ -525,7 +538,11 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 		b = buffer.find(")>",u + 2);
 		if (b == dodoString::npos)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__);
+			{
+				char message[128];
+				sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__,message);
+			}
 			#else
 				return start;
 			#endif
@@ -555,10 +572,11 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 
 void 
 cgiProcessor::_include(const dodoString &statement, 
-						dodoString &tpl, 
+						dodoString &tpl,
+						unsigned long &start, 
 						const dodoString &path)
 {
-	dodoString temp1 = getVar(statement);
+	dodoString temp1 = getVar(statement,start,path);
 	
 	if (strcmp(temp1.c_str(),path.c_str()) != 0 && !recursive(temp1))
 	{
@@ -572,18 +590,20 @@ cgiProcessor::_include(const dodoString &statement,
 
 void 
 cgiProcessor::_print(const dodoString &statement, 
-					dodoString &tpl)
+					dodoString &tpl, 
+					unsigned long &start, 
+					const dodoString &path)
 {
 	dodoStringArr temp = tools::explode(statement,",");
 	if (temp.size() == 1)
-		tpl.append(getVar(statement));	
+		tpl.append(getVar(statement,start,path));	
 	else
 	{
 		if (temp.size() > 1)
 		{
 			dodoStringArr::iterator i(temp.begin()), j(temp.end());
 			for (;i!=j;++i)
-				tpl.append(getVar(*i));
+				tpl.append(getVar(*i,start,path));
 		}
 	}
 }
@@ -591,11 +611,13 @@ cgiProcessor::_print(const dodoString &statement,
 //-------------------------------------------------------------------
 
 bool 
-cgiProcessor::_break(const dodoString &statement)
+cgiProcessor::_break(const dodoString &statement, 
+					unsigned long &start, 
+					const dodoString &path)
 {
 	if (_loopDeepness > 0)
 	{
-		_breakDeepness = strtoul(getVar(statement).c_str(),NULL,10);
+		_breakDeepness = strtoul(getVar(statement,start,path).c_str(),NULL,10);
 		
 		if (_breakDeepness == 0)
 			_breakDeepness = 1;	
@@ -612,13 +634,19 @@ cgiProcessor::_break(const dodoString &statement)
 //-------------------------------------------------------------------
 
 void 
-cgiProcessor::_assign(const dodoString &statement)
+cgiProcessor::_assign(const dodoString &statement, 
+					unsigned long &start, 
+					const dodoString &path)
 {
 	dodoStringArr temp = tools::explode(statement,"=",2);
 		
 	if (temp.size() == 0)	
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT_STR,__LINE__,__FILE__);
+		{
+			char message[128];
+			sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT_STR,__LINE__,__FILE__,message);
+		}
 		#else
 			return ;
 		#endif
@@ -630,7 +658,11 @@ cgiProcessor::_assign(const dodoString &statement)
 		
 	if (strcmp(varName.c_str(),"dodo") == 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__);
+		{
+			char message[128];
+			sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_DODOISRESERVEDVARNAME,CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR,__LINE__,__FILE__,message);
+		}
 		#else
 			return ;
 		#endif
@@ -641,7 +673,7 @@ cgiProcessor::_assign(const dodoString &statement)
 			localNamespace[namespaceDeepness][i->first] = i->second;
 	
 	namespaceVars[namespaceDeepness].push_back(varName);
-	local[varName] = getVar(temp[1]);
+	local[varName] = getVar(temp[1],start,path);
 }
 
 //-------------------------------------------------------------------
@@ -681,7 +713,7 @@ cgiProcessor::_ns(const dodoString &buffer,
 				dodoString &tpl, 
 				const dodoString &path)
 {
-	register unsigned long u(blockEnd(buffer,start,"ns","sn"));	
+	register unsigned long u(blockEnd(buffer,start,"ns","sn",path));	
 	
 	tpl.append(_process(buffer.substr(start,u - start),path));
 	
@@ -697,7 +729,7 @@ cgiProcessor::_for(const dodoString &buffer,
 				dodoString &tpl, 
 				const dodoString &path)
 {
-	register unsigned long u(blockEnd(buffer,start,"for","rof"));
+	register unsigned long u(blockEnd(buffer,start,"for","rof",path));
 	
 	register unsigned long p = statement.find("$");
 	register unsigned long i(p), j(statement.size());
@@ -731,7 +763,11 @@ cgiProcessor::_for(const dodoString &buffer,
 	p = statement.find("in",i + 1);
 	if (p == dodoString::npos)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__FOR,ERR_LIBDODO,CGIPREPROCESSOR_WRONGFORSTATEMENT,CGIPREPROCESSOR_WRONGFORSTATEMENT_STR,__LINE__,__FILE__);
+		{
+			char message[128];
+			sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__FOR,ERR_LIBDODO,CGIPREPROCESSOR_WRONGFORSTATEMENT,CGIPREPROCESSOR_WRONGFORSTATEMENT_STR,__LINE__,__FILE__,message);
+		}
 		#else
 			return u;
 		#endif
@@ -1484,7 +1520,9 @@ cgiProcessor::_for(const dodoString &buffer,
 //-------------------------------------------------------------------
 
 dodoString 
-cgiProcessor::getVar(const dodoString &a_varName)
+cgiProcessor::getVar(const dodoString &a_varName, 
+					unsigned long &start, 
+					const dodoString &path)
 {
 	dodoString varName = trim(a_varName), tempVar;
 	register unsigned long u, b, m(0), ob, cb, i, c;
@@ -1504,7 +1542,11 @@ cgiProcessor::getVar(const dodoString &a_varName)
 			b = varName.find("}",c + 1);
 			if (b == dodoString::npos)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_GETVAR,ERR_LIBDODO,CGIPREPROCESSOR_WRONGVARSTATEMENT,CGIPREPROCESSOR_WRONGVARSTATEMENT_STR,__LINE__,__FILE__);
+				{
+					char message[128];
+					sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+					throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_GETVAR,ERR_LIBDODO,CGIPREPROCESSOR_WRONGVARSTATEMENT,CGIPREPROCESSOR_WRONGVARSTATEMENT_STR,__LINE__,__FILE__,message);
+				}
 				#else
 					return __string__;
 				#endif
@@ -1523,7 +1565,7 @@ cgiProcessor::getVar(const dodoString &a_varName)
 		
 		tempVar = trim(varName.substr(u + 1,b - 1 - u));
 		if (tempVar[0] == '$')
-			tempVar = getVar(tempVar);
+			tempVar = getVar(tempVar,start,path);
 		
 		varName.replace(u,b + 1 - u,tempVar,0,tempVar.size());
 							

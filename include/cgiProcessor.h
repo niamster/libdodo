@@ -152,29 +152,36 @@ namespace dodo
 			 * processes `print` statement
 			 * @param statement indicates `print` statement
 			 * @param tpl indicates string where to add result
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
 			 */
-			virtual void _print(const dodoString &statement, dodoString &tpl);
+			virtual void _print(const dodoString &statement, dodoString &tpl, unsigned long &start, const dodoString &path);
 			
 			/**
 			 * processes `break` statement
 			 * @param statement indicates `break` statement
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
 			 */
-			virtual bool _break(const dodoString &statement);
+			virtual bool _break(const dodoString &statement, unsigned long &start, const dodoString &path);
 			
 			/**
 			 * processes `assign` statement
 			 * @param statement indicates `assign` statement
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
 			 */
-			virtual void _assign(const dodoString &statement);
+			virtual void _assign(const dodoString &statement, unsigned long &start, const dodoString &path);
 			
 			/**
 			 * processes `include` statement
 			 * @param buffer indicates what buffer contains found `if`
 			 * @param statement indicates `include` statement
 			 * @param tpl indicates string where to add result
+			 * @param start indicates position in file
 			 * @param path indicates path of current .tpl file
 			 */
-			virtual void _include(const dodoString &statement, dodoString &tpl, const dodoString &path);
+			virtual void _include(const dodoString &statement, dodoString &tpl, unsigned long &start, const dodoString &path);
 			
 			/**
 			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
@@ -187,8 +194,9 @@ namespace dodo
 			 * @param start indicates where )> closes if `<( if ... )>` block
 			 * @param st is open statement[if, for ...]
 			 * @param ts is close statement[fi, rof ...]
+			 * @param path indicates path of current .tpl file
 			 */
-			virtual unsigned long blockEnd(const dodoString &buffer, unsigned long start, const dodoString &st, const dodoString &ts);
+			virtual unsigned long blockEnd(const dodoString &buffer, unsigned long start, const dodoString &st, const dodoString &ts, const dodoString &path);
 						
 			/**
 			 * @return true if path is in `processed` list
@@ -199,8 +207,10 @@ namespace dodo
 			/**
 			 * @return var's value
 			 * @param varName describes name of variable
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
 			 */
-			virtual dodoString getVar(const dodoString &varName);
+			virtual dodoString getVar(const dodoString &varName, unsigned long &start, const dodoString &path);
 
 			/**
 			 * @return extracted data(e.g. removes pairs of ",',`)

@@ -77,8 +77,6 @@ fi
 		echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib"
-		AC_CHECK_LIB([sqlite3], [sqlite3_open], AC_MSG_RESULT([sqlite3 lib was found]), AC_MSG_ERROR([sqlite3 lib was not found]))
-		LIBS="$LIBS -lsqlite3"
 		AC_CHECK_HEADER([sqlite3.h], AC_MSG_RESULT([sqlite3 header was found]), AC_MSG_ERROR([sqlite3 header was not found]))
 		
 		AC_CHECK_LIB([sqlite3], [sqlite3_table_column_metadata], RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tenabled", RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled")

@@ -2,6 +2,6 @@ first
 second
 <(include $main)>
 
-	<(if a!=b )>
+	<(if a!=b)>
 		a!=b
 	<(fi)>

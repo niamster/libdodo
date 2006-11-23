@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 		arr1["three"] = "three";
 		cgip.assign("arr1",arr1);
 		
-		std::vector<dodoAssocArr> arr2;
+		dodoArray<dodoAssocArr> arr2;
 		arr2.push_back(arr1);
 		arr1["one"] = "three";
 		arr2.push_back(arr1);
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << " " << ex.line;
+		cout << ex << " " << ex.line << " " << ex.message;
 	}	
 		
 	return 0;

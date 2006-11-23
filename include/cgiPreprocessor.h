@@ -76,8 +76,7 @@ namespace dodo
 			 */
 			virtual dodoString read(const dodoString &path, dodoArray<unsigned long> &newLinePos);
 			
-			std::vector< dodoArray<unsigned long> > linePoss;///< newlines' positions for current preprocessed included/main file 
-
+			dodoArray< dodoArray<unsigned long> > newLinePositions;///< stack of processed new lines' positions
 	};
 
 };
