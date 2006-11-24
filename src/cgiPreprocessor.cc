@@ -43,36 +43,20 @@ cgiPreprocessor::read(const dodoString &path,
 {
 	FILE *tpl = fopen(path.c_str(),"r");
 	if (tpl == NULL)
-<<<<<<< .mine
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return __string__;
 		#endif
-=======
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__,message);
-		#else
-			return __string__;
-		#endif
->>>>>>> .r418
 	
 	struct stat st;
 
 	if (::lstat(path.c_str(),&st) == -1)
-<<<<<<< .mine
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return __string__;
 		#endif
-=======
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR,CGIPREPROCESSOR_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__,message);
-		#else
-			return __string__;
-		#endif
->>>>>>> .r418
 	
 	char *stor = new char[st.st_size];
 	

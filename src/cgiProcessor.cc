@@ -529,7 +529,7 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 			{
 				char message[128];
 				sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
-				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__,message);
+				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGBLOCK,CGIPREPROCESSOR_WRONGBLOCK_STR,__LINE__,__FILE__,message);
 			}
 			#else
 				return start;
@@ -541,7 +541,7 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 			{
 				char message[128];
 				sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
-				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGIFSTATEMENT,CGIPREPROCESSOR_WRONGIFSTATEMENT_STR,__LINE__,__FILE__,message);
+				throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR_BLOCKEND,ERR_LIBDODO,CGIPREPROCESSOR_WRONGBLOCK,CGIPREPROCESSOR_WRONGBLOCK_STR,__LINE__,__FILE__,message);
 			}
 			#else
 				return start;
@@ -652,6 +652,16 @@ cgiProcessor::_assign(const dodoString &statement,
 		#endif
 		
 	dodoString varName = trim(temp[0]);	
+	if (varName.size() == 0)	
+		#ifndef NO_EX
+		{
+			char message[128];
+			sprintf(message," Line: %li File: %s",getLineNumber(newLinePositions.back(),start),path.c_str());
+			throw baseEx(ERRMODULE_CGIPROCESSOR,CGIPROCESSOR__ASSIGN,ERR_LIBDODO,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT,CGIPREPROCESSOR_WRONGASSIGNSTATEMENT_STR,__LINE__,__FILE__,message);
+		}
+		#else
+			return ;
+		#endif
 		
 	if (varName[0] == '$')
 		varName = varName.substr(1);
