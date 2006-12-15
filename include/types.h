@@ -56,7 +56,7 @@ namespace dodo
 
 	typedef std::map<dodoString, dodoString> dodoAssocArr;///< array where key=>string; value=>string; toy may access like arr["key"] = "value";
 
-	typedef __dodoMap<dodoString> dodoStringMap;///< hash of strings
+	typedef dodoMap<dodoString> dodoStringMap;///< hash of strings
 	
 	typedef dodoArray<dodoStringMap> dodoStringMapArr;///< array of hashes of string
 	

@@ -36,7 +36,7 @@ namespace dodo
 		 * if varName's value is not defined - empty anyType will be returned
 		 */
 		template <typename anyType>
-		class __dodoMap
+		class dodoMap
 		{
 						
 			public:
@@ -44,7 +44,7 @@ namespace dodo
 				/**
 				 * copy constructor
 				 */
-				__dodoMap(const __dodoMap &dodoM) : icase(dodoM.icase), 
+				dodoMap(const dodoMap &dodoM) : icase(dodoM.icase), 
 													realArr(dodoM.realArr)
 				{
 				}
@@ -52,7 +52,7 @@ namespace dodo
 				/**
 				 * constructor
 				 */
-				__dodoMap(): icase(false)
+				dodoMap(): icase(false)
 				{
 				}
 				

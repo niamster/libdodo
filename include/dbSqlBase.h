@@ -245,7 +245,7 @@ namespace dodo
 			dodoString mediumblob;///< bytea for postgres, blob for others 
 			dodoString longblob;///< bytea for postgres, blob for others 
 		
-			__dodoMap<dodoStringArr> framingFields;///< hash of 'db:table' => `array of fields to frame`
+			dodoMap<dodoStringArr> framingFields;///< hash of 'db:table' => `array of fields to frame`
 		
 		private:
 			

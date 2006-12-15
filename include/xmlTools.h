@@ -51,7 +51,7 @@
 			
 			dodoString name;///< name of the node [[tag]]
 			
-			__dodoMap< dodoArray<__xmlNode> > children;///< vector of children's realisation;
+			dodoMap< dodoArray<__xmlNode> > children;///< vector of children's realisation;
 			
 			dodoStringMap attributes;///< hash of attributes
 			
