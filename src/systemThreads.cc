@@ -573,13 +573,23 @@
 	systemThreads::sweepTrash()
 	{
 		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
-		for (;i!=j;++i)
+		for (;i!=j;)
 		{
 			if (_isRunning(i))
+			{
+				++i;
+
 				continue;
+			}
 					
 			if (i->executeLimit > 0 && (i->executeLimit <= i->executed))
+			{
 				i = threads.erase(i);
+
+				continue;
+			}
+
+			++i;
 		}	
 	}
 	

@@ -18,6 +18,7 @@ echo "" > include/directives.runtime.h
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
+LIBS=""
 
 RESULT="\n\n"
 
@@ -63,7 +64,6 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-
 # Checks for libraries.
 	AC_ARG_WITH([sqlite3],
 		AS_HELP_STRING([--with-sqlite3(=/path)],[use sqlite3]),
@@ -74,12 +74,13 @@ fi
 		then
 			MOD_SQLITE_DIR=/usr
 		fi
-		echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib"
-		AC_CHECK_HEADER([sqlite3.h], AC_MSG_RESULT([sqlite3 header was found]), AC_MSG_ERROR([sqlite3 header was not found]))
-		
 		AC_CHECK_LIB([sqlite3], [sqlite3_table_column_metadata], RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tenabled", RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled")
+		AC_CHECK_LIB([sqlite3], [sqlite3_exec])
+		AC_CHECK_HEADER([sqlite3.h])
+		LIBS="$LIBS -lsqlite3"
+		echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
 	else
@@ -95,12 +96,17 @@ fi
 		then
 			MOD_POSTGRESQL_DIR=/usr
 		fi
-		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib"
-		AC_CHECK_LIB([pq], [PQclear], AC_MSG_RESULT([postgresql lib was found]), AC_MSG_ERROR([postgresql lib was not found]))
+		AC_CHECK_LIB([pq], [PQclear])
+		AC_CHECK_HEADER([libpq-fe.h])
 		LIBS="$LIBS -lpq"
-		AC_CHECK_HEADER([libpq-fe.h], AC_MSG_RESULT([postgresql header was found]), AC_MSG_ERROR([postgresql header was not found]))
+		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/directives.runtime.h
+
+		RESULT="$RESULT\nPostresql\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tdisabled"
+	
 	fi
 
 	AC_ARG_WITH([mysql],
@@ -112,12 +118,18 @@ fi
 		then
 			MOD_MYSQL_DIR=/usr
 		fi
-		echo -n -e "#define MYSQL_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include/mysql"
 		LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib/mysql"
-		AC_CHECK_LIB([mysqlclient], [mysql_init], AC_MSG_RESULT([mysql lib was found]), AC_MSG_ERROR([mysql lib was not found]))
+		AC_CHECK_LIB([mysqlclient], [mysql_init])
+		AC_CHECK_HEADER([mysql.h])
 		LIBS="$LIBS -lmysqlclient"
-		AC_CHECK_HEADER([mysql.h], AC_MSG_RESULT([mysql header was found]), AC_MSG_ERROR([mysql header was not found]))
+		echo -n -e "#define MYSQL_EXT\n\n" >> include/directives.runtime.h
+		
+		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nMySQL\t\t\t\t\t\tdisabled"
+	
+	
 	fi
 
 	AC_ARG_WITH([fcgi],
@@ -129,12 +141,12 @@ fi
 		then
 			MOD_FCGI_DIR=/usr
 		fi
-		echo -n -e "#define FCGI_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_FCGI_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_FCGI_DIR/lib"
-		AC_CHECK_LIB([fcgi], [FCGX_Init], AC_MSG_RESULT([fcgi lib was found]), AC_MSG_ERROR([fcgi lib was not found]))
+		AC_CHECK_LIB([fcgi], [FCGX_Init])
+		AC_CHECK_HEADER([fcgiapp.h])
 		LIBS="$LIBS -lfcgi"
-		AC_CHECK_HEADER([fcgiapp.h], AC_MSG_RESULT([fcgi header was found]), AC_MSG_ERROR([fcgi header was not found]))
+		echo -n -e "#define FCGI_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
 	else
@@ -150,12 +162,12 @@ fi
 		then
 			MOD_PCRE_DIR=/usr
 		fi
-		echo -n -e "#define PCRE_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_PCRE_DIR/lib"
-		AC_CHECK_LIB([pcre], [pcre_exec], AC_MSG_RESULT([pcre lib was found]), AC_MSG_ERROR([pcre was not found]))
+		AC_CHECK_LIB([pcre], [pcre_exec])
+		AC_CHECK_HEADER([pcre.h])
 		LIBS="$LIBS -lpcre"
-		AC_CHECK_HEADER([pcre.h], AC_MSG_RESULT([pcre header was found]), AC_MSG_ERROR([pcre header was not found]))
+		echo -n -e "#define PCRE_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\nPCRE\t\t\t\t\t\tenabled"
 	else
@@ -171,18 +183,18 @@ fi
 		then
 			MOD_DL_DIR=/usr
 		fi
-		echo -n -e "#define DL_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
+		AC_CHECK_HEADER([dlfcn.h])
                 AC_ARG_ENABLE([dl-lib],
                         AS_HELP_STRING([--disable-dl-lib], [disable dl as lib (default=enabled)]),
                         [MOD_DL_LIB="$enableval"], [MOD_DL_LIB="no"])
                 if test "$MOD_DL_LIB" = "yes"
                 then
-			AC_CHECK_LIB([dl], [dlopen], AC_MSG_RESULT([dl lib was found]), AC_MSG_ERROR([dl was not found]))
+			AC_CHECK_LIB([dl], [dlopen], RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tenabled", RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tdisabled")
 			LIBS="$LIBS -ldl"
 		fi
-		AC_CHECK_HEADER([dlfcn.h], AC_MSG_RESULT([dl header was found]), AC_MSG_ERROR([dl header was not found]))
+		echo -n -e "#define DL_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
 	else
@@ -198,12 +210,12 @@ fi
 		then
 			MOD_LIBXML2_DIR=/usr
 		fi
-		echo -n -e "#define LIBXML2_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
 		LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib"
-		AC_CHECK_LIB([xml2], [xmlInitParser], AC_MSG_RESULT([libxml2 lib was found]), AC_MSG_ERROR([libxml2 was not found]))
+		AC_CHECK_HEADER([libxml/xmlmemory.h])
+		AC_CHECK_LIB([xml2], [xmlInitParser])
 		LIBS="$LIBS -lxml2"
-		AC_CHECK_HEADER([libxml/xmlmemory.h], AC_MSG_RESULT([libxml2 header was found]), AC_MSG_ERROR([libxml2 header was not found]))
+		echo -n -e "#define LIBXML2_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tenabled"
 	else
@@ -219,15 +231,15 @@ fi
 		then
 			MOD_PTHREAD_DIR=/usr
 		fi
-		echo -n -e "#define PTHREAD_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib"
         	AC_ARG_WITH([pthread-lib],
 		AS_HELP_STRING([--with-pthread-lib],[use pthread lib(pthread, thr, lthread, c_r) (default=pthread)]),
 		[MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
-		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create], AC_MSG_RESULT([pthread lib was found]), AC_MSG_ERROR([pthread lib was not found]))
+		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create])
+		AC_CHECK_HEADER([pthread.h])
 		LIBS="$LIBS -l$MOD_PTHREAD_LIB"
-		AC_CHECK_HEADER([pthread.h], AC_MSG_RESULT([pthread header was found]), AC_MSG_ERROR([pthread header was not found]))
+		echo -n -e "#define PTHREAD_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\npthread\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
 	else
@@ -243,12 +255,12 @@ fi
 		then
 			MOD_BZIP2_DIR=/usr
 		fi
-		echo -n -e "#define BZIP2_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_BZIP2_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib"
-		AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress], AC_MSG_RESULT([bzip2 lib was found]), AC_MSG_ERROR([bzip2 was not found]))
+		AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress])
+		AC_CHECK_HEADER([bzlib.h])
 		LIBS="$LIBS -lbz2"
-		AC_CHECK_HEADER([bzlib.h], AC_MSG_RESULT([bzip2 header was found]), AC_MSG_ERROR([bzip2 header was not found]))
+		echo -n -e "#define BZIP2_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tenabled"
 	else
@@ -264,18 +276,18 @@ fi
 		then
 			MOD_ZLIB_DIR=/usr
 		fi
-		echo -n -e "#define ZLIB_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_ZLIB_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_ZLIB_DIR/lib"
+		AC_CHECK_HEADER([zlib.h])
 		AC_ARG_ENABLE([zlib-lib],
 			AS_HELP_STRING([--enable-zlib-lib], [enable zlib as lib (default=disabled)]),
 			[MOD_ZLIB_LIB="yes"])
 	        if test "$MOD_ZLIB_LIB" = "yes"
 		then
-			AC_CHECK_LIB([z], [deflateInit2], AC_MSG_RESULT([zlib lib was found]), AC_MSG_ERROR([zlib was not found]))
+			AC_CHECK_LIB([z], [deflateInit2])
 			LIBS="$LIBS -lz"
 		fi
-		AC_CHECK_HEADER([zlib.h], AC_MSG_RESULT([zlib header was found]), AC_MSG_ERROR([zlib header was not found]))
+		echo -n -e "#define ZLIB_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\nZLIB\t\t\t\t\t\tenabled"
 	else
@@ -291,18 +303,18 @@ fi
 		then
 			MOD_ICONV_DIR=/usr
 		fi
-		echo -n -e "#define ICONV_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_ICONV_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_ICONV_DIR/lib"
+		AC_CHECK_HEADER([iconv.h])
 		AC_ARG_ENABLE([iconv-lib],
 			AS_HELP_STRING([--enable-iconv-lib], [enable iconv as lib (default=disabled)]),
 			[MOD_ICONV_LIB="yes"])
 	        if test "$MOD_ICONV_LIB" = "yes"
 		then
-			AC_CHECK_LIB([iconv], [iconv], AC_MSG_RESULT([iconv lib was found]), AC_MSG_ERROR([iconv was not found]))
+			AC_CHECK_LIB([iconv], [iconv])
 			LIBS="$LIBS -liconv"
 		fi
-		AC_CHECK_HEADER([iconv.h], AC_MSG_RESULT([iconv header was found]), AC_MSG_ERROR([iconv header was not found]))
+		echo -n -e "#define ICONV_EXT\n\n" >> include/directives.runtime.h
 		
 		RESULT="$RESULT\niconv\t\t\t\t\t\tenabled"
 	else

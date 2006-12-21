@@ -3753,6 +3753,7 @@ echo "" > include/directives.runtime.h
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
+LIBS=""
 
 RESULT="\n\n"
 
@@ -3806,7 +3807,6 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-
 # Checks for libraries.
 
 # Check whether --with-sqlite3 was given.
@@ -3822,9 +3822,146 @@ fi
 		then
 			MOD_SQLITE_DIR=/usr
 		fi
-		echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib"
+		{ echo "$as_me:$LINENO: checking for sqlite3_table_column_metadata in -lsqlite3" >&5
+echo $ECHO_N "checking for sqlite3_table_column_metadata in -lsqlite3... $ECHO_C" >&6; }
+if test "${ac_cv_lib_sqlite3_sqlite3_table_column_metadata+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lsqlite3  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char sqlite3_table_column_metadata ();
+int
+main ()
+{
+return sqlite3_table_column_metadata ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_sqlite3_sqlite3_table_column_metadata=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_sqlite3_sqlite3_table_column_metadata=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_sqlite3_sqlite3_table_column_metadata" >&5
+echo "${ECHO_T}$ac_cv_lib_sqlite3_sqlite3_table_column_metadata" >&6; }
+if test $ac_cv_lib_sqlite3_sqlite3_table_column_metadata = yes; then
+  RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tenabled"
+else
+  RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled"
+fi
+
+
+{ echo "$as_me:$LINENO: checking for sqlite3_exec in -lsqlite3" >&5
+echo $ECHO_N "checking for sqlite3_exec in -lsqlite3... $ECHO_C" >&6; }
+if test "${ac_cv_lib_sqlite3_sqlite3_exec+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lsqlite3  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char sqlite3_exec ();
+int
+main ()
+{
+return sqlite3_exec ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_sqlite3_sqlite3_exec=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_sqlite3_sqlite3_exec=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_sqlite3_sqlite3_exec" >&5
+echo "${ECHO_T}$ac_cv_lib_sqlite3_sqlite3_exec" >&6; }
+if test $ac_cv_lib_sqlite3_sqlite3_exec = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBSQLITE3 1
+_ACEOF
+
+  LIBS="-lsqlite3 $LIBS"
+
+fi
+
 
 { echo "$as_me:$LINENO: checking for grep that handles long lines and -e" >&5
 echo $ECHO_N "checking for grep that handles long lines and -e... $ECHO_C" >&6; }
@@ -4361,84 +4498,10 @@ fi
 echo "${ECHO_T}$ac_cv_header_sqlite3_h" >&6; }
 
 fi
-if test $ac_cv_header_sqlite3_h = yes; then
-  { echo "$as_me:$LINENO: result: sqlite3 header was found" >&5
-echo "${ECHO_T}sqlite3 header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: sqlite3 header was not found" >&5
-echo "$as_me: error: sqlite3 header was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 
-
-		{ echo "$as_me:$LINENO: checking for sqlite3_table_column_metadata in -lsqlite3" >&5
-echo $ECHO_N "checking for sqlite3_table_column_metadata in -lsqlite3... $ECHO_C" >&6; }
-if test "${ac_cv_lib_sqlite3_sqlite3_table_column_metadata+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lsqlite3  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char sqlite3_table_column_metadata ();
-int
-main ()
-{
-return sqlite3_table_column_metadata ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_sqlite3_sqlite3_table_column_metadata=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_sqlite3_sqlite3_table_column_metadata=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_sqlite3_sqlite3_table_column_metadata" >&5
-echo "${ECHO_T}$ac_cv_lib_sqlite3_sqlite3_table_column_metadata" >&6; }
-if test $ac_cv_lib_sqlite3_sqlite3_table_column_metadata = yes; then
-  RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tenabled"
-else
-  RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled"
-fi
-
+		LIBS="$LIBS -lsqlite3"
+		echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
 
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
 	else
@@ -4459,10 +4522,10 @@ fi
 		then
 			MOD_POSTGRESQL_DIR=/usr
 		fi
-		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib"
-		{ echo "$as_me:$LINENO: checking for PQclear in -lpq" >&5
+
+{ echo "$as_me:$LINENO: checking for PQclear in -lpq" >&5
 echo $ECHO_N "checking for PQclear in -lpq... $ECHO_C" >&6; }
 if test "${ac_cv_lib_pq_PQclear+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4524,15 +4587,14 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_pq_PQclear" >&5
 echo "${ECHO_T}$ac_cv_lib_pq_PQclear" >&6; }
 if test $ac_cv_lib_pq_PQclear = yes; then
-  { echo "$as_me:$LINENO: result: postgresql lib was found" >&5
-echo "${ECHO_T}postgresql lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: postgresql lib was not found" >&5
-echo "$as_me: error: postgresql lib was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBPQ 1
+_ACEOF
+
+  LIBS="-lpq $LIBS"
+
 fi
 
-		LIBS="$LIBS -lpq"
 		if test "${ac_cv_header_libpq_fe_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for libpq-fe.h" >&5
 echo $ECHO_N "checking for libpq-fe.h... $ECHO_C" >&6; }
@@ -4663,15 +4725,14 @@ fi
 echo "${ECHO_T}$ac_cv_header_libpq_fe_h" >&6; }
 
 fi
-if test $ac_cv_header_libpq_fe_h = yes; then
-  { echo "$as_me:$LINENO: result: postgresql header was found" >&5
-echo "${ECHO_T}postgresql header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: postgresql header was not found" >&5
-echo "$as_me: error: postgresql header was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
+
+		LIBS="$LIBS -lpq"
+		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/directives.runtime.h
+
+		RESULT="$RESULT\nPostresql\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tdisabled"
 
 	fi
 
@@ -4689,10 +4750,10 @@ fi
 		then
 			MOD_MYSQL_DIR=/usr
 		fi
-		echo -n -e "#define MYSQL_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include/mysql"
 		LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib/mysql"
-		{ echo "$as_me:$LINENO: checking for mysql_init in -lmysqlclient" >&5
+
+{ echo "$as_me:$LINENO: checking for mysql_init in -lmysqlclient" >&5
 echo $ECHO_N "checking for mysql_init in -lmysqlclient... $ECHO_C" >&6; }
 if test "${ac_cv_lib_mysqlclient_mysql_init+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4754,15 +4815,14 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_mysqlclient_mysql_init" >&5
 echo "${ECHO_T}$ac_cv_lib_mysqlclient_mysql_init" >&6; }
 if test $ac_cv_lib_mysqlclient_mysql_init = yes; then
-  { echo "$as_me:$LINENO: result: mysql lib was found" >&5
-echo "${ECHO_T}mysql lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: mysql lib was not found" >&5
-echo "$as_me: error: mysql lib was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMYSQLCLIENT 1
+_ACEOF
+
+  LIBS="-lmysqlclient $LIBS"
+
 fi
 
-		LIBS="$LIBS -lmysqlclient"
 		if test "${ac_cv_header_mysql_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for mysql.h" >&5
 echo $ECHO_N "checking for mysql.h... $ECHO_C" >&6; }
@@ -4893,14 +4953,14 @@ fi
 echo "${ECHO_T}$ac_cv_header_mysql_h" >&6; }
 
 fi
-if test $ac_cv_header_mysql_h = yes; then
-  { echo "$as_me:$LINENO: result: mysql header was found" >&5
-echo "${ECHO_T}mysql header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: mysql header was not found" >&5
-echo "$as_me: error: mysql header was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
+
+
+		LIBS="$LIBS -lmysqlclient"
+		echo -n -e "#define MYSQL_EXT\n\n" >> include/directives.runtime.h
+
+		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nMySQL\t\t\t\t\t\tdisabled"
 
 
 	fi
@@ -4919,10 +4979,10 @@ fi
 		then
 			MOD_FCGI_DIR=/usr
 		fi
-		echo -n -e "#define FCGI_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_FCGI_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_FCGI_DIR/lib"
-		{ echo "$as_me:$LINENO: checking for FCGX_Init in -lfcgi" >&5
+
+{ echo "$as_me:$LINENO: checking for FCGX_Init in -lfcgi" >&5
 echo $ECHO_N "checking for FCGX_Init in -lfcgi... $ECHO_C" >&6; }
 if test "${ac_cv_lib_fcgi_FCGX_Init+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4984,15 +5044,14 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_fcgi_FCGX_Init" >&5
 echo "${ECHO_T}$ac_cv_lib_fcgi_FCGX_Init" >&6; }
 if test $ac_cv_lib_fcgi_FCGX_Init = yes; then
-  { echo "$as_me:$LINENO: result: fcgi lib was found" >&5
-echo "${ECHO_T}fcgi lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: fcgi lib was not found" >&5
-echo "$as_me: error: fcgi lib was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBFCGI 1
+_ACEOF
+
+  LIBS="-lfcgi $LIBS"
+
 fi
 
-		LIBS="$LIBS -lfcgi"
 		if test "${ac_cv_header_fcgiapp_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for fcgiapp.h" >&5
 echo $ECHO_N "checking for fcgiapp.h... $ECHO_C" >&6; }
@@ -5123,16 +5182,10 @@ fi
 echo "${ECHO_T}$ac_cv_header_fcgiapp_h" >&6; }
 
 fi
-if test $ac_cv_header_fcgiapp_h = yes; then
-  { echo "$as_me:$LINENO: result: fcgi header was found" >&5
-echo "${ECHO_T}fcgi header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: fcgi header was not found" >&5
-echo "$as_me: error: fcgi header was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 
+		LIBS="$LIBS -lfcgi"
+		echo -n -e "#define FCGI_EXT\n\n" >> include/directives.runtime.h
 
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
 	else
@@ -5153,10 +5206,10 @@ fi
 		then
 			MOD_PCRE_DIR=/usr
 		fi
-		echo -n -e "#define PCRE_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_PCRE_DIR/lib"
-		{ echo "$as_me:$LINENO: checking for pcre_exec in -lpcre" >&5
+
+{ echo "$as_me:$LINENO: checking for pcre_exec in -lpcre" >&5
 echo $ECHO_N "checking for pcre_exec in -lpcre... $ECHO_C" >&6; }
 if test "${ac_cv_lib_pcre_pcre_exec+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -5218,15 +5271,14 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_pcre_pcre_exec" >&5
 echo "${ECHO_T}$ac_cv_lib_pcre_pcre_exec" >&6; }
 if test $ac_cv_lib_pcre_pcre_exec = yes; then
-  { echo "$as_me:$LINENO: result: pcre lib was found" >&5
-echo "${ECHO_T}pcre lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: pcre was not found" >&5
-echo "$as_me: error: pcre was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBPCRE 1
+_ACEOF
+
+  LIBS="-lpcre $LIBS"
+
 fi
 
-		LIBS="$LIBS -lpcre"
 		if test "${ac_cv_header_pcre_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for pcre.h" >&5
 echo $ECHO_N "checking for pcre.h... $ECHO_C" >&6; }
@@ -5357,16 +5409,10 @@ fi
 echo "${ECHO_T}$ac_cv_header_pcre_h" >&6; }
 
 fi
-if test $ac_cv_header_pcre_h = yes; then
-  { echo "$as_me:$LINENO: result: pcre header was found" >&5
-echo "${ECHO_T}pcre header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: pcre header was not found" >&5
-echo "$as_me: error: pcre header was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 
+		LIBS="$LIBS -lpcre"
+		echo -n -e "#define PCRE_EXT\n\n" >> include/directives.runtime.h
 
 		RESULT="$RESULT\nPCRE\t\t\t\t\t\tenabled"
 	else
@@ -5387,90 +5433,8 @@ fi
 		then
 			MOD_DL_DIR=/usr
 		fi
-		echo -n -e "#define DL_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_DL_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_DL_DIR/lib"
-                # Check whether --enable-dl-lib was given.
-if test "${enable_dl_lib+set}" = set; then
-  enableval=$enable_dl_lib; MOD_DL_LIB="$enableval"
-else
-  MOD_DL_LIB="no"
-fi
-
-                if test "$MOD_DL_LIB" = "yes"
-                then
-			{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
-echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
-if test "${ac_cv_lib_dl_dlopen+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-ldl  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char dlopen ();
-int
-main ()
-{
-return dlopen ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_dl_dlopen=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_dl_dlopen=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
-echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6; }
-if test $ac_cv_lib_dl_dlopen = yes; then
-  { echo "$as_me:$LINENO: result: dl lib was found" >&5
-echo "${ECHO_T}dl lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: dl was not found" >&5
-echo "$as_me: error: dl was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-			LIBS="$LIBS -ldl"
-		fi
 		if test "${ac_cv_header_dlfcn_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for dlfcn.h" >&5
 echo $ECHO_N "checking for dlfcn.h... $ECHO_C" >&6; }
@@ -5601,46 +5565,24 @@ fi
 echo "${ECHO_T}$ac_cv_header_dlfcn_h" >&6; }
 
 fi
-if test $ac_cv_header_dlfcn_h = yes; then
-  { echo "$as_me:$LINENO: result: dl header was found" >&5
-echo "${ECHO_T}dl header was found" >&6; }
+
+
+                # Check whether --enable-dl-lib was given.
+if test "${enable_dl_lib+set}" = set; then
+  enableval=$enable_dl_lib; MOD_DL_LIB="$enableval"
 else
-  { { echo "$as_me:$LINENO: error: dl header was not found" >&5
-echo "$as_me: error: dl header was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  MOD_DL_LIB="no"
 fi
 
-
-
-		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tdisabled"
-	fi
-
-
-# Check whether --with-libxml2 was given.
-if test "${with_libxml2+set}" = set; then
-  withval=$with_libxml2; MOD_LIBXML2_DIR="$withval"
-else
-  MOD_LIBXML2="no"
-fi
-
-	if test "$MOD_LIBXML2" != "no"
-	then
-		if test "$MOD_LIBXML2_DIR" = "yes"
-		then
-			MOD_LIBXML2_DIR=/usr
-		fi
-		echo -n -e "#define LIBXML2_EXT\n\n" >> include/directives.runtime.h
-		CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
-		LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib"
-		{ echo "$as_me:$LINENO: checking for xmlInitParser in -lxml2" >&5
-echo $ECHO_N "checking for xmlInitParser in -lxml2... $ECHO_C" >&6; }
-if test "${ac_cv_lib_xml2_xmlInitParser+set}" = set; then
+                if test "$MOD_DL_LIB" = "yes"
+                then
+			{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
+if test "${ac_cv_lib_dl_dlopen+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lxml2  $LIBS"
+LIBS="-ldl  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -5654,11 +5596,11 @@ cat >>conftest.$ac_ext <<_ACEOF
 #ifdef __cplusplus
 extern "C"
 #endif
-char xmlInitParser ();
+char dlopen ();
 int
 main ()
 {
-return xmlInitParser ();
+return dlopen ();
   ;
   return 0;
 }
@@ -5681,30 +5623,51 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
        $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_xml2_xmlInitParser=yes
+  ac_cv_lib_dl_dlopen=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_xml2_xmlInitParser=no
+	ac_cv_lib_dl_dlopen=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_xml2_xmlInitParser" >&5
-echo "${ECHO_T}$ac_cv_lib_xml2_xmlInitParser" >&6; }
-if test $ac_cv_lib_xml2_xmlInitParser = yes; then
-  { echo "$as_me:$LINENO: result: libxml2 lib was found" >&5
-echo "${ECHO_T}libxml2 lib was found" >&6; }
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
+echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6; }
+if test $ac_cv_lib_dl_dlopen = yes; then
+  RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tenabled"
 else
-  { { echo "$as_me:$LINENO: error: libxml2 was not found" >&5
-echo "$as_me: error: libxml2 was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tdisabled"
 fi
 
-		LIBS="$LIBS -lxml2"
+			LIBS="$LIBS -ldl"
+		fi
+		echo -n -e "#define DL_EXT\n\n" >> include/directives.runtime.h
+
+		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tdisabled"
+	fi
+
+
+# Check whether --with-libxml2 was given.
+if test "${with_libxml2+set}" = set; then
+  withval=$with_libxml2; MOD_LIBXML2_DIR="$withval"
+else
+  MOD_LIBXML2="no"
+fi
+
+	if test "$MOD_LIBXML2" != "no"
+	then
+		if test "$MOD_LIBXML2_DIR" = "yes"
+		then
+			MOD_LIBXML2_DIR=/usr
+		fi
+		CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
+		LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib"
 		if test "${ac_cv_header_libxml_xmlmemory_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for libxml/xmlmemory.h" >&5
 echo $ECHO_N "checking for libxml/xmlmemory.h... $ECHO_C" >&6; }
@@ -5835,16 +5798,81 @@ fi
 echo "${ECHO_T}$ac_cv_header_libxml_xmlmemory_h" >&6; }
 
 fi
-if test $ac_cv_header_libxml_xmlmemory_h = yes; then
-  { echo "$as_me:$LINENO: result: libxml2 header was found" >&5
-echo "${ECHO_T}libxml2 header was found" >&6; }
+
+
+
+{ echo "$as_me:$LINENO: checking for xmlInitParser in -lxml2" >&5
+echo $ECHO_N "checking for xmlInitParser in -lxml2... $ECHO_C" >&6; }
+if test "${ac_cv_lib_xml2_xmlInitParser+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
 else
-  { { echo "$as_me:$LINENO: error: libxml2 header was not found" >&5
-echo "$as_me: error: libxml2 header was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lxml2  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char xmlInitParser ();
+int
+main ()
+{
+return xmlInitParser ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_xml2_xmlInitParser=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_xml2_xmlInitParser=no
 fi
 
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_xml2_xmlInitParser" >&5
+echo "${ECHO_T}$ac_cv_lib_xml2_xmlInitParser" >&6; }
+if test $ac_cv_lib_xml2_xmlInitParser = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBXML2 1
+_ACEOF
 
+  LIBS="-lxml2 $LIBS"
+
+fi
+
+		LIBS="$LIBS -lxml2"
+		echo -n -e "#define LIBXML2_EXT\n\n" >> include/directives.runtime.h
 
 		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tenabled"
 	else
@@ -5865,7 +5893,6 @@ fi
 		then
 			MOD_PTHREAD_DIR=/usr
 		fi
-		echo -n -e "#define PTHREAD_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib"
 
@@ -5876,7 +5903,8 @@ else
   MOD_PTHREAD_LIB="pthread"
 fi
 
-		as_ac_Lib=`echo "ac_cv_lib_$MOD_PTHREAD_LIB''_pthread_create" | $as_tr_sh`
+
+as_ac_Lib=`echo "ac_cv_lib_$MOD_PTHREAD_LIB''_pthread_create" | $as_tr_sh`
 { echo "$as_me:$LINENO: checking for pthread_create in -l$MOD_PTHREAD_LIB" >&5
 echo $ECHO_N "checking for pthread_create in -l$MOD_PTHREAD_LIB... $ECHO_C" >&6; }
 if { as_var=$as_ac_Lib; eval "test \"\${$as_var+set}\" = set"; }; then
@@ -5940,15 +5968,14 @@ ac_res=`eval echo '${'$as_ac_Lib'}'`
 	       { echo "$as_me:$LINENO: result: $ac_res" >&5
 echo "${ECHO_T}$ac_res" >&6; }
 if test `eval echo '${'$as_ac_Lib'}'` = yes; then
-  { echo "$as_me:$LINENO: result: pthread lib was found" >&5
-echo "${ECHO_T}pthread lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: pthread lib was not found" >&5
-echo "$as_me: error: pthread lib was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_LIB$MOD_PTHREAD_LIB" | $as_tr_cpp` 1
+_ACEOF
+
+  LIBS="-l$MOD_PTHREAD_LIB $LIBS"
+
 fi
 
-		LIBS="$LIBS -l$MOD_PTHREAD_LIB"
 		if test "${ac_cv_header_pthread_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for pthread.h" >&5
 echo $ECHO_N "checking for pthread.h... $ECHO_C" >&6; }
@@ -6079,16 +6106,10 @@ fi
 echo "${ECHO_T}$ac_cv_header_pthread_h" >&6; }
 
 fi
-if test $ac_cv_header_pthread_h = yes; then
-  { echo "$as_me:$LINENO: result: pthread header was found" >&5
-echo "${ECHO_T}pthread header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: pthread header was not found" >&5
-echo "$as_me: error: pthread header was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 
+		LIBS="$LIBS -l$MOD_PTHREAD_LIB"
+		echo -n -e "#define PTHREAD_EXT\n\n" >> include/directives.runtime.h
 
 		RESULT="$RESULT\npthread\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
 	else
@@ -6109,10 +6130,10 @@ fi
 		then
 			MOD_BZIP2_DIR=/usr
 		fi
-		echo -n -e "#define BZIP2_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_BZIP2_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib"
-		{ echo "$as_me:$LINENO: checking for BZ2_bzBuffToBuffCompress in -lbz2" >&5
+
+{ echo "$as_me:$LINENO: checking for BZ2_bzBuffToBuffCompress in -lbz2" >&5
 echo $ECHO_N "checking for BZ2_bzBuffToBuffCompress in -lbz2... $ECHO_C" >&6; }
 if test "${ac_cv_lib_bz2_BZ2_bzBuffToBuffCompress+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -6174,15 +6195,14 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_bz2_BZ2_bzBuffToBuffCompress" >&5
 echo "${ECHO_T}$ac_cv_lib_bz2_BZ2_bzBuffToBuffCompress" >&6; }
 if test $ac_cv_lib_bz2_BZ2_bzBuffToBuffCompress = yes; then
-  { echo "$as_me:$LINENO: result: bzip2 lib was found" >&5
-echo "${ECHO_T}bzip2 lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: bzip2 was not found" >&5
-echo "$as_me: error: bzip2 was not found" >&2;}
-   { (exit 1); exit 1; }; }
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBBZ2 1
+_ACEOF
+
+  LIBS="-lbz2 $LIBS"
+
 fi
 
-		LIBS="$LIBS -lbz2"
 		if test "${ac_cv_header_bzlib_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for bzlib.h" >&5
 echo $ECHO_N "checking for bzlib.h... $ECHO_C" >&6; }
@@ -6313,16 +6333,10 @@ fi
 echo "${ECHO_T}$ac_cv_header_bzlib_h" >&6; }
 
 fi
-if test $ac_cv_header_bzlib_h = yes; then
-  { echo "$as_me:$LINENO: result: bzip2 header was found" >&5
-echo "${ECHO_T}bzip2 header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: bzip2 header was not found" >&5
-echo "$as_me: error: bzip2 header was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 
+		LIBS="$LIBS -lbz2"
+		echo -n -e "#define BZIP2_EXT\n\n" >> include/directives.runtime.h
 
 		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tenabled"
 	else
@@ -6343,88 +6357,8 @@ fi
 		then
 			MOD_ZLIB_DIR=/usr
 		fi
-		echo -n -e "#define ZLIB_EXT\n\n" >> include/directives.runtime.h
 		CPPFLAGS="$CPPFLAGS -I$MOD_ZLIB_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_ZLIB_DIR/lib"
-		# Check whether --enable-zlib-lib was given.
-if test "${enable_zlib_lib+set}" = set; then
-  enableval=$enable_zlib_lib; MOD_ZLIB_LIB="yes"
-fi
-
-	        if test "$MOD_ZLIB_LIB" = "yes"
-		then
-			{ echo "$as_me:$LINENO: checking for deflateInit2 in -lz" >&5
-echo $ECHO_N "checking for deflateInit2 in -lz... $ECHO_C" >&6; }
-if test "${ac_cv_lib_z_deflateInit2+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lz  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char deflateInit2 ();
-int
-main ()
-{
-return deflateInit2 ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_z_deflateInit2=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_z_deflateInit2=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_z_deflateInit2" >&5
-echo "${ECHO_T}$ac_cv_lib_z_deflateInit2" >&6; }
-if test $ac_cv_lib_z_deflateInit2 = yes; then
-  { echo "$as_me:$LINENO: result: zlib lib was found" >&5
-echo "${ECHO_T}zlib lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: zlib was not found" >&5
-echo "$as_me: error: zlib was not found" >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
-			LIBS="$LIBS -lz"
-		fi
 		if test "${ac_cv_header_zlib_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for zlib.h" >&5
 echo $ECHO_N "checking for zlib.h... $ECHO_C" >&6; }
@@ -6555,53 +6489,23 @@ fi
 echo "${ECHO_T}$ac_cv_header_zlib_h" >&6; }
 
 fi
-if test $ac_cv_header_zlib_h = yes; then
-  { echo "$as_me:$LINENO: result: zlib header was found" >&5
-echo "${ECHO_T}zlib header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: zlib header was not found" >&5
-echo "$as_me: error: zlib header was not found" >&2;}
-   { (exit 1); exit 1; }; }
+
+
+		# Check whether --enable-zlib-lib was given.
+if test "${enable_zlib_lib+set}" = set; then
+  enableval=$enable_zlib_lib; MOD_ZLIB_LIB="yes"
 fi
 
-
-
-		RESULT="$RESULT\nZLIB\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nZLIB\t\t\t\t\t\tdisabled"
-	fi
-
-
-# Check whether --with-iconv was given.
-if test "${with_iconv+set}" = set; then
-  withval=$with_iconv; MOD_ICONV_DIR="$withval"
-else
-  MOD_ICONV="no"
-fi
-
-	if test "$MOD_ICONV" != "no"
-	then
-		if test "$MOD_ICONV_DIR" = "yes"
+	        if test "$MOD_ZLIB_LIB" = "yes"
 		then
-			MOD_ICONV_DIR=/usr
-		fi
-		echo -n -e "#define ICONV_EXT\n\n" >> include/directives.runtime.h
-		CPPFLAGS="$CPPFLAGS -I$MOD_ICONV_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_ICONV_DIR/lib"
-		# Check whether --enable-iconv-lib was given.
-if test "${enable_iconv_lib+set}" = set; then
-  enableval=$enable_iconv_lib; MOD_ICONV_LIB="yes"
-fi
 
-	        if test "$MOD_ICONV_LIB" = "yes"
-		then
-			{ echo "$as_me:$LINENO: checking for iconv in -liconv" >&5
-echo $ECHO_N "checking for iconv in -liconv... $ECHO_C" >&6; }
-if test "${ac_cv_lib_iconv_iconv+set}" = set; then
+{ echo "$as_me:$LINENO: checking for deflateInit2 in -lz" >&5
+echo $ECHO_N "checking for deflateInit2 in -lz... $ECHO_C" >&6; }
+if test "${ac_cv_lib_z_deflateInit2+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-liconv  $LIBS"
+LIBS="-lz  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -6615,11 +6519,11 @@ cat >>conftest.$ac_ext <<_ACEOF
 #ifdef __cplusplus
 extern "C"
 #endif
-char iconv ();
+char deflateInit2 ();
 int
 main ()
 {
-return iconv ();
+return deflateInit2 ();
   ;
   return 0;
 }
@@ -6642,31 +6546,54 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
        $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_iconv_iconv=yes
+  ac_cv_lib_z_deflateInit2=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_iconv_iconv=no
+	ac_cv_lib_z_deflateInit2=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_iconv_iconv" >&5
-echo "${ECHO_T}$ac_cv_lib_iconv_iconv" >&6; }
-if test $ac_cv_lib_iconv_iconv = yes; then
-  { echo "$as_me:$LINENO: result: iconv lib was found" >&5
-echo "${ECHO_T}iconv lib was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: iconv was not found" >&5
-echo "$as_me: error: iconv was not found" >&2;}
-   { (exit 1); exit 1; }; }
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_z_deflateInit2" >&5
+echo "${ECHO_T}$ac_cv_lib_z_deflateInit2" >&6; }
+if test $ac_cv_lib_z_deflateInit2 = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBZ 1
+_ACEOF
+
+  LIBS="-lz $LIBS"
+
 fi
 
-			LIBS="$LIBS -liconv"
+			LIBS="$LIBS -lz"
 		fi
+		echo -n -e "#define ZLIB_EXT\n\n" >> include/directives.runtime.h
+
+		RESULT="$RESULT\nZLIB\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nZLIB\t\t\t\t\t\tdisabled"
+	fi
+
+
+# Check whether --with-iconv was given.
+if test "${with_iconv+set}" = set; then
+  withval=$with_iconv; MOD_ICONV_DIR="$withval"
+else
+  MOD_ICONV="no"
+fi
+
+	if test "$MOD_ICONV" != "no"
+	then
+		if test "$MOD_ICONV_DIR" = "yes"
+		then
+			MOD_ICONV_DIR=/usr
+		fi
+		CPPFLAGS="$CPPFLAGS -I$MOD_ICONV_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_ICONV_DIR/lib"
 		if test "${ac_cv_header_iconv_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for iconv.h" >&5
 echo $ECHO_N "checking for iconv.h... $ECHO_C" >&6; }
@@ -6797,16 +6724,89 @@ fi
 echo "${ECHO_T}$ac_cv_header_iconv_h" >&6; }
 
 fi
-if test $ac_cv_header_iconv_h = yes; then
-  { echo "$as_me:$LINENO: result: iconv header was found" >&5
-echo "${ECHO_T}iconv header was found" >&6; }
-else
-  { { echo "$as_me:$LINENO: error: iconv header was not found" >&5
-echo "$as_me: error: iconv header was not found" >&2;}
-   { (exit 1); exit 1; }; }
+
+
+		# Check whether --enable-iconv-lib was given.
+if test "${enable_iconv_lib+set}" = set; then
+  enableval=$enable_iconv_lib; MOD_ICONV_LIB="yes"
 fi
 
+	        if test "$MOD_ICONV_LIB" = "yes"
+		then
 
+{ echo "$as_me:$LINENO: checking for iconv in -liconv" >&5
+echo $ECHO_N "checking for iconv in -liconv... $ECHO_C" >&6; }
+if test "${ac_cv_lib_iconv_iconv+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-liconv  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char iconv ();
+int
+main ()
+{
+return iconv ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_iconv_iconv=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_iconv_iconv=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_iconv_iconv" >&5
+echo "${ECHO_T}$ac_cv_lib_iconv_iconv" >&6; }
+if test $ac_cv_lib_iconv_iconv = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBICONV 1
+_ACEOF
+
+  LIBS="-liconv $LIBS"
+
+fi
+
+			LIBS="$LIBS -liconv"
+		fi
+		echo -n -e "#define ICONV_EXT\n\n" >> include/directives.runtime.h
 
 		RESULT="$RESULT\niconv\t\t\t\t\t\tenabled"
 	else
