@@ -573,7 +573,8 @@
 	systemThreads::sweepTrash()
 	{
 		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
-		for (;i!=j;)
+		int o = 0, p = threads.size();
+		for (;o<p;++p)
 		{
 			if (_isRunning(i))
 			{
