@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 	cout << systemTools::getWorkingDir() << endl;
 	
 	{
-		std::vector<__userInfo> info;
+		dodoArray<__userInfo> info;
 		systemTools::getUsers(info);
 		
 		for (int i(0);i<info.size();i++)
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 	cout << endl << endl;
 	
 	{	
-		std::vector<__groupInfo> info;
+		dodoArray<__groupInfo> info;
 		systemTools::getGroups(info);
 		
 		for (int i(0);i<info.size();i++)

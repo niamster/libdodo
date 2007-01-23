@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 			arr["date"] = "2005-07-08";
 			arr["operation"] = "mu";
 			
-			vector<string> select;
+			dodoArray<string> select;
 			select.push_back("date");
 			select.push_back("operation");
 			
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 			
 			__dbStorage store = pp.fetch();
 			
-			std::vector<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
+			dodoArray<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
 			
 			dodoStringArr::iterator m, n;
 			

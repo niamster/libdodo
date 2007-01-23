@@ -24,11 +24,8 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
-#include <string>
 #include <vector>
-#include <map>
 #include <list>
-#include <iostream>
 #include <deque>
 
 #include <errno.h>

@@ -34,6 +34,7 @@
 #include <types.h>
 #include <dodoMap.h>
 #include <cgiFast.h>
+#include <flushSTD.h>
 
 namespace dodo
 {
@@ -324,7 +325,9 @@ namespace dodo
 				
 				cgiFastSTD *cf;///< pointer to cgiFast class
 				
-			#endif 
+			#endif
+
+			flushSTD *fstd;
 	};
 
 };

@@ -32,10 +32,15 @@ systemThreadShares::systemThreadShares(systemThreadShares &sts)
 
 //-------------------------------------------------------------------
 
-systemThreadShares::systemThreadShares() : sharedNum(0)
+systemThreadShares::systemThreadShares() : data(NULL)
 {
+	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+
+	pthread_mutex_init(&mutex,&attr);
+
+	pthread_mutexattr_destroy(&attr);
 	
 	timeout.tv_nsec = 1000;
 	timeout.tv_sec = 0;	
@@ -45,53 +50,39 @@ systemThreadShares::systemThreadShares() : sharedNum(0)
 
 systemThreadShares::~systemThreadShares()
 {
-	std::list<__shareInfo>::iterator l(shareds.begin()), m(shareds.end());
-	
-	for (;l!=m;++l)
-		pthread_mutex_destroy(&(l->mutex));
-		
-	pthread_mutexattr_destroy(&attr);	
+	pthread_mutex_destroy(&mutex);		
 }
 
 //-------------------------------------------------------------------
 
-bool 
-systemThreadShares::getShared(int position)
+#ifndef NO_EX
+	void
+#else
+	bool
+#endif 
+systemThreadShares::set(void *a_data)
 {
-	std::list<__shareInfo>::iterator l(shareds.begin()), m(shareds.end());
-	
-	for (;l!=m;++l)
-		if (l->position == position)
-		{
-			n = l;
-			return true;
-		}
-	
-	return false;	
-}
-
-//-------------------------------------------------------------------
-
-int 
-systemThreadShares::add(void *data)
-{
-	__shareInfo shared;
-	
-	shared.data = data;
-	shared.position = ++sharedNum;
-	shared.isLocked = false;
-	
-	errno = pthread_mutex_init(&(shared.mutex),&attr);
+	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_ADD,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_SET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
-			return -1;
+			return false;
 		#endif
-				
-	shareds.push_back(shared);
 	
-	return shared.position;
+	data = a_data;
+	
+	errno = pthread_mutex_unlock(&mutex);
+	if (errno != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_SET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -101,121 +92,85 @@ systemThreadShares::add(void *data)
 #else
 	bool
 #endif
-systemThreadShares::del(int position,
-						bool force)
+systemThreadShares::del()
 {
-	if (getShared(position))
-	{
-		if (n->isLocked)
-		{
-			if (!force)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_ISALREADYLOCKED,SYSTEMTHREADSHARES_ISALREADYLOCKED_STR,__LINE__,__FILE__);
-				#else
-					return false;
-				#endif
-			else
-			{
-				errno = pthread_mutex_unlock(&(n->mutex));
-				if (errno != 0)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						return false;
-					#endif
-				
-				n->isLocked = false;
-			}
-		}
-		
-		errno = pthread_mutex_destroy(&(n->mutex));
-		if (errno != 0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;
-			#endif
-								
-		shareds.erase(n);
-		
-		#ifdef NO_EX
-			return true;
-		#endif
-	}
-	else
+	errno = pthread_mutex_lock(&mutex);
+	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
+
+	data = NULL;
+
+	errno = pthread_mutex_unlock(&mutex);
+	if (errno != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 
 //-------------------------------------------------------------------
 
 void *						 
-systemThreadShares::lock(int position,
-						unsigned long microseconds)
+systemThreadShares::lock(unsigned long microseconds)
 {
-	if (getShared(position))
+	if (microseconds == 0)
 	{
-		if (microseconds == 0)
-		{
-			errno = pthread_mutex_lock(&(n->mutex));
-			if (errno != 0)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return NULL;
-				#endif
-		}
-		else
-		{
-			register bool locked = true;
-			register unsigned long slept = 0;
-			
-			while (locked)
-			{
-				errno = pthread_mutex_trylock(&(n->mutex));
-				if (errno != 0)
-				{
-					if (errno != EBUSY)
-						#ifndef NO_EX
-							throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-						#else
-							return NULL;
-						#endif
-											
-					if (nanosleep(&timeout, NULL) == -1)
-						#ifndef NO_EX
-							throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-						#else
-							return NULL;
-						#endif
-					
-					slept += 1;
-					
-					if (slept > microseconds)
-						#ifndef NO_EX
-							throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,SYSTEMTHREADSHARES_CANNOTLOCK,SYSTEMTHREADSHARES_CANNOTLOCK_STR,__LINE__,__FILE__);
-						#else
-							return NULL;
-						#endif
-				}
-				else
-					locked = false;
-			}	
-		}
-		
-		n->isLocked = true;
-		
-		return n->data;
+		errno = pthread_mutex_lock(&mutex);
+		if (errno != 0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return NULL;
+			#endif
 	}
 	else
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
-		#else
-			return NULL;
-		#endif	
+	{
+		register bool locked = true;
+		register unsigned long slept = 0;
+		
+		while (locked)
+		{
+			errno = pthread_mutex_trylock(&mutex);
+			if (errno != 0)
+			{
+				if (errno != EBUSY)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return NULL;
+					#endif
+										
+				if (nanosleep(&timeout, NULL) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return NULL;
+					#endif
+				
+				slept += 1;
+				
+				if (slept > microseconds)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,SYSTEMTHREADSHARES_CANNOTLOCK,SYSTEMTHREADSHARES_CANNOTLOCK_STR,__LINE__,__FILE__);
+					#else
+						return NULL;
+					#endif
+			}
+			else
+				locked = false;
+		}	
+	}
+	
+	return data;
 }
 							
 //-------------------------------------------------------------------
@@ -225,33 +180,19 @@ systemThreadShares::lock(int position,
 #else
 	bool 
 #endif						 
-systemThreadShares::unlock(int position)
-{	
-	if (getShared(position))
-	{
-		if (n->isLocked)
-		{
-			errno = pthread_mutex_unlock(&(n->mutex));
-			if (errno != 0)
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-				#else
-					return false;
-				#endif
-									
-			n->isLocked = false;
-		}
-		
-		#ifdef NO_EX
-			return true;
-		#endif
-	}
-	else
+systemThreadShares::unlock()
+{
+	errno = pthread_mutex_unlock(&mutex);
+	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_UNLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
-		#endif	
+		#endif
+			
+	#ifdef NO_EX
+		return true;
+	#endif
 }
 							
 //-------------------------------------------------------------------

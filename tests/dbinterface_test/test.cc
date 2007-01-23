@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 		arr["operation"] = "mu";
 		arr["d"] = "1";
 		
-		vector<string> select;
+		dodoArray<string> select;
 		select.push_back("date");
 		select.push_back("operation");
 		select.push_back("b");
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 		
 		cout << store.rows.size() << endl;
 		
-		std::vector<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
+		dodoArray<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
 		
 		dodoStringArr::iterator m, n;
 		

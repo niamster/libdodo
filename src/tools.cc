@@ -285,7 +285,7 @@ tools::implode(const dodoStringArr &fields,
 	register int k(0);
 	
 	dodoString temp, fs(frame + separator);
-	dodoStringArr::const_iterator i(fields.begin()), j(--fields.end());
+	dodoStringArr::const_iterator i(fields.begin()), j(fields.end()-1);
 	
 	for (;i!=j;++i)
 	{
@@ -333,7 +333,7 @@ tools::implode(const dodoStringArr &fields,
 	register int k(0);	
 	
 	dodoString temp;
-	dodoStringArr::const_iterator i(fields.begin()), j(--fields.end());
+	dodoStringArr::const_iterator i(fields.begin()), j(fields.end()-1);
 	
 	for (;i!=j;++i)
 	{

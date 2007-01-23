@@ -107,7 +107,7 @@ int main(int argc, char **argv)
 			pp.exec();
 			
 			
-			std::vector<std::string> fields;
+			dodoStringArr fields;
 			
 			fields.push_back("dote");
 			fields.push_back("operation");
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 			pp.limit(10);
 			pp.exec();
 			
-			std::vector<std::string> values;
+			dodoStringArr values;
 			values.push_back("20\"05`''-'07-08");
 			values.push_back("mu");
 	
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 			arr["dote"] = "20\"05`''-'07-08";
 			arr["operation"] = "m\nu";
 			
-			std::vector<dodoAssocArr> assA;
+			dodoArray<dodoAssocArr> assA;
 	
 	///
 	        FILE *file = fopen("/bin/ls","r");
@@ -176,12 +176,12 @@ int main(int argc, char **argv)
 			pp.select("tab",fields,"id>1");
 	
 			/* creatin' union with sqlStatement that compiles from  'pp.select("log",fields,"id>1");'*/
-			std::vector<std::string> uni;
+			dodoStringArr uni;
 			uni.push_back(pp.queryCollect());
 			uni.push_back(pp.queryCollect());
 			pp.subquery(uni);
 			
-			std::vector<std::string> uni_all;
+			dodoStringArr uni_all;
 			uni_all.push_back(pp.queryCollect());
 			uni_all.push_back(pp.queryCollect());
 			pp.subquery(uni_all,DBREQUEST_UNION_ALL);

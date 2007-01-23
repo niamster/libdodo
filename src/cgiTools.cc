@@ -65,6 +65,8 @@ cgiTools::cgiTools(bool silent,
 									#endif	
 				
 {		
+	fstd = new flushSTD;
+
 	initHeaders(a_headers);
 	
 	if (!silent)
@@ -111,6 +113,9 @@ cgiTools::cgiTools(bool silent,
 cgiTools::~cgiTools()
 {
 	cleanTmp();
+	
+	if (!cgiFastSet)
+		delete fstd;
 }
 
 //-------------------------------------------------------------------
@@ -223,7 +228,7 @@ cgiTools::printHeaders() const
 				cf->print(i->first + ": " + i->second + "\r\n");
 			else
 		#endif		
-				std::cout << i->first << ": " << i->second << "\r\n";
+				fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
 		
 	if (cookiesSet.size() > 0)
 	{
@@ -247,16 +252,16 @@ cgiTools::printHeaders() const
 				else
 			#endif	
 				{	
-					std::cout << "Set-Cookie: ";
-					std::cout << i->name << "=" << i->value << "; ";
+					fstd->writeStreamString("Set-Cookie: ");
+					fstd->writeStreamString(i->name + "=" + i->value + "; ");
 					if (i->path.size() > 0)	
-						std::cout << "path=" << i->path << "; ";
+						fstd->writeStreamString("path=" + i->path + "; ");
 					if (i->exDate.size() > 0)	
-						std::cout << "expires=" << i->exDate << "; ";
+						fstd->writeStreamString("expires=" + i->exDate + "; ");
 					if (i->domain.size() > 0)
-						std::cout << "domain=" << i->domain << "; ";
+						fstd->writeStreamString("domain=" + i->domain + "; ");
 					if (i->secure)
-						std::cout << "secure";
+						fstd->writeStreamString("secure");
 				}
 		}
 	}
@@ -270,8 +275,8 @@ cgiTools::printHeaders() const
 		else
 	#endif		
 		{
-			std::cout << "\r\n\r\n";
-			std::cout.flush();
+			fstd->writeStreamString("\r\n\r\n");
+			fstd->flush();
 		}
 }
 

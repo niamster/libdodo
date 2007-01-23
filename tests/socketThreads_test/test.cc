@@ -9,7 +9,6 @@ using namespace dodo;
 using namespace std;
 
 systemThreadShares sh;
-#define EXIT_POS 1
 
 void *
 process(void *data)
@@ -46,9 +45,9 @@ process(void *data)
 		if (rec.compare("exit")==0)
 		{
 			bool *exit_st;
-			exit_st = (bool *)sh.lock(EXIT_POS);
+			exit_st = (bool *)sh.lock();
 			*exit_st = true;
-			sh.unlock(EXIT_POS);
+			sh.unlock();
 		}
 	}
 	catch (baseEx ex)
@@ -90,7 +89,7 @@ int main(int argc, char **argv)
 		systemThreads th;
 		std::vector<int> positions;
 		
-		sh.add((void *)&exit_st);
+		sh.set((void *)&exit_st);
 		
 		while(!exit_st)
 		{

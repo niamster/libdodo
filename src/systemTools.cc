@@ -736,7 +736,9 @@ void
 systemTools::die(const dodoString &message, 
 				int status)
 {
-	std::cerr << message << std::endl;
+	fwrite(message.c_str(),message.size(),1,stderr);
+	fflush(stderr);
+
 	_exit(status);
 }
 
@@ -1045,15 +1047,8 @@ systemTools::setMicroTimer(unsigned long timeout,
 	itimerval value;
 	value.it_interval.tv_sec = tSec;
 	value.it_interval.tv_usec = tMicrosec;
-	value.it_value.tv_sec = 0;
-	value.it_value.tv_usec = 0;  
-	
-	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETMICROTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif		
+	value.it_value.tv_sec = tSec;
+	value.it_value.tv_usec = tMicrosec;  
 	
 	if (sigaction(SIGALRM,&act,NULL) == -1)
 		#ifndef NO_EX
@@ -1061,6 +1056,13 @@ systemTools::setMicroTimer(unsigned long timeout,
 		#else
 			return false;
 		#endif	
+
+	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETMICROTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
 		
 	#ifdef NO_EX
 		return true;
@@ -1112,15 +1114,8 @@ systemTools::setTimer(long timeout,
 	itimerval value;
 	value.it_interval.tv_sec = timeout;
 	value.it_interval.tv_usec = 0;
-	value.it_value.tv_sec = 0;
+	value.it_value.tv_sec = timeout;
 	value.it_value.tv_usec = 0;  
-	
-	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif		
 	
 	if (sigaction(SIGALRM,&act,NULL) == -1)
 		#ifndef NO_EX
@@ -1128,7 +1123,14 @@ systemTools::setTimer(long timeout,
 		#else
 			return false;
 		#endif	
-		
+
+	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_SETTIMER,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif		
+			
 	#ifdef NO_EX
 		return true;
 	#endif	

@@ -132,7 +132,7 @@ regexpTools::boundMatch(const dodoString &sample)
 		register int subs = code.re_nsub+1;
 		regmatch_t *pmatch = new regmatch_t[subs];
 				
-		res = regexec(&code,sample.c_str(),subs,pmatch,0);
+		int res = regexec(&code,sample.c_str(),subs,pmatch,0);
 		if (res != 0)
 		{
 			delete [] pmatch;

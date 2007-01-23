@@ -33,8 +33,6 @@
 	#include <dlfcn.h>
 
 #endif	
-	
-#include <string>
 
 #ifndef NO_EX
 

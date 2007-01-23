@@ -24,10 +24,9 @@
 #ifndef _DBSQLBASEEX_H_
 #define _DBSQLBASEEX_H_
 
-#include <vector>
-#include <string>
-
 #include <directives.h>
+
+#include <types.h>
 
 #include <baseEx.h>
 

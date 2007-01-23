@@ -35,18 +35,6 @@
 
 namespace dodo
 {
-
-	/**
-	 * @struct __sharedInfo dewscribes shared info that can be locked
-	 */
-	struct __shareInfo
-	{
-		void *data;///< data that will be shared
-		int position;///< position in queue
-		pthread_mutex_t mutex;///< lock
-		bool isLocked;///< whether share is locked
-	};
-
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
@@ -74,63 +62,50 @@ namespace dodo
 
 			/**
 			 * adds data to became a shared
-			 * @return position of shared in queue
 			 * @paraqm data describes data to be shared
 			 */
-			virtual int add(void *data);
+			#ifndef NO_EX
+				virtual void
+			#else
+				virtual bool
+			#endif
+                            set(void *data);
 			
 			/**
-			 * removes registered shared[do not deletes data]
-			 * @param position indicates on shared to remove
-			 * @param force if is set to true remove if this shared is locked
-			 * @note - exception if it's currently locked
+			 * sets shared data to NULL
 			 */
 			#ifndef NO_EX
 				virtual void
 			#else
 				virtual bool 
 			#endif						 
-							del(int position, bool force=false);
+							del();
 			
 			/**
 			 * lock and return shared data [if locked and force==false, wait until unlocked]
-			 * @param position indicates on shared to return
 			 * @param data points on shared data or NULL in error case
 			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
 			 * @note if microseconds==0 - infinite sleep
 			 */
-			virtual void *lock(int position, unsigned long microseconds=0);
+			virtual void *lock(unsigned long microseconds=0);
 							
 			
 			/**
-			 * lock and return shared data [if locked and force==false, wait until unlocked]
-			 * @param position indicates on shared to return
+			 * lock and return shared data
 			 */
 			#ifndef NO_EX
 				virtual void
 			#else
 				virtual bool 
 			#endif						 
-							unlock(int position);			
+							unlock();			
 			
 		protected:
-
-			/**
-			 * searches shared resources by position
-			 * @return true if found
-			 * @param position describes position of wanted shared
-			 * @param iter is iterator that points on found shared
-			 */
-			virtual bool getShared(int position);
 			
-			std::list<__shareInfo> shareds;///< vector of shareads
-			
-			int sharedNum;///< number of registered shareads
+    		void *data;///< data that will be shared
+    		pthread_mutex_t mutex;///< lock
 						
-			pthread_mutexattr_t attr;///attribute for mutex
-			timespec timeout;///timeout to lock mutex
-						
-			std::list<__shareInfo>::iterator n;///< iterator for list of shared data[for matched]
+			timespec timeout;///timeout to lock mutex check
 	};
 
 };

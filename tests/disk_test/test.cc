@@ -76,12 +76,12 @@ int main(int argc, char **argv)
 		cout << endl; 
 
 
-		std::vector<__fileInfo> dir = flushDiskTools::getDirInfo("/");
+		dodoArray<__fileInfo> dir = flushDiskTools::getDirInfo("/");
 		
 		if (dir.size() > 0)
 		{
 			cout << endl << dir.size() << endl;
-			for (std::vector<__fileInfo>::iterator i=dir.begin();i!=dir.end();++i)
+			for (dodoArray<__fileInfo>::iterator i=dir.begin();i!=dir.end();++i)
 				cout << i->size << "!" << i->name << endl; 
 		}
 	}

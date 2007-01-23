@@ -46,7 +46,7 @@ using namespace std;
 			arr1["three"] = "three";
 			cgip.assign("arr1",arr1);
 			
-			std::vector<dodoAssocArr> arr2;
+			dodoArray<dodoAssocArr> arr2;
 			arr2.push_back(arr1);
 			arr1["one"] = "three";
 			arr2.push_back(arr1);

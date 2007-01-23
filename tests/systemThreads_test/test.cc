@@ -9,33 +9,26 @@ using namespace dodo;
 using namespace std;
 
 systemThreadShares sh;
-int shPos = 0;
 
 void *
 thread(void *data)
 {
 	try
 	{
-		cout << endl << endl << (char *)data << timeTools::now() << endl;
+		cout << endl << (char *)data << ": " << timeTools::now() << endl;
 		cout.flush();
 		
-		int *timeout = (int *)sh.lock(shPos,100);
-		cout << "==" << *timeout << endl;
-		cout.flush();
-		systemTools::sleep(*timeout);
-		sh.unlock(shPos);
+		int timeout = *(int *)sh.lock();
+		systemTools::sleep(timeout);
+		sh.unlock();
 		
-		cout << endl << endl << (char *)data << timeTools::now() << endl;
+		cout << endl << (char *)data << ": " << timeTools::now() << endl;
 		cout.flush();
 	}
 	catch(baseEx ex)
 	{
 		cout << ex << ex.line << endl;
 	}	
-	//cout.flush();
-	//long i = -1000000000;
-	//while (i<1000000000){i++;}
-	//cout << endl << timeTools::now() << endl;
 	
 	return NULL;
 }
@@ -44,17 +37,24 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		int *shared = new int(10);
+		int *shared = new int(1);
 		
-		shPos = sh.add((void *)shared);
+		sh.set((void *)shared);
 		
 		systemThreads th;
-		int pos[2];
-		pos[0] = th.add(thread,(void *)"HIHI");
-		pos[1] = th.add(thread,(void *)"HOHO");
+
+		const int amount = 10;
+
+		int pos[amount];
+		std::string ids[amount];
+		for (int i=0;i<amount;++i)
+		{
+			ids[i] = tools::lToString(i);
+			pos[i] = th.add(thread,(void *)ids[i].c_str());
+		}
 		
-		th.run(pos[0]);
-		th.run(pos[1]);
+		for (int i=0;i<amount;++i)
+			th.run(pos[i]);
 		
 		cout << endl << endl << "STARTED" << endl;
 		cout << timeTools::now() << endl;
