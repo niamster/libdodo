@@ -1,5 +1,7 @@
 #include <baseEx.h>
 #include <dbMysql.h>
+#include <timeTools.h>
+#include <iostream>
 
 using namespace dodo;
 using namespace std;
@@ -47,7 +49,9 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	
+
+	long now = timeTools::now();
+
 	#ifdef MYSQL_EXT
 
 		dbMysql pp;
@@ -166,7 +170,7 @@ int main(int argc, char **argv)
 			cout << pp.queryCollect() << endl;
 			pp.exec();
 			
-			for (int o=0;o<1000000;o++)
+			for (int o=0;o<10000;o++)
 			{
 				pp.insert("tab",values,fields);
 				//cout << pp.queryCollect() << endl;//show query
@@ -205,6 +209,10 @@ int main(int argc, char **argv)
     	cout << "No MySQL extension was compiled!";
     	
     #endif
+
+    	now = timeTools::now() - now;
+
+	cout << "SpentTime: " << now;
     
 	return 0;
 }

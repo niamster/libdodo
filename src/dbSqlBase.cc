@@ -56,6 +56,7 @@ const unsigned int dbSqlBase::addSelEnumArr[] =
 
 const __statements dbSqlBase::sqlQStArr[] = 
 {
+	{""},
 	{" union "},
 	{" union all "},
 	{" minus "},
@@ -1010,3 +1011,4 @@ dbSqlBase::stringReference(int type)
 }
 
 //-------------------------------------------------------------------
+

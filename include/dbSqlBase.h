@@ -246,7 +246,7 @@ namespace dodo
 			dodoString longblob;///< bytea for postgres, blob for others 
 		
 			dodoMap<dodoStringArr> framingFields;///< hash of 'db:table' => `array of fields to frame`
-		
+
 		private:
 			
 			static const __statements sqlAddSelArr[3];///< `select` additional statement
@@ -256,7 +256,7 @@ namespace dodo
 			
 			static const __statements sqlAddArr[7];///< additional sql statements for queries(where, limit, ...)
 			
-			static const __statements sqlQStArr[4];///< sql statements for complex queries(union, ...)
+			static const __statements sqlQStArr[5];///< sql statements for complex queries(union, ...)
 			
 			static const unsigned int addSelEnumArr[2];///< array of positions in sqlAddSelArr `select` additional statement
 			static const unsigned int addDelEnumArr[1];///< array of positions in sqlAddDelArr `delete` additional statement

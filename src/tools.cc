@@ -301,6 +301,7 @@ tools::implode(const dodoStringArr &fields,
 	
 	return temp;
 }
+
 //-------------------------------------------------------------------
 
 dodoString
