@@ -49,7 +49,6 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-
 	long now = timeTools::now();
 
 	#ifdef MYSQL_EXT
@@ -62,7 +61,7 @@ int main(int argc, char **argv)
 			//pp.addPostExec(&journal,(void *)"journal");
 			//pp.delPreExec(pos);//removes hook!!
 			
-			pp.setDbInfo("test","",3306,"","Dmitrik");
+			pp.setDbInfo("test","",3306,"root","Dmitrik");
 			pp.connect();
 	
 			__tableInfo ti;
@@ -170,7 +169,7 @@ int main(int argc, char **argv)
 			cout << pp.queryCollect() << endl;
 			pp.exec();
 			
-			for (int o=0;o<10000;o++)
+			for (int o=0;o<100000;o++)
 			{
 				pp.insert("tab",values,fields);
 				//cout << pp.queryCollect() << endl;//show query

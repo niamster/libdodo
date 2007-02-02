@@ -282,6 +282,13 @@ tools::implode(const dodoStringArr &fields,
 		const dodoString &frame,
 		int limit)
 {
+	if (fields.size() == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_IMPLODE,ERR_LIBDODO,TOOLS_ARRAY_EMPTY,TOOLS_ARRAY_EMPTY_STR,__LINE__,__FILE__);
+		#else
+			return buffer;
+		#endif
+	
 	register int k(0);
 	
 	dodoString temp, fs(frame + separator);
@@ -331,6 +338,13 @@ tools::implode(const dodoStringArr &fields,
 		const dodoString &separator,
 		int limit)
 {
+	if (fields.size() == 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_IMPLODE,ERR_LIBDODO,TOOLS_ARRAY_EMPTY,TOOLS_ARRAY_EMPTY_STR,__LINE__,__FILE__);
+		#else
+			return buffer;
+		#endif
+		
 	register int k(0);	
 	
 	dodoString temp;

@@ -49,9 +49,11 @@
 			
 			#ifndef FAST
 				
-				TOOLS_DATA_TOO_LONG
+				TOOLS_DATA_TOO_LONG,
 			
 			#endif
+			
+			TOOLS_ARRAY_EMPTY
 		};
 		
 		/**
@@ -72,13 +74,13 @@
 		#define TOOLS_BADMAILAUTH_STR "Error during uthentification."
 		#define TOOLS_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
 		#define TOOLS_DATA_TOO_LONG_STR "Data size is bigger than TOOLS_SHORT_DATA_SIZE."
+		#define TOOLS_ARRAY_EMPTY_STR "Array is empty."
 		
 		/**
 		 * ID of function where exception was thrown
 		 */			
 		enum toolsFunctionsID
 		{
-			
 			#ifdef ICONV_EXT
 			
 				TOOLS_CODESETCONVERSION,
@@ -109,6 +111,7 @@
 			TOOLS_SENDSHORTDATADEL,	
 			TOOLS_RECEIVESHORTDATADEL,
 			TOOLS_SENDLONGDATA,
+			TOOLS_IMPLODE
 		};
 		
 	};
