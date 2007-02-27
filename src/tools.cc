@@ -378,6 +378,16 @@ tools::lToString(long number)
 //-------------------------------------------------------------------
 
 dodoString 
+tools::iToString(int number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%d",number);
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
 tools::dToString(double number)
 {
 	char temp[SIZEOFNUM];

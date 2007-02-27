@@ -190,6 +190,12 @@ namespace dodo
 			static dodoString lToString(long number);
 			
 			/**
+			 * @return converted int to string
+			 * @param number is number to convert
+			 */
+			static dodoString iToString(int number);
+			
+			/**
 			 * @return converted double to string
 			 * @param number is number to convert
 			 */
