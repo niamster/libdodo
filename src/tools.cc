@@ -388,6 +388,16 @@ tools::iToString(int number)
 //-------------------------------------------------------------------
 
 dodoString 
+tools::fToString(float number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%f",number);
+	return temp;	
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
 tools::dToString(double number)
 {
 	char temp[SIZEOFNUM];

@@ -196,6 +196,12 @@ namespace dodo
 			static dodoString iToString(int number);
 			
 			/**
+			 * @return converted float to string
+			 * @param number is number to convert
+			 */
+			static dodoString fToString(float number);
+			
+			/**
 			 * @return converted double to string
 			 * @param number is number to convert
 			 */
