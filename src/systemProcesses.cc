@@ -40,7 +40,7 @@ systemProcesses::systemProcesses(systemProcesses &sp)
 
 //-------------------------------------------------------------------
 
-systemProcesses::systemProcesses : processNum(0)
+systemProcesses::systemProcesses() : processNum(0)
 {
 }
 

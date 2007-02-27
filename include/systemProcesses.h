@@ -79,12 +79,12 @@
 				/**
 				 * constructor
 				 */
-				systemProcess();
+				systemProcesses();
 
 				/**
 				 * destructor
 				 */
-				virtual ~systemProcess();
+				virtual ~systemProcesses();
 				
 			protected:
 				
