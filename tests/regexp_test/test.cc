@@ -1,5 +1,6 @@
 
 #include <regexpTools.h>
+#include <iostream>
 
 using namespace dodo;
 

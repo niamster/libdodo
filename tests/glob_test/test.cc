@@ -3,6 +3,7 @@
 #include <baseEx.h>
 #include <flushDiskTools.h>
 #include <flushSocket.h>
+#include <iostream>
 
 using namespace dodo;
 using namespace std;

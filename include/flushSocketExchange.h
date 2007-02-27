@@ -207,7 +207,7 @@ namespace dodo
 			virtual bool alive();
 			
 			/**
-			 * send
+			 * write
 			 * @param data is data that would be sent
 			 * @param urgent -> send out-of-band data
 			 * @note sends no longer than outSize
@@ -219,12 +219,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							send(const char * const data, bool urgent = false);
+							write(const char * const data);
 			
 			/**
-			 * send
+			 * write
 			 * @param data is string that would be sent
-			 * @param urgent -> send out-of-band data
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * signal safe
@@ -234,12 +233,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							sendString(const dodoString &data, bool urgent = false);
+							writeString(const dodoString &data);
 			
 			/**
 			 * receive
 			 * @param data is data that would be received
-			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * signal safe
@@ -249,12 +247,11 @@ namespace dodo
 			#else
 				virtual bool
 			#endif
-							receive(char * const data, bool urgent = false);
+							read(char * const data);
 							 
 			/**
-			 * receive
+			 * read
 			 * @param data is string that would be received
-			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * signal safe
@@ -264,12 +261,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							receiveString(dodoString &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
+							readString(dodoString &data);
 
 			/**
-			 * send - null-terminated string
+			 * write - null-terminated string
 			 * @param data is data that would be sent
-			 * @param urgent -> send out-of-band data
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * max data size is outSocketBuffer
@@ -281,12 +277,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							sendStream(const char * const data, bool urgent = false);
+							writeStream(const char * const data);
 			
 			/**
-			 * send - null-terminated string
+			 * write - null-terminated string
 			 * @param data is string that would be sent
-			 * @param urgent -> send out-of-band data
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * max data size is outSocketBuffer
@@ -298,12 +293,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							sendStreamString(const dodoString &data, bool urgent = false);
+							writeStreamString(const dodoString &data);
 			
 			/**
-			 * receive - null-terminated string
+			 * read - null-terminated string
 			 * @param data is data that would be received
-			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * max data size is inSocketBuffer
@@ -314,12 +308,11 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							receiveStream(char * const data, bool urgent = false);
+							readStream(char * const data);
 			
 			/**
-			 * receive - null-terminated string
+			 * read - null-terminated string
 			 * @param data is string that would be received
-			 * @param urgent -> receives out-of-band data
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * max data size is inSocketBuffer
@@ -330,8 +323,8 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif				
-							receiveStreamString(dodoString &data, bool urgent = false);///urgent = true -> Receipt  of out-of-band data
-						
+							readStreamString(dodoString &data);						
+							
 			/**
 			 * closes this socket
 			 */			

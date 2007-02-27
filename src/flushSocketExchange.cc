@@ -187,8 +187,7 @@ flushSocketExchange::alive()
 #else
 	bool
 #endif
-flushSocketExchange::send(const char * const data, 
-						bool urgent)
+flushSocketExchange::write(const char * const data)
 {
 	buffer.assign(data,outSize);
 				
@@ -202,10 +201,6 @@ flushSocketExchange::send(const char * const data,
 
 	register unsigned long sent_received = 0;
 		
-	register int flag = 0;	
-	if (urgent)	
-		flag = MSG_OOB;
-		
 	register unsigned long batch, n;	
 		
 	for (register unsigned long i=0;i<iter;++i)
@@ -215,7 +210,7 @@ flushSocketExchange::send(const char * const data,
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,flag);
+				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
@@ -243,7 +238,7 @@ flushSocketExchange::send(const char * const data,
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
+				n = ::send(socket,buffer.c_str()+sent_received,rest,0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
@@ -280,10 +275,9 @@ flushSocketExchange::send(const char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::sendString(const dodoString &data, 
-						bool urgent)
+flushSocketExchange::writeString(const dodoString &data)
 {
-	return this->send(data.c_str(),urgent);
+	return this->write(data.c_str());
 }
 
 //-------------------------------------------------------------------
@@ -293,8 +287,7 @@ flushSocketExchange::sendString(const dodoString &data,
 #else
 	bool
 #endif
-flushSocketExchange::receive(char * const data, 
-							bool urgent)
+flushSocketExchange::read(char * const data)
 {
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVE;
@@ -308,10 +301,6 @@ flushSocketExchange::receive(char * const data,
 
 	register unsigned long sent_received = 0;
 		
-	register int flag = 0;	
-	if (urgent)	
-		flag = MSG_OOB;
-		
 	register unsigned long batch, n; 
 			
 	for (register unsigned long i=0;i<iter;++i)
@@ -321,7 +310,7 @@ flushSocketExchange::receive(char * const data,
 		{
 			while (true)
 			{
-				n = ::recv(socket,data+sent_received,inSocketBuffer,flag);
+				n = ::recv(socket,data+sent_received,inSocketBuffer,0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
@@ -349,7 +338,7 @@ flushSocketExchange::receive(char * const data,
 		{
 			while (true)
 			{
-				n = ::recv(socket,data+sent_received,rest,flag);
+				n = ::recv(socket,data+sent_received,rest,0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
@@ -393,8 +382,7 @@ flushSocketExchange::receive(char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::receiveString(dodoString &data, 
-								bool urgent)
+flushSocketExchange::readString(dodoString &data)
 {	
 	register char *t_data = new char[inSize+1];
 
@@ -407,7 +395,7 @@ flushSocketExchange::receiveString(dodoString &data,
 		{
 	#endif
 	
-	this->receive(t_data,urgent);
+	this->read(t_data);
 			
 	#ifndef NO_EX
 		}
@@ -495,8 +483,7 @@ flushSocketExchange::receiveString(dodoString &data,
 #else
 	bool
 #endif
-flushSocketExchange::sendStream(const char * const data, 
-						bool urgent)
+flushSocketExchange::writeStream(const char * const data)
 {
 	buffer.assign(data);
 				
@@ -513,10 +500,6 @@ flushSocketExchange::sendStream(const char * const data,
 	register unsigned long rest = outSize%outSocketBuffer;
 
 	register unsigned long sent_received = 0;
-		
-	register int flag = 0;	
-	if (urgent)	
-		flag = MSG_OOB;
 	
 	register unsigned long batch, n;
 		
@@ -527,7 +510,7 @@ flushSocketExchange::sendStream(const char * const data,
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,flag);
+				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
@@ -555,7 +538,7 @@ flushSocketExchange::sendStream(const char * const data,
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,rest,flag);
+				n = ::send(socket,buffer.c_str()+sent_received,rest,0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
@@ -592,10 +575,9 @@ flushSocketExchange::sendStream(const char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::sendStreamString(const dodoString &data, 
-						bool urgent)
+flushSocketExchange::writeStreamString(const dodoString &data)
 {
-	return this->sendStream(data.c_str(),urgent);
+	return this->writeStream(data.c_str());
 }
 
 //-------------------------------------------------------------------
@@ -605,8 +587,7 @@ flushSocketExchange::sendStreamString(const dodoString &data,
 #else
 	bool
 #endif
-flushSocketExchange::receiveStream(char * const data, 
-							bool urgent)
+flushSocketExchange::readStream(char * const data)
 {
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM;
@@ -614,16 +595,12 @@ flushSocketExchange::receiveStream(char * const data,
 	#endif	
 	
 	memset(data,'\0',inSocketBuffer);
-		
-	register int flag = 0;	
-	if (urgent)	
-		flag = MSG_OOB;
 	
 	register unsigned long n;
 	
 	while (true)
 	{
-		if ((n = ::recv(socket,data,inSocketBuffer,flag)) == -1)
+		if ((n = ::recv(socket,data,inSocketBuffer,0)) == -1)
 		{
 			if (errno == EINTR)
 				continue;
@@ -658,8 +635,7 @@ flushSocketExchange::receiveStream(char * const data,
 #else
 	bool
 #endif
-flushSocketExchange::receiveStreamString(dodoString &data, 
-								bool urgent)
+flushSocketExchange::readStreamString(dodoString &data)
 {
 	register char *t_data = new char[inSocketBuffer+1];
 
@@ -673,7 +649,7 @@ flushSocketExchange::receiveStreamString(dodoString &data,
 		{
 	#endif
 	
-	this->receiveStream(t_data,urgent);
+	this->readStream(t_data);
 		
 	#ifndef NO_EX
 		}

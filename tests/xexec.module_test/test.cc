@@ -1,5 +1,6 @@
 #include <baseEx.h>
 #include <flushSTD.h>
+#include <iostream>
 
 using namespace dodo;
 using namespace std;

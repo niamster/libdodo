@@ -1,6 +1,7 @@
 #include <xexec.h>
 #include <flushSTD.h>
 #include <string.h>
+#include <iostream>
 
 using namespace dodo;
 

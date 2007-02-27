@@ -51,7 +51,7 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~flush();
-							
+										
 			unsigned long inSize;///< size of data block;
 			unsigned long outSize;///< size of data block;
 			

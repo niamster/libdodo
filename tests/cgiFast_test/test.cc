@@ -3,6 +3,7 @@
 #include <cgiProcessor.h>
 #include <tools.h>
 #include <cgiFast.h>
+#include <iostream>
 
 using namespace dodo;
 

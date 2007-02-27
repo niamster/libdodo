@@ -3,6 +3,7 @@
 #include <flushSocketTools.h>
 #include <systemThreads.h>
 #include <systemThreadShares.h>
+#include <iostream>
 
 using namespace dodo;
 
@@ -31,14 +32,14 @@ process(void *data)
 	fse->setOutBufferSize(1);
 	
 	fse->outSize = 7;
-	//fse->sendStreamString("dasdasd");
-	fse->sendString("dasdasd");
+	//fse->writeStreamString("dasdasd");
+	fse->writeString("dasdasd");
 	
 	std::string rec = "";
 	try
 	{
-		//fse->receiveStreamString(rec);
-		fse->receiveString(rec);
+		//fse->readStreamString(rec);
+		fse->readString(rec);
 		
 		cout << rec << rec.size() << endl;
 		cout.flush();

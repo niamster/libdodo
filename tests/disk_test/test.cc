@@ -1,6 +1,7 @@
 #include <baseEx.h>
 #include <flushDisk.h>
 #include <flushDiskTools.h>
+#include <iostream>
 
 using namespace dodo;
 

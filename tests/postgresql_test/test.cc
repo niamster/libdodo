@@ -1,5 +1,6 @@
 #include <baseEx.h>
 #include <dbPostgresql.h>
+#include <iostream>
 
 using namespace dodo;
 

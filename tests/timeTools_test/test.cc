@@ -2,6 +2,7 @@
 #include <systemTools.h>
 #include <tools.h>
 #include <timeTools.h>
+#include <iostream>
 
 using namespace dodo;
 

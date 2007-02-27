@@ -1,6 +1,7 @@
 #include <baseEx.h>
 #include <flushSocket.h>
 #include <flushSocketTools.h>
+#include <iostream>
 
 using namespace dodo;
 
@@ -26,14 +27,14 @@ process(flushSocketExchange fse)
 	fse.setOutBufferSize(1);
 	
 	fse.outSize = 7;
-	//fse.sendStreamString("dasdasd");
-	fse.sendString("dasdasd");
+	//fse.writeStreamString("dasdasd");
+	fse.writeString("dasdasd");
 	
 	std::string rec = "";
 	try
 	{
-		//fse.receiveStreamString(rec);
-		fse.receiveString(rec);
+		//fse.readStreamString(rec);
+		fse.readString(rec);
 		
 		cout << rec << rec.size() << endl;
 		cout.flush();
@@ -86,7 +87,7 @@ int main(int argc, char **argv)
 			{
 				st.connectFrom("127.0.0.1","10.10.208.254",21,exch);
 
-				exch.receiveStreamString(str);
+				exch.readStreamString(str);
 				std::cout << "\ngot:\n" << str << "\n";
 			}
 			catch(baseEx ex)
@@ -98,7 +99,7 @@ int main(int argc, char **argv)
 			{
 				st.connect("192.168.0.254",21,exch);
 
-				exch.receiveStreamString(str);
+				exch.readStreamString(str);
 				std::cout << "\ngot:\n" << str << "\n";
 			}
 			catch(baseEx ex)
@@ -110,7 +111,7 @@ int main(int argc, char **argv)
 			{
 				st.connect("10.10.208.254",21,exch);
 
-				exch.receiveStreamString(str);
+				exch.readStreamString(str);
 				std::cout << "\ngot:\n" << str << "\n";
 			}
 			catch(baseEx ex)

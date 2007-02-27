@@ -1,6 +1,7 @@
 #include <baseEx.h>
 #include <cgiTools.h>
 #include <cgiProcessor.h>
+#include <iostream>
 
 using namespace dodo;
 

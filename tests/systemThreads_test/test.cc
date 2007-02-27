@@ -4,6 +4,7 @@
 #include <systemTools.h>
 #include <timeTools.h>
 #include <tools.h>
+#include <iostream>
 
 using namespace dodo;
 using namespace std;

@@ -2,6 +2,7 @@
 #include <flushSocket.h>
 #include <flushSocketTools.h>
 #include <flushNBA.h>
+#include <iostream>
 
 using namespace dodo;
 
@@ -47,7 +48,7 @@ int main(int argc, char **argv)
 				{
 					if (nb.isReadable(pos))
 					{
-						conn.receiveStreamString(data);
+						conn.readStreamString(data);
 						cout << data << endl;
 					}
 				}

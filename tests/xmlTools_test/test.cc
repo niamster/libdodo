@@ -1,6 +1,7 @@
 #include <baseEx.h>
 #include <xmlTools.h>
 #include <tools.h>
+#include <iostream>
 
 using namespace dodo;
 using namespace std;
