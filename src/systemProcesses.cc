@@ -26,3 +26,26 @@
 	
 using namespace dodo;
 
+__processInfo::__processInfo() : isRunning(false),
+				executed(0),
+				executeLimit(0)
+{
+}
+
+//-------------------------------------------------------------------
+
+systemProcesses::systemProcesses(systemProcesses &sp)
+{
+}
+
+//-------------------------------------------------------------------
+
+systemProcesses::systemProcesses : processNum(0)
+{
+}
+
+//-------------------------------------------------------------------
+
+systemProcesses::~systemProcesses()
+{
+}

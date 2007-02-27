@@ -31,9 +31,38 @@
 	{
 	
 		/**
-		 * @typedef describes function to be passed as thread
+		 * @typedef describes function to be passed as process
 		 */
-		typedef void *(*threadFunc)(void *);
+		typedef void *(*processFunc)(void *);
+
+		/*
+		 * @enum processTypeEnum describes type of process
+		 */
+		enum processTypeEnum
+		{
+			PROCESS_FORK,///< standart fork calling
+			PROCESS_VFORK///< don't copys parent's page tables
+		};
+
+		/**
+		 * @struct __processInfo describes process
+		 */
+		struct __processInfo
+		{
+			/**
+			 * constuctor
+			 */
+			__processInfo();
+
+			void *data;///< data that will be passed on run
+                        bool isRunning;///< whether process is running
+			short type;///< type of process creation[see processTypeEnum]
+                        unsigned long position;///< position in queue
+                        processFunc func;///< function to execute
+                        short action;///< action on class destruction[see systemThreadOnDestructEnum]
+                        unsigned long executed;///< amount of times thread was executed
+                        unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; de
+		};
 
 		class systemProcesses
 		{
@@ -46,7 +75,20 @@
 				systemProcesses(systemProcesses &sp);
 
 			public:
+				
+				/**
+				 * constructor
+				 */
+				systemProcess();
 
+				/**
+				 * destructor
+				 */
+				virtual ~systemProcess();
+				
+			protected:
+				
+				unsigned long processNum;///< number of registered processes
 		};
 
 	};
