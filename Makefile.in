@@ -37,6 +37,7 @@ OBJECTS:=dbBase.o \
 		timeTools.o \
 		xmlTools.o \
 		dbSqlite.o \
+		systemProcesses.o \
 		systemThreads.o \
 		systemThreadShares.o \
 		dbPostgresql.o \
