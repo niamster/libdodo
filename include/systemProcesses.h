@@ -24,73 +24,191 @@
 #ifndef _SYSTEMPROCESSES_H_
 #define _SYSTEMPROCESSES_H_
 
+#ifdef DL_EXT
+
+	#include <dlfcn.h>
+
+#endif       
+
+#include <sys/types.h>
+#include <signal.h>
+#include <unistd.h>
+#include <sys/wait.h>
+	
 #include <directives.h>
 #include <types.h>
+#include <systemJob.h>
+#include <systemProcessesEx.h>
 	
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * @typedef describes function to be passed as process
+	 */
+	typedef void *(*processFunc)(void *);
+
+	/**
+	 * 
+	 */
+	enum systemProcessOnDestructEnum
 	{
+		PROCESS_KEEP_ALIVE,
+		PROCESS_STOP,///< send SIGINT to process
+		PROCESS_WAIT
+	};
+
+	/**
+	 * @struct __processInfo describes process
+	 */
+	struct __processInfo
+	{
+		/**
+		 * constuctor
+		 */
+		__processInfo();
+
+		pid_t pid;///< process pid
+		void *data;///< data that will be passed on run
+		bool isRunning;///< whether process is running
+		unsigned long position;///< position in queue
+		processFunc func;///< function to execute
+		short action;///< action on class destruction[see systemProcessOnDestructEnum]
+		unsigned long executed;///< amount of times thread was executed
+		unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
+			
+		#ifdef DL_EXT
+			void *handle;///< handle to module
+		#endif
+	};
+		
+	#ifdef DL_EXT
 	
 		/**
-		 * @typedef describes function to be passed as process
+		 * @struct systemProcessesMod must be returned from initSystemProcessesModule in the module
 		 */
-		typedef void *(*processFunc)(void *);
-
-		/*
-		 * @enum processTypeEnum describes type of process
-		 */
-		enum processTypeEnum
+		struct systemProcessesMod
 		{
-			PROCESS_FORK,///< standart fork calling
-			PROCESS_VFORK///< don't copys parent's page tables
+			char name[64];///< name of module
+			char discription[256];///< discription of module
+			char hook[64];///< name of function in module that will be a hook
+			unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
+			short action;///< action on class destruction[see systemProcessOnDestructEnum]
 		};
+		
+		/**
+		 * @typedef describes function in module that must return info for the hook
+		 */
+		typedef systemProcessesMod (*initSystemProcessesModule)(void *);
 
 		/**
-		 * @struct __processInfo describes process
+		 * @typedef describes function in module that will be called during module unloading
 		 */
-		struct __processInfo
-		{
+		typedef void (*deinitSystemProcessesModule)();
+	
+	#endif
+
+	class systemProcesses : public systemJob
+	{
+		private:
+
 			/**
-			 * constuctor
+			 * copy constructor
+			 * to prevent copying
 			 */
-			__processInfo();
+			systemProcesses(systemProcesses &sp);
 
-			void *data;///< data that will be passed on run
-                        bool isRunning;///< whether process is running
-			short type;///< type of process creation[see processTypeEnum]
-                        unsigned long position;///< position in queue
-                        processFunc func;///< function to execute
-                        short action;///< action on class destruction[see systemThreadOnDestructEnum]
-                        unsigned long executed;///< amount of times thread was executed
-                        unsigned long executeLimit;///< if more than one will be autodleted or with `sweepTrash` method; de
-		};
+		public:
+			
+			/**
+			 * constructor
+			 */
+			systemProcesses();
 
-		class systemProcesses
-		{
-			private:
-
-				/**
-				 * copy constructor
-				 * to prevent copying
-				 */
-				systemProcesses(systemProcesses &sp);
-
-			public:
+			/**
+			 * destructor
+			 */
+			virtual ~systemProcesses();
+			
+		
+			/**
+			 * adds function to became a process[not executing]
+			 * @return position of process in queue
+			 * @param func indicates function to be executed
+			 * @param data describes data to be passed to func
+			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
+			 * @note func must not call `exit` family call
+			 */
+			virtual unsigned long add(processFunc func, void *data, short action);
+			
+			/**
+			 * adds function to became a process[executing]
+			 * @return position of process in queue
+			 * @param func indicates function to be executed
+			 * @param data describes data to be passed to func
+			 * @param limit indicates the thread's limit on executions
+			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
+			 * @note func must not call `exit` family call
+			 */
+			virtual unsigned long addNRun(processFunc func, void *data, unsigned long limit=1, short action=PROCESS_WAIT);
+							
+			/**
+			 * adds function to became a job[not executing]
+			 * @return position of jobFunc in queue
+			 * @param func indicates function to be executed
+			 * @param data describes data to be passed to func
+			 * @note func must not call `exit` family call
+			 * action=PROCESS_WAIT
+			 */
+			virtual unsigned long add(jobFunc func, void *data);	
 				
-				/**
-				 * constructor
-				 */
-				systemProcesses();
-
-				/**
-				 * destructor
-				 */
-				virtual ~systemProcesses();
+			/**
+			 * adds function to became a job[executing]
+			 * @return position of job in queue
+			 * @param func indicates function to be executed
+			 * @param data describes data to be passed to func
+			 * @note func must not call `exit` family call
+			 * limit=1
+			 * action=PROCESS_WAIT
+			 */
+			virtual unsigned long addNRun(jobFunc func, void *data);
 				
-			protected:
-				
-				unsigned long processNum;///< number of registered processes
-		};
-
+			/**
+			 * removes registered process
+			 * @param position indicates on process to remove
+			 * @param force if is set to true stops execution if this process is running
+			 * @note - exception if it's currently running
+			 * send SIGINT to process
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 
+							del(unsigned long position, bool force=false);
+								
+		protected:
+		
+			/**
+			 * @return true if thread is process
+			 * @param position indicates for what process to indicate
+			 */
+			virtual bool _isRunning(std::list<__processInfo>::iterator &position) const;
+			
+			/**
+			 * searches processes by position
+			 * @return true if found
+			 * @param position describes position of wanted process
+			 */
+			virtual bool getProcess(unsigned long position) const;
+			
+			unsigned long processNum;///< number of registered processes
+							
+			std::list<__processInfo> processes;///< vector of processes
+			
+			mutable std::list<__processInfo>::iterator k;///< iterator for list of processes[for matched]
 	};
+
+};
 
 #endif

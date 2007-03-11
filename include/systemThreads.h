@@ -37,6 +37,7 @@
 	#include <signal.h>
 	#include <pthread.h>
 
+	#include <systemJob.h> 
 	#include <systemTools.h>		
 	#include <systemThreadsEx.h>
 	#include <types.h>
@@ -116,7 +117,7 @@
 		/**
 		 * @class systemThreads is to manage threads(based on POSIX threads)
 		 */
-		class systemThreads
+		class systemThreads : public systemJob
 		{
 			private:
 			
@@ -147,8 +148,7 @@
 				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 				 * @param stackSize describes stack siae of the thread
 				 */
-				virtual unsigned long add(threadFunc func, void *data, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
-	
+				virtual unsigned long add(threadFunc func, void *data, bool detached, short action, int stackSize=2097152);
 			
 				/**
 				 * adds function to became a thread[executing]
@@ -162,6 +162,31 @@
 				 */
 				virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit=1, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
 				
+				/**
+				 * adds function to became a job[not executing]
+				 * @return position of jobFunc in queue
+				 * @param func indicates function to be executed
+				 * @param data describes data to be passed to func
+				 * @note
+				 * detached = false
+				 * action=THREAD_WAIT
+				 * stackSize=2097152
+				 */
+				virtual unsigned long add(jobFunc func, void *data);	
+					
+				/**
+				 * adds function to became a job[executing]
+				 * @return position of job in queue
+				 * @param func indicates function to be executed
+				 * @param data describes data to be passed to func
+				 * @note
+				 * limit=1
+				 * detached = false
+				 * action=THREAD_WAIT
+				 * stackSize=2097152
+				 */
+				virtual unsigned long addNRun(jobFunc func, void *data);
+			
 				/**
 				 * removes registered thread
 				 * @param position indicates on thread to remove
@@ -335,7 +360,6 @@
 				 * searches threads by position
 				 * @return true if found
 				 * @param position describes position of wanted thread
-				 * @param iter is iterator that points on found thread
 				 */
 				virtual bool getThread(unsigned long position) const;
 							

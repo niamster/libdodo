@@ -48,4 +48,261 @@ systemProcesses::systemProcesses() : processNum(0)
 
 systemProcesses::~systemProcesses()
 {
+	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	
+	#ifdef DL_EXT
+		deinitSystemProcessesModule deinit;
+	#endif
+	
+	for (;i!=j;++i)
+	{
+		if (!_isRunning(i))
+			continue;
+		
+		switch (i->action)
+		{
+			case PROCESS_KEEP_ALIVE:
+			
+				waitpid(i->pid,NULL,WNOHANG);
+			
+				break;
+				
+			case PROCESS_STOP:
+			
+				kill(i->pid,2);
+				
+				#ifdef DL_EXT
+				
+					if (i->handle != NULL)
+					{
+						deinit = (deinitSystemProcessesModule)dlsym(i->handle, "deinitSystemProcessesModule");
+						if (deinit != NULL)
+							deinit();
+						
+						dlclose(i->handle);						
+					}
+					
+				#endif		
+				
+				break;
+			
+			case PROCESS_WAIT:
+			default:
+			
+				waitpid(i->pid,NULL,0);
+				
+				#ifdef DL_EXT
+				
+					if (i->handle != NULL)
+					{
+						deinit = (deinitSystemProcessesModule)dlsym(i->handle, "deinitSystemProcessesModule");
+						if (deinit != NULL)
+							deinit();
+						
+						dlclose(i->handle);						
+					}
+					
+				#endif				
+		}
+	}	
 }
+	
+//-------------------------------------------------------------------
+	
+unsigned long 
+systemProcesses::add(processFunc func,
+						void *data,
+						short action)
+{
+	__processInfo process;
+	
+	process.data = data;
+	process.func = func;
+	process.position = ++processNum;
+	process.action = action;
+	process.executeLimit = 0;
+	
+	#ifdef DL_EXT
+		process.handle = NULL;
+	#endif
+	
+	processes.push_back(process);
+	
+	return process.position;
+}
+		
+//-------------------------------------------------------------------
+
+unsigned long 
+systemProcesses::add(jobFunc func,
+						void *data)
+{
+	return add(func,data,PROCESS_WAIT);
+}
+	
+//-------------------------------------------------------------------
+
+unsigned long 
+systemProcesses::addNRun(jobFunc func,
+						void *data)
+{
+	return addNRun(func,data,1,PROCESS_WAIT);
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+systemProcesses::addNRun(processFunc func, 
+						void *data, 
+						unsigned long limit, 
+						short action)
+{
+	__processInfo process;
+	
+	process.data = data;
+	process.func = func;
+	process.position = ++processNum;
+	process.action = action;
+	process.executeLimit = 0;
+	
+	#ifdef DL_EXT
+		process.handle = NULL;
+	#endif
+	
+	register pid_t pid = fork();
+		
+	if (pid == 0)
+	{
+		func(data);
+		
+		_exit(0);
+	}
+	else
+	{
+		if (pid == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_ADDNRUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif			
+		else	
+			process.pid = pid;
+	}
+	
+	process.isRunning = true;
+	++(process.executed);
+	
+	processes.push_back(process);
+	
+	return process.position;
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemProcesses::del(unsigned long position, 
+					bool force)
+{
+	if (getProcess(position))
+	{
+		if (_isRunning(k))
+		{
+			if (!force)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_DEL,ERR_LIBDODO,SYSTEMPROCESSES_ISALREADYRUNNING,SYSTEMPROCESSES_ISALREADYRUNNING_STR,__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+			else
+			{
+				if (kill(k->pid,2) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+			}
+		}
+
+		#ifdef DL_EXT
+		
+			if (k->handle != NULL)
+			{
+				deinitSystemProcessesModule deinit;	
+	
+				deinit = (deinitSystemProcessesModule)dlsym(k->handle, "deinitSystemProcessesModule");
+				if (deinit != NULL)
+					deinit();
+				
+				if (dlclose(k->handle)!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_DEL,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+					#endif
+					
+				k->handle = NULL;	
+			}
+				
+		#endif
+			
+		processes.erase(k);
+		
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_DEL,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+}
+
+//-------------------------------------------------------------------
+	
+bool 
+systemProcesses::getProcess(unsigned long position) const
+{
+	std::list<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
+	for (;i!=j;++i)
+		if (i->position == position)
+		{
+			k = *((std::list<__processInfo>::iterator *)&i);
+			return true;
+		}
+	
+	return false;	
+}
+//-------------------------------------------------------------------
+
+bool 
+systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
+{
+	if (!position->isRunning)
+		return false;
+		
+	register int res = kill(position->pid,0);	
+	if (res != 0)	
+	{
+		if (errno == ESRCH)
+		{
+			position->isRunning = false;
+			
+			return false;
+		}
+
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES__ISRUNNING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif			
+	}
+	
+	return true;	
+}
+	
+//-------------------------------------------------------------------

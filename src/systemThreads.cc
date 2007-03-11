@@ -111,6 +111,15 @@
 			}
 		}	
 	}
+		
+	//-------------------------------------------------------------------
+	
+	unsigned long 
+	systemThreads::add(jobFunc func,
+							void *data)
+	{
+		return add(func,data,false,THREAD_WAIT,2097152);
+	}
 	
 	//-------------------------------------------------------------------
 	
@@ -190,7 +199,7 @@
 	
 			#ifdef DL_EXT
 			
-				if (k->handle!=NULL)
+				if (k->handle != NULL)
 				{
 					deinitSystemThreadsModule deinit;	
 		
@@ -786,6 +795,15 @@
 			pthread_sigmask(SIG_BLOCK,&signal_mask,NULL);	
 		else
 			pthread_sigmask(SIG_UNBLOCK,&signal_mask,NULL);
+	}
+	
+	//-------------------------------------------------------------------
+	
+	unsigned long 
+	systemThreads::addNRun(jobFunc func,
+							void *data)
+	{
+		return addNRun(func,data,1,false,THREAD_WAIT,2097152);
 	}
 	
 	//-------------------------------------------------------------------

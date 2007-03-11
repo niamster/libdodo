@@ -37,20 +37,24 @@
 		 */
 		enum systemProcessesExR
 		{
-			SYSTEMPROCESSES_,
+			SYSTEMPROCESSES_ISALREADYRUNNING,
+			SYSTEMPROCESSES_NOTFOUND,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */
-		#define SYSTEMTHREADS_ ""
+		#define SYSTEMPROCESSES_ISALREADYRUNNING_STR "The process is currently running. Please wait."
+		#define SYSTEMPROCESSES_NOTFOUND_STR "Process not found."
 			
 		/**
 		 * ID of function where exception was thrown
 		 */			
 		enum systemProcessesFunctionsID
 		{
-			SYSTEMPROCESSES_,
+			SYSTEMPROCESSES__ISRUNNING,
+			SYSTEMPROCESSES_ADDNRUN,
+			SYSTEMPROCESSES_DEL,
 		};
 	};
 
