@@ -382,8 +382,7 @@
 	#else
 		bool
 	#endif
-	systemThreads::wait(unsigned long position,
-							void **data)
+	systemThreads::wait(unsigned long position)
 	{
 		if (getThread(position))
 		{
@@ -401,7 +400,7 @@
 					return false;
 				#endif
 			
-			errno = pthread_join(k->thread,data);	
+			errno = pthread_join(k->thread,NULL);	
 			if (errno != 0)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_WAIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -452,14 +451,6 @@
 		#ifdef NO_EX
 			return true;
 		#endif
-	}
-	
-	//-------------------------------------------------------------------
-	
-	void 
-	systemThreads::returnFromThread(void *data)
-	{	
-		pthread_exit(data);
 	}
 	
 	//-------------------------------------------------------------------

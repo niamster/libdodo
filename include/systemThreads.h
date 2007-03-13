@@ -143,7 +143,7 @@
 				 * adds function to became a thread[not executing]
 				 * @return position of thread in queue
 				 * @param func indicates function to be executed
-				 * @param data describes data to be passed to func
+				 * @param data describes data to be passed to func[function should return NULL to exit]
 				 * @param detached indicates whether thread will be detached
 				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 				 * @param stackSize describes stack siae of the thread
@@ -154,7 +154,7 @@
 				 * adds function to became a thread[executing]
 				 * @return position of thread in queue
 				 * @param func indicates function to be executed
-				 * @param data describes data to be passed to func
+				 * @param data describes data to be passed to func[function should return NULL to exit]
 				 * @param limit indicates the thread's limit on executions
 				 * @param detached indicates whether thread will be detached
 				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
@@ -164,7 +164,7 @@
 				
 				/**
 				 * adds function to became a job[not executing]
-				 * @return position of jobFunc in queue
+				 * @return position of jobFunc in queue[function should return NULL to exit]
 				 * @param func indicates function to be executed
 				 * @param data describes data to be passed to func
 				 * @note
@@ -176,7 +176,7 @@
 					
 				/**
 				 * adds function to became a job[executing]
-				 * @return position of job in queue
+				 * @return position of job in queue[function should return NULL to exit]
 				 * @param func indicates function to be executed
 				 * @param data describes data to be passed to func
 				 * @note
@@ -204,7 +204,7 @@
 				 * replaces function to became a thread[not executing]
 				 * @param position indicates on thread to replace
 				 * @param func indicates function to be executed
-				 * @param data describes data to be passed to func
+				 * @param data describes data to be passed to func[function should return NULL to exit]
 				 * @param force if is set to true stops execution if this thread is running
 				 * @param detached indicates whether thread will be detached
 				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
@@ -255,14 +255,13 @@
 				/**
 				 * waits for thread's termination
 				 * @param position indicates for what thread to wait
-				 * @param data points on data that thread returned
 				 */
 				#ifndef NO_EX
 					virtual void 
 				#else
 					virtual bool 
 				#endif						 	
-								wait(unsigned long position, void **data=NULL);
+								wait(unsigned long position);
 											
 				/**
 				 * @return true if thread is running
@@ -283,13 +282,7 @@
 				#else
 					virtual bool 
 				#endif						 	
-								wait();
-				
-				/**
-				 * returns from thread and sets return data
-				 * @param data points on data that thread returned
-				 */
-				static void returnFromThread(void *data);			
+								wait();		
 				
 				/**
 				 * sweep threads if their time are already passed
@@ -341,12 +334,12 @@
 				
 				#endif
 				
-					/**
-					 * block or unblock signals to thread
-					 * @param signal indicates what signals to block/unblock; can be or'ed;
-					 * @param block indicates whether to block or unblock
-					 */
-					static void blockSignal(int signals, bool block=true);
+				/**
+				 * block or unblock signals to thread
+				 * @param signal indicates what signals to block/unblock; can be or'ed;
+				 * @param block indicates whether to block or unblock
+				 */
+				static void blockSignal(int signals, bool block=true);
 											
 			protected:
 								

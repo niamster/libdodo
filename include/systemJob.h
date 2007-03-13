@@ -43,7 +43,7 @@ namespace dodo
 			
 			/**
 			 * adds function to became a job[not executing]
-			 * @return position of jobFunc in queue
+			 * @return position of jobFunc in queue[function should return NULL to exit]
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 */
@@ -51,7 +51,7 @@ namespace dodo
 				
 			/**
 			 * adds function to became a job[executing]
-			 * @return position of job in queue
+			 * @return position of job in queue[function should return NULL to exit]
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 */
@@ -107,14 +107,13 @@ namespace dodo
 			/**
 			 * waits for job's termination
 			 * @param position indicates for what job to wait
-			 * @param data points on data that job returned
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif						 	
-							wait(unsigned long position, void **data=NULL) = 0;
+							wait(unsigned long position) = 0;
 										
 			/**
 			 * @return true if job is running

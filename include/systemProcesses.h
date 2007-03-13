@@ -134,7 +134,7 @@ namespace dodo
 			/**
 			 * adds function to became a process[not executing]
 			 * @return position of process in queue
-			 * @param func indicates function to be executed
+			 * @param func indicates function to be executed[function should return NULL to exit]
 			 * @param data describes data to be passed to func
 			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
@@ -144,7 +144,7 @@ namespace dodo
 			/**
 			 * adds function to became a process[executing]
 			 * @return position of process in queue
-			 * @param func indicates function to be executed
+			 * @param func indicates function to be executed[function should return NULL to exit]
 			 * @param data describes data to be passed to func
 			 * @param limit indicates the thread's limit on executions
 			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
@@ -154,7 +154,7 @@ namespace dodo
 							
 			/**
 			 * adds function to became a job[not executing]
-			 * @return position of jobFunc in queue
+			 * @return position of jobFunc in queue[function should return NULL to exit]
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 * @note func must not call `exit` family call
@@ -164,7 +164,7 @@ namespace dodo
 				
 			/**
 			 * adds function to became a job[executing]
-			 * @return position of job in queue
+			 * @return position of job in queue[function should return NULL to exit]
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 * @note func must not call `exit` family call
@@ -191,7 +191,7 @@ namespace dodo
 			 * replaces function to became a process[not executing]
 			 * @param position indicates on process to replace
 			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func
+			 * @param data describes data to be passed to func[function should return NULL to exit]
 			 * @param force if is set to true stops execution if this process is running
 			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note - exception if it's currently running
