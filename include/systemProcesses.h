@@ -186,6 +186,22 @@ namespace dodo
 				virtual bool 
 			#endif						 
 							del(unsigned long position, bool force=false);
+							
+			/**
+			 * replaces function to became a process[not executing]
+			 * @param position indicates on process to replace
+			 * @param func indicates function to be executed
+			 * @param data describes data to be passed to func
+			 * @param force if is set to true stops execution if this process is running
+			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
+			 * @note - exception if it's currently running
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 
+							replace(unsigned long position, processFunc func, void *data, bool force=false, short action=PROCESS_WAIT);
 								
 		protected:
 		

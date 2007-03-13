@@ -304,5 +304,78 @@ systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
 	
 	return true;	
 }
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif 
+systemProcesses::replace(unsigned long position, 
+						processFunc func, 
+						void *data,
+						bool force,
+						short action)
+{
+	if (getProcess(position))
+	{
+		if (_isRunning(k))
+		{
+			if (!force)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_REPLACE,ERR_LIBDODO,SYSTEMPROCESSES_ISALREADYRUNNING,SYSTEMPROCESSES_ISALREADYRUNNING_STR,__LINE__,__FILE__);
+				#else
+					return false;
+				#endif
+			else
+			{
+				if (kill(k->pid,2) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_REPLACE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return false;
+					#endif
+			}
+		}
+
+
+		#ifdef DL_EXT
+		
+			if (k->handle!=NULL)
+			{
+				deinitSystemProcessesModule deinit;	
+	
+				deinit = (deinitSystemProcessesModule)dlsym(k->handle, "deinitSystemProcessesModule");
+				if (deinit != NULL)
+					deinit();
+				
+				if (dlclose(k->handle)!=0)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_REPLACE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+					#endif
+					
+				k->handle = NULL;	
+			}
+				
+		#endif
+			
+		k->data = data;
+		k->func = func;
+		k->isRunning = false;
+		k->action = action;
+			
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_REPLACE,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+}
 	
 //-------------------------------------------------------------------
