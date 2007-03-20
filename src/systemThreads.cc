@@ -321,7 +321,7 @@
 	{
 		if (getThread(position))
 		{
-			if (k->executeLimit>0 && (k->executeLimit<=k->executed))
+			if (k->executeLimit > 0 && (k->executeLimit <= k->executed))
 			{
 				threads.erase(k);
 				

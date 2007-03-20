@@ -1,3 +1,6 @@
 To configure run `./configure` [to see configuration settings run `./configure --help` and edit include/directives.h] 
+
+**NOTE** if you have installed required for libdodo package into /usr/local you have to indicate it
+
 To compile use `gmake`
 To install `gmake install`

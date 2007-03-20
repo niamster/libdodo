@@ -202,6 +202,19 @@ namespace dodo
 				virtual bool 
 			#endif						 
 							replace(unsigned long position, processFunc func, void *data, bool force=false, short action=PROCESS_WAIT);
+				
+			/**
+			 * executes process
+			 * @param position indicates what process to run
+			 * @param force if is set to true permits execution even if this process is running
+			 * @note - exception if it's currently running
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 
+							run(unsigned long position, bool force=false);
 								
 		protected:
 		

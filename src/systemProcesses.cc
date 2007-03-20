@@ -277,6 +277,7 @@ systemProcesses::getProcess(unsigned long position) const
 	
 	return false;	
 }
+
 //-------------------------------------------------------------------
 
 bool 
@@ -376,6 +377,71 @@ systemProcesses::replace(unsigned long position,
 			return false;
 		#endif
 	
+}
+	
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemProcesses::run(unsigned long position, 
+						bool force)
+{
+	if (getProcess(position))
+	{
+		if (k->executeLimit >0 && (k->executeLimit <= k->executed))
+		{
+			processes.erase(k);
+			
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_RUN,ERR_LIBDODO,SYSTEMPROCESSES_SWEPT,SYSTEMPROCESSES_SWEPT_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif				
+		}
+		
+		if (_isRunning(k) && !force)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_RUN,ERR_LIBDODO,SYSTEMPROCESSES_ISALREADYRUNNING,SYSTEMPROCESSES_ISALREADYRUNNING_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		register pid_t pid = fork();
+			
+		if (pid == 0)
+		{
+			k->func(k->data);
+			
+			_exit(0);
+		}
+		else
+		{
+			if (pid == -1)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_RUN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				#else
+					return false;
+				#endif			
+			else
+				k->pid = pid;
+		}
+		
+		k->isRunning = true;
+		++(k->executed);
+				
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_RUN,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
 }
 	
 //-------------------------------------------------------------------
