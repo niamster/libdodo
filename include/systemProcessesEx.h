@@ -40,6 +40,7 @@
 			SYSTEMPROCESSES_ISALREADYRUNNING,
 			SYSTEMPROCESSES_NOTFOUND,
 			SYSTEMPROCESSES_SWEPT,
+			SYSTEMPROCESSES_ISNOTRUNNING,
 		};
 		
 		/**
@@ -48,6 +49,7 @@
 		#define SYSTEMPROCESSES_ISALREADYRUNNING_STR "The process is currently running. Please wait."
 		#define SYSTEMPROCESSES_NOTFOUND_STR "Process not found."
 		#define SYSTEMPROCESSES_SWEPT_STR "Limit of execution exceeded. Process swept."
+		#define SYSTEMPROCESSES_ISNOTRUNNING_STR "The process is currently not running."
 			
 		/**
 		 * ID of function where exception was thrown
@@ -59,6 +61,7 @@
 			SYSTEMPROCESSES_RUN,
 			SYSTEMPROCESSES_DEL,
 			SYSTEMPROCESSES_REPLACE,
+			SYSTEMPROCESSES_STOP,
 		};
 	};
 

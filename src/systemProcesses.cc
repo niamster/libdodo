@@ -445,3 +445,42 @@ systemProcesses::run(unsigned long position,
 }
 	
 //-------------------------------------------------------------------
+	
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemProcesses::stop(unsigned long position)
+{
+	if (getProcess(position))
+	{
+		if (!_isRunning(k))
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_STOP,ERR_LIBDODO,SYSTEMPROCESSES_ISNOTRUNNING,SYSTEMPROCESSES_ISNOTRUNNING_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		if (kill(k->pid,9) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_STOP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		k->isRunning = false;
+				
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_STOP,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+}
+
+//-------------------------------------------------------------------

@@ -215,7 +215,102 @@ namespace dodo
 				virtual bool 
 			#endif						 
 							run(unsigned long position, bool force=false);
-								
+
+			/*************************************/
+			/**
+			 * stops process
+			 * @param position indicates what process to stop
+			 * @note sends signal 9 to preocess
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 		
+							stop(unsigned long position);
+
+			/**
+			 * stops all registered jobs
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 		
+							stop() = 0;
+										
+			/**
+			 * waits for job's termination
+			 * @param position indicates for what job to wait
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 	
+							wait(unsigned long position) = 0;
+										
+			/**
+			 * @return true if job is running
+			 * @param position indicates for what job to indicate
+			 */
+			virtual bool isRunning(unsigned long position) const = 0;
+			
+			/**
+			 * @return amount of running jobs
+			 */
+			virtual unsigned long running() const = 0;
+							
+			/**
+			 * waits for all registered jobs' termination
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 	
+							wait() = 0;			
+			
+			/**
+			 * sweep jobs if their time are already passed
+			 */
+			virtual void sweepTrash() = 0;
+			
+			/**
+			 * set maximum execution time
+			 * @param position indicates for what job to set limit
+			 * @param limit indicates the job's limit on executions
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif			
+							setExecutionLimit(unsigned long position, unsigned long limit=1) = 0; 
+
+			
+			#ifdef DL_EXT
+			
+				/**
+				 * adds function to became a job[not executing] from module
+				 * @return position of job in queue
+				 * @param module indicates mudule where is function to be executed
+				 * @param data describes data to be passed to func
+				 * @param toInit indicates data that will path to initialize function
+				 */
+				virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
+				
+				
+				/**
+				 * @return info about module
+				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+				 * @param toInit indicates data that will path to initialize function
+				 */
+				static systemProcessesMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			
+			#endif
+			/*************************************/
+														
 		protected:
 		
 			/**
