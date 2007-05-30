@@ -14,7 +14,7 @@ AC_SYS_LARGEFILE
 
 AC_PREFIX_DEFAULT([/usr/local])
 
-echo "" > include/directives.runtime.h
+echo "" > include/libdodo/directives.runtime.h
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
@@ -37,16 +37,6 @@ else
 	RESULT="$RESULT\nDebug\t\t\t\t\t\tdisabled"
 fi
 
-AC_SUBST(INCLUDE_STL_SGI)
-INCLUDE_STL_SGI=""
-AC_ARG_WITH([stl.sgi],
-                AS_HELP_STRING([--with-stl.sgi],[use stl by SGI]),
-                [STL_SGI="yes"], [STL_SGI="no"])
-        if test "STL_SGI" == "yes"
-        then
-                INCLUDE_STL_SGI="-I./include/stl.sgi"
-        fi
-
 PROFILING="no"
 AC_ARG_ENABLE(profiling,
         AS_HELP_STRING([--enable-profiling],[enable profiling]),
@@ -67,7 +57,7 @@ AC_ARG_ENABLE(deque,
 
 if test "$DEQUE" = "yes"
 then
-	echo -n -e "#define USE_DEQUE\n\n" >> include/directives.runtime.h        
+	echo -n -e "#define USE_DEQUE\n\n" >> include/libdodo/directives.runtime.h        
 	
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tenabled"
 else
@@ -90,7 +80,7 @@ fi
 		AC_CHECK_LIB([sqlite3], [sqlite3_exec])
 		AC_CHECK_HEADER([sqlite3.h])
 		LIBS="$LIBS -lsqlite3"
-		echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
 	else
@@ -111,7 +101,7 @@ fi
 		AC_CHECK_LIB([pq], [PQclear])
 		AC_CHECK_HEADER([libpq-fe.h])
 		LIBS="$LIBS -lpq"
-		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nPostresql\t\t\t\t\t\tenabled"
 	else
@@ -133,7 +123,7 @@ fi
 		AC_CHECK_LIB([mysqlclient], [mysql_init])
 		AC_CHECK_HEADER([mysql.h])
 		LIBS="$LIBS -lmysqlclient"
-		echo -n -e "#define MYSQL_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
 	else
@@ -156,7 +146,7 @@ fi
 		AC_CHECK_LIB([fcgi], [FCGX_Init])
 		AC_CHECK_HEADER([fcgiapp.h])
 		LIBS="$LIBS -lfcgi"
-		echo -n -e "#define FCGI_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define FCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
 	else
@@ -177,7 +167,7 @@ fi
 		AC_CHECK_LIB([pcre], [pcre_exec])
 		AC_CHECK_HEADER([pcre.h])
 		LIBS="$LIBS -lpcre"
-		echo -n -e "#define PCRE_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define PCRE_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nPCRE\t\t\t\t\t\tenabled"
 	else
@@ -204,7 +194,7 @@ fi
 			AC_CHECK_LIB([dl], [dlopen], RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tenabled", RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tdisabled")
 			LIBS="$LIBS -ldl"
 		fi
-		echo -n -e "#define DL_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
 	else
@@ -225,7 +215,7 @@ fi
 		AC_CHECK_HEADER([libxml/xmlmemory.h])
 		AC_CHECK_LIB([xml2], [xmlInitParser])
 		LIBS="$LIBS -lxml2"
-		echo -n -e "#define LIBXML2_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tenabled"
 	else
@@ -249,7 +239,7 @@ fi
 		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create])
 		AC_CHECK_HEADER([pthread.h])
 		LIBS="$LIBS -l$MOD_PTHREAD_LIB"
-		echo -n -e "#define PTHREAD_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\npthread\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
 	else
@@ -270,7 +260,7 @@ fi
 		AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress])
 		AC_CHECK_HEADER([bzlib.h])
 		LIBS="$LIBS -lbz2"
-		echo -n -e "#define BZIP2_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define BZIP2_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tenabled"
 	else
@@ -297,7 +287,7 @@ fi
 			AC_CHECK_LIB([z], [deflateInit2])
 			LIBS="$LIBS -lz"
 		fi
-		echo -n -e "#define ZLIB_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define ZLIB_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nZLIB\t\t\t\t\t\tenabled"
 	else
@@ -324,7 +314,7 @@ fi
 			AC_CHECK_LIB([iconv], [iconv])
 			LIBS="$LIBS -liconv"
 		fi
-		echo -n -e "#define ICONV_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define ICONV_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\niconv\t\t\t\t\t\tenabled"
 	else
@@ -337,7 +327,7 @@ fi
                 [EXCEPTIONS="$enableval"], [EXCEPTIONS="yes"])
 	if test "$EXCEPTIONS" = "no"
 	then
-		echo -n -e "#define NO_EX\n\n" >> include/directives.runtime.h
+		echo -n -e "#define NO_EX\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
 	else

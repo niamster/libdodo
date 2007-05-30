@@ -10,7 +10,7 @@ CXX:=@CXX@
 INSTALL:=@INSTALL@
 LN_S = @LN_S@
 
-CPPFLAGS:=@INCLUDE_STL_SGI@ -I./include @CPPFLAGS@
+CPPFLAGS:=-I./include/libdodo @CPPFLAGS@
 LDFLAGS:= -L./ @LDFLAGS@
 LIBS:=@LIBS@
 CFLAGS:=@CFLAGS@
@@ -55,12 +55,9 @@ VPATH:=src/
 all: @PACKAGE_NAME@
 
 @PACKAGE_NAME@: $(OBJECTS)
-	$(CXX) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
+	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
 	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded @PACKAGE_NAME@.so.@PACKAGE_VERSION@; fi
 	ln -sf @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $@.so
-	
-	ar rc @PACKAGE_NAME@.a.@PACKAGE_VERSION@ $(OBJECTS)
-	ln -sf @PACKAGE_NAME@.a.@PACKAGE_VERSION@ $@.a
 	
 	@echo ""
 	@echo ""
@@ -73,8 +70,8 @@ all: @PACKAGE_NAME@
 install: 
 	${INSTALL} -m 755 -d $(libdir)
 	${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/
-	${INSTALL} -m 755 -d $(includedir)/
-	cd include; for i in ./*; do ${INSTALL} -m 755 $$i $(includedir)/; done; cd ..
+	${INSTALL} -m 755 -d $(includedir)/libdodo
+	cd include/libdodo; for i in ./*; do ${INSTALL} -m 755 $$i $(includedir)/libdodo; done; cd ..
 	
 	$(LN_S) -f $(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/@PACKAGE_NAME@.so
 	
@@ -89,7 +86,8 @@ uninstall:
 	rm -f $(libdir)/@PACKAGE_NAME@.so
 	rmdir $(libdir)
 	
-	cd include; for i in ./*; do rm -f $(includedir)/$$i; done; cd ..
+	cd i$(ncludedir)/libdodo; for i in ./*; do rm -f $(includedir)/$$i; done; cd ..
+	rmdir $(includedir)/libdodo
 	rmdir $(includedir)
 	
 	rmdir $(prefix)

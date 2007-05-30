@@ -669,7 +669,6 @@ INSTALL_PROGRAM
 INSTALL_SCRIPT
 INSTALL_DATA
 DEBUG
-INCLUDE_STL_SGI
 GREP
 EGREP
 LIBOBJS
@@ -1270,7 +1269,6 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-stl.sgi          use stl by SGI
   --with-sqlite3(=/path)  use sqlite3
   --with-postgresql(=/path)
                           use postgresql
@@ -3751,7 +3749,7 @@ fi
 
 
 
-echo "" > include/directives.runtime.h
+echo "" > include/libdodo/directives.runtime.h
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
@@ -3775,21 +3773,6 @@ then
 else
 	RESULT="$RESULT\nDebug\t\t\t\t\t\tdisabled"
 fi
-
-
-INCLUDE_STL_SGI=""
-
-# Check whether --with-stl.sgi was given.
-if test "${with_stl_sgi+set}" = set; then
-  withval=$with_stl_sgi; STL_SGI="yes"
-else
-  STL_SGI="no"
-fi
-
-        if test "STL_SGI" == "yes"
-        then
-                INCLUDE_STL_SGI="-I./include/stl.sgi"
-        fi
 
 PROFILING="no"
 # Check whether --enable-profiling was given.
@@ -3817,7 +3800,7 @@ fi
 
 if test "$DEQUE" = "yes"
 then
-	echo -n -e "#define USE_DEQUE\n\n" >> include/directives.runtime.h
+	echo -n -e "#define USE_DEQUE\n\n" >> include/libdodo/directives.runtime.h
 
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tenabled"
 else
@@ -4518,7 +4501,7 @@ fi
 
 
 		LIBS="$LIBS -lsqlite3"
-		echo -n -e "#define SQLITE_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
 	else
@@ -4745,7 +4728,7 @@ fi
 
 
 		LIBS="$LIBS -lpq"
-		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nPostresql\t\t\t\t\t\tenabled"
 	else
@@ -4973,7 +4956,7 @@ fi
 
 
 		LIBS="$LIBS -lmysqlclient"
-		echo -n -e "#define MYSQL_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
 	else
@@ -5202,7 +5185,7 @@ fi
 
 
 		LIBS="$LIBS -lfcgi"
-		echo -n -e "#define FCGI_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define FCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
 	else
@@ -5429,7 +5412,7 @@ fi
 
 
 		LIBS="$LIBS -lpcre"
-		echo -n -e "#define PCRE_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define PCRE_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nPCRE\t\t\t\t\t\tenabled"
 	else
@@ -5662,7 +5645,7 @@ fi
 
 			LIBS="$LIBS -ldl"
 		fi
-		echo -n -e "#define DL_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
 	else
@@ -5889,7 +5872,7 @@ _ACEOF
 fi
 
 		LIBS="$LIBS -lxml2"
-		echo -n -e "#define LIBXML2_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tenabled"
 	else
@@ -6126,7 +6109,7 @@ fi
 
 
 		LIBS="$LIBS -l$MOD_PTHREAD_LIB"
-		echo -n -e "#define PTHREAD_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\npthread\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
 	else
@@ -6353,7 +6336,7 @@ fi
 
 
 		LIBS="$LIBS -lbz2"
-		echo -n -e "#define BZIP2_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define BZIP2_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tenabled"
 	else
@@ -6588,7 +6571,7 @@ fi
 
 			LIBS="$LIBS -lz"
 		fi
-		echo -n -e "#define ZLIB_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define ZLIB_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nZLIB\t\t\t\t\t\tenabled"
 	else
@@ -6823,7 +6806,7 @@ fi
 
 			LIBS="$LIBS -liconv"
 		fi
-		echo -n -e "#define ICONV_EXT\n\n" >> include/directives.runtime.h
+		echo -n -e "#define ICONV_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\niconv\t\t\t\t\t\tenabled"
 	else
@@ -6840,7 +6823,7 @@ fi
 
 	if test "$EXCEPTIONS" = "no"
 	then
-		echo -n -e "#define NO_EX\n\n" >> include/directives.runtime.h
+		echo -n -e "#define NO_EX\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
 	else
@@ -8675,14 +8658,13 @@ INSTALL_PROGRAM!$INSTALL_PROGRAM$ac_delim
 INSTALL_SCRIPT!$INSTALL_SCRIPT$ac_delim
 INSTALL_DATA!$INSTALL_DATA$ac_delim
 DEBUG!$DEBUG$ac_delim
-INCLUDE_STL_SGI!$INCLUDE_STL_SGI$ac_delim
 GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 59; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 58; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
