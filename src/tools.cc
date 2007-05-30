@@ -372,6 +372,7 @@ tools::lToString(long number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%ld",number);
+	
 	return temp;
 }
 
@@ -382,6 +383,7 @@ tools::iToString(int number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%d",number);
+	
 	return temp;
 }
 
@@ -392,6 +394,7 @@ tools::fToString(float number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%f",number);
+	
 	return temp;	
 }
 
@@ -402,6 +405,7 @@ tools::dToString(double number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%f",number);
+	
 	return temp;	
 }
 

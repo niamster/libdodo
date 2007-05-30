@@ -2,3 +2,4 @@ firebird
 libsoup
 processes
 posix_fallocate
+job collection

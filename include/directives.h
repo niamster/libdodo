@@ -69,7 +69,7 @@
 /**
  * is used for converting from number to string
  */
-#define SIZEOFNUM 32
+#define SIZEOFNUM 20
 
 /**
  * delimiter in disk operations
