@@ -59,7 +59,7 @@ namespace dodo
 				bool icase;///< whether to react on keys with keys or no; false[react] by default
 							
 				/**
-				 * @return value of hash by varName or empty anyType if not found
+				 * @return value of hash by varName or empty anyType already added to map, if not found
 				 * @param varName value of hash that points to the value
 				 */			 
 				anyType &
@@ -76,7 +76,9 @@ namespace dodo
 						if (cmpFunc(varName.c_str(),i->first.c_str()) == 0)
 							return i->second;		
 					
-					return type;				
+					std::pair<typename std::map<dodoString, anyType>::iterator, bool> res = realArr.insert(make_pair(varName, type));
+					
+					return *(res->first);				
 				}
 							
 				/**
@@ -216,8 +218,8 @@ namespace dodo
 					return false;				 	
 				}
 				
-                                typedef typename std::map<dodoString, anyType>::const_iterator const_iterator;
-                                typedef typename std::map<dodoString, anyType>::iterator iterator;
+                typedef typename std::map<dodoString, anyType>::const_iterator const_iterator;
+                typedef typename std::map<dodoString, anyType>::iterator iterator;
 
 				std::map<dodoString, anyType> realArr;///< real array
 				

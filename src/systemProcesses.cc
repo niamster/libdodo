@@ -482,5 +482,75 @@ systemProcesses::stop(unsigned long position)
 			return false;
 		#endif	
 }
+	
+//-------------------------------------------------------------------
 
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemProcesses::stop()
+{
+	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	for (;i!=j;++i)
+	{
+		if (!_isRunning(i))
+			continue;
+		
+		
+		if (kill(i->pid,9) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_STOP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		i->isRunning = false;
+	}
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemProcesses::wait(unsigned long position)
+{
+	if (getProcess(position))
+	{
+		if (!_isRunning(k))
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_WAIT,ERR_LIBDODO,SYSTEMPROCESSES_ISNOTRUNNING,SYSTEMPROCESSES_ISNOTRUNNING_STR,__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+			
+		if (waitpid(k->pid,NULL,0) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_WAIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		k->isRunning = false;			
+	
+		#ifdef NO_EX
+			return true;
+		#endif
+	}
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_WAIT,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+}
+		
 //-------------------------------------------------------------------

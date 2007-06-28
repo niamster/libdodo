@@ -114,6 +114,16 @@ namespace dodo
 				virtual bool 
 			#endif						 	
 							wait(unsigned long position) = 0;
+							
+			/**
+			 * waits for all registered jobs' termination
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif						 	
+							wait() = 0;
 										
 			/**
 			 * @return true if job is running
@@ -124,17 +134,7 @@ namespace dodo
 			/**
 			 * @return amount of running jobs
 			 */
-			virtual unsigned long running() const = 0;
-							
-			/**
-			 * waits for all registered jobs' termination
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif						 	
-							wait() = 0;			
+			virtual unsigned long running() const = 0;			
 			
 			/**
 			 * sweep jobs if their time are already passed

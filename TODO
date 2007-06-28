@@ -3,3 +3,19 @@ libsoup
 processes
 posix_fallocate
 job collection
+
+threads,processes: locking mutual exlusions
+			//mutex
+		
+			/*class atomMutex
+			{
+				atomMutex()
+				{
+					lock
+				}
+				~atomMutex()
+				{
+					unlock
+				}
+			};*/
+random(/dev/{u}random)

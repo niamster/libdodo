@@ -262,6 +262,16 @@
 					virtual bool 
 				#endif						 	
 								wait(unsigned long position);
+								
+				/**
+				 * waits for all registered threads' termination
+				 */
+				#ifndef NO_EX
+					virtual void 
+				#else
+					virtual bool 
+				#endif						 	
+								wait();		
 											
 				/**
 				 * @return true if thread is running
@@ -273,16 +283,6 @@
 				 * @return amount of running threads
 				 */
 				virtual unsigned long running() const;
-								
-				/**
-				 * waits for all registered threads' termination
-				 */
-				#ifndef NO_EX
-					virtual void 
-				#else
-					virtual bool 
-				#endif						 	
-								wait();		
 				
 				/**
 				 * sweep threads if their time are already passed
