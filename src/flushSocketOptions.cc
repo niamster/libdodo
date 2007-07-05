@@ -373,9 +373,9 @@ flushSocketOptions::setSockOption(short option,
 		#endif	
 	
 	if (!flag)
-		removeF(socketOpts,1<<option);
+		removeFlag(socketOpts,1<<option);
 	else
-		addF(socketOpts,1<<option);	
+		addFlag(socketOpts,1<<option);	
 		
 	#ifdef NO_EX
 		return true;

@@ -38,6 +38,7 @@
 
 #include <flushSocketToolsEx.h>
 #include <types.h>
+#include <tools.h>
 
 namespace dodo
 {	

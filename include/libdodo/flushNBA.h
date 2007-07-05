@@ -30,6 +30,7 @@
 #include <flushNBAEx.h>
 #include <types.h>
 #include <flush.h>
+#include <tools.h>
 
 #include <poll.h>
 

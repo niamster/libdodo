@@ -874,68 +874,68 @@ systemTools::sigMask(sigset_t *set,
 {
 	if (blockSignals != -1)
 	{
-		if ((SIGNAL_HANGUP&blockSignals) == SIGNAL_HANGUP)
+		if (isSetFlag(blockSignals,SIGNAL_HANGUP))
 			sigaddset(set, SIGHUP);
 			
-		if ((SIGNAL_INTERRUPT&blockSignals) == SIGNAL_INTERRUPT)
+		if (isSetFlag(blockSignals,SIGNAL_INTERRUPT))
 			sigaddset(set, SIGINT);
 			
-		if ((SIGNAL_QUIT&blockSignals) == SIGNAL_QUIT)
+		if (isSetFlag(blockSignals,SIGNAL_QUIT))
 			sigaddset(set, SIGQUIT);
 			
-		if ((SIGNAL_ILLEGAL_INSTRUCTION&blockSignals) == SIGNAL_ILLEGAL_INSTRUCTION)
+		if (isSetFlag(blockSignals,SIGNAL_ILLEGAL_INSTRUCTION))
 			sigaddset(set, SIGILL);
 			
-		if ((SIGNAL_ABORT&blockSignals) == SIGNAL_ABORT)
+		if (isSetFlag(blockSignals,SIGNAL_ABORT))
 			sigaddset(set, SIGABRT);
 			
-		if ((SIGNAL_BUS_FAULT&blockSignals) == SIGNAL_BUS_FAULT)
+		if (isSetFlag(blockSignals,SIGNAL_BUS_FAULT))
 			sigaddset(set, SIGBUS);
 			
-		if ((SIGNAL_FLOATINGPOINT_FAULT&blockSignals) == SIGNAL_FLOATINGPOINT_FAULT)
+		if (isSetFlag(blockSignals,SIGNAL_FLOATINGPOINT_FAULT))
 			sigaddset(set, SIGFPE);
 			
-		if ((SIGNAL_USER_DEFINED1&blockSignals) == SIGNAL_USER_DEFINED1)
+		if (isSetFlag(blockSignals,SIGNAL_USER_DEFINED1))
 			sigaddset(set, SIGUSR1);
 	
-		if ((SIGNAL_SEGMENTATION_FAULT&blockSignals) == SIGNAL_SEGMENTATION_FAULT)
+		if (isSetFlag(blockSignals,SIGNAL_SEGMENTATION_FAULT))
 			sigaddset(set, SIGSEGV);
 			
-		if ((SIGNAL_USER_DEFINED2&blockSignals) == SIGNAL_USER_DEFINED2)
+		if (isSetFlag(blockSignals,SIGNAL_USER_DEFINED2))
 			sigaddset(set, SIGUSR2);
 			
-		if ((SIGNAL_PIPE_FAULT&blockSignals) == SIGNAL_PIPE_FAULT)
+		if (isSetFlag(blockSignals,SIGNAL_PIPE_FAULT))
 			sigaddset(set, SIGPIPE);
 			
-		if ((SIGNAL_ALARM&blockSignals) == SIGNAL_ALARM)
+		if (isSetFlag(blockSignals,SIGNAL_ALARM))
 			sigaddset(set, SIGALRM);
 			
-		if ((SIGNAL_TERMINATION&blockSignals) == SIGNAL_TERMINATION)
+		if (isSetFlag(blockSignals,SIGNAL_TERMINATION))
 			sigaddset(set, SIGTERM);
 
 		#ifndef	__FreeBSD__
 			
-			if ((SIGNAL_STACK_FAULT&blockSignals) == SIGNAL_STACK_FAULT)
+			if (isSetFlag(blockSignals,SIGNAL_STACK_FAULT))
 				sigaddset(set, SIGSTKFLT);
 				
 		#endif		
 			
-		if ((SIGNAL_CHILD_CHANGED&blockSignals) == SIGNAL_CHILD_CHANGED)
+		if (isSetFlag(blockSignals,SIGNAL_CHILD_CHANGED))
 			sigaddset(set, SIGCHLD);
 			
-		if ((SIGNAL_CONTINUE&blockSignals) == SIGNAL_CONTINUE)
+		if (isSetFlag(blockSignals,SIGNAL_CONTINUE))
 			sigaddset(set, SIGCONT);
 							
-		if ((SIGNAL_KEYBOARD_STOP&blockSignals) == SIGNAL_KEYBOARD_STOP)
+		if (isSetFlag(blockSignals,SIGNAL_KEYBOARD_STOP))
 			sigaddset(set, SIGTSTP);
 			
-		if ((SIGNAL_CPULIMIT_EXCEEDED&blockSignals) == SIGNAL_CPULIMIT_EXCEEDED)
+		if (isSetFlag(blockSignals,SIGNAL_CPULIMIT_EXCEEDED))
 			sigaddset(set, SIGXCPU);
 			
-		if ((SIGNAL_FILESIZE_EXCEEDED&blockSignals) == SIGNAL_FILESIZE_EXCEEDED)
+		if (isSetFlag(blockSignals,SIGNAL_FILESIZE_EXCEEDED))
 			sigaddset(set, SIGXFSZ);
 			
-		if ((SIGNAL_BAD_SYSCALL&blockSignals) == SIGNAL_BAD_SYSCALL)
+		if (isSetFlag(blockSignals,SIGNAL_BAD_SYSCALL))
 			sigaddset(set, SIGSYS);	
 	}
 }

@@ -189,7 +189,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 		return ;
 		
 	register int tempQTypeTocheck = 1<<qTypeTocheck;
-	if ((tempQTypeTocheck & qShift)==tempQTypeTocheck)
+	if (isSetFlag(qShift,tempQTypeTocheck))
 	{
 		request.append(sqlAddArr[qTypeTocheck].str);
 		request.append(collectedString);
@@ -209,12 +209,10 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 	dodoString temp;
 	
 	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
-	register unsigned int temp_bit = 0;
 	
 	for (register unsigned int i=0;i<arrLen;++i)
 	{
-		temp_bit = 1<<sqlAddEnumArr[i];
-		if ((temp_bit & qTypeShift) == temp_bit)
+		if (isSetFlag(qTypeShift,1<<sqlAddEnumArr[i]))
 			temp.append(sqlAddArr[sqlAddEnumArr[i]].str);
 	}
 	
@@ -233,13 +231,11 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 	dodoString temp;
 
 	register unsigned int k(1);
-	register unsigned int temp_bit = 0;
 	
 	dodoStringArr::const_iterator i(statements.begin()), j(statements.end());
 	for (;i!=j;++i,++k)
 	{
-		temp_bit = 1<<k;
-		if ((temp_bit & qTypeShift)==temp_bit)
+		if (isSetFlag(qTypeShift,1<<k))
 			temp.append(*i);
 	}
 	

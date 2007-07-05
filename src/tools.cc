@@ -1877,18 +1877,18 @@ tools::mail(const dodoString &host,
 	if (auth)	
 	{
 		if (strcasestr(data+4,"CRAM-MD5") != NULL)
-			addF(authType,SMTPAUTH_CRAMMD5);
+			addFlag(authType,SMTPAUTH_CRAMMD5);
 			
 		if (strcasestr(data+4,"LOGIN") != NULL)
-			addF(authType,SMTPAUTH_LOGIN);
+			addFlag(authType,SMTPAUTH_LOGIN);
 			
 		if (strcasestr(data+4,"PLAIN") != NULL)
-			addF(authType,SMTPAUTH_PLAIN);
+			addFlag(authType,SMTPAUTH_PLAIN);
 	}
 	
 	if (auth)
 	{
-		if ((SMTPAUTH_CRAMMD5&authType) == SMTPAUTH_CRAMMD5)
+		if (isSetFlag(authType,SMTPAUTH_CRAMMD5))
 		{
 			mess = "AUTH CRAM-MD5\r\n";
 			#ifdef NO_EX
@@ -2004,7 +2004,7 @@ tools::mail(const dodoString &host,
 		}
 		else
 		{
-			if ((SMTPAUTH_LOGIN&authType) == SMTPAUTH_LOGIN)
+			if (isSetFlag(authType,SMTPAUTH_LOGIN))
 			{
 				mess = "AUTH LOGIN\r\n";
 				#ifdef NO_EX
@@ -2116,7 +2116,7 @@ tools::mail(const dodoString &host,
 			}
 			else
 			{
-				if ((SMTPAUTH_PLAIN&authType) == SMTPAUTH_PLAIN)
+				if (isSetFlag(authType,SMTPAUTH_PLAIN))
 				{
 					mess = "AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n";
 					#ifdef NO_EX

@@ -97,11 +97,11 @@
 	void 
 	dbMysql::setMyAddInsSt(short statement)
 	{
-		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_DELAYED);
-		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_LOW_PRIORITY);
-		removeF(qDbDepInsShift,1<<DBREQUEST_INSERT_HIGH_PRIORITY);
+		removeFlag(qDbDepInsShift,1<<DBREQUEST_INSERT_DELAYED);
+		removeFlag(qDbDepInsShift,1<<DBREQUEST_INSERT_LOW_PRIORITY);
+		removeFlag(qDbDepInsShift,1<<DBREQUEST_INSERT_HIGH_PRIORITY);
 		
-		addF(qDbDepInsShift,1<<statement);
+		addFlag(qDbDepInsShift,1<<statement);
 	}
 	
 	//-------------------------------------------------------------------
@@ -109,7 +109,7 @@
 	void 
 	dbMysql::setMyAddUpSt(short statement)
 	{
-		addF(qDbDepUpShift,1<<statement);	
+		addFlag(qDbDepUpShift,1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -117,7 +117,7 @@
 	void 
 	dbMysql::setMyAddSelSt(short statement)
 	{
-		addF(qDbDepSelShift,1<<statement);	
+		addFlag(qDbDepSelShift,1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -125,7 +125,7 @@
 	void 
 	dbMysql::setMyAddDelSt(short statement)
 	{
-		addF(qDbDepDelShift,1<<statement);
+		addFlag(qDbDepDelShift,1<<statement);
 	}
 	
 	//-------------------------------------------------------------------
@@ -133,7 +133,7 @@
 	void 
 	dbMysql::unsetMyAddInsSt(short statement)
 	{
-		removeF(qDbDepInsShift,1<<statement);
+		removeFlag(qDbDepInsShift,1<<statement);
 	}
 	
 	//-------------------------------------------------------------------
@@ -141,7 +141,7 @@
 	void 
 	dbMysql::unsetMyAddUpSt(short statement)
 	{
-		removeF(qDbDepUpShift,1<<statement);	
+		removeFlag(qDbDepUpShift,1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -149,7 +149,7 @@
 	void 
 	dbMysql::unsetMyAddSelSt(short statement)
 	{
-		removeF(qDbDepSelShift,1<<statement);	
+		removeFlag(qDbDepSelShift,1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -157,7 +157,7 @@
 	void 
 	dbMysql::unsetMyAddDelSt(short statement)
 	{
-		removeF(qDbDepDelShift,1<<statement);	
+		removeFlag(qDbDepDelShift,1<<statement);	
 	}
 
 	//-------------------------------------------------------------------

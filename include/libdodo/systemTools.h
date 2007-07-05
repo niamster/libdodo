@@ -45,6 +45,7 @@
 
 #include <systemToolsEx.h>
 #include <types.h>
+#include <tools.h>
 
 namespace dodo
 {

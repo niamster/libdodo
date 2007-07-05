@@ -365,7 +365,7 @@ flushSocket::connectFrom(const dodoString &local,
 			return false;	
 		#endif
 	
-	addF(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts,1<<SOCKET_REUSE_ADDRESS);
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -583,7 +583,7 @@ flushSocket::bindNListen(const dodoString &host,
 			return false;	
 		#endif
 	
-	addF(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts,1<<SOCKET_REUSE_ADDRESS);
 	
 	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
 	
@@ -739,7 +739,7 @@ flushSocket::bindNListen(const dodoString &path,
 			return false;	
 		#endif
 	
-	addF(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts,1<<SOCKET_REUSE_ADDRESS);
 	
 	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
 	

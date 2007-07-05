@@ -104,7 +104,7 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 		{
 				for (register int i=0;i<count;++i)
 				{
-					if ((POLLIN&fds[i].revents) == POLLIN || (POLLPRI&fds[i].revents) == POLLPRI)
+					if (isSetFlag(fds[i].revents,POLLIN) || isSetFlag(fds[i].revents,POLLPRI))
 						tempRB.push_back(true);
 					else
 						tempRB.push_back(false);
@@ -183,7 +183,7 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 		{
 				for (register int i=0;i<count;++i)
 				{
-					if ((POLLOUT&fds[i].revents) == POLLOUT)
+					if (isSetFlag(fds[i].revents,POLLOUT))
 						tempRB.push_back(true);
 					else
 						tempRB.push_back(false);
@@ -244,7 +244,7 @@ flushNBA::isReadable(int pos,
 			
 			if (res > 0)
 			{
-				if ((POLLIN&fd.revents) == POLLIN || (POLLPRI&fd.revents) == POLLPRI)
+				if (isSetFlag(fd.revents,POLLIN) || isSetFlag(fd.revents,POLLPRI))
 					return true;
 				else
 					return false;
@@ -298,7 +298,7 @@ flushNBA::isWritable(int pos,
 			
 			if (res > 0)
 			{
-				if ((POLLOUT&fd.revents) == POLLOUT)
+				if (isSetFlag(fd.revents,POLLOUT))
 					return true;
 				else
 					return false;

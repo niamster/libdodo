@@ -248,18 +248,18 @@ flushSocketTools::getInterfaceInfo(const dodoString &interface)
 	
 	#ifdef __FreeBSD__
 	
-		if ((IFF_LOOPBACK&ifr.ifr_ifru.ifru_flags[0]) == IFF_LOOPBACK)
+		if (isSetFlag(ifr.ifr_ifru.ifru_flags[0],IFF_LOOPBACK))
 			info.loop = true;
 	
-		if ((IFF_UP&ifr.ifr_ifru.ifru_flags[0]) == IFF_UP)
+		if (isSetFlag(ifr.ifr_ifru.ifru_flags[0],IFF_UP))
 			info.up = true;
 		
 	#else
 
-		if ((IFF_LOOPBACK&ifr.ifr_ifru.ifru_flags) == IFF_LOOPBACK)
+		if (isSetFlag(IFF_LOOPBACK&ifr.ifr_ifru.ifru_flags,IFF_LOOPBACK))
 			info.loop = true;
 	
-		if ((IFF_UP&ifr.ifr_ifru.ifru_flags) == IFF_UP)
+		if (isSetFlag(IFF_UP&ifr.ifr_ifru.ifru_flags,IFF_UP))
 			info.up = true;
 	
 	#endif	

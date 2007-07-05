@@ -323,35 +323,35 @@ flushDiskTools::getPermission(int permission)
 {
 	register int mode(0);
 	
-	if ((PERM_OWNER_READ_ACCESS & permission) == PERM_OWNER_READ_ACCESS)
+	if (isSetFlag(permission,PERM_OWNER_READ_ACCESS))
 		mode |= S_IRUSR;
 		
-	if ((PERM_GROUP_READ_ACCESS & permission) == PERM_GROUP_READ_ACCESS)
+	if (isSetFlag(permission,PERM_GROUP_READ_ACCESS))
 		mode |= S_IRGRP;	
-	if ((PERM_OTHER_READ_ACCESS & permission) == PERM_OTHER_READ_ACCESS)
+	if (isSetFlag(permission,PERM_OTHER_READ_ACCESS))
 		mode |= S_IROTH;
 			
-	if ((PERM_OWNER_WRITE_ACCESS & permission) == PERM_OWNER_WRITE_ACCESS)
+	if (isSetFlag(permission,PERM_OWNER_WRITE_ACCESS))
 		mode |= S_IWUSR;
 		
-	if ((PERM_GROUP_WRITE_ACCESS & permission) == PERM_GROUP_WRITE_ACCESS)
+	if (isSetFlag(permission,PERM_GROUP_WRITE_ACCESS))
 		mode |= S_IWGRP;
-	if ((PERM_OTHER_WRITE_ACCESS & permission) == PERM_OTHER_WRITE_ACCESS)
+	if (isSetFlag(permission,PERM_OTHER_WRITE_ACCESS))
 		mode |= S_IWOTH;
 		
-	if ((PERM_STICKY_ACCESS & permission) == PERM_STICKY_ACCESS)
+	if (isSetFlag(permission,PERM_STICKY_ACCESS))
 		mode |= S_ISVTX;
 			
-	if ((PERM_OWNER_EXECUTE_ACCESS & permission) == PERM_OWNER_EXECUTE_ACCESS)
+	if (isSetFlag(permission,PERM_OWNER_EXECUTE_ACCESS))
 		mode |= S_IXUSR;
-	if ((PERM_GROUP_EXECUTE_ACCESS & permission) == PERM_GROUP_EXECUTE_ACCESS)
+	if (isSetFlag(permission,PERM_GROUP_EXECUTE_ACCESS))
 		mode |= S_IXGRP;
-	if ((PERM_OTHER_EXECUTE_ACCESS & permission) == PERM_OTHER_EXECUTE_ACCESS)
+	if (isSetFlag(permission,PERM_OTHER_EXECUTE_ACCESS))
 		mode |= S_IXOTH;
 		
-	if ((PERM_SUID_ACCESS & permission) == PERM_SUID_ACCESS)
+	if (isSetFlag(permission,PERM_SUID_ACCESS))
 		mode |= S_ISUID;
-	if ((PERM_SGID_ACCESS & permission) == PERM_SGID_ACCESS)
+	if (isSetFlag(permission,PERM_SGID_ACCESS))
 		mode |= S_ISGID;		
 
 	return mode;
@@ -476,35 +476,35 @@ flushDiskTools::getPermissions(const dodoString &path)
 		
 	register int mode(PERM_NONE);
 	
-	if ((S_IRUSR & st.st_mode) == S_IRUSR)
+	if (isSetFlag(st.st_mode,S_IRUSR))
 		mode |= PERM_OWNER_READ_ACCESS;	
 		
-	if ((S_IRGRP & st.st_mode) == S_IRGRP)
+	if (isSetFlag(st.st_mode,S_IRGRP))
 		mode |= PERM_GROUP_READ_ACCESS;	
-	if ((S_IROTH & st.st_mode) == S_IROTH)
+	if (isSetFlag(st.st_mode,S_IROTH))
 		mode |= PERM_OTHER_READ_ACCESS;
 	
-	if ((S_IWUSR & st.st_mode) == S_IWUSR)		
+	if (isSetFlag(st.st_mode,S_IWUSR))		
 		mode |= PERM_OWNER_WRITE_ACCESS;
 	
-	if ((S_IWGRP & st.st_mode) == S_IWGRP)
+	if (isSetFlag(st.st_mode,S_IWGRP))
 		mode |= PERM_GROUP_WRITE_ACCESS;
-	if ((S_IWOTH & st.st_mode) == S_IWOTH)
+	if (isSetFlag(st.st_mode,S_IWOTH))
 		mode |= PERM_OTHER_WRITE_ACCESS;
 			
-	if ((S_ISVTX & st.st_mode) == S_ISVTX)
+	if (isSetFlag(st.st_mode,S_ISVTX))
 		mode |= PERM_STICKY_ACCESS;
 			
-	if ((S_IXUSR & st.st_mode) == S_IXUSR)
+	if (isSetFlag(st.st_mode,S_IXUSR))
 		mode |= PERM_OWNER_EXECUTE_ACCESS;
-	if ((S_IXGRP & st.st_mode) == S_IXGRP)
+	if (isSetFlag(st.st_mode,S_IXGRP))
 		mode |= PERM_GROUP_EXECUTE_ACCESS;
-	if ((S_IXOTH & st.st_mode) == S_IXOTH)
+	if (isSetFlag(st.st_mode,S_IXOTH))
 		mode |= PERM_OTHER_EXECUTE_ACCESS;
 		
-	if ((S_ISUID & st.st_mode) == S_ISUID)
+	if (isSetFlag(st.st_mode,S_ISUID))
 		mode |= PERM_SUID_ACCESS;
-	if ((S_ISGID & st.st_mode) == S_ISGID)
+	if (isSetFlag(st.st_mode,S_ISGID))
 		mode |= PERM_SGID_ACCESS;		
 		
 	return mode;	

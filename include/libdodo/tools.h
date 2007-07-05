@@ -58,11 +58,17 @@ namespace dodo
 	/**
 	 * @def adds bit flag to statement
 	 */
-	#define addF(flag,statement) (flag)|=(statement)
+	#define addFlag(statement,flag) (statement)|=(flag)
+
 	/**
-	 * @def removes bit flag to statement
+	 * @def removes bit flag from statement
 	 */
-	#define removeF(flag,statement) (flag)&=(~(statement))
+	#define removeFlag(statement,flag) (statement)&=(~(flag))
+
+	/**
+	 * @def return true if bit flag is set
+	 */
+	#define isSetFlag(statement,flag) ((statement)&(flag)) != 0
 
 	/**
 	 * @typedef that describes function that will escapes parts in explode/implode
