@@ -7953,7 +7953,7 @@ echo "${ECHO_T}$ac_cv_prog_gcc_traditional" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files Makefile tests/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/dbinterface_test/Makefile tests/disk_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/socketNB_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemThreads_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec.module_test/Makefile tests/xmlTools_test/Makefile"
+ac_config_files="$ac_config_files Makefile tests/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/dbinterface_test/Makefile tests/disk_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/socketNB_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemThreads_test/Makefile tests/systemProcesses_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec.module_test/Makefile tests/xmlTools_test/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -8540,6 +8540,7 @@ do
     "tests/socket_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/socket_test/Makefile" ;;
     "tests/sqlite_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/sqlite_test/Makefile" ;;
     "tests/systemThreads_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/systemThreads_test/Makefile" ;;
+    "tests/systemProcesses_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/systemProcesses_test/Makefile" ;;
     "tests/systemTools_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/systemTools_test/Makefile" ;;
     "tests/timeTools_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/timeTools_test/Makefile" ;;
     "tests/xexec.module_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/xexec.module_test/Makefile" ;;
