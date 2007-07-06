@@ -178,6 +178,33 @@ tools::~tools()
 
 //-------------------------------------------------------------------
 
+#ifndef NO_EX
+	static void 
+#else
+	static bool 
+#endif
+tools::random(void *data, 
+			unsigned long size)
+{
+	FILE *file = fopen("/dev/random","r");
+	if (file == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_TOOLS,TOOLS_RANDOM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;	
+		#endif
+	
+	fread(data, size, 1, file);
+	
+	fclose(file);
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
 bool 
 tools::isInArray(const dodoStringArr &arr, 
 				const dodoString &needle, 

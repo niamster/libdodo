@@ -131,6 +131,19 @@ namespace dodo
 			virtual ~tools();
 			
 			/**
+			 * @return random data
+			 * @param data is pointer where to store data
+			 * @param size indicates amount of random data in bytes
+			 * @note based on /dev/random
+			 */
+			#ifndef NO_EX
+				static void 
+			#else
+				static bool 
+			#endif		
+							random(void *data, unsigned long size);
+			
+			/**
 			 * removes symbols from the end and from the begin of given string
 			 * @return processed string
 			 * @param data is string to process
