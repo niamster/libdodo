@@ -154,6 +154,36 @@ namespace dodo
 			static long lRandom();
 			
 			/**
+			 * @return random unsigned int
+			 */
+			static unsigned int uiRandom();
+			
+			/**
+			 * @return random int
+			 */
+			static int iRandom();
+			
+			/**
+			 * @return random unsigned short
+			 */
+			static unsigned short usRandom();
+			
+			/**
+			 * @return random short
+			 */
+			static short sRandom();
+			
+			/**
+			 * @return random unsigned char
+			 */
+			static unsigned char ucRandom();
+			
+			/**
+			 * @return random char
+			 */
+			static char cRandom();
+			
+			/**
 			 * @return random double
 			 */
 			static double dRandom();

@@ -1,6 +1,5 @@
 firebird
 libsoup
-processes
 posix_fallocate
 job collection
 
@@ -18,4 +17,3 @@ threads,processes: locking mutual exlusions
 					unlock
 				}
 			};*/
-random(/dev/{u}random)

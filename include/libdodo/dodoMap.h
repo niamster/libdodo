@@ -78,7 +78,7 @@ namespace dodo
 					
 					std::pair<typename std::map<dodoString, anyType>::iterator, bool> res = realArr.insert(make_pair(varName, type));
 					
-					return *(res->first);				
+					return res.first->second;				
 				}
 							
 				/**

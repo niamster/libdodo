@@ -229,6 +229,78 @@ tools::lRandom()
 	
 //-------------------------------------------------------------------
 
+unsigned int 
+tools::uiRandom()
+{
+	unsigned int rnd;
+	
+	random(&rnd, sizeof(unsigned int));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
+int 
+tools::iRandom()
+{
+	int rnd;
+	
+	random(&rnd, sizeof(int));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
+unsigned short 
+tools::usRandom()
+{
+	unsigned short rnd;
+	
+	random(&rnd, sizeof(unsigned short));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
+short 
+tools::sRandom()
+{
+	short rnd;
+	
+	random(&rnd, sizeof(short));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
+unsigned char 
+tools::ucRandom()
+{
+	char rnd;
+	
+	random(&rnd, sizeof(char));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
+char 
+tools::cRandom()
+{
+	char rnd;
+	
+	random(&rnd, sizeof(char));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
 double 
 tools::dRandom()
 {
