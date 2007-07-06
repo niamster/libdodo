@@ -156,7 +156,7 @@ systemProcesses::addNRun(processFunc func,
 		process.handle = NULL;
 	#endif
 	
-	register pid_t pid = fork();
+	pid_t pid = fork();
 		
 	if (pid == 0)
 	{
@@ -273,7 +273,7 @@ systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
 	if (!position->isRunning)
 		return false;
 		
-	register int res = kill(position->pid,0);	
+	int res = kill(position->pid,0);	
 	if (res != 0)	
 	{
 		if (errno == ESRCH)
@@ -396,7 +396,7 @@ systemProcesses::run(unsigned long position,
 				return false;
 			#endif
 		
-		register pid_t pid = fork();
+		pid_t pid = fork();
 			
 		if (pid == 0)
 		{

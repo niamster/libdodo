@@ -62,7 +62,7 @@ flushNBA::addFlush(const flush &fl)
 void 
 flushNBA::makeFalse(int count) const
 {	
-	for (register int i=0;i<count;++i)
+	for (int i=0;i<count;++i)
 		tempRB.push_back(false);
 }
 
@@ -74,7 +74,7 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 {
 	tempRB.clear();
 	
-	register int count = -1;
+	int count = -1;
 	
 	pollfd *fds = new pollfd[pos.size()];
 	
@@ -98,11 +98,11 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 	
 	if (count > 0)
 	{
-		register int res = poll(fds,count,timeout);
+		int res = poll(fds,count,timeout);
 		
 		if (res > 0)
 		{
-				for (register int i=0;i<count;++i)
+				for (int i=0;i<count;++i)
 				{
 					if (isSetFlag(fds[i].revents,POLLIN) || isSetFlag(fds[i].revents,POLLPRI))
 						tempRB.push_back(true);
@@ -153,7 +153,7 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 					int timeout) const
 {	tempRB.clear();
 	
-	register int count = -1;
+	int count = -1;
 	
 	pollfd *fds = new pollfd[pos.size()];
 	
@@ -177,11 +177,11 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 	
 	if (count > 0)
 	{
-		register int res = poll(fds,count,timeout);
+		int res = poll(fds,count,timeout);
 		
 		if (res > 0)
 		{
-				for (register int i=0;i<count;++i)
+				for (int i=0;i<count;++i)
 				{
 					if (isSetFlag(fds[i].revents,POLLOUT))
 						tempRB.push_back(true);
@@ -240,7 +240,7 @@ flushNBA::isReadable(int pos,
 			fd.fd = i->in;
 			fd.events = POLLIN | POLLPRI;
 			
-			register int res = poll(&fd,1,timeout);
+			int res = poll(&fd,1,timeout);
 			
 			if (res > 0)
 			{
@@ -294,7 +294,7 @@ flushNBA::isWritable(int pos,
 			fd.fd = i->out;
 			fd.events = POLLOUT;
 			
-			register int res = poll(&fd,1,timeout);
+			int res = poll(&fd,1,timeout);
 			
 			if (res > 0)
 			{

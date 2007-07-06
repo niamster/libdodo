@@ -123,7 +123,7 @@ flushSocketExchange::close()
 		#endif
 	
 	#ifdef NO_EX
-		register bool result = 
+		bool result = 
 	#endif
 	
 	flushSocketOptions::_close(socket);
@@ -196,14 +196,14 @@ flushSocketExchange::write(const char * const data)
 		performXExec(preExec);
 	#endif	
 	
-	register unsigned long iter = outSize/outSocketBuffer;
-	register unsigned long rest = outSize%outSocketBuffer;
+	unsigned long iter = outSize/outSocketBuffer;
+	unsigned long rest = outSize%outSocketBuffer;
 
-	register unsigned long sent_received = 0;
+	unsigned long sent_received = 0;
 		
-	register unsigned long batch, n;	
+	unsigned long batch, n;	
 		
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		batch = 0;
 		while (batch < outSocketBuffer)
@@ -296,14 +296,14 @@ flushSocketExchange::read(char * const data)
 	
 	memset(data,'\0',inSize);
 				
-	register unsigned long iter = inSize/inSocketBuffer;
-	register unsigned long rest = inSize%inSocketBuffer;
+	unsigned long iter = inSize/inSocketBuffer;
+	unsigned long rest = inSize%inSocketBuffer;
 
-	register unsigned long sent_received = 0;
+	unsigned long sent_received = 0;
 		
-	register unsigned long batch, n; 
+	unsigned long batch, n; 
 			
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		batch = 0;
 		while (batch < inSocketBuffer)
@@ -384,10 +384,10 @@ flushSocketExchange::read(char * const data)
 #endif
 flushSocketExchange::readString(dodoString &data)
 {	
-	register char *t_data = new char[inSize+1];
+	char *t_data = new char[inSize+1];
 
 	#ifdef NO_EX
-		register bool result = 
+		bool result = 
 	#endif
 	
 	#ifndef NO_EX
@@ -494,16 +494,16 @@ flushSocketExchange::writeStream(const char * const data)
 	
 	buffer.append(1,'\n');
 	
-	register unsigned long outSize = buffer.size();
+	unsigned long outSize = buffer.size();
 	
-	register unsigned long iter = outSize/outSocketBuffer;
-	register unsigned long rest = outSize%outSocketBuffer;
+	unsigned long iter = outSize/outSocketBuffer;
+	unsigned long rest = outSize%outSocketBuffer;
 
-	register unsigned long sent_received = 0;
+	unsigned long sent_received = 0;
 	
-	register unsigned long batch, n;
+	unsigned long batch, n;
 		
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		batch = 0;
 		while (batch < outSocketBuffer)
@@ -596,7 +596,7 @@ flushSocketExchange::readStream(char * const data)
 	
 	memset(data,'\0',inSocketBuffer);
 	
-	register unsigned long n;
+	unsigned long n;
 	
 	while (true)
 	{
@@ -637,10 +637,10 @@ flushSocketExchange::readStream(char * const data)
 #endif
 flushSocketExchange::readStreamString(dodoString &data)
 {
-	register char *t_data = new char[inSocketBuffer+1];
+	char *t_data = new char[inSocketBuffer+1];
 
 	#ifdef NO_EX
-		register bool result =
+		bool result =
 	#endif
 
 	

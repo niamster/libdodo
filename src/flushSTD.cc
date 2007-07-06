@@ -135,12 +135,12 @@ flushSTD::read(char * const a_void)
 	
 	memset(a_void,'\0',inSize);
 	 
-	register unsigned long iter = inSize/inSTDBuffer;
-	register unsigned long rest = inSize%inSTDBuffer;
+	unsigned long iter = inSize/inSTDBuffer;
+	unsigned long rest = inSize%inSTDBuffer;
 	
-	register unsigned long sent_received = 0;
+	unsigned long sent_received = 0;
 
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		while (true)
 		{
@@ -204,10 +204,10 @@ flushSTD::read(char * const a_void)
 #endif
 flushSTD::readString(dodoString &a_str)
 {
-	register char *data = new char[inSize+1];
+	char *data = new char[inSize+1];
 
 	#ifdef NO_EX
-		register bool result = 
+		bool result = 
 	#endif
 	
 	#ifndef NO_EX
@@ -264,16 +264,16 @@ flushSTD::write(const char *const aa_buf)
 		performXExec(preExec);
 	#endif
 	 
-	register unsigned long iter = outSize/outSTDBuffer;
-	register unsigned long rest = outSize%outSTDBuffer;
+	unsigned long iter = outSize/outSTDBuffer;
+	unsigned long rest = outSize%outSTDBuffer;
 	
-	register unsigned long sent_received = 0;
+	unsigned long sent_received = 0;
 	
 	desc = stdout;
 	if (err)
 		desc = stderr;
 	
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		while (true)
 		{
@@ -360,7 +360,7 @@ flushSTD::inputterInfo()
 	
 	struct sockaddr sa;
 	
-	register socklen_t len = sizeof(sockaddr_in6);
+	socklen_t len = sizeof(sockaddr_in6);
 	
 	if (::getpeername(1,&sa,&len)==-1)
 		#ifndef NO_EX
@@ -543,10 +543,10 @@ flushSTD::readStream(char * const a_void)
 #endif
 flushSTD::readStreamString(dodoString &a_str)
 {
-	register char *data = new char[inSTDBuffer+1];
+	char *data = new char[inSTDBuffer+1];
 
 	#ifdef NO_EX
-		register bool result =
+		bool result =
 	#endif
 	
 	#ifndef NO_EX
@@ -609,20 +609,20 @@ flushSTD::writeStream(const char *const aa_buf)
 
 	buffer.append(1,'\n');
 
-	register unsigned long outSize = strlen(aa_buf);
+	unsigned long outSize = strlen(aa_buf);
 	 
-	register unsigned long iter = outSize/outSTDBuffer;
-	register unsigned long rest = outSize%outSTDBuffer;
+	unsigned long iter = outSize/outSTDBuffer;
+	unsigned long rest = outSize%outSTDBuffer;
 	
-	register unsigned long sent_received = 0;
+	unsigned long sent_received = 0;
 	
 	desc = stdout;
 	if (err)
 		desc = stderr;
 	
-	register char *buff = new char[outSTDBuffer+1];
+	char *buff = new char[outSTDBuffer+1];
 	
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		strncpy(buff,buffer.c_str()+sent_received,outSTDBuffer);
 		buff[outSTDBuffer] = '\0';

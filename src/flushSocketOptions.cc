@@ -307,12 +307,12 @@ flushSocketOptions::setSockOption(short option,
 			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETSOCKOPT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#endif
 	
-	register int sockFlag(1);
+	int sockFlag(1);
 	
 	if (!flag)
 		sockFlag = 0;
 	
-	register int real_option(0);
+	int real_option(0);
 	
 	switch (option)
 	{

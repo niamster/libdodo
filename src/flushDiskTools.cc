@@ -33,7 +33,7 @@ using namespace dodo;
 flushDiskTools::unlink(const dodoString &path,
 				bool force)
 {
-	register int status(0);
+	int status(0);
 	struct stat st;
 
 	if (::lstat(path.c_str(),&st) == -1)
@@ -321,7 +321,7 @@ flushDiskTools::chmod(const dodoString &path, int permissions)
 int 
 flushDiskTools::getPermission(int permission)
 {
-	register int mode(0);
+	int mode(0);
 	
 	if (isSetFlag(permission,PERM_OWNER_READ_ACCESS))
 		mode |= S_IRUSR;
@@ -474,7 +474,7 @@ flushDiskTools::getPermissions(const dodoString &path)
 			return (permissionModesEnum)-1;
 		#endif
 		
-	register int mode(PERM_NONE);
+	int mode(PERM_NONE);
 	
 	if (isSetFlag(st.st_mode,S_IRUSR))
 		mode |= PERM_OWNER_READ_ACCESS;	
@@ -748,12 +748,12 @@ flushDiskTools::getFileContent(const dodoString &path)
 			return __string__;
 		#endif
 	
-	register char buffer[INSIZE];
+	char buffer[INSIZE];
 	
-	register long iter = st.st_size/INSIZE, rest = st.st_size%INSIZE;
+	long iter = st.st_size/INSIZE, rest = st.st_size%INSIZE;
 	dodoString retS = "";	
 	
-	register int i(0);	
+	int i(0);	
 	for (;i<iter;++i)
 	{
 		if (fseek(file,i*INSIZE,SEEK_SET) == -1)
@@ -865,7 +865,7 @@ flushDiskTools::getFileContentArr(const dodoString &path)
 			return __stringarray__;
 		#endif
 		
-	register char buffer[DISK_MAXLINELEN];	
+	char buffer[DISK_MAXLINELEN];	
 	dodoStringArr arr;
 	
 	while (fgets(buffer,DISK_MAXLINELEN,file)!=NULL)
@@ -998,8 +998,8 @@ flushDiskTools::copy(const dodoString &from,
 		else
 			if (S_ISLNK(stFrom.st_mode))
 			{
-				register char buffer[MAXPATHLEN];
-				register int count = 0;
+				char buffer[MAXPATHLEN];
+				int count = 0;
 	
 				if ( (count = ::readlink(from.c_str(),buffer,MAXPATHLEN)) == -1)
 					#ifndef NO_EX
@@ -1027,7 +1027,7 @@ flushDiskTools::copy(const dodoString &from,
 	}
 	else
 	{
-		register long iter = stFrom.st_size/INSIZE, rest = stFrom.st_size%INSIZE;
+		long iter = stFrom.st_size/INSIZE, rest = stFrom.st_size%INSIZE;
 		
 		FILE *fromFile = fopen(from.c_str(),"r");			
 		if (fromFile == NULL)
@@ -1045,9 +1045,9 @@ flushDiskTools::copy(const dodoString &from,
 				return false;
 			#endif
 		
-		register char buffer[INSIZE];
+		char buffer[INSIZE];
 		
-		register int i(0),j;
+		int i(0),j;
 		for (;i<iter;++i)
 		{
 			j = i*INSIZE;

@@ -83,7 +83,7 @@
 						dbInfo.user.size()==0?NULL:dbInfo.user.c_str(),
 						dbInfo.password.size()==0?NULL:dbInfo.password.c_str());
 						
-		register int status = PQstatus(conn);
+		int status = PQstatus(conn);
 		
 		if (status != CONNECTION_OK)
 			#ifndef NO_EX
@@ -149,8 +149,8 @@
 	dbPostgresql::_exec(const dodoString &query, 
 						bool result)
 	{	
-		register bool blobHint;
-		register int status;
+		bool blobHint;
+		int status;
 		
 		if (query.size() == 0)
 		{
@@ -197,12 +197,12 @@
 						
 						empty = false;
 
-						register int rowsNum = PQntuples(pgResult);
+						int rowsNum = PQntuples(pgResult);
 						char *fieldType;
 						
 						dodoStringArr rowsPart;
 				
-						for (register int i(0);i<rowsNum;++i)
+						for (int i(0);i<rowsNum;++i)
 						{
 							fieldType = PQgetvalue(pgResult,i,1);
 							
@@ -264,14 +264,14 @@
 				case DBREQUEST_INSERT:
 				
 					{
-						register long size = blobs.size();
+						long size = blobs.size();
 						
-						register char **values = new char*[size];
-						register int *lengths = new int[size];
-						register int *formats = new int[size];
+						char **values = new char*[size];
+						int *lengths = new int[size];
+						int *formats = new int[size];
 						
 						dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
-						for (register int o=0;i!=j;++i,++o)
+						for (int o=0;i!=j;++i,++o)
 						{
 							values[o] = (char *)i->c_str();
 							lengths[o] = i->size();
@@ -363,8 +363,8 @@
 		if (empty || !show)
 			return __stringarrayvector__;
 		
-		register int rowsNum = PQntuples(pgResult);
-		register int fieldsNum = PQnfields(pgResult);
+		int rowsNum = PQntuples(pgResult);
+		int fieldsNum = PQnfields(pgResult);
 
 		dodoArray<dodoStringArr> rows;
 		
@@ -372,12 +372,12 @@
 			rows.reserve(rowsNum);
 		#endif
 		
-		register int j;
+		int j;
 		
 		dodoStringArr rowsPart;
 		dodoString rowPart;
 
-		for (register int i(0);i<rowsNum;++i)
+		for (int i(0);i<rowsNum;++i)
 		{
 			rowsPart.clear();
 			
@@ -423,7 +423,7 @@
 		if (empty || !show)
 			return __stringarray__;
 
-		register int fieldsNum = PQnfields(pgResult);
+		int fieldsNum = PQnfields(pgResult);
 		
 		dodoStringArr fields;
 		
@@ -431,7 +431,7 @@
 			fields.reserve(fieldsNum);
 		#endif
 		
-		for (register int i(0);i<fieldsNum;++i)
+		for (int i(0);i<fieldsNum;++i)
 			fields.push_back(PQfname(pgResult,i));
 
 		#ifndef DBPOSTGRESQL_WO_XEXEC
@@ -580,8 +580,8 @@
 		if (empty || !show)
 			return __dodostringmap__;
 		
-		register int rowsNum = PQntuples(pgResult);
-		register int fieldsNum = PQnfields(pgResult);
+		int rowsNum = PQntuples(pgResult);
+		int fieldsNum = PQnfields(pgResult);
 		
 		dodoStringMapArr rowsFields;
 		
@@ -592,9 +592,9 @@
 		dodoStringMap rowFieldsPart;
 		dodoString rowPart;
 		
-		register int j;
+		int j;
 
-		for (register int i(0);i<rowsNum;++i)
+		for (int i(0);i<rowsNum;++i)
 		{
 			rowFieldsPart.clear();
 			
@@ -628,7 +628,7 @@
 	#endif 
 	dbPostgresql::setCharset(const dodoString &charset)
 	{
-		register int status = PQsetClientEncoding(conn, charset.c_str());
+		int status = PQsetClientEncoding(conn, charset.c_str());
 		if (status == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_SETCHARSET,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);

@@ -189,7 +189,7 @@
 		
 			deinitExModule deinit;	
 			
-			for (register int i(0);i<AM_MODULES;++i)
+			for (int i(0);i<AM_MODULES;++i)
 			{
 				if (!handlesOpenedEx[i])
 					continue;
@@ -253,7 +253,7 @@
 			deinitExModule deinit;
 		#endif
 		
-		for (register int i(0);i<AM_MODULES;++i)
+		for (int i(0);i<AM_MODULES;++i)
 		{
 			#ifdef DL_EXT
 				
@@ -314,7 +314,7 @@
 			deinitExModule deinit;
 		#endif
 		
-		for (register int i(0);i<AM_MODULES;++i)
+		for (int i(0);i<AM_MODULES;++i)
 		{
 			#ifdef DL_EXT
 				
@@ -351,7 +351,7 @@
 			errorHandler in;
 			deinitExModule deinit;
 			
-			for (register int i(0);i<AM_MODULES;++i)
+			for (int i(0);i<AM_MODULES;++i)
 			{
 				
 				if (handlesOpenedEx[i])

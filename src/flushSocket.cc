@@ -151,7 +151,7 @@ flushSocket::makeSocket()
 		socket = -1;		
 	}
 	
-	register int real_domain(PF_INET), real_type(SOCK_STREAM);
+	int real_domain(PF_INET), real_type(SOCK_STREAM);
 	
 	switch (family)
 	{
@@ -316,7 +316,7 @@ flushSocket::connect(const __connInfo &destinaton,
 					flushSocketExchange &exchange)
 {
 	#ifdef NO_EX
-		register bool result =
+		bool result =
 	#endif
 	
 	connect(destinaton.host,destinaton.port,exchange);
@@ -357,7 +357,7 @@ flushSocket::connectFrom(const dodoString &local,
 		makeSocket();
 	#endif
 		
-	register int sockFlag(1);
+	int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int)) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -454,7 +454,7 @@ flushSocket::connectFrom(const dodoString &local,
 					flushSocketExchange &exchange)
 {
 	#ifdef NO_EX
-		register bool result =
+		bool result =
 	#endif
 	
 	connectFrom(local,destinaton.host,destinaton.port,exchange);
@@ -575,7 +575,7 @@ flushSocket::bindNListen(const dodoString &host,
 		makeSocket();
 	#endif
 	
-	register int sockFlag(1);
+	int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -656,7 +656,7 @@ flushSocket::bindNListen(const __connInfo &destinaton,
 						int numberOfConnections) 
 {
 	#ifdef NO_EX
-		register bool result =
+		bool result =
 	#endif
 	
 	bindNListen(destinaton.host,destinaton.port,numberOfConnections);
@@ -731,7 +731,7 @@ flushSocket::bindNListen(const dodoString &path,
 				#endif
 	}
 		
-	register int sockFlag(1);
+	int sockFlag(1);
 	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int)) == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -811,7 +811,7 @@ flushSocket::accept(__initialAccept &init,
 			return false;
 		#endif
 	
-	register int sock(-1);
+	int sock(-1);
 	info.host.clear();
 	
 	switch (family)
@@ -819,7 +819,7 @@ flushSocket::accept(__initialAccept &init,
 		case PROTO_FAMILY_IPV4:
 			{
 				struct sockaddr_in sa;
-				register socklen_t len = sizeof(sockaddr_in);
+				socklen_t len = sizeof(sockaddr_in);
 				sock = ::accept(socket,(sockaddr *)&sa,&len);
 				
 				if (sock == -1)
@@ -845,7 +845,7 @@ flushSocket::accept(__initialAccept &init,
 		case PROTO_FAMILY_IPV6:
 			{
 				struct sockaddr_in6 sa;
-				register socklen_t len = sizeof(sockaddr_in6);
+				socklen_t len = sizeof(sockaddr_in6);
 				
 				sock = ::accept(socket,(sockaddr *)&sa,&len);
 	
@@ -939,7 +939,7 @@ flushSocket::accept(__initialAccept &init)
 			return false;
 		#endif
 	
-	register int sock = ::accept(socket,NULL,NULL);
+	int sock = ::accept(socket,NULL,NULL);
 	if (sock == -1)
 		#ifndef NO_EX
 		{

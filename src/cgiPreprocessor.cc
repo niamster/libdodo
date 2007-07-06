@@ -68,7 +68,7 @@ cgiPreprocessor::read(const dodoString &path,
 	temp.assign(stor,st.st_size);
 	newLinePos.clear();
 	
-	register long i(0);
+	long i(0);
 	for (;i<st.st_size;++i)
 		if (temp[i] == '\n')
 			newLinePos.push_back(i);
@@ -88,7 +88,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 	
 	dodoString buffer = read(path,newLinePos);
 	
-	register unsigned long i(0), j(0), begin(0);
+	unsigned long i(0), j(0), begin(0);
 	
 	while (true)
 	{	
@@ -238,7 +238,7 @@ cgiPreprocessor::getLineNumber(const dodoArray<unsigned long> &newLinePos,
 {	
 	dodoArray<unsigned long>::const_iterator o(newLinePos.begin()), p(newLinePos.end());
 	
-	register unsigned long i(1);
+	unsigned long i(1);
 	
 	for (;o!=p;++o,++i)
 		if (pos <= *o)

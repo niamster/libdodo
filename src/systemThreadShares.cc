@@ -134,8 +134,8 @@ systemThreadShares::lock(unsigned long microseconds)
 	}
 	else
 	{
-		register bool locked = true;
-		register unsigned long slept = 0;
+		bool locked = true;
+		unsigned long slept = 0;
 		
 		while (locked)
 		{

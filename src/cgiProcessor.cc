@@ -102,7 +102,7 @@ dodoString
 cgiProcessor::_process(const dodoString &buffer, 
 					const dodoString &path)
 {
-	register unsigned long i(0), j(0), begin(0), k(0);
+	unsigned long i(0), j(0), begin(0), k(0);
 	
 	dodoString tpl;
 	dodoString temp;
@@ -361,9 +361,9 @@ cgiProcessor::_if(const dodoString &buffer,
 				dodoString &tpl, 
 				const dodoString &path)
 {
-	register bool _float(false), invert(false);
+	bool _float(false), invert(false);
 	
-	register unsigned short oper(0);
+	unsigned short oper(0);
 	
 	dodoArray<dodoString> temp2 = tools::explode(statement,"==");
 	if (temp2.size() != 2)
@@ -409,7 +409,7 @@ cgiProcessor::_if(const dodoString &buffer,
 			invert = true;			
 	}
 	
-	register bool accept(invert);
+	bool accept(invert);
 	
 	if (temp2.size() != 2)
 	{
@@ -447,7 +447,7 @@ cgiProcessor::_if(const dodoString &buffer,
 		
 		if (_float)	
 		{
-			register double first(atof(temp1.c_str())), second(atof(temp3.c_str()));
+			double first(atof(temp1.c_str())), second(atof(temp3.c_str()));
 			
 			switch (oper)
 			{
@@ -483,8 +483,8 @@ cgiProcessor::_if(const dodoString &buffer,
 		}
 	}
 
-	register unsigned long u(blockEnd(buffer,start,"if","fi",path)), v(0);
-	register bool found(true);
+	unsigned long u(blockEnd(buffer,start,"if","fi",path)), v(0);
+	bool found(true);
 	
 	try
 	{
@@ -523,7 +523,7 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 						const dodoString &ts,
 						const dodoString &path)
 {
-	register unsigned long u, m(start), _st(1), b, p, stLen(st.size()), tsLen(ts.size());
+	unsigned long u, m(start), _st(1), b, p, stLen(st.size()), tsLen(ts.size());
 
 	while (true)
 	{
@@ -699,7 +699,7 @@ cgiProcessor::cleanNamespace()
 	if (c != namespaceVars.end())
 	{
 		std::map<unsigned int, dodoAssocArr>::iterator v = localNamespace.find(namespaceDeepness);
-		register bool inLocal = (v != localNamespace.end())?true:false; 
+		bool inLocal = (v != localNamespace.end())?true:false; 
 		
 		dodoStringArr::iterator x(c->second.begin()), z(c->second.end());
 		for (;x!=z;++x)
@@ -727,7 +727,7 @@ cgiProcessor::_ns(const dodoString &buffer,
 				dodoString &tpl, 
 				const dodoString &path)
 {
-	register unsigned long u(blockEnd(buffer,start,"ns","sn",path));	
+	unsigned long u(blockEnd(buffer,start,"ns","sn",path));	
 	
 	tpl.append(_process(buffer.substr(start,u - start),path));
 	
@@ -743,10 +743,10 @@ cgiProcessor::_for(const dodoString &buffer,
 				dodoString &tpl, 
 				const dodoString &path)
 {
-	register unsigned long u(blockEnd(buffer,start,"for","rof",path));
+	unsigned long u(blockEnd(buffer,start,"for","rof",path));
 	
-	register unsigned long p = statement.find("$");
-	register unsigned long i(p), j(statement.size());
+	unsigned long p = statement.find("$");
+	unsigned long i(p), j(statement.size());
 	
 	for (;i<j;++i)
 		if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
@@ -756,7 +756,7 @@ cgiProcessor::_for(const dodoString &buffer,
 
 	dodoString keyVal;
 	dodoAssocArr::iterator keyIter;
-	register bool key(false);	
+	bool key(false);	
 	dodoString keyName;
 	
 	p = statement.find("=>",i + 1);
@@ -816,8 +816,8 @@ cgiProcessor::_for(const dodoString &buffer,
 							keyVal = local[keyName];
 					}
 					
-					register unsigned long i(0),j(k->second.size());
-					register unsigned long iteratorPrev = iterator;
+					unsigned long i(0),j(k->second.size());
+					unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (;i<j;++i,++iterator)
 					{
@@ -875,7 +875,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					
 					dodoAssocArr::iterator k = g->second.begin();
 					dodoAssocArr::iterator l = g->second.end();		
-					register unsigned long iteratorPrev = iterator;
+					unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (;k!=l;++k,++iterator)
 					{								
@@ -931,8 +931,8 @@ cgiProcessor::_for(const dodoString &buffer,
 							keyVal = local[keyName];
 					}
 																
-					register unsigned long i(0),j(k->second.size());
-					register unsigned long iteratorPrev = iterator;
+					unsigned long i(0),j(k->second.size());
+					unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (;i<j;++i,++iterator)
 					{					
@@ -990,7 +990,7 @@ cgiProcessor::_for(const dodoString &buffer,
 																
 					dodoAssocArr::iterator k = g->second.begin();
 					dodoAssocArr::iterator l = g->second.end();		
-					register unsigned long iteratorPrev = iterator;
+					unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (;k!=l;++k,++iterator)
 					{								
@@ -1048,9 +1048,9 @@ cgiProcessor::_for(const dodoString &buffer,
 											
 					dodoStringArr::iterator k = o->second.begin();
 					dodoStringArr::iterator l = o->second.end();	
-					register unsigned long iteratorPrev = iterator;
+					unsigned long iteratorPrev = iterator;
 					iterator = 1;
-					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter,++iterator)
+					for (unsigned long keyNIter(0);k!=l;++k,++keyNIter,++iterator)
 					{					
 						dodo["iterator"] = tools::lToString(iterator);
 						
@@ -1106,9 +1106,9 @@ cgiProcessor::_for(const dodoString &buffer,
 										
 					dodoArray<dodoAssocArr>::iterator k = d->second.begin();
 					dodoArray<dodoAssocArr>::iterator l = d->second.end();
-					register unsigned long iteratorPrev = iterator;
+					unsigned long iteratorPrev = iterator;
 					iterator = 1;
-					for (register unsigned long keyNIter(0);k!=l;++k,++keyNIter,++iterator)
+					for (unsigned long keyNIter(0);k!=l;++k,++keyNIter,++iterator)
 					{		
 						dodo["iterator"] = tools::lToString(iterator);
 						
@@ -1172,8 +1172,8 @@ cgiProcessor::_for(const dodoString &buffer,
 										keyVal = local[keyName];
 								}
 														
-								register unsigned long i(0),j(k->second.size());
-								register unsigned long iteratorPrev = iterator;
+								unsigned long i(0),j(k->second.size());
+								unsigned long iteratorPrev = iterator;
 								iterator = 1;
 								for (;i<j;++i,++iterator)
 								{						
@@ -1235,8 +1235,8 @@ cgiProcessor::_for(const dodoString &buffer,
 										keyVal = local[keyName];
 								}
 																									
-								register unsigned long i(0),j(k->second.size());
-								register unsigned long iteratorPrev = iterator;
+								unsigned long i(0),j(k->second.size());
+								unsigned long iteratorPrev = iterator;
 								iterator = 1;
 								for (;i<j;++i,++iterator)
 								{			
@@ -1281,7 +1281,7 @@ cgiProcessor::_for(const dodoString &buffer,
 				for (;o!=p;++o)
 					if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
 					{
-						register unsigned long pos = atol(temp[1].c_str());
+						unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= o->second.size())
 						{
 							dodoAssocArr::iterator iter = local.find(varName);
@@ -1296,8 +1296,8 @@ cgiProcessor::_for(const dodoString &buffer,
 									keyVal = local[keyName];
 							}
 																
-							register unsigned long i(0),j(o->second[pos].size());
-							register unsigned long iteratorPrev = iterator;
+							unsigned long i(0),j(o->second[pos].size());
+							unsigned long iteratorPrev = iterator;
 							iterator = 1;
 							for (;i<j;++i,++iterator)
 							{							
@@ -1342,7 +1342,7 @@ cgiProcessor::_for(const dodoString &buffer,
 				for (;d!=f;++d)
 					if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 					{
-						register unsigned long pos = atol(temp[1].c_str());
+						unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= d->second.size())
 						{
 							dodoAssocArr::iterator iter = local.find(varName);
@@ -1359,7 +1359,7 @@ cgiProcessor::_for(const dodoString &buffer,
 																							
 							dodoAssocArr::iterator k = d->second[pos].begin();					
 							dodoAssocArr::iterator l = d->second[pos].end();
-							register unsigned long iteratorPrev = iterator;
+							unsigned long iteratorPrev = iterator;
 							iterator = 1;
 							for (;k!=l;++k,++iterator)
 							{	
@@ -1408,7 +1408,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					for (;d!=f;++d)
 						if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 						{
-							register unsigned long pos = atol(temp[1].c_str());
+							unsigned long pos = atol(temp[1].c_str());
 							if (pos >= 0 && pos <= d->second.size())
 							{
 								dodoAssocArr::iterator k = d->second[pos].begin();					
@@ -1428,8 +1428,8 @@ cgiProcessor::_for(const dodoString &buffer,
 												keyVal = local[keyName];
 										}		
 																
-										register unsigned long i(0),j(k->second.size());
-										register unsigned long iteratorPrev = iterator;
+										unsigned long i(0),j(k->second.size());
+										unsigned long iteratorPrev = iterator;
 										iterator = 1;
 										for (;i<j;++i,++iterator)
 										{
@@ -1488,8 +1488,8 @@ cgiProcessor::_for(const dodoString &buffer,
 				keyVal = local[keyName];
 		}					
 			
-		register unsigned long i(0), j(targetVar.size());
-		register unsigned long iteratorPrev = iterator;
+		unsigned long i(0), j(targetVar.size());
+		unsigned long iteratorPrev = iterator;
 		iterator = 1;
 		for (;i<j;++i,++iterator)
 		{		
@@ -1539,7 +1539,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 					const dodoString &path)
 {
 	dodoString varName = trim(a_varName), tempVar;
-	register unsigned long u, b, m(0), ob, cb, i, c;
+	unsigned long u, b, m(0), ob, cb, i, c;
 	
 	while (true)
 	{
@@ -1618,7 +1618,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 				if (strcmp(temp[1].c_str(),k->first.c_str()) == 0)
 					if (temp.size() == 3)
 					{
-						register unsigned long pos = atol(temp[2].c_str());
+						unsigned long pos = atol(temp[2].c_str());
 						if (pos >= 0 && pos <= k->second.size())
 							return dodoString(1,k->second[pos]);
 						else
@@ -1634,7 +1634,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		for (;k!=l;++k)
 			if (strcmp(temp[0].c_str(),k->first.c_str()) == 0)
 			{
-				register unsigned long pos = atol(temp[1].c_str());
+				unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= k->second.size())
 					return dodoString(1,k->second[pos]);
 				else
@@ -1652,7 +1652,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 					{
 						if (temp.size() == 3)
 						{
-							register unsigned long pos = atol(temp[2].c_str());
+							unsigned long pos = atol(temp[2].c_str());
 							if (pos >= 0 && pos <= k->second.size())
 								return dodoString(1,k->second[pos]);
 							else
@@ -1668,7 +1668,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		for (;k!=l;++k)
 			if (strcmp(temp[0].c_str(),k->first.c_str()) == 0)
 			{
-				register unsigned long pos = atol(temp[1].c_str());
+				unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= k->second.size())
 					return dodoString(1,k->second[pos]);
 				else
@@ -1687,7 +1687,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 					{
 						if (temp.size() == 3)
 						{
-							register unsigned long pos = atol(temp[2].c_str());
+							unsigned long pos = atol(temp[2].c_str());
 							if (pos >= 0 && pos <= k->second.size())
 								return dodoString(1,k->second[pos]);
 							else
@@ -1702,12 +1702,12 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		for (;o!=p;++o)
 			if (strcmp(temp[0].c_str(),o->first.c_str()) == 0)
 			{
-				register unsigned long pos = atol(temp[1].c_str());
+				unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= o->second.size())
 				{
 					if (temp.size() == 3)
 					{
-						register unsigned long pos1 = atol(temp[2].c_str());
+						unsigned long pos1 = atol(temp[2].c_str());
 						if (pos >= 0 && pos1 <= o->second[pos].size())
 							return dodoString(1,o->second[pos][pos1]);
 						else
@@ -1724,7 +1724,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 			for (;d!=f;++d)
 				if (strcmp(temp[0].c_str(),d->first.c_str()) == 0)
 				{
-					register unsigned long pos = atol(temp[1].c_str());
+					unsigned long pos = atol(temp[1].c_str());
 					if (pos >= 0 && pos <= d->second.size())
 					{
 						k = d->second[pos].begin();					
@@ -1758,7 +1758,7 @@ cgiProcessor::trim(const dodoString &statement)
 {
 	dodoString temp = tools::trim(statement," \t\n",3);
 	
-	register unsigned long i(temp.size() - 1);
+	unsigned long i(temp.size() - 1);
 	
 	if (temp[0] == '\"' && temp[i] == '\"')
 	{

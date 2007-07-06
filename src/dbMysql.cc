@@ -370,7 +370,7 @@
 			
 		mysql_field_seek(mysqlRes, 0);
 		
-		register unsigned int numFields = mysql_num_fields(mysqlRes);	
+		unsigned int numFields = mysql_num_fields(mysqlRes);	
 		
 		dodoArray<dodoStringArr> rows;
 		
@@ -378,7 +378,7 @@
 			rows.reserve(mysql_num_rows(mysqlRes));
 		#endif
 		
-		register unsigned long *length, j;
+		unsigned long *length, j;
 		
 		dodoStringArr rowsPart;
 		
@@ -437,7 +437,7 @@
 			fields.reserve(numFields);
 		#endif
 		
-		for (register unsigned int i(0);i<numFields;++i)
+		for (unsigned int i(0);i<numFields;++i)
 			fields.push_back(mysqlFields[i].name);
 
 		#ifndef DBMYSQL_WO_XEXEC
@@ -625,7 +625,7 @@
 		
 		dodoString rowPart;
 
-		register unsigned long *length, j;
+		unsigned long *length, j;
 		
 		MYSQL_ROW mysqlRow;
 		

@@ -369,10 +369,10 @@ flushDisk::read(char * const a_void,
 flushDisk::readString(dodoString &a_str, 
 				unsigned long a_pos)
 {
-	register char *data = new char[inSize+1];
+	char *data = new char[inSize+1];
 
 	#ifdef NO_EX
-		register bool result = 
+		bool result = 
 	#endif
 	
 	#ifndef NO_EX
@@ -439,7 +439,7 @@ flushDisk::write(const char *const a_buf,
 		{	
 			if (!over)
 			{
-				register size_t read_bytes(0);
+				size_t read_bytes(0);
 				char *t_buf = new char[outSize];
 				
 				if (fseek(file,a_pos,SEEK_SET) == -1)
@@ -542,12 +542,12 @@ flushDisk::write(const char *const a_buf,
 #endif 
 flushDisk::erase(unsigned long a_pos)
 {
-	register char *empty = new char[outSize];
+	char *empty = new char[outSize];
 	
 	memset(empty,0,outSize);
 
 	#ifdef NO_EX
-		register bool result = 
+		bool result = 
 	#endif
 	
 	this->write(empty,a_pos);
@@ -612,7 +612,7 @@ flushDisk::readStream(char * const a_void,
 				return false;
 			#endif
 			
-		for (register unsigned long i(0);i<a_pos;++i)
+		for (unsigned long i(0);i<a_pos;++i)
 		{
 			if (fgets(a_void,inSize,file)==NULL)
 			{
@@ -701,10 +701,10 @@ flushDisk::readStream(char * const a_void,
 flushDisk::readStreamString(dodoString &a_str, 
 				unsigned long a_pos)
 {
-	register char *data = new char[inSize+1];
+	char *data = new char[inSize+1];
 
 	#ifdef NO_EX
-		register bool result = 
+		bool result = 
 	#endif
 	
 	#ifndef NO_EX

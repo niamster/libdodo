@@ -330,7 +330,7 @@ systemTools::setLimit(short type,
 int 
 systemTools::getPriority(short type)
 {
-	register int prio = getpriority(PRIO_PROCESS,getUID(type));
+	int prio = getpriority(PRIO_PROCESS,getUID(type));
 	if (prio == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETPRIORITY,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -398,7 +398,7 @@ systemTools::getUID(short type)
 systemTools::setUID(short type, 
 					int uid)
 {
-	register int res(0);
+	int res(0);
 	
 	switch (type)
 	{
@@ -470,7 +470,7 @@ systemTools::getGID(short type)
 systemTools::setGID(short type, 
 					int uid)
 {
-	register int res(0);
+	int res(0);
 	
 	switch (type)
 	{
@@ -628,7 +628,7 @@ systemTools::fillGroupInfo(__groupInfo &info,
 	
 	info.members.clear();
 	
-	register int i(0);
+	int i(0);
 	
 	while (pw->gr_mem[i] != NULL)
 		info.members.push_back(pw->gr_mem[i++]);
@@ -811,7 +811,7 @@ systemTools::getGroupPID()
 int 
 systemTools::getGroupPID(int pid)
 {
-	register int pgid = getpgid(pid);
+	int pgid = getpgid(pid);
 	if (pgid == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS,SYSTEMTOOLS_GETGROUPPID,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1036,7 +1036,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 		
 	sigMask(&act.sa_mask, blockSignals);
 	
-	register long tSec = 0, tMicrosec = timeout;
+	long tSec = 0, tMicrosec = timeout;
 	
 	if (timeout > 1000000)
 	{                

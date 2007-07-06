@@ -185,9 +185,9 @@ cgiTools::make(dodoAssocArr &val,
 void
 cgiTools::makeEnv()
 {
-	register char *env;
+	char *env;
 	
-	for (register int i=0;i<HTTP_ENV_SIZE;++i)
+	for (int i=0;i<HTTP_ENV_SIZE;++i)
 	{
 		#ifdef FCGI_EXT
 			if (cgiFastSet)
@@ -296,8 +296,8 @@ cgiTools::makePost()
 			return false;
 		#endif
 	
-	register unsigned long inSize = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
-	register char *post = new char[POST_BATCH_SIZE];	
+	unsigned long inSize = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
+	char *post = new char[POST_BATCH_SIZE];	
 
 	unsigned long iter = inSize/POST_BATCH_SIZE;
 	unsigned long rest = inSize%POST_BATCH_SIZE;
@@ -306,7 +306,7 @@ cgiTools::makePost()
 	
 	_cgiFilesInMem = cgiFilesInMem;
 			
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		
 		#ifdef FCGI_EXT
@@ -383,16 +383,16 @@ cgiTools::makePost()
 		if (strcasecmp(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"].c_str(),"base64")==0)
 			bPost = tools::decodeBase64(bPost);
 		
-		register unsigned int temp0;
+		unsigned int temp0;
 		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
 		dodoStringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT["CONTENT_TYPE"].substr(temp0+9));
 		
 		dodoStringArr::iterator i(postPartd.begin()),j(postPartd.end());
 
-		register unsigned int temp1;
-		register char *ptr;
-		register int fd;
-		register unsigned short pathLength = postFilesTmpDir.size()+18;
+		unsigned int temp1;
+		char *ptr;
+		int fd;
+		unsigned short pathLength = postFilesTmpDir.size()+18;
 		
 		for (;i!=j;++i)
 			if (i->find("filename")!=dodoString::npos)

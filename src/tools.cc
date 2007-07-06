@@ -179,9 +179,9 @@ tools::~tools()
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	static void 
+	void 
 #else
-	static bool 
+	bool 
 #endif
 tools::random(void *data, 
 			unsigned long size)
@@ -202,7 +202,43 @@ tools::random(void *data,
 		return true;
 	#endif
 }
+	
+//-------------------------------------------------------------------
 
+unsigned long 
+tools::ulRandom()
+{
+	unsigned long rnd;
+	
+	random(&rnd, sizeof(unsigned long));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
+long 
+tools::lRandom()
+{
+	long rnd;
+	
+	random(&rnd, sizeof(long));
+	
+	return rnd;
+}
+	
+//-------------------------------------------------------------------
+
+double 
+tools::dRandom()
+{
+	double rnd;
+	
+	random(&rnd, sizeof(double));
+	
+	return rnd;
+}
+	
 //-------------------------------------------------------------------
 
 bool 
@@ -233,8 +269,8 @@ tools::explode(const dodoString &fields,
 			const dodoString &separator, 
 			int limit)
 {
-	register unsigned long i(0), j(0), sep_size(separator.size());
-	register int k(0);
+	unsigned long i(0), j(0), sep_size(separator.size());
+	int k(0);
 	dodoStringArr arr;
 	
 	while (true)
@@ -265,7 +301,7 @@ tools::replace(const dodoString &needle,
 		const dodoString &replacement,
 		dodoString &data)
 {
-	register unsigned long i(0),j(needle.size()),k(replacement.size());
+	unsigned long i(0),j(needle.size()),k(replacement.size());
 	
 	while (true)
 	{
@@ -316,7 +352,7 @@ tools::implode(const dodoStringArr &fields,
 			return buffer;
 		#endif
 	
-	register int k(0);
+	int k(0);
 	
 	dodoString temp, fs(frame + separator);
 	dodoStringArr::const_iterator i(fields.begin()), j(fields.end()-1);
@@ -372,7 +408,7 @@ tools::implode(const dodoStringArr &fields,
 			return buffer;
 		#endif
 		
-	register int k(0);	
+	int k(0);	
 	
 	dodoString temp;
 	dodoStringArr::const_iterator i(fields.begin()), j(fields.end()-1);
@@ -442,7 +478,7 @@ dodoString
 tools::lTrim(const dodoString &data, 
 			char symbol)
 {
-	register int size = data.size(), i(0);
+	int size = data.size(), i(0);
 	
 	for (;i<size;++i)
 		if (data[i] != symbol)
@@ -457,7 +493,7 @@ dodoString
 tools::rTrim(const dodoString &data, 
 			char symbol)
 {
-	register int i(data.size()-1);
+	int i(data.size()-1);
 	
 	for (;i>=0;--i)
 		if (data[i] != symbol)
@@ -473,7 +509,7 @@ tools::rTrim(const dodoString &data,
 			char symbols[], 
 			int symCount)
 {
-	register int i(data.size()-1),j,empty;
+	int i(data.size()-1),j,empty;
 	
 	for (;i>=0;--i)
 	{
@@ -494,7 +530,7 @@ tools::lTrim(const dodoString &data,
 			char symbols[], 
 			int symCount)
 {
-	register int size = data.size(),i(0),empty,j;
+	int size = data.size(),i(0),empty,j;
 	
 	for (;i<size;++i)
 	{
@@ -547,8 +583,8 @@ tools::trim(const dodoString &data,
 			#endif
 
 				
-		register size_t in, out, outBefore;
-		register char *inFake, *outFake;
+		size_t in, out, outBefore;
+		char *inFake, *outFake;
 		
 		in = buffer.size();
 		outBefore = out = in*2;
@@ -611,13 +647,13 @@ tools::trim(const dodoString &data,
 	{
 		codeSet(toCode,fromCode);
 		
-		register size_t in = buffer.size();
-		register size_t out = in*2;
-		register size_t outBefore = out;
+		size_t in = buffer.size();
+		size_t out = in*2;
+		size_t outBefore = out;
 		char *outBuffer = new char[out];
 				
-		register char *inFake = (char *)buffer.c_str();
-		register char *outFake = outBuffer;
+		char *inFake = (char *)buffer.c_str();
+		char *outFake = outBuffer;
 		
 		#ifdef __FreeBSD__
 			if (iconv(conv,(const char **)&inFake,&in,&outFake,&out) == (size_t)(-1))
@@ -649,13 +685,13 @@ tools::trim(const dodoString &data,
 		if (!convSet)
 			return buffer;
 		
-		register size_t in = buffer.size();
-		register size_t out = in*2;
-		register size_t outBefore = out;
-		register char *outBuffer = new char[out];
+		size_t in = buffer.size();
+		size_t out = in*2;
+		size_t outBefore = out;
+		char *outBuffer = new char[out];
 					
-		register char *inFake = (char *)buffer.c_str();
-		register char *outFake = outBuffer;
+		char *inFake = (char *)buffer.c_str();
+		char *outFake = outBuffer;
 		
 		#ifdef __FreeBSD__
 			if (iconv(conv,(const char **)&inFake,&in,&outFake,&out) == (size_t)(-1))
@@ -806,7 +842,7 @@ char
 tools::hexToChar(const char first,
 				const char second)
 {
-	register int val=0;
+	int val=0;
 	
 	switch (first)
 	{
@@ -870,7 +906,7 @@ dodoString
 tools::decodeURL(const dodoString &string)
 {
 	dodoString result;
-	register unsigned long o(0),k(string.size());
+	unsigned long o(0),k(string.size());
 
 	for(;o<k;++o) 
 	{
@@ -910,8 +946,8 @@ tools::encodeURL(const dodoString &string)
 {
 	dodoString result;
 	
-	register unsigned long i(0), j(string.size());
-	register char temp[3];
+	unsigned long i(0), j(string.size());
+	char temp[3];
 	
 	for(;i!=j;++i) 
 	{
@@ -1014,8 +1050,8 @@ tools::_encodeASCII85(dodoString &result,
 					unsigned long tuple, 
 					int count)
 {
-	register short int i(5);
-	register char buf[5], *s = buf;
+	short int i(5);
+	char buf[5], *s = buf;
 	
 	do 
 	{
@@ -1038,12 +1074,12 @@ dodoString
 tools::encodeASCII85(const dodoString &string)
 {
 	dodoString result("<~");
-	register unsigned long tuple = 0;
+	unsigned long tuple = 0;
 	
 	unsigned short count(0);
-	register int j = string.size();
+	int j = string.size();
 	
-	for (register int k(0);k<j;++k)
+	for (int k(0);k<j;++k)
 	{
 		switch (count++) 
 		{
@@ -1135,11 +1171,11 @@ tools::_decodeASCII85(dodoString &result,
 dodoString 
 tools::decodeASCII85(const dodoString &string)
 {
-	register unsigned long j = string.size(), count = 0, tuple = 0;
-	register bool _break = false;
+	unsigned long j = string.size(), count = 0, tuple = 0;
+	bool _break = false;
 	dodoString result;
 	
-	for (register unsigned long k(0);k<j;++k)
+	for (unsigned long k(0);k<j;++k)
 	{
 		if (string[k] == '<')
 		{
@@ -1248,12 +1284,12 @@ tools::_encodeBase64(unsigned char in[3],
 dodoString 
 tools::encodeBase64(const dodoString &string)
 {
-	register unsigned long j = string.size();
-	register unsigned char in[3], out[4];
-	register unsigned short i, len;
+	unsigned long j = string.size();
+	unsigned char in[3], out[4];
+	unsigned short i, len;
 	dodoString result;
 	
-	for (register unsigned long k(0);k<j;)
+	for (unsigned long k(0);k<j;)
 	{
 		len = 0;
 		for(i=0;i<3;++i) 
@@ -1297,12 +1333,12 @@ tools::_decodeBase64(unsigned char in[4],
 dodoString 
 tools::decodeBase64(const dodoString &string)
 {
-	register unsigned long j = string.size() + 1;	
-    register unsigned char in[4], out[3], v;
-    register unsigned short i, len;
+	unsigned long j = string.size() + 1;	
+    unsigned char in[4], out[3], v;
+    unsigned short i, len;
 	dodoString result;
 	
-	for (register unsigned long k(0);k<j;)
+	for (unsigned long k(0);k<j;)
 	{
 		len = 0;
         for(len=0,i=0;i<4 && k<j;++i) 
@@ -1342,7 +1378,7 @@ tools::decodeBase64(const dodoString &string)
 __url 
 tools::parseURL(const dodoString &url)
 {
-	register unsigned long begin(0), pos, pos1;
+	unsigned long begin(0), pos, pos1;
 	
 	__url temp;
 	
@@ -1423,7 +1459,7 @@ tools::parseURL(const dodoString &url)
 		unsigned int len = buffer.size();
 		char *dst = new char[len + 1];
 		
-		register int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
+		int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZCOMPRESS,ERR_BZIP,TOOLS_BAD_BZCOMPRESSION,TOOLS_BAD_BZCOMPRESSION_STR,__LINE__,__FILE__);
@@ -1444,7 +1480,7 @@ tools::parseURL(const dodoString &url)
 	    bzs.bzalloc = NULL;
 	    bzs.bzfree = NULL;
 	
-	    register int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
+	    int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 		if (ret != BZ_OK)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_TOOLS,TOOLS_BZDECOMPRESS,ERR_BZIP,TOOLS_BAD_BZDECOMPRESSION_INIT,TOOLS_BAD_BZDECOMPRESSION_INIT_STR,__LINE__,__FILE__);
@@ -1758,11 +1794,11 @@ tools::mail(const dodoString &host,
 		SMTPAUTH_PLAIN = 8
 	};
 	
-	register unsigned short authType = 0;
+	unsigned short authType = 0;
 	
-	register bool auth = (login.size()>0)?true:false;
+	bool auth = (login.size()>0)?true:false;
 
-	register int real_domain(PF_INET);
+	int real_domain(PF_INET);
 	
 	switch (type)
 	{
@@ -1787,7 +1823,7 @@ tools::mail(const dodoString &host,
 			#endif			
 	}
 		
-	register int socket = ::socket(real_domain,SOCK_STREAM,0);
+	int socket = ::socket(real_domain,SOCK_STREAM,0);
 	if (socket == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1826,7 +1862,7 @@ tools::mail(const dodoString &host,
 			#endif
 	}
 	
-	register int outSocketBuffer = TOOLS_SHORT_DATA_SIZE;
+	int outSocketBuffer = TOOLS_SHORT_DATA_SIZE;
 	if (setsockopt(socket,SOL_SOCKET,SO_SNDBUF,&outSocketBuffer,sizeof(long))==-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS,TOOLS_MAIL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
@@ -1836,11 +1872,11 @@ tools::mail(const dodoString &host,
 			
 	dodoString mess;
 	
-	register int code = 0;
-	register char *data = new char[TOOLS_SHORT_DATA_SIZE];
+	int code = 0;
+	char *data = new char[TOOLS_SHORT_DATA_SIZE];
 	
 	#ifdef NO_EX
-		register bool result;
+		bool result;
 	#endif
 	
 	#ifdef NO_EX
@@ -2456,17 +2492,17 @@ tools::sendShortData(int socket,
 tools::sendLongData(int socket, 
 					const dodoString &mess)
 {
-	register unsigned long outSize = mess.size();	
+	unsigned long outSize = mess.size();	
 	
-	register unsigned long iter = outSize/TOOLS_SHORT_DATA_SIZE;
-	register unsigned long rest = outSize%TOOLS_SHORT_DATA_SIZE;
+	unsigned long iter = outSize/TOOLS_SHORT_DATA_SIZE;
+	unsigned long rest = outSize%TOOLS_SHORT_DATA_SIZE;
 
-	register unsigned long sent_received = 0;
+	unsigned long sent_received = 0;
 	
-	register unsigned long batch;
-	register long n;
+	unsigned long batch;
+	long n;
 		
-	for (register unsigned long i=0;i<iter;++i)
+	for (unsigned long i=0;i<iter;++i)
 	{
 		batch = 0;
 		while (batch < TOOLS_SHORT_DATA_SIZE)
@@ -2537,7 +2573,7 @@ tools::sendLongData(int socket,
 tools::receiveShortDataDel(int socket, 
 						char *data)
 {	
-	register int n;
+	int n;
 	
 	while (true)
 	{

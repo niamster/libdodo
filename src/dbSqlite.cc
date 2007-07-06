@@ -142,7 +142,7 @@
 	dbSqlite::_exec(const dodoString &query, 
 					bool result)
 	{
-		register bool blobHint;
+		bool blobHint;
 		
 		if (query.size() == 0)
 		{
@@ -180,13 +180,13 @@
 								
 							empty = false;
 				
-							register unsigned int numFields = sqlite3_column_count(liteStmt);
+							unsigned int numFields = sqlite3_column_count(liteStmt);
 							
-							register const char *columnType, *columnName;
+							const char *columnType, *columnName;
 							
 							dodoStringArr temp1;
 							
-							for (register unsigned int i(0);i<numFields;++i)
+							for (unsigned int i(0);i<numFields;++i)
 							{	
 								columnName = sqlite3_column_name(liteStmt, i);
 											
@@ -277,7 +277,7 @@
 				
 					{
 						dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
-						for (register int o=1;i!=j;++i,++o)
+						for (int o=1;i!=j;++i,++o)
 							if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
 								#ifndef NO_EX
 									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
@@ -336,10 +336,10 @@
 
 		sqlite3_reset(liteStmt);
 		
-		register unsigned int numFields = sqlite3_column_count(liteStmt);
+		unsigned int numFields = sqlite3_column_count(liteStmt);
 		
-		register bool iterate = true;
-		register unsigned int i = 0;
+		bool iterate = true;
+		unsigned int i = 0;
 		
 		dodoArray<dodoStringArr> rows;
 		
@@ -350,7 +350,7 @@
 		dodoStringArr rowsPart;
 		dodoString rowPart;
 		
-		register int result;
+		int result;
 		
 		while (iterate)
 		{
@@ -452,7 +452,7 @@
 		if (!show)
 			return __stringarray__;
 			
-		register unsigned int numFields = sqlite3_column_count(liteStmt);
+		unsigned int numFields = sqlite3_column_count(liteStmt);
 		
 		dodoStringArr fields;
 		
@@ -460,7 +460,7 @@
 			fields.reserve(numFields);
 		#endif
 		
-		for (register unsigned int i(0);i<numFields;++i)
+		for (unsigned int i(0);i<numFields;++i)
 			fields.push_back(sqlite3_column_name(liteStmt, i));
 
 		#ifndef DBSQLITE_WO_XEXEC
@@ -487,9 +487,9 @@
 		{
 			sqlite3_reset(liteStmt);
 		
-			register unsigned int numRows = 0;
-			register bool iterate = true;
-			register int result;
+			unsigned int numRows = 0;
+			bool iterate = true;
+			int result;
 			
 			while (iterate)
 			{
@@ -650,10 +650,10 @@
 		
 		sqlite3_reset(liteStmt);
 		
-		register unsigned int numFields = sqlite3_column_count(liteStmt);
+		unsigned int numFields = sqlite3_column_count(liteStmt);
 		
-		register bool iterate = true;
-		register unsigned int i = 0;
+		bool iterate = true;
+		unsigned int i = 0;
 
 		dodoStringMapArr rowsFields;
 		dodoStringMap rowFieldsPart;
@@ -663,7 +663,7 @@
 			rowsFields.reserve(sqlite3_data_count(liteStmt));
 		#endif
 		
-		register int result;
+		int result;
 		
 		while (iterate)
 		{

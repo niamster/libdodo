@@ -104,14 +104,14 @@ timeTools::week(long date,
 				const dodoString &format,
 				bool local)
 {
-	register long daynum = atol(timeTools::byFormat("%w",date,local).c_str());
+	long daynum = atol(timeTools::byFormat("%w",date,local).c_str());
 	if (daynum == 0)
 		daynum = 7;
 
 	dodoStringArr week;
-	register long mon = date - (daynum-1)*86400;
+	long mon = date - (daynum-1)*86400;
 	
-	for (register short int i(0);i<7;++i,mon+=86400)
+	for (short int i(0);i<7;++i,mon+=86400)
 		week.push_back(timeTools::byFormat(format,mon,local));
 	
 	return week;	
@@ -135,7 +135,7 @@ timeTools::datesArr(long dateFrom,
 	
 	if (dateFrom > dateTo)
 	{
-	    register long tmp = dateFrom;
+	    long tmp = dateFrom;
 	    dateFrom = dateTo;
 	    dateTo = tmp;
 	}
@@ -207,7 +207,7 @@ unsigned short int
 timeTools::daysInMonth(unsigned int year, 
 					unsigned short int month)
 {
-	register unsigned short int day(0);
+	unsigned short int day(0);
 	
 	switch (month) 
 	{
@@ -234,7 +234,7 @@ timeTools::daysInMonth(unsigned int year,
 			
 		case 2:
 		
-			register unsigned int isleap = 0;
+			unsigned int isleap = 0;
 			if (year % 4 == 0) 
 			{
 				isleap = 1;

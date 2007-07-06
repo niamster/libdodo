@@ -96,7 +96,7 @@ regexpTools::boundMatch(const dodoString &sample)
 	
 	#ifdef PCRE_EXT
 	
-		register int subs;
+		int subs;
 	
 		if (pcre_fullinfo(code,NULL,PCRE_INFO_CAPTURECOUNT,&subs) != 0)
 			return false;
@@ -104,9 +104,9 @@ regexpTools::boundMatch(const dodoString &sample)
 		subs *= 3;
 		subs += 3;
 		
-		register int *oVector = new int[subs];
+		int *oVector = new int[subs];
 			
-		register int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
+		int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 		if (rc <= 0)
 		{
 			delete [] oVector;
@@ -115,7 +115,7 @@ regexpTools::boundMatch(const dodoString &sample)
 		
 		__regexMatch bound;
 		
-		for (register int j=1;j<rc;++j)
+		for (int j=1;j<rc;++j)
 		{
 			subs = j*2;
 			bound.begin = oVector[subs];
@@ -129,7 +129,7 @@ regexpTools::boundMatch(const dodoString &sample)
 		
 	#else
 	
-		register int subs = code.re_nsub+1;
+		int subs = code.re_nsub+1;
 		regmatch_t *pmatch = new regmatch_t[subs];
 				
 		int res = regexec(&code,sample.c_str(),subs,pmatch,0);
@@ -141,7 +141,7 @@ regexpTools::boundMatch(const dodoString &sample)
 		
 		__regexMatch bound;
 		
-		for (register int i(1); i<subs;++i)
+		for (int i(1); i<subs;++i)
 		{
 			bound.begin = pmatch[i].rm_so;
 			bound.end = pmatch[i].rm_eo;
@@ -160,7 +160,7 @@ regexpTools::boundMatch(const dodoString &sample)
 bool 
 regexpTools::compile(const dodoString &pattern)
 {
-	register int bits(0);
+	int bits(0);
 	
 	#ifdef PCRE_EXT
 	
@@ -174,8 +174,8 @@ regexpTools::compile(const dodoString &pattern)
 			bits |= PCRE_MULTILINE;
 		bits |= PCRE_DOTALL;	
 		
-		register int errOffset(0);
-		register const char *error;
+		int errOffset(0);
+		const char *error;
 		code = pcre_compile(pattern.c_str(), bits, &error, &errOffset, NULL);
 		if (code == NULL)
 			return false;
@@ -224,11 +224,11 @@ regexpTools::reReplace(const dodoString &sample,
 	std::list<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 	
 	dodoStringArr::const_iterator k(replacements.begin());
-	register int subs = replacements.size();
+	int subs = replacements.size();
 	
 	dodoString temp = sample;
 	
-	for (register int res = 0;res<subs && i!=j;++i,++res,++k)
+	for (int res = 0;res<subs && i!=j;++i,++res,++k)
 		temp.replace(i->begin,i->end-i->begin,*k);
 		
 	return temp;

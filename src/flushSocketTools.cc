@@ -41,7 +41,7 @@ flushSocketTools::getHostInfo(const dodoString &host)
 	
 	info.name = ent->h_name;
 
-	register int i(0);
+	int i(0);
 
 	while (ent->h_aliases[i] != NULL)	
 		info.aliases.push_back(ent->h_aliases[i++]);
@@ -83,7 +83,7 @@ flushSocketTools::getInterfacesNames()
 			return __stringarray__;			
 		#endif
 			
-	register int i(-1);
+	int i(-1);
 	dodoStringArr arr;
 	
 	while (ifaces[++i].if_index != 0)
@@ -111,7 +111,7 @@ flushSocketTools::getServiceInfo(const dodoString &host,
 	info.name = ent->s_name;
 	info.port = ent->s_port;
 		
-		register int i(0);
+		int i(0);
 
 	while (ent->s_aliases[i] != NULL)	
 		info.aliases.push_back(ent->s_aliases[i++]);
@@ -135,7 +135,7 @@ flushSocketTools::getServiceInfo(int port,
 	info.name = ent->s_name;
 	info.port = ent->s_port;
 		
-		register int i(0);
+		int i(0);
 
 	while (ent->s_aliases[i] != NULL)	
 		info.aliases.push_back(ent->s_aliases[i++]);
@@ -150,7 +150,7 @@ flushSocketTools::getServiceInfo(int port,
 __ifInfo 
 flushSocketTools::getInterfaceInfo(const dodoString &interface)
 {
-	register int socket = ::socket(PF_INET,SOCK_DGRAM,0);
+	int socket = ::socket(PF_INET,SOCK_DGRAM,0);
 	if (socket == -1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS,FLUSHSOCKETTOOLS_GETINTERFACEINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);

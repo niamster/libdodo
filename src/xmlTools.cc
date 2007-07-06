@@ -104,7 +104,7 @@
 	bool 
 	xmlTools::isCDATA(xmlNodePtr chNode)
 	{
-		register xmlNodePtr node = chNode->children;
+		xmlNodePtr node = chNode->children;
 		while (node != NULL)
 		{
 			if (node->type == XML_CDATA_SECTION_NODE)
@@ -301,7 +301,7 @@
 					const xmlNodePtr chNode, 
 					long chLimit)
 	{
-		register xmlNodePtr node = chNode, subNode;
+		xmlNodePtr node = chNode, subNode;
 		
 		__xmlNode sample, one;
 		dodoArray<__xmlNode> sampleArr;

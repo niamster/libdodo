@@ -142,6 +142,21 @@ namespace dodo
 				static bool 
 			#endif		
 							random(void *data, unsigned long size);
+				
+			/**
+			 * @return random unsigned long
+			 */
+			static unsigned long ulRandom();
+			
+			/**
+			 * @return random long
+			 */
+			static long lRandom();
+			
+			/**
+			 * @return random double
+			 */
+			static double dRandom();
 			
 			/**
 			 * removes symbols from the end and from the begin of given string

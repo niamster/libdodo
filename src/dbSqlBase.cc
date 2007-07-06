@@ -140,12 +140,12 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 {
 	dodoString temp;
 	
-	register unsigned int fn(fieldsNames.size()),fv(fieldsVal.size());
+	unsigned int fn(fieldsNames.size()),fv(fieldsVal.size());
 	
-	register unsigned int o(fn<=fv?fn:fv);
+	unsigned int o(fn<=fv?fn:fv);
 	
 	dodoStringArr::const_iterator i(fieldsNames.begin()), j(fieldsVal.begin());
-	for (register unsigned int k(0);k<o-1;++i,++k,++j)
+	for (unsigned int k(0);k<o-1;++i,++k,++j)
 	{
 		temp.append(*i);	
 		temp.append("=");	
@@ -188,7 +188,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 	if (qShift == DB_EMPTY)
 		return ;
 		
-	register int tempQTypeTocheck = 1<<qTypeTocheck;
+	int tempQTypeTocheck = 1<<qTypeTocheck;
 	if (isSetFlag(qShift,tempQTypeTocheck))
 	{
 		request.append(sqlAddArr[qTypeTocheck].str);
@@ -208,9 +208,9 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 		
 	dodoString temp;
 	
-	register unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
+	unsigned int arrLen = sizeof(sqlAddArr)/sizeof(char *);
 	
-	for (register unsigned int i=0;i<arrLen;++i)
+	for (unsigned int i=0;i<arrLen;++i)
 	{
 		if (isSetFlag(qTypeShift,1<<sqlAddEnumArr[i]))
 			temp.append(sqlAddArr[sqlAddEnumArr[i]].str);
@@ -230,7 +230,7 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 		
 	dodoString temp;
 
-	register unsigned int k(1);
+	unsigned int k(1);
 	
 	dodoStringArr::const_iterator i(statements.begin()), j(statements.end());
 	for (;i!=j;++i,++k)
@@ -405,11 +405,11 @@ dbSqlBase::updateCollect()
 		
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
 	{
-		register unsigned int fn(pre_fieldsNames.size()),fv(pre_fieldsVal.front().size());
-		register unsigned int o(fn<=fv?fn:fv);
+		unsigned int fn(pre_fieldsNames.size()),fv(pre_fieldsVal.front().size());
+		unsigned int o(fn<=fv?fn:fv);
 	
 		dodoStringArr::iterator i(pre_fieldsNames.begin()), j(pre_fieldsVal.front().begin());
-		for (register unsigned int k(0);k<o-1;++i,++j,++k)
+		for (unsigned int k(0);k<o-1;++i,++j,++k)
 		{	
 			if (tools::isInArray(y->second,*i,true))
 			{
@@ -600,8 +600,8 @@ dbSqlBase::createFieldCollect()
 dodoString
 dbSqlBase::queryCollect()
 {	
-	register bool additionalActions = true;
-	register bool selectAction = false;
+	bool additionalActions = true;
+	bool selectAction = false;
 	
 	switch (qType)
 	{
@@ -795,7 +795,7 @@ dbSqlBase::escapeFields(const dodoString &data)
 dodoString 
 dbSqlBase::fieldCollect(__fieldInfo &row)
 {
-	register int type = row.type, flag = row.flag;
+	int type = row.type, flag = row.flag;
 	dodoString resRow(row.name + " " + stringType(type));
 	
 	if (preventEscaping)
