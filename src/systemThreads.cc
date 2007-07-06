@@ -76,39 +76,27 @@
 				case THREAD_STOP:
 				
 					pthread_cancel(i->thread);
-					#ifdef DL_EXT
-					
-						if (i->handle != NULL)
-						{
-							deinit = (deinitSystemThreadsModule)dlsym(i->handle, "deinitSystemThreadsModule");
-							if (deinit != NULL)
-								deinit();
-							
-							dlclose(i->handle);						
-						}
-						
-					#endif
 					
 					break;
 				
 				case THREAD_WAIT:
 				default:
 				
-					pthread_join(i->thread,NULL);
-					
-					#ifdef DL_EXT
-					
-						if (i->handle != NULL)
-						{
-							deinit = (deinitSystemThreadsModule)dlsym(i->handle, "deinitSystemThreadsModule");
-							if (deinit != NULL)
-								deinit();
-							
-							dlclose(i->handle);						
-						}
-						
-					#endif								
+					pthread_join(i->thread,NULL);						
 			}
+			
+			#ifdef DL_EXT
+			
+				if (i->handle != NULL)
+				{
+					deinit = (deinitSystemThreadsModule)dlsym(i->handle, "deinitSystemThreadsModule");
+					if (deinit != NULL)
+						deinit();
+					
+					dlclose(i->handle);						
+				}
+				
+			#endif
 		}	
 	}
 		
@@ -574,8 +562,7 @@
 	systemThreads::sweepTrash()
 	{
 		std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
-		int o = 0, p = threads.size();
-		for (;o<p;++p)
+		while(i!=j)
 		{
 			if (_isRunning(i))
 			{
@@ -602,13 +589,14 @@
 	#else
 		bool
 	#endif
-	systemThreads::setExecutionLimit(unsigned long position, unsigned long limit)
+	systemThreads::setExecutionLimit(unsigned long position, 
+									unsigned long limit)
 	{
 		if (getThread(position))
 			k->executeLimit = limit;
 		else
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_ISRUNNING,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_SETEXECUTIONLIMIT,ERR_LIBDODO,SYSTEMTHREADS_NOTFOUND,SYSTEMTHREADS_NOTFOUND_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif	

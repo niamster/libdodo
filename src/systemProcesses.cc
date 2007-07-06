@@ -71,39 +71,26 @@ systemProcesses::~systemProcesses()
 			
 				kill(i->pid,2);
 				
-				#ifdef DL_EXT
-				
-					if (i->handle != NULL)
-					{
-						deinit = (deinitSystemProcessesModule)dlsym(i->handle, "deinitSystemProcessesModule");
-						if (deinit != NULL)
-							deinit();
-						
-						dlclose(i->handle);						
-					}
-					
-				#endif		
-				
 				break;
 			
 			case PROCESS_WAIT:
 			default:
 			
-				waitpid(i->pid,NULL,0);
-				
-				#ifdef DL_EXT
-				
-					if (i->handle != NULL)
-					{
-						deinit = (deinitSystemProcessesModule)dlsym(i->handle, "deinitSystemProcessesModule");
-						if (deinit != NULL)
-							deinit();
-						
-						dlclose(i->handle);						
-					}
-					
-				#endif				
+				waitpid(i->pid,NULL,0);		
 		}
+		
+		#ifdef DL_EXT
+		
+			if (i->handle != NULL)
+			{
+				deinit = (deinitSystemProcessesModule)dlsym(i->handle, "deinitSystemProcessesModule");
+				if (deinit != NULL)
+					deinit();
+				
+				dlclose(i->handle);						
+			}
+			
+		#endif		
 	}	
 }
 	
@@ -553,4 +540,198 @@ systemProcesses::wait(unsigned long position)
 		#endif	
 }
 		
+//-------------------------------------------------------------------
+	
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemProcesses::wait()
+{
+	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	for (;i!=j;++i)
+	{
+		if (!_isRunning(i))
+			continue;
+		
+		if (waitpid(i->pid,NULL,0) == -1)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_WAIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return false;
+			#endif
+		
+		i->isRunning = false;
+	}
+	
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+	
+bool
+systemProcesses::isRunning(unsigned long position) const
+{
+	if (getProcess(position))
+		return _isRunning(k);
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_ISRUNNING,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+systemProcesses::running() const
+{
+	unsigned long amount(0);
+
+	std::list<__processInfo>::const_iterator i(processes.begin()), j(processes.end());		
+	for (;i!=j;++i)
+		if (_isRunning(*((std::list<__processInfo>::iterator *)&i)))
+			++amount;
+	
+	return amount;		
+}
+
+//-------------------------------------------------------------------
+
+void
+systemProcesses::sweepTrash()
+{
+	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	while(i!=j)
+	{
+		if (_isRunning(i))
+		{
+			++i;
+
+			continue;
+		}
+				
+		if (i->executeLimit > 0 && (i->executeLimit <= i->executed))
+		{
+			i = processes.erase(i);
+
+			continue;
+		}
+
+		++i;
+	}	
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+systemProcesses::setExecutionLimit(unsigned long position, 
+									unsigned long limit)
+{
+	if (getProcess(position))
+		k->executeLimit = limit;
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_SETEXECUTIONLIMIT,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return false;
+		#endif	
+		
+	#ifdef NO_EX		
+		return true;
+	#endif
+}
+	//-------------------------------------------------------------------
+		
+	#ifdef DL_EXT
+		
+		systemProcessesMod 
+		systemProcesses::getModuleInfo(const dodoString &module, 
+									void *toInit)
+		{
+			void *handle = dlopen(module.c_str(), RTLD_LAZY);
+			if (handle == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return systemThreadsMod();
+				#endif
+				
+			initSystemProcessesModule init = (initSystemProcessesModule)dlsym(handle, "initSystemProcessesModule");
+			if (init == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return systemThreadsMod();
+				#endif
+				
+			systemProcessesMod mod = init(toInit);
+			
+			if (dlclose(handle)!=0)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return mod;
+				#endif
+			
+			return mod;	
+		}
+	
+		//-------------------------------------------------------------------
+		
+		unsigned long 
+		systemProcesses::add(const dodoString &module,
+								void *data, 
+								void *toInit)
+		{
+			__processInfo process;
+			
+			process.data = data;
+			process.position = ++processNum;
+			
+			process.handle = dlopen(module.c_str(), RTLD_LAZY);
+			if (process.handle == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return 0;
+				#endif
+			
+			initSystemProcessesModule init = (initSystemProcessesModule)dlsym(process.handle, "initSystemProcessesModule");
+			if (init == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return 0;
+				#endif	
+			
+			systemProcessesMod temp = init(toInit);
+			
+			processFunc in = (processFunc)dlsym(process.handle, temp.hook);
+			if (in == NULL)
+				#ifndef NO_EX
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_ADD,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				#else
+					return 0;
+				#endif
+		
+			process.executeLimit = temp.executeLimit;
+			process.action = temp.action;
+			process.func = in;		
+	
+			processes.push_back(process);
+			
+			return process.position;
+		}
+	
+	#endif
+	
 //-------------------------------------------------------------------

@@ -228,9 +228,8 @@ namespace dodo
 			#endif						 		
 							stop(unsigned long position);
 
-			/*************************************/
 			/**
-			 * stops all registered jobs
+			 * stops all registered processes
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -240,8 +239,8 @@ namespace dodo
 							stop();
 										
 			/**
-			 * waits for job's termination
-			 * @param position indicates for what job to wait
+			 * waits for process's termination
+			 * @param position indicates for what process to wait
 			 */
 			#ifndef NO_EX
 				virtual void 
@@ -251,54 +250,54 @@ namespace dodo
 							wait(unsigned long position);
 							
 			/**
-			 * waits for all registered jobs' termination
+			 * waits for all registered process' termination
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif						 	
-							wait() = 0;
+							wait();
 										
 			/**
-			 * @return true if job is running
-			 * @param position indicates for what job to indicate
+			 * @return true if process is running
+			 * @param position indicates for what process to indicate
 			 */
-			virtual bool isRunning(unsigned long position) const = 0;
+			virtual bool isRunning(unsigned long position) const;
 			
 			/**
-			 * @return amount of running jobs
+			 * @return amount of running processes
 			 */
-			virtual unsigned long running() const = 0;
+			virtual unsigned long running() const;
 			
 			/**
-			 * sweep jobs if their time are already passed
+			 * sweep processes if their time are already passed
 			 */
-			virtual void sweepTrash() = 0;
+			virtual void sweepTrash();
 			
 			/**
 			 * set maximum execution time
-			 * @param position indicates for what job to set limit
-			 * @param limit indicates the job's limit on executions
+			 * @param position indicates for what process to set limit
+			 * @param limit indicates the process' limit on executions
 			 */
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif			
-							setExecutionLimit(unsigned long position, unsigned long limit=1) = 0; 
+							setExecutionLimit(unsigned long position, unsigned long limit=1); 
 
 			
 			#ifdef DL_EXT
 			
 				/**
-				 * adds function to became a job[not executing] from module
-				 * @return position of job in queue
+				 * adds function to became a process[not executing] from module
+				 * @return position of process in queue
 				 * @param module indicates mudule where is function to be executed
 				 * @param data describes data to be passed to func
 				 * @param toInit indicates data that will path to initialize function
 				 */
-				virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
+				virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
 				
 				
 				/**
@@ -309,7 +308,6 @@ namespace dodo
 				static systemProcessesMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 			
 			#endif
-			/*************************************/
 														
 		protected:
 		
