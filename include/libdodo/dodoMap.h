@@ -35,7 +35,7 @@ namespace dodo
 		 * @class dodoMap is a duck for std::map<dodoString, any_type> but controlling varName
 		 * if varName's value is not defined - empty anyType will be returned
 		 */
-		template <typename anyType>
+		template <typename valueType, typename keyType=dodoString>
 		class dodoMap
 		{
 						
@@ -59,13 +59,13 @@ namespace dodo
 				bool icase;///< whether to react on keys with keys or no; false[react] by default
 							
 				/**
-				 * @return value of hash by varName or empty anyType already added to map, if not found
+				 * @return value of hash by varName or empty valueType already added to map, if not found
 				 * @param varName value of hash that points to the value
 				 */			 
-				anyType &
-				operator[](const dodoString &varName)
+				valueType &
+				operator[](const keyType &varName)
 				{
-					typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
+					typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
 						cmpFunc = strcasecmp;
@@ -76,7 +76,7 @@ namespace dodo
 						if (cmpFunc(varName.c_str(),i->first.c_str()) == 0)
 							return i->second;		
 					
-					std::pair<typename std::map<dodoString, anyType>::iterator, bool> res = realArr.insert(make_pair(varName, type));
+					std::pair<typename std::map<keyType, valueType>::iterator, bool> res = realArr.insert(make_pair(varName, type));
 					
 					return res.first->second;				
 				}
@@ -85,12 +85,12 @@ namespace dodo
 				 * @return iterator by hash or end of hash if not found
 				 * @param varName value of hash that points to the value
 				 */			 
-				typename std::map<dodoString, anyType>::iterator
-				find(const dodoString &varName)
+				typename std::map<keyType, valueType>::iterator
+				find(const keyType &varName)
 				{
 					if (icase)
 					{
-						typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
+						typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
 							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
@@ -106,12 +106,12 @@ namespace dodo
 				 * @return const_iterator by hash or end of hash if not found
 				 * @param varName is value of hash that points to the value
 				 */			 
-				typename std::map<dodoString, anyType>::const_iterator
-				find(const dodoString &varName) const
+				typename std::map<keyType, valueType>::const_iterator
+				find(const keyType &varName) const
 				{
 					if (icase)
 					{
-						typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
+						typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
 							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
@@ -129,8 +129,8 @@ namespace dodo
 				 * @param varVal is value of hash by varName 
 				 */
 				void
-				insert(const dodoString &varName, 
-						const anyType &varVal)
+				insert(const keyType &varName, 
+						const valueType &varVal)
 				{
 					realArr.insert(make_pair(varName, varVal));
 				}
@@ -138,7 +138,7 @@ namespace dodo
 				/**
 				 * return const_iterator that points on the begin of the original array
 				 */
-				typename std::map<dodoString, anyType>::const_iterator
+				typename std::map<keyType, valueType>::const_iterator
 				begin() const
 				{
 					return realArr.begin();
@@ -147,7 +147,7 @@ namespace dodo
 				/**
 				 * return const_iterator that points on the begin of the original array
 				 */
-				typename std::map<dodoString, anyType>::const_iterator
+				typename std::map<keyType, valueType>::const_iterator
 				end() const
 				{
 					return realArr.end();
@@ -156,7 +156,7 @@ namespace dodo
 				/**
 				 * return iterator that points on the begin of the original array
 				 */
-				typename std::map<dodoString, anyType>::iterator
+				typename std::map<keyType, valueType>::iterator
 				begin()
 				{
 					return realArr.begin();
@@ -165,7 +165,7 @@ namespace dodo
 				/**
 				 * return iterator that points on the begin of the original array
 				 */
-				typename std::map<dodoString, anyType>::iterator
+				typename std::map<keyType, valueType>::iterator
 				end()
 				{
 					return realArr.end();
@@ -202,9 +202,9 @@ namespace dodo
 				 * @return true if value is set by given key
 				 */
 				bool
-				isset(const dodoString &varName)
+				isset(const keyType &varName)
 				{
-					typename std::map<dodoString, anyType>::iterator i(realArr.begin()), j(realArr.end());
+					typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
 						cmpFunc = strcasecmp;
@@ -218,12 +218,12 @@ namespace dodo
 					return false;				 	
 				}
 				
-                typedef typename std::map<dodoString, anyType>::const_iterator const_iterator;
-                typedef typename std::map<dodoString, anyType>::iterator iterator;
+                typedef typename std::map<keyType, valueType>::const_iterator const_iterator;
+                typedef typename std::map<keyType, valueType>::iterator iterator;
 
-				std::map<dodoString, anyType> realArr;///< real array
+				std::map<keyType, valueType> realArr;///< real array
 				
-				anyType type;///< copy of typed
+				valueType type;///< copy of typed
 								
 			private:
 				
