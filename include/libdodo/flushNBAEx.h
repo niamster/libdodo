@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef FLUSHNBAEX_H_
-#define FLUSHNBAEX_H_
+#ifndef _ATOMICMUTEXEX_H_
+#define _ATOMICMUTEXEX_H_
 
 #include <directives.h>
 

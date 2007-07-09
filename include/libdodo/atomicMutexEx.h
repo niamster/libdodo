@@ -1,7 +1,7 @@
 /***************************************************************************
- *            atomicMutex.h
+ *            atomicMutexEx.h
  *
- *  Mon Jul 09 11:31:55 2007
+ *  Mon Jul 09 12:49:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,51 +21,31 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICMUTEX_H_
-#define _ATOMICMUTEX_H_
-
-#include <pthread.h>
+#ifndef FLUSHNBAEX_H_
+#define FLUSHNBAEX_H_
 
 #include <directives.h>
 
-#include <atomicMutexEx.h>
-#include <types.h>
+#include <baseEx.h>
 
-namespace dodo
-{
-	/**
-	 * @class atomicMutex is to perform atomic locks
-	 */
-	class atomicMutex
+#ifndef NO_EX
+
+	namespace dodo
 	{
-		public:
-			
-			/**
-			 * consructor
-			 */
-			atomicMutex();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~atomicMutex();
-			
-			/**
-			 * locks critical section
-			 */
-			void lock();
-			
-			/**
-			 * unlocks critical section
-			 */
-			void unLock();
+		/**
+		 * next for atomicMutex
+		 */
 		
-		protected:
-			
-			pthread_mutex_t mutex;///< lock
-			
+		/**
+		 * ID of function where exception was thrown
+		 */		
+		enum atomicMutexFunctionsID
+		{
+			ATOMICMUTEX_LOCK,
+			ATOMICMUTEX_UNLOCK,
+		};
+		
 	};
 
-};
-
-#endif /*_ATOMICMUTEX_H_*/
+#endif	
+#endif

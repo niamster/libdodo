@@ -369,6 +369,7 @@ AC_CONFIG_FILES([Makefile
                  tests/sqlite_test/Makefile
                  tests/systemThreads_test/Makefile
                  tests/systemProcesses_test/Makefile
+                 tests/systemJobs_test/Makefile
                  tests/systemTools_test/Makefile
                  tests/timeTools_test/Makefile
                  tests/xexec.module_test/Makefile
