@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 
 		st.outSize = sizeof(int);
 		
-		cout << flushSTD::getModuleInfo("./module").name;
+		//cout << flushSTD::getModuleInfo("./module").name;
 		
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;

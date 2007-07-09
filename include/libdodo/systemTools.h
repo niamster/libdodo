@@ -1,5 +1,5 @@
 /***************************************************************************
- *            system.h
+ *            systemTools.h
  *
  *  Sat Nov 19 15:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _SYSTEM_H_
-#define _SYSTEM_H_
+#ifndef _SYSTEMTOOLS_H_
+#define _SYSTEMTOOLS_H_
 
 #include <directives.h>
 

@@ -39,7 +39,7 @@ OBJECTS:=dbBase.o \
 		dbSqlite.o \
 		systemProcesses.o \
 		systemThreads.o \
-		systemThreadShares.o \
+		systemThreadShare.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \
 		flush.o \
