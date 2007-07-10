@@ -144,8 +144,6 @@ namespace dodo
 		bool secure;///< indicates if cookie is secure; false by default
 	}; 
 
-	static dodoString postFilesTmpDir = "/tmp";///< path of dir, where POST files will be temporary saved [default is /tmp]
-
 	/**
 	 * @enum requestMethodEnum indicates request type
 	 */
@@ -269,6 +267,8 @@ namespace dodo
 		
 			virtual void setCookie(const __cookies &cookie);
 		
+			static dodoString postFilesTmpDir;///< path of dir, where POST files will be temporary saved [default is /tmp]
+			
 		protected:
 					
 			/**

@@ -29,6 +29,10 @@ bool cgiTools::cgiFilesInMem = true;
 
 //-------------------------------------------------------------------
 
+dodoString cgiTools::postFilesTmpDir = "/tmp";
+
+//-------------------------------------------------------------------
+
 __cookies::__cookies(const dodoString &a_name, 
 					const dodoString &a_value, 
 					const dodoString &a_exDate, 

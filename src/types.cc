@@ -1,7 +1,7 @@
 /***************************************************************************
- *            atomicMutex.h
+ *            types.cc
  *
- *  Mon Jul 09 11:31:55 2007
+ *  Tue Jul  10 21:47:57 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,50 +21,20 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICMUTEX_H_
-#define _ATOMICMUTEX_H_
 
-#include <pthread.h>
-
-#include <directives.h>
-
-#include <atomicMutexEx.h>
 #include <types.h>
 
 namespace dodo
 {
-	/**
-	 * @class atomicMutex is to perform atomic locks
-	 */
-	class atomicMutex
-	{
-		public:
-			
-			/**
-			 * consructor
-			 */
-			atomicMutex();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~atomicMutex();
-			
-			/**
-			 * locks critical section
-			 */
-			void lock();
-			
-			/**
-			 * unlocks critical section
-			 */
-			void unLock();
-		
-		protected:
-			
-			pthread_mutex_t mutex;///< lock
-	};
+
+	const dodoString __string__;
+	
+	dodoStringArr __stringarray__;
+	
+	dodoAssocArr __assocarray__;
+	
+	dodoArray<dodoStringArr> __stringarrayvector__;
+	
+	dodoStringMapArr __dodostringmap__;
 
 };
-
-#endif /*_ATOMICMUTEX_H_*/

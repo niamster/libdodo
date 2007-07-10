@@ -321,6 +321,7 @@ namespace dodo
 			 * searches processes by position
 			 * @return true if found
 			 * @param position describes position of wanted process
+			 * @note sets internal parameter 'current' to found process
 			 */
 			virtual bool getProcess(unsigned long position) const;
 			
@@ -328,7 +329,7 @@ namespace dodo
 							
 			std::list<__processInfo> processes;///< vector of processes
 			
-			mutable std::list<__processInfo>::iterator k;///< iterator for list of processes[for matched]
+			mutable std::list<__processInfo>::iterator current;///< iterator for list of processes[for matched with getProcess method]
 	};
 
 };

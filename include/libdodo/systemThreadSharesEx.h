@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadShareEx.h
+ *            systemThreadSharesEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -21,12 +21,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREEX_H_
-#define _SYSTEMTHREADSHAREEX_H_
+#ifndef _SYSTEMTHREADSHARESEX_H_
+#define _SYSTEMTHREADSHARESEX_H_
 
 #include <directives.h>
 
 #include <baseEx.h>
+
 
 #ifndef NO_EX
 
@@ -35,28 +36,28 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum systemThreadShareExR
+		enum systemThreadSharesExR
 		{
-			SYSTEMTHREADSHARE_ISALREADYLOCKED,
-			SYSTEMTHREADSHARE_CANNOTLOCK
+			SYSTEMTHREADSHARES_ISALREADYLOCKED,
+			SYSTEMTHREADSHARES_CANNOTLOCK
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */
-		#define SYSTEMTHREADSHARE_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-		#define SYSTEMTHREADSHARE_NOTFOUND_STR "Share not found."
-		#define SYSTEMTHREADSHARE_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
+		#define SYSTEMTHREADSHARES_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
+		#define SYSTEMTHREADSHARES_NOTFOUND_STR "Share not found."
+		#define SYSTEMTHREADSHARES_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 			
 		/**
 		 * ID of function where exception was thrown
 		 */			
-		enum systemThreadShareFunctionsID
+		enum systemThreadSharesFunctionsID
 		{
-			SYSTEMTHREADSHARE_DEL,
-			SYSTEMTHREADSHARE_SET,
-			SYSTEMTHREADSHARE_LOCK,
-			SYSTEMTHREADSHARE_UNLOCK,
+			SYSTEMTHREADSHARES_DEL,
+			SYSTEMTHREADSHARES_SET,
+			SYSTEMTHREADSHARES_LOCK,
+			SYSTEMTHREADSHARES_UNLOCK,
 		};
 	};
 

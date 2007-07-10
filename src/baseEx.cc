@@ -50,11 +50,13 @@
 									false,
 									false,
 									false,
+									false,
 									false};
 
 	//-------------------------------------------------------------------
 	
 	errorHandler baseEx::handlersEx[] = {NULL,
+											NULL,
 											NULL,
 											NULL,
 											NULL,
@@ -104,6 +106,7 @@
 								NULL,
 								NULL,
 								NULL,
+								NULL,
 								NULL};
 
 	//-------------------------------------------------------------------								
@@ -111,6 +114,7 @@
 	#ifdef DL_EXT
 	
 		bool baseEx::handlesOpenedEx[] = {false,
+											false,
 											false,
 											false,
 											false,

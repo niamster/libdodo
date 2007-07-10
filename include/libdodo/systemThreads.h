@@ -353,6 +353,7 @@
 				 * searches threads by position
 				 * @return true if found
 				 * @param position describes position of wanted thread
+				 * @note sets internal parameter 'current' to found thread
 				 */
 				virtual bool getThread(unsigned long position) const;
 							
@@ -362,7 +363,7 @@
 				
 				pthread_attr_t attr;///< attribute that indicates joinability
 
-				mutable std::list<__threadInfo>::iterator k;///< iterator for list of threads[for matched]
+				mutable std::list<__threadInfo>::iterator current;///< iterator for list of threads[for matched with getThread method]
 		};
 	
 	};

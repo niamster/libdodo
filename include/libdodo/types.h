@@ -66,15 +66,15 @@ namespace dodo
 	 * diferent predifined constants
 	 */
 
-	static const dodoString __string__ = "";
+	extern const dodoString __string__;
 
-	static dodoStringArr __stringarray__;
+	extern dodoStringArr __stringarray__;
 
-	static dodoAssocArr __assocarray__;
+	extern dodoAssocArr __assocarray__;
 
-	static dodoArray<dodoStringArr> __stringarrayvector__;
+	extern dodoArray<dodoStringArr> __stringarrayvector__;
 
-	static dodoStringMapArr __dodostringmap__;
+	extern dodoStringMapArr __dodostringmap__;
 
 };
 

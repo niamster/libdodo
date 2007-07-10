@@ -3,6 +3,8 @@ libsoup
 posix_fallocate
 job collection
 
+shares collection
+
 threads,processes: locking mutual exlusions
 			//mutex
 		

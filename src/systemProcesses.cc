@@ -196,7 +196,7 @@ systemProcesses::del(unsigned long position,
 {
 	if (getProcess(position))
 	{
-		if (_isRunning(k))
+		if (_isRunning(current))
 		{
 			if (!force)
 				#ifndef NO_EX
@@ -206,7 +206,7 @@ systemProcesses::del(unsigned long position,
 				#endif
 			else
 			{
-				if (kill(k->pid,2) == -1)
+				if (kill(current->pid,2) == -1)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
@@ -217,25 +217,25 @@ systemProcesses::del(unsigned long position,
 
 		#ifdef DL_EXT
 		
-			if (k->handle != NULL)
+			if (current->handle != NULL)
 			{
 				deinitSystemProcessesModule deinit;	
 	
-				deinit = (deinitSystemProcessesModule)dlsym(k->handle, "deinitSystemProcessesModule");
+				deinit = (deinitSystemProcessesModule)dlsym(current->handle, "deinitSystemProcessesModule");
 				if (deinit != NULL)
 					deinit();
 				
-				if (dlclose(k->handle)!=0)
+				if (dlclose(current->handle)!=0)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_DEL,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 					#endif
 					
-				k->handle = NULL;	
+				current->handle = NULL;	
 			}
 				
 		#endif
 			
-		processes.erase(k);
+		processes.erase(current);
 		
 		#ifdef NO_EX
 			return true;
@@ -258,7 +258,7 @@ systemProcesses::getProcess(unsigned long position) const
 	for (;i!=j;++i)
 		if (i->position == position)
 		{
-			k = *((std::list<__processInfo>::iterator *)&i);
+			current = *((std::list<__processInfo>::iterator *)&i);
 			return true;
 		}
 	
@@ -308,7 +308,7 @@ systemProcesses::replace(unsigned long position,
 {
 	if (getProcess(position))
 	{
-		if (_isRunning(k))
+		if (_isRunning(current))
 		{
 			if (!force)
 				#ifndef NO_EX
@@ -318,7 +318,7 @@ systemProcesses::replace(unsigned long position,
 				#endif
 			else
 			{
-				if (kill(k->pid,2) == -1)
+				if (kill(current->pid,2) == -1)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_REPLACE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 					#else
@@ -330,28 +330,28 @@ systemProcesses::replace(unsigned long position,
 
 		#ifdef DL_EXT
 		
-			if (k->handle!=NULL)
+			if (current->handle!=NULL)
 			{
 				deinitSystemProcessesModule deinit;	
 	
-				deinit = (deinitSystemProcessesModule)dlsym(k->handle, "deinitSystemProcessesModule");
+				deinit = (deinitSystemProcessesModule)dlsym(current->handle, "deinitSystemProcessesModule");
 				if (deinit != NULL)
 					deinit();
 				
-				if (dlclose(k->handle)!=0)
+				if (dlclose(current->handle)!=0)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_REPLACE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 					#endif
 					
-				k->handle = NULL;	
+				current->handle = NULL;	
 			}
 				
 		#endif
 			
-		k->data = data;
-		k->func = func;
-		k->isRunning = false;
-		k->action = action;
+		current->data = data;
+		current->func = func;
+		current->isRunning = false;
+		current->action = action;
 			
 		#ifdef NO_EX
 			return true;
@@ -378,9 +378,9 @@ systemProcesses::run(unsigned long position,
 {
 	if (getProcess(position))
 	{
-		if (k->executeLimit >0 && (k->executeLimit <= k->executed))
+		if (current->executeLimit >0 && (current->executeLimit <= current->executed))
 		{
-			processes.erase(k);
+			processes.erase(current);
 			
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_RUN,ERR_LIBDODO,SYSTEMPROCESSES_SWEPT,SYSTEMPROCESSES_SWEPT_STR,__LINE__,__FILE__);
@@ -389,7 +389,7 @@ systemProcesses::run(unsigned long position,
 			#endif				
 		}
 		
-		if (_isRunning(k) && !force)
+		if (_isRunning(current) && !force)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_RUN,ERR_LIBDODO,SYSTEMPROCESSES_ISALREADYRUNNING,SYSTEMPROCESSES_ISALREADYRUNNING_STR,__LINE__,__FILE__);
 			#else
@@ -400,7 +400,7 @@ systemProcesses::run(unsigned long position,
 			
 		if (pid == 0)
 		{
-			k->func(k->data);
+			current->func(current->data);
 			
 			_exit(0);
 		}
@@ -413,11 +413,11 @@ systemProcesses::run(unsigned long position,
 					return false;
 				#endif			
 			else
-				k->pid = pid;
+				current->pid = pid;
 		}
 		
-		k->isRunning = true;
-		++(k->executed);
+		current->isRunning = true;
+		++(current->executed);
 				
 		#ifdef NO_EX
 			return true;
@@ -442,21 +442,21 @@ systemProcesses::stop(unsigned long position)
 {
 	if (getProcess(position))
 	{
-		if (!_isRunning(k))
+		if (!_isRunning(current))
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_STOP,ERR_LIBDODO,SYSTEMPROCESSES_ISNOTRUNNING,SYSTEMPROCESSES_ISNOTRUNNING_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 		
-		if (kill(k->pid,9) == -1)
+		if (kill(current->pid,9) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_STOP,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 		
-		k->isRunning = false;
+		current->isRunning = false;
 				
 		#ifdef NO_EX
 			return true;
@@ -512,21 +512,21 @@ systemProcesses::wait(unsigned long position)
 {
 	if (getProcess(position))
 	{
-		if (!_isRunning(k))
+		if (!_isRunning(current))
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_WAIT,ERR_LIBDODO,SYSTEMPROCESSES_ISNOTRUNNING,SYSTEMPROCESSES_ISNOTRUNNING_STR,__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 			
-		if (waitpid(k->pid,NULL,0) == -1)
+		if (waitpid(current->pid,NULL,0) == -1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_WAIT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 		
-		k->isRunning = false;			
+		current->isRunning = false;			
 	
 		#ifdef NO_EX
 			return true;
@@ -576,7 +576,7 @@ bool
 systemProcesses::isRunning(unsigned long position) const
 {
 	if (getProcess(position))
-		return _isRunning(k);
+		return _isRunning(current);
 	else
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_ISRUNNING,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
@@ -637,7 +637,7 @@ systemProcesses::setExecutionLimit(unsigned long position,
 									unsigned long limit)
 {
 	if (getProcess(position))
-		k->executeLimit = limit;
+		current->executeLimit = limit;
 	else
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES,SYSTEMPROCESSES_SETEXECUTIONLIMIT,ERR_LIBDODO,SYSTEMPROCESSES_NOTFOUND,SYSTEMPROCESSES_NOTFOUND_STR,__LINE__,__FILE__);
