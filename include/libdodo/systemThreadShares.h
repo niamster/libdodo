@@ -31,7 +31,7 @@
 
 #include <types.h>
 #include <systemThreadSharesEx.h>
-#include <atomicMutex.h>
+#include <threadGuard.h>
 
 namespace dodo
 {
@@ -48,7 +48,7 @@ namespace dodo
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
-	class systemThreadShares
+	class systemThreadShares : public threadGuardHolder
 	{
 		private:
 		
@@ -75,7 +75,7 @@ namespace dodo
 			 * @return position of shared in queue
 			 * @param data describes data to be shared
 			 */
-			virtual unsigned long set(void *data);
+			virtual unsigned long add(void *data);
 			
 			/**
 			 * sets shared data to NULL
@@ -89,13 +89,28 @@ namespace dodo
 							del(unsigned long position);
 			
 			/**
-			 * lock and return shared data [if locked and force==false, wait until unlocked]
+			 * lock and return shared data
 			 * @return data points on shared data or NULL in error case
 			 * @param position indicates on shared data to lock
 			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
 			 * @note if microseconds==0 - infinite sleep
 			 */
 			virtual void *lock(unsigned long position, unsigned long microseconds=0);
+			
+			/**
+			 * locks, sets data, unlocks
+			 * @return data points on shared data or NULL in error case
+			 * @param position indicates on shared data to lock
+			 * @param data describes data to be set
+			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
+			 * @note if microseconds==0 - infinite sleep
+			 */
+			#ifndef NO_EX
+				virtual void
+			#else
+				virtual bool 
+			#endif				
+							set(unsigned long position, void *data, unsigned long microseconds=0);
 							
 			
 			/**
@@ -111,38 +126,6 @@ namespace dodo
 			
 		protected:
 			
-
-			atomicMutex mutex;///< lock
-			
-			/**
-			 * @class threadGuard provides thread safe behaviour 
-			 */
-			class threadGuard
-			{
-				public:
-					
-					/**
-					 * contructor
-					 */
-					threadGuard(systemThreadShares *parent);
-					
-					/**
-					 * destructor
-					 */
-					~threadGuard();
-					
-					/**
-					 * unlock and nothing will be done in destructor 
-					 */
-					void unlock();
-				
-				protected:
-					
-					bool locked;///< indicates whether mutex is locked
-					
-					systemThreadShares *parent;///< class to lock
-			};
-
 			/**
 			 * searches shares by position
 			 * @return true if found
@@ -158,6 +141,8 @@ namespace dodo
 			timespec timeout;///< timeout to lock mutex check
 			
 			std::list<__shareInfo>::iterator current;///< iterator for list of shares[for matched with getShare method]
+			
+			pthread_mutexattr_t attr;///< mutexes attribute
 	};
 
 };

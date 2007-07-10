@@ -26,43 +26,16 @@
 	
 using namespace dodo;
 
-systemThreadShares::threadGuard::threadGuard(systemThreadShares *a_parent) : locked(false),
-																			parent(a_parent)
-{
-	parent->mutex.lock();
-	
-	locked = true;
-}
-
-systemThreadShares::threadGuard::~threadGuard()
-{
-	if (locked)
-		parent->mutex.unLock();
-}
-
-void
-systemThreadShares::threadGuard::unlock()
-{
-	locked = false;
-	
-	parent->mutex.unLock();
-}
-
 systemThreadShares::systemThreadShares(systemThreadShares &sts)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadShares::systemThreadShares()
+systemThreadShares::systemThreadShares() : shareNum(0)
 {
-	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-
-	/*pthread_mutex_init(&mutex,&attr);
-
-	pthread_mutexattr_destroy(&attr);*/
 	
 	timeout.tv_nsec = 1000;
 	timeout.tv_sec = 0;	
@@ -72,31 +45,25 @@ systemThreadShares::systemThreadShares()
 
 systemThreadShares::~systemThreadShares()
 {
-	//pthread_mutex_destroy(&mutex);		
+	pthread_mutexattr_destroy(&attr);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-systemThreadShares::set(void *a_data)
+systemThreadShares::add(void *data)
 {
-	/*errno = pthread_mutex_lock(&mutex);
-	if (errno != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_SET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return 0;
-		#endif
+	threadGuard tg(this);
 	
-	data = a_data;
+	__shareInfo share;
 	
-	errno = pthread_mutex_unlock(&mutex);
-	if (errno != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_SET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return 0;
-		#endif*/
+	share.position = ++shareNum;
+	pthread_mutex_init(&share.mutex,&attr);
+	share.data = data;
+	
+	shares.push_back(share);
+	
+	return share.position;
 }
 
 //-------------------------------------------------------------------
@@ -131,6 +98,68 @@ systemThreadShares::del(unsigned long position)
 	#endif*/
 }
 
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void
+#else
+	bool 
+#endif						 
+systemThreadShares::set(unsigned long position,
+						void *data,
+						unsigned long microseconds)
+{
+	/*if (microseconds == 0)
+	{
+		errno = pthread_mutex_lock(&mutex);
+		if (errno != 0)
+			#ifndef NO_EX
+				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			#else
+				return NULL;
+			#endif
+	}
+	else
+	{
+		bool locked = true;
+		unsigned long slept = 0;
+		
+		while (locked)
+		{
+			errno = pthread_mutex_trylock(&mutex);
+			if (errno != 0)
+			{
+				if (errno != EBUSY)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return NULL;
+					#endif
+										
+				if (nanosleep(&timeout, NULL) == -1)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					#else
+						return NULL;
+					#endif
+				
+				slept += 1;
+				
+				if (slept > microseconds)
+					#ifndef NO_EX
+						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,SYSTEMTHREADSHARES_CANNOTLOCK,SYSTEMTHREADSHARES_CANNOTLOCK_STR,__LINE__,__FILE__);
+					#else
+						return NULL;
+					#endif
+			}
+			else
+				locked = false;
+		}	
+	}
+	
+	return data;*/
+}
+				
 //-------------------------------------------------------------------
 
 void *						 

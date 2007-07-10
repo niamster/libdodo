@@ -81,7 +81,7 @@ namespace dodo
 							del();
 			
 			/**
-			 * lock and return shared data [if locked and force==false, wait until unlocked]
+			 * lock and return shared data
 			 * @return data points on shared data or NULL in error case
 			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
 			 * @note if microseconds==0 - infinite sleep

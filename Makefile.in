@@ -41,6 +41,7 @@ OBJECTS:=dbBase.o \
 		dbSqlite.o \
 		systemProcesses.o \
 		systemThreads.o \
+		threadGuard.o \
 		systemThreadShare.o \
 		systemThreadShares.o \
 		dbPostgresql.o \
