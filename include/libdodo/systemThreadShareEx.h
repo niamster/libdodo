@@ -45,7 +45,6 @@
 		 * libdodo defined errors' explanation
 		 */
 		#define SYSTEMTHREADSHARE_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-		#define SYSTEMTHREADSHARE_NOTFOUND_STR "Share not found."
 		#define SYSTEMTHREADSHARE_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 			
 		/**

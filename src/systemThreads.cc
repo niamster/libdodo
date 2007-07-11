@@ -199,8 +199,6 @@
 						#ifndef NO_EX
 							throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADS_DEL,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 						#endif
-						
-					current->handle = NULL;	
 				}
 					
 			#endif

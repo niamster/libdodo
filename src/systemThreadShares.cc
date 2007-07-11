@@ -34,18 +34,12 @@ systemThreadShares::systemThreadShares(systemThreadShares &sts)
 
 systemThreadShares::systemThreadShares() : shareNum(0)
 {
-	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-	
-	timeout.tv_nsec = 1000;
-	timeout.tv_sec = 0;	
 }
 
 //-------------------------------------------------------------------
 
 systemThreadShares::~systemThreadShares()
 {
-	pthread_mutexattr_destroy(&attr);
 }
 
 //-------------------------------------------------------------------
@@ -58,7 +52,6 @@ systemThreadShares::add(void *data)
 	__shareInfo share;
 	
 	share.position = ++shareNum;
-	pthread_mutex_init(&share.mutex,&attr);
 	share.data = data;
 	
 	shares.push_back(share);
@@ -75,27 +68,20 @@ systemThreadShares::add(void *data)
 #endif
 systemThreadShares::del(unsigned long position)
 {
-	/*errno = pthread_mutex_lock(&mutex);
-	if (errno != 0)
+	threadGuard tg(this);
+
+	if (getShare(position))
+		shares.erase(current);
+	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
-
-	data = NULL;
-
-	errno = pthread_mutex_unlock(&mutex);
-	if (errno != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_DEL,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
-
+			
 	#ifdef NO_EX
 		return true;
-	#endif*/
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -106,137 +92,39 @@ systemThreadShares::del(unsigned long position)
 	bool 
 #endif						 
 systemThreadShares::set(unsigned long position,
-						void *data,
-						unsigned long microseconds)
+						void *data)
 {
-	/*if (microseconds == 0)
-	{
-		errno = pthread_mutex_lock(&mutex);
-		if (errno != 0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return NULL;
-			#endif
-	}
-	else
-	{
-		bool locked = true;
-		unsigned long slept = 0;
-		
-		while (locked)
-		{
-			errno = pthread_mutex_trylock(&mutex);
-			if (errno != 0)
-			{
-				if (errno != EBUSY)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif
-										
-				if (nanosleep(&timeout, NULL) == -1)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif
-				
-				slept += 1;
-				
-				if (slept > microseconds)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,SYSTEMTHREADSHARES_CANNOTLOCK,SYSTEMTHREADSHARES_CANNOTLOCK_STR,__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif
-			}
-			else
-				locked = false;
-		}	
-	}
-	
-	return data;*/
-}
-				
-//-------------------------------------------------------------------
+	threadGuard tg(this);
 
-void *						 
-systemThreadShares::lock(unsigned long position,
-						unsigned long microseconds)
-{
-	/*if (microseconds == 0)
-	{
-		errno = pthread_mutex_lock(&mutex);
-		if (errno != 0)
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-			#else
-				return NULL;
-			#endif
-	}
+	if (getShare(position))
+		current->data = data;
 	else
-	{
-		bool locked = true;
-		unsigned long slept = 0;
-		
-		while (locked)
-		{
-			errno = pthread_mutex_trylock(&mutex);
-			if (errno != 0)
-			{
-				if (errno != EBUSY)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif
-										
-				if (nanosleep(&timeout, NULL) == -1)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif
-				
-				slept += 1;
-				
-				if (slept > microseconds)
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_LOCK,ERR_ERRNO,SYSTEMTHREADSHARES_CANNOTLOCK,SYSTEMTHREADSHARES_CANNOTLOCK_STR,__LINE__,__FILE__);
-					#else
-						return NULL;
-					#endif
-			}
-			else
-				locked = false;
-		}	
-	}
-	
-	return data;*/
-}
-							
-//-------------------------------------------------------------------
-
-#ifndef NO_EX
-	void
-#else
-	bool 
-#endif						 
-systemThreadShares::unlock(unsigned long position)
-{
-	/*errno = pthread_mutex_unlock(&mutex);
-	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADSHARES,SYSTEMTHREADSHARES_UNLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHARES_SET,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 			
 	#ifdef NO_EX
 		return true;
-	#endif*/
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+const void *
+systemThreadShares::get(unsigned long position)
+{
+	threadGuard tg(this);
+
+	if (getShare(position))
+		return current->data;
+	else
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHARES_SET,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+		#else
+			return NULL;
+		#endif
 }
 							
 //-------------------------------------------------------------------

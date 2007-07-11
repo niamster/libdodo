@@ -275,6 +275,7 @@ flushNBA::delFlush(int pos)
 		if (i->position == pos)
 		{
 			desc.erase(i);
+			
 			break;
 		}
 }

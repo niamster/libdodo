@@ -38,15 +38,34 @@ threadGuardHolder::threadGuard::threadGuard(threadGuardHolder *a_parent) : locke
 threadGuardHolder::threadGuard::~threadGuard()
 {
 	if (locked)
-		parent->mutex.unLock();
+	{
+		try
+		{
+			parent->mutex.unLock();
+		}
+		catch(baseEx &ex)
+		{
+			
+		}
+	}
 }
 
 //-------------------------------------------------------------------
 
 void
-threadGuardHolder::threadGuard::unlock()
+threadGuardHolder::threadGuard::unLock()
 {
 	locked = false;
 	
 	parent->mutex.unLock();
+}
+
+//-------------------------------------------------------------------
+
+void
+threadGuardHolder::threadGuard::lock()
+{
+	parent->mutex.lock();
+	
+	locked = false;
 }

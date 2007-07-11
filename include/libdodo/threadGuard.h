@@ -61,7 +61,12 @@ namespace dodo
 					/**
 					 * unlock and nothing will be done in destructor 
 					 */
-					void unlock();
+					void unLock();
+					
+					/**
+					 * unlock and nothing will be done in destructor 
+					 */
+					void lock();
 				
 				protected:
 					

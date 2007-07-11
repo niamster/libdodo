@@ -444,7 +444,7 @@ namespace dodo
 			
 			int execs;///< execs counter
 			
-			std::list<__execItem>::iterator k;///< iterator for list[for matched]
+			std::list<__execItem>::iterator current;///< iterator for list[for matched]
 	};
 
 };

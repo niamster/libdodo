@@ -106,7 +106,7 @@ xexec::setStatXExec(std::list<__execItem> &list,
 		bool stat)
 {
 	if (getXexec(list,position))
-		k->enabled = stat;
+		current->enabled = stat;
 }
 
 //-------------------------------------------------------------------
@@ -119,25 +119,23 @@ xexec::delXExec(std::list<__execItem> &list,
 	{
 		#ifdef DL_EXT
 		
-			if (k->handle!=NULL)
+			if (current->handle!=NULL)
 			{
 				deinitXexecModule deinit;	
 	
-				deinit = (deinitXexecModule)dlsym(k->handle, "deinitXexecModule");
+				deinit = (deinitXexecModule)dlsym(current->handle, "deinitXexecModule");
 				if (deinit != NULL)
 					deinit();
 				
-				if (dlclose(k->handle)!=0)
+				if (dlclose(current->handle)!=0)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_XEXEC,XEXEC_DELXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 					#endif
-				
-				k->handle = NULL;	
 			}
 				
 		#endif			
 		
-		list.erase(k);		
+		list.erase(current);		
 	}
 }
 
@@ -325,30 +323,30 @@ xexec::replaceXExec(std::list<__execItem> &list,
 	{
 		#ifdef DL_EXT
 		
-			if (k->handle!=NULL)
+			if (current->handle!=NULL)
 			{
 				deinitXexecModule deinit;	
 	
-				deinit = (deinitXexecModule)dlsym(k->handle, "deinitXexecModule");
+				deinit = (deinitXexecModule)dlsym(current->handle, "deinitXexecModule");
 				if (deinit != NULL)
 					deinit();
 				
-				if (dlclose(k->handle)!=0)
+				if (dlclose(current->handle)!=0)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_XEXEC,XEXEC_DELXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
 					#endif
 					
-				k->handle = NULL;	
+				current->handle = NULL;	
 			}
 				
 		#endif
 		
-		k->func = func;
-		k->data = data;
-		k->enabled = true;
+		current->func = func;
+		current->data = data;
+		current->enabled = true;
 		
 		#ifdef DL_EXT
-			k->handle = NULL;
+			current->handle = NULL;
 		#endif
 		
 		return true;
@@ -592,7 +590,8 @@ xexec::getXexec(std::list<__execItem> &list,
 	for (;i!=j;++i)
 		if (i->position == position)
 		{
-			k = i;
+			current = i;
+			
 			return true;
 		}
 	

@@ -38,16 +38,13 @@
 		 */
 		enum systemThreadSharesExR
 		{
-			SYSTEMTHREADSHARES_ISALREADYLOCKED,
-			SYSTEMTHREADSHARES_CANNOTLOCK
+			SYSTEMTHREADSHARES_NOTFOUND,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */
-		#define SYSTEMTHREADSHARES_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
 		#define SYSTEMTHREADSHARES_NOTFOUND_STR "Share not found."
-		#define SYSTEMTHREADSHARES_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 			
 		/**
 		 * ID of function where exception was thrown
@@ -56,8 +53,7 @@
 		{
 			SYSTEMTHREADSHARES_DEL,
 			SYSTEMTHREADSHARES_SET,
-			SYSTEMTHREADSHARES_LOCK,
-			SYSTEMTHREADSHARES_UNLOCK,
+			SYSTEMTHREADSHARES_GET,
 		};
 	};
 
