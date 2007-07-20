@@ -474,6 +474,12 @@ namespace dodo
 			 */
 			static dodoString MD5Hex(const dodoString &string);
 			
+			/**
+			 * @return formated string
+			 * @param format represents format of the string   
+			 */
+			static dodoString format(const dodoString &format, ...);
+			
 			#ifdef BZIP2_EXT
 			
 			 	

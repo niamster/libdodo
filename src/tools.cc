@@ -1841,6 +1841,8 @@ tools::MD5(const dodoString &string)
 	return dodoString((char *)digest,16);
 }
 
+//-------------------------------------------------------------------
+
 dodoString 
 tools::MD5Hex(const dodoString &string)
 {
@@ -1856,6 +1858,24 @@ tools::MD5Hex(const dodoString &string)
 	}	
 	
 	return md5Hex;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+tools::format(const dodoString &format, ...)
+{
+	unsigned long length = format.size() * 3;
+	char *str = new char[length];
+	va_list ap;
+	
+	vsnprintf(str,length,format.c_str(),ap);
+	
+	std::string res = str;
+	
+	delete [] str;
+	
+	return res;
 }
 
 //-------------------------------------------------------------------
