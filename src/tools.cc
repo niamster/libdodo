@@ -1841,6 +1841,21 @@ tools::MD5(const dodoString &string)
 	return dodoString((char *)digest,16);
 }
 
+dodoString 
+tools::MD5Hex(const dodoString &string)
+{
+	std::string md5 = MD5(content);
+	int j = md5.size();
+	std::string md5Hex;
+	for (int i = 0; i < j; ++i)
+	{
+		sprintf(tmp,"%02x", (unsigned char)md5[i]);
+		md5Hex.append(tmp);
+	}	
+	
+	return md5Hex;
+}
+
 //-------------------------------------------------------------------
 
 #ifndef NO_EX

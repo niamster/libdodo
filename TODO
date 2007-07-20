@@ -1,21 +1,9 @@
 firebird
 libsoup
 posix_fallocate
-job collection
 
-shares collection
+systemProcesseShare
 
 threads,processes: locking mutual exlusions
 			//mutex
-		
-			/*class atomMutex
-			{
-				atomMutex()
-				{
-					lock
-				}
-				~atomMutex()
-				{
-					unlock
-				}
-			};*/
+

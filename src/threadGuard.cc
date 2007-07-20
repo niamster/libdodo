@@ -55,9 +55,12 @@ threadGuardHolder::threadGuard::~threadGuard()
 void
 threadGuardHolder::threadGuard::unLock()
 {
-	locked = false;
-	
-	parent->mutex.unLock();
+	if (locked)
+	{
+		locked = false;
+		
+		parent->mutex.unLock();
+	}
 }
 
 //-------------------------------------------------------------------

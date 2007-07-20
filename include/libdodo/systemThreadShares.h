@@ -47,7 +47,7 @@ namespace dodo
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
-	class systemThreadShares : public threadGuardHolder
+	class systemThreadShares : virtual public threadGuardHolder
 	{
 		private:
 		

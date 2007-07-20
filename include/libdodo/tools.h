@@ -468,6 +468,12 @@ namespace dodo
 			 */
 			static dodoString MD5(const dodoString &string);
 			
+			/**
+			 * @return MD5 hash of string in 'hex' representation(e.g. 'fbc093901857fcd118f065f900982c24')
+			 * @param string indicates string for what generate hash
+			 */
+			static dodoString MD5Hex(const dodoString &string);
+			
 			#ifdef BZIP2_EXT
 			
 			 	
