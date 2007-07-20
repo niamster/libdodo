@@ -969,7 +969,7 @@ void
 tools::charToHex(char result[3],
 				const char first)
 {
-	sprintf(result,"%.2X",first);
+	sprintf(result,"%02x",first);
 }
 
 //-------------------------------------------------------------------
@@ -1844,9 +1844,11 @@ tools::MD5(const dodoString &string)
 dodoString 
 tools::MD5Hex(const dodoString &string)
 {
-	std::string md5 = MD5(content);
+	std::string md5 = MD5(string);
 	int j = md5.size();
 	std::string md5Hex;
+	char tmp[3];
+	
 	for (int i = 0; i < j; ++i)
 	{
 		sprintf(tmp,"%02x", (unsigned char)md5[i]);
