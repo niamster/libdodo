@@ -60,7 +60,7 @@ namespace dodo
 			virtual ~systemThreadShare();
 
 			/**
-			 * adds data to became a shared
+			 * sets data to became a shared
 			 * @param data describes data to be shared
 			 */
 			#ifndef NO_EX
@@ -69,6 +69,18 @@ namespace dodo
 				virtual bool
 			#endif
                             set(void *data);
+
+			/**
+			 * adds data to became a shared
+			 * @param size describes the size data to be shared
+			 * @note memory for data is being allocated and freed automaticaly
+			 */
+			#ifndef NO_EX
+				virtual void
+			#else
+				virtual bool
+			#endif
+                            set(unsigned long size);
 			
 			/**
 			 * sets shared data to NULL
@@ -102,9 +114,10 @@ namespace dodo
 		protected:
 			
     		void *data;///< data that will be shared
+			bool userData;///< is pointer to data given by user
     		pthread_mutex_t mutex;///< lock
 						
-			timespec timeout;///timeout to lock mutex check
+			timespec timeout;///< timeout to lock mutex check	
 	};
 
 };

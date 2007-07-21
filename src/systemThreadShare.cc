@@ -50,6 +50,9 @@ systemThreadShare::systemThreadShare() : data(NULL)
 
 systemThreadShare::~systemThreadShare()
 {
+	if (pthread_mutex_trylock(&mutex) == 0)
+		pthread_mutex_unlock(&mutex);
+	
 	pthread_mutex_destroy(&mutex);		
 }
 
@@ -69,8 +72,55 @@ systemThreadShare::set(void *a_data)
 		#else
 			return false;
 		#endif
+
+	if (!userData && data != NULL)
+		free(data);
 	
 	data = a_data;
+	userData = true;
+	
+	errno = pthread_mutex_unlock(&mutex);
+	if (errno != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARE,SYSTEMTHREADSHARE_SET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	#ifdef NO_EX
+		return true;
+	#endif
+}
+
+//-------------------------------------------------------------------
+
+#ifndef NO_EX
+	void
+#else
+	bool
+#endif 
+systemThreadShare::set(unsigned long size)
+{
+	errno = pthread_mutex_lock(&mutex);
+	if (errno != 0)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARE,SYSTEMTHREADSHARE_SET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+
+	if (!userData && data != NULL)
+		free(data);
+	
+	data = malloc(size);
+	if (data == NULL)
+		#ifndef NO_EX
+			throw baseEx(ERRMODULE_SYSTEMTHREADSHARE,SYSTEMTHREADSHARE_SET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+		#else
+			return false;
+		#endif
+	
+	userData = false;
 	
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
@@ -102,6 +152,9 @@ systemThreadShare::del()
 			return false;
 		#endif
 
+	if (!userData && data != NULL)
+		free(data);
+		
 	data = NULL;
 
 	errno = pthread_mutex_unlock(&mutex);
