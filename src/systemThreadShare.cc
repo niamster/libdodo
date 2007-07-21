@@ -32,7 +32,8 @@ systemThreadShare::systemThreadShare(systemThreadShare &sts)
 
 //-------------------------------------------------------------------
 
-systemThreadShare::systemThreadShare() : data(NULL)
+systemThreadShare::systemThreadShare() : data(NULL),
+										userData(false)
 {
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
@@ -50,8 +51,12 @@ systemThreadShare::systemThreadShare() : data(NULL)
 
 systemThreadShare::~systemThreadShare()
 {
-	if (pthread_mutex_trylock(&mutex) == 0)
-		pthread_mutex_unlock(&mutex);
+	pthread_mutex_lock(&mutex);
+
+	if (!userData && data != NULL)
+		free(data);
+	
+	pthread_mutex_unlock(&mutex);
 	
 	pthread_mutex_destroy(&mutex);		
 }
@@ -77,6 +82,7 @@ systemThreadShare::set(void *a_data)
 		free(data);
 	
 	data = a_data;
+	
 	userData = true;
 	
 	errno = pthread_mutex_unlock(&mutex);
