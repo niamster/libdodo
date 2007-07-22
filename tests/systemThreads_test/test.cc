@@ -1,6 +1,6 @@
 #include <baseEx.h>
 #include <systemThreads.h>
-#include <systemThreadShare.h>
+#include <systemThreadShareDataGuard.h>
 #include <systemTools.h>
 #include <timeTools.h>
 #include <tools.h>
@@ -9,7 +9,7 @@
 using namespace dodo;
 using namespace std;
 
-systemThreadShare sh;
+systemThreadShareDataGuard sh;
 
 void *
 thread(void *data)

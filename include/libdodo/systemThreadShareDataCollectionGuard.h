@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadShares.h
+ *            systemThreadShareDataCollectionGuard.h
  *
  *  Tue Nov 29 23:31:55 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _SYSTEMTHREADSHARES_H_
-#define _SYSTEMTHREADSHARES_H_
+#ifndef _SYSTEMTHREASSHAREDATACOLLECTIONGUARD_H_
+#define _SYSTEMTHREASSHAREDATACOLLECTIONGUARD_H_
 	
 #include <pthread.h>
 #include <time.h>
@@ -30,7 +30,7 @@
 #include <directives.h>
 
 #include <types.h>
-#include <systemThreadSharesEx.h>
+#include <systemThreadShareDataCollectionGuardEx.h>
 #include <threadGuard.h>
 
 namespace dodo
@@ -47,7 +47,7 @@ namespace dodo
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
-	class systemThreadShares : virtual public threadGuardHolder
+	class systemThreadShareDataCollectionGuard : virtual public threadGuardHolder
 	{
 		private:
 		
@@ -55,19 +55,19 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			systemThreadShares(systemThreadShares &sts);
+			systemThreadShareDataCollectionGuard(systemThreadShareDataCollectionGuard &sts);
 			
 		public:
 		
 			/**
 			 * constructor
 			 */
-			systemThreadShares();
+			systemThreadShareDataCollectionGuard();
 			
 			/**
 			 * destructor
 			 */
-			virtual ~systemThreadShares();
+			virtual ~systemThreadShareDataCollectionGuard();
 
 			/**
 			 * adds data to became a shared

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadShares.cc
+ *            systemThreadShareDataCollectionGuard.cc
  *
  *  Wed Nov 30 22:02:16 2005
  *  Copyright  2005  Ni@m
@@ -22,30 +22,30 @@
  */
 
 
-#include <systemThreadShares.h>
+#include <systemThreadShareDataCollectionGuard.h>
 	
 using namespace dodo;
 
-systemThreadShares::systemThreadShares(systemThreadShares &sts)
+systemThreadShareDataCollectionGuard::systemThreadShareDataCollectionGuard(systemThreadShareDataCollectionGuard &sts)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadShares::systemThreadShares() : shareNum(0)
+systemThreadShareDataCollectionGuard::systemThreadShareDataCollectionGuard() : shareNum(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadShares::~systemThreadShares()
+systemThreadShareDataCollectionGuard::~systemThreadShareDataCollectionGuard()
 {
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-systemThreadShares::add(void *data)
+systemThreadShareDataCollectionGuard::add(void *data)
 {
 	threadGuard tg(this);
 	
@@ -66,7 +66,7 @@ systemThreadShares::add(void *data)
 #else
 	bool
 #endif
-systemThreadShares::del(unsigned long position)
+systemThreadShareDataCollectionGuard::del(unsigned long position)
 {
 	threadGuard tg(this);
 
@@ -74,7 +74,7 @@ systemThreadShares::del(unsigned long position)
 		shares.erase(current);
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHARES_DEL,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_DEL,ERR_LIBDODO,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -91,7 +91,7 @@ systemThreadShares::del(unsigned long position)
 #else
 	bool 
 #endif						 
-systemThreadShares::set(unsigned long position,
+systemThreadShareDataCollectionGuard::set(unsigned long position,
 						void *data)
 {
 	threadGuard tg(this);
@@ -100,7 +100,7 @@ systemThreadShares::set(unsigned long position,
 		current->data = data;
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHARES_SET,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_SET,ERR_LIBDODO,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -113,7 +113,7 @@ systemThreadShares::set(unsigned long position,
 //-------------------------------------------------------------------
 
 const void *
-systemThreadShares::get(unsigned long position)
+systemThreadShareDataCollectionGuard::get(unsigned long position)
 {
 	threadGuard tg(this);
 
@@ -121,7 +121,7 @@ systemThreadShares::get(unsigned long position)
 		return current->data;
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHARES_SET,ERR_LIBDODO,SYSTEMTHREADSHARES_NOTFOUND,SYSTEMTHREADSHARES_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADS,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_SET,ERR_LIBDODO,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND,SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return NULL;
 		#endif
@@ -130,7 +130,7 @@ systemThreadShares::get(unsigned long position)
 //-------------------------------------------------------------------
 
 bool						 
-systemThreadShares::getShare(unsigned long position)
+systemThreadShareDataCollectionGuard::getShare(unsigned long position)
 {
 	std::list<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
 	for (;i!=j;++i)
