@@ -113,7 +113,7 @@
 		};
 		
 		/**
-	 	 * @class dbMysql is an interface to mysql db through sql-,database- independent interfaces
+	 	 * @class dbMysql is an interface to mysql db through sql-, database- independent interfaces
 		 */
 		class dbMysql : public dbSqlBase
 		
@@ -172,7 +172,7 @@
 				virtual void disconnect();
 				
 				/**
-				 * @return amount of affected rows(update,delete...)
+				 * @return amount of affected rows(update, delete...)
 				 */
 				virtual unsigned int affectedRowsCount() const;
 				

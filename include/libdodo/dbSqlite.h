@@ -61,7 +61,7 @@
 		};
 		
 		/**
-	 	 * @class dbSqlite is an interface to sqlite db through sql-,database- independent interfaces
+	 	 * @class dbSqlite is an interface to sqlite db through sql-, database- independent interfaces
 	 	 * @note for autoFraming sqlite must be compiled with SQLITE_ENABLE_COLUMN_METADATA defined
 		 */
 		class dbSqlite : public dbSqlBase
@@ -107,7 +107,7 @@
 				virtual void disconnect();
 				
 				/**
-				 * @return amount of affected rows(update,delete...)
+				 * @return amount of affected rows(update, delete...)
 				 */
 				virtual unsigned int affectedRowsCount() const;
 				

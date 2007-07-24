@@ -39,24 +39,24 @@ namespace dodo
 	 * @note time/date format can be specified:
 	 *    
 	 * 
-	 * %w     Weekday number (Sunday = [0,6]).
+	 * %w     Weekday number (Sunday = [0, 6]).
 	 * %a     Abbreviated weekday name.
 	 * %A     Full weekday name.
 	 * 
-	 * %m     Month number [01,12].
+	 * %m     Month number [01, 12].
 	 * %b     Abbreviated month name.
 	 * %B     Full month name.
 	 * 
-	 * %y     Year within century. When a century is not otherwise specified, values in the range [69,99] shall refer to years 1969 to  1999
-	 *           inclusive, and values in the range [00,68] shall refer to years 2000 to 2068 inclusive.
+	 * %y     Year within century. When a century is not otherwise specified, values in the range [69, 99] shall refer to years 1969 to  1999
+	 *           inclusive, and values in the range [00, 68] shall refer to years 2000 to 2068 inclusive.
 	 * %Y     Year as "ccyy" (for example, 2001).
-	 * %C     Century number [00,99]; leading zeros are permitted but not required.
+	 * %C     Century number [00, 99]; leading zeros are permitted but not required.
 	 * 
-	 * %d     Day of month [01,31]; the leading 0 is optional.
+	 * %d     Day of month [01, 31]; the leading 0 is optional.
 	 * 
-	 * %H     Hour [00,23].
-	 * %M     Minute [00,59].
-	 * %S     Seconds  [00,60]. The range goes to 60 (rather than stopping at 59) to allow positive leap seconds to be expressed. Since leap
+	 * %H     Hour [00, 23].
+	 * %M     Minute [00, 59].
+	 * %S     Seconds  [00, 60]. The range goes to 60 (rather than stopping at 59) to allow positive leap seconds to be expressed. Since leap
 	 * seconds cannot be predicted by any algorithm, leap second data must come from some external source.
 	 * 
 	 */
@@ -77,11 +77,11 @@ namespace dodo
 		 */
 		__mktime(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight=true); 
 		
-		unsigned int sec;///< Seconds [0,60]
-		unsigned int min;///< Minutes [0,59]
-		unsigned int hour;///< Hour [0,23]
-		unsigned int day;///< Day of month [1,31]
-		unsigned int month;///< Month of year [1,12]
+		unsigned int sec;///< Seconds [0, 60]
+		unsigned int min;///< Minutes [0, 59]
+		unsigned int hour;///< Hour [0, 23]
+		unsigned int day;///< Day of month [1, 31]
+		unsigned int month;///< Month of year [1, 12]
 		unsigned int year;///< Years since 1900
 		
 		bool daylight;///< Daylight Savings flag; true by default

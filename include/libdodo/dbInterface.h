@@ -73,7 +73,7 @@ namespace dodo
 	};
 	
 	/**
- 	 * @class dbInterface is an interface to mysql db through sql-,database- independent interfaces; 
+ 	 * @class dbInterface is an interface to mysql db through sql-, database- independent interfaces; 
  	 * you should derive from it if you want to write 'plugin' for your database
 	 */
 	class dbInterface
@@ -261,7 +261,7 @@ namespace dodo
 			virtual void unhaving() = 0;
 						
 			/**
-			 * @return amount of affected rows(update,delete...)
+			 * @return amount of affected rows(update, delete...)
 			 */
 			virtual unsigned int affectedRowsCount() const = 0;
 			

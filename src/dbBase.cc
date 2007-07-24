@@ -190,7 +190,7 @@ dbBase::select(const dodoString &a_table,
 	
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift,1<<DBADDREQUEST_WHERE);
+		addFlag(qShift, 1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 	
@@ -318,7 +318,7 @@ dbBase::insertSelect(const dodoString &a_tableTo,
 	
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift,1<<DBADDREQUEST_WHERE);
+		addFlag(qShift, 1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 	
@@ -351,7 +351,7 @@ dbBase::update(const dodoString &a_table,
 	
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift,1<<DBADDREQUEST_WHERE);
+		addFlag(qShift, 1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}	
 	
@@ -377,7 +377,7 @@ dbBase::update(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift,1<<DBADDREQUEST_WHERE);
+		addFlag(qShift, 1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}	
 	
@@ -396,7 +396,7 @@ dbBase::del(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift,1<<DBADDREQUEST_WHERE);
+		addFlag(qShift, 1<<DBADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 	
@@ -574,7 +574,7 @@ dbBase::where(const dodoString &where)
 {
 	pre_where = where;
 
-	addFlag(qShift,1<<DBADDREQUEST_WHERE);
+	addFlag(qShift, 1<<DBADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
@@ -582,7 +582,7 @@ dbBase::where(const dodoString &where)
 void 
 dbBase::limit(unsigned int a_number)
 {
-	addFlag(qShift,1<<DBADDREQUEST_LIMIT);
+	addFlag(qShift, 1<<DBADDREQUEST_LIMIT);
 
 	pre_limNumber = tools::lToString(a_number);
 }
@@ -591,7 +591,7 @@ dbBase::limit(unsigned int a_number)
 void 
 dbBase::offset(unsigned int a_number)
 {
-	addFlag(qShift,1<<DBADDREQUEST_OFFSET);
+	addFlag(qShift, 1<<DBADDREQUEST_OFFSET);
 	
 	pre_limOffset = tools::lToString(a_number);
 }
@@ -603,7 +603,7 @@ dbBase::order(const dodoString &order)
 {
 	pre_order = order;
 
-	addFlag(qShift,1<<DBADDREQUEST_ORDERBY);
+	addFlag(qShift, 1<<DBADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -613,7 +613,7 @@ dbBase::group(const dodoString &group)
 {	
 	pre_group = group;
 
-	addFlag(qShift,1<<DBADDREQUEST_GROUPBY);
+	addFlag(qShift, 1<<DBADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -623,7 +623,7 @@ dbBase::having(const dodoString &having)
 {
 	pre_having = having;
 
-	addFlag(qShift,1<<DBADDREQUEST_HAVING);
+	addFlag(qShift, 1<<DBADDREQUEST_HAVING);
 }
 
 
@@ -632,7 +632,7 @@ dbBase::having(const dodoString &having)
 void 
 dbBase::unwhere()
 {
-	removeFlag(qShift,1<<DBADDREQUEST_WHERE);	
+	removeFlag(qShift, 1<<DBADDREQUEST_WHERE);	
 }
 
 //-------------------------------------------------------------------
@@ -640,7 +640,7 @@ dbBase::unwhere()
 void 
 dbBase::unlimit()
 {
-	removeFlag(qShift,1<<DBADDREQUEST_LIMIT);
+	removeFlag(qShift, 1<<DBADDREQUEST_LIMIT);
 }
 
 //-------------------------------------------------------------------
@@ -648,7 +648,7 @@ dbBase::unlimit()
 void 
 dbBase::unoffset()
 {
-	removeFlag(qShift,1<<DBADDREQUEST_OFFSET);
+	removeFlag(qShift, 1<<DBADDREQUEST_OFFSET);
 }
 
 //-------------------------------------------------------------------
@@ -656,7 +656,7 @@ dbBase::unoffset()
 void 
 dbBase::unorder()
 {
-	removeFlag(qShift,1<<DBADDREQUEST_ORDERBY);
+	removeFlag(qShift, 1<<DBADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -664,7 +664,7 @@ dbBase::unorder()
 void 
 dbBase::ungroup()
 {	
-	removeFlag(qShift,1<<DBADDREQUEST_GROUPBY);
+	removeFlag(qShift, 1<<DBADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -672,7 +672,7 @@ dbBase::ungroup()
 void 
 dbBase::unhaving()
 {
-	removeFlag(qShift,1<<DBADDREQUEST_HAVING);
+	removeFlag(qShift, 1<<DBADDREQUEST_HAVING);
 }
 
 
@@ -688,7 +688,7 @@ dbBase::setAddInsSt(unsigned int statement)
 			break;
 		
 	}*/
-	addFlag(qInsShift,1<<statement);
+	addFlag(qInsShift, 1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -703,7 +703,7 @@ dbBase::setAddUpSt(unsigned int statement)
 			break;
 		
 	}*/
-	addFlag(qUpShift,1<<statement);	
+	addFlag(qUpShift, 1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -716,8 +716,8 @@ dbBase::setAddSelSt(unsigned int statement)
 		case DBREQUEST_SELECT_DISTINCT:
 		case DBREQUEST_SELECT_ALL:
 		
-			removeFlag(qSelShift,1<<DBREQUEST_SELECT_ALL);
-			removeFlag(qSelShift,1<<DBREQUEST_SELECT_DISTINCT);
+			removeFlag(qSelShift, 1<<DBREQUEST_SELECT_ALL);
+			removeFlag(qSelShift, 1<<DBREQUEST_SELECT_DISTINCT);
 			
 			break;
 			
@@ -726,7 +726,7 @@ dbBase::setAddSelSt(unsigned int statement)
 			break;
 		
 	}
-	addFlag(qSelShift,1<<statement);	
+	addFlag(qSelShift, 1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -741,7 +741,7 @@ dbBase::setAddDelSt(unsigned int statement)
 			break;
 		
 	}*/
-	addFlag(qDelShift,1<<statement);
+	addFlag(qDelShift, 1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -749,7 +749,7 @@ dbBase::setAddDelSt(unsigned int statement)
 void 
 dbBase::unsetAddInsSt(unsigned int statement)
 {
-	removeFlag(qInsShift,1<<statement);
+	removeFlag(qInsShift, 1<<statement);
 }
 
 //-------------------------------------------------------------------
@@ -757,7 +757,7 @@ dbBase::unsetAddInsSt(unsigned int statement)
 void 
 dbBase::unsetAddUpSt(unsigned int statement)
 {
-	removeFlag(qUpShift,1<<statement);	
+	removeFlag(qUpShift, 1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -765,7 +765,7 @@ dbBase::unsetAddUpSt(unsigned int statement)
 void 
 dbBase::unsetAddSelSt(unsigned int statement)
 {
-	removeFlag(qSelShift,1<<statement);	
+	removeFlag(qSelShift, 1<<statement);	
 }
 
 //-------------------------------------------------------------------
@@ -773,7 +773,7 @@ dbBase::unsetAddSelSt(unsigned int statement)
 void 
 dbBase::unsetAddDelSt(unsigned int statement)
 {
-	removeFlag(qDelShift,1<<statement);	
+	removeFlag(qDelShift, 1<<statement);	
 }
 
 //-------------------------------------------------------------------

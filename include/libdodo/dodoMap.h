@@ -73,7 +73,7 @@ namespace dodo
 						cmpFunc = strcmp;
 					
 					for (;i!=j;++i)
-						if (cmpFunc(varName.c_str(),i->first.c_str()) == 0)
+						if (cmpFunc(varName.c_str(), i->first.c_str()) == 0)
 							return i->second;		
 					
 					std::pair<typename std::map<keyType, valueType>::iterator, bool> res = realArr.insert(make_pair(varName, type));
@@ -93,7 +93,7 @@ namespace dodo
 						typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
-							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
+							if (strcasecmp(varName.c_str(), i->first.c_str()) == 0)
 								return i;		
 						
 						return j;
@@ -114,7 +114,7 @@ namespace dodo
 						typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 						
 						for (;i!=j;++i)
-							if (strcasecmp(varName.c_str(),i->first.c_str()) == 0)
+							if (strcasecmp(varName.c_str(), i->first.c_str()) == 0)
 								return i;		
 						
 						return j;
@@ -212,7 +212,7 @@ namespace dodo
 						cmpFunc = strcmp;
 					
 					for (;i!=j;++i)
-						if (cmpFunc(varName.c_str(),i->first.c_str()) == 0)
+						if (cmpFunc(varName.c_str(), i->first.c_str()) == 0)
 							return true;		
 					
 					return false;				 	

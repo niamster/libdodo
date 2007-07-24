@@ -63,7 +63,7 @@ regexpTools::match(const dodoString &pattern,
 	if (!compile(pattern))
 		return false;
 
-	return reMatch(sample,pockets);
+	return reMatch(sample, pockets);
 }
 
 //-------------------------------------------------------------------
@@ -82,7 +82,7 @@ regexpTools::reMatch(const dodoString &sample,
 		
 	std::list<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 	for (;i!=j;++i)
-		pockets.push_back(sample.substr(i->begin,i->end-i->begin));
+		pockets.push_back(sample.substr(i->begin, i->end-i->begin));
 		
 	return true;
 }
@@ -98,7 +98,7 @@ regexpTools::boundMatch(const dodoString &sample)
 	
 		int subs;
 	
-		if (pcre_fullinfo(code,NULL,PCRE_INFO_CAPTURECOUNT,&subs) != 0)
+		if (pcre_fullinfo(code, NULL, PCRE_INFO_CAPTURECOUNT,&subs) != 0)
 			return false;
 			
 		subs *= 3;
@@ -132,7 +132,7 @@ regexpTools::boundMatch(const dodoString &sample)
 		int subs = code.re_nsub+1;
 		regmatch_t *pmatch = new regmatch_t[subs];
 				
-		int res = regexec(&code,sample.c_str(),subs,pmatch,0);
+		int res = regexec(&code, sample.c_str(), subs, pmatch, 0);
 		if (res != 0)
 		{
 			delete [] pmatch;
@@ -191,7 +191,7 @@ regexpTools::compile(const dodoString &pattern)
 			notCompiled = false;
 		else
 			regfree(&code);
-		if (regcomp(&code, pattern.c_str(),bits) != 0)
+		if (regcomp(&code, pattern.c_str(), bits) != 0)
 			return false;
 			
 	#endif
@@ -209,7 +209,7 @@ regexpTools::replace(const dodoString &pattern,
 	if (!compile(pattern))
 		return sample;
 	
-	return reReplace(sample,replacements);
+	return reReplace(sample, replacements);
 }
 
 //-------------------------------------------------------------------
@@ -229,7 +229,7 @@ regexpTools::reReplace(const dodoString &sample,
 	dodoString temp = sample;
 	
 	for (int res = 0;res<subs && i!=j;++i,++res,++k)
-		temp.replace(i->begin,i->end-i->begin,*k);
+		temp.replace(i->begin, i->end-i->begin,*k);
 		
 	return temp;
 }

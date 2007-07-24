@@ -152,9 +152,9 @@ namespace dodo
 		dodoString &pre_where;///< where statement of the request	
 		dodoStringArr &pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
 		dodoArray<dodoStringArr> &pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-		dodoString &pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+		dodoString &pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
 		dodoString &pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-		dodoString &pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+		dodoString &pre_order;///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
 		dodoString &pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
 		dodoString &pre_group;///< group statement
 		dodoString &pre_limNumber;///< limit of result
@@ -200,14 +200,14 @@ namespace dodo
 		FIELDTYPE_CHAR,///< **; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
 		FIELDTYPE_VARCHAR,///< **; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
 		FIELDTYPE_TINYBLOB,///< A column with a maximum length of 255 (2^8 - 1) characters.
-		FIELDTYPE_BLOB,///< A column with a maximum length of 65,535 (2^16 -1) characters.
-		FIELDTYPE_MEDIUMBLOB,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
-		FIELDTYPE_LONGBLOB,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
+		FIELDTYPE_BLOB,///< A column with a maximum length of 65, 535 (2^16 -1) characters.
+		FIELDTYPE_MEDIUMBLOB,///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters. 
+		FIELDTYPE_LONGBLOB,///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
 		FIELDTYPE_TINYTEXT,///< A column with a maximum length of 255 (2^8 - 1) characters.
-		FIELDTYPE_TEXT,///< A column with a maximum length of 65,535 (2^16 -1) characters.
-		FIELDTYPE_MEDIUMTEXT,///< A column with a maximum length of 16,777,215 (2^24 - 1) characters. 
-		FIELDTYPE_LONGTEXT,///< A column with a maximum length of 4,294,967,295 or 4GB (2^32 - 1) characters.
-		FIELDTYPE_ENUM,///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65,535 distinct values.
+		FIELDTYPE_TEXT,///< A column with a maximum length of 65, 535 (2^16 -1) characters.
+		FIELDTYPE_MEDIUMTEXT,///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters. 
+		FIELDTYPE_LONGTEXT,///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
+		FIELDTYPE_ENUM,///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values.
 		FIELDTYPE_SET,///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
 	};
 	
@@ -403,7 +403,7 @@ namespace dodo
 			 * @param sub is array of subqueries
 			 * @param type is type of "subquering"[see qStEnum]
 			 */
-			virtual void subquery(const dodoStringArr &sub, int type=DBREQUEST_UNION/*DBREQUEST_UNION_ALL,DBREQUEST_MINUS,DBREQUEST_INTERSECT*/);
+			virtual void subquery(const dodoStringArr &sub, int type=DBREQUEST_UNION/*DBREQUEST_UNION_ALL, DBREQUEST_MINUS, DBREQUEST_INTERSECT*/);
 			
 			/**
 			 * create index in table
@@ -644,16 +644,16 @@ namespace dodo
 			dodoString pre_where;///< where statement of the request	
 			dodoStringArr pre_fieldsNames;///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
 			dodoArray<dodoStringArr> pre_fieldsVal;///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			dodoString pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods, create(delete)Index methods)
+			dodoString pre_table;///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods)
 			dodoString pre_tableTo;///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-			dodoString pre_order;///< order statement(also can be used as 'db' for rename(delete)Field,rename(delete)Db,rename(delete)Table methods)
+			dodoString pre_order;///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
 			dodoString pre_having;///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
 			dodoString pre_group;///< group statement
 			dodoString pre_limNumber;///< limit of result
 			dodoString pre_limOffset;///< offset of requested result
 			dodoStringArr pre_subQ;///< subquery
 			
-			bool show;///< is request was with result(show,select)
+			bool show;///< is request was with result(show, select)
 						
 			int qType;///< type of operation
 			

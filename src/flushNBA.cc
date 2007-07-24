@@ -98,13 +98,13 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 	
 	if (count > 0)
 	{
-		int res = poll(fds,count,timeout);
+		int res = poll(fds, count, timeout);
 		
 		if (res > 0)
 		{
 				for (int i=0;i<count;++i)
 				{
-					if (isSetFlag(fds[i].revents,POLLIN) || isSetFlag(fds[i].revents,POLLPRI))
+					if (isSetFlag(fds[i].revents, POLLIN) || isSetFlag(fds[i].revents, POLLPRI))
 						tempRB.push_back(true);
 					else
 						tempRB.push_back(false);
@@ -126,7 +126,7 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 			}
 			else	
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISREADABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 				#else			
 					{
 						delete [] fds;
@@ -177,13 +177,13 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 	
 	if (count > 0)
 	{
-		int res = poll(fds,count,timeout);
+		int res = poll(fds, count, timeout);
 		
 		if (res > 0)
 		{
 				for (int i=0;i<count;++i)
 				{
-					if (isSetFlag(fds[i].revents,POLLOUT))
+					if (isSetFlag(fds[i].revents, POLLOUT))
 						tempRB.push_back(true);
 					else
 						tempRB.push_back(false);
@@ -205,7 +205,7 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 			}
 			else	
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISWRITABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 				#else			
 					{
 						delete [] fds;
@@ -240,11 +240,11 @@ flushNBA::isReadable(int pos,
 			fd.fd = i->in;
 			fd.events = POLLIN | POLLPRI;
 			
-			int res = poll(&fd,1,timeout);
+			int res = poll(&fd, 1, timeout);
 			
 			if (res > 0)
 			{
-				if (isSetFlag(fd.revents,POLLIN) || isSetFlag(fd.revents,POLLPRI))
+				if (isSetFlag(fd.revents, POLLIN) || isSetFlag(fd.revents, POLLPRI))
 					return true;
 				else
 					return false;
@@ -255,7 +255,7 @@ flushNBA::isReadable(int pos,
 					return false;
 				else	
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISREADABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else			
 						return false;
 					#endif
@@ -295,11 +295,11 @@ flushNBA::isWritable(int pos,
 			fd.fd = i->out;
 			fd.events = POLLOUT;
 			
-			int res = poll(&fd,1,timeout);
+			int res = poll(&fd, 1, timeout);
 			
 			if (res > 0)
 			{
-				if (isSetFlag(fd.revents,POLLOUT))
+				if (isSetFlag(fd.revents, POLLOUT))
 					return true;
 				else
 					return false;
@@ -310,7 +310,7 @@ flushNBA::isWritable(int pos,
 					return false;
 				else	
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHNBA,FLUSHNBA_ISWRITABLE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else			
 						return false;
 					#endif

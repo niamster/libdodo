@@ -33,7 +33,7 @@ flushSocket::flushSocket(flushSocket &fs)
 
 flushSocket::flushSocket(bool a_server, 
 						short a_family, 
-						short a_type) : flushSocketOptions(a_family,a_type),
+						short a_type) : flushSocketOptions(a_family, a_type),
 						blockInherited(false),
 						server(a_server)
 {
@@ -47,7 +47,7 @@ flushSocket::~flushSocket()
 {
 	if (socket != -1)
 	{
-		::shutdown(socket,SHUT_RDWR);
+		::shutdown(socket, SHUT_RDWR);
 			
 		::close(socket);
 	}	
@@ -123,7 +123,7 @@ flushSocket::restoreOptions()
 	setInTimeout(inTimeout);
 	setOutTimeout(outTimeout);
 	
-	setLingerSockOption(lingerOpts,lingerSeconds);	
+	setLingerSockOption(lingerOpts, lingerSeconds);	
 	
 	block(blocked);
 }
@@ -139,11 +139,11 @@ flushSocket::makeSocket()
 {
 	if (socket != -1)
 	{
-		::shutdown(socket,SHUT_RDWR);
+		::shutdown(socket, SHUT_RDWR);
 		
 		if (::close(socket) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -176,7 +176,7 @@ flushSocket::makeSocket()
 		default:
 		
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKESOCKET, ERR_LIBDODO, FLUSHSOCKET_WRONG_PARAMETHER, FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;			
 			#endif			
@@ -199,16 +199,16 @@ flushSocket::makeSocket()
 		default:
 		
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKESOCKET, ERR_LIBDODO, FLUSHSOCKET_WRONG_PARAMETHER, FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;			
 			#endif	
 	}	
 	
-	socket = ::socket(real_domain,real_type,0);
+	socket = ::socket(real_domain, real_type, 0);
 	if (socket == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKESOCKET,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKESOCKET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;			
 		#endif
@@ -238,7 +238,7 @@ flushSocket::connect(const dodoString &host,
 	
 	if (server)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -257,15 +257,15 @@ flushSocket::connect(const dodoString &host,
 		sa.sin6_port = htons(port);
 		sa.sin6_flowinfo = 0;
 		sa.sin6_scope_id = 0;
-		inet_pton(AF_INET6,host.c_str(),&sa.sin6_addr);
+		inet_pton(AF_INET6, host.c_str(),&sa.sin6_addr);
 		
-		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			::close(socket);
 			socket = -1;
 			
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else			
 				return false;		
 			#endif
@@ -278,13 +278,13 @@ flushSocket::connect(const dodoString &host,
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(),&sa.sin_addr);
 		
-		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			::close(socket);
 			socket = -1;
 			
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else			
 				return false;		
 			#endif
@@ -292,7 +292,7 @@ flushSocket::connect(const dodoString &host,
 	}
 	
 	exchange.blocked = blocked;
-	exchange.init(socket,blockInherited);
+	exchange.init(socket, blockInherited);
 	
 	socket = -1;
 			
@@ -319,7 +319,7 @@ flushSocket::connect(const __connInfo &destinaton,
 		bool result =
 	#endif
 	
-	connect(destinaton.host,destinaton.port,exchange);
+	connect(destinaton.host, destinaton.port, exchange);
 
 	#ifdef NO_EX
 		return result;
@@ -345,7 +345,7 @@ flushSocket::connectFrom(const dodoString &local,
 	
 	if (server)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -358,14 +358,14 @@ flushSocket::connectFrom(const dodoString &local,
 	#endif
 		
 	int sockFlag(1);
-	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int)) == -1)
+	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR,&sockFlag, sizeof(int)) == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;	
 		#endif
 	
-	addFlag(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1<<SOCKET_REUSE_ADDRESS);
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -374,25 +374,25 @@ flushSocket::connectFrom(const dodoString &local,
 		sa.sin6_flowinfo = 0;
 		sa.sin6_scope_id = 0;
 		sa.sin6_port = htons(0);
-		inet_pton(AF_INET6,local.c_str(),&sa.sin6_addr);
+		inet_pton(AF_INET6, local.c_str(),&sa.sin6_addr);
 
-		if (::bind(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::bind(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
 
 		sa.sin6_port = htons(port);
-		inet_pton(AF_INET6,host.c_str(),&sa.sin6_addr);
+		inet_pton(AF_INET6, host.c_str(),&sa.sin6_addr);
 		
-		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			::close(socket);
 			socket = -1;
 			
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else			
 				return false;		
 			#endif
@@ -405,9 +405,9 @@ flushSocket::connectFrom(const dodoString &local,
 		sa.sin_port = htons(0);
 		inet_aton(local.c_str(),&sa.sin_addr);	
 
-		if (::bind(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::bind(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -415,13 +415,13 @@ flushSocket::connectFrom(const dodoString &local,
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(),&sa.sin_addr);	
 		
-		if (::connect(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			::close(socket);
 			socket = -1;
 			
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else			
 				return false;		
 			#endif
@@ -429,7 +429,7 @@ flushSocket::connectFrom(const dodoString &local,
 	}
 	
 	exchange.blocked = blocked;
-	exchange.init(socket,blockInherited);
+	exchange.init(socket, blockInherited);
 	
 	socket = -1;
 			
@@ -457,7 +457,7 @@ flushSocket::connectFrom(const dodoString &local,
 		bool result =
 	#endif
 	
-	connectFrom(local,destinaton.host,destinaton.port,exchange);
+	connectFrom(local, destinaton.host, destinaton.port, exchange);
 
 	#ifdef NO_EX
 		return result;
@@ -481,7 +481,7 @@ flushSocket::connect(const dodoString &path,
 	
 	if (server)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_CONNECT,FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif	
@@ -495,23 +495,23 @@ flushSocket::connect(const dodoString &path,
 	
 	struct sockaddr_un sa;
 	
-	strcpy(sa.sun_path,path.c_str());
+	strcpy(sa.sun_path, path.c_str());
 	sa.sun_family = AF_UNIX;
 
-	if (::connect(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa.sun_family)) == -1)
+	if (::connect(socket,(struct sockaddr *)&sa, path.size()+sizeof(sa.sun_family)) == -1)
 	{
 		::close(socket);
 		socket = -1;
 		
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else			
 			return false;		
 		#endif
 	}	
 		
 	exchange.blocked = blocked;
-	exchange.init(socket,blockInherited);
+	exchange.init(socket, blockInherited);
 	
 	socket = -1;
 		
@@ -542,23 +542,23 @@ flushSocket::bindNListen(const dodoString &host,
 			
 	if (!server)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_CANNOT_BIND,FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_LIBDODO, FLUSHSOCKET_CANNOT_BIND, FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 
 	if (opened)
 	{
-		if (::shutdown(socket,SHUT_RDWR) == -1)
+		if (::shutdown(socket, SHUT_RDWR) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif	
 		
 		if (::close(socket) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -576,16 +576,16 @@ flushSocket::bindNListen(const dodoString &host,
 	#endif
 	
 	int sockFlag(1);
-	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR,&sockFlag, sizeof(int))==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;	
 		#endif
 	
-	addFlag(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1<<SOCKET_REUSE_ADDRESS);
 	
-	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
+	setLingerSockOption(SOCKET_LINGER_OPTION, SOCKET_LINGER_PERIOD);
 	
 	if (family == PROTO_FAMILY_IPV6)
 	{
@@ -597,11 +597,11 @@ flushSocket::bindNListen(const dodoString &host,
 		if (strcmp(host.c_str(),"*") == 0)
 			sa.sin6_addr = in6addr_any;
 		else
-			inet_pton(AF_INET6,host.c_str(),&sa.sin6_addr);
+			inet_pton(AF_INET6, host.c_str(),&sa.sin6_addr);
 		
-		if (::bind(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::bind(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -615,20 +615,20 @@ flushSocket::bindNListen(const dodoString &host,
 		if (strcmp(host.c_str(),"*") == 0)
 			sa.sin_addr.s_addr = htonl(INADDR_ANY);
 		else
-			inet_pton(AF_INET,host.c_str(),&sa.sin_addr);
+			inet_pton(AF_INET, host.c_str(),&sa.sin_addr);
 
-		if (::bind(socket,(struct sockaddr *)&sa,sizeof(sa)) == -1)
+		if (::bind(socket,(struct sockaddr *)&sa, sizeof(sa)) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif			
 	}	
 
 	if (type == TRANSFER_TYPE_STREAM)
-		if (::listen(socket,numberOfConnections) == -1)
+		if (::listen(socket, numberOfConnections) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif		
@@ -659,7 +659,7 @@ flushSocket::bindNListen(const __connInfo &destinaton,
 		bool result =
 	#endif
 	
-	bindNListen(destinaton.host,destinaton.port,numberOfConnections);
+	bindNListen(destinaton.host, destinaton.port, numberOfConnections);
 
 	#ifdef NO_EX
 		return result;
@@ -684,23 +684,23 @@ flushSocket::bindNListen(const dodoString &path,
 	
 	if (!server)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_LIBDODO,FLUSHSOCKET_CANNOT_BIND,FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_LIBDODO, FLUSHSOCKET_CANNOT_BIND, FLUSHSOCKET_CANNOT_BIND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 
 	if (opened)
 	{
-		if (::shutdown(socket,SHUT_RDWR) == -1)
+		if (::shutdown(socket, SHUT_RDWR) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif	
 			
 		if (::close(socket) == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -725,39 +725,39 @@ flushSocket::bindNListen(const dodoString &path,
 				::unlink(path.c_str());
 			else
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_MAKEUNIXSOCKET,ERR_LIBDODO,FLUSHSOCKET_WRONG_FILENAME,FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKEUNIXSOCKET, ERR_LIBDODO, FLUSHSOCKET_WRONG_FILENAME, FLUSHSOCKET_WRONG_FILENAME_STR,__LINE__,__FILE__);
 				#else
 					return false;	
 				#endif
 	}
 		
 	int sockFlag(1);
-	if (setsockopt(socket,SOL_SOCKET,SO_REUSEADDR,&sockFlag,sizeof(int)) == -1)
+	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR,&sockFlag, sizeof(int)) == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_CONNECTFROM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;	
 		#endif
 	
-	addFlag(socketOpts,1<<SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1<<SOCKET_REUSE_ADDRESS);
 	
-	setLingerSockOption(SOCKET_LINGER_OPTION,SOCKET_LINGER_PERIOD);
+	setLingerSockOption(SOCKET_LINGER_OPTION, SOCKET_LINGER_PERIOD);
 	
 	struct sockaddr_un sa;
 	
-	strcpy(sa.sun_path,path.c_str());
+	strcpy(sa.sun_path, path.c_str());
 	sa.sun_family = AF_UNIX;	
 	
-	if (::bind(socket,(struct sockaddr *)&sa,path.size()+sizeof(sa.sun_family)) == -1)
+	if (::bind(socket,(struct sockaddr *)&sa, path.size()+sizeof(sa.sun_family)) == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 
-	if (::listen(socket,numberOfConnections) == -1)
+	if (::listen(socket, numberOfConnections) == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_BINDNLISTEN,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif	
@@ -788,7 +788,7 @@ flushSocket::accept(__initialAccept &init,
 	
 	if (!server)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_ACCEPT, FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -806,7 +806,7 @@ flushSocket::accept(__initialAccept &init,
 			
 	if (!opened)	
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_ACCEPT_WO_BIND,FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_ACCEPT_WO_BIND, FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -828,14 +828,14 @@ flushSocket::accept(__initialAccept &init,
 						if (errno == EINVAL)
 							return false;
 						else
-							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+							throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					}
 					#else
 						return false;
 					#endif
 				
 				char temp[INET_ADDRSTRLEN];
-				if (inet_ntop(AF_INET,&(sa.sin_addr),temp,INET_ADDRSTRLEN) != NULL)
+				if (inet_ntop(AF_INET,&(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
 					info.host.assign(temp);
 				info.port = ntohs(sa.sin_port);
 			}
@@ -855,28 +855,28 @@ flushSocket::accept(__initialAccept &init,
 						if (errno == EINVAL)
 							return false;
 						else
-							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+							throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					}
 					#else
 						return false;
 					#endif
 									
 				char temp[INET6_ADDRSTRLEN];
-				if (inet_ntop(AF_INET6,&(sa.sin6_addr),temp,INET6_ADDRSTRLEN) != NULL)
+				if (inet_ntop(AF_INET6,&(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
 					info.host.assign(temp);
 				info.port = ntohs(sa.sin6_port);	
 			}
 			break;
 			
 		case PROTO_FAMILY_UNIX_SOCKET:
-			sock = ::accept(socket,NULL,NULL);
+			sock = ::accept(socket, NULL, NULL);
 			if (sock == -1)
 				#ifndef NO_EX
 					{
 						if (errno == EINVAL)
 							return false;
 						else
-							throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+							throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					}
 				#else
 					return false;
@@ -885,7 +885,7 @@ flushSocket::accept(__initialAccept &init,
 			
 		default:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_WRONG_PARAMETHER,FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_WRONG_PARAMETHER, FLUSHSOCKET_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;			
 			#endif	
@@ -916,7 +916,7 @@ flushSocket::accept(__initialAccept &init)
 	
 	if (!server)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_CANNOT_ACCEPT,FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_ACCEPT, FLUSHSOCKET_CANNOT_ACCEPT_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -934,19 +934,19 @@ flushSocket::accept(__initialAccept &init)
 	
 	if (!opened)	
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_LIBDODO,FLUSHSOCKET_ACCEPT_WO_BIND,FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_ACCEPT_WO_BIND, FLUSHSOCKET_ACCEPT_WO_BIND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 	
-	int sock = ::accept(socket,NULL,NULL);
+	int sock = ::accept(socket, NULL, NULL);
 	if (sock == -1)
 		#ifndef NO_EX
 		{
 			if (errno == EINVAL)
 				return false;
 			else
-				throw baseEx(ERRMODULE_FLUSHSOCKET,FLUSHSOCKET_ACCEPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		}
 		#else
 			return false;

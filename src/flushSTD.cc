@@ -133,7 +133,7 @@ flushSTD::read(char * const a_void)
 		performXExec(preExec);
 	#endif
 	
-	memset(a_void,'\0',inSize);
+	memset(a_void,'\0', inSize);
 	 
 	unsigned long iter = inSize/inSTDBuffer;
 	unsigned long rest = inSize%inSTDBuffer;
@@ -144,14 +144,14 @@ flushSTD::read(char * const a_void)
 	{
 		while (true)
 		{
-			if (fread(a_void+sent_received,inSTDBuffer,1,stdin) == 0)
+			if (fread(a_void+sent_received, inSTDBuffer, 1, stdin) == 0)
 			{
 				if (errno == EINTR)
 					continue;
 				
 				if (ferror(stdin) != 0)					
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READ, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else			
 						return false;
 					#endif
@@ -167,14 +167,14 @@ flushSTD::read(char * const a_void)
 	{
 		while (true)
 		{
-			if (fread(a_void+sent_received,rest,1,stdin) == 0)
+			if (fread(a_void+sent_received, rest, 1, stdin) == 0)
 			{
 				if (errno == EINTR)
 					continue;
 				
 				if (ferror(stdin) != 0)					
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READ,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READ, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);	
 					#else
 						return false;
 					#endif
@@ -184,7 +184,7 @@ flushSTD::read(char * const a_void)
 		}
 	}	
 	
-	buffer.assign(a_void,inSize);
+	buffer.assign(a_void, inSize);
 			
 	#ifndef FLUSH_STD_WO_XEXEC		
 		performXExec(postExec);
@@ -221,14 +221,14 @@ flushSTD::readString(dodoString &a_str)
 		}
 		catch(...)
 		{
-			a_str.assign(data,inSize);
+			a_str.assign(data, inSize);
 			delete [] data;
 			
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READSTRING, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		}
 	#endif
 
-	a_str.assign(data,inSize);
+	a_str.assign(data, inSize);
 	delete [] data;
 		
 	#ifdef NO_EX	
@@ -277,14 +277,14 @@ flushSTD::write(const char *const aa_buf)
 	{
 		while (true)
 		{
-			if (fwrite(buffer.c_str()+sent_received,outSTDBuffer,1,desc) == 0)
+			if (fwrite(buffer.c_str()+sent_received, outSTDBuffer, 1, desc) == 0)
 			{
 				if (errno == EINTR)
 					continue;
 				
 				if (ferror(desc) != 0)					
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else			
 						return false;
 					#endif
@@ -300,14 +300,14 @@ flushSTD::write(const char *const aa_buf)
 	{
 		while (true)
 		{
-			if (fwrite(buffer.c_str()+sent_received,rest,1,desc) == 0)
+			if (fwrite(buffer.c_str()+sent_received, rest, 1, desc) == 0)
 			{
 				if (errno == EINTR)
 					continue;
 				
 				if (ferror(desc) != 0)					
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else			
 						return false;
 					#endif
@@ -341,7 +341,7 @@ flushSTD::flush()
 
     if (fflush(desc) != 0)
         #ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_FLUSH,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_FLUSH, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
         #else
 			return false;
         #endif
@@ -366,7 +366,7 @@ flushSTD::inputterInfo()
 		#ifndef NO_EX
 		{
 			if (errno!=ENOTSOCK)
-				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_INPUTTERINFO,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_INPUTTERINFO, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			else
 				return info;
 		}
@@ -382,7 +382,7 @@ flushSTD::inputterInfo()
 				char temp[15];
 				sockaddr_in *sa4;
 				sa4 = (sockaddr_in *)&sa;
-				if (inet_ntop(AF_INET,&(sa4->sin_addr),temp,15) != NULL)
+				if (inet_ntop(AF_INET,&(sa4->sin_addr), temp, 15) != NULL)
 					info.host.assign(temp);
 				info.port = ntohs(sa4->sin_port);
 			
@@ -395,7 +395,7 @@ flushSTD::inputterInfo()
 				char temp[INET6_ADDRSTRLEN];
 				sockaddr_in6 *sa6;
 				sa6 = (sockaddr_in6 *)&sa6;
-				if (inet_ntop(AF_INET6,&(sa6->sin6_addr),temp,INET6_ADDRSTRLEN) != NULL)
+				if (inet_ntop(AF_INET6,&(sa6->sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
 					info.host.assign(temp);
 				info.port = ntohs(sa6->sin6_port);
 				
@@ -430,30 +430,30 @@ flushSTD::block(bool flag)
 	
 	if (flag)
 	{
-		block[0] = fcntl(0,F_GETFL);
+		block[0] = fcntl(0, F_GETFL);
 		if (block[0] == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;		
 			#endif		
 		
 		block[0] &= ~O_NONBLOCK;
 			
-		block[1] = fcntl(1,F_GETFL);
+		block[1] = fcntl(1, F_GETFL);
 		if (block[1] == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;		
 			#endif
 		
 		block[1] &= ~O_NONBLOCK;
 				
-		block[2] = fcntl(2,F_GETFL);
+		block[2] = fcntl(2, F_GETFL);
 		if (block[2] == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;		
 			#endif	
@@ -461,23 +461,23 @@ flushSTD::block(bool flag)
 		block[2] &= ~O_NONBLOCK;
 	}
 	
-	if (fcntl(0,F_SETFL,block[0])==-1)
+	if (fcntl(0, F_SETFL, block[0])==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif		
 	
-	if (fcntl(1,F_SETFL,block[1])==-1)
+	if (fcntl(1, F_SETFL, block[1])==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif		
 		
-	if (fcntl(2,F_SETFL,block[2])==-1)
+	if (fcntl(2, F_SETFL, block[2])==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif	
@@ -503,18 +503,18 @@ flushSTD::readStream(char * const a_void)
 		performXExec(preExec);
 	#endif
 
-	memset(a_void,'\0',inSTDBuffer);
+	memset(a_void,'\0', inSTDBuffer);
 
 	while (true)
 	{
-		if (fgets(a_void,inSTDBuffer+1,stdin) == NULL)
+		if (fgets(a_void, inSTDBuffer+1, stdin) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
 			
 			if (ferror(stdin) != 0)				
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READSTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 				#else			
 					return false;
 				#endif
@@ -563,7 +563,7 @@ flushSTD::readStreamString(dodoString &a_str)
 			a_str.assign(data);
 			delete [] data;
 			
-			throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_READSTREAMSTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		}
 	#endif
 	
@@ -624,12 +624,12 @@ flushSTD::writeStream(const char *const aa_buf)
 	
 	for (unsigned long i=0;i<iter;++i)
 	{
-		strncpy(buff,buffer.c_str()+sent_received,outSTDBuffer);
+		strncpy(buff, buffer.c_str()+sent_received, outSTDBuffer);
 		buff[outSTDBuffer] = '\0';
 		
 		while (true)
 		{
-			if (fputs(buff,desc) == 0)
+			if (fputs(buff, desc) == 0)
 			{
 				if (errno == EINTR)
 					continue;
@@ -639,7 +639,7 @@ flushSTD::writeStream(const char *const aa_buf)
 					delete [] buff;	
 					
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -654,12 +654,12 @@ flushSTD::writeStream(const char *const aa_buf)
 
 	if (rest>0)
 	{		
-		strncpy(buff,buffer.c_str()+sent_received,rest);
+		strncpy(buff, buffer.c_str()+sent_received, rest);
 		buff[rest] = '\0';
 		
 		while (true)
 		{
-			if (fputs(buff,desc) == 0)
+			if (fputs(buff, desc) == 0)
 			{
 				if (errno == EINTR)
 					continue;
@@ -668,7 +668,7 @@ flushSTD::writeStream(const char *const aa_buf)
 				{	
 					delete [] buff;			
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSTD,FLUSHSTD_WRITESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);	
+						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);	
 					#else
 						return false;
 					#endif

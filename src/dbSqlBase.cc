@@ -140,7 +140,7 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 {
 	dodoString temp;
 	
-	unsigned int fn(fieldsNames.size()),fv(fieldsVal.size());
+	unsigned int fn(fieldsNames.size()), fv(fieldsVal.size());
 	
 	unsigned int o(fn<=fv?fn:fv);
 	
@@ -189,7 +189,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 		return ;
 		
 	int tempQTypeTocheck = 1<<qTypeTocheck;
-	if (isSetFlag(qShift,tempQTypeTocheck))
+	if (isSetFlag(qShift, tempQTypeTocheck))
 	{
 		request.append(sqlAddArr[qTypeTocheck].str);
 		request.append(collectedString);
@@ -212,7 +212,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 	
 	for (unsigned int i=0;i<arrLen;++i)
 	{
-		if (isSetFlag(qTypeShift,1<<sqlAddEnumArr[i]))
+		if (isSetFlag(qTypeShift, 1<<sqlAddEnumArr[i]))
 			temp.append(sqlAddArr[sqlAddEnumArr[i]].str);
 	}
 	
@@ -235,7 +235,7 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 	dodoStringArr::const_iterator i(statements.begin()), j(statements.end());
 	for (;i!=j;++i,++k)
 	{
-		if (isSetFlag(qTypeShift,1<<k))
+		if (isSetFlag(qTypeShift, 1<<k))
 			temp.append(*i);
 	}
 	
@@ -248,8 +248,8 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 void 
 dbSqlBase::selectCollect() 
 {
-	dodoString temp = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
-	temp.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
+	dodoString temp = insideAddCollect(addSelEnumArr, sqlAddSelArr, qSelShift);
+	temp.append(insideAddCollect(sqlDbDepAddSelArr, qDbDepSelShift));
 	
 	if (pre_table.size()>0)
 	{
@@ -294,7 +294,7 @@ dbSqlBase::insertCollect()
 			dodoStringArr::const_iterator i(k->begin()), j(k->end()-1);
 			for (;i!=j;++i,++t)
 			{
-				if (tools::isInArray(y->second,*t,true))
+				if (tools::isInArray(y->second,*t, true))
 				{
 					if (preventEscaping)
 						temp.append("'" + *i + "',");
@@ -304,7 +304,7 @@ dbSqlBase::insertCollect()
 				else
 					temp.append(*i + ",");
 			}
-			if (tools::isInArray(y->second,*t,true))
+			if (tools::isInArray(y->second,*t, true))
 			{
 				if (preventEscaping)
 					temp.append("'" + *i + "'");
@@ -326,9 +326,9 @@ dbSqlBase::insertCollect()
 		for (;k!=l;++k)
 		{
 			if (preventEscaping)
-				fieldsVPart.push_back(tools::implode(*k,",",frame));
+				fieldsVPart.push_back(tools::implode(*k,",", frame));
 			else
-				fieldsVPart.push_back(tools::implode(*k,escapeFields,",",frame));
+				fieldsVPart.push_back(tools::implode(*k, escapeFields,",", frame));
 		}
 	}
 	
@@ -345,8 +345,8 @@ dbSqlBase::insertCollect()
 	fieldsPart.append(*i);	
 	fieldsPart.append(")");	
 	
-	dodoString temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
-	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
+	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, qInsShift);
+	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
 	
 	dodoString temp1 = pre_table;
 	
@@ -374,11 +374,11 @@ dbSqlBase::insertSelectCollect()
 	dodoString fieldsPartTo = tools::implode(pre_fieldsNames,",");
 	dodoString fieldsPartFrom = tools::implode(pre_fieldsVal.front(),",");
 	
-	dodoString temp = insideAddCollect(addInsEnumArr,sqlAddInsArr,qInsShift);
-	temp.append(insideAddCollect(sqlDbDepAddInsArr,qDbDepInsShift));
+	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, qInsShift);
+	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
 	
-	dodoString tempS = insideAddCollect(addSelEnumArr,sqlAddSelArr,qSelShift);
-	tempS.append(insideAddCollect(sqlDbDepAddSelArr,qDbDepSelShift));
+	dodoString tempS = insideAddCollect(addSelEnumArr, sqlAddSelArr, qSelShift);
+	tempS.append(insideAddCollect(sqlDbDepAddSelArr, qDbDepSelShift));
 	
 	tempS.append(fieldsPartFrom);
 		
@@ -405,13 +405,13 @@ dbSqlBase::updateCollect()
 		
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
 	{
-		unsigned int fn(pre_fieldsNames.size()),fv(pre_fieldsVal.front().size());
+		unsigned int fn(pre_fieldsNames.size()), fv(pre_fieldsVal.front().size());
 		unsigned int o(fn<=fv?fn:fv);
 	
 		dodoStringArr::iterator i(pre_fieldsNames.begin()), j(pre_fieldsVal.front().begin());
 		for (unsigned int k(0);k<o-1;++i,++j,++k)
 		{	
-			if (tools::isInArray(y->second,*i,true))
+			if (tools::isInArray(y->second,*i, true))
 			{
 				setPart.append(*i);	
 				setPart.append("='");		
@@ -426,7 +426,7 @@ dbSqlBase::updateCollect()
 				setPart.append(",");
 			}
 		}	
-		if (tools::isInArray(y->second,*i,true))
+		if (tools::isInArray(y->second,*i, true))
 		{
 			setPart.append(*i);	
 			setPart.append("='");		
@@ -446,11 +446,11 @@ dbSqlBase::updateCollect()
 		if (preventFraming)
 			frame[0] = ' ';
 					
-		setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames,frame);
+		setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames, frame);
 	}
 	
-	insideAddCollect(addUpEnumArr,sqlAddUpArr,qUpShift);
-	dodoString temp = insideAddCollect(sqlDbDepAddUpArr,qDbDepUpShift);
+	insideAddCollect(addUpEnumArr, sqlAddUpArr, qUpShift);
+	dodoString temp = insideAddCollect(sqlDbDepAddUpArr, qDbDepUpShift);
 
 	temp.append(pre_table);
 
@@ -465,8 +465,8 @@ dbSqlBase::updateCollect()
 void
 dbSqlBase::delCollect()
 {
-	dodoString temp = insideAddCollect(addDelEnumArr,sqlAddDelArr,qDelShift);
-	temp.append(insideAddCollect(sqlDbDepAddDelArr,qDbDepDelShift));
+	dodoString temp = insideAddCollect(addDelEnumArr, sqlAddDelArr, qDelShift);
+	temp.append(insideAddCollect(sqlDbDepAddDelArr, qDbDepDelShift));
 
 	request = "delete ";
 	request.append(temp);
@@ -479,7 +479,7 @@ dbSqlBase::delCollect()
 void 
 dbSqlBase::subCollect()
 {
-	request = tools::implode(pre_subQ,sqlQStArr[qType].str);
+	request = tools::implode(pre_subQ, sqlQStArr[qType].str);
 }
 
 //-------------------------------------------------------------------
@@ -741,7 +741,7 @@ dbSqlBase::queryCollect()
 	
 		if (request.size()==0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBSQLBASE,DBSQLBASE_QUERYCOLLECT,ERR_LIBDODO,DBSQLBASE_EMPTY_REQUEST,DBSQLBASE_EMPTY_REQUEST_STR,__LINE__,__FILE__);	
+				throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASE_QUERYCOLLECT, ERR_LIBDODO, DBSQLBASE_EMPTY_REQUEST, DBSQLBASE_EMPTY_REQUEST_STR,__LINE__,__FILE__);	
 			#else
 				return __string__;
 			#endif
@@ -750,15 +750,15 @@ dbSqlBase::queryCollect()
 	
 	if (additionalActions)
 	{
-		additionalCollect(DBADDREQUEST_WHERE,pre_where);
+		additionalCollect(DBADDREQUEST_WHERE, pre_where);
 		if (selectAction)
 		{
-			additionalCollect(DBADDREQUEST_GROUPBY,pre_group);
-			additionalCollect(DBADDREQUEST_HAVING,pre_having);
+			additionalCollect(DBADDREQUEST_GROUPBY, pre_group);
+			additionalCollect(DBADDREQUEST_HAVING, pre_having);
 		}
-		additionalCollect(DBADDREQUEST_ORDERBY,pre_order);
-		additionalCollect(DBADDREQUEST_LIMIT,pre_limNumber);
-		additionalCollect(DBADDREQUEST_OFFSET,pre_limOffset);
+		additionalCollect(DBADDREQUEST_ORDERBY, pre_order);
+		additionalCollect(DBADDREQUEST_LIMIT, pre_limNumber);
+		additionalCollect(DBADDREQUEST_OFFSET, pre_limOffset);
 	}
 	
 	return request;
@@ -771,8 +771,8 @@ dbSqlBase::unescapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 	
-	tools::replace("\\'","'",temp);
-	tools::replace("\\\\","\\",temp); 
+	tools::replace("\\'","'", temp);
+	tools::replace("\\\\","\\", temp); 
 	
 	return temp;
 }
@@ -784,8 +784,8 @@ dbSqlBase::escapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 	
-	tools::replace("\\","\\\\",temp);
-	tools::replace("'","\\'",temp); 
+	tools::replace("\\","\\\\", temp);
+	tools::replace("'","\\'", temp); 
 	
 	return temp;
 }
@@ -801,7 +801,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row)
 	if (preventEscaping)
 		resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,",") + ")"):__string__);
 	else
-		resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum,escapeFields,",") + ")"):__string__);
+		resRow.append(!row.set_enum.empty()?(" (" + tools::implode(row.set_enum, escapeFields,",") + ")"):__string__);
 	resRow.append((chkRange(type)>0 && row.length>0)?(" ("+ tools::lToString(row.length) +") "):__string__);
 	resRow.append((row.charset.size()>0)?(" collate " + row.charset):" ");
 	resRow.append(((FIELDPROP_NULL&flag)==FIELDPROP_NULL)?" null ":" not null ");

@@ -51,7 +51,7 @@
 		};
 		
 		/**
-	 	 * @class dbPostgresql is an interface to Postgresql db through sql-,database- independent interfaces
+	 	 * @class dbPostgresql is an interface to Postgresql db through sql-, database- independent interfaces
 		 */
 		class dbPostgresql : public dbSqlBase
 		
@@ -96,7 +96,7 @@
 				virtual void disconnect();
 				
 				/**
-				 * @return amount of affected rows(update,delete...)
+				 * @return amount of affected rows(update, delete...)
 				 */
 				virtual unsigned int affectedRowsCount() const;
 				

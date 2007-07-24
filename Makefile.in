@@ -43,6 +43,7 @@ OBJECTS:=dbBase.o \
 		systemThreads.o \
 		threadGuard.o \
 		systemThreadShareDataGuard.o \
+		systemProcessShareDataGuard.o \
 		systemThreadShareDataCollectionGuard.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \

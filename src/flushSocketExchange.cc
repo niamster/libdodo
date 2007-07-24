@@ -73,7 +73,7 @@ flushSocketExchange::flushSocketExchange()
 
 flushSocketExchange::flushSocketExchange(__initialAccept &a_init)
 {
-	init(a_init.socket,a_init.blockInherited);
+	init(a_init.socket, a_init.blockInherited);
 }
 
 //-------------------------------------------------------------------
@@ -82,7 +82,7 @@ flushSocketExchange::~flushSocketExchange()
 {
 	if (opened)
 	{
-		::shutdown(socket,SHUT_RDWR);		
+		::shutdown(socket, SHUT_RDWR);		
 		
 		::close(socket);
 	}
@@ -157,7 +157,7 @@ flushSocketExchange::init(int a_socket,
 	setInTimeout(inTimeout);
 	setOutTimeout(outTimeout);
 	
-	setLingerSockOption(lingerOpts,lingerSeconds);	
+	setLingerSockOption(lingerOpts, lingerSeconds);	
 	
 	if (!blocked)
 	{
@@ -189,7 +189,7 @@ flushSocketExchange::alive()
 #endif
 flushSocketExchange::write(const char * const data)
 {
-	buffer.assign(data,outSize);
+	buffer.assign(data, outSize);
 				
 	#ifndef FLUSH_SOCKET_WO_XEXEC
 		operType = FLUSHSOCKETEXCHANGE_OPER_SEND;
@@ -210,14 +210,14 @@ flushSocketExchange::write(const char * const data)
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,0);
+				n = ::send(socket, buffer.c_str()+sent_received, outSocketBuffer, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
 						
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;	
 					#endif
@@ -238,14 +238,14 @@ flushSocketExchange::write(const char * const data)
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,rest,0);
+				n = ::send(socket, buffer.c_str()+sent_received, rest, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
 										
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SEND,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;	
 					#endif
@@ -294,7 +294,7 @@ flushSocketExchange::read(char * const data)
 		performXExec(preExec);
 	#endif	
 	
-	memset(data,'\0',inSize);
+	memset(data,'\0', inSize);
 				
 	unsigned long iter = inSize/inSocketBuffer;
 	unsigned long rest = inSize%inSocketBuffer;
@@ -310,14 +310,14 @@ flushSocketExchange::read(char * const data)
 		{
 			while (true)
 			{
-				n = ::recv(socket,data+sent_received,inSocketBuffer,0);
+				n = ::recv(socket, data+sent_received, inSocketBuffer, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
 						
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;	
 					#endif
@@ -338,7 +338,7 @@ flushSocketExchange::read(char * const data)
 		{
 			while (true)
 			{
-				n = ::recv(socket,data+sent_received,rest,0);
+				n = ::recv(socket, data+sent_received, rest, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
@@ -349,7 +349,7 @@ flushSocketExchange::read(char * const data)
 						if (errno == EINVAL)
 							return ;
 						else
-							throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+							throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					}
 					#else
 						return false;	
@@ -364,7 +364,7 @@ flushSocketExchange::read(char * const data)
 		}
 	}
 	
-	buffer.assign(data,inSize);
+	buffer.assign(data, inSize);
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -401,14 +401,14 @@ flushSocketExchange::readString(dodoString &data)
 		}
 		catch(...)
 		{
-			data.assign(t_data,inSize);
+			data.assign(t_data, inSize);
 			delete [] t_data;
 			
-			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVESTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		}
 	#endif
 	
-	data.assign(t_data,inSize);
+	data.assign(t_data, inSize);
 	delete [] t_data;
 	
 	#ifdef NO_EX	
@@ -510,14 +510,14 @@ flushSocketExchange::writeStream(const char * const data)
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,outSocketBuffer,0);
+				n = ::send(socket, buffer.c_str()+sent_received, outSocketBuffer, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
 						
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SENDSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;	
 					#endif
@@ -538,14 +538,14 @@ flushSocketExchange::writeStream(const char * const data)
 		{
 			while (true)
 			{
-				n = ::send(socket,buffer.c_str()+sent_received,rest,0);
+				n = ::send(socket, buffer.c_str()+sent_received, rest, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
 										
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_SENDSTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return false;	
 					#endif
@@ -594,19 +594,19 @@ flushSocketExchange::readStream(char * const data)
 		performXExec(preExec);
 	#endif	
 	
-	memset(data,'\0',inSocketBuffer);
+	memset(data,'\0', inSocketBuffer);
 	
 	unsigned long n;
 	
 	while (true)
 	{
-		if ((n = ::recv(socket,data,inSocketBuffer,0)) == -1)
+		if ((n = ::recv(socket, data, inSocketBuffer, 0)) == -1)
 		{
 			if (errno == EINTR)
 				continue;
 					
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVESTREAM,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return false;	
 			#endif
@@ -617,7 +617,7 @@ flushSocketExchange::readStream(char * const data)
 	
 	data[n] = '\0';
 		
-	buffer.assign(data,n);
+	buffer.assign(data, n);
 			
 	#ifndef FLUSH_SOCKET_WO_XEXEC		
 		performXExec(postExec);
@@ -658,7 +658,7 @@ flushSocketExchange::readStreamString(dodoString &data)
 			data.assign(t_data);
 			delete [] t_data;
 			
-			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE,FLUSHSOCKETEXCHANGE_RECEIVESTRING,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		}
 	#endif
 	  

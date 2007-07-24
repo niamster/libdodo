@@ -81,8 +81,8 @@ cgiTools::cgiTools(bool silent,
 	detectMethod();
 
 	makePost();
-	make(COOKIES.realArr,ENVIRONMENT["HTTP_COOKIE"],"; ");
-	make(METHOD_GET.realArr,ENVIRONMENT["QUERY_STRING"]);
+	make(COOKIES.realArr, ENVIRONMENT["HTTP_COOKIE"],"; ");
+	make(METHOD_GET.realArr, ENVIRONMENT["QUERY_STRING"]);
 }
 
 //-------------------------------------------------------------------
@@ -106,8 +106,8 @@ cgiTools::cgiTools(bool silent,
 		detectMethod();
 	
 		makePost();
-		make(COOKIES.realArr,ENVIRONMENT["HTTP_COOKIE"],"; ");
-		make(METHOD_GET.realArr,ENVIRONMENT["QUERY_STRING"]);
+		make(COOKIES.realArr, ENVIRONMENT["HTTP_COOKIE"],"; ");
+		make(METHOD_GET.realArr, ENVIRONMENT["QUERY_STRING"]);
 	}
 
 #endif	
@@ -127,7 +127,7 @@ cgiTools::~cgiTools()
 void 
 cgiTools::cleanTmp()
 {
-	std::map<dodoString, __cgiFilesUp>::iterator i(FILES.begin()),j(FILES.end());
+	std::map<dodoString, __cgiFilesUp>::iterator i(FILES.begin()), j(FILES.end());
 	for (;i!=j;++i)
 	{
 		fclose(i->second.fp);
@@ -170,7 +170,7 @@ cgiTools::make(dodoAssocArr &val,
 			const dodoString &string,
 			char *delim)
 {	
-	dodoStringArr getPair = tools::explode(tools::decodeURL(string),delim);
+	dodoStringArr getPair = tools::explode(tools::decodeURL(string), delim);
 	
 	dodoStringArr::iterator l(getPair.begin()), m(getPair.end());
 	
@@ -236,7 +236,7 @@ cgiTools::printHeaders() const
 		
 	if (cookiesSet.size() > 0)
 	{
-		std::list<__cookies>::const_iterator i(cookiesSet.begin()),j(cookiesSet.end());
+		std::list<__cookies>::const_iterator i(cookiesSet.begin()), j(cookiesSet.end());
 		for (;i!=j;++i)
 		{
 			#ifdef FCGI_EXT
@@ -315,10 +315,10 @@ cgiTools::makePost()
 		
 		#ifdef FCGI_EXT
 			if (cgiFastSet)
-				cf->read(post,POST_BATCH_SIZE);
+				cf->read(post, POST_BATCH_SIZE);
 			else
 		#endif
-				if (fread(post,POST_BATCH_SIZE,1,stdin) != POST_BATCH_SIZE)
+				if (fread(post, POST_BATCH_SIZE, 1, stdin) != POST_BATCH_SIZE)
 					#ifndef NO_EX
 						switch (errno)
 						{
@@ -328,7 +328,7 @@ cgiTools::makePost()
 							case EOVERFLOW:
 							case EROFS:
 							
-								throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+								throw baseEx(ERRMODULE_CGITOOLS, CGITOOLS_MAKEPOST, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 						}	
 					#else			
 						switch (errno)
@@ -343,12 +343,12 @@ cgiTools::makePost()
 						}
 					#endif
 		
-		bPost.append(post,POST_BATCH_SIZE);
+		bPost.append(post, POST_BATCH_SIZE);
 	}
 	
 	if (rest>0)
 	{
-		if (fread(post,rest,1,stdin) == 0)
+		if (fread(post, rest, 1, stdin) == 0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -358,7 +358,7 @@ cgiTools::makePost()
 					case EOVERFLOW:
 					case EROFS:
 					
-						throw baseEx(ERRMODULE_CGITOOLS,CGITOOLS_MAKEPOST,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_CGITOOLS, CGITOOLS_MAKEPOST, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 				}	
 			#else			
 				switch (errno)
@@ -373,14 +373,14 @@ cgiTools::makePost()
 				}
 			#endif
 			
-		bPost.append(post,rest);
+		bPost.append(post, rest);
 	}
 
 	delete [] post;
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
 	{
-		make(METHOD_POST.realArr,bPost);
+		make(METHOD_POST.realArr, bPost);
 	}
 	else
 	{
@@ -391,7 +391,7 @@ cgiTools::makePost()
 		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
 		dodoStringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT["CONTENT_TYPE"].substr(temp0+9));
 		
-		dodoStringArr::iterator i(postPartd.begin()),j(postPartd.end());
+		dodoStringArr::iterator i(postPartd.begin()), j(postPartd.end());
 
 		unsigned int temp1;
 		char *ptr;
@@ -404,24 +404,24 @@ cgiTools::makePost()
 				if ((temp0 = i->find("name=\"")) == dodoString::npos)
 					continue;
 				temp0 += 6;	
-				temp1 = i->find("\"",temp0);
+				temp1 = i->find("\"", temp0);
 				
-				dodoString post_name = i->substr(temp0,temp1-temp0);
+				dodoString post_name = i->substr(temp0, temp1-temp0);
 				
 				__cgiFilesUp file;
 				
-				temp0 = i->find("filename=\"",temp1);
+				temp0 = i->find("filename=\"", temp1);
 				temp0 += 10;	
-				temp1 = i->find("\"",temp0);
+				temp1 = i->find("\"", temp0);
 				if (temp0==temp1)
 					continue;
 				
-				file.name = i->substr(temp0,temp1-temp0);
+				file.name = i->substr(temp0, temp1-temp0);
 				
-				temp0 = i->find("Content-Type: ",temp1);
+				temp0 = i->find("Content-Type: ", temp1);
 				temp0 += 14;
-				temp1 = i->find("\n",temp0);
-				file.type = i->substr(temp0,temp1-temp0);
+				temp1 = i->find("\n", temp0);
+				file.type = i->substr(temp0, temp1-temp0);
 				
 				#ifndef __FreeBSD__
 				
@@ -457,7 +457,7 @@ cgiTools::makePost()
 					if (cgiFilesInMem)
 					{
 						file.buf = malloc(file.size);
-						file.fp = fmemopen(file.buf,file.size,"w+");
+						file.fp = fmemopen(file.buf, file.size,"w+");
 					}
 					else
 
@@ -488,7 +488,7 @@ cgiTools::makePost()
 							
 							break;
 					}
-				fwrite(i->substr(temp1+4).c_str(),file.size,1,file.fp);
+				fwrite(i->substr(temp1+4).c_str(), file.size, 1, file.fp);
 				if (errno == ENOMEM)
 						file.error = POSTFILEERR_NO_SPACE;
 				
@@ -499,9 +499,9 @@ cgiTools::makePost()
 				if ((temp0 = i->find("name=\"")) == dodoString::npos)
 					continue;
 				temp0 += 6;		
-				temp1 = i->find("\"",temp0);
+				temp1 = i->find("\"", temp0);
 								
-				METHOD_POST.realArr[i->substr(temp0,temp1-temp0)] = i->substr(temp1+5,i->size()-temp1-7);//FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
+				METHOD_POST.realArr[i->substr(temp0, temp1-temp0)] = i->substr(temp1+5, i->size()-temp1-7);//FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
 	}
 	

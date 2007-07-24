@@ -305,7 +305,7 @@ namespace dodo
 			#endif
 							flush();
 			
-			bool over;///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files,tmp_files only
+			bool over;///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files, tmp_files only
 			short mode;///< mode to open file; if you change it then you have to reopen!
 			
 			/**

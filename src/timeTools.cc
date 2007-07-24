@@ -69,7 +69,7 @@ timeTools::byFormat(const dodoString &format,
 		
 	if (tTime == NULL)	
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_TIMETOOLS,TIMETOOLS_GETBYFORMAT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_GETBYFORMAT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return __string__;
 		#endif
@@ -89,7 +89,7 @@ timeTools::now()
 	time_t tTime = ::time(NULL);
 	if (tTime==((time_t)-1))
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_TIMETOOLS,TIMETOOLS_NOW,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_NOW, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return -1;
 		#endif
@@ -104,15 +104,15 @@ timeTools::week(long date,
 				const dodoString &format,
 				bool local)
 {
-	long daynum = atol(timeTools::byFormat("%w",date,local).c_str());
+	long daynum = atol(timeTools::byFormat("%w", date, local).c_str());
 	if (daynum == 0)
 		daynum = 7;
 
 	dodoStringArr week;
 	long mon = date - (daynum-1)*86400;
 	
-	for (short int i(0);i<7;++i,mon+=86400)
-		week.push_back(timeTools::byFormat(format,mon,local));
+	for (short int i(0);i<7;++i, mon+=86400)
+		week.push_back(timeTools::byFormat(format, mon, local));
 	
 	return week;	
 }
@@ -129,7 +129,7 @@ timeTools::datesArr(long dateFrom,
 	
 	if ( (dateFrom == dateTo) || (dateFrom - dateTo<86400) )
 	{
-		result.push_back(timeTools::byFormat(format,dateFrom,local));
+		result.push_back(timeTools::byFormat(format, dateFrom, local));
 		return result;
 	}
 	
@@ -142,10 +142,10 @@ timeTools::datesArr(long dateFrom,
 	        
 	while (dateFrom < dateTo)
 	{
-		result.push_back(timeTools::byFormat(format,dateFrom,local));
+		result.push_back(timeTools::byFormat(format, dateFrom, local));
 	    dateFrom += 86400;
 	}
-	result.push_back(timeTools::byFormat(format,dateTo,local));
+	result.push_back(timeTools::byFormat(format, dateTo, local));
 
 	return result;	
 }
@@ -183,7 +183,7 @@ timeTools::makeTime(long seconds,
 		
 	if (tTime == NULL)	
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_TIMETOOLS,TIMETOOLS_MAKETIME,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_MAKETIME, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return __mktime();
 		#endif

@@ -72,7 +72,7 @@
 		#endif
 		
 		char port[6];
-		sprintf(port,"%d",dbInfo.port);
+		sprintf(port,"%d", dbInfo.port);
 		
 		conn = PQsetdbLogin(
 						dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
@@ -87,7 +87,7 @@
 		
 		if (status != CONNECTION_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_CONNECT,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL_CONNECT, ERR_MYSQL, status, PQerrorMessage(conn),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -171,10 +171,10 @@
 							empty = true;
 						}
 							
-						pgResult = PQexecParams(conn,request.c_str(),0,NULL,NULL,NULL,NULL,1);
+						pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 						if(pgResult == NULL)
 							#ifndef NO_EX
-								throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__,request);
+								throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn),__LINE__,__FILE__, request);
 							#else
 								return false;
 							#endif
@@ -189,7 +189,7 @@
 							case PGRES_FATAL_ERROR:
 							
 								#ifndef NO_EX
-									throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
+									throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, status, PQerrorMessage(conn),__LINE__,__FILE__);
 								#else
 									return false;
 								#endif
@@ -204,7 +204,7 @@
 				
 						for (int i(0);i<rowsNum;++i)
 						{
-							fieldType = PQgetvalue(pgResult,i,1);
+							fieldType = PQgetvalue(pgResult, i, 1);
 							
 							if (strcasestr(fieldType,"char") != NULL || 
 								strcasestr(fieldType,"date") != NULL || 
@@ -214,7 +214,7 @@
 								strcasestr(fieldType,"cidr") != NULL || 
 								strcasestr(fieldType,"macaddrcd ") != NULL || 
 								strcasestr(fieldType,"inet") != NULL)
-									rowsPart.push_back(PQgetvalue(pgResult,i,0));
+									rowsPart.push_back(PQgetvalue(pgResult, i, 0));
 						}
 					
 						if (!empty)
@@ -278,7 +278,7 @@
 							formats[o] = 1;
 						}
 
-						pgResult = PQexecParams(conn,request.c_str(),size,NULL,values,lengths,formats,0);
+						pgResult = PQexecParams(conn, request.c_str(), size, NULL, values, lengths, formats, 0);
 						if(pgResult == NULL)
 							#ifndef NO_EX
 							{
@@ -286,7 +286,7 @@
 								delete [] lengths;
 								delete [] formats;
 								
-								throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__);
+								throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn),__LINE__,__FILE__);
 							}
 							#else
 							{
@@ -308,7 +308,7 @@
 				default:
 					
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_LIBDODO,DBPOSTGRESQL_WRONG_HINT_USAGE,DBPOSTGRESQL_WRONG_HINT_USAGE_STR,__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_LIBDODO, DBPOSTGRESQL_WRONG_HINT_USAGE, DBPOSTGRESQL_WRONG_HINT_USAGE_STR,__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -317,10 +317,10 @@
 		}
 		else
 		{
-			pgResult = PQexecParams(conn,request.c_str(),0,NULL,NULL,NULL,NULL,1);
+			pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 			if(pgResult == NULL)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,PGRES_FATAL_ERROR,PQerrorMessage(conn),__LINE__,__FILE__,request);
+					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn),__LINE__,__FILE__, request);
 				#else
 					return false;
 				#endif
@@ -336,7 +336,7 @@
 			case PGRES_FATAL_ERROR:
 			
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL__EXEC,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, status, PQerrorMessage(conn),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
@@ -387,14 +387,14 @@
 			
 			for (j=0;j<fieldsNum;++j)
 			{
-				if (PQgetisnull(pgResult,i,j) == 1)
+				if (PQgetisnull(pgResult, i, j) == 1)
 					rowPart.assign("NULL");
 				else
 				{
 					if (preventEscaping)
-						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
+						rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
 					else
-						rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));
+						rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
 				}
 
 				rowsPart.push_back(rowPart);
@@ -432,7 +432,7 @@
 		#endif
 		
 		for (int i(0);i<fieldsNum;++i)
-			fields.push_back(PQfname(pgResult,i));
+			fields.push_back(PQfname(pgResult, i));
 
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 			performXExec(postExec);
@@ -600,17 +600,17 @@
 			
 			for (j=0;j<fieldsNum;++j)
 			{
-				if (PQgetisnull(pgResult,i,j)==1)
+				if (PQgetisnull(pgResult, i, j)==1)
 					rowPart.assign("NULL");
 				else
 				{
 					if (preventEscaping)
-						rowPart.assign(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j));
+						rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
 					else
-						rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult,i,j),PQgetlength(pgResult,i,j))));					
+						rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));					
 				}
 
-				rowFieldsPart.realArr[PQfname(pgResult,i)] = rowPart;
+				rowFieldsPart.realArr[PQfname(pgResult, i)] = rowPart;
 			}
 			
 			rowsFields.push_back(rowFieldsPart);
@@ -631,7 +631,7 @@
 		int status = PQsetClientEncoding(conn, charset.c_str());
 		if (status == -1)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBPOSTGRESQL,DBPOSTGRESQL_SETCHARSET,ERR_MYSQL,status,PQerrorMessage(conn),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL_SETCHARSET, ERR_MYSQL, status, PQerrorMessage(conn),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif

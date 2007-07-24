@@ -91,10 +91,10 @@ flushSocketOptions::isBlocked() const
 #endif
 flushSocketOptions::block(bool flag)
 {
-	int block = fcntl(socket,F_GETFL);
+	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif		
@@ -104,9 +104,9 @@ flushSocketOptions::block(bool flag)
 	else
 		block |= O_NONBLOCK;
 	
-	if (fcntl(socket,F_SETFL,block)==-1)
+	if (fcntl(socket, F_SETFL, block)==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_BLOCK,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif		
@@ -129,16 +129,16 @@ flushSocketOptions::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETINBUFFERSIZE,ERR_LIBDODO,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 	
 	inSocketBuffer = bytes;
 	
-	if (setsockopt(socket,SOL_SOCKET,SO_RCVBUF,&inSocketBuffer,sizeof(long))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF,&inSocketBuffer, sizeof(long))==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETINBUFFERSIZE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif	
@@ -169,14 +169,14 @@ flushSocketOptions::setOutBufferSize(unsigned long bytes)
 		#ifdef NO_EX
 			return false;
 		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE,ERR_LIBDODO,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#endif
 	
 	outSocketBuffer = bytes;
 	
-	if (setsockopt(socket,SOL_SOCKET,SO_SNDBUF,&outSocketBuffer,sizeof(long))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF,&outSocketBuffer, sizeof(long))==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif	
@@ -207,7 +207,7 @@ flushSocketOptions::setInTimeout(unsigned long microseconds)
 		#ifdef NO_EX
 			return false;
 		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETINTIMEOUT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#endif
 
 	inTimeout = microseconds;
@@ -216,9 +216,9 @@ flushSocketOptions::setInTimeout(unsigned long microseconds)
 	val.tv_sec = inTimeout/100;
 	val.tv_usec = inTimeout%100;
 	
-	if (setsockopt(socket,SOL_SOCKET,SO_RCVTIMEO,&val,sizeof(val))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO,&val, sizeof(val))==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETINTIMEOUT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;	
 		#endif	
@@ -250,7 +250,7 @@ flushSocketOptions::setOutTimeout(unsigned long microseconds)
 		#ifdef NO_EX
 			return false;
 		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETOUTTIMEOUT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#endif
 
 	outTimeout = microseconds;
@@ -259,9 +259,9 @@ flushSocketOptions::setOutTimeout(unsigned long microseconds)
 	val.tv_sec = outTimeout/100;
 	val.tv_usec = outTimeout%100;
 	
-	if (setsockopt(socket,SOL_SOCKET,SO_SNDTIMEO,&val,sizeof(val))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO,&val, sizeof(val))==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETOUTTIMEOUT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif	
@@ -304,7 +304,7 @@ flushSocketOptions::setSockOption(short option,
 		#ifdef NO_EX
 			return false;
 		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETSOCKOPT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#endif
 	
 	int sockFlag(1);
@@ -359,23 +359,23 @@ flushSocketOptions::setSockOption(short option,
 		default:
 		
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETSOCKOPT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;			
 			#endif	
 	}
 	
-	if (setsockopt(socket,SOL_SOCKET,real_option,&sockFlag,sizeof(int))==-1)
+	if (setsockopt(socket, SOL_SOCKET, real_option,&sockFlag, sizeof(int))==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETSOCKOPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;	
 		#endif	
 	
 	if (!flag)
-		removeFlag(socketOpts,1<<option);
+		removeFlag(socketOpts, 1<<option);
 	else
-		addFlag(socketOpts,1<<option);	
+		addFlag(socketOpts, 1<<option);	
 		
 	#ifdef NO_EX
 		return true;
@@ -396,7 +396,7 @@ flushSocketOptions::setLingerSockOption(short option,
 		#ifdef NO_EX
 			return false;
 		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
 		#endif
 	
 	linger lin;
@@ -425,15 +425,15 @@ flushSocketOptions::setLingerSockOption(short option,
 			
 		default:
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT,ERR_LIBDODO,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER,FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
 			#else
 				return false;			
 			#endif	
 	}
 
-	if (setsockopt(socket,SOL_SOCKET,SO_LINGER,&lin,sizeof(linger))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_LINGER,&lin, sizeof(linger))==-1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;	
 		#endif
@@ -471,16 +471,16 @@ flushSocketOptions::getLingerPeriod() const
 #endif
 flushSocketOptions::_close(int socket)
 {
-	if (::shutdown(socket,SHUT_RDWR) == -1)
+	if (::shutdown(socket, SHUT_RDWR) == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS__CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif			
 	
 	if (::close(socket) == -1)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS,FLUSHSOCKETOPTIONS__CLOSE,ERR_ERRNO,errno,strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif

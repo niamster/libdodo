@@ -97,11 +97,11 @@
 	void 
 	dbMysql::setMyAddInsSt(short statement)
 	{
-		removeFlag(qDbDepInsShift,1<<DBREQUEST_INSERT_DELAYED);
-		removeFlag(qDbDepInsShift,1<<DBREQUEST_INSERT_LOW_PRIORITY);
-		removeFlag(qDbDepInsShift,1<<DBREQUEST_INSERT_HIGH_PRIORITY);
+		removeFlag(qDbDepInsShift, 1<<DBREQUEST_INSERT_DELAYED);
+		removeFlag(qDbDepInsShift, 1<<DBREQUEST_INSERT_LOW_PRIORITY);
+		removeFlag(qDbDepInsShift, 1<<DBREQUEST_INSERT_HIGH_PRIORITY);
 		
-		addFlag(qDbDepInsShift,1<<statement);
+		addFlag(qDbDepInsShift, 1<<statement);
 	}
 	
 	//-------------------------------------------------------------------
@@ -109,7 +109,7 @@
 	void 
 	dbMysql::setMyAddUpSt(short statement)
 	{
-		addFlag(qDbDepUpShift,1<<statement);	
+		addFlag(qDbDepUpShift, 1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -117,7 +117,7 @@
 	void 
 	dbMysql::setMyAddSelSt(short statement)
 	{
-		addFlag(qDbDepSelShift,1<<statement);	
+		addFlag(qDbDepSelShift, 1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -125,7 +125,7 @@
 	void 
 	dbMysql::setMyAddDelSt(short statement)
 	{
-		addFlag(qDbDepDelShift,1<<statement);
+		addFlag(qDbDepDelShift, 1<<statement);
 	}
 	
 	//-------------------------------------------------------------------
@@ -133,7 +133,7 @@
 	void 
 	dbMysql::unsetMyAddInsSt(short statement)
 	{
-		removeFlag(qDbDepInsShift,1<<statement);
+		removeFlag(qDbDepInsShift, 1<<statement);
 	}
 	
 	//-------------------------------------------------------------------
@@ -141,7 +141,7 @@
 	void 
 	dbMysql::unsetMyAddUpSt(short statement)
 	{
-		removeFlag(qDbDepUpShift,1<<statement);	
+		removeFlag(qDbDepUpShift, 1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -149,7 +149,7 @@
 	void 
 	dbMysql::unsetMyAddSelSt(short statement)
 	{
-		removeFlag(qDbDepSelShift,1<<statement);	
+		removeFlag(qDbDepSelShift, 1<<statement);	
 	}
 	
 	//-------------------------------------------------------------------
@@ -157,7 +157,7 @@
 	void 
 	dbMysql::unsetMyAddDelSt(short statement)
 	{
-		removeFlag(qDbDepDelShift,1<<statement);	
+		removeFlag(qDbDepDelShift, 1<<statement);	
 	}
 
 	//-------------------------------------------------------------------
@@ -202,7 +202,7 @@
 			dbInfo.path.size()==0?NULL:dbInfo.path.c_str(),
 			type))
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif
@@ -268,9 +268,9 @@
 					{
 						request = "describe " + pre_table;
 	
-						if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
+						if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
 							#ifndef NO_EX
-								throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__,request);
+								throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql),__LINE__,__FILE__, request);
 							#else
 								return false;
 							#endif
@@ -278,7 +278,7 @@
 						mysqlRes = mysql_store_result(mysql);
 						if (mysqlRes == NULL)
 							#ifndef NO_EX
-								throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+								throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql),__LINE__,__FILE__);
 							#else
 								return false;
 							#endif
@@ -320,9 +320,9 @@
 			show = result;
 		}
 
-		if (mysql_real_query(mysql,request.c_str(),request.size()) != 0)
+		if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__,request);
+				throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql),__LINE__,__FILE__, request);
 			#else
 				return false;
 			#endif
@@ -343,7 +343,7 @@
 		mysqlRes = mysql_store_result(mysql);
 		if (mysqlRes == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBMYSQL,DBMYSQL_CONNECT,ERR_MYSQL,mysql_errno(mysql),mysql_error(mysql),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -398,7 +398,7 @@
 			
 			for (j=0;j<numFields;++j)
 			{
-				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
+				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL", mysqlRow[j]?length[j]:4);
 				if (preventEscaping)
 					rowsPart.push_back(rowPart);
 				else
@@ -583,7 +583,7 @@
 	void 
 	dbMysql::setCharset(const dodoString &charset)
 	{
-		mysql_options(mysql,MYSQL_READ_DEFAULT_FILE,charset.c_str());
+		mysql_options(mysql, MYSQL_READ_DEFAULT_FILE, charset.c_str());
 	}
 	
 	//-------------------------------------------------------------------
@@ -591,7 +591,7 @@
 	void 
 	dbMysql::setConnectTimeout(unsigned int time)
 	{
-		mysql_options(mysql,MYSQL_OPT_CONNECT_TIMEOUT,(char *)&time);
+		mysql_options(mysql, MYSQL_OPT_CONNECT_TIMEOUT,(char *)&time);
 	}
 
 	//-------------------------------------------------------------------
@@ -637,7 +637,7 @@
 			
 			for (j=0;j<numFields;++j)
 			{
-				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL",mysqlRow[j]?length[j]:4);
+				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL", mysqlRow[j]?length[j]:4);
 				if (preventEscaping)
 					rowFieldsPart.realArr[mysqlFields[j].name] = rowPart;
 				else

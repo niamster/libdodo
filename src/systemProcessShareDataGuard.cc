@@ -1,8 +1,8 @@
 /***************************************************************************
- *            systemThreadShareDataGuard.cc
+ *            systemProcessShareDataGuard.cc
  *
- *  Wed Nov 30 22:02:16 2005
- *  Copyright  2005  Ni@m
+ *  Sun Jul 22 23:14:14 2007
+ *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -22,38 +22,36 @@
  */
 
 
-#include <systemThreadShareDataGuard.h>
+#include <systemProcessShareDataGuard.h>
 	
 using namespace dodo;
 
-systemThreadShareDataGuard::systemThreadShareDataGuard(systemThreadShareDataGuard &sts)
+systemProcessShareDataGuard::systemProcessShareDataGuard(systemProcessShareDataGuard &sts)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadShareDataGuard::systemThreadShareDataGuard() : data(NULL)
+systemProcessShareDataGuard::systemProcessShareDataGuard(int id) : data(NULL)
 {
-	pthread_mutexattr_t attr;
-	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-
-	pthread_mutex_init(&mutex,&attr);
-
-	pthread_mutexattr_destroy(&attr);
+	key_t key = ftok("/tmp", id);
 	
-	timeout.tv_nsec = 1000;
-	timeout.tv_sec = 0;	
+	semaphore = semget(key, 1, 0660 | IPC_EXCL);
+	if (semaphore == -1 && errno == EEXIST)
+		semaphore = semget(key, 1, 0660);
+	else
+	{
+		semOptions.val = 1;
+		
+		semctl(semaphore, 1, SETVAL, semOptions);
+	}
 }
 
 //-------------------------------------------------------------------
 
-systemThreadShareDataGuard::~systemThreadShareDataGuard()
-{
-	if (pthread_mutex_trylock(&mutex) == 0)
-		pthread_mutex_unlock(&mutex);
-	
-	pthread_mutex_destroy(&mutex);		
+systemProcessShareDataGuard::~systemProcessShareDataGuard()
+{	
+	semctl(semaphore, 1, IPC_RMID, semOptions);
 }
 
 //-------------------------------------------------------------------
@@ -63,12 +61,12 @@ systemThreadShareDataGuard::~systemThreadShareDataGuard()
 #else
 	bool
 #endif 
-systemThreadShareDataGuard::set(void *a_data)
+systemProcessShareDataGuard::set(void *a_data)
 {
-	errno = pthread_mutex_lock(&mutex);
+	/*errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -78,14 +76,14 @@ systemThreadShareDataGuard::set(void *a_data)
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 
 	#ifdef NO_EX
 		return true;
-	#endif
+	#endif*/
 }
 
 //-------------------------------------------------------------------
@@ -95,12 +93,12 @@ systemThreadShareDataGuard::set(void *a_data)
 #else
 	bool
 #endif
-systemThreadShareDataGuard::del()
+systemProcessShareDataGuard::del()
 {
-	errno = pthread_mutex_lock(&mutex);
+	/*errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -110,27 +108,27 @@ systemThreadShareDataGuard::del()
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 
 	#ifdef NO_EX
 		return true;
-	#endif
+	#endif*/
 }
 
 //-------------------------------------------------------------------
 
 void *						 
-systemThreadShareDataGuard::lock(unsigned long microseconds)
+systemProcessShareDataGuard::lock(unsigned long microseconds)
 {
-	if (microseconds == 0)
+	/*if (microseconds == 0)
 	{
 		errno = pthread_mutex_lock(&mutex);
 		if (errno != 0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
 				return NULL;
 			#endif
@@ -147,14 +145,14 @@ systemThreadShareDataGuard::lock(unsigned long microseconds)
 			{
 				if (errno != EBUSY)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return NULL;
 					#endif
 										
 				if (nanosleep(&timeout, NULL) == -1)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 					#else
 						return NULL;
 					#endif
@@ -163,7 +161,7 @@ systemThreadShareDataGuard::lock(unsigned long microseconds)
 				
 				if (slept > microseconds)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_LOCK, ERR_ERRNO, SYSTEMTHREADSHAREDATAGUARD_CANNOTLOCK, SYSTEMTHREADSHAREDATAGUARD_CANNOTLOCK_STR,__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_LOCK, ERR_ERRNO, SYSTEMPROCESSSHAREDATAGUARD_CANNOTLOCK, SYSTEMPROCESSSHAREDATAGUARD_CANNOTLOCK_STR,__LINE__,__FILE__);
 					#else
 						return NULL;
 					#endif
@@ -173,7 +171,7 @@ systemThreadShareDataGuard::lock(unsigned long microseconds)
 		}	
 	}
 	
-	return data;
+	return data;*/
 }
 							
 //-------------------------------------------------------------------
@@ -183,19 +181,19 @@ systemThreadShareDataGuard::lock(unsigned long microseconds)
 #else
 	bool 
 #endif						 
-systemThreadShareDataGuard::unlock()
+systemProcessShareDataGuard::unlock()
 {
-	errno = pthread_mutex_unlock(&mutex);
+	/*errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATAGUARD, SYSTEMTHREADSHAREDATAGUARD_UNLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDATAGUARD, SYSTEMPROCESSSHAREDATAGUARD_UNLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
 			
 	#ifdef NO_EX
 		return true;
-	#endif
+	#endif*/
 }
 							
 //-------------------------------------------------------------------

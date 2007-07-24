@@ -91,7 +91,7 @@
 	{
 		if (document == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_REPARCE,ERR_LIBDODO,XMLTOOLS_NOT_PARCED_BEFORE,XMLTOOLS_NOT_PARCED_BEFORE_STR,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_REPARCE, ERR_LIBDODO, XMLTOOLS_NOT_PARCED_BEFORE, XMLTOOLS_NOT_PARCED_BEFORE_STR,__LINE__,__FILE__);
 			#else
 				return __xmlNode();
 			#endif
@@ -129,7 +129,7 @@
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILE, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__, file);
 			}
 			#else
 				return __xmlNode();
@@ -146,12 +146,12 @@
 	{
 		xmlFreeDoc(document);
 		
-		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		document = xmlParseMemory(buffer.c_str(), buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFER, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__);
 			}
 			#else
 				return __xmlNode();
@@ -176,7 +176,7 @@
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILEINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILEINT, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__, file);
 			}
 			#else
 				return false;
@@ -198,12 +198,12 @@
 	{
 		xmlFreeDoc(document);
 		
-		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		document = xmlParseMemory(buffer.c_str(), buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFERINT,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFERINT, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__);
 			}
 			#else
 				return false;
@@ -224,7 +224,7 @@
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCE, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__);
 			}
 			#else
 				return __xmlNode();
@@ -232,14 +232,14 @@
 		
 		__xmlNode sample;
 
-		node = findNode(definition,node);
+		node = findNode(definition, node);
 		
 		if (node == NULL)
 			return sample;
 
-		getNodeInfo(node,sample);
+		getNodeInfo(node, sample);
 		
-		getAttributes(definition,node,sample.attributes.realArr);
+		getAttributes(definition, node, sample.attributes.realArr);
 		
 		if (node->children == NULL)
 		{
@@ -253,7 +253,7 @@
 		{
 			std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (;i!=j;++i)
-				sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
+				sample.children.realArr[i->first] = parse(i->second, node->children, definition.chLimit);
 		}
 		else
 		{
@@ -271,9 +271,9 @@
 						continue;
 					}
 												
-					getNodeInfo(node,one);
+					getNodeInfo(node, one);
 					
-					getAttributes(node,one.attributes.realArr);		
+					getAttributes(node, one.attributes.realArr);		
 					
 					if (node->children == NULL)
 						one.empty = true;
@@ -350,8 +350,8 @@
 		
 			initNode(sample);
 		
-			getNodeInfo(node,sample);
-			getAttributes(definition,node,sample.attributes.realArr);
+			getNodeInfo(node, sample);
+			getAttributes(definition, node, sample.attributes.realArr);
 					
 			if (node->children == NULL)
 				sample.empty = true;
@@ -360,9 +360,9 @@
 	
 			if (definition.children.size() > 0)
 			{
-				std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()),j(definition.children.end());
+				std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 				for (;i!=j;++i)
-					sample.children.realArr[i->first] = parse(i->second,node->children,definition.chLimit);
+					sample.children.realArr[i->first] = parse(i->second, node->children, definition.chLimit);
 				
 			}
 			else
@@ -379,9 +379,9 @@
 							continue;
 						}
 													
-						getNodeInfo(subNode,one);
+						getNodeInfo(subNode, one);
 						
-						getAttributes(subNode,one.attributes.realArr);
+						getAttributes(subNode, one.attributes.realArr);
 								
 						if (subNode->children == NULL)
 							one.empty = true;
@@ -438,7 +438,7 @@
 					{
 						if (xmlStrcmp(attribute->name,(xmlChar *)iAttr->c_str()) == 0)
 						{
-							xmlChar *xChar = xmlGetProp(node,attribute->name);
+							xmlChar *xChar = xmlGetProp(node, attribute->name);
 							if (xChar != NULL)
 							{
 								attributes[*iAttr] = (char *)xChar;
@@ -470,7 +470,7 @@
 			{
 				while (attribute != NULL)
 				{
-					xmlChar *xChar = xmlGetProp(node,attribute->name);
+					xmlChar *xChar = xmlGetProp(node, attribute->name);
 					if (xChar!=NULL)
 					{
 						attributes[(char *)attribute->name] = (char *)xChar;
@@ -493,7 +493,7 @@
 		
 		while (attribute != NULL)
 		{
-			xmlChar *xChar = xmlGetProp(node,attribute->name);
+			xmlChar *xChar = xmlGetProp(node, attribute->name);
 			if (xChar != NULL)
 			{
 				attributes[(char *)attribute->name] = (char *)xChar;
@@ -525,7 +525,7 @@
 		if (node->name != NULL)
 			resNode.name.assign((char *)node->name);
 		
-		xmlChar *xChar = xmlNodeListGetString(document,node->children,1);
+		xmlChar *xChar = xmlNodeListGetString(document, node->children, 1);
 		if (xChar != NULL)
 		{
 			resNode.value.assign((char *)xChar);
@@ -543,7 +543,7 @@
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLFILEINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_GETXMLFILEINFO, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__, file);
 			}
 			#else
 				return __xmlInfo();
@@ -560,18 +560,18 @@
 	__xmlInfo 
 	xmlTools::getXMLBufferInfo(const dodoString &buffer)
 	{
-		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		document = xmlParseMemory(buffer.c_str(), buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_GETXMLBUFFERINFO,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_GETXMLBUFFERINFO, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__);
 			}
 			#else
 				return __xmlInfo();
 			#endif		
 			
-		return __xmlInfo((char *)document->version,(char *)document->encoding,(char *)document->children->name,document->compression);
+		return __xmlInfo((char *)document->version,(char *)document->encoding,(char *)document->children->name, document->compression);
 	}
 
 	//-------------------------------------------------------------------	
@@ -591,9 +591,9 @@
 				continue;
 			}
 										
-			getNodeInfo(node,one);
+			getNodeInfo(node, one);
 			
-			getAttributes(node,one.attributes.realArr);
+			getAttributes(node, one.attributes.realArr);
 					
 			if (node->children == NULL)
 				one.empty = true;
@@ -639,7 +639,7 @@
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILE, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__, file);
 			}
 			#else
 				return __xmlNode();
@@ -650,7 +650,7 @@
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEFILE,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__,file);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILE, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__, file);
 			}
 			#else
 				return __xmlNode();
@@ -668,12 +668,12 @@
 	{
 		xmlFreeDoc(document);
 		
-		document = xmlParseMemory(buffer.c_str(),buffer.size());
+		document = xmlParseMemory(buffer.c_str(), buffer.size());
 		if (document == NULL)
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFER, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__);
 			}
 			#else
 				return __xmlNode();
@@ -684,7 +684,7 @@
 			#ifndef NO_EX
 			{
 				xmlErrorPtr error = xmlGetLastError();
-				throw baseEx(ERRMODULE_LIBXML2,XMLTOOLS_PARCEBUFFER,ERR_LIBXML2,error->code,error->message,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFER, ERR_LIBXML2, error->code, error->message,__LINE__,__FILE__);
 			}
 			#else
 				return __xmlNode();
@@ -744,7 +744,7 @@
 				if (cmpFunc(node->name,(xmlChar *)definition.name.c_str()) == 0)
 					return node;
 			
-			one = findNode(definition,node->children);
+			one = findNode(definition, node->children);
 			
 			if (one != NULL)
 				return one;

@@ -74,7 +74,7 @@
 			sqlite3_close(lite);
 			
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_CONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_CONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif		
@@ -111,7 +111,7 @@
 						
 			if (sqlite3_close(lite) != SQLITE_OK)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_DISCONNECT,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_DISCONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 				#else
 					return ;
 				#endif
@@ -164,16 +164,16 @@
 								empty = true;
 							}		
 		
-							if (sqlite3_prepare(lite,request.c_str(),request.size(), &liteStmt, NULL) != SQLITE_OK)
+							if (sqlite3_prepare(lite, request.c_str(), request.size(), &liteStmt, NULL) != SQLITE_OK)
 								#ifndef NO_EX
-									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__,request);
+									throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__, request);
 								#else
 									return false;
 								#endif	
 			
 							if (liteStmt == NULL)	
 								#ifndef NO_EX
-									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+									throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 								#else
 									return false;
 								#endif
@@ -200,7 +200,7 @@
 															NULL,
 															NULL) != SQLITE_OK)
 																#ifndef NO_EX
-																	throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__,request);
+																	throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__, request);
 																#else
 																	return false;
 																#endif
@@ -261,9 +261,9 @@
 			empty = true;
 		}			
 			
-		if (sqlite3_prepare(lite,request.c_str(),request.size(), &liteStmt, NULL) != SQLITE_OK)
+		if (sqlite3_prepare(lite, request.c_str(), request.size(), &liteStmt, NULL) != SQLITE_OK)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__,request);
+				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__, request);
 			#else
 				return false;
 			#endif
@@ -280,7 +280,7 @@
 						for (int o=1;i!=j;++i,++o)
 							if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
 								#ifndef NO_EX
-									throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+									throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 								#else
 									return false;
 								#endif
@@ -291,7 +291,7 @@
 				default:
 					
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_LIBDODO,DBSQLITE_WRONG_HINT_USAGE,DBSQLITE_WRONG_HINT_USAGE_STR,__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_LIBDODO, DBSQLITE_WRONG_HINT_USAGE, DBSQLITE_WRONG_HINT_USAGE_STR,__LINE__,__FILE__);
 					#else
 						return false;
 					#endif
@@ -301,7 +301,7 @@
 		
 		if (liteStmt == NULL)	
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE__EXEC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 			#else
 				return false;
 			#endif
@@ -311,7 +311,7 @@
 		if (!show)
 			if (sqlite3_step(liteStmt) != SQLITE_DONE)
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 				#else
 					return false;
 				#endif	
@@ -370,7 +370,7 @@
 				case SQLITE_ERROR:
 				
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 					#else
 						return __stringarrayvector__;
 					#endif
@@ -384,23 +384,23 @@
 					#endif
 					
 					for (i=0;i<numFields;++i)
-						switch (sqlite3_column_type(liteStmt,i))
+						switch (sqlite3_column_type(liteStmt, i))
 						{
 							case SQLITE_INTEGER:
 								
-								rowsPart.push_back(tools::lToString(sqlite3_column_int(liteStmt,i)));
+								rowsPart.push_back(tools::lToString(sqlite3_column_int(liteStmt, i)));
 								
 								break;
 								
 							case SQLITE_FLOAT:
 								
-								rowsPart.push_back(tools::dToString(sqlite3_column_double(liteStmt,i)));
+								rowsPart.push_back(tools::dToString(sqlite3_column_double(liteStmt, i)));
 								
 								break;
 								
 							case SQLITE_TEXT:
 								
-								rowPart = (const char *)sqlite3_column_text(liteStmt,i);
+								rowPart = (const char *)sqlite3_column_text(liteStmt, i);
 								if (preventEscaping)
 									rowsPart.push_back(rowPart);
 								else
@@ -410,7 +410,7 @@
 								
 							case SQLITE_BLOB:
 								
-								rowPart.assign((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
+								rowPart.assign((const char *)sqlite3_column_blob(liteStmt, i), sqlite3_column_bytes(liteStmt, i));
 								if (preventEscaping)
 									rowsPart.push_back(rowPart);
 								else
@@ -509,7 +509,7 @@
 					case SQLITE_ERROR:
 					
 						#ifndef NO_EX
-							throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHROW,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+							throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 						#else
 							return false;
 						#endif
@@ -683,7 +683,7 @@
 				case SQLITE_ERROR:
 				
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_DBSQLITE,DBSQLITE_FETCHASSOC,ERR_SQLITE,sqlite3_errcode(lite),sqlite3_errmsg(lite),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHASSOC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite),__LINE__,__FILE__);
 					#else
 						return __dodostringmap__;
 					#endif
@@ -693,23 +693,23 @@
 					rowFieldsPart.clear();
 					
 					for (i=0;i<numFields;++i)
-						switch (sqlite3_column_type(liteStmt,i))
+						switch (sqlite3_column_type(liteStmt, i))
 						{
 							case SQLITE_INTEGER:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::lToString(sqlite3_column_int(liteStmt,i));
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::lToString(sqlite3_column_int(liteStmt, i));
 								
 								break;
 								
 							case SQLITE_FLOAT:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::dToString(sqlite3_column_double(liteStmt,i));
+								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::dToString(sqlite3_column_double(liteStmt, i));
 								
 								break;
 								
 							case SQLITE_TEXT:
 								
-								rowPart = (const char *)sqlite3_column_text(liteStmt,i);
+								rowPart = (const char *)sqlite3_column_text(liteStmt, i);
 								if (preventEscaping)
 									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = rowPart;
 								else
@@ -719,7 +719,7 @@
 								
 							case SQLITE_BLOB:
 								
-								rowPart.assign((const char *)sqlite3_column_blob(liteStmt,i),sqlite3_column_bytes(liteStmt,i));
+								rowPart.assign((const char *)sqlite3_column_blob(liteStmt, i), sqlite3_column_bytes(liteStmt, i));
 								if (preventEscaping)
 									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = rowPart;
 								else

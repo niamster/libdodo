@@ -105,7 +105,7 @@ xexec::setStatXExec(std::list<__execItem> &list,
 		int position,
 		bool stat)
 {
-	if (getXexec(list,position))
+	if (getXexec(list, position))
 		current->enabled = stat;
 }
 
@@ -115,7 +115,7 @@ void
 xexec::delXExec(std::list<__execItem> &list, 
 				int position)
 {	
-	if (getXexec(list,position))
+	if (getXexec(list, position))
 	{
 		#ifdef DL_EXT
 		
@@ -129,7 +129,7 @@ xexec::delXExec(std::list<__execItem> &list,
 				
 				if (dlclose(current->handle)!=0)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_XEXEC,XEXEC_DELXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_XEXEC, XEXEC_DELXEXEC, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 					#endif
 			}
 				
@@ -147,7 +147,7 @@ xexec::_addPreExec(inExec func,
  				short type,
 				void *data)
 {
-	return addXExec(preExec.exec,func,obj,type,data);
+	return addXExec(preExec.exec, func, obj, type, data);
 }
 
 //-------------------------------------------------------------------
@@ -155,7 +155,7 @@ xexec::_addPreExec(inExec func,
 void 
 xexec::disablePreExec(int position)
 {
-	setStatXExec(preExec.exec,position,false);
+	setStatXExec(preExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
@@ -163,7 +163,7 @@ xexec::disablePreExec(int position)
 void 
 xexec::delPreExec(int position)
 {
-	delXExec(preExec.exec,position);
+	delXExec(preExec.exec, position);
 }
 
 //-------------------------------------------------------------------
@@ -171,7 +171,7 @@ xexec::delPreExec(int position)
 void 
 xexec::enablePreExec(int position)
 {
-	setStatXExec(preExec.exec,position,true);
+	setStatXExec(preExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
@@ -182,7 +182,7 @@ xexec::_addPostExec(inExec func,
  				short type,
 				void *data)
 {
-	return addXExec(postExec.exec,func,obj,type,data);
+	return addXExec(postExec.exec, func, obj, type, data);
 }
 
 //-------------------------------------------------------------------
@@ -190,7 +190,7 @@ xexec::_addPostExec(inExec func,
 void 
 xexec::disablePostExec(int position)
 {
-	setStatXExec(postExec.exec,position,false);
+	setStatXExec(postExec.exec, position, false);
 }
 
 //-------------------------------------------------------------------
@@ -198,7 +198,7 @@ xexec::disablePostExec(int position)
 void 
 xexec::delPostExec(int position)
 {
-	delXExec(postExec.exec,position);
+	delXExec(postExec.exec, position);
 }
 
 //-------------------------------------------------------------------
@@ -206,7 +206,7 @@ xexec::delPostExec(int position)
 void 
 xexec::enablePostExec(int position)
 {
-	setStatXExec(postExec.exec,position,true);
+	setStatXExec(postExec.exec, position, true);
 }
 
 //-------------------------------------------------------------------
@@ -298,7 +298,7 @@ xexec::replacePostExec(int position,
 				inExec func,
 				void *data)
 {
-	return replaceXExec(postExec.exec,position,func,data);
+	return replaceXExec(postExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -308,7 +308,7 @@ xexec::replacePreExec(int position,
 				inExec func,
 				void *data)
 {
-	return replaceXExec(preExec.exec,position,func,data);
+	return replaceXExec(preExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -319,7 +319,7 @@ xexec::replaceXExec(std::list<__execItem> &list,
 			inExec func,
 			void *data)
 {
-	if (getXexec(list,position))
+	if (getXexec(list, position))
 	{
 		#ifdef DL_EXT
 		
@@ -333,7 +333,7 @@ xexec::replaceXExec(std::list<__execItem> &list,
 				
 				if (dlclose(current->handle)!=0)
 					#ifndef NO_EX
-						throw baseEx(ERRMODULE_XEXEC,XEXEC_DELXEXEC,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+						throw baseEx(ERRMODULE_XEXEC, XEXEC_DELXEXEC, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 					#endif
 					
 				current->handle = NULL;	
@@ -372,7 +372,7 @@ xexec::performXExec(__execItemList &list) const
 					disableAllPostExec();
 					disableAllPreExec();
 			}
-			i->func(i->obj,i->type,i->data);
+			i->func(i->obj, i->type, i->data);
 			if (safeHooks)
 			{
 				enableAllPostExec();
@@ -411,7 +411,7 @@ xexec::performXExec(__execItemList &list) const
 		temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 		if (temp.handle == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return -1;
 			#endif
@@ -419,7 +419,7 @@ xexec::performXExec(__execItemList &list) const
 		initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 		if (init == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return -1;
 			#endif	
@@ -427,7 +427,7 @@ xexec::performXExec(__execItemList &list) const
 		inExec in = (inExec)dlsym(temp.handle, init(toInit).hook);
 		if (in == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return -1;
 			#endif
@@ -448,7 +448,7 @@ xexec::performXExec(__execItemList &list) const
 						void *data, 
 						void *toInit)
 	{
-		return addXExecModule(postExec.exec,obj,type,module,data,toInit);
+		return addXExecModule(postExec.exec, obj, type, module, data, toInit);
 	}
 	
 	//-------------------------------------------------------------------
@@ -460,7 +460,7 @@ xexec::performXExec(__execItemList &list) const
 					void *data, 
 					void *toInit)
 	{
-		return addXExecModule(preExec.exec,obj,type,module,data,toInit);
+		return addXExecModule(preExec.exec, obj, type, module, data, toInit);
 	}
 	
 	//-------------------------------------------------------------------
@@ -472,7 +472,7 @@ xexec::performXExec(__execItemList &list) const
 		void *handle = dlopen(module.c_str(), RTLD_LAZY);
 		if (handle == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return xexecMod();
 			#endif
@@ -480,7 +480,7 @@ xexec::performXExec(__execItemList &list) const
 		initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
 		if (init == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return xexecMod();
 			#endif
@@ -489,7 +489,7 @@ xexec::performXExec(__execItemList &list) const
 		
 		if (dlclose(handle)!=0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_GETMODULEINFO,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return mod;
 			#endif
@@ -516,7 +516,7 @@ xexec::performXExec(__execItemList &list) const
 		temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 		if (temp.handle == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return xexecCounts();
 			#endif
@@ -524,7 +524,7 @@ xexec::performXExec(__execItemList &list) const
 		initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 		if (init == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return xexecCounts();
 			#endif	
@@ -534,7 +534,7 @@ xexec::performXExec(__execItemList &list) const
 		inExec in = (inExec)dlsym(temp.handle, info.hook);
 		if (in == NULL)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_XEXEC,XEXEC_ADDXEXECMODULE,ERR_DYNLOAD,0,dlerror(),__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(),__LINE__,__FILE__);
 			#else
 				return xexecCounts();
 			#endif
