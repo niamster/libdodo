@@ -39,7 +39,7 @@ namespace dodo
 	 * @note time/date format can be specified:
 	 *    
 	 * 
-	 * %w     Weekday number (Sunday = [0, 6]).
+	 * %w     Weekday number (Sunday=[0, 6]).
 	 * %a     Abbreviated weekday name.
 	 * %A     Full weekday name.
 	 * 
@@ -109,7 +109,7 @@ namespace dodo
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 * @note if compiled with NO_EX and error occured empty string will return
 			 */
-			static dodoString byFormat(const dodoString &format, long timestamp, bool local = true);
+			static dodoString byFormat(const dodoString &format, long timestamp, bool local=true);
 
 			/**
 			 * @return timestamp[amount of seconds from 01.01.1970]
@@ -153,7 +153,7 @@ namespace dodo
 			 * @seconds is amount of secound that will be translated
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 */ 
-			static __mktime makeTime(long seconds, bool local = true); 
+			static __mktime makeTime(long seconds, bool local=true); 
 	};
 
 };

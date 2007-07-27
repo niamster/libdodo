@@ -64,12 +64,12 @@ namespace dodo
 			/**
 			 * @return descriptor of input stream
 			 */
-			virtual int getInDescriptor() const = 0;
+			virtual int getInDescriptor() const=0;
 			
 			/**
 			 * @return descriptor of output stream
 			 */ 
-			virtual int getOutDescriptor() const = 0;
+			virtual int getOutDescriptor() const=0;
 	};
 
 };

@@ -24,9 +24,7 @@
 #ifndef _SYSTEMPROCESSSHAREDATAGUARD_H_
 #define _SYSTEMPROCESSSHAREDATAGUARD_H_
 
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/sem.h>
+#include <semaphore.h>
 	
 #include <time.h>
 
@@ -106,27 +104,7 @@ namespace dodo
 		protected:
 			
     		void *data;///< data that will be shared
-    		int semaphore;///< semaphore
-    		
-			#if _SEM_SEMUN_UNDEFINED == 1
-			    		
-    					/**
-    					 * @union semun defines operations for controling semaphore 
-    					 * @note got from <bits/sem.h>
-    					 */
-						union semun
-						{
-							int val;///< value for SETVAL
-							struct semid_ds *buf;///< buffer for IPC_STAT & IPC_SET
-							unsigned short int *array;///< array for GETALL & SETALL
-							struct seminfo *__buf;///< buffer for IPC_INFO
-						} semOptions;///< options for semaphore
-			
-			#else
-						
-						semun semOptions;
-						
-			#endif
+    		sem_t semaphore;///< semaphore
 						
 			timespec timeout;///< timeout to lock mutex check	
 	};

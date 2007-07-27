@@ -37,7 +37,7 @@ namespace dodo
 	 */
 	enum AddEnum
 	{
-		DBADDREQUEST_WHERE = 1,
+		DBADDREQUEST_WHERE=1,
 		DBADDREQUEST_HAVING,
 		DBADDREQUEST_GROUPBY,
 		DBADDREQUEST_ORDERBY,
@@ -50,7 +50,7 @@ namespace dodo
 	 */	
 	enum emptyEnum
 	{
-		DB_EMPTY = 0
+		DB_EMPTY=0
 	};	
 	
 	/**
@@ -58,7 +58,7 @@ namespace dodo
 	 */
 	enum qStEnum
 	{
-		DBREQUEST_UNION = 1,
+		DBREQUEST_UNION=1,
 		DBREQUEST_UNION_ALL,
 		DBREQUEST_MINUS,
 		DBREQUEST_INTERSECT,
@@ -92,7 +92,7 @@ namespace dodo
 	 */
 	enum addSelEnum
 	{
-		DBREQUEST_SELECT_DISTINCT = 1,
+		DBREQUEST_SELECT_DISTINCT=1,
 		DBREQUEST_SELECT_ALL
 	};
 
@@ -101,7 +101,7 @@ namespace dodo
 	 */	
 	enum addDelEnum
 	{
-		DBREQUEST_DELETE_IGNORE = 1,
+		DBREQUEST_DELETE_IGNORE=1,
 	};
 
 	/**
@@ -109,7 +109,7 @@ namespace dodo
 	 */	
 	enum addUpEnum
 	{
-		DBREQUEST_UPDATE_IGNORE = 1,
+		DBREQUEST_UPDATE_IGNORE=1,
 	};
 
 	/**
@@ -117,7 +117,7 @@ namespace dodo
 	 */	
 	enum addInsEnum
 	{
-		DBREQUEST_INSERT_IGNORE = 1,
+		DBREQUEST_INSERT_IGNORE=1,
 	};
 	
 	/**
@@ -216,8 +216,8 @@ namespace dodo
 	 */
 	enum fieldFlagEnum
 	{
-		FIELDPROP_NULL = 2,///< NULL type
-		FIELDPROP_AUTO_INCREMENT = 4,///< if is not set by request, will be incremented relatevly to previous
+		FIELDPROP_NULL=2,///< NULL type
+		FIELDPROP_AUTO_INCREMENT=4,///< if is not set by request, will be incremented relatevly to previous
 	};
 	
 	/**
@@ -225,7 +225,7 @@ namespace dodo
 	 */
 	enum refFieldEnum
 	{
-		REFERENCE_RESTRICT = 1,///< does not allow the action of any of those parent rows
+		REFERENCE_RESTRICT=1,///< does not allow the action of any of those parent rows
 		REFERENCE_CASCADE,///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
 		REFERENCE_SET_NULL,///< sets NULL on the action of any of those parent rows indicates on set action
 		REFERENCE_NO_ACTION,///< noacton on the action of any of those parent rows indicates on set action
@@ -250,7 +250,7 @@ namespace dodo
 		dodoString name;///< name of the field
 		int type;///< type of field[see baseDataTypesEnum]
 		int length;///< length of field; is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
-		int flag;///< default = NULL; set it with '|'[see fieldFlagEnum]
+		int flag;///< default=NULL; set it with '|'[see fieldFlagEnum]
 		
 		/**
 		* @note for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
@@ -324,7 +324,7 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __string__);
+			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path=__string__);
 
 			/**
 			 * sets info for database
@@ -337,7 +337,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where = __string__);
+			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where=__string__);
 			
 			/**
 			 * @param table is table name
@@ -360,20 +360,20 @@ namespace dodo
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__);
+			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames=__stringarray__);
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __stringarray__);			
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames=__stringarray__);			
 			
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __stringarray__, const dodoString &where = __string__);
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom=__stringarray__, const dodoString &where=__string__);
 			
 			/**
 			 * @param table is table name
@@ -382,7 +382,7 @@ namespace dodo
 			 * 			value => field's value
 			 * @param where is where statement for request
 		     */
-			virtual void update(const dodoString &table, const dodoAssocArr &fields, const dodoString &where = __string__);			
+			virtual void update(const dodoString &table, const dodoAssocArr &fields, const dodoString &where=__string__);			
 			
 			/**
 			 * @param table is table name
@@ -390,13 +390,13 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where = __string__);
+			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where=__string__);
 			
 			/**
 			 * @param table is table name
 			 * @param where is where statement for request
 			 */       
-			virtual void del(const dodoString &table, const dodoString &where = __string__);
+			virtual void del(const dodoString &table, const dodoString &where=__string__);
 			
 			/**
 			 * store query, made from subquery with requested method
@@ -472,7 +472,7 @@ namespace dodo
 			 * @param db is name of new database
 			 * @param charset indicates what type of charset will be used
 			 */
-			virtual void createDb(const dodoString &db, const dodoString &charset = __string__);
+			virtual void createDb(const dodoString &db, const dodoString &charset=__string__);
 			
 			/**
 			 * creates table

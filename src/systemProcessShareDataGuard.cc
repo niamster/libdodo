@@ -34,24 +34,12 @@ systemProcessShareDataGuard::systemProcessShareDataGuard(systemProcessShareDataG
 
 systemProcessShareDataGuard::systemProcessShareDataGuard(int id) : data(NULL)
 {
-	key_t key = ftok("/tmp", id);
-	
-	semaphore = semget(key, 1, 0660 | IPC_EXCL);
-	if (semaphore == -1 && errno == EEXIST)
-		semaphore = semget(key, 1, 0660);
-	else
-	{
-		semOptions.val = 1;
-		
-		semctl(semaphore, 1, SETVAL, semOptions);
-	}
 }
 
 //-------------------------------------------------------------------
 
 systemProcessShareDataGuard::~systemProcessShareDataGuard()
-{	
-	semctl(semaphore, 1, IPC_RMID, semOptions);
+{
 }
 
 //-------------------------------------------------------------------

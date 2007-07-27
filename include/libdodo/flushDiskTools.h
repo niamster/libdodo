@@ -61,30 +61,30 @@ namespace dodo
 	 */
 	enum permissionModesEnum
 	{
-		PERM_NONE = 0,
+		PERM_NONE=0,
 		
-		PERM_OWNER_READ_ACCESS = 2,
-		PERM_GROUP_READ_ACCESS = 4,
-		PERM_OTHER_READ_ACCESS = 8,
+		PERM_OWNER_READ_ACCESS=2,
+		PERM_GROUP_READ_ACCESS=4,
+		PERM_OTHER_READ_ACCESS=8,
 		
-		PERM_OWNER_WRITE_ACCESS = 16,
-		PERM_GROUP_WRITE_ACCESS = 32,
-		PERM_OTHER_WRITE_ACCESS = 64,
+		PERM_OWNER_WRITE_ACCESS=16,
+		PERM_GROUP_WRITE_ACCESS=32,
+		PERM_OTHER_WRITE_ACCESS=64,
 		
-		PERM_OWNER_EXECUTE_ACCESS = 128,
-		PERM_GROUP_EXECUTE_ACCESS = 256,
-		PERM_OTHER_EXECUTE_ACCESS = 512,
+		PERM_OWNER_EXECUTE_ACCESS=128,
+		PERM_GROUP_EXECUTE_ACCESS=256,
+		PERM_OTHER_EXECUTE_ACCESS=512,
 				
-		PERM_STICKY_ACCESS = 1024,
+		PERM_STICKY_ACCESS=1024,
 		
-		PERM_SUID_ACCESS = 2048,
-		PERM_SGID_ACCESS = 4096,
+		PERM_SUID_ACCESS=2048,
+		PERM_SGID_ACCESS=4096,
 		
-		PERM_OWNER_ALL_ACCESS = 146,
-		PERM_GROUP_ALL_ACCESS = 292,
-		PERM_OTHER_ALL_ACCESS = 584,
+		PERM_OWNER_ALL_ACCESS=146,
+		PERM_GROUP_ALL_ACCESS=292,
+		PERM_OTHER_ALL_ACCESS=584,
 		
-		PERM_ALL_ALL_ACCESS = 1022
+		PERM_ALL_ALL_ACCESS=1022
 		
 	};
 	
@@ -227,7 +227,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							mkdir(const dodoString &path, int permissions = PERM_OWNER_ALL_ACCESS, bool force = true);
+							mkdir(const dodoString &path, int permissions=PERM_OWNER_ALL_ACCESS, bool force=true);
 			
 			/**
 			 * delete files, non empty directory
@@ -306,7 +306,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							symlink(const dodoString &oldPath, const dodoString &newPath, bool force = true);
+							symlink(const dodoString &oldPath, const dodoString &newPath, bool force=true);
 
 			/**
 			 * creates link

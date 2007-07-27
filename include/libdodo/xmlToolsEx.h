@@ -37,7 +37,7 @@
 		 */
 		enum xmlToolsExR
 		{
-			XMLTOOLS_NOT_PARCED_BEFORE = 1,
+			XMLTOOLS_NOT_PARCED_BEFORE=1,
 		};
 		
 		/**

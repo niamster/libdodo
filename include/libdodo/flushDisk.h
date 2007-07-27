@@ -59,7 +59,7 @@ namespace dodo
 	{
 		OPENMODE_READ_ONLY,///< error if not exists file
 		OPENMODE_READ_WRITE,///< creates if not exists
-		OPENMODE_READ_WRITE_TRUNCATE,///< if exists = truncates
+		OPENMODE_READ_WRITE_TRUNCATE,///< if exists=truncates
 		OPENMODE_APPEND///< for readin'; writin' to the end; you may skip parameter `pos` for write method
 	};
 	
@@ -103,7 +103,7 @@ namespace dodo
 			 * 
 			 * if type == TMP_FILE, u don't have to specify path
 			 */
-			flushDisk(short type, const dodoString &path = __string__);
+			flushDisk(short type, const dodoString &path=__string__);
 			
 			/**
 			 * destructor
@@ -138,7 +138,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
 								
 					/**
 					 * adds hook after the operation by callback
@@ -147,7 +147,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -156,7 +156,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 				#endif	
 			
@@ -174,7 +174,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif			 
-							open(const dodoString &path = __string__);///if opened previous file, closes it		
+							open(const dodoString &path=__string__);///if opened previous file, closes it		
 			
 			/**
 			 * closes file
@@ -196,7 +196,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readString(dodoString &data, unsigned long pos = 0);
+							readString(dodoString &data, unsigned long pos=0);
 			/**
 			 * read data
 			 * @param data will be filled with data
@@ -207,7 +207,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							read(char * const data, unsigned long pos = 0);	
+							read(char * const data, unsigned long pos=0);	
 			
 			/**
 			 * write string
@@ -219,7 +219,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							writeString(const dodoString &data, unsigned long pos = 0);
+							writeString(const dodoString &data, unsigned long pos=0);
 										
 			/**
 			 * write string
@@ -231,7 +231,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							write(const char * const data, unsigned long pos = 0);
+							write(const char * const data, unsigned long pos=0);
 							
 			/**
 			 * read string - null[or \n]-terminated string
@@ -244,7 +244,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readStreamString(dodoString &data, unsigned long pos = 0);
+							readStreamString(dodoString &data, unsigned long pos=0);
 			/**
 			 * read data - null[or \n]-terminated string
 			 * @param data will be filled with data
@@ -256,7 +256,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							readStream(char * const data, unsigned long pos = 0);
+							readStream(char * const data, unsigned long pos=0);
 			
 			/**
 			 * write string - null-terminated string [append only]

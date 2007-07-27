@@ -44,7 +44,7 @@ namespace dodo
 	/**
 	 * @var array of names that would be in ENV array[environment of http demon]
 	 */
-	__statements HTTP_ENV[HTTP_ENV_SIZE] = 
+	__statements HTTP_ENV[HTTP_ENV_SIZE]=
 	{		
 		{"REQUEST_METHOD"},
 		{"REQUEST_URI"},
@@ -193,7 +193,7 @@ namespace dodo
 			 * 
 			 * @note you cant print headers after they have been printed with printHeaders method 
 			 */
-			cgiTools(bool silent = false, dodoAssocArr &headers = __assocarray__);
+			cgiTools(bool silent=false, dodoAssocArr &headers=__assocarray__);
 					
 			#ifdef FCGI_EXT		
 					
@@ -205,7 +205,7 @@ namespace dodo
 				 * 
 				 * @note you cant print headers after they have been printed with printHeaders method 
 				 */
-				cgiTools(cgiFastSTD *cf, bool silent = false, dodoAssocArr &headers = __assocarray__);
+				cgiTools(cgiFastSTD *cf, bool silent=false, dodoAssocArr &headers=__assocarray__);
 			
 			#endif
 			
@@ -299,13 +299,13 @@ namespace dodo
 			/**
 			 * processes :
 			 * from : smth1=1`delim`smth2=2 
-			 * to : val["smth1"] = 1; val["smth2"] = 2;
+			 * to : val["smth1"]=1; val["smth2"]=2;
 			 * 
 			 * @param val will be filled with processed values
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(dodoAssocArr &val, const dodoString &string, char *delim = "&");
+			virtual void make(dodoAssocArr &val, const dodoString &string, char *delim="&");
 		
 		private:	
 		

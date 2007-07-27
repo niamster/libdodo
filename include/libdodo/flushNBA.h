@@ -91,7 +91,7 @@ namespace dodo
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 	 		 * @note if timeout is negative - infinit timeout
 	 		 */
-	 		virtual bool isReadable(int pos, int timeout = 100) const;
+	 		virtual bool isReadable(int pos, int timeout=100) const;
 	 			 		
 	 		/**
 	 		 * @return vector of true if flush* is ready to read
@@ -99,7 +99,7 @@ namespace dodo
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 	 		 * @note if timeout is negative - infinit timeout
 	 		 */
-	 		virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout = 100) const;
+	 		virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout=100) const;
 	 			 			 		
 	 		/**
 	 		 * @return vector of true if flush* is ready to write
@@ -107,7 +107,7 @@ namespace dodo
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 	 		 * @note if timeout is negative - infinit timeout
 	 		 */
-	 		virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout = 100) const;	 		
+	 		virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout=100) const;	 		
 	 		
 	 		/**
 	 		 * @return true if flush* is ready to write
@@ -115,7 +115,7 @@ namespace dodo
 	 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 	 		 * @note if timeout is negative - infinit timeout
 	 		 */
-	 		virtual bool isWritable(int pos, int timeout = 100) const;
+	 		virtual bool isWritable(int pos, int timeout=100) const;
 	 		
 		protected:	 		
 		

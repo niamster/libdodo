@@ -47,7 +47,7 @@ namespace dodo
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 */
-			virtual unsigned long add(jobFunc func, void *data) = 0;	
+			virtual unsigned long add(jobFunc func, void *data)=0;	
 				
 			/**
 			 * adds function to became a job[executing]
@@ -55,7 +55,7 @@ namespace dodo
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 */
-			virtual unsigned long addNRun(jobFunc func, void *data) = 0;
+			virtual unsigned long addNRun(jobFunc func, void *data)=0;
 				
 			/**
 			 * removes registered job
@@ -68,7 +68,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							del(unsigned long position, bool force=false) = 0;
+							del(unsigned long position, bool force=false)=0;
 			
 			/**
 			 * executes job
@@ -81,7 +81,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 
-							run(unsigned long position, bool force=false) = 0;
+							run(unsigned long position, bool force=false)=0;
 
 			/**
 			 * stops job
@@ -92,7 +92,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 		
-							stop(unsigned long position) = 0;
+							stop(unsigned long position)=0;
 
 			/**
 			 * stops all registered jobs
@@ -102,7 +102,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 		
-							stop() = 0;
+							stop()=0;
 										
 			/**
 			 * waits for job's termination
@@ -113,7 +113,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 	
-							wait(unsigned long position) = 0;
+							wait(unsigned long position)=0;
 							
 			/**
 			 * waits for all registered jobs' termination
@@ -123,23 +123,23 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif						 	
-							wait() = 0;
+							wait()=0;
 										
 			/**
 			 * @return true if job is running
 			 * @param position indicates for what job to indicate
 			 */
-			virtual bool isRunning(unsigned long position) const = 0;
+			virtual bool isRunning(unsigned long position) const=0;
 			
 			/**
 			 * @return amount of running jobs
 			 */
-			virtual unsigned long running() const = 0;			
+			virtual unsigned long running() const=0;			
 			
 			/**
 			 * sweep jobs if their time are already passed
 			 */
-			virtual void sweepTrash() = 0;
+			virtual void sweepTrash()=0;
 			
 			/**
 			 * set maximum execution time
@@ -151,7 +151,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif			
-							setExecutionLimit(unsigned long position, unsigned long limit=1) = 0; 
+							setExecutionLimit(unsigned long position, unsigned long limit=1)=0; 
 
 			
 			#ifdef DL_EXT
@@ -163,7 +163,7 @@ namespace dodo
 				 * @param data describes data to be passed to func
 				 * @param toInit indicates data that will path to initialize function
 				 */
-				virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
+				virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL)=0;
 			
 			#endif
 	};

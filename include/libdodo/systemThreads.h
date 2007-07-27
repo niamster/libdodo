@@ -160,7 +160,7 @@
 				 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 				 * @param stackSize describes stack siae of the thread
 				 */
-				virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit=1, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
+				virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit=1, bool detached=false, short action=THREAD_WAIT, int stackSize=2097152);
 				
 				/**
 				 * adds function to became a job[not executing]
@@ -168,7 +168,7 @@
 				 * @param func indicates function to be executed
 				 * @param data describes data to be passed to func
 				 * @note
-				 * detached = false
+				 * detached=false
 				 * action=THREAD_WAIT
 				 * stackSize=2097152
 				 */
@@ -181,7 +181,7 @@
 				 * @param data describes data to be passed to func
 				 * @note
 				 * limit=1
-				 * detached = false
+				 * detached=false
 				 * action=THREAD_WAIT
 				 * stackSize=2097152
 				 */
@@ -216,7 +216,7 @@
 				#else
 					virtual bool 
 				#endif						 
-								replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
+								replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached=false, short action=THREAD_WAIT, int stackSize=2097152);
 				
 				/**
 				 * executes thread
@@ -314,7 +314,7 @@
 					 * @param action describes action with thread on destruction if thread is running
 					 * @param stackSize describes stack siae of the thread
 					 */
-					virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL, bool detached = false, short action=THREAD_WAIT, int stackSize=2097152);
+					virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL, bool detached=false, short action=THREAD_WAIT, int stackSize=2097152);
 					
 					/**
 					 * adds function to became a thread[not executing] from module
@@ -323,14 +323,14 @@
 					 * @param data describes data to be passed to func
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
+					virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL);
 				
 					/**
 					 * @return info about module
 					 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					static systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+					static systemThreadsMod getModuleInfo(const dodoString &module, void *toInit=NULL);
 				
 				#endif
 				

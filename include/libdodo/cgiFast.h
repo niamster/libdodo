@@ -116,7 +116,7 @@
 					 * @param threading indicates whether to call new thread on cgi request or proceed a queue
 					 * @param threadsNum indicates how many threads to use in fast-cgi server
 					 */
-					cgiFast(bool threading = true, unsigned int threadsNum = 10);
+					cgiFast(bool threading=true, unsigned int threadsNum=10);
 					
 				#else
 				
@@ -125,7 +125,7 @@
 					 * @param threading indicates whether to call new thread on cgi request or proceed a queue
 					 * @param threadsNum indicates how many threads to use in fast-cgi server
 					 */
-					cgiFast(bool threading = true, unsigned int threadsNum = 10);
+					cgiFast(bool threading=true, unsigned int threadsNum=10);
 					
 				#endif				
 				

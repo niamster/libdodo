@@ -129,7 +129,7 @@ namespace dodo
 		
 		/**
 		 * @struct xexecCounts describes what position of pre or[and] post exec was set from module;
-		 * @note if not set = -1
+		 * @note if not set=-1
 		 */
 		struct xexecCounts
 		{
@@ -211,7 +211,7 @@ namespace dodo
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);///if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+				virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 			
 				/**
 				 * set function from module that will be executed before  the main action call
@@ -223,7 +223,7 @@ namespace dodo
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);///if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+				virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 	
 				/**
 				 * set function from module that will be executed before/after the main action call
@@ -236,7 +236,7 @@ namespace dodo
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);///if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+				virtual xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 			
 			#endif
 			
@@ -344,7 +344,7 @@ namespace dodo
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param toInit indicates data that will path to initialize function
 				 */
-				static xexecMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+				static xexecMod getModuleInfo(const dodoString &module, void *toInit=NULL);
 			
 			#endif
 			
@@ -429,7 +429,7 @@ namespace dodo
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int addXExecModule(std::list<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit = NULL);
+				virtual int addXExecModule(std::list<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit=NULL);
 			
 			#endif
 			

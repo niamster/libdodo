@@ -237,7 +237,7 @@
 				 * @param encoding declears encoding of XML
 				 * @param version declears version of XML
 				 */
-				virtual dodoString createXML(const __xmlNode &root, const dodoString &encoding = "UTF-8", const dodoString &version = "1.0")  const; 
+				virtual dodoString createXML(const __xmlNode &root, const dodoString &encoding="UTF-8", const dodoString &version="1.0")  const; 
 
 				/**
 				 * @return XML string

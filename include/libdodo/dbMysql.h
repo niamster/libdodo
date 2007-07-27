@@ -56,7 +56,7 @@
 		 */
 		enum mysqlAddSelEnum
 		{
-			DBREQUEST_SELECT_STRAIGHT_JOIN = 1,
+			DBREQUEST_SELECT_STRAIGHT_JOIN=1,
 			DBREQUEST_SELECT_SMALL_RESULT,
 			DBREQUEST_SELECT_BIG_RESULT,
 		};
@@ -66,7 +66,7 @@
 		 */		
 		enum mysqlAddDelEnum
 		{
-			DBREQUEST_DELETE_LOW_PRIORITY = 1,
+			DBREQUEST_DELETE_LOW_PRIORITY=1,
 			DBREQUEST_DELETE_QUICK
 		};
 
@@ -75,7 +75,7 @@
 		 */		
 		enum mysqlAddUpEnum
 		{
-			DBREQUEST_UPDATE_LOW_PRIORITY = 1,
+			DBREQUEST_UPDATE_LOW_PRIORITY=1,
 		};
 
 		/**
@@ -83,7 +83,7 @@
 		 */		
 		enum mysqlAddInsEnum
 		{
-			DBREQUEST_INSERT_DELAYED = 1,
+			DBREQUEST_INSERT_DELAYED=1,
 			DBREQUEST_INSERT_LOW_PRIORITY,
 			DBREQUEST_INSERT_HIGH_PRIORITY,
 		};
@@ -103,7 +103,7 @@
 			 * constructor
 			 * @note defines structure data with user data
 			 */
-			__mysqlSSLOptions(const dodoString &key, const dodoString &cert = __string__, const dodoString &ca = __string__, const dodoString &capath = __string__, const dodoString &cipher = __string__);
+			__mysqlSSLOptions(const dodoString &key, const dodoString &cert=__string__, const dodoString &ca=__string__, const dodoString &capath=__string__, const dodoString &cipher=__string__);
 			
 			dodoString key;///< the pathname to the key file
 			dodoString cert;///< the pathname to the certificate file.
@@ -154,7 +154,7 @@
 				 *	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
 				 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
 				 */			
-				void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions());
+				void connectSettings(unsigned long type, const __mysqlSSLOptions &options=__mysqlSSLOptions());
 			
 				/**
 				 * connect to database
@@ -264,7 +264,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const dodoString &query = __string__, bool result = false);
+								exec(const dodoString &query=__string__, bool result=false);
 				
 				#ifndef DBMYSQL_WO_XEXEC
 				
@@ -294,7 +294,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */			
-						virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+						virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 						/**
 						 * adds hook after the operation by callback
@@ -303,7 +303,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+						virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
 						
 						/**
 						 * adds hook after the operation by callback
@@ -312,7 +312,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+						virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 					#endif
 				

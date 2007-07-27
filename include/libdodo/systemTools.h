@@ -91,28 +91,28 @@ namespace dodo
 	 */
 	enum systemSignalsEnum
 	{
-		SIGNAL_HANGUP = 0,
-		SIGNAL_INTERRUPT = 2,
-		SIGNAL_QUIT = 4,
-		SIGNAL_ILLEGAL_INSTRUCTION = 8,
-		SIGNAL_ABORT = 16,
-		SIGNAL_BUS_FAULT = 32,
-		SIGNAL_FLOATINGPOINT_FAULT = 64,
-		SIGNAL_USER_DEFINED1 = 128,
-		SIGNAL_SEGMENTATION_FAULT = 256,
-		SIGNAL_USER_DEFINED2 = 512,
-		SIGNAL_PIPE_FAULT = 1024,
-		SIGNAL_ALARM = 2048,
-		SIGNAL_TERMINATION = 4096,
+		SIGNAL_HANGUP=0,
+		SIGNAL_INTERRUPT=2,
+		SIGNAL_QUIT=4,
+		SIGNAL_ILLEGAL_INSTRUCTION=8,
+		SIGNAL_ABORT=16,
+		SIGNAL_BUS_FAULT=32,
+		SIGNAL_FLOATINGPOINT_FAULT=64,
+		SIGNAL_USER_DEFINED1=128,
+		SIGNAL_SEGMENTATION_FAULT=256,
+		SIGNAL_USER_DEFINED2=512,
+		SIGNAL_PIPE_FAULT=1024,
+		SIGNAL_ALARM=2048,
+		SIGNAL_TERMINATION=4096,
 		#ifndef __FreeBSD__
-			SIGNAL_STACK_FAULT = 8192,
+			SIGNAL_STACK_FAULT=8192,
 		#endif
-		SIGNAL_CHILD_CHANGED = 16384,
-		SIGNAL_CONTINUE = 32768,
-		SIGNAL_KEYBOARD_STOP = 65536,
-		SIGNAL_CPULIMIT_EXCEEDED = 131072,
-		SIGNAL_FILESIZE_EXCEEDED = 262144,
-		SIGNAL_BAD_SYSCALL = 524288,
+		SIGNAL_CHILD_CHANGED=16384,
+		SIGNAL_CONTINUE=32768,
+		SIGNAL_KEYBOARD_STOP=65536,
+		SIGNAL_CPULIMIT_EXCEEDED=131072,
+		SIGNAL_FILESIZE_EXCEEDED=262144,
+		SIGNAL_BAD_SYSCALL=524288,
 	};
 	
 	/**
@@ -215,7 +215,7 @@ namespace dodo
 			 * @param message is message to print
 			 * @param status indicate with what status to exit
 			 */
-			static void die(const dodoString &message, int status = 1);
+			static void die(const dodoString &message, int status=1);
 			
 			/**
 			 * changes root(/) to new
@@ -460,7 +460,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals = -1);
+							setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals=-1);
 			
 			/**
 			 * set timer and onTimer function
@@ -473,7 +473,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							setTimer(long timeout, signalHandler handler, int blockSignals = -1);
+							setTimer(long timeout, signalHandler handler, int blockSignals=-1);
 			
 			/**
 			 * set signal handler
@@ -486,7 +486,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							setSignalHandler(long signal, signalHandler handler, int blockSignals = -1);
+							setSignalHandler(long signal, signalHandler handler, int blockSignals=-1);
 			
 			/**
 			 * determines whether handler was set on signal[see systemSignalsEnum]
@@ -512,7 +512,7 @@ namespace dodo
 				 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 				 * @param toInit indicates data that will path to initialize function
 				 */
-				static sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+				static sigMod getModuleInfo(const dodoString &module, void *toInit=NULL);
 				
 				/**
 				 * set handler on signal from specific module
@@ -526,7 +526,7 @@ namespace dodo
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(long signal, const dodoString &module, void *toInit = NULL, int blockSignals = -1);
+								setSignalHandler(long signal, const dodoString &module, void *toInit=NULL, int blockSignals=-1);
 
 				/**
 				 * set handler on signal from specific module
@@ -540,7 +540,7 @@ namespace dodo
 				#else
 					static bool 
 				#endif				 
-								setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
+								setSignalHandler(const dodoString &module, void *toInit=NULL, int blockSignals=-1);
 
 			#endif											
 			

@@ -491,7 +491,7 @@ namespace dodo
 				 * @note if compiled without exeptions - on error buffer will be returned
 				 * Lower values of workFactor reduce the amount of effort the standard algorithm will expend before resorting to the fallback
 			 	 */
-			 	static dodoString bzCompress(const dodoString &buffer, unsigned short level=6, unsigned short type = 30);
+			 	static dodoString bzCompress(const dodoString &buffer, unsigned short level=6, unsigned short type=30);
 			 	
 			 	/**
 			 	 * @return decompressed buffer
@@ -516,7 +516,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __string__);
+							mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers=__string__);
 			
 			/**
 			 * sends mail
@@ -536,7 +536,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __string__, const dodoString &pass = __string__, const dodoString &headers = __string__);
+							mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login=__string__, const dodoString &pass=__string__, const dodoString &headers=__string__);
 									
 		private:
 			

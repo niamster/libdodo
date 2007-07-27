@@ -38,7 +38,7 @@ namespace dodo
 	 * @class to provide wide abilities for sql manipulations
 	 * be carefull!!! all data become escaped and fremed with <'>. Fields' names are not framed with <`> to prevent "`count(*)`" or smth else
 	 * when u are usin' select wo table_name field names are not escaped and framed!!
-	 * If u want to prevent data framin' set dbSqlBase.preventFraming = true; but remember u have to use <'> using compare with strings in 'where' statement
+	 * If u want to prevent data framin' set dbSqlBase.preventFraming=true; but remember u have to use <'> using compare with strings in 'where' statement
 	 */
 	class dbSqlBase : public dbBase
 	{
@@ -228,7 +228,7 @@ namespace dodo
 			virtual dodoString stringType(int type);
 			
 			/**
-			 * @return : if type must have range = 1; if may have = 0; if mustn't have = -1;
+			 * @return : if type must have range=1; if may have=0; if mustn't have=-1;
 			 * @param type indicates the data type
 			 */
 			virtual int chkRange(int type);

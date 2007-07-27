@@ -68,15 +68,15 @@ namespace dodo
 					typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
-						cmpFunc = strcasecmp;
+						cmpFunc=strcasecmp;
 					else
-						cmpFunc = strcmp;
+						cmpFunc=strcmp;
 					
 					for (;i!=j;++i)
 						if (cmpFunc(varName.c_str(), i->first.c_str()) == 0)
 							return i->second;		
 					
-					std::pair<typename std::map<keyType, valueType>::iterator, bool> res = realArr.insert(make_pair(varName, type));
+					std::pair<typename std::map<keyType, valueType>::iterator, bool> res=realArr.insert(make_pair(varName, type));
 					
 					return res.first->second;				
 				}
@@ -207,9 +207,9 @@ namespace dodo
 					typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
 					
 					if (icase)
-						cmpFunc = strcasecmp;
+						cmpFunc=strcasecmp;
 					else
-						cmpFunc = strcmp;
+						cmpFunc=strcmp;
 					
 					for (;i!=j;++i)
 						if (cmpFunc(varName.c_str(), i->first.c_str()) == 0)

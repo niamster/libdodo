@@ -134,7 +134,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
 							
 					/**
 					 * adds hook after the operation by callback
@@ -143,7 +143,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -152,7 +152,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
 						
 				#endif		
 			
@@ -252,14 +252,14 @@ namespace dodo
 			 * connect. for server part
 			 * @param path is path to unix socket
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-			 * @note if socket is already created and force = true and it's a socket - delete it!!
+			 * @note if socket is already created and force=true and it's a socket - delete it!!
 			 */						
 			#ifndef NO_EX
 				virtual void 
 			#else
 				virtual bool 
 			#endif
-							bindNListen(const dodoString &path, int numberOfConnections, bool force = false);	
+							bindNListen(const dodoString &path, int numberOfConnections, bool force=false);	
 			
 			/**
 			 * accepts incommin' connections(as for server)

@@ -137,7 +137,7 @@
 				 * @note to insert|update using BLOB values use hint:
 				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
 				 * 		call setBLOBValues method to set blob values according to id
-				 * 		call exec method with query = "dodo:hint:db:blob"
+				 * 		call exec method with query="dodo:hint:db:blob"
 				 * 		YOU MUST 
 				 * 				set preventFraming and preventEscaping to true 
 				 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
@@ -148,7 +148,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const dodoString &query = __string__, bool result = false);
+								exec(const dodoString &query=__string__, bool result=false);
 				
 				#ifndef DBPOSTGRESQL_WO_XEXEC
 				
@@ -178,7 +178,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */			
-						virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+						virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 						/**
 						 * adds hook after the operation by callback
@@ -187,7 +187,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+						virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
 						
 						/**
 						 * adds hook after the operation by callback
@@ -196,7 +196,7 @@
 						 * @param data is pointer to data toy want to pass to hook
 					 	 * @param toInit indicates data that will path to initialize function
 						 */
-						virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+						virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 					#endif
 				
@@ -234,7 +234,7 @@
 				 * to insert|update using BLOB values use hint:
 				 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]  
 				 * 		call setBLOBValues method to set blob values according to id
-				 * 		call exec method with query = "dodo:hint:db:blob"
+				 * 		call exec method with query="dodo:hint:db:blob"
 				 * 		YOU MUST 
 				 * 				set preventFraming and preventEscaping to true 
 				 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating

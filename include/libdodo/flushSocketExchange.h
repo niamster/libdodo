@@ -93,7 +93,7 @@ namespace dodo
 	 * @class flushSocketExchange used for communication[send/receive data]
 	 * you may use it's functions only after passing it to connect(accept)
 	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
-	 * if you'll init this class again with another connection = previous will be closed
+	 * if you'll init this class again with another connection=previous will be closed
 	 */
 	class flushSocketExchange : public flushSocketOptions	
 	
@@ -171,7 +171,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */			
-					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
 							
 					/**
 					 * adds hook after the operation by callback
@@ -180,7 +180,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 					/**
 					 * adds hook after the operation by callback
@@ -189,7 +189,7 @@ namespace dodo
 					 * @param data is pointer to data toy want to pass to hook
 					 * @param toInit indicates data that will path to initialize function
 					 */
-					virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+					virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
 					
 				#endif	
 			
