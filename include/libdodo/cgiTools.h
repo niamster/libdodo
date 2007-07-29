@@ -214,7 +214,19 @@ namespace dodo
 			 */
 			virtual ~cgiTools();
 			
-			static bool cgiFilesInMem;///to store POST files in memory[true by default]
+			static bool postFilesInMem;///< to store POST files in memory[true by default]
+			
+			static bool autoclearContent;///< clear content of the request after processing[true by default]
+			
+			/**
+			 * @return content of the request
+			 */
+			dodoString getContent();
+			
+			/**
+			 * clears content of the request
+			 */
+			void clearContent();
 			
 			/**
 			 * @return method type
@@ -309,10 +321,12 @@ namespace dodo
 		
 		private:	
 		
-			bool _cgiFilesInMem;///< where POST files stored
+			bool postFilesStoredInMem;///< where POST files stored
 		
 			std::list<__cookies> cookiesSet;///< array of cookies nodes
 			int method;///< method that received program
+			
+			dodoString content;///< content of the request
 		
 			/**
 			 * deletes temp files that were created if POST files were present

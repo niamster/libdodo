@@ -25,7 +25,11 @@
 
 using namespace dodo;
 
-bool cgiTools::cgiFilesInMem = true;
+bool cgiTools::postFilesInMem = true;
+
+//-------------------------------------------------------------------
+
+bool cgiTools::autoclearContent = true;
 
 //-------------------------------------------------------------------
 
@@ -62,7 +66,7 @@ cgiTools::cgiTools(cgiTools &ct)
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent, 
-			dodoAssocArr &a_headers) : _cgiFilesInMem(true)
+			dodoAssocArr &a_headers) : postFilesStoredInMem(true)
 									#ifdef FCGI_EXT
 										,
 										cgiFastSet(false)
@@ -81,6 +85,10 @@ cgiTools::cgiTools(bool silent,
 	detectMethod();
 
 	makePost();
+	
+	if(autoclearContent)
+		content.clear();
+	
 	make(COOKIES.realArr, ENVIRONMENT["HTTP_COOKIE"],"; ");
 	make(METHOD_GET.realArr, ENVIRONMENT["QUERY_STRING"]);
 }
@@ -91,7 +99,7 @@ cgiTools::cgiTools(bool silent,
 
 	cgiTools::cgiTools(cgiFastSTD *a_cf, 
 						bool silent, 
-						dodoAssocArr &a_headers) : _cgiFilesInMem(true),
+						dodoAssocArr &a_headers) : postFilesStoredInMem(true),
 											cgiFastSet(true),
 											cf(a_cf)
 					
@@ -124,6 +132,22 @@ cgiTools::~cgiTools()
 
 //-------------------------------------------------------------------
 
+dodoString 
+cgiTools::getContent()
+{
+	return content;
+}
+
+//-------------------------------------------------------------------
+
+void
+cgiTools::clearContent()
+{
+	content.clear();
+}
+
+//-------------------------------------------------------------------
+
 void 
 cgiTools::cleanTmp()
 {
@@ -132,7 +156,7 @@ cgiTools::cleanTmp()
 	{
 		fclose(i->second.fp);
 		
-		if (_cgiFilesInMem)
+		if (postFilesStoredInMem)
 			free(i->second.buf);
 		else
 			unlink(i->second.tmp_name.c_str());
@@ -306,9 +330,7 @@ cgiTools::makePost()
 	unsigned long iter = inSize/POST_BATCH_SIZE;
 	unsigned long rest = inSize%POST_BATCH_SIZE;
 	
-	dodoString bPost;
-	
-	_cgiFilesInMem = cgiFilesInMem;
+	postFilesStoredInMem = postFilesInMem;
 			
 	for (unsigned long i=0;i<iter;++i)
 	{
@@ -343,7 +365,7 @@ cgiTools::makePost()
 						}
 					#endif
 		
-		bPost.append(post, POST_BATCH_SIZE);
+		content.append(post, POST_BATCH_SIZE);
 	}
 	
 	if (rest>0)
@@ -373,23 +395,23 @@ cgiTools::makePost()
 				}
 			#endif
 			
-		bPost.append(post, rest);
+		content.append(post, rest);
 	}
 
 	delete [] post;
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
 	{
-		make(METHOD_POST.realArr, bPost);
+		make(METHOD_POST.realArr, content);
 	}
 	else
 	{
 		if (strcasecmp(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"].c_str(),"base64")==0)
-			bPost = tools::decodeBase64(bPost);
+			content = tools::decodeBase64(content);
 		
 		unsigned int temp0;
 		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
-		dodoStringArr postPartd = tools::explode(bPost,"--"+ENVIRONMENT["CONTENT_TYPE"].substr(temp0+9));
+		dodoStringArr postPartd = tools::explode(content,"--"+ENVIRONMENT["CONTENT_TYPE"].substr(temp0+9));
 		
 		dodoStringArr::iterator i(postPartd.begin()), j(postPartd.end());
 
@@ -425,7 +447,7 @@ cgiTools::makePost()
 				
 				#ifndef __FreeBSD__
 				
-				if (!cgiFilesInMem)
+				if (!postFilesInMem)
 				
 				#endif
 				{
@@ -454,7 +476,7 @@ cgiTools::makePost()
 				
 				#ifndef __FreeBSD__
 
-					if (cgiFilesInMem)
+					if (postFilesInMem)
 					{
 						file.buf = malloc(file.size);
 						file.fp = fmemopen(file.buf, file.size,"w+");
