@@ -297,6 +297,16 @@ namespace dodo
 				virtual bool 
 			#endif
 							makePost();
+				
+			/**
+			 * gets contents of the request 
+			 */
+			#ifndef NO_EX
+				virtual void 
+			#else
+				virtual bool 
+			#endif
+							makeContent();
 			
 			/**
 			 * gets info about environment

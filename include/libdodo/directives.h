@@ -112,7 +112,7 @@
 /**
  * size of batch for POST reading in cgiTool
  */
-#define POST_BATCH_SIZE 4096
+#define CONTENT_BATCH_SIZE 4096
 
 /**
  * default values of buffer for io operations(flush*)

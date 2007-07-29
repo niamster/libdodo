@@ -76,6 +76,7 @@ cgiTools::cgiTools(bool silent,
 	
 	detectMethod();
 
+	makeContent();
 	makePost();
 	
 	if(autoclearContent)
@@ -108,8 +109,13 @@ cgiTools::cgiTools(bool silent,
 		makeEnv();
 		
 		detectMethod();
-	
+
+		makeContent();
 		makePost();
+		
+		if(autoclearContent)
+			content.clear();
+		
 		make(COOKIES.realArr, ENVIRONMENT["HTTP_COOKIE"],"; ");
 		make(METHOD_GET.realArr, ENVIRONMENT["QUERY_STRING"]);
 	}
@@ -311,15 +317,8 @@ cgiTools::printHeaders() const
 #else
 	bool
 #endif
-cgiTools::makePost()
+cgiTools::makeContent()
 {
-	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
-		#ifndef NO_EX
-			return ;
-		#else
-			return false;
-		#endif
-	
 	unsigned long inSize = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
 	
 	if (inSize <= 0)
@@ -329,78 +328,92 @@ cgiTools::makePost()
 			return true;
 		#endif
 	
-	char *post = new char[POST_BATCH_SIZE];	
+	char *cont = new char[CONTENT_BATCH_SIZE];	
 
-	unsigned long iter = inSize/POST_BATCH_SIZE;
-	unsigned long rest = inSize%POST_BATCH_SIZE;
+	unsigned long iter = inSize/CONTENT_BATCH_SIZE;
+	unsigned long rest = inSize%CONTENT_BATCH_SIZE;
 			
 	for (unsigned long i=0;i<iter;++i)
 	{
 		
 		#ifdef FCGI_EXT
 			if (cgiFastSet)
-				cf->read(post, POST_BATCH_SIZE);
+				cf->read(cont, CONTENT_BATCH_SIZE);
 			else
 		#endif
-				if (fread(post, POST_BATCH_SIZE, 1, stdin) != POST_BATCH_SIZE)
-					#ifndef NO_EX
-						switch (errno)
-						{
-							case EIO:
-							case EINTR:
-							case ENOMEM:
-							case EOVERFLOW:
-							case EROFS:
+				if (fread(cont, CONTENT_BATCH_SIZE, 1, stdin) != CONTENT_BATCH_SIZE)
+					switch (errno)
+					{
+						case EIO:
+						case EINTR:
+						case ENOMEM:
+						case EOVERFLOW:
+						case EROFS:
+
+							delete [] cont;	
 							
+							#ifndef NO_EX
 								throw baseEx(ERRMODULE_CGITOOLS, CGITOOLS_MAKEPOST, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-						}	
-					#else			
-						switch (errno)
-						{
-							case EIO:
-							case EINTR:
-							case ENOMEM:
-							case EOVERFLOW:	
-							case EROFS:
-							
+							#else
 								return false;
-						}
-					#endif
+							#endif
+					}
 		
-		content.append(post, POST_BATCH_SIZE);
+		content.append(cont, CONTENT_BATCH_SIZE);
 	}
 	
 	if (rest>0)
 	{
-		if (fread(post, rest, 1, stdin) == 0)
-			#ifndef NO_EX
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
+		if (fread(cont, rest, 1, stdin) == 0)
+			switch (errno)
+			{
+				case EIO:
+				case EINTR:
+				case ENOMEM:
+				case EOVERFLOW:
+				case EROFS:
+
+					delete [] cont;	
 					
+					#ifndef NO_EX
 						throw baseEx(ERRMODULE_CGITOOLS, CGITOOLS_MAKEPOST, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-				}	
-			#else			
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:	
-					case EROFS:
-					
+					#else
 						return false;
-				}
-			#endif
+					#endif
+			}
 			
-		content.append(post, rest);
+		content.append(cont, rest);
 	}
 
-	delete [] post;
+	delete [] cont;	
+		
+	#ifdef NO_EX
+		return true;
+	#endif		
+}
+
+//-------------------------------------------------------------------
+	
+#ifndef NO_EX
+	void 
+#else
+	bool
+#endif
+cgiTools::makePost()
+{
+	if (content.size() == 0)
+		#ifndef NO_EX
+			return ;
+		#else
+			return false;
+		#endif
+				
+	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
+		#ifndef NO_EX
+			return ;
+		#else
+			return false;
+		#endif
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
 	{
