@@ -291,22 +291,12 @@ namespace dodo
 			/**
 			 * fills POST variable [also files if defined]
 			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							makePost();
+			void makePost();
 				
 			/**
 			 * gets contents of the request 
 			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							makeContent();
+			void makeContent();
 			
 			/**
 			 * gets info about environment

@@ -312,11 +312,7 @@ cgiTools::printHeaders() const
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
-	void 
-#else
-	bool
-#endif
+void
 cgiTools::makeContent()
 {
 	unsigned long inSize = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
@@ -352,11 +348,7 @@ cgiTools::makeContent()
 
 							delete [] cont;	
 							
-							#ifndef NO_EX
-								throw baseEx(ERRMODULE_CGITOOLS, CGITOOLS_MAKEPOST, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-							#else
-								return false;
-							#endif
+							return ;
 					}
 		
 		content.append(cont, CONTENT_BATCH_SIZE);
@@ -373,47 +365,27 @@ cgiTools::makeContent()
 				case EOVERFLOW:
 				case EROFS:
 
-					delete [] cont;	
+					delete [] cont;
 					
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_CGITOOLS, CGITOOLS_MAKEPOST, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else
-						return false;
-					#endif
+					return ;
 			}
 			
 		content.append(cont, rest);
 	}
 
-	delete [] cont;	
-		
-	#ifdef NO_EX
-		return true;
-	#endif		
+	delete [] cont;
 }
 
 //-------------------------------------------------------------------
 	
-#ifndef NO_EX
-	void 
-#else
-	bool
-#endif
+void
 cgiTools::makePost()
 {
 	if (content.size() == 0)
-		#ifndef NO_EX
-			return ;
-		#else
-			return false;
-		#endif
+		return ;
 				
 	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
-		#ifndef NO_EX
-			return ;
-		#else
-			return false;
-		#endif
+		return ;
 	
 	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded")==0)
 	{
@@ -517,6 +489,7 @@ cgiTools::makePost()
 						case ENOTDIR:
 						
 							file.error = POSTFILEERR_BAD_FILE_NAME;
+							
 							break;
 							
 						case ENOMEM:
@@ -541,10 +514,6 @@ cgiTools::makePost()
 				METHOD_POST.realArr[i->substr(temp0, temp1-temp0)] = i->substr(temp1+5, i->size()-temp1-7);//FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
 	}
-	
-	#ifdef NO_EX
-		return true;
-	#endif	
 }
 
 //-------------------------------------------------------------------
