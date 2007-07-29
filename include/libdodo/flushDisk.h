@@ -174,7 +174,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif			 
-							open(const dodoString &path=__string__);///<f opened previous file, closes it		
+							open(const dodoString &path=__string__);///< if opened previous file, closes it		
 			
 			/**
 			 * closes file

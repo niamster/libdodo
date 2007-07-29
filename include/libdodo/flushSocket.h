@@ -220,7 +220,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							connect(const dodoString &path, flushSocketExchange &exchange);///<f socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+							connect(const dodoString &path, flushSocketExchange &exchange);///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 			
 			/**
 			 * connect. for server part

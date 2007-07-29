@@ -190,7 +190,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							unlink(const dodoString &path, bool force=true);///<lso empty directory
+							unlink(const dodoString &path, bool force=true);///< also empty directory
 							
 			/**
 			 * rename file
@@ -214,7 +214,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif
-							touch(const dodoString &path, int time=-1);///<ow by default
+							touch(const dodoString &path, int time=-1);///< now by default
 			
 			/**
 			 * make directory
@@ -269,7 +269,7 @@ namespace dodo
 			 * @return file size; if no such file or directory and lib was compiled without exceptions - will return -1
 			 * @param path indicates path what to describe
 			 */
-			static long getSize(const dodoString &path);///<n bytes; 
+			static long getSize(const dodoString &path);///< in bytes
 			
 			/**
 			 * @return node access time
@@ -366,13 +366,13 @@ namespace dodo
 			 * @return file info[see __fileInfo]
 			 * @param path indicates path where to get info
 			 */
-			static __fileInfo getFileInfo(const dodoString &path);///<f no such file - empty will be returned
+			static __fileInfo getFileInfo(const dodoString &path);///< if no such file - empty will be returned
 
 			/**
 			 * @return file dir[see __fileInfo]
 			 * @param path indicates path where to get info
 			 */
-			static dodoArray<__fileInfo> getDirInfo(const dodoString &path);///<f it'not a dir - empty will be returned and nothing write to 'dir' paramether!
+			static dodoArray<__fileInfo> getDirInfo(const dodoString &path);///< if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
 					
 			/**
 			 * @return system understandable permissions

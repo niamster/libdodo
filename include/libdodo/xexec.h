@@ -153,7 +153,7 @@ namespace dodo
 	 *	derivedClass::exec() const
 	 *	{
 	 *		performXExec(preExec);
-	 *		///<xecute 
+	 *		///< execute 
 	 *		performXExec(postExec);
 	 *	}
 	 *
@@ -211,7 +211,7 @@ namespace dodo
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///<f applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+				virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 			
 				/**
 				 * set function from module that will be executed before  the main action call
@@ -223,7 +223,7 @@ namespace dodo
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///<f applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+				virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 	
 				/**
 				 * set function from module that will be executed before/after the main action call
@@ -236,7 +236,7 @@ namespace dodo
 				 * @param toInit indicates data that will path to initialize function
 				 * @attention data is not copied!!!
 				 */
-				virtual xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///<f applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+				virtual xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 			
 			#endif
 			
