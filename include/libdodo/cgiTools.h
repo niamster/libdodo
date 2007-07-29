@@ -190,10 +190,13 @@ namespace dodo
 			 * constructor
 			 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.
 			 * @param headers contains array of headers that would pe printed; it's usefull if you set silent=false[prin headers during contructing]
+			 * @param autoclearContent indicates whether to clean content of request in constructor
+			 * @param postFilesInMem indicates where to place POST files[disk or memory]
+			 * @param postFilesTmpDir indicates where to place POST files if on disk
 			 * 
 			 * @note you cant print headers after they have been printed with printHeaders method 
 			 */
-			cgiTools(bool silent=false, dodoAssocArr &headers=__assocarray__);
+			cgiTools(bool silent=false, dodoAssocArr &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 					
 			#ifdef FCGI_EXT		
 					
@@ -202,10 +205,13 @@ namespace dodo
 				 * @param cf describes output interface
 				 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.
 				 * @param headers contains array of headers that would pe printed; it's usefull if you set silent=false[prin headers during contructing]
+				 * @param autoclearContent indicates whether to clean content of request in constructor
+				 * @param postFilesInMem indicates where to place POST files[disk or memory]
+				 * @param postFilesTmpDir indicates where to place POST files if on disk
 				 * 
 				 * @note you cant print headers after they have been printed with printHeaders method 
 				 */
-				cgiTools(cgiFastSTD *cf, bool silent=false, dodoAssocArr &headers=__assocarray__);
+				cgiTools(cgiFastSTD *cf, bool silent=false, dodoAssocArr &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 			
 			#endif
 			
@@ -213,10 +219,6 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~cgiTools();
-			
-			static bool postFilesInMem;///< to store POST files in memory[true by default]
-			
-			static bool autoclearContent;///< clear content of the request after processing[true by default]
 			
 			/**
 			 * @return content of the request
@@ -278,8 +280,6 @@ namespace dodo
 			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate=__string__, const dodoString &path=__string__, const dodoString &domain=__string__, bool secure=false);
 		
 			virtual void setCookie(const __cookies &cookie);
-		
-			static dodoString postFilesTmpDir;///< path of dir, where POST files will be temporary saved [default is /tmp]
 			
 		protected:
 					
@@ -306,7 +306,7 @@ namespace dodo
 			/**
 			 * initiates headers with given headers; printed with printHeaders method
 			 */
-			virtual void initHeaders(dodoAssocArr &a_headers);
+			virtual void initHeaders(dodoAssocArr &headers);
 
 			/**
 			 * processes :
@@ -321,7 +321,11 @@ namespace dodo
 		
 		private:	
 		
-			bool postFilesStoredInMem;///< where POST files stored
+			bool postFilesInMem;///< where POST files stored
+			
+			bool autoclearContent;///< clear content of the request after processing
+		
+			dodoString postFilesTmpDir;///< path of dir, where POST files will be temporary saved
 		
 			std::list<__cookies> cookiesSet;///< array of cookies nodes
 			int method;///< method that received program

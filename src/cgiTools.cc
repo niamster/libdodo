@@ -25,18 +25,6 @@
 
 using namespace dodo;
 
-bool cgiTools::postFilesInMem = true;
-
-//-------------------------------------------------------------------
-
-bool cgiTools::autoclearContent = true;
-
-//-------------------------------------------------------------------
-
-dodoString cgiTools::postFilesTmpDir = "/tmp";
-
-//-------------------------------------------------------------------
-
 __cookies::__cookies(const dodoString &a_name, 
 					const dodoString &a_value, 
 					const dodoString &a_exDate, 
@@ -66,11 +54,15 @@ cgiTools::cgiTools(cgiTools &ct)
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent, 
-			dodoAssocArr &a_headers) : postFilesStoredInMem(true)
-									#ifdef FCGI_EXT
-										,
-										cgiFastSet(false)
-									#endif	
+			dodoAssocArr &a_headers,
+			bool a_autoclearContent,
+			bool a_postFilesInMem,
+			dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+											postFilesTmpDir(a_postFilesTmpDir)
+											#ifdef FCGI_EXT
+												,
+												cgiFastSet(false)
+											#endif	
 				
 {		
 	fstd = new flushSTD;
@@ -99,9 +91,13 @@ cgiTools::cgiTools(bool silent,
 
 	cgiTools::cgiTools(cgiFastSTD *a_cf, 
 						bool silent, 
-						dodoAssocArr &a_headers) : postFilesStoredInMem(true),
-											cgiFastSet(true),
-											cf(a_cf)
+						dodoAssocArr &a_headers,
+						bool a_autoclearContent,
+						bool a_postFilesInMem,
+						dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+														postFilesTmpDir(a_postFilesTmpDir),
+														cgiFastSet(true),
+														cf(a_cf)
 					
 	{		
 		initHeaders(a_headers);
@@ -156,7 +152,7 @@ cgiTools::cleanTmp()
 	{
 		fclose(i->second.fp);
 		
-		if (postFilesStoredInMem)
+		if (postFilesInMem)
 			free(i->second.buf);
 		else
 			unlink(i->second.tmp_name.c_str());
@@ -231,14 +227,14 @@ cgiTools::makeEnv()
 //-------------------------------------------------------------------
 
 void 
-cgiTools::initHeaders(dodoAssocArr &a_headers)
+cgiTools::initHeaders(dodoAssocArr &headers)
 {
 	HEADERS["Content-type"] = "text/html";
 	HEADERS["X-Powered-By"] = PACKAGE_NAME "/" PACKAGE_VERSION ;
 	
-	if (a_headers.size() > 0)
+	if (headers.size() > 0)
 	{
-		dodoAssocArr::iterator i(a_headers.begin()), j(a_headers.end());
+		dodoAssocArr::iterator i(headers.begin()), j(headers.end());
 		for (;i!=j;++i)
 			HEADERS[i->first] = i->second;	
 	}
@@ -325,12 +321,18 @@ cgiTools::makePost()
 		#endif
 	
 	unsigned long inSize = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
+	
+	if (inSize <= 0)
+		#ifndef NO_EX
+			return ;
+		#else
+			return true;
+		#endif
+	
 	char *post = new char[POST_BATCH_SIZE];	
 
 	unsigned long iter = inSize/POST_BATCH_SIZE;
 	unsigned long rest = inSize%POST_BATCH_SIZE;
-	
-	postFilesStoredInMem = postFilesInMem;
 			
 	for (unsigned long i=0;i<iter;++i)
 	{
