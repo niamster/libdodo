@@ -1,8 +1,8 @@
 /***************************************************************************
- *            systemThreadShareDataGuardEx.h
+ *            systemProcessSharedDataGuardEx.h
  *
- *  Wed Oct 5 16:25:14 2005
- *  Copyright  2005  Ni@m
+ *  Sun Jul 22 23:14:14 2007
+ *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREDATAGUARDEX_H_
-#define _SYSTEMTHREADSHAREDATAGUARDEX_H_
+#ifndef _SYSTEMPROCESSSHAREDDATAGUARDEX_H_
+#define _SYSTEMPROCESSSHAREDDATAGUARDEX_H_
 
 #include <directives.h>
 
@@ -35,27 +35,27 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum systemThreadShareDataGuardExR
+		enum systemProcessSharedDataGuardExR
 		{
-			SYSTEMTHREADSHAREDATAGUARD_ISALREADYLOCKED,
-			SYSTEMTHREADSHAREDATAGUARD_CANNOTLOCK
+			SYSTEMPROCESSSHAREDDATAGUARD_ISALREADYLOCKED,
+			SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */
-		#define SYSTEMTHREADSHAREDATAGUARD_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-		#define SYSTEMTHREADSHAREDATAGUARD_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
+		#define SYSTEMPROCESSSHAREDDATAGUARD_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
+		#define SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 			
 		/**
 		 * ID of function where exception was thrown
 		 */			
-		enum systemThreadShareDataGuardFunctionsID
+		enum systemProcessSharedDataGuardFunctionsID
 		{
-			SYSTEMTHREADSHAREDATAGUARD_DEL,
-			SYSTEMTHREADSHAREDATAGUARD_SET,
-			SYSTEMTHREADSHAREDATAGUARD_LOCK,
-			SYSTEMTHREADSHAREDATAGUARD_UNLOCK,
+			SYSTEMPROCESSSHAREDDATAGUARD_DEL,
+			SYSTEMPROCESSSHAREDDATAGUARD_SET,
+			SYSTEMPROCESSSHAREDDATAGUARD_LOCK,
+			SYSTEMPROCESSSHAREDDATAGUARD_UNLOCK,
 		};
 	};
 

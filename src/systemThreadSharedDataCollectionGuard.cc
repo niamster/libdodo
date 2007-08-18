@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadShareDataCollectionGuard.cc
+ *            systemThreadSharedDataCollectionGuard.cc
  *
  *  Wed Nov 30 22:02:16 2005
  *  Copyright  2005  Ni@m
@@ -22,30 +22,30 @@
  */
 
 
-#include <systemThreadShareDataCollectionGuard.h>
+#include <systemThreadSharedDataCollectionGuard.h>
 	
 using namespace dodo;
 
-systemThreadShareDataCollectionGuard::systemThreadShareDataCollectionGuard(systemThreadShareDataCollectionGuard &sts)
+systemThreadSharedDataCollectionGuard::systemThreadSharedDataCollectionGuard(systemThreadSharedDataCollectionGuard &sts)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadShareDataCollectionGuard::systemThreadShareDataCollectionGuard() : shareNum(0)
+systemThreadSharedDataCollectionGuard::systemThreadSharedDataCollectionGuard() : shareNum(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadShareDataCollectionGuard::~systemThreadShareDataCollectionGuard()
+systemThreadSharedDataCollectionGuard::~systemThreadSharedDataCollectionGuard()
 {
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-systemThreadShareDataCollectionGuard::add(void *data)
+systemThreadSharedDataCollectionGuard::add(void *data)
 {
 	threadGuard tg(this);
 	
@@ -66,7 +66,7 @@ systemThreadShareDataCollectionGuard::add(void *data)
 #else
 	bool
 #endif
-systemThreadShareDataCollectionGuard::del(unsigned long position)
+systemThreadSharedDataCollectionGuard::del(unsigned long position)
 {
 	threadGuard tg(this);
 
@@ -74,7 +74,7 @@ systemThreadShareDataCollectionGuard::del(unsigned long position)
 		shares.erase(current);
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_DEL, ERR_LIBDODO, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -91,7 +91,7 @@ systemThreadShareDataCollectionGuard::del(unsigned long position)
 #else
 	bool 
 #endif						 
-systemThreadShareDataCollectionGuard::set(unsigned long position,
+systemThreadSharedDataCollectionGuard::set(unsigned long position,
 						void *data)
 {
 	threadGuard tg(this);
@@ -100,7 +100,7 @@ systemThreadShareDataCollectionGuard::set(unsigned long position,
 		current->data = data;
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return false;
 		#endif
@@ -113,7 +113,7 @@ systemThreadShareDataCollectionGuard::set(unsigned long position,
 //-------------------------------------------------------------------
 
 const void *
-systemThreadShareDataCollectionGuard::get(unsigned long position)
+systemThreadSharedDataCollectionGuard::get(unsigned long position)
 {
 	threadGuard tg(this);
 
@@ -121,7 +121,7 @@ systemThreadShareDataCollectionGuard::get(unsigned long position)
 		return current->data;
 	else
 		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
 		#else
 			return NULL;
 		#endif
@@ -130,7 +130,7 @@ systemThreadShareDataCollectionGuard::get(unsigned long position)
 //-------------------------------------------------------------------
 
 bool						 
-systemThreadShareDataCollectionGuard::getShare(unsigned long position)
+systemThreadSharedDataCollectionGuard::getShare(unsigned long position)
 {
 	std::list<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
 	for (;i!=j;++i)

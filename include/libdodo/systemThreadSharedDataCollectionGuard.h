@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadShareDataCollectionGuard.h
+ *            systemThreadSharedDataCollectionGuard.h
  *
  *  Tue Nov 29 23:31:55 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
  
-#ifndef _SYSTEMTHREASSHAREDATACOLLECTIONGUARD_H_
-#define _SYSTEMTHREASSHAREDATACOLLECTIONGUARD_H_
+#ifndef _SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_H_
+#define _SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_H_
 	
 #include <pthread.h>
 #include <time.h>
@@ -30,13 +30,13 @@
 #include <directives.h>
 
 #include <types.h>
-#include <systemThreadShareDataCollectionGuardEx.h>
+#include <systemThreadSharedDataCollectionGuardEx.h>
 #include <threadGuard.h>
 
 namespace dodo
 {
 	/**
-	 * @struct __systemThreadShareData describes shared data
+	 * @struct __shareInfo describes shared data
 	 */
 	struct __shareInfo
 	{
@@ -45,9 +45,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class systemThreads is to manage threads(based on POSIX threads)
+	 * @class systemThreadSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
 	 */
-	class systemThreadShareDataCollectionGuard : virtual public threadGuardHolder
+	class systemThreadSharedDataCollectionGuard : virtual public threadGuardHolder
 	{
 		private:
 		
@@ -55,19 +55,19 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			systemThreadShareDataCollectionGuard(systemThreadShareDataCollectionGuard &sts);
+			systemThreadSharedDataCollectionGuard(systemThreadSharedDataCollectionGuard &sts);
 			
 		public:
 		
 			/**
 			 * constructor
 			 */
-			systemThreadShareDataCollectionGuard();
+			systemThreadSharedDataCollectionGuard();
 			
 			/**
 			 * destructor
 			 */
-			virtual ~systemThreadShareDataCollectionGuard();
+			virtual ~systemThreadSharedDataCollectionGuard();
 
 			/**
 			 * adds data to became a shared

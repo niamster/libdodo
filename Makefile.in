@@ -42,9 +42,9 @@ OBJECTS:=dbBase.o \
 		systemProcesses.o \
 		systemThreads.o \
 		threadGuard.o \
-		systemThreadShareDataGuard.o \
-		systemProcessShareDataGuard.o \
-		systemThreadShareDataCollectionGuard.o \
+		systemThreadSharedDataGuard.o \
+		systemProcessSharedDataGuard.o \
+		systemThreadSharedDataCollectionGuard.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \
 		flush.o \

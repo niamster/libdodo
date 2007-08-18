@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadShareDataCollectionGuardEx.h
+ *            systemThreadSharedDataCollectionGuardEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREDATACOLLECTIONGUARDEX_H_
-#define _SYSTEMTHREADSHAREDATACOLLECTIONGUARDEX_H_
+#ifndef _SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_H_
+#define _SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_H_
 
 #include <directives.h>
 
@@ -36,24 +36,24 @@
 		/**
 		 * libdodo defined errors
 		 */
-		enum systemThreadShareDataCollectionGuardExR
+		enum systemThreadSharedDataCollectionGuardExR
 		{
-			SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND,
+			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND,
 		};
 		
 		/**
 		 * libdodo defined errors' explanation
 		 */
-		#define SYSTEMTHREADSHAREDATACOLLECTIONGUARD_NOTFOUND_STR "Share not found."
+		#define SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR "Share not found."
 			
 		/**
 		 * ID of function where exception was thrown
 		 */			
-		enum systemThreadShareDataCollectionGuardFunctionsID
+		enum systemThreadSharedDataCollectionGuardFunctionsID
 		{
-			SYSTEMTHREADSHAREDATACOLLECTIONGUARD_DEL,
-			SYSTEMTHREADSHAREDATACOLLECTIONGUARD_SET,
-			SYSTEMTHREADSHAREDATACOLLECTIONGUARD_GET,
+			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL,
+			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET,
+			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_GET,
 		};
 	};
 

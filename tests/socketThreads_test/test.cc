@@ -2,14 +2,14 @@
 #include <flushSocket.h>
 #include <flushSocketTools.h>
 #include <systemThreads.h>
-#include <systemThreadShareDataGuard.h>
+#include <systemThreadSharedDataGuard.h>
 #include <iostream>
 
 using namespace dodo;
 
 using namespace std;
 
-systemThreadShareDataGuard sh;
+systemThreadSharedDataGuard sh;
 
 void *
 process(void *data)
