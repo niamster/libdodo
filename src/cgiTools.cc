@@ -194,7 +194,7 @@ cgiTools::getMethod() const
 void 
 cgiTools::make(dodoAssocArr &val,
 			const dodoString &string,
-			char *delim)
+			const char *delim)
 {	
 	dodoStringArr getPair = tools::explode(tools::decodeURL(string), delim);
 	

@@ -194,7 +194,7 @@ namespace dodo
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
 			 */
-			static dodoString trim(const dodoString &data, char symbol=' ');
+			static dodoString trim(const dodoString &data, const char symbol=' ');
 			
 			/**
 			 * @return true if needle found in array
@@ -211,7 +211,7 @@ namespace dodo
 			 * @param symbols is an array of symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
-			static dodoString trim(const dodoString &data, char symbols[], int symCount);
+			static dodoString trim(const dodoString &data, const char symbols[], int symCount);
 						
 			/**
 			 * removes symbols[from given array] from the end of given string
@@ -220,7 +220,7 @@ namespace dodo
 			 * @param symbols is an array of symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
-			static dodoString rTrim(const dodoString &data, char symbols[], int symCount);
+			static dodoString rTrim(const dodoString &data, const char symbols[], int symCount);
 			
 			/**
 			 * removes symbols[from given array] from the begin of given string
@@ -229,7 +229,7 @@ namespace dodo
 			 * @param symbols is an array of symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
-			static dodoString lTrim(const dodoString &data, char symbols[], int symCount);
+			static dodoString lTrim(const dodoString &data, const char symbols[], int symCount);
 						
 			/**
 			 * removes symbols from the end of given string

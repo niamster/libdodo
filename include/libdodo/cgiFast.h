@@ -76,7 +76,7 @@
 				 * @return environment variable[fast-cgi safe]
 				 * @param buf describes what to receive from environment
 				 */
-				virtual char *getenv(char *buf); 
+				virtual char *getenv(const char *buf); 
 				
 				/**
 				 * flushes output[fast-cgi safe]

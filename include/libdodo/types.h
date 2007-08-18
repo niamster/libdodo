@@ -59,7 +59,7 @@ namespace dodo
 	
 	struct __statements 
 	{
-		char *str;
+		const char *str;
 	};	
 
 	/**

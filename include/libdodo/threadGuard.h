@@ -57,20 +57,8 @@ namespace dodo
 					 * destructor
 					 */
 					~threadGuard();
-					
-					/**
-					 * unlock and nothing will be done in destructor 
-					 */
-					void unLock();
-					
-					/**
-					 * unlock and nothing will be done in destructor 
-					 */
-					void lock();
 				
 				protected:
-					
-					bool locked;///< indicates whether mutex is locked
 					
 					threadGuardHolder *parent;///< class to lock
 			};

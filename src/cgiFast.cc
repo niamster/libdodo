@@ -94,7 +94,7 @@
 	//-------------------------------------------------------------------
 	
 	char *
-	cgiFastSTD::getenv(char *buf)
+	cgiFastSTD::getenv(const char *buf)
 	{
 		return FCGX_GetParam(buf, request->envp);
 	}

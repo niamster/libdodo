@@ -30,7 +30,6 @@
 #include <stdlib.h>
 
 #include <tools.h>
-#include <cgiToolsEx.h>
 #include <types.h>
 #include <dodoMap.h>
 #include <cgiFast.h>
@@ -317,7 +316,7 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(dodoAssocArr &val, const dodoString &string, char *delim="&");
+			virtual void make(dodoAssocArr &val, const dodoString &string, const char *delim="&");
 		
 		private:	
 		

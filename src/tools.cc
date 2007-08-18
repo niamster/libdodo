@@ -578,7 +578,7 @@ tools::rTrim(const dodoString &data,
 
 dodoString 
 tools::rTrim(const dodoString &data, 
-			char symbols[], 
+			const char symbols[], 
 			int symCount)
 {
 	int i(data.size()-1), j, empty;
@@ -599,7 +599,7 @@ tools::rTrim(const dodoString &data,
 
 dodoString 
 tools::lTrim(const dodoString &data, 
-			char symbols[], 
+			const char symbols[], 
 			int symCount)
 {
 	int size = data.size(), i(0), empty, j;
@@ -620,7 +620,7 @@ tools::lTrim(const dodoString &data,
 
 dodoString 
 tools::trim(const dodoString &data, 
-			char symbols[], 
+			const char symbols[], 
 			int symCount)
 {
 	return rTrim(lTrim(data, symbols, symCount), symbols, symCount);

@@ -54,7 +54,7 @@ namespace dodo
 			 * constructor
 			 * @param id is given to generate proper key
 			 */
-			systemProcessShareDataGuard(int id='l'+'i'+'b'+'d'+'o'+'d'+'o');
+			systemProcessShareDataGuard();
 			
 			/**
 			 * destructor

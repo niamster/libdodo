@@ -25,57 +25,21 @@
 	
 using namespace dodo;
 
-threadGuardHolder::threadGuard::threadGuard(threadGuardHolder *a_parent) : locked(false),
-																			parent(a_parent)
+threadGuardHolder::threadGuard::threadGuard(threadGuardHolder *a_parent) : parent(a_parent)
 {
-	try
-	{
-		parent->mutex.lock();
-		
-		locked = true;
-	}
-	catch(baseEx &ex)
-	{
-		
-	}
+	parent->mutex.lock();
 }
 
 //-------------------------------------------------------------------
 
 threadGuardHolder::threadGuard::~threadGuard()
 {
-	if (locked)
+	try
 	{
-		try
-		{
-			parent->mutex.unLock();
-		}
-		catch(baseEx &ex)
-		{
-			
-		}
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-threadGuardHolder::threadGuard::unLock()
-{
-	if (locked)
-	{
-		locked = false;
-		
 		parent->mutex.unLock();
 	}
-}
-
-//-------------------------------------------------------------------
-
-void
-threadGuardHolder::threadGuard::lock()
-{
-	parent->mutex.lock();
-	
-	locked = false;
+	catch(baseEx &ex)
+	{
+		
+	}
 }
