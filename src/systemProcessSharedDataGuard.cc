@@ -33,9 +33,7 @@ systemProcessSharedDataGuard::systemProcessSharedDataGuard(systemProcessSharedDa
 //-------------------------------------------------------------------
 
 systemProcessSharedDataGuard::systemProcessSharedDataGuard(const char *a_key) : data(NULL)
-{
-	//sem_init(&semaphore, 1, 0);
-	
+{	
 	if (a_key == NULL)
 	{
 		key = new char[32];
@@ -49,14 +47,16 @@ systemProcessSharedDataGuard::systemProcessSharedDataGuard(const char *a_key) : 
 		strcpy(key, a_key);
 	}
 	
-	
+	semaphore = sem_open(key, O_CREAT, 0660, 1);
 }
 
 //-------------------------------------------------------------------
 
 systemProcessSharedDataGuard::~systemProcessSharedDataGuard()
 {
-	//sem_destroy(&semaphore);
+	sem_close(semaphore);
+	
+	sem_unlink(key);
 }
 
 //-------------------------------------------------------------------

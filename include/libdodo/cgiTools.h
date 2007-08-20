@@ -43,7 +43,7 @@ namespace dodo
 	/**
 	 * @var array of names that would be in ENV array[environment of http demon]
 	 */
-	__statements HTTP_ENV[HTTP_ENV_SIZE]=
+	const __statements HTTP_ENV[HTTP_ENV_SIZE]=
 	{		
 		{"REQUEST_METHOD"},
 		{"REQUEST_URI"},
