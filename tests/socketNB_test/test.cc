@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 				
 				int pos = nb.addFlush(conn);
 				
-				string data;
+				dodoString data;
 				
 				while (true)
 				{

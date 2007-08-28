@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
 
 		
-		string str;
+		dodoString str;
 	
 		flush.readStreamString(str,0);
 		cout << "\n\n" << str << "\n\n";

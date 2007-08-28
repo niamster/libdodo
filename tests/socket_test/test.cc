@@ -30,7 +30,7 @@ process(flushSocketExchange fse)
 	//fse.writeStreamString("dasdasd");
 	fse.writeString("dasdasd");
 	
-	std::string rec = "";
+	dodoString rec = "";
 	try
 	{
 		//fse.readStreamString(rec);
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 		{
 			flushSocket st(false,PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
 			flushSocketExchange exch;
-			std::string str;
+			dodoString str;
 			
 			try
 			{

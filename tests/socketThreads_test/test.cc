@@ -35,7 +35,7 @@ process(void *data)
 	//fse->writeStreamString("dasdasd");
 	fse->writeString("dasdasd");
 	
-	std::string rec = "";
+	dodoString rec = "";
 	try
 	{
 		//fse->readStreamString(rec);

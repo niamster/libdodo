@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 		st.write((char *)&a);
 		st.flush();
 		
-		string o;
+		dodoString o;
 		
 		st.inSize = 33;
 		st.inSTDBuffer = 20;
