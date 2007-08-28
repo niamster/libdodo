@@ -1,9 +1,8 @@
 firebird
 soap
-posix_fallocate
 
 systemProcesseShare
 
 threads,processes: locking mutual exlusions
-			//mutex
 
+()?:; => ?:;

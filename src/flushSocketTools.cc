@@ -55,7 +55,7 @@ flushSocketTools::getHostInfo(const dodoString &host)
 		{
 			case AF_INET:
 			
-				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN)==NULL)
+				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
 					continue;
 					
 			case AF_INET6:

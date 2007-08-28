@@ -22,6 +22,7 @@ OBJECTS:=dbBase.o \
 		atomicMutex.o \
 		tools.o \
 		types.o \
+		dodoString.o \
 		xexec.o \
 		dbSqlBase.o \
 		baseEx.o \

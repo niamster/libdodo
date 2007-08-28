@@ -201,7 +201,7 @@ dbBase::select(const dodoString &a_table,
 
 void 
 dbBase::insert(const dodoString &a_table, 
-				const dodoAssocArr &a_fields)
+				const dodoStringMapContents &a_fields)
 {
 	qType = DBREQUEST_INSERT;
 	
@@ -212,7 +212,7 @@ dbBase::insert(const dodoString &a_table,
 	
 	dodoStringArr temp;
 	
-	dodoAssocArr::const_iterator i = (a_fields.begin()), j(a_fields.end());
+	dodoStringMapContents::const_iterator i = (a_fields.begin()), j(a_fields.end());
 	for (;i!=j;++i)
 	{
 		pre_fieldsNames.push_back(i->first);
@@ -227,18 +227,18 @@ dbBase::insert(const dodoString &a_table,
 
 void 
 dbBase::insert(const dodoString &a_table, 
-				const dodoArray<dodoAssocArr> &a_fields)
+				const dodoArray<dodoStringMapContents> &a_fields)
 {
 	qType = DBREQUEST_INSERT;
 	
 	pre_table = a_table;
 	
-	dodoArray<dodoAssocArr>::const_iterator v(a_fields.begin()), b(a_fields.end());
+	dodoArray<dodoStringMapContents>::const_iterator v(a_fields.begin()), b(a_fields.end());
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 	
-	dodoAssocArr::const_iterator i(v->begin()), j(v->end());
+	dodoStringMapContents::const_iterator i(v->begin()), j(v->end());
 	for (;i!=j;++i)
 		pre_fieldsNames.push_back(i->first);
 
@@ -328,14 +328,14 @@ dbBase::insertSelect(const dodoString &a_tableTo,
 //-------------------------------------------------------------------
 void 
 dbBase::update(const dodoString &a_table, 
-				const dodoAssocArr &a_fields, 
+				const dodoStringMapContents &a_fields, 
 				const dodoString &a_where)
 {
 	qType = DBREQUEST_UPDATE;
         
 	pre_table = a_table;
 	
-	dodoAssocArr::const_iterator i(a_fields.begin()), j(a_fields.end());
+	dodoStringMapContents::const_iterator i(a_fields.begin()), j(a_fields.end());
 	
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();

@@ -87,14 +87,14 @@ namespace dodo
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(hash)
 			 */
-			virtual void assign(dodoString varName, const dodoAssocArr &varVal);
+			virtual void assign(dodoString varName, const dodoStringMapContents &varVal);
 
 			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array of hashes)
 			 */
-			virtual void assign(dodoString varName, const dodoArray<dodoAssocArr> &varVal);
+			virtual void assign(dodoString varName, const dodoArray<dodoStringMapContents> &varVal);
 			
 			/**
 			 * show to stdout parsed template
@@ -223,15 +223,15 @@ namespace dodo
 		
 			std::map<dodoString, dodoStringArr> globalArray;///< set of global variables(arrays)[user-set]
 			
-			std::map<dodoString, dodoAssocArr> globalHash;///< set of global variables(hashes)[user-set]
+			std::map<dodoString, dodoStringMapContents> globalHash;///< set of global variables(hashes)[user-set]
 			
-			std::map<dodoString, dodoArray<dodoAssocArr> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
-			std::map<dodoString, dodoAssocArr> localHash;///< set of local variables(hashes)
+			std::map<dodoString, dodoArray<dodoStringMapContents> > globalArrayHash;///< set of global variables(array of hashes)[user-set]
+			std::map<dodoString, dodoStringMapContents> localHash;///< set of local variables(hashes)
 			
-			dodoAssocArr dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
+			dodoStringMapContents dodo;///< set of auxillary variables[dodo defined][use as dodo.smth]
 			
-			dodoAssocArr global;///< set of global variables[user-set]
-			dodoAssocArr local;///< set of local variables[during parsing]
+			dodoStringMapContents global;///< set of global variables[user-set]
+			dodoStringMapContents local;///< set of local variables[during parsing]
 			
 			bool _continueFlag;///< indicates `continue`
 			
@@ -241,7 +241,7 @@ namespace dodo
 			unsigned long iterator;///< count of iteration of a loop
 			
 			unsigned int namespaceDeepness;///< deepness of the namespace
-			std::map<unsigned int, dodoAssocArr> localNamespace;///< set of local variables invisible due to overwrite in deeper namespace[user-set] 
+			std::map<unsigned int, dodoStringMapContents> localNamespace;///< set of local variables invisible due to overwrite in deeper namespace[user-set] 
 			std::map<unsigned int, dodoStringArr> namespaceVars;///< names of vars in namespaces
 			
 			#ifdef FCGI_EXT	

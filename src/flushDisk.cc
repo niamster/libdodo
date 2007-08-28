@@ -199,7 +199,7 @@ flushDisk::open(const dodoString &a_path)
 			struct stat st;
 			bool exists(false);
 			
-			if (::lstat(path.c_str(),&st)==-1)
+			if (::lstat(path.c_str(),&st) == 1)
 			{
 				if (errno != ENOENT)
 					#ifndef NO_EX
@@ -614,7 +614,7 @@ flushDisk::readStream(char * const a_void,
 			
 		for (unsigned long i(0);i<a_pos;++i)
 		{
-			if (fgets(a_void, inSize, file)==NULL)
+			if (fgets(a_void, inSize, file) == NULL)
 			{
 				#ifndef NO_EX
 					switch (errno)
@@ -653,7 +653,7 @@ flushDisk::readStream(char * const a_void,
 	
 	memset(a_void,'\0', inSize);
 	 
-	if (fgets(a_void, inSize, file)==NULL)
+	if (fgets(a_void, inSize, file) == NULL)
 		#ifndef NO_EX
 			switch (errno)
 			{

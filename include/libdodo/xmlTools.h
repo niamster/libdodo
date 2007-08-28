@@ -281,7 +281,7 @@
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
 				 */
-				virtual void getAttributes(const xmlNodePtr node, dodoAssocArr &attributes);
+				virtual void getAttributes(const xmlNodePtr node, dodoStringMapContents &attributes);
 				
 				/**
 				 * gets attributes from node
@@ -289,7 +289,7 @@
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
 				 */
-				virtual void getAttributes(const __xmlNodeDef &definition, const xmlNodePtr node, dodoAssocArr &attributes);
+				virtual void getAttributes(const __xmlNodeDef &definition, const xmlNodePtr node, dodoStringMapContents &attributes);
 				
 				/**
 				 * get diff info from node

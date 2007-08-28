@@ -30,7 +30,69 @@
 
 namespace dodo
 {
-	typedef std::string dodoString;
+	/**
+	 * @class dodoString extends standart std::string class
+	 */
+	class dodoString: public std::string
+	{
+		public:
+			
+			/**
+			 * constructor
+			 */
+			dodoString();
+
+			/**
+			 * constructor
+			 */
+			dodoString(const std::string &str);
+
+			/**
+			 * constructor
+			 */
+			dodoString(const char *str);
+
+			/**
+			 * copy constructor
+			 */
+			dodoString(const dodoString &str);
+
+			/**
+			 * constructor
+			 */
+			dodoString(const char *str, size_type length);
+
+			/**
+			 * constructor
+			 */
+			dodoString(const std::string &str, size_type index, size_type length);
+
+			/**
+			 * constructor
+			 */
+			dodoString(size_type length, const char &ch);
+			
+			/**
+			 * constructor
+			 */
+			template<typename inputIterator>
+			dodoString(inputIterator start, inputIterator end);
+			
+			/**
+			 * @return true if strings are equal
+			 * @param first string to compare
+			 * @param second string to compare
+			 */
+			static bool equal(const dodoString &first, const dodoString &second);
+
+			/**
+			 * @return true if strings are equal
+			 * @param first string to compare
+			 * @param second string to compare
+			 * @note it ignores case
+			 */
+			static bool iequal(const dodoString &first, const dodoString &second);
+	};
 };
 
 #endif

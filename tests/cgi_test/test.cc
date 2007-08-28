@@ -10,7 +10,7 @@ using namespace std;
 int main(int argc, char **argv)
 {		
 	///first type
-//	dodoAssocArr head;
+//	dodoStringMapContents head;
 //	head["Content-type"] = "text/html";
 //	cgiTools cgi(false,head);
 	
@@ -44,13 +44,13 @@ int main(int argc, char **argv)
 		arr.push_back("three");
 		cgip.assign("arr",arr);
 		
-		dodoAssocArr arr1;
+		dodoStringMapContents arr1;
 		arr1["one"] = "one";
 		arr1["two"] = "two";
 		arr1["three"] = "three";
 		cgip.assign("arr1",arr1);
 		
-		dodoArray<dodoAssocArr> arr2;
+		dodoArray<dodoStringMapContents> arr2;
 		arr2.push_back(arr1);
 		arr1["one"] = "three";
 		arr2.push_back(arr1);

@@ -75,13 +75,13 @@
 		sprintf(port,"%d", dbInfo.port);
 		
 		conn = PQsetdbLogin(
-						dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
+						dbInfo.host.size() == 0?NULL:dbInfo.host.c_str(),
 						port,
 						NULL,
 						NULL,
-						dbInfo.db.size()==0?NULL:dbInfo.db.c_str(),
-						dbInfo.user.size()==0?NULL:dbInfo.user.c_str(),
-						dbInfo.password.size()==0?NULL:dbInfo.password.c_str());
+						dbInfo.db.size() == 0?NULL:dbInfo.db.c_str(),
+						dbInfo.user.size() == 0?NULL:dbInfo.user.c_str(),
+						dbInfo.password.size() == 0?NULL:dbInfo.password.c_str());
 						
 		int status = PQstatus(conn);
 		
@@ -600,7 +600,7 @@
 			
 			for (j=0;j<fieldsNum;++j)
 			{
-				if (PQgetisnull(pgResult, i, j)==1)
+				if (PQgetisnull(pgResult, i, j) == 0)
 					rowPart.assign("NULL");
 				else
 				{
@@ -610,7 +610,7 @@
 						rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));					
 				}
 
-				rowFieldsPart.realArr[PQfname(pgResult, i)] = rowPart;
+				rowFieldsPart.contents[PQfname(pgResult, i)] = rowPart;
 			}
 			
 			rowsFields.push_back(rowFieldsPart);

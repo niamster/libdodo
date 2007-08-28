@@ -362,7 +362,7 @@ flushSTD::inputterInfo()
 	
 	socklen_t len = sizeof(sockaddr_in6);
 	
-	if (::getpeername(1,&sa,&len)==-1)
+	if (::getpeername(1,&sa,&len) == 1)
 		#ifndef NO_EX
 		{
 			if (errno!=ENOTSOCK)
@@ -461,21 +461,21 @@ flushSTD::block(bool flag)
 		block[2] &= ~O_NONBLOCK;
 	}
 	
-	if (fcntl(0, F_SETFL, block[0])==-1)
+	if (fcntl(0, F_SETFL, block[0]) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif		
 	
-	if (fcntl(1, F_SETFL, block[1])==-1)
+	if (fcntl(1, F_SETFL, block[1]) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
 			return false;		
 		#endif		
 		
-	if (fcntl(2, F_SETFL, block[2])==-1)
+	if (fcntl(2, F_SETFL, block[2]) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else

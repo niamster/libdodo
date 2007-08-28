@@ -169,11 +169,11 @@
 		type = a_type;
 		
 		mysql_ssl_set(mysql,
-		options.key.size()==0?NULL:options.key.c_str(),
-		options.cert.size()==0?NULL:options.cert.c_str(),
-		options.ca.size()==0?NULL:options.ca.c_str(),
-		options.capath.size()==0?NULL:options.capath.c_str(),
-		options.cipher.size()==0?NULL:options.cipher.c_str());		
+		options.key.size() == 0?NULL:options.key.c_str(),
+		options.cert.size() == 0?NULL:options.cert.c_str(),
+		options.ca.size() == 0?NULL:options.ca.c_str(),
+		options.capath.size() == 0?NULL:options.capath.c_str(),
+		options.cipher.size() == 0?NULL:options.cipher.c_str());		
 	}	
 	//-------------------------------------------------------------------
 	
@@ -194,12 +194,12 @@
 		mysql = mysql_init(NULL);
 		
 		if (!mysql_real_connect(mysql,
-			dbInfo.host.size()==0?NULL:dbInfo.host.c_str(),
-			dbInfo.user.size()==0?NULL:dbInfo.user.c_str(),
-			dbInfo.password.size()==0?NULL:dbInfo.password.c_str(),
-			dbInfo.db.size()==0?NULL:dbInfo.db.c_str(),
+			dbInfo.host.size() == 0?NULL:dbInfo.host.c_str(),
+			dbInfo.user.size() == 0?NULL:dbInfo.user.c_str(),
+			dbInfo.password.size() == 0?NULL:dbInfo.password.c_str(),
+			dbInfo.db.size() == 0?NULL:dbInfo.db.c_str(),
 			dbInfo.port,
-			dbInfo.path.size()==0?NULL:dbInfo.path.c_str(),
+			dbInfo.path.size() == 0?NULL:dbInfo.path.c_str(),
 			type))
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql),__LINE__,__FILE__);
@@ -398,7 +398,7 @@
 			
 			for (j=0;j<numFields;++j)
 			{
-				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL", mysqlRow[j]?length[j]:4);
+				rowPart.assign(mysqlRow[j] != NULL?mysqlRow[j]:"NULL", mysqlRow[j]?length[j]:4);
 				if (preventEscaping)
 					rowsPart.push_back(rowPart);
 				else
@@ -637,11 +637,11 @@
 			
 			for (j=0;j<numFields;++j)
 			{
-				rowPart.assign((mysqlRow[j]!=NULL)?mysqlRow[j]:"NULL", mysqlRow[j]?length[j]:4);
+				rowPart.assign(mysqlRow[j] != NULL?mysqlRow[j]:"NULL", mysqlRow[j]?length[j]:4);
 				if (preventEscaping)
-					rowFieldsPart.realArr[mysqlFields[j].name] = rowPart;
+					rowFieldsPart.contents[mysqlFields[j].name] = rowPart;
 				else
-					rowFieldsPart.realArr[mysqlFields[j].name] = unescapeFields(rowPart);
+					rowFieldsPart.contents[mysqlFields[j].name] = unescapeFields(rowPart);
 			}
 			
 			rowsFields.push_back(rowFieldsPart);

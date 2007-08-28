@@ -239,7 +239,7 @@
 
 		getNodeInfo(node, sample);
 		
-		getAttributes(definition, node, sample.attributes.realArr);
+		getAttributes(definition, node, sample.attributes.contents);
 		
 		if (node->children == NULL)
 		{
@@ -253,7 +253,7 @@
 		{
 			std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (;i!=j;++i)
-				sample.children.realArr[i->first] = parse(i->second, node->children, definition.chLimit);
+				sample.children.contents[i->first] = parse(i->second, node->children, definition.chLimit);
 		}
 		else
 		{
@@ -273,16 +273,16 @@
 												
 					getNodeInfo(node, one);
 					
-					getAttributes(node, one.attributes.realArr);		
+					getAttributes(node, one.attributes.contents);		
 					
 					if (node->children == NULL)
 						one.empty = true;
 					
 					one.CDATA = isCDATA(node);
 					
-					one.children.realArr[(char *)node->name] = parse(node->children);
+					one.children.contents[(char *)node->name] = parse(node->children);
 					
-					sample.children.realArr[(char *)node->name].push_back(one);
+					sample.children.contents[(char *)node->name].push_back(one);
 					
 					initNode(one);
 					
@@ -329,7 +329,7 @@
 			
 			if (definition.ns.size() > 0)
 			{
-				if (node->ns==NULL)
+				if (node->ns == NULL)
 				{
 					node = node->next;
 					continue;
@@ -351,7 +351,7 @@
 			initNode(sample);
 		
 			getNodeInfo(node, sample);
-			getAttributes(definition, node, sample.attributes.realArr);
+			getAttributes(definition, node, sample.attributes.contents);
 					
 			if (node->children == NULL)
 				sample.empty = true;
@@ -362,7 +362,7 @@
 			{
 				std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 				for (;i!=j;++i)
-					sample.children.realArr[i->first] = parse(i->second, node->children, definition.chLimit);
+					sample.children.contents[i->first] = parse(i->second, node->children, definition.chLimit);
 				
 			}
 			else
@@ -381,16 +381,16 @@
 													
 						getNodeInfo(subNode, one);
 						
-						getAttributes(subNode, one.attributes.realArr);
+						getAttributes(subNode, one.attributes.contents);
 								
 						if (subNode->children == NULL)
 							one.empty = true;
 						
 						one.CDATA = isCDATA(subNode);
 						
-						one.children.realArr[(char *)subNode->name] = parse(subNode->children);
+						one.children.contents[(char *)subNode->name] = parse(subNode->children);
 						
-						sample.children.realArr[(char *)subNode->name].push_back(one);
+						sample.children.contents[(char *)subNode->name].push_back(one);
 						
 						initNode(one);
 						
@@ -422,7 +422,7 @@
 	void 
 	xmlTools::getAttributes(const __xmlNodeDef &definition, 
 						const xmlNodePtr node,
-						dodoAssocArr &attributes)
+						dodoStringMapContents &attributes)
 	{
 		attribute = node->properties;
 		
@@ -487,7 +487,7 @@
 
 	void 
 	xmlTools::getAttributes(const xmlNodePtr node, 
-							dodoAssocArr &attributes)
+							dodoStringMapContents &attributes)
 	{
 		attribute = node->properties;
 		
@@ -550,8 +550,8 @@
 			#endif		
 			
 		return __xmlInfo(document->version!=NULL?(char *)document->version:__string__,
-		document->encoding!=NULL?(char *)document->encoding:__string__,
-		(document->children!=NULL && document->children->name!=NULL)?(char *)document->children->name:__string__,
+		document->encoding != NULL?(char *)document->encoding:__string__,
+		(document->children != NULL && document->children->name != NULL)?(char *)document->children->name:__string__,
 		document->compression);
 	}
 
@@ -593,14 +593,14 @@
 										
 			getNodeInfo(node, one);
 			
-			getAttributes(node, one.attributes.realArr);
+			getAttributes(node, one.attributes.contents);
 					
 			if (node->children == NULL)
 				one.empty = true;
 			
 			one.CDATA = isCDATA(node);
 			
-			one.children.realArr[(char *)node->name] = parse(node->children);
+			one.children.contents[(char *)node->name] = parse(node->children);
 			
 			sample.push_back(one);
 			

@@ -810,9 +810,9 @@ tools::trim(const dodoString &data,
 		strm.zfree = Z_NULL;
 		strm.opaque = Z_NULL;
 		
-		if ( (ret=deflateInit2(&strm, level, Z_DEFLATED, 15, level, type))<0)
+		if ( (ret=deflateInit2(&strm, level, Z_DEFLATED, 15, level, type)) < 0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS, TOOLS_ZCOMPRESS, ERR_ZLIB, ret, strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS, TOOLS_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL?"":strm.msg,__LINE__,__FILE__);
 			#else
 				return buffer;
 			#endif
@@ -833,7 +833,7 @@ tools::trim(const dodoString &data,
 			{
 				delete [] byteBuf;
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_TOOLS, TOOLS_ZCOMPRESS, ERR_ZLIB, ret, strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_TOOLS, TOOLS_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL?"":strm.msg,__LINE__,__FILE__);
 				#else
 					return buffer;
 				#endif
@@ -841,7 +841,7 @@ tools::trim(const dodoString &data,
 				
 			strBuf.append((char *)byteBuf, ZLIB_CHUNK-strm.avail_out);
 		}
-		while (strm.avail_out==0);
+		while (strm.avail_out == 0);
 		
 		deflateEnd(&strm);
 		delete [] byteBuf;
@@ -866,7 +866,7 @@ tools::trim(const dodoString &data,
 		
 		if ( (ret=inflateInit2(&strm, 15))<0)
 			#ifndef NO_EX
-				throw baseEx(ERRMODULE_TOOLS, TOOLS_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+				throw baseEx(ERRMODULE_TOOLS, TOOLS_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL?"":strm.msg,__LINE__,__FILE__);
 			#else
 				return buffer;
 			#endif
@@ -888,7 +888,7 @@ tools::trim(const dodoString &data,
 			{
 				delete [] byteBuf;
 				#ifndef NO_EX
-					throw baseEx(ERRMODULE_TOOLS, TOOLS_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg==NULL?"":strm.msg,__LINE__,__FILE__);
+					throw baseEx(ERRMODULE_TOOLS, TOOLS_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL?"":strm.msg,__LINE__,__FILE__);
 				#else
 					return buffer;
 				#endif
@@ -896,7 +896,7 @@ tools::trim(const dodoString &data,
 				
 			strBuf.append((char *)byteBuf, ZLIB_CHUNK-strm.avail_out);
 		}
-		while (strm.avail_out==0); 
+		while (strm.avail_out == 0); 
 
 		inflateEnd(&strm);
 		delete [] byteBuf;
@@ -1347,8 +1347,8 @@ tools::_encodeBase64(unsigned char in[3],
 {
     out[0] = base64EncodeTr[in[0] >> 2];
     out[1] = base64EncodeTr[((in[0]&0x03) << 4) | ((in[1]&0xf0) >> 4)];
-    out[2] = (unsigned char)(len>1?base64EncodeTr[((in[1]&0x0f) << 2) | ((in[2]&0xc0) >> 6) ]:'=');
-    out[3] = (unsigned char)(len>2?base64EncodeTr[in[2]&0x3f ]:'=');    
+    out[2] = (unsigned char)(len > 1?base64EncodeTr[((in[1]&0x0f) << 2) | ((in[2]&0xc0) >> 6) ]:'=');
+    out[3] = (unsigned char)(len > 2?base64EncodeTr[in[2]&0x3f ]:'=');    
 }
 
 //-------------------------------------------------------------------
@@ -1419,16 +1419,16 @@ tools::decodeBase64(const dodoString &string)
             while(k < j && v == 0) 
             {
                 v = string[k++];
-                v = (unsigned char)((v<43||v>122)?0:base64DecodeTr[v-43]);
+                v = (unsigned char)((v < 43 || v > 122)?0:base64DecodeTr[v - 43]);
                 if(v) 
-                    v = (unsigned char)((v == '$')?0:v-61);
+                    v = (unsigned char)(v == '$'?0:v - 61);
             }
             
             if(k < j) 
             {
                 ++len;
                 if(v)
-					in[i] = (unsigned char)(v-1);
+			in[i] = (unsigned char)(v - 1);
             }
             else
                 in[i] = 0;
@@ -1775,7 +1775,7 @@ tools::MD5Final(unsigned char digest[16],
 	}
 
 	index = (unsigned int)((context->count[0] >> 3) & 0x3f);
-	padLen = (index < 56) ? (56 - index) : (120 - index);
+	padLen = index < 56?56 - index:120 - index;
 	MD5Update(context, PADDING, padLen);
 
 	MD5Update(context, bits, 8);
@@ -1905,7 +1905,7 @@ tools::mail(const dodoString &host,
 	
 	unsigned short authType = 0;
 	
-	bool auth = (login.size()>0)?true:false;
+	bool auth = login.size() > 0?true:false;
 
 	int real_domain(PF_INET);
 	
@@ -1949,7 +1949,7 @@ tools::mail(const dodoString &host,
 		sa.sin6_scope_id = 0;
 		inet_pton(AF_INET6, host.c_str(),&sa.sin6_addr);
 		
-		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa))==-1)
+		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa)) == 1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else			
@@ -1963,7 +1963,7 @@ tools::mail(const dodoString &host,
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(),&sa.sin_addr);
 		
-		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa))==-1)
+		if (::connect(socket,(struct sockaddr *)&sa, sizeof(sa)) == 1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else			
@@ -1972,7 +1972,7 @@ tools::mail(const dodoString &host,
 	}
 	
 	int outSocketBuffer = TOOLS_SHORT_DATA_SIZE;
-	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF,&outSocketBuffer, sizeof(long))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF,&outSocketBuffer, sizeof(long)) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else

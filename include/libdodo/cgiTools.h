@@ -195,7 +195,7 @@ namespace dodo
 			 * 
 			 * @note you cant print headers after they have been printed with printHeaders method 
 			 */
-			cgiTools(bool silent=false, dodoAssocArr &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
+			cgiTools(bool silent=false, dodoStringMapContents &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 					
 			#ifdef FCGI_EXT		
 					
@@ -210,7 +210,7 @@ namespace dodo
 				 * 
 				 * @note you cant print headers after they have been printed with printHeaders method 
 				 */
-				cgiTools(cgiFastSTD *cf, bool silent=false, dodoAssocArr &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
+				cgiTools(cgiFastSTD *cf, bool silent=false, dodoStringMapContents &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 			
 			#endif
 			
@@ -264,7 +264,7 @@ namespace dodo
 			 */
 			virtual void printHeaders() const;
 			
-			dodoAssocArr HEADERS;///< array of header that will be printed with printHeaders method
+			dodoStringMapContents HEADERS;///< array of header that will be printed with printHeaders method
 			
 			/**
 			 * sets cookie. the cookies are printed with printHeaders method
@@ -305,7 +305,7 @@ namespace dodo
 			/**
 			 * initiates headers with given headers; printed with printHeaders method
 			 */
-			virtual void initHeaders(dodoAssocArr &headers);
+			virtual void initHeaders(dodoStringMapContents &headers);
 
 			/**
 			 * processes :
@@ -316,7 +316,7 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(dodoAssocArr &val, const dodoString &string, const char *delim="&");
+			virtual void make(dodoStringMapContents &val, const dodoString &string, const char *delim="&");
 		
 		private:	
 		

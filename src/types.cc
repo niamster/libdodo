@@ -27,11 +27,11 @@
 namespace dodo
 {
 
-	const dodoString __string__;
+	dodoString __string__;
 	
 	dodoStringArr __stringarray__;
 	
-	dodoAssocArr __assocarray__;
+	dodoStringMapContents __assocarray__;
 	
 	dodoArray<dodoStringArr> __stringarrayvector__;
 	

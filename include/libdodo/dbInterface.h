@@ -134,7 +134,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const dodoString &table, const dodoAssocArr &fields)=0;
+			virtual void insert(const dodoString &table, const dodoStringMapContents &fields)=0;
 			
 			/**
 			 * @param table is table name
@@ -142,7 +142,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const dodoString &table, const dodoArray<dodoAssocArr> &fields)=0;
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringMapContents> &fields)=0;
 			
 			/**
 			 * @param table is table name
@@ -171,7 +171,7 @@ namespace dodo
 			 * 			value => field's value
 			 * @param where is where statement for request
 		     */
-			virtual void update(const dodoString &table, const dodoAssocArr &fields, const dodoString &where=__string__)=0;			
+			virtual void update(const dodoString &table, const dodoStringMapContents &fields, const dodoString &where=__string__)=0;			
 			
 			/**
 			 * @param table is table name

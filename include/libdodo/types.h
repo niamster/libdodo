@@ -51,9 +51,9 @@ namespace dodo
 
 	typedef dodoArray<dodoString> dodoStringArr;///< array of strings
 
-	typedef std::map<dodoString, dodoString> dodoAssocArr;///< array where key=>string; value=>string; toy may access like arr["key"]="value";
-
 	typedef dodoMap<dodoString> dodoStringMap;///< hash of strings
+	
+	typedef dodoStringMap::contentsType dodoStringMapContents;///< contents of dodoStringMap
 	
 	typedef dodoArray<dodoStringMap> dodoStringMapArr;///< array of hashes of string
 	
@@ -66,11 +66,12 @@ namespace dodo
 	 * diferent predifined constants
 	 */
 
-	extern const dodoString __string__;
+	//FIXME: namings
+	extern dodoString __string__;
 
 	extern dodoStringArr __stringarray__;
 
-	extern dodoAssocArr __assocarray__;
+	extern dodoStringMapContents __assocarray__;
 
 	extern dodoArray<dodoStringArr> __stringarrayvector__;
 

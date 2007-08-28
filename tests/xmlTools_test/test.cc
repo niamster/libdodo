@@ -43,8 +43,8 @@ int main(int argc, char **argv)
 			
 			if (node.children.size()>0)
 			{
-				cout << node.children.realArr.begin()->first << endl;
-				cout << node.children.realArr.begin()->second.size() << endl;
+				cout << node.children.contents.begin()->first << endl;
+				cout << node.children.contents.begin()->second.size() << endl;
 			}
 			
 			if (node.children["bebe"].size() > 0)

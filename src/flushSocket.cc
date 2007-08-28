@@ -576,7 +576,7 @@ flushSocket::bindNListen(const dodoString &host,
 	#endif
 	
 	int sockFlag(1);
-	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR,&sockFlag, sizeof(int))==-1)
+	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR,&sockFlag, sizeof(int)) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else

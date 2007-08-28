@@ -31,11 +31,23 @@
 
 namespace dodo
 {
+
+		template <typename keyType> 
+		class cmp
+		{
+			public:
+				
+				typedef bool (*cmpFunc)(const keyType &, const keyType &);
+		};
+
 		/**
 		 * @class dodoMap is a duck for std::map<dodoString, any_type> but controlling varName
 		 * if varName's value is not defined - empty anyType will be returned
 		 */
-		template <typename valueType, typename keyType=dodoString>
+		template <typename valueType, 
+					typename keyType=dodoString, 
+					typename cmp<keyType>::cmpFunc iCaseCmp=dodoString::iequal, 
+					typename cmp<keyType>::cmpFunc caseCmp=dodoString::equal>
 		class dodoMap
 		{
 						
@@ -45,7 +57,15 @@ namespace dodo
 				 * copy constructor
 				 */
 				dodoMap(const dodoMap &dodoM) : icase(dodoM.icase), 
-													realArr(dodoM.realArr)
+													contents(dodoM.contents)
+				{
+				}
+			
+				/**
+				 * constructor
+				 */
+				dodoMap(std::map<keyType, valueType> a_contents): icase(false),
+																	contents(a_contents)
 				{
 				}
 			
@@ -65,18 +85,18 @@ namespace dodo
 				valueType &
 				operator[](const keyType &varName)
 				{
-					typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
+					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 					
 					if (icase)
-						cmpFunc=strcasecmp;
+						cmpFunc = iCaseCmp;
 					else
-						cmpFunc=strcmp;
+						cmpFunc = caseCmp;
 					
 					for (;i!=j;++i)
-						if (cmpFunc(varName.c_str(), i->first.c_str()) == 0)
+						if (cmpFunc(varName, i->first))
 							return i->second;		
 					
-					std::pair<typename std::map<keyType, valueType>::iterator, bool> res=realArr.insert(make_pair(varName, type));
+					std::pair<typename std::map<keyType, valueType>::iterator, bool> res = contents.insert(make_pair(varName, type));
 					
 					return res.first->second;				
 				}
@@ -90,16 +110,16 @@ namespace dodo
 				{
 					if (icase)
 					{
-						typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
+						typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 						
 						for (;i!=j;++i)
-							if (strcasecmp(varName.c_str(), i->first.c_str()) == 0)
+							if (iCaseCmp(varName, i->first))
 								return i;		
 						
 						return j;
 					}
 					else
-						return realArr.find(varName);				
+						return contents.find(varName);				
 				}
 							
 				/**
@@ -111,16 +131,16 @@ namespace dodo
 				{
 					if (icase)
 					{
-						typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
+						typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 						
 						for (;i!=j;++i)
-							if (strcasecmp(varName.c_str(), i->first.c_str()) == 0)
+							if (iCaseCmp(varName, i->first))
 								return i;		
 						
 						return j;
 					}
 					else
-						return realArr.find(varName);				
+						return contents.find(varName);				
 				}
 								
 				/**
@@ -132,7 +152,7 @@ namespace dodo
 				insert(const keyType &varName, 
 						const valueType &varVal)
 				{
-					realArr.insert(make_pair(varName, varVal));
+					contents.insert(make_pair(varName, varVal));
 				}
 				
 				/**
@@ -141,7 +161,7 @@ namespace dodo
 				typename std::map<keyType, valueType>::const_iterator
 				begin() const
 				{
-					return realArr.begin();
+					return contents.begin();
 				}
 				
 				/**
@@ -150,7 +170,7 @@ namespace dodo
 				typename std::map<keyType, valueType>::const_iterator
 				end() const
 				{
-					return realArr.end();
+					return contents.end();
 				}
 				
 				/**
@@ -159,7 +179,7 @@ namespace dodo
 				typename std::map<keyType, valueType>::iterator
 				begin()
 				{
-					return realArr.begin();
+					return contents.begin();
 				}
 				
 				/**
@@ -168,16 +188,16 @@ namespace dodo
 				typename std::map<keyType, valueType>::iterator
 				end()
 				{
-					return realArr.end();
+					return contents.end();
 				}
 				
 				/**
-				 * @return true if realArr is empty
+				 * @return true if contents is empty
 				 */
 				bool
 				empty()
 				{
-					return realArr.empty();
+					return contents.empty();
 				}
 				
 				/**
@@ -186,16 +206,21 @@ namespace dodo
 				int 
 				size()
 				{
-					return realArr.size();
+					return contents.size();
 				}
 				
 				/**
-				 * clears realArr
+				 * clears contents
 				 */
 				void
 				clear()
 				{
-					realArr.clear();
+					contents.clear();
+				}
+				
+				operator const std::map<keyType, valueType>&()
+				{
+					return contents;
 				}
 				
 				/**
@@ -204,15 +229,15 @@ namespace dodo
 				bool
 				isset(const keyType &varName)
 				{
-					typename std::map<keyType, valueType>::iterator i(realArr.begin()), j(realArr.end());
+					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 					
 					if (icase)
-						cmpFunc=strcasecmp;
+						cmpFunc = iCaseCmp;
 					else
-						cmpFunc=strcmp;
+						cmpFunc = caseCmp;
 					
 					for (;i!=j;++i)
-						if (cmpFunc(varName.c_str(), i->first.c_str()) == 0)
+						if (cmpFunc(varName, i->first))
 							return true;		
 					
 					return false;				 	
@@ -220,14 +245,15 @@ namespace dodo
 				
                 typedef typename std::map<keyType, valueType>::const_iterator const_iterator;
                 typedef typename std::map<keyType, valueType>::iterator iterator;
+                typedef typename std::map<keyType, valueType> contentsType;
 
-				std::map<keyType, valueType> realArr;///< real array
+				std::map<keyType, valueType> contents;///< real array
 				
 				valueType type;///< copy of typed
-								
+				
 			private:
 				
-				int(*cmpFunc)(const char *, const char *);
+				bool (*cmpFunc)(const keyType &, const keyType &);///< compare function
 		};
 };
 

@@ -697,13 +697,13 @@
 						{
 							case SQLITE_INTEGER:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::lToString(sqlite3_column_int(liteStmt, i));
+								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = tools::lToString(sqlite3_column_int(liteStmt, i));
 								
 								break;
 								
 							case SQLITE_FLOAT:
 								
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = tools::dToString(sqlite3_column_double(liteStmt, i));
+								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = tools::dToString(sqlite3_column_double(liteStmt, i));
 								
 								break;
 								
@@ -711,9 +711,9 @@
 								
 								rowPart = (const char *)sqlite3_column_text(liteStmt, i);
 								if (preventEscaping)
-									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = rowPart;
+									rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = rowPart;
 								else
-									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
+									rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
 								
 								break;
 								
@@ -721,16 +721,16 @@
 								
 								rowPart.assign((const char *)sqlite3_column_blob(liteStmt, i), sqlite3_column_bytes(liteStmt, i));
 								if (preventEscaping)
-									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = rowPart;
+									rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = rowPart;
 								else
-									rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
+									rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
 								
 								break;
 								
 							case SQLITE_NULL:
 							default:
 							
-								rowFieldsPart.realArr[sqlite3_column_name(liteStmt, i)] = "NULL";
+								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = "NULL";
 								
 								break;	
 						}

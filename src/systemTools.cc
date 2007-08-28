@@ -831,7 +831,7 @@ systemTools::getGroupPID(int pid)
 #endif			
 systemTools::setGroupPID(int gpid)
 {
-	if (setpgid(0, gpid)==-1)
+	if (setpgid(0, gpid) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGROUPPID, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
@@ -854,7 +854,7 @@ systemTools::setGroupPID(int gpid)
 systemTools::setGroupPID(int pid,
 						int gpid)
 {
-	if (setpgid(pid, gpid)==-1)
+	if (setpgid(pid, gpid) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGROUPPID, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1142,7 +1142,7 @@ bool
 systemTools::isSignalHandled(long signal)
 {
 	struct sigaction act;
-	if (sigaction(systemTools::toRealSignal(signal), NULL,&act)==-1)
+	if (sigaction(systemTools::toRealSignal(signal), NULL,&act) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1208,7 +1208,7 @@ systemTools::unsetSignalHandler(long signal)
 	struct sigaction act;
 	act.sa_sigaction = NULL;
 		
-	if (sigaction(systemTools::toRealSignal(signal),&act, NULL)==-1)
+	if (sigaction(systemTools::toRealSignal(signal),&act, NULL) == 1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_UNSETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
@@ -1324,7 +1324,7 @@ systemTools::unsetSignalHandler(long signal)
 		else
 			sigMask(&act.sa_mask, mod.blockSignals);
 		
-		if (sigaction(systemTools::toRealSignal(signal),&act, NULL)==-1)
+		if (sigaction(systemTools::toRealSignal(signal),&act, NULL) == 1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else
@@ -1408,7 +1408,7 @@ systemTools::unsetSignalHandler(long signal)
 		else
 			sigMask(&act.sa_mask, mod.blockSignals);
 		
-		if (sigaction(systemTools::toRealSignal(mod.signal),&act, NULL)==-1)
+		if (sigaction(systemTools::toRealSignal(mod.signal),&act, NULL) == 1)
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 			#else

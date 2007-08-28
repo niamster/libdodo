@@ -87,7 +87,7 @@ long
 timeTools::now()
 {
 	time_t tTime = ::time(NULL);
-	if (tTime==((time_t)-1))
+	if (tTime == (time_t)-1)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_NOW, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
@@ -196,7 +196,7 @@ timeTools::makeTime(long seconds,
 	timeInfo.day = tTime->tm_mday;
 	timeInfo.month = tTime->tm_mon+1;
 	timeInfo.year = tTime->tm_year;
-	timeInfo.daylight = (tTime->tm_isdst>0)?true:false;
+	timeInfo.daylight = tTime->tm_isdst > 0?true:false;
 		
 	return timeInfo;
 }

@@ -235,7 +235,7 @@ flushDiskTools::getGroupOwner(const dodoString &path)
 flushDiskTools::touch(const dodoString &path,
 				 int a_time)
 {
-	if (a_time==-1)
+	if (a_time == 1)
 		a_time = time(NULL);
 	
 	utimbuf temp = {a_time, a_time};
@@ -763,7 +763,7 @@ flushDiskTools::getFileContent(const dodoString &path)
 				return retS;
 			#endif
 			
-		if (fread(buffer, INSIZE, 1, file)==0)
+		if (fread(buffer, INSIZE, 1, file) == 0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -799,7 +799,7 @@ flushDiskTools::getFileContent(const dodoString &path)
 				return retS;
 			#endif
 					
-		if (fread(buffer, rest, 1, file)==0)
+		if (fread(buffer, rest, 1, file) == 0)
 			#ifndef NO_EX
 				switch (errno)
 				{
@@ -932,7 +932,7 @@ flushDiskTools::copy(const dodoString &from,
 			
 		strcpy(tempB, to.c_str());
 		char *toT = ::basename(tempB);
-		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.size()-1] == FILE_DELIM)
+		if (strcmp(toT,"..") == 0  || strcmp(toT,".") == 0 || a_to[a_to.size()-1] == FILE_DELIM)
 			to = toT + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 	
@@ -988,7 +988,7 @@ flushDiskTools::copy(const dodoString &from,
 	{
 		if (S_ISDIR(stFrom.st_mode))
 		{
-			if (::mkdir(to.c_str(), stFrom.st_mode)==-1)
+			if (::mkdir(to.c_str(), stFrom.st_mode) == 1)
 				#ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__, to);
 				#else
@@ -1018,7 +1018,7 @@ flushDiskTools::copy(const dodoString &from,
 					#endif					
 			}
 			else
-				if (::mknod(to.c_str(), stFrom.st_mode, 0)==-1)
+				if (::mknod(to.c_str(), stFrom.st_mode, 0) == 1)
 					#ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__, to);
 					#else
@@ -1066,7 +1066,7 @@ flushDiskTools::copy(const dodoString &from,
 					return false;
 				#endif
 							
-			if (fread(buffer, INSIZE, 1, fromFile)==0)
+			if (fread(buffer, INSIZE, 1, fromFile) == 0)
 				#ifndef NO_EX
 					switch (errno)
 					{
@@ -1091,7 +1091,7 @@ flushDiskTools::copy(const dodoString &from,
 					}
 				#endif
 	
-			if (fwrite(buffer, INSIZE, 1, toFile)==0)
+			if (fwrite(buffer, INSIZE, 1, toFile) == 0)
 				#ifndef NO_EX
 					switch (errno)
 					{
@@ -1133,7 +1133,7 @@ flushDiskTools::copy(const dodoString &from,
 					return false;
 				#endif
 									
-			if (fread(buffer, rest, 1, fromFile)==0)
+			if (fread(buffer, rest, 1, fromFile) == 0)
 				#ifndef NO_EX
 					switch (errno)
 					{
@@ -1158,7 +1158,7 @@ flushDiskTools::copy(const dodoString &from,
 					}
 				#endif
 	
-			if (fwrite(buffer, rest, 1, toFile)==0)
+			if (fwrite(buffer, rest, 1, toFile) == 0)
 				#ifndef NO_EX
 					switch (errno)
 					{
@@ -1222,7 +1222,7 @@ flushDiskTools::copyDir(const dodoString &from,
 			
 		strcpy(tempB, to.c_str());
 		char *toT = ::basename(tempB);
-		if (strcmp(toT,"..")==0 || strcmp(toT,".")==0 || a_to[a_to.size()-1] == FILE_DELIM)
+		if (strcmp(toT,"..") == 0 || strcmp(toT,".") == 0 || a_to[a_to.size()-1] == FILE_DELIM)
 			to = toT + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 	
