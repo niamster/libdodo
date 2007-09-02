@@ -51,32 +51,23 @@ dodoString::dodoString(const dodoString &str) : std::string(str)
 //-------------------------------------------------------------------
 
 dodoString::dodoString(const char *str, 
-						size_type length) : std::string(str, length)
+						unsigned long  length) : std::string(str, length)
 {
 }
 
 //-------------------------------------------------------------------
 
 dodoString::dodoString(const std::string &str, 
-						size_type index, 
-						size_type length) : std::string(str, index, length)
+						unsigned long  index, 
+						unsigned long  length) : std::string(str, index, length)
 {
 }
 
 //-------------------------------------------------------------------
 
-dodoString::dodoString(size_type length, 
+dodoString::dodoString(unsigned long  length, 
 						const char &ch) : std::string(length, ch)
 {
-}
-
-//-------------------------------------------------------------------
-
-template<typename inputIterator>
-dodoString::dodoString(inputIterator start, 
-						inputIterator end) : std::string(start, end)
-{
-	
 }
 
 //-------------------------------------------------------------------
@@ -98,3 +89,157 @@ dodoString::iequal(const dodoString &first,
 }
 
 //-------------------------------------------------------------------
+
+dodoString 
+dodoString::format(const dodoString &format, ...)
+{
+	unsigned long length = format.size() * 3;
+	char *str = new char[length];
+	va_list ap;
+	
+	vsnprintf(str, length, format.c_str(), ap);
+	
+	std::string res = str;
+	
+	delete [] str;
+	
+	return res;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::lToString(long number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%ld", number);
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::iToString(int number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%d", number);
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fToString(float number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%f", number);
+	
+	return temp;	
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::dToString(double number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%f", number);
+	
+	return temp;	
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::lTrim(const dodoString &data, 
+			char symbol)
+{
+	int size = data.size(), i(0);
+	
+	for (;i<size;++i)
+		if (data[i] != symbol)
+			break;
+	
+	return data.substr(i, size-i);		
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::rTrim(const dodoString &data, 
+			char symbol)
+{
+	int i(data.size()-1);
+	
+	for (;i>=0;--i)
+		if (data[i] != symbol)
+			break;
+	
+	return data.substr(0, i+1);	
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::rTrim(const dodoString &data, 
+			const char symbols[], 
+			int symCount)
+{
+	int i(data.size()-1), j, empty;
+	
+	for (;i>=0;--i)
+	{
+		for (j=0, empty=0;j<symCount;++j)
+			if (data[i] != symbols[j])
+				++empty;
+		if (empty == symCount)
+			break;
+	}
+	
+	return data.substr(0, i+1);
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::lTrim(const dodoString &data, 
+			const char symbols[], 
+			int symCount)
+{
+	int size = data.size(), i(0), empty, j;
+	
+	for (;i<size;++i)
+	{
+		for (j=0, empty=0;j<symCount;++j)
+			if (data[i] != symbols[j])
+				++empty;
+		if (empty == symCount)
+			break;
+	}
+	
+	return data.substr(i, size-i);		
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::trim(const dodoString &data, 
+			const char symbols[], 
+			int symCount)
+{
+	return rTrim(lTrim(data, symbols, symCount), symbols, symCount);
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::trim(const dodoString &data, 
+			char symbol)
+{
+	return rTrim(lTrim(data, symbol), symbol);
+}
+
+//-------------------------------------------------------------------
+

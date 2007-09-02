@@ -51,7 +51,7 @@ namespace dodo
 
 	typedef dodoArray<dodoString> dodoStringArr;///< array of strings
 
-	typedef dodoMap<dodoString> dodoStringMap;///< hash of strings
+	typedef dodoMap<dodoString, dodoString, dodoString::iequal, dodoString::equal> dodoStringMap;///< hash of strings
 	
 	typedef dodoStringMap::contentsType dodoStringMapContents;///< contents of dodoStringMap
 	

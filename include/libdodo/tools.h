@@ -189,89 +189,6 @@ namespace dodo
 			static double dRandom();
 			
 			/**
-			 * removes symbols from the end and from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbol is symbol to remove
-			 */
-			static dodoString trim(const dodoString &data, const char symbol=' ');
-			
-			/**
-			 * @return true if needle found in array
-			 * @param arr is where to search
-			 * @param needle is what to search for
-			 * @param icase indicates whether to use or not caseless search
-			 */
-			static bool isInArray(const dodoStringArr &arr, const dodoString &needle, bool icase);			
-						
-			/**
-			 * removes symbols[from given array] from the end and from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbols is an array of symbols to remove
-			 * @param symCount is amount of symbols in @param symbols
-			 */
-			static dodoString trim(const dodoString &data, const char symbols[], int symCount);
-						
-			/**
-			 * removes symbols[from given array] from the end of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbols is an array of symbols to remove
-			 * @param symCount is amount of symbols in @param symbols
-			 */
-			static dodoString rTrim(const dodoString &data, const char symbols[], int symCount);
-			
-			/**
-			 * removes symbols[from given array] from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbols is an array of symbols to remove
-			 * @param symCount is amount of symbols in @param symbols
-			 */
-			static dodoString lTrim(const dodoString &data, const char symbols[], int symCount);
-						
-			/**
-			 * removes symbols from the end of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbol is symbol to remove
-			 */
-			static dodoString rTrim(const dodoString &data, char symbol=' ');
-			
-			/**
-			 * removes symbols from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbol is symbol to remove
-			 */
-			static dodoString lTrim(const dodoString &data, char symbol=' ');
-						
-			/**
-			 * @return converted long to string
-			 * @param number is number to convert
-			 */
-			static dodoString lToString(long number);
-			
-			/**
-			 * @return converted int to string
-			 * @param number is number to convert
-			 */
-			static dodoString iToString(int number);
-			
-			/**
-			 * @return converted float to string
-			 * @param number is number to convert
-			 */
-			static dodoString fToString(float number);
-			
-			/**
-			 * @return converted double to string
-			 * @param number is number to convert
-			 */
-			static dodoString dToString(double number);
-			
-			/**
 			 * replaces nodes in string
 			 * @param needle indicates what to replace in string
 			 * @param replacement indicates with what to replace
@@ -285,7 +202,15 @@ namespace dodo
 			 * @param replacement indicates with what to replace
 			 * @param data specifies wher to replace
 			 */
-			static void replace(const dodoStringArr &needle, const dodoStringArr &replacement, dodoString &data);
+			static void replace(const dodoStringArr &needle, const dodoStringArr &replacement, dodoString &data);	
+			
+			/**
+			 * @return true if needle found in array
+			 * @param arr is where to search
+			 * @param needle is what to search for
+			 * @param icase indicates whether to use or not caseless search
+			 */
+			static bool isInArray(const dodoStringArr &arr, const dodoString &needle, bool icase);
 		
 			/**
 			 * @return array of strings made from string using separtator
@@ -473,12 +398,6 @@ namespace dodo
 			 * @param string indicates string for what generate hash
 			 */
 			static dodoString MD5Hex(const dodoString &string);
-			
-			/**
-			 * @return formated string
-			 * @param format represents format of the string   
-			 */
-			static dodoString format(const dodoString &format, ...);
 			
 			#ifdef BZIP2_EXT
 			

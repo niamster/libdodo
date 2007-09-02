@@ -388,13 +388,13 @@
 						{
 							case SQLITE_INTEGER:
 								
-								rowsPart.push_back(tools::lToString(sqlite3_column_int(liteStmt, i)));
+								rowsPart.push_back(dodoString::lToString(sqlite3_column_int(liteStmt, i)));
 								
 								break;
 								
 							case SQLITE_FLOAT:
 								
-								rowsPart.push_back(tools::dToString(sqlite3_column_double(liteStmt, i)));
+								rowsPart.push_back(dodoString::dToString(sqlite3_column_double(liteStmt, i)));
 								
 								break;
 								
@@ -697,13 +697,13 @@
 						{
 							case SQLITE_INTEGER:
 								
-								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = tools::lToString(sqlite3_column_int(liteStmt, i));
+								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = dodoString::lToString(sqlite3_column_int(liteStmt, i));
 								
 								break;
 								
 							case SQLITE_FLOAT:
 								
-								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = tools::dToString(sqlite3_column_double(liteStmt, i));
+								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = dodoString::dToString(sqlite3_column_double(liteStmt, i));
 								
 								break;
 								

@@ -584,7 +584,7 @@ dbBase::limit(unsigned int a_number)
 {
 	addFlag(qShift, 1<<DBADDREQUEST_LIMIT);
 
-	pre_limNumber = tools::lToString(a_number);
+	pre_limNumber = dodoString::lToString(a_number);
 }
 //-------------------------------------------------------------------
 
@@ -593,7 +593,7 @@ dbBase::offset(unsigned int a_number)
 {
 	addFlag(qShift, 1<<DBADDREQUEST_OFFSET);
 	
-	pre_limOffset = tools::lToString(a_number);
+	pre_limOffset = dodoString::lToString(a_number);
 }
 
 //-------------------------------------------------------------------

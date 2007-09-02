@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 			else
 				pr[i] = new systemThreads;
 
-			ids[i] = tools::lToString(i);
+			ids[i] = dodoString::lToString(i);
 			pos[i] = pr[i]->add(process,(void *)ids[i].c_str());
 		}
 		

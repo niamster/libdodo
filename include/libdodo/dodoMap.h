@@ -31,12 +31,17 @@
 
 namespace dodo
 {
-
+		/**
+		 * @class cmp defines cmpFunc 
+		 */
 		template <typename keyType> 
 		class cmp
 		{
 			public:
 				
+				/**
+				 * @typedef type of pointer on function to compare two values
+				 */
 				typedef bool (*cmpFunc)(const keyType &, const keyType &);
 		};
 
@@ -44,10 +49,10 @@ namespace dodo
 		 * @class dodoMap is a duck for std::map<dodoString, any_type> but controlling varName
 		 * if varName's value is not defined - empty anyType will be returned
 		 */
-		template <typename valueType, 
-					typename keyType=dodoString, 
-					typename cmp<keyType>::cmpFunc iCaseCmp=dodoString::iequal, 
-					typename cmp<keyType>::cmpFunc caseCmp=dodoString::equal>
+		template <typename keyType, 
+					typename valueType, 
+					typename cmp<keyType>::cmpFunc iCaseCmp, 
+					typename cmp<keyType>::cmpFunc caseCmp>
 		class dodoMap
 		{
 						
@@ -109,17 +114,17 @@ namespace dodo
 				find(const keyType &varName)
 				{
 					if (icase)
-					{
-						typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
-						
-						for (;i!=j;++i)
-							if (iCaseCmp(varName, i->first))
-								return i;		
-						
-						return j;
-					}
+						cmpFunc = iCaseCmp;
 					else
-						return contents.find(varName);				
+						cmpFunc = caseCmp;
+					
+					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
+					
+					for (;i!=j;++i)
+						if (cmpFunc(varName, i->first))
+							return i;		
+					
+					return j;				
 				}
 							
 				/**
@@ -130,17 +135,17 @@ namespace dodo
 				find(const keyType &varName) const
 				{
 					if (icase)
-					{
-						typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
-						
-						for (;i!=j;++i)
-							if (iCaseCmp(varName, i->first))
-								return i;		
-						
-						return j;
-					}
+						cmpFunc = iCaseCmp;
 					else
-						return contents.find(varName);				
+						cmpFunc = caseCmp;
+					
+					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
+					
+					for (;i!=j;++i)
+						if (cmpFunc(varName, i->first))
+							return i;		
+					
+					return j;		
 				}
 								
 				/**
@@ -243,9 +248,9 @@ namespace dodo
 					return false;				 	
 				}
 				
-                typedef typename std::map<keyType, valueType>::const_iterator const_iterator;
-                typedef typename std::map<keyType, valueType>::iterator iterator;
-                typedef typename std::map<keyType, valueType> contentsType;
+                typedef typename std::map<keyType, valueType>::const_iterator const_iterator;///< const iterator
+                typedef typename std::map<keyType, valueType>::iterator iterator;///< iterator
+                typedef typename std::map<keyType, valueType> contentsType;///< type of contents' map
 
 				std::map<keyType, valueType> contents;///< real array
 				

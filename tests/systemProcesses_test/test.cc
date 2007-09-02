@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 		std::string ids[amount];
 		for (int i=0;i<amount;++i)
 		{
-			ids[i] = tools::lToString(i);
+			ids[i] = dodoString::lToString(i);
 			pos[i] = pr.add(process,(void *)ids[i].c_str());
 		}
 		

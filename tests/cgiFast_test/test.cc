@@ -59,7 +59,7 @@ using namespace std;
 		}
 		catch(baseEx ex)
 		{
-			fcgi->print(ex.baseErrstr + " " + tools::lToString(ex.line));
+			fcgi->print(ex.baseErrstr + " " + dodoString::lToString(ex.line));
 		}	
 		
 		fcgi->print("\n\n\n!!!");
