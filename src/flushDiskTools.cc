@@ -730,14 +730,14 @@ flushDiskTools::getFileContent(const dodoString &path)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__, path);
 		#else
-			return __string__;		
+			return __dodostring__;		
 		#endif
 	
 	if (!S_ISREG(st.st_mode))
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR,__LINE__,__FILE__, path);
 		#else
-			return __string__;
+			return __dodostring__;
 		#endif	
 
 	FILE *file = fopen(path.c_str(),"r");			
@@ -745,7 +745,7 @@ flushDiskTools::getFileContent(const dodoString &path)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__, path);
 		#else
-			return __string__;
+			return __dodostring__;
 		#endif
 	
 	char buffer[INSIZE];
@@ -847,14 +847,14 @@ flushDiskTools::getFileContentArr(const dodoString &path)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__, path);
 		#else
-			return __stringarray__;		
+			return __dodostringarray__;		
 		#endif
 		
 	if (!S_ISREG(st.st_mode))
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENTARR, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR,__LINE__,__FILE__, path);
 		#else
-			return __stringarray__;
+			return __dodostringarray__;
 		#endif
 
 	FILE *file = fopen(path.c_str(),"r");
@@ -862,7 +862,7 @@ flushDiskTools::getFileContentArr(const dodoString &path)
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__, path);
 		#else
-			return __stringarray__;
+			return __dodostringarray__;
 		#endif
 		
 	char buffer[DISK_MAXLINELEN];	

@@ -120,6 +120,17 @@ dodoString::lToString(long number)
 //-------------------------------------------------------------------
 
 dodoString 
+dodoString::ulToString(unsigned long number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%ld", number);
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
 dodoString::iToString(int number)
 {
 	char temp[SIZEOFNUM];
@@ -127,6 +138,40 @@ dodoString::iToString(int number)
 	
 	return temp;
 }
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::uiToString(unsigned int number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%u", number);
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::sToString(short number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%sd", number);
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::usToString(unsigned short number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%sd", number);
+	
+	return temp;
+}
+
 
 //-------------------------------------------------------------------
 
@@ -146,6 +191,111 @@ dodoString::dToString(double number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp,"%f", number);
+	
+	return temp;	
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromL(long number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%ld", number);
+
+	*this = temp;
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromUL(unsigned long number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%ld", number);
+
+	*this = temp;
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromI(int number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%d", number);
+
+	*this = temp;
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromUI(unsigned int number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%u", number);
+
+	*this = temp;
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromS(short number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%sd", number);
+
+	*this = temp;
+	
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromUS(unsigned short number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%sd", number);
+
+	*this = temp;
+	
+	return temp;
+}
+
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromF(float number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%f", number);
+
+	*this = temp;
+	
+	return temp;	
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::fromD(double number)
+{
+	char temp[SIZEOFNUM];
+	sprintf(temp,"%f", number);
+
+	*this = temp;
 	
 	return temp;	
 }
@@ -243,3 +393,218 @@ dodoString::trim(const dodoString &data,
 
 //-------------------------------------------------------------------
 
+dodoString 
+dodoString::lTrim(char symbol)
+{
+	int size = this->size(), i(0);
+	
+	for (;i<size;++i)
+		if ((*this)[i] != symbol)
+			break;
+	
+	return this->substr(i, size-i);		
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::rTrim(char symbol)
+{
+	int i(this->size()-1);
+	
+	for (;i>=0;--i)
+		if ((*this)[i] != symbol)
+			break;
+	
+	return this->substr(0, i+1);	
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::rTrim(const char symbols[], 
+					int symCount)
+{
+	int i(this->size()-1), j, empty;
+	
+	for (;i>=0;--i)
+	{
+		for (j=0, empty=0;j<symCount;++j)
+			if ((*this)[i] != symbols[j])
+				++empty;
+		if (empty == symCount)
+			break;
+	}
+	
+	return this->substr(0, i+1);
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::lTrim(const char symbols[], 
+			int symCount)
+{
+	int size = this->size(), i(0), empty, j;
+	
+	for (;i<size;++i)
+	{
+		for (j=0, empty=0;j<symCount;++j)
+			if ((*this)[i] != symbols[j])
+				++empty;
+		if (empty == symCount)
+			break;
+	}
+	
+	return this->substr(i, size-i);		
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::trim(const char symbols[], 
+			int symCount)
+{
+	lTrim(symbols, symCount);
+	return rTrim(symbols, symCount);
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+dodoString::trim(char symbol)
+{
+	lTrim(symbol);
+	return rTrim(symbol);
+}
+
+//-------------------------------------------------------------------
+
+long 
+dodoString::toL()
+{
+	return atol(this->c_str());
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+dodoString::toUL()
+{
+	return strtoul(this->c_str(), NULL, 10);
+}
+
+//-------------------------------------------------------------------
+
+int 
+dodoString::toI()
+{
+	return atoi(this->c_str());
+}
+
+//-------------------------------------------------------------------
+
+unsigned int 
+dodoString::toUI()
+{
+	return (unsigned int)atol(this->c_str());
+}
+
+//-------------------------------------------------------------------
+
+short 
+dodoString::toS()
+{
+	return (short)atoi(this->c_str());
+}
+
+//-------------------------------------------------------------------
+
+unsigned short 
+dodoString::toUS()
+{
+	return (unsigned short)atoi(this->c_str());
+}
+
+//-------------------------------------------------------------------
+
+float 
+dodoString::toF()
+{
+	return (float)atof(this->c_str());
+}
+
+//-------------------------------------------------------------------
+
+double 
+dodoString::toD()
+{
+	return atof(this->c_str());
+}
+
+//-------------------------------------------------------------------
+
+long 
+dodoString::stringToL(const dodoString &data)
+{
+	return atol(data.c_str());
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+dodoString::stringToUL(const dodoString &data)
+{
+	return strtoul(data.c_str(), NULL, 10);
+}
+
+//-------------------------------------------------------------------
+
+int 
+dodoString::stringToI(const dodoString &data)
+{
+	return atoi(data.c_str());
+}
+
+//-------------------------------------------------------------------
+
+unsigned int 
+dodoString::stringToUI(const dodoString &data)
+{
+	return (unsigned int)atol(data.c_str());
+}
+
+//-------------------------------------------------------------------
+
+short 
+dodoString::stringToS(const dodoString &data)
+{
+	return (short)atoi(data.c_str());
+}
+
+//-------------------------------------------------------------------
+
+unsigned short 
+dodoString::stringToUS(const dodoString &data)
+{
+	return (unsigned short)atoi(data.c_str());
+}
+
+//-------------------------------------------------------------------
+
+float 
+dodoString::stringToF(const dodoString &data)
+{
+	return (float)atof(data.c_str());
+}
+
+//-------------------------------------------------------------------
+
+double 
+dodoString::stringToD(const dodoString &data)
+{
+	return atof(data.c_str());
+}
+
+
+//-------------------------------------------------------------------

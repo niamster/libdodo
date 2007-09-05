@@ -84,7 +84,7 @@ systemTools::getWorkingDir()
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETWORKINGDIR, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
-			return __string__;
+			return __dodostring__;
 		#endif
 	
 	return wd;

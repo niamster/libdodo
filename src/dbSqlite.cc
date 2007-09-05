@@ -332,7 +332,7 @@
 		#endif		
 			
 		if (!show)
-			return __stringarrayvector__;
+			return __dodostringarrayarray__;
 
 		sqlite3_reset(liteStmt);
 		
@@ -450,7 +450,7 @@
 		#endif
 		
 		if (!show)
-			return __stringarray__;
+			return __dodostringarray__;
 			
 		unsigned int numFields = sqlite3_column_count(liteStmt);
 		
@@ -646,7 +646,7 @@
 	dbSqlite::fetchAssoc() const
 	{
 		if (!show)
-			return __dodostringmap__;
+			return __dodostringmaparray__;
 		
 		sqlite3_reset(liteStmt);
 		

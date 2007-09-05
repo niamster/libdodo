@@ -324,7 +324,7 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path=__string__);
+			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path=__dodostring__);
 
 			/**
 			 * sets info for database
@@ -337,7 +337,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where=__string__);
+			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where=__dodostring__);
 			
 			/**
 			 * @param table is table name
@@ -345,7 +345,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const dodoString &table, const dodoStringMapContents &fields);
+			virtual void insert(const dodoString &table, const dodoStringMap &fields);
 			
 			/**
 			 * @param table is table name
@@ -353,27 +353,27 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringMapContents> &fields);
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringMap> &fields);
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames=__stringarray__);
+			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames=__dodostringarray__);
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames=__stringarray__);			
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames=__dodostringarray__);			
 			
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom=__stringarray__, const dodoString &where=__string__);
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom=__dodostringarray__, const dodoString &where=__dodostring__);
 			
 			/**
 			 * @param table is table name
@@ -382,7 +382,7 @@ namespace dodo
 			 * 			value => field's value
 			 * @param where is where statement for request
 		     */
-			virtual void update(const dodoString &table, const dodoStringMapContents &fields, const dodoString &where=__string__);			
+			virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where=__dodostring__);			
 			
 			/**
 			 * @param table is table name
@@ -390,13 +390,13 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where=__string__);
+			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where=__dodostring__);
 			
 			/**
 			 * @param table is table name
 			 * @param where is where statement for request
 			 */       
-			virtual void del(const dodoString &table, const dodoString &where=__string__);
+			virtual void del(const dodoString &table, const dodoString &where=__dodostring__);
 			
 			/**
 			 * store query, made from subquery with requested method
@@ -472,7 +472,7 @@ namespace dodo
 			 * @param db is name of new database
 			 * @param charset indicates what type of charset will be used
 			 */
-			virtual void createDb(const dodoString &db, const dodoString &charset=__string__);
+			virtual void createDb(const dodoString &db, const dodoString &charset=__dodostring__);
 			
 			/**
 			 * creates table

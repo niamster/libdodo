@@ -54,7 +54,7 @@ cgiTools::cgiTools(cgiTools &ct)
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent, 
-			dodoStringMapContents &a_headers,
+			dodoStringMap &a_headers,
 			bool a_autoclearContent,
 			bool a_postFilesInMem,
 			dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -82,8 +82,8 @@ cgiTools::cgiTools(bool silent,
 	if(autoclearContent)
 		content.clear();
 	
-	make(COOKIES.contents, ENVIRONMENT["HTTP_COOKIE"],"; ");
-	make(METHOD_GET.contents, ENVIRONMENT["QUERY_STRING"]);
+	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"],"; ");
+	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
 }
 
 //-------------------------------------------------------------------
@@ -92,7 +92,7 @@ cgiTools::cgiTools(bool silent,
 
 	cgiTools::cgiTools(cgiFastSTD *a_cf, 
 						bool silent, 
-						dodoStringMapContents &a_headers,
+						dodoStringMap &a_headers,
 						bool a_autoclearContent,
 						bool a_postFilesInMem,
 						dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -116,8 +116,8 @@ cgiTools::cgiTools(bool silent,
 		if(autoclearContent)
 			content.clear();
 		
-		make(COOKIES.contents, ENVIRONMENT["HTTP_COOKIE"],"; ");
-		make(METHOD_GET.contents, ENVIRONMENT["QUERY_STRING"]);
+		make(COOKIES, ENVIRONMENT["HTTP_COOKIE"],"; ");
+		make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
 	}
 
 #endif	
@@ -170,11 +170,11 @@ cgiTools::cleanTmp()
 void 
 cgiTools::detectMethod()
 {
-	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"GET") == 0)
+	if (dodoString::iequal(ENVIRONMENT["REQUEST_METHOD"],"GET"))
 		method = REQUESTMETHOD_GET;
 	else 
 	{
-		if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") == 0 && ENVIRONMENT["REQUEST_METHOD"].empty())
+		if (dodoString::iequal(ENVIRONMENT["REQUEST_METHOD"],"POST") && ENVIRONMENT["REQUEST_METHOD"].empty())
 			method = REQUESTMETHOD_POST;
 		else
 			method = REQUESTMETHOD_GET_POST;
@@ -192,7 +192,7 @@ cgiTools::getMethod() const
 //-------------------------------------------------------------------
 
 void 
-cgiTools::make(dodoStringMapContents &val,
+cgiTools::make(dodoStringMap &val,
 			const dodoString &string,
 			const char *delim)
 {	
@@ -206,7 +206,7 @@ cgiTools::make(dodoStringMapContents &val,
 	{
 		temp = tools::explode(*l,"=");
 		if (temp.size() > 1)
-			val[temp[0]] = temp[1];
+			val.insert(temp[0], temp[1]);
 	}	
 }
 
@@ -226,23 +226,23 @@ cgiTools::makeEnv()
 		#endif	
 				env = getenv(HTTP_ENV[i].str);
 				
-		ENVIRONMENT.contents[HTTP_ENV[i].str] = env == NULL?"NULL":env;
+		ENVIRONMENT.insert(HTTP_ENV[i].str, env == NULL?"NULL":env);
 	}
 }
 
 //-------------------------------------------------------------------
 
 void 
-cgiTools::initHeaders(dodoStringMapContents &headers)
+cgiTools::initHeaders(dodoStringMap &headers)
 {
-	HEADERS["Content-type"] = "text/html";
-	HEADERS["X-Powered-By"] = PACKAGE_NAME "/" PACKAGE_VERSION ;
+	HEADERS.insert("Content-type", "text/html");
+	HEADERS.insert("X-Powered-By", PACKAGE_NAME "/" PACKAGE_VERSION);
 	
 	if (headers.size() > 0)
 	{
-		dodoStringMapContents::iterator i(headers.begin()), j(headers.end());
+		dodoStringMap::iterator i(headers.begin()), j(headers.end());
 		for (;i!=j;++i)
-			HEADERS[i->first] = i->second;	
+			HEADERS.insert(i->first, i->second);	
 	}
 }
 
@@ -251,7 +251,7 @@ cgiTools::initHeaders(dodoStringMapContents &headers)
 void 
 cgiTools::printHeaders() const
 {
-	dodoStringMapContents::const_iterator i(HEADERS.begin()), j(HEADERS.end());
+	dodoStringMap::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (;i!=j;++i)
 		#ifdef FCGI_EXT
 			if (cgiFastSet)
@@ -315,7 +315,7 @@ cgiTools::printHeaders() const
 void
 cgiTools::makeContent()
 {
-	unsigned long inSize = atoi(ENVIRONMENT["CONTENT_LENGTH"].c_str());
+	unsigned long inSize = ENVIRONMENT["CONTENT_LENGTH"].toUL();
 	
 	if (inSize <= 0)
 		#ifndef NO_EX
@@ -384,16 +384,16 @@ cgiTools::makePost()
 	if (content.size() == 0)
 		return ;
 				
-	if (strcasecmp(ENVIRONMENT["REQUEST_METHOD"].c_str(),"POST") != 0)
+	if (!dodoString::iequal(ENVIRONMENT["REQUEST_METHOD"],"POST"))
 		return ;
 	
-	if (strcasecmp(ENVIRONMENT["CONTENT_TYPE"].c_str(),"application/x-www-form-urlencoded") == 0)
+	if (dodoString::iequal(ENVIRONMENT["CONTENT_TYPE"],"application/x-www-form-urlencoded"))
 	{
-		make(METHOD_POST.contents, content);
+		make(METHOD_POST, content);
 	}
 	else
 	{
-		if (strcasecmp(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"].c_str(),"base64") == 0)
+		if (dodoString::iequal(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"],"base64"))
 			content = tools::decodeBase64(content);
 		
 		unsigned int temp0;
@@ -447,7 +447,7 @@ cgiTools::makePost()
 						delete [] ptr;
 						
 						file.error = POSTFILEERR_BAD_FILE_NAME;
-						FILES.contents[post_name] = file;
+						FILES.insert(post_name, file);
 						
 						continue;
 					}
@@ -502,7 +502,7 @@ cgiTools::makePost()
 				if (errno == ENOMEM)
 						file.error = POSTFILEERR_NO_SPACE;
 				
-				FILES.contents[post_name] = file;
+				FILES.insert(post_name, file);
 			}
 			else
 			{
@@ -511,7 +511,7 @@ cgiTools::makePost()
 				temp0 += 6;		
 				temp1 = i->find("\"", temp0);
 								
-				METHOD_POST.contents[i->substr(temp0, temp1-temp0)] = i->substr(temp1+5, i->size()-temp1-7);//FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
+				METHOD_POST.insert(i->substr(temp0, temp1-temp0), i->substr(temp1+5, i->size()-temp1-7));//FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
 	}
 }

@@ -6,3 +6,5 @@ systemProcesseShare
 threads,processes: locking mutual exlusions
 
 ()?:; => ?:;
+
+remove strcmp, strcasecmp, ato[ifl] where not needed

@@ -51,9 +51,7 @@ namespace dodo
 
 	typedef dodoArray<dodoString> dodoStringArr;///< array of strings
 
-	typedef dodoMap<dodoString, dodoString, dodoString::iequal, dodoString::equal> dodoStringMap;///< hash of strings
-	
-	typedef dodoStringMap::contentsType dodoStringMapContents;///< contents of dodoStringMap
+	typedef dodoMap<dodoString, dodoString, dodoString::equal> dodoStringMap;///< hash of strings
 	
 	typedef dodoArray<dodoStringMap> dodoStringMapArr;///< array of hashes of string
 	
@@ -66,16 +64,15 @@ namespace dodo
 	 * diferent predifined constants
 	 */
 
-	//FIXME: namings
-	extern dodoString __string__;
+	extern dodoString __dodostring__;
 
-	extern dodoStringArr __stringarray__;
+	extern dodoStringArr __dodostringarray__;
 
-	extern dodoStringMapContents __assocarray__;
+	extern dodoStringMap __dodostringmap__;
 
-	extern dodoArray<dodoStringArr> __stringarrayvector__;
+	extern dodoArray<dodoStringArr> __dodostringarrayarray__;
 
-	extern dodoStringMapArr __dodostringmap__;
+	extern dodoStringMapArr __dodostringmaparray__;
 
 };
 

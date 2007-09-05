@@ -46,7 +46,7 @@ cgiPreprocessor::read(const dodoString &path,
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOR_READ, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
-			return __string__;
+			return __dodostring__;
 		#endif
 	
 	struct stat st;
@@ -55,7 +55,7 @@ cgiPreprocessor::read(const dodoString &path,
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOR_READ, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
-			return __string__;
+			return __dodostring__;
 		#endif
 	
 	char *stor = new char[st.st_size];

@@ -80,7 +80,7 @@ flushSocketTools::getInterfacesNames()
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACESNAMES, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
-			return __stringarray__;			
+			return __dodostringarray__;			
 		#endif
 			
 	int i(-1);

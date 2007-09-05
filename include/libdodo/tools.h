@@ -435,7 +435,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers=__string__);
+							mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers=__dodostring__);
 			
 			/**
 			 * sends mail
@@ -455,7 +455,7 @@ namespace dodo
 			#else
 				static bool 
 			#endif				
-							mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login=__string__, const dodoString &pass=__string__, const dodoString &headers=__string__);
+							mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login=__dodostring__, const dodoString &pass=__dodostring__, const dodoString &headers=__dodostring__);
 									
 		private:
 			

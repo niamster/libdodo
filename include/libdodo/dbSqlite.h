@@ -159,7 +159,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const dodoString &query=__string__, bool result=false);
+								exec(const dodoString &query=__dodostring__, bool result=false);
 				
 				/**
 				 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators

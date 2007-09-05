@@ -103,7 +103,7 @@
 			 * constructor
 			 * @note defines structure data with user data
 			 */
-			__mysqlSSLOptions(const dodoString &key, const dodoString &cert=__string__, const dodoString &ca=__string__, const dodoString &capath=__string__, const dodoString &cipher=__string__);
+			__mysqlSSLOptions(const dodoString &key, const dodoString &cert=__dodostring__, const dodoString &ca=__dodostring__, const dodoString &capath=__dodostring__, const dodoString &cipher=__dodostring__);
 			
 			dodoString key;///< the pathname to the key file
 			dodoString cert;///< the pathname to the certificate file.
@@ -264,7 +264,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const dodoString &query=__string__, bool result=false);
+								exec(const dodoString &query=__dodostring__, bool result=false);
 				
 				#ifndef DBMYSQL_WO_XEXEC
 				

@@ -32,10 +32,10 @@
 namespace dodo
 {
 		/**
-		 * @class cmp defines cmpFunc 
+		 * @class dodoMapFunc defines functions for dodoMap 
 		 */
 		template <typename keyType> 
-		class cmp
+		class dodoMapFunc
 		{
 			public:
 				
@@ -43,16 +43,20 @@ namespace dodo
 				 * @typedef type of pointer on function to compare two values
 				 */
 				typedef bool (*cmpFunc)(const keyType &, const keyType &);
+				
+				/**
+				 * @typedef type of pointer on function to generate hash for keyType
+				 */
+				typedef unsigned long (*hashFunc)(const keyType &);
 		};
 
 		/**
-		 * @class dodoMap is a duck for std::map<dodoString, any_type> but controlling varName
-		 * if varName's value is not defined - empty anyType will be returned
+		 * @class dodoMap is a wrapper for std::map<keyType, valueType>
+		 * TODO: apply hash function
 		 */
 		template <typename keyType, 
 					typename valueType, 
-					typename cmp<keyType>::cmpFunc iCaseCmp, 
-					typename cmp<keyType>::cmpFunc caseCmp>
+					typename dodoMapFunc<keyType>::cmpFunc cmpFunc>
 		class dodoMap
 		{
 						
@@ -61,27 +65,23 @@ namespace dodo
 				/**
 				 * copy constructor
 				 */
-				dodoMap(const dodoMap &dodoM) : icase(dodoM.icase), 
-													contents(dodoM.contents)
+				dodoMap(const dodoMap &dodoM) : contents(dodoM.contents)
 				{
 				}
 			
 				/**
 				 * constructor
 				 */
-				dodoMap(std::map<keyType, valueType> a_contents): icase(false),
-																	contents(a_contents)
+				dodoMap(std::map<keyType, valueType> a_contents): contents(a_contents)
 				{
 				}
 			
 				/**
 				 * constructor
 				 */
-				dodoMap(): icase(false)
+				dodoMap()
 				{
 				}
-				
-				bool icase;///< whether to react on keys with keys or no; false[react] by default
 							
 				/**
 				 * @return value of hash by varName or empty valueType already added to map, if not found
@@ -91,11 +91,6 @@ namespace dodo
 				operator[](const keyType &varName)
 				{
 					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
-					
-					if (icase)
-						cmpFunc = iCaseCmp;
-					else
-						cmpFunc = caseCmp;
 					
 					for (;i!=j;++i)
 						if (cmpFunc(varName, i->first))
@@ -113,11 +108,6 @@ namespace dodo
 				typename std::map<keyType, valueType>::iterator
 				find(const keyType &varName)
 				{
-					if (icase)
-						cmpFunc = iCaseCmp;
-					else
-						cmpFunc = caseCmp;
-					
 					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 					
 					for (;i!=j;++i)
@@ -133,12 +123,7 @@ namespace dodo
 				 */			 
 				typename std::map<keyType, valueType>::const_iterator
 				find(const keyType &varName) const
-				{
-					if (icase)
-						cmpFunc = iCaseCmp;
-					else
-						cmpFunc = caseCmp;
-					
+				{	
 					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 					
 					for (;i!=j;++i)
@@ -146,6 +131,16 @@ namespace dodo
 							return i;		
 					
 					return j;		
+				}
+				
+				/**
+				 * removes element with given key
+				 * @param varName is value of hash that points to the value
+				 */
+				void
+				erase(const keyType &varName)
+				{
+					contents.erase(varName);
 				}
 								
 				/**
@@ -236,11 +231,6 @@ namespace dodo
 				{
 					typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 					
-					if (icase)
-						cmpFunc = iCaseCmp;
-					else
-						cmpFunc = caseCmp;
-					
 					for (;i!=j;++i)
 						if (cmpFunc(varName, i->first))
 							return true;		
@@ -255,10 +245,6 @@ namespace dodo
 				std::map<keyType, valueType> contents;///< real array
 				
 				valueType type;///< copy of typed
-				
-			private:
-				
-				bool (*cmpFunc)(const keyType &, const keyType &);///< compare function
 		};
 };
 

@@ -148,7 +148,7 @@
 				#else
 					virtual bool 
 				#endif
-								exec(const dodoString &query=__string__, bool result=false);
+								exec(const dodoString &query=__dodostring__, bool result=false);
 				
 				#ifndef DBPOSTGRESQL_WO_XEXEC
 				

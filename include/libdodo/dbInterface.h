@@ -113,7 +113,7 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path=__string__)=0;
+			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path=__dodostring__)=0;
 
 			/**
 			 * sets info for database
@@ -126,7 +126,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where=__string__)=0;
+			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where=__dodostring__)=0;
 			
 			/**
 			 * @param table is table name
@@ -134,7 +134,7 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const dodoString &table, const dodoStringMapContents &fields)=0;
+			virtual void insert(const dodoString &table, const dodoStringMap &fields)=0;
 			
 			/**
 			 * @param table is table name
@@ -142,27 +142,27 @@ namespace dodo
 			 * 			key => field's name
 			 * 			value => field's value
 		     */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringMapContents> &fields)=0;
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringMap> &fields)=0;
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames=__stringarray__)=0;
+			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames=__dodostringarray__)=0;
 			
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 		     */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames=__stringarray__)=0;			
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames=__dodostringarray__)=0;			
 			
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom=__stringarray__, const dodoString &where=__string__)=0;
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom=__dodostringarray__, const dodoString &where=__dodostring__)=0;
 			
 			/**
 			 * @param table is table name
@@ -171,7 +171,7 @@ namespace dodo
 			 * 			value => field's value
 			 * @param where is where statement for request
 		     */
-			virtual void update(const dodoString &table, const dodoStringMapContents &fields, const dodoString &where=__string__)=0;			
+			virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where=__dodostring__)=0;			
 			
 			/**
 			 * @param table is table name
@@ -179,13 +179,13 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 		     */
-			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where=__string__)=0;
+			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where=__dodostring__)=0;
 			
 			/**
 			 * @param table is table name
 			 * @param where is where statement for request
 			 */       
-			virtual void del(const dodoString &table, const dodoString &where=__string__)=0;
+			virtual void del(const dodoString &table, const dodoString &where=__dodostring__)=0;
 			
 			/**
 			 * truncates table
@@ -305,7 +305,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif
-							exec(const dodoString &query=__string__, bool result=false)=0;
+							exec(const dodoString &query=__dodostring__, bool result=false)=0;
 									
 		protected:
 		

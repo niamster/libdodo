@@ -361,7 +361,7 @@
 		#endif		
 			
 		if (empty || !show)
-			return __stringarrayvector__;
+			return __dodostringarrayarray__;
 		
 		int rowsNum = PQntuples(pgResult);
 		int fieldsNum = PQnfields(pgResult);
@@ -421,7 +421,7 @@
 		#endif
 					
 		if (empty || !show)
-			return __stringarray__;
+			return __dodostringarray__;
 
 		int fieldsNum = PQnfields(pgResult);
 		
@@ -578,7 +578,7 @@
 	dbPostgresql::fetchAssoc() const
 	{
 		if (empty || !show)
-			return __dodostringmap__;
+			return __dodostringmaparray__;
 		
 		int rowsNum = PQntuples(pgResult);
 		int fieldsNum = PQnfields(pgResult);

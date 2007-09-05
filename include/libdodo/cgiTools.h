@@ -195,7 +195,7 @@ namespace dodo
 			 * 
 			 * @note you cant print headers after they have been printed with printHeaders method 
 			 */
-			cgiTools(bool silent=false, dodoStringMapContents &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
+			cgiTools(bool silent=false, dodoStringMap &headers=__dodostringmap__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 					
 			#ifdef FCGI_EXT		
 					
@@ -210,7 +210,7 @@ namespace dodo
 				 * 
 				 * @note you cant print headers after they have been printed with printHeaders method 
 				 */
-				cgiTools(cgiFastSTD *cf, bool silent=false, dodoStringMapContents &headers=__assocarray__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
+				cgiTools(cgiFastSTD *cf, bool silent=false, dodoStringMap &headers=__dodostringmap__, bool autoclearContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 			
 			#endif
 			
@@ -248,7 +248,7 @@ namespace dodo
 			dodoStringMap METHOD_GET;///< array of GET variables
 			dodoStringMap ENVIRONMENT;///< environment variables
 			dodoStringMap COOKIES;///< coockes sent by browser
-			dodoMap<dodoString, __cgiFilesUp, dodoString::iequal, dodoString::equal> FILES;///< array of POST files, if one or more files were uploaded
+			dodoMap<dodoString, __cgiFilesUp, dodoString::equal> FILES;///< array of POST files, if one or more files were uploaded
 			
 			/**
 			 * @return value of requested variable from POST or GET
@@ -264,7 +264,7 @@ namespace dodo
 			 */
 			virtual void printHeaders() const;
 			
-			dodoStringMapContents HEADERS;///< array of header that will be printed with printHeaders method
+			dodoStringMap HEADERS;///< array of header that will be printed with printHeaders method
 			
 			/**
 			 * sets cookie. the cookies are printed with printHeaders method
@@ -276,7 +276,7 @@ namespace dodo
 			 * @param domain is cookie's domain
 			 * @param secure is indicates if cookie is secure; false by default
 			 */
-			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate=__string__, const dodoString &path=__string__, const dodoString &domain=__string__, bool secure=false);
+			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate=__dodostring__, const dodoString &path=__dodostring__, const dodoString &domain=__dodostring__, bool secure=false);
 		
 			virtual void setCookie(const __cookies &cookie);
 			
@@ -305,7 +305,7 @@ namespace dodo
 			/**
 			 * initiates headers with given headers; printed with printHeaders method
 			 */
-			virtual void initHeaders(dodoStringMapContents &headers);
+			virtual void initHeaders(dodoStringMap &headers);
 
 			/**
 			 * processes :
@@ -316,7 +316,7 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(dodoStringMapContents &val, const dodoString &string, const char *delim="&");
+			virtual void make(dodoStringMap &val, const dodoString &string, const char *delim="&");
 		
 		private:	
 		

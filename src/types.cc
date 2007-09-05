@@ -27,14 +27,14 @@
 namespace dodo
 {
 
-	dodoString __string__;
+	dodoString __dodostring__;
 	
-	dodoStringArr __stringarray__;
+	dodoStringArr __dodostringarray__;
+
+	dodoStringMap __dodostringmap__;
 	
-	dodoStringMapContents __assocarray__;
+	dodoArray<dodoStringArr> __dodostringarrayarray__;
 	
-	dodoArray<dodoStringArr> __stringarrayvector__;
-	
-	dodoStringMapArr __dodostringmap__;
+	dodoStringMapArr __dodostringmaparray__;
 
 };

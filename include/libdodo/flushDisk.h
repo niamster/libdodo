@@ -103,7 +103,7 @@ namespace dodo
 			 * 
 			 * if type == TMP_FILE, u don't have to specify path
 			 */
-			flushDisk(short type, const dodoString &path=__string__);
+			flushDisk(short type, const dodoString &path=__dodostring__);
 			
 			/**
 			 * destructor
@@ -174,7 +174,7 @@ namespace dodo
 			#else
 				virtual bool 
 			#endif			 
-							open(const dodoString &path=__string__);///< if opened previous file, closes it		
+							open(const dodoString &path=__dodostring__);///< if opened previous file, closes it		
 			
 			/**
 			 * closes file

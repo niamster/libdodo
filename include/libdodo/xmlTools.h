@@ -51,7 +51,7 @@
 			
 			dodoString name;///< name of the node [[tag]]
 			
-			dodoMap<dodoString, dodoArray<__xmlNode>, dodoString::iequal, dodoString::equal> children;///< vector of children's realisation;
+			dodoMap<dodoString, dodoArray<__xmlNode>, dodoString::equal> children;///< vector of children's realisation;
 			
 			dodoStringMap attributes;///< hash of attributes
 			
@@ -281,7 +281,7 @@
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
 				 */
-				virtual void getAttributes(const xmlNodePtr node, dodoStringMapContents &attributes);
+				virtual void getAttributes(const xmlNodePtr node, dodoStringMap &attributes);
 				
 				/**
 				 * gets attributes from node
@@ -289,7 +289,7 @@
 				 * @param node describes the node content
 				 * @param attributes describes array of got attributes
 				 */
-				virtual void getAttributes(const __xmlNodeDef &definition, const xmlNodePtr node, dodoStringMapContents &attributes);
+				virtual void getAttributes(const __xmlNodeDef &definition, const xmlNodePtr node, dodoStringMap &attributes);
 				
 				/**
 				 * get diff info from node

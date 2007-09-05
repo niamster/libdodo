@@ -366,7 +366,7 @@
 		#endif		
 			
 		if (empty || !show)
-			return __stringarrayvector__;
+			return __dodostringarrayarray__;
 			
 		mysql_field_seek(mysqlRes, 0);
 		
@@ -426,7 +426,7 @@
 		#endif
 					
 		if (empty || !show)
-			return __stringarray__;
+			return __dodostringarray__;
 			
 		unsigned int numFields = mysql_num_fields(mysqlRes);	
 		MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlRes);
@@ -608,7 +608,7 @@
 	dbMysql::fetchAssoc() const
 	{
 		if (empty || !show)
-			return __dodostringmap__;
+			return __dodostringmaparray__;
 		
 		mysql_field_seek(mysqlRes, 0);
 		

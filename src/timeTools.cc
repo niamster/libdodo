@@ -71,7 +71,7 @@ timeTools::byFormat(const dodoString &format,
 		#ifndef NO_EX
 			throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_GETBYFORMAT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 		#else
-			return __string__;
+			return __dodostring__;
 		#endif
 	
 	char formatted[30];

@@ -239,7 +239,7 @@
 
 		getNodeInfo(node, sample);
 		
-		getAttributes(definition, node, sample.attributes.contents);
+		getAttributes(definition, node, sample.attributes);
 		
 		if (node->children == NULL)
 		{
@@ -253,7 +253,7 @@
 		{
 			std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (;i!=j;++i)
-				sample.children.contents[i->first] = parse(i->second, node->children, definition.chLimit);
+				sample.children.insert(i->first, parse(i->second, node->children, definition.chLimit));
 		}
 		else
 		{
@@ -273,16 +273,16 @@
 												
 					getNodeInfo(node, one);
 					
-					getAttributes(node, one.attributes.contents);		
+					getAttributes(node, one.attributes);		
 					
 					if (node->children == NULL)
 						one.empty = true;
 					
 					one.CDATA = isCDATA(node);
 					
-					one.children.contents[(char *)node->name] = parse(node->children);
+					one.children.insert((char *)node->name, parse(node->children));
 					
-					sample.children.contents[(char *)node->name].push_back(one);
+					sample.children[(char *)node->name].push_back(one);
 					
 					initNode(one);
 					
@@ -351,7 +351,7 @@
 			initNode(sample);
 		
 			getNodeInfo(node, sample);
-			getAttributes(definition, node, sample.attributes.contents);
+			getAttributes(definition, node, sample.attributes);
 					
 			if (node->children == NULL)
 				sample.empty = true;
@@ -362,7 +362,7 @@
 			{
 				std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 				for (;i!=j;++i)
-					sample.children.contents[i->first] = parse(i->second, node->children, definition.chLimit);
+					sample.children.insert(i->first, parse(i->second, node->children, definition.chLimit));
 				
 			}
 			else
@@ -381,16 +381,16 @@
 													
 						getNodeInfo(subNode, one);
 						
-						getAttributes(subNode, one.attributes.contents);
+						getAttributes(subNode, one.attributes);
 								
 						if (subNode->children == NULL)
 							one.empty = true;
 						
 						one.CDATA = isCDATA(subNode);
 						
-						one.children.contents[(char *)subNode->name] = parse(subNode->children);
+						one.children.insert((char *)subNode->name, parse(subNode->children));
 						
-						sample.children.contents[(char *)subNode->name].push_back(one);
+						sample.children[(char *)subNode->name].push_back(one);
 						
 						initNode(one);
 						
@@ -422,7 +422,7 @@
 	void 
 	xmlTools::getAttributes(const __xmlNodeDef &definition, 
 						const xmlNodePtr node,
-						dodoStringMapContents &attributes)
+						dodoStringMap &attributes)
 	{
 		attribute = node->properties;
 		
@@ -487,7 +487,7 @@
 
 	void 
 	xmlTools::getAttributes(const xmlNodePtr node, 
-							dodoStringMapContents &attributes)
+							dodoStringMap &attributes)
 	{
 		attribute = node->properties;
 		
@@ -549,9 +549,9 @@
 				return __xmlInfo();
 			#endif		
 			
-		return __xmlInfo(document->version!=NULL?(char *)document->version:__string__,
-		document->encoding != NULL?(char *)document->encoding:__string__,
-		(document->children != NULL && document->children->name != NULL)?(char *)document->children->name:__string__,
+		return __xmlInfo(document->version!=NULL?(char *)document->version:__dodostring__,
+		document->encoding != NULL?(char *)document->encoding:__dodostring__,
+		(document->children != NULL && document->children->name != NULL)?(char *)document->children->name:__dodostring__,
 		document->compression);
 	}
 
@@ -593,14 +593,14 @@
 										
 			getNodeInfo(node, one);
 			
-			getAttributes(node, one.attributes.contents);
+			getAttributes(node, one.attributes);
 					
 			if (node->children == NULL)
 				one.empty = true;
 			
 			one.CDATA = isCDATA(node);
 			
-			one.children.contents[(char *)node->name] = parse(node->children);
+			one.children.insert((char *)node->name, parse(node->children));
 			
 			sample.push_back(one);
 			
@@ -772,7 +772,7 @@
 					const dodoString &version) const
 	{
 		if (root.name.empty())
-			return __string__;
+			return __dodostring__;
 		
 		dodoString xml = "<?xml version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
 		
@@ -787,7 +787,7 @@
 	xmlTools::createNode(const __xmlNode &node) const
 	{
 		if (node.name.empty())
-			return __string__;
+			return __dodostring__;
 			
 		dodoString xml = "<";		
 		
@@ -808,7 +808,7 @@
 			xml.append("\" ");
 		}
 		
-		dodoMap<dodoString, dodoString, dodoString::iequal, dodoString::equal>::const_iterator i = node.attributes.begin(), j = node.attributes.end(); 
+		dodoMap<dodoString, dodoString, dodoString::equal>::const_iterator i = node.attributes.begin(), j = node.attributes.end(); 
 		for (;i!=j;++i)
 		{
 			xml.append(i->first);
@@ -839,7 +839,7 @@
 			}
 		}
 		
-		dodoMap<dodoString, dodoArray<__xmlNode>, dodoString::iequal, dodoString::equal>::const_iterator o = node.children.begin(), p = node.children.end();
+		dodoMap<dodoString, dodoArray<__xmlNode>, dodoString::equal>::const_iterator o = node.children.begin(), p = node.children.end();
 		dodoArray<__xmlNode>::const_iterator x, y;
 		for (;o!=p;++o)
 		{

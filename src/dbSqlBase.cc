@@ -121,8 +121,6 @@ dbSqlBase::dbSqlBase() : preventFraming(false),
 	tinyblob = "tinyblob";
 	mediumblob = "mediumblob";
 	longblob = "longblob";
-	
-	framingFields.icase = true;
 }
 
 //-------------------------------------------------------------------
@@ -204,7 +202,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 						int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
-		return __string__;
+		return __dodostring__;
 		
 	dodoString temp;
 	
@@ -226,7 +224,7 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 						int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
-		return __string__;
+		return __dodostring__;
 		
 	dodoString temp;
 
@@ -518,7 +516,7 @@ dbSqlBase::delFieldCollect()
 void 
 dbSqlBase::renameBaseCollect()
 {
-	request = __string__;///< FIXME: make SQL statement
+	request = __dodostring__;///< FIXME: make SQL statement
 }
 
 //-------------------------------------------------------------------
@@ -534,7 +532,7 @@ dbSqlBase::renameTableCollect()
 void 
 dbSqlBase::renameFieldCollect()
 {
-	request = __string__;///< FIXME: make SQL statement
+	request = __dodostring__;///< FIXME: make SQL statement
 }
 
 //-------------------------------------------------------------------
@@ -570,7 +568,7 @@ dbSqlBase::createTableCollect()
 {
 	request = "create table "; 
 	
-	request.append(pre_tableInfo.ifNotExists?"if not exists ":__string__);
+	request.append(pre_tableInfo.ifNotExists?"if not exists ":__dodostring__);
 	
 	request.append(pre_tableInfo.name + "(");
 	
@@ -581,8 +579,8 @@ dbSqlBase::createTableCollect()
 		request.append(fieldCollect(*i));
 	}
 	
-	request.append(!pre_tableInfo.primKeys.empty()?", primary key (" + tools::implode(pre_tableInfo.primKeys,",") + ") ":__string__);
-	request.append(!pre_tableInfo.uniq.empty()?", unique " + tools::implode(pre_tableInfo.uniq,","):__string__);	
+	request.append(!pre_tableInfo.primKeys.empty()?", primary key (" + tools::implode(pre_tableInfo.primKeys,",") + ") ":__dodostring__);
+	request.append(!pre_tableInfo.uniq.empty()?", unique " + tools::implode(pre_tableInfo.uniq,","):__dodostring__);	
 	
 	request.append(")");
 }
@@ -743,7 +741,7 @@ dbSqlBase::queryCollect()
 			#ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASE_QUERYCOLLECT, ERR_LIBDODO, DBSQLBASE_EMPTY_REQUEST, DBSQLBASE_EMPTY_REQUEST_STR,__LINE__,__FILE__);	
 			#else
-				return __string__;
+				return __dodostring__;
 			#endif
 				
 	#endif
@@ -799,21 +797,21 @@ dbSqlBase::fieldCollect(__fieldInfo &row)
 	dodoString resRow(row.name + " " + stringType(type));
 	
 	if (preventEscaping)
-		resRow.append(!row.set_enum.empty()?" (" + tools::implode(row.set_enum,",") + ")":__string__);
+		resRow.append(!row.set_enum.empty()?" (" + tools::implode(row.set_enum,",") + ")":__dodostring__);
 	else
-		resRow.append(!row.set_enum.empty()?" (" + tools::implode(row.set_enum, escapeFields,",") + ")":__string__);
-	resRow.append((chkRange(type) > 0 && row.length > 0)?" ("+ dodoString::lToString(row.length) +") ":__string__);
+		resRow.append(!row.set_enum.empty()?" (" + tools::implode(row.set_enum, escapeFields,",") + ")":__dodostring__);
+	resRow.append((chkRange(type) > 0 && row.length > 0)?" ("+ dodoString::lToString(row.length) +") ":__dodostring__);
 	resRow.append(row.charset.size() > 0?" collate " + row.charset:" ");
 	resRow.append((FIELDPROP_NULL&flag) == FIELDPROP_NULL?" null ":" not null ");
-	resRow.append(row.defaultVal.size() > 0?"default '" + row.defaultVal + "' ":__string__);
-	resRow.append((FIELDPROP_AUTO_INCREMENT&flag) == FIELDPROP_AUTO_INCREMENT?" primary key " + auto_increment:__string__);
+	resRow.append(row.defaultVal.size() > 0?"default '" + row.defaultVal + "' ":__dodostring__);
+	resRow.append((FIELDPROP_AUTO_INCREMENT&flag) == FIELDPROP_AUTO_INCREMENT?" primary key " + auto_increment:__dodostring__);
 	
 	if (row.refTable.size() > 0)
 	{
 		resRow.append(" references " + row.refTable);
-		resRow.append(!row.refFields.empty()?"(" + tools::implode(row.set_enum,",") +" )":__string__);
-		resRow.append(row.onDelete >= 0?" on delete " + stringReference(row.onDelete):__string__);
-		resRow.append(row.onUpdate >= 0?" on update " + stringReference(row.onUpdate):__string__);
+		resRow.append(!row.refFields.empty()?"(" + tools::implode(row.set_enum,",") +" )":__dodostring__);
+		resRow.append(row.onDelete >= 0?" on delete " + stringReference(row.onDelete):__dodostring__);
+		resRow.append(row.onUpdate >= 0?" on update " + stringReference(row.onUpdate):__dodostring__);
 	}
 	
 	return resRow;
@@ -922,7 +920,7 @@ dbSqlBase::stringType(int type)
 			
 		default:
 		
-			return __string__;
+			return __dodostring__;
 	}
 }
 	
@@ -1002,7 +1000,7 @@ dbSqlBase::stringReference(int type)
 			
 		default:
 		
-			return __string__;
+			return __dodostring__;
 	}
 }
 
