@@ -178,7 +178,7 @@ flushDisk::open(const dodoString&a_path)
 	performXExec(preExec);
     #endif
 
-	if (a_path.size() != 0 && strcmp(a_path.c_str(), path.c_str()) != 0)
+	if (a_path.size() != 0 && a_path == path)
 		path = a_path;
 
 	if (opened)

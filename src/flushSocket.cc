@@ -594,7 +594,7 @@ flushSocket::bindNListen(const dodoString&host,
 		sa.sin6_port = htons(port);
 		sa.sin6_flowinfo = 0;
 		sa.sin6_scope_id = 0;
-		if (strcmp(host.c_str(), "*") == 0)
+		if (host == "*")
 			sa.sin6_addr = in6addr_any;
 		else
 			inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
@@ -612,7 +612,7 @@ flushSocket::bindNListen(const dodoString&host,
 
 		sa.sin_family = AF_INET;
 		sa.sin_port = htons(port);
-		if (strcmp(host.c_str(), "*") == 0)
+		if (host == "*")
 			sa.sin_addr.s_addr = htonl(INADDR_ANY);
 		else
 			inet_pton(AF_INET, host.c_str(), &sa.sin_addr);

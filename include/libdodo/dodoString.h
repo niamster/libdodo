@@ -91,7 +91,12 @@ namespace dodo
 		 * @return formated string
 		 * @param format represents format of the string
 		 */
-		static dodoString format(const dodoString&format, ...);
+		static dodoString formatStatic(const dodoString&format, ...);
+
+		/**
+		 * @param format represents format of the string
+		 */
+		virtual void format(const dodoString&format, ...);
 
 		/**
 		 * removes symbols from the end and from the begin of given string
@@ -146,48 +151,42 @@ namespace dodo
 
 		/**
 		 * removes symbols from the end and from the begin of string
-		 * @return processed string
 		 * @param symbol is symbol to remove
 		 */
-		virtual dodoString trim(const char symbol = ' ');
+		virtual void trim(const char symbol = ' ');
 
 		/**
 		 * removes symbols[from given array] from the end and from the begin of string
-		 * @return processed string
 		 * @param symbols is an array of symbols to remove
 		 * @param symCount is amount of symbols in @param symbols
 		 */
-		virtual dodoString trim(const char symbols[], int symCount);
+		virtual void trim(const char symbols[], int symCount);
 
 		/**
 		 * removes symbols[from given array] from the end of string
-		 * @return processed string
 		 * @param symbols is an array of symbols to remove
 		 * @param symCount is amount of symbols in @param symbols
 		 */
-		virtual dodoString rTrim(const char symbols[], int symCount);
+		virtual void rTrim(const char symbols[], int symCount);
 
 		/**
 		 * removes symbols[from given array] from the begin of string
-		 * @return processed string
 		 * @param symbols is an array of symbols to remove
 		 * @param symCount is amount of symbols in @param symbols
 		 */
-		virtual dodoString lTrim(const char symbols[], int symCount);
+		virtual void lTrim(const char symbols[], int symCount);
 
 		/**
 		 * removes symbols from the end of string
-		 * @return processed string
 		 * @param symbol is symbol to remove
 		 */
-		virtual dodoString rTrim(char symbol = ' ');
+		virtual void rTrim(char symbol = ' ');
 
 		/**
 		 * removes symbols from the begin of string
-		 * @return processed string
 		 * @param symbol is symbol to remove
 		 */
-		virtual dodoString lTrim(char symbol = ' ');
+		virtual void lTrim(char symbol = ' ');
 
 		/**
 		 * @return converted long to string
@@ -238,52 +237,44 @@ namespace dodo
 		static dodoString dToString(double number);
 
 		/**
-		 * @return converted long to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromL(long number);
+		virtual void fromL(long number);
 
 		/**
-		 * @return converted unsigned long to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromUL(unsigned long number);
+		virtual void fromUL(unsigned long number);
 
 		/**
-		 * @return converted int to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromI(int number);
+		virtual void fromI(int number);
 
 		/**
-		 * @return converted unsigned int to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromUI(unsigned int number);
+		virtual void fromUI(unsigned int number);
 
 		/**
-		 * @return converted short to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromS(short number);
+		virtual void fromS(short number);
 
 		/**
-		 * @return converted unsigned short to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromUS(unsigned short number);
+		virtual void fromUS(unsigned short number);
 
 		/**
-		 * @return converted float to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromF(float number);
+		virtual void fromF(float number);
 
 		/**
-		 * @return converted double to string
 		 * @param number is number to convert
 		 */
-		virtual dodoString fromD(double number);
+		virtual void fromD(double number);
 
 		/**
 		 * @return string converted to unsigned long

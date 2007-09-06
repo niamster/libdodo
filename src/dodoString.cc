@@ -90,8 +90,24 @@ dodoString::iequal(const dodoString&first,
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::format(const dodoString&format, ...)
+{
+	unsigned long length = format.size() * 3;
+	char *str = new char[length];
+	va_list ap;
+
+	vsnprintf(str, length, format.c_str(), ap);
+
+	*this = str;
+
+	delete [] str;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+dodoString::formatStatic(const dodoString&format, ...)
 {
 	unsigned long length = format.size() * 3;
 	char *str = new char[length];
@@ -104,6 +120,36 @@ dodoString::format(const dodoString&format, ...)
 	delete [] str;
 
 	return res;
+}
+
+
+//-------------------------------------------------------------------
+
+void
+dodoString::replace(const dodoString&needle,
+			   const dodoString&replacement)
+{
+	unsigned long i(0), j(needle.size()), k(replacement.size());
+
+	while (true)
+	{
+		i = this->find(needle, i);
+		if (i == dodoString::npos)
+			break;
+
+		this->std::string::replace(i, j, replacement, 0, k);
+		i += k;
+	}
+}
+
+//-------------------------------------------------------------------
+
+void
+dodoString::replace(const dodoString&needle,
+			   const dodoString&replacement,
+			   dodoString&data)
+{
+	data.replace(needle, replacement);
 }
 
 //-------------------------------------------------------------------
@@ -197,107 +243,91 @@ dodoString::dToString(double number)
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromL(long number)
-{
+{	
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%ld", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromUL(unsigned long number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%ld", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromI(int number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%d", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromUI(unsigned int number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%u", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromS(short number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%sd", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromUS(unsigned short number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%sd", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromF(float number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%f", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::fromD(double number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%f", number);
 
 	*this = temp;
-
-	return temp;
 }
 
 //-------------------------------------------------------------------
@@ -393,7 +423,7 @@ dodoString::trim(const dodoString&data,
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::lTrim(char symbol)
 {
 	int size = this->size(), i(0);
@@ -402,12 +432,12 @@ dodoString::lTrim(char symbol)
 		if ((*this)[i] != symbol)
 			break;
 
-	return this->substr(i, size - i);
+	this->substr(i, size - i);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::rTrim(char symbol)
 {
 	int i(this->size() - 1);
@@ -416,12 +446,12 @@ dodoString::rTrim(char symbol)
 		if ((*this)[i] != symbol)
 			break;
 
-	return this->substr(0, i + 1);
+	this->substr(0, i + 1);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::rTrim(const char symbols[],
 				  int symCount)
 {
@@ -436,12 +466,12 @@ dodoString::rTrim(const char symbols[],
 			break;
 	}
 
-	return this->substr(0, i + 1);
+	this->substr(0, i + 1);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::lTrim(const char symbols[],
 				  int symCount)
 {
@@ -456,26 +486,26 @@ dodoString::lTrim(const char symbols[],
 			break;
 	}
 
-	return this->substr(i, size - i);
+	this->substr(i, size - i);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::trim(const char symbols[],
 				 int symCount)
 {
 	lTrim(symbols, symCount);
-	return rTrim(symbols, symCount);
+	rTrim(symbols, symCount);
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+void
 dodoString::trim(char symbol)
 {
 	lTrim(symbol);
-	return rTrim(symbol);
+	rTrim(symbol);
 }
 
 //-------------------------------------------------------------------
