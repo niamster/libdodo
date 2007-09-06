@@ -103,7 +103,7 @@ namespace dodo
 		 * constructor
 		 * @note defines structure data with user data
 		 */
-		__mysqlSSLOptions(const dodoString&key, const dodoString&cert = __dodostring__, const dodoString&ca = __dodostring__, const dodoString&capath = __dodostring__, const dodoString&cipher = __dodostring__);
+		__mysqlSSLOptions(const dodoString &key, const dodoString &cert = __dodostring__, const dodoString &ca = __dodostring__, const dodoString &capath = __dodostring__, const dodoString &cipher = __dodostring__);
 
 		dodoString key;         ///< the pathname to the key file
 		dodoString cert;        ///< the pathname to the certificate file.
@@ -128,7 +128,7 @@ namespace dodo
 		 * constructor
 		 * to prevent from copying
 		 */
-		dbMysql(dbMysql&a_mypp);
+		dbMysql(dbMysql &a_mypp);
 
 		public:
 
@@ -154,7 +154,7 @@ namespace dodo
 		 *	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
 		 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
 		 */
-		void connectSettings(unsigned long type, const __mysqlSSLOptions&options = __mysqlSSLOptions());
+		void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions());
 
 		/**
 		 * connect to database
@@ -264,7 +264,7 @@ namespace dodo
                 #else
 		virtual bool
                 #endif
-		exec(const dodoString&query = __dodostring__, bool result = false);
+		exec(const dodoString &query = __dodostring__, bool result = false);
 
                 #ifndef DBMYSQL_WO_XEXEC
 
@@ -294,7 +294,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual xexecCounts addExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * adds hook after the operation by callback
@@ -303,7 +303,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPostExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * adds hook after the operation by callback
@@ -312,7 +312,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPreExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
                 #endif
 
@@ -322,7 +322,7 @@ namespace dodo
 		 * sets sessions charset
 		 * @param charset indicates what type of charset would be used for session
 		 */
-		virtual void setCharset(const dodoString&charset);
+		virtual void setCharset(const dodoString &charset);
 
 		/**
 		 * sets connection timeout
@@ -349,7 +349,7 @@ namespace dodo
                 #else
 		virtual bool
                 #endif
-		_exec(const dodoString&query, bool result);
+		_exec(const dodoString &query, bool result);
 
 		/**
 		 * inits addidtional mySQL specific statements

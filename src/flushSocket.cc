@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-flushSocket::flushSocket(flushSocket&fs)
+flushSocket::flushSocket(flushSocket &fs)
 {
 }
 
@@ -34,8 +34,8 @@ flushSocket::flushSocket(flushSocket&fs)
 flushSocket::flushSocket(bool a_server,
 						 short a_family,
 						 short a_type) : flushSocketOptions(a_family, a_type),
-	blockInherited(false),
-	server(a_server)
+										 blockInherited(false),
+										 server(a_server)
 {
 	makeSocket();
 }
@@ -81,7 +81,7 @@ flushSocket::addPreExec(inExec func,
     #ifdef DL_EXT
 
 int
-flushSocket::addPostExec(const dodoString&module,
+flushSocket::addPostExec(const dodoString &module,
 						 void             *data,
 						 void             *toInit)
 {
@@ -91,7 +91,7 @@ flushSocket::addPostExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 int
-flushSocket::addPreExec(const dodoString&module,
+flushSocket::addPreExec(const dodoString &module,
 						void             *data,
 						void             *toInit)
 {
@@ -101,7 +101,7 @@ flushSocket::addPreExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 xexecCounts
-flushSocket::addExec(const dodoString&module,
+flushSocket::addExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
@@ -227,9 +227,9 @@ void
 #else
 bool
 #endif
-flushSocket::connect(const dodoString&host,
+flushSocket::connect(const dodoString &host,
 					 int port,
-					 flushSocketExchange&exchange)
+					 flushSocketExchange &exchange)
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_CONNECT;
@@ -312,8 +312,8 @@ void
 #else
 bool
 #endif
-flushSocket::connect(const __connInfo&destinaton,
-					 flushSocketExchange&exchange)
+flushSocket::connect(const __connInfo &destinaton,
+					 flushSocketExchange &exchange)
 {
     #ifdef NO_EX
 	bool result =
@@ -333,10 +333,10 @@ void
 #else
 bool
 #endif
-flushSocket::connectFrom(const dodoString&local,
-						 const dodoString&host,
+flushSocket::connectFrom(const dodoString &local,
+						 const dodoString &host,
 						 int port,
-						 flushSocketExchange&exchange)
+						 flushSocketExchange &exchange)
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_CONNECT;
@@ -449,9 +449,9 @@ void
 #else
 bool
 #endif
-flushSocket::connectFrom(const dodoString&local,
-						 const __connInfo&destinaton,
-						 flushSocketExchange&exchange)
+flushSocket::connectFrom(const dodoString &local,
+						 const __connInfo &destinaton,
+						 flushSocketExchange &exchange)
 {
     #ifdef NO_EX
 	bool result =
@@ -471,8 +471,8 @@ void
 #else
 bool
 #endif
-flushSocket::connect(const dodoString&path,
-					 flushSocketExchange&exchange)
+flushSocket::connect(const dodoString &path,
+					 flushSocketExchange &exchange)
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
@@ -531,7 +531,7 @@ void
 #else
 bool
 #endif
-flushSocket::bindNListen(const dodoString&host,
+flushSocket::bindNListen(const dodoString &host,
 						 int port,
 						 int numberOfConnections)
 {
@@ -652,7 +652,7 @@ void
 #else
 bool
 #endif
-flushSocket::bindNListen(const __connInfo&destinaton,
+flushSocket::bindNListen(const __connInfo &destinaton,
 						 int numberOfConnections)
 {
     #ifdef NO_EX
@@ -673,7 +673,7 @@ void
 #else
 bool
 #endif
-flushSocket::bindNListen(const dodoString&path,
+flushSocket::bindNListen(const dodoString &path,
 						 int numberOfConnections,
 						 bool force)
 {
@@ -778,8 +778,8 @@ flushSocket::bindNListen(const dodoString&path,
 //-------------------------------------------------------------------
 
 bool
-flushSocket::accept(__initialAccept&init,
-					__connInfo&info)
+flushSocket::accept(__initialAccept &init,
+					__connInfo &info)
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_ACCEPT;
@@ -907,7 +907,7 @@ flushSocket::accept(__initialAccept&init,
 //-------------------------------------------------------------------
 
 bool
-flushSocket::accept(__initialAccept&init)
+flushSocket::accept(__initialAccept &init)
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_ACCEPT;

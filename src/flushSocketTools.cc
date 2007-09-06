@@ -26,7 +26,7 @@
 using namespace dodo;
 
 __hostInfo
-flushSocketTools::getHostInfo(const dodoString&host)
+flushSocketTools::getHostInfo(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
 
@@ -98,8 +98,8 @@ flushSocketTools::getInterfacesNames()
 //-------------------------------------------------------------------
 
 __servInfo
-flushSocketTools::getServiceInfo(const dodoString&host,
-								 const dodoString&protocol)
+flushSocketTools::getServiceInfo(const dodoString &host,
+								 const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 
@@ -123,7 +123,7 @@ flushSocketTools::getServiceInfo(const dodoString&host,
 
 __servInfo
 flushSocketTools::getServiceInfo(int port,
-								 const dodoString&protocol)
+								 const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 
@@ -148,7 +148,7 @@ flushSocketTools::getServiceInfo(int port,
 //-------------------------------------------------------------------
 
 __ifInfo
-flushSocketTools::getInterfaceInfo(const dodoString&interface)
+flushSocketTools::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if (socket == -1)
@@ -299,7 +299,7 @@ void
 #else
 bool
 #endif
-flushSocketTools::setLocalName(const dodoString&host)
+flushSocketTools::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(), host.size()) == -1)
         #ifndef NO_EX

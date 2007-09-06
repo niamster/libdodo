@@ -25,17 +25,17 @@
 
 using namespace dodo;
 
-__cookies::__cookies(const dodoString&a_name,
-					 const dodoString&a_value,
-					 const dodoString&a_exDate,
-					 const dodoString&a_path,
-					 const dodoString&a_domain,
+__cookies::__cookies(const dodoString &a_name,
+					 const dodoString &a_value,
+					 const dodoString &a_exDate,
+					 const dodoString &a_path,
+					 const dodoString &a_domain,
 					 bool a_secure) : name(a_name),
-	value(a_value),
-	exDate(a_exDate),
-	path(a_path),
-	domain(a_domain),
-	secure(a_secure)
+									  value(a_value),
+									  exDate(a_exDate),
+									  path(a_path),
+									  domain(a_domain),
+									  secure(a_secure)
 {
 }
 
@@ -47,21 +47,21 @@ __cookies::__cookies(bool a_secure) : secure(a_secure)
 
 //-------------------------------------------------------------------
 
-cgiTools::cgiTools(cgiTools&ct)
+cgiTools::cgiTools(cgiTools &ct)
 {
 }
 
 //-------------------------------------------------------------------
 
 cgiTools::cgiTools(bool silent,
-				   dodoStringMap&a_headers,
+				   dodoStringMap &a_headers,
 				   bool a_autoclearContent,
 				   bool a_postFilesInMem,
 				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-	postFilesTmpDir(a_postFilesTmpDir)
+												   postFilesTmpDir(a_postFilesTmpDir)
                 #ifdef FCGI_EXT
-	,
-	cgiFastSet(false)
+												   ,
+												   cgiFastSet(false)
                 #endif
 
 {
@@ -92,13 +92,13 @@ cgiTools::cgiTools(bool silent,
 
 cgiTools::cgiTools(cgiFastSTD    *a_cf,
 				   bool silent,
-				   dodoStringMap&a_headers,
+				   dodoStringMap &a_headers,
 				   bool a_autoclearContent,
 				   bool a_postFilesInMem,
 				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-	postFilesTmpDir(a_postFilesTmpDir),
-	cgiFastSet(true),
-	cf(a_cf)
+												   postFilesTmpDir(a_postFilesTmpDir),
+												   cgiFastSet(true),
+												   cf(a_cf)
 
 {
 	initHeaders(a_headers);
@@ -192,8 +192,8 @@ cgiTools::getMethod() const
 //-------------------------------------------------------------------
 
 void
-cgiTools::make(dodoStringMap&val,
-			   const dodoString&string,
+cgiTools::make(dodoStringMap &val,
+			   const dodoString &string,
 			   const char       *delim)
 {
 	dodoStringArr getPair = tools::explode(tools::decodeURL(string), delim);
@@ -233,7 +233,7 @@ cgiTools::makeEnv()
 //-------------------------------------------------------------------
 
 void
-cgiTools::initHeaders(dodoStringMap&headers)
+cgiTools::initHeaders(dodoStringMap &headers)
 {
 	HEADERS.insert("Content-type", "text/html");
 	HEADERS.insert("X-Powered-By", PACKAGE_NAME "/" PACKAGE_VERSION);
@@ -518,7 +518,7 @@ cgiTools::makePost()
 
 //-------------------------------------------------------------------
 
-dodoStringMap&
+dodoStringMap &
 cgiTools::operator[](short method)
 {
 	if (method == REQUESTMETHOD_POST)
@@ -530,7 +530,7 @@ cgiTools::operator[](short method)
 //-------------------------------------------------------------------
 
 dodoString
-cgiTools::request(const dodoString&varName,
+cgiTools::request(const dodoString &varName,
 				  short first)
 {
 	dodoString met0 = METHOD_GET[varName];
@@ -552,11 +552,11 @@ cgiTools::request(const dodoString&varName,
 //-------------------------------------------------------------------
 
 void
-cgiTools::setCookie(const dodoString&name,
-					const dodoString&value,
-					const dodoString&exDate,
-					const dodoString&path,
-					const dodoString&domain,
+cgiTools::setCookie(const dodoString &name,
+					const dodoString &value,
+					const dodoString &exDate,
+					const dodoString &path,
+					const dodoString &domain,
 					bool secure)
 {
 	__cookies temp(secure);
@@ -571,7 +571,7 @@ cgiTools::setCookie(const dodoString&name,
 //-------------------------------------------------------------------
 
 void
-cgiTools::setCookie(const __cookies&cookie)
+cgiTools::setCookie(const __cookies &cookie)
 {
 	cookiesSet.push_back(cookie);
 }

@@ -27,28 +27,28 @@ using namespace dodo;
 
 flushSocketOptions::flushSocketOptions(short a_family,
 									   short a_type) : family(a_family),
-	type(a_type),
-	lingerOpts(SOCKET_LINGER_OPTION),
-	lingerSeconds(SOCKET_LINGER_PERIOD),
-	inTimeout(RECIEVE_TIMEOUT),
-	outTimeout(SEND_TIMEOUT),
-	inSocketBuffer(SOCKET_INSIZE),
-	outSocketBuffer(SOCKET_OUTSIZE),
-	socket(-1),
-	blocked(true)
+													   type(a_type),
+													   lingerOpts(SOCKET_LINGER_OPTION),
+													   lingerSeconds(SOCKET_LINGER_PERIOD),
+													   inTimeout(RECIEVE_TIMEOUT),
+													   outTimeout(SEND_TIMEOUT),
+													   inSocketBuffer(SOCKET_INSIZE),
+													   outSocketBuffer(SOCKET_OUTSIZE),
+													   socket(-1),
+													   blocked(true)
 {
 }
 
 //-------------------------------------------------------------------
 
 flushSocketOptions::flushSocketOptions() : lingerOpts(SOCKET_LINGER_OPTION),
-	lingerSeconds(SOCKET_LINGER_PERIOD),
-	inTimeout(RECIEVE_TIMEOUT),
-	outTimeout(SEND_TIMEOUT),
-	inSocketBuffer(SOCKET_INSIZE),
-	outSocketBuffer(SOCKET_OUTSIZE),
-	socket(-1),
-	blocked(true)
+										   lingerSeconds(SOCKET_LINGER_PERIOD),
+										   inTimeout(RECIEVE_TIMEOUT),
+										   outTimeout(SEND_TIMEOUT),
+										   inSocketBuffer(SOCKET_INSIZE),
+										   outSocketBuffer(SOCKET_OUTSIZE),
+										   socket(-1),
+										   blocked(true)
 {
 }
 

@@ -42,12 +42,12 @@ namespace dodo
 		/**
 		 * @typedef type of pointer on function to compare two values
 		 */
-		typedef bool (*cmpFunc)(const keyType&, const keyType&);
+		typedef bool (*cmpFunc)(const keyType &, const keyType &);
 
 		/**
 		 * @typedef type of pointer on function to generate hash for keyType
 		 */
-		typedef unsigned long (*hashFunc)(const keyType&);
+		typedef unsigned long (*hashFunc)(const keyType &);
 	};
 
 	/**
@@ -65,7 +65,7 @@ namespace dodo
 		/**
 		 * copy constructor
 		 */
-		dodoMap(const dodoMap&dodoM) : contents(dodoM.contents)
+		dodoMap(const dodoMap &dodoM) : contents(dodoM.contents)
 		{
 		}
 
@@ -90,15 +90,15 @@ namespace dodo
 		valueType &
 		operator[](const keyType &varName)
 		{
-		   	typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
+			typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 
-		   	for (;i!=j;++i)
-		   		if (cmpFunc(varName, i->first))
-		   			return i->second;
+			for (; i != j; ++i)
+				if (cmpFunc(varName, i->first))
+					return i->second;
 
-		   	std::pair<typename std::map<keyType, valueType>::iterator, bool> res = contents.insert(make_pair(varName, type));
+			std::pair < typename std::map<keyType, valueType>::iterator, bool > res = contents.insert(make_pair(varName, type));
 
-		   	return res.first->second;
+			return res.first->second;
 		}
 
 		/**
@@ -106,7 +106,7 @@ namespace dodo
 		 * @param varName value of hash that points to the value
 		 */
 		typename std::map<keyType, valueType>::iterator
-		find(const keyType&varName)
+		find(const keyType &varName)
 		{
 			typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 
@@ -122,7 +122,7 @@ namespace dodo
 		 * @param varName is value of hash that points to the value
 		 */
 		typename std::map<keyType, valueType>::const_iterator
-		find(const keyType&varName) const
+		find(const keyType &varName) const
 		{
 			typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 
@@ -138,7 +138,7 @@ namespace dodo
 		 * @param varName is value of hash that points to the value
 		 */
 		void
-		erase(const keyType&varName)
+		erase(const keyType &varName)
 		{
 			contents.erase(varName);
 		}
@@ -149,8 +149,8 @@ namespace dodo
 		 * @param varVal is value of hash by varName
 		 */
 		void
-		insert(const keyType&varName,
-			   const valueType&varVal)
+		insert(const keyType &varName,
+			   const valueType &varVal)
 		{
 			contents.insert(make_pair(varName, varVal));
 		}
@@ -227,7 +227,7 @@ namespace dodo
 		 * @return true if value is set by given key
 		 */
 		bool
-		isset(const keyType&varName)
+		isset(const keyType &varName)
 		{
 			typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
 

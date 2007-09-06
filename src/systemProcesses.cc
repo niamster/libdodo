@@ -27,14 +27,14 @@
 using namespace dodo;
 
 __processInfo::__processInfo() : isRunning(false),
-	executed(0),
-	executeLimit(0)
+								 executed(0),
+								 executeLimit(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemProcesses::systemProcesses(systemProcesses&sp)
+systemProcesses::systemProcesses(systemProcesses &sp)
 {
 }
 
@@ -268,7 +268,7 @@ systemProcesses::getProcess(unsigned long position) const
 //-------------------------------------------------------------------
 
 bool
-systemProcesses::_isRunning(std::list<__processInfo>::iterator&position) const
+systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
 {
 	if (!position->isRunning)
 		return false;
@@ -654,7 +654,7 @@ systemProcesses::setExecutionLimit(unsigned long position,
     #ifdef DL_EXT
 
 systemProcessesMod
-systemProcesses::getModuleInfo(const dodoString&module,
+systemProcesses::getModuleInfo(const dodoString &module,
 							   void             *toInit)
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
@@ -688,7 +688,7 @@ systemProcesses::getModuleInfo(const dodoString&module,
 //-------------------------------------------------------------------
 
 unsigned long
-systemProcesses::add(const dodoString&module,
+systemProcesses::add(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {

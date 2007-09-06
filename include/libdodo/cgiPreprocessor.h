@@ -58,7 +58,7 @@ namespace dodo
 		 * @return preprocessed template from file
 		 * @param path indicates path where template stays
 		 */
-		virtual dodoString preProcess(const dodoString&path);
+		virtual dodoString preProcess(const dodoString &path);
 
 		protected:
 
@@ -67,14 +67,14 @@ namespace dodo
 		 * @param newLinePos describes array of newlines' positions
 		 * @param pos describes pos in file
 		 */
-		virtual unsigned long getLineNumber(const dodoArray<unsigned long>&newLinePos, unsigned long pos);
+		virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newLinePos, unsigned long pos);
 
 		/**
 		 * @return file contents
 		 * @param path indicates what to read
 		 * @param newLinePos describes array of newlines' positions
 		 */
-		virtual dodoString read(const dodoString&path, dodoArray<unsigned long>&newLinePos);
+		virtual dodoString read(const dodoString &path, dodoArray<unsigned long> &newLinePos);
 
 		dodoArray< dodoArray<unsigned long> > newLinePositions;    ///< stack of processed new lines' positions
 	};

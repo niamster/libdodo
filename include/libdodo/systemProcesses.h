@@ -116,7 +116,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		systemProcesses(systemProcesses&sp);
+		systemProcesses(systemProcesses &sp);
 
 		public:
 
@@ -297,7 +297,7 @@ namespace dodo
 		 * @param data describes data to be passed to func
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual unsigned long add(const dodoString&module, void *data, void *toInit = NULL);
+		virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
 
 
 		/**
@@ -305,7 +305,7 @@ namespace dodo
 		 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static systemProcessesMod getModuleInfo(const dodoString&module, void *toInit = NULL);
+		static systemProcessesMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
             #endif
 
@@ -315,7 +315,7 @@ namespace dodo
 		 * @return true if thread is process
 		 * @param position indicates for what process to indicate
 		 */
-		virtual bool _isRunning(std::list<__processInfo>::iterator&position) const;
+		virtual bool _isRunning(std::list<__processInfo>::iterator &position) const;
 
 		/**
 		 * searches processes by position

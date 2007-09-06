@@ -26,23 +26,23 @@
 using namespace dodo;
 
 __initialAccept::__initialAccept() : socket(-1),
-	family(-1),
-	type(-1)
+									 family(-1),
+									 type(-1)
 {
 }
 
 //-------------------------------------------------------------------
 
-__initialAccept::__initialAccept(__initialAccept&init) : socket(init.socket),
-	family(init.family),
-	type(init.type)
+__initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
+														  family(init.family),
+														  type(init.type)
 {
 	init.socket = -1;
 }
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange(flushSocketExchange&fse)
+flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 {
 	socket = fse.socket;
 	opened = fse.opened;
@@ -71,7 +71,7 @@ flushSocketExchange::flushSocketExchange()
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange(__initialAccept&a_init)
+flushSocketExchange::flushSocketExchange(__initialAccept &a_init)
 {
 	init(a_init.socket, a_init.blockInherited);
 }
@@ -91,7 +91,7 @@ flushSocketExchange::~flushSocketExchange()
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::init(__initialAccept&a_init)
+flushSocketExchange::init(__initialAccept &a_init)
 {
 	family = a_init.family;
 	type = a_init.type;
@@ -275,7 +275,7 @@ void
 #else
 bool
 #endif
-flushSocketExchange::writeString(const dodoString&data)
+flushSocketExchange::writeString(const dodoString &data)
 {
 	return this->write(data.c_str());
 }
@@ -382,7 +382,7 @@ void
 #else
 bool
 #endif
-flushSocketExchange::readString(dodoString&data)
+flushSocketExchange::readString(dodoString &data)
 {
 	char *t_data = new char[inSize + 1];
 
@@ -443,7 +443,7 @@ flushSocketExchange::addPreExec(inExec func,
     #ifdef DL_EXT
 
 int
-flushSocketExchange::addPostExec(const dodoString&module,
+flushSocketExchange::addPostExec(const dodoString &module,
 								 void             *data,
 								 void             *toInit)
 {
@@ -453,7 +453,7 @@ flushSocketExchange::addPostExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 int
-flushSocketExchange::addPreExec(const dodoString&module,
+flushSocketExchange::addPreExec(const dodoString &module,
 								void             *data,
 								void             *toInit)
 {
@@ -463,7 +463,7 @@ flushSocketExchange::addPreExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 xexecCounts
-flushSocketExchange::addExec(const dodoString&module,
+flushSocketExchange::addExec(const dodoString &module,
 							 void             *data,
 							 void             *toInit)
 {
@@ -575,7 +575,7 @@ void
 #else
 bool
 #endif
-flushSocketExchange::writeStreamString(const dodoString&data)
+flushSocketExchange::writeStreamString(const dodoString &data)
 {
 	return this->writeStream(data.c_str());
 }
@@ -635,7 +635,7 @@ void
 #else
 bool
 #endif
-flushSocketExchange::readStreamString(dodoString&data)
+flushSocketExchange::readStreamString(dodoString &data)
 {
 	char *t_data = new char[inSocketBuffer + 1];
 

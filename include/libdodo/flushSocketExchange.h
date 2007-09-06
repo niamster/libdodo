@@ -75,7 +75,7 @@ namespace dodo
 		 * copy constructor
 		 * @note if you want to copy it, the object, from what was copy is not be able to init new session => you have to reinit it with accept method!
 		 */
-		__initialAccept(__initialAccept&init);
+		__initialAccept(__initialAccept &init);
 
 
 		private:
@@ -118,14 +118,14 @@ namespace dodo
 		 * @note object that inited new object of this class you can use for future connections;
 		 * you can safely pass it to the functions;
 		 */
-		flushSocketExchange(flushSocketExchange&fse);
+		flushSocketExchange(flushSocketExchange &fse);
 
 		/**
 		 * constructor
 		 * @param init is initial data[got from accept method]
 		 * @note object that inited new object of this class you can use for future connections;
 		 */
-		flushSocketExchange(__initialAccept&init);
+		flushSocketExchange(__initialAccept &init);
 
 		/**
 		 * destructor
@@ -171,7 +171,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual xexecCounts addExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * adds hook after the operation by callback
@@ -180,7 +180,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPostExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * adds hook after the operation by callback
@@ -189,7 +189,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPreExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
                 #endif
 
@@ -199,7 +199,7 @@ namespace dodo
 		 * init oject with given data
 		 * @param init is initial data[got from accept method]
 		 */
-		virtual void init(__initialAccept&init);
+		virtual void init(__initialAccept &init);
 
 		/**
 		 * @return true if connection is alive
@@ -233,7 +233,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		writeString(const dodoString&data);
+		writeString(const dodoString &data);
 
 		/**
 		 * receive
@@ -261,7 +261,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		readString(dodoString&data);
+		readString(dodoString &data);
 
 		/**
 		 * write - null-terminated string
@@ -293,7 +293,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		writeStreamString(const dodoString&data);
+		writeStreamString(const dodoString &data);
 
 		/**
 		 * read - null-terminated string
@@ -323,7 +323,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		readStreamString(dodoString&data);
+		readStreamString(dodoString &data);
 
 		/**
 		 * closes this socket

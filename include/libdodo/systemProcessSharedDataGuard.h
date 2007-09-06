@@ -47,7 +47,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		systemProcessSharedDataGuard(systemProcessSharedDataGuard&sts);
+		systemProcessSharedDataGuard(systemProcessSharedDataGuard &sts);
 
 		public:
 

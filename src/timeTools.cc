@@ -26,12 +26,12 @@
 using namespace dodo;
 
 __mktime::__mktime() : sec(0),
-	min(0),
-	hour(0),
-	day(1),
-	month(1),
-	year(1990),
-	daylight(true)
+					   min(0),
+					   hour(0),
+					   day(1),
+					   month(1),
+					   year(1990),
+					   daylight(true)
 {
 }
 
@@ -44,19 +44,19 @@ __mktime::__mktime(unsigned int a_sec,
 				   unsigned int a_month,
 				   unsigned int a_year,
 				   bool a_daylight) : sec(a_sec),
-	min(a_min),
-	hour(a_hour),
-	day(a_day),
-	month(a_month),
-	year(a_year),
-	daylight(a_daylight)
+									  min(a_min),
+									  hour(a_hour),
+									  day(a_day),
+									  month(a_month),
+									  year(a_year),
+									  daylight(a_daylight)
 {
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-timeTools::byFormat(const dodoString&format,
+timeTools::byFormat(const dodoString &format,
 					long timestamp,
 					bool local)
 {
@@ -101,7 +101,7 @@ timeTools::now()
 
 dodoStringArr
 timeTools::week(long date,
-				const dodoString&format,
+				const dodoString &format,
 				bool local)
 {
 	long daynum = atol(timeTools::byFormat("%w", date, local).c_str());
@@ -122,7 +122,7 @@ timeTools::week(long date,
 dodoStringArr
 timeTools::datesArr(long dateFrom,
 					long dateTo,
-					const dodoString&format,
+					const dodoString &format,
 					bool local)
 {
 	dodoStringArr result;
@@ -153,7 +153,7 @@ timeTools::datesArr(long dateFrom,
 //-------------------------------------------------------------------
 
 long
-timeTools::makeTime(const __mktime&timeInfo)
+timeTools::makeTime(const __mktime &timeInfo)
 {
 	tm tTime;
 
@@ -255,8 +255,8 @@ timeTools::daysInMonth(unsigned int year,
 //-------------------------------------------------------------------
 
 long
-timeTools::byFormat(const dodoString&format,
-					const dodoString&dt)
+timeTools::byFormat(const dodoString &format,
+					const dodoString &dt)
 {
 	tm tTime;
 	strptime(dt.c_str(), format.c_str(), &tTime);

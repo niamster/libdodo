@@ -29,15 +29,15 @@
 using namespace dodo;
 
 __threadInfo::__threadInfo() : thread(0),
-	isRunning(false),
-	executed(0),
-	executeLimit(0)
+							   isRunning(false),
+							   executed(0),
+							   executeLimit(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreads::systemThreads(systemThreads&st)
+systemThreads::systemThreads(systemThreads &st)
 {
 }
 
@@ -531,7 +531,7 @@ systemThreads::isRunning(unsigned long position) const
 //-------------------------------------------------------------------
 
 bool
-systemThreads::_isRunning(std::list<__threadInfo>::iterator&position) const
+systemThreads::_isRunning(std::list<__threadInfo>::iterator &position) const
 {
 	if (!position->isRunning)
 		return false;
@@ -626,7 +626,7 @@ systemThreads::running() const
     #ifdef DL_EXT
 
 systemThreadsMod
-systemThreads::getModuleInfo(const dodoString&module,
+systemThreads::getModuleInfo(const dodoString &module,
 							 void             *toInit)
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
@@ -660,7 +660,7 @@ systemThreads::getModuleInfo(const dodoString&module,
 //-------------------------------------------------------------------
 
 unsigned long
-systemThreads::add(const dodoString&module,
+systemThreads::add(const dodoString &module,
 				   void             *data,
 				   void             *toInit,
 				   bool detached,
@@ -712,7 +712,7 @@ systemThreads::add(const dodoString&module,
 //-------------------------------------------------------------------
 
 unsigned long
-systemThreads::add(const dodoString&module,
+systemThreads::add(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {

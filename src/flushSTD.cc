@@ -26,15 +26,15 @@
 using namespace dodo;
 
 flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),
-	outSTDBuffer(STD_OUTSIZE),
-	err(false),
-	blocked(true)
+					   outSTDBuffer(STD_OUTSIZE),
+					   err(false),
+					   blocked(true)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushSTD::flushSTD(flushSTD&fd)
+flushSTD::flushSTD(flushSTD &fd)
 {
 }
 
@@ -88,7 +88,7 @@ flushSTD::addPreExec(inExec func,
     #ifdef DL_EXT
 
 int
-flushSTD::addPostExec(const dodoString&module,
+flushSTD::addPostExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
@@ -98,7 +98,7 @@ flushSTD::addPostExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 xexecCounts
-flushSTD::addExec(const dodoString&module,
+flushSTD::addExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
@@ -108,7 +108,7 @@ flushSTD::addExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 int
-flushSTD::addPreExec(const dodoString&module,
+flushSTD::addPreExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
@@ -202,7 +202,7 @@ void
 #else
 bool
 #endif
-flushSTD::readString(dodoString&a_str)
+flushSTD::readString(dodoString &a_str)
 {
 	char *data = new char[inSize + 1];
 
@@ -243,7 +243,7 @@ void
 #else
 bool
 #endif
-flushSTD::writeString(const dodoString&a_buf)
+flushSTD::writeString(const dodoString &a_buf)
 {
 	return this->write(a_buf.c_str());
 }
@@ -541,7 +541,7 @@ void
 #else
 bool
 #endif
-flushSTD::readStreamString(dodoString&a_str)
+flushSTD::readStreamString(dodoString &a_str)
 {
 	char *data = new char[inSTDBuffer + 1];
 
@@ -582,7 +582,7 @@ void
 #else
 bool
 #endif
-flushSTD::writeStreamString(const dodoString&a_buf)
+flushSTD::writeStreamString(const dodoString &a_buf)
 {
 	return this->writeStream(a_buf.c_str());
 }

@@ -77,7 +77,7 @@ namespace dodo
 		 * constructor
 		 * to prevent from copying
 		 */
-		dbSqlite(dbSqlite&a_pp);
+		dbSqlite(dbSqlite &a_pp);
 
 		public:
 
@@ -159,12 +159,12 @@ namespace dodo
                 #else
 		virtual bool
                 #endif
-		exec(const dodoString&query = __dodostring__, bool result = false);
+		exec(const dodoString &query = __dodostring__, bool result = false);
 
 		/**
 		 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
 		 */
-		virtual void setBLOBValues(const dodoStringArr&values);
+		virtual void setBLOBValues(const dodoStringArr &values);
 
                 #ifndef DBSQLITE_WO_XEXEC
 
@@ -194,7 +194,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual xexecCounts addExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * adds hook after the operation by callback
@@ -203,7 +203,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPostExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * adds hook after the operation by callback
@@ -212,7 +212,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPreExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
                 #endif
 
@@ -240,7 +240,7 @@ namespace dodo
                 #else
 		virtual bool
                 #endif
-		_exec(const dodoString&query, bool result);
+		_exec(const dodoString &query, bool result);
 
 		private:
 

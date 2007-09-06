@@ -103,7 +103,7 @@ namespace dodo
 		 * constructor
 		 * @note initializes with user values
 		 */
-		__xmlInfo(const dodoString&version, const dodoString&encoding, const dodoString&root, int compression);
+		__xmlInfo(const dodoString &version, const dodoString &encoding, const dodoString &root, int compression);
 
 		dodoString version;     ///< version of XML document
 		dodoString encoding;    ///< encoding of XML document
@@ -124,7 +124,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		xmlTools(xmlTools&xt);
+		xmlTools(xmlTools &xt);
 
 		public:
 
@@ -147,7 +147,7 @@ namespace dodo
                 #else
 		virtual bool
                 #endif
-		parseFileInt(const dodoString&file);
+		parseFileInt(const dodoString &file);
 
 		/**
 		 * parses XML from buffer if you want to use reParse wo calling parseFile/parseBuffer
@@ -158,7 +158,7 @@ namespace dodo
                 #else
 		virtual bool
                 #endif
-		parseBufferInt(const dodoString&buffer);
+		parseBufferInt(const dodoString &buffer);
 
 		/**
 		 * parses XML using __xmlNodeDef XML explanation from file
@@ -167,7 +167,7 @@ namespace dodo
 		 * @param file path XML file to parse
 		 * @note the first given definition is as root for XML document, even it isn't really like that in document
 		 */
-		virtual __xmlNode parseFile(const __xmlNodeDef&definition, const dodoString&file);
+		virtual __xmlNode parseFile(const __xmlNodeDef &definition, const dodoString &file);
 
 		/**
 		 * parses XML using __xmlNodeDef XML explanation from buffer
@@ -176,7 +176,7 @@ namespace dodo
 		 * @param buffer contains XML to parse
 		 * @note the first given definition is as root for XML document, even it isn't really like that in document
 		 */
-		virtual __xmlNode parseBuffer(const __xmlNodeDef&definition, const dodoString&buffer);
+		virtual __xmlNode parseBuffer(const __xmlNodeDef &definition, const dodoString &buffer);
 
 		/**
 		 * parses XML using __xmlNodeDef XML explanation from file
@@ -184,7 +184,7 @@ namespace dodo
 		 * @param file path XML file to parse
 		 * @note the first given definition is as root for XML document, even it isn't really like that in document
 		 */
-		virtual __xmlNode parseFile(const dodoString&file);
+		virtual __xmlNode parseFile(const dodoString &file);
 
 		/**
 		 * parses XML using __xmlNodeDef XML explanation from buffer
@@ -192,7 +192,7 @@ namespace dodo
 		 * @param buffer contains XML to parse
 		 * @note the first given definition is as root for XML document, even it isn't really like that in document
 		 */
-		virtual __xmlNode parseBuffer(const dodoString&buffer);
+		virtual __xmlNode parseBuffer(const dodoString &buffer);
 
 		/**
 		 * parses XML using __xmlNodeDef XML explanation with xml you have once parsed; faster
@@ -200,7 +200,7 @@ namespace dodo
 		 * @param definition describes structure of XML
 		 * @note the first given definition is as root for XML document, even it isn't really like that in document
 		 */
-		virtual __xmlNode reParse(const __xmlNodeDef&definition);
+		virtual __xmlNode reParse(const __xmlNodeDef &definition);
 
 		bool icaseNames;        ///< whether to check nodes names and attributes' names with(out) case matching; with case(false) by default
 
@@ -208,23 +208,23 @@ namespace dodo
 		 * @return got info about XML from file
 		 * @param file path XML file to parse
 		 */
-		virtual __xmlInfo getXMLFileInfo(const dodoString&file);
+		virtual __xmlInfo getXMLFileInfo(const dodoString &file);
 
 		/**
 		 * @return got info about XML from buffer
 		 * @param buffer contains XML to parse
 		 */
-		virtual __xmlInfo getXMLBufferInfo(const dodoString&buffer);
+		virtual __xmlInfo getXMLBufferInfo(const dodoString &buffer);
 
 		/**
 		 * clears params of the give node
 		 */
-		static void initNode(__xmlNode&node);
+		static void initNode(__xmlNode &node);
 
 		/**
 		 * clears params of the give node definition
 		 */
-		static void initNodeDef(__xmlNodeDef&node);
+		static void initNodeDef(__xmlNodeDef &node);
 
 		/**
 		 * frees internal structures
@@ -237,13 +237,13 @@ namespace dodo
 		 * @param encoding declears encoding of XML
 		 * @param version declears version of XML
 		 */
-		virtual dodoString createXML(const __xmlNode&root, const dodoString&encoding = "UTF-8", const dodoString&version = "1.0")  const;
+		virtual dodoString createXML(const __xmlNode &root, const dodoString &encoding = "UTF-8", const dodoString &version = "1.0")  const;
 
 		/**
 		 * @return XML string
 		 * @param root defines root node of XML document
 		 */
-		virtual dodoString createNode(const __xmlNode&node) const;
+		virtual dodoString createNode(const __xmlNode &node) const;
 
 		protected:
 
@@ -265,7 +265,7 @@ namespace dodo
 		 * @return parsed into __xmlNode structure given XML
 		 * @param definition describes structure of XML
 		 */
-		virtual __xmlNode parse(const __xmlNodeDef&definition);
+		virtual __xmlNode parse(const __xmlNodeDef &definition);
 
 		/**
 		 * parses XML using __xmlNodeDef XML explanation
@@ -274,14 +274,14 @@ namespace dodo
 		 * @param chNode is XML tree node
 		 * @param chLimit is limit of children to search for
 		 */
-		virtual dodoArray<__xmlNode> parse(const __xmlNodeDef&definition, const xmlNodePtr chNode, long chLimit);
+		virtual dodoArray<__xmlNode> parse(const __xmlNodeDef &definition, const xmlNodePtr chNode, long chLimit);
 
 		/**
 		 * gets attributes from node
 		 * @param node describes the node content
 		 * @param attributes describes array of got attributes
 		 */
-		virtual void getAttributes(const xmlNodePtr node, dodoStringMap&attributes);
+		virtual void getAttributes(const xmlNodePtr node, dodoStringMap &attributes);
 
 		/**
 		 * gets attributes from node
@@ -289,14 +289,14 @@ namespace dodo
 		 * @param node describes the node content
 		 * @param attributes describes array of got attributes
 		 */
-		virtual void getAttributes(const __xmlNodeDef&definition, const xmlNodePtr node, dodoStringMap&attributes);
+		virtual void getAttributes(const __xmlNodeDef &definition, const xmlNodePtr node, dodoStringMap &attributes);
 
 		/**
 		 * get diff info from node
 		 * @param node describes the node content
 		 * @param sample describes node that contains result data
 		 */
-		virtual void getNodeInfo(const xmlNodePtr node, __xmlNode&sample);
+		virtual void getNodeInfo(const xmlNodePtr node, __xmlNode &sample);
 
 		private:
 
@@ -304,7 +304,7 @@ namespace dodo
 
 		xcharCmp cmpFunc;        ///< function to compare
 
-		xmlNodePtr findNode(const __xmlNodeDef&definition, xmlNodePtr node);
+		xmlNodePtr findNode(const __xmlNodeDef &definition, xmlNodePtr node);
 
 		xmlDocPtr document;         ///< XML Document
 		xmlAttr *attribute;         ///< XML attributes

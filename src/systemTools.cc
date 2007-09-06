@@ -97,7 +97,7 @@ void
 #else
 bool
 #endif
-systemTools::setWorkingDir(const dodoString&path)
+systemTools::setWorkingDir(const dodoString &path)
 {
 	if (chdir(path.c_str()) == -1)
         #ifndef NO_EX
@@ -119,7 +119,7 @@ void
 #else
 bool
 #endif
-systemTools::getUsageInfo(__usage&info)
+systemTools::getUsageInfo(__usage &info)
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
@@ -144,7 +144,7 @@ void
 #else
 bool
 #endif
-systemTools::changeRoot(const dodoString&path)
+systemTools::changeRoot(const dodoString &path)
 {
     #ifndef NO_EX
 	setWorkingDir(path);
@@ -173,7 +173,7 @@ void
 bool
 #endif
 systemTools::getLimit(short type,
-					  __limits&lim)
+					  __limits &lim)
 {
 	rlimit limit;
 
@@ -253,7 +253,7 @@ void
 bool
 #endif
 systemTools::setLimit(short type,
-					  const __limits&lim)
+					  const __limits &lim)
 {
 	rlimit limit;
 
@@ -514,7 +514,7 @@ void
 #else
 bool
 #endif
-systemTools::getUserInfo(__userInfo&info,
+systemTools::getUserInfo(__userInfo &info,
 						 int uid)
 {
 	passwd *in = getpwuid(uid);
@@ -540,8 +540,8 @@ void
 #else
 bool
 #endif
-systemTools::getUserInfo(__userInfo&info,
-						 const dodoString&uid)
+systemTools::getUserInfo(__userInfo &info,
+						 const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
@@ -567,7 +567,7 @@ void
 #else
 bool
 #endif
-systemTools::getUsers(dodoArray<__userInfo>&users)
+systemTools::getUsers(dodoArray<__userInfo> &users)
 {
 	users.clear();
 
@@ -602,8 +602,8 @@ systemTools::getUsers(dodoArray<__userInfo>&users)
 
 //-------------------------------------------------------------------
 
-__userInfo&
-systemTools::fillUserInfo(__userInfo&info,
+__userInfo &
+systemTools::fillUserInfo(__userInfo &info,
 						  passwd     *in)
 {
 	info.gid = in->pw_gid;
@@ -619,8 +619,8 @@ systemTools::fillUserInfo(__userInfo&info,
 
 //-------------------------------------------------------------------
 
-__groupInfo&
-systemTools::fillGroupInfo(__groupInfo&info,
+__groupInfo &
+systemTools::fillGroupInfo(__groupInfo &info,
 						   group       *pw)
 {
 	info.gid = pw->gr_gid;
@@ -643,7 +643,7 @@ void
 #else
 bool
 #endif
-systemTools::getGroupInfo(__groupInfo&info,
+systemTools::getGroupInfo(__groupInfo &info,
 						  int uid)
 {
 	group *in = getgrgid(uid);
@@ -669,8 +669,8 @@ void
 #else
 bool
 #endif
-systemTools::getGroupInfo(__groupInfo&info,
-						  const dodoString&uid)
+systemTools::getGroupInfo(__groupInfo &info,
+						  const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
@@ -696,7 +696,7 @@ void
 #else
 bool
 #endif
-systemTools::getGroups(dodoArray<__groupInfo>&users)
+systemTools::getGroups(dodoArray<__groupInfo> &users)
 {
 	users.clear();
 
@@ -733,7 +733,7 @@ systemTools::getGroups(dodoArray<__groupInfo>&users)
 //-------------------------------------------------------------------
 
 void
-systemTools::die(const dodoString&message,
+systemTools::die(const dodoString &message,
 				 int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
@@ -1225,7 +1225,7 @@ systemTools::unsetSignalHandler(long signal)
 #ifdef DL_EXT
 
 sigMod
-systemTools::getModuleInfo(const dodoString&module,
+systemTools::getModuleInfo(const dodoString &module,
 						   void             *toInit)
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
@@ -1264,7 +1264,7 @@ void
 bool
     #endif
 systemTools::setSignalHandler(long signal,
-							  const dodoString&path,
+							  const dodoString &path,
 							  void             *toInit,
 							  int blockSignals)
 {
@@ -1345,7 +1345,7 @@ void
     #else
 bool
     #endif
-systemTools::setSignalHandler(const dodoString&path,
+systemTools::setSignalHandler(const dodoString &path,
 							  void             *toInit,
 							  int blockSignals)
 {

@@ -215,7 +215,7 @@ namespace dodo
 		 * @param message is message to print
 		 * @param status indicate with what status to exit
 		 */
-		static void die(const dodoString&message, int status = 1);
+		static void die(const dodoString &message, int status = 1);
 
 		/**
 		 * changes root(/) to new
@@ -227,7 +227,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		changeRoot(const dodoString&path);
+		changeRoot(const dodoString &path);
 		/**
 		 * @return current working directory
 		 */
@@ -242,7 +242,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		setWorkingDir(const dodoString&path);
+		setWorkingDir(const dodoString &path);
 
 		/**
 		 * get system usage with current process
@@ -253,7 +253,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getUsageInfo(__usage&info);
+		getUsageInfo(__usage &info);
 
 		/**
 		 * get limits from systemToolsLimitEnum
@@ -265,7 +265,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getLimit(short type,  __limits&lim);
+		getLimit(short type,  __limits &lim);
 
 		/**
 		 * set limits from systemToolsLimitEnum
@@ -277,7 +277,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		setLimit(short type, const __limits&lim);
+		setLimit(short type, const __limits &lim);
 
 		/**
 		 * @return priority of current process for uidTypeEnum
@@ -346,7 +346,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getUserInfo(__userInfo&info, int uid);
+		getUserInfo(__userInfo &info, int uid);
 
 		/**
 		 * gets user info
@@ -358,7 +358,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getUserInfo(__userInfo&info, const dodoString&uid);
+		getUserInfo(__userInfo &info, const dodoString &uid);
 
 		/**
 		 * gets users of the system
@@ -369,7 +369,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getUsers(dodoArray<__userInfo>&info);
+		getUsers(dodoArray<__userInfo> &info);
 
 		/**
 		 * gets group info
@@ -381,7 +381,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getGroupInfo(__groupInfo&info, int gid);
+		getGroupInfo(__groupInfo &info, int gid);
 
 		/**
 		 * gets group info
@@ -393,7 +393,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getGroupInfo(__groupInfo&info, const dodoString&gid);
+		getGroupInfo(__groupInfo &info, const dodoString &gid);
 
 		/**
 		 * gets group of the system
@@ -404,7 +404,7 @@ namespace dodo
             #else
 		static bool
             #endif
-		getGroups(dodoArray<__groupInfo>&info);
+		getGroups(dodoArray<__groupInfo> &info);
 		/**
 		 * @return PID of current process
 		 */
@@ -512,7 +512,7 @@ namespace dodo
 		 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static sigMod getModuleInfo(const dodoString&module, void *toInit = NULL);
+		static sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 		/**
 		 * set handler on signal from specific module
@@ -526,7 +526,7 @@ namespace dodo
                 #else
 		static bool
                 #endif
-		setSignalHandler(long signal, const dodoString&module, void *toInit = NULL, int blockSignals = -1);
+		setSignalHandler(long signal, const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
 		/**
 		 * set handler on signal from specific module
@@ -540,7 +540,7 @@ namespace dodo
                 #else
 		static bool
                 #endif
-		setSignalHandler(const dodoString&module, void *toInit = NULL, int blockSignals = -1);
+		setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
             #endif
 
@@ -568,12 +568,12 @@ namespace dodo
 		/**
 		 * fills __userInfo with values from passwd structure
 		 */
-		static __userInfo&fillUserInfo(__userInfo&info, passwd *pw);
+		static __userInfo &fillUserInfo(__userInfo &info, passwd *pw);
 
 		/**
 		 * fills __groupInfo with values from group structure
 		 */
-		static __groupInfo&fillGroupInfo(__groupInfo&info, group *pw);
+		static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
 
 		/**
 		 * @return signal number that refers to given systemSignalsEnum

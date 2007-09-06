@@ -38,7 +38,7 @@ threadGuardHolder::threadGuard::~threadGuard()
 	{
 		parent->mutex.unLock();
 	}
-	catch (baseEx&ex)
+	catch (baseEx &ex)
 	{
 
 	}

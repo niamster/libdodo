@@ -37,7 +37,7 @@ dbPostgresql::dbPostgresql() : empty(true)
 
 //-------------------------------------------------------------------
 
-dbPostgresql::dbPostgresql(dbPostgresql&a_mypp)
+dbPostgresql::dbPostgresql(dbPostgresql &a_mypp)
 {
 }
 
@@ -134,7 +134,7 @@ dbPostgresql::disconnect()
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::setBLOBValues(const dodoStringArr&values)
+dbPostgresql::setBLOBValues(const dodoStringArr &values)
 {
 	blobs = values;
 }
@@ -146,7 +146,7 @@ void
     #else
 bool
     #endif
-dbPostgresql::_exec(const dodoString&query,
+dbPostgresql::_exec(const dodoString &query,
 					bool result)
 {
 	bool blobHint;
@@ -490,7 +490,7 @@ void
     #else
 bool
     #endif
-dbPostgresql::exec(const dodoString&query,
+dbPostgresql::exec(const dodoString &query,
 				   bool result)
 {
         #ifndef DBPOSTGRESQL_WO_XEXEC
@@ -539,7 +539,7 @@ dbPostgresql::addPreExec(inExec func,
         #ifdef DL_EXT
 
 int
-dbPostgresql::addPostExec(const dodoString&module,
+dbPostgresql::addPostExec(const dodoString &module,
 						  void             *data,
 						  void             *toInit)
 {
@@ -549,7 +549,7 @@ dbPostgresql::addPostExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 int
-dbPostgresql::addPreExec(const dodoString&module,
+dbPostgresql::addPreExec(const dodoString &module,
 						 void             *data,
 						 void             *toInit)
 {
@@ -559,7 +559,7 @@ dbPostgresql::addPreExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 xexecCounts
-dbPostgresql::addExec(const dodoString&module,
+dbPostgresql::addExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
@@ -626,7 +626,7 @@ void
     #else
 bool
     #endif
-dbPostgresql::setCharset(const dodoString&charset)
+dbPostgresql::setCharset(const dodoString &charset)
 {
 	int status = PQsetClientEncoding(conn, charset.c_str());
 	if (status == -1)

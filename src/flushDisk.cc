@@ -26,17 +26,17 @@
 using namespace dodo;
 
 flushDisk::flushDisk(short type,
-					 const dodoString&a_path) : over(false),
-	mode(OPENMODE_READ_WRITE),
-	fileType(type),
-	append(false),
-	path(a_path)
+					 const dodoString &a_path) : over(false),
+												 mode(OPENMODE_READ_WRITE),
+												 fileType(type),
+												 append(false),
+												 path(a_path)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushDisk::flushDisk(flushDisk&fd)
+flushDisk::flushDisk(flushDisk &fd)
 {
 }
 
@@ -95,7 +95,7 @@ flushDisk::addPreExec(inExec func,
     #ifdef DL_EXT
 
 int
-flushDisk::addPostExec(const dodoString&module,
+flushDisk::addPostExec(const dodoString &module,
 					   void             *data,
 					   void             *toInit)
 {
@@ -105,7 +105,7 @@ flushDisk::addPostExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 int
-flushDisk::addPreExec(const dodoString&module,
+flushDisk::addPreExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
@@ -115,7 +115,7 @@ flushDisk::addPreExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 xexecCounts
-flushDisk::addExec(const dodoString&module,
+flushDisk::addExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
@@ -171,7 +171,7 @@ void
 #else
 bool
 #endif
-flushDisk::open(const dodoString&a_path)
+flushDisk::open(const dodoString &a_path)
 {
     #ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_OPEN;
@@ -366,7 +366,7 @@ void
 #else
 bool
 #endif
-flushDisk::readString(dodoString&a_str,
+flushDisk::readString(dodoString &a_str,
 					  unsigned long a_pos)
 {
 	char *data = new char[inSize + 1];
@@ -408,7 +408,7 @@ void
 #else
 bool
 #endif
-flushDisk::writeString(const dodoString&a_buf,
+flushDisk::writeString(const dodoString &a_buf,
 					   unsigned long a_pos)
 {
 	return this->write(a_buf.c_str(), a_pos);
@@ -698,7 +698,7 @@ void
 #else
 bool
 #endif
-flushDisk::readStreamString(dodoString&a_str,
+flushDisk::readStreamString(dodoString &a_str,
 							unsigned long a_pos)
 {
 	char *data = new char[inSize + 1];
@@ -740,7 +740,7 @@ void
 #else
 bool
 #endif
-flushDisk::writeStreamString(const dodoString&a_buf)
+flushDisk::writeStreamString(const dodoString &a_buf)
 {
 	return this->writeStream(a_buf.c_str());
 }

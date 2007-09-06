@@ -163,7 +163,7 @@ namespace dodo
 		 * @param data describes data to be passed to func
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual unsigned long add(const dodoString&module, void *data, void *toInit = NULL) = 0;
+		virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
 
             #endif
 	};

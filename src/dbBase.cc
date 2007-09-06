@@ -25,17 +25,17 @@
 
 using namespace dodo;
 
-__dbInfo::__dbInfo(const dodoString&a_db,
-				   const dodoString&a_host,
-				   const dodoString&a_user,
-				   const dodoString&a_password,
-				   const dodoString&a_path,
+__dbInfo::__dbInfo(const dodoString &a_db,
+				   const dodoString &a_host,
+				   const dodoString &a_user,
+				   const dodoString &a_password,
+				   const dodoString &a_path,
 				   int a_port) : db(a_db),
-	host(a_host),
-	user(a_user),
-	password(a_password),
-	path(a_path),
-	port(a_port)
+								 host(a_host),
+								 user(a_user),
+								 password(a_password),
+								 path(a_path),
+								 port(a_port)
 {
 }
 
@@ -54,8 +54,8 @@ __tableInfo::__tableInfo()
 
 //-------------------------------------------------------------------
 
-const __tableInfo&
-__tableInfo::operator=(const __tableInfo&from)
+const __tableInfo &
+__tableInfo::operator=(const __tableInfo &from)
 {
 	name = from.name;
 
@@ -85,8 +85,8 @@ __fieldInfo::__fieldInfo()
 
 //-------------------------------------------------------------------
 
-const __fieldInfo&
-__fieldInfo::operator=(const __fieldInfo&from)
+const __fieldInfo &
+__fieldInfo::operator=(const __fieldInfo &from)
 {
 	name = from.name;
 	type = from.type;
@@ -109,30 +109,30 @@ __fieldInfo::operator=(const __fieldInfo&from)
 //-------------------------------------------------------------------
 
 __dbStorage::__dbStorage(dodoArray<dodoStringArr> a_rows, dodoStringArr a_fields) : rows(a_rows),
-	fields(a_fields)
+																					fields(a_fields)
 {
 }
 
 //-------------------------------------------------------------------
 
 __collectedData::__collectedData(
-	dodoString&a_pre_where,
-	dodoStringArr&a_pre_fieldsNames,
-	dodoArray<dodoStringArr>&a_pre_fieldsVal,
-	dodoString&a_pre_table,
-	dodoString&a_pre_tableTo,
-	dodoString&a_pre_order,
-	dodoString&a_pre_having,
-	dodoString&a_pre_group,
-	dodoString&a_pre_limNumber,
-	dodoString&a_pre_limOffset,
-	dodoStringArr&a_pre_subQ,
-	int&a_qType,
-	int&a_qShift,
-	int&a_qSelShift,
-	int&a_qInsShift,
-	int&a_qUpShift,
-	int&a_qDelShift
+	dodoString &a_pre_where,
+	dodoStringArr &a_pre_fieldsNames,
+	dodoArray<dodoStringArr> &a_pre_fieldsVal,
+	dodoString &a_pre_table,
+	dodoString &a_pre_tableTo,
+	dodoString &a_pre_order,
+	dodoString &a_pre_having,
+	dodoString &a_pre_group,
+	dodoString &a_pre_limNumber,
+	dodoString &a_pre_limOffset,
+	dodoStringArr &a_pre_subQ,
+	int &a_qType,
+	int &a_qShift,
+	int &a_qSelShift,
+	int &a_qInsShift,
+	int &a_qUpShift,
+	int &a_qDelShift
 	) :
 	pre_where(a_pre_where),
 	pre_fieldsNames(a_pre_fieldsNames),
@@ -157,16 +157,16 @@ __collectedData::__collectedData(
 //-------------------------------------------------------------------
 
 dbBase::dbBase() : show(false),
-	qType(-1),
-	qShift(DB_EMPTY),
-	qSelShift(DB_EMPTY),
-	qInsShift(DB_EMPTY),
-	qUpShift(DB_EMPTY),
-	qDelShift(DB_EMPTY),
-	qDbDepSelShift(DB_EMPTY),
-	qDbDepInsShift(DB_EMPTY),
-	qDbDepUpShift(DB_EMPTY),
-	qDbDepDelShift(DB_EMPTY)
+				   qType(-1),
+				   qShift(DB_EMPTY),
+				   qSelShift(DB_EMPTY),
+				   qInsShift(DB_EMPTY),
+				   qUpShift(DB_EMPTY),
+				   qDelShift(DB_EMPTY),
+				   qDbDepSelShift(DB_EMPTY),
+				   qDbDepInsShift(DB_EMPTY),
+				   qDbDepUpShift(DB_EMPTY),
+				   qDbDepDelShift(DB_EMPTY)
 {
 }
 
@@ -179,9 +179,9 @@ dbBase::~dbBase()
 //-------------------------------------------------------------------
 
 void
-dbBase::select(const dodoString&a_table,
-			   const dodoStringArr&a_fieldsNames,
-			   const dodoString&a_where)
+dbBase::select(const dodoString &a_table,
+			   const dodoStringArr &a_fieldsNames,
+			   const dodoString &a_where)
 {
 	qType = DBREQUEST_SELECT;
 
@@ -200,8 +200,8 @@ dbBase::select(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString&a_table,
-			   const dodoStringMap&a_fields)
+dbBase::insert(const dodoString &a_table,
+			   const dodoStringMap &a_fields)
 {
 	qType = DBREQUEST_INSERT;
 
@@ -226,8 +226,8 @@ dbBase::insert(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString&a_table,
-			   const dodoArray<dodoStringMap>&a_fields)
+dbBase::insert(const dodoString &a_table,
+			   const dodoArray<dodoStringMap> &a_fields)
 {
 	qType = DBREQUEST_INSERT;
 
@@ -261,9 +261,9 @@ dbBase::insert(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString&a_table,
-			   const dodoStringArr&a_fieldsVal,
-			   const dodoStringArr&a_fieldsNames)
+dbBase::insert(const dodoString &a_table,
+			   const dodoStringArr &a_fieldsVal,
+			   const dodoStringArr &a_fieldsNames)
 {
 	qType = DBREQUEST_INSERT;
 
@@ -280,9 +280,9 @@ dbBase::insert(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString&a_table,
-			   const dodoArray<dodoStringArr>&a_fieldsVal,
-			   const dodoStringArr&a_fieldsNames)
+dbBase::insert(const dodoString &a_table,
+			   const dodoArray<dodoStringArr> &a_fieldsVal,
+			   const dodoStringArr &a_fieldsNames)
 {
 	qType = DBREQUEST_INSERT;
 
@@ -300,11 +300,11 @@ dbBase::insert(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insertSelect(const dodoString&a_tableTo,
-					 const dodoString&a_tableFrom,
-					 const dodoStringArr&a_fieldsNamesTo,
-					 const dodoStringArr&a_fieldsNamesFrom,
-					 const dodoString&a_where)
+dbBase::insertSelect(const dodoString &a_tableTo,
+					 const dodoString &a_tableFrom,
+					 const dodoStringArr &a_fieldsNamesTo,
+					 const dodoStringArr &a_fieldsNamesFrom,
+					 const dodoString &a_where)
 {
 	qType = DBREQUEST_INSERT_SELECT;
 
@@ -327,9 +327,9 @@ dbBase::insertSelect(const dodoString&a_tableTo,
 
 //-------------------------------------------------------------------
 void
-dbBase::update(const dodoString&a_table,
-			   const dodoStringMap&a_fields,
-			   const dodoString&a_where)
+dbBase::update(const dodoString &a_table,
+			   const dodoStringMap &a_fields,
+			   const dodoString &a_where)
 {
 	qType = DBREQUEST_UPDATE;
 
@@ -361,10 +361,10 @@ dbBase::update(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::update(const dodoString&a_table,
-			   const dodoStringArr&a_fieldsVal,
-			   const dodoStringArr&a_fieldsNames,
-			   const dodoString&a_where)
+dbBase::update(const dodoString &a_table,
+			   const dodoStringArr &a_fieldsVal,
+			   const dodoStringArr &a_fieldsNames,
+			   const dodoString &a_where)
 {
 	qType = DBREQUEST_UPDATE;
 
@@ -387,8 +387,8 @@ dbBase::update(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::del(const dodoString&a_table,
-			const dodoString&a_where)
+dbBase::del(const dodoString &a_table,
+			const dodoString &a_where)
 {
 	qType = DBREQUEST_DELETE;
 
@@ -406,7 +406,7 @@ dbBase::del(const dodoString&a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::subquery(const dodoStringArr&sub,
+dbBase::subquery(const dodoStringArr &sub,
 				 int type)
 {
 	qType = type;
@@ -416,7 +416,7 @@ dbBase::subquery(const dodoStringArr&sub,
 //-------------------------------------------------------------------
 
 void
-dbBase::truncate(const dodoString&table)
+dbBase::truncate(const dodoString &table)
 {
 	qType = DBREQUEST_TRUNCATE;
 	pre_table = table;
@@ -426,8 +426,8 @@ dbBase::truncate(const dodoString&table)
 //-------------------------------------------------------------------
 
 void
-dbBase::renameDb(const dodoString&db,
-				 const dodoString&to_db)
+dbBase::renameDb(const dodoString &db,
+				 const dodoString &to_db)
 {
 	qType = DBREQUEST_RENAME_DB;
 	pre_order = db;
@@ -438,8 +438,8 @@ dbBase::renameDb(const dodoString&db,
 //-------------------------------------------------------------------
 
 void
-dbBase::renameTable(const dodoString&table,
-					const dodoString&to_table)
+dbBase::renameTable(const dodoString &table,
+					const dodoString &to_table)
 {
 	qType = DBREQUEST_RENAME_TABLE;
 	pre_table = table;
@@ -450,9 +450,9 @@ dbBase::renameTable(const dodoString&table,
 //-------------------------------------------------------------------
 
 void
-dbBase::createIndex(const dodoString&table,
-					const dodoString&field,
-					const dodoString&name)
+dbBase::createIndex(const dodoString &table,
+					const dodoString &field,
+					const dodoString &name)
 {
 	qType = DBREQUEST_CREATE_INDEX;
 	pre_table = table;
@@ -464,9 +464,9 @@ dbBase::createIndex(const dodoString&table,
 //-------------------------------------------------------------------
 
 void
-dbBase::createIndex(const dodoString&table,
-					const dodoStringArr&fields,
-					const dodoString&name)
+dbBase::createIndex(const dodoString &table,
+					const dodoStringArr &fields,
+					const dodoString &name)
 {
 	qType = DBREQUEST_CREATE_INDEX;
 	pre_table = table;
@@ -478,8 +478,8 @@ dbBase::createIndex(const dodoString&table,
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteIndex(const dodoString&table,
-					const dodoString&field)
+dbBase::deleteIndex(const dodoString &table,
+					const dodoString &field)
 {
 	qType = DBREQUEST_DELETE_INDEX;
 	pre_table = table;
@@ -490,9 +490,9 @@ dbBase::deleteIndex(const dodoString&table,
 //-------------------------------------------------------------------
 
 void
-dbBase::renameField(const dodoString&field,
-					const dodoString&to_field,
-					const dodoString&table)
+dbBase::renameField(const dodoString &field,
+					const dodoString &to_field,
+					const dodoString &table)
 {
 	qType = DBREQUEST_RENAME_FIELD;
 	pre_tableTo = field;
@@ -504,7 +504,7 @@ dbBase::renameField(const dodoString&field,
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteDb(const dodoString&db)
+dbBase::deleteDb(const dodoString &db)
 {
 	qType = DBREQUEST_DELETE_DB;
 	pre_order = db;
@@ -514,7 +514,7 @@ dbBase::deleteDb(const dodoString&db)
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteTable(const dodoString&table)
+dbBase::deleteTable(const dodoString &table)
 {
 	qType = DBREQUEST_DELETE_TABLE;
 	pre_table = table;
@@ -524,8 +524,8 @@ dbBase::deleteTable(const dodoString&table)
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteField(const dodoString&field,
-					const dodoString&table)
+dbBase::deleteField(const dodoString &field,
+					const dodoString &table)
 {
 	qType = DBREQUEST_DELETE_FIELD;
 	pre_tableTo = field;
@@ -536,8 +536,8 @@ dbBase::deleteField(const dodoString&field,
 //-------------------------------------------------------------------
 
 void
-dbBase::createDb(const dodoString&db,
-				 const dodoString&charset)
+dbBase::createDb(const dodoString &db,
+				 const dodoString &charset)
 {
 	qType = DBREQUEST_CREATE_DB;
 	pre_order = db;
@@ -548,7 +548,7 @@ dbBase::createDb(const dodoString&db,
 //-------------------------------------------------------------------
 
 void
-dbBase::createTable(__tableInfo&tableInfo)
+dbBase::createTable(__tableInfo &tableInfo)
 {
 	qType = DBREQUEST_CREATE_TABLE;
 	pre_tableInfo = tableInfo;
@@ -558,8 +558,8 @@ dbBase::createTable(__tableInfo&tableInfo)
 //-------------------------------------------------------------------
 
 void
-dbBase::createField(__fieldInfo&row,
-					const dodoString&table)
+dbBase::createField(__fieldInfo &row,
+					const dodoString &table)
 {
 	qType = DBREQUEST_CREATE_FIELD;
 	pre_fieldInfo = row;
@@ -570,7 +570,7 @@ dbBase::createField(__fieldInfo&row,
 //-------------------------------------------------------------------
 
 void
-dbBase::where(const dodoString&where)
+dbBase::where(const dodoString &where)
 {
 	pre_where = where;
 
@@ -599,7 +599,7 @@ dbBase::offset(unsigned int a_number)
 //-------------------------------------------------------------------
 
 void
-dbBase::order(const dodoString&order)
+dbBase::order(const dodoString &order)
 {
 	pre_order = order;
 
@@ -609,7 +609,7 @@ dbBase::order(const dodoString&order)
 //-------------------------------------------------------------------
 
 void
-dbBase::group(const dodoString&group)
+dbBase::group(const dodoString &group)
 {
 	pre_group = group;
 
@@ -619,7 +619,7 @@ dbBase::group(const dodoString&group)
 //-------------------------------------------------------------------
 
 void
-dbBase::having(const dodoString&having)
+dbBase::having(const dodoString &having)
 {
 	pre_having = having;
 
@@ -799,12 +799,12 @@ dbBase::cleanCollect()
 //-------------------------------------------------------------------
 
 void
-dbBase::setDbInfo(const dodoString&db,
-				  const dodoString&host,
+dbBase::setDbInfo(const dodoString &db,
+				  const dodoString &host,
 				  unsigned int port,
-				  const dodoString&user,
-				  const dodoString&password,
-				  const dodoString&path)
+				  const dodoString &user,
+				  const dodoString &password,
+				  const dodoString &path)
 {
 	dbInfo.port = port;
 	dbInfo.db = db;
@@ -817,7 +817,7 @@ dbBase::setDbInfo(const dodoString&db,
 //-------------------------------------------------------------------
 
 void
-dbBase::setDbInfo(const __dbInfo&info)
+dbBase::setDbInfo(const __dbInfo &info)
 {
 	dbInfo.port = info.port;
 	dbInfo.db = info.db;
@@ -863,7 +863,7 @@ dbBase::collectedData()
 //-------------------------------------------------------------------
 
 void
-dbBase::initTableInfo(__tableInfo&table)
+dbBase::initTableInfo(__tableInfo &table)
 {
 	table.name.clear();
 
@@ -876,7 +876,7 @@ dbBase::initTableInfo(__tableInfo&table)
 //-------------------------------------------------------------------
 
 void
-dbBase::initFieldInfo(__fieldInfo&field)
+dbBase::initFieldInfo(__fieldInfo &field)
 {
 	field.type = -1;
 	field.length = -1;

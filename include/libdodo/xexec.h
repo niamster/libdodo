@@ -211,7 +211,7 @@ namespace dodo
 		 * @param toInit indicates data that will path to initialize function
 		 * @attention data is not copied!!!
 		 */
-		virtual int _addPostExec(const dodoString&module, void *obj, short type, void *data, void *toInit = NULL);       ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+		virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);       ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 		/**
 		 * set function from module that will be executed before  the main action call
@@ -223,7 +223,7 @@ namespace dodo
 		 * @param toInit indicates data that will path to initialize function
 		 * @attention data is not copied!!!
 		 */
-		virtual int _addPreExec(const dodoString&module, void *obj, short type, void *data, void *toInit = NULL);       ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+		virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);       ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 		/**
 		 * set function from module that will be executed before/after the main action call
@@ -236,7 +236,7 @@ namespace dodo
 		 * @param toInit indicates data that will path to initialize function
 		 * @attention data is not copied!!!
 		 */
-		virtual xexecCounts _addExec(const dodoString&module, void *obj, short type, void *data, void *toInit = NULL);       ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+		virtual xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);       ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
             #endif
 
@@ -344,7 +344,7 @@ namespace dodo
 		 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static xexecMod getModuleInfo(const dodoString&module, void *toInit = NULL);
+		static xexecMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
             #endif
 
@@ -378,7 +378,7 @@ namespace dodo
 		 * @param position is position in list of hooks
 		 * @param iter is iterator that is specified with position
 		 */
-		virtual bool getXexec(std::list<__execItem>&list, int position);
+		virtual bool getXexec(std::list<__execItem> &list, int position);
 
 		/**
 		 * set function that will be executed before  the main action call
@@ -390,14 +390,14 @@ namespace dodo
 		 * @param data is pointer to data that will pass to hook
 		 * @attention data is not copied!!!
 		 */
-		virtual int addXExec(std::list<__execItem>&list, inExec func, void *obj, short type, void *data);
+		virtual int addXExec(std::list<__execItem> &list, inExec func, void *obj, short type, void *data);
 
 		/**
 		 * deletes hook from list
 		 * @param list describes list where is set hook
 		 * @param position is position in list of hooks
 		 */
-		virtual void delXExec(std::list<__execItem>&list, int position);
+		virtual void delXExec(std::list<__execItem> &list, int position);
 
 		/**
 		 * replaces hook from list
@@ -406,7 +406,7 @@ namespace dodo
 		 * @param func is reference to functions that will be called as a hook
 		 * @param data is pointer to data that will pass to hook
 		 */
-		virtual bool replaceXExec(std::list<__execItem>&list, int position, inExec func, void *data);
+		virtual bool replaceXExec(std::list<__execItem> &list, int position, inExec func, void *data);
 
 		/**
 		 * set state(enable/disable) for XExec
@@ -414,7 +414,7 @@ namespace dodo
 		 * @param position is position in list where to set state
 		 * @param stat indicates what state to set
 		 */
-		virtual void setStatXExec(std::list<__execItem>&list, int position, bool stat);
+		virtual void setStatXExec(std::list<__execItem> &list, int position, bool stat);
 
             #ifdef DL_EXT
 
@@ -429,7 +429,7 @@ namespace dodo
 		 * @param toInit indicates data that will path to initialize function
 		 * @attention data is not copied!!!
 		 */
-		virtual int addXExecModule(std::list<__execItem>&list, void *obj, short type, const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addXExecModule(std::list<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit = NULL);
 
             #endif
 
@@ -437,7 +437,7 @@ namespace dodo
 		 * perform enabled hooks from the list
 		 * @param list describes list where to get hooks
 		 */
-		virtual void performXExec(__execItemList&list) const;
+		virtual void performXExec(__execItemList &list) const;
 
 		mutable __execItemList preExec;             ///< list of hooks executed before exec
 		mutable __execItemList postExec;            ///< list of hooks executed after exec

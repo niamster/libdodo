@@ -48,7 +48,7 @@ cgiProc cgiFast::cgiF = &dummyStackThread;
 
 //-------------------------------------------------------------------
 
-cgiFastSTD::cgiFastSTD(cgiFastSTD&cf)
+cgiFastSTD::cgiFastSTD(cgiFastSTD &cf)
 {
 }
 
@@ -77,7 +77,7 @@ cgiFastSTD::flush()
     #include <tools.h>
 
 void
-cgiFastSTD::print(const dodoString&buf)
+cgiFastSTD::print(const dodoString &buf)
 {
 	FCGX_PutStr(buf.c_str(), buf.size(), request->out);
 }
@@ -101,7 +101,7 @@ cgiFastSTD::getenv(const char *buf)
 
 //-------------------------------------------------------------------
 
-cgiFast::cgiFast(cgiFast&cf)
+cgiFast::cgiFast(cgiFast &cf)
 {
 }
 
@@ -111,7 +111,7 @@ cgiFast::cgiFast(cgiFast&cf)
 
 cgiFast::cgiFast(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
-	threadsNum(a_threadsNum)
+											  threadsNum(a_threadsNum)
 {
 	pthread_mutexattr_t attr;
 

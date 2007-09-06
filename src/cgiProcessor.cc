@@ -26,13 +26,13 @@
 using namespace dodo;
 
 cgiProcessor::cgiProcessor() : _continueFlag(false),
-	_breakDeepness(0),
-	_loopDeepness(0),
-	iterator(1),
-	namespaceDeepness(1)
+							   _breakDeepness(0),
+							   _loopDeepness(0),
+							   iterator(1),
+							   namespaceDeepness(1)
                 #ifdef FCGI_EXT
-	,
-	cgiFastSet(false)
+							   ,
+							   cgiFastSet(false)
                 #endif
 {
 	dodo["version"] = PACKAGE_STRING;
@@ -45,12 +45,12 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 #ifdef FCGI_EXT
 
 cgiProcessor::cgiProcessor(cgiFastSTD *a_cf) : _continueFlag(false),
-	_breakDeepness(0),
-	_loopDeepness(0),
-	iterator(1),
-	namespaceDeepness(1),
-	cgiFastSet(true),
-	cf(a_cf)
+											   _breakDeepness(0),
+											   _loopDeepness(0),
+											   iterator(1),
+											   namespaceDeepness(1),
+											   cgiFastSet(true),
+											   cf(a_cf)
 
 {
 	dodo["version"] = PACKAGE_STRING;
@@ -70,7 +70,7 @@ cgiProcessor::~cgiProcessor()
 //-------------------------------------------------------------------
 
 dodoString
-cgiProcessor::process(const dodoString&path)
+cgiProcessor::process(const dodoString &path)
 {
 	std::string tmp = _process(preProcess(path), path);
 
@@ -99,8 +99,8 @@ cgiProcessor::clear()
 //-------------------------------------------------------------------
 
 dodoString
-cgiProcessor::_process(const dodoString&buffer,
-					   const dodoString&path)
+cgiProcessor::_process(const dodoString &buffer,
+					   const dodoString &path)
 {
 	unsigned long i(0), j(0), begin(0), k(0);
 
@@ -250,7 +250,7 @@ cgiProcessor::_process(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 bool
-cgiProcessor::recursive(const dodoString&path)
+cgiProcessor::recursive(const dodoString &path)
 {
 	std::list<dodoString>::iterator i(processed.begin()), j(processed.end());
 	for (; i != j; ++i)
@@ -264,7 +264,7 @@ cgiProcessor::recursive(const dodoString&path)
 
 void
 cgiProcessor::assign(dodoString varName,
-					 const dodoArray<dodoStringMap>&varVal)
+					 const dodoArray<dodoStringMap> &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -287,7 +287,7 @@ cgiProcessor::assign(dodoString varName,
 
 void
 cgiProcessor::assign(dodoString varName,
-					 const dodoStringMap&varVal)
+					 const dodoStringMap &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -310,7 +310,7 @@ cgiProcessor::assign(dodoString varName,
 
 void
 cgiProcessor::assign(dodoString varName,
-					 const dodoStringArr&varVal)
+					 const dodoStringArr &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -333,7 +333,7 @@ cgiProcessor::assign(dodoString varName,
 
 void
 cgiProcessor::assign(dodoString varName,
-					 const dodoString&varVal)
+					 const dodoString &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -355,11 +355,11 @@ cgiProcessor::assign(dodoString varName,
 //-------------------------------------------------------------------
 
 unsigned long
-cgiProcessor::_if(const dodoString&buffer,
+cgiProcessor::_if(const dodoString &buffer,
 				  unsigned long start,
-				  const dodoString&statement,
-				  dodoString&tpl,
-				  const dodoString&path)
+				  const dodoString &statement,
+				  dodoString &tpl,
+				  const dodoString &path)
 {
 	bool _float(false), invert(false);
 
@@ -517,11 +517,11 @@ cgiProcessor::_if(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 unsigned long
-cgiProcessor::blockEnd(const dodoString&buffer,
+cgiProcessor::blockEnd(const dodoString &buffer,
 					   unsigned long start,
-					   const dodoString&st,
-					   const dodoString&ts,
-					   const dodoString&path)
+					   const dodoString &st,
+					   const dodoString &ts,
+					   const dodoString &path)
 {
 	unsigned long u, m(start), _st(1), b, p, stLen(st.size()), tsLen(ts.size());
 
@@ -575,10 +575,10 @@ cgiProcessor::blockEnd(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 void
-cgiProcessor::_include(const dodoString&statement,
-					   dodoString&tpl,
-					   unsigned long&start,
-					   const dodoString&path)
+cgiProcessor::_include(const dodoString &statement,
+					   dodoString &tpl,
+					   unsigned long &start,
+					   const dodoString &path)
 {
 	dodoString temp1 = getVar(statement, start, path);
 
@@ -593,10 +593,10 @@ cgiProcessor::_include(const dodoString&statement,
 //-------------------------------------------------------------------
 
 void
-cgiProcessor::_print(const dodoString&statement,
-					 dodoString&tpl,
-					 unsigned long&start,
-					 const dodoString&path)
+cgiProcessor::_print(const dodoString &statement,
+					 dodoString &tpl,
+					 unsigned long &start,
+					 const dodoString &path)
 {
 	dodoStringArr temp = tools::explode(statement, ",");
 	if (temp.size() == 1)
@@ -615,9 +615,9 @@ cgiProcessor::_print(const dodoString&statement,
 //-------------------------------------------------------------------
 
 bool
-cgiProcessor::_break(const dodoString&statement,
-					 unsigned long&start,
-					 const dodoString&path)
+cgiProcessor::_break(const dodoString &statement,
+					 unsigned long &start,
+					 const dodoString &path)
 {
 	if (_loopDeepness > 0)
 	{
@@ -638,9 +638,9 @@ cgiProcessor::_break(const dodoString&statement,
 //-------------------------------------------------------------------
 
 void
-cgiProcessor::_assign(const dodoString&statement,
-					  unsigned long&start,
-					  const dodoString&path)
+cgiProcessor::_assign(const dodoString &statement,
+					  unsigned long &start,
+					  const dodoString &path)
 {
 	dodoStringArr temp = tools::explode(statement, "=", 2);
 
@@ -722,10 +722,10 @@ cgiProcessor::cleanNamespace()
 //-------------------------------------------------------------------
 
 unsigned long
-cgiProcessor::_ns(const dodoString&buffer,
+cgiProcessor::_ns(const dodoString &buffer,
 				  unsigned long start,
-				  dodoString&tpl,
-				  const dodoString&path)
+				  dodoString &tpl,
+				  const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, "ns", "sn", path));
 
@@ -737,11 +737,11 @@ cgiProcessor::_ns(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 unsigned long
-cgiProcessor::_for(const dodoString&buffer,
+cgiProcessor::_for(const dodoString &buffer,
 				   unsigned long start,
-				   const dodoString&statement,
-				   dodoString&tpl,
-				   const dodoString&path)
+				   const dodoString &statement,
+				   dodoString &tpl,
+				   const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, "for", "rof", path));
 
@@ -1534,9 +1534,9 @@ cgiProcessor::_for(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 dodoString
-cgiProcessor::getVar(const dodoString&a_varName,
-					 unsigned long&start,
-					 const dodoString&path)
+cgiProcessor::getVar(const dodoString &a_varName,
+					 unsigned long &start,
+					 const dodoString &path)
 {
 	dodoString varName = trim(a_varName), tempVar;
 	unsigned long u, b, m(0), ob, cb, i, c;
@@ -1754,7 +1754,7 @@ cgiProcessor::getVar(const dodoString&a_varName,
 //-------------------------------------------------------------------
 
 dodoString
-cgiProcessor::trim(const dodoString&statement)
+cgiProcessor::trim(const dodoString &statement)
 {
 	dodoString temp = dodoString::trim(statement, " \t\n", 3);
 
@@ -1788,7 +1788,7 @@ cgiProcessor::trim(const dodoString&statement)
 //-------------------------------------------------------------------
 
 void
-cgiProcessor::display(const dodoString&path)
+cgiProcessor::display(const dodoString &path)
 {
         #ifdef FCGI_EXT
 	if (cgiFastSet)

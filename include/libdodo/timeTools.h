@@ -109,14 +109,14 @@ namespace dodo
 		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 		 * @note if compiled with NO_EX and error occured empty string will return
 		 */
-		static dodoString byFormat(const dodoString&format, long timestamp, bool local = true);
+		static dodoString byFormat(const dodoString &format, long timestamp, bool local = true);
 
 		/**
 		 * @return timestamp[amount of seconds from 01.01.1970]
 		 * @param format is string contains format presented above
 		 * @param dt contais formated time[date...]
 		 */
-		static long byFormat(const dodoString&format, const dodoString&dt);
+		static long byFormat(const dodoString &format, const dodoString &dt);
 
 		/**
 		 * @return amount of seconds from 00:00:00 UTC, January 1, 1970
@@ -130,7 +130,7 @@ namespace dodo
 		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 		 * @note monday is first in the array
 		 */
-		static dodoStringArr week(long date, const dodoString&format, bool local = true);
+		static dodoStringArr week(long date, const dodoString &format, bool local = true);
 
 		/**
 		 * @return array of dates between specified period
@@ -140,13 +140,13 @@ namespace dodo
 		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 		 * @note you should't set the date in 00:00, add some hours; you can get strange result in periods whe daytime changes
 		 */
-		static dodoStringArr datesArr(long dateFrom, long dateTo, const dodoString&format, bool local = true);
+		static dodoStringArr datesArr(long dateFrom, long dateTo, const dodoString &format, bool local = true);
 
 		/**
 		 * @return second that describes __mktime
 		 * @timeInfo holds parameters about time that will be converted into seconds
 		 */
-		static long makeTime(const __mktime&timeInfo);
+		static long makeTime(const __mktime &timeInfo);
 
 		/**
 		 * @return parameter about given time

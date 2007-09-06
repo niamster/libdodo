@@ -26,7 +26,7 @@
 
 using namespace dodo;
 
-systemThreadSharedDataGuard::systemThreadSharedDataGuard(systemThreadSharedDataGuard&sts)
+systemThreadSharedDataGuard::systemThreadSharedDataGuard(systemThreadSharedDataGuard &sts)
 {
 }
 

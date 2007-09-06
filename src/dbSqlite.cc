@@ -35,7 +35,7 @@ dbSqlite::dbSqlite() : empty(true)
 
 //-------------------------------------------------------------------
 
-dbSqlite::dbSqlite(dbSqlite&a_pp)
+dbSqlite::dbSqlite(dbSqlite &a_pp)
 {
 }
 
@@ -127,7 +127,7 @@ dbSqlite::disconnect()
 //-------------------------------------------------------------------
 
 void
-dbSqlite::setBLOBValues(const dodoStringArr&values)
+dbSqlite::setBLOBValues(const dodoStringArr &values)
 {
 	blobs = values;
 }
@@ -139,7 +139,7 @@ void
     #else
 bool
     #endif
-dbSqlite::_exec(const dodoString&query,
+dbSqlite::_exec(const dodoString &query,
 				bool result)
 {
 	bool blobHint;
@@ -558,7 +558,7 @@ void
     #else
 bool
     #endif
-dbSqlite::exec(const dodoString&query,
+dbSqlite::exec(const dodoString &query,
 			   bool result)
 {
         #ifndef DBSQLITE_WO_XEXEC
@@ -607,7 +607,7 @@ dbSqlite::addPreExec(inExec func,
         #ifdef DL_EXT
 
 int
-dbSqlite::addPostExec(const dodoString&module,
+dbSqlite::addPostExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
@@ -617,7 +617,7 @@ dbSqlite::addPostExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 int
-dbSqlite::addPreExec(const dodoString&module,
+dbSqlite::addPreExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
@@ -627,7 +627,7 @@ dbSqlite::addPreExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 xexecCounts
-dbSqlite::addExec(const dodoString&module,
+dbSqlite::addExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {

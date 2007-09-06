@@ -64,13 +64,13 @@ namespace dodo
 		 * @returns string in 'exist()'
 		 * @param statement is sql statement that you want to cover with 'exist()'
 		 */
-		static dodoString exists(const dodoString&statement);
+		static dodoString exists(const dodoString &statement);
 
 		/**
 		 * @returns string in 'not exist()'
 		 * @param statement is sql statement that you want to cover with 'not exist()'
 		 */
-		static dodoString noexists(const dodoString&statement);
+		static dodoString noexists(const dodoString &statement);
 
 		bool preventFraming;        ///< to frame or not with `'` fields values in insert and update; false by default
 
@@ -84,13 +84,13 @@ namespace dodo
 		 * @return escaped string
 		 * @param data is string to escape
 		 */
-		static dodoString escapeFields(const dodoString&data);
+		static dodoString escapeFields(const dodoString &data);
 
 		/**
 		 * @return unescaped string
 		 * @param data is string to unescape
 		 */
-		static dodoString unescapeFields(const dodoString&data);
+		static dodoString unescapeFields(const dodoString &data);
 
 		protected:
 
@@ -189,14 +189,14 @@ namespace dodo
 		/**
 		 * constructs from collected data to sql adaptive field info for proper fields representation
 		 */
-		virtual dodoString fieldCollect(__fieldInfo&row);
+		virtual dodoString fieldCollect(__fieldInfo &row);
 
 		/**
 		 * adds to the end of request additional data collection for query if check passed
 		 * @param qTypeTocheck indicates what type of additional info to check
 		 * @collectedString is string that holds additional statement
 		 */
-		virtual void additionalCollect(unsigned int qTypeTocheck, const dodoString&collectedString);
+		virtual void additionalCollect(unsigned int qTypeTocheck, const dodoString &collectedString);
 
 		/**
 		 * @return string constructed from collected additional statements
@@ -211,7 +211,7 @@ namespace dodo
 		 * @param statement is array of statements
 		 * @param qTypeShift is value that indicates what values were set
 		 */
-		virtual dodoString insideAddCollect(const dodoStringArr&statements, int qTypeShift);
+		virtual dodoString insideAddCollect(const dodoStringArr &statements, int qTypeShift);
 
 		/**
 		 * @return string from fields' names and 'em values
@@ -219,7 +219,7 @@ namespace dodo
 		 * @param fieldsNames is array of names
 		 * @param frame is value with what values will be framed
 		 */
-		virtual dodoString fieldsValName(const dodoStringArr&fieldsVal, const dodoStringArr&fieldsNames, const dodoString&frame = "'");
+		virtual dodoString fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &frame = "'");
 
 		/**
 		 * @return sql compliant data type

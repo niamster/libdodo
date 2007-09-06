@@ -33,15 +33,15 @@ __mysqlSSLOptions::__mysqlSSLOptions()
 
 //-------------------------------------------------------------------
 
-__mysqlSSLOptions::__mysqlSSLOptions(const dodoString&a_key,
-									 const dodoString&a_cert,
-									 const dodoString&a_ca,
-									 const dodoString&a_capath,
-									 const dodoString&a_cipher) : key(a_key),
-	cert(a_cert),
-	ca(a_ca),
-	capath(a_capath),
-	cipher(a_cipher)
+__mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key,
+									 const dodoString &a_cert,
+									 const dodoString &a_ca,
+									 const dodoString &a_capath,
+									 const dodoString &a_cipher) : key(a_key),
+																   cert(a_cert),
+																   ca(a_ca),
+																   capath(a_capath),
+																   cipher(a_cipher)
 {
 }
 
@@ -49,14 +49,14 @@ __mysqlSSLOptions::__mysqlSSLOptions(const dodoString&a_key,
 
 
 dbMysql::dbMysql() : empty(true),
-	type(CLIENT_MULTI_STATEMENTS)
+					 type(CLIENT_MULTI_STATEMENTS)
 {
 	addSQL();
 }
 
 //-------------------------------------------------------------------
 
-dbMysql::dbMysql(dbMysql&a_mypp)
+dbMysql::dbMysql(dbMysql &a_mypp)
 {
 }
 
@@ -164,7 +164,7 @@ dbMysql::unsetMyAddDelSt(short statement)
 
 void
 dbMysql::connectSettings(unsigned long a_type,
-						 const __mysqlSSLOptions&options)
+						 const __mysqlSSLOptions &options)
 {
 	type = a_type;
 
@@ -253,7 +253,7 @@ void
     #else
 bool
     #endif
-dbMysql::_exec(const dodoString&query,
+dbMysql::_exec(const dodoString &query,
 			   bool result)
 {
 	if (query.size() == 0)
@@ -496,7 +496,7 @@ void
     #else
 bool
     #endif
-dbMysql::exec(const dodoString&query,
+dbMysql::exec(const dodoString &query,
 			  bool result)
 {
         #ifndef DBMYSQL_WO_XEXEC
@@ -545,7 +545,7 @@ dbMysql::addPreExec(inExec func,
         #ifdef DL_EXT
 
 int
-dbMysql::addPostExec(const dodoString&module,
+dbMysql::addPostExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
@@ -555,7 +555,7 @@ dbMysql::addPostExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 int
-dbMysql::addPreExec(const dodoString&module,
+dbMysql::addPreExec(const dodoString &module,
 					void             *data,
 					void             *toInit)
 {
@@ -565,7 +565,7 @@ dbMysql::addPreExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 xexecCounts
-dbMysql::addExec(const dodoString&module,
+dbMysql::addExec(const dodoString &module,
 				 void             *data,
 				 void             *toInit)
 {
@@ -581,7 +581,7 @@ dbMysql::addExec(const dodoString&module,
 //-------------------------------------------------------------------
 
 void
-dbMysql::setCharset(const dodoString&charset)
+dbMysql::setCharset(const dodoString &charset)
 {
 	mysql_options(mysql, MYSQL_READ_DEFAULT_FILE, charset.c_str());
 }

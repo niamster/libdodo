@@ -45,7 +45,7 @@ namespace dodo
 		/**
 		 * constructor
 		 */
-		dodoString(const std::string&str);
+		dodoString(const std::string &str);
 
 		/**
 		 * constructor
@@ -55,7 +55,7 @@ namespace dodo
 		/**
 		 * copy constructor
 		 */
-		dodoString(const dodoString&str);
+		dodoString(const dodoString &str);
 
 		/**
 		 * constructor
@@ -65,19 +65,19 @@ namespace dodo
 		/**
 		 * constructor
 		 */
-		dodoString(const std::string&str, unsigned long index, unsigned long length);
+		dodoString(const std::string &str, unsigned long index, unsigned long length);
 
 		/**
 		 * constructor
 		 */
-		dodoString(unsigned long length, const char&ch);
+		dodoString(unsigned long length, const char &ch);
 
 		/**
 		 * @return true if strings are equal
 		 * @param first string to compare
 		 * @param second string to compare
 		 */
-		static bool equal(const dodoString&first, const dodoString&second);
+		static bool equal(const dodoString &first, const dodoString &second);
 
 		/**
 		 * @return true if strings are equal
@@ -85,18 +85,18 @@ namespace dodo
 		 * @param second string to compare
 		 * @note it ignores case
 		 */
-		static bool iequal(const dodoString&first, const dodoString&second);
+		static bool iequal(const dodoString &first, const dodoString &second);
 
 		/**
 		 * @return formated string
 		 * @param format represents format of the string
 		 */
-		static dodoString formatStatic(const dodoString&format, ...);
+		static dodoString formatStatic(const dodoString &format, ...);
 
 		/**
 		 * @param format represents format of the string
 		 */
-		virtual void format(const dodoString&format, ...);
+		virtual void format(const dodoString &format, ...);
 
 		/**
 		 * removes symbols from the end and from the begin of given string
@@ -104,7 +104,7 @@ namespace dodo
 		 * @param data is string to process
 		 * @param symbol is symbol to remove
 		 */
-		static dodoString trim(const dodoString&data, const char symbol = ' ');
+		static dodoString trim(const dodoString &data, const char symbol = ' ');
 
 		/**
 		 * removes symbols[from given array] from the end and from the begin of given string
@@ -113,7 +113,7 @@ namespace dodo
 		 * @param symbols is an array of symbols to remove
 		 * @param symCount is amount of symbols in @param symbols
 		 */
-		static dodoString trim(const dodoString&data, const char symbols[], int symCount);
+		static dodoString trim(const dodoString &data, const char symbols[], int symCount);
 
 		/**
 		 * removes symbols[from given array] from the end of given string
@@ -122,7 +122,7 @@ namespace dodo
 		 * @param symbols is an array of symbols to remove
 		 * @param symCount is amount of symbols in @param symbols
 		 */
-		static dodoString rTrim(const dodoString&data, const char symbols[], int symCount);
+		static dodoString rTrim(const dodoString &data, const char symbols[], int symCount);
 
 		/**
 		 * removes symbols[from given array] from the begin of given string
@@ -131,7 +131,7 @@ namespace dodo
 		 * @param symbols is an array of symbols to remove
 		 * @param symCount is amount of symbols in @param symbols
 		 */
-		static dodoString lTrim(const dodoString&data, const char symbols[], int symCount);
+		static dodoString lTrim(const dodoString &data, const char symbols[], int symCount);
 
 		/**
 		 * removes symbols from the end of given string
@@ -139,7 +139,7 @@ namespace dodo
 		 * @param data is string to process
 		 * @param symbol is symbol to remove
 		 */
-		static dodoString rTrim(const dodoString&data, char symbol = ' ');
+		static dodoString rTrim(const dodoString &data, char symbol = ' ');
 
 		/**
 		 * removes symbols from the begin of given string
@@ -147,7 +147,7 @@ namespace dodo
 		 * @param data is string to process
 		 * @param symbol is symbol to remove
 		 */
-		static dodoString lTrim(const dodoString&data, char symbol = ' ');
+		static dodoString lTrim(const dodoString &data, char symbol = ' ');
 
 		/**
 		 * removes symbols from the end and from the begin of string
@@ -279,42 +279,42 @@ namespace dodo
 		/**
 		 * @return string converted to unsigned long
 		 */
-		static unsigned long stringToUL(const dodoString&data);
+		static unsigned long stringToUL(const dodoString &data);
 
 		/**
 		 * @return string converted to long
 		 */
-		static long stringToL(const dodoString&data);
+		static long stringToL(const dodoString &data);
 
 		/**
 		 * @return string converted to int
 		 */
-		static int stringToI(const dodoString&data);
+		static int stringToI(const dodoString &data);
 
 		/**
 		 * @return string converted to unsigned int
 		 */
-		static unsigned int stringToUI(const dodoString&data);
+		static unsigned int stringToUI(const dodoString &data);
 
 		/**
 		 * @return string converted to short
 		 */
-		static short stringToS(const dodoString&data);
+		static short stringToS(const dodoString &data);
 
 		/**
 		 * @return string converted to unsigned short
 		 */
-		static unsigned short stringToUS(const dodoString&data);
+		static unsigned short stringToUS(const dodoString &data);
 
 		/**
 		 * @return string converted to double
 		 */
-		static double stringToD(const dodoString&data);
+		static double stringToD(const dodoString &data);
 
 		/**
 		 * @return string converted to float
 		 */
-		static float stringToF(const dodoString&data);
+		static float stringToF(const dodoString &data);
 
 		/**
 		 * @return string converted to unsigned long

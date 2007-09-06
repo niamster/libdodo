@@ -30,7 +30,7 @@ void
 #else
 bool
 #endif
-flushDiskTools::unlink(const dodoString&path,
+flushDiskTools::unlink(const dodoString &path,
 					   bool force)
 {
 	int status(0);
@@ -69,8 +69,8 @@ void
 #else
 bool
 #endif
-flushDiskTools::rename(const dodoString&oldPath,
-					   const dodoString&newPath)
+flushDiskTools::rename(const dodoString &oldPath,
+					   const dodoString &newPath)
 {
 	if (::rename(oldPath.c_str(), newPath.c_str()) == -1)
         #ifdef NO_EX
@@ -91,8 +91,8 @@ void
 #else
 bool
 #endif
-flushDiskTools::symlink(const dodoString&oldPath,
-						const dodoString&newPath,
+flushDiskTools::symlink(const dodoString &oldPath,
+						const dodoString &newPath,
 						bool force)
 {
 	if (force)
@@ -134,8 +134,8 @@ void
 #else
 bool
 #endif
-flushDiskTools::link(const dodoString&oldPath,
-					 const dodoString&newPath)
+flushDiskTools::link(const dodoString &oldPath,
+					 const dodoString &newPath)
 {
 	if  (::link(oldPath.c_str(), newPath.c_str()) == -1)
         #ifdef NO_EX
@@ -156,7 +156,7 @@ void
 #else
 bool
 #endif
-flushDiskTools::chown(const dodoString&path,
+flushDiskTools::chown(const dodoString &path,
 					  int uid)
 {
 	if (::chown(path.c_str(), uid, (unsigned int)-1) == -1)
@@ -178,7 +178,7 @@ void
 #else
 bool
 #endif
-flushDiskTools::chgrp(const dodoString&path,
+flushDiskTools::chgrp(const dodoString &path,
 					  int gid)
 {
 	if (::chown(path.c_str(), (unsigned int)-1, gid) == -1)
@@ -196,7 +196,7 @@ flushDiskTools::chgrp(const dodoString&path,
 //-------------------------------------------------------------------
 
 int
-flushDiskTools::getUserOwner(const dodoString&path)
+flushDiskTools::getUserOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -212,7 +212,7 @@ flushDiskTools::getUserOwner(const dodoString&path)
 //-------------------------------------------------------------------
 
 int
-flushDiskTools::getGroupOwner(const dodoString&path)
+flushDiskTools::getGroupOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -232,7 +232,7 @@ void
 #else
 bool
 #endif
-flushDiskTools::touch(const dodoString&path,
+flushDiskTools::touch(const dodoString &path,
 					  int a_time)
 {
 	if (a_time == 1)
@@ -259,7 +259,7 @@ void
 #else
 bool
 #endif
-flushDiskTools::mkdir(const dodoString&path,
+flushDiskTools::mkdir(const dodoString &path,
 					  int permissions,
 					  bool force)
 {
@@ -302,7 +302,7 @@ void
 #else
 bool
 #endif
-flushDiskTools::chmod(const dodoString&path, int permissions)
+flushDiskTools::chmod(const dodoString &path, int permissions)
 {
 	if (::chmod(path.c_str(), getPermission(permissions)) == -1)
         #ifndef NO_EX
@@ -365,7 +365,7 @@ void
 #else
 bool
 #endif
-flushDiskTools::rm(const dodoString&path,
+flushDiskTools::rm(const dodoString &path,
 				   bool force)
 {
 	struct stat st;
@@ -464,7 +464,7 @@ flushDiskTools::rm(const dodoString&path,
 //-------------------------------------------------------------------
 
 int
-flushDiskTools::getPermissions(const dodoString&path)
+flushDiskTools::getPermissions(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -513,7 +513,7 @@ flushDiskTools::getPermissions(const dodoString&path)
 //-------------------------------------------------------------------
 
 int
-flushDiskTools::getFileType(const dodoString&path)
+flushDiskTools::getFileType(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -564,7 +564,7 @@ flushDiskTools::getFileType(const dodoString&path)
 //-------------------------------------------------------------------
 
 long
-flushDiskTools::getSize(const dodoString&path)
+flushDiskTools::getSize(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -580,7 +580,7 @@ flushDiskTools::getSize(const dodoString&path)
 //-------------------------------------------------------------------
 
 long
-flushDiskTools::getAccTime(const dodoString&path)
+flushDiskTools::getAccTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -596,7 +596,7 @@ flushDiskTools::getAccTime(const dodoString&path)
 //-------------------------------------------------------------------
 
 long
-flushDiskTools::getModTime(const dodoString&path)
+flushDiskTools::getModTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -612,7 +612,7 @@ flushDiskTools::getModTime(const dodoString&path)
 //-------------------------------------------------------------------
 
 __fileInfo
-flushDiskTools::getFileInfo(const dodoString&path)
+flushDiskTools::getFileInfo(const dodoString &path)
 {
 	__fileInfo file;
 
@@ -639,7 +639,7 @@ flushDiskTools::getFileInfo(const dodoString&path)
 //-------------------------------------------------------------------
 
 dodoArray<__fileInfo>
-flushDiskTools::getDirInfo(const dodoString&path)
+flushDiskTools::getDirInfo(const dodoString &path)
 {
 	dodoArray<__fileInfo> dir;
 	struct stat st;
@@ -684,8 +684,8 @@ void
 #else
 bool
 #endif
-flushDiskTools::followSymlink(const dodoString&path,
-							  dodoString&original)
+flushDiskTools::followSymlink(const dodoString &path,
+							  dodoString &original)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -723,7 +723,7 @@ flushDiskTools::followSymlink(const dodoString&path,
 //-------------------------------------------------------------------
 
 dodoString
-flushDiskTools::getFileContent(const dodoString&path)
+flushDiskTools::getFileContent(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -840,7 +840,7 @@ flushDiskTools::getFileContent(const dodoString&path)
 //-------------------------------------------------------------------
 
 dodoStringArr
-flushDiskTools::getFileContentArr(const dodoString&path)
+flushDiskTools::getFileContentArr(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -885,7 +885,7 @@ flushDiskTools::getFileContentArr(const dodoString&path)
 //-------------------------------------------------------------------
 
 dodoString
-flushDiskTools::lastname(const dodoString&path)
+flushDiskTools::lastname(const dodoString &path)
 {
 	char tempB[MAXPATHLEN];
 
@@ -901,7 +901,7 @@ flushDiskTools::lastname(const dodoString&path)
 //-------------------------------------------------------------------
 
 dodoString
-flushDiskTools::dirname(const dodoString&path)
+flushDiskTools::dirname(const dodoString &path)
 {
 	char tempB[MAXPATHLEN];
 
@@ -921,8 +921,8 @@ void
 #else
 bool
 #endif
-flushDiskTools::copy(const dodoString&from,
-					 const dodoString&a_to,
+flushDiskTools::copy(const dodoString &from,
+					 const dodoString &a_to,
 					 bool force)
 {
 	dodoString to = a_to;
@@ -1211,8 +1211,8 @@ void
 #else
 bool
 #endif
-flushDiskTools::copyDir(const dodoString&from,
-						const dodoString&a_to,
+flushDiskTools::copyDir(const dodoString &from,
+						const dodoString &a_to,
 						bool force)
 {
 	dodoString to = a_to;
@@ -1326,7 +1326,7 @@ flushDiskTools::copyDir(const dodoString&from,
 //-------------------------------------------------------------------
 
 bool
-flushDiskTools::exists(const dodoString&path)
+flushDiskTools::exists(const dodoString &path)
 {
 	struct stat st;
 
@@ -1343,8 +1343,8 @@ void
 #else
 bool
 #endif
-flushDiskTools::append(const dodoString&path,
-					   const dodoString&content)
+flushDiskTools::append(const dodoString &path,
+					   const dodoString &content)
 {
 	FILE *file = fopen(path.c_str(), "a+");
 	if (file == NULL)

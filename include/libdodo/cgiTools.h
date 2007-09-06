@@ -132,7 +132,7 @@ namespace dodo
 		 * constructor
 		 * @note  defines struct data with user data
 		 */
-		__cookies(const dodoString&name, const dodoString&value, const dodoString&exDate, const dodoString&path, const dodoString&domain, bool secure);
+		__cookies(const dodoString &name, const dodoString &value, const dodoString &exDate, const dodoString &path, const dodoString &domain, bool secure);
 
 		dodoString name;    ///< name of cookie
 		dodoString value;   ///< value of cookie
@@ -181,7 +181,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		cgiTools(cgiTools&ct);
+		cgiTools(cgiTools &ct);
 
 		public:
 
@@ -195,7 +195,7 @@ namespace dodo
 		 *
 		 * @note you cant print headers after they have been printed with printHeaders method
 		 */
-		cgiTools(bool silent = false, dodoStringMap&headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+		cgiTools(bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
             #ifdef FCGI_EXT
 
@@ -210,7 +210,7 @@ namespace dodo
 		 *
 		 * @note you cant print headers after they have been printed with printHeaders method
 		 */
-		cgiTools(cgiFastSTD *cf, bool silent = false, dodoStringMap&headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+		cgiTools(cgiFastSTD *cf, bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
             #endif
 
@@ -239,7 +239,7 @@ namespace dodo
 		 * @param method is indicates what reference would be returned
 		 * example: classObj[POST]["name"]
 		 */
-		virtual dodoStringMap&operator[](short method);
+		virtual dodoStringMap &operator[](short method);
 
 		/**
 		 * specific variables (from POST, GET, ENV or COOKIE)
@@ -255,7 +255,7 @@ namespace dodo
 		 * @param varName name of the variable
 		 * @param first indicates what array will be searched first[see requestMethodEnum]
 		 */
-		virtual dodoString request(const dodoString&varName, short first = REQUESTMETHOD_GET);
+		virtual dodoString request(const dodoString &varName, short first = REQUESTMETHOD_GET);
 
 		/**
 		 * prints cgi headers;
@@ -276,9 +276,9 @@ namespace dodo
 		 * @param domain is cookie's domain
 		 * @param secure is indicates if cookie is secure; false by default
 		 */
-		virtual void setCookie(const dodoString&name, const dodoString&value, const dodoString&exDate = __dodostring__, const dodoString&path = __dodostring__, const dodoString&domain = __dodostring__, bool secure = false);
+		virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate = __dodostring__, const dodoString &path = __dodostring__, const dodoString &domain = __dodostring__, bool secure = false);
 
-		virtual void setCookie(const __cookies&cookie);
+		virtual void setCookie(const __cookies &cookie);
 
 		protected:
 
@@ -305,7 +305,7 @@ namespace dodo
 		/**
 		 * initiates headers with given headers; printed with printHeaders method
 		 */
-		virtual void initHeaders(dodoStringMap&headers);
+		virtual void initHeaders(dodoStringMap &headers);
 
 		/**
 		 * processes :
@@ -316,7 +316,7 @@ namespace dodo
 		 * @param string contains string to process
 		 * @param delim indicates format of delimiter
 		 */
-		virtual void make(dodoStringMap&val, const dodoString&string, const char *delim = "&");
+		virtual void make(dodoStringMap &val, const dodoString &string, const char *delim = "&");
 
 		private:
 

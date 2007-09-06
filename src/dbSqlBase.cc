@@ -112,8 +112,8 @@ const __statements dbSqlBase::sqlAddSelArr[] =
 //-------------------------------------------------------------------
 
 dbSqlBase::dbSqlBase() : preventFraming(false),
-	preventEscaping(false),
-	autoFraming(true)
+						 preventEscaping(false),
+						 autoFraming(true)
 {
 	auto_increment = " auto_increment ";
 
@@ -132,9 +132,9 @@ dbSqlBase::~dbSqlBase()
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::fieldsValName(const dodoStringArr&fieldsVal,
-						 const dodoStringArr&fieldsNames,
-						 const dodoString&frame)
+dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
+						 const dodoStringArr &fieldsNames,
+						 const dodoString &frame)
 {
 	dodoString temp;
 
@@ -164,7 +164,7 @@ dbSqlBase::fieldsValName(const dodoStringArr&fieldsVal,
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::exists(const dodoString&statement)
+dbSqlBase::exists(const dodoString &statement)
 {
 	return dodoString("exists(" + statement + ')');
 }
@@ -172,7 +172,7 @@ dbSqlBase::exists(const dodoString&statement)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::noexists(const dodoString&statement)
+dbSqlBase::noexists(const dodoString &statement)
 {
 	return dodoString("not exists(" + statement + ')');
 }
@@ -181,7 +181,7 @@ dbSqlBase::noexists(const dodoString&statement)
 
 void
 dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
-							 const dodoString&collectedString)
+							 const dodoString &collectedString)
 {
 	if (qShift == DB_EMPTY)
 		return ;
@@ -220,7 +220,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::insideAddCollect(const dodoStringArr&statements,
+dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 							int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
@@ -765,7 +765,7 @@ dbSqlBase::queryCollect()
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::unescapeFields(const dodoString&data)
+dbSqlBase::unescapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 
@@ -778,7 +778,7 @@ dbSqlBase::unescapeFields(const dodoString&data)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::escapeFields(const dodoString&data)
+dbSqlBase::escapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 
@@ -791,7 +791,7 @@ dbSqlBase::escapeFields(const dodoString&data)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::fieldCollect(__fieldInfo&row)
+dbSqlBase::fieldCollect(__fieldInfo &row)
 {
 	int type = row.type, flag = row.flag;
 	dodoString resRow(row.name + " " + stringType(type));

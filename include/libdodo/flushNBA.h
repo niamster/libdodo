@@ -60,7 +60,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		flushNBA(flushNBA&rt);
+		flushNBA(flushNBA &rt);
 
 		public:
 
@@ -78,7 +78,7 @@ namespace dodo
 		 * @return identificator of added stream
 		 * @param fl is a reference on stream[flushDisk, flushSTD, flushSocket, flushSocketExchange]
 		 */
-		virtual int addFlush(const flush&fl);
+		virtual int addFlush(const flush &fl);
 
 		/**
 		 * @param fl is identificator of stream to remove
@@ -99,7 +99,7 @@ namespace dodo
 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 		 * @note if timeout is negative - infinit timeout
 		 */
-		virtual dodoArray<bool> isReadable(const dodoArray<int>&pos, int timeout = 100) const;
+		virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout = 100) const;
 
 		/**
 		 * @return vector of true if flush* is ready to write
@@ -107,7 +107,7 @@ namespace dodo
 		 * @param timeout describes amount of time to wait for result[in milliseconds]
 		 * @note if timeout is negative - infinit timeout
 		 */
-		virtual dodoArray<bool> isWritable(const dodoArray<int>&pos, int timeout = 100) const;
+		virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout = 100) const;
 
 		/**
 		 * @return true if flush* is ready to write

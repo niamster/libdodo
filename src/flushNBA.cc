@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-flushNBA::flushNBA(flushNBA&rt)
+flushNBA::flushNBA(flushNBA &rt)
 {
 }
 
@@ -44,7 +44,7 @@ flushNBA::~flushNBA()
 //-------------------------------------------------------------------
 
 int
-flushNBA::addFlush(const flush&fl)
+flushNBA::addFlush(const flush &fl)
 {
 	__inOutDescriptors tempD;
 
@@ -69,7 +69,7 @@ flushNBA::makeFalse(int count) const
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-flushNBA::isReadable(const dodoArray<int>&pos,
+flushNBA::isReadable(const dodoArray<int> &pos,
 					 int timeout) const
 {
 	tempRB.clear();
@@ -149,7 +149,7 @@ flushNBA::isReadable(const dodoArray<int>&pos,
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-flushNBA::isWritable(const dodoArray<int>&pos,
+flushNBA::isWritable(const dodoArray<int> &pos,
 					 int timeout) const
 {
 	tempRB.clear();

@@ -73,7 +73,7 @@ namespace dodo
 		 * constructor
 		 * to prevent from copying
 		 */
-		flushSTD(flushSTD&fd);
+		flushSTD(flushSTD &fd);
 
 		public:
 
@@ -120,7 +120,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPostExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * adds hook after the operation by callback
@@ -129,7 +129,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual int addPreExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * set function from module that will be executed before/after the main action call
@@ -139,7 +139,7 @@ namespace dodo
 		 * @param data is pointer to data toy want to pass to hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual xexecCounts addExec(const dodoString&module, void *data, void *toInit = NULL);
+		virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
                 #endif
 
@@ -155,7 +155,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		readString(dodoString&data);
+		readString(dodoString &data);
 		/**
 		 * read
 		 * @param data is filled with read data
@@ -178,7 +178,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		writeString(const dodoString&data);
+		writeString(const dodoString &data);
 
 		/**
 		 * write
@@ -202,7 +202,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		readStreamString(dodoString&data);
+		readStreamString(dodoString &data);
 		/**
 		 * read from stream - null[or \n]-terminated string
 		 * @param data is filled with read data
@@ -226,7 +226,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		writeStreamString(const dodoString&data);
+		writeStreamString(const dodoString &data);
 
 		/**
 		 * write to stream - null-terminated string

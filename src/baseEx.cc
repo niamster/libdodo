@@ -179,17 +179,17 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 			   unsigned long functionID,
 			   errnoSourceEnum errnoSource,
 			   int a_errno,
-			   const dodoString&a_errstr,
+			   const dodoString &a_errstr,
 			   unsigned long a_line,
-			   const dodoString&a_file,
-			   const dodoString&a_message) : errModule(a_errModule),
-	funcID(functionID),
-	errnoSource(errnoSource),
-	baseErrno(a_errno),
-	baseErrstr(a_errstr),
-	line(a_line),
-	file(a_file),
-	message(a_message)
+			   const dodoString &a_file,
+			   const dodoString &a_message) : errModule(a_errModule),
+											  funcID(functionID),
+											  errnoSource(errnoSource),
+											  baseErrno(a_errno),
+											  baseErrstr(a_errstr),
+											  line(a_line),
+											  file(a_file),
+											  message(a_message)
 {
 	if (handlerSetEx[errModule])
 		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
@@ -357,7 +357,7 @@ baseEx::unsetErrorHandlers()
     #ifdef DL_EXT
 
 bool
-baseEx::setErrorHandlers(const dodoString&path,
+baseEx::setErrorHandlers(const dodoString &path,
 						 void *data,
 						 void *toInit)
 {
@@ -407,7 +407,7 @@ baseEx::setErrorHandlers(const dodoString&path,
 
 bool
 baseEx::setErrorHandler(errorModuleEnum module,
-						const dodoString&path,
+						const dodoString &path,
 						void *data,
 						void *toInit)
 {
@@ -449,7 +449,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 //-------------------------------------------------------------------
 
 bool
-baseEx::setErrorHandler(const dodoString&path,
+baseEx::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
@@ -496,7 +496,7 @@ baseEx::setErrorHandler(const dodoString&path,
 //-------------------------------------------------------------------
 
 exMod
-baseEx::getModuleInfo(const dodoString&module,
+baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);

@@ -140,7 +140,7 @@ namespace dodo
 		 * @param line line, where was thrown
 		 * @param file file, where was thrown
 		 */
-		baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, const dodoString&baseErrstr, unsigned long line, const dodoString&file, const dodoString&message = __dodostring__);
+		baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, const dodoString &baseErrstr, unsigned long line, const dodoString &file, const dodoString &message = __dodostring__);
 
 		/**
 		 * destructor
@@ -201,7 +201,7 @@ namespace dodo
 		 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static exMod getModuleInfo(const dodoString&module, void *toInit = NULL);
+		static exMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 		/**
 		 * set handler on error for specific module
@@ -211,7 +211,7 @@ namespace dodo
 		 * @param data is data that will be passed to handler
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static bool setErrorHandler(errorModuleEnum module, const dodoString&path, void *data, void *toInit = NULL);
+		static bool setErrorHandler(errorModuleEnum module, const dodoString &path, void *data, void *toInit = NULL);
 
 		/**
 		 * set handler on error for specific module
@@ -220,7 +220,7 @@ namespace dodo
 		 * @param data is data that will be passed to handler
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static bool setErrorHandler(const dodoString&path, void *data, void *toInit = NULL);
+		static bool setErrorHandler(const dodoString &path, void *data, void *toInit = NULL);
 
 		/**
 		 * set handler on error for all modules
@@ -229,7 +229,7 @@ namespace dodo
 		 * @param data is data that will be passed to handler
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static bool setErrorHandlers(const dodoString&path, void *data, void *toInit = NULL);
+		static bool setErrorHandlers(const dodoString &path, void *data, void *toInit = NULL);
 
                 #endif
 

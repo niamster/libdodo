@@ -125,7 +125,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		systemThreads(systemThreads&st);
+		systemThreads(systemThreads &st);
 
 		public:
 
@@ -314,7 +314,7 @@ namespace dodo
 		 * @param action describes action with thread on destruction if thread is running
 		 * @param stackSize describes stack siae of the thread
 		 */
-		virtual unsigned long add(const dodoString&module, void *data, void *toInit = NULL, bool detached = false, short action = THREAD_WAIT, int stackSize = 2097152);
+		virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL, bool detached = false, short action = THREAD_WAIT, int stackSize = 2097152);
 
 		/**
 		 * adds function to became a thread[not executing] from module
@@ -323,14 +323,14 @@ namespace dodo
 		 * @param data describes data to be passed to func
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		virtual unsigned long add(const dodoString&module, void *data, void *toInit = NULL);
+		virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
 
 		/**
 		 * @return info about module
 		 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 		 * @param toInit indicates data that will path to initialize function
 		 */
-		static systemThreadsMod getModuleInfo(const dodoString&module, void *toInit = NULL);
+		static systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
                 #endif
 
@@ -347,7 +347,7 @@ namespace dodo
 		 * @return true if thread is running
 		 * @param position indicates for what thread to indicate
 		 */
-		virtual bool _isRunning(std::list<__threadInfo>::iterator&position) const;
+		virtual bool _isRunning(std::list<__threadInfo>::iterator &position) const;
 
 		/**
 		 * searches threads by position

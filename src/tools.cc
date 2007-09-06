@@ -51,9 +51,9 @@ using namespace dodo;
 //-------------------------------------------------------------------
 
 static unsigned char PADDING[64] = {
-	0x80, 0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	0x80, 0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 /**
@@ -146,14 +146,14 @@ static const char base64DecodeTr[] = "|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQ
 //-------------------------------------------------------------------
 
 inline dodoString
-tools::dummyTools(const dodoString&data)
+tools::dummyTools(const dodoString &data)
 {
 	return data;
 }
 
 //-------------------------------------------------------------------
 
-tools::tools(tools&tls)
+tools::tools(tools &tls)
 {
 }
 
@@ -314,9 +314,9 @@ tools::dRandom()
 //-------------------------------------------------------------------
 
 void
-tools::replace(const dodoStringArr&needle,
-			   const dodoStringArr&replacement,
-			   dodoString&data)
+tools::replace(const dodoStringArr &needle,
+			   const dodoStringArr &replacement,
+			   dodoString &data)
 {
 	dodoStringArr::const_iterator i = needle.begin(), j = needle.end(), o = replacement.begin(), p = replacement.end();
 	for (; i != j && o != p; ++i, ++o)
@@ -326,9 +326,9 @@ tools::replace(const dodoStringArr&needle,
 //-------------------------------------------------------------------
 
 void
-tools::replace(const dodoString&needle,
-			   const dodoString&replacement,
-			   dodoString&data)
+tools::replace(const dodoString &needle,
+			   const dodoString &replacement,
+			   dodoString &data)
 {
 	unsigned long i(0), j(needle.size()), k(replacement.size());
 
@@ -346,8 +346,8 @@ tools::replace(const dodoString&needle,
 //-------------------------------------------------------------------
 
 bool
-tools::isInArray(const dodoStringArr&arr,
-				 const dodoString&needle,
+tools::isInArray(const dodoStringArr &arr,
+				 const dodoString &needle,
 				 bool icase)
 {
 	int (*cmpFunc)(const char *, const char *);
@@ -368,9 +368,9 @@ tools::isInArray(const dodoStringArr&arr,
 //-------------------------------------------------------------------
 
 dodoStringArr
-tools::explode(const dodoString&fields,
+tools::explode(const dodoString &fields,
 			   escape escapeF,
-			   const dodoString&separator,
+			   const dodoString &separator,
 			   int limit)
 {
 	unsigned long i(0), j(0), sep_size(separator.size());
@@ -401,8 +401,8 @@ tools::explode(const dodoString&fields,
 //-------------------------------------------------------------------
 
 dodoStringArr
-tools::explode(const dodoString&fields,
-			   const dodoString&separator,
+tools::explode(const dodoString &fields,
+			   const dodoString &separator,
 			   int limit)
 {
 	return explode(fields, &dummyTools, separator, limit);
@@ -411,10 +411,10 @@ tools::explode(const dodoString&fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr&fields,
+tools::implode(const dodoStringArr &fields,
 			   escape escapeF,
-			   const dodoString&separator,
-			   const dodoString&frame,
+			   const dodoString &separator,
+			   const dodoString &frame,
 			   int limit)
 {
 	if (fields.size() == 0)
@@ -447,9 +447,9 @@ tools::implode(const dodoStringArr&fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr&fields,
-			   const dodoString&separator,
-			   const dodoString&frame,
+tools::implode(const dodoStringArr &fields,
+			   const dodoString &separator,
+			   const dodoString &frame,
 			   int limit)
 {
 	return implode(fields, &dummyTools, separator, frame, limit);
@@ -458,8 +458,8 @@ tools::implode(const dodoStringArr&fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr&fields,
-			   const dodoString&separator,
+tools::implode(const dodoStringArr &fields,
+			   const dodoString &separator,
 			   int limit)
 {
 	return implode(fields, &dummyTools, separator, limit);
@@ -468,9 +468,9 @@ tools::implode(const dodoStringArr&fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr&fields,
+tools::implode(const dodoStringArr &fields,
 			   escape escapeF,
-			   const dodoString&separator,
+			   const dodoString &separator,
 			   int limit)
 {
 	if (fields.size() == 0)
@@ -507,9 +507,9 @@ tools::implode(const dodoStringArr&fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::codesetConversionStatic(const dodoString&buffer,
-							   const dodoString&toCode,
-							   const dodoString&fromCode)
+tools::codesetConversionStatic(const dodoString &buffer,
+							   const dodoString &toCode,
+							   const dodoString &fromCode)
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
@@ -559,8 +559,8 @@ void
     #else
 bool
     #endif
-tools::codeSet(const dodoString&toCode,
-			   const dodoString&fromCode)
+tools::codeSet(const dodoString &toCode,
+			   const dodoString &fromCode)
 {
 	conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
@@ -578,9 +578,9 @@ tools::codeSet(const dodoString&toCode,
 //-------------------------------------------------------------------
 
 dodoString
-tools::codesetConversion(const dodoString&buffer,
-						 const dodoString&toCode,
-						 const dodoString&fromCode)
+tools::codesetConversion(const dodoString &buffer,
+						 const dodoString &toCode,
+						 const dodoString &fromCode)
 {
 	codeSet(toCode, fromCode);
 
@@ -617,7 +617,7 @@ tools::codesetConversion(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 dodoString
-tools::reCodesetConversion(const dodoString&buffer)
+tools::reCodesetConversion(const dodoString &buffer)
 {
 	if (!convSet)
 		return buffer;
@@ -661,7 +661,7 @@ tools::reCodesetConversion(const dodoString&buffer)
 //-------------------------------------------------------------------
 
 dodoString
-tools::zCompress(const dodoString&buffer,
+tools::zCompress(const dodoString &buffer,
 				 unsigned short level,
 				 short type)
 {
@@ -717,7 +717,7 @@ tools::zCompress(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 dodoString
-tools::zDecompress(const dodoString&buffer)
+tools::zDecompress(const dodoString &buffer)
 {
 	z_stream strm;
 	int ret;
@@ -840,7 +840,7 @@ tools::charToHex(char result[3],
 //-------------------------------------------------------------------
 
 dodoString
-tools::decodeURL(const dodoString&string)
+tools::decodeURL(const dodoString &string)
 {
 	dodoString result;
 	unsigned long o(0), k(string.size());
@@ -879,7 +879,7 @@ tools::decodeURL(const dodoString&string)
 //-------------------------------------------------------------------
 
 dodoString
-tools::encodeURL(const dodoString&string)
+tools::encodeURL(const dodoString &string)
 {
 	dodoString result;
 
@@ -983,7 +983,7 @@ tools::encodeURL(const dodoString&string)
 //-------------------------------------------------------------------
 
 void
-tools::_encodeASCII85(dodoString&result,
+tools::_encodeASCII85(dodoString &result,
 					  unsigned long tuple,
 					  int count)
 {
@@ -1008,7 +1008,7 @@ tools::_encodeASCII85(dodoString&result,
 //-------------------------------------------------------------------
 
 dodoString
-tools::encodeASCII85(const dodoString&string)
+tools::encodeASCII85(const dodoString &string)
 {
 	dodoString result("<~");
 	unsigned long tuple = 0;
@@ -1065,7 +1065,7 @@ tools::encodeASCII85(const dodoString&string)
 //-------------------------------------------------------------------
 
 void
-tools::_decodeASCII85(dodoString&result,
+tools::_decodeASCII85(dodoString &result,
 					  unsigned long tuple,
 					  int count)
 {
@@ -1106,7 +1106,7 @@ tools::_decodeASCII85(dodoString&result,
 //-------------------------------------------------------------------
 
 dodoString
-tools::decodeASCII85(const dodoString&string)
+tools::decodeASCII85(const dodoString &string)
 {
 	unsigned long j = string.size(), count = 0, tuple = 0;
 	bool _break = false;
@@ -1219,7 +1219,7 @@ tools::_encodeBase64(unsigned char in[3],
 //-------------------------------------------------------------------
 
 dodoString
-tools::encodeBase64(const dodoString&string)
+tools::encodeBase64(const dodoString &string)
 {
 	unsigned long j = string.size();
 	unsigned char in[3], out[4];
@@ -1268,7 +1268,7 @@ tools::_decodeBase64(unsigned char in[4],
 //-------------------------------------------------------------------
 
 dodoString
-tools::decodeBase64(const dodoString&string)
+tools::decodeBase64(const dodoString &string)
 {
 	unsigned long j = string.size() + 1;
 	unsigned char in[4], out[3], v;
@@ -1313,7 +1313,7 @@ tools::decodeBase64(const dodoString&string)
 //-------------------------------------------------------------------
 
 __url
-tools::parseURL(const dodoString&url)
+tools::parseURL(const dodoString &url)
 {
 	unsigned long begin(0), pos, pos1;
 
@@ -1389,7 +1389,7 @@ tools::parseURL(const dodoString&url)
 //-------------------------------------------------------------------
 
 dodoString
-tools::bzCompress(const dodoString&buffer,
+tools::bzCompress(const dodoString &buffer,
 				  unsigned short level,
 				  unsigned short type)
 {
@@ -1410,7 +1410,7 @@ tools::bzCompress(const dodoString&buffer,
 //-------------------------------------------------------------------
 
 dodoString
-tools::bzDecompress(const dodoString&buffer)
+tools::bzDecompress(const dodoString &buffer)
 {
 	bz_stream bzs;
 
@@ -1489,11 +1489,11 @@ void
 #else
 bool
 #endif
-tools::mail(const dodoString&path,
-			const dodoString&to,
-			const dodoString&subject,
-			const dodoString&message,
-			const dodoString&headers)
+tools::mail(const dodoString &path,
+			const dodoString &to,
+			const dodoString &subject,
+			const dodoString &message,
+			const dodoString &headers)
 {
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
@@ -1694,7 +1694,7 @@ tools::MD5Update(MD5_CTX       *context,
 //-------------------------------------------------------------------
 
 dodoString
-tools::MD5(const dodoString&string)
+tools::MD5(const dodoString &string)
 {
 	MD5_CTX context;
 	unsigned char digest[16];
@@ -1709,7 +1709,7 @@ tools::MD5(const dodoString&string)
 //-------------------------------------------------------------------
 
 dodoString
-tools::MD5Hex(const dodoString&string)
+tools::MD5Hex(const dodoString &string)
 {
 	std::string md5 = MD5(string);
 	int j = md5.size();
@@ -1732,16 +1732,16 @@ void
 #else
 bool
 #endif
-tools::mail(const dodoString&host,
+tools::mail(const dodoString &host,
 			short type,
 			int port,
-			const dodoString&to,
-			const dodoString&from,
-			const dodoString&subject,
-			const dodoString&message,
-			const dodoString&login,
-			const dodoString&pass,
-			const dodoString&headers)
+			const dodoString &to,
+			const dodoString &from,
+			const dodoString &subject,
+			const dodoString &message,
+			const dodoString &login,
+			const dodoString &pass,
+			const dodoString &headers)
 {
 	enum authTypeEnum
 	{
@@ -2357,7 +2357,7 @@ void
 bool
 #endif
 tools::sendShortDataDel(int socket,
-						const dodoString&mess,
+						const dodoString &mess,
 						char             *data)
 {
     #ifndef FAST
@@ -2403,7 +2403,7 @@ void
 bool
 #endif
 tools::sendShortData(int socket,
-					 const dodoString&mess)
+					 const dodoString &mess)
 {
     #ifndef FAST
 
@@ -2446,7 +2446,7 @@ void
 bool
 #endif
 tools::sendLongData(int socket,
-					const dodoString&mess)
+					const dodoString &mess)
 {
 	unsigned long outSize = mess.size();
 

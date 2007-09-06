@@ -62,7 +62,7 @@ namespace dodo
 		 * constructor
 		 * @note defines structure data with user data
 		 */
-		__dbInfo(const dodoString&db, const dodoString&host, const dodoString&user, const dodoString&password, const dodoString&path, int port);
+		__dbInfo(const dodoString &db, const dodoString &host, const dodoString &user, const dodoString &password, const dodoString &path, int port);
 
 		dodoString db;          ///< database name
 		dodoString host;        ///< hostname
@@ -113,20 +113,20 @@ namespace dodo
 		 * @param password is password, to connect to server
 		 * @param socket is path to unix socket
 		 */
-		virtual void setDbInfo(const dodoString&db, const dodoString&host, unsigned int port, const dodoString&user, const dodoString&password, const dodoString&path = __dodostring__) = 0;
+		virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __dodostring__) = 0;
 
 		/**
 		 * sets info for database
 		 * @param info is info for database
 		 */
-		virtual void setDbInfo(const __dbInfo&dbInfo) = 0;
+		virtual void setDbInfo(const __dbInfo &dbInfo) = 0;
 
 		/**
 		 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
 		 * @param fields is array of fields' names
 		 * @param where is where statement for request
 		 */
-		virtual void select(const dodoString&table, const dodoStringArr&fieldsNames, const dodoString&where = __dodostring__) = 0;
+		virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__) = 0;
 
 		/**
 		 * @param table is table name
@@ -134,7 +134,7 @@ namespace dodo
 		 * 			key => field's name
 		 * 			value => field's value
 		 */
-		virtual void insert(const dodoString&table, const dodoStringMap&fields) = 0;
+		virtual void insert(const dodoString &table, const dodoStringMap &fields) = 0;
 
 		/**
 		 * @param table is table name
@@ -142,27 +142,27 @@ namespace dodo
 		 * 			key => field's name
 		 * 			value => field's value
 		 */
-		virtual void insert(const dodoString&table, const dodoArray<dodoStringMap>&fields) = 0;
+		virtual void insert(const dodoString &table, const dodoArray<dodoStringMap> &fields) = 0;
 
 		/**
 		 * @param table is table name
 		 * @param fieldsVal is array of fields' values
 		 * @param fieldsNames is array of fields' names
 		 */
-		virtual void insert(const dodoString&table, const dodoStringArr&fieldsVal, const dodoStringArr&fieldsNames = __dodostringarray__) = 0;
+		virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__) = 0;
 
 		/**
 		 * @param table is table name
 		 * @param fieldsVal - array of array of (array of fields' values)
 		 * @param fieldsNames is array of fields' names
 		 */
-		virtual void insert(const dodoString&table, const dodoArray<dodoStringArr>&fieldsVal, const dodoStringArr&fieldsNames = __dodostringarray__) = 0;
+		virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__) = 0;
 
 		/**
 		 * @param table(To/From) is table name To/From
 		 * @param fieldsNames is array of fields' names
 		 */
-		virtual void insertSelect(const dodoString&tableTo, const dodoString&tableFrom, const dodoStringArr&fieldsNamesTo, const dodoStringArr&fieldsNamesFrom = __dodostringarray__, const dodoString&where = __dodostring__) = 0;
+		virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__) = 0;
 
 		/**
 		 * @param table is table name
@@ -171,7 +171,7 @@ namespace dodo
 		 * 			value => field's value
 		 * @param where is where statement for request
 		 */
-		virtual void update(const dodoString&table, const dodoStringMap&fields, const dodoString&where = __dodostring__) = 0;
+		virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where = __dodostring__) = 0;
 
 		/**
 		 * @param table is table name
@@ -179,26 +179,26 @@ namespace dodo
 		 * @param fieldsNames is array of fields' names
 		 * @param where is where statement for request
 		 */
-		virtual void update(const dodoString&table, const dodoStringArr&fieldsVal, const dodoStringArr&fieldsNames, const dodoString&where = __dodostring__) = 0;
+		virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__) = 0;
 
 		/**
 		 * @param table is table name
 		 * @param where is where statement for request
 		 */
-		virtual void del(const dodoString&table, const dodoString&where = __dodostring__) = 0;
+		virtual void del(const dodoString &table, const dodoString &where = __dodostring__) = 0;
 
 		/**
 		 * truncates table
 		 * @param table is name name of table to truncate
 		 */
-		virtual void truncate(const dodoString&table) = 0;
+		virtual void truncate(const dodoString &table) = 0;
 
 		/**
 		 * add where statement
 		 * overwites previous is it was defined
 		 * @param where is where statement
 		 */
-		virtual void where(const dodoString&where) = 0;
+		virtual void where(const dodoString &where) = 0;
 
 		/**
 		 * sets limit for request
@@ -216,19 +216,19 @@ namespace dodo
 		 * sets order for request
 		 * @param order is order statement
 		 */
-		virtual void order(const dodoString&order) = 0;
+		virtual void order(const dodoString &order) = 0;
 
 		/**
 		 * sets group for request
 		 * @param group is group statement
 		 */
-		virtual void group(const dodoString&group) = 0;
+		virtual void group(const dodoString &group) = 0;
 
 		/**
 		 * sets having for request
 		 * @param having is having statement
 		 */
-		virtual void having(const dodoString&having) = 0;
+		virtual void having(const dodoString &having) = 0;
 
 		/**
 		 * remove where statement
@@ -305,7 +305,7 @@ namespace dodo
             #else
 		virtual bool
             #endif
-		exec(const dodoString&query = __dodostring__, bool result = false) = 0;
+		exec(const dodoString &query = __dodostring__, bool result = false) = 0;
 
 		protected:
 

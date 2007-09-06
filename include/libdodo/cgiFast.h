@@ -45,7 +45,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		cgiFastSTD(cgiFastSTD&cf);
+		cgiFastSTD(cgiFastSTD &cf);
 
 		public:
 
@@ -64,7 +64,7 @@ namespace dodo
 		 * sends buf to specific output[fast-cgi safe]
 		 * @param buf describes what to send to user
 		 */
-		virtual void print(const dodoString&buf);
+		virtual void print(const dodoString &buf);
 
 		/**
 		 * reads to buf from specific input[fast-cgi safe]
@@ -105,7 +105,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		cgiFast(cgiFast&cf);
+		cgiFast(cgiFast &cf);
 
 		public:
 

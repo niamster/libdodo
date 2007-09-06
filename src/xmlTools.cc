@@ -28,13 +28,13 @@
 
 using namespace dodo;
 
-__xmlInfo::__xmlInfo(const dodoString&a_version,
-					 const dodoString&a_encoding,
-					 const dodoString&a_root,
+__xmlInfo::__xmlInfo(const dodoString &a_version,
+					 const dodoString &a_encoding,
+					 const dodoString &a_root,
 					 int a_compression) : version(a_version),
-	encoding(a_encoding),
-	root(a_root),
-	compression(a_compression)
+										  encoding(a_encoding),
+										  root(a_root),
+										  compression(a_compression)
 {
 }
 
@@ -47,28 +47,28 @@ __xmlInfo::__xmlInfo()
 //-------------------------------------------------------------------
 
 __xmlNodeDef::__xmlNodeDef() : chLimit(-1),
-	ignoreChildrenDef(false),
-	ignoreAttributesDef(true)
+							   ignoreChildrenDef(false),
+							   ignoreAttributesDef(true)
 {
 }
 
 //-------------------------------------------------------------------
 
 __xmlNode::__xmlNode() : CDATA(false),
-	empty(false)
+						 empty(false)
 {
 }
 
 //-------------------------------------------------------------------
 
-xmlTools::xmlTools(xmlTools&xt)
+xmlTools::xmlTools(xmlTools &xt)
 {
 }
 
 //-------------------------------------------------------------------
 
 xmlTools::xmlTools() : icaseNames(false),
-	document(NULL)
+					   document(NULL)
 {
 	xmlPedanticParserDefault(0);
 	xmlInitParser();
@@ -87,7 +87,7 @@ xmlTools::~xmlTools()
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::reParse(const __xmlNodeDef&definition)
+xmlTools::reParse(const __xmlNodeDef &definition)
 {
 	if (document == NULL)
             #ifndef NO_EX
@@ -119,8 +119,8 @@ xmlTools::isCDATA(xmlNodePtr chNode)
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseFile(const __xmlNodeDef&definition,
-					const dodoString&file)
+xmlTools::parseFile(const __xmlNodeDef &definition,
+					const dodoString &file)
 {
 	xmlFreeDoc(document);
 
@@ -141,8 +141,8 @@ xmlTools::parseFile(const __xmlNodeDef&definition,
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseBuffer(const __xmlNodeDef&definition,
-					  const dodoString&buffer)
+xmlTools::parseBuffer(const __xmlNodeDef &definition,
+					  const dodoString &buffer)
 {
 	xmlFreeDoc(document);
 
@@ -167,7 +167,7 @@ void
     #else
 bool
     #endif
-xmlTools::parseFileInt(const dodoString&file)
+xmlTools::parseFileInt(const dodoString &file)
 {
 	xmlFreeDoc(document);
 
@@ -194,7 +194,7 @@ void
     #else
 bool
     #endif
-xmlTools::parseBufferInt(const dodoString&buffer)
+xmlTools::parseBufferInt(const dodoString &buffer)
 {
 	xmlFreeDoc(document);
 
@@ -217,7 +217,7 @@ xmlTools::parseBufferInt(const dodoString&buffer)
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parse(const __xmlNodeDef&definition)
+xmlTools::parse(const __xmlNodeDef &definition)
 {
 	xmlNodePtr node = xmlDocGetRootElement(document);
 	if (node == NULL)
@@ -297,7 +297,7 @@ xmlTools::parse(const __xmlNodeDef&definition)
 //-------------------------------------------------------------------
 
 dodoArray<__xmlNode>
-xmlTools::parse(const __xmlNodeDef&definition,
+xmlTools::parse(const __xmlNodeDef &definition,
 				const xmlNodePtr chNode,
 				long chLimit)
 {
@@ -420,9 +420,9 @@ xmlTools::errHandler(void        *data,
 //-------------------------------------------------------------------
 
 void
-xmlTools::getAttributes(const __xmlNodeDef&definition,
+xmlTools::getAttributes(const __xmlNodeDef &definition,
 						const xmlNodePtr node,
-						dodoStringMap&attributes)
+						dodoStringMap &attributes)
 {
 	attribute = node->properties;
 
@@ -487,7 +487,7 @@ xmlTools::getAttributes(const __xmlNodeDef&definition,
 
 void
 xmlTools::getAttributes(const xmlNodePtr node,
-						dodoStringMap&attributes)
+						dodoStringMap &attributes)
 {
 	attribute = node->properties;
 
@@ -508,7 +508,7 @@ xmlTools::getAttributes(const xmlNodePtr node,
 
 void
 xmlTools::getNodeInfo(const xmlNodePtr node,
-					  __xmlNode&resNode)
+					  __xmlNode &resNode)
 {
 	if (node->ns != NULL)
 	{
@@ -536,7 +536,7 @@ xmlTools::getNodeInfo(const xmlNodePtr node,
 //-------------------------------------------------------------------
 
 __xmlInfo
-xmlTools::getXMLFileInfo(const dodoString&file)
+xmlTools::getXMLFileInfo(const dodoString &file)
 {
 	document = xmlParseFile(file.c_str());
 	if (document == NULL)
@@ -558,7 +558,7 @@ xmlTools::getXMLFileInfo(const dodoString&file)
 //-------------------------------------------------------------------
 
 __xmlInfo
-xmlTools::getXMLBufferInfo(const dodoString&buffer)
+xmlTools::getXMLBufferInfo(const dodoString &buffer)
 {
 	document = xmlParseMemory(buffer.c_str(), buffer.size());
 	if (document == NULL)
@@ -615,7 +615,7 @@ xmlTools::parse(xmlNodePtr node)
 //-------------------------------------------------------------------
 
 void
-xmlTools::initNode(__xmlNode&node)
+xmlTools::initNode(__xmlNode &node)
 {
 	node.attributes.clear();
 	node.children.clear();
@@ -630,7 +630,7 @@ xmlTools::initNode(__xmlNode&node)
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseFile(const dodoString&file)
+xmlTools::parseFile(const dodoString &file)
 {
 	xmlFreeDoc(document);
 
@@ -664,7 +664,7 @@ xmlTools::parseFile(const dodoString&file)
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseBuffer(const dodoString&buffer)
+xmlTools::parseBuffer(const dodoString &buffer)
 {
 	xmlFreeDoc(document);
 
@@ -698,7 +698,7 @@ xmlTools::parseBuffer(const dodoString&buffer)
 //-------------------------------------------------------------------
 
 void
-xmlTools::initNodeDef(__xmlNodeDef&node)
+xmlTools::initNodeDef(__xmlNodeDef &node)
 {
 	node.attributes.clear();
 	node.children.clear();
@@ -710,7 +710,7 @@ xmlTools::initNodeDef(__xmlNodeDef&node)
 //-------------------------------------------------------------------
 
 xmlNodePtr
-xmlTools::findNode(const __xmlNodeDef&definition,
+xmlTools::findNode(const __xmlNodeDef &definition,
 				   xmlNodePtr node)
 {
 	xmlNodePtr one;
@@ -767,9 +767,9 @@ xmlTools::clear()
 //-------------------------------------------------------------------
 
 dodoString
-xmlTools::createXML(const __xmlNode&root,
-					const dodoString&encoding,
-					const dodoString&version) const
+xmlTools::createXML(const __xmlNode &root,
+					const dodoString &encoding,
+					const dodoString &version) const
 {
 	if (root.name.empty())
 		return __dodostring__;
@@ -784,7 +784,7 @@ xmlTools::createXML(const __xmlNode&root,
 //-------------------------------------------------------------------
 
 dodoString
-xmlTools::createNode(const __xmlNode&node) const
+xmlTools::createNode(const __xmlNode &node) const
 {
 	if (node.name.empty())
 		return __dodostring__;

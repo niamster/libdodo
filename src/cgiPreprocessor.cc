@@ -38,8 +38,8 @@ cgiPreprocessor::~cgiPreprocessor()
 //-------------------------------------------------------------------
 
 dodoString
-cgiPreprocessor::read(const dodoString&path,
-					  dodoArray<unsigned long>&newLinePos)
+cgiPreprocessor::read(const dodoString &path,
+					  dodoArray<unsigned long> &newLinePos)
 {
 	FILE *tpl = fopen(path.c_str(), "r");
 	if (tpl == NULL)
@@ -82,7 +82,7 @@ cgiPreprocessor::read(const dodoString&path,
 //-------------------------------------------------------------------
 
 dodoString
-cgiPreprocessor::preProcess(const dodoString&path)
+cgiPreprocessor::preProcess(const dodoString &path)
 {
 	dodoArray<unsigned long> newLinePos;
 
@@ -233,7 +233,7 @@ cgiPreprocessor::preProcess(const dodoString&path)
 //-------------------------------------------------------------------
 
 unsigned long
-cgiPreprocessor::getLineNumber(const dodoArray<unsigned long>&newLinePos,
+cgiPreprocessor::getLineNumber(const dodoArray<unsigned long> &newLinePos,
 							   unsigned long pos)
 {
 	dodoArray<unsigned long>::const_iterator o(newLinePos.begin()), p(newLinePos.end());

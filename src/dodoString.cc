@@ -32,7 +32,7 @@ dodoString::dodoString()
 
 //-------------------------------------------------------------------
 
-dodoString::dodoString(const std::string&str) : std::string(str)
+dodoString::dodoString(const std::string &str) : std::string(str)
 {
 }
 
@@ -44,7 +44,7 @@ dodoString::dodoString(const char *str) : std::string(str)
 
 //-------------------------------------------------------------------
 
-dodoString::dodoString(const dodoString&str) : std::string(str)
+dodoString::dodoString(const dodoString &str) : std::string(str)
 {
 }
 
@@ -57,7 +57,7 @@ dodoString::dodoString(const char    *str,
 
 //-------------------------------------------------------------------
 
-dodoString::dodoString(const std::string&str,
+dodoString::dodoString(const std::string &str,
 					   unsigned long index,
 					   unsigned long length) : std::string(str, index, length)
 {
@@ -66,15 +66,15 @@ dodoString::dodoString(const std::string&str,
 //-------------------------------------------------------------------
 
 dodoString::dodoString(unsigned long length,
-					   const char&ch) : std::string(length, ch)
+					   const char &ch) : std::string(length, ch)
 {
 }
 
 //-------------------------------------------------------------------
 
 bool
-dodoString::equal(const dodoString&first,
-				  const dodoString&second)
+dodoString::equal(const dodoString &first,
+				  const dodoString &second)
 {
 	return strcmp(first.c_str(), second.c_str()) == 0 ? true : false;
 }
@@ -82,8 +82,8 @@ dodoString::equal(const dodoString&first,
 //-------------------------------------------------------------------
 
 bool
-dodoString::iequal(const dodoString&first,
-				   const dodoString&second)
+dodoString::iequal(const dodoString &first,
+				   const dodoString &second)
 {
 	return strcasecmp(first.c_str(), second.c_str()) == 0 ? true : false;
 }
@@ -91,7 +91,7 @@ dodoString::iequal(const dodoString&first,
 //-------------------------------------------------------------------
 
 void
-dodoString::format(const dodoString&format, ...)
+dodoString::format(const dodoString &format, ...)
 {
 	unsigned long length = format.size() * 3;
 	char *str = new char[length];
@@ -107,7 +107,7 @@ dodoString::format(const dodoString&format, ...)
 //-------------------------------------------------------------------
 
 dodoString
-dodoString::formatStatic(const dodoString&format, ...)
+dodoString::formatStatic(const dodoString &format, ...)
 {
 	unsigned long length = format.size() * 3;
 	char *str = new char[length];
@@ -126,8 +126,8 @@ dodoString::formatStatic(const dodoString&format, ...)
 //-------------------------------------------------------------------
 
 void
-dodoString::replace(const dodoString&needle,
-			   const dodoString&replacement)
+dodoString::replace(const dodoString &needle,
+					const dodoString &replacement)
 {
 	unsigned long i(0), j(needle.size()), k(replacement.size());
 
@@ -145,9 +145,9 @@ dodoString::replace(const dodoString&needle,
 //-------------------------------------------------------------------
 
 void
-dodoString::replace(const dodoString&needle,
-			   const dodoString&replacement,
-			   dodoString&data)
+dodoString::replace(const dodoString &needle,
+					const dodoString &replacement,
+					dodoString &data)
 {
 	data.replace(needle, replacement);
 }
@@ -245,7 +245,7 @@ dodoString::dToString(double number)
 
 void
 dodoString::fromL(long number)
-{	
+{
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%ld", number);
 
@@ -333,7 +333,7 @@ dodoString::fromD(double number)
 //-------------------------------------------------------------------
 
 dodoString
-dodoString::lTrim(const dodoString&data,
+dodoString::lTrim(const dodoString &data,
 				  char symbol)
 {
 	int size = data.size(), i(0);
@@ -348,7 +348,7 @@ dodoString::lTrim(const dodoString&data,
 //-------------------------------------------------------------------
 
 dodoString
-dodoString::rTrim(const dodoString&data,
+dodoString::rTrim(const dodoString &data,
 				  char symbol)
 {
 	int i(data.size() - 1);
@@ -363,7 +363,7 @@ dodoString::rTrim(const dodoString&data,
 //-------------------------------------------------------------------
 
 dodoString
-dodoString::rTrim(const dodoString&data,
+dodoString::rTrim(const dodoString &data,
 				  const char symbols[],
 				  int symCount)
 {
@@ -384,7 +384,7 @@ dodoString::rTrim(const dodoString&data,
 //-------------------------------------------------------------------
 
 dodoString
-dodoString::lTrim(const dodoString&data,
+dodoString::lTrim(const dodoString &data,
 				  const char symbols[],
 				  int symCount)
 {
@@ -405,7 +405,7 @@ dodoString::lTrim(const dodoString&data,
 //-------------------------------------------------------------------
 
 dodoString
-dodoString::trim(const dodoString&data,
+dodoString::trim(const dodoString &data,
 				 const char symbols[],
 				 int symCount)
 {
@@ -415,7 +415,7 @@ dodoString::trim(const dodoString&data,
 //-------------------------------------------------------------------
 
 dodoString
-dodoString::trim(const dodoString&data,
+dodoString::trim(const dodoString &data,
 				 char symbol)
 {
 	return rTrim(lTrim(data, symbol), symbol);
@@ -575,7 +575,7 @@ dodoString::toD()
 //-------------------------------------------------------------------
 
 long
-dodoString::stringToL(const dodoString&data)
+dodoString::stringToL(const dodoString &data)
 {
 	return atol(data.c_str());
 }
@@ -583,7 +583,7 @@ dodoString::stringToL(const dodoString&data)
 //-------------------------------------------------------------------
 
 unsigned long
-dodoString::stringToUL(const dodoString&data)
+dodoString::stringToUL(const dodoString &data)
 {
 	return strtoul(data.c_str(), NULL, 10);
 }
@@ -591,7 +591,7 @@ dodoString::stringToUL(const dodoString&data)
 //-------------------------------------------------------------------
 
 int
-dodoString::stringToI(const dodoString&data)
+dodoString::stringToI(const dodoString &data)
 {
 	return atoi(data.c_str());
 }
@@ -599,7 +599,7 @@ dodoString::stringToI(const dodoString&data)
 //-------------------------------------------------------------------
 
 unsigned int
-dodoString::stringToUI(const dodoString&data)
+dodoString::stringToUI(const dodoString &data)
 {
 	return (unsigned int)atol(data.c_str());
 }
@@ -607,7 +607,7 @@ dodoString::stringToUI(const dodoString&data)
 //-------------------------------------------------------------------
 
 short
-dodoString::stringToS(const dodoString&data)
+dodoString::stringToS(const dodoString &data)
 {
 	return (short)atoi(data.c_str());
 }
@@ -615,7 +615,7 @@ dodoString::stringToS(const dodoString&data)
 //-------------------------------------------------------------------
 
 unsigned short
-dodoString::stringToUS(const dodoString&data)
+dodoString::stringToUS(const dodoString &data)
 {
 	return (unsigned short)atoi(data.c_str());
 }
@@ -623,7 +623,7 @@ dodoString::stringToUS(const dodoString&data)
 //-------------------------------------------------------------------
 
 float
-dodoString::stringToF(const dodoString&data)
+dodoString::stringToF(const dodoString &data)
 {
 	return (float)atof(data.c_str());
 }
@@ -631,7 +631,7 @@ dodoString::stringToF(const dodoString&data)
 //-------------------------------------------------------------------
 
 double
-dodoString::stringToD(const dodoString&data)
+dodoString::stringToD(const dodoString &data)
 {
 	return atof(data.c_str());
 }
