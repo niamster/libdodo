@@ -31,32 +31,32 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+	/**
+	 * libdodo defined errors
+	 */
+	enum systemThreadSharedDataCollectionGuardExR
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum systemThreadSharedDataCollectionGuardExR
-		{
-			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */
-		#define SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR "Share not found."
-			
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum systemThreadSharedDataCollectionGuardFunctionsID
-		{
-			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL,
-			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET,
-			SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_GET,
-		};
+		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND,
 	};
 
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR    "Share not found."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum systemThreadSharedDataCollectionGuardFunctionsID
+	{
+		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL,
+		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET,
+		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_GET,
+	};
+};
+
 #endif
-#endif 
+#endif
 

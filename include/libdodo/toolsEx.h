@@ -30,92 +30,92 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * libdodo defined errors
+	 */
+	enum toolsExR
 	{
-		
-		/**
-		 * libdodo defined errors
-		 */
-		enum toolsExR
-		{
-			TOOLS_BAD_ASCII85=1,
-			TOOLS_BAD_BZCOMPRESSION,
-			TOOLS_BAD_BZDECOMPRESSION_INIT,
-			TOOLS_BAD_BZDECOMPRESSION_FINISH,
-			TOOLS_BAD_BZDECOMPRESSION,
-			TOOLS_BADMAILHELO,
-			TOOLS_BADMAILAUTH,
-			TOOLS_WRONG_PARAMETHER,
-			
-			#ifndef FAST
-				
-				TOOLS_DATA_TOO_LONG,
-			
-			#endif
-			
-			TOOLS_ARRAY_EMPTY
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */	
-		#define TOOLS_BAD_ASCII85_STR "Bad character in ASCII85."
-		
-		#ifdef BZIP2_EXT
-		
-			#define TOOLS_BAD_BZCOMPRESSION_STR "Error occured during comression."
-			#define TOOLS_BAD_BZDECOMPRESSION_INIT_STR "Error occured during preparations for decompression."
-			#define TOOLS_BAD_BZDECOMPRESSION_FINISH_STR "Error occured during finishing decompression."
-			#define TOOLS_BAD_BZDECOMPRESSION_STR "Error occured during decompression."
-		
-		#endif
-		
-		#define TOOLS_BADMAILHELO_STR "Error occurd while sending EHLO."
-		#define TOOLS_BADMAILAUTH_STR "Error during uthentification."
-		#define TOOLS_WRONG_PARAMETHER_STR "Wrong paramather passed to function."
-		#define TOOLS_DATA_TOO_LONG_STR "Data size is bigger than TOOLS_SHORT_DATA_SIZE."
-		#define TOOLS_ARRAY_EMPTY_STR "Array is empty."
-		
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum toolsFunctionsID
-		{
-			#ifdef ICONV_EXT
-			
-				TOOLS_CODESETCONVERSION,
-				TOOLS_CODESETCONVERSIONSTATIC,
-				TOOLS_RECODESETCONVERSION,
-				TOOLS_CODESET,
-			
-			#endif
-			
-			#ifdef ZLIB_EXT
-			
-				TOOLS_ZCOMPRESS,
-				TOOLS_ZDECOMPRESS,			
-			
-			#endif
-			
-				TOOLS_DECODEASCII85,
-				
-			#ifdef BZIP2_EXT
-			
-				TOOLS_BZCOMPRESS,
-				TOOLS_BZDECOMPRESS,							
-			
-			#endif
-			
-			TOOLS_MAIL,
-			TOOLS_SENDSHORTDATA,
-			TOOLS_SENDSHORTDATADEL,	
-			TOOLS_RECEIVESHORTDATADEL,
-			TOOLS_SENDLONGDATA,
-			TOOLS_IMPLODE,
-			TOOLS_RANDOM
-		};
-		
+		TOOLS_BAD_ASCII85 = 1,
+		TOOLS_BAD_BZCOMPRESSION,
+		TOOLS_BAD_BZDECOMPRESSION_INIT,
+		TOOLS_BAD_BZDECOMPRESSION_FINISH,
+		TOOLS_BAD_BZDECOMPRESSION,
+		TOOLS_BADMAILHELO,
+		TOOLS_BADMAILAUTH,
+		TOOLS_WRONG_PARAMETHER,
+
+            #ifndef FAST
+
+		TOOLS_DATA_TOO_LONG,
+
+            #endif
+
+		TOOLS_ARRAY_EMPTY
 	};
+
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define TOOLS_BAD_ASCII85_STR                       "Bad character in ASCII85."
+
+        #ifdef BZIP2_EXT
+
+            #define TOOLS_BAD_BZCOMPRESSION_STR             "Error occured during comression."
+            #define TOOLS_BAD_BZDECOMPRESSION_INIT_STR      "Error occured during preparations for decompression."
+            #define TOOLS_BAD_BZDECOMPRESSION_FINISH_STR    "Error occured during finishing decompression."
+            #define TOOLS_BAD_BZDECOMPRESSION_STR           "Error occured during decompression."
+
+        #endif
+
+        #define TOOLS_BADMAILHELO_STR                       "Error occurd while sending EHLO."
+        #define TOOLS_BADMAILAUTH_STR                       "Error during uthentification."
+        #define TOOLS_WRONG_PARAMETHER_STR                  "Wrong paramather passed to function."
+        #define TOOLS_DATA_TOO_LONG_STR                     "Data size is bigger than TOOLS_SHORT_DATA_SIZE."
+        #define TOOLS_ARRAY_EMPTY_STR                       "Array is empty."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum toolsFunctionsID
+	{
+            #ifdef ICONV_EXT
+
+		TOOLS_CODESETCONVERSION,
+		TOOLS_CODESETCONVERSIONSTATIC,
+		TOOLS_RECODESETCONVERSION,
+		TOOLS_CODESET,
+
+            #endif
+
+            #ifdef ZLIB_EXT
+
+		TOOLS_ZCOMPRESS,
+		TOOLS_ZDECOMPRESS,
+
+            #endif
+
+		TOOLS_DECODEASCII85,
+
+            #ifdef BZIP2_EXT
+
+		TOOLS_BZCOMPRESS,
+		TOOLS_BZDECOMPRESS,
+
+            #endif
+
+		TOOLS_MAIL,
+		TOOLS_SENDSHORTDATA,
+		TOOLS_SENDSHORTDATADEL,
+		TOOLS_RECEIVESHORTDATADEL,
+		TOOLS_SENDLONGDATA,
+		TOOLS_IMPLODE,
+		TOOLS_RANDOM
+	};
+
+};
 
 #endif
 

@@ -30,51 +30,51 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+	/**
+	 * libdodo defined errors
+	 */
+	enum systemProcessesExR
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum systemProcessesExR
-		{
-			SYSTEMPROCESSES_ISALREADYRUNNING,
-			SYSTEMPROCESSES_NOTFOUND,
-			SYSTEMPROCESSES_SWEPT,
-			SYSTEMPROCESSES_ISNOTRUNNING,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */
-		#define SYSTEMPROCESSES_ISALREADYRUNNING_STR "The process is currently running. Please wait."
-		#define SYSTEMPROCESSES_NOTFOUND_STR "Process not found."
-		#define SYSTEMPROCESSES_SWEPT_STR "Limit of execution exceeded. Process swept."
-		#define SYSTEMPROCESSES_ISNOTRUNNING_STR "The process is currently not running."
-			
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum systemProcessesFunctionsID
-		{
-			SYSTEMPROCESSES__ISRUNNING,
-			SYSTEMPROCESSES_ADDNRUN,
-			SYSTEMPROCESSES_RUN,
-			SYSTEMPROCESSES_DEL,
-			SYSTEMPROCESSES_REPLACE,
-			SYSTEMPROCESSES_STOP,
-			SYSTEMPROCESSES_WAIT,
-			SYSTEMPROCESSES_SETEXECUTIONLIMIT,
-			SYSTEMPROCESSES_ISRUNNING,
-			
-			#ifdef DL_EXT
-			
-				SYSTEMPROCESSES_GETMODULEINFO,
-				SYSTEMPROCESSES_ADD,
-				
-			#endif
-		};
+		SYSTEMPROCESSES_ISALREADYRUNNING,
+		SYSTEMPROCESSES_NOTFOUND,
+		SYSTEMPROCESSES_SWEPT,
+		SYSTEMPROCESSES_ISNOTRUNNING,
 	};
 
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define SYSTEMPROCESSES_ISALREADYRUNNING_STR    "The process is currently running. Please wait."
+        #define SYSTEMPROCESSES_NOTFOUND_STR            "Process not found."
+        #define SYSTEMPROCESSES_SWEPT_STR               "Limit of execution exceeded. Process swept."
+        #define SYSTEMPROCESSES_ISNOTRUNNING_STR        "The process is currently not running."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum systemProcessesFunctionsID
+	{
+		SYSTEMPROCESSES__ISRUNNING,
+		SYSTEMPROCESSES_ADDNRUN,
+		SYSTEMPROCESSES_RUN,
+		SYSTEMPROCESSES_DEL,
+		SYSTEMPROCESSES_REPLACE,
+		SYSTEMPROCESSES_STOP,
+		SYSTEMPROCESSES_WAIT,
+		SYSTEMPROCESSES_SETEXECUTIONLIMIT,
+		SYSTEMPROCESSES_ISRUNNING,
+
+            #ifdef DL_EXT
+
+		SYSTEMPROCESSES_GETMODULEINFO,
+		SYSTEMPROCESSES_ADD,
+
+            #endif
+	};
+};
+
 #endif
-#endif 
+#endif
 

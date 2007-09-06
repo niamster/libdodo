@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _DBPOSTGRESQLEX_H_
 #define _DBPOSTGRESQLEX_H_
 
@@ -30,32 +30,32 @@
 
 #ifndef NO_EX
 
-	namespace dodo
-	{
+namespace dodo
+{
 
-		/**
-		 * libdodo defined errors
-		 */
-		enum dbPostgresqlExR
-		{
-			DBPOSTGRESQL_WRONG_HINT_USAGE,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */				
-		#define DBPOSTGRESQL_WRONG_HINT_USAGE_STR "Wrong hint usage. You used hint where it's not needed."
-					
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum dbPostgresqlFunctionsID
-		{
-			DBPOSTGRESQL_CONNECT,
-			DBPOSTGRESQL__EXEC,
-			DBPOSTGRESQL_SETCHARSET,
-		};		
+	/**
+	 * libdodo defined errors
+	 */
+	enum dbPostgresqlExR
+	{
+		DBPOSTGRESQL_WRONG_HINT_USAGE,
 	};
+
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define DBPOSTGRESQL_WRONG_HINT_USAGE_STR    "Wrong hint usage. You used hint where it's not needed."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum dbPostgresqlFunctionsID
+	{
+		DBPOSTGRESQL_CONNECT,
+		DBPOSTGRESQL__EXEC,
+		DBPOSTGRESQL_SETCHARSET,
+	};
+};
 
 #endif
 

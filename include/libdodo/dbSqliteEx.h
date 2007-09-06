@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _DBSQLITEEX_H_
 #define _DBSQLITEEX_H_
 
@@ -30,35 +30,35 @@
 
 #ifndef NO_EX
 
-	namespace dodo
-	{			
-		
-		/**
-		 * libdodo defined errors
-		 */
-		enum dbSqliteExR
-		{
-			DBSQLITE_WRONG_HINT_USAGE,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */				
-		#define DBSQLITE_WRONG_HINT_USAGE_STR "Wrong hint usage. You used hint where it's not needed."
-			
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum dbSqliteFunctionsID
-		{
-			DBSQLITE_DISCONNECT,
-			DBSQLITE_CONNECT,
-			DBSQLITE__EXEC,
-			DBSQLITE_FETCHROW,
-			DBSQLITE_FETCHASSOC
-		};	
-			
+namespace dodo
+{
+
+	/**
+	 * libdodo defined errors
+	 */
+	enum dbSqliteExR
+	{
+		DBSQLITE_WRONG_HINT_USAGE,
 	};
+
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define DBSQLITE_WRONG_HINT_USAGE_STR    "Wrong hint usage. You used hint where it's not needed."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum dbSqliteFunctionsID
+	{
+		DBSQLITE_DISCONNECT,
+		DBSQLITE_CONNECT,
+		DBSQLITE__EXEC,
+		DBSQLITE_FETCHROW,
+		DBSQLITE_FETCHASSOC
+	};
+
+};
 
 #endif
 

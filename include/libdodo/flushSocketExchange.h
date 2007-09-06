@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _FLUSHSOCKETEXCHANGE_H_
 #define _FLUSHSOCKETEXCHANGE_H_
 
@@ -42,8 +42,8 @@
 #include <xexec.h>
 
 namespace dodo
-{	
-	
+{
+
 	/**
 	 * @enum flushSocketOperationTypeEnum describes type of operation for hook
 	 */
@@ -54,8 +54,8 @@ namespace dodo
 		FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM,
 		FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM,
 		FLUSHSOCKETEXCHANGE_OPER_CLOSE,
-	};	
-	
+	};
+
 	/**
 	 * @class __initialAccept holds info that passes to accept call, and then inits flushSocketExchange;
 	 */
@@ -63,287 +63,287 @@ namespace dodo
 	{
 		friend class flushSocketExchange;
 		friend class flushSocket;
-		
-		public:			
-		
-			/**
-			 * constructor
-			 */
-			__initialAccept();
-			
-			/**
-			 * copy constructor
-			 * @note if you want to copy it, the object, from what was copy is not be able to init new session => you have to reinit it with accept method!
-			 */
-			__initialAccept(__initialAccept &init);
-		
-		
+
+		public:
+
+		/**
+		 * constructor
+		 */
+		__initialAccept();
+
+		/**
+		 * copy constructor
+		 * @note if you want to copy it, the object, from what was copy is not be able to init new session => you have to reinit it with accept method!
+		 */
+		__initialAccept(__initialAccept&init);
+
+
 		private:
-				
-			int socket;///< id of socket
-			
-			short family;///< socket family[see socketProtoFamilyEnum]
-			short type;///< socket type[see socketTransferTypeEnum]
-			
-			bool blocked;///< if blocked
-			bool blockInherited;///< if block inherited	
+
+		int socket;             ///< id of socket
+
+		short family;           ///< socket family[see socketProtoFamilyEnum]
+		short type;             ///< socket type[see socketTransferTypeEnum]
+
+		bool blocked;           ///< if blocked
+		bool blockInherited;    ///< if block inherited
 	};
-		
+
 	/**
 	 * @class flushSocketExchange used for communication[send/receive data]
 	 * you may use it's functions only after passing it to connect(accept)
 	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection=previous will be closed
 	 */
-	class flushSocketExchange : public flushSocketOptions	
-	
-	#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
+	class flushSocketExchange : public flushSocketOptions
+
+    #ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
 								, public xexec
-	#endif
-	
-	 
-	 {
-	 	
-	 	friend class flushSocket;
-	 	
+    #endif
+
+
+	{
+
+		friend class flushSocket;
+
 		public:
-											
-			/**
-			 * constructor
-			 */	
-			flushSocketExchange();
-			
-			/**
-			 * copy constructor
-			 * @note object that inited new object of this class you can use for future connections; 
-			 * you can safely pass it to the functions;
-			 */	
-			flushSocketExchange(flushSocketExchange &fse);
 
-			/**
-			 * constructor
-			 * @param init is initial data[got from accept method]
-			 * @note object that inited new object of this class you can use for future connections; 
-			 */	
-			flushSocketExchange(__initialAccept &init);
-		
-			/**
-			 * destructor
-			 */
-			virtual ~flushSocketExchange();
+		/**
+		 * constructor
+		 */
+		flushSocketExchange();
 
-			/**
-			 * @return copy of object
-			 */
-			virtual flushSocketExchange *createCopy();
-					
-			/**
-			 * deletes copy of object
-			 * @param copy is copy of object to delete
-			 */		
-			static void deleteCopy(flushSocketExchange *copy);
-			
-			#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
-					
-				/**
-				 * adds hook after the operation by callback
-				 * @return number in list where function is set
-				 * @param func is a pointer to function
-				 * @param data is pointer to data toy want to pass to hook
-				 */			
-				virtual int addPostExec(inExec func, void *data);
-				
-				/**
-				 * adds hook before the operation by callback
-				 * @return number in list where function is set
-				 * @param func is a pointer to function
-				 * @param data is pointer to data toy want to pass to hook
-				 */
-				virtual int addPreExec(inExec func, void *data);
-				
-				#ifdef DL_EXT
-	
-					/**
-					 * set function from module that will be executed before/after the main action call
-					 * the type of hook[pre/post] is defined in module
-					 * @return number in list where function is set
-					 * @param func is a pointer to function
-					 * @param data is pointer to data toy want to pass to hook
-					 * @param toInit indicates data that will path to initialize function
-					 */			
-					virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
-							
-					/**
-					 * adds hook after the operation by callback
-					 * @return number in list where function is set
-					 * @param module is a path to module, whrere hook exists
-					 * @param data is pointer to data toy want to pass to hook
-					 * @param toInit indicates data that will path to initialize function
-					 */
-					virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
-					
-					/**
-					 * adds hook after the operation by callback
-					 * @return number in list where function is set
-					 * @param module is a path to module, whrere hook exists
-					 * @param data is pointer to data toy want to pass to hook
-					 * @param toInit indicates data that will path to initialize function
-					 */
-					virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
-					
-				#endif	
-			
-			#endif
-				
-			/**
-			 * init oject with given data
-			 * @param init is initial data[got from accept method]
-			 */
-			virtual void init(__initialAccept &init);
-		
-			/**
-			 * @return true if connection is alive
-			 */
-			virtual bool alive();
-			
-			/**
-			 * write
-			 * @param data is data that would be sent
-			 * @param urgent -> send out-of-band data
-			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * signal safe
-			 */			
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							write(const char * const data);
-			
-			/**
-			 * write
-			 * @param data is string that would be sent
-			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * signal safe
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif				
-							writeString(const dodoString &data);
-			
-			/**
-			 * receive
-			 * @param data is data that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * signal safe
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool
-			#endif
-							read(char * const data);
-							 
-			/**
-			 * read
-			 * @param data is string that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * signal safe
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif				
-							readString(dodoString &data);
+		/**
+		 * copy constructor
+		 * @note object that inited new object of this class you can use for future connections;
+		 * you can safely pass it to the functions;
+		 */
+		flushSocketExchange(flushSocketExchange&fse);
 
-			/**
-			 * write - null-terminated string
-			 * @param data is data that would be sent
-			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * max data size is outSocketBuffer
-			 * @note - appends '\n'
-			 * signal safe
-			 */			
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							writeStream(const char * const data);
-			
-			/**
-			 * write - null-terminated string
-			 * @param data is string that would be sent
-			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * max data size is outSocketBuffer
-			 * @note - appends '\n'
-			 * signal safe
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif				
-							writeStreamString(const dodoString &data);
-			
-			/**
-			 * read - null-terminated string
-			 * @param data is data that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * max data size is inSocketBuffer
-			 * signal safe
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							readStream(char * const data);
-			
-			/**
-			 * read - null-terminated string
-			 * @param data is string that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * max data size is inSocketBuffer
-			 * signal safe
-			 */
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif				
-							readStreamString(dodoString &data);						
-							
-			/**
-			 * closes this socket
-			 */			
-			#ifndef NO_EX
-				virtual void 
-			#else
-				virtual bool 
-			#endif
-							close();
-			
-		protected:	
-					
-			/**
-			 * inits this class' data
-			 * @param socket is id of socket
-			 * @param blockInherited indicates whether to inherit block of parent
-			 */		
-			virtual void init(int socket, bool blockInherited);	
-	 };
+		/**
+		 * constructor
+		 * @param init is initial data[got from accept method]
+		 * @note object that inited new object of this class you can use for future connections;
+		 */
+		flushSocketExchange(__initialAccept&init);
+
+		/**
+		 * destructor
+		 */
+		virtual ~flushSocketExchange();
+
+		/**
+		 * @return copy of object
+		 */
+		virtual flushSocketExchange *createCopy();
+
+		/**
+		 * deletes copy of object
+		 * @param copy is copy of object to delete
+		 */
+		static void deleteCopy(flushSocketExchange *copy);
+
+            #ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
+
+		/**
+		 * adds hook after the operation by callback
+		 * @return number in list where function is set
+		 * @param func is a pointer to function
+		 * @param data is pointer to data toy want to pass to hook
+		 */
+		virtual int addPostExec(inExec func, void *data);
+
+		/**
+		 * adds hook before the operation by callback
+		 * @return number in list where function is set
+		 * @param func is a pointer to function
+		 * @param data is pointer to data toy want to pass to hook
+		 */
+		virtual int addPreExec(inExec func, void *data);
+
+                #ifdef DL_EXT
+
+		/**
+		 * set function from module that will be executed before/after the main action call
+		 * the type of hook[pre/post] is defined in module
+		 * @return number in list where function is set
+		 * @param func is a pointer to function
+		 * @param data is pointer to data toy want to pass to hook
+		 * @param toInit indicates data that will path to initialize function
+		 */
+		virtual xexecCounts addExec(const dodoString&module, void *data, void *toInit = NULL);
+
+		/**
+		 * adds hook after the operation by callback
+		 * @return number in list where function is set
+		 * @param module is a path to module, whrere hook exists
+		 * @param data is pointer to data toy want to pass to hook
+		 * @param toInit indicates data that will path to initialize function
+		 */
+		virtual int addPostExec(const dodoString&module, void *data, void *toInit = NULL);
+
+		/**
+		 * adds hook after the operation by callback
+		 * @return number in list where function is set
+		 * @param module is a path to module, whrere hook exists
+		 * @param data is pointer to data toy want to pass to hook
+		 * @param toInit indicates data that will path to initialize function
+		 */
+		virtual int addPreExec(const dodoString&module, void *data, void *toInit = NULL);
+
+                #endif
+
+            #endif
+
+		/**
+		 * init oject with given data
+		 * @param init is initial data[got from accept method]
+		 */
+		virtual void init(__initialAccept&init);
+
+		/**
+		 * @return true if connection is alive
+		 */
+		virtual bool alive();
+
+		/**
+		 * write
+		 * @param data is data that would be sent
+		 * @param urgent -> send out-of-band data
+		 * @note sends no longer than outSize
+		 * if outSize bigger than socket buffer size - sends with few iterations
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		write(const char * const data);
+
+		/**
+		 * write
+		 * @param data is string that would be sent
+		 * @note sends no longer than outSize
+		 * if outSize bigger than socket buffer size - sends with few iterations
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		writeString(const dodoString&data);
+
+		/**
+		 * receive
+		 * @param data is data that would be received
+		 * @note receives no longer than inSize
+		 * if inSize bigger than socket buffer size - receives with few iterations
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		read(char * const data);
+
+		/**
+		 * read
+		 * @param data is string that would be received
+		 * @note receives no longer than inSize
+		 * if inSize bigger than socket buffer size - receives with few iterations
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		readString(dodoString&data);
+
+		/**
+		 * write - null-terminated string
+		 * @param data is data that would be sent
+		 * @note sends no longer than outSize
+		 * if outSize bigger than socket buffer size - sends with few iterations
+		 * max data size is outSocketBuffer
+		 * @note - appends '\n'
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		writeStream(const char * const data);
+
+		/**
+		 * write - null-terminated string
+		 * @param data is string that would be sent
+		 * @note sends no longer than outSize
+		 * if outSize bigger than socket buffer size - sends with few iterations
+		 * max data size is outSocketBuffer
+		 * @note - appends '\n'
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		writeStreamString(const dodoString&data);
+
+		/**
+		 * read - null-terminated string
+		 * @param data is data that would be received
+		 * @note receives no longer than inSize
+		 * if inSize bigger than socket buffer size - receives with few iterations
+		 * max data size is inSocketBuffer
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		readStream(char * const data);
+
+		/**
+		 * read - null-terminated string
+		 * @param data is string that would be received
+		 * @note receives no longer than inSize
+		 * if inSize bigger than socket buffer size - receives with few iterations
+		 * max data size is inSocketBuffer
+		 * signal safe
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		readStreamString(dodoString&data);
+
+		/**
+		 * closes this socket
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		close();
+
+		protected:
+
+		/**
+		 * inits this class' data
+		 * @param socket is id of socket
+		 * @param blockInherited indicates whether to inherit block of parent
+		 */
+		virtual void init(int socket, bool blockInherited);
+	};
 
 };
 

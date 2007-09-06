@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _FLUSHSOCKETEXCHANGEEX_H_
 #define _FLUSHSOCKETEXCHANGEEX_H_
 
@@ -30,24 +30,24 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum flushSocketExchangeFunctionsID
 	{
-		
-		/**
-		 * ID of function where exception was thrown
-		 */		
-		enum flushSocketExchangeFunctionsID
-		{
-			FLUSHSOCKETEXCHANGE_SEND,
-			FLUSHSOCKETEXCHANGE_RECEIVE,
-			FLUSHSOCKETEXCHANGE_SENDSTREAM,
-			FLUSHSOCKETEXCHANGE_RECEIVESTREAM,
-			FLUSHSOCKETEXCHANGE_RECEIVESTRINGSTREAM,
-			FLUSHSOCKETEXCHANGE_RECEIVESTRING,
-		};
-		
+		FLUSHSOCKETEXCHANGE_SEND,
+		FLUSHSOCKETEXCHANGE_RECEIVE,
+		FLUSHSOCKETEXCHANGE_SENDSTREAM,
+		FLUSHSOCKETEXCHANGE_RECEIVESTREAM,
+		FLUSHSOCKETEXCHANGE_RECEIVESTRINGSTREAM,
+		FLUSHSOCKETEXCHANGE_RECEIVESTRING,
 	};
 
-#endif	
-	
+};
+
+#endif
+
 #endif

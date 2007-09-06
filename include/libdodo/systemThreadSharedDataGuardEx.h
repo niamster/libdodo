@@ -30,35 +30,35 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+	/**
+	 * libdodo defined errors
+	 */
+	enum systemThreadSharedDataGuardExR
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum systemThreadSharedDataGuardExR
-		{
-			SYSTEMTHREADSHAREDDATAGUARD_ISALREADYLOCKED,
-			SYSTEMTHREADSHAREDDATAGUARD_CANNOTLOCK
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */
-		#define SYSTEMTHREADSHAREDDATAGUARD_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-		#define SYSTEMTHREADSHAREDDATAGUARD_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
-			
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum systemThreadSharedDataGuardFunctionsID
-		{
-			SYSTEMTHREADSHAREDDATAGUARD_DEL,
-			SYSTEMTHREADSHAREDDATAGUARD_SET,
-			SYSTEMTHREADSHAREDDATAGUARD_LOCK,
-			SYSTEMTHREADSHAREDDATAGUARD_UNLOCK,
-		};
+		SYSTEMTHREADSHAREDDATAGUARD_ISALREADYLOCKED,
+		SYSTEMTHREADSHAREDDATAGUARD_CANNOTLOCK
 	};
 
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define SYSTEMTHREADSHAREDDATAGUARD_ISALREADYLOCKED_STR    "The share is currently locked. Please wait."
+        #define SYSTEMTHREADSHAREDDATAGUARD_CANNOTLOCK_STR         "The share is currently locked. Timeout exhousted."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum systemThreadSharedDataGuardFunctionsID
+	{
+		SYSTEMTHREADSHAREDDATAGUARD_DEL,
+		SYSTEMTHREADSHAREDDATAGUARD_SET,
+		SYSTEMTHREADSHAREDDATAGUARD_LOCK,
+		SYSTEMTHREADSHAREDDATAGUARD_UNLOCK,
+	};
+};
+
 #endif
-#endif 
+#endif
 

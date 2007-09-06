@@ -22,7 +22,7 @@
  */
 
 #include <threadGuard.h>
-	
+
 using namespace dodo;
 
 threadGuardHolder::threadGuard::threadGuard(threadGuardHolder *a_parent) : parent(a_parent)
@@ -38,8 +38,8 @@ threadGuardHolder::threadGuard::~threadGuard()
 	{
 		parent->mutex.unLock();
 	}
-	catch(baseEx &ex)
+	catch (baseEx&ex)
 	{
-		
+
 	}
 }

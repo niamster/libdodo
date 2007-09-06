@@ -36,32 +36,32 @@ namespace dodo
 	 */
 	class threadGuardHolder
 	{
-		
+
 		protected:
-			
-			atomicMutex mutex;///< lock
-			
+
+		atomicMutex mutex;    ///< lock
+
+		/**
+		 * @class threadGuard provides thread safe behaviour
+		 */
+		class threadGuard
+		{
+			public:
+
 			/**
-			 * @class threadGuard provides thread safe behaviour 
+			 * contructor
 			 */
-			class threadGuard
-			{
-				public:
-					
-					/**
-					 * contructor
-					 */
-					threadGuard(threadGuardHolder *parent);
-					
-					/**
-					 * destructor
-					 */
-					~threadGuard();
-				
-				protected:
-					
-					threadGuardHolder *parent;///< class to lock
-			};
+			threadGuard(threadGuardHolder *parent);
+
+			/**
+			 * destructor
+			 */
+			~threadGuard();
+
+			protected:
+
+			threadGuardHolder *parent;        ///< class to lock
+		};
 	};
 
 };

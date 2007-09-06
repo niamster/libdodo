@@ -20,10 +20,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _SYSTEMTHREADSHAREDDATAGUARD_H_
 #define _SYSTEMTHREADSHAREDDATAGUARD_H_
-	
+
 #include <pthread.h>
 #include <time.h>
 
@@ -40,71 +40,71 @@ namespace dodo
 	class systemThreadSharedDataGuard
 	{
 		private:
-		
-			/**
-			 * copy constructor
-			 * to prevent copying
-			 */
-			systemThreadSharedDataGuard(systemThreadSharedDataGuard &sts);
-			
-		public:
-		
-			/**
-			 * constructor
-			 */
-			systemThreadSharedDataGuard();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~systemThreadSharedDataGuard();
 
-			/**
-			 * sets data to became a shared
-			 * @param data describes data to be shared
-			 */
-			#ifndef NO_EX
-				virtual void
-			#else
-				virtual bool
-			#endif
-                            set(void *data);
-			
-			/**
-			 * sets shared data to NULL
-			 */
-			#ifndef NO_EX
-				virtual void
-			#else
-				virtual bool 
-			#endif						 
-							del();
-			
-			/**
-			 * lock and return shared data
-			 * @return data points on shared data or NULL in error case
-			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
-			 * @note if microseconds==0 - infinite sleep
-			 */
-			virtual void *lock(unsigned long microseconds=0);
-							
-			
-			/**
-			 * lock and return shared data
-			 */
-			#ifndef NO_EX
-				virtual void
-			#else
-				virtual bool 
-			#endif						 
-							unlock();			
-			
+		/**
+		 * copy constructor
+		 * to prevent copying
+		 */
+		systemThreadSharedDataGuard(systemThreadSharedDataGuard&sts);
+
+		public:
+
+		/**
+		 * constructor
+		 */
+		systemThreadSharedDataGuard();
+
+		/**
+		 * destructor
+		 */
+		virtual ~systemThreadSharedDataGuard();
+
+		/**
+		 * sets data to became a shared
+		 * @param data describes data to be shared
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		set(void *data);
+
+		/**
+		 * sets shared data to NULL
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		del();
+
+		/**
+		 * lock and return shared data
+		 * @return data points on shared data or NULL in error case
+		 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
+		 * @note if microseconds==0 - infinite sleep
+		 */
+		virtual void *lock(unsigned long microseconds = 0);
+
+
+		/**
+		 * lock and return shared data
+		 */
+            #ifndef NO_EX
+		virtual void
+            #else
+		virtual bool
+            #endif
+		unlock();
+
 		protected:
-			
-    		void *data;///< data that will be shared
-    		pthread_mutex_t mutex;///< lock
-						
-			timespec timeout;///< timeout to lock mutex check	
+
+		void *data;                 ///< data that will be shared
+		pthread_mutex_t mutex;      ///< lock
+
+		timespec timeout;           ///< timeout to lock mutex check
 	};
 
 };

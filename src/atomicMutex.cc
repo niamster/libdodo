@@ -31,9 +31,9 @@ atomicMutex::atomicMutex()
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 
-	pthread_mutex_init(&mutex,&attr);
+	pthread_mutex_init(&mutex, &attr);
 
-	pthread_mutexattr_destroy(&attr);	
+	pthread_mutexattr_destroy(&attr);
 }
 
 //-------------------------------------------------------------------
@@ -50,11 +50,11 @@ atomicMutex::lock()
 {
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEX_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return ;
-		#endif
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return ;
+        #endif
 }
 
 //-------------------------------------------------------------------
@@ -64,11 +64,11 @@ atomicMutex::unLock()
 {
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEX_UNLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return ;
-		#endif
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return ;
+        #endif
 }
 
 //-------------------------------------------------------------------

@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-flushNBA::flushNBA(flushNBA &rt)
+flushNBA::flushNBA(flushNBA&rt)
 {
 }
 
@@ -42,206 +42,207 @@ flushNBA::~flushNBA()
 }
 
 //-------------------------------------------------------------------
- 
-int 
-flushNBA::addFlush(const flush &fl)
+
+int
+flushNBA::addFlush(const flush&fl)
 {
 	__inOutDescriptors tempD;
-	
+
 	tempD.position = ++descs;
 	tempD.in = fl.getInDescriptor();
 	tempD.out = fl.getOutDescriptor();
-	
+
 	desc.push_back(tempD);
-	
-	return tempD.position; 
+
+	return tempD.position;
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 flushNBA::makeFalse(int count) const
-{	
-	for (int i=0;i<count;++i)
+{
+	for (int i = 0; i < count; ++i)
 		tempRB.push_back(false);
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<bool> 
-flushNBA::isReadable(const dodoArray<int> &pos, 
-					int timeout) const
+dodoArray<bool>
+flushNBA::isReadable(const dodoArray<int>&pos,
+					 int timeout) const
 {
 	tempRB.clear();
-	
+
 	int count = -1;
-	
+
 	pollfd *fds = new pollfd[pos.size()];
-	
+
 	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
-		for (;m!=n;++m)
+		for (; m != n; ++m)
 		{
 			if (i->position == *m)
 			{
 				++count;
-				
+
 				fds[count].fd = i->in;
 				fds[count].events = POLLIN | POLLPRI;
 			}
 		}
 	}
-	
+
 	++count;
-	
+
 	if (count > 0)
 	{
 		int res = poll(fds, count, timeout);
-		
+
 		if (res > 0)
 		{
-				for (int i=0;i<count;++i)
-				{
-					if (isSetFlag(fds[i].revents, POLLIN) || isSetFlag(fds[i].revents, POLLPRI))
-						tempRB.push_back(true);
-					else
-						tempRB.push_back(false);
-				}
-				
-				delete [] fds;
-				
-				return tempRB;
+			for (int i = 0; i < count; ++i)
+			{
+				if (isSetFlag(fds[i].revents, POLLIN) || isSetFlag(fds[i].revents, POLLPRI))
+					tempRB.push_back(true);
+				else
+					tempRB.push_back(false);
+			}
+
+			delete [] fds;
+
+			return tempRB;
 		}
 		else
 		{
 			if (res == 0)
 			{
 				makeFalse(count);
-				
+
 				delete [] fds;
-				
+
 				return tempRB;
 			}
-			else	
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-				#else			
-					{
-						delete [] fds;
-						
-						makeFalse(count);
-						
-						return tempRB;
-					}
-				#endif
-		}		
+			else
+                #ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+			{
+				delete [] fds;
+
+				makeFalse(count);
+
+				return tempRB;
+			}
+                #endif
+		}
 	}
-	
+
 	delete [] fds;
-	
+
 	makeFalse(count);
-	
+
 	return tempRB;
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<bool> 
-flushNBA::isWritable(const dodoArray<int> &pos, 
-					int timeout) const
-{	tempRB.clear();
-	
+dodoArray<bool>
+flushNBA::isWritable(const dodoArray<int>&pos,
+					 int timeout) const
+{
+	tempRB.clear();
+
 	int count = -1;
-	
+
 	pollfd *fds = new pollfd[pos.size()];
-	
+
 	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
-		for (;m!=n;++m)
+		for (; m != n; ++m)
 		{
 			if (i->position == *m)
 			{
 				++count;
-				
+
 				fds[count].fd = i->out;
 				fds[count].events = POLLOUT;
 			}
 		}
 	}
-	
+
 	++count;
-	
+
 	if (count > 0)
 	{
 		int res = poll(fds, count, timeout);
-		
+
 		if (res > 0)
 		{
-				for (int i=0;i<count;++i)
-				{
-					if (isSetFlag(fds[i].revents, POLLOUT))
-						tempRB.push_back(true);
-					else
-						tempRB.push_back(false);
-				}
-				
-				delete [] fds;
-				
-				return tempRB;
+			for (int i = 0; i < count; ++i)
+			{
+				if (isSetFlag(fds[i].revents, POLLOUT))
+					tempRB.push_back(true);
+				else
+					tempRB.push_back(false);
+			}
+
+			delete [] fds;
+
+			return tempRB;
 		}
 		else
 		{
 			if (res == 0)
 			{
 				delete [] fds;
-						
+
 				makeFalse(count);
-				
+
 				return tempRB;
 			}
-			else	
-				#ifndef NO_EX
-					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-				#else			
-					{
-						delete [] fds;
-						
-						makeFalse(count);
-						
-						return tempRB;
-					}
-				#endif
-		}		
+			else
+                #ifndef NO_EX
+				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+			{
+				delete [] fds;
+
+				makeFalse(count);
+
+				return tempRB;
+			}
+                #endif
+		}
 	}
-	
+
 	delete [] fds;
-	
+
 	makeFalse(count);
-	
+
 	return tempRB;
 }
 
 //-------------------------------------------------------------------
 
-bool 
+bool
 flushNBA::isReadable(int pos,
-					int timeout) const
+					 int timeout) const
 {
 	pollfd fd;
-	
+
 	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 		if (i->position == pos)
 		{
 			fd.fd = i->in;
 			fd.events = POLLIN | POLLPRI;
-			
+
 			int res = poll(&fd, 1, timeout);
-			
+
 			if (res > 0)
 			{
 				if (isSetFlag(fd.revents, POLLIN) || isSetFlag(fd.revents, POLLPRI))
@@ -253,50 +254,50 @@ flushNBA::isReadable(int pos,
 			{
 				if (res == 0)
 					return false;
-				else	
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else			
-						return false;
-					#endif
+				else
+                #ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+					return false;
+                #endif
 			}
 		}
-	
+
 	return false;
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 flushNBA::delFlush(int pos)
 {
 	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 		if (i->position == pos)
 		{
 			desc.erase(i);
-			
+
 			break;
 		}
 }
 
 //-------------------------------------------------------------------
 
-bool 
+bool
 flushNBA::isWritable(int pos,
-					int timeout) const
+					 int timeout) const
 {
 	pollfd fd;
-	
+
 	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 		if (i->position == pos)
 		{
 			fd.fd = i->out;
 			fd.events = POLLOUT;
-			
+
 			int res = poll(&fd, 1, timeout);
-			
+
 			if (res > 0)
 			{
 				if (isSetFlag(fd.revents, POLLOUT))
@@ -308,15 +309,15 @@ flushNBA::isWritable(int pos,
 			{
 				if (res == 0)
 					return false;
-				else	
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else			
-						return false;
-					#endif
+				else
+                #ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+					return false;
+                #endif
 			}
 		}
-	
+
 	return false;
 }
 

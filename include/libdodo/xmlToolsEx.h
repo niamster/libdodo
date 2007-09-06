@@ -30,40 +30,40 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+	/**
+	 * libdodo defined errors
+	 */
+	enum xmlToolsExR
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum xmlToolsExR
-		{
-			XMLTOOLS_NOT_PARCED_BEFORE=1,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */			
-		#define XMLTOOLS_NOT_PARCED_BEFORE_STR "The document haven't been parsed before."
-				
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum xmlToolsFunctionsID
-		{
-			XMLTOOLS_PARCEFILE,
-			XMLTOOLS_PARCE,
-			XMLTOOLS_ERRHANDLER,
-			XMLTOOLS_GETXMLBUFFERINFO,
-			XMLTOOLS_PARCEBUFFER,
-			XMLTOOLS_GETXMLFILEINFO,
-			XMLTOOLS_REPARCE,
-			XMLTOOLS_PARCEBUFFERINT,
-			XMLTOOLS_PARCEFILEINT,
-			
-		};
-		
+		XMLTOOLS_NOT_PARCED_BEFORE = 1,
 	};
 
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define XMLTOOLS_NOT_PARCED_BEFORE_STR    "The document haven't been parsed before."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum xmlToolsFunctionsID
+	{
+		XMLTOOLS_PARCEFILE,
+		XMLTOOLS_PARCE,
+		XMLTOOLS_ERRHANDLER,
+		XMLTOOLS_GETXMLBUFFERINFO,
+		XMLTOOLS_PARCEBUFFER,
+		XMLTOOLS_GETXMLFILEINFO,
+		XMLTOOLS_REPARCE,
+		XMLTOOLS_PARCEBUFFERINT,
+		XMLTOOLS_PARCEFILEINT,
+
+	};
+
+};
+
 #endif
-#endif 
+#endif
 

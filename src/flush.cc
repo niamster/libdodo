@@ -25,9 +25,9 @@
 
 using namespace dodo;
 
-flush::flush(): inSize(INSIZE), 
-				outSize(OUTSIZE),
-				opened(false)
+flush::flush() : inSize(INSIZE),
+	outSize(OUTSIZE),
+	opened(false)
 {
 }
 

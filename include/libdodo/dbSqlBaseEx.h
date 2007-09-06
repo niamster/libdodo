@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _DBSQLBASEEX_H_
 #define _DBSQLBASEEX_H_
 
@@ -32,33 +32,33 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * libdodo defined errors
+	 */
+	enum dbSqlBaseExR
 	{
-		
-		/**
-		 * libdodo defined errors
-		 */
-		enum dbSqlBaseExR
-		{
-			DBSQLBASE_EMPTY_REQUEST
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */
-		#define DBSQLBASE_EMPTY_REQUEST_STR "Query is empty. are you sure?"
-		
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum dbSqlBaseFunctionsID
-		{
-			DBSQLBASE_QUERYCOLLECT
-			
-		};
-		
+		DBSQLBASE_EMPTY_REQUEST
 	};
 
-#endif	
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define DBSQLBASE_EMPTY_REQUEST_STR    "Query is empty. are you sure?"
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum dbSqlBaseFunctionsID
+	{
+		DBSQLBASE_QUERYCOLLECT
+
+	};
+
+};
+
+#endif
 
 #endif

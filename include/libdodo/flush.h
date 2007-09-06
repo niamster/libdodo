@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _FLUSH_H_
 #define _FLUSH_H_
 
@@ -39,37 +39,37 @@ namespace dodo
 	class flush
 	{
 		friend class flushNBA;
-		
+
 		public:
-		
-			/**
-			 * constructor
-			 */
-			flush();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~flush();
-										
-			unsigned long inSize;///< size of data block;
-			unsigned long outSize;///< size of data block;
-			
-			dodoString buffer;///< before readin' or after writin' the storege sets to buffer; usefull for xexec
+
+		/**
+		 * constructor
+		 */
+		flush();
+
+		/**
+		 * destructor
+		 */
+		virtual ~flush();
+
+		unsigned long inSize;       ///< size of data block;
+		unsigned long outSize;      ///< size of data block;
+
+		dodoString buffer;          ///< before readin' or after writin' the storege sets to buffer; usefull for xexec
 
 		protected:
-		
-			bool opened;///< indicates whether file(connection) opened or not
-			
-			/**
-			 * @return descriptor of input stream
-			 */
-			virtual int getInDescriptor() const=0;
-			
-			/**
-			 * @return descriptor of output stream
-			 */ 
-			virtual int getOutDescriptor() const=0;
+
+		bool opened;    ///< indicates whether file(connection) opened or not
+
+		/**
+		 * @return descriptor of input stream
+		 */
+		virtual int getInDescriptor() const = 0;
+
+		/**
+		 * @return descriptor of output stream
+		 */
+		virtual int getOutDescriptor() const = 0;
 	};
 
 };

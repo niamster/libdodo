@@ -30,22 +30,22 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+	/**
+	 * next for atomicMutex
+	 */
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum atomicMutexFunctionsID
 	{
-		/**
-		 * next for atomicMutex
-		 */
-		
-		/**
-		 * ID of function where exception was thrown
-		 */		
-		enum atomicMutexFunctionsID
-		{
-			ATOMICMUTEX_LOCK,
-			ATOMICMUTEX_UNLOCK,
-		};
-		
+		ATOMICMUTEX_LOCK,
+		ATOMICMUTEX_UNLOCK,
 	};
 
-#endif	
+};
+
+#endif
 #endif

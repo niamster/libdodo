@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
@@ -41,24 +41,24 @@ namespace dodo
 	/**
 	 * diferent predifined types
 	 */
-	
-	#ifdef USE_DEQUE
-		#define dodoArray std::deque
-	#else
-		#define dodoArray std::vector
-	#endif
-	
 
-	typedef dodoArray<dodoString> dodoStringArr;///< array of strings
+    #ifdef USE_DEQUE
+        #define dodoArray    std::deque
+    #else
+        #define dodoArray    std::vector
+    #endif
 
-	typedef dodoMap<dodoString, dodoString, dodoString::equal> dodoStringMap;///< hash of strings
-	
-	typedef dodoArray<dodoStringMap> dodoStringMapArr;///< array of hashes of string
-	
-	struct __statements 
+
+	typedef dodoArray<dodoString> dodoStringArr;                                ///< array of strings
+
+	typedef dodoMap<dodoString, dodoString, dodoString::equal> dodoStringMap;   ///< hash of strings
+
+	typedef dodoArray<dodoStringMap> dodoStringMapArr;                          ///< array of hashes of string
+
+	struct __statements
 	{
 		const char *str;
-	};	
+	};
 
 	/**
 	 * diferent predifined constants

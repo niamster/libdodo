@@ -30,26 +30,26 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum xexecFunctionsID
 	{
-		
-		/**
-		 * ID of function where exception was thrown
-		 */					
-		enum xexecFunctionsID
-		{
-			#ifdef DL_EXT
-			
-				XEXEC_ADDXEXECMODULE,
-				XEXEC_GETMODULEINFO,
-				XEXEC_DELXEXEC,
-				XEXEC_REPLACEXEXEC
-				
-			#endif
-			
-		};
-		
+            #ifdef DL_EXT
+
+		XEXEC_ADDXEXECMODULE,
+		XEXEC_GETMODULEINFO,
+		XEXEC_DELXEXEC,
+		XEXEC_REPLACEXEXEC
+
+            #endif
+
 	};
+
+};
 
 #endif
 

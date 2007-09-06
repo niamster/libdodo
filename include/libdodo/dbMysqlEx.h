@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _DBMYSQLEX_H_
 #define _DBMYSQLEX_H_
 
@@ -30,18 +30,18 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum dbMysqlFunctionsID
 	{
-		
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum dbMysqlFunctionsID
-		{
-			DBMYSQL_CONNECT,
-			DBMYSQL_EXEC,
-		};		
+		DBMYSQL_CONNECT,
+		DBMYSQL_EXEC,
 	};
+};
 
 #endif
 

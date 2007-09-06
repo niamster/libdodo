@@ -20,39 +20,39 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #include <flushSocketExchange.h>
 
 using namespace dodo;
 
-__initialAccept::__initialAccept() : socket(-1), 
-									family(-1), 
-									type(-1)
+__initialAccept::__initialAccept() : socket(-1),
+	family(-1),
+	type(-1)
 {
 }
 
 //-------------------------------------------------------------------
 
-__initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket), 
-														family(init.family), 
-														type(init.type)
+__initialAccept::__initialAccept(__initialAccept&init) : socket(init.socket),
+	family(init.family),
+	type(init.type)
 {
 	init.socket = -1;
 }
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
+flushSocketExchange::flushSocketExchange(flushSocketExchange&fse)
 {
 	socket = fse.socket;
 	opened = fse.opened;
-	
+
 	fse.opened = false;
 	fse.socket = -1;
-			
+
 	family = fse.family;
-	type = fse.type;		
-	
+	type = fse.type;
+
 	socketOpts = fse.socketOpts;
 	inTimeout = fse.inTimeout;
 	outTimeout = fse.outTimeout;
@@ -71,7 +71,7 @@ flushSocketExchange::flushSocketExchange()
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange(__initialAccept &a_init)
+flushSocketExchange::flushSocketExchange(__initialAccept&a_init)
 {
 	init(a_init.socket, a_init.blockInherited);
 }
@@ -82,8 +82,8 @@ flushSocketExchange::~flushSocketExchange()
 {
 	if (opened)
 	{
-		::shutdown(socket, SHUT_RDWR);		
-		
+		::shutdown(socket, SHUT_RDWR);
+
 		::close(socket);
 	}
 }
@@ -91,61 +91,61 @@ flushSocketExchange::~flushSocketExchange()
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::init(__initialAccept &a_init)
+flushSocketExchange::init(__initialAccept&a_init)
 {
 	family = a_init.family;
 	type = a_init.type;
-	
+
 	blocked = a_init.blocked;
-	
+
 	init(a_init.socket, a_init.blockInherited);
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketExchange::close()
-{		
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-		operType = FLUSHSOCKETEXCHANGE_OPER_CLOSE;
-		performXExec(preExec);
-	#endif
-	
+{
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	operType = FLUSHSOCKETEXCHANGE_OPER_CLOSE;
+	performXExec(preExec);
+    #endif
+
 	if (!opened)
-		#ifndef NO_EX
-			return ;
-		#else
-			return true;
-		#endif
-	
-	#ifdef NO_EX
-		bool result = 
-	#endif
-	
+        #ifndef NO_EX
+		return ;
+        #else
+		return true;
+        #endif
+
+    #ifdef NO_EX
+	bool result =
+    #endif
+
 	flushSocketOptions::_close(socket);
-	
+
 	socket = -1;
-	
+
 	opened = false;
-			
-	#ifndef FLUSH_SOCKET_WO_XEXEC		
-		performXExec(postExec);
-	#endif
-			
-	#ifdef NO_EX
-		return result;
-	#endif			
+
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	performXExec(postExec);
+    #endif
+
+    #ifdef NO_EX
+	return result;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
-void 
-flushSocketExchange::init(int a_socket, 
-						bool blockInherited)
+void
+flushSocketExchange::init(int a_socket,
+						  bool blockInherited)
 {
 	close();
 
@@ -153,12 +153,12 @@ flushSocketExchange::init(int a_socket,
 
 	setInBufferSize(inSocketBuffer);
 	setOutBufferSize(outSocketBuffer);
-	
+
 	setInTimeout(inTimeout);
 	setOutTimeout(outTimeout);
-	
-	setLingerSockOption(lingerOpts, lingerSeconds);	
-	
+
+	setLingerSockOption(lingerOpts, lingerSeconds);
+
 	if (!blocked)
 	{
 		if (blockInherited)
@@ -174,7 +174,7 @@ flushSocketExchange::init(int a_socket,
 
 //-------------------------------------------------------------------
 
-bool 
+bool
 flushSocketExchange::alive()
 {
 	return opened;
@@ -183,54 +183,54 @@ flushSocketExchange::alive()
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketExchange::write(const char * const data)
 {
 	buffer.assign(data, outSize);
-				
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-		operType = FLUSHSOCKETEXCHANGE_OPER_SEND;
-		performXExec(preExec);
-	#endif	
-	
-	unsigned long iter = outSize/outSocketBuffer;
-	unsigned long rest = outSize%outSocketBuffer;
+
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	operType = FLUSHSOCKETEXCHANGE_OPER_SEND;
+	performXExec(preExec);
+    #endif
+
+	unsigned long iter = outSize / outSocketBuffer;
+	unsigned long rest = outSize % outSocketBuffer;
 
 	unsigned long sent_received = 0;
-		
-	unsigned long batch, n;	
-		
-	for (unsigned long i=0;i<iter;++i)
+
+	unsigned long batch, n;
+
+	for (unsigned long i = 0; i < iter; ++i)
 	{
 		batch = 0;
 		while (batch < outSocketBuffer)
 		{
 			while (true)
 			{
-				n = ::send(socket, buffer.c_str()+sent_received, outSocketBuffer, 0);
+				n = ::send(socket, buffer.c_str() + sent_received, outSocketBuffer, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
-						
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else
-						return false;	
-					#endif
+
+                #ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+					return false;
+                #endif
 				}
-				
+
 				break;
 			}
-			
-			batch += n;	
+
+			batch += n;
 			sent_received += n;
 		}
 	}
-	
+
 	if (rest > 0)
 	{
 		batch = 0;
@@ -238,44 +238,44 @@ flushSocketExchange::write(const char * const data)
 		{
 			while (true)
 			{
-				n = ::send(socket, buffer.c_str()+sent_received, rest, 0);
+				n = ::send(socket, buffer.c_str() + sent_received, rest, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
-										
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else
-						return false;	
-					#endif
+
+                #ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+					return false;
+                #endif
 				}
-				
+
 				break;
 			}
-			
-			batch += n;	
+
+			batch += n;
 			sent_received += n;
-		}		
+		}
 	}
-			
-	#ifndef FLUSH_SOCKET_WO_XEXEC		
-		performXExec(postExec);
-	#endif
-		
-	#ifdef NO_EX
-		return true;
-	#endif		
+
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	performXExec(postExec);
+    #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
-flushSocketExchange::writeString(const dodoString &data)
+flushSocketExchange::writeString(const dodoString&data)
 {
 	return this->write(data.c_str());
 }
@@ -283,54 +283,54 @@ flushSocketExchange::writeString(const dodoString &data)
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketExchange::read(char * const data)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-		operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVE;
-		performXExec(preExec);
-	#endif	
-	
-	memset(data,'\0', inSize);
-				
-	unsigned long iter = inSize/inSocketBuffer;
-	unsigned long rest = inSize%inSocketBuffer;
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVE;
+	performXExec(preExec);
+    #endif
+
+	memset(data, '\0', inSize);
+
+	unsigned long iter = inSize / inSocketBuffer;
+	unsigned long rest = inSize % inSocketBuffer;
 
 	unsigned long sent_received = 0;
-		
-	unsigned long batch, n; 
-			
-	for (unsigned long i=0;i<iter;++i)
+
+	unsigned long batch, n;
+
+	for (unsigned long i = 0; i < iter; ++i)
 	{
 		batch = 0;
 		while (batch < inSocketBuffer)
 		{
 			while (true)
 			{
-				n = ::recv(socket, data+sent_received, inSocketBuffer, 0);
+				n = ::recv(socket, data + sent_received, inSocketBuffer, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
-						
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else
-						return false;	
-					#endif
+
+                #ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+					return false;
+                #endif
 				}
-				
+
 				break;
 			}
-			
-			batch += n;	
+
+			batch += n;
 			sent_received += n;
 		}
 	}
-	
+
 	if (rest > 0)
 	{
 		batch = 0;
@@ -338,244 +338,244 @@ flushSocketExchange::read(char * const data)
 		{
 			while (true)
 			{
-				n = ::recv(socket, data+sent_received, rest, 0);
+				n = ::recv(socket, data + sent_received, rest, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
-						continue;				
-					
-					#ifndef NO_EX
+						continue;
+
+                #ifndef NO_EX
 					{
 						if (errno == EINVAL)
 							return ;
 						else
-							throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+							throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
-					#else
-						return false;	
-					#endif
+                #else
+					return false;
+                #endif
 				}
-				
+
 				break;
 			}
-			
+
 			batch += n;
 			sent_received += n;
 		}
 	}
-	
+
 	buffer.assign(data, inSize);
-			
-	#ifndef FLUSH_SOCKET_WO_XEXEC		
-		performXExec(postExec);
-	#endif
-	
-	#ifdef NO_EX
-		return true;
-	#endif		
+
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	performXExec(postExec);
+    #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
-flushSocketExchange::readString(dodoString &data)
-{	
-	char *t_data = new char[inSize+1];
+flushSocketExchange::readString(dodoString&data)
+{
+	char *t_data = new char[inSize + 1];
 
-	#ifdef NO_EX
-		bool result = 
-	#endif
-	
-	#ifndef NO_EX
-		try
-		{
-	#endif
-	
+    #ifdef NO_EX
+	bool result =
+    #endif
+
+    #ifndef NO_EX
+	try
+	{
+    #endif
+
 	this->read(t_data);
-			
-	#ifndef NO_EX
-		}
-		catch(...)
-		{
-			data.assign(t_data, inSize);
-			delete [] t_data;
-			
-			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		}
-	#endif
-	
+
+    #ifndef NO_EX
+}
+catch (...)
+{
 	data.assign(t_data, inSize);
 	delete [] t_data;
-	
-	#ifdef NO_EX	
-		return result;
-	#endif
+
+	throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+}
+    #endif
+
+	data.assign(t_data, inSize);
+	delete [] t_data;
+
+    #ifdef NO_EX
+	return result;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
 
-	//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 
-	int 
-	flushSocketExchange::addPostExec(inExec func, 
-						void *data)
-	{
-		return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
-	}
-	
-	//-------------------------------------------------------------------
-	
-	int 
-	flushSocketExchange::addPreExec(inExec func, 
-						void *data)
-	{
-		return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
-	}
-	
-	//-------------------------------------------------------------------
-	
-	#ifdef DL_EXT
-	
-		int 
-		flushSocketExchange::addPostExec(const dodoString &module, 
-							void *data,
-							void *toInit)
-		{
-			return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
-		}
-		
-		//-------------------------------------------------------------------
-		
-		int 
-		flushSocketExchange::addPreExec(const dodoString &module, 
-							void *data,
-							void *toInit)
-		{
-			return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
-		}
-		
-		//-------------------------------------------------------------------
-		
-		xexecCounts 
-		flushSocketExchange::addExec(const dodoString &module, 
-							void *data,
-							void *toInit)
-		{
-			return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
-		}
-	
-	#endif
+int
+flushSocketExchange::addPostExec(inExec func,
+								 void   *data)
+{
+	return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+}
 
-	//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+
+int
+flushSocketExchange::addPreExec(inExec func,
+								void   *data)
+{
+	return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+}
+
+//-------------------------------------------------------------------
+
+    #ifdef DL_EXT
+
+int
+flushSocketExchange::addPostExec(const dodoString&module,
+								 void             *data,
+								 void             *toInit)
+{
+	return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
+}
+
+//-------------------------------------------------------------------
+
+int
+flushSocketExchange::addPreExec(const dodoString&module,
+								void             *data,
+								void             *toInit)
+{
+	return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
+}
+
+//-------------------------------------------------------------------
+
+xexecCounts
+flushSocketExchange::addExec(const dodoString&module,
+							 void             *data,
+							 void             *toInit)
+{
+	return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
+}
+
+    #endif
+
+//-------------------------------------------------------------------
 
 #endif
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketExchange::writeStream(const char * const data)
 {
 	buffer.assign(data);
-				
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-		operType = FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM;
-		performXExec(preExec);
-	#endif	
-	
-	buffer.append(1,'\n');
-	
+
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	operType = FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM;
+	performXExec(preExec);
+    #endif
+
+	buffer.append(1, '\n');
+
 	unsigned long outSize = buffer.size();
-	
-	unsigned long iter = outSize/outSocketBuffer;
-	unsigned long rest = outSize%outSocketBuffer;
+
+	unsigned long iter = outSize / outSocketBuffer;
+	unsigned long rest = outSize % outSocketBuffer;
 
 	unsigned long sent_received = 0;
-	
+
 	unsigned long batch, n;
-		
-	for (unsigned long i=0;i<iter;++i)
+
+	for (unsigned long i = 0; i < iter; ++i)
 	{
 		batch = 0;
 		while (batch < outSocketBuffer)
 		{
 			while (true)
 			{
-				n = ::send(socket, buffer.c_str()+sent_received, outSocketBuffer, 0);
+				n = ::send(socket, buffer.c_str() + sent_received, outSocketBuffer, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
-						
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else
-						return false;	
-					#endif
+
+                #ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+					return false;
+                #endif
 				}
-				
+
 				break;
 			}
-			
-			batch += n;	
+
+			batch += n;
 			sent_received += n;
 		}
 	}
-	
-	if (rest>0)
+
+	if (rest > 0)
 	{
 		batch = 0;
 		while (batch < rest)
 		{
 			while (true)
 			{
-				n = ::send(socket, buffer.c_str()+sent_received, rest, 0);
+				n = ::send(socket, buffer.c_str() + sent_received, rest, 0);
 				if (n == -1)
 				{
 					if (errno == EINTR)
 						continue;
-										
-					#ifndef NO_EX
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-					#else
-						return false;	
-					#endif
+
+                #ifndef NO_EX
+					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                #else
+					return false;
+                #endif
 				}
-				
+
 				break;
 			}
-			
-			batch += n;	
+
+			batch += n;
 			sent_received += n;
-		}		
+		}
 	}
-			
-	#ifndef FLUSH_SOCKET_WO_XEXEC		
-		performXExec(postExec);
-	#endif
-		
-	#ifdef NO_EX
-		return true;
-	#endif		
+
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	performXExec(postExec);
+    #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
-flushSocketExchange::writeStreamString(const dodoString &data)
+flushSocketExchange::writeStreamString(const dodoString&data)
 {
 	return this->writeStream(data.c_str());
 }
@@ -583,91 +583,91 @@ flushSocketExchange::writeStreamString(const dodoString &data)
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketExchange::readStream(char * const data)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-		operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM;
-		performXExec(preExec);
-	#endif	
-	
-	memset(data,'\0', inSocketBuffer);
-	
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM;
+	performXExec(preExec);
+    #endif
+
+	memset(data, '\0', inSocketBuffer);
+
 	unsigned long n;
-	
+
 	while (true)
 	{
 		if ((n = ::recv(socket, data, inSocketBuffer, 0)) == -1)
 		{
 			if (errno == EINTR)
 				continue;
-					
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-			#else
-				return false;	
-			#endif
+
+            #ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            #else
+			return false;
+            #endif
 		}
-		
-		break;	
+
+		break;
 	}
-	
+
 	data[n] = '\0';
-		
+
 	buffer.assign(data, n);
-			
-	#ifndef FLUSH_SOCKET_WO_XEXEC		
-		performXExec(postExec);
-	#endif
-	
-	#ifdef NO_EX
-		return true;
-	#endif		
+
+    #ifndef FLUSH_SOCKET_WO_XEXEC
+	performXExec(postExec);
+    #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
-flushSocketExchange::readStreamString(dodoString &data)
+flushSocketExchange::readStreamString(dodoString&data)
 {
-	char *t_data = new char[inSocketBuffer+1];
+	char *t_data = new char[inSocketBuffer + 1];
 
-	#ifdef NO_EX
-		bool result =
-	#endif
+    #ifdef NO_EX
+	bool result =
+    #endif
 
-	
-	#ifndef NO_EX
-		try
-		{
-	#endif
-	
+
+    #ifndef NO_EX
+	try
+	{
+    #endif
+
 	this->readStream(t_data);
-		
-	#ifndef NO_EX
-		}
-		catch(...)
-		{
-			data.assign(t_data);
-			delete [] t_data;
-			
-			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		}
-	#endif
-	  
+
+    #ifndef NO_EX
+}
+catch (...)
+{
 	data.assign(t_data);
 	delete [] t_data;
 
-	#ifdef NO_EX
-		return result;
-	#endif
+	throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+}
+    #endif
+
+	data.assign(t_data);
+	delete [] t_data;
+
+    #ifdef NO_EX
+	return result;
+    #endif
 }
 
 //-------------------------------------------------------------------
@@ -676,16 +676,16 @@ flushSocketExchange *
 flushSocketExchange::createCopy()
 {
 	flushSocketExchange *copy = new flushSocketExchange;
-	
+
 	copy->socket = socket;
-	copy->opened = opened;	
+	copy->opened = opened;
 
 	opened = false;
 	socket = -1;
-	
+
 	copy->family = family;
-	copy->type = type;	
-	
+	copy->type = type;
+
 	copy->socketOpts = socketOpts;
 	copy->inTimeout = inTimeout;
 	copy->outTimeout = outTimeout;
@@ -694,13 +694,13 @@ flushSocketExchange::createCopy()
 	copy->lingerOpts = lingerOpts;
 	copy->lingerSeconds = lingerSeconds;
 	copy->blocked = blocked;
-	
+
 	return copy;
 }
 
 //-------------------------------------------------------------------
-					
-void 
+
+void
 flushSocketExchange::deleteCopy(flushSocketExchange *copy)
 {
 	delete copy;

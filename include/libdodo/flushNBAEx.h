@@ -30,22 +30,22 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+	/**
+	 * next for flushNBA
+	 */
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum flushNBAFunctionsID
 	{
-		/**
-		 * next for flushNBA
-		 */
-		
-		/**
-		 * ID of function where exception was thrown
-		 */		
-		enum flushNBAFunctionsID
-		{
-			FLUSHNBA_ISREADABLE,
-			FLUSHNBA_ISWRITABLE,
-		};
-		
+		FLUSHNBA_ISREADABLE,
+		FLUSHNBA_ISWRITABLE,
 	};
 
-#endif	
+};
+
+#endif
 #endif

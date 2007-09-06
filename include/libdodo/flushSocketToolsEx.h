@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _FLUSHSOCKETTOOLSEX_H_
 #define _FLUSHSOCKETTOOLSEX_H_
 
@@ -30,26 +30,26 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum flushSocketToolsFunctionsID
 	{
-		
-		/**
-		 * ID of function where exception was thrown
-		 */		
-		enum flushSocketToolsFunctionsID
-		{
-			FLUSHSOCKETTOOLS_GETHOSTINFO,
-			FLUSHSOCKETTOOLS_SETLOCALNAME,
-			FLUSHSOCKETTOOLS_GETLOCALNAME,
-			FLUSHSOCKETTOOLS_GETSERVICEINFO,
-			FLUSHSOCKETTOOLS_GETLOCALDOMAIN,
-			FLUSHSOCKETTOOLS_SETLOCALDOMAIN,
-			FLUSHSOCKETTOOLS_GETINTERFACEINFO,
-			FLUSHSOCKETTOOLS_GETINTERFACESNAMES,
-		};
-		
+		FLUSHSOCKETTOOLS_GETHOSTINFO,
+		FLUSHSOCKETTOOLS_SETLOCALNAME,
+		FLUSHSOCKETTOOLS_GETLOCALNAME,
+		FLUSHSOCKETTOOLS_GETSERVICEINFO,
+		FLUSHSOCKETTOOLS_GETLOCALDOMAIN,
+		FLUSHSOCKETTOOLS_SETLOCALDOMAIN,
+		FLUSHSOCKETTOOLS_GETINTERFACEINFO,
+		FLUSHSOCKETTOOLS_GETINTERFACESNAMES,
 	};
 
-#endif	
-	
+};
+
+#endif
+
 #endif

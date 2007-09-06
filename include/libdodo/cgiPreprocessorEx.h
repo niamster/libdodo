@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _CGIPREPROCESSOREX_H_
 #define _CGIPREPROCESSOREX_H_
 
@@ -30,31 +30,31 @@
 
 #ifndef NO_EX
 
-	namespace dodo
-	{	
-		/**
-		 * libdodo defined errors
-		 */
-		enum cgiPreprocessorExR
-		{
-			CGIPREPROCESSOR_NOTCLOSEDBRACKET,
-		};
-		
-		/**
-		 * libdodo defined errors' explanation
-		 */				
-		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)."
-		
-		/**
-		 * ID of function where exception was thrown
-		 */
-		enum cgiPreprocessorFunctionsID
-		{
-			CGIPREPROCESSOR_PREPROCESS,
-			CGIPREPROCESSOR_READ,
-		};
+namespace dodo
+{
+	/**
+	 * libdodo defined errors
+	 */
+	enum cgiPreprocessorExR
+	{
+		CGIPREPROCESSOR_NOTCLOSEDBRACKET,
 	};
 
-#endif	
-	
+	/**
+	 * libdodo defined errors' explanation
+	 */
+        #define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR    "Bracket was opened(closed) but not closed(opened)."
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum cgiPreprocessorFunctionsID
+	{
+		CGIPREPROCESSOR_PREPROCESS,
+		CGIPREPROCESSOR_READ,
+	};
+};
+
+#endif
+
 #endif

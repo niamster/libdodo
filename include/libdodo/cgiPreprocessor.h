@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _CGIPREPROCESSOR_H_
 #define _CGIPREPROCESSOR_H_
 
@@ -43,40 +43,40 @@ namespace dodo
 	class cgiPreprocessor
 	{
 		public:
-							
-			/**
-			 * constructor
-			 */
-			cgiPreprocessor();
-			
-			/**
-			 * destructor
-			 */
-			virtual ~cgiPreprocessor();
-			
-			/**
-			 * @return preprocessed template from file
-			 * @param path indicates path where template stays
-			 */		
-			virtual dodoString preProcess(const dodoString &path);
-		
-		protected:	
-						
-			/**
-			 * @return line number in file
-			 * @param newLinePos describes array of newlines' positions
-			 * @param pos describes pos in file
-			 */
-			virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newLinePos, unsigned long pos);
-			
-			/**
-			 * @return file contents
-			 * @param path indicates what to read
-			 * @param newLinePos describes array of newlines' positions
-			 */
-			virtual dodoString read(const dodoString &path, dodoArray<unsigned long> &newLinePos);
-			
-			dodoArray< dodoArray<unsigned long> > newLinePositions;///< stack of processed new lines' positions
+
+		/**
+		 * constructor
+		 */
+		cgiPreprocessor();
+
+		/**
+		 * destructor
+		 */
+		virtual ~cgiPreprocessor();
+
+		/**
+		 * @return preprocessed template from file
+		 * @param path indicates path where template stays
+		 */
+		virtual dodoString preProcess(const dodoString&path);
+
+		protected:
+
+		/**
+		 * @return line number in file
+		 * @param newLinePos describes array of newlines' positions
+		 * @param pos describes pos in file
+		 */
+		virtual unsigned long getLineNumber(const dodoArray<unsigned long>&newLinePos, unsigned long pos);
+
+		/**
+		 * @return file contents
+		 * @param path indicates what to read
+		 * @param newLinePos describes array of newlines' positions
+		 */
+		virtual dodoString read(const dodoString&path, dodoArray<unsigned long>&newLinePos);
+
+		dodoArray< dodoArray<unsigned long> > newLinePositions;    ///< stack of processed new lines' positions
 	};
 
 };

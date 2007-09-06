@@ -20,7 +20,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #ifndef _FLUSHDISKEX_H_
 #define _FLUSHDISKEX_H_
 
@@ -30,29 +30,29 @@
 
 #ifndef NO_EX
 
-	namespace dodo
-	{	
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum flushSTDFunctionsID
-		{
-			FLUSHSTD_CLOSE,
-			FLUSHSTD_OPEN,
-			FLUSHSTD_READ,
-			FLUSHSTD_WRITE,
-			FLUSHSTD_READSTREAM,
-			FLUSHSTD_READSTREAMSTRING,
-			FLUSHSTD_READSTRING,
-			FLUSHSTD_WRITESTREAM,
-			FLUSHSTD_FLUSH,
-			FLUSHSTD_LOCKOUT,
-			FLUSHSTD_LOCKIN,
-			FLUSHSTD_INPUTTERINFO,
-			FLUSHSTD_BLOCK
-		};
+namespace dodo
+{
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum flushSTDFunctionsID
+	{
+		FLUSHSTD_CLOSE,
+		FLUSHSTD_OPEN,
+		FLUSHSTD_READ,
+		FLUSHSTD_WRITE,
+		FLUSHSTD_READSTREAM,
+		FLUSHSTD_READSTREAMSTRING,
+		FLUSHSTD_READSTRING,
+		FLUSHSTD_WRITESTREAM,
+		FLUSHSTD_FLUSH,
+		FLUSHSTD_LOCKOUT,
+		FLUSHSTD_LOCKIN,
+		FLUSHSTD_INPUTTERINFO,
+		FLUSHSTD_BLOCK
 	};
+};
 
-#endif	
-	
+#endif
+
 #endif

@@ -23,10 +23,10 @@
 
 
 #include <systemThreadSharedDataCollectionGuard.h>
-	
+
 using namespace dodo;
 
-systemThreadSharedDataCollectionGuard::systemThreadSharedDataCollectionGuard(systemThreadSharedDataCollectionGuard &sts)
+systemThreadSharedDataCollectionGuard::systemThreadSharedDataCollectionGuard(systemThreadSharedDataCollectionGuard&sts)
 {
 }
 
@@ -48,23 +48,23 @@ unsigned long
 systemThreadSharedDataCollectionGuard::add(void *data)
 {
 	threadGuard tg(this);
-	
+
 	__shareInfo share;
-	
+
 	share.position = ++shareNum;
 	share.data = data;
-	
+
 	shares.push_back(share);
-	
+
 	return share.position;
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 systemThreadSharedDataCollectionGuard::del(unsigned long position)
 {
@@ -73,41 +73,41 @@ systemThreadSharedDataCollectionGuard::del(unsigned long position)
 	if (getShare(position))
 		shares.erase(current);
 	else
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
-			
-	#ifdef NO_EX
-		return true;
-	#endif
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR, __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void
+void
 #else
-	bool 
-#endif						 
+bool
+#endif
 systemThreadSharedDataCollectionGuard::set(unsigned long position,
-						void *data)
+										   void          *data)
 {
 	threadGuard tg(this);
 
 	if (getShare(position))
 		current->data = data;
 	else
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
-			
-	#ifdef NO_EX
-		return true;
-	#endif
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR, __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
@@ -120,27 +120,27 @@ systemThreadSharedDataCollectionGuard::get(unsigned long position)
 	if (getShare(position))
 		return current->data;
 	else
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR,__LINE__,__FILE__);
-		#else
-			return NULL;
-		#endif
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR, __LINE__, __FILE__);
+        #else
+		return NULL;
+        #endif
 }
-							
+
 //-------------------------------------------------------------------
 
-bool						 
+bool
 systemThreadSharedDataCollectionGuard::getShare(unsigned long position)
 {
 	std::list<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((std::list<__shareInfo>::iterator *)&i);
+			current = *((std::list<__shareInfo>::iterator *) & i);
 			return true;
 		}
-	
-	return false;	
+
+	return false;
 }
 
 //-------------------------------------------------------------------

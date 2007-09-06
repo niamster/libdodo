@@ -20,35 +20,35 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
- 
+
 #include <flushSocketOptions.h>
 
 using namespace dodo;
 
-flushSocketOptions::flushSocketOptions(short a_family, 
-										short a_type): family(a_family),
-																	type(a_type),
-																	lingerOpts(SOCKET_LINGER_OPTION),
-																	lingerSeconds(SOCKET_LINGER_PERIOD),
-																	inTimeout(RECIEVE_TIMEOUT),
-																	outTimeout(SEND_TIMEOUT),
-																	inSocketBuffer(SOCKET_INSIZE),
-																	outSocketBuffer(SOCKET_OUTSIZE),
-																	socket(-1),
-																	blocked(true)
+flushSocketOptions::flushSocketOptions(short a_family,
+									   short a_type) : family(a_family),
+	type(a_type),
+	lingerOpts(SOCKET_LINGER_OPTION),
+	lingerSeconds(SOCKET_LINGER_PERIOD),
+	inTimeout(RECIEVE_TIMEOUT),
+	outTimeout(SEND_TIMEOUT),
+	inSocketBuffer(SOCKET_INSIZE),
+	outSocketBuffer(SOCKET_OUTSIZE),
+	socket(-1),
+	blocked(true)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushSocketOptions::flushSocketOptions(): lingerOpts(SOCKET_LINGER_OPTION),
-										lingerSeconds(SOCKET_LINGER_PERIOD),
-										inTimeout(RECIEVE_TIMEOUT),
-										outTimeout(SEND_TIMEOUT),
-										inSocketBuffer(SOCKET_INSIZE),
-										outSocketBuffer(SOCKET_OUTSIZE),
-										socket(-1),
-										blocked(true)
+flushSocketOptions::flushSocketOptions() : lingerOpts(SOCKET_LINGER_OPTION),
+	lingerSeconds(SOCKET_LINGER_PERIOD),
+	inTimeout(RECIEVE_TIMEOUT),
+	outTimeout(SEND_TIMEOUT),
+	inSocketBuffer(SOCKET_INSIZE),
+	outSocketBuffer(SOCKET_OUTSIZE),
+	socket(-1),
+	blocked(true)
 {
 }
 
@@ -70,13 +70,13 @@ flushSocketOptions::getInDescriptor() const
 
 int
 flushSocketOptions::getOutDescriptor() const
-{		
+{
 	return socket;
 }
 
 //-------------------------------------------------------------------
 
-bool 
+bool
 flushSocketOptions::isBlocked() const
 {
 	return blocked;
@@ -85,72 +85,72 @@ flushSocketOptions::isBlocked() const
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketOptions::block(bool flag)
 {
 	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;		
-		#endif		
-	
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
 	if (flag)
 		block &= ~O_NONBLOCK;
 	else
 		block |= O_NONBLOCK;
-	
+
 	if (fcntl(socket, F_SETFL, block) == 1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;		
-		#endif		
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
 
 	blocked = flag;
-	
-	#ifdef NO_EX
-		return true;
-	#endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketOptions::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
-	
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
 	inSocketBuffer = bytes;
-	
-	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF,&inSocketBuffer, sizeof(long)) == 1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;		
-		#endif	
-		
-	#ifdef NO_EX
-		return true;
-	#endif			
+
+	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBuffer, sizeof(long)) == 1)
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
-unsigned long 
+unsigned long
 flushSocketOptions::getInBufferSize() const
 {
 	return inSocketBuffer;
@@ -159,31 +159,31 @@ flushSocketOptions::getInBufferSize() const
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketOptions::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		#ifdef NO_EX
-			return false;
-		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#endif
-	
+        #ifdef NO_EX
+		return false;
+        #else
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+        #endif
+
 	outSocketBuffer = bytes;
-	
-	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF,&outSocketBuffer, sizeof(long)) == 1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;		
-		#endif	
-		
-	#ifdef NO_EX
-		return true;
-	#endif				
+
+	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
@@ -197,41 +197,41 @@ flushSocketOptions::getOutBufferSize() const
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
-#endif 
+bool
+#endif
 flushSocketOptions::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		#ifdef NO_EX
-			return false;
-		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#endif
+        #ifdef NO_EX
+		return false;
+        #else
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+        #endif
 
 	inTimeout = microseconds;
 
 	timeval val;
-	val.tv_sec = inTimeout/100;
-	val.tv_usec = inTimeout%100;
-	
-	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO,&val, sizeof(val)) == 1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;	
-		#endif	
-		
-	#ifdef NO_EX
-		return true;
-	#endif	
+	val.tv_sec = inTimeout / 100;
+	val.tv_usec = inTimeout % 100;
+
+	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &val, sizeof(val)) == 1)
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 
 //-------------------------------------------------------------------
 
-unsigned long 
+unsigned long
 flushSocketOptions::getInTimeout() const
 {
 	return inTimeout;
@@ -240,41 +240,41 @@ flushSocketOptions::getInTimeout() const
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketOptions::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		#ifdef NO_EX
-			return false;
-		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#endif
+        #ifdef NO_EX
+		return false;
+        #else
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+        #endif
 
 	outTimeout = microseconds;
 
 	timeval val;
-	val.tv_sec = outTimeout/100;
-	val.tv_usec = outTimeout%100;
-	
-	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO,&val, sizeof(val)) == 1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;		
-		#endif	
-		
-	#ifdef NO_EX
-		return true;
-	#endif	
+	val.tv_sec = outTimeout / 100;
+	val.tv_usec = outTimeout % 100;
+
+	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &val, sizeof(val)) == 1)
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 
 //-------------------------------------------------------------------
 
-unsigned long 
+unsigned long
 flushSocketOptions::getOutTimeout() const
 {
 	return outTimeout;
@@ -285,7 +285,7 @@ flushSocketOptions::getOutTimeout() const
 bool
 flushSocketOptions::getSocketOpts(int option) const
 {
-	if  ( (option&socketOpts) == option)
+	if  ((option & socketOpts) == option)
 		return true;
 	return false;
 }
@@ -293,162 +293,162 @@ flushSocketOptions::getSocketOpts(int option) const
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
-flushSocketOptions::setSockOption(short option, 
-							bool flag)
+flushSocketOptions::setSockOption(short option,
+								  bool flag)
 {
 	if (socket == -1)
-		#ifdef NO_EX
-			return false;
-		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#endif
-	
+        #ifdef NO_EX
+		return false;
+        #else
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+        #endif
+
 	int sockFlag(1);
-	
+
 	if (!flag)
 		sockFlag = 0;
-	
+
 	int real_option(0);
-	
+
 	switch (option)
 	{
 		case SOCKET_KEEP_ALIVE:
-		
+
 			real_option = SO_KEEPALIVE;
-			
+
 			break;
-			
+
 		case SOCKET_REUSE_ADDRESS:
-		
+
 			real_option = SO_REUSEADDR;
-			
+
 			break;
-			
+
 		case SOCKET_DONOT_USE_GATEWAY:
-		
+
 			real_option = SO_DONTROUTE;
-			
+
 			break;
-			
+
 		case SOCKET_BROADCAST:
-		
+
 			real_option = SO_BROADCAST;
-			
+
 			break;
-			
+
 		case SOCKET_OOB_INLINE:
-		
+
 			real_option = SO_OOBINLINE;
-			
+
 			break;
-			
-		#ifdef SO_REUSEPORT
 
-			case SOCKET_REUSE_PORT:
-			
-				real_option = SO_REUSEPORT;
-				
-				break;
+        #ifdef SO_REUSEPORT
 
-		#endif
-		
+		case SOCKET_REUSE_PORT:
+
+			real_option = SO_REUSEPORT;
+
+			break;
+
+        #endif
+
 		default:
-		
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-			#else
-				return false;			
-			#endif	
+
+            #ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+            #else
+			return false;
+            #endif
 	}
-	
-	if (setsockopt(socket, SOL_SOCKET, real_option,&sockFlag, sizeof(int)) == 1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;	
-		#endif	
-	
+
+	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
 	if (!flag)
-		removeFlag(socketOpts, 1<<option);
+		removeFlag(socketOpts, 1 << option);
 	else
-		addFlag(socketOpts, 1<<option);	
-		
-	#ifdef NO_EX
-		return true;
-	#endif					
+		addFlag(socketOpts, 1 << option);
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketOptions::setLingerSockOption(short option,
-									int seconds)
-{	
+										int seconds)
+{
 	if (socket == -1)
-		#ifdef NO_EX
-			return false;
-		#else
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR,__LINE__,__FILE__);
-		#endif
-	
+        #ifdef NO_EX
+		return false;
+        #else
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+        #endif
+
 	linger lin;
-	
+
 	switch (option)
 	{
 		case SOCKET_GRACEFUL_CLOSE:
-		
+
 			lin.l_onoff = 0;
-			
+
 			break;
-			
+
 		case SOCKET_HARD_CLOSE:
-		
+
 			lin.l_onoff = 1;
 			lin.l_linger = 0;
-			
+
 			break;
-			
+
 		case SOCKET_WAIT_CLOSE:
-		
+
 			lin.l_onoff = 1;
 			lin.l_linger = seconds;
-			
+
 			break;
-			
+
 		default:
-			#ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR,__LINE__,__FILE__);
-			#else
-				return false;			
-			#endif	
+            #ifndef NO_EX
+			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+            #else
+			return false;
+            #endif
 	}
 
-	if (setsockopt(socket, SOL_SOCKET, SO_LINGER,&lin, sizeof(linger)) == 1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;	
-		#endif
-		
+	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
 	lingerOpts = option;
-	lingerSeconds = seconds;		
-	
-	#ifdef NO_EX
-		return true;
-	#endif	
+	lingerSeconds = seconds;
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------
 
-short 
+short
 flushSocketOptions::getLingerOption() const
 {
 	return lingerOpts;
@@ -456,7 +456,7 @@ flushSocketOptions::getLingerOption() const
 
 //-------------------------------------------------------------------
 
-int 
+int
 flushSocketOptions::getLingerPeriod() const
 {
 	return lingerSeconds;
@@ -465,29 +465,29 @@ flushSocketOptions::getLingerPeriod() const
 //-------------------------------------------------------------------
 
 #ifndef NO_EX
-	void 
+void
 #else
-	bool
+bool
 #endif
 flushSocketOptions::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif			
-	
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
 	if (::close(socket) == -1)
-		#ifndef NO_EX
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-		#else
-			return false;
-		#endif
-		
-	#ifdef NO_EX
-		return true;
-	#endif			
+        #ifndef NO_EX
+		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+        #else
+		return false;
+        #endif
+
+    #ifdef NO_EX
+	return true;
+    #endif
 }
 
 //-------------------------------------------------------------------

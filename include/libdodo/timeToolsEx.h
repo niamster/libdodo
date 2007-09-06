@@ -30,20 +30,20 @@
 
 #ifndef NO_EX
 
-	namespace dodo
+namespace dodo
+{
+
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum timeToolsFunctionsID
 	{
-		
-		/**
-		 * ID of function where exception was thrown
-		 */			
-		enum timeToolsFunctionsID
-		{
-			TIMETOOLS_GETBYFORMAT,
-			TIMETOOLS_NOW,
-			TIMETOOLS_MAKETIME,
-		};
-		
+		TIMETOOLS_GETBYFORMAT,
+		TIMETOOLS_NOW,
+		TIMETOOLS_MAKETIME,
 	};
+
+};
 
 #endif
 
