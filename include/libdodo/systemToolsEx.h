@@ -28,6 +28,7 @@
 
 #include <baseEx.h>
 
+namespace dodo
 {
 
 	/**

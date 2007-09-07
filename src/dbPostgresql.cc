@@ -158,6 +158,32 @@ dbPostgresql::_exec(const dodoString &query,
 					pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 					if (pgResult == NULL)
 						throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
+
+					status = PQresultStatus(pgResult);
+
+					switch (status)
+					{
+						case PGRES_EMPTY_QUERY:
+						case PGRES_BAD_RESPONSE:
+						case PGRES_NONFATAL_ERROR:
+						case PGRES_FATAL_ERROR:
+
+							throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+					}
+
+					empty = false;
+
+					int rowsNum = PQntuples(pgResult);
+					char *fieldType;
+
+					dodoStringArr rowsPart;
+
+					for (int i(0); i < rowsNum; ++i)
+					{
+						fieldType = PQgetvalue(pgResult, i, 1);
+
+						if (strcasestr(fieldType, "char") != NULL ||
+							strcasestr(fieldType, "date") != NULL ||
 							strcasestr(fieldType, "bytea") != NULL ||
 							strcasestr(fieldType, "array") != NULL ||
 							strcasestr(fieldType, "text") != NULL ||
@@ -248,7 +274,6 @@ dbPostgresql::_exec(const dodoString &query,
 			default:
 
 				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_LIBDODO, DBPOSTGRESQL_WRONG_HINT_USAGE, DBPOSTGRESQL_WRONG_HINT_USAGE_STR, __LINE__, __FILE__);
-
 		}
 	}
 	else

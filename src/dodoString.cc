@@ -122,36 +122,6 @@ dodoString::formatStatic(const dodoString &format, ...)
 	return res;
 }
 
-
-//-------------------------------------------------------------------
-
-void
-dodoString::replace(const dodoString &needle,
-					const dodoString &replacement)
-{
-	unsigned long i(0), j(needle.size()), k(replacement.size());
-
-	while (true)
-	{
-		i = this->find(needle, i);
-		if (i == dodoString::npos)
-			break;
-
-		this->std::string::replace(i, j, replacement, 0, k);
-		i += k;
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-dodoString::replace(const dodoString &needle,
-					const dodoString &replacement,
-					dodoString &data)
-{
-	data.replace(needle, replacement);
-}
-
 //-------------------------------------------------------------------
 
 dodoString
