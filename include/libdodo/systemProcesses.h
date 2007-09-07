@@ -180,11 +180,7 @@ namespace dodo
 		 * @note - exception if it's currently running
 		 * send SIGINT to process
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		del(unsigned long position, bool force = false);
 
 		/**
@@ -196,11 +192,7 @@ namespace dodo
 		 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
 		 * @note - exception if it's currently running
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		replace(unsigned long position, processFunc func, void *data, bool force = false, short action = PROCESS_WAIT);
 
 		/**
@@ -209,11 +201,7 @@ namespace dodo
 		 * @param force if is set to true permits execution even if this process is running
 		 * @note - exception if it's currently running
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		run(unsigned long position, bool force = false);
 
 		/**
@@ -221,42 +209,26 @@ namespace dodo
 		 * @param position indicates what process to stop
 		 * @note sends signal 9 to preocess
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		stop(unsigned long position);
 
 		/**
 		 * stops all registered processes
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		stop();
 
 		/**
 		 * waits for process's termination
 		 * @param position indicates for what process to wait
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		wait(unsigned long position);
 
 		/**
 		 * waits for all registered process' termination
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		wait();
 
 		/**
@@ -280,11 +252,7 @@ namespace dodo
 		 * @param position indicates for what process to set limit
 		 * @param limit indicates the process' limit on executions
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
 

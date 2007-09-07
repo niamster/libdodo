@@ -70,21 +70,13 @@ namespace dodo
 		 * sets data to became a shared
 		 * @param data describes data to be shared
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		set(void *data);
 
 		/**
 		 * sets shared data to NULL
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		del();
 
 		/**
@@ -99,11 +91,7 @@ namespace dodo
 		/**
 		 * lock and return shared data
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		unlock();
 
 		protected:

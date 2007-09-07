@@ -1264,7 +1264,6 @@ Optional Features:
   --disable-dl-lib        disable dl as lib (default=enabled)
   --enable-zlib-lib       enable zlib as lib (default=disabled)
   --enable-iconv-lib      enable iconv as lib (default=disabled)
-  --disable-exceptions    disable throwing exceptions (default=enabled)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -6811,23 +6810,6 @@ fi
 		RESULT="$RESULT\niconv\t\t\t\t\t\tenabled"
 	else
 		RESULT="$RESULT\niconv\t\t\t\t\t\tdisabled"
-	fi
-
-#check for features
-	# Check whether --enable-exceptions was given.
-if test "${enable_exceptions+set}" = set; then
-  enableval=$enable_exceptions; EXCEPTIONS="$enableval"
-else
-  EXCEPTIONS="yes"
-fi
-
-	if test "$EXCEPTIONS" = "no"
-	then
-		echo -n -e "#define NO_EX\n\n" >> include/libdodo/directives.runtime.h
-
-		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
 	fi
 
 # Checks for header files.

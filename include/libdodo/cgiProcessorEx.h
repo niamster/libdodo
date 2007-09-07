@@ -28,8 +28,6 @@
 
 #include <baseEx.h>
 
-#ifndef NO_EX
-
 namespace dodo
 {
 	/**
@@ -68,7 +66,5 @@ namespace dodo
 		CGIPROCESSOR__ASSIGN
 	};
 };
-
-#endif
 
 #endif

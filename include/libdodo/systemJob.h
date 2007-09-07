@@ -63,11 +63,7 @@ namespace dodo
 		 * @param force if is set to true stops execution if this job is running
 		 * @note - exception if it's currently running
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		del(unsigned long position, bool force = false) = 0;
 
 		/**
@@ -76,53 +72,33 @@ namespace dodo
 		 * @param force if is set to true permits execution even if this job is running
 		 * @note - exception if it's currently running
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		run(unsigned long position, bool force = false) = 0;
 
 		/**
 		 * stops job
 		 * @param position indicates what job to stop
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		stop(unsigned long position) = 0;
 
 		/**
 		 * stops all registered jobs
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		stop() = 0;
 
 		/**
 		 * waits for job's termination
 		 * @param position indicates for what job to wait
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		wait(unsigned long position) = 0;
 
 		/**
 		 * waits for all registered jobs' termination
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		wait() = 0;
 
 		/**
@@ -146,11 +122,7 @@ namespace dodo
 		 * @param position indicates for what job to set limit
 		 * @param limit indicates the job's limit on executions
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setExecutionLimit(unsigned long position, unsigned long limit = 1) = 0;
 
 

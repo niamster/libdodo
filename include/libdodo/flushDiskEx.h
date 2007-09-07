@@ -28,8 +28,6 @@
 
 #include <baseEx.h>
 
-#ifndef NO_EX
-
 namespace dodo
 {
 
@@ -66,7 +64,5 @@ namespace dodo
 		FLUSHDISK_FLUSH,
 	};
 };
-
-#endif
 
 #endif

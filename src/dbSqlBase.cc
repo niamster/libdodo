@@ -738,11 +738,7 @@ dbSqlBase::queryCollect()
     #ifndef FAST
 
 	if (request.size() == 0)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASE_QUERYCOLLECT, ERR_LIBDODO, DBSQLBASE_EMPTY_REQUEST, DBSQLBASE_EMPTY_REQUEST_STR, __LINE__, __FILE__);
-            #else
-		return __dodostring__;
-            #endif
 
     #endif
 

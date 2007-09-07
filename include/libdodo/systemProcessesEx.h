@@ -28,8 +28,6 @@
 
 #include <baseEx.h>
 
-#ifndef NO_EX
-
 namespace dodo
 {
 	/**
@@ -75,6 +73,5 @@ namespace dodo
 	};
 };
 
-#endif
 #endif
 

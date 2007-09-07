@@ -191,11 +191,7 @@ namespace dodo
 		 * registers functions that will be called on normal program exit
 		 * @note you can register more than one
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		atExit(void (*func)());
 
 		/**
@@ -222,11 +218,7 @@ namespace dodo
 		 * @param path indicates where to change root(/) directory
 		 * @note you will appear in the root(/)
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		changeRoot(const dodoString &path);
 		/**
 		 * @return current working directory
@@ -237,22 +229,14 @@ namespace dodo
 		 * set current working directory (cd path)
 		 * @param path is path where to go
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setWorkingDir(const dodoString &path);
 
 		/**
 		 * get system usage with current process
 		 * @param info will be filled with system usage info
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getUsageInfo(__usage &info);
 
 		/**
@@ -260,11 +244,7 @@ namespace dodo
 		 * @param type is type of info to get[see systemToolsLimitEnum]
 		 * @param lim will be filled with requested values
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getLimit(short type,  __limits &lim);
 
 		/**
@@ -272,17 +252,12 @@ namespace dodo
 		 * @param type is type of info to set[see systemToolsLimitEnum]
 		 * @param lim will fill with requested values
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setLimit(short type, const __limits &lim);
 
 		/**
 		 * @return priority of current process for uidTypeEnum
 		 * @param type is type of UID to use[see uidTypeEnum]
-		 * @note if error occured and if NO_EX set -> -1 will return
 		 */
 		static int getPriority(short type);
 
@@ -291,17 +266,12 @@ namespace dodo
 		 * @param type is type of UID to use[see uidTypeEnum]
 		 * @param prio is value of priority
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setPriority(short type, int prio);
 
 		/**
 		 * @return user id of the current process
 		 * @param type is type of UID to use[see uidTypeEnum]
-		 * @note if error occured and if NO_EX set -> -1 will return
 		 */
 		static int getUID(short type);
 
@@ -310,17 +280,12 @@ namespace dodo
 		 * @param type is type of UID to use[see uidTypeEnum]
 		 * @param uid is user's id
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setUID(short type, int uid);
 
 		/**
 		 * get group id of the current process
 		 * @param type is type of UID to use[see uidTypeEnum]
-		 * @note if error occured and if NO_EX set -> -1 will return
 		 */
 		static int getGID(short type);
 
@@ -329,11 +294,7 @@ namespace dodo
 		 * @param type is type of UID to use[see uidTypeEnum]
 		 * @param gid is group id
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setGID(short type, int gid);
 
 		/**
@@ -341,11 +302,7 @@ namespace dodo
 		 * @param info will be filled with user's info
 		 * @param uid is user's id about what to get info
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getUserInfo(__userInfo &info, int uid);
 
 		/**
@@ -353,22 +310,14 @@ namespace dodo
 		 * @param info will be filled with user's info
 		 * @param name is user's login name about what to get info
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getUserInfo(__userInfo &info, const dodoString &uid);
 
 		/**
 		 * gets users of the system
 		 * @param info will be filled with array of users' info
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getUsers(dodoArray<__userInfo> &info);
 
 		/**
@@ -376,11 +325,7 @@ namespace dodo
 		 * @param info will be filled with group's info
 		 * @param name is group's id name about what to get info
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getGroupInfo(__groupInfo &info, int gid);
 
 		/**
@@ -388,22 +333,14 @@ namespace dodo
 		 * @param info will be filled with user's info
 		 * @param name is group's name about what to get info
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getGroupInfo(__groupInfo &info, const dodoString &gid);
 
 		/**
 		 * gets group of the system
 		 * @param info will be filled with array of group' info
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		getGroups(dodoArray<__groupInfo> &info);
 		/**
 		 * @return PID of current process
@@ -430,11 +367,7 @@ namespace dodo
 		 * sets group PID of current process
 		 * @param pgid specifies the group PID where to move current process
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setGroupPID(int gpid);
 
 		/**
@@ -442,11 +375,7 @@ namespace dodo
 		 * @param pid specifies what pid to move
 		 * @param pgid specifies the group PID where to move current process
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setGroupPID(int pid, int gpid);
 
 		/**
@@ -455,11 +384,7 @@ namespace dodo
 		 * @param handler is function that will be called
 		 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals = -1);
 
 		/**
@@ -468,11 +393,7 @@ namespace dodo
 		 * @param handler is function that will be called
 		 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setTimer(long timeout, signalHandler handler, int blockSignals = -1);
 
 		/**
@@ -481,11 +402,7 @@ namespace dodo
 		 * @param handler is function that will be called
 		 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setSignalHandler(long signal, signalHandler handler, int blockSignals = -1);
 
 		/**
@@ -498,11 +415,7 @@ namespace dodo
 		 * removes signal handler
 		 * @param is signal is from what unset handler[see systemSignalsEnum]
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		unsetSignalHandler(long signal);
 
             #ifdef DL_EXT
@@ -521,11 +434,7 @@ namespace dodo
 		 * @param toInit indicates data that will path to initialize function
 		 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
 		 */
-                #ifndef NO_EX
 		static void
-                #else
-		static bool
-                #endif
 		setSignalHandler(long signal, const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
 		/**
@@ -535,11 +444,7 @@ namespace dodo
 		 * @param toInit indicates data that will path to initialize function
 		 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 		 */
-                #ifndef NO_EX
 		static void
-                #else
-		static bool
-                #endif
 		setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
             #endif
@@ -549,11 +454,7 @@ namespace dodo
 		 * @param pid indicates where to send signal
 		 * @param is signal is what signal to send[see systemSignalsEnum]
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		sendSignal(int pid, long signal);
 
 		/**

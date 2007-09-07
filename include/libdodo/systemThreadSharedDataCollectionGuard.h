@@ -80,11 +80,7 @@ namespace dodo
 		 * sets shared data to NULL
 		 * @param position indicates on shared data to lock
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		del(unsigned long position);
 
 		/**
@@ -92,11 +88,7 @@ namespace dodo
 		 * @param position indicates on shared data to lock
 		 * @param data describes data to be set
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		set(unsigned long position, void *data);
 
 		/**

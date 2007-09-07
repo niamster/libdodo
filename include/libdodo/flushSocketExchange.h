@@ -214,11 +214,7 @@ namespace dodo
 		 * if outSize bigger than socket buffer size - sends with few iterations
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		write(const char * const data);
 
 		/**
@@ -228,11 +224,7 @@ namespace dodo
 		 * if outSize bigger than socket buffer size - sends with few iterations
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeString(const dodoString &data);
 
 		/**
@@ -242,11 +234,7 @@ namespace dodo
 		 * if inSize bigger than socket buffer size - receives with few iterations
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		read(char * const data);
 
 		/**
@@ -256,11 +244,7 @@ namespace dodo
 		 * if inSize bigger than socket buffer size - receives with few iterations
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readString(dodoString &data);
 
 		/**
@@ -272,11 +256,7 @@ namespace dodo
 		 * @note - appends '\n'
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeStream(const char * const data);
 
 		/**
@@ -288,11 +268,7 @@ namespace dodo
 		 * @note - appends '\n'
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeStreamString(const dodoString &data);
 
 		/**
@@ -303,11 +279,7 @@ namespace dodo
 		 * max data size is inSocketBuffer
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readStream(char * const data);
 
 		/**
@@ -318,21 +290,13 @@ namespace dodo
 		 * max data size is inSocketBuffer
 		 * signal safe
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readStreamString(dodoString &data);
 
 		/**
 		 * closes this socket
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		close();
 
 		protected:

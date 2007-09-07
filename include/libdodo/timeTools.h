@@ -107,7 +107,6 @@ namespace dodo
 		 * @param format is string contains format presented above
 		 * @param timestamp is amount of seconds from 01.01.1970
 		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
-		 * @note if compiled with NO_EX and error occured empty string will return
 		 */
 		static dodoString byFormat(const dodoString &format, long timestamp, bool local = true);
 

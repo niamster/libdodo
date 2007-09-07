@@ -126,11 +126,7 @@ namespace dodo
 		 * @param options is option to set to socket
 		 * @param flag indicates whether to set or unset option
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setSockOption(short option, bool flag);
 
 		/**
@@ -138,11 +134,7 @@ namespace dodo
 		 * @param option is linger option[see socketLingerOption]
 		 * @param seconds how long to wait(for SOCKET_WAIT_CLOSE only)
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setLingerSockOption(short option, int seconds = 1);
 
 		/**
@@ -159,22 +151,14 @@ namespace dodo
 		 * sets incoming buffer size of socket
 		 * @param bytes is size of buffer in bytes
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setInBufferSize(unsigned long bytes);
 
 		/**
 		 * sets outgoing buffer size of socket
 		 * @param bytes is size of buffer in bytes
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setOutBufferSize(unsigned long bytes);
 
 		/**
@@ -191,22 +175,14 @@ namespace dodo
 		 * sets incomming operation timeout of socket
 		 * @param microseconds is amount of time to wait for action
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setInTimeout(unsigned long microseconds);
 
 		/**
 		 * sets outgoing operation timeout of socket
 		 * @param microseconds is amount of time to wait for action
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		setOutTimeout(unsigned long microseconds);
 
 		/**
@@ -234,11 +210,7 @@ namespace dodo
 		 * blocks/unblocks socket
 		 * @param flag indicates ehether to block or unblock socket
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		block(bool flag);
 
 		protected:
@@ -246,11 +218,7 @@ namespace dodo
 		/**
 		 * closes connection for socket
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		_close(int socket);
 
 		short family;                       ///< socket family

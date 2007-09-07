@@ -94,11 +94,7 @@ namespace dodo
 		/**
 		 * connect to database
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		connect();
 
 		/**
@@ -154,11 +150,7 @@ namespace dodo
 		 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 		 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		exec(const dodoString &query = __dodostring__, bool result = false);
 
 		/**
@@ -235,11 +227,7 @@ namespace dodo
 		 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 		 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		_exec(const dodoString &query, bool result);
 
 		private:

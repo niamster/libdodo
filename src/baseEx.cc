@@ -23,8 +23,6 @@
 
 #include <baseEx.h>
 
-#ifndef NO_EX
-
 using namespace dodo;
 
 bool baseEx::handlerSetEx[] = { false,
@@ -514,7 +512,5 @@ baseEx::getModuleInfo(const dodoString &module,
 
 	return mod;
 }
-
-    #endif
 
 #endif

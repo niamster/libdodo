@@ -103,11 +103,7 @@ flushSocketExchange::init(__initialAccept &a_init)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::close()
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
@@ -116,15 +112,7 @@ flushSocketExchange::close()
     #endif
 
 	if (!opened)
-        #ifndef NO_EX
 		return ;
-        #else
-		return true;
-        #endif
-
-    #ifdef NO_EX
-	bool result =
-    #endif
 
 	flushSocketOptions::_close(socket);
 
@@ -134,10 +122,6 @@ flushSocketExchange::close()
 
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
-
-    #ifdef NO_EX
-	return result;
     #endif
 }
 
@@ -182,11 +166,7 @@ flushSocketExchange::alive()
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::write(const char * const data)
 {
 	buffer.assign(data, outSize);
@@ -216,11 +196,7 @@ flushSocketExchange::write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				break;
@@ -244,11 +220,7 @@ flushSocketExchange::write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				break;
@@ -262,31 +234,19 @@ flushSocketExchange::write(const char * const data)
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
     #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::writeString(const dodoString &data)
 {
-	return this->write(data.c_str());
+	this->write(data.c_str());
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::read(char * const data)
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
@@ -316,11 +276,7 @@ flushSocketExchange::read(char * const data)
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				break;
@@ -344,16 +300,10 @@ flushSocketExchange::read(char * const data)
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
-					{
-						if (errno == EINVAL)
-							return ;
-						else
-							throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-					}
-                #else
-					return false;
-                #endif
+					if (errno == EINVAL)
+						return ;
+					else
+						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -369,51 +319,29 @@ flushSocketExchange::read(char * const data)
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
     #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::readString(dodoString &data)
 {
 	char *t_data = new char[inSize + 1];
 
-    #ifdef NO_EX
-	bool result =
-    #endif
-
-    #ifndef NO_EX
 	try
 	{
-    #endif
+		this->read(t_data);
+	}
+	catch (...)
+	{
+		data.assign(t_data, inSize);
+		delete [] t_data;
 
-	this->read(t_data);
-
-    #ifndef NO_EX
-}
-catch (...)
-{
-	data.assign(t_data, inSize);
-	delete [] t_data;
-
-	throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-}
-    #endif
+		throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	data.assign(t_data, inSize);
 	delete [] t_data;
-
-    #ifdef NO_EX
-	return result;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -478,11 +406,7 @@ flushSocketExchange::addExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::writeStream(const char * const data)
 {
 	buffer.assign(data);
@@ -516,11 +440,7 @@ flushSocketExchange::writeStream(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				break;
@@ -544,11 +464,7 @@ flushSocketExchange::writeStream(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				break;
@@ -562,31 +478,19 @@ flushSocketExchange::writeStream(const char * const data)
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
     #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::writeStreamString(const dodoString &data)
 {
-	return this->writeStream(data.c_str());
+	this->writeStream(data.c_str());
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::readStream(char * const data)
 {
     #ifndef FLUSH_SOCKET_WO_XEXEC
@@ -605,11 +509,7 @@ flushSocketExchange::readStream(char * const data)
 			if (errno == EINTR)
 				continue;
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 		}
 
 		break;
@@ -622,52 +522,31 @@ flushSocketExchange::readStream(char * const data)
     #ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
     #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketExchange::readStreamString(dodoString &data)
 {
 	char *t_data = new char[inSocketBuffer + 1];
 
-    #ifdef NO_EX
-	bool result =
-    #endif
-
-
-    #ifndef NO_EX
 	try
 	{
-    #endif
 
-	this->readStream(t_data);
+		this->readStream(t_data);
 
-    #ifndef NO_EX
-}
-catch (...)
-{
-	data.assign(t_data);
-	delete [] t_data;
+	}
+	catch (...)
+	{
+		data.assign(t_data);
+		delete [] t_data;
 
-	throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-}
-    #endif
+		throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
 
 	data.assign(t_data);
 	delete [] t_data;
-
-    #ifdef NO_EX
-	return result;
-    #endif
 }
 
 //-------------------------------------------------------------------

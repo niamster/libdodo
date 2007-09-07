@@ -177,11 +177,7 @@ dbMysql::connectSettings(unsigned long a_type,
 }
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbMysql::connect()
 {
 	disconnect();
@@ -201,21 +197,13 @@ dbMysql::connect()
 							dbInfo.port,
 							dbInfo.path.size() == 0 ? NULL : dbInfo.path.c_str(),
 							type))
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
-                #else
-		return false;
-                #endif
 
         #ifndef DBMYSQL_WO_XEXEC
 	performXExec(postExec);
         #endif
 
 	connected = true;
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -248,11 +236,7 @@ dbMysql::disconnect()
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbMysql::_exec(const dodoString &query,
 			   bool result)
 {
@@ -269,19 +253,11 @@ dbMysql::_exec(const dodoString &query,
 					request = "describe " + pre_table;
 
 					if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__, request);
-                #else
-						return false;
-                #endif
 
 					mysqlRes = mysql_store_result(mysql);
 					if (mysqlRes == NULL)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
-                #else
-						return false;
-                #endif
 
 					empty = false;
 
@@ -321,18 +297,10 @@ dbMysql::_exec(const dodoString &query,
 	}
 
 	if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__, request);
-            #else
-		return false;
-            #endif
 
 	if (!show)
-            #ifndef NO_EX
 		return ;
-            #else
-		return true;
-            #endif
 
 	if (!empty)
 	{
@@ -342,17 +310,9 @@ dbMysql::_exec(const dodoString &query,
 
 	mysqlRes = mysql_store_result(mysql);
 	if (mysqlRes == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	empty = false;
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -491,11 +451,7 @@ dbMysql::affectedRowsCount() const
 //-------------------------------------------------------------------
 
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbMysql::exec(const dodoString &query,
 			  bool result)
 {
@@ -504,9 +460,6 @@ dbMysql::exec(const dodoString &query,
 	performXExec(preExec);
         #endif
 
-        #ifdef NO_EX
-	bool _result =
-        #endif
 	_exec(query, result);
 
         #ifndef DBMYSQL_WO_XEXEC
@@ -514,10 +467,6 @@ dbMysql::exec(const dodoString &query,
         #endif
 
 	cleanCollect();
-
-        #ifdef NO_EX
-	return _result;
-        #endif
 }
 
 //-------------------------------------------------------------------

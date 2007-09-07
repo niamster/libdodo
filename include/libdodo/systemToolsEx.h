@@ -28,9 +28,6 @@
 
 #include <baseEx.h>
 
-#ifndef NO_EX
-
-namespace dodo
 {
 
 	/**
@@ -78,7 +75,5 @@ namespace dodo
 		SYSTEMTOOLS_SETMICROTIMER,
 	};
 };
-
-#endif
 
 #endif

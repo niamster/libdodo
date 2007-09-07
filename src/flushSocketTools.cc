@@ -33,11 +33,7 @@ flushSocketTools::getHostInfo(const dodoString &host)
 	__hostInfo info;
 
 	if (ent == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETHOSTINFO, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
-        #else
-		return info;
-        #endif
 
 	info.name = ent->h_name;
 
@@ -77,11 +73,7 @@ flushSocketTools::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
 	if (ifaces == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACESNAMES, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return __dodostringarray__;
-        #endif
 
 	int i(-1);
 	dodoStringArr arr;
@@ -152,11 +144,7 @@ flushSocketTools::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if (socket == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return __ifInfo();
-        #endif
 
 	ifreq ifr;
 	strcpy(ifr.ifr_name, interface.c_str());
@@ -167,11 +155,7 @@ flushSocketTools::getInterfaceInfo(const dodoString &interface)
 	sockaddr_in sin;
 
 	if (::ioctl(socket, SIOCGIFADDR, &ifr) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return __ifInfo();
-        #endif
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_addr, sizeof(sockaddr));
 
@@ -184,11 +168,7 @@ flushSocketTools::getInterfaceInfo(const dodoString &interface)
     #else
 
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return info;
-            #endif
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_netmask, sizeof(sockaddr));
 
@@ -198,11 +178,7 @@ flushSocketTools::getInterfaceInfo(const dodoString &interface)
     #endif
 
 	if (::ioctl(socket, SIOCGIFBRDADDR, &ifr) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return info;
-        #endif
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_broadaddr, sizeof(sockaddr));
 
@@ -215,11 +191,7 @@ flushSocketTools::getInterfaceInfo(const dodoString &interface)
     #else
 
 	if (::ioctl(socket, SIOCGIFHWADDR, &ifr) == -1)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return info;
-            #endif
 
 	sprintf(add, "%.2X:%.2X:%.2X:%.2X:%.2X:%.2X", ifr.ifr_ifru.ifru_hwaddr.sa_data[0] & 0xff,
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[1] & 0xff,
@@ -233,18 +205,10 @@ flushSocketTools::getInterfaceInfo(const dodoString &interface)
 	info.hwaddr = add;
 
 	if (::ioctl(socket, SIOCGIFFLAGS, &ifr) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return info;
-        #endif
 
 	if (::close(socket) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return info;
-        #endif
 
     #ifdef __FreeBSD__
 
@@ -278,11 +242,7 @@ flushSocketTools::getLocalName()
 	{
 		delete [] temp1;
 
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_GETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return temp0;
-        #endif
 	}
 
 	temp0.assign(temp1, 255);
@@ -294,23 +254,11 @@ flushSocketTools::getLocalName()
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushSocketTools::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(), host.size()) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHSOCKETTOOLS, FLUSHSOCKETTOOLS_SETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------

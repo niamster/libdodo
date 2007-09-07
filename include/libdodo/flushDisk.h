@@ -169,21 +169,13 @@ namespace dodo
 		 * if u want to create pipe, but not a pipe was created with the same name - false will be returned
 		 * if u want to create regular file, but not regular file was created with the same name - false will be returned
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		open(const dodoString &path = __dodostring__);                   ///< if opened previous file, closes it
 
 		/**
 		 * closes file
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		close();
 
 		/**
@@ -191,22 +183,14 @@ namespace dodo
 		 * @param data will be filled with data
 		 * @param pos indicates position in file
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readString(dodoString &data, unsigned long pos = 0);
 		/**
 		 * read data
 		 * @param data will be filled with data
 		 * @param pos indicates position in file
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		read(char * const data, unsigned long pos = 0);
 
 		/**
@@ -214,11 +198,7 @@ namespace dodo
 		 * @param data will be written to file
 		 * @param pos indicates position in file
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeString(const dodoString &data, unsigned long pos = 0);
 
 		/**
@@ -226,11 +206,7 @@ namespace dodo
 		 * @param data will be written to file
 		 * @param pos indicates position in file
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		write(const char * const data, unsigned long pos = 0);
 
 		/**
@@ -239,11 +215,7 @@ namespace dodo
 		 * @param pos indicates position in file [string that has pos-1 strings before]
 		 * @note max size is inSize
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readStreamString(dodoString &data, unsigned long pos = 0);
 		/**
 		 * read data - null[or \n]-terminated string
@@ -251,11 +223,7 @@ namespace dodo
 		 * @param pos indicates position in file [string that has pos-1 strings before]
 		 * @note max size is inSize
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readStream(char * const data, unsigned long pos = 0);
 
 		/**
@@ -264,11 +232,7 @@ namespace dodo
 		 * @note max size is outSize
 		 * @note - appends '\n'
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeStreamString(const dodoString &data);
 
 		/**
@@ -277,11 +241,7 @@ namespace dodo
 		 * @note max size is outSize
 		 * @note - appends '\n'
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeStream(const char * const data);
 
 		/**
@@ -289,20 +249,12 @@ namespace dodo
 		 * @param pos indicates position in file
 		 * @note for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		erase(unsigned long pos);
 		/**
 		 * flushes to disk
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		flush();
 
 		bool over;      ///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files, tmp_files only

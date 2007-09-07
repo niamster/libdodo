@@ -270,11 +270,7 @@ cgiProcessor::assign(dodoString varName,
 		varName = varName.substr(1);
 
 	if (strcmp(varName.c_str(), "dodo") == 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
-        #else
-		return ;
-        #endif
 
 	global.erase(varName);
 	globalArray.erase(varName);
@@ -293,11 +289,7 @@ cgiProcessor::assign(dodoString varName,
 		varName = varName.substr(1);
 
 	if (strcmp(varName.c_str(), "dodo") == 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
-        #else
-		return ;
-        #endif
 
 	global.erase(varName);
 	globalArray.erase(varName);
@@ -316,11 +308,7 @@ cgiProcessor::assign(dodoString varName,
 		varName = varName.substr(1);
 
 	if (strcmp(varName.c_str(), "dodo") == 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
-        #else
-		return ;
-        #endif
 
 	global.erase(varName);
 	globalHash.erase(varName);
@@ -339,11 +327,7 @@ cgiProcessor::assign(dodoString varName,
 		varName = varName.substr(1);
 
 	if (strcmp(varName.c_str(), "dodo") == 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
-        #else
-		return ;
-        #endif
 
 	globalArray.erase(varName);
 	globalHash.erase(varName);
@@ -414,15 +398,12 @@ cgiProcessor::_if(const dodoString &buffer,
 	if (temp2.size() != 2)
 	{
 		if (temp2.size() != 1)
-            #ifndef NO_EX
 		{
 			char message[128];
 			sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR__IF, ERR_LIBDODO, CGIPREPROCESSOR_WRONGIFSTATEMENT, CGIPREPROCESSOR_WRONGIFSTATEMENT_STR, __LINE__, __FILE__, message);
 		}
-            #else
-			return start;
-            #endif
 
 		dodoString temp1 = dodoString::trim(temp2[0], " \t\n", 3);
 
@@ -529,27 +510,21 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 	{
 		u = buffer.find("<(", m);
 		if (u == dodoString::npos)
-            #ifndef NO_EX
 		{
 			char message[128];
 			sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_BLOCKEND, ERR_LIBDODO, CGIPREPROCESSOR_WRONGBLOCK, CGIPREPROCESSOR_WRONGBLOCK_STR, __LINE__, __FILE__, message);
 		}
-            #else
-			return start;
-            #endif
 
 		b = buffer.find(")>", u + 2);
 		if (b == dodoString::npos)
-            #ifndef NO_EX
 		{
 			char message[128];
 			sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_BLOCKEND, ERR_LIBDODO, CGIPREPROCESSOR_WRONGBLOCK, CGIPREPROCESSOR_WRONGBLOCK_STR, __LINE__, __FILE__, message);
 		}
-            #else
-			return start;
-            #endif
 
 		for (p = u; p < b; ++p)
 			if (buffer[p] != ' ' && buffer[p] != '\t' && buffer[p] != '\n')
@@ -645,41 +620,32 @@ cgiProcessor::_assign(const dodoString &statement,
 	dodoStringArr temp = tools::explode(statement, "=", 2);
 
 	if (temp.size() == 0)
-        #ifndef NO_EX
 	{
 		char message[128];
 		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR__ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_WRONGASSIGNSTATEMENT, CGIPREPROCESSOR_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, message);
 	}
-        #else
-		return ;
-        #endif
 
 	dodoString varName = trim(temp[0]);
 	if (varName.size() == 0)
-        #ifndef NO_EX
 	{
 		char message[128];
 		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR__ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_WRONGASSIGNSTATEMENT, CGIPREPROCESSOR_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, message);
 	}
-        #else
-		return ;
-        #endif
 
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
 	if (strcmp(varName.c_str(), "dodo") == 0)
-        #ifndef NO_EX
 	{
 		char message[128];
 		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR__ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, message);
 	}
-        #else
-		return ;
-        #endif
 
 	dodoStringMap::iterator i = local.find(varName);
 	if (i != local.end())
@@ -776,15 +742,12 @@ cgiProcessor::_for(const dodoString &buffer,
 
 	p = statement.find("in", i + 1);
 	if (p == dodoString::npos)
-        #ifndef NO_EX
 	{
 		char message[128];
 		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR__FOR, ERR_LIBDODO, CGIPREPROCESSOR_WRONGFORSTATEMENT, CGIPREPROCESSOR_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, message);
 	}
-        #else
-		return u;
-        #endif
 
 	dodoString targetVar = trim(statement.substr(p + 2));
 	dodoString forSpace = buffer.substr(start, u - start);
@@ -1555,15 +1518,12 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		{
 			b = varName.find("}", c + 1);
 			if (b == dodoString::npos)
-                #ifndef NO_EX
 			{
 				char message[128];
 				sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
+
 				throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_GETVAR, ERR_LIBDODO, CGIPREPROCESSOR_WRONGVARSTATEMENT, CGIPREPROCESSOR_WRONGVARSTATEMENT_STR, __LINE__, __FILE__, message);
 			}
-                #else
-				return __dodostring__;
-                #endif
 
 			++cb;
 

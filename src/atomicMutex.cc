@@ -50,11 +50,7 @@ atomicMutex::lock()
 {
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return ;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -64,11 +60,7 @@ atomicMutex::unLock()
 {
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return ;
-        #endif
 }
 
 //-------------------------------------------------------------------

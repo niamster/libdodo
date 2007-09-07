@@ -121,11 +121,7 @@ namespace dodo
 		 * @param force indicates to overwrite
 		 * @note works as cp[but for files and empty dirs] -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		copy(const dodoString &from, const dodoString &to, bool force = false);
 
 		/**
@@ -135,11 +131,7 @@ namespace dodo
 		 * @param force indicates to overwrite
 		 * @note works as cp -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		copyDir(const dodoString &from, const dodoString &to, bool force = false);
 
 		/**
@@ -147,11 +139,7 @@ namespace dodo
 		 * @param path describes file's path
 		 * @param content describes content will be appended to file
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		append(const dodoString &path, const dodoString &content);
 
 		/**
@@ -185,11 +173,7 @@ namespace dodo
 		 * @param path is path to node
 		 * @param force if it is true and nothing already exists do not say anything
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		unlink(const dodoString &path, bool force = true);                   ///< also empty directory
 
 		/**
@@ -197,11 +181,7 @@ namespace dodo
 		 * @param from specifies input file
 		 * @param to specifies output file
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		rename(const dodoString &oldPath, const dodoString &newPath);
 
 		/**
@@ -209,11 +189,7 @@ namespace dodo
 		 * @param path is path to file
 		 * @param time is timestams; if not specified -> now
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		touch(const dodoString &path, int time = -1);                   ///< now by default
 
 		/**
@@ -222,11 +198,7 @@ namespace dodo
 		 * @param permissions is new permissions; use | to combine[see permissionModesEnum]
 		 * @param force if it is true and directory already exists do not say anything
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		mkdir(const dodoString &path, int permissions = PERM_OWNER_ALL_ACCESS, bool force = true);
 
 		/**
@@ -234,11 +206,7 @@ namespace dodo
 		 * @param path indicates the path to remove
 		 * @param force if it is true and nothing already exists do not say anything
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		rm(const dodoString &path, bool force = true);
 
 		/**
@@ -252,11 +220,7 @@ namespace dodo
 		 * @param path is path to node
 		 * @param permissions is ne permissions; use | to combine[see permissionModesEnum]
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		chmod(const dodoString &path, int permissions);
 
 		/**
@@ -288,11 +252,7 @@ namespace dodo
 		 * @param path indicates path what to describe
 		 * @param original will be filled with path to file that link is set
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		followSymlink(const dodoString &path, dodoString &original);
 
 		/**
@@ -301,11 +261,7 @@ namespace dodo
 		 * @param newPath indicates path to symlink
 		 * @param force if is set to true link exists already - nothing to say, but replace
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		symlink(const dodoString &oldPath, const dodoString &newPath, bool force = true);
 
 		/**
@@ -313,11 +269,7 @@ namespace dodo
 		 * @param oldPath indicates original file path
 		 * @param newPath indicates path to link
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		link(const dodoString &oldPath, const dodoString &newPath);
 
 		/**
@@ -325,11 +277,7 @@ namespace dodo
 		 * @param path indacate the path of node where to change owner
 		 * @param uid indicates user id
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		chown(const dodoString &path, int uid);
 
 		/**
@@ -337,11 +285,7 @@ namespace dodo
 		 * @param path indacate the path of node where to change group owner
 		 * @param uid indicates group id
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		chgrp(const dodoString &path, int gid);
 
 		/**

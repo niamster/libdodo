@@ -193,11 +193,7 @@ namespace dodo
 		 * @param force if is set to true stops execution if this thread is running
 		 * @note - exception if it's currently running
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		del(unsigned long position, bool force = false);
 
 		/**
@@ -211,11 +207,7 @@ namespace dodo
 		 * @param stackSize describes stack siae of the thread
 		 * @note - exception if it's currently running
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		replace(unsigned long position, threadFunc func, void *data, bool force = false, bool detached = false, short action = THREAD_WAIT, int stackSize = 2097152);
 
 		/**
@@ -224,53 +216,33 @@ namespace dodo
 		 * @param force if is set to true permits execution even if this thread is running
 		 * @note - exception if it's currently running
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		run(unsigned long position, bool force = false);
 
 		/**
 		 * stops thread
 		 * @param position indicates what thread to stop
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		stop(unsigned long position);
 
 		/**
 		 * stops all registered threads
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		stop();
 
 		/**
 		 * waits for thread's termination
 		 * @param position indicates for what thread to wait
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		wait(unsigned long position);
 
 		/**
 		 * waits for all registered threads' termination
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		wait();
 
 		/**
@@ -294,11 +266,7 @@ namespace dodo
 		 * @param position indicates for what thread to set limit
 		 * @param limit indicates the thread's limit on executions
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
 

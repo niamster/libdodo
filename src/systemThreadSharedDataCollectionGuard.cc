@@ -61,11 +61,7 @@ systemThreadSharedDataCollectionGuard::add(void *data)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemThreadSharedDataCollectionGuard::del(unsigned long position)
 {
 	threadGuard tg(this);
@@ -73,24 +69,12 @@ systemThreadSharedDataCollectionGuard::del(unsigned long position)
 	if (getShare(position))
 		shares.erase(current);
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemThreadSharedDataCollectionGuard::set(unsigned long position,
 										   void          *data)
 {
@@ -99,15 +83,7 @@ systemThreadSharedDataCollectionGuard::set(unsigned long position,
 	if (getShare(position))
 		current->data = data;
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -120,11 +96,7 @@ systemThreadSharedDataCollectionGuard::get(unsigned long position)
 	if (getShare(position))
 		return current->data;
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADHAREDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return NULL;
-        #endif
 }
 
 //-------------------------------------------------------------------

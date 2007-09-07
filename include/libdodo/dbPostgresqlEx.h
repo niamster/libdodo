@@ -28,8 +28,6 @@
 
 #include <baseEx.h>
 
-#ifndef NO_EX
-
 namespace dodo
 {
 
@@ -56,7 +54,5 @@ namespace dodo
 		DBPOSTGRESQL_SETCHARSET,
 	};
 };
-
-#endif
 
 #endif

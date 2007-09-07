@@ -321,19 +321,6 @@ fi
 		RESULT="$RESULT\niconv\t\t\t\t\t\tdisabled"
 	fi
 
-#check for features
-	AC_ARG_ENABLE([exceptions],
-        	AS_HELP_STRING([--disable-exceptions], [disable throwing exceptions (default=enabled)]),
-                [EXCEPTIONS="$enableval"], [EXCEPTIONS="yes"])
-	if test "$EXCEPTIONS" = "no"
-	then
-		echo -n -e "#define NO_EX\n\n" >> include/libdodo/directives.runtime.h
-		
-		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
-	else
-		RESULT="$RESULT\nExceptions\t\t\t\t\t\tenabled"
-	fi
-
 # Checks for header files.
 AC_HEADER_SYS_WAIT
 AC_HEADER_DIRENT

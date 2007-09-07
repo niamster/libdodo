@@ -113,11 +113,7 @@ namespace dodo
 		 * sets local name
 		 * @param host is new  name of the host
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		setLocalName(const dodoString &host);
 
 		/**

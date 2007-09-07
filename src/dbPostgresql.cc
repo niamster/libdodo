@@ -56,11 +56,7 @@ dbPostgresql::~dbPostgresql()
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbPostgresql::connect()
 {
 	if (connected)
@@ -86,21 +82,13 @@ dbPostgresql::connect()
 	int status = PQstatus(conn);
 
 	if (status != CONNECTION_OK)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL_CONNECT, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
         #ifndef DBPOSTGRESQL_WO_XEXEC
 	performXExec(postExec);
         #endif
 
 	connected = true;
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -141,11 +129,7 @@ dbPostgresql::setBLOBValues(const dodoStringArr &values)
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbPostgresql::_exec(const dodoString &query,
 					bool result)
 {
@@ -173,41 +157,7 @@ dbPostgresql::_exec(const dodoString &query,
 
 					pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 					if (pgResult == NULL)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
-                #else
-						return false;
-                #endif
-
-					status = PQresultStatus(pgResult);
-
-					switch (status)
-					{
-						case PGRES_EMPTY_QUERY:
-						case PGRES_BAD_RESPONSE:
-						case PGRES_NONFATAL_ERROR:
-						case PGRES_FATAL_ERROR:
-
-                #ifndef NO_EX
-							throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
-                #else
-							return false;
-                #endif
-					}
-
-					empty = false;
-
-					int rowsNum = PQntuples(pgResult);
-					char *fieldType;
-
-					dodoStringArr rowsPart;
-
-					for (int i(0); i < rowsNum; ++i)
-					{
-						fieldType = PQgetvalue(pgResult, i, 1);
-
-						if (strcasestr(fieldType, "char") != NULL ||
-							strcasestr(fieldType, "date") != NULL ||
 							strcasestr(fieldType, "bytea") != NULL ||
 							strcasestr(fieldType, "array") != NULL ||
 							strcasestr(fieldType, "text") != NULL ||
@@ -280,7 +230,6 @@ dbPostgresql::_exec(const dodoString &query,
 
 				pgResult = PQexecParams(conn, request.c_str(), size, NULL, values, lengths, formats, 0);
 				if (pgResult == NULL)
-                #ifndef NO_EX
 				{
 					delete [] values;
 					delete [] lengths;
@@ -288,15 +237,6 @@ dbPostgresql::_exec(const dodoString &query,
 
 					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__);
 				}
-                #else
-				{
-					delete [] values;
-					delete [] lengths;
-					delete [] formats;
-
-					return false;
-				}
-                #endif
 
 				delete [] values;
 				delete [] lengths;
@@ -307,11 +247,7 @@ dbPostgresql::_exec(const dodoString &query,
 
 			default:
 
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_LIBDODO, DBPOSTGRESQL_WRONG_HINT_USAGE, DBPOSTGRESQL_WRONG_HINT_USAGE_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 
 		}
 	}
@@ -319,11 +255,7 @@ dbPostgresql::_exec(const dodoString &query,
 	{
 		pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 		if (pgResult == NULL)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
-                #else
-			return false;
-                #endif
 	}
 
 	status = PQresultStatus(pgResult);
@@ -335,18 +267,10 @@ dbPostgresql::_exec(const dodoString &query,
 		case PGRES_NONFATAL_ERROR:
 		case PGRES_FATAL_ERROR:
 
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 	}
 
 	empty = false;
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -485,11 +409,7 @@ dbPostgresql::affectedRowsCount() const
 //-------------------------------------------------------------------
 
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbPostgresql::exec(const dodoString &query,
 				   bool result)
 {
@@ -498,9 +418,6 @@ dbPostgresql::exec(const dodoString &query,
 	performXExec(preExec);
         #endif
 
-        #ifdef NO_EX
-	bool _result =
-        #endif
 	_exec(query, result);
 
         #ifndef DBPOSTGRESQL_WO_XEXEC
@@ -508,10 +425,6 @@ dbPostgresql::exec(const dodoString &query,
         #endif
 
 	cleanCollect();
-
-        #ifdef NO_EX
-	return _result;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -621,24 +534,12 @@ dbPostgresql::fetchAssoc() const
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbPostgresql::setCharset(const dodoString &charset)
 {
 	int status = PQsetClientEncoding(conn, charset.c_str());
 	if (status == -1)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL_SETCHARSET, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------

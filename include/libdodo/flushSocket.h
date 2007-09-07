@@ -164,11 +164,7 @@ namespace dodo
 		 * @param port is port where to connect
 		 * @param exchange is reference to oject that will perform communication actions
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		connectFrom(const dodoString &local, const dodoString &host, int port, flushSocketExchange &exchange);
 
 		/**
@@ -177,11 +173,7 @@ namespace dodo
 		 * @param exchange is reference to oject that will perform communication actions
 		 * the same as previous, but more pretty
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		connectFrom(const dodoString &local, const __connInfo &destinaton, flushSocketExchange &exchange);
 
 		/**
@@ -190,11 +182,7 @@ namespace dodo
 		 * @param port is port where to connect
 		 * @param exchange is reference to oject that will perform communication actions
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		connect(const dodoString &host, int port, flushSocketExchange &exchange);
 
 		/**
@@ -203,11 +191,7 @@ namespace dodo
 		 * @param exchange is reference to oject that will perform communication actions
 		 * the same as previous, but more pretty
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		connect(const __connInfo &destinaton, flushSocketExchange &exchange);
 
 		/**
@@ -215,11 +199,7 @@ namespace dodo
 		 * @param path is path to unix socket
 		 * @param exchange is reference to oject that will perform communication actions
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		connect(const dodoString &path, flushSocketExchange &exchange);                      ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 
 		/**
@@ -228,11 +208,7 @@ namespace dodo
 		 * @param port is port where to listen
 		 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		bindNListen(const dodoString &host, int port, int numberOfConnections);
 
 		/**
@@ -241,11 +217,7 @@ namespace dodo
 		 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 		 * the same as previous, but more pretty
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		bindNListen(const __connInfo &destinaton, int numberOfConnections);
 
 		/**
@@ -254,11 +226,7 @@ namespace dodo
 		 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 		 * @note if socket is already created and force=true and it's a socket - delete it!!
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		bindNListen(const dodoString &path, int numberOfConnections, bool force = false);
 
 		/**
@@ -266,7 +234,6 @@ namespace dodo
 		 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
 		 * @param init will be filled with info that will init flushSocketExchange object
 		 * @param info is info about connected host
-		 * @note if was defined NO_EX - no way to detect error
 		 * with PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
 		 */
 		virtual bool accept(__initialAccept &init, __connInfo &info);
@@ -275,7 +242,6 @@ namespace dodo
 		 * accepts incommin' connections(as for server)
 		 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
 		 * @param init will be filled with info that will init flushSocketExchange object
-		 * @note if was defined NO_EX - no way to detect error
 		 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
 		 */
 		virtual bool accept(__initialAccept &init);
@@ -292,11 +258,7 @@ namespace dodo
 		/**
 		 * creates socket with given data
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		makeSocket();
 
 		bool server;            ///< indicates whether server object or not

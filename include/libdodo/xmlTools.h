@@ -142,22 +142,14 @@ namespace dodo
 		 * parses XML from file if you want to use reParse wo calling parseFile/parseBuffer
 		 * @param file contains XML to parse
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		parseFileInt(const dodoString &file);
 
 		/**
 		 * parses XML from buffer if you want to use reParse wo calling parseFile/parseBuffer
 		 * @param buffer contains XML to parcse
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		parseBufferInt(const dodoString &buffer);
 
 		/**

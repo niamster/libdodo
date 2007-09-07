@@ -318,11 +318,7 @@ cgiTools::makeContent()
 	unsigned long inSize = ENVIRONMENT["CONTENT_LENGTH"].toUL();
 
 	if (inSize <= 0)
-        #ifndef NO_EX
 		return ;
-        #else
-		return true;
-        #endif
 
 	char *cont = new char[CONTENT_BATCH_SIZE];
 

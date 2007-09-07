@@ -125,17 +125,11 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 				return tempRB;
 			}
 			else
-                #ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
 			{
 				delete [] fds;
 
-				makeFalse(count);
-
-				return tempRB;
+				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
-                #endif
 		}
 	}
 
@@ -205,17 +199,11 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 				return tempRB;
 			}
 			else
-                #ifndef NO_EX
-				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
 			{
 				delete [] fds;
-
-				makeFalse(count);
-
-				return tempRB;
+				
+				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
-                #endif
 		}
 	}
 
@@ -255,11 +243,7 @@ flushNBA::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 			}
 		}
 
@@ -310,11 +294,7 @@ flushNBA::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 			}
 		}
 

@@ -54,11 +54,7 @@ dbSqlite::~dbSqlite()
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbSqlite::connect()
 {
 	if (connected)
@@ -73,11 +69,7 @@ dbSqlite::connect()
 	{
 		sqlite3_close(lite);
 
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_CONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 	}
 
         #ifndef DBSQLITE_WO_XEXEC
@@ -85,10 +77,6 @@ dbSqlite::connect()
         #endif
 
 	connected = true;
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -110,11 +98,7 @@ dbSqlite::disconnect()
 		}
 
 		if (sqlite3_close(lite) != SQLITE_OK)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_DISCONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-                #else
-			return ;
-                #endif
 
             #ifndef DBSQLITE_WO_XEXEC
 		performXExec(postExec);
@@ -134,11 +118,7 @@ dbSqlite::setBLOBValues(const dodoStringArr &values)
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbSqlite::_exec(const dodoString &query,
 				bool result)
 {
@@ -165,18 +145,10 @@ dbSqlite::_exec(const dodoString &query,
 					}
 
 					if (sqlite3_prepare(lite, request.c_str(), request.size(), &liteStmt, NULL) != SQLITE_OK)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
-                #else
-						return false;
-                #endif
 
 					if (liteStmt == NULL)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-                #else
-						return false;
-                #endif
 
 					empty = false;
 
@@ -199,11 +171,7 @@ dbSqlite::_exec(const dodoString &query,
 														  NULL,
 														  NULL,
 														  NULL) != SQLITE_OK)
-                #ifndef NO_EX
 							throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
-                #else
-							return false;
-                #endif
 
 						if (strcasestr(columnType, "char") != NULL ||
 							strcasestr(columnType, "date") != NULL ||
@@ -262,11 +230,7 @@ dbSqlite::_exec(const dodoString &query,
 	}
 
 	if (sqlite3_prepare(lite, request.c_str(), request.size(), &liteStmt, NULL) != SQLITE_OK)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
-            #else
-		return false;
-            #endif
 
 	if (blobHint)
 	{
@@ -279,46 +243,26 @@ dbSqlite::_exec(const dodoString &query,
 				dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
 				for (int o = 1; i != j; ++i, ++o)
 					if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-                #else
-						return false;
-                #endif
 			}
 
 				break;
 
 			default:
 
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_LIBDODO, DBSQLITE_WRONG_HINT_USAGE, DBSQLITE_WRONG_HINT_USAGE_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 
 		}
 	}
 
 	if (liteStmt == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	empty = false;
 
 	if (!show)
 		if (sqlite3_step(liteStmt) != SQLITE_DONE)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -369,11 +313,7 @@ dbSqlite::fetchRow() const
 
 			case SQLITE_ERROR:
 
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-                #else
-				return __stringarrayvector__;
-                #endif
 
 			case SQLITE_ROW:
 
@@ -508,11 +448,7 @@ dbSqlite::rowsCount() const
 
 				case SQLITE_ERROR:
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 
 				case SQLITE_ROW:
 
@@ -553,11 +489,7 @@ dbSqlite::affectedRowsCount() const
 //-------------------------------------------------------------------
 
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 dbSqlite::exec(const dodoString &query,
 			   bool result)
 {
@@ -566,9 +498,6 @@ dbSqlite::exec(const dodoString &query,
 	performXExec(preExec);
         #endif
 
-        #ifdef NO_EX
-	bool _result =
-        #endif
 	_exec(query, result);
 
         #ifndef DBSQLITE_WO_XEXEC
@@ -576,10 +505,6 @@ dbSqlite::exec(const dodoString &query,
         #endif
 
 	cleanCollect();
-
-        #ifdef NO_EX
-	return _result;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -682,11 +607,7 @@ dbSqlite::fetchAssoc() const
 
 			case SQLITE_ERROR:
 
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHASSOC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
-                #else
-				return __dodostringmap__;
-                #endif
 
 			case SQLITE_ROW:
 

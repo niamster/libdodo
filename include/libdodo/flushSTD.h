@@ -150,22 +150,14 @@ namespace dodo
 		 * @param data is filled with read string
 		 * if inSize bigger than buffer size - reads with few iterations
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readString(dodoString &data);
 		/**
 		 * read
 		 * @param data is filled with read data
 		 * if inSize bigger than buffer size - reads with few iterations
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		read(char * const data);
 
 		/**
@@ -173,11 +165,7 @@ namespace dodo
 		 * @param data is string that will be written
 		 * if outSize bigger than buffer size - writes with few iterations
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeString(const dodoString &data);
 
 		/**
@@ -185,11 +173,7 @@ namespace dodo
 		 * @param data is data that will be written
 		 * if outSize bigger than buffer size - writes with few iterations
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		write(const char * const data);
 
 		/**
@@ -197,22 +181,14 @@ namespace dodo
 		 * @param data is filled with read string
 		 * max size of data is inSTDBuffer
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readStreamString(dodoString &data);
 		/**
 		 * read from stream - null[or \n]-terminated string
 		 * @param data is filled with read data
 		 * max size of data is inSTDBuffer
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		readStream(char * const data);
 
 		/**
@@ -221,11 +197,7 @@ namespace dodo
 		 * @note max data size is outSTDBuffer
 		 * @note - appends '\n'
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeStreamString(const dodoString &data);
 
 		/**
@@ -234,21 +206,13 @@ namespace dodo
 		 * @note max data size is outSTDBuffer
 		 * @note - appends '\n'
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		writeStream(const char * const data);
 
 		/**
 		 * flushes to output
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		flush();
 
 		/**
@@ -270,11 +234,7 @@ namespace dodo
 		 * blocks/unblocks stream
 		 * @param flag indicates whether to block or unblock stream
 		 */
-            #ifndef NO_EX
 		virtual void
-            #else
-		virtual bool
-            #endif
 		block(bool flag);
 
 		protected:

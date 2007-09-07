@@ -62,66 +62,36 @@ systemProcessSharedDataGuard::~systemProcessSharedDataGuard()
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcessSharedDataGuard::set(void *a_data)
 {
 	/*errno = pthread_mutex_lock(&mutex);
 	   if (errno != 0)
-	 #ifndef NO_EX
 	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   		return false;
-	 #endif
 
 	   data = a_data;
 
 	   errno = pthread_mutex_unlock(&mutex);
 	   if (errno != 0)
-	 #ifndef NO_EX
 	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   		return false;
-	 #endif
-
-	 #ifdef NO_EX
-	   	return true;
-	 #endif*/
+	*/
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcessSharedDataGuard::del()
 {
 	/*errno = pthread_mutex_lock(&mutex);
 	   if (errno != 0)
-	 #ifndef NO_EX
 	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   		return false;
-	 #endif
 
 	   data = NULL;
 
 	   errno = pthread_mutex_unlock(&mutex);
 	   if (errno != 0)
-	 #ifndef NO_EX
 	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   		return false;
-	 #endif
-
-	 #ifdef NO_EX
-	   	return true;
-	 #endif*/
+	   	return true;*/
 }
 
 //-------------------------------------------------------------------
@@ -133,11 +103,7 @@ systemProcessSharedDataGuard::lock(unsigned long microseconds)
 	   {
 	   	errno = pthread_mutex_lock(&mutex);
 	   	if (errno != 0)
-	 #ifndef NO_EX
 	   			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   			return NULL;
-	 #endif
 	   }
 	   else
 	   {
@@ -150,27 +116,15 @@ systemProcessSharedDataGuard::lock(unsigned long microseconds)
 	   		if (errno != 0)
 	   		{
 	   			if (errno != EBUSY)
-	 #ifndef NO_EX
 	   					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   					return NULL;
-	 #endif
 
 	   			if (nanosleep(&timeout, NULL) == -1)
-	 #ifndef NO_EX
 	   					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   					return NULL;
-	 #endif
 
 	   			slept += 1;
 
 	   			if (slept > microseconds)
-	 #ifndef NO_EX
 	   					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK, SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK_STR,__LINE__,__FILE__);
-	 #else
-	   					return NULL;
-	 #endif
 	   		}
 	   		else
 	   			locked = false;
@@ -182,24 +136,13 @@ systemProcessSharedDataGuard::lock(unsigned long microseconds)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcessSharedDataGuard::unlock()
 {
 	/*errno = pthread_mutex_unlock(&mutex);
 	   if (errno != 0)
-	 #ifndef NO_EX
 	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_UNLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	 #else
-	   		return false;
-	 #endif
-
-	 #ifdef NO_EX
-	   	return true;
-	 #endif*/
+	*/
 }
 
 //-------------------------------------------------------------------

@@ -136,11 +136,7 @@ namespace dodo
 		 * @param size indicates amount of random data in bytes
 		 * @note based on /dev/random
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		random(void *data, unsigned long size);
 
 		/**
@@ -302,11 +298,7 @@ namespace dodo
 		 * @param toCode indicates codeset in what perform conversion
 		 * @param fromCode indicates codeset in what buffer coded
 		 */
-                #ifndef NO_EX
 		virtual void
-                #else
-		virtual bool
-                #endif
 		codeSet(const dodoString &toCode, const dodoString &fromCode);
 
 
@@ -430,11 +422,7 @@ namespace dodo
 		 * @param headers - extra headers
 		 * @note if login is emty - no auth
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__);
 
 		/**
@@ -450,11 +438,7 @@ namespace dodo
 		 * @param pass is a password for auth
 		 * @param headers - extra headers [each must ends with `\r\n`]
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
 
 		private:
@@ -544,11 +528,7 @@ namespace dodo
 		 * @param mess is data to send
 		 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		sendShortData(int socket, const dodoString &mess);
 
 		/**
@@ -559,11 +539,7 @@ namespace dodo
 		 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
 		 * on exception deletes data
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		sendShortDataDel(int socket, const dodoString &mess, char *data);
 
 		/**
@@ -572,11 +548,7 @@ namespace dodo
 		 * @param mess is data to send
 		 * @note mess's length can be more than TOOLS_SHORT_DATA_SIZE bytes
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		sendLongData(int socket, const dodoString &mess);
 
 		/**
@@ -586,11 +558,7 @@ namespace dodo
 		 * @note data's length not more than TOOLS_SHORT_DATA_SIZE bytes
 		 * on exception deletes data
 		 */
-            #ifndef NO_EX
 		static void
-            #else
-		static bool
-            #endif
 		receiveShortDataDel(int socket, char *data);
 	};
 

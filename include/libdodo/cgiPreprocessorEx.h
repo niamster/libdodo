@@ -28,8 +28,6 @@
 
 #include <baseEx.h>
 
-#ifndef NO_EX
-
 namespace dodo
 {
 	/**
@@ -54,7 +52,5 @@ namespace dodo
 		CGIPREPROCESSOR_READ,
 	};
 };
-
-#endif
 
 #endif
