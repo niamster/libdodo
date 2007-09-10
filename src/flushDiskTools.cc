@@ -25,11 +25,7 @@
 
 using namespace dodo;
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::unlink(const dodoString &path,
 					   bool force)
 {
@@ -38,11 +34,7 @@ flushDiskTools::unlink(const dodoString &path,
 
 	if (::lstat(path.c_str(), &st) == -1)
 		if (errno != ENOENT || !force)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-            #else
-			return false;
-            #endif
 
 	if (S_ISDIR(st.st_mode))
 		status = ::rmdir(path.c_str());
@@ -51,46 +43,22 @@ flushDiskTools::unlink(const dodoString &path,
 
 	if (status == -1)
 		if (errno != ENOENT || !force)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-            #else
-			return false;
-            #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::rename(const dodoString &oldPath,
 					   const dodoString &newPath)
 {
 	if (::rename(oldPath.c_str(), newPath.c_str()) == -1)
-        #ifdef NO_EX
-		return false;
-        #else
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RENAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::symlink(const dodoString &oldPath,
 						const dodoString &newPath,
 						bool force)
@@ -101,96 +69,44 @@ flushDiskTools::symlink(const dodoString &oldPath,
 		if (::lstat(newPath.c_str(), &st) != -1)
 
 			if (!S_ISLNK(st.st_mode))
-                #ifdef NO_EX
-				return false;
-                #else
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_SYMLINK, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, newPath);
-                #endif
 		else
 		if (::unlink(newPath.c_str()) == -1)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
-                #else
-			return false;
-                #endif
 	}
 
 	if (::symlink(oldPath.c_str(), newPath.c_str()) == -1)
-        #ifdef NO_EX
-		return false;
-        #else
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::link(const dodoString &oldPath,
 					 const dodoString &newPath)
 {
 	if  (::link(oldPath.c_str(), newPath.c_str()) == -1)
-        #ifdef NO_EX
-		return false;
-        #else
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_LINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::chown(const dodoString &path,
 					  int uid)
 {
 	if (::chown(path.c_str(), uid, (unsigned int)-1) == -1)
-        #ifdef NO_EX
-		return false;
-        #else
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_CHOWN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::chgrp(const dodoString &path,
 					  int gid)
 {
 	if (::chown(path.c_str(), (unsigned int)-1, gid) == -1)
-        #ifdef NO_EX
-		return false;
-        #else
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_CHGRP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -200,11 +116,7 @@ flushDiskTools::getUserOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETUSEROWNER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return -1;
-        #endif
 
 	return st.st_uid;
 }
@@ -216,22 +128,14 @@ flushDiskTools::getGroupOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETGROUPOWNER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return -1;
-        #endif
 
 	return st.st_gid;
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::touch(const dodoString &path,
 					  int a_time)
 {
@@ -241,24 +145,12 @@ flushDiskTools::touch(const dodoString &path,
 	utimbuf temp = { a_time, a_time };
 
 	if (::utime(path.c_str(), &temp) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_TOUCH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::mkdir(const dodoString &path,
 					  int permissions,
 					  bool force)
@@ -269,51 +161,23 @@ flushDiskTools::mkdir(const dodoString &path,
 		{
 			struct stat st;
 			if (::lstat(path.c_str(), &st) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-                #else
-				return false;
-                #endif
 
 			if (S_ISDIR(st.st_mode))
-                #ifdef NO_EX
-				return true;
-                #else
 				return ;
-                #endif
 		}
 		else
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-            #else
-			return false;
-            #endif
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::chmod(const dodoString &path, int permissions)
 {
 	if (::chmod(path.c_str(), getPermission(permissions)) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_CHMOD, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -360,38 +224,22 @@ flushDiskTools::getPermission(int permission)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::rm(const dodoString &path,
 				   bool force)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
 		if (errno != ENOENT || !force)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-            #else
-			return false;
-            #endif
 	else
-            #ifndef NO_EX
 		return ;
-            #else
-		return false;
-            #endif
 
 	if (!S_ISDIR(st.st_mode))
 	{
 		if (::unlink(path.c_str()) == -1)
 			if (errno != ENOENT || !force)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-                #else
-				return false;
-                #endif
 	}
 	else
 	{
@@ -402,11 +250,7 @@ flushDiskTools::rm(const dodoString &path,
 		if (directory == NULL)
 		{
 			if (errno != ENOENT || !force)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-                #else
-				return false;
-                #endif
 		}
 		else
 		{
@@ -421,44 +265,23 @@ flushDiskTools::rm(const dodoString &path,
 
 				if (::lstat(attached.c_str(), &st) == -1)
 					if (errno != ENOENT || !force)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-                #else
-						return false;
-                #endif
 
 				if (S_ISDIR(st.st_mode))
-                #ifndef NO_EX
 					flushDiskTools::rm(attached.c_str());
-                #else
-					if (flushDiskTools::rm(attached.c_str()))
-						return false;
-                #endif
 				else
 				if (::unlink(attached.c_str()) == -1)
 					if (errno != ENOENT || !force)
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-                #else
-						return false;
-                #endif
 			}
 
 			closedir(directory);
 
 			if (::rmdir(path.c_str()) == -1)
 				if (errno != ENOENT || !force)
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-                #else
-					return false;
-                #endif
 		}
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -468,11 +291,7 @@ flushDiskTools::getPermissions(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETPERMISSIONS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return (permissionModesEnum) - 1;
-        #endif
 
 	int mode(PERM_NONE);
 
@@ -517,11 +336,7 @@ flushDiskTools::getFileType(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILETYPE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return (flushDiskToolsFileTypeEnum) - 1;
-        #endif
 
 	st.st_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
 
@@ -568,11 +383,7 @@ flushDiskTools::getSize(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return -1;
-        #endif
 
 	return st.st_size;
 }
@@ -584,11 +395,7 @@ flushDiskTools::getAccTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETACCTIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return -1;
-        #endif
 
 	return st.st_atime;
 }
@@ -600,11 +407,7 @@ flushDiskTools::getModTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETMODTIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return -1;
-        #endif
 
 	return st.st_mtime;
 }
@@ -618,11 +421,7 @@ flushDiskTools::getFileInfo(const dodoString &path)
 
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return file;
-        #endif
 
 	file.name.assign(::basename((char *)path.c_str()));
 	file.type = flushDiskTools::getFileType(path);
@@ -644,11 +443,7 @@ flushDiskTools::getDirInfo(const dodoString &path)
 	dodoArray<__fileInfo> dir;
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETDIRINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return dir;
-        #endif
 
 	if (!S_ISDIR(st.st_mode))
 		return dir;
@@ -657,11 +452,7 @@ flushDiskTools::getDirInfo(const dodoString &path)
 	DIR *directory = opendir(path.c_str());
 
 	if (directory == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETDIRINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return dir;
-        #endif
 
 	dirent *dd;
 	dodoString attached;
@@ -679,45 +470,25 @@ flushDiskTools::getDirInfo(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::followSymlink(const dodoString &path,
 							  dodoString &original)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return false;
-        #endif
 
 	char buffer[MAXPATHLEN];
 
 	if (!S_ISLNK(st.st_mode))
-        #ifdef NO_EX
-		return false;
-        #else
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_SYMLINK, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
-        #endif
 
 	int count = 0;
 
 	if ((count = ::readlink(path.c_str(), buffer, MAXPATHLEN)) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return false;
-        #endif
 
 	original.assign(buffer, count);
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -727,26 +498,14 @@ flushDiskTools::getFileContent(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return __dodostring__;
-        #endif
 
 	if (!S_ISREG(st.st_mode))
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
-        #else
-		return __dodostring__;
-        #endif
 
 	FILE *file = fopen(path.c_str(), "r");
 	if (file == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return __dodostring__;
-        #endif
 
 	char buffer[INSIZE];
 
@@ -757,14 +516,9 @@ flushDiskTools::getFileContent(const dodoString &path)
 	for (; i < iter; ++i)
 	{
 		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-            #else
-			return retS;
-            #endif
 
 		if (fread(buffer, INSIZE, 1, file) == 0)
-            #ifndef NO_EX
 			switch (errno)
 			{
 				case EIO:
@@ -775,32 +529,15 @@ flushDiskTools::getFileContent(const dodoString &path)
 
 					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
-            #else
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
-
-					return retS;
-			}
-            #endif
 
 		retS.append(buffer, INSIZE);
 	}
 	if (rest > 0)
 	{
 		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-            #else
-			return retS;
-            #endif
 
 		if (fread(buffer, rest, 1, file) == 0)
-            #ifndef NO_EX
 			switch (errno)
 			{
 				case EIO:
@@ -811,28 +548,12 @@ flushDiskTools::getFileContent(const dodoString &path)
 
 					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
-            #else
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
-
-					return retS;
-			}
-            #endif
 
 		retS.append(buffer, rest);
 	}
 
 	if (fclose(file) != 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return retS;
-        #endif
 
 	return retS;
 }
@@ -844,26 +565,14 @@ flushDiskTools::getFileContentArr(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return __dodostringarray__;
-        #endif
 
 	if (!S_ISREG(st.st_mode))
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENTARR, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
-        #else
-		return __dodostringarray__;
-        #endif
 
 	FILE *file = fopen(path.c_str(), "r");
 	if (file == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return __dodostringarray__;
-        #endif
 
 	char buffer[DISK_MAXLINELEN];
 	dodoStringArr arr;
@@ -872,11 +581,7 @@ flushDiskTools::getFileContentArr(const dodoString &path)
 		arr.push_back(buffer);
 
 	if (fclose(file) != 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return arr;
-        #endif
 
 	return arr;
 
@@ -916,11 +621,7 @@ flushDiskTools::dirname(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::copy(const dodoString &from,
 					 const dodoString &a_to,
 					 bool force)
@@ -939,20 +640,12 @@ flushDiskTools::copy(const dodoString &from,
 	struct stat stFrom, stTo;
 
 	if (::lstat(from.c_str(), &stFrom) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
-        #else
-		return false;
-        #endif
 
 	if (::lstat(to.c_str(), &stTo) == -1)
 	{
 		if (errno != ENOENT)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-            #else
-			return false;
-            #endif
 	}
 	else
 	{
@@ -961,27 +654,15 @@ flushDiskTools::copy(const dodoString &from,
 			if (!S_ISDIR(stTo.st_mode))
 			{
 				if (::unlink(to.c_str()) == -1)
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-                #else
-					return false;
-                #endif
 			}
 			else
 			if (::rmdir(to.c_str()) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-                #else
-				return false;
-                #endif
 
 		}
 		else
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, to);
-            #else
-			return false;
-            #endif
 	}
 
 	if (!S_ISREG(stFrom.st_mode))
@@ -989,11 +670,7 @@ flushDiskTools::copy(const dodoString &from,
 		if (S_ISDIR(stFrom.st_mode))
 		{
 			if (::mkdir(to.c_str(), stFrom.st_mode) == 1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-                #else
-				return false;
-                #endif
 		}
 		else
 		if (S_ISLNK(stFrom.st_mode))
@@ -1002,28 +679,16 @@ flushDiskTools::copy(const dodoString &from,
 			int count = 0;
 
 			if ((count = ::readlink(from.c_str(), buffer, MAXPATHLEN)) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
-                #else
-				return false;
-                #endif
 
 			buffer[count] = '\0';
 
 			if (::symlink(buffer, to.c_str()) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, dodoString(buffer) + "->" + to);
-                #else
-				return false;
-                #endif
 		}
 		else
 		if (::mknod(to.c_str(), stFrom.st_mode, 0) == 1)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-                #else
-			return false;
-                #endif
 	}
 	else
 	{
@@ -1031,19 +696,11 @@ flushDiskTools::copy(const dodoString &from,
 
 		FILE *fromFile = fopen(from.c_str(), "r");
 		if (fromFile == NULL)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
-            #else
-			return false;
-            #endif
 
 		FILE *toFile = fopen(to.c_str(), "w+");
 		if (toFile == NULL)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-            #else
-			return false;
-            #endif
 
 		char buffer[INSIZE];
 
@@ -1053,21 +710,12 @@ flushDiskTools::copy(const dodoString &from,
 			j = i * INSIZE;
 
 			if (fseek(fromFile, j, SEEK_SET) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-                #else
-				return false;
-                #endif
 
 			if (fseek(toFile, j, SEEK_SET) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-                #else
-				return false;
-                #endif
 
 			if (fread(buffer, INSIZE, 1, fromFile) == 0)
-                #ifndef NO_EX
 				switch (errno)
 				{
 					case EIO:
@@ -1078,21 +726,8 @@ flushDiskTools::copy(const dodoString &from,
 
 						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
-                #else
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-
-						return false;
-				}
-                #endif
 
 			if (fwrite(buffer, INSIZE, 1, toFile) == 0)
-                #ifndef NO_EX
 				switch (errno)
 				{
 					case EIO:
@@ -1103,38 +738,17 @@ flushDiskTools::copy(const dodoString &from,
 
 						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
-                #else
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-
-						return false;
-				}
-                #endif
 		}
 		if (rest > 0)
 		{
 			j = i * INSIZE;
 			if (fseek(fromFile, j, SEEK_SET) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-                #else
-				return false;
-                #endif
 
 			if (fseek(toFile, j, SEEK_SET) == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-                #else
-				return false;
-                #endif
 
 			if (fread(buffer, rest, 1, fromFile) == 0)
-                #ifndef NO_EX
 				switch (errno)
 				{
 					case EIO:
@@ -1145,21 +759,8 @@ flushDiskTools::copy(const dodoString &from,
 
 						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
-                #else
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-
-						return false;
-				}
-                #endif
 
 			if (fwrite(buffer, rest, 1, toFile) == 0)
-                #ifndef NO_EX
 				switch (errno)
 				{
 					case EIO:
@@ -1170,47 +771,19 @@ flushDiskTools::copy(const dodoString &from,
 
 						throw baseEx(ERRMODULE_FLUSHSTD, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
-                #else
-				switch (errno)
-				{
-					case EIO:
-					case EINTR:
-					case ENOMEM:
-					case EOVERFLOW:
-					case EROFS:
-
-						return false;
-				}
-                #endif
 		}
 
 		if (fclose(fromFile) != 0)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-            #else
-			return false;
-            #endif
 
 		if (fclose(toFile) != 0)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-            #else
-			return false;
-            #endif
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::copyDir(const dodoString &from,
 						const dodoString &a_to,
 						bool force)
@@ -1229,72 +802,35 @@ flushDiskTools::copyDir(const dodoString &from,
 	struct stat stFrom, stTo;
 
 	if (::lstat(from.c_str(), &stFrom) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
-        #else
-		return false;
-        #endif
 
 	if (::lstat(to.c_str(), &stTo) == -1)
 	{
 		if (errno != ENOENT)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-            #else
-			return false;
-            #endif
 	}
 	else
 	if (force)
-	{
-            #ifndef NO_EX
 		flushDiskTools::rm(to, force);
-            #else
-		if (!flushDiskTools::rm(to, force))
-			return false;
-            #endif
-	}
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPYDIR, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, to);
-            #else
-		return false;
-            #endif
 
 	if (!S_ISDIR(stFrom.st_mode))
-	{
-        #ifndef NO_EX
 		flushDiskTools::copy(from, to, force);
-        #else
-		if (!flushDiskTools::copy(from, to, force))
-			return false;
-        #endif
-	}
 	else
 	{
 		if (::mkdir(to.c_str(), stFrom.st_mode) == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
-            #else
-			return false;
-            #endif
 
 		dodoString attachedFrom, attachedTo;
 
 		DIR *directory = opendir(from.c_str());
 		if (directory == NULL)
 		{
-            #ifndef NO_EX
 			if (errno == ENOENT)
 				return ;
 			else
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
-            #else
-			if (errno == ENOENT)
-				return true;
-			else
-				return false;
-            #endif
 		}
 
 		dirent *dd;
@@ -1307,20 +843,11 @@ flushDiskTools::copyDir(const dodoString &from,
 			attachedTo.assign(to + FILE_DELIM + dd->d_name);
 			attachedFrom.assign(from + FILE_DELIM + dd->d_name);
 
-            #ifndef NO_EX
 			flushDiskTools::copyDir(attachedFrom, attachedTo, force);
-            #else
-			if (!flushDiskTools::copyDir(attachedFrom, attachedTo, force))
-				return false;
-            #endif
 		}
 
 		closedir(directory);
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -1338,32 +865,16 @@ flushDiskTools::exists(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 flushDiskTools::append(const dodoString &path,
 					   const dodoString &content)
 {
 	FILE *file = fopen(path.c_str(), "a+");
 	if (file == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return false;
-        #endif
 
 	if (fwrite(content.c_str(), content.size(), 1, file) == 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
