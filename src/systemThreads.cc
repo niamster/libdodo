@@ -155,11 +155,7 @@ systemThreads::getThread(unsigned long position) const
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::del(unsigned long position,
 				   bool force)
 {
@@ -168,20 +164,12 @@ systemThreads::del(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_DEL, ERR_LIBDODO, SYSTEMTHREADS_ISALREADYRUNNING, SYSTEMTHREADS_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 			else
 			{
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 			}
 		}
 
@@ -196,36 +184,20 @@ systemThreads::del(unsigned long position,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 		}
 
             #endif
 
 		threads.erase(current);
-
-            #ifdef NO_EX
-		return true;
-            #endif
 	}
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_DEL, ERR_LIBDODO, SYSTEMTHREADS_NOTFOUND, SYSTEMTHREADS_NOTFOUND_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::replace(unsigned long position,
 					   threadFunc func,
 					   void          *data,
@@ -239,20 +211,12 @@ systemThreads::replace(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_REPLACE, ERR_LIBDODO, SYSTEMTHREADS_ISALREADYRUNNING, SYSTEMTHREADS_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 			else
 			{
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 			}
 		}
 
@@ -268,11 +232,9 @@ systemThreads::replace(unsigned long position,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #endif
 
-				current->handle = NULL;
+			current->handle = NULL;
 		}
 
             #endif
@@ -283,27 +245,14 @@ systemThreads::replace(unsigned long position,
 		current->detached = detached;
 		current->stackSize = stackSize;
 		current->action = action;
-
-            #ifdef NO_EX
-		return true;
-            #endif
 	}
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_REPLACE, ERR_LIBDODO, SYSTEMTHREADS_NOTFOUND, SYSTEMTHREADS_NOTFOUND_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
-
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::run(unsigned long position,
 				   bool force)
 {
@@ -313,19 +262,11 @@ systemThreads::run(unsigned long position,
 		{
 			threads.erase(current);
 
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_RUN, ERR_LIBDODO, SYSTEMTHREADS_SWEPT, SYSTEMTHREADS_SWEPT_STR, __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 		}
 
 		if (_isRunning(current) && !force)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_RUN, ERR_LIBDODO, SYSTEMTHREADS_ISALREADYRUNNING, SYSTEMTHREADS_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		if (current->detached)
 			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
@@ -334,89 +275,45 @@ systemThreads::run(unsigned long position,
 
 		errno = pthread_attr_setstacksize(&attr, current->stackSize);
 		if (errno != 0)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		errno = pthread_create(&(current->thread), &attr, current->func, current->data);
 		if (errno != 0)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		current->isRunning = true;
 		++ (current->executed);
-
-            #ifdef NO_EX
-		return true;
-            #endif
 	}
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_RUN, ERR_LIBDODO, SYSTEMTHREADS_NOTFOUND, SYSTEMTHREADS_NOTFOUND_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::wait(unsigned long position)
 {
 	if (getThread(position))
 	{
 		if (!_isRunning(current))
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_WAIT, ERR_LIBDODO, SYSTEMTHREADS_ISNOTRUNNING, SYSTEMTHREADS_ISNOTRUNNING_STR, __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		if (current->detached)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_WAIT, ERR_LIBDODO, SYSTEMTHREADS_ISDETACHED, SYSTEMTHREADS_ISDETACHED_STR, __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		errno = pthread_join(current->thread, NULL);
 		if (errno != 0)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		current->isRunning = false;
-
-            #ifdef NO_EX
-		return true;
-            #endif
 	}
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_WAIT, ERR_LIBDODO, SYSTEMTHREADS_NOTFOUND, SYSTEMTHREADS_NOTFOUND_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::wait()
 {
 	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
@@ -427,67 +324,35 @@ systemThreads::wait()
 
 		errno = pthread_join(i->thread, NULL);
 		if (errno != 0)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		i->isRunning = false;
 	}
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::stop(unsigned long position)
 {
 	if (getThread(position))
 	{
 		if (!_isRunning(current))
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_STOP, ERR_LIBDODO, SYSTEMTHREADS_ISNOTRUNNING, SYSTEMTHREADS_ISNOTRUNNING_STR, __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		errno = pthread_cancel(current->thread);
 		if (errno != 0)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		current->isRunning = false;
-
-            #ifdef NO_EX
-		return true;
-            #endif
 	}
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_STOP, ERR_LIBDODO, SYSTEMTHREADS_NOTFOUND, SYSTEMTHREADS_NOTFOUND_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::stop()
 {
 	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
@@ -498,18 +363,10 @@ systemThreads::stop()
 
 		errno = pthread_cancel(i->thread);
 		if (errno != 0)
-                #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-			return false;
-                #endif
 
 		i->isRunning = false;
 	}
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -521,11 +378,7 @@ systemThreads::isRunning(unsigned long position) const
 	if (getThread(position))
 		return _isRunning(current);
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ISRUNNING, ERR_LIBDODO, SYSTEMTHREADS_NOTFOUND, SYSTEMTHREADS_NOTFOUND_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 }
 
 //-------------------------------------------------------------------
@@ -546,11 +399,7 @@ systemThreads::_isRunning(std::list<__threadInfo>::iterator &position) const
 			return false;
 		}
 
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 	}
 
 	return true;
@@ -584,26 +433,14 @@ systemThreads::sweepTrash()
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemThreads::setExecutionLimit(unsigned long position,
 								 unsigned long limit)
 {
 	if (getThread(position))
 		current->executeLimit = limit;
 	else
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_SETEXECUTIONLIMIT, ERR_LIBDODO, SYSTEMTHREADS_NOTFOUND, SYSTEMTHREADS_NOTFOUND_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -631,28 +468,16 @@ systemThreads::getModuleInfo(const dodoString &module,
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return systemThreadsMod();
-                #endif
 
 	initSystemThreadsModule init = (initSystemThreadsModule)dlsym(handle, "initSystemThreadsModule");
 	if (init == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return systemThreadsMod();
-                #endif
 
 	systemThreadsMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return mod;
-                #endif
 
 	return mod;
 }
@@ -677,29 +502,17 @@ systemThreads::add(const dodoString &module,
 
 	thread.handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (thread.handle == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
 	if (init == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	systemThreadsMod temp = init(toInit);
 
 	threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
 	if (in == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	thread.executeLimit = temp.executeLimit;
 	thread.func = in;
@@ -723,29 +536,17 @@ systemThreads::add(const dodoString &module,
 
 	thread.handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (thread.handle == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
 	if (init == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	systemThreadsMod temp = init(toInit);
 
 	threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
 	if (in == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	thread.executeLimit = temp.executeLimit;
 	thread.detached = temp.detached;
@@ -817,19 +618,11 @@ systemThreads::addNRun(threadFunc func,
 
 	errno = pthread_attr_setstacksize(&attr, stackSize);
 	if (errno != 0)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return 0;
-            #endif
 
 	errno = pthread_create(&(thread.thread), &attr, func, data);
 	if (errno != 0)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return 0;
-            #endif
 
 	thread.isRunning = true;
 	++ (thread.executed);
