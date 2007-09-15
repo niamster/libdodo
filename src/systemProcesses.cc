@@ -167,11 +167,7 @@ systemProcesses::addNRun(processFunc func,
 	else
 	{
 		if (pid == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 		else
 			process.pid = pid;
 	}
@@ -186,11 +182,7 @@ systemProcesses::addNRun(processFunc func,
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::del(unsigned long position,
 					 bool force)
 {
@@ -199,19 +191,11 @@ systemProcesses::del(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_LIBDODO, SYSTEMPROCESSES_ISALREADYRUNNING, SYSTEMPROCESSES_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 			}
 		}
 
@@ -226,27 +210,15 @@ systemProcesses::del(unsigned long position,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #endif
-
-				current->handle = NULL;
 		}
 
         #endif
 
 		processes.erase(current);
-
-        #ifdef NO_EX
-		return true;
-        #endif
 	}
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -283,11 +255,7 @@ systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
 			return false;
 		}
 
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 	}
 
 	return true;
@@ -295,11 +263,7 @@ systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::replace(unsigned long position,
 						 processFunc func,
 						 void          *data,
@@ -311,19 +275,11 @@ systemProcesses::replace(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_LIBDODO, SYSTEMPROCESSES_ISALREADYRUNNING, SYSTEMPROCESSES_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 			}
 		}
 
@@ -339,11 +295,7 @@ systemProcesses::replace(unsigned long position,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #endif
-
-				current->handle = NULL;
 		}
 
         #endif
@@ -352,27 +304,14 @@ systemProcesses::replace(unsigned long position,
 		current->func = func;
 		current->isRunning = false;
 		current->action = action;
-
-        #ifdef NO_EX
-		return true;
-        #endif
 	}
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::run(unsigned long position,
 					 bool force)
 {
@@ -382,19 +321,11 @@ systemProcesses::run(unsigned long position,
 		{
 			processes.erase(current);
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_LIBDODO, SYSTEMPROCESSES_SWEPT, SYSTEMPROCESSES_SWEPT_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 		}
 
 		if (_isRunning(current) && !force)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_LIBDODO, SYSTEMPROCESSES_ISALREADYRUNNING, SYSTEMPROCESSES_ISALREADYRUNNING_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 
 		pid_t pid = fork();
 
@@ -407,76 +338,40 @@ systemProcesses::run(unsigned long position,
 		else
 		{
 			if (pid == -1)
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 			else
 				current->pid = pid;
 		}
 
 		current->isRunning = true;
 		++ (current->executed);
-
-        #ifdef NO_EX
-		return true;
-        #endif
 	}
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::stop(unsigned long position)
 {
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_LIBDODO, SYSTEMPROCESSES_ISNOTRUNNING, SYSTEMPROCESSES_ISNOTRUNNING_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 
 		if (kill(current->pid, 9) == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 
 		current->isRunning = false;
-
-        #ifdef NO_EX
-		return true;
-        #endif
 	}
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::stop()
 {
 	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
@@ -487,66 +382,34 @@ systemProcesses::stop()
 
 
 		if (kill(i->pid, 9) == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 
 		i->isRunning = false;
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::wait(unsigned long position)
 {
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_LIBDODO, SYSTEMPROCESSES_ISNOTRUNNING, SYSTEMPROCESSES_ISNOTRUNNING_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 
 		if (waitpid(current->pid, NULL, 0) == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 
 		current->isRunning = false;
-
-        #ifdef NO_EX
-		return true;
-        #endif
 	}
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::wait()
 {
 	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
@@ -556,18 +419,10 @@ systemProcesses::wait()
 			continue;
 
 		if (waitpid(i->pid, NULL, 0) == -1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 
 		i->isRunning = false;
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -578,11 +433,7 @@ systemProcesses::isRunning(unsigned long position) const
 	if (getProcess(position))
 		return _isRunning(current);
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ISRUNNING, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -628,26 +479,14 @@ systemProcesses::sweepTrash()
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemProcesses::setExecutionLimit(unsigned long position,
 								   unsigned long limit)
 {
 	if (getProcess(position))
 		current->executeLimit = limit;
 	else
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_SETEXECUTIONLIMIT, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 //-------------------------------------------------------------------
 
@@ -659,28 +498,16 @@ systemProcesses::getModuleInfo(const dodoString &module,
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return systemThreadsMod();
-                #endif
 
 	initSystemProcessesModule init = (initSystemProcessesModule)dlsym(handle, "initSystemProcessesModule");
 	if (init == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return systemThreadsMod();
-                #endif
 
 	systemProcessesMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return mod;
-                #endif
 
 	return mod;
 }
@@ -699,29 +526,17 @@ systemProcesses::add(const dodoString &module,
 
 	process.handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (process.handle == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	initSystemProcessesModule init = (initSystemProcessesModule)dlsym(process.handle, "initSystemProcessesModule");
 	if (init == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	systemProcessesMod temp = init(toInit);
 
 	processFunc in = (processFunc)dlsym(process.handle, temp.hook);
 	if (in == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return 0;
-                #endif
 
 	process.executeLimit = temp.executeLimit;
 	process.action = temp.action;
