@@ -1,10 +1,20 @@
-firebird
-soap
+1.
+	dodoString->dodoString, stringTools
+	regexpTools->regexp
+	cgiTools->cgi
+	xmlTools->xml
+	
+	remove strcmp, strcasecmp, ato[ifl] where not needed
 
-systemProcesseShare
+2.
+	systemProcessSharedDataCollectionGuard
+	processGuard
 
-threads,processes: locking mutual exlusions
+3.
+	thread-safe
 
-()?:; => ?:;
+4.
+	firebird
+	soap
+	json
 
-remove strcmp, strcasecmp, ato[ifl] where not needed
