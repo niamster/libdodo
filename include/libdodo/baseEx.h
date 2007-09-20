@@ -152,7 +152,7 @@ namespace dodo
 		 *		cout << ex << endl;
 		 *	}
 		 */
-		operator dodoString();
+		operator const dodoString&();
 
 		errorModuleEnum errModule;          ///< in what module was thrown
 		unsigned long funcID;               ///< in what function was thrown[see *Ex.h headers for IDs]

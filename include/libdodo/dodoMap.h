@@ -102,6 +102,24 @@ namespace dodo
 		}
 
 		/**
+		 * @return value of hash by varName or empty valueType already added to map, if not found
+		 * @param varName value of hash that points to the value
+		 */
+		const valueType &
+		operator[](const keyType &varName) const
+		{
+			typename std::map<keyType, valueType>::iterator i(contents.begin()), j(contents.end());
+
+			for (; i != j; ++i)
+				if (cmpFunc(varName, i->first))
+					return i->second;
+
+			std::pair < typename std::map<keyType, valueType>::iterator, bool > res = contents.insert(make_pair(varName, type));
+
+			return res.first->second;
+		}
+
+		/**
 		 * @return iterator by hash or end of hash if not found
 		 * @param varName value of hash that points to the value
 		 */

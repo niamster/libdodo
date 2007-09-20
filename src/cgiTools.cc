@@ -514,7 +514,7 @@ cgiTools::makePost()
 
 //-------------------------------------------------------------------
 
-dodoStringMap &
+const dodoStringMap &
 cgiTools::operator[](short method)
 {
 	if (method == REQUESTMETHOD_POST)

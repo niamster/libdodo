@@ -239,7 +239,7 @@ namespace dodo
 		 * @param method is indicates what reference would be returned
 		 * example: classObj[POST]["name"]
 		 */
-		virtual dodoStringMap &operator[](short method);
+		virtual const dodoStringMap &operator[](short method);
 
 		/**
 		 * specific variables (from POST, GET, ENV or COOKIE)

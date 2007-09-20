@@ -220,7 +220,7 @@ baseEx::~baseEx()
 
 //-------------------------------------------------------------------
 
-baseEx::operator dodoString()
+baseEx::operator const dodoString&()
 {
 	return baseErrstr;
 }
