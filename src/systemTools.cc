@@ -81,97 +81,48 @@ systemTools::getWorkingDir()
 	char wd[MAXPATHLEN];
 
 	if (getcwd(wd, MAXPATHLEN) == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return __dodostring__;
-        #endif
 
 	return wd;
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setWorkingDir(const dodoString &path)
 {
 	if (chdir(path.c_str()) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getUsageInfo(__usage &info)
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSAGEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	info.time = use.ru_utime.tv_sec * 100 + use.ru_utime.tv_usec;
 	info.mem = use.ru_maxrss * 1024;
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::changeRoot(const dodoString &path)
 {
-    #ifndef NO_EX
 	setWorkingDir(path);
-    #else
-	if (!setWorkingDir(path))
-		return false;
-    #endif
 
 	if (chroot(path.c_str()) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_CHANGEROOT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getLimit(short type,
 					  __limits &lim)
 {
@@ -223,35 +174,19 @@ systemTools::getLimit(short type,
 
 		default:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETLIMIT, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 	}
 
 	if (getrlimit(realRes, &limit) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	lim.current = limit.rlim_cur;
 	lim.max = limit.rlim_max;
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setLimit(short type,
 					  const __limits &lim)
 {
@@ -303,26 +238,14 @@ systemTools::setLimit(short type,
 
 		default:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETLIMIT, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 	}
 
 	limit.rlim_cur = lim.current;
 	limit.rlim_max = lim.max;
 
 	if (setrlimit(realRes, &limit) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -332,35 +255,19 @@ systemTools::getPriority(short type)
 {
 	int prio = getpriority(PRIO_PROCESS, getUID(type));
 	if (prio == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return -1;
-        #endif
 
 	return prio;
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setPriority(short type,
 						 int prio)
 {
 	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -380,21 +287,13 @@ systemTools::getUID(short type)
 
 		default:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
-            #else
-			return -1;
-            #endif
 	}
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setUID(short type,
 					int uid)
 {
@@ -416,23 +315,11 @@ systemTools::setUID(short type,
 
 		default:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETUID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 	}
 
 	if (res == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETUID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -452,21 +339,13 @@ systemTools::getGID(short type)
 
 		default:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
-            #else
-			return -1;
-            #endif
 	}
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setGID(short type,
 					int uid)
 {
@@ -488,85 +367,44 @@ systemTools::setGID(short type,
 
 		default:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 	}
 
 	if (res == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getUserInfo(__userInfo &info,
 						 int uid)
 {
 	passwd *in = getpwuid(uid);
 	if (in == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	fillUserInfo(info, in);
-
-    #ifdef NO_EX
-	return true;
-    #endif
 
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getUserInfo(__userInfo &info,
 						 const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	fillUserInfo(info, in);
-
-    #ifdef NO_EX
-	return true;
-    #endif
-
 }
 
 //-------------------------------------------------------------------
 
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getUsers(dodoArray<__userInfo> &users)
 {
 	users.clear();
@@ -585,19 +423,10 @@ systemTools::getUsers(dodoArray<__userInfo> &users)
 		case ENFILE:
 		case ENOMEM:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSERS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
-
 	}
 
 	endpwent();
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -638,64 +467,34 @@ systemTools::fillGroupInfo(__groupInfo &info,
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getGroupInfo(__groupInfo &info,
 						  int uid)
 {
 	group *in = getgrgid(uid);
 	if (in == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	fillGroupInfo(info, in);
-
-    #ifdef NO_EX
-	return true;
-    #endif
-
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getGroupInfo(__groupInfo &info,
 						  const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	fillGroupInfo(info, in);
-
-    #ifdef NO_EX
-	return true;
-    #endif
-
 }
 
 //-------------------------------------------------------------------
 
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::getGroups(dodoArray<__groupInfo> &users)
 {
 	users.clear();
@@ -715,19 +514,10 @@ systemTools::getGroups(dodoArray<__groupInfo> &users)
 		case EINTR:
 		case ENOMEM:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
-
 	}
 
 	endgrent();
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -763,23 +553,11 @@ systemTools::sleep(long period)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::atExit(void (*func)())
 {
 	if (atexit(func) != 0)
-    #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_ATEXIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-    #else
-		return false;
-    #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -813,57 +591,29 @@ systemTools::getGroupPID(int pid)
 {
 	int pgid = getpgid(pid);
 	if (pgid == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return -1;
-        #endif
 
 	return pgid;
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setGroupPID(int gpid)
 {
 	if (setpgid(0, gpid) == 1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setGroupPID(int pid,
 						 int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -942,11 +692,7 @@ systemTools::sigMask(sigset_t *set,
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setSignalHandler(long signal,
 							  signalHandler handler,
 							  int blockSignals)
@@ -974,33 +720,17 @@ systemTools::setSignalHandler(long signal,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	sigMask(&act.sa_mask, blockSignals);
 
 	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setMicroTimer(unsigned long timeout,
 						   signalHandler handler,
 						   int blockSignals)
@@ -1028,11 +758,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -1051,31 +777,15 @@ systemTools::setMicroTimer(unsigned long timeout,
 	value.it_value.tv_usec = tMicrosec;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::setTimer(long timeout,
 					  signalHandler handler,
 					  int blockSignals)
@@ -1103,11 +813,7 @@ systemTools::setTimer(long timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -1118,22 +824,10 @@ systemTools::setTimer(long timeout,
 	value.it_value.tv_usec = 0;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -1143,11 +837,7 @@ systemTools::isSignalHandled(long signal)
 {
 	struct sigaction act;
 	if (sigaction(systemTools::toRealSignal(signal), NULL, &act) == 1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	if (act.sa_sigaction != NULL || act.sa_handler != NULL)
 		return true;
@@ -1157,34 +847,17 @@ systemTools::isSignalHandled(long signal)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::sendSignal(int pid,
 						long signal)
 {
 	if (kill(pid, systemTools::toRealSignal(signal)) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
-
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 systemTools::unsetSignalHandler(long signal)
 {
     #ifdef DL_EXT
@@ -1209,15 +882,7 @@ systemTools::unsetSignalHandler(long signal)
 	act.sa_sigaction = NULL;
 
 	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == 1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_UNSETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -1230,39 +895,23 @@ systemTools::getModuleInfo(const dodoString &module,
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return sigMod();
-                #endif
 
 	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
 	if (init == NULL)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return sigMod();
-                #endif
 
 	sigMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
-                #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-                #else
-		return mod;
-                #endif
 
 	return mod;
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemTools::setSignalHandler(long signal,
 							  const dodoString &path,
 							  void             *toInit,
@@ -1284,40 +933,24 @@ systemTools::setSignalHandler(long signal,
 
 	handlesSig[signal] = dlopen(path.c_str(), RTLD_LAZY);
 	if (handlesSig[signal] == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	initSigModule init = (initSigModule)dlsym(handlesSig[signal], "initSigModule");
 	if (init == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	sigMod mod = init(toInit);
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[signal], mod.hook);
 	if (in == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	struct sigaction act;
 	act.sa_sigaction = in;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	if (blockSignals != -1)
 		sigMask(&act.sa_mask, blockSignals);
@@ -1325,26 +958,14 @@ systemTools::setSignalHandler(long signal,
 		sigMask(&act.sa_mask, mod.blockSignals);
 
 	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == 1)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	handlesOpenedSig[signal] = true;
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 systemTools::setSignalHandler(const dodoString &path,
 							  void             *toInit,
 							  int blockSignals)
@@ -1352,19 +973,11 @@ systemTools::setSignalHandler(const dodoString &path,
 
 	void *handle = dlopen(path.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
 	if (init == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	sigMod mod = init(toInit);
 
@@ -1386,22 +999,14 @@ systemTools::setSignalHandler(const dodoString &path,
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[mod.signal], mod.hook);
 	if (in == NULL)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	struct sigaction act;
 	act.sa_sigaction = in;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	if (blockSignals != -1)
 		sigMask(&act.sa_mask, blockSignals);
@@ -1409,17 +1014,9 @@ systemTools::setSignalHandler(const dodoString &path,
 		sigMask(&act.sa_mask, mod.blockSignals);
 
 	if (sigaction(systemTools::toRealSignal(mod.signal), &act, NULL) == 1)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
 	handlesOpenedSig[mod.signal] = true;
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 #endif

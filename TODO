@@ -3,6 +3,9 @@
 	regexpTools->regexp
 	cgiTools->cgi
 	xmlTools->xml
+
+	db: renew connect
+	db: virtual overriding SQL dealiect
 	
 	remove strcmp, strcasecmp, ato[ifl] where not needed
 
@@ -17,4 +20,4 @@
 	firebird
 	soap
 	json
-
+	module loading

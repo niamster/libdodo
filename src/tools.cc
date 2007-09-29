@@ -178,29 +178,17 @@ tools::~tools()
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 tools::random(void          *data,
 			  unsigned long size)
 {
 	FILE *file = fopen("/dev/random", "r");
 	if (file == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	fread(data, size, 1, file);
 
 	fclose(file);
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -418,11 +406,7 @@ tools::implode(const dodoStringArr &fields,
 			   int limit)
 {
 	if (fields.size() == 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_IMPLODE, ERR_LIBDODO, TOOLS_ARRAY_EMPTY, TOOLS_ARRAY_EMPTY_STR, __LINE__, __FILE__);
-        #else
-		return buffer;
-        #endif
 
 	int k(0);
 
@@ -474,11 +458,7 @@ tools::implode(const dodoStringArr &fields,
 			   int limit)
 {
 	if (fields.size() == 0)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_IMPLODE, ERR_LIBDODO, TOOLS_ARRAY_EMPTY, TOOLS_ARRAY_EMPTY_STR, __LINE__, __FILE__);
-        #else
-		return buffer;
-        #endif
 
 	int k(0);
 
@@ -513,12 +493,7 @@ tools::codesetConversionStatic(const dodoString &buffer,
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESETCONVERSIONSTATIC, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return buffer;
-            #endif
-
 
 	size_t in, out, outBefore;
 	char *inFake, *outFake;
@@ -537,11 +512,8 @@ tools::codesetConversionStatic(const dodoString &buffer,
         #endif
 	{
 		delete [] outBuffer;
-            #ifndef NO_EX
+
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESETCONVERSIONSTATIC, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return buffer;
-            #endif
 	}
 
 	dodoString result;
@@ -554,25 +526,13 @@ tools::codesetConversionStatic(const dodoString &buffer,
 
 //-------------------------------------------------------------------
 
-    #ifndef NO_EX
 void
-    #else
-bool
-    #endif
 tools::codeSet(const dodoString &toCode,
 			   const dodoString &fromCode)
 {
 	conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
-
-        #ifdef NO_EX
-	return true;
-        #endif
 }
 
 //-------------------------------------------------------------------
@@ -599,11 +559,8 @@ tools::codesetConversion(const dodoString &buffer,
         #endif
 	{
 		delete [] outBuffer;
-            #ifndef NO_EX
+
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-		return buffer;
-            #endif
 	}
 
 	dodoString result;
@@ -637,11 +594,8 @@ tools::reCodesetConversion(const dodoString &buffer)
         #endif
 	{
 		delete [] outBuffer;
-                #ifndef NO_EX
+
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_RECODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-		return buffer;
-                #endif
 	}
 
 	dodoString result;
@@ -676,11 +630,7 @@ tools::zCompress(const dodoString &buffer,
 	strm.opaque = Z_NULL;
 
 	if ((ret = deflateInit2(&strm, level, Z_DEFLATED, 15, level, type)) < 0)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
-            #else
-		return buffer;
-            #endif
 
 	strm.avail_in =  buffer.size();
 	strm.next_in = (Bytef *)buffer.c_str();
@@ -697,11 +647,8 @@ tools::zCompress(const dodoString &buffer,
 		if ((ret = deflate(&strm, Z_FINISH)) < 0)
 		{
 			delete [] byteBuf;
-                #ifndef NO_EX
+
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
-                #else
-			return buffer;
-                #endif
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -730,12 +677,7 @@ tools::zDecompress(const dodoString &buffer)
 	strm.opaque = Z_NULL;
 
 	if ((ret = inflateInit2(&strm, 15)) < 0)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
-            #else
-		return buffer;
-            #endif
-
 
 	byteBuf = new Bytef[ZLIB_CHUNK];
 
@@ -752,11 +694,8 @@ tools::zDecompress(const dodoString &buffer)
 		if ((ret = inflate(&strm, Z_NO_FLUSH)) < 0)
 		{
 			delete [] byteBuf;
-                #ifndef NO_EX
+
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
-                #else
-			return buffer;
-                #endif
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -1126,11 +1065,7 @@ tools::decodeASCII85(const dodoString &string)
 						case 'z':
 
 							if (count != 0)
-                #ifndef NO_EX
 								throw baseEx(ERRMODULE_TOOLS, TOOLS_DECODEASCII85, ERR_LIBDODO, TOOLS_BAD_ASCII85, TOOLS_BAD_ASCII85_STR, __LINE__, __FILE__);
-                #else
-								return result;
-                #endif
 
 							result.append(4, '\0');
 
@@ -1148,14 +1083,11 @@ tools::decodeASCII85(const dodoString &string)
 								}
 								++k;
 								_break = true;
+
 								break;
 							}
 
-                #ifndef NO_EX
 							throw baseEx(ERRMODULE_TOOLS, TOOLS_DECODEASCII85, ERR_LIBDODO, TOOLS_BAD_ASCII85, TOOLS_BAD_ASCII85_STR, __LINE__, __FILE__);
-                #else
-							return result;
-                #endif
 
 						case '\n':
 						case '\r':
@@ -1171,11 +1103,7 @@ tools::decodeASCII85(const dodoString &string)
 						default:
 
 							if (string[k] < '!' || string[k] > 'u')
-                #ifndef NO_EX
 								throw baseEx(ERRMODULE_TOOLS, TOOLS_DECODEASCII85, ERR_LIBDODO, TOOLS_BAD_ASCII85, TOOLS_BAD_ASCII85_STR, __LINE__, __FILE__);
-                #else
-								return result;
-                #endif
 
 							tuple += (string[k] - '!') * powASCII85[count++];
 							if (count == 5)
@@ -1398,11 +1326,7 @@ tools::bzCompress(const dodoString &buffer,
 
 	int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 	if (ret != BZ_OK)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_BZCOMPRESS, ERR_BZIP, TOOLS_BAD_BZCOMPRESSION, TOOLS_BAD_BZCOMPRESSION_STR, __LINE__, __FILE__);
-            #else
-		return __string__;
-            #endif
 
 	return dodoString(dst, len);
 }
@@ -1419,11 +1343,7 @@ tools::bzDecompress(const dodoString &buffer)
 
 	int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 	if (ret != BZ_OK)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_BZDECOMPRESS, ERR_BZIP, TOOLS_BAD_BZDECOMPRESSION_INIT, TOOLS_BAD_BZDECOMPRESSION_INIT_STR, __LINE__, __FILE__);
-            #else
-		return __string__;
-            #endif
 
 	int src_len = buffer.size();
 	char *src = new char[src_len + 1];
@@ -1460,20 +1380,13 @@ tools::bzDecompress(const dodoString &buffer)
 	{
 		delete [] src;
 		free(dst);
-            #ifndef NO_EX
+
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_BZDECOMPRESS, ERR_BZIP, TOOLS_BAD_BZDECOMPRESSION, TOOLS_BAD_BZDECOMPRESSION_STR, __LINE__, __FILE__);
-            #else
-		return __string__;
-            #endif
 	}
 
 	ret = BZ2_bzDecompressEnd(&bzs);
 	if (ret != BZ_OK)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_BZDECOMPRESS, ERR_BZIP, TOOLS_BAD_BZDECOMPRESSION_FINISH, TOOLS_BAD_BZDECOMPRESSION_FINISH_STR, __LINE__, __FILE__);
-            #else
-		return __string__;
-            #endif
 
 	return _buffer;
 }
@@ -1484,11 +1397,7 @@ tools::bzDecompress(const dodoString &buffer)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 tools::mail(const dodoString &path,
 			const dodoString &to,
 			const dodoString &subject,
@@ -1498,11 +1407,7 @@ tools::mail(const dodoString &path,
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
 	if (sendmail == NULL)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	fprintf(sendmail, "To: %s\n", to.c_str());
 	fprintf(sendmail, "Subject: %s\n", subject.c_str());
@@ -1511,15 +1416,7 @@ tools::mail(const dodoString &path,
 	fprintf(sendmail, "\n%s\n", message.c_str());
 
 	if (pclose(sendmail) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
@@ -1727,11 +1624,7 @@ tools::MD5Hex(const dodoString &string)
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 tools::mail(const dodoString &host,
 			short type,
 			int port,
@@ -1772,20 +1665,12 @@ tools::mail(const dodoString &host,
 
 		default:
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_LIBDODO, TOOLS_WRONG_PARAMETHER, TOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 	}
 
 	int socket = ::socket(real_domain, SOCK_STREAM, 0);
 	if (socket == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	if (type == PROTO_FAMILY_IPV6)
 	{
@@ -1797,11 +1682,7 @@ tools::mail(const dodoString &host,
 		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == 1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 	}
 	else
 	{
@@ -1811,86 +1692,42 @@ tools::mail(const dodoString &host,
 		inet_aton(host.c_str(), &sa.sin_addr);
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == 1)
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 	}
 
 	int outSocketBuffer = TOOLS_SHORT_DATA_SIZE;
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	dodoString mess;
 
 	int code = 0;
 	char *data = new char[TOOLS_SHORT_DATA_SIZE];
 
-    #ifdef NO_EX
-	bool result;
-    #endif
-
-    #ifdef NO_EX
-	result =
-    #endif
 	receiveShortDataDel(socket, data);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	if (::gethostname(data, 255) == -1)
 	{
 		delete [] data;
 
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 	}
 
 	mess = "EHLO " + dodoString(data) + "\r\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortDataDel(socket, mess, data);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-
-    #ifdef NO_EX
-	result =
-    #endif
 	receiveShortDataDel(socket, data);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	char _code[3];
 
 	strncpy(_code, data, 3);
-
 	code = atoi(_code);
-
 	if (code != 250)
 	{
 		delete [] data;
 
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_LIBDODO, TOOLS_BADMAILHELO, TOOLS_BADMAILHELO_STR, __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 	}
 
 	if (auth)
@@ -1910,39 +1747,18 @@ tools::mail(const dodoString &host,
 		if (isSetFlag(authType, SMTPAUTH_CRAMMD5))
 		{
 			mess = "AUTH CRAM-MD5\r\n";
-            #ifdef NO_EX
-			result =
-            #endif
 			sendShortDataDel(socket, mess, data);
-            #ifdef NO_EX
-			if (!result)
-				return false;
-            #endif
 
 			memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-
-            #ifdef NO_EX
-			result =
-            #endif
 			receiveShortDataDel(socket, data);
-            #ifdef NO_EX
-			if (!result)
-				return false;
-            #endif
 
 			strncpy(_code, data, 3);
-
 			code = atoi(_code);
-
 			if (code != 334)
 			{
 				delete [] data;
 
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, TOOLS_BADMAILAUTH, TOOLS_BADMAILAUTH_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 			}
 
 			dodoString ticket = decodeBase64(data + 4);
@@ -1986,39 +1802,18 @@ tools::mail(const dodoString &host,
 			}
 
 			mess = encodeBase64(login + " " + md5pass) + "\r\n";
-            #ifdef NO_EX
-			result =
-            #endif
 			sendShortDataDel(socket, mess, data);
-            #ifdef NO_EX
-			if (!result)
-				return false;
-            #endif
 
 			memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-
-            #ifdef NO_EX
-			result =
-            #endif
 			receiveShortDataDel(socket, data);
-            #ifdef NO_EX
-			if (!result)
-				return false;
-            #endif
 
 			strncpy(_code, data, 3);
-
 			code = atoi(_code);
-
 			if (code != 334)
 			{
 				delete [] data;
 
-                #ifndef NO_EX
 				throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, TOOLS_BADMAILAUTH, TOOLS_BADMAILAUTH_STR, __LINE__, __FILE__);
-                #else
-				return false;
-                #endif
 			}
 		}
 		else
@@ -2026,25 +1821,10 @@ tools::mail(const dodoString &host,
 			if (isSetFlag(authType, SMTPAUTH_LOGIN))
 			{
 				mess = "AUTH LOGIN\r\n";
-                #ifdef NO_EX
-				result =
-                #endif
 				sendShortDataDel(socket, mess, data);
-                #ifdef NO_EX
-				if (!result)
-					return false;
-                #endif
 
 				memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-
-                #ifdef NO_EX
-				result =
-                #endif
 				receiveShortDataDel(socket, data);
-                #ifdef NO_EX
-				if (!result)
-					return false;
-                #endif
 
 				strncpy(_code, data, 3);
 
@@ -2054,83 +1834,37 @@ tools::mail(const dodoString &host,
 				{
 					delete [] data;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, TOOLS_BADMAILAUTH, TOOLS_BADMAILAUTH_STR, __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				mess = encodeBase64(login) + "\r\n";
-                #ifdef NO_EX
-				result =
-                #endif
 				sendShortDataDel(socket, mess, data);
-                #ifdef NO_EX
-				if (!result)
-					return false;
-                #endif
 
 				memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-
-                #ifdef NO_EX
-				result =
-                #endif
 				receiveShortDataDel(socket, data);
-                #ifdef NO_EX
-				if (!result)
-					return false;
-                #endif
 
 				strncpy(_code, data, 3);
-
 				code = atoi(_code);
-
 				if (code != 334)
 				{
 					delete [] data;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, TOOLS_BADMAILAUTH, TOOLS_BADMAILAUTH_STR, __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				mess = encodeBase64(pass) + "\r\n";
-                #ifdef NO_EX
-				result =
-                #endif
 				sendShortDataDel(socket, mess, data);
-                #ifdef NO_EX
-				if (!result)
-					return false;
-                #endif
 
 				memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-
-                #ifdef NO_EX
-				result =
-                #endif
 				receiveShortDataDel(socket, data);
-                #ifdef NO_EX
-				if (!result)
-					return false;
-                #endif
 
 				strncpy(_code, data, 3);
-
 				code = atoi(_code);
-
 				if (code != 235)
 				{
 					delete [] data;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, TOOLS_BADMAILAUTH, TOOLS_BADMAILAUTH_STR, __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 			}
 			else
@@ -2138,39 +1872,19 @@ tools::mail(const dodoString &host,
 				if (isSetFlag(authType, SMTPAUTH_PLAIN))
 				{
 					mess = "AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n";
-                #ifdef NO_EX
-					result =
-                #endif
 					sendShortDataDel(socket, mess, data);
-                #ifdef NO_EX
-					if (!result)
-						return false;
-                #endif
 
 					memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-
-                #ifdef NO_EX
-					result =
-                #endif
 					receiveShortDataDel(socket, data);
-                #ifdef NO_EX
-					if (!result)
-						return false;
-                #endif
 
 					strncpy(_code, data, 3);
-
 					code = atoi(_code);
 
 					if (code != 334)
 					{
 						delete [] data;
 
-                #ifndef NO_EX
 						throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, TOOLS_BADMAILAUTH, TOOLS_BADMAILAUTH_STR, __LINE__, __FILE__);
-                #else
-						return false;
-                #endif
 					}
 				}
 			}
@@ -2178,23 +1892,9 @@ tools::mail(const dodoString &host,
 	}
 
 	mess = "MAIL FROM: <" + from + ">\r\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortDataDel(socket, mess, data);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
-    #ifdef NO_EX
-	result =
-    #endif
 	receiveShortDataDel(socket, data);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	dodoStringArr pock = explode(to, ",");
 
@@ -2202,160 +1902,53 @@ tools::mail(const dodoString &host,
 	for (; i != j; ++i)
 	{
 		mess = "RCPT TO: <" + *i + ">\r\n";
-        #ifdef NO_EX
-		result =
-        #endif
 		sendShortDataDel(socket, mess, data);
-        #ifdef NO_EX
-		if (!result)
-			return false;
-        #endif
 
-        #ifdef NO_EX
-		result =
-        #endif
 		receiveShortDataDel(socket, data);
-        #ifdef NO_EX
-		if (!result)
-			return false;
-        #endif
 	}
 
 	mess = "DATA\r\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortDataDel(socket, mess, data);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
-    #ifdef NO_EX
-	result =
-    #endif
 	receiveShortDataDel(socket, data);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	delete [] data;
 
 	mess = "DATA\r\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortData(socket, mess);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	mess = "To: " + to + "\r\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortData(socket, mess);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	mess = "From: " + from + "\r\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortData(socket, mess);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	mess = "X-Mailer: libdodo\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortData(socket, mess);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	mess = "Subject: " + subject  + "\r\n";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortData(socket, mess);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
-    #ifdef NO_EX
-	result =
-    #endif
 	sendLongData(socket, headers);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
-    #ifdef NO_EX
-	result =
-    #endif
 	sendLongData(socket, message);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	mess = "\r\n.\r";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortData(socket, mess);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	mess = "QUIT\r";
-    #ifdef NO_EX
-	result =
-    #endif
 	sendShortData(socket, mess);
-    #ifdef NO_EX
-	if (!result)
-		return false;
-    #endif
 
 	if (::shutdown(socket, SHUT_RDWR) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
 
 	if (::close(socket) == -1)
-        #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-        #else
-		return false;
-        #endif
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 tools::sendShortDataDel(int socket,
 						const dodoString &mess,
 						char             *data)
@@ -2363,11 +1956,7 @@ tools::sendShortDataDel(int socket,
     #ifndef FAST
 
 	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDSHORTDATADEL, ERR_LIBDODO, TOOLS_DATA_TOO_LONG, TOOLS_DATA_TOO_LONG_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
     #endif
 
@@ -2380,39 +1969,23 @@ tools::sendShortDataDel(int socket,
 
 			delete [] data;
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDSHORTDATADEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 		}
 
 		break;
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 tools::sendShortData(int socket,
 					 const dodoString &mess)
 {
     #ifndef FAST
 
 	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
-            #ifndef NO_EX
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDSHORTDATA, ERR_LIBDODO, TOOLS_DATA_TOO_LONG, TOOLS_DATA_TOO_LONG_STR, __LINE__, __FILE__);
-            #else
-		return false;
-            #endif
 
     #endif
 
@@ -2423,28 +1996,16 @@ tools::sendShortData(int socket,
 			if (errno == EINTR)
 				continue;
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDSHORTDATA, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 		}
 
 		break;
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 tools::sendLongData(int socket,
 					const dodoString &mess)
 {
@@ -2471,11 +2032,7 @@ tools::sendLongData(int socket,
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDLONGDATA, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				break;
@@ -2499,11 +2056,7 @@ tools::sendLongData(int socket,
 					if (errno == EINTR)
 						continue;
 
-                #ifndef NO_EX
 					throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDLONGDATA, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-                #else
-					return false;
-                #endif
 				}
 
 				break;
@@ -2513,19 +2066,11 @@ tools::sendLongData(int socket,
 			sent_received += n;
 		}
 	}
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
 
-#ifndef NO_EX
 void
-#else
-bool
-#endif
 tools::receiveShortDataDel(int socket,
 						   char *data)
 {
@@ -2540,21 +2085,13 @@ tools::receiveShortDataDel(int socket,
 
 			delete [] data;
 
-            #ifndef NO_EX
 			throw baseEx(ERRMODULE_TOOLS, TOOLS_RECEIVESHORTDATADEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-            #else
-			return false;
-            #endif
 		}
 
 		break;
 	}
 
 	data[n] = '\0';
-
-    #ifdef NO_EX
-	return true;
-    #endif
 }
 
 //-------------------------------------------------------------------
