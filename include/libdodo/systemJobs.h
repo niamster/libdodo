@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemJob.h
+ *            systemJobs.h
  *
  *  Mon Mar 05 13:01:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMJOB_H_
-#define _SYSTEMJOB_H_
+#ifndef _systemJobs_H_
+#define _systemJobs_H_
 
 #include <directives.h>
 #include <types.h>
@@ -35,11 +35,16 @@ namespace dodo
 	typedef void *(*jobFunc)(void *);
 
 	/**
-	 * @class systemJob is to manage jobs
+	 * @class systemJobs is to manage jobs
 	 */
-	class systemJob
+	class systemJobs
 	{
 		public:
+
+		/**
+		 *destructor
+		 */
+		virtual ~systemJobs() = 0;
 
 		/**
 		 * adds function to became a job[not executing]

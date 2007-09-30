@@ -37,7 +37,7 @@
 
 #include <directives.h>
 #include <types.h>
-#include <systemJob.h>
+#include <systemJobs.h>
 #include <systemProcessesEx.h>
 
 namespace dodo
@@ -108,7 +108,7 @@ namespace dodo
 
     #endif
 
-	class systemProcesses : public systemJob
+	class systemProcesses : public systemJobs
 	{
 		private:
 

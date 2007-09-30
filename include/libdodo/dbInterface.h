@@ -81,14 +81,14 @@ namespace dodo
 		public:
 
 		/**
-		 * constructor
+		 *constructor
 		 */
 		dbInterface();
 
 		/**
 		 * destructor
 		 */
-		virtual ~dbInterface();
+		virtual ~dbInterface() = 0;
 
 		/**
 		 * connect to database

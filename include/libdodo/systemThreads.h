@@ -37,7 +37,7 @@
     #include <signal.h>
     #include <pthread.h>
 
-    #include <systemJob.h>
+    #include <systemJobs.h>
     #include <systemTools.h>
     #include <systemThreadsEx.h>
     #include <types.h>
@@ -117,7 +117,7 @@ namespace dodo
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
 	 */
-	class systemThreads : public systemJob
+	class systemThreads : public systemJobs
 	{
 		private:
 

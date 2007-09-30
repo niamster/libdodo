@@ -1,5 +1,5 @@
 #include <baseEx.h>
-#include <systemJob.h>
+#include <systemJobs.h>
 #include <systemProcesses.h>
 #include <systemThreads.h>
 #include <systemTools.h>
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 
 		const int amount = 10;
 		
-		systemJob *pr[amount];
+		systemJobs *pr[amount];
 
 		int pos[amount];
 		std::string ids[amount];

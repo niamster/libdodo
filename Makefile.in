@@ -43,6 +43,7 @@ OBJECTS:=dbBase.o \
 		dbSqlite.o \
 		systemProcesses.o \
 		systemThreads.o \
+		systemJobs.o \
 		threadGuard.o \
 		systemThreadSharedDataGuard.o \
 		systemProcessSharedDataGuard.o \
