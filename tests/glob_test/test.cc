@@ -18,12 +18,10 @@ int main(int argc, char **argv)
 {	
 	try
 	{
-		tools tl;
-		
 		cout << tools::decodeBase64("yujl4j3P7uvy4OLg") << endl;
 		exit(0);
 		cout << "Что происходит?" << endl;
-		cout << tl.codesetConversion("Что происходит?","cp1251","utf-8") << endl;
+		cout << tools::codesetConversion("Что происходит?","cp1251","utf-8") << endl;
 		
 		cout << "MD5 of \"\"" << endl;
 		dodoString md5 = tools::MD5("");
@@ -43,16 +41,12 @@ int main(int argc, char **argv)
 		
 		
 		for (register int i(0);i<10000;++i)
-			tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
+			tools::codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
 		
-		tl.codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
-		for (register int i(0);i<9999;++i)
-			tl.reCodesetConversion(flushDiskTools::getFileContent("test.cc"));
-	
 		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		cout << tl.zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		cout << tools::zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
 	
-		cout << tl.zDecompress(tl.zCompress(flushDiskTools::getFileContent("test.cc")));
+		cout << tools::zDecompress(tools::zCompress(flushDiskTools::getFileContent("test.cc")));
 		
 		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
 		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
@@ -79,23 +73,13 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).request << endl;
 
 		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		cout << tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		cout << tools::bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
 		for (int i(0);i<10000;++i)
-			tl.bzDecompress(tl.bzCompress(flushDiskTools::getFileContent("Makefile"),9));
+			tools::bzDecompress(tools::bzCompress(flushDiskTools::getFileContent("Makefile"),9));
 			
 		dodoString t = "abcddF";
-		tools::replace("cd","WW",t);
+		stringTools::replace("cd","WW",t);
 		cout << t << endl;	
-		
-		t = "abcddF";
-		dodoStringArr rep, nee;
-		nee.push_back("cd");
-		nee.push_back("ab");
-		rep.push_back("WW");
-		rep.push_back("EE");
-		tools::replace(nee,rep,t);
-		cout << t << endl;
-				
 	}
     catch(baseEx ex)
     {

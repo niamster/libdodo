@@ -255,11 +255,13 @@ namespace dodo
 
 			return false;
 		}
-
+		
 		typedef typename std::map<keyType, valueType>::const_iterator const_iterator;           ///< const iterator
 		typedef typename std::map<keyType, valueType>::iterator iterator;                       ///< iterator
 		typedef typename std::map<keyType, valueType> contentsType;                             ///< type of contents' map
-
+		
+		private:
+		
 		std::map<keyType, valueType> contents;                                                  ///< real array
 
 		valueType type;                                                                         ///< copy of typed

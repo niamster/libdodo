@@ -33,11 +33,11 @@
 #include <directives.h>
 
 #include <dodoString.h>
+#include <stringTools.h>
 #include <dodoMap.h>
 
 namespace dodo
 {
-
 	/**
 	 * diferent predifined types
 	 */
@@ -48,12 +48,11 @@ namespace dodo
         #define dodoArray    std::vector
     #endif
 
+	typedef dodoArray<dodoString> dodoStringArr;///< array of strings
 
-	typedef dodoArray<dodoString> dodoStringArr;                                ///< array of strings
+	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;///< hash of strings
 
-	typedef dodoMap<dodoString, dodoString, dodoString::equal> dodoStringMap;   ///< hash of strings
-
-	typedef dodoArray<dodoStringMap> dodoStringMapArr;                          ///< array of hashes of string
+	typedef dodoArray<dodoStringMap> dodoStringMapArr;///< array of hashes of string
 
 	struct __statements
 	{

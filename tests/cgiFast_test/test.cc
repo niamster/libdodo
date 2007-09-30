@@ -41,13 +41,13 @@ using namespace std;
 			arr.push_back("three");
 			cgip.assign("arr",arr);
 			
-			dodoStringMapContents arr1;
+			dodoStringMap arr1;
 			arr1["one"] = "one";
 			arr1["two"] = "two";
 			arr1["three"] = "three";
 			cgip.assign("arr1",arr1);
 			
-			dodoArray<dodoStringMapContents> arr2;
+			dodoArray<dodoStringMap> arr2;
 			arr2.push_back(arr1);
 			arr1["one"] = "three";
 			arr2.push_back(arr1);
@@ -59,7 +59,7 @@ using namespace std;
 		}
 		catch(baseEx ex)
 		{
-			fcgi->print(ex.baseErrstr + " " + dodoString::lToString(ex.line));
+			fcgi->print(ex.baseErrstr + " " + stringTools::lToString(ex.line));
 		}	
 		
 		fcgi->print("\n\n\n!!!");

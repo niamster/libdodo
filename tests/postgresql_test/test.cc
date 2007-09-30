@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 		}
 		catch(baseEx ex)
 		{
-			cout << ex << ex.line;
+			cout << (string)ex << ex.line;
 		}	
 	
 	#else

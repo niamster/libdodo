@@ -548,7 +548,7 @@ dbPostgresql::fetchAssoc() const
 					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
 			}
 
-			rowFieldsPart.contents[PQfname(pgResult, i)] = rowPart;
+			rowFieldsPart.insert(PQfname(pgResult, i), rowPart);
 		}
 
 		rowsFields.push_back(rowFieldsPart);

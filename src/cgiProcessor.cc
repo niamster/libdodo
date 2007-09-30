@@ -405,7 +405,7 @@ cgiProcessor::_if(const dodoString &buffer,
 			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR__IF, ERR_LIBDODO, CGIPREPROCESSOR_WRONGIFSTATEMENT, CGIPREPROCESSOR_WRONGIFSTATEMENT_STR, __LINE__, __FILE__, message);
 		}
 
-		dodoString temp1 = dodoString::trim(temp2[0], " \t\n", 3);
+		dodoString temp1 = stringTools::trim(temp2[0], " \t\n", 3);
 
 		if (temp1[0] == '!')
 		{
@@ -784,10 +784,10 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; i < j; ++i, ++iterator)
 					{
-						dodo["iterator"] = dodoString::lToString(iterator);
+						dodo["iterator"] = stringTools::lToString(iterator);
 
 						if (key)
-							local[keyName] = dodoString::lToString(i);
+							local[keyName] = stringTools::lToString(i);
 						local[varName] = dodoString(1, k->second[i]);
 						tpl.append(_process(forSpace, path));
 
@@ -801,7 +801,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = dodoString::lToString(iteratorPrev);
+					dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -842,7 +842,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; k != l; ++k, ++iterator)
 					{
-						dodo["iterator"] = dodoString::lToString(iterator);
+						dodo["iterator"] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = k->first;
@@ -859,7 +859,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = dodoString::lToString(iteratorPrev);
+					dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -899,10 +899,10 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; i < j; ++i, ++iterator)
 					{
-						dodo["iterator"] = dodoString::lToString(iterator);
+						dodo["iterator"] = stringTools::lToString(iterator);
 
 						if (key)
-							local[keyName] = dodoString::lToString(i);
+							local[keyName] = stringTools::lToString(i);
 						local[varName] = dodoString(1, k->second[i]);
 						tpl.append(_process(forSpace, path));
 
@@ -916,7 +916,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = dodoString::lToString(iteratorPrev);
+					dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -957,7 +957,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; k != l; ++k, ++iterator)
 					{
-						dodo["iterator"] = dodoString::lToString(iterator);
+						dodo["iterator"] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = k->first;
@@ -974,7 +974,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = dodoString::lToString(iteratorPrev);
+					dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -1015,10 +1015,10 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
 					{
-						dodo["iterator"] = dodoString::lToString(iterator);
+						dodo["iterator"] = stringTools::lToString(iterator);
 
 						if (key)
-							local[keyName] = dodoString::lToString(keyNIter);
+							local[keyName] = stringTools::lToString(keyNIter);
 						local[varName] = *k;
 						tpl.append(_process(forSpace, path));
 
@@ -1032,7 +1032,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = dodoString::lToString(iteratorPrev);
+					dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -1073,10 +1073,10 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
 					{
-						dodo["iterator"] = dodoString::lToString(iterator);
+						dodo["iterator"] = stringTools::lToString(iterator);
 
 						if (key)
-							local[keyName] = dodoString::lToString(keyNIter);
+							local[keyName] = stringTools::lToString(keyNIter);
 						localHash[varName] = *k;
 
 						tpl.append(_process(forSpace, path));
@@ -1091,7 +1091,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = dodoString::lToString(iteratorPrev);
+					dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 					if (iter != localHash.end())
 						localHash[varName] = iterVal;
@@ -1140,10 +1140,10 @@ cgiProcessor::_for(const dodoString &buffer,
 								iterator = 1;
 								for (; i < j; ++i, ++iterator)
 								{
-									dodo["iterator"] = dodoString::lToString(iterator);
+									dodo["iterator"] = stringTools::lToString(iterator);
 
 									if (key)
-										local[keyName] = dodoString::lToString(i);
+										local[keyName] = stringTools::lToString(i);
 									local[varName] = dodoString(1, k->second[i]);
 									tpl.append(_process(forSpace, path));
 
@@ -1157,7 +1157,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								}
 
 								iterator =  iteratorPrev;
-								dodo["iterator"] = dodoString::lToString(iteratorPrev);
+								dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 								if (iter != local.end())
 									local[varName] = iterVal;
@@ -1203,10 +1203,10 @@ cgiProcessor::_for(const dodoString &buffer,
 								iterator = 1;
 								for (; i < j; ++i, ++iterator)
 								{
-									dodo["iterator"] = dodoString::lToString(iterator);
+									dodo["iterator"] = stringTools::lToString(iterator);
 
 									if (key)
-										local[keyName] = dodoString::lToString(i);
+										local[keyName] = stringTools::lToString(i);
 									local[varName] = dodoString(1, k->second[i]);
 									tpl.append(_process(forSpace, path));
 
@@ -1220,7 +1220,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								}
 
 								iterator =  iteratorPrev;
-								dodo["iterator"] = dodoString::lToString(iteratorPrev);
+								dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 								if (iter != local.end())
 									local[varName] = iterVal;
@@ -1264,10 +1264,10 @@ cgiProcessor::_for(const dodoString &buffer,
 							iterator = 1;
 							for (; i < j; ++i, ++iterator)
 							{
-								dodo["iterator"] = dodoString::lToString(iterator);
+								dodo["iterator"] = stringTools::lToString(iterator);
 
 								if (key)
-									local[keyName] = dodoString::lToString(i);
+									local[keyName] = stringTools::lToString(i);
 								local[varName] = dodoString(1, o->second[pos][i]);
 								tpl.append(_process(forSpace, path));
 
@@ -1281,7 +1281,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							}
 
 							iterator =  iteratorPrev;
-							dodo["iterator"] = dodoString::lToString(iteratorPrev);
+							dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 							if (iter != local.end())
 								local[varName] = iterVal;
@@ -1326,7 +1326,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							iterator = 1;
 							for (; k != l; ++k, ++iterator)
 							{
-								dodo["iterator"] = dodoString::lToString(iterator);
+								dodo["iterator"] = stringTools::lToString(iterator);
 
 								if (key)
 									local[keyName] = k->first;
@@ -1343,7 +1343,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							}
 
 							iterator =  iteratorPrev;
-							dodo["iterator"] = dodoString::lToString(iteratorPrev);
+							dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 							if (iter != local.end())
 								local[varName] = iterVal;
@@ -1396,10 +1396,10 @@ cgiProcessor::_for(const dodoString &buffer,
 										iterator = 1;
 										for (; i < j; ++i, ++iterator)
 										{
-											dodo["iterator"] = dodoString::lToString(iterator);
+											dodo["iterator"] = stringTools::lToString(iterator);
 
 											if (key)
-												local[keyName] = dodoString::lToString(i);
+												local[keyName] = stringTools::lToString(i);
 											local[varName] = dodoString(1, k->second[i]);
 											tpl.append(_process(forSpace, path));
 
@@ -1413,7 +1413,7 @@ cgiProcessor::_for(const dodoString &buffer,
 										}
 
 										iterator =  iteratorPrev;
-										dodo["iterator"] = dodoString::lToString(iteratorPrev);
+										dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 										if (iter != local.end())
 											local[varName] = iterVal;
@@ -1456,10 +1456,10 @@ cgiProcessor::_for(const dodoString &buffer,
 		iterator = 1;
 		for (; i < j; ++i, ++iterator)
 		{
-			dodo["iterator"] = dodoString::lToString(iterator);
+			dodo["iterator"] = stringTools::lToString(iterator);
 
 			if (key)
-				local[keyName] = dodoString::lToString(i);
+				local[keyName] = stringTools::lToString(i);
 			local[varName] = dodoString(1, targetVar[i]);
 			tpl.append(_process(forSpace, path));
 
@@ -1473,7 +1473,7 @@ cgiProcessor::_for(const dodoString &buffer,
 		}
 
 		iterator =  iteratorPrev;
-		dodo["iterator"] = dodoString::lToString(iteratorPrev);
+		dodo["iterator"] = stringTools::lToString(iteratorPrev);
 
 		if (iter != local.end())
 			local[varName] = iterVal;
@@ -1716,7 +1716,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 dodoString
 cgiProcessor::trim(const dodoString &statement)
 {
-	dodoString temp = dodoString::trim(statement, " \t\n", 3);
+	dodoString temp = stringTools::trim(statement, " \t\n", 3);
 
 	unsigned long i(temp.size() - 1);
 

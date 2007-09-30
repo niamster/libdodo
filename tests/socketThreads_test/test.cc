@@ -53,7 +53,7 @@ process(void *data)
 	}
 	catch (baseEx ex)
 	{
-		cout << "Smth happened!" << ex << endl;
+		cout << "Smth happened!" << (string)ex << endl;
 		cout.flush();
 	}
 	catch(...)
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 				}
 				catch(baseEx ex)
 				{
-					cout << ex << "\t" << ex.line << endl;
+					cout << (string)ex << "\t" << ex.line << endl;
 					cout.flush();
 				}
 			}
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << "\t" << ex.line << endl;
+		cout << (string)ex << "\t" << ex.line << endl;
 		cout.flush();
 	}
 	

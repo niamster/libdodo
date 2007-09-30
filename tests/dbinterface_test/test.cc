@@ -222,7 +222,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << endl << ex.message << endl << ex.line << endl << endl;
+		cout << (string)ex << endl << ex.message << endl << ex.line << endl << endl;
 	}
 
 	delete pp;

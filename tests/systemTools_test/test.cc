@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 		
 	cout << systemTools::getWorkingDir() << endl;	
 
-	systemTools::die(dodoString::rTrim("    dsgdfhhdf    "));
+	systemTools::die(stringTools::rTrim("    dsgdfhhdf    "));
 
 	cout << systemTools::getWorkingDir();
 		

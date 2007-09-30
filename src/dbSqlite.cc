@@ -328,13 +328,13 @@ dbSqlite::fetchRow() const
 					{
 						case SQLITE_INTEGER:
 
-							rowsPart.push_back(dodoString::lToString(sqlite3_column_int(liteStmt, i)));
+							rowsPart.push_back(stringTools::lToString(sqlite3_column_int(liteStmt, i)));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowsPart.push_back(dodoString::dToString(sqlite3_column_double(liteStmt, i)));
+							rowsPart.push_back(stringTools::dToString(sqlite3_column_double(liteStmt, i)));
 
 							break;
 
@@ -618,13 +618,13 @@ dbSqlite::fetchAssoc() const
 					{
 						case SQLITE_INTEGER:
 
-							rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = dodoString::lToString(sqlite3_column_int(liteStmt, i));
+							rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), stringTools::lToString(sqlite3_column_int(liteStmt, i)));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = dodoString::dToString(sqlite3_column_double(liteStmt, i));
+							rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), stringTools::dToString(sqlite3_column_double(liteStmt, i)));
 
 							break;
 
@@ -632,9 +632,9 @@ dbSqlite::fetchAssoc() const
 
 							rowPart = (const char *)sqlite3_column_text(liteStmt, i);
 							if (preventEscaping)
-								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = rowPart;
+								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), rowPart);
 							else
-								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
+								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), unescapeFields(rowPart));
 
 							break;
 
@@ -642,16 +642,16 @@ dbSqlite::fetchAssoc() const
 
 							rowPart.assign((const char *)sqlite3_column_blob(liteStmt, i), sqlite3_column_bytes(liteStmt, i));
 							if (preventEscaping)
-								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = rowPart;
+								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), rowPart);
 							else
-								rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = unescapeFields(rowPart);
+								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), unescapeFields(rowPart));
 
 							break;
 
 						case SQLITE_NULL:
 						default:
 
-							rowFieldsPart.contents[sqlite3_column_name(liteStmt, i)] = "NULL";
+							rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), "NULL");
 
 							break;
 					}

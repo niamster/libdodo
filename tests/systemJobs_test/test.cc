@@ -25,7 +25,7 @@ process(void *data)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << ex.line << endl;
+		cout << (string)ex << ex.line << endl;
 	}	
 	
 	return NULL;
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 			else
 				pr[i] = new systemThreads;
 
-			ids[i] = dodoString::lToString(i);
+			ids[i] = stringTools::lToString(i);
 			pos[i] = pr[i]->add(process,(void *)ids[i].c_str());
 		}
 		
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << endl;
+		cout << (string)ex << endl;
 	}
 		
 	return 0;

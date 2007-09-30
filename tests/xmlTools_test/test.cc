@@ -38,13 +38,13 @@ int main(int argc, char **argv)
 					
 			cout << node.attributes["iD"] << endl;
 			cout << node.name << endl;
-			cout << dodoString::trim(node.value," \n\t\r",4) << endl;
+			cout << stringTools::trim(node.value," \n\t\r",4) << endl;
 			cout << node.children.size() << endl;
 			
 			if (node.children.size()>0)
 			{
-				cout << node.children.contents.begin()->first << endl;
-				cout << node.children.contents.begin()->second.size() << endl;
+				cout << node.children.begin()->first << endl;
+				cout << node.children.begin()->second.size() << endl;
 			}
 			
 			if (node.children["bebe"].size() > 0)
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 		}
 		catch(baseEx ex)
 		{
-			cout << ex << "\t" << ex.line << endl;
+			cout << (string)ex << "\t" << ex.line << endl;
 		}
 		catch(exception ex)
 		{

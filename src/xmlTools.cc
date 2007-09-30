@@ -755,7 +755,7 @@ xmlTools::createNode(const __xmlNode &node) const
 		xml.append("\" ");
 	}
 
-	dodoMap<dodoString, dodoString, dodoString::equal>::const_iterator i = node.attributes.begin(), j = node.attributes.end();
+	dodoMap<dodoString, dodoString, stringTools::equal>::const_iterator i = node.attributes.begin(), j = node.attributes.end();
 	for (; i != j; ++i)
 	{
 		xml.append(i->first);
@@ -786,7 +786,7 @@ xmlTools::createNode(const __xmlNode &node) const
 		}
 	}
 
-	dodoMap<dodoString, dodoArray<__xmlNode>, dodoString::equal>::const_iterator o = node.children.begin(), p = node.children.end();
+	dodoMap<dodoString, dodoArray<__xmlNode>, stringTools::equal>::const_iterator o = node.children.begin(), p = node.children.end();
 	dodoArray<__xmlNode>::const_iterator x, y;
 	for (; o != p; ++o)
 	{

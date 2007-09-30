@@ -23,6 +23,7 @@ OBJECTS:=dbBase.o \
 		tools.o \
 		types.o \
 		dodoString.o \
+		stringTools.o \
 		xexec.o \
 		dbSqlBase.o \
 		baseEx.o \

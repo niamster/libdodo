@@ -23,7 +23,7 @@ process(void *data)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << ex.line << endl;
+		cout << (string)ex << ex.line << endl;
 	}	
 	
 	return NULL;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 		std::string ids[amount];
 		for (int i=0;i<amount;++i)
 		{
-			ids[i] = dodoString::lToString(i);
+			ids[i] = stringTools::lToString(i);
 			pos[i] = pr.add(process,(void *)ids[i].c_str());
 		}
 		
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << endl;
+		cout << (string)ex << endl;
 	}
 		
 	return 0;

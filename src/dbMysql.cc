@@ -588,9 +588,9 @@ dbMysql::fetchAssoc() const
 		{
 			rowPart.assign(mysqlRow[j] != NULL ? mysqlRow[j] : "NULL", mysqlRow[j] ? length[j] : 4);
 			if (preventEscaping)
-				rowFieldsPart.contents[mysqlFields[j].name] = rowPart;
+				rowFieldsPart.insert(mysqlFields[j].name, rowPart);
 			else
-				rowFieldsPart.contents[mysqlFields[j].name] = unescapeFields(rowPart);
+				rowFieldsPart.insert(mysqlFields[j].name, unescapeFields(rowPart));
 		}
 
 		rowsFields.push_back(rowFieldsPart);

@@ -170,11 +170,11 @@ cgiTools::cleanTmp()
 void
 cgiTools::detectMethod()
 {
-	if (dodoString::iequal(ENVIRONMENT["REQUEST_METHOD"], "GET"))
+	if (stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "GET"))
 		method = REQUESTMETHOD_GET;
 	else
 	{
-		if (dodoString::iequal(ENVIRONMENT["REQUEST_METHOD"], "POST") && ENVIRONMENT["REQUEST_METHOD"].empty())
+		if (stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "POST") && ENVIRONMENT["REQUEST_METHOD"].empty())
 			method = REQUESTMETHOD_POST;
 		else
 			method = REQUESTMETHOD_GET_POST;
@@ -380,16 +380,16 @@ cgiTools::makePost()
 	if (content.size() == 0)
 		return ;
 
-	if (!dodoString::iequal(ENVIRONMENT["REQUEST_METHOD"], "POST"))
+	if (!stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "POST"))
 		return ;
 
-	if (dodoString::iequal(ENVIRONMENT["CONTENT_TYPE"], "application/x-www-form-urlencoded"))
+	if (stringTools::iequal(ENVIRONMENT["CONTENT_TYPE"], "application/x-www-form-urlencoded"))
 	{
 		make(METHOD_POST, content);
 	}
 	else
 	{
-		if (dodoString::iequal(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"], "base64"))
+		if (stringTools::iequal(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"], "base64"))
 			content = tools::decodeBase64(content);
 
 		unsigned int temp0;

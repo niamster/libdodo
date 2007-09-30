@@ -45,7 +45,7 @@ process(flushSocketExchange fse)
 	}
 	catch (baseEx ex)
 	{
-		cout << "Smth happened!" << ex << endl;
+		cout << "Smth happened!" << (string)ex << endl;
 		cout.flush();
 	}
 	catch(...)
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 			}
 			catch (baseEx ex)
 			{
-				cout << ifaces[i] << ":\t" << ex << endl;
+				cout << ifaces[i] << ":\t" << (string)ex << endl;
 			}
 		}
 		
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 			}
 			catch(baseEx ex)
 			{
-				cout << ex << "\t" << ex.line << endl;
+				cout << (string)ex << "\t" << ex.line << endl;
 				cout.flush();
 			}
 			try
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 			}
 			catch(baseEx ex)
 			{
-				cout << ex << "\t" << ex.line << endl;
+				cout << (string)ex << "\t" << ex.line << endl;
 				cout.flush();
 			}
 			try
@@ -116,13 +116,13 @@ int main(int argc, char **argv)
 			}
 			catch(baseEx ex)
 			{
-				cout << ex << "\t" << ex.line << endl;
+				cout << (string)ex << "\t" << ex.line << endl;
 				cout.flush();
 			}
 		}
 		catch(baseEx ex)
 		{
-			cout << ex << "\t" << ex.line << endl;
+			cout << (string)ex << "\t" << ex.line << endl;
 			cout.flush();
 		}
 		
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex << "\t" << ex.line << endl;
+		cout << (string)ex << "\t" << ex.line << endl;
 		cout.flush();
 	}
 	

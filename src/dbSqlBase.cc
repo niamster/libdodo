@@ -765,8 +765,8 @@ dbSqlBase::unescapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 
-	tools::replace("\\'", "'", temp);
-	tools::replace("\\\\", "\\", temp);
+	stringTools::replace("\\'", "'", temp);
+	stringTools::replace("\\\\", "\\", temp);
 
 	return temp;
 }
@@ -778,8 +778,8 @@ dbSqlBase::escapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 
-	tools::replace("\\", "\\\\", temp);
-	tools::replace("'", "\\'", temp);
+	stringTools::replace("\\", "\\\\", temp);
+	stringTools::replace("'", "\\'", temp);
 
 	return temp;
 }
@@ -796,7 +796,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, ",") + ")" : __dodostring__);
 	else
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
-	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + dodoString::lToString(row.length) + ") " : __dodostring__);
+	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
 	resRow.append((FIELDPROP_NULL & flag) == FIELDPROP_NULL ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);

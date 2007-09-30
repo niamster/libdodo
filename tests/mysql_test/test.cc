@@ -129,11 +129,11 @@ int main(int argc, char **argv)
 			pp.offset(3);//change offset value
 	//		pp.unlimit();//no limits!! =)
 					
-			dodoStringMapContents arr;
+			dodoStringMap arr;
 			arr["dote"] = "20\"05`''-'07-08";
 			arr["operation"] = "m\nu";
 			
-			dodoArray<dodoStringMapContents> assA;
+			dodoArray<dodoStringMap> assA;
 	
 	///
 	        FILE *file = fopen("/bin/ls","r");

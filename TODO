@@ -1,5 +1,4 @@
 1.
-	dodoString->dodoString, stringTools
 	regexpTools->regexp
 	cgiTools->cgi
 	xmlTools->xml

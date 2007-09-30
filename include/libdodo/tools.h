@@ -185,22 +185,6 @@ namespace dodo
 		static double dRandom();
 
 		/**
-		 * replaces nodes in string
-		 * @param needle indicates what to replace in string
-		 * @param replacement indicates with what to replace
-		 * @param data specifies wher to replace
-		 */
-		static void replace(const dodoString &needle, const dodoString &replacement, dodoString &data);
-
-		/**
-		 * replaces nodes in string
-		 * @param needle indicates what to replace in string
-		 * @param replacement indicates with what to replace
-		 * @param data specifies wher to replace
-		 */
-		static void replace(const dodoStringArr &needle, const dodoStringArr &replacement, dodoString &data);
-
-		/**
 		 * @return true if needle found in array
 		 * @param arr is where to search
 		 * @param needle is what to search for
@@ -271,35 +255,7 @@ namespace dodo
 		 * @param fromCode indicates codeset in what buffer coded
 		 * @note if compiled without exeptions - on error buffer will be returned
 		 */
-		static dodoString codesetConversionStatic(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
-
-		/**
-		 * converts from one codeset to another
-		 * @return converted string
-		 * @param buffer contains string to convert
-		 * @param toCode indicates codeset in what perform conversion
-		 * @param fromCode indicates codeset in what buffer coded
-		 * @note if compiled without exeptions - on error buffer will be returned
-		 */
-		virtual dodoString codesetConversion(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
-
-		/**
-		 * converts from one codeset to another
-		 * @return converted string
-		 * @param buffer contains string to convert
-		 * @note you may use it you called once codeSetConvert method. it'll be faster for future conversions
-		 * usefull if you have only one type of conversion
-		 * if compiled without exeptions - on error buffer will be returned
-		 */
-		virtual dodoString reCodesetConversion(const dodoString &buffer);
-
-		/**
-		 * set params for convertion [if you want to use reCodesetConversion wo calling codesetConversion before]
-		 * @param toCode indicates codeset in what perform conversion
-		 * @param fromCode indicates codeset in what buffer coded
-		 */
-		virtual void
-		codeSet(const dodoString &toCode, const dodoString &fromCode);
+		static dodoString codesetConversion(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
 
 
              #endif
@@ -473,13 +429,6 @@ namespace dodo
 		 * @param count is amount of encoded data
 		 */
 		static void _decodeASCII85(dodoString &result, unsigned long tuple, int count);
-
-            #ifdef ICONV_EXT
-
-		iconv_t conv;           ///< discriptor for code conversions
-		bool convSet;           ///< indicates whether codeset was set
-
-            #endif
 
 		/**
 		 * MD5 structure

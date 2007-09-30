@@ -301,38 +301,6 @@ tools::dRandom()
 
 //-------------------------------------------------------------------
 
-void
-tools::replace(const dodoStringArr &needle,
-			   const dodoStringArr &replacement,
-			   dodoString &data)
-{
-	dodoStringArr::const_iterator i = needle.begin(), j = needle.end(), o = replacement.begin(), p = replacement.end();
-	for (; i != j && o != p; ++i, ++o)
-		replace(*i, *o, data);
-}
-
-//-------------------------------------------------------------------
-
-void
-tools::replace(const dodoString &needle,
-			   const dodoString &replacement,
-			   dodoString &data)
-{
-	unsigned long i(0), j(needle.size()), k(replacement.size());
-
-	while (true)
-	{
-		i = data.find(needle, i);
-		if (i == dodoString::npos)
-			break;
-
-		data.replace(i, j, replacement, 0, k);
-		i += k;
-	}
-}
-
-//-------------------------------------------------------------------
-
 bool
 tools::isInArray(const dodoStringArr &arr,
 				 const dodoString &needle,
@@ -487,13 +455,13 @@ tools::implode(const dodoStringArr &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::codesetConversionStatic(const dodoString &buffer,
+tools::codesetConversion(const dodoString &buffer,
 							   const dodoString &toCode,
 							   const dodoString &fromCode)
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
-		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESETCONVERSIONSTATIC, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	size_t in, out, outBefore;
 	char *inFake, *outFake;
@@ -513,93 +481,11 @@ tools::codesetConversionStatic(const dodoString &buffer,
 	{
 		delete [] outBuffer;
 
-		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESETCONVERSIONSTATIC, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
-
-	dodoString result;
-	result.assign(outBuffer, outBefore - out);
-
-	delete [] outBuffer;
-
-	return result;
-}
-
-//-------------------------------------------------------------------
-
-void
-tools::codeSet(const dodoString &toCode,
-			   const dodoString &fromCode)
-{
-	conv = iconv_open(toCode.c_str(), fromCode.c_str());
-	if (conv == (iconv_t)(-1))
-		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-tools::codesetConversion(const dodoString &buffer,
-						 const dodoString &toCode,
-						 const dodoString &fromCode)
-{
-	codeSet(toCode, fromCode);
-
-	size_t in = buffer.size();
-	size_t out = in * 2;
-	size_t outBefore = out;
-	char *outBuffer = new char[out];
-
-	char *inFake = (char *)buffer.c_str();
-	char *outFake = outBuffer;
-
-        #ifdef __FreeBSD__
-	if (iconv(conv, (const char **)&inFake, &in, &outFake, &out) == (size_t)(-1))
-        #else
-	if (iconv(conv, &inFake, &in, &outFake, &out) == (size_t)(-1))
-        #endif
-	{
-		delete [] outBuffer;
-
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	dodoString result;
 	result.assign(outBuffer, outBefore - out);
-
-	delete [] outBuffer;
-
-	return result;
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-tools::reCodesetConversion(const dodoString &buffer)
-{
-	if (!convSet)
-		return buffer;
-
-	size_t in = buffer.size();
-	size_t out = in * 2;
-	size_t outBefore = out;
-	char *outBuffer = new char[out];
-
-	char *inFake = (char *)buffer.c_str();
-	char *outFake = outBuffer;
-
-        #ifdef __FreeBSD__
-	if (iconv(conv, (const char **)&inFake, &in, &outFake, &out) == (size_t)(-1))
-        #else
-	if (iconv(conv, &inFake, &in, &outFake, &out) == (size_t)(-1))
-        #endif
-	{
-		delete [] outBuffer;
-
-		throw baseEx(ERRMODULE_TOOLS, TOOLS_RECODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
-
-	dodoString result;
-	result.assign(outFake, outBefore - out);
 
 	delete [] outBuffer;
 

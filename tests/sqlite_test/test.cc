@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 		}
 		catch(baseEx ex)
 		{
-			cout << ex << "\t" << ex.line << endl << endl;
+			cout << (string)ex << "\t" << ex.line << endl << endl;
 		}	
 	
 	#else

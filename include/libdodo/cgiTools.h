@@ -248,7 +248,7 @@ namespace dodo
 		dodoStringMap METHOD_GET;                                       ///< array of GET variables
 		dodoStringMap ENVIRONMENT;                                      ///< environment variables
 		dodoStringMap COOKIES;                                          ///< coockes sent by browser
-		dodoMap<dodoString, __cgiFilesUp, dodoString::equal> FILES;     ///< array of POST files, if one or more files were uploaded
+		dodoMap<dodoString, __cgiFilesUp, stringTools::equal> FILES;     ///< array of POST files, if one or more files were uploaded
 
 		/**
 		 * @return value of requested variable from POST or GET
