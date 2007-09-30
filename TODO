@@ -16,8 +16,13 @@
 3.
 	thread-safe
 
-4.
-	firebird
-	soap
+4.	
+	tests
+
+5.
 	json
 	module loading
+
+6.
+	firebird
+	soap
