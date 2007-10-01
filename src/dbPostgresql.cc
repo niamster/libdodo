@@ -29,10 +29,6 @@ using namespace dodo;
 
 dbPostgresql::dbPostgresql() : empty(true)
 {
-	blob = "bytea";
-	tinyblob = "bytea";
-	mediumblob = "bytea";
-	longblob = "bytea";
 }
 
 //-------------------------------------------------------------------
@@ -51,6 +47,26 @@ dbPostgresql::~dbPostgresql()
 			PQclear(pgResult);
 
 		PQfinish(conn);
+	}
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+dbPostgresql::stringType(int type)
+{
+	switch (type)
+	{
+		case FIELDTYPE_TINYBLOB:
+		case FIELDTYPE_BLOB:
+		case FIELDTYPE_MEDIUMBLOB:
+		case FIELDTYPE_LONGBLOB:
+			
+			return dodoString("BYTEA");
+
+		default:
+
+			return dbSqlBase::stringType(type);
 	}
 }
 

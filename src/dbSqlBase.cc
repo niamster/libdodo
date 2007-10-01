@@ -115,12 +115,6 @@ dbSqlBase::dbSqlBase() : preventFraming(false),
 						 preventEscaping(false),
 						 autoFraming(true)
 {
-	auto_increment = " auto_increment ";
-
-	blob = "blob";
-	tinyblob = "tinyblob";
-	mediumblob = "mediumblob";
-	longblob = "longblob";
 }
 
 //-------------------------------------------------------------------
@@ -800,7 +794,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row)
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
 	resRow.append((FIELDPROP_NULL & flag) == FIELDPROP_NULL ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append((FIELDPROP_AUTO_INCREMENT & flag) == FIELDPROP_AUTO_INCREMENT ? " primary key " + auto_increment : __dodostring__);
+	resRow.append((FIELDPROP_AUTO_INCREMENT & flag) == FIELDPROP_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{
@@ -875,20 +869,20 @@ dbSqlBase::stringType(int type)
 			return dodoString("CHAR");
 
 		case FIELDTYPE_TINYBLOB:
-
-			return tinyblob;
+			
+			return dodoString("TINYBLOB");
 
 		case FIELDTYPE_BLOB:
-
-			return blob;
+			
+			return dodoString("BLOB");
 
 		case FIELDTYPE_MEDIUMBLOB:
-
-			return mediumblob;
+			
+			return dodoString("MEDIUMBLOB");
 
 		case FIELDTYPE_LONGBLOB:
-
-			return longblob;
+			
+			return dodoString("LONGBLOB");
 
 		case FIELDTYPE_TINYTEXT:
 

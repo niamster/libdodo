@@ -257,8 +257,7 @@ namespace dodo
 		}
 		
 		typedef typename std::map<keyType, valueType>::const_iterator const_iterator;           ///< const iterator
-		typedef typename std::map<keyType, valueType>::iterator iterator;                       ///< iterator
-		typedef typename std::map<keyType, valueType> contentsType;                             ///< type of contents' map
+		typedef typename std::map<keyType, valueType>::iterator iterator;                       ///< iterator                          ///< type of contents' map
 		
 		private:
 		

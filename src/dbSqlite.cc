@@ -30,7 +30,6 @@ using namespace dodo;
 
 dbSqlite::dbSqlite() : empty(true)
 {
-	auto_increment = " autoincrement ";
 }
 
 //-------------------------------------------------------------------
@@ -50,6 +49,35 @@ dbSqlite::~dbSqlite()
 
 		sqlite3_close(lite);
 	}
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+dbSqlite::fieldCollect(__fieldInfo &row)
+{
+	int type = row.type, flag = row.flag;
+	dodoString resRow(row.name + " " + stringType(type));
+
+	if (preventEscaping)
+		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, ",") + ")" : __dodostring__);
+	else
+		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
+	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
+	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
+	resRow.append((FIELDPROP_NULL & flag) == FIELDPROP_NULL ? " null " : " not null ");
+	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
+	resRow.append((FIELDPROP_AUTO_INCREMENT & flag) == FIELDPROP_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
+
+	if (row.refTable.size() > 0)
+	{
+		resRow.append(" references " + row.refTable);
+		resRow.append(!row.refFields.empty() ? "(" + tools::implode(row.set_enum, ",") + " )" : __dodostring__);
+		resRow.append(row.onDelete >= 0 ? " on delete " + stringReference(row.onDelete) : __dodostring__);
+		resRow.append(row.onUpdate >= 0 ? " on update " + stringReference(row.onUpdate) : __dodostring__);
+	}
+
+	return resRow;
 }
 
 //-------------------------------------------------------------------

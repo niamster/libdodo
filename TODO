@@ -4,7 +4,6 @@
 	xmlTools->xml
 
 	db: renew connect
-	db: virtual overriding SQL dealiect
 	
 	remove strcmp, strcasecmp, ato[ifl] where not needed
 

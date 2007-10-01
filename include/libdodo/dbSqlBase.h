@@ -239,12 +239,6 @@ namespace dodo
 		 */
 		virtual dodoString stringReference(int type);
 
-		dodoString auto_increment;                                                  ///< AUTO_INCREMENT syntax. that's funny, but some understans AUTO_INCREMENT, others AUTOINCREMENT =); by default is AUTO_INCREMENT; have to redefine in derived class if differs;
-		dodoString blob;                                                            ///< bytea for postgres, blob for others
-		dodoString tinyblob;                                                        ///< bytea for postgres, blob for others
-		dodoString mediumblob;                                                      ///< bytea for postgres, blob for others
-		dodoString longblob;                                                        ///< bytea for postgres, blob for others
-
 		dodoMap<dodoString, dodoStringArr, stringTools::iequal> framingFields;       ///< hash of 'db:table' => `array of fields to frame`
 
 		private:

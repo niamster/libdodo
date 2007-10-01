@@ -213,6 +213,11 @@ namespace dodo
 		protected:
 
 		/**
+		 * constructs from collected data to sql adaptive field info for proper fields representation
+		 */
+		virtual dodoString fieldCollect(__fieldInfo &row);
+
+		/**
 		 * executes request
 		 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
 		 * @param result describes whether request returns result[show, select...] or not[delete, update]
