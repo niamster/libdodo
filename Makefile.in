@@ -39,7 +39,7 @@ OBJECTS:=dbBase.o \
 		flushSTD.o \
 		systemTools.o \
 		timeTools.o \
-		xmlTools.o \
+		xml.o \
 		dbSqlite.o \
 		systemProcesses.o \
 		systemThreads.o \

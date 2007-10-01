@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _XMLTOOLSEX_H_
-#define _XMLTOOLSEX_H_
+#ifndef _XMLEX_H_
+#define _XMLEX_H_
 
 #include <directives.h>
 
@@ -33,30 +33,30 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum xmlToolsExR
+	enum xmlExR
 	{
-		XMLTOOLS_NOT_PARCED_BEFORE = 1,
+		XML_NOT_PARCED_BEFORE = 1,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-        #define XMLTOOLS_NOT_PARCED_BEFORE_STR    "The document haven't been parsed before."
+        #define XML_NOT_PARCED_BEFORE_STR    "The document haven't been parsed before."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum xmlToolsFunctionsID
+	enum xmlFunctionsID
 	{
-		XMLTOOLS_PARCEFILE,
-		XMLTOOLS_PARCE,
-		XMLTOOLS_ERRHANDLER,
-		XMLTOOLS_GETXMLBUFFERINFO,
-		XMLTOOLS_PARCEBUFFER,
-		XMLTOOLS_GETXMLFILEINFO,
-		XMLTOOLS_REPARCE,
-		XMLTOOLS_PARCEBUFFERINT,
-		XMLTOOLS_PARCEFILEINT,
+		XML_PARCEFILE,
+		XML_PARCE,
+		XML_ERRHANDLER,
+		XML_GETXMLBUFFERINFO,
+		XML_PARCEBUFFER,
+		XML_GETXMLFILEINFO,
+		XML_REPARCE,
+		XML_PARCEBUFFERINT,
+		XML_PARCEFILEINT,
 
 	};
 

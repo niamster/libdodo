@@ -1,5 +1,5 @@
 /***************************************************************************
- *            xmlTools.h
+ *            xml.h
  *
  *  Tue Nov 29 23:31:55 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _XMLTOOLS_H_
-#define _XMLTOOLS_H_
+#ifndef _XML_H_
+#define _XML_H_
 
 #include <directives.h>
 
@@ -31,7 +31,7 @@
     #include <libxml/parser.h>
     #include <libxml/xmlmemory.h>
 
-    #include <xmlToolsEx.h>
+    #include <xmlEx.h>
     #include <types.h>
     #include <dodoMap.h>
 
@@ -113,9 +113,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class xmlTools provides user friendly communication with XML.
+	 * @class xml provides user friendly communication with XML.
 	 */
-	class xmlTools
+	class xml
 	{
 
 		private:
@@ -124,19 +124,19 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		xmlTools(xmlTools &xt);
+		xml(xml &xt);
 
 		public:
 
 		/**
 		 * constructor
 		 */
-		xmlTools();
+		xml();
 
 		/**
 		 * destructor
 		 */
-		virtual ~xmlTools();
+		virtual ~xml();
 
 		/**
 		 * parses XML from file if you want to use reParse wo calling parseFile/parseBuffer

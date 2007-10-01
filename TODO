@@ -9,6 +9,7 @@
 
 2.
 	systemProcessSharedDataCollectionGuard
+	systemProcessSharedDataGuard
 	processGuard
 
 3.

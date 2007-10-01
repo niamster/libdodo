@@ -1,5 +1,5 @@
 /***************************************************************************
- *            xmlTools.cc
+ *            xml.cc
  *
  *  Wed Nov 30 22:02:16 2005
  *  Copyright  2005  Ni@m
@@ -22,7 +22,7 @@
  */
 
 
-#include <xmlTools.h>
+#include <xml.h>
 
 #ifdef LIBXML2_EXT
 
@@ -61,23 +61,23 @@ __xmlNode::__xmlNode() : CDATA(false),
 
 //-------------------------------------------------------------------
 
-xmlTools::xmlTools(xmlTools &xt)
+xml::xml(xml &xt)
 {
 }
 
 //-------------------------------------------------------------------
 
-xmlTools::xmlTools() : icaseNames(false),
+xml::xml() : icaseNames(false),
 					   document(NULL)
 {
 	xmlPedanticParserDefault(0);
 	xmlInitParser();
-	xmlSetStructuredErrorFunc(NULL, xmlTools::errHandler);
+	xmlSetStructuredErrorFunc(NULL, xml::errHandler);
 }
 
 //-------------------------------------------------------------------
 
-xmlTools::~xmlTools()
+xml::~xml()
 {
 	xmlFreeDoc(document);
 
@@ -87,10 +87,10 @@ xmlTools::~xmlTools()
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::reParse(const __xmlNodeDef &definition)
+xml::reParse(const __xmlNodeDef &definition)
 {
 	if (document == NULL)
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_REPARCE, ERR_LIBDODO, XMLTOOLS_NOT_PARCED_BEFORE, XMLTOOLS_NOT_PARCED_BEFORE_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XML_REPARCE, ERR_LIBDODO, XML_NOT_PARCED_BEFORE, XML_NOT_PARCED_BEFORE_STR, __LINE__, __FILE__);
 
 	return parse(definition);
 }
@@ -98,7 +98,7 @@ xmlTools::reParse(const __xmlNodeDef &definition)
 //-------------------------------------------------------------------
 
 bool
-xmlTools::isCDATA(xmlNodePtr chNode)
+xml::isCDATA(xmlNodePtr chNode)
 {
 	xmlNodePtr node = chNode->children;
 	while (node != NULL)
@@ -115,7 +115,7 @@ xmlTools::isCDATA(xmlNodePtr chNode)
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseFile(const __xmlNodeDef &definition,
+xml::parseFile(const __xmlNodeDef &definition,
 					const dodoString &file)
 {
 	xmlFreeDoc(document);
@@ -125,7 +125,7 @@ xmlTools::parseFile(const __xmlNodeDef &definition,
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	return parse(definition);
@@ -134,7 +134,7 @@ xmlTools::parseFile(const __xmlNodeDef &definition,
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseBuffer(const __xmlNodeDef &definition,
+xml::parseBuffer(const __xmlNodeDef &definition,
 					  const dodoString &buffer)
 {
 	xmlFreeDoc(document);
@@ -144,7 +144,7 @@ xmlTools::parseBuffer(const __xmlNodeDef &definition,
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	return parse(definition);
@@ -153,7 +153,7 @@ xmlTools::parseBuffer(const __xmlNodeDef &definition,
 //-------------------------------------------------------------------
 
 void
-xmlTools::parseFileInt(const dodoString &file)
+xml::parseFileInt(const dodoString &file)
 {
 	xmlFreeDoc(document);
 
@@ -162,14 +162,14 @@ xmlTools::parseFileInt(const dodoString &file)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILEINT, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEFILEINT, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-xmlTools::parseBufferInt(const dodoString &buffer)
+xml::parseBufferInt(const dodoString &buffer)
 {
 	xmlFreeDoc(document);
 
@@ -178,21 +178,21 @@ xmlTools::parseBufferInt(const dodoString &buffer)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFERINT, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEBUFFERINT, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 }
 
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parse(const __xmlNodeDef &definition)
+xml::parse(const __xmlNodeDef &definition)
 {
 	xmlNodePtr node = xmlDocGetRootElement(document);
 	if (node == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	__xmlNode sample;
@@ -262,7 +262,7 @@ xmlTools::parse(const __xmlNodeDef &definition)
 //-------------------------------------------------------------------
 
 dodoArray<__xmlNode>
-xmlTools::parse(const __xmlNodeDef &definition,
+xml::parse(const __xmlNodeDef &definition,
 				const xmlNodePtr chNode,
 				long chLimit)
 {
@@ -377,7 +377,7 @@ xmlTools::parse(const __xmlNodeDef &definition,
 //-------------------------------------------------------------------
 
 void
-xmlTools::errHandler(void        *data,
+xml::errHandler(void        *data,
 					 xmlErrorPtr error)
 {
 }
@@ -385,7 +385,7 @@ xmlTools::errHandler(void        *data,
 //-------------------------------------------------------------------
 
 void
-xmlTools::getAttributes(const __xmlNodeDef &definition,
+xml::getAttributes(const __xmlNodeDef &definition,
 						const xmlNodePtr node,
 						dodoStringMap &attributes)
 {
@@ -451,7 +451,7 @@ xmlTools::getAttributes(const __xmlNodeDef &definition,
 //-------------------------------------------------------------------
 
 void
-xmlTools::getAttributes(const xmlNodePtr node,
+xml::getAttributes(const xmlNodePtr node,
 						dodoStringMap &attributes)
 {
 	attribute = node->properties;
@@ -472,7 +472,7 @@ xmlTools::getAttributes(const xmlNodePtr node,
 //-------------------------------------------------------------------
 
 void
-xmlTools::getNodeInfo(const xmlNodePtr node,
+xml::getNodeInfo(const xmlNodePtr node,
 					  __xmlNode &resNode)
 {
 	if (node->ns != NULL)
@@ -501,14 +501,14 @@ xmlTools::getNodeInfo(const xmlNodePtr node,
 //-------------------------------------------------------------------
 
 __xmlInfo
-xmlTools::getXMLFileInfo(const dodoString &file)
+xml::getXMLFileInfo(const dodoString &file)
 {
 	document = xmlParseFile(file.c_str());
 	if (document == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_GETXMLFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		throw baseEx(ERRMODULE_LIBXML2, XML_GETXMLFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	return __xmlInfo(document->version != NULL ? (char *)document->version : __dodostring__,
@@ -520,14 +520,14 @@ xmlTools::getXMLFileInfo(const dodoString &file)
 //-------------------------------------------------------------------
 
 __xmlInfo
-xmlTools::getXMLBufferInfo(const dodoString &buffer)
+xml::getXMLBufferInfo(const dodoString &buffer)
 {
 	document = xmlParseMemory(buffer.c_str(), buffer.size());
 	if (document == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_GETXMLBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XML_GETXMLBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	return __xmlInfo((char *)document->version, (char *)document->encoding, (char *)document->children->name, document->compression);
@@ -536,7 +536,7 @@ xmlTools::getXMLBufferInfo(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 dodoArray<__xmlNode>
-xmlTools::parse(xmlNodePtr node)
+xml::parse(xmlNodePtr node)
 {
 	dodoArray<__xmlNode> sample;
 
@@ -574,7 +574,7 @@ xmlTools::parse(xmlNodePtr node)
 //-------------------------------------------------------------------
 
 void
-xmlTools::initNode(__xmlNode &node)
+xml::initNode(__xmlNode &node)
 {
 	node.attributes.clear();
 	node.children.clear();
@@ -589,7 +589,7 @@ xmlTools::initNode(__xmlNode &node)
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseFile(const dodoString &file)
+xml::parseFile(const dodoString &file)
 {
 	xmlFreeDoc(document);
 
@@ -598,7 +598,7 @@ xmlTools::parseFile(const dodoString &file)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	xmlNodePtr node = xmlDocGetRootElement(document);
@@ -606,7 +606,7 @@ xmlTools::parseFile(const dodoString &file)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	__xmlNode sample = *(parse(node).begin());
@@ -617,7 +617,7 @@ xmlTools::parseFile(const dodoString &file)
 //-------------------------------------------------------------------
 
 __xmlNode
-xmlTools::parseBuffer(const dodoString &buffer)
+xml::parseBuffer(const dodoString &buffer)
 {
 	xmlFreeDoc(document);
 
@@ -626,7 +626,7 @@ xmlTools::parseBuffer(const dodoString &buffer)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	xmlNodePtr node = xmlDocGetRootElement(document);
@@ -634,7 +634,7 @@ xmlTools::parseBuffer(const dodoString &buffer)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLTOOLS_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XML_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	__xmlNode sample = *(parse(node).begin());
@@ -645,7 +645,7 @@ xmlTools::parseBuffer(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 void
-xmlTools::initNodeDef(__xmlNodeDef &node)
+xml::initNodeDef(__xmlNodeDef &node)
 {
 	node.attributes.clear();
 	node.children.clear();
@@ -657,7 +657,7 @@ xmlTools::initNodeDef(__xmlNodeDef &node)
 //-------------------------------------------------------------------
 
 xmlNodePtr
-xmlTools::findNode(const __xmlNodeDef &definition,
+xml::findNode(const __xmlNodeDef &definition,
 				   xmlNodePtr node)
 {
 	xmlNodePtr one;
@@ -705,7 +705,7 @@ xmlTools::findNode(const __xmlNodeDef &definition,
 //-------------------------------------------------------------------
 
 void
-xmlTools::clear()
+xml::clear()
 {
 	xmlFreeDoc(document);
 	document = NULL;
@@ -714,7 +714,7 @@ xmlTools::clear()
 //-------------------------------------------------------------------
 
 dodoString
-xmlTools::createXML(const __xmlNode &root,
+xml::createXML(const __xmlNode &root,
 					const dodoString &encoding,
 					const dodoString &version) const
 {
@@ -731,7 +731,7 @@ xmlTools::createXML(const __xmlNode &root,
 //-------------------------------------------------------------------
 
 dodoString
-xmlTools::createNode(const __xmlNode &node) const
+xml::createNode(const __xmlNode &node) const
 {
 	if (node.name.empty())
 		return __dodostring__;

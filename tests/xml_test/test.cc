@@ -1,5 +1,5 @@
 #include <baseEx.h>
-#include <xmlTools.h>
+#include <xml.h>
 #include <tools.h>
 #include <iostream>
 
@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 		
 		try
 		{
-			xmlTools tool;
+			xml tool;
 			tool.icaseNames = true;
 			
 			cout << tool.getXMLFileInfo("./test.xml").version;
