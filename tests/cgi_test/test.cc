@@ -1,5 +1,5 @@
 #include <baseEx.h>
-#include <cgiTools.h>
+#include <cgi.h>
 #include <cgiProcessor.h>
 #include <iostream>
 
@@ -12,22 +12,22 @@ int main(int argc, char **argv)
 	///first type
 //	dodoStringMap head;
 //	head["Content-type"] = "text/html";
-//	cgiTools cgi(false,head);
+//	cgi cgi(false,head);
 	
 	///second type
-	cgiTools cgi(true);
-	//cgi.HEADERS["Content-type"] = "image/jpg";
-	cgi.HEADERS["Content-type"] = "text/html";
-	cgi.setCookie("test","Ni@m");
-	cgi.printHeaders();
+	cgi cgit(true);
+	//cgit.HEADERS["Content-type"] = "image/jpg";
+	cgit.HEADERS["Content-type"] = "text/html";
+	cgit.setCookie("test","Ni@m");
+	cgit.printHeaders();
 	 
 	
-	cout << "!" << cgi.METHOD_GET["a"] << "!<br>";
-	cout << "!" << cgi.METHOD_POST["a"] << "!<br>";
-	cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
-	cout << "!" << cgi.ENVIRONMENT["QUERY_STRING"] << "<br>";
-	cout << "!" << cgi.COOKIES["test"] << "<br>";
-	cout << "!" << cgi.FILES["qsadasdaf"].error << "<br>";
+	cout << "!" << cgit.METHOD_GET["a"] << "!<br>";
+	cout << "!" << cgit.METHOD_POST["a"] << "!<br>";
+	cout << "!" << cgit.METHOD_POST["e"] << "!<br>";
+	cout << "!" << cgit.ENVIRONMENT["QUERY_STRING"] << "<br>";
+	cout << "!" << cgit.COOKIES["test"] << "<br>";
+	cout << "!" << cgit.FILES["qsadasdaf"].error << "<br>";
 	
 	cout << "\n\n\n";
 	

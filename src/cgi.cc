@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiTools.cc
+ *            cgi.cc
  *
  *  Sat Sep  18 17:18:19 2005
  *  Copyright  2005  Ni@m
@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <cgiTools.h>
+#include <cgi.h>
 
 using namespace dodo;
 
@@ -47,13 +47,13 @@ __cookies::__cookies(bool a_secure) : secure(a_secure)
 
 //-------------------------------------------------------------------
 
-cgiTools::cgiTools(cgiTools &ct)
+cgi::cgi(cgi &ct)
 {
 }
 
 //-------------------------------------------------------------------
 
-cgiTools::cgiTools(bool silent,
+cgi::cgi(bool silent,
 				   dodoStringMap &a_headers,
 				   bool a_autoclearContent,
 				   bool a_postFilesInMem,
@@ -90,7 +90,7 @@ cgiTools::cgiTools(bool silent,
 
 #ifdef FCGI_EXT
 
-cgiTools::cgiTools(cgiFastSTD    *a_cf,
+cgi::cgi(cgiFastSTD    *a_cf,
 				   bool silent,
 				   dodoStringMap &a_headers,
 				   bool a_autoclearContent,
@@ -124,7 +124,7 @@ cgiTools::cgiTools(cgiFastSTD    *a_cf,
 
 //-------------------------------------------------------------------
 
-cgiTools::~cgiTools()
+cgi::~cgi()
 {
 	cleanTmp();
 
@@ -135,7 +135,7 @@ cgiTools::~cgiTools()
 //-------------------------------------------------------------------
 
 dodoString
-cgiTools::getContent()
+cgi::getContent()
 {
 	return content;
 }
@@ -143,7 +143,7 @@ cgiTools::getContent()
 //-------------------------------------------------------------------
 
 void
-cgiTools::clearContent()
+cgi::clearContent()
 {
 	content.clear();
 }
@@ -151,7 +151,7 @@ cgiTools::clearContent()
 //-------------------------------------------------------------------
 
 void
-cgiTools::cleanTmp()
+cgi::cleanTmp()
 {
 	std::map<dodoString, __cgiFilesUp>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
@@ -168,7 +168,7 @@ cgiTools::cleanTmp()
 //-------------------------------------------------------------------
 
 void
-cgiTools::detectMethod()
+cgi::detectMethod()
 {
 	if (stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "GET"))
 		method = REQUESTMETHOD_GET;
@@ -184,7 +184,7 @@ cgiTools::detectMethod()
 //-------------------------------------------------------------------
 
 int
-cgiTools::getMethod() const
+cgi::getMethod() const
 {
 	return method;
 }
@@ -192,7 +192,7 @@ cgiTools::getMethod() const
 //-------------------------------------------------------------------
 
 void
-cgiTools::make(dodoStringMap &val,
+cgi::make(dodoStringMap &val,
 			   const dodoString &string,
 			   const char       *delim)
 {
@@ -213,7 +213,7 @@ cgiTools::make(dodoStringMap &val,
 //-------------------------------------------------------------------
 
 void
-cgiTools::makeEnv()
+cgi::makeEnv()
 {
 	char *env;
 
@@ -233,7 +233,7 @@ cgiTools::makeEnv()
 //-------------------------------------------------------------------
 
 void
-cgiTools::initHeaders(dodoStringMap &headers)
+cgi::initHeaders(dodoStringMap &headers)
 {
 	HEADERS.insert("Content-type", "text/html");
 	HEADERS.insert("X-Powered-By", PACKAGE_NAME "/" PACKAGE_VERSION);
@@ -249,7 +249,7 @@ cgiTools::initHeaders(dodoStringMap &headers)
 //-------------------------------------------------------------------
 
 void
-cgiTools::printHeaders() const
+cgi::printHeaders() const
 {
 	dodoStringMap::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
@@ -313,7 +313,7 @@ cgiTools::printHeaders() const
 //-------------------------------------------------------------------
 
 void
-cgiTools::makeContent()
+cgi::makeContent()
 {
 	unsigned long inSize = ENVIRONMENT["CONTENT_LENGTH"].toUL();
 
@@ -375,7 +375,7 @@ cgiTools::makeContent()
 //-------------------------------------------------------------------
 
 void
-cgiTools::makePost()
+cgi::makePost()
 {
 	if (content.size() == 0)
 		return ;
@@ -515,7 +515,7 @@ cgiTools::makePost()
 //-------------------------------------------------------------------
 
 const dodoStringMap &
-cgiTools::operator[](short method)
+cgi::operator[](short method)
 {
 	if (method == REQUESTMETHOD_POST)
 		return METHOD_POST;
@@ -526,7 +526,7 @@ cgiTools::operator[](short method)
 //-------------------------------------------------------------------
 
 dodoString
-cgiTools::request(const dodoString &varName,
+cgi::request(const dodoString &varName,
 				  short first)
 {
 	dodoString met0 = METHOD_GET[varName];
@@ -548,7 +548,7 @@ cgiTools::request(const dodoString &varName,
 //-------------------------------------------------------------------
 
 void
-cgiTools::setCookie(const dodoString &name,
+cgi::setCookie(const dodoString &name,
 					const dodoString &value,
 					const dodoString &exDate,
 					const dodoString &path,
@@ -567,7 +567,7 @@ cgiTools::setCookie(const dodoString &name,
 //-------------------------------------------------------------------
 
 void
-cgiTools::setCookie(const __cookies &cookie)
+cgi::setCookie(const __cookies &cookie)
 {
 	cookiesSet.push_back(cookie);
 }

@@ -1,7 +1,4 @@
 1.
-	regexpTools->regexp
-	cgiTools->cgi
-	xmlTools->xml
 
 	db: renew connect
 	

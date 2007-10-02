@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiTools.h
+ *            cgi.h
  *
  *  Sat Sep  17 21:55:19 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGITOOLS_H_
-#define _CGITOOLS_H_
+#ifndef _CGI_H_
+#define _CGI_H_
 
 #include <directives.h>
 
@@ -163,7 +163,7 @@ namespace dodo
 	 */
 
 	/**
-	 * @class cgiTools
+	 * @class cgi
 	 * provides simple work with info that passes to cgi program
 	 * u can get POST/GET variables; any ENV variable;
 	 * @note when usin' POST:
@@ -172,7 +172,7 @@ namespace dodo
 	 * 		please contruct object of this class in the begin of your program;
 	 * 		it will prevent any situations;
 	 */
-	class cgiTools
+	class cgi
 	{
 
 		private:
@@ -181,7 +181,7 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		cgiTools(cgiTools &ct);
+		cgi(cgi &ct);
 
 		public:
 
@@ -195,7 +195,7 @@ namespace dodo
 		 *
 		 * @note you cant print headers after they have been printed with printHeaders method
 		 */
-		cgiTools(bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+		cgi(bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
             #ifdef FCGI_EXT
 
@@ -210,14 +210,14 @@ namespace dodo
 		 *
 		 * @note you cant print headers after they have been printed with printHeaders method
 		 */
-		cgiTools(cgiFastSTD *cf, bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+		cgi(cgiFastSTD *cf, bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
             #endif
 
 		/**
 		 * destructor
 		 */
-		virtual ~cgiTools();
+		virtual ~cgi();
 
 		/**
 		 * @return content of the request

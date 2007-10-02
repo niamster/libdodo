@@ -1,5 +1,5 @@
 #include <baseEx.h>
-#include <cgiTools.h>
+#include <cgi.h>
 #include <cgiProcessor.h>
 #include <tools.h>
 #include <cgiFast.h>
@@ -12,20 +12,20 @@ using namespace std;
 #ifdef FCGI_EXT
 
 	void 
-	cgi(cgiFastSTD *fcgi)
+	cgif(cgiFastSTD *fcgi)
 	{
-		cgiTools cgi(fcgi, true);
-		//cgi.HEADERS["Content-type"] = "image/jpg";
-		cgi.setCookie("test","Ni@m");
-		cgi.printHeaders();
+		cgi cgit(fcgi, true);
+		//cgit.HEADERS["Content-type"] = "image/jpg";
+		cgit.setCookie("test","Ni@m");
+		cgit.printHeaders();
 		 
 		
-	/*	cout << "!" << cgi.METHOD_GET["a"] << "!<br>";
-		cout << "!" << cgi.METHOD_POST["a"] << "!<br>";
-		cout << "!" << cgi.METHOD_POST["e"] << "!<br>";
-		cout << "!" << cgi.ENVIRONMENT["QUERY_STRING"] << "<br>";
-		cout << "!" << cgi.COOKIES["test"] << "<br>";*/
-		//cout << "!" << cgi.getFile("qsadasdaf").error << "<br>";
+	/*	cout << "!" << cgit.METHOD_GET["a"] << "!<br>";
+		cout << "!" << cgit.METHOD_POST["a"] << "!<br>";
+		cout << "!" << cgit.METHOD_POST["e"] << "!<br>";
+		cout << "!" << cgit.ENVIRONMENT["QUERY_STRING"] << "<br>";
+		cout << "!" << cgit.COOKIES["test"] << "<br>";*/
+		//cout << "!" << cgit.getFile("qsadasdaf").error << "<br>";
 		
 		fcgi->print("!!!\n\n\n");
 		
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	
 		cgiFast cf;
 		
-		cf.setCGIFunction(&cgi);
+		cf.setCGIFunction(&cgif);
 	
 		cf.listen();
 	

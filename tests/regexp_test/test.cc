@@ -1,5 +1,5 @@
 
-#include <regexpTools.h>
+#include <regexp.h>
 #include <iostream>
 
 using namespace dodo;
@@ -8,7 +8,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {	
-	regexpTools expr;
+	regexp expr;
 	dodoStringArr pock;
 	
 	expr.multiline = true;

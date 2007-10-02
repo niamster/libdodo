@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexpTools.cc
+ *            regexp.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -21,17 +21,17 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <regexpTools.h>
+#include <regexp.h>
 
 using namespace dodo;
 
-regexpTools::regexpTools(regexpTools &rt)
+regexp::regexp(regexp &rt)
 {
 }
 
 //-------------------------------------------------------------------
 
-regexpTools::regexpTools() : extended(true),
+regexp::regexp() : extended(true),
 							 icase(false),
 							 greedy(true),
 							 multiline(false)
@@ -44,7 +44,7 @@ regexpTools::regexpTools() : extended(true),
 
 //-------------------------------------------------------------------
 
-regexpTools::~regexpTools()
+regexp::~regexp()
 {
     #ifdef PCRE_EXT
     #else
@@ -56,7 +56,7 @@ regexpTools::~regexpTools()
 //-------------------------------------------------------------------
 
 bool
-regexpTools::match(const dodoString &pattern,
+regexp::match(const dodoString &pattern,
 				   const dodoString &sample,
 				   dodoStringArr &pockets)
 {
@@ -69,7 +69,7 @@ regexpTools::match(const dodoString &pattern,
 //-------------------------------------------------------------------
 
 bool
-regexpTools::reMatch(const dodoString &sample,
+regexp::reMatch(const dodoString &sample,
 					 dodoStringArr &pockets)
 {
 	pockets.clear();
@@ -90,7 +90,7 @@ regexpTools::reMatch(const dodoString &sample,
 //-------------------------------------------------------------------
 
 bool
-regexpTools::boundMatch(const dodoString &sample)
+regexp::boundMatch(const dodoString &sample)
 {
 	boundaries.clear();
 
@@ -158,7 +158,7 @@ regexpTools::boundMatch(const dodoString &sample)
 //-------------------------------------------------------------------
 
 bool
-regexpTools::compile(const dodoString &pattern)
+regexp::compile(const dodoString &pattern)
 {
 	int bits(0);
 
@@ -202,7 +202,7 @@ regexpTools::compile(const dodoString &pattern)
 //-------------------------------------------------------------------
 
 dodoString
-regexpTools::replace(const dodoString &pattern,
+regexp::replace(const dodoString &pattern,
 					 const dodoString &sample,
 					 const dodoStringArr &replacements)
 {
@@ -215,7 +215,7 @@ regexpTools::replace(const dodoString &pattern,
 //-------------------------------------------------------------------
 
 dodoString
-regexpTools::reReplace(const dodoString &sample,
+regexp::reReplace(const dodoString &sample,
 					   const dodoStringArr &replacements)
 {
 	if (!boundMatch(sample))

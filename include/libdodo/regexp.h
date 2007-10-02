@@ -1,5 +1,5 @@
 /***************************************************************************
- *            regexpTools.h
+ *            regexp.h
  *
  *  Thu Sep 20 01:39:24 2005
  *  Copyright  2005  Ni@m
@@ -44,14 +44,14 @@ namespace dodo
 {
 
 	/**
-	 * @class regexpTools that covers REGEXP routine using different regex libs
+	 * @class regexp that covers REGEXP routine using different regex libs
 	 * @note PCRE is much faster
 	 * both POSIX and PCRE don't support binary patterns
 	 * if string is not matchin' fully the pattern - it don't want to execute it(return false)
 	 *
 	 * POSIX doesn't support binary test sting;
 	 */
-	class regexpTools
+	class regexp
 	{
 
 		private:
@@ -60,19 +60,19 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		regexpTools(regexpTools &rt);
+		regexp(regexp &rt);
 
 		public:
 
 		/**
 		 * constructor
 		 */
-		regexpTools();
+		regexp();
 
 		/**
 		 * destructor
 		 */
-		virtual ~regexpTools();
+		virtual ~regexp();
 
 		bool extended;      ///< set whether to use extended or basic regex; extended by default
 
