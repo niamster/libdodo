@@ -180,13 +180,7 @@ dodoString::fromD(double number)
 void
 dodoString::lTrim(char symbol)
 {
-	int size = this->size(), i(0);
-
-	for (; i < size; ++i)
-		if ((*this)[i] != symbol)
-			break;
-
-	this->substr(i, size - i);
+	stringTools::lTrim(*this, symbol);
 }
 
 //-------------------------------------------------------------------
@@ -194,13 +188,7 @@ dodoString::lTrim(char symbol)
 void
 dodoString::rTrim(char symbol)
 {
-	int i(this->size() - 1);
-
-	for (; i >= 0; --i)
-		if ((*this)[i] != symbol)
-			break;
-
-	this->substr(0, i + 1);
+	stringTools::rTrim(*this, symbol);
 }
 
 //-------------------------------------------------------------------
@@ -209,18 +197,7 @@ void
 dodoString::rTrim(const char symbols[],
 				  int symCount)
 {
-	int i(this->size() - 1), j, empty;
-
-	for (; i >= 0; --i)
-	{
-		for (j = 0, empty = 0; j < symCount; ++j)
-			if ((*this)[i] != symbols[j])
-				++empty;
-		if (empty == symCount)
-			break;
-	}
-
-	this->substr(0, i + 1);
+	stringTools::rTrim(*this, symbols, symCount);
 }
 
 //-------------------------------------------------------------------
@@ -229,18 +206,7 @@ void
 dodoString::lTrim(const char symbols[],
 				  int symCount)
 {
-	int size = this->size(), i(0), empty, j;
-
-	for (; i < size; ++i)
-	{
-		for (j = 0, empty = 0; j < symCount; ++j)
-			if ((*this)[i] != symbols[j])
-				++empty;
-		if (empty == symCount)
-			break;
-	}
-
-	this->substr(i, size - i);
+	stringTools::lTrim(*this, symbols, symCount);
 }
 
 //-------------------------------------------------------------------
@@ -249,8 +215,8 @@ void
 dodoString::trim(const char symbols[],
 				 int symCount)
 {
-	lTrim(symbols, symCount);
-	rTrim(symbols, symCount);
+	stringTools::lTrim(*this, symbols, symCount);
+	stringTools::rTrim(*this, symbols, symCount);
 }
 
 //-------------------------------------------------------------------
@@ -258,8 +224,8 @@ dodoString::trim(const char symbols[],
 void
 dodoString::trim(char symbol)
 {
-	lTrim(symbol);
-	rTrim(symbol);
+	stringTools::lTrim(*this, symbol);
+	stringTools::rTrim(*this, symbol);
 }
 
 //-------------------------------------------------------------------
@@ -267,7 +233,7 @@ dodoString::trim(char symbol)
 long
 dodoString::toL()
 {
-	return atol(this->c_str());
+	return stringTools::stringToL(*this);
 }
 
 //-------------------------------------------------------------------
@@ -275,7 +241,7 @@ dodoString::toL()
 unsigned long
 dodoString::toUL()
 {
-	return strtoul(this->c_str(), NULL, 10);
+	return stringTools::stringToUL(*this);
 }
 
 //-------------------------------------------------------------------
@@ -283,7 +249,7 @@ dodoString::toUL()
 int
 dodoString::toI()
 {
-	return atoi(this->c_str());
+	return stringTools::stringToI(*this);
 }
 
 //-------------------------------------------------------------------
@@ -291,7 +257,7 @@ dodoString::toI()
 unsigned int
 dodoString::toUI()
 {
-	return (unsigned int)atol(this->c_str());
+	return (unsigned int)stringTools::stringToL(*this);
 }
 
 //-------------------------------------------------------------------
@@ -299,7 +265,7 @@ dodoString::toUI()
 short
 dodoString::toS()
 {
-	return (short)atoi(this->c_str());
+	return (short)stringTools::stringToI(*this);
 }
 
 //-------------------------------------------------------------------
@@ -307,7 +273,7 @@ dodoString::toS()
 unsigned short
 dodoString::toUS()
 {
-	return (unsigned short)atoi(this->c_str());
+	return (unsigned short)stringTools::stringToI(*this);
 }
 
 //-------------------------------------------------------------------
@@ -315,7 +281,7 @@ dodoString::toUS()
 float
 dodoString::toF()
 {
-	return (float)atof(this->c_str());
+	return (float)stringTools::stringToF(*this);
 }
 
 //-------------------------------------------------------------------
@@ -323,7 +289,7 @@ dodoString::toF()
 double
 dodoString::toD()
 {
-	return atof(this->c_str());
+	return stringTools::stringToD(*this);
 }
 
 //-------------------------------------------------------------------

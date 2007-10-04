@@ -2,7 +2,7 @@
 
 	db: renew connect
 	
-	remove ato[ifl] where not needed
+	remove sprintf where not needed
 
 2.
 	systemProcessSharedDataGuard

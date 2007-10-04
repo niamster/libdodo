@@ -96,7 +96,7 @@ timeTools::week(long date,
 				const dodoString &format,
 				bool local)
 {
-	long daynum = atol(timeTools::byFormat("%w", date, local).c_str());
+	long daynum = stringTools::stringToL(timeTools::byFormat("%w", date, local));
 	if (daynum == 0)
 		daynum = 7;
 

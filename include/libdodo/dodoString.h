@@ -27,6 +27,7 @@
 #include <directives.h>
 
 #include <string>
+#include <stringTools.h>
 
 namespace dodo
 {

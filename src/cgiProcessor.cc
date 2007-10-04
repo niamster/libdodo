@@ -433,7 +433,7 @@ cgiProcessor::_if(const dodoString &buffer,
 
 		if (_float)
 		{
-			double first(atof(temp1.c_str())), second(atof(temp3.c_str()));
+			double first(stringTools::stringToD(temp1)), second(stringTools::stringToD(temp3));
 
 			switch (oper)
 			{
@@ -1249,7 +1249,7 @@ cgiProcessor::_for(const dodoString &buffer,
 				for (; o != p; ++o)
 					if (stringTools::equal(temp[0], o->first))
 					{
-						unsigned long pos = atol(temp[1].c_str());
+						unsigned long pos = stringTools::stringToUL(temp[1]);
 						if (pos >= 0 && pos <= o->second.size())
 						{
 							dodoStringMap::iterator iter = local.find(varName);
@@ -1310,7 +1310,7 @@ cgiProcessor::_for(const dodoString &buffer,
 				for (; d != f; ++d)
 					if (stringTools::equal(temp[0], d->first))
 					{
-						unsigned long pos = atol(temp[1].c_str());
+						unsigned long pos = stringTools::stringToUL(temp[1]);
 						if (pos >= 0 && pos <= d->second.size())
 						{
 							dodoStringMap::iterator iter = local.find(varName);
@@ -1376,7 +1376,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					for (; d != f; ++d)
 						if (stringTools::equal(temp[0], d->first))
 						{
-							unsigned long pos = atol(temp[1].c_str());
+							unsigned long pos = stringTools::stringToUL(temp[1]);
 							if (pos >= 0 && pos <= d->second.size())
 							{
 								dodoStringMap::iterator k = d->second[pos].begin();
@@ -1583,7 +1583,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 				if (stringTools::equal(temp[1], k->first))
 					if (temp.size() == 3)
 					{
-						unsigned long pos = atol(temp[2].c_str());
+						unsigned long pos = stringTools::stringToUL(temp[2]);
 						if (pos >= 0 && pos <= k->second.size())
 							return dodoString(1, k->second[pos]);
 						else
@@ -1599,7 +1599,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		for (; k != l; ++k)
 			if (stringTools::equal(temp[0], k->first))
 			{
-				unsigned long pos = atol(temp[1].c_str());
+				unsigned long pos = stringTools::stringToUL(temp[1]);
 				if (pos >= 0 && pos <= k->second.size())
 					return dodoString(1, k->second[pos]);
 				else
@@ -1617,7 +1617,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 					{
 						if (temp.size() == 3)
 						{
-							unsigned long pos = atol(temp[2].c_str());
+							unsigned long pos = stringTools::stringToUL(temp[2]);
 							if (pos >= 0 && pos <= k->second.size())
 								return dodoString(1, k->second[pos]);
 							else
@@ -1633,7 +1633,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		for (; k != l; ++k)
 			if (stringTools::equal(temp[0], k->first))
 			{
-				unsigned long pos = atol(temp[1].c_str());
+				unsigned long pos = stringTools::stringToUL(temp[1]);
 				if (pos >= 0 && pos <= k->second.size())
 					return dodoString(1, k->second[pos]);
 				else
@@ -1652,7 +1652,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 					{
 						if (temp.size() == 3)
 						{
-							unsigned long pos = atol(temp[2].c_str());
+							unsigned long pos = stringTools::stringToUL(temp[2]);
 							if (pos >= 0 && pos <= k->second.size())
 								return dodoString(1, k->second[pos]);
 							else
@@ -1667,12 +1667,12 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		for (; o != p; ++o)
 			if (stringTools::equal(temp[0], o->first))
 			{
-				unsigned long pos = atol(temp[1].c_str());
+				unsigned long pos = stringTools::stringToUL(temp[1]);
 				if (pos >= 0 && pos <= o->second.size())
 				{
 					if (temp.size() == 3)
 					{
-						unsigned long pos1 = atol(temp[2].c_str());
+						unsigned long pos1 = stringTools::stringToUL(temp[2]);
 						if (pos >= 0 && pos1 <= o->second[pos].size())
 							return dodoString(1, o->second[pos][pos1]);
 						else
@@ -1689,7 +1689,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 			for (; d != f; ++d)
 				if (stringTools::equal(temp[0], d->first))
 				{
-					unsigned long pos = atol(temp[1].c_str());
+					unsigned long pos = stringTools::stringToUL(temp[1]);
 					if (pos >= 0 && pos <= d->second.size())
 					{
 						k = d->second[pos].begin();
@@ -1699,7 +1699,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 							{
 								if (temp.size() == 4)
 								{
-									pos = atol(temp[3].c_str());
+									pos = stringTools::stringToUL(temp[3]);
 									if (pos >= 0 && pos <= k->second.size())
 										return dodoString(1, k->second[pos]);
 									else

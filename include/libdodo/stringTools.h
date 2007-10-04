@@ -30,6 +30,8 @@
 
 namespace dodo
 {
+	class dodoString;
+
 	/**
 	 * @class stringToolst extends standart std::string class
 	 */
