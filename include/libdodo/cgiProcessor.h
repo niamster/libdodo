@@ -228,7 +228,7 @@ namespace dodo
 		std::map<dodoString, dodoArray<dodoStringMap> > globalArrayHash;    ///< set of global variables(array of hashes)[user-set]
 		std::map<dodoString, dodoStringMap> localHash;                      ///< set of local variables(hashes)
 
-		dodoStringMap dodo;                                                 ///< set of auxillary variables[dodo defined][use as dodo.smth]
+		dodoStringMap dodo;                                                 ///< set of auxillary variables[dodo defined][for dodo.*]
 
 		dodoStringMap global;                                               ///< set of global variables[user-set]
 		dodoStringMap local;                                                ///< set of local variables[during parsing]
@@ -243,6 +243,8 @@ namespace dodo
 		unsigned int namespaceDeepness;                                     ///< deepness of the namespace
 		std::map<unsigned int, dodoStringMap> localNamespace;               ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
 		std::map<unsigned int, dodoStringArr> namespaceVars;                ///< names of vars in namespaces
+
+		static const dodoString dodoSt;///< dodo statement[for dodo.*]
 
             #ifdef FCGI_EXT
 

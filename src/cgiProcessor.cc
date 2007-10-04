@@ -25,6 +25,10 @@
 
 using namespace dodo;
 
+const dodoString cgiProcessor::dodoSt = "dodo";
+
+//-------------------------------------------------------------------
+//
 cgiProcessor::cgiProcessor() : _continueFlag(false),
 							   _breakDeepness(0),
 							   _loopDeepness(0),
@@ -40,6 +44,7 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 
 	fstd = new flushSTD;
 }
+
 //-------------------------------------------------------------------
 
 #ifdef FCGI_EXT
@@ -254,7 +259,7 @@ cgiProcessor::recursive(const dodoString &path)
 {
 	std::list<dodoString>::iterator i(processed.begin()), j(processed.end());
 	for (; i != j; ++i)
-		if (strcmp(i->c_str(), path.c_str()) == 0)
+		if (stringTools::equal(*i, path))
 			return true;
 
 	return false;
@@ -269,7 +274,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (strcmp(varName.c_str(), "dodo") == 0)
+	if (stringTools::equal(varName, dodoSt))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -288,7 +293,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (strcmp(varName.c_str(), "dodo") == 0)
+	if (stringTools::equal(varName, dodoSt))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -307,7 +312,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (strcmp(varName.c_str(), "dodo") == 0)
+	if (stringTools::equal(varName, dodoSt))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -326,7 +331,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (strcmp(varName.c_str(), "dodo") == 0)
+	if (stringTools::equal(varName, dodoSt))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	globalArray.erase(varName);
@@ -415,7 +420,7 @@ cgiProcessor::_if(const dodoString &buffer,
 
 		temp1 = getVar(temp1, start, path);
 
-		if (strcmp(temp1.c_str(), "false") != 0 && temp1.size() != 0)
+		if (!stringTools::equal(temp1, "false") && temp1.size() != 0)
 			accept = !invert;
 		else
 			accept = invert;
@@ -459,7 +464,7 @@ cgiProcessor::_if(const dodoString &buffer,
 		}
 		else
 		{
-			if (strcmp(temp1.c_str(), temp3.c_str()) == 0)
+			if (stringTools::equal(temp1, temp3))
 				accept = !invert;
 		}
 	}
@@ -529,11 +534,11 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 		for (p = u; p < b; ++p)
 			if (buffer[p] != ' ' && buffer[p] != '\t' && buffer[p] != '\n')
 			{
-				if (strcmp(buffer.substr(p, tsLen).c_str(), ts.c_str()) == 0)
+				if (stringTools::equal(buffer.substr(p, tsLen), ts))
 					--_st;
 				else
 				{
-					if (strcmp(buffer.substr(p, stLen).c_str(), st.c_str()) == 0)
+					if (stringTools::equal(buffer.substr(p, stLen), st))
 						++_st;
 				}
 			}
@@ -557,7 +562,7 @@ cgiProcessor::_include(const dodoString &statement,
 {
 	dodoString temp1 = getVar(statement, start, path);
 
-	if (strcmp(temp1.c_str(), path.c_str()) != 0 && !recursive(temp1))
+	if (!stringTools::equal(temp1, path) && !recursive(temp1))
 	{
 		processed.push_back(path);
 		tpl.append(process(temp1));
@@ -639,7 +644,7 @@ cgiProcessor::_assign(const dodoString &statement,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (strcmp(varName.c_str(), "dodo") == 0)
+	if (stringTools::equal(varName, dodoSt))
 	{
 		char message[128];
 		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
@@ -765,7 +770,7 @@ cgiProcessor::_for(const dodoString &buffer,
 			dodoStringMap::iterator k = local.begin();
 			dodoStringMap::iterator l = local.end();
 			for (; k != l; ++k)
-				if (strcmp(targetVar.c_str(), k->first.c_str()) == 0)
+				if (stringTools::equal(targetVar, k->first))
 				{
 					dodoStringMap::iterator iter = local.find(varName);
 					dodoString iterVal;
@@ -822,7 +827,7 @@ cgiProcessor::_for(const dodoString &buffer,
 			std::map<dodoString, dodoStringMap>::iterator g = localHash.begin();
 			std::map<dodoString, dodoStringMap>::iterator h = localHash.end();
 			for (; g != h; ++g)
-				if (strcmp(temp[0].c_str(), g->first.c_str()) == 0)
+				if (stringTools::equal(temp[0], g->first))
 				{
 					dodoStringMap::iterator iter = local.find(varName);
 					dodoString iterVal;
@@ -880,7 +885,7 @@ cgiProcessor::_for(const dodoString &buffer,
 			k = global.begin();
 			l = global.end();
 			for (; k != l; ++k)
-				if (strcmp(targetVar.c_str(), k->first.c_str()) == 0)
+				if (stringTools::equal(targetVar, k->first))
 				{
 					dodoStringMap::iterator iter = local.find(varName);
 					dodoString iterVal;
@@ -937,7 +942,7 @@ cgiProcessor::_for(const dodoString &buffer,
 			g = globalHash.begin();
 			h = globalHash.end();
 			for (; g != h; ++g)
-				if (strcmp(temp[0].c_str(), g->first.c_str()) == 0)
+				if (stringTools::equal(temp[0], g->first))
 				{
 					dodoStringMap::iterator iter = local.find(varName);
 					dodoString iterVal;
@@ -995,7 +1000,7 @@ cgiProcessor::_for(const dodoString &buffer,
 			std::map<dodoString, dodoStringArr>::iterator o = globalArray.begin();
 			std::map<dodoString, dodoStringArr>::iterator p = globalArray.end();
 			for (; o != p; ++o)
-				if (strcmp(temp[0].c_str(), o->first.c_str()) == 0)
+				if (stringTools::equal(temp[0], o->first))
 				{
 					dodoStringMap::iterator iter = local.find(varName);
 					dodoString iterVal;
@@ -1053,7 +1058,7 @@ cgiProcessor::_for(const dodoString &buffer,
 			std::map<dodoString, dodoArray<dodoStringMap> >::iterator d = globalArrayHash.begin();
 			std::map<dodoString, dodoArray<dodoStringMap> >::iterator f = globalArrayHash.end();
 			for (; d != f; ++d)
-				if (strcmp(temp[0].c_str(), d->first.c_str()) == 0)
+				if (stringTools::equal(temp[0], d->first))
 				{
 					std::map<dodoString, dodoStringMap>::iterator iter = localHash.find(varName);
 					dodoStringMap iterVal;
@@ -1116,12 +1121,12 @@ cgiProcessor::_for(const dodoString &buffer,
 				std::map<dodoString, dodoStringMap>::iterator g = localHash.begin();
 				std::map<dodoString, dodoStringMap>::iterator h = localHash.end();
 				for (; g != h; ++g)
-					if (strcmp(temp[0].c_str(), g->first.c_str()) == 0)
+					if (stringTools::equal(temp[0], g->first))
 					{
 						dodoStringMap::iterator k = g->second.begin();
 						dodoStringMap::iterator l = g->second.end();
 						for (; k != l; ++k)
-							if (strcmp(temp[1].c_str(), k->first.c_str()) == 0)
+							if (stringTools::equal(temp[1], k->first))
 							{
 								dodoStringMap::iterator iter = local.find(varName);
 								dodoString iterVal;
@@ -1179,12 +1184,12 @@ cgiProcessor::_for(const dodoString &buffer,
 				g = globalHash.begin();
 				h = globalHash.end();
 				for (; g != h; ++g)
-					if (strcmp(temp[0].c_str(), g->first.c_str()) == 0)
+					if (stringTools::equal(temp[0], g->first))
 					{
 						dodoStringMap::iterator k = g->second.begin();
 						dodoStringMap::iterator l = g->second.end();
 						for (; k != l; ++k)
-							if (strcmp(temp[1].c_str(), k->first.c_str()) == 0)
+							if (stringTools::equal(temp[1], k->first))
 							{
 								dodoStringMap::iterator iter = local.find(varName);
 								dodoString iterVal;
@@ -1242,7 +1247,7 @@ cgiProcessor::_for(const dodoString &buffer,
 				std::map<dodoString, dodoStringArr>::iterator o = globalArray.begin();
 				std::map<dodoString, dodoStringArr>::iterator p = globalArray.end();
 				for (; o != p; ++o)
-					if (strcmp(temp[0].c_str(), o->first.c_str()) == 0)
+					if (stringTools::equal(temp[0], o->first))
 					{
 						unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= o->second.size())
@@ -1303,7 +1308,7 @@ cgiProcessor::_for(const dodoString &buffer,
 				std::map<dodoString, dodoArray<dodoStringMap> >::iterator d = globalArrayHash.begin();
 				std::map<dodoString, dodoArray<dodoStringMap> >::iterator f = globalArrayHash.end();
 				for (; d != f; ++d)
-					if (strcmp(temp[0].c_str(), d->first.c_str()) == 0)
+					if (stringTools::equal(temp[0], d->first))
 					{
 						unsigned long pos = atol(temp[1].c_str());
 						if (pos >= 0 && pos <= d->second.size())
@@ -1369,7 +1374,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					std::map<dodoString, dodoArray<dodoStringMap> >::iterator d = globalArrayHash.begin();
 					std::map<dodoString, dodoArray<dodoStringMap> >::iterator f = globalArrayHash.end();
 					for (; d != f; ++d)
-						if (strcmp(temp[0].c_str(), d->first.c_str()) == 0)
+						if (stringTools::equal(temp[0], d->first))
 						{
 							unsigned long pos = atol(temp[1].c_str());
 							if (pos >= 0 && pos <= d->second.size())
@@ -1377,7 +1382,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								dodoStringMap::iterator k = d->second[pos].begin();
 								dodoStringMap::iterator l = d->second[pos].end();
 								for (; k != l; ++k)
-									if (strcmp(temp[2].c_str(), k->first.c_str()) == 0)
+									if (stringTools::equal(temp[2], k->first))
 									{
 										dodoStringMap::iterator iter = local.find(varName);
 										dodoString iterVal;
@@ -1555,27 +1560,27 @@ cgiProcessor::getVar(const dodoString &a_varName,
 
 	if (temp.size() == 1)
 	{
-		if (strcmp(varName.c_str(), "dodo") == 0)
+		if (stringTools::equal(varName, dodoSt))
 			return "cgi framework libdodo";
 
 		dodoStringMap::iterator k(local.begin()), l(local.end());
 		for (; k != l; ++k)
-			if (strcmp(varName.c_str(), k->first.c_str()) == 0)
+			if (stringTools::equal(varName, k->first))
 				return k->second;
 
 		k = global.begin();
 		l = global.end();
 		for (; k != l; ++k)
-			if (strcmp(varName.c_str(), k->first.c_str()) == 0)
+			if (stringTools::equal(varName, k->first))
 				return k->second;
 	}
 	else
 	{
-		if (strcmp(temp[0].c_str(), "dodo") == 0)
+		if (stringTools::equal(temp[0], dodoSt))
 		{
 			dodoStringMap::iterator k(local.begin()), l(local.end());
 			for (; k != l; ++k)
-				if (strcmp(temp[1].c_str(), k->first.c_str()) == 0)
+				if (stringTools::equal(temp[1], k->first))
 					if (temp.size() == 3)
 					{
 						unsigned long pos = atol(temp[2].c_str());
@@ -1592,7 +1597,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 
 		dodoStringMap::iterator k(local.begin()), l(local.end());
 		for (; k != l; ++k)
-			if (strcmp(temp[0].c_str(), k->first.c_str()) == 0)
+			if (stringTools::equal(temp[0], k->first))
 			{
 				unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= k->second.size())
@@ -1603,12 +1608,12 @@ cgiProcessor::getVar(const dodoString &a_varName,
 
 		std::map<dodoString, dodoStringMap>::iterator g(localHash.begin()), h(localHash.end());
 		for (; g != h; ++g)
-			if (strcmp(temp[0].c_str(), g->first.c_str()) == 0)
+			if (stringTools::equal(temp[0], g->first))
 			{
 				k = g->second.begin();
 				l = g->second.end();
 				for (; k != l; ++k)
-					if (strcmp(temp[1].c_str(), k->first.c_str()) == 0)
+					if (stringTools::equal(temp[1], k->first))
 					{
 						if (temp.size() == 3)
 						{
@@ -1626,7 +1631,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		k = global.begin();
 		l = global.end();
 		for (; k != l; ++k)
-			if (strcmp(temp[0].c_str(), k->first.c_str()) == 0)
+			if (stringTools::equal(temp[0], k->first))
 			{
 				unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= k->second.size())
@@ -1638,12 +1643,12 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		g = globalHash.begin();
 		h = globalHash.end();
 		for (; g != h; ++g)
-			if (strcmp(temp[0].c_str(), g->first.c_str()) == 0)
+			if (stringTools::equal(temp[0], g->first))
 			{
 				k = g->second.begin();
 				l = g->second.end();
 				for (; k != l; ++k)
-					if (strcmp(temp[1].c_str(), k->first.c_str()) == 0)
+					if (stringTools::equal(temp[1], k->first))
 					{
 						if (temp.size() == 3)
 						{
@@ -1660,7 +1665,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 
 		std::map<dodoString, dodoStringArr>::iterator o(globalArray.begin()), p(globalArray.end());
 		for (; o != p; ++o)
-			if (strcmp(temp[0].c_str(), o->first.c_str()) == 0)
+			if (stringTools::equal(temp[0], o->first))
 			{
 				unsigned long pos = atol(temp[1].c_str());
 				if (pos >= 0 && pos <= o->second.size())
@@ -1682,7 +1687,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		{
 			std::map<dodoString, dodoArray<dodoStringMap> >::iterator d(globalArrayHash.begin()), f(globalArrayHash.end());
 			for (; d != f; ++d)
-				if (strcmp(temp[0].c_str(), d->first.c_str()) == 0)
+				if (stringTools::equal(temp[0], d->first))
 				{
 					unsigned long pos = atol(temp[1].c_str());
 					if (pos >= 0 && pos <= d->second.size())
@@ -1690,7 +1695,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 						k = d->second[pos].begin();
 						l = d->second[pos].end();
 						for (; k != l; ++k)
-							if (strcmp(temp[2].c_str(), k->first.c_str()) == 0)
+							if (stringTools::equal(temp[2], k->first))
 							{
 								if (temp.size() == 4)
 								{

@@ -306,16 +306,16 @@ tools::isInArray(const dodoStringArr &arr,
 				 const dodoString &needle,
 				 bool icase)
 {
-	int (*cmpFunc)(const char *, const char *);
+	bool (*cmpFunc)(const dodoString &, const dodoString &);
 
 	if (icase)
-		cmpFunc = strcasecmp;
+		cmpFunc = stringTools::iequal;
 	else
-		cmpFunc = strcmp;
+		cmpFunc = stringTools::equal;
 
 	dodoStringArr::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)
-		if (cmpFunc(i->c_str(), needle.c_str()) == 0)
+		if (cmpFunc(*i, needle))
 			return true;
 
 	return false;

@@ -2,11 +2,11 @@
 
 	db: renew connect
 	
-	remove strcmp, strcasecmp, ato[ifl] where not needed
+	remove ato[ifl] where not needed
 
 2.
-	systemProcessSharedDataCollectionGuard
 	systemProcessSharedDataGuard
+	systemProcessSharedDataCollectionGuard
 	processGuard
 
 3.
