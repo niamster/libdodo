@@ -25,6 +25,14 @@
 
 using namespace dodo;
 
+__cgiFilesUp::__cgiFilesUp() : fp(NULL),
+				buf(NULL),
+				size(0)
+{
+}
+
+//-------------------------------------------------------------------
+
 __cookies::__cookies(const dodoString &a_name,
 					 const dodoString &a_value,
 					 const dodoString &a_exDate,
@@ -156,7 +164,8 @@ cgi::cleanTmp()
 	std::map<dodoString, __cgiFilesUp>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
 	{
-		fclose(i->second.fp);
+		if (i->second.fp != NULL)
+			fclose(i->second.fp);
 
 		if (postFilesInMem)
 			free(i->second.buf);

@@ -108,6 +108,10 @@ namespace dodo
 	 */
 	struct __cgiFilesUp
 	{
+		/**
+		 * constructor
+		 */
+		__cgiFilesUp();
 		dodoString name;        ///< real name of the file
 		dodoString type;        ///< MIME type
 		FILE *fp;               ///< pointer to opened file[any case - in memory or on disk]
