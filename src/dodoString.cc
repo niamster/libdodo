@@ -91,10 +91,7 @@ dodoString::format(const dodoString &format, ...)
 void
 dodoString::fromL(long number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%ld", number);
-
-	*this = temp;
+	*this = stringTools::lToString(number);
 }
 
 //-------------------------------------------------------------------
@@ -102,10 +99,7 @@ dodoString::fromL(long number)
 void
 dodoString::fromUL(unsigned long number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%ld", number);
-
-	*this = temp;
+	*this = stringTools::ulToString(number);
 }
 
 //-------------------------------------------------------------------
@@ -113,10 +107,7 @@ dodoString::fromUL(unsigned long number)
 void
 dodoString::fromI(int number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%d", number);
-
-	*this = temp;
+	*this = stringTools::iToString(number);
 }
 
 //-------------------------------------------------------------------
@@ -124,10 +115,7 @@ dodoString::fromI(int number)
 void
 dodoString::fromUI(unsigned int number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%u", number);
-
-	*this = temp;
+	*this = stringTools::uiToString(number);
 }
 
 //-------------------------------------------------------------------
@@ -135,10 +123,7 @@ dodoString::fromUI(unsigned int number)
 void
 dodoString::fromS(short number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%sd", number);
-
-	*this = temp;
+	*this = stringTools::sToString(number);
 }
 
 //-------------------------------------------------------------------
@@ -146,10 +131,7 @@ dodoString::fromS(short number)
 void
 dodoString::fromUS(unsigned short number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%sd", number);
-
-	*this = temp;
+	*this = stringTools::usToString(number);
 }
 
 
@@ -158,10 +140,7 @@ dodoString::fromUS(unsigned short number)
 void
 dodoString::fromF(float number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%f", number);
-
-	*this = temp;
+	*this = stringTools::fToString(number);
 }
 
 //-------------------------------------------------------------------
@@ -169,10 +148,7 @@ dodoString::fromF(float number)
 void
 dodoString::fromD(double number)
 {
-	char temp[SIZEOFNUM];
-	sprintf(temp, "%f", number);
-
-	*this = temp;
+	*this = stringTools::dToString(number);
 }
 
 //-------------------------------------------------------------------

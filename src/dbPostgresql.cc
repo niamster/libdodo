@@ -83,12 +83,9 @@ dbPostgresql::connect()
 	performXExec(preExec);
         #endif
 
-	char port[6];
-	sprintf(port, "%d", dbInfo.port);
-
 	conn = PQsetdbLogin(
 		dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
-		port,
+		stringTools::iToString(dbInfo.port).c_str(),
 		NULL,
 		NULL,
 		dbInfo.db.size() == 0 ? NULL : dbInfo.db.c_str(),
