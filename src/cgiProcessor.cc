@@ -25,43 +25,6 @@
 
 using namespace dodo;
 
-const dodoString cgiProcessor::statements[] = {"dodo",
-						"<(",
-						")>",
-						"<)>",
-						"*)>",
-						"if",
-						"else",
-						"fi",
-						"for",
-						"in",
-						"=>",
-						"rof",
-						"print",
-						"break",
-						"continue",
-						"assign",
-						"=",
-						"ns",
-						"sn",
-						"include",
-						"iterator",
-						"version",
-						".",
-						",",
-						"$",
-						"false",
-						"==",
-						"!=",
-						"<=",
-						">=",
-						"<",
-						">",
-						"{",
-						"}"};
-
-//-------------------------------------------------------------------
-//
 cgiProcessor::cgiProcessor() : _continueFlag(false),
 							   _breakDeepness(0),
 							   _loopDeepness(0),

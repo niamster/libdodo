@@ -77,6 +77,50 @@ namespace dodo
 		virtual dodoString read(const dodoString &path, dodoArray<unsigned long> &newLinePos);
 
 		dodoArray< dodoArray<unsigned long> > newLinePositions;    ///< stack of processed new lines' positions
+
+		/**
+		 * @enum processorStatemets describes positions in 'statements' property
+		 */
+		enum processorStatemets
+		{
+			DODO = 0,
+			OPEN_ST,
+			CLOSE_ST,
+			OPEN_NP,
+			CLOSE_NP,
+			OPEN_COMM,
+			CLOSE_COMM,
+			OPEN_IF,
+			ELSE,
+			CLOSE_IF,
+			OPEN_FOR,
+			IN,
+			KEY_VALUE,
+			CLOSE_FOR,
+			PRINT,
+			BREAK,
+			CONT,
+			ASSIGN,
+			ASSIGN_OP,
+			OPEN_NS,
+			CLOSE_NS,
+			INCLUDE,
+			ITERATOR,
+			VERSION,
+			DOT,
+			COMA,
+			DOLLAR,
+			FALSE,
+			EQ,
+			NE,
+			LE,
+			GE,
+			LT,
+			GT,
+			OPEN_VARPART,
+			CLOSE_VARPART,
+		};
+		static const dodoString statements[36];///< dodo statement[for dodo.*, ...]
 	};
 
 };

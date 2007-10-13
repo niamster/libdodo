@@ -25,6 +25,45 @@
 
 using namespace dodo;
 
+const dodoString cgiPreprocessor::statements[] = {"dodo",
+						"<(",
+						")>",
+						"<(>",
+						"<)>",
+						"<(*",
+						"*)>",
+						"if",
+						"else",
+						"fi",
+						"for",
+						"in",
+						"=>",
+						"rof",
+						"print",
+						"break",
+						"continue",
+						"assign",
+						"=",
+						"ns",
+						"sn",
+						"include",
+						"iterator",
+						"version",
+						".",
+						",",
+						"$",
+						"false",
+						"==",
+						"!=",
+						"<=",
+						">=",
+						"<",
+						">",
+						"{",
+						"}"};
+
+//-------------------------------------------------------------------
+
 cgiPreprocessor::cgiPreprocessor()
 {
 }
@@ -86,10 +125,10 @@ cgiPreprocessor::preProcess(const dodoString &path)
 	{
 		begin = j;
 
-		i = buffer.find("<(", begin);
+		i = buffer.find(statements[OPEN_ST], begin);
 		if (i == dodoString::npos)
 		{
-			j = buffer.find(")>", begin);
+			j = buffer.find(statements[CLOSE_ST], begin);
 			if (j != dodoString::npos)
 			{
 				char message[128];
@@ -104,7 +143,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 		{
 			dodoString temp = buffer.substr(begin, i - begin);
 
-			j = temp.find(")>", begin);
+			j = temp.find(statements[CLOSE_ST], begin);
 			if (j != dodoString::npos)
 			{
 				char message[128];
@@ -118,7 +157,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 
 		if (buffer[i] == '>')
 		{
-			j = buffer.find("<)>", i);
+			j = buffer.find(statements[CLOSE_NP], i);
 			if (j != dodoString::npos)
 			{
 				j += 3;
@@ -138,7 +177,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 
 		if (buffer[i] == '*')
 		{
-			j = buffer.find("*)>", i);
+			j = buffer.find(statements[CLOSE_COMM], i);
 			if (j != dodoString::npos)
 			{
 				j += 3;
@@ -154,7 +193,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 			}
 		}
 
-		j = buffer.find(")>", i);
+		j = buffer.find(statements[CLOSE_ST], i);
 		if (j == dodoString::npos)
 		{
 			char message[128];
@@ -181,7 +220,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 
 		dodoString temp = buffer.substr(i, j - i);
 
-		if (temp.find("<(") != dodoString::npos)
+		if (temp.find(statements[OPEN_ST]) != dodoString::npos)
 		{
 			char message[128];
 			sprintf(message, " Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str());
