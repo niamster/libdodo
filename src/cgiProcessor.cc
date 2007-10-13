@@ -25,7 +25,40 @@
 
 using namespace dodo;
 
-const dodoString cgiProcessor::dodoSt = "dodo";
+const dodoString cgiProcessor::statements[] = {"dodo",
+						"<(",
+						")>",
+						"<)>",
+						"*)>",
+						"if",
+						"else",
+						"fi",
+						"for",
+						"in",
+						"=>",
+						"rof",
+						"print",
+						"break",
+						"continue",
+						"assign",
+						"=",
+						"ns",
+						"sn",
+						"include",
+						"iterator",
+						"version",
+						".",
+						",",
+						"$",
+						"false",
+						"==",
+						"!=",
+						"<=",
+						">=",
+						"<",
+						">",
+						"{",
+						"}"};
 
 //-------------------------------------------------------------------
 //
@@ -39,8 +72,8 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 							   cgiFastSet(false)
                 #endif
 {
-	dodo["version"] = PACKAGE_STRING;
-	dodo["iterator"] = "1";
+	dodo[statements[VERSION]] = PACKAGE_STRING;
+	dodo[statements[ITERATOR]] = "1";
 
 	fstd = new flushSTD;
 }
@@ -58,8 +91,8 @@ cgiProcessor::cgiProcessor(cgiFastSTD *a_cf) : _continueFlag(false),
 											   cf(a_cf)
 
 {
-	dodo["version"] = PACKAGE_STRING;
-	dodo["iterator"] = "1";
+	dodo[statements[VERSION]] = PACKAGE_STRING;
+	dodo[statements[ITERATOR]] = "1";
 }
 
 #endif
@@ -116,7 +149,7 @@ cgiProcessor::_process(const dodoString &buffer,
 	{
 		begin = j;
 
-		i = buffer.find("<(", begin);
+		i = buffer.find(statements[OPEN_ST], begin);
 		if (i == dodoString::npos)
 		{
 			tpl.append(buffer.substr(begin));
@@ -129,7 +162,7 @@ cgiProcessor::_process(const dodoString &buffer,
 
 		if (buffer[i] == '>')
 		{
-			j = buffer.find("<)>", i);
+			j = buffer.find(statements[CLOSE_NP], i);
 
 			++i;
 			tpl.append(buffer.substr(i, j - i));
@@ -140,27 +173,27 @@ cgiProcessor::_process(const dodoString &buffer,
 
 		if (buffer[i] == '*')
 		{
-			j = buffer.find("*)>", i);
+			j = buffer.find(statements[CLOSE_ST], i);
 
 			j += 3;
 
 			continue;
 		}
 
-		j = buffer.find(")>", i);
+		j = buffer.find(statements[CLOSE_ST], i);
 
 		temp = buffer.substr(i, j - i);
 
 		j += 2;
 
-		k = temp.find("include");
+		k = temp.find(statements[INCLUDE]);
 		if (k != dodoString::npos)
 		{
 			_include(temp.substr(k + 8), tpl, j, path);
 		}
 		else
 		{
-			k = temp.find("if");
+			k = temp.find(statements[OPEN_IF]);
 			if (k != dodoString::npos)
 			{
 				++namespaceDeepness;
@@ -173,14 +206,14 @@ cgiProcessor::_process(const dodoString &buffer,
 			}
 			else
 			{
-				k = temp.find("print");
+				k = temp.find(statements[PRINT]);
 				if (k != dodoString::npos)
 				{
 					_print(temp.substr(k + 5), tpl, j, path);
 				}
 				else
 				{
-					k = temp.find("for");
+					k = temp.find(statements[OPEN_FOR]);
 					if (k != dodoString::npos)
 					{
 						++_loopDeepness;
@@ -195,7 +228,7 @@ cgiProcessor::_process(const dodoString &buffer,
 					}
 					else
 					{
-						k = temp.find("break");
+						k = temp.find(statements[BREAK]);
 						if (k != dodoString::npos)
 						{
 							if (_break(temp.substr(k + 5), j, path))
@@ -203,7 +236,7 @@ cgiProcessor::_process(const dodoString &buffer,
 						}
 						else
 						{
-							k = temp.find("continue");
+							k = temp.find(statements[CONT]);
 							if (k != dodoString::npos)
 							{
 								if (_loopDeepness > 0)
@@ -214,14 +247,14 @@ cgiProcessor::_process(const dodoString &buffer,
 							}
 							else
 							{
-								k = temp.find("assign");
+								k = temp.find(statements[ASSIGN]);
 								if (k != dodoString::npos)
 								{
 									_assign(temp.substr(k + 6), j, path);
 								}
 								else
 								{
-									k = temp.find("ns");
+									k = temp.find(statements[OPEN_NS]);
 									if (k != dodoString::npos)
 									{
 										++namespaceDeepness;
@@ -274,7 +307,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (stringTools::equal(varName, dodoSt))
+	if (stringTools::equal(varName, statements[DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -293,7 +326,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (stringTools::equal(varName, dodoSt))
+	if (stringTools::equal(varName, statements[DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -312,7 +345,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (stringTools::equal(varName, dodoSt))
+	if (stringTools::equal(varName, statements[DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -331,7 +364,7 @@ cgiProcessor::assign(dodoString varName,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (stringTools::equal(varName, dodoSt))
+	if (stringTools::equal(varName, statements[DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_ASSIGN, ERR_LIBDODO, CGIPREPROCESSOR_DODOISRESERVEDVARNAME, CGIPREPROCESSOR_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	globalArray.erase(varName);
@@ -354,22 +387,22 @@ cgiProcessor::_if(const dodoString &buffer,
 
 	unsigned short oper(0);
 
-	dodoArray<dodoString> temp2 = tools::explode(statement, "==");
+	dodoArray<dodoString> temp2 = tools::explode(statement, statements[EQ]);
 	if (temp2.size() != 2)
 	{
-		temp2 = tools::explode(statement, "!=");
+		temp2 = tools::explode(statement, statements[NE]);
 		if (temp2.size() != 2)
 		{
-			temp2 = tools::explode(statement, "<=");
+			temp2 = tools::explode(statement, statements[LE]);
 			if (temp2.size() != 2)
 			{
-				temp2 = tools::explode(statement, ">=");
+				temp2 = tools::explode(statement, statements[GE]);
 				if (temp2.size() != 2)
 				{
-					temp2 = tools::explode(statement, "<");
+					temp2 = tools::explode(statement, statements[LT]);
 					if (temp2.size() != 2)
 					{
-						temp2 = tools::explode(statement, ">");
+						temp2 = tools::explode(statement, statements[GT]);
 						if (temp2.size() == 2)
 						{
 							oper = 4;
@@ -420,7 +453,7 @@ cgiProcessor::_if(const dodoString &buffer,
 
 		temp1 = getVar(temp1, start, path);
 
-		if (!stringTools::equal(temp1, "false") && temp1.size() != 0)
+		if (!stringTools::equal(temp1, statements[FALSE]) && temp1.size() != 0)
 			accept = !invert;
 		else
 			accept = invert;
@@ -469,12 +502,12 @@ cgiProcessor::_if(const dodoString &buffer,
 		}
 	}
 
-	unsigned long u(blockEnd(buffer, start, "if", "fi", path)), v(0);
+	unsigned long u(blockEnd(buffer, start, statements[OPEN_IF], statements[CLOSE_IF], path)), v(0);
 	bool found(true);
 
 	try
 	{
-		v = blockEnd(buffer, start, "if", "else", path);
+		v = blockEnd(buffer, start, statements[OPEN_IF], statements[ELSE], path);
 	}
 	catch (...)
 	{
@@ -492,12 +525,12 @@ cgiProcessor::_if(const dodoString &buffer,
 	{
 		if (found)
 		{
-			v = buffer.find(")>", v) + 2;
+			v = buffer.find(statements[CLOSE_ST], v) + 2;
 			tpl.append(_process(buffer.substr(v, u - v), path));
 		}
 	}
 
-	return buffer.find(")>", u) + 2;
+	return buffer.find(statements[CLOSE_ST], u) + 2;
 }
 
 //-------------------------------------------------------------------
@@ -513,7 +546,7 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 
 	while (true)
 	{
-		u = buffer.find("<(", m);
+		u = buffer.find(statements[OPEN_ST], m);
 		if (u == dodoString::npos)
 		{
 			char message[128];
@@ -522,7 +555,7 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOR_BLOCKEND, ERR_LIBDODO, CGIPREPROCESSOR_WRONGBLOCK, CGIPREPROCESSOR_WRONGBLOCK_STR, __LINE__, __FILE__, message);
 		}
 
-		b = buffer.find(")>", u + 2);
+		b = buffer.find(statements[CLOSE_ST], u + 2);
 		if (b == dodoString::npos)
 		{
 			char message[128];
@@ -578,7 +611,7 @@ cgiProcessor::_print(const dodoString &statement,
 					 unsigned long &start,
 					 const dodoString &path)
 {
-	dodoStringArr temp = tools::explode(statement, ",");
+	dodoStringArr temp = tools::explode(statement, statements[COMA]);
 	if (temp.size() == 1)
 		tpl.append(getVar(statement, start, path));
 	else
@@ -622,7 +655,7 @@ cgiProcessor::_assign(const dodoString &statement,
 					  unsigned long &start,
 					  const dodoString &path)
 {
-	dodoStringArr temp = tools::explode(statement, "=", 2);
+	dodoStringArr temp = tools::explode(statement, statements[ASSIGN_OP], 2);
 
 	if (temp.size() == 0)
 	{
@@ -644,7 +677,7 @@ cgiProcessor::_assign(const dodoString &statement,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (stringTools::equal(varName, dodoSt))
+	if (stringTools::equal(varName, statements[DODO]))
 	{
 		char message[128];
 		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
@@ -698,11 +731,11 @@ cgiProcessor::_ns(const dodoString &buffer,
 				  dodoString &tpl,
 				  const dodoString &path)
 {
-	unsigned long u(blockEnd(buffer, start, "ns", "sn", path));
+	unsigned long u(blockEnd(buffer, start, statements[OPEN_NS], statements[CLOSE_NS], path));
 
 	tpl.append(_process(buffer.substr(start, u - start), path));
 
-	return buffer.find(")>", u) + 2;
+	return buffer.find(statements[CLOSE_ST], u) + 2;
 }
 
 //-------------------------------------------------------------------
@@ -714,9 +747,9 @@ cgiProcessor::_for(const dodoString &buffer,
 				   dodoString &tpl,
 				   const dodoString &path)
 {
-	unsigned long u(blockEnd(buffer, start, "for", "rof", path));
+	unsigned long u(blockEnd(buffer, start, statements[OPEN_FOR], statements[CLOSE_FOR], path));
 
-	unsigned long p = statement.find("$");
+	unsigned long p = statement.find(statements[DOLLAR]);
 	unsigned long i(p), j(statement.size());
 
 	for (; i < j; ++i)
@@ -730,11 +763,11 @@ cgiProcessor::_for(const dodoString &buffer,
 	bool key(false);
 	dodoString keyName;
 
-	p = statement.find("=>", i + 1);
+	p = statement.find(statements[KEY_VALUE], i + 1);
 	if (p != dodoString::npos)
 	{
 		key = true;
-		p = statement.find("$", p + 2);
+		p = statement.find(statements[DOLLAR], p + 2);
 
 		i = p;
 		for (; i < j; ++i)
@@ -745,7 +778,7 @@ cgiProcessor::_for(const dodoString &buffer,
 		varName = statement.substr(p, i - p).substr(1);
 	}
 
-	p = statement.find("in", i + 1);
+	p = statement.find(statements[IN], i + 1);
 	if (p == dodoString::npos)
 	{
 		char message[128];
@@ -757,13 +790,13 @@ cgiProcessor::_for(const dodoString &buffer,
 	dodoString targetVar = trim(statement.substr(p + 2));
 	dodoString forSpace = buffer.substr(start, u - start);
 
-	u = buffer.find(")>", u) + 2;
+	u = buffer.find(statements[CLOSE_ST], u) + 2;
 
 	if (targetVar[0] == '$')
 	{
 		targetVar = targetVar.substr(1);
 
-		dodoStringArr temp = tools::explode(targetVar, ".");
+		dodoStringArr temp = tools::explode(targetVar, statements[DOT]);
 
 		if (temp.size() == 1)
 		{
@@ -789,7 +822,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; i < j; ++i, ++iterator)
 					{
-						dodo["iterator"] = stringTools::lToString(iterator);
+						dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = stringTools::lToString(i);
@@ -806,7 +839,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = stringTools::lToString(iteratorPrev);
+					dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -847,7 +880,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; k != l; ++k, ++iterator)
 					{
-						dodo["iterator"] = stringTools::lToString(iterator);
+						dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = k->first;
@@ -864,7 +897,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = stringTools::lToString(iteratorPrev);
+					dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -904,7 +937,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; i < j; ++i, ++iterator)
 					{
-						dodo["iterator"] = stringTools::lToString(iterator);
+						dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = stringTools::lToString(i);
@@ -921,7 +954,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = stringTools::lToString(iteratorPrev);
+					dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -962,7 +995,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (; k != l; ++k, ++iterator)
 					{
-						dodo["iterator"] = stringTools::lToString(iterator);
+						dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = k->first;
@@ -979,7 +1012,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = stringTools::lToString(iteratorPrev);
+					dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -1020,7 +1053,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
 					{
-						dodo["iterator"] = stringTools::lToString(iterator);
+						dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = stringTools::lToString(keyNIter);
@@ -1037,7 +1070,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = stringTools::lToString(iteratorPrev);
+					dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 					if (iter != local.end())
 						local[varName] = iterVal;
@@ -1078,7 +1111,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					iterator = 1;
 					for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
 					{
-						dodo["iterator"] = stringTools::lToString(iterator);
+						dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 						if (key)
 							local[keyName] = stringTools::lToString(keyNIter);
@@ -1096,7 +1129,7 @@ cgiProcessor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo["iterator"] = stringTools::lToString(iteratorPrev);
+					dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 					if (iter != localHash.end())
 						localHash[varName] = iterVal;
@@ -1145,7 +1178,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								iterator = 1;
 								for (; i < j; ++i, ++iterator)
 								{
-									dodo["iterator"] = stringTools::lToString(iterator);
+									dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 									if (key)
 										local[keyName] = stringTools::lToString(i);
@@ -1162,7 +1195,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								}
 
 								iterator =  iteratorPrev;
-								dodo["iterator"] = stringTools::lToString(iteratorPrev);
+								dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 								if (iter != local.end())
 									local[varName] = iterVal;
@@ -1208,7 +1241,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								iterator = 1;
 								for (; i < j; ++i, ++iterator)
 								{
-									dodo["iterator"] = stringTools::lToString(iterator);
+									dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 									if (key)
 										local[keyName] = stringTools::lToString(i);
@@ -1225,7 +1258,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								}
 
 								iterator =  iteratorPrev;
-								dodo["iterator"] = stringTools::lToString(iteratorPrev);
+								dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 								if (iter != local.end())
 									local[varName] = iterVal;
@@ -1269,7 +1302,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							iterator = 1;
 							for (; i < j; ++i, ++iterator)
 							{
-								dodo["iterator"] = stringTools::lToString(iterator);
+								dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 								if (key)
 									local[keyName] = stringTools::lToString(i);
@@ -1286,7 +1319,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							}
 
 							iterator =  iteratorPrev;
-							dodo["iterator"] = stringTools::lToString(iteratorPrev);
+							dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 							if (iter != local.end())
 								local[varName] = iterVal;
@@ -1331,7 +1364,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							iterator = 1;
 							for (; k != l; ++k, ++iterator)
 							{
-								dodo["iterator"] = stringTools::lToString(iterator);
+								dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 								if (key)
 									local[keyName] = k->first;
@@ -1348,7 +1381,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							}
 
 							iterator =  iteratorPrev;
-							dodo["iterator"] = stringTools::lToString(iteratorPrev);
+							dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 							if (iter != local.end())
 								local[varName] = iterVal;
@@ -1401,7 +1434,7 @@ cgiProcessor::_for(const dodoString &buffer,
 										iterator = 1;
 										for (; i < j; ++i, ++iterator)
 										{
-											dodo["iterator"] = stringTools::lToString(iterator);
+											dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 											if (key)
 												local[keyName] = stringTools::lToString(i);
@@ -1418,7 +1451,7 @@ cgiProcessor::_for(const dodoString &buffer,
 										}
 
 										iterator =  iteratorPrev;
-										dodo["iterator"] = stringTools::lToString(iteratorPrev);
+										dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 										if (iter != local.end())
 											local[varName] = iterVal;
@@ -1461,7 +1494,7 @@ cgiProcessor::_for(const dodoString &buffer,
 		iterator = 1;
 		for (; i < j; ++i, ++iterator)
 		{
-			dodo["iterator"] = stringTools::lToString(iterator);
+			dodo[statements[ITERATOR]] = stringTools::lToString(iterator);
 
 			if (key)
 				local[keyName] = stringTools::lToString(i);
@@ -1478,7 +1511,7 @@ cgiProcessor::_for(const dodoString &buffer,
 		}
 
 		iterator =  iteratorPrev;
-		dodo["iterator"] = stringTools::lToString(iteratorPrev);
+		dodo[statements[ITERATOR]] = stringTools::lToString(iteratorPrev);
 
 		if (iter != local.end())
 			local[varName] = iterVal;
@@ -1514,14 +1547,14 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		ob = 1;
 		cb = 0;
 
-		u = varName.find("{", m);
+		u = varName.find(statements[OPEN_VARPART], m);
 		if (u == dodoString::npos)
 			break;
 
 		c = u;
 		while (true)
 		{
-			b = varName.find("}", c + 1);
+			b = varName.find(statements[CLOSE_VARPART], c + 1);
 			if (b == dodoString::npos)
 			{
 				char message[128];
@@ -1556,11 +1589,11 @@ cgiProcessor::getVar(const dodoString &a_varName,
 
 	varName.erase(0, 1);
 
-	dodoStringArr temp = tools::explode(varName, ".");
+	dodoStringArr temp = tools::explode(varName, statements[DOT]);
 
 	if (temp.size() == 1)
 	{
-		if (stringTools::equal(varName, dodoSt))
+		if (stringTools::equal(varName, statements[DODO]))
 			return "cgi framework libdodo";
 
 		dodoStringMap::iterator k(local.begin()), l(local.end());
@@ -1576,7 +1609,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 	}
 	else
 	{
-		if (stringTools::equal(temp[0], dodoSt))
+		if (stringTools::equal(temp[0], statements[DODO]))
 		{
 			dodoStringMap::iterator k(local.begin()), l(local.end());
 			for (; k != l; ++k)

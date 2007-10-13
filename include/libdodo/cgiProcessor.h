@@ -244,7 +244,47 @@ namespace dodo
 		std::map<unsigned int, dodoStringMap> localNamespace;               ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
 		std::map<unsigned int, dodoStringArr> namespaceVars;                ///< names of vars in namespaces
 
-		static const dodoString dodoSt;///< dodo statement[for dodo.*]
+		/**
+		 * @enum processorStatemets describes positions in 'statements' property
+		 */
+		enum processorStatemets
+		{
+			DODO = 0,
+			OPEN_ST,
+			CLOSE_ST,
+			CLOSE_NP,
+			CLOSE_COMM,
+			OPEN_IF,
+			ELSE,
+			CLOSE_IF,
+			OPEN_FOR,
+			IN,
+			KEY_VALUE,
+			CLOSE_FOR,
+			PRINT,
+			BREAK,
+			CONT,
+			ASSIGN,
+			ASSIGN_OP,
+			OPEN_NS,
+			CLOSE_NS,
+			INCLUDE,
+			ITERATOR,
+			VERSION,
+			DOT,
+			COMA,
+			DOLLAR,
+			FALSE,
+			EQ,
+			NE,
+			LE,
+			GE,
+			LT,
+			GT,
+			OPEN_VARPART,
+			CLOSE_VARPART,
+		};
+		static const dodoString statements[34];///< dodo statement[for dodo.*, ...]
 
             #ifdef FCGI_EXT
 
