@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edi:test xmlns:edi="http://ecommerce.org/shema" id="df">		
+	<test id="dddasfasdhsff" do="sd">
+		<dust id="dustNode" />
+		asd
+	</test>
+	<bubu>
+		<mimi>
+			<edi:hehe id="found!">
+				<![CDATA[ aszdfszz\\0zzzzzzzzzzdasf]]>
+				<bebe id="kl">dsd
+					<bebe id="ddffssssssdfdddasdfsdgshssd">asd</bebe>
+					<bebe id="ffdda">asddsa</bebe>	
+				</bebe>
+				<bebe id="km">dsd
+					<bebe id="asdfsdgshssd">asd</bebe>
+					<bebe id="ffddhgggggggggga">asddsa</bebe>	
+				</bebe>
+			</edi:hehe>
+		</mimi>	
+	</bubu>		
+	<edi:tesT id="ffdda">asddsa</edi:tesT>		
+	<![CDATA[
+	hahas]]>
+</edi:test>

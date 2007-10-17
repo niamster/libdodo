@@ -1,0 +1,17 @@
+GCC_PATH=/opt/gcc-3.4.3/bin/
+
+LIBTOOL = libtool
+CXX = $(GCC_PATH)g++
+CFLAGS=-O2 -march=pentium4
+
+MOD_MYSQL_CPP:=-I/opt/mysql/include/mysql
+
+override DEFINES:=-DMYSQL_EXT $(DEFINES)
+
+override CPPFLAGS:=-I../../ $(MOD_MYSQL_CPP)  $(CPPFLAGS)
+override LDFLAGS:=-L../../ $(LDFLAGS) 
+
+test: test.cc
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@ 
+clean:
+	rm -fr test .libs core*

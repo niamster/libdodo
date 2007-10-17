@@ -1,0 +1,22 @@
+
+include ../../directives.mk
+
+include ../../directives.runtime.mk
+
+include ../../flags.mk
+			
+###########################################################
+
+override CPPFLAGS:=-I../../include $(CPPFLAGS)
+override LDFLAGS:=-L../../ $(LDFLAGS) 
+
+all: test module
+
+test: test.cc
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -ldodo $^ -o $@
+
+module: module.cc
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) $(DEBUG) -Wall -shared -ldodo -fPIC $^ -o $@ 
+
+clean:
+	rm -fr test module
