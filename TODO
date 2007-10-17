@@ -1,23 +1,21 @@
 1.
-
 	db: renew connect
-	
-	remove sprintf where not needed
+	exception in _exec
 
 2.
-	systemProcessSharedDataGuard
-	systemProcessSharedDataCollectionGuard
-	processGuard
+	!! systemProcessSharedDataGuard
+	!! systemProcessSharedDataCollectionGuard
+	!! processGuard
 
 3.
-	thread-safe
+	!! thread-safe
 
 4.	
-	tests
+	!! tests
 
 5.
 	json
-	module loading
+	!! module loading
 
 6.
 	firebird
