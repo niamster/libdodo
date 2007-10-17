@@ -1,6 +1,7 @@
-#include <baseEx.h>
-#include <xml.h>
-#include <tools.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/xml.h>
+#include <libdodo/tools.h>
+
 #include <iostream>
 
 using namespace dodo;

@@ -24,13 +24,13 @@
 #ifndef CGIFAST_H_
 #define CGIFAST_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef FCGI_EXT
 
     #include <fcgiapp.h>
 
-    #include <types.h>
+    #include <libdodo/types.h>
 
 namespace dodo
 {

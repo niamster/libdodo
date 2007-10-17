@@ -31,13 +31,13 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <tools.h>
-#include <flushSTDEx.h>
-#include <types.h>
-#include <flush.h>
-#include <flushSocket.h>
+#include <libdodo/tools.h>
+#include <libdodo/flushSTDEx.h>
+#include <libdodo/types.h>
+#include <libdodo/flush.h>
+#include <libdodo/flushSocket.h>
 
 namespace dodo
 {

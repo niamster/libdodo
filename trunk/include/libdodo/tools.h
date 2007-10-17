@@ -24,7 +24,7 @@
 #ifndef _TOOLS_H_
 #define _TOOLS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef ICONV_EXT
     #include <iconv.h>
@@ -49,9 +49,9 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <flushSocketOptions.h>
-#include <toolsEx.h>
-#include <types.h>
+#include <libdodo/flushSocketOptions.h>
+#include <libdodo/toolsEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

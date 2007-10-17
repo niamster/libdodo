@@ -1,6 +1,7 @@
-#include <baseEx.h>
-#include <dbSqlite.h>
-#include <flushDiskTools.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/dbSqlite.h>
+#include <libdodo/flushDiskTools.h>
+
 #include <iostream>
 
 using namespace dodo;

@@ -22,7 +22,7 @@
  */
 
 
-#include <systemThreadSharedDataCollectionGuard.h>
+#include <libdodo/systemThreadSharedDataCollectionGuard.h>
 
 using namespace dodo;
 

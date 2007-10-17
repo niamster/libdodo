@@ -24,12 +24,12 @@
 #ifndef _ATOMICMUTEX_H_
 #define _ATOMICMUTEX_H_
 
+#include <libdodo/directives.h>
+
 #include <pthread.h>
 
-#include <directives.h>
-
-#include <atomicMutexEx.h>
-#include <types.h>
+#include <libdodo/atomicMutexEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

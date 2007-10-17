@@ -24,7 +24,7 @@
 #ifndef _FLUSHSOCKET_H_
 #define _FLUSHSOCKET_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -37,13 +37,13 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <flushDiskTools.h>
-#include <tools.h>
-#include <flushSocketEx.h>
-#include <types.h>
-#include <flushSocketOptions.h>
-#include <flushSocketExchange.h>
-#include <xexec.h>
+#include <libdodo/flushDiskTools.h>
+#include <libdodo/tools.h>
+#include <libdodo/flushSocketEx.h>
+#include <libdodo/types.h>
+#include <libdodo/flushSocketOptions.h>
+#include <libdodo/flushSocketExchange.h>
+#include <libdodo/xexec.h>
 
 namespace dodo
 {

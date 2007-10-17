@@ -24,18 +24,17 @@
 #ifndef _FLUSHDISK_H_
 #define _FLUSHDISK_H_
 
-#include <directives.h>
-
+#include <libdodo/directives.h>
 
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <tools.h>
-#include <flushDiskTools.h>
-#include <flushDiskEx.h>
-#include <types.h>
-#include <flush.h>
+#include <libdodo/tools.h>
+#include <libdodo/flushDiskTools.h>
+#include <libdodo/flushDiskEx.h>
+#include <libdodo/types.h>
+#include <libdodo/flush.h>
 
 namespace dodo
 {

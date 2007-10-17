@@ -24,16 +24,16 @@
 #ifndef _XML_H_
 #define _XML_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef LIBXML2_EXT
 
     #include <libxml/parser.h>
     #include <libxml/xmlmemory.h>
 
-    #include <xmlEx.h>
-    #include <types.h>
-    #include <dodoMap.h>
+    #include <libdodo/xmlEx.h>
+    #include <libdodo/types.h>
+    #include <libdodo/dodoMap.h>
 
 namespace dodo
 {

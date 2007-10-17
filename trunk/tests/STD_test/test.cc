@@ -1,6 +1,7 @@
-#include <baseEx.h>
-#include <flushSTD.h>
-#include <flushSocketTools.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/flushSTD.h>
+#include <libdodo/flushSocketTools.h>
+
 #include <iostream>
 
 using namespace dodo;

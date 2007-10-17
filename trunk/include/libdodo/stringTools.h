@@ -24,9 +24,9 @@
 #ifndef _STRINGTOOLS_H_
 #define _STRINGTOOLS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <dodoString.h>
+#include <libdodo/dodoString.h>
 
 namespace dodo
 {

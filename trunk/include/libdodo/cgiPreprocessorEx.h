@@ -24,9 +24,9 @@
 #ifndef _CGIPREPROCESSOREX_H_
 #define _CGIPREPROCESSOREX_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <baseEx.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {

@@ -24,7 +24,7 @@
 #ifndef _FLUSHSOCKETEXCHANGE_H_
 #define _FLUSHSOCKETEXCHANGE_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -36,10 +36,10 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <flushSocketOptions.h>
-#include <flushSocketExchangeEx.h>
-#include <types.h>
-#include <xexec.h>
+#include <libdodo/flushSocketOptions.h>
+#include <libdodo/flushSocketExchangeEx.h>
+#include <libdodo/types.h>
+#include <libdodo/xexec.h>
 
 namespace dodo
 {

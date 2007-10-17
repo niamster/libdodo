@@ -24,7 +24,7 @@
 #ifndef _DIRECTIVES_H_
 #define _DIRECTIVES_H_
 
-#include <directives.runtime.h>
+#include <libdodo/directives.runtime.h>
 
 #ifndef _GNU_SOURCE
     #define _GNU_SOURCE

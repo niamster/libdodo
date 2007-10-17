@@ -1,5 +1,6 @@
-#include <xexec.h>
-#include <flushSTD.h>
+#include <libdodo/xexec.h>
+#include <libdodo/flushSTD.h>
+
 #include <string.h>
 #include <iostream>
 

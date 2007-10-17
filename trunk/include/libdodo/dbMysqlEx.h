@@ -24,9 +24,9 @@
 #ifndef _DBMYSQLEX_H_
 #define _DBMYSQLEX_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <baseEx.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {

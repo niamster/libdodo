@@ -24,18 +24,18 @@
 #ifndef _FLUSHSOCKETOPTIONS_H_
 #define _FLUSHSOCKETOPTIONS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <flushDiskTools.h>
-#include <tools.h>
-#include <flushSocketOptionsEx.h>
-#include <types.h>
-#include <flush.h>
+#include <libdodo/flushDiskTools.h>
+#include <libdodo/tools.h>
+#include <libdodo/flushSocketOptionsEx.h>
+#include <libdodo/types.h>
+#include <libdodo/flush.h>
 
 namespace dodo
 {

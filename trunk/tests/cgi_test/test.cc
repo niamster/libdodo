@@ -1,6 +1,7 @@
-#include <baseEx.h>
-#include <cgi.h>
-#include <cgiProcessor.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/cgi.h>
+#include <libdodo/cgiProcessor.h>
+
 #include <iostream>
 
 using namespace dodo;

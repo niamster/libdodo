@@ -24,10 +24,11 @@
 #ifndef _DODOMAP_H_
 #define _DODOMAP_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <map>
-#include <dodoString.h>
+
+#include <libdodo/dodoString.h>
 
 namespace dodo
 {

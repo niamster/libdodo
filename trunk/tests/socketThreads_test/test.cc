@@ -1,8 +1,9 @@
-#include <baseEx.h>
-#include <flushSocket.h>
-#include <flushSocketTools.h>
-#include <systemThreads.h>
-#include <systemThreadSharedDataGuard.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/flushSocket.h>
+#include <libdodo/flushSocketTools.h>
+#include <libdodo/systemThreads.h>
+#include <libdodo/systemThreadSharedDataGuard.h>
+
 #include <iostream>
 
 using namespace dodo;

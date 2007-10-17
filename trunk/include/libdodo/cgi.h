@@ -24,16 +24,16 @@
 #ifndef _CGI_H_
 #define _CGI_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <string.h>
 #include <stdlib.h>
 
-#include <tools.h>
-#include <types.h>
-#include <dodoMap.h>
-#include <cgiFast.h>
-#include <flushSTD.h>
+#include <libdodo/tools.h>
+#include <libdodo/types.h>
+#include <libdodo/dodoMap.h>
+#include <libdodo/cgiFast.h>
+#include <libdodo/flushSTD.h>
 
 namespace dodo
 {

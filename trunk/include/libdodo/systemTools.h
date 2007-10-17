@@ -24,7 +24,7 @@
 #ifndef _SYSTEMTOOLS_H_
 #define _SYSTEMTOOLS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <signal.h>
 #include <pwd.h>
@@ -43,9 +43,9 @@
 
 #endif
 
-#include <systemToolsEx.h>
-#include <types.h>
-#include <tools.h>
+#include <libdodo/systemToolsEx.h>
+#include <libdodo/types.h>
+#include <libdodo/tools.h>
 
 namespace dodo
 {

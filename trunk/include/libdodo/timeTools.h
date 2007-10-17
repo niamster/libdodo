@@ -24,13 +24,13 @@
 #ifndef _TIMETOOLS_H_
 #define _TIMETOOLS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <time.h>
 #include <stdlib.h>
 
-#include <timeToolsEx.h>
-#include <types.h>
+#include <libdodo/timeToolsEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

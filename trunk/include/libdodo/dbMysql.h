@@ -24,17 +24,17 @@
 #ifndef _DBMYSQL_H_
 #define _DBMYSQL_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef MYSQL_EXT
 
     #include <mysql.h>
     #include <sys/socket.h>
 
-    #include <tools.h>
-    #include <dbMysqlEx.h>
-    #include <dbSqlBase.h>
-    #include <xexec.h>
+    #include <libdodo/tools.h>
+    #include <libdodo/dbMysqlEx.h>
+    #include <libdodo/dbSqlBase.h>
+    #include <libdodo/xexec.h>
 
 namespace dodo
 {

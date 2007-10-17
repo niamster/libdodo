@@ -1,9 +1,10 @@
-#include <baseEx.h>
-#include <dbBase.h>
-#include <dbPostgresql.h>
-#include <dbMysql.h>
-#include <dbSqlite.h>
-#include <flushDiskTools.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/dbBase.h>
+#include <libdodo/dbPostgresql.h>
+#include <libdodo/dbMysql.h>
+#include <libdodo/dbSqlite.h>
+#include <libdodo/flushDiskTools.h>
+
 #include <iostream>
 
 using namespace dodo;

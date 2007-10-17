@@ -22,7 +22,7 @@
  */
 
 
-#include <systemThreads.h>
+#include <libdodo/systemThreads.h>
 
 #ifdef PTHREAD_EXT
 

@@ -22,7 +22,7 @@
  */
 
 
-#include <xml.h>
+#include <libdodo/xml.h>
 
 #ifdef LIBXML2_EXT
 

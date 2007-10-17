@@ -24,7 +24,7 @@
 #ifndef _FLUSHSOCKETTOOLS_H_
 #define _FLUSHSOCKETTOOLS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -36,9 +36,9 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <flushSocketToolsEx.h>
-#include <types.h>
-#include <tools.h>
+#include <libdodo/flushSocketToolsEx.h>
+#include <libdodo/types.h>
+#include <libdodo/tools.h>
 
 namespace dodo
 {

@@ -24,11 +24,11 @@
 #ifndef _DBBASE_H_
 #define _DBBASE_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <types.h>
-#include <tools.h>
-#include <dbInterface.h>
+#include <libdodo/types.h>
+#include <libdodo/tools.h>
+#include <libdodo/dbInterface.h>
 
 namespace dodo
 {

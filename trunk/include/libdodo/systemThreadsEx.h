@@ -24,9 +24,9 @@
 #ifndef _SYSTEMTHREADSEX_H_
 #define _SYSTEMTHREADSEX_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <baseEx.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {

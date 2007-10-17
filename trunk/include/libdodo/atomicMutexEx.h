@@ -24,9 +24,9 @@
 #ifndef FLUSHNBAEX_H_
 #define FLUSHNBAEX_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <baseEx.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {

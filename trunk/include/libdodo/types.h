@@ -30,11 +30,11 @@
 
 #include <errno.h>
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <dodoString.h>
-#include <stringTools.h>
-#include <dodoMap.h>
+#include <libdodo/dodoString.h>
+#include <libdodo/stringTools.h>
+#include <libdodo/dodoMap.h>
 
 namespace dodo
 {

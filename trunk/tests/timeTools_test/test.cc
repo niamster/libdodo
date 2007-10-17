@@ -1,7 +1,8 @@
-#include <baseEx.h>
-#include <systemTools.h>
-#include <tools.h>
-#include <timeTools.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/systemTools.h>
+#include <libdodo/tools.h>
+#include <libdodo/timeTools.h>
+
 #include <iostream>
 
 using namespace dodo;

@@ -24,10 +24,10 @@
 #ifndef _FLUSH_H_
 #define _FLUSH_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <xexec.h>
-#include <types.h>
+#include <libdodo/xexec.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

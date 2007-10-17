@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <cgiFast.h>
+#include <libdodo/cgiFast.h>
 
 #ifdef FCGI_EXT
 

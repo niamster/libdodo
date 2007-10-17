@@ -24,7 +24,7 @@
 #ifndef _XEXEC_H_
 #define _XEXEC_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef DL_EXT
 
@@ -32,8 +32,8 @@
 
 #endif
 
-#include <xexecEx.h>
-#include <types.h>
+#include <libdodo/xexecEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

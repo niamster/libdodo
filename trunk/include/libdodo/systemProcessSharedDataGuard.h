@@ -27,11 +27,11 @@
 #include <semaphore.h>
 #include <time.h>
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <systemProcessSharedDataGuardEx.h>
-#include <types.h>
-#include <tools.h>
+#include <libdodo/systemProcessSharedDataGuardEx.h>
+#include <libdodo/types.h>
+#include <libdodo/tools.h>
 
 namespace dodo
 {

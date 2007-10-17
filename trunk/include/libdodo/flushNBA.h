@@ -25,14 +25,14 @@
 #ifndef _FLUSHNBA_H_
 #define _FLUSHNBA_H_
 
-#include <directives.h>
-
-#include <flushNBAEx.h>
-#include <types.h>
-#include <flush.h>
-#include <tools.h>
+#include <libdodo/directives.h>
 
 #include <poll.h>
+
+#include <libdodo/flushNBAEx.h>
+#include <libdodo/types.h>
+#include <libdodo/flush.h>
+#include <libdodo/tools.h>
 
 namespace dodo
 {

@@ -24,9 +24,9 @@
 #ifndef _BASEEX_H_
 #define _BASEEX_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <types.h>
+#include <libdodo/types.h>
 
 #ifdef DL_EXT
 

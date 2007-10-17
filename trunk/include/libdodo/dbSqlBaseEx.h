@@ -24,11 +24,10 @@
 #ifndef _DBSQLBASEEX_H_
 #define _DBSQLBASEEX_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <types.h>
-
-#include <baseEx.h>
+#include <libdodo/types.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {

@@ -23,16 +23,16 @@
 #ifndef _DBSQLITE_H_
 #define _DBSQLITE_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef SQLITE_EXT
 
     #include <sqlite3.h>
 
-    #include <tools.h>
-    #include <dbSqliteEx.h>
-    #include <dbSqlBase.h>
-    #include <xexec.h>
+    #include <libdodo/tools.h>
+    #include <libdodo/dbSqliteEx.h>
+    #include <libdodo/dbSqlBase.h>
+    #include <libdodo/xexec.h>
 
 namespace dodo
 {

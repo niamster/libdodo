@@ -24,8 +24,9 @@
 #ifndef _DBINTERFACE_H_
 #define _DBINTERFACE_H_
 
-#include <directives.h>
-#include <types.h>
+#include <libdodo/directives.h>
+
+#include <libdodo/types.h>
 
 namespace dodo
 {

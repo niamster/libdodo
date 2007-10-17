@@ -25,7 +25,7 @@
 #ifndef _REGEXP_H_
 #define _REGEXP_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef PCRE_EXT
 
@@ -38,7 +38,7 @@
 
 #endif
 
-#include <types.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

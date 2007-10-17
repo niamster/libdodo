@@ -24,14 +24,14 @@
 #ifndef _CGIPROCESSOR_H_
 #define _CGIPROCESSOR_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <cgiProcessorEx.h>
-#include <types.h>
-#include <tools.h>
-#include <cgiPreprocessor.h>
-#include <cgiFast.h>
-#include <flushSTD.h>
+#include <libdodo/cgiProcessorEx.h>
+#include <libdodo/types.h>
+#include <libdodo/tools.h>
+#include <libdodo/cgiPreprocessor.h>
+#include <libdodo/cgiFast.h>
+#include <libdodo/flushSTD.h>
 
 namespace dodo
 {

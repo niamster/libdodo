@@ -1,8 +1,9 @@
-#include <tools.h>
-#include <flushDisk.h>
-#include <baseEx.h>
-#include <flushDiskTools.h>
-#include <flushSocket.h>
+#include <libdodo/tools.h>
+#include <libdodo/flushDisk.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/flushDiskTools.h>
+#include <libdodo/flushSocket.h>
+
 #include <iostream>
 
 using namespace dodo;

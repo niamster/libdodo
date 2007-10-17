@@ -27,10 +27,10 @@
 #include <pthread.h>
 #include <time.h>
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <systemThreadSharedDataGuardEx.h>
-#include <types.h>
+#include <libdodo/systemThreadSharedDataGuardEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

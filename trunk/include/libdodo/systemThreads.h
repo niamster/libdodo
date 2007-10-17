@@ -24,7 +24,7 @@
 #ifndef _SYSTEMTHREADS_H_
 #define _SYSTEMTHREADS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef PTHREAD_EXT
 
@@ -37,10 +37,10 @@
     #include <signal.h>
     #include <pthread.h>
 
-    #include <systemJobs.h>
-    #include <systemTools.h>
-    #include <systemThreadsEx.h>
-    #include <types.h>
+    #include <libdodo/systemJobs.h>
+    #include <libdodo/systemTools.h>
+    #include <libdodo/systemThreadsEx.h>
+    #include <libdodo/types.h>
 
 namespace dodo
 {

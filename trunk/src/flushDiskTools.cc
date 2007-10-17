@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <flushDiskTools.h>
+#include <libdodo/flushDiskTools.h>
 
 using namespace dodo;
 

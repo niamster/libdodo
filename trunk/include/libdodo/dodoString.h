@@ -24,10 +24,11 @@
 #ifndef _DODOSTRING_H_
 #define _DODOSTRING_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <string>
-#include <stringTools.h>
+
+#include <libdodo/stringTools.h>
 
 namespace dodo
 {

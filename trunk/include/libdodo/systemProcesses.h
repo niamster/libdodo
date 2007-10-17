@@ -35,10 +35,10 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#include <directives.h>
-#include <types.h>
-#include <systemJobs.h>
-#include <systemProcessesEx.h>
+#include <libdodo/directives.h>
+#include <libdodo/types.h>
+#include <libdodo/systemJobs.h>
+#include <libdodo/systemProcessesEx.h>
 
 namespace dodo
 {

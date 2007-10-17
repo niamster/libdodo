@@ -1,6 +1,7 @@
-#include <baseEx.h>
-#include <dbMysql.h>
-#include <timeTools.h>
+#include <libdodo/baseEx.h>
+#include <libdodo/dbMysql.h>
+#include <libdodo/timeTools.h>
+
 #include <iostream>
 
 using namespace dodo;

@@ -24,16 +24,16 @@
 #ifndef _POSTGRESQL_H_
 #define _POSTGRESQL_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #ifdef POSTGRESQL_EXT
 
     #include <libpq-fe.h>
 
-    #include <tools.h>
-    #include <dbPostgresqlEx.h>
-    #include <dbSqlBase.h>
-    #include <xexec.h>
+    #include <libdodo/tools.h>
+    #include <libdodo/dbPostgresqlEx.h>
+    #include <libdodo/dbSqlBase.h>
+    #include <libdodo/xexec.h>
 
 namespace dodo
 {

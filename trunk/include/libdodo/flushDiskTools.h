@@ -24,7 +24,7 @@
 #ifndef _FLUSHDISKTOOLS_H_
 #define _FLUSHDISKTOOLS_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 
 #include <sys/types.h>
@@ -36,9 +36,9 @@
 #include <libgen.h>
 #include <unistd.h>
 
-#include <tools.h>
-#include <flushDiskToolsEx.h>
-#include <types.h>
+#include <libdodo/tools.h>
+#include <libdodo/flushDiskToolsEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

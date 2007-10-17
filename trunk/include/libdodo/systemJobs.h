@@ -24,8 +24,8 @@
 #ifndef _systemJobs_H_
 #define _systemJobs_H_
 
-#include <directives.h>
-#include <types.h>
+#include <libdodo/directives.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

@@ -24,10 +24,10 @@
 #ifndef _THREADGUARD_H_
 #define _THREADGUARD_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
-#include <types.h>
-#include <atomicMutex.h>
+#include <libdodo/types.h>
+#include <libdodo/atomicMutex.h>
 
 namespace dodo
 {

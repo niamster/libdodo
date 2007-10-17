@@ -24,15 +24,15 @@
 #ifndef _CGIPREPROCESSOR_H_
 #define _CGIPREPROCESSOR_H_
 
-#include <directives.h>
+#include <libdodo/directives.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <tools.h>
-#include <cgiPreprocessorEx.h>
-#include <types.h>
+#include <libdodo/tools.h>
+#include <libdodo/cgiPreprocessorEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {

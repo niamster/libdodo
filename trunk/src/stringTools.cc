@@ -22,7 +22,7 @@
  */
 
 
-#include <stringTools.h>
+#include <libdodo/stringTools.h>
 
 using namespace dodo;
 
