@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 	try
 	{
 		cout << tools::decodeBase64("yujl4j3P7uvy4OLg") << endl;
-		exit(0);
+		
 		cout << "Что происходит?" << endl;
 		cout << tools::codesetConversion("Что происходит?","cp1251","utf-8") << endl;
 		

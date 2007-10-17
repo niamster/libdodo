@@ -74,8 +74,6 @@ cgiFastSTD::flush()
 
 //-------------------------------------------------------------------
 
-    #include <tools.h>
-
 void
 cgiFastSTD::print(const dodoString &buf)
 {
