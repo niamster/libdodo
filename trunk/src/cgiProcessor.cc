@@ -597,7 +597,7 @@ cgiProcessor::_break(const dodoString &statement,
 {
 	if (_loopDeepness > 0)
 	{
-		_breakDeepness = getVar(statement, start, path).toUL();
+		_breakDeepness = stringTools::stringToUL(getVar(statement, start, path));
 
 		if (_breakDeepness == 0)
 			_breakDeepness = 1;

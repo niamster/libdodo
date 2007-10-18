@@ -324,7 +324,7 @@ cgi::printHeaders() const
 void
 cgi::makeContent()
 {
-	unsigned long inSize = ENVIRONMENT["CONTENT_LENGTH"].toUL();
+	unsigned long inSize = stringTools::stringToUL(ENVIRONMENT["CONTENT_LENGTH"]);
 
 	if (inSize <= 0)
 		return ;

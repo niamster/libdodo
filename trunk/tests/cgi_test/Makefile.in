@@ -9,4 +9,4 @@ test: test.cc
 	cp -rf test test.cgi
 
 clean:
-	rm -rf test
+	rm -rf test test.cgi
