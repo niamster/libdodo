@@ -1,8 +1,8 @@
 /***************************************************************************
- *            flushNBAEx.h
+ *            atomicSemaphore.h
  *
- *  Thu Sep 09 03:41:24 2006
- *  Copyright  2006  Ni@m
+ *  Mon Jul 09 11:31:55 2007
+ *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,28 +21,52 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHNBAEX_H_
-#define _FLUSHNBAEX_H_
+#ifndef _ATOMICSEMAPHORE_H_
+#define _ATOMICSEMAPHORE_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/baseEx.h>
+#include <fcntl.h>
+#include <semaphore.h>
+
+#include <libdodo/atomicSemaphoreEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
 	/**
-	 * next for flushNBA
+	 * @class atomicSemaphore is to perform atomic locks
 	 */
-
-	/**
-	 * ID of function where exception was thrown
-	 */
-	enum flushNBAFunctionsID
+	class atomicSemaphore
 	{
-		FLUSHNBA_ISREADABLE,
-		FLUSHNBA_ISWRITABLE,
+		public:
+
+		/**
+		 * consructor
+		 */
+		atomicSemaphore(unsigned int value, const char *key);
+
+		/**
+		 * destructor
+		 */
+		virtual ~atomicSemaphore();
+
+		/**
+		 * locks critical section
+		 */
+		void lock();
+
+		/**
+		 * unlocks critical section
+		 */
+		void unLock();
+
+		protected:
+
+		sem_t *semaphore;       ///< semaphore
+		char *key;              ///< key for the semaphore
 	};
 
 };
 
-#endif
+#endif /*_ATOMICSEMAPHORE_H_*/

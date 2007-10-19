@@ -62,7 +62,7 @@ systemProcessSharedDataGuard::~systemProcessSharedDataGuard()
 //-------------------------------------------------------------------
 
 void
-systemProcessSharedDataGuard::set(void *a_data)
+systemProcessSharedDataGuard::set(	void *a_data)
 {
 	if (sem_wait(semaphore) != 0)
 	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);

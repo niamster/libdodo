@@ -3,17 +3,22 @@
 #include <libdodo/systemTools.h>
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
+#include <libdodo/systemProcessSharedDataGuard.h>
 
 #include <iostream>
 
 using namespace dodo;
 using namespace std;
 
+systemProcessSharedDataGuard dg;
+
 void *
 process(void *data)
 {
 	try
 	{
+		cout << (char *)dg.lock();dg.unlock();
+
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
 		cout.flush();
 		
@@ -34,7 +39,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		
+		dg.set((char *)"!test!\n");
+
 		systemProcesses pr;
 
 		const int amount = 10;

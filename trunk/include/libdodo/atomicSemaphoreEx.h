@@ -1,8 +1,8 @@
 /***************************************************************************
- *            flushNBAEx.h
+ *            atomicSemaphoreEx.h
  *
- *  Thu Sep 09 03:41:24 2006
- *  Copyright  2006  Ni@m
+ *  Mon Jul 09 12:49:55 2007
+ *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHNBAEX_H_
-#define _FLUSHNBAEX_H_
+#ifndef _ATOMICSEMAPHOREEX_H_
+#define _ATOMICSEMAPHOREEX_H_
 
 #include <libdodo/directives.h>
 
@@ -31,16 +31,16 @@
 namespace dodo
 {
 	/**
-	 * next for flushNBA
+	 * next for atomicSemaphore
 	 */
 
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum flushNBAFunctionsID
+	enum atomicSemaphoreFunctionsID
 	{
-		FLUSHNBA_ISREADABLE,
-		FLUSHNBA_ISWRITABLE,
+		ATOMICSEMAPHORE_LOCK,
+		ATOMICSEMAPHORE_UNLOCK,
 	};
 
 };

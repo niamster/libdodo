@@ -24,10 +24,10 @@
 #ifndef _SYSTEMPROCESSSHAREDDATAGUARD_H_
 #define _SYSTEMPROCESSSHAREDDATAGUARD_H_
 
+#include <libdodo/directives.h>
+
 #include <semaphore.h>
 #include <time.h>
-
-#include <libdodo/directives.h>
 
 #include <libdodo/systemProcessSharedDataGuardEx.h>
 #include <libdodo/types.h>
