@@ -63,14 +63,12 @@ namespace dodo
 		 * sets data to became a shared
 		 * @param data describes data to be shared
 		 */
-		virtual void
-		set(void *data);
+		virtual void set(void *data);
 
 		/**
 		 * sets shared data to NULL
 		 */
-		virtual void
-		del();
+		virtual void del();
 
 		/**
 		 * lock and return shared data
@@ -84,8 +82,7 @@ namespace dodo
 		/**
 		 * lock and return shared data
 		 */
-		virtual void
-		unlock();
+		virtual void unlock();
 
 		protected:
 
