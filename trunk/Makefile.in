@@ -47,6 +47,7 @@ OBJECTS:=dbBase.o \
 		systemThreads.o \
 		systemJobs.o \
 		threadGuard.o \
+		processGuard.o \
 		systemThreadSharedDataGuard.o \
 		systemProcessSharedDataGuard.o \
 		systemThreadSharedDataCollectionGuard.o \
