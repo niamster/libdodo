@@ -1,7 +1,7 @@
 /***************************************************************************
- *            atomicMutex.h
+ *            atomicLock.h
  *
- *  Mon Jul 09 11:31:55 2007
+ *  Sat Oct 20 10:50:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,51 +21,37 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICMUTEX_H_
-#define _ATOMICMUTEX_H_
+#ifndef _ATOMICLOCK_H_
+#define _ATOMICLOCK_H_
 
 #include <libdodo/directives.h>
 
-#include <pthread.h>
-
-#include <libdodo/atomicLock.h>
-#include <libdodo/atomicMutexEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
 {
 	/**
-	 * @class atomicMutex is to perform atomic locks
+	 * @class atomicLock is to perform atomic locks
 	 */
-	class atomicMutex : public atomicLock
+	class atomicLock
 	{
 		public:
 
 		/**
-		 * consructor
-		 */
-		atomicMutex();
-
-		/**
 		 * destructor
 		 */
-		virtual ~atomicMutex();
+		virtual ~atomicLock() = 0;
 
 		/**
 		 * locks critical section
 		 */
-		void lock();
+		void lock() = 0;
 
 		/**
 		 * unlocks critical section
 		 */
-		void unLock();
-
-		protected:
-
-		pthread_mutex_t mutex;    ///< lock
+		void unLock() = 0;
 	};
-
 };
 
-#endif /*_ATOMICMUTEX_H_*/
+#endif /*_ATOMICLOCK_H_*/

@@ -29,6 +29,7 @@
 #include <fcntl.h>
 #include <semaphore.h>
 
+#include <libdodo/atomicLock.h>
 #include <libdodo/atomicSemaphoreEx.h>
 #include <libdodo/types.h>
 
@@ -37,7 +38,7 @@ namespace dodo
 	/**
 	 * @class atomicSemaphore is to perform atomic locks
 	 */
-	class atomicSemaphore
+	class atomicSemaphore : public atomicLock
 	{
 		public:
 
