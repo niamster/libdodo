@@ -1,7 +1,7 @@
 /***************************************************************************
- *            threadGuard.cc
+ *            guard.cc
  *
- *  Tue Jul  10 22:10:57 2007
+ *  Sat Oct 20 11:00:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,18 +21,31 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/threadGuard.h>
+#include <libdodo/guard.h>
 
 using namespace dodo;
 
-threadGuardHolder::threadGuardHolder()
+guardHolder::~guardHolder()
 {
-	mutex = new atomicMutex;
 }
 
 //-------------------------------------------------------------------
 
-threadGuardHolder::~threadGuardHolder()
+guardHolder::guard::guard(guardHolder *a_parent) : parent(a_parent)
 {
-	delete mutex;
+	parent->mutex->lock();
+}
+
+//-------------------------------------------------------------------
+
+guardHolder::guard::~guard()
+{
+	try
+	{
+		parent->mutex->unLock();
+	}
+	catch (baseEx &ex)
+	{
+
+	}
 }

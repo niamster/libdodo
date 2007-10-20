@@ -1,7 +1,7 @@
 /***************************************************************************
- *            threadGuard.cc
+ *            guard.h
  *
- *  Tue Jul  10 22:10:57 2007
+ *  Sat Oct 20 02:00:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,18 +21,54 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/threadGuard.h>
+#ifndef _GUARD_H_
+#define _GUARD_H_
 
-using namespace dodo;
+#include <libdodo/directives.h>
 
-threadGuardHolder::threadGuardHolder()
+#include <libdodo/types.h>
+#include <libdodo/atomicLock.h>
+#include <libdodo/baseEx.h>
+
+namespace dodo
 {
-	mutex = new atomicMutex;
-}
+	/**
+	 * @class threadGuardHolder contains mutex lock and threadGuard class
+	 */
+	class guardHolder
+	{
+		protected:
 
-//-------------------------------------------------------------------
+		atomicLock *mutex;    ///< lock
+		
+		/**
+		 * destructor
+		 */
+		virtual ~guardHolder() = 0;
 
-threadGuardHolder::~threadGuardHolder()
-{
-	delete mutex;
-}
+		/**
+		 * @class threadGuard provides thread safe behaviour
+		 */
+		class guard
+		{
+			public:
+
+			/**
+			 * contructor
+			 */
+			guard(guardHolder *parent);
+
+			/**
+			 * destructor
+			 */
+			virtual ~guard();
+
+			protected:
+
+			guardHolder *parent;        ///< class to lock
+		};
+	};
+
+};
+
+#endif /*THREADGUARD_H_*/

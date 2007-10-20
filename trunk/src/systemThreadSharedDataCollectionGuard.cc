@@ -47,7 +47,7 @@ systemThreadSharedDataCollectionGuard::~systemThreadSharedDataCollectionGuard()
 unsigned long
 systemThreadSharedDataCollectionGuard::add(void *data)
 {
-	threadGuard tg(this);
+	guard tg(this);
 
 	__shareInfo share;
 
@@ -64,7 +64,7 @@ systemThreadSharedDataCollectionGuard::add(void *data)
 void
 systemThreadSharedDataCollectionGuard::del(unsigned long position)
 {
-	threadGuard tg(this);
+	guard tg(this);
 
 	if (getShare(position))
 		shares.erase(current);
@@ -78,7 +78,7 @@ void
 systemThreadSharedDataCollectionGuard::set(unsigned long position,
 										   void          *data)
 {
-	threadGuard tg(this);
+	guard tg(this);
 
 	if (getShare(position))
 		current->data = data;
@@ -91,7 +91,7 @@ systemThreadSharedDataCollectionGuard::set(unsigned long position,
 const void *
 systemThreadSharedDataCollectionGuard::get(unsigned long position)
 {
-	threadGuard tg(this);
+	guard tg(this);
 
 	if (getShare(position))
 		return current->data;

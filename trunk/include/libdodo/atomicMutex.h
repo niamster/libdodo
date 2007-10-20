@@ -54,12 +54,12 @@ namespace dodo
 		/**
 		 * locks critical section
 		 */
-		void lock();
+		virtual void lock();
 
 		/**
 		 * unlocks critical section
 		 */
-		void unLock();
+		virtual void unLock();
 
 		protected:
 

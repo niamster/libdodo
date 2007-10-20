@@ -1,6 +1,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/systemThreads.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
+#include <libdodo/systemThreadSharedDataCollectionGuard.h>
 #include <libdodo/systemTools.h>
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
@@ -11,12 +12,15 @@ using namespace dodo;
 using namespace std;
 
 systemThreadSharedDataGuard sh;
+systemThreadSharedDataCollectionGuard shC;
+unsigned long shCI;
 
 void *
 thread(void *data)
 {
 	try
 	{
+		cout << (char *)shC.get(shCI);
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
 		cout.flush();
 		
@@ -37,6 +41,7 @@ thread(void *data)
 
 int main(int argc, char **argv)
 {
+	shCI = shC.add((char *)"@test@\n");
 	try
 	{
 		int *shared = new int(1);

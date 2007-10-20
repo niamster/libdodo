@@ -27,6 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
+#include <libdodo/guard.h>
 #include <libdodo/atomicMutex.h>
 
 namespace dodo
@@ -34,34 +35,19 @@ namespace dodo
 	/**
 	 * @class threadGuardHolder contains mutex lock and threadGuard class
 	 */
-	class threadGuardHolder
+	class threadGuardHolder : public guardHolder
 	{
-
 		protected:
-
-		atomicMutex mutex;    ///< lock
-
+		
 		/**
-		 * @class threadGuard provides thread safe behaviour
+		 * contructor
 		 */
-		class threadGuard
-		{
-			public:
-
-			/**
-			 * contructor
-			 */
-			threadGuard(threadGuardHolder *parent);
-
-			/**
-			 * destructor
-			 */
-			virtual ~threadGuard();
-
-			protected:
-
-			threadGuardHolder *parent;        ///< class to lock
-		};
+		threadGuardHolder();
+		
+		/**
+		 * destructor
+		 */
+		virtual ~threadGuardHolder();
 	};
 
 };
