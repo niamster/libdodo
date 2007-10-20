@@ -56,7 +56,7 @@ namespace dodo
 			/**
 			 * destructor
 			 */
-			~threadGuard();
+			virtual ~threadGuard();
 
 			protected:
 
