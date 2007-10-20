@@ -44,7 +44,7 @@ process(void *data)
 		
 		cout << rec << rec.size() << endl;
 		cout.flush();
-		if (rec.compare("exit")==0)
+		if (rec == "exit")
 		{
 			bool *exit_st;
 			exit_st = (bool *)sh.lock();
@@ -78,11 +78,11 @@ int main(int argc, char **argv)
 		__initialAccept fake;
 				
 		sock.bindNListen("127.0.0.1",7778,3);
+		//sock.bindNListen("::",7777);
+		//sock.bindNListen("./sock",10,true);
 		sock.setLingerSockOption(SOCKET_HARD_CLOSE);	
 		sock.blockInherited = false;
 		sock.block(false);
-		//sock.bindNListen("::",7777);
-		//sock.bindNListen("./sock",10,true);
 		
 		flushSocketExchange conn;
 
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 				}
 				catch(baseEx ex)
 				{
-					cout << (string)ex << "\t" << ex.line << endl;
+					cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 					cout.flush();
 				}
 			}
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << (string)ex << "\t" << ex.line << endl;
+		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 		cout.flush();
 	}
 	

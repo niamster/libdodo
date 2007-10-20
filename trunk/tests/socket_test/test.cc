@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 		}
 		
 		cout << flushSocketTools::getInterfaceInfo("lo").hwaddr << endl;
-		cout << flushSocketTools::getInterfaceInfo("eth0").address << endl;
+		cout << flushSocketTools::getInterfaceInfo("eth1").address << endl;
 		
 		try
 		{
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << (string)ex << "\t" << ex.line << endl;
+		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 		cout.flush();
 	}
 	

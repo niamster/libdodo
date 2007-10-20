@@ -590,7 +590,7 @@ flushSocket::accept(__initialAccept &init,
 
 			if (sock == -1)
 			{
-				if (errno == EINVAL)
+				if (errno == EAGAIN)
 					return false;
 				else
 					throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -613,7 +613,7 @@ flushSocket::accept(__initialAccept &init,
 
 			if (sock == -1)
 			{
-				if (errno == EINVAL)
+				if (errno == EAGAIN)
 					return false;
 				else
 					throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -630,7 +630,7 @@ flushSocket::accept(__initialAccept &init,
 			sock = ::accept(socket, NULL, NULL);
 			if (sock == -1)
 			{
-				if (errno == EINVAL)
+				if (errno == EAGAIN)
 					return false;
 				else
 					throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -684,7 +684,7 @@ flushSocket::accept(__initialAccept &init)
 	int sock = ::accept(socket, NULL, NULL);
 	if (sock == -1)
 	{
-		if (errno == EINVAL)
+		if (errno == EAGAIN)
 			return false;
 		else
 			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

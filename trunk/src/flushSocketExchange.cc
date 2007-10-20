@@ -276,6 +276,9 @@ flushSocketExchange::read(char * const data)
 					if (errno == EINTR)
 						continue;
 
+					if (errno == EAGAIN)
+						break;
+
 					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
@@ -300,10 +303,10 @@ flushSocketExchange::read(char * const data)
 					if (errno == EINTR)
 						continue;
 
-					if (errno == EINVAL)
-						return ;
-					else
-						throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					if (errno == EAGAIN)
+						break;
+
+					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
