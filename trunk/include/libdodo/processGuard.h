@@ -28,6 +28,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/guard.h>
+#include <libdodo/tools.h>
 #include <libdodo/atomicSemaphore.h>
 
 namespace dodo
@@ -48,6 +49,8 @@ namespace dodo
 		 * destructor
 		 */
 		virtual ~processGuardHolder();
+		
+		char key[32];///< key for the semaphore
 	};
 
 };

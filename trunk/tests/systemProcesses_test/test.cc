@@ -4,6 +4,7 @@
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
 #include <libdodo/systemProcessSharedDataGuard.h>
+#include <libdodo/systemProcessSharedDataCollectionGuard.h>
 
 #include <iostream>
 
@@ -11,12 +12,15 @@ using namespace dodo;
 using namespace std;
 
 systemProcessSharedDataGuard dg;
+systemProcessSharedDataCollectionGuard dgC;
+unsigned long dgCI;
 
 void *
 process(void *data)
 {
 	try
 	{
+		cout << (char *)dgC.get(dgCI);
 		cout << (char *)dg.lock();dg.unlock();
 
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
@@ -39,6 +43,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
+		dgCI = dgC.add((char *)"@test@\n");
 		dg.set((char *)"!test!\n");
 
 		systemProcesses pr;

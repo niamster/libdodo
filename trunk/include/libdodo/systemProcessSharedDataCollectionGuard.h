@@ -1,7 +1,7 @@
 /***************************************************************************
- *            systemThreadSharedDataCollectionGuard.h
+ *            systemProcessSharedDataCollectionGuard.h
  *
- *  Tue Nov 29 23:31:55 2005
+ *  Sat Oct 20 12:20:55 2007
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_H_
-#define _SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_H_
+#ifndef _SYSTEMPROCESSSHAREDDATACOLLECTIONGUARD_H_
+#define _SYSTEMPROCESSSHAREDDATACOLLECTIONGUARD_H_
 
 #include <pthread.h>
 #include <time.h>
@@ -31,16 +31,16 @@
 
 #include <libdodo/types.h>
 #include <libdodo/systemSharedDataCollectionGuard.h>
-#include <libdodo/systemThreadSharedDataCollectionGuardEx.h>
-#include <libdodo/threadGuard.h>
+#include <libdodo/systemProcessSharedDataCollectionGuardEx.h>
+#include <libdodo/processGuard.h>
 
 namespace dodo
 {
 	/**
-	 * @class systemThreadSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
+	 * @class systemProcessSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
 	 */
-	class systemThreadSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
-												virtual public threadGuardHolder
+	class systemProcessSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
+												virtual public processGuardHolder
 	{
 		private:
 
@@ -48,19 +48,19 @@ namespace dodo
 		 * copy constructor
 		 * to prevent copying
 		 */
-		systemThreadSharedDataCollectionGuard(systemThreadSharedDataCollectionGuard &sts);
+		systemProcessSharedDataCollectionGuard(systemProcessSharedDataCollectionGuard &sts);
 
 		public:
 
 		/**
 		 * constructor
 		 */
-		systemThreadSharedDataCollectionGuard();
+		systemProcessSharedDataCollectionGuard();
 
 		/**
 		 * destructor
 		 */
-		virtual ~systemThreadSharedDataCollectionGuard();
+		virtual ~systemProcessSharedDataCollectionGuard();
 
 		/**
 		 * adds data to became a shared

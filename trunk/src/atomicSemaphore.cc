@@ -57,7 +57,7 @@ atomicSemaphore::lock()
 void
 atomicSemaphore::unLock()
 {
-	if (sem_wait(semaphore) != 0)
+	if (sem_post(semaphore) != 0)
 		throw baseEx(ERRMODULE_ATOMICSEMAPHORE, ATOMICSEMAPHORE_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 

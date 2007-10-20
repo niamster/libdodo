@@ -1,7 +1,7 @@
 /***************************************************************************
- *            systemThreadSharedDataCollectionGuard.h
+ *            systemSharedDataCollectionGuard.h
  *
- *  Tue Nov 29 23:31:55 2005
+ *  Sat Oct 20 02:00:55 2007
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_H_
-#define _SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_H_
+#ifndef _SYSTEMSHAREDDATACOLLECTIONGUARD_H_
+#define _SYSTEMSHAREDDATACOLLECTIONGUARD_H_
 
 #include <pthread.h>
 #include <time.h>
@@ -30,51 +30,44 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/systemSharedDataCollectionGuard.h>
-#include <libdodo/systemThreadSharedDataCollectionGuardEx.h>
-#include <libdodo/threadGuard.h>
+#include <libdodo/guard.h>
 
 namespace dodo
 {
 	/**
-	 * @class systemThreadSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
+	 * @struct __shareInfo describes shared data
 	 */
-	class systemThreadSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
-												virtual public threadGuardHolder
+	struct __shareInfo
 	{
-		private:
+		unsigned long position; ///< position in queue
+		void *data;             ///< data that will be shared
+	};
 
-		/**
-		 * copy constructor
-		 * to prevent copying
-		 */
-		systemThreadSharedDataCollectionGuard(systemThreadSharedDataCollectionGuard &sts);
-
+	/**
+	 * @class systemSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
+	 */
+	class systemSharedDataCollectionGuard
+	{
 		public:
-
-		/**
-		 * constructor
-		 */
-		systemThreadSharedDataCollectionGuard();
 
 		/**
 		 * destructor
 		 */
-		virtual ~systemThreadSharedDataCollectionGuard();
+		virtual ~systemSharedDataCollectionGuard() = 0;
 
 		/**
 		 * adds data to became a shared
 		 * @return position of shared in queue
 		 * @param data describes data to be shared
 		 */
-		virtual unsigned long add(void *data);
+		virtual unsigned long add(void *data) = 0;
 
 		/**
 		 * sets shared data to NULL
 		 * @param position indicates on shared data to lock
 		 */
 		virtual void
-		del(unsigned long position);
+		del(unsigned long position) = 0;
 
 		/**
 		 * locks, sets data, unlocks
@@ -82,30 +75,14 @@ namespace dodo
 		 * @param data describes data to be set
 		 */
 		virtual void
-		set(unsigned long position, void *data);
+		set(unsigned long position, void *data) = 0;
 
 		/**
 		 * locks, gets data, unlocks
 		 * @return data points on shared data or NULL in error case
 		 * @param position indicates on shared data to lock
 		 */
-		virtual const void *get(unsigned long position);
-
-		protected:
-
-		/**
-		 * searches shares by position
-		 * @return true if found
-		 * @param position describes position of wanted thread
-		 * @note sets internal parameter 'current' to found share
-		 */
-		virtual bool getShare(unsigned long position);
-
-		std::list<__shareInfo> shares;                  ///< list of shared data
-
-		unsigned long shareNum;                         ///< number of registered shares
-
-		std::list<__shareInfo>::iterator current;       ///< iterator for list of shares[for matched with getShare method]
+		virtual const void *get(unsigned long position) = 0;
 	};
 
 };

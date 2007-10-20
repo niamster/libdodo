@@ -27,7 +27,10 @@ using namespace dodo;
 
 processGuardHolder::processGuardHolder()
 {
-	mutex = new atomicSemaphore;
+	tools::random(key, 31);
+	key[31] = '\0';
+	
+	mutex = new atomicSemaphore(1, key);
 }
 
 //-------------------------------------------------------------------

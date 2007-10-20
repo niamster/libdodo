@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreadSharedDataCollectionGuardEx.h
+ *            systemProcessSharedDataCollectionGuardEx.h
  *
  *  Sat Oct 20 02:00:55 2007
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_H_
-#define _SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_H_
+#ifndef _SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_H_
+#define _SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum systemThreadSharedDataCollectionGuardExR
+	enum systemProcessSharedDataCollectionGuardExR
 	{
 		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND,
 	};
@@ -46,11 +46,11 @@ namespace dodo
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum systemThreadSharedDataCollectionGuardFunctionsID
+	enum systemProcessSharedDataCollectionGuardFunctionsID
 	{
-		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL,
-		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET,
-		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_GET,
+		SYSTEMPROCESSSHAREDDATACOLLECTIONGUARD_DEL,
+		SYSTEMPROCESSSHAREDDATACOLLECTIONGUARD_SET,
+		SYSTEMPROCESSSHAREDDATACOLLECTIONGUARD_GET,
 	};
 };
 

@@ -51,6 +51,8 @@ OBJECTS:=dbBase.o \
 		systemThreadSharedDataGuard.o \
 		systemProcessSharedDataGuard.o \
 		systemThreadSharedDataCollectionGuard.o \
+		systemProcessSharedDataCollectionGuard.o \
+		systemSharedDataCollectionGuard.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \
 		flush.o \
