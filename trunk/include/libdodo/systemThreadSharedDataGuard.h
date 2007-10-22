@@ -24,12 +24,13 @@
 #ifndef _SYSTEMTHREADSHAREDDATAGUARD_H_
 #define _SYSTEMTHREADSHAREDDATAGUARD_H_
 
+#include <libdodo/directives.h>
+
 #include <pthread.h>
 #include <time.h>
 
-#include <libdodo/directives.h>
-
 #include <libdodo/systemThreadSharedDataGuardEx.h>
+#include <libdodo/systemSharedDataGuard.h>
 #include <libdodo/types.h>
 
 namespace dodo
@@ -37,7 +38,7 @@ namespace dodo
 	/**
 	 * @class systemThreadSharedDataGuard is to manage data between threads(based on POSIX threads)
 	 */
-	class systemThreadSharedDataGuard
+	class systemThreadSharedDataGuard : public systemSharedDataGuard
 	{
 		private:
 

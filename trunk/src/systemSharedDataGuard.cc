@@ -1,8 +1,8 @@
 /***************************************************************************
- *            systemThreadSharedDataCollectionGuardEx.h
+ *            systemSharedDataGuard.cc
  *
- *  Wed Oct 5 16:25:14 2005
- *  Copyright  2005  Ni@m
+ *  Sun Jul 22 23:14:14 2007
+ *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,38 +21,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_H_
-#define _SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_H_
 
-#include <libdodo/directives.h>
+#include <libdodo/systemSharedDataGuard.h>
 
-#include <libdodo/baseEx.h>
+using namespace dodo;
 
-namespace dodo
+systemSharedDataGuard::~systemSharedDataGuard()
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum systemThreadSharedDataCollectionGuardExR
-	{
-		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND,
-	};
+}
 
-	/**
-	 * libdodo defined errors' explanation
-	 */
-        #define SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_NOTFOUND_STR    "Share not found."
-
-	/**
-	 * ID of function where exception was thrown
-	 */
-	enum systemThreadSharedDataCollectionGuardFunctionsID
-	{
-		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_DEL,
-		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_SET,
-		SYSTEMTHREADSHAREDDATACOLLECTIONGUARD_GET,
-	};
-};
-
-#endif
-
+//-------------------------------------------------------------------

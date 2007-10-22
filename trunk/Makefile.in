@@ -50,6 +50,7 @@ OBJECTS:=dbBase.o \
 		processGuard.o \
 		systemThreadSharedDataGuard.o \
 		systemProcessSharedDataGuard.o \
+		systemSharedDataGuard.o \
 		systemThreadSharedDataCollectionGuard.o \
 		systemProcessSharedDataCollectionGuard.o \
 		systemSharedDataCollectionGuard.o \
