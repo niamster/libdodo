@@ -59,15 +59,14 @@ systemSharedData::~systemSharedData()
 //-------------------------------------------------------------------
 
 void *
-systemSharedData::alloc(unsigned long size)
+systemSharedData::map(unsigned long size)
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-systemSharedData::free(void *data, 
-						unsigned long size)
+systemSharedData::unmap()
 {
 }
 

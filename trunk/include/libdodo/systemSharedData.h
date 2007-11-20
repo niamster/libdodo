@@ -65,22 +65,22 @@ namespace dodo
 		virtual ~systemSharedData();
 
 		/**
-		 * sets data to became a shared
+		 * maps shared data
 		 * @return pointer on shared data
 		 * @param size describes amount of data to be shared
 		 */
-		virtual void *alloc(unsigned long size);
+		virtual void *map(unsigned long size);
 
 		/**
-		 * frees shared data
-		 * @param data points on shared data to be freed
-		 * @param size indicates amount of shared data
+		 * unmaps shared data
 		 */
-		static void free(void *data, unsigned long size);
+		static void unmap();
 
 		protected:
 			
-		int shm;///< shared mamory descriptor
+		int shm;///< shared data descriptor
+		void *data;///< shared data
+		unsigned long size;///< size of shared data
 
 		char *key;              ///< key for the semaphore
 	};
