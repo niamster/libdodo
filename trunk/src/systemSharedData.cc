@@ -66,7 +66,8 @@ systemSharedData::alloc(unsigned long size)
 //-------------------------------------------------------------------
 
 void
-systemSharedData::free()
+systemSharedData::free(void *data, 
+						unsigned long size)
 {
 }
 
