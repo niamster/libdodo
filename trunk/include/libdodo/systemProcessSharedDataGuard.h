@@ -38,7 +38,7 @@ namespace dodo
 {
 	/**
 	 * @class systemProcessSharedDataGuard is to manage data between processes(based on POSIX semaphores)
-	 * @note you should use systemShareDate
+	 * @note you should use systemSharedData
 	 */
 	class systemProcessSharedDataGuard : public systemSharedDataGuard
 	{

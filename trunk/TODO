@@ -4,10 +4,12 @@
 
 2.
 	!! systemSharedData
-	!! systemSharedDataGuard
 
 3.
-	!! thread-safe
+	!! thread-safe:
+		db*
+		flush*
+		regexp
 
 4.	
 	!! tests

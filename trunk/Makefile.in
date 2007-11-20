@@ -51,6 +51,7 @@ OBJECTS:=dbBase.o \
 		systemThreadSharedDataGuard.o \
 		systemProcessSharedDataGuard.o \
 		systemSharedDataGuard.o \
+		systemSharedData.o \
 		systemThreadSharedDataCollectionGuard.o \
 		systemProcessSharedDataCollectionGuard.o \
 		systemSharedDataCollectionGuard.o \
