@@ -67,6 +67,11 @@ systemSharedData::map(unsigned long size,
 				unsigned long offset)
 {
 	data = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, shm, offset);
+	
+	if (data == MAP_FAILED)
+		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+	
+	return data;
 }
 
 //-------------------------------------------------------------------
@@ -75,7 +80,8 @@ void
 systemSharedData::unmap()
 {
 	if (data != NULL)
-		munmap(data, size);
+		if (munmap(data, size) == -1)
+			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_UNMAP, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
 	data = NULL;
 	size = 0;
 }
