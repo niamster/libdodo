@@ -32,7 +32,8 @@ systemSharedData::systemSharedData(systemSharedData &sts)
 
 //-------------------------------------------------------------------
 
-systemSharedData::systemSharedData(const char   *a_key)
+systemSharedData::systemSharedData(const char   *a_key): data(NULL),
+														size(0)
 {
 	if (a_key == NULL)
 	{
@@ -53,14 +54,19 @@ systemSharedData::systemSharedData(const char   *a_key)
 
 systemSharedData::~systemSharedData()
 {
+	if (data != NULL)
+		munmap(data, size);
+	
 	shm_unlink(key);
 }
 
 //-------------------------------------------------------------------
 
 void *
-systemSharedData::map(unsigned long size)
+systemSharedData::map(unsigned long size, 
+				unsigned long offset)
 {
+	data = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, shm, offset);
 }
 
 //-------------------------------------------------------------------
@@ -68,6 +74,18 @@ systemSharedData::map(unsigned long size)
 void
 systemSharedData::unmap()
 {
+	if (data != NULL)
+		munmap(data, size);
+	data = NULL;
+	size = 0;
+}
+
+//-------------------------------------------------------------------
+
+long 
+systemSharedData::pageSize()
+{
+	return sysconf(_SC_PAGE_SIZE);
 }
 
 //-------------------------------------------------------------------

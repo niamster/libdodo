@@ -31,21 +31,12 @@
 namespace dodo
 {
 	/**
-	 * libdodo defined errors
-	 */
-	enum systemSharedDataExR
-	{
-	};
-
-	/**
-	 * libdodo defined errors' explanation
-	 */
-
-	/**
 	 * ID of function where exception was thrown
 	 */
 	enum systemSharedDataFunctionsID
 	{
+		SYSTEMSHAREDDATA_MAP,
+		SYSTEMSHAREDDATA_UNMAP,
 	};
 };
 
