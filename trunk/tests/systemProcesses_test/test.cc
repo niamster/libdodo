@@ -3,6 +3,7 @@
 #include <libdodo/systemTools.h>
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
+#include <libdodo/systemSharedData.h>
 #include <libdodo/systemProcessSharedDataGuard.h>
 #include <libdodo/systemProcessSharedDataCollectionGuard.h>
 
@@ -11,6 +12,7 @@
 using namespace dodo;
 using namespace std;
 
+systemSharedData shD("dodo");
 systemProcessSharedDataGuard dg;
 systemProcessSharedDataCollectionGuard dgC;
 unsigned long dgCI;
@@ -20,6 +22,8 @@ process(void *data)
 {
 	try
 	{
+		cout << (char *)shD.getMapped();
+
 		cout << (char *)dgC.get(dgCI);
 		cout << (char *)dg.lock();dg.unlock();
 
@@ -43,6 +47,9 @@ int main(int argc, char **argv)
 {
 	try
 	{
+		char *data = (char *)shD.map(100);
+		strcpy(data, "abc");
+
 		dgCI = dgC.add((char *)"@test@\n");
 		dg.set((char *)"!test!\n");
 
@@ -72,7 +79,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << (string)ex << endl;
+		cout << (string)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
 	}
 		
 	return 0;
