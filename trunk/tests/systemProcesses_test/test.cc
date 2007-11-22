@@ -23,7 +23,7 @@ process(void *data)
 	{
 		systemSharedData shD("dodo");
 		char *data = (char *)shD.map(100);
-		cout << data;
+		cout << data << endl;
 
 		cout << (char *)dgC.get(dgCI);
 		cout << (char *)dg.lock();dg.unlock();

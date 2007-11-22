@@ -29,7 +29,6 @@
 #include <sys/types.h>
 #include <sys/mman.h>
 #include <fcntl.h>
-#include <unistd.h>
 
 #include <libdodo/systemSharedDataEx.h>
 #include <libdodo/tools.h>
@@ -72,10 +71,9 @@ namespace dodo
 		 * @return pointer on shared data
 		 * @param size describes amount of data to be shared
 		 * @param offset describes the offset of shared data
-		 * @note offset must be a multiple of the page size as returned by systemSharedData::pageSize
 		 * if map is called twice - old data would be unmapped
 		 */
-		virtual void *map(unsigned long size, unsigned long offset=0);
+		virtual void *map(unsigned long size);
 
 		/**
 		 * unmaps shared data
@@ -92,11 +90,7 @@ namespace dodo
 		 */
 		
 		virtual unsigned long getSize();
-		/**
-		 * @return page size
-		 */
-		static long pageSize();
-
+		
 		protected:
 			
 		int shm;///< shared data descriptor

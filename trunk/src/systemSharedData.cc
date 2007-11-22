@@ -65,8 +65,7 @@ systemSharedData::~systemSharedData()
 //-------------------------------------------------------------------
 
 void *
-systemSharedData::map(unsigned long size, 
-				unsigned long offset)
+systemSharedData::map(unsigned long size)
 {
 	unmap();
 	
@@ -75,7 +74,7 @@ systemSharedData::map(unsigned long size,
 	
 	ftruncate(shm, sizeof(size));
 	
-	data = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, shm, offset);
+	data = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, shm, 0);
 	
 	if (data == MAP_FAILED)
 		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
@@ -94,14 +93,6 @@ systemSharedData::unmap()
 	
 	data = NULL;
 	size = 0;
-}
-
-//-------------------------------------------------------------------
-
-long 
-systemSharedData::pageSize()
-{
-	return sysconf(_SC_PAGE_SIZE);
 }
 
 //-------------------------------------------------------------------
