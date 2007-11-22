@@ -12,7 +12,6 @@
 using namespace dodo;
 using namespace std;
 
-systemSharedData shD("dodo");
 systemProcessSharedDataGuard dg;
 systemProcessSharedDataCollectionGuard dgC;
 unsigned long dgCI;
@@ -22,7 +21,9 @@ process(void *data)
 {
 	try
 	{
-		cout << (char *)shD.getMapped();
+		systemSharedData shD("dodo");
+		char *data = (char *)shD.map(100);
+		cout << data;
 
 		cout << (char *)dgC.get(dgCI);
 		cout << (char *)dg.lock();dg.unlock();
@@ -47,6 +48,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
+		systemSharedData shD("dodo");
 		char *data = (char *)shD.map(100);
 		strcpy(data, "abc");
 
