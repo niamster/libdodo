@@ -86,9 +86,10 @@ namespace dodo
 		ERRMODULE_FLUSHNBA,
 		ERRMODULE_ATOMICMUTEX,
 		ERRMODULE_ATOMICSEMAPHORE,
+		ERRMODULE_IMAGE,
 	};
 
-        #define AM_MODULES    29
+        #define AM_MODULES    30
 
         #ifdef DL_EXT
 

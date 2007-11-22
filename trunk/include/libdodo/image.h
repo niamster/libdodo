@@ -1,7 +1,7 @@
 /***************************************************************************
- *            systemSharedDataEx.h
+ *            image.h
  *
- *  Wed Nov 21 01:05:14 2007
+ *  Thu Nov 23 00:19:57 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,28 +21,22 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMSHAREDDATAEX_H_
-#define _SYSTEMSHAREDDATAEX_H_
+#ifndef _IMAGE_H_
+#define _IMAGE_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/baseEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
-	/**
-	 * next for systemSharedData
-	 */
 
 	/**
-	 * ID of function where exception was thrown
+	 * @class image for simple image manipulations
 	 */
-	enum systemSharedDataFunctionsID
+	class image
 	{
-		SYSTEMSHAREDDATA_MAP,
-		SYSTEMSHAREDDATA_UNMAP,
 	};
 };
 
 #endif
-

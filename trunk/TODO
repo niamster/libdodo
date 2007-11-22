@@ -2,14 +2,9 @@
 	db: renew connect
 	exception in _exec
 
-2.
-	!! systemSharedData
-
 3.
 	!! thread-safe:
-		db*
 		flush*
-		regexp
 
 4.	
 	!! tests
