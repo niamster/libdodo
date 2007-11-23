@@ -26,7 +26,10 @@
 
 #include <libdodo/directives.h>
 
+#ifdef IMAGEMAGICK_EXT
+
 #include <libdodo/types.h>
+#include <libdodo/imageEx.h>
 
 namespace dodo
 {
@@ -38,5 +41,7 @@ namespace dodo
 	{
 	};
 };
+
+#endif
 
 #endif

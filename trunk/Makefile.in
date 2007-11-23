@@ -42,6 +42,7 @@ OBJECTS:=dbBase.o \
 		systemTools.o \
 		timeTools.o \
 		xml.o \
+		image.o \
 		dbSqlite.o \
 		systemProcesses.o \
 		systemThreads.o \

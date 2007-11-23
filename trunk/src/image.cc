@@ -23,4 +23,10 @@
 
 #include <libdodo/image.h>
 
+#ifdef IMAGEMAGICK_EXT
+
 using namespace dodo;
+
+//-------------------------------------------------------------------
+
+#endif
