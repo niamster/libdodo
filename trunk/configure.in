@@ -18,7 +18,6 @@ echo "" > include/libdodo/directives.runtime.h
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
-LIBS=""
 
 RESULT="\n\n"
 
@@ -75,11 +74,10 @@ fi
 			MOD_SQLITE_DIR=/usr
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib"
+		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
 		AC_CHECK_LIB([sqlite3], [sqlite3_table_column_metadata], RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tenabled", RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled")
 		AC_CHECK_LIB([sqlite3], [sqlite3_exec])
 		AC_CHECK_HEADER([sqlite3.h])
-		LIBS="$LIBS -lsqlite3"
 		echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
@@ -97,16 +95,14 @@ fi
 			MOD_POSTGRESQL_DIR=/usr
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib"
+		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 		AC_CHECK_LIB([pq], [PQclear])
 		AC_CHECK_HEADER([libpq-fe.h])
-		LIBS="$LIBS -lpq"
 		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nPostresql\t\t\t\t\t\tenabled"
 	else
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tdisabled"
-	
 	fi
 
 	AC_ARG_WITH([mysql],
@@ -116,20 +112,20 @@ fi
 	then
 		if test "$MOD_MYSQL_DIR" = "yes"
 		then
+			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
+			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
+		else
 			MOD_MYSQL_DIR=/usr
+			CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
+			LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
 		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include/mysql"
-		LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib/mysql"
 		AC_CHECK_LIB([mysqlclient], [mysql_init])
 		AC_CHECK_HEADER([mysql.h])
-		LIBS="$LIBS -lmysqlclient"
 		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
 	else
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tdisabled"
-	
-	
 	fi
 
 	AC_ARG_WITH([fcgi],
@@ -142,15 +138,14 @@ fi
 			MOD_FCGI_DIR=/usr
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_FCGI_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_FCGI_DIR/lib"
+		LDFLAGS="$LDFLAGS -L$MOD_FCGI_DIR/lib -lfcgi"
 		AC_CHECK_LIB([fcgi], [FCGX_Init])
 		AC_CHECK_HEADER([fcgiapp.h])
-		LIBS="$LIBS -lfcgi"
 		echo -n -e "#define FCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
-		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 	else
-		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tdisabled"
 	fi
 
 	AC_ARG_WITH([pcre],
@@ -160,13 +155,15 @@ fi
 	then
 		if test "$MOD_PCRE_DIR" = "yes"
 		then
+			CPPFLAGS="$CPPFLAGS $(pcre-config --cflags)"
+			LDFLAGS="$LDFLAGS $(pcre-config --libs)"
+		else
 			MOD_PCRE_DIR=/usr
+			CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
+			LDFLAGS="$LDFLAGS -L$MOD_PCRE_DIR/lib -lpcre"
 		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_PCRE_DIR/lib"
 		AC_CHECK_LIB([pcre], [pcre_exec])
 		AC_CHECK_HEADER([pcre.h])
-		LIBS="$LIBS -lpcre"
 		echo -n -e "#define PCRE_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nPCRE\t\t\t\t\t\tenabled"
@@ -192,7 +189,7 @@ fi
                 if test "$MOD_DL_LIB" = "yes"
                 then
 			AC_CHECK_LIB([dl], [dlopen], RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tenabled", RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tdisabled")
-			LIBS="$LIBS -ldl"
+			LDFLAGS="$LDFLAGS -ldl"
 		fi
 		echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
@@ -208,13 +205,15 @@ fi
 	then
 		if test "$MOD_LIBXML2_DIR" = "yes"
 		then
+			CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
+			LDFLAGS="$LDFLAGS $(xml2-config --libs)"
+		else
 			MOD_LIBXML2_DIR=/usr
+			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
+			LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
 		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
-		LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib"
 		AC_CHECK_HEADER([libxml/xmlmemory.h])
 		AC_CHECK_LIB([xml2], [xmlInitParser])
-		LIBS="$LIBS -lxml2"
 		echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tenabled"
@@ -231,14 +230,13 @@ fi
 		then
 			MOD_PTHREAD_DIR=/usr
 		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib"
         	AC_ARG_WITH([pthread-lib],
 		AS_HELP_STRING([--with-pthread-lib],[use pthread lib(pthread, thr, lthread, c_r) (default=pthread)]),
 		[MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
+		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
 		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create])
 		AC_CHECK_HEADER([pthread.h])
-		LIBS="$LIBS -l$MOD_PTHREAD_LIB"
 		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\npthread\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
@@ -256,10 +254,9 @@ fi
 			MOD_BZIP2_DIR=/usr
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_BZIP2_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib"
+		LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib -lbz2"
 		AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress])
 		AC_CHECK_HEADER([bzlib.h])
-		LIBS="$LIBS -lbz2"
 		echo -n -e "#define BZIP2_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tenabled"
@@ -285,7 +282,7 @@ fi
 	        if test "$MOD_ZLIB_LIB" = "yes"
 		then
 			AC_CHECK_LIB([z], [deflateInit2])
-			LIBS="$LIBS -lz"
+			LDFLAGS="$LDFLAGS -lz"
 		fi
 		echo -n -e "#define ZLIB_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
@@ -312,13 +309,36 @@ fi
 	        if test "$MOD_ICONV_LIB" = "yes"
 		then
 			AC_CHECK_LIB([iconv], [iconv])
-			LIBS="$LIBS -liconv"
+			LDFLAGS="$LDFLAGS -liconv"
 		fi
 		echo -n -e "#define ICONV_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\niconv\t\t\t\t\t\tenabled"
 	else
 		RESULT="$RESULT\niconv\t\t\t\t\t\tdisabled"
+	fi
+
+	AC_ARG_WITH([imagemagick],
+		AS_HELP_STRING([--with-imagemagick(=/path)],[use ImageMagick]),
+		[MOD_IMAGEMAGICK_DIR="$withval"], [MOD_IMAGEMAGICK="no"])
+	if test "$MOD_IMAGEMAGICK" != "no"
+	then
+		if test "$MOD_IMAGEMAGICK_DIR" = "yes"
+		then
+			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
+			LDFLAGS="$LDFLAGS $(Magick-config --ldflags) $(Magick-config --libs)"
+		else
+			MOD_ICONV_DIR=/usr
+			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
+			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
+		fi
+		AC_CHECK_LIB([Magick], [MagickCoreGenesis])
+		AC_CHECK_HEADER([magick/MagickCore.h])
+		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
+		
+		RESULT="$RESULT\nIMAGEMAGICK\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nIMAGEMAGICK\t\t\t\t\t\tdisabled"
 	fi
 
 # Checks for header files.

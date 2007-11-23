@@ -11,8 +11,7 @@ INSTALL:=@INSTALL@
 LN_S = @LN_S@
 
 CPPFLAGS:=-I./include @CPPFLAGS@
-LDFLAGS:= -L./ @LDFLAGS@
-LIBS:=@LIBS@ -lrt
+LDFLAGS:= -L./ @LDFLAGS@ -lrt
 CFLAGS:=@CFLAGS@
 DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 @DEFS@
 
@@ -71,7 +70,7 @@ VPATH:=src/
 all: @PACKAGE_NAME@
 
 @PACKAGE_NAME@: $(OBJECTS)
-	$(CXX) $(LDFLAGS) $(LIBS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
+	$(CXX) $(LDFLAGS) -shared -Wl,-soname,$@.so.@PACKAGE_VERSION@ -o $@.so.@PACKAGE_VERSION@ $(OBJECTS)
 	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded @PACKAGE_NAME@.so.@PACKAGE_VERSION@; fi
 	ln -sf @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $@.so
 	
