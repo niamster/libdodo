@@ -37,20 +37,20 @@ namespace dodo
 	{
 		public:
 
-		/**
-		 * destructor
-		 */
-		virtual ~atomicLock() = 0;
+			/**
+			 * destructor
+			 */
+			virtual ~atomicLock() = 0;
 
-		/**
-		 * locks critical section
-		 */
-		virtual void lock() = 0;
+			/**
+			 * locks critical section
+			 */
+			virtual void lock() = 0;
 
-		/**
-		 * unlocks critical section
-		 */
-		virtual void unLock() = 0;
+			/**
+			 * unlocks critical section
+			 */
+			virtual void unLock() = 0;
 	};
 };
 

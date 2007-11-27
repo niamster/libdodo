@@ -39,18 +39,18 @@ namespace dodo
 	class processGuardHolder : public guardHolder
 	{
 		protected:
-		
-		/**
-		 * contructor
-		 */
-		processGuardHolder();
-		
-		/**
-		 * destructor
-		 */
-		virtual ~processGuardHolder();
-		
-		char key[32];///< key for the semaphore
+
+			/**
+			 * contructor
+			 */
+			processGuardHolder();
+
+			/**
+			 * destructor
+			 */
+			virtual ~processGuardHolder();
+
+			char key[32]; ///< key for the semaphore
 	};
 
 };

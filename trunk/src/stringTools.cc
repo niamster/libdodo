@@ -28,7 +28,7 @@ using namespace dodo;
 
 bool
 stringTools::equal(const dodoString &first,
-				  const dodoString &second)
+				   const dodoString &second)
 {
 	return strcmp(first.c_str(), second.c_str()) == 0 ? true : false;
 }
@@ -37,7 +37,7 @@ stringTools::equal(const dodoString &first,
 
 bool
 stringTools::iequal(const dodoString &first,
-				   const dodoString &second)
+					const dodoString &second)
 {
 	return strcasecmp(first.c_str(), second.c_str()) == 0 ? true : false;
 }
@@ -153,7 +153,7 @@ stringTools::dToString(double number)
 
 dodoString
 stringTools::lTrim(const dodoString &data,
-				  char symbol)
+				   char symbol)
 {
 	int size = data.size(), i(0);
 
@@ -168,7 +168,7 @@ stringTools::lTrim(const dodoString &data,
 
 dodoString
 stringTools::rTrim(const dodoString &data,
-				  char symbol)
+				   char symbol)
 {
 	int i(data.size() - 1);
 
@@ -183,8 +183,8 @@ stringTools::rTrim(const dodoString &data,
 
 dodoString
 stringTools::rTrim(const dodoString &data,
-				  const char symbols[],
-				  int symCount)
+				   const char symbols[],
+				   int symCount)
 {
 	int i(data.size() - 1), j, empty;
 
@@ -204,8 +204,8 @@ stringTools::rTrim(const dodoString &data,
 
 dodoString
 stringTools::lTrim(const dodoString &data,
-				  const char symbols[],
-				  int symCount)
+				   const char symbols[],
+				   int symCount)
 {
 	int size = data.size(), i(0), empty, j;
 
@@ -225,8 +225,8 @@ stringTools::lTrim(const dodoString &data,
 
 dodoString
 stringTools::trim(const dodoString &data,
-				 const char symbols[],
-				 int symCount)
+				  const char symbols[],
+				  int symCount)
 {
 	return rTrim(lTrim(data, symbols, symCount), symbols, symCount);
 }
@@ -235,7 +235,7 @@ stringTools::trim(const dodoString &data,
 
 dodoString
 stringTools::trim(const dodoString &data,
-				 char symbol)
+				  char symbol)
 {
 	return rTrim(lTrim(data, symbol), symbol);
 }
@@ -308,8 +308,8 @@ stringTools::stringToD(const dodoString &data)
 
 void
 stringTools::replace(const dodoString &needle,
-			   const dodoString &replacement,
-			   dodoString &data)
+					 const dodoString &replacement,
+					 dodoString &data)
 {
 	unsigned long i(0), j(needle.size()), k(replacement.size());
 

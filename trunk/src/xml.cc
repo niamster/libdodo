@@ -68,7 +68,7 @@ xml::xml(xml &xt)
 //-------------------------------------------------------------------
 
 xml::xml() : icaseNames(false),
-					   document(NULL)
+			 document(NULL)
 {
 	xmlPedanticParserDefault(0);
 	xmlInitParser();
@@ -116,7 +116,7 @@ xml::isCDATA(xmlNodePtr chNode)
 
 __xmlNode
 xml::parseFile(const __xmlNodeDef &definition,
-					const dodoString &file)
+			   const dodoString &file)
 {
 	xmlFreeDoc(document);
 
@@ -135,7 +135,7 @@ xml::parseFile(const __xmlNodeDef &definition,
 
 __xmlNode
 xml::parseBuffer(const __xmlNodeDef &definition,
-					  const dodoString &buffer)
+				 const dodoString &buffer)
 {
 	xmlFreeDoc(document);
 
@@ -263,8 +263,8 @@ xml::parse(const __xmlNodeDef &definition)
 
 dodoArray<__xmlNode>
 xml::parse(const __xmlNodeDef &definition,
-				const xmlNodePtr chNode,
-				long chLimit)
+		   const xmlNodePtr chNode,
+		   long chLimit)
 {
 	xmlNodePtr node = chNode, subNode;
 
@@ -378,7 +378,7 @@ xml::parse(const __xmlNodeDef &definition,
 
 void
 xml::errHandler(void        *data,
-					 xmlErrorPtr error)
+				xmlErrorPtr error)
 {
 }
 
@@ -386,8 +386,8 @@ xml::errHandler(void        *data,
 
 void
 xml::getAttributes(const __xmlNodeDef &definition,
-						const xmlNodePtr node,
-						dodoStringMap &attributes)
+				   const xmlNodePtr node,
+				   dodoStringMap &attributes)
 {
 	attribute = node->properties;
 
@@ -452,7 +452,7 @@ xml::getAttributes(const __xmlNodeDef &definition,
 
 void
 xml::getAttributes(const xmlNodePtr node,
-						dodoStringMap &attributes)
+				   dodoStringMap &attributes)
 {
 	attribute = node->properties;
 
@@ -473,7 +473,7 @@ xml::getAttributes(const xmlNodePtr node,
 
 void
 xml::getNodeInfo(const xmlNodePtr node,
-					  __xmlNode &resNode)
+				 __xmlNode &resNode)
 {
 	if (node->ns != NULL)
 	{
@@ -658,7 +658,7 @@ xml::initNodeDef(__xmlNodeDef &node)
 
 xmlNodePtr
 xml::findNode(const __xmlNodeDef &definition,
-				   xmlNodePtr node)
+			  xmlNodePtr node)
 {
 	xmlNodePtr one;
 	bool skip;
@@ -715,8 +715,8 @@ xml::clear()
 
 dodoString
 xml::createXML(const __xmlNode &root,
-					const dodoString &encoding,
-					const dodoString &version) const
+			   const dodoString &encoding,
+			   const dodoString &version) const
 {
 	if (root.name.empty())
 		return __dodostring__;

@@ -44,10 +44,10 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-        #define SYSTEMPROCESSES_ISALREADYRUNNING_STR    "The process is currently running. Please wait."
-        #define SYSTEMPROCESSES_NOTFOUND_STR            "Process not found."
-        #define SYSTEMPROCESSES_SWEPT_STR               "Limit of execution exceeded. Process swept."
-        #define SYSTEMPROCESSES_ISNOTRUNNING_STR        "The process is currently not running."
+		#define SYSTEMPROCESSES_ISALREADYRUNNING_STR    "The process is currently running. Please wait."
+		#define SYSTEMPROCESSES_NOTFOUND_STR            "Process not found."
+		#define SYSTEMPROCESSES_SWEPT_STR               "Limit of execution exceeded. Process swept."
+		#define SYSTEMPROCESSES_ISNOTRUNNING_STR        "The process is currently not running."
 
 	/**
 	 * ID of function where exception was thrown
@@ -64,12 +64,12 @@ namespace dodo
 		SYSTEMPROCESSES_SETEXECUTIONLIMIT,
 		SYSTEMPROCESSES_ISRUNNING,
 
-            #ifdef DL_EXT
+			#ifdef DL_EXT
 
 		SYSTEMPROCESSES_GETMODULEINFO,
 		SYSTEMPROCESSES_ADD,
 
-            #endif
+			#endif
 	};
 };
 

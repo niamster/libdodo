@@ -36,14 +36,14 @@ namespace dodo
 	 */
 	enum xexecFunctionsID
 	{
-            #ifdef DL_EXT
+			#ifdef DL_EXT
 
 		XEXEC_ADDXEXECMODULE,
 		XEXEC_GETMODULEINFO,
 		XEXEC_DELXEXEC,
 		XEXEC_REPLACEXEXEC
 
-            #endif
+			#endif
 
 	};
 

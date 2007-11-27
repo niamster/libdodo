@@ -164,11 +164,11 @@ systemTools::getLimit(short type,
 
 		case SYSTEM_MAXOPENFILES:
 
-            #ifdef __FreeBSD__
+			#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
-            #else
+			#else
 			realRes = RLIMIT_OFILE;
-            #endif
+			#endif
 
 			break;
 
@@ -228,11 +228,11 @@ systemTools::setLimit(short type,
 
 		case SYSTEM_MAXOPENFILES:
 
-            #ifdef __FreeBSD__
+			#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
-            #else
+			#else
 			realRes = RLIMIT_OFILE;
-            #endif
+			#endif
 
 			break;
 
@@ -663,12 +663,12 @@ systemTools::sigMask(sigset_t *set,
 		if (isSetFlag(blockSignals, SIGNAL_TERMINATION))
 			sigaddset(set, SIGTERM);
 
-        #ifndef __FreeBSD__
+		#ifndef __FreeBSD__
 
 		if (isSetFlag(blockSignals, SIGNAL_STACK_FAULT))
 			sigaddset(set, SIGSTKFLT);
 
-        #endif
+		#endif
 
 		if (isSetFlag(blockSignals, SIGNAL_CHILD_CHANGED))
 			sigaddset(set, SIGCHLD);
@@ -697,7 +697,7 @@ systemTools::setSignalHandler(long signal,
 							  signalHandler handler,
 							  int blockSignals)
 {
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -713,7 +713,7 @@ systemTools::setSignalHandler(long signal,
 		handlesSig[signal] = NULL;
 	}
 
-    #endif
+	#endif
 
 	struct sigaction act;
 	act.sa_sigaction = handler;
@@ -735,7 +735,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 						   signalHandler handler,
 						   int blockSignals)
 {
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -751,7 +751,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 		handlesSig[SIGNAL_ALARM] = NULL;
 	}
 
-    #endif
+	#endif
 
 	struct sigaction act;
 	act.sa_sigaction = handler;
@@ -790,7 +790,7 @@ systemTools::setTimer(long timeout,
 					  signalHandler handler,
 					  int blockSignals)
 {
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -806,7 +806,7 @@ systemTools::setTimer(long timeout,
 		handlesSig[SIGNAL_ALARM] = NULL;
 	}
 
-    #endif
+	#endif
 
 	struct sigaction act;
 	act.sa_sigaction = handler;
@@ -860,7 +860,7 @@ systemTools::sendSignal(int pid,
 void
 systemTools::unsetSignalHandler(long signal)
 {
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -876,7 +876,7 @@ systemTools::unsetSignalHandler(long signal)
 		handlesSig[signal] = NULL;
 	}
 
-    #endif
+	#endif
 
 	struct sigaction act;
 	act.sa_sigaction = NULL;
@@ -1080,12 +1080,12 @@ systemTools::toRealSignal(long signal)
 
 			return SIGTERM;
 
-        #ifndef __FreeBSD__
+		#ifndef __FreeBSD__
 
 		case SIGNAL_STACK_FAULT:
 			return SIGSTKFLT;
 
-        #endif
+		#endif
 
 		case SIGNAL_CHILD_CHANGED:
 

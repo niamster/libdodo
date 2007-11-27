@@ -38,16 +38,16 @@ namespace dodo
 	class threadGuardHolder : public guardHolder
 	{
 		protected:
-		
-		/**
-		 * contructor
-		 */
-		threadGuardHolder();
-		
-		/**
-		 * destructor
-		 */
-		virtual ~threadGuardHolder();
+
+			/**
+			 * contructor
+			 */
+			threadGuardHolder();
+
+			/**
+			 * destructor
+			 */
+			virtual ~threadGuardHolder();
 	};
 
 };

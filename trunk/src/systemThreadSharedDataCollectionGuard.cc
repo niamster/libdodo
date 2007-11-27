@@ -109,7 +109,7 @@ systemThreadSharedDataCollectionGuard::getShare(unsigned long position)
 		if (i->position == position)
 		{
 			current = *((std::list<__shareInfo>::iterator *) & i);
-			
+
 			return true;
 		}
 

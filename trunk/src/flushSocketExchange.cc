@@ -106,10 +106,10 @@ flushSocketExchange::init(__initialAccept &a_init)
 void
 flushSocketExchange::close()
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKETEXCHANGE_OPER_CLOSE;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (!opened)
 		return ;
@@ -120,9 +120,9 @@ flushSocketExchange::close()
 
 	opened = false;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -171,10 +171,10 @@ flushSocketExchange::write(const char * const data)
 {
 	buffer.assign(data, outSize);
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKETEXCHANGE_OPER_SEND;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -231,9 +231,9 @@ flushSocketExchange::write(const char * const data)
 		}
 	}
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -249,10 +249,10 @@ flushSocketExchange::writeString(const dodoString &data)
 void
 flushSocketExchange::read(char * const data)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVE;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	memset(data, '\0', inSize);
 
@@ -319,9 +319,9 @@ flushSocketExchange::read(char * const data)
 
 	buffer.assign(data, inSize);
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -371,7 +371,7 @@ flushSocketExchange::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 int
 flushSocketExchange::addPostExec(const dodoString &module,
@@ -401,7 +401,7 @@ flushSocketExchange::addExec(const dodoString &module,
 	return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
 }
 
-    #endif
+	#endif
 
 //-------------------------------------------------------------------
 
@@ -414,10 +414,10 @@ flushSocketExchange::writeStream(const char * const data)
 {
 	buffer.assign(data);
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	buffer.append(1, '\n');
 
@@ -478,9 +478,9 @@ flushSocketExchange::writeStream(const char * const data)
 		}
 	}
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -496,10 +496,10 @@ flushSocketExchange::writeStreamString(const dodoString &data)
 void
 flushSocketExchange::readStream(char * const data)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	memset(data, '\0', inSocketBuffer);
 
@@ -522,9 +522,9 @@ flushSocketExchange::readStream(char * const data)
 
 	buffer.assign(data, n);
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------

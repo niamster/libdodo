@@ -52,9 +52,9 @@ using namespace dodo;
 //-------------------------------------------------------------------
 
 static unsigned char PADDING[64] = {
-	0x80, 0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	0x80, 0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 /**
@@ -83,38 +83,38 @@ static unsigned char PADDING[64] = {
  * FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
  * Rotation is separate from addition to prevent recomputation.
  */
-#define FF(a, b, c, d, x, s, ac)                            \
-	{                                                       \
-		(a) += F((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));                        \
-		(a) += (b);                                         \
+#define FF(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += F((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
 
-#define GG(a, b, c, d, x, s, ac)                            \
-	{                                                       \
-		(a) += G((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));                        \
-		(a) += (b);                                         \
+#define GG(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += G((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
 
-#define HH(a, b, c, d, x, s, ac)                            \
-	{                                                       \
-		(a) += H((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));                        \
-		(a) += (b);                                         \
+#define HH(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += H((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
 
-#define II(a, b, c, d, x, s, ac)                            \
-	{                                                       \
-		(a) += I((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));                        \
-		(a) += (b);                                         \
+#define II(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += I((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
@@ -162,19 +162,19 @@ tools::tools(tools &tls)
 
 tools::tools()
 {
-    #ifdef CODECONV_EXT
+	#ifdef CODECONV_EXT
 	convSet = false;
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
 
 tools::~tools()
 {
-    #ifdef CODECONV_EXT
+	#ifdef CODECONV_EXT
 	if (convSet)
 		iconv_close(conv);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -457,8 +457,8 @@ tools::implode(const dodoStringArr &fields,
 
 dodoString
 tools::codesetConversion(const dodoString &buffer,
-							   const dodoString &toCode,
-							   const dodoString &fromCode)
+						 const dodoString &toCode,
+						 const dodoString &fromCode)
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
@@ -474,11 +474,11 @@ tools::codesetConversion(const dodoString &buffer,
 	inFake = (char *)buffer.c_str();
 	outFake = outBuffer;
 
-        #ifdef __FreeBSD__
+		#ifdef __FreeBSD__
 	if (iconv(conv, (const char **)&inFake, &in, &outFake, &out) == (size_t)(-1))
-        #else
+		#else
 	if (iconv(conv, &inFake, &in, &outFake, &out) == (size_t)(-1))
-        #endif
+		#endif
 	{
 		delete [] outBuffer;
 
@@ -1840,12 +1840,12 @@ tools::sendShortDataDel(int socket,
 						const dodoString &mess,
 						char             *data)
 {
-    #ifndef FAST
+	#ifndef FAST
 
 	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDSHORTDATADEL, ERR_LIBDODO, TOOLS_DATA_TOO_LONG, TOOLS_DATA_TOO_LONG_STR, __LINE__, __FILE__);
 
-    #endif
+	#endif
 
 	while (true)
 	{
@@ -1869,12 +1869,12 @@ void
 tools::sendShortData(int socket,
 					 const dodoString &mess)
 {
-    #ifndef FAST
+	#ifndef FAST
 
 	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
 		throw baseEx(ERRMODULE_TOOLS, TOOLS_SENDSHORTDATA, ERR_LIBDODO, TOOLS_DATA_TOO_LONG, TOOLS_DATA_TOO_LONG_STR, __LINE__, __FILE__);
 
-    #endif
+	#endif
 
 	while (true)
 	{

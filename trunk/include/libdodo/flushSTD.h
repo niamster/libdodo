@@ -61,199 +61,199 @@ namespace dodo
 
 	class flushSTD : public flush
 
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 					 , public xexec
-    #endif
+	#endif
 
 
 	{
 		private:
 
-		/**
-		 * constructor
-		 * to prevent from copying
-		 */
-		flushSTD(flushSTD &fd);
+			/**
+			 * constructor
+			 * to prevent from copying
+			 */
+			flushSTD(flushSTD &fd);
 
 		public:
 
-		/**
-		 * constructor
-		 */
-		flushSTD();
+			/**
+			 * constructor
+			 */
+			flushSTD();
 
-		/**
-		 * destructor
-		 */
-		virtual ~flushSTD();
+			/**
+			 * destructor
+			 */
+			virtual ~flushSTD();
 
-		/**
-		 * @return info about source of inputting
-		 * @note it can be used to get info foreign `inputter` if you ar usin'g inetd
-		 */
-		static __connInfo inputterInfo();
+			/**
+			 * @return info about source of inputting
+			 * @note it can be used to get info foreign `inputter` if you ar usin'g inetd
+			 */
+			static __connInfo inputterInfo();
 
-            #ifndef FLUSH_STD_WO_XEXEC
+			#ifndef FLUSH_STD_WO_XEXEC
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 */
-		virtual int addPostExec(inExec func, void *data);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPostExec(inExec func, void *data);
 
-		/**
-		 * adds hook before the operation by callback
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 */
-		virtual int addPreExec(inExec func, void *data);
+			/**
+			 * adds hook before the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(inExec func, void *data);
 
-                #ifdef DL_EXT
+				#ifdef DL_EXT
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param module is a path to module, whrere hook exists
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param module is a path to module, whrere hook exists
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
-		/**
-		 * set function from module that will be executed before/after the main action call
-		 * the type of hook[pre/post] is defined in module
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * set function from module that will be executed before/after the main action call
+			 * the type of hook[pre/post] is defined in module
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
-                #endif
+				#endif
 
-            #endif
+			#endif
 
-		/**
-		 * read
-		 * @param data is filled with read string
-		 * if inSize bigger than buffer size - reads with few iterations
-		 */
-		virtual void
-		readString(dodoString &data);
-		/**
-		 * read
-		 * @param data is filled with read data
-		 * if inSize bigger than buffer size - reads with few iterations
-		 */
-		virtual void
-		read(char * const data);
+			/**
+			 * read
+			 * @param data is filled with read string
+			 * if inSize bigger than buffer size - reads with few iterations
+			 */
+			virtual void
+			readString(dodoString &data);
+			/**
+			 * read
+			 * @param data is filled with read data
+			 * if inSize bigger than buffer size - reads with few iterations
+			 */
+			virtual void
+			read(char * const data);
 
-		/**
-		 * write
-		 * @param data is string that will be written
-		 * if outSize bigger than buffer size - writes with few iterations
-		 */
-		virtual void
-		writeString(const dodoString &data);
+			/**
+			 * write
+			 * @param data is string that will be written
+			 * if outSize bigger than buffer size - writes with few iterations
+			 */
+			virtual void
+			writeString(const dodoString &data);
 
-		/**
-		 * write
-		 * @param data is data that will be written
-		 * if outSize bigger than buffer size - writes with few iterations
-		 */
-		virtual void
-		write(const char * const data);
+			/**
+			 * write
+			 * @param data is data that will be written
+			 * if outSize bigger than buffer size - writes with few iterations
+			 */
+			virtual void
+			write(const char * const data);
 
-		/**
-		 * read from stream - null[or \n]-terminated string
-		 * @param data is filled with read string
-		 * max size of data is inSTDBuffer
-		 */
-		virtual void
-		readStreamString(dodoString &data);
-		/**
-		 * read from stream - null[or \n]-terminated string
-		 * @param data is filled with read data
-		 * max size of data is inSTDBuffer
-		 */
-		virtual void
-		readStream(char * const data);
+			/**
+			 * read from stream - null[or \n]-terminated string
+			 * @param data is filled with read string
+			 * max size of data is inSTDBuffer
+			 */
+			virtual void
+			readStreamString(dodoString &data);
+			/**
+			 * read from stream - null[or \n]-terminated string
+			 * @param data is filled with read data
+			 * max size of data is inSTDBuffer
+			 */
+			virtual void
+			readStream(char * const data);
 
-		/**
-		 * write to stream - null-terminated string
-		 * @param data is string that will be written
-		 * @note max data size is outSTDBuffer
-		 * @note - appends '\n'
-		 */
-		virtual void
-		writeStreamString(const dodoString &data);
+			/**
+			 * write to stream - null-terminated string
+			 * @param data is string that will be written
+			 * @note max data size is outSTDBuffer
+			 * @note - appends '\n'
+			 */
+			virtual void
+			writeStreamString(const dodoString &data);
 
-		/**
-		 * write to stream - null-terminated string
-		 * @param data is data that will be written
-		 * @note max data size is outSTDBuffer
-		 * @note - appends '\n'
-		 */
-		virtual void
-		writeStream(const char * const data);
+			/**
+			 * write to stream - null-terminated string
+			 * @param data is data that will be written
+			 * @note max data size is outSTDBuffer
+			 * @note - appends '\n'
+			 */
+			virtual void
+			writeStream(const char * const data);
 
-		/**
-		 * flushes to output
-		 */
-		virtual void
-		flush();
+			/**
+			 * flushes to output
+			 */
+			virtual void
+			flush();
 
-		/**
-		 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer
-		 * this parameters will help you;
-		 * by default, they are too large, so you don't have to change it
-		 */
-		int inSTDBuffer;        ///< input buffer
-		int outSTDBuffer;       ///< output buffer
+			/**
+			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer
+			 * this parameters will help you;
+			 * by default, they are too large, so you don't have to change it
+			 */
+			int inSTDBuffer;    ///< input buffer
+			int outSTDBuffer;   ///< output buffer
 
-		bool err;               ///< redirect output to stderr; false by default
+			bool err;           ///< redirect output to stderr; false by default
 
-		/**
-		 * @return true if stream is blocked
-		 */
-		virtual bool isBlocked() const;
+			/**
+			 * @return true if stream is blocked
+			 */
+			virtual bool isBlocked() const;
 
-		/**
-		 * blocks/unblocks stream
-		 * @param flag indicates whether to block or unblock stream
-		 */
-		virtual void
-		block(bool flag);
+			/**
+			 * blocks/unblocks stream
+			 * @param flag indicates whether to block or unblock stream
+			 */
+			virtual void
+			block(bool flag);
 
 		protected:
 
-		/**
-		 * @return descriptor of input stream
-		 */
-		virtual int getInDescriptor() const;
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
 
-		/**
-		 * @return descriptor of output stream
-		 */
-		virtual int getOutDescriptor() const;
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const;
 
 		private:
 
-		FILE *desc;         ///< descriptor that is needed for redirection
+			FILE *desc;     ///< descriptor that is needed for redirection
 
-		bool blocked;       ///< indicates, whether blocked or not;
+			bool blocked;   ///< indicates, whether blocked or not;
 	};
 
 };

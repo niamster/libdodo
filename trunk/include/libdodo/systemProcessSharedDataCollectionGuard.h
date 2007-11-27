@@ -40,72 +40,72 @@ namespace dodo
 	 * @class systemProcessSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
 	 */
 	class systemProcessSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
-												virtual public processGuardHolder
+												   virtual public processGuardHolder
 	{
 		private:
 
-		/**
-		 * copy constructor
-		 * to prevent copying
-		 */
-		systemProcessSharedDataCollectionGuard(systemProcessSharedDataCollectionGuard &sts);
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			systemProcessSharedDataCollectionGuard(systemProcessSharedDataCollectionGuard &sts);
 
 		public:
 
-		/**
-		 * constructor
-		 */
-		systemProcessSharedDataCollectionGuard();
+			/**
+			 * constructor
+			 */
+			systemProcessSharedDataCollectionGuard();
 
-		/**
-		 * destructor
-		 */
-		virtual ~systemProcessSharedDataCollectionGuard();
+			/**
+			 * destructor
+			 */
+			virtual ~systemProcessSharedDataCollectionGuard();
 
-		/**
-		 * adds data to became a shared
-		 * @return position of shared in queue
-		 * @param data describes data to be shared
-		 */
-		virtual unsigned long add(void *data);
+			/**
+			 * adds data to became a shared
+			 * @return position of shared in queue
+			 * @param data describes data to be shared
+			 */
+			virtual unsigned long add(void *data);
 
-		/**
-		 * sets shared data to NULL
-		 * @param position indicates on shared data to lock
-		 */
-		virtual void
-		del(unsigned long position);
+			/**
+			 * sets shared data to NULL
+			 * @param position indicates on shared data to lock
+			 */
+			virtual void
+			del(unsigned long position);
 
-		/**
-		 * locks, sets data, unlocks
-		 * @param position indicates on shared data to lock
-		 * @param data describes data to be set
-		 */
-		virtual void
-		set(unsigned long position, void *data);
+			/**
+			 * locks, sets data, unlocks
+			 * @param position indicates on shared data to lock
+			 * @param data describes data to be set
+			 */
+			virtual void
+			set(unsigned long position, void *data);
 
-		/**
-		 * locks, gets data, unlocks
-		 * @return data points on shared data or NULL in error case
-		 * @param position indicates on shared data to lock
-		 */
-		virtual const void *get(unsigned long position);
+			/**
+			 * locks, gets data, unlocks
+			 * @return data points on shared data or NULL in error case
+			 * @param position indicates on shared data to lock
+			 */
+			virtual const void *get(unsigned long position);
 
 		protected:
 
-		/**
-		 * searches shares by position
-		 * @return true if found
-		 * @param position describes position of wanted thread
-		 * @note sets internal parameter 'current' to found share
-		 */
-		virtual bool getShare(unsigned long position);
+			/**
+			 * searches shares by position
+			 * @return true if found
+			 * @param position describes position of wanted thread
+			 * @note sets internal parameter 'current' to found share
+			 */
+			virtual bool getShare(unsigned long position);
 
-		std::list<__shareInfo> shares;                  ///< list of shared data
+			std::list<__shareInfo> shares;              ///< list of shared data
 
-		unsigned long shareNum;                         ///< number of registered shares
+			unsigned long shareNum;                     ///< number of registered shares
 
-		std::list<__shareInfo>::iterator current;       ///< iterator for list of shares[for matched with getShare method]
+			std::list<__shareInfo>::iterator current;   ///< iterator for list of shares[for matched with getShare method]
 	};
 
 };

@@ -42,217 +42,217 @@ namespace dodo
 	{
 		public:
 
-		/**
-		 * constructor
-		 */
-		cgiProcessor();
+			/**
+			 * constructor
+			 */
+			cgiProcessor();
 
-            #ifdef FCGI_EXT
+			#ifdef FCGI_EXT
 
-		/**
-		 * constructor
-		 * @param cf describes output interface
-		 */
-		cgiProcessor(cgiFastSTD *cf);
+			/**
+			 * constructor
+			 * @param cf describes output interface
+			 */
+			cgiProcessor(cgiFastSTD *cf);
 
-            #endif
+			#endif
 
-		/**
-		 * destructor
-		 */
-		virtual ~cgiProcessor();
+			/**
+			 * destructor
+			 */
+			virtual ~cgiProcessor();
 
-		/**
-		 * @return parsed template from file
-		 * @param path indicates path where template stays
-		 */
-		virtual dodoString process(const dodoString &path);
+			/**
+			 * @return parsed template from file
+			 * @param path indicates path where template stays
+			 */
+			virtual dodoString process(const dodoString &path);
 
-		/**
-		 * sets varable
-		 * @param varName describes name of variable
-		 * @param varVal describes value of variable
-		 */
-		virtual void assign(dodoString varName, const dodoString &varVal);
+			/**
+			 * sets varable
+			 * @param varName describes name of variable
+			 * @param varVal describes value of variable
+			 */
+			virtual void assign(dodoString varName, const dodoString &varVal);
 
-		/**
-		 * sets varable
-		 * @param varName describes name of variable
-		 * @param varVal describes value of variable(array)
-		 */
-		virtual void assign(dodoString varName, const dodoStringArr &varVal);
+			/**
+			 * sets varable
+			 * @param varName describes name of variable
+			 * @param varVal describes value of variable(array)
+			 */
+			virtual void assign(dodoString varName, const dodoStringArr &varVal);
 
-		/**
-		 * sets varable
-		 * @param varName describes name of variable
-		 * @param varVal describes value of variable(hash)
-		 */
-		virtual void assign(dodoString varName, const dodoStringMap &varVal);
+			/**
+			 * sets varable
+			 * @param varName describes name of variable
+			 * @param varVal describes value of variable(hash)
+			 */
+			virtual void assign(dodoString varName, const dodoStringMap &varVal);
 
-		/**
-		 * sets varable
-		 * @param varName describes name of variable
-		 * @param varVal describes value of variable(array of hashes)
-		 */
-		virtual void assign(dodoString varName, const dodoArray<dodoStringMap> &varVal);
+			/**
+			 * sets varable
+			 * @param varName describes name of variable
+			 * @param varVal describes value of variable(array of hashes)
+			 */
+			virtual void assign(dodoString varName, const dodoArray<dodoStringMap> &varVal);
 
-		/**
-		 * show to stdout parsed template
-		 * @param path indicates path where template stays
-		 */
-		virtual void display(const dodoString &path);
+			/**
+			 * show to stdout parsed template
+			 * @param path indicates path where template stays
+			 */
+			virtual void display(const dodoString &path);
 
-		/**
-		 * clears internal data[assigned vars, etc.]
-		 * @note useful for fastCGI
-		 */
-		virtual void clear();
+			/**
+			 * clears internal data[assigned vars, etc.]
+			 * @note useful for fastCGI
+			 */
+			virtual void clear();
 
 		protected:
 
-		/**
-		 * @return parsed template from preprocessored buffer
-		 * @param path indicates buffer where template stays
-		 * @param path indicates file where template got
-		 */
-		virtual dodoString _process(const dodoString &buffer, const dodoString &path);
+			/**
+			 * @return parsed template from preprocessored buffer
+			 * @param path indicates buffer where template stays
+			 * @param path indicates file where template got
+			 */
+			virtual dodoString _process(const dodoString &buffer, const dodoString &path);
 
-		/**
-		 * processes `if` statement
-		 * @return position of cursor where to continue search
-		 * @param buffer indicates what buffer contains found `if`
-		 * @param start indicates where )> closes in `<( if ... )>` block
-		 * @param statement indicates `if` statement
-		 * @param tpl indicates string where to add result
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual unsigned long _if(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &tpl, const dodoString &path);
+			/**
+			 * processes `if` statement
+			 * @return position of cursor where to continue search
+			 * @param buffer indicates what buffer contains found `if`
+			 * @param start indicates where )> closes in `<( if ... )>` block
+			 * @param statement indicates `if` statement
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual unsigned long _if(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &tpl, const dodoString &path);
 
-		/**
-		 * processes `for` statement
-		 * @return position of cursor where to continue search
-		 * @param buffer indicates what buffer contains found `for`
-		 * @param start indicates where )> closes in `<( for ... )>` block
-		 * @param statement indicates `for` statement
-		 * @param tpl indicates string where to add result
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual unsigned long _for(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &tpl, const dodoString &path);
+			/**
+			 * processes `for` statement
+			 * @return position of cursor where to continue search
+			 * @param buffer indicates what buffer contains found `for`
+			 * @param start indicates where )> closes in `<( for ... )>` block
+			 * @param statement indicates `for` statement
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual unsigned long _for(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &tpl, const dodoString &path);
 
-		/**
-		 * processes `for` statement
-		 * @return position of cursor where to continue search
-		 * @param buffer indicates what buffer contains found `for`
-		 * @param start indicates where )> closes in `<( namespace ... )>` block
-		 * @param tpl indicates string where to add result
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual unsigned long _ns(const dodoString &buffer, unsigned long start, dodoString &tpl, const dodoString &path);
+			/**
+			 * processes `for` statement
+			 * @return position of cursor where to continue search
+			 * @param buffer indicates what buffer contains found `for`
+			 * @param start indicates where )> closes in `<( namespace ... )>` block
+			 * @param tpl indicates string where to add result
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual unsigned long _ns(const dodoString &buffer, unsigned long start, dodoString &tpl, const dodoString &path);
 
-		/**
-		 * processes `print` statement
-		 * @param statement indicates `print` statement
-		 * @param tpl indicates string where to add result
-		 * @param start indicates position in file
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual void _print(const dodoString &statement, dodoString &tpl, unsigned long &start, const dodoString &path);
+			/**
+			 * processes `print` statement
+			 * @param statement indicates `print` statement
+			 * @param tpl indicates string where to add result
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual void _print(const dodoString &statement, dodoString &tpl, unsigned long &start, const dodoString &path);
 
-		/**
-		 * processes `break` statement
-		 * @param statement indicates `break` statement
-		 * @param start indicates position in file
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual bool _break(const dodoString &statement, unsigned long &start, const dodoString &path);
+			/**
+			 * processes `break` statement
+			 * @param statement indicates `break` statement
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual bool _break(const dodoString &statement, unsigned long &start, const dodoString &path);
 
-		/**
-		 * processes `assign` statement
-		 * @param statement indicates `assign` statement
-		 * @param start indicates position in file
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual void _assign(const dodoString &statement, unsigned long &start, const dodoString &path);
+			/**
+			 * processes `assign` statement
+			 * @param statement indicates `assign` statement
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual void _assign(const dodoString &statement, unsigned long &start, const dodoString &path);
 
-		/**
-		 * processes `include` statement
-		 * @param buffer indicates what buffer contains found `if`
-		 * @param statement indicates `include` statement
-		 * @param tpl indicates string where to add result
-		 * @param start indicates position in file
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual void _include(const dodoString &statement, dodoString &tpl, unsigned long &start, const dodoString &path);
+			/**
+			 * processes `include` statement
+			 * @param buffer indicates what buffer contains found `if`
+			 * @param statement indicates `include` statement
+			 * @param tpl indicates string where to add result
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual void _include(const dodoString &statement, dodoString &tpl, unsigned long &start, const dodoString &path);
 
-		/**
-		 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
-		 */
-		virtual void cleanNamespace();
+			/**
+			 * cleans namespace variable and back to life vars of prevous namespace that were overwritten
+			 */
+			virtual void cleanNamespace();
 
-		/**
-		 * @return position of the exact close block of the statement
-		 * @param buffer indicates what buffer contains found `if`
-		 * @param start indicates where )> closes if `<( if ... )>` block
-		 * @param st is open statement[if, for ...]
-		 * @param ts is close statement[fi, rof ...]
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual unsigned long blockEnd(const dodoString &buffer, unsigned long start, const dodoString &st, const dodoString &ts, const dodoString &path);
+			/**
+			 * @return position of the exact close block of the statement
+			 * @param buffer indicates what buffer contains found `if`
+			 * @param start indicates where )> closes if `<( if ... )>` block
+			 * @param st is open statement[if, for ...]
+			 * @param ts is close statement[fi, rof ...]
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual unsigned long blockEnd(const dodoString &buffer, unsigned long start, const dodoString &st, const dodoString &ts, const dodoString &path);
 
-		/**
-		 * @return true if path is in `processed` list
-		 * @param path desribes what to look up
-		 */
-		virtual bool recursive(const dodoString &path);
+			/**
+			 * @return true if path is in `processed` list
+			 * @param path desribes what to look up
+			 */
+			virtual bool recursive(const dodoString &path);
 
-		/**
-		 * @return var's value
-		 * @param varName describes name of variable
-		 * @param start indicates position in file
-		 * @param path indicates path of current .tpl file
-		 */
-		virtual dodoString getVar(const dodoString &varName, unsigned long &start, const dodoString &path);
+			/**
+			 * @return var's value
+			 * @param varName describes name of variable
+			 * @param start indicates position in file
+			 * @param path indicates path of current .tpl file
+			 */
+			virtual dodoString getVar(const dodoString &varName, unsigned long &start, const dodoString &path);
 
-		/**
-		 * @return extracted data(e.g. removes pairs of ",',`)
-		 * @param statement describes statement that needs extraction from the pairs of ",',`
-		 */
-		virtual dodoString trim(const dodoString &statement);
+			/**
+			 * @return extracted data(e.g. removes pairs of ",',`)
+			 * @param statement describes statement that needs extraction from the pairs of ",',`
+			 */
+			virtual dodoString trim(const dodoString &statement);
 
-		std::list<dodoString> processed;                                    ///< vector of files that will be skipped due to recurse
+			std::list<dodoString> processed;                                    ///< vector of files that will be skipped due to recurse
 
-		std::map<dodoString, dodoStringArr> globalArray;                    ///< set of global variables(arrays)[user-set]
+			std::map<dodoString, dodoStringArr> globalArray;                    ///< set of global variables(arrays)[user-set]
 
-		std::map<dodoString, dodoStringMap> globalHash;                     ///< set of global variables(hashes)[user-set]
+			std::map<dodoString, dodoStringMap> globalHash;                     ///< set of global variables(hashes)[user-set]
 
-		std::map<dodoString, dodoArray<dodoStringMap> > globalArrayHash;    ///< set of global variables(array of hashes)[user-set]
-		std::map<dodoString, dodoStringMap> localHash;                      ///< set of local variables(hashes)
+			std::map<dodoString, dodoArray<dodoStringMap> > globalArrayHash;    ///< set of global variables(array of hashes)[user-set]
+			std::map<dodoString, dodoStringMap> localHash;                      ///< set of local variables(hashes)
 
-		dodoStringMap dodo;                                                 ///< set of auxillary variables[dodo defined][for dodo.*]
+			dodoStringMap dodo;                                                 ///< set of auxillary variables[dodo defined][for dodo.*]
 
-		dodoStringMap global;                                               ///< set of global variables[user-set]
-		dodoStringMap local;                                                ///< set of local variables[during parsing]
+			dodoStringMap global;                                               ///< set of global variables[user-set]
+			dodoStringMap local;                                                ///< set of local variables[during parsing]
 
-		bool _continueFlag;                                                 ///< indicates `continue`
+			bool _continueFlag;                                                 ///< indicates `continue`
 
-		unsigned int _breakDeepness;                                        ///< deepness of the break
-		unsigned int _loopDeepness;                                         ///< deepness of the loop
+			unsigned int _breakDeepness;                                        ///< deepness of the break
+			unsigned int _loopDeepness;                                         ///< deepness of the loop
 
-		unsigned long iterator;                                             ///< count of iteration of a loop
+			unsigned long iterator;                                             ///< count of iteration of a loop
 
-		unsigned int namespaceDeepness;                                     ///< deepness of the namespace
-		std::map<unsigned int, dodoStringMap> localNamespace;               ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
-		std::map<unsigned int, dodoStringArr> namespaceVars;                ///< names of vars in namespaces
+			unsigned int namespaceDeepness;                                     ///< deepness of the namespace
+			std::map<unsigned int, dodoStringMap> localNamespace;               ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
+			std::map<unsigned int, dodoStringArr> namespaceVars;                ///< names of vars in namespaces
 
-            #ifdef FCGI_EXT
+			#ifdef FCGI_EXT
 
-		bool cgiFastSet;        ///< indicates whether cgiFast was set
+			bool cgiFastSet;    ///< indicates whether cgiFast was set
 
-		cgiFastSTD *cf;         ///< pointer to cgiFast class
+			cgiFastSTD *cf;     ///< pointer to cgiFast class
 
-            #endif
+			#endif
 
-		flushSTD *fstd;
+			flushSTD *fstd;
 	};
 
 };

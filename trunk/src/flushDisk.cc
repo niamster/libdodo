@@ -92,7 +92,7 @@ flushDisk::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 int
 flushDisk::addPostExec(const dodoString &module,
@@ -122,7 +122,7 @@ flushDisk::addExec(const dodoString &module,
 	return _addExec(module, (void *)this, XEXECOBJ_FLUSHDISK, data, toInit);
 }
 
-    #endif
+	#endif
 
 #endif
 
@@ -131,22 +131,22 @@ flushDisk::addExec(const dodoString &module,
 void
 flushDisk::close()
 {
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_CLOSE;
-    #endif
+	#endif
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (opened)
 	{
 		if (fclose(file) != 0)
 			throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-        #ifndef FLUSH_DISK_WO_XEXEC
+		#ifndef FLUSH_DISK_WO_XEXEC
 		performXExec(postExec);
-        #endif
+		#endif
 
 		opened = false;
 	}
@@ -157,10 +157,10 @@ flushDisk::close()
 void
 flushDisk::open(const dodoString &a_path)
 {
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_OPEN;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (a_path.size() != 0 && a_path == path)
 		path = a_path;
@@ -237,9 +237,9 @@ flushDisk::open(const dodoString &a_path)
 
 	flushDiskTools::chmod(path, FILE_PERM);
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 
 	opened = true;
 }
@@ -250,10 +250,10 @@ void
 flushDisk::read(char * const a_void,
 				unsigned long a_pos)
 {
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_READ;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 		if (fseek(file, a_pos * inSize, SEEK_SET) == -1)
@@ -265,9 +265,9 @@ flushDisk::read(char * const a_void,
 	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 		fread(a_void, inSize, 1, file);
 	else
-        #ifndef FAST
+		#ifndef FAST
 	if (fileType == FIFO_FILE)
-        #endif
+		#endif
 		fgets(a_void, inSize + 1, file);
 
 	switch (errno)
@@ -284,9 +284,9 @@ flushDisk::read(char * const a_void,
 
 	buffer.assign(a_void, inSize);
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -300,7 +300,7 @@ flushDisk::readString(dodoString &a_str,
 	try
 	{
 
-	this->read(data, a_pos);
+		this->read(data, a_pos);
 
 	}
 	catch (...)
@@ -332,10 +332,10 @@ flushDisk::write(const char *const a_buf,
 {
 	buffer.assign(a_buf, outSize);
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_WRITE;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 	{
@@ -374,9 +374,9 @@ flushDisk::write(const char *const a_buf,
 	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 		fwrite(buffer.c_str(), outSize, 1, file);
 	else
-        #ifndef FAST
+		#ifndef FAST
 	if (fileType == FILETYPE_FIFO_FILE)
-        #endif
+		#endif
 		fputs(buffer.c_str(), file);
 
 	switch (errno)
@@ -394,9 +394,9 @@ flushDisk::write(const char *const a_buf,
 			throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -436,10 +436,10 @@ void
 flushDisk::readStream(char * const a_void,
 					  unsigned long a_pos)
 {
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_READSTREAM;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
 	{
@@ -484,9 +484,9 @@ flushDisk::readStream(char * const a_void,
 
 	buffer.assign(a_void);
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -529,10 +529,10 @@ flushDisk::writeStream(const char *const a_buf)
 {
 	buffer.assign(a_buf);
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_WRITESTREAM;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (fseek(file, 0, SEEK_END) == -1)
 		throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -572,9 +572,9 @@ flushDisk::writeStream(const char *const a_buf)
 				throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------

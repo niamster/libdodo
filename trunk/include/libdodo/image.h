@@ -63,7 +63,7 @@ namespace dodo
 
 		private:
 
-			bool initialized;     ///< indicates if environment was initialized in the object
+			bool initialized; ///< indicates if environment was initialized in the object
 	};
 
 	extern __image_init__ __image_init_object__;

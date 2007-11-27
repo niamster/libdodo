@@ -124,7 +124,7 @@ void *baseEx::handlerDataEx[] = { NULL,
 
 //-------------------------------------------------------------------
 
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 bool baseEx::handlesOpenedEx[] = { false,
 								   false,
@@ -190,7 +190,7 @@ void *baseEx::handlesEx[] = { NULL,
 							  NULL,
 							  NULL };
 
-    #endif
+	#endif
 
 //-------------------------------------------------------------------
 
@@ -218,7 +218,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 
 baseEx::~baseEx()
 {
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 
 	deinitExModule deinit;
 
@@ -236,12 +236,12 @@ baseEx::~baseEx()
 		dlclose(handlesEx[i]);
 	}
 
-        #endif
+		#endif
 }
 
 //-------------------------------------------------------------------
 
-baseEx::operator const dodoString&()
+baseEx::operator const dodoString & ()
 {
 	return baseErrstr;
 }
@@ -253,7 +253,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 						errorHandler handler,
 						void *data)
 {
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 
 	if (handlesOpenedEx[module])
 	{
@@ -269,7 +269,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 		handlesEx[module] = NULL;
 	}
 
-        #endif
+		#endif
 
 	handlersEx[module] = handler;
 	handlerSetEx[module] = true;
@@ -282,13 +282,13 @@ void
 baseEx::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 	deinitExModule deinit;
-        #endif
+		#endif
 
 	for (int i(0); i < AM_MODULES; ++i)
 	{
-            #ifdef DL_EXT
+			#ifdef DL_EXT
 
 		if (handlesOpenedEx[i])
 		{
@@ -302,7 +302,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 			handlesEx[i] = NULL;
 		}
 
-            #endif
+			#endif
 
 		handlersEx[i] = handler;
 		handlerSetEx[i] = true;
@@ -315,7 +315,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 void
 baseEx::unsetErrorHandler(errorModuleEnum module)
 {
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 
 	if (handlesOpenedEx[module])
 	{
@@ -331,7 +331,7 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 		handlesEx[module] = NULL;
 	}
 
-        #endif
+		#endif
 
 	handlersEx[module] = NULL;
 	handlerSetEx[module] = false;
@@ -343,13 +343,13 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 void
 baseEx::unsetErrorHandlers()
 {
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 	deinitExModule deinit;
-        #endif
+		#endif
 
 	for (int i(0); i < AM_MODULES; ++i)
 	{
-            #ifdef DL_EXT
+			#ifdef DL_EXT
 
 		if (handlesOpenedEx[i])
 		{
@@ -363,7 +363,7 @@ baseEx::unsetErrorHandlers()
 			handlesEx[i] = NULL;
 		}
 
-            #endif
+			#endif
 
 		handlersEx[i] = NULL;
 		handlerSetEx[i] = false;
@@ -373,7 +373,7 @@ baseEx::unsetErrorHandlers()
 
 //-------------------------------------------------------------------
 
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 bool
 baseEx::setErrorHandlers(const dodoString &path,

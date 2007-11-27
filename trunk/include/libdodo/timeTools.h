@@ -95,64 +95,64 @@ namespace dodo
 
 		public:
 
-		/**
-		 * @return number of days in the month [detecting leap year]
-		 * @param year is to detect leap year
-		 * @param month is describes month where to calculate number of days
-		 */
-		static unsigned short int daysInMonth(unsigned int year, unsigned short int month);
+			/**
+			 * @return number of days in the month [detecting leap year]
+			 * @param year is to detect leap year
+			 * @param month is describes month where to calculate number of days
+			 */
+			static unsigned short int daysInMonth(unsigned int year, unsigned short int month);
 
-		/**
-		 * @return formated time[date...]
-		 * @param format is string contains format presented above
-		 * @param timestamp is amount of seconds from 01.01.1970
-		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
-		 */
-		static dodoString byFormat(const dodoString &format, long timestamp, bool local = true);
+			/**
+			 * @return formated time[date...]
+			 * @param format is string contains format presented above
+			 * @param timestamp is amount of seconds from 01.01.1970
+			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
+			 */
+			static dodoString byFormat(const dodoString &format, long timestamp, bool local = true);
 
-		/**
-		 * @return timestamp[amount of seconds from 01.01.1970]
-		 * @param format is string contains format presented above
-		 * @param dt contais formated time[date...]
-		 */
-		static long byFormat(const dodoString &format, const dodoString &dt);
+			/**
+			 * @return timestamp[amount of seconds from 01.01.1970]
+			 * @param format is string contains format presented above
+			 * @param dt contais formated time[date...]
+			 */
+			static long byFormat(const dodoString &format, const dodoString &dt);
 
-		/**
-		 * @return amount of seconds from 00:00:00 UTC, January 1, 1970
-		 */
-		static long now();
+			/**
+			 * @return amount of seconds from 00:00:00 UTC, January 1, 1970
+			 */
+			static long now();
 
-		/**
-		 * @return array of dates that specifies week, where date(in seconds) is specified
-		 * @param date indicates date for what to build array
-		 * @param format is string contains format presented above
-		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
-		 * @note monday is first in the array
-		 */
-		static dodoStringArr week(long date, const dodoString &format, bool local = true);
+			/**
+			 * @return array of dates that specifies week, where date(in seconds) is specified
+			 * @param date indicates date for what to build array
+			 * @param format is string contains format presented above
+			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
+			 * @note monday is first in the array
+			 */
+			static dodoStringArr week(long date, const dodoString &format, bool local = true);
 
-		/**
-		 * @return array of dates between specified period
-		 * @param dateFrom indicates date for start
-		 * @param dateTo indicates date for end
-		 * @param format is string contains format presented above
-		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
-		 * @note you should't set the date in 00:00, add some hours; you can get strange result in periods whe daytime changes
-		 */
-		static dodoStringArr datesArr(long dateFrom, long dateTo, const dodoString &format, bool local = true);
+			/**
+			 * @return array of dates between specified period
+			 * @param dateFrom indicates date for start
+			 * @param dateTo indicates date for end
+			 * @param format is string contains format presented above
+			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
+			 * @note you should't set the date in 00:00, add some hours; you can get strange result in periods whe daytime changes
+			 */
+			static dodoStringArr datesArr(long dateFrom, long dateTo, const dodoString &format, bool local = true);
 
-		/**
-		 * @return second that describes __mktime
-		 * @timeInfo holds parameters about time that will be converted into seconds
-		 */
-		static long makeTime(const __mktime &timeInfo);
+			/**
+			 * @return second that describes __mktime
+			 * @timeInfo holds parameters about time that will be converted into seconds
+			 */
+			static long makeTime(const __mktime &timeInfo);
 
-		/**
-		 * @return parameter about given time
-		 * @seconds is amount of secound that will be translated
-		 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
-		 */
-		static __mktime makeTime(long seconds, bool local = true);
+			/**
+			 * @return parameter about given time
+			 * @seconds is amount of secound that will be translated
+			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
+			 */
+			static __mktime makeTime(long seconds, bool local = true);
 	};
 
 };

@@ -38,38 +38,38 @@ namespace dodo
 	 */
 	class flush
 	{
-		friend class flushNBA;
+			friend class flushNBA;
 
 		public:
 
-		/**
-		 * constructor
-		 */
-		flush();
+			/**
+			 * constructor
+			 */
+			flush();
 
-		/**
-		 * destructor
-		 */
-		virtual ~flush();
+			/**
+			 * destructor
+			 */
+			virtual ~flush();
 
-		unsigned long inSize;       ///< size of data block;
-		unsigned long outSize;      ///< size of data block;
+			unsigned long inSize;   ///< size of data block;
+			unsigned long outSize;  ///< size of data block;
 
-		dodoString buffer;          ///< before readin' or after writin' the storege sets to buffer; usefull for xexec
+			dodoString buffer;      ///< before readin' or after writin' the storege sets to buffer; usefull for xexec
 
 		protected:
 
-		bool opened;    ///< indicates whether file(connection) opened or not
+			bool opened; ///< indicates whether file(connection) opened or not
 
-		/**
-		 * @return descriptor of input stream
-		 */
-		virtual int getInDescriptor() const = 0;
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const = 0;
 
-		/**
-		 * @return descriptor of output stream
-		 */
-		virtual int getOutDescriptor() const = 0;
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const = 0;
 	};
 
 };

@@ -41,29 +41,29 @@ namespace dodo
 	{
 		public:
 
-		/**
-		 * consructor
-		 */
-		atomicMutex();
+			/**
+			 * consructor
+			 */
+			atomicMutex();
 
-		/**
-		 * destructor
-		 */
-		virtual ~atomicMutex();
+			/**
+			 * destructor
+			 */
+			virtual ~atomicMutex();
 
-		/**
-		 * locks critical section
-		 */
-		virtual void lock();
+			/**
+			 * locks critical section
+			 */
+			virtual void lock();
 
-		/**
-		 * unlocks critical section
-		 */
-		virtual void unLock();
+			/**
+			 * unlocks critical section
+			 */
+			virtual void unLock();
 
 		protected:
 
-		pthread_mutex_t mutex;    ///< lock
+			pthread_mutex_t mutex; ///< lock
 	};
 
 };

@@ -729,12 +729,12 @@ dbSqlBase::queryCollect()
 			additionalActions = false;
 	}
 
-    #ifndef FAST
+	#ifndef FAST
 
 	if (request.size() == 0)
 		throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASE_QUERYCOLLECT, ERR_LIBDODO, DBSQLBASE_EMPTY_REQUEST, DBSQLBASE_EMPTY_REQUEST_STR, __LINE__, __FILE__);
 
-    #endif
+	#endif
 
 	if (additionalActions)
 	{
@@ -869,19 +869,19 @@ dbSqlBase::stringType(int type)
 			return dodoString("CHAR");
 
 		case FIELDTYPE_TINYBLOB:
-			
+
 			return dodoString("TINYBLOB");
 
 		case FIELDTYPE_BLOB:
-			
+
 			return dodoString("BLOB");
 
 		case FIELDTYPE_MEDIUMBLOB:
-			
+
 			return dodoString("MEDIUMBLOB");
 
 		case FIELDTYPE_LONGBLOB:
-			
+
 			return dodoString("LONGBLOB");
 
 		case FIELDTYPE_TINYTEXT:

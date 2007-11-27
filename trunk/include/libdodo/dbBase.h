@@ -300,390 +300,390 @@ namespace dodo
 	{
 		public:
 
-		/*
-		 * constructor
-		 */
-		dbBase();
+			/*
+			 * constructor
+			 */
+			dbBase();
 
-		/**
-		 * destructor
-		 */
-		virtual ~dbBase();
+			/**
+			 * destructor
+			 */
+			virtual ~dbBase();
 
-		/**
-		 * next functions just modify internal data, but don't make a query. that's usefull to make hooks [preExec or postExec actions]
-		 * in any time you can unset additional statement with callin' same function with `un` preffix (unlimit,..)
-		 */
+			/**
+			 * next functions just modify internal data, but don't make a query. that's usefull to make hooks [preExec or postExec actions]
+			 * in any time you can unset additional statement with callin' same function with `un` preffix (unlimit,..)
+			 */
 
-		/**
-		 * sets info for database
-		 * @param db is database name
-		 * @param host is host, to connect to server
-		 * @param port is port, to connect to server
-		 * @param user is username, to connect to server
-		 * @param password is password, to connect to server
-		 * @param socket is path to unix socket
-		 */
-		virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __dodostring__);
+			/**
+			 * sets info for database
+			 * @param db is database name
+			 * @param host is host, to connect to server
+			 * @param port is port, to connect to server
+			 * @param user is username, to connect to server
+			 * @param password is password, to connect to server
+			 * @param socket is path to unix socket
+			 */
+			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __dodostring__);
 
-		/**
-		 * sets info for database
-		 * @param info is info for database
-		 */
-		virtual void setDbInfo(const __dbInfo &dbInfo);
+			/**
+			 * sets info for database
+			 * @param info is info for database
+			 */
+			virtual void setDbInfo(const __dbInfo &dbInfo);
 
-		/**
-		 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
-		 * @param fields is array of fields' names
-		 * @param where is where statement for request
-		 */
-		virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__);
+			/**
+			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
+			 * @param fields is array of fields' names
+			 * @param where is where statement for request
+			 */
+			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__);
 
-		/**
-		 * @param table is table name
-		 * @param fields is array of fields' names
-		 * 			key => field's name
-		 * 			value => field's value
-		 */
-		virtual void insert(const dodoString &table, const dodoStringMap &fields);
+			/**
+			 * @param table is table name
+			 * @param fields is array of fields' names
+			 * 			key => field's name
+			 * 			value => field's value
+			 */
+			virtual void insert(const dodoString &table, const dodoStringMap &fields);
 
-		/**
-		 * @param table is table name
-		 * @param fields is array of (array of fields' names)
-		 * 			key => field's name
-		 * 			value => field's value
-		 */
-		virtual void insert(const dodoString &table, const dodoArray<dodoStringMap> &fields);
+			/**
+			 * @param table is table name
+			 * @param fields is array of (array of fields' names)
+			 * 			key => field's name
+			 * 			value => field's value
+			 */
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringMap> &fields);
 
-		/**
-		 * @param table is table name
-		 * @param fieldsVal is array of fields' values
-		 * @param fieldsNames is array of fields' names
-		 */
-		virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__);
+			/**
+			 * @param table is table name
+			 * @param fieldsVal is array of fields' values
+			 * @param fieldsNames is array of fields' names
+			 */
+			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__);
 
-		/**
-		 * @param table is table name
-		 * @param fieldsVal - array of array of (array of fields' values)
-		 * @param fieldsNames is array of fields' names
-		 */
-		virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__);
+			/**
+			 * @param table is table name
+			 * @param fieldsVal - array of array of (array of fields' values)
+			 * @param fieldsNames is array of fields' names
+			 */
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__);
 
-		/**
-		 * @param table(To/From) is table name To/From
-		 * @param fieldsNames is array of fields' names
-		 */
-		virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__);
+			/**
+			 * @param table(To/From) is table name To/From
+			 * @param fieldsNames is array of fields' names
+			 */
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__);
 
-		/**
-		 * @param table is table name
-		 * @param fields - array of (char*)/(string)
-		 * 			key => field's name
-		 * 			value => field's value
-		 * @param where is where statement for request
-		 */
-		virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where = __dodostring__);
+			/**
+			 * @param table is table name
+			 * @param fields - array of (char*)/(string)
+			 * 			key => field's name
+			 * 			value => field's value
+			 * @param where is where statement for request
+			 */
+			virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where = __dodostring__);
 
-		/**
-		 * @param table is table name
-		 * @param fieldsVal is array of fields' values
-		 * @param fieldsNames is array of fields' names
-		 * @param where is where statement for request
-		 */
-		virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__);
+			/**
+			 * @param table is table name
+			 * @param fieldsVal is array of fields' values
+			 * @param fieldsNames is array of fields' names
+			 * @param where is where statement for request
+			 */
+			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__);
 
-		/**
-		 * @param table is table name
-		 * @param where is where statement for request
-		 */
-		virtual void del(const dodoString &table, const dodoString &where = __dodostring__);
+			/**
+			 * @param table is table name
+			 * @param where is where statement for request
+			 */
+			virtual void del(const dodoString &table, const dodoString &where = __dodostring__);
 
-		/**
-		 * store query, made from subquery with requested method
-		 * @param sub is array of subqueries
-		 * @param type is type of "subquering"[see qStEnum]
-		 */
-		virtual void subquery(const dodoStringArr &sub, int type = DBREQUEST_UNION /*DBREQUEST_UNION_ALL, DBREQUEST_MINUS, DBREQUEST_INTERSECT*/);
+			/**
+			 * store query, made from subquery with requested method
+			 * @param sub is array of subqueries
+			 * @param type is type of "subquering"[see qStEnum]
+			 */
+			virtual void subquery(const dodoStringArr &sub, int type = DBREQUEST_UNION /*DBREQUEST_UNION_ALL, DBREQUEST_MINUS, DBREQUEST_INTERSECT*/);
 
-		/**
-		 * create index in table
-		 * @param table is where to create index
-		 * @param field is field's name to be index
-		 */
-		virtual void createIndex(const dodoString &table, const dodoString &field, const dodoString &name);
+			/**
+			 * create index in table
+			 * @param table is where to create index
+			 * @param field is field's name to be index
+			 */
+			virtual void createIndex(const dodoString &table, const dodoString &field, const dodoString &name);
 
-		/**
-		 * create index in table
-		 * @param table is where to create index
-		 * @param fields is fields' name to be index
-		 */
-		virtual void createIndex(const dodoString &table, const dodoStringArr &fields, const dodoString &name);
+			/**
+			 * create index in table
+			 * @param table is where to create index
+			 * @param fields is fields' name to be index
+			 */
+			virtual void createIndex(const dodoString &table, const dodoStringArr &fields, const dodoString &name);
 
-		/**
-		 * delete index in table
-		 * @param table is where to delete index
-		 * @param name is index's name
-		 */
-		virtual void deleteIndex(const dodoString &table, const dodoString &name);
+			/**
+			 * delete index in table
+			 * @param table is where to delete index
+			 * @param name is index's name
+			 */
+			virtual void deleteIndex(const dodoString &table, const dodoString &name);
 
-		/**
-		 * rename database
-		 * @param db is current name
-		 * @param to_db is new name
-		 */
-		virtual void renameDb(const dodoString &db, const dodoString &to_db);
+			/**
+			 * rename database
+			 * @param db is current name
+			 * @param to_db is new name
+			 */
+			virtual void renameDb(const dodoString &db, const dodoString &to_db);
 
-		/**
-		 * renames table
-		 * @param table is current name
-		 * @param to_table is new name
-		 */
-		virtual void renameTable(const dodoString &table, const dodoString &to_table);
+			/**
+			 * renames table
+			 * @param table is current name
+			 * @param to_table is new name
+			 */
+			virtual void renameTable(const dodoString &table, const dodoString &to_table);
 
-		/**
-		 * renames field
-		 * @param field is current name
-		 * @param to_field is new name
-		 * @param is table where field is stored
-		 */
-		virtual void renameField(const dodoString &field, const dodoString &to_field, const dodoString &table);
+			/**
+			 * renames field
+			 * @param field is current name
+			 * @param to_field is new name
+			 * @param is table where field is stored
+			 */
+			virtual void renameField(const dodoString &field, const dodoString &to_field, const dodoString &table);
 
-		/**
-		 * deletes database
-		 * @param db indicates what database to delete
-		 */
-		virtual void deleteDb(const dodoString &db);
+			/**
+			 * deletes database
+			 * @param db indicates what database to delete
+			 */
+			virtual void deleteDb(const dodoString &db);
 
-		/**
-		 * deletes table
-		 * @param table indicates what table to delete
-		 */
-		virtual void deleteTable(const dodoString &table);
+			/**
+			 * deletes table
+			 * @param table indicates what table to delete
+			 */
+			virtual void deleteTable(const dodoString &table);
 
-		/**
-		 * deletes field
-		 * @param field indicates what field to delete
-		 * @param table is table where field is stored
-		 */
-		virtual void deleteField(const dodoString &field, const dodoString &table);
+			/**
+			 * deletes field
+			 * @param field indicates what field to delete
+			 * @param table is table where field is stored
+			 */
+			virtual void deleteField(const dodoString &field, const dodoString &table);
 
-		/**
-		 * creates database
-		 * @param db is name of new database
-		 * @param charset indicates what type of charset will be used
-		 */
-		virtual void createDb(const dodoString &db, const dodoString &charset = __dodostring__);
+			/**
+			 * creates database
+			 * @param db is name of new database
+			 * @param charset indicates what type of charset will be used
+			 */
+			virtual void createDb(const dodoString &db, const dodoString &charset = __dodostring__);
 
-		/**
-		 * creates table
-		 * @param tableInfo[see __tableInfo]
-		 */
-		virtual void createTable(__tableInfo &tableInfo);
+			/**
+			 * creates table
+			 * @param tableInfo[see __tableInfo]
+			 */
+			virtual void createTable(__tableInfo &tableInfo);
 
-		/**
-		 * creates field
-		 * @param fieldInfo[see __fieldInfo]
-		 * @param table indicates in what table create field
-		 */
-		virtual void createField(__fieldInfo &fieldInfo, const dodoString &table);
+			/**
+			 * creates field
+			 * @param fieldInfo[see __fieldInfo]
+			 * @param table indicates in what table create field
+			 */
+			virtual void createField(__fieldInfo &fieldInfo, const dodoString &table);
 
-		/**
-		 * truncates table
-		 * @param table is name name of table to truncate
-		 */
-		virtual void truncate(const dodoString &table);
+			/**
+			 * truncates table
+			 * @param table is name name of table to truncate
+			 */
+			virtual void truncate(const dodoString &table);
 
-		/**
-		 * add where statement
-		 * overwites previous is it was defined
-		 * @param where is where statement
-		 */
-		virtual void where(const dodoString &where);
+			/**
+			 * add where statement
+			 * overwites previous is it was defined
+			 * @param where is where statement
+			 */
+			virtual void where(const dodoString &where);
 
-		/**
-		 * sets limit for request
-		 * @param number indicates the number of rows to show
-		 */
-		virtual void limit(unsigned int number);
+			/**
+			 * sets limit for request
+			 * @param number indicates the number of rows to show
+			 */
+			virtual void limit(unsigned int number);
 
-		/**
-		 * sets offset for request
-		 * @param number indicates offset of the reading result
-		 */
-		virtual void offset(unsigned int number);
+			/**
+			 * sets offset for request
+			 * @param number indicates offset of the reading result
+			 */
+			virtual void offset(unsigned int number);
 
-		/**
-		 * sets order for request
-		 * @param order is order statement
-		 */
-		virtual void order(const dodoString &order);
+			/**
+			 * sets order for request
+			 * @param order is order statement
+			 */
+			virtual void order(const dodoString &order);
 
-		/**
-		 * sets group for request
-		 * @param group is group statement
-		 */
-		virtual void group(const dodoString &group);
+			/**
+			 * sets group for request
+			 * @param group is group statement
+			 */
+			virtual void group(const dodoString &group);
 
-		/**
-		 * sets having for request
-		 * @param having is having statement
-		 */
-		virtual void having(const dodoString &having);
+			/**
+			 * sets having for request
+			 * @param having is having statement
+			 */
+			virtual void having(const dodoString &having);
 
-		/**
-		 * remove where statement
-		 */
-		virtual void unwhere();
+			/**
+			 * remove where statement
+			 */
+			virtual void unwhere();
 
-		/**
-		 * remove limit for request
-		 */
-		virtual void unlimit();
+			/**
+			 * remove limit for request
+			 */
+			virtual void unlimit();
 
-		/**
-		 * remove offset for request
-		 */
-		virtual void unoffset();
+			/**
+			 * remove offset for request
+			 */
+			virtual void unoffset();
 
-		/**
-		 * remove order for request
-		 */
-		virtual void unorder();
+			/**
+			 * remove order for request
+			 */
+			virtual void unorder();
 
-		/**
-		 * remove group for request
-		 */
-		virtual void ungroup();
+			/**
+			 * remove group for request
+			 */
+			virtual void ungroup();
 
-		/**
-		 * remove having for request
-		 */
-		virtual void unhaving();
+			/**
+			 * remove having for request
+			 */
+			virtual void unhaving();
 
-		/**
-		 * sets additional parameters for INSERT
-		 * @param statement indicates what kind of additional parameters to add[see addInsEnum]
-		 */
-		virtual void setAddInsSt(unsigned int statement);
+			/**
+			 * sets additional parameters for INSERT
+			 * @param statement indicates what kind of additional parameters to add[see addInsEnum]
+			 */
+			virtual void setAddInsSt(unsigned int statement);
 
-		/**
-		 * sets additional parameters for UPDATE
-		 * @param statement indicates what kind of additional parameters to add[see addUpEnum]
-		 */
-		virtual void setAddUpSt(unsigned int statement);
+			/**
+			 * sets additional parameters for UPDATE
+			 * @param statement indicates what kind of additional parameters to add[see addUpEnum]
+			 */
+			virtual void setAddUpSt(unsigned int statement);
 
-		/**
-		 * sets additional parameters for SELECT
-		 * @param statement indicates what kind of additional parameters to add[see addSelEnum]
-		 */
-		virtual void setAddSelSt(unsigned int statement);
+			/**
+			 * sets additional parameters for SELECT
+			 * @param statement indicates what kind of additional parameters to add[see addSelEnum]
+			 */
+			virtual void setAddSelSt(unsigned int statement);
 
-		/**
-		 * sets additional parameters for DELETE
-		 * @param statement indicates what kind of additional parameters to add[see addDelEnum]
-		 */
-		virtual void setAddDelSt(unsigned int statement);
+			/**
+			 * sets additional parameters for DELETE
+			 * @param statement indicates what kind of additional parameters to add[see addDelEnum]
+			 */
+			virtual void setAddDelSt(unsigned int statement);
 
-		/**
-		 * removes additional parameters for INSERT
-		 * @param statement indicates what kind of additional parameters to remove[see addInsEnum]
-		 */
-		virtual void unsetAddInsSt(unsigned int statement);
+			/**
+			 * removes additional parameters for INSERT
+			 * @param statement indicates what kind of additional parameters to remove[see addInsEnum]
+			 */
+			virtual void unsetAddInsSt(unsigned int statement);
 
-		/**
-		 * removes additional parameters for UPDATE
-		 * @param statement indicates what kind of additional parameters to remove[see addUpEnum]
-		 */
-		virtual void unsetAddUpSt(unsigned int statement);
+			/**
+			 * removes additional parameters for UPDATE
+			 * @param statement indicates what kind of additional parameters to remove[see addUpEnum]
+			 */
+			virtual void unsetAddUpSt(unsigned int statement);
 
-		/**
-		 * removes additional parameters for SELECT
-		 * @param statement indicates what kind of additional parameters to remove[see addSelEnum]
-		 */
-		virtual void unsetAddSelSt(unsigned int statement);
+			/**
+			 * removes additional parameters for SELECT
+			 * @param statement indicates what kind of additional parameters to remove[see addSelEnum]
+			 */
+			virtual void unsetAddSelSt(unsigned int statement);
 
-		/**
-		 * removes additional parameters for DELETE
-		 * @param statement indicates what kind of additional parameters to remove[see addDelEnum]
-		 */
-		virtual void unsetAddDelSt(unsigned int statement);
+			/**
+			 * removes additional parameters for DELETE
+			 * @param statement indicates what kind of additional parameters to remove[see addDelEnum]
+			 */
+			virtual void unsetAddDelSt(unsigned int statement);
 
-		/**
-		 * @return type of request was(will be) performed
-		 * @note see qStEnum
-		 */
-		virtual int getQType() const;
+			/**
+			 * @return type of request was(will be) performed
+			 * @note see qStEnum
+			 */
+			virtual int getQType() const;
 
-		/**
-		 * @return structure with references to internal collected request data(not copy).
-		 * @note it may be used for postExec and preExec functions.
-		 */
-		virtual __collectedData collectedData();
+			/**
+			 * @return structure with references to internal collected request data(not copy).
+			 * @note it may be used for postExec and preExec functions.
+			 */
+			virtual __collectedData collectedData();
 
-		/**
-		 * set default values for table (if you want safelly reuse)
-		 */
-		static void initTableInfo(__tableInfo &table);
+			/**
+			 * set default values for table (if you want safelly reuse)
+			 */
+			static void initTableInfo(__tableInfo &table);
 
-		/**
-		 * set default values for field (if you want safelly reuse)
-		 */
-		static void initFieldInfo(__fieldInfo &field);
+			/**
+			 * set default values for field (if you want safelly reuse)
+			 */
+			static void initFieldInfo(__fieldInfo &field);
 
 		protected:
 
-		/**
-		 * frees collected data
-		 */
-		virtual void cleanCollect();
+			/**
+			 * frees collected data
+			 */
+			virtual void cleanCollect();
 
-		/**
-		 * collected data
-		 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
-		 */
-		dodoString pre_where;                       ///< where statement of the request
-		dodoStringArr pre_fieldsNames;              ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
-		dodoArray<dodoStringArr> pre_fieldsVal;     ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-		dodoString pre_table;                       ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods)
-		dodoString pre_tableTo;                     ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-		dodoString pre_order;                       ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-		dodoString pre_having;                      ///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
-		dodoString pre_group;                       ///< group statement
-		dodoString pre_limNumber;                   ///< limit of result
-		dodoString pre_limOffset;                   ///< offset of requested result
-		dodoStringArr pre_subQ;                     ///< subquery
+			/**
+			 * collected data
+			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
+			 */
+			dodoString pre_where;                   ///< where statement of the request
+			dodoStringArr pre_fieldsNames;          ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
+			dodoArray<dodoStringArr> pre_fieldsVal; ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+			dodoString pre_table;                   ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods)
+			dodoString pre_tableTo;                 ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
+			dodoString pre_order;                   ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
+			dodoString pre_having;                  ///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
+			dodoString pre_group;                   ///< group statement
+			dodoString pre_limNumber;               ///< limit of result
+			dodoString pre_limOffset;               ///< offset of requested result
+			dodoStringArr pre_subQ;                 ///< subquery
 
-		bool show;                                  ///< is request was with result(show, select)
+			bool show;                              ///< is request was with result(show, select)
 
-		int qType;                                  ///< type of operation
+			int qType;                              ///< type of operation
 
-		int qShift;                                 ///< indicates if AddEnum's values was set [can be or'ed with | ]
+			int qShift;                             ///< indicates if AddEnum's values was set [can be or'ed with | ]
 
-		int qSelShift;                              ///< additional select statements
-		int qInsShift;                              ///< additional insert statements
-		int qUpShift;                               ///< additional update statements
-		int qDelShift;                              ///< additional delete statements
+			int qSelShift;                          ///< additional select statements
+			int qInsShift;                          ///< additional insert statements
+			int qUpShift;                           ///< additional update statements
+			int qDelShift;                          ///< additional delete statements
 
 
-		__tableInfo pre_tableInfo;      ///< info about table to create
-		__fieldInfo pre_fieldInfo;      ///< info about field to create
+			__tableInfo pre_tableInfo;  ///< info about table to create
+			__fieldInfo pre_fieldInfo;  ///< info about field to create
 
-		__dbInfo dbInfo;                ///< data to connect to server
+			__dbInfo dbInfo;            ///< data to connect to server
 
-		/*
-		 * additional statements for query, db-dependent, that can be implemented in derived class;
-		 * these arrays take part after generalSQL statements !!! See (mysqlpp::addSQL()) for more details
-		 * every in this class has 1 empty("") element
-		 */
-		dodoStringArr sqlDbDepAddSelArr;    ///< additional SELECT statement
-		dodoStringArr sqlDbDepAddInsArr;    ///< additional INSERT statement
-		dodoStringArr sqlDbDepAddUpArr;     ///< additional UPDATE statement
-		dodoStringArr sqlDbDepAddDelArr;    ///< additional DELETE statement
+			/*
+			 * additional statements for query, db-dependent, that can be implemented in derived class;
+			 * these arrays take part after generalSQL statements !!! See (mysqlpp::addSQL()) for more details
+			 * every in this class has 1 empty("") element
+			 */
+			dodoStringArr sqlDbDepAddSelArr;    ///< additional SELECT statement
+			dodoStringArr sqlDbDepAddInsArr;    ///< additional INSERT statement
+			dodoStringArr sqlDbDepAddUpArr;     ///< additional UPDATE statement
+			dodoStringArr sqlDbDepAddDelArr;    ///< additional DELETE statement
 
-		int qDbDepSelShift;                 ///< value to shift query template for specific
-		int qDbDepInsShift;                 ///< value to shift query template for specific
-		int qDbDepUpShift;                  ///< value to shift query template for specific
-		int qDbDepDelShift;                 ///< value to shift query template for specific
+			int qDbDepSelShift;                 ///< value to shift query template for specific
+			int qDbDepInsShift;                 ///< value to shift query template for specific
+			int qDbDepUpShift;                  ///< value to shift query template for specific
+			int qDbDepDelShift;                 ///< value to shift query template for specific
 	};
 
 };

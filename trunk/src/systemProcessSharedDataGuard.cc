@@ -62,15 +62,15 @@ systemProcessSharedDataGuard::~systemProcessSharedDataGuard()
 //-------------------------------------------------------------------
 
 void
-systemProcessSharedDataGuard::set(	void *a_data)
+systemProcessSharedDataGuard::set(  void *a_data)
 {
 	if (sem_wait(semaphore) != 0)
-	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	data = a_data;
-	   
+
 	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -79,12 +79,12 @@ void
 systemProcessSharedDataGuard::del()
 {
 	if (sem_wait(semaphore) != 0)
-	   		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	data = NULL;
-	   
+
 	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -93,36 +93,36 @@ void *
 systemProcessSharedDataGuard::lock(unsigned long microseconds)
 {
 	if (microseconds == 0)
-	{	
-			if (sem_wait(semaphore) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+	{
+		if (sem_wait(semaphore) != 0)
+			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-	   else
-	   {
-	   	bool locked = true;
-	   	unsigned long slept = 0;
+	else
+	{
+		bool locked = true;
+		unsigned long slept = 0;
 
-	   	while (locked)
-	   	{
-	   		if (sem_trywait(semaphore) != 0)
-	   		{
-	   			if (errno != EAGAIN)
-	   					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+		while (locked)
+		{
+			if (sem_trywait(semaphore) != 0)
+			{
+				if (errno != EAGAIN)
+					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	   			if (nanosleep(&timeout, NULL) == -1)
-	   					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+				if (nanosleep(&timeout, NULL) == -1)
+					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	   			slept += 1;
+				slept += 1;
 
-	   			if (slept > microseconds)
-	   					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK, SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK_STR,__LINE__,__FILE__);
-	   		}
-	   		else
-	   			locked = false;
-	   	}
-	   }
+				if (slept > microseconds)
+					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_LOCK, ERR_ERRNO, SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK, SYSTEMPROCESSSHAREDDATAGUARD_CANNOTLOCK_STR, __LINE__, __FILE__);
+			}
+			else
+				locked = false;
+		}
+	}
 
-	   return data;
+	return data;
 }
 
 //-------------------------------------------------------------------
@@ -131,7 +131,7 @@ void
 systemProcessSharedDataGuard::unlock()
 {
 	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_UNLOCK, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, SYSTEMPROCESSSHAREDDATAGUARD_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

@@ -56,80 +56,80 @@ namespace dodo
 
 		private:
 
-		/**
-		 * copy constructor
-		 * to prevent copying
-		 */
-		flushNBA(flushNBA &rt);
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			flushNBA(flushNBA &rt);
 
 		public:
 
-		/**
-		 * constructor
-		 */
-		flushNBA();
+			/**
+			 * constructor
+			 */
+			flushNBA();
 
-		/**
-		 * destructor
-		 */
-		virtual ~flushNBA();
+			/**
+			 * destructor
+			 */
+			virtual ~flushNBA();
 
-		/**
-		 * @return identificator of added stream
-		 * @param fl is a reference on stream[flushDisk, flushSTD, flushSocket, flushSocketExchange]
-		 */
-		virtual int addFlush(const flush &fl);
+			/**
+			 * @return identificator of added stream
+			 * @param fl is a reference on stream[flushDisk, flushSTD, flushSocket, flushSocketExchange]
+			 */
+			virtual int addFlush(const flush &fl);
 
-		/**
-		 * @param fl is identificator of stream to remove
-		 */
-		virtual void delFlush(int pos);
+			/**
+			 * @param fl is identificator of stream to remove
+			 */
+			virtual void delFlush(int pos);
 
-		/**
-		 * @return true if flush* is ready to read
-		 * @param pos is identificator of stream
-		 * @param timeout describes amount of time to wait for result[in milliseconds]
-		 * @note if timeout is negative - infinit timeout
-		 */
-		virtual bool isReadable(int pos, int timeout = 100) const;
+			/**
+			 * @return true if flush* is ready to read
+			 * @param pos is identificator of stream
+			 * @param timeout describes amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual bool isReadable(int pos, int timeout = 100) const;
 
-		/**
-		 * @return vector of true if flush* is ready to read
-		 * @param pos is vector of identificators of streams
-		 * @param timeout describes amount of time to wait for result[in milliseconds]
-		 * @note if timeout is negative - infinit timeout
-		 */
-		virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout = 100) const;
+			/**
+			 * @return vector of true if flush* is ready to read
+			 * @param pos is vector of identificators of streams
+			 * @param timeout describes amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout = 100) const;
 
-		/**
-		 * @return vector of true if flush* is ready to write
-		 * @param pos is vector of identificators of streams
-		 * @param timeout describes amount of time to wait for result[in milliseconds]
-		 * @note if timeout is negative - infinit timeout
-		 */
-		virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout = 100) const;
+			/**
+			 * @return vector of true if flush* is ready to write
+			 * @param pos is vector of identificators of streams
+			 * @param timeout describes amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout = 100) const;
 
-		/**
-		 * @return true if flush* is ready to write
-		 * @param pos is identificator of stream
-		 * @param timeout describes amount of time to wait for result[in milliseconds]
-		 * @note if timeout is negative - infinit timeout
-		 */
-		virtual bool isWritable(int pos, int timeout = 100) const;
+			/**
+			 * @return true if flush* is ready to write
+			 * @param pos is identificator of stream
+			 * @param timeout describes amount of time to wait for result[in milliseconds]
+			 * @note if timeout is negative - infinit timeout
+			 */
+			virtual bool isWritable(int pos, int timeout = 100) const;
 
 		protected:
 
-		/**
-		 * @param count decribes with how many 'false' fill
-		 * @note fill tempRB with false values
-		 */
-		virtual void makeFalse(int count) const;
+			/**
+			 * @param count decribes with how many 'false' fill
+			 * @note fill tempRB with false values
+			 */
+			virtual void makeFalse(int count) const;
 
-		dodoArray<__inOutDescriptors> desc;     ///< flush descriptors
+			dodoArray<__inOutDescriptors> desc; ///< flush descriptors
 
-		int descs;                              ///< descriptors counter
+			int descs;                          ///< descriptors counter
 
-		mutable dodoArray<bool> tempRB;         ///< temporary to save results of avalaibility
+			mutable dodoArray<bool> tempRB;     ///< temporary to save results of avalaibility
 	};
 
 };

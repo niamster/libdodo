@@ -42,7 +42,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-        #define SYSTEMTOOLS_WRONG_PARAMETHER_STR    "Wrong paramather passed to function."
+		#define SYSTEMTOOLS_WRONG_PARAMETHER_STR    "Wrong paramather passed to function."
 
 	/**
 	 * ID of function where exception was thrown

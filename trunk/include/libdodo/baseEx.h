@@ -30,7 +30,7 @@
 
 #ifdef DL_EXT
 
-    #include <dlfcn.h>
+	#include <dlfcn.h>
 
 #endif
 
@@ -89,9 +89,9 @@ namespace dodo
 		ERRMODULE_IMAGE,
 	};
 
-        #define AM_MODULES    30
+		#define AM_MODULES    30
 
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 
 	/**
 	 * @struct exMod must be returned from initExModule in the module
@@ -114,7 +114,7 @@ namespace dodo
 	 */
 	typedef void (*deinitExModule)();
 
-        #endif
+		#endif
 
 	class baseEx;    ///< to make typedef before class declaration
 
@@ -131,124 +131,124 @@ namespace dodo
 	{
 		public:
 
-		/**
-		 * constructor
-		 * @param errModule in what module was thrown
-		 * @param functionID in what function was thrown[see *Ex.h headers for IDs]
-		 * @param errnoSource where error code and string was taken
-		 * @param baseErrno error code
-		 * @param baseErrstr describes error code
-		 * @param line line, where was thrown
-		 * @param file file, where was thrown
-		 */
-		baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, const dodoString &baseErrstr, unsigned long line, const dodoString &file, const dodoString &message = __dodostring__);
+			/**
+			 * constructor
+			 * @param errModule in what module was thrown
+			 * @param functionID in what function was thrown[see *Ex.h headers for IDs]
+			 * @param errnoSource where error code and string was taken
+			 * @param baseErrno error code
+			 * @param baseErrstr describes error code
+			 * @param line line, where was thrown
+			 * @param file file, where was thrown
+			 */
+			baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, const dodoString &baseErrstr, unsigned long line, const dodoString &file, const dodoString &message = __dodostring__);
 
-		/**
-		 * destructor
-		 */
-		~baseEx();
+			/**
+			 * destructor
+			 */
+			~baseEx();
 
-		/**
-		 * @return string that describes error
-		 * 	catch(baseEx ex)
-		 *	{
-		 *		cout << ex << endl;
-		 *	}
-		 */
-		operator const dodoString&();
+			/**
+			 * @return string that describes error
+			 * 	catch(baseEx ex)
+			 *	{
+			 *		cout << ex << endl;
+			 *	}
+			 */
+			operator const dodoString &();
 
-		errorModuleEnum errModule;          ///< in what module was thrown
-		unsigned long funcID;               ///< in what function was thrown[see *Ex.h headers for IDs]
-		errnoSourceEnum errnoSource;        ///< 	where error code and string was taken
+			errorModuleEnum errModule;      ///< in what module was thrown
+			unsigned long funcID;           ///< in what function was thrown[see *Ex.h headers for IDs]
+			errnoSourceEnum errnoSource;    ///< 	where error code and string was taken
 
-		int baseErrno;                      ///< error code
-		dodoString baseErrstr;              ///< describes error code
+			int baseErrno;                  ///< error code
+			dodoString baseErrstr;          ///< describes error code
 
-		unsigned long line;                 ///< line, where was thrown
-		dodoString file;                    ///< file, where was thrown
+			unsigned long line;             ///< line, where was thrown
+			dodoString file;                ///< file, where was thrown
 
-		dodoString message;                 ///< custom message
+			dodoString message;             ///< custom message
 
-		/**
-		 * set handler on error for specific module
-		 * @param module indicates for what module to set handler
-		 * @param handler is function that will be called when error occured[in catch]
-		 * @param data is data that will be passed to handler
-		 */
-		static void setErrorHandler(errorModuleEnum module, errorHandler handler, void *data);
+			/**
+			 * set handler on error for specific module
+			 * @param module indicates for what module to set handler
+			 * @param handler is function that will be called when error occured[in catch]
+			 * @param data is data that will be passed to handler
+			 */
+			static void setErrorHandler(errorModuleEnum module, errorHandler handler, void *data);
 
-		/**
-		 * set handlers on error for all modules
-		 * @param handler is function that will be called when error occured[in catch]
-		 * @param data is data that will be passed to handler
-		 */
-		static void setErrorHandlers(errorHandler handler, void *data);
+			/**
+			 * set handlers on error for all modules
+			 * @param handler is function that will be called when error occured[in catch]
+			 * @param data is data that will be passed to handler
+			 */
+			static void setErrorHandlers(errorHandler handler, void *data);
 
-		/**
-		 * remove handler on error for specific module
-		 * @param module indicates for what module to set handler
-		 */
-		static void unsetErrorHandler(errorModuleEnum module);
+			/**
+			 * remove handler on error for specific module
+			 * @param module indicates for what module to set handler
+			 */
+			static void unsetErrorHandler(errorModuleEnum module);
 
-		/**
-		 * unset handlers on error for all modules
-		 */
-		static void unsetErrorHandlers();
+			/**
+			 * unset handlers on error for all modules
+			 */
+			static void unsetErrorHandlers();
 
-                #ifdef DL_EXT
+				#ifdef DL_EXT
 
-		/**
-		 * @return info about module
-		 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		static exMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			/**
+			 * @return info about module
+			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			static exMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
-		/**
-		 * set handler on error for specific module
-		 * @return false on error
-		 * @param module indicates for what module to set handler
-		 * @param path is path to module from what function will be called when error occured[in catch]
-		 * @param data is data that will be passed to handler
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		static bool setErrorHandler(errorModuleEnum module, const dodoString &path, void *data, void *toInit = NULL);
+			/**
+			 * set handler on error for specific module
+			 * @return false on error
+			 * @param module indicates for what module to set handler
+			 * @param path is path to module from what function will be called when error occured[in catch]
+			 * @param data is data that will be passed to handler
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			static bool setErrorHandler(errorModuleEnum module, const dodoString &path, void *data, void *toInit = NULL);
 
-		/**
-		 * set handler on error for specific module
-		 * @return false on error
-		 * @param path is path to module from what function will be called when error occured[in catch]
-		 * @param data is data that will be passed to handler
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		static bool setErrorHandler(const dodoString &path, void *data, void *toInit = NULL);
+			/**
+			 * set handler on error for specific module
+			 * @return false on error
+			 * @param path is path to module from what function will be called when error occured[in catch]
+			 * @param data is data that will be passed to handler
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			static bool setErrorHandler(const dodoString &path, void *data, void *toInit = NULL);
 
-		/**
-		 * set handler on error for all modules
-		 * @return false on error
-		 * @param handler is path to module from what function will be called when error occured[in catch]
-		 * @param data is data that will be passed to handler
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		static bool setErrorHandlers(const dodoString &path, void *data, void *toInit = NULL);
+			/**
+			 * set handler on error for all modules
+			 * @return false on error
+			 * @param handler is path to module from what function will be called when error occured[in catch]
+			 * @param data is data that will be passed to handler
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			static bool setErrorHandlers(const dodoString &path, void *data, void *toInit = NULL);
 
-                #endif
+				#endif
 
 		protected:
 
-		static errorHandler handlersEx[AM_MODULES];         ///< handlers
+			static errorHandler handlersEx[AM_MODULES];     ///< handlers
 
-		static bool handlerSetEx[AM_MODULES];               ///< indicates whether handler was set
+			static bool handlerSetEx[AM_MODULES];           ///< indicates whether handler was set
 
-		static void *handlerDataEx[AM_MODULES];             ///< data that will be passed to handler
+			static void *handlerDataEx[AM_MODULES];         ///< data that will be passed to handler
 
-                #ifdef DL_EXT
+				#ifdef DL_EXT
 
-		static void *handlesEx[AM_MODULES];                 ///< handles to modules
+			static void *handlesEx[AM_MODULES];             ///< handles to modules
 
-		static bool handlesOpenedEx[AM_MODULES];            //< map of opened modules
+			static bool handlesOpenedEx[AM_MODULES];        //< map of opened modules
 
-                #endif
+				#endif
 	};
 
 };

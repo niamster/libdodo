@@ -46,8 +46,8 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-        #define FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR    "No socket was created =(."
-        #define FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
+		#define FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR    "No socket was created =(."
+		#define FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
 
 	/**
 	 * ID of function where exception was thrown

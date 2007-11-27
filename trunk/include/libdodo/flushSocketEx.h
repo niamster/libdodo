@@ -51,13 +51,13 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-        #define FLUSHSOCKET_NO_SOCKET_CREATED_STR    "No socket was created =(."
-        #define FLUSHSOCKET_CANNOT_BIND_STR          "You cannot <bindNListen> with this constructor; choose another one!"
-        #define FLUSHSOCKET_CANNOT_CONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
-        #define FLUSHSOCKET_CANNOT_ACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
-        #define FLUSHSOCKET_ACCEPT_WO_BIND_STR       "You try to accept without called bindNListen or bindNListen failed."
-        #define FLUSHSOCKET_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
-        #define FLUSHSOCKET_WRONG_FILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define FLUSHSOCKET_NO_SOCKET_CREATED_STR    "No socket was created =(."
+		#define FLUSHSOCKET_CANNOT_BIND_STR          "You cannot <bindNListen> with this constructor; choose another one!"
+		#define FLUSHSOCKET_CANNOT_CONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
+		#define FLUSHSOCKET_CANNOT_ACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
+		#define FLUSHSOCKET_ACCEPT_WO_BIND_STR       "You try to accept without called bindNListen or bindNListen failed."
+		#define FLUSHSOCKET_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
+		#define FLUSHSOCKET_WRONG_FILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
 	 * ID of function where exception was thrown

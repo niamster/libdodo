@@ -28,9 +28,9 @@
 
 #ifdef FCGI_EXT
 
-    #include <fcgiapp.h>
+	#include <fcgiapp.h>
 
-    #include <libdodo/types.h>
+	#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -41,51 +41,51 @@ namespace dodo
 	{
 		private:
 
-		/**
-		 * copy constructor
-		 * to prevent copying
-		 */
-		cgiFastSTD(cgiFastSTD &cf);
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			cgiFastSTD(cgiFastSTD &cf);
 
 		public:
 
-		/**
-		 * constructor
-		 * @param request describes CGI request info
-		 */
-		cgiFastSTD(FCGX_Request *request);
+			/**
+			 * constructor
+			 * @param request describes CGI request info
+			 */
+			cgiFastSTD(FCGX_Request *request);
 
-		/**
-		 * destructor
-		 */
-		virtual ~cgiFastSTD();
+			/**
+			 * destructor
+			 */
+			virtual ~cgiFastSTD();
 
-		/**
-		 * sends buf to specific output[fast-cgi safe]
-		 * @param buf describes what to send to user
-		 */
-		virtual void print(const dodoString &buf);
+			/**
+			 * sends buf to specific output[fast-cgi safe]
+			 * @param buf describes what to send to user
+			 */
+			virtual void print(const dodoString &buf);
 
-		/**
-		 * reads to buf from specific input[fast-cgi safe]
-		 * @param buf describes what to receive from user
-		 */
-		virtual void read(char *buf, unsigned int size);
+			/**
+			 * reads to buf from specific input[fast-cgi safe]
+			 * @param buf describes what to receive from user
+			 */
+			virtual void read(char *buf, unsigned int size);
 
-		/**
-		 * @return environment variable[fast-cgi safe]
-		 * @param buf describes what to receive from environment
-		 */
-		virtual char *getenv(const char *buf);
+			/**
+			 * @return environment variable[fast-cgi safe]
+			 * @param buf describes what to receive from environment
+			 */
+			virtual char *getenv(const char *buf);
 
-		/**
-		 * flushes output[fast-cgi safe]
-		 */
-		virtual void flush();
+			/**
+			 * flushes output[fast-cgi safe]
+			 */
+			virtual void flush();
 
 		private:
 
-		FCGX_Request *request;        ///< CGI request
+			FCGX_Request *request;    ///< CGI request
 	};
 
 	/**
@@ -101,69 +101,69 @@ namespace dodo
 	{
 		private:
 
-		/**
-		 * copy constructor
-		 * to prevent copying
-		 */
-		cgiFast(cgiFast &cf);
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			cgiFast(cgiFast &cf);
 
 		public:
 
-                #ifdef PTHREAD_EXT
+				#ifdef PTHREAD_EXT
 
-		/**
-		 * constructor
-		 * @param threading indicates whether to call new thread on cgi request or proceed a queue
-		 * @param threadsNum indicates how many threads to use in fast-cgi server
-		 */
-		cgiFast(bool threading = true, unsigned int threadsNum = 10);
+			/**
+			 * constructor
+			 * @param threading indicates whether to call new thread on cgi request or proceed a queue
+			 * @param threadsNum indicates how many threads to use in fast-cgi server
+			 */
+			cgiFast(bool threading = true, unsigned int threadsNum = 10);
 
-                #else
+				#else
 
-		/**
-		 * constructor
-		 * @param threading indicates whether to call new thread on cgi request or proceed a queue
-		 * @param threadsNum indicates how many threads to use in fast-cgi server
-		 */
-		cgiFast(bool threading = true, unsigned int threadsNum = 10);
+			/**
+			 * constructor
+			 * @param threading indicates whether to call new thread on cgi request or proceed a queue
+			 * @param threadsNum indicates how many threads to use in fast-cgi server
+			 */
+			cgiFast(bool threading = true, unsigned int threadsNum = 10);
 
-                #endif
+				#endif
 
-		/**
-		 * destructor
-		 */
-		virtual ~cgiFast();
+			/**
+			 * destructor
+			 */
+			virtual ~cgiFast();
 
-		/**
-		 * sets function that would be called on CGI request
-		 * @param func indicates what function to set
-		 */
-		virtual void setCGIFunction(cgiProc func);
+			/**
+			 * sets function that would be called on CGI request
+			 * @param func indicates what function to set
+			 */
+			virtual void setCGIFunction(cgiProc func);
 
-		/**
-		 * listen for incoming requests
-		 */
-		virtual void listen();
+			/**
+			 * listen for incoming requests
+			 */
+			virtual void listen();
 
 		private:
 
-                #ifdef PTHREAD_EXT
+				#ifdef PTHREAD_EXT
 
-		bool threading;                     ///< threading or not
+			bool threading;                 ///< threading or not
 
-		unsigned int threadsNum;            ///< amount of threads
+			unsigned int threadsNum;        ///< amount of threads
 
-		/**
-		 * thread that holds one queue of cgi clients
-		 * @param data indicates what data will be passed to thread
-		 */
-		static void *stackThread(void *data);
+			/**
+			 * thread that holds one queue of cgi clients
+			 * @param data indicates what data will be passed to thread
+			 */
+			static void *stackThread(void *data);
 
-		static pthread_mutex_t accept;            ///< accept request mutex
+			static pthread_mutex_t accept;        ///< accept request mutex
 
-                #endif
+				#endif
 
-		static cgiProc cgiF;        ///< function to be called on new request
+			static cgiProc cgiF;    ///< function to be called on new request
 	};
 };
 

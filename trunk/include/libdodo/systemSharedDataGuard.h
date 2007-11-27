@@ -35,35 +35,35 @@ namespace dodo
 	{
 		public:
 
-		/**
-		 * destructor
-		 */
-		virtual ~systemSharedDataGuard() = 0;
+			/**
+			 * destructor
+			 */
+			virtual ~systemSharedDataGuard() = 0;
 
-		/**
-		 * sets data to became a shared
-		 * @param data describes data to be shared
-		 */
-		virtual void set(void *data) = 0;
+			/**
+			 * sets data to became a shared
+			 * @param data describes data to be shared
+			 */
+			virtual void set(void *data) = 0;
 
-		/**
-		 * sets shared data to NULL
-		 */
-		virtual void del() = 0;
+			/**
+			 * sets shared data to NULL
+			 */
+			virtual void del() = 0;
 
-		/**
-		 * lock and return shared data
-		 * @return data points on shared data or NULL in error case
-		 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
-		 * @note if microseconds==0 - infinite sleep
-		 */
-		virtual void *lock(unsigned long microseconds) = 0;
+			/**
+			 * lock and return shared data
+			 * @return data points on shared data or NULL in error case
+			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
+			 * @note if microseconds==0 - infinite sleep
+			 */
+			virtual void *lock(unsigned long microseconds) = 0;
 
 
-		/**
-		 * lock and return shared data
-		 */
-		virtual void unlock() = 0;
+			/**
+			 * lock and return shared data
+			 */
+			virtual void unlock() = 0;
 	};
 
 };

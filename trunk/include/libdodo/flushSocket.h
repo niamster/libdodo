@@ -76,194 +76,194 @@ namespace dodo
 	 */
 	class flushSocket : public flushSocketOptions
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 						, public xexec
-    #endif
+	#endif
 
 	{
-		friend class flushSocketExchange;
+			friend class flushSocketExchange;
 
 		private:
 
-		/**
-		 * connstructor
-		 * to prevent copying
-		 */
-		flushSocket(flushSocket &fs);
+			/**
+			 * connstructor
+			 * to prevent copying
+			 */
+			flushSocket(flushSocket &fs);
 
 		public:
 
-		/**
-		 * constructors
-		 * @param server indicates what type of oject will be
-		 * @param family is family of the socket[see socketProtoFamilyEnum]
-		 * @param type is type of the socket[see socketTransferTypeEnum]
-		 */
-		flushSocket(bool server, short family, short type);
+			/**
+			 * constructors
+			 * @param server indicates what type of oject will be
+			 * @param family is family of the socket[see socketProtoFamilyEnum]
+			 * @param type is type of the socket[see socketTransferTypeEnum]
+			 */
+			flushSocket(bool server, short family, short type);
 
-		/**
-		 * destructor
-		 */
-		virtual ~flushSocket();
+			/**
+			 * destructor
+			 */
+			virtual ~flushSocket();
 
-            #ifndef FLUSH_SOCKET_WO_XEXEC
+			#ifndef FLUSH_SOCKET_WO_XEXEC
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 */
-		virtual int addPostExec(inExec func, void *data);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPostExec(inExec func, void *data);
 
-		/**
-		 * adds hook before the operation by callback
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 */
-		virtual int addPreExec(inExec func, void *data);
+			/**
+			 * adds hook before the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(inExec func, void *data);
 
-                #ifdef DL_EXT
+				#ifdef DL_EXT
 
-		/**
-		 * set function from module that will be executed before/after the main action call
-		 * the type of hook[pre/post] is defined in module
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * set function from module that will be executed before/after the main action call
+			 * the type of hook[pre/post] is defined in module
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param module is a path to module, whrere hook exists
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param module is a path to module, whrere hook exists
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
-                #endif
+				#endif
 
-            #endif
+			#endif
 
-		/**
-		 * connect from specific address. for client part
-		 * @param host is ip address where to connect
-		 * @param port is port where to connect
-		 * @param exchange is reference to oject that will perform communication actions
-		 */
-		virtual void
-		connectFrom(const dodoString &local, const dodoString &host, int port, flushSocketExchange &exchange);
+			/**
+			 * connect from specific address. for client part
+			 * @param host is ip address where to connect
+			 * @param port is port where to connect
+			 * @param exchange is reference to oject that will perform communication actions
+			 */
+			virtual void
+			connectFrom(const dodoString &local, const dodoString &host, int port, flushSocketExchange &exchange);
 
-		/**
-		 * connect from specific address. for client part
-		 * @param destinaton is structure that describes destination
-		 * @param exchange is reference to oject that will perform communication actions
-		 * the same as previous, but more pretty
-		 */
-		virtual void
-		connectFrom(const dodoString &local, const __connInfo &destinaton, flushSocketExchange &exchange);
+			/**
+			 * connect from specific address. for client part
+			 * @param destinaton is structure that describes destination
+			 * @param exchange is reference to oject that will perform communication actions
+			 * the same as previous, but more pretty
+			 */
+			virtual void
+			connectFrom(const dodoString &local, const __connInfo &destinaton, flushSocketExchange &exchange);
 
-		/**
-		 * connect. for client part
-		 * @param host is ip address where to connect
-		 * @param port is port where to connect
-		 * @param exchange is reference to oject that will perform communication actions
-		 */
-		virtual void
-		connect(const dodoString &host, int port, flushSocketExchange &exchange);
+			/**
+			 * connect. for client part
+			 * @param host is ip address where to connect
+			 * @param port is port where to connect
+			 * @param exchange is reference to oject that will perform communication actions
+			 */
+			virtual void
+			connect(const dodoString &host, int port, flushSocketExchange &exchange);
 
-		/**
-		 * connect. for client part
-		 * @param destinaton is structure that describes destination
-		 * @param exchange is reference to oject that will perform communication actions
-		 * the same as previous, but more pretty
-		 */
-		virtual void
-		connect(const __connInfo &destinaton, flushSocketExchange &exchange);
+			/**
+			 * connect. for client part
+			 * @param destinaton is structure that describes destination
+			 * @param exchange is reference to oject that will perform communication actions
+			 * the same as previous, but more pretty
+			 */
+			virtual void
+			connect(const __connInfo &destinaton, flushSocketExchange &exchange);
 
-		/**
-		 * connect. for client part
-		 * @param path is path to unix socket
-		 * @param exchange is reference to oject that will perform communication actions
-		 */
-		virtual void
-		connect(const dodoString &path, flushSocketExchange &exchange);                      ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+			/**
+			 * connect. for client part
+			 * @param path is path to unix socket
+			 * @param exchange is reference to oject that will perform communication actions
+			 */
+			virtual void
+			connect(const dodoString &path, flushSocketExchange &exchange);                  ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 
-		/**
-		 * connect. for server part
-		 * @param host is ip address that would be listen; can be '*' -> any address
-		 * @param port is port where to listen
-		 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-		 */
-		virtual void
-		bindNListen(const dodoString &host, int port, int numberOfConnections);
+			/**
+			 * connect. for server part
+			 * @param host is ip address that would be listen; can be '*' -> any address
+			 * @param port is port where to listen
+			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
+			 */
+			virtual void
+			bindNListen(const dodoString &host, int port, int numberOfConnections);
 
-		/**
-		 * connect. for server part
-		 * @param destinaton is structure that describes destination
-		 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-		 * the same as previous, but more pretty
-		 */
-		virtual void
-		bindNListen(const __connInfo &destinaton, int numberOfConnections);
+			/**
+			 * connect. for server part
+			 * @param destinaton is structure that describes destination
+			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
+			 * the same as previous, but more pretty
+			 */
+			virtual void
+			bindNListen(const __connInfo &destinaton, int numberOfConnections);
 
-		/**
-		 * connect. for server part
-		 * @param path is path to unix socket
-		 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-		 * @note if socket is already created and force=true and it's a socket - delete it!!
-		 */
-		virtual void
-		bindNListen(const dodoString &path, int numberOfConnections, bool force = false);
+			/**
+			 * connect. for server part
+			 * @param path is path to unix socket
+			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
+			 * @note if socket is already created and force=true and it's a socket - delete it!!
+			 */
+			virtual void
+			bindNListen(const dodoString &path, int numberOfConnections, bool force = false);
 
-		/**
-		 * accepts incommin' connections(as for server)
-		 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
-		 * @param init will be filled with info that will init flushSocketExchange object
-		 * @param info is info about connected host
-		 * with PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
-		 */
-		virtual bool accept(__initialAccept &init, __connInfo &info);
+			/**
+			 * accepts incommin' connections(as for server)
+			 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
+			 * @param init will be filled with info that will init flushSocketExchange object
+			 * @param info is info about connected host
+			 * with PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
+			 */
+			virtual bool accept(__initialAccept &init, __connInfo &info);
 
-		/**
-		 * accepts incommin' connections(as for server)
-		 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
-		 * @param init will be filled with info that will init flushSocketExchange object
-		 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
-		 */
-		virtual bool accept(__initialAccept &init);
+			/**
+			 * accepts incommin' connections(as for server)
+			 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
+			 * @param init will be filled with info that will init flushSocketExchange object
+			 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
+			 */
+			virtual bool accept(__initialAccept &init);
 
-		bool blockInherited;    ///< if true - children(flushSocketExchange) became unblocked, if parent(flushSocket) in unblocked; false by default
+			bool blockInherited; ///< if true - children(flushSocketExchange) became unblocked, if parent(flushSocket) in unblocked; false by default
 
 		protected:
 
-		/**
-		 * restores options on connect/bind
-		 */
-		virtual void restoreOptions();
+			/**
+			 * restores options on connect/bind
+			 */
+			virtual void restoreOptions();
 
-		/**
-		 * creates socket with given data
-		 */
-		virtual void
-		makeSocket();
+			/**
+			 * creates socket with given data
+			 */
+			virtual void
+			makeSocket();
 
-		bool server;            ///< indicates whether server object or not
+			bool server;            ///< indicates whether server object or not
 
-		dodoString unixSock;    ///< to remember, 'cos have to unlink in destructor
+			dodoString unixSock;    ///< to remember, 'cos have to unlink in destructor
 	};
 
 };

@@ -85,7 +85,7 @@ flushSTD::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 int
 flushSTD::addPostExec(const dodoString &module,
@@ -115,7 +115,7 @@ flushSTD::addPreExec(const dodoString &module,
 	return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
 }
 
-    #endif
+	#endif
 
 #endif
 
@@ -124,10 +124,10 @@ flushSTD::addPreExec(const dodoString &module,
 void
 flushSTD::read(char * const a_void)
 {
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	operType = FLUSHSTD_OPER_READ;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	memset(a_void, '\0', inSize);
 
@@ -174,9 +174,9 @@ flushSTD::read(char * const a_void)
 
 	buffer.assign(a_void, inSize);
 
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -218,10 +218,10 @@ flushSTD::write(const char *const aa_buf)
 {
 	buffer.assign(aa_buf, outSize);
 
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	operType = FLUSHSTD_OPER_WRITE;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	unsigned long iter = outSize / outSTDBuffer;
 	unsigned long rest = outSize % outSTDBuffer;
@@ -268,9 +268,9 @@ flushSTD::write(const char *const aa_buf)
 		}
 	}
 
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -393,10 +393,10 @@ flushSTD::block(bool flag)
 void
 flushSTD::readStream(char * const a_void)
 {
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	operType = FLUSHSTD_OPER_READSTREAM;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	memset(a_void, '\0', inSTDBuffer);
 
@@ -416,9 +416,9 @@ flushSTD::readStream(char * const a_void)
 
 	buffer.assign(a_void);
 
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -460,10 +460,10 @@ flushSTD::writeStream(const char *const aa_buf)
 {
 	buffer.assign(aa_buf);
 
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	operType = FLUSHSTD_OPER_WRITESTREAM;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	desc = stdout;
 	if (err)
@@ -536,9 +536,9 @@ flushSTD::writeStream(const char *const aa_buf)
 
 	delete [] buff;
 
-    #ifndef FLUSH_STD_WO_XEXEC
+	#ifndef FLUSH_STD_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------

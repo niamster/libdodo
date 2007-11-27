@@ -39,34 +39,34 @@ namespace dodo
 	{
 		protected:
 
-		atomicLock *mutex;    ///< lock
-		
-		/**
-		 * destructor
-		 */
-		virtual ~guardHolder() = 0;
-
-		/**
-		 * @class threadGuard provides thread safe behaviour
-		 */
-		class guard
-		{
-			public:
-
-			/**
-			 * contructor
-			 */
-			guard(guardHolder *parent);
+			atomicLock *mutex; ///< lock
 
 			/**
 			 * destructor
 			 */
-			virtual ~guard();
+			virtual ~guardHolder() = 0;
 
-			protected:
+			/**
+			 * @class threadGuard provides thread safe behaviour
+			 */
+			class guard
+			{
+				public:
 
-			guardHolder *parent;        ///< class to lock
-		};
+					/**
+					 * contructor
+					 */
+					guard(guardHolder *parent);
+
+					/**
+					 * destructor
+					 */
+					virtual ~guard();
+
+				protected:
+
+					guardHolder *parent; ///< class to lock
+			};
 	};
 
 };

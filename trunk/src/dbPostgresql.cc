@@ -61,7 +61,7 @@ dbPostgresql::stringType(int type)
 		case FIELDTYPE_BLOB:
 		case FIELDTYPE_MEDIUMBLOB:
 		case FIELDTYPE_LONGBLOB:
-			
+
 			return dodoString("BYTEA");
 
 		default:
@@ -78,10 +78,10 @@ dbPostgresql::connect()
 	if (connected)
 		disconnect();
 
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	operType = DBPOSTGRESQL_OPER_CONNECT;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	conn = PQsetdbLogin(
 		dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
@@ -97,9 +97,9 @@ dbPostgresql::connect()
 	if (status != CONNECTION_OK)
 		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL_CONNECT, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
 
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	connected = true;
 }
@@ -111,10 +111,10 @@ dbPostgresql::disconnect()
 {
 	if (connected)
 	{
-            #ifndef DBPOSTGRESQL_WO_XEXEC
+			#ifndef DBPOSTGRESQL_WO_XEXEC
 		operType = DBPOSTGRESQL_OPER_DISCONNECT;
 		performXExec(preExec);
-            #endif
+			#endif
 
 		if (!empty)
 		{
@@ -124,9 +124,9 @@ dbPostgresql::disconnect()
 
 		PQfinish(conn);
 
-            #ifndef DBPOSTGRESQL_WO_XEXEC
+			#ifndef DBPOSTGRESQL_WO_XEXEC
 		performXExec(postExec);
-            #endif
+			#endif
 
 		connected = false;
 	}
@@ -317,10 +317,10 @@ dodoArray<dodoStringArr>
 dbPostgresql::fetchRow() const
 {
 
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	operType = DBPOSTGRESQL_OPER_FETCHROW;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	if (empty || !show)
 		return __dodostringarrayarray__;
@@ -330,9 +330,9 @@ dbPostgresql::fetchRow() const
 
 	dodoArray<dodoStringArr> rows;
 
-        #ifndef USE_DEQUE
+		#ifndef USE_DEQUE
 	rows.reserve(rowsNum);
-        #endif
+		#endif
 
 	int j;
 
@@ -343,9 +343,9 @@ dbPostgresql::fetchRow() const
 	{
 		rowsPart.clear();
 
-            #ifndef USE_DEQUE
+			#ifndef USE_DEQUE
 		rowsPart.reserve(fieldsNum);
-            #endif
+			#endif
 
 		for (j = 0; j < fieldsNum; ++j)
 		{
@@ -365,9 +365,9 @@ dbPostgresql::fetchRow() const
 		rows.push_back(rowsPart);
 	}
 
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	return rows;
 }
@@ -377,10 +377,10 @@ dbPostgresql::fetchRow() const
 dodoStringArr
 dbPostgresql::fetchField() const
 {
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	operType = DBPOSTGRESQL_OPER_FETCHFIELD;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	if (empty || !show)
 		return __dodostringarray__;
@@ -389,16 +389,16 @@ dbPostgresql::fetchField() const
 
 	dodoStringArr fields;
 
-        #ifndef USE_DEQUE
+		#ifndef USE_DEQUE
 	fields.reserve(fieldsNum);
-        #endif
+		#endif
 
 	for (int i(0); i < fieldsNum; ++i)
 		fields.push_back(PQfname(pgResult, i));
 
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	return fields;
 }
@@ -451,23 +451,23 @@ void
 dbPostgresql::exec(const dodoString &query,
 				   bool result)
 {
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	operType = DBPOSTGRESQL_OPER_EXEC;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	_exec(query, result);
 
-        #ifndef DBPOSTGRESQL_WO_XEXEC
+		#ifndef DBPOSTGRESQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	cleanCollect();
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef DBPOSTGRESQL_WO_XEXEC
+	#ifndef DBPOSTGRESQL_WO_XEXEC
 
 int
 dbPostgresql::addPostExec(inExec func,
@@ -487,7 +487,7 @@ dbPostgresql::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 
 int
 dbPostgresql::addPostExec(const dodoString &module,
@@ -517,11 +517,11 @@ dbPostgresql::addExec(const dodoString &module,
 	return _addExec(module, (void *)this, XEXECOBJ_DBPOSTGRESQL, data, toInit);
 }
 
-        #endif
+		#endif
 
 //-------------------------------------------------------------------
 
-    #endif
+	#endif
 
 //-------------------------------------------------------------------
 
@@ -536,9 +536,9 @@ dbPostgresql::fetchAssoc() const
 
 	dodoStringMapArr rowsFields;
 
-        #ifndef USE_DEQUE
+		#ifndef USE_DEQUE
 	rowsFields.reserve(rowsNum);
-        #endif
+		#endif
 
 	dodoStringMap rowFieldsPart;
 	dodoString rowPart;

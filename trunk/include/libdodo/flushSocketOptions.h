@@ -69,9 +69,9 @@ namespace dodo
 		SOCKET_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
 		SOCKET_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
 		SOCKET_OOB_INLINE,          ///< out-of-band(marked urgent) data keep inline in recieve operation
-        #ifdef SO_REUSEPORT
+		#ifdef SO_REUSEPORT
 		SOCKET_REUSE_PORT,
-        #endif
+		#endif
 	};
 
 	/**
@@ -92,152 +92,152 @@ namespace dodo
 
 		protected:
 
-		/**
-		 * constructor
-		 * @param family is family of the socket
-		 * @param type is type of the socket
-		 */
-		flushSocketOptions(short family, short type);
+			/**
+			 * constructor
+			 * @param family is family of the socket
+			 * @param type is type of the socket
+			 */
+			flushSocketOptions(short family, short type);
 
-		/**
-		 * constructor
-		 */
-		flushSocketOptions();
+			/**
+			 * constructor
+			 */
+			flushSocketOptions();
 
-		/**
-		 * destructor
-		 */
-		virtual ~flushSocketOptions();
+			/**
+			 * destructor
+			 */
+			virtual ~flushSocketOptions();
 
-		/**
-		 * @return descriptor of input stream
-		 */
-		virtual int getInDescriptor() const;
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
 
-		/**
-		 * @return descriptor of output stream
-		 */
-		virtual int getOutDescriptor() const;
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const;
 
 		public:
 
-		/**
-		 * set socket options
-		 * @param options is option to set to socket
-		 * @param flag indicates whether to set or unset option
-		 */
-		virtual void
-		setSockOption(short option, bool flag);
+			/**
+			 * set socket options
+			 * @param options is option to set to socket
+			 * @param flag indicates whether to set or unset option
+			 */
+			virtual void
+			setSockOption(short option, bool flag);
 
-		/**
-		 * set linger option
-		 * @param option is linger option[see socketLingerOption]
-		 * @param seconds how long to wait(for SOCKET_WAIT_CLOSE only)
-		 */
-		virtual void
-		setLingerSockOption(short option, int seconds = 1);
+			/**
+			 * set linger option
+			 * @param option is linger option[see socketLingerOption]
+			 * @param seconds how long to wait(for SOCKET_WAIT_CLOSE only)
+			 */
+			virtual void
+			setLingerSockOption(short option, int seconds = 1);
 
-		/**
-		 * @return linger option that was set[see socketLingerOption]
-		 */
-		virtual short getLingerOption() const;
+			/**
+			 * @return linger option that was set[see socketLingerOption]
+			 */
+			virtual short getLingerOption() const;
 
-		/**
-		 * @return amount of seconds to wait(for SOCKET_WAIT_CLOSE only)
-		 */
-		virtual int getLingerPeriod() const;
+			/**
+			 * @return amount of seconds to wait(for SOCKET_WAIT_CLOSE only)
+			 */
+			virtual int getLingerPeriod() const;
 
-		/**
-		 * sets incoming buffer size of socket
-		 * @param bytes is size of buffer in bytes
-		 */
-		virtual void
-		setInBufferSize(unsigned long bytes);
+			/**
+			 * sets incoming buffer size of socket
+			 * @param bytes is size of buffer in bytes
+			 */
+			virtual void
+			setInBufferSize(unsigned long bytes);
 
-		/**
-		 * sets outgoing buffer size of socket
-		 * @param bytes is size of buffer in bytes
-		 */
-		virtual void
-		setOutBufferSize(unsigned long bytes);
+			/**
+			 * sets outgoing buffer size of socket
+			 * @param bytes is size of buffer in bytes
+			 */
+			virtual void
+			setOutBufferSize(unsigned long bytes);
 
-		/**
-		 * @return incoming buffer size of socket
-		 */
-		virtual unsigned long  getInBufferSize() const;
+			/**
+			 * @return incoming buffer size of socket
+			 */
+			virtual unsigned long  getInBufferSize() const;
 
-		/**
-		 * @return outgoing buffer size of socket
-		 */
-		virtual unsigned long  getOutBufferSize() const;
+			/**
+			 * @return outgoing buffer size of socket
+			 */
+			virtual unsigned long  getOutBufferSize() const;
 
-		/**
-		 * sets incomming operation timeout of socket
-		 * @param microseconds is amount of time to wait for action
-		 */
-		virtual void
-		setInTimeout(unsigned long microseconds);
+			/**
+			 * sets incomming operation timeout of socket
+			 * @param microseconds is amount of time to wait for action
+			 */
+			virtual void
+			setInTimeout(unsigned long microseconds);
 
-		/**
-		 * sets outgoing operation timeout of socket
-		 * @param microseconds is amount of time to wait for action
-		 */
-		virtual void
-		setOutTimeout(unsigned long microseconds);
+			/**
+			 * sets outgoing operation timeout of socket
+			 * @param microseconds is amount of time to wait for action
+			 */
+			virtual void
+			setOutTimeout(unsigned long microseconds);
 
-		/**
-		 * @return incomming operation timeout of socket
-		 */
-		virtual unsigned long getInTimeout() const;
+			/**
+			 * @return incomming operation timeout of socket
+			 */
+			virtual unsigned long getInTimeout() const;
 
-		/**
-		 * @return outgoing operation timeout of socket
-		 */
-		virtual unsigned long getOutTimeout() const;
+			/**
+			 * @return outgoing operation timeout of socket
+			 */
+			virtual unsigned long getOutTimeout() const;
 
 
-		/**
-		 * @return true if socket option was set
-		 */
-		virtual bool getSocketOpts(int option) const;
+			/**
+			 * @return true if socket option was set
+			 */
+			virtual bool getSocketOpts(int option) const;
 
-		/**
-		 * @return true if socked is blocked
-		 */
-		virtual bool isBlocked() const;
+			/**
+			 * @return true if socked is blocked
+			 */
+			virtual bool isBlocked() const;
 
-		/**
-		 * blocks/unblocks socket
-		 * @param flag indicates ehether to block or unblock socket
-		 */
-		virtual void
-		block(bool flag);
+			/**
+			 * blocks/unblocks socket
+			 * @param flag indicates ehether to block or unblock socket
+			 */
+			virtual void
+			block(bool flag);
 
 		protected:
 
-		/**
-		 * closes connection for socket
-		 */
-		static void
-		_close(int socket);
+			/**
+			 * closes connection for socket
+			 */
+			static void
+			_close(int socket);
 
-		short family;                       ///< socket family
-		short type;                         ///< socket type
+			short family;                   ///< socket family
+			short type;                     ///< socket type
 
-		int socketOpts;                     ///< socket options
+			int socketOpts;                 ///< socket options
 
-		short lingerOpts;                   ///< socket linger option
-		int lingerSeconds;                  ///< socket linger timeout
+			short lingerOpts;               ///< socket linger option
+			int lingerSeconds;              ///< socket linger timeout
 
-		unsigned long inTimeout;            ///< incomming operation timeout of socket; in microseconds
-		unsigned long outTimeout;           ///< outgoing operation timeout of socket; in microseconds
+			unsigned long inTimeout;        ///< incomming operation timeout of socket; in microseconds
+			unsigned long outTimeout;       ///< outgoing operation timeout of socket; in microseconds
 
-		unsigned long inSocketBuffer;       ///< incoming buffer size of socket; in bytes
-		unsigned long outSocketBuffer;      ///< outgoing buffer size of socket; in bytes
+			unsigned long inSocketBuffer;   ///< incoming buffer size of socket; in bytes
+			unsigned long outSocketBuffer;  ///< outgoing buffer size of socket; in bytes
 
-		int socket;                         ///< id of socket
+			int socket;                     ///< id of socket
 
-		bool blocked;                       ///< indicates, whether blocked or not;
+			bool blocked;                   ///< indicates, whether blocked or not;
 	};
 
 };

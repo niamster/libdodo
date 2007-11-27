@@ -182,10 +182,10 @@ dbMysql::connect()
 {
 	disconnect();
 
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	operType = DBMYSQL_OPER_CONNECT;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	mysql = mysql_init(NULL);
 
@@ -199,9 +199,9 @@ dbMysql::connect()
 							type))
 		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQL_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
 
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	connected = true;
 }
@@ -213,10 +213,10 @@ dbMysql::disconnect()
 {
 	if (connected)
 	{
-            #ifndef DBMYSQL_WO_XEXEC
+			#ifndef DBMYSQL_WO_XEXEC
 		operType = DBMYSQL_OPER_DISCONNECT;
 		performXExec(preExec);
-            #endif
+			#endif
 
 		if (!empty)
 		{
@@ -226,9 +226,9 @@ dbMysql::disconnect()
 
 		mysql_close(mysql);
 
-            #ifndef DBMYSQL_WO_XEXEC
+			#ifndef DBMYSQL_WO_XEXEC
 		performXExec(postExec);
-            #endif
+			#endif
 
 		connected = false;
 	}
@@ -320,10 +320,10 @@ dbMysql::_exec(const dodoString &query,
 dodoArray<dodoStringArr>
 dbMysql::fetchRow() const
 {
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	operType = DBMYSQL_OPER_FETCHROW;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	if (empty || !show)
 		return __dodostringarrayarray__;
@@ -334,9 +334,9 @@ dbMysql::fetchRow() const
 
 	dodoArray<dodoStringArr> rows;
 
-        #ifndef USE_DEQUE
+		#ifndef USE_DEQUE
 	rows.reserve(mysql_num_rows(mysqlRes));
-        #endif
+		#endif
 
 	unsigned long *length, j;
 
@@ -352,9 +352,9 @@ dbMysql::fetchRow() const
 
 		rowsPart.clear();
 
-            #ifndef USE_DEQUE
+			#ifndef USE_DEQUE
 		rowsPart.reserve(numFields);
-            #endif
+			#endif
 
 		for (j = 0; j < numFields; ++j)
 		{
@@ -368,9 +368,9 @@ dbMysql::fetchRow() const
 		rows.push_back(rowsPart);
 	}
 
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	return rows;
 }
@@ -380,10 +380,10 @@ dbMysql::fetchRow() const
 dodoStringArr
 dbMysql::fetchField() const
 {
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	operType = DBMYSQL_OPER_FETCHFIELD;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	if (empty || !show)
 		return __dodostringarray__;
@@ -393,16 +393,16 @@ dbMysql::fetchField() const
 
 	dodoStringArr fields;
 
-        #ifndef USE_DEQUE
+		#ifndef USE_DEQUE
 	fields.reserve(numFields);
-        #endif
+		#endif
 
 	for (unsigned int i(0); i < numFields; ++i)
 		fields.push_back(mysqlFields[i].name);
 
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	return fields;
 }
@@ -455,23 +455,23 @@ void
 dbMysql::exec(const dodoString &query,
 			  bool result)
 {
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	operType = DBMYSQL_OPER_EXEC;
 	performXExec(preExec);
-        #endif
+		#endif
 
 	_exec(query, result);
 
-        #ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 	performXExec(postExec);
-        #endif
+		#endif
 
 	cleanCollect();
 }
 
 //-------------------------------------------------------------------
 
-    #ifndef DBMYSQL_WO_XEXEC
+	#ifndef DBMYSQL_WO_XEXEC
 
 int
 dbMysql::addPostExec(inExec func,
@@ -491,7 +491,7 @@ dbMysql::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-        #ifdef DL_EXT
+		#ifdef DL_EXT
 
 int
 dbMysql::addPostExec(const dodoString &module,
@@ -521,11 +521,11 @@ dbMysql::addExec(const dodoString &module,
 	return _addExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
 }
 
-        #endif
+		#endif
 
 //-------------------------------------------------------------------
 
-    #endif
+	#endif
 
 //-------------------------------------------------------------------
 
@@ -566,9 +566,9 @@ dbMysql::fetchAssoc() const
 
 	dodoStringMapArr rowsFields;
 
-        #ifndef USE_DEQUE
+		#ifndef USE_DEQUE
 	rowsFields.reserve(mysql_num_rows(mysqlRes));
-        #endif
+		#endif
 
 	dodoStringMap rowFieldsPart;
 

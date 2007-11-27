@@ -44,218 +44,218 @@ namespace dodo
 	{
 		public:
 
-		/*
-		 * constructor
-		 */
-		dbSqlBase();
+			/*
+			 * constructor
+			 */
+			dbSqlBase();
 
-		/**
-		 * destructor
-		 */
-		virtual ~dbSqlBase();
+			/**
+			 * destructor
+			 */
+			virtual ~dbSqlBase();
 
-		/**
-		 * @return constructed query from collected data;
-		 * it doesn't clean collected data
-		 */
-		virtual dodoString queryCollect();
+			/**
+			 * @return constructed query from collected data;
+			 * it doesn't clean collected data
+			 */
+			virtual dodoString queryCollect();
 
-		/**
-		 * @returns string in 'exist()'
-		 * @param statement is sql statement that you want to cover with 'exist()'
-		 */
-		static dodoString exists(const dodoString &statement);
+			/**
+			 * @returns string in 'exist()'
+			 * @param statement is sql statement that you want to cover with 'exist()'
+			 */
+			static dodoString exists(const dodoString &statement);
 
-		/**
-		 * @returns string in 'not exist()'
-		 * @param statement is sql statement that you want to cover with 'not exist()'
-		 */
-		static dodoString noexists(const dodoString &statement);
+			/**
+			 * @returns string in 'not exist()'
+			 * @param statement is sql statement that you want to cover with 'not exist()'
+			 */
+			static dodoString noexists(const dodoString &statement);
 
-		bool preventFraming;        ///< to frame or not with `'` fields values in insert and update; false by default
+			bool preventFraming;    ///< to frame or not with `'` fields values in insert and update; false by default
 
-		bool preventEscaping;       ///< to escape{\,'} or not fields' values in insert and update; false by default
+			bool preventEscaping;   ///< to escape{\,'} or not fields' values in insert and update; false by default
 
-		bool autoFraming;           ///< detects automatic whether to frame or not; true by default; if preventFraming is set - autoFraming is disabled; if preventEscaping is false - escaping only framed values
+			bool autoFraming;       ///< detects automatic whether to frame or not; true by default; if preventFraming is set - autoFraming is disabled; if preventEscaping is false - escaping only framed values
 
-		dodoString request;         ///< ready sql statement with `'` fields values in insert and update; true by default
+			dodoString request;     ///< ready sql statement with `'` fields values in insert and update; true by default
 
-		/**
-		 * @return escaped string
-		 * @param data is string to escape
-		 */
-		static dodoString escapeFields(const dodoString &data);
+			/**
+			 * @return escaped string
+			 * @param data is string to escape
+			 */
+			static dodoString escapeFields(const dodoString &data);
 
-		/**
-		 * @return unescaped string
-		 * @param data is string to unescape
-		 */
-		static dodoString unescapeFields(const dodoString &data);
+			/**
+			 * @return unescaped string
+			 * @param data is string to unescape
+			 */
+			static dodoString unescapeFields(const dodoString &data);
 
 		protected:
 
-		/**
-		 * constructs from collected data to SELECT sql statement
-		 */
-		virtual void selectCollect();
+			/**
+			 * constructs from collected data to SELECT sql statement
+			 */
+			virtual void selectCollect();
 
-		/**
-		 * constructs from collected data to INSERT sql statement
-		 */
-		virtual void insertCollect();
+			/**
+			 * constructs from collected data to INSERT sql statement
+			 */
+			virtual void insertCollect();
 
-		/**
-		 * constructs from collected data to INSERT ... SELECT sql statement
-		 */
-		virtual void insertSelectCollect();
+			/**
+			 * constructs from collected data to INSERT ... SELECT sql statement
+			 */
+			virtual void insertSelectCollect();
 
-		/**
-		 * constructs from collected data to UPDATE sql statement
-		 */
-		virtual void updateCollect();
+			/**
+			 * constructs from collected data to UPDATE sql statement
+			 */
+			virtual void updateCollect();
 
-		/**
-		 * constructs from collected data to DELETE sql statement
-		 */
-		virtual void delCollect();
+			/**
+			 * constructs from collected data to DELETE sql statement
+			 */
+			virtual void delCollect();
 
-		/**
-		 * constructs from collected data to UNION, MINUS, INTERSECT sql statement
-		 */
-		virtual void subCollect();
+			/**
+			 * constructs from collected data to UNION, MINUS, INTERSECT sql statement
+			 */
+			virtual void subCollect();
 
-		/**
-		 * constructs from collected data to TRUNCATE sql statement
-		 */
-		virtual void truncateCollect();
+			/**
+			 * constructs from collected data to TRUNCATE sql statement
+			 */
+			virtual void truncateCollect();
 
-		/**
-		 * constructs from collected data to DROP DATABASE sql statement
-		 */
-		virtual void delBaseCollect();
+			/**
+			 * constructs from collected data to DROP DATABASE sql statement
+			 */
+			virtual void delBaseCollect();
 
-		/**
-		 * constructs from collected data to DROP TABLE sql statement
-		 */
-		virtual void delTableCollect();
+			/**
+			 * constructs from collected data to DROP TABLE sql statement
+			 */
+			virtual void delTableCollect();
 
-		/**
-		 * constructs from collected data to ALTER ... DROP sql statement
-		 */
-		virtual void delFieldCollect();
+			/**
+			 * constructs from collected data to ALTER ... DROP sql statement
+			 */
+			virtual void delFieldCollect();
 
-		/**
-		 * constructs from collected data to RENAME sql statement
-		 * FIXME: implement it!
-		 */
-		virtual void renameBaseCollect();
+			/**
+			 * constructs from collected data to RENAME sql statement
+			 * FIXME: implement it!
+			 */
+			virtual void renameBaseCollect();
 
-		/**
-		 * constructs from collected data to RENAME sql statement
-		 */
-		virtual void renameTableCollect();
+			/**
+			 * constructs from collected data to RENAME sql statement
+			 */
+			virtual void renameTableCollect();
 
-		/**
-		 * constructs from collected data to RENAME sql statement
-		 * FIXME: implement it!
-		 */
-		virtual void renameFieldCollect();
+			/**
+			 * constructs from collected data to RENAME sql statement
+			 * FIXME: implement it!
+			 */
+			virtual void renameFieldCollect();
 
-		/**
-		 * constructs from collected data to CREATE DATABASE sql statement
-		 */
-		virtual void createBaseCollect();
+			/**
+			 * constructs from collected data to CREATE DATABASE sql statement
+			 */
+			virtual void createBaseCollect();
 
-		/**
-		 * constructs from collected data to CREATE TABLE sql statement
-		 */
-		virtual void createTableCollect();
+			/**
+			 * constructs from collected data to CREATE TABLE sql statement
+			 */
+			virtual void createTableCollect();
 
-		/**
-		 * constructs from collected data to CREATE INDEX sql statement
-		 */
-		virtual void createIndexCollect();
+			/**
+			 * constructs from collected data to CREATE INDEX sql statement
+			 */
+			virtual void createIndexCollect();
 
-		/**
-		 * constructs from collected data to DROP INDEX sql statement
-		 */
-		virtual void deleteIndexCollect();
+			/**
+			 * constructs from collected data to DROP INDEX sql statement
+			 */
+			virtual void deleteIndexCollect();
 
-		/**
-		 * constructs from collected data to ALTER TABLE ... ADD sql statement
-		 */
-		virtual void createFieldCollect();
+			/**
+			 * constructs from collected data to ALTER TABLE ... ADD sql statement
+			 */
+			virtual void createFieldCollect();
 
-		/**
-		 * constructs from collected data to sql adaptive field info for proper fields representation
-		 */
-		virtual dodoString fieldCollect(__fieldInfo &row);
+			/**
+			 * constructs from collected data to sql adaptive field info for proper fields representation
+			 */
+			virtual dodoString fieldCollect(__fieldInfo &row);
 
-		/**
-		 * adds to the end of request additional data collection for query if check passed
-		 * @param qTypeTocheck indicates what type of additional info to check
-		 * @collectedString is string that holds additional statement
-		 */
-		virtual void additionalCollect(unsigned int qTypeTocheck, const dodoString &collectedString);
+			/**
+			 * adds to the end of request additional data collection for query if check passed
+			 * @param qTypeTocheck indicates what type of additional info to check
+			 * @collectedString is string that holds additional statement
+			 */
+			virtual void additionalCollect(unsigned int qTypeTocheck, const dodoString &collectedString);
 
-		/**
-		 * @return string constructed from collected additional statements
-		 * @param sqlAddEnumArr is array of statements[position in sqlAddArr]
-		 * @param sqlAddArr is array of statements
-		 * @param qTypeShift is value that indicates what values were set
-		 */
-		virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift);
+			/**
+			 * @return string constructed from collected additional statements
+			 * @param sqlAddEnumArr is array of statements[position in sqlAddArr]
+			 * @param sqlAddArr is array of statements
+			 * @param qTypeShift is value that indicates what values were set
+			 */
+			virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift);
 
-		/**
-		 * @return string constructed from collected additional statements(DB-dependent)
-		 * @param statement is array of statements
-		 * @param qTypeShift is value that indicates what values were set
-		 */
-		virtual dodoString insideAddCollect(const dodoStringArr &statements, int qTypeShift);
+			/**
+			 * @return string constructed from collected additional statements(DB-dependent)
+			 * @param statement is array of statements
+			 * @param qTypeShift is value that indicates what values were set
+			 */
+			virtual dodoString insideAddCollect(const dodoStringArr &statements, int qTypeShift);
 
-		/**
-		 * @return string from fields' names and 'em values
-		 * @param fieldsVal is array of fields
-		 * @param fieldsNames is array of names
-		 * @param frame is value with what values will be framed
-		 */
-		virtual dodoString fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &frame = "'");
+			/**
+			 * @return string from fields' names and 'em values
+			 * @param fieldsVal is array of fields
+			 * @param fieldsNames is array of names
+			 * @param frame is value with what values will be framed
+			 */
+			virtual dodoString fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &frame = "'");
 
-		/**
-		 * @return sql compliant data type
-		 * @param type indicates the data type
-		 */
-		virtual dodoString stringType(int type);
+			/**
+			 * @return sql compliant data type
+			 * @param type indicates the data type
+			 */
+			virtual dodoString stringType(int type);
 
-		/**
-		 * @return : if type must have range=1; if may have=0; if mustn't have=-1;
-		 * @param type indicates the data type
-		 */
-		virtual int chkRange(int type);
+			/**
+			 * @return : if type must have range=1; if may have=0; if mustn't have=-1;
+			 * @param type indicates the data type
+			 */
+			virtual int chkRange(int type);
 
-		/**
-		 * @return sql compliant references statements
-		 * @param type indicates the type of reference
-		 */
-		virtual dodoString stringReference(int type);
+			/**
+			 * @return sql compliant references statements
+			 * @param type indicates the type of reference
+			 */
+			virtual dodoString stringReference(int type);
 
-		dodoMap<dodoString, dodoStringArr, stringTools::iequal> framingFields;       ///< hash of 'db:table' => `array of fields to frame`
+			dodoMap<dodoString, dodoStringArr, stringTools::iequal> framingFields;   ///< hash of 'db:table' => `array of fields to frame`
 
 		private:
 
-		static const __statements sqlAddSelArr[3];      ///< `select` additional statement
-		static const __statements sqlAddDelArr[2];      ///< `delete` additional statement
-		static const __statements sqlAddUpArr[2];       ///< `update` additional statement
-		static const __statements sqlAddInsArr[2];      ///< `insert` additional statement
+			static const __statements sqlAddSelArr[3];  ///< `select` additional statement
+			static const __statements sqlAddDelArr[2];  ///< `delete` additional statement
+			static const __statements sqlAddUpArr[2];   ///< `update` additional statement
+			static const __statements sqlAddInsArr[2];  ///< `insert` additional statement
 
-		static const __statements sqlAddArr[7];         ///< additional sql statements for queries(where, limit, ...)
+			static const __statements sqlAddArr[7];     ///< additional sql statements for queries(where, limit, ...)
 
-		static const __statements sqlQStArr[5];         ///< sql statements for complex queries(union, ...)
+			static const __statements sqlQStArr[5];     ///< sql statements for complex queries(union, ...)
 
-		static const unsigned int addSelEnumArr[2];     ///< array of positions in sqlAddSelArr `select` additional statement
-		static const unsigned int addDelEnumArr[1];     ///< array of positions in sqlAddDelArr `delete` additional statement
-		static const unsigned int addUpEnumArr[1];      ///< array of positions in sqlAddUpArr `update` additional statement
-		static const unsigned int addInsEnumArr[1];     ///< array of positions in sqlAddInsArr `insert` additional statement
+			static const unsigned int addSelEnumArr[2]; ///< array of positions in sqlAddSelArr `select` additional statement
+			static const unsigned int addDelEnumArr[1]; ///< array of positions in sqlAddDelArr `delete` additional statement
+			static const unsigned int addUpEnumArr[1];  ///< array of positions in sqlAddUpArr `update` additional statement
+			static const unsigned int addInsEnumArr[1]; ///< array of positions in sqlAddInsArr `insert` additional statement
 
 	};
 

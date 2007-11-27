@@ -87,48 +87,48 @@ namespace dodo
 
 		public:
 
-		/**
-		 * @return a list of interfaces in system
-		 */
-		static dodoStringArr getInterfacesNames();
+			/**
+			 * @return a list of interfaces in system
+			 */
+			static dodoStringArr getInterfacesNames();
 
-		/**
-		 * @return info about interface
-		 * @param interface is name of interface about what info is needed
-		 */
-		static __ifInfo getInterfaceInfo(const dodoString &interface);
+			/**
+			 * @return info about interface
+			 * @param interface is name of interface about what info is needed
+			 */
+			static __ifInfo getInterfaceInfo(const dodoString &interface);
 
-		/**
-		 * @return info about given host
-		 * @param host points to host about what info would be given
-		 */
-		static __hostInfo getHostInfo(const dodoString &host);
+			/**
+			 * @return info about given host
+			 * @param host points to host about what info would be given
+			 */
+			static __hostInfo getHostInfo(const dodoString &host);
 
-		/**
-		 * @return name of local host
-		 */
-		static dodoString getLocalName();
+			/**
+			 * @return name of local host
+			 */
+			static dodoString getLocalName();
 
-		/**
-		 * sets local name
-		 * @param host is new  name of the host
-		 */
-		static void
-		setLocalName(const dodoString &host);
+			/**
+			 * sets local name
+			 * @param host is new  name of the host
+			 */
+			static void
+			setLocalName(const dodoString &host);
 
-		/**
-		 * @return info about service
-		 * @param service is service name
-		 * @param protocol specifies protocol of service(tcp, udp ..)
-		 */
-		static __servInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
+			/**
+			 * @return info about service
+			 * @param service is service name
+			 * @param protocol specifies protocol of service(tcp, udp ..)
+			 */
+			static __servInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
 
-		/**
-		 * @return info about service
-		 * @param port is port of service
-		 * @param protocol specifies protocol of service(tcp, udp ..)
-		 */
-		static __servInfo getServiceInfo(int port, const dodoString &protocol);
+			/**
+			 * @return info about service
+			 * @param port is port of service
+			 * @param protocol specifies protocol of service(tcp, udp ..)
+			 */
+			static __servInfo getServiceInfo(int port, const dodoString &protocol);
 
 	};
 

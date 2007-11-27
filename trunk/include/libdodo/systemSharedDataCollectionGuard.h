@@ -50,39 +50,39 @@ namespace dodo
 	{
 		public:
 
-		/**
-		 * destructor
-		 */
-		virtual ~systemSharedDataCollectionGuard() = 0;
+			/**
+			 * destructor
+			 */
+			virtual ~systemSharedDataCollectionGuard() = 0;
 
-		/**
-		 * adds data to became a shared
-		 * @return position of shared in queue
-		 * @param data describes data to be shared
-		 */
-		virtual unsigned long add(void *data) = 0;
+			/**
+			 * adds data to became a shared
+			 * @return position of shared in queue
+			 * @param data describes data to be shared
+			 */
+			virtual unsigned long add(void *data) = 0;
 
-		/**
-		 * sets shared data to NULL
-		 * @param position indicates on shared data to lock
-		 */
-		virtual void
-		del(unsigned long position) = 0;
+			/**
+			 * sets shared data to NULL
+			 * @param position indicates on shared data to lock
+			 */
+			virtual void
+			del(unsigned long position) = 0;
 
-		/**
-		 * locks, sets data, unlocks
-		 * @param position indicates on shared data to lock
-		 * @param data describes data to be set
-		 */
-		virtual void
-		set(unsigned long position, void *data) = 0;
+			/**
+			 * locks, sets data, unlocks
+			 * @param position indicates on shared data to lock
+			 * @param data describes data to be set
+			 */
+			virtual void
+			set(unsigned long position, void *data) = 0;
 
-		/**
-		 * locks, gets data, unlocks
-		 * @return data points on shared data or NULL in error case
-		 * @param position indicates on shared data to lock
-		 */
-		virtual const void *get(unsigned long position) = 0;
+			/**
+			 * locks, gets data, unlocks
+			 * @return data points on shared data or NULL in error case
+			 * @param position indicates on shared data to lock
+			 */
+			virtual const void *get(unsigned long position) = 0;
 	};
 
 };

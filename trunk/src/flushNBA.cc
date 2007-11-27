@@ -201,7 +201,7 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 			else
 			{
 				delete [] fds;
-				
+
 				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}

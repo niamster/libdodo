@@ -42,30 +42,30 @@ namespace dodo
 	{
 		public:
 
-		/**
-		 * consructor
-		 */
-		atomicSemaphore(unsigned int value, const char *key);
+			/**
+			 * consructor
+			 */
+			atomicSemaphore(unsigned int value, const char *key);
 
-		/**
-		 * destructor
-		 */
-		virtual ~atomicSemaphore();
+			/**
+			 * destructor
+			 */
+			virtual ~atomicSemaphore();
 
-		/**
-		 * locks critical section
-		 */
-		virtual void lock();
+			/**
+			 * locks critical section
+			 */
+			virtual void lock();
 
-		/**
-		 * unlocks critical section
-		 */
-		virtual void unLock();
+			/**
+			 * unlocks critical section
+			 */
+			virtual void unLock();
 
 		protected:
 
-		sem_t *semaphore;       ///< semaphore
-		char *key;              ///< key for the semaphore
+			sem_t *semaphore;   ///< semaphore
+			char *key;          ///< key for the semaphore
 	};
 
 };

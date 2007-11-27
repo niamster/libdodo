@@ -76,7 +76,7 @@ systemProcessSharedDataCollectionGuard::del(unsigned long position)
 
 void
 systemProcessSharedDataCollectionGuard::set(unsigned long position,
-										   void          *data)
+											void          *data)
 {
 	guard tg(this);
 
@@ -109,7 +109,7 @@ systemProcessSharedDataCollectionGuard::getShare(unsigned long position)
 		if (i->position == position)
 		{
 			current = *((std::list<__shareInfo>::iterator *) & i);
-			
+
 			return true;
 		}
 

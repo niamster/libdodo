@@ -79,212 +79,212 @@ namespace dodo
 
 	class flushDisk : public flush
 
-    #ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef FLUSH_DISK_WO_XEXEC
 					  , public xexec
-    #endif
+	#endif
 
 	{
-		friend class flushSocket;
+			friend class flushSocket;
 
 		private:
 
-		/**
-		 * cosrtructor prevents from copyin'
-		 */
-		flushDisk(flushDisk &fd);
+			/**
+			 * cosrtructor prevents from copyin'
+			 */
+			flushDisk(flushDisk &fd);
 
 		public:
 
-		/**
-		 * constructor
-		 * @param type describes type of file with what manipulation will be made
-		 * @param path is path to the file
-		 *
-		 * if type == TMP_FILE, u don't have to specify path
-		 */
-		flushDisk(short type, const dodoString &path = __dodostring__);
+			/**
+			 * constructor
+			 * @param type describes type of file with what manipulation will be made
+			 * @param path is path to the file
+			 *
+			 * if type == TMP_FILE, u don't have to specify path
+			 */
+			flushDisk(short type, const dodoString &path = __dodostring__);
 
-		/**
-		 * destructor
-		 */
-		virtual ~flushDisk();
+			/**
+			 * destructor
+			 */
+			virtual ~flushDisk();
 
-            #ifndef FLUSH_DISK_WO_XEXEC
+			#ifndef FLUSH_DISK_WO_XEXEC
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 */
-		virtual int addPostExec(inExec func, void *data);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPostExec(inExec func, void *data);
 
-		/**
-		 * adds hook before the operation by callback
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 */
-		virtual int addPreExec(inExec func, void *data);
+			/**
+			 * adds hook before the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
+			virtual int addPreExec(inExec func, void *data);
 
-                #ifdef DL_EXT
+				#ifdef DL_EXT
 
-		/**
-		 * set function from module that will be executed before/after the main action call
-		 * the type of hook[pre/post] is defined in module
-		 * @return number in list where function is set
-		 * @param func is a pointer to function
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * set function from module that will be executed before/after the main action call
+			 * the type of hook[pre/post] is defined in module
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param module is a path to module, whrere hook exists
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
-		/**
-		 * adds hook after the operation by callback
-		 * @return number in list where function is set
-		 * @param module is a path to module, whrere hook exists
-		 * @param data is pointer to data toy want to pass to hook
-		 * @param toInit indicates data that will path to initialize function
-		 */
-		virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+			/**
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
-                #endif
+				#endif
 
-            #endif
+			#endif
 
-		/**
-		 * opens file
-		 * @param path describes path to file
-		 * closes previous opened file if needed
-		 * if u want to create pipe, but not a pipe was created with the same name - false will be returned
-		 * if u want to create regular file, but not regular file was created with the same name - false will be returned
-		 */
-		virtual void
-		open(const dodoString &path = __dodostring__);                   ///< if opened previous file, closes it
+			/**
+			 * opens file
+			 * @param path describes path to file
+			 * closes previous opened file if needed
+			 * if u want to create pipe, but not a pipe was created with the same name - false will be returned
+			 * if u want to create regular file, but not regular file was created with the same name - false will be returned
+			 */
+			virtual void
+			open(const dodoString &path = __dodostring__);               ///< if opened previous file, closes it
 
-		/**
-		 * closes file
-		 */
-		virtual void
-		close();
+			/**
+			 * closes file
+			 */
+			virtual void
+			close();
 
-		/**
-		 * read string
-		 * @param data will be filled with data
-		 * @param pos indicates position in file
-		 */
-		virtual void
-		readString(dodoString &data, unsigned long pos = 0);
-		/**
-		 * read data
-		 * @param data will be filled with data
-		 * @param pos indicates position in file
-		 */
-		virtual void
-		read(char * const data, unsigned long pos = 0);
+			/**
+			 * read string
+			 * @param data will be filled with data
+			 * @param pos indicates position in file
+			 */
+			virtual void
+			readString(dodoString &data, unsigned long pos = 0);
+			/**
+			 * read data
+			 * @param data will be filled with data
+			 * @param pos indicates position in file
+			 */
+			virtual void
+			read(char * const data, unsigned long pos = 0);
 
-		/**
-		 * write string
-		 * @param data will be written to file
-		 * @param pos indicates position in file
-		 */
-		virtual void
-		writeString(const dodoString &data, unsigned long pos = 0);
+			/**
+			 * write string
+			 * @param data will be written to file
+			 * @param pos indicates position in file
+			 */
+			virtual void
+			writeString(const dodoString &data, unsigned long pos = 0);
 
-		/**
-		 * write string
-		 * @param data will be written to file
-		 * @param pos indicates position in file
-		 */
-		virtual void
-		write(const char * const data, unsigned long pos = 0);
+			/**
+			 * write string
+			 * @param data will be written to file
+			 * @param pos indicates position in file
+			 */
+			virtual void
+			write(const char * const data, unsigned long pos = 0);
 
-		/**
-		 * read string - null[or \n]-terminated string
-		 * @param data will be filled with data
-		 * @param pos indicates position in file [string that has pos-1 strings before]
-		 * @note max size is inSize
-		 */
-		virtual void
-		readStreamString(dodoString &data, unsigned long pos = 0);
-		/**
-		 * read data - null[or \n]-terminated string
-		 * @param data will be filled with data
-		 * @param pos indicates position in file [string that has pos-1 strings before]
-		 * @note max size is inSize
-		 */
-		virtual void
-		readStream(char * const data, unsigned long pos = 0);
+			/**
+			 * read string - null[or \n]-terminated string
+			 * @param data will be filled with data
+			 * @param pos indicates position in file [string that has pos-1 strings before]
+			 * @note max size is inSize
+			 */
+			virtual void
+			readStreamString(dodoString &data, unsigned long pos = 0);
+			/**
+			 * read data - null[or \n]-terminated string
+			 * @param data will be filled with data
+			 * @param pos indicates position in file [string that has pos-1 strings before]
+			 * @note max size is inSize
+			 */
+			virtual void
+			readStream(char * const data, unsigned long pos = 0);
 
-		/**
-		 * write string - null-terminated string [append only]
-		 * @param data will be written to file
-		 * @note max size is outSize
-		 * @note - appends '\n'
-		 */
-		virtual void
-		writeStreamString(const dodoString &data);
+			/**
+			 * write string - null-terminated string [append only]
+			 * @param data will be written to file
+			 * @note max size is outSize
+			 * @note - appends '\n'
+			 */
+			virtual void
+			writeStreamString(const dodoString &data);
 
-		/**
-		 * write string - null-terminated string [append only]
-		 * @param data will be written to file
-		 * @note max size is outSize
-		 * @note - appends '\n'
-		 */
-		virtual void
-		writeStream(const char * const data);
+			/**
+			 * write string - null-terminated string [append only]
+			 * @param data will be written to file
+			 * @note max size is outSize
+			 * @note - appends '\n'
+			 */
+			virtual void
+			writeStream(const char * const data);
 
-		/**
-		 * erase node on position
-		 * @param pos indicates position in file
-		 * @note for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
-		 */
-		virtual void
-		erase(unsigned long pos);
-		/**
-		 * flushes to disk
-		 */
-		virtual void
-		flush();
+			/**
+			 * erase node on position
+			 * @param pos indicates position in file
+			 * @note for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
+			 */
+			virtual void
+			erase(unsigned long pos);
+			/**
+			 * flushes to disk
+			 */
+			virtual void
+			flush();
 
-		bool over;      ///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files, tmp_files only
-		short mode;     ///< mode to open file; if you change it then you have to reopen!
+			bool over;  ///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files, tmp_files only
+			short mode; ///< mode to open file; if you change it then you have to reopen!
 
-		/**
-		 * @return path of the opened file
-		 */
-		virtual dodoString getPath() const;
+			/**
+			 * @return path of the opened file
+			 */
+			virtual dodoString getPath() const;
 
-		short fileType;     ///< type of file; if you change then it you have to reopen!
+			short fileType; ///< type of file; if you change then it you have to reopen!
 
-		bool append;        ///< if true, will append to the end of the file, even pos is set.
+			bool append;    ///< if true, will append to the end of the file, even pos is set.
 
 		protected:
 
-		/**
-		 * @return descriptor of input stream
-		 */
-		virtual int getInDescriptor() const;
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
 
-		/**
-		 * @return descriptor of output stream
-		 */
-		virtual int getOutDescriptor() const;
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const;
 
 		private:
 
-		dodoString path;    ///< file name
+			dodoString path;    ///< file name
 
-		FILE *file;         ///< file handler
+			FILE *file;         ///< file handler
 	};
 
 };

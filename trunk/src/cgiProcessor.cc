@@ -30,10 +30,10 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 							   _loopDeepness(0),
 							   iterator(1),
 							   namespaceDeepness(1)
-                #ifdef FCGI_EXT
+				#ifdef FCGI_EXT
 							   ,
 							   cgiFastSet(false)
-                #endif
+				#endif
 {
 	dodo[statements[VERSION]] = PACKAGE_STRING;
 	dodo[statements[ITERATOR]] = "1";
@@ -1751,14 +1751,14 @@ cgiProcessor::trim(const dodoString &statement)
 void
 cgiProcessor::display(const dodoString &path)
 {
-        #ifdef FCGI_EXT
+		#ifdef FCGI_EXT
 	if (cgiFastSet)
 	{
 		cf->print(this->process(path));
 		cf->flush();
 	}
 	else
-        #endif
+		#endif
 	{
 		fstd->writeStreamString(this->process(path));
 		fstd->flush();

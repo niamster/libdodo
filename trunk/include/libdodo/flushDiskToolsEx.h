@@ -43,8 +43,8 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-        #define FLUSHDISKTOOLS_WRONG_FILENAME_STR        "Probably wrong filename, type of file is wrong or `path` is empty!"
-        #define FLUSHDISKTOOLS_DESTINATION_EXISTS_STR    "Destination file/dir/etc. exists. Won't overvrite"
+		#define FLUSHDISKTOOLS_WRONG_FILENAME_STR        "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define FLUSHDISKTOOLS_DESTINATION_EXISTS_STR    "Destination file/dir/etc. exists. Won't overvrite"
 
 	/**
 	 * ID of function where exception was thrown

@@ -26,8 +26,8 @@
 using namespace dodo;
 
 __cgiFilesUp::__cgiFilesUp() : fp(NULL),
-				buf(NULL),
-				size(0)
+							   buf(NULL),
+							   size(0)
 {
 }
 
@@ -62,15 +62,15 @@ cgi::cgi(cgi &ct)
 //-------------------------------------------------------------------
 
 cgi::cgi(bool silent,
-				   dodoStringMap &a_headers,
-				   bool a_autoclearContent,
-				   bool a_postFilesInMem,
-				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-												   postFilesTmpDir(a_postFilesTmpDir)
-                #ifdef FCGI_EXT
-												   ,
-												   cgiFastSet(false)
-                #endif
+		 dodoStringMap &a_headers,
+		 bool a_autoclearContent,
+		 bool a_postFilesInMem,
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+										 postFilesTmpDir(a_postFilesTmpDir)
+				#ifdef FCGI_EXT
+										 ,
+										 cgiFastSet(false)
+				#endif
 
 {
 	fstd = new flushSTD;
@@ -99,14 +99,14 @@ cgi::cgi(bool silent,
 #ifdef FCGI_EXT
 
 cgi::cgi(cgiFastSTD    *a_cf,
-				   bool silent,
-				   dodoStringMap &a_headers,
-				   bool a_autoclearContent,
-				   bool a_postFilesInMem,
-				   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-												   postFilesTmpDir(a_postFilesTmpDir),
-												   cgiFastSet(true),
-												   cf(a_cf)
+		 bool silent,
+		 dodoStringMap &a_headers,
+		 bool a_autoclearContent,
+		 bool a_postFilesInMem,
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+										 postFilesTmpDir(a_postFilesTmpDir),
+										 cgiFastSet(true),
+										 cf(a_cf)
 
 {
 	initHeaders(a_headers);
@@ -202,8 +202,8 @@ cgi::getMethod() const
 
 void
 cgi::make(dodoStringMap &val,
-			   const dodoString &string,
-			   const char       *delim)
+		  const dodoString &string,
+		  const char       *delim)
 {
 	dodoStringArr getPair = tools::explode(tools::decodeURL(string), delim);
 
@@ -228,11 +228,11 @@ cgi::makeEnv()
 
 	for (int i = 0; i < HTTP_ENV_SIZE; ++i)
 	{
-        #ifdef FCGI_EXT
+		#ifdef FCGI_EXT
 		if (cgiFastSet)
 			env = cf->getenv(HTTP_ENV[i].str);
 		else
-        #endif
+		#endif
 		env = getenv(HTTP_ENV[i].str);
 
 		ENVIRONMENT.insert(HTTP_ENV[i].str, env == NULL ? "NULL" : env);
@@ -262,11 +262,11 @@ cgi::printHeaders() const
 {
 	dodoStringMap::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
-        #ifdef FCGI_EXT
+		#ifdef FCGI_EXT
 		if (cgiFastSet)
 			cf->print(i->first + ": " + i->second + "\r\n");
 		else
-        #endif
+		#endif
 		fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
 
 	if (cookiesSet.size() > 0)
@@ -274,7 +274,7 @@ cgi::printHeaders() const
 		std::list<__cookies>::const_iterator i(cookiesSet.begin()), j(cookiesSet.end());
 		for (; i != j; ++i)
 		{
-            #ifdef FCGI_EXT
+			#ifdef FCGI_EXT
 			if (cgiFastSet)
 			{
 				cf->print("Set-Cookie: ");
@@ -289,7 +289,7 @@ cgi::printHeaders() const
 					cf->print("secure");
 			}
 			else
-            #endif
+			#endif
 			{
 				fstd->writeStreamString("Set-Cookie: ");
 				fstd->writeStreamString(i->name + "=" + i->value + "; ");
@@ -305,14 +305,14 @@ cgi::printHeaders() const
 		}
 	}
 
-    #ifdef FCGI_EXT
+	#ifdef FCGI_EXT
 	if (cgiFastSet)
 	{
 		cf->print("\r\n\r\n");
 		cf->flush();
 	}
 	else
-    #endif
+	#endif
 	{
 		fstd->writeStreamString("\r\n\r\n");
 		fstd->flush();
@@ -337,11 +337,11 @@ cgi::makeContent()
 	for (unsigned long i = 0; i < iter; ++i)
 	{
 
-        #ifdef FCGI_EXT
+		#ifdef FCGI_EXT
 		if (cgiFastSet)
 			cf->read(cont, CONTENT_BATCH_SIZE);
 		else
-        #endif
+		#endif
 		if (fread(cont, CONTENT_BATCH_SIZE, 1, stdin) != CONTENT_BATCH_SIZE)
 			switch (errno)
 			{
@@ -437,11 +437,11 @@ cgi::makePost()
 				temp1 = i->find("\n", temp0);
 				file.type = i->substr(temp0, temp1 - temp0);
 
-                #ifndef __FreeBSD__
+				#ifndef __FreeBSD__
 
 				if (!postFilesInMem)
 
-                #endif
+				#endif
 				{
 					ptr = new char[pathLength];
 					strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
@@ -466,7 +466,7 @@ cgi::makePost()
 
 				file.error = POSTFILEERR_NONE;
 
-                #ifndef __FreeBSD__
+				#ifndef __FreeBSD__
 
 				if (postFilesInMem)
 				{
@@ -475,7 +475,7 @@ cgi::makePost()
 				}
 				else
 
-                #endif
+				#endif
 				{
 					file.fp = fdopen(fd, "w+");
 					free(ptr);
@@ -536,7 +536,7 @@ cgi::operator[](short method)
 
 dodoString
 cgi::request(const dodoString &varName,
-				  short first)
+			 short first)
 {
 	dodoString met0 = METHOD_GET[varName];
 	dodoString met1 = METHOD_POST[varName];
@@ -558,11 +558,11 @@ cgi::request(const dodoString &varName,
 
 void
 cgi::setCookie(const dodoString &name,
-					const dodoString &value,
-					const dodoString &exDate,
-					const dodoString &path,
-					const dodoString &domain,
-					bool secure)
+			   const dodoString &value,
+			   const dodoString &exDate,
+			   const dodoString &path,
+			   const dodoString &domain,
+			   bool secure)
 {
 	__cookies temp(secure);
 	temp.name = name;

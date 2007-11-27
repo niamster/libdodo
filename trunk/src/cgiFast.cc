@@ -29,11 +29,11 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 
-    #ifdef PTHREAD_EXT
+	#ifdef PTHREAD_EXT
 
 pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
 
-    #endif
+	#endif
 
 //-------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ cgiFast::cgiFast(cgiFast &cf)
 
 //-------------------------------------------------------------------
 
-    #ifdef PTHREAD_EXT
+	#ifdef PTHREAD_EXT
 
 cgiFast::cgiFast(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
@@ -122,14 +122,14 @@ cgiFast::cgiFast(bool a_threading,
 	FCGX_Init();
 }
 
-    #else
+	#else
 
 cgiFast::cgiFast()
 {
 	FCGX_Init();
 }
 
-    #endif
+	#endif
 
 //-------------------------------------------------------------------
 
@@ -148,7 +148,7 @@ cgiFast::setCGIFunction(cgiProc func)
 
 //-------------------------------------------------------------------
 
-    #ifdef PTHREAD_EXT
+	#ifdef PTHREAD_EXT
 
 void *
 cgiFast::stackThread(void *data)
@@ -172,14 +172,14 @@ cgiFast::stackThread(void *data)
 	return NULL;
 }
 
-    #endif
+	#endif
 
 //-------------------------------------------------------------------
 
 void
 cgiFast::listen()
 {
-        #ifdef PTHREAD_EXT
+		#ifdef PTHREAD_EXT
 	if (threading)
 	{
 		pthread_t *id = new pthread_t[threadsNum];
@@ -210,7 +210,7 @@ cgiFast::listen()
 			FCGX_Finish_r(&request);
 		}
 	}
-        #else
+		#else
 
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
@@ -226,7 +226,7 @@ cgiFast::listen()
 		FCGX_Finish_r(&request);
 	}
 
-        #endif
+		#endif
 }
 
 //-------------------------------------------------------------------

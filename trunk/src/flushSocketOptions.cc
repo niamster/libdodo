@@ -258,7 +258,7 @@ flushSocketOptions::setSockOption(short option,
 
 			break;
 
-        #ifdef SO_REUSEPORT
+		#ifdef SO_REUSEPORT
 
 		case SOCKET_REUSE_PORT:
 
@@ -266,7 +266,7 @@ flushSocketOptions::setSockOption(short option,
 
 			break;
 
-        #endif
+		#endif
 
 		default:
 

@@ -42,55 +42,55 @@ namespace dodo
 	{
 		private:
 
-		/**
-		 * copy constructor
-		 * to prevent copying
-		 */
-		systemThreadSharedDataGuard(systemThreadSharedDataGuard &sts);
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			systemThreadSharedDataGuard(systemThreadSharedDataGuard &sts);
 
 		public:
 
-		/**
-		 * constructor
-		 */
-		systemThreadSharedDataGuard();
+			/**
+			 * constructor
+			 */
+			systemThreadSharedDataGuard();
 
-		/**
-		 * destructor
-		 */
-		virtual ~systemThreadSharedDataGuard();
+			/**
+			 * destructor
+			 */
+			virtual ~systemThreadSharedDataGuard();
 
-		/**
-		 * sets data to became a shared
-		 * @param data describes data to be shared
-		 */
-		virtual void set(void *data);
+			/**
+			 * sets data to became a shared
+			 * @param data describes data to be shared
+			 */
+			virtual void set(void *data);
 
-		/**
-		 * sets shared data to NULL
-		 */
-		virtual void del();
+			/**
+			 * sets shared data to NULL
+			 */
+			virtual void del();
 
-		/**
-		 * lock and return shared data
-		 * @return data points on shared data or NULL in error case
-		 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
-		 * @note if microseconds==0 - infinite sleep
-		 */
-		virtual void *lock(unsigned long microseconds = 0);
+			/**
+			 * lock and return shared data
+			 * @return data points on shared data or NULL in error case
+			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
+			 * @note if microseconds==0 - infinite sleep
+			 */
+			virtual void *lock(unsigned long microseconds = 0);
 
 
-		/**
-		 * lock and return shared data
-		 */
-		virtual void unlock();
+			/**
+			 * lock and return shared data
+			 */
+			virtual void unlock();
 
 		protected:
 
-		void *data;                 ///< data that will be shared
-		pthread_mutex_t mutex;      ///< lock
+			void *data;             ///< data that will be shared
+			pthread_mutex_t mutex;  ///< lock
 
-		timespec timeout;           ///< timeout to lock mutex check
+			timespec timeout;       ///< timeout to lock mutex check
 	};
 
 };

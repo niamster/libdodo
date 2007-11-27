@@ -32,24 +32,24 @@ systemSharedData::systemSharedData(systemSharedData &sts)
 
 //-------------------------------------------------------------------
 
-systemSharedData::systemSharedData(const char   *a_key): data(NULL),
-														size(0)
+systemSharedData::systemSharedData(const char   *a_key) : data(NULL),
+														  size(0)
 {
 	if (a_key == NULL)
 	{
 		key = new char[33];
 		key[0] = '/';
-		tools::random(key+1, 31);
+		tools::random(key + 1, 31);
 		key[31] = '\0';
 	}
 	else
 	{
 		key = new char[strlen(a_key) + 2];
 		key[0] = '/';
-		strcpy(key+1, a_key);
+		strcpy(key + 1, a_key);
 	}
 
-	shm = shm_open(key, O_CREAT|O_RDWR, 0660);
+	shm = shm_open(key, O_CREAT | O_RDWR, 0660);
 }
 
 //-------------------------------------------------------------------
@@ -58,7 +58,7 @@ systemSharedData::~systemSharedData()
 {
 	if (data != NULL)
 		munmap(data, size);
-	
+
 	shm_unlink(key);
 }
 
@@ -68,17 +68,17 @@ void *
 systemSharedData::map(unsigned long size)
 {
 	unmap();
-	
+
 	if (shm <= 0)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	
+		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 	ftruncate(shm, sizeof(size));
-	
-	data = mmap(NULL, size, PROT_READ|PROT_WRITE, MAP_SHARED, shm, 0);
-	
+
+	data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm, 0);
+
 	if (data == MAP_FAILED)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	
+		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 	return data;
 }
 
@@ -89,8 +89,8 @@ systemSharedData::unmap()
 {
 	if (data != NULL)
 		if (munmap(data, size) == -1)
-			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_UNMAP, ERR_ERRNO, errno, strerror(errno),__LINE__,__FILE__);
-	
+			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_UNMAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 	data = NULL;
 	size = 0;
 }

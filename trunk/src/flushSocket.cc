@@ -78,7 +78,7 @@ flushSocket::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-    #ifdef DL_EXT
+	#ifdef DL_EXT
 
 int
 flushSocket::addPostExec(const dodoString &module,
@@ -108,7 +108,7 @@ flushSocket::addExec(const dodoString &module,
 	return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
 }
 
-    #endif
+	#endif
 
 #endif
 
@@ -203,10 +203,10 @@ flushSocket::connect(const dodoString &host,
 					 int port,
 					 flushSocketExchange &exchange)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_CONNECT;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (server)
 		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
@@ -251,9 +251,9 @@ flushSocket::connect(const dodoString &host,
 
 	socket = -1;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -273,10 +273,10 @@ flushSocket::connectFrom(const dodoString &local,
 						 int port,
 						 flushSocketExchange &exchange)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_CONNECT;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (server)
 		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
@@ -339,9 +339,9 @@ flushSocket::connectFrom(const dodoString &local,
 
 	socket = -1;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -360,10 +360,10 @@ void
 flushSocket::connect(const dodoString &path,
 					 flushSocketExchange &exchange)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (server)
 		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
@@ -387,9 +387,9 @@ flushSocket::connect(const dodoString &path,
 
 	socket = -1;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -399,10 +399,10 @@ flushSocket::bindNListen(const dodoString &host,
 						 int port,
 						 int numberOfConnections)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_BINDNLISTEN;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_LIBDODO, FLUSHSOCKET_CANNOT_BIND, FLUSHSOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
@@ -466,9 +466,9 @@ flushSocket::bindNListen(const dodoString &host,
 
 	opened = true;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 
 }
 
@@ -488,10 +488,10 @@ flushSocket::bindNListen(const dodoString &path,
 						 int numberOfConnections,
 						 bool force)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_LIBDODO, FLUSHSOCKET_CANNOT_BIND, FLUSHSOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
@@ -508,7 +508,7 @@ flushSocket::bindNListen(const dodoString &path,
 
 		opened = false;
 	}
-	
+
 	makeSocket();
 
 	if (force)
@@ -544,9 +544,9 @@ flushSocket::bindNListen(const dodoString &path,
 
 	opened = true;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -555,10 +555,10 @@ bool
 flushSocket::accept(__initialAccept &init,
 					__connInfo &info)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_ACCEPT;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_ACCEPT, FLUSHSOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
@@ -647,9 +647,9 @@ flushSocket::accept(__initialAccept &init,
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 
 	return true;
 }
@@ -659,10 +659,10 @@ flushSocket::accept(__initialAccept &init,
 bool
 flushSocket::accept(__initialAccept &init)
 {
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	operType = FLUSHSOCKET_OPER_ACCEPT;
 	performXExec(preExec);
-    #endif
+	#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_ACCEPT, FLUSHSOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
@@ -696,9 +696,9 @@ flushSocket::accept(__initialAccept &init)
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-    #ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef FLUSH_SOCKET_WO_XEXEC
 	performXExec(postExec);
-    #endif
+	#endif
 
 	return true;
 }

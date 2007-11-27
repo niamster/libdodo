@@ -45,11 +45,11 @@ namespace dodo
 		TOOLS_BADMAILAUTH,
 		TOOLS_WRONG_PARAMETHER,
 
-            #ifndef FAST
+			#ifndef FAST
 
 		TOOLS_DATA_TOO_LONG,
 
-            #endif
+			#endif
 
 		TOOLS_ARRAY_EMPTY
 	};
@@ -57,49 +57,49 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-        #define TOOLS_BAD_ASCII85_STR                       "Bad character in ASCII85."
+		#define TOOLS_BAD_ASCII85_STR                       "Bad character in ASCII85."
 
-        #ifdef BZIP2_EXT
+		#ifdef BZIP2_EXT
 
-            #define TOOLS_BAD_BZCOMPRESSION_STR             "Error occured during comression."
-            #define TOOLS_BAD_BZDECOMPRESSION_INIT_STR      "Error occured during preparations for decompression."
-            #define TOOLS_BAD_BZDECOMPRESSION_FINISH_STR    "Error occured during finishing decompression."
-            #define TOOLS_BAD_BZDECOMPRESSION_STR           "Error occured during decompression."
+			#define TOOLS_BAD_BZCOMPRESSION_STR             "Error occured during comression."
+			#define TOOLS_BAD_BZDECOMPRESSION_INIT_STR      "Error occured during preparations for decompression."
+			#define TOOLS_BAD_BZDECOMPRESSION_FINISH_STR    "Error occured during finishing decompression."
+			#define TOOLS_BAD_BZDECOMPRESSION_STR           "Error occured during decompression."
 
-        #endif
+		#endif
 
-        #define TOOLS_BADMAILHELO_STR                       "Error occurd while sending EHLO."
-        #define TOOLS_BADMAILAUTH_STR                       "Error during uthentification."
-        #define TOOLS_WRONG_PARAMETHER_STR                  "Wrong paramather passed to function."
-        #define TOOLS_DATA_TOO_LONG_STR                     "Data size is bigger than TOOLS_SHORT_DATA_SIZE."
-        #define TOOLS_ARRAY_EMPTY_STR                       "Array is empty."
+		#define TOOLS_BADMAILHELO_STR                       "Error occurd while sending EHLO."
+		#define TOOLS_BADMAILAUTH_STR                       "Error during uthentification."
+		#define TOOLS_WRONG_PARAMETHER_STR                  "Wrong paramather passed to function."
+		#define TOOLS_DATA_TOO_LONG_STR                     "Data size is bigger than TOOLS_SHORT_DATA_SIZE."
+		#define TOOLS_ARRAY_EMPTY_STR                       "Array is empty."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum toolsFunctionsID
 	{
-            #ifdef ICONV_EXT
+			#ifdef ICONV_EXT
 
 		TOOLS_CODESETCONVERSION,
 
-            #endif
+			#endif
 
-            #ifdef ZLIB_EXT
+			#ifdef ZLIB_EXT
 
 		TOOLS_ZCOMPRESS,
 		TOOLS_ZDECOMPRESS,
 
-            #endif
+			#endif
 
 		TOOLS_DECODEASCII85,
 
-            #ifdef BZIP2_EXT
+			#ifdef BZIP2_EXT
 
 		TOOLS_BZCOMPRESS,
 		TOOLS_BZDECOMPRESS,
 
-            #endif
+			#endif
 
 		TOOLS_MAIL,
 		TOOLS_SENDSHORTDATA,

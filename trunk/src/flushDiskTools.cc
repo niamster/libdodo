@@ -70,9 +70,9 @@ flushDiskTools::symlink(const dodoString &oldPath,
 
 			if (!S_ISLNK(st.st_mode))
 				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_SYMLINK, ERR_LIBDODO, FLUSHDISKTOOLS_WRONG_FILENAME, FLUSHDISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, newPath);
-		else
-		if (::unlink(newPath.c_str()) == -1)
-			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
+			else
+			if (::unlink(newPath.c_str()) == -1)
+				throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
 	}
 
 	if (::symlink(oldPath.c_str(), newPath.c_str()) == -1)
@@ -232,8 +232,8 @@ flushDiskTools::rm(const dodoString &path,
 	if (::lstat(path.c_str(), &st) == -1)
 		if (errno != ENOENT || !force)
 			throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-	else
-		return ;
+		else
+			return ;
 
 	if (!S_ISDIR(st.st_mode))
 	{
