@@ -29,4 +29,25 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 
+__image_init__::__image_init__() : initialized(false)
+{
+	if (IsMagickInstantiated() == MagickFalse)
+	{
+		initialized = true;
+		MagickCoreGenesis(NULL, MagicFalse);
+	}
+}
+
+//-------------------------------------------------------------------
+
+__image_init__::~__image_init__()
+{
+	if (initialized)
+		MagickCoreTerminus();
+}
+
+__image_init__ __image_init_object__;
+
+//-------------------------------------------------------------------
+
 #endif

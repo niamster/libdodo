@@ -31,15 +31,42 @@
 #include <libdodo/types.h>
 #include <libdodo/imageEx.h>
 
+#include <magick/MagickCore.h>
+
 namespace dodo
 {
-
 	/**
 	 * @class image for simple image manipulations
 	 */
 	class image
 	{
+		public:
+
 	};
+
+	/**
+	 * @class __image_init__ initializes image evironment
+	 */
+	class __image_init__
+	{
+		public:
+
+			/**
+			 * contructor
+			 */
+			__image_init__();
+
+			/**
+			 * destructor
+			 */
+			~__image_init__();
+
+		private:
+
+			bool initialized;     ///< indicates if environment was initialized in the object
+	};
+
+	extern __image_init__ __image_init_object__;
 };
 
 #endif
