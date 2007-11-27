@@ -7035,9 +7035,9 @@ fi
 
 		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\nIMAGEMAGICK\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
 	else
-		RESULT="$RESULT\nIMAGEMAGICK\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi
 
 # Checks for header files.
@@ -8163,7 +8163,7 @@ echo "${ECHO_T}$ac_cv_prog_gcc_traditional" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files Makefile tests/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/dbinterface_test/Makefile tests/disk_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/socketNB_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemThreads_test/Makefile tests/systemProcesses_test/Makefile tests/systemJobs_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec.module_test/Makefile tests/xml_test/Makefile"
+ac_config_files="$ac_config_files Makefile tests/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/dbinterface_test/Makefile tests/disk_test/Makefile tests/image_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/socketNB_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemThreads_test/Makefile tests/systemProcesses_test/Makefile tests/systemJobs_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec.module_test/Makefile tests/xml_test/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -8741,6 +8741,7 @@ do
     "tests/cgi_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/cgi_test/Makefile" ;;
     "tests/dbinterface_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/dbinterface_test/Makefile" ;;
     "tests/disk_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/disk_test/Makefile" ;;
+    "tests/image_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/image_test/Makefile" ;;
     "tests/glob_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/glob_test/Makefile" ;;
     "tests/mysql_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/mysql_test/Makefile" ;;
     "tests/postgresql_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/postgresql_test/Makefile" ;;

@@ -42,6 +42,33 @@ namespace dodo
 	{
 		public:
 
+			/**
+			 * contructor
+			 */
+			image();
+
+			/**
+			 * destructor
+			 */
+			~image();
+			
+			/**
+			 * reads image
+			 * @param path describes path to image
+			 */
+			void read(const dodoString &path);
+			
+			/**
+			 * writes image
+			 * @param path describes path to image
+			 */
+			void write(const dodoString &path);
+			
+		protected:
+			
+			ImageInfo *imInfoHandler;///< image info handler
+			Image *imHandler;///< image handler
+			ExceptionInfo *exInfoHandler;///< exception info handler
 	};
 
 	/**

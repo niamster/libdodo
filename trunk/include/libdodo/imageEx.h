@@ -39,7 +39,8 @@ namespace dodo
 	 */
 	enum imageFunctionsID
 	{
-		IMAGE_,
+		IMAGE_READ,
+		IMAGE_WRITE
 	};
 
 };

@@ -34,7 +34,7 @@ __image_init__::__image_init__() : initialized(false)
 	if (IsMagickInstantiated() == MagickFalse)
 	{
 		initialized = true;
-		MagickCoreGenesis(NULL, MagicFalse);
+		MagickCoreGenesis(NULL, MagickFalse);
 	}
 }
 
@@ -49,5 +49,47 @@ __image_init__::~__image_init__()
 __image_init__ __image_init_object__;
 
 //-------------------------------------------------------------------
+
+image::image()
+{
+	imInfoHandler = CloneImageInfo((ImageInfo *) NULL);
+	exInfoHandler = AcquireExceptionInfo();
+}
+
+//-------------------------------------------------------------------
+
+image::~image()
+{
+	DestroyImageInfo(imInfoHandler);
+	DestroyExceptionInfo(exInfoHandler);
+}
+
+//-------------------------------------------------------------------
+
+void
+image::read(const dodoString &str)
+{	
+	strcpy(imInfoHandler->filename, str.c_str());
+	
+	imHandler = ReadImage(imInfoHandler, exInfoHandler);
+	if (imHandler == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfoHandler->error_number, GetExceptionMessage(exInfoHandler->error_number), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+#include <iostream>
+
+void
+image::write(const dodoString &str)
+{	
+	strcpy(imHandler->filename, str.c_str());
+	
+	if (WriteImage(imInfoHandler, imHandler) == MagickFalse)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, imHandler->exception.error_number, GetExceptionMessage(imHandler->exception.error_number), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
 
 #endif

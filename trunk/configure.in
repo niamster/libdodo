@@ -336,9 +336,9 @@ fi
 		AC_CHECK_HEADER([magick/MagickCore.h])
 		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
-		RESULT="$RESULT\nIMAGEMAGICK\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
 	else
-		RESULT="$RESULT\nIMAGEMAGICK\t\t\t\t\t\tdisabled"
+		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi
 
 # Checks for header files.
@@ -366,6 +366,7 @@ AC_CONFIG_FILES([Makefile
                  tests/cgi_test/Makefile
                  tests/dbinterface_test/Makefile
                  tests/disk_test/Makefile
+                 tests/image_test/Makefile
                  tests/glob_test/Makefile
                  tests/mysql_test/Makefile
                  tests/postgresql_test/Makefile
