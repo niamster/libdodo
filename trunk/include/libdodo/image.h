@@ -36,6 +36,48 @@
 namespace dodo
 {
 	/**
+	 * @enum imageMappingEnum describes the order of pixels 
+	 */
+	enum imageMappingEnum
+	{
+		IMAGE_MAP_RGB,
+		IMAGE_MAP_RGBA,
+		IMAGE_MAP_CMYK
+	};
+	
+	/**
+	 * @enum imagePixelSizeEnum describes pixel's size
+	 */
+	enum imagePixelSizeEnum
+	{
+		IMAGE_PS_CHAR,///< 8 bits
+		IMAGE_PS_SHORT,///< 16 bits
+		IMAGE_PS_INT,///< 32(16 on some CPUs) bits
+		IMAGE_PS_LONG,///< 32(32 on some CPUs) bits
+		IMAGE_PS_FLOAT,///< 32 bits
+		IMAGE_PS_DOUBLE,///< 64 bits
+	};
+	
+	enum imageEncoderEnum
+	{
+		IMAGE_ENC_PNG,
+		IMAGE_ENC_JPEG,
+		IMAGE_ENC_RGB
+	};
+
+	/**
+	 * @struct __imageInfo defines image information 
+	 */
+	struct __imageInfo
+	{
+		void *data;///< 2D array of pixels
+		unsigned long width;///< width of the image
+		unsigned long height;///< height of the image
+		short mapping;///< type of mapping[see imageMappingEnum]
+		short pixelSize;///< type of pixel
+	};
+
+	/**
 	 * @class image for simple image manipulations
 	 */
 	class image
@@ -59,16 +101,53 @@ namespace dodo
 			void read(const dodoString &path);
 			
 			/**
+			 * reads image
+			 * @param info describes image info
+			 */
+			void read(const __imageInfo &info);
+			
+			/**
+			 * reads image
+			 * @param data describes image data
+			 * @param size describes image data size
+			 */
+			void read(const unsigned char * const data, unsigned long size);
+			
+			/**
 			 * writes image
 			 * @param path describes path to image
 			 */
 			void write(const dodoString &path);
 			
+			/**
+			 * writes image
+			 * @param data describes pointer to image
+			 * @param size describes size of data
+			 */
+			void write(const unsigned char *data, unsigned int &size);
+			
+			/**
+			 * @param encoder describes codec to encode image[see imageEncoderEnum]
+			 */
+			void setEncoder(short encoder);
+			
+			/**
+			 * @param width describes width of the image
+			 * @param height describes height of the image
+			 */
+			void scale(unsigned long width, unsigned long height);
+			
 		protected:
 			
-			ImageInfo *imInfoHandler;///< image info handler
-			Image *imHandler;///< image handler
-			ExceptionInfo *exInfoHandler;///< exception info handler
+			ImageInfo *imInfo;///< image info handler
+			Image *im;///< image handler
+			ExceptionInfo *exInfo;///< exception info handler
+		
+		private:
+			
+			static const __statements mappingStArr[3];///< image mapping statements
+			static const StorageType pixelSizeStArr[6];///< pixel type statements
+			static const __statements encoderStArr[6];///< image encoder
 	};
 
 	/**

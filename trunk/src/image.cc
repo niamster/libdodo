@@ -46,22 +46,56 @@ __image_init__::~__image_init__()
 		MagickCoreTerminus();
 }
 
+//-------------------------------------------------------------------
+
 __image_init__ __image_init_object__;
 
 //-------------------------------------------------------------------
 
-image::image()
+const __statements image::mappingStArr[] = 
 {
-	imInfoHandler = CloneImageInfo((ImageInfo *) NULL);
-	exInfoHandler = AcquireExceptionInfo();
+	"RGB",
+	"RGBA",
+	"CMYK"
+};
+
+//-------------------------------------------------------------------
+
+const StorageType image::pixelSizeStArr[] = 
+{
+	CharPixel,
+	ShortPixel,
+	IntegerPixel,
+	LongPixel,
+	FloatPixel,
+	DoublePixel
+};
+
+//-------------------------------------------------------------------
+
+const __statements image::encoderStArr[] = 
+{
+	"PNG",
+	"JPEG",
+	"RGB"
+};
+
+//-------------------------------------------------------------------
+
+image::image() : im(NULL)
+{
+	imInfo = CloneImageInfo((ImageInfo *) NULL);
+	exInfo = AcquireExceptionInfo();
 }
 
 //-------------------------------------------------------------------
 
 image::~image()
 {
-	DestroyImageInfo(imInfoHandler);
-	DestroyExceptionInfo(exInfoHandler);
+	if (im != NULL)
+		DestroyImage(im);
+	DestroyImageInfo(imInfo);
+	DestroyExceptionInfo(exInfo);
 }
 
 //-------------------------------------------------------------------
@@ -69,27 +103,90 @@ image::~image()
 void
 image::read(const dodoString &str)
 {	
-	strcpy(imInfoHandler->filename, str.c_str());
+	strcpy(imInfo->filename, str.c_str());
 	
-	imHandler = ReadImage(imInfoHandler, exInfoHandler);
-	if (imHandler == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfoHandler->error_number, GetExceptionMessage(exInfoHandler->error_number), __LINE__, __FILE__);
+	im = ReadImage(imInfo, exInfo);
+	if (im == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
-#include <iostream>
+void 
+image::read(const unsigned char * const data, 
+		unsigned long size)
+{
+	im = BlobToImage(imInfo, data, size, exInfo);
+	if (im == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);	
+}
+
+//-------------------------------------------------------------------
+
+void
+image::read(const __imageInfo &info)
+{
+	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr)/sizeof(__statements) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr)/sizeof(StorageType))
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_LIBDODO, IMAGE_BADINFO, IMAGE_BADINFO_STR, __LINE__, __FILE__);
+	
+	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping].str, pixelSizeStArr[info.pixelSize], info.data, exInfo);
+	if (im == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
 
 void
 image::write(const dodoString &str)
 {	
-	strcpy(imHandler->filename, str.c_str());
+	strcpy(im->filename, str.c_str());
 	
-	if (WriteImage(imInfoHandler, imHandler) == MagickFalse)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, imHandler->exception.error_number, GetExceptionMessage(imHandler->exception.error_number), __LINE__, __FILE__);
+	if (WriteImage(imInfo, im) == MagickFalse)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, im->exception.error_number, GetExceptionMessage(im->exception.error_number), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
+void
+image::write(const unsigned char *data, 
+			unsigned int &size)
+{	
+	data = ImageToBlob(imInfo, im, &size, exInfo);
+	if (data == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void 
+image::setEncoder(short encoder)
+{
+	if (encoder < 0 || encoder >= sizeof(encoderStArr)/sizeof(__statements))
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_SETENCODER, ERR_LIBDODO, IMAGE_BADINFO, IMAGE_BADINFO_STR, __LINE__, __FILE__);
+	
+	FormatMagickString(imInfo->filename, MaxTextExtent, "%.1024s:", encoderStArr[encoder].str );
+	SetImageInfo(imInfo, MagickTrue, exInfo);
+	
+	if (*imInfo->magick == '\0')
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_SETENCODER, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void 
+image::scale(unsigned long width, 
+		unsigned long height)
+{
+	Image *image = ScaleImage(im, width, height, exInfo);
+	
+	if (image == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_SCALE, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+	
+	if (im != NULL)
+		DestroyImage(im);
+	im = image;
+}
+
+//-------------------------------------------------------------------
 
 #endif

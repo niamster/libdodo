@@ -35,12 +35,27 @@ namespace dodo
 	 */
 
 	/**
+	 * libdodo defined errors
+	 */
+	enum imageFunctionsExR
+	{
+		IMAGE_BADINFO
+	};
+
+	/**
+	 * libdodo defined errors' explanation
+	 */
+	#define IMAGE_BADINFO_STR "Bad information for image was provided."
+
+	/**
 	 * ID of function where exception was thrown
 	 */
 	enum imageFunctionsID
 	{
 		IMAGE_READ,
-		IMAGE_WRITE
+		IMAGE_WRITE,
+		IMAGE_SETENCODER,
+		IMAGE_SCALE
 	};
 
 };

@@ -13,7 +13,17 @@ int main(int argc, char **argv)
 		image im;
 
 		im.read("test.png");
+		im.scale(1000, 1000);
+		
 		im.write("test.jpg");
+		
+		unsigned char *img; unsigned int size;
+		im.setEncoder(IMAGE_ENC_RGB);
+		im.write(img, size);
+		
+		im.write("test.bmp");
+		
+		cout << size << endl;
 	}
 	catch(baseEx ex)
 	{
