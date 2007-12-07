@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/dbSqlite.h>
-#include <libdodo/flushDiskTools.h>
+#include <libdodo/ioDiskTools.h>
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 		try
 		{
 			
-			flushDiskTools::unlink("test.lite",true);
+			ioDiskTools::unlink("test.lite",true);
 			
 			__dbInfo info;
 			
@@ -27,19 +27,19 @@ int main(int argc, char **argv)
 	
 			__fieldInfo fi;
 			fi.name = "date";
-			fi.type = FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 			
 			__tableInfo ti;
 			ti.name = "leg";
 			ti.fields.push_back(fi);
 			
 			fi.name = "operation";
-			fi.type = FIELDTYPE_TEXT;		
+			fi.type = DBBASE_FIELDTYPE_TEXT;		
 			ti.fields.push_back(fi);
 			
 			fi.name = "id";
-			fi.type = FIELDTYPE_INTEGER;
-			fi.flag = FIELDPROP_AUTO_INCREMENT;
+			fi.type = DBBASE_FIELDTYPE_INTEGER;
+			fi.flag = DBBASE_FIELDPROP_AUTO_INCREMENT;
 			ti.fields.push_back(fi);		
 			
 			pp.createTable(ti);

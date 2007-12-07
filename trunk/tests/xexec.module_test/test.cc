@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/flushSTD.h>
+#include <libdodo/ioSTD.h>
 
 #include <iostream>
 
@@ -11,11 +11,11 @@ int main(int argc, char **argv)
 
 	try
 	{
-		flushSTD st;
+		ioSTD st;
 
 		st.outSize = sizeof(int);
 		
-		//cout << flushSTD::getModuleInfo("./module").name;
+		//cout << ioSTD::getModuleInfo("./module").name;
 		
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 		
 		cout << endl << st.buffer << endl;
 		
-		st.flush();
+		st.io();
 	}
 	catch(baseEx ex)
 	{

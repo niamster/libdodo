@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/flushSTD.h>
-#include <libdodo/flushSocketTools.h>
+#include <libdodo/ioSTD.h>
+#include <libdodo/ioSocketTools.h>
 
 #include <iostream>
 
@@ -12,8 +12,8 @@ hook(void *base,
 	short int type, 
 	void *yep)
 {
-	flushSTD *st = (flushSTD *)base;
-	if (st->operType == FLUSHSTD_OPER_WRITE)
+	ioSTD *st = (ioSTD *)base;
+	if (st->operType == IOSTD_OPER_WRITE)
 	{
 		char q[100];
 		int *a;
@@ -28,10 +28,10 @@ int main(int argc, char **argv)
 
 	try
 	{
-		cout << flushSocketTools::getHostInfo("niam.mu").name << endl;
-		cout << flushSTD::inputterInfo().host << endl;
+		cout << ioSocketTools::getHostInfo("niam.mu").name << endl;
+		cout << ioSTD::inputterInfo().host << endl;
 		
-		flushSTD st;
+		ioSTD st;
 		//st.block(true);
 		int pos = st.addPreExec(&hook,NULL);
 		//st.outSTDBuffer = 2;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	
 		int a = 10;
 		st.write((char *)&a);
-		st.flush();
+		st.io();
 		
 		dodoString o;
 		

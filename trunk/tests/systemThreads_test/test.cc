@@ -22,14 +22,14 @@ thread(void *data)
 	{
 		cout << (char *)shC.get(shCI);
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
-		cout.flush();
+		cout.io();
 		
 		int timeout = *(int *)sh.lock();
 		systemTools::sleep(timeout);
 		sh.unlock();
 		
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
-		cout.flush();
+		cout.io();
 	}
 	catch(baseEx ex)
 	{
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 		
 		cout << endl << endl << "STARTED" << endl;
 		cout << timeTools::now() << endl;
-		cout.flush();
+		cout.io();
 		
 		th.wait();
 		

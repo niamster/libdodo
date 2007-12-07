@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSTD.h
+ *            ioSTD.h
  *
  *  Tue Nov 15 21:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSTD_H_
-#define _FLUSHSTD_H_
+#ifndef _IOSTD_H_
+#define _IOSTD_H_
 
 #include <fcntl.h>
 #include <sys/un.h>
@@ -34,34 +34,34 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/tools.h>
-#include <libdodo/flushSTDEx.h>
+#include <libdodo/ioSTDEx.h>
 #include <libdodo/types.h>
-#include <libdodo/flush.h>
-#include <libdodo/flushSocket.h>
+#include <libdodo/io.h>
+#include <libdodo/ioSocket.h>
 
 namespace dodo
 {
 	/**
-	 * @enum flushSTDOperationTypeEnum describes type of operation for hook
+	 * @enum ioSTDOperationTypeEnum describes type of operation for hook
 	 */
-	enum flushSTDOperationTypeEnum
+	enum ioSTDOperationTypeEnum
 	{
-		FLUSHSTD_OPER_READ,
-		FLUSHSTD_OPER_WRITE,
-		FLUSHSTD_OPER_READSTREAM,
-		FLUSHSTD_OPER_WRITESTREAM,
-		FLUSHSTD_OPER_OPEN,
-		FLUSHSTD_OPER_CLOSE
+		IOSTD_OPER_READ,
+		IOSTD_OPER_WRITE,
+		IOSTD_OPER_READSTREAM,
+		IOSTD_OPER_WRITESTREAM,
+		IOSTD_OPER_OPEN,
+		IOSTD_OPER_CLOSE
 	};
 
 	/**
-	 * @class flushSTD performs actions with stdin/out.
+	 * @class ioSTD performs actions with stdin/out.
 	 * @note it's usefull when you are using in/out operations through some proxy -> for example inetd!
 	 */
 
-	class flushSTD : public flush
+	class ioSTD : public io
 
-	#ifndef FLUSH_STD_WO_XEXEC
+	#ifndef IO_STD_WO_XEXEC
 					 , public xexec
 	#endif
 
@@ -73,19 +73,19 @@ namespace dodo
 			 * constructor
 			 * to prevent from copying
 			 */
-			flushSTD(flushSTD &fd);
+			ioSTD(ioSTD &fd);
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			flushSTD();
+			ioSTD();
 
 			/**
 			 * destructor
 			 */
-			virtual ~flushSTD();
+			virtual ~ioSTD();
 
 			/**
 			 * @return info about source of inputting
@@ -93,7 +93,7 @@ namespace dodo
 			 */
 			static __connInfo inputterInfo();
 
-			#ifndef FLUSH_STD_WO_XEXEC
+			#ifndef IO_STD_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -210,10 +210,10 @@ namespace dodo
 			writeStream(const char * const data);
 
 			/**
-			 * flushes to output
+			 * ioes to output
 			 */
 			virtual void
-			flush();
+			io();
 
 			/**
 			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer

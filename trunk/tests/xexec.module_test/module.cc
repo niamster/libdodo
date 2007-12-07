@@ -1,5 +1,5 @@
 #include <libdodo/xexec.h>
-#include <libdodo/flushSTD.h>
+#include <libdodo/ioSTD.h>
 
 #include <string.h>
 #include <iostream>
@@ -14,12 +14,12 @@ extern "C"
 		xexecObjTypeEnum type,
 		void *yep)
 	{
-		if (type == XEXECOBJ_FLUSHSTD)
+		if (type == XEXECOBJ_IOSTD)
 		{
-			std::cout << "flushSTD module\t";
+			std::cout << "ioSTD module\t";
 			
-			flushSTD *st = (flushSTD *)base;
-			if (st->operType == FLUSHSTD_OPER_WRITE)
+			ioSTD *st = (ioSTD *)base;
+			if (st->operType == IOSTD_OPER_WRITE)
 			{
 				char q[100];
 				int *a;

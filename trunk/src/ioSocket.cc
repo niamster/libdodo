@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocket.cc
+ *            ioSocket.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -21,19 +21,19 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/flushSocket.h>
+#include <libdodo/ioSocket.h>
 
 using namespace dodo;
 
-flushSocket::flushSocket(flushSocket &fs)
+ioSocket::ioSocket(ioSocket &fs)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushSocket::flushSocket(bool a_server,
+ioSocket::ioSocket(bool a_server,
 						 short a_family,
-						 short a_type) : flushSocketOptions(a_family, a_type),
+						 short a_type) : ioSocketOptions(a_family, a_type),
 										 blockInherited(false),
 										 server(a_server)
 {
@@ -43,7 +43,7 @@ flushSocket::flushSocket(bool a_server,
 
 //-------------------------------------------------------------------
 
-flushSocket::~flushSocket()
+ioSocket::~ioSocket()
 {
 	if (socket != -1)
 	{
@@ -58,22 +58,22 @@ flushSocket::~flushSocket()
 
 //-------------------------------------------------------------------
 
-#ifndef FLUSH_SOCKET_WO_XEXEC
+#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 
 int
-flushSocket::addPostExec(inExec func,
+ioSocket::addPostExec(inExec func,
 						 void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+	return _addPostExec(func, (void *)this, XEXECOBJ_IOSOCKET, data);
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSocket::addPreExec(inExec func,
+ioSocket::addPreExec(inExec func,
 						void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKET, data);
+	return _addPreExec(func, (void *)this, XEXECOBJ_IOSOCKET, data);
 }
 
 //-------------------------------------------------------------------
@@ -81,31 +81,31 @@ flushSocket::addPreExec(inExec func,
 	#ifdef DL_EXT
 
 int
-flushSocket::addPostExec(const dodoString &module,
+ioSocket::addPostExec(const dodoString &module,
 						 void             *data,
 						 void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
+	return _addPostExec(module, (void *)this, XEXECOBJ_IOSOCKET, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSocket::addPreExec(const dodoString &module,
+ioSocket::addPreExec(const dodoString &module,
 						void             *data,
 						void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
+	return _addPreExec(module, (void *)this, XEXECOBJ_IOSOCKET, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 xexecCounts
-flushSocket::addExec(const dodoString &module,
+ioSocket::addExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKET, data, toInit);
+	return _addExec(module, (void *)this, XEXECOBJ_IOSOCKET, data, toInit);
 }
 
 	#endif
@@ -115,7 +115,7 @@ flushSocket::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-flushSocket::restoreOptions()
+ioSocket::restoreOptions()
 {
 	setInBufferSize(inSocketBuffer);
 	setOutBufferSize(outSocketBuffer);
@@ -131,14 +131,14 @@ flushSocket::restoreOptions()
 //-------------------------------------------------------------------
 
 void
-flushSocket::makeSocket()
+ioSocket::makeSocket()
 {
 	if (socket != -1)
 	{
 		::shutdown(socket, SHUT_RDWR);
 
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 	}
@@ -147,19 +147,19 @@ flushSocket::makeSocket()
 
 	switch (family)
 	{
-		case PROTO_FAMILY_IPV4:
+		case IOSOCKETOPTIONS_PROTO_FAMILY_IPV4:
 
 			real_domain = PF_INET;
 
 			break;
 
-		case PROTO_FAMILY_IPV6:
+		case IOSOCKETOPTIONS_PROTO_FAMILY_IPV6:
 
 			real_domain = PF_INET6;
 
 			break;
 
-		case PROTO_FAMILY_UNIX_SOCKET:
+		case IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET:
 
 			real_domain = PF_UNIX;
 
@@ -167,18 +167,18 @@ flushSocket::makeSocket()
 
 		default:
 
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKESOCKET, ERR_LIBDODO, FLUSHSOCKET_WRONG_PARAMETHER, FLUSHSOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKESOCKET, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	switch (type)
 	{
-		case TRANSFER_TYPE_STREAM:
+		case IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM:
 
 			real_type = SOCK_STREAM;
 
 			break;
 
-		case TRANSFER_TYPE_DATAGRAM:
+		case IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM:
 
 			real_type = SOCK_DGRAM;
 
@@ -186,12 +186,12 @@ flushSocket::makeSocket()
 
 		default:
 
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKESOCKET, ERR_LIBDODO, FLUSHSOCKET_WRONG_PARAMETHER, FLUSHSOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKESOCKET, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	socket = ::socket(real_domain, real_type, 0);
 	if (socket == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	restoreOptions();
 }
@@ -199,21 +199,21 @@ flushSocket::makeSocket()
 //-------------------------------------------------------------------
 
 void
-flushSocket::connect(const dodoString &host,
+ioSocket::connect(const dodoString &host,
 					 int port,
-					 flushSocketExchange &exchange)
+					 ioSocketExchange &exchange)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKET_OPER_CONNECT;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT;
 	performXExec(preExec);
 	#endif
 
 	if (server)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
 
 	makeSocket();
 
-	if (family == PROTO_FAMILY_IPV6)
+	if (family == IOSOCKETOPTIONS_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
@@ -227,7 +227,7 @@ flushSocket::connect(const dodoString &host,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 	else
@@ -242,7 +242,7 @@ flushSocket::connect(const dodoString &host,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 
@@ -251,7 +251,7 @@ flushSocket::connect(const dodoString &host,
 
 	socket = -1;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -259,8 +259,8 @@ flushSocket::connect(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-flushSocket::connect(const __connInfo &destinaton,
-					 flushSocketExchange &exchange)
+ioSocket::connect(const __connInfo &destinaton,
+					 ioSocketExchange &exchange)
 {
 	connect(destinaton.host, destinaton.port, exchange);
 }
@@ -268,28 +268,28 @@ flushSocket::connect(const __connInfo &destinaton,
 //-------------------------------------------------------------------
 
 void
-flushSocket::connectFrom(const dodoString &local,
+ioSocket::connectFrom(const dodoString &local,
 						 const dodoString &host,
 						 int port,
-						 flushSocketExchange &exchange)
+						 ioSocketExchange &exchange)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKET_OPER_CONNECT;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT;
 	performXExec(preExec);
 	#endif
 
 	if (server)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
 
 	makeSocket();
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
 
-	if (family == PROTO_FAMILY_IPV6)
+	if (family == IOSOCKETOPTIONS_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
@@ -299,7 +299,7 @@ flushSocket::connectFrom(const dodoString &local,
 		inet_pton(AF_INET6, local.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		sa.sin6_port = htons(port);
 		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
@@ -309,7 +309,7 @@ flushSocket::connectFrom(const dodoString &local,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 	else
@@ -320,7 +320,7 @@ flushSocket::connectFrom(const dodoString &local,
 		inet_aton(local.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(), &sa.sin_addr);
@@ -330,7 +330,7 @@ flushSocket::connectFrom(const dodoString &local,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 
@@ -339,7 +339,7 @@ flushSocket::connectFrom(const dodoString &local,
 
 	socket = -1;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -347,9 +347,9 @@ flushSocket::connectFrom(const dodoString &local,
 //-------------------------------------------------------------------
 
 void
-flushSocket::connectFrom(const dodoString &local,
+ioSocket::connectFrom(const dodoString &local,
 						 const __connInfo &destinaton,
-						 flushSocketExchange &exchange)
+						 ioSocketExchange &exchange)
 {
 	connectFrom(local, destinaton.host, destinaton.port, exchange);
 }
@@ -357,16 +357,16 @@ flushSocket::connectFrom(const dodoString &local,
 //-------------------------------------------------------------------
 
 void
-flushSocket::connect(const dodoString &path,
-					 flushSocketExchange &exchange)
+ioSocket::connect(const dodoString &path,
+					 ioSocketExchange &exchange)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT_UNIX;
 	performXExec(preExec);
 	#endif
 
 	if (server)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_CONNECT, FLUSHSOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
 	makeSocket();
 
 	struct sockaddr_un sa;
@@ -379,7 +379,7 @@ flushSocket::connect(const dodoString &path,
 		::close(socket);
 		socket = -1;
 
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	exchange.blocked = blocked;
@@ -387,7 +387,7 @@ flushSocket::connect(const dodoString &path,
 
 	socket = -1;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -395,25 +395,25 @@ flushSocket::connect(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
-flushSocket::bindNListen(const dodoString &host,
+ioSocket::bindNListen(const dodoString &host,
 						 int port,
 						 int numberOfConnections)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKET_OPER_BINDNLISTEN;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_BINDNLISTEN;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_LIBDODO, FLUSHSOCKET_CANNOT_BIND, FLUSHSOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
 
 	if (opened)
 	{
 		if (::shutdown(socket, SHUT_RDWR) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 
@@ -424,13 +424,13 @@ flushSocket::bindNListen(const dodoString &host,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
 
-	setLingerSockOption(SOCKET_LINGER_OPTION, SOCKET_LINGER_PERIOD);
+	setLingerSockOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
 
-	if (family == PROTO_FAMILY_IPV6)
+	if (family == IOSOCKETOPTIONS_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
@@ -443,7 +443,7 @@ flushSocket::bindNListen(const dodoString &host,
 			inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
@@ -457,16 +457,16 @@ flushSocket::bindNListen(const dodoString &host,
 			inet_pton(AF_INET, host.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	if (type == TRANSFER_TYPE_STREAM)
+	if (type == IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM)
 		if (::listen(socket, numberOfConnections) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	opened = true;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 
@@ -475,7 +475,7 @@ flushSocket::bindNListen(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-flushSocket::bindNListen(const __connInfo &destinaton,
+ioSocket::bindNListen(const __connInfo &destinaton,
 						 int numberOfConnections)
 {
 	bindNListen(destinaton.host, destinaton.port, numberOfConnections);
@@ -484,25 +484,25 @@ flushSocket::bindNListen(const __connInfo &destinaton,
 //-------------------------------------------------------------------
 
 void
-flushSocket::bindNListen(const dodoString &path,
+ioSocket::bindNListen(const dodoString &path,
 						 int numberOfConnections,
 						 bool force)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKET_OPER_CONNECT_UNIX;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT_UNIX;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_LIBDODO, FLUSHSOCKET_CANNOT_BIND, FLUSHSOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
 
 	if (opened)
 	{
 		if (::shutdown(socket, SHUT_RDWR) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 
@@ -518,16 +518,16 @@ flushSocket::bindNListen(const dodoString &path,
 			if (S_ISSOCK(st.st_mode))
 				::unlink(path.c_str());
 			else
-				throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_MAKEUNIXSOCKET, ERR_LIBDODO, FLUSHSOCKET_WRONG_FILENAME, FLUSHSOCKET_WRONG_FILENAME_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKEUNIXSOCKET, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_FILENAME, IOIOSOCKETOPTIONS_SOCKET_WRONG_FILENAME_STR, __LINE__, __FILE__);
 	}
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
 
-	setLingerSockOption(SOCKET_LINGER_OPTION, SOCKET_LINGER_PERIOD);
+	setLingerSockOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
 
 	struct sockaddr_un sa;
 
@@ -535,16 +535,16 @@ flushSocket::bindNListen(const dodoString &path,
 	sa.sun_family = AF_UNIX;
 
 	if (::bind(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::listen(socket, numberOfConnections) == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	unixSock = path;
 
 	opened = true;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -552,18 +552,18 @@ flushSocket::bindNListen(const dodoString &path,
 //-------------------------------------------------------------------
 
 bool
-flushSocket::accept(__initialAccept &init,
+ioSocket::accept(__initialAccept &init,
 					__connInfo &info)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKET_OPER_ACCEPT;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_ACCEPT;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_ACCEPT, FLUSHSOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
 
-	if (type != TRANSFER_TYPE_STREAM)
+	if (type != IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
 		init.type = type;
@@ -575,14 +575,14 @@ flushSocket::accept(__initialAccept &init,
 	}
 
 	if (!opened)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_ACCEPT_WO_BIND, FLUSHSOCKET_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
 
 	int sock(-1);
 	info.host.clear();
 
 	switch (family)
 	{
-		case PROTO_FAMILY_IPV4:
+		case IOSOCKETOPTIONS_PROTO_FAMILY_IPV4:
 		{
 			struct sockaddr_in sa;
 			socklen_t len = sizeof(sockaddr_in);
@@ -593,7 +593,7 @@ flushSocket::accept(__initialAccept &init,
 				if (errno == EAGAIN)
 					return false;
 				else
-					throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			char temp[INET_ADDRSTRLEN];
@@ -604,7 +604,7 @@ flushSocket::accept(__initialAccept &init,
 
 			break;
 
-		case PROTO_FAMILY_IPV6:
+		case IOSOCKETOPTIONS_PROTO_FAMILY_IPV6:
 		{
 			struct sockaddr_in6 sa;
 			socklen_t len = sizeof(sockaddr_in6);
@@ -616,7 +616,7 @@ flushSocket::accept(__initialAccept &init,
 				if (errno == EAGAIN)
 					return false;
 				else
-					throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			char temp[INET6_ADDRSTRLEN];
@@ -626,19 +626,19 @@ flushSocket::accept(__initialAccept &init,
 		}
 			break;
 
-		case PROTO_FAMILY_UNIX_SOCKET:
+		case IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET:
 			sock = ::accept(socket, NULL, NULL);
 			if (sock == -1)
 			{
 				if (errno == EAGAIN)
 					return false;
 				else
-					throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 			break;
 
 		default:
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_WRONG_PARAMETHER, FLUSHSOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	init.socket = sock;
@@ -647,7 +647,7 @@ flushSocket::accept(__initialAccept &init,
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 
@@ -657,17 +657,17 @@ flushSocket::accept(__initialAccept &init,
 //-------------------------------------------------------------------
 
 bool
-flushSocket::accept(__initialAccept &init)
+ioSocket::accept(__initialAccept &init)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKET_OPER_ACCEPT;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_ACCEPT;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_CANNOT_ACCEPT, FLUSHSOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
 
-	if (type != TRANSFER_TYPE_STREAM)
+	if (type != IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
 		init.type = type;
@@ -679,7 +679,7 @@ flushSocket::accept(__initialAccept &init)
 	}
 
 	if (!opened)
-		throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_LIBDODO, FLUSHSOCKET_ACCEPT_WO_BIND, FLUSHSOCKET_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
 
 	int sock = ::accept(socket, NULL, NULL);
 	if (sock == -1)
@@ -687,7 +687,7 @@ flushSocket::accept(__initialAccept &init)
 		if (errno == EAGAIN)
 			return false;
 		else
-			throw baseEx(ERRMODULE_FLUSHSOCKET, FLUSHSOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	init.socket = sock;
@@ -696,7 +696,7 @@ flushSocket::accept(__initialAccept &init)
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 

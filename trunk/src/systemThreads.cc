@@ -24,7 +24,7 @@
 
 #include <libdodo/systemThreads.h>
 
-#ifdef PTHREAD_EXT
+#ifdef PSYSTEMTHREADS_EXT
 
 using namespace dodo;
 
@@ -67,19 +67,19 @@ systemThreads::~systemThreads()
 
 		switch (i->action)
 		{
-			case THREAD_KEEP_ALIVE:
+			case SYSTEMTHREADS_KEEP_ALIVE:
 
 				pthread_detach(i->thread);
 
 				break;
 
-			case THREAD_STOP:
+			case SYSTEMTHREADS_STOP:
 
 				pthread_cancel(i->thread);
 
 				break;
 
-			case THREAD_WAIT:
+			case SYSTEMTHREADS_WAIT:
 			default:
 
 				pthread_join(i->thread, NULL);
@@ -106,7 +106,7 @@ unsigned long
 systemThreads::add(jobFunc func,
 				   void    *data)
 {
-	return add(func, data, false, THREAD_WAIT, 2097152);
+	return add(func, data, false, SYSTEMTHREADS_WAIT, 2097152);
 }
 
 //-------------------------------------------------------------------
@@ -269,9 +269,9 @@ systemThreads::run(unsigned long position,
 			throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADS_RUN, ERR_LIBDODO, SYSTEMTHREADS_ISALREADYRUNNING, SYSTEMTHREADS_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 		if (current->detached)
-			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+			pthread_attr_setdetachstate(&attr, PSYSTEMTHREADS_CREATE_DETACHED);
 		else
-			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+			pthread_attr_setdetachstate(&attr, PSYSTEMTHREADS_CREATE_JOINABLE);
 
 		errno = pthread_attr_setstacksize(&attr, current->stackSize);
 		if (errno != 0)
@@ -584,7 +584,7 @@ unsigned long
 systemThreads::addNRun(jobFunc func,
 					   void    *data)
 {
-	return addNRun(func, data, 1, false, THREAD_WAIT, 2097152);
+	return addNRun(func, data, 1, false, SYSTEMTHREADS_WAIT, 2097152);
 }
 
 //-------------------------------------------------------------------
@@ -612,9 +612,9 @@ systemThreads::addNRun(threadFunc func,
 		#endif
 
 	if (detached)
-		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+		pthread_attr_setdetachstate(&attr, PSYSTEMTHREADS_CREATE_DETACHED);
 	else
-		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+		pthread_attr_setdetachstate(&attr, PSYSTEMTHREADS_CREATE_JOINABLE);
 
 	errno = pthread_attr_setstacksize(&attr, stackSize);
 	if (errno != 0)

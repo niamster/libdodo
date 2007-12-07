@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbInterface.cc
+ *            db.cc
  *
  *  Sun Jan  15 19:45:19 2005
  *  Copyright  2005  Ni@m
@@ -21,17 +21,17 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/dbInterface.h>
+#include <libdodo/db.h>
 
 using namespace dodo;
 
-dbInterface::dbInterface() : connected(false)
+db::db() : connected(false)
 {
 }
 
 //-------------------------------------------------------------------
 
-dbInterface::~dbInterface()
+db::~db()
 {
 }
 

@@ -38,19 +38,19 @@ int main(int argc, char **argv)
 	
 			__fieldInfo fi;
 			fi.name = "date";
-			fi.type = FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 			
 			__tableInfo ti;
 			ti.name = "leg";
 			ti.fields.push_back(fi);
 			
 			fi.name = "operation";
-			fi.type = FIELDTYPE_TEXT;		
+			fi.type = DBBASE_FIELDTYPE_TEXT;		
 			ti.fields.push_back(fi);
 			
 			fi.name = "id";
-			fi.type = FIELDTYPE_INTEGER;
-			fi.flag = FIELDPROP_NULL;
+			fi.type = DBBASE_FIELDTYPE_INTEGER;
+			fi.flag = DBBASE_FIELDPROP_NULL;
 			ti.fields.push_back(fi);		
 			
 			pp.createTable(ti);

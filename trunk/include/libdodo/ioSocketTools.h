@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocket.h
+ *            ioSocket.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSOCKETTOOLS_H_
-#define _FLUSHSOCKETTOOLS_H_
+#ifndef _IOSOCKETTOOLS_H_
+#define _IOSOCKETTOOLS_H_
 
 #include <libdodo/directives.h>
 
@@ -36,7 +36,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/flushSocketToolsEx.h>
+#include <libdodo/ioSocketToolsEx.h>
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
 
@@ -78,10 +78,10 @@ namespace dodo
 	};
 
 	/**
-	 * @class flushSocket performs communication actions!!
-	 * exchange of data is flushSocketExchange class' task; ou init it with connect or accept methods
+	 * @class ioSocket performs communication actions!!
+	 * exchange of data is ioSocketExchange class' task; ou init it with connect or accept methods
 	 */
-	class flushSocketTools
+	class ioSocketTools
 
 	{
 

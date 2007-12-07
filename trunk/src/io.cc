@@ -1,8 +1,8 @@
 /***************************************************************************
- *            flushNBAEx.h
+ *            io.cc
  *
- *  Thu Sep 09 03:41:24 2006
- *  Copyright  2006  Ni@m
+ *  Tue Oct 11 00:19:57 2005
+ *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,28 +21,18 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHNBAEX_H_
-#define _FLUSHNBAEX_H_
+#include <libdodo/io.h>
 
-#include <libdodo/directives.h>
+using namespace dodo;
 
-#include <libdodo/baseEx.h>
-
-namespace dodo
+io::io() : inSize(INSIZE),
+				 outSize(OUTSIZE),
+				 opened(false)
 {
-	/**
-	 * next for flushNBA
-	 */
+}
 
-	/**
-	 * ID of function where exception was thrown
-	 */
-	enum flushNBAFunctionsID
-	{
-		FLUSHNBA_ISREADABLE,
-		FLUSHNBA_ISWRITABLE,
-	};
+//-------------------------------------------------------------------
 
-};
-
-#endif
+io::~io()
+{
+}

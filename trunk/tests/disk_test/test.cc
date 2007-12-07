@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/flushDisk.h>
-#include <libdodo/flushDiskTools.h>
+#include <libdodo/ioDisk.h>
+#include <libdodo/ioDiskTools.h>
 
 #include <iostream>
 
@@ -12,18 +12,18 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		//cout << flushDiskTools::getFileContent("test.cc");
-		//flushDiskTools::copy("test.cc","test.cc.copy",true);
-		//flushDiskTools::copy("/tmp","./",true);
-		/*dodoStringArr arr = flushDiskTools::getFileContentArr("test.cc");
+		//cout << ioDiskTools::getFileContent("test.cc");
+		//ioDiskTools::copy("test.cc","test.cc.copy",true);
+		//ioDiskTools::copy("/tmp","./",true);
+		/*dodoStringArr arr = ioDiskTools::getFileContentArr("test.cc");
 		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
 		}*/
-		//flushDiskTools::copy("/root","./tmp",true);
-		//flushDiskTools::copy("/root","./tmp/",true);
-		//flushDiskTools::unlink("my.dat");
+		//ioDiskTools::copy("/root","./tmp",true);
+		//ioDiskTools::copy("/root","./tmp/",true);
+		//ioDiskTools::unlink("my.dat");
 	}
 	catch(baseEx ex)
 	{
@@ -35,47 +35,47 @@ int main(int argc, char **argv)
 	}
 	try
 	{
-		flushDiskTools::unlink("my.dat");
+		ioDiskTools::unlink("my.dat");
 		
-		//flushDisk flush("my.dat", FLUSHDISKTOOLS_FILETYPE_FIFO_FILE);
-		flushDisk flush("my.dat");
+		//ioDisk io("my.dat", IODISKTOOLS_FILETYPE_FIFO_FILE);
+		ioDisk io("my.dat");
 		
-		//flush.inSize = flush.outSize = 13;
-		flush.over = true;
+		//io.inSize = io.outSize = 13;
+		io.over = true;
 		
-//		flush.append = true;
+//		io.append = true;
 		
-		flush.writeStreamString("!1234567890#!!");
-//		flush.writeStreamString("!1234567890-!!");
-//		flush.writeStreamString("!1234567890@!!");
-		flush.writeStreamString("!1234567890$!!");
+		io.writeStreamString("!1234567890#!!");
+//		io.writeStreamString("!1234567890-!!");
+//		io.writeStreamString("!1234567890@!!");
+		io.writeStreamString("!1234567890$!!");
 
 
 		
 		dodoString str;
 	
-		flush.readStreamString(str,0);
+		io.readStreamString(str,0);
 		cout << "\n\n" << str << "\n\n";
 
-		flush.readString(str,0);
+		io.readString(str,0);
 		cout << "\n\n" << str << "\n\n";
 
 	
-		flushDiskTools::rm("./tmp");
+		ioDiskTools::rm("./tmp");
 
-		flushDiskTools::mkdir("testDir");//,FLUSHDISKTOOLS_PERM_OWNER_ALL_ACCESS,false);
+		ioDiskTools::mkdir("testDir");//,IODISKTOOLS_PERM_OWNER_ALL_ACCESS,false);
 
-		flushDiskTools::rename("testDir","DirTest");	
+		ioDiskTools::rename("testDir","DirTest");	
 		
-		flushDiskTools::symlink("test","TEST");
-		flushDiskTools::chmod("test",FLUSHDISKTOOLS_PERM_ALL_ALL_ACCESS);
+		ioDiskTools::symlink("test","TEST");
+		ioDiskTools::chmod("test",IODISKTOOLS_PERM_ALL_ALL_ACCESS);
 		
-		cout << flushDiskTools::getPermissions("Makefile");
+		cout << ioDiskTools::getPermissions("Makefile");
 		
 		cout << endl; 
 
 
-		dodoArray<__fileInfo> dir = flushDiskTools::getDirInfo("/");
+		dodoArray<__fileInfo> dir = ioDiskTools::getDirInfo("/");
 		
 		if (dir.size() > 0)
 		{

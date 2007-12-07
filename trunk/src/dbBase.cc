@@ -183,14 +183,14 @@ dbBase::select(const dodoString &a_table,
 			   const dodoStringArr &a_fieldsNames,
 			   const dodoString &a_where)
 {
-	qType = DBREQUEST_SELECT;
+	qType = DBBASE_REQUEST_SELECT;
 
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBADDREQUEST_WHERE);
+		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -203,7 +203,7 @@ void
 dbBase::insert(const dodoString &a_table,
 			   const dodoStringMap &a_fields)
 {
-	qType = DBREQUEST_INSERT;
+	qType = DBBASE_REQUEST_INSERT;
 
 	pre_table = a_table;
 
@@ -229,7 +229,7 @@ void
 dbBase::insert(const dodoString &a_table,
 			   const dodoArray<dodoStringMap> &a_fields)
 {
-	qType = DBREQUEST_INSERT;
+	qType = DBBASE_REQUEST_INSERT;
 
 	pre_table = a_table;
 
@@ -265,7 +265,7 @@ dbBase::insert(const dodoString &a_table,
 			   const dodoStringArr &a_fieldsVal,
 			   const dodoStringArr &a_fieldsNames)
 {
-	qType = DBREQUEST_INSERT;
+	qType = DBBASE_REQUEST_INSERT;
 
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
@@ -284,7 +284,7 @@ dbBase::insert(const dodoString &a_table,
 			   const dodoArray<dodoStringArr> &a_fieldsVal,
 			   const dodoStringArr &a_fieldsNames)
 {
-	qType = DBREQUEST_INSERT;
+	qType = DBBASE_REQUEST_INSERT;
 
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
@@ -306,7 +306,7 @@ dbBase::insertSelect(const dodoString &a_tableTo,
 					 const dodoStringArr &a_fieldsNamesFrom,
 					 const dodoString &a_where)
 {
-	qType = DBREQUEST_INSERT_SELECT;
+	qType = DBBASE_REQUEST_INSERT_SELECT;
 
 	pre_tableTo = a_tableTo;
 	pre_table = a_tableFrom;
@@ -318,7 +318,7 @@ dbBase::insertSelect(const dodoString &a_tableTo,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBADDREQUEST_WHERE);
+		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -331,7 +331,7 @@ dbBase::update(const dodoString &a_table,
 			   const dodoStringMap &a_fields,
 			   const dodoString &a_where)
 {
-	qType = DBREQUEST_UPDATE;
+	qType = DBBASE_REQUEST_UPDATE;
 
 	pre_table = a_table;
 
@@ -351,7 +351,7 @@ dbBase::update(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBADDREQUEST_WHERE);
+		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -366,7 +366,7 @@ dbBase::update(const dodoString &a_table,
 			   const dodoStringArr &a_fieldsNames,
 			   const dodoString &a_where)
 {
-	qType = DBREQUEST_UPDATE;
+	qType = DBBASE_REQUEST_UPDATE;
 
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
@@ -377,7 +377,7 @@ dbBase::update(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBADDREQUEST_WHERE);
+		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -390,13 +390,13 @@ void
 dbBase::del(const dodoString &a_table,
 			const dodoString &a_where)
 {
-	qType = DBREQUEST_DELETE;
+	qType = DBBASE_REQUEST_DELETE;
 
 	pre_table = a_table;
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBADDREQUEST_WHERE);
+		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -418,7 +418,7 @@ dbBase::subquery(const dodoStringArr &sub,
 void
 dbBase::truncate(const dodoString &table)
 {
-	qType = DBREQUEST_TRUNCATE;
+	qType = DBBASE_REQUEST_TRUNCATE;
 	pre_table = table;
 	show = false;
 }
@@ -429,7 +429,7 @@ void
 dbBase::renameDb(const dodoString &db,
 				 const dodoString &to_db)
 {
-	qType = DBREQUEST_RENAME_DB;
+	qType = DBBASE_REQUEST_RENAME_DB;
 	pre_order = db;
 	pre_having = to_db;
 	show = false;
@@ -441,7 +441,7 @@ void
 dbBase::renameTable(const dodoString &table,
 					const dodoString &to_table)
 {
-	qType = DBREQUEST_RENAME_TABLE;
+	qType = DBBASE_REQUEST_RENAME_TABLE;
 	pre_table = table;
 	pre_having = to_table;
 	show = false;
@@ -454,7 +454,7 @@ dbBase::createIndex(const dodoString &table,
 					const dodoString &field,
 					const dodoString &name)
 {
-	qType = DBREQUEST_CREATE_INDEX;
+	qType = DBBASE_REQUEST_CREATE_INDEX;
 	pre_table = table;
 	pre_fieldsNames.push_back(field);
 	pre_having = name;
@@ -468,7 +468,7 @@ dbBase::createIndex(const dodoString &table,
 					const dodoStringArr &fields,
 					const dodoString &name)
 {
-	qType = DBREQUEST_CREATE_INDEX;
+	qType = DBBASE_REQUEST_CREATE_INDEX;
 	pre_table = table;
 	pre_fieldsNames = fields;
 	pre_having = name;
@@ -481,7 +481,7 @@ void
 dbBase::deleteIndex(const dodoString &table,
 					const dodoString &field)
 {
-	qType = DBREQUEST_DELETE_INDEX;
+	qType = DBBASE_REQUEST_DELETE_INDEX;
 	pre_table = table;
 	pre_having = field;
 	show = false;
@@ -494,7 +494,7 @@ dbBase::renameField(const dodoString &field,
 					const dodoString &to_field,
 					const dodoString &table)
 {
-	qType = DBREQUEST_RENAME_FIELD;
+	qType = DBBASE_REQUEST_RENAME_FIELD;
 	pre_tableTo = field;
 	pre_having = to_field;
 	pre_table = table;
@@ -506,7 +506,7 @@ dbBase::renameField(const dodoString &field,
 void
 dbBase::deleteDb(const dodoString &db)
 {
-	qType = DBREQUEST_DELETE_DB;
+	qType = DBBASE_REQUEST_DELETE_DB;
 	pre_order = db;
 	show = false;
 }
@@ -516,7 +516,7 @@ dbBase::deleteDb(const dodoString &db)
 void
 dbBase::deleteTable(const dodoString &table)
 {
-	qType = DBREQUEST_DELETE_TABLE;
+	qType = DBBASE_REQUEST_DELETE_TABLE;
 	pre_table = table;
 	show = false;
 }
@@ -527,7 +527,7 @@ void
 dbBase::deleteField(const dodoString &field,
 					const dodoString &table)
 {
-	qType = DBREQUEST_DELETE_FIELD;
+	qType = DBBASE_REQUEST_DELETE_FIELD;
 	pre_tableTo = field;
 	pre_table = table;
 	show = false;
@@ -539,7 +539,7 @@ void
 dbBase::createDb(const dodoString &db,
 				 const dodoString &charset)
 {
-	qType = DBREQUEST_CREATE_DB;
+	qType = DBBASE_REQUEST_CREATE_DB;
 	pre_order = db;
 	pre_having = charset;
 	show = false;
@@ -550,7 +550,7 @@ dbBase::createDb(const dodoString &db,
 void
 dbBase::createTable(__tableInfo &tableInfo)
 {
-	qType = DBREQUEST_CREATE_TABLE;
+	qType = DBBASE_REQUEST_CREATE_TABLE;
 	pre_tableInfo = tableInfo;
 	show = false;
 }
@@ -561,7 +561,7 @@ void
 dbBase::createField(__fieldInfo &row,
 					const dodoString &table)
 {
-	qType = DBREQUEST_CREATE_FIELD;
+	qType = DBBASE_REQUEST_CREATE_FIELD;
 	pre_fieldInfo = row;
 	pre_table = table;
 	show = false;
@@ -574,7 +574,7 @@ dbBase::where(const dodoString &where)
 {
 	pre_where = where;
 
-	addFlag(qShift, 1 << DBADDREQUEST_WHERE);
+	addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
@@ -582,7 +582,7 @@ dbBase::where(const dodoString &where)
 void
 dbBase::limit(unsigned int a_number)
 {
-	addFlag(qShift, 1 << DBADDREQUEST_LIMIT);
+	addFlag(qShift, 1 << DBBASE_ADDREQUEST_LIMIT);
 
 	pre_limNumber = stringTools::lToString(a_number);
 }
@@ -591,7 +591,7 @@ dbBase::limit(unsigned int a_number)
 void
 dbBase::offset(unsigned int a_number)
 {
-	addFlag(qShift, 1 << DBADDREQUEST_OFFSET);
+	addFlag(qShift, 1 << DBBASE_ADDREQUEST_OFFSET);
 
 	pre_limOffset = stringTools::lToString(a_number);
 }
@@ -603,7 +603,7 @@ dbBase::order(const dodoString &order)
 {
 	pre_order = order;
 
-	addFlag(qShift, 1 << DBADDREQUEST_ORDERBY);
+	addFlag(qShift, 1 << DBBASE_ADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -613,7 +613,7 @@ dbBase::group(const dodoString &group)
 {
 	pre_group = group;
 
-	addFlag(qShift, 1 << DBADDREQUEST_GROUPBY);
+	addFlag(qShift, 1 << DBBASE_ADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -623,7 +623,7 @@ dbBase::having(const dodoString &having)
 {
 	pre_having = having;
 
-	addFlag(qShift, 1 << DBADDREQUEST_HAVING);
+	addFlag(qShift, 1 << DBBASE_ADDREQUEST_HAVING);
 }
 
 
@@ -632,7 +632,7 @@ dbBase::having(const dodoString &having)
 void
 dbBase::unwhere()
 {
-	removeFlag(qShift, 1 << DBADDREQUEST_WHERE);
+	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
@@ -640,7 +640,7 @@ dbBase::unwhere()
 void
 dbBase::unlimit()
 {
-	removeFlag(qShift, 1 << DBADDREQUEST_LIMIT);
+	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_LIMIT);
 }
 
 //-------------------------------------------------------------------
@@ -648,7 +648,7 @@ dbBase::unlimit()
 void
 dbBase::unoffset()
 {
-	removeFlag(qShift, 1 << DBADDREQUEST_OFFSET);
+	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_OFFSET);
 }
 
 //-------------------------------------------------------------------
@@ -656,7 +656,7 @@ dbBase::unoffset()
 void
 dbBase::unorder()
 {
-	removeFlag(qShift, 1 << DBADDREQUEST_ORDERBY);
+	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -664,7 +664,7 @@ dbBase::unorder()
 void
 dbBase::ungroup()
 {
-	removeFlag(qShift, 1 << DBADDREQUEST_GROUPBY);
+	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -672,7 +672,7 @@ dbBase::ungroup()
 void
 dbBase::unhaving()
 {
-	removeFlag(qShift, 1 << DBADDREQUEST_HAVING);
+	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_HAVING);
 }
 
 
@@ -713,11 +713,11 @@ dbBase::setAddSelSt(unsigned int statement)
 {
 	switch (statement)
 	{
-		case DBREQUEST_SELECT_DISTINCT:
-		case DBREQUEST_SELECT_ALL:
+		case DBBASE_REQUEST_SELECT_DISTINCT:
+		case DBBASE_REQUEST_SELECT_ALL:
 
-			removeFlag(qSelShift, 1 << DBREQUEST_SELECT_ALL);
-			removeFlag(qSelShift, 1 << DBREQUEST_SELECT_DISTINCT);
+			removeFlag(qSelShift, 1 << DBBASE_REQUEST_SELECT_ALL);
+			removeFlag(qSelShift, 1 << DBBASE_REQUEST_SELECT_DISTINCT);
 
 			break;
 

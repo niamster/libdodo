@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushDisk.h
+ *            ioDisk.h
  *
  *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHDISK_H_
-#define _FLUSHDISK_H_
+#ifndef _IODISK_H_
+#define _IODISK_H_
 
 #include <libdodo/directives.h>
 
@@ -31,67 +31,67 @@
 #include <sys/stat.h>
 
 #include <libdodo/tools.h>
-#include <libdodo/flushDiskTools.h>
-#include <libdodo/flushDiskEx.h>
+#include <libdodo/ioDiskTools.h>
+#include <libdodo/ioDiskEx.h>
 #include <libdodo/types.h>
-#include <libdodo/flush.h>
+#include <libdodo/io.h>
 
 namespace dodo
 {
 	/**
-	 * @enum flushDiskOperationTypeEnum describes type of operation for hook
+	 * @enum ioDiskOperationTypeEnum describes type of operation for hook
 	 */
-	enum flushDiskOperationTypeEnum
+	enum ioDiskOperationTypeEnum
 	{
-		FLUSHDISK_OPER_READ,
-		FLUSHDISK_OPER_WRITE,
-		FLUSHDISK_OPER_READSTREAM,
-		FLUSHDISK_OPER_WRITESTREAM,
-		FLUSHDISK_OPER_OPEN,
-		FLUSHDISK_OPER_CLOSE
+		IODISK_OPER_READ,
+		IODISK_OPER_WRITE,
+		IODISK_OPER_READSTREAM,
+		IODISK_OPER_WRITESTREAM,
+		IODISK_OPER_OPEN,
+		IODISK_OPER_CLOSE
 	};
 
 	/**
-	 * @enum flushDiskModesEnum descibes modes to open file
+	 * @enum ioDiskModesEnum descibes modes to open file
 	 */
-	enum flushDiskModesEnum
+	enum ioDiskModesEnum
 	{
-		FLUSHDISK_OPENMODE_READ_ONLY,             ///< error if not exists file
-		FLUSHDISK_OPENMODE_READ_WRITE,            ///< creates if not exists
-		FLUSHDISK_OPENMODE_READ_WRITE_TRUNCATE,   ///< if exists=truncates
-		FLUSHDISK_OPENMODE_APPEND                 ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
+		IODISK_OPENMODE_READ_ONLY,             ///< error if not exists file
+		IODISK_OPENMODE_READ_WRITE,            ///< creates if not exists
+		IODISK_OPENMODE_READ_WRITE_TRUNCATE,   ///< if exists=truncates
+		IODISK_OPENMODE_APPEND                 ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
 	};
 
 	/**
-	 * @enum flushDiskFileToCreateEnum describes file type you can create
+	 * @enum ioDiskFileToCreateEnum describes file type you can create
 	 */
-	enum flushDiskFileToCreateEnum
+	enum ioDiskFileToCreateEnum
 	{
-		FLUSHDISK_FILETYPE_REG_FILE,  ///< regular file
-		FLUSHDISK_FILETYPE_TMP_FILE,  ///< temporary file. will be deleted after you exit program(or close it)
-		FLUSHDISK_FILETYPE_FIFO_FILE, ///< FIFO file
-		FLUSHDISK_FILETYPE_CHAR_FILE  ///< CHAR file
+		IODISK_FILETYPE_REG_FILE,  ///< regular file
+		IODISK_FILETYPE_TMP_FILE,  ///< temporary file. will be deleted after you exit program(or close it)
+		IODISK_FILETYPE_FIFO_FILE, ///< FIFO file
+		IODISK_FILETYPE_CHAR_FILE  ///< CHAR file
 	};
 
 	/**
-	 * @class flushDisk allows disk I/O manipulations
+	 * @class ioDisk allows disk I/O manipulations
 	 */
 
-	class flushDisk : public flush
+	class ioDisk : public io
 
-	#ifndef FLUSH_DISK_WO_XEXEC
+	#ifndef IO_DISK_WO_XEXEC
 					  , public xexec
 	#endif
 
 	{
-			friend class flushSocket;
+			friend class ioSocket;
 
 		private:
 
 			/**
 			 * cosrtructor prevents from copyin'
 			 */
-			flushDisk(flushDisk &fd);
+			ioDisk(ioDisk &fd);
 
 		public:
 
@@ -102,14 +102,14 @@ namespace dodo
 			 * @param mode defines mode to open file 
 			 * @note if type == TMP_FILE, u don't have to specify path
 			 */
-			flushDisk(const dodoString &path = __dodostring__, short fileType = FLUSHDISK_FILETYPE_REG_FILE, short mode = FLUSHDISK_OPENMODE_READ_WRITE);
+			ioDisk(const dodoString &path = __dodostring__, short fileType = IODISK_FILETYPE_REG_FILE, short mode = IODISK_OPENMODE_READ_WRITE);
 
 			/**
 			 * destructor
 			 */
-			virtual ~flushDisk();
+			virtual ~ioDisk();
 
-			#ifndef FLUSH_DISK_WO_XEXEC
+			#ifndef IO_DISK_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -253,10 +253,10 @@ namespace dodo
 			erase(unsigned long pos);
 			
 			/**
-			 * flushes to disk
+			 * ioes to disk
 			 */
 			virtual void
-			flush();
+			io();
 
 			bool over;  ///< indicates whether overwrite or not; if you want to write to nonempty node error will be occured; for files, tmp_files only
 			bool append;    ///< if true, will append to the end of the file, even pos is set.

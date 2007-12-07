@@ -53,9 +53,9 @@ namespace dodo
 	 */
 	enum systemProcessOnDestructEnum
 	{
-		PROCESS_KEEP_ALIVE,
-		PROCESS_STOP, ///< send SIGINT to process
-		PROCESS_WAIT
+		SYSTEMPROCESS_KEEP_ALIVE,
+		SYSTEMPROCESS_STOP, ///< send SIGINT to process
+		SYSTEMPROCESS_WAIT
 	};
 
 	/**
@@ -150,7 +150,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
 			 */
-			virtual unsigned long addNRun(processFunc func, void *data, unsigned long limit = 1, short action = PROCESS_WAIT);
+			virtual unsigned long addNRun(processFunc func, void *data, unsigned long limit = 1, short action = SYSTEMPROCESS_WAIT);
 
 			/**
 			 * adds function to became a job[not executing]
@@ -158,7 +158,7 @@ namespace dodo
 			 * @param func indicates function to be executed
 			 * @param data describes data to be passed to func
 			 * @note func must not call `exit` family call
-			 * action=PROCESS_WAIT
+			 * action=SYSTEMPROCESS_WAIT
 			 */
 			virtual unsigned long add(jobFunc func, void *data);
 
@@ -169,7 +169,7 @@ namespace dodo
 			 * @param data describes data to be passed to func
 			 * @note func must not call `exit` family call
 			 * limit=1
-			 * action=PROCESS_WAIT
+			 * action=SYSTEMPROCESS_WAIT
 			 */
 			virtual unsigned long addNRun(jobFunc func, void *data);
 
@@ -193,7 +193,7 @@ namespace dodo
 			 * @note - exception if it's currently running
 			 */
 			virtual void
-			replace(unsigned long position, processFunc func, void *data, bool force = false, short action = PROCESS_WAIT);
+			replace(unsigned long position, processFunc func, void *data, bool force = false, short action = SYSTEMPROCESS_WAIT);
 
 			/**
 			 * executes process

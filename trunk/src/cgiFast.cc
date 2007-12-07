@@ -29,9 +29,9 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 
-	#ifdef PTHREAD_EXT
+	#ifdef PSYSTEMTHREADS_EXT
 
-pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t cgiFast::accept = PSYSTEMTHREADS_MUTEX_INITIALIZER;
 
 	#endif
 
@@ -67,7 +67,7 @@ cgiFastSTD::~cgiFastSTD()
 //-------------------------------------------------------------------
 
 void
-cgiFastSTD::flush()
+cgiFastSTD::io()
 {
 	FCGX_FFlush(request->out);
 }
@@ -105,7 +105,7 @@ cgiFast::cgiFast(cgiFast &cf)
 
 //-------------------------------------------------------------------
 
-	#ifdef PTHREAD_EXT
+	#ifdef PSYSTEMTHREADS_EXT
 
 cgiFast::cgiFast(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
@@ -114,7 +114,7 @@ cgiFast::cgiFast(bool a_threading,
 	pthread_mutexattr_t attr;
 
 	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+	pthread_mutexattr_settype(&attr, PSYSTEMTHREADS_MUTEX_ERRORCHECK);
 	pthread_mutex_init(&accept, &attr);
 
 	pthread_mutexattr_destroy(&attr);
@@ -148,7 +148,7 @@ cgiFast::setCGIFunction(cgiProc func)
 
 //-------------------------------------------------------------------
 
-	#ifdef PTHREAD_EXT
+	#ifdef PSYSTEMTHREADS_EXT
 
 void *
 cgiFast::stackThread(void *data)
@@ -179,7 +179,7 @@ cgiFast::stackThread(void *data)
 void
 cgiFast::listen()
 {
-		#ifdef PTHREAD_EXT
+		#ifdef PSYSTEMTHREADS_EXT
 	if (threading)
 	{
 		pthread_t *id = new pthread_t[threadsNum];

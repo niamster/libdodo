@@ -29,12 +29,12 @@ process(void *data)
 		cout << (char *)dg.lock();dg.unlock();
 
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
-		cout.flush();
+		cout.io();
 		
 		systemTools::sleep(10);
 		
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
-		cout.flush();
+		cout.io();
 	}
 	catch(baseEx ex)
 	{
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 		
 		cout << endl << endl << "STARTED" << endl;
 		cout << timeTools::now() << endl;
-		cout.flush();
+		cout.io();
 		
 		pr.wait();
 		

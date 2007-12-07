@@ -1,8 +1,8 @@
 /***************************************************************************
- *            flush.cc
+ *            ioNBAEx.h
  *
- *  Tue Oct 11 00:19:57 2005
- *  Copyright  2005  Ni@m
+ *  Thu Sep 09 03:41:24 2006
+ *  Copyright  2006  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,18 +21,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/flush.h>
+#ifndef _IONBAEX_H_
+#define _IONBAEX_H_
 
-using namespace dodo;
+#include <libdodo/directives.h>
 
-flush::flush() : inSize(INSIZE),
-				 outSize(OUTSIZE),
-				 opened(false)
+#include <libdodo/baseEx.h>
+
+namespace dodo
 {
-}
+	/**
+	 * next for ioNBA
+	 */
 
-//-------------------------------------------------------------------
+	/**
+	 * ID of function where exception was thrown
+	 */
+	enum ioNBAFunctionsID
+	{
+		IONBA_ISREADABLE,
+		IONBA_ISWRITABLE,
+	};
 
-flush::~flush()
-{
-}
+};
+
+#endif

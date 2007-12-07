@@ -49,7 +49,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/flushSocketOptions.h>
+#include <libdodo/ioSocketOptions.h>
 #include <libdodo/toolsEx.h>
 #include <libdodo/types.h>
 

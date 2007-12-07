@@ -1,8 +1,8 @@
 #include <libdodo/tools.h>
-#include <libdodo/flushDisk.h>
+#include <libdodo/ioDisk.h>
 #include <libdodo/baseEx.h>
-#include <libdodo/flushDiskTools.h>
-#include <libdodo/flushSocket.h>
+#include <libdodo/ioDiskTools.h>
+#include <libdodo/ioSocket.h>
 
 #include <iostream>
 
@@ -32,36 +32,36 @@ int main(int argc, char **argv)
  			
 		cout << endl;
 
-		//tools::mail("127.0.0.1",PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com", "test", "test");
+		//tools::mail("127.0.0.1",IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,25,"niam.niam@gmail.com","root@winerrorfixer.com", "test", "test");
 		
-		baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,&baseHandler,NULL);
-		if(!baseEx::setErrorHandler(ERRMODULE_FLUSHDISK,"./module",NULL))
+		baseEx::setErrorHandler(ERRMODULE_IODISK,&baseHandler,NULL);
+		if(!baseEx::setErrorHandler(ERRMODULE_IODISK,"./module",NULL))
 			cout << "WTF";
 		
-		cout << flushDiskTools::getFileContent("test.cc");
+		cout << ioDiskTools::getFileContent("test.cc");
 		
 		
 		for (register int i(0);i<10000;++i)
-			tools::codesetConversion(flushDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
+			tools::codesetConversion(ioDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
 		
-		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		cout << tools::zCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		cout << ioDiskTools::getFileContent("Makefile").size() << endl;
+		cout << tools::zCompress(ioDiskTools::getFileContent("Makefile"),9).size() << endl;
 	
-		cout << tools::zDecompress(tools::zCompress(flushDiskTools::getFileContent("test.cc")));
+		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContent("test.cc")));
 		
 		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
 		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
 		
-		cout << "real size of test is : " << flushDiskTools::getSize("test") << endl;
+		cout << "real size of test is : " << ioDiskTools::getSize("test") << endl;
 		
 		cout << tools::encodeASCII85("HEY, that's working!") << endl;
 		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's working!")) << endl;
-		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(flushDiskTools::getFileContent("test")).size() << endl;
+		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(ioDiskTools::getFileContent("test")).size() << endl;
 		
 		cout << tools::encodeBase64("HEY, that's working!") << endl;
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
 		cout << tools::decodeBase64("PDQxMjg3NjA3ODEuMTMzODQ4NjJAd2luZXJyb3JmaXhlci5jb20+") << endl;
-		cout << "size of test base64-encoded : " <<  tools::encodeBase64(flushDiskTools::getFileContent("test")).size() << endl;
+		cout << "size of test base64-encoded : " <<  tools::encodeBase64(ioDiskTools::getFileContent("test")).size() << endl;
 		
 		dodoString tt = "ftp://hihi:hoho@niam.mu:32/init.cgi?gonivo=true&work=true";
 
@@ -73,10 +73,10 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).protocol << endl;
 		cout << tools::parseURL(tt).request << endl;
 
-		cout << flushDiskTools::getFileContent("Makefile").size() << endl;
-		cout << tools::bzCompress(flushDiskTools::getFileContent("Makefile"),9).size() << endl;
+		cout << ioDiskTools::getFileContent("Makefile").size() << endl;
+		cout << tools::bzCompress(ioDiskTools::getFileContent("Makefile"),9).size() << endl;
 		for (int i(0);i<10000;++i)
-			tools::bzDecompress(tools::bzCompress(flushDiskTools::getFileContent("Makefile"),9));
+			tools::bzDecompress(tools::bzCompress(ioDiskTools::getFileContent("Makefile"),9));
 			
 		dodoString t = "abcddF";
 		stringTools::replace("cd","WW",t);

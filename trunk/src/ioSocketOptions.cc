@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocketOptions.cc
+ *            ioSocketOptions.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -21,19 +21,19 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/flushSocketOptions.h>
+#include <libdodo/ioSocketOptions.h>
 
 using namespace dodo;
 
-flushSocketOptions::flushSocketOptions(short a_family,
+ioSocketOptions::ioSocketOptions(short a_family,
 									   short a_type) : family(a_family),
 													   type(a_type),
-													   lingerOpts(SOCKET_LINGER_OPTION),
-													   lingerSeconds(SOCKET_LINGER_PERIOD),
+													   lingerOpts(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION),
+													   lingerSeconds(IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD),
 													   inTimeout(RECIEVE_TIMEOUT),
 													   outTimeout(SEND_TIMEOUT),
-													   inSocketBuffer(SOCKET_INSIZE),
-													   outSocketBuffer(SOCKET_OUTSIZE),
+													   inSocketBuffer(IOSOCKETOPTIONS_SOCKET_INSIZE),
+													   outSocketBuffer(IOSOCKETOPTIONS_SOCKET_OUTSIZE),
 													   socket(-1),
 													   blocked(true)
 {
@@ -41,12 +41,12 @@ flushSocketOptions::flushSocketOptions(short a_family,
 
 //-------------------------------------------------------------------
 
-flushSocketOptions::flushSocketOptions() : lingerOpts(SOCKET_LINGER_OPTION),
-										   lingerSeconds(SOCKET_LINGER_PERIOD),
+ioSocketOptions::ioSocketOptions() : lingerOpts(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION),
+										   lingerSeconds(IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD),
 										   inTimeout(RECIEVE_TIMEOUT),
 										   outTimeout(SEND_TIMEOUT),
-										   inSocketBuffer(SOCKET_INSIZE),
-										   outSocketBuffer(SOCKET_OUTSIZE),
+										   inSocketBuffer(IOSOCKETOPTIONS_SOCKET_INSIZE),
+										   outSocketBuffer(IOSOCKETOPTIONS_SOCKET_OUTSIZE),
 										   socket(-1),
 										   blocked(true)
 {
@@ -54,14 +54,14 @@ flushSocketOptions::flushSocketOptions() : lingerOpts(SOCKET_LINGER_OPTION),
 
 //-------------------------------------------------------------------
 
-flushSocketOptions::~flushSocketOptions()
+ioSocketOptions::~ioSocketOptions()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSocketOptions::getInDescriptor() const
+ioSocketOptions::getInDescriptor() const
 {
 	return socket;
 }
@@ -69,7 +69,7 @@ flushSocketOptions::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-flushSocketOptions::getOutDescriptor() const
+ioSocketOptions::getOutDescriptor() const
 {
 	return socket;
 }
@@ -77,7 +77,7 @@ flushSocketOptions::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 bool
-flushSocketOptions::isBlocked() const
+ioSocketOptions::isBlocked() const
 {
 	return blocked;
 }
@@ -85,11 +85,11 @@ flushSocketOptions::isBlocked() const
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::block(bool flag)
+ioSocketOptions::block(bool flag)
 {
 	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (flag)
 		block &= ~O_NONBLOCK;
@@ -97,7 +97,7 @@ flushSocketOptions::block(bool flag)
 		block |= O_NONBLOCK;
 
 	if (fcntl(socket, F_SETFL, block) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	blocked = flag;
 }
@@ -105,21 +105,21 @@ flushSocketOptions::block(bool flag)
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::setInBufferSize(unsigned long bytes)
+ioSocketOptions::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINBUFFERSIZE, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	inSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-flushSocketOptions::getInBufferSize() const
+ioSocketOptions::getInBufferSize() const
 {
 	return inSocketBuffer;
 }
@@ -127,21 +127,21 @@ flushSocketOptions::getInBufferSize() const
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::setOutBufferSize(unsigned long bytes)
+ioSocketOptions::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	outSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-flushSocketOptions::getOutBufferSize() const
+ioSocketOptions::getOutBufferSize() const
 {
 	return outSocketBuffer;
 }
@@ -149,10 +149,10 @@ flushSocketOptions::getOutBufferSize() const
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::setInTimeout(unsigned long microseconds)
+ioSocketOptions::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINTIMEOUT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	inTimeout = microseconds;
 
@@ -161,14 +161,14 @@ flushSocketOptions::setInTimeout(unsigned long microseconds)
 	val.tv_usec = inTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 
 //-------------------------------------------------------------------
 
 unsigned long
-flushSocketOptions::getInTimeout() const
+ioSocketOptions::getInTimeout() const
 {
 	return inTimeout;
 }
@@ -176,10 +176,10 @@ flushSocketOptions::getInTimeout() const
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::setOutTimeout(unsigned long microseconds)
+ioSocketOptions::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTTIMEOUT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	outTimeout = microseconds;
 
@@ -188,14 +188,14 @@ flushSocketOptions::setOutTimeout(unsigned long microseconds)
 	val.tv_usec = outTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 
 //-------------------------------------------------------------------
 
 unsigned long
-flushSocketOptions::getOutTimeout() const
+ioSocketOptions::getOutTimeout() const
 {
 	return outTimeout;
 }
@@ -203,7 +203,7 @@ flushSocketOptions::getOutTimeout() const
 //-------------------------------------------------------------------
 
 bool
-flushSocketOptions::getSocketOpts(int option) const
+ioSocketOptions::getSocketOpts(int option) const
 {
 	if  ((option & socketOpts) == option)
 		return true;
@@ -213,11 +213,11 @@ flushSocketOptions::getSocketOpts(int option) const
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::setSockOption(short option,
+ioSocketOptions::setSockOption(short option,
 								  bool flag)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	int sockFlag(1);
 
@@ -228,31 +228,31 @@ flushSocketOptions::setSockOption(short option,
 
 	switch (option)
 	{
-		case SOCKET_KEEP_ALIVE:
+		case IOSOCKETOPTIONS_SOCKET_KEEP_ALIVE:
 
 			real_option = SO_KEEPALIVE;
 
 			break;
 
-		case SOCKET_REUSE_ADDRESS:
+		case IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS:
 
 			real_option = SO_REUSEADDR;
 
 			break;
 
-		case SOCKET_DONOT_USE_GATEWAY:
+		case IOSOCKETOPTIONS_SOCKET_DONOT_USE_GATEWAY:
 
 			real_option = SO_DONTROUTE;
 
 			break;
 
-		case SOCKET_BROADCAST:
+		case IOSOCKETOPTIONS_SOCKET_BROADCAST:
 
 			real_option = SO_BROADCAST;
 
 			break;
 
-		case SOCKET_OOB_INLINE:
+		case IOSOCKETOPTIONS_SOCKET_OOB_INLINE:
 
 			real_option = SO_OOBINLINE;
 
@@ -260,7 +260,7 @@ flushSocketOptions::setSockOption(short option,
 
 		#ifdef SO_REUSEPORT
 
-		case SOCKET_REUSE_PORT:
+		case IOSOCKETOPTIONS_SOCKET_REUSE_PORT:
 
 			real_option = SO_REUSEPORT;
 
@@ -270,11 +270,11 @@ flushSocketOptions::setSockOption(short option,
 
 		default:
 
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_WRONG_PARAMETHER, IOSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (!flag)
 		removeFlag(socketOpts, 1 << option);
@@ -285,30 +285,30 @@ flushSocketOptions::setSockOption(short option,
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::setLingerSockOption(short option,
+ioSocketOptions::setLingerSockOption(short option,
 										int seconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED, FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	linger lin;
 
 	switch (option)
 	{
-		case SOCKET_GRACEFUL_CLOSE:
+		case IOSOCKETOPTIONS_SOCKET_GRACEFUL_CLOSE:
 
 			lin.l_onoff = 0;
 
 			break;
 
-		case SOCKET_HARD_CLOSE:
+		case IOSOCKETOPTIONS_SOCKET_HARD_CLOSE:
 
 			lin.l_onoff = 1;
 			lin.l_linger = 0;
 
 			break;
 
-		case SOCKET_WAIT_CLOSE:
+		case IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE:
 
 			lin.l_onoff = 1;
 			lin.l_linger = seconds;
@@ -316,11 +316,11 @@ flushSocketOptions::setLingerSockOption(short option,
 			break;
 
 		default:
-			throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER, FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_WRONG_PARAMETHER, IOSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	lingerOpts = option;
 	lingerSeconds = seconds;
@@ -329,7 +329,7 @@ flushSocketOptions::setLingerSockOption(short option,
 //-------------------------------------------------------------------
 
 short
-flushSocketOptions::getLingerOption() const
+ioSocketOptions::getLingerOption() const
 {
 	return lingerOpts;
 }
@@ -337,7 +337,7 @@ flushSocketOptions::getLingerOption() const
 //-------------------------------------------------------------------
 
 int
-flushSocketOptions::getLingerPeriod() const
+ioSocketOptions::getLingerPeriod() const
 {
 	return lingerSeconds;
 }
@@ -345,13 +345,13 @@ flushSocketOptions::getLingerPeriod() const
 //-------------------------------------------------------------------
 
 void
-flushSocketOptions::_close(int socket)
+ioSocketOptions::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::close(socket) == -1)
-		throw baseEx(ERRMODULE_FLUSHSOCKETOPTIONS, FLUSHSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

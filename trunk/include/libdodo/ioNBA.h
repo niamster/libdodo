@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushNBA.h
+ *            ioNBA.h
  *
  *  Thu Sep 09 03:21:24 2006
  *  Copyright  2006  Ni@m
@@ -22,23 +22,23 @@
  */
 
 
-#ifndef _FLUSHNBA_H_
-#define _FLUSHNBA_H_
+#ifndef _IONBA_H_
+#define _IONBA_H_
 
 #include <libdodo/directives.h>
 
 #include <poll.h>
 
-#include <libdodo/flushNBAEx.h>
+#include <libdodo/ioNBAEx.h>
 #include <libdodo/types.h>
-#include <libdodo/flush.h>
+#include <libdodo/io.h>
 #include <libdodo/tools.h>
 
 namespace dodo
 {
 
 	/**
-	 * @struct __inOutDescriptors contains in and descriptors of the flush* classes
+	 * @struct __inOutDescriptors contains in and descriptors of the io* classes
 	 */
 	struct __inOutDescriptors
 	{
@@ -49,9 +49,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class flushNBA
+	 * @class ioNBA
 	 */
-	class flushNBA
+	class ioNBA
 	{
 
 		private:
@@ -60,25 +60,25 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			flushNBA(flushNBA &rt);
+			ioNBA(ioNBA &rt);
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			flushNBA();
+			ioNBA();
 
 			/**
 			 * destructor
 			 */
-			virtual ~flushNBA();
+			virtual ~ioNBA();
 
 			/**
 			 * @return identificator of added stream
-			 * @param fl is a reference on stream[flushDisk, flushSTD, flushSocket, flushSocketExchange]
+			 * @param fl is a reference on stream[ioDisk, ioSTD, ioSocket, ioSocketExchange]
 			 */
-			virtual int addFlush(const flush &fl);
+			virtual int addFlush(const io &fl);
 
 			/**
 			 * @param fl is identificator of stream to remove
@@ -86,7 +86,7 @@ namespace dodo
 			virtual void delFlush(int pos);
 
 			/**
-			 * @return true if flush* is ready to read
+			 * @return true if io* is ready to read
 			 * @param pos is identificator of stream
 			 * @param timeout describes amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
@@ -94,7 +94,7 @@ namespace dodo
 			virtual bool isReadable(int pos, int timeout = 100) const;
 
 			/**
-			 * @return vector of true if flush* is ready to read
+			 * @return vector of true if io* is ready to read
 			 * @param pos is vector of identificators of streams
 			 * @param timeout describes amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
@@ -102,7 +102,7 @@ namespace dodo
 			virtual dodoArray<bool> isReadable(const dodoArray<int> &pos, int timeout = 100) const;
 
 			/**
-			 * @return vector of true if flush* is ready to write
+			 * @return vector of true if io* is ready to write
 			 * @param pos is vector of identificators of streams
 			 * @param timeout describes amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
@@ -110,7 +110,7 @@ namespace dodo
 			virtual dodoArray<bool> isWritable(const dodoArray<int> &pos, int timeout = 100) const;
 
 			/**
-			 * @return true if flush* is ready to write
+			 * @return true if io* is ready to write
 			 * @param pos is identificator of stream
 			 * @param timeout describes amount of time to wait for result[in milliseconds]
 			 * @note if timeout is negative - infinit timeout
@@ -125,7 +125,7 @@ namespace dodo
 			 */
 			virtual void makeFalse(int count) const;
 
-			dodoArray<__inOutDescriptors> desc; ///< flush descriptors
+			dodoArray<__inOutDescriptors> desc; ///< io descriptors
 
 			int descs;                          ///< descriptors counter
 

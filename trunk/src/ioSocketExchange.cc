@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocketExchange.cc
+ *            ioSocketExchange.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/flushSocketExchange.h>
+#include <libdodo/ioSocketExchange.h>
 
 using namespace dodo;
 
@@ -42,7 +42,7 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
+ioSocketExchange::ioSocketExchange(ioSocketExchange &fse)
 {
 	socket = fse.socket;
 	opened = fse.opened;
@@ -65,20 +65,20 @@ flushSocketExchange::flushSocketExchange(flushSocketExchange &fse)
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange()
+ioSocketExchange::ioSocketExchange()
 {
 }
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::flushSocketExchange(__initialAccept &a_init)
+ioSocketExchange::ioSocketExchange(__initialAccept &a_init)
 {
 	init(a_init.socket, a_init.blockInherited);
 }
 
 //-------------------------------------------------------------------
 
-flushSocketExchange::~flushSocketExchange()
+ioSocketExchange::~ioSocketExchange()
 {
 	if (opened)
 	{
@@ -91,7 +91,7 @@ flushSocketExchange::~flushSocketExchange()
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::init(__initialAccept &a_init)
+ioSocketExchange::init(__initialAccept &a_init)
 {
 	family = a_init.family;
 	type = a_init.type;
@@ -104,23 +104,23 @@ flushSocketExchange::init(__initialAccept &a_init)
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::close()
+ioSocketExchange::close()
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKETEXCHANGE_OPER_CLOSE;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPER_CLOSE;
 	performXExec(preExec);
 	#endif
 
 	if (!opened)
 		return ;
 
-	flushSocketOptions::_close(socket);
+	ioSocketOptions::_close(socket);
 
 	socket = -1;
 
 	opened = false;
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -128,7 +128,7 @@ flushSocketExchange::close()
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::init(int a_socket,
+ioSocketExchange::init(int a_socket,
 						  bool blockInherited)
 {
 	close();
@@ -159,7 +159,7 @@ flushSocketExchange::init(int a_socket,
 //-------------------------------------------------------------------
 
 bool
-flushSocketExchange::alive()
+ioSocketExchange::alive()
 {
 	return opened;
 }
@@ -167,12 +167,12 @@ flushSocketExchange::alive()
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::write(const char * const data)
+ioSocketExchange::write(const char * const data)
 {
 	buffer.assign(data, outSize);
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKETEXCHANGE_OPER_SEND;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPER_SEND;
 	performXExec(preExec);
 	#endif
 
@@ -196,7 +196,7 @@ flushSocketExchange::write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -220,7 +220,7 @@ flushSocketExchange::write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -231,7 +231,7 @@ flushSocketExchange::write(const char * const data)
 		}
 	}
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -239,7 +239,7 @@ flushSocketExchange::write(const char * const data)
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::writeString(const dodoString &data)
+ioSocketExchange::writeString(const dodoString &data)
 {
 	this->write(data.c_str());
 }
@@ -247,10 +247,10 @@ flushSocketExchange::writeString(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::read(char * const data)
+ioSocketExchange::read(char * const data)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVE;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPER_RECEIVE;
 	performXExec(preExec);
 	#endif
 
@@ -279,7 +279,7 @@ flushSocketExchange::read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -306,7 +306,7 @@ flushSocketExchange::read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -319,7 +319,7 @@ flushSocketExchange::read(char * const data)
 
 	buffer.assign(data, inSize);
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -327,7 +327,7 @@ flushSocketExchange::read(char * const data)
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::readString(dodoString &data)
+ioSocketExchange::readString(dodoString &data)
 {
 	char *t_data = new char[inSize + 1];
 
@@ -340,7 +340,7 @@ flushSocketExchange::readString(dodoString &data)
 		data.assign(t_data, inSize);
 		delete [] t_data;
 
-		throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	data.assign(t_data, inSize);
@@ -349,24 +349,24 @@ flushSocketExchange::readString(dodoString &data)
 
 //-------------------------------------------------------------------
 
-#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
+#ifndef IO_SOCKETEXCHANGE_WO_XEXEC
 
 //-------------------------------------------------------------------
 
 int
-flushSocketExchange::addPostExec(inExec func,
+ioSocketExchange::addPostExec(inExec func,
 								 void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+	return _addPostExec(func, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSocketExchange::addPreExec(inExec func,
+ioSocketExchange::addPreExec(inExec func,
 								void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data);
+	return _addPreExec(func, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
@@ -374,31 +374,31 @@ flushSocketExchange::addPreExec(inExec func,
 	#ifdef DL_EXT
 
 int
-flushSocketExchange::addPostExec(const dodoString &module,
+ioSocketExchange::addPostExec(const dodoString &module,
 								 void             *data,
 								 void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
+	return _addPostExec(module, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSocketExchange::addPreExec(const dodoString &module,
+ioSocketExchange::addPreExec(const dodoString &module,
 								void             *data,
 								void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
+	return _addPreExec(module, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 xexecCounts
-flushSocketExchange::addExec(const dodoString &module,
+ioSocketExchange::addExec(const dodoString &module,
 							 void             *data,
 							 void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_FLUSHSOCKETEXCHANGE, data, toInit);
+	return _addExec(module, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data, toInit);
 }
 
 	#endif
@@ -410,12 +410,12 @@ flushSocketExchange::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::writeStream(const char * const data)
+ioSocketExchange::writeStream(const char * const data)
 {
 	buffer.assign(data);
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPER_SENDSTREAM;
 	performXExec(preExec);
 	#endif
 
@@ -443,7 +443,7 @@ flushSocketExchange::writeStream(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -467,7 +467,7 @@ flushSocketExchange::writeStream(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -478,7 +478,7 @@ flushSocketExchange::writeStream(const char * const data)
 		}
 	}
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -486,7 +486,7 @@ flushSocketExchange::writeStream(const char * const data)
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::writeStreamString(const dodoString &data)
+ioSocketExchange::writeStreamString(const dodoString &data)
 {
 	this->writeStream(data.c_str());
 }
@@ -494,10 +494,10 @@ flushSocketExchange::writeStreamString(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::readStream(char * const data)
+ioSocketExchange::readStream(char * const data)
 {
-	#ifndef FLUSH_SOCKET_WO_XEXEC
-	operType = FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM;
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPER_RECEIVESTREAM;
 	performXExec(preExec);
 	#endif
 
@@ -512,7 +512,7 @@ flushSocketExchange::readStream(char * const data)
 			if (errno == EINTR)
 				continue;
 
-			throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -522,7 +522,7 @@ flushSocketExchange::readStream(char * const data)
 
 	buffer.assign(data, n);
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -530,7 +530,7 @@ flushSocketExchange::readStream(char * const data)
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::readStreamString(dodoString &data)
+ioSocketExchange::readStreamString(dodoString &data)
 {
 	char *t_data = new char[inSocketBuffer + 1];
 
@@ -545,7 +545,7 @@ flushSocketExchange::readStreamString(dodoString &data)
 		data.assign(t_data);
 		delete [] t_data;
 
-		throw baseEx(ERRMODULE_FLUSHSOCKETEXCHANGE, FLUSHSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	data.assign(t_data);
@@ -554,10 +554,10 @@ flushSocketExchange::readStreamString(dodoString &data)
 
 //-------------------------------------------------------------------
 
-flushSocketExchange *
-flushSocketExchange::createCopy()
+ioSocketExchange *
+ioSocketExchange::createCopy()
 {
-	flushSocketExchange *copy = new flushSocketExchange;
+	ioSocketExchange *copy = new ioSocketExchange;
 
 	copy->socket = socket;
 	copy->opened = opened;
@@ -583,7 +583,7 @@ flushSocketExchange::createCopy()
 //-------------------------------------------------------------------
 
 void
-flushSocketExchange::deleteCopy(flushSocketExchange *copy)
+ioSocketExchange::deleteCopy(ioSocketExchange *copy)
 {
 	delete copy;
 }

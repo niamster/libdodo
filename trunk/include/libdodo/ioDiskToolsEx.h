@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocketOptionsEx.h
+ *            ioDiskToolsEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSOCKETOPTIONSEX_H_
-#define _FLUSHSOCKETOPTIONSEX_H_
+#ifndef _IODISKTOOLSEX_H_
+#define _IODISKTOOLSEX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,40 +30,53 @@
 
 namespace dodo
 {
-	/**
-	 * next for flushSocketOptions
-	 */
 
 	/**
 	 * libdodo defined errors
 	 */
-	enum flushSocketOptionsExR
+	enum ioDiskToolsExR
 	{
-		FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED,
-		FLUSHSOCKETOPTIONS_WRONG_PARAMETHER,
+		IODISKTOOLS_WRONG_FILENAME,
+		IODISKTOOLS_DESTINATION_EXISTS,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define FLUSHSOCKETOPTIONS_NO_SOCKET_CREATED_STR    "No socket was created =(."
-		#define FLUSHSOCKETOPTIONS_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
+		#define IODISKTOOLS_WRONG_FILENAME_STR        "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define IODISKTOOLS_DESTINATION_EXISTS_STR    "Destination file/dir/etc. exists. Won't overvrite"
 
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum flushSocketOptionsFunctionsID
+	enum ioDiskToolsFunctionsID
 	{
-		FLUSHSOCKETOPTIONS_SETINBUFFERSIZE,
-		FLUSHSOCKETOPTIONS_SETOUTBUFFERSIZE,
-		FLUSHSOCKETOPTIONS_SETINTIMEOUT,
-		FLUSHSOCKETOPTIONS_SETOUTTIMEOUT,
-		FLUSHSOCKETOPTIONS_SETSOCKOPT,
-		FLUSHSOCKETOPTIONS_SETLINGERSOCKOPT,
-		FLUSHSOCKETOPTIONS_BLOCK,
-		FLUSHSOCKETOPTIONS__CLOSE,
+		IODISKTOOLS_UNLINK,
+		IODISKTOOLS_RENAME,
+		IODISKTOOLS_LINK,
+		IODISKTOOLS_SYMLINK,
+		IODISKTOOLS_CHOWN,
+		IODISKTOOLS_CHGRP,
+		IODISKTOOLS_GETUSEROWNER,
+		IODISKTOOLS_GETGROUPOWNER,
+		IODISKTOOLS_TOUCH,
+		IODISKTOOLS_MKDIR,
+		IODISKTOOLS_CHMOD,
+		IODISKTOOLS_RM,
+		IODISKTOOLS_GETPERMISSIONS,
+		IODISKTOOLS_GETFILETYPE,
+		IODISKTOOLS_GETSIZE,
+		IODISKTOOLS_GETACCTIME,
+		IODISKTOOLS_GETMODTIME,
+		IODISKTOOLS_GETFILEINFO,
+		IODISKTOOLS_GETDIRINFO,
+		IODISKTOOLS_FOLLOWSYMLINK,
+		IODISKTOOLS_GETFILECONTENT,
+		IODISKTOOLS_GETFILECONTENTARR,
+		IODISKTOOLS_COPY,
+		IODISKTOOLS_COPYDIR,
+		IODISKTOOLS_APPEND,
 	};
-
 };
 
 #endif

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocket.h
+ *            ioSocket.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSOCKETEXCHANGE_H_
-#define _FLUSHSOCKETEXCHANGE_H_
+#ifndef _IOSOCKETEXCHANGE_H_
+#define _IOSOCKETEXCHANGE_H_
 
 #include <libdodo/directives.h>
 
@@ -36,8 +36,8 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/flushSocketOptions.h>
-#include <libdodo/flushSocketExchangeEx.h>
+#include <libdodo/ioSocketOptions.h>
+#include <libdodo/ioSocketExchangeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
 
@@ -45,24 +45,24 @@ namespace dodo
 {
 
 	/**
-	 * @enum flushSocketOperationTypeEnum describes type of operation for hook
+	 * @enum ioSocketOperationTypeEnum describes type of operation for hook
 	 */
-	enum flushSocketExchangeOperationTypeEnum
+	enum ioSocketExchangeOperationTypeEnum
 	{
-		FLUSHSOCKETEXCHANGE_OPER_RECEIVE,
-		FLUSHSOCKETEXCHANGE_OPER_SEND,
-		FLUSHSOCKETEXCHANGE_OPER_RECEIVESTREAM,
-		FLUSHSOCKETEXCHANGE_OPER_SENDSTREAM,
-		FLUSHSOCKETEXCHANGE_OPER_CLOSE,
+		IOSOCKETEXCHANGE_OPER_RECEIVE,
+		IOSOCKETEXCHANGE_OPER_SEND,
+		IOSOCKETEXCHANGE_OPER_RECEIVESTREAM,
+		IOSOCKETEXCHANGE_OPER_SENDSTREAM,
+		IOSOCKETEXCHANGE_OPER_CLOSE,
 	};
 
 	/**
-	 * @class __initialAccept holds info that passes to accept call, and then inits flushSocketExchange;
+	 * @class __initialAccept holds info that passes to accept call, and then inits ioSocketExchange;
 	 */
 	class __initialAccept
 	{
-			friend class flushSocketExchange;
-			friend class flushSocket;
+			friend class ioSocketExchange;
+			friend class ioSocket;
 
 		public:
 
@@ -89,60 +89,60 @@ namespace dodo
 	};
 
 	/**
-	 * @class flushSocketExchange used for communication[send/receive data]
+	 * @class ioSocketExchange used for communication[send/receive data]
 	 * you may use it's functions only after passing it to connect(accept)
 	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection=previous will be closed
 	 */
-	class flushSocketExchange : public flushSocketOptions
+	class ioSocketExchange : public ioSocketOptions
 
-	#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
+	#ifndef IO_SOCKETEXCHANGE_WO_XEXEC
 								, public xexec
 	#endif
 
 
 	{
 
-			friend class flushSocket;
+			friend class ioSocket;
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			flushSocketExchange();
+			ioSocketExchange();
 
 			/**
 			 * copy constructor
 			 * @note object that inited new object of this class you can use for future connections;
 			 * you can safely pass it to the functions;
 			 */
-			flushSocketExchange(flushSocketExchange &fse);
+			ioSocketExchange(ioSocketExchange &fse);
 
 			/**
 			 * constructor
 			 * @param init is initial data[got from accept method]
 			 * @note object that inited new object of this class you can use for future connections;
 			 */
-			flushSocketExchange(__initialAccept &init);
+			ioSocketExchange(__initialAccept &init);
 
 			/**
 			 * destructor
 			 */
-			virtual ~flushSocketExchange();
+			virtual ~ioSocketExchange();
 
 			/**
 			 * @return copy of object
 			 */
-			virtual flushSocketExchange *createCopy();
+			virtual ioSocketExchange *createCopy();
 
 			/**
 			 * deletes copy of object
 			 * @param copy is copy of object to delete
 			 */
-			static void deleteCopy(flushSocketExchange *copy);
+			static void deleteCopy(ioSocketExchange *copy);
 
-			#ifndef FLUSH_SOCKETEXCHANGE_WO_XEXEC
+			#ifndef IO_SOCKETEXCHANGE_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocketOptions.h
+ *            ioSocketOptions.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSOCKETOPTIONS_H_
-#define _FLUSHSOCKETOPTIONS_H_
+#ifndef _IOSOCKETOPTIONS_H_
+#define _IOSOCKETOPTIONS_H_
 
 #include <libdodo/directives.h>
 
@@ -31,11 +31,11 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <libdodo/flushDiskTools.h>
+#include <libdodo/ioDiskTools.h>
 #include <libdodo/tools.h>
-#include <libdodo/flushSocketOptionsEx.h>
+#include <libdodo/ioSocketOptionsEx.h>
 #include <libdodo/types.h>
-#include <libdodo/flush.h>
+#include <libdodo/io.h>
 
 namespace dodo
 {
@@ -43,51 +43,51 @@ namespace dodo
 	/**
 	 * @enum socketTransferTypeEnum type of socket to use
 	 */
-	enum socketTransferTypeEnum
+	enum socketOptionsTransferTypeEnum
 	{
-		TRANSFER_TYPE_STREAM,   ///< Sequenced, reliable, connection-based byte streams
-		TRANSFER_TYPE_DATAGRAM, ///< Connectionless, unreliable datagrams of fixed maximum length
+		IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM,   ///< Sequenced, reliable, connection-based byte streams
+		IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM, ///< Connectionless, unreliable datagrams of fixed maximum length
 	};
 
 	/**
 	 * @enum socketProtoFamilyEnum describes type of domain of socket to use
 	 */
-	enum socketProtoFamilyEnum
+	enum socketOptionsProtoFamilyEnum
 	{
-		PROTO_FAMILY_IPV4,
-		PROTO_FAMILY_IPV6,
-		PROTO_FAMILY_UNIX_SOCKET,
+		IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,
+		IOSOCKETOPTIONS_PROTO_FAMILY_IPV6,
+		IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET,
 	};
 
 	/**
 	 * @enum socketOptionsEnum defines options for socket
 	 */
-	enum socketOptionsEnum
+	enum socketOptionsOptionsEnum
 	{
-		SOCKET_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-		SOCKET_REUSE_ADDRESS,       ///<  should allow reuse of local addresses[it's accepted by default]
-		SOCKET_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
-		SOCKET_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
-		SOCKET_OOB_INLINE,          ///< out-of-band(marked urgent) data keep inline in recieve operation
+		IOSOCKETOPTIONS_SOCKET_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+		IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS,       ///<  should allow reuse of local addresses[it's accepted by default]
+		IOSOCKETOPTIONS_SOCKET_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
+		IOSOCKETOPTIONS_SOCKET_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
+		IOSOCKETOPTIONS_SOCKET_OOB_INLINE,          ///< out-of-band(marked urgent) data keep inline in recieve operation
 		#ifdef SO_REUSEPORT
-		SOCKET_REUSE_PORT,
+		IOSOCKETOPTIONS_SOCKET_REUSE_PORT,
 		#endif
 	};
 
 	/**
 	 * @enum socketLingerOption defines linger options for socket
 	 */
-	enum socketLingerOption
+	enum socketOptionsLingerOptionEnum
 	{
-		SOCKET_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
-		SOCKET_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
-		SOCKET_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+		IOSOCKETOPTIONS_SOCKET_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
+		IOSOCKETOPTIONS_SOCKET_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
+		IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	};
 
 	/**
-	 * @class flushSocketOptions defines options for socket connections
+	 * @class ioSocketOptions defines options for socket connections
 	 */
-	class flushSocketOptions : public flush
+	class ioSocketOptions : public io
 	{
 
 		protected:
@@ -97,17 +97,17 @@ namespace dodo
 			 * @param family is family of the socket
 			 * @param type is type of the socket
 			 */
-			flushSocketOptions(short family, short type);
+			ioSocketOptions(short family, short type);
 
 			/**
 			 * constructor
 			 */
-			flushSocketOptions();
+			ioSocketOptions();
 
 			/**
 			 * destructor
 			 */
-			virtual ~flushSocketOptions();
+			virtual ~ioSocketOptions();
 
 			/**
 			 * @return descriptor of input stream
@@ -132,7 +132,7 @@ namespace dodo
 			/**
 			 * set linger option
 			 * @param option is linger option[see socketLingerOption]
-			 * @param seconds how long to wait(for SOCKET_WAIT_CLOSE only)
+			 * @param seconds how long to wait(for IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE only)
 			 */
 			virtual void
 			setLingerSockOption(short option, int seconds = 1);
@@ -143,7 +143,7 @@ namespace dodo
 			virtual short getLingerOption() const;
 
 			/**
-			 * @return amount of seconds to wait(for SOCKET_WAIT_CLOSE only)
+			 * @return amount of seconds to wait(for IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE only)
 			 */
 			virtual int getLingerPeriod() const;
 

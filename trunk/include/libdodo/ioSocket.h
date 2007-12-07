@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocket.h
+ *            ioSocket.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSOCKET_H_
-#define _FLUSHSOCKET_H_
+#ifndef _IOIOSOCKETOPTIONS_SOCKET_H_
+#define _IOIOSOCKETOPTIONS_SOCKET_H_
 
 #include <libdodo/directives.h>
 
@@ -37,27 +37,27 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/flushDiskTools.h>
+#include <libdodo/ioDiskTools.h>
 #include <libdodo/tools.h>
-#include <libdodo/flushSocketEx.h>
+#include <libdodo/ioSocketEx.h>
 #include <libdodo/types.h>
-#include <libdodo/flushSocketOptions.h>
-#include <libdodo/flushSocketExchange.h>
+#include <libdodo/ioSocketOptions.h>
+#include <libdodo/ioSocketExchange.h>
 #include <libdodo/xexec.h>
 
 namespace dodo
 {
 
 	/**
-	 * @enum flushSocketOperationTypeEnum describes type of operation for hook
+	 * @enum ioSocketOperationTypeEnum describes type of operation for hook
 	 */
-	enum flushSocketOperationTypeEnum
+	enum ioSocketOperationTypeEnum
 	{
-		FLUSHSOCKET_OPER_CONNECT,
-		FLUSHSOCKET_OPER_CONNECT_UNIX,
-		FLUSHSOCKET_OPER_BINDNLISTEN,
-		FLUSHSOCKET_OPER_BINDNLISTEN_UNIX,
-		FLUSHSOCKET_OPER_ACCEPT,
+		IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT,
+		IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT_UNIX,
+		IOIOSOCKETOPTIONS_SOCKET_OPER_BINDNLISTEN,
+		IOIOSOCKETOPTIONS_SOCKET_OPER_BINDNLISTEN_UNIX,
+		IOIOSOCKETOPTIONS_SOCKET_OPER_ACCEPT,
 	};
 
 	/**
@@ -71,17 +71,17 @@ namespace dodo
 	};
 
 	/**
-	 * @class flushSocket performs communication actions!!
-	 * exchange of data is flushSocketExchange class' task; ou init it with connect or accept methods
+	 * @class ioSocket performs communication actions!!
+	 * exchange of data is ioSocketExchange class' task; ou init it with connect or accept methods
 	 */
-	class flushSocket : public flushSocketOptions
+	class ioSocket : public ioSocketOptions
 
-	#ifndef FLUSH_SOCKET_WO_XEXEC
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 						, public xexec
 	#endif
 
 	{
-			friend class flushSocketExchange;
+			friend class ioSocketExchange;
 
 		private:
 
@@ -89,7 +89,7 @@ namespace dodo
 			 * connstructor
 			 * to prevent copying
 			 */
-			flushSocket(flushSocket &fs);
+			ioSocket(ioSocket &fs);
 
 		public:
 
@@ -99,14 +99,14 @@ namespace dodo
 			 * @param family is family of the socket[see socketProtoFamilyEnum]
 			 * @param type is type of the socket[see socketTransferTypeEnum]
 			 */
-			flushSocket(bool server, short family, short type);
+			ioSocket(bool server, short family, short type);
 
 			/**
 			 * destructor
 			 */
-			virtual ~flushSocket();
+			virtual ~ioSocket();
 
-			#ifndef FLUSH_SOCKET_WO_XEXEC
+			#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -165,7 +165,7 @@ namespace dodo
 			 * @param exchange is reference to oject that will perform communication actions
 			 */
 			virtual void
-			connectFrom(const dodoString &local, const dodoString &host, int port, flushSocketExchange &exchange);
+			connectFrom(const dodoString &local, const dodoString &host, int port, ioSocketExchange &exchange);
 
 			/**
 			 * connect from specific address. for client part
@@ -174,7 +174,7 @@ namespace dodo
 			 * the same as previous, but more pretty
 			 */
 			virtual void
-			connectFrom(const dodoString &local, const __connInfo &destinaton, flushSocketExchange &exchange);
+			connectFrom(const dodoString &local, const __connInfo &destinaton, ioSocketExchange &exchange);
 
 			/**
 			 * connect. for client part
@@ -183,7 +183,7 @@ namespace dodo
 			 * @param exchange is reference to oject that will perform communication actions
 			 */
 			virtual void
-			connect(const dodoString &host, int port, flushSocketExchange &exchange);
+			connect(const dodoString &host, int port, ioSocketExchange &exchange);
 
 			/**
 			 * connect. for client part
@@ -192,7 +192,7 @@ namespace dodo
 			 * the same as previous, but more pretty
 			 */
 			virtual void
-			connect(const __connInfo &destinaton, flushSocketExchange &exchange);
+			connect(const __connInfo &destinaton, ioSocketExchange &exchange);
 
 			/**
 			 * connect. for client part
@@ -200,7 +200,7 @@ namespace dodo
 			 * @param exchange is reference to oject that will perform communication actions
 			 */
 			virtual void
-			connect(const dodoString &path, flushSocketExchange &exchange);                  ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+			connect(const dodoString &path, ioSocketExchange &exchange);                  ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 
 			/**
 			 * connect. for server part
@@ -231,22 +231,22 @@ namespace dodo
 
 			/**
 			 * accepts incommin' connections(as for server)
-			 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
-			 * @param init will be filled with info that will init flushSocketExchange object
+			 * @return true on accept; with IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
+			 * @param init will be filled with info that will init ioSocketExchange object
 			 * @param info is info about connected host
-			 * with PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
+			 * with IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
 			 */
 			virtual bool accept(__initialAccept &init, __connInfo &info);
 
 			/**
 			 * accepts incommin' connections(as for server)
-			 * @return true on accept; with TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
-			 * @param init will be filled with info that will init flushSocketExchange object
+			 * @return true on accept; with IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
+			 * @param init will be filled with info that will init ioSocketExchange object
 			 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
 			 */
 			virtual bool accept(__initialAccept &init);
 
-			bool blockInherited; ///< if true - children(flushSocketExchange) became unblocked, if parent(flushSocket) in unblocked; false by default
+			bool blockInherited; ///< if true - children(ioSocketExchange) became unblocked, if parent(ioSocket) in unblocked; false by default
 
 		protected:
 

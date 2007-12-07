@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushNBA.cc
+ *            ioNBA.cc
  *
  *  Thu Sep 09 03:21:24 2006
  *  Copyright  2006  Ni@m
@@ -21,30 +21,30 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/flushNBA.h>
+#include <libdodo/ioNBA.h>
 
 using namespace dodo;
 
-flushNBA::flushNBA(flushNBA &rt)
+ioNBA::ioNBA(ioNBA &rt)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushNBA::flushNBA() : descs(0)
+ioNBA::ioNBA() : descs(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushNBA::~flushNBA()
+ioNBA::~ioNBA()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-flushNBA::addFlush(const flush &fl)
+ioNBA::addFlush(const io &fl)
 {
 	__inOutDescriptors tempD;
 
@@ -60,7 +60,7 @@ flushNBA::addFlush(const flush &fl)
 //-------------------------------------------------------------------
 
 void
-flushNBA::makeFalse(int count) const
+ioNBA::makeFalse(int count) const
 {
 	for (int i = 0; i < count; ++i)
 		tempRB.push_back(false);
@@ -69,7 +69,7 @@ flushNBA::makeFalse(int count) const
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-flushNBA::isReadable(const dodoArray<int> &pos,
+ioNBA::isReadable(const dodoArray<int> &pos,
 					 int timeout) const
 {
 	tempRB.clear();
@@ -128,7 +128,7 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONBA, IONBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -143,7 +143,7 @@ flushNBA::isReadable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-flushNBA::isWritable(const dodoArray<int> &pos,
+ioNBA::isWritable(const dodoArray<int> &pos,
 					 int timeout) const
 {
 	tempRB.clear();
@@ -202,7 +202,7 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONBA, IONBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -217,7 +217,7 @@ flushNBA::isWritable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 bool
-flushNBA::isReadable(int pos,
+ioNBA::isReadable(int pos,
 					 int timeout) const
 {
 	pollfd fd;
@@ -243,7 +243,7 @@ flushNBA::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONBA, IONBA_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -253,7 +253,7 @@ flushNBA::isReadable(int pos,
 //-------------------------------------------------------------------
 
 void
-flushNBA::delFlush(int pos)
+ioNBA::delFlush(int pos)
 {
 	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
@@ -268,7 +268,7 @@ flushNBA::delFlush(int pos)
 //-------------------------------------------------------------------
 
 bool
-flushNBA::isWritable(int pos,
+ioNBA::isWritable(int pos,
 					 int timeout) const
 {
 	pollfd fd;
@@ -294,7 +294,7 @@ flushNBA::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_FLUSHNBA, FLUSHNBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONBA, IONBA_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 

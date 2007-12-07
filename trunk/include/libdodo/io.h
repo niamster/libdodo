@@ -1,7 +1,7 @@
 /***************************************************************************
- *            flushSocketExchangeEx.h
+ *            io.h
  *
- *  Mon Feb 21 03:03:47 2005
+ *  Tue Oct 11 00:19:57 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,27 +21,55 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSOCKETEXCHANGEEX_H_
-#define _FLUSHSOCKETEXCHANGEEX_H_
+#ifndef _IO_H_
+#define _IO_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/baseEx.h>
+#include <libdodo/xexec.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
 
 	/**
-	 * ID of function where exception was thrown
+	 * @class io is a base class for I/O operations.
+	 * all I/O operations are blockable => read/write inSize/outSize block.
 	 */
-	enum flushSocketExchangeFunctionsID
+	class io
 	{
-		FLUSHSOCKETEXCHANGE_SEND,
-		FLUSHSOCKETEXCHANGE_RECEIVE,
-		FLUSHSOCKETEXCHANGE_SENDSTREAM,
-		FLUSHSOCKETEXCHANGE_RECEIVESTREAM,
-		FLUSHSOCKETEXCHANGE_RECEIVESTRINGSTREAM,
-		FLUSHSOCKETEXCHANGE_RECEIVESTRING,
+			friend class ioNBA;
+
+		public:
+
+			/**
+			 * constructor
+			 */
+			io();
+
+			/**
+			 * destructor
+			 */
+			virtual ~io();
+
+			unsigned long inSize;   ///< size of data block;
+			unsigned long outSize;  ///< size of data block;
+
+			dodoString buffer;      ///< before readin' or after writin' the storege sets to buffer; usefull for xexec
+
+		protected:
+
+			bool opened; ///< indicates whether file(connection) opened or not
+
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const = 0;
+
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const = 0;
 	};
 
 };

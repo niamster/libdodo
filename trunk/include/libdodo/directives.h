@@ -64,7 +64,7 @@
 /**
  *  describes file permissions for newly created file(pipe) with open method
  */
-#define FILE_PERM     (FLUSHDISKTOOLS_PERM_OWNER_READ_ACCESS | FLUSHDISKTOOLS_PERM_OWNER_WRITE_ACCESS | FLUSHDISKTOOLS_PERM_OWNER_EXECUTE_ACCESS)
+#define FILE_PERM     (IODISKTOOLS_PERM_OWNER_READ_ACCESS | IODISKTOOLS_PERM_OWNER_WRITE_ACCESS | IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS)
 
 /**
  * is used for converting from number to string
@@ -90,12 +90,12 @@
 /**
  * use modules without hooks. faster a little bit.
  */
-//#define FLUSH_DISK_WO_XEXEC=a little bit faster, if u don't want to use it!
+//#define IO_DISK_WO_XEXEC=a little bit faster, if u don't want to use it!
 //#define DBMYSQL_WO_XEXEC
 //#define DBSQLITE_WO_XEXEC
-//#define FLUSH_STD_WO_XEXEC
-//#define FLUSH_SOCKET_WO_XEXEC
-//#define FLUSH_SOCKETEXCHANGE_WO_XEXEC
+//#define IO_STD_WO_XEXEC
+//#define IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+//#define IO_SOCKETEXCHANGE_WO_XEXEC
 //#define DBPOSTGRESQL_WO_XEXEC
 
 /**
@@ -105,7 +105,7 @@
 #define SEND_TIMEOUT             1000
 
 /**
- * for flushDisk::getFileContentArr
+ * for ioDisk::getFileContentArr
  */
 #define DISK_MAXLINELEN          10240
 
@@ -115,19 +115,19 @@
 #define CONTENT_BATCH_SIZE       4096
 
 /**
- * default values of buffer for io operations(flush*)
+ * default values of buffer for io operations(io*)
  */
 #define INSIZE                   4096
 #define OUTSIZE                  4096
 
 /**
- * default values of socket buffer for io operations(flushSocket)
+ * default values of socket buffer for io operations(ioSocket)
  */
-#define SOCKET_INSIZE            10240
-#define SOCKET_OUTSIZE           10240
+#define IOSOCKETOPTIONS_SOCKET_INSIZE            10240
+#define IOSOCKETOPTIONS_SOCKET_OUTSIZE           10240
 
 /**
- * default values of stdin/out buffer for io operations(flushSTD)
+ * default values of stdin/out buffer for io operations(ioSTD)
  */
 #define STD_INSIZE               1024000
 #define STD_OUTSIZE              1024000
@@ -135,8 +135,8 @@
 /**
  * amount of seconds for linger
  */
-#define SOCKET_LINGER_PERIOD     1
-#define SOCKET_LINGER_OPTION     SOCKET_WAIT_CLOSE
+#define IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD     1
+#define IOSOCKETOPTIONS_SOCKET_LINGER_OPTION     IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE
 
 #define TOOLS_SHORT_DATA_SIZE    2048
 

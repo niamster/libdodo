@@ -57,10 +57,10 @@ dbPostgresql::stringType(int type)
 {
 	switch (type)
 	{
-		case FIELDTYPE_TINYBLOB:
-		case FIELDTYPE_BLOB:
-		case FIELDTYPE_MEDIUMBLOB:
-		case FIELDTYPE_LONGBLOB:
+		case DBBASE_FIELDTYPE_TINYBLOB:
+		case DBBASE_FIELDTYPE_BLOB:
+		case DBBASE_FIELDTYPE_MEDIUMBLOB:
+		case DBBASE_FIELDTYPE_LONGBLOB:
 
 			return dodoString("BYTEA");
 
@@ -154,7 +154,7 @@ dbPostgresql::_exec(const dodoString &query,
 
 		if (autoFraming)
 		{
-			if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
+			if (qType == DBBASE_REQUEST_INSERT || qType == DBBASE_REQUEST_UPDATE)
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 
@@ -249,8 +249,8 @@ dbPostgresql::_exec(const dodoString &query,
 	{
 		switch (qType)
 		{
-			case DBREQUEST_UPDATE:
-			case DBREQUEST_INSERT:
+			case DBBASE_REQUEST_UPDATE:
+			case DBBASE_REQUEST_INSERT:
 
 			{
 				long size = blobs.size();

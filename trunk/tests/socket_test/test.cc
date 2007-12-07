@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/flushSocket.h>
-#include <libdodo/flushSocketTools.h>
+#include <libdodo/ioSocket.h>
+#include <libdodo/ioSocketTools.h>
 
 #include <iostream>
 
@@ -9,18 +9,18 @@ using namespace dodo;
 using namespace std;
 
 void
-process(flushSocketExchange fse)
+process(ioSocketExchange fse)
 {
 	
 	if (fse.isBlocked())
 	{
 		std::cout << "CHILD BLOCKED\n";
-		cout.flush();
+		cout.io();
 	}
 	else
 	{
 		std::cout << "CHILD UNBLOCKED\n";
-		cout.flush();
+		cout.io();
 	}
 	
 	fse.inSize = 4;
@@ -38,7 +38,7 @@ process(flushSocketExchange fse)
 		fse.readString(rec);
 		
 		cout << rec << rec.size() << endl;
-		cout.flush();
+		cout.io();
 		if (rec.compare("exit")==0)
 		{
 			exit(0);
@@ -47,12 +47,12 @@ process(flushSocketExchange fse)
 	catch (baseEx ex)
 	{
 		cout << "Smth happened!" << (string)ex << endl;
-		cout.flush();
+		cout.io();
 	}
 	catch(...)
 	{
 		cout << "Smth happened!" << endl;
-		cout.flush();		
+		cout.io();		
 	}
 }
 
@@ -60,14 +60,14 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		dodoStringArr ifaces = flushSocketTools::getInterfacesNames();
+		dodoStringArr ifaces = ioSocketTools::getInterfacesNames();
 		for (unsigned int i(0);i<ifaces.size();i++)
 		{
 			try
 			{
-				cout << ifaces[i] << ":\t" << flushSocketTools::getInterfaceInfo(ifaces[i]).hwaddr << endl;	
-				cout << ifaces[i] << ":\t" << flushSocketTools::getInterfaceInfo(ifaces[i]).broadcast << endl;	
-				cout << ifaces[i] << ":\t" << flushSocketTools::getInterfaceInfo(ifaces[i]).netmask << endl;	
+				cout << ifaces[i] << ":\t" << ioSocketTools::getInterfaceInfo(ifaces[i]).hwaddr << endl;	
+				cout << ifaces[i] << ":\t" << ioSocketTools::getInterfaceInfo(ifaces[i]).broadcast << endl;	
+				cout << ifaces[i] << ":\t" << ioSocketTools::getInterfaceInfo(ifaces[i]).netmask << endl;	
 			}
 			catch (baseEx ex)
 			{
@@ -75,13 +75,13 @@ int main(int argc, char **argv)
 			}
 		}
 		
-		cout << flushSocketTools::getInterfaceInfo("lo").hwaddr << endl;
-		cout << flushSocketTools::getInterfaceInfo("eth1").address << endl;
+		cout << ioSocketTools::getInterfaceInfo("lo").hwaddr << endl;
+		cout << ioSocketTools::getInterfaceInfo("eth1").address << endl;
 		
 		try
 		{
-			flushSocket st(false,PROTO_FAMILY_IPV4,TRANSFER_TYPE_STREAM);
-			flushSocketExchange exch;
+			ioSocket st(false,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+			ioSocketExchange exch;
 			dodoString str;
 			
 			try
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 			catch(baseEx ex)
 			{
 				cout << (string)ex << "\t" << ex.line << endl;
-				cout.flush();
+				cout.io();
 			}
 			try
 			{
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 			catch(baseEx ex)
 			{
 				cout << (string)ex << "\t" << ex.line << endl;
-				cout.flush();
+				cout.io();
 			}
 			try
 			{
@@ -118,23 +118,23 @@ int main(int argc, char **argv)
 			catch(baseEx ex)
 			{
 				cout << (string)ex << "\t" << ex.line << endl;
-				cout.flush();
+				cout.io();
 			}
 		}
 		catch(baseEx ex)
 		{
 			cout << (string)ex << "\t" << ex.line << endl;
-			cout.flush();
+			cout.io();
 		}
 		
 		cout << "\n-------------------------------------\n" << endl;
 			
-		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
+		ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4/*IOSOCKETOPTIONS_PROTO_FAMILY_IPV6*//*IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET*/,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__connInfo info;
 		__initialAccept fake;
 				
-		sock.setLingerSockOption(SOCKET_HARD_CLOSE);	
+		sock.setLingerSockOption(IOSOCKETOPTIONS_SOCKET_HARD_CLOSE);	
 		sock.blockInherited = false;
 		sock.block(false);
 		
@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",10,true);
 		
-		flushSocketExchange conn;
+		ioSocketExchange conn;
 		
 		while(true)
 		{
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 				if (sock.isBlocked())
 				{
 					std::cout << "PARENT BLOCKED\n";
-					cout.flush();
+					cout.io();
 				}
 					
 				conn.init(fake);
@@ -160,19 +160,19 @@ int main(int argc, char **argv)
 			}
 		}
 		
-		//flushSocketTools::setLocalName("BUBU");
+		//ioSocketTools::setLocalName("BUBU");
 		
-		cout << flushSocketTools::getLocalName() << endl;
-		cout << flushSocketTools::getHostInfo("192.168.0.1").addresses[0] << endl;
+		cout << ioSocketTools::getLocalName() << endl;
+		cout << ioSocketTools::getHostInfo("192.168.0.1").addresses[0] << endl;
 		
-		flushSocketTools fst;
+		ioSocketTools fst;
 		cout << fst.getHostInfo("google.com").addresses[0] << endl;
 		
 	}
 	catch(baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-		cout.flush();
+		cout.io();
 	}
 	
 	return 0;

@@ -38,7 +38,7 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 	dodo[statements[VERSION]] = PACKAGE_STRING;
 	dodo[statements[ITERATOR]] = "1";
 
-	fstd = new flushSTD;
+	fstd = new ioSTD;
 }
 
 //-------------------------------------------------------------------
@@ -1755,13 +1755,13 @@ cgiProcessor::display(const dodoString &path)
 	if (cgiFastSet)
 	{
 		cf->print(this->process(path));
-		cf->flush();
+		cf->io();
 	}
 	else
 		#endif
 	{
 		fstd->writeStreamString(this->process(path));
-		fstd->flush();
+		fstd->io();
 	}
 }
 

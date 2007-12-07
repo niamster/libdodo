@@ -28,7 +28,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
-#include <libdodo/dbInterface.h>
+#include <libdodo/db.h>
 
 namespace dodo
 {
@@ -37,12 +37,12 @@ namespace dodo
 	 */
 	enum addEnum
 	{
-		DBADDREQUEST_WHERE = 1,
-		DBADDREQUEST_HAVING,
-		DBADDREQUEST_GROUPBY,
-		DBADDREQUEST_ORDERBY,
-		DBADDREQUEST_LIMIT,
-		DBADDREQUEST_OFFSET,
+		DBBASE_ADDREQUEST_WHERE = 1,
+		DBBASE_ADDREQUEST_HAVING,
+		DBBASE_ADDREQUEST_GROUPBY,
+		DBBASE_ADDREQUEST_ORDERBY,
+		DBBASE_ADDREQUEST_LIMIT,
+		DBBASE_ADDREQUEST_OFFSET,
 	};
 
 	/**
@@ -58,33 +58,33 @@ namespace dodo
 	 */
 	enum qStEnum
 	{
-		DBREQUEST_UNION = 1,
-		DBREQUEST_UNION_ALL,
-		DBREQUEST_MINUS,
-		DBREQUEST_INTERSECT,
+		DBBASE_REQUEST_UNION = 1,
+		DBBASE_REQUEST_UNION_ALL,
+		DBBASE_REQUEST_MINUS,
+		DBBASE_REQUEST_INTERSECT,
 
-		DBREQUEST_SELECT,
-		DBREQUEST_INSERT,
-		DBREQUEST_INSERT_SELECT,
-		DBREQUEST_UPDATE,
-		DBREQUEST_DELETE,
+		DBBASE_REQUEST_SELECT,
+		DBBASE_REQUEST_INSERT,
+		DBBASE_REQUEST_INSERT_SELECT,
+		DBBASE_REQUEST_UPDATE,
+		DBBASE_REQUEST_DELETE,
 
-		DBREQUEST_TRUNCATE,
+		DBBASE_REQUEST_TRUNCATE,
 
-		DBREQUEST_RENAME_DB,
-		DBREQUEST_RENAME_TABLE,
-		DBREQUEST_RENAME_FIELD,
+		DBBASE_REQUEST_RENAME_DB,
+		DBBASE_REQUEST_RENAME_TABLE,
+		DBBASE_REQUEST_RENAME_FIELD,
 
-		DBREQUEST_DELETE_DB,
-		DBREQUEST_DELETE_TABLE,
-		DBREQUEST_DELETE_FIELD,
+		DBBASE_REQUEST_DELETE_DB,
+		DBBASE_REQUEST_DELETE_TABLE,
+		DBBASE_REQUEST_DELETE_FIELD,
 
-		DBREQUEST_CREATE_DB,
-		DBREQUEST_CREATE_TABLE,
-		DBREQUEST_CREATE_FIELD,
+		DBBASE_REQUEST_CREATE_DB,
+		DBBASE_REQUEST_CREATE_TABLE,
+		DBBASE_REQUEST_CREATE_FIELD,
 
-		DBREQUEST_CREATE_INDEX,
-		DBREQUEST_DELETE_INDEX,
+		DBBASE_REQUEST_CREATE_INDEX,
+		DBBASE_REQUEST_DELETE_INDEX,
 	};
 
 	/**
@@ -92,8 +92,8 @@ namespace dodo
 	 */
 	enum addSelEnum
 	{
-		DBREQUEST_SELECT_DISTINCT = 1,
-		DBREQUEST_SELECT_ALL
+		DBBASE_REQUEST_SELECT_DISTINCT = 1,
+		DBBASE_REQUEST_SELECT_ALL
 	};
 
 	/**
@@ -101,7 +101,7 @@ namespace dodo
 	 */
 	enum addDelEnum
 	{
-		DBREQUEST_DELETE_IGNORE = 1,
+		DBBASE_REQUEST_DELETE_IGNORE = 1,
 	};
 
 	/**
@@ -109,7 +109,7 @@ namespace dodo
 	 */
 	enum addUpEnum
 	{
-		DBREQUEST_UPDATE_IGNORE = 1,
+		DBBASE_REQUEST_UPDATE_IGNORE = 1,
 	};
 
 	/**
@@ -117,7 +117,7 @@ namespace dodo
 	 */
 	enum addInsEnum
 	{
-		DBREQUEST_INSERT_IGNORE = 1,
+		DBBASE_REQUEST_INSERT_IGNORE = 1,
 	};
 
 	/**
@@ -177,17 +177,17 @@ namespace dodo
 	 */
 	enum baseDataTypesEnum
 	{
-		FIELDTYPE_TINYINT,                  ///< *; The signed range is -128 to 127. The unsigned range is 0 to 255.
-		FIELDTYPE_SMALLINT,                 ///< *; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
-		FIELDTYPE_MEDIUMINT,                ///< *; The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215.
-		FIELDTYPE_INTEGER, FIELDTYPE_INT,   ///< *; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
-		FIELDTYPE_BIGINT,                   ///< *; The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615.
-		FIELDTYPE_FLOAT,                    ///< *; Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38.
-		FIELDTYPE_REAL, FIELDTYPE_DOUBLE,   ///< *; [DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
-		FIELDTYPE_DECIMAL,                  ///< **; An unpacked(the number is stored as a string) fixed-point number.
-		FIELDTYPE_DATE,                     ///< The supported range is '1000-01-01' to '9999-12-31'.
-		FIELDTYPE_TIME,                     ///< The range is '-838:59:59' to '838:59:59'
-		FIELDTYPE_TIMESTAMP,                ///< *; The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself.
+		DBBASE_FIELDTYPE_TINYINT,                  ///< *; The signed range is -128 to 127. The unsigned range is 0 to 255.
+		DBBASE_FIELDTYPE_SMALLINT,                 ///< *; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
+		DBBASE_FIELDTYPE_MEDIUMINT,                ///< *; The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215.
+		DBBASE_FIELDTYPE_INTEGER, DBBASE_FIELDTYPE_INT,   ///< *; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
+		DBBASE_FIELDTYPE_BIGINT,                   ///< *; The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615.
+		DBBASE_FIELDTYPE_FLOAT,                    ///< *; Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38.
+		DBBASE_FIELDTYPE_REAL, DBBASE_FIELDTYPE_DOUBLE,   ///< *; [DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
+		DBBASE_FIELDTYPE_DECIMAL,                  ///< **; An unpacked(the number is stored as a string) fixed-point number.
+		DBBASE_FIELDTYPE_DATE,                     ///< The supported range is '1000-01-01' to '9999-12-31'.
+		DBBASE_FIELDTYPE_TIME,                     ///< The range is '-838:59:59' to '838:59:59'
+		DBBASE_FIELDTYPE_TIMESTAMP,                ///< *; The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself.
 		/**
 		 * TIMESTAMP(14) 	YYYYMMDDHHMMSS
 		 * TIMESTAMP(12) 	YYMMDDHHMMSS
@@ -197,18 +197,18 @@ namespace dodo
 		 * TIMESTAMP(4) 		YYMM
 		 * TIMESTAMP(2) 		YY
 		 */
-		FIELDTYPE_CHAR,                     ///< **; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
-		FIELDTYPE_VARCHAR,                  ///< **; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
-		FIELDTYPE_TINYBLOB,                 ///< A column with a maximum length of 255 (2^8 - 1) characters.
-		FIELDTYPE_BLOB,                     ///< A column with a maximum length of 65, 535 (2^16 -1) characters.
-		FIELDTYPE_MEDIUMBLOB,               ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters.
-		FIELDTYPE_LONGBLOB,                 ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
-		FIELDTYPE_TINYTEXT,                 ///< A column with a maximum length of 255 (2^8 - 1) characters.
-		FIELDTYPE_TEXT,                     ///< A column with a maximum length of 65, 535 (2^16 -1) characters.
-		FIELDTYPE_MEDIUMTEXT,               ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters.
-		FIELDTYPE_LONGTEXT,                 ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
-		FIELDTYPE_ENUM,                     ///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values.
-		FIELDTYPE_SET,                      ///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
+		DBBASE_FIELDTYPE_CHAR,                     ///< **; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
+		DBBASE_FIELDTYPE_VARCHAR,                  ///< **; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
+		DBBASE_FIELDTYPE_TINYBLOB,                 ///< A column with a maximum length of 255 (2^8 - 1) characters.
+		DBBASE_FIELDTYPE_BLOB,                     ///< A column with a maximum length of 65, 535 (2^16 -1) characters.
+		DBBASE_FIELDTYPE_MEDIUMBLOB,               ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters.
+		DBBASE_FIELDTYPE_LONGBLOB,                 ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
+		DBBASE_FIELDTYPE_TINYTEXT,                 ///< A column with a maximum length of 255 (2^8 - 1) characters.
+		DBBASE_FIELDTYPE_TEXT,                     ///< A column with a maximum length of 65, 535 (2^16 -1) characters.
+		DBBASE_FIELDTYPE_MEDIUMTEXT,               ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters.
+		DBBASE_FIELDTYPE_LONGTEXT,                 ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
+		DBBASE_FIELDTYPE_ENUM,                     ///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values.
+		DBBASE_FIELDTYPE_SET,                      ///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
 	};
 
 	/**
@@ -216,8 +216,8 @@ namespace dodo
 	 */
 	enum fieldFlagEnum
 	{
-		FIELDPROP_NULL = 2,             ///< NULL type
-		FIELDPROP_AUTO_INCREMENT = 4,   ///< if is not set by request, will be incremented relatevly to previous
+		DBBASE_FIELDPROP_NULL = 2,             ///< NULL type
+		DBBASE_FIELDPROP_AUTO_INCREMENT = 4,   ///< if is not set by request, will be incremented relatevly to previous
 	};
 
 	/**
@@ -225,11 +225,11 @@ namespace dodo
 	 */
 	enum refFieldEnum
 	{
-		REFERENCE_RESTRICT = 1, ///< does not allow the action of any of those parent rows
-		REFERENCE_CASCADE,      ///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
-		REFERENCE_SET_NULL,     ///< sets NULL on the action of any of those parent rows indicates on set action
-		REFERENCE_NO_ACTION,    ///< noacton on the action of any of those parent rows indicates on set action
-		REFERENCE_SET_DEFAULT   ///< sets default on the action of any of those parent rows indicates on set action
+		DBBASE_REFERENCE_RESTRICT = 1, ///< does not allow the action of any of those parent rows
+		DBBASE_REFERENCE_CASCADE,      ///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
+		DBBASE_REFERENCE_SET_NULL,     ///< sets NULL on the action of any of those parent rows indicates on set action
+		DBBASE_REFERENCE_NO_ACTION,    ///< noacton on the action of any of those parent rows indicates on set action
+		DBBASE_REFERENCE_SET_DEFAULT   ///< sets default on the action of any of those parent rows indicates on set action
 	};
 
 	/**
@@ -296,7 +296,7 @@ namespace dodo
 	 *
 	 * @note for xexec => you may use store/restore methods in hook if you want to leave data unchanged after it!
 	 */
-	class dbBase : public dbInterface
+	class dbBase : public db
 	{
 		public:
 
@@ -403,7 +403,7 @@ namespace dodo
 			 * @param sub is array of subqueries
 			 * @param type is type of "subquering"[see qStEnum]
 			 */
-			virtual void subquery(const dodoStringArr &sub, int type = DBREQUEST_UNION /*DBREQUEST_UNION_ALL, DBREQUEST_MINUS, DBREQUEST_INTERSECT*/);
+			virtual void subquery(const dodoStringArr &sub, int type = DBBASE_REQUEST_UNION /*DBBASE_REQUEST_UNION_ALL, DBBASE_REQUEST_MINUS, DBBASE_REQUEST_INTERSECT*/);
 
 			/**
 			 * create index in table

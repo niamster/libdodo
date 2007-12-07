@@ -65,9 +65,9 @@ dbSqlite::fieldCollect(__fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
 	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
-	resRow.append((FIELDPROP_NULL & flag) == FIELDPROP_NULL ? " null " : " not null ");
+	resRow.append((DBBASE_FIELDPROP_NULL & flag) == DBBASE_FIELDPROP_NULL ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append((FIELDPROP_AUTO_INCREMENT & flag) == FIELDPROP_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
+	resRow.append((DBBASE_FIELDPROP_AUTO_INCREMENT & flag) == DBBASE_FIELDPROP_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{
@@ -158,7 +158,7 @@ dbSqlite::_exec(const dodoString &query,
 		{
 				#ifdef SQLITE_ENABLE_COLUMN_METADATA
 
-			if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
+			if (qType == DBBASE_REQUEST_INSERT || qType == DBBASE_REQUEST_UPDATE)
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 
@@ -264,8 +264,8 @@ dbSqlite::_exec(const dodoString &query,
 	{
 		switch (qType)
 		{
-			case DBREQUEST_UPDATE:
-			case DBREQUEST_INSERT:
+			case DBBASE_REQUEST_UPDATE:
+			case DBBASE_REQUEST_INSERT:
 
 			{
 				dodoStringArr::iterator i(blobs.begin()), j(blobs.end());

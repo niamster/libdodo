@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/flushSocket.h>
-#include <libdodo/flushSocketTools.h>
-#include <libdodo/flushNBA.h>
+#include <libdodo/ioSocket.h>
+#include <libdodo/ioSocketTools.h>
+#include <libdodo/ioNBA.h>
 
 #include <iostream>
 
@@ -13,12 +13,12 @@ int main(int argc, char **argv)
 {
 	try
 	{						
-		flushSocket sock(true,PROTO_FAMILY_IPV4/*PROTO_FAMILY_IPV6*//*PROTO_FAMILY_UNIX_SOCKET*/,TRANSFER_TYPE_STREAM);
+		ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4/*IOSOCKETOPTIONS_PROTO_FAMILY_IPV6*//*IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET*/,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__initialAccept fake;
 
-		sock.setSockOption(SOCKET_REUSE_ADDRESS,true);
-		sock.setLingerSockOption(SOCKET_HARD_CLOSE);	
+		sock.setSockOption(IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS,true);
+		sock.setLingerSockOption(IOSOCKETOPTIONS_SOCKET_HARD_CLOSE);	
 		sock.blockInherited = true;
 		sock.block(false);
 						
@@ -26,9 +26,9 @@ int main(int argc, char **argv)
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",10,true);
 				
-		flushSocketExchange conn;
+		ioSocketExchange conn;
 
-		flushNBA nb;
+		ioNBA nb;
 		
 		while(true)
 		{
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 	catch(baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.file << "\t" << ex.line << endl;
-		cout.flush();
+		cout.io();
 	}
 	
 	return 0;

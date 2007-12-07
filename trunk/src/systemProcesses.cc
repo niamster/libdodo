@@ -61,19 +61,19 @@ systemProcesses::~systemProcesses()
 
 		switch (i->action)
 		{
-			case PROCESS_KEEP_ALIVE:
+			case SYSTEMPROCESS_KEEP_ALIVE:
 
 				waitpid(i->pid, NULL, WNOHANG);
 
 				break;
 
-			case PROCESS_STOP:
+			case SYSTEMPROCESS_STOP:
 
 				kill(i->pid, 2);
 
 				break;
 
-			case PROCESS_WAIT:
+			case SYSTEMPROCESS_WAIT:
 			default:
 
 				waitpid(i->pid, NULL, 0);
@@ -124,7 +124,7 @@ unsigned long
 systemProcesses::add(jobFunc func,
 					 void    *data)
 {
-	return add(func, data, PROCESS_WAIT);
+	return add(func, data, SYSTEMPROCESS_WAIT);
 }
 
 //-------------------------------------------------------------------
@@ -133,7 +133,7 @@ unsigned long
 systemProcesses::addNRun(jobFunc func,
 						 void    *data)
 {
-	return addNRun(func, data, 1, PROCESS_WAIT);
+	return addNRun(func, data, 1, SYSTEMPROCESS_WAIT);
 }
 
 //-------------------------------------------------------------------

@@ -79,9 +79,9 @@ namespace dodo
 			virtual char *getenv(const char *buf);
 
 			/**
-			 * flushes output[fast-cgi safe]
+			 * ioes output[fast-cgi safe]
 			 */
-			virtual void flush();
+			virtual void io();
 
 		private:
 
@@ -109,7 +109,7 @@ namespace dodo
 
 		public:
 
-				#ifdef PTHREAD_EXT
+				#ifdef PSYSTEMTHREADS_EXT
 
 			/**
 			 * constructor
@@ -147,7 +147,7 @@ namespace dodo
 
 		private:
 
-				#ifdef PTHREAD_EXT
+				#ifdef PSYSTEMTHREADS_EXT
 
 			bool threading;                 ///< threading or not
 

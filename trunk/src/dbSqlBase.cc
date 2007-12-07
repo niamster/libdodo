@@ -27,29 +27,29 @@ using namespace dodo;
 
 const unsigned int dbSqlBase::addInsEnumArr[] =
 {
-	DBREQUEST_INSERT_IGNORE,
+	DBBASE_REQUEST_INSERT_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 const unsigned int dbSqlBase::addUpEnumArr[] =
 {
-	DBREQUEST_UPDATE_IGNORE,
+	DBBASE_REQUEST_UPDATE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 const unsigned int dbSqlBase::addDelEnumArr[] =
 {
-	DBREQUEST_DELETE_IGNORE,
+	DBBASE_REQUEST_DELETE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 const unsigned int dbSqlBase::addSelEnumArr[] =
 {
-	DBREQUEST_SELECT_DISTINCT,
-	DBREQUEST_SELECT_ALL
+	DBBASE_REQUEST_SELECT_DISTINCT,
+	DBBASE_REQUEST_SELECT_ALL
 };
 
 //-------------------------------------------------------------------
@@ -597,127 +597,127 @@ dbSqlBase::queryCollect()
 
 	switch (qType)
 	{
-		case DBREQUEST_SELECT:
+		case DBBASE_REQUEST_SELECT:
 
 			selectCollect();
 			selectAction = true;
 
 			break;
 
-		case DBREQUEST_INSERT:
+		case DBBASE_REQUEST_INSERT:
 
 			insertCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_UPDATE:
+		case DBBASE_REQUEST_UPDATE:
 
 			updateCollect();
 
 			break;
 
-		case DBREQUEST_DELETE:
+		case DBBASE_REQUEST_DELETE:
 
 			delCollect();
 
 			break;
 
-		case DBREQUEST_INSERT_SELECT:
+		case DBBASE_REQUEST_INSERT_SELECT:
 
 			insertSelectCollect();
 			selectAction = true;
 
 			break;
 
-		case DBREQUEST_UNION:
-		case DBREQUEST_UNION_ALL:
-		case DBREQUEST_MINUS:
-		case DBREQUEST_INTERSECT:
+		case DBBASE_REQUEST_UNION:
+		case DBBASE_REQUEST_UNION_ALL:
+		case DBBASE_REQUEST_MINUS:
+		case DBBASE_REQUEST_INTERSECT:
 
 			subCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_TRUNCATE:
+		case DBBASE_REQUEST_TRUNCATE:
 
 			truncateCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_RENAME_DB:
+		case DBBASE_REQUEST_RENAME_DB:
 
 			renameBaseCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_CREATE_INDEX:
+		case DBBASE_REQUEST_CREATE_INDEX:
 
 			createIndexCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_DELETE_INDEX:
+		case DBBASE_REQUEST_DELETE_INDEX:
 
 			deleteIndexCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_RENAME_TABLE:
+		case DBBASE_REQUEST_RENAME_TABLE:
 
 			renameTableCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_RENAME_FIELD:
+		case DBBASE_REQUEST_RENAME_FIELD:
 
 			renameFieldCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_DELETE_DB:
+		case DBBASE_REQUEST_DELETE_DB:
 
 			delBaseCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_DELETE_TABLE:
+		case DBBASE_REQUEST_DELETE_TABLE:
 
 			delTableCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_DELETE_FIELD:
+		case DBBASE_REQUEST_DELETE_FIELD:
 
 			delFieldCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_CREATE_DB:
+		case DBBASE_REQUEST_CREATE_DB:
 
 			createBaseCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_CREATE_TABLE:
+		case DBBASE_REQUEST_CREATE_TABLE:
 
 			createTableCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBREQUEST_CREATE_FIELD:
+		case DBBASE_REQUEST_CREATE_FIELD:
 
 			createFieldCollect();
 			additionalActions = false;
@@ -738,15 +738,15 @@ dbSqlBase::queryCollect()
 
 	if (additionalActions)
 	{
-		additionalCollect(DBADDREQUEST_WHERE, pre_where);
+		additionalCollect(DBBASE_ADDREQUEST_WHERE, pre_where);
 		if (selectAction)
 		{
-			additionalCollect(DBADDREQUEST_GROUPBY, pre_group);
-			additionalCollect(DBADDREQUEST_HAVING, pre_having);
+			additionalCollect(DBBASE_ADDREQUEST_GROUPBY, pre_group);
+			additionalCollect(DBBASE_ADDREQUEST_HAVING, pre_having);
 		}
-		additionalCollect(DBADDREQUEST_ORDERBY, pre_order);
-		additionalCollect(DBADDREQUEST_LIMIT, pre_limNumber);
-		additionalCollect(DBADDREQUEST_OFFSET, pre_limOffset);
+		additionalCollect(DBBASE_ADDREQUEST_ORDERBY, pre_order);
+		additionalCollect(DBBASE_ADDREQUEST_LIMIT, pre_limNumber);
+		additionalCollect(DBBASE_ADDREQUEST_OFFSET, pre_limOffset);
 	}
 
 	return request;
@@ -792,9 +792,9 @@ dbSqlBase::fieldCollect(__fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
 	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
-	resRow.append((FIELDPROP_NULL & flag) == FIELDPROP_NULL ? " null " : " not null ");
+	resRow.append((DBBASE_FIELDPROP_NULL & flag) == DBBASE_FIELDPROP_NULL ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append((FIELDPROP_AUTO_INCREMENT & flag) == FIELDPROP_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
+	resRow.append((DBBASE_FIELDPROP_AUTO_INCREMENT & flag) == DBBASE_FIELDPROP_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{
@@ -814,97 +814,97 @@ dbSqlBase::stringType(int type)
 {
 	switch (type)
 	{
-		case FIELDTYPE_INT:
-		case FIELDTYPE_INTEGER:
+		case DBBASE_FIELDTYPE_INT:
+		case DBBASE_FIELDTYPE_INTEGER:
 
 			return dodoString("INTEGER");
 
-		case FIELDTYPE_DATE:
+		case DBBASE_FIELDTYPE_DATE:
 
 			return dodoString("DATE");
 
-		case FIELDTYPE_VARCHAR:
+		case DBBASE_FIELDTYPE_VARCHAR:
 
 			return dodoString("VARCHAR");
 
-		case FIELDTYPE_TIMESTAMP:
+		case DBBASE_FIELDTYPE_TIMESTAMP:
 
 			return dodoString("TIMESTAMP");
 
-		case FIELDTYPE_TIME:
+		case DBBASE_FIELDTYPE_TIME:
 
 			return dodoString("TIME");
 
-		case FIELDTYPE_TINYINT:
+		case DBBASE_FIELDTYPE_TINYINT:
 
 			return dodoString("TINYINT");
 
-		case FIELDTYPE_SMALLINT:
+		case DBBASE_FIELDTYPE_SMALLINT:
 
 			return dodoString("SMALLINT");
 
-		case FIELDTYPE_MEDIUMINT:
+		case DBBASE_FIELDTYPE_MEDIUMINT:
 
 			return dodoString("MEDIUMINT");
 
-		case FIELDTYPE_BIGINT:
+		case DBBASE_FIELDTYPE_BIGINT:
 
 			return dodoString("BIGINT");
 
-		case FIELDTYPE_FLOAT:
+		case DBBASE_FIELDTYPE_FLOAT:
 
 			return dodoString("FLOAT");
 
-		case FIELDTYPE_REAL:
-		case FIELDTYPE_DOUBLE:
+		case DBBASE_FIELDTYPE_REAL:
+		case DBBASE_FIELDTYPE_DOUBLE:
 
 			return dodoString("REAL");
 
-		case FIELDTYPE_DECIMAL:
+		case DBBASE_FIELDTYPE_DECIMAL:
 
 			return dodoString("DECIMAL");
 
-		case FIELDTYPE_CHAR:
+		case DBBASE_FIELDTYPE_CHAR:
 
 			return dodoString("CHAR");
 
-		case FIELDTYPE_TINYBLOB:
+		case DBBASE_FIELDTYPE_TINYBLOB:
 
 			return dodoString("TINYBLOB");
 
-		case FIELDTYPE_BLOB:
+		case DBBASE_FIELDTYPE_BLOB:
 
 			return dodoString("BLOB");
 
-		case FIELDTYPE_MEDIUMBLOB:
+		case DBBASE_FIELDTYPE_MEDIUMBLOB:
 
 			return dodoString("MEDIUMBLOB");
 
-		case FIELDTYPE_LONGBLOB:
+		case DBBASE_FIELDTYPE_LONGBLOB:
 
 			return dodoString("LONGBLOB");
 
-		case FIELDTYPE_TINYTEXT:
+		case DBBASE_FIELDTYPE_TINYTEXT:
 
 			return dodoString("TINYTEXT");
 
-		case FIELDTYPE_TEXT:
+		case DBBASE_FIELDTYPE_TEXT:
 
 			return dodoString("TEXT");
 
-		case FIELDTYPE_MEDIUMTEXT:
+		case DBBASE_FIELDTYPE_MEDIUMTEXT:
 
 			return dodoString("MEDIUMTEXT");
 
-		case FIELDTYPE_LONGTEXT:
+		case DBBASE_FIELDTYPE_LONGTEXT:
 
 			return dodoString("LONGTEXT");
 
-		case FIELDTYPE_ENUM:
+		case DBBASE_FIELDTYPE_ENUM:
 
 			return dodoString("ENUM");
 
-		case FIELDTYPE_SET:
+		case DBBASE_FIELDTYPE_SET:
 
 			return dodoString("SET");
 
@@ -921,37 +921,37 @@ dbSqlBase::chkRange(int type)
 {
 	switch (type)
 	{
-		case FIELDTYPE_DATE:
-		case FIELDTYPE_TIME:
-		case FIELDTYPE_TINYBLOB:
-		case FIELDTYPE_BLOB:
-		case FIELDTYPE_MEDIUMBLOB:
-		case FIELDTYPE_LONGBLOB:
-		case FIELDTYPE_TINYTEXT:
-		case FIELDTYPE_TEXT:
-		case FIELDTYPE_MEDIUMTEXT:
-		case FIELDTYPE_LONGTEXT:
-		case FIELDTYPE_ENUM:
-		case FIELDTYPE_SET:
+		case DBBASE_FIELDTYPE_DATE:
+		case DBBASE_FIELDTYPE_TIME:
+		case DBBASE_FIELDTYPE_TINYBLOB:
+		case DBBASE_FIELDTYPE_BLOB:
+		case DBBASE_FIELDTYPE_MEDIUMBLOB:
+		case DBBASE_FIELDTYPE_LONGBLOB:
+		case DBBASE_FIELDTYPE_TINYTEXT:
+		case DBBASE_FIELDTYPE_TEXT:
+		case DBBASE_FIELDTYPE_MEDIUMTEXT:
+		case DBBASE_FIELDTYPE_LONGTEXT:
+		case DBBASE_FIELDTYPE_ENUM:
+		case DBBASE_FIELDTYPE_SET:
 
 			return -1;
 
-		case FIELDTYPE_INTEGER:
-		case FIELDTYPE_INT:
-		case FIELDTYPE_TINYINT:
-		case FIELDTYPE_SMALLINT:
-		case FIELDTYPE_MEDIUMINT:
-		case FIELDTYPE_BIGINT:
-		case FIELDTYPE_FLOAT:
-		case FIELDTYPE_REAL:
-		case FIELDTYPE_DOUBLE:
-		case FIELDTYPE_TIMESTAMP:
+		case DBBASE_FIELDTYPE_INTEGER:
+		case DBBASE_FIELDTYPE_INT:
+		case DBBASE_FIELDTYPE_TINYINT:
+		case DBBASE_FIELDTYPE_SMALLINT:
+		case DBBASE_FIELDTYPE_MEDIUMINT:
+		case DBBASE_FIELDTYPE_BIGINT:
+		case DBBASE_FIELDTYPE_FLOAT:
+		case DBBASE_FIELDTYPE_REAL:
+		case DBBASE_FIELDTYPE_DOUBLE:
+		case DBBASE_FIELDTYPE_TIMESTAMP:
 
 			return 0;
 
-		case FIELDTYPE_VARCHAR:
-		case FIELDTYPE_CHAR:
-		case FIELDTYPE_DECIMAL:
+		case DBBASE_FIELDTYPE_VARCHAR:
+		case DBBASE_FIELDTYPE_CHAR:
+		case DBBASE_FIELDTYPE_DECIMAL:
 
 			return 1;
 
@@ -968,23 +968,23 @@ dbSqlBase::stringReference(int type)
 {
 	switch (type)
 	{
-		case REFERENCE_RESTRICT:
+		case DBBASE_REFERENCE_RESTRICT:
 
 			return dodoString("restrict");
 
-		case REFERENCE_CASCADE:
+		case DBBASE_REFERENCE_CASCADE:
 
 			return dodoString("cascade");
 
-		case REFERENCE_SET_NULL:
+		case DBBASE_REFERENCE_SET_NULL:
 
 			return dodoString("set null");
 
-		case REFERENCE_NO_ACTION:
+		case DBBASE_REFERENCE_NO_ACTION:
 
 			return dodoString("no action");
 
-		case REFERENCE_SET_DEFAULT:
+		case DBBASE_REFERENCE_SET_DEFAULT:
 
 			return dodoString("set default");
 

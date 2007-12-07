@@ -3,7 +3,7 @@
 #include <libdodo/dbPostgresql.h>
 #include <libdodo/dbMysql.h>
 #include <libdodo/dbSqlite.h>
-#include <libdodo/flushDiskTools.h>
+#include <libdodo/ioDiskTools.h>
 
 #include <iostream>
 
@@ -13,7 +13,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {	
-	dbInterface *pp;	
+	db *pp;	
 	
 	if (argc == 2)
 	{
@@ -82,29 +82,29 @@ int main(int argc, char **argv)
 
 		__fieldInfo fi;
 		fi.name = "date";
-		fi.type = FIELDTYPE_TEXT;
+		fi.type = DBBASE_FIELDTYPE_TEXT;
 		
 		__tableInfo ti;
 		ti.name = "leg";
 		ti.fields.push_back(fi);
 		
 		fi.name = "operation";
-		fi.type = FIELDTYPE_TEXT;		
+		fi.type = DBBASE_FIELDTYPE_TEXT;		
 		ti.fields.push_back(fi);
 		
 		fi.name = "id";
-		fi.type = FIELDTYPE_INTEGER;
-		fi.flag = FIELDPROP_NULL;
+		fi.type = DBBASE_FIELDTYPE_INTEGER;
+		fi.flag = DBBASE_FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
 		fi.name = "d";
-		fi.type = FIELDTYPE_INTEGER;
-		fi.flag = FIELDPROP_NULL;
+		fi.type = DBBASE_FIELDTYPE_INTEGER;
+		fi.flag = DBBASE_FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
 		fi.name = "b";
-		fi.type = FIELDTYPE_LONGBLOB;
-		fi.flag = FIELDPROP_NULL;
+		fi.type = DBBASE_FIELDTYPE_LONGBLOB;
+		fi.flag = DBBASE_FIELDPROP_NULL;
 		ti.fields.push_back(fi);		
 		
 		((dbBase *)pp)->createTable(ti);
@@ -162,11 +162,11 @@ int main(int argc, char **argv)
 
 		arr.clear();
 
-		flushDiskTools::unlink("test.1");
-		flushDiskTools::unlink("test.2");
+		ioDiskTools::unlink("test.1");
+		ioDiskTools::unlink("test.2");
 
-		std::string dt = flushDiskTools::getFileContent("test");
-		flushDiskTools::append("test.1", dt);
+		std::string dt = ioDiskTools::getFileContent("test");
+		ioDiskTools::append("test.1", dt);
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 			arr["b"] = "$1";
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			flushDiskTools::append("test.2",(*store.rows.begin())[2]);	
+			ioDiskTools::append("test.2",(*store.rows.begin())[2]);	
 	}
 	catch(baseEx ex)
 	{

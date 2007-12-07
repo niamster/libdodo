@@ -73,7 +73,7 @@ cgi::cgi(bool silent,
 				#endif
 
 {
-	fstd = new flushSTD;
+	fstd = new ioSTD;
 
 	initHeaders(a_headers);
 
@@ -309,13 +309,13 @@ cgi::printHeaders() const
 	if (cgiFastSet)
 	{
 		cf->print("\r\n\r\n");
-		cf->flush();
+		cf->io();
 	}
 	else
 	#endif
 	{
 		fstd->writeStreamString("\r\n\r\n");
-		fstd->flush();
+		fstd->io();
 	}
 }
 
@@ -398,7 +398,7 @@ cgi::makePost()
 	}
 	else
 	{
-		if (stringTools::iequal(ENVIRONMENT["CONTENT_TRANSFER_ENCODING"], "base64"))
+		if (stringTools::iequal(ENVIRONMENT["CONTENT_IOSOCKETOPTIONS_TRANSFER_ENCODING"], "base64"))
 			content = tools::decodeBase64(content);
 
 		unsigned int temp0;

@@ -1,7 +1,7 @@
 /***************************************************************************
- *            flush.h
+ *            ioSTD.h
  *
- *  Tue Oct 11 00:19:57 2005
+ *  Tue Nov 15 21:19:57 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,57 +21,34 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSH_H_
-#define _FLUSH_H_
+#ifndef _IODISKEX_H_
+#define _IODISKEX_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/xexec.h>
-#include <libdodo/types.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {
-
 	/**
-	 * @class flush is a base class for I/O operations.
-	 * all I/O operations are blockable => read/write inSize/outSize block.
+	 * ID of function where exception was thrown
 	 */
-	class flush
+	enum ioSTDFunctionsID
 	{
-			friend class flushNBA;
-
-		public:
-
-			/**
-			 * constructor
-			 */
-			flush();
-
-			/**
-			 * destructor
-			 */
-			virtual ~flush();
-
-			unsigned long inSize;   ///< size of data block;
-			unsigned long outSize;  ///< size of data block;
-
-			dodoString buffer;      ///< before readin' or after writin' the storege sets to buffer; usefull for xexec
-
-		protected:
-
-			bool opened; ///< indicates whether file(connection) opened or not
-
-			/**
-			 * @return descriptor of input stream
-			 */
-			virtual int getInDescriptor() const = 0;
-
-			/**
-			 * @return descriptor of output stream
-			 */
-			virtual int getOutDescriptor() const = 0;
+		IOSTD_CLOSE,
+		IOSTD_OPEN,
+		IOSTD_READ,
+		IOSTD_WRITE,
+		IOSTD_READSTREAM,
+		IOSTD_READSTREAMSTRING,
+		IOSTD_READSTRING,
+		IOSTD_WRITESTREAM,
+		IOSTD_IO,
+		IOSTD_LOCKOUT,
+		IOSTD_LOCKIN,
+		IOSTD_INPUTTERINFO,
+		IOSTD_BLOCK
 	};
-
 };
 
 #endif

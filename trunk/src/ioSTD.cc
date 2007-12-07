@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSTD.cc
+ *            ioSTD.cc
  *
  *  Tue Nov 15 21:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/flushSTD.h>
+#include <libdodo/ioSTD.h>
 
 using namespace dodo;
 
-flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),
+ioSTD::ioSTD() : inSTDBuffer(STD_INSIZE),
 					   outSTDBuffer(STD_OUTSIZE),
 					   err(false),
 					   blocked(true)
@@ -34,20 +34,20 @@ flushSTD::flushSTD() : inSTDBuffer(STD_INSIZE),
 
 //-------------------------------------------------------------------
 
-flushSTD::flushSTD(flushSTD &fd)
+ioSTD::ioSTD(ioSTD &fd)
 {
 }
 
 //-------------------------------------------------------------------
 
-flushSTD::~flushSTD()
+ioSTD::~ioSTD()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSTD::getInDescriptor() const
+ioSTD::getInDescriptor() const
 {
 	return fileno(stdin);
 }
@@ -55,7 +55,7 @@ flushSTD::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-flushSTD::getOutDescriptor() const
+ioSTD::getOutDescriptor() const
 {
 	if (err)
 		return fileno(stderr);
@@ -65,22 +65,22 @@ flushSTD::getOutDescriptor() const
 
 //-------------------------------------------------------------------
 
-#ifndef FLUSH_STD_WO_XEXEC
+#ifndef IO_STD_WO_XEXEC
 
 int
-flushSTD::addPostExec(inExec func,
+ioSTD::addPostExec(inExec func,
 					  void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
+	return _addPostExec(func, (void *)this, XEXECOBJ_IOSTD, data);
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSTD::addPreExec(inExec func,
+ioSTD::addPreExec(inExec func,
 					 void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_FLUSHSTD, data);
+	return _addPreExec(func, (void *)this, XEXECOBJ_IOSTD, data);
 }
 
 //-------------------------------------------------------------------
@@ -88,31 +88,31 @@ flushSTD::addPreExec(inExec func,
 	#ifdef DL_EXT
 
 int
-flushSTD::addPostExec(const dodoString &module,
+ioSTD::addPostExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
+	return _addPostExec(module, (void *)this, XEXECOBJ_IOSTD, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 xexecCounts
-flushSTD::addExec(const dodoString &module,
+ioSTD::addExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
+	return _addExec(module, (void *)this, XEXECOBJ_IOSTD, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 int
-flushSTD::addPreExec(const dodoString &module,
+ioSTD::addPreExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_FLUSHSTD, data, toInit);
+	return _addPreExec(module, (void *)this, XEXECOBJ_IOSTD, data, toInit);
 }
 
 	#endif
@@ -122,10 +122,10 @@ flushSTD::addPreExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-flushSTD::read(char * const a_void)
+ioSTD::read(char * const a_void)
 {
-	#ifndef FLUSH_STD_WO_XEXEC
-	operType = FLUSHSTD_OPER_READ;
+	#ifndef IO_STD_WO_XEXEC
+	operType = IOSTD_OPER_READ;
 	performXExec(preExec);
 	#endif
 
@@ -146,7 +146,7 @@ flushSTD::read(char * const a_void)
 					continue;
 
 				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTD_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -165,7 +165,7 @@ flushSTD::read(char * const a_void)
 					continue;
 
 				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTD_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -174,7 +174,7 @@ flushSTD::read(char * const a_void)
 
 	buffer.assign(a_void, inSize);
 
-	#ifndef FLUSH_STD_WO_XEXEC
+	#ifndef IO_STD_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -182,7 +182,7 @@ flushSTD::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-flushSTD::readString(dodoString &a_str)
+ioSTD::readString(dodoString &a_str)
 {
 	char *data = new char[inSize + 1];
 
@@ -196,7 +196,7 @@ flushSTD::readString(dodoString &a_str)
 		a_str.assign(data, inSize);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTD_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	a_str.assign(data, inSize);
@@ -206,7 +206,7 @@ flushSTD::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-flushSTD::writeString(const dodoString &a_buf)
+ioSTD::writeString(const dodoString &a_buf)
 {
 	this->write(a_buf.c_str());
 }
@@ -214,12 +214,12 @@ flushSTD::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-flushSTD::write(const char *const aa_buf)
+ioSTD::write(const char *const aa_buf)
 {
 	buffer.assign(aa_buf, outSize);
 
-	#ifndef FLUSH_STD_WO_XEXEC
-	operType = FLUSHSTD_OPER_WRITE;
+	#ifndef IO_STD_WO_XEXEC
+	operType = IOSTD_OPER_WRITE;
 	performXExec(preExec);
 	#endif
 
@@ -242,7 +242,7 @@ flushSTD::write(const char *const aa_buf)
 					continue;
 
 				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -261,14 +261,14 @@ flushSTD::write(const char *const aa_buf)
 					continue;
 
 				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
 		}
 	}
 
-	#ifndef FLUSH_STD_WO_XEXEC
+	#ifndef IO_STD_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -276,20 +276,20 @@ flushSTD::write(const char *const aa_buf)
 //-------------------------------------------------------------------
 
 void
-flushSTD::flush()
+ioSTD::io()
 {
 	desc = stdout;
 	if (err)
 		desc = stderr;
 
-	if (fflush(desc) != 0)
-		throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (fio(desc) != 0)
+		throw baseEx(ERRMODULE_IOSTD, IOSTD_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 __connInfo
-flushSTD::inputterInfo()
+ioSTD::inputterInfo()
 {
 	__connInfo info;
 
@@ -300,7 +300,7 @@ flushSTD::inputterInfo()
 	if (::getpeername(1, &sa, &len) == 1)
 	{
 		if (errno != ENOTSOCK)
-			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_INPUTTERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTD_INPUTTERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			return info;
 	}
@@ -343,7 +343,7 @@ flushSTD::inputterInfo()
 //-------------------------------------------------------------------
 
 bool
-flushSTD::isBlocked() const
+ioSTD::isBlocked() const
 {
 	return blocked;
 }
@@ -351,7 +351,7 @@ flushSTD::isBlocked() const
 //-------------------------------------------------------------------
 
 void
-flushSTD::block(bool flag)
+ioSTD::block(bool flag)
 {
 	int block[3] = { O_NONBLOCK, O_NONBLOCK, O_NONBLOCK };
 
@@ -359,31 +359,31 @@ flushSTD::block(bool flag)
 	{
 		block[0] = fcntl(0, F_GETFL);
 		if (block[0] == -1)
-			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[0] &= ~O_NONBLOCK;
 
 		block[1] = fcntl(1, F_GETFL);
 		if (block[1] == -1)
-			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[1] &= ~O_NONBLOCK;
 
 		block[2] = fcntl(2, F_GETFL);
 		if (block[2] == -1)
-			throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[2] &= ~O_NONBLOCK;
 	}
 
 	if (fcntl(0, F_SETFL, block[0]) == 1)
-		throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (fcntl(1, F_SETFL, block[1]) == 1)
-		throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (fcntl(2, F_SETFL, block[2]) == 1)
-		throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	blocked = flag;
 }
@@ -391,10 +391,10 @@ flushSTD::block(bool flag)
 //-------------------------------------------------------------------
 
 void
-flushSTD::readStream(char * const a_void)
+ioSTD::readStream(char * const a_void)
 {
-	#ifndef FLUSH_STD_WO_XEXEC
-	operType = FLUSHSTD_OPER_READSTREAM;
+	#ifndef IO_STD_WO_XEXEC
+	operType = IOSTD_OPER_READSTREAM;
 	performXExec(preExec);
 	#endif
 
@@ -408,7 +408,7 @@ flushSTD::readStream(char * const a_void)
 				continue;
 
 			if (ferror(stdin) != 0)
-				throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IOSTD, IOSTD_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -416,7 +416,7 @@ flushSTD::readStream(char * const a_void)
 
 	buffer.assign(a_void);
 
-	#ifndef FLUSH_STD_WO_XEXEC
+	#ifndef IO_STD_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -424,7 +424,7 @@ flushSTD::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-flushSTD::readStreamString(dodoString &a_str)
+ioSTD::readStreamString(dodoString &a_str)
 {
 	char *data = new char[inSTDBuffer + 1];
 
@@ -438,7 +438,7 @@ flushSTD::readStreamString(dodoString &a_str)
 		a_str.assign(data);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTD_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	a_str.assign(data);
@@ -448,7 +448,7 @@ flushSTD::readStreamString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-flushSTD::writeStreamString(const dodoString &a_buf)
+ioSTD::writeStreamString(const dodoString &a_buf)
 {
 	this->writeStream(a_buf.c_str());
 }
@@ -456,12 +456,12 @@ flushSTD::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-flushSTD::writeStream(const char *const aa_buf)
+ioSTD::writeStream(const char *const aa_buf)
 {
 	buffer.assign(aa_buf);
 
-	#ifndef FLUSH_STD_WO_XEXEC
-	operType = FLUSHSTD_OPER_WRITESTREAM;
+	#ifndef IO_STD_WO_XEXEC
+	operType = IOSTD_OPER_WRITESTREAM;
 	performXExec(preExec);
 	#endif
 
@@ -500,7 +500,7 @@ flushSTD::writeStream(const char *const aa_buf)
 				{
 					delete [] buff;
 
-					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 			}
 
@@ -526,7 +526,7 @@ flushSTD::writeStream(const char *const aa_buf)
 				{
 					delete [] buff;
 
-					throw baseEx(ERRMODULE_FLUSHSTD, FLUSHSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 			}
 
@@ -536,7 +536,7 @@ flushSTD::writeStream(const char *const aa_buf)
 
 	delete [] buff;
 
-	#ifndef FLUSH_STD_WO_XEXEC
+	#ifndef IO_STD_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }

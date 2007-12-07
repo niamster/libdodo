@@ -26,7 +26,7 @@
 
 #include <libdodo/directives.h>
 
-#ifdef PTHREAD_EXT
+#ifdef PSYSTEMTHREADS_EXT
 
 	#ifdef DL_EXT
 
@@ -55,9 +55,9 @@ namespace dodo
 	 */
 	enum systemThreadOnDestructEnum
 	{
-		THREAD_KEEP_ALIVE,
-		THREAD_STOP,
-		THREAD_WAIT
+		SYSTEMTHREADS_KEEP_ALIVE,
+		SYSTEMTHREADS_STOP,
+		SYSTEMTHREADS_WAIT
 	};
 
 	/**
@@ -160,7 +160,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 			 * @param stackSize describes stack siae of the thread
 			 */
-			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit = 1, bool detached = false, short action = THREAD_WAIT, int stackSize = 2097152);
+			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit = 1, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
 			 * adds function to became a job[not executing]
@@ -169,7 +169,7 @@ namespace dodo
 			 * @param data describes data to be passed to func
 			 * @note
 			 * detached=false
-			 * action=THREAD_WAIT
+			 * action=SYSTEMTHREADS_WAIT
 			 * stackSize=2097152
 			 */
 			virtual unsigned long add(jobFunc func, void *data);
@@ -182,7 +182,7 @@ namespace dodo
 			 * @note
 			 * limit=1
 			 * detached=false
-			 * action=THREAD_WAIT
+			 * action=SYSTEMTHREADS_WAIT
 			 * stackSize=2097152
 			 */
 			virtual unsigned long addNRun(jobFunc func, void *data);
@@ -208,7 +208,7 @@ namespace dodo
 			 * @note - exception if it's currently running
 			 */
 			virtual void
-			replace(unsigned long position, threadFunc func, void *data, bool force = false, bool detached = false, short action = THREAD_WAIT, int stackSize = 2097152);
+			replace(unsigned long position, threadFunc func, void *data, bool force = false, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
 			 * executes thread
@@ -282,7 +282,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if thread is running
 			 * @param stackSize describes stack siae of the thread
 			 */
-			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL, bool detached = false, short action = THREAD_WAIT, int stackSize = 2097152);
+			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
 			 * adds function to became a thread[not executing] from module

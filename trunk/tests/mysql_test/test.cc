@@ -16,7 +16,7 @@ using namespace std;
 	{
 		dbMysql *sql = (dbMysql *)base;
 	
-		if (sql->operType == DBMYSQL_OPER_EXEC && sql->getQType() == DBREQUEST_SELECT)
+		if (sql->operType == DBMYSQL_OPER_EXEC && sql->getQType() == DBMYSQL_REQUEST_SELECT)
 		{
 			__collectedData data = sql->collectedData();
 			
@@ -36,9 +36,9 @@ using namespace std;
 	
 		switch (child->getQType())
 		{
-			case DBREQUEST_INSERT:
-			case DBREQUEST_DELETE:
-			case DBREQUEST_UPDATE:
+			case DBMYSQL_REQUEST_INSERT:
+			case DBMYSQL_REQUEST_DELETE:
+			case DBMYSQL_REQUEST_UPDATE:
 				__collectedData data = child->collectedData();
 				data.pre_table.assign(std::string((char *)yep));
 				child->exec();
@@ -71,17 +71,17 @@ int main(int argc, char **argv)
 	                __fieldInfo fi;
 	
 	                fi.name = "id";
-	                fi.type = FIELDTYPE_INTEGER;
-	                fi.flag = FIELDPROP_NULL | FIELDPROP_AUTO_INCREMENT;
+	                fi.type = DBBASE_FIELDTYPE_INTEGER;
+	                fi.flag = DBBASE_FIELDPROP_NULL | DBBASE_FIELDPROP_AUTO_INCREMENT;
 	                ti.fields.push_back(fi);
 			
 			fi.name = "dote";
 	                fi.flag = 0;
-			fi.type = FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 	                ti.fields.push_back(fi);
 	
 			fi.name = "operation";
-			fi.type = FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			try
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	
 			/*create field*/
 			fi.name = "fi";
-			fi.type = FIELDTYPE_CHAR;
+			fi.type = DBBASE_FIELDTYPE_CHAR;
 			fi.length = 10;
 			
 			pp.createField(fi,"tab");
@@ -153,9 +153,9 @@ int main(int argc, char **argv)
 			assA.push_back(arr);
 			
 			/*additional statement*/
-			pp.setAddInsSt(DBREQUEST_INSERT_IGNORE);//base SQL
-			pp.setAddSelSt(DBREQUEST_SELECT_DISTINCT);//base SQL
-			pp.setMyAddSelSt(DBREQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
+			pp.setAddInsSt(DBMYSQL_REQUEST_INSERT_IGNORE);//base SQL
+			pp.setAddSelSt(DBMYSQL_REQUEST_SELECT_DISTINCT);//base SQL
+			pp.setMyAddSelSt(DBMYSQL_REQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
 					
 			
 			pp.insert("tab",assA);//multiply insert
@@ -188,11 +188,11 @@ int main(int argc, char **argv)
 			dodoStringArr uni_all;
 			uni_all.push_back(pp.queryCollect());
 			uni_all.push_back(pp.queryCollect());
-			pp.subquery(uni_all,DBREQUEST_UNION_ALL);
+			pp.subquery(uni_all,DBMYSQL_REQUEST_UNION_ALL);
 			
 			pp.order("id desc");
 			pp.limit(5);
-			pp.setAddSelSt(DBREQUEST_SELECT_DISTINCT);
+			pp.setAddSelSt(DBMYSQL_REQUEST_SELECT_DISTINCT);
 			cout << pp.queryCollect() << endl;//show query
 			pp.exec();
 			

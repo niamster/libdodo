@@ -31,7 +31,7 @@
 #include <libdodo/tools.h>
 #include <libdodo/cgiPreprocessor.h>
 #include <libdodo/cgiFast.h>
-#include <libdodo/flushSTD.h>
+#include <libdodo/ioSTD.h>
 
 namespace dodo
 {
@@ -252,7 +252,7 @@ namespace dodo
 
 			#endif
 
-			flushSTD *fstd;
+			ioSTD *fstd;
 	};
 
 };

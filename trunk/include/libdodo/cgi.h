@@ -33,7 +33,7 @@
 #include <libdodo/types.h>
 #include <libdodo/dodoMap.h>
 #include <libdodo/cgiFast.h>
-#include <libdodo/flushSTD.h>
+#include <libdodo/ioSTD.h>
 
 namespace dodo
 {
@@ -52,7 +52,7 @@ namespace dodo
 
 		{ "CONTENT_TYPE"              },
 		{ "CONTENT_LENGTH"            },
-		{ "CONTENT_TRANSFER_ENCODING" },
+		{ "CONTENT_IOSOCKETOPTIONS_TRANSFER_ENCODING" },
 
 		{ "HTTP_HOST"                 },
 		{ "HTTP_USER_AGENT"           },
@@ -348,7 +348,7 @@ namespace dodo
 
 			#endif
 
-			flushSTD *fstd;
+			ioSTD *fstd;
 	};
 
 };

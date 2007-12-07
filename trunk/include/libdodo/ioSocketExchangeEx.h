@@ -1,7 +1,7 @@
 /***************************************************************************
- *            flushSTD.h
+ *            ioSocketExchangeEx.h
  *
- *  Tue Nov 15 21:19:57 2005
+ *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHDISKEX_H_
-#define _FLUSHDISKEX_H_
+#ifndef _IOSOCKETEXCHANGEEX_H_
+#define _IOSOCKETEXCHANGEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,25 +30,20 @@
 
 namespace dodo
 {
+
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum flushSTDFunctionsID
+	enum ioSocketExchangeFunctionsID
 	{
-		FLUSHSTD_CLOSE,
-		FLUSHSTD_OPEN,
-		FLUSHSTD_READ,
-		FLUSHSTD_WRITE,
-		FLUSHSTD_READSTREAM,
-		FLUSHSTD_READSTREAMSTRING,
-		FLUSHSTD_READSTRING,
-		FLUSHSTD_WRITESTREAM,
-		FLUSHSTD_FLUSH,
-		FLUSHSTD_LOCKOUT,
-		FLUSHSTD_LOCKIN,
-		FLUSHSTD_INPUTTERINFO,
-		FLUSHSTD_BLOCK
+		IOSOCKETEXCHANGE_SEND,
+		IOSOCKETEXCHANGE_RECEIVE,
+		IOSOCKETEXCHANGE_SENDSTREAM,
+		IOSOCKETEXCHANGE_RECEIVESTREAM,
+		IOSOCKETEXCHANGE_RECEIVESTRINGSTREAM,
+		IOSOCKETEXCHANGE_RECEIVESTRING,
 	};
+
 };
 
 #endif

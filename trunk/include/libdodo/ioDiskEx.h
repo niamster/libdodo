@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushDiskEx.h
+ *            ioDiskEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHDISKEX_H_
-#define _FLUSHDISKEX_H_
+#ifndef _IODISKEX_H_
+#define _IODISKEX_H_
 
 #include <libdodo/directives.h>
 
@@ -34,34 +34,34 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum flushDiskExR
+	enum ioDiskExR
 	{
-		FLUSHDISK_WRONG_FILENAME,
-		FLUSHDISK_CANNOT_OVEWRITE,
-		FLUSHDISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION,
+		IODISK_WRONG_FILENAME,
+		IODISK_CANNOT_OVEWRITE,
+		IODISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define FLUSHDISK_WRONG_FILENAME_STR                         "Probably wrong filename, type of file is wrong or `path` is empty!"
-		#define FLUSHDISK_CANNOT_OVEWRITE_STR                        "You set option not to overwrite, but try to do that =)"
-		#define FLUSHDISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR    "Given file couldn't reach given position. File is short."
+		#define IODISK_WRONG_FILENAME_STR                         "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define IODISK_CANNOT_OVEWRITE_STR                        "You set option not to overwrite, but try to do that =)"
+		#define IODISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR    "Given file couldn't reach given position. File is short."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum flushDiskFunctionsID
+	enum ioDiskFunctionsID
 	{
-		FLUSHDISK_CLOSE,
-		FLUSHDISK_OPEN,
-		FLUSHDISK_READ,
-		FLUSHDISK_WRITE,
-		FLUSHDISK_READSTREAM,
-		FLUSHDISK_READSTRING,
-		FLUSHDISK_READSTREAMSTRING,
-		FLUSHDISK_WRITESTREAM,
-		FLUSHDISK_FLUSH,
+		IODISK_CLOSE,
+		IODISK_OPEN,
+		IODISK_READ,
+		IODISK_WRITE,
+		IODISK_READSTREAM,
+		IODISK_READSTRING,
+		IODISK_READSTREAMSTRING,
+		IODISK_WRITESTREAM,
+		IODISK_IO,
 	};
 };
 

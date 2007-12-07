@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushSocketToolsEx.h
+ *            ioSocketToolsEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHSOCKETTOOLSEX_H_
-#define _FLUSHSOCKETTOOLSEX_H_
+#ifndef _IOSOCKETTOOLSEX_H_
+#define _IOSOCKETTOOLSEX_H_
 
 #include <libdodo/directives.h>
 
@@ -34,16 +34,16 @@ namespace dodo
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum flushSocketToolsFunctionsID
+	enum ioSocketToolsFunctionsID
 	{
-		FLUSHSOCKETTOOLS_GETHOSTINFO,
-		FLUSHSOCKETTOOLS_SETLOCALNAME,
-		FLUSHSOCKETTOOLS_GETLOCALNAME,
-		FLUSHSOCKETTOOLS_GETSERVICEINFO,
-		FLUSHSOCKETTOOLS_GETLOCALDOMAIN,
-		FLUSHSOCKETTOOLS_SETLOCALDOMAIN,
-		FLUSHSOCKETTOOLS_GETINTERFACEINFO,
-		FLUSHSOCKETTOOLS_GETINTERFACESNAMES,
+		IOSOCKETTOOLS_GETHOSTINFO,
+		IOSOCKETTOOLS_SETLOCALNAME,
+		IOSOCKETTOOLS_GETLOCALNAME,
+		IOSOCKETTOOLS_GETSERVICEINFO,
+		IOSOCKETTOOLS_GETLOCALDOMAIN,
+		IOSOCKETTOOLS_SETLOCALDOMAIN,
+		IOSOCKETTOOLS_GETINTERFACEINFO,
+		IOSOCKETTOOLS_GETINTERFACESNAMES,
 	};
 
 };

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbInterface.h
+ *            db.h
  *
  *  Sun Jan  15 19:45:19 2005
  *  Copyright  2005  Ni@m
@@ -74,22 +74,22 @@ namespace dodo
 	};
 
 	/**
-	 * @class dbInterface is an interface to mysql db through sql-, database- independent interfaces;
+	 * @class db is an interface to mysql db through sql-, database- independent interfaces;
 	 * you should derive from it if you want to write 'plugin' for your database
 	 */
-	class dbInterface
+	class db
 	{
 		public:
 
 			/**
 			 *constructor
 			 */
-			dbInterface();
+			db();
 
 			/**
 			 * destructor
 			 */
-			virtual ~dbInterface() = 0;
+			virtual ~db() = 0;
 
 			/**
 			 * connect to database

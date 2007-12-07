@@ -50,12 +50,12 @@ namespace dodo
 	 */
 	enum imagePixelSizeEnum
 	{
-		IMAGE_PS_CHAR,///< 8 bits
-		IMAGE_PS_SHORT,///< 16 bits
-		IMAGE_PS_INT,///< 32(16 on some CPUs) bits
-		IMAGE_PS_LONG,///< 32(32 on some CPUs) bits
-		IMAGE_PS_FLOAT,///< 32 bits
-		IMAGE_PS_DOUBLE,///< 64 bits
+		IMAGE_PIXELSIZE_CHAR,///< 8 bits
+		IMAGE_PIXELSIZE_SHORT,///< 16 bits
+		IMAGE_PIXELSIZE_INT,///< 32(16 on some CPUs) bits
+		IMAGE_PIXELSIZE_LONG,///< 32(32 on some CPUs) bits
+		IMAGE_PIXELSIZE_FLOAT,///< 32 bits
+		IMAGE_PIXELSIZE_DOUBLE,///< 64 bits
 	};
 	
 	/**
@@ -63,20 +63,20 @@ namespace dodo
 	 */
 	enum imageEncoderEnum
 	{
-		IMAGE_ENC_PNG,
-		IMAGE_ENC_JPEG,
+		IMAGE_ENCODER_PNG,
+		IMAGE_ENCODER_JPEG,
 	};
 	
 	/**
 	 * @enum imageRotateDirAngEnum describes parameters for rotation
 	 */
-	enum imageRotateDirAngEnum
+	enum imageRotateDirectionAngleEnum
 	{
-		IMAGE_RDA_90CW = -90,
-		IMAGE_RDA_90CCW = 90,
-		IMAGE_RDA_180 = 180,
-		IMAGE_RDA_270CW = -270,
-		IMAGE_RDA_270CCW = 270,
+		IMAGE_ROTATEDIRECTIONANGLE_90CW = -90,
+		IMAGE_ROTATEDIRECTIONANGLE_90CCW = 90,
+		IMAGE_ROTATEDIRECTIONANGLE_180 = 180,
+		IMAGE_ROTATEDIRECTIONANGLE_270CW = -270,
+		IMAGE_ROTATEDIRECTIONANGLE_270CCW = 270,
 	};
 
 	/**

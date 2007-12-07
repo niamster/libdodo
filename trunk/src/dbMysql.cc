@@ -97,9 +97,9 @@ dbMysql::addSQL()
 void
 dbMysql::setMyAddInsSt(short statement)
 {
-	removeFlag(qDbDepInsShift, 1 << DBREQUEST_INSERT_DELAYED);
-	removeFlag(qDbDepInsShift, 1 << DBREQUEST_INSERT_LOW_PRIORITY);
-	removeFlag(qDbDepInsShift, 1 << DBREQUEST_INSERT_HIGH_PRIORITY);
+	removeFlag(qDbDepInsShift, 1 << DBMYSQL_REQUEST_INSERT_DELAYED);
+	removeFlag(qDbDepInsShift, 1 << DBMYSQL_REQUEST_INSERT_LOW_PRIORITY);
+	removeFlag(qDbDepInsShift, 1 << DBMYSQL_REQUEST_INSERT_HIGH_PRIORITY);
 
 	addFlag(qDbDepInsShift, 1 << statement);
 }
@@ -244,7 +244,7 @@ dbMysql::_exec(const dodoString &query,
 	{
 		if (autoFraming)
 		{
-			if (qType == DBREQUEST_INSERT || qType == DBREQUEST_UPDATE)
+			if (qType == DBMYSQL_REQUEST_INSERT || qType ==DBMYSQL_REQUEST_UPDATE)
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 

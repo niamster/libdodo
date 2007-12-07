@@ -1,5 +1,5 @@
 /***************************************************************************
- *            flushDiskTools.h
+ *            ioDiskTools.h
  *
  *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _FLUSHDISKTOOLS_H_
-#define _FLUSHDISKTOOLS_H_
+#ifndef _IODISKTOOLS_H_
+#define _IODISKTOOLS_H_
 
 #include <libdodo/directives.h>
 
@@ -37,23 +37,23 @@
 #include <unistd.h>
 
 #include <libdodo/tools.h>
-#include <libdodo/flushDiskToolsEx.h>
+#include <libdodo/ioDiskToolsEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
 {
 	/**
-	 * @enum flushDiskFileTypeEnum indicates file type; you receive it from getFileInfo and relative methods
+	 * @enum ioDiskFileTypeEnum indicates file type; you receive it from getFileInfo and relative methods
 	 */
-	enum flushDiskToolsFileTypeEnum
+	enum ioDiskToolsFileTypeEnum
 	{
-		FLUSHDISKTOOLS_FILETYPE_REGULAR_FILE,
-		FLUSHDISKTOOLS_FILETYPE_LOCAL_SOCKET,
-		FLUSHDISKTOOLS_FILETYPE_SYMBOLIC_LINK,
-		FLUSHDISKTOOLS_FILETYPE_BLOCK_DEVICE,
-		FLUSHDISKTOOLS_FILETYPE_DIRECTORY,
-		FLUSHDISKTOOLS_FILETYPE_CHARACTER_DEVICE,
-		FLUSHDISKTOOLS_FILETYPE_FIFO
+		IODISKTOOLS_FILETYPE_REGULAR_FILE,
+		IODISKTOOLS_FILETYPE_LOCAL_SOCKET,
+		IODISKTOOLS_FILETYPE_SYMBOLIC_LINK,
+		IODISKTOOLS_FILETYPE_BLOCK_DEVICE,
+		IODISKTOOLS_FILETYPE_DIRECTORY,
+		IODISKTOOLS_FILETYPE_CHARACTER_DEVICE,
+		IODISKTOOLS_FILETYPE_FIFO
 	};
 
 	/**
@@ -61,30 +61,30 @@ namespace dodo
 	 */
 	enum permissionModesEnum
 	{
-		FLUSHDISKTOOLS_PERM_NONE = 0,
+		IODISKTOOLS_PERM_NONE = 0,
 
-		FLUSHDISKTOOLS_PERM_OWNER_READ_ACCESS = 2,
-		FLUSHDISKTOOLS_PERM_GROUP_READ_ACCESS = 4,
-		FLUSHDISKTOOLS_PERM_OTHER_READ_ACCESS = 8,
+		IODISKTOOLS_PERM_OWNER_READ_ACCESS = 2,
+		IODISKTOOLS_PERM_GROUP_READ_ACCESS = 4,
+		IODISKTOOLS_PERM_OTHER_READ_ACCESS = 8,
 
-		FLUSHDISKTOOLS_PERM_OWNER_WRITE_ACCESS = 16,
-		FLUSHDISKTOOLS_PERM_GROUP_WRITE_ACCESS = 32,
-		FLUSHDISKTOOLS_PERM_OTHER_WRITE_ACCESS = 64,
+		IODISKTOOLS_PERM_OWNER_WRITE_ACCESS = 16,
+		IODISKTOOLS_PERM_GROUP_WRITE_ACCESS = 32,
+		IODISKTOOLS_PERM_OTHER_WRITE_ACCESS = 64,
 
-		FLUSHDISKTOOLS_PERM_OWNER_EXECUTE_ACCESS = 128,
-		FLUSHDISKTOOLS_PERM_GROUP_EXECUTE_ACCESS = 256,
-		FLUSHDISKTOOLS_PERM_OTHER_EXECUTE_ACCESS = 512,
+		IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS = 128,
+		IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS = 256,
+		IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS = 512,
 
-		FLUSHDISKTOOLS_PERM_STICKY_ACCESS = 1024,
+		IODISKTOOLS_PERM_STICKY_ACCESS = 1024,
 
-		FLUSHDISKTOOLS_PERM_SUID_ACCESS = 2048,
-		FLUSHDISKTOOLS_PERM_SGID_ACCESS = 4096,
+		IODISKTOOLS_PERM_SUID_ACCESS = 2048,
+		IODISKTOOLS_PERM_SGID_ACCESS = 4096,
 
-		FLUSHDISKTOOLS_PERM_OWNER_ALL_ACCESS = 146,
-		FLUSHDISKTOOLS_PERM_GROUP_ALL_ACCESS = 292,
-		FLUSHDISKTOOLS_PERM_OTHER_ALL_ACCESS = 584,
+		IODISKTOOLS_PERM_OWNER_ALL_ACCESS = 146,
+		IODISKTOOLS_PERM_GROUP_ALL_ACCESS = 292,
+		IODISKTOOLS_PERM_OTHER_ALL_ACCESS = 584,
 
-		FLUSHDISKTOOLS_PERM_ALL_ALL_ACCESS = 1022
+		IODISKTOOLS_PERM_ALL_ALL_ACCESS = 1022
 
 	};
 
@@ -95,7 +95,7 @@ namespace dodo
 	{
 		dodoString name;    ///< file name
 		int perm;           ///< file permissions[see permissionModesEnum]; may be or'ed
-		int type;           ///< file type[see flushDiskToolsFileTypeEnum]
+		int type;           ///< file type[see ioDiskToolsFileTypeEnum]
 		long size;          ///< file size
 		long modTime;       ///< modyfication time
 		long accTime;       ///< access time
@@ -104,13 +104,13 @@ namespace dodo
 	};
 
 	/**
-	 * @class flushDisk allows disk I/O manipulations
+	 * @class ioDisk allows disk I/O manipulations
 	 */
 
-	class flushDiskTools
+	class ioDiskTools
 	{
 
-			friend class flushSocket;
+			friend class ioSocket;
 
 		public:
 
@@ -199,7 +199,7 @@ namespace dodo
 			 * @param force if it is true and directory already exists do not say anything
 			 */
 			static void
-			mkdir(const dodoString &path, int permissions = FLUSHDISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force = true);
+			mkdir(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force = true);
 
 			/**
 			 * delete files, non empty directory
