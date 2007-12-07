@@ -96,10 +96,10 @@ namespace dodo
 	 */
 	enum errPostFileEnum
 	{
-		POSTFILEERR_NONE,           ///< everythin' is OK
-		POSTFILEERR_ACCESS_DENY,    ///< permissions error
-		POSTFILEERR_BAD_FILE_NAME,  ///< filename too long
-		POSTFILEERR_NO_SPACE        ///< not enough space to save the file
+		CGI_POSTFILEERR_NONE,           ///< everythin' is OK
+		CGI_POSTFILEERR_ACCESS_DENY,    ///< permissions error
+		CGI_POSTFILEERR_BAD_FILE_NAME,  ///< filename too long
+		CGI_POSTFILEERR_NO_SPACE        ///< not enough space to save the file
 	};
 
 	/**

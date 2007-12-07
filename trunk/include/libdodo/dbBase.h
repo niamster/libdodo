@@ -35,7 +35,7 @@ namespace dodo
 	/**
 	 * @enum AddEnum describes additional statement
 	 */
-	enum AddEnum
+	enum addEnum
 	{
 		DBADDREQUEST_WHERE = 1,
 		DBADDREQUEST_HAVING,

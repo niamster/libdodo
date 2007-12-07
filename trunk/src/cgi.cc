@@ -451,7 +451,7 @@ cgi::makePost()
 					{
 						delete [] ptr;
 
-						file.error = POSTFILEERR_BAD_FILE_NAME;
+						file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
 						FILES.insert(post_name, file);
 
 						continue;
@@ -464,7 +464,7 @@ cgi::makePost()
 
 				file.size = i->substr(temp1 + 4).size() - 2;
 
-				file.error = POSTFILEERR_NONE;
+				file.error = CGI_POSTFILEERR_NONE;
 
 				#ifndef __FreeBSD__
 
@@ -486,26 +486,26 @@ cgi::makePost()
 						case EACCES:
 						case EISDIR:
 
-							file.error = POSTFILEERR_ACCESS_DENY;
+							file.error = CGI_POSTFILEERR_ACCESS_DENY;
 
 							break;
 
 						case ENAMETOOLONG:
 						case ENOTDIR:
 
-							file.error = POSTFILEERR_BAD_FILE_NAME;
+							file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
 
 							break;
 
 						case ENOMEM:
 
-							file.error = POSTFILEERR_NO_SPACE;
+							file.error = CGI_POSTFILEERR_NO_SPACE;
 
 							break;
 					}
 				fwrite(i->substr(temp1 + 4).c_str(), file.size, 1, file.fp);
 				if (errno == ENOMEM)
-					file.error = POSTFILEERR_NO_SPACE;
+					file.error = CGI_POSTFILEERR_NO_SPACE;
 
 				FILES.insert(post_name, file);
 			}
