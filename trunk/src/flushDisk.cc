@@ -25,13 +25,22 @@
 
 using namespace dodo;
 
-flushDisk::flushDisk(short type,
-					 const dodoString &a_path) : over(false),
-												 mode(OPENMODE_READ_WRITE),
-												 fileType(type),
-												 append(false),
-												 path(a_path)
+flushDisk::flushDisk(const dodoString &a_path,
+					short a_fileType,
+					 short mode) : over(false),
+									 append(false),
+									 path(a_path),
+									 fileType(a_fileType)
 {
+	if (path != __dodostring__)
+		try
+		{
+			open(path, fileType, mode);
+		}
+		catch(...)
+		{
+			
+		}
 }
 
 //-------------------------------------------------------------------
@@ -155,20 +164,22 @@ flushDisk::close()
 //-------------------------------------------------------------------
 
 void
-flushDisk::open(const dodoString &a_path)
+flushDisk::open(const dodoString &a_path,
+			short a_fileType,
+			short mode)
 {
 	#ifndef FLUSH_DISK_WO_XEXEC
 	operType = FLUSHDISK_OPER_OPEN;
 	performXExec(preExec);
 	#endif
 
-	if (a_path.size() != 0 && a_path == path)
-		path = a_path;
+	path = a_path;
+	fileType = a_fileType;
 
 	if (opened)
 		close();
 
-	if (fileType == FILETYPE_TMP_FILE)
+	if (fileType == FLUSHDISK_FILETYPE_TMP_FILE)
 		file = tmpfile();
 	else
 	{
@@ -179,7 +190,7 @@ flushDisk::open(const dodoString &a_path)
 			struct stat st;
 			bool exists(false);
 
-			if (::lstat(path.c_str(), &st) == 1)
+			if (::lstat(path.c_str(), &st) == -1)
 			{
 				if (errno != ENOENT)
 					throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -187,7 +198,7 @@ flushDisk::open(const dodoString &a_path)
 			else
 				exists = true;
 
-			if (fileType == FILETYPE_FIFO_FILE)
+			if (fileType == FLUSHDISK_FILETYPE_FIFO_FILE)
 			{
 				if (exists && !S_ISFIFO(st.st_mode))
 					throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_OPEN, ERR_LIBDODO, FLUSHDISK_WRONG_FILENAME, FLUSHDISK_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
@@ -197,13 +208,13 @@ flushDisk::open(const dodoString &a_path)
 			}
 			else
 			{
-				if ((fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE || FILETYPE_CHAR_FILE) && exists && !S_ISREG(st.st_mode) && !S_ISCHR(st.st_mode))
+				if ((fileType == FLUSHDISK_FILETYPE_REG_FILE || fileType == FLUSHDISK_FILETYPE_TMP_FILE || fileType ==  FLUSHDISK_FILETYPE_CHAR_FILE) && exists && !S_ISREG(st.st_mode) && !S_ISCHR(st.st_mode))
 					throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_OPEN, ERR_LIBDODO, FLUSHDISK_WRONG_FILENAME, FLUSHDISK_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 			}
 
 			switch (mode)
 			{
-				case OPENMODE_READ_WRITE:
+				case FLUSHDISK_OPENMODE_READ_WRITE:
 
 					file = fopen(path.c_str(), "r+");
 					if (file == NULL)
@@ -211,20 +222,20 @@ flushDisk::open(const dodoString &a_path)
 
 					break;
 
-				case OPENMODE_READ_WRITE_TRUNCATE:
+				case FLUSHDISK_OPENMODE_READ_WRITE_TRUNCATE:
 
 					file = fopen(path.c_str(), "w+");
 
 					break;
 
-				case OPENMODE_APPEND:
+				case FLUSHDISK_OPENMODE_APPEND:
 
 					file = fopen(path.c_str(), "a+");
 					append = true;
 
 					break;
 
-				case OPENMODE_READ_ONLY:
+				case FLUSHDISK_OPENMODE_READ_ONLY:
 				default:
 
 					file = fopen(path.c_str(), "r");
@@ -255,14 +266,14 @@ flushDisk::read(char * const a_void,
 	performXExec(preExec);
 	#endif
 
-	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
+	if (fileType == FLUSHDISK_FILETYPE_REG_FILE || fileType == FLUSHDISK_FILETYPE_TMP_FILE)
 		if (fseek(file, a_pos * inSize, SEEK_SET) == -1)
 			throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	memset(a_void, '\0', inSize);
 
 	errno = 0;
-	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
+	if (fileType == FLUSHDISK_FILETYPE_REG_FILE || fileType == FLUSHDISK_FILETYPE_TMP_FILE)
 		fread(a_void, inSize, 1, file);
 	else
 		#ifndef FAST
@@ -337,7 +348,7 @@ flushDisk::write(const char *const a_buf,
 	performXExec(preExec);
 	#endif
 
-	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
+	if (fileType == FLUSHDISK_FILETYPE_REG_FILE || fileType == FLUSHDISK_FILETYPE_TMP_FILE)
 	{
 		a_pos *= outSize;
 
@@ -371,11 +382,11 @@ flushDisk::write(const char *const a_buf,
 	}
 
 	errno = 0;
-	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
+	if (fileType == FLUSHDISK_FILETYPE_REG_FILE || fileType == FLUSHDISK_FILETYPE_TMP_FILE)
 		fwrite(buffer.c_str(), outSize, 1, file);
 	else
 		#ifndef FAST
-	if (fileType == FILETYPE_FIFO_FILE)
+	if (fileType == FLUSHDISK_FILETYPE_FIFO_FILE)
 		#endif
 		fputs(buffer.c_str(), file);
 
@@ -441,7 +452,7 @@ flushDisk::readStream(char * const a_void,
 	performXExec(preExec);
 	#endif
 
-	if (fileType == FILETYPE_REG_FILE || fileType == FILETYPE_TMP_FILE)
+	if (fileType == FLUSHDISK_FILETYPE_REG_FILE || fileType == FLUSHDISK_FILETYPE_TMP_FILE)
 	{
 		if (fseek(file, 0, SEEK_SET) == -1)
 			throw baseEx(ERRMODULE_FLUSHDISK, FLUSHDISK_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -575,6 +586,14 @@ flushDisk::writeStream(const char *const a_buf)
 	#ifndef FLUSH_DISK_WO_XEXEC
 	performXExec(postExec);
 	#endif
+}
+
+//-------------------------------------------------------------------
+
+short 
+flushDisk::getFileType() const
+{
+	return fileType;
 }
 
 //-------------------------------------------------------------------

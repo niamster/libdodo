@@ -77,7 +77,6 @@ const __statements image::encoderStArr[] =
 {
 	"PNG",
 	"JPEG",
-	"RGB"
 };
 
 //-------------------------------------------------------------------
@@ -148,10 +147,11 @@ image::write(const dodoString &str)
 //-------------------------------------------------------------------
 
 void
-image::write(const unsigned char *data, 
+image::write(unsigned char **data, 
 			unsigned int &size)
 {	
-	data = ImageToBlob(imInfo, im, &size, exInfo);
+	size = 0;
+	*data = ImageToBlob(imInfo, im, &size, exInfo);
 	if (data == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
 }
@@ -164,11 +164,7 @@ image::setEncoder(short encoder)
 	if (encoder < 0 || encoder >= sizeof(encoderStArr)/sizeof(__statements))
 		throw baseEx(ERRMODULE_IMAGE, IMAGE_SETENCODER, ERR_LIBDODO, IMAGE_BADINFO, IMAGE_BADINFO_STR, __LINE__, __FILE__);
 	
-	FormatMagickString(imInfo->filename, MaxTextExtent, "%.1024s:", encoderStArr[encoder].str );
-	SetImageInfo(imInfo, MagickTrue, exInfo);
-	
-	if (*imInfo->magick == '\0')
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_SETENCODER, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+	strcpy(imInfo->magick, encoderStArr[encoder].str);
 }
 
 //-------------------------------------------------------------------
@@ -185,6 +181,28 @@ image::scale(unsigned long width,
 	if (im != NULL)
 		DestroyImage(im);
 	im = image;
+}
+//-------------------------------------------------------------------
+
+void 
+image::rotate(double angle)
+{	
+	Image *image = RotateImage(im, angle, exInfo);
+	
+	if (image == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGE_ROTATE, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+	
+	if (im != NULL)
+		DestroyImage(im);
+	im = image;
+}
+
+//-------------------------------------------------------------------
+
+void 
+image::destroyImageData(unsigned char **data)
+{
+	free(*data);
 }
 
 //-------------------------------------------------------------------

@@ -37,12 +37,9 @@ int main(int argc, char **argv)
 	{
 		flushDiskTools::unlink("my.dat");
 		
-		//flushDisk flush(FILETYPE_FIFO_FILE,"my.dat");
-		flushDisk flush(FILETYPE_REG_FILE,"my.dat");
+		//flushDisk flush("my.dat", FLUSHDISKTOOLS_FILETYPE_FIFO_FILE);
+		flushDisk flush("my.dat");
 		
-		
-		//flushDisk flush(true);///in tmp file
-		flush.open();
 		//flush.inSize = flush.outSize = 13;
 		flush.over = true;
 		
@@ -66,12 +63,12 @@ int main(int argc, char **argv)
 	
 		flushDiskTools::rm("./tmp");
 
-		flushDiskTools::mkdir("testDir");//,PERM_OWNER_ALL_ACCESS,false);
+		flushDiskTools::mkdir("testDir");//,FLUSHDISKTOOLS_PERM_OWNER_ALL_ACCESS,false);
 
 		flushDiskTools::rename("testDir","DirTest");	
 		
 		flushDiskTools::symlink("test","TEST");
-		flushDiskTools::chmod("test",PERM_ALL_ALL_ACCESS);
+		flushDiskTools::chmod("test",FLUSHDISKTOOLS_PERM_ALL_ALL_ACCESS);
 		
 		cout << flushDiskTools::getPermissions("Makefile");
 		

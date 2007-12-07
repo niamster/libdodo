@@ -56,10 +56,10 @@ namespace dodo
 	 */
 	enum flushDiskModesEnum
 	{
-		OPENMODE_READ_ONLY,             ///< error if not exists file
-		OPENMODE_READ_WRITE,            ///< creates if not exists
-		OPENMODE_READ_WRITE_TRUNCATE,   ///< if exists=truncates
-		OPENMODE_APPEND                 ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
+		FLUSHDISK_OPENMODE_READ_ONLY,             ///< error if not exists file
+		FLUSHDISK_OPENMODE_READ_WRITE,            ///< creates if not exists
+		FLUSHDISK_OPENMODE_READ_WRITE_TRUNCATE,   ///< if exists=truncates
+		FLUSHDISK_OPENMODE_APPEND                 ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
 	};
 
 	/**
@@ -67,10 +67,10 @@ namespace dodo
 	 */
 	enum flushDiskFileToCreateEnum
 	{
-		FILETYPE_REG_FILE,  ///< regular file
-		FILETYPE_TMP_FILE,  ///< temporary file. will be deleted after you exit program(or close it)
-		FILETYPE_FIFO_FILE, ///< FIFO file
-		FILETYPE_CHAR_FILE  ///< CHAR file
+		FLUSHDISK_FILETYPE_REG_FILE,  ///< regular file
+		FLUSHDISK_FILETYPE_TMP_FILE,  ///< temporary file. will be deleted after you exit program(or close it)
+		FLUSHDISK_FILETYPE_FIFO_FILE, ///< FIFO file
+		FLUSHDISK_FILETYPE_CHAR_FILE  ///< CHAR file
 	};
 
 	/**
@@ -97,12 +97,12 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param type describes type of file with what manipulation will be made
 			 * @param path is path to the file
-			 *
-			 * if type == TMP_FILE, u don't have to specify path
+			 * @param type describes type of file with what manipulation will be made
+			 * @param mode defines mode to open file 
+			 * @note if type == TMP_FILE, u don't have to specify path
 			 */
-			flushDisk(short type, const dodoString &path = __dodostring__);
+			flushDisk(const dodoString &path = __dodostring__, short fileType = FLUSHDISK_FILETYPE_REG_FILE, short mode = FLUSHDISK_OPENMODE_READ_WRITE);
 
 			/**
 			 * destructor
@@ -164,12 +164,13 @@ namespace dodo
 			/**
 			 * opens file
 			 * @param path describes path to file
-			 * closes previous opened file if needed
-			 * if u want to create pipe, but not a pipe was created with the same name - false will be returned
-			 * if u want to create regular file, but not regular file was created with the same name - false will be returned
+			 * @param mode defines mode to open file 
+			 * @note closes previous opened file if needed
+			 * if you want to create pipe, but not a pipe was created with the same name - false will be returned
+			 * if you want to create regular file, but not regular file was created with the same name - false will be returned
 			 */
 			virtual void
-			open(const dodoString &path = __dodostring__);               ///< if opened previous file, closes it
+			open(const dodoString &path, short fileType, short mode); 
 
 			/**
 			 * closes file
@@ -250,23 +251,25 @@ namespace dodo
 			 */
 			virtual void
 			erase(unsigned long pos);
+			
 			/**
 			 * flushes to disk
 			 */
 			virtual void
 			flush();
 
-			bool over;  ///< indicates whether overright or not; if tou want to write to nonempty node error will be occured; for files, tmp_files only
-			short mode; ///< mode to open file; if you change it then you have to reopen!
-
+			bool over;  ///< indicates whether overwrite or not; if you want to write to nonempty node error will be occured; for files, tmp_files only
+			bool append;    ///< if true, will append to the end of the file, even pos is set.
+			
 			/**
 			 * @return path of the opened file
 			 */
 			virtual dodoString getPath() const;
-
-			short fileType; ///< type of file; if you change then it you have to reopen!
-
-			bool append;    ///< if true, will append to the end of the file, even pos is set.
+			
+			/**
+			 * @return type of the opened file
+			 */
+			virtual short getFileType() const;
 
 		protected:
 
@@ -283,6 +286,7 @@ namespace dodo
 		private:
 
 			dodoString path;    ///< file name
+			short fileType; ///< type of file
 
 			FILE *file;         ///< file handler
 	};

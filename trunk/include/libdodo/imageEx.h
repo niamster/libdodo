@@ -55,7 +55,8 @@ namespace dodo
 		IMAGE_READ,
 		IMAGE_WRITE,
 		IMAGE_SETENCODER,
-		IMAGE_SCALE
+		IMAGE_SCALE,
+		IMAGE_ROTATE,
 	};
 
 };

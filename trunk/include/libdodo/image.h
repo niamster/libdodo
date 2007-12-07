@@ -58,11 +58,25 @@ namespace dodo
 		IMAGE_PS_DOUBLE,///< 64 bits
 	};
 	
+	/**
+	 * @enum imageEncoderEnum describes image encoder
+	 */
 	enum imageEncoderEnum
 	{
 		IMAGE_ENC_PNG,
 		IMAGE_ENC_JPEG,
-		IMAGE_ENC_RGB
+	};
+	
+	/**
+	 * @enum imageRotateDirAngEnum describes parameters for rotation
+	 */
+	enum imageRotateDirAngEnum
+	{
+		IMAGE_RDA_90CW = -90,
+		IMAGE_RDA_90CCW = 90,
+		IMAGE_RDA_180 = 180,
+		IMAGE_RDA_270CW = -270,
+		IMAGE_RDA_270CCW = 270,
 	};
 
 	/**
@@ -124,18 +138,32 @@ namespace dodo
 			 * @param data describes pointer to image
 			 * @param size describes size of data
 			 */
-			void write(const unsigned char *data, unsigned int &size);
+			void write(unsigned char **data, unsigned int &size);
 			
 			/**
+			 * sets image output encoder
 			 * @param encoder describes codec to encode image[see imageEncoderEnum]
 			 */
 			void setEncoder(short encoder);
 			
 			/**
+			 * scales image
 			 * @param width describes width of the image
 			 * @param height describes height of the image
 			 */
 			void scale(unsigned long width, unsigned long height);
+			
+			/**
+			 * rotates image
+			 * @param angle describes the number of degrees to rotate the image[see also imageRotateDirAngEnum]
+			 */
+			void rotate(double angle);
+			
+			/**
+			 * destroys image data got from write
+			 * @param data describes pointer to image
+			 */
+			void destroyImageData(unsigned char **data);
 			
 		protected:
 			
@@ -147,7 +175,7 @@ namespace dodo
 			
 			static const __statements mappingStArr[3];///< image mapping statements
 			static const StorageType pixelSizeStArr[6];///< pixel type statements
-			static const __statements encoderStArr[6];///< image encoder
+			static const __statements encoderStArr[2];///< image encoder
 	};
 
 	/**

@@ -1,5 +1,6 @@
 #include <libdodo/tools.h>
 #include <libdodo/image.h>
+#include <libdodo/flushDisk.h>
 
 #include <iostream>
 
@@ -18,16 +19,21 @@ int main(int argc, char **argv)
 		im.write("test.jpg");
 		
 		unsigned char *img; unsigned int size;
-		im.setEncoder(IMAGE_ENC_RGB);
-		im.write(img, size);
+		im.rotate(IMAGE_RDA_180);
+		im.setEncoder(IMAGE_ENC_PNG);
+		im.write(&img, size);
 		
-		im.write("test.bmp");
+		flushDisk flush;
+		flush.open("my.png", FLUSHDISK_FILETYPE_REG_FILE, FLUSHDISK_OPENMODE_READ_WRITE_TRUNCATE);
+		flush.outSize = size;
+		flush.write((char *)img);
+		im.destroyImageData(&img);
 		
 		cout << size << endl;
 	}
 	catch(baseEx ex)
 	{
-    		cout << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
+    		cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
     }
     
 	return 0;

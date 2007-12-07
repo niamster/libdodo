@@ -187,35 +187,35 @@ flushDiskTools::getPermission(int permission)
 {
 	int mode(0);
 
-	if (isSetFlag(permission, PERM_OWNER_READ_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_OWNER_READ_ACCESS))
 		mode |= S_IRUSR;
 
-	if (isSetFlag(permission, PERM_GROUP_READ_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_GROUP_READ_ACCESS))
 		mode |= S_IRGRP;
-	if (isSetFlag(permission, PERM_OTHER_READ_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_OTHER_READ_ACCESS))
 		mode |= S_IROTH;
 
-	if (isSetFlag(permission, PERM_OWNER_WRITE_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_OWNER_WRITE_ACCESS))
 		mode |= S_IWUSR;
 
-	if (isSetFlag(permission, PERM_GROUP_WRITE_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_GROUP_WRITE_ACCESS))
 		mode |= S_IWGRP;
-	if (isSetFlag(permission, PERM_OTHER_WRITE_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_OTHER_WRITE_ACCESS))
 		mode |= S_IWOTH;
 
-	if (isSetFlag(permission, PERM_STICKY_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_STICKY_ACCESS))
 		mode |= S_ISVTX;
 
-	if (isSetFlag(permission, PERM_OWNER_EXECUTE_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_OWNER_EXECUTE_ACCESS))
 		mode |= S_IXUSR;
-	if (isSetFlag(permission, PERM_GROUP_EXECUTE_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_GROUP_EXECUTE_ACCESS))
 		mode |= S_IXGRP;
-	if (isSetFlag(permission, PERM_OTHER_EXECUTE_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_OTHER_EXECUTE_ACCESS))
 		mode |= S_IXOTH;
 
-	if (isSetFlag(permission, PERM_SUID_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_SUID_ACCESS))
 		mode |= S_ISUID;
-	if (isSetFlag(permission, PERM_SGID_ACCESS))
+	if (isSetFlag(permission, FLUSHDISKTOOLS_PERM_SGID_ACCESS))
 		mode |= S_ISGID;
 
 	return mode;
@@ -293,38 +293,38 @@ flushDiskTools::getPermissions(const dodoString &path)
 	if (::lstat(path.c_str(), &st) == -1)
 		throw baseEx(ERRMODULE_FLUSHDISKTOOLS, FLUSHDISKTOOLS_GETPERMISSIONS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	int mode(PERM_NONE);
+	int mode(FLUSHDISKTOOLS_PERM_NONE);
 
 	if (isSetFlag(st.st_mode, S_IRUSR))
-		mode |= PERM_OWNER_READ_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_OWNER_READ_ACCESS;
 
 	if (isSetFlag(st.st_mode, S_IRGRP))
-		mode |= PERM_GROUP_READ_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_GROUP_READ_ACCESS;
 	if (isSetFlag(st.st_mode, S_IROTH))
-		mode |= PERM_OTHER_READ_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_OTHER_READ_ACCESS;
 
 	if (isSetFlag(st.st_mode, S_IWUSR))
-		mode |= PERM_OWNER_WRITE_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_OWNER_WRITE_ACCESS;
 
 	if (isSetFlag(st.st_mode, S_IWGRP))
-		mode |= PERM_GROUP_WRITE_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_GROUP_WRITE_ACCESS;
 	if (isSetFlag(st.st_mode, S_IWOTH))
-		mode |= PERM_OTHER_WRITE_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_OTHER_WRITE_ACCESS;
 
 	if (isSetFlag(st.st_mode, S_ISVTX))
-		mode |= PERM_STICKY_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_STICKY_ACCESS;
 
 	if (isSetFlag(st.st_mode, S_IXUSR))
-		mode |= PERM_OWNER_EXECUTE_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_OWNER_EXECUTE_ACCESS;
 	if (isSetFlag(st.st_mode, S_IXGRP))
-		mode |= PERM_GROUP_EXECUTE_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_GROUP_EXECUTE_ACCESS;
 	if (isSetFlag(st.st_mode, S_IXOTH))
-		mode |= PERM_OTHER_EXECUTE_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_OTHER_EXECUTE_ACCESS;
 
 	if (isSetFlag(st.st_mode, S_ISUID))
-		mode |= PERM_SUID_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_SUID_ACCESS;
 	if (isSetFlag(st.st_mode, S_ISGID))
-		mode |= PERM_SGID_ACCESS;
+		mode |= FLUSHDISKTOOLS_PERM_SGID_ACCESS;
 
 	return mode;
 }
@@ -344,31 +344,31 @@ flushDiskTools::getFileType(const dodoString &path)
 	{
 		case S_IFREG:
 
-			return FILETYPE_REGULAR_FILE;
+			return FLUSHDISKTOOLS_FILETYPE_REGULAR_FILE;
 
 		case S_IFDIR:
 
-			return FILETYPE_DIRECTORY;
+			return FLUSHDISKTOOLS_FILETYPE_DIRECTORY;
 
 		case S_IFLNK:
 
-			return FILETYPE_SYMBOLIC_LINK;
+			return FLUSHDISKTOOLS_FILETYPE_SYMBOLIC_LINK;
 
 		case S_IFSOCK:
 
-			return FILETYPE_LOCAL_SOCKET;
+			return FLUSHDISKTOOLS_FILETYPE_LOCAL_SOCKET;
 
 		case S_IFBLK:
 
-			return FILETYPE_BLOCK_DEVICE;
+			return FLUSHDISKTOOLS_FILETYPE_BLOCK_DEVICE;
 
 		case S_IFCHR:
 
-			return FILETYPE_CHARACTER_DEVICE;
+			return FLUSHDISKTOOLS_FILETYPE_CHARACTER_DEVICE;
 
 		case S_IFIFO:
 
-			return FILETYPE_FIFO;
+			return FLUSHDISKTOOLS_FILETYPE_FIFO;
 
 		default:
 
