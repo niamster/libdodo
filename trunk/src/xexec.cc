@@ -128,7 +128,7 @@ xexec::delXExec(std::list<__execItem> &list,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_XEXEC, XEXEC_DELXEXEC, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXECEX_DELXEXEC, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
 		#endif
@@ -330,7 +330,7 @@ xexec::replaceXExec(std::list<__execItem> &list,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_XEXEC, XEXEC_DELXEXEC, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_XEXEC, XEXECEX_DELXEXEC, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 			current->handle = NULL;
 		}
@@ -406,15 +406,15 @@ xexec::addXExecModule(std::list<__execItem> &list,
 
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (temp.handle == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	inExec in = (inExec)dlsym(temp.handle, init(toInit).hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	temp.func = in;
 
@@ -455,16 +455,16 @@ xexec::getModuleInfo(const dodoString &module,
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	xexecMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	return mod;
 }
@@ -487,17 +487,17 @@ xexec::_addExec(const dodoString &module,
 
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (temp.handle == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	xexecMod info = init(toInit);
 
 	inExec in = (inExec)dlsym(temp.handle, info.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXEC_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	temp.func = in;
 

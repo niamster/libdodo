@@ -35,28 +35,28 @@ namespace dodo
 	 */
 	enum xmlExR
 	{
-		XML_NOT_PARCED_BEFORE = 1,
+		XMLEX_NOT_PARCED_BEFORE = 1,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define XML_NOT_PARCED_BEFORE_STR    "The document haven't been parsed before."
+		#define XMLEX_NOT_PARCED_BEFORE_STR    "The document haven't been parsed before."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum xmlFunctionsID
 	{
-		XML_PARCEFILE,
-		XML_PARCE,
-		XML_ERRHANDLER,
-		XML_GETXMLBUFFERINFO,
-		XML_PARCEBUFFER,
-		XML_GETXMLFILEINFO,
-		XML_REPARCE,
-		XML_PARCEBUFFERINT,
-		XML_PARCEFILEINT,
+		XMLEX_PARCEFILE,
+		XMLEX_PARCE,
+		XMLEX_ERRHANDLER,
+		XMLEX_GETXMLBUFFERINFO,
+		XMLEX_PARCEBUFFER,
+		XMLEX_GETXMLFILEINFO,
+		XMLEX_REPARCE,
+		XMLEX_PARCEBUFFERINT,
+		XMLEX_PARCEFILEINT,
 
 	};
 

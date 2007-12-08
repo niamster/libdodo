@@ -81,7 +81,7 @@ systemTools::getWorkingDir()
 	char wd[MAXPATHLEN];
 
 	if (getcwd(wd, MAXPATHLEN) == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return wd;
 }
@@ -92,7 +92,7 @@ void
 systemTools::setWorkingDir(const dodoString &path)
 {
 	if (chdir(path.c_str()) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -103,7 +103,7 @@ systemTools::getUsageInfo(__usage &info)
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSAGEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSAGEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	info.time = use.ru_utime.tv_sec * 100 + use.ru_utime.tv_usec;
 	info.mem = use.ru_maxrss * 1024;
@@ -117,7 +117,7 @@ systemTools::changeRoot(const dodoString &path)
 	setWorkingDir(path);
 
 	if (chroot(path.c_str()) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_CHANGEROOT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_CHANGEROOT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -174,11 +174,11 @@ systemTools::getLimit(short type,
 
 		default:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETLIMIT, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETLIMIT, ERR_LIBDODO, SYSTEMTOOLSEX_WRONG_PARAMETHER, SYSTEMTOOLSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	if (getrlimit(realRes, &limit) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	lim.current = limit.rlim_cur;
 	lim.max = limit.rlim_max;
@@ -238,14 +238,14 @@ systemTools::setLimit(short type,
 
 		default:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETLIMIT, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETLIMIT, ERR_LIBDODO, SYSTEMTOOLSEX_WRONG_PARAMETHER, SYSTEMTOOLSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	limit.rlim_cur = lim.current;
 	limit.rlim_max = lim.max;
 
 	if (setrlimit(realRes, &limit) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -255,7 +255,7 @@ systemTools::getPriority(short type)
 {
 	int prio = getpriority(PRIO_PROCESS, getUID(type));
 	if (prio == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return prio;
 }
@@ -267,7 +267,7 @@ systemTools::setPriority(short type,
 						 int prio)
 {
 	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -287,7 +287,7 @@ systemTools::getUID(short type)
 
 		default:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUID, ERR_LIBDODO, SYSTEMTOOLSEX_WRONG_PARAMETHER, SYSTEMTOOLSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 }
 
@@ -315,11 +315,11 @@ systemTools::setUID(short type,
 
 		default:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETUID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETUID, ERR_LIBDODO, SYSTEMTOOLSEX_WRONG_PARAMETHER, SYSTEMTOOLSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETUID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETUID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -339,7 +339,7 @@ systemTools::getGID(short type)
 
 		default:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGID, ERR_LIBDODO, SYSTEMTOOLSEX_WRONG_PARAMETHER, SYSTEMTOOLSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 }
 
@@ -367,11 +367,11 @@ systemTools::setGID(short type,
 
 		default:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGID, ERR_LIBDODO, SYSTEMTOOLS_WRONG_PARAMETHER, SYSTEMTOOLS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETGID, ERR_LIBDODO, SYSTEMTOOLSEX_WRONG_PARAMETHER, SYSTEMTOOLSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETGID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -382,7 +382,7 @@ systemTools::getUserInfo(__userInfo &info,
 {
 	passwd *in = getpwuid(uid);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	fillUserInfo(info, in);
 
@@ -396,7 +396,7 @@ systemTools::getUserInfo(__userInfo &info,
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	fillUserInfo(info, in);
 }
@@ -423,7 +423,7 @@ systemTools::getUsers(dodoArray<__userInfo> &users)
 		case ENFILE:
 		case ENOMEM:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETUSERS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSERS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endpwent();
@@ -473,7 +473,7 @@ systemTools::getGroupInfo(__groupInfo &info,
 {
 	group *in = getgrgid(uid);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	fillGroupInfo(info, in);
 }
@@ -486,7 +486,7 @@ systemTools::getGroupInfo(__groupInfo &info,
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	fillGroupInfo(info, in);
 }
@@ -514,7 +514,7 @@ systemTools::getGroups(dodoArray<__groupInfo> &users)
 		case EINTR:
 		case ENOMEM:
 
-			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endgrent();
@@ -557,7 +557,7 @@ void
 systemTools::atExit(void (*func)())
 {
 	if (atexit(func) != 0)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_ATEXIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_ATEXIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -591,7 +591,7 @@ systemTools::getGroupPID(int pid)
 {
 	int pgid = getpgid(pid);
 	if (pgid == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return pgid;
 }
@@ -602,7 +602,7 @@ void
 systemTools::setGroupPID(int gpid)
 {
 	if (setpgid(0, gpid) == 1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 
@@ -613,7 +613,7 @@ systemTools::setGroupPID(int pid,
 						 int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -720,12 +720,12 @@ systemTools::setSignalHandler(long signal,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
 	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -758,7 +758,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -777,10 +777,10 @@ systemTools::setMicroTimer(unsigned long timeout,
 	value.it_value.tv_usec = tMicrosec;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -813,7 +813,7 @@ systemTools::setTimer(long timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -824,10 +824,10 @@ systemTools::setTimer(long timeout,
 	value.it_value.tv_usec = 0;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -837,7 +837,7 @@ systemTools::isSignalHandled(long signal)
 {
 	struct sigaction act;
 	if (sigaction(systemTools::toRealSignal(signal), NULL, &act) == 1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (act.sa_sigaction != NULL || act.sa_handler != NULL)
 		return true;
@@ -852,7 +852,7 @@ systemTools::sendSignal(int pid,
 						long signal)
 {
 	if (kill(pid, systemTools::toRealSignal(signal)) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -882,7 +882,7 @@ systemTools::unsetSignalHandler(long signal)
 	act.sa_sigaction = NULL;
 
 	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == 1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_UNSETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_UNSETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -895,16 +895,16 @@ systemTools::getModuleInfo(const dodoString &module,
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	sigMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	return mod;
 }
@@ -933,24 +933,24 @@ systemTools::setSignalHandler(long signal,
 
 	handlesSig[signal] = dlopen(path.c_str(), RTLD_LAZY);
 	if (handlesSig[signal] == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	initSigModule init = (initSigModule)dlsym(handlesSig[signal], "initSigModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMod mod = init(toInit);
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[signal], mod.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	struct sigaction act;
 	act.sa_sigaction = in;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (blockSignals != -1)
 		sigMask(&act.sa_mask, blockSignals);
@@ -958,7 +958,7 @@ systemTools::setSignalHandler(long signal,
 		sigMask(&act.sa_mask, mod.blockSignals);
 
 	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == 1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	handlesOpenedSig[signal] = true;
 }
@@ -973,11 +973,11 @@ systemTools::setSignalHandler(const dodoString &path,
 
 	void *handle = dlopen(path.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMod mod = init(toInit);
 
@@ -999,14 +999,14 @@ systemTools::setSignalHandler(const dodoString &path,
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[mod.signal], mod.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	struct sigaction act;
 	act.sa_sigaction = in;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (blockSignals != -1)
 		sigMask(&act.sa_mask, blockSignals);
@@ -1014,7 +1014,7 @@ systemTools::setSignalHandler(const dodoString &path,
 		sigMask(&act.sa_mask, mod.blockSignals);
 
 	if (sigaction(systemTools::toRealSignal(mod.signal), &act, NULL) == 1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLS_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	handlesOpenedSig[mod.signal] = true;
 }

@@ -39,8 +39,8 @@ namespace dodo
 	 */
 	enum ioNBAFunctionsID
 	{
-		IONBA_ISREADABLE,
-		IONBA_ISWRITABLE,
+		IONBAEX_ISREADABLE,
+		IONBAEX_ISWRITABLE,
 	};
 
 };

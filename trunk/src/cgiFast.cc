@@ -29,7 +29,7 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 
-	#ifdef PSYSTEMTHREADS_EXT
+	#ifdef PTHREAD_EXT
 
 pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
 
@@ -148,7 +148,7 @@ cgiFast::setCGIFunction(cgiProc func)
 
 //-------------------------------------------------------------------
 
-	#ifdef PSYSTEMTHREADS_EXT
+	#ifdef PTHREAD_EXT
 
 void *
 cgiFast::stackThread(void *data)
@@ -179,7 +179,7 @@ cgiFast::stackThread(void *data)
 void
 cgiFast::listen()
 {
-		#ifdef PSYSTEMTHREADS_EXT
+		#ifdef PTHREAD_EXT
 	if (threading)
 	{
 		pthread_t *id = new pthread_t[threadsNum];

@@ -36,8 +36,8 @@ namespace dodo
 	 */
 	enum dbMysqlFunctionsID
 	{
-		DBMYSQL_CONNECT,
-		DBMYSQL_EXEC,
+		DBMYSQLEX_CONNECT,
+		DBMYSQLEX_EXEC,
 	};
 };
 

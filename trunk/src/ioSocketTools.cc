@@ -33,7 +33,7 @@ ioSocketTools::getHostInfo(const dodoString &host)
 	__hostInfo info;
 
 	if (ent == NULL)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETHOSTINFO, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETHOSTINFO, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
 
 	info.name = ent->h_name;
 
@@ -73,7 +73,7 @@ ioSocketTools::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
 	if (ifaces == NULL)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACESNAMES, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACESNAMES, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	int i(-1);
 	dodoStringArr arr;
@@ -144,7 +144,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	ifreq ifr;
 	strcpy(ifr.ifr_name, interface.c_str());
@@ -155,7 +155,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	sockaddr_in sin;
 
 	if (::ioctl(socket, SIOCGIFADDR, &ifr) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_addr, sizeof(sockaddr));
 
@@ -168,7 +168,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	#else
 
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_netmask, sizeof(sockaddr));
 
@@ -178,7 +178,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	#endif
 
 	if (::ioctl(socket, SIOCGIFBRDADDR, &ifr) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_broadaddr, sizeof(sockaddr));
 
@@ -191,7 +191,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	#else
 
 	if (::ioctl(socket, SIOCGIFHWADDR, &ifr) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sprintf(add, "%.2X:%.2X:%.2X:%.2X:%.2X:%.2X", ifr.ifr_ifru.ifru_hwaddr.sa_data[0] & 0xff,
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[1] & 0xff,
@@ -205,10 +205,10 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	info.hwaddr = add;
 
 	if (::ioctl(socket, SIOCGIFFLAGS, &ifr) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::close(socket) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	#ifdef __FreeBSD__
 
@@ -242,7 +242,7 @@ ioSocketTools::getLocalName()
 	{
 		delete [] temp1;
 
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_GETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	temp0.assign(temp1, 255);
@@ -258,7 +258,7 @@ void
 ioSocketTools::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(), host.size()) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLS_SETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_SETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

@@ -167,7 +167,7 @@ systemProcesses::addNRun(processFunc func,
 	else
 	{
 		if (pid == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			process.pid = pid;
 	}
@@ -191,11 +191,11 @@ systemProcesses::del(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_LIBDODO, SYSTEMPROCESSES_ISALREADYRUNNING, SYSTEMPROCESSES_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_LIBDODO, SYSTEMPROCESSESEX_ISALREADYRUNNING, SYSTEMPROCESSESEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -210,7 +210,7 @@ systemProcesses::del(unsigned long position,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
 		#endif
@@ -218,7 +218,7 @@ systemProcesses::del(unsigned long position,
 		processes.erase(current);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_DEL, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -255,7 +255,7 @@ systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
 			return false;
 		}
 
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	return true;
@@ -275,11 +275,11 @@ systemProcesses::replace(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_LIBDODO, SYSTEMPROCESSES_ISALREADYRUNNING, SYSTEMPROCESSES_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_LIBDODO, SYSTEMPROCESSESEX_ISALREADYRUNNING, SYSTEMPROCESSESEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -295,7 +295,7 @@ systemProcesses::replace(unsigned long position,
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
 		#endif
@@ -306,7 +306,7 @@ systemProcesses::replace(unsigned long position,
 		current->action = action;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_REPLACE, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -321,11 +321,11 @@ systemProcesses::run(unsigned long position,
 		{
 			processes.erase(current);
 
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_LIBDODO, SYSTEMPROCESSES_SWEPT, SYSTEMPROCESSES_SWEPT_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_LIBDODO, SYSTEMPROCESSESEX_SWEPT, SYSTEMPROCESSESEX_SWEPT_STR, __LINE__, __FILE__);
 		}
 
 		if (_isRunning(current) && !force)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_LIBDODO, SYSTEMPROCESSES_ISALREADYRUNNING, SYSTEMPROCESSES_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_LIBDODO, SYSTEMPROCESSESEX_ISALREADYRUNNING, SYSTEMPROCESSESEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 		pid_t pid = fork();
 
@@ -338,7 +338,7 @@ systemProcesses::run(unsigned long position,
 		else
 		{
 			if (pid == -1)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			else
 				current->pid = pid;
 		}
@@ -347,7 +347,7 @@ systemProcesses::run(unsigned long position,
 		++ (current->executed);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_RUN, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -358,15 +358,15 @@ systemProcesses::stop(unsigned long position)
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_LIBDODO, SYSTEMPROCESSES_ISNOTRUNNING, SYSTEMPROCESSES_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_LIBDODO, SYSTEMPROCESSESEX_ISNOTRUNNING, SYSTEMPROCESSESEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 		if (kill(current->pid, 9) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -382,7 +382,7 @@ systemProcesses::stop()
 
 
 		if (kill(i->pid, 9) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		i->isRunning = false;
 	}
@@ -396,15 +396,15 @@ systemProcesses::wait(unsigned long position)
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_LIBDODO, SYSTEMPROCESSES_ISNOTRUNNING, SYSTEMPROCESSES_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_LIBDODO, SYSTEMPROCESSESEX_ISNOTRUNNING, SYSTEMPROCESSESEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 		if (waitpid(current->pid, NULL, 0) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -419,7 +419,7 @@ systemProcesses::wait()
 			continue;
 
 		if (waitpid(i->pid, NULL, 0) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		i->isRunning = false;
 	}
@@ -433,7 +433,7 @@ systemProcesses::isRunning(unsigned long position) const
 	if (getProcess(position))
 		return _isRunning(current);
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ISRUNNING, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ISRUNNING, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -486,7 +486,7 @@ systemProcesses::setExecutionLimit(unsigned long position,
 	if (getProcess(position))
 		current->executeLimit = limit;
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_SETEXECUTIONLIMIT, ERR_LIBDODO, SYSTEMPROCESSES_NOTFOUND, SYSTEMPROCESSES_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_SETEXECUTIONLIMIT, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 //-------------------------------------------------------------------
 
@@ -498,16 +498,16 @@ systemProcesses::getModuleInfo(const dodoString &module,
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSystemProcessesModule init = (initSystemProcessesModule)dlsym(handle, "initSystemProcessesModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	systemProcessesMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	return mod;
 }
@@ -526,17 +526,17 @@ systemProcesses::add(const dodoString &module,
 
 	process.handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (process.handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSystemProcessesModule init = (initSystemProcessesModule)dlsym(process.handle, "initSystemProcessesModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	systemProcessesMod temp = init(toInit);
 
 	processFunc in = (processFunc)dlsym(process.handle, temp.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSES_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	process.executeLimit = temp.executeLimit;
 	process.action = temp.action;

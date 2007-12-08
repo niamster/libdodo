@@ -39,8 +39,8 @@ namespace dodo
 	 */
 	enum atomicMutexFunctionsID
 	{
-		ATOMICMUTEX_LOCK,
-		ATOMICMUTEX_UNLOCK,
+		ATOMICMUTEXEX_LOCK,
+		ATOMICMUTEXEX_UNLOCK,
 	};
 
 };

@@ -15,7 +15,7 @@ void
 signaler(int, siginfo_t *, void *)
 {
 	cout << "\nHAHA =)\n";
-	cout.io();
+	cout.flush();
 	cought = true;
 	number++;
 }
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		{
 			cought = false;
 			cout << "\nHEHE =)\n";
-			cout.io();
+			cout.flush();
 		}
 		
 	}

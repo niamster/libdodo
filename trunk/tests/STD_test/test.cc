@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	
 		int a = 10;
 		st.write((char *)&a);
-		st.io();
+		st.flush();
 		
 		dodoString o;
 		

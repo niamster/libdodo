@@ -34,7 +34,7 @@ ioDiskTools::unlink(const dodoString &path,
 
 	if (::lstat(path.c_str(), &st) == -1)
 		if (errno != ENOENT || !force)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (S_ISDIR(st.st_mode))
 		status = ::rmdir(path.c_str());
@@ -43,7 +43,7 @@ ioDiskTools::unlink(const dodoString &path,
 
 	if (status == -1)
 		if (errno != ENOENT || !force)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -53,7 +53,7 @@ ioDiskTools::rename(const dodoString &oldPath,
 					   const dodoString &newPath)
 {
 	if (::rename(oldPath.c_str(), newPath.c_str()) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_RENAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RENAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
 }
 
 //-------------------------------------------------------------------
@@ -69,14 +69,14 @@ ioDiskTools::symlink(const dodoString &oldPath,
 		if (::lstat(newPath.c_str(), &st) != -1)
 
 			if (!S_ISLNK(st.st_mode))
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_SYMLINK, ERR_LIBDODO, IODISKTOOLS_WRONG_FILENAME, IODISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, newPath);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_LIBDODO, IODISKTOOLSEX_WRONG_FILENAME, IODISKTOOLSEX_WRONG_FILENAME_STR, __LINE__, __FILE__, newPath);
 			else
 			if (::unlink(newPath.c_str()) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
 	}
 
 	if (::symlink(oldPath.c_str(), newPath.c_str()) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
 }
 
 //-------------------------------------------------------------------
@@ -86,7 +86,7 @@ ioDiskTools::link(const dodoString &oldPath,
 					 const dodoString &newPath)
 {
 	if  (::link(oldPath.c_str(), newPath.c_str()) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_LINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_LINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
 }
 
 //-------------------------------------------------------------------
@@ -96,7 +96,7 @@ ioDiskTools::chown(const dodoString &path,
 					  int uid)
 {
 	if (::chown(path.c_str(), uid, (unsigned int)-1) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_CHOWN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_CHOWN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -106,7 +106,7 @@ ioDiskTools::chgrp(const dodoString &path,
 					  int gid)
 {
 	if (::chown(path.c_str(), (unsigned int)-1, gid) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_CHGRP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_CHGRP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -116,7 +116,7 @@ ioDiskTools::getUserOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETUSEROWNER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETUSEROWNER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return st.st_uid;
 }
@@ -128,7 +128,7 @@ ioDiskTools::getGroupOwner(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETGROUPOWNER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETGROUPOWNER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return st.st_gid;
 }
@@ -145,7 +145,7 @@ ioDiskTools::touch(const dodoString &path,
 	utimbuf temp = { a_time, a_time };
 
 	if (::utime(path.c_str(), &temp) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_TOUCH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_TOUCH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -161,13 +161,13 @@ ioDiskTools::mkdir(const dodoString &path,
 		{
 			struct stat st;
 			if (::lstat(path.c_str(), &st) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 			if (S_ISDIR(st.st_mode))
 				return ;
 		}
 		else
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 }
 
@@ -177,7 +177,7 @@ void
 ioDiskTools::chmod(const dodoString &path, int permissions)
 {
 	if (::chmod(path.c_str(), getPermission(permissions)) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_CHMOD, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_CHMOD, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -231,7 +231,7 @@ ioDiskTools::rm(const dodoString &path,
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
 		if (errno != ENOENT || !force)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		else
 			return ;
 
@@ -239,7 +239,7 @@ ioDiskTools::rm(const dodoString &path,
 	{
 		if (::unlink(path.c_str()) == -1)
 			if (errno != ENOENT || !force)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 	else
 	{
@@ -250,7 +250,7 @@ ioDiskTools::rm(const dodoString &path,
 		if (directory == NULL)
 		{
 			if (errno != ENOENT || !force)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 		else
 		{
@@ -265,21 +265,21 @@ ioDiskTools::rm(const dodoString &path,
 
 				if (::lstat(attached.c_str(), &st) == -1)
 					if (errno != ENOENT || !force)
-						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 				if (S_ISDIR(st.st_mode))
 					ioDiskTools::rm(attached.c_str());
 				else
 				if (::unlink(attached.c_str()) == -1)
 					if (errno != ENOENT || !force)
-						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 			closedir(directory);
 
 			if (::rmdir(path.c_str()) == -1)
 				if (errno != ENOENT || !force)
-					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 	}
 }
@@ -291,7 +291,7 @@ ioDiskTools::getPermissions(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETPERMISSIONS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETPERMISSIONS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	int mode(IODISKTOOLS_PERM_NONE);
 
@@ -336,7 +336,7 @@ ioDiskTools::getFileType(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILETYPE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILETYPE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	st.st_mode &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
 
@@ -383,7 +383,7 @@ ioDiskTools::getSize(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return st.st_size;
 }
@@ -395,7 +395,7 @@ ioDiskTools::getAccTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETACCTIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETACCTIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return st.st_atime;
 }
@@ -407,7 +407,7 @@ ioDiskTools::getModTime(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETMODTIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETMODTIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return st.st_mtime;
 }
@@ -421,7 +421,7 @@ ioDiskTools::getFileInfo(const dodoString &path)
 
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	file.name.assign(::basename((char *)path.c_str()));
 	file.type = ioDiskTools::getFileType(path);
@@ -443,7 +443,7 @@ ioDiskTools::getDirInfo(const dodoString &path)
 	dodoArray<__fileInfo> dir;
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETDIRINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETDIRINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (!S_ISDIR(st.st_mode))
 		return dir;
@@ -452,7 +452,7 @@ ioDiskTools::getDirInfo(const dodoString &path)
 	DIR *directory = opendir(path.c_str());
 
 	if (directory == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETDIRINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETDIRINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	dirent *dd;
 	dodoString attached;
@@ -476,17 +476,17 @@ ioDiskTools::followSymlink(const dodoString &path,
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	char buffer[MAXPATHLEN];
 
 	if (!S_ISLNK(st.st_mode))
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_SYMLINK, ERR_LIBDODO, IODISKTOOLS_WRONG_FILENAME, IODISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_LIBDODO, IODISKTOOLSEX_WRONG_FILENAME, IODISKTOOLSEX_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 
 	int count = 0;
 
 	if ((count = ::readlink(path.c_str(), buffer, MAXPATHLEN)) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	original.assign(buffer, count);
 }
@@ -498,14 +498,14 @@ ioDiskTools::getFileContent(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (!S_ISREG(st.st_mode))
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENT, ERR_LIBDODO, IODISKTOOLS_WRONG_FILENAME, IODISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_LIBDODO, IODISKTOOLSEX_WRONG_FILENAME, IODISKTOOLSEX_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 
 	FILE *file = fopen(path.c_str(), "r");
 	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	char buffer[INSIZE];
 
@@ -516,7 +516,7 @@ ioDiskTools::getFileContent(const dodoString &path)
 	for (; i < iter; ++i)
 	{
 		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		if (fread(buffer, INSIZE, 1, file) == 0)
 			switch (errno)
@@ -527,7 +527,7 @@ ioDiskTools::getFileContent(const dodoString &path)
 				case EOVERFLOW:
 				case EROFS:
 
-					throw baseEx(ERRMODULE_IOSTD, IODISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 		retS.append(buffer, INSIZE);
@@ -535,7 +535,7 @@ ioDiskTools::getFileContent(const dodoString &path)
 	if (rest > 0)
 	{
 		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		if (fread(buffer, rest, 1, file) == 0)
 			switch (errno)
@@ -546,14 +546,14 @@ ioDiskTools::getFileContent(const dodoString &path)
 				case EOVERFLOW:
 				case EROFS:
 
-					throw baseEx(ERRMODULE_IOSTD, IODISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 		retS.append(buffer, rest);
 	}
 
 	if (fclose(file) != 0)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return retS;
 }
@@ -565,14 +565,14 @@ ioDiskTools::getFileContentArr(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (!S_ISREG(st.st_mode))
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENTARR, ERR_LIBDODO, IODISKTOOLS_WRONG_FILENAME, IODISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_LIBDODO, IODISKTOOLSEX_WRONG_FILENAME, IODISKTOOLSEX_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 
 	FILE *file = fopen(path.c_str(), "r");
 	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	char buffer[DISK_MAXLINELEN];
 	dodoStringArr arr;
@@ -581,7 +581,7 @@ ioDiskTools::getFileContentArr(const dodoString &path)
 		arr.push_back(buffer);
 
 	if (fclose(file) != 0)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return arr;
 
@@ -640,12 +640,12 @@ ioDiskTools::copy(const dodoString &from,
 	struct stat stFrom, stTo;
 
 	if (::lstat(from.c_str(), &stFrom) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
 	if (::lstat(to.c_str(), &stTo) == -1)
 	{
 		if (errno != ENOENT)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 	}
 	else
 	{
@@ -654,15 +654,15 @@ ioDiskTools::copy(const dodoString &from,
 			if (!S_ISDIR(stTo.st_mode))
 			{
 				if (::unlink(to.c_str()) == -1)
-					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 			}
 			else
 			if (::rmdir(to.c_str()) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_UNLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
 		}
 		else
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_LIBDODO, IODISKTOOLS_WRONG_FILENAME, IODISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_LIBDODO, IODISKTOOLSEX_WRONG_FILENAME, IODISKTOOLSEX_WRONG_FILENAME_STR, __LINE__, __FILE__, to);
 	}
 
 	if (!S_ISREG(stFrom.st_mode))
@@ -670,7 +670,7 @@ ioDiskTools::copy(const dodoString &from,
 		if (S_ISDIR(stFrom.st_mode))
 		{
 			if (::mkdir(to.c_str(), stFrom.st_mode) == 1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 		}
 		else
 		if (S_ISLNK(stFrom.st_mode))
@@ -679,16 +679,16 @@ ioDiskTools::copy(const dodoString &from,
 			int count = 0;
 
 			if ((count = ::readlink(from.c_str(), buffer, MAXPATHLEN)) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
 			buffer[count] = '\0';
 
 			if (::symlink(buffer, to.c_str()) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, dodoString(buffer) + "->" + to);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, dodoString(buffer) + "->" + to);
 		}
 		else
 		if (::mknod(to.c_str(), stFrom.st_mode, 0) == 1)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 	}
 	else
 	{
@@ -696,11 +696,11 @@ ioDiskTools::copy(const dodoString &from,
 
 		FILE *fromFile = fopen(from.c_str(), "r");
 		if (fromFile == NULL)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
 		FILE *toFile = fopen(to.c_str(), "w+");
 		if (toFile == NULL)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
 		char buffer[INSIZE];
 
@@ -710,10 +710,10 @@ ioDiskTools::copy(const dodoString &from,
 			j = i * INSIZE;
 
 			if (fseek(fromFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 
 			if (fseek(toFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 
 			if (fread(buffer, INSIZE, 1, fromFile) == 0)
 				switch (errno)
@@ -724,7 +724,7 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 
 			if (fwrite(buffer, INSIZE, 1, toFile) == 0)
@@ -736,17 +736,17 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 		}
 		if (rest > 0)
 		{
 			j = i * INSIZE;
 			if (fseek(fromFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 
 			if (fseek(toFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 
 			if (fread(buffer, rest, 1, fromFile) == 0)
 				switch (errno)
@@ -757,7 +757,7 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 
 			if (fwrite(buffer, rest, 1, toFile) == 0)
@@ -769,15 +769,15 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 		}
 
 		if (fclose(fromFile) != 0)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 
 		if (fclose(toFile) != 0)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 	}
 }
 
@@ -802,25 +802,25 @@ ioDiskTools::copyDir(const dodoString &from,
 	struct stat stFrom, stTo;
 
 	if (::lstat(from.c_str(), &stFrom) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 
 	if (::lstat(to.c_str(), &stTo) == -1)
 	{
 		if (errno != ENOENT)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 	}
 	else
 	if (force)
 		ioDiskTools::rm(to, force);
 	else
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPYDIR, ERR_LIBDODO, IODISKTOOLS_WRONG_FILENAME, IODISKTOOLS_WRONG_FILENAME_STR, __LINE__, __FILE__, to);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPYDIR, ERR_LIBDODO, IODISKTOOLSEX_WRONG_FILENAME, IODISKTOOLSEX_WRONG_FILENAME_STR, __LINE__, __FILE__, to);
 
 	if (!S_ISDIR(stFrom.st_mode))
 		ioDiskTools::copy(from, to, force);
 	else
 	{
 		if (::mkdir(to.c_str(), stFrom.st_mode) == -1)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
 		dodoString attachedFrom, attachedTo;
 
@@ -830,7 +830,7 @@ ioDiskTools::copyDir(const dodoString &from,
 			if (errno == ENOENT)
 				return ;
 			else
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 		}
 
 		dirent *dd;
@@ -871,10 +871,10 @@ ioDiskTools::append(const dodoString &path,
 {
 	FILE *file = fopen(path.c_str(), "a+");
 	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (fwrite(content.c_str(), content.size(), 1, file) == 0)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLS_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------

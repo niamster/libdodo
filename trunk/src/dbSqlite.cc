@@ -97,7 +97,7 @@ dbSqlite::connect()
 	{
 		sqlite3_close(lite);
 
-		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_CONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_CONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 	}
 
 		#ifndef DBSQLITE_WO_XEXEC
@@ -126,7 +126,7 @@ dbSqlite::disconnect()
 		}
 
 		if (sqlite3_close(lite) != SQLITE_OK)
-			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_DISCONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_DISCONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 
 			#ifndef DBSQLITE_WO_XEXEC
 		performXExec(postExec);
@@ -173,10 +173,10 @@ dbSqlite::_exec(const dodoString &query,
 					}
 
 					if (sqlite3_prepare(lite, request.c_str(), request.size(), &liteStmt, NULL) != SQLITE_OK)
-						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
+						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
 
 					if (liteStmt == NULL)
-						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 
 					empty = false;
 
@@ -199,7 +199,7 @@ dbSqlite::_exec(const dodoString &query,
 														  NULL,
 														  NULL,
 														  NULL) != SQLITE_OK)
-							throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
+							throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
 
 						if (strcasestr(columnType, "char") != NULL ||
 							strcasestr(columnType, "date") != NULL ||
@@ -258,7 +258,7 @@ dbSqlite::_exec(const dodoString &query,
 	}
 
 	if (sqlite3_prepare(lite, request.c_str(), request.size(), &liteStmt, NULL) != SQLITE_OK)
-		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
+		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
 
 	if (blobHint)
 	{
@@ -271,26 +271,26 @@ dbSqlite::_exec(const dodoString &query,
 				dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
 				for (int o = 1; i != j; ++i, ++o)
 					if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
-						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 			}
 
 				break;
 
 			default:
 
-				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_LIBDODO, DBSQLITE_WRONG_HINT_USAGE, DBSQLITE_WRONG_HINT_USAGE_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_LIBDODO, DBSQLITEEX_WRONG_HINT_USAGE, DBSQLITEEX_WRONG_HINT_USAGE_STR, __LINE__, __FILE__);
 
 		}
 	}
 
 	if (liteStmt == NULL)
-		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 
 	empty = false;
 
 	if (!show)
 		if (sqlite3_step(liteStmt) != SQLITE_DONE)
-			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -341,7 +341,7 @@ dbSqlite::fetchRow() const
 
 			case SQLITE_ERROR:
 
-				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 
 			case SQLITE_ROW:
 
@@ -476,7 +476,7 @@ dbSqlite::rowsCount() const
 
 				case SQLITE_ERROR:
 
-					throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 
 				case SQLITE_ROW:
 
@@ -635,7 +635,7 @@ dbSqlite::fetchAssoc() const
 
 			case SQLITE_ERROR:
 
-				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITE_FETCHASSOC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_FETCHASSOC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 
 			case SQLITE_ROW:
 

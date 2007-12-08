@@ -151,7 +151,7 @@ ioDisk::close()
 	if (opened)
 	{
 		if (fclose(file) != 0)
-			throw baseEx(ERRMODULE_IODISK, IODISK_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISK, IODISKEX_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		#ifndef IO_DISK_WO_XEXEC
 		performXExec(postExec);
@@ -184,7 +184,7 @@ ioDisk::open(const dodoString &a_path,
 	else
 	{
 		if (path.size() == 0)
-			throw baseEx(ERRMODULE_IODISK, IODISK_OPEN, ERR_LIBDODO, IODISK_WRONG_FILENAME, IODISK_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_LIBDODO, IODISKEX_WRONG_FILENAME, IODISKEX_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 		else
 		{
 			struct stat st;
@@ -193,7 +193,7 @@ ioDisk::open(const dodoString &a_path,
 			if (::lstat(path.c_str(), &st) == -1)
 			{
 				if (errno != ENOENT)
-					throw baseEx(ERRMODULE_IODISK, IODISK_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 			else
 				exists = true;
@@ -201,15 +201,15 @@ ioDisk::open(const dodoString &a_path,
 			if (fileType == IODISK_FILETYPE_FIFO_FILE)
 			{
 				if (exists && !S_ISFIFO(st.st_mode))
-					throw baseEx(ERRMODULE_IODISK, IODISK_OPEN, ERR_LIBDODO, IODISK_WRONG_FILENAME, IODISK_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_LIBDODO, IODISKEX_WRONG_FILENAME, IODISKEX_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 				if (!exists)
 					if (mkfifo(path.c_str(), ioDiskTools::getPermission(FILE_PERM)) == -1)
-						throw baseEx(ERRMODULE_IODISK, IODISK_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 			else
 			{
 				if ((fileType == IODISK_FILETYPE_REG_FILE || fileType == IODISK_FILETYPE_TMP_FILE || fileType ==  IODISK_FILETYPE_CHAR_FILE) && exists && !S_ISREG(st.st_mode) && !S_ISCHR(st.st_mode))
-					throw baseEx(ERRMODULE_IODISK, IODISK_OPEN, ERR_LIBDODO, IODISK_WRONG_FILENAME, IODISK_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_LIBDODO, IODISKEX_WRONG_FILENAME, IODISKEX_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 			}
 
 			switch (mode)
@@ -244,7 +244,7 @@ ioDisk::open(const dodoString &a_path,
 	}
 
 	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISK, IODISK_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	ioDiskTools::chmod(path, FILE_PERM);
 
@@ -268,7 +268,7 @@ ioDisk::read(char * const a_void,
 
 	if (fileType == IODISK_FILETYPE_REG_FILE || fileType == IODISK_FILETYPE_TMP_FILE)
 		if (fseek(file, a_pos * inSize, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IODISK, IODISK_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISK, IODISKEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	memset(a_void, '\0', inSize);
 
@@ -290,7 +290,7 @@ ioDisk::read(char * const a_void,
 		case ENOMEM:
 		case ENXIO:
 
-			throw baseEx(ERRMODULE_IODISK, IODISK_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISK, IODISKEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	buffer.assign(a_void, inSize);
@@ -319,7 +319,7 @@ ioDisk::readString(dodoString &a_str,
 		a_str.assign(data, inSize);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IODISK, IODISK_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	a_str.assign(data, inSize);
@@ -362,7 +362,7 @@ ioDisk::write(const char *const a_buf,
 				if (fseek(file, a_pos, SEEK_SET) == -1)
 				{
 					delete [] t_buf;
-					throw baseEx(ERRMODULE_IODISK, IODISK_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
 				read_bytes = fread(t_buf, outSize, 1, file);
@@ -370,15 +370,15 @@ ioDisk::write(const char *const a_buf,
 				delete [] t_buf;
 
 				if (read_bytes != 0)
-					throw baseEx(ERRMODULE_IODISK, IODISK_WRITE, ERR_LIBDODO, IODISK_CANNOT_OVEWRITE, IODISK_CANNOT_OVEWRITE_STR, __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_LIBDODO, IODISKEX_CANNOT_OVEWRITE, IODISKEX_CANNOT_OVEWRITE_STR, __LINE__, __FILE__, path);
 			}
 
 			if (fseek(file, a_pos, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_IODISK, IODISK_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 		else
 		if (fseek(file, 0, SEEK_END) == -1)
-			throw baseEx(ERRMODULE_IODISK, IODISK_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	errno = 0;
@@ -402,7 +402,7 @@ ioDisk::write(const char *const a_buf,
 		case ENOMEM:
 		case ENXIO:
 
-			throw baseEx(ERRMODULE_IODISK, IODISK_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	#ifndef IO_DISK_WO_XEXEC
@@ -430,7 +430,7 @@ void
 ioDisk::flush()
 {
 	if (fflush(file) != 0)
-		throw baseEx(ERRMODULE_IODISK, IODISK_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISK, IODISKEX_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
@@ -455,7 +455,7 @@ ioDisk::readStream(char * const a_void,
 	if (fileType == IODISK_FILETYPE_REG_FILE || fileType == IODISK_FILETYPE_TMP_FILE)
 	{
 		if (fseek(file, 0, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IODISK, IODISK_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		for (unsigned long i(0); i < a_pos; ++i)
 		{
@@ -470,10 +470,10 @@ ioDisk::readStream(char * const a_void,
 					case ENOMEM:
 					case ENXIO:
 
-						throw baseEx(ERRMODULE_IODISK, IODISK_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
-				throw baseEx(ERRMODULE_IODISK, IODISK_READSTREAM, ERR_LIBDODO, IODISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION, IODISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR, __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAM, ERR_LIBDODO, IODISKEX_FILE_IS_SHORTER_THAN_GIVEN_POSITION, IODISKEX_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR, __LINE__, __FILE__, path);
 			}
 		}
 	}
@@ -490,7 +490,7 @@ ioDisk::readStream(char * const a_void,
 			case ENOMEM:
 			case ENXIO:
 
-				throw baseEx(ERRMODULE_IODISK, IODISK_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
 	buffer.assign(a_void);
@@ -518,7 +518,7 @@ ioDisk::readStreamString(dodoString &a_str,
 		a_str.assign(data);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IODISK, IODISK_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	a_str.assign(data);
@@ -546,7 +546,7 @@ ioDisk::writeStream(const char *const a_buf)
 	#endif
 
 	if (fseek(file, 0, SEEK_END) == -1)
-		throw baseEx(ERRMODULE_IODISK, IODISK_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (buffer.size() > outSize)
 		buffer.resize(outSize);
@@ -564,7 +564,7 @@ ioDisk::writeStream(const char *const a_buf)
 			case ENOMEM:
 			case ENXIO:
 
-				throw baseEx(ERRMODULE_IODISK, IODISK_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
 	if (fputc('\n', file) < 0)
@@ -580,7 +580,7 @@ ioDisk::writeStream(const char *const a_buf)
 			case ENOMEM:
 			case ENXIO:
 
-				throw baseEx(ERRMODULE_IODISK, IODISK_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
 	#ifndef IO_DISK_WO_XEXEC

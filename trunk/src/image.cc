@@ -106,7 +106,7 @@ image::read(const dodoString &str)
 	
 	im = ReadImage(imInfo, exInfo);
 	if (im == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -117,7 +117,7 @@ image::read(const unsigned char * const data,
 {
 	im = BlobToImage(imInfo, data, size, exInfo);
 	if (im == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);	
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);	
 }
 
 //-------------------------------------------------------------------
@@ -126,11 +126,11 @@ void
 image::read(const __imageInfo &info)
 {
 	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr)/sizeof(__statements) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr)/sizeof(StorageType))
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_LIBDODO, IMAGE_BADINFO, IMAGE_BADINFO_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 	
 	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping].str, pixelSizeStArr[info.pixelSize], info.data, exInfo);
 	if (im == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -141,7 +141,7 @@ image::write(const dodoString &str)
 	strcpy(im->filename, str.c_str());
 	
 	if (WriteImage(imInfo, im) == MagickFalse)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, im->exception.error_number, GetExceptionMessage(im->exception.error_number), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, im->exception.error_number, GetExceptionMessage(im->exception.error_number), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -153,7 +153,7 @@ image::write(unsigned char **data,
 	size = 0;
 	*data = ImageToBlob(imInfo, im, &size, exInfo);
 	if (data == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -162,7 +162,7 @@ void
 image::setEncoder(short encoder)
 {
 	if (encoder < 0 || encoder >= sizeof(encoderStArr)/sizeof(__statements))
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_SETENCODER, ERR_LIBDODO, IMAGE_BADINFO, IMAGE_BADINFO_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 	
 	strcpy(imInfo->magick, encoderStArr[encoder].str);
 }
@@ -176,7 +176,7 @@ image::scale(unsigned long width,
 	Image *image = ScaleImage(im, width, height, exInfo);
 	
 	if (image == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_SCALE, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
 	
 	if (im != NULL)
 		DestroyImage(im);
@@ -190,7 +190,7 @@ image::rotate(double angle)
 	Image *image = RotateImage(im, angle, exInfo);
 	
 	if (image == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGE_ROTATE, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_ROTATE, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
 	
 	if (im != NULL)
 		DestroyImage(im);

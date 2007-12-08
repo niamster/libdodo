@@ -39,8 +39,8 @@ namespace dodo
 	 */
 	enum systemSharedDataFunctionsID
 	{
-		SYSTEMSHAREDDATA_MAP,
-		SYSTEMSHAREDDATA_UNMAP,
+		SYSTEMSHAREDDATAEX_MAP,
+		SYSTEMSHAREDDATAEX_UNMAP,
 	};
 };
 

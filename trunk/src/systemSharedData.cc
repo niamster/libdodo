@@ -70,14 +70,14 @@ systemSharedData::map(unsigned long size)
 	unmap();
 
 	if (shm <= 0)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	ftruncate(shm, sizeof(size));
 
 	data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm, 0);
 
 	if (data == MAP_FAILED)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return data;
 }
@@ -89,7 +89,7 @@ systemSharedData::unmap()
 {
 	if (data != NULL)
 		if (munmap(data, size) == -1)
-			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATA_UNMAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATAEX_UNMAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	data = NULL;
 	size = 0;

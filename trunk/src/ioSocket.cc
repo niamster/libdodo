@@ -58,7 +58,7 @@ ioSocket::~ioSocket()
 
 //-------------------------------------------------------------------
 
-#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+#ifndef IO_SOCKET_WO_XEXEC
 
 int
 ioSocket::addPostExec(inExec func,
@@ -138,7 +138,7 @@ ioSocket::makeSocket()
 		::shutdown(socket, SHUT_RDWR);
 
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 	}
@@ -167,7 +167,7 @@ ioSocket::makeSocket()
 
 		default:
 
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKESOCKET, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_MAKESOCKET, ERR_LIBDODO, IOSOCKETEX_WRONG_PARAMETHER, IOSOCKETEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	switch (type)
@@ -186,12 +186,12 @@ ioSocket::makeSocket()
 
 		default:
 
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKESOCKET, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_MAKESOCKET, ERR_LIBDODO, IOSOCKETEX_WRONG_PARAMETHER, IOSOCKETEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	socket = ::socket(real_domain, real_type, 0);
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	restoreOptions();
 }
@@ -203,13 +203,13 @@ ioSocket::connect(const dodoString &host,
 					 int port,
 					 ioSocketExchange &exchange)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT;
+	#ifndef IO_SOCKET_WO_XEXEC
+	operType = IOSOCKET_OPER_CONNECT;
 	performXExec(preExec);
 	#endif
 
 	if (server)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_LIBDODO, IOSOCKETEX_CANNOT_CONNECT, IOSOCKETEX_CANNOT_CONNECT_STR, __LINE__, __FILE__);
 
 	makeSocket();
 
@@ -227,7 +227,7 @@ ioSocket::connect(const dodoString &host,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 	else
@@ -242,7 +242,7 @@ ioSocket::connect(const dodoString &host,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 
@@ -251,7 +251,7 @@ ioSocket::connect(const dodoString &host,
 
 	socket = -1;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -273,19 +273,19 @@ ioSocket::connectFrom(const dodoString &local,
 						 int port,
 						 ioSocketExchange &exchange)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT;
+	#ifndef IO_SOCKET_WO_XEXEC
+	operType = IOSOCKET_OPER_CONNECT;
 	performXExec(preExec);
 	#endif
 
 	if (server)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_LIBDODO, IOSOCKETEX_CANNOT_CONNECT, IOSOCKETEX_CANNOT_CONNECT_STR, __LINE__, __FILE__);
 
 	makeSocket();
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
 
@@ -299,7 +299,7 @@ ioSocket::connectFrom(const dodoString &local,
 		inet_pton(AF_INET6, local.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		sa.sin6_port = htons(port);
 		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
@@ -309,7 +309,7 @@ ioSocket::connectFrom(const dodoString &local,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 	else
@@ -320,7 +320,7 @@ ioSocket::connectFrom(const dodoString &local,
 		inet_aton(local.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(), &sa.sin_addr);
@@ -330,7 +330,7 @@ ioSocket::connectFrom(const dodoString &local,
 			::close(socket);
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 
@@ -339,7 +339,7 @@ ioSocket::connectFrom(const dodoString &local,
 
 	socket = -1;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -360,13 +360,13 @@ void
 ioSocket::connect(const dodoString &path,
 					 ioSocketExchange &exchange)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT_UNIX;
+	#ifndef IO_SOCKET_WO_XEXEC
+	operType = IOSOCKET_OPER_CONNECT_UNIX;
 	performXExec(preExec);
 	#endif
 
 	if (server)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_LIBDODO, IOSOCKETEX_CANNOT_CONNECT, IOSOCKETEX_CANNOT_CONNECT_STR, __LINE__, __FILE__);
 	makeSocket();
 
 	struct sockaddr_un sa;
@@ -379,7 +379,7 @@ ioSocket::connect(const dodoString &path,
 		::close(socket);
 		socket = -1;
 
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	exchange.blocked = blocked;
@@ -387,7 +387,7 @@ ioSocket::connect(const dodoString &path,
 
 	socket = -1;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -399,21 +399,21 @@ ioSocket::bindNListen(const dodoString &host,
 						 int port,
 						 int numberOfConnections)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_BINDNLISTEN;
+	#ifndef IO_SOCKET_WO_XEXEC
+	operType = IOSOCKET_OPER_BINDNLISTEN;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_LIBDODO, IOSOCKETEX_CANNOT_BIND, IOSOCKETEX_CANNOT_BIND_STR, __LINE__, __FILE__);
 
 	if (opened)
 	{
 		if (::shutdown(socket, SHUT_RDWR) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 
@@ -424,7 +424,7 @@ ioSocket::bindNListen(const dodoString &host,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
 
@@ -443,7 +443,7 @@ ioSocket::bindNListen(const dodoString &host,
 			inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
@@ -457,16 +457,16 @@ ioSocket::bindNListen(const dodoString &host,
 			inet_pton(AF_INET, host.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	if (type == IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM)
 		if (::listen(socket, numberOfConnections) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	opened = true;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 
@@ -488,21 +488,21 @@ ioSocket::bindNListen(const dodoString &path,
 						 int numberOfConnections,
 						 bool force)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT_UNIX;
+	#ifndef IO_SOCKET_WO_XEXEC
+	operType = IOSOCKET_OPER_CONNECT_UNIX;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND, IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_LIBDODO, IOSOCKETEX_CANNOT_BIND, IOSOCKETEX_CANNOT_BIND_STR, __LINE__, __FILE__);
 
 	if (opened)
 	{
 		if (::shutdown(socket, SHUT_RDWR) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 
@@ -518,12 +518,12 @@ ioSocket::bindNListen(const dodoString &path,
 			if (S_ISSOCK(st.st_mode))
 				::unlink(path.c_str());
 			else
-				throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_MAKEUNIXSOCKET, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_FILENAME, IOIOSOCKETOPTIONS_SOCKET_WRONG_FILENAME_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_MAKEUNIXSOCKET, ERR_LIBDODO, IOSOCKETEX_WRONG_FILENAME, IOSOCKETEX_WRONG_FILENAME_STR, __LINE__, __FILE__);
 	}
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
 
@@ -535,16 +535,16 @@ ioSocket::bindNListen(const dodoString &path,
 	sa.sun_family = AF_UNIX;
 
 	if (::bind(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::listen(socket, numberOfConnections) == -1)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	unixSock = path;
 
 	opened = true;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -555,13 +555,13 @@ bool
 ioSocket::accept(__initialAccept &init,
 					__connInfo &info)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_ACCEPT;
+	#ifndef IO_SOCKET_WO_XEXEC
+	operType = IOSOCKET_OPER_ACCEPT;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_LIBDODO, IOSOCKETEX_CANNOT_ACCEPT, IOSOCKETEX_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
 
 	if (type != IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM)
 	{
@@ -575,7 +575,7 @@ ioSocket::accept(__initialAccept &init,
 	}
 
 	if (!opened)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_LIBDODO, IOSOCKETEX_ACCEPT_WO_BIND, IOSOCKETEX_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
 
 	int sock(-1);
 	info.host.clear();
@@ -593,7 +593,7 @@ ioSocket::accept(__initialAccept &init,
 				if (errno == EAGAIN)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			char temp[INET_ADDRSTRLEN];
@@ -616,7 +616,7 @@ ioSocket::accept(__initialAccept &init,
 				if (errno == EAGAIN)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			char temp[INET6_ADDRSTRLEN];
@@ -633,12 +633,12 @@ ioSocket::accept(__initialAccept &init,
 				if (errno == EAGAIN)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 			break;
 
 		default:
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER, IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_LIBDODO, IOSOCKETEX_WRONG_PARAMETHER, IOSOCKETEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	init.socket = sock;
@@ -647,7 +647,7 @@ ioSocket::accept(__initialAccept &init,
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 
@@ -659,13 +659,13 @@ ioSocket::accept(__initialAccept &init,
 bool
 ioSocket::accept(__initialAccept &init)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOIOSOCKETOPTIONS_SOCKET_OPER_ACCEPT;
+	#ifndef IO_SOCKET_WO_XEXEC
+	operType = IOSOCKET_OPER_ACCEPT;
 	performXExec(preExec);
 	#endif
 
 	if (!server)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT, IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_LIBDODO, IOSOCKETEX_CANNOT_ACCEPT, IOSOCKETEX_CANNOT_ACCEPT_STR, __LINE__, __FILE__);
 
 	if (type != IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM)
 	{
@@ -679,7 +679,7 @@ ioSocket::accept(__initialAccept &init)
 	}
 
 	if (!opened)
-		throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_LIBDODO, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND, IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_LIBDODO, IOSOCKETEX_ACCEPT_WO_BIND, IOSOCKETEX_ACCEPT_WO_BIND_STR, __LINE__, __FILE__);
 
 	int sock = ::accept(socket, NULL, NULL);
 	if (sock == -1)
@@ -687,7 +687,7 @@ ioSocket::accept(__initialAccept &init)
 		if (errno == EAGAIN)
 			return false;
 		else
-			throw baseEx(ERRMODULE_IOSOCKET, IOIOSOCKETOPTIONS_SOCKET_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	init.socket = sock;
@@ -696,7 +696,7 @@ ioSocket::accept(__initialAccept &init)
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 

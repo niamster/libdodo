@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOIOSOCKETOPTIONS_SOCKET_H_
-#define _IOIOSOCKETOPTIONS_SOCKET_H_
+#ifndef _IOSOCKET_H_
+#define _IOSOCKET_H_
 
 #include <libdodo/directives.h>
 
@@ -53,11 +53,11 @@ namespace dodo
 	 */
 	enum ioSocketOperationTypeEnum
 	{
-		IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT,
-		IOIOSOCKETOPTIONS_SOCKET_OPER_CONNECT_UNIX,
-		IOIOSOCKETOPTIONS_SOCKET_OPER_BINDNLISTEN,
-		IOIOSOCKETOPTIONS_SOCKET_OPER_BINDNLISTEN_UNIX,
-		IOIOSOCKETOPTIONS_SOCKET_OPER_ACCEPT,
+		IOSOCKET_OPER_CONNECT,
+		IOSOCKET_OPER_CONNECT_UNIX,
+		IOSOCKET_OPER_BINDNLISTEN,
+		IOSOCKET_OPER_BINDNLISTEN_UNIX,
+		IOSOCKET_OPER_ACCEPT,
 	};
 
 	/**
@@ -76,7 +76,7 @@ namespace dodo
 	 */
 	class ioSocket : public ioSocketOptions
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IO_SOCKET_WO_XEXEC
 						, public xexec
 	#endif
 
@@ -106,7 +106,7 @@ namespace dodo
 			 */
 			virtual ~ioSocket();
 
-			#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+			#ifndef IO_SOCKET_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback

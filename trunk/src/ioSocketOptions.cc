@@ -89,7 +89,7 @@ ioSocketOptions::block(bool flag)
 {
 	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (flag)
 		block &= ~O_NONBLOCK;
@@ -97,7 +97,7 @@ ioSocketOptions::block(bool flag)
 		block |= O_NONBLOCK;
 
 	if (fcntl(socket, F_SETFL, block) == 1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	blocked = flag;
 }
@@ -108,12 +108,12 @@ void
 ioSocketOptions::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINBUFFERSIZE, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETINBUFFERSIZE, ERR_LIBDODO, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	inSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -130,12 +130,12 @@ void
 ioSocketOptions::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETOUTBUFFERSIZE, ERR_LIBDODO, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	outSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -152,7 +152,7 @@ void
 ioSocketOptions::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINTIMEOUT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETINTIMEOUT, ERR_LIBDODO, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	inTimeout = microseconds;
 
@@ -161,7 +161,7 @@ ioSocketOptions::setInTimeout(unsigned long microseconds)
 	val.tv_usec = inTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 
@@ -179,7 +179,7 @@ void
 ioSocketOptions::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTTIMEOUT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETOUTTIMEOUT, ERR_LIBDODO, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	outTimeout = microseconds;
 
@@ -188,7 +188,7 @@ ioSocketOptions::setOutTimeout(unsigned long microseconds)
 	val.tv_usec = outTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 
@@ -217,7 +217,7 @@ ioSocketOptions::setSockOption(short option,
 								  bool flag)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	int sockFlag(1);
 
@@ -270,11 +270,11 @@ ioSocketOptions::setSockOption(short option,
 
 		default:
 
-			throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_WRONG_PARAMETHER, IOSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONSEX_WRONG_PARAMETHER, IOSOCKETOPTIONSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (!flag)
 		removeFlag(socketOpts, 1 << option);
@@ -289,7 +289,7 @@ ioSocketOptions::setLingerSockOption(short option,
 										int seconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED, IOSOCKETOPTIONS_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED, IOSOCKETOPTIONSEX_NO_SOCKET_CREATED_STR, __LINE__, __FILE__);
 
 	linger lin;
 
@@ -316,11 +316,11 @@ ioSocketOptions::setLingerSockOption(short option,
 			break;
 
 		default:
-			throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONS_WRONG_PARAMETHER, IOSOCKETOPTIONS_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONSEX_WRONG_PARAMETHER, IOSOCKETOPTIONSEX_WRONG_PARAMETHER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	lingerOpts = option;
 	lingerSeconds = seconds;
@@ -348,10 +348,10 @@ void
 ioSocketOptions::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::close(socket) == -1)
-		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONS__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

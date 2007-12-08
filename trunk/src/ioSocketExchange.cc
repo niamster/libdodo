@@ -196,7 +196,7 @@ ioSocketExchange::write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -220,7 +220,7 @@ ioSocketExchange::write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_SEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -279,7 +279,7 @@ ioSocketExchange::read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -306,7 +306,7 @@ ioSocketExchange::read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -340,7 +340,7 @@ ioSocketExchange::readString(dodoString &data)
 		data.assign(t_data, inSize);
 		delete [] t_data;
 
-		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	data.assign(t_data, inSize);
@@ -443,7 +443,7 @@ ioSocketExchange::writeStream(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -467,7 +467,7 @@ ioSocketExchange::writeStream(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_SENDSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -512,7 +512,7 @@ ioSocketExchange::readStream(char * const data)
 			if (errno == EINTR)
 				continue;
 
-			throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -545,7 +545,7 @@ ioSocketExchange::readStreamString(dodoString &data)
 		data.assign(t_data);
 		delete [] t_data;
 
-		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGE_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	data.assign(t_data);

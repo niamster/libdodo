@@ -39,8 +39,8 @@ namespace dodo
 	 */
 	enum atomicSemaphoreFunctionsID
 	{
-		ATOMICSEMAPHORE_LOCK,
-		ATOMICSEMAPHORE_UNLOCK,
+		ATOMICSEMAPHOREEX_LOCK,
+		ATOMICSEMAPHOREEX_UNLOCK,
 	};
 
 };

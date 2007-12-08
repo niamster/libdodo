@@ -95,7 +95,7 @@ dbPostgresql::connect()
 	int status = PQstatus(conn);
 
 	if (status != CONNECTION_OK)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL_CONNECT, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX_CONNECT, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
 
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 	performXExec(postExec);
@@ -170,7 +170,7 @@ dbPostgresql::_exec(const dodoString &query,
 
 					pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 					if (pgResult == NULL)
-						throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
+						throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
 
 					status = PQresultStatus(pgResult);
 
@@ -181,7 +181,7 @@ dbPostgresql::_exec(const dodoString &query,
 						case PGRES_NONFATAL_ERROR:
 						case PGRES_FATAL_ERROR:
 
-							throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+							throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
 					}
 
 					empty = false;
@@ -274,7 +274,7 @@ dbPostgresql::_exec(const dodoString &query,
 					delete [] lengths;
 					delete [] formats;
 
-					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__);
 				}
 
 				delete [] values;
@@ -286,14 +286,14 @@ dbPostgresql::_exec(const dodoString &query,
 
 			default:
 
-				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_LIBDODO, DBPOSTGRESQL_WRONG_HINT_USAGE, DBPOSTGRESQL_WRONG_HINT_USAGE_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_LIBDODO, DBPOSTGRESQLEX_WRONG_HINT_USAGE, DBPOSTGRESQLEX_WRONG_HINT_USAGE_STR, __LINE__, __FILE__);
 		}
 	}
 	else
 	{
 		pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 		if (pgResult == NULL)
-			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
+			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
 	}
 
 	status = PQresultStatus(pgResult);
@@ -305,7 +305,7 @@ dbPostgresql::_exec(const dodoString &query,
 		case PGRES_NONFATAL_ERROR:
 		case PGRES_FATAL_ERROR:
 
-			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -577,7 +577,7 @@ dbPostgresql::setCharset(const dodoString &charset)
 {
 	int status = PQsetClientEncoding(conn, charset.c_str());
 	if (status == -1)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQL_SETCHARSET, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX_SETCHARSET, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

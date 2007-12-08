@@ -17,12 +17,12 @@ process(void *data)
 	try
 	{
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
-		cout.io();
+		cout.flush();
 		
 		systemTools::sleep(10);
 		
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
-		cout.io();
+		cout.flush();
 	}
 	catch(baseEx ex)
 	{
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		
 		cout << endl << endl << "STARTED" << endl;
 		cout << timeTools::now() << endl;
-		cout.io();
+		cout.flush();
 		
 		for (int i=0;i<amount;++i)
 			pr[i]->wait();

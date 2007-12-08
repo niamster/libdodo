@@ -36,32 +36,32 @@ namespace dodo
 	 */
 	enum ioDiskExR
 	{
-		IODISK_WRONG_FILENAME,
-		IODISK_CANNOT_OVEWRITE,
-		IODISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION,
+		IODISKEX_WRONG_FILENAME,
+		IODISKEX_CANNOT_OVEWRITE,
+		IODISKEX_FILE_IS_SHORTER_THAN_GIVEN_POSITION,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define IODISK_WRONG_FILENAME_STR                         "Probably wrong filename, type of file is wrong or `path` is empty!"
-		#define IODISK_CANNOT_OVEWRITE_STR                        "You set option not to overwrite, but try to do that =)"
-		#define IODISK_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR    "Given file couldn't reach given position. File is short."
+		#define IODISKEX_WRONG_FILENAME_STR                         "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define IODISKEX_CANNOT_OVEWRITE_STR                        "You set option not to overwrite, but try to do that =)"
+		#define IODISKEX_FILE_IS_SHORTER_THAN_GIVEN_POSITION_STR    "Given file couldn't reach given position. File is short."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum ioDiskFunctionsID
 	{
-		IODISK_CLOSE,
-		IODISK_OPEN,
-		IODISK_READ,
-		IODISK_WRITE,
-		IODISK_READSTREAM,
-		IODISK_READSTRING,
-		IODISK_READSTREAMSTRING,
-		IODISK_WRITESTREAM,
-		IODISK_IO,
+		IODISKEX_CLOSE,
+		IODISKEX_OPEN,
+		IODISKEX_READ,
+		IODISKEX_WRITE,
+		IODISKEX_READSTREAM,
+		IODISKEX_READSTRING,
+		IODISKEX_READSTREAMSTRING,
+		IODISKEX_WRITESTREAM,
+		IODISKEX_IO,
 	};
 };
 

@@ -16,7 +16,7 @@ using namespace std;
 	{
 		dbMysql *sql = (dbMysql *)base;
 	
-		if (sql->operType == DBMYSQL_OPER_EXEC && sql->getQType() == DBMYSQL_REQUEST_SELECT)
+		if (sql->operType == DBMYSQL_OPER_EXEC && sql->getQType() == DBBASE_REQUEST_SELECT)
 		{
 			__collectedData data = sql->collectedData();
 			
@@ -36,9 +36,9 @@ using namespace std;
 	
 		switch (child->getQType())
 		{
-			case DBMYSQL_REQUEST_INSERT:
-			case DBMYSQL_REQUEST_DELETE:
-			case DBMYSQL_REQUEST_UPDATE:
+			case DBBASE_REQUEST_INSERT:
+			case DBBASE_REQUEST_DELETE:
+			case DBBASE_REQUEST_UPDATE:
 				__collectedData data = child->collectedData();
 				data.pre_table.assign(std::string((char *)yep));
 				child->exec();
@@ -153,8 +153,8 @@ int main(int argc, char **argv)
 			assA.push_back(arr);
 			
 			/*additional statement*/
-			pp.setAddInsSt(DBMYSQL_REQUEST_INSERT_IGNORE);//base SQL
-			pp.setAddSelSt(DBMYSQL_REQUEST_SELECT_DISTINCT);//base SQL
+			pp.setAddInsSt(DBBASE_REQUEST_INSERT_IGNORE);//base SQL
+			pp.setAddSelSt(DBBASE_REQUEST_SELECT_DISTINCT);//base SQL
 			pp.setMyAddSelSt(DBMYSQL_REQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
 					
 			
@@ -188,11 +188,11 @@ int main(int argc, char **argv)
 			dodoStringArr uni_all;
 			uni_all.push_back(pp.queryCollect());
 			uni_all.push_back(pp.queryCollect());
-			pp.subquery(uni_all,DBMYSQL_REQUEST_UNION_ALL);
+			pp.subquery(uni_all,DBBASE_REQUEST_UNION_ALL);
 			
 			pp.order("id desc");
 			pp.limit(5);
-			pp.setAddSelSt(DBMYSQL_REQUEST_SELECT_DISTINCT);
+			pp.setAddSelSt(DBBASE_REQUEST_SELECT_DISTINCT);
 			cout << pp.queryCollect() << endl;//show query
 			pp.exec();
 			

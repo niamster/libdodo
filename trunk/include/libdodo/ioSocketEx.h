@@ -39,39 +39,39 @@ namespace dodo
 	 */
 	enum ioSocketExR
 	{
-		IOIOSOCKETOPTIONS_SOCKET_NO_IOSOCKETOPTIONS_SOCKET_CREATED,
-		IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND,
-		IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT,
-		IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT,
-		IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND,
-		IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER,
-		IOIOSOCKETOPTIONS_SOCKET_WRONG_FILENAME,
+		IOSOCKETEX_NO_SOCKET_CREATED,
+		IOSOCKETEX_CANNOT_BIND,
+		IOSOCKETEX_CANNOT_CONNECT,
+		IOSOCKETEX_CANNOT_ACCEPT,
+		IOSOCKETEX_ACCEPT_WO_BIND,
+		IOSOCKETEX_WRONG_PARAMETHER,
+		IOSOCKETEX_WRONG_FILENAME,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define IOIOSOCKETOPTIONS_SOCKET_NO_IOSOCKETOPTIONS_SOCKET_CREATED_STR    "No socket was created =(."
-		#define IOIOSOCKETOPTIONS_SOCKET_CANNOT_BIND_STR          "You cannot <bindNListen> with this constructor; choose another one!"
-		#define IOIOSOCKETOPTIONS_SOCKET_CANNOT_CONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
-		#define IOIOSOCKETOPTIONS_SOCKET_CANNOT_ACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
-		#define IOIOSOCKETOPTIONS_SOCKET_ACCEPT_WO_BIND_STR       "You try to accept without called bindNListen or bindNListen failed."
-		#define IOIOSOCKETOPTIONS_SOCKET_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
-		#define IOIOSOCKETOPTIONS_SOCKET_WRONG_FILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define IOSOCKETEX_NO_SOCKET_CREATED_STR    "No socket was created =(."
+		#define IOSOCKETEX_CANNOT_BIND_STR          "You cannot <bindNListen> with this constructor; choose another one!"
+		#define IOSOCKETEX_CANNOT_CONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
+		#define IOSOCKETEX_CANNOT_ACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
+		#define IOSOCKETEX_ACCEPT_WO_BIND_STR       "You try to accept without called bindNListen or bindNListen failed."
+		#define IOSOCKETEX_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
+		#define IOSOCKETEX_WRONG_FILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum ioSocketFunctionsID
 	{
-		IOIOSOCKETOPTIONS_SOCKET_MAKESOCKET,
-		IOIOSOCKETOPTIONS_SOCKET_CONNECT,
-		IOIOSOCKETOPTIONS_SOCKET_MAKEUNIXSOCKET,
-		IOIOSOCKETOPTIONS_SOCKET_BINDNLISTEN,
-		IOIOSOCKETOPTIONS_SOCKET_ACCEPT,
-		IOIOSOCKETOPTIONS_SOCKET_SEND,
-		IOIOSOCKETOPTIONS_SOCKET_RECIEVE,
-		IOIOSOCKETOPTIONS_SOCKET_CONNECTFROM
+		IOSOCKETEX_MAKESOCKET,
+		IOSOCKETEX_CONNECT,
+		IOSOCKETEX_MAKEUNIXSOCKET,
+		IOSOCKETEX_BINDNLISTEN,
+		IOSOCKETEX_ACCEPT,
+		IOSOCKETEX_SEND,
+		IOSOCKETEX_RECIEVE,
+		IOSOCKETEX_CONNECTFROM
 	};
 
 };

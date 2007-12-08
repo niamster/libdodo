@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 		
 		unsigned char *img; unsigned int size;
 		im.rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
-		im.setEncoder(IMAGE_ENC_PNG);
+		im.setEncoder(IMAGE_ENCODER_PNG);
 		im.write(&img, size);
 		
 		ioDisk io;

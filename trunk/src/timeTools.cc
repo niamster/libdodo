@@ -68,7 +68,7 @@ timeTools::byFormat(const dodoString &format,
 		tTime = gmtime((const time_t *)&timestamp);
 
 	if (tTime == NULL)
-		throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_GETBYFORMAT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLSEX_GETBYFORMAT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	char formatted[30];
 
@@ -84,7 +84,7 @@ timeTools::now()
 {
 	time_t tTime = ::time(NULL);
 	if (tTime == (time_t)-1)
-		throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_NOW, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLSEX_NOW, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return tTime;
 }
@@ -174,7 +174,7 @@ timeTools::makeTime(long seconds,
 		tTime = gmtime((const time_t *)&seconds);
 
 	if (tTime == NULL)
-		throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLS_MAKETIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLSEX_MAKETIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__mktime timeInfo;
 

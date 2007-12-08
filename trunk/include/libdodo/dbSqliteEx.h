@@ -36,24 +36,24 @@ namespace dodo
 	 */
 	enum dbSqliteExR
 	{
-		DBSQLITE_WRONG_HINT_USAGE,
+		DBSQLITEEX_WRONG_HINT_USAGE,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define DBSQLITE_WRONG_HINT_USAGE_STR    "Wrong hint usage. You used hint where it's not needed."
+		#define DBSQLITEEX_WRONG_HINT_USAGE_STR    "Wrong hint usage. You used hint where it's not needed."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum dbSqliteFunctionsID
 	{
-		DBSQLITE_DISCONNECT,
-		DBSQLITE_CONNECT,
-		DBSQLITE__EXEC,
-		DBSQLITE_FETCHROW,
-		DBSQLITE_FETCHASSOC
+		DBSQLITEEX_DISCONNECT,
+		DBSQLITEEX_CONNECT,
+		DBSQLITEEX__EXEC,
+		DBSQLITEEX_FETCHROW,
+		DBSQLITEEX_FETCHASSOC
 	};
 
 };

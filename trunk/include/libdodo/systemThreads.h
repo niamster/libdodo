@@ -26,7 +26,7 @@
 
 #include <libdodo/directives.h>
 
-#ifdef PSYSTEMTHREADS_EXT
+#ifdef PTHREAD_EXT
 
 	#ifdef DL_EXT
 

@@ -35,21 +35,21 @@ namespace dodo
 	 */
 	enum cgiPreprocessorExR
 	{
-		CGIPREPROCESSOR_NOTCLOSEDBRACKET,
+		CGIPREPROCESSOREX_NOTCLOSEDBRACKET,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define CGIPREPROCESSOR_NOTCLOSEDBRACKET_STR    "Bracket was opened(closed) but not closed(opened)."
+		#define CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR    "Bracket was opened(closed) but not closed(opened)."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum cgiPreprocessorFunctionsID
 	{
-		CGIPREPROCESSOR_PREPROCESS,
-		CGIPREPROCESSOR_READ,
+		CGIPREPROCESSOREX_PREPROCESS,
+		CGIPREPROCESSOREX_READ,
 	};
 };
 

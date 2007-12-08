@@ -15,12 +15,12 @@ process(ioSocketExchange fse)
 	if (fse.isBlocked())
 	{
 		std::cout << "CHILD BLOCKED\n";
-		cout.io();
+		cout.flush();
 	}
 	else
 	{
 		std::cout << "CHILD UNBLOCKED\n";
-		cout.io();
+		cout.flush();
 	}
 	
 	fse.inSize = 4;
@@ -38,7 +38,7 @@ process(ioSocketExchange fse)
 		fse.readString(rec);
 		
 		cout << rec << rec.size() << endl;
-		cout.io();
+		cout.flush();
 		if (rec.compare("exit")==0)
 		{
 			exit(0);
@@ -47,12 +47,12 @@ process(ioSocketExchange fse)
 	catch (baseEx ex)
 	{
 		cout << "Smth happened!" << (string)ex << endl;
-		cout.io();
+		cout.flush();
 	}
 	catch(...)
 	{
 		cout << "Smth happened!" << endl;
-		cout.io();		
+		cout.flush();		
 	}
 }
 
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 			catch(baseEx ex)
 			{
 				cout << (string)ex << "\t" << ex.line << endl;
-				cout.io();
+				cout.flush();
 			}
 			try
 			{
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 			catch(baseEx ex)
 			{
 				cout << (string)ex << "\t" << ex.line << endl;
-				cout.io();
+				cout.flush();
 			}
 			try
 			{
@@ -118,13 +118,13 @@ int main(int argc, char **argv)
 			catch(baseEx ex)
 			{
 				cout << (string)ex << "\t" << ex.line << endl;
-				cout.io();
+				cout.flush();
 			}
 		}
 		catch(baseEx ex)
 		{
 			cout << (string)ex << "\t" << ex.line << endl;
-			cout.io();
+			cout.flush();
 		}
 		
 		cout << "\n-------------------------------------\n" << endl;
@@ -151,7 +151,7 @@ int main(int argc, char **argv)
 				if (sock.isBlocked())
 				{
 					std::cout << "PARENT BLOCKED\n";
-					cout.io();
+					cout.flush();
 				}
 					
 				conn.init(fake);
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 	catch(baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-		cout.io();
+		cout.flush();
 	}
 	
 	return 0;

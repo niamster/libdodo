@@ -146,7 +146,7 @@ ioSTD::read(char * const a_void)
 					continue;
 
 				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTD_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -165,7 +165,7 @@ ioSTD::read(char * const a_void)
 					continue;
 
 				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTD_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -196,7 +196,7 @@ ioSTD::readString(dodoString &a_str)
 		a_str.assign(data, inSize);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IOSTD, IOSTD_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	a_str.assign(data, inSize);
@@ -242,7 +242,7 @@ ioSTD::write(const char *const aa_buf)
 					continue;
 
 				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -261,7 +261,7 @@ ioSTD::write(const char *const aa_buf)
 					continue;
 
 				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -283,7 +283,7 @@ ioSTD::flush()
 		desc = stderr;
 
 	if (fflush(desc) != 0)
-		throw baseEx(ERRMODULE_IOSTD, IOSTD_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -300,7 +300,7 @@ ioSTD::inputterInfo()
 	if (::getpeername(1, &sa, &len) == 1)
 	{
 		if (errno != ENOTSOCK)
-			throw baseEx(ERRMODULE_IOSTD, IOSTD_INPUTTERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTDEX_INPUTTERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			return info;
 	}
@@ -359,31 +359,31 @@ ioSTD::block(bool flag)
 	{
 		block[0] = fcntl(0, F_GETFL);
 		if (block[0] == -1)
-			throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTDEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[0] &= ~O_NONBLOCK;
 
 		block[1] = fcntl(1, F_GETFL);
 		if (block[1] == -1)
-			throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTDEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[1] &= ~O_NONBLOCK;
 
 		block[2] = fcntl(2, F_GETFL);
 		if (block[2] == -1)
-			throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTD, IOSTDEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[2] &= ~O_NONBLOCK;
 	}
 
 	if (fcntl(0, F_SETFL, block[0]) == 1)
-		throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (fcntl(1, F_SETFL, block[1]) == 1)
-		throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (fcntl(2, F_SETFL, block[2]) == 1)
-		throw baseEx(ERRMODULE_IOSTD, IOSTD_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	blocked = flag;
 }
@@ -408,7 +408,7 @@ ioSTD::readStream(char * const a_void)
 				continue;
 
 			if (ferror(stdin) != 0)
-				throw baseEx(ERRMODULE_IOSTD, IOSTD_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -438,7 +438,7 @@ ioSTD::readStreamString(dodoString &a_str)
 		a_str.assign(data);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IOSTD, IOSTD_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	a_str.assign(data);
@@ -500,7 +500,7 @@ ioSTD::writeStream(const char *const aa_buf)
 				{
 					delete [] buff;
 
-					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 			}
 
@@ -526,7 +526,7 @@ ioSTD::writeStream(const char *const aa_buf)
 				{
 					delete [] buff;
 
-					throw baseEx(ERRMODULE_IOSTD, IOSTD_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 			}
 
