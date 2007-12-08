@@ -578,7 +578,7 @@ tools::zDecompress(const dodoString &buffer)
 		strm.avail_out = ZLIB_CHUNK;
 		strm.next_out = byteBuf;
 
-		if ((ret = inflate(&strm, Z_NO_IO)) < 0)
+		if ((ret = inflate(&strm, Z_NO_FLUSH)) < 0)
 		{
 			delete [] byteBuf;
 

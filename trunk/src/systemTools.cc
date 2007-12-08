@@ -527,7 +527,7 @@ systemTools::die(const dodoString &message,
 				 int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
-	fio(stderr);
+	fflush(stderr);
 
 	_exit(status);
 }

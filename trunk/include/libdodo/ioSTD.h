@@ -210,10 +210,10 @@ namespace dodo
 			writeStream(const char * const data);
 
 			/**
-			 * ioes to output
+			 * flushes to output
 			 */
 			virtual void
-			io();
+			flush();
 
 			/**
 			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer

@@ -276,13 +276,13 @@ ioSTD::write(const char *const aa_buf)
 //-------------------------------------------------------------------
 
 void
-ioSTD::io()
+ioSTD::flush()
 {
 	desc = stdout;
 	if (err)
 		desc = stderr;
 
-	if (fio(desc) != 0)
+	if (fflush(desc) != 0)
 		throw baseEx(ERRMODULE_IOSTD, IOSTD_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 

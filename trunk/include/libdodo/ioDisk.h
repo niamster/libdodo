@@ -253,10 +253,10 @@ namespace dodo
 			erase(unsigned long pos);
 			
 			/**
-			 * ioes to disk
+			 * flushes to disk
 			 */
 			virtual void
-			io();
+			flush();
 
 			bool over;  ///< indicates whether overwrite or not; if you want to write to nonempty node error will be occured; for files, tmp_files only
 			bool append;    ///< if true, will append to the end of the file, even pos is set.

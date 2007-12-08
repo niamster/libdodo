@@ -309,13 +309,13 @@ cgi::printHeaders() const
 	if (cgiFastSet)
 	{
 		cf->print("\r\n\r\n");
-		cf->io();
+		cf->flush();
 	}
 	else
 	#endif
 	{
 		fstd->writeStreamString("\r\n\r\n");
-		fstd->io();
+		fstd->flush();
 	}
 }
 

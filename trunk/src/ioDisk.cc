@@ -427,9 +427,9 @@ ioDisk::erase(unsigned long a_pos)
 //-------------------------------------------------------------------
 
 void
-ioDisk::io()
+ioDisk::flush()
 {
-	if (fio(file) != 0)
+	if (fflush(file) != 0)
 		throw baseEx(ERRMODULE_IODISK, IODISK_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 

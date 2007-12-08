@@ -31,7 +31,7 @@ using namespace dodo;
 
 	#ifdef PSYSTEMTHREADS_EXT
 
-pthread_mutex_t cgiFast::accept = PSYSTEMTHREADS_MUTEX_INITIALIZER;
+pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
 
 	#endif
 
@@ -67,7 +67,7 @@ cgiFastSTD::~cgiFastSTD()
 //-------------------------------------------------------------------
 
 void
-cgiFastSTD::io()
+cgiFastSTD::flush()
 {
 	FCGX_FFlush(request->out);
 }
@@ -105,7 +105,7 @@ cgiFast::cgiFast(cgiFast &cf)
 
 //-------------------------------------------------------------------
 
-	#ifdef PSYSTEMTHREADS_EXT
+	#ifdef PTHREAD_EXT
 
 cgiFast::cgiFast(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
@@ -114,7 +114,7 @@ cgiFast::cgiFast(bool a_threading,
 	pthread_mutexattr_t attr;
 
 	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, PSYSTEMTHREADS_MUTEX_ERRORCHECK);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 	pthread_mutex_init(&accept, &attr);
 
 	pthread_mutexattr_destroy(&attr);

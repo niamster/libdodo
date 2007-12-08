@@ -1755,13 +1755,13 @@ cgiProcessor::display(const dodoString &path)
 	if (cgiFastSet)
 	{
 		cf->print(this->process(path));
-		cf->io();
+		cf->flush();
 	}
 	else
 		#endif
 	{
 		fstd->writeStreamString(this->process(path));
-		fstd->io();
+		fstd->flush();
 	}
 }
 

@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 		
 		cout << endl << st.buffer << endl;
 		
-		st.io();
+		st.flush();
 	}
 	catch(baseEx ex)
 	{

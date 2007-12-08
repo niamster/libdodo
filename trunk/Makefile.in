@@ -31,13 +31,13 @@ OBJECTS:=dbBase.o \
 		dbMysql.o \
 		cgi.o \
 		regexp.o \
-		flushSocketOptions.o \
-		flushSocketExchange.o \
-		flushSocketTools.o \
-		flushSocket.o \
-		flushDiskTools.o \
-		flushDisk.o \
-		flushSTD.o \
+		ioSocketOptions.o \
+		ioSocketExchange.o \
+		ioSocketTools.o \
+		ioSocket.o \
+		ioDiskTools.o \
+		ioDisk.o \
+		ioSTD.o \
 		systemTools.o \
 		timeTools.o \
 		xml.o \
@@ -57,11 +57,11 @@ OBJECTS:=dbBase.o \
 		systemSharedDataCollectionGuard.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \
-		flush.o \
-		dbInterface.o \
+		io.o \
+		db.o \
 		cgiFast.o \
 		cgiProcessor.o \
-		flushNBA.o
+		ioNBA.o
 
 ###########################################################
 

@@ -81,7 +81,7 @@ namespace dodo
 			/**
 			 * ioes output[fast-cgi safe]
 			 */
-			virtual void io();
+			virtual void flush();
 
 		private:
 
@@ -109,7 +109,7 @@ namespace dodo
 
 		public:
 
-				#ifdef PSYSTEMTHREADS_EXT
+				#ifdef PTHREAD_EXT
 
 			/**
 			 * constructor
@@ -122,10 +122,8 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param threading indicates whether to call new thread on cgi request or proceed a queue
-			 * @param threadsNum indicates how many threads to use in fast-cgi server
 			 */
-			cgiFast(bool threading = true, unsigned int threadsNum = 10);
+			cgiFast();
 
 				#endif
 
@@ -147,7 +145,7 @@ namespace dodo
 
 		private:
 
-				#ifdef PSYSTEMTHREADS_EXT
+				#ifdef PTHREAD_EXT
 
 			bool threading;                 ///< threading or not
 
