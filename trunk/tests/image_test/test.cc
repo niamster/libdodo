@@ -14,6 +14,8 @@ int main(int argc, char **argv)
 		image im;
 
 		im.read("test.png");
+		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
+		
 		im.scale(1000, 1000);
 		
 		im.write("test.jpg");
@@ -21,6 +23,8 @@ int main(int argc, char **argv)
 		unsigned char *img; unsigned int size;
 		im.rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
 		im.setEncoder(IMAGE_ENCODER_PNG);
+		im.setCompression(IMAGE_COMPRESSION_ZIP);
+		im.setQuality(4);
 		im.write(&img, size);
 		
 		ioDisk io;

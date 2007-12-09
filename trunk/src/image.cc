@@ -77,13 +77,31 @@ const __statements image::encoderStArr[] =
 {
 	"PNG",
 	"JPEG",
+	"GIF",
+	"BMP",
+	"XPM",
+	"ICO"
+};
+
+//-------------------------------------------------------------------
+
+const CompressionType image::compressionStArr[] =
+{
+		NoCompression,
+		LZWCompression,
+		RLECompression,
+		ZipCompression,
+		BZipCompression,
+		JPEGCompression,
+		LosslessJPEGCompression,
+		JPEG2000Compression,
 };
 
 //-------------------------------------------------------------------
 
 image::image() : im(NULL)
 {
-	imInfo = CloneImageInfo((ImageInfo *) NULL);
+	imInfo = AcquireImageInfo();
 	exInfo = AcquireExceptionInfo();
 }
 
@@ -107,6 +125,10 @@ image::read(const dodoString &str)
 	im = ReadImage(imInfo, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+	
+	imInfo->compression = im->compression;
+	imInfo->quality = im->quality;
+	strcpy(imInfo->magick, im->magick);
 }
 
 //-------------------------------------------------------------------
@@ -118,6 +140,10 @@ image::read(const unsigned char * const data,
 	im = BlobToImage(imInfo, data, size, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);	
+
+	imInfo->compression = im->compression;
+	imInfo->quality = im->quality;
+	strcpy(imInfo->magick, im->magick);
 }
 
 //-------------------------------------------------------------------
@@ -131,6 +157,10 @@ image::read(const __imageInfo &info)
 	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping].str, pixelSizeStArr[info.pixelSize], info.data, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, GetExceptionMessage(exInfo->error_number), __LINE__, __FILE__);
+
+	imInfo->compression = im->compression;
+	imInfo->quality = im->quality;
+	strcpy(imInfo->magick, im->magick);
 }
 
 //-------------------------------------------------------------------
@@ -159,12 +189,61 @@ image::write(unsigned char **data,
 //-------------------------------------------------------------------
 
 void 
+image::setCompression(short type)
+{
+	if (type < 0 || type >= sizeof(compressionStArr)/sizeof(CompressionType))
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
+	
+	imInfo->compression = compressionStArr[type];
+}
+
+//-------------------------------------------------------------------
+
+void 
+image::setQuality(short quality)
+{
+	imInfo->quality = quality;
+}
+
+//-------------------------------------------------------------------
+
+void 
 image::setEncoder(short encoder)
 {
 	if (encoder < 0 || encoder >= sizeof(encoderStArr)/sizeof(__statements))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 	
 	strcpy(imInfo->magick, encoderStArr[encoder].str);
+}
+
+//-------------------------------------------------------------------
+
+short 
+image::getCompression()
+{	
+	int i = 0, j = sizeof(compressionStArr)/sizeof(CompressionType);
+	for (;i<j;++i)
+		if (imInfo->compression == compressionStArr[i])
+			return i;
+}
+
+//-------------------------------------------------------------------
+
+short 
+image::getQuality()
+{
+	return imInfo->quality;
+}
+
+//-------------------------------------------------------------------
+
+short 
+image::getEncoder()
+{
+	int i = 0, j = sizeof(encoderStArr)/sizeof(__statements);
+	for (;i<j;++i)
+		if (strcmp(imInfo->magick, encoderStArr[i].str) == 0)
+			return i;
 }
 
 //-------------------------------------------------------------------

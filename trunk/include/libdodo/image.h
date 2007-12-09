@@ -65,6 +65,10 @@ namespace dodo
 	{
 		IMAGE_ENCODER_PNG,
 		IMAGE_ENCODER_JPEG,
+		IMAGE_ENCODER_GIF,
+		IMAGE_ENCODER_BMP,
+		IMAGE_ENCODER_XPM,
+		IMAGE_ENCODER_ICO,
 	};
 	
 	/**
@@ -77,6 +81,21 @@ namespace dodo
 		IMAGE_ROTATEDIRECTIONANGLE_180 = 180,
 		IMAGE_ROTATEDIRECTIONANGLE_270CW = -270,
 		IMAGE_ROTATEDIRECTIONANGLE_270CCW = 270,
+	};
+	
+	/**
+	 * @enum imageCompressionEnum describes type of compression 
+	 */
+	enum imageCompressionEnum
+	{
+		IMAGE_COMPRESSION_NO,
+		IMAGE_COMPRESSION_BZIP,
+		IMAGE_COMPRESSION_LZW,
+		IMAGE_COMPRESSION_RLE,
+		IMAGE_COMPRESSION_ZIP,
+		IMAGE_COMPRESSION_JPEG,///< only for JPEG 
+		IMAGE_COMPRESSION_LOSSLESSJPEG,///< only for JPEG 
+		IMAGE_COMPRESSION_JPEG2000,///< only for JPEG 
 	};
 
 	/**
@@ -147,6 +166,33 @@ namespace dodo
 			void setEncoder(short encoder);
 			
 			/**
+			 * sets image compression type
+			 * @param type describes type of image compression[see imageCompressionEnum]
+			 */
+			void setCompression(short type);
+			
+			/**
+			 * sets image quality
+			 * @param quality describes quality of image
+			 */
+			void setQuality(short quality);
+			
+			/**
+			 * @return image output encoder
+			 */
+			short getEncoder();
+			
+			/**
+			 * @return image compression type
+			 */
+			short getCompression();
+			
+			/**
+			 * @return image quality
+			 */
+			short getQuality();
+			
+			/**
 			 * scales image
 			 * @param width describes width of the image
 			 * @param height describes height of the image
@@ -175,7 +221,8 @@ namespace dodo
 			
 			static const __statements mappingStArr[3];///< image mapping statements
 			static const StorageType pixelSizeStArr[6];///< pixel type statements
-			static const __statements encoderStArr[2];///< image encoder
+			static const __statements encoderStArr[6];///< image encoder
+			static const CompressionType compressionStArr[8];///< image encoder
 	};
 
 	/**
