@@ -23,6 +23,7 @@ OBJECTS:=dbBase.o \
 		atomicMutex.o \
 		atomicSemaphore.o \
 		tools.o \
+		json.o \
 		types.o \
 		stringTools.o \
 		xexec.o \
