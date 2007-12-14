@@ -99,6 +99,13 @@ const CompressionType image::compressionStArr[] =
 
 //-------------------------------------------------------------------
 
+image::image(image &im)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
 image::image() : im(NULL)
 {
 	imInfo = AcquireImageInfo();

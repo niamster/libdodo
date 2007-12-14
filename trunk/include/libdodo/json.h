@@ -27,14 +27,125 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
+#include <libdodo/jsonEx.h>
 
 namespace dodo
 {
+	/**
+	 * @enum jsonDataTypeEnum
+	 */
+	enum jsonDataTypeEnum
+	{
+		JSON_DATATYPE_STRING,
+		JSON_DATATYPE_OBJECT,
+		JSON_DATATYPE_ARRAY,
+		JSON_DATATYPE_BOOLEAN,
+		JSON_DATATYPE_NULL,
+	};
+	
+	class jsonNode;
+	
+	/**
+	 * @class jsonObject represents json object
+	 */
+	class jsonNode
+	{
+		friend class json;
+		
+		public:
+			
+			/**
+			 * constructor
+			 */
+			jsonNode();
+			
+			/**
+			 * destructor
+			 */
+			virtual ~jsonNode();
+			
+			/**
+			 * @return node by string key
+			 * @param key describes string key to search for node
+			 * @note throws exception if data type is not JSON_DATATYPE_OBJECT
+			 */
+			virtual jsonNode operator[](const dodoString &key);
+
+			/**
+			 * @return node by numeric key
+			 * @param key describes numeric key to search for node
+			 * @note throws exception if data type is not JSON_DATATYPE_ARRAY
+			 */
+			virtual jsonNode operator[](unsigned long key);
+			
+			/**
+			 * @return type of node[see jsonDataTypeEnum]
+			 */
+			virtual short getType();
+			
+			/**
+			 * @return true if node is NULL
+			 */
+			virtual bool isNull();
+
+			/**
+			 * @return value as string
+			 * @note throws exception if data type is not JSON_DATATYPE_STRING
+			 */
+			virtual dodoString getString();
+
+			/**
+			 * @return value as bool
+			 * @note throws exception if data type is not JSON_DATATYPE_BOOLEAN
+			 */
+			virtual bool getBoolean();
+
+			/**
+			 * @return value as array
+			 * @note throws exception if data type is not JSON_DATATYPE_ARRAY
+			 */
+			virtual dodoArray<jsonNode> getArray();
+
+			/**
+			 * @return value as object
+			 * @note throws exception if data type is not JSON_DATATYPE_OBJECT
+			 */
+			virtual dodoMap<dodoString, jsonNode, stringTools::equal> getObject();
+		
+		private:
+			
+			dodoString stringValue;///< string value of node
+			dodoMap<dodoString, jsonNode, stringTools::equal> objectValue;///< object value of node 
+			dodoArray<jsonNode> arrayValue;///< array value of node
+			bool booleanValue;///< boolean value of node
+			
+			short valueDataType;///< data type of value
+	};
+
 	/**
 	 * @class json is to perform json operations
 	 */
 	class json
 	{
+		private:
+	
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			json(json &js);
+			
+		public:
+	
+			/**
+			 * contructor
+			 */
+			json();
+	
+			/**
+			 * destructor
+			 */
+			virtual ~json();
 	};
 };
 

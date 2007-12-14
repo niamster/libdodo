@@ -88,9 +88,10 @@ namespace dodo
 		ERRMODULE_ATOMICMUTEX,
 		ERRMODULE_ATOMICSEMAPHORE,
 		ERRMODULE_IMAGE,
+		ERRMODULE_JSON,
 	};
 
-		#define AM_MODULES    30
+		#define AM_MODULES    31
 
 		#ifdef DL_EXT
 

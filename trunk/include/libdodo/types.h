@@ -58,7 +58,7 @@ namespace dodo
 	{
 		const char *str;
 	};
-
+	
 	/**
 	 * diferent predifined constants
 	 */

@@ -22,3 +22,5 @@
 
 8.
 	collections: getIndexes
+
+9.	cgiProcessor: parse from string

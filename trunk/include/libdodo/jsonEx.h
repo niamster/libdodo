@@ -35,11 +35,31 @@ namespace dodo
 	 */
 
 	/**
+	 * libdodo defined errors
+	 */
+	enum imageFunctionsExR
+	{
+		JSONNODEEX_WRONGTYPEREQUESTED,
+		JSONNODEEX_ARRAYOUTOFRANGE
+	};
+	
+	/**
+	 * libdodo defined errors' explanation
+	 */
+	#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+	#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
+
+	/**
 	 * ID of function where exception was thrown
 	 */
 	enum jsonFunctionsID
 	{
-		JSONEX_,
+		JSONNODEEX_BROPERATORSTRING,
+		JSONNODEEX_BROPERATORNUMERIC,
+		JSONNODEEX_GETSTRING,
+		JSONNODEEX_GETBOOLEAN,
+		JSONNODEEX_GETARRAY,
+		JSONNODEEX_GETOBJECT,
 	};
 
 };

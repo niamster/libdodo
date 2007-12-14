@@ -115,6 +115,14 @@ namespace dodo
 	 */
 	class image
 	{
+		private:
+	
+			/**
+			 * copy constructor
+			 * to prevent copying
+			 */
+			image(image &im);
+			
 		public:
 
 			/**
@@ -125,91 +133,91 @@ namespace dodo
 			/**
 			 * destructor
 			 */
-			~image();
+			virtual ~image();
 			
 			/**
 			 * reads image
 			 * @param path describes path to image
 			 */
-			void read(const dodoString &path);
+			virtual void read(const dodoString &path);
 			
 			/**
 			 * reads image
 			 * @param info describes image info
 			 */
-			void read(const __imageInfo &info);
+			virtual void read(const __imageInfo &info);
 			
 			/**
 			 * reads image
 			 * @param data describes image data
 			 * @param size describes image data size
 			 */
-			void read(const unsigned char * const data, unsigned long size);
+			virtual void read(const unsigned char * const data, unsigned long size);
 			
 			/**
 			 * writes image
 			 * @param path describes path to image
 			 */
-			void write(const dodoString &path);
+			virtual void write(const dodoString &path);
 			
 			/**
 			 * writes image
 			 * @param data describes pointer to image
 			 * @param size describes size of data
 			 */
-			void write(unsigned char **data, unsigned int &size);
+			virtual void write(unsigned char **data, unsigned int &size);
 			
 			/**
 			 * sets image output encoder
 			 * @param encoder describes codec to encode image[see imageEncoderEnum]
 			 */
-			void setEncoder(short encoder);
+			virtual void setEncoder(short encoder);
 			
 			/**
 			 * sets image compression type
 			 * @param type describes type of image compression[see imageCompressionEnum]
 			 */
-			void setCompression(short type);
+			virtual void setCompression(short type);
 			
 			/**
 			 * sets image quality
 			 * @param quality describes quality of image
 			 */
-			void setQuality(short quality);
+			virtual void setQuality(short quality);
 			
 			/**
 			 * @return image output encoder
 			 */
-			short getEncoder();
+			virtual short getEncoder();
 			
 			/**
 			 * @return image compression type
 			 */
-			short getCompression();
+			virtual short getCompression();
 			
 			/**
 			 * @return image quality
 			 */
-			short getQuality();
+			virtual short getQuality();
 			
 			/**
 			 * scales image
 			 * @param width describes width of the image
 			 * @param height describes height of the image
 			 */
-			void scale(unsigned long width, unsigned long height);
+			virtual void scale(unsigned long width, unsigned long height);
 			
 			/**
 			 * rotates image
 			 * @param angle describes the number of degrees to rotate the image[see also imageRotateDirAngEnum]
 			 */
-			void rotate(double angle);
+			virtual void rotate(double angle);
 			
 			/**
 			 * destroys image data got from write
 			 * @param data describes pointer to image
 			 */
-			void destroyImageData(unsigned char **data);
+			virtual void destroyImageData(unsigned char **data);
 			
 		protected:
 			
