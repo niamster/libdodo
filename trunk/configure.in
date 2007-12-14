@@ -361,12 +361,13 @@ AC_PROG_GCC_TRADITIONAL
 
 AC_CONFIG_FILES([Makefile
                  tests/Makefile
+                 tests/image_test/Makefile
+                 tests/json_test/Makefile
                  tests/STD_test/Makefile
                  tests/cgiFast_test/Makefile
                  tests/cgi_test/Makefile
                  tests/dbinterface_test/Makefile
                  tests/disk_test/Makefile
-                 tests/image_test/Makefile
                  tests/glob_test/Makefile
                  tests/mysql_test/Makefile
                  tests/postgresql_test/Makefile

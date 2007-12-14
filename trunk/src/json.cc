@@ -94,6 +94,18 @@ jsonNode::getBoolean()
 
 //-------------------------------------------------------------------
 
+long
+jsonNode::getNumeric()
+{
+	if (valueDataType != JSON_DATATYPE_NUMERIC)
+		throw baseEx(ERRMODULE_JSON, JSONNODEEX_NUMERIC, ERR_LIBDODO, JSONNODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+	
+	return numericValue;
+}
+
+
+//-------------------------------------------------------------------
+
 dodoArray<jsonNode> 
 jsonNode::getArray()
 {
@@ -139,6 +151,82 @@ json::json()
 
 json::~json()
 {
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+json::makeJSON(const jsonNodeDef &root)
+{
+	switch (root.valueDataType)
+	{
+		case JSON_DATATYPE_STRING:
+			{
+	
+				dodoString jsonObject = "\"";
+				jsonObject.append(root.stringValue);
+				jsonObject.append("\"");
+				
+				return jsonObject;
+			}
+			
+		case JSON_DATATYPE_OBJECT:
+			{
+				dodoString jsonObject = "{";
+				
+				std::map<dodoString, jsonNodeDef>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
+				for (--j;i!=j;++i)
+				{
+					jsonObject.append("\"");
+					jsonObject.append(i->first);
+					jsonObject.append("\":");
+					
+					jsonObject.append(makeJSON(i->second));
+					jsonObject.append(",");
+				}
+				jsonObject.append("\"");
+				jsonObject.append(i->first);
+				jsonObject.append("\":");
+	
+				jsonObject.append(makeJSON(i->second));
+	
+				jsonObject.append("}");
+				
+				return jsonObject;
+			}
+			
+		case JSON_DATATYPE_ARRAY:
+			{
+				dodoString jsonObject = "[";
+				
+				dodoArray<jsonNodeDef>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end() - 1;
+				for (;i!=j;++i)
+				{
+					jsonObject.append(makeJSON(*i));
+					jsonObject.append(",");
+				}
+				jsonObject.append(makeJSON(*i));
+				
+				jsonObject.append("]");
+				
+				return jsonObject;
+			}
+			
+		case JSON_DATATYPE_NUMERIC:
+			
+			return stringTools::lToString(root.numericValue);
+			
+		case JSON_DATATYPE_BOOLEAN:
+			
+			return root.booleanValue?"true":"false";
+			
+		case JSON_DATATYPE_NULL:
+		default:
+			
+			return "null";
+	}
+
+	return "null";
 }
 
 //-------------------------------------------------------------------

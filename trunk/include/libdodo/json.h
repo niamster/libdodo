@@ -27,6 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
+#include <libdodo/stringTools.h>
 #include <libdodo/jsonEx.h>
 
 namespace dodo
@@ -40,11 +41,24 @@ namespace dodo
 		JSON_DATATYPE_OBJECT,
 		JSON_DATATYPE_ARRAY,
 		JSON_DATATYPE_BOOLEAN,
+		JSON_DATATYPE_NUMERIC,
 		JSON_DATATYPE_NULL,
 	};
 	
-	class jsonNode;
-	
+	/**
+	 * @class jsonObject represents json object data
+	 */
+	struct jsonNodeDef
+	{		
+		dodoString stringValue;///< string value of node
+		dodoMap<dodoString, jsonNodeDef, stringTools::equal> objectValue;///< object value of node 
+		dodoArray<jsonNodeDef> arrayValue;///< array value of node
+		bool booleanValue;///< boolean value of node
+		long numericValue;///< numeric value of node
+		
+		short valueDataType;///< data type of value
+	};
+
 	/**
 	 * @class jsonObject represents json object
 	 */
@@ -101,6 +115,12 @@ namespace dodo
 			virtual bool getBoolean();
 
 			/**
+			 * @return value as numeric
+			 * @note throws exception if data type is not JSON_DATATYPE_NUMERIC
+			 */
+			virtual long getNumeric();
+
+			/**
 			 * @return value as array
 			 * @note throws exception if data type is not JSON_DATATYPE_ARRAY
 			 */
@@ -112,12 +132,13 @@ namespace dodo
 			 */
 			virtual dodoMap<dodoString, jsonNode, stringTools::equal> getObject();
 		
-		private:
+		private:		
 			
 			dodoString stringValue;///< string value of node
 			dodoMap<dodoString, jsonNode, stringTools::equal> objectValue;///< object value of node 
 			dodoArray<jsonNode> arrayValue;///< array value of node
 			bool booleanValue;///< boolean value of node
+			long numericValue;///< numeric value of node
 			
 			short valueDataType;///< data type of value
 	};
@@ -146,6 +167,12 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~json();
+			
+			/**
+			 * @return string that contain json object
+			 * @param root describes root of json object 
+			 */
+			virtual dodoString makeJSON(const jsonNodeDef &root);
 	};
 };
 
