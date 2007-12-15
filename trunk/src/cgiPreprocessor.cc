@@ -125,10 +125,10 @@ cgiPreprocessor::preProcess(const dodoString &path)
 	{
 		begin = j;
 
-		i = buffer.find(statements[OPEN_ST], begin);
+		i = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_OPEN_ST], begin);
 		if (i == dodoString::npos)
 		{
-			j = buffer.find(statements[CLOSE_ST], begin);
+			j = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], begin);
 			if (j != dodoString::npos)
 			{
 				char message[128];
@@ -143,7 +143,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 		{
 			dodoString temp = buffer.substr(begin, i - begin);
 
-			j = temp.find(statements[CLOSE_ST], begin);
+			j = temp.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], begin);
 			if (j != dodoString::npos)
 			{
 				char message[128];
@@ -157,7 +157,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 
 		if (buffer[i] == '>')
 		{
-			j = buffer.find(statements[CLOSE_NP], i);
+			j = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_NP], i);
 			if (j != dodoString::npos)
 			{
 				j += 3;
@@ -177,7 +177,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 
 		if (buffer[i] == '*')
 		{
-			j = buffer.find(statements[CLOSE_COMM], i);
+			j = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_COMM], i);
 			if (j != dodoString::npos)
 			{
 				j += 3;
@@ -193,7 +193,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 			}
 		}
 
-		j = buffer.find(statements[CLOSE_ST], i);
+		j = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], i);
 		if (j == dodoString::npos)
 		{
 			char message[128];
@@ -220,7 +220,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 
 		dodoString temp = buffer.substr(i, j - i);
 
-		if (temp.find(statements[OPEN_ST]) != dodoString::npos)
+		if (temp.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_OPEN_ST]) != dodoString::npos)
 		{
 			char message[128];
 			sprintf(message, " Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str());

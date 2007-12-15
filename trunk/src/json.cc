@@ -230,3 +230,172 @@ json::makeJSON(const jsonNodeDef &root)
 }
 
 //-------------------------------------------------------------------
+
+void 
+json::processJSON(jsonNode &node,
+				const dodoString &root)
+{
+	unsigned long i(0), j(root.size());
+	for (;i<j;++i)
+	{
+		switch (root[i])
+		{
+			case '"':
+				
+				i = processString(node, root, i + 1);
+				
+				continue;
+			
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
+				
+				continue;
+			
+			break;
+			
+			case '{':
+				
+				
+				break;
+				
+			case '}':
+				
+				break;
+				
+			case ':':
+				
+				break;
+				
+			case ',':
+				
+				break;
+				
+			case '[':
+				
+				break;
+				
+			case ']':
+				
+				break;
+		}
+	}
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+json::processString(jsonNode &node, 
+					const dodoString &root, 
+					unsigned long pos)
+{
+	
+	node.valueDataType = JSON_DATATYPE_STRING;
+	
+	bool escape = false;
+	
+	unsigned long i(pos), j(root.size());
+	for (;i<j;++i)
+	{
+		switch (root[i])
+		{
+			case '\\':
+				
+				if (escape)
+				{
+					escape = false;
+					
+					node.stringValue.append("\\");
+				}
+				escape = true;
+			
+				break;
+				
+			case '"':
+				
+				if (escape)
+				{
+					escape = false;
+					
+					node.stringValue.append("\\\"");
+				}
+				else
+					return (i + 1);
+				
+				break;
+				
+			case 'r':
+			case 'n':
+			case 't':
+			case 'b':
+			case 'f':
+			case '/':
+				
+				if (escape)
+				{
+					escape = false;
+					
+					processEscaped(node, root[i]);
+				}
+				else
+					node.stringValue.append(1, root[i]);
+			
+			default:
+				
+				node.stringValue.append(1, root[i]);
+			
+				break;
+		}
+	}	
+	
+	return i;
+}
+
+//-------------------------------------------------------------------
+
+void 
+json::processEscaped(jsonNode &node, 
+					char symbol)
+{
+	switch (symbol)
+	{
+		case 'n':
+			
+			node.stringValue.append("\n");
+			
+			break;
+			
+		case 'r':
+			
+			node.stringValue.append("\r");
+			
+			break;
+			
+		case 't':
+			
+			node.stringValue.append("\t");
+			
+			break;
+			
+		case '/':
+			
+			node.stringValue.append("\\/");
+			
+			break;
+			
+		case 'b':
+			
+			node.stringValue.append("\b");
+			
+			break;
+			
+		case 'f':
+			
+			node.stringValue.append("\f");
+			
+			break;
+	}
+}
+
+//-------------------------------------------------------------------

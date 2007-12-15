@@ -41,6 +41,20 @@ int main(int argc, char **argv)
 
 
 		cout << js.makeJSON(node) << endl;
+		
+		jsonNode jsN;
+		js.processJSON(jsN, "\"assdqweq\"");
+		
+		cout << jsN.getType() << endl;
+		
+		switch (jsN.getType())
+		{
+			case JSON_DATATYPE_STRING:
+				
+				cout << jsN.getString() << endl;
+				
+				break;
+		}
 	}
 	catch(baseEx ex)
 	{

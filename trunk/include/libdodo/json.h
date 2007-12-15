@@ -173,6 +173,41 @@ namespace dodo
 			 * @param root describes root of json object 
 			 */
 			virtual dodoString makeJSON(const jsonNodeDef &root);
+			
+			/**
+			 * processes json object 
+			 * @param node describes root of json object 
+			 * @param root describes string that contain json object
+			 */
+			virtual void processJSON(jsonNode &node, const dodoString &root);
+		
+		protected:
+			
+			/**
+			 * processes escaped chars in string 
+			 * @param root describes json object that is forming
+			 * @param symbol describes escaped symbol
+			 */
+			virtual void processEscaped(jsonNode &node, char symbol);
+			
+			/**
+			 * processes string value
+			 * @param root describes json object that is forming
+			 * @param symbol describes string to process
+			 * @param pos describes start position in string
+			 */
+			virtual unsigned long processString(jsonNode &node, const dodoString &root, unsigned long pos);
+			
+			/**
+			 * @enum jsonStateEnum describes states for json processor
+			 */
+			enum jsonStateEnum
+			{
+				JSON_STATE_INITIAL,
+				JSON_STATE_NONE,
+				JSON_STATE_OBJECT,
+				JSON_STATE_STRING
+			};
 	};
 };
 

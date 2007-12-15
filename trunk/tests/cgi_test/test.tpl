@@ -142,4 +142,9 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 
+
+<(>
+<(print $dodo.version, " ", $dodo)>
+<)>
+
 <(print $dodo.version, " ", $dodo)>

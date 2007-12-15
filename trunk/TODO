@@ -11,6 +11,7 @@
 
 5.
 	json
+	json: json from map<string, string>
 	!! module loading
 
 6.
