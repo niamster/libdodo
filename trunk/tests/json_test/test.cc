@@ -43,7 +43,8 @@ int main(int argc, char **argv)
 		cout << js.makeJSON(node) << endl;
 		
 		jsonNode jsN;
-		js.processJSON(jsN, "\"assdqweq\"");
+		cout << "string: " << "as\\\"sdq\\\\weq" << endl;
+		js.processJSON(jsN, "\"as\\\"sdq\\\\weq\"");
 		
 		cout << jsN.getType() << endl;
 		

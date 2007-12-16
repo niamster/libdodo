@@ -306,9 +306,10 @@ json::processString(jsonNode &node,
 				{
 					escape = false;
 					
-					node.stringValue.append("\\");
+					processEscaped(node, root[i]);
 				}
-				escape = true;
+				else
+					escape = true;
 			
 				break;
 				
@@ -318,19 +319,14 @@ json::processString(jsonNode &node,
 				{
 					escape = false;
 					
-					node.stringValue.append("\\\"");
+					processEscaped(node, root[i]);
 				}
 				else
 					return (i + 1);
 				
 				break;
-				
-			case 'r':
-			case 'n':
-			case 't':
-			case 'b':
-			case 'f':
-			case '/':
+			
+			default:
 				
 				if (escape)
 				{
@@ -340,11 +336,7 @@ json::processString(jsonNode &node,
 				}
 				else
 					node.stringValue.append(1, root[i]);
-			
-			default:
 				
-				node.stringValue.append(1, root[i]);
-			
 				break;
 		}
 	}	
@@ -358,44 +350,8 @@ void
 json::processEscaped(jsonNode &node, 
 					char symbol)
 {
-	switch (symbol)
-	{
-		case 'n':
-			
-			node.stringValue.append("\n");
-			
-			break;
-			
-		case 'r':
-			
-			node.stringValue.append("\r");
-			
-			break;
-			
-		case 't':
-			
-			node.stringValue.append("\t");
-			
-			break;
-			
-		case '/':
-			
-			node.stringValue.append("\\/");
-			
-			break;
-			
-		case 'b':
-			
-			node.stringValue.append("\b");
-			
-			break;
-			
-		case 'f':
-			
-			node.stringValue.append("\f");
-			
-			break;
-	}
+	node.stringValue.append("\\");
+	node.stringValue.append(1, symbol);
 }
 
 //-------------------------------------------------------------------
