@@ -42,6 +42,7 @@ namespace dodo
 		JSONNODEEX_WRONGTYPEREQUESTED,
 		JSONNODEEX_ARRAYOUTOFRANGE,
 		JSONNODEEX_MALFORMEDJSON,
+		JSONEX_MALFORMEDJSON,
 	};
 	
 	/**
@@ -50,6 +51,7 @@ namespace dodo
 	#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
 	#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
 	#define JSONNODEEX_MALFORMEDJSON_STR "Malformed json object."
+	#define JSONEX_MALFORMEDJSON_STR "Malformed json object."
 
 	/**
 	 * ID of function where exception was thrown
@@ -63,7 +65,7 @@ namespace dodo
 		JSONNODEEX_NUMERIC,
 		JSONNODEEX_GETARRAY,
 		JSONNODEEX_GETOBJECT,
-		JSONNODEEX_PROCESSJSON,
+		JSONEX__PROCESSOBJECT,
 	};
 
 };

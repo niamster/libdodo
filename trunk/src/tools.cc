@@ -798,8 +798,6 @@ tools::encodeURL(const dodoString &string)
 				result.append(1, '%');
 				tools::charToHex(temp, string[i]);
 				result.append(temp);
-
-				break;
 		}
 	}
 
@@ -999,8 +997,6 @@ tools::decodeASCII85(const dodoString &string)
 								count = 0;
 								tuple = 0;
 							}
-
-							break;
 					}
 				}
 			}

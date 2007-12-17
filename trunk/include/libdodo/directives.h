@@ -78,9 +78,8 @@
 
 /**
  * removes some checks
- * 1) check for request completeness(sqlBase)
  */
-#define FAST
+//#define FAST
 
 /**
  *

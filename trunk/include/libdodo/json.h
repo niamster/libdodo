@@ -188,25 +188,45 @@ namespace dodo
 			 * @param root describes json object that is forming
 			 * @param symbol describes escaped symbol
 			 */
-			virtual void processEscaped(jsonNode &node, char symbol);
+			virtual void processEscaped(dodoString &node, char symbol);
 			
 			/**
 			 * processes string value
+			 * @return next symbol after processed string
 			 * @param root describes json object that is forming
 			 * @param symbol describes string to process
 			 * @param pos describes start position in string
 			 */
-			virtual unsigned long processString(jsonNode &node, const dodoString &root, unsigned long pos);
+			virtual unsigned long processString(dodoString &node, const dodoString &root, unsigned long pos);
+			
+			/**
+			 * processes json object 
+			 * @return next symbol after processed object
+			 * @param node describes root of json object 
+			 * @param root describes string that contain json object, unsigned long pos
+			 * @param pos describes start position in string
+			 */
+			virtual unsigned long _processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, const dodoString &root, unsigned long pos);
+			
+			/**
+			 * processes json object value
+			 * @return next symbol after processed object value
+			 * @param node describes value of json object 
+			 * @param root describes string that contain json object, unsigned long pos
+			 * @param pos describes start position in string
+			 */
+			virtual unsigned long _processObjectValue(jsonNode &node, const dodoString &root, unsigned long pos);
 			
 			/**
 			 * @enum jsonStateEnum describes states for json processor
 			 */
 			enum jsonStateEnum
 			{
-				JSON_STATE_INITIAL,
-				JSON_STATE_NONE,
-				JSON_STATE_OBJECT,
-				JSON_STATE_STRING
+				JSON_STATE_OBJECT_INITIAL,
+				JSON_STATE_OBJECT_OBJECTNAME,
+				JSON_STATE_OBJECT_OBJECTVALUE,
+				JSON_STATE_STRING_INITIAL,
+				JSON_STATE_STRING_STRING,
 			};
 	};
 };

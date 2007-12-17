@@ -277,7 +277,7 @@ ioDisk::read(char * const a_void,
 		fread(a_void, inSize, 1, file);
 	else
 		#ifndef FAST
-	if (fileType == FIFO_FILE)
+	if (fileType == IODISK_FILETYPE_FIFO_FILE)
 		#endif
 		fgets(a_void, inSize + 1, file);
 

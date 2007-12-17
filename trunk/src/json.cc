@@ -231,69 +231,165 @@ json::makeJSON(const jsonNodeDef &root)
 
 //-------------------------------------------------------------------
 
-void 
-json::processJSON(jsonNode &node,
-				const dodoString &root)
-{
-	unsigned long i(0), j(root.size());
+unsigned long 
+json::_processObjectValue(jsonNode &node, 
+						const dodoString &root, 
+						unsigned long pos)
+{	
+	unsigned long i(pos), j(root.size());
 	for (;i<j;++i)
 	{
 		switch (root[i])
 		{
 			case '"':
-				
-				i = processString(node, root, i + 1);
-				
-				continue;
-			
-			case ' ':
-			case '\r':
-			case '\n':
-			case '\t':
-				
-				continue;
-			
-			break;
-			
-			case '{':
-				
-				
-				break;
-				
-			case '}':
-				
-				break;
-				
-			case ':':
-				
-				break;
-				
-			case ',':
-				
-				break;
-				
-			case '[':
-				
-				break;
-				
-			case ']':
-				
-				break;
+			{
+					node.valueDataType = JSON_DATATYPE_STRING;
+					return processString(node.stringValue, root, i);
+			}
 		}
 	}
 }
 
 //-------------------------------------------------------------------
 
-unsigned long 
-json::processString(jsonNode &node, 
+unsigned long
+json::_processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, 
 					const dodoString &root, 
 					unsigned long pos)
 {
+	short state = JSON_STATE_OBJECT_INITIAL;
 	
-	node.valueDataType = JSON_DATATYPE_STRING;
+	jsonNode subNodeValue;
+	dodoString subNodeName;
 	
+	unsigned long i(pos), j(root.size());
+	for (;i<j;++i)
+	{
+		switch (root[i])
+		{
+			case '"':
+				
+				if (state == JSON_STATE_OBJECT_OBJECTNAME)
+				{
+					i = processString(subNodeName, root, i);
+					
+					state = JSON_STATE_OBJECT_OBJECTVALUE;
+					
+					break;
+				}
+				else
+				{
+					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+					{
+						i = _processObjectValue(subNodeValue, root, i);
+						
+						state = JSON_STATE_OBJECT_OBJECTNAME;
+						node.insert(subNodeName, subNodeValue);
+						
+						break;
+					}
+					#ifndef FAST
+					
+						else
+							throw baseEx(ERRMODULE_JSON, JSONEX__PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+					
+					#endif
+				}
+			
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
+				
+				break;
+			
+			case '{':
+				
+				if (state == JSON_STATE_OBJECT_INITIAL)
+					state = JSON_STATE_OBJECT_OBJECTNAME;
+				#ifndef FAST
+				
+					else
+						throw baseEx(ERRMODULE_JSON, JSONEX__PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+				
+				#endif
+				
+				break;
+				
+			case '}':
+				
+				#ifndef FAST
+				
+					if (state != JSON_STATE_OBJECT_OBJECTNAME)
+						throw baseEx(ERRMODULE_JSON, JSONEX__PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+				
+				#endif
+				
+				return i;
+				
+			case ':':
+				
+				#ifndef FAST
+				
+					if (state != JSON_STATE_OBJECT_OBJECTVALUE)
+						throw baseEx(ERRMODULE_JSON, JSONEX__PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+				
+				#endif
+					
+				break;
+				
+			case ',':
+				
+				#ifndef FAST
+				
+					if (state != JSON_STATE_OBJECT_OBJECTNAME)
+						throw baseEx(ERRMODULE_JSON, JSONEX__PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+				
+				#endif
+				
+				break;
+			
+			default:
+
+				if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+				{
+					i = _processObjectValue(subNodeValue, root, i);
+					
+					state = JSON_STATE_OBJECT_OBJECTNAME;
+					node.insert(subNodeName, subNodeValue);
+				}
+		}
+	}
+	
+	#ifndef FAST
+	
+		if (state != JSON_STATE_OBJECT_OBJECTNAME && state != JSON_STATE_OBJECT_INITIAL)
+			throw baseEx(ERRMODULE_JSON, JSONEX__PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+	
+	#endif
+	
+	return i;
+}
+
+//-------------------------------------------------------------------
+
+void 
+json::processJSON(jsonNode &node,
+				const dodoString &root)
+{
+	node.valueDataType = JSON_DATATYPE_OBJECT;
+	_processObject(node.objectValue, root, 0);
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+json::processString(dodoString &node, 
+					const dodoString &root, 
+					unsigned long pos)
+{	
 	bool escape = false;
+	short state = JSON_STATE_STRING_INITIAL;
 	
 	unsigned long i(pos), j(root.size());
 	for (;i<j;++i)
@@ -322,7 +418,12 @@ json::processString(jsonNode &node,
 					processEscaped(node, root[i]);
 				}
 				else
-					return (i + 1);
+				{
+					if (state == JSON_STATE_STRING_INITIAL)
+						state = JSON_STATE_STRING_STRING;
+					else
+						return i;
+				}
 				
 				break;
 			
@@ -335,9 +436,7 @@ json::processString(jsonNode &node,
 					processEscaped(node, root[i]);
 				}
 				else
-					node.stringValue.append(1, root[i]);
-				
-				break;
+					node.append(1, root[i]);
 		}
 	}	
 	
@@ -347,11 +446,11 @@ json::processString(jsonNode &node,
 //-------------------------------------------------------------------
 
 void 
-json::processEscaped(jsonNode &node, 
+json::processEscaped(dodoString &node, 
 					char symbol)
 {
-	node.stringValue.append("\\");
-	node.stringValue.append(1, symbol);
+	node.append("\\");
+	node.append(1, symbol);
 }
 
 //-------------------------------------------------------------------

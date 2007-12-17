@@ -700,8 +700,6 @@ dbBase::setAddUpSt(unsigned int statement)
 	   {
 	   	default:
 
-	   		break;
-
 	   }*/
 	addFlag(qUpShift, 1 << statement);
 }
@@ -721,9 +719,7 @@ dbBase::setAddSelSt(unsigned int statement)
 
 			break;
 
-		default:
-
-			break;
+		/*default:*/
 
 	}
 	addFlag(qSelShift, 1 << statement);
@@ -737,8 +733,6 @@ dbBase::setAddDelSt(unsigned int statement)
 	/*switch (statement)
 	   {
 	   	default:
-
-	   		break;
 
 	   }*/
 	addFlag(qDelShift, 1 << statement);
