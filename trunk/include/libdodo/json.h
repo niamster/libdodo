@@ -69,6 +69,11 @@ namespace dodo
 		public:
 			
 			/**
+			 * copy constructor
+			 */
+			jsonNode(const jsonNode &node);
+			
+			/**
 			 * constructor
 			 */
 			jsonNode();
@@ -131,6 +136,11 @@ namespace dodo
 			 * @note throws exception if data type is not JSON_DATATYPE_OBJECT
 			 */
 			virtual dodoMap<dodoString, jsonNode, stringTools::equal> getObject();
+			
+			/**
+			 * clears internal data
+			 */
+			virtual void clear();
 		
 		private:		
 			
@@ -184,15 +194,8 @@ namespace dodo
 		protected:
 			
 			/**
-			 * processes escaped chars in string 
-			 * @param root describes json object that is forming
-			 * @param symbol describes escaped symbol
-			 */
-			virtual void processEscaped(dodoString &node, char symbol);
-			
-			/**
 			 * processes string value
-			 * @return next symbol after processed string
+			 * @return last symbol of processed string
 			 * @param root describes json object that is forming
 			 * @param symbol describes string to process
 			 * @param pos describes start position in string
@@ -200,22 +203,31 @@ namespace dodo
 			virtual unsigned long processString(dodoString &node, const dodoString &root, unsigned long pos);
 			
 			/**
+			 * processes string value
+			 * @return last symbol of processed string
+			 * @param root describes json object that is forming
+			 * @param symbol describes string to process
+			 * @param pos describes start position in string
+			 */
+			virtual unsigned long processArray(dodoArray<jsonNode> &node, const dodoString &root, unsigned long pos);
+			
+			/**
 			 * processes json object 
-			 * @return next symbol after processed object
+			 * @return last symbol of processed object
 			 * @param node describes root of json object 
 			 * @param root describes string that contain json object, unsigned long pos
 			 * @param pos describes start position in string
 			 */
-			virtual unsigned long _processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, const dodoString &root, unsigned long pos);
+			virtual unsigned long processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, const dodoString &root, unsigned long pos);
 			
 			/**
 			 * processes json object value
-			 * @return next symbol after processed object value
+			 * @return last symbol of processed object value
 			 * @param node describes value of json object 
 			 * @param root describes string that contain json object, unsigned long pos
 			 * @param pos describes start position in string
 			 */
-			virtual unsigned long _processObjectValue(jsonNode &node, const dodoString &root, unsigned long pos);
+			virtual unsigned long processValue(jsonNode &node, const dodoString &root, unsigned long pos);
 			
 			/**
 			 * @enum jsonStateEnum describes states for json processor
@@ -227,6 +239,8 @@ namespace dodo
 				JSON_STATE_OBJECT_OBJECTVALUE,
 				JSON_STATE_STRING_INITIAL,
 				JSON_STATE_STRING_STRING,
+				JSON_STATE_ARRAY_INITIAL,
+				JSON_STATE_ARRAY_ARRAY,
 			};
 	};
 };

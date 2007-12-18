@@ -43,31 +43,52 @@ int main(int argc, char **argv)
 		cout << js.makeJSON(node) << endl;
 		
 		jsonNode jsN;
-		cout << "string: " << "as\\\"sdq\\\\weq" << endl;
-		js.processJSON(jsN, "{\"as\\\"sdq\\\\weq\":\"sad\", \"sd\":[\"sdd\"]}");
-		
-		cout << jsN.getType() << endl;
+		js.processJSON(jsN, "{\"as\\\"sdq\\\\weq\":\"sad\",\"assdq\\\\weq\":\"sad\",\"assdq\\\\weaq\":[\"sads\", \"asdwq\"]}");
 		
 		switch (jsN.getType())
-		{
-			case JSON_DATATYPE_STRING:
-				
-				cout << jsN.getString() << endl;
-				
-				break;
-				
+		{		
 			case JSON_DATATYPE_OBJECT:
-				
-				cout << jsN.getObject().size() << endl;
-				if (jsN.getObject().size() > 1)
-				{
-					dodoMap<dodoString, jsonNode, stringTools::equal>::iterator i = jsN.getObject().begin();
-					
-					cout << i->second.getType() << "@" << i->first << ":" << i->second.getString() << endl;
 
-					++i;
-					cout << i->second.getType();
-					//cout << i->first << ":" << i->second.getArray().begin()->getString() << endl;
+				dodoMap<dodoString, jsonNode, stringTools::equal> objectValue = jsN.getObject();
+				cout << "size: " << objectValue.size() << endl;
+				std::map<dodoString, jsonNode>::iterator i = objectValue.begin(), j = objectValue.end();
+				
+				for (;i!=j;++i)
+				{
+					cout << i->first << ": ";
+					switch (i->second.getType())
+					{
+						case JSON_DATATYPE_STRING:
+							
+							cout << "[string]: " << i->second.getString() << endl;
+							
+							break;
+							
+						case JSON_DATATYPE_OBJECT:
+							
+							cout << "[object]: " << endl;
+							
+							break;
+							
+						case JSON_DATATYPE_ARRAY:
+						{
+							dodoArray<jsonNode> objectValue = i->second.getArray();
+							dodoArray<jsonNode>::iterator o = objectValue.begin(), p = objectValue.end();
+							
+							cout << "[array]: " << endl;
+							for (;o!=p;++o)
+								switch (o->getType())
+								{
+									case JSON_DATATYPE_STRING:
+										
+										cout << "[string]: " << o->getString() << endl;
+										
+										break;
+								}
+							
+							break;
+						}
+					}
 				}
 				
 				break;
