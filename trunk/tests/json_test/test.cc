@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 		
 		jsonNode jsN;
 		cout << "string: " << "as\\\"sdq\\\\weq" << endl;
-		js.processJSON(jsN, "{\"as\\\"sdq\\\\weq\":\"sad\"}");
+		js.processJSON(jsN, "{\"as\\\"sdq\\\\weq\":\"sad\", \"sd\":[\"sdd\"]}");
 		
 		cout << jsN.getType() << endl;
 		
@@ -59,9 +59,15 @@ int main(int argc, char **argv)
 			case JSON_DATATYPE_OBJECT:
 				
 				cout << jsN.getObject().size() << endl;
-				if (jsN.getObject().size() > 0)
+				if (jsN.getObject().size() > 1)
 				{
-					cout << jsN.getObject().begin()->first << ":" << jsN.getObject().begin()->second.getString() << endl;
+					dodoMap<dodoString, jsonNode, stringTools::equal>::iterator i = jsN.getObject().begin();
+					
+					cout << i->second.getType() << "@" << i->first << ":" << i->second.getString() << endl;
+
+					++i;
+					cout << i->second.getType();
+					//cout << i->first << ":" << i->second.getArray().begin()->getString() << endl;
 				}
 				
 				break;
