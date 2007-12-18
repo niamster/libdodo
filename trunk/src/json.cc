@@ -301,6 +301,12 @@ json::processArray(dodoArray<jsonNode> &node,
 			case ',':
 				
 				break;
+				
+			default:
+
+				i = processValue(subNode, root, i);
+				
+				node.push_back(subNode);
 		}
 	}
 	
@@ -368,25 +374,6 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 					state = JSON_STATE_OBJECT_OBJECTVALUE;
 					
 					break;
-				}
-				else
-				{
-					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
-					{
-						subNodeValue.valueDataType = JSON_DATATYPE_STRING;
-						i = processString(subNodeValue.stringValue, root, i);
-						node.insert(subNodeName, subNodeValue);
-						
-						state = JSON_STATE_OBJECT_OBJECTNAME;
-						
-						break;
-					}
-					#ifndef FAST
-					
-						else
-							throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
-					
-					#endif
 				}
 			
 			case ' ':
@@ -495,36 +482,26 @@ json::processString(dodoString &node,
 		{
 			case '\\':
 				
-				if (escape)
+				if (!escape)
 				{
-					escape = false;
-
-					node.append(1, '\\');
-					node.append(1, root[i]);
-				}
-				else
 					escape = true;
-			
-				break;
+
+					break;
+				}
 				
 			case '"':
 				
-				if (escape)
-				{
-					escape = false;
-
-					node.append(1, '\\');
-					node.append(1, root[i]);
-				}
-				else
+				if (!escape)
 				{
 					if (state == JSON_STATE_STRING_INITIAL)
+					{
 						state = JSON_STATE_STRING_STRING;
+						
+						break;
+					}
 					else
 						return i;
 				}
-				
-				break;
 			
 			default:
 				
