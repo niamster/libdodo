@@ -310,6 +310,13 @@ json::processArray(dodoArray<jsonNode> &node,
 		}
 	}
 	
+	#ifndef FAST
+	
+		if (state != JSON_STATE_ARRAY_ARRAY)
+			throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSARRAY, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+	
+	#endif
+	
 	return i;
 }
 
@@ -317,8 +324,8 @@ json::processArray(dodoArray<jsonNode> &node,
 
 unsigned long 
 json::processValue(jsonNode &node, 
-						const dodoString &root, 
-						unsigned long pos)
+					const dodoString &root, 
+					unsigned long pos)
 {	
 	node.clear();
 	
@@ -328,22 +335,136 @@ json::processValue(jsonNode &node,
 		switch (root[i])
 		{
 			case '"':
-			{
+
 					node.valueDataType = JSON_DATATYPE_STRING;
 					return processString(node.stringValue, root, i);
-			}
+
 			case '{':
-			{
+
 					node.valueDataType = JSON_DATATYPE_OBJECT;
 					return processObject(node.objectValue, root, i);
-			}
+
 			case '[':
-			{
+				
 					node.valueDataType = JSON_DATATYPE_ARRAY;
 					return processArray(node.arrayValue, root, i);
-			}
+
+			case 't':
+			case 'f':
+
+				node.valueDataType = JSON_DATATYPE_BOOLEAN;
+				return processBoolean(node.booleanValue, root, i);
+				
+				break;
+			
+			case 'n':
+
+				node.valueDataType = JSON_DATATYPE_NULL;
+				return processNull(root, i);
+				
+				break;
+				
+			default:
+
+				node.valueDataType = JSON_DATATYPE_NUMERIC;
+				return processNumeric(node.numericValue, root, i);
 		}
 	}
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+json::processBoolean(bool &node, 
+					const dodoString &root, 
+					unsigned long pos)
+{
+	if ((root.size() - pos) < 4)
+		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+	
+	if (root.substr(pos, 4) == "true")
+	{
+		node = true;
+		
+		return pos + 3;
+	}
+	else
+	{
+		if (root.substr(pos, 5) == "false")
+		{
+			node = false;
+			
+			return pos + 4;
+		}
+		else
+			throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+	}
+
+	return pos;
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+json::processNull(const dodoString &root, 
+				unsigned long pos)
+{
+	if ((root.size() - pos) < 4)
+		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+	
+	if (root.substr(pos, 4) == "null")	
+		return pos + 3;
+	else
+		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+
+	return pos;
+	
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+json::processNumeric(long &node, 
+					const dodoString &root, 
+					unsigned long pos)
+{
+	dodoString numeric;
+	
+	unsigned long i(pos), j(root.size());
+	for (;i<j;++i)
+	{
+		switch (root[i])
+		{
+			case '1':
+			case '2':
+			case '3':
+			case '4':
+			case '5':
+			case '6':
+			case '7':
+			case '8':
+			case '9':
+			case '0':
+			case '+':
+			case '-':
+			case 'e':
+			case 'E': 
+				
+				numeric.append(1, root[i]);
+				
+				break;
+				
+			default:
+				
+				node = stringTools::stringToL(numeric);
+				
+				return i;
+		}
+	}
+	
+	node = stringTools::stringToL(numeric);
+	
+	return i;
 }
 
 //-------------------------------------------------------------------
@@ -363,19 +484,9 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 	unsigned long i(pos), j(root.size());
 	for (;i<j;++i)
 	{
+		int o = 0;
 		switch (root[i])
 		{
-			case '"':
-				
-				if (state == JSON_STATE_OBJECT_OBJECTNAME)
-				{
-					i = processString(subNodeName, root, i);
-					
-					state = JSON_STATE_OBJECT_OBJECTVALUE;
-					
-					break;
-				}
-			
 			case ' ':
 			case '\r':
 			case '\n':
@@ -387,12 +498,16 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 				
 				if (state == JSON_STATE_OBJECT_INITIAL)
 					state = JSON_STATE_OBJECT_OBJECTNAME;
-				#ifndef FAST
-				
-					else
-						throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSOBJECT, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
-				
-				#endif
+				else
+				{
+					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+					{
+						i = processValue(subNodeValue, root, i);
+						node.insert(subNodeName, subNodeValue);
+						
+						state = JSON_STATE_OBJECT_OBJECTNAME;
+					}					
+				}
 				
 				break;
 				
@@ -428,7 +543,28 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 				#endif
 				
 				break;
-			
+
+			case '"':
+				
+				if (state == JSON_STATE_OBJECT_OBJECTNAME)
+				{
+					i = processString(subNodeName, root, i);
+					
+					state = JSON_STATE_OBJECT_OBJECTVALUE;
+					
+					break;
+				}
+				else
+				{
+					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
+					{
+						i = processValue(subNodeValue, root, i);
+						node.insert(subNodeName, subNodeValue);
+						
+						state = JSON_STATE_OBJECT_OBJECTNAME;
+					}
+				}
+				
 			default:
 
 				if (state == JSON_STATE_OBJECT_OBJECTVALUE)
@@ -516,6 +652,13 @@ json::processString(dodoString &node,
 					node.append(1, root[i]);
 		}
 	}	
+	
+	#ifndef FAST
+	
+		if (state != JSON_STATE_STRING_STRING)
+			throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSARRAY, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+	
+	#endif
 	
 	return i;
 }

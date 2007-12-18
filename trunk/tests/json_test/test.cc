@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 		cout << js.makeJSON(node) << endl;
 		
 		jsonNode jsN;
-		js.processJSON(jsN, "{\"as\\\"sdq\\\\weq\":\"sad\",\"assdq\\\\weq\":\"sad\",\"assdq\\\\weaq\":[\"sads\", \"asdwq\"]}");
+		js.processJSON(jsN, js.makeJSON(node));
 		
 		switch (jsN.getType())
 		{		
@@ -70,6 +70,24 @@ int main(int argc, char **argv)
 							
 							break;
 							
+						case JSON_DATATYPE_NULL:
+							
+							cout << "[null]: " << endl;
+							
+							break;
+							
+						case JSON_DATATYPE_NUMERIC:
+							
+							cout << "[numeric]: " << endl;
+							
+							break;
+							
+						case JSON_DATATYPE_BOOLEAN:
+							
+							cout << "[boolean]: " << endl;
+							
+							break;
+							
 						case JSON_DATATYPE_ARRAY:
 						{
 							dodoArray<jsonNode> objectValue = i->second.getArray();
@@ -81,7 +99,37 @@ int main(int argc, char **argv)
 								{
 									case JSON_DATATYPE_STRING:
 										
-										cout << "[string]: " << o->getString() << endl;
+										cout << "\t[string]: " << o->getString() << endl;
+										
+										break;
+										
+									case JSON_DATATYPE_ARRAY:
+										
+										cout << "\t[array]: " << endl;
+										
+										break;
+										
+									case JSON_DATATYPE_OBJECT:
+										
+										cout << "\t[object]: " << endl;
+										
+										break;
+										
+									case JSON_DATATYPE_NULL:
+										
+										cout << "\t[null]: " << endl;
+										
+										break;
+										
+									case JSON_DATATYPE_NUMERIC:
+										
+										cout << "\t[numeric]: " << endl;
+										
+										break;
+										
+									case JSON_DATATYPE_BOOLEAN:
+										
+										cout << "\t[boolean]: " << endl;
 										
 										break;
 								}

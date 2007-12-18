@@ -28,6 +28,8 @@
 #include <list>
 #include <deque>
 
+#include <iostream>
+
 #include <errno.h>
 
 #include <libdodo/directives.h>

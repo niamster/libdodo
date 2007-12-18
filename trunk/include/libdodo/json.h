@@ -215,7 +215,7 @@ namespace dodo
 			 * processes json object 
 			 * @return last symbol of processed object
 			 * @param node describes root of json object 
-			 * @param root describes string that contain json object, unsigned long pos
+			 * @param root describes string that contain json object
 			 * @param pos describes start position in string
 			 */
 			virtual unsigned long processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, const dodoString &root, unsigned long pos);
@@ -224,10 +224,36 @@ namespace dodo
 			 * processes json object value
 			 * @return last symbol of processed object value
 			 * @param node describes value of json object 
-			 * @param root describes string that contain json object, unsigned long pos
+			 * @param root describes string that contain json object
 			 * @param pos describes start position in string
 			 */
 			virtual unsigned long processValue(jsonNode &node, const dodoString &root, unsigned long pos);
+
+			/**
+			 * processes json boolean value
+			 * @return last symbol of processed object value
+			 * @param node describes value of json object 
+			 * @param root describes string that contain json object
+			 * @param pos describes start position in string
+			 */
+			virtual unsigned long processBoolean(bool &node, const dodoString &root, unsigned long pos);
+
+			/**
+			 * processes json numeric value
+			 * @return last symbol of processed object value
+			 * @param node describes value of json object 
+			 * @param root describes string that contain json object
+			 * @param pos describes start position in string
+			 */
+			virtual unsigned long processNumeric(long &node, const dodoString &root, unsigned long pos);
+
+			/**
+			 * processes json null value
+			 * @return last symbol of processed object value 
+			 * @param root describes string that contain json object
+			 * @param pos describes start position in string
+			 */
+			virtual unsigned long processNull(const dodoString &root, unsigned long pos);
 			
 			/**
 			 * @enum jsonStateEnum describes states for json processor
