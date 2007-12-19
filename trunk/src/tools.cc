@@ -381,18 +381,20 @@ tools::implode(const dodoStringArr &fields,
 
 	dodoString temp, fs(frame + separator);
 	dodoStringArr::const_iterator i(fields.begin()), j(fields.end() - 1);
-
-	for (; i != j; ++i)
+	if (i!=j)
 	{
-		if (limit != -1)
+		for (; i != j; ++i)
 		{
-			if (k > limit)
-				return temp;
-			++k;
+			if (limit != -1)
+			{
+				if (k > limit)
+					return temp;
+				++k;
+			}
+			temp.append(frame + escapeF(*i) + fs);
 		}
-		temp.append(frame + escapeF(*i) + fs);
+		temp.append(frame + escapeF(*i) + frame);
 	}
-	temp.append(frame + escapeF(*i) + frame);
 
 	return temp;
 }
@@ -433,18 +435,20 @@ tools::implode(const dodoStringArr &fields,
 
 	dodoString temp;
 	dodoStringArr::const_iterator i(fields.begin()), j(fields.end() - 1);
-
-	for (; i != j; ++i)
+	if (i!=j)
 	{
-		if (limit != -1)
+		for (; i != j; ++i)
 		{
-			if (k > limit)
-				return temp;
-			++k;
+			if (limit != -1)
+			{
+				if (k > limit)
+					return temp;
+				++k;
+			}
+			temp.append(escapeF(*i) + separator);
 		}
-		temp.append(escapeF(*i) + separator);
+		temp.append(escapeF(*i));
 	}
-	temp.append(escapeF(*i));
 
 	return temp;
 }

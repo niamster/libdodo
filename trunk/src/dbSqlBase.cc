@@ -137,20 +137,23 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 	unsigned int o(fn <= fv ? fn : fv);
 
 	dodoStringArr::const_iterator i(fieldsNames.begin()), j(fieldsVal.begin());
-	for (unsigned int k(0); k < o - 1; ++i, ++k, ++j)
+	if (i != j)
 	{
+		for (unsigned int k(0); k < o - 1; ++i, ++k, ++j)
+		{
+			temp.append(*i);
+			temp.append("=");
+			temp.append(frame);
+			temp.append(preventEscaping ? *j : escapeFields(*j));
+			temp.append(frame);
+			temp.append(",");
+		}
 		temp.append(*i);
 		temp.append("=");
 		temp.append(frame);
 		temp.append(preventEscaping ? *j : escapeFields(*j));
-		temp.append(frame);
-		temp.append(",");
+	temp.append(frame);
 	}
-	temp.append(*i);
-	temp.append("=");
-	temp.append(frame);
-	temp.append(preventEscaping ? *j : escapeFields(*j));
-	temp.append(frame);
 
 	return temp;
 }
@@ -327,15 +330,18 @@ dbSqlBase::insertCollect()
 	dodoString fieldsPart;
 
 	dodoStringArr::iterator i(fieldsVPart.begin()), j(fieldsVPart.end() - 1);
-	for (; i != j; ++i)
+	if (i != j)
 	{
+		for (; i != j; ++i)
+		{
+			fieldsPart.append("(");
+			fieldsPart.append(*i);
+			fieldsPart.append("),");
+		}
 		fieldsPart.append("(");
 		fieldsPart.append(*i);
-		fieldsPart.append("),");
+		fieldsPart.append(")");
 	}
-	fieldsPart.append("(");
-	fieldsPart.append(*i);
-	fieldsPart.append(")");
 
 	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
@@ -568,9 +574,12 @@ dbSqlBase::createTableCollect()
 
 	{
 		dodoArray<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end() - 1);
-		for (; i != j; ++i)
-			request.append(fieldCollect(*i) + ",");
-		request.append(fieldCollect(*i));
+		if (i!=j)
+		{
+			for (; i != j; ++i)
+				request.append(fieldCollect(*i) + ",");
+			request.append(fieldCollect(*i));
+		}
 	}
 
 	request.append(!pre_tableInfo.primKeys.empty() ? ", primary key (" + tools::implode(pre_tableInfo.primKeys, ",") + ") " : __dodostring__);
