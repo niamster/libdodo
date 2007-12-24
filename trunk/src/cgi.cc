@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-__cgiFilesUp::__cgiFilesUp() : fp(NULL),
+__cgiFile::__cgiFile() : fp(NULL),
 							   buf(NULL),
 							   size(0)
 {
@@ -177,7 +177,7 @@ cgi::clearContent()
 void
 cgi::cleanTmp()
 {
-	std::map<dodoString, __cgiFilesUp>::iterator i(FILES.begin()), j(FILES.end());
+	std::map<dodoString, __cgiFile>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
 	{
 		if (i->second.fp != NULL)
@@ -196,13 +196,13 @@ void
 cgi::detectMethod()
 {
 	if (stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "GET"))
-		method = REQUESTMETHOD_GET;
+		method = CGI_REQUESTMETHOD_GET;
 	else
 	{
 		if (stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "POST") && ENVIRONMENT["REQUEST_METHOD"].empty())
-			method = REQUESTMETHOD_POST;
+			method = CGI_REQUESTMETHOD_POST;
 		else
-			method = REQUESTMETHOD_GET_POST;
+			method = CGI_REQUESTMETHOD_GET_POST;
 	}
 }
 
@@ -438,7 +438,7 @@ cgi::makePost()
 
 				dodoString post_name = i->substr(temp0, temp1 - temp0);
 
-				__cgiFilesUp file;
+				__cgiFile file;
 
 				temp0 = i->find("filename=\"", temp1);
 				temp0 += 10;
@@ -542,7 +542,7 @@ cgi::makePost()
 const dodoStringMap &
 cgi::operator[](short method)
 {
-	if (method == REQUESTMETHOD_POST)
+	if (method == CGI_REQUESTMETHOD_POST)
 		return METHOD_POST;
 	else
 		return METHOD_GET;
@@ -557,7 +557,7 @@ cgi::request(const dodoString &varName,
 	dodoString met0 = METHOD_GET[varName];
 	dodoString met1 = METHOD_POST[varName];
 
-	if (first == REQUESTMETHOD_GET)
+	if (first == CGI_REQUESTMETHOD_GET)
 		if (met0.size() != 0)
 			return met0;
 		else

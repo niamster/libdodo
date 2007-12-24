@@ -132,37 +132,37 @@ systemTools::getLimit(short type,
 
 	switch (type)
 	{
-		case SYSTEM_CPUTIME:
+		case SYSTEMTOOLS_CPUTIME:
 
 			realRes = RLIMIT_CPU;
 
 			break;
 
-		case SYSTEM_MAXFILESIZE:
+		case SYSTEMTOOLS_MAXFILESIZE:
 
 			realRes = RLIMIT_FSIZE;
 
 			break;
 
-		case SYSTEM_MAXMEMUSAGE:
+		case SYSTEMTOOLS_MAXMEMUSAGE:
 
 			realRes = RLIMIT_DATA;
 
 			break;
 
-		case SYSTEM_MAXSTACK:
+		case SYSTEMTOOLS_MAXSTACK:
 
 			realRes = RLIMIT_STACK;
 
 			break;
 
-		case SYSTEM_MAXPROC:
+		case SYSTEMTOOLS_MAXPROC:
 
 			realRes = RLIMIT_NPROC;
 
 			break;
 
-		case SYSTEM_MAXOPENFILES:
+		case SYSTEMTOOLS_MAXOPENFILES:
 
 			#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
@@ -196,37 +196,37 @@ systemTools::setLimit(short type,
 
 	switch (type)
 	{
-		case SYSTEM_CPUTIME:
+		case SYSTEMTOOLS_CPUTIME:
 
 			realRes = RLIMIT_CPU;
 
 			break;
 
-		case SYSTEM_MAXFILESIZE:
+		case SYSTEMTOOLS_MAXFILESIZE:
 
 			realRes = RLIMIT_FSIZE;
 
 			break;
 
-		case SYSTEM_MAXMEMUSAGE:
+		case SYSTEMTOOLS_MAXMEMUSAGE:
 
 			realRes = RLIMIT_DATA;
 
 			break;
 
-		case SYSTEM_MAXSTACK:
+		case SYSTEMTOOLS_MAXSTACK:
 
 			realRes = RLIMIT_STACK;
 
 			break;
 
-		case SYSTEM_MAXPROC:
+		case SYSTEMTOOLS_MAXPROC:
 
 			realRes = RLIMIT_NPROC;
 
 			break;
 
-		case SYSTEM_MAXOPENFILES:
+		case SYSTEMTOOLS_MAXOPENFILES:
 
 			#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
@@ -277,11 +277,11 @@ systemTools::getUID(short type)
 {
 	switch (type)
 	{
-		case SYSTEM_UID:
+		case SYSTEMTOOLS_UID:
 
 			return getuid();
 
-		case SYSTEM_EUID:
+		case SYSTEMTOOLS_EUID:
 
 			return geteuid();
 
@@ -301,13 +301,13 @@ systemTools::setUID(short type,
 
 	switch (type)
 	{
-		case SYSTEM_UID:
+		case SYSTEMTOOLS_UID:
 
 			res = setuid(uid);
 
 			break;
 
-		case SYSTEM_EUID:
+		case SYSTEMTOOLS_EUID:
 
 			res = seteuid(uid);
 
@@ -329,11 +329,11 @@ systemTools::getGID(short type)
 {
 	switch (type)
 	{
-		case SYSTEM_UID:
+		case SYSTEMTOOLS_UID:
 
 			return getgid();
 
-		case SYSTEM_EUID:
+		case SYSTEMTOOLS_EUID:
 
 			return getegid();
 
@@ -353,13 +353,13 @@ systemTools::setGID(short type,
 
 	switch (type)
 	{
-		case SYSTEM_UID:
+		case SYSTEMTOOLS_UID:
 
 			res = setgid(uid);
 
 			break;
 
-		case SYSTEM_EUID:
+		case SYSTEMTOOLS_EUID:
 
 			res = setegid(uid);
 
@@ -624,68 +624,68 @@ systemTools::sigMask(sigset_t *set,
 {
 	if (blockSignals != -1)
 	{
-		if (isSetFlag(blockSignals, SIGNAL_HANGUP))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_HANGUP))
 			sigaddset(set, SIGHUP);
 
-		if (isSetFlag(blockSignals, SIGNAL_INTERRUPT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_INTERRUPT))
 			sigaddset(set, SIGINT);
 
-		if (isSetFlag(blockSignals, SIGNAL_QUIT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_QUIT))
 			sigaddset(set, SIGQUIT);
 
-		if (isSetFlag(blockSignals, SIGNAL_ILLEGAL_INSTRUCTION))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_ILLEGAL_INSTRUCTION))
 			sigaddset(set, SIGILL);
 
-		if (isSetFlag(blockSignals, SIGNAL_ABORT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_ABORT))
 			sigaddset(set, SIGABRT);
 
-		if (isSetFlag(blockSignals, SIGNAL_BUS_FAULT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_BUS_FAULT))
 			sigaddset(set, SIGBUS);
 
-		if (isSetFlag(blockSignals, SIGNAL_FLOATINGPOINT_FAULT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_FLOATINGPOINT_FAULT))
 			sigaddset(set, SIGFPE);
 
-		if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED1))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_USER_DEFINED1))
 			sigaddset(set, SIGUSR1);
 
-		if (isSetFlag(blockSignals, SIGNAL_SEGMENTATION_FAULT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_SEGMENTATION_FAULT))
 			sigaddset(set, SIGSEGV);
 
-		if (isSetFlag(blockSignals, SIGNAL_USER_DEFINED2))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_USER_DEFINED2))
 			sigaddset(set, SIGUSR2);
 
-		if (isSetFlag(blockSignals, SIGNAL_PIPE_FAULT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_PIPE_FAULT))
 			sigaddset(set, SIGPIPE);
 
-		if (isSetFlag(blockSignals, SIGNAL_ALARM))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_ALARM))
 			sigaddset(set, SIGALRM);
 
-		if (isSetFlag(blockSignals, SIGNAL_TERMINATION))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_TERMINATION))
 			sigaddset(set, SIGTERM);
 
 		#ifndef __FreeBSD__
 
-		if (isSetFlag(blockSignals, SIGNAL_STACK_FAULT))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_STACK_FAULT))
 			sigaddset(set, SIGSTKFLT);
 
 		#endif
 
-		if (isSetFlag(blockSignals, SIGNAL_CHILD_CHANGED))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_CHILD_CHANGED))
 			sigaddset(set, SIGCHLD);
 
-		if (isSetFlag(blockSignals, SIGNAL_CONTINUE))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_CONTINUE))
 			sigaddset(set, SIGCONT);
 
-		if (isSetFlag(blockSignals, SIGNAL_KEYBOARD_STOP))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_KEYBOARD_STOP))
 			sigaddset(set, SIGTSTP);
 
-		if (isSetFlag(blockSignals, SIGNAL_CPULIMIT_EXCEEDED))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_CPULIMIT_EXCEEDED))
 			sigaddset(set, SIGXCPU);
 
-		if (isSetFlag(blockSignals, SIGNAL_FILESIZE_EXCEEDED))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_FILESIZE_EXCEEDED))
 			sigaddset(set, SIGXFSZ);
 
-		if (isSetFlag(blockSignals, SIGNAL_BAD_SYSCALL))
+		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_BAD_SYSCALL))
 			sigaddset(set, SIGSYS);
 	}
 }
@@ -739,16 +739,16 @@ systemTools::setMicroTimer(unsigned long timeout,
 
 	deinitSigModule deinit;
 
-	if (handlesOpenedSig[SIGNAL_ALARM])
+	if (handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[SIGNAL_ALARM], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[SIGNAL_ALARM]);
+		dlclose(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM]);
 
-		handlesOpenedSig[SIGNAL_ALARM] = false;
-		handlesSig[SIGNAL_ALARM] = NULL;
+		handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM] = false;
+		handlesSig[SYSTEMTOOLS_SIGNAL_ALARM] = NULL;
 	}
 
 	#endif
@@ -794,16 +794,16 @@ systemTools::setTimer(long timeout,
 
 	deinitSigModule deinit;
 
-	if (handlesOpenedSig[SIGNAL_ALARM])
+	if (handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[SIGNAL_ALARM], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[SIGNAL_ALARM]);
+		dlclose(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM]);
 
-		handlesOpenedSig[SIGNAL_ALARM] = false;
-		handlesSig[SIGNAL_ALARM] = NULL;
+		handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM] = false;
+		handlesSig[SYSTEMTOOLS_SIGNAL_ALARM] = NULL;
 	}
 
 	#endif
@@ -1028,86 +1028,86 @@ systemTools::toRealSignal(long signal)
 {
 	switch (signal)
 	{
-		case SIGNAL_HANGUP:
+		case SYSTEMTOOLS_SIGNAL_HANGUP:
 
 			return SIGHUP;
 
-		case SIGNAL_INTERRUPT:
+		case SYSTEMTOOLS_SIGNAL_INTERRUPT:
 
 			return SIGINT;
 
-		case SIGNAL_QUIT:
+		case SYSTEMTOOLS_SIGNAL_QUIT:
 
 			return SIGQUIT;
 
-		case SIGNAL_ILLEGAL_INSTRUCTION:
+		case SYSTEMTOOLS_SIGNAL_ILLEGAL_INSTRUCTION:
 
 			return SIGILL;
 
-		case SIGNAL_ABORT:
+		case SYSTEMTOOLS_SIGNAL_ABORT:
 
 			return SIGABRT;
 
-		case SIGNAL_BUS_FAULT:
+		case SYSTEMTOOLS_SIGNAL_BUS_FAULT:
 
 			return SIGBUS;
 
-		case SIGNAL_FLOATINGPOINT_FAULT:
+		case SYSTEMTOOLS_SIGNAL_FLOATINGPOINT_FAULT:
 
 			return SIGFPE;
 
-		case SIGNAL_USER_DEFINED1:
+		case SYSTEMTOOLS_SIGNAL_USER_DEFINED1:
 
 			return SIGUSR1;
 
-		case SIGNAL_SEGMENTATION_FAULT:
+		case SYSTEMTOOLS_SIGNAL_SEGMENTATION_FAULT:
 
 			return SIGSEGV;
 
-		case SIGNAL_USER_DEFINED2:
+		case SYSTEMTOOLS_SIGNAL_USER_DEFINED2:
 
 			return SIGUSR2;
 
-		case SIGNAL_PIPE_FAULT:
+		case SYSTEMTOOLS_SIGNAL_PIPE_FAULT:
 
 			return SIGPIPE;
 
-		case SIGNAL_ALARM:
+		case SYSTEMTOOLS_SIGNAL_ALARM:
 
 			return SIGALRM;
 
-		case SIGNAL_TERMINATION:
+		case SYSTEMTOOLS_SIGNAL_TERMINATION:
 
 			return SIGTERM;
 
 		#ifndef __FreeBSD__
 
-		case SIGNAL_STACK_FAULT:
+		case SYSTEMTOOLS_SIGNAL_STACK_FAULT:
 			return SIGSTKFLT;
 
 		#endif
 
-		case SIGNAL_CHILD_CHANGED:
+		case SYSTEMTOOLS_SIGNAL_CHILD_CHANGED:
 
 			return SIGCHLD;
 
-		case SIGNAL_CONTINUE:
+		case SYSTEMTOOLS_SIGNAL_CONTINUE:
 
 			return SIGCONT;
 
-		case SIGNAL_KEYBOARD_STOP:
+		case SYSTEMTOOLS_SIGNAL_KEYBOARD_STOP:
 
 			return SIGTSTP;
 
-		case SIGNAL_CPULIMIT_EXCEEDED:
+		case SYSTEMTOOLS_SIGNAL_CPULIMIT_EXCEEDED:
 
 			return SIGXCPU;
 
-		case SIGNAL_FILESIZE_EXCEEDED:
+		case SYSTEMTOOLS_SIGNAL_FILESIZE_EXCEEDED:
 
 			return SIGXFSZ;
 
-		case SIGNAL_BAD_SYSCALL:
+		case SYSTEMTOOLS_SIGNAL_BAD_SYSCALL:
 
 			return SIGSYS;
 

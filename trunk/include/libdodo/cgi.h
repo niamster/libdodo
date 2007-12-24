@@ -106,12 +106,12 @@ namespace dodo
 	 * @struct __cgiFilesUp
 	 * defines node about uploaded POST file
 	 */
-	struct __cgiFilesUp
+	struct __cgiFile
 	{
 		/**
 		 * constructor
 		 */
-		__cgiFilesUp();
+		__cgiFile();
 		dodoString name;        ///< real name of the file
 		dodoString type;        ///< MIME type
 		FILE *fp;               ///< pointer to opened file[any case - in memory or on disk]
@@ -152,9 +152,9 @@ namespace dodo
 	 */
 	enum requestMethodEnum
 	{
-		REQUESTMETHOD_GET,
-		REQUESTMETHOD_POST,
-		REQUESTMETHOD_GET_POST ///< if POST but data tranferred in ?name=value&.... format
+		CGI_REQUESTMETHOD_GET,
+		CGI_REQUESTMETHOD_POST,
+		CGI_REQUESTMETHOD_GET_POST ///< if POST but data tranferred in ?name=value&.... format
 	};
 
 
@@ -252,14 +252,14 @@ namespace dodo
 			dodoStringMap METHOD_GET;                                       ///< array of GET variables
 			dodoStringMap ENVIRONMENT;                                      ///< environment variables
 			dodoStringMap COOKIES;                                          ///< coockes sent by browser
-			dodoMap<dodoString, __cgiFilesUp, stringTools::equal> FILES;    ///< array of POST files, if one or more files were uploaded
+			dodoMap<dodoString, __cgiFile, stringTools::equal> FILES;    ///< array of POST files, if one or more files were uploaded
 
 			/**
 			 * @return value of requested variable from POST or GET
 			 * @param varName name of the variable
 			 * @param first indicates what array will be searched first[see requestMethodEnum]
 			 */
-			virtual dodoString request(const dodoString &varName, short first = REQUESTMETHOD_GET);
+			virtual dodoString request(const dodoString &varName, short first = CGI_REQUESTMETHOD_GET);
 
 			/**
 			 * prints cgi headers;
