@@ -42,11 +42,11 @@ namespace dodo
 	 */
 	enum dbSqliteOperTypeEnum
 	{
-		DBSQLITE_OPER_CONNECT,
-		DBSQLITE_OPER_EXEC,
-		DBSQLITE_OPER_DISCONNECT,
-		DBSQLITE_OPER_FETCHROW,
-		DBSQLITE_OPER_FETCHFIELD,
+		DBSQLITE_OPERATION_CONNECT,
+		DBSQLITE_OPERATION_EXEC,
+		DBSQLITE_OPERATION_DISCONNECT,
+		DBSQLITE_OPERATION_FETCHROW,
+		DBSQLITE_OPERATION_FETCHFIELD,
 	};
 
 	class dbSqlite;    ///< to make struct with this class before class declaration
@@ -186,7 +186,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback

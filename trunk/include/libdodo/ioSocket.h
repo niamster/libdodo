@@ -53,11 +53,11 @@ namespace dodo
 	 */
 	enum ioSocketOperationTypeEnum
 	{
-		IOSOCKET_OPER_CONNECT,
-		IOSOCKET_OPER_CONNECT_UNIX,
-		IOSOCKET_OPER_BINDNLISTEN,
-		IOSOCKET_OPER_BINDNLISTEN_UNIX,
-		IOSOCKET_OPER_ACCEPT,
+		IOSOCKET_OPERATION_CONNECT,
+		IOSOCKET_OPERATION_CONNECT_UNIX,
+		IOSOCKET_OPERATION_BINDNLISTEN,
+		IOSOCKET_OPERATION_BINDNLISTEN_UNIX,
+		IOSOCKET_OPERATION_ACCEPT,
 	};
 
 	/**
@@ -134,7 +134,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback

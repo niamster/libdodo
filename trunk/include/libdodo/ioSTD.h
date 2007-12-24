@@ -46,12 +46,12 @@ namespace dodo
 	 */
 	enum ioSTDOperationTypeEnum
 	{
-		IOSTD_OPER_READ,
-		IOSTD_OPER_WRITE,
-		IOSTD_OPER_READSTREAM,
-		IOSTD_OPER_WRITESTREAM,
-		IOSTD_OPER_OPEN,
-		IOSTD_OPER_CLOSE
+		IOSTD_OPERATION_READ,
+		IOSTD_OPERATION_WRITE,
+		IOSTD_OPERATION_READSTREAM,
+		IOSTD_OPERATION_WRITESTREAM,
+		IOSTD_OPERATION_OPEN,
+		IOSTD_OPERATION_CLOSE
 	};
 
 	/**
@@ -139,7 +139,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 				#endif
 

@@ -43,12 +43,12 @@ namespace dodo
 	 */
 	enum ioDiskOperationTypeEnum
 	{
-		IODISK_OPER_READ,
-		IODISK_OPER_WRITE,
-		IODISK_OPER_READSTREAM,
-		IODISK_OPER_WRITESTREAM,
-		IODISK_OPER_OPEN,
-		IODISK_OPER_CLOSE
+		IODISK_OPERATION_READ,
+		IODISK_OPERATION_WRITE,
+		IODISK_OPERATION_READSTREAM,
+		IODISK_OPERATION_WRITESTREAM,
+		IODISK_OPERATION_OPEN,
+		IODISK_OPERATION_CLOSE
 	};
 
 	/**
@@ -137,7 +137,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback

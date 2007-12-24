@@ -71,7 +71,7 @@ int
 ioSTD::addPostExec(inExec func,
 					  void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_IOSTD, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data);
 }
 
 //-------------------------------------------------------------------
@@ -80,7 +80,7 @@ int
 ioSTD::addPreExec(inExec func,
 					 void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_IOSTD, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data);
 }
 
 //-------------------------------------------------------------------
@@ -92,17 +92,17 @@ ioSTD::addPostExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_IOSTD, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-xexecCounts
+__xexecCounts
 ioSTD::addExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_IOSTD, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -112,7 +112,7 @@ ioSTD::addPreExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_IOSTD, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data, toInit);
 }
 
 	#endif
@@ -125,7 +125,7 @@ void
 ioSTD::read(char * const a_void)
 {
 	#ifndef IO_STD_WO_XEXEC
-	operType = IOSTD_OPER_READ;
+	operType = IOSTD_OPERATION_READ;
 	performXExec(preExec);
 	#endif
 
@@ -219,7 +219,7 @@ ioSTD::write(const char *const aa_buf)
 	buffer.assign(aa_buf, outSize);
 
 	#ifndef IO_STD_WO_XEXEC
-	operType = IOSTD_OPER_WRITE;
+	operType = IOSTD_OPERATION_WRITE;
 	performXExec(preExec);
 	#endif
 
@@ -394,7 +394,7 @@ void
 ioSTD::readStream(char * const a_void)
 {
 	#ifndef IO_STD_WO_XEXEC
-	operType = IOSTD_OPER_READSTREAM;
+	operType = IOSTD_OPERATION_READSTREAM;
 	performXExec(preExec);
 	#endif
 
@@ -461,7 +461,7 @@ ioSTD::writeStream(const char *const aa_buf)
 	buffer.assign(aa_buf);
 
 	#ifndef IO_STD_WO_XEXEC
-	operType = IOSTD_OPER_WRITESTREAM;
+	operType = IOSTD_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 	#endif
 

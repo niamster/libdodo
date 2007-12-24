@@ -65,9 +65,9 @@ dbSqlite::fieldCollect(__fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
 	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
-	resRow.append((DBBASE_FIELDPROP_NULL & flag) == DBBASE_FIELDPROP_NULL ? " null " : " not null ");
+	resRow.append((DBBASE_FIELDFLAG_NULL & flag) == DBBASE_FIELDFLAG_NULL ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append((DBBASE_FIELDPROP_AUTO_INCREMENT & flag) == DBBASE_FIELDPROP_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
+	resRow.append((DBBASE_FIELDFLAG_AUTO_INCREMENT & flag) == DBBASE_FIELDFLAG_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{
@@ -89,7 +89,7 @@ dbSqlite::connect()
 		disconnect();
 
 		#ifndef DBSQLITE_WO_XEXEC
-	operType = DBSQLITE_OPER_CONNECT;
+	operType = DBSQLITE_OPERATION_CONNECT;
 	performXExec(preExec);
 		#endif
 
@@ -115,7 +115,7 @@ dbSqlite::disconnect()
 	if (connected)
 	{
 			#ifndef DBSQLITE_WO_XEXEC
-		operType = DBSQLITE_OPER_DISCONNECT;
+		operType = DBSQLITE_OPERATION_DISCONNECT;
 		performXExec(preExec);
 			#endif
 
@@ -299,7 +299,7 @@ dodoArray<dodoStringArr>
 dbSqlite::fetchRow() const
 {
 		#ifndef DBSQLITE_WO_XEXEC
-	operType = DBSQLITE_OPER_FETCHROW;
+	operType = DBSQLITE_OPERATION_FETCHROW;
 	performXExec(preExec);
 		#endif
 
@@ -413,7 +413,7 @@ dodoStringArr
 dbSqlite::fetchField() const
 {
 		#ifndef DBSQLITE_WO_XEXEC
-	operType = DBSQLITE_OPER_FETCHFIELD;
+	operType = DBSQLITE_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 		#endif
 
@@ -522,7 +522,7 @@ dbSqlite::exec(const dodoString &query,
 			   bool result)
 {
 		#ifndef DBSQLITE_WO_XEXEC
-	operType = DBSQLITE_OPER_EXEC;
+	operType = DBSQLITE_OPERATION_EXEC;
 	performXExec(preExec);
 		#endif
 
@@ -532,7 +532,7 @@ dbSqlite::exec(const dodoString &query,
 	performXExec(postExec);
 		#endif
 
-	cleanCollect();
+	cleanCollected();
 }
 
 //-------------------------------------------------------------------
@@ -543,7 +543,7 @@ int
 dbSqlite::addPostExec(inExec func,
 					  void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data);
 }
 
 //-------------------------------------------------------------------
@@ -552,7 +552,7 @@ int
 dbSqlite::addPreExec(inExec func,
 					 void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_DBSQLITE, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data);
 }
 
 //-------------------------------------------------------------------
@@ -564,7 +564,7 @@ dbSqlite::addPostExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -574,17 +574,17 @@ dbSqlite::addPreExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-xexecCounts
+__xexecCounts
 dbSqlite::addExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_DBSQLITE, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
 }
 
 		#endif

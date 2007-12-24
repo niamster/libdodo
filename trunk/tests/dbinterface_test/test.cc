@@ -94,17 +94,17 @@ int main(int argc, char **argv)
 		
 		fi.name = "id";
 		fi.type = DBBASE_FIELDTYPE_INTEGER;
-		fi.flag = DBBASE_FIELDPROP_NULL;
+		fi.flag = DBBASE_FIELDFLAG_NULL;
 		ti.fields.push_back(fi);		
 		
 		fi.name = "d";
 		fi.type = DBBASE_FIELDTYPE_INTEGER;
-		fi.flag = DBBASE_FIELDPROP_NULL;
+		fi.flag = DBBASE_FIELDFLAG_NULL;
 		ti.fields.push_back(fi);		
 		
 		fi.name = "b";
 		fi.type = DBBASE_FIELDTYPE_LONGBLOB;
-		fi.flag = DBBASE_FIELDPROP_NULL;
+		fi.flag = DBBASE_FIELDFLAG_NULL;
 		ti.fields.push_back(fi);		
 		
 		((dbBase *)pp)->createTable(ti);

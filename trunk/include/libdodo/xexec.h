@@ -39,17 +39,17 @@ namespace dodo
 {
 
 	/**
-	 * @enum xexecObjTypeEnum describes object that passes to module
+	 * @enum xexecObjectEnum describes object that passes to module
 	 */
 	enum xexecObjTypeEnum
 	{
-		XEXEC_OBJTYPE_DBMYSQL,
-		XEXEC_OBJTYPE_DBSQLITE,
-		XEXEC_OBJTYPE_IOSTD,
-		XEXEC_OBJTYPE_IODISK,
-		XEXEC_OBJTYPE_IOSOCKET,
-		XEXEC_OBJTYPE_IOSOCKETEXCHANGE,
-		XEXEC_OBJTYPE_DBPOSTGRESQL,
+		XEXEC_OBJECT_DBMYSQL,
+		XEXEC_OBJECT_DBSQLITE,
+		XEXEC_OBJECT_IOSTD,
+		XEXEC_OBJECT_IODISK,
+		XEXEC_OBJECT_IOSOCKET,
+		XEXEC_OBJECT_IOSOCKETEXCHANGE,
+		XEXEC_OBJECT_DBPOSTGRESQL,
 	};
 
 	/**
@@ -97,7 +97,7 @@ namespace dodo
 	#ifdef DL_EXT
 
 	/**
-	 * @enum execTypeEnum defines what type of exec[pre/post] will be used for module
+	 * @enum xexecModuleActionTypeEnum defines what type of exec[pre/post] will be used for module
 	 */
 	enum xexecModuleActionTypeEnum
 	{
@@ -107,7 +107,7 @@ namespace dodo
 	};
 
 	/**
-	 * @struct xexecExMod must be returned from initXexecModule in the module
+	 * @struct __xexecExMod must be returned from initXexecModule in the module
 	 */
 	struct __xexecMod
 	{
@@ -128,7 +128,7 @@ namespace dodo
 	typedef void (*deinitXexecModule)();
 
 	/**
-	 * @struct xexecCounts describes what position of pre or[and] post exec was set from module;
+	 * @struct __xexecCounts describes what position of pre or[and] post exec was set from module;
 	 * @note if not set=-1
 	 */
 	struct __xexecCounts

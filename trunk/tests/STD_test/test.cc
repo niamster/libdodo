@@ -13,7 +13,7 @@ hook(void *base,
 	void *yep)
 {
 	ioSTD *st = (ioSTD *)base;
-	if (st->operType == IOSTD_OPER_WRITE)
+	if (st->operType == IOSTD_OPERATION_WRITE)
 	{
 		char q[100];
 		int *a;

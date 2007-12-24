@@ -31,6 +31,19 @@
 
 namespace dodo
 {
+	/**
+	 * @struct __xexexIoCollectedData contains data that could be retrieved from class(to modificate)[contains references]
+	 */
+	struct __xexexIoCollectedData
+	{
+		/**
+		 * constructor
+		 * initiates references
+		 */
+		__xexexIoCollectedData(dodoString &buffer);
+
+		dodoString &buffer;      ///< buffer where data is stored
+	};
 
 	/**
 	 * @class io is a base class for I/O operations.
@@ -55,8 +68,6 @@ namespace dodo
 			unsigned long inSize;   ///< size of data block;
 			unsigned long outSize;  ///< size of data block;
 
-			dodoString buffer;      ///< before readin' or after writin' the storege sets to buffer; usefull for xexec
-
 		protected:
 
 			bool opened; ///< indicates whether file(connection) opened or not
@@ -70,6 +81,10 @@ namespace dodo
 			 * @return descriptor of output stream
 			 */
 			virtual int getOutDescriptor() const = 0;
+
+			dodoString buffer;      ///< buffer where data is stored
+			
+			__xexexIoCollectedData collectedData;///< data collected for xexec 
 	};
 
 };

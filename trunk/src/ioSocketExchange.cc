@@ -107,7 +107,7 @@ void
 ioSocketExchange::close()
 {
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPER_CLOSE;
+	operType = IOSOCKETEXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
 	#endif
 
@@ -172,7 +172,7 @@ ioSocketExchange::write(const char * const data)
 	buffer.assign(data, outSize);
 
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPER_SEND;
+	operType = IOSOCKETEXCHANGE_OPERATION_SEND;
 	performXExec(preExec);
 	#endif
 
@@ -250,7 +250,7 @@ void
 ioSocketExchange::read(char * const data)
 {
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPER_RECEIVE;
+	operType = IOSOCKETEXCHANGE_OPERATION_RECEIVE;
 	performXExec(preExec);
 	#endif
 
@@ -357,7 +357,7 @@ int
 ioSocketExchange::addPostExec(inExec func,
 								 void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
@@ -366,7 +366,7 @@ int
 ioSocketExchange::addPreExec(inExec func,
 								void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
@@ -378,7 +378,7 @@ ioSocketExchange::addPostExec(const dodoString &module,
 								 void             *data,
 								 void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -388,17 +388,17 @@ ioSocketExchange::addPreExec(const dodoString &module,
 								void             *data,
 								void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-xexecCounts
+__xexecCounts
 ioSocketExchange::addExec(const dodoString &module,
 							 void             *data,
 							 void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_IOSOCKETEXCHANGE, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
 }
 
 	#endif
@@ -415,7 +415,7 @@ ioSocketExchange::writeStream(const char * const data)
 	buffer.assign(data);
 
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPER_SENDSTREAM;
+	operType = IOSOCKETEXCHANGE_OPERATION_SENDSTREAM;
 	performXExec(preExec);
 	#endif
 
@@ -497,7 +497,7 @@ void
 ioSocketExchange::readStream(char * const data)
 {
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPER_RECEIVESTREAM;
+	operType = IOSOCKETEXCHANGE_OPERATION_RECEIVESTREAM;
 	performXExec(preExec);
 	#endif
 

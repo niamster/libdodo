@@ -33,9 +33,9 @@
 namespace dodo
 {
 	/**
-	 * @enum AddEnum describes additional statement
+	 * @enum dbBaseAddEnum describes additional statement
 	 */
-	enum addEnum
+	enum dbBaseAddEnum
 	{
 		DBBASE_ADDREQUEST_WHERE = 1,
 		DBBASE_ADDREQUEST_HAVING,
@@ -46,17 +46,17 @@ namespace dodo
 	};
 
 	/**
-	 * @enum emptyEnum indicates that no action will be performed
+	 * @enum dbBaseEmptyEnum indicates that no action will be performed
 	 */
-	enum emptyEnum
+	enum dbBaseEmptyEnum
 	{
 		DB_EMPTY = 0
 	};
 
 	/**
-	 * @enum qStEnum indicates what type of operaion will be performed
+	 * @enum dbBaseRequestEnum indicates what type of operaion will be performed
 	 */
-	enum qStEnum
+	enum dbBaseRequestEnum
 	{
 		DBBASE_REQUEST_UNION = 1,
 		DBBASE_REQUEST_UNION_ALL,
@@ -88,26 +88,26 @@ namespace dodo
 	};
 
 	/**
-	 * @enum addSelEnum describes additional statements for select
+	 * @enum dbBaseAddSelEnum describes additional statements for select
 	 */
-	enum addSelEnum
+	enum dbBaseAddSelEnum
 	{
 		DBBASE_REQUEST_SELECT_DISTINCT = 1,
 		DBBASE_REQUEST_SELECT_ALL
 	};
 
 	/**
-	 * @enum addDelEnum describes additional statements for delete
+	 * @enum dbBaseAddDelEnum describes additional statements for delete
 	 */
-	enum addDelEnum
+	enum dbBaseAddDelEnum
 	{
 		DBBASE_REQUEST_DELETE_IGNORE = 1,
 	};
 
 	/**
-	 * @enum addUpEnum describes additional statements for update
+	 * @enum dbBaseAddUpEnum describes additional statements for update
 	 */
-	enum addUpEnum
+	enum dbBaseAddUpEnum
 	{
 		DBBASE_REQUEST_UPDATE_IGNORE = 1,
 	};
@@ -115,22 +115,21 @@ namespace dodo
 	/**
 	 * @enum addInsEnum describes additional statements for insert
 	 */
-	enum addInsEnum
+	enum dbBaseAddInsEnum
 	{
 		DBBASE_REQUEST_INSERT_IGNORE = 1,
 	};
 
 	/**
-	 * @struct __collectedData contains data that could be retrieved from class(to modyficate)[contains references]
-	 * @note u can access to data directly from class, but this is more comfortable
+	 * @struct __xexexDbBaseCollectedData contains data that could be retrieved from class(to modificate)[contains references]
 	 */
-	struct __collectedData
+	struct __xexexDbBaseCollectedData
 	{
 		/**
 		 * constructor
 		 * initiates references
 		 */
-		__collectedData(dodoString &pre_where,
+		__xexexDbBaseCollectedData(dodoString &pre_where,
 						dodoStringArr &pre_fieldsNames,
 						dodoArray<dodoStringArr> &pre_fieldsVal,
 						dodoString &pre_table,
@@ -146,8 +145,7 @@ namespace dodo
 						int &qSelShift,
 						int &qInsShift,
 						int &qUpShift,
-						int &qDelShift
-						);
+						int &qDelShift);
 
 		dodoString &pre_where;                      ///< where statement of the request
 		dodoStringArr &pre_fieldsNames;             ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
@@ -175,7 +173,7 @@ namespace dodo
 	 * @enum baseDataTypesEnum defines Data types;
 	 * with '**' need range; with '*' may have range
 	 */
-	enum baseDataTypesEnum
+	enum dbBaseFieldTypeEnum
 	{
 		DBBASE_FIELDTYPE_TINYINT,                  ///< *; The signed range is -128 to 127. The unsigned range is 0 to 255.
 		DBBASE_FIELDTYPE_SMALLINT,                 ///< *; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
@@ -212,18 +210,18 @@ namespace dodo
 	};
 
 	/**
-	 *  @enum fieldFlagEnum describes type of field [in field creation]
+	 *  @enum dbBaseFieldFlagEnum describes type of field [in field creation]
 	 */
-	enum fieldFlagEnum
+	enum dbBaseFieldFlagEnum
 	{
-		DBBASE_FIELDPROP_NULL = 2,             ///< NULL type
-		DBBASE_FIELDPROP_AUTO_INCREMENT = 4,   ///< if is not set by request, will be incremented relatevly to previous
+		DBBASE_FIELDFLAG_NULL = 2,             ///< NULL type
+		DBBASE_FIELDFLAG_AUTO_INCREMENT = 4,   ///< if is not set by request, will be incremented relatevly to previous
 	};
 
 	/**
 	 * @enum refFieldEnum describes reference type on field [in field creation]
 	 */
-	enum refFieldEnum
+	enum dbBaseReferenceEnum
 	{
 		DBBASE_REFERENCE_RESTRICT = 1, ///< does not allow the action of any of those parent rows
 		DBBASE_REFERENCE_CASCADE,      ///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
@@ -607,19 +605,7 @@ namespace dodo
 			 * @param statement indicates what kind of additional parameters to remove[see addDelEnum]
 			 */
 			virtual void unsetAddDelSt(unsigned int statement);
-
-			/**
-			 * @return type of request was(will be) performed
-			 * @note see qStEnum
-			 */
-			virtual int getQType() const;
-
-			/**
-			 * @return structure with references to internal collected request data(not copy).
-			 * @note it may be used for postExec and preExec functions.
-			 */
-			virtual __collectedData collectedData();
-
+			
 			/**
 			 * set default values for table (if you want safelly reuse)
 			 */
@@ -635,7 +621,7 @@ namespace dodo
 			/**
 			 * frees collected data
 			 */
-			virtual void cleanCollect();
+			virtual void cleanCollected();
 
 			/**
 			 * collected data
@@ -664,7 +650,6 @@ namespace dodo
 			int qUpShift;                           ///< additional update statements
 			int qDelShift;                          ///< additional delete statements
 
-
 			__tableInfo pre_tableInfo;  ///< info about table to create
 			__fieldInfo pre_fieldInfo;  ///< info about field to create
 
@@ -684,6 +669,8 @@ namespace dodo
 			int qDbDepInsShift;                 ///< value to shift query template for specific
 			int qDbDepUpShift;                  ///< value to shift query template for specific
 			int qDbDepDelShift;                 ///< value to shift query template for specific
+			
+			__xexexDbBaseCollectedData collectedData;///< data collected for xexec 
 	};
 
 };

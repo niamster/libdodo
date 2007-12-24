@@ -44,11 +44,11 @@ namespace dodo
 	 */
 	enum dbMysqlOperTypeEnum
 	{
-		DBMYSQL_OPER_CONNECT,
-		DBMYSQL_OPER_EXEC,
-		DBMYSQL_OPER_DISCONNECT,
-		DBMYSQL_OPER_FETCHROW,
-		DBMYSQL_OPER_FETCHFIELD,
+		DBMYSQL_OPERATION_CONNECT,
+		DBMYSQL_OPERATION_EXEC,
+		DBMYSQL_OPERATION_DISCONNECT,
+		DBMYSQL_OPERATION_FETCHROW,
+		DBMYSQL_OPERATION_FETCHFIELD,
 	};
 
 	/**
@@ -286,7 +286,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback

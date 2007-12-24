@@ -25,9 +25,16 @@
 
 using namespace dodo;
 
+__xexexIoCollectedData::__xexexIoCollectedData(dodoString &a_buffer) : buffer(a_buffer)
+{
+}
+
+//-------------------------------------------------------------------
+
 io::io() : inSize(INSIZE),
 				 outSize(OUTSIZE),
-				 opened(false)
+				 opened(false),
+				 collectedData(buffer)
 {
 }
 

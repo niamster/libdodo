@@ -14,12 +14,12 @@ extern "C"
 		xexecObjTypeEnum type,
 		void *yep)
 	{
-		if (type == XEXECOBJ_IOSTD)
+		if (type == XEXEC_OBJECT_IOSTD)
 		{
 			std::cout << "ioSTD module\t";
 			
 			ioSTD *st = (ioSTD *)base;
-			if (st->operType == IOSTD_OPER_WRITE)
+			if (st->operType == IOSTD_OPERATION_WRITE)
 			{
 				char q[100];
 				int *a;

@@ -16,7 +16,7 @@ using namespace std;
 	{
 		dbMysql *sql = (dbMysql *)base;
 	
-		if (sql->operType == DBMYSQL_OPER_EXEC && sql->getQType() == DBBASE_REQUEST_SELECT)
+		if (sql->operType == DBMYSQL_OPERATION_EXEC && sql->getQueryType() == DBBASE_REQUEST_SELECT)
 		{
 			__collectedData data = sql->collectedData();
 			
@@ -34,7 +34,7 @@ using namespace std;
 	{
 		dbMysql *child = (dbMysql *)base;
 	
-		switch (child->getQType())
+		switch (child->getQueryType())
 		{
 			case DBBASE_REQUEST_INSERT:
 			case DBBASE_REQUEST_DELETE:
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
 	
 	                fi.name = "id";
 	                fi.type = DBBASE_FIELDTYPE_INTEGER;
-	                fi.flag = DBBASE_FIELDPROP_NULL | DBBASE_FIELDPROP_AUTO_INCREMENT;
+	                fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
 	                ti.fields.push_back(fi);
 			
 			fi.name = "dote";

@@ -43,11 +43,11 @@ namespace dodo
 	 */
 	enum dbPostgresqlOperTypeEnum
 	{
-		DBPOSTGRESQL_OPER_CONNECT,
-		DBPOSTGRESQL_OPER_EXEC,
-		DBPOSTGRESQL_OPER_DISCONNECT,
-		DBPOSTGRESQL_OPER_FETCHROW,
-		DBPOSTGRESQL_OPER_FETCHFIELD,
+		DBPOSTGRESQL_OPERATION_CONNECT,
+		DBPOSTGRESQL_OPERATION_EXEC,
+		DBPOSTGRESQL_OPERATION_DISCONNECT,
+		DBPOSTGRESQL_OPERATION_FETCHROW,
+		DBPOSTGRESQL_OPERATION_FETCHFIELD,
 	};
 
 	/**
@@ -170,7 +170,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback

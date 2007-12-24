@@ -49,11 +49,11 @@ namespace dodo
 	 */
 	enum ioSocketExchangeOperationTypeEnum
 	{
-		IOSOCKETEXCHANGE_OPER_RECEIVE,
-		IOSOCKETEXCHANGE_OPER_SEND,
-		IOSOCKETEXCHANGE_OPER_RECEIVESTREAM,
-		IOSOCKETEXCHANGE_OPER_SENDSTREAM,
-		IOSOCKETEXCHANGE_OPER_CLOSE,
+		IOSOCKETEXCHANGE_OPERATION_RECEIVE,
+		IOSOCKETEXCHANGE_OPERATION_SEND,
+		IOSOCKETEXCHANGE_OPERATION_RECEIVESTREAM,
+		IOSOCKETEXCHANGE_OPERATION_SENDSTREAM,
+		IOSOCKETEXCHANGE_OPERATION_CLOSE,
 	};
 
 	/**
@@ -170,7 +170,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback

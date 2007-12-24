@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 			
 			fi.name = "id";
 			fi.type = DBBASE_FIELDTYPE_INTEGER;
-			fi.flag = DBBASE_FIELDPROP_NULL;
+			fi.flag = DBBASE_FIELDFLAG_NULL;
 			ti.fields.push_back(fi);		
 			
 			pp.createTable(ti);

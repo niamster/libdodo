@@ -115,7 +115,7 @@ __dbStorage::__dbStorage(dodoArray<dodoStringArr> a_rows, dodoStringArr a_fields
 
 //-------------------------------------------------------------------
 
-__collectedData::__collectedData(
+__xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
 	dodoString &a_pre_where,
 	dodoStringArr &a_pre_fieldsNames,
 	dodoArray<dodoStringArr> &a_pre_fieldsVal,
@@ -132,25 +132,23 @@ __collectedData::__collectedData(
 	int &a_qSelShift,
 	int &a_qInsShift,
 	int &a_qUpShift,
-	int &a_qDelShift
-	) :
-	pre_where(a_pre_where),
-	pre_fieldsNames(a_pre_fieldsNames),
-	pre_fieldsVal(a_pre_fieldsVal),
-	pre_table(a_pre_table),
-	pre_tableTo(a_pre_tableTo),
-	pre_order(a_pre_order),
-	pre_having(a_pre_having),
-	pre_group(a_pre_group),
-	pre_limNumber(a_pre_limNumber),
-	pre_limOffset(a_pre_limOffset),
-	pre_subQ(a_pre_subQ),
-	qType(a_qType),
-	qShift(a_qShift),
-	qSelShift(a_qSelShift),
-	qInsShift(a_qInsShift),
-	qUpShift(a_qUpShift),
-	qDelShift(a_qDelShift)
+	int &a_qDelShift) :	pre_where(a_pre_where),
+			pre_fieldsNames(a_pre_fieldsNames),
+			pre_fieldsVal(a_pre_fieldsVal),
+			pre_table(a_pre_table),
+			pre_tableTo(a_pre_tableTo),
+			pre_order(a_pre_order),
+			pre_having(a_pre_having),
+			pre_group(a_pre_group),
+			pre_limNumber(a_pre_limNumber),
+			pre_limOffset(a_pre_limOffset),
+			pre_subQ(a_pre_subQ),
+			qType(a_qType),
+			qShift(a_qShift),
+			qSelShift(a_qSelShift),
+			qInsShift(a_qInsShift),
+			qUpShift(a_qUpShift),
+			qDelShift(a_qDelShift)
 {
 }
 
@@ -166,7 +164,24 @@ dbBase::dbBase() : show(false),
 				   qDbDepSelShift(DB_EMPTY),
 				   qDbDepInsShift(DB_EMPTY),
 				   qDbDepUpShift(DB_EMPTY),
-				   qDbDepDelShift(DB_EMPTY)
+				   qDbDepDelShift(DB_EMPTY),
+				   collectedData(pre_where,
+				   			   pre_fieldsNames,
+				   			   pre_fieldsVal,
+				   			   pre_table,
+				   			   pre_tableTo,
+				   			   pre_order,
+				   			   pre_having,
+				   			   pre_group,
+				   			   pre_limNumber,
+				   			   pre_limOffset,
+				   			   pre_subQ,
+				   			   qType,
+				   			   qShift,
+				   			   qSelShift,
+				   			   qInsShift,
+				   			   qUpShift,
+				   			   qDelShift)
 {
 }
 
@@ -626,7 +641,6 @@ dbBase::having(const dodoString &having)
 	addFlag(qShift, 1 << DBBASE_ADDREQUEST_HAVING);
 }
 
-
 //-------------------------------------------------------------------
 
 void
@@ -773,7 +787,7 @@ dbBase::unsetAddDelSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::cleanCollect()
+dbBase::cleanCollected()
 {
 	qType = -1;
 
@@ -819,39 +833,6 @@ dbBase::setDbInfo(const __dbInfo &info)
 	dbInfo.user = info.user;
 	dbInfo.password = info.password;
 	dbInfo.path = info.path;
-}
-
-//-------------------------------------------------------------------
-
-int
-dbBase::getQType() const
-{
-	return qType;
-}
-
-//-------------------------------------------------------------------
-
-__collectedData
-dbBase::collectedData()
-{
-	return __collectedData(
-			   pre_where,
-			   pre_fieldsNames,
-			   pre_fieldsVal,
-			   pre_table,
-			   pre_tableTo,
-			   pre_order,
-			   pre_having,
-			   pre_group,
-			   pre_limNumber,
-			   pre_limOffset,
-			   pre_subQ,
-			   qType,
-			   qShift,
-			   qSelShift,
-			   qInsShift,
-			   qUpShift,
-			   qDelShift);
 }
 
 //-------------------------------------------------------------------

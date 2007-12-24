@@ -183,7 +183,7 @@ dbMysql::connect()
 	disconnect();
 
 		#ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPER_CONNECT;
+	operType = DBMYSQL_OPERATION_CONNECT;
 	performXExec(preExec);
 		#endif
 
@@ -214,7 +214,7 @@ dbMysql::disconnect()
 	if (connected)
 	{
 			#ifndef DBMYSQL_WO_XEXEC
-		operType = DBMYSQL_OPER_DISCONNECT;
+		operType = DBMYSQL_OPERATION_DISCONNECT;
 		performXExec(preExec);
 			#endif
 
@@ -321,7 +321,7 @@ dodoArray<dodoStringArr>
 dbMysql::fetchRow() const
 {
 		#ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPER_FETCHROW;
+	operType = DBMYSQL_OPERATION_FETCHROW;
 	performXExec(preExec);
 		#endif
 
@@ -381,7 +381,7 @@ dodoStringArr
 dbMysql::fetchField() const
 {
 		#ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPER_FETCHFIELD;
+	operType = DBMYSQL_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 		#endif
 
@@ -456,7 +456,7 @@ dbMysql::exec(const dodoString &query,
 			  bool result)
 {
 		#ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPER_EXEC;
+	operType = DBMYSQL_OPERATION_EXEC;
 	performXExec(preExec);
 		#endif
 
@@ -466,7 +466,7 @@ dbMysql::exec(const dodoString &query,
 	performXExec(postExec);
 		#endif
 
-	cleanCollect();
+	cleanCollected();
 }
 
 //-------------------------------------------------------------------
@@ -477,7 +477,7 @@ int
 dbMysql::addPostExec(inExec func,
 					 void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
 }
 
 //-------------------------------------------------------------------
@@ -486,7 +486,7 @@ int
 dbMysql::addPreExec(inExec func,
 					void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_DBMYSQL, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
 }
 
 //-------------------------------------------------------------------
@@ -498,7 +498,7 @@ dbMysql::addPostExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -508,17 +508,17 @@ dbMysql::addPreExec(const dodoString &module,
 					void             *data,
 					void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-xexecCounts
+__xexecCounts
 dbMysql::addExec(const dodoString &module,
 				 void             *data,
 				 void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_DBMYSQL, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
 }
 
 		#endif

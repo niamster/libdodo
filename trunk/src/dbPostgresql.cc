@@ -79,7 +79,7 @@ dbPostgresql::connect()
 		disconnect();
 
 		#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPER_CONNECT;
+	operType = DBPOSTGRESQL_OPERATION_CONNECT;
 	performXExec(preExec);
 		#endif
 
@@ -112,7 +112,7 @@ dbPostgresql::disconnect()
 	if (connected)
 	{
 			#ifndef DBPOSTGRESQL_WO_XEXEC
-		operType = DBPOSTGRESQL_OPER_DISCONNECT;
+		operType = DBPOSTGRESQL_OPERATION_DISCONNECT;
 		performXExec(preExec);
 			#endif
 
@@ -318,7 +318,7 @@ dbPostgresql::fetchRow() const
 {
 
 		#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPER_FETCHROW;
+	operType = DBPOSTGRESQL_OPERATION_FETCHROW;
 	performXExec(preExec);
 		#endif
 
@@ -378,7 +378,7 @@ dodoStringArr
 dbPostgresql::fetchField() const
 {
 		#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPER_FETCHFIELD;
+	operType = DBPOSTGRESQL_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 		#endif
 
@@ -452,7 +452,7 @@ dbPostgresql::exec(const dodoString &query,
 				   bool result)
 {
 		#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPER_EXEC;
+	operType = DBPOSTGRESQL_OPERATION_EXEC;
 	performXExec(preExec);
 		#endif
 
@@ -462,7 +462,7 @@ dbPostgresql::exec(const dodoString &query,
 	performXExec(postExec);
 		#endif
 
-	cleanCollect();
+	cleanCollected();
 }
 
 //-------------------------------------------------------------------
@@ -473,7 +473,7 @@ int
 dbPostgresql::addPostExec(inExec func,
 						  void   *data)
 {
-	return _addPostExec(func, (void *)this, XEXECOBJ_DBPOSTGRESQL, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
 }
 
 //-------------------------------------------------------------------
@@ -482,7 +482,7 @@ int
 dbPostgresql::addPreExec(inExec func,
 						 void   *data)
 {
-	return _addPreExec(func, (void *)this, XEXECOBJ_DBPOSTGRESQL, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
 }
 
 //-------------------------------------------------------------------
@@ -494,7 +494,7 @@ dbPostgresql::addPostExec(const dodoString &module,
 						  void             *data,
 						  void             *toInit)
 {
-	return _addPostExec(module, (void *)this, XEXECOBJ_DBPOSTGRESQL, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -504,17 +504,17 @@ dbPostgresql::addPreExec(const dodoString &module,
 						 void             *data,
 						 void             *toInit)
 {
-	return _addPreExec(module, (void *)this, XEXECOBJ_DBPOSTGRESQL, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-xexecCounts
+__xexecCounts
 dbPostgresql::addExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
-	return _addExec(module, (void *)this, XEXECOBJ_DBPOSTGRESQL, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
 }
 
 		#endif
