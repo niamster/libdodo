@@ -26,8 +26,9 @@
 using namespace dodo;
 
 xexec::xexec() : safeHooks(true),
-				 operType(XEXEC_NONE),
-				 execs(0)
+				 operType(XEXEC_OPERTYPE_NONE),
+				 execs(0),
+				 collectData(true)
 {
 	preExec.execDisabled = false;
 	postExec.execDisabled = false;
@@ -69,6 +70,22 @@ xexec::~xexec()
 	}
 
 	#endif
+}
+
+//-------------------------------------------------------------------
+
+void 
+xexec::enableDataCollecting(bool enable)
+{
+	collectData = enable;
+}
+
+//-------------------------------------------------------------------
+
+bool 
+xexec::dataCollectingEnabled()
+{
+	return collectData;
 }
 
 //-------------------------------------------------------------------
@@ -381,7 +398,7 @@ xexec::performXExec(__execItemList &list) const
 
 #ifdef DL_EXT
 
-xexecCounts::xexecCounts() : pre(-1),
+__xexecCounts::__xexecCounts() : pre(-1),
 							 post(-1)
 {
 }
@@ -449,7 +466,7 @@ xexec::_addPreExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-xexecMod
+__xexecMod
 xexec::getModuleInfo(const dodoString &module,
 					 void             *toInit)
 {
@@ -461,7 +478,7 @@ xexec::getModuleInfo(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	xexecMod mod = init(toInit);
+	__xexecMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
@@ -471,7 +488,7 @@ xexec::getModuleInfo(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-xexecCounts
+__xexecCounts
 xexec::_addExec(const dodoString &module,
 				void             *obj,
 				short type,
@@ -493,7 +510,7 @@ xexec::_addExec(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	xexecMod info = init(toInit);
+	__xexecMod info = init(toInit);
 
 	inExec in = (inExec)dlsym(temp.handle, info.hook);
 	if (in == NULL)
@@ -501,11 +518,11 @@ xexec::_addExec(const dodoString &module,
 
 	temp.func = in;
 
-	xexecCounts count;
+	__xexecCounts count;
 
 	switch (info.execType)
 	{
-		case XEXECMODULE_POST:
+		case XEXEC_MODULEACTIONTYPE_POST:
 
 			temp.position = ++execs;
 			postExec.exec.push_back(temp);
@@ -513,7 +530,7 @@ xexec::_addExec(const dodoString &module,
 
 			break;
 
-		case XEXECMODULE_PRE:
+		case XEXEC_MODULEACTIONTYPE_PRE:
 
 			temp.position = ++execs;
 			preExec.exec.push_back(temp);
@@ -521,7 +538,7 @@ xexec::_addExec(const dodoString &module,
 
 			break;
 
-		case XEXECMODULE_BOTH:
+		case XEXEC_MODULEACTIONTYPE_BOTH:
 
 			temp.position = ++execs;
 			postExec.exec.push_back(temp);

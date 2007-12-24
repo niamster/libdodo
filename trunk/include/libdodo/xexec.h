@@ -43,13 +43,13 @@ namespace dodo
 	 */
 	enum xexecObjTypeEnum
 	{
-		XEXECOBJ_DBMYSQL,
-		XEXECOBJ_DBSQLITE,
-		XEXECOBJ_IOSTD,
-		XEXECOBJ_IODISK,
-		XEXECOBJ_IOSOCKET,
-		XEXECOBJ_IOSOCKETEXCHANGE,
-		XEXECOBJ_DBPOSTGRESQL,
+		XEXEC_OBJTYPE_DBMYSQL,
+		XEXEC_OBJTYPE_DBSQLITE,
+		XEXEC_OBJTYPE_IOSTD,
+		XEXEC_OBJTYPE_IODISK,
+		XEXEC_OBJTYPE_IOSOCKET,
+		XEXEC_OBJTYPE_IOSOCKETEXCHANGE,
+		XEXEC_OBJTYPE_DBPOSTGRESQL,
 	};
 
 	/**
@@ -91,7 +91,7 @@ namespace dodo
 	 */
 	enum xexecOperTypeEnum
 	{
-		XEXEC_NONE,
+		XEXEC_OPERTYPE_NONE,
 	};
 
 	#ifdef DL_EXT
@@ -99,17 +99,17 @@ namespace dodo
 	/**
 	 * @enum execTypeEnum defines what type of exec[pre/post] will be used for module
 	 */
-	enum execTypeEnum
+	enum xexecModuleActionTypeEnum
 	{
-		XEXECMODULE_PRE,
-		XEXECMODULE_POST,
-		XEXECMODULE_BOTH,
+		XEXEC_MODULEACTIONTYPE_PRE,
+		XEXEC_MODULEACTIONTYPE_POST,
+		XEXEC_MODULEACTIONTYPE_BOTH,
 	};
 
 	/**
 	 * @struct xexecExMod must be returned from initXexecModule in the module
 	 */
-	struct xexecMod
+	struct __xexecMod
 	{
 		char name[64];              ///< name of module
 		char discription[256];      ///< discription of module
@@ -120,7 +120,7 @@ namespace dodo
 	/**
 	 * @typedef describes function in module that must return info for the hook
 	 */
-	typedef xexecMod (*initXexecModule)(void *);
+	typedef __xexecMod (*initXexecModule)(void *);
 
 	/**
 	 * @typedef describes function in module that will be called during module unloading
@@ -131,12 +131,12 @@ namespace dodo
 	 * @struct xexecCounts describes what position of pre or[and] post exec was set from module;
 	 * @note if not set=-1
 	 */
-	struct xexecCounts
+	struct __xexecCounts
 	{
 		/**
 		 * constructor
 		 */
-		xexecCounts();
+		__xexecCounts();
 
 		int pre;        ///< position of preExec
 		int post;       ///< position of postExec
@@ -236,7 +236,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @attention data is not copied!!!
 			 */
-			virtual xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual __xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 			#endif
 
@@ -344,9 +344,20 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static xexecMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __xexecMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 			#endif
+			
+			/**
+			 * permits to collect data for xexec
+			 * @param enable defines whether collect or not
+			 */
+			virtual void enableDataCollecting(bool enable);
+			
+			/**
+			 * @return true if it's permitted to collect data for xexec
+			 */
+			virtual bool dataCollectingEnabled();
 
 		protected:
 
@@ -445,6 +456,8 @@ namespace dodo
 			int execs;                                  ///< execs counter
 
 			std::list<__execItem>::iterator current;    ///< iterator for list[for matched]
+			
+			mutable bool collectData;///< to collect data for xexec[true by default]
 	};
 
 };
