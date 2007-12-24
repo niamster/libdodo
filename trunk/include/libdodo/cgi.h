@@ -94,7 +94,7 @@ namespace dodo
 	/**
 	 * @enum errPostFileEnum describes errors that could happen durin' savin' POST file
 	 */
-	enum errPostFileEnum
+	enum postFileErrEnum
 	{
 		CGI_POSTFILEERR_NONE,           ///< everythin' is OK
 		CGI_POSTFILEERR_ACCESS_DENY,    ///< permissions error
@@ -156,7 +156,6 @@ namespace dodo
 		CGI_REQUESTMETHOD_POST,
 		CGI_REQUESTMETHOD_GET_POST ///< if POST but data tranferred in ?name=value&.... format
 	};
-
 
 	/**
 	 * @note

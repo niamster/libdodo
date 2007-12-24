@@ -86,7 +86,7 @@ cgi::cgi(bool silent,
 
 	makeContent();
 	makePost();
-
+	
 	if (autoclearContent)
 		content.clear();
 
@@ -494,7 +494,6 @@ cgi::makePost()
 				#endif
 				{
 					file.fp = fdopen(fd, "w+");
-					free(ptr);
 				}
 				if (file.fp == NULL)
 					switch (errno)
