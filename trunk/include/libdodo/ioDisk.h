@@ -78,11 +78,6 @@ namespace dodo
 	 */
 
 	class ioDisk : public io
-
-	#ifndef IO_DISK_WO_XEXEC
-					  , public xexec
-	#endif
-
 	{
 			friend class ioSocket;
 

@@ -60,12 +60,6 @@ namespace dodo
 	 */
 
 	class ioSTD : public io
-
-	#ifndef IO_STD_WO_XEXEC
-					 , public xexec
-	#endif
-
-
 	{
 		private:
 

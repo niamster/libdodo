@@ -553,7 +553,7 @@ dbMysql::getCharset() const
 
 //-------------------------------------------------------------------
 
-dodoStringMapArr
+dodoStringMapArray
 dbMysql::fetchAssoc() const
 {
 	if (empty || !show)
@@ -564,7 +564,7 @@ dbMysql::fetchAssoc() const
 	unsigned int numFields = mysql_num_fields(mysqlRes);
 	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlRes);
 
-	dodoStringMapArr rowsFields;
+	dodoStringMapArray rowsFields;
 
 		#ifndef USE_DEQUE
 	rowsFields.reserve(mysql_num_rows(mysqlRes));

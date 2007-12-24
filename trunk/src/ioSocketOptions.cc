@@ -60,22 +60,6 @@ ioSocketOptions::~ioSocketOptions()
 
 //-------------------------------------------------------------------
 
-int
-ioSocketOptions::getInDescriptor() const
-{
-	return socket;
-}
-
-//-------------------------------------------------------------------
-
-int
-ioSocketOptions::getOutDescriptor() const
-{
-	return socket;
-}
-
-//-------------------------------------------------------------------
-
 bool
 ioSocketOptions::isBlocked() const
 {

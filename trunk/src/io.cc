@@ -25,7 +25,9 @@
 
 using namespace dodo;
 
-__xexexIoCollectedData::__xexexIoCollectedData(dodoString &a_buffer) : buffer(a_buffer)
+__xexexIoCollectedData::__xexexIoCollectedData(dodoString &a_buffer,
+											int &a_operType) : buffer(a_buffer),
+											operType(a_operType)
 {
 }
 
@@ -34,7 +36,8 @@ __xexexIoCollectedData::__xexexIoCollectedData(dodoString &a_buffer) : buffer(a_
 io::io() : inSize(INSIZE),
 				 outSize(OUTSIZE),
 				 opened(false),
-				 collectedData(buffer)
+				 collectedData(buffer,
+						 		operType)
 {
 }
 

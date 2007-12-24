@@ -46,14 +46,6 @@ namespace dodo
 	};
 
 	/**
-	 * @enum dbBaseEmptyEnum indicates that no action will be performed
-	 */
-	enum dbBaseEmptyEnum
-	{
-		DB_EMPTY = 0
-	};
-
-	/**
 	 * @enum dbBaseRequestEnum indicates what type of operaion will be performed
 	 */
 	enum dbBaseRequestEnum
@@ -118,55 +110,6 @@ namespace dodo
 	enum dbBaseAddInsEnum
 	{
 		DBBASE_REQUEST_INSERT_IGNORE = 1,
-	};
-
-	/**
-	 * @struct __xexexDbBaseCollectedData contains data that could be retrieved from class(to modificate)[contains references]
-	 */
-	struct __xexexDbBaseCollectedData
-	{
-		/**
-		 * constructor
-		 * initiates references
-		 */
-		__xexexDbBaseCollectedData(dodoString &pre_where,
-						dodoStringArr &pre_fieldsNames,
-						dodoArray<dodoStringArr> &pre_fieldsVal,
-						dodoString &pre_table,
-						dodoString &pre_tableTo,
-						dodoString &pre_order,
-						dodoString &pre_having,
-						dodoString &pre_group,
-						dodoString &pre_limNumber,
-						dodoString &pre_limOffset,
-						dodoStringArr &pre_subQ,
-						int &qType,
-						int &qShift,
-						int &qSelShift,
-						int &qInsShift,
-						int &qUpShift,
-						int &qDelShift);
-
-		dodoString &pre_where;                      ///< where statement of the request
-		dodoStringArr &pre_fieldsNames;             ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-		dodoArray<dodoStringArr> &pre_fieldsVal;    ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-		dodoString &pre_table;                      ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-		dodoString &pre_tableTo;                    ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-		dodoString &pre_order;                      ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-		dodoString &pre_having;                     ///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
-		dodoString &pre_group;                      ///< group statement
-		dodoString &pre_limNumber;                  ///< limit of result
-		dodoString &pre_limOffset;                  ///< offset of requested result
-		dodoStringArr &pre_subQ;                    ///< subquery
-
-		int &qType;                                 ///< type of operation[see qStEnum]
-
-		int &qShift;                                ///< indicates if AddEnum's values was set [can be or'ed with | ][see AddEnum]
-
-		int &qSelShift;                             ///< additional select statements[see addSelEnum]
-		int &qInsShift;                             ///< additional insert statements[see addInsEnum]
-		int &qUpShift;                              ///< additional update statements[see addUpEnum]
-		int &qDelShift;                             ///< additional delete statements[see addDelEnum]
 	};
 
 	/**
@@ -623,32 +566,7 @@ namespace dodo
 			 */
 			virtual void cleanCollected();
 
-			/**
-			 * collected data
-			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
-			 */
-			dodoString pre_where;                   ///< where statement of the request
-			dodoStringArr pre_fieldsNames;          ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
-			dodoArray<dodoStringArr> pre_fieldsVal; ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			dodoString pre_table;                   ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods)
-			dodoString pre_tableTo;                 ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-			dodoString pre_order;                   ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-			dodoString pre_having;                  ///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
-			dodoString pre_group;                   ///< group statement
-			dodoString pre_limNumber;               ///< limit of result
-			dodoString pre_limOffset;               ///< offset of requested result
-			dodoStringArr pre_subQ;                 ///< subquery
-
 			bool show;                              ///< is request was with result(show, select)
-
-			int qType;                              ///< type of operation
-
-			int qShift;                             ///< indicates if AddEnum's values was set [can be or'ed with | ]
-
-			int qSelShift;                          ///< additional select statements
-			int qInsShift;                          ///< additional insert statements
-			int qUpShift;                           ///< additional update statements
-			int qDelShift;                          ///< additional delete statements
 
 			__tableInfo pre_tableInfo;  ///< info about table to create
 			__fieldInfo pre_fieldInfo;  ///< info about field to create
@@ -669,8 +587,6 @@ namespace dodo
 			int qDbDepInsShift;                 ///< value to shift query template for specific
 			int qDbDepUpShift;                  ///< value to shift query template for specific
 			int qDbDepDelShift;                 ///< value to shift query template for specific
-			
-			__xexexDbBaseCollectedData collectedData;///< data collected for xexec 
 	};
 
 };

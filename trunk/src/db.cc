@@ -25,7 +25,72 @@
 
 using namespace dodo;
 
-db::db() : connected(false)
+__xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
+	dodoString &a_pre_where,
+	dodoStringArr &a_pre_fieldsNames,
+	dodoArray<dodoStringArr> &a_pre_fieldsVal,
+	dodoString &a_pre_table,
+	dodoString &a_pre_tableTo,
+	dodoString &a_pre_order,
+	dodoString &a_pre_having,
+	dodoString &a_pre_group,
+	dodoString &a_pre_limNumber,
+	dodoString &a_pre_limOffset,
+	dodoStringArr &a_pre_subQ,
+	int &a_qType,
+	int &a_qShift,
+	int &a_qSelShift,
+	int &a_qInsShift,
+	int &a_qUpShift,
+	int &a_qDelShift,
+	int &a_operType) :	pre_where(a_pre_where),
+			pre_fieldsNames(a_pre_fieldsNames),
+			pre_fieldsVal(a_pre_fieldsVal),
+			pre_table(a_pre_table),
+			pre_tableTo(a_pre_tableTo),
+			pre_order(a_pre_order),
+			pre_having(a_pre_having),
+			pre_group(a_pre_group),
+			pre_limNumber(a_pre_limNumber),
+			pre_limOffset(a_pre_limOffset),
+			pre_subQ(a_pre_subQ),
+			qType(a_qType),
+			qShift(a_qShift),
+			qSelShift(a_qSelShift),
+			qInsShift(a_qInsShift),
+			qUpShift(a_qUpShift),
+			qDelShift(a_qDelShift),
+			operType(a_operType)
+{
+}
+
+//-------------------------------------------------------------------
+
+db::db() : connected(false),
+		qType(-1),
+		qShift(DB_EMPTY),
+		qSelShift(DB_EMPTY),
+		qInsShift(DB_EMPTY),
+		qUpShift(DB_EMPTY),
+		qDelShift(DB_EMPTY),
+		collectedData(pre_where,
+					   pre_fieldsNames,
+					   pre_fieldsVal,
+					   pre_table,
+					   pre_tableTo,
+					   pre_order,
+					   pre_having,
+					   pre_group,
+					   pre_limNumber,
+					   pre_limOffset,
+					   pre_subQ,
+					   qType,
+					   qShift,
+					   qSelShift,
+					   qInsShift,
+					   qUpShift,
+					   qDelShift,
+					   operType)
 {
 }
 

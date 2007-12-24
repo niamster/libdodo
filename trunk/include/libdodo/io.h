@@ -40,16 +40,19 @@ namespace dodo
 		 * constructor
 		 * initiates references
 		 */
-		__xexexIoCollectedData(dodoString &buffer);
+		__xexexIoCollectedData(dodoString &buffer,
+								int &operType);
 
 		dodoString &buffer;      ///< buffer where data is stored
+		
+		int &operType; ///< operation type set by main action; can be used in hook to determine type of action
 	};
 
 	/**
 	 * @class io is a base class for I/O operations.
 	 * all I/O operations are blockable => read/write inSize/outSize block.
 	 */
-	class io
+	class io : public xexec 
 	{
 			friend class ioNBA;
 

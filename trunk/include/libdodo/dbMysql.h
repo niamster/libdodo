@@ -116,11 +116,6 @@ namespace dodo
 	 * @class dbMysql is an interface to mysql db through sql-, database- independent interfaces
 	 */
 	class dbMysql : public dbSqlBase
-
-		#ifndef DBMYSQL_WO_XEXEC
-					, public xexec
-		#endif
-
 	{
 		private:
 
@@ -200,7 +195,7 @@ namespace dodo
 			/**
 			 * @return array that holds assoc array['fiels'=>'value'] got from request
 			 */
-			virtual dodoStringMapArr fetchAssoc() const;
+			virtual dodoStringMapArray fetchAssoc() const;
 
 			/**
 			 * set additional mysql-specific statement for INSERT

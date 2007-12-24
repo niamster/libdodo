@@ -525,7 +525,7 @@ dbPostgresql::addExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-dodoStringMapArr
+dodoStringMapArray
 dbPostgresql::fetchAssoc() const
 {
 	if (empty || !show)
@@ -534,7 +534,7 @@ dbPostgresql::fetchAssoc() const
 	int rowsNum = PQntuples(pgResult);
 	int fieldsNum = PQnfields(pgResult);
 
-	dodoStringMapArr rowsFields;
+	dodoStringMapArray rowsFields;
 
 		#ifndef USE_DEQUE
 	rowsFields.reserve(rowsNum);

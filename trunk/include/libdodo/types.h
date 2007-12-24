@@ -54,7 +54,7 @@ namespace dodo
 
 	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;  ///< hash of strings
 
-	typedef dodoArray<dodoStringMap> dodoStringMapArr;                          ///< array of hashes of string
+	typedef dodoArray<dodoStringMap> dodoStringMapArray;                          ///< array of hashes of string
 
 	struct __statements
 	{
@@ -73,7 +73,7 @@ namespace dodo
 
 	extern dodoArray<dodoStringArr> __dodostringarrayarray__;
 
-	extern dodoStringMapArr __dodostringmaparray__;
+	extern dodoStringMapArray __dodostringmaparray__;
 
 };
 

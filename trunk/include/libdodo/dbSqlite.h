@@ -65,11 +65,6 @@ namespace dodo
 	 * @note for autoFraming sqlite must be compiled with SQLITE_ENABLE_COLUMN_METADATA defined
 	 */
 	class dbSqlite : public dbSqlBase
-
-		#ifndef DBSQLITE_WO_XEXEC
-					 , public xexec
-		#endif
-
 	{
 		private:
 
@@ -135,7 +130,7 @@ namespace dodo
 			/**
 			 * @return array that holds assoc array['fiels'=>'value'] got from request
 			 */
-			virtual dodoStringMapArr fetchAssoc() const;
+			virtual dodoStringMapArray fetchAssoc() const;
 
 			/**
 			 * executes collected request

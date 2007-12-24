@@ -595,7 +595,7 @@ dbSqlite::addExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-dodoStringMapArr
+dodoStringMapArray
 dbSqlite::fetchAssoc() const
 {
 	if (!show)
@@ -608,7 +608,7 @@ dbSqlite::fetchAssoc() const
 	bool iterate = true;
 	unsigned int i = 0;
 
-	dodoStringMapArr rowsFields;
+	dodoStringMapArray rowsFields;
 	dodoStringMap rowFieldsPart;
 	dodoString rowPart;
 

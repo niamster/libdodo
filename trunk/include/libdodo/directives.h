@@ -87,17 +87,6 @@
 //#define CGI_SAVEPROCESS
 
 /**
- * use modules without hooks. faster a little bit.
- */
-//#define IO_DISK_WO_XEXEC=a little bit faster, if u don't want to use it!
-//#define DBMYSQL_WO_XEXEC
-//#define DBSQLITE_WO_XEXEC
-//#define IO_STD_WO_XEXEC
-//#define IO_SOCKET_WO_XEXEC
-//#define IO_SOCKETEXCHANGE_WO_XEXEC
-//#define DBPOSTGRESQL_WO_XEXEC
-
-/**
  * socket default timeouts
  */
 #define RECIEVE_TIMEOUT          1000

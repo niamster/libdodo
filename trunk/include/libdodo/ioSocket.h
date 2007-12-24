@@ -74,12 +74,7 @@ namespace dodo
 	 * @class ioSocket performs communication actions!!
 	 * exchange of data is ioSocketExchange class' task; ou init it with connect or accept methods
 	 */
-	class ioSocket : public ioSocketOptions
-
-	#ifndef IO_SOCKET_WO_XEXEC
-						, public xexec
-	#endif
-
+	class ioSocket : public io, public ioSocketOptions
 	{
 			friend class ioSocketExchange;
 

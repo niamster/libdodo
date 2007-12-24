@@ -18,7 +18,7 @@ extern "C"
 		{
 			std::cout << "ioSTD module\t";
 			
-			ioSTD *st = (ioSTD *)base;
+			__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
 			if (st->operType == IOSTD_OPERATION_WRITE)
 			{
 				char q[100];
@@ -41,14 +41,14 @@ extern "C"
 		std::cout << "empty activation\n";
 	}
 	
-	xexecMod 
+	__xexecMod 
 	initXexecModule(void *data)
 	{	
-		xexecMod module;
+		__xexecMod module;
 		
 		strcpy(module.name,"test");
 		strcpy(module.discription,"test module");
-		module.execType = XEXECMODULE_PRE;
+		module.execType = XEXEC_MODULEACTIONTYPE_PRE;
 		
 		if (data == NULL)
 			strcpy(module.hook,"empty");

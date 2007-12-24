@@ -590,3 +590,19 @@ ioSocketExchange::deleteCopy(ioSocketExchange *copy)
 
 //-------------------------------------------------------------------
 
+int
+ioSocketExchange::getInDescriptor() const
+{
+	return socket;
+}
+
+//-------------------------------------------------------------------
+
+int
+ioSocketExchange::getOutDescriptor() const
+{
+	return socket;
+}
+
+//-------------------------------------------------------------------
+

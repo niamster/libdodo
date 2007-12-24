@@ -335,8 +335,6 @@ namespace dodo
 			 */
 			bool safeHooks;
 
-			mutable int operType; ///< operation type set by main action; can be used in hook to determine type of action
-
 			#ifdef DL_EXT
 
 			/**
@@ -458,6 +456,8 @@ namespace dodo
 			std::list<__execItem>::iterator current;    ///< iterator for list[for matched]
 			
 			mutable bool collectData;///< to collect data for xexec[true by default]
+
+			mutable int operType; ///< operation type set by main action; can be used in hook to determine type of action
 	};
 
 };

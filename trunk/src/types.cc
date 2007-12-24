@@ -35,6 +35,6 @@ namespace dodo
 
 	dodoArray<dodoStringArr> __dodostringarrayarray__;
 
-	dodoStringMapArr __dodostringmaparray__;
+	dodoStringMapArray __dodostringmaparray__;
 
 };

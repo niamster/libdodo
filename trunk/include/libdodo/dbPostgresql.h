@@ -54,11 +54,6 @@ namespace dodo
 	 * @class dbPostgresql is an interface to Postgresql db through sql-, database- independent interfaces
 	 */
 	class dbPostgresql : public dbSqlBase
-
-		#ifndef DBPOSTGRESQL_WO_XEXEC
-						 , public xexec
-		#endif
-
 	{
 		private:
 
@@ -124,7 +119,7 @@ namespace dodo
 			/**
 			 * @return array that holds assoc array['fiels'=>'value'] got from request
 			 */
-			virtual dodoStringMapArr fetchAssoc() const;
+			virtual dodoStringMapArray fetchAssoc() const;
 
 			/**
 			 * executes collected request

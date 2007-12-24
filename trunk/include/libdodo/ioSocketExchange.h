@@ -94,13 +94,7 @@ namespace dodo
 	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection=previous will be closed
 	 */
-	class ioSocketExchange : public ioSocketOptions
-
-	#ifndef IO_SOCKETEXCHANGE_WO_XEXEC
-								, public xexec
-	#endif
-
-
+	class ioSocketExchange : public ioSocketOptions, public io
 	{
 
 			friend class ioSocket;
@@ -297,6 +291,16 @@ namespace dodo
 			 */
 			virtual void
 			close();
+
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
+
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const;
 
 		protected:
 

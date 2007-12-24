@@ -87,7 +87,7 @@ namespace dodo
 	/**
 	 * @class ioSocketOptions defines options for socket connections
 	 */
-	class ioSocketOptions : public io
+	class ioSocketOptions
 	{
 
 		protected:
@@ -108,16 +108,6 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~ioSocketOptions();
-
-			/**
-			 * @return descriptor of input stream
-			 */
-			virtual int getInDescriptor() const;
-
-			/**
-			 * @return descriptor of output stream
-			 */
-			virtual int getOutDescriptor() const;
 
 		public:
 
