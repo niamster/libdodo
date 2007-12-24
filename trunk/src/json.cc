@@ -199,7 +199,7 @@ json::makeJSON(const jsonNodeDef &root)
 			{
 				dodoString jsonObject = "{";
 				
-				std::map<dodoString, jsonNodeDef>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
+				dodoMap<dodoString, jsonNodeDef, stringTools::equal>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
 				if (i != j)
 				{
 					for (--j;i!=j;++i)
@@ -226,10 +226,11 @@ json::makeJSON(const jsonNodeDef &root)
 		case JSON_DATATYPE_ARRAY:
 			{
 				dodoString jsonObject = "[";
-				
-				dodoArray<jsonNodeDef>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end() - 1;
+
+				dodoArray<jsonNodeDef>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
 				if (i != j)
 				{
+					--j;
 					for (;i!=j;++i)
 					{
 						jsonObject.append(makeJSON(*i));
@@ -562,6 +563,45 @@ json::processJSON(jsonNode &node,
 	
 	node.valueDataType = JSON_DATATYPE_OBJECT;
 	processObject(node.objectValue, root, 0);
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+json::mapToJSON(const dodoStringMap &root)
+{
+	jsonNodeDef nodeDef;
+	jsonNodeDef subNodeDef;
+	
+	nodeDef.valueDataType = JSON_DATATYPE_OBJECT;
+	subNodeDef.valueDataType = JSON_DATATYPE_STRING;
+	
+	dodoStringMap::const_iterator i = root.begin(), j = root.end();
+	for (;i!=j;++i)
+	{
+		subNodeDef.stringValue = i->second;
+		nodeDef.objectValue.insert(i->first, subNodeDef);
+	}
+	
+	return makeJSON(nodeDef);
+}
+
+//-------------------------------------------------------------------
+
+dodoStringMap 
+json::JSONToMap(const dodoString &node)
+{
+	jsonNode JSON;
+	
+	processJSON(JSON, node);
+	
+	dodoStringMap map;
+	
+	dodoMap<dodoString, jsonNode, stringTools::equal>::iterator i = JSON.objectValue.begin(), j = JSON.objectValue.end();
+	for (;i!=j;++i)
+		map.insert(i->first, i->second.stringValue);
+	
+	return map;
 }
 
 //-------------------------------------------------------------------

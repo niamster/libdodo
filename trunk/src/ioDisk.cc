@@ -319,7 +319,7 @@ ioDisk::readString(dodoString &a_str,
 		a_str.assign(data, inSize);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw;
 	}
 
 	a_str.assign(data, inSize);
@@ -518,7 +518,7 @@ ioDisk::readStreamString(dodoString &a_str,
 		a_str.assign(data);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw;
 	}
 
 	a_str.assign(data);

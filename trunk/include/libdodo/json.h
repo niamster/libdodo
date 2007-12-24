@@ -190,6 +190,18 @@ namespace dodo
 			 * @param root describes string that contain json object
 			 */
 			virtual void processJSON(jsonNode &node, const dodoString &root);
+			
+			/**
+			 * @return string that contain json object
+			 * @param root describes map that contain json object
+			 */
+			virtual dodoString mapToJSON(const dodoStringMap &root);
+			
+			/**
+			 * @return string to string map that contain json object
+			 * @param root describes map that contain json object
+			 */
+			virtual dodoStringMap JSONToMap(const dodoString &node);
 		
 		protected:
 			

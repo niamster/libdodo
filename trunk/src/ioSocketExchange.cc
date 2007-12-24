@@ -545,7 +545,7 @@ ioSocketExchange::readStreamString(dodoString &data)
 		data.assign(t_data);
 		delete [] t_data;
 
-		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw;
 	}
 
 	data.assign(t_data);

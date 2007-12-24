@@ -53,7 +53,7 @@ namespace dodo
 			 * constructor
 			 * @param cf describes output interface
 			 */
-			cgiProcessor(cgiFastSTD *cf);
+			cgiProcessor(cgiFastIO *cf);
 
 			#endif
 
@@ -248,7 +248,7 @@ namespace dodo
 
 			bool cgiFastSet;    ///< indicates whether cgiFast was set
 
-			cgiFastSTD *cf;     ///< pointer to cgiFast class
+			cgiFastIO *cf;     ///< pointer to cgiFast class
 
 			#endif
 

@@ -35,9 +35,9 @@
 namespace dodo
 {
 	/**
-	 * @class cgiFastSTD provides interface to fast_cgi
+	 * @class cgiFastIO provides interface to fast_cgi
 	 */
-	class cgiFastSTD
+	class cgiFastIO
 	{
 		private:
 
@@ -45,7 +45,7 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			cgiFastSTD(cgiFastSTD &cf);
+			cgiFastIO(cgiFastIO &cf);
 
 		public:
 
@@ -53,12 +53,12 @@ namespace dodo
 			 * constructor
 			 * @param request describes CGI request info
 			 */
-			cgiFastSTD(FCGX_Request *request);
+			cgiFastIO(FCGX_Request *request);
 
 			/**
 			 * destructor
 			 */
-			virtual ~cgiFastSTD();
+			virtual ~cgiFastIO();
 
 			/**
 			 * sends buf to specific output[fast-cgi safe]
@@ -79,7 +79,7 @@ namespace dodo
 			virtual char *getenv(const char *buf);
 
 			/**
-			 * ioes output[fast-cgi safe]
+			 * flushes output[fast-cgi safe]
 			 */
 			virtual void flush();
 
@@ -91,7 +91,7 @@ namespace dodo
 	/**
 	 * @typedef that describes function that will be called on new cgi request
 	 */
-	typedef void (*cgiProc)(cgiFastSTD *);
+	typedef void (*cgiProc)(cgiFastIO *);
 
 	/**
 	 * @class cgiFast

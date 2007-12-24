@@ -380,9 +380,10 @@ tools::implode(const dodoStringArr &fields,
 	int k(0);
 
 	dodoString temp, fs(frame + separator);
-	dodoStringArr::const_iterator i(fields.begin()), j(fields.end() - 1);
+	dodoStringArr::const_iterator i(fields.begin()), j(fields.end());
 	if (i!=j)
 	{
+		--j;
 		for (; i != j; ++i)
 		{
 			if (limit != -1)
@@ -434,9 +435,10 @@ tools::implode(const dodoStringArr &fields,
 	int k(0);
 
 	dodoString temp;
-	dodoStringArr::const_iterator i(fields.begin()), j(fields.end() - 1);
+	dodoStringArr::const_iterator i(fields.begin()), j(fields.end());
 	if (i!=j)
 	{
+		--j;
 		for (; i != j; ++i)
 		{
 			if (limit != -1)

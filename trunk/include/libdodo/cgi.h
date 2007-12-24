@@ -214,7 +214,7 @@ namespace dodo
 			 *
 			 * @note you cant print headers after they have been printed with printHeaders method
 			 */
-			cgi(cgiFastSTD *cf, bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(cgiFastIO *cf, bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 			#endif
 
@@ -269,6 +269,17 @@ namespace dodo
 			virtual void printHeaders() const;
 
 			dodoStringMap HEADERS; ///< array of header that will be printed with printHeaders method
+
+			/**
+			 * sends buf to output
+			 * @param buf describes what to send to user
+			 */
+			virtual void print(const dodoString &buf);
+
+			/**
+			 * flushes output
+			 */
+			virtual void flush();
 
 			/**
 			 * sets cookie. the cookies are printed with printHeaders method
@@ -344,7 +355,7 @@ namespace dodo
 
 			bool cgiFastSet;    ///< indicates whether cgiFast was set
 
-			cgiFastSTD *cf;     ///< pointer to cgiFast class
+			cgiFastIO *cf;     ///< pointer to cgiFast class
 
 			#endif
 

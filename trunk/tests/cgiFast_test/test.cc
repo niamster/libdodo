@@ -13,7 +13,7 @@ using namespace std;
 #ifdef FCGI_EXT
 
 	void 
-	cgif(cgiFastSTD *fcgi)
+	cgif(cgiFastIO *fcgi)
 	{
 		cgi cgit(fcgi, true);
 		//cgit.HEADERS["Content-type"] = "image/jpg";

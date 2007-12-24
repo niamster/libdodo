@@ -196,7 +196,7 @@ ioSTD::readString(dodoString &a_str)
 		a_str.assign(data, inSize);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw;
 	}
 
 	a_str.assign(data, inSize);
@@ -438,7 +438,7 @@ ioSTD::readStreamString(dodoString &a_str)
 		a_str.assign(data);
 		delete [] data;
 
-		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READSTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw;
 	}
 
 	a_str.assign(data);

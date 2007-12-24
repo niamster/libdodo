@@ -45,7 +45,7 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 
 #ifdef FCGI_EXT
 
-cgiProcessor::cgiProcessor(cgiFastSTD *a_cf) : _continueFlag(false),
+cgiProcessor::cgiProcessor(cgiFastIO *a_cf) : _continueFlag(false),
 											   _breakDeepness(0),
 											   _loopDeepness(0),
 											   iterator(1),

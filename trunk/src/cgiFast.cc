@@ -38,7 +38,7 @@ pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(cgiFastSTD *data)
+dummyStackThread(cgiFastIO *data)
 {
 }
 
@@ -48,26 +48,26 @@ cgiProc cgiFast::cgiF = &dummyStackThread;
 
 //-------------------------------------------------------------------
 
-cgiFastSTD::cgiFastSTD(cgiFastSTD &cf)
+cgiFastIO::cgiFastIO(cgiFastIO &cf)
 {
 }
 
 //-------------------------------------------------------------------
 
-cgiFastSTD::cgiFastSTD(FCGX_Request *a_request) : request(a_request)
+cgiFastIO::cgiFastIO(FCGX_Request *a_request) : request(a_request)
 {
 }
 
 //-------------------------------------------------------------------
 
-cgiFastSTD::~cgiFastSTD()
+cgiFastIO::~cgiFastIO()
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-cgiFastSTD::flush()
+cgiFastIO::flush()
 {
 	FCGX_FFlush(request->out);
 }
@@ -75,7 +75,7 @@ cgiFastSTD::flush()
 //-------------------------------------------------------------------
 
 void
-cgiFastSTD::print(const dodoString &buf)
+cgiFastIO::print(const dodoString &buf)
 {
 	FCGX_PutStr(buf.c_str(), buf.size(), request->out);
 }
@@ -83,7 +83,7 @@ cgiFastSTD::print(const dodoString &buf)
 //-------------------------------------------------------------------
 
 void
-cgiFastSTD::read(char         *buf,
+cgiFastIO::read(char         *buf,
 				 unsigned int size)
 {
 	FCGX_GetStr(buf, size, request->in);
@@ -92,7 +92,7 @@ cgiFastSTD::read(char         *buf,
 //-------------------------------------------------------------------
 
 char *
-cgiFastSTD::getenv(const char *buf)
+cgiFastIO::getenv(const char *buf)
 {
 	return FCGX_GetParam(buf, request->envp);
 }
@@ -156,7 +156,7 @@ cgiFast::stackThread(void *data)
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
 
-	cgiFastSTD cfSTD(&request);
+	cgiFastIO cfSTD(&request);
 
 	while (true)
 	{
@@ -199,7 +199,7 @@ cgiFast::listen()
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);
 
-		cgiFastSTD cfSTD(&request);
+		cgiFastIO cfSTD(&request);
 
 		while (true)
 		{
@@ -215,7 +215,7 @@ cgiFast::listen()
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
 
-	cgiFastSTD cfSTD(&request);
+	cgiFastIO cfSTD(&request);
 
 	while (true)
 	{

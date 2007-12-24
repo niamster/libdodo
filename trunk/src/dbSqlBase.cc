@@ -139,7 +139,8 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 	dodoStringArr::const_iterator i(fieldsNames.begin()), j(fieldsVal.begin());
 	if (i != j)
 	{
-		for (unsigned int k(0); k < o - 1; ++i, ++k, ++j)
+		--o;
+		for (unsigned int k(0); k < o; ++i, ++k, ++j)
 		{
 			temp.append(*i);
 			temp.append("=");
@@ -329,9 +330,10 @@ dbSqlBase::insertCollect()
 
 	dodoString fieldsPart;
 
-	dodoStringArr::iterator i(fieldsVPart.begin()), j(fieldsVPart.end() - 1);
+	dodoStringArr::iterator i(fieldsVPart.begin()), j(fieldsVPart.end());
 	if (i != j)
 	{
+		--j;
 		for (; i != j; ++i)
 		{
 			fieldsPart.append("(");
@@ -573,9 +575,10 @@ dbSqlBase::createTableCollect()
 	request.append(pre_tableInfo.name + "(");
 
 	{
-		dodoArray<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end() - 1);
+		dodoArray<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end());
 		if (i!=j)
 		{
+			--j;
 			for (; i != j; ++i)
 				request.append(fieldCollect(*i) + ",");
 			request.append(fieldCollect(*i));

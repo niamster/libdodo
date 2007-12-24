@@ -1,6 +1,7 @@
 1.
 	db: renew connect
 	exception in _exec
+	not to return objects but to pass as arguments: func(dodoStringMap &map, ...
 
 3.
 	!! thread-safe:
@@ -10,7 +11,7 @@
 	!! tests
 
 5.
-	json
+	json: parser errors
 	json: json from map<string, string>
 	!! module loading
 

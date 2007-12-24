@@ -98,7 +98,7 @@ cgi::cgi(bool silent,
 
 #ifdef FCGI_EXT
 
-cgi::cgi(cgiFastSTD    *a_cf,
+cgi::cgi(cgiFastIO    *a_cf,
 		 bool silent,
 		 dodoStringMap &a_headers,
 		 bool a_autoclearContent,
@@ -138,6 +138,22 @@ cgi::~cgi()
 
 	if (!cgiFastSet)
 		delete fstd;
+}
+
+//-------------------------------------------------------------------
+
+void
+cgi::flush()
+{
+	fflush(stdout);
+}
+
+//-------------------------------------------------------------------
+
+void
+cgi::print(const dodoString &buf)
+{
+	fwrite(buf.c_str(), buf.size(), 1, stdout);
 }
 
 //-------------------------------------------------------------------
