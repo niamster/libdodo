@@ -45,13 +45,11 @@ void *systemTools::handlesSig[] = { NULL,
 									NULL,
 									NULL,
 									NULL,
-									NULL,
 									NULL };
 
 //-------------------------------------------------------------------
 
 bool systemTools::handlesOpenedSig[] = { false,
-										 false,
 										 false,
 										 false,
 										 false,
@@ -403,7 +401,6 @@ systemTools::getUserInfo(__userInfo &info,
 
 //-------------------------------------------------------------------
 
-
 void
 systemTools::getUsers(dodoArray<__userInfo> &users)
 {
@@ -492,7 +489,6 @@ systemTools::getGroupInfo(__groupInfo &info,
 }
 
 //-------------------------------------------------------------------
-
 
 void
 systemTools::getGroups(dodoArray<__groupInfo> &users)
@@ -605,7 +601,6 @@ systemTools::setGroupPID(int gpid)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
-
 //-------------------------------------------------------------------
 
 void
@@ -663,13 +658,6 @@ systemTools::sigMask(sigset_t *set,
 		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_TERMINATION))
 			sigaddset(set, SIGTERM);
 
-		#ifndef __FreeBSD__
-
-		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_STACK_FAULT))
-			sigaddset(set, SIGSTKFLT);
-
-		#endif
-
 		if (isSetFlag(blockSignals, SYSTEMTOOLS_SIGNAL_CHILD_CHANGED))
 			sigaddset(set, SIGCHLD);
 
@@ -701,16 +689,17 @@ systemTools::setSignalHandler(long signal,
 
 	deinitSigModule deinit;
 
-	if (handlesOpenedSig[signal])
+	int handleSignal = toSignalNumber(signal);
+	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[signal]);
+		dlclose(handlesSig[handleSignal]);
 
-		handlesOpenedSig[signal] = false;
-		handlesSig[signal] = NULL;
+		handlesOpenedSig[handleSignal] = false;
+		handlesSig[handleSignal] = NULL;
 	}
 
 	#endif
@@ -738,17 +727,18 @@ systemTools::setMicroTimer(unsigned long timeout,
 	#ifdef DL_EXT
 
 	deinitSigModule deinit;
-
-	if (handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM])
+	
+	int handleSignal = toSignalNumber(SYSTEMTOOLS_SIGNAL_ALARM);
+	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM]);
+		dlclose(handlesSig[handleSignal]);
 
-		handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM] = false;
-		handlesSig[SYSTEMTOOLS_SIGNAL_ALARM] = NULL;
+		handlesOpenedSig[handleSignal] = false;
+		handlesSig[handleSignal] = NULL;
 	}
 
 	#endif
@@ -794,16 +784,17 @@ systemTools::setTimer(long timeout,
 
 	deinitSigModule deinit;
 
-	if (handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM])
+	int handleSignal = toSignalNumber(SYSTEMTOOLS_SIGNAL_ALARM);
+	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[SYSTEMTOOLS_SIGNAL_ALARM]);
+		dlclose(handlesSig[handleSignal]);
 
-		handlesOpenedSig[SYSTEMTOOLS_SIGNAL_ALARM] = false;
-		handlesSig[SYSTEMTOOLS_SIGNAL_ALARM] = NULL;
+		handlesOpenedSig[handleSignal] = false;
+		handlesSig[handleSignal] = NULL;
 	}
 
 	#endif
@@ -864,16 +855,17 @@ systemTools::unsetSignalHandler(long signal)
 
 	deinitSigModule deinit;
 
-	if (handlesOpenedSig[signal])
+	int handleSignal = toSignalNumber(signal);
+	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[signal]);
+		dlclose(handlesSig[handleSignal]);
 
-		handlesOpenedSig[signal] = false;
-		handlesSig[signal] = NULL;
+		handlesOpenedSig[handleSignal] = false;
+		handlesSig[handleSignal] = NULL;
 	}
 
 	#endif
@@ -919,16 +911,17 @@ systemTools::setSignalHandler(long signal,
 {
 	deinitSigModule deinit;
 
-	if (handlesOpenedSig[signal])
+	int handleSignal = toSignalNumber(signal);
+	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[signal], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[signal]);
+		dlclose(handlesSig[handleSignal]);
 
-		handlesOpenedSig[signal] = false;
-		handlesSig[signal] = NULL;
+		handlesOpenedSig[handleSignal] = false;
+		handlesSig[handleSignal] = NULL;
 	}
 
 	handlesSig[signal] = dlopen(path.c_str(), RTLD_LAZY);
@@ -960,7 +953,7 @@ systemTools::setSignalHandler(long signal,
 	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == 1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	handlesOpenedSig[signal] = true;
+	handlesOpenedSig[handleSignal] = true;
 }
 
 //-------------------------------------------------------------------
@@ -983,19 +976,20 @@ systemTools::setSignalHandler(const dodoString &path,
 
 	deinitSigModule deinit;
 
-	if (handlesOpenedSig[mod.signal])
+	int handleSignal = toSignalNumber(mod.signal);
+	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[mod.signal], "deinitSigModule");
+		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
 		if (deinit != NULL)
 			deinit();
 
-		dlclose(handlesSig[mod.signal]);
+		dlclose(handlesSig[handleSignal]);
 
-		handlesOpenedSig[mod.signal] = false;
-		handlesSig[mod.signal] = NULL;
+		handlesOpenedSig[handleSignal] = false;
+		handlesSig[handleSignal] = NULL;
 	}
 
-	handlesSig[mod.signal] = handle;
+	handlesSig[handleSignal] = handle;
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[mod.signal], mod.hook);
 	if (in == NULL)
@@ -1016,10 +1010,99 @@ systemTools::setSignalHandler(const dodoString &path,
 	if (sigaction(systemTools::toRealSignal(mod.signal), &act, NULL) == 1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	handlesOpenedSig[mod.signal] = true;
+	handlesOpenedSig[handleSignal] = true;
 }
 
 #endif
+
+//-------------------------------------------------------------------
+
+int 
+systemTools::toSignalNumber(long signal)
+{
+	switch (signal)
+	{
+		case SYSTEMTOOLS_SIGNAL_HANGUP:
+
+			return 0;
+
+		case SYSTEMTOOLS_SIGNAL_INTERRUPT:
+
+			return 1;
+
+		case SYSTEMTOOLS_SIGNAL_QUIT:
+
+			return 2;
+
+		case SYSTEMTOOLS_SIGNAL_ILLEGAL_INSTRUCTION:
+
+			return 3;
+
+		case SYSTEMTOOLS_SIGNAL_ABORT:
+
+			return 4;
+
+		case SYSTEMTOOLS_SIGNAL_BUS_FAULT:
+
+			return 5;
+
+		case SYSTEMTOOLS_SIGNAL_FLOATINGPOINT_FAULT:
+
+			return 6;
+
+		case SYSTEMTOOLS_SIGNAL_USER_DEFINED1:
+
+			return 7;
+
+		case SYSTEMTOOLS_SIGNAL_SEGMENTATION_FAULT:
+
+			return 8;
+
+		case SYSTEMTOOLS_SIGNAL_USER_DEFINED2:
+
+			return 9;
+
+		case SYSTEMTOOLS_SIGNAL_PIPE_FAULT:
+
+			return 10;
+
+		case SYSTEMTOOLS_SIGNAL_ALARM:
+
+			return 11;
+
+		case SYSTEMTOOLS_SIGNAL_TERMINATION:
+
+			return 12;
+
+		case SYSTEMTOOLS_SIGNAL_CHILD_CHANGED:
+
+			return 13;
+
+		case SYSTEMTOOLS_SIGNAL_CONTINUE:
+
+			return 14;
+
+		case SYSTEMTOOLS_SIGNAL_KEYBOARD_STOP:
+
+			return 15;
+
+		case SYSTEMTOOLS_SIGNAL_CPULIMIT_EXCEEDED:
+
+			return 16;
+
+		case SYSTEMTOOLS_SIGNAL_FILESIZE_EXCEEDED:
+
+			return 17;
+
+		case SYSTEMTOOLS_SIGNAL_BAD_SYSCALL:
+
+			return 18;
+
+		default:
+
+			return -1;
+	}
+}
 
 //-------------------------------------------------------------------
 
@@ -1080,13 +1163,6 @@ systemTools::toRealSignal(long signal)
 
 			return SIGTERM;
 
-		#ifndef __FreeBSD__
-
-		case SYSTEMTOOLS_SIGNAL_STACK_FAULT:
-			return SIGSTKFLT;
-
-		#endif
-
 		case SYSTEMTOOLS_SIGNAL_CHILD_CHANGED:
 
 			return SIGCHLD;
@@ -1113,7 +1189,7 @@ systemTools::toRealSignal(long signal)
 
 		default:
 
-			return 0;
+			return -1;
 	}
 }
 

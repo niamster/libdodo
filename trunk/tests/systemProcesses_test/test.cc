@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 	{
 		systemSharedData shD("dodo");
 		char *data = (char *)shD.map(100);
-		strcpy(data, "abc");
+		strcpy(data, "test");
 
 		dgCI = dgC.add((char *)"@test@\n");
 		dg.set((char *)"!test!\n");
@@ -75,9 +75,6 @@ int main(int argc, char **argv)
 		cout.flush();
 		
 		pr.wait();
-		
-		//systemTools::sleep(5);
-		
 	}
 	catch(baseEx ex)
 	{

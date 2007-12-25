@@ -69,10 +69,6 @@ int main(int argc, char **argv)
 		
 		th.wait();
 		
-		//systemTools::sleep(5);
-		
-		//th.stopThread(pos);
-		
 		delete shared;
 	}
 	catch(baseEx ex)

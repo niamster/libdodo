@@ -203,8 +203,7 @@ ioDisk::open(const dodoString &a_path,
 				if (exists && !S_ISFIFO(st.st_mode))
 					throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_LIBDODO, IODISKEX_WRONG_FILENAME, IODISKEX_WRONG_FILENAME_STR, __LINE__, __FILE__, path);
 				if (!exists)
-					if (mkfifo(path.c_str(), ioDiskTools::getPermission(FILE_PERM)) == -1)
-						throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					ioDiskTools::mkfifo(path, DEFAULT_FILE_PERM);
 			}
 			else
 			{
@@ -246,7 +245,7 @@ ioDisk::open(const dodoString &a_path,
 	if (file == NULL)
 		throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	ioDiskTools::chmod(path, FILE_PERM);
+	ioDiskTools::chmod(path, DEFAULT_FILE_PERM);
 
 	#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
@@ -510,7 +509,6 @@ ioDisk::readStreamString(dodoString &a_str,
 
 	try
 	{
-
 		this->readStream(data, a_pos);
 	}
 	catch (...)

@@ -1525,7 +1525,7 @@ tools::mail(const dodoString &host,
 			const dodoString &pass,
 			const dodoString &headers)
 {
-	enum authTypeEnum
+	enum mailAuthTypeEnum
 	{
 		SMTPAUTH_CRAMMD5 = 2,
 		SMTPAUTH_LOGIN = 4,

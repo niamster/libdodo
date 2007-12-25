@@ -92,27 +92,24 @@ namespace dodo
 	enum systemSignalsEnum
 	{
 		SYSTEMTOOLS_SIGNAL_HANGUP = 0,
-		SYSTEMTOOLS_SIGNAL_INTERRUPT = 2,
-		SYSTEMTOOLS_SIGNAL_QUIT = 4,
-		SYSTEMTOOLS_SIGNAL_ILLEGAL_INSTRUCTION = 8,
-		SYSTEMTOOLS_SIGNAL_ABORT = 16,
-		SYSTEMTOOLS_SIGNAL_BUS_FAULT = 32,
-		SYSTEMTOOLS_SIGNAL_FLOATINGPOINT_FAULT = 64,
-		SYSTEMTOOLS_SIGNAL_USER_DEFINED1 = 128,
-		SYSTEMTOOLS_SIGNAL_SEGMENTATION_FAULT = 256,
-		SYSTEMTOOLS_SIGNAL_USER_DEFINED2 = 512,
-		SYSTEMTOOLS_SIGNAL_PIPE_FAULT = 1024,
-		SYSTEMTOOLS_SIGNAL_ALARM = 2048,
-		SYSTEMTOOLS_SIGNAL_TERMINATION = 4096,
-		#ifndef __FreeBSD__
-		SYSTEMTOOLS_SIGNAL_STACK_FAULT = 8192,
-		#endif
-		SYSTEMTOOLS_SIGNAL_CHILD_CHANGED = 16384,
-		SYSTEMTOOLS_SIGNAL_CONTINUE = 32768,
-		SYSTEMTOOLS_SIGNAL_KEYBOARD_STOP = 65536,
-		SYSTEMTOOLS_SIGNAL_CPULIMIT_EXCEEDED = 131072,
-		SYSTEMTOOLS_SIGNAL_FILESIZE_EXCEEDED = 262144,
-		SYSTEMTOOLS_SIGNAL_BAD_SYSCALL = 524288,
+		SYSTEMTOOLS_SIGNAL_INTERRUPT = 1<<1,
+		SYSTEMTOOLS_SIGNAL_QUIT = 1<<2,
+		SYSTEMTOOLS_SIGNAL_ILLEGAL_INSTRUCTION = 1<<3,
+		SYSTEMTOOLS_SIGNAL_ABORT = 1<<4,
+		SYSTEMTOOLS_SIGNAL_BUS_FAULT = 1<<5,
+		SYSTEMTOOLS_SIGNAL_FLOATINGPOINT_FAULT = 1<<6,
+		SYSTEMTOOLS_SIGNAL_USER_DEFINED1 = 1<<7,
+		SYSTEMTOOLS_SIGNAL_SEGMENTATION_FAULT = 1<<8,
+		SYSTEMTOOLS_SIGNAL_USER_DEFINED2 = 1<<9,
+		SYSTEMTOOLS_SIGNAL_PIPE_FAULT = 1<<10,
+		SYSTEMTOOLS_SIGNAL_ALARM = 1<<11,
+		SYSTEMTOOLS_SIGNAL_TERMINATION = 1<<12,
+		SYSTEMTOOLS_SIGNAL_CHILD_CHANGED = 1<<13,
+		SYSTEMTOOLS_SIGNAL_CONTINUE = 1<<14,
+		SYSTEMTOOLS_SIGNAL_KEYBOARD_STOP = 1<<15,
+		SYSTEMTOOLS_SIGNAL_CPULIMIT_EXCEEDED = 1<<16,
+		SYSTEMTOOLS_SIGNAL_FILESIZE_EXCEEDED = 1<<17,
+		SYSTEMTOOLS_SIGNAL_BAD_SYSCALL = 1<<18,
 	};
 
 	/**
@@ -477,19 +474,28 @@ namespace dodo
 			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
 
 			/**
-			 * @return signal number that refers to given systemSignalsEnum
+			 * @return system signal number that refers to given systemSignalsEnum
 			 * @param signal describes signal to convert
 			 */
 			static int toRealSignal(long signal);
+
+			/**
+			 * @return signal number that refers to given systemSignalsEnum
+			 * @param signal describes signal to convert
+			 */
+			static int toSignalNumber(long signal);
 
 			/**
 			 * fills 'set' structure with given signal mask
 			 */
 			static void sigMask(sigset_t *set, long signal);
 
-			static void *handlesSig[20];        ///< handles to modules
-
-			static bool handlesOpenedSig[20];   ///< map of opened modules
+			#ifdef DL_EXT
+			
+			static void *handlesSig[19];        ///< handles to modules
+			static bool handlesOpenedSig[19];   ///< map of opened modules
+			
+			#endif
 
 	};
 

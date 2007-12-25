@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 			fi.type = DBBASE_FIELDTYPE_TEXT;
 			
 			__tableInfo ti;
-			ti.name = "leg";
+			ti.name = "test";
 			ti.fields.push_back(fi);
 			
 			fi.name = "operation";
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 			
 			for (int i=0;i<10;i++)
 			{
-				pp.select("leg",select,"`id`<20 or `operation`='um'");
+				pp.select("test",select,"`id`<20 or `operation`='um'");
 				//cout << pp.queryCollect() << endl;
 				pp.exec();
 				cout << "Selected: " << pp.rowsCount() << endl;
@@ -67,18 +67,18 @@ int main(int argc, char **argv)
 				
 				pp.fetch();
 				
-				pp.insert("leg",arr);
+				pp.insert("test",arr);
 				pp.exec();
 				
 				arr["operation"] = "um";
-				pp.update("leg",arr);
+				pp.update("test",arr);
 				arr["operation"] = "mu";
 				pp.exec();
 	
 				cout << "Updated: " << pp.affectedRowsCount() << endl;
 			}
 	
-			pp.select("leg",select,"`id`<20 or `operation`='um'");
+			pp.select("test",select,"`id`<20 or `operation`='um'");
 			pp.exec();
 			
 			cout << pp.fetch().rows.size() << endl;

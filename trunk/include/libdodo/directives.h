@@ -64,7 +64,7 @@
 /**
  *  describes file permissions for newly created file(pipe) with open method
  */
-#define FILE_PERM     (IODISKTOOLS_PERM_OWNER_READ_ACCESS | IODISKTOOLS_PERM_OWNER_WRITE_ACCESS | IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS)
+#define DEFAULT_FILE_PERM IODISKTOOLS_PERM_OWNER_ALL_ACCESS 
 
 /**
  * is used for converting from number to string

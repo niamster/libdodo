@@ -152,11 +152,21 @@ ioDiskTools::touch(const dodoString &path,
 //-------------------------------------------------------------------
 
 void
+ioDiskTools::mkfifo(const dodoString &path,
+					  int permissions)
+{
+	if (::mkfifo(path.c_str(), toRealPermission(permissions)) == -1)
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKFIFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+}
+
+//-------------------------------------------------------------------
+
+void
 ioDiskTools::mkdir(const dodoString &path,
 					  int permissions,
 					  bool force)
 {
-	if (::mkdir(path.c_str(), getPermission(permissions)) == -1)
+	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 	{
 		if (force && (errno == EEXIST))
 		{
@@ -177,20 +187,19 @@ ioDiskTools::mkdir(const dodoString &path,
 void
 ioDiskTools::chmod(const dodoString &path, int permissions)
 {
-	if (::chmod(path.c_str(), getPermission(permissions)) == -1)
+	if (::chmod(path.c_str(), toRealPermission(permissions)) == -1)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_CHMOD, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
 
 int
-ioDiskTools::getPermission(int permission)
+ioDiskTools::toRealPermission(int permission)
 {
 	int mode(0);
 
 	if (isSetFlag(permission, IODISKTOOLS_PERM_OWNER_READ_ACCESS))
 		mode |= S_IRUSR;
-
 	if (isSetFlag(permission, IODISKTOOLS_PERM_GROUP_READ_ACCESS))
 		mode |= S_IRGRP;
 	if (isSetFlag(permission, IODISKTOOLS_PERM_OTHER_READ_ACCESS))
@@ -198,14 +207,10 @@ ioDiskTools::getPermission(int permission)
 
 	if (isSetFlag(permission, IODISKTOOLS_PERM_OWNER_WRITE_ACCESS))
 		mode |= S_IWUSR;
-
 	if (isSetFlag(permission, IODISKTOOLS_PERM_GROUP_WRITE_ACCESS))
 		mode |= S_IWGRP;
 	if (isSetFlag(permission, IODISKTOOLS_PERM_OTHER_WRITE_ACCESS))
 		mode |= S_IWOTH;
-
-	if (isSetFlag(permission, IODISKTOOLS_PERM_STICKY_ACCESS))
-		mode |= S_ISVTX;
 
 	if (isSetFlag(permission, IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS))
 		mode |= S_IXUSR;
@@ -213,6 +218,9 @@ ioDiskTools::getPermission(int permission)
 		mode |= S_IXGRP;
 	if (isSetFlag(permission, IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS))
 		mode |= S_IXOTH;
+
+	if (isSetFlag(permission, IODISKTOOLS_PERM_STICKY_ACCESS))
+		mode |= S_ISVTX;
 
 	if (isSetFlag(permission, IODISKTOOLS_PERM_SUID_ACCESS))
 		mode |= S_ISUID;
@@ -298,7 +306,6 @@ ioDiskTools::getPermissions(const dodoString &path)
 
 	if (isSetFlag(st.st_mode, S_IRUSR))
 		mode |= IODISKTOOLS_PERM_OWNER_READ_ACCESS;
-
 	if (isSetFlag(st.st_mode, S_IRGRP))
 		mode |= IODISKTOOLS_PERM_GROUP_READ_ACCESS;
 	if (isSetFlag(st.st_mode, S_IROTH))
@@ -306,12 +313,11 @@ ioDiskTools::getPermissions(const dodoString &path)
 
 	if (isSetFlag(st.st_mode, S_IWUSR))
 		mode |= IODISKTOOLS_PERM_OWNER_WRITE_ACCESS;
-
 	if (isSetFlag(st.st_mode, S_IWGRP))
 		mode |= IODISKTOOLS_PERM_GROUP_WRITE_ACCESS;
 	if (isSetFlag(st.st_mode, S_IWOTH))
 		mode |= IODISKTOOLS_PERM_OTHER_WRITE_ACCESS;
-
+	
 	if (isSetFlag(st.st_mode, S_ISVTX))
 		mode |= IODISKTOOLS_PERM_STICKY_ACCESS;
 

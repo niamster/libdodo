@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 		ioDiskTools::rename("testDir","DirTest");
 		
 		ioDiskTools::symlink("test", "TEST");
-		ioDiskTools::chmod("test", IODISKTOOLS_PERM_ALL_ALL_ACCESS);
+		ioDiskTools::chmod("my.dat", IODISKTOOLS_PERM_ALL_ALL_ACCESS);
 		
 		cout << ioDiskTools::getPermissions("Makefile") << endl;
 

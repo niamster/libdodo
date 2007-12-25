@@ -67,9 +67,6 @@ int main(int argc, char **argv)
 
 		for (int i=0;i<amount;++i)
 			delete pr[i];
-		
-		//systemTools::sleep(5);
-		
 	}
 	catch(baseEx ex)
 	{

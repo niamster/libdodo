@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 {
 	try
 	{						
-		ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4/*IOSOCKETOPTIONS_PROTO_FAMILY_IPV6*//*IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET*/,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+		ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__initialAccept fake;
 
@@ -23,8 +23,6 @@ int main(int argc, char **argv)
 		sock.block(false);
 						
 		sock.bindNListen("127.0.0.1",7778,1);
-		//sock.bindNListen("::",7777);
-		//sock.bindNListen("./sock",10,true);
 				
 		ioSocketExchange conn;
 

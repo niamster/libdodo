@@ -59,32 +59,32 @@ namespace dodo
 	/**
 	 * @enum permissionModesEnum describes permissions you can set/get to/from file
 	 */
-	enum permissionModesEnum
+	enum ioDiskPermissionModesEnum
 	{
-		IODISKTOOLS_PERM_NONE = 0,
+		IODISKTOOLS_PERM_NONE,
 
-		IODISKTOOLS_PERM_OWNER_READ_ACCESS = 2,
-		IODISKTOOLS_PERM_GROUP_READ_ACCESS = 4,
-		IODISKTOOLS_PERM_OTHER_READ_ACCESS = 8,
+		IODISKTOOLS_PERM_OWNER_READ_ACCESS = 1<<1,
+		IODISKTOOLS_PERM_GROUP_READ_ACCESS = 1<<2,
+		IODISKTOOLS_PERM_OTHER_READ_ACCESS = 1<<3,
 
-		IODISKTOOLS_PERM_OWNER_WRITE_ACCESS = 16,
-		IODISKTOOLS_PERM_GROUP_WRITE_ACCESS = 32,
-		IODISKTOOLS_PERM_OTHER_WRITE_ACCESS = 64,
+		IODISKTOOLS_PERM_OWNER_WRITE_ACCESS = 1<<4,
+		IODISKTOOLS_PERM_GROUP_WRITE_ACCESS = 1<<5,
+		IODISKTOOLS_PERM_OTHER_WRITE_ACCESS = 1<<6,
 
-		IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS = 128,
-		IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS = 256,
-		IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS = 512,
+		IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS = 1<<7,
+		IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS = 1<<8,
+		IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS = 1<<9,
 
-		IODISKTOOLS_PERM_STICKY_ACCESS = 1024,
+		IODISKTOOLS_PERM_STICKY_ACCESS = 1<<10,
 
-		IODISKTOOLS_PERM_SUID_ACCESS = 2048,
-		IODISKTOOLS_PERM_SGID_ACCESS = 4096,
+		IODISKTOOLS_PERM_SUID_ACCESS = 1<<11,
+		IODISKTOOLS_PERM_SGID_ACCESS = 1<<12,
 
-		IODISKTOOLS_PERM_OWNER_ALL_ACCESS = 146,
-		IODISKTOOLS_PERM_GROUP_ALL_ACCESS = 292,
-		IODISKTOOLS_PERM_OTHER_ALL_ACCESS = 584,
+		IODISKTOOLS_PERM_OWNER_ALL_ACCESS = IODISKTOOLS_PERM_OWNER_READ_ACCESS|IODISKTOOLS_PERM_OWNER_WRITE_ACCESS|IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS,
+		IODISKTOOLS_PERM_GROUP_ALL_ACCESS = IODISKTOOLS_PERM_GROUP_READ_ACCESS|IODISKTOOLS_PERM_GROUP_WRITE_ACCESS|IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS,
+		IODISKTOOLS_PERM_OTHER_ALL_ACCESS = IODISKTOOLS_PERM_OTHER_READ_ACCESS|IODISKTOOLS_PERM_OTHER_WRITE_ACCESS|IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS,
 
-		IODISKTOOLS_PERM_ALL_ALL_ACCESS = 1022
+		IODISKTOOLS_PERM_ALL_ALL_ACCESS = IODISKTOOLS_PERM_OWNER_ALL_ACCESS|IODISKTOOLS_PERM_GROUP_ALL_ACCESS|IODISKTOOLS_PERM_OTHER_ALL_ACCESS,
 
 	};
 
@@ -94,7 +94,7 @@ namespace dodo
 	struct __fileInfo
 	{
 		dodoString name;    ///< file name
-		int perm;           ///< file permissions[see permissionModesEnum]; may be or'ed
+		int perm;           ///< file permissions[see ioDiskPermissionModesEnum]; may be or'ed
 		int type;           ///< file type[see ioDiskToolsFileTypeEnum]
 		long size;          ///< file size
 		long modTime;       ///< modyfication time
@@ -192,10 +192,19 @@ namespace dodo
 			static void
 			touch(const dodoString &path, int time = -1);               ///< now by default
 
+
+			/**
+			 * make directory
+			 * @param path is path of fifo to create
+			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
+			 */
+			static void
+			mkfifo(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
+			
 			/**
 			 * make directory
 			 * @param path is path of directory to create
-			 * @param permissions is new permissions; use | to combine[see permissionModesEnum]
+			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 * @param force if it is true and directory already exists do not say anything
 			 */
 			static void
@@ -218,7 +227,7 @@ namespace dodo
 			/**
 			 * changes permissions
 			 * @param path is path to node
-			 * @param permissions is ne permissions; use | to combine[see permissionModesEnum]
+			 * @param permissions is ne permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 */
 			static void
 			chmod(const dodoString &path, int permissions);
@@ -318,11 +327,13 @@ namespace dodo
 			 */
 			static dodoArray<__fileInfo> getDirInfo(const dodoString &path); ///< if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
 
+		protected:
+			
 			/**
 			 * @return system understandable permissions
 			 * @param permission is user understandable permissions
 			 */
-			static int getPermission(int permission);
+			static int toRealPermission(int permission);
 	};
 
 };

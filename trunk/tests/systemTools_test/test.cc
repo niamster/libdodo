@@ -14,7 +14,7 @@ static int number = 1;
 void 
 signaler(int, siginfo_t *, void *)
 {
-	cout << "\nHAHA =)\n";
+	cout << "\nTEST\n";
 	cout.flush();
 	cought = true;
 	number++;
@@ -31,14 +31,13 @@ int main(int argc, char **argv)
 	
 	cout << systemTools::getPID() << endl;
 	
-	systemTools::setSignalHandler(SIGNAL_HANGUP,exit);
-	systemTools::setSignalHandler(SIGNAL_INTERRUPT,signaler);
-	//systemTools::unsetSignalHandler(SIGNAL_HANGUP);
+	systemTools::setSignalHandler(SYSTEMTOOLS_SIGNAL_HANGUP,exit);
+	systemTools::setSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT,signaler);
 	
-	if (systemTools::isSignalHandled(SIGNAL_HANGUP))
-		cout << "SET ... !\n";
+	if (systemTools::isSignalHandled(SYSTEMTOOLS_SIGNAL_HANGUP))
+		cout << "SYSTEMTOOLS_SIGNAL_HANGUP IS SET ... !\n";
 	else
-		cout << "NOT SET ... !\n";
+		cout << "SYSTEMTOOLS_SIGNAL_HANGUP IS NOT SET ... !\n";
 		
 	while (run)
 	{
@@ -46,8 +45,10 @@ int main(int argc, char **argv)
 		if (cought)
 		{
 			cought = false;
-			cout << "\nHEHE =)\n";
+			cout << "\nSYSTEMTOOLS_SIGNAL_HANGUP =)\n";
 			cout.flush();
+			
+			systemTools::unsetSignalHandler(SYSTEMTOOLS_SIGNAL_HANGUP);
 		}
 		
 	}
@@ -76,7 +77,7 @@ int main(int argc, char **argv)
 		
 	cout << systemTools::getWorkingDir() << endl;	
 
-	systemTools::die(stringTools::rTrim("    dsgdfhhdf    "));
+	systemTools::die(stringTools::rTrim("    rTrim    "));
 
 	cout << systemTools::getWorkingDir();
 		

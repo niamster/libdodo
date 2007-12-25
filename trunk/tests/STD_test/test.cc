@@ -12,13 +12,13 @@ hook(void *base,
 	short int type, 
 	void *yep)
 {
-	ioSTD *st = (ioSTD *)base;
+	__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
 	if (st->operType == IOSTD_OPERATION_WRITE)
 	{
 		char q[100];
-		int *a;
-		a = (int *)(st->buffer.c_str());
-		sprintf(q,"%d",*a);
+		int a = *(int *)(st->buffer.c_str());
+		++a;
+		sprintf(q,"%d",a);
 		st->buffer.assign(q);
 	}
 }
@@ -32,9 +32,7 @@ int main(int argc, char **argv)
 		cout << ioSTD::inputterInfo().host << endl;
 		
 		ioSTD st;
-		//st.block(true);
 		int pos = st.addPreExec(&hook,NULL);
-		//st.outSTDBuffer = 2;
 	
 		st.outSize = sizeof(int);
 	
