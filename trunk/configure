@@ -578,7 +578,6 @@ PACKAGE_VERSION='0.4.0'
 PACKAGE_STRING='libdodo 0.4.0'
 PACKAGE_BUGREPORT='libdodo.sf.net'
 
-ac_default_prefix=/usr/local
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -3746,8 +3745,6 @@ esac
 rm -f conftest*
   fi
 fi
-
-
 
 
 echo "" > include/libdodo/directives.runtime.h
@@ -7040,6 +7037,9 @@ fi
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi
 
+CPPFLAGS=$(echo $CPPFLAGS | tr " " "\n" | uniq | tr "\n" " ")
+LDFLAGS=$(echo $LDFLAGS | tr " " "\n" | uniq | tr "\n" " ")
+
 # Checks for header files.
 { echo "$as_me:$LINENO: checking for sys/wait.h that is POSIX.1 compatible" >&5
 echo $ECHO_N "checking for sys/wait.h that is POSIX.1 compatible... $ECHO_C" >&6; }
@@ -8163,7 +8163,7 @@ echo "${ECHO_T}$ac_cv_prog_gcc_traditional" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files Makefile tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/dbinterface_test/Makefile tests/disk_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/socketNB_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemThreads_test/Makefile tests/systemProcesses_test/Makefile tests/systemJobs_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec.module_test/Makefile tests/xml_test/Makefile"
+ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/dbinterface_test/Makefile tests/disk_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/socketNB_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemThreads_test/Makefile tests/systemProcesses_test/Makefile tests/systemJobs_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec.module_test/Makefile tests/xml_test/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -8735,6 +8735,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "bin/dodo-config") CONFIG_FILES="$CONFIG_FILES bin/dodo-config" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "tests/image_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/image_test/Makefile" ;;
     "tests/json_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/json_test/Makefile" ;;
@@ -9210,5 +9211,7 @@ if test "$no_create" != yes; then
   $ac_cs_success || { (exit 1); exit 1; }
 fi
 
+
+chmod +x bin/dodo-config
 
 echo -e $RESULT

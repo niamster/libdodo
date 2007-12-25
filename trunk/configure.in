@@ -358,6 +358,7 @@ AC_STRUCT_TM
 AC_PROG_GCC_TRADITIONAL
 
 AC_CONFIG_FILES([Makefile
+		 bin/dodo-config
                  tests/Makefile
                  tests/image_test/Makefile
                  tests/json_test/Makefile
@@ -383,5 +384,7 @@ AC_CONFIG_FILES([Makefile
                  tests/xml_test/Makefile])
 
 AC_OUTPUT
+
+chmod +x bin/dodo-config
 
 echo -e $RESULT

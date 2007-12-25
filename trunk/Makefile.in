@@ -4,6 +4,7 @@ datarootdir:=@datarootdir@
 exec_prefix:=@exec_prefix@
 mandir:=@mandir@
 libdir:=@libdir@
+bindir:=@bindir@
 includedir:=@includedir@
 
 CXX:=@CXX@
@@ -88,6 +89,9 @@ install:
 	${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/
 	${INSTALL} -m 755 -d $(includedir)/libdodo
 	cd include/libdodo; for i in ./*; do ${INSTALL} -m 755 $$i $(includedir)/libdodo; done; cd ..
+
+	${INSTALL} -m 755 -d $(bindir)
+	${INSTALL} -m 755 bin/dodo-config $(bindir)/
 	
 	$(LN_S) -f $(libdir)/@PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/@PACKAGE_NAME@.so
 	
@@ -105,6 +109,9 @@ uninstall:
 	cd i$(ncludedir)/libdodo; for i in ./*; do rm -f $(includedir)/$$i; done; cd ..
 	rmdir $(includedir)/libdodo
 	rmdir $(includedir)
+
+	rm -f $(bindir)/dodo-config
+	rmdir $(bindir)/dodo-config
 	
 	rmdir $(prefix)
 clean:
