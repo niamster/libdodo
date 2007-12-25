@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 			cout << "\nSYSTEMTOOLS_SIGNAL_HANGUP =)\n";
 			cout.flush();
 			
-			systemTools::unsetSignalHandler(SYSTEMTOOLS_SIGNAL_HANGUP);
+			systemTools::unsetSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT);
 		}
 		
 	}
