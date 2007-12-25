@@ -9,7 +9,7 @@ using namespace std;
 int main(int argc, char **argv)
 {	
 	regexp expr;
-	dodoStringArr pock;
+	dodoStringArray pock;
 	
 	expr.multiline = true;
 
@@ -34,9 +34,10 @@ int main(int argc, char **argv)
 	
 	cout << "\nReplacemets: a-> '!!!', '@@'=> result:\n";
 	
-	dodoStringArr a;
+	dodoStringArray a;
 	a.push_back("!!!");
 	a.push_back("@@");
 	cout << expr.reReplace("dsdasa4565aaa",a) << "\n";
+	
 	return 0;
 }

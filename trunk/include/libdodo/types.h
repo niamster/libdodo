@@ -50,7 +50,7 @@ namespace dodo
 		#define dodoArray    std::vector
 	#endif
 
-	typedef dodoArray<dodoString> dodoStringArr;                                ///< array of strings
+	typedef dodoArray<dodoString> dodoStringArray;                                ///< array of strings
 
 	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;  ///< hash of strings
 
@@ -67,11 +67,11 @@ namespace dodo
 
 	extern dodoString __dodostring__;
 
-	extern dodoStringArr __dodostringarray__;
+	extern dodoStringArray __dodostringarray__;
 
 	extern dodoStringMap __dodostringmap__;
 
-	extern dodoArray<dodoStringArr> __dodostringarrayarray__;
+	extern dodoArray<dodoStringArray> __dodostringarrayarray__;
 
 	extern dodoStringMapArray __dodostringmaparray__;
 

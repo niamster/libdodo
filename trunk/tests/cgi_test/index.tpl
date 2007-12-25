@@ -1,7 +1,6 @@
-first
-second
+index
 <(include $main)>
 
-	<(if a!=b)>
-		a!=b
-	<(fi)>
+<(if a!=b)>
+	a!=b
+<(fi)>

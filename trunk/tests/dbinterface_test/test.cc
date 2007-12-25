@@ -60,7 +60,6 @@ int main(int argc, char **argv)
 		{
 			info.path = "/tmp/mysql.sock";
 			info.user = "root";
-			info.password = "Dmitrik";
 		}
 		else if (strcasecmp(argv[1],"sqlite") == 0)
 		{
@@ -70,7 +69,7 @@ int main(int argc, char **argv)
 		pp->setDbInfo(info);
 		pp->connect();	
 
-		((dbBase *)pp)->deleteTable("leg");
+		((dbBase *)pp)->deleteTable("test");
 		
 		try
 		{
@@ -85,7 +84,7 @@ int main(int argc, char **argv)
 		fi.type = DBBASE_FIELDTYPE_TEXT;
 		
 		__tableInfo ti;
-		ti.name = "leg";
+		ti.name = "test";
 		ti.fields.push_back(fi);
 		
 		fi.name = "operation";
@@ -122,34 +121,34 @@ int main(int argc, char **argv)
 		
 		for (int i=0;i<10;i++)
 		{
-			pp->select("leg",select,"id<20 or operation='um'");
+			pp->select("test",select,"id<20 or operation='um'");
 			pp->exec();
 			
 			pp->fetch();
 			
-			pp->insert("leg",arr);
+			pp->insert("test",arr);
 			cout << ((dbSqlBase *)pp)->queryCollect() << endl;
 			pp->exec();
 			
 			arr["d"] = "d+1";
 			arr["operation"] = "um";
-			pp->update("leg",arr);
+			pp->update("test",arr);
 			cout << ((dbSqlBase *)pp)->queryCollect() << endl;
 			arr["operation"] = "mu";
 			arr["d"] = "1";
 			pp->exec();
 		}
 		
-		pp->select("leg",select,"operation='um'");
+		pp->select("test",select,"operation='um'");
 		pp->exec();
 		
 		__dbStorage store = pp->fetch();
 		
 		cout << store.rows.size() << endl;
 		
-		dodoArray<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
+		dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 		
-		dodoStringArr::iterator m, n;
+		dodoStringArray::iterator m, n;
 		
 		for (;i!=j;i++)
 		{
@@ -175,7 +174,7 @@ int main(int argc, char **argv)
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 		{
-			dodoStringArr blobs;
+			dodoStringArray blobs;
 			blobs.push_back(dt);
 
 			if (strcasecmp(argv[1],"sqlite") == 0)
@@ -195,7 +194,7 @@ int main(int argc, char **argv)
 			}
                 	
 			((dbSqlBase *)pp)->preventFraming = true;
-            ((dbSqlBase *)pp)->preventEscaping = true;
+            		((dbSqlBase *)pp)->preventEscaping = true;
 		
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";
@@ -206,14 +205,14 @@ int main(int argc, char **argv)
 			arr["operation"] = "ma";
 		}
 
-		pp->insert("leg",arr);
+		pp->insert("test",arr);
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 			pp->exec("dodo:hint:db:blob");
 		else
 			pp->exec();
 
-		pp->select("leg",select,"operation='ma'");
+		pp->select("test",select,"operation='ma'");
 		pp->exec();
 
 		store = pp->fetch();

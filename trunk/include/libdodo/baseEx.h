@@ -96,9 +96,9 @@ namespace dodo
 		#ifdef DL_EXT
 
 	/**
-	 * @struct exMod must be returned from initExModule in the module
+	 * @struct __exMod must be returned from initExModule in the module
 	 */
-	struct exMod
+	struct __exMod
 	{
 		char name[64];                  ///< name of module
 		char discription[256];          ///< discription of module
@@ -109,7 +109,7 @@ namespace dodo
 	/**
 	 * @typedef describes function in module that must return info for the hook
 	 */
-	typedef exMod (*initExModule)(void *);
+	typedef __exMod (*initExModule)(void *);
 
 	/**
 	 * @typedef describes function in module that will be called during module unloading
@@ -204,7 +204,7 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static exMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __exMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 			/**
 			 * set handler on error for specific module

@@ -12,7 +12,7 @@ int main(int argc, char **argv)
 	{
 		json js;
 
-		jsonNodeDef node, node1, node2;
+		__jsonNodeDef node, node1, node2;
 		
 		node.valueDataType = JSON_DATATYPE_OBJECT;
 		
@@ -141,6 +141,13 @@ int main(int argc, char **argv)
 				
 				break;
 		}
+		
+		dodoStringMap map;
+		map["test"] = "test";
+		map["foo"] = "bar";
+		map["one"] = "two";
+		
+		cout << endl << js.mapToJSON(map) << endl;
 	}
 	catch(baseEx ex)
 	{

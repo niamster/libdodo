@@ -29,11 +29,11 @@ namespace dodo
 
 	dodoString __dodostring__;
 
-	dodoStringArr __dodostringarray__;
+	dodoStringArray __dodostringarray__;
 
 	dodoStringMap __dodostringmap__;
 
-	dodoArray<dodoStringArr> __dodostringarrayarray__;
+	dodoArray<dodoStringArray> __dodostringarrayarray__;
 
 	dodoStringMapArray __dodostringmaparray__;
 

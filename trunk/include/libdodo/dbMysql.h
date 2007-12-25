@@ -180,12 +180,12 @@ namespace dodo
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual dodoArray<dodoStringArr> fetchRow() const;
+			virtual dodoArray<dodoStringArray> fetchRow() const;
 
 			/**
 			 * @return array of fields got from request
 			 */
-			virtual dodoStringArr fetchField() const;
+			virtual dodoStringArray fetchField() const;
 
 			/**
 			 * @return structure that holds array of rows and array of fields got from request

@@ -147,15 +147,15 @@ namespace dodo
 	{
 		dodoString name;        ///< name of the group
 		int gid;                ///< group id
-		dodoStringArr members;  ///< list of group members
+		dodoStringArray members;  ///< list of group members
 	};
 
 	#ifdef DL_EXT
 
 	/**
-	 * @struct sigMod must be returned from initSigModule in the module
+	 * @struct __sigMod must be returned from initSigModule in the module
 	 */
-	struct sigMod
+	struct __sigMod
 	{
 		char name[64];              ///< name of module
 		char discription[256];      ///< discription of module
@@ -167,7 +167,7 @@ namespace dodo
 	/**
 	 * @typedef describes function in module that must return info for the hook
 	 */
-	typedef sigMod (*initSigModule)(void *);
+	typedef __sigMod (*initSigModule)(void *);
 
 	/**
 	 * @typedef describes function in module that will be called during module unloading
@@ -425,7 +425,7 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 			/**
 			 * set handler on signal from specific module

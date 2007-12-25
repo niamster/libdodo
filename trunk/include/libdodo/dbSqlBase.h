@@ -211,7 +211,7 @@ namespace dodo
 			 * @param statement is array of statements
 			 * @param qTypeShift is value that indicates what values were set
 			 */
-			virtual dodoString insideAddCollect(const dodoStringArr &statements, int qTypeShift);
+			virtual dodoString insideAddCollect(const dodoStringArray &statements, int qTypeShift);
 
 			/**
 			 * @return string from fields' names and 'em values
@@ -219,7 +219,7 @@ namespace dodo
 			 * @param fieldsNames is array of names
 			 * @param frame is value with what values will be framed
 			 */
-			virtual dodoString fieldsValName(const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &frame = "'");
+			virtual dodoString fieldsValName(const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &frame = "'");
 
 			/**
 			 * @return sql compliant data type
@@ -239,7 +239,7 @@ namespace dodo
 			 */
 			virtual dodoString stringReference(int type);
 
-			dodoMap<dodoString, dodoStringArr, stringTools::iequal> framingFields;   ///< hash of 'db:table' => `array of fields to frame`
+			dodoMap<dodoString, dodoStringArray, stringTools::iequal> framingFields;   ///< hash of 'db:table' => `array of fields to frame`
 
 		private:
 

@@ -67,12 +67,13 @@ ioDiskTools::symlink(const dodoString &oldPath,
 	{
 		struct stat st;
 		if (::lstat(newPath.c_str(), &st) != -1)
-
+		{
 			if (!S_ISLNK(st.st_mode))
 				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_LIBDODO, IODISKTOOLSEX_WRONG_FILENAME, IODISKTOOLSEX_WRONG_FILENAME_STR, __LINE__, __FILE__, newPath);
 			else
-			if (::unlink(newPath.c_str()) == -1)
-				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
+				if (::unlink(newPath.c_str()) == -1)
+					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
+		}
 	}
 
 	if (::symlink(oldPath.c_str(), newPath.c_str()) == -1)
@@ -560,7 +561,7 @@ ioDiskTools::getFileContent(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 ioDiskTools::getFileContentArr(const dodoString &path)
 {
 	struct stat st;
@@ -575,7 +576,7 @@ ioDiskTools::getFileContentArr(const dodoString &path)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	char buffer[DISK_MAXLINELEN];
-	dodoStringArr arr;
+	dodoStringArray arr;
 
 	while (fgets(buffer, DISK_MAXLINELEN, file) != NULL)
 		arr.push_back(buffer);

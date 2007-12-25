@@ -126,8 +126,8 @@ dbSqlBase::~dbSqlBase()
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
-						 const dodoStringArr &fieldsNames,
+dbSqlBase::fieldsValName(const dodoStringArray &fieldsVal,
+						 const dodoStringArray &fieldsNames,
 						 const dodoString &frame)
 {
 	dodoString temp;
@@ -136,7 +136,7 @@ dbSqlBase::fieldsValName(const dodoStringArr &fieldsVal,
 
 	unsigned int o(fn <= fv ? fn : fv);
 
-	dodoStringArr::const_iterator i(fieldsNames.begin()), j(fieldsVal.begin());
+	dodoStringArray::const_iterator i(fieldsNames.begin()), j(fieldsVal.begin());
 	if (i != j)
 	{
 		--o;
@@ -218,7 +218,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::insideAddCollect(const dodoStringArr &statements,
+dbSqlBase::insideAddCollect(const dodoStringArray &statements,
 							int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
@@ -228,7 +228,7 @@ dbSqlBase::insideAddCollect(const dodoStringArr &statements,
 
 	unsigned int k(1);
 
-	dodoStringArr::const_iterator i(statements.begin()), j(statements.end());
+	dodoStringArray::const_iterator i(statements.begin()), j(statements.end());
 	for (; i != j; ++i, ++k)
 	{
 		if (isSetFlag(qTypeShift, 1 << k))
@@ -269,15 +269,15 @@ dbSqlBase::selectCollect()
 void
 dbSqlBase::insertCollect()
 {
-	dodoStringArr fieldsVPart;
+	dodoStringArray fieldsVPart;
 
-	dodoArray<dodoStringArr>::iterator k(pre_fieldsVal.begin()), l(pre_fieldsVal.end());
+	dodoArray<dodoStringArray>::iterator k(pre_fieldsVal.begin()), l(pre_fieldsVal.end());
 
-	std::map<dodoString, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
+	std::map<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
 	{
-		dodoStringArr::iterator t;
+		dodoStringArray::iterator t;
 
 		dodoString temp;
 
@@ -287,7 +287,7 @@ dbSqlBase::insertCollect()
 
 			t = pre_fieldsNames.begin();
 
-			dodoStringArr::const_iterator i(k->begin()), j(k->end() - 1);
+			dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
 			for (; i != j; ++i, ++t)
 			{
 				if (tools::isInArray(y->second, *t, true))
@@ -330,7 +330,7 @@ dbSqlBase::insertCollect()
 
 	dodoString fieldsPart;
 
-	dodoStringArr::iterator i(fieldsVPart.begin()), j(fieldsVPart.end());
+	dodoStringArray::iterator i(fieldsVPart.begin()), j(fieldsVPart.end());
 	if (i != j)
 	{
 		--j;
@@ -401,14 +401,14 @@ dbSqlBase::updateCollect()
 {
 	dodoString setPart;
 
-	std::map<dodoString, dodoStringArr>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
+	std::map<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
 	{
 		unsigned int fn(pre_fieldsNames.size()), fv(pre_fieldsVal.front().size());
 		unsigned int o(fn <= fv ? fn : fv);
 
-		dodoStringArr::iterator i(pre_fieldsNames.begin()), j(pre_fieldsVal.front().begin());
+		dodoStringArray::iterator i(pre_fieldsNames.begin()), j(pre_fieldsVal.front().begin());
 		for (unsigned int k(0); k < o - 1; ++i, ++j, ++k)
 		{
 			if (tools::isInArray(y->second, *i, true))

@@ -1,6 +1,8 @@
+
 #include <libdodo/baseEx.h>
 #include <libdodo/ioSocket.h>
 #include <libdodo/ioSocketTools.h>
+#include <libdodo/types.h>
 
 #include <iostream>
 
@@ -28,13 +30,11 @@ process(ioSocketExchange fse)
 	fse.setOutBufferSize(1);
 	
 	fse.outSize = 7;
-	//fse.writeStreamString("dasdasd");
 	fse.writeString("dasdasd");
 	
 	dodoString rec = "";
 	try
 	{
-		//fse.readStreamString(rec);
 		fse.readString(rec);
 		
 		cout << rec << rec.size() << endl;
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		dodoStringArr ifaces = ioSocketTools::getInterfacesNames();
+		dodoStringArray ifaces = ioSocketTools::getInterfacesNames();
 		for (unsigned int i(0);i<ifaces.size();i++)
 		{
 			try
@@ -76,7 +76,6 @@ int main(int argc, char **argv)
 		}
 		
 		cout << ioSocketTools::getInterfaceInfo("lo").hwaddr << endl;
-		cout << ioSocketTools::getInterfaceInfo("eth1").address << endl;
 		
 		try
 		{
@@ -86,31 +85,7 @@ int main(int argc, char **argv)
 			
 			try
 			{
-				st.connectFrom("127.0.0.1","10.10.208.254",21,exch);
-
-				exch.readStreamString(str);
-				std::cout << "\ngot:\n" << str << "\n";
-			}
-			catch(baseEx ex)
-			{
-				cout << (string)ex << "\t" << ex.line << endl;
-				cout.flush();
-			}
-			try
-			{
-				st.connect("192.168.0.254",21,exch);
-
-				exch.readStreamString(str);
-				std::cout << "\ngot:\n" << str << "\n";
-			}
-			catch(baseEx ex)
-			{
-				cout << (string)ex << "\t" << ex.line << endl;
-				cout.flush();
-			}
-			try
-			{
-				st.connect("10.10.208.254",21,exch);
+				st.connectFrom("127.0.0.1","127.0.0.1",21,exch);
 
 				exch.readStreamString(str);
 				std::cout << "\ngot:\n" << str << "\n";
@@ -126,10 +101,10 @@ int main(int argc, char **argv)
 			cout << (string)ex << "\t" << ex.line << endl;
 			cout.flush();
 		}
-		
-		cout << "\n-------------------------------------\n" << endl;
 			
-		ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4/*IOSOCKETOPTIONS_PROTO_FAMILY_IPV6*//*IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET*/,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+		/*ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+		//ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV6,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+		//ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__connInfo info;
 		__initialAccept fake;
@@ -158,15 +133,16 @@ int main(int argc, char **argv)
 				
 				process(conn);
 			}
-		}
-		
-		//ioSocketTools::setLocalName("BUBU");
+		}*/
 		
 		cout << ioSocketTools::getLocalName() << endl;
-		cout << ioSocketTools::getHostInfo("192.168.0.1").addresses[0] << endl;
 		
-		ioSocketTools fst;
-		cout << fst.getHostInfo("google.com").addresses[0] << endl;
+		cout << ioSocketTools::getHostInfo("google.com").name << " : " << endl;
+		
+		dodoStringArray addresses = ioSocketTools::getHostInfo("google.com").addresses;
+		dodoStringArray::iterator i = addresses.begin(), j = addresses.end();
+		for (;i!=j;++i)
+			cout << *i << endl;
 		
 	}
 	catch(baseEx ex)

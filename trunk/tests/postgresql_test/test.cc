@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 			pp.setDbInfo(info);
 			pp.connect();	
 	
-			pp.deleteTable("leg");
+			pp.deleteTable("test");
 			pp.exec();
 	
 			__fieldInfo fi;
@@ -61,36 +61,36 @@ int main(int argc, char **argv)
 			arr["date"] = "2005-07-08";
 			arr["operation"] = "mu";
 			
-			dodoStringArr select;
+			dodoStringArray select;
 			select.push_back("date");
 			select.push_back("operation");
 			
 			for (int i=0;i<10;i++)
 			{
-				pp.select("leg",select,"id<20 or operation='um'");
+				pp.select("test",select,"id<20 or operation='um'");
 				pp.exec();
 				
 				pp.fetch();
 				
-				pp.insert("leg",arr);
+				pp.insert("test",arr);
 				pp.exec();
 				
 				arr["operation"] = "um";
-				pp.update("leg",arr);
+				pp.update("test",arr);
 				arr["operation"] = "mu";
 				pp.exec();
 			}
 			
-			pp.select("leg",select,"operation='um'");cout << pp.queryCollect() << endl;
+			pp.select("test",select,"operation='um'");cout << pp.queryCollect() << endl;
 			pp.exec();
 			
 			cout << pp.fetch().rows.size() << endl;
 			
 			__dbStorage store = pp.fetch();
 			
-			dodoArray<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
+			dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 			
-			dodoStringArr::iterator m, n;
+			dodoStringArray::iterator m, n;
 			
 			for (;i!=j;i++)
 			{

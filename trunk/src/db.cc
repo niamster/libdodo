@@ -27,8 +27,8 @@ using namespace dodo;
 
 __xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
 	dodoString &a_pre_where,
-	dodoStringArr &a_pre_fieldsNames,
-	dodoArray<dodoStringArr> &a_pre_fieldsVal,
+	dodoStringArray &a_pre_fieldsNames,
+	dodoArray<dodoStringArray> &a_pre_fieldsVal,
 	dodoString &a_pre_table,
 	dodoString &a_pre_tableTo,
 	dodoString &a_pre_order,
@@ -36,7 +36,7 @@ __xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
 	dodoString &a_pre_group,
 	dodoString &a_pre_limNumber,
 	dodoString &a_pre_limOffset,
-	dodoStringArr &a_pre_subQ,
+	dodoStringArray &a_pre_subQ,
 	int &a_qType,
 	int &a_qShift,
 	int &a_qSelShift,

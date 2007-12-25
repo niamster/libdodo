@@ -704,3 +704,19 @@ ioSocket::accept(__initialAccept &init)
 }
 
 //-------------------------------------------------------------------
+
+int
+ioSocket::getInDescriptor() const
+{
+	return socket;
+}
+
+//-------------------------------------------------------------------
+
+int
+ioSocket::getOutDescriptor() const
+{
+	return socket;
+}
+
+//-------------------------------------------------------------------

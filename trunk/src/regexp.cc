@@ -58,7 +58,7 @@ regexp::~regexp()
 bool
 regexp::match(const dodoString &pattern,
 			  const dodoString &sample,
-			  dodoStringArr &pockets)
+			  dodoStringArray &pockets)
 {
 	if (!compile(pattern))
 		return false;
@@ -70,7 +70,7 @@ regexp::match(const dodoString &pattern,
 
 bool
 regexp::reMatch(const dodoString &sample,
-				dodoStringArr &pockets)
+				dodoStringArray &pockets)
 {
 	pockets.clear();
 	if (!boundMatch(sample))
@@ -204,7 +204,7 @@ regexp::compile(const dodoString &pattern)
 dodoString
 regexp::replace(const dodoString &pattern,
 				const dodoString &sample,
-				const dodoStringArr &replacements)
+				const dodoStringArray &replacements)
 {
 	if (!compile(pattern))
 		return sample;
@@ -216,14 +216,14 @@ regexp::replace(const dodoString &pattern,
 
 dodoString
 regexp::reReplace(const dodoString &sample,
-				  const dodoStringArr &replacements)
+				  const dodoStringArray &replacements)
 {
 	if (!boundMatch(sample))
 		return sample;
 
 	std::list<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 
-	dodoStringArr::const_iterator k(replacements.begin());
+	dodoStringArray::const_iterator k(replacements.begin());
 	int subs = replacements.size();
 
 	dodoString temp = sample;

@@ -16,17 +16,15 @@ using namespace std;
 	cgif(cgiFastIO *fcgi)
 	{
 		cgi cgit(fcgi, true);
-		//cgit.HEADERS["Content-type"] = "image/jpg";
 		cgit.setCookie("test","Ni@m");
 		cgit.printHeaders();
 		 
 		
-	/*	cout << "!" << cgit.METHOD_GET["a"] << "!<br>";
-		cout << "!" << cgit.METHOD_POST["a"] << "!<br>";
-		cout << "!" << cgit.METHOD_POST["e"] << "!<br>";
-		cout << "!" << cgit.ENVIRONMENT["QUERY_STRING"] << "<br>";
-		cout << "!" << cgit.COOKIES["test"] << "<br>";*/
-		//cout << "!" << cgit.getFile("qsadasdaf").error << "<br>";
+		fcgi->print("!" + cgit.METHOD_GET["a"] + "!<br>");
+		fcgi->print("!" + cgit.METHOD_POST["a"] + "!<br>");
+		fcgi->print("!" + cgit.METHOD_POST["e"] + "!<br>");
+		fcgi->print("!" + cgit.ENVIRONMENT["QUERY_STRING"] + "<br>");
+		fcgi->print("!" + cgit.COOKIES["test"] + "<br>");
 		
 		fcgi->print("!!!\n\n\n");
 		
@@ -36,7 +34,7 @@ using namespace std;
 			cgip.assign("test","hoho");
 			cgip.assign("show","That's works!");
 			
-			dodoStringArr arr;
+			dodoStringArray arr;
 			arr.push_back("one");
 			arr.push_back("two");
 			arr.push_back("three");

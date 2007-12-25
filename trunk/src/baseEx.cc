@@ -486,7 +486,7 @@ baseEx::setErrorHandler(const dodoString &path,
 	if (init == NULL)
 		return false;
 
-	exMod mod = init(toInit);
+	__exMod mod = init(toInit);
 
 	deinitExModule deinit;
 
@@ -519,19 +519,19 @@ baseEx::setErrorHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-exMod
+__exMod
 baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-		return exMod();
+		return __exMod();
 
 	initExModule init = (initExModule)dlsym(handle, "initExModule");
 	if (init == NULL)
-		return exMod();
+		return __exMod();
 
-	exMod mod = init(toInit);
+	__exMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
 		return mod;

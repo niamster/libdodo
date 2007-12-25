@@ -263,7 +263,7 @@ dbMysql::_exec(const dodoString &query,
 
 					mysql_field_seek(mysqlRes, 0);
 
-					dodoStringArr rowsPart;
+					dodoStringArray rowsPart;
 
 					MYSQL_ROW mysqlRow;
 
@@ -317,7 +317,7 @@ dbMysql::_exec(const dodoString &query,
 
 //-------------------------------------------------------------------
 
-dodoArray<dodoStringArr>
+dodoArray<dodoStringArray>
 dbMysql::fetchRow() const
 {
 		#ifndef DBMYSQL_WO_XEXEC
@@ -332,7 +332,7 @@ dbMysql::fetchRow() const
 
 	unsigned int numFields = mysql_num_fields(mysqlRes);
 
-	dodoArray<dodoStringArr> rows;
+	dodoArray<dodoStringArray> rows;
 
 		#ifndef USE_DEQUE
 	rows.reserve(mysql_num_rows(mysqlRes));
@@ -340,7 +340,7 @@ dbMysql::fetchRow() const
 
 	unsigned long *length, j;
 
-	dodoStringArr rowsPart;
+	dodoStringArray rowsPart;
 
 	MYSQL_ROW mysqlRow;
 
@@ -377,7 +377,7 @@ dbMysql::fetchRow() const
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 dbMysql::fetchField() const
 {
 		#ifndef DBMYSQL_WO_XEXEC
@@ -391,7 +391,7 @@ dbMysql::fetchField() const
 	unsigned int numFields = mysql_num_fields(mysqlRes);
 	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlRes);
 
-	dodoStringArr fields;
+	dodoStringArray fields;
 
 		#ifndef USE_DEQUE
 	fields.reserve(numFields);

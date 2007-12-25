@@ -10,14 +10,13 @@ using namespace std;
 
 int main(int argc, char **argv)
 {		
-	///first type
+///first type
 //	dodoStringMap head;
 //	head["Content-type"] = "text/html";
 //	cgi cgi(false,head);
 	
-	///second type
+///second type
 	cgi cgit(true);
-	//cgit.HEADERS["Content-type"] = "image/jpg";
 	cgit.HEADERS["Content-type"] = "text/html";
 	cgit.setCookie("test","Ni@m");
 	cgit.printHeaders();
@@ -36,10 +35,10 @@ int main(int argc, char **argv)
 	{
 		cgiProcessor cgip;
 		cgip.assign("main","index.tpl");
-		cgip.assign("test","hoho");
-		cgip.assign("show","That's works!");
+		cgip.assign("test","test");
+		cgip.assign("show","show");
 		
-		dodoStringArr arr;
+		dodoStringArray arr;
 		arr.push_back("one");
 		arr.push_back("two");
 		arr.push_back("three");

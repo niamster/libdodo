@@ -1,41 +1,32 @@
-<html>
-<head>
-</head>
-<body>
-
-<div>
 <(> not )> parsed  <)>
-</div>
 
 <(* if statement *)>
-<div>
-		<(if $test!=hoho )>
-			<(print $test)>
-		<(else)>
-			NULL
-		<(fi)>
-</div>
 
-<div>
+<(if $test!=test )>
+	<(print $test)>
+<(else)>
+	NULL
+<(fi)>
+
 <(if $test )>
-	blabla
-	<(if $test==hoho )>
-		HOHO
+	$test
+	<(if $test==test )>
+		test
 	<(fi)>
-	<(if $test==hihi )>
-		HIHI
+	<(if $test==test1 )>
+		test1
 	<(fi)>	
 	
 	<(if $test )>
-		blabla
-		<(if $test==hoho )>
+		test
+		<(if $test==test )>
 			<(print $test)>
 		<(else)>
 			NULL
 		<(fi)>
 	<(else)>	
-		<(if $test!=hihi )>
-			HOHO
+		<(if $test!=test )>
+			test
 		<(fi)>	
 		<(if false )>
 			WTF?
@@ -70,50 +61,39 @@
 		OK!
 	<(fi)>	
 <(fi)>
-</div>
 
-<div>
 <( print bla-bla )>
 <( print $show )>
-</div>
 
-<div>
+
 <(for $i in $arr)>
 	<(for $b in $arr)>
 		<div class="test"><(print $b)></div>
 	<(rof)>
 <(rof)>
-</div>
 
-<div>
+
 <(print $test )>
 <(print $arr.0.0 )>
 <(print $arr1.one )>
 
 <(print $arr2.0.one )>
 <(print $arr2.1.one )>
-</div>
 
-<div>
+
 <(for $b in $arr2)>
 	<(for $c in $b)>
 		|<(print $c)>|<(print $b.one)>
 	<(rof)>
 <(rof)>
-</div>
 
-<div>
 <(for $c in $arr2.1)>
 	|<(print $c)>
 <(rof)>
-</div>
 
-<div>
 <(print {$arr2.{0}.{$one}} )>
 <(print $arr2.1.{$arr1.{$one}} )>
-</div>
 
-<div>
 <(print namespace: )>
 
 <(for $b in $arr2)>
@@ -124,14 +104,12 @@
 	|<(print $b.one)>
 	<(print $dodo.iterator)>
 <(rof)>
-</div>
 
-<div>
-<(assign a = bASDA)>
+<(assign a = test1)>
 
 <(if true )>	
 
-	<(assign a = ASDA)>
+	<(assign a = test2)>
 
 	<(for $b in $arr2)>
 		<(for $b => $c in $b)>
@@ -140,33 +118,31 @@
 			<(fi)>
 			<(print $b)> -> <(print $c)>
 			
-			<(assign a = SDA)>
-			<(print $a," must be SDA")>
+			<(assign a = test3)>
+			<(print $a," must be test3")>
 		<(rof)>
 		-------
 	<(rof)>	
 	
-	<(print $a," must be ASDA")>
+	<(print $a," must be test2")>
 	
 <(fi)>
 
-<(print $a," must be bASDA")>
-</div>
+<(print $a," must be test1")>
 	
 <(ns)>
 		<(ns)>
 			<(assign a = in namespace)>
-			<(assign b = in namespace)>
 			<(print $a," must be `in namespace`")>
-			<(print $b," must be `in namespace`")>
 		<(sn)>
-	<(print $a," must be bASDA")>
-	<(print $b," must be empty")>
+	<(print $a," must be test1")>
 <(sn)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 
-<(print $dodo.version, " ", $dodo)>
 
-</body>
-</html>
+<(>
+<(print $dodo.version, " ", $dodo)>
+<)>
+
+<(print $dodo.version, " ", $dodo)>

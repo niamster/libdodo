@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 			
 			__xmlNodeDef def;
 			
-			dodoStringArr attr;
+			dodoStringArray attr;
 			attr.push_back("iD");
 			def.attributes = attr;	
 			def.name = "hehe";	

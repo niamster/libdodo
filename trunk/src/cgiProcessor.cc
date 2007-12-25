@@ -303,7 +303,7 @@ cgiProcessor::assign(dodoString varName,
 
 void
 cgiProcessor::assign(dodoString varName,
-					 const dodoStringArr &varVal)
+					 const dodoStringArray &varVal)
 {
 	if (varName[0] == '$')
 		varName = varName.substr(1);
@@ -574,14 +574,14 @@ cgiProcessor::_print(const dodoString &statement,
 					 unsigned long &start,
 					 const dodoString &path)
 {
-	dodoStringArr temp = tools::explode(statement, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_COMA]);
+	dodoStringArray temp = tools::explode(statement, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_COMA]);
 	if (temp.size() == 1)
 		tpl.append(getVar(statement, start, path));
 	else
 	{
 		if (temp.size() > 1)
 		{
-			dodoStringArr::iterator i(temp.begin()), j(temp.end());
+			dodoStringArray::iterator i(temp.begin()), j(temp.end());
 			for (; i != j; ++i)
 				tpl.append(getVar(*i, start, path));
 		}
@@ -618,7 +618,7 @@ cgiProcessor::_assign(const dodoString &statement,
 					  unsigned long &start,
 					  const dodoString &path)
 {
-	dodoStringArr temp = tools::explode(statement, statements[CGIPREPROCESSOR_CGIPREPROCESSOR_PROCESSORSTATEMENT_ASSIGN_OP], 2);
+	dodoStringArray temp = tools::explode(statement, statements[CGIPREPROCESSOR_CGIPREPROCESSOR_PROCESSORSTATEMENT_ASSIGN_OP], 2);
 
 	if (temp.size() == 0)
 	{
@@ -662,13 +662,13 @@ cgiProcessor::_assign(const dodoString &statement,
 void
 cgiProcessor::cleanNamespace()
 {
-	std::map<unsigned int, dodoStringArr>::iterator c = namespaceVars.find(namespaceDeepness);
+	std::map<unsigned int, dodoStringArray>::iterator c = namespaceVars.find(namespaceDeepness);
 	if (c != namespaceVars.end())
 	{
 		std::map<unsigned int, dodoStringMap>::iterator v = localNamespace.find(namespaceDeepness);
 		bool inLocal = v != localNamespace.end() ? true : false;
 
-		dodoStringArr::iterator x(c->second.begin()), z(c->second.end());
+		dodoStringArray::iterator x(c->second.begin()), z(c->second.end());
 		for (; x != z; ++x)
 			if (inLocal)
 			{
@@ -759,7 +759,7 @@ cgiProcessor::_for(const dodoString &buffer,
 	{
 		targetVar = targetVar.substr(1);
 
-		dodoStringArr temp = tools::explode(targetVar, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_DOT]);
+		dodoStringArray temp = tools::explode(targetVar, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_DOT]);
 
 		if (temp.size() == 1)
 		{
@@ -993,8 +993,8 @@ cgiProcessor::_for(const dodoString &buffer,
 					return u;
 				}
 
-			std::map<dodoString, dodoStringArr>::iterator o = globalArray.begin();
-			std::map<dodoString, dodoStringArr>::iterator p = globalArray.end();
+			std::map<dodoString, dodoStringArray>::iterator o = globalArray.begin();
+			std::map<dodoString, dodoStringArray>::iterator p = globalArray.end();
 			for (; o != p; ++o)
 				if (stringTools::equal(temp[0], o->first))
 				{
@@ -1010,8 +1010,8 @@ cgiProcessor::_for(const dodoString &buffer,
 							keyVal = local[keyName];
 					}
 
-					dodoStringArr::iterator k = o->second.begin();
-					dodoStringArr::iterator l = o->second.end();
+					dodoStringArray::iterator k = o->second.begin();
+					dodoStringArray::iterator l = o->second.end();
 					unsigned long iteratorPrev = iterator;
 					iterator = 1;
 					for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
@@ -1240,8 +1240,8 @@ cgiProcessor::_for(const dodoString &buffer,
 							}
 					}
 
-				std::map<dodoString, dodoStringArr>::iterator o = globalArray.begin();
-				std::map<dodoString, dodoStringArr>::iterator p = globalArray.end();
+				std::map<dodoString, dodoStringArray>::iterator o = globalArray.begin();
+				std::map<dodoString, dodoStringArray>::iterator p = globalArray.end();
 				for (; o != p; ++o)
 					if (stringTools::equal(temp[0], o->first))
 					{
@@ -1552,7 +1552,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 
 	varName.erase(0, 1);
 
-	dodoStringArr temp = tools::explode(varName, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_DOT]);
+	dodoStringArray temp = tools::explode(varName, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_DOT]);
 
 	if (temp.size() == 1)
 	{
@@ -1659,7 +1659,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 					}
 			}
 
-		std::map<dodoString, dodoStringArr>::iterator o(globalArray.begin()), p(globalArray.end());
+		std::map<dodoString, dodoStringArray>::iterator o(globalArray.begin()), p(globalArray.end());
 		for (; o != p; ++o)
 			if (stringTools::equal(temp[0], o->first))
 			{

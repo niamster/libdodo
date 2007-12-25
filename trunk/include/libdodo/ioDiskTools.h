@@ -166,7 +166,7 @@ namespace dodo
 			 * @return file content in array of strings
 			 * @param path is path to file
 			 */
-			static dodoStringArr getFileContentArr(const dodoString &path);
+			static dodoStringArray getFileContentArr(const dodoString &path);
 
 			/**
 			 * deletes file or notempty directory

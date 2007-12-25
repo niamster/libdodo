@@ -492,7 +492,7 @@ systemProcesses::setExecutionLimit(unsigned long position,
 
 	#ifdef DL_EXT
 
-systemProcessesMod
+__systemProcessesMod
 systemProcesses::getModuleInfo(const dodoString &module,
 							   void             *toInit)
 {
@@ -504,7 +504,7 @@ systemProcesses::getModuleInfo(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	systemProcessesMod mod = init(toInit);
+	__systemProcessesMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
@@ -532,7 +532,7 @@ systemProcesses::add(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	systemProcessesMod temp = init(toInit);
+	__systemProcessesMod temp = init(toInit);
 
 	processFunc in = (processFunc)dlsym(process.handle, temp.hook);
 	if (in == NULL)

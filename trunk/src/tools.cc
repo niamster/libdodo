@@ -303,7 +303,7 @@ tools::dRandom()
 //-------------------------------------------------------------------
 
 bool
-tools::isInArray(const dodoStringArr &arr,
+tools::isInArray(const dodoStringArray &arr,
 				 const dodoString &needle,
 				 bool icase)
 {
@@ -314,7 +314,7 @@ tools::isInArray(const dodoStringArr &arr,
 	else
 		cmpFunc = stringTools::equal;
 
-	dodoStringArr::const_iterator i(arr.begin()), j(arr.end());
+	dodoStringArray::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)
 		if (cmpFunc(*i, needle))
 			return true;
@@ -324,7 +324,7 @@ tools::isInArray(const dodoStringArr &arr,
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 tools::explode(const dodoString &fields,
 			   escape escapeF,
 			   const dodoString &separator,
@@ -332,7 +332,7 @@ tools::explode(const dodoString &fields,
 {
 	unsigned long i(0), j(0), sep_size(separator.size());
 	int k(0);
-	dodoStringArr arr;
+	dodoStringArray arr;
 
 	while (true)
 	{
@@ -357,7 +357,7 @@ tools::explode(const dodoString &fields,
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 tools::explode(const dodoString &fields,
 			   const dodoString &separator,
 			   int limit)
@@ -368,7 +368,7 @@ tools::explode(const dodoString &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr &fields,
+tools::implode(const dodoStringArray &fields,
 			   escape escapeF,
 			   const dodoString &separator,
 			   const dodoString &frame,
@@ -380,7 +380,7 @@ tools::implode(const dodoStringArr &fields,
 	int k(0);
 
 	dodoString temp, fs(frame + separator);
-	dodoStringArr::const_iterator i(fields.begin()), j(fields.end());
+	dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
 	if (i!=j)
 	{
 		--j;
@@ -403,7 +403,7 @@ tools::implode(const dodoStringArr &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr &fields,
+tools::implode(const dodoStringArray &fields,
 			   const dodoString &separator,
 			   const dodoString &frame,
 			   int limit)
@@ -414,7 +414,7 @@ tools::implode(const dodoStringArr &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr &fields,
+tools::implode(const dodoStringArray &fields,
 			   const dodoString &separator,
 			   int limit)
 {
@@ -424,7 +424,7 @@ tools::implode(const dodoStringArr &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArr &fields,
+tools::implode(const dodoStringArray &fields,
 			   escape escapeF,
 			   const dodoString &separator,
 			   int limit)
@@ -435,7 +435,7 @@ tools::implode(const dodoStringArr &fields,
 	int k(0);
 
 	dodoString temp;
-	dodoStringArr::const_iterator i(fields.begin()), j(fields.end());
+	dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
 	if (i!=j)
 	{
 		--j;
@@ -474,7 +474,7 @@ tools::codesetConversion(const dodoString &buffer,
 	char *inFake, *outFake;
 
 	in = buffer.size();
-	outBefore = out = in * 2;
+	outBefore = out = (in + 1) * 4;
 	char *outBuffer = new char[out];
 
 	inFake = (char *)buffer.c_str();
@@ -1785,9 +1785,9 @@ tools::mail(const dodoString &host,
 
 	receiveShortDataDel(socket, data);
 
-	dodoStringArr pock = explode(to, ",");
+	dodoStringArray pock = explode(to, ",");
 
-	dodoStringArr::iterator i = pock.begin(), j = pock.end();
+	dodoStringArray::iterator i = pock.begin(), j = pock.end();
 	for (; i != j; ++i)
 	{
 		mess = "RCPT TO: <" + *i + ">\r\n";

@@ -85,9 +85,9 @@ int main(int argc, char **argv)
 			
 			__dbStorage store = pp.fetch();
 			
-			dodoArray<dodoStringArr>::iterator i(store.rows.begin()), j(store.rows.end());
+			dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 			
-			dodoStringArr::iterator m, n;
+			dodoStringArray::iterator m, n;
 			
 			for (;i!=j;i++)
 			{

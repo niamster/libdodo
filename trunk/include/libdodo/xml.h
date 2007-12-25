@@ -83,7 +83,7 @@ namespace dodo
 		long chLimit;                                   ///< limit of children to search for[-1 for unlimit, default]
 		bool ignoreChildrenDef;                         ///< if true - parse all children tree if no children difenition; false by default
 
-		dodoStringArr attributes;                       ///< attrributes to take from node; if empty - take all
+		dodoStringArray attributes;                       ///< attrributes to take from node; if empty - take all
 		bool ignoreAttributesDef;                       ///< if true - parse all attributes if no attributes difenition; true by default
 
 		dodoString ns;                                  ///< namespace of the node; if empty - skips

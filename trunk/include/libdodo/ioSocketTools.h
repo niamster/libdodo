@@ -63,8 +63,8 @@ namespace dodo
 	struct __hostInfo
 	{
 		dodoString name;            ///< original name of the host
-		dodoStringArr aliases;      ///< aliases of the host
-		dodoStringArr addresses;    ///< addresses of the host
+		dodoStringArray aliases;      ///< aliases of the host
+		dodoStringArray addresses;    ///< addresses of the host
 	};
 
 	/**
@@ -73,7 +73,7 @@ namespace dodo
 	struct __servInfo
 	{
 		dodoString name;        ///< original name of the service
-		dodoStringArr aliases;  ///< sevice's aliases
+		dodoStringArray aliases;  ///< sevice's aliases
 		int port;               ///< port of service
 	};
 
@@ -90,7 +90,7 @@ namespace dodo
 			/**
 			 * @return a list of interfaces in system
 			 */
-			static dodoStringArr getInterfacesNames();
+			static dodoStringArray getInterfacesNames();
 
 			/**
 			 * @return info about interface

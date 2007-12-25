@@ -393,12 +393,12 @@ xml::getAttributes(const __xmlNodeDef &definition,
 
 	if (definition.attributes.size() > 0)
 	{
-		dodoStringArr::const_iterator jAttr = definition.attributes.end();
+		dodoStringArray::const_iterator jAttr = definition.attributes.end();
 		if (icaseNames)
 		{
 			while (attribute != NULL)
 			{
-				dodoStringArr::const_iterator iAttr = definition.attributes.begin();
+				dodoStringArray::const_iterator iAttr = definition.attributes.begin();
 				for (; iAttr != jAttr; ++iAttr)
 				{
 					if (xmlStrcmp(attribute->name, (xmlChar *)iAttr->c_str()) == 0)
@@ -417,7 +417,7 @@ xml::getAttributes(const __xmlNodeDef &definition,
 		}
 		else
 		{
-			dodoStringArr::const_iterator iAttr = definition.attributes.begin();
+			dodoStringArray::const_iterator iAttr = definition.attributes.begin();
 			for (; iAttr != jAttr; ++iAttr)
 			{
 				xmlChar *xChar = xmlGetProp(node, (xmlChar *)iAttr->c_str());

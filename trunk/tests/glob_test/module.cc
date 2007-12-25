@@ -16,10 +16,10 @@ extern "C"
 		std::cout << "baseModuleHandler: " << ex->baseErrstr << std::endl;
 	}
 	
-	exMod 
+	__exMod 
 	initExModule(void *data)
 	{
-		exMod module;
+		__exMod module;
 		
 		strcpy(module.name,"test");
 		strcpy(module.discription,"test module");

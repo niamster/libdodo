@@ -198,12 +198,12 @@ namespace dodo
 		 * for [ON DELETE or ON UPDATE] use on flag (RESTRICT or CASCADE or SET NULL or NO ACTION or SET DEFAULT)
 		 */
 		dodoString refTable;        ///< table on what is reference
-		dodoStringArr refFields;    ///< array of fields on what is references
+		dodoStringArray refFields;    ///< array of fields on what is references
 		int onDelete;               ///< reference on action[see refFieldEnum]
 		int onUpdate;               ///< reference on action[see refFieldEnum]
 
 		dodoString defaultVal;      ///< default value of field
-		dodoStringArr set_enum;     ///< array of statements for SET or ENUM if these type difined
+		dodoStringArray set_enum;     ///< array of statements for SET or ENUM if these type difined
 
 		dodoString charset;         ///< field's collate charset
 	};
@@ -226,8 +226,8 @@ namespace dodo
 		dodoString name;                ///< name of the table
 		dodoArray<__fieldInfo> fields;  ///< array of fields[see__fieldInfo]
 
-		dodoStringArr primKeys;         ///< array of primary keys in table (field names)
-		dodoStringArr uniq;             ///< array of unique in table (field names)
+		dodoStringArray primKeys;         ///< array of primary keys in table (field names)
+		dodoStringArray uniq;             ///< array of unique in table (field names)
 
 		bool ifNotExists;               ///< no warning message if table already exixts [false by default]
 	};
@@ -278,7 +278,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__);
+			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__);
 
 			/**
 			 * @param table is table name
@@ -301,20 +301,20 @@ namespace dodo
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__);
+			virtual void insert(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__);
 
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__);
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__);
 
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__);
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsNamesTo, const dodoStringArray &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__);
 
 			/**
 			 * @param table is table name
@@ -331,7 +331,7 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__);
+			virtual void update(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__);
 
 			/**
 			 * @param table is table name
@@ -344,7 +344,7 @@ namespace dodo
 			 * @param sub is array of subqueries
 			 * @param type is type of "subquering"[see qStEnum]
 			 */
-			virtual void subquery(const dodoStringArr &sub, int type = DBBASE_REQUEST_UNION /*DBBASE_REQUEST_UNION_ALL, DBBASE_REQUEST_MINUS, DBBASE_REQUEST_INTERSECT*/);
+			virtual void subquery(const dodoStringArray &sub, int type = DBBASE_REQUEST_UNION /*DBBASE_REQUEST_UNION_ALL, DBBASE_REQUEST_MINUS, DBBASE_REQUEST_INTERSECT*/);
 
 			/**
 			 * create index in table
@@ -358,7 +358,7 @@ namespace dodo
 			 * @param table is where to create index
 			 * @param fields is fields' name to be index
 			 */
-			virtual void createIndex(const dodoString &table, const dodoStringArr &fields, const dodoString &name);
+			virtual void createIndex(const dodoString &table, const dodoStringArray &fields, const dodoString &name);
 
 			/**
 			 * delete index in table
@@ -578,10 +578,10 @@ namespace dodo
 			 * these arrays take part after generalSQL statements !!! See (mysqlpp::addSQL()) for more details
 			 * every in this class has 1 empty("") element
 			 */
-			dodoStringArr sqlDbDepAddSelArr;    ///< additional SELECT statement
-			dodoStringArr sqlDbDepAddInsArr;    ///< additional INSERT statement
-			dodoStringArr sqlDbDepAddUpArr;     ///< additional UPDATE statement
-			dodoStringArr sqlDbDepAddDelArr;    ///< additional DELETE statement
+			dodoStringArray sqlDbDepAddSelArr;    ///< additional SELECT statement
+			dodoStringArray sqlDbDepAddInsArr;    ///< additional INSERT statement
+			dodoStringArray sqlDbDepAddUpArr;     ///< additional UPDATE statement
+			dodoStringArray sqlDbDepAddDelArr;    ///< additional DELETE statement
 
 			int qDbDepSelShift;                 ///< value to shift query template for specific
 			int qDbDepInsShift;                 ///< value to shift query template for specific

@@ -14,35 +14,14 @@ using namespace std;
 		short int type,
 		void *yep)
 	{
-		dbMysql *sql = (dbMysql *)base;
+		__xexexDbBaseCollectedData *sql = (__xexexDbBaseCollectedData *)base;
 	
-		if (sql->operType == DBMYSQL_OPERATION_EXEC && sql->getQueryType() == DBBASE_REQUEST_SELECT)
+		if (sql->operType == DBMYSQL_OPERATION_EXEC && sql->qType == DBBASE_REQUEST_SELECT)
 		{
-			__collectedData data = sql->collectedData();
+			cout << endl << endl << "table was " << sql->pre_table << endl << endl;
 			
-			cout << endl << endl << "table was " << data.pre_table << endl << endl;
-			
-			data.pre_limNumber = "70";
-			data.pre_fieldsNames[0] = std::string((char *)yep);
-		}
-	}
-	
-	void 
-	journal(void *base, 
-			short int type,
-			void *yep)
-	{
-		dbMysql *child = (dbMysql *)base;
-	
-		switch (child->getQueryType())
-		{
-			case DBBASE_REQUEST_INSERT:
-			case DBBASE_REQUEST_DELETE:
-			case DBBASE_REQUEST_UPDATE:
-				__collectedData data = child->collectedData();
-				data.pre_table.assign(std::string((char *)yep));
-				child->exec();
-			break;
+			sql->pre_limNumber = "70";
+			sql->pre_fieldsNames[0] = std::string((char *)yep);
 		}
 	}
 
@@ -59,26 +38,24 @@ int main(int argc, char **argv)
 		{
 			
 			int pos = pp.addPreExec(hook,(void *)"id");
-			//pp.addPostExec(&journal,(void *)"journal");
-			//pp.delPreExec(pos);//removes hook!!
 			
-			pp.setDbInfo("test","",3306,"root","Dmitrik");
+			pp.setDbInfo("test","",3306,"root", "");
 			pp.connect();
 	
 			__tableInfo ti;
-	                ti.name = "tab";
-	
-	                __fieldInfo fi;
-	
-	                fi.name = "id";
-	                fi.type = DBBASE_FIELDTYPE_INTEGER;
-	                fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
-	                ti.fields.push_back(fi);
+            ti.name = "test";
+
+            __fieldInfo fi;
+
+            fi.name = "id";
+            fi.type = DBBASE_FIELDTYPE_INTEGER;
+            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
+            ti.fields.push_back(fi);
 			
-			fi.name = "dote";
-	                fi.flag = 0;
+			fi.name = "dot";
+			fi.flag = 0;
 			fi.type = DBBASE_FIELDTYPE_TEXT;
-	                ti.fields.push_back(fi);
+			ti.fields.push_back(fi);
 	
 			fi.name = "operation";
 			fi.type = DBBASE_FIELDTYPE_TEXT;
@@ -86,7 +63,7 @@ int main(int argc, char **argv)
 	
 			try
 			{
-	                	pp.deleteTable("tab");
+				pp.deleteTable("test");
 				pp.exec();
 			}
 			catch(...)
@@ -97,7 +74,7 @@ int main(int argc, char **argv)
 			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 			pp.exec();
 	
-			pp.createIndex("tab","id","id");
+			pp.createIndex("test","id","id");
 			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 			pp.exec();
 	
@@ -106,50 +83,36 @@ int main(int argc, char **argv)
 			fi.type = DBBASE_FIELDTYPE_CHAR;
 			fi.length = 10;
 			
-			pp.createField(fi,"tab");
+			pp.createField(fi,"test");
 			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 			pp.exec();
 			
 			
-			dodoStringArr fields;
+			dodoStringArray fields;
 			
-			fields.push_back("dote");
+			fields.push_back("dot");
 			fields.push_back("operation");
 			
 			/* select*/
-			pp.select("tab",fields);
+			pp.select("test",fields);
 			pp.limit(10);
 			pp.exec();
 			
-			dodoStringArr values;
+			dodoStringArray values;
 			values.push_back("20\"05`''-'07-08");
 			values.push_back("mu");
 	
 			pp.limit(10);
 			pp.offset(23);
-			pp.offset(3);//change offset value
-	//		pp.unlimit();//no limits!! =)
+			pp.offset(3);
 					
 			dodoStringMap arr;
-			arr["dote"] = "20\"05`''-'07-08";
-			arr["operation"] = "m\nu";
-			
 			dodoArray<dodoStringMap> assA;
-	
-	///
-	        FILE *file = fopen("/bin/ls","r");
-	
-	        char temp[100];
-	
-	        fread(temp,100,1,file);
-	
-	        string str;
-	        str.assign(temp,100);
-	///
-			
+			arr["dot"] = "20\"05`''-'07-08";
+			arr["operation"] = "m\nu";
 			assA.push_back(arr);
-			arr["dote"] = "20\"05`''-'07-08";
-			arr["operation"] = str;
+			arr["dot"] = "20\"05`''-'07-08";
+			arr["operation"] = "n\nu";
 			assA.push_back(arr);
 			
 			/*additional statement*/
@@ -157,35 +120,31 @@ int main(int argc, char **argv)
 			pp.setAddSelSt(DBBASE_REQUEST_SELECT_DISTINCT);//base SQL
 			pp.setMyAddSelSt(DBMYSQL_REQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
 					
-			
-			pp.insert("tab",assA);//multiply insert
+			pp.insert("test",assA);//multiply insert
 			cout << pp.queryCollect() << endl;
 			pp.exec();
 			
-			pp.insertSelect("test1","test2",fields,values);//insert_select
-			cout << pp.queryCollect() << endl;
-			//pp.exec();
 			
-			pp.insert("tab",values,fields);//simple insert
+			pp.insert("test",values,fields);//simple insert
 			cout << pp.queryCollect() << endl;
 			pp.exec();
 			
 			for (int o=0;o<100000;o++)
 			{
-				pp.insert("tab",values,fields);
+				pp.insert("test",values,fields);
 				//cout << pp.queryCollect() << endl;//show query
 				pp.exec();
 			}
 			
-			pp.select("tab",fields,"id>1");
+			pp.select("test",fields,"id>1");
 	
 			/* creatin' union with sqlStatement that compiles from  'pp.select("log",fields,"id>1");'*/
-			dodoStringArr uni;
+			dodoStringArray uni;
 			uni.push_back(pp.queryCollect());
 			uni.push_back(pp.queryCollect());
 			pp.subquery(uni);
 			
-			dodoStringArr uni_all;
+			dodoStringArray uni_all;
 			uni_all.push_back(pp.queryCollect());
 			uni_all.push_back(pp.queryCollect());
 			pp.subquery(uni_all,DBBASE_REQUEST_UNION_ALL);

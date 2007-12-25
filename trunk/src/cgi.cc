@@ -221,11 +221,11 @@ cgi::make(dodoStringMap &val,
 		  const dodoString &string,
 		  const char       *delim)
 {
-	dodoStringArr getPair = tools::explode(tools::decodeURL(string), delim);
+	dodoStringArray getPair = tools::explode(tools::decodeURL(string), delim);
 
-	dodoStringArr::iterator l(getPair.begin()), m(getPair.end());
+	dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
 
-	dodoStringArr temp;
+	dodoStringArray temp;
 
 	for (; l != m; ++l)
 	{
@@ -419,9 +419,9 @@ cgi::makePost()
 
 		unsigned int temp0;
 		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
-		dodoStringArr postPartd = tools::explode(content, "--" + ENVIRONMENT["CONTENT_TYPE"].substr(temp0 + 9));
+		dodoStringArray postPartd = tools::explode(content, "--" + ENVIRONMENT["CONTENT_TYPE"].substr(temp0 + 9));
 
-		dodoStringArr::iterator i(postPartd.begin()), j(postPartd.end());
+		dodoStringArray::iterator i(postPartd.begin()), j(postPartd.end());
 
 		unsigned int temp1;
 		char *ptr;

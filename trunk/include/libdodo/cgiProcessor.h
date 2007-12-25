@@ -80,7 +80,7 @@ namespace dodo
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable(array)
 			 */
-			virtual void assign(dodoString varName, const dodoStringArr &varVal);
+			virtual void assign(dodoString varName, const dodoStringArray &varVal);
 
 			/**
 			 * sets varable
@@ -221,7 +221,7 @@ namespace dodo
 
 			std::list<dodoString> processed;                                    ///< vector of files that will be skipped due to recurse
 
-			std::map<dodoString, dodoStringArr> globalArray;                    ///< set of global variables(arrays)[user-set]
+			std::map<dodoString, dodoStringArray> globalArray;                    ///< set of global variables(arrays)[user-set]
 
 			std::map<dodoString, dodoStringMap> globalHash;                     ///< set of global variables(hashes)[user-set]
 
@@ -242,7 +242,7 @@ namespace dodo
 
 			unsigned int namespaceDeepness;                                     ///< deepness of the namespace
 			std::map<unsigned int, dodoStringMap> localNamespace;               ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
-			std::map<unsigned int, dodoStringArr> namespaceVars;                ///< names of vars in namespaces
+			std::map<unsigned int, dodoStringArray> namespaceVars;                ///< names of vars in namespaces
 
 			#ifdef FCGI_EXT
 

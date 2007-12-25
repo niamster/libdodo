@@ -30,11 +30,10 @@ ioSocketTools::getHostInfo(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
 
-	__hostInfo info;
-
 	if (ent == NULL)
 		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETHOSTINFO, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
 
+	__hostInfo info;
 	info.name = ent->h_name;
 
 	int i(0);
@@ -42,25 +41,38 @@ ioSocketTools::getHostInfo(const dodoString &host)
 	while (ent->h_aliases[i] != NULL)
 		info.aliases.push_back(ent->h_aliases[i++]);
 
-	i = -1;
+	i = 0;
 	char temp[INET6_ADDRSTRLEN];
 
-	while (ent->h_addr_list[i] != NULL && ++i)
+	while (ent->h_addr_list[i] != NULL)
 	{
 		switch (ent->h_addrtype)
 		{
 			case AF_INET:
 
 				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
+				{
+					++i;
+					
 					continue;
+				}
+				
+				break;
 
 			case AF_INET6:
 
 				if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL)
+				{
+					++i;
+					
 					continue;
+				}
+				
+				break;
 		}
 
 		info.addresses.push_back(temp);
+		++i;
 	}
 
 	return info;
@@ -68,7 +80,7 @@ ioSocketTools::getHostInfo(const dodoString &host)
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 ioSocketTools::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
@@ -76,7 +88,7 @@ ioSocketTools::getInterfacesNames()
 		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACESNAMES, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	int i(-1);
-	dodoStringArr arr;
+	dodoStringArray arr;
 
 	while (ifaces[++i].if_index != 0)
 		arr.push_back(ifaces[i].if_name);
@@ -245,7 +257,7 @@ ioSocketTools::getLocalName()
 		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	temp0.assign(temp1, 255);
+	temp0.assign(temp1);
 
 	delete [] temp1;
 

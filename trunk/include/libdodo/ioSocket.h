@@ -243,6 +243,16 @@ namespace dodo
 
 			bool blockInherited; ///< if true - children(ioSocketExchange) became unblocked, if parent(ioSocket) in unblocked; false by default
 
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const;
+
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const;
+			
 		protected:
 
 			/**

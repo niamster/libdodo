@@ -48,11 +48,11 @@ namespace dodo
 	/**
 	 * @class jsonObject represents json object data
 	 */
-	struct jsonNodeDef
+	struct __jsonNodeDef
 	{		
 		dodoString stringValue;///< string value of node
-		dodoMap<dodoString, jsonNodeDef, stringTools::equal> objectValue;///< object value of node 
-		dodoArray<jsonNodeDef> arrayValue;///< array value of node
+		dodoMap<dodoString, __jsonNodeDef, stringTools::equal> objectValue;///< object value of node 
+		dodoArray<__jsonNodeDef> arrayValue;///< array value of node
 		bool booleanValue;///< boolean value of node
 		long numericValue;///< numeric value of node
 		
@@ -182,7 +182,7 @@ namespace dodo
 			 * @return string that contain json object
 			 * @param root describes root of json object 
 			 */
-			virtual dodoString makeJSON(const jsonNodeDef &root);
+			virtual dodoString makeJSON(const __jsonNodeDef &root);
 			
 			/**
 			 * processes json object 

@@ -889,7 +889,7 @@ systemTools::unsetSignalHandler(long signal)
 
 #ifdef DL_EXT
 
-sigMod
+__sigMod
 systemTools::getModuleInfo(const dodoString &module,
 						   void             *toInit)
 {
@@ -901,7 +901,7 @@ systemTools::getModuleInfo(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	sigMod mod = init(toInit);
+	__sigMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
@@ -939,7 +939,7 @@ systemTools::setSignalHandler(long signal,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	sigMod mod = init(toInit);
+	__sigMod mod = init(toInit);
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[signal], mod.hook);
 	if (in == NULL)
@@ -979,7 +979,7 @@ systemTools::setSignalHandler(const dodoString &path,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	sigMod mod = init(toInit);
+	__sigMod mod = init(toInit);
 
 	deinitSigModule deinit;
 

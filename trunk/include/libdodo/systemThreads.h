@@ -89,9 +89,9 @@ namespace dodo
 		#ifdef DL_EXT
 
 	/**
-	 * @struct systemThreadsMod must be returned from initSystemThreadsModule in the module
+	 * @struct __systemThreadsMod must be returned from initSystemThreadsModule in the module
 	 */
-	struct systemThreadsMod
+	struct __systemThreadsMod
 	{
 		char name[64];                      ///< name of module
 		char discription[256];              ///< discription of module
@@ -105,7 +105,7 @@ namespace dodo
 	/**
 	 * @typedef describes function in module that must return info for the hook
 	 */
-	typedef systemThreadsMod (*initSystemThreadsModule)(void *);
+	typedef __systemThreadsMod (*initSystemThreadsModule)(void *);
 
 	/**
 	 * @typedef describes function in module that will be called during module unloading
@@ -298,7 +298,7 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 				#endif
 

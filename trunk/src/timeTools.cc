@@ -91,7 +91,7 @@ timeTools::now()
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 timeTools::week(long date,
 				const dodoString &format,
 				bool local)
@@ -100,7 +100,7 @@ timeTools::week(long date,
 	if (daynum == 0)
 		daynum = 7;
 
-	dodoStringArr week;
+	dodoStringArray week;
 	long mon = date - (daynum - 1) * 86400;
 
 	for (short int i(0); i < 7; ++i, mon += 86400)
@@ -111,13 +111,13 @@ timeTools::week(long date,
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 timeTools::datesArr(long dateFrom,
 					long dateTo,
 					const dodoString &format,
 					bool local)
 {
-	dodoStringArr result;
+	dodoStringArray result;
 
 	if ((dateFrom == dateTo) || (dateFrom - dateTo < 86400))
 	{

@@ -190,7 +190,7 @@ namespace dodo
 			 * @param needle is what to search for
 			 * @param icase indicates whether to use or not caseless search
 			 */
-			static bool isInArray(const dodoStringArr &arr, const dodoString &needle, bool icase);
+			static bool isInArray(const dodoStringArray &arr, const dodoString &needle, bool icase);
 
 			/**
 			 * @return array of strings made from string using separtator
@@ -198,7 +198,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArr explode(const dodoString &fields, const dodoString &separator, int limit = -1);
+			static dodoStringArray explode(const dodoString &fields, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return array of strings made from string using separtator
@@ -207,7 +207,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArr explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit = -1);
+			static dodoStringArray explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -217,7 +217,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArr &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -226,7 +226,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArr &fields, escape escapeF, const dodoString &separator, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -234,7 +234,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArr &fields, const dodoString &separator, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -243,7 +243,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArr &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
 
 			#ifdef ICONV_EXT
 

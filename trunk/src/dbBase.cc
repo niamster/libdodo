@@ -108,7 +108,7 @@ __fieldInfo::operator=(const __fieldInfo &from)
 
 //-------------------------------------------------------------------
 
-__dbStorage::__dbStorage(dodoArray<dodoStringArr> a_rows, dodoStringArr a_fields) : rows(a_rows),
+__dbStorage::__dbStorage(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
 																					fields(a_fields)
 {
 }
@@ -133,7 +133,7 @@ dbBase::~dbBase()
 
 void
 dbBase::select(const dodoString &a_table,
-			   const dodoStringArr &a_fieldsNames,
+			   const dodoStringArray &a_fieldsNames,
 			   const dodoString &a_where)
 {
 	qType = DBBASE_REQUEST_SELECT;
@@ -163,7 +163,7 @@ dbBase::insert(const dodoString &a_table,
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 
-	dodoStringArr temp;
+	dodoStringArray temp;
 
 	dodoStringMap::const_iterator i = (a_fields.begin()), j(a_fields.end());
 	for (; i != j; ++i)
@@ -195,7 +195,7 @@ dbBase::insert(const dodoString &a_table,
 	for (; i != j; ++i)
 		pre_fieldsNames.push_back(i->first);
 
-	dodoStringArr temp;
+	dodoStringArray temp;
 
 	for (; v != b; ++v)
 	{
@@ -215,8 +215,8 @@ dbBase::insert(const dodoString &a_table,
 
 void
 dbBase::insert(const dodoString &a_table,
-			   const dodoStringArr &a_fieldsVal,
-			   const dodoStringArr &a_fieldsNames)
+			   const dodoStringArray &a_fieldsVal,
+			   const dodoStringArray &a_fieldsNames)
 {
 	qType = DBBASE_REQUEST_INSERT;
 
@@ -234,15 +234,15 @@ dbBase::insert(const dodoString &a_table,
 
 void
 dbBase::insert(const dodoString &a_table,
-			   const dodoArray<dodoStringArr> &a_fieldsVal,
-			   const dodoStringArr &a_fieldsNames)
+			   const dodoArray<dodoStringArray> &a_fieldsVal,
+			   const dodoStringArray &a_fieldsNames)
 {
 	qType = DBBASE_REQUEST_INSERT;
 
 	pre_table = a_table;
 	pre_fieldsNames = a_fieldsNames;
 
-	dodoArray<dodoStringArr>::const_iterator k(a_fieldsVal.begin()), l(a_fieldsVal.end());
+	dodoArray<dodoStringArray>::const_iterator k(a_fieldsVal.begin()), l(a_fieldsVal.end());
 	for (; k != l; ++k)
 		pre_fieldsVal.push_back(*k);
 
@@ -255,8 +255,8 @@ dbBase::insert(const dodoString &a_table,
 void
 dbBase::insertSelect(const dodoString &a_tableTo,
 					 const dodoString &a_tableFrom,
-					 const dodoStringArr &a_fieldsNamesTo,
-					 const dodoStringArr &a_fieldsNamesFrom,
+					 const dodoStringArray &a_fieldsNamesTo,
+					 const dodoStringArray &a_fieldsNamesFrom,
 					 const dodoString &a_where)
 {
 	qType = DBBASE_REQUEST_INSERT_SELECT;
@@ -293,7 +293,7 @@ dbBase::update(const dodoString &a_table,
 	pre_fieldsNames.clear();
 	pre_fieldsVal.clear();
 
-	dodoStringArr temp;
+	dodoStringArray temp;
 
 	for (; i != j; ++i)
 	{
@@ -315,8 +315,8 @@ dbBase::update(const dodoString &a_table,
 
 void
 dbBase::update(const dodoString &a_table,
-			   const dodoStringArr &a_fieldsVal,
-			   const dodoStringArr &a_fieldsNames,
+			   const dodoStringArray &a_fieldsVal,
+			   const dodoStringArray &a_fieldsNames,
 			   const dodoString &a_where)
 {
 	qType = DBBASE_REQUEST_UPDATE;
@@ -359,7 +359,7 @@ dbBase::del(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::subquery(const dodoStringArr &sub,
+dbBase::subquery(const dodoStringArray &sub,
 				 int type)
 {
 	qType = type;
@@ -418,7 +418,7 @@ dbBase::createIndex(const dodoString &table,
 
 void
 dbBase::createIndex(const dodoString &table,
-					const dodoStringArr &fields,
+					const dodoStringArray &fields,
 					const dodoString &name)
 {
 	qType = DBBASE_REQUEST_CREATE_INDEX;

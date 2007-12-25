@@ -50,10 +50,10 @@ namespace dodo
 		 * @param rows
 		 * @param fields
 		 */
-		__dbStorage(dodoArray<dodoStringArr> rows, dodoStringArr fields);
+		__dbStorage(dodoArray<dodoStringArray> rows, dodoStringArray fields);
 
-		dodoArray<dodoStringArr> rows;  ///< array of rows returned in request
-		dodoStringArr fields;           ///< array of fields returned in request
+		dodoArray<dodoStringArray> rows;  ///< array of rows returned in request
+		dodoStringArray fields;           ///< array of fields returned in request
 	};
 	
 	/**
@@ -66,8 +66,8 @@ namespace dodo
 		 * initiates references
 		 */
 		__xexexDbBaseCollectedData(dodoString &pre_where,
-						dodoStringArr &pre_fieldsNames,
-						dodoArray<dodoStringArr> &pre_fieldsVal,
+						dodoStringArray &pre_fieldsNames,
+						dodoArray<dodoStringArray> &pre_fieldsVal,
 						dodoString &pre_table,
 						dodoString &pre_tableTo,
 						dodoString &pre_order,
@@ -75,7 +75,7 @@ namespace dodo
 						dodoString &pre_group,
 						dodoString &pre_limNumber,
 						dodoString &pre_limOffset,
-						dodoStringArr &pre_subQ,
+						dodoStringArray &pre_subQ,
 						int &qType,
 						int &qShift,
 						int &qSelShift,
@@ -85,8 +85,8 @@ namespace dodo
 						int &operType);
 
 		dodoString &pre_where;                      ///< where statement of the request
-		dodoStringArr &pre_fieldsNames;             ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-		dodoArray<dodoStringArr> &pre_fieldsVal;    ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+		dodoStringArray &pre_fieldsNames;             ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
+		dodoArray<dodoStringArray> &pre_fieldsVal;    ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
 		dodoString &pre_table;                      ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
 		dodoString &pre_tableTo;                    ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
 		dodoString &pre_order;                      ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
@@ -94,7 +94,7 @@ namespace dodo
 		dodoString &pre_group;                      ///< group statement
 		dodoString &pre_limNumber;                  ///< limit of result
 		dodoString &pre_limOffset;                  ///< offset of requested result
-		dodoStringArr &pre_subQ;                    ///< subquery
+		dodoStringArray &pre_subQ;                    ///< subquery
 
 		int &qType;                                 ///< type of operation[see qStEnum]
 
@@ -183,7 +183,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void select(const dodoString &table, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__) = 0;
+			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__) = 0;
 
 			/**
 			 * @param table is table name
@@ -206,20 +206,20 @@ namespace dodo
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__) = 0;
+			virtual void insert(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__) = 0;
 
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArr> &fieldsVal, const dodoStringArr &fieldsNames = __dodostringarray__) = 0;
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__) = 0;
 
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArr &fieldsNamesTo, const dodoStringArr &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__) = 0;
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsNamesTo, const dodoStringArray &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__) = 0;
 
 			/**
 			 * @param table is table name
@@ -236,7 +236,7 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void update(const dodoString &table, const dodoStringArr &fieldsVal, const dodoStringArr &fieldsNames, const dodoString &where = __dodostring__) = 0;
+			virtual void update(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__) = 0;
 
 			/**
 			 * @param table is table name
@@ -335,12 +335,12 @@ namespace dodo
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual dodoArray<dodoStringArr> fetchRow() const = 0;
+			virtual dodoArray<dodoStringArray> fetchRow() const = 0;
 
 			/**
 			 * @return array of fields got from request
 			 */
-			virtual dodoStringArr fetchField() const = 0;
+			virtual dodoStringArray fetchField() const = 0;
 
 			/**
 			 * @return structure that holds array of rows and array of fields got from request
@@ -369,8 +369,8 @@ namespace dodo
 			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
 			 */
 			dodoString pre_where;                   ///< where statement of the request
-			dodoStringArr pre_fieldsNames;          ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
-			dodoArray<dodoStringArr> pre_fieldsVal; ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
+			dodoStringArray pre_fieldsNames;          ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
+			dodoArray<dodoStringArray> pre_fieldsVal; ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
 			dodoString pre_table;                   ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods)
 			dodoString pre_tableTo;                 ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
 			dodoString pre_order;                   ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
@@ -378,7 +378,7 @@ namespace dodo
 			dodoString pre_group;                   ///< group statement
 			dodoString pre_limNumber;               ///< limit of result
 			dodoString pre_limOffset;               ///< offset of requested result
-			dodoStringArr pre_subQ;                 ///< subquery
+			dodoStringArray pre_subQ;                 ///< subquery
 
 			int qType;                              ///< type of operation
 

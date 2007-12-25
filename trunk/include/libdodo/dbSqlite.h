@@ -115,12 +115,12 @@ namespace dodo
 			/**
 			 * @return array of rows got from request
 			 */
-			virtual dodoArray<dodoStringArr> fetchRow() const;
+			virtual dodoArray<dodoStringArray> fetchRow() const;
 
 			/**
 			 * @return array of fields got from request
 			 */
-			virtual dodoStringArr fetchField() const;
+			virtual dodoStringArray fetchField() const;
 
 			/**
 			 * @return structure that holds array of rows and array of fields got from request
@@ -151,7 +151,7 @@ namespace dodo
 			/**
 			 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
 			 */
-			virtual void setBLOBValues(const dodoStringArr &values);
+			virtual void setBLOBValues(const dodoStringArray &values);
 
 				#ifndef DBSQLITE_WO_XEXEC
 
@@ -237,7 +237,7 @@ namespace dodo
 
 			bool empty;                 ///< for detectin' whether liteStmt is empty or not
 
-			dodoStringArr blobs;        ///< to store blob data
+			dodoStringArray blobs;        ///< to store blob data
 	};
 
 };

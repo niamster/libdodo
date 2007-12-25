@@ -12,18 +12,14 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		//cout << ioDiskTools::getFileContent("test.cc");
-		//ioDiskTools::copy("test.cc","test.cc.copy",true);
-		//ioDiskTools::copy("/tmp","./",true);
-		/*dodoStringArr arr = ioDiskTools::getFileContentArr("test.cc");
-		
+		cout << ioDiskTools::getFileContent("test.cc");
+		ioDiskTools::copy("test.cc", "test.cc.copy", true);
+
+		dodoStringArray arr = ioDiskTools::getFileContentArr("test.cc");		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
-		}*/
-		//ioDiskTools::copy("/root","./tmp",true);
-		//ioDiskTools::copy("/root","./tmp/",true);
-		//ioDiskTools::unlink("my.dat");
+		}
 	}
 	catch(baseEx ex)
 	{
@@ -37,20 +33,15 @@ int main(int argc, char **argv)
 	{
 		ioDiskTools::unlink("my.dat");
 		
-		//ioDisk io("my.dat", IODISKTOOLS_FILETYPE_FIFO_FILE);
 		ioDisk io("my.dat");
 		
-		//io.inSize = io.outSize = 13;
+		io.inSize = io.outSize = 13;
 		io.over = true;
 		
-//		io.append = true;
-		
 		io.writeStreamString("!1234567890#!!");
-//		io.writeStreamString("!1234567890-!!");
-//		io.writeStreamString("!1234567890@!!");
+		io.writeStreamString("!1234567890-!!");
+		io.writeStreamString("!1234567890@!!");
 		io.writeStreamString("!1234567890$!!");
-
-
 		
 		dodoString str;
 	
@@ -59,24 +50,19 @@ int main(int argc, char **argv)
 
 		io.readString(str,0);
 		cout << "\n\n" << str << "\n\n";
-
 	
-		ioDiskTools::rm("./tmp");
+		ioDiskTools::rm("./test.cc.copy");
 
-		ioDiskTools::mkdir("testDir");//,IODISKTOOLS_PERM_OWNER_ALL_ACCESS,false);
+		ioDiskTools::mkdir("testDir");
 
-		ioDiskTools::rename("testDir","DirTest");	
+		ioDiskTools::rename("testDir","DirTest");
 		
-		ioDiskTools::symlink("test","TEST");
-		ioDiskTools::chmod("test",IODISKTOOLS_PERM_ALL_ALL_ACCESS);
+		ioDiskTools::symlink("test", "TEST");
+		ioDiskTools::chmod("test", IODISKTOOLS_PERM_ALL_ALL_ACCESS);
 		
-		cout << ioDiskTools::getPermissions("Makefile");
-		
-		cout << endl; 
+		cout << ioDiskTools::getPermissions("Makefile") << endl;
 
-
-		dodoArray<__fileInfo> dir = ioDiskTools::getDirInfo("/");
-		
+		dodoArray<__fileInfo> dir = ioDiskTools::getDirInfo("./");
 		if (dir.size() > 0)
 		{
 			cout << endl << dir.size() << endl;
@@ -86,7 +72,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << ex.baseErrstr << "\t" << ex.line << endl;
+		cout << ex.baseErrstr << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 	return 0;
 }

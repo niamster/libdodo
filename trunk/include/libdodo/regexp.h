@@ -91,7 +91,7 @@ namespace dodo
 			 * pockets clears before fillin'
 			 * first in pocket is not sample - but first match
 			 */
-			bool match(const dodoString &pattern, const dodoString &sample, dodoStringArr &pockets = __dodostringarray__);
+			bool match(const dodoString &pattern, const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
 
 			/**
 			 * matches with pattern prviously given with match method; if patterns are similar - faster!
@@ -102,7 +102,7 @@ namespace dodo
 			 * pockets clears before fillin'
 			 * first in pocket is not sample - but first match
 			 */
-			bool reMatch(const dodoString &sample, dodoStringArr &pockets = __dodostringarray__);
+			bool reMatch(const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
 
 			/**
 			 * replaces in sample from pieces usin' pattern
@@ -113,7 +113,7 @@ namespace dodo
 			 * @note if amount of pockets more than replacements  - replacemet will stop
 			 * if pattern is not matched - the sample will be returned
 			 */
-			dodoString replace(const dodoString &pattern, const dodoString &sample, const dodoStringArr &replacements);
+			dodoString replace(const dodoString &pattern, const dodoString &sample, const dodoStringArray &replacements);
 
 			/**
 			 * matches with pattern prviously given with replace method; if patterns are similar - faster!
@@ -125,7 +125,7 @@ namespace dodo
 			 * @note if amount of pockets more than replacements  - replacemet will stop
 			 * if pattern is not matched - the sample will be returned
 			 */
-			dodoString reReplace(const dodoString &sample, const dodoStringArr &replacements);
+			dodoString reReplace(const dodoString &sample, const dodoStringArray &replacements);
 
 			/**
 			 * compile pattern [if you want to use reReplace/reMatch wo calling replace/match before]

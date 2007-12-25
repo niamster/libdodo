@@ -135,7 +135,7 @@ dbPostgresql::disconnect()
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::setBLOBValues(const dodoStringArr &values)
+dbPostgresql::setBLOBValues(const dodoStringArray &values)
 {
 	blobs = values;
 }
@@ -189,7 +189,7 @@ dbPostgresql::_exec(const dodoString &query,
 					int rowsNum = PQntuples(pgResult);
 					char *fieldType;
 
-					dodoStringArr rowsPart;
+					dodoStringArray rowsPart;
 
 					for (int i(0); i < rowsNum; ++i)
 					{
@@ -259,7 +259,7 @@ dbPostgresql::_exec(const dodoString &query,
 				int *lengths = new int[size];
 				int *formats = new int[size];
 
-				dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
+				dodoStringArray::iterator i(blobs.begin()), j(blobs.end());
 				for (int o = 0; i != j; ++i, ++o)
 				{
 					values[o] = (char *)i->c_str();
@@ -313,7 +313,7 @@ dbPostgresql::_exec(const dodoString &query,
 
 //-------------------------------------------------------------------
 
-dodoArray<dodoStringArr>
+dodoArray<dodoStringArray>
 dbPostgresql::fetchRow() const
 {
 
@@ -328,7 +328,7 @@ dbPostgresql::fetchRow() const
 	int rowsNum = PQntuples(pgResult);
 	int fieldsNum = PQnfields(pgResult);
 
-	dodoArray<dodoStringArr> rows;
+	dodoArray<dodoStringArray> rows;
 
 		#ifndef USE_DEQUE
 	rows.reserve(rowsNum);
@@ -336,7 +336,7 @@ dbPostgresql::fetchRow() const
 
 	int j;
 
-	dodoStringArr rowsPart;
+	dodoStringArray rowsPart;
 	dodoString rowPart;
 
 	for (int i(0); i < rowsNum; ++i)
@@ -374,7 +374,7 @@ dbPostgresql::fetchRow() const
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 dbPostgresql::fetchField() const
 {
 		#ifndef DBPOSTGRESQL_WO_XEXEC
@@ -387,7 +387,7 @@ dbPostgresql::fetchField() const
 
 	int fieldsNum = PQnfields(pgResult);
 
-	dodoStringArr fields;
+	dodoStringArray fields;
 
 		#ifndef USE_DEQUE
 	fields.reserve(fieldsNum);

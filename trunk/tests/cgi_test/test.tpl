@@ -1,34 +1,35 @@
-blabla <(include "menu.tpl")> HIHI <(include $main)>
+included menu.tpl: <(include "menu.tpl")>
+included $main <(include $main)>
 
 <(> not )> parsed  <)>
 
 <(* if statement *)>
 
-		<(if $test!=hoho )>
-			<(print $test)>
-		<(else)>
-			NULL
-		<(fi)>
+<(if $test!=test )>
+	<(print $test)>
+<(else)>
+	NULL
+<(fi)>
 
 <(if $test )>
-	blabla
-	<(if $test==hoho )>
-		HOHO
+	$test
+	<(if $test==test )>
+		test
 	<(fi)>
-	<(if $test==hihi )>
-		HIHI
+	<(if $test==test1 )>
+		test1
 	<(fi)>	
 	
 	<(if $test )>
-		blabla
-		<(if $test==hoho )>
+		test
+		<(if $test==test )>
 			<(print $test)>
 		<(else)>
 			NULL
 		<(fi)>
 	<(else)>	
-		<(if $test!=hihi )>
-			HOHO
+		<(if $test!=test )>
+			test
 		<(fi)>	
 		<(if false )>
 			WTF?
@@ -107,11 +108,11 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 	<(print $dodo.iterator)>
 <(rof)>
 
-<(assign a = bASDA)>
+<(assign a = test1)>
 
 <(if true )>	
 
-	<(assign a = ASDA)>
+	<(assign a = test2)>
 
 	<(for $b in $arr2)>
 		<(for $b => $c in $b)>
@@ -120,24 +121,24 @@ blabla <(include "menu.tpl")> HIHI <(include $main)>
 			<(fi)>
 			<(print $b)> -> <(print $c)>
 			
-			<(assign a = SDA)>
-			<(print $a," must be SDA")>
+			<(assign a = test3)>
+			<(print $a," must be test3")>
 		<(rof)>
 		-------
 	<(rof)>	
 	
-	<(print $a," must be ASDA")>
+	<(print $a," must be test2")>
 	
 <(fi)>
 
-<(print $a," must be bASDA")>
+<(print $a," must be test1")>
 	
 <(ns)>
 		<(ns)>
 			<(assign a = in namespace)>
 			<(print $a," must be `in namespace`")>
 		<(sn)>
-	<(print $a," must be bASDA")>
+	<(print $a," must be test1")>
 <(sn)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>

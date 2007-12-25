@@ -181,7 +181,7 @@ json::~json()
 //-------------------------------------------------------------------
 
 dodoString 
-json::makeJSON(const jsonNodeDef &root)
+json::makeJSON(const __jsonNodeDef &root)
 {
 	switch (root.valueDataType)
 	{
@@ -199,7 +199,7 @@ json::makeJSON(const jsonNodeDef &root)
 			{
 				dodoString jsonObject = "{";
 				
-				dodoMap<dodoString, jsonNodeDef, stringTools::equal>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
+				dodoMap<dodoString, __jsonNodeDef, stringTools::equal>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
 				if (i != j)
 				{
 					for (--j;i!=j;++i)
@@ -227,7 +227,7 @@ json::makeJSON(const jsonNodeDef &root)
 			{
 				dodoString jsonObject = "[";
 
-				dodoArray<jsonNodeDef>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
+				dodoArray<__jsonNodeDef>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
 				if (i != j)
 				{
 					--j;
@@ -570,8 +570,8 @@ json::processJSON(jsonNode &node,
 dodoString 
 json::mapToJSON(const dodoStringMap &root)
 {
-	jsonNodeDef nodeDef;
-	jsonNodeDef subNodeDef;
+	__jsonNodeDef nodeDef;
+	__jsonNodeDef subNodeDef;
 	
 	nodeDef.valueDataType = JSON_DATATYPE_OBJECT;
 	subNodeDef.valueDataType = JSON_DATATYPE_STRING;

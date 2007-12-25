@@ -139,7 +139,7 @@ dbSqlite::disconnect()
 //-------------------------------------------------------------------
 
 void
-dbSqlite::setBLOBValues(const dodoStringArr &values)
+dbSqlite::setBLOBValues(const dodoStringArray &values)
 {
 	blobs = values;
 }
@@ -184,7 +184,7 @@ dbSqlite::_exec(const dodoString &query,
 
 					const char *columnType, *columnName;
 
-					dodoStringArr temp1;
+					dodoStringArray temp1;
 
 					for (unsigned int i(0); i < numFields; ++i)
 					{
@@ -268,7 +268,7 @@ dbSqlite::_exec(const dodoString &query,
 			case DBBASE_REQUEST_INSERT:
 
 			{
-				dodoStringArr::iterator i(blobs.begin()), j(blobs.end());
+				dodoStringArray::iterator i(blobs.begin()), j(blobs.end());
 				for (int o = 1; i != j; ++i, ++o)
 					if (sqlite3_bind_blob(liteStmt, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
 						throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
@@ -295,7 +295,7 @@ dbSqlite::_exec(const dodoString &query,
 
 //-------------------------------------------------------------------
 
-dodoArray<dodoStringArr>
+dodoArray<dodoStringArray>
 dbSqlite::fetchRow() const
 {
 		#ifndef DBSQLITE_WO_XEXEC
@@ -313,13 +313,13 @@ dbSqlite::fetchRow() const
 	bool iterate = true;
 	unsigned int i = 0;
 
-	dodoArray<dodoStringArr> rows;
+	dodoArray<dodoStringArray> rows;
 
 		#ifndef USE_DEQUE
 	rows.reserve(sqlite3_data_count(liteStmt));
 		#endif
 
-	dodoStringArr rowsPart;
+	dodoStringArray rowsPart;
 	dodoString rowPart;
 
 	int result;
@@ -409,7 +409,7 @@ dbSqlite::fetchRow() const
 
 //-------------------------------------------------------------------
 
-dodoStringArr
+dodoStringArray
 dbSqlite::fetchField() const
 {
 		#ifndef DBSQLITE_WO_XEXEC
@@ -422,7 +422,7 @@ dbSqlite::fetchField() const
 
 	unsigned int numFields = sqlite3_column_count(liteStmt);
 
-	dodoStringArr fields;
+	dodoStringArray fields;
 
 		#ifndef USE_DEQUE
 	fields.reserve(numFields);

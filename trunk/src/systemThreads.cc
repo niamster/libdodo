@@ -462,7 +462,7 @@ systemThreads::running() const
 
 	#ifdef DL_EXT
 
-systemThreadsMod
+__systemThreadsMod
 systemThreads::getModuleInfo(const dodoString &module,
 							 void             *toInit)
 {
@@ -474,7 +474,7 @@ systemThreads::getModuleInfo(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	systemThreadsMod mod = init(toInit);
+	__systemThreadsMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
@@ -508,7 +508,7 @@ systemThreads::add(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	systemThreadsMod temp = init(toInit);
+	__systemThreadsMod temp = init(toInit);
 
 	threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
 	if (in == NULL)
@@ -542,7 +542,7 @@ systemThreads::add(const dodoString &module,
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	systemThreadsMod temp = init(toInit);
+	__systemThreadsMod temp = init(toInit);
 
 	threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
 	if (in == NULL)
