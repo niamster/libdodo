@@ -8,4 +8,4 @@ test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@ 
 
 clean:
-	rm -rf test test.lite
+	rm -rf test test.1 test.2 test.lite

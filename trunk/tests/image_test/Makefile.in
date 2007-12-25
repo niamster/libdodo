@@ -10,4 +10,4 @@ test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@
 
 clean:
-	rm -fr test
+	rm -fr test my.png test.jpg

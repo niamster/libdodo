@@ -115,6 +115,6 @@ uninstall:
 	
 	rmdir $(prefix)
 clean:
-	rm -rf *.o *.so* *.a*
+	rm -rf *.o *.so* *.a* bin/dodo-config
 
 force : clean @PACKAGE_NAME@
