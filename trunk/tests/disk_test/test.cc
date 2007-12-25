@@ -12,10 +12,10 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		cout << ioDiskTools::getFileContent("test.cc");
+		cout << ioDiskTools::getFileContents("test.cc");
 		ioDiskTools::copy("test.cc", "test.cc.copy", true);
 
-		dodoStringArray arr = ioDiskTools::getFileContentArr("test.cc");		
+		dodoStringArray arr = ioDiskTools::getFileContentsArr("test.cc");		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];

@@ -48,8 +48,7 @@ namespace dodo
 	 */
 	enum cgiPreprocessorFunctionsID
 	{
-		CGIPREPROCESSOREX_PREPROCESS,
-		CGIPREPROCESSOREX_READ,
+		CGIPREPROCESSOREX_PREPROCESSSTRING,
 	};
 };
 

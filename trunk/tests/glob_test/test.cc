@@ -34,21 +34,21 @@ int main(int argc, char **argv)
 			cout << "WTF";
 		
 		for (register int i(0);i<10000;++i)
-			tools::codesetConversion(ioDiskTools::getFileContent("test.cc"),"cp1251","utf-8");
+			tools::codesetConversion(ioDiskTools::getFileContents("test.cc"),"cp1251","utf-8");
 		
-		cout << tools::zCompress(ioDiskTools::getFileContent("Makefile"),9).size() << endl;
-		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContent("test.cc")));
+		cout << tools::zCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;
+		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContents("test.cc")));
 		
 		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
 		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
 		
 		cout << tools::encodeASCII85("HEY, that's working!") << endl;
 		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's working!")) << endl;
-		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(ioDiskTools::getFileContent("test")).size() << endl;
+		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(ioDiskTools::getFileContents("test")).size() << endl;
 		
 		cout << tools::encodeBase64("HEY, that's working!") << endl;
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
-		cout << "size of test base64-encoded : " <<  tools::encodeBase64(ioDiskTools::getFileContent("test")).size() << endl;
+		cout << "size of test base64-encoded : " <<  tools::encodeBase64(ioDiskTools::getFileContents("test")).size() << endl;
 		
 		dodoString tt = "ftp://user:pass@localhost.domain:32/init.cgi?net=true&work=true";
 		cout << endl << tt << endl;
@@ -60,8 +60,8 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).protocol << endl;
 		cout << tools::parseURL(tt).request << endl;
 
-		cout << ioDiskTools::getFileContent("Makefile").size() << endl;
-		cout << tools::bzCompress(ioDiskTools::getFileContent("Makefile"),9).size() << endl;
+		cout << ioDiskTools::getFileContents("Makefile").size() << endl;
+		cout << tools::bzCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;
 			
 		dodoString t = "abcddF";
 		stringTools::replace("cd","WW",t);

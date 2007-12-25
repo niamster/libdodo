@@ -93,7 +93,7 @@
 #define SEND_TIMEOUT             1000
 
 /**
- * for ioDisk::getFileContentArr
+ * for ioDisk::getFileContentsArr
  */
 #define DISK_MAXLINELEN          10240
 

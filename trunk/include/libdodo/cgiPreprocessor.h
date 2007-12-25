@@ -33,6 +33,7 @@
 #include <libdodo/tools.h>
 #include <libdodo/cgiPreprocessorEx.h>
 #include <libdodo/types.h>
+#include <libdodo/ioDiskTools.h>
 
 namespace dodo
 {
@@ -60,7 +61,20 @@ namespace dodo
 			 */
 			virtual dodoString preProcess(const dodoString &path);
 
+			/**
+			 * @return preprocessed template from buffer
+			 * @param tpl indicates template to preprocess
+			 */
+			virtual dodoString preProcessString(const dodoString &tpl);
+
 		protected:
+
+			/**
+			 * @return preprocessed template from buffer
+			 * @param tpl indicates template to preprocess
+			 * @param path indicates path where template stays[for reporting]
+			 */
+			virtual dodoString _preProcessString(const dodoString &tpl, const dodoString &path);
 
 			/**
 			 * @return line number in file
@@ -70,11 +84,10 @@ namespace dodo
 			virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newLinePos, unsigned long pos);
 
 			/**
-			 * @return file contents
-			 * @param path indicates what to read
-			 * @param newLinePos describes array of newlines' positions
+			 * @return newlines positions
+			 * @param tpl indicates template to process
 			 */
-			virtual dodoString read(const dodoString &path, dodoArray<unsigned long> &newLinePos);
+			virtual dodoArray<unsigned long> detectNewLines(const dodoString &tpl);
 
 			dodoArray< dodoArray<unsigned long> > newLinePositions; ///< stack of processed new lines' positions
 

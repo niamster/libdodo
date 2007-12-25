@@ -70,10 +70,22 @@ cgiProcessor::~cgiProcessor()
 
 //-------------------------------------------------------------------
 
+dodoString 
+cgiProcessor::processString(const dodoString &tpl)
+{
+	std::string tmp = _processString(preProcessString(tpl), "memory");
+
+	newLinePositions.pop_back();
+
+	return tmp;
+}
+
+//-------------------------------------------------------------------
+
 dodoString
 cgiProcessor::process(const dodoString &path)
 {
-	std::string tmp = _process(preProcess(path), path);
+	std::string tmp = _processString(preProcess(path), path);
 
 	newLinePositions.pop_back();
 
@@ -100,7 +112,7 @@ cgiProcessor::clear()
 //-------------------------------------------------------------------
 
 dodoString
-cgiProcessor::_process(const dodoString &buffer,
+cgiProcessor::_processString(const dodoString &buffer,
 					   const dodoString &path)
 {
 	unsigned long i(0), j(0), begin(0), k(0);
@@ -482,14 +494,14 @@ cgiProcessor::_if(const dodoString &buffer,
 		if (!found)
 			v = u;
 
-		tpl.append(_process(buffer.substr(start, v - start), path));
+		tpl.append(_processString(buffer.substr(start, v - start), path));
 	}
 	else
 	{
 		if (found)
 		{
 			v = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], v) + 2;
-			tpl.append(_process(buffer.substr(v, u - v), path));
+			tpl.append(_processString(buffer.substr(v, u - v), path));
 		}
 	}
 
@@ -696,7 +708,7 @@ cgiProcessor::_ns(const dodoString &buffer,
 {
 	unsigned long u(blockEnd(buffer, start, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_OPEN_NS], statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_NS], path));
 
-	tpl.append(_process(buffer.substr(start, u - start), path));
+	tpl.append(_processString(buffer.substr(start, u - start), path));
 
 	return buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], u) + 2;
 }
@@ -790,7 +802,7 @@ cgiProcessor::_for(const dodoString &buffer,
 						if (key)
 							local[keyName] = stringTools::lToString(i);
 						local[varName] = dodoString(1, k->second[i]);
-						tpl.append(_process(forSpace, path));
+						tpl.append(_processString(forSpace, path));
 
 						if (_breakDeepness > 0)
 						{
@@ -848,7 +860,7 @@ cgiProcessor::_for(const dodoString &buffer,
 						if (key)
 							local[keyName] = k->first;
 						local[varName] = k->second;
-						tpl.append(_process(forSpace, path));
+						tpl.append(_processString(forSpace, path));
 
 						if (_breakDeepness > 0)
 						{
@@ -905,7 +917,7 @@ cgiProcessor::_for(const dodoString &buffer,
 						if (key)
 							local[keyName] = stringTools::lToString(i);
 						local[varName] = dodoString(1, k->second[i]);
-						tpl.append(_process(forSpace, path));
+						tpl.append(_processString(forSpace, path));
 
 						if (_breakDeepness > 0)
 						{
@@ -963,7 +975,7 @@ cgiProcessor::_for(const dodoString &buffer,
 						if (key)
 							local[keyName] = k->first;
 						local[varName] = k->second;
-						tpl.append(_process(forSpace, path));
+						tpl.append(_processString(forSpace, path));
 
 						if (_breakDeepness > 0)
 						{
@@ -1021,7 +1033,7 @@ cgiProcessor::_for(const dodoString &buffer,
 						if (key)
 							local[keyName] = stringTools::lToString(keyNIter);
 						local[varName] = *k;
-						tpl.append(_process(forSpace, path));
+						tpl.append(_processString(forSpace, path));
 
 						if (_breakDeepness > 0)
 						{
@@ -1080,7 +1092,7 @@ cgiProcessor::_for(const dodoString &buffer,
 							local[keyName] = stringTools::lToString(keyNIter);
 						localHash[varName] = *k;
 
-						tpl.append(_process(forSpace, path));
+						tpl.append(_processString(forSpace, path));
 
 						if (_breakDeepness > 0)
 						{
@@ -1146,7 +1158,7 @@ cgiProcessor::_for(const dodoString &buffer,
 									if (key)
 										local[keyName] = stringTools::lToString(i);
 									local[varName] = dodoString(1, k->second[i]);
-									tpl.append(_process(forSpace, path));
+									tpl.append(_processString(forSpace, path));
 
 									if (_breakDeepness > 0)
 									{
@@ -1209,7 +1221,7 @@ cgiProcessor::_for(const dodoString &buffer,
 									if (key)
 										local[keyName] = stringTools::lToString(i);
 									local[varName] = dodoString(1, k->second[i]);
-									tpl.append(_process(forSpace, path));
+									tpl.append(_processString(forSpace, path));
 
 									if (_breakDeepness > 0)
 									{
@@ -1270,7 +1282,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								if (key)
 									local[keyName] = stringTools::lToString(i);
 								local[varName] = dodoString(1, o->second[pos][i]);
-								tpl.append(_process(forSpace, path));
+								tpl.append(_processString(forSpace, path));
 
 								if (_breakDeepness > 0)
 								{
@@ -1332,7 +1344,7 @@ cgiProcessor::_for(const dodoString &buffer,
 								if (key)
 									local[keyName] = k->first;
 								local[varName] = k->second;
-								tpl.append(_process(forSpace, path));
+								tpl.append(_processString(forSpace, path));
 
 								if (_breakDeepness > 0)
 								{
@@ -1402,7 +1414,7 @@ cgiProcessor::_for(const dodoString &buffer,
 											if (key)
 												local[keyName] = stringTools::lToString(i);
 											local[varName] = dodoString(1, k->second[i]);
-											tpl.append(_process(forSpace, path));
+											tpl.append(_processString(forSpace, path));
 
 											if (_breakDeepness > 0)
 											{
@@ -1462,7 +1474,7 @@ cgiProcessor::_for(const dodoString &buffer,
 			if (key)
 				local[keyName] = stringTools::lToString(i);
 			local[varName] = dodoString(1, targetVar[i]);
-			tpl.append(_process(forSpace, path));
+			tpl.append(_processString(forSpace, path));
 
 			if (_breakDeepness > 0)
 			{

@@ -76,49 +76,36 @@ cgiPreprocessor::~cgiPreprocessor()
 
 //-------------------------------------------------------------------
 
-dodoString
-cgiPreprocessor::read(const dodoString &path,
-					  dodoArray<unsigned long> &newLinePos)
+dodoArray<unsigned long>
+cgiPreprocessor::detectNewLines(const dodoString &tpl)
 {
-	FILE *tpl = fopen(path.c_str(), "r");
-	if (tpl == NULL)
-		throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	dodoArray<unsigned long> newLinePos;
 
-	struct stat st;
-
-	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	char *stor = new char[st.st_size];
-
-	fread(stor, st.st_size, 1, tpl);
-	fclose(tpl);
-
-	dodoString temp;
-
-	temp.assign(stor, st.st_size);
-	newLinePos.clear();
-
-	long i(0);
-	for (; i < st.st_size; ++i)
-		if (temp[i] == '\n')
+	long i(0), j(tpl.size());
+	for (; i < j; ++i)
+		if (tpl[i] == '\n')
 			newLinePos.push_back(i);
 	newLinePos.push_back(i);
 
-	delete [] stor;
-
-	return temp;
+	return newLinePos;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
-cgiPreprocessor::preProcess(const dodoString &path)
+dodoString 
+cgiPreprocessor::preProcessString(const dodoString &buffer)
 {
-	dodoArray<unsigned long> newLinePos;
+	_preProcessString(buffer, "memory");
+}
 
-	dodoString buffer = read(path, newLinePos);
+//-------------------------------------------------------------------
 
+dodoString 
+cgiPreprocessor::_preProcessString(const dodoString &buffer,
+								const dodoString &path)
+{
+	dodoArray<unsigned long> newLinePos = detectNewLines(buffer);
+	
 	unsigned long i(0), j(0), begin(0);
 
 	while (true)
@@ -134,7 +121,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 				char message[128];
 				sprintf(message, " Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str());
 
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 			}
 
 			break;
@@ -149,7 +136,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 				char message[128];
 				sprintf(message, " Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.c_str());
 
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 			}
 		}
 
@@ -170,7 +157,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 				char message[128];
 				sprintf(message, " Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.c_str());
 
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 			}
 
 		}
@@ -189,7 +176,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 				char message[128];
 				sprintf(message, " Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.c_str());
 
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 			}
 		}
 
@@ -199,7 +186,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 			char message[128];
 			sprintf(message, " Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.c_str());
 
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 		}
 
 		if (j > 0 && buffer[j - 1] == '*')
@@ -207,7 +194,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 			char message[128];
 			sprintf(message, " Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.c_str());
 
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 		}
 
 		if (j > 0 && buffer[j - 1] == '<')
@@ -215,7 +202,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 			char message[128];
 			sprintf(message, " Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.c_str());
 
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 		}
 
 		dodoString temp = buffer.substr(i, j - i);
@@ -225,7 +212,7 @@ cgiPreprocessor::preProcess(const dodoString &path)
 			char message[128];
 			sprintf(message, " Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str());
 
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESS, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, CGIPREPROCESSOREX_PREPROCESSSTRING, ERR_LIBDODO, CGIPREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, message);
 		}
 
 		j += 2;
@@ -233,7 +220,15 @@ cgiPreprocessor::preProcess(const dodoString &path)
 
 	newLinePositions.push_back(newLinePos);
 
-	return buffer;
+	return buffer;	
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+cgiPreprocessor::preProcess(const dodoString &path)
+{
+	return _preProcessString(ioDiskTools::getFileContents(path), path);
 }
 
 //-------------------------------------------------------------------

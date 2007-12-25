@@ -495,7 +495,7 @@ ioDiskTools::followSymlink(const dodoString &path,
 //-------------------------------------------------------------------
 
 dodoString
-ioDiskTools::getFileContent(const dodoString &path)
+ioDiskTools::getFileContents(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -562,7 +562,7 @@ ioDiskTools::getFileContent(const dodoString &path)
 //-------------------------------------------------------------------
 
 dodoStringArray
-ioDiskTools::getFileContentArr(const dodoString &path)
+ioDiskTools::getFileContentsArr(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)

@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 		ioDiskTools::unlink("test.1");
 		ioDiskTools::unlink("test.2");
 
-		std::string dt = ioDiskTools::getFileContent("test");
+		std::string dt = ioDiskTools::getFileContents("test");
 		ioDiskTools::append("test.1", dt);
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)

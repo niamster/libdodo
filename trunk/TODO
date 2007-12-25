@@ -12,17 +12,10 @@
 
 5.
 	json: parser errors
-	json: json from map<string, string>
 	!! module loading
 
 6.
 	firebird
 	soap
-
-7.
-	image-magick
-
 8.
 	collections: getIndexes
-
-9.	cgiProcessor: parse from string

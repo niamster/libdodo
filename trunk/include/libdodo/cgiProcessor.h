@@ -69,6 +69,12 @@ namespace dodo
 			virtual dodoString process(const dodoString &path);
 
 			/**
+			 * @return parsed template from buffer
+			 * @param tpl indicates template to parse
+			 */
+			virtual dodoString processString(const dodoString &tpl);
+
+			/**
 			 * sets varable
 			 * @param varName describes name of variable
 			 * @param varVal describes value of variable
@@ -113,9 +119,9 @@ namespace dodo
 			/**
 			 * @return parsed template from preprocessored buffer
 			 * @param path indicates buffer where template stays
-			 * @param path indicates file where template got
+			 * @param path indicates file where template got[for reporting]
 			 */
-			virtual dodoString _process(const dodoString &buffer, const dodoString &path);
+			virtual dodoString _processString(const dodoString &buffer, const dodoString &path);
 
 			/**
 			 * processes `if` statement
