@@ -796,7 +796,7 @@ dodoString
 dbSqlBase::fieldCollect(__fieldInfo &row)
 {
 	int type = row.type, flag = row.flag;
-	dodoString resRow(row.name + " " + stringType(type));
+	dodoString resRow(row.name + " " + sqlDataType(type));
 
 	if (preventEscaping)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, ",") + ")" : __dodostring__);
@@ -822,7 +822,7 @@ dbSqlBase::fieldCollect(__fieldInfo &row)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::stringType(int type)
+dbSqlBase::sqlDataType(int type)
 {
 	switch (type)
 	{

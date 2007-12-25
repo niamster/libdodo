@@ -87,7 +87,7 @@ namespace dodo
 			 */
 			static __connInfo inputterInfo();
 
-			#ifndef IO_STD_WO_XEXEC
+			#ifndef IOSTD_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback

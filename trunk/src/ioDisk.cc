@@ -81,7 +81,7 @@ ioDisk::getOutDescriptor() const
 
 //-------------------------------------------------------------------
 
-#ifndef IO_DISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 
 int
 ioDisk::addPostExec(inExec func,
@@ -140,11 +140,11 @@ ioDisk::addExec(const dodoString &module,
 void
 ioDisk::close()
 {
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_CLOSE;
 	#endif
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	performXExec(preExec);
 	#endif
 
@@ -153,7 +153,7 @@ ioDisk::close()
 		if (fclose(file) != 0)
 			throw baseEx(ERRMODULE_IODISK, IODISKEX_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-		#ifndef IO_DISK_WO_XEXEC
+		#ifndef IODISK_WO_XEXEC
 		performXExec(postExec);
 		#endif
 
@@ -168,7 +168,7 @@ ioDisk::open(const dodoString &a_path,
 			short a_fileType,
 			short mode)
 {
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_OPEN;
 	performXExec(preExec);
 	#endif
@@ -248,7 +248,7 @@ ioDisk::open(const dodoString &a_path,
 
 	ioDiskTools::chmod(path, FILE_PERM);
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
 	#endif
 
@@ -261,7 +261,7 @@ void
 ioDisk::read(char * const a_void,
 				unsigned long a_pos)
 {
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READ;
 	performXExec(preExec);
 	#endif
@@ -295,7 +295,7 @@ ioDisk::read(char * const a_void,
 
 	buffer.assign(a_void, inSize);
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -343,7 +343,7 @@ ioDisk::write(const char *const a_buf,
 {
 	buffer.assign(a_buf, outSize);
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_WRITE;
 	performXExec(preExec);
 	#endif
@@ -405,7 +405,7 @@ ioDisk::write(const char *const a_buf,
 			throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -447,7 +447,7 @@ void
 ioDisk::readStream(char * const a_void,
 					  unsigned long a_pos)
 {
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTREAM;
 	performXExec(preExec);
 	#endif
@@ -495,7 +495,7 @@ ioDisk::readStream(char * const a_void,
 
 	buffer.assign(a_void);
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -540,7 +540,7 @@ ioDisk::writeStream(const char *const a_buf)
 {
 	buffer.assign(a_buf);
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 	#endif
@@ -583,7 +583,7 @@ ioDisk::writeStream(const char *const a_buf)
 				throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 
-	#ifndef IO_DISK_WO_XEXEC
+	#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }

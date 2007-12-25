@@ -104,7 +104,7 @@ namespace dodo
 			 */
 			virtual ~ioDisk();
 
-			#ifndef IO_DISK_WO_XEXEC
+			#ifndef IODISK_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback

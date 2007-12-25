@@ -53,7 +53,7 @@ dbPostgresql::~dbPostgresql()
 //-------------------------------------------------------------------
 
 dodoString
-dbPostgresql::stringType(int type)
+dbPostgresql::sqlDataType(int type)
 {
 	switch (type)
 	{
@@ -66,7 +66,7 @@ dbPostgresql::stringType(int type)
 
 		default:
 
-			return dbSqlBase::stringType(type);
+			return dbSqlBase::sqlDataType(type);
 	}
 }
 

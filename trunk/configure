@@ -1258,11 +1258,24 @@ Optional Features:
   --disable-largefile     omit support for large files
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
-  --disable-deque         use std::vector instead of std::deque(std::deque
-                          used by default)
-  --disable-dl-lib        disable dl as lib (default=enabled)
-  --enable-zlib-lib       enable zlib as lib (default=disabled)
-  --enable-iconv-lib      enable iconv as lib (default=disabled)
+  --disable-deque         use std::vector instead of std::deque
+  --disable-ioSTD-xexec-support
+                          compile ioSTD w/o xexec support
+  --disable-ioSocketExchange-xexec-support
+                          compile ioSocketExchange w/o xexec support
+  --disable-ioSocket-xexec-support
+                          compile ioSocket w/o xexec support
+  --disable-ioDisk-xexec-support
+                          compile ioDisk w/o xexec support
+  --disable-dbPostgresql-xexec-support
+                          compile dbPostgresql w/o xexec support
+  --disable-dbSqlite-xexec-support
+                          compile dbSqlite w/o xexec support
+  --disable-dbMysql-xexec-support
+                          compile dbMysql w/o xexec support
+  --disable-dl-lib        disable dl as lib
+  --enable-zlib-lib       enable zlib as lib
+  --enable-iconv-lib      enable iconv as lib
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -3802,6 +3815,125 @@ then
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tenabled"
 else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
+fi
+
+# Check whether --enable-ioSTD-xexec-support was given.
+if test "${enable_ioSTD_xexec_support+set}" = set; then
+  enableval=$enable_ioSTD_xexec_support; IOSTD_W_XEXEC="$enableval"
+else
+  IOSTD_W_XEXEC="yes"
+fi
+
+
+if test "$IOSTD_W_XEXEC" = "no"
+then
+	echo -n -e "#define IOSTD_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tenabled"
+fi
+
+# Check whether --enable-ioSocketExchange-xexec-support was given.
+if test "${enable_ioSocketExchange_xexec_support+set}" = set; then
+  enableval=$enable_ioSocketExchange_xexec_support; IOSOCKETEXCHANGE_W_XEXEC="$enableval"
+else
+  IOSOCKETEXCHANGE_W_XEXEC="yes"
+fi
+
+
+if test "$IOSOCKETEXCHANGE_W_XEXEC" = "no"
+then
+	echo -n -e "#define IOSOCKETEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nioSocketExchange xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\nioSocketExchange xexec support\t\t\t\t\t\tenabled"
+fi
+
+# Check whether --enable-ioSocket-xexec-support was given.
+if test "${enable_ioSocket_xexec_support+set}" = set; then
+  enableval=$enable_ioSocket_xexec_support; IOSOCKET_W_XEXEC="$enableval"
+else
+  IOSOCKET_W_XEXEC="yes"
+fi
+
+
+if test "$IOSOCKET_W_XEXEC" = "no"
+then
+	echo -n -e "#define IOSOCKET_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nioSocket xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\nioSocket xexec support\t\t\t\t\t\tenabled"
+fi
+
+# Check whether --enable-ioDisk-xexec-support was given.
+if test "${enable_ioDisk_xexec_support+set}" = set; then
+  enableval=$enable_ioDisk_xexec_support; IODISK_W_XEXEC="$enableval"
+else
+  IODISK_W_XEXEC="yes"
+fi
+
+
+if test "$IODISK_W_XEXEC" = "no"
+then
+	echo -n -e "#define IODISK_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tenabled"
+fi
+
+# Check whether --enable-dbPostresql-xexec-support was given.
+if test "${enable_dbPostresql_xexec_support+set}" = set; then
+  enableval=$enable_dbPostresql_xexec_support; DBPOSTGRESQL_W_XEXEC="$enableval"
+else
+  DBPOSTGRESQL_W_XEXEC="yes"
+fi
+
+
+if test "$DBPOSTGRESQL_W_XEXEC" = "no"
+then
+	echo -n -e "#define DBPOSTGRESQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tenabled"
+fi
+
+# Check whether --enable-dbSqlite-xexec-support was given.
+if test "${enable_dbSqlite_xexec_support+set}" = set; then
+  enableval=$enable_dbSqlite_xexec_support; DBSQLITE_W_XEXEC="$enableval"
+else
+  DBSQLITE_W_XEXEC="yes"
+fi
+
+
+if test "$DBSQLITE_W_XEXEC" = "no"
+then
+	echo -n -e "#define DBSQLITE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tenabled"
+fi
+
+# Check whether --enable-dbMysql-xexec-support was given.
+if test "${enable_dbMysql_xexec_support+set}" = set; then
+  enableval=$enable_dbMysql_xexec_support; DBMYSQL_W_XEXEC="$enableval"
+else
+  DBMYSQL_W_XEXEC="yes"
+fi
+
+
+if test "$DBMYSQL_W_XEXEC" = "no"
+then
+	echo -n -e "#define DBMYSQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Checks for libraries.
@@ -7036,9 +7168,6 @@ fi
 	else
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi
-
-CPPFLAGS=$(echo $CPPFLAGS | tr " " "\n" | uniq | tr "\n" " ")
-LDFLAGS=$(echo $LDFLAGS | tr " " "\n" | uniq | tr "\n" " ")
 
 # Checks for header files.
 { echo "$as_me:$LINENO: checking for sys/wait.h that is POSIX.1 compatible" >&5

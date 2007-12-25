@@ -349,7 +349,7 @@ ioSocketExchange::readString(dodoString &data)
 
 //-------------------------------------------------------------------
 
-#ifndef IO_SOCKETEXCHANGE_WO_XEXEC
+#ifndef IOSOCKETEXCHANGE_WO_XEXEC
 
 //-------------------------------------------------------------------
 

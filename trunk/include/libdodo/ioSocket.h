@@ -101,7 +101,7 @@ namespace dodo
 			 */
 			virtual ~ioSocket();
 
-			#ifndef IO_SOCKET_WO_XEXEC
+			#ifndef IOSOCKET_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback

@@ -57,7 +57,7 @@ dodoString
 dbSqlite::fieldCollect(__fieldInfo &row)
 {
 	int type = row.type, flag = row.flag;
-	dodoString resRow(row.name + " " + stringType(type));
+	dodoString resRow(row.name + " " + sqlDataType(type));
 
 	if (preventEscaping)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, ",") + ")" : __dodostring__);
@@ -67,7 +67,7 @@ dbSqlite::fieldCollect(__fieldInfo &row)
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
 	resRow.append((DBBASE_FIELDFLAG_NULL & flag) == DBBASE_FIELDFLAG_NULL ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append((DBBASE_FIELDFLAG_AUTO_INCREMENT & flag) == DBBASE_FIELDFLAG_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
+	resRow.append((DBBASE_FIELDFLAG_AUTO_INCREMENT & flag) == DBBASE_FIELDFLAG_AUTO_INCREMENT ? " primary key autoincrement" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{

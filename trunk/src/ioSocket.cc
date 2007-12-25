@@ -58,7 +58,7 @@ ioSocket::~ioSocket()
 
 //-------------------------------------------------------------------
 
-#ifndef IO_SOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 
 int
 ioSocket::addPostExec(inExec func,
@@ -203,7 +203,7 @@ ioSocket::connect(const dodoString &host,
 					 int port,
 					 ioSocketExchange &exchange)
 {
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_CONNECT;
 	performXExec(preExec);
 	#endif
@@ -251,7 +251,7 @@ ioSocket::connect(const dodoString &host,
 
 	socket = -1;
 
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -273,7 +273,7 @@ ioSocket::connectFrom(const dodoString &local,
 						 int port,
 						 ioSocketExchange &exchange)
 {
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_CONNECT;
 	performXExec(preExec);
 	#endif
@@ -339,7 +339,7 @@ ioSocket::connectFrom(const dodoString &local,
 
 	socket = -1;
 
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -360,7 +360,7 @@ void
 ioSocket::connect(const dodoString &path,
 					 ioSocketExchange &exchange)
 {
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_CONNECT_UNIX;
 	performXExec(preExec);
 	#endif
@@ -387,7 +387,7 @@ ioSocket::connect(const dodoString &path,
 
 	socket = -1;
 
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -399,7 +399,7 @@ ioSocket::bindNListen(const dodoString &host,
 						 int port,
 						 int numberOfConnections)
 {
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_BINDNLISTEN;
 	performXExec(preExec);
 	#endif
@@ -466,7 +466,7 @@ ioSocket::bindNListen(const dodoString &host,
 
 	opened = true;
 
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 
@@ -488,7 +488,7 @@ ioSocket::bindNListen(const dodoString &path,
 						 int numberOfConnections,
 						 bool force)
 {
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_CONNECT_UNIX;
 	performXExec(preExec);
 	#endif
@@ -544,7 +544,7 @@ ioSocket::bindNListen(const dodoString &path,
 
 	opened = true;
 
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -555,7 +555,7 @@ bool
 ioSocket::accept(__initialAccept &init,
 					__connInfo &info)
 {
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_ACCEPT;
 	performXExec(preExec);
 	#endif
@@ -647,7 +647,7 @@ ioSocket::accept(__initialAccept &init,
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 
@@ -659,7 +659,7 @@ ioSocket::accept(__initialAccept &init,
 bool
 ioSocket::accept(__initialAccept &init)
 {
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_ACCEPT;
 	performXExec(preExec);
 	#endif
@@ -696,7 +696,7 @@ ioSocket::accept(__initialAccept &init)
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef IO_SOCKET_WO_XEXEC
+	#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 

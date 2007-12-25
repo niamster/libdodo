@@ -225,7 +225,7 @@ namespace dodo
 			 * @return sql compliant data type
 			 * @param type indicates the data type
 			 */
-			virtual dodoString stringType(int type);
+			virtual dodoString sqlDataType(int type);
 
 			/**
 			 * @return : if type must have range=1; if may have=0; if mustn't have=-1;
