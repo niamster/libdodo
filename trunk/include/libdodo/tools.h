@@ -91,6 +91,12 @@ namespace dodo
 
 	 #endif
 
+	enum toolsRandomStrength
+	{
+		TOOLS_RANDOMSTRENGTH_DEFAULT,
+		TOOLS_RANDOMSTRENGTH_STRONG
+	};
+	
 	/**
 	 * @struct __url describes info that could be retrieved from URL
 	 */
@@ -137,52 +143,52 @@ namespace dodo
 			 * @note based on /dev/random
 			 */
 			static void
-			random(void *data, unsigned long size);
+			random(void *data, unsigned long size, short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long
 			 */
-			static unsigned long ulRandom();
+			static unsigned long ulRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random long
 			 */
-			static long lRandom();
+			static long lRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned int
 			 */
-			static unsigned int uiRandom();
+			static unsigned int uiRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random int
 			 */
-			static int iRandom();
+			static int iRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned short
 			 */
-			static unsigned short usRandom();
+			static unsigned short usRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random short
 			 */
-			static short sRandom();
+			static short sRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned char
 			 */
-			static unsigned char ucRandom();
+			static unsigned char ucRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random char
 			 */
-			static char cRandom();
+			static char cRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random double
 			 */
-			static double dRandom();
+			static double dRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return true if needle found in array

@@ -36,43 +36,45 @@ namespace dodo
 	 */
 	enum toolsExR
 	{
-		TOOLS_BAD_ASCII85 = 1,
-		TOOLS_BAD_BZCOMPRESSION,
-		TOOLS_BAD_BZDECOMPRESSION_INIT,
-		TOOLS_BAD_BZDECOMPRESSION_FINISH,
-		TOOLS_BAD_BZDECOMPRESSION,
-		TOOLS_BADMAILHELO,
-		TOOLS_BADMAILAUTH,
-		TOOLS_WRONG_PARAMETHER,
+		TOOLSEX_BADASCII85 = 1,
+		TOOLSEX_BADBZCOMPRESSION,
+		TOOLSEX_BADBZDECOMPRESSION_INIT,
+		TOOLSEX_BADBZDECOMPRESSION_FINISH,
+		TOOLSEX_BADBZDECOMPRESSION,
+		TOOLSEX_BADMAILHELO,
+		TOOLSEX_BADMAILAUTH,
+		TOOLSEX_WRONGPARAMETER,
 
 			#ifndef FAST
 
-		TOOLS_DATA_TOO_LONG,
+		TOOLSEX_DATATOOLONG,
 
 			#endif
 
-		TOOLS_ARRAY_EMPTY
+		TOOLSEX_EMPTYARRAY,
+		TOOLSEX_WRONGSTRENGTH
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define TOOLS_BAD_ASCII85_STR                       "Bad character in ASCII85."
+		#define TOOLSEX_BADASCII85_STR                       "Bad character in ASCII85."
 
 		#ifdef BZIP2_EXT
 
-			#define TOOLS_BAD_BZCOMPRESSION_STR             "Error occured during comression."
-			#define TOOLS_BAD_BZDECOMPRESSION_INIT_STR      "Error occured during preparations for decompression."
-			#define TOOLS_BAD_BZDECOMPRESSION_FINISH_STR    "Error occured during finishing decompression."
-			#define TOOLS_BAD_BZDECOMPRESSION_STR           "Error occured during decompression."
+			#define TOOLSEX_BADBZCOMPRESSION_STR             "Error occured during comression."
+			#define TOOLSEX_BADBZDECOMPRESSION_INIT_STR      "Error occured during preparations for decompression."
+			#define TOOLSEX_BADBZDECOMPRESSION_FINISH_STR    "Error occured during finishing decompression."
+			#define TOOLSEX_BADBZDECOMPRESSION_STR           "Error occured during decompression."
 
 		#endif
 
-		#define TOOLS_BADMAILHELO_STR                       "Error occurd while sending EHLO."
-		#define TOOLS_BADMAILAUTH_STR                       "Error during uthentification."
-		#define TOOLS_WRONG_PARAMETHER_STR                  "Wrong paramather passed to function."
-		#define TOOLS_DATA_TOO_LONG_STR                     "Data size is bigger than TOOLS_SHORT_DATA_SIZE."
-		#define TOOLS_ARRAY_EMPTY_STR                       "Array is empty."
+		#define TOOLSEX_BADMAILHELO_STR                       "Error occurd while sending EHLO."
+		#define TOOLSEX_BADMAILAUTH_STR                       "Error during uthentification."
+		#define TOOLSEX_WRONGPARAMETER_STR                  "Wrong paramather passed to function."
+		#define TOOLSEX_DATATOOLONG_STR                     "Data size is bigger than TOOLSEX_SHORT_DATA_SIZE."
+		#define TOOLSEX_EMPTYARRAY_STR                       "Array is empty."
+		#define TOOLSEX_WRONGSTRENGTH_STR                     "Wrong strength argument."
 
 	/**
 	 * ID of function where exception was thrown
@@ -81,33 +83,33 @@ namespace dodo
 	{
 			#ifdef ICONV_EXT
 
-		TOOLS_CODESETCONVERSION,
+		TOOLSEX_CODESETCONVERSION,
 
 			#endif
 
 			#ifdef ZLIB_EXT
 
-		TOOLS_ZCOMPRESS,
-		TOOLS_ZDECOMPRESS,
+		TOOLSEX_ZCOMPRESS,
+		TOOLSEX_ZDECOMPRESS,
 
 			#endif
 
-		TOOLS_DECODEASCII85,
+		TOOLSEX_DECODEASCII85,
 
 			#ifdef BZIP2_EXT
 
-		TOOLS_BZCOMPRESS,
-		TOOLS_BZDECOMPRESS,
+		TOOLSEX_BZCOMPRESS,
+		TOOLSEX_BZDECOMPRESS,
 
 			#endif
 
-		TOOLS_MAIL,
-		TOOLS_SENDSHORTDATA,
-		TOOLS_SENDSHORTDATADEL,
-		TOOLS_RECEIVESHORTDATADEL,
-		TOOLS_SENDLONGDATA,
-		TOOLS_IMPLODE,
-		TOOLS_RANDOM
+		TOOLSEX_MAIL,
+		TOOLSEX_SENDSHORTDATA,
+		TOOLSEX_SENDSHORTDATADEL,
+		TOOLSEX_RECEIVESHORTDATADEL,
+		TOOLSEX_SENDLONGDATA,
+		TOOLSEX_IMPLODE,
+		TOOLSEX_RANDOM
 	};
 
 };

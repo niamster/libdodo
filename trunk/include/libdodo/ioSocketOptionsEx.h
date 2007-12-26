@@ -40,14 +40,14 @@ namespace dodo
 	enum ioSocketOptionsExR
 	{
 		IOSOCKETOPTIONSEX_NO_SOCKET_CREATED,
-		IOSOCKETOPTIONSEX_WRONG_PARAMETHER,
+		IOSOCKETOPTIONSEX_WRONG_PARAMETER,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
 		#define IOSOCKETOPTIONSEX_NO_SOCKET_CREATED_STR    "No socket was created =(."
-		#define IOSOCKETOPTIONSEX_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
+		#define IOSOCKETOPTIONSEX_WRONG_PARAMETER_STR     "Wrong paramather passed to function."
 
 	/**
 	 * ID of function where exception was thrown

@@ -44,7 +44,7 @@ namespace dodo
 		IOSOCKETEX_CANNOT_CONNECT,
 		IOSOCKETEX_CANNOT_ACCEPT,
 		IOSOCKETEX_ACCEPT_WO_BIND,
-		IOSOCKETEX_WRONG_PARAMETHER,
+		IOSOCKETEX_WRONG_PARAMETER,
 		IOSOCKETEX_WRONG_FILENAME,
 	};
 
@@ -56,7 +56,7 @@ namespace dodo
 		#define IOSOCKETEX_CANNOT_CONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
 		#define IOSOCKETEX_CANNOT_ACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
 		#define IOSOCKETEX_ACCEPT_WO_BIND_STR       "You try to accept without called bindNListen or bindNListen failed."
-		#define IOSOCKETEX_WRONG_PARAMETHER_STR     "Wrong paramather passed to function."
+		#define IOSOCKETEX_WRONG_PARAMETER_STR     "Wrong paramather passed to function."
 		#define IOSOCKETEX_WRONG_FILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
