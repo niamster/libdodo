@@ -36,13 +36,13 @@ namespace dodo
 	 */
 	enum systemExR
 	{
-		SYSTEMTOOLSEX_WRONG_PARAMETER,
+		SYSTEMTOOLSEX_WRONGPARAMETER,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define SYSTEMTOOLSEX_WRONG_PARAMETER_STR    "Wrong paramather passed to function."
+		#define SYSTEMTOOLSEX_WRONGPARAMETER_STR    "Wrong paramather passed to function."
 
 	/**
 	 * ID of function where exception was thrown

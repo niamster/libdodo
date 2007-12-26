@@ -90,7 +90,7 @@ __xmlNode
 xml::reParse(const __xmlNodeDef &definition)
 {
 	if (document == NULL)
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_REPARCE, ERR_LIBDODO, XMLEX_NOT_PARCED_BEFORE, XMLEX_NOT_PARCED_BEFORE_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_LIBXML2, XMLEX_REPARCE, ERR_LIBDODO, XMLEX_NOTPARCEDBEFORE, XMLEX_NOTPARCEDBEFORE_STR, __LINE__, __FILE__);
 
 	return parse(definition);
 }

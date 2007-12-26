@@ -36,14 +36,14 @@ namespace dodo
 	 */
 	enum ioDiskToolsExR
 	{
-		IODISKTOOLSEX_WRONG_FILENAME,
+		IODISKTOOLSEX_WRONGFILENAME,
 		IODISKTOOLSEX_DESTINATION_EXISTS,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define IODISKTOOLSEX_WRONG_FILENAME_STR        "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define IODISKTOOLSEX_WRONGFILENAME_STR        "Probably wrong filename, type of file is wrong or `path` is empty!"
 		#define IODISKTOOLSEX_DESTINATION_EXISTS_STR    "Destination file/dir/etc. exists. Won't overvrite"
 
 	/**

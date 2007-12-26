@@ -39,25 +39,25 @@ namespace dodo
 	 */
 	enum ioSocketExR
 	{
-		IOSOCKETEX_NO_SOCKET_CREATED,
-		IOSOCKETEX_CANNOT_BIND,
-		IOSOCKETEX_CANNOT_CONNECT,
-		IOSOCKETEX_CANNOT_ACCEPT,
-		IOSOCKETEX_ACCEPT_WO_BIND,
-		IOSOCKETEX_WRONG_PARAMETER,
-		IOSOCKETEX_WRONG_FILENAME,
+		IOSOCKETEX_NOSOCKETCREATED,
+		IOSOCKETEX_CANNOTBIND,
+		IOSOCKETEX_CANNOTCONNECT,
+		IOSOCKETEX_CANNOTACCEPT,
+		IOSOCKETEX_ACCEPTWOBIND,
+		IOSOCKETEX_WRONGPARAMETER,
+		IOSOCKETEX_WRONGFILENAME,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define IOSOCKETEX_NO_SOCKET_CREATED_STR    "No socket was created =(."
-		#define IOSOCKETEX_CANNOT_BIND_STR          "You cannot <bindNListen> with this constructor; choose another one!"
-		#define IOSOCKETEX_CANNOT_CONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
-		#define IOSOCKETEX_CANNOT_ACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
-		#define IOSOCKETEX_ACCEPT_WO_BIND_STR       "You try to accept without called bindNListen or bindNListen failed."
-		#define IOSOCKETEX_WRONG_PARAMETER_STR     "Wrong paramather passed to function."
-		#define IOSOCKETEX_WRONG_FILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
+		#define IOSOCKETEX_NOSOCKETCREATED_STR    "No socket was created =(."
+		#define IOSOCKETEX_CANNOTBIND_STR          "You cannot <bindNListen> with this constructor; choose another one!"
+		#define IOSOCKETEX_CANNOTCONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
+		#define IOSOCKETEX_CANNOTACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
+		#define IOSOCKETEX_ACCEPTWOBIND_STR       "You try to accept without called bindNListen or bindNListen failed."
+		#define IOSOCKETEX_WRONGPARAMETER_STR     "Wrong paramather passed to function."
+		#define IOSOCKETEX_WRONGFILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
 	 * ID of function where exception was thrown

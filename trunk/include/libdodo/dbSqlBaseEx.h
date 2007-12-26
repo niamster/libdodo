@@ -37,13 +37,13 @@ namespace dodo
 	 */
 	enum dbSqlBaseExR
 	{
-		DBSQLBASEEX_EMPTY_REQUEST
+		DBSQLBASEEX_EMPTYREQUEST
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define DBSQLBASEEX_EMPTY_REQUEST_STR    "Query is empty. are you sure?"
+		#define DBSQLBASEEX_EMPTYREQUEST_STR    "Query is empty. are you sure?"
 
 	/**
 	 * ID of function where exception was thrown

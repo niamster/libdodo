@@ -38,8 +38,8 @@ namespace dodo
 	{
 		TOOLSEX_BADASCII85 = 1,
 		TOOLSEX_BADBZCOMPRESSION,
-		TOOLSEX_BADBZDECOMPRESSION_INIT,
-		TOOLSEX_BADBZDECOMPRESSION_FINISH,
+		TOOLSEX_BADBZDECOMPRESSIONINIT,
+		TOOLSEX_BADBZDECOMPRESSIONFINISH,
 		TOOLSEX_BADBZDECOMPRESSION,
 		TOOLSEX_BADMAILHELO,
 		TOOLSEX_BADMAILAUTH,
@@ -63,8 +63,8 @@ namespace dodo
 		#ifdef BZIP2_EXT
 
 			#define TOOLSEX_BADBZCOMPRESSION_STR             "Error occured during comression."
-			#define TOOLSEX_BADBZDECOMPRESSION_INIT_STR      "Error occured during preparations for decompression."
-			#define TOOLSEX_BADBZDECOMPRESSION_FINISH_STR    "Error occured during finishing decompression."
+			#define TOOLSEX_BADBZDECOMPRESSIONINIT_STR      "Error occured during preparations for decompression."
+			#define TOOLSEX_BADBZDECOMPRESSIONFINISH_STR    "Error occured during finishing decompression."
 			#define TOOLSEX_BADBZDECOMPRESSION_STR           "Error occured during decompression."
 
 		#endif
