@@ -42,6 +42,7 @@ namespace dodo
 	enum imageOperTypeEnum
 	{
 		IMAGE_OPERATION_WRITE,
+		IMAGE_OPERATION_READ,
 	};
 	
 	/**

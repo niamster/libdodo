@@ -146,6 +146,11 @@ image::~image()
 void
 image::read(const dodoString &str)
 {	
+	#ifndef IMAGE_WO_XEXEC
+	operType = IMAGE_OPERATION_READ;
+	performXExec(preExec);
+	#endif
+
 	strcpy(imInfo->filename, str.c_str());
 	
 	im = ReadImage(imInfo, exInfo);
@@ -155,6 +160,10 @@ image::read(const dodoString &str)
 	imInfo->compression = im->compression;
 	imInfo->quality = im->quality;
 	strcpy(imInfo->magick, im->magick);
+
+	#ifndef IMAGE_WO_XEXEC
+	performXExec(postExec);
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -163,6 +172,11 @@ void
 image::read(const unsigned char * const data, 
 		unsigned long size)
 {
+	#ifndef IMAGE_WO_XEXEC
+	operType = IMAGE_OPERATION_READ;
+	performXExec(preExec);
+	#endif
+
 	im = BlobToImage(imInfo, data, size, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);	
@@ -170,6 +184,10 @@ image::read(const unsigned char * const data,
 	imInfo->compression = im->compression;
 	imInfo->quality = im->quality;
 	strcpy(imInfo->magick, im->magick);
+
+	#ifndef IMAGE_WO_XEXEC
+	performXExec(postExec);
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -177,6 +195,11 @@ image::read(const unsigned char * const data,
 void
 image::read(const __imageInfo &info)
 {
+	#ifndef IMAGE_WO_XEXEC
+	operType = IMAGE_OPERATION_READ;
+	performXExec(preExec);
+	#endif
+
 	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr)/sizeof(__statements) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr)/sizeof(StorageType))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 	
@@ -187,6 +210,10 @@ image::read(const __imageInfo &info)
 	imInfo->compression = im->compression;
 	imInfo->quality = im->quality;
 	strcpy(imInfo->magick, im->magick);
+
+	#ifndef IMAGE_WO_XEXEC
+	performXExec(postExec);
+	#endif
 }
 
 //-------------------------------------------------------------------

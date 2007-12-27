@@ -19,7 +19,9 @@ using namespace std;
 		if (imData->operType == IMAGE_OPERATION_WRITE)
 		{
 			image *img = (image *)imData->executor;
+			img->disableAll();
 			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
+			img->enableAll();
 		}
 	}
 
