@@ -190,30 +190,57 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.
-			 * @param headers contains array of headers that would pe printed; it's usefull if you set silent=false[prin headers during contructing]
-			 * @param autoclearContent indicates whether to clean content of request in constructor
+			 * @param headers contains array of headers that would pe printed
+			 * @param silent indicates whether to print headers in constructor or not
+			 * @param autocleanFiles indicates whether to clean files in destructor
+			 * @param autocleanContent indicates whether to clean content of request in constructor
 			 * @param postFilesInMem indicates where to place POST files[disk or memory]
 			 * @param postFilesTmpDir indicates where to place POST files if on disk
-			 *
 			 * @note you cant print headers after they have been printed with printHeaders method
 			 */
-			cgi(bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(dodoStringMap &headers, bool silent=false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+
+
+			/**
+			 * constructor
+			 * @param silent indicates whether to print headers in constructor or not
+			 * @param autocleanContent indicates whether to clean content of request in constructor
+			 * @param autocleanFiles indicates whether to clean files in destructor
+			 * @param postFilesInMem indicates where to place POST files[disk or memory]
+			 * @param postFilesTmpDir indicates where to place POST files if on disk
+			 * @note you cant print headers after they have been printed with printHeaders method
+			 */
+			cgi(bool silent=false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 			#ifdef FCGI_EXT
 
 			/**
 			 * constructor
 			 * @param cf describes output interface
-			 * @param silent [false by default];if is set to true, no header will be printed during constructing; you may call printHeaders method later.
-			 * @param headers contains array of headers that would pe printed; it's usefull if you set silent=false[prin headers during contructing]
-			 * @param autoclearContent indicates whether to clean content of request in constructor
+			 * @param silent indicates whether to print headers in constructor or not
+			 * @param headers contains array of headers that would pe printed
+			 * @param autocleanContent indicates whether to clean content of request in constructor
+			 * @param autocleanFiles indicates whether to clean files in destructor
 			 * @param postFilesInMem indicates where to place POST files[disk or memory]
 			 * @param postFilesTmpDir indicates where to place POST files if on disk
 			 *
 			 * @note you cant print headers after they have been printed with printHeaders method
 			 */
-			cgi(cgiFastIO *cf, bool silent = false, dodoStringMap &headers = __dodostringmap__, bool autoclearContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(cgiFastIO *cf, bool silent=false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+
+			/**
+			 * constructor
+			 * @param cf describes output interface
+			 * @param headers contains array of headers that would pe printed
+			 * @param silent indicates whether to print headers in constructor or not
+			 * @param autocleanContent indicates whether to clean content of request in constructor
+			 * @param autocleanFiles indicates whether to clean files in destructor
+			 * @param postFilesInMem indicates where to place POST files[disk or memory]
+			 * @param postFilesTmpDir indicates where to place POST files if on disk
+			 *
+			 * @note you cant print headers after they have been printed with printHeaders method
+			 */
+			cgi(cgiFastIO *cf, dodoStringMap &headers, bool silent=false, bool autocleanFiles = true, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 			#endif
 
@@ -336,7 +363,7 @@ namespace dodo
 
 			bool postFilesInMem;                ///< where POST files stored
 
-			bool autoclearContent;              ///< clear content of the request after processing
+			bool autocleanFiles;              ///< clear files of the request in destructor
 
 			dodoString postFilesTmpDir;         ///< path of dir, where POST files will be temporary saved
 

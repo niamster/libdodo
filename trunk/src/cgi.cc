@@ -61,12 +61,14 @@ cgi::cgi(cgi &ct)
 
 //-------------------------------------------------------------------
 
-cgi::cgi(bool silent,
-		 dodoStringMap &a_headers,
-		 bool a_autoclearContent,
+cgi::cgi(dodoStringMap &headers,
+		 bool silent,
+		 bool autocleanContent,
+		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-										 postFilesTmpDir(a_postFilesTmpDir)
+										 postFilesTmpDir(a_postFilesTmpDir),
+										 autocleanFiles(a_autocleanFiles)
 				#ifdef FCGI_EXT
 										 ,
 										 cgiFastSet(false)
@@ -75,7 +77,7 @@ cgi::cgi(bool silent,
 {
 	fstd = new ioSTD;
 
-	initHeaders(a_headers);
+	initHeaders(headers);
 
 	if (!silent)
 		printHeaders();
@@ -87,7 +89,43 @@ cgi::cgi(bool silent,
 	makeContent();
 	makePost();
 	
-	if (autoclearContent)
+	if (autocleanContent)
+		content.clear();
+
+	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
+	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
+}
+
+//-------------------------------------------------------------------
+
+cgi::cgi(bool silent,
+		 bool autocleanContent,
+		 bool a_autocleanFiles,
+		 bool a_postFilesInMem,
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+										 postFilesTmpDir(a_postFilesTmpDir),
+										 autocleanFiles(a_autocleanFiles)
+				#ifdef FCGI_EXT
+										 ,
+										 cgiFastSet(false)
+				#endif
+
+{
+	fstd = new ioSTD;
+
+	initHeaders(__dodostringmap__);
+
+	if (!silent)
+		printHeaders();
+
+	makeEnv();
+
+	detectMethod();
+
+	makeContent();
+	makePost();
+	
+	if (autocleanContent)
 		content.clear();
 
 	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
@@ -100,16 +138,17 @@ cgi::cgi(bool silent,
 
 cgi::cgi(cgiFastIO    *a_cf,
 		 bool silent,
-		 dodoStringMap &a_headers,
-		 bool a_autoclearContent,
+		 bool autocleanContent,
+		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 cgiFastSet(true),
-										 cf(a_cf)
+										 cf(a_cf),
+										 autocleanFiles(a_autocleanFiles)
 
 {
-	initHeaders(a_headers);
+	initHeaders(__dodostringmap__);
 
 	if (!silent)
 		printHeaders();
@@ -121,12 +160,45 @@ cgi::cgi(cgiFastIO    *a_cf,
 	makeContent();
 	makePost();
 
-	if (autoclearContent)
+	if (autocleanContent)
 		content.clear();
 
 	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
 	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
 }
+
+cgi::cgi(cgiFastIO    *a_cf,
+		 dodoStringMap &headers,
+		 bool silent,
+		 bool autocleanContent,
+		 bool a_autocleanFiles,
+		 bool a_postFilesInMem,
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+										 postFilesTmpDir(a_postFilesTmpDir),
+										 cgiFastSet(true),
+										 cf(a_cf),
+										 autocleanFiles(a_autocleanFiles)
+
+{
+	initHeaders(headers);
+
+	if (!silent)
+		printHeaders();
+
+	makeEnv();
+
+	detectMethod();
+
+	makeContent();
+	makePost();
+
+	if (autocleanContent)
+		content.clear();
+
+	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
+	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
+}
+
 
 #endif
 
@@ -134,7 +206,8 @@ cgi::cgi(cgiFastIO    *a_cf,
 
 cgi::~cgi()
 {
-	cleanTmp();
+	if (autocleanFiles)
+		cleanTmp();
 
 	if (!cgiFastSet)
 		delete fstd;
@@ -260,14 +333,16 @@ cgi::makeEnv()
 void
 cgi::initHeaders(dodoStringMap &headers)
 {
-	HEADERS.insert("Content-type", "text/html");
-	HEADERS.insert("X-Powered-By", PACKAGE_NAME "/" PACKAGE_VERSION);
-
 	if (headers.size() > 0)
 	{
 		dodoStringMap::iterator i(headers.begin()), j(headers.end());
 		for (; i != j; ++i)
 			HEADERS.insert(i->first, i->second);
+	}
+	else
+	{
+		HEADERS.insert("Content-type", "text/html");
+		HEADERS.insert("X-Powered-By", PACKAGE_NAME "/" PACKAGE_VERSION);
 	}
 }
 

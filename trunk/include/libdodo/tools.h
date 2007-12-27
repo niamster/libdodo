@@ -140,53 +140,82 @@ namespace dodo
 			 * @return random data
 			 * @param data is pointer where to store data
 			 * @param size indicates amount of random data in bytes
-			 * @note based on /dev/random
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static void
 			random(void *data, unsigned long size, short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static unsigned long ulRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random long
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static long lRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned int
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static unsigned int uiRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random int
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static int iRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned short
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static unsigned short usRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random short
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static short sRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned char
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static unsigned char ucRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random char
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static char cRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random double
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static double dRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
