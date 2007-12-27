@@ -30,11 +30,42 @@
 
 #include <libdodo/types.h>
 #include <libdodo/imageEx.h>
+#include <libdodo/xexec.h>
 
 #include <magick/MagickCore.h>
 
 namespace dodo
 {
+	/**
+	 * @enum imageOperTypeEnum describes type of operation for hook
+	 */
+	enum imageOperTypeEnum
+	{
+		IMAGE_OPERATION_WRITE,
+	};
+	
+	/**
+	 * @struct __xexexImageCollectedData contains data that could be retrieved from class(to modificate)[contains references]
+	 */
+	struct __xexexImageCollectedData
+	{
+		/**
+		 * constructor
+		 * initiates references
+		 */
+		__xexexImageCollectedData(ImageInfo &imInfo,
+								Image &im,
+								int &operType,
+								void *executor);
+		
+		ImageInfo &imInfo;///< image info handler
+		Image &im;///< image handler
+		
+		int &operType; ///< operation type set by main action; can be used in hook to determine type of action
+		
+		void *executor;///< class that executed hook
+	};
+
 	/**
 	 * @enum imageMappingEnum describes the order of pixels 
 	 */
@@ -113,7 +144,7 @@ namespace dodo
 	/**
 	 * @class image for simple image manipulations
 	 */
-	class image
+	class image : public xexec
 	{
 		private:
 	
@@ -219,11 +250,65 @@ namespace dodo
 			 */
 			virtual void destroyImageData(unsigned char **data);
 			
+			#ifndef IMAGE_WO_XEXEC
+			
+			/**
+			* adds hook after the operation by callback
+			* @return number in list where function is set
+			* @param func is a pointer to function
+			* @param data is pointer to data toy want to pass to hook
+			*/
+			virtual int addPostExec(inExec func, void *data);
+			
+			/**
+			* adds hook before the operation by callback
+			* @return number in list where function is set
+			* @param func is a pointer to function
+			* @param data is pointer to data toy want to pass to hook
+			*/
+			virtual int addPreExec(inExec func, void *data);
+			
+			#ifdef DL_EXT
+			
+			/**
+			* set function from module that will be executed before/after the main action call
+			* the type of hook[pre/post] is defined in module
+			* @return number in list where function is set
+			* @param func is a pointer to function
+			* @param data is pointer to data toy want to pass to hook
+			* @param toInit indicates data that will path to initialize function
+			*/
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
+			
+			/**
+			* adds hook after the operation by callback
+			* @return number in list where function is set
+			* @param module is a path to module, whrere hook exists
+			* @param data is pointer to data toy want to pass to hook
+			* @param toInit indicates data that will path to initialize function
+			*/
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
+			
+			/**
+			* adds hook after the operation by callback
+			* @return number in list where function is set
+			* @param module is a path to module, whrere hook exists
+			* @param data is pointer to data toy want to pass to hook
+			* @param toInit indicates data that will path to initialize function
+			*/
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
+			
+			#endif
+			
+			#endif
+
 		protected:
 			
 			ImageInfo *imInfo;///< image info handler
 			Image *im;///< image handler
 			ExceptionInfo *exInfo;///< exception info handler
+			
+			__xexexImageCollectedData  collectedData;///< data collected for xexec 
 		
 		private:
 			

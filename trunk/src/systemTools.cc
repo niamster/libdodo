@@ -1211,3 +1211,25 @@ systemTools::blockSignal(long signals,
 }
 
 //-------------------------------------------------------------------
+
+void
+systemTools::daemonize()
+{
+	pid_t pid = fork();
+
+	if (pid == 0)
+	{
+		fclose(stdin);
+		fclose(stdout);
+		fclose(stderr);
+	}
+	else
+	{
+		if (pid == -1)
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		else
+			_exit(0);
+	}	
+}
+
+//-------------------------------------------------------------------

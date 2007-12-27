@@ -292,9 +292,9 @@ ioDisk::read(char * const a_void,
 			throw baseEx(ERRMODULE_IODISK, IODISKEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
-	buffer.assign(a_void, inSize);
-
 	#ifndef IODISK_WO_XEXEC
+	buffer.assign(a_void, inSize);
+	
 	performXExec(postExec);
 	#endif
 }
@@ -491,10 +491,10 @@ ioDisk::readStream(char * const a_void,
 
 				throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
-
+	
+	#ifndef IODISK_WO_XEXEC
 	buffer.assign(a_void);
 
-	#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }

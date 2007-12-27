@@ -198,6 +198,11 @@ namespace dodo
 			static void microSleep(unsigned long period);
 
 			/**
+			 * daemonize application
+			 */
+			static void daemonize();
+
+			/**
 			 * suspend for given seconds
 			 * @param period is time in seconds
 			 */

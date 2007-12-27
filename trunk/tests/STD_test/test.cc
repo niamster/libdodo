@@ -15,10 +15,18 @@ hook(void *base,
 	__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
 	if (st->operType == IOSTD_OPERATION_WRITE)
 	{
-		char q[100];
 		int a = *(int *)(st->buffer.c_str());
+		
+		ioSTD *io = (ioSTD *)st->executor;
+		io->disableAll();
+		io->writeStreamString("\nhook\n");
+		io->enableAll();
+		
+		char q[100];
 		++a;
-		sprintf(q,"%d",a);
+		sprintf(q,"%d\n",a);
+
+		io->outSize = strlen(q);
 		st->buffer.assign(q);
 	}
 }
@@ -50,6 +58,7 @@ int main(int argc, char **argv)
 		std::cout << o.size() << "\n";
 		
 		st.disablePreExec(pos);
+		
 		st.writeStreamString(o);
 		st.writeStreamString("\nexiting\n");
 	}

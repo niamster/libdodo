@@ -41,11 +41,14 @@ namespace dodo
 		 * initiates references
 		 */
 		__xexexIoCollectedData(dodoString &buffer,
-								int &operType);
+								int &operType,
+								void *executor);
 
 		dodoString &buffer;      ///< buffer where data is stored
 		
 		int &operType; ///< operation type set by main action; can be used in hook to determine type of action
+		
+		void *executor;///< class that executed hook
 	};
 
 	/**

@@ -317,9 +317,9 @@ ioSocketExchange::read(char * const data)
 		}
 	}
 
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC	
 	buffer.assign(data, inSize);
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -520,9 +520,9 @@ ioSocketExchange::readStream(char * const data)
 
 	data[n] = '\0';
 
-	buffer.assign(data, n);
-
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	buffer.assign(data, n);
+	
 	performXExec(postExec);
 	#endif
 }

@@ -43,7 +43,8 @@ __xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
 	int &a_qInsShift,
 	int &a_qUpShift,
 	int &a_qDelShift,
-	int &a_operType) :	pre_where(a_pre_where),
+	int &a_operType,
+	void *a_executor) :	pre_where(a_pre_where),
 			pre_fieldsNames(a_pre_fieldsNames),
 			pre_fieldsVal(a_pre_fieldsVal),
 			pre_table(a_pre_table),
@@ -60,7 +61,8 @@ __xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
 			qInsShift(a_qInsShift),
 			qUpShift(a_qUpShift),
 			qDelShift(a_qDelShift),
-			operType(a_operType)
+			operType(a_operType),
+			executor(a_executor)
 {
 }
 
@@ -90,7 +92,8 @@ db::db() : connected(false),
 					   qInsShift,
 					   qUpShift,
 					   qDelShift,
-					   operType)
+					   operType,
+					   (void *)this)
 {
 }
 

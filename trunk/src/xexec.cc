@@ -74,22 +74,6 @@ xexec::~xexec()
 
 //-------------------------------------------------------------------
 
-void 
-xexec::enableDataCollecting(bool enable)
-{
-	collectData = enable;
-}
-
-//-------------------------------------------------------------------
-
-bool 
-xexec::dataCollectingEnabled()
-{
-	return collectData;
-}
-
-//-------------------------------------------------------------------
-
 int
 xexec::addXExec(std::list<__execItem> &list,
 				inExec func,

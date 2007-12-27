@@ -91,7 +91,7 @@ namespace dodo
 
 	 #endif
 
-	enum toolsRandomStrength
+	enum toolsRandomStrengthEnum
 	{
 		TOOLS_RANDOMSTRENGTH_DEFAULT,
 		TOOLS_RANDOMSTRENGTH_STRONG

@@ -325,7 +325,7 @@ namespace dodo
 			 */
 			virtual bool getThread(unsigned long position) const;
 
-			std::list<__threadInfo> threads;                        ///< vector of threads
+			mutable std::list<__threadInfo> threads;                        ///< vector of threads
 
 			unsigned long threadNum;                                ///< number of registered threads
 

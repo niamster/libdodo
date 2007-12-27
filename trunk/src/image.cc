@@ -99,14 +99,33 @@ const CompressionType image::compressionStArr[] =
 
 //-------------------------------------------------------------------
 
-image::image(image &im)
+
+__xexexImageCollectedData::__xexexImageCollectedData(ImageInfo &a_imInfo,
+													Image &a_im,
+													int &a_operType,
+													void *a_executor) : imInfo(a_imInfo),
+													im(a_im),
+													operType(a_operType),
+													executor(a_executor)
 {
-	
 }
 
 //-------------------------------------------------------------------
 
-image::image() : im(NULL)
+image::image(image &a_im) : collectedData(*imInfo,
+						*im,
+						operType,
+						(void *)this)
+{
+}
+
+//-------------------------------------------------------------------
+
+image::image() : im(NULL),
+				collectedData(*imInfo,
+							*im,
+							operType,
+							(void *)this)
 {
 	imInfo = AcquireImageInfo();
 	exInfo = AcquireExceptionInfo();
@@ -174,11 +193,20 @@ image::read(const __imageInfo &info)
 
 void
 image::write(const dodoString &str)
-{	
+{
+	#ifndef IMAGE_WO_XEXEC
+	operType = IMAGE_OPERATION_WRITE;
+	performXExec(preExec);
+	#endif
+
 	strcpy(im->filename, str.c_str());
 	
 	if (WriteImage(imInfo, im) == MagickFalse)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, im->exception.error_number, exInfo->reason, __LINE__, __FILE__);
+
+	#ifndef IMAGE_WO_XEXEC
+	performXExec(postExec);
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -186,11 +214,20 @@ image::write(const dodoString &str)
 void
 image::write(unsigned char **data, 
 			unsigned int &size)
-{	
+{
+	#ifndef IMAGE_WO_XEXEC
+	operType = IMAGE_OPERATION_WRITE;
+	performXExec(preExec);
+	#endif
+
 	size = 0;
 	*data = ImageToBlob(imInfo, im, &size, exInfo);
 	if (data == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
+
+	#ifndef IMAGE_WO_XEXEC
+	performXExec(postExec);
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -290,6 +327,64 @@ image::destroyImageData(unsigned char **data)
 {
 	free(*data);
 }
+
+//-------------------------------------------------------------------
+
+#ifndef DBSQLITE_WO_XEXEC
+
+int
+image::addPostExec(inExec func,
+				  void   *data)
+{
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data);
+}
+
+//-------------------------------------------------------------------
+
+int
+image::addPreExec(inExec func,
+				 void   *data)
+{
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data);
+}
+
+//-------------------------------------------------------------------
+
+	#ifdef DL_EXT
+
+int
+image::addPostExec(const dodoString &module,
+				  void             *data,
+				  void             *toInit)
+{
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data, toInit);
+}
+
+//-------------------------------------------------------------------
+
+int
+image::addPreExec(const dodoString &module,
+				 void             *data,
+				 void             *toInit)
+{
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data, toInit);
+}
+
+//-------------------------------------------------------------------
+
+__xexecCounts
+image::addExec(const dodoString &module,
+			  void             *data,
+			  void             *toInit)
+{
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data, toInit);
+}
+
+	#endif
+
+//-------------------------------------------------------------------
+
+#endif
 
 //-------------------------------------------------------------------
 

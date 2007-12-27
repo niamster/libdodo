@@ -82,7 +82,8 @@ namespace dodo
 						int &qInsShift,
 						int &qUpShift,
 						int &qDelShift,
-						int &operType);
+						int &operType,
+						void *executor);
 
 		dodoString &pre_where;                      ///< where statement of the request
 		dodoStringArray &pre_fieldsNames;             ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
@@ -106,6 +107,8 @@ namespace dodo
 		int &qDelShift;                             ///< additional delete statements[see addDelEnum]
 		
 		int &operType; ///< operation type set by main action; can be used in hook to determine type of action
+		
+		void *executor;///< class that executed hook
 	};
 	
 	/**

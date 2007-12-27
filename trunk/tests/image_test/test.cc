@@ -7,11 +7,31 @@
 using namespace dodo;
 using namespace std;
 
+#ifdef IMAGEMAGICK_EXT
+
+	void 
+	hook(void *base,
+		short int type,
+		void *yep)
+	{
+		__xexexImageCollectedData *imData = (__xexexImageCollectedData *)base;
+	
+		if (imData->operType == IMAGE_OPERATION_WRITE)
+		{
+			image *img = (image *)imData->executor;
+			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
+		}
+	}
+
+#endif
+	
 int main(int argc, char **argv)
 {	
 	try
 	{
 		image im;
+		im.addPreExec(hook, NULL);
+		im.addPostExec(hook, NULL);///< revert
 
 		im.read("test.png");
 		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
@@ -21,7 +41,6 @@ int main(int argc, char **argv)
 		im.write("test.jpg");
 		
 		unsigned char *img; unsigned int size;
-		im.rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
 		im.setEncoder(IMAGE_ENCODER_PNG);
 		im.setCompression(IMAGE_COMPRESSION_ZIP);
 		im.setQuality(4);

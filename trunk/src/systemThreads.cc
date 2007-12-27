@@ -450,9 +450,9 @@ systemThreads::running() const
 {
 	unsigned long amount(0);
 
-	std::list<__threadInfo>::const_iterator i(threads.begin()), j(threads.end());
+	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
-		if (_isRunning(*((std::list<__threadInfo>::iterator *) & i)))
+		if (_isRunning(i))
 			++amount;
 
 	return amount;

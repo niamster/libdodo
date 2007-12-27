@@ -50,6 +50,7 @@ namespace dodo
 		XEXEC_OBJECT_IOSOCKET,
 		XEXEC_OBJECT_IOSOCKETEXCHANGE,
 		XEXEC_OBJECT_DBPOSTGRESQL,
+		XEXEC_OBJECT_IMAGE
 	};
 
 	/**
@@ -345,17 +346,6 @@ namespace dodo
 			static __xexecMod getModuleInfo(const dodoString &module, void *toInit=NULL);
 
 			#endif
-			
-			/**
-			 * permits to collect data for xexec
-			 * @param enable defines whether collect or not
-			 */
-			virtual void enableDataCollecting(bool enable);
-			
-			/**
-			 * @return true if it's permitted to collect data for xexec
-			 */
-			virtual bool dataCollectingEnabled();
 
 		protected:
 

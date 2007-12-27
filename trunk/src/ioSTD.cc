@@ -172,9 +172,9 @@ ioSTD::read(char * const a_void)
 		}
 	}
 
+	#ifndef IOSTD_WO_XEXEC	
 	buffer.assign(a_void, inSize);
-
-	#ifndef IOSTD_WO_XEXEC
+	
 	performXExec(postExec);
 	#endif
 }
@@ -414,9 +414,9 @@ ioSTD::readStream(char * const a_void)
 		break;
 	}
 
+	#ifndef IOSTD_WO_XEXEC	
 	buffer.assign(a_void);
 
-	#ifndef IOSTD_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }

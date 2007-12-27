@@ -1259,6 +1259,8 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
+  --disable-image-xexec-support
+                          compile image w/o xexec support
   --disable-ioSTD-xexec-support
                           compile ioSTD w/o xexec support
   --disable-ioSocketExchange-xexec-support
@@ -3815,6 +3817,23 @@ then
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tenabled"
 else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
+fi
+
+# Check whether --enable-image-xexec-support was given.
+if test "${enable_image_xexec_support+set}" = set; then
+  enableval=$enable_image_xexec_support; IMAGE_W_XEXEC="$enableval"
+else
+  IMAGE_W_XEXEC="yes"
+fi
+
+
+if test "$IMAGE_W_XEXEC" = "no"
+then
+	echo -n -e "#define IMAGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioSTD-xexec-support was given.
