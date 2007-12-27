@@ -59,7 +59,7 @@ namespace dodo
 			 * if you want to share semaphore between different instances of process - set own key,
 			 * otherwise(like fork) - can be generated
 			 */
-			systemSharedData(const char *key = NULL);
+			systemSharedData(const char *key=NULL);
 
 			/**
 			 * destructor

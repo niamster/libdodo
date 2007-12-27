@@ -208,7 +208,7 @@ namespace dodo
 			 * @param message is message to print
 			 * @param status indicate with what status to exit
 			 */
-			static void die(const dodoString &message, int status = 1);
+			static void die(const dodoString &message, int status=1);
 
 			/**
 			 * changes root(/) to new
@@ -382,7 +382,7 @@ namespace dodo
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
 			static void
-			setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals = -1);
+			setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals=-1);
 
 			/**
 			 * set timer and onTimer function
@@ -391,7 +391,7 @@ namespace dodo
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
 			static void
-			setTimer(long timeout, signalHandler handler, int blockSignals = -1);
+			setTimer(long timeout, signalHandler handler, int blockSignals=-1);
 
 			/**
 			 * set signal handler
@@ -400,7 +400,7 @@ namespace dodo
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
 			static void
-			setSignalHandler(long signal, signalHandler handler, int blockSignals = -1);
+			setSignalHandler(long signal, signalHandler handler, int blockSignals=-1);
 
 			/**
 			 * determines whether handler was set on signal[see systemSignalsEnum]
@@ -422,7 +422,7 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static __sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __sigMod getModuleInfo(const dodoString &module, void *toInit=NULL);
 
 			/**
 			 * set handler on signal from specific module
@@ -432,7 +432,7 @@ namespace dodo
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
 			 */
 			static void
-			setSignalHandler(long signal, const dodoString &module, void *toInit = NULL, int blockSignals = -1);
+			setSignalHandler(long signal, const dodoString &module, void *toInit=NULL, int blockSignals=-1);
 
 			/**
 			 * set handler on signal from specific module
@@ -442,7 +442,7 @@ namespace dodo
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
 			static void
-			setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
+			setSignalHandler(const dodoString &module, void *toInit=NULL, int blockSignals=-1);
 
 			#endif
 
@@ -459,7 +459,7 @@ namespace dodo
 			 * @param signal indicates what signals to block/unblock; can be or'ed;
 			 * @param block indicates whether to block or unblock
 			 */
-			static void blockSignal(long signals, bool block = true);
+			static void blockSignal(long signals, bool block=true);
 
 		protected:
 

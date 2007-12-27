@@ -198,7 +198,7 @@ namespace dodo
 			 * @param postFilesTmpDir indicates where to place POST files if on disk
 			 * @note you cant print headers after they have been printed with printHeaders method
 			 */
-			cgi(dodoStringMap &headers, bool silent=false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(dodoStringMap &headers, bool silent=false, bool autocleanContent=true, bool autocleanFiles=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 
 
 			/**
@@ -210,7 +210,7 @@ namespace dodo
 			 * @param postFilesTmpDir indicates where to place POST files if on disk
 			 * @note you cant print headers after they have been printed with printHeaders method
 			 */
-			cgi(bool silent=false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(bool silent=false, bool autocleanContent=true, bool autocleanFiles=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 
 			#ifdef FCGI_EXT
 
@@ -226,7 +226,7 @@ namespace dodo
 			 *
 			 * @note you cant print headers after they have been printed with printHeaders method
 			 */
-			cgi(cgiFastIO *cf, bool silent=false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(cgiFastIO *cf, bool silent=false, bool autocleanContent=true, bool autocleanFiles=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 
 			/**
 			 * constructor
@@ -240,7 +240,7 @@ namespace dodo
 			 *
 			 * @note you cant print headers after they have been printed with printHeaders method
 			 */
-			cgi(cgiFastIO *cf, dodoStringMap &headers, bool silent=false, bool autocleanFiles = true, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(cgiFastIO *cf, dodoStringMap &headers, bool silent=false, bool autocleanFiles=true, bool autocleanContent=true, bool postFilesInMem=true, dodoString postFilesTmpDir="/tmp/");
 
 			#endif
 
@@ -285,7 +285,7 @@ namespace dodo
 			 * @param varName name of the variable
 			 * @param first indicates what array will be searched first[see requestMethodEnum]
 			 */
-			virtual dodoString request(const dodoString &varName, short first = CGI_REQUESTMETHOD_GET);
+			virtual dodoString request(const dodoString &varName, short first=CGI_REQUESTMETHOD_GET);
 
 			/**
 			 * prints cgi headers;
@@ -317,7 +317,7 @@ namespace dodo
 			 * @param domain is cookie's domain
 			 * @param secure is indicates if cookie is secure; false by default
 			 */
-			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate = __dodostring__, const dodoString &path = __dodostring__, const dodoString &domain = __dodostring__, bool secure = false);
+			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate=__dodostring__, const dodoString &path=__dodostring__, const dodoString &domain=__dodostring__, bool secure=false);
 
 			virtual void setCookie(const __cookies &cookie);
 
@@ -357,7 +357,7 @@ namespace dodo
 			 * @param string contains string to process
 			 * @param delim indicates format of delimiter
 			 */
-			virtual void make(dodoStringMap &val, const dodoString &string, const char *delim = "&");
+			virtual void make(dodoStringMap &val, const dodoString &string, const char *delim="&");
 
 		private:
 

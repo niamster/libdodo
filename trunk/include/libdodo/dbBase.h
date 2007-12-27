@@ -265,7 +265,7 @@ namespace dodo
 			 * @param password is password, to connect to server
 			 * @param socket is path to unix socket
 			 */
-			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __dodostring__);
+			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path=__dodostring__);
 
 			/**
 			 * sets info for database
@@ -278,7 +278,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__);
+			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where=__dodostring__);
 
 			/**
 			 * @param table is table name
@@ -301,20 +301,20 @@ namespace dodo
 			 * @param fieldsVal is array of fields' values
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__);
+			virtual void insert(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames=__dodostringarray__);
 
 			/**
 			 * @param table is table name
 			 * @param fieldsVal - array of array of (array of fields' values)
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__);
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &fieldsVal, const dodoStringArray &fieldsNames=__dodostringarray__);
 
 			/**
 			 * @param table(To/From) is table name To/From
 			 * @param fieldsNames is array of fields' names
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsNamesTo, const dodoStringArray &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__);
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsNamesTo, const dodoStringArray &fieldsNamesFrom=__dodostringarray__, const dodoString &where=__dodostring__);
 
 			/**
 			 * @param table is table name
@@ -323,7 +323,7 @@ namespace dodo
 			 * 			value => field's value
 			 * @param where is where statement for request
 			 */
-			virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where = __dodostring__);
+			virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where=__dodostring__);
 
 			/**
 			 * @param table is table name
@@ -331,20 +331,20 @@ namespace dodo
 			 * @param fieldsNames is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void update(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__);
+			virtual void update(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &where=__dodostring__);
 
 			/**
 			 * @param table is table name
 			 * @param where is where statement for request
 			 */
-			virtual void del(const dodoString &table, const dodoString &where = __dodostring__);
+			virtual void del(const dodoString &table, const dodoString &where=__dodostring__);
 
 			/**
 			 * store query, made from subquery with requested method
 			 * @param sub is array of subqueries
 			 * @param type is type of "subquering"[see qStEnum]
 			 */
-			virtual void subquery(const dodoStringArray &sub, int type = DBBASE_REQUEST_UNION /*DBBASE_REQUEST_UNION_ALL, DBBASE_REQUEST_MINUS, DBBASE_REQUEST_INTERSECT*/);
+			virtual void subquery(const dodoStringArray &sub, int type=DBBASE_REQUEST_UNION /*DBBASE_REQUEST_UNION_ALL, DBBASE_REQUEST_MINUS, DBBASE_REQUEST_INTERSECT*/);
 
 			/**
 			 * create index in table
@@ -413,7 +413,7 @@ namespace dodo
 			 * @param db is name of new database
 			 * @param charset indicates what type of charset will be used
 			 */
-			virtual void createDb(const dodoString &db, const dodoString &charset = __dodostring__);
+			virtual void createDb(const dodoString &db, const dodoString &charset=__dodostring__);
 
 			/**
 			 * creates table

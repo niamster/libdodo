@@ -69,7 +69,7 @@ namespace dodo
 			 * @note - exception if it's currently running
 			 */
 			virtual void
-			del(unsigned long position, bool force = false) = 0;
+			del(unsigned long position, bool force=false) = 0;
 
 			/**
 			 * executes job
@@ -78,7 +78,7 @@ namespace dodo
 			 * @note - exception if it's currently running
 			 */
 			virtual void
-			run(unsigned long position, bool force = false) = 0;
+			run(unsigned long position, bool force=false) = 0;
 
 			/**
 			 * stops job
@@ -128,7 +128,7 @@ namespace dodo
 			 * @param limit indicates the job's limit on executions
 			 */
 			virtual void
-			setExecutionLimit(unsigned long position, unsigned long limit = 1) = 0;
+			setExecutionLimit(unsigned long position, unsigned long limit=1) = 0;
 
 
 			#ifdef DL_EXT
@@ -140,7 +140,7 @@ namespace dodo
 			 * @param data describes data to be passed to func
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
+			virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL) = 0;
 
 			#endif
 	};

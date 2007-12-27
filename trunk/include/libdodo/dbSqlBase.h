@@ -219,7 +219,7 @@ namespace dodo
 			 * @param fieldsNames is array of names
 			 * @param frame is value with what values will be framed
 			 */
-			virtual dodoString fieldsValName(const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &frame = "'");
+			virtual dodoString fieldsValName(const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &frame="'");
 
 			/**
 			 * @return sql compliant data type

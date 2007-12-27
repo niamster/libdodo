@@ -146,7 +146,7 @@ namespace dodo
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
 			virtual void
-			exec(const dodoString &query = __dodostring__, bool result = false);
+			exec(const dodoString &query=__dodostring__, bool result=false);
 
 			/**
 			 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
@@ -181,7 +181,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -190,7 +190,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -199,7 +199,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
 
 				#endif
 

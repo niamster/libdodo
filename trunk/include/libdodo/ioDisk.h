@@ -97,7 +97,7 @@ namespace dodo
 			 * @param mode defines mode to open file 
 			 * @note if type == TMP_FILE, u don't have to specify path
 			 */
-			ioDisk(const dodoString &path = __dodostring__, short fileType = IODISK_FILETYPE_REG_FILE, short mode = IODISK_OPENMODE_READ_WRITE);
+			ioDisk(const dodoString &path=__dodostring__, short fileType=IODISK_FILETYPE_REG_FILE, short mode=IODISK_OPENMODE_READ_WRITE);
 
 			/**
 			 * destructor
@@ -132,7 +132,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -141,7 +141,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -150,7 +150,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
 
 				#endif
 
@@ -179,14 +179,14 @@ namespace dodo
 			 * @param pos indicates position in file
 			 */
 			virtual void
-			readString(dodoString &data, unsigned long pos = 0);
+			readString(dodoString &data, unsigned long pos=0);
 			/**
 			 * read data
 			 * @param data will be filled with data
 			 * @param pos indicates position in file
 			 */
 			virtual void
-			read(char * const data, unsigned long pos = 0);
+			read(char * const data, unsigned long pos=0);
 
 			/**
 			 * write string
@@ -194,7 +194,7 @@ namespace dodo
 			 * @param pos indicates position in file
 			 */
 			virtual void
-			writeString(const dodoString &data, unsigned long pos = 0);
+			writeString(const dodoString &data, unsigned long pos=0);
 
 			/**
 			 * write string
@@ -202,7 +202,7 @@ namespace dodo
 			 * @param pos indicates position in file
 			 */
 			virtual void
-			write(const char * const data, unsigned long pos = 0);
+			write(const char * const data, unsigned long pos=0);
 
 			/**
 			 * read string - null[or \n]-terminated string
@@ -211,7 +211,7 @@ namespace dodo
 			 * @note max size is inSize
 			 */
 			virtual void
-			readStreamString(dodoString &data, unsigned long pos = 0);
+			readStreamString(dodoString &data, unsigned long pos=0);
 			/**
 			 * read data - null[or \n]-terminated string
 			 * @param data will be filled with data
@@ -219,7 +219,7 @@ namespace dodo
 			 * @note max size is inSize
 			 */
 			virtual void
-			readStream(char * const data, unsigned long pos = 0);
+			readStream(char * const data, unsigned long pos=0);
 
 			/**
 			 * write string - null-terminated string [append only]

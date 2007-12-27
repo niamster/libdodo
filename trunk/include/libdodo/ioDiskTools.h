@@ -122,7 +122,7 @@ namespace dodo
 			 * @note works as cp[but for files and empty dirs] -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 			 */
 			static void
-			copy(const dodoString &from, const dodoString &to, bool force = false);
+			copy(const dodoString &from, const dodoString &to, bool force=false);
 
 			/**
 			 * copy file/Dir
@@ -132,7 +132,7 @@ namespace dodo
 			 * @note works as cp -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 			 */
 			static void
-			copyDir(const dodoString &from, const dodoString &to, bool force = false);
+			copyDir(const dodoString &from, const dodoString &to, bool force=false);
 
 			/**
 			 * appends string to file
@@ -174,7 +174,7 @@ namespace dodo
 			 * @param force if it is true and nothing already exists do not say anything
 			 */
 			static void
-			unlink(const dodoString &path, bool force = true);               ///< also empty directory
+			unlink(const dodoString &path, bool force=true);               ///< also empty directory
 
 			/**
 			 * rename file
@@ -190,7 +190,7 @@ namespace dodo
 			 * @param time is timestams; if not specified -> now
 			 */
 			static void
-			touch(const dodoString &path, int time = -1);               ///< now by default
+			touch(const dodoString &path, int time=-1);               ///< now by default
 
 
 			/**
@@ -199,7 +199,7 @@ namespace dodo
 			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 */
 			static void
-			mkfifo(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
+			mkfifo(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
 			
 			/**
 			 * make directory
@@ -208,7 +208,7 @@ namespace dodo
 			 * @param force if it is true and directory already exists do not say anything
 			 */
 			static void
-			mkdir(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force = true);
+			mkdir(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force=true);
 
 			/**
 			 * delete files, non empty directory
@@ -216,7 +216,7 @@ namespace dodo
 			 * @param force if it is true and nothing already exists do not say anything
 			 */
 			static void
-			rm(const dodoString &path, bool force = true);
+			rm(const dodoString &path, bool force=true);
 
 			/**
 			 * @return type of file; if error occured and lib was compiled without exceptions -> -1 will be returned;
@@ -271,7 +271,7 @@ namespace dodo
 			 * @param force if is set to true link exists already - nothing to say, but replace
 			 */
 			static void
-			symlink(const dodoString &oldPath, const dodoString &newPath, bool force = true);
+			symlink(const dodoString &oldPath, const dodoString &newPath, bool force=true);
 
 			/**
 			 * creates link

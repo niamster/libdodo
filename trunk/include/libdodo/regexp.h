@@ -91,7 +91,7 @@ namespace dodo
 			 * pockets clears before fillin'
 			 * first in pocket is not sample - but first match
 			 */
-			bool match(const dodoString &pattern, const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
+			bool match(const dodoString &pattern, const dodoString &sample, dodoStringArray &pockets=__dodostringarray__);
 
 			/**
 			 * matches with pattern prviously given with match method; if patterns are similar - faster!
@@ -102,7 +102,7 @@ namespace dodo
 			 * pockets clears before fillin'
 			 * first in pocket is not sample - but first match
 			 */
-			bool reMatch(const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
+			bool reMatch(const dodoString &sample, dodoStringArray &pockets=__dodostringarray__);
 
 			/**
 			 * replaces in sample from pieces usin' pattern

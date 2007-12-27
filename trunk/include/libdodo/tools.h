@@ -233,7 +233,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArray explode(const dodoString &fields, const dodoString &separator, int limit = -1);
+			static dodoStringArray explode(const dodoString &fields, const dodoString &separator, int limit=-1);
 
 			/**
 			 * @return array of strings made from string using separtator
@@ -242,7 +242,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArray explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit = -1);
+			static dodoStringArray explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit=-1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -252,7 +252,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit=-1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -261,7 +261,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, int limit=-1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -269,7 +269,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, int limit=-1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -278,7 +278,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
+			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit=-1);
 
 			#ifdef ICONV_EXT
 
@@ -304,7 +304,7 @@ namespace dodo
 			 * @param type descibes compression strategy[see zlibCompressionStrategyEnum]
 			 * @note if compiled without exeptions - on error buffer will be returned
 			 */
-			static dodoString zCompress(const dodoString &buffer, unsigned short level = 6, short type = ZLIB_HUFFMAN_COMRESSION);
+			static dodoString zCompress(const dodoString &buffer, unsigned short level=6, short type=ZLIB_HUFFMAN_COMRESSION);
 
 			/**
 			 * @return decompressed buffer
@@ -393,7 +393,7 @@ namespace dodo
 			 * @note if compiled without exeptions - on error buffer will be returned
 			 * Lower values of workFactor reduce the amount of effort the standard algorithm will expend before resorting to the fallback
 			 */
-			static dodoString bzCompress(const dodoString &buffer, unsigned short level = 6, unsigned short type = 30);
+			static dodoString bzCompress(const dodoString &buffer, unsigned short level=6, unsigned short type=30);
 
 			/**
 			 * @return decompressed buffer
@@ -414,7 +414,7 @@ namespace dodo
 			 * @note if login is emty - no auth
 			 */
 			static void
-			mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__);
+			mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers=__dodostring__);
 
 			/**
 			 * sends mail
@@ -430,7 +430,7 @@ namespace dodo
 			 * @param headers - extra headers [each must ends with `\r\n`]
 			 */
 			static void
-			mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
+			mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login=__dodostring__, const dodoString &pass=__dodostring__, const dodoString &headers=__dodostring__);
 
 		private:
 

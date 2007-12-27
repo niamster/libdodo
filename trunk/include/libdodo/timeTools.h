@@ -75,7 +75,7 @@ namespace dodo
 		 * constructor
 		 * @note set structure's data with user data
 		 */
-		__mktime(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight = true);
+		__mktime(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight=true);
 
 		unsigned int sec;   ///< Seconds [0, 60]
 		unsigned int min;   ///< Minutes [0, 59]
@@ -108,7 +108,7 @@ namespace dodo
 			 * @param timestamp is amount of seconds from 01.01.1970
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 */
-			static dodoString byFormat(const dodoString &format, long timestamp, bool local = true);
+			static dodoString byFormat(const dodoString &format, long timestamp, bool local=true);
 
 			/**
 			 * @return timestamp[amount of seconds from 01.01.1970]
@@ -129,7 +129,7 @@ namespace dodo
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 * @note monday is first in the array
 			 */
-			static dodoStringArray week(long date, const dodoString &format, bool local = true);
+			static dodoStringArray week(long date, const dodoString &format, bool local=true);
 
 			/**
 			 * @return array of dates between specified period
@@ -139,7 +139,7 @@ namespace dodo
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 * @note you should't set the date in 00:00, add some hours; you can get strange result in periods whe daytime changes
 			 */
-			static dodoStringArray datesArr(long dateFrom, long dateTo, const dodoString &format, bool local = true);
+			static dodoStringArray datesArr(long dateFrom, long dateTo, const dodoString &format, bool local=true);
 
 			/**
 			 * @return second that describes __mktime
@@ -152,7 +152,7 @@ namespace dodo
 			 * @seconds is amount of secound that will be translated
 			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 */
-			static __mktime makeTime(long seconds, bool local = true);
+			static __mktime makeTime(long seconds, bool local=true);
 	};
 
 };

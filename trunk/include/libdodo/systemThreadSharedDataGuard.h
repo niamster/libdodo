@@ -77,7 +77,7 @@ namespace dodo
 			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
 			 * @note if microseconds==0 - infinite sleep
 			 */
-			virtual void *lock(unsigned long microseconds = 0);
+			virtual void *lock(unsigned long microseconds=0);
 
 
 			/**
