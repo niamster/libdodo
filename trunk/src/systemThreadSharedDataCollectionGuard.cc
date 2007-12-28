@@ -104,16 +104,31 @@ systemThreadSharedDataCollectionGuard::get(unsigned long position)
 bool
 systemThreadSharedDataCollectionGuard::getShare(unsigned long position)
 {
-	std::list<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
+	dodoList<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((std::list<__shareInfo>::iterator *) & i);
+			current = *((dodoList<__shareInfo>::iterator *) & i);
 
 			return true;
 		}
 
 	return false;
+}
+
+
+//-------------------------------------------------------------------
+
+dodoList<unsigned long> 
+systemThreadSharedDataCollectionGuard::getSharedDataIds()
+{
+	dodoList<unsigned long> ids;
+	
+	dodoList<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
+	for (; i != j; ++i)
+		ids.push_back(i->position);
+	
+	return ids;
 }
 
 //-------------------------------------------------------------------

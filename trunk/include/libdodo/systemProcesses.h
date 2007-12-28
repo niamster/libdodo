@@ -246,6 +246,11 @@ namespace dodo
 			 * sweep processes if their time are already passed
 			 */
 			virtual void sweepTrash();
+			
+			/**
+			 * @return list of jobs in object
+			 */
+			virtual dodoList<unsigned long> getJobsIds();
 
 			/**
 			 * set maximum execution time
@@ -283,7 +288,7 @@ namespace dodo
 			 * @return true if thread is process
 			 * @param position indicates for what process to indicate
 			 */
-			virtual bool _isRunning(std::list<__processInfo>::iterator &position) const;
+			virtual bool _isRunning(dodoList<__processInfo>::iterator &position) const;
 
 			/**
 			 * searches processes by position
@@ -295,9 +300,9 @@ namespace dodo
 
 			unsigned long processNum;                           ///< number of registered processes
 
-			std::list<__processInfo> processes;                 ///< vector of processes
+			dodoList<__processInfo> processes;                 ///< vector of processes
 
-			mutable std::list<__processInfo>::iterator current; ///< iterator for list of processes[for matched with getProcess method]
+			mutable dodoList<__processInfo>::iterator current; ///< iterator for list of processes[for matched with getProcess method]
 	};
 
 };

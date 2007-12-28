@@ -48,7 +48,7 @@ systemProcesses::systemProcesses() : processNum(0)
 
 systemProcesses::~systemProcesses()
 {
-	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 
 	#ifdef DL_EXT
 	deinitSystemProcessesModule deinit;
@@ -226,11 +226,11 @@ systemProcesses::del(unsigned long position,
 bool
 systemProcesses::getProcess(unsigned long position) const
 {
-	std::list<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((std::list<__processInfo>::iterator *) & i);
+			current = *((dodoList<__processInfo>::iterator *) & i);
 			return true;
 		}
 
@@ -240,7 +240,7 @@ systemProcesses::getProcess(unsigned long position) const
 //-------------------------------------------------------------------
 
 bool
-systemProcesses::_isRunning(std::list<__processInfo>::iterator &position) const
+systemProcesses::_isRunning(dodoList<__processInfo>::iterator &position) const
 {
 	if (!position->isRunning)
 		return false;
@@ -374,7 +374,7 @@ systemProcesses::stop(unsigned long position)
 void
 systemProcesses::stop()
 {
-	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
 	{
 		if (!_isRunning(i))
@@ -412,7 +412,7 @@ systemProcesses::wait(unsigned long position)
 void
 systemProcesses::wait()
 {
-	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
 	{
 		if (!_isRunning(i))
@@ -443,9 +443,9 @@ systemProcesses::running() const
 {
 	unsigned long amount(0);
 
-	std::list<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
-		if (_isRunning(*((std::list<__processInfo>::iterator *) & i)))
+		if (_isRunning(*((dodoList<__processInfo>::iterator *) & i)))
 			++amount;
 
 	return amount;
@@ -456,7 +456,7 @@ systemProcesses::running() const
 void
 systemProcesses::sweepTrash()
 {
-	std::list<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	while (i != j)
 	{
 		if (_isRunning(i))
@@ -488,6 +488,7 @@ systemProcesses::setExecutionLimit(unsigned long position,
 	else
 		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_SETEXECUTIONLIMIT, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
+
 //-------------------------------------------------------------------
 
 	#ifdef DL_EXT
@@ -548,5 +549,20 @@ systemProcesses::add(const dodoString &module,
 }
 
 	#endif
+
+//-------------------------------------------------------------------
+
+dodoList<unsigned long>
+systemProcesses::getJobsIds()
+{
+	dodoList<unsigned long> ids;
+	
+	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
+	for (; i != j; ++i)
+		ids.push_back(i->position);
+	
+	return ids;
+	
+}
 
 //-------------------------------------------------------------------

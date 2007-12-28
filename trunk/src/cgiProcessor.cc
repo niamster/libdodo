@@ -265,7 +265,7 @@ cgiProcessor::_processString(const dodoString &buffer,
 bool
 cgiProcessor::recursive(const dodoString &path)
 {
-	std::list<dodoString>::iterator i(processed.begin()), j(processed.end());
+	dodoList<dodoString>::iterator i(processed.begin()), j(processed.end());
 	for (; i != j; ++i)
 		if (stringTools::equal(*i, path))
 			return true;

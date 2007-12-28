@@ -90,6 +90,11 @@ namespace dodo
 			 * @param position indicates on shared data to lock
 			 */
 			virtual const void *get(unsigned long position);
+			
+			/**
+			 * @return list of ids of shared data in object
+			 */
+			virtual dodoList<unsigned long> getSharedDataIds();
 
 		protected:
 
@@ -101,11 +106,11 @@ namespace dodo
 			 */
 			virtual bool getShare(unsigned long position);
 
-			std::list<__shareInfo> shares;              ///< list of shared data
+			dodoList<__shareInfo> shares;              ///< list of shared data
 
 			unsigned long shareNum;                     ///< number of registered shares
 
-			std::list<__shareInfo>::iterator current;   ///< iterator for list of shares[for matched with getShare method]
+			dodoList<__shareInfo>::iterator current;   ///< iterator for list of shares[for matched with getShare method]
 	};
 
 };

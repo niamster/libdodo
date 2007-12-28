@@ -367,7 +367,7 @@ namespace dodo
 
 			dodoString postFilesTmpDir;         ///< path of dir, where POST files will be temporary saved
 
-			std::list<__cookies> cookiesSet;    ///< array of cookies nodes
+			dodoList<__cookies> cookiesSet;    ///< array of cookies nodes
 			int method;                         ///< method that received program
 
 			dodoString content;                 ///< content of the request

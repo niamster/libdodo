@@ -1,18 +1,12 @@
-1.
-	db: renew connect
-	exception in _exec
-
 3.
-	!! thread-safe:
+	thread-safe:
 		io*
 
 5.
 	json: parser errors
-	!! module loading
+	module loading
 
 6.
 	firebird
 	soap
 
-8.
-	collections: getIndexes

@@ -158,7 +158,7 @@ namespace dodo
 			bool notCompiled;       ///< indicates, if not compiled
 			#endif
 
-			std::list<__regexMatch> boundaries; ///< list of buondaries matched in sample by pattern
+			dodoList<__regexMatch> boundaries; ///< list of buondaries matched in sample by pattern
 	};
 
 };

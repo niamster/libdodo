@@ -225,7 +225,7 @@ namespace dodo
 			 */
 			virtual dodoString trim(const dodoString &statement);
 
-			std::list<dodoString> processed;                                    ///< vector of files that will be skipped due to recurse
+			dodoList<dodoString> processed;                                    ///< vector of files that will be skipped due to recurse
 
 			std::map<dodoString, dodoStringArray> globalArray;                    ///< set of global variables(arrays)[user-set]
 

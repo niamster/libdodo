@@ -121,6 +121,11 @@ namespace dodo
 			 * sweep jobs if their time are already passed
 			 */
 			virtual void sweepTrash() = 0;
+			
+			/**
+			 * @return list of jobs in object
+			 */
+			virtual dodoList<unsigned long> getJobsIds() = 0;
 
 			/**
 			 * set maximum execution time

@@ -54,7 +54,7 @@ systemThreads::~systemThreads()
 {
 	pthread_attr_destroy(&attr);
 
-	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
+	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 
 		#ifdef DL_EXT
 	deinitSystemThreadsModule deinit;
@@ -142,11 +142,11 @@ systemThreads::add(threadFunc func,
 bool
 systemThreads::getThread(unsigned long position) const
 {
-	std::list<__threadInfo>::const_iterator i(threads.begin()), j(threads.end());
+	dodoList<__threadInfo>::const_iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((std::list<__threadInfo>::iterator *) & i);
+			current = *((dodoList<__threadInfo>::iterator *) & i);
 			return true;
 		}
 
@@ -316,7 +316,7 @@ systemThreads::wait(unsigned long position)
 void
 systemThreads::wait()
 {
-	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
+	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
 	{
 		if (!_isRunning(i) || i->detached)
@@ -355,7 +355,7 @@ systemThreads::stop(unsigned long position)
 void
 systemThreads::stop()
 {
-	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
+	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
 	{
 		if (!_isRunning(i))
@@ -384,7 +384,7 @@ systemThreads::isRunning(unsigned long position) const
 //-------------------------------------------------------------------
 
 bool
-systemThreads::_isRunning(std::list<__threadInfo>::iterator &position) const
+systemThreads::_isRunning(dodoList<__threadInfo>::iterator &position) const
 {
 	if (!position->isRunning)
 		return false;
@@ -410,7 +410,7 @@ systemThreads::_isRunning(std::list<__threadInfo>::iterator &position) const
 void
 systemThreads::sweepTrash()
 {
-	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
+	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	while (i != j)
 	{
 		if (_isRunning(i))
@@ -450,7 +450,7 @@ systemThreads::running() const
 {
 	unsigned long amount(0);
 
-	std::list<__threadInfo>::iterator i(threads.begin()), j(threads.end());
+	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
 		if (_isRunning(i))
 			++amount;
@@ -635,3 +635,20 @@ systemThreads::addNRun(threadFunc func,
 //-------------------------------------------------------------------
 
 #endif
+
+//-------------------------------------------------------------------
+
+dodoList<unsigned long>
+systemThreads::getJobsIds()
+{
+	dodoList<unsigned long> ids;
+	
+	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
+	for (; i != j; ++i)
+		ids.push_back(i->position);
+	
+	return ids;
+	
+}
+
+//-------------------------------------------------------------------

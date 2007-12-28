@@ -83,7 +83,7 @@ namespace dodo
 	 */
 	struct __execItemList
 	{
-		std::list<__execItem> exec; ///< vector of hooks
+		dodoList<__execItem> exec; ///< vector of hooks
 		bool execDisabled;          ///< enable or disable list
 	};
 
@@ -377,7 +377,7 @@ namespace dodo
 			 * @param position is position in list of hooks
 			 * @param iter is iterator that is specified with position
 			 */
-			virtual bool getXexec(std::list<__execItem> &list, int position);
+			virtual bool getXexec(dodoList<__execItem> &list, int position);
 
 			/**
 			 * set function that will be executed before  the main action call
@@ -389,14 +389,14 @@ namespace dodo
 			 * @param data is pointer to data that will pass to hook
 			 * @attention data is not copied!!!
 			 */
-			virtual int addXExec(std::list<__execItem> &list, inExec func, void *obj, short type, void *data);
+			virtual int addXExec(dodoList<__execItem> &list, inExec func, void *obj, short type, void *data);
 
 			/**
 			 * deletes hook from list
 			 * @param list describes list where is set hook
 			 * @param position is position in list of hooks
 			 */
-			virtual void delXExec(std::list<__execItem> &list, int position);
+			virtual void delXExec(dodoList<__execItem> &list, int position);
 
 			/**
 			 * replaces hook from list
@@ -405,7 +405,7 @@ namespace dodo
 			 * @param func is reference to functions that will be called as a hook
 			 * @param data is pointer to data that will pass to hook
 			 */
-			virtual bool replaceXExec(std::list<__execItem> &list, int position, inExec func, void *data);
+			virtual bool replaceXExec(dodoList<__execItem> &list, int position, inExec func, void *data);
 
 			/**
 			 * set state(enable/disable) for XExec
@@ -413,7 +413,7 @@ namespace dodo
 			 * @param position is position in list where to set state
 			 * @param stat indicates what state to set
 			 */
-			virtual void setStatXExec(std::list<__execItem> &list, int position, bool stat);
+			virtual void setStatXExec(dodoList<__execItem> &list, int position, bool stat);
 
 			#ifdef DL_EXT
 
@@ -428,7 +428,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @attention data is not copied!!!
 			 */
-			virtual int addXExecModule(std::list<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addXExecModule(dodoList<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit=NULL);
 
 			#endif
 
@@ -443,7 +443,7 @@ namespace dodo
 
 			int execs;                                  ///< execs counter
 
-			std::list<__execItem>::iterator current;    ///< iterator for list[for matched]
+			dodoList<__execItem>::iterator current;    ///< iterator for list[for matched]
 			
 			mutable bool collectData;///< to collect data for xexec[true by default]
 

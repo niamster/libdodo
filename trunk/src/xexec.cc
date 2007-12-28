@@ -42,7 +42,7 @@ xexec::~xexec()
 
 	deinitXexecModule deinit;
 
-	std::list<__execItem>::iterator i(preExec.exec.begin()), j(preExec.exec.end());
+	dodoList<__execItem>::iterator i(preExec.exec.begin()), j(preExec.exec.end());
 	for (; i != j; ++i)
 	{
 		if (i->handle == NULL)
@@ -75,7 +75,7 @@ xexec::~xexec()
 //-------------------------------------------------------------------
 
 int
-xexec::addXExec(std::list<__execItem> &list,
+xexec::addXExec(dodoList<__execItem> &list,
 				inExec func,
 				void                  *obj,
 				short type,
@@ -102,7 +102,7 @@ xexec::addXExec(std::list<__execItem> &list,
 //-------------------------------------------------------------------
 
 void
-xexec::setStatXExec(std::list<__execItem> &list,
+xexec::setStatXExec(dodoList<__execItem> &list,
 					int position,
 					bool stat)
 {
@@ -113,7 +113,7 @@ xexec::setStatXExec(std::list<__execItem> &list,
 //-------------------------------------------------------------------
 
 void
-xexec::delXExec(std::list<__execItem> &list,
+xexec::delXExec(dodoList<__execItem> &list,
 				int position)
 {
 	if (getXexec(list, position))
@@ -313,7 +313,7 @@ xexec::replacePreExec(int position,
 //-------------------------------------------------------------------
 
 bool
-xexec::replaceXExec(std::list<__execItem> &list,
+xexec::replaceXExec(dodoList<__execItem> &list,
 					int position,
 					inExec func,
 					void                  *data)
@@ -359,7 +359,7 @@ xexec::performXExec(__execItemList &list) const
 	if (list.execDisabled)
 		return ;
 
-	std::list<__execItem>::iterator i(list.exec.begin()), j(list.exec.end());
+	dodoList<__execItem>::iterator i(list.exec.begin()), j(list.exec.end());
 
 	for (; i != j; ++i)
 		if (i->enabled)
@@ -390,7 +390,7 @@ __xexecCounts::__xexecCounts() : pre(-1),
 //-------------------------------------------------------------------
 
 int
-xexec::addXExecModule(std::list<__execItem> &list,
+xexec::addXExecModule(dodoList<__execItem> &list,
 					  void                  *obj,
 					  short type,
 					  const dodoString &module,
@@ -543,10 +543,10 @@ xexec::_addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 bool
-xexec::getXexec(std::list<__execItem> &list,
+xexec::getXexec(dodoList<__execItem> &list,
 				int position)
 {
-	std::list<__execItem>::iterator i(list.begin()), j(list.end());
+	dodoList<__execItem>::iterator i(list.begin()), j(list.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{

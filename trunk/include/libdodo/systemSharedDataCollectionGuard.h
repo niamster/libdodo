@@ -83,6 +83,11 @@ namespace dodo
 			 * @param position indicates on shared data to lock
 			 */
 			virtual const void *get(unsigned long position) = 0;
+			
+			/**
+			 * @return list of ids of shared data in object
+			 */
+			virtual dodoList<unsigned long> getSharedDataIds() = 0;
 	};
 
 };

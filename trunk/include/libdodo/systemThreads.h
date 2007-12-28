@@ -260,6 +260,11 @@ namespace dodo
 			 * sweep threads if their time are already passed
 			 */
 			virtual void sweepTrash();
+			
+			/**
+			 * @return list of jobs in object
+			 */
+			virtual dodoList<unsigned long> getJobsIds();
 
 			/**
 			 * set maximum execution time
@@ -315,7 +320,7 @@ namespace dodo
 			 * @return true if thread is running
 			 * @param position indicates for what thread to indicate
 			 */
-			virtual bool _isRunning(std::list<__threadInfo>::iterator &position) const;
+			virtual bool _isRunning(dodoList<__threadInfo>::iterator &position) const;
 
 			/**
 			 * searches threads by position
@@ -325,13 +330,13 @@ namespace dodo
 			 */
 			virtual bool getThread(unsigned long position) const;
 
-			mutable std::list<__threadInfo> threads;                        ///< vector of threads
+			mutable dodoList<__threadInfo> threads;                        ///< vector of threads
 
 			unsigned long threadNum;                                ///< number of registered threads
 
 			pthread_attr_t attr;                                    ///< attribute that indicates joinability
 
-			mutable std::list<__threadInfo>::iterator current;      ///< iterator for list of threads[for matched with getThread method]
+			mutable dodoList<__threadInfo>::iterator current;      ///< iterator for list of threads[for matched with getThread method]
 	};
 
 };

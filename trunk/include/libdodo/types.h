@@ -51,6 +51,8 @@ namespace dodo
 	#endif
 
 	typedef dodoArray<dodoString> dodoStringArray;                                ///< array of strings
+	
+	#define dodoList std::list
 
 	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;  ///< hash of strings
 

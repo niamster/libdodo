@@ -362,7 +362,7 @@ cgi::printHeaders() const
 
 	if (cookiesSet.size() > 0)
 	{
-		std::list<__cookies>::const_iterator i(cookiesSet.begin()), j(cookiesSet.end());
+		dodoList<__cookies>::const_iterator i(cookiesSet.begin()), j(cookiesSet.end());
 		for (; i != j; ++i)
 		{
 			#ifdef FCGI_EXT

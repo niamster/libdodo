@@ -80,7 +80,7 @@ regexp::reMatch(const dodoString &sample,
 	pockets.reserve(boundaries.size());
 	#endif
 
-	std::list<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
+	dodoList<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 	for (; i != j; ++i)
 		pockets.push_back(sample.substr(i->begin, i->end - i->begin));
 
@@ -221,7 +221,7 @@ regexp::reReplace(const dodoString &sample,
 	if (!boundMatch(sample))
 		return sample;
 
-	std::list<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
+	dodoList<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 
 	dodoStringArray::const_iterator k(replacements.begin());
 	int subs = replacements.size();
