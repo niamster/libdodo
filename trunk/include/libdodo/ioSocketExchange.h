@@ -40,6 +40,7 @@
 #include <libdodo/ioSocketExchangeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
+#include <libdodo/threadGuard.h>
 
 namespace dodo
 {
@@ -94,7 +95,9 @@ namespace dodo
 	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection=previous will be closed
 	 */
-	class ioSocketExchange : public ioSocketOptions, public io
+	class ioSocketExchange : public ioSocketOptions, 
+							public io,
+							virtual public threadGuardHolder
 	{
 
 			friend class ioSocket;
@@ -292,6 +295,8 @@ namespace dodo
 			virtual void
 			close();
 
+		protected:
+
 			/**
 			 * @return descriptor of input stream
 			 */
@@ -302,14 +307,33 @@ namespace dodo
 			 */
 			virtual int getOutDescriptor() const;
 
-		protected:
-
 			/**
 			 * inits this class' data
 			 * @param socket is id of socket
 			 * @param blockInherited indicates whether to inherit block of parent
 			 */
 			virtual void init(int socket, bool blockInherited);
+
+			/**
+			 * receive
+			 * @param data is data that would be received
+			 * @note receives no longer than inSize
+			 * if inSize bigger than socket buffer size - receives with few iterations
+			 * signal safe
+			 */
+			virtual void
+			_read(char * const data);
+
+			/**
+			 * read - null-terminated string
+			 * @param data is data that would be received
+			 * @note receives no longer than inSize
+			 * if inSize bigger than socket buffer size - receives with few iterations
+			 * max data size is inSocketBuffer
+			 * signal safe
+			 */
+			virtual void
+			_readStream(char * const data);
 	};
 
 };

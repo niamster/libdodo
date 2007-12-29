@@ -35,6 +35,7 @@
 #include <libdodo/ioDiskEx.h>
 #include <libdodo/types.h>
 #include <libdodo/io.h>
+#include <libdodo/threadGuard.h>
 
 namespace dodo
 {
@@ -77,7 +78,8 @@ namespace dodo
 	 * @class ioDisk allows disk I/O manipulations
 	 */
 
-	class ioDisk : public io
+	class ioDisk : public io,
+					virtual public threadGuardHolder
 	{
 			friend class ioSocket;
 
@@ -180,6 +182,7 @@ namespace dodo
 			 */
 			virtual void
 			readString(dodoString &data, unsigned long pos=0);
+			
 			/**
 			 * read data
 			 * @param data will be filled with data
@@ -212,6 +215,7 @@ namespace dodo
 			 */
 			virtual void
 			readStreamString(dodoString &data, unsigned long pos=0);
+			
 			/**
 			 * read data - null[or \n]-terminated string
 			 * @param data will be filled with data
@@ -277,6 +281,31 @@ namespace dodo
 			 * @return descriptor of output stream
 			 */
 			virtual int getOutDescriptor() const;
+			
+			/**
+			 * read data
+			 * @param data will be filled with data
+			 * @param pos indicates position in file
+			 */
+			virtual void
+			_read(char * const data, unsigned long pos=0);
+			
+			/**
+			 * read data - null[or \n]-terminated string
+			 * @param data will be filled with data
+			 * @param pos indicates position in file [string that has pos-1 strings before]
+			 * @note max size is inSize
+			 */
+			virtual void
+			_readStream(char * const data, unsigned long pos=0);
+
+			/**
+			 * write string
+			 * @param data will be written to file
+			 * @param pos indicates position in file
+			 */
+			virtual void
+			_write(const char * const data, unsigned long pos=0);
 
 		private:
 

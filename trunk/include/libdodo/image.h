@@ -28,11 +28,11 @@
 
 #ifdef IMAGEMAGICK_EXT
 
+#include <magick/MagickCore.h>
+
 #include <libdodo/types.h>
 #include <libdodo/imageEx.h>
 #include <libdodo/xexec.h>
-
-#include <magick/MagickCore.h>
 
 namespace dodo
 {

@@ -38,6 +38,7 @@
 #include <libdodo/types.h>
 #include <libdodo/io.h>
 #include <libdodo/ioSocket.h>
+#include <libdodo/threadGuard.h>
 
 namespace dodo
 {
@@ -59,7 +60,8 @@ namespace dodo
 	 * @note it's usefull when you are using in/out operations through some proxy -> for example inetd!
 	 */
 
-	class ioSTD : public io
+	class ioSTD : public io,
+				virtual public threadGuardHolder
 	{
 		private:
 
@@ -85,7 +87,7 @@ namespace dodo
 			 * @return info about source of inputting
 			 * @note it can be used to get info foreign `inputter` if you ar usin'g inetd
 			 */
-			static __connInfo inputterInfo();
+			__connInfo inputterInfo();
 
 			#ifndef IOSTD_WO_XEXEC
 
@@ -146,6 +148,7 @@ namespace dodo
 			 */
 			virtual void
 			readString(dodoString &data);
+			
 			/**
 			 * read
 			 * @param data is filled with read data
@@ -177,6 +180,7 @@ namespace dodo
 			 */
 			virtual void
 			readStreamString(dodoString &data);
+			
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
@@ -222,7 +226,7 @@ namespace dodo
 			/**
 			 * @return true if stream is blocked
 			 */
-			virtual bool isBlocked() const;
+			virtual bool isBlocked();
 
 			/**
 			 * blocks/unblocks stream
@@ -242,6 +246,22 @@ namespace dodo
 			 * @return descriptor of output stream
 			 */
 			virtual int getOutDescriptor() const;
+			
+			/**
+			 * read
+			 * @param data is filled with read data
+			 * if inSize bigger than buffer size - reads with few iterations
+			 */
+			virtual void
+			_read(char * const data);
+			
+			/**
+			 * read from stream - null[or \n]-terminated string
+			 * @param data is filled with read data
+			 * max size of data is inSTDBuffer
+			 */
+			virtual void
+			_readStream(char * const data);
 
 		private:
 

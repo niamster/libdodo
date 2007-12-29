@@ -60,7 +60,7 @@ namespace dodo
 			/**
 			 * unlocks critical section
 			 */
-			virtual void unLock();
+			virtual void unlock();
 
 		protected:
 

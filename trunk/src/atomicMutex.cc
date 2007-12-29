@@ -49,14 +49,14 @@ void
 atomicMutex::lock()
 {
 	errno = pthread_mutex_lock(&mutex);
-	if (errno != 0)
+	if (errno != 0 && errno != EDEADLK)
 		throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-atomicMutex::unLock()
+atomicMutex::unlock()
 {
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)

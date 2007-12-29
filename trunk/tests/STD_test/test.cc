@@ -37,9 +37,10 @@ int main(int argc, char **argv)
 	try
 	{
 		cout << ioSocketTools::getHostInfo("niam.mu").name << endl;
-		cout << ioSTD::inputterInfo().host << endl;
 		
 		ioSTD st;
+		cout << st.inputterInfo().host << endl;
+
 		int pos = st.addPreExec(&hook,NULL);
 	
 		st.outSize = sizeof(int);
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << (string)ex << "\t" << ex.line << endl;
+		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 	
 	return 0;

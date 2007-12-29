@@ -33,6 +33,7 @@
 #include <libdodo/types.h>
 #include <libdodo/io.h>
 #include <libdodo/tools.h>
+#include <libdodo/threadGuard.h>
 
 namespace dodo
 {
@@ -51,7 +52,7 @@ namespace dodo
 	/**
 	 * @class ioNBA
 	 */
-	class ioNBA
+	class ioNBA : virtual public threadGuardHolder
 	{
 
 		private:

@@ -106,6 +106,8 @@ ioSocketExchange::init(__initialAccept &a_init)
 void
 ioSocketExchange::close()
 {
+	guard th(this);
+	
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	operType = IOSOCKETEXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
@@ -130,8 +132,17 @@ ioSocketExchange::close()
 void
 ioSocketExchange::init(int a_socket,
 						  bool blockInherited)
-{
-	close();
+{	
+	guard th(this);
+	
+	if (opened)
+	{
+		ioSocketOptions::_close(socket);
+	
+		socket = -1;
+	
+		opened = false;
+	}
 
 	socket = a_socket;
 
@@ -161,6 +172,8 @@ ioSocketExchange::init(int a_socket,
 bool
 ioSocketExchange::alive()
 {
+	guard th(this);
+	
 	return opened;
 }
 
@@ -169,6 +182,8 @@ ioSocketExchange::alive()
 void
 ioSocketExchange::write(const char * const data)
 {
+	guard th(this);
+	
 	buffer.assign(data, outSize);
 
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
@@ -247,8 +262,8 @@ ioSocketExchange::writeString(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::read(char * const data)
-{
+ioSocketExchange::_read(char * const data)
+{	
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	operType = IOSOCKETEXCHANGE_OPERATION_RECEIVE;
 	performXExec(preExec);
@@ -327,13 +342,25 @@ ioSocketExchange::read(char * const data)
 //-------------------------------------------------------------------
 
 void
+ioSocketExchange::read(char * const data)
+{
+	guard th(this);
+	
+	_read(data);
+}
+
+//-------------------------------------------------------------------
+
+void
 ioSocketExchange::readString(dodoString &data)
 {
+	guard th(this);
+	
 	char *t_data = new char[inSize + 1];
 
 	try
 	{
-		this->read(t_data);
+		_read(t_data);
 	}
 	catch (...)
 	{
@@ -342,7 +369,7 @@ ioSocketExchange::readString(dodoString &data)
 
 		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-
+	
 	data.assign(t_data, inSize);
 	delete [] t_data;
 }
@@ -412,6 +439,8 @@ ioSocketExchange::addExec(const dodoString &module,
 void
 ioSocketExchange::writeStream(const char * const data)
 {
+	guard th(this);
+	
 	buffer.assign(data);
 
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
@@ -494,8 +523,8 @@ ioSocketExchange::writeStreamString(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::readStream(char * const data)
-{
+ioSocketExchange::_readStream(char * const data)
+{	
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	operType = IOSOCKETEXCHANGE_OPERATION_RECEIVESTREAM;
 	performXExec(preExec);
@@ -530,15 +559,25 @@ ioSocketExchange::readStream(char * const data)
 //-------------------------------------------------------------------
 
 void
+ioSocketExchange::readStream(char * const data)
+{
+	guard th(this);
+	
+	_readStream(data);
+}
+
+//-------------------------------------------------------------------
+
+void
 ioSocketExchange::readStreamString(dodoString &data)
 {
+	guard th(this);
+	
 	char *t_data = new char[inSocketBuffer + 1];
 
 	try
 	{
-
-		this->readStream(t_data);
-
+		_readStream(t_data);
 	}
 	catch (...)
 	{
@@ -547,7 +586,7 @@ ioSocketExchange::readStreamString(dodoString &data)
 
 		throw;
 	}
-
+	
 	data.assign(t_data);
 	delete [] t_data;
 }
@@ -557,6 +596,8 @@ ioSocketExchange::readStreamString(dodoString &data)
 ioSocketExchange *
 ioSocketExchange::createCopy()
 {
+	guard th(this);
+	
 	ioSocketExchange *copy = new ioSocketExchange;
 
 	copy->socket = socket;
@@ -593,6 +634,8 @@ ioSocketExchange::deleteCopy(ioSocketExchange *copy)
 int
 ioSocketExchange::getInDescriptor() const
 {
+	guard th(this);
+	
 	return socket;
 }
 
@@ -601,6 +644,8 @@ ioSocketExchange::getInDescriptor() const
 int
 ioSocketExchange::getOutDescriptor() const
 {
+	guard th(this);
+	
 	return socket;
 }
 

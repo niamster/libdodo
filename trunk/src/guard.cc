@@ -31,7 +31,7 @@ guardHolder::~guardHolder()
 
 //-------------------------------------------------------------------
 
-guardHolder::guard::guard(guardHolder *a_parent) : parent(a_parent)
+guardHolder::guard::guard(const guardHolder *a_parent) : parent((guardHolder *)a_parent)
 {
 	parent->mutex->lock();
 }
@@ -42,7 +42,7 @@ guardHolder::guard::~guard()
 {
 	try
 	{
-		parent->mutex->unLock();
+		parent->mutex->unlock();
 	}
 	catch (baseEx &ex)
 	{

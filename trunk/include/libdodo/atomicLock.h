@@ -50,7 +50,7 @@ namespace dodo
 			/**
 			 * unlocks critical section
 			 */
-			virtual void unLock() = 0;
+			virtual void unlock() = 0;
 	};
 };
 

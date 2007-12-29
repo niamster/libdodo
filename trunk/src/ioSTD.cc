@@ -49,6 +49,8 @@ ioSTD::~ioSTD()
 int
 ioSTD::getInDescriptor() const
 {
+	guard th(this);
+	
 	return fileno(stdin);
 }
 
@@ -57,6 +59,8 @@ ioSTD::getInDescriptor() const
 int
 ioSTD::getOutDescriptor() const
 {
+	guard th(this);
+	
 	if (err)
 		return fileno(stderr);
 	else
@@ -119,10 +123,11 @@ ioSTD::addPreExec(const dodoString &module,
 
 #endif
 
+
 //-------------------------------------------------------------------
 
 void
-ioSTD::read(char * const a_void)
+ioSTD::_read(char * const a_void)
 {
 	#ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READ;
@@ -182,14 +187,25 @@ ioSTD::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
+ioSTD::read(char * const a_void)
+{
+	guard th(this);
+	
+	_read(a_void);
+}
+
+//-------------------------------------------------------------------
+
+void
 ioSTD::readString(dodoString &a_str)
 {
+	guard th(this);
+	
 	char *data = new char[inSize + 1];
 
 	try
 	{
-
-		this->read(data);
+		_read(data);
 	}
 	catch (...)
 	{
@@ -216,6 +232,8 @@ ioSTD::writeString(const dodoString &a_buf)
 void
 ioSTD::write(const char *const aa_buf)
 {
+	guard th(this);
+	
 	buffer.assign(aa_buf, outSize);
 
 	#ifndef IOSTD_WO_XEXEC
@@ -278,12 +296,14 @@ ioSTD::write(const char *const aa_buf)
 void
 ioSTD::flush()
 {
+	guard th(this);
+	
 	desc = stdout;
 	if (err)
 		desc = stderr;
 
 	if (fflush(desc) != 0)
-		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_IO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -291,6 +311,8 @@ ioSTD::flush()
 __connInfo
 ioSTD::inputterInfo()
 {
+	guard th(this);
+	
 	__connInfo info;
 
 	struct sockaddr sa;
@@ -336,15 +358,16 @@ ioSTD::inputterInfo()
 		default:
 
 			return info;
-
 	}
 }
 
 //-------------------------------------------------------------------
 
 bool
-ioSTD::isBlocked() const
+ioSTD::isBlocked()
 {
+	guard th(this);
+	
 	return blocked;
 }
 
@@ -353,6 +376,8 @@ ioSTD::isBlocked() const
 void
 ioSTD::block(bool flag)
 {
+	guard th(this);
+	
 	int block[3] = { O_NONBLOCK, O_NONBLOCK, O_NONBLOCK };
 
 	if (flag)
@@ -391,8 +416,8 @@ ioSTD::block(bool flag)
 //-------------------------------------------------------------------
 
 void
-ioSTD::readStream(char * const a_void)
-{
+ioSTD::_readStream(char * const a_void)
+{	
 	#ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTREAM;
 	performXExec(preExec);
@@ -421,17 +446,29 @@ ioSTD::readStream(char * const a_void)
 	#endif
 }
 
+
+//-------------------------------------------------------------------
+
+void
+ioSTD::readStream(char * const a_void)
+{
+	guard th(this);
+	
+	_readStream(a_void);
+}
+
 //-------------------------------------------------------------------
 
 void
 ioSTD::readStreamString(dodoString &a_str)
 {
+	guard th(this);
+	
 	char *data = new char[inSTDBuffer + 1];
 
 	try
 	{
-
-		this->readStream(data);
+		_readStream(data);
 	}
 	catch (...)
 	{
@@ -440,7 +477,7 @@ ioSTD::readStreamString(dodoString &a_str)
 
 		throw;
 	}
-
+	
 	a_str.assign(data);
 	delete [] data;
 }
@@ -458,6 +495,8 @@ ioSTD::writeStreamString(const dodoString &a_buf)
 void
 ioSTD::writeStream(const char *const aa_buf)
 {
+	guard th(this);
+	
 	buffer.assign(aa_buf);
 
 	#ifndef IOSTD_WO_XEXEC

@@ -33,7 +33,7 @@
 namespace dodo
 {
 	/**
-	 * @class threadGuardHolder contains mutex lock and threadGuard class
+	 * @class guardHolder contains mutex lock and threadGuard class
 	 */
 	class guardHolder
 	{
@@ -56,7 +56,7 @@ namespace dodo
 					/**
 					 * contructor
 					 */
-					guard(guardHolder *parent);
+					guard(const guardHolder *parent);
 
 					/**
 					 * destructor
