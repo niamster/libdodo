@@ -116,7 +116,6 @@ jsonNode::getNumeric()
 	return numericValue;
 }
 
-
 //-------------------------------------------------------------------
 
 dodoArray<jsonNode> 
@@ -270,7 +269,7 @@ json::processArray(dodoArray<jsonNode> &node,
 {
 	node.clear();
 	
-	short state = JSON_STATE_ARRAY_INITIAL;
+	bool initial = true;
 	
 	jsonNode subNode;
 	
@@ -288,8 +287,8 @@ json::processArray(dodoArray<jsonNode> &node,
 				
 			case '[':
 
-				if (state == JSON_STATE_ARRAY_INITIAL)
-					state = JSON_STATE_ARRAY_ARRAY;
+				if (initial)
+					initial = false;
 				else
 				{
 					i = processValue(subNode, root, i);
@@ -374,7 +373,7 @@ json::processBoolean(bool &node,
 					unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
-		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSONBOOLEAN, JSONEX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
 	
 	if (root.substr(pos, 4) == "true")
 	{
@@ -391,7 +390,7 @@ json::processBoolean(bool &node,
 			return pos + 4;
 		}
 		else
-			throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSONBOOLEAN, JSONEX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
 	}
 
 	return pos;
@@ -404,12 +403,12 @@ json::processNull(const dodoString &root,
 				unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
-		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSONNULL, JSONEX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
 	
 	if (root.substr(pos, 4) == "null")	
 		return pos + 3;
 	else
-		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSON, JSONEX_MALFORMEDJSON_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSONNULL, JSONEX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
 
 	return pos;
 	
@@ -442,7 +441,8 @@ json::processNumeric(long &node,
 			case '+':
 			case '-':
 			case 'e':
-			case 'E': 
+			case 'E':
+			case ' ':
 				
 				numeric.append(1, root[i]);
 				
@@ -450,9 +450,7 @@ json::processNumeric(long &node,
 				
 			default:
 				
-				node = stringTools::stringToL(numeric);
-				
-				return i;
+				throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNUMERIC, ERR_LIBDODO, JSONEX_MALFORMEDJSONNUMERIC, JSONEX_MALFORMEDJSONNUMERIC_STR, __LINE__, __FILE__);
 		}
 	}
 	
@@ -614,7 +612,7 @@ json::processString(dodoString &node,
 	node.clear();
 	
 	bool escape = false;
-	short state = JSON_STATE_STRING_INITIAL;
+	bool initial = true;
 	
 	unsigned long i(pos), j(root.size());
 	for (;i<j;++i)
@@ -634,9 +632,9 @@ json::processString(dodoString &node,
 				
 				if (!escape)
 				{
-					if (state == JSON_STATE_STRING_INITIAL)
+					if (initial)
 					{
-						state = JSON_STATE_STRING_STRING;
+						initial = false;
 						
 						break;
 					}
