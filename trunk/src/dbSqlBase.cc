@@ -153,7 +153,7 @@ dbSqlBase::fieldsValName(const dodoStringArray &fieldsVal,
 		temp.append("=");
 		temp.append(frame);
 		temp.append(preventEscaping ? *j : escapeFields(*j));
-	temp.append(frame);
+		temp.append(frame);
 	}
 
 	return temp;
@@ -576,7 +576,7 @@ dbSqlBase::createTableCollect()
 
 	{
 		dodoArray<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end());
-		if (i!=j)
+		if (i != j)
 		{
 			--j;
 			for (; i != j; ++i)

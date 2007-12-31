@@ -129,7 +129,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -138,7 +138,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -147,7 +147,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
 				#endif
 
@@ -214,7 +214,7 @@ namespace dodo
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 			 * @note if socket is already created and force=true and it's a socket - delete it!!
 			 */
-			virtual void bindNListen(const dodoString &path, int numberOfConnections, bool force=false);
+			virtual void bindNListen(const dodoString &path, int numberOfConnections, bool force = false);
 
 			/**
 			 * accepts incommin' connections(as for server)
@@ -244,7 +244,7 @@ namespace dodo
 			 * @return descriptor of output stream
 			 */
 			virtual int getOutDescriptor() const;
-			
+
 		protected:
 
 			/**

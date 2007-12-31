@@ -44,19 +44,19 @@ namespace dodo
 		JSON_DATATYPE_NUMERIC,
 		JSON_DATATYPE_NULL,
 	};
-	
+
 	/**
 	 * @class jsonObject represents json object data
 	 */
 	struct __jsonNodeDef
-	{		
-		dodoString stringValue;///< string value of node
-		dodoMap<dodoString, __jsonNodeDef, stringTools::equal> objectValue;///< object value of node 
-		dodoArray<__jsonNodeDef> arrayValue;///< array value of node
-		bool booleanValue;///< boolean value of node
-		long numericValue;///< numeric value of node
-		
-		short valueDataType;///< data type of value
+	{
+		dodoString stringValue;                                             ///< string value of node
+		dodoMap<dodoString, __jsonNodeDef, stringTools::equal> objectValue; ///< object value of node
+		dodoArray<__jsonNodeDef> arrayValue;                                ///< array value of node
+		bool booleanValue;                                                  ///< boolean value of node
+		long numericValue;                                                  ///< numeric value of node
+
+		short valueDataType;                                                ///< data type of value
 	};
 
 	/**
@@ -64,25 +64,25 @@ namespace dodo
 	 */
 	class jsonNode
 	{
-		friend class json;
-		
+			friend class json;
+
 		public:
-			
+
 			/**
 			 * copy constructor
 			 */
 			jsonNode(const jsonNode &node);
-			
+
 			/**
 			 * constructor
 			 */
 			jsonNode();
-			
+
 			/**
 			 * destructor
 			 */
 			virtual ~jsonNode();
-			
+
 			/**
 			 * @return node by string key
 			 * @param key describes string key to search for node
@@ -96,12 +96,12 @@ namespace dodo
 			 * @note throws exception if data type is not JSON_DATATYPE_ARRAY
 			 */
 			virtual jsonNode operator[](unsigned long key);
-			
+
 			/**
 			 * @return type of node[see jsonDataTypeEnum]
 			 */
 			virtual short getType();
-			
+
 			/**
 			 * @return true if node is NULL
 			 */
@@ -136,21 +136,21 @@ namespace dodo
 			 * @note throws exception if data type is not JSON_DATATYPE_OBJECT
 			 */
 			virtual dodoMap<dodoString, jsonNode, stringTools::equal> getObject();
-			
+
 			/**
 			 * clears internal data
 			 */
 			virtual void clear();
-		
-		private:		
-			
-			dodoString stringValue;///< string value of node
-			dodoMap<dodoString, jsonNode, stringTools::equal> objectValue;///< object value of node 
-			dodoArray<jsonNode> arrayValue;///< array value of node
-			bool booleanValue;///< boolean value of node
-			long numericValue;///< numeric value of node
-			
-			short valueDataType;///< data type of value
+
+		private:
+
+			dodoString stringValue;                                         ///< string value of node
+			dodoMap<dodoString, jsonNode, stringTools::equal> objectValue;  ///< object value of node
+			dodoArray<jsonNode> arrayValue;                                 ///< array value of node
+			bool booleanValue;                                              ///< boolean value of node
+			long numericValue;                                              ///< numeric value of node
+
+			short valueDataType;                                            ///< data type of value
 	};
 
 	/**
@@ -159,52 +159,52 @@ namespace dodo
 	class json
 	{
 		private:
-	
+
 			/**
 			 * copy constructor
 			 * to prevent copying
 			 */
 			json(json &js);
-			
+
 		public:
-	
+
 			/**
 			 * contructor
 			 */
 			json();
-	
+
 			/**
 			 * destructor
 			 */
 			virtual ~json();
-			
+
 			/**
 			 * @return string that contain json object
-			 * @param root describes root of json object 
+			 * @param root describes root of json object
 			 */
 			virtual dodoString makeJSON(const __jsonNodeDef &root);
-			
+
 			/**
-			 * processes json object 
-			 * @param node describes root of json object 
+			 * processes json object
+			 * @param node describes root of json object
 			 * @param root describes string that contain json object
 			 */
 			virtual void processJSON(jsonNode &node, const dodoString &root);
-			
+
 			/**
 			 * @return string that contain json object
 			 * @param root describes map that contain json object
 			 */
 			virtual dodoString mapToJSON(const dodoStringMap &root);
-			
+
 			/**
 			 * @return string to string map that contain json object
 			 * @param root describes map that contain json object
 			 */
 			virtual dodoStringMap JSONToMap(const dodoString &node);
-		
+
 		protected:
-			
+
 			/**
 			 * processes string value
 			 * @return last symbol of processed string
@@ -213,7 +213,7 @@ namespace dodo
 			 * @param pos describes start position in string
 			 */
 			virtual unsigned long processString(dodoString &node, const dodoString &root, unsigned long pos);
-			
+
 			/**
 			 * processes string value
 			 * @return last symbol of processed string
@@ -222,20 +222,20 @@ namespace dodo
 			 * @param pos describes start position in string
 			 */
 			virtual unsigned long processArray(dodoArray<jsonNode> &node, const dodoString &root, unsigned long pos);
-			
+
 			/**
-			 * processes json object 
+			 * processes json object
 			 * @return last symbol of processed object
-			 * @param node describes root of json object 
+			 * @param node describes root of json object
 			 * @param root describes string that contain json object
 			 * @param pos describes start position in string
 			 */
 			virtual unsigned long processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, const dodoString &root, unsigned long pos);
-			
+
 			/**
 			 * processes json object value
 			 * @return last symbol of processed object value
-			 * @param node describes value of json object 
+			 * @param node describes value of json object
 			 * @param root describes string that contain json object
 			 * @param pos describes start position in string
 			 */
@@ -244,7 +244,7 @@ namespace dodo
 			/**
 			 * processes json boolean value
 			 * @return last symbol of processed object value
-			 * @param node describes value of json object 
+			 * @param node describes value of json object
 			 * @param root describes string that contain json object
 			 * @param pos describes start position in string
 			 */
@@ -253,7 +253,7 @@ namespace dodo
 			/**
 			 * processes json numeric value
 			 * @return last symbol of processed object value
-			 * @param node describes value of json object 
+			 * @param node describes value of json object
 			 * @param root describes string that contain json object
 			 * @param pos describes start position in string
 			 */
@@ -261,12 +261,12 @@ namespace dodo
 
 			/**
 			 * processes json null value
-			 * @return last symbol of processed object value 
+			 * @return last symbol of processed object value
 			 * @param root describes string that contain json object
 			 * @param pos describes start position in string
 			 */
 			virtual unsigned long processNull(const dodoString &root, unsigned long pos);
-			
+
 			/**
 			 * @enum jsonStateEnum describes states for json processor
 			 */

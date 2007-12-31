@@ -148,7 +148,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 			 * @param stackSize describes stack siae of the thread
 			 */
-			virtual unsigned long add(threadFunc func, void *data, bool detached, short action, int stackSize=2097152);
+			virtual unsigned long add(threadFunc func, void *data, bool detached, short action, int stackSize = 2097152);
 
 			/**
 			 * adds function to became a thread[executing]
@@ -160,7 +160,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
 			 * @param stackSize describes stack siae of the thread
 			 */
-			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit=1, bool detached=false, short action=SYSTEMTHREADS_WAIT, int stackSize=2097152);
+			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit = 1, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
 			 * adds function to became a job[not executing]
@@ -193,7 +193,7 @@ namespace dodo
 			 * @param force if is set to true stops execution if this thread is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void del(unsigned long position, bool force=false);
+			virtual void del(unsigned long position, bool force = false);
 
 			/**
 			 * replaces function to became a thread[not executing]
@@ -206,7 +206,7 @@ namespace dodo
 			 * @param stackSize describes stack siae of the thread
 			 * @note - exception if it's currently running
 			 */
-			virtual void replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached=false, short action=SYSTEMTHREADS_WAIT, int stackSize=2097152);
+			virtual void replace(unsigned long position, threadFunc func, void *data, bool force = false, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
 			 * executes thread
@@ -214,7 +214,7 @@ namespace dodo
 			 * @param force if is set to true permits execution even if this thread is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void run(unsigned long position, bool force=false);
+			virtual void run(unsigned long position, bool force = false);
 
 			/**
 			 * stops thread
@@ -253,7 +253,7 @@ namespace dodo
 			 * sweep threads if their time are already passed
 			 */
 			virtual void sweepTrash();
-			
+
 			/**
 			 * @return list of jobs in object
 			 */
@@ -264,7 +264,7 @@ namespace dodo
 			 * @param position indicates for what thread to set limit
 			 * @param limit indicates the thread's limit on executions
 			 */
-			virtual void setExecutionLimit(unsigned long position, unsigned long limit=1);
+			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
 
 				#ifdef DL_EXT
@@ -279,7 +279,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if thread is running
 			 * @param stackSize describes stack siae of the thread
 			 */
-			virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL, bool detached=false, short action=SYSTEMTHREADS_WAIT, int stackSize=2097152);
+			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
 			 * adds function to became a thread[not executing] from module
@@ -288,14 +288,14 @@ namespace dodo
 			 * @param data describes data to be passed to func
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL);
+			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * @return info about module
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static __systemThreadsMod getModuleInfo(const dodoString &module, void *toInit=NULL);
+			static __systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 				#endif
 
@@ -304,7 +304,7 @@ namespace dodo
 			 * @param signal indicates what signals to block/unblock; can be or'ed;
 			 * @param block indicates whether to block or unblock
 			 */
-			static void blockSignal(int signals, bool block=true);
+			static void blockSignal(int signals, bool block = true);
 
 		protected:
 
@@ -322,13 +322,13 @@ namespace dodo
 			 */
 			virtual bool getThread(unsigned long position) const;
 
-			mutable dodoList<__threadInfo> threads;                        ///< vector of threads
+			mutable dodoList<__threadInfo> threads;                         ///< vector of threads
 
-			unsigned long threadNum;                                ///< number of registered threads
+			unsigned long threadNum;                                        ///< number of registered threads
 
-			pthread_attr_t attr;                                    ///< attribute that indicates joinability
+			pthread_attr_t attr;                                            ///< attribute that indicates joinability
 
-			mutable dodoList<__threadInfo>::iterator current;      ///< iterator for list of threads[for matched with getThread method]
+			mutable dodoList<__threadInfo>::iterator current;               ///< iterator for list of threads[for matched with getThread method]
 	};
 
 };

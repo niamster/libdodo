@@ -225,36 +225,36 @@ namespace dodo
 			 */
 			virtual dodoString trim(const dodoString &statement);
 
-			dodoList<dodoString> processed;                                    ///< vector of files that will be skipped due to recurse
+			dodoList<dodoString> processed;                                         ///< vector of files that will be skipped due to recurse
 
-			std::map<dodoString, dodoStringArray> globalArray;                    ///< set of global variables(arrays)[user-set]
+			std::map<dodoString, dodoStringArray> globalArray;                      ///< set of global variables(arrays)[user-set]
 
-			std::map<dodoString, dodoStringMap> globalHash;                     ///< set of global variables(hashes)[user-set]
+			std::map<dodoString, dodoStringMap> globalHash;                         ///< set of global variables(hashes)[user-set]
 
-			std::map<dodoString, dodoArray<dodoStringMap> > globalArrayHash;    ///< set of global variables(array of hashes)[user-set]
-			std::map<dodoString, dodoStringMap> localHash;                      ///< set of local variables(hashes)
+			std::map<dodoString, dodoArray<dodoStringMap> > globalArrayHash;        ///< set of global variables(array of hashes)[user-set]
+			std::map<dodoString, dodoStringMap> localHash;                          ///< set of local variables(hashes)
 
-			dodoStringMap dodo;                                                 ///< set of auxillary variables[dodo defined][for dodo.*]
+			dodoStringMap dodo;                                                     ///< set of auxillary variables[dodo defined][for dodo.*]
 
-			dodoStringMap global;                                               ///< set of global variables[user-set]
-			dodoStringMap local;                                                ///< set of local variables[during parsing]
+			dodoStringMap global;                                                   ///< set of global variables[user-set]
+			dodoStringMap local;                                                    ///< set of local variables[during parsing]
 
-			bool _continueFlag;                                                 ///< indicates `continue`
+			bool _continueFlag;                                                     ///< indicates `continue`
 
-			unsigned int _breakDeepness;                                        ///< deepness of the break
-			unsigned int _loopDeepness;                                         ///< deepness of the loop
+			unsigned int _breakDeepness;                                            ///< deepness of the break
+			unsigned int _loopDeepness;                                             ///< deepness of the loop
 
-			unsigned long iterator;                                             ///< count of iteration of a loop
+			unsigned long iterator;                                                 ///< count of iteration of a loop
 
-			unsigned int namespaceDeepness;                                     ///< deepness of the namespace
-			std::map<unsigned int, dodoStringMap> localNamespace;               ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
-			std::map<unsigned int, dodoStringArray> namespaceVars;                ///< names of vars in namespaces
+			unsigned int namespaceDeepness;                                         ///< deepness of the namespace
+			std::map<unsigned int, dodoStringMap> localNamespace;                   ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
+			std::map<unsigned int, dodoStringArray> namespaceVars;                  ///< names of vars in namespaces
 
 			#ifdef FCGI_EXT
 
 			bool cgiFastSet;    ///< indicates whether cgiFast was set
 
-			cgiFastIO *cf;     ///< pointer to cgiFast class
+			cgiFastIO *cf;      ///< pointer to cgiFast class
 
 			#endif
 

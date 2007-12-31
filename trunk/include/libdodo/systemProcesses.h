@@ -150,7 +150,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
 			 */
-			virtual unsigned long addNRun(processFunc func, void *data, unsigned long limit=1, short action=SYSTEMPROCESS_WAIT);
+			virtual unsigned long addNRun(processFunc func, void *data, unsigned long limit = 1, short action = SYSTEMPROCESS_WAIT);
 
 			/**
 			 * adds function to became a job[not executing]
@@ -180,7 +180,7 @@ namespace dodo
 			 * @note - exception if it's currently running
 			 * send SIGINT to process
 			 */
-			virtual void del(unsigned long position, bool force=false);
+			virtual void del(unsigned long position, bool force = false);
 
 			/**
 			 * replaces function to became a process[not executing]
@@ -191,7 +191,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note - exception if it's currently running
 			 */
-			virtual void replace(unsigned long position, processFunc func, void *data, bool force=false, short action=SYSTEMPROCESS_WAIT);
+			virtual void replace(unsigned long position, processFunc func, void *data, bool force = false, short action = SYSTEMPROCESS_WAIT);
 
 			/**
 			 * executes process
@@ -199,7 +199,7 @@ namespace dodo
 			 * @param force if is set to true permits execution even if this process is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void run(unsigned long position, bool force=false);
+			virtual void run(unsigned long position, bool force = false);
 
 			/**
 			 * stops process
@@ -239,7 +239,7 @@ namespace dodo
 			 * sweep processes if their time are already passed
 			 */
 			virtual void sweepTrash();
-			
+
 			/**
 			 * @return list of jobs in object
 			 */
@@ -250,7 +250,7 @@ namespace dodo
 			 * @param position indicates for what process to set limit
 			 * @param limit indicates the process' limit on executions
 			 */
-			virtual void setExecutionLimit(unsigned long position, unsigned long limit=1);
+			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
 
 			#ifdef DL_EXT
@@ -262,7 +262,7 @@ namespace dodo
 			 * @param data describes data to be passed to func
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL);
+			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
 
 
 			/**
@@ -270,7 +270,7 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static __systemProcessesMod getModuleInfo(const dodoString &module, void *toInit=NULL);
+			static __systemProcessesMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 			#endif
 
@@ -292,9 +292,9 @@ namespace dodo
 
 			unsigned long processNum;                           ///< number of registered processes
 
-			dodoList<__processInfo> processes;                 ///< vector of processes
+			dodoList<__processInfo> processes;                  ///< vector of processes
 
-			mutable dodoList<__processInfo>::iterator current; ///< iterator for list of processes[for matched with getProcess method]
+			mutable dodoList<__processInfo>::iterator current;  ///< iterator for list of processes[for matched with getProcess method]
 	};
 
 };

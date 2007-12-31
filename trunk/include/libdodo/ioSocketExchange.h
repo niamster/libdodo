@@ -95,9 +95,9 @@ namespace dodo
 	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
 	 * if you'll init this class again with another connection=previous will be closed
 	 */
-	class ioSocketExchange : public ioSocketOptions, 
-							public io,
-							virtual public threadGuardHolder
+	class ioSocketExchange : public ioSocketOptions,
+							 public io,
+							 virtual public threadGuardHolder
 	{
 
 			friend class ioSocket;
@@ -167,7 +167,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -176,7 +176,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -185,7 +185,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
 				#endif
 

@@ -107,7 +107,7 @@ void
 ioSocketExchange::close()
 {
 	guard th(this);
-	
+
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	operType = IOSOCKETEXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
@@ -131,16 +131,16 @@ ioSocketExchange::close()
 
 void
 ioSocketExchange::init(int a_socket,
-						  bool blockInherited)
-{	
+					   bool blockInherited)
+{
 	guard th(this);
-	
+
 	if (opened)
 	{
 		ioSocketOptions::_close(socket);
-	
+
 		socket = -1;
-	
+
 		opened = false;
 	}
 
@@ -173,7 +173,7 @@ bool
 ioSocketExchange::alive()
 {
 	guard th(this);
-	
+
 	return opened;
 }
 
@@ -183,7 +183,7 @@ void
 ioSocketExchange::write(const char * const data)
 {
 	guard th(this);
-	
+
 	buffer.assign(data, outSize);
 
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
@@ -263,7 +263,7 @@ ioSocketExchange::writeString(const dodoString &data)
 
 void
 ioSocketExchange::_read(char * const data)
-{	
+{
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	operType = IOSOCKETEXCHANGE_OPERATION_RECEIVE;
 	performXExec(preExec);
@@ -332,7 +332,7 @@ ioSocketExchange::_read(char * const data)
 		}
 	}
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC	
+	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	buffer.assign(data, inSize);
 
 	performXExec(postExec);
@@ -345,7 +345,7 @@ void
 ioSocketExchange::read(char * const data)
 {
 	guard th(this);
-	
+
 	_read(data);
 }
 
@@ -355,7 +355,7 @@ void
 ioSocketExchange::readString(dodoString &data)
 {
 	guard th(this);
-	
+
 	char *t_data = new char[inSize + 1];
 
 	try
@@ -369,7 +369,7 @@ ioSocketExchange::readString(dodoString &data)
 
 		throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_RECEIVESTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-	
+
 	data.assign(t_data, inSize);
 	delete [] t_data;
 }
@@ -382,7 +382,7 @@ ioSocketExchange::readString(dodoString &data)
 
 int
 ioSocketExchange::addPostExec(inExec func,
-								 void   *data)
+							  void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data);
 }
@@ -391,7 +391,7 @@ ioSocketExchange::addPostExec(inExec func,
 
 int
 ioSocketExchange::addPreExec(inExec func,
-								void   *data)
+							 void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data);
 }
@@ -402,8 +402,8 @@ ioSocketExchange::addPreExec(inExec func,
 
 int
 ioSocketExchange::addPostExec(const dodoString &module,
-								 void             *data,
-								 void             *toInit)
+							  void             *data,
+							  void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
 }
@@ -412,8 +412,8 @@ ioSocketExchange::addPostExec(const dodoString &module,
 
 int
 ioSocketExchange::addPreExec(const dodoString &module,
-								void             *data,
-								void             *toInit)
+							 void             *data,
+							 void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
 }
@@ -422,8 +422,8 @@ ioSocketExchange::addPreExec(const dodoString &module,
 
 __xexecCounts
 ioSocketExchange::addExec(const dodoString &module,
-							 void             *data,
-							 void             *toInit)
+						  void             *data,
+						  void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
 }
@@ -440,7 +440,7 @@ void
 ioSocketExchange::writeStream(const char * const data)
 {
 	guard th(this);
-	
+
 	buffer.assign(data);
 
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
@@ -524,7 +524,7 @@ ioSocketExchange::writeStreamString(const dodoString &data)
 
 void
 ioSocketExchange::_readStream(char * const data)
-{	
+{
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	operType = IOSOCKETEXCHANGE_OPERATION_RECEIVESTREAM;
 	performXExec(preExec);
@@ -551,7 +551,7 @@ ioSocketExchange::_readStream(char * const data)
 
 	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	buffer.assign(data, n);
-	
+
 	performXExec(postExec);
 	#endif
 }
@@ -562,7 +562,7 @@ void
 ioSocketExchange::readStream(char * const data)
 {
 	guard th(this);
-	
+
 	_readStream(data);
 }
 
@@ -572,7 +572,7 @@ void
 ioSocketExchange::readStreamString(dodoString &data)
 {
 	guard th(this);
-	
+
 	char *t_data = new char[inSocketBuffer + 1];
 
 	try
@@ -586,7 +586,7 @@ ioSocketExchange::readStreamString(dodoString &data)
 
 		throw;
 	}
-	
+
 	data.assign(t_data);
 	delete [] t_data;
 }
@@ -597,7 +597,7 @@ ioSocketExchange *
 ioSocketExchange::createCopy()
 {
 	guard th(this);
-	
+
 	ioSocketExchange *copy = new ioSocketExchange;
 
 	copy->socket = socket;
@@ -635,7 +635,7 @@ int
 ioSocketExchange::getInDescriptor() const
 {
 	guard th(this);
-	
+
 	return socket;
 }
 
@@ -645,7 +645,7 @@ int
 ioSocketExchange::getOutDescriptor() const
 {
 	guard th(this);
-	
+
 	return socket;
 }
 

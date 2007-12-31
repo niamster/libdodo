@@ -556,13 +556,13 @@ dodoList<unsigned long>
 systemProcesses::getJobsIds()
 {
 	dodoList<unsigned long> ids;
-	
+
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
 		ids.push_back(i->position);
-	
+
 	return ids;
-	
+
 }
 
 //-------------------------------------------------------------------

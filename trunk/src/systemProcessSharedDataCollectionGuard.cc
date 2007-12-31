@@ -118,15 +118,15 @@ systemProcessSharedDataCollectionGuard::getShare(unsigned long position)
 
 //-------------------------------------------------------------------
 
-dodoList<unsigned long> 
+dodoList<unsigned long>
 systemProcessSharedDataCollectionGuard::getSharedDataIds()
 {
 	dodoList<unsigned long> ids;
-	
+
 	dodoList<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 		ids.push_back(i->position);
-	
+
 	return ids;
 }
 

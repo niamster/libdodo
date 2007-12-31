@@ -61,7 +61,7 @@ namespace dodo
 	 */
 
 	class ioSTD : public io,
-				virtual public threadGuardHolder
+				  virtual public threadGuardHolder
 	{
 		private:
 
@@ -116,7 +116,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -125,7 +125,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * set function from module that will be executed before/after the main action call
@@ -135,7 +135,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 				#endif
 
@@ -147,7 +147,7 @@ namespace dodo
 			 * if inSize bigger than buffer size - reads with few iterations
 			 */
 			virtual void readString(dodoString &data);
-			
+
 			/**
 			 * read
 			 * @param data is filled with read data
@@ -175,7 +175,7 @@ namespace dodo
 			 * max size of data is inSTDBuffer
 			 */
 			virtual void readStreamString(dodoString &data);
-			
+
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
@@ -236,14 +236,14 @@ namespace dodo
 			 * @return descriptor of output stream
 			 */
 			virtual int getOutDescriptor() const;
-			
+
 			/**
 			 * read
 			 * @param data is filled with read data
 			 * if inSize bigger than buffer size - reads with few iterations
 			 */
 			virtual void _read(char * const data);
-			
+
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data

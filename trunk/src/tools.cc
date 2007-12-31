@@ -52,9 +52,9 @@ using namespace dodo;
 //-------------------------------------------------------------------
 
 static unsigned char PADDING[64] = {
-	0x80, 0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	0x80, 0,	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 /**
@@ -185,7 +185,7 @@ tools::random(void *data,
 			  short strength)
 {
 	FILE *file;
-	
+
 	if (strength == TOOLS_RANDOMSTRENGTH_DEFAULT)
 	{
 		file = fopen("/dev/urandom", "r");
@@ -398,7 +398,7 @@ tools::implode(const dodoStringArray &fields,
 
 	dodoString temp, fs(frame + separator);
 	dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
-	if (i!=j)
+	if (i != j)
 	{
 		--j;
 		for (; i != j; ++i)
@@ -453,7 +453,7 @@ tools::implode(const dodoStringArray &fields,
 
 	dodoString temp;
 	dodoStringArray::const_iterator i(fields.begin()), j(fields.end());
-	if (i!=j)
+	if (i != j)
 	{
 		--j;
 		for (; i != j; ++i)

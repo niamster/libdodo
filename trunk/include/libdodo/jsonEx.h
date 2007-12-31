@@ -46,7 +46,7 @@ namespace dodo
 		JSONEX_MALFORMEDJSONNULL,
 		JSONEX_MALFORMEDJSONBOOLEAN,
 	};
-	
+
 	/**
 	 * libdodo defined errors' explanation
 	 */

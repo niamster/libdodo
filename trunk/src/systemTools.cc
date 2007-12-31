@@ -727,7 +727,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 	#ifdef DL_EXT
 
 	deinitSigModule deinit;
-	
+
 	int handleSignal = toSignalNumber(SYSTEMTOOLS_SIGNAL_ALARM);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
@@ -1017,7 +1017,7 @@ systemTools::setSignalHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-int 
+int
 systemTools::toSignalNumber(long signal)
 {
 	switch (signal)
@@ -1229,7 +1229,7 @@ systemTools::daemonize()
 			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			_exit(0);
-	}	
+	}
 }
 
 //-------------------------------------------------------------------

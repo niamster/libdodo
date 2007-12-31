@@ -68,7 +68,7 @@ namespace dodo
 			 * @param force if is set to true stops execution if this job is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void del(unsigned long position, bool force=false) = 0;
+			virtual void del(unsigned long position, bool force = false) = 0;
 
 			/**
 			 * executes job
@@ -76,7 +76,7 @@ namespace dodo
 			 * @param force if is set to true permits execution even if this job is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void run(unsigned long position, bool force=false) = 0;
+			virtual void run(unsigned long position, bool force = false) = 0;
 
 			/**
 			 * stops job
@@ -115,7 +115,7 @@ namespace dodo
 			 * sweep jobs if their time are already passed
 			 */
 			virtual void sweepTrash() = 0;
-			
+
 			/**
 			 * @return list of jobs in object
 			 */
@@ -126,7 +126,7 @@ namespace dodo
 			 * @param position indicates for what job to set limit
 			 * @param limit indicates the job's limit on executions
 			 */
-			virtual void setExecutionLimit(unsigned long position, unsigned long limit=1) = 0;
+			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1) = 0;
 
 
 			#ifdef DL_EXT
@@ -138,7 +138,7 @@ namespace dodo
 			 * @param data describes data to be passed to func
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual unsigned long add(const dodoString &module, void *data, void *toInit=NULL) = 0;
+			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
 
 			#endif
 	};

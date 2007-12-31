@@ -27,7 +27,7 @@ using namespace dodo;
 
 void
 ioDiskTools::unlink(const dodoString &path,
-					   bool force)
+					bool force)
 {
 	int status(0);
 	struct stat st;
@@ -50,7 +50,7 @@ ioDiskTools::unlink(const dodoString &path,
 
 void
 ioDiskTools::rename(const dodoString &oldPath,
-					   const dodoString &newPath)
+					const dodoString &newPath)
 {
 	if (::rename(oldPath.c_str(), newPath.c_str()) == -1)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RENAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
@@ -60,8 +60,8 @@ ioDiskTools::rename(const dodoString &oldPath,
 
 void
 ioDiskTools::symlink(const dodoString &oldPath,
-						const dodoString &newPath,
-						bool force)
+					 const dodoString &newPath,
+					 bool force)
 {
 	if (force)
 	{
@@ -71,8 +71,8 @@ ioDiskTools::symlink(const dodoString &oldPath,
 			if (!S_ISLNK(st.st_mode))
 				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_LIBDODO, IODISKTOOLSEX_WRONGFILENAME, IODISKTOOLSEX_WRONGFILENAME_STR, __LINE__, __FILE__, newPath);
 			else
-				if (::unlink(newPath.c_str()) == -1)
-					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
+			if (::unlink(newPath.c_str()) == -1)
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_SYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, newPath);
 		}
 	}
 
@@ -84,7 +84,7 @@ ioDiskTools::symlink(const dodoString &oldPath,
 
 void
 ioDiskTools::link(const dodoString &oldPath,
-					 const dodoString &newPath)
+				  const dodoString &newPath)
 {
 	if  (::link(oldPath.c_str(), newPath.c_str()) == -1)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_LINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
@@ -94,7 +94,7 @@ ioDiskTools::link(const dodoString &oldPath,
 
 void
 ioDiskTools::chown(const dodoString &path,
-					  int uid)
+				   int uid)
 {
 	if (::chown(path.c_str(), uid, (unsigned int)-1) == -1)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_CHOWN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -104,7 +104,7 @@ ioDiskTools::chown(const dodoString &path,
 
 void
 ioDiskTools::chgrp(const dodoString &path,
-					  int gid)
+				   int gid)
 {
 	if (::chown(path.c_str(), (unsigned int)-1, gid) == -1)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_CHGRP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -138,7 +138,7 @@ ioDiskTools::getGroupOwner(const dodoString &path)
 
 void
 ioDiskTools::touch(const dodoString &path,
-					  int a_time)
+				   int a_time)
 {
 	if (a_time == 1)
 		a_time = time(NULL);
@@ -153,7 +153,7 @@ ioDiskTools::touch(const dodoString &path,
 
 void
 ioDiskTools::mkfifo(const dodoString &path,
-					  int permissions)
+					int permissions)
 {
 	if (::mkfifo(path.c_str(), toRealPermission(permissions)) == -1)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKFIFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -163,8 +163,8 @@ ioDiskTools::mkfifo(const dodoString &path,
 
 void
 ioDiskTools::mkdir(const dodoString &path,
-					  int permissions,
-					  bool force)
+				   int permissions,
+				   bool force)
 {
 	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 	{
@@ -235,7 +235,7 @@ ioDiskTools::toRealPermission(int permission)
 
 void
 ioDiskTools::rm(const dodoString &path,
-				   bool force)
+				bool force)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -317,7 +317,7 @@ ioDiskTools::getPermissions(const dodoString &path)
 		mode |= IODISKTOOLS_PERM_GROUP_WRITE_ACCESS;
 	if (isSetFlag(st.st_mode, S_IWOTH))
 		mode |= IODISKTOOLS_PERM_OTHER_WRITE_ACCESS;
-	
+
 	if (isSetFlag(st.st_mode, S_ISVTX))
 		mode |= IODISKTOOLS_PERM_STICKY_ACCESS;
 
@@ -479,7 +479,7 @@ ioDiskTools::getDirInfo(const dodoString &path)
 
 void
 ioDiskTools::followSymlink(const dodoString &path,
-							  dodoString &original)
+						   dodoString &original)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -630,8 +630,8 @@ ioDiskTools::dirname(const dodoString &path)
 
 void
 ioDiskTools::copy(const dodoString &from,
-					 const dodoString &a_to,
-					 bool force)
+				  const dodoString &a_to,
+				  bool force)
 {
 	dodoString to = a_to;
 
@@ -792,8 +792,8 @@ ioDiskTools::copy(const dodoString &from,
 
 void
 ioDiskTools::copyDir(const dodoString &from,
-						const dodoString &a_to,
-						bool force)
+					 const dodoString &a_to,
+					 bool force)
 {
 	dodoString to = a_to;
 
@@ -874,7 +874,7 @@ ioDiskTools::exists(const dodoString &path)
 
 void
 ioDiskTools::append(const dodoString &path,
-					   const dodoString &content)
+					const dodoString &content)
 {
 	FILE *file = fopen(path.c_str(), "a+");
 	if (file == NULL)

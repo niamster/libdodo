@@ -109,7 +109,7 @@ __fieldInfo::operator=(const __fieldInfo &from)
 //-------------------------------------------------------------------
 
 __dbStorage::__dbStorage(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
-																					fields(a_fields)
+																						fields(a_fields)
 {
 }
 
@@ -671,7 +671,7 @@ dbBase::setAddSelSt(unsigned int statement)
 
 			break;
 
-		/*default:*/
+			/*default:*/
 
 	}
 	addFlag(qSelShift, 1 << statement);

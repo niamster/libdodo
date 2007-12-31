@@ -72,7 +72,7 @@ namespace dodo
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
 			 */
-			static dodoString trim(const dodoString &data, const char symbol=' ');
+			static dodoString trim(const dodoString &data, const char symbol = ' ');
 
 			/**
 			 * removes symbols[from given array] from the end and from the begin of given string
@@ -107,7 +107,7 @@ namespace dodo
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
 			 */
-			static dodoString rTrim(const dodoString &data, char symbol=' ');
+			static dodoString rTrim(const dodoString &data, char symbol = ' ');
 
 			/**
 			 * removes symbols from the begin of given string
@@ -115,7 +115,7 @@ namespace dodo
 			 * @param data is string to process
 			 * @param symbol is symbol to remove
 			 */
-			static dodoString lTrim(const dodoString &data, char symbol=' ');
+			static dodoString lTrim(const dodoString &data, char symbol = ' ');
 
 			/**
 			 * @return converted long to string

@@ -47,7 +47,7 @@ int
 ioNBA::addFlush(const io &fl)
 {
 	guard th(this);
-	
+
 	__inOutDescriptors tempD;
 
 	tempD.position = ++descs;
@@ -72,10 +72,10 @@ ioNBA::makeFalse(int count) const
 
 dodoArray<bool>
 ioNBA::isReadable(const dodoArray<int> &pos,
-					 int timeout) const
+				  int timeout) const
 {
 	guard th(this);
-	
+
 	tempRB.clear();
 
 	int count = -1;
@@ -148,10 +148,10 @@ ioNBA::isReadable(const dodoArray<int> &pos,
 
 dodoArray<bool>
 ioNBA::isWritable(const dodoArray<int> &pos,
-					 int timeout) const
+				  int timeout) const
 {
 	guard th(this);
-	
+
 	tempRB.clear();
 
 	int count = -1;
@@ -224,10 +224,10 @@ ioNBA::isWritable(const dodoArray<int> &pos,
 
 bool
 ioNBA::isReadable(int pos,
-					 int timeout) const
+				  int timeout) const
 {
 	guard th(this);
-	
+
 	pollfd fd;
 
 	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
@@ -264,7 +264,7 @@ void
 ioNBA::delFlush(int pos)
 {
 	guard th(this);
-	
+
 	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 		if (i->position == pos)
@@ -279,10 +279,10 @@ ioNBA::delFlush(int pos)
 
 bool
 ioNBA::isWritable(int pos,
-					 int timeout) const
+				  int timeout) const
 {
 	guard th(this);
-	
+
 	pollfd fd;
 
 	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());

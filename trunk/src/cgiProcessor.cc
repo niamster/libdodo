@@ -46,12 +46,12 @@ cgiProcessor::cgiProcessor() : _continueFlag(false),
 #ifdef FCGI_EXT
 
 cgiProcessor::cgiProcessor(cgiFastIO *a_cf) : _continueFlag(false),
-											   _breakDeepness(0),
-											   _loopDeepness(0),
-											   iterator(1),
-											   namespaceDeepness(1),
-											   cgiFastSet(true),
-											   cf(a_cf)
+											  _breakDeepness(0),
+											  _loopDeepness(0),
+											  iterator(1),
+											  namespaceDeepness(1),
+											  cgiFastSet(true),
+											  cf(a_cf)
 
 {
 	dodo[statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_VERSION]] = PACKAGE_STRING;
@@ -70,7 +70,7 @@ cgiProcessor::~cgiProcessor()
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 cgiProcessor::processString(const dodoString &tpl)
 {
 	std::string tmp = _processString(preProcessString(tpl), "memory");
@@ -113,7 +113,7 @@ cgiProcessor::clear()
 
 dodoString
 cgiProcessor::_processString(const dodoString &buffer,
-					   const dodoString &path)
+							 const dodoString &path)
 {
 	unsigned long i(0), j(0), begin(0), k(0);
 

@@ -26,9 +26,9 @@
 using namespace dodo;
 
 ioSTD::ioSTD() : inSTDBuffer(STD_INSIZE),
-					   outSTDBuffer(STD_OUTSIZE),
-					   err(false),
-					   blocked(true)
+				 outSTDBuffer(STD_OUTSIZE),
+				 err(false),
+				 blocked(true)
 {
 }
 
@@ -50,7 +50,7 @@ int
 ioSTD::getInDescriptor() const
 {
 	guard th(this);
-	
+
 	return fileno(stdin);
 }
 
@@ -60,7 +60,7 @@ int
 ioSTD::getOutDescriptor() const
 {
 	guard th(this);
-	
+
 	if (err)
 		return fileno(stderr);
 	else
@@ -73,7 +73,7 @@ ioSTD::getOutDescriptor() const
 
 int
 ioSTD::addPostExec(inExec func,
-					  void   *data)
+				   void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data);
 }
@@ -82,7 +82,7 @@ ioSTD::addPostExec(inExec func,
 
 int
 ioSTD::addPreExec(inExec func,
-					 void   *data)
+				  void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data);
 }
@@ -93,8 +93,8 @@ ioSTD::addPreExec(inExec func,
 
 int
 ioSTD::addPostExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
+				   void             *data,
+				   void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data, toInit);
 }
@@ -103,8 +103,8 @@ ioSTD::addPostExec(const dodoString &module,
 
 __xexecCounts
 ioSTD::addExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
+			   void             *data,
+			   void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data, toInit);
 }
@@ -113,8 +113,8 @@ ioSTD::addExec(const dodoString &module,
 
 int
 ioSTD::addPreExec(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
+				  void             *data,
+				  void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data, toInit);
 }
@@ -177,9 +177,9 @@ ioSTD::_read(char * const a_void)
 		}
 	}
 
-	#ifndef IOSTD_WO_XEXEC	
+	#ifndef IOSTD_WO_XEXEC
 	buffer.assign(a_void, inSize);
-	
+
 	performXExec(postExec);
 	#endif
 }
@@ -190,7 +190,7 @@ void
 ioSTD::read(char * const a_void)
 {
 	guard th(this);
-	
+
 	_read(a_void);
 }
 
@@ -200,7 +200,7 @@ void
 ioSTD::readString(dodoString &a_str)
 {
 	guard th(this);
-	
+
 	char *data = new char[inSize + 1];
 
 	try
@@ -233,7 +233,7 @@ void
 ioSTD::write(const char *const aa_buf)
 {
 	guard th(this);
-	
+
 	buffer.assign(aa_buf, outSize);
 
 	#ifndef IOSTD_WO_XEXEC
@@ -297,7 +297,7 @@ void
 ioSTD::flush()
 {
 	guard th(this);
-	
+
 	desc = stdout;
 	if (err)
 		desc = stderr;
@@ -312,7 +312,7 @@ __connInfo
 ioSTD::inputterInfo()
 {
 	guard th(this);
-	
+
 	__connInfo info;
 
 	struct sockaddr sa;
@@ -367,7 +367,7 @@ bool
 ioSTD::isBlocked()
 {
 	guard th(this);
-	
+
 	return blocked;
 }
 
@@ -377,7 +377,7 @@ void
 ioSTD::block(bool flag)
 {
 	guard th(this);
-	
+
 	int block[3] = { O_NONBLOCK, O_NONBLOCK, O_NONBLOCK };
 
 	if (flag)
@@ -417,7 +417,7 @@ ioSTD::block(bool flag)
 
 void
 ioSTD::_readStream(char * const a_void)
-{	
+{
 	#ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTREAM;
 	performXExec(preExec);
@@ -439,7 +439,7 @@ ioSTD::_readStream(char * const a_void)
 		break;
 	}
 
-	#ifndef IOSTD_WO_XEXEC	
+	#ifndef IOSTD_WO_XEXEC
 	buffer.assign(a_void);
 
 	performXExec(postExec);
@@ -453,7 +453,7 @@ void
 ioSTD::readStream(char * const a_void)
 {
 	guard th(this);
-	
+
 	_readStream(a_void);
 }
 
@@ -463,7 +463,7 @@ void
 ioSTD::readStreamString(dodoString &a_str)
 {
 	guard th(this);
-	
+
 	char *data = new char[inSTDBuffer + 1];
 
 	try
@@ -477,7 +477,7 @@ ioSTD::readStreamString(dodoString &a_str)
 
 		throw;
 	}
-	
+
 	a_str.assign(data);
 	delete [] data;
 }
@@ -496,7 +496,7 @@ void
 ioSTD::writeStream(const char *const aa_buf)
 {
 	guard th(this);
-	
+
 	buffer.assign(aa_buf);
 
 	#ifndef IOSTD_WO_XEXEC

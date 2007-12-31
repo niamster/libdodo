@@ -642,13 +642,13 @@ dodoList<unsigned long>
 systemThreads::getJobsIds()
 {
 	dodoList<unsigned long> ids;
-	
+
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
 		ids.push_back(i->position);
-	
+
 	return ids;
-	
+
 }
 
 //-------------------------------------------------------------------

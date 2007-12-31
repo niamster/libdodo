@@ -26,8 +26,8 @@
 using namespace dodo;
 
 __cgiFile::__cgiFile() : fp(NULL),
-							   buf(NULL),
-							   size(0)
+						 buf(NULL),
+						 size(0)
 {
 }
 
@@ -88,7 +88,7 @@ cgi::cgi(dodoStringMap &headers,
 
 	makeContent();
 	makePost();
-	
+
 	if (autocleanContent)
 		content.clear();
 
@@ -124,7 +124,7 @@ cgi::cgi(bool silent,
 
 	makeContent();
 	makePost();
-	
+
 	if (autocleanContent)
 		content.clear();
 

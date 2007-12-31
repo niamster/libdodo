@@ -92,24 +92,24 @@ namespace dodo
 	enum systemSignalsEnum
 	{
 		SYSTEMTOOLS_SIGNAL_HANGUP = 0,
-		SYSTEMTOOLS_SIGNAL_INTERRUPT = 1<<1,
-		SYSTEMTOOLS_SIGNAL_QUIT = 1<<2,
-		SYSTEMTOOLS_SIGNAL_ILLEGAL_INSTRUCTION = 1<<3,
-		SYSTEMTOOLS_SIGNAL_ABORT = 1<<4,
-		SYSTEMTOOLS_SIGNAL_BUS_FAULT = 1<<5,
-		SYSTEMTOOLS_SIGNAL_FLOATINGPOINT_FAULT = 1<<6,
-		SYSTEMTOOLS_SIGNAL_USER_DEFINED1 = 1<<7,
-		SYSTEMTOOLS_SIGNAL_SEGMENTATION_FAULT = 1<<8,
-		SYSTEMTOOLS_SIGNAL_USER_DEFINED2 = 1<<9,
-		SYSTEMTOOLS_SIGNAL_PIPE_FAULT = 1<<10,
-		SYSTEMTOOLS_SIGNAL_ALARM = 1<<11,
-		SYSTEMTOOLS_SIGNAL_TERMINATION = 1<<12,
-		SYSTEMTOOLS_SIGNAL_CHILD_CHANGED = 1<<13,
-		SYSTEMTOOLS_SIGNAL_CONTINUE = 1<<14,
-		SYSTEMTOOLS_SIGNAL_KEYBOARD_STOP = 1<<15,
-		SYSTEMTOOLS_SIGNAL_CPULIMIT_EXCEEDED = 1<<16,
-		SYSTEMTOOLS_SIGNAL_FILESIZE_EXCEEDED = 1<<17,
-		SYSTEMTOOLS_SIGNAL_BAD_SYSCALL = 1<<18,
+		SYSTEMTOOLS_SIGNAL_INTERRUPT = 1 << 1,
+		SYSTEMTOOLS_SIGNAL_QUIT = 1 << 2,
+		SYSTEMTOOLS_SIGNAL_ILLEGAL_INSTRUCTION = 1 << 3,
+		SYSTEMTOOLS_SIGNAL_ABORT = 1 << 4,
+		SYSTEMTOOLS_SIGNAL_BUS_FAULT = 1 << 5,
+		SYSTEMTOOLS_SIGNAL_FLOATINGPOINT_FAULT = 1 << 6,
+		SYSTEMTOOLS_SIGNAL_USER_DEFINED1 = 1 << 7,
+		SYSTEMTOOLS_SIGNAL_SEGMENTATION_FAULT = 1 << 8,
+		SYSTEMTOOLS_SIGNAL_USER_DEFINED2 = 1 << 9,
+		SYSTEMTOOLS_SIGNAL_PIPE_FAULT = 1 << 10,
+		SYSTEMTOOLS_SIGNAL_ALARM = 1 << 11,
+		SYSTEMTOOLS_SIGNAL_TERMINATION = 1 << 12,
+		SYSTEMTOOLS_SIGNAL_CHILD_CHANGED = 1 << 13,
+		SYSTEMTOOLS_SIGNAL_CONTINUE = 1 << 14,
+		SYSTEMTOOLS_SIGNAL_KEYBOARD_STOP = 1 << 15,
+		SYSTEMTOOLS_SIGNAL_CPULIMIT_EXCEEDED = 1 << 16,
+		SYSTEMTOOLS_SIGNAL_FILESIZE_EXCEEDED = 1 << 17,
+		SYSTEMTOOLS_SIGNAL_BAD_SYSCALL = 1 << 18,
 	};
 
 	/**
@@ -142,9 +142,9 @@ namespace dodo
 	 */
 	struct __groupInfo
 	{
-		dodoString name;        ///< name of the group
-		int gid;                ///< group id
-		dodoStringArray members;  ///< list of group members
+		dodoString name;            ///< name of the group
+		int gid;                    ///< group id
+		dodoStringArray members;    ///< list of group members
 	};
 
 	#ifdef DL_EXT
@@ -212,7 +212,7 @@ namespace dodo
 			 * @param message is message to print
 			 * @param status indicate with what status to exit
 			 */
-			static void die(const dodoString &message, int status=1);
+			static void die(const dodoString &message, int status = 1);
 
 			/**
 			 * changes root(/) to new
@@ -369,7 +369,7 @@ namespace dodo
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals=-1);
+			static void setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals = -1);
 
 			/**
 			 * set timer and onTimer function
@@ -377,7 +377,7 @@ namespace dodo
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void setTimer(long timeout, signalHandler handler, int blockSignals=-1);
+			static void setTimer(long timeout, signalHandler handler, int blockSignals = -1);
 
 			/**
 			 * set signal handler
@@ -385,7 +385,7 @@ namespace dodo
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void setSignalHandler(long signal, signalHandler handler, int blockSignals=-1);
+			static void setSignalHandler(long signal, signalHandler handler, int blockSignals = -1);
 
 			/**
 			 * determines whether handler was set on signal[see systemSignalsEnum]
@@ -406,7 +406,7 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static __sigMod getModuleInfo(const dodoString &module, void *toInit=NULL);
+			static __sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 			/**
 			 * set handler on signal from specific module
@@ -415,7 +415,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
 			 */
-			static void setSignalHandler(long signal, const dodoString &module, void *toInit=NULL, int blockSignals=-1);
+			static void setSignalHandler(long signal, const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
 			/**
 			 * set handler on signal from specific module
@@ -424,7 +424,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void setSignalHandler(const dodoString &module, void *toInit=NULL, int blockSignals=-1);
+			static void setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
 			#endif
 
@@ -440,7 +440,7 @@ namespace dodo
 			 * @param signal indicates what signals to block/unblock; can be or'ed;
 			 * @param block indicates whether to block or unblock
 			 */
-			static void blockSignal(long signals, bool block=true);
+			static void blockSignal(long signals, bool block = true);
 
 		protected:
 
@@ -472,10 +472,10 @@ namespace dodo
 			static void sigMask(sigset_t *set, long signal);
 
 			#ifdef DL_EXT
-			
+
 			static void *handlesSig[19];        ///< handles to modules
 			static bool handlesOpenedSig[19];   ///< map of opened modules
-			
+
 			#endif
 
 	};

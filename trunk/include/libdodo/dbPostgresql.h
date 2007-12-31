@@ -133,7 +133,7 @@ namespace dodo
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
-			virtual void exec(const dodoString &query=__dodostring__, bool result=false);
+			virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
 				#ifndef DBPOSTGRESQL_WO_XEXEC
 
@@ -163,7 +163,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -172,7 +172,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
 			 * adds hook after the operation by callback
@@ -181,7 +181,7 @@ namespace dodo
 			 * @param data is pointer to data toy want to pass to hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
 				#endif
 
@@ -230,12 +230,12 @@ namespace dodo
 
 		private:
 
-			bool empty;             ///< for detectin' whether pgResult is empty or not
+			bool empty;                 ///< for detectin' whether pgResult is empty or not
 
-			PGconn *conn;           ///< handle for connection to PG SQL server
-			PGresult *pgResult;     ///< holds result from request
+			PGconn *conn;               ///< handle for connection to PG SQL server
+			PGresult *pgResult;         ///< holds result from request
 
-			dodoStringArray blobs;    ///< to store blob data
+			dodoStringArray blobs;      ///< to store blob data
 	};
 
 };

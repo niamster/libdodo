@@ -26,20 +26,20 @@
 using namespace dodo;
 
 ioDisk::ioDisk(const dodoString &a_path,
-					short a_fileType,
-					 short mode) : over(false),
-									 append(false),
-									 path(a_path),
-									 fileType(a_fileType)
+			   short a_fileType,
+			   short mode) : over(false),
+							 append(false),
+							 path(a_path),
+							 fileType(a_fileType)
 {
 	if (path != __dodostring__)
 		try
 		{
 			open(path, fileType, mode);
 		}
-		catch(...)
+		catch (...)
 		{
-			
+
 		}
 }
 
@@ -63,7 +63,7 @@ int
 ioDisk::getInDescriptor() const
 {
 	guard th(this);
-	
+
 	if (!opened)
 		return -1;
 
@@ -76,7 +76,7 @@ int
 ioDisk::getOutDescriptor() const
 {
 	guard th(this);
-	
+
 	if (!opened)
 		return -1;
 
@@ -89,7 +89,7 @@ ioDisk::getOutDescriptor() const
 
 int
 ioDisk::addPostExec(inExec func,
-					   void   *data)
+					void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IODISK, data);
 }
@@ -98,7 +98,7 @@ ioDisk::addPostExec(inExec func,
 
 int
 ioDisk::addPreExec(inExec func,
-					  void   *data)
+				   void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IODISK, data);
 }
@@ -109,8 +109,8 @@ ioDisk::addPreExec(inExec func,
 
 int
 ioDisk::addPostExec(const dodoString &module,
-					   void             *data,
-					   void             *toInit)
+					void             *data,
+					void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IODISK, data, toInit);
 }
@@ -119,8 +119,8 @@ ioDisk::addPostExec(const dodoString &module,
 
 int
 ioDisk::addPreExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
+				   void             *data,
+				   void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IODISK, data, toInit);
 }
@@ -129,8 +129,8 @@ ioDisk::addPreExec(const dodoString &module,
 
 __xexecCounts
 ioDisk::addExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
+				void             *data,
+				void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IODISK, data, toInit);
 }
@@ -145,7 +145,7 @@ void
 ioDisk::close()
 {
 	guard th(this);
-	
+
 	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_CLOSE;
 	#endif
@@ -171,11 +171,11 @@ ioDisk::close()
 
 void
 ioDisk::open(const dodoString &a_path,
-			short a_fileType,
-			short mode)
+			 short a_fileType,
+			 short mode)
 {
 	guard th(this);
-	
+
 	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_OPEN;
 	performXExec(preExec);
@@ -271,7 +271,7 @@ ioDisk::open(const dodoString &a_path,
 
 void
 ioDisk::_read(char * const a_void,
-				unsigned long a_pos)
+			  unsigned long a_pos)
 {
 	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READ;
@@ -307,7 +307,7 @@ ioDisk::_read(char * const a_void,
 
 	#ifndef IODISK_WO_XEXEC
 	buffer.assign(a_void, inSize);
-	
+
 	performXExec(postExec);
 	#endif
 }
@@ -316,10 +316,10 @@ ioDisk::_read(char * const a_void,
 
 void
 ioDisk::read(char * const a_void,
-				unsigned long a_pos)
+			 unsigned long a_pos)
 {
 	guard th(this);
-	
+
 	_read(a_void, a_pos);
 }
 
@@ -327,10 +327,10 @@ ioDisk::read(char * const a_void,
 
 void
 ioDisk::readString(dodoString &a_str,
-					  unsigned long a_pos)
+				   unsigned long a_pos)
 {
 	guard th(this);
-	
+
 	char *data = new char[inSize + 1];
 
 	try
@@ -353,7 +353,7 @@ ioDisk::readString(dodoString &a_str,
 
 void
 ioDisk::writeString(const dodoString &a_buf,
-					   unsigned long a_pos)
+					unsigned long a_pos)
 {
 	this->write(a_buf.c_str(), a_pos);
 }
@@ -363,7 +363,7 @@ ioDisk::writeString(const dodoString &a_buf,
 
 void
 ioDisk::_write(const char *const a_buf,
-				 unsigned long a_pos)
+			   unsigned long a_pos)
 {
 	buffer.assign(a_buf, outSize);
 
@@ -438,10 +438,10 @@ ioDisk::_write(const char *const a_buf,
 
 void
 ioDisk::write(const char *const a_buf,
-				 unsigned long a_pos)
+			  unsigned long a_pos)
 {
 	guard th(this);
-	
+
 	_write(a_buf, a_pos);
 }
 
@@ -451,7 +451,7 @@ void
 ioDisk::erase(unsigned long a_pos)
 {
 	guard th(this);
-	
+
 	char *empty = new char[outSize];
 
 	memset(empty, 0, outSize);
@@ -467,7 +467,7 @@ void
 ioDisk::flush()
 {
 	guard th(this);
-	
+
 	if (fflush(file) != 0)
 		throw baseEx(ERRMODULE_IODISK, IODISKEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
@@ -478,7 +478,7 @@ dodoString
 ioDisk::getPath() const
 {
 	guard th(this);
-	
+
 	return path;
 }
 
@@ -486,7 +486,7 @@ ioDisk::getPath() const
 
 void
 ioDisk::_readStream(char * const a_void,
-					  unsigned long a_pos)
+					unsigned long a_pos)
 {
 	#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTREAM;
@@ -533,7 +533,7 @@ ioDisk::_readStream(char * const a_void,
 
 				throw baseEx(ERRMODULE_IODISK, IODISKEX_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
-	
+
 	#ifndef IODISK_WO_XEXEC
 	buffer.assign(a_void);
 
@@ -545,10 +545,10 @@ ioDisk::_readStream(char * const a_void,
 
 void
 ioDisk::readStream(char * const a_void,
-					  unsigned long a_pos)
+				   unsigned long a_pos)
 {
 	guard th(this);
-	
+
 	_readStream(a_void, a_pos);
 }
 
@@ -556,10 +556,10 @@ ioDisk::readStream(char * const a_void,
 
 void
 ioDisk::readStreamString(dodoString &a_str,
-							unsigned long a_pos)
+						 unsigned long a_pos)
 {
 	guard th(this);
-	
+
 	char *data = new char[inSize + 1];
 
 	try
@@ -592,7 +592,7 @@ void
 ioDisk::writeStream(const char *const a_buf)
 {
 	guard th(this);
-	
+
 	buffer.assign(a_buf);
 
 	#ifndef IODISK_WO_XEXEC
@@ -645,11 +645,11 @@ ioDisk::writeStream(const char *const a_buf)
 
 //-------------------------------------------------------------------
 
-short 
+short
 ioDisk::getFileType() const
 {
 	guard th(this);
-	
+
 	return fileType;
 }
 

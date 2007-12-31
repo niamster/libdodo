@@ -83,7 +83,7 @@ namespace dodo
 	 */
 	struct __execItemList
 	{
-		dodoList<__execItem> exec; ///< vector of hooks
+		dodoList<__execItem> exec;  ///< vector of hooks
 		bool execDisabled;          ///< enable or disable list
 	};
 
@@ -212,7 +212,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @attention data is not copied!!!
 			 */
-			virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 			/**
 			 * set function from module that will be executed before  the main action call
@@ -224,7 +224,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @attention data is not copied!!!
 			 */
-			virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 			/**
 			 * set function from module that will be executed before/after the main action call
@@ -237,7 +237,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @attention data is not copied!!!
 			 */
-			virtual __xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit=NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual __xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 			#endif
 
@@ -343,7 +343,7 @@ namespace dodo
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 */
-			static __xexecMod getModuleInfo(const dodoString &module, void *toInit=NULL);
+			static __xexecMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 			#endif
 
@@ -428,7 +428,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @attention data is not copied!!!
 			 */
-			virtual int addXExecModule(dodoList<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit=NULL);
+			virtual int addXExecModule(dodoList<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit = NULL);
 
 			#endif
 
@@ -443,11 +443,11 @@ namespace dodo
 
 			int execs;                                  ///< execs counter
 
-			dodoList<__execItem>::iterator current;    ///< iterator for list[for matched]
-			
-			mutable bool collectData;///< to collect data for xexec[true by default]
+			dodoList<__execItem>::iterator current;     ///< iterator for list[for matched]
 
-			mutable int operType; ///< operation type set by main action; can be used in hook to determine type of action
+			mutable bool collectData;                   ///< to collect data for xexec[true by default]
+
+			mutable int operType;                       ///< operation type set by main action; can be used in hook to determine type of action
 	};
 
 };

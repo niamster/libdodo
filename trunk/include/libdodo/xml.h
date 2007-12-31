@@ -76,17 +76,17 @@ namespace dodo
 		 */
 		__xmlNodeDef();
 
-		dodoString name;                                ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
+		dodoString name;                                    ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own  children]
 
-		std::map<dodoString, __xmlNodeDef> children;    ///< vector of children's definitions
+		std::map<dodoString, __xmlNodeDef> children;        ///< vector of children's definitions
 
-		long chLimit;                                   ///< limit of children to search for[-1 for unlimit, default]
-		bool ignoreChildrenDef;                         ///< if true - parse all children tree if no children difenition; false by default
+		long chLimit;                                       ///< limit of children to search for[-1 for unlimit, default]
+		bool ignoreChildrenDef;                             ///< if true - parse all children tree if no children difenition; false by default
 
-		dodoStringArray attributes;                       ///< attrributes to take from node; if empty - take all
-		bool ignoreAttributesDef;                       ///< if true - parse all attributes if no attributes difenition; true by default
+		dodoStringArray attributes;                         ///< attrributes to take from node; if empty - take all
+		bool ignoreAttributesDef;                           ///< if true - parse all attributes if no attributes difenition; true by default
 
-		dodoString ns;                                  ///< namespace of the node; if empty - skips
+		dodoString ns;                                      ///< namespace of the node; if empty - skips
 	};
 
 	/**
@@ -227,7 +227,7 @@ namespace dodo
 			 * @param encoding declears encoding of XML
 			 * @param version declears version of XML
 			 */
-			virtual dodoString createXML(const __xmlNode &root, const dodoString &encoding="UTF-8", const dodoString &version="1.0")  const;
+			virtual dodoString createXML(const __xmlNode &root, const dodoString &encoding = "UTF-8", const dodoString &version = "1.0")  const;
 
 			/**
 			 * @return XML string

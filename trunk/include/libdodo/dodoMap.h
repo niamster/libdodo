@@ -97,7 +97,7 @@ namespace dodo
 					if (cmpFunc(varName, i->first))
 						return i->second;
 
-				std::pair < typename std::map<keyType, valueType>::iterator, bool > res=contents.insert(make_pair(varName, valueType()));
+				std::pair < typename std::map<keyType, valueType>::iterator, bool > res = contents.insert(make_pair(varName, valueType()));
 
 				return res.first->second;
 			}
@@ -115,7 +115,7 @@ namespace dodo
 					if (cmpFunc(varName, i->first))
 						return i->second;
 
-				std::pair < typename std::map<keyType, valueType>::iterator, bool > res=contents.insert(make_pair(varName, valueType()));
+				std::pair < typename std::map<keyType, valueType>::iterator, bool > res = contents.insert(make_pair(varName, valueType()));
 
 				return res.first->second;
 			}
@@ -258,7 +258,7 @@ namespace dodo
 			}
 
 			typedef typename std::map<keyType, valueType>::const_iterator const_iterator;       ///< const iterator
-			typedef typename std::map<keyType, valueType>::iterator iterator;                   ///< iterator 
+			typedef typename std::map<keyType, valueType>::iterator iterator;                   ///< iterator
 
 		private:
 

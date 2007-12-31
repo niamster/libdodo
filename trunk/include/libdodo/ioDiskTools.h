@@ -63,28 +63,28 @@ namespace dodo
 	{
 		IODISKTOOLS_PERM_NONE,
 
-		IODISKTOOLS_PERM_OWNER_READ_ACCESS = 1<<1,
-		IODISKTOOLS_PERM_GROUP_READ_ACCESS = 1<<2,
-		IODISKTOOLS_PERM_OTHER_READ_ACCESS = 1<<3,
+		IODISKTOOLS_PERM_OWNER_READ_ACCESS = 1 << 1,
+		IODISKTOOLS_PERM_GROUP_READ_ACCESS = 1 << 2,
+		IODISKTOOLS_PERM_OTHER_READ_ACCESS = 1 << 3,
 
-		IODISKTOOLS_PERM_OWNER_WRITE_ACCESS = 1<<4,
-		IODISKTOOLS_PERM_GROUP_WRITE_ACCESS = 1<<5,
-		IODISKTOOLS_PERM_OTHER_WRITE_ACCESS = 1<<6,
+		IODISKTOOLS_PERM_OWNER_WRITE_ACCESS = 1 << 4,
+		IODISKTOOLS_PERM_GROUP_WRITE_ACCESS = 1 << 5,
+		IODISKTOOLS_PERM_OTHER_WRITE_ACCESS = 1 << 6,
 
-		IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS = 1<<7,
-		IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS = 1<<8,
-		IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS = 1<<9,
+		IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS = 1 << 7,
+		IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS = 1 << 8,
+		IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS = 1 << 9,
 
-		IODISKTOOLS_PERM_STICKY_ACCESS = 1<<10,
+		IODISKTOOLS_PERM_STICKY_ACCESS = 1 << 10,
 
-		IODISKTOOLS_PERM_SUID_ACCESS = 1<<11,
-		IODISKTOOLS_PERM_SGID_ACCESS = 1<<12,
+		IODISKTOOLS_PERM_SUID_ACCESS = 1 << 11,
+		IODISKTOOLS_PERM_SGID_ACCESS = 1 << 12,
 
-		IODISKTOOLS_PERM_OWNER_ALL_ACCESS = IODISKTOOLS_PERM_OWNER_READ_ACCESS|IODISKTOOLS_PERM_OWNER_WRITE_ACCESS|IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS,
-		IODISKTOOLS_PERM_GROUP_ALL_ACCESS = IODISKTOOLS_PERM_GROUP_READ_ACCESS|IODISKTOOLS_PERM_GROUP_WRITE_ACCESS|IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS,
-		IODISKTOOLS_PERM_OTHER_ALL_ACCESS = IODISKTOOLS_PERM_OTHER_READ_ACCESS|IODISKTOOLS_PERM_OTHER_WRITE_ACCESS|IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS,
+		IODISKTOOLS_PERM_OWNER_ALL_ACCESS = IODISKTOOLS_PERM_OWNER_READ_ACCESS | IODISKTOOLS_PERM_OWNER_WRITE_ACCESS | IODISKTOOLS_PERM_OWNER_EXECUTE_ACCESS,
+		IODISKTOOLS_PERM_GROUP_ALL_ACCESS = IODISKTOOLS_PERM_GROUP_READ_ACCESS | IODISKTOOLS_PERM_GROUP_WRITE_ACCESS | IODISKTOOLS_PERM_GROUP_EXECUTE_ACCESS,
+		IODISKTOOLS_PERM_OTHER_ALL_ACCESS = IODISKTOOLS_PERM_OTHER_READ_ACCESS | IODISKTOOLS_PERM_OTHER_WRITE_ACCESS | IODISKTOOLS_PERM_OTHER_EXECUTE_ACCESS,
 
-		IODISKTOOLS_PERM_ALL_ALL_ACCESS = IODISKTOOLS_PERM_OWNER_ALL_ACCESS|IODISKTOOLS_PERM_GROUP_ALL_ACCESS|IODISKTOOLS_PERM_OTHER_ALL_ACCESS,
+		IODISKTOOLS_PERM_ALL_ALL_ACCESS = IODISKTOOLS_PERM_OWNER_ALL_ACCESS | IODISKTOOLS_PERM_GROUP_ALL_ACCESS | IODISKTOOLS_PERM_OTHER_ALL_ACCESS,
 
 	};
 
@@ -121,7 +121,7 @@ namespace dodo
 			 * @param force indicates to overwrite
 			 * @note works as cp[but for files and empty dirs] -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 			 */
-			static void copy(const dodoString &from, const dodoString &to, bool force=false);
+			static void copy(const dodoString &from, const dodoString &to, bool force = false);
 
 			/**
 			 * copy file/Dir
@@ -130,7 +130,7 @@ namespace dodo
 			 * @param force indicates to overwrite
 			 * @note works as cp -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 			 */
-			static void copyDir(const dodoString &from, const dodoString &to, bool force=false);
+			static void copyDir(const dodoString &from, const dodoString &to, bool force = false);
 
 			/**
 			 * appends string to file
@@ -170,7 +170,7 @@ namespace dodo
 			 * @param path is path to node
 			 * @param force if it is true and nothing already exists do not say anything
 			 */
-			static void unlink(const dodoString &path, bool force=true);               ///< also empty directory
+			static void unlink(const dodoString &path, bool force = true);               ///< also empty directory
 
 			/**
 			 * rename file
@@ -184,7 +184,7 @@ namespace dodo
 			 * @param path is path to file
 			 * @param time is timestams; if not specified -> now
 			 */
-			static void touch(const dodoString &path, int time=-1);               ///< now by default
+			static void touch(const dodoString &path, int time = -1);               ///< now by default
 
 
 			/**
@@ -192,22 +192,22 @@ namespace dodo
 			 * @param path is path of fifo to create
 			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 */
-			static void mkfifo(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
-			
+			static void mkfifo(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
+
 			/**
 			 * make directory
 			 * @param path is path of directory to create
 			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 * @param force if it is true and directory already exists do not say anything
 			 */
-			static void mkdir(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force=true);
+			static void mkdir(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force = true);
 
 			/**
 			 * delete files, non empty directory
 			 * @param path indicates the path to remove
 			 * @param force if it is true and nothing already exists do not say anything
 			 */
-			static void rm(const dodoString &path, bool force=true);
+			static void rm(const dodoString &path, bool force = true);
 
 			/**
 			 * @return type of file; if error occured and lib was compiled without exceptions -> -1 will be returned;
@@ -259,7 +259,7 @@ namespace dodo
 			 * @param newPath indicates path to symlink
 			 * @param force if is set to true link exists already - nothing to say, but replace
 			 */
-			static void symlink(const dodoString &oldPath, const dodoString &newPath, bool force=true);
+			static void symlink(const dodoString &oldPath, const dodoString &newPath, bool force = true);
 
 			/**
 			 * creates link
@@ -313,7 +313,7 @@ namespace dodo
 			static dodoArray<__fileInfo> getDirInfo(const dodoString &path); ///< if it'not a dir - empty will be returned and nothing write to 'dir' paramether!
 
 		protected:
-			
+
 			/**
 			 * @return system understandable permissions
 			 * @param permission is user understandable permissions

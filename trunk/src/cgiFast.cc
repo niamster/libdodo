@@ -86,7 +86,7 @@ cgiFastIO::print(const dodoString &buf)
 
 void
 cgiFastIO::read(char         *buf,
-				 unsigned int size)
+				unsigned int size)
 {
 	FCGX_GetStr(buf, size, request->in);
 }
@@ -163,7 +163,7 @@ cgiFast::stackThread(void *data)
 	FCGX_InitRequest(&request, 0, 0);
 
 	cgiFastIO cfSTD(&request);
-	
+
 	int res = 0;
 
 	while (true)
@@ -174,7 +174,7 @@ cgiFast::stackThread(void *data)
 
 		if (res == -1)
 			throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_STACKTHREAD, ERR_LIBDODO, CGIFASTEX_ACCEPTFAILED, CGIFASTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
-		
+
 		cgiF(&cfSTD);
 
 		FCGX_Finish_r(&request);
@@ -192,7 +192,7 @@ cgiFast::listen()
 {
 	if (!isFastCGI())
 		throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_LISTEN, ERR_LIBDODO, CGIFASTEX_ISCGI, CGIFASTEX_ISCGI_STR, __LINE__, __FILE__);
-	
+
 		#ifdef PTHREAD_EXT
 	if (threading)
 	{
@@ -231,7 +231,7 @@ cgiFast::listen()
 
 //-------------------------------------------------------------------
 
-bool 
+bool
 cgiFast::isFastCGI()
 {
 	return !FCGX_IsCGI();

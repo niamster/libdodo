@@ -44,7 +44,7 @@ namespace dodo
 		CGIFASTEX_ACCEPTFAILED,
 		CGIFASTEX_ISCGI,
 	};
-	
+
 	/**
 	 * libdodo defined errors' explanation
 	 */

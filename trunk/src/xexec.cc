@@ -383,7 +383,7 @@ xexec::performXExec(__execItemList &list) const
 #ifdef DL_EXT
 
 __xexecCounts::__xexecCounts() : pre(-1),
-							 post(-1)
+								 post(-1)
 {
 }
 

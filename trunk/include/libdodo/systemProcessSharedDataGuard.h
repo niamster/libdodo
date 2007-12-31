@@ -60,7 +60,7 @@ namespace dodo
 			 * if you want to share semaphore between different instances of process - set own key,
 			 * otherwise(like fork) - can be generated
 			 */
-			systemProcessSharedDataGuard(unsigned int value=1, const char *key=NULL);
+			systemProcessSharedDataGuard(unsigned int value = 1, const char *key = NULL);
 
 			/**
 			 * destructor
@@ -84,7 +84,7 @@ namespace dodo
 			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
 			 * @note if microseconds==0 - infinite sleep
 			 */
-			virtual void *lock(unsigned long microseconds=0);
+			virtual void *lock(unsigned long microseconds = 0);
 
 
 			/**

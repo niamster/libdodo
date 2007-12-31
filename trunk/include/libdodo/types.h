@@ -51,18 +51,18 @@ namespace dodo
 	#endif
 
 	typedef dodoArray<dodoString> dodoStringArray;                                ///< array of strings
-	
+
 	#define dodoList std::list
 
-	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;  ///< hash of strings
+	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;      ///< hash of strings
 
-	typedef dodoArray<dodoStringMap> dodoStringMapArray;                          ///< array of hashes of string
+	typedef dodoArray<dodoStringMap> dodoStringMapArray;                            ///< array of hashes of string
 
 	struct __statements
 	{
 		const char *str;
 	};
-	
+
 	/**
 	 * diferent predifined constants
 	 */

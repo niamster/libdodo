@@ -26,29 +26,29 @@
 using namespace dodo;
 
 ioSocketOptions::ioSocketOptions(short a_family,
-									   short a_type) : family(a_family),
-													   type(a_type),
-													   lingerOpts(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION),
-													   lingerSeconds(IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD),
-													   inTimeout(RECIEVE_TIMEOUT),
-													   outTimeout(SEND_TIMEOUT),
-													   inSocketBuffer(IOSOCKETOPTIONS_SOCKET_INSIZE),
-													   outSocketBuffer(IOSOCKETOPTIONS_SOCKET_OUTSIZE),
-													   socket(-1),
-													   blocked(true)
+								 short a_type) : family(a_family),
+												 type(a_type),
+												 lingerOpts(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION),
+												 lingerSeconds(IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD),
+												 inTimeout(RECIEVE_TIMEOUT),
+												 outTimeout(SEND_TIMEOUT),
+												 inSocketBuffer(IOSOCKETOPTIONS_SOCKET_INSIZE),
+												 outSocketBuffer(IOSOCKETOPTIONS_SOCKET_OUTSIZE),
+												 socket(-1),
+												 blocked(true)
 {
 }
 
 //-------------------------------------------------------------------
 
 ioSocketOptions::ioSocketOptions() : lingerOpts(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION),
-										   lingerSeconds(IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD),
-										   inTimeout(RECIEVE_TIMEOUT),
-										   outTimeout(SEND_TIMEOUT),
-										   inSocketBuffer(IOSOCKETOPTIONS_SOCKET_INSIZE),
-										   outSocketBuffer(IOSOCKETOPTIONS_SOCKET_OUTSIZE),
-										   socket(-1),
-										   blocked(true)
+									 lingerSeconds(IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD),
+									 inTimeout(RECIEVE_TIMEOUT),
+									 outTimeout(SEND_TIMEOUT),
+									 inSocketBuffer(IOSOCKETOPTIONS_SOCKET_INSIZE),
+									 outSocketBuffer(IOSOCKETOPTIONS_SOCKET_OUTSIZE),
+									 socket(-1),
+									 blocked(true)
 {
 }
 
@@ -198,7 +198,7 @@ ioSocketOptions::getSocketOpts(int option) const
 
 void
 ioSocketOptions::setSockOption(short option,
-								  bool flag)
+							   bool flag)
 {
 	if (socket == -1)
 		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONSEX_NOSOCKETCREATED, IOSOCKETOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
@@ -270,7 +270,7 @@ ioSocketOptions::setSockOption(short option,
 
 void
 ioSocketOptions::setLingerSockOption(short option,
-										int seconds)
+									 int seconds)
 {
 	if (socket == -1)
 		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, IOSOCKETOPTIONSEX_NOSOCKETCREATED, IOSOCKETOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);

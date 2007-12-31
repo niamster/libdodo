@@ -62,9 +62,9 @@ namespace dodo
 	 */
 	struct __hostInfo
 	{
-		dodoString name;            ///< original name of the host
-		dodoStringArray aliases;      ///< aliases of the host
-		dodoStringArray addresses;    ///< addresses of the host
+		dodoString name;                ///< original name of the host
+		dodoStringArray aliases;        ///< aliases of the host
+		dodoStringArray addresses;      ///< addresses of the host
 	};
 
 	/**
@@ -72,9 +72,9 @@ namespace dodo
 	 */
 	struct __servInfo
 	{
-		dodoString name;        ///< original name of the service
-		dodoStringArray aliases;  ///< sevice's aliases
-		int port;               ///< port of service
+		dodoString name;            ///< original name of the service
+		dodoStringArray aliases;    ///< sevice's aliases
+		int port;                   ///< port of service
 	};
 
 	/**

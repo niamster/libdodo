@@ -53,10 +53,10 @@ ioSocketTools::getHostInfo(const dodoString &host)
 				if (inet_ntop(AF_INET, ent->h_addr_list[i], temp, INET_ADDRSTRLEN) == NULL)
 				{
 					++i;
-					
+
 					continue;
 				}
-				
+
 				break;
 
 			case AF_INET6:
@@ -64,10 +64,10 @@ ioSocketTools::getHostInfo(const dodoString &host)
 				if (inet_ntop(AF_INET6, ent->h_addr_list[i], temp, INET6_ADDRSTRLEN) == NULL)
 				{
 					++i;
-					
+
 					continue;
 				}
-				
+
 				break;
 		}
 
@@ -103,7 +103,7 @@ ioSocketTools::getInterfacesNames()
 
 __servInfo
 ioSocketTools::getServiceInfo(const dodoString &host,
-								 const dodoString &protocol)
+							  const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 
@@ -127,7 +127,7 @@ ioSocketTools::getServiceInfo(const dodoString &host,
 
 __servInfo
 ioSocketTools::getServiceInfo(int port,
-								 const dodoString &protocol)
+							  const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 

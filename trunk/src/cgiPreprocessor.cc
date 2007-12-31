@@ -92,7 +92,7 @@ cgiPreprocessor::detectNewLines(const dodoString &tpl)
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 cgiPreprocessor::preProcessString(const dodoString &buffer)
 {
 	_preProcessString(buffer, "memory");
@@ -100,12 +100,12 @@ cgiPreprocessor::preProcessString(const dodoString &buffer)
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 cgiPreprocessor::_preProcessString(const dodoString &buffer,
-								const dodoString &path)
+								   const dodoString &path)
 {
 	dodoArray<unsigned long> newLinePos = detectNewLines(buffer);
-	
+
 	unsigned long i(0), j(0), begin(0);
 
 	while (true)
@@ -220,7 +220,7 @@ cgiPreprocessor::_preProcessString(const dodoString &buffer,
 
 	newLinePositions.push_back(newLinePos);
 
-	return buffer;	
+	return buffer;
 }
 
 //-------------------------------------------------------------------

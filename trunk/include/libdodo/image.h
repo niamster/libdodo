@@ -44,7 +44,7 @@ namespace dodo
 		IMAGE_OPERATION_WRITE,
 		IMAGE_OPERATION_READ,
 	};
-	
+
 	/**
 	 * @struct __xexexImageCollectedData contains data that could be retrieved from class(to modificate)[contains references]
 	 */
@@ -55,20 +55,20 @@ namespace dodo
 		 * initiates references
 		 */
 		__xexexImageCollectedData(ImageInfo &imInfo,
-								Image &im,
-								int &operType,
-								void *executor);
-		
-		ImageInfo &imInfo;///< image info handler
-		Image &im;///< image handler
-		
-		int &operType; ///< operation type set by main action; can be used in hook to determine type of action
-		
-		void *executor;///< class that executed hook
+								  Image &im,
+								  int &operType,
+								  void *executor);
+
+		ImageInfo &imInfo;  ///< image info handler
+		Image &im;          ///< image handler
+
+		int &operType;      ///< operation type set by main action; can be used in hook to determine type of action
+
+		void *executor;     ///< class that executed hook
 	};
 
 	/**
-	 * @enum imageMappingEnum describes the order of pixels 
+	 * @enum imageMappingEnum describes the order of pixels
 	 */
 	enum imageMappingEnum
 	{
@@ -76,20 +76,20 @@ namespace dodo
 		IMAGE_MAP_RGBA,
 		IMAGE_MAP_CMYK
 	};
-	
+
 	/**
 	 * @enum imagePixelSizeEnum describes pixel's size
 	 */
 	enum imagePixelSizeEnum
 	{
-		IMAGE_PIXELSIZE_CHAR,///< 8 bits
-		IMAGE_PIXELSIZE_SHORT,///< 16 bits
-		IMAGE_PIXELSIZE_INT,///< 32(16 on some CPUs) bits
-		IMAGE_PIXELSIZE_LONG,///< 32(32 on some CPUs) bits
-		IMAGE_PIXELSIZE_FLOAT,///< 32 bits
-		IMAGE_PIXELSIZE_DOUBLE,///< 64 bits
+		IMAGE_PIXELSIZE_CHAR,   ///< 8 bits
+		IMAGE_PIXELSIZE_SHORT,  ///< 16 bits
+		IMAGE_PIXELSIZE_INT,    ///< 32(16 on some CPUs) bits
+		IMAGE_PIXELSIZE_LONG,   ///< 32(32 on some CPUs) bits
+		IMAGE_PIXELSIZE_FLOAT,  ///< 32 bits
+		IMAGE_PIXELSIZE_DOUBLE, ///< 64 bits
 	};
-	
+
 	/**
 	 * @enum imageEncoderEnum describes image encoder
 	 */
@@ -102,7 +102,7 @@ namespace dodo
 		IMAGE_ENCODER_XPM,
 		IMAGE_ENCODER_ICO,
 	};
-	
+
 	/**
 	 * @enum imageRotateDirAngEnum describes parameters for rotation
 	 */
@@ -114,9 +114,9 @@ namespace dodo
 		IMAGE_ROTATEDIRECTIONANGLE_270CW = -270,
 		IMAGE_ROTATEDIRECTIONANGLE_270CCW = 270,
 	};
-	
+
 	/**
-	 * @enum imageCompressionEnum describes type of compression 
+	 * @enum imageCompressionEnum describes type of compression
 	 */
 	enum imageCompressionEnum
 	{
@@ -125,21 +125,21 @@ namespace dodo
 		IMAGE_COMPRESSION_LZW,
 		IMAGE_COMPRESSION_RLE,
 		IMAGE_COMPRESSION_ZIP,
-		IMAGE_COMPRESSION_JPEG,///< only for JPEG 
-		IMAGE_COMPRESSION_LOSSLESSJPEG,///< only for JPEG 
-		IMAGE_COMPRESSION_JPEG2000,///< only for JPEG 
+		IMAGE_COMPRESSION_JPEG,         ///< only for JPEG
+		IMAGE_COMPRESSION_LOSSLESSJPEG, ///< only for JPEG
+		IMAGE_COMPRESSION_JPEG2000,     ///< only for JPEG
 	};
 
 	/**
-	 * @struct __imageInfo defines image information 
+	 * @struct __imageInfo defines image information
 	 */
 	struct __imageInfo
 	{
-		void *data;///< 2D array of pixels
-		unsigned long width;///< width of the image
-		unsigned long height;///< height of the image
-		short mapping;///< type of mapping[see imageMappingEnum]
-		short pixelSize;///< type of pixel
+		void *data;             ///< 2D array of pixels
+		unsigned long width;    ///< width of the image
+		unsigned long height;   ///< height of the image
+		short mapping;          ///< type of mapping[see imageMappingEnum]
+		short pixelSize;        ///< type of pixel
 	};
 
 	/**
@@ -148,13 +148,13 @@ namespace dodo
 	class image : public xexec
 	{
 		private:
-	
+
 			/**
 			 * copy constructor
 			 * to prevent copying
 			 */
 			image(image &im);
-			
+
 		public:
 
 			/**
@@ -166,157 +166,157 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~image();
-			
+
 			/**
 			 * reads image
 			 * @param path describes path to image
 			 */
 			virtual void read(const dodoString &path);
-			
+
 			/**
 			 * reads image
 			 * @param info describes image info
 			 */
 			virtual void read(const __imageInfo &info);
-			
+
 			/**
 			 * reads image
 			 * @param data describes image data
 			 * @param size describes image data size
 			 */
 			virtual void read(const unsigned char * const data, unsigned long size);
-			
+
 			/**
 			 * writes image
 			 * @param path describes path to image
 			 */
 			virtual void write(const dodoString &path);
-			
+
 			/**
 			 * writes image
 			 * @param data describes pointer to image
 			 * @param size describes size of data
 			 */
 			virtual void write(unsigned char **data, unsigned int &size);
-			
+
 			/**
 			 * sets image output encoder
 			 * @param encoder describes codec to encode image[see imageEncoderEnum]
 			 */
 			virtual void setEncoder(short encoder);
-			
+
 			/**
 			 * sets image compression type
 			 * @param type describes type of image compression[see imageCompressionEnum]
 			 */
 			virtual void setCompression(short type);
-			
+
 			/**
 			 * sets image quality
 			 * @param quality describes quality of image
 			 */
 			virtual void setQuality(short quality);
-			
+
 			/**
 			 * @return image output encoder
 			 */
 			virtual short getEncoder();
-			
+
 			/**
 			 * @return image compression type
 			 */
 			virtual short getCompression();
-			
+
 			/**
 			 * @return image quality
 			 */
 			virtual short getQuality();
-			
+
 			/**
 			 * scales image
 			 * @param width describes width of the image
 			 * @param height describes height of the image
 			 */
 			virtual void scale(unsigned long width, unsigned long height);
-			
+
 			/**
 			 * rotates image
 			 * @param angle describes the number of degrees to rotate the image[see also imageRotateDirAngEnum]
 			 */
 			virtual void rotate(double angle);
-			
+
 			/**
 			 * destroys image data got from write
 			 * @param data describes pointer to image
 			 */
 			virtual void destroyImageData(unsigned char **data);
-			
+
 			#ifndef IMAGE_WO_XEXEC
-			
+
 			/**
-			* adds hook after the operation by callback
-			* @return number in list where function is set
-			* @param func is a pointer to function
-			* @param data is pointer to data toy want to pass to hook
-			*/
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
 			virtual int addPostExec(inExec func, void *data);
-			
+
 			/**
-			* adds hook before the operation by callback
-			* @return number in list where function is set
-			* @param func is a pointer to function
-			* @param data is pointer to data toy want to pass to hook
-			*/
+			 * adds hook before the operation by callback
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 */
 			virtual int addPreExec(inExec func, void *data);
-			
+
 			#ifdef DL_EXT
-			
+
 			/**
-			* set function from module that will be executed before/after the main action call
-			* the type of hook[pre/post] is defined in module
-			* @return number in list where function is set
-			* @param func is a pointer to function
-			* @param data is pointer to data toy want to pass to hook
-			* @param toInit indicates data that will path to initialize function
-			*/
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit=NULL);
-			
+			 * set function from module that will be executed before/after the main action call
+			 * the type of hook[pre/post] is defined in module
+			 * @return number in list where function is set
+			 * @param func is a pointer to function
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+
 			/**
-			* adds hook after the operation by callback
-			* @return number in list where function is set
-			* @param module is a path to module, whrere hook exists
-			* @param data is pointer to data toy want to pass to hook
-			* @param toInit indicates data that will path to initialize function
-			*/
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit=NULL);
-			
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+
 			/**
-			* adds hook after the operation by callback
-			* @return number in list where function is set
-			* @param module is a path to module, whrere hook exists
-			* @param data is pointer to data toy want to pass to hook
-			* @param toInit indicates data that will path to initialize function
-			*/
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit=NULL);
-			
+			 * adds hook after the operation by callback
+			 * @return number in list where function is set
+			 * @param module is a path to module, whrere hook exists
+			 * @param data is pointer to data toy want to pass to hook
+			 * @param toInit indicates data that will path to initialize function
+			 */
+			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+
 			#endif
-			
+
 			#endif
 
 		protected:
-			
-			ImageInfo *imInfo;///< image info handler
-			Image *im;///< image handler
-			ExceptionInfo *exInfo;///< exception info handler
-			
-			__xexexImageCollectedData  collectedData;///< data collected for xexec 
-		
+
+			ImageInfo *imInfo;                          ///< image info handler
+			Image *im;                                  ///< image handler
+			ExceptionInfo *exInfo;                      ///< exception info handler
+
+			__xexexImageCollectedData collectedData;    ///< data collected for xexec
+
 		private:
-			
-			static const __statements mappingStArr[3];///< image mapping statements
-			static const StorageType pixelSizeStArr[6];///< pixel type statements
-			static const __statements encoderStArr[6];///< image encoder
-			static const CompressionType compressionStArr[8];///< image encoder
+
+			static const __statements mappingStArr[3];          ///< image mapping statements
+			static const StorageType pixelSizeStArr[6];         ///< pixel type statements
+			static const __statements encoderStArr[6];          ///< image encoder
+			static const CompressionType compressionStArr[8];   ///< image encoder
 	};
 
 	/**

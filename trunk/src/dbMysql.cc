@@ -244,7 +244,7 @@ dbMysql::_exec(const dodoString &query,
 	{
 		if (autoFraming)
 		{
-			if (qType == DBBASE_REQUEST_INSERT || qType ==DBBASE_REQUEST_UPDATE)
+			if (qType == DBBASE_REQUEST_INSERT || qType == DBBASE_REQUEST_UPDATE)
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 

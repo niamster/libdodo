@@ -96,7 +96,7 @@ namespace dodo
 		TOOLS_RANDOMSTRENGTH_DEFAULT,
 		TOOLS_RANDOMSTRENGTH_STRONG
 	};
-	
+
 	/**
 	 * @struct __url describes info that could be retrieved from URL
 	 */
@@ -144,7 +144,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static void random(void *data, unsigned long size, short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static void random(void *data, unsigned long size, short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long
@@ -152,7 +152,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned long ulRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned long ulRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random long
@@ -160,7 +160,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static long lRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static long lRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned int
@@ -168,7 +168,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned int uiRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned int uiRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random int
@@ -176,7 +176,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static int iRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static int iRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned short
@@ -184,7 +184,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned short usRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned short usRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random short
@@ -192,7 +192,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static short sRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static short sRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned char
@@ -200,7 +200,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned char ucRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned char ucRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random char
@@ -208,7 +208,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static char cRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static char cRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random double
@@ -216,7 +216,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static double dRandom(short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static double dRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return true if needle found in array
@@ -232,7 +232,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArray explode(const dodoString &fields, const dodoString &separator, int limit=-1);
+			static dodoStringArray explode(const dodoString &fields, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return array of strings made from string using separtator
@@ -241,7 +241,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoStringArray explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit=-1);
+			static dodoStringArray explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -251,7 +251,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit=-1);
+			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -260,7 +260,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, int limit=-1);
+			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -268,7 +268,7 @@ namespace dodo
 			 * @param separator is value that separates parts
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, int limit=-1);
+			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, int limit = -1);
 
 			/**
 			 * @return string of fields, separated with separator;
@@ -277,7 +277,7 @@ namespace dodo
 			 * @param frame is node that will cover node [frame='; node => 'node']
 			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
 			 */
-			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit=-1);
+			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
 
 			#ifdef ICONV_EXT
 
@@ -303,7 +303,7 @@ namespace dodo
 			 * @param type descibes compression strategy[see zlibCompressionStrategyEnum]
 			 * @note if compiled without exeptions - on error buffer will be returned
 			 */
-			static dodoString zCompress(const dodoString &buffer, unsigned short level=6, short type=ZLIB_HUFFMAN_COMRESSION);
+			static dodoString zCompress(const dodoString &buffer, unsigned short level = 6, short type = ZLIB_HUFFMAN_COMRESSION);
 
 			/**
 			 * @return decompressed buffer
@@ -392,7 +392,7 @@ namespace dodo
 			 * @note if compiled without exeptions - on error buffer will be returned
 			 * Lower values of workFactor reduce the amount of effort the standard algorithm will expend before resorting to the fallback
 			 */
-			static dodoString bzCompress(const dodoString &buffer, unsigned short level=6, unsigned short type=30);
+			static dodoString bzCompress(const dodoString &buffer, unsigned short level = 6, unsigned short type = 30);
 
 			/**
 			 * @return decompressed buffer
@@ -412,7 +412,7 @@ namespace dodo
 			 * @param headers - extra headers
 			 * @note if login is emty - no auth
 			 */
-			static void mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers=__dodostring__);
+			static void mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__);
 
 			/**
 			 * sends mail
@@ -427,7 +427,7 @@ namespace dodo
 			 * @param pass is a password for auth
 			 * @param headers - extra headers [each must ends with `\r\n`]
 			 */
-			static void mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login=__dodostring__, const dodoString &pass=__dodostring__, const dodoString &headers=__dodostring__);
+			static void mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
 
 		private:
 
