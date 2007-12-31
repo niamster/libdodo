@@ -1,6 +1,6 @@
 
 AC_PREREQ(2.60)
-AC_INIT(libdodo, 0.4.0, libdodo.sf.net)
+AC_INIT(libdodo, 0.8.0, libdodo.sf.net)
 
 # Checks for programs.
 AC_PROG_CXX
