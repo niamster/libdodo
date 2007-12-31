@@ -166,46 +166,40 @@ namespace dodo
 			 * if you want to create pipe, but not a pipe was created with the same name - false will be returned
 			 * if you want to create regular file, but not regular file was created with the same name - false will be returned
 			 */
-			virtual void
-			open(const dodoString &path, short fileType, short mode); 
+			virtual void open(const dodoString &path, short fileType, short mode); 
 
 			/**
 			 * closes file
 			 */
-			virtual void
-			close();
+			virtual void close();
 
 			/**
 			 * read string
 			 * @param data will be filled with data
 			 * @param pos indicates position in file
 			 */
-			virtual void
-			readString(dodoString &data, unsigned long pos=0);
+			virtual void readString(dodoString &data, unsigned long pos=0);
 			
 			/**
 			 * read data
 			 * @param data will be filled with data
 			 * @param pos indicates position in file
 			 */
-			virtual void
-			read(char * const data, unsigned long pos=0);
+			virtual void read(char * const data, unsigned long pos=0);
 
 			/**
 			 * write string
 			 * @param data will be written to file
 			 * @param pos indicates position in file
 			 */
-			virtual void
-			writeString(const dodoString &data, unsigned long pos=0);
+			virtual void writeString(const dodoString &data, unsigned long pos=0);
 
 			/**
 			 * write string
 			 * @param data will be written to file
 			 * @param pos indicates position in file
 			 */
-			virtual void
-			write(const char * const data, unsigned long pos=0);
+			virtual void write(const char * const data, unsigned long pos=0);
 
 			/**
 			 * read string - null[or \n]-terminated string
@@ -213,8 +207,7 @@ namespace dodo
 			 * @param pos indicates position in file [string that has pos-1 strings before]
 			 * @note max size is inSize
 			 */
-			virtual void
-			readStreamString(dodoString &data, unsigned long pos=0);
+			virtual void readStreamString(dodoString &data, unsigned long pos=0);
 			
 			/**
 			 * read data - null[or \n]-terminated string
@@ -222,8 +215,7 @@ namespace dodo
 			 * @param pos indicates position in file [string that has pos-1 strings before]
 			 * @note max size is inSize
 			 */
-			virtual void
-			readStream(char * const data, unsigned long pos=0);
+			virtual void readStream(char * const data, unsigned long pos=0);
 
 			/**
 			 * write string - null-terminated string [append only]
@@ -231,8 +223,7 @@ namespace dodo
 			 * @note max size is outSize
 			 * @note - appends '\n'
 			 */
-			virtual void
-			writeStreamString(const dodoString &data);
+			virtual void writeStreamString(const dodoString &data);
 
 			/**
 			 * write string - null-terminated string [append only]
@@ -240,22 +231,19 @@ namespace dodo
 			 * @note max size is outSize
 			 * @note - appends '\n'
 			 */
-			virtual void
-			writeStream(const char * const data);
+			virtual void writeStream(const char * const data);
 
 			/**
 			 * erase node on position
 			 * @param pos indicates position in file
 			 * @note for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
 			 */
-			virtual void
-			erase(unsigned long pos);
+			virtual void erase(unsigned long pos);
 			
 			/**
 			 * flushes to disk
 			 */
-			virtual void
-			flush();
+			virtual void flush();
 
 			bool over;  ///< indicates whether overwrite or not; if you want to write to nonempty node error will be occured; for files, tmp_files only
 			bool append;    ///< if true, will append to the end of the file, even pos is set.
@@ -287,8 +275,7 @@ namespace dodo
 			 * @param data will be filled with data
 			 * @param pos indicates position in file
 			 */
-			virtual void
-			_read(char * const data, unsigned long pos=0);
+			virtual void _read(char * const data, unsigned long pos=0);
 			
 			/**
 			 * read data - null[or \n]-terminated string
@@ -296,16 +283,14 @@ namespace dodo
 			 * @param pos indicates position in file [string that has pos-1 strings before]
 			 * @note max size is inSize
 			 */
-			virtual void
-			_readStream(char * const data, unsigned long pos=0);
+			virtual void _readStream(char * const data, unsigned long pos=0);
 
 			/**
 			 * write string
 			 * @param data will be written to file
 			 * @param pos indicates position in file
 			 */
-			virtual void
-			_write(const char * const data, unsigned long pos=0);
+			virtual void _write(const char * const data, unsigned long pos=0);
 
 		private:
 

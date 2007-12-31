@@ -113,8 +113,7 @@ namespace dodo
 			 * sets local name
 			 * @param host is new  name of the host
 			 */
-			static void
-			setLocalName(const dodoString &host);
+			static void setLocalName(const dodoString &host);
 
 			/**
 			 * @return info about service

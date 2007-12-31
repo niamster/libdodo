@@ -89,8 +89,7 @@ namespace dodo
 			/**
 			 * connect to database
 			 */
-			virtual void
-			connect();
+			virtual void connect();
 
 			/**
 			 * disconnect from database
@@ -145,8 +144,7 @@ namespace dodo
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
-			virtual void
-			exec(const dodoString &query=__dodostring__, bool result=false);
+			virtual void exec(const dodoString &query=__dodostring__, bool result=false);
 
 			/**
 			 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
@@ -227,8 +225,7 @@ namespace dodo
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
-			virtual void
-			_exec(const dodoString &query, bool result);
+			virtual void _exec(const dodoString &query, bool result);
 
 		private:
 

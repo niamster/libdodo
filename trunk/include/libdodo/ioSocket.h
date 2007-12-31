@@ -159,8 +159,7 @@ namespace dodo
 			 * @param port is port where to connect
 			 * @param exchange is reference to oject that will perform communication actions
 			 */
-			virtual void
-			connectFrom(const dodoString &local, const dodoString &host, int port, ioSocketExchange &exchange);
+			virtual void connectFrom(const dodoString &local, const dodoString &host, int port, ioSocketExchange &exchange);
 
 			/**
 			 * connect from specific address. for client part
@@ -168,8 +167,7 @@ namespace dodo
 			 * @param exchange is reference to oject that will perform communication actions
 			 * the same as previous, but more pretty
 			 */
-			virtual void
-			connectFrom(const dodoString &local, const __connInfo &destinaton, ioSocketExchange &exchange);
+			virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, ioSocketExchange &exchange);
 
 			/**
 			 * connect. for client part
@@ -177,8 +175,7 @@ namespace dodo
 			 * @param port is port where to connect
 			 * @param exchange is reference to oject that will perform communication actions
 			 */
-			virtual void
-			connect(const dodoString &host, int port, ioSocketExchange &exchange);
+			virtual void connect(const dodoString &host, int port, ioSocketExchange &exchange);
 
 			/**
 			 * connect. for client part
@@ -186,16 +183,14 @@ namespace dodo
 			 * @param exchange is reference to oject that will perform communication actions
 			 * the same as previous, but more pretty
 			 */
-			virtual void
-			connect(const __connInfo &destinaton, ioSocketExchange &exchange);
+			virtual void connect(const __connInfo &destinaton, ioSocketExchange &exchange);
 
 			/**
 			 * connect. for client part
 			 * @param path is path to unix socket
 			 * @param exchange is reference to oject that will perform communication actions
 			 */
-			virtual void
-			connect(const dodoString &path, ioSocketExchange &exchange);                  ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+			virtual void connect(const dodoString &path, ioSocketExchange &exchange);                  ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
 
 			/**
 			 * connect. for server part
@@ -203,8 +198,7 @@ namespace dodo
 			 * @param port is port where to listen
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 			 */
-			virtual void
-			bindNListen(const dodoString &host, int port, int numberOfConnections);
+			virtual void bindNListen(const dodoString &host, int port, int numberOfConnections);
 
 			/**
 			 * connect. for server part
@@ -212,8 +206,7 @@ namespace dodo
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 			 * the same as previous, but more pretty
 			 */
-			virtual void
-			bindNListen(const __connInfo &destinaton, int numberOfConnections);
+			virtual void bindNListen(const __connInfo &destinaton, int numberOfConnections);
 
 			/**
 			 * connect. for server part
@@ -221,8 +214,7 @@ namespace dodo
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
 			 * @note if socket is already created and force=true and it's a socket - delete it!!
 			 */
-			virtual void
-			bindNListen(const dodoString &path, int numberOfConnections, bool force=false);
+			virtual void bindNListen(const dodoString &path, int numberOfConnections, bool force=false);
 
 			/**
 			 * accepts incommin' connections(as for server)
@@ -263,8 +255,7 @@ namespace dodo
 			/**
 			 * creates socket with given data
 			 */
-			virtual void
-			makeSocket();
+			virtual void makeSocket();
 
 			bool server;            ///< indicates whether server object or not
 

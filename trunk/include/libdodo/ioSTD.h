@@ -146,48 +146,42 @@ namespace dodo
 			 * @param data is filled with read string
 			 * if inSize bigger than buffer size - reads with few iterations
 			 */
-			virtual void
-			readString(dodoString &data);
+			virtual void readString(dodoString &data);
 			
 			/**
 			 * read
 			 * @param data is filled with read data
 			 * if inSize bigger than buffer size - reads with few iterations
 			 */
-			virtual void
-			read(char * const data);
+			virtual void read(char * const data);
 
 			/**
 			 * write
 			 * @param data is string that will be written
 			 * if outSize bigger than buffer size - writes with few iterations
 			 */
-			virtual void
-			writeString(const dodoString &data);
+			virtual void writeString(const dodoString &data);
 
 			/**
 			 * write
 			 * @param data is data that will be written
 			 * if outSize bigger than buffer size - writes with few iterations
 			 */
-			virtual void
-			write(const char * const data);
+			virtual void write(const char * const data);
 
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read string
 			 * max size of data is inSTDBuffer
 			 */
-			virtual void
-			readStreamString(dodoString &data);
+			virtual void readStreamString(dodoString &data);
 			
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
 			 * max size of data is inSTDBuffer
 			 */
-			virtual void
-			readStream(char * const data);
+			virtual void readStream(char * const data);
 
 			/**
 			 * write to stream - null-terminated string
@@ -195,8 +189,7 @@ namespace dodo
 			 * @note max data size is outSTDBuffer
 			 * @note - appends '\n'
 			 */
-			virtual void
-			writeStreamString(const dodoString &data);
+			virtual void writeStreamString(const dodoString &data);
 
 			/**
 			 * write to stream - null-terminated string
@@ -204,14 +197,12 @@ namespace dodo
 			 * @note max data size is outSTDBuffer
 			 * @note - appends '\n'
 			 */
-			virtual void
-			writeStream(const char * const data);
+			virtual void writeStream(const char * const data);
 
 			/**
 			 * flushes to output
 			 */
-			virtual void
-			flush();
+			virtual void flush();
 
 			/**
 			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer
@@ -232,8 +223,7 @@ namespace dodo
 			 * blocks/unblocks stream
 			 * @param flag indicates whether to block or unblock stream
 			 */
-			virtual void
-			block(bool flag);
+			virtual void block(bool flag);
 
 		protected:
 
@@ -252,16 +242,14 @@ namespace dodo
 			 * @param data is filled with read data
 			 * if inSize bigger than buffer size - reads with few iterations
 			 */
-			virtual void
-			_read(char * const data);
+			virtual void _read(char * const data);
 			
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
 			 * max size of data is inSTDBuffer
 			 */
-			virtual void
-			_readStream(char * const data);
+			virtual void _readStream(char * const data);
 
 		private:
 

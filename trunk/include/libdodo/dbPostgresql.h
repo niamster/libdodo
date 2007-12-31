@@ -78,8 +78,7 @@ namespace dodo
 			/**
 			 * connect to database
 			 */
-			virtual void
-			connect();
+			virtual void connect();
 
 			/**
 			 * disconnect from database
@@ -134,8 +133,7 @@ namespace dodo
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
-			virtual void
-			exec(const dodoString &query=__dodostring__, bool result=false);
+			virtual void exec(const dodoString &query=__dodostring__, bool result=false);
 
 				#ifndef DBPOSTGRESQL_WO_XEXEC
 
@@ -193,8 +191,7 @@ namespace dodo
 			 * sets sessions charset
 			 * @param charset indicates what type of charset would be used for session
 			 */
-			virtual void
-			setCharset(const dodoString &charset);
+			virtual void setCharset(const dodoString &charset);
 
 			/**
 			 * @return current session charset
@@ -229,8 +226,7 @@ namespace dodo
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
-			virtual void
-			_exec(const dodoString &query, bool result);
+			virtual void _exec(const dodoString &query, bool result);
 
 		private:
 

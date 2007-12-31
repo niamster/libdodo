@@ -116,16 +116,14 @@ namespace dodo
 			 * @param options is option to set to socket
 			 * @param flag indicates whether to set or unset option
 			 */
-			virtual void
-			setSockOption(short option, bool flag);
+			virtual void setSockOption(short option, bool flag);
 
 			/**
 			 * set linger option
 			 * @param option is linger option[see socketLingerOption]
 			 * @param seconds how long to wait(for IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE only)
 			 */
-			virtual void
-			setLingerSockOption(short option, int seconds=1);
+			virtual void setLingerSockOption(short option, int seconds=1);
 
 			/**
 			 * @return linger option that was set[see socketLingerOption]
@@ -141,15 +139,13 @@ namespace dodo
 			 * sets incoming buffer size of socket
 			 * @param bytes is size of buffer in bytes
 			 */
-			virtual void
-			setInBufferSize(unsigned long bytes);
+			virtual void setInBufferSize(unsigned long bytes);
 
 			/**
 			 * sets outgoing buffer size of socket
 			 * @param bytes is size of buffer in bytes
 			 */
-			virtual void
-			setOutBufferSize(unsigned long bytes);
+			virtual void setOutBufferSize(unsigned long bytes);
 
 			/**
 			 * @return incoming buffer size of socket
@@ -165,15 +161,13 @@ namespace dodo
 			 * sets incomming operation timeout of socket
 			 * @param microseconds is amount of time to wait for action
 			 */
-			virtual void
-			setInTimeout(unsigned long microseconds);
+			virtual void setInTimeout(unsigned long microseconds);
 
 			/**
 			 * sets outgoing operation timeout of socket
 			 * @param microseconds is amount of time to wait for action
 			 */
-			virtual void
-			setOutTimeout(unsigned long microseconds);
+			virtual void setOutTimeout(unsigned long microseconds);
 
 			/**
 			 * @return incomming operation timeout of socket
@@ -200,16 +194,14 @@ namespace dodo
 			 * blocks/unblocks socket
 			 * @param flag indicates ehether to block or unblock socket
 			 */
-			virtual void
-			block(bool flag);
+			virtual void block(bool flag);
 
 		protected:
 
 			/**
 			 * closes connection for socket
 			 */
-			static void
-			_close(int socket);
+			static void _close(int socket);
 
 			short family;                   ///< socket family
 			short type;                     ///< socket type

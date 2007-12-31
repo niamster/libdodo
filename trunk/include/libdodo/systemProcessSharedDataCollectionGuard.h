@@ -73,16 +73,14 @@ namespace dodo
 			 * sets shared data to NULL
 			 * @param position indicates on shared data to lock
 			 */
-			virtual void
-			del(unsigned long position);
+			virtual void del(unsigned long position);
 
 			/**
 			 * locks, sets data, unlocks
 			 * @param position indicates on shared data to lock
 			 * @param data describes data to be set
 			 */
-			virtual void
-			set(unsigned long position, void *data);
+			virtual void set(unsigned long position, void *data);
 
 			/**
 			 * locks, gets data, unlocks

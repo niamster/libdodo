@@ -154,8 +154,7 @@ namespace dodo
 			/**
 			 * connect to database
 			 */
-			virtual void
-			connect();
+			virtual void connect();
 
 			/**
 			 * disconnect from database
@@ -250,8 +249,7 @@ namespace dodo
 			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
 			 * @param result describes whether request returns result[show, select...] or not[delete, update]
 			 */
-			virtual void
-			exec(const dodoString &query=__dodostring__, bool result=false);
+			virtual void exec(const dodoString &query=__dodostring__, bool result=false);
 
 				#ifndef DBMYSQL_WO_XEXEC
 
@@ -331,8 +329,7 @@ namespace dodo
 			 * @note pure mysql actions
 			 * in function without `_` hooks are calling
 			 */
-			virtual void
-			_exec(const dodoString &query, bool result);
+			virtual void _exec(const dodoString &query, bool result);
 
 			/**
 			 * inits addidtional mySQL specific statements

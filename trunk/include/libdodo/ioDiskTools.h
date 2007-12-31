@@ -121,8 +121,7 @@ namespace dodo
 			 * @param force indicates to overwrite
 			 * @note works as cp[but for files and empty dirs] -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 			 */
-			static void
-			copy(const dodoString &from, const dodoString &to, bool force=false);
+			static void copy(const dodoString &from, const dodoString &to, bool force=false);
 
 			/**
 			 * copy file/Dir
@@ -131,16 +130,14 @@ namespace dodo
 			 * @param force indicates to overwrite
 			 * @note works as cp -> if you copy to `bla/` it'll copy to dir `bla`, if to `bla` it'll overwrites
 			 */
-			static void
-			copyDir(const dodoString &from, const dodoString &to, bool force=false);
+			static void copyDir(const dodoString &from, const dodoString &to, bool force=false);
 
 			/**
 			 * appends string to file
 			 * @param path describes file's path
 			 * @param content describes content will be appended to file
 			 */
-			static void
-			append(const dodoString &path, const dodoString &content);
+			static void append(const dodoString &path, const dodoString &content);
 
 			/**
 			 * @return basename of node
@@ -173,24 +170,21 @@ namespace dodo
 			 * @param path is path to node
 			 * @param force if it is true and nothing already exists do not say anything
 			 */
-			static void
-			unlink(const dodoString &path, bool force=true);               ///< also empty directory
+			static void unlink(const dodoString &path, bool force=true);               ///< also empty directory
 
 			/**
 			 * rename file
 			 * @param from specifies input file
 			 * @param to specifies output file
 			 */
-			static void
-			rename(const dodoString &oldPath, const dodoString &newPath);
+			static void rename(const dodoString &oldPath, const dodoString &newPath);
 
 			/**
 			 * sets access and modyfiacation time of file
 			 * @param path is path to file
 			 * @param time is timestams; if not specified -> now
 			 */
-			static void
-			touch(const dodoString &path, int time=-1);               ///< now by default
+			static void touch(const dodoString &path, int time=-1);               ///< now by default
 
 
 			/**
@@ -198,8 +192,7 @@ namespace dodo
 			 * @param path is path of fifo to create
 			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 */
-			static void
-			mkfifo(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
+			static void mkfifo(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
 			
 			/**
 			 * make directory
@@ -207,16 +200,14 @@ namespace dodo
 			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 * @param force if it is true and directory already exists do not say anything
 			 */
-			static void
-			mkdir(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force=true);
+			static void mkdir(const dodoString &path, int permissions=IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force=true);
 
 			/**
 			 * delete files, non empty directory
 			 * @param path indicates the path to remove
 			 * @param force if it is true and nothing already exists do not say anything
 			 */
-			static void
-			rm(const dodoString &path, bool force=true);
+			static void rm(const dodoString &path, bool force=true);
 
 			/**
 			 * @return type of file; if error occured and lib was compiled without exceptions -> -1 will be returned;
@@ -229,8 +220,7 @@ namespace dodo
 			 * @param path is path to node
 			 * @param permissions is ne permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 */
-			static void
-			chmod(const dodoString &path, int permissions);
+			static void chmod(const dodoString &path, int permissions);
 
 			/**
 			 * @return node permissions; if error occured and lib was compiled without exceptions -> -1 will be returned
@@ -261,8 +251,7 @@ namespace dodo
 			 * @param path indicates path what to describe
 			 * @param original will be filled with path to file that link is set
 			 */
-			static void
-			followSymlink(const dodoString &path, dodoString &original);
+			static void followSymlink(const dodoString &path, dodoString &original);
 
 			/**
 			 * creates symbolic link
@@ -270,32 +259,28 @@ namespace dodo
 			 * @param newPath indicates path to symlink
 			 * @param force if is set to true link exists already - nothing to say, but replace
 			 */
-			static void
-			symlink(const dodoString &oldPath, const dodoString &newPath, bool force=true);
+			static void symlink(const dodoString &oldPath, const dodoString &newPath, bool force=true);
 
 			/**
 			 * creates link
 			 * @param oldPath indicates original file path
 			 * @param newPath indicates path to link
 			 */
-			static void
-			link(const dodoString &oldPath, const dodoString &newPath);
+			static void link(const dodoString &oldPath, const dodoString &newPath);
 
 			/**
 			 * change owner of the node
 			 * @param path indacate the path of node where to change owner
 			 * @param uid indicates user id
 			 */
-			static void
-			chown(const dodoString &path, int uid);
+			static void chown(const dodoString &path, int uid);
 
 			/**
 			 * change group owner of the node
 			 * @param path indacate the path of node where to change group owner
 			 * @param uid indicates group id
 			 */
-			static void
-			chgrp(const dodoString &path, int gid);
+			static void chgrp(const dodoString &path, int gid);
 
 			/**
 			 * @return true if file/directory exists

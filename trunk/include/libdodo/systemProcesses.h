@@ -180,8 +180,7 @@ namespace dodo
 			 * @note - exception if it's currently running
 			 * send SIGINT to process
 			 */
-			virtual void
-			del(unsigned long position, bool force=false);
+			virtual void del(unsigned long position, bool force=false);
 
 			/**
 			 * replaces function to became a process[not executing]
@@ -192,8 +191,7 @@ namespace dodo
 			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note - exception if it's currently running
 			 */
-			virtual void
-			replace(unsigned long position, processFunc func, void *data, bool force=false, short action=SYSTEMPROCESS_WAIT);
+			virtual void replace(unsigned long position, processFunc func, void *data, bool force=false, short action=SYSTEMPROCESS_WAIT);
 
 			/**
 			 * executes process
@@ -201,35 +199,30 @@ namespace dodo
 			 * @param force if is set to true permits execution even if this process is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void
-			run(unsigned long position, bool force=false);
+			virtual void run(unsigned long position, bool force=false);
 
 			/**
 			 * stops process
 			 * @param position indicates what process to stop
 			 * @note sends signal 9 to preocess
 			 */
-			virtual void
-			stop(unsigned long position);
+			virtual void stop(unsigned long position);
 
 			/**
 			 * stops all registered processes
 			 */
-			virtual void
-			stop();
+			virtual void stop();
 
 			/**
 			 * waits for process's termination
 			 * @param position indicates for what process to wait
 			 */
-			virtual void
-			wait(unsigned long position);
+			virtual void wait(unsigned long position);
 
 			/**
 			 * waits for all registered process' termination
 			 */
-			virtual void
-			wait();
+			virtual void wait();
 
 			/**
 			 * @return true if process is running
@@ -257,8 +250,7 @@ namespace dodo
 			 * @param position indicates for what process to set limit
 			 * @param limit indicates the process' limit on executions
 			 */
-			virtual void
-			setExecutionLimit(unsigned long position, unsigned long limit=1);
+			virtual void setExecutionLimit(unsigned long position, unsigned long limit=1);
 
 
 			#ifdef DL_EXT

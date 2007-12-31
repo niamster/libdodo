@@ -193,8 +193,7 @@ namespace dodo
 			 * @param force if is set to true stops execution if this thread is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void
-			del(unsigned long position, bool force=false);
+			virtual void del(unsigned long position, bool force=false);
 
 			/**
 			 * replaces function to became a thread[not executing]
@@ -207,8 +206,7 @@ namespace dodo
 			 * @param stackSize describes stack siae of the thread
 			 * @note - exception if it's currently running
 			 */
-			virtual void
-			replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached=false, short action=SYSTEMTHREADS_WAIT, int stackSize=2097152);
+			virtual void replace(unsigned long position, threadFunc func, void *data, bool force=false, bool detached=false, short action=SYSTEMTHREADS_WAIT, int stackSize=2097152);
 
 			/**
 			 * executes thread
@@ -216,34 +214,29 @@ namespace dodo
 			 * @param force if is set to true permits execution even if this thread is running
 			 * @note - exception if it's currently running
 			 */
-			virtual void
-			run(unsigned long position, bool force=false);
+			virtual void run(unsigned long position, bool force=false);
 
 			/**
 			 * stops thread
 			 * @param position indicates what thread to stop
 			 */
-			virtual void
-			stop(unsigned long position);
+			virtual void stop(unsigned long position);
 
 			/**
 			 * stops all registered threads
 			 */
-			virtual void
-			stop();
+			virtual void stop();
 
 			/**
 			 * waits for thread's termination
 			 * @param position indicates for what thread to wait
 			 */
-			virtual void
-			wait(unsigned long position);
+			virtual void wait(unsigned long position);
 
 			/**
 			 * waits for all registered threads' termination
 			 */
-			virtual void
-			wait();
+			virtual void wait();
 
 			/**
 			 * @return true if thread is running
@@ -271,8 +264,7 @@ namespace dodo
 			 * @param position indicates for what thread to set limit
 			 * @param limit indicates the thread's limit on executions
 			 */
-			virtual void
-			setExecutionLimit(unsigned long position, unsigned long limit=1);
+			virtual void setExecutionLimit(unsigned long position, unsigned long limit=1);
 
 
 				#ifdef DL_EXT

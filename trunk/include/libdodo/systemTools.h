@@ -188,8 +188,7 @@ namespace dodo
 			 * registers functions that will be called on normal program exit
 			 * @note you can register more than one
 			 */
-			static void
-			atExit(void (*func)());
+			static void atExit(void (*func)());
 
 			/**
 			 * suspend for given microseconds
@@ -220,8 +219,7 @@ namespace dodo
 			 * @param path indicates where to change root(/) directory
 			 * @note you will appear in the root(/)
 			 */
-			static void
-			changeRoot(const dodoString &path);
+			static void changeRoot(const dodoString &path);
 			/**
 			 * @return current working directory
 			 */
@@ -231,31 +229,27 @@ namespace dodo
 			 * set current working directory (cd path)
 			 * @param path is path where to go
 			 */
-			static void
-			setWorkingDir(const dodoString &path);
+			static void setWorkingDir(const dodoString &path);
 
 			/**
 			 * get system usage with current process
 			 * @param info will be filled with system usage info
 			 */
-			static void
-			getUsageInfo(__usage &info);
+			static void getUsageInfo(__usage &info);
 
 			/**
 			 * get limits from systemToolsLimitEnum
 			 * @param type is type of info to get[see systemToolsLimitEnum]
 			 * @param lim will be filled with requested values
 			 */
-			static void
-			getLimit(short type,  __limits &lim);
+			static void getLimit(short type,  __limits &lim);
 
 			/**
 			 * set limits from systemToolsLimitEnum
 			 * @param type is type of info to set[see systemToolsLimitEnum]
 			 * @param lim will fill with requested values
 			 */
-			static void
-			setLimit(short type, const __limits &lim);
+			static void setLimit(short type, const __limits &lim);
 
 			/**
 			 * @return priority of current process for uidTypeEnum
@@ -268,8 +262,7 @@ namespace dodo
 			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @param prio is value of priority
 			 */
-			static void
-			setPriority(short type, int prio);
+			static void setPriority(short type, int prio);
 
 			/**
 			 * @return user id of the current process
@@ -282,8 +275,7 @@ namespace dodo
 			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @param uid is user's id
 			 */
-			static void
-			setUID(short type, int uid);
+			static void setUID(short type, int uid);
 
 			/**
 			 * get group id of the current process
@@ -296,54 +288,47 @@ namespace dodo
 			 * @param type is type of UID to use[see uidTypeEnum]
 			 * @param gid is group id
 			 */
-			static void
-			setGID(short type, int gid);
+			static void setGID(short type, int gid);
 
 			/**
 			 * gets user info
 			 * @param info will be filled with user's info
 			 * @param uid is user's id about what to get info
 			 */
-			static void
-			getUserInfo(__userInfo &info, int uid);
+			static void getUserInfo(__userInfo &info, int uid);
 
 			/**
 			 * gets user info
 			 * @param info will be filled with user's info
 			 * @param name is user's login name about what to get info
 			 */
-			static void
-			getUserInfo(__userInfo &info, const dodoString &uid);
+			static void getUserInfo(__userInfo &info, const dodoString &uid);
 
 			/**
 			 * gets users of the system
 			 * @param info will be filled with array of users' info
 			 */
-			static void
-			getUsers(dodoArray<__userInfo> &info);
+			static void getUsers(dodoArray<__userInfo> &info);
 
 			/**
 			 * gets group info
 			 * @param info will be filled with group's info
 			 * @param name is group's id name about what to get info
 			 */
-			static void
-			getGroupInfo(__groupInfo &info, int gid);
+			static void getGroupInfo(__groupInfo &info, int gid);
 
 			/**
 			 * gets group info
 			 * @param info will be filled with user's info
 			 * @param name is group's name about what to get info
 			 */
-			static void
-			getGroupInfo(__groupInfo &info, const dodoString &gid);
+			static void getGroupInfo(__groupInfo &info, const dodoString &gid);
 
 			/**
 			 * gets group of the system
 			 * @param info will be filled with array of group' info
 			 */
-			static void
-			getGroups(dodoArray<__groupInfo> &info);
+			static void getGroups(dodoArray<__groupInfo> &info);
 			/**
 			 * @return PID of current process
 			 */
@@ -369,16 +354,14 @@ namespace dodo
 			 * sets group PID of current process
 			 * @param pgid specifies the group PID where to move current process
 			 */
-			static void
-			setGroupPID(int gpid);
+			static void setGroupPID(int gpid);
 
 			/**
 			 * sets group PID of given process
 			 * @param pid specifies what pid to move
 			 * @param pgid specifies the group PID where to move current process
 			 */
-			static void
-			setGroupPID(int pid, int gpid);
+			static void setGroupPID(int pid, int gpid);
 
 			/**
 			 * set timer and onTimer function
@@ -386,8 +369,7 @@ namespace dodo
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void
-			setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals=-1);
+			static void setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals=-1);
 
 			/**
 			 * set timer and onTimer function
@@ -395,8 +377,7 @@ namespace dodo
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void
-			setTimer(long timeout, signalHandler handler, int blockSignals=-1);
+			static void setTimer(long timeout, signalHandler handler, int blockSignals=-1);
 
 			/**
 			 * set signal handler
@@ -404,8 +385,7 @@ namespace dodo
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void
-			setSignalHandler(long signal, signalHandler handler, int blockSignals=-1);
+			static void setSignalHandler(long signal, signalHandler handler, int blockSignals=-1);
 
 			/**
 			 * determines whether handler was set on signal[see systemSignalsEnum]
@@ -417,8 +397,7 @@ namespace dodo
 			 * removes signal handler
 			 * @param is signal is from what unset handler[see systemSignalsEnum]
 			 */
-			static void
-			unsetSignalHandler(long signal);
+			static void unsetSignalHandler(long signal);
 
 			#ifdef DL_EXT
 
@@ -436,8 +415,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
 			 */
-			static void
-			setSignalHandler(long signal, const dodoString &module, void *toInit=NULL, int blockSignals=-1);
+			static void setSignalHandler(long signal, const dodoString &module, void *toInit=NULL, int blockSignals=-1);
 
 			/**
 			 * set handler on signal from specific module
@@ -446,8 +424,7 @@ namespace dodo
 			 * @param toInit indicates data that will path to initialize function
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
-			static void
-			setSignalHandler(const dodoString &module, void *toInit=NULL, int blockSignals=-1);
+			static void setSignalHandler(const dodoString &module, void *toInit=NULL, int blockSignals=-1);
 
 			#endif
 
@@ -456,8 +433,7 @@ namespace dodo
 			 * @param pid indicates where to send signal
 			 * @param is signal is what signal to send[see systemSignalsEnum]
 			 */
-			static void
-			sendSignal(int pid, long signal);
+			static void sendSignal(int pid, long signal);
 
 			/**
 			 * block or unblock signals

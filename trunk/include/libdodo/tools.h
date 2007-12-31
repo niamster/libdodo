@@ -144,8 +144,7 @@ namespace dodo
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
-			static void
-			random(void *data, unsigned long size, short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static void random(void *data, unsigned long size, short strength=TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long
@@ -413,8 +412,7 @@ namespace dodo
 			 * @param headers - extra headers
 			 * @note if login is emty - no auth
 			 */
-			static void
-			mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers=__dodostring__);
+			static void mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers=__dodostring__);
 
 			/**
 			 * sends mail
@@ -429,8 +427,7 @@ namespace dodo
 			 * @param pass is a password for auth
 			 * @param headers - extra headers [each must ends with `\r\n`]
 			 */
-			static void
-			mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login=__dodostring__, const dodoString &pass=__dodostring__, const dodoString &headers=__dodostring__);
+			static void mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login=__dodostring__, const dodoString &pass=__dodostring__, const dodoString &headers=__dodostring__);
 
 		private:
 
@@ -512,8 +509,7 @@ namespace dodo
 			 * @param mess is data to send
 			 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
 			 */
-			static void
-			sendShortData(int socket, const dodoString &mess);
+			static void sendShortData(int socket, const dodoString &mess);
 
 			/**
 			 * sends data through socket
@@ -523,8 +519,7 @@ namespace dodo
 			 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
 			 * on exception deletes data
 			 */
-			static void
-			sendShortDataDel(int socket, const dodoString &mess, char *data);
+			static void sendShortDataDel(int socket, const dodoString &mess, char *data);
 
 			/**
 			 * sends data through socket
@@ -532,8 +527,7 @@ namespace dodo
 			 * @param mess is data to send
 			 * @note mess's length can be more than TOOLS_SHORT_DATA_SIZE bytes
 			 */
-			static void
-			sendLongData(int socket, const dodoString &mess);
+			static void sendLongData(int socket, const dodoString &mess);
 
 			/**
 			 * receives data through socket
@@ -542,8 +536,7 @@ namespace dodo
 			 * @note data's length not more than TOOLS_SHORT_DATA_SIZE bytes
 			 * on exception deletes data
 			 */
-			static void
-			receiveShortDataDel(int socket, char *data);
+			static void receiveShortDataDel(int socket, char *data);
 	};
 
 };

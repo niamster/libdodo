@@ -210,8 +210,7 @@ namespace dodo
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * signal safe
 			 */
-			virtual void
-			write(const char * const data);
+			virtual void write(const char * const data);
 
 			/**
 			 * write
@@ -220,8 +219,7 @@ namespace dodo
 			 * if outSize bigger than socket buffer size - sends with few iterations
 			 * signal safe
 			 */
-			virtual void
-			writeString(const dodoString &data);
+			virtual void writeString(const dodoString &data);
 
 			/**
 			 * receive
@@ -230,8 +228,7 @@ namespace dodo
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * signal safe
 			 */
-			virtual void
-			read(char * const data);
+			virtual void read(char * const data);
 
 			/**
 			 * read
@@ -240,8 +237,7 @@ namespace dodo
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * signal safe
 			 */
-			virtual void
-			readString(dodoString &data);
+			virtual void readString(dodoString &data);
 
 			/**
 			 * write - null-terminated string
@@ -252,8 +248,7 @@ namespace dodo
 			 * @note - appends '\n'
 			 * signal safe
 			 */
-			virtual void
-			writeStream(const char * const data);
+			virtual void writeStream(const char * const data);
 
 			/**
 			 * write - null-terminated string
@@ -264,8 +259,7 @@ namespace dodo
 			 * @note - appends '\n'
 			 * signal safe
 			 */
-			virtual void
-			writeStreamString(const dodoString &data);
+			virtual void writeStreamString(const dodoString &data);
 
 			/**
 			 * read - null-terminated string
@@ -275,8 +269,7 @@ namespace dodo
 			 * max data size is inSocketBuffer
 			 * signal safe
 			 */
-			virtual void
-			readStream(char * const data);
+			virtual void readStream(char * const data);
 
 			/**
 			 * read - null-terminated string
@@ -286,14 +279,12 @@ namespace dodo
 			 * max data size is inSocketBuffer
 			 * signal safe
 			 */
-			virtual void
-			readStreamString(dodoString &data);
+			virtual void readStreamString(dodoString &data);
 
 			/**
 			 * closes this socket
 			 */
-			virtual void
-			close();
+			virtual void close();
 
 		protected:
 
@@ -321,8 +312,7 @@ namespace dodo
 			 * if inSize bigger than socket buffer size - receives with few iterations
 			 * signal safe
 			 */
-			virtual void
-			_read(char * const data);
+			virtual void _read(char * const data);
 
 			/**
 			 * read - null-terminated string
@@ -332,8 +322,7 @@ namespace dodo
 			 * max data size is inSocketBuffer
 			 * signal safe
 			 */
-			virtual void
-			_readStream(char * const data);
+			virtual void _readStream(char * const data);
 	};
 
 };
