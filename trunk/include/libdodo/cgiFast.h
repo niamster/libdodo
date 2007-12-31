@@ -31,6 +31,7 @@
 	#include <fcgiapp.h>
 
 	#include <libdodo/types.h>
+	#include <libdodo/cgiFastEx.h>
 
 namespace dodo
 {
@@ -142,6 +143,11 @@ namespace dodo
 			 * listen for incoming requests
 			 */
 			virtual void listen();
+
+			/**
+			 * @return true if called as a fastCGI[not as a CGI]
+			 */
+			virtual bool isFastCGI();
 
 		private:
 

@@ -69,7 +69,8 @@ cgiFastIO::~cgiFastIO()
 void
 cgiFastIO::flush()
 {
-	FCGX_FFlush(request->out);
+	if (FCGX_FFlush(request->out) == -1)
+		throw baseEx(ERRMODULE_CGIFAST, CGIFASTIOEX_FLUSH, ERR_LIBDODO, CGIFASTIOEX_FAILEDTOFLUSH, CGIFASTIOEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -77,7 +78,8 @@ cgiFastIO::flush()
 void
 cgiFastIO::print(const dodoString &buf)
 {
-	FCGX_PutStr(buf.c_str(), buf.size(), request->out);
+	if (FCGX_PutStr(buf.c_str(), buf.size(), request->out) == -1)
+		throw baseEx(ERRMODULE_CGIFAST, CGIFASTIOEX_PRINT, ERR_LIBDODO, CGIFASTIOEX_FAILEDTOPRINTSTRING, CGIFASTIOEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -122,12 +124,16 @@ cgiFast::cgiFast(bool a_threading,
 	FCGX_Init();
 }
 
+//-------------------------------------------------------------------
+
 	#else
 
 cgiFast::cgiFast()
 {
 	FCGX_Init();
 }
+
+//-------------------------------------------------------------------
 
 	#endif
 
@@ -157,13 +163,18 @@ cgiFast::stackThread(void *data)
 	FCGX_InitRequest(&request, 0, 0);
 
 	cgiFastIO cfSTD(&request);
+	
+	int res = 0;
 
 	while (true)
 	{
 		pthread_mutex_lock(&accept);
-		FCGX_Accept_r(&request);
+		res = FCGX_Accept_r(&request);
 		pthread_mutex_unlock(&accept);
 
+		if (res == -1)
+			throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_STACKTHREAD, ERR_LIBDODO, CGIFASTEX_ACCEPTFAILED, CGIFASTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+		
 		cgiF(&cfSTD);
 
 		FCGX_Finish_r(&request);
@@ -179,6 +190,9 @@ cgiFast::stackThread(void *data)
 void
 cgiFast::listen()
 {
+	if (!isFastCGI())
+		throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_LISTEN, ERR_LIBDODO, CGIFASTEX_ISCGI, CGIFASTEX_ISCGI_STR, __LINE__, __FILE__);
+	
 		#ifdef PTHREAD_EXT
 	if (threading)
 	{
@@ -195,6 +209,8 @@ cgiFast::listen()
 		delete [] id;
 	}
 	else
+
+	#endif
 	{
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);
@@ -203,30 +219,22 @@ cgiFast::listen()
 
 		while (true)
 		{
-			FCGX_Accept_r(&request);
+			if (FCGX_Accept_r(&request) == -1)
+				throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_LISTEN, ERR_LIBDODO, CGIFASTEX_ACCEPTFAILED, CGIFASTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
 			cgiF(&cfSTD);
 
 			FCGX_Finish_r(&request);
 		}
 	}
-		#else
+}
 
-	FCGX_Request request;
-	FCGX_InitRequest(&request, 0, 0);
+//-------------------------------------------------------------------
 
-	cgiFastIO cfSTD(&request);
-
-	while (true)
-	{
-		FCGX_Accept_r(&request);
-
-		cgiF(&cfSTD);
-
-		FCGX_Finish_r(&request);
-	}
-
-		#endif
+bool 
+cgiFast::isFastCGI()
+{
+	return !FCGX_IsCGI();
 }
 
 //-------------------------------------------------------------------

@@ -70,11 +70,23 @@ int main(int argc, char **argv)
 {	
 	#ifdef FCGI_EXT
 	
+	try
+	{
 		cgiFast cf;
+		if (!cf.isFastCGI())
+		{
+			cout << "Not a fastCGI.";
+			cout.flush();
+		}
 		
 		cf.setCGIFunction(&cgif);
 	
 		cf.listen();
+	}
+	catch (baseEx &ex)
+	{
+		cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
+	}
 	
 	#else
 	

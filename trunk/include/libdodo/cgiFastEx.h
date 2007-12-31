@@ -1,7 +1,7 @@
 /***************************************************************************
- *            jsonEx.h
+ *            cgiFastEx.h
  *
- *  Mon Oct 20 02:15:55 2007
+ *  Mon Dec 31 01:51:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _JSONEX_H_
-#define _JSONEX_H_
+#ifndef _CGIFASTEX_H_
+#define _CGIFASTEX_H_
 
 #include <libdodo/directives.h>
 
@@ -31,48 +31,38 @@
 namespace dodo
 {
 	/**
-	 * next for json
+	 * next for cgiFast
 	 */
 
 	/**
 	 * libdodo defined errors
 	 */
-	enum jsonFunctionsExR
+	enum cgiFastFunctionsExR
 	{
-		JSONNODEEX_WRONGTYPEREQUESTED,
-		JSONNODEEX_ARRAYOUTOFRANGE,
-		JSONNODEEX_MALFORMEDJSON,
-		JSONEX_MALFORMEDJSONNUMERIC,
-		JSONEX_MALFORMEDJSONNULL,
-		JSONEX_MALFORMEDJSONBOOLEAN,
+		CGIFASTIOEX_FAILEDTOFLUSH,
+		CGIFASTIOEX_FAILEDTOPRINTSTRING,
+		CGIFASTEX_ACCEPTFAILED,
+		CGIFASTEX_ISCGI,
 	};
 	
 	/**
 	 * libdodo defined errors' explanation
 	 */
-	#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-	#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
-	#define JSONNODEEX_MALFORMEDJSON_STR "Malformed json object."
-	#define JSONEX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-	#define JSONEX_MALFORMEDJSONNULL_STR "Malformed json object: null."
-	#define JSONEX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
+	#define CGIFASTIOEX_FAILEDTOFLUSH_STR "Failed to flush."
+	#define CGIFASTIOEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
+	#define CGIFASTEX_ACCEPTFAILED_STR "Accept call failed."
+	#define CGIFASTEX_ISCGI_STR "Called as a CGI."
 
 
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum jsonFunctionsID
+	enum cgiFastFunctionsID
 	{
-		JSONNODEEX_BROPERATORSTRING,
-		JSONNODEEX_BROPERATORNUMERIC,
-		JSONNODEEX_GETSTRING,
-		JSONNODEEX_GETBOOLEAN,
-		JSONNODEEX_NUMERIC,
-		JSONNODEEX_GETARRAY,
-		JSONNODEEX_GETOBJECT,
-		JSONEX_PROCESSBOOLEAN,
-		JSONEX_PROCESSNULL,
-		JSONEX_PROCESSNUMERIC,
+		CGIFASTIOEX_FLUSH,
+		CGIFASTIOEX_PRINT,
+		CGIFASTEX_LISTEN,
+		CGIFASTEX_STACKTHREAD,
 	};
 
 };

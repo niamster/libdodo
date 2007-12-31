@@ -34,7 +34,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum systemExR
+	enum systemToolsExR
 	{
 		SYSTEMTOOLSEX_WRONGPARAMETER,
 	};
@@ -47,7 +47,7 @@ namespace dodo
 	/**
 	 * ID of function where exception was thrown
 	 */
-	enum systemFunctionsID
+	enum systemToolsFunctionsID
 	{
 		SYSTEMTOOLSEX_SETWORKINGDIR,
 		SYSTEMTOOLSEX_GETWORKINGDIR,
