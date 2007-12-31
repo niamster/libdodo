@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 PROJECT_NAME           = libdodo
-PROJECT_NUMBER         = 0.4.0
+PROJECT_NUMBER         = 0.8.0
 OUTPUT_DIRECTORY       = /mnt/media/projects/workspace/libdodo/docs/
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -25,7 +25,7 @@ ABBREVIATE_BRIEF       = "The $name class" \
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = /mnt/media/projects/workspace/libdodo/
+STRIP_FROM_PATH        = /mnt/media/projects/workspace/libdodo/tags/libdodo-0.8.0
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = YES
@@ -82,7 +82,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = /mnt/media/projects/workspace/libdodo/include
+INPUT                  = /mnt/media/projects/workspace/libdodo/tags/libdodo-0.8.0/include/libdodo/ 
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
@@ -227,7 +227,7 @@ ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = YES
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
-INCLUDE_PATH           = /tmp/libdodo-0.4.0/include/
+INCLUDE_PATH           = /mnt/media/projects/workspace/libdodo/tags/libdodo-0.8.0/include/libdodo/
 INCLUDE_FILE_PATTERNS  = 
 PREDEFINED             = USE_DEQUE \
                          SQLITE_EXT \
