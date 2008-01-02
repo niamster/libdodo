@@ -84,7 +84,7 @@ all: @PACKAGE_NAME@
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(CFLAGS) -fPIC -c $^
 	if test "@DEBUG@" = "no"; then strip -d --strip-unneeded $@; fi
 
-install: 
+install: @PACKAGE_NAME@ 
 	${INSTALL} -m 755 -d $(libdir)
 	${INSTALL} -m 755 @PACKAGE_NAME@.so.@PACKAGE_VERSION@ $(libdir)/
 	${INSTALL} -m 755 -d $(includedir)/libdodo
