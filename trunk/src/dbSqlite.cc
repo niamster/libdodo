@@ -54,7 +54,7 @@ dbSqlite::~dbSqlite()
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlite::fieldCollect(__fieldInfo &row)
+dbSqlite::fieldCollect(const __fieldInfo &row)
 {
 	int type = row.type, flag = row.flag;
 	dodoString resRow(row.name + " " + sqlDataType(type));

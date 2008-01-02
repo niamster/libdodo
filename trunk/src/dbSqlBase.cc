@@ -793,7 +793,7 @@ dbSqlBase::escapeFields(const dodoString &data)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::fieldCollect(__fieldInfo &row)
+dbSqlBase::fieldCollect(const __fieldInfo &row)
 {
 	int type = row.type, flag = row.flag;
 	dodoString resRow(row.name + " " + sqlDataType(type));

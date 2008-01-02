@@ -232,17 +232,15 @@ namespace dodo
 			static void setWorkingDir(const dodoString &path);
 
 			/**
-			 * get system usage with current process
-			 * @param info will be filled with system usage info
+			 * @return info filled with system usage info
 			 */
-			static void getUsageInfo(__usage &info);
+			static __usage getUsageInfo();
 
 			/**
-			 * get limits from systemToolsLimitEnum
+			 * @return limit info
 			 * @param type is type of info to get[see systemToolsLimitEnum]
-			 * @param lim will be filled with requested values
 			 */
-			static void getLimit(short type,  __limits &lim);
+			static __limits getLimit(short type);
 
 			/**
 			 * set limits from systemToolsLimitEnum
@@ -291,44 +289,38 @@ namespace dodo
 			static void setGID(short type, int gid);
 
 			/**
-			 * gets user info
-			 * @param info will be filled with user's info
+			 * @return info filled with user's info
 			 * @param uid is user's id about what to get info
 			 */
-			static void getUserInfo(__userInfo &info, int uid);
+			static __userInfo getUserInfo(int uid);
 
 			/**
-			 * gets user info
-			 * @param info will be filled with user's info
+			 * @return info filled with user's info
 			 * @param name is user's login name about what to get info
 			 */
-			static void getUserInfo(__userInfo &info, const dodoString &uid);
+			static __userInfo getUserInfo(const dodoString &uid);
 
 			/**
-			 * gets users of the system
-			 * @param info will be filled with array of users' info
+			 * @return users of the system
 			 */
-			static void getUsers(dodoArray<__userInfo> &info);
+			static dodoArray<__userInfo> getUsers();
 
 			/**
-			 * gets group info
-			 * @param info will be filled with group's info
+			 * @return group info
 			 * @param name is group's id name about what to get info
 			 */
-			static void getGroupInfo(__groupInfo &info, int gid);
+			static __groupInfo getGroupInfo(int gid);
 
 			/**
-			 * gets group info
-			 * @param info will be filled with user's info
+			 * @return group info
 			 * @param name is group's name about what to get info
 			 */
-			static void getGroupInfo(__groupInfo &info, const dodoString &gid);
+			static __groupInfo getGroupInfo(const dodoString &gid);
 
 			/**
-			 * gets group of the system
-			 * @param info will be filled with array of group' info
+			 * @return groups of the system
 			 */
-			static void getGroups(dodoArray<__groupInfo> &info);
+			static dodoArray<__groupInfo> getGroups();
 			/**
 			 * @return PID of current process
 			 */

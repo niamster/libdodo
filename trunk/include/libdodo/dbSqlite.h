@@ -208,7 +208,7 @@ namespace dodo
 			/**
 			 * constructs from collected data to sql adaptive field info for proper fields representation
 			 */
-			virtual dodoString fieldCollect(__fieldInfo &row);
+			virtual dodoString fieldCollect(const __fieldInfo &row);
 
 			/**
 			 * executes request

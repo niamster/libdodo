@@ -501,7 +501,7 @@ dbBase::createDb(const dodoString &db,
 //-------------------------------------------------------------------
 
 void
-dbBase::createTable(__tableInfo &tableInfo)
+dbBase::createTable(const __tableInfo &tableInfo)
 {
 	qType = DBBASE_REQUEST_CREATE_TABLE;
 	pre_tableInfo = tableInfo;
@@ -511,7 +511,7 @@ dbBase::createTable(__tableInfo &tableInfo)
 //-------------------------------------------------------------------
 
 void
-dbBase::createField(__fieldInfo &row,
+dbBase::createField(const __fieldInfo &row,
 					const dodoString &table)
 {
 	qType = DBBASE_REQUEST_CREATE_FIELD;

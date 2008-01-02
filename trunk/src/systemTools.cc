@@ -96,15 +96,18 @@ systemTools::setWorkingDir(const dodoString &path)
 //-------------------------------------------------------------------
 
 
-void
-systemTools::getUsageInfo(__usage &info)
+__usage
+systemTools::getUsageInfo()
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSAGEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+	__usage info;
 	info.time = use.ru_utime.tv_sec * 100 + use.ru_utime.tv_usec;
 	info.mem = use.ru_maxrss * 1024;
+	
+	return info;
 }
 
 //-------------------------------------------------------------------
@@ -120,9 +123,8 @@ systemTools::changeRoot(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-void
-systemTools::getLimit(short type,
-					  __limits &lim)
+__limits
+systemTools::getLimit(short type)
 {
 	rlimit limit;
 
@@ -178,8 +180,12 @@ systemTools::getLimit(short type,
 	if (getrlimit(realRes, &limit) == -1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+	__limits lim;
+	
 	lim.current = limit.rlim_cur;
 	lim.max = limit.rlim_max;
+	
+	return lim;
 }
 
 //-------------------------------------------------------------------
@@ -374,37 +380,38 @@ systemTools::setGID(short type,
 
 //-------------------------------------------------------------------
 
-void
-systemTools::getUserInfo(__userInfo &info,
-						 int uid)
+__userInfo
+systemTools::getUserInfo(int uid)
 {
 	passwd *in = getpwuid(uid);
 	if (in == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	fillUserInfo(info, in);
-
+	__userInfo info;
+	
+	return fillUserInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-void
-systemTools::getUserInfo(__userInfo &info,
-						 const dodoString &uid)
+__userInfo
+systemTools::getUserInfo(const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	fillUserInfo(info, in);
+	__userInfo info;
+	
+	return fillUserInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-void
-systemTools::getUsers(dodoArray<__userInfo> &users)
+dodoArray<__userInfo>
+systemTools::getUsers()
 {
-	users.clear();
+	dodoArray<__userInfo> users;
 
 	passwd *in;
 
@@ -424,6 +431,8 @@ systemTools::getUsers(dodoArray<__userInfo> &users)
 	}
 
 	endpwent();
+	
+	return users;
 }
 
 //-------------------------------------------------------------------
@@ -464,43 +473,45 @@ systemTools::fillGroupInfo(__groupInfo &info,
 
 //-------------------------------------------------------------------
 
-void
-systemTools::getGroupInfo(__groupInfo &info,
-						  int uid)
+__groupInfo
+systemTools::getGroupInfo(int uid)
 {
 	group *in = getgrgid(uid);
 	if (in == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	fillGroupInfo(info, in);
+	__groupInfo info;
+	
+	return fillGroupInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-void
-systemTools::getGroupInfo(__groupInfo &info,
-						  const dodoString &uid)
+__groupInfo
+systemTools::getGroupInfo(const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	fillGroupInfo(info, in);
+	__groupInfo info;
+	
+	return fillGroupInfo(info, in);
 }
 
 //-------------------------------------------------------------------
 
-void
-systemTools::getGroups(dodoArray<__groupInfo> &users)
+dodoArray<__groupInfo>
+systemTools::getGroups()
 {
-	users.clear();
+	dodoArray<__groupInfo> groups;
 
 	group *in;
 
 	__groupInfo info;
 
 	while ((in = getgrent()) != NULL)
-		users.push_back(fillGroupInfo(info, in));
+		groups.push_back(fillGroupInfo(info, in));
 
 	switch (errno)
 	{
@@ -514,6 +525,8 @@ systemTools::getGroups(dodoArray<__groupInfo> &users)
 	}
 
 	endgrent();
+	
+	return groups;
 }
 
 //-------------------------------------------------------------------

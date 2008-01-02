@@ -419,14 +419,14 @@ namespace dodo
 			 * creates table
 			 * @param tableInfo[see __tableInfo]
 			 */
-			virtual void createTable(__tableInfo &tableInfo);
+			virtual void createTable(const __tableInfo &tableInfo);
 
 			/**
 			 * creates field
 			 * @param fieldInfo[see __fieldInfo]
 			 * @param table indicates in what table create field
 			 */
-			virtual void createField(__fieldInfo &fieldInfo, const dodoString &table);
+			virtual void createField(const __fieldInfo &fieldInfo, const dodoString &table);
 
 			/**
 			 * truncates table
