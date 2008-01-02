@@ -3,4 +3,11 @@
 
 2.
 	firebird
-	soap
+	xmlrpc
+
+3.
+	VFS
+
+4.	pth(GNU Portable Threads)
+	GD
+	Oracle Database
