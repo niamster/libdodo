@@ -570,7 +570,7 @@ cgiProcessor::_include(const dodoString &statement,
 {
 	dodoString temp1 = getVar(statement, start, path);
 
-	if (!stringTools::equal(temp1, path) && !recursive(temp1) && ioDiskTools::exists(temp1))
+	if (!stringTools::equal(temp1, path) && !recursive(temp1) && ioDiskTools::exists(tplBasePath + FILE_DELIM + temp1))
 	{
 		processed.push_back(path);
 		tpl.append(process(temp1));
