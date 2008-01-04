@@ -673,12 +673,12 @@ ioDiskTools::copy(const dodoString &from,
 	dodoString to = a_to;
 
 	{
-		char tempB[MAXPATHLEN];
+		char temp[MAXPATHLEN];
 
-		strcpy(tempB, to.c_str());
-		char *toT = ::basename(tempB);
-		if (strcmp(toT, "..") == 0  || strcmp(toT, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
-			to = toT + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
+		strcpy(temp, to.c_str());
+		::basename(temp);
+		if (strcmp(temp, "..") == 0  || strcmp(temp, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
+			to = temp + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 
 	struct stat stFrom, stTo;
@@ -835,12 +835,12 @@ ioDiskTools::copyDir(const dodoString &from,
 	dodoString to = a_to;
 
 	{
-		char tempB[MAXPATHLEN];
+		char temp[MAXPATHLEN];
 
-		strcpy(tempB, to.c_str());
-		char *toT = ::basename(tempB);
-		if (strcmp(toT, "..") == 0 || strcmp(toT, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
-			to = toT + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
+		strcpy(temp, to.c_str());
+		::basename(temp);
+		if (strcmp(temp, "..") == 0 || strcmp(temp, ".") == 0 || a_to[a_to.size() - 1] == FILE_DELIM)
+			to = temp + dodoString(1, FILE_DELIM) + ::basename((char *)from.c_str());
 	}
 
 	struct stat stFrom, stTo;
