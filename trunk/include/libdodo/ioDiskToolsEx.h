@@ -37,14 +37,18 @@ namespace dodo
 	enum ioDiskToolsExR
 	{
 		IODISKTOOLSEX_WRONGFILENAME,
-		IODISKTOOLSEX_DESTINATION_EXISTS,
+		IODISKTOOLSEX_DESTINATIONEXISTS,
+		IODISKTOOLSEX_NOTADIR,
+		IODISKTOOLSEX_TOOLONGPATH
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
 		#define IODISKTOOLSEX_WRONGFILENAME_STR        "Probably wrong filename, type of file is wrong or `path` is empty!"
-		#define IODISKTOOLSEX_DESTINATION_EXISTS_STR    "Destination file/dir/etc. exists. Won't overvrite"
+		#define IODISKTOOLSEX_DESTINATIONEXISTS_STR    "Destination file/dir/etc. exists. Won't overvrite"
+		#define IODISKTOOLSEX_NOTADIR_STR              "There is not a dir with given path."
+		#define IODISKTOOLSEX_TOOLONGPATH_STR          "Too long path."
 
 	/**
 	 * ID of function where exception was thrown
@@ -61,6 +65,7 @@ namespace dodo
 		IODISKTOOLSEX_GETGROUPOWNER,
 		IODISKTOOLSEX_TOUCH,
 		IODISKTOOLSEX_MKDIR,
+		IODISKTOOLSEX_MKDIRRECURSIVE,
 		IODISKTOOLSEX_MKFIFO,
 		IODISKTOOLSEX_CHMOD,
 		IODISKTOOLSEX_RM,
@@ -77,6 +82,8 @@ namespace dodo
 		IODISKTOOLSEX_COPY,
 		IODISKTOOLSEX_COPYDIR,
 		IODISKTOOLSEX_APPEND,
+		IODISKTOOLSEX_DIRNAME,
+		IODISKTOOLSEX_LASTNAME,
 	};
 };
 

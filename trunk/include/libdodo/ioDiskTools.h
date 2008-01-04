@@ -203,6 +203,13 @@ namespace dodo
 			static void mkdir(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS, bool force = true);
 
 			/**
+			 * make directory recursively
+			 * @param path is path of directory to create
+			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
+			 */
+			static void mkdirRecursive(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
+			
+			/**
 			 * delete files, non empty directory
 			 * @param path indicates the path to remove
 			 * @param force if it is true and nothing already exists do not say anything

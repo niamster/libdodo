@@ -174,11 +174,46 @@ ioDiskTools::mkdir(const dodoString &path,
 			if (::lstat(path.c_str(), &st) == -1)
 				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-			if (S_ISDIR(st.st_mode))
-				return ;
+			if (!S_ISDIR(st.st_mode))
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIR, ERR_LIBDODO, IODISKTOOLSEX_NOTADIR, IODISKTOOLSEX_NOTADIR_STR, __LINE__, __FILE__, path);
 		}
 		else
 			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	}
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::mkdirRecursive(const dodoString &path,
+				   int permissions)
+{
+	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
+	{
+		if (errno == EEXIST)
+		{
+			struct stat st;
+			if (::lstat(path.c_str(), &st) == -1)
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIRRECURSIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+
+			if (!S_ISDIR(st.st_mode))
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIRRECURSIVE, ERR_LIBDODO, IODISKTOOLSEX_NOTADIR, IODISKTOOLSEX_NOTADIR_STR, __LINE__, __FILE__, path);
+		}
+		else
+		{
+			mkdirRecursive(dirname(path), permissions);
+
+			if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
+				if (errno == EEXIST)
+				{
+					struct stat st;
+					if (::lstat(path.c_str(), &st) == -1)
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIRRECURSIVE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+
+					if (!S_ISDIR(st.st_mode))
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_MKDIRRECURSIVE, ERR_LIBDODO, IODISKTOOLSEX_NOTADIR, IODISKTOOLSEX_NOTADIR_STR, __LINE__, __FILE__, path);
+				}
+		}
 	}
 }
 
@@ -599,15 +634,16 @@ ioDiskTools::getFileContentsArr(const dodoString &path)
 dodoString
 ioDiskTools::lastname(const dodoString &path)
 {
-	char tempB[MAXPATHLEN];
+	if (path.size() >= MAXPATHLEN)
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_LASTNAME, ERR_LIBDODO, IODISKTOOLSEX_TOOLONGPATH, IODISKTOOLSEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
+	
+	char temp[MAXPATHLEN];
 
-	strcpy(tempB, path.c_str());
+	strcpy(temp, path.c_str());
 
-	::basename((char *)path.c_str());
+	::basename(temp);
 
-	dodoString result(tempB);
-
-	return result;
+	return temp;
 }
 
 //-------------------------------------------------------------------
@@ -615,15 +651,16 @@ ioDiskTools::lastname(const dodoString &path)
 dodoString
 ioDiskTools::dirname(const dodoString &path)
 {
-	char tempB[MAXPATHLEN];
+	if (path.size() >= MAXPATHLEN)
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_DIRNAME, ERR_LIBDODO, IODISKTOOLSEX_TOOLONGPATH, IODISKTOOLSEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
+	
+	char temp[MAXPATHLEN];
 
-	strcpy(tempB, path.c_str());
+	strcpy(temp, path.c_str());
 
-	::dirname((char *)path.c_str());
+	::dirname(temp);
 
-	dodoString result(tempB);
-
-	return result;
+	return temp;
 }
 
 //-------------------------------------------------------------------
