@@ -66,6 +66,8 @@ namespace dodo
 			 * @param tpl indicates template to preprocess
 			 */
 			virtual dodoString preProcessString(const dodoString &tpl);
+			
+			dodoString tplBasePath;///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
 
 		protected:
 

@@ -228,7 +228,10 @@ cgiPreprocessor::_preProcessString(const dodoString &buffer,
 dodoString
 cgiPreprocessor::preProcess(const dodoString &path)
 {
-	return _preProcessString(ioDiskTools::getFileContents(path), path);
+	if (tplBasePath.empty())
+		return _preProcessString(ioDiskTools::getFileContents(path), path);
+	else
+		return _preProcessString(ioDiskTools::getFileContents(tplBasePath + FILE_DELIM + path), path);
 }
 
 //-------------------------------------------------------------------
