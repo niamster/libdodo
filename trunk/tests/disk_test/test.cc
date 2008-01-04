@@ -54,6 +54,7 @@ int main(int argc, char **argv)
 		ioDiskTools::rm("./test.cc.copy");
 
 		ioDiskTools::mkdir("testDir");
+		ioDiskTools::mkdirRecursive("testDir/1/2/3/4");
 
 		ioDiskTools::rename("testDir","DirTest");
 		
