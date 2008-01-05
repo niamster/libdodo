@@ -137,7 +137,7 @@ namespace dodo
 			virtual ~tools();
 
 			/**
-			 * @return random data
+			 * generates random data
 			 * @param data is pointer where to store data
 			 * @param size indicates amount of random data in bytes
 			 * @param strength indicate the ramndomness of the data
@@ -145,6 +145,16 @@ namespace dodo
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
 			static void random(void *data, unsigned long size, short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+
+			/**
+			 * @return random data
+			 * @param size indicates amount of random data in bytes
+			 * @param strength indicate the ramndomness of the data
+			 * @note based on /dev/(u)?random
+			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * '\0' will be replaced with '*'
+			 */
+			static dodoString stringRandom(unsigned long size, short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long

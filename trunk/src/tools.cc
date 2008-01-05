@@ -211,6 +211,33 @@ tools::random(void *data,
 
 //-------------------------------------------------------------------
 
+dodoString 
+tools::stringRandom(unsigned long size, 
+					short strength)
+{
+	char *data = new char[size + 1];
+	try
+	{
+		random(data, size, strength);
+	}
+	catch (...)
+	{
+		delete [] data;
+		
+		throw;
+	}
+	for (unsigned long i=0;i<size;++i)
+		if (data[i] == '\0')
+			data[i] = '*';
+
+	dodoString res(data, size);
+	delete [] data;
+	
+	return res;
+}
+
+//-------------------------------------------------------------------
+
 unsigned long
 tools::ulRandom(short strength)
 {
