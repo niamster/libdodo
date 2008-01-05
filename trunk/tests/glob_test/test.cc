@@ -66,6 +66,9 @@ int main(int argc, char **argv)
 		dodoString t = "abcddF";
 		stringTools::replace("cd","WW",t);
 		cout << t << endl;	
+		
+		dodoString rnd = tools::stringRandom(12);
+		cout << rnd.size() << " : " << rnd << endl;	
 	}
     catch(baseEx ex)
     {
