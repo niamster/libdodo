@@ -56,6 +56,7 @@ int main(int argc, char **argv)
 		ioDiskTools::mkdir("testDir");
 		ioDiskTools::mkdirRecursive("testDir/1/2/3/4");
 
+		ioDiskTools::rm("DirTest");
 		ioDiskTools::rename("testDir","DirTest");
 		
 		ioDiskTools::symlink("test", "TEST");
