@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 	
 	try
 	{
-		cgiProcessor cgip;
+		cgiProcessor cgip(cgit);
 		cgip.assign("main","index.tpl");
 		cgip.assign("test","test");
 		cgip.assign("show","show");

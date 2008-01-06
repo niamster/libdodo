@@ -31,7 +31,7 @@
 #include <libdodo/tools.h>
 #include <libdodo/cgiPreprocessor.h>
 #include <libdodo/cgiFast.h>
-#include <libdodo/ioSTD.h>
+#include <libdodo/cgi.h>
 
 namespace dodo
 {
@@ -45,17 +45,7 @@ namespace dodo
 			/**
 			 * constructor
 			 */
-			cgiProcessor();
-
-			#ifdef FCGI_EXT
-
-			/**
-			 * constructor
-			 * @param cf describes output interface
-			 */
-			cgiProcessor(cgiFastIO *cf);
-
-			#endif
+			cgiProcessor(cgi &CGI);
 
 			/**
 			 * destructor
@@ -249,16 +239,8 @@ namespace dodo
 			unsigned int namespaceDeepness;                                         ///< deepness of the namespace
 			std::map<unsigned int, dodoStringMap> localNamespace;                   ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
 			std::map<unsigned int, dodoStringArray> namespaceVars;                  ///< names of vars in namespaces
-
-			#ifdef FCGI_EXT
-
-			bool cgiFastSet;    ///< indicates whether cgiFast was set
-
-			cgiFastIO *cf;      ///< pointer to cgiFast class
-
-			#endif
-
-			ioSTD *fstd;
+			
+			cgi &CGI;///< cgi object through what output will be performed
 	};
 
 };

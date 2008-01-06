@@ -58,8 +58,7 @@ int main(int argc, char **argv)
 	cout << systemTools::getWorkingDir() << endl;
 	
 	{
-		dodoArray<__userInfo> info;
-		systemTools::getUsers(info);
+		dodoArray<__userInfo> info = systemTools::getUsers();
 		
 		for (int i(0);i<info.size();i++)
 			cout << info[i].name << endl;
@@ -68,8 +67,7 @@ int main(int argc, char **argv)
 	cout << endl << endl;
 	
 	{	
-		dodoArray<__groupInfo> info;
-		systemTools::getGroups(info);
+		dodoArray<__groupInfo> info = systemTools::getGroups();
 		
 		for (int i(0);i<info.size();i++)
 			cout << info[i].name << endl;	

@@ -30,7 +30,7 @@ using namespace std;
 		
 		try
 		{
-			cgiProcessor cgip(fcgi);
+			cgiProcessor cgip(cgit);
 			cgip.assign("test","hoho");
 			cgip.assign("show","That's works!");
 			

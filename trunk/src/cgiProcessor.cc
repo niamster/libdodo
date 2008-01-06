@@ -25,47 +25,21 @@
 
 using namespace dodo;
 
-cgiProcessor::cgiProcessor() : _continueFlag(false),
+cgiProcessor::cgiProcessor(cgi &a_cgi) : _continueFlag(false),
 							   _breakDeepness(0),
 							   _loopDeepness(0),
 							   iterator(1),
-							   namespaceDeepness(1)
-				#ifdef FCGI_EXT
-							   ,
-							   cgiFastSet(false)
-				#endif
-{
-	dodo[statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_VERSION]] = PACKAGE_STRING;
-	dodo[statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_ITERATOR]] = "1";
-
-	fstd = new ioSTD;
-}
-
-//-------------------------------------------------------------------
-
-#ifdef FCGI_EXT
-
-cgiProcessor::cgiProcessor(cgiFastIO *a_cf) : _continueFlag(false),
-											  _breakDeepness(0),
-											  _loopDeepness(0),
-											  iterator(1),
-											  namespaceDeepness(1),
-											  cgiFastSet(true),
-											  cf(a_cf)
-
+							   namespaceDeepness(1),
+							   CGI(a_cgi)
 {
 	dodo[statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_VERSION]] = PACKAGE_STRING;
 	dodo[statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_ITERATOR]] = "1";
 }
-
-#endif
 
 //-------------------------------------------------------------------
 
 cgiProcessor::~cgiProcessor()
 {
-	if (!cgiFastSet)
-		delete fstd;
 }
 
 //-------------------------------------------------------------------
@@ -1763,18 +1737,8 @@ cgiProcessor::trim(const dodoString &statement)
 void
 cgiProcessor::display(const dodoString &path)
 {
-		#ifdef FCGI_EXT
-	if (cgiFastSet)
-	{
-		cf->print(this->process(path));
-		cf->flush();
-	}
-	else
-		#endif
-	{
-		fstd->writeStreamString(this->process(path));
-		fstd->flush();
-	}
+	CGI.print(this->process(path));
+	CGI.flush();
 }
 
 //-------------------------------------------------------------------

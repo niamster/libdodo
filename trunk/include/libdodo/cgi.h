@@ -309,7 +309,6 @@ namespace dodo
 
 			/**
 			 * sets cookie. the cookies are printed with printHeaders method
-			 *
 			 * @param name is name of cookie
 			 * @param value is value of cookie
 			 * @param exDate is date of expire
@@ -319,6 +318,10 @@ namespace dodo
 			 */
 			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate = __dodostring__, const dodoString &path = __dodostring__, const dodoString &domain = __dodostring__, bool secure = false);
 
+			/**
+			 * sets cookie. the cookies are printed with printHeaders method
+			 * @param cookie describes the cookie
+			 */
 			virtual void setCookie(const __cookies &cookie);
 
 		protected:
@@ -386,6 +389,9 @@ namespace dodo
 			#endif
 
 			ioSTD *fstd;
+			
+			bool firstPrint;
+			mutable bool headersPrinted;
 	};
 
 };

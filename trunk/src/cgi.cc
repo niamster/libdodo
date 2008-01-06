@@ -68,7 +68,9 @@ cgi::cgi(dodoStringMap &headers,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
-										 autocleanFiles(a_autocleanFiles)
+										 autocleanFiles(a_autocleanFiles),
+										 firstPrint(true),
+										 headersPrinted(false)
 				#ifdef FCGI_EXT
 										 ,
 										 cgiFastSet(false)
@@ -104,7 +106,9 @@ cgi::cgi(bool silent,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
-										 autocleanFiles(a_autocleanFiles)
+										 autocleanFiles(a_autocleanFiles),
+										 firstPrint(true),
+										 headersPrinted(false)
 				#ifdef FCGI_EXT
 										 ,
 										 cgiFastSet(false)
@@ -145,7 +149,9 @@ cgi::cgi(cgiFastIO    *a_cf,
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 cgiFastSet(true),
 										 cf(a_cf),
-										 autocleanFiles(a_autocleanFiles)
+										 autocleanFiles(a_autocleanFiles),
+										 firstPrint(true),
+										 headersPrinted(false)
 
 {
 	initHeaders(__dodostringmap__);
@@ -177,7 +183,9 @@ cgi::cgi(cgiFastIO    *a_cf,
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 cgiFastSet(true),
 										 cf(a_cf),
-										 autocleanFiles(a_autocleanFiles)
+										 autocleanFiles(a_autocleanFiles),
+										 firstPrint(true),
+										 headersPrinted(false)
 
 {
 	initHeaders(headers);
@@ -206,6 +214,8 @@ cgi::cgi(cgiFastIO    *a_cf,
 
 cgi::~cgi()
 {
+	printHeaders();
+	
 	if (autocleanFiles)
 		cleanTmp();
 
@@ -217,16 +227,33 @@ cgi::~cgi()
 
 void
 cgi::flush()
-{
-	fflush(stdout);
+{	
+	#ifdef FCGI_EXT
+	if (cgiFastSet)
+		cf->flush();
+	else
+	#endif
+		fstd->flush();
 }
 
 //-------------------------------------------------------------------
 
 void
 cgi::print(const dodoString &buf)
-{
-	fwrite(buf.c_str(), buf.size(), 1, stdout);
+{	
+	if (firstPrint)
+	{
+		firstPrint = false;
+		
+		printHeaders();
+	}
+	
+	#ifdef FCGI_EXT
+	if (cgiFastSet)
+		cf->print(buf);
+	else
+	#endif
+		fstd->writeStreamString(buf);
 }
 
 //-------------------------------------------------------------------
@@ -351,6 +378,11 @@ cgi::initHeaders(dodoStringMap &headers)
 void
 cgi::printHeaders() const
 {
+	if (headersPrinted)
+		return;
+	
+	headersPrinted = true;
+	
 	dodoStringMap::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
 		#ifdef FCGI_EXT
@@ -358,7 +390,7 @@ cgi::printHeaders() const
 			cf->print(i->first + ": " + i->second + "\r\n");
 		else
 		#endif
-		fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
+			fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
 
 	if (cookiesSet.size() > 0)
 	{
