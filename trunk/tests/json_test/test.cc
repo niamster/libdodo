@@ -39,12 +39,10 @@ int main(int argc, char **argv)
 
 		node.objectValue["object"] = node2;
 
-
 		cout << js.makeJSON(node) << endl;
 		
-		jsonNode jsN;
-		js.processJSON(jsN, js.makeJSON(node));
-		
+		jsonNode jsN = js.processJSON(js.makeJSON(node));
+	
 		switch (jsN.getType())
 		{		
 			case JSON_DATATYPE_OBJECT:
@@ -72,19 +70,19 @@ int main(int argc, char **argv)
 							
 						case JSON_DATATYPE_NULL:
 							
-							cout << "[null]: " << endl;
+							cout << "[null]: null" << endl;
 							
 							break;
 							
 						case JSON_DATATYPE_NUMERIC:
 							
-							cout << "[numeric]: " << endl;
+							cout << "[numeric]: " << i->second.getNumeric() << endl;
 							
 							break;
 							
 						case JSON_DATATYPE_BOOLEAN:
 							
-							cout << "[boolean]: " << endl;
+							cout << "[boolean]: " << (i->second.getBoolean()?"true":"false") << endl;
 							
 							break;
 							
@@ -117,19 +115,19 @@ int main(int argc, char **argv)
 										
 									case JSON_DATATYPE_NULL:
 										
-										cout << "\t[null]: " << endl;
+										cout << "\t[null]: null" << endl;
 										
 										break;
 										
 									case JSON_DATATYPE_NUMERIC:
 										
-										cout << "\t[numeric]: " << endl;
+										cout << "\t[numeric]: " << o->getNumeric() << endl;
 										
 										break;
 										
 									case JSON_DATATYPE_BOOLEAN:
 										
-										cout << "\t[boolean]: " << endl;
+										cout << "\t[boolean]: " << (o->getBoolean()?"true":"false") << endl;
 										
 										break;
 								}

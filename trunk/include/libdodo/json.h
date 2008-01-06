@@ -185,11 +185,10 @@ namespace dodo
 			virtual dodoString makeJSON(const __jsonNodeDef &root);
 
 			/**
-			 * processes json object
-			 * @param node describes root of json object
+			 * @return root of json object
 			 * @param root describes string that contain json object
 			 */
-			virtual void processJSON(jsonNode &node, const dodoString &root);
+			virtual jsonNode processJSON(const dodoString &root);
 
 			/**
 			 * @return string that contain json object

@@ -422,6 +422,8 @@ json::processNumeric(long &node,
 					 unsigned long pos)
 {
 	dodoString numeric;
+	
+	bool endOfNumeric = false;
 
 	unsigned long i(pos), j(root.size());
 	for (; i < j; ++i)
@@ -447,11 +449,20 @@ json::processNumeric(long &node,
 				numeric.append(1, root[i]);
 
 				break;
+			
+			case ',':
+				
+				endOfNumeric = true;
+				
+				break;
 
 			default:
 
-				throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNUMERIC, ERR_LIBDODO, JSONEX_MALFORMEDJSONNUMERIC, JSONEX_MALFORMEDJSONNUMERIC_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNUMERIC, ERR_LIBDODO, JSONEX_MALFORMEDJSONNUMERIC, numeric, __LINE__, __FILE__);
 		}
+		
+		if (endOfNumeric)
+			break;
 	}
 
 	node = stringTools::stringToL(numeric);
@@ -553,14 +564,15 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 
 //-------------------------------------------------------------------
 
-void
-json::processJSON(jsonNode &node,
-				  const dodoString &root)
+jsonNode
+json::processJSON(const dodoString &root)
 {
-	node.clear();
+	jsonNode node;
 
 	node.valueDataType = JSON_DATATYPE_OBJECT;
 	processObject(node.objectValue, root, 0);
+	
+	return node;
 }
 
 //-------------------------------------------------------------------
@@ -589,9 +601,7 @@ json::mapToJSON(const dodoStringMap &root)
 dodoStringMap
 json::JSONToMap(const dodoString &node)
 {
-	jsonNode JSON;
-
-	processJSON(JSON, node);
+	jsonNode JSON = processJSON(node);
 
 	dodoStringMap map;
 

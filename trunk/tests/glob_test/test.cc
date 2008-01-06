@@ -33,8 +33,7 @@ int main(int argc, char **argv)
 		if(!baseEx::setErrorHandler(ERRMODULE_IODISK,"./module",NULL))
 			cout << "WTF";
 		
-		for (register int i(0);i<10000;++i)
-			tools::codesetConversion(ioDiskTools::getFileContents("test.cc"),"cp1251","utf-8");
+		tools::codesetConversion(ioDiskTools::getFileContents("test.cc"),"cp1251","utf-8");
 		
 		cout << tools::zCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;
 		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContents("test.cc")));
@@ -68,7 +67,7 @@ int main(int argc, char **argv)
 		cout << t << endl;	
 		
 		dodoString rnd = tools::stringRandom(12);
-		cout << rnd.size() << " : " << rnd << endl;	
+		cout << tools::MD5Hex(rnd) << endl;	
 	}
     catch(baseEx ex)
     {
