@@ -86,12 +86,12 @@ while test $# -gt 0; do
 	then
 	    if [ "-L@libdir@" = "-L/usr/lib64" ]
 	    then
-		echo -L@LIBS@ @LDFLAGS@
+		echo -L@LIBS@ @LDFLAGS@ -ldodo
 	    else
-		echo -L@libdir@ @LIBS@ @LDFLAGS@
+		echo -L@libdir@ @LIBS@ @LDFLAGS@ -ldodo
 	    fi
 	else
-	    echo -L@libdir@ @LIBS@ @LDFLAGS@
+	    echo -L@libdir@ @LIBS@ @LDFLAGS@ -ldodo
 	fi
        	;;
 
