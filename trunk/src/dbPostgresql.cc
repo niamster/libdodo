@@ -268,18 +268,13 @@ dbPostgresql::_exec(const dodoString &query,
 				}
 
 				pgResult = PQexecParams(conn, request.c_str(), size, NULL, values, lengths, formats, 0);
-				if (pgResult == NULL)
-				{
-					delete [] values;
-					delete [] lengths;
-					delete [] formats;
-
-					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__);
-				}
-
+				
 				delete [] values;
 				delete [] lengths;
 				delete [] formats;
+				
+				if (pgResult == NULL)
+					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__);
 			}
 
 				break;

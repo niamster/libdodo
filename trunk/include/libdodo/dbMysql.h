@@ -29,6 +29,7 @@
 #ifdef MYSQL_EXT
 
 	#include <mysql.h>
+	#include <errmsg.h>
 	#include <sys/socket.h>
 
 	#include <libdodo/tools.h>

@@ -69,6 +69,7 @@ __xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
 //-------------------------------------------------------------------
 
 db::db() : connected(false),
+			reconnect(true),
 		   qType(-1),
 		   qShift(DB_EMPTY),
 		   qSelShift(DB_EMPTY),

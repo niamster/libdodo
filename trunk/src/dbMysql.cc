@@ -253,7 +253,17 @@ dbMysql::_exec(const dodoString &query,
 					request = "describe " + pre_table;
 
 					if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-						throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__, request);
+					{
+						int mysqlErrno = mysql_errno(mysql);
+						if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
+						{
+							connect();
+							if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
+								throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+						}
+						else
+							throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+					}
 
 					mysqlRes = mysql_store_result(mysql);
 					if (mysqlRes == NULL)
@@ -297,7 +307,17 @@ dbMysql::_exec(const dodoString &query,
 	}
 
 	if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__, request);
+	{
+		int mysqlErrno = mysql_errno(mysql);
+		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
+		{
+			connect();
+			if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
+				throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+		}
+		else
+			throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+	}
 
 	if (!show)
 		return ;
