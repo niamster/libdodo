@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 ///first type
 //	dodoStringMap head;
 //	head["Content-type"] = "text/html";
-//	cgi cgi(false,head);
+//	cgi cgi(head, false);
 	
 ///second type
 	cgi cgit(true);
