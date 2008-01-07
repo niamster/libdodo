@@ -253,7 +253,10 @@ cgi::print(const dodoString &buf)
 		cf->print(buf);
 	else
 	#endif
-		fstd->writeStreamString(buf);
+	{
+		fstd->outSize = buf.size();
+		fstd->writeString(buf);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -410,6 +413,7 @@ cgi::printHeaders() const
 					cf->print("domain=" + i->domain + "; ");
 				if (i->secure)
 					cf->print("secure");
+				cf->print("\r\n");
 			}
 			else
 			#endif
@@ -424,6 +428,7 @@ cgi::printHeaders() const
 					fstd->writeStreamString("domain=" + i->domain + "; ");
 				if (i->secure)
 					fstd->writeStreamString("secure");
+				fstd->writeStreamString("\r\n");
 			}
 		}
 	}
@@ -431,13 +436,13 @@ cgi::printHeaders() const
 	#ifdef FCGI_EXT
 	if (cgiFastSet)
 	{
-		cf->print("\r\n\r\n");
+		cf->print("\r\n");
 		cf->flush();
 	}
 	else
 	#endif
 	{
-		fstd->writeStreamString("\r\n\r\n");
+		fstd->writeStreamString("\r\n");
 		fstd->flush();
 	}
 }
