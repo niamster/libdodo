@@ -564,6 +564,7 @@ cgi::makePost()
 				temp0 += 14;
 				temp1 = i->find("\n", temp0);
 				file.type = i->substr(temp0, temp1 - temp0);
+				temp1 += 3;
 
 				#ifndef __FreeBSD__
 
@@ -590,7 +591,7 @@ cgi::makePost()
 					delete [] ptr;
 				}
 
-				file.size = i->substr(temp1 + 4).size() - 2;
+				file.size = i->size() - temp1 - 2;
 
 				file.error = CGI_POSTFILEERR_NONE;
 
@@ -630,7 +631,7 @@ cgi::makePost()
 
 							break;
 					}
-				fwrite(i->substr(temp1 + 4).c_str(), file.size, 1, file.fp);
+				fwrite(i->c_str() + temp1, file.size, 1, file.fp);
 				if (errno == ENOMEM)
 					file.error = CGI_POSTFILEERR_NO_SPACE;
 
