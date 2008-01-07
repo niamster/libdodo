@@ -188,7 +188,9 @@ json::makeJSON(const __jsonNodeDef &root)
 		{
 
 			dodoString jsonObject = "\"";
-			jsonObject.append(root.stringValue);
+			dodoString stringValue = root.stringValue;
+			stringTools::replace("\"", "\\\"", stringValue);
+			jsonObject.append(stringValue);
 			jsonObject.append("\"");
 
 			return jsonObject;
