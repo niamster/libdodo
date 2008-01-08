@@ -358,7 +358,6 @@ ioDisk::writeString(const dodoString &a_buf,
 	this->write(a_buf.c_str(), a_pos);
 }
 
-
 //-------------------------------------------------------------------
 
 void
@@ -401,8 +400,8 @@ ioDisk::_write(const char *const a_buf,
 				throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 		else
-		if (fseek(file, 0, SEEK_END) == -1)
-			throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			if (fseek(file, 0, SEEK_END) == -1)
+				throw baseEx(ERRMODULE_IODISK, IODISKEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	errno = 0;
@@ -410,9 +409,9 @@ ioDisk::_write(const char *const a_buf,
 		fwrite(buffer.c_str(), outSize, 1, file);
 	else
 		#ifndef FAST
-	if (fileType == IODISK_FILETYPE_FIFO_FILE)
+		if (fileType == IODISK_FILETYPE_FIFO_FILE)
 		#endif
-		fputs(buffer.c_str(), file);
+			fputs(buffer.c_str(), file);
 
 	switch (errno)
 	{

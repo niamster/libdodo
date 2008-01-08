@@ -569,7 +569,7 @@ cgi::makePost()
 					file.error = CGI_POSTFILEERR_NONE;
 
 					ptr = new char[pathLength];
-					strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
+					strcpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str());
 					fd = mkstemp(ptr);
 					if (fd == -1)
 					{
