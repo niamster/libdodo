@@ -132,6 +132,27 @@ dbBase::~dbBase()
 //-------------------------------------------------------------------
 
 void
+dbBase::callFunction(const dodoString &name, 
+					const dodoStringArray &arguments, 
+					const dodoString &as)
+{
+	qType = DBBASE_REQUEST_CALL_FUNCTION;
+
+	pre_table = name;
+	pre_fieldsNames = arguments;
+
+	if (as.size() != 0)
+	{
+		addFlag(qShift, 1 << DBBASE_ADDREQUEST_AS);
+		pre_where = as;
+	}
+
+	show = true;
+}
+
+//-------------------------------------------------------------------
+
+void
 dbBase::select(const dodoString &a_table,
 			   const dodoStringArray &a_fieldsNames,
 			   const dodoString &a_where)

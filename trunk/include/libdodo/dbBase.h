@@ -43,6 +43,7 @@ namespace dodo
 		DBBASE_ADDREQUEST_ORDERBY,
 		DBBASE_ADDREQUEST_LIMIT,
 		DBBASE_ADDREQUEST_OFFSET,
+		DBBASE_ADDREQUEST_AS,
 	};
 
 	/**
@@ -77,6 +78,8 @@ namespace dodo
 
 		DBBASE_REQUEST_CREATE_INDEX,
 		DBBASE_REQUEST_DELETE_INDEX,
+		
+		DBBASE_REQUEST_CALL_FUNCTION
 	};
 
 	/**
@@ -272,6 +275,13 @@ namespace dodo
 			 * @param info is info for database
 			 */
 			virtual void setDbInfo(const __dbInfo &dbInfo);
+
+			/**
+			 * @param name is function name
+			 * @param arguments is array of arguments
+			 * @param as is name of the result
+			 */
+			void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__);
 
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use

@@ -74,6 +74,7 @@ const __statements dbSqlBase::sqlAddArr[] =
 	{ " order by " },
 	{ " limit "    },
 	{ " offset "   },
+	{ " as "       },
 };
 
 //-------------------------------------------------------------------
@@ -237,6 +238,27 @@ dbSqlBase::insideAddCollect(const dodoStringArray &statements,
 
 	return temp;
 
+}
+
+//-------------------------------------------------------------------
+
+void 
+dbSqlBase::callFunctionCollect()
+{
+	request = "select ";
+	request.append(pre_table);
+	request.append("(");
+	
+	char frame[] = "'";
+	if (preventFraming)
+		frame[0] = ' ';
+
+	if (preventEscaping)
+		request.append(tools::implode(pre_fieldsNames, ",", frame));
+	else
+		request.append(tools::implode(pre_fieldsNames, escapeFields, ",", frame));
+
+	request.append(")");
 }
 
 //-------------------------------------------------------------------
@@ -513,6 +535,7 @@ dbSqlBase::delFieldCollect()
 {
 	request = "alter " + pre_order + " drop " + pre_table;
 }
+
 //-------------------------------------------------------------------
 
 void
@@ -651,6 +674,13 @@ dbSqlBase::queryCollect()
 			additionalActions = false;
 
 			break;
+			
+		case DBBASE_REQUEST_CALL_FUNCTION:
+
+			callFunctionCollect();
+			selectAction = true;
+
+			break;
 
 		case DBBASE_REQUEST_TRUNCATE:
 
@@ -750,6 +780,7 @@ dbSqlBase::queryCollect()
 
 	if (additionalActions)
 	{
+		additionalCollect(DBBASE_ADDREQUEST_AS, pre_where);
 		additionalCollect(DBBASE_ADDREQUEST_WHERE, pre_where);
 		if (selectAction)
 		{
@@ -1007,4 +1038,3 @@ dbSqlBase::stringReference(int type)
 }
 
 //-------------------------------------------------------------------
-

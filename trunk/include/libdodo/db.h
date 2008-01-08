@@ -85,13 +85,13 @@ namespace dodo
 								   int &operType,
 								   void *executor);
 
-		dodoString &pre_where;                          ///< where statement of the request
-		dodoStringArray &pre_fieldsNames;               ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result)
-		dodoArray<dodoStringArray> &pre_fieldsVal;      ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-		dodoString &pre_table;                          ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-		dodoString &pre_tableTo;                        ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-		dodoString &pre_order;                          ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-		dodoString &pre_having;                         ///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods])
+		dodoString &pre_where;                          ///< where statement of the request(can be used as `as` for callFunction)
+		dodoStringArray &pre_fieldsNames;               ///< names of fields of request(can be used for `insert_select` as fields' names where to store result; as arguments for callFunction)
+		dodoArray<dodoStringArray> &pre_fieldsVal;      ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested(can be used for `insert_select` as fields' names from data requested)
+		dodoString &pre_table;                          ///< table for request;(can be used for `insert_select` as table from what to take request); as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods; as name of function for callFunction)
+		dodoString &pre_tableTo;                        ///< string of table where to store request(insert_select)(can be used as 'field' for rename(delete)Field method)
+		dodoString &pre_order;                          ///< order statement(can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
+		dodoString &pre_having;                         ///< having statement(can be used as ['charset' for db creation method] [table/field/database for rename methods])
 		dodoString &pre_group;                          ///< group statement
 		dodoString &pre_limNumber;                      ///< limit of result
 		dodoString &pre_limOffset;                      ///< offset of requested result
@@ -179,6 +179,13 @@ namespace dodo
 			 * @param info is info for database
 			 */
 			virtual void setDbInfo(const __dbInfo &dbInfo) = 0;
+
+			/**
+			 * @param name is function name
+			 * @param arguments is array of arguments
+			 * @param as is name of the result
+			 */
+			virtual void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__) = 0;
 
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
@@ -371,13 +378,13 @@ namespace dodo
 			 * collected data
 			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
 			 */
-			dodoString pre_where;                       ///< where statement of the request
-			dodoStringArray pre_fieldsNames;            ///< names of fields of request;(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex )
+			dodoString pre_where;                       ///< where statement of the request(can be used as `as` for callFunction)
+			dodoStringArray pre_fieldsNames;            ///< names of fields of request(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex; as arguments for callFunction)
 			dodoArray<dodoStringArray> pre_fieldsVal;   ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			dodoString pre_table;                       ///< table for request;(can be used for `insert_select` as table from what to take request); also can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods)
-			dodoString pre_tableTo;                     ///< string of table where to store request(insert_select)(also can be used as 'field' for rename(delete)Field method)
-			dodoString pre_order;                       ///< order statement(also can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-			dodoString pre_having;                      ///< having statement(also can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
+			dodoString pre_table;                       ///< table for request;(can be used for `insert_select` as table from what to take request); can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods; as name for callFunction)
+			dodoString pre_tableTo;                     ///< string of table where to store request(insert_select)(can be used as 'field' for rename(delete)Field method)
+			dodoString pre_order;                       ///< order statement(can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
+			dodoString pre_having;                      ///< having statement(can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
 			dodoString pre_group;                       ///< group statement
 			dodoString pre_limNumber;                   ///< limit of result
 			dodoString pre_limOffset;                   ///< offset of requested result

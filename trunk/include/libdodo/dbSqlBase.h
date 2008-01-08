@@ -95,6 +95,11 @@ namespace dodo
 		protected:
 
 			/**
+			 * constructs from collected data to SELECT `function`(...) sql statement
+			 */
+			virtual void callFunctionCollect();
+
+			/**
 			 * constructs from collected data to SELECT sql statement
 			 */
 			virtual void selectCollect();
@@ -248,7 +253,7 @@ namespace dodo
 			static const __statements sqlAddUpArr[2];   ///< `update` additional statement
 			static const __statements sqlAddInsArr[2];  ///< `insert` additional statement
 
-			static const __statements sqlAddArr[7];     ///< additional sql statements for queries(where, limit, ...)
+			static const __statements sqlAddArr[8];     ///< additional sql statements for queries(where, limit, ...)
 
 			static const __statements sqlQStArr[5];     ///< sql statements for complex queries(union, ...)
 
