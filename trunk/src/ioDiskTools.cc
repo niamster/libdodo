@@ -910,15 +910,100 @@ ioDiskTools::exists(const dodoString &path)
 //-------------------------------------------------------------------
 
 void
-ioDiskTools::append(const dodoString &path,
+ioDiskTools::appendToFile(const dodoString &path,
 					const dodoString &content)
 {
-	FILE *file = fopen(path.c_str(), "a+");
+	_writeToFile(path, content, "a+");
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::appendToFile(const dodoString &path,
+					const dodoStringArray &content)
+{
+	_writeToFile(path, content, "a+");
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::writeToFile(const dodoString &path,
+					const dodoString &content)
+{
+	_writeToFile(path, content, "w+");
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::writeToFile(const dodoString &path,
+					const dodoStringArray &content)
+{
+	_writeToFile(path, content, "w+");
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::_writeToFile(const dodoString &path,
+					const dodoString &content,
+					const char *mode)
+{
+	FILE *file = fopen(path.c_str(), mode);
 	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (fwrite(content.c_str(), content.size(), 1, file) == 0)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::_writeToFile(const dodoString &path,
+					const dodoStringArray &content,
+					const char *mode)
+{
+	FILE *file = fopen(path.c_str(), mode);
+	if (file == NULL)
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+
+	dodoStringArray::const_iterator i=content.begin(), j=content.end();
+	for (;i!=j;++i)
+	{
+        if (fputs(i->c_str(), file) < 0)
+                switch (errno)
+                {   
+                        case EFBIG:
+                        case EIO:
+                        case EINTR:
+                        case EBADF:
+                        case EOVERFLOW:
+                        case ENOSPC:
+                        case EPIPE:
+                        case ENOMEM:
+                        case ENXIO:
+
+                                throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                }   
+
+        if (fputc('\n', file) < 0)
+                switch (errno)
+                {   
+                        case EFBIG:
+                        case EIO:
+                        case EINTR:
+                        case EBADF:
+                        case EOVERFLOW:
+                        case ENOSPC:
+                        case EPIPE:
+                        case ENOMEM:
+                        case ENXIO:
+
+                                throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+                }
+	}
 }
 
 //-------------------------------------------------------------------
