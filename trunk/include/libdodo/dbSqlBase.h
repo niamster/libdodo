@@ -151,9 +151,8 @@ namespace dodo
 
 			/**
 			 * constructs from collected data to RENAME sql statement
-			 * FIXME: implement it!
 			 */
-			virtual void renameBaseCollect();
+			virtual void renameDbCollect();
 
 			/**
 			 * constructs from collected data to RENAME sql statement

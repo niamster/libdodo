@@ -539,9 +539,9 @@ dbSqlBase::delFieldCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::renameBaseCollect()
+dbSqlBase::renameDbCollect()
 {
-	request = __dodostring__; ///< FIXME: make SQL statement
+	request = "rename database " + pre_order + " to " + pre_having;
 }
 
 //-------------------------------------------------------------------
@@ -691,7 +691,7 @@ dbSqlBase::queryCollect()
 
 		case DBBASE_REQUEST_RENAME_DB:
 
-			renameBaseCollect();
+			renameDbCollect();
 			additionalActions = false;
 
 			break;
