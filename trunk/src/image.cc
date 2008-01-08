@@ -344,8 +344,8 @@ image::getImageSize()
 	
 	__imageSize info;
 	
-	info.height = im->columns;
-	info.width = im->rows;
+	info.height = im->rows;
+	info.width = im->columns;
 	
 	return info;
 }
