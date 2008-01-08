@@ -300,6 +300,9 @@ ioSocketExchange::_read(char * const data)
 				break;
 			}
 
+			if (n == 0)
+				break;
+
 			batch += n;
 			sent_received += n;
 		}
@@ -326,6 +329,9 @@ ioSocketExchange::_read(char * const data)
 
 				break;
 			}
+
+			if (n == 0)
+				break;
 
 			batch += n;
 			sent_received += n;
