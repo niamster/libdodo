@@ -25,9 +25,7 @@
 
 using namespace dodo;
 
-__cgiFile::__cgiFile() : fp(NULL),
-						 buf(NULL),
-						 size(0)
+__cgiFile::__cgiFile() : size(0)
 {
 }
 
@@ -283,12 +281,7 @@ cgi::cleanTmp()
 	std::map<dodoString, __cgiFile>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
 	{
-		if (i->second.fp != NULL)
-			fclose(i->second.fp);
-
-		if (postFilesInMem)
-			free(i->second.buf);
-		else
+		if (!postFilesInMem)
 			unlink(i->second.tmp_name.c_str());
 	}
 }
@@ -539,6 +532,7 @@ cgi::makePost()
 		char *ptr;
 		int fd;
 		unsigned short pathLength = postFilesTmpDir.size() + 18;
+		FILE *fp;
 
 		for (; i != j; ++i)
 			if (i->find("filename") != dodoString::npos)
@@ -566,16 +560,17 @@ cgi::makePost()
 				file.type = i->substr(temp0, temp1 - temp0);
 				temp1 += 3;
 
-				#ifndef __FreeBSD__
-
-				if (!postFilesInMem)
-
-				#endif
+				file.size = i->size() - temp1 - 2;
+				
+				if (postFilesInMem)
+					file.buf.assign(i->c_str() + temp1, file.size);
+				else
 				{
+					file.error = CGI_POSTFILEERR_NONE;
+
 					ptr = new char[pathLength];
 					strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
 					fd = mkstemp(ptr);
-
 					if (fd == -1)
 					{
 						delete [] ptr;
@@ -589,52 +584,42 @@ cgi::makePost()
 					file.tmp_name = ptr;
 
 					delete [] ptr;
-				}
-
-				file.size = i->size() - temp1 - 2;
-
-				file.error = CGI_POSTFILEERR_NONE;
-
-				#ifndef __FreeBSD__
-
-				if (postFilesInMem)
-				{
-					file.buf = malloc(file.size);
-					file.fp = fmemopen(file.buf, file.size, "w+");
-				}
-				else
-
-				#endif
-				{
-					file.fp = fdopen(fd, "w+");
-				}
-				if (file.fp == NULL)
-					switch (errno)
+					
+					fp = fdopen(fd, "w+");
+					if (fp == NULL)
 					{
-						case EACCES:
-						case EISDIR:
+						switch (errno)
+						{
+							case EACCES:
+							case EISDIR:
 
-							file.error = CGI_POSTFILEERR_ACCESS_DENY;
+								file.error = CGI_POSTFILEERR_ACCESS_DENY;
 
-							break;
+								break;
 
-						case ENAMETOOLONG:
-						case ENOTDIR:
+							case ENAMETOOLONG:
+							case ENOTDIR:
 
-							file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
+								file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
 
-							break;
+								break;
 
-						case ENOMEM:
-
-							file.error = CGI_POSTFILEERR_NO_SPACE;
-
-							break;
+							case ENOMEM:
+		
+								file.error = CGI_POSTFILEERR_NO_SPACE;
+		
+								break;
+						}
 					}
-				fwrite(i->c_str() + temp1, file.size, 1, file.fp);
-				if (errno == ENOMEM)
-					file.error = CGI_POSTFILEERR_NO_SPACE;
-
+					else
+					{
+						fwrite(i->c_str() + temp1, file.size, 1, fp);
+						if (errno == ENOMEM)
+							file.error = CGI_POSTFILEERR_NO_SPACE;
+						fclose(fp);
+					}
+				}
+				
 				FILES.insert(post_name, file);
 			}
 			else

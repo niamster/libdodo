@@ -114,11 +114,10 @@ namespace dodo
 		__cgiFile();
 		dodoString name;        ///< real name of the file
 		dodoString type;        ///< MIME type
-		FILE *fp;               ///< pointer to opened file[any case - in memory or on disk]
 		dodoString tmp_name;    ///< path where it was temporary saved[empty, if file stored in memory]
 		unsigned long size;     ///< size of the file
 		int error;              ///< indicates if error occured
-		void *buf;              ///< contains file data[if file stored in memory]
+		dodoString buf;              ///< contains file data[if file stored in memory]
 	};
 
 	/**
