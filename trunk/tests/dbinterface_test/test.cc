@@ -3,6 +3,7 @@
 #include <libdodo/dbPostgresql.h>
 #include <libdodo/dbMysql.h>
 #include <libdodo/dbSqlite.h>
+#include <libdodo/dbSqlBase.h>
 #include <libdodo/ioDiskTools.h>
 
 #include <iostream>

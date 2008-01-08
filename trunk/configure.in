@@ -10,8 +10,6 @@ AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 
-AC_SYS_LARGEFILE
-
 echo "" > include/libdodo/directives.runtime.h
 
 CPPFLAGS="$CPPFLAGS -I/usr/local/include"

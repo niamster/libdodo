@@ -20,7 +20,9 @@ int main(int argc, char **argv)
 	try
 	{	
 		cout << "тест" << endl;
+		#ifdef ICONV_EXT
 		cout << tools::codesetConversion(tools::codesetConversion("тест", "utf-8", "cp1251"), "cp1251", "utf-8") << endl;
+		#endif
 		
 		cout << "MD5 of \"\"" << endl;
 		dodoString md5 = tools::MD5("");
@@ -30,13 +32,19 @@ int main(int argc, char **argv)
 		cout << endl;
 		
 		baseEx::setErrorHandler(ERRMODULE_IODISK,&baseHandler,NULL);
+		#ifdef DL_EXT
 		if(!baseEx::setErrorHandler(ERRMODULE_IODISK,"./module",NULL))
 			cout << "WTF";
+		#endif
 		
+		#ifdef ICONV_EXT
 		tools::codesetConversion(ioDiskTools::getFileContents("test.cc"),"cp1251","utf-8");
-		
+		#endif
+
+		#ifdef ZLIB_EXT
 		cout << tools::zCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;
 		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContents("test.cc")));
+		#endif
 		
 		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
 		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
@@ -60,7 +68,9 @@ int main(int argc, char **argv)
 		cout << tools::parseURL(tt).request << endl;
 
 		cout << ioDiskTools::getFileContents("Makefile").size() << endl;
+		#ifdef BZ2_EXT
 		cout << tools::bzCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;
+		#endif
 			
 		dodoString t = "abcddF";
 		stringTools::replace("cd","WW",t);

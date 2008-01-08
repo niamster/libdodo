@@ -1,10 +1,13 @@
 #include <libdodo/xexec.h>
 #include <libdodo/ioSTD.h>
+#include <libdodo/directives.h>
 
 #include <string.h>
 #include <iostream>
 
 using namespace dodo;
+
+#ifdef DL_EXT
 
 extern "C"
 {
@@ -65,3 +68,5 @@ extern "C"
 	}
 
 };
+
+#endif

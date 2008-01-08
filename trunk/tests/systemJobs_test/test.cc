@@ -48,8 +48,10 @@ int main(int argc, char **argv)
 		{
 			if (i%2 == 0)	
 				pr[i] = new systemProcesses;
+			#ifdef PTHREAD_EXT
 			else
 				pr[i] = new systemThreads;
+			#endif
 
 			ids[i] = stringTools::lToString(i);
 			pos[i] = pr[i]->add(process,(void *)ids[i].c_str());

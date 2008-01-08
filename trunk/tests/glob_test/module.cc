@@ -5,9 +5,9 @@
 
 using namespace dodo;
 
+#ifdef DL_EXT
 extern "C"
 {
-
 	void
 	baseHandler(errorModuleEnum module, 
 				baseEx *ex, 
@@ -36,3 +36,4 @@ extern "C"
 	}
 
 };
+#endif

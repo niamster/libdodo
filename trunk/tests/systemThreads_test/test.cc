@@ -47,7 +47,8 @@ int main(int argc, char **argv)
 		int *shared = new int(1);
 		
 		sh.set((void *)shared);
-		
+
+		#ifdef PTHREAD_EXT
 		systemThreads th;
 
 		const int amount = 10;
@@ -68,6 +69,7 @@ int main(int argc, char **argv)
 		cout.flush();
 		
 		th.wait();
+		#endif
 		
 		delete shared;
 	}

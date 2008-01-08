@@ -31,6 +31,7 @@ int main(int argc, char **argv)
 {	
 	try
 	{
+		#ifdef IMAGEMAGICK_EXT
 		image im;
 		im.addPreExec(hook, NULL);
 		im.addPostExec(hook, NULL);///< revert
@@ -55,6 +56,7 @@ int main(int argc, char **argv)
 		im.destroyImageData(&img);
 		
 		cout << size << endl;
+		#endif
 	}
 	catch(baseEx ex)
 	{
