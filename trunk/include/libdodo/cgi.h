@@ -302,6 +302,12 @@ namespace dodo
 			virtual void print(const dodoString &buf);
 
 			/**
+			 * sends buf to output - null-terminated string
+			 * @param buf describes what to send to user
+			 */
+			virtual void printStream(const dodoString &buf);
+
+			/**
 			 * flushes output
 			 */
 			virtual void flush();

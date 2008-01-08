@@ -68,6 +68,12 @@ namespace dodo
 			virtual void print(const dodoString &buf);
 
 			/**
+			 * sends buf to specific output[fast-cgi safe] - null-terminated string
+			 * @param buf describes what to send to user
+			 */
+			virtual void printStream(const dodoString &buf);
+
+			/**
 			 * reads to buf from specific input[fast-cgi safe]
 			 * @param buf describes what to receive from user
 			 */

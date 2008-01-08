@@ -20,13 +20,13 @@ using namespace std;
 		cgit.printHeaders();
 		 
 		
-		fcgi->print("!" + cgit.METHOD_GET["a"] + "!<br>");
-		fcgi->print("!" + cgit.METHOD_POST["a"] + "!<br>");
-		fcgi->print("!" + cgit.METHOD_POST["e"] + "!<br>");
-		fcgi->print("!" + cgit.ENVIRONMENT["QUERY_STRING"] + "<br>");
-		fcgi->print("!" + cgit.COOKIES["test"] + "<br>");
+		fcgi->printStream("!" + cgit.METHOD_GET["a"] + "!<br>");
+		fcgi->printStream("!" + cgit.METHOD_POST["a"] + "!<br>");
+		fcgi->printStream("!" + cgit.METHOD_POST["e"] + "!<br>");
+		fcgi->printStream("!" + cgit.ENVIRONMENT["QUERY_STRING"] + "<br>");
+		fcgi->printStream("!" + cgit.COOKIES["test"] + "<br>");
 		
-		fcgi->print("!!!\n\n\n");
+		fcgi->printStream("!!!\n\n\n");
 		
 		try
 		{
@@ -58,10 +58,10 @@ using namespace std;
 		}
 		catch(baseEx ex)
 		{
-			fcgi->print(ex.baseErrstr + " " + stringTools::lToString(ex.line));
+			fcgi->printStream(ex.baseErrstr + " " + stringTools::lToString(ex.line));
 		}	
 		
-		fcgi->print("\n\n\n!!!");
+		fcgi->printStream("\n\n\n!!!");
 	}
 
 #endif

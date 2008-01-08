@@ -38,11 +38,11 @@ int main(int argc, char **argv)
 		io.inSize = io.outSize = 13;
 		io.over = true;
 		
-		io.writeStreamString("!12345890#!!");
-		io.writeStreamString("!12345890-!!");
-		io.writeStreamString("!12345890@!!");
-		io.writeStreamString("!12345890$!!");
-                io.writeString("!12345890$!~\n", 1);
+		io.writeStreamString("!12345890#!!@");
+		io.writeStreamString("!12345890-!!@");
+		io.writeStreamString("!12345890@!!@");
+		io.writeStreamString("!12345890$!!@");
+                io.writeString("!12345890$!~@", 1);
 		
 		dodoString str;
 	

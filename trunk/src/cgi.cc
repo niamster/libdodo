@@ -241,6 +241,26 @@ cgi::flush()
 //-------------------------------------------------------------------
 
 void
+cgi::printStream(const dodoString &buf)
+{	
+	if (firstPrint)
+	{
+		firstPrint = false;
+		
+		printHeaders();
+	}
+	
+	#ifdef FCGI_EXT
+	if (cgiFastSet)
+		cf->printStream(buf);
+	else
+	#endif
+		fstd->writeStreamString(buf);
+}
+
+//-------------------------------------------------------------------
+
+void
 cgi::print(const dodoString &buf)
 {	
 	if (firstPrint)
@@ -257,7 +277,7 @@ cgi::print(const dodoString &buf)
 	#endif
 	{
 		fstd->outSize = buf.size();
-		fstd->writeStreamString(buf);
+		fstd->writeString(buf);
 	}
 }
 
@@ -387,7 +407,7 @@ cgi::printHeaders() const
 	for (; i != j; ++i)
 		#ifdef FCGI_EXT
 		if (cgiFastSet)
-			cf->print(i->first + ": " + i->second + "\r\n");
+			cf->printStream(i->first + ": " + i->second + "\r\n");
 		else
 		#endif
 			fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
@@ -400,17 +420,17 @@ cgi::printHeaders() const
 			#ifdef FCGI_EXT
 			if (cgiFastSet)
 			{
-				cf->print("Set-Cookie: ");
-				cf->print(i->name + "=" + i->value + "; ");
+				cf->printStream("Set-Cookie: ");
+				cf->printStream(i->name + "=" + i->value + "; ");
 				if (i->path.size() > 0)
-					cf->print("path=" + i->path + "; ");
+					cf->printStream("path=" + i->path + "; ");
 				if (i->exDate.size() > 0)
-					cf->print("expires=" + i->exDate + "; ");
+					cf->printStream("expires=" + i->exDate + "; ");
 				if (i->domain.size() > 0)
-					cf->print("domain=" + i->domain + "; ");
+					cf->printStream("domain=" + i->domain + "; ");
 				if (i->secure)
-					cf->print("secure");
-				cf->print("\r\n");
+					cf->printStream("secure");
+				cf->printStream("\r\n");
 			}
 			else
 			#endif
@@ -433,7 +453,7 @@ cgi::printHeaders() const
 	#ifdef FCGI_EXT
 	if (cgiFastSet)
 	{
-		cf->print("\r\n");
+		cf->printStream("\r\n");
 		cf->flush();
 	}
 	else

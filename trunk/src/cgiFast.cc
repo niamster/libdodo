@@ -74,6 +74,15 @@ cgiFastIO::flush()
 //-------------------------------------------------------------------
 
 void
+cgiFastIO::printStream(const dodoString &buf)
+{
+	if (FCGX_PutStr(buf.c_str(), buf.size(), request->out) == -1)
+		throw baseEx(ERRMODULE_CGIFAST, CGIFASTIOEX_PRINT, ERR_LIBDODO, CGIFASTIOEX_FAILEDTOPRINTSTRING, CGIFASTIOEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void
 cgiFastIO::print(const dodoString &buf)
 {
 	if (FCGX_PutStr(buf.c_str(), buf.size(), request->out) == -1)
