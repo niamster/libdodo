@@ -330,8 +330,26 @@ image::scale(unsigned long width,
 
 	if (im != NULL)
 		DestroyImage(im);
+	
 	im = image;
 }
+
+//-------------------------------------------------------------------
+
+__imageSize 
+image::getImageSize()
+{
+	if (im == NULL)
+		return __imageSize();
+	
+	__imageSize info;
+	
+	info.height = im->columns;
+	info.width = im->rows;
+	
+	return info;
+}
+
 //-------------------------------------------------------------------
 
 void
@@ -344,6 +362,7 @@ image::rotate(double angle)
 
 	if (im != NULL)
 		DestroyImage(im);
+	
 	im = image;
 }
 

@@ -143,6 +143,15 @@ namespace dodo
 	};
 
 	/**
+	 * @struct __imageSize defines image width/height
+	 */
+	struct __imageSize
+	{
+		unsigned long width;    ///< width of the image
+		unsigned long height;   ///< height of the image
+	};
+
+	/**
 	 * @class image for simple image manipulations
 	 */
 	class image : public xexec
@@ -198,6 +207,11 @@ namespace dodo
 			 * @param size describes size of data
 			 */
 			virtual void write(unsigned char **data, unsigned int &size);
+			
+			/**
+			 * @return info about image
+			 */
+			virtual __imageSize getImageSize();
 
 			/**
 			 * sets image output encoder
