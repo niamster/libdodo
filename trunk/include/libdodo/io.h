@@ -69,7 +69,7 @@ namespace dodo
 			/**
 			 * destructor
 			 */
-			virtual ~io();
+			virtual ~io() = 0;
 
 			unsigned long inSize;   ///< size of data block;
 			unsigned long outSize;  ///< size of data block;

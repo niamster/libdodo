@@ -171,6 +171,8 @@ cgi::cgi(cgiFastIO    *a_cf,
 	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
 }
 
+//-------------------------------------------------------------------
+
 cgi::cgi(cgiFastIO    *a_cf,
 		 dodoStringMap &headers,
 		 bool silent,
@@ -217,8 +219,10 @@ cgi::~cgi()
 	if (autocleanFiles)
 		cleanTmp();
 
+        #ifdef FCGI_EXT
 	if (!cgiFastSet)
 		delete fstd;
+        #endif
 }
 
 //-------------------------------------------------------------------
@@ -253,7 +257,7 @@ cgi::print(const dodoString &buf)
 	#endif
 	{
 		fstd->outSize = buf.size();
-		fstd->writeString(buf);
+		fstd->writeStreamString(buf);
 	}
 }
 
@@ -569,7 +573,7 @@ cgi::makePost()
 					file.error = CGI_POSTFILEERR_NONE;
 
 					ptr = new char[pathLength];
-					strcpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str());
+					strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
 					fd = mkstemp(ptr);
 					if (fd == -1)
 					{

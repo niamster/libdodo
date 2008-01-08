@@ -514,8 +514,6 @@ dbPostgresql::addExec(const dodoString &module,
 
 		#endif
 
-//-------------------------------------------------------------------
-
 	#endif
 
 //-------------------------------------------------------------------
@@ -583,6 +581,7 @@ dbPostgresql::getCharset() const
 	return PQclientEncoding(conn);
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
-#endif

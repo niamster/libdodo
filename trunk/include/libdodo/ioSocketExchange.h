@@ -50,10 +50,8 @@ namespace dodo
 	 */
 	enum ioSocketExchangeOperationTypeEnum
 	{
-		IOSOCKETEXCHANGE_OPERATION_RECEIVE,
-		IOSOCKETEXCHANGE_OPERATION_SEND,
-		IOSOCKETEXCHANGE_OPERATION_RECEIVESTREAM,
-		IOSOCKETEXCHANGE_OPERATION_SENDSTREAM,
+		IOSOCKETEXCHANGE_OPERATION_READ,
+		IOSOCKETEXCHANGE_OPERATION_WRITE,
 		IOSOCKETEXCHANGE_OPERATION_CLOSE,
 	};
 
@@ -244,8 +242,6 @@ namespace dodo
 			 * @param data is data that would be sent
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * max data size is outSocketBuffer
-			 * @note - appends '\n'
 			 * signal safe
 			 */
 			virtual void writeStream(const char * const data);
@@ -255,8 +251,6 @@ namespace dodo
 			 * @param data is string that would be sent
 			 * @note sends no longer than outSize
 			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * max data size is outSocketBuffer
-			 * @note - appends '\n'
 			 * signal safe
 			 */
 			virtual void writeStreamString(const dodoString &data);
@@ -266,7 +260,7 @@ namespace dodo
 			 * @param data is data that would be received
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * max data size is inSocketBuffer
+			 * max data size is inSize
 			 * signal safe
 			 */
 			virtual void readStream(char * const data);
@@ -276,7 +270,7 @@ namespace dodo
 			 * @param data is string that would be received
 			 * @note receives no longer than inSize
 			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * max data size is inSocketBuffer
+			 * max data size is inSize
 			 * signal safe
 			 */
 			virtual void readStreamString(dodoString &data);

@@ -810,6 +810,7 @@ xml::createNode(const __xmlNode &node) const
 	return xml;
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
-#endif

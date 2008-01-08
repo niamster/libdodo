@@ -111,14 +111,14 @@
 /**
  * default values of socket buffer for io operations(ioSocket)
  */
-#define IOSOCKETOPTIONS_SOCKET_INSIZE            10240
-#define IOSOCKETOPTIONS_SOCKET_OUTSIZE           10240
+#define IOSOCKETOPTIONS_SOCKET_INSIZE            102400
+#define IOSOCKETOPTIONS_SOCKET_OUTSIZE           102400
 
 /**
  * default values of stdin/out buffer for io operations(ioSTD)
  */
-#define STD_INSIZE               1024000
-#define STD_OUTSIZE              1024000
+#define STD_INSIZE               102400
+#define STD_OUTSIZE              102400
 
 /**
  * amount of seconds for linger

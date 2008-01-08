@@ -46,7 +46,7 @@ ioNBA::~ioNBA()
 int
 ioNBA::addFlush(const io &fl)
 {
-	guard th(this);
+	guard pg(this);
 
 	__inOutDescriptors tempD;
 
@@ -74,7 +74,7 @@ dodoArray<bool>
 ioNBA::isReadable(const dodoArray<int> &pos,
 				  int timeout) const
 {
-	guard th(this);
+	guard pg(this);
 
 	tempRB.clear();
 
@@ -150,7 +150,7 @@ dodoArray<bool>
 ioNBA::isWritable(const dodoArray<int> &pos,
 				  int timeout) const
 {
-	guard th(this);
+	guard pg(this);
 
 	tempRB.clear();
 
@@ -226,7 +226,7 @@ bool
 ioNBA::isReadable(int pos,
 				  int timeout) const
 {
-	guard th(this);
+	guard pg(this);
 
 	pollfd fd;
 
@@ -263,7 +263,7 @@ ioNBA::isReadable(int pos,
 void
 ioNBA::delFlush(int pos)
 {
-	guard th(this);
+	guard pg(this);
 
 	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
@@ -281,7 +281,7 @@ bool
 ioNBA::isWritable(int pos,
 				  int timeout) const
 {
-	guard th(this);
+	guard pg(this);
 
 	pollfd fd;
 
@@ -314,3 +314,4 @@ ioNBA::isWritable(int pos,
 }
 
 //-------------------------------------------------------------------
+

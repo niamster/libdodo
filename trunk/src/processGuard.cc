@@ -39,3 +39,6 @@ processGuardHolder::~processGuardHolder()
 {
 	delete mutex;
 }
+
+//-------------------------------------------------------------------
+

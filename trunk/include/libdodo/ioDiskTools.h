@@ -137,14 +137,7 @@ namespace dodo
 			 * @param path describes file's path
 			 * @param content describes content will be appended to file
 			 */
-			static void appendToFile(const dodoString &path, const dodoString &content);
-
-			/**
-			 * appends string to file
-			 * @param path describes file's path
-			 * @param content describes strings will be appended to file
-			 */
-			static void appendToFile(const dodoString &path, const dodoStringArray &content);
+			static void append(const dodoString &path, const dodoString &content);
 
 			/**
 			 * @return basename of node
@@ -171,20 +164,6 @@ namespace dodo
 			 * @param path is path to file
 			 */
 			static dodoStringArray getFileContentsArr(const dodoString &path);
-			
-			/**
-			 * writes string to file
-			 * @param path describes file's path
-			 * @param content describes content will be written to file
-			 */			
-			static void writeToFile(const dodoString &path, const dodoString &content);
-			
-			/**
-			 * writes string to file
-			 * @param path describes file's path
-			 * @param content describes strings will be written to file
-			 */			
-			static void writeToFile(const dodoString &path, const dodoStringArray &content);
 
 			/**
 			 * deletes file or notempty directory
@@ -347,22 +326,6 @@ namespace dodo
 			 * @param permission is user understandable permissions
 			 */
 			static int toRealPermission(int permission);
-			
-			/**
-			 * writes string to file
-			 * @param path describes file's path
-			 * @param content describes content will be written to file
-			 * @param come describes mode to open file
-			 */			
-			static void _writeToFile(const dodoString &path, const dodoString &content, const char *mode);
-			
-			/**
-			 * writes string to file
-			 * @param path describes file's path
-			 * @param content describes strings will be written to file
-			 * @param come describes mode to open file
-			 */			
-			static void _writeToFile(const dodoString &path, const dodoStringArray &content, const char *mode);
 	};
 
 };

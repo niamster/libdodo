@@ -28,7 +28,8 @@ using namespace dodo;
 ioSTD::ioSTD() : inSTDBuffer(STD_INSIZE),
 				 outSTDBuffer(STD_OUTSIZE),
 				 err(false),
-				 blocked(true)
+				 blocked(true),
+				desc(stdout)
 {
 }
 
@@ -49,7 +50,7 @@ ioSTD::~ioSTD()
 int
 ioSTD::getInDescriptor() const
 {
-	guard th(this);
+	guard pg(this);
 
 	return fileno(stdin);
 }
@@ -59,7 +60,7 @@ ioSTD::getInDescriptor() const
 int
 ioSTD::getOutDescriptor() const
 {
-	guard th(this);
+	guard pg(this);
 
 	if (err)
 		return fileno(stderr);
@@ -140,39 +141,56 @@ ioSTD::_read(char * const a_void)
 
 	unsigned long sent_received = 0;
 
+	unsigned long batch, n;
+
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		while (true)
+		batch = 0;
+		while (batch < inSTDBuffer)
 		{
-			if (fread(a_void + sent_received, inSTDBuffer, 1, stdin) == 0)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
+				if ((n = fread(a_void + sent_received, 1, inSTDBuffer, stdin)) == 0)
+				{
+					if (errno == EINTR)
+						continue;
+					
+					if (ferror(stdin) != 0)
+						throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 
-				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				break;
 			}
 
-			break;
+			batch += n;
+			sent_received += n;
 		}
-
-		sent_received += inSTDBuffer;
 	}
 
 	if (rest > 0)
 	{
-		while (true)
+		batch = 0;
+		while (batch < rest)
 		{
-			if (fread(a_void + sent_received, rest, 1, stdin) == 0)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
+				if ((n = fread(a_void + sent_received, 1, rest, stdin)) == 0)
+				{
+					if (errno == EINTR)
+						continue;
+					
+					if (ferror(stdin) != 0)
+						throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 
-				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				break;
 			}
 
-			break;
+			if (n == 0)
+				break;
+
+			batch += n;
+			sent_received += n;
 		}
 	}
 
@@ -188,7 +206,7 @@ ioSTD::_read(char * const a_void)
 void
 ioSTD::read(char * const a_void)
 {
-	guard th(this);
+	guard pg(this);
 
 	_read(a_void);
 }
@@ -198,7 +216,7 @@ ioSTD::read(char * const a_void)
 void
 ioSTD::readString(dodoString &a_str)
 {
-	guard th(this);
+	guard pg(this);
 
 	char *data = new char[inSize + 1];
 
@@ -231,7 +249,7 @@ ioSTD::writeString(const dodoString &a_buf)
 void
 ioSTD::write(const char *const aa_buf)
 {
-	guard th(this);
+	guard pg(this);
 
 	buffer.assign(aa_buf, outSize);
 
@@ -245,43 +263,59 @@ ioSTD::write(const char *const aa_buf)
 
 	unsigned long sent_received = 0;
 
-	desc = stdout;
-	if (err)
-		desc = stderr;
+	unsigned long batch, n;
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		while (true)
+		batch = 0;
+		while (batch < outSTDBuffer)
 		{
-			if (fwrite(buffer.c_str() + sent_received, outSTDBuffer, 1, desc) == 0)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
+				if ((n = fwrite(buffer.c_str() + sent_received, 1, outSTDBuffer, desc)) == 0)
+				{
+					if (errno == EINTR)
+						continue;
+					
+					if (ferror(desc) != 0)
+						throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
 
-				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				break;
 			}
 
-			break;
-		}
+			if (n == 0)
+				break;
 
-		sent_received += outSTDBuffer;
+			batch += n;
+			sent_received += n;
+		}
 	}
 
 	if (rest > 0)
 	{
-		while (true)
+		batch = 0;
+		while (batch < rest)
 		{
-			if (fwrite(buffer.c_str() + sent_received, rest, 1, desc) == 0)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
+				if ((n = fwrite(buffer.c_str() + sent_received, 1, rest, desc)) == 0)
+				{
+					if (errno == EINTR)
+						continue;
 
-				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					if (ferror(desc) != 0)
+						throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				}
+
+				break;
 			}
 
-			break;
+			if (n == 0)
+				break;
+
+			batch += n;
+			sent_received += n;
 		}
 	}
 
@@ -295,11 +329,7 @@ ioSTD::write(const char *const aa_buf)
 void
 ioSTD::flush()
 {
-	guard th(this);
-
-	desc = stdout;
-	if (err)
-		desc = stderr;
+	guard pg(this);
 
 	if (fflush(desc) != 0)
 		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -310,7 +340,7 @@ ioSTD::flush()
 __connInfo
 ioSTD::inputterInfo()
 {
-	guard th(this);
+	guard pg(this);
 
 	__connInfo info;
 
@@ -365,9 +395,30 @@ ioSTD::inputterInfo()
 bool
 ioSTD::isBlocked()
 {
-	guard th(this);
+	guard pg(this);
 
 	return blocked;
+}
+
+//-------------------------------------------------------------------
+
+void 
+ioSTD::redirectToSTDErr(bool toSTDErr)
+{
+	err = toSTDErr;
+	
+	if (err)
+		desc = stderr;
+	else
+		desc = stdout;
+}
+
+//-------------------------------------------------------------------
+
+bool 
+ioSTD::isRedirectedToSTDErr()
+{
+	return err;
 }
 
 //-------------------------------------------------------------------
@@ -375,7 +426,7 @@ ioSTD::isBlocked()
 void
 ioSTD::block(bool flag)
 {
-	guard th(this);
+	guard pg(this);
 
 	int block[3] = { O_NONBLOCK, O_NONBLOCK, O_NONBLOCK };
 
@@ -418,15 +469,15 @@ void
 ioSTD::_readStream(char * const a_void)
 {
 	#ifndef IOSTD_WO_XEXEC
-	operType = IOSTD_OPERATION_READSTREAM;
+	operType = IOSTD_OPERATION_READ;
 	performXExec(preExec);
 	#endif
 
-	memset(a_void, '\0', inSTDBuffer);
+	memset(a_void, '\0', inSize);
 
 	while (true)
 	{
-		if (fgets(a_void, inSTDBuffer + 1, stdin) == NULL)
+		if (fgets(a_void, inSize + 1, stdin) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -445,13 +496,12 @@ ioSTD::_readStream(char * const a_void)
 	#endif
 }
 
-
 //-------------------------------------------------------------------
 
 void
 ioSTD::readStream(char * const a_void)
 {
-	guard th(this);
+	guard pg(this);
 
 	_readStream(a_void);
 }
@@ -461,9 +511,9 @@ ioSTD::readStream(char * const a_void)
 void
 ioSTD::readStreamString(dodoString &a_str)
 {
-	guard th(this);
+	guard pg(this);
 
-	char *data = new char[inSTDBuffer + 1];
+	char *data = new char[inSize + 1];
 
 	try
 	{
@@ -494,85 +544,77 @@ ioSTD::writeStreamString(const dodoString &a_buf)
 void
 ioSTD::writeStream(const char *const aa_buf)
 {
-	guard th(this);
+	guard pg(this);
 
 	buffer.assign(aa_buf);
 
 	#ifndef IOSTD_WO_XEXEC
-	operType = IOSTD_OPERATION_WRITESTREAM;
+	operType = IOSTD_OPERATION_WRITE;
 	performXExec(preExec);
 	#endif
 
-	desc = stdout;
-	if (err)
-		desc = stderr;
-
-	buffer.append(1, '\n');
-
-	unsigned long outSize = strlen(aa_buf);
+	unsigned long outSize = buffer.size();
 
 	unsigned long iter = outSize / outSTDBuffer;
 	unsigned long rest = outSize % outSTDBuffer;
 
 	unsigned long sent_received = 0;
 
-	desc = stdout;
-	if (err)
-		desc = stderr;
-
-	char *buff = new char[outSTDBuffer + 1];
+	unsigned long batch, n;
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		strncpy(buff, buffer.c_str() + sent_received, outSTDBuffer);
-		buff[outSTDBuffer] = '\0';
-
-		while (true)
+		batch = 0;
+		while (batch < outSTDBuffer)
 		{
-			if (fputs(buff, desc) == 0)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
-
-				if (ferror(desc) != 0)
+				if ((n = fwrite(buffer.c_str() + sent_received, 1, outSTDBuffer, desc)) == 0)
 				{
-					delete [] buff;
-
-					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					if (errno == EINTR)
+						continue;
+					
+					if (ferror(desc) != 0)
+						throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
+
+				break;
 			}
 
-			break;
-		}
+			if (n == 0)
+				break;
 
-		sent_received += outSTDBuffer;
+			batch += n;
+			sent_received += n;
+		}
 	}
 
 	if (rest > 0)
 	{
-		strncpy(buff, buffer.c_str() + sent_received, rest);
-		buff[rest] = '\0';
-
-		while (true)
+		batch = 0;
+		while (batch < rest)
 		{
-			if (fputs(buff, desc) == 0)
+			while (true)
 			{
-				if (errno == EINTR)
-					continue;
-
-				if (ferror(desc) != 0)
+				if ((n = fwrite(buffer.c_str() + sent_received, 1, rest, desc)) == 0)
 				{
-					delete [] buff;
+					if (errno == EINTR)
+						continue;
 
-					throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					if (ferror(desc) != 0)
+						throw baseEx(ERRMODULE_IOSTD, IOSTDEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
+
+				break;
 			}
 
-			break;
+			if (n == 0)
+				break;
+
+			batch += n;
+			sent_received += n;
 		}
 	}
-
-	delete [] buff;
 
 	#ifndef IOSTD_WO_XEXEC
 	performXExec(postExec);
@@ -580,3 +622,4 @@ ioSTD::writeStream(const char *const aa_buf)
 }
 
 //-------------------------------------------------------------------
+

@@ -503,8 +503,6 @@ tools::implode(const dodoStringArray &fields,
 
 #ifdef ICONV_EXT
 
-//-------------------------------------------------------------------
-
 dodoString
 tools::codesetConversion(const dodoString &buffer,
 						 const dodoString &toCode,
@@ -548,8 +546,6 @@ tools::codesetConversion(const dodoString &buffer,
 //-------------------------------------------------------------------
 
 #ifdef ZLIB_EXT
-
-//-------------------------------------------------------------------
 
 dodoString
 tools::zCompress(const dodoString &buffer,
@@ -644,8 +640,6 @@ tools::zDecompress(const dodoString &buffer)
 
 	return strBuf;
 }
-
-//-------------------------------------------------------------------
 
 #endif
 
@@ -1247,8 +1241,6 @@ tools::parseURL(const dodoString &url)
 
 #ifdef BZIP2_EXT
 
-//-------------------------------------------------------------------
-
 dodoString
 tools::bzCompress(const dodoString &buffer,
 				  unsigned short level,
@@ -1323,8 +1315,6 @@ tools::bzDecompress(const dodoString &buffer)
 
 	return _buffer;
 }
-
-//-------------------------------------------------------------------
 
 #endif
 
@@ -2028,3 +2018,4 @@ tools::receiveShortDataDel(int socket,
 }
 
 //-------------------------------------------------------------------
+

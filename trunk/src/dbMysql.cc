@@ -175,6 +175,7 @@ dbMysql::connectSettings(unsigned long a_type,
 				  options.capath.size() == 0 ? NULL : options.capath.c_str(),
 				  options.cipher.size() == 0 ? NULL : options.cipher.c_str());
 }
+
 //-------------------------------------------------------------------
 
 void
@@ -543,8 +544,6 @@ dbMysql::addExec(const dodoString &module,
 
 		#endif
 
-//-------------------------------------------------------------------
-
 	#endif
 
 //-------------------------------------------------------------------
@@ -619,6 +618,7 @@ dbMysql::fetchAssoc() const
 	return rowsFields;
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
-#endif

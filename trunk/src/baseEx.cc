@@ -545,3 +545,6 @@ baseEx::getModuleInfo(const dodoString &module,
 }
 
 #endif
+
+//-------------------------------------------------------------------
+

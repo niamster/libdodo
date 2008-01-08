@@ -21,13 +21,15 @@ hook(void *base,
 		io->disableAll();
 		io->writeStreamString("\nhook\n");
 		io->enableAll();
+                
+                st->buffer.clear();
 		
 		char q[100];
 		++a;
 		sprintf(q,"%d\n",a);
 
 		io->outSize = strlen(q);
-		st->buffer.assign(q);
+		st->buffer.assign(q, io->outSize);
 	}
 }
 
@@ -36,12 +38,10 @@ int main(int argc, char **argv)
 
 	try
 	{
-		cout << ioSocketTools::getHostInfo("niam.mu").name << endl;
-		
 		ioSTD st;
 		cout << st.inputterInfo().host << endl;
 
-		int pos = st.addPreExec(&hook,NULL);
+		int pos = st.addPreExec(&hook, NULL);
 	
 		st.outSize = sizeof(int);
 	

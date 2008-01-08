@@ -148,7 +148,6 @@ ioSocketOptions::setInTimeout(unsigned long microseconds)
 		throw baseEx(ERRMODULE_IOSOCKETOPTIONS, IOSOCKETOPTIONSEX_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
-
 //-------------------------------------------------------------------
 
 unsigned long
@@ -340,3 +339,4 @@ ioSocketOptions::_close(int socket)
 }
 
 //-------------------------------------------------------------------
+

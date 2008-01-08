@@ -46,8 +46,6 @@ namespace dodo
 	{
 		IODISK_OPERATION_READ,
 		IODISK_OPERATION_WRITE,
-		IODISK_OPERATION_READSTREAM,
-		IODISK_OPERATION_WRITESTREAM,
 		IODISK_OPERATION_OPEN,
 		IODISK_OPERATION_CLOSE
 	};
@@ -220,16 +218,12 @@ namespace dodo
 			/**
 			 * write string - null-terminated string [append only]
 			 * @param data will be written to file
-			 * @note max size is outSize
-			 * @note - appends '\n'
 			 */
 			virtual void writeStreamString(const dodoString &data);
 
 			/**
 			 * write string - null-terminated string [append only]
 			 * @param data will be written to file
-			 * @note max size is outSize
-			 * @note - appends '\n'
 			 */
 			virtual void writeStream(const char * const data);
 

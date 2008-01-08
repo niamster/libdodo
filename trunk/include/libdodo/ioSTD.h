@@ -49,8 +49,6 @@ namespace dodo
 	{
 		IOSTD_OPERATION_READ,
 		IOSTD_OPERATION_WRITE,
-		IOSTD_OPERATION_READSTREAM,
-		IOSTD_OPERATION_WRITESTREAM,
 		IOSTD_OPERATION_OPEN,
 		IOSTD_OPERATION_CLOSE
 	};
@@ -172,30 +170,26 @@ namespace dodo
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read string
-			 * max size of data is inSTDBuffer
+			 * max size of data is inSize
 			 */
 			virtual void readStreamString(dodoString &data);
 
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
-			 * max size of data is inSTDBuffer
+			 * max size of data is inSize
 			 */
 			virtual void readStream(char * const data);
 
 			/**
 			 * write to stream - null-terminated string
 			 * @param data is string that will be written
-			 * @note max data size is outSTDBuffer
-			 * @note - appends '\n'
 			 */
 			virtual void writeStreamString(const dodoString &data);
 
 			/**
 			 * write to stream - null-terminated string
 			 * @param data is data that will be written
-			 * @note max data size is outSTDBuffer
-			 * @note - appends '\n'
 			 */
 			virtual void writeStream(const char * const data);
 
@@ -203,16 +197,6 @@ namespace dodo
 			 * flushes to output
 			 */
 			virtual void flush();
-
-			/**
-			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer
-			 * this parameters will help you;
-			 * by default, they are too large, so you don't have to change it
-			 */
-			int inSTDBuffer;    ///< input buffer
-			int outSTDBuffer;   ///< output buffer
-
-			bool err;           ///< redirect output to stderr; false by default
 
 			/**
 			 * @return true if stream is blocked
@@ -225,6 +209,26 @@ namespace dodo
 			 */
 			virtual void block(bool flag);
 
+			/**
+			 * redirects stream to stderr/stdout
+			 * @param toSTDErr indicates whether redirects stream to stderr or to stdout
+			 */
+			virtual void redirectToSTDErr(bool toSTDErr);
+
+			/**
+			 * redirects stream to stderr/stdout
+			 * @param toSTDErr indicates whether redirects stream to stderr or to stdout
+			 */
+			virtual bool isRedirectedToSTDErr();
+
+			/**
+			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer
+			 * this parameters will help you;
+			 * by default, they are too large, so you don't have to change it
+			 */
+			int inSTDBuffer;    ///< input buffer
+			int outSTDBuffer;   ///< output buffer
+			
 		protected:
 
 			/**
@@ -256,6 +260,8 @@ namespace dodo
 			FILE *desc;     ///< descriptor that is needed for redirection
 
 			bool blocked;   ///< indicates, whether blocked or not;
+
+			bool err;           ///< redirect output to stderr; false by default
 	};
 
 };
