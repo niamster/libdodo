@@ -19,25 +19,25 @@ int main(int argc, char **argv)
 	if (argc == 2)
 	{
 		if (strcasecmp(argv[1],"postgres") == 0)
-			#ifdef POSTGRESQL_EXT
+#ifdef POSTGRESQL_EXT
 				pp = new dbPostgresql;
-			#else
+#else
 				return 1;
-			#endif
+#endif
 			
 		else if (strcasecmp(argv[1],"mysql") == 0)
-			#ifdef MYSQL_EXT
+#ifdef MYSQL_EXT
 				pp = new dbMysql;
-			#else
+#else
 				return 1;
-			#endif
+#endif
 			
 		else if (strcasecmp(argv[1],"sqlite") == 0)
-			#ifdef SQLITE_EXT	
+#ifdef SQLITE_EXT	
 				pp = new dbSqlite;
-			#else
+#else
 				return 1;
-			#endif
+#endif
 						
 		else
 			return 1;
@@ -179,19 +179,19 @@ int main(int argc, char **argv)
 			blobs.push_back(dt);
 
 			if (strcasecmp(argv[1],"sqlite") == 0)
-				#ifdef SQLITE_EXT
+#ifdef SQLITE_EXT
 					((dbSqlite *)pp)->setBLOBValues(blobs);
-				#else
+#else
 					;
-				#endif
+#endif
 			else
 			{
 				if (strcasecmp(argv[1],"postgres") == 0)
-					#ifdef POSTGRESQL_EXT
+#ifdef POSTGRESQL_EXT
 						((dbPostgresql *)pp)->setBLOBValues(blobs);
-					#else
+#else
 						;
-					#endif
+#endif
 			}
                 	
 			((dbSqlBase *)pp)->preventFraming = true;

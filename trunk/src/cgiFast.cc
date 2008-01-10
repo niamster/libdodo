@@ -27,11 +27,11 @@
 
 using namespace dodo;
 
-	#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
 
-	#endif
+#endif
 
 //-------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ cgiFast::cgiFast(cgiFast &cf)
 
 //-------------------------------------------------------------------
 
-	#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 cgiFast::cgiFast(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
@@ -133,14 +133,14 @@ cgiFast::cgiFast(bool a_threading,
 
 //-------------------------------------------------------------------
 
-	#else
+#else
 
 cgiFast::cgiFast()
 {
 	FCGX_Init();
 }
 
-	#endif
+#endif
 
 //-------------------------------------------------------------------
 
@@ -159,7 +159,7 @@ cgiFast::setCGIFunction(cgiProc func)
 
 //-------------------------------------------------------------------
 
-	#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 void *
 cgiFast::stackThread(void *data)
@@ -188,7 +188,7 @@ cgiFast::stackThread(void *data)
 	return NULL;
 }
 
-	#endif
+#endif
 
 //-------------------------------------------------------------------
 
@@ -198,7 +198,7 @@ cgiFast::listen()
 	if (!isFastCGI())
 		throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_LISTEN, ERR_LIBDODO, CGIFASTEX_ISCGI, CGIFASTEX_ISCGI_STR, __LINE__, __FILE__);
 
-		#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 	if (threading)
 	{
 		pthread_t *id = new pthread_t[threadsNum];
@@ -215,7 +215,7 @@ cgiFast::listen()
 	}
 	else
 
-	#endif
+#endif
 	{
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);

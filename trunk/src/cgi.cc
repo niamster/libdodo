@@ -69,10 +69,10 @@ cgi::cgi(dodoStringMap &headers,
 										 autocleanFiles(a_autocleanFiles),
 										 firstPrint(true),
 										 headersPrinted(false)
-				#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 										 ,
 										 cgiFastSet(false)
-				#endif
+#endif
 
 {
 	fstd = new ioSTD;
@@ -107,10 +107,10 @@ cgi::cgi(bool silent,
 										 autocleanFiles(a_autocleanFiles),
 										 firstPrint(true),
 										 headersPrinted(false)
-				#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 										 ,
 										 cgiFastSet(false)
-				#endif
+#endif
 
 {
 	fstd = new ioSTD;
@@ -215,66 +215,66 @@ cgi::cgi(cgiFastIO    *a_cf,
 cgi::~cgi()
 {
 	printHeaders();
-	
+
 	if (autocleanFiles)
 		cleanTmp();
 
-        #ifdef FCGI_EXT
+#ifdef FCGI_EXT
 	if (!cgiFastSet)
 		delete fstd;
-        #endif
+#endif
 }
 
 //-------------------------------------------------------------------
 
 void
 cgi::flush()
-{	
-	#ifdef FCGI_EXT
+{
+#ifdef FCGI_EXT
 	if (cgiFastSet)
 		cf->flush();
 	else
-	#endif
-		fstd->flush();
+#endif
+	fstd->flush();
 }
 
 //-------------------------------------------------------------------
 
 void
 cgi::printStream(const dodoString &buf)
-{	
+{
 	if (firstPrint)
 	{
 		firstPrint = false;
-		
+
 		printHeaders();
 	}
-	
-	#ifdef FCGI_EXT
+
+#ifdef FCGI_EXT
 	if (cgiFastSet)
 		cf->printStream(buf);
 	else
-	#endif
-		fstd->writeStreamString(buf);
+#endif
+	fstd->writeStreamString(buf);
 }
 
 //-------------------------------------------------------------------
 
 void
 cgi::print(const dodoString &buf)
-{	
+{
 	if (firstPrint)
 	{
 		firstPrint = false;
-		
+
 		printHeaders();
 	}
-	
-	#ifdef FCGI_EXT
+
+#ifdef FCGI_EXT
 	if (cgiFastSet)
 		cf->print(buf);
 	else
-	#endif
+#endif
 	{
 		fstd->outSize = buf.size();
 		fstd->writeString(buf);
@@ -364,11 +364,11 @@ cgi::makeEnv()
 
 	for (int i = 0; i < HTTP_ENV_SIZE; ++i)
 	{
-		#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 		if (cgiFastSet)
 			env = cf->getenv(HTTP_ENV[i].str);
 		else
-		#endif
+#endif
 		env = getenv(HTTP_ENV[i].str);
 
 		ENVIRONMENT.insert(HTTP_ENV[i].str, env == NULL ? "NULL" : env);
@@ -400,24 +400,24 @@ cgi::printHeaders() const
 {
 	if (headersPrinted)
 		return;
-	
+
 	headersPrinted = true;
-	
+
 	dodoStringMap::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
-		#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 		if (cgiFastSet)
 			cf->printStream(i->first + ": " + i->second + "\r\n");
 		else
-		#endif
-			fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
+#endif
+		fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
 
 	if (cookiesSet.size() > 0)
 	{
 		dodoList<__cookies>::const_iterator i(cookiesSet.begin()), j(cookiesSet.end());
 		for (; i != j; ++i)
 		{
-			#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 			if (cgiFastSet)
 			{
 				cf->printStream("Set-Cookie: ");
@@ -433,7 +433,7 @@ cgi::printHeaders() const
 				cf->printStream("\r\n");
 			}
 			else
-			#endif
+#endif
 			{
 				fstd->writeStreamString("Set-Cookie: ");
 				fstd->writeStreamString(i->name + "=" + i->value + "; ");
@@ -450,14 +450,14 @@ cgi::printHeaders() const
 		}
 	}
 
-	#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 	if (cgiFastSet)
 	{
 		cf->printStream("\r\n");
 		cf->flush();
 	}
 	else
-	#endif
+#endif
 	{
 		fstd->writeStreamString("\r\n");
 		fstd->flush();
@@ -482,11 +482,11 @@ cgi::makeContent()
 	for (unsigned long i = 0; i < iter; ++i)
 	{
 
-		#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 		if (cgiFastSet)
 			cf->read(cont, CONTENT_BATCH_SIZE);
 		else
-		#endif
+#endif
 		if (fread(cont, CONTENT_BATCH_SIZE, 1, stdin) != CONTENT_BATCH_SIZE)
 			switch (errno)
 			{
@@ -585,7 +585,7 @@ cgi::makePost()
 				temp1 += 3;
 
 				file.size = i->size() - temp1 - 2;
-				
+
 				if (postFilesInMem)
 					file.buf.assign(i->c_str() + temp1, file.size);
 				else
@@ -608,7 +608,7 @@ cgi::makePost()
 					file.tmp_name = ptr;
 
 					delete [] ptr;
-					
+
 					fp = fdopen(fd, "w+");
 					if (fp == NULL)
 					{
@@ -629,9 +629,9 @@ cgi::makePost()
 								break;
 
 							case ENOMEM:
-		
+
 								file.error = CGI_POSTFILEERR_NO_SPACE;
-		
+
 								break;
 						}
 					}
@@ -643,7 +643,7 @@ cgi::makePost()
 						fclose(fp);
 					}
 				}
-				
+
 				FILES.insert(post_name, file);
 			}
 			else

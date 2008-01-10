@@ -15,7 +15,7 @@ hook(void *object, short int type, void *data)
 
 int main(int argc, char **argv)
 {
-	#ifdef POSTGRESQL_EXT
+#ifdef POSTGRESQL_EXT
 	
 		dbPostgresql pp;	
 		
@@ -107,11 +107,11 @@ int main(int argc, char **argv)
 			cout << (string)ex << ex.line;
 		}	
 	
-	#else
+#else
 	
 		cout << "No Postresql extension was compiled";
 		
-	#endif
+#endif
 	
 	return 0;
 }

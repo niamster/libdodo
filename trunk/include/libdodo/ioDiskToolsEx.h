@@ -45,10 +45,10 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define IODISKTOOLSEX_WRONGFILENAME_STR        "Probably wrong filename, type of file is wrong or `path` is empty!"
-		#define IODISKTOOLSEX_DESTINATIONEXISTS_STR    "Destination file/dir/etc. exists. Won't overvrite"
-		#define IODISKTOOLSEX_NOTADIR_STR              "There is not a dir with given path."
-		#define IODISKTOOLSEX_TOOLONGPATH_STR          "Too long path."
+#define IODISKTOOLSEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+#define IODISKTOOLSEX_DESTINATIONEXISTS_STR "Destination file/dir/etc. exists. Won't overvrite"
+#define IODISKTOOLSEX_NOTADIR_STR "There is not a dir with given path."
+#define IODISKTOOLSEX_TOOLONGPATH_STR "Too long path."
 
 	/**
 	 * ID of function where exception was thrown

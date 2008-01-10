@@ -26,11 +26,11 @@
 using namespace dodo;
 
 cgiProcessor::cgiProcessor(cgi &a_cgi) : _continueFlag(false),
-							   _breakDeepness(0),
-							   _loopDeepness(0),
-							   iterator(1),
-							   namespaceDeepness(1),
-							   CGI(a_cgi)
+										 _breakDeepness(0),
+										 _loopDeepness(0),
+										 iterator(1),
+										 namespaceDeepness(1),
+										 CGI(a_cgi)
 {
 	dodo[statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_VERSION]] = PACKAGE_STRING;
 	dodo[statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_ITERATOR]] = "1";

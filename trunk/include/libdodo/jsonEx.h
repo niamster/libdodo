@@ -50,12 +50,12 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-	#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-	#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
-	#define JSONNODEEX_MALFORMEDJSON_STR "Malformed json object."
-	#define JSONEX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-	#define JSONEX_MALFORMEDJSONNULL_STR "Malformed json object: null."
-	#define JSONEX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
+#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
+#define JSONNODEEX_MALFORMEDJSON_STR "Malformed json object."
+#define JSONEX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
+#define JSONEX_MALFORMEDJSONNULL_STR "Malformed json object: null."
+#define JSONEX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
 
 
 	/**

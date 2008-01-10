@@ -38,7 +38,7 @@ xexec::xexec() : safeHooks(true),
 
 xexec::~xexec()
 {
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	deinitXexecModule deinit;
 
@@ -69,7 +69,7 @@ xexec::~xexec()
 		dlclose(i->handle);
 	}
 
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -90,9 +90,9 @@ xexec::addXExec(dodoList<__execItem> &list,
 	temp.enabled = true;
 	temp.type = type;
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 	temp.handle = NULL;
-	#endif
+#endif
 
 	list.push_back(temp);
 
@@ -118,7 +118,7 @@ xexec::delXExec(dodoList<__execItem> &list,
 {
 	if (getXexec(list, position))
 	{
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (current->handle != NULL)
 		{
@@ -132,7 +132,7 @@ xexec::delXExec(dodoList<__execItem> &list,
 				throw baseEx(ERRMODULE_XEXEC, XEXECEX_DELXEXEC, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
-		#endif
+#endif
 
 		list.erase(current);
 	}
@@ -320,7 +320,7 @@ xexec::replaceXExec(dodoList<__execItem> &list,
 {
 	if (getXexec(list, position))
 	{
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (current->handle != NULL)
 		{
@@ -336,15 +336,15 @@ xexec::replaceXExec(dodoList<__execItem> &list,
 			current->handle = NULL;
 		}
 
-		#endif
+#endif
 
 		current->func = func;
 		current->data = data;
 		current->enabled = true;
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 		current->handle = NULL;
-		#endif
+#endif
 
 		return true;
 	}

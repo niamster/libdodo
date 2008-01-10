@@ -46,12 +46,12 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define CGIPROCESSOREX_WRONGIFSTATEMENT_STR         "Wrong `if` statement."
-		#define CGIPROCESSOREX_WRONGFORSTATEMENT_STR        "Wrong `for` statement."
-		#define CGIPROCESSOREX_WRONGVARSTATEMENT_STR        "In variable statement `}` wasn't closed."
-		#define CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR    "dodo.* is reserved variable name."
-		#define CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR     "Wrong `assing` statement."
-		#define CGIPROCESSOREX_WRONGBLOCK_STR               "Wrong block construction."
+#define CGIPROCESSOREX_WRONGIFSTATEMENT_STR "Wrong `if` statement."
+#define CGIPROCESSOREX_WRONGFORSTATEMENT_STR "Wrong `for` statement."
+#define CGIPROCESSOREX_WRONGVARSTATEMENT_STR "In variable statement `}` wasn't closed."
+#define CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name."
+#define CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR "Wrong `assing` statement."
+#define CGIPROCESSOREX_WRONGBLOCK_STR "Wrong block construction."
 
 	/**
 	 * ID of function where exception was thrown

@@ -50,9 +50,9 @@ systemProcesses::~systemProcesses()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 	deinitSystemProcessesModule deinit;
-	#endif
+#endif
 
 	for (; i != j; ++i)
 	{
@@ -79,7 +79,7 @@ systemProcesses::~systemProcesses()
 				waitpid(i->pid, NULL, 0);
 		}
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (i->handle != NULL)
 		{
@@ -90,7 +90,7 @@ systemProcesses::~systemProcesses()
 			dlclose(i->handle);
 		}
 
-		#endif
+#endif
 	}
 }
 
@@ -109,9 +109,9 @@ systemProcesses::add(processFunc func,
 	process.action = action;
 	process.executeLimit = 0;
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 	process.handle = NULL;
-	#endif
+#endif
 
 	processes.push_back(process);
 
@@ -152,9 +152,9 @@ systemProcesses::addNRun(processFunc func,
 	process.action = action;
 	process.executeLimit = 0;
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 	process.handle = NULL;
-	#endif
+#endif
 
 	pid_t pid = fork();
 
@@ -199,7 +199,7 @@ systemProcesses::del(unsigned long position,
 			}
 		}
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (current->handle != NULL)
 		{
@@ -213,7 +213,7 @@ systemProcesses::del(unsigned long position,
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
-		#endif
+#endif
 
 		processes.erase(current);
 	}
@@ -284,7 +284,7 @@ systemProcesses::replace(unsigned long position,
 		}
 
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (current->handle != NULL)
 		{
@@ -298,7 +298,7 @@ systemProcesses::replace(unsigned long position,
 				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
-		#endif
+#endif
 
 		current->data = data;
 		current->func = func;
@@ -491,7 +491,7 @@ systemProcesses::setExecutionLimit(unsigned long position,
 
 //-------------------------------------------------------------------
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 __systemProcessesMod
 systemProcesses::getModuleInfo(const dodoString &module,
@@ -548,7 +548,7 @@ systemProcesses::add(const dodoString &module,
 	return process.position;
 }
 
-	#endif
+#endif
 
 //-------------------------------------------------------------------
 

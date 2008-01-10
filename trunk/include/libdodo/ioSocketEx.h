@@ -51,13 +51,13 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define IOSOCKETEX_NOSOCKETCREATED_STR    "No socket was created =(."
-		#define IOSOCKETEX_CANNOTBIND_STR          "You cannot <bindNListen> with this constructor; choose another one!"
-		#define IOSOCKETEX_CANNOTCONNECT_STR       "You cannot <connect> with this constructor; choose another one!"
-		#define IOSOCKETEX_CANNOTACCEPT_STR        "You cannot <accept> with this constructor; choose another one!"
-		#define IOSOCKETEX_ACCEPTWOBIND_STR       "You try to accept without called bindNListen or bindNListen failed."
-		#define IOSOCKETEX_WRONGPARAMETER_STR     "Wrong paramather passed to function."
-		#define IOSOCKETEX_WRONGFILENAME_STR       "Probably wrong filename, type of file is wrong or `path` is empty!"
+#define IOSOCKETEX_NOSOCKETCREATED_STR "No socket was created =(."
+#define IOSOCKETEX_CANNOTBIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
+#define IOSOCKETEX_CANNOTCONNECT_STR "You cannot <connect> with this constructor; choose another one!"
+#define IOSOCKETEX_CANNOTACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
+#define IOSOCKETEX_ACCEPTWOBIND_STR "You try to accept without called bindNListen or bindNListen failed."
+#define IOSOCKETEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+#define IOSOCKETEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
 	 * ID of function where exception was thrown

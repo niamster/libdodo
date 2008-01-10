@@ -26,7 +26,7 @@
 
 #ifdef DL_EXT
 
-	#include <dlfcn.h>
+#include <dlfcn.h>
 
 #endif
 
@@ -77,12 +77,12 @@ namespace dodo
 		unsigned long executed;     ///< amount of times thread was executed
 		unsigned long executeLimit; ///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 		void *handle;    ///< handle to module
-		#endif
+#endif
 	};
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	/**
 	 * @struct __systemProcessesMod must be returned from initSystemProcessesModule in the module
@@ -106,7 +106,7 @@ namespace dodo
 	 */
 	typedef void (*deinitSystemProcessesModule)();
 
-	#endif
+#endif
 
 	class systemProcesses : public systemJobs
 	{
@@ -253,7 +253,7 @@ namespace dodo
 			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * adds function to became a process[not executing] from module
@@ -272,7 +272,7 @@ namespace dodo
 			 */
 			static __systemProcessesMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
-			#endif
+#endif
 
 		protected:
 

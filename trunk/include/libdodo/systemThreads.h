@@ -28,19 +28,19 @@
 
 #ifdef PTHREAD_EXT
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
-		#include <dlfcn.h>
+#include <dlfcn.h>
 
-	#endif
+#endif
 
-	#include <signal.h>
-	#include <pthread.h>
+#include <signal.h>
+#include <pthread.h>
 
-	#include <libdodo/systemJobs.h>
-	#include <libdodo/systemTools.h>
-	#include <libdodo/systemThreadsEx.h>
-	#include <libdodo/types.h>
+#include <libdodo/systemJobs.h>
+#include <libdodo/systemTools.h>
+#include <libdodo/systemThreadsEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
@@ -81,12 +81,12 @@ namespace dodo
 		unsigned long executed;         ///< amount of times thread was executed
 		unsigned long executeLimit;     ///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 		void *handle;        ///< handle to module
-			#endif
+#endif
 	};
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 	/**
 	 * @struct __systemThreadsMod must be returned from initSystemThreadsModule in the module
@@ -112,7 +112,7 @@ namespace dodo
 	 */
 	typedef void (*deinitSystemThreadsModule)();
 
-		#endif
+#endif
 
 	/**
 	 * @class systemThreads is to manage threads(based on POSIX threads)
@@ -267,7 +267,7 @@ namespace dodo
 			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
 
-				#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * adds function to became a thread[not executing] from module
@@ -297,7 +297,7 @@ namespace dodo
 			 */
 			static __systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
-				#endif
+#endif
 
 			/**
 			 * block or unblock signals to thread

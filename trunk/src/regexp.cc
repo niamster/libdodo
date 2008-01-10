@@ -36,21 +36,21 @@ regexp::regexp() : extended(true),
 				   greedy(true),
 				   multiline(false)
 {
-	#ifdef PCRE_EXT
-	#else
+#ifdef PCRE_EXT
+#else
 	notCompiled = true;
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
 
 regexp::~regexp()
 {
-	#ifdef PCRE_EXT
-	#else
+#ifdef PCRE_EXT
+#else
 	if (!notCompiled)
 		regfree(&code);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -76,9 +76,9 @@ regexp::reMatch(const dodoString &sample,
 	if (!boundMatch(sample))
 		return false;
 
-	#ifndef USE_DEQUE
+#ifndef USE_DEQUE
 	pockets.reserve(boundaries.size());
-	#endif
+#endif
 
 	dodoList<__regexMatch>::const_iterator i(boundaries.begin()), j(boundaries.end());
 	for (; i != j; ++i)
@@ -94,7 +94,7 @@ regexp::boundMatch(const dodoString &sample)
 {
 	boundaries.clear();
 
-	#ifdef PCRE_EXT
+#ifdef PCRE_EXT
 
 	int subs;
 
@@ -127,7 +127,7 @@ regexp::boundMatch(const dodoString &sample)
 
 	return true;
 
-	#else
+#else
 
 	int subs = code.re_nsub + 1;
 	regmatch_t *pmatch = new regmatch_t[subs];
@@ -152,7 +152,7 @@ regexp::boundMatch(const dodoString &sample)
 
 	return true;
 
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -162,7 +162,7 @@ regexp::compile(const dodoString &pattern)
 {
 	int bits(0);
 
-	#ifdef PCRE_EXT
+#ifdef PCRE_EXT
 
 	if (extended)
 		bits |= PCRE_EXTENDED;
@@ -180,7 +180,7 @@ regexp::compile(const dodoString &pattern)
 	if (code == NULL)
 		return false;
 
-	#else
+#else
 
 	if (extended)
 		bits |= REG_EXTENDED;
@@ -194,7 +194,7 @@ regexp::compile(const dodoString &pattern)
 	if (regcomp(&code, pattern.c_str(), bits) != 0)
 		return false;
 
-	#endif
+#endif
 
 	return true;
 }

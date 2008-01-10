@@ -27,12 +27,12 @@
 
 #ifdef SQLITE_EXT
 
-	#include <sqlite3.h>
+#include <sqlite3.h>
 
-	#include <libdodo/tools.h>
-	#include <libdodo/dbSqliteEx.h>
-	#include <libdodo/dbSqlBase.h>
-	#include <libdodo/xexec.h>
+#include <libdodo/tools.h>
+#include <libdodo/dbSqliteEx.h>
+#include <libdodo/dbSqlBase.h>
+#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -151,7 +151,7 @@ namespace dodo
 			 */
 			virtual void setBLOBValues(const dodoStringArray &values);
 
-				#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -169,7 +169,7 @@ namespace dodo
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
-				#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * set function from module that will be executed before/after the main action call
@@ -199,9 +199,9 @@ namespace dodo
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
-				#endif
+#endif
 
-				#endif
+#endif
 
 		protected:
 

@@ -48,10 +48,10 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-	#define CGIFASTIOEX_FAILEDTOFLUSH_STR "Failed to flush."
-	#define CGIFASTIOEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
-	#define CGIFASTEX_ACCEPTFAILED_STR "Accept call failed."
-	#define CGIFASTEX_ISCGI_STR "Called as a CGI."
+#define CGIFASTIOEX_FAILEDTOFLUSH_STR "Failed to flush."
+#define CGIFASTIOEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
+#define CGIFASTEX_ACCEPTFAILED_STR "Accept call failed."
+#define CGIFASTEX_ISCGI_STR "Called as a CGI."
 
 
 	/**

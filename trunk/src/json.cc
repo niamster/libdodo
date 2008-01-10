@@ -424,7 +424,7 @@ json::processNumeric(long &node,
 					 unsigned long pos)
 {
 	dodoString numeric;
-	
+
 	bool endOfNumeric = false;
 
 	unsigned long i(pos), j(root.size());
@@ -451,18 +451,18 @@ json::processNumeric(long &node,
 				numeric.append(1, root[i]);
 
 				break;
-			
+
 			case ',':
-				
+
 				endOfNumeric = true;
-				
+
 				break;
 
 			default:
 
 				throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNUMERIC, ERR_LIBDODO, JSONEX_MALFORMEDJSONNUMERIC, numeric, __LINE__, __FILE__);
 		}
-		
+
 		if (endOfNumeric)
 			break;
 	}
@@ -573,7 +573,7 @@ json::processJSON(const dodoString &root)
 
 	node.valueDataType = JSON_DATATYPE_OBJECT;
 	processObject(node.objectValue, root, 0);
-	
+
 	return node;
 }
 

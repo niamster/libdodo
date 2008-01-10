@@ -29,12 +29,12 @@
 
 #ifdef PCRE_EXT
 
-	#include <pcre.h>
+#include <pcre.h>
 
 #else
 
-	#include <sys/types.h>
-	#include <regex.h>
+#include <sys/types.h>
+#include <regex.h>
 
 #endif
 
@@ -151,12 +151,12 @@ namespace dodo
 
 		private:
 
-			#ifdef PCRE_EXT
+#ifdef PCRE_EXT
 			pcre * code;            ///< compiled pattern
-			#else
+#else
 			regex_t code;           ///< compiled pattern
 			bool notCompiled;       ///< indicates, if not compiled
-			#endif
+#endif
 
 			dodoList<__regexMatch> boundaries; ///< list of buondaries matched in sample by pattern
 	};

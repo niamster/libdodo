@@ -102,7 +102,7 @@ namespace dodo
 			 */
 			virtual ~ioSocket();
 
-			#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -120,7 +120,7 @@ namespace dodo
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
-				#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * set function from module that will be executed before/after the main action call
@@ -150,9 +150,9 @@ namespace dodo
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
-				#endif
+#endif
 
-			#endif
+#endif
 
 			/**
 			 * connect from specific address. for client part

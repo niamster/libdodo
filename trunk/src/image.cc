@@ -146,16 +146,16 @@ image::~image()
 void
 image::read(const dodoString &str)
 {
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
 	performXExec(preExec);
-	#endif
+#endif
 
 	strcpy(imInfo->filename, str.c_str());
 
 	if (im != NULL)
 		DestroyImage(im);
-	
+
 	im = ReadImage(imInfo, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
@@ -164,9 +164,9 @@ image::read(const dodoString &str)
 	imInfo->quality = im->quality;
 	strcpy(imInfo->magick, im->magick);
 
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -175,14 +175,14 @@ void
 image::read(const unsigned char * const data,
 			unsigned long size)
 {
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (im != NULL)
 		DestroyImage(im);
-	
+
 	im = BlobToImage(imInfo, data, size, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
@@ -191,9 +191,9 @@ image::read(const unsigned char * const data,
 	imInfo->quality = im->quality;
 	strcpy(imInfo->magick, im->magick);
 
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -201,17 +201,17 @@ image::read(const unsigned char * const data,
 void
 image::read(const __imageInfo &info)
 {
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr) / sizeof(__statements) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr) / sizeof(StorageType))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
 	if (im != NULL)
 		DestroyImage(im);
-	
+
 	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping].str, pixelSizeStArr[info.pixelSize], info.data, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
@@ -220,20 +220,20 @@ image::read(const __imageInfo &info)
 	imInfo->quality = im->quality;
 	strcpy(imInfo->magick, im->magick);
 
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
 
 void
 image::close()
-{	
+{
 	if (im != NULL)
 	{
 		DestroyImage(im);
-		
+
 		im = NULL;
 	}
 }
@@ -243,22 +243,22 @@ image::close()
 void
 image::write(const dodoString &str)
 {
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
 	performXExec(preExec);
-	#endif
-	
+#endif
+
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	
+
 	strcpy(im->filename, str.c_str());
 
 	if (WriteImage(imInfo, im) == MagickFalse)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, im->exception.error_number, exInfo->reason, __LINE__, __FILE__);
 
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -267,11 +267,11 @@ void
 image::write(unsigned char **data,
 			 unsigned int &size)
 {
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
 	performXExec(preExec);
-	#endif
-	
+#endif
+
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
@@ -280,9 +280,9 @@ image::write(unsigned char **data,
 	if (data == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-	#ifndef IMAGE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -353,7 +353,7 @@ image::scale(unsigned long width,
 {
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	
+
 	Image *image = ScaleImage(im, width, height, exInfo);
 
 	if (image == NULL)
@@ -361,23 +361,23 @@ image::scale(unsigned long width,
 
 	if (im != NULL)
 		DestroyImage(im);
-	
+
 	im = image;
 }
 
 //-------------------------------------------------------------------
 
-__imageSize 
+__imageSize
 image::getImageSize()
 {
 	if (im == NULL)
 		return __imageSize();
-	
+
 	__imageSize info;
-	
+
 	info.height = im->rows;
 	info.width = im->columns;
-	
+
 	return info;
 }
 
@@ -388,7 +388,7 @@ image::rotate(double angle)
 {
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_ROTATE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
-	
+
 	Image *image = RotateImage(im, angle, exInfo);
 
 	if (image == NULL)
@@ -396,7 +396,7 @@ image::rotate(double angle)
 
 	if (im != NULL)
 		DestroyImage(im);
-	
+
 	im = image;
 }
 
@@ -430,7 +430,7 @@ image::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 int
 image::addPostExec(const dodoString &module,
@@ -460,7 +460,7 @@ image::addExec(const dodoString &module,
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data, toInit);
 }
 
-	#endif
+#endif
 
 #endif
 

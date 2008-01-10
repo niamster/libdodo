@@ -186,7 +186,7 @@ ioDiskTools::mkdir(const dodoString &path,
 
 void
 ioDiskTools::mkdirRecursive(const dodoString &path,
-				   int permissions)
+							int permissions)
 {
 	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 	{
@@ -636,7 +636,7 @@ ioDiskTools::lastname(const dodoString &path)
 {
 	if (path.size() >= MAXPATHLEN)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_LASTNAME, ERR_LIBDODO, IODISKTOOLSEX_TOOLONGPATH, IODISKTOOLSEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
-	
+
 	char temp[MAXPATHLEN];
 
 	strcpy(temp, path.c_str());
@@ -653,7 +653,7 @@ ioDiskTools::dirname(const dodoString &path)
 {
 	if (path.size() >= MAXPATHLEN)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_DIRNAME, ERR_LIBDODO, IODISKTOOLSEX_TOOLONGPATH, IODISKTOOLSEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);
-	
+
 	char temp[MAXPATHLEN];
 
 	strcpy(temp, path.c_str());

@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 
 		st.outSize = sizeof(int);
 	
-		#ifdef DL_EXT
+#ifdef DL_EXT
 		cout << ioSTD::getModuleInfo("./module").name;
 		
 		cout << st.addPreExec("./module",NULL)<<endl;
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 		st.delPreExec(2);
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL,(void *)"perform")<<endl;
-		#endif
+#endif
 	
 		int a = 10;
 		st.write((char *)&a);

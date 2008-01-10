@@ -69,9 +69,9 @@ namespace dodo
 		IOSOCKETOPTIONS_SOCKET_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
 		IOSOCKETOPTIONS_SOCKET_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
 		IOSOCKETOPTIONS_SOCKET_OOB_INLINE,          ///< out-of-band(marked urgent) data keep inline in recieve operation
-		#ifdef SO_REUSEPORT
+#ifdef SO_REUSEPORT
 		IOSOCKETOPTIONS_SOCKET_REUSE_PORT,
-		#endif
+#endif
 	};
 
 	/**

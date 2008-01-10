@@ -28,10 +28,10 @@
 
 #ifdef FCGI_EXT
 
-	#include <fcgiapp.h>
+#include <fcgiapp.h>
 
-	#include <libdodo/types.h>
-	#include <libdodo/cgiFastEx.h>
+#include <libdodo/types.h>
+#include <libdodo/cgiFastEx.h>
 
 namespace dodo
 {
@@ -116,7 +116,7 @@ namespace dodo
 
 		public:
 
-				#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 			/**
 			 * constructor
@@ -125,14 +125,14 @@ namespace dodo
 			 */
 			cgiFast(bool threading = true, unsigned int threadsNum = 10);
 
-				#else
+#else
 
 			/**
 			 * constructor
 			 */
 			cgiFast();
 
-				#endif
+#endif
 
 			/**
 			 * destructor
@@ -157,7 +157,7 @@ namespace dodo
 
 		private:
 
-				#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 			bool threading;                 ///< threading or not
 
@@ -171,7 +171,7 @@ namespace dodo
 
 			static pthread_mutex_t accept;        ///< accept request mutex
 
-				#endif
+#endif
 
 			static cgiProc cgiF;    ///< function to be called on new request
 	};

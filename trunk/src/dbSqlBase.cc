@@ -242,13 +242,13 @@ dbSqlBase::insideAddCollect(const dodoStringArray &statements,
 
 //-------------------------------------------------------------------
 
-void 
+void
 dbSqlBase::callFunctionCollect()
 {
 	request = "select ";
 	request.append(pre_table);
 	request.append("(");
-	
+
 	char frame[] = "'";
 	if (preventFraming)
 		frame[0] = ' ';
@@ -674,7 +674,7 @@ dbSqlBase::queryCollect()
 			additionalActions = false;
 
 			break;
-			
+
 		case DBBASE_REQUEST_CALL_FUNCTION:
 
 			callFunctionCollect();
@@ -771,12 +771,12 @@ dbSqlBase::queryCollect()
 			additionalActions = false;
 	}
 
-	#ifndef FAST
+#ifndef FAST
 
 	if (request.size() == 0)
 		throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASEEX_QUERYCOLLECT, ERR_LIBDODO, DBSQLBASEEX_EMPTYREQUEST, DBSQLBASEEX_EMPTYREQUEST_STR, __LINE__, __FILE__);
 
-	#endif
+#endif
 
 	if (additionalActions)
 	{

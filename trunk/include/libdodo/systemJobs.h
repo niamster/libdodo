@@ -129,7 +129,7 @@ namespace dodo
 			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1) = 0;
 
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * adds function to became a job[not executing] from module
@@ -140,7 +140,7 @@ namespace dodo
 			 */
 			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
 
-			#endif
+#endif
 	};
 };
 

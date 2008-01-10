@@ -367,8 +367,8 @@ namespace dodo
 			 * @param result describes whether request returns result[show, select...] or not[delete, update]
 			 */
 			virtual void exec(const dodoString &query = __dodostring__, bool result = false) = 0;
-			
-			bool reconnect;///< tries to recconect if exec failed with connection error[true by default]
+
+			bool reconnect; ///< tries to recconect if exec failed with connection error[true by default]
 
 		protected:
 

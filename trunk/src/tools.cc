@@ -52,9 +52,9 @@ using namespace dodo;
 //-------------------------------------------------------------------
 
 static unsigned char PADDING[64] = {
-	0x80, 0,	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,	0,    0,	0,    0,	0,    0,	0,    0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	0x80, 0,	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
 /**
@@ -162,19 +162,19 @@ tools::tools(tools &tls)
 
 tools::tools()
 {
-	#ifdef CODECONV_EXT
+#ifdef CODECONV_EXT
 	convSet = false;
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
 
 tools::~tools()
 {
-	#ifdef CODECONV_EXT
+#ifdef CODECONV_EXT
 	if (convSet)
 		iconv_close(conv);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -211,8 +211,8 @@ tools::random(void *data,
 
 //-------------------------------------------------------------------
 
-dodoString 
-tools::stringRandom(unsigned long size, 
+dodoString
+tools::stringRandom(unsigned long size,
 					short strength)
 {
 	char *data = new char[size + 1];
@@ -223,16 +223,16 @@ tools::stringRandom(unsigned long size,
 	catch (...)
 	{
 		delete [] data;
-		
+
 		throw;
 	}
-	for (unsigned long i=0;i<size;++i)
+	for (unsigned long i = 0; i < size; ++i)
 		if (data[i] == '\0')
 			data[i] = '*';
 
 	dodoString res(data, size);
 	delete [] data;
-	
+
 	return res;
 }
 
@@ -522,11 +522,11 @@ tools::codesetConversion(const dodoString &buffer,
 	inFake = (char *)buffer.c_str();
 	outFake = outBuffer;
 
-		#ifdef __FreeBSD__
+#ifdef __FreeBSD__
 	if (iconv(conv, (const char **)&inFake, &in, &outFake, &out) == (size_t)(-1))
-		#else
+#else
 	if (iconv(conv, &inFake, &in, &outFake, &out) == (size_t)(-1))
-		#endif
+#endif
 	{
 		delete [] outBuffer;
 
@@ -1876,12 +1876,12 @@ tools::sendShortDataDel(int socket,
 						const dodoString &mess,
 						char             *data)
 {
-	#ifndef FAST
+#ifndef FAST
 
 	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
 		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDSHORTDATADEL, ERR_LIBDODO, TOOLSEX_DATATOOLONG, TOOLSEX_DATATOOLONG_STR, __LINE__, __FILE__);
 
-	#endif
+#endif
 
 	while (true)
 	{
@@ -1905,12 +1905,12 @@ void
 tools::sendShortData(int socket,
 					 const dodoString &mess)
 {
-	#ifndef FAST
+#ifndef FAST
 
 	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
 		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDSHORTDATA, ERR_LIBDODO, TOOLSEX_DATATOOLONG, TOOLSEX_DATATOOLONG_STR, __LINE__, __FILE__);
 
-	#endif
+#endif
 
 	while (true)
 	{

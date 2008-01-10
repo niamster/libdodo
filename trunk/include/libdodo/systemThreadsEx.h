@@ -45,11 +45,11 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define SYSTEMTHREADSEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
-		#define SYSTEMTHREADSEX_ISNOTRUNNING_STR        "The thread is currently not running."
-		#define SYSTEMTHREADSEX_NOTFOUND_STR            "Thread not found."
-		#define SYSTEMTHREADSEX_ISDETACHED_STR          "Thread is detached. Cannot join."
-		#define SYSTEMTHREADSEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
+#define SYSTEMTHREADSEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
+#define SYSTEMTHREADSEX_ISNOTRUNNING_STR        "The thread is currently not running."
+#define SYSTEMTHREADSEX_NOTFOUND_STR            "Thread not found."
+#define SYSTEMTHREADSEX_ISDETACHED_STR          "Thread is detached. Cannot join."
+#define SYSTEMTHREADSEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
 
 	/**
 	 * ID of function where exception was thrown
@@ -67,12 +67,12 @@ namespace dodo
 		SYSTEMTHREADSEX__ISRUNNING,
 		SYSTEMTHREADSEX_SETEXECUTIONLIMIT,
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 		SYSTEMTHREADSEX_GETMODULEINFO,
 		SYSTEMTHREADSEX_ADD,
 
-			#endif
+#endif
 	};
 };
 

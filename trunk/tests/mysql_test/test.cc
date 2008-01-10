@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 {
 	long now = timeTools::now();
 
-	#ifdef MYSQL_EXT
+#ifdef MYSQL_EXT
 
 		dbMysql pp;
 		try
@@ -163,11 +163,11 @@ int main(int argc, char **argv)
 			cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl;
 	    }
     
-    #else
+#else
     
     	cout << "No MySQL extension was compiled!";
     	
-    #endif
+#endif
 
     	now = timeTools::now() - now;
 

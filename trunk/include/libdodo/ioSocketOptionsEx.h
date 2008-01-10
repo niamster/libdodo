@@ -46,8 +46,8 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define IOSOCKETOPTIONSEX_NOSOCKETCREATED_STR    "No socket was created =(."
-		#define IOSOCKETOPTIONSEX_WRONGPARAMETER_STR     "Wrong paramather passed to function."
+#define IOSOCKETOPTIONSEX_NOSOCKETCREATED_STR "No socket was created =(."
+#define IOSOCKETOPTIONSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 
 	/**
 	 * ID of function where exception was thrown

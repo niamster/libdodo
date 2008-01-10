@@ -208,7 +208,7 @@ namespace dodo
 			 * @param permissions is new permissions; use | to combine[see ioDiskPermissionModesEnum]
 			 */
 			static void mkdirRecursive(const dodoString &path, int permissions = IODISKTOOLS_PERM_OWNER_ALL_ACCESS);
-			
+
 			/**
 			 * delete files, non empty directory
 			 * @param path indicates the path to remove

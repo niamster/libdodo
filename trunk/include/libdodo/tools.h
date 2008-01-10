@@ -27,15 +27,15 @@
 #include <libdodo/directives.h>
 
 #ifdef ICONV_EXT
-	#include <iconv.h>
+#include <iconv.h>
 #endif
 
 #ifdef ZLIB_EXT
-	#include <zlib.h>
+#include <zlib.h>
 #endif
 
 #ifdef BZIP2_EXT
-	#include <bzlib.h>
+#include <bzlib.h>
 #endif
 
 #include <sys/types.h>
@@ -58,17 +58,17 @@ namespace dodo
 	/**
 	 * @def adds bit flag to statement
 	 */
-	#define addFlag(statement, flag)       (statement) |= (flag)
+#define addFlag(statement, flag)       (statement) |= (flag)
 
 	/**
 	 * @def removes bit flag from statement
 	 */
-	#define removeFlag(statement, flag)    (statement) &= (~(flag))
+#define removeFlag(statement, flag)    (statement) &= (~(flag))
 
 	/**
 	 * @def return true if bit flag is set
 	 */
-	#define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
+#define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
 	/**
 	 * @typedef that describes function that will escapes parts in explode/implode
@@ -76,7 +76,7 @@ namespace dodo
 	 */
 	typedef dodoString (*escape)(const dodoString &);
 
-	 #ifdef ZLIB_EXT
+#ifdef ZLIB_EXT
 
 	/**
 	 * @enum zlibCompressionStrategyEnum
@@ -89,7 +89,7 @@ namespace dodo
 		ZLIB_FIXED_COMRESSION
 	};
 
-	 #endif
+#endif
 
 	enum toolsRandomStrengthEnum
 	{
@@ -289,7 +289,7 @@ namespace dodo
 			 */
 			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
 
-			#ifdef ICONV_EXT
+#ifdef ICONV_EXT
 
 			/**
 			 * converts from one codeset to another
@@ -302,9 +302,9 @@ namespace dodo
 			static dodoString codesetConversion(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
 
 
-			 #endif
+#endif
 
-			 #ifdef ZLIB_EXT
+#ifdef ZLIB_EXT
 
 			/**
 			 * @return compressed buffer
@@ -322,7 +322,7 @@ namespace dodo
 			 */
 			static dodoString zDecompress(const dodoString &buffer);
 
-			 #endif
+#endif
 
 			/**
 			 * @return url decoded string
@@ -391,7 +391,7 @@ namespace dodo
 			 */
 			static dodoString MD5Hex(const dodoString &string);
 
-			#ifdef BZIP2_EXT
+#ifdef BZIP2_EXT
 
 
 			/**
@@ -411,7 +411,7 @@ namespace dodo
 			 */
 			static dodoString bzDecompress(const dodoString &buffer);
 
-			#endif
+#endif
 
 			/**
 			 * sends mail using sendmail

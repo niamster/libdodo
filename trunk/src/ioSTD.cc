@@ -29,7 +29,7 @@ ioSTD::ioSTD() : inSTDBuffer(STD_INSIZE),
 				 outSTDBuffer(STD_OUTSIZE),
 				 err(false),
 				 blocked(true),
-				desc(stdout)
+				 desc(stdout)
 {
 }
 
@@ -90,7 +90,7 @@ ioSTD::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 int
 ioSTD::addPostExec(const dodoString &module,
@@ -120,7 +120,7 @@ ioSTD::addPreExec(const dodoString &module,
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTD, data, toInit);
 }
 
-	#endif
+#endif
 
 #endif
 
@@ -149,7 +149,7 @@ ioSTD::_read(char * const a_void)
 				{
 					if (errno == EINTR)
 						continue;
-					
+
 					if (ferror(stdin) != 0)
 						throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
@@ -173,7 +173,7 @@ ioSTD::_read(char * const a_void)
 				{
 					if (errno == EINTR)
 						continue;
-					
+
 					if (ferror(stdin) != 0)
 						throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
@@ -197,14 +197,14 @@ ioSTD::read(char * const a_void)
 {
 	guard pg(this);
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READ;
 	performXExec(preExec);
-	
-	buffer.reserve(inSize);
-	#endif
 
-	#ifndef IOSTD_WO_XEXEC
+	buffer.reserve(inSize);
+#endif
+
+#ifndef IOSTD_WO_XEXEC
 	try
 	{
 		_read(a_void);
@@ -214,19 +214,19 @@ ioSTD::read(char * const a_void)
 		buffer.clear();
 
 		throw;
-	}	
-	#else
+	}
+#else
 	_read(a_void);
-	#endif
+#endif
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer.assign(a_void, inSize);
-	
+
 	performXExec(postExec);
-	
-	strncpy(a_void, buffer.c_str(), buffer.size()>inSize?inSize:buffer.size());
+
+	strncpy(a_void, buffer.c_str(), buffer.size() > inSize ? inSize : buffer.size());
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -236,12 +236,12 @@ ioSTD::readString(dodoString &a_str)
 {
 	guard pg(this);
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTRING;
 	performXExec(preExec);
-	
+
 	buffer.reserve(inSize);
-	#endif
+#endif
 
 	char *data = new char[inSize + 1];
 
@@ -252,26 +252,26 @@ ioSTD::readString(dodoString &a_str)
 	catch (...)
 	{
 		delete [] data;
-		
-		#ifndef IOSTD_WO_XEXEC
+
+#ifndef IOSTD_WO_XEXEC
 		buffer.clear();
-		#endif
+#endif
 
 		throw;
 	}
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer.assign(data, inSize);
 	delete [] data;
-	
+
 	performXExec(postExec);
-	
+
 	a_str = buffer;
 	buffer.clear();
-	#else
+#else
 	a_str.assign(data, inSize);
 	delete [] data;
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -281,12 +281,12 @@ ioSTD::writeString(const dodoString &a_buf)
 {
 	guard pg(this);
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer = a_buf;
-	
+
 	operType = IOSTD_OPERATION_WRITESTRING;
 	performXExec(preExec);
-	
+
 	try
 	{
 		_write(buffer.c_str());
@@ -294,19 +294,19 @@ ioSTD::writeString(const dodoString &a_buf)
 	catch (...)
 	{
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	_write(a_buf.c_str());
-	#endif
+#endif
 
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -316,12 +316,12 @@ ioSTD::write(const char *const a_buf)
 {
 	guard pg(this);
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer.assign(a_buf, outSize);
-	
+
 	operType = IOSTD_OPERATION_WRITE;
 	performXExec(preExec);
-	
+
 	try
 	{
 		_write(buffer.c_str());
@@ -329,19 +329,19 @@ ioSTD::write(const char *const a_buf)
 	catch (...)
 	{
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	_write(a_buf);
-	#endif
+#endif
 
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -367,7 +367,7 @@ ioSTD::_write(const char *const buf)
 				{
 					if (errno == EINTR)
 						continue;
-					
+
 					if (ferror(desc) != 0)
 						throw baseEx(ERRMODULE_IOSTD, IOSTDEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
@@ -489,11 +489,11 @@ ioSTD::isBlocked()
 
 //-------------------------------------------------------------------
 
-void 
+void
 ioSTD::redirectToSTDErr(bool toSTDErr)
 {
 	err = toSTDErr;
-	
+
 	if (err)
 		desc = stderr;
 	else
@@ -502,7 +502,7 @@ ioSTD::redirectToSTDErr(bool toSTDErr)
 
 //-------------------------------------------------------------------
 
-bool 
+bool
 ioSTD::isRedirectedToSTDErr()
 {
 	return err;
@@ -578,24 +578,24 @@ void
 ioSTD::readStream(char * const a_void)
 {
 	guard pg(this);
-	
-	#ifndef IOSTD_WO_XEXEC
+
+#ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTREAM;
 	performXExec(preExec);
-	#endif
+#endif
 
 	_readStream(a_void);
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer = a_void;
-	
+
 	performXExec(postExec);
-	
+
 	if (buffer.size() > inSize)
 		buffer.resize(inSize);
 	strcpy(a_void, buffer.c_str());
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -605,10 +605,10 @@ ioSTD::readStreamString(dodoString &a_str)
 {
 	guard pg(this);
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
-	#endif
+#endif
 
 	char *data = new char[inSize + 1];
 
@@ -623,73 +623,73 @@ ioSTD::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer = data;
 	delete [] data;
-	
+
 	performXExec(postExec);
-	
+
 	a_str = buffer;
 	buffer.clear();
-	#else
+#else
 	a_str = data;
 	delete [] data;
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
 
 void
 ioSTD::writeStreamString(const dodoString &a_buf)
-{	
+{
 	guard pg(this);
 
 	unsigned long _outSize = outSize;
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer = a_buf;
-	
+
 	operType = IOSTD_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
-	
+
 	try
 	{
 		outSize = buffer.size();
-		
+
 		_write(buffer.c_str());
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	try
 	{
 		outSize = a_buf.size();
-		
+
 		_write(a_buf.c_str());
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		throw;
 	}
-	#endif
-		
-	#ifndef IOSTD_WO_XEXEC
+#endif
+
+#ifndef IOSTD_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -701,50 +701,50 @@ ioSTD::writeStream(const char *const a_buf)
 
 	unsigned long _outSize = outSize;
 
-	#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 	buffer = a_buf;
-	
+
 	operType = IOSTD_OPERATION_WRITESTREAM;
 	performXExec(preExec);
-	
+
 	try
 	{
 		outSize = buffer.size();
-		
+
 		_write(buffer.c_str());
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	try
 	{
 		outSize = strlen(a_buf);
-		
+
 		_write(a_buf);
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		throw;
 	}
-	#endif
-	
-	#ifndef IOSTD_WO_XEXEC
+#endif
+
+#ifndef IOSTD_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------

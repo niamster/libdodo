@@ -99,10 +99,10 @@ dbSqlite::connect()
 		connected = false;
 	}
 
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	operType = DBSQLITE_OPERATION_CONNECT;
 	performXExec(preExec);
-		#endif
+#endif
 
 	if (sqlite3_open(dbInfo.path.c_str(), &lite) != SQLITE_OK)
 	{
@@ -111,9 +111,9 @@ dbSqlite::connect()
 		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_CONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 	}
 
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	performXExec(postExec);
-		#endif
+#endif
 
 	connected = true;
 }
@@ -125,10 +125,10 @@ dbSqlite::disconnect()
 {
 	if (connected)
 	{
-			#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 		operType = DBSQLITE_OPERATION_DISCONNECT;
 		performXExec(preExec);
-			#endif
+#endif
 
 		if (!empty)
 		{
@@ -139,9 +139,9 @@ dbSqlite::disconnect()
 		if (sqlite3_close(lite) != SQLITE_OK)
 			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_DISCONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
 
-			#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 		performXExec(postExec);
-			#endif
+#endif
 
 		connected = false;
 	}
@@ -167,7 +167,7 @@ dbSqlite::_exec(const dodoString &query,
 	{
 		if (autoFraming)
 		{
-				#ifdef SQLITE_ENABLE_COLUMN_METADATA
+#ifdef SQLITE_ENABLE_COLUMN_METADATA
 
 			if (qType == DBBASE_REQUEST_INSERT || qType == DBBASE_REQUEST_UPDATE)
 			{
@@ -232,11 +232,11 @@ dbSqlite::_exec(const dodoString &query,
 				}
 			}
 
-				#else
+#else
 
 			autoFraming = false;
 
-				#endif
+#endif
 
 		}
 
@@ -309,10 +309,10 @@ dbSqlite::_exec(const dodoString &query,
 dodoArray<dodoStringArray>
 dbSqlite::fetchRow() const
 {
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	operType = DBSQLITE_OPERATION_FETCHROW;
 	performXExec(preExec);
-		#endif
+#endif
 
 	if (!show)
 		return __dodostringarrayarray__;
@@ -326,9 +326,9 @@ dbSqlite::fetchRow() const
 
 	dodoArray<dodoStringArray> rows;
 
-		#ifndef USE_DEQUE
+#ifndef USE_DEQUE
 	rows.reserve(sqlite3_data_count(liteStmt));
-		#endif
+#endif
 
 	dodoStringArray rowsPart;
 	dodoString rowPart;
@@ -358,9 +358,9 @@ dbSqlite::fetchRow() const
 
 				rowsPart.clear();
 
-				#ifndef USE_DEQUE
+#ifndef USE_DEQUE
 				rowsPart.reserve(numFields);
-				#endif
+#endif
 
 				for (i = 0; i < numFields; ++i)
 					switch (sqlite3_column_type(liteStmt, i))
@@ -411,9 +411,9 @@ dbSqlite::fetchRow() const
 		}
 	}
 
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	performXExec(postExec);
-		#endif
+#endif
 
 	return rows;
 }
@@ -423,10 +423,10 @@ dbSqlite::fetchRow() const
 dodoStringArray
 dbSqlite::fetchField() const
 {
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	operType = DBSQLITE_OPERATION_FETCHFIELD;
 	performXExec(preExec);
-		#endif
+#endif
 
 	if (!show)
 		return __dodostringarray__;
@@ -435,16 +435,16 @@ dbSqlite::fetchField() const
 
 	dodoStringArray fields;
 
-		#ifndef USE_DEQUE
+#ifndef USE_DEQUE
 	fields.reserve(numFields);
-		#endif
+#endif
 
 	for (unsigned int i(0); i < numFields; ++i)
 		fields.push_back(sqlite3_column_name(liteStmt, i));
 
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	performXExec(postExec);
-		#endif
+#endif
 
 	return fields;
 }
@@ -532,23 +532,23 @@ void
 dbSqlite::exec(const dodoString &query,
 			   bool result)
 {
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	operType = DBSQLITE_OPERATION_EXEC;
 	performXExec(preExec);
-		#endif
+#endif
 
 	_exec(query, result);
 
-		#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 	performXExec(postExec);
-		#endif
+#endif
 
 	cleanCollected();
 }
 
 //-------------------------------------------------------------------
 
-	#ifndef DBSQLITE_WO_XEXEC
+#ifndef DBSQLITE_WO_XEXEC
 
 int
 dbSqlite::addPostExec(inExec func,
@@ -568,7 +568,7 @@ dbSqlite::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 int
 dbSqlite::addPostExec(const dodoString &module,
@@ -598,9 +598,9 @@ dbSqlite::addExec(const dodoString &module,
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
 }
 
-		#endif
+#endif
 
-	#endif
+#endif
 
 //-------------------------------------------------------------------
 
@@ -621,9 +621,9 @@ dbSqlite::fetchAssoc() const
 	dodoStringMap rowFieldsPart;
 	dodoString rowPart;
 
-		#ifndef USE_DEQUE
+#ifndef USE_DEQUE
 	rowsFields.reserve(sqlite3_data_count(liteStmt));
-		#endif
+#endif
 
 	int result;
 

@@ -106,7 +106,7 @@ systemTools::getUsageInfo()
 	__usage info;
 	info.time = use.ru_utime.tv_sec * 100 + use.ru_utime.tv_usec;
 	info.mem = use.ru_maxrss * 1024;
-	
+
 	return info;
 }
 
@@ -164,11 +164,11 @@ systemTools::getLimit(short type)
 
 		case SYSTEMTOOLS_MAXOPENFILES:
 
-			#ifdef __FreeBSD__
+#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
-			#else
+#else
 			realRes = RLIMIT_OFILE;
-			#endif
+#endif
 
 			break;
 
@@ -181,10 +181,10 @@ systemTools::getLimit(short type)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__limits lim;
-	
+
 	lim.current = limit.rlim_cur;
 	lim.max = limit.rlim_max;
-	
+
 	return lim;
 }
 
@@ -232,11 +232,11 @@ systemTools::setLimit(short type,
 
 		case SYSTEMTOOLS_MAXOPENFILES:
 
-			#ifdef __FreeBSD__
+#ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
-			#else
+#else
 			realRes = RLIMIT_OFILE;
-			#endif
+#endif
 
 			break;
 
@@ -388,7 +388,7 @@ systemTools::getUserInfo(int uid)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__userInfo info;
-	
+
 	return fillUserInfo(info, in);
 }
 
@@ -402,7 +402,7 @@ systemTools::getUserInfo(const dodoString &uid)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__userInfo info;
-	
+
 	return fillUserInfo(info, in);
 }
 
@@ -431,7 +431,7 @@ systemTools::getUsers()
 	}
 
 	endpwent();
-	
+
 	return users;
 }
 
@@ -481,7 +481,7 @@ systemTools::getGroupInfo(int uid)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__groupInfo info;
-	
+
 	return fillGroupInfo(info, in);
 }
 
@@ -495,7 +495,7 @@ systemTools::getGroupInfo(const dodoString &uid)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__groupInfo info;
-	
+
 	return fillGroupInfo(info, in);
 }
 
@@ -525,7 +525,7 @@ systemTools::getGroups()
 	}
 
 	endgrent();
-	
+
 	return groups;
 }
 
@@ -698,7 +698,7 @@ systemTools::setSignalHandler(long signal,
 							  signalHandler handler,
 							  int blockSignals)
 {
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -715,7 +715,7 @@ systemTools::setSignalHandler(long signal,
 		handlesSig[handleSignal] = NULL;
 	}
 
-	#endif
+#endif
 
 	struct sigaction act;
 	act.sa_sigaction = handler;
@@ -737,7 +737,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 						   signalHandler handler,
 						   int blockSignals)
 {
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -754,7 +754,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 		handlesSig[handleSignal] = NULL;
 	}
 
-	#endif
+#endif
 
 	struct sigaction act;
 	act.sa_sigaction = handler;
@@ -793,7 +793,7 @@ systemTools::setTimer(long timeout,
 					  signalHandler handler,
 					  int blockSignals)
 {
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -810,7 +810,7 @@ systemTools::setTimer(long timeout,
 		handlesSig[handleSignal] = NULL;
 	}
 
-	#endif
+#endif
 
 	struct sigaction act;
 	act.sa_sigaction = handler;
@@ -864,7 +864,7 @@ systemTools::sendSignal(int pid,
 void
 systemTools::unsetSignalHandler(long signal)
 {
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	deinitSigModule deinit;
 
@@ -881,7 +881,7 @@ systemTools::unsetSignalHandler(long signal)
 		handlesSig[handleSignal] = NULL;
 	}
 
-	#endif
+#endif
 
 	struct sigaction act;
 	act.sa_sigaction = NULL;

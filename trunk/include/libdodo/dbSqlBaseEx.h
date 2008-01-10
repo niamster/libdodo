@@ -43,7 +43,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define DBSQLBASEEX_EMPTYREQUEST_STR    "Query is empty. are you sure?"
+#define DBSQLBASEEX_EMPTYREQUEST_STR "Query is empty. are you sure?"
 
 	/**
 	 * ID of function where exception was thrown

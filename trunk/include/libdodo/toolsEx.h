@@ -45,11 +45,11 @@ namespace dodo
 		TOOLSEX_BADMAILAUTH,
 		TOOLSEX_WRONGPARAMETER,
 
-			#ifndef FAST
+#ifndef FAST
 
 		TOOLSEX_DATATOOLONG,
 
-			#endif
+#endif
 
 		TOOLSEX_EMPTYARRAY,
 		TOOLSEX_WRONGSTRENGTH
@@ -58,50 +58,50 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define TOOLSEX_BADASCII85_STR                       "Bad character in ASCII85."
+#define TOOLSEX_BADASCII85_STR "Bad character in ASCII85."
 
-		#ifdef BZIP2_EXT
+#ifdef BZIP2_EXT
 
-			#define TOOLSEX_BADBZCOMPRESSION_STR             "Error occured during comression."
-			#define TOOLSEX_BADBZDECOMPRESSIONINIT_STR      "Error occured during preparations for decompression."
-			#define TOOLSEX_BADBZDECOMPRESSIONFINISH_STR    "Error occured during finishing decompression."
-			#define TOOLSEX_BADBZDECOMPRESSION_STR           "Error occured during decompression."
+#define TOOLSEX_BADBZCOMPRESSION_STR "Error occured during comression."
+#define TOOLSEX_BADBZDECOMPRESSIONINIT_STR "Error occured during preparations for decompression."
+#define TOOLSEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
+#define TOOLSEX_BADBZDECOMPRESSION_STR "Error occured during decompression."
 
-		#endif
+#endif
 
-		#define TOOLSEX_BADMAILHELO_STR                       "Error occurd while sending EHLO."
-		#define TOOLSEX_BADMAILAUTH_STR                       "Error during uthentification."
-		#define TOOLSEX_WRONGPARAMETER_STR                  "Wrong paramather passed to function."
-		#define TOOLSEX_DATATOOLONG_STR                     "Data size is bigger than TOOLSEX_SHORT_DATA_SIZE."
-		#define TOOLSEX_EMPTYARRAY_STR                       "Array is empty."
-		#define TOOLSEX_WRONGSTRENGTH_STR                     "Wrong strength argument."
+#define TOOLSEX_BADMAILHELO_STR "Error occurd while sending EHLO."
+#define TOOLSEX_BADMAILAUTH_STR "Error during uthentification."
+#define TOOLSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+#define TOOLSEX_DATATOOLONG_STR "Data size is bigger than TOOLSEX_SHORT_DATA_SIZE."
+#define TOOLSEX_EMPTYARRAY_STR "Array is empty."
+#define TOOLSEX_WRONGSTRENGTH_STR "Wrong strength argument."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum toolsFunctionsID
 	{
-			#ifdef ICONV_EXT
+#ifdef ICONV_EXT
 
 		TOOLSEX_CODESETCONVERSION,
 
-			#endif
+#endif
 
-			#ifdef ZLIB_EXT
+#ifdef ZLIB_EXT
 
 		TOOLSEX_ZCOMPRESS,
 		TOOLSEX_ZDECOMPRESS,
 
-			#endif
+#endif
 
 		TOOLSEX_DECODEASCII85,
 
-			#ifdef BZIP2_EXT
+#ifdef BZIP2_EXT
 
 		TOOLSEX_BZCOMPRESS,
 		TOOLSEX_BZDECOMPRESS,
 
-			#endif
+#endif
 
 		TOOLSEX_MAIL,
 		TOOLSEX_SENDSHORTDATA,

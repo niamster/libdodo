@@ -38,7 +38,7 @@
 namespace dodo
 {
 
-	#define HTTP_ENV_SIZE    34
+#define HTTP_ENV_SIZE    34
 
 	/**
 	 * @var array of names that would be in ENV array[environment of http demon]
@@ -112,12 +112,12 @@ namespace dodo
 		 * constructor
 		 */
 		__cgiFile();
-		dodoString name;        ///< real name of the file
-		dodoString type;        ///< MIME type
-		dodoString tmp_name;    ///< path where it was temporary saved[empty, if file stored in memory]
-		unsigned long size;     ///< size of the file
-		int error;              ///< indicates if error occured
-		dodoString buf;              ///< contains file data[if file stored in memory]
+		dodoString name;                ///< real name of the file
+		dodoString type;                ///< MIME type
+		dodoString tmp_name;            ///< path where it was temporary saved[empty, if file stored in memory]
+		unsigned long size;             ///< size of the file
+		int error;                      ///< indicates if error occured
+		dodoString buf;                 ///< contains file data[if file stored in memory]
 	};
 
 	/**
@@ -211,7 +211,7 @@ namespace dodo
 			 */
 			cgi(bool silent = false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
-			#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 
 			/**
 			 * constructor
@@ -241,7 +241,7 @@ namespace dodo
 			 */
 			cgi(cgiFastIO *cf, dodoStringMap &headers, bool silent = false, bool autocleanFiles = true, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
-			#endif
+#endif
 
 			/**
 			 * destructor
@@ -385,16 +385,16 @@ namespace dodo
 			 */
 			virtual void cleanTmp();
 
-			#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 
 			bool cgiFastSet;    ///< indicates whether cgiFast was set
 
 			cgiFastIO *cf;      ///< pointer to cgiFast class
 
-			#endif
+#endif
 
 			ioSTD *fstd;
-			
+
 			bool firstPrint;
 			mutable bool headersPrinted;
 	};

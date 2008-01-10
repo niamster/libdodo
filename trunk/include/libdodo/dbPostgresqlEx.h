@@ -42,7 +42,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define DBPOSTGRESQLEX_WRONGHINTUSAGE_STR    "Wrong hint usage. You used hint where it's not needed."
+#define DBPOSTGRESQLEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
 
 	/**
 	 * ID of function where exception was thrown

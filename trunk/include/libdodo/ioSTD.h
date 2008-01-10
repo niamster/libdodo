@@ -93,7 +93,7 @@ namespace dodo
 			 */
 			__connInfo inputterInfo();
 
-			#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -111,7 +111,7 @@ namespace dodo
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
-				#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * adds hook after the operation by callback
@@ -141,9 +141,9 @@ namespace dodo
 			 */
 			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
-				#endif
+#endif
 
-			#endif
+#endif
 
 			/**
 			 * read
@@ -234,7 +234,7 @@ namespace dodo
 			 */
 			int inSTDBuffer;    ///< input buffer
 			int outSTDBuffer;   ///< output buffer
-			
+
 		protected:
 
 			/**
@@ -270,9 +270,9 @@ namespace dodo
 
 		private:
 
-			FILE *desc;     ///< descriptor that is needed for redirection
+			FILE *desc;         ///< descriptor that is needed for redirection
 
-			bool blocked;   ///< indicates, whether blocked or not;
+			bool blocked;       ///< indicates, whether blocked or not;
 
 			bool err;           ///< redirect output to stderr; false by default
 	};

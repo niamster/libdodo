@@ -42,8 +42,8 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define SYSTEMTHREADSHAREDDATAGUARDEX_ISALREADYLOCKED_STR    "The share is currently locked. Please wait."
-		#define SYSTEMTHREADSHAREDDATAGUARDEX_CANNOTLOCK_STR         "The share is currently locked. Timeout exhousted."
+#define SYSTEMTHREADSHAREDDATAGUARDEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
+#define SYSTEMTHREADSHAREDDATAGUARDEX_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 
 	/**
 	 * ID of function where exception was thrown

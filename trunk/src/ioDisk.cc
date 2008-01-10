@@ -105,7 +105,7 @@ ioDisk::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 int
 ioDisk::addPostExec(const dodoString &module,
@@ -135,7 +135,7 @@ ioDisk::addExec(const dodoString &module,
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IODISK, data, toInit);
 }
 
-	#endif
+#endif
 
 #endif
 
@@ -146,13 +146,13 @@ ioDisk::close()
 {
 	guard pg(this);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_CLOSE;
-	#endif
+#endif
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (opened)
 	{
@@ -162,9 +162,9 @@ ioDisk::close()
 		opened = false;
 	}
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -176,10 +176,10 @@ ioDisk::open(const dodoString &a_path,
 {
 	guard pg(this);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_OPEN;
 	performXExec(preExec);
-	#endif
+#endif
 
 	path = a_path;
 	fileType = a_fileType;
@@ -260,9 +260,9 @@ ioDisk::open(const dodoString &a_path,
 
 	ioDiskTools::chmod(path, DEFAULT_FILE_PERM);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 
 	opened = true;
 }
@@ -291,7 +291,7 @@ ioDisk::_read(char * const a_void,
 			{
 				if (errno == EINTR)
 					continue;
-				
+
 				if (ferror(file) != 0)
 					throw baseEx(ERRMODULE_IODISK, IODISKEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
@@ -315,14 +315,14 @@ ioDisk::read(char * const a_void,
 {
 	guard pg(this);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READ;
 	performXExec(preExec);
-	
-	buffer.reserve(inSize);
-	#endif
 
-	#ifndef IODISK_WO_XEXEC
+	buffer.reserve(inSize);
+#endif
+
+#ifndef IODISK_WO_XEXEC
 	try
 	{
 		_read(a_void, a_pos);
@@ -332,19 +332,19 @@ ioDisk::read(char * const a_void,
 		buffer.clear();
 
 		throw;
-	}	
-	#else
+	}
+#else
 	_read(a_void, a_pos);
-	#endif
+#endif
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer.assign(a_void, inSize);
-	
+
 	performXExec(postExec);
-	
-	strncpy(a_void, buffer.c_str(), buffer.size()>inSize?inSize:buffer.size());
+
+	strncpy(a_void, buffer.c_str(), buffer.size() > inSize ? inSize : buffer.size());
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -355,12 +355,12 @@ ioDisk::readString(dodoString &a_str,
 {
 	guard pg(this);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTRING;
 	performXExec(preExec);
-	
+
 	buffer.reserve(inSize);
-	#endif
+#endif
 
 	char *data = new char[inSize + 1];
 
@@ -371,26 +371,26 @@ ioDisk::readString(dodoString &a_str,
 	catch (...)
 	{
 		delete [] data;
-		
-		#ifndef IODISK_WO_XEXEC
+
+#ifndef IODISK_WO_XEXEC
 		buffer.clear();
-		#endif
+#endif
 
 		throw;
 	}
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer.assign(data, inSize);
 	delete [] data;
-	
+
 	performXExec(postExec);
-	
+
 	a_str = buffer;
 	buffer.clear();
-	#else
+#else
 	a_str.assign(data, inSize);
 	delete [] data;
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -401,12 +401,12 @@ ioDisk::writeString(const dodoString &a_buf,
 {
 	guard pg(this);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer = a_buf;
-	
+
 	operType = IODISK_OPERATION_WRITESTRING;
 	performXExec(preExec);
-	
+
 	try
 	{
 		_write(buffer.c_str());
@@ -414,20 +414,20 @@ ioDisk::writeString(const dodoString &a_buf,
 	catch (...)
 	{
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	_write(a_buf.c_str());
-	#endif
+#endif
 
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif	
-	
+#endif
+
 	this->write(a_buf.c_str(), a_pos);
 }
 
@@ -467,8 +467,8 @@ ioDisk::_write(const char *const a_buf,
 				throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 		else
-			if (fseek(file, 0, SEEK_END) == -1)
-				throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		if (fseek(file, 0, SEEK_END) == -1)
+			throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	unsigned long sent_received = 0;
@@ -507,12 +507,12 @@ ioDisk::write(const char *const a_buf,
 {
 	guard pg(this);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer.assign(a_buf, outSize);
-	
+
 	operType = IODISK_OPERATION_WRITE;
 	performXExec(preExec);
-	
+
 	try
 	{
 		_write(buffer.c_str(), a_pos);
@@ -520,19 +520,19 @@ ioDisk::write(const char *const a_buf,
 	catch (...)
 	{
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	_write(a_buf, a_pos);
-	#endif
+#endif
 
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -628,24 +628,24 @@ ioDisk::readStream(char * const a_void,
 				   unsigned long a_pos)
 {
 	guard pg(this);
-	
-	#ifndef IODISK_WO_XEXEC
+
+#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTREAM;
 	performXExec(preExec);
-	#endif
+#endif
 
 	_readStream(a_void, a_pos);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer = a_void;
-	
+
 	performXExec(postExec);
-	
+
 	if (buffer.size() > inSize)
 		buffer.resize(inSize);
 	strcpy(a_void, buffer.c_str());
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -656,10 +656,10 @@ ioDisk::readStreamString(dodoString &a_str,
 {
 	guard pg(this);
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
-	#endif
+#endif
 
 	char *data = new char[inSize + 1];
 
@@ -674,18 +674,18 @@ ioDisk::readStreamString(dodoString &a_str,
 		throw;
 	}
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer = data;
 	delete [] data;
-	
+
 	performXExec(postExec);
-	
+
 	a_str = buffer;
 	buffer.clear();
-	#else
+#else
 	a_str = data;
 	delete [] data;
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -697,60 +697,60 @@ ioDisk::writeStreamString(const dodoString &a_buf)
 
 	unsigned long _outSize = outSize;
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer = a_buf;
-	
+
 	operType = IODISK_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
-	
+
 	if (fseek(file, 0, SEEK_END) == -1)
 	{
 		buffer.clear();
-		
+
 		throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITESTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
-	
+
 	try
 	{
 		outSize = buffer.size();
-		
+
 		_write(buffer.c_str());
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	if (fseek(file, 0, SEEK_END) == -1)
 		throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITESTREAMSTRING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-	
+
 	try
 	{
 		outSize = a_buf.size();
-		
+
 		_write(a_buf.c_str());
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		throw;
 	}
-	#endif
-		
-	#ifndef IODISK_WO_XEXEC
+#endif
+
+#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -762,50 +762,50 @@ ioDisk::writeStream(const char *const a_buf)
 
 	unsigned long _outSize = outSize;
 
-	#ifndef IODISK_WO_XEXEC
+#ifndef IODISK_WO_XEXEC
 	buffer = a_buf;
-	
+
 	operType = IODISK_OPERATION_WRITESTREAM;
 	performXExec(preExec);
-	
+
 	try
 	{
 		outSize = buffer.size();
-		
+
 		_write(buffer.c_str());
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		buffer.clear();
-		
+
 		throw;
 	}
-	#else
+#else
 	try
 	{
 		outSize = strlen(a_buf);
-		
+
 		_write(a_buf);
-		
+
 		outSize = _outSize;
 	}
 	catch (...)
 	{
 		outSize = _outSize;
-		
+
 		throw;
 	}
-	#endif
-	
-	#ifndef IODISK_WO_XEXEC
+#endif
+
+#ifndef IODISK_WO_XEXEC
 	performXExec(postExec);
-	
+
 	buffer.clear();
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------

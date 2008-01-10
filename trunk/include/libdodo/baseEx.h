@@ -30,7 +30,7 @@
 
 #ifdef DL_EXT
 
-	#include <dlfcn.h>
+#include <dlfcn.h>
 
 #endif
 
@@ -92,9 +92,9 @@ namespace dodo
 		ERRMODULE_CGIFAST,
 	};
 
-		#define AM_MODULES    32
+#define AM_MODULES    32
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 	/**
 	 * @struct __exMod must be returned from initExModule in the module
@@ -117,7 +117,7 @@ namespace dodo
 	 */
 	typedef void (*deinitExModule)();
 
-		#endif
+#endif
 
 	class baseEx;    ///< to make typedef before class declaration
 
@@ -198,7 +198,7 @@ namespace dodo
 			 */
 			static void unsetErrorHandlers();
 
-				#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * @return info about module
@@ -235,7 +235,7 @@ namespace dodo
 			 */
 			static bool setErrorHandlers(const dodoString &path, void *data, void *toInit = NULL);
 
-				#endif
+#endif
 
 		protected:
 
@@ -245,13 +245,13 @@ namespace dodo
 
 			static void *handlerDataEx[AM_MODULES];         ///< data that will be passed to handler
 
-				#ifdef DL_EXT
+#ifdef DL_EXT
 
 			static void *handlesEx[AM_MODULES];             ///< handles to modules
 
 			static bool handlesOpenedEx[AM_MODULES];        //< map of opened modules
 
-				#endif
+#endif
 	};
 
 };

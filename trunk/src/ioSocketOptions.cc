@@ -241,7 +241,7 @@ ioSocketOptions::setSockOption(short option,
 
 			break;
 
-		#ifdef SO_REUSEPORT
+#ifdef SO_REUSEPORT
 
 		case IOSOCKETOPTIONS_SOCKET_REUSE_PORT:
 
@@ -249,7 +249,7 @@ ioSocketOptions::setSockOption(short option,
 
 			break;
 
-		#endif
+#endif
 
 		default:
 

@@ -174,10 +174,10 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	if (inet_ntop(AF_INET, &sin.sin_addr, add, INET_ADDRSTRLEN) != NULL)
 		info.address = add;
 
-	#ifdef __FreeBSD__
+#ifdef __FreeBSD__
 
 
-	#else
+#else
 
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
 		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -187,7 +187,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	if (inet_ntop(AF_INET, &sin.sin_addr, add, INET_ADDRSTRLEN) != NULL)
 		info.netmask = add;
 
-	#endif
+#endif
 
 	if (::ioctl(socket, SIOCGIFBRDADDR, &ifr) == -1)
 		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -197,10 +197,10 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	if (inet_ntop(AF_INET, &sin.sin_addr, add, INET_ADDRSTRLEN) != NULL)
 		info.broadcast = add;
 
-	#ifdef __FreeBSD__
+#ifdef __FreeBSD__
 
 
-	#else
+#else
 
 	if (::ioctl(socket, SIOCGIFHWADDR, &ifr) == -1)
 		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -212,7 +212,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[4] & 0xff,
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[5] & 0xff);
 
-	#endif
+#endif
 
 	info.hwaddr = add;
 
@@ -222,7 +222,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	if (::close(socket) == -1)
 		throw baseEx(ERRMODULE_IOSOCKETTOOLS, IOSOCKETTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	#ifdef __FreeBSD__
+#ifdef __FreeBSD__
 
 	if (isSetFlag(ifr.ifr_ifru.ifru_flags[0], IFF_LOOPBACK))
 		info.loop = true;
@@ -230,7 +230,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	if (isSetFlag(ifr.ifr_ifru.ifru_flags[0], IFF_UP))
 		info.up = true;
 
-	#else
+#else
 
 	if (isSetFlag(IFF_LOOPBACK & ifr.ifr_ifru.ifru_flags, IFF_LOOPBACK))
 		info.loop = true;
@@ -238,7 +238,7 @@ ioSocketTools::getInterfaceInfo(const dodoString &interface)
 	if (isSetFlag(IFF_UP & ifr.ifr_ifru.ifru_flags, IFF_UP))
 		info.up = true;
 
-	#endif
+#endif
 
 	return info;
 }

@@ -28,7 +28,7 @@
 
 #ifdef DL_EXT
 
-	#include <dlfcn.h>
+#include <dlfcn.h>
 
 #endif
 
@@ -73,9 +73,9 @@ namespace dodo
 		bool enabled;   ///< disable or enable hook
 		int position;   ///< identificator of object
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 		void *handle;    ///< handle to module
-		#endif
+#endif
 	};
 
 	/**
@@ -95,7 +95,7 @@ namespace dodo
 		XEXEC_OPERTYPE_NONE,
 	};
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	/**
 	 * @enum xexecModuleActionTypeEnum defines what type of exec[pre/post] will be used for module
@@ -143,7 +143,7 @@ namespace dodo
 		int post;       ///< position of postExec
 	};
 
-	#endif
+#endif
 
 	/**
 	 * example of exec function that performs xexec
@@ -200,7 +200,7 @@ namespace dodo
 			 */
 			virtual int _addPreExec(inExec func, void *obj, short type, void *data);
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * set function from module that will be executed after  the main action call
@@ -239,7 +239,7 @@ namespace dodo
 			 */
 			virtual __xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
-			#endif
+#endif
 
 			/**
 			 * deletes hook from list
@@ -336,7 +336,7 @@ namespace dodo
 			 */
 			bool safeHooks;
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * @return info about module
@@ -345,7 +345,7 @@ namespace dodo
 			 */
 			static __xexecMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
-			#endif
+#endif
 
 		protected:
 
@@ -415,7 +415,7 @@ namespace dodo
 			 */
 			virtual void setStatXExec(dodoList<__execItem> &list, int position, bool stat);
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * set function from  module that will be executed before  the main action call
@@ -430,7 +430,7 @@ namespace dodo
 			 */
 			virtual int addXExecModule(dodoList<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit = NULL);
 
-			#endif
+#endif
 
 			/**
 			 * perform enabled hooks from the list

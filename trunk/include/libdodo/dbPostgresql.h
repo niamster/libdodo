@@ -28,12 +28,12 @@
 
 #ifdef POSTGRESQL_EXT
 
-	#include <libpq-fe.h>
+#include <libpq-fe.h>
 
-	#include <libdodo/tools.h>
-	#include <libdodo/dbPostgresqlEx.h>
-	#include <libdodo/dbSqlBase.h>
-	#include <libdodo/xexec.h>
+#include <libdodo/tools.h>
+#include <libdodo/dbPostgresqlEx.h>
+#include <libdodo/dbSqlBase.h>
+#include <libdodo/xexec.h>
 
 namespace dodo
 {
@@ -135,7 +135,7 @@ namespace dodo
 			 */
 			virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
-				#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DBPOSTGRESQL_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -153,7 +153,7 @@ namespace dodo
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
-				#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * set function from module that will be executed before/after the main action call
@@ -183,9 +183,9 @@ namespace dodo
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
-				#endif
+#endif
 
-				#endif
+#endif
 
 			/**
 			 * sets sessions charset

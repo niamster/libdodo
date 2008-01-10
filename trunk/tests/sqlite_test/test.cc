@@ -10,7 +10,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	#ifdef SQLITE_EXT
+#ifdef SQLITE_EXT
 	
 		dbSqlite pp;	
 		try
@@ -104,11 +104,11 @@ int main(int argc, char **argv)
 			cout << (string)ex << "\t" << ex.line << endl << endl;
 		}	
 	
-	#else
+#else
 	
 		cout << "No SQLite exteinsion was compiled!";
 	
-	#endif
+#endif
 	
 	return 0;
 }

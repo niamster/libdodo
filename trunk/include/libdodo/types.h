@@ -44,15 +44,15 @@ namespace dodo
 	 * diferent predifined types
 	 */
 
-	#ifdef USE_DEQUE
-		#define dodoArray    std::deque
-	#else
-		#define dodoArray    std::vector
-	#endif
+#ifdef USE_DEQUE
+#define dodoArray    std::deque
+#else
+#define dodoArray    std::vector
+#endif
 
 	typedef dodoArray<dodoString> dodoStringArray;                                ///< array of strings
 
-	#define dodoList std::list
+#define dodoList std::list
 
 	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;      ///< hash of strings
 

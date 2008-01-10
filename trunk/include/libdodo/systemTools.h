@@ -39,7 +39,7 @@
 
 #ifdef DL_EXT
 
-	#include <dlfcn.h>
+#include <dlfcn.h>
 
 #endif
 
@@ -147,7 +147,7 @@ namespace dodo
 		dodoStringArray members;    ///< list of group members
 	};
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 	/**
 	 * @struct __sigMod must be returned from initSigModule in the module
@@ -171,7 +171,7 @@ namespace dodo
 	 */
 	typedef void (*deinitSigModule)();
 
-	#endif
+#endif
 
 
 	/**
@@ -391,7 +391,7 @@ namespace dodo
 			 */
 			static void unsetSignalHandler(long signal);
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * @return info about module
@@ -418,7 +418,7 @@ namespace dodo
 			 */
 			static void setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
 
-			#endif
+#endif
 
 			/**
 			 * send signal to process
@@ -463,12 +463,12 @@ namespace dodo
 			 */
 			static void sigMask(sigset_t *set, long signal);
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 			static void *handlesSig[19];        ///< handles to modules
 			static bool handlesOpenedSig[19];   ///< map of opened modules
 
-			#endif
+#endif
 
 	};
 

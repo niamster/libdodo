@@ -78,7 +78,7 @@ ioSocket::addPreExec(inExec func,
 
 //-------------------------------------------------------------------
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 int
 ioSocket::addPostExec(const dodoString &module,
@@ -108,7 +108,7 @@ ioSocket::addExec(const dodoString &module,
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKET, data, toInit);
 }
 
-	#endif
+#endif
 
 #endif
 
@@ -203,10 +203,10 @@ ioSocket::connect(const dodoString &host,
 				  int port,
 				  ioSocketExchange &exchange)
 {
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_CONNECT;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (server)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_LIBDODO, IOSOCKETEX_CANNOTCONNECT, IOSOCKETEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
@@ -251,9 +251,9 @@ ioSocket::connect(const dodoString &host,
 
 	socket = -1;
 
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -273,10 +273,10 @@ ioSocket::connectFrom(const dodoString &local,
 					  int port,
 					  ioSocketExchange &exchange)
 {
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_CONNECTFROM;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (server)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_LIBDODO, IOSOCKETEX_CANNOTCONNECT, IOSOCKETEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
@@ -339,9 +339,9 @@ ioSocket::connectFrom(const dodoString &local,
 
 	socket = -1;
 
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -360,10 +360,10 @@ void
 ioSocket::connect(const dodoString &path,
 				  ioSocketExchange &exchange)
 {
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_CONNECT_UNIX;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (server)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_LIBDODO, IOSOCKETEX_CANNOTCONNECT, IOSOCKETEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
@@ -387,9 +387,9 @@ ioSocket::connect(const dodoString &path,
 
 	socket = -1;
 
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -399,10 +399,10 @@ ioSocket::bindNListen(const dodoString &host,
 					  int port,
 					  int numberOfConnections)
 {
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_BINDNLISTEN;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_LIBDODO, IOSOCKETEX_CANNOTBIND, IOSOCKETEX_CANNOTBIND_STR, __LINE__, __FILE__);
@@ -466,9 +466,9 @@ ioSocket::bindNListen(const dodoString &host,
 
 	opened = true;
 
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 
 }
 
@@ -488,10 +488,10 @@ ioSocket::bindNListen(const dodoString &path,
 					  int numberOfConnections,
 					  bool force)
 {
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_BINDNLISTEN_UNIX;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_BINDNLISTEN, ERR_LIBDODO, IOSOCKETEX_CANNOTBIND, IOSOCKETEX_CANNOTBIND_STR, __LINE__, __FILE__);
@@ -544,9 +544,9 @@ ioSocket::bindNListen(const dodoString &path,
 
 	opened = true;
 
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -555,10 +555,10 @@ bool
 ioSocket::accept(__initialAccept &init,
 				 __connInfo &info)
 {
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_ACCEPT;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_LIBDODO, IOSOCKETEX_CANNOTACCEPT, IOSOCKETEX_CANNOTACCEPT_STR, __LINE__, __FILE__);
@@ -647,9 +647,9 @@ ioSocket::accept(__initialAccept &init,
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 
 	return true;
 }
@@ -659,10 +659,10 @@ ioSocket::accept(__initialAccept &init,
 bool
 ioSocket::accept(__initialAccept &init)
 {
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	operType = IOSOCKET_OPERATION_ACCEPT;
 	performXExec(preExec);
-	#endif
+#endif
 
 	if (!server)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_ACCEPT, ERR_LIBDODO, IOSOCKETEX_CANNOTACCEPT, IOSOCKETEX_CANNOTACCEPT_STR, __LINE__, __FILE__);
@@ -696,9 +696,9 @@ ioSocket::accept(__initialAccept &init)
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-	#ifndef IOSOCKET_WO_XEXEC
+#ifndef IOSOCKET_WO_XEXEC
 	performXExec(postExec);
-	#endif
+#endif
 
 	return true;
 }

@@ -56,9 +56,9 @@ systemThreads::~systemThreads()
 
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 	deinitSystemThreadsModule deinit;
-		#endif
+#endif
 
 	for (; i != j; ++i)
 	{
@@ -85,7 +85,7 @@ systemThreads::~systemThreads()
 				pthread_join(i->thread, NULL);
 		}
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (i->handle != NULL)
 		{
@@ -96,7 +96,7 @@ systemThreads::~systemThreads()
 			dlclose(i->handle);
 		}
 
-			#endif
+#endif
 	}
 }
 
@@ -128,9 +128,9 @@ systemThreads::add(threadFunc func,
 	thread.action = action;
 	thread.executeLimit = 0;
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 	thread.handle = NULL;
-		#endif
+#endif
 
 	threads.push_back(thread);
 
@@ -173,7 +173,7 @@ systemThreads::del(unsigned long position,
 			}
 		}
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (current->handle != NULL)
 		{
@@ -187,7 +187,7 @@ systemThreads::del(unsigned long position,
 				throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
-			#endif
+#endif
 
 		threads.erase(current);
 	}
@@ -221,7 +221,7 @@ systemThreads::replace(unsigned long position,
 		}
 
 
-			#ifdef DL_EXT
+#ifdef DL_EXT
 
 		if (current->handle != NULL)
 		{
@@ -237,7 +237,7 @@ systemThreads::replace(unsigned long position,
 			current->handle = NULL;
 		}
 
-			#endif
+#endif
 
 		current->data = data;
 		current->func = func;
@@ -460,7 +460,7 @@ systemThreads::running() const
 
 //-------------------------------------------------------------------
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 __systemThreadsMod
 systemThreads::getModuleInfo(const dodoString &module,
@@ -559,7 +559,7 @@ systemThreads::add(const dodoString &module,
 	return thread.position;
 }
 
-	#endif
+#endif
 
 //-------------------------------------------------------------------
 
@@ -607,9 +607,9 @@ systemThreads::addNRun(threadFunc func,
 	thread.action = action;
 	thread.executeLimit = limit;
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 	thread.handle = NULL;
-		#endif
+#endif
 
 	if (detached)
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);

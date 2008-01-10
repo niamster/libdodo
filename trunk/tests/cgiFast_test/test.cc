@@ -68,7 +68,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {	
-	#ifdef FCGI_EXT
+#ifdef FCGI_EXT
 	
 	try
 	{
@@ -88,11 +88,11 @@ int main(int argc, char **argv)
 		cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
 	}
 	
-	#else
+#else
 	
 		cout << "No fastCGI extension was compiled!";
 		
-	#endif
+#endif
 		
 	return 0;
 }

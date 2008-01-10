@@ -28,12 +28,12 @@
 
 #ifdef LIBXML2_EXT
 
-	#include <libxml/parser.h>
-	#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
+#include <libxml/xmlmemory.h>
 
-	#include <libdodo/xmlEx.h>
-	#include <libdodo/types.h>
-	#include <libdodo/dodoMap.h>
+#include <libdodo/xmlEx.h>
+#include <libdodo/types.h>
+#include <libdodo/dodoMap.h>
 
 namespace dodo
 {

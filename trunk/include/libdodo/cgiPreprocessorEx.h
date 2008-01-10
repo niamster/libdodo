@@ -41,7 +41,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors' explanation
 	 */
-		#define CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR    "Bracket was opened(closed) but not closed(opened)."
+#define CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)."
 
 	/**
 	 * ID of function where exception was thrown

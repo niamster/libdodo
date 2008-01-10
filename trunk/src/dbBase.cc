@@ -132,9 +132,9 @@ dbBase::~dbBase()
 //-------------------------------------------------------------------
 
 void
-dbBase::callFunction(const dodoString &name, 
-					const dodoStringArray &arguments, 
-					const dodoString &as)
+dbBase::callFunction(const dodoString &name,
+					 const dodoStringArray &arguments,
+					 const dodoString &as)
 {
 	qType = DBBASE_REQUEST_CALL_FUNCTION;
 

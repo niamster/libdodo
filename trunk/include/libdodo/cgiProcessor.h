@@ -239,8 +239,8 @@ namespace dodo
 			unsigned int namespaceDeepness;                                         ///< deepness of the namespace
 			std::map<unsigned int, dodoStringMap> localNamespace;                   ///< set of local variables invisible due to overwrite in deeper namespace[user-set]
 			std::map<unsigned int, dodoStringArray> namespaceVars;                  ///< names of vars in namespaces
-			
-			cgi &CGI;///< cgi object through what output will be performed
+
+			cgi &CGI;                                                               ///< cgi object through what output will be performed
 	};
 
 };

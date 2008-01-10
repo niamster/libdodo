@@ -84,18 +84,18 @@ int main(int argc, char **argv)
 
 		bool exit_st(false);
 
-		#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 		systemThreads th;
 		std::vector<int> positions;
-		#endif
+#endif
 		
 		sh.set((void *)&exit_st);
 		
 		while(!exit_st)
 		{
-			#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 			th.sweepTrash();
-			#endif
+#endif
 			
 			if (sock.accept(fake,info))
 			{
@@ -106,15 +106,15 @@ int main(int argc, char **argv)
 				}
 					
 				conn.init(fake);
-				#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 				positions.push_back(th.add(process,(void *)conn.createCopy()));
 				th.run(positions.back());
 				th.setExecutionLimit(positions.back(), 1);
-				#else
+#else
 				process((void *)conn.createCopy());
-				#endif
+#endif
 				
-				#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 				try
 				{
 					if (th.isRunning(1))
@@ -128,13 +128,13 @@ int main(int argc, char **argv)
 					cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 					cout.flush();
 				}
-				#endif
+#endif
 			}
 		}
 		
-		#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 		th.wait();
-		#endif
+#endif
 		
 	}
 	catch(baseEx ex)

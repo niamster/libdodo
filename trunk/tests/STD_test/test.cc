@@ -41,9 +41,9 @@ int main(int argc, char **argv)
 		ioSTD st;
 		cout << st.inputterInfo().host << endl;
 
-		#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 		int pos = st.addPreExec(&hook, NULL);
-		#endif
+#endif
 	
 		st.outSize = sizeof(int);
 	
@@ -60,9 +60,9 @@ int main(int argc, char **argv)
 		
 		std::cout << o.size() << "\n";
 		
-		#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTD_WO_XEXEC
 		st.disablePreExec(pos);
-		#endif
+#endif
 		
 		st.writeStreamString(o);
 		st.writeStreamString("\nexiting\n");
