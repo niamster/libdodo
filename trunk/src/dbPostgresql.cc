@@ -75,14 +75,24 @@ dbPostgresql::sqlDataType(int type)
 void
 dbPostgresql::connect()
 {
-	if (connected)
-		disconnect();
-
 		#ifndef DBPOSTGRESQL_WO_XEXEC
 	operType = DBPOSTGRESQL_OPERATION_CONNECT;
 	performXExec(preExec);
 		#endif
 
+	if (connected)
+	{
+		if (!empty)
+		{
+			PQclear(pgResult);
+			empty = true;
+		}
+
+		PQfinish(conn);
+
+		connected = false;
+	}
+	
 	conn = PQsetdbLogin(
 		dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
 		stringTools::iToString(dbInfo.port).c_str(),

@@ -51,7 +51,13 @@ namespace dodo
 	enum ioSocketExchangeOperationTypeEnum
 	{
 		IOSOCKETEXCHANGE_OPERATION_READ,
+		IOSOCKETEXCHANGE_OPERATION_READSTRING,
+		IOSOCKETEXCHANGE_OPERATION_READSTREAM,
+		IOSOCKETEXCHANGE_OPERATION_READSTREAMSTRING,
 		IOSOCKETEXCHANGE_OPERATION_WRITE,
+		IOSOCKETEXCHANGE_OPERATION_WRITESTRING,
+		IOSOCKETEXCHANGE_OPERATION_WRITESTREAM,
+		IOSOCKETEXCHANGE_OPERATION_WRITESTREAMSTRING,
 		IOSOCKETEXCHANGE_OPERATION_CLOSE,
 	};
 
@@ -317,6 +323,16 @@ namespace dodo
 			 * signal safe
 			 */
 			virtual void _readStream(char * const data);
+
+			/**
+			 * write
+			 * @param data is data that would be sent
+			 * @param urgent -> send out-of-band data
+			 * @note sends no longer than outSize
+			 * if outSize bigger than socket buffer size - sends with few iterations
+			 * signal safe
+			 */
+			virtual void _write(const char * const data);
 	};
 
 };

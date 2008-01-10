@@ -181,12 +181,23 @@ dbMysql::connectSettings(unsigned long a_type,
 void
 dbMysql::connect()
 {
-	disconnect();
-
 		#ifndef DBMYSQL_WO_XEXEC
 	operType = DBMYSQL_OPERATION_CONNECT;
 	performXExec(preExec);
 		#endif
+	
+	if (connected)
+	{
+		if (!empty)
+		{
+			empty = true;
+			mysql_free_result(mysqlRes);
+		}
+
+		mysql_close(mysql);
+
+		connected = false;
+	}
 
 	mysql = mysql_init(NULL);
 
@@ -214,10 +225,10 @@ dbMysql::disconnect()
 {
 	if (connected)
 	{
-			#ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 		operType = DBMYSQL_OPERATION_DISCONNECT;
 		performXExec(preExec);
-			#endif
+		#endif
 
 		if (!empty)
 		{
@@ -227,9 +238,9 @@ dbMysql::disconnect()
 
 		mysql_close(mysql);
 
-			#ifndef DBMYSQL_WO_XEXEC
+		#ifndef DBMYSQL_WO_XEXEC
 		performXExec(postExec);
-			#endif
+		#endif
 
 		connected = false;
 	}

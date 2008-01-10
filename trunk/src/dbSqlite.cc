@@ -86,7 +86,18 @@ void
 dbSqlite::connect()
 {
 	if (connected)
-		disconnect();
+	{
+		if (!empty)
+		{
+			empty = true;
+			sqlite3_finalize(liteStmt);
+		}
+
+		if (sqlite3_close(lite) != SQLITE_OK)
+			throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX_CONNECT, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__);
+
+		connected = false;
+	}
 
 		#ifndef DBSQLITE_WO_XEXEC
 	operType = DBSQLITE_OPERATION_CONNECT;

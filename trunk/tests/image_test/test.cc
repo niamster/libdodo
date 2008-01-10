@@ -18,10 +18,17 @@ using namespace std;
 	
 		if (imData->operType == IMAGE_OPERATION_WRITE)
 		{
-			image *img = (image *)imData->executor;
-			img->disableAll();
-			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
-			img->enableAll();
+			try
+			{
+				image *img = (image *)imData->executor;
+				img->disableAll();
+				img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
+				img->enableAll();
+			}
+			catch(baseEx ex)
+			{
+    				cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
+			}
 		}
 	}
 
@@ -38,7 +45,7 @@ int main(int argc, char **argv)
 
 		im.read("test.png");
 		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
-		
+	
 		im.scale(1000, 1000);
 		
 		im.write("test.jpg");
@@ -61,7 +68,7 @@ int main(int argc, char **argv)
 	catch(baseEx ex)
 	{
     		cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
-    }
+    	}
     
 	return 0;
 }

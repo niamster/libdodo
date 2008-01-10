@@ -153,6 +153,9 @@ image::read(const dodoString &str)
 
 	strcpy(imInfo->filename, str.c_str());
 
+	if (im != NULL)
+		DestroyImage(im);
+	
 	im = ReadImage(imInfo, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
@@ -177,6 +180,9 @@ image::read(const unsigned char * const data,
 	performXExec(preExec);
 	#endif
 
+	if (im != NULL)
+		DestroyImage(im);
+	
 	im = BlobToImage(imInfo, data, size, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
@@ -203,6 +209,9 @@ image::read(const __imageInfo &info)
 	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr) / sizeof(__statements) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr) / sizeof(StorageType))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
+	if (im != NULL)
+		DestroyImage(im);
+	
 	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping].str, pixelSizeStArr[info.pixelSize], info.data, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
@@ -219,17 +228,33 @@ image::read(const __imageInfo &info)
 //-------------------------------------------------------------------
 
 void
+image::close()
+{	
+	if (im != NULL)
+	{
+		DestroyImage(im);
+		
+		im = NULL;
+	}
+}
+
+//-------------------------------------------------------------------
+
+void
 image::write(const dodoString &str)
 {
 	#ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
 	performXExec(preExec);
 	#endif
-
+	
+	if (im == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	
 	strcpy(im->filename, str.c_str());
 
 	if (WriteImage(imInfo, im) == MagickFalse)
-		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, im->exception.error_number, exInfo->reason, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, im->exception.error_number, exInfo->reason, __LINE__, __FILE__);
 
 	#ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
@@ -246,11 +271,14 @@ image::write(unsigned char **data,
 	operType = IMAGE_OPERATION_WRITE;
 	performXExec(preExec);
 	#endif
+	
+	if (im == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 	size = 0;
 	*data = ImageToBlob(imInfo, im, &size, exInfo);
 	if (data == NULL)
-		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
 	#ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
@@ -323,6 +351,9 @@ void
 image::scale(unsigned long width,
 			 unsigned long height)
 {
+	if (im == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	
 	Image *image = ScaleImage(im, width, height, exInfo);
 
 	if (image == NULL)
@@ -355,6 +386,9 @@ image::getImageSize()
 void
 image::rotate(double angle)
 {
+	if (im == NULL)
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_ROTATE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
+	
 	Image *image = RotateImage(im, angle, exInfo);
 
 	if (image == NULL)

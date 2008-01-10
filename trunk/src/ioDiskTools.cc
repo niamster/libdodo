@@ -569,7 +569,7 @@ ioDiskTools::getFileContents(const dodoString &path)
 				case EOVERFLOW:
 				case EROFS:
 
-					throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 		retS.append(buffer, INSIZE);
@@ -588,7 +588,7 @@ ioDiskTools::getFileContents(const dodoString &path)
 				case EOVERFLOW:
 				case EROFS:
 
-					throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 		retS.append(buffer, rest);
@@ -768,7 +768,7 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 
 			if (fwrite(buffer, INSIZE, 1, toFile) == 0)
@@ -780,7 +780,7 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 		}
 		if (rest > 0)
@@ -801,7 +801,7 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 
 			if (fwrite(buffer, rest, 1, toFile) == 0)
@@ -813,7 +813,7 @@ ioDiskTools::copy(const dodoString &from,
 					case EOVERFLOW:
 					case EROFS:
 
-						throw baseEx(ERRMODULE_IOSTD, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
+						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 		}
 
@@ -922,4 +922,3 @@ ioDiskTools::append(const dodoString &path,
 }
 
 //-------------------------------------------------------------------
-

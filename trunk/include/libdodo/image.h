@@ -207,6 +207,11 @@ namespace dodo
 			 * @param size describes size of data
 			 */
 			virtual void write(unsigned char **data, unsigned int &size);
+
+			/**
+			 * closes access to image
+			 */
+			virtual void close();
 			
 			/**
 			 * @return info about image

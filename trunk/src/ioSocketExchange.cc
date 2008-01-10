@@ -108,7 +108,7 @@ ioSocketExchange::close()
 {
 	guard pg(this);
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	operType = IOSOCKETEXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
 	#endif
@@ -122,7 +122,7 @@ ioSocketExchange::close()
 
 	opened = false;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	#ifndef IOSOCKETOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 	#endif
 }
@@ -177,20 +177,12 @@ ioSocketExchange::alive()
 	return opened;
 }
 
+
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::write(const char * const data)
+ioSocketExchange::_write(const char * const data)
 {
-	guard pg(this);
-
-	buffer.assign(data, outSize);
-
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_WRITE;
-	performXExec(preExec);
-	#endif
-
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
 
@@ -205,12 +197,12 @@ ioSocketExchange::write(const char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, buffer.c_str() + sent_received, outSocketBuffer, 0)) == -1)
+				if ((n = ::send(socket, data + sent_received, outSocketBuffer, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -228,12 +220,12 @@ ioSocketExchange::write(const char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, buffer.c_str() + sent_received, rest, 0)) == -1)
+				if ((n = ::send(socket, data + sent_received, rest, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -243,18 +235,76 @@ ioSocketExchange::write(const char * const data)
 			sent_received += n;
 		}
 	}
+}
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+//-------------------------------------------------------------------
+
+void
+ioSocketExchange::write(const char * const a_buf)
+{
+	guard pg(this);
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer.assign(a_buf, outSize);
+	
+	operType = IOSOCKETEXCHANGE_OPERATION_WRITE;
+	performXExec(preExec);
+	
+	try
+	{
+		_write(buffer.c_str());
+	}
+	catch (...)
+	{
+		buffer.clear();
+		
+		throw;
+	}
+	#else
+	_write(a_buf);
+	#endif
+
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
 	performXExec(postExec);
+	
+	buffer.clear();
 	#endif
 }
 
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::writeString(const dodoString &data)
+ioSocketExchange::writeString(const dodoString &a_buf)
 {
-	this->write(data.c_str());
+	guard pg(this);
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer = a_buf;
+	
+	operType = IOSOCKETEXCHANGE_OPERATION_WRITESTRING;
+	performXExec(preExec);
+	
+	try
+	{
+		_write(buffer.c_str());
+	}
+	catch (...)
+	{
+		buffer.clear();
+		
+		throw;
+	}
+	#else
+	_write(a_buf.c_str());
+	#endif
+
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	performXExec(postExec);
+	
+	buffer.clear();
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -262,11 +312,6 @@ ioSocketExchange::writeString(const dodoString &data)
 void
 ioSocketExchange::_read(char * const data)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_READ;
-	performXExec(preExec);
-	#endif
-
 	memset(data, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
@@ -291,7 +336,7 @@ ioSocketExchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -320,7 +365,7 @@ ioSocketExchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -333,47 +378,90 @@ ioSocketExchange::_read(char * const data)
 			sent_received += n;
 		}
 	}
+}
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	buffer.assign(data, inSize);
+//-------------------------------------------------------------------
 
+void
+ioSocketExchange::read(char * const a_void)
+{
+	guard pg(this);
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPERATION_READ;
+	performXExec(preExec);
+	
+	buffer.reserve(inSize);
+	#endif
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	try
+	{
+		_read(a_void);
+	}
+	catch (...)
+	{
+		buffer.clear();
+
+		throw;
+	}	
+	#else
+	_read(a_void);
+	#endif
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer.assign(a_void, inSize);
+	
 	performXExec(postExec);
+	
+	strncpy(a_void, buffer.c_str(), buffer.size()>inSize?inSize:buffer.size());
+	buffer.clear();
 	#endif
 }
 
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::read(char * const data)
+ioSocketExchange::readString(dodoString &a_str)
 {
 	guard pg(this);
 
-	_read(data);
-}
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPERATION_READSTRING;
+	performXExec(preExec);
+	
+	buffer.reserve(inSize);
+	#endif
 
-//-------------------------------------------------------------------
-
-void
-ioSocketExchange::readString(dodoString &data)
-{
-	guard pg(this);
-
-	char *t_data = new char[inSize + 1];
+	char *data = new char[inSize + 1];
 
 	try
 	{
-		_read(t_data);
+		_read(data);
 	}
 	catch (...)
 	{
-		data.assign(t_data, inSize);
-		delete [] t_data;
+		delete [] data;
+		
+		#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+		buffer.clear();
+		#endif
 
 		throw;
 	}
 
-	data.assign(t_data, inSize);
-	delete [] t_data;
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer.assign(data, inSize);
+	delete [] data;
+	
+	performXExec(postExec);
+	
+	a_str = buffer;
+	buffer.clear();
+	#else
+	a_str.assign(data, inSize);
+	delete [] data;
+	#endif
 }
 
 #ifndef IOSOCKETEXCHANGE_WO_XEXEC
@@ -435,83 +523,111 @@ ioSocketExchange::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::writeStream(const char * const data)
+ioSocketExchange::writeStream(const char * const a_buf)
 {
 	guard pg(this);
 
-	buffer.assign(data);
+	unsigned long _outSize = outSize;
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_WRITE;
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer = a_buf;
+	
+	operType = IOSOCKETEXCHANGE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
+	
+	try
+	{
+		outSize = buffer.size();
+		
+		_write(buffer.c_str());
+		
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+		
+		buffer.clear();
+		
+		throw;
+	}
+	#else
+	try
+	{
+		outSize = strlen(a_buf);
+		
+		_write(a_buf);
+		
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+		
+		throw;
+	}
 	#endif
-
-	unsigned long outSize = buffer.size();
-
-	unsigned long iter = outSize / outSocketBuffer;
-	unsigned long rest = outSize % outSocketBuffer;
-
-	unsigned long sent_received = 0;
-
-	unsigned long batch, n;
-
-	for (unsigned long i = 0; i < iter; ++i)
-	{
-		batch = 0;
-		while (batch < outSocketBuffer)
-		{
-			while (true)
-			{
-				if ((n = ::send(socket, buffer.c_str() + sent_received, outSocketBuffer, 0)) == -1)
-				{
-					if (errno == EINTR)
-						continue;
-
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch += n;
-			sent_received += n;
-		}
-	}
-
-	if (rest > 0)
-	{
-		batch = 0;
-		while (batch < rest)
-		{
-			while (true)
-			{
-				if ((n = ::send(socket, buffer.c_str() + sent_received, rest, 0)) == -1)
-				{
-					if (errno == EINTR)
-						continue;
-
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch += n;
-			sent_received += n;
-		}
-	}
-
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+	
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
 	performXExec(postExec);
+	
+	buffer.clear();
 	#endif
 }
 
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::writeStreamString(const dodoString &data)
+ioSocketExchange::writeStreamString(const dodoString &a_buf)
 {
-	this->writeStream(data.c_str());
+	guard pg(this);
+
+	unsigned long _outSize = outSize;
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer = a_buf;
+	
+	operType = IOSOCKETEXCHANGE_OPERATION_WRITESTREAMSTRING;
+	performXExec(preExec);
+	
+	try
+	{
+		outSize = buffer.size();
+		
+		_write(buffer.c_str());
+		
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+		
+		buffer.clear();
+		
+		throw;
+	}
+	#else
+	try
+	{
+		outSize = a_buf.size();
+		
+		_write(a_buf.c_str());
+		
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+		
+		throw;
+	}
+	#endif
+		
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	performXExec(postExec);
+	
+	buffer.clear();
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -519,11 +635,6 @@ ioSocketExchange::writeStreamString(const dodoString &data)
 void
 ioSocketExchange::_readStream(char * const data)
 {
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_READ;
-	performXExec(preExec);
-	#endif
-
 	memset(data, '\0', inSize);
 
 	while (true)
@@ -533,52 +644,76 @@ ioSocketExchange::_readStream(char * const data)
 			if (errno == EINTR)
 				continue;
 
-			throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX_READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
 	}
+}
 
-	#ifndef IO_IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	buffer.assign(data);
+//-------------------------------------------------------------------
 
+void
+ioSocketExchange::readStream(char * const a_void)
+{
+	guard pg(this);
+	
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPERATION_READSTREAM;
+	performXExec(preExec);
+	#endif
+
+	_readStream(a_void);
+
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer = a_void;
+	
 	performXExec(postExec);
+	
+	if (buffer.size() > inSize)
+		buffer.resize(inSize);
+	strcpy(a_void, buffer.c_str());
+	buffer.clear();
 	#endif
 }
 
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::readStream(char * const data)
+ioSocketExchange::readStreamString(dodoString &a_str)
 {
 	guard pg(this);
 
-	_readStream(data);
-}
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	operType = IOSOCKETEXCHANGE_OPERATION_READSTREAMSTRING;
+	performXExec(preExec);
+	#endif
 
-//-------------------------------------------------------------------
-
-void
-ioSocketExchange::readStreamString(dodoString &data)
-{
-	guard pg(this);
-
-	char *t_data = new char[inSize + 1];
+	char *data = new char[inSize + 1];
 
 	try
 	{
-		_readStream(t_data);
+		_readStream(data);
 	}
 	catch (...)
 	{
-		data.assign(t_data);
-		delete [] t_data;
+		delete [] data;
 
 		throw;
 	}
 
-	data.assign(t_data);
-	delete [] t_data;
+	#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+	buffer = data;
+	delete [] data;
+	
+	performXExec(postExec);
+	
+	a_str = buffer;
+	buffer.clear();
+	#else
+	a_str = data;
+	delete [] data;
+	#endif
 }
 
 //-------------------------------------------------------------------

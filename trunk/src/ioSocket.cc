@@ -274,7 +274,7 @@ ioSocket::connectFrom(const dodoString &local,
 					  ioSocketExchange &exchange)
 {
 	#ifndef IOSOCKET_WO_XEXEC
-	operType = IOSOCKET_OPERATION_CONNECT;
+	operType = IOSOCKET_OPERATION_CONNECTFROM;
 	performXExec(preExec);
 	#endif
 
@@ -489,7 +489,7 @@ ioSocket::bindNListen(const dodoString &path,
 					  bool force)
 {
 	#ifndef IOSOCKET_WO_XEXEC
-	operType = IOSOCKET_OPERATION_CONNECT_UNIX;
+	operType = IOSOCKET_OPERATION_BINDNLISTEN_UNIX;
 	performXExec(preExec);
 	#endif
 

@@ -48,7 +48,13 @@ namespace dodo
 	enum ioSTDOperationTypeEnum
 	{
 		IOSTD_OPERATION_READ,
+		IOSTD_OPERATION_READSTRING,
+		IOSTD_OPERATION_READSTREAM,
+		IOSTD_OPERATION_READSTREAMSTRING,
 		IOSTD_OPERATION_WRITE,
+		IOSTD_OPERATION_WRITESTRING,
+		IOSTD_OPERATION_WRITESTREAM,
+		IOSTD_OPERATION_WRITESTREAMSTRING,
 		IOSTD_OPERATION_OPEN,
 		IOSTD_OPERATION_CLOSE
 	};
@@ -254,6 +260,13 @@ namespace dodo
 			 * max size of data is inSTDBuffer
 			 */
 			virtual void _readStream(char * const data);
+
+			/**
+			 * write
+			 * @param data is data that will be written
+			 * if outSize bigger than buffer size - writes with few iterations
+			 */
+			virtual void _write(const char * const data);
 
 		private:
 
