@@ -210,9 +210,6 @@ namespace dodo
 			 * write
 			 * @param data is data that would be sent
 			 * @param urgent -> send out-of-band data
-			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * signal safe
 			 */
 			virtual void write(const char * const data);
 
@@ -220,26 +217,20 @@ namespace dodo
 			 * write
 			 * @param data is string that would be sent
 			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * signal safe
 			 */
 			virtual void writeString(const dodoString &data);
 
 			/**
 			 * receive
 			 * @param data is data that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * signal safe
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void read(char * const data);
 
 			/**
 			 * read
 			 * @param data is string that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * signal safe
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readString(dodoString &data);
 
@@ -247,8 +238,6 @@ namespace dodo
 			 * write - null-terminated string
 			 * @param data is data that would be sent
 			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * signal safe
 			 */
 			virtual void writeStream(const char * const data);
 
@@ -256,28 +245,20 @@ namespace dodo
 			 * write - null-terminated string
 			 * @param data is string that would be sent
 			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * signal safe
 			 */
 			virtual void writeStreamString(const dodoString &data);
 
 			/**
 			 * read - null-terminated string
 			 * @param data is data that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * max data size is inSize
-			 * signal safe
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStream(char * const data);
 
 			/**
 			 * read - null-terminated string
 			 * @param data is string that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * max data size is inSize
-			 * signal safe
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStreamString(dodoString &data);
 

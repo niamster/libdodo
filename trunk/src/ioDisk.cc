@@ -362,7 +362,7 @@ ioDisk::readString(dodoString &a_str,
 	buffer.reserve(inSize);
 #endif
 
-	char *data = new char[inSize + 1];
+	char *data = new char[inSize];
 
 	try
 	{
@@ -608,7 +608,7 @@ ioDisk::_readStream(char * const a_void,
 
 	while (true)
 	{
-		if (fgets(a_void, inSize + 1, file) == NULL)
+		if (fgets(a_void, inSize, file) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -661,7 +661,7 @@ ioDisk::readStreamString(dodoString &a_str,
 	performXExec(preExec);
 #endif
 
-	char *data = new char[inSize + 1];
+	char *data = new char[inSize];
 
 	try
 	{

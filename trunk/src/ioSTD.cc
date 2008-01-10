@@ -243,7 +243,7 @@ ioSTD::readString(dodoString &a_str)
 	buffer.reserve(inSize);
 #endif
 
-	char *data = new char[inSize + 1];
+	char *data = new char[inSize];
 
 	try
 	{
@@ -559,7 +559,7 @@ ioSTD::_readStream(char * const a_void)
 
 	while (true)
 	{
-		if (fgets(a_void, inSize + 1, stdin) == NULL)
+		if (fgets(a_void, inSize, stdin) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -610,7 +610,7 @@ ioSTD::readStreamString(dodoString &a_str)
 	performXExec(preExec);
 #endif
 
-	char *data = new char[inSize + 1];
+	char *data = new char[inSize];
 
 	try
 	{

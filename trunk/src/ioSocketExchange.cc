@@ -433,7 +433,7 @@ ioSocketExchange::readString(dodoString &a_str)
 	buffer.reserve(inSize);
 #endif
 
-	char *data = new char[inSize + 1];
+	char *data = new char[inSize];
 
 	try
 	{
@@ -637,9 +637,11 @@ ioSocketExchange::_readStream(char * const data)
 {
 	memset(data, '\0', inSize);
 
+	unsigned long n = 0;
+	
 	while (true)
 	{
-		if (::recv(socket, data, inSize, 0) == -1)
+		if ((n = ::recv(socket, data, inSize, 0)) == -1)
 		{
 			if (errno == EINTR)
 				continue;
@@ -649,6 +651,9 @@ ioSocketExchange::_readStream(char * const data)
 
 		break;
 	}
+	
+	if (n == inSize)
+		data[n] = '\0';
 }
 
 //-------------------------------------------------------------------
@@ -689,7 +694,7 @@ ioSocketExchange::readStreamString(dodoString &a_str)
 	performXExec(preExec);
 #endif
 
-	char *data = new char[inSize + 1];
+	char *data = new char[inSize];
 
 	try
 	{

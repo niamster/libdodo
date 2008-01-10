@@ -148,42 +148,40 @@ namespace dodo
 			/**
 			 * read
 			 * @param data is filled with read string
-			 * if inSize bigger than buffer size - reads with few iterations
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readString(dodoString &data);
 
 			/**
 			 * read
 			 * @param data is filled with read data
-			 * if inSize bigger than buffer size - reads with few iterations
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void read(char * const data);
 
 			/**
 			 * write
 			 * @param data is string that will be written
-			 * if outSize bigger than buffer size - writes with few iterations
 			 */
 			virtual void writeString(const dodoString &data);
 
 			/**
 			 * write
 			 * @param data is data that will be written
-			 * if outSize bigger than buffer size - writes with few iterations
 			 */
 			virtual void write(const char * const data);
 
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read string
-			 * max size of data is inSize
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStreamString(dodoString &data);
 
 			/**
 			 * read from stream - null[or \n]-terminated string
 			 * @param data is filled with read data
-			 * max size of data is inSize
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStream(char * const data);
 

@@ -181,6 +181,7 @@ namespace dodo
 			 * read string
 			 * @param data will be filled with data
 			 * @param pos indicates position in file
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readString(dodoString &data, unsigned long pos = 0);
 
@@ -188,6 +189,7 @@ namespace dodo
 			 * read data
 			 * @param data will be filled with data
 			 * @param pos indicates position in file
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void read(char * const data, unsigned long pos = 0);
 
@@ -209,7 +211,7 @@ namespace dodo
 			 * read string - null[or \n]-terminated string
 			 * @param data will be filled with data
 			 * @param pos indicates position in file [string that has pos-1 strings before]
-			 * @note max size is inSize
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStreamString(dodoString &data, unsigned long pos = 0);
 
@@ -217,7 +219,7 @@ namespace dodo
 			 * read data - null[or \n]-terminated string
 			 * @param data will be filled with data
 			 * @param pos indicates position in file [string that has pos-1 strings before]
-			 * @note max size is inSize
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStream(char * const data, unsigned long pos = 0);
 
