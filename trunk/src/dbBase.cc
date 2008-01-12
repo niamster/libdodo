@@ -25,94 +25,6 @@
 
 using namespace dodo;
 
-__dbInfo::__dbInfo(const dodoString &a_db,
-				   const dodoString &a_host,
-				   const dodoString &a_user,
-				   const dodoString &a_password,
-				   const dodoString &a_path,
-				   int a_port) : db(a_db),
-								 host(a_host),
-								 user(a_user),
-								 password(a_password),
-								 path(a_path),
-								 port(a_port)
-{
-}
-
-//-------------------------------------------------------------------
-
-__dbInfo::__dbInfo()
-{
-}
-
-//-------------------------------------------------------------------
-
-__tableInfo::__tableInfo()
-{
-	ifNotExists = false;
-}
-
-//-------------------------------------------------------------------
-
-const __tableInfo &
-__tableInfo::operator=(const __tableInfo &from)
-{
-	name = from.name;
-
-	fields.clear();
-
-	dodoArray<__fieldInfo>::const_iterator j = from.fields.end();
-	for (dodoArray<__fieldInfo>::const_iterator i = from.fields.begin(); i != j; ++i)
-		fields.push_back(*i);
-
-	primKeys = from.primKeys;
-	uniq = from.uniq;
-	ifNotExists = from.ifNotExists;
-
-	return from;
-}
-
-//-------------------------------------------------------------------
-
-__fieldInfo::__fieldInfo()
-{
-	type = -1;
-	length = -1;
-	flag = 0;
-	onDelete = -1;
-	onUpdate = -1;
-}
-
-//-------------------------------------------------------------------
-
-const __fieldInfo &
-__fieldInfo::operator=(const __fieldInfo &from)
-{
-	name = from.name;
-	type = from.type;
-	length = from.length;
-	flag = from.flag;
-
-	refTable = from.refTable;
-	onDelete = from.onDelete;
-	onUpdate = from.onUpdate;
-	refFields = from.refFields;
-
-	defaultVal = from.defaultVal;
-	set_enum = from.set_enum;
-
-	charset = from.charset;
-
-	return from;
-}
-
-//-------------------------------------------------------------------
-
-__dbStorage::__dbStorage(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
-																						fields(a_fields)
-{
-}
-
 //-------------------------------------------------------------------
 
 dbBase::dbBase() : show(false),
@@ -719,11 +631,11 @@ dbBase::setAddSelSt(unsigned int statement)
 {
 	switch (statement)
 	{
-		case DBBASE_REQUEST_SELECT_DISTINCT:
-		case DBBASE_REQUEST_SELECT_ALL:
+		case DBBASE_ADDREQUEST_SELECT_DISTINCT:
+		case DBBASE_ADDREQUEST_SELECT_ALL:
 
-			removeFlag(qSelShift, 1 << DBBASE_REQUEST_SELECT_ALL);
-			removeFlag(qSelShift, 1 << DBBASE_REQUEST_SELECT_DISTINCT);
+			removeFlag(qSelShift, 1 << DBBASE_ADDREQUEST_SELECT_ALL);
+			removeFlag(qSelShift, 1 << DBBASE_ADDREQUEST_SELECT_DISTINCT);
 
 			break;
 

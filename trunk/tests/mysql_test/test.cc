@@ -58,17 +58,17 @@ int main(int argc, char **argv)
             __fieldInfo fi;
 
             fi.name = "id";
-            fi.type = DBBASE_FIELDTYPE_INTEGER;
-            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
+            fi.type = DB_FIELDTYPE_INTEGER;
+            fi.flag = DB_FIELDFLAG_NULL | DB_FIELDFLAG_AUTO_INCREMENT;
             ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = DB_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			fi.name = "operation";
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = DB_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			pp.createTable(ti);
@@ -79,17 +79,17 @@ int main(int argc, char **argv)
             ti.name = "test1";
 			
             fi.name = "id";
-            fi.type = DBBASE_FIELDTYPE_INTEGER;
-            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
+            fi.type = DB_FIELDTYPE_INTEGER;
+            fi.flag = DB_FIELDFLAG_NULL | DB_FIELDFLAG_AUTO_INCREMENT;
             ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = DB_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			fi.name = "operation";
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = DB_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			pp.createTable(ti);
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 	
 			/*create field*/
 			fi.name = "fi";
-			fi.type = DBBASE_FIELDTYPE_CHAR;
+			fi.type = DB_FIELDTYPE_CHAR;
 			fi.length = 10;
 			
 			pp.createField(fi,"test");
@@ -110,13 +110,19 @@ int main(int argc, char **argv)
 			pp.exec();
 			
 			dodoStringArray fields;
+			__dbStorage storage;
 			
 			/* select*/
 			pp.selectAll("test");
-			pp.join("test1", DBBASE_REQUEST_JOINTYPE_JOIN, "test.operation = test1.operation");
+			pp.join("test1", DB_JOINTYPE_JOIN, "test.operation = test1.operation");
 			pp.limit(10);
 			cout << pp.queryCollect() << endl;
 			pp.exec();
+			storage = pp.fetch();//get result
+			dodoStringArray::iterator i=storage.fields.begin(), j=storage.fields.end();
+			for (;i!=j;++i)
+				cout << *i << "\t";
+			cout << endl;
 			
 			dodoStringArray values;
 			values.push_back("20\"05`''-'07-08");
@@ -136,9 +142,9 @@ int main(int argc, char **argv)
 			assA.push_back(arr);
 			
 			/*additional statement*/
-			pp.setAddInsSt(DBBASE_REQUEST_INSERT_IGNORE);//base SQL
-			pp.setAddSelSt(DBBASE_REQUEST_SELECT_DISTINCT);//base SQL
-			pp.setMyAddSelSt(DBMYSQL_REQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
+			pp.setAddInsSt(DBBASE_ADDREQUEST_INSERT_IGNORE);//base SQL
+			pp.setAddSelSt(DBBASE_ADDREQUEST_SELECT_DISTINCT);//base SQL
+			pp.setMyAddSelSt(DBMYSQL_ADDREQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
 					
 			pp.insert("test",assA);//multiply insert
 			cout << pp.queryCollect() << endl;
@@ -174,11 +180,11 @@ int main(int argc, char **argv)
 			
 			pp.order("id desc");
 			pp.limit(5);
-			pp.setAddSelSt(DBBASE_REQUEST_SELECT_DISTINCT);
+			pp.setAddSelSt(DBBASE_ADDREQUEST_SELECT_DISTINCT);
 			cout << pp.queryCollect() << endl;//show query
 			pp.exec();
 			
-			__dbStorage storage = pp.fetch();//get result
+			storage = pp.fetch();//get result
 	
 		}
 	    catch(baseEx ex)

@@ -47,7 +47,6 @@ __mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key,
 
 //-------------------------------------------------------------------
 
-
 dbMysql::dbMysql() : empty(true),
 					 type(CLIENT_MULTI_STATEMENTS)
 {
@@ -97,9 +96,9 @@ dbMysql::addSQL()
 void
 dbMysql::setMyAddInsSt(short statement)
 {
-	removeFlag(qDbDepInsShift, 1 << DBMYSQL_REQUEST_INSERT_DELAYED);
-	removeFlag(qDbDepInsShift, 1 << DBMYSQL_REQUEST_INSERT_LOW_PRIORITY);
-	removeFlag(qDbDepInsShift, 1 << DBMYSQL_REQUEST_INSERT_HIGH_PRIORITY);
+	removeFlag(qDbDepInsShift, 1 << DBMYSQL_ADDREQUEST_INSERT_DELAYED);
+	removeFlag(qDbDepInsShift, 1 << DBMYSQL_ADDREQUEST_INSERT_LOW_PRIORITY);
+	removeFlag(qDbDepInsShift, 1 << DBMYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY);
 
 	addFlag(qDbDepInsShift, 1 << statement);
 }

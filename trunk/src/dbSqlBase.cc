@@ -27,29 +27,29 @@ using namespace dodo;
 
 const unsigned int dbSqlBase::addInsEnumArr[] =
 {
-	DBBASE_REQUEST_INSERT_IGNORE,
+	DBBASE_ADDREQUEST_INSERT_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 const unsigned int dbSqlBase::addUpEnumArr[] =
 {
-	DBBASE_REQUEST_UPDATE_IGNORE,
+	DBBASE_ADDREQUEST_UPDATE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 const unsigned int dbSqlBase::addDelEnumArr[] =
 {
-	DBBASE_REQUEST_DELETE_IGNORE,
+	DBBASE_ADDREQUEST_DELETE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
 const unsigned int dbSqlBase::addSelEnumArr[] =
 {
-	DBBASE_REQUEST_SELECT_DISTINCT,
-	DBBASE_REQUEST_SELECT_ALL
+	DBBASE_ADDREQUEST_SELECT_DISTINCT,
+	DBBASE_ADDREQUEST_SELECT_ALL
 };
 
 //-------------------------------------------------------------------
@@ -634,37 +634,37 @@ dbSqlBase::joinCollect()
 	{
 		switch (*m)
 		{
-			case DBBASE_REQUEST_JOINTYPE_JOIN:
+			case DB_JOINTYPE_JOIN:
 				
 				request.append(" join ");
 				
 				break;
 			
-			case DBBASE_REQUEST_JOINTYPE_LEFTOUTER:
+			case DB_JOINTYPE_LEFTOUTER:
 				
 				request.append(" left outer join ");
 				
 				break;
 				
-			case DBBASE_REQUEST_JOINTYPE_RIGHTOUTER:
+			case DB_JOINTYPE_RIGHTOUTER:
 
 				request.append(" right outer join ");
 				
 				break;
 				
-			case DBBASE_REQUEST_JOINTYPE_FULLOUTER:
+			case DB_JOINTYPE_FULLOUTER:
 
 				request.append(" full outer join ");
 				
 				break;
 				
-			case DBBASE_REQUEST_JOINTYPE_INNER:
+			case DB_JOINTYPE_INNER:
 
 				request.append(" inner join ");
 				
 				break;
 				
-			case DBBASE_REQUEST_JOINTYPE_CROSS:
+			case DB_JOINTYPE_CROSS:
 
 				request.append(" cross join ");
 				
@@ -900,9 +900,9 @@ dbSqlBase::fieldCollect(const __fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
 	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
-	resRow.append((DBBASE_FIELDFLAG_NULL & flag) == DBBASE_FIELDFLAG_NULL ? " null " : " not null ");
+	resRow.append(isSetFlag(flag, DB_FIELDFLAG_NULL) ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append((DBBASE_FIELDFLAG_AUTO_INCREMENT & flag) == DBBASE_FIELDFLAG_AUTO_INCREMENT ? " primary key auto_increment" : __dodostring__);
+	resRow.append(isSetFlag(flag, DB_FIELDFLAG_AUTO_INCREMENT) ? " primary key auto_increment" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{
@@ -922,97 +922,97 @@ dbSqlBase::sqlDataType(int type)
 {
 	switch (type)
 	{
-		case DBBASE_FIELDTYPE_INT:
-		case DBBASE_FIELDTYPE_INTEGER:
+		case DB_FIELDTYPE_INT:
+		case DB_FIELDTYPE_INTEGER:
 
 			return dodoString("INTEGER");
 
-		case DBBASE_FIELDTYPE_DATE:
+		case DB_FIELDTYPE_DATE:
 
 			return dodoString("DATE");
 
-		case DBBASE_FIELDTYPE_VARCHAR:
+		case DB_FIELDTYPE_VARCHAR:
 
 			return dodoString("VARCHAR");
 
-		case DBBASE_FIELDTYPE_TIMESTAMP:
+		case DB_FIELDTYPE_TIMESTAMP:
 
 			return dodoString("TIMESTAMP");
 
-		case DBBASE_FIELDTYPE_TIME:
+		case DB_FIELDTYPE_TIME:
 
 			return dodoString("TIME");
 
-		case DBBASE_FIELDTYPE_TINYINT:
+		case DB_FIELDTYPE_TINYINT:
 
 			return dodoString("TINYINT");
 
-		case DBBASE_FIELDTYPE_SMALLINT:
+		case DB_FIELDTYPE_SMALLINT:
 
 			return dodoString("SMALLINT");
 
-		case DBBASE_FIELDTYPE_MEDIUMINT:
+		case DB_FIELDTYPE_MEDIUMINT:
 
 			return dodoString("MEDIUMINT");
 
-		case DBBASE_FIELDTYPE_BIGINT:
+		case DB_FIELDTYPE_BIGINT:
 
 			return dodoString("BIGINT");
 
-		case DBBASE_FIELDTYPE_FLOAT:
+		case DB_FIELDTYPE_FLOAT:
 
 			return dodoString("FLOAT");
 
-		case DBBASE_FIELDTYPE_REAL:
-		case DBBASE_FIELDTYPE_DOUBLE:
+		case DB_FIELDTYPE_REAL:
+		case DB_FIELDTYPE_DOUBLE:
 
 			return dodoString("REAL");
 
-		case DBBASE_FIELDTYPE_DECIMAL:
+		case DB_FIELDTYPE_DECIMAL:
 
 			return dodoString("DECIMAL");
 
-		case DBBASE_FIELDTYPE_CHAR:
+		case DB_FIELDTYPE_CHAR:
 
 			return dodoString("CHAR");
 
-		case DBBASE_FIELDTYPE_TINYBLOB:
+		case DB_FIELDTYPE_TINYBLOB:
 
 			return dodoString("TINYBLOB");
 
-		case DBBASE_FIELDTYPE_BLOB:
+		case DB_FIELDTYPE_BLOB:
 
 			return dodoString("BLOB");
 
-		case DBBASE_FIELDTYPE_MEDIUMBLOB:
+		case DB_FIELDTYPE_MEDIUMBLOB:
 
 			return dodoString("MEDIUMBLOB");
 
-		case DBBASE_FIELDTYPE_LONGBLOB:
+		case DB_FIELDTYPE_LONGBLOB:
 
 			return dodoString("LONGBLOB");
 
-		case DBBASE_FIELDTYPE_TINYTEXT:
+		case DB_FIELDTYPE_TINYTEXT:
 
 			return dodoString("TINYTEXT");
 
-		case DBBASE_FIELDTYPE_TEXT:
+		case DB_FIELDTYPE_TEXT:
 
 			return dodoString("TEXT");
 
-		case DBBASE_FIELDTYPE_MEDIUMTEXT:
+		case DB_FIELDTYPE_MEDIUMTEXT:
 
 			return dodoString("MEDIUMTEXT");
 
-		case DBBASE_FIELDTYPE_LONGTEXT:
+		case DB_FIELDTYPE_LONGTEXT:
 
 			return dodoString("LONGTEXT");
 
-		case DBBASE_FIELDTYPE_ENUM:
+		case DB_FIELDTYPE_ENUM:
 
 			return dodoString("ENUM");
 
-		case DBBASE_FIELDTYPE_SET:
+		case DB_FIELDTYPE_SET:
 
 			return dodoString("SET");
 
@@ -1029,37 +1029,37 @@ dbSqlBase::chkRange(int type)
 {
 	switch (type)
 	{
-		case DBBASE_FIELDTYPE_DATE:
-		case DBBASE_FIELDTYPE_TIME:
-		case DBBASE_FIELDTYPE_TINYBLOB:
-		case DBBASE_FIELDTYPE_BLOB:
-		case DBBASE_FIELDTYPE_MEDIUMBLOB:
-		case DBBASE_FIELDTYPE_LONGBLOB:
-		case DBBASE_FIELDTYPE_TINYTEXT:
-		case DBBASE_FIELDTYPE_TEXT:
-		case DBBASE_FIELDTYPE_MEDIUMTEXT:
-		case DBBASE_FIELDTYPE_LONGTEXT:
-		case DBBASE_FIELDTYPE_ENUM:
-		case DBBASE_FIELDTYPE_SET:
+		case DB_FIELDTYPE_DATE:
+		case DB_FIELDTYPE_TIME:
+		case DB_FIELDTYPE_TINYBLOB:
+		case DB_FIELDTYPE_BLOB:
+		case DB_FIELDTYPE_MEDIUMBLOB:
+		case DB_FIELDTYPE_LONGBLOB:
+		case DB_FIELDTYPE_TINYTEXT:
+		case DB_FIELDTYPE_TEXT:
+		case DB_FIELDTYPE_MEDIUMTEXT:
+		case DB_FIELDTYPE_LONGTEXT:
+		case DB_FIELDTYPE_ENUM:
+		case DB_FIELDTYPE_SET:
 
 			return -1;
 
-		case DBBASE_FIELDTYPE_INTEGER:
-		case DBBASE_FIELDTYPE_INT:
-		case DBBASE_FIELDTYPE_TINYINT:
-		case DBBASE_FIELDTYPE_SMALLINT:
-		case DBBASE_FIELDTYPE_MEDIUMINT:
-		case DBBASE_FIELDTYPE_BIGINT:
-		case DBBASE_FIELDTYPE_FLOAT:
-		case DBBASE_FIELDTYPE_REAL:
-		case DBBASE_FIELDTYPE_DOUBLE:
-		case DBBASE_FIELDTYPE_TIMESTAMP:
+		case DB_FIELDTYPE_INTEGER:
+		case DB_FIELDTYPE_INT:
+		case DB_FIELDTYPE_TINYINT:
+		case DB_FIELDTYPE_SMALLINT:
+		case DB_FIELDTYPE_MEDIUMINT:
+		case DB_FIELDTYPE_BIGINT:
+		case DB_FIELDTYPE_FLOAT:
+		case DB_FIELDTYPE_REAL:
+		case DB_FIELDTYPE_DOUBLE:
+		case DB_FIELDTYPE_TIMESTAMP:
 
 			return 0;
 
-		case DBBASE_FIELDTYPE_VARCHAR:
-		case DBBASE_FIELDTYPE_CHAR:
-		case DBBASE_FIELDTYPE_DECIMAL:
+		case DB_FIELDTYPE_VARCHAR:
+		case DB_FIELDTYPE_CHAR:
+		case DB_FIELDTYPE_DECIMAL:
 
 			return 1;
 
@@ -1076,23 +1076,23 @@ dbSqlBase::stringReference(int type)
 {
 	switch (type)
 	{
-		case DBBASE_REFERENCE_RESTRICT:
+		case DB_REFERENCE_RESTRICT:
 
 			return dodoString("restrict");
 
-		case DBBASE_REFERENCE_CASCADE:
+		case DB_REFERENCE_CASCADE:
 
 			return dodoString("cascade");
 
-		case DBBASE_REFERENCE_SET_NULL:
+		case DB_REFERENCE_SET_NULL:
 
 			return dodoString("set null");
 
-		case DBBASE_REFERENCE_NO_ACTION:
+		case DB_REFERENCE_NO_ACTION:
 
 			return dodoString("no action");
 
-		case DBBASE_REFERENCE_SET_DEFAULT:
+		case DB_REFERENCE_SET_DEFAULT:
 
 			return dodoString("set default");
 

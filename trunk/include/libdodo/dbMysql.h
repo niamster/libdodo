@@ -53,22 +53,22 @@ namespace dodo
 	};
 
 	/**
-	 * @enum mysqlAddSelEnum describes mySQL additional statement for SELECT
+	 * @enum dbMysqlAddSelEnum describes mySQL additional statement for SELECT
 	 */
-	enum mysqlAddSelEnum
+	enum dbMysqlAddSelEnum
 	{
-		DBMYSQL_REQUEST_SELECT_STRAIGHT_JOIN = 1,
-		DBMYSQL_REQUEST_SELECT_SMALL_RESULT,
-		DBMYSQL_REQUEST_SELECT_BIG_RESULT,
+		DBMYSQL_ADDREQUEST_SELECT_STRAIGHT_JOIN = 1,
+		DBMYSQL_ADDREQUEST_SELECT_SMALL_RESULT,
+		DBMYSQL_ADDREQUEST_SELECT_BIG_RESULT,
 	};
 
 	/**
-	 * @enum mysqlAddDelEnum describes mySQL additional statement for DELETE
+	 * @enum dbMysqlAddDelEnum describes mySQL additional statement for DELETE
 	 */
-	enum mysqlAddDelEnum
+	enum dbMysqlAddDelEnum
 	{
-		DBMYSQL_REQUEST_DELETE_LOW_PRIORITY = 1,
-		DBMYSQL_REQUEST_DELETE_QUICK
+		DBMYSQL_ADDREQUEST_DELETE_LOW_PRIORITY = 1,
+		DBMYSQL_ADDREQUEST_DELETE_QUICK
 	};
 
 	/**
@@ -80,13 +80,13 @@ namespace dodo
 	};
 
 	/**
-	 * @enum mysqlAddInsEnum describes mySQL additional statement for INSERT
+	 * @enum dbMysqlAddInsEnum describes mySQL additional statement for INSERT
 	 */
-	enum mysqlAddInsEnum
+	enum dbMysqlAddInsEnum
 	{
-		DBMYSQL_REQUEST_INSERT_DELAYED = 1,
-		DBMYSQL_REQUEST_INSERT_LOW_PRIORITY,
-		DBMYSQL_REQUEST_INSERT_HIGH_PRIORITY,
+		DBMYSQL_ADDREQUEST_INSERT_DELAYED = 1,
+		DBMYSQL_ADDREQUEST_INSERT_LOW_PRIORITY,
+		DBMYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY,
 	};
 
 	/**

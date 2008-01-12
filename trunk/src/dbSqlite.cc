@@ -65,9 +65,9 @@ dbSqlite::fieldCollect(const __fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
 	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
-	resRow.append((DBBASE_FIELDFLAG_NULL & flag) == DBBASE_FIELDFLAG_NULL ? " null " : " not null ");
+	resRow.append(isSetFlag(flag, DB_FIELDFLAG_NULL) ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append((DBBASE_FIELDFLAG_AUTO_INCREMENT & flag) == DBBASE_FIELDFLAG_AUTO_INCREMENT ? " primary key autoincrement" : __dodostring__);
+	resRow.append(isSetFlag(flag, DB_FIELDFLAG_AUTO_INCREMENT) ? " primary key autoincrement" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{
