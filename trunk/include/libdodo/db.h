@@ -75,7 +75,10 @@ namespace dodo
 								   dodoString &pre_group,
 								   dodoString &pre_limNumber,
 								   dodoString &pre_limOffset,
-								   dodoStringArray &pre_subQ,
+								   dodoStringArray &pre_subQueries,
+								   dodoStringArray &pre_joinTables,
+								   dodoStringArray &pre_joinConds,
+								   dodoArray<int> &pre_joinTypes,
 								   int &qType,
 								   int &qShift,
 								   int &qSelShift,
@@ -95,7 +98,10 @@ namespace dodo
 		dodoString &pre_group;                          ///< group statement
 		dodoString &pre_limNumber;                      ///< limit of result
 		dodoString &pre_limOffset;                      ///< offset of requested result
-		dodoStringArray &pre_subQ;                      ///< subquery
+		dodoStringArray &pre_subQueries;                ///< subquery
+		dodoStringArray &pre_joinTables;                ///< join tables
+		dodoStringArray &pre_joinConds;                 ///< join conditions
+		dodoArray<int> &pre_joinTypes;                  ///< join types
 
 		int &qType;                                     ///< type of operation[see qStEnum]
 
@@ -193,6 +199,12 @@ namespace dodo
 			 * @param where is where statement for request
 			 */
 			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__) = 0;
+
+			/**
+			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
+			 * @param where is where statement for request
+			 */
+			virtual void selectAll(const dodoString &table, const dodoString &where = __dodostring__) = 0;
 
 			/**
 			 * @param table is table name
@@ -297,6 +309,14 @@ namespace dodo
 			virtual void having(const dodoString &having) = 0;
 
 			/**
+			 * appends join for request
+			 * @param table defines what table to join
+			 * @param condition defines condition for joining
+			 * @param type defines join type[see dbBaseJoinTypeEnum]
+			 */
+			virtual void join(const dodoString &table, int type, const dodoString &condition) = 0;
+
+			/**
 			 * remove where statement
 			 */
 			virtual void unwhere() = 0;
@@ -388,7 +408,10 @@ namespace dodo
 			dodoString pre_group;                       ///< group statement
 			dodoString pre_limNumber;                   ///< limit of result
 			dodoString pre_limOffset;                   ///< offset of requested result
-			dodoStringArray pre_subQ;                   ///< subquery
+			dodoStringArray pre_subQueries;             ///< subquery
+			dodoStringArray pre_joinTables;            ///< join tables
+			dodoStringArray pre_joinConds;             ///< join conditions
+			dodoArray<int> pre_joinTypes;              ///< join types
 
 			int qType;                                  ///< type of operation
 

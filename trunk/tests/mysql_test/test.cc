@@ -21,7 +21,6 @@ using namespace std;
 			cout << endl << endl << "table was " << sql->pre_table << endl << endl;
 			
 			sql->pre_limNumber = "70";
-			sql->pre_fieldsNames[0] = std::string((char *)yep);
 		}
 	}
 
@@ -39,8 +38,19 @@ int main(int argc, char **argv)
 			
 			int pos = pp.addPreExec(hook,(void *)"id");
 			
-			pp.setDbInfo("test","",3306,"root", "");
+			pp.setDbInfo("test","",3306,"root", "password");
 			pp.connect();
+	
+			try
+			{
+				pp.deleteTable("test");
+				pp.exec();
+				pp.deleteTable("test1");
+				pp.exec();
+			}
+			catch(...)
+			{
+			}
 	
 			__tableInfo ti;
             ti.name = "test";
@@ -61,14 +71,26 @@ int main(int argc, char **argv)
 			fi.type = DBBASE_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
-			try
-			{
-				pp.deleteTable("test");
-				pp.exec();
-			}
-			catch(...)
-			{
-			}
+			pp.createTable(ti);
+			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
+			pp.exec();
+			
+			ti.fields.clear();
+            ti.name = "test1";
+			
+            fi.name = "id";
+            fi.type = DBBASE_FIELDTYPE_INTEGER;
+            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
+            ti.fields.push_back(fi);
+			
+			fi.name = "dot";
+			fi.flag = 0;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
+			ti.fields.push_back(fi);
+	
+			fi.name = "operation";
+			fi.type = DBBASE_FIELDTYPE_TEXT;
+			ti.fields.push_back(fi);
 	
 			pp.createTable(ti);
 			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
@@ -87,15 +109,13 @@ int main(int argc, char **argv)
 			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 			pp.exec();
 			
-			
 			dodoStringArray fields;
 			
-			fields.push_back("dot");
-			fields.push_back("operation");
-			
 			/* select*/
-			pp.select("test",fields);
+			pp.selectAll("test");
+			pp.join("test1", DBBASE_REQUEST_JOINTYPE_JOIN, "test.operation = test1.operation");
 			pp.limit(10);
+			cout << pp.queryCollect() << endl;
 			pp.exec();
 			
 			dodoStringArray values;
@@ -124,6 +144,9 @@ int main(int argc, char **argv)
 			cout << pp.queryCollect() << endl;
 			pp.exec();
 			
+			fields.clear();
+			fields.push_back("dot");
+			fields.push_back("operation");
 			
 			pp.insert("test",values,fields);//simple insert
 			cout << pp.queryCollect() << endl;
@@ -136,7 +159,7 @@ int main(int argc, char **argv)
 				pp.exec();
 			}
 			
-			pp.select("test",fields,"id>1");
+			pp.selectAll("test","id>1");
 	
 			/* creatin' union with sqlStatement that compiles from  'pp.select("log",fields,"id>1");'*/
 			dodoStringArray uni;
@@ -160,7 +183,7 @@ int main(int argc, char **argv)
 		}
 	    catch(baseEx ex)
 	    {	
-			cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl;
+			cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl << ex.message << endl;
 	    }
     
 #else
@@ -171,7 +194,7 @@ int main(int argc, char **argv)
 
     	now = timeTools::now() - now;
 
-	cout << "SpentTime: " << now;
+    	cout << "SpentTime: " << now << endl;
     
 	return 0;
 }

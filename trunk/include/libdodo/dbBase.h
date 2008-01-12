@@ -44,6 +44,7 @@ namespace dodo
 		DBBASE_ADDREQUEST_LIMIT,
 		DBBASE_ADDREQUEST_OFFSET,
 		DBBASE_ADDREQUEST_AS,
+		DBBASE_ADDREQUEST_JOIN,
 	};
 
 	/**
@@ -80,6 +81,19 @@ namespace dodo
 		DBBASE_REQUEST_DELETE_INDEX,
 
 		DBBASE_REQUEST_CALL_FUNCTION
+	};
+	
+	/**
+	 * @enum dbBaseJoinTypeEnum define join types
+	 */
+	enum dbBaseJoinTypeEnum
+	{
+		DBBASE_REQUEST_JOINTYPE_JOIN,
+		DBBASE_REQUEST_JOINTYPE_LEFTOUTER,
+		DBBASE_REQUEST_JOINTYPE_RIGHTOUTER,
+		DBBASE_REQUEST_JOINTYPE_FULLOUTER,
+		DBBASE_REQUEST_JOINTYPE_INNER,
+		DBBASE_REQUEST_JOINTYPE_CROSS,
 	};
 
 	/**
@@ -291,6 +305,12 @@ namespace dodo
 			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__);
 
 			/**
+			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
+			 * @param where is where statement for request
+			 */
+			virtual void selectAll(const dodoString &table, const dodoString &where = __dodostring__);
+
+			/**
 			 * @param table is table name
 			 * @param fields is array of fields' names
 			 * 			key => field's name
@@ -480,6 +500,14 @@ namespace dodo
 			 * @param having is having statement
 			 */
 			virtual void having(const dodoString &having);
+
+			/**
+			 * appends join for request
+			 * @param table defines what table to join
+			 * @param type defines join type[see dbBaseJoinTypeEnum]
+			 * @param condition defines condition for joining
+			 */
+			virtual void join(const dodoString &table, int type, const dodoString &condition);
 
 			/**
 			 * remove where statement

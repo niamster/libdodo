@@ -501,7 +501,7 @@ dbSqlBase::delCollect()
 void
 dbSqlBase::subCollect()
 {
-	request = tools::implode(pre_subQ, sqlQStArr[qType].str);
+	request = tools::implode(pre_subQueries, sqlQStArr[qType].str);
 }
 
 //-------------------------------------------------------------------
@@ -624,6 +624,69 @@ dbSqlBase::createFieldCollect()
 
 //-------------------------------------------------------------------
 
+void 
+dbSqlBase::joinCollect()
+{
+	dodoStringArray::iterator i = pre_joinTables.begin(), j = pre_joinTables.end();
+	dodoStringArray::iterator o = pre_joinConds.begin(), p = pre_joinConds.end();
+	dodoArray<int>::iterator m = pre_joinTypes.begin(), n = pre_joinTypes.end();
+	for (;i!=j;++i, ++o, ++m)
+	{
+		switch (*m)
+		{
+			case DBBASE_REQUEST_JOINTYPE_JOIN:
+				
+				request.append(" join ");
+				
+				break;
+			
+			case DBBASE_REQUEST_JOINTYPE_LEFTOUTER:
+				
+				request.append(" left outer join ");
+				
+				break;
+				
+			case DBBASE_REQUEST_JOINTYPE_RIGHTOUTER:
+
+				request.append(" right outer join ");
+				
+				break;
+				
+			case DBBASE_REQUEST_JOINTYPE_FULLOUTER:
+
+				request.append(" full outer join ");
+				
+				break;
+				
+			case DBBASE_REQUEST_JOINTYPE_INNER:
+
+				request.append(" inner join ");
+				
+				break;
+				
+			case DBBASE_REQUEST_JOINTYPE_CROSS:
+
+				request.append(" cross join ");
+				
+				break;
+				
+			default:
+				
+				throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASEEX_JOINCOLLECT, ERR_LIBDODO, DBSQLBASEEX_UNKNOWNJOINTYPE, DBSQLBASEEX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
+		}
+		
+		request.append(*i);
+		
+		if (o->size() > 0)
+		{
+			request.append(" on ");
+			request.append(*o);
+		}
+	}
+}
+
+//-------------------------------------------------------------------
+
 dodoString
 dbSqlBase::queryCollect()
 {
@@ -636,6 +699,8 @@ dbSqlBase::queryCollect()
 
 			selectCollect();
 			selectAction = true;
+			
+			joinCollect();
 
 			break;
 

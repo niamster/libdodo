@@ -37,21 +37,23 @@ namespace dodo
 	 */
 	enum dbSqlBaseExR
 	{
-		DBSQLBASEEX_EMPTYREQUEST
+		DBSQLBASEEX_EMPTYREQUEST,
+		DBSQLBASEEX_UNKNOWNJOINTYPE,
 	};
 
 	/**
 	 * libdodo defined errors' explanation
 	 */
-#define DBSQLBASEEX_EMPTYREQUEST_STR "Query is empty. are you sure?"
+#define DBSQLBASEEX_EMPTYREQUEST_STR "Query is empty. Are you sure?"
+#define DBSQLBASEEX_UNKNOWNJOINTYPE_STR "Unknown join type."
 
 	/**
 	 * ID of function where exception was thrown
 	 */
 	enum dbSqlBaseFunctionsID
 	{
-		DBSQLBASEEX_QUERYCOLLECT
-
+		DBSQLBASEEX_QUERYCOLLECT,
+		DBSQLBASEEX_JOINCOLLECT,
 	};
 
 };

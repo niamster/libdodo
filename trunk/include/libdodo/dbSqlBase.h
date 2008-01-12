@@ -105,6 +105,11 @@ namespace dodo
 			virtual void selectCollect();
 
 			/**
+			 * constructs from collected data JOIN sql statement
+			 */
+			virtual void joinCollect();
+
+			/**
 			 * constructs from collected data to INSERT sql statement
 			 */
 			virtual void insertCollect();

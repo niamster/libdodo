@@ -174,6 +174,26 @@ dbBase::select(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
+dbBase::selectAll(const dodoString &a_table,
+			   const dodoString &a_where)
+{
+	qType = DBBASE_REQUEST_SELECT;
+
+	pre_table = a_table;
+	pre_fieldsNames.push_back("*");
+
+	if (a_where.size() != 0)
+	{
+		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+		pre_where = a_where;
+	}
+
+	show = true;
+}
+
+//-------------------------------------------------------------------
+
+void
 dbBase::insert(const dodoString &a_table,
 			   const dodoStringMap &a_fields)
 {
@@ -300,6 +320,7 @@ dbBase::insertSelect(const dodoString &a_tableTo,
 }
 
 //-------------------------------------------------------------------
+
 void
 dbBase::update(const dodoString &a_table,
 			   const dodoStringMap &a_fields,
@@ -384,7 +405,7 @@ dbBase::subquery(const dodoStringArray &sub,
 				 int type)
 {
 	qType = type;
-	pre_subQ = sub;
+	pre_subQueries = sub;
 }
 
 //-------------------------------------------------------------------
@@ -603,6 +624,20 @@ dbBase::having(const dodoString &having)
 //-------------------------------------------------------------------
 
 void
+dbBase::join(const dodoString &table,
+		int type,
+		const dodoString &condition)
+{
+	pre_joinTables.push_back(table);
+	pre_joinConds.push_back(condition);
+	pre_joinTypes.push_back(type);
+
+	addFlag(qShift, 1 << DBBASE_ADDREQUEST_JOIN);
+}
+
+//-------------------------------------------------------------------
+
+void
 dbBase::unwhere()
 {
 	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
@@ -761,6 +796,21 @@ dbBase::cleanCollected()
 	qDbDepInsShift = DB_EMPTY;
 	qDbDepUpShift = DB_EMPTY;
 	qDbDepDelShift = DB_EMPTY;
+	
+	pre_where.clear();
+	pre_fieldsNames.clear();
+	pre_fieldsVal.clear();
+	pre_table.clear();
+	pre_tableTo.clear();
+	pre_order.clear();
+	pre_having.clear();
+	pre_group.clear();
+	pre_limNumber.clear();
+	pre_limOffset.clear();
+	pre_subQueries.clear();
+	pre_joinTables.clear();
+	pre_joinConds.clear();
+	pre_joinTypes.clear();
 }
 
 //-------------------------------------------------------------------
