@@ -25,6 +25,65 @@
 
 using namespace dodo;
 
+__tableInfo::__tableInfo()
+{
+	ifNotExists = false;
+}
+
+//-------------------------------------------------------------------
+
+const __tableInfo &
+__tableInfo::operator=(const __tableInfo &from)
+{
+	name = from.name;
+
+	fields.clear();
+
+	dodoArray<__fieldInfo>::const_iterator j = from.fields.end();
+	for (dodoArray<__fieldInfo>::const_iterator i = from.fields.begin(); i != j; ++i)
+		fields.push_back(*i);
+
+	primKeys = from.primKeys;
+	uniq = from.uniq;
+	ifNotExists = from.ifNotExists;
+
+	return from;
+}
+
+//-------------------------------------------------------------------
+
+__fieldInfo::__fieldInfo()
+{
+	type = -1;
+	length = -1;
+	flag = 0;
+	onDelete = -1;
+	onUpdate = -1;
+}
+
+//-------------------------------------------------------------------
+
+const __fieldInfo &
+__fieldInfo::operator=(const __fieldInfo &from)
+{
+	name = from.name;
+	type = from.type;
+	length = from.length;
+	flag = from.flag;
+
+	refTable = from.refTable;
+	onDelete = from.onDelete;
+	onUpdate = from.onUpdate;
+	refFields = from.refFields;
+
+	defaultVal = from.defaultVal;
+	set_enum = from.set_enum;
+
+	charset = from.charset;
+
+	return from;
+}
+
 //-------------------------------------------------------------------
 
 dbBase::dbBase() : show(false),

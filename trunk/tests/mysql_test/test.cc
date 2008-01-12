@@ -58,17 +58,17 @@ int main(int argc, char **argv)
             __fieldInfo fi;
 
             fi.name = "id";
-            fi.type = DB_FIELDTYPE_INTEGER;
-            fi.flag = DB_FIELDFLAG_NULL | DB_FIELDFLAG_AUTO_INCREMENT;
+            fi.type = DBBASE_FIELDTYPE_INTEGER;
+            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
             ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
-			fi.type = DB_FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			fi.name = "operation";
-			fi.type = DB_FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			pp.createTable(ti);
@@ -79,17 +79,17 @@ int main(int argc, char **argv)
             ti.name = "test1";
 			
             fi.name = "id";
-            fi.type = DB_FIELDTYPE_INTEGER;
-            fi.flag = DB_FIELDFLAG_NULL | DB_FIELDFLAG_AUTO_INCREMENT;
+            fi.type = DBBASE_FIELDTYPE_INTEGER;
+            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
             ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
-			fi.type = DB_FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			fi.name = "operation";
-			fi.type = DB_FIELDTYPE_TEXT;
+			fi.type = DBBASE_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			pp.createTable(ti);
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 	
 			/*create field*/
 			fi.name = "fi";
-			fi.type = DB_FIELDTYPE_CHAR;
+			fi.type = DBBASE_FIELDTYPE_CHAR;
 			fi.length = 10;
 			
 			pp.createField(fi,"test");

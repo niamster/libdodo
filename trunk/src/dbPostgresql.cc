@@ -57,10 +57,10 @@ dbPostgresql::sqlDataType(int type)
 {
 	switch (type)
 	{
-		case DB_FIELDTYPE_TINYBLOB:
-		case DB_FIELDTYPE_BLOB:
-		case DB_FIELDTYPE_MEDIUMBLOB:
-		case DB_FIELDTYPE_LONGBLOB:
+		case DBBASE_FIELDTYPE_TINYBLOB:
+		case DBBASE_FIELDTYPE_BLOB:
+		case DBBASE_FIELDTYPE_MEDIUMBLOB:
+		case DBBASE_FIELDTYPE_LONGBLOB:
 
 			return dodoString("BYTEA");
 
