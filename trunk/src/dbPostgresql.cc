@@ -446,7 +446,6 @@ dbPostgresql::affectedRowsCount() const
 
 //-------------------------------------------------------------------
 
-
 void
 dbPostgresql::exec(const dodoString &query,
 				   bool result)
@@ -554,7 +553,7 @@ dbPostgresql::fetchAssoc() const
 			else
 				rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
 
-			rowFieldsPart.insert(PQfname(pgResult, i), rowPart);
+			rowFieldsPart.insert(PQfname(pgResult, j), rowPart);
 		}
 
 		rowsFields.push_back(rowFieldsPart);
