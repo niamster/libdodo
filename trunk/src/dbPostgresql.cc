@@ -354,15 +354,10 @@ dbPostgresql::fetchRow() const
 
 		for (j = 0; j < fieldsNum; ++j)
 		{
-			if (PQgetisnull(pgResult, i, j) == 1)
-				rowPart.assign("NULL");
+			if (preventEscaping)
+				rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
 			else
-			{
-				if (preventEscaping)
-					rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
-				else
-					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
-			}
+				rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
 
 			rowsPart.push_back(rowPart);
 		}
@@ -554,15 +549,10 @@ dbPostgresql::fetchAssoc() const
 
 		for (j = 0; j < fieldsNum; ++j)
 		{
-			if (PQgetisnull(pgResult, i, j) == 0)
-				rowPart.assign("NULL");
+			if (preventEscaping)
+				rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
 			else
-			{
-				if (preventEscaping)
-					rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
-				else
-					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
-			}
+				rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
 
 			rowFieldsPart.insert(PQfname(pgResult, i), rowPart);
 		}
