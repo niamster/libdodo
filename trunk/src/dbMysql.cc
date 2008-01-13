@@ -270,15 +270,15 @@ dbMysql::_exec(const dodoString &query,
 						{
 							connect();
 							if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-								throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+								throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
 						}
 						else
-							throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+							throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
 					}
 
 					mysqlRes = mysql_store_result(mysql);
 					if (mysqlRes == NULL)
-						throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
+						throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
 
 					empty = false;
 
@@ -313,6 +313,9 @@ dbMysql::_exec(const dodoString &query,
 	}
 	else
 	{
+		if (stringTools::equal(query, "dodo:hint:db:blob"))
+			throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_LIBDODO, DBMYSQLEX_WRONGHINTUSAGE, DBMYSQLEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
+		
 		request = query;
 		show = result;
 	}
@@ -324,10 +327,10 @@ dbMysql::_exec(const dodoString &query,
 		{
 			connect();
 			if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-				throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+				throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
 		}
 		else
-			throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+			throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
 	}
 
 	if (!show)
@@ -341,7 +344,7 @@ dbMysql::_exec(const dodoString &query,
 
 	mysqlRes = mysql_store_result(mysql);
 	if (mysqlRes == NULL)
-		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
 
 	empty = false;
 }

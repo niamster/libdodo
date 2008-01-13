@@ -59,8 +59,9 @@ int main(int argc, char **argv)
 		}
 		else if (strcasecmp(argv[1],"mysql") == 0)
 		{
-			info.path = "/tmp/mysql.sock";
+			info.path = "/var/run/mysqld/mysqld.sock";
 			info.user = "root";
+			info.password = "password";
 		}
 		else if (strcasecmp(argv[1],"sqlite") == 0)
 		{
@@ -214,7 +215,10 @@ int main(int argc, char **argv)
 			pp->exec();
 
 		pp->select("test",select,"operation='ma'");
-		pp->exec();
+		if (strcasecmp(argv[1],"postgres") == 0)
+			pp->exec("dodo:hint:db:blob");
+		else
+			pp->exec();
 
 		store = pp->fetch();
 

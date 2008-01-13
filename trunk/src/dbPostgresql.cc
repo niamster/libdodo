@@ -233,12 +233,11 @@ dbPostgresql::_exec(const dodoString &query,
 	}
 	else
 	{
-		if (strstr(query.c_str(), "dodo:hint:db:blob") != NULL)
+		if (stringTools::equal(query, "dodo:hint:db:blob"))
 		{
 			queryCollect();
 
-			if (!show)
-				blobHint = true;
+			blobHint = true;
 		}
 		else
 		{
@@ -288,9 +287,15 @@ dbPostgresql::_exec(const dodoString &query,
 			}
 
 				break;
-
+			
+			case DBBASE_REQUEST_SELECT:
+				
+				pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
+				
+				break;
+				
 			default:
-
+				
 				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_LIBDODO, DBPOSTGRESQLEX_WRONGHINTUSAGE, DBPOSTGRESQLEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
 		}
 	}

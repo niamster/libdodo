@@ -161,7 +161,7 @@ void
 dbSqlite::_exec(const dodoString &query,
 				bool result)
 {
-	bool blobHint;
+	bool blobHint = false;
 
 	if (query.size() == 0)
 	{
@@ -246,7 +246,7 @@ dbSqlite::_exec(const dodoString &query,
 	}
 	else
 	{
-		if (strstr(query.c_str(), "dodo:hint:db:blob") != NULL)
+		if (stringTools::equal(query, "dodo:hint:db:blob"))
 		{
 			queryCollect();
 
@@ -286,9 +286,9 @@ dbSqlite::_exec(const dodoString &query,
 			}
 
 				break;
-
+				
 			default:
-
+				
 				throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_LIBDODO, DBSQLITEEX_WRONGHINTUSAGE, DBSQLITEEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
 
 		}

@@ -30,6 +30,18 @@
 
 namespace dodo
 {
+	/**
+	 * libdodo defined errors
+	 */
+	enum dbMysqlExR
+	{
+		DBMYSQLEX_WRONGHINTUSAGE,
+	};
+
+	/**
+	 * libdodo defined errors' explanation
+	 */
+#define DBMYSQLEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
 
 	/**
 	 * ID of function where exception was thrown
@@ -37,7 +49,7 @@ namespace dodo
 	enum dbMysqlFunctionsID
 	{
 		DBMYSQLEX_CONNECT,
-		DBMYSQLEX_EXEC,
+		DBMYSQLEX__EXEC,
 	};
 };
 

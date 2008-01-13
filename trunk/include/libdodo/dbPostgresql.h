@@ -124,7 +124,7 @@ namespace dodo
 			 * executes collected request
 			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
 			 * @param result describes whether request returns result[show, select...] or not[delete, update]
-			 * @note to insert|update using BLOB values use hint:
+			 * @note to insert|update|select using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
 			 * 		call exec method with query="dodo:hint:db:blob"
