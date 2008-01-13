@@ -296,7 +296,7 @@ dbPostgresql::_exec(const dodoString &query,
 	}
 	else
 	{
-		pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
+		pgResult = PQexec(conn, request.c_str());
 		if (pgResult == NULL)
 			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
 	}

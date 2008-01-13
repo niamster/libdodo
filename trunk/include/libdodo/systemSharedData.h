@@ -33,8 +33,6 @@
 #include <libdodo/systemSharedDataEx.h>
 #include <libdodo/tools.h>
 
-#include <iostream>
-
 namespace dodo
 {
 	/**
