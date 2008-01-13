@@ -124,6 +124,20 @@ dbBase::callFunction(const dodoString &name,
 //-------------------------------------------------------------------
 
 void
+dbBase::callProcedure(const dodoString &name,
+					 const dodoStringArray &arguments)
+{
+	qType = DBBASE_REQUEST_CALL_PROCEDURE;
+
+	pre_table = name;
+	pre_fieldsNames = arguments;
+
+	show = true;
+}
+
+//-------------------------------------------------------------------
+
+void
 dbBase::select(const dodoString &a_table,
 			   const dodoStringArray &a_fieldsNames,
 			   const dodoString &a_where)

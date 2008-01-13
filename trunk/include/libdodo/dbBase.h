@@ -80,7 +80,8 @@ namespace dodo
 		DBBASE_REQUEST_CREATE_INDEX,
 		DBBASE_REQUEST_DELETE_INDEX,
 
-		DBBASE_REQUEST_CALL_FUNCTION
+		DBBASE_REQUEST_CALL_FUNCTION,
+		DBBASE_REQUEST_CALL_PROCEDURE,
 	};
 
 	/**
@@ -283,6 +284,12 @@ namespace dodo
 			 * @param as is name of the result
 			 */
 			void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__);
+
+			/**
+			 * @param name is procedure name
+			 * @param arguments is array of arguments
+			 */
+			void callProcedure(const dodoString &name, const dodoStringArray &arguments);
 
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use

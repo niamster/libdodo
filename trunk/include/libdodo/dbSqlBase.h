@@ -100,6 +100,11 @@ namespace dodo
 			virtual void callFunctionCollect();
 
 			/**
+			 * constructs from collected data to CALL `procedure`(...) sql statement
+			 */
+			virtual void callProcedureCollect();
+
+			/**
 			 * constructs from collected data to SELECT sql statement
 			 */
 			virtual void selectCollect();

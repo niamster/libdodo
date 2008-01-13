@@ -264,6 +264,27 @@ dbSqlBase::callFunctionCollect()
 //-------------------------------------------------------------------
 
 void
+dbSqlBase::callProcedureCollect()
+{
+	request = "call ";
+	request.append(pre_table);
+	request.append("(");
+
+	char frame[] = "'";
+	if (preventFraming)
+		frame[0] = ' ';
+
+	if (preventEscaping)
+		request.append(tools::implode(pre_fieldsNames, ",", frame));
+	else
+		request.append(tools::implode(pre_fieldsNames, escapeFields, ",", frame));
+
+	request.append(")");
+}
+
+//-------------------------------------------------------------------
+
+void
 dbSqlBase::selectCollect()
 {
 	dodoString temp = insideAddCollect(addSelEnumArr, sqlAddSelArr, qSelShift);
@@ -744,6 +765,12 @@ dbSqlBase::queryCollect()
 
 			callFunctionCollect();
 			selectAction = true;
+
+			break;
+
+		case DBBASE_REQUEST_CALL_PROCEDURE:
+
+			callProcedureCollect();
 
 			break;
 
