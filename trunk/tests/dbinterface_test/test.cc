@@ -166,7 +166,7 @@ int main(int argc, char **argv)
 		ioDiskTools::unlink("test.2");
 
 		std::string dt = ioDiskTools::getFileContents("test");
-		ioDiskTools::append("test.1", dt);
+		ioDiskTools::writeToFile("test.1", dt);
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 			arr["b"] = "$1";
@@ -219,7 +219,7 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			ioDiskTools::append("test.2",(*store.rows.begin())[2]);	
+			ioDiskTools::writeToFile("test.2",(*store.rows.begin())[2]);	
 	}
 	catch(baseEx ex)
 	{

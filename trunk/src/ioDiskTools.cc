@@ -540,14 +540,14 @@ ioDiskTools::getFileContents(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (!S_ISREG(st.st_mode))
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_LIBDODO, IODISKTOOLSEX_WRONGFILENAME, IODISKTOOLSEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_LIBDODO, IODISKTOOLSEX_WRONGFILENAME, IODISKTOOLSEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
 	FILE *file = fopen(path.c_str(), "r");
 	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	char buffer[INSIZE];
 
@@ -558,7 +558,7 @@ ioDiskTools::getFileContents(const dodoString &path)
 	for (; i < iter; ++i)
 	{
 		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		if (fread(buffer, INSIZE, 1, file) == 0)
 			switch (errno)
@@ -569,7 +569,7 @@ ioDiskTools::getFileContents(const dodoString &path)
 				case EOVERFLOW:
 				case EROFS:
 
-					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 		retS.append(buffer, INSIZE);
@@ -577,7 +577,7 @@ ioDiskTools::getFileContents(const dodoString &path)
 	if (rest > 0)
 	{
 		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		if (fread(buffer, rest, 1, file) == 0)
 			switch (errno)
@@ -588,14 +588,14 @@ ioDiskTools::getFileContents(const dodoString &path)
 				case EOVERFLOW:
 				case EROFS:
 
-					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
 		retS.append(buffer, rest);
 	}
 
 	if (fclose(file) != 0)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return retS;
 }
@@ -607,14 +607,14 @@ ioDiskTools::getFileContentsArr(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTSARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	if (!S_ISREG(st.st_mode))
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_LIBDODO, IODISKTOOLSEX_WRONGFILENAME, IODISKTOOLSEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTSARR, ERR_LIBDODO, IODISKTOOLSEX_WRONGFILENAME, IODISKTOOLSEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 
 	FILE *file = fopen(path.c_str(), "r");
 	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTSARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	char buffer[DISK_MAXLINELEN];
 	dodoStringArray arr;
@@ -623,7 +623,7 @@ ioDiskTools::getFileContentsArr(const dodoString &path)
 		arr.push_back(buffer);
 
 	if (fclose(file) != 0)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTSARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	return arr;
 
@@ -910,15 +910,100 @@ ioDiskTools::exists(const dodoString &path)
 //-------------------------------------------------------------------
 
 void
-ioDiskTools::append(const dodoString &path,
-					const dodoString &content)
+ioDiskTools::appendToFile(const dodoString &path,
+						const dodoString &content)
 {
-	FILE *file = fopen(path.c_str(), "a+");
-	if (file == NULL)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	_writeToFile(path, content, "a+");
+}
 
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::appendToFile(const dodoString &path,
+						const dodoStringArray &content)
+{
+	_writeToFile(path, content, "a+");
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::writeToFile(const dodoString &path,
+						const dodoString &content)
+{
+	_writeToFile(path, content, "w+");
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::writeToFile(const dodoString &path,
+						const dodoStringArray &content)
+{
+	_writeToFile(path, content, "w+");
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::_writeToFile(const dodoString &path,
+                                        const dodoString &content,
+                                        const char *mode)
+{
+	FILE *file = fopen(path.c_str(), mode);
+	if (file == NULL)
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	
 	if (fwrite(content.c_str(), content.size(), 1, file) == 0)
-		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_APPEND, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+}
+
+//-------------------------------------------------------------------
+
+void
+ioDiskTools::_writeToFile(const dodoString &path,
+                                        const dodoStringArray &content,
+                                        const char *mode)
+{
+	FILE *file = fopen(path.c_str(), mode);
+	if (file == NULL)
+		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	
+	dodoStringArray::const_iterator i=content.begin(), j=content.end();
+	for (;i!=j;++i)
+	{
+	if (fputs(i->c_str(), file) < 0)
+		switch (errno)
+		{   
+			case EFBIG:
+			case EIO:
+			case EINTR:
+			case EBADF:
+			case EOVERFLOW:
+			case ENOSPC:
+			case EPIPE:
+			case ENOMEM:
+			case ENXIO:
+			
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		}   
+	
+	if (fputc('\n', file) < 0)
+		switch (errno)
+		{   
+			case EFBIG:
+			case EIO:
+			case EINTR:
+			case EBADF:
+			case EOVERFLOW:
+			case ENOSPC:
+			case EPIPE:
+			case ENOMEM:
+			case ENXIO:
+		
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		}
+	}
 }
 
 //-------------------------------------------------------------------
