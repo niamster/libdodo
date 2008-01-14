@@ -227,6 +227,9 @@ xml::parse(const __xmlNodeDef &definition)
 			node = node->children;
 
 			__xmlNode one;
+			
+			dodoArray<__xmlNode> chldrn;
+			dodoArray<__xmlNode>::iterator i, j;
 
 			while (node != NULL)
 			{
@@ -240,12 +243,18 @@ xml::parse(const __xmlNodeDef &definition)
 
 				getAttributes(node, one.attributes);
 
+				one.CDATA = isCDATA(node);
+				
 				if (node->children == NULL)
 					one.empty = true;
-
-				one.CDATA = isCDATA(node);
-
-				one.children.insert((char *)node->name, parse(node->children));
+				else
+				{
+					chldrn = parse(node->children);
+					i = chldrn.begin();
+					j = chldrn.end();
+					for (;i!=j;++i)
+						one.children[i->name].push_back(*i);
+				}
 
 				sample.children[(char *)node->name].push_back(one);
 
@@ -268,7 +277,7 @@ xml::parse(const __xmlNodeDef &definition,
 {
 	xmlNodePtr node = chNode, subNode;
 
-	__xmlNode sample, one;
+	__xmlNode sample;
 	dodoArray<__xmlNode> sampleArr;
 
 	if (icaseNames)
@@ -336,6 +345,11 @@ xml::parse(const __xmlNodeDef &definition,
 			{
 				subNode = node->children;
 
+				__xmlNode one;
+				
+				dodoArray<__xmlNode> chldrn;
+				dodoArray<__xmlNode>::iterator i, j;
+
 				while (subNode != NULL)
 				{
 					if (subNode->type != XML_ELEMENT_NODE)
@@ -347,13 +361,19 @@ xml::parse(const __xmlNodeDef &definition,
 					getNodeInfo(subNode, one);
 
 					getAttributes(subNode, one.attributes);
-
-					if (subNode->children == NULL)
-						one.empty = true;
-
+					
 					one.CDATA = isCDATA(subNode);
 
-					one.children.insert((char *)subNode->name, parse(subNode->children));
+					if (node->children == NULL)
+						one.empty = true;
+					else
+					{
+						chldrn = parse(node->children);
+						i = chldrn.begin();
+						j = chldrn.end();
+						for (;i!=j;++i)
+							one.children[i->name].push_back(*i);
+					}
 
 					sample.children[(char *)subNode->name].push_back(one);
 
@@ -541,6 +561,9 @@ xml::parse(xmlNodePtr node)
 	dodoArray<__xmlNode> sample;
 
 	__xmlNode one;
+	
+	dodoArray<__xmlNode> chldrn;
+	dodoArray<__xmlNode>::iterator i, j;
 
 	while (node != NULL)
 	{
@@ -554,12 +577,18 @@ xml::parse(xmlNodePtr node)
 
 		getAttributes(node, one.attributes);
 
+		one.CDATA = isCDATA(node);
+		
 		if (node->children == NULL)
 			one.empty = true;
-
-		one.CDATA = isCDATA(node);
-
-		one.children.insert((char *)node->name, parse(node->children));
+		else
+		{
+			chldrn = parse(node->children);
+			i = chldrn.begin();
+			j = chldrn.end();
+			for (;i!=j;++i)
+				one.children[i->name].push_back(*i);
+		}
 
 		sample.push_back(one);
 
