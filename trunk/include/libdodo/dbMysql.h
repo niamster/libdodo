@@ -320,6 +320,14 @@ namespace dodo
 			 * @return current session charset
 			 */
 			virtual dodoString getCharset() const;
+			
+			/**
+			 * renames field
+			 * @param field is current name
+			 * @param to_field is new name
+			 * @param is table where field is stored
+			 */
+			virtual void renameField(const dodoString &field, const dodoString &to_field, const __fieldInfo &fieldInfo);
 
 		protected:
 
@@ -336,6 +344,16 @@ namespace dodo
 			 * inits addidtional mySQL specific statements
 			 */
 			virtual void addSQL();
+			
+			/**
+			 * constructs from collected data to RENAME sql statement
+			 */
+			virtual void renameDbCollect();
+
+			/**
+			 * constructs from collected data to RENAME sql statement
+			 */
+			virtual void renameFieldCollect();
 
 		private:
 

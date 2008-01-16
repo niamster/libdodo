@@ -210,6 +210,16 @@ namespace dodo
 			 * @param type indicates the data type
 			 */
 			virtual dodoString sqlDataType(int type);
+			
+			/**
+			 * constructs from collected data to RENAME sql statement
+			 */
+			virtual void renameDbCollect();
+			
+			/**
+			 * constructs from collected data to RENAME sql statement
+			 */
+			virtual void renameFieldCollect();
 
 			/**
 			 * executes request

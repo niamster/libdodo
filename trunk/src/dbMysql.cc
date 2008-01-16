@@ -631,6 +631,36 @@ dbMysql::fetchAssoc() const
 	return rowsFields;
 }
 
+//-------------------------------------------------------------------
+
+void
+dbMysql::renameDbCollect()
+{
+	request = "rename database " + pre_order + " to " + pre_having;
+}
+
+//-------------------------------------------------------------------
+
+void
+dbMysql::renameFieldCollect()
+{
+	request = "alter table " + pre_table + " change " + pre_tableTo + " " + fieldCollect(pre_fieldInfo);
+}
+
+//-------------------------------------------------------------------
+
+void 
+dbMysql::renameField(const dodoString &field, 
+					const dodoString &to_field, 
+					const __fieldInfo &fieldInfo)
+{
+	qType = DBBASE_REQUEST_RENAME_FIELD;
+	pre_tableTo = field;
+	pre_having = to_field;
+	pre_fieldInfo = fieldInfo;
+	show = false;	
+}
+
 #endif
 
 //-------------------------------------------------------------------

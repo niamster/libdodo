@@ -594,6 +594,21 @@ dbPostgresql::getCharset() const
 {
 	return PQclientEncoding(conn);
 }
+//-------------------------------------------------------------------
+
+void
+dbPostgresql::renameDbCollect()
+{
+	request = "alter database " + pre_order + " rename to " + pre_having;
+}
+
+//-------------------------------------------------------------------
+
+void
+dbPostgresql::renameFieldCollect()
+{
+	request = "alter table " + pre_table + " rename column " + pre_tableTo + " to " + pre_having;
+}
 
 #endif
 

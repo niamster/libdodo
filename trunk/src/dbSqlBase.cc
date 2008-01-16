@@ -562,7 +562,7 @@ dbSqlBase::delFieldCollect()
 void
 dbSqlBase::renameDbCollect()
 {
-	request = "rename database " + pre_order + " to " + pre_having;
+	request = __dodostring__;
 }
 
 //-------------------------------------------------------------------
@@ -578,7 +578,7 @@ dbSqlBase::renameTableCollect()
 void
 dbSqlBase::renameFieldCollect()
 {
-	request = __dodostring__; ///< FIXME: make SQL statement
+	request = __dodostring__;
 }
 
 //-------------------------------------------------------------------

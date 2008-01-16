@@ -171,7 +171,6 @@ namespace dodo
 
 			/**
 			 * constructs from collected data to RENAME sql statement
-			 * FIXME: implement it!
 			 */
 			virtual void renameFieldCollect();
 
