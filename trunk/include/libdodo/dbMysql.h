@@ -327,7 +327,7 @@ namespace dodo
 			 * @param to_field is new name
 			 * @param is table where field is stored
 			 */
-			virtual void renameField(const dodoString &field, const dodoString &to_field, const __fieldInfo &fieldInfo);
+			virtual void renameField(const dodoString &field, const __fieldInfo &to_field, const dodoString &table);
 
 		protected:
 

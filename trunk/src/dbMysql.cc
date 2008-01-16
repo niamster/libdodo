@@ -644,20 +644,20 @@ dbMysql::renameDbCollect()
 void
 dbMysql::renameFieldCollect()
 {
-	request = "alter table " + pre_table + " change " + pre_tableTo + " " + fieldCollect(pre_fieldInfo);
+	request = "alter table " + pre_table + " change " + pre_having + " " + fieldCollect(pre_fieldInfo);
 }
 
 //-------------------------------------------------------------------
 
 void 
 dbMysql::renameField(const dodoString &field, 
-					const dodoString &to_field, 
-					const __fieldInfo &fieldInfo)
+					const __fieldInfo &to_field,
+					const dodoString &table)
 {
 	qType = DBBASE_REQUEST_RENAME_FIELD;
 	pre_tableTo = field;
-	pre_having = to_field;
-	pre_fieldInfo = fieldInfo;
+	pre_having = table;
+	pre_fieldInfo = to_field;
 	show = false;	
 }
 

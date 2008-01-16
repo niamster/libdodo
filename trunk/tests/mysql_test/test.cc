@@ -101,11 +101,16 @@ int main(int argc, char **argv)
 			pp.exec();
 	
 			/*create field*/
-			fi.name = "fi";
+			fi.name = "foo";
 			fi.type = DBBASE_FIELDTYPE_CHAR;
 			fi.length = 10;
 			
 			pp.createField(fi,"test");
+			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
+			pp.exec();
+
+			fi.name = "bar";	
+			pp.renameField(foo, fi, "test");
 			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 			pp.exec();
 			
