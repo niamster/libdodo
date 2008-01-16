@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 			pp.exec();
 
 			fi.name = "bar";	
-			pp.renameField(foo, fi, "test");
+			pp.renameField("foo", fi, "test");
 			cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 			pp.exec();
 			

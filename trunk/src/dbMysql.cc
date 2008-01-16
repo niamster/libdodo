@@ -644,7 +644,7 @@ dbMysql::renameDbCollect()
 void
 dbMysql::renameFieldCollect()
 {
-	request = "alter table " + pre_table + " change " + pre_having + " " + fieldCollect(pre_fieldInfo);
+	request = "alter table " + pre_table + " change " + pre_tableTo + " " + fieldCollect(pre_fieldInfo);
 }
 
 //-------------------------------------------------------------------
@@ -656,7 +656,7 @@ dbMysql::renameField(const dodoString &field,
 {
 	qType = DBBASE_REQUEST_RENAME_FIELD;
 	pre_tableTo = field;
-	pre_having = table;
+	pre_table = table;
 	pre_fieldInfo = to_field;
 	show = false;	
 }
