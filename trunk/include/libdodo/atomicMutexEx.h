@@ -31,11 +31,7 @@
 namespace dodo
 {
 	/**
-	 * next for atomicMutex
-	 */
-
-	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum atomicMutexFunctionsID
 	{

@@ -35,7 +35,7 @@
 namespace dodo
 {
 	/**
-	 * @class atomicMutex is to perform atomic locks
+	 * @class atomicMutex performs atomic locks using mutexes
 	 */
 	class atomicMutex : public atomicLock
 	{
@@ -52,20 +52,20 @@ namespace dodo
 			virtual ~atomicMutex();
 
 			/**
-			 * locks critical section
+			 * lock critical section
 			 */
 			virtual void lock();
 
 			/**
-			 * unlocks critical section
+			 * unlock critical section
 			 */
 			virtual void unlock();
 
 		protected:
 
-			pthread_mutex_t mutex; ///< lock
+			pthread_mutex_t mutex; ///< mutex
 	};
 
 };
 
-#endif /*_ATOMICMUTEX_H_*/
+#endif

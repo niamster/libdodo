@@ -36,7 +36,7 @@
 namespace dodo
 {
 	/**
-	 * @class atomicSemaphore is to perform atomic locks
+	 * @class atomicSemaphore performs atomic locks using semaphores
 	 */
 	class atomicSemaphore : public atomicLock
 	{
@@ -53,12 +53,12 @@ namespace dodo
 			virtual ~atomicSemaphore();
 
 			/**
-			 * locks critical section
+			 * lock critical section
 			 */
 			virtual void lock();
 
 			/**
-			 * unlocks critical section
+			 * unlock critical section
 			 */
 			virtual void unlock();
 

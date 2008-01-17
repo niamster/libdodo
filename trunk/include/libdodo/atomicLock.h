@@ -31,7 +31,7 @@
 namespace dodo
 {
 	/**
-	 * @class atomicLock is to perform atomic locks
+	 * @class atomicLock performs atomic locks
 	 */
 	class atomicLock
 	{
@@ -43,15 +43,15 @@ namespace dodo
 			virtual ~atomicLock() = 0;
 
 			/**
-			 * locks critical section
+			 * lock critical section
 			 */
 			virtual void lock() = 0;
 
 			/**
-			 * unlocks critical section
+			 * unlock critical section
 			 */
 			virtual void unlock() = 0;
 	};
 };
 
-#endif /*_ATOMICLOCK_H_*/
+#endif
