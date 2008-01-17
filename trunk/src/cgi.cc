@@ -31,7 +31,7 @@ __cgiFile::__cgiFile() : size(0)
 
 //-------------------------------------------------------------------
 
-__cookies::__cookies(const dodoString &a_name,
+__cookie::__cookie(const dodoString &a_name,
 					 const dodoString &a_value,
 					 const dodoString &a_exDate,
 					 const dodoString &a_path,
@@ -47,7 +47,7 @@ __cookies::__cookies(const dodoString &a_name,
 
 //-------------------------------------------------------------------
 
-__cookies::__cookies(bool a_secure) : secure(a_secure)
+__cookie::__cookie(bool a_secure) : secure(a_secure)
 {
 }
 
@@ -67,7 +67,6 @@ cgi::cgi(dodoStringMap &headers,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 autocleanFiles(a_autocleanFiles),
-										 firstPrint(true),
 										 headersPrinted(false)
 #ifdef FCGI_EXT
 										 ,
@@ -93,7 +92,7 @@ cgi::cgi(dodoStringMap &headers,
 		content.clear();
 
 	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
+	make(GET, ENVIRONMENT["QUERY_STRING"]);
 }
 
 //-------------------------------------------------------------------
@@ -105,7 +104,6 @@ cgi::cgi(bool silent,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 autocleanFiles(a_autocleanFiles),
-										 firstPrint(true),
 										 headersPrinted(false)
 #ifdef FCGI_EXT
 										 ,
@@ -131,7 +129,7 @@ cgi::cgi(bool silent,
 		content.clear();
 
 	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
+	make(GET, ENVIRONMENT["QUERY_STRING"]);
 }
 
 //-------------------------------------------------------------------
@@ -148,7 +146,6 @@ cgi::cgi(cgiFastIO    *a_cf,
 										 cgiFastSet(true),
 										 cf(a_cf),
 										 autocleanFiles(a_autocleanFiles),
-										 firstPrint(true),
 										 headersPrinted(false)
 
 {
@@ -168,7 +165,7 @@ cgi::cgi(cgiFastIO    *a_cf,
 		content.clear();
 
 	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
+	make(GET, ENVIRONMENT["QUERY_STRING"]);
 }
 
 //-------------------------------------------------------------------
@@ -184,7 +181,6 @@ cgi::cgi(cgiFastIO    *a_cf,
 										 cgiFastSet(true),
 										 cf(a_cf),
 										 autocleanFiles(a_autocleanFiles),
-										 firstPrint(true),
 										 headersPrinted(false)
 
 {
@@ -204,7 +200,7 @@ cgi::cgi(cgiFastIO    *a_cf,
 		content.clear();
 
 	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(METHOD_GET, ENVIRONMENT["QUERY_STRING"]);
+	make(GET, ENVIRONMENT["QUERY_STRING"]);
 }
 
 
@@ -243,12 +239,7 @@ cgi::flush()
 void
 cgi::printStream(const dodoString &buf)
 {
-	if (firstPrint)
-	{
-		firstPrint = false;
-
-		printHeaders();
-	}
+	printHeaders();
 
 #ifdef FCGI_EXT
 	if (cgiFastSet)
@@ -263,12 +254,7 @@ cgi::printStream(const dodoString &buf)
 void
 cgi::print(const dodoString &buf)
 {
-	if (firstPrint)
-	{
-		firstPrint = false;
-
-		printHeaders();
-	}
+	printHeaders();
 
 #ifdef FCGI_EXT
 	if (cgiFastSet)
@@ -412,9 +398,9 @@ cgi::printHeaders() const
 #endif
 		fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
 
-	if (cookiesSet.size() > 0)
+	if (cookies.size() > 0)
 	{
-		dodoList<__cookies>::const_iterator i(cookiesSet.begin()), j(cookiesSet.end());
+		dodoList<__cookie>::const_iterator i(cookies.begin()), j(cookies.end());
 		for (; i != j; ++i)
 		{
 #ifdef FCGI_EXT
@@ -539,7 +525,7 @@ cgi::makePost()
 
 	if (stringTools::iequal(ENVIRONMENT["CONTENT_TYPE"], "application/x-www-form-urlencoded"))
 	{
-		make(METHOD_POST, content);
+		make(POST, content);
 	}
 	else
 	{
@@ -653,7 +639,7 @@ cgi::makePost()
 				temp0 += 6;
 				temp1 = i->find("\"", temp0);
 
-				METHOD_POST.insert(i->substr(temp0, temp1 - temp0), i->substr(temp1 + 5, i->size() - temp1 - 7)); //FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
+				POST.insert(i->substr(temp0, temp1 - temp0), i->substr(temp1 + 5, i->size() - temp1 - 7)); //FIXME: damned boundaries. I've chosen 5 by substitution; It have to be CR+LF, but no =(; 7 = 5+2 -> unknown 5 + (CR+LF)
 			}
 	}
 }
@@ -664,9 +650,9 @@ const dodoStringMap &
 cgi::operator[](short method)
 {
 	if (method == CGI_REQUESTMETHOD_POST)
-		return METHOD_POST;
+		return POST;
 	else
-		return METHOD_GET;
+		return GET;
 }
 
 //-------------------------------------------------------------------
@@ -675,8 +661,8 @@ dodoString
 cgi::request(const dodoString &varName,
 			 short first)
 {
-	dodoString met0 = METHOD_GET[varName];
-	dodoString met1 = METHOD_POST[varName];
+	dodoString met0 = GET[varName];
+	dodoString met1 = POST[varName];
 
 	if (first == CGI_REQUESTMETHOD_GET)
 		if (met0.size() != 0)
@@ -701,21 +687,21 @@ cgi::setCookie(const dodoString &name,
 			   const dodoString &domain,
 			   bool secure)
 {
-	__cookies temp(secure);
+	__cookie temp(secure);
 	temp.name = name;
 	temp.value = tools::encodeURL(value);
 	temp.exDate = exDate;
 	temp.path = path;
 	temp.domain = domain;
-	cookiesSet.push_back(temp);
+	cookies.push_back(temp);
 }
 
 //-------------------------------------------------------------------
 
 void
-cgi::setCookie(const __cookies &cookie)
+cgi::setCookie(const __cookie &cookie)
 {
-	cookiesSet.push_back(cookie);
+	cookies.push_back(cookie);
 }
 
 //-------------------------------------------------------------------

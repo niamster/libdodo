@@ -41,7 +41,7 @@ namespace dodo
 #define HTTP_ENV_SIZE    34
 
 	/**
-	 * @var array of names that would be in ENV array[environment of http demon]
+	 * @var HTTP_ENV defines names of the environment variables that would be pushed into ENVIRONMENT cgi class property
 	 */
 	const __statements HTTP_ENV[HTTP_ENV_SIZE] =
 	{
@@ -92,19 +92,18 @@ namespace dodo
 	};
 
 	/**
-	 * @enum errPostFileEnum describes errors that could happen durin' savin' POST file
+	 * @enum postFileErrEnum defines errors that might occur during fetching POST file
 	 */
 	enum postFileErrEnum
 	{
-		CGI_POSTFILEERR_NONE,           ///< everythin' is OK
+		CGI_POSTFILEERR_NONE,           ///< everything is OK
 		CGI_POSTFILEERR_ACCESS_DENY,    ///< permissions error
-		CGI_POSTFILEERR_BAD_FILE_NAME,  ///< filename too long
+		CGI_POSTFILEERR_BAD_FILE_NAME,  ///< filename is too long
 		CGI_POSTFILEERR_NO_SPACE        ///< not enough space to save the file
 	};
 
 	/**
-	 * @struct __cgiFilesUp
-	 * defines node about uploaded POST file
+	 * @struct __cgiFile defines node about uploaded POST file
 	 */
 	struct __cgiFile
 	{
@@ -112,48 +111,48 @@ namespace dodo
 		 * constructor
 		 */
 		__cgiFile();
+		
 		dodoString name;                ///< real name of the file
 		dodoString type;                ///< MIME type
-		dodoString tmp_name;            ///< path where it was temporary saved[empty, if file stored in memory]
+		dodoString tmp_name;            ///< path where it was temporary saved[empty, if file is stored in the memory]
 		unsigned long size;             ///< size of the file
-		int error;                      ///< indicates if error occured
-		dodoString buf;                 ///< contains file data[if file stored in memory]
+		postFileErrEnum error;          ///< error code[see postFileErrEnum]
+		dodoString buf;                 ///< contains file data[if file is stored in the memory]
 	};
 
 	/**
-	 * @struct __cookies
-	 * describes cookie that would be sent to browser
+	 * @struct __cookies describes cookie that would be sent to the client browser
 	 */
-	struct __cookies
+	struct __cookie
 	{
 		/**
 		 * constructor
 		 */
-		__cookies(bool secure);
+		__cookie(bool secure);
 
 		/**
 		 * constructor
-		 * @note  defines struct data with user data
+		 * @note defines struct data with user data
 		 */
-		__cookies(const dodoString &name, const dodoString &value, const dodoString &exDate, const dodoString &path, const dodoString &domain, bool secure);
+		__cookie(const dodoString &name, const dodoString &value, const dodoString &exDate, const dodoString &path, const dodoString &domain, bool secure);
 
-		dodoString name;    ///< name of cookie
-		dodoString value;   ///< value of cookie
+		dodoString name;    ///< name of the cookie
+		dodoString value;   ///< value of the cookie
 
-		dodoString exDate;  ///< date of expire
-		dodoString path;    ///< cookie's path
-		dodoString domain;  ///< cookie's domain
-		bool secure;        ///< indicates if cookie is secure; false by default
+		dodoString exDate;  ///< expiration date
+		dodoString path;    ///< cookie path
+		dodoString domain;  ///< cookie domain
+		bool secure;        ///< defines cookie security; false by default
 	};
 
 	/**
-	 * @enum requestMethodEnum indicates request type
+	 * @enum requestMethodEnum defines request type
 	 */
 	enum requestMethodEnum
 	{
 		CGI_REQUESTMETHOD_GET,
 		CGI_REQUESTMETHOD_POST,
-		CGI_REQUESTMETHOD_GET_POST ///< if POST but data tranferred in ?name=value&.... format
+		CGI_REQUESTMETHOD_GET_POST ///< if POST method and request URL also contains ?name=value&.... format data
 	};
 
 	/**
@@ -161,18 +160,13 @@ namespace dodo
 	 * headers that will be printed calling prinHeaders method:
 	 * "Content-type",
 	 * "X-Powered-By"
-	 * u can change them or add yours modifin' HEADERS array;
+	 * you can change them or add extra using HEADERS cgi class property
 	 */
 
 	/**
-	 * @class cgi
-	 * provides simple work with info that passes to cgi program
-	 * u can get POST/GET variables; any ENV variable;
-	 * @note when usin' POST:
-	 * 		POST is in stdin;
-	 * 		do not read stdin before contructin' object of this class!
-	 * 		please contruct object of this class in the begin of your program;
-	 * 		it will prevent any situations;
+	 * @class cgi provides CGI functionality
+	 * @note do not read stdin before contructing object of this class!
+	 * object of this class should be contructed in the early begin
 	 */
 	class cgi
 	{
@@ -189,25 +183,23 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param headers contains array of headers that would pe printed
-			 * @param silent indicates whether to print headers in constructor or not
-			 * @param autocleanFiles indicates whether to clean files in destructor
-			 * @param autocleanContent indicates whether to clean content of request in constructor
-			 * @param postFilesInMem indicates where to place POST files[disk or memory]
-			 * @param postFilesTmpDir indicates where to place POST files if on disk
-			 * @note you cant print headers after they have been printed with printHeaders method
+			 * @param headers defines headers that will be printed
+			 * @param silent defines whether to print headers in constructor or not
+			 * @param autocleanFiles defines whether to clean POST files in destructor
+			 * @param autocleanContent indicates whether to clean contents of stdin got for POST request in constructor
+			 * @param postFilesInMem defines place of POST files[disk or memory]
+			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
 			cgi(dodoStringMap &headers, bool silent = false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 
 			/**
 			 * constructor
-			 * @param silent indicates whether to print headers in constructor or not
-			 * @param autocleanContent indicates whether to clean content of request in constructor
-			 * @param autocleanFiles indicates whether to clean files in destructor
-			 * @param postFilesInMem indicates where to place POST files[disk or memory]
-			 * @param postFilesTmpDir indicates where to place POST files if on disk
-			 * @note you cant print headers after they have been printed with printHeaders method
+			 * @param silent defines whether to print headers in constructor or not
+			 * @param autocleanFiles defines whether to clean POST files in destructor
+			 * @param autocleanContent indicates whether to clean contents of stdin got for POST request in constructor
+			 * @param postFilesInMem defines place of POST files[disk or memory]
+			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
 			cgi(bool silent = false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
@@ -215,29 +207,24 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param cf describes output interface
-			 * @param silent indicates whether to print headers in constructor or not
-			 * @param headers contains array of headers that would pe printed
-			 * @param autocleanContent indicates whether to clean content of request in constructor
-			 * @param autocleanFiles indicates whether to clean files in destructor
-			 * @param postFilesInMem indicates where to place POST files[disk or memory]
-			 * @param postFilesTmpDir indicates where to place POST files if on disk
-			 *
-			 * @note you cant print headers after they have been printed with printHeaders method
+			 * @param cf defines cgiFastIO output interface
+			 * @param silent defines whether to print headers in constructor or not
+			 * @param autocleanFiles defines whether to clean POST files in destructor
+			 * @param autocleanContent indicates whether to clean contents of stdin got for POST request in constructor
+			 * @param postFilesInMem defines place of POST files[disk or memory]
+			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
 			cgi(cgiFastIO *cf, bool silent = false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 			/**
 			 * constructor
-			 * @param cf describes output interface
-			 * @param headers contains array of headers that would pe printed
-			 * @param silent indicates whether to print headers in constructor or not
-			 * @param autocleanContent indicates whether to clean content of request in constructor
-			 * @param autocleanFiles indicates whether to clean files in destructor
-			 * @param postFilesInMem indicates where to place POST files[disk or memory]
-			 * @param postFilesTmpDir indicates where to place POST files if on disk
-			 *
-			 * @note you cant print headers after they have been printed with printHeaders method
+			 * @param cf defines cgiFastIO output interface
+			 * @param headers defines headers that will be printed
+			 * @param silent defines whether to print headers in constructor or not
+			 * @param autocleanFiles defines whether to clean POST files in destructor
+			 * @param autocleanContent indicates whether to clean contents of stdin got for POST request in constructor
+			 * @param postFilesInMem defines place of POST files[disk or memory]
+			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
 			cgi(cgiFastIO *cf, dodoStringMap &headers, bool silent = false, bool autocleanFiles = true, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
@@ -249,12 +236,12 @@ namespace dodo
 			virtual ~cgi();
 
 			/**
-			 * @return content of the request
+			 * @return contents of stdin got for the POST request
 			 */
 			dodoString getContent();
 
 			/**
-			 * clears content of the request
+			 * clears contents of stdin got for the POST request
 			 */
 			void clearContent();
 
@@ -264,139 +251,141 @@ namespace dodo
 			virtual int getMethod() const;
 
 			/**
-			 * @return reference to array with given method[see requestMethodEnum]
-			 * @param method is indicates what reference would be returned
-			 * example: classObj[POST]["name"]
+			 * @return array of request variables of given method
+			 * @param method defines defines type of array of request variables to return[see requestMethodEnum]
+			 * @note example: classObj[CGI_REQUESTMETHOD_POST]["name"]
 			 */
 			virtual const dodoStringMap &operator[](short method);
 
 			/**
 			 * specific variables (from POST, GET, ENV or COOKIE)
 			 */
-			dodoStringMap METHOD_POST;                                      ///< array of POST variables
-			dodoStringMap METHOD_GET;                                       ///< array of GET variables
+			dodoStringMap POST;                                      ///< POST variables
+			dodoStringMap GET;                                       ///< GET variables
 			dodoStringMap ENVIRONMENT;                                      ///< environment variables
-			dodoStringMap COOKIES;                                          ///< coockes sent by browser
-			dodoMap<dodoString, __cgiFile, stringTools::equal> FILES;       ///< array of POST files, if one or more files were uploaded
+			dodoStringMap COOKIES;                                          ///< cookies sent by browser
+			dodoMap<dodoString, __cgiFile, stringTools::equal> FILES;       ///< POST files
 
 			/**
-			 * @return value of requested variable from POST or GET
-			 * @param varName name of the variable
-			 * @param first indicates what array will be searched first[see requestMethodEnum]
+			 * @return value of the requested variable from POST or GET
+			 * @param varName defines name of the variable
+			 * @param first defines what array will be used first to search for the variable[see requestMethodEnum]
 			 */
 			virtual dodoString request(const dodoString &varName, short first = CGI_REQUESTMETHOD_GET);
 
 			/**
-			 * prints cgi headers;
-			 * u can change them modyfing HEADERS array or passing into constructor
-			 * cookies prints too
+			 * print cgi headers
+			 * @tone print cookies also
 			 */
 			virtual void printHeaders() const;
 
-			dodoStringMap HEADERS; ///< array of header that will be printed with printHeaders method
+			dodoStringMap HEADERS; ///< headers that will be printed with printHeaders method
 
 			/**
-			 * sends buf to output
-			 * @param buf describes what to send to user
+			 * print data to the output
+			 * @param data defines data that would be printed
 			 */
-			virtual void print(const dodoString &buf);
+			virtual void print(const dodoString &data);
 
 			/**
-			 * sends buf to output - null-terminated string
-			 * @param buf describes what to send to user
+			 * print data to the output
+			 * @param data defines data that would be printed
+			 * @note print until '\n' is reached
 			 */
 			virtual void printStream(const dodoString &buf);
 
 			/**
-			 * flushes output
+			 * flushe output
 			 */
 			virtual void flush();
 
 			/**
-			 * sets cookie. the cookies are printed with printHeaders method
-			 * @param name is name of cookie
-			 * @param value is value of cookie
-			 * @param exDate is date of expire
-			 * @param path is cookie's path
-			 * @param domain is cookie's domain
-			 * @param secure is indicates if cookie is secure; false by default
+			 * set cookie
+			 * @param name defines name of cookie
+			 * @param value defines value of cookie
+			 * @param exDate defines expiration date
+			 * @param path defines cookie path
+			 * @param domain defines cookie domain
+			 * @param secure defines cookie security
+			 * @note cookies are printed with printHeaders method
 			 */
 			virtual void setCookie(const dodoString &name, const dodoString &value, const dodoString &exDate = __dodostring__, const dodoString &path = __dodostring__, const dodoString &domain = __dodostring__, bool secure = false);
 
 			/**
-			 * sets cookie. the cookies are printed with printHeaders method
-			 * @param cookie describes the cookie
+			 * set cookie
+			 * @param cookie defines the cookie
+			 * @note cookies are printed with printHeaders method
 			 */
-			virtual void setCookie(const __cookies &cookie);
+			virtual void setCookie(const __cookie &cookie);
 
 		protected:
 
 			/**
-			 * writes detected method to method property
+			 * write detected method to method class property
 			 */
 			virtual void detectMethod();
 
 			/**
-			 * fills POST variable [also files if defined]
+			 * fill POST variables and files if defined
 			 */
 			void makePost();
 
 			/**
-			 * gets contents of the request
+			 * get contents of stdin for the POST request
 			 */
 			void makeContent();
 
 			/**
-			 * gets info about environment
+			 * get environment variables
 			 */
 			virtual void makeEnv();
 
 			/**
-			 * initiates headers with given headers; printed with printHeaders method
+			 * initiate HEADERS class property with given tuples name->value
+			 * @param headers defines init headers
 			 */
 			virtual void initHeaders(dodoStringMap &headers);
 
 			/**
-			 * processes :
-			 * from : smth1=1`delim`smth2=2
-			 * to : val["smth1"]=1; val["smth2"]=2;
-			 *
-			 * @param val will be filled with processed values
-			 * @param string contains string to process
-			 * @param delim indicates format of delimiter
+			 * process serialized string of tuples key->value
+			 * @param val defines map that will be filled with processed tuples key->value
+			 * @param string defines string to process
+			 * @param delim defines delimite
+			 * @note
+			 * from : name1=value1`delim`name2=value2
+			 * to : val["name1"]=value1; val["name2"]=value2;
 			 */
 			virtual void make(dodoStringMap &val, const dodoString &string, const char *delim = "&");
 
 		private:
 
-			bool postFilesInMem;                ///< where POST files stored
+			bool postFilesInMem;                ///< place of POST files
 
-			bool autocleanFiles;                ///< clear files of the request in destructor
+			bool autocleanFiles;                ///< defines whether to clean POST files in destructor
 
-			dodoString postFilesTmpDir;         ///< path of dir, where POST files will be temporary saved
+			dodoString postFilesTmpDir;         ///< directory for POST files if on they are saved on the disk
 
-			dodoList<__cookies> cookiesSet;     ///< array of cookies nodes
-			int method;                         ///< method that received program
+			dodoList<__cookie> cookies;     ///< cookies
+			int method;                         ///< request method
 
-			dodoString content;                 ///< content of the request
+			dodoString content;                 ///< contents of the stdin for the POST request
 
 			/**
-			 * deletes temp files that were created if POST files were present
+			 * delete temp POST files that have been created
 			 */
 			virtual void cleanTmp();
 
 #ifdef FCGI_EXT
 
-			bool cgiFastSet;    ///< indicates whether cgiFast was set
+			bool cgiFastSet;    ///< true if use cgiFastIO
 
-			cgiFastIO *cf;      ///< pointer to cgiFast class
+			cgiFastIO *cf;      ///< cgiFastIO instance
 
 #endif
 
-			ioSTD *fstd;
+			ioSTD *fstd;///< ioSTD instance
 
-			bool firstPrint;
-			mutable bool headersPrinted;
+			mutable bool headersPrinted;///< true if headers have been printed 
 	};
 
 };
