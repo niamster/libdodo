@@ -36,7 +36,7 @@
 namespace dodo
 {
 	/**
-	 * @class cgiFastIO provides interface to fast_cgi
+	 * @class cgiFastIO provides interface to fast CGI I/O functionality
 	 */
 	class cgiFastIO
 	{
@@ -52,7 +52,7 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param request describes CGI request info
+			 * @param request defines CGI request descriptor
 			 */
 			cgiFastIO(FCGX_Request *request);
 
@@ -62,47 +62,47 @@ namespace dodo
 			virtual ~cgiFastIO();
 
 			/**
-			 * sends buf to specific output[fast-cgi safe]
-			 * @param buf describes what to send to user
+			 * print data to the output
+			 * @param data defines data that would be printed
 			 */
 			virtual void print(const dodoString &buf);
 
 			/**
-			 * sends buf to specific output[fast-cgi safe] - null-terminated string
-			 * @param buf describes what to send to user
+			 * print data to the output
+			 * @param data defines data that would be printed
+			 * @note print until '\n' is reached
 			 */
 			virtual void printStream(const dodoString &buf);
 
 			/**
-			 * reads to buf from specific input[fast-cgi safe]
-			 * @param buf describes what to receive from user
+			 * read from the input
+			 * @param data defines buffer where data will be written
 			 */
-			virtual void read(char *buf, unsigned int size);
+			virtual void read(char *data, unsigned int size);
 
 			/**
-			 * @return environment variable[fast-cgi safe]
-			 * @param buf describes what to receive from environment
+			 * @return environment variable
+			 * @param data defines name of environment variable
 			 */
 			virtual char *getenv(const char *buf);
 
 			/**
-			 * flushes output[fast-cgi safe]
+			 * flushe output
 			 */
 			virtual void flush();
 
 		private:
 
-			FCGX_Request *request;    ///< CGI request
+			FCGX_Request *request;    ///< fast CGI descriptor
 	};
 
 	/**
-	 * @typedef that describes function that will be called on new cgi request
+	 * @typedef defines type of function that will be called on new cgi request
 	 */
 	typedef void (*cgiProc)(cgiFastIO *);
 
 	/**
-	 * @class cgiFast
-	 * provides cpp wrapper for fast-cgi technology
+	 * @class cgiFast provides fast CGI functionality
 	 */
 	class cgiFast
 	{
@@ -120,8 +120,8 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param threading indicates whether to call new thread on cgi request or proceed a queue
-			 * @param threadsNum indicates how many threads to use in fast-cgi server
+			 * @param threading defines if to use threads on new CGI requests
+			 * @param threadsNum defines amount of threads for processing fast CGI queue
 			 */
 			cgiFast(bool threading = true, unsigned int threadsNum = 10);
 
@@ -140,8 +140,8 @@ namespace dodo
 			virtual ~cgiFast();
 
 			/**
-			 * sets function that would be called on CGI request
-			 * @param func indicates what function to set
+			 * set function that will be called on new CGI request
+			 * @param func define function handler
 			 */
 			virtual void setCGIFunction(cgiProc func);
 
@@ -151,7 +151,7 @@ namespace dodo
 			virtual void listen();
 
 			/**
-			 * @return true if called as a fastCGI[not as a CGI]
+			 * @return true if called as a fast CGI[not as a CGI]
 			 */
 			virtual bool isFastCGI();
 
@@ -159,13 +159,13 @@ namespace dodo
 
 #ifdef PTHREAD_EXT
 
-			bool threading;                 ///< threading or not
+			bool threading;                 ///< true use threading
 
 			unsigned int threadsNum;        ///< amount of threads
 
 			/**
-			 * thread that holds one queue of cgi clients
-			 * @param data indicates what data will be passed to thread
+			 * thread that holds one queue of CGI requests
+			 * @param data defines the data that will be passed to the thread
 			 */
 			static void *stackThread(void *data);
 
