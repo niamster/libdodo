@@ -44,6 +44,7 @@
 #include <libdodo/ioSocketOptions.h>
 #include <libdodo/ioSocketExchange.h>
 #include <libdodo/xexec.h>
+#include <libdodo/ioNBAInfo.h>
 
 namespace dodo
 {
@@ -72,10 +73,29 @@ namespace dodo
 	};
 
 	/**
+	 * @struct __xexexIoCollectedData contains data that could be retrieved from class(to modificate)[contains references]
+	 */
+	struct __xexexIoSocketCollectedData
+	{
+		/**
+		 * constructor
+		 * initiates references
+		 */
+		__xexexIoSocketCollectedData(int &operType,
+							   		void *executor);
+
+		int &operType;              ///< operation type set by main action; can be used in hook to determine type of action
+
+		void *executor;             ///< class that executed hook
+	};
+	
+	/**
 	 * @class ioSocket performs communication actions!!
 	 * exchange of data is ioSocketExchange class' task; ou init it with connect or accept methods
 	 */
-	class ioSocket : public io, public ioSocketOptions
+	class ioSocket : public xexec, 
+					public ioSocketOptions,
+					virtual public ioNBAInfo
 	{
 			friend class ioSocketExchange;
 
@@ -258,9 +278,13 @@ namespace dodo
 			 */
 			virtual void makeSocket();
 
+			bool opened; ///< indicates whether file(connection) opened or not
+
 			bool server;            ///< indicates whether server object or not
 
 			dodoString unixSock;    ///< to remember, 'cos have to unlink in destructor
+			
+			__xexexIoSocketCollectedData collectedData;   ///< data collected for xexec
 	};
 
 };

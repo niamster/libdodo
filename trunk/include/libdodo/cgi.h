@@ -99,7 +99,8 @@ namespace dodo
 		CGI_POSTFILEERR_NONE,           ///< everything is OK
 		CGI_POSTFILEERR_ACCESS_DENY,    ///< permissions error
 		CGI_POSTFILEERR_BAD_FILE_NAME,  ///< filename is too long
-		CGI_POSTFILEERR_NO_SPACE        ///< not enough space to save the file
+		CGI_POSTFILEERR_NO_SPACE,        ///< not enough space to save the file
+		CGI_POSTFILEERR_NO_FILE,        ///< file with such name not found
 	};
 
 	/**
@@ -207,18 +208,18 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param cf defines cgiFastIO output interface
+			 * @param cf defines ioCGIFast output interface
 			 * @param silent defines whether to print headers in constructor or not
 			 * @param autocleanFiles defines whether to clean POST files in destructor
 			 * @param autocleanContent indicates whether to clean contents of stdin got for POST request in constructor
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
-			cgi(cgiFastIO *cf, bool silent = false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(ioCGIFast *cf, bool silent = false, bool autocleanContent = true, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 			/**
 			 * constructor
-			 * @param cf defines cgiFastIO output interface
+			 * @param cf defines ioCGIFast output interface
 			 * @param headers defines headers that will be printed
 			 * @param silent defines whether to print headers in constructor or not
 			 * @param autocleanFiles defines whether to clean POST files in destructor
@@ -226,7 +227,7 @@ namespace dodo
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
-			cgi(cgiFastIO *cf, dodoStringMap &headers, bool silent = false, bool autocleanFiles = true, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(ioCGIFast *cf, dodoStringMap &headers, bool silent = false, bool autocleanFiles = true, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 #endif
 
@@ -377,13 +378,11 @@ namespace dodo
 
 #ifdef FCGI_EXT
 
-			bool cgiFastSet;    ///< true if use cgiFastIO
-
-			cgiFastIO *cf;      ///< cgiFastIO instance
+			bool cgiFastSet;    ///< true if use ioCGIFast
 
 #endif
 
-			ioSTD *fstd;///< ioSTD instance
+			io *cgiIO;///< CGI I/O instance
 
 			mutable bool headersPrinted;///< true if headers have been printed 
 	};

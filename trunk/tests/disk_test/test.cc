@@ -30,28 +30,7 @@ int main(int argc, char **argv)
 		cout << "not exists\n";
 	}
 	try
-	{
-		ioDiskTools::unlink("my.dat");
-		
-		ioDisk io("my.dat");
-		
-		io.inSize = io.outSize = 13;
-		io.over = true;
-		
-		io.writeStreamString("!12345890#!!@");
-		io.writeStreamString("!12345890-!!@");
-		io.writeStreamString("!12345890@!!@");
-		io.writeStreamString("!12345890$!!@");
-                io.writeString("!12345890$!~@", 1);
-		
-		dodoString str;
-	
-		io.readStreamString(str,0);
-		cout << "\n\n" << str << "\n\n";
-
-		io.readString(str,0);
-		cout << "\n\n" << str << "\n\n";
-	
+	{	
 		ioDiskTools::rm("./test.cc.copy");
 
 		ioDiskTools::mkdir("testDir");
@@ -72,6 +51,30 @@ int main(int argc, char **argv)
 			for (dodoArray<__fileInfo>::iterator i=dir.begin();i!=dir.end();++i)
 				cout << i->size << "!" << i->name << endl; 
 		}
+		
+		ioDiskTools::unlink("my.dat");
+		
+		ioDisk io("my.dat");
+		
+		io.inSize = io.outSize = 14;
+		io.over = true;
+		
+		io.writeStreamString("!12345890#!!@\n");
+		io.writeStreamString("!12345890-!!@\n");
+		io.writeStreamString("!12345890@!!@\n");
+		io.writeStreamString("!12345890$!!@\n");
+		io.pos = 1;
+        io.writeString("!12345890$!~@\n");
+		
+		dodoString str;
+	
+		io.pos = 0;
+		io.readStreamString(str);
+		cout << "\n\n" << str << "\n\n";
+
+		io.pos = 0;
+		io.readString(str);
+		cout << "\n\n" << str << "\n\n";		
 	}
 	catch(baseEx ex)
 	{

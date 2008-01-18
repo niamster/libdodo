@@ -31,7 +31,6 @@
 
 #include <libdodo/ioNBAEx.h>
 #include <libdodo/types.h>
-#include <libdodo/io.h>
 #include <libdodo/tools.h>
 #include <libdodo/threadGuard.h>
 
@@ -79,7 +78,7 @@ namespace dodo
 			 * @return identificator of added stream
 			 * @param fl is a reference on stream[ioDisk, ioSTD, ioSocket, ioSocketExchange]
 			 */
-			virtual int addFlush(const io &fl);
+			virtual int addFlush(const ioNBAInfo &fl);
 
 			/**
 			 * @param fl is identificator of stream to remove

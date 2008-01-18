@@ -25,7 +25,16 @@
 
 using namespace dodo;
 
-ioSocket::ioSocket(ioSocket &fs)
+__xexexIoSocketCollectedData::__xexexIoSocketCollectedData(int &a_operType,
+											   void *a_executor) : operType(a_operType),
+																   executor(a_executor)
+{
+}
+
+//-------------------------------------------------------------------
+
+ioSocket::ioSocket(ioSocket &fs): collectedData(operType,
+										 (void *) this)
 {
 }
 
@@ -35,7 +44,9 @@ ioSocket::ioSocket(bool a_server,
 				   short a_family,
 				   short a_type) : ioSocketOptions(a_family, a_type),
 								   blockInherited(false),
-								   server(a_server)
+								   server(a_server),
+								   collectedData(operType,
+												 (void *) this)
 {
 	makeSocket();
 }

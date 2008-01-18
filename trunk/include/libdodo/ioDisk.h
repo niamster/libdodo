@@ -183,7 +183,7 @@ namespace dodo
 			 * @param pos indicates position in file
 			 * @note not more then inSize(including '\0')
 			 */
-			virtual void readString(dodoString &data, unsigned long pos = 0);
+			virtual void readString(dodoString &data);
 
 			/**
 			 * read data
@@ -191,21 +191,21 @@ namespace dodo
 			 * @param pos indicates position in file
 			 * @note not more then inSize(including '\0')
 			 */
-			virtual void read(char * const data, unsigned long pos = 0);
+			virtual void read(char * const data);
 
 			/**
 			 * write string
 			 * @param data will be written to file
 			 * @param pos indicates position in file
 			 */
-			virtual void writeString(const dodoString &data, unsigned long pos = 0);
+			virtual void writeString(const dodoString &data);
 
 			/**
 			 * write string
 			 * @param data will be written to file
 			 * @param pos indicates position in file
 			 */
-			virtual void write(const char * const data, unsigned long pos = 0);
+			virtual void write(const char * const data);
 
 			/**
 			 * read string - null[or \n]-terminated string
@@ -213,7 +213,7 @@ namespace dodo
 			 * @param pos indicates position in file [string that has pos-1 strings before]
 			 * @note not more then inSize(including '\0')
 			 */
-			virtual void readStreamString(dodoString &data, unsigned long pos = 0);
+			virtual void readStreamString(dodoString &data);
 
 			/**
 			 * read data - null[or \n]-terminated string
@@ -221,7 +221,7 @@ namespace dodo
 			 * @param pos indicates position in file [string that has pos-1 strings before]
 			 * @note not more then inSize(including '\0')
 			 */
-			virtual void readStream(char * const data, unsigned long pos = 0);
+			virtual void readStream(char * const data);
 
 			/**
 			 * write string - null-terminated string [append only]
@@ -240,7 +240,9 @@ namespace dodo
 			 * @param pos indicates position in file
 			 * @note for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
 			 */
-			virtual void erase(unsigned long pos);
+			virtual void erase();
+			
+			unsigned long pos;///< read/write/erase position[0 by default]
 
 			/**
 			 * flushes to disk
@@ -277,7 +279,7 @@ namespace dodo
 			 * @param data will be filled with data
 			 * @param pos indicates position in file
 			 */
-			virtual void _read(char * const data, unsigned long pos = 0);
+			virtual void _read(char * const data);
 
 			/**
 			 * read data - null[or \n]-terminated string
@@ -285,14 +287,20 @@ namespace dodo
 			 * @param pos indicates position in file [string that has pos-1 strings before]
 			 * @note max size is inSize
 			 */
-			virtual void _readStream(char * const data, unsigned long pos = 0);
+			virtual void _readStream(char * const data);
 
 			/**
 			 * write string
 			 * @param data will be written to file
 			 * @param pos indicates position in file
 			 */
-			virtual void _write(const char * const data, unsigned long pos = 0);
+			virtual void _write(const char * const data);
+
+			/**
+			 * write string - null-terminated string [append only]
+			 * @param data will be written to file
+			 */
+			virtual void _writeStream(const char * const data);
 
 		private:
 

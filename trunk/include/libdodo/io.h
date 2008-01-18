@@ -28,6 +28,7 @@
 
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
+#include <libdodo/ioNBAInfo.h>
 
 namespace dodo
 {
@@ -55,10 +56,9 @@ namespace dodo
 	 * @class io is a base class for I/O operations.
 	 * all I/O operations are blockable => read/write inSize/outSize block.
 	 */
-	class io : public xexec
+	class io : public xexec,
+				virtual public ioNBAInfo
 	{
-			friend class ioNBA;
-
 		public:
 
 			/**
@@ -70,6 +70,58 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~io() = 0;
+			/**
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
+			 */
+			virtual void readString(dodoString &data) = 0;
+
+			/**
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
+			 */
+			virtual void read(char * const data) = 0;
+
+			/**
+			 * @param data defines data that will be written
+			 */
+			virtual void writeString(const dodoString &data) = 0;
+
+			/**
+			 * @param data defines data that will be written
+			 */
+			virtual void write(const char * const data) = 0;
+
+			/**
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
+			 */
+			virtual void readStreamString(dodoString &data) = 0;
+
+			/**
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
+			 */
+			virtual void readStream(char * const data) = 0;
+
+			/**
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
+			 */
+			virtual void writeStreamString(const dodoString &data) = 0;
+
+			/**
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
+			 */
+			virtual void writeStream(const char * const data) = 0;
+
+			/**
+			 * flush output
+			 */
+			virtual void flush() = 0;
 
 			unsigned long inSize;   ///< size of data block;
 			unsigned long outSize;  ///< size of data block;
@@ -77,16 +129,6 @@ namespace dodo
 		protected:
 
 			bool opened; ///< indicates whether file(connection) opened or not
-
-			/**
-			 * @return descriptor of input stream
-			 */
-			virtual int getInDescriptor() const = 0;
-
-			/**
-			 * @return descriptor of output stream
-			 */
-			virtual int getOutDescriptor() const = 0;
 
 			dodoString buffer;                      ///< buffer where data is stored
 

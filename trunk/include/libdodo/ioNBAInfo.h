@@ -1,8 +1,8 @@
 /***************************************************************************
- *            cgiFastEx.h
+ *            ioNBAInfo.h
  *
- *  Mon Dec 31 01:51:55 2007
- *  Copyright  2007  Ni@m
+ *  Fri Jan 18 02:51:24 2008
+ *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,50 +21,38 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGIFASTEX_H_
-#define _CGIFASTEX_H_
+
+#ifndef _IONBAINFO_H_
+#define _IONBAINFO_H_
 
 #include <libdodo/directives.h>
-
-#include <libdodo/baseEx.h>
 
 namespace dodo
 {
 	/**
-	 * next for cgiFast
+	 * @class ioNBAInfo 
 	 */
-
-	/**
-	 * libdodo defined errors
-	 */
-	enum cgiFastFunctionsExR
+	class ioNBAInfo
 	{
-		CGIFASTIOEX_FAILEDTOFLUSH,
-		CGIFASTIOEX_FAILEDTOPRINTSTRING,
-		CGIFASTEX_ACCEPTFAILED,
-		CGIFASTEX_ISCGI,
+		friend class ioNBA;
+		
+		public:
+			
+			/**
+			 * destructor
+			 */
+			virtual ~ioNBAInfo() = 0;
+	
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const = 0;
+	
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const = 0;
 	};
-
-	/**
-	 * libdodo defined errors' explanation
-	 */
-#define CGIFASTIOEX_FAILEDTOFLUSH_STR "Failed to flush."
-#define CGIFASTIOEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
-#define CGIFASTEX_ACCEPTFAILED_STR "Accept call failed."
-#define CGIFASTEX_ISCGI_STR "Called as a CGI."
-
-
-	/**
-	 * ID of function where exception was thrown
-	 */
-	enum cgiFastFunctionsID
-	{
-		IOCGIFASTEX_FLUSH,
-		IOCGIFASTEX__WRITE,
-		CGIFASTEX_LISTEN,
-		CGIFASTEX_STACKTHREAD,
-	};
-
 };
 
 #endif

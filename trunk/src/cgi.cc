@@ -25,7 +25,8 @@
 
 using namespace dodo;
 
-__cgiFile::__cgiFile() : size(0)
+__cgiFile::__cgiFile() : size(0),
+						error(CGI_POSTFILEERR_NO_FILE)
 {
 }
 
@@ -74,7 +75,7 @@ cgi::cgi(dodoStringMap &headers,
 #endif
 
 {
-	fstd = new ioSTD;
+	cgiIO = new ioSTD;
 
 	initHeaders(headers);
 
@@ -111,7 +112,7 @@ cgi::cgi(bool silent,
 #endif
 
 {
-	fstd = new ioSTD;
+	cgiIO = new ioSTD;
 
 	initHeaders(__dodostringmap__);
 
@@ -136,7 +137,7 @@ cgi::cgi(bool silent,
 
 #ifdef FCGI_EXT
 
-cgi::cgi(cgiFastIO    *a_cf,
+cgi::cgi(ioCGIFast    *a_cf,
 		 bool silent,
 		 bool autocleanContent,
 		 bool a_autocleanFiles,
@@ -144,7 +145,7 @@ cgi::cgi(cgiFastIO    *a_cf,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 cgiFastSet(true),
-										 cf(a_cf),
+										 cgiIO(a_cf),
 										 autocleanFiles(a_autocleanFiles),
 										 headersPrinted(false)
 
@@ -170,7 +171,7 @@ cgi::cgi(cgiFastIO    *a_cf,
 
 //-------------------------------------------------------------------
 
-cgi::cgi(cgiFastIO    *a_cf,
+cgi::cgi(ioCGIFast    *a_cf,
 		 dodoStringMap &headers,
 		 bool silent,
 		 bool autocleanContent,
@@ -179,7 +180,7 @@ cgi::cgi(cgiFastIO    *a_cf,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 cgiFastSet(true),
-										 cf(a_cf),
+										 cgiIO(a_cf),
 										 autocleanFiles(a_autocleanFiles),
 										 headersPrinted(false)
 
@@ -217,7 +218,7 @@ cgi::~cgi()
 
 #ifdef FCGI_EXT
 	if (!cgiFastSet)
-		delete fstd;
+		delete cgiIO;
 #endif
 }
 
@@ -226,12 +227,7 @@ cgi::~cgi()
 void
 cgi::flush()
 {
-#ifdef FCGI_EXT
-	if (cgiFastSet)
-		cf->flush();
-	else
-#endif
-	fstd->flush();
+	cgiIO->flush();
 }
 
 //-------------------------------------------------------------------
@@ -241,12 +237,7 @@ cgi::printStream(const dodoString &buf)
 {
 	printHeaders();
 
-#ifdef FCGI_EXT
-	if (cgiFastSet)
-		cf->printStream(buf);
-	else
-#endif
-	fstd->writeStreamString(buf);
+	cgiIO->writeStreamString(buf);
 }
 
 //-------------------------------------------------------------------
@@ -256,15 +247,8 @@ cgi::print(const dodoString &buf)
 {
 	printHeaders();
 
-#ifdef FCGI_EXT
-	if (cgiFastSet)
-		cf->print(buf);
-	else
-#endif
-	{
-		fstd->outSize = buf.size();
-		fstd->writeString(buf);
-	}
+	cgiIO->outSize = buf.size();
+	cgiIO->writeString(buf);
 }
 
 //-------------------------------------------------------------------
@@ -352,7 +336,7 @@ cgi::makeEnv()
 	{
 #ifdef FCGI_EXT
 		if (cgiFastSet)
-			env = cf->getenv(HTTP_ENV[i].str);
+			env = ((ioCGIFast *)cgiIO)->getenv(HTTP_ENV[i].str);
 		else
 #endif
 		env = getenv(HTTP_ENV[i].str);
@@ -391,63 +375,29 @@ cgi::printHeaders() const
 
 	dodoStringMap::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
-#ifdef FCGI_EXT
-		if (cgiFastSet)
-			cf->printStream(i->first + ": " + i->second + "\r\n");
-		else
-#endif
-		fstd->writeStreamString(i->first + ": " + i->second + "\r\n");
+		cgiIO->writeStreamString(i->first + ": " + i->second + "\r\n");
 
 	if (cookies.size() > 0)
 	{
 		dodoList<__cookie>::const_iterator i(cookies.begin()), j(cookies.end());
 		for (; i != j; ++i)
 		{
-#ifdef FCGI_EXT
-			if (cgiFastSet)
-			{
-				cf->printStream("Set-Cookie: ");
-				cf->printStream(i->name + "=" + i->value + "; ");
-				if (i->path.size() > 0)
-					cf->printStream("path=" + i->path + "; ");
-				if (i->exDate.size() > 0)
-					cf->printStream("expires=" + i->exDate + "; ");
-				if (i->domain.size() > 0)
-					cf->printStream("domain=" + i->domain + "; ");
-				if (i->secure)
-					cf->printStream("secure");
-				cf->printStream("\r\n");
-			}
-			else
-#endif
-			{
-				fstd->writeStreamString("Set-Cookie: ");
-				fstd->writeStreamString(i->name + "=" + i->value + "; ");
-				if (i->path.size() > 0)
-					fstd->writeStreamString("path=" + i->path + "; ");
-				if (i->exDate.size() > 0)
-					fstd->writeStreamString("expires=" + i->exDate + "; ");
-				if (i->domain.size() > 0)
-					fstd->writeStreamString("domain=" + i->domain + "; ");
-				if (i->secure)
-					fstd->writeStreamString("secure");
-				fstd->writeStreamString("\r\n");
-			}
+			cgiIO->writeStreamString("Set-Cookie: ");
+			cgiIO->writeStreamString(i->name + "=" + i->value + "; ");
+			if (i->path.size() > 0)
+				cgiIO->writeStreamString("path=" + i->path + "; ");
+			if (i->exDate.size() > 0)
+				cgiIO->writeStreamString("expires=" + i->exDate + "; ");
+			if (i->domain.size() > 0)
+				cgiIO->writeStreamString("domain=" + i->domain + "; ");
+			if (i->secure)
+				cgiIO->writeStreamString("secure");
+			cgiIO->writeStreamString("\r\n");
 		}
 	}
 
-#ifdef FCGI_EXT
-	if (cgiFastSet)
-	{
-		cf->printStream("\r\n");
-		cf->flush();
-	}
-	else
-#endif
-	{
-		fstd->writeStreamString("\r\n");
-		fstd->flush();
-	}
+	cgiIO->writeStreamString("\r\n");
+	cgiIO->flush();
 }
 
 //-------------------------------------------------------------------
@@ -460,56 +410,9 @@ cgi::makeContent()
 	if (inSize <= 0)
 		return ;
 
-	char *cont = new char[CONTENT_BATCH_SIZE];
-
-	unsigned long iter = inSize / CONTENT_BATCH_SIZE;
-	unsigned long rest = inSize % CONTENT_BATCH_SIZE;
-
-	for (unsigned long i = 0; i < iter; ++i)
-	{
-
-#ifdef FCGI_EXT
-		if (cgiFastSet)
-			cf->read(cont, CONTENT_BATCH_SIZE);
-		else
-#endif
-		if (fread(cont, CONTENT_BATCH_SIZE, 1, stdin) != CONTENT_BATCH_SIZE)
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
-
-					delete [] cont;
-
-					return ;
-			}
-
-		content.append(cont, CONTENT_BATCH_SIZE);
-	}
-
-	if (rest > 0)
-	{
-		if (fread(cont, rest, 1, stdin) == 0)
-			switch (errno)
-			{
-				case EIO:
-				case EINTR:
-				case ENOMEM:
-				case EOVERFLOW:
-				case EROFS:
-
-					delete [] cont;
-
-					return ;
-			}
-
-		content.append(cont, rest);
-	}
-
-	delete [] cont;
+	cgiIO->inSize = inSize;
+	
+	cgiIO->readString(content);
 }
 
 //-------------------------------------------------------------------

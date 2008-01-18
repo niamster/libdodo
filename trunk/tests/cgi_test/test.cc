@@ -22,9 +22,9 @@ int main(int argc, char **argv)
 	cgit.printHeaders();
 	 
 	
-	cout << "!" << cgit.METHOD_GET["a"] << "!<br>";
-	cout << "!" << cgit.METHOD_POST["a"] << "!<br>";
-	cout << "!" << cgit.METHOD_POST["e"] << "!<br>";
+	cout << "!" << cgit.GET["a"] << "!<br>";
+	cout << "!" << cgit.POST["a"] << "!<br>";
+	cout << "!" << cgit.POST["e"] << "!<br>";
 	cout << "!" << cgit.ENVIRONMENT["QUERY_STRING"] << "<br>";
 	cout << "!" << cgit.COOKIES["test"] << "<br>";
 	cout << "!" << cgit.FILES["qsadasdaf"].error << "<br>";

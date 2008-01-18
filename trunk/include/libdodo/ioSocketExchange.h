@@ -263,6 +263,11 @@ namespace dodo
 			virtual void readStreamString(dodoString &data);
 
 			/**
+			 * flush output
+			 */
+			virtual void flush();
+
+			/**
 			 * closes this socket
 			 */
 			virtual void close();

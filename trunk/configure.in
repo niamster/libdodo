@@ -59,9 +59,18 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_ENABLE(image-xexec-support,
-        AS_HELP_STRING([--disable-image-xexec-support],[compile image w/o xexec support]),
-        [IMAGE_W_XEXEC="$enableval"], [IMAGE_W_XEXEC="yes"])
+AC_ARG_ENABLE(cgiFast-xexec-support,
+        AS_HELP_STRING([--disable-cgiFast-xexec-support],[compile cgiFast w/o xexec support]),
+        [CGIFAST_W_XEXEC="$enableval"], [CGIFAST_W_XEXEC="yes"])
+
+if test "$CGIFAST_W_XEXEC" = "no"
+then
+	echo -n -e "#define CGIFAST_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	
+	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tenabled"
+fi
 
 if test "$IMAGE_W_XEXEC" = "no"
 then

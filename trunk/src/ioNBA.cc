@@ -25,6 +25,8 @@
 
 using namespace dodo;
 
+//-------------------------------------------------------------------
+
 ioNBA::ioNBA(ioNBA &rt)
 {
 }
@@ -44,7 +46,7 @@ ioNBA::~ioNBA()
 //-------------------------------------------------------------------
 
 int
-ioNBA::addFlush(const io &fl)
+ioNBA::addFlush(const ioNBAInfo &fl)
 {
 	guard pg(this);
 

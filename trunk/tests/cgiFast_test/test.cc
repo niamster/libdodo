@@ -13,20 +13,20 @@ using namespace std;
 #ifdef FCGI_EXT
 
 	void 
-	cgif(cgiFastIO *fcgi)
+	cgif(ioCGIFast *fcgi)
 	{
 		cgi cgit(fcgi, true);
 		cgit.setCookie("test","Ni@m");
 		cgit.printHeaders();
 		 
 		
-		fcgi->printStream("!" + cgit.METHOD_GET["a"] + "!<br>");
-		fcgi->printStream("!" + cgit.METHOD_POST["a"] + "!<br>");
-		fcgi->printStream("!" + cgit.METHOD_POST["e"] + "!<br>");
-		fcgi->printStream("!" + cgit.ENVIRONMENT["QUERY_STRING"] + "<br>");
-		fcgi->printStream("!" + cgit.COOKIES["test"] + "<br>");
+		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
+		fcgi->writeStreamString("!" + cgit.POST["a"] + "!<br>");
+		fcgi->writeStreamString("!" + cgit.POST["e"] + "!<br>");
+		fcgi->writeStreamString("!" + cgit.ENVIRONMENT["QUERY_STRING"] + "<br>");
+		fcgi->writeStreamString("!" + cgit.COOKIES["test"] + "<br>");
 		
-		fcgi->printStream("!!!\n\n\n");
+		fcgi->writeStreamString("!!!\n\n\n");
 		
 		try
 		{
@@ -58,10 +58,10 @@ using namespace std;
 		}
 		catch(baseEx ex)
 		{
-			fcgi->printStream(ex.baseErrstr + " " + stringTools::lToString(ex.line));
+			fcgi->writeStreamString(ex.baseErrstr + " " + stringTools::lToString(ex.line));
 		}	
 		
-		fcgi->printStream("\n\n\n!!!");
+		fcgi->writeStreamString("\n\n\n!!!");
 	}
 
 #endif

@@ -761,6 +761,13 @@ ioSocketExchange::deleteCopy(ioSocketExchange *copy)
 
 //-------------------------------------------------------------------
 
+void
+ioSocketExchange::flush()
+{
+}
+
+//-------------------------------------------------------------------
+
 int
 ioSocketExchange::getInDescriptor() const
 {
