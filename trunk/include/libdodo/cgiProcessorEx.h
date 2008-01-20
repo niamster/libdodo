@@ -44,7 +44,7 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define CGIPROCESSOREX_WRONGIFSTATEMENT_STR "Wrong `if` statement."
 #define CGIPROCESSOREX_WRONGFORSTATEMENT_STR "Wrong `for` statement."
@@ -54,7 +54,7 @@ namespace dodo
 #define CGIPROCESSOREX_WRONGBLOCK_STR "Wrong block construction."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum cgiProcessorFunctionsID
 	{

@@ -65,7 +65,6 @@ namespace dodo
 
 			pthread_mutex_t mutex; ///< mutex
 	};
-
 };
 
 #endif

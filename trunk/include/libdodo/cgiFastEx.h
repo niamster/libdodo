@@ -31,10 +31,6 @@
 namespace dodo
 {
 	/**
-	 * next for cgiFast
-	 */
-
-	/**
 	 * libdodo defined errors
 	 */
 	enum cgiFastFunctionsExR
@@ -46,16 +42,15 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define CGIFASTIOEX_FAILEDTOFLUSH_STR "Failed to flush."
 #define CGIFASTIOEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
 #define CGIFASTEX_ACCEPTFAILED_STR "Accept call failed."
 #define CGIFASTEX_ISCGI_STR "Called as a CGI."
 
-
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum cgiFastFunctionsID
 	{
@@ -64,7 +59,6 @@ namespace dodo
 		CGIFASTEX_LISTEN,
 		CGIFASTEX_STACKTHREAD,
 	};
-
 };
 
 #endif

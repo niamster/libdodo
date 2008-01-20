@@ -607,7 +607,6 @@ cgiFast::listen()
 		delete [] id;
 	}
 	else
-
 #endif
 	{
 		FCGX_Request request;

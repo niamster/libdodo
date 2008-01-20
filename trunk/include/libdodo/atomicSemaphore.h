@@ -67,7 +67,6 @@ namespace dodo
 			sem_t *semaphore;   ///< semaphore
 			char *key;          ///< key for the semaphore
 	};
-
 };
 
 #endif /*_ATOMICSEMAPHORE_H_*/

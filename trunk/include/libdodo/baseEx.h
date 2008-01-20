@@ -250,7 +250,6 @@ namespace dodo
 
 #endif
 	};
-
 };
 
 #endif

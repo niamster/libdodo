@@ -386,7 +386,6 @@ namespace dodo
 
 			mutable bool headersPrinted;///< true if headers have been printed 
 	};
-
 };
 
 #endif

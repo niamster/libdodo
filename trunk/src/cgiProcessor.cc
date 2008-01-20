@@ -25,9 +25,9 @@
 
 using namespace dodo;
 
-cgiProcessor::cgiProcessor(cgi &a_cgi) : _continueFlag(false),
-										 _breakDeepness(0),
-										 _loopDeepness(0),
+cgiProcessor::cgiProcessor(cgi &a_cgi) : continueFlag(false),
+										 breakDeepness(0),
+										 loopDeepness(0),
 										 iterator(1),
 										 namespaceDeepness(1),
 										 CGI(a_cgi)
@@ -138,7 +138,7 @@ cgiProcessor::_processString(const dodoString &buffer,
 		k = temp.find(statements[CGIPREPROCESSOR_CGIPREPROCESSOR_PROCESSORSTATEMENT_INCLUDE]);
 		if (k != dodoString::npos)
 		{
-			_include(temp.substr(k + 8), tpl, j, path);
+			j = _include(j, temp.substr(k + 8), tpl, path);
 		}
 		else
 		{
@@ -158,14 +158,14 @@ cgiProcessor::_processString(const dodoString &buffer,
 				k = temp.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_PRINT]);
 				if (k != dodoString::npos)
 				{
-					_print(temp.substr(k + 5), tpl, j, path);
+					j = _print(j, temp.substr(k + 5), tpl, path);
 				}
 				else
 				{
 					k = temp.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_OPEN_FOR]);
 					if (k != dodoString::npos)
 					{
-						++_loopDeepness;
+						++loopDeepness;
 						++namespaceDeepness;
 
 						j = _for(buffer, j, temp.substr(k + 3), tpl, path);
@@ -173,14 +173,14 @@ cgiProcessor::_processString(const dodoString &buffer,
 						cleanNamespace();
 
 						--namespaceDeepness;
-						--_loopDeepness;
+						--loopDeepness;
 					}
 					else
 					{
 						k = temp.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_BREAK]);
 						if (k != dodoString::npos)
 						{
-							if (_break(temp.substr(k + 5), j, path))
+							if (_break(j, temp.substr(k + 5), path))
 								break;
 						}
 						else
@@ -188,9 +188,9 @@ cgiProcessor::_processString(const dodoString &buffer,
 							k = temp.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CONT]);
 							if (k != dodoString::npos)
 							{
-								if (_loopDeepness > 0)
+								if (loopDeepness > 0)
 								{
-									_continueFlag = true;
+									continueFlag = true;
 									break;
 								}
 							}
@@ -199,7 +199,7 @@ cgiProcessor::_processString(const dodoString &buffer,
 								k = temp.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_ASSIGN]);
 								if (k != dodoString::npos)
 								{
-									_assign(temp.substr(k + 6), j, path);
+									j = _assign(j, temp.substr(k + 6), path);
 								}
 								else
 								{
@@ -224,10 +224,10 @@ cgiProcessor::_processString(const dodoString &buffer,
 			}
 		}
 
-		if (_breakDeepness > 0)
+		if (breakDeepness > 0)
 			break;
 
-		if (_continueFlag)
+		if (continueFlag)
 			break;
 	}
 
@@ -536,10 +536,10 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 
 //-------------------------------------------------------------------
 
-void
-cgiProcessor::_include(const dodoString &statement,
+unsigned long
+cgiProcessor::_include(unsigned long start,
+					const dodoString &statement,
 					   dodoString &tpl,
-					   unsigned long &start,
 					   const dodoString &path)
 {
 	dodoString temp1 = getVar(statement, start, path);
@@ -550,14 +550,16 @@ cgiProcessor::_include(const dodoString &statement,
 		tpl.append(process(temp1));
 		processed.pop_back();
 	}
+	
+	return start;
 }
 
 //-------------------------------------------------------------------
 
-void
-cgiProcessor::_print(const dodoString &statement,
+unsigned long
+cgiProcessor::_print(unsigned long start,
+					const dodoString &statement,
 					 dodoString &tpl,
-					 unsigned long &start,
 					 const dodoString &path)
 {
 	dodoStringArray temp = tools::explode(statement, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_COMA]);
@@ -572,24 +574,26 @@ cgiProcessor::_print(const dodoString &statement,
 				tpl.append(getVar(*i, start, path));
 		}
 	}
+	
+	return start;
 }
 
 //-------------------------------------------------------------------
 
 bool
-cgiProcessor::_break(const dodoString &statement,
-					 unsigned long &start,
+cgiProcessor::_break(unsigned long start,
+		 			const dodoString &statement,
 					 const dodoString &path)
 {
-	if (_loopDeepness > 0)
+	if (loopDeepness > 0)
 	{
-		_breakDeepness = stringTools::stringToUL(getVar(statement, start, path));
+		breakDeepness = stringTools::stringToUL(getVar(statement, start, path));
 
-		if (_breakDeepness == 0)
-			_breakDeepness = 1;
+		if (breakDeepness == 0)
+			breakDeepness = 1;
 		else
-		if (_breakDeepness > _loopDeepness)
-			_breakDeepness = _loopDeepness;
+			if (breakDeepness > loopDeepness)
+				breakDeepness = loopDeepness;
 
 		return true;
 	}
@@ -599,9 +603,9 @@ cgiProcessor::_break(const dodoString &statement,
 
 //-------------------------------------------------------------------
 
-void
-cgiProcessor::_assign(const dodoString &statement,
-					  unsigned long &start,
+unsigned long
+cgiProcessor::_assign(unsigned long start,
+						const dodoString &statement,
 					  const dodoString &path)
 {
 	dodoStringArray temp = tools::explode(statement, statements[CGIPREPROCESSOR_CGIPREPROCESSOR_PROCESSORSTATEMENT_ASSIGN_OP], 2);
@@ -641,6 +645,8 @@ cgiProcessor::_assign(const dodoString &statement,
 
 	namespaceVars[namespaceDeepness].push_back(varName);
 	local[varName] = getVar(temp[1], start, path);
+	
+	return start;
 }
 
 //-------------------------------------------------------------------
@@ -778,13 +784,13 @@ cgiProcessor::_for(const dodoString &buffer,
 						local[varName] = dodoString(1, k->second[i]);
 						tpl.append(_processString(forSpace, path));
 
-						if (_breakDeepness > 0)
+						if (breakDeepness > 0)
 						{
-							--_breakDeepness;
+							--breakDeepness;
 							break;
 						}
-						if (_continueFlag)
-							_continueFlag = false;
+						if (continueFlag)
+							continueFlag = false;
 					}
 
 					iterator =  iteratorPrev;
@@ -836,13 +842,13 @@ cgiProcessor::_for(const dodoString &buffer,
 						local[varName] = k->second;
 						tpl.append(_processString(forSpace, path));
 
-						if (_breakDeepness > 0)
+						if (breakDeepness > 0)
 						{
-							--_breakDeepness;
+							--breakDeepness;
 							break;
 						}
-						if (_continueFlag)
-							_continueFlag = false;
+						if (continueFlag)
+							continueFlag = false;
 					}
 
 					iterator =  iteratorPrev;
@@ -893,13 +899,13 @@ cgiProcessor::_for(const dodoString &buffer,
 						local[varName] = dodoString(1, k->second[i]);
 						tpl.append(_processString(forSpace, path));
 
-						if (_breakDeepness > 0)
+						if (breakDeepness > 0)
 						{
-							--_breakDeepness;
+							--breakDeepness;
 							break;
 						}
-						if (_continueFlag)
-							_continueFlag = false;
+						if (continueFlag)
+							continueFlag = false;
 					}
 
 					iterator =  iteratorPrev;
@@ -951,13 +957,13 @@ cgiProcessor::_for(const dodoString &buffer,
 						local[varName] = k->second;
 						tpl.append(_processString(forSpace, path));
 
-						if (_breakDeepness > 0)
+						if (breakDeepness > 0)
 						{
-							--_breakDeepness;
+							--breakDeepness;
 							break;
 						}
-						if (_continueFlag)
-							_continueFlag = false;
+						if (continueFlag)
+							continueFlag = false;
 					}
 
 					iterator =  iteratorPrev;
@@ -1009,13 +1015,13 @@ cgiProcessor::_for(const dodoString &buffer,
 						local[varName] = *k;
 						tpl.append(_processString(forSpace, path));
 
-						if (_breakDeepness > 0)
+						if (breakDeepness > 0)
 						{
-							--_breakDeepness;
+							--breakDeepness;
 							break;
 						}
-						if (_continueFlag)
-							_continueFlag = false;
+						if (continueFlag)
+							continueFlag = false;
 					}
 
 					iterator =  iteratorPrev;
@@ -1068,13 +1074,13 @@ cgiProcessor::_for(const dodoString &buffer,
 
 						tpl.append(_processString(forSpace, path));
 
-						if (_breakDeepness > 0)
+						if (breakDeepness > 0)
 						{
-							--_breakDeepness;
+							--breakDeepness;
 							break;
 						}
-						if (_continueFlag)
-							_continueFlag = false;
+						if (continueFlag)
+							continueFlag = false;
 					}
 
 					iterator =  iteratorPrev;
@@ -1134,13 +1140,13 @@ cgiProcessor::_for(const dodoString &buffer,
 									local[varName] = dodoString(1, k->second[i]);
 									tpl.append(_processString(forSpace, path));
 
-									if (_breakDeepness > 0)
+									if (breakDeepness > 0)
 									{
-										--_breakDeepness;
+										--breakDeepness;
 										break;
 									}
-									if (_continueFlag)
-										_continueFlag = false;
+									if (continueFlag)
+										continueFlag = false;
 								}
 
 								iterator =  iteratorPrev;
@@ -1197,13 +1203,13 @@ cgiProcessor::_for(const dodoString &buffer,
 									local[varName] = dodoString(1, k->second[i]);
 									tpl.append(_processString(forSpace, path));
 
-									if (_breakDeepness > 0)
+									if (breakDeepness > 0)
 									{
-										--_breakDeepness;
+										--breakDeepness;
 										break;
 									}
-									if (_continueFlag)
-										_continueFlag = false;
+									if (continueFlag)
+										continueFlag = false;
 								}
 
 								iterator =  iteratorPrev;
@@ -1258,13 +1264,13 @@ cgiProcessor::_for(const dodoString &buffer,
 								local[varName] = dodoString(1, o->second[pos][i]);
 								tpl.append(_processString(forSpace, path));
 
-								if (_breakDeepness > 0)
+								if (breakDeepness > 0)
 								{
-									--_breakDeepness;
+									--breakDeepness;
 									break;
 								}
-								if (_continueFlag)
-									_continueFlag = false;
+								if (continueFlag)
+									continueFlag = false;
 							}
 
 							iterator =  iteratorPrev;
@@ -1320,13 +1326,13 @@ cgiProcessor::_for(const dodoString &buffer,
 								local[varName] = k->second;
 								tpl.append(_processString(forSpace, path));
 
-								if (_breakDeepness > 0)
+								if (breakDeepness > 0)
 								{
-									--_breakDeepness;
+									--breakDeepness;
 									break;
 								}
-								if (_continueFlag)
-									_continueFlag = false;
+								if (continueFlag)
+									continueFlag = false;
 							}
 
 							iterator =  iteratorPrev;
@@ -1390,13 +1396,13 @@ cgiProcessor::_for(const dodoString &buffer,
 											local[varName] = dodoString(1, k->second[i]);
 											tpl.append(_processString(forSpace, path));
 
-											if (_breakDeepness > 0)
+											if (breakDeepness > 0)
 											{
-												--_breakDeepness;
+												--breakDeepness;
 												break;
 											}
-											if (_continueFlag)
-												_continueFlag = false;
+											if (continueFlag)
+												continueFlag = false;
 										}
 
 										iterator =  iteratorPrev;
@@ -1450,13 +1456,13 @@ cgiProcessor::_for(const dodoString &buffer,
 			local[varName] = dodoString(1, targetVar[i]);
 			tpl.append(_processString(forSpace, path));
 
-			if (_breakDeepness > 0)
+			if (breakDeepness > 0)
 			{
-				--_breakDeepness;
+				--breakDeepness;
 				break;
 			}
-			if (_continueFlag)
-				_continueFlag = false;
+			if (continueFlag)
+				continueFlag = false;
 		}
 
 		iterator =  iteratorPrev;
@@ -1485,7 +1491,7 @@ cgiProcessor::_for(const dodoString &buffer,
 
 dodoString
 cgiProcessor::getVar(const dodoString &a_varName,
-					 unsigned long &start,
+					 unsigned long start,
 					 const dodoString &path)
 {
 	dodoString varName = trim(a_varName), tempVar;

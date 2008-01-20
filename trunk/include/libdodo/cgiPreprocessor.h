@@ -37,9 +37,8 @@
 
 namespace dodo
 {
-
 	/**
-	 * @class cgiPreprocessor prepares template for future parsings
+	 * @class cgiPreprocessor prepares template for cgiProcessor
 	 */
 	class cgiPreprocessor
 	{
@@ -56,47 +55,48 @@ namespace dodo
 			virtual ~cgiPreprocessor();
 
 			/**
-			 * @return preprocessed template from file
-			 * @param path indicates path where template stays
+			 * @return preprocessed template
+			 * @param path defines path of template
 			 */
 			virtual dodoString preProcess(const dodoString &path);
 
 			/**
-			 * @return preprocessed template from buffer
-			 * @param tpl indicates template to preprocess
+			 * @return preprocessed template
+			 * @param buffer defines buffer where template is stored
 			 */
-			virtual dodoString preProcessString(const dodoString &tpl);
+			virtual dodoString preProcessString(const dodoString &buffer);
 
 			dodoString tplBasePath; ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
 
 		protected:
 
 			/**
-			 * @return preprocessed template from buffer
-			 * @param tpl indicates template to preprocess
-			 * @param path indicates path where template stays[for reporting]
+			 * @return preprocessed template
+			 * @param buffer defines buffer where template is stored
+			 * @param path defines path of template
 			 */
-			virtual dodoString _preProcessString(const dodoString &tpl, const dodoString &path);
+			virtual dodoString _preProcessString(const dodoString &buffer, const dodoString &path);
 
 			/**
 			 * @return line number in file
-			 * @param newLinePos describes array of newlines' positions
-			 * @param pos describes pos in file
+			 * @param newlines defines positions of new lines if template 
+			 * @param pos defines position of symbol in template
 			 */
-			virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newLinePos, unsigned long pos);
+			virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newlines, unsigned long pos);
 
 			/**
-			 * @return newlines positions
-			 * @param tpl indicates template to process
+			 * @return positions of new lines
+			 * @param buffer defines buffer where template is stored
 			 */
-			virtual dodoArray<unsigned long> detectNewLines(const dodoString &tpl);
+			virtual dodoArray<unsigned long> detectNewLines(const dodoString &buffer);
 
-			dodoArray< dodoArray<unsigned long> > newLinePositions; ///< stack of processed new lines' positions
+			dodoArray< dodoArray<unsigned long> > newLinePositions; ///< stack of positions of new lines of templates
 
 			/**
-			 * @enum processorStatemetsEnum describes positions in 'statements' property
+			 * @enum preprocessorStatemetsEnum defines processor statements
+			 * @note defines positions of string representation in 'statements' class property
 			 */
-			enum processorStatemetsEnum
+			enum preprocessorStatemetsEnum
 			{
 				CGIPREPROCESSOR_PROCESSORSTATEMENT_DODO = 0,
 				CGIPREPROCESSOR_PROCESSORSTATEMENT_OPEN_ST,
@@ -135,9 +135,9 @@ namespace dodo
 				CGIPREPROCESSOR_PROCESSORSTATEMENT_OPEN_VARPART,
 				CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_VARPART,
 			};
-			static const dodoString statements[36]; ///< dodo statement[for dodo.*, ...]
+			
+			static const dodoString statements[36]; ///< processor statement[for dodo.*, ...]
 	};
-
 };
 
 #endif

@@ -38,7 +38,6 @@ namespace dodo
 		ATOMICSEMAPHOREEX_LOCK,
 		ATOMICSEMAPHOREEX_UNLOCK,
 	};
-
 };
 
 #endif

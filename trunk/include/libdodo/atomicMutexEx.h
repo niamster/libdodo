@@ -38,7 +38,6 @@ namespace dodo
 		ATOMICMUTEXEX_LOCK,
 		ATOMICMUTEXEX_UNLOCK,
 	};
-
 };
 
 #endif
