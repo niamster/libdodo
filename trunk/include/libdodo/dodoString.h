@@ -31,7 +31,7 @@
 namespace dodo
 {
 	/**
-	 * @typedef dodoString should extend standart std::string class
+	 * @typedef dodoString defines class that represents string
 	 */
 	typedef std::string dodoString;
 };

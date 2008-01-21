@@ -45,68 +45,53 @@
 #include <stdio.h>
 #include <unistd.h>
 
-/**
- * other options
- */
 
 /**
- * !!!!note!!!!!
- * please read notes before uncommentin'!!!
- */
-
-/**
- * size of block to use with zLib de/compression
+ * size of block for zLib de/compression
  */
 #define ZLIB_CHUNK    100
 
+/**
+ * size of block for bzip2 de/compression
+ */
 #define BZIP_CHUNK    100
 
 /**
- *  describes file permissions for newly created file(pipe) with open method
+ * file permissions for newly created file(pipe)
  */
 #define DEFAULT_FILE_PERM IODISKTOOLS_PERM_OWNER_ALL_ACCESS
 
 /**
- * is used for converting from number to string
+ * size of string that represents numeric value during convertion
  */
 #define SIZEOFNUM     20
 
 /**
- * delimiter in disk operations
+ * filesystem path delimiter
  */
 #define FILE_DELIM    '/'
 
 /**
- * removes some checks
+ * remove some checks
  */
 #define FAST
 
 /**
- *
- */
-#define CGI_SAVEPROCESS
-
-/**
  * socket default timeouts
  */
-#define RECIEVE_TIMEOUT          1000
-#define SEND_TIMEOUT             1000
-
-/**
- * for ioDisk::getFileContentsArr
- */
-#define DISK_MAXLINELEN          10240
-
-/**
- * size of batch for POST reading in cgiTool
- */
-#define CONTENT_BATCH_SIZE       4096
+#define IOSOCKET_RECIEVE_TIMEOUT          1000
+#define IOSOCKET_SEND_TIMEOUT             1000
 
 /**
  * default values of buffer for io operations(io*)
  */
-#define INSIZE                   4096
-#define OUTSIZE                  4096
+#define IO_INSIZE                   4096
+#define IO_OUTSIZE                  4096
+
+/**
+ * max line length
+ */
+#define IODISK_MAXLINELEN          10240
 
 /**
  * default values of socket buffer for io operations(ioSocket)
@@ -121,15 +106,18 @@
 #define STD_OUTSIZE              102400
 
 /**
- * amount of seconds for linger
+ * linger options
  */
 #define IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD     1
 #define IOSOCKETOPTIONS_SOCKET_LINGER_OPTION     IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE
 
+/**
+ * size of the short messages
+ */
 #define TOOLS_SHORT_DATA_SIZE    2048
 
 /**
- * max length of the file path
+ * max length of the filesystem path
  */
 #define MAXPATHLEN               FILENAME_MAX
 

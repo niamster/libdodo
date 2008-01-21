@@ -35,8 +35,8 @@ __xexexIoCollectedData::__xexexIoCollectedData(dodoString &a_buffer,
 
 //-------------------------------------------------------------------
 
-io::io() : inSize(INSIZE),
-		   outSize(OUTSIZE),
+io::io() : inSize(IO_INSIZE),
+		   outSize(IO_OUTSIZE),
 		   opened(false),
 		   collectedData(buffer,
 						 operType,

@@ -549,18 +549,18 @@ ioDiskTools::getFileContents(const dodoString &path)
 	if (file == NULL)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	char buffer[INSIZE];
+	char buffer[IO_INSIZE];
 
-	long iter = st.st_size / INSIZE, rest = st.st_size % INSIZE;
+	long iter = st.st_size / IO_INSIZE, rest = st.st_size % IO_INSIZE;
 	dodoString retS = "";
 
 	int i(0);
 	for (; i < iter; ++i)
 	{
-		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
+		if (fseek(file, i * IO_INSIZE, SEEK_SET) == -1)
 			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-		if (fread(buffer, INSIZE, 1, file) == 0)
+		if (fread(buffer, IO_INSIZE, 1, file) == 0)
 			switch (errno)
 			{
 				case EIO:
@@ -572,11 +572,11 @@ ioDiskTools::getFileContents(const dodoString &path)
 					throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
-		retS.append(buffer, INSIZE);
+		retS.append(buffer, IO_INSIZE);
 	}
 	if (rest > 0)
 	{
-		if (fseek(file, i * INSIZE, SEEK_SET) == -1)
+		if (fseek(file, i * IO_INSIZE, SEEK_SET) == -1)
 			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		if (fread(buffer, rest, 1, file) == 0)
@@ -616,10 +616,10 @@ ioDiskTools::getFileContentsArr(const dodoString &path)
 	if (file == NULL)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_GETFILECONTENTSARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	char buffer[DISK_MAXLINELEN];
+	char buffer[IODISK_MAXLINELEN];
 	dodoStringArray arr;
 
-	while (fgets(buffer, DISK_MAXLINELEN, file) != NULL)
+	while (fgets(buffer, IODISK_MAXLINELEN, file) != NULL)
 		arr.push_back(buffer);
 
 	if (fclose(file) != 0)
@@ -736,7 +736,7 @@ ioDiskTools::copy(const dodoString &from,
 	}
 	else
 	{
-		long iter = stFrom.st_size / INSIZE, rest = stFrom.st_size % INSIZE;
+		long iter = stFrom.st_size / IO_INSIZE, rest = stFrom.st_size % IO_INSIZE;
 
 		FILE *fromFile = fopen(from.c_str(), "r");
 		if (fromFile == NULL)
@@ -746,12 +746,12 @@ ioDiskTools::copy(const dodoString &from,
 		if (toFile == NULL)
 			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, to);
 
-		char buffer[INSIZE];
+		char buffer[IO_INSIZE];
 
 		int i(0), j;
 		for (; i < iter; ++i)
 		{
-			j = i * INSIZE;
+			j = i * IO_INSIZE;
 
 			if (fseek(fromFile, j, SEEK_SET) == -1)
 				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
@@ -759,7 +759,7 @@ ioDiskTools::copy(const dodoString &from,
 			if (fseek(toFile, j, SEEK_SET) == -1)
 				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 
-			if (fread(buffer, INSIZE, 1, fromFile) == 0)
+			if (fread(buffer, IO_INSIZE, 1, fromFile) == 0)
 				switch (errno)
 				{
 					case EIO:
@@ -771,7 +771,7 @@ ioDiskTools::copy(const dodoString &from,
 						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 				}
 
-			if (fwrite(buffer, INSIZE, 1, toFile) == 0)
+			if (fwrite(buffer, IO_INSIZE, 1, toFile) == 0)
 				switch (errno)
 				{
 					case EIO:
@@ -785,7 +785,7 @@ ioDiskTools::copy(const dodoString &from,
 		}
 		if (rest > 0)
 		{
-			j = i * INSIZE;
+			j = i * IO_INSIZE;
 			if (fseek(fromFile, j, SEEK_SET) == -1)
 				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
 

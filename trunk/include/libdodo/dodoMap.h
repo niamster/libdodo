@@ -85,8 +85,9 @@ namespace dodo
 			}
 
 			/**
-			 * @return value of hash by varName or empty valueType already added to map, if not found
-			 * @param varName value of hash that points to the value
+			 * @return value of the node of hash
+			 * @param varName defines name of the node in hash
+			 * @note if nothing points to the name new object is created and is added to hash
 			 */
 			valueType &
 			operator[](const keyType &varName)
@@ -103,8 +104,9 @@ namespace dodo
 			}
 
 			/**
-			 * @return value of hash by varName or empty valueType already added to map, if not found
-			 * @param varName value of hash that points to the value
+			 * @return value of the node of hash
+			 * @param varName defines name of the node in hash
+			 * @note if nothing points to the name new object is created and added to hash
 			 */
 			const valueType &
 			operator[](const keyType &varName) const
@@ -121,8 +123,8 @@ namespace dodo
 			}
 
 			/**
-			 * @return iterator by hash or end of hash if not found
-			 * @param varName value of hash that points to the value
+			 * @return iterator that points to the node of hash
+			 * @param varName defines name of the node in hash
 			 */
 			typename std::map<keyType, valueType>::iterator
 			find(const keyType &varName)
@@ -137,8 +139,8 @@ namespace dodo
 			}
 
 			/**
-			 * @return const_iterator by hash or end of hash if not found
-			 * @param varName is value of hash that points to the value
+			 * @return constant iterator that points to the node of hash
+			 * @param varName defines name of the node in hash
 			 */
 			typename std::map<keyType, valueType>::const_iterator
 			find(const keyType &varName) const
@@ -153,8 +155,8 @@ namespace dodo
 			}
 
 			/**
-			 * removes element with given key
-			 * @param varName is value of hash that points to the value
+			 * remove node from hash
+			 * @param varName defines name of the node in hash
 			 */
 			void
 			erase(const keyType &varName)
@@ -164,8 +166,8 @@ namespace dodo
 
 			/**
 			 * insert into hash
-			 * @param varName is value of hash that points to the value
-			 * @param varVal is value of hash by varName
+			 * @param varName defines name of the node in hash
+			 * @param varName defines value of the node in hash
 			 */
 			void
 			insert(const keyType &varName,
@@ -175,7 +177,7 @@ namespace dodo
 			}
 
 			/**
-			 * return const_iterator that points on the begin of the original array
+			 * @return constant iterator that points to the begin of hash
 			 */
 			typename std::map<keyType, valueType>::const_iterator
 			begin() const
@@ -184,7 +186,7 @@ namespace dodo
 			}
 
 			/**
-			 * return const_iterator that points on the begin of the original array
+			 * @return constant iterator that points to the end of hash
 			 */
 			typename std::map<keyType, valueType>::const_iterator
 			end() const
@@ -193,7 +195,7 @@ namespace dodo
 			}
 
 			/**
-			 * return iterator that points on the begin of the original array
+			 * @return iterator that points to the begin of hash
 			 */
 			typename std::map<keyType, valueType>::iterator
 			begin()
@@ -202,7 +204,7 @@ namespace dodo
 			}
 
 			/**
-			 * return iterator that points on the begin of the original array
+			 * @return iterator that points to the end of hash
 			 */
 			typename std::map<keyType, valueType>::iterator
 			end()
@@ -211,7 +213,7 @@ namespace dodo
 			}
 
 			/**
-			 * @return true if contents is empty
+			 * @return true if hash is empty
 			 */
 			bool
 			empty()
@@ -220,7 +222,7 @@ namespace dodo
 			}
 
 			/**
-			 * @return size of the map
+			 * @return size of the hash
 			 */
 			int
 			size()
@@ -229,7 +231,7 @@ namespace dodo
 			}
 
 			/**
-			 * clears contents
+			 * clear hash
 			 */
 			void
 			clear()
@@ -237,13 +239,16 @@ namespace dodo
 				contents.clear();
 			}
 
+			/**
+			 * @return std::map that represents current hash
+			 */
 			operator const std::map < keyType, valueType> & ()
 			{
 				return contents;
 			}
 
 			/**
-			 * @return true if value is set by given key
+			 * @return true if node exists by given name
 			 */
 			bool
 			isset(const keyType &varName)
@@ -257,12 +262,12 @@ namespace dodo
 				return false;
 			}
 
-			typedef typename std::map<keyType, valueType>::const_iterator const_iterator;       ///< const iterator
-			typedef typename std::map<keyType, valueType>::iterator iterator;                   ///< iterator
+			typedef typename std::map<keyType, valueType>::const_iterator const_iterator;       ///< definition of const iterator
+			typedef typename std::map<keyType, valueType>::iterator iterator;                   ///< definition of iterator
 
 		private:
 
-			std::map<keyType, valueType> contents;                                              ///< real array
+			std::map<keyType, valueType> contents;                                              ///< instance of hash
 	};
 };
 
