@@ -296,7 +296,7 @@ namespace dodo
 			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__);
+			virtual void select(const dodoString &table, const dodoStringArray &fields, const dodoString &where = __dodostring__);
 
 			/**
 			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
@@ -322,23 +322,23 @@ namespace dodo
 
 			/**
 			 * @param table is table name
-			 * @param fieldsVal is array of fields' values
-			 * @param fieldsNames is array of fields' names
+			 * @param values is array of fields' values
+			 * @param fields is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__);
+			virtual void insert(const dodoString &table, const dodoStringArray &values, const dodoStringArray &fields = __dodostringarray__);
 
 			/**
 			 * @param table is table name
-			 * @param fieldsVal - array of array of (array of fields' values)
-			 * @param fieldsNames is array of fields' names
+			 * @param values - array of array of (array of fields' values)
+			 * @param fields is array of fields' names
 			 */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__);
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &values, const dodoStringArray &fields = __dodostringarray__);
 
 			/**
 			 * @param table(To/From) is table name To/From
-			 * @param fieldsNames is array of fields' names
+			 * @param fields is array of fields' names
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsNamesTo, const dodoStringArray &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__);
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsTo, const dodoStringArray &fieldsFrom = __dodostringarray__, const dodoString &where = __dodostring__);
 
 			/**
 			 * @param table is table name
@@ -351,11 +351,11 @@ namespace dodo
 
 			/**
 			 * @param table is table name
-			 * @param fieldsVal is array of fields' values
-			 * @param fieldsNames is array of fields' names
+			 * @param values is array of fields' values
+			 * @param fields is array of fields' names
 			 * @param where is where statement for request
 			 */
-			virtual void update(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__);
+			virtual void update(const dodoString &table, const dodoStringArray &values, const dodoStringArray &fields, const dodoString &where = __dodostring__);
 
 			/**
 			 * @param table is table name

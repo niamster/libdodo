@@ -110,7 +110,7 @@ dbBase::callFunction(const dodoString &name,
 	qType = DBBASE_REQUEST_CALL_FUNCTION;
 
 	pre_table = name;
-	pre_fieldsNames = arguments;
+	pre_fields = arguments;
 
 	if (as.size() != 0)
 	{
@@ -130,7 +130,7 @@ dbBase::callProcedure(const dodoString &name,
 	qType = DBBASE_REQUEST_CALL_PROCEDURE;
 
 	pre_table = name;
-	pre_fieldsNames = arguments;
+	pre_fields = arguments;
 
 	show = true;
 }
@@ -139,13 +139,13 @@ dbBase::callProcedure(const dodoString &name,
 
 void
 dbBase::select(const dodoString &a_table,
-			   const dodoStringArray &a_fieldsNames,
+			   const dodoStringArray &a_fields,
 			   const dodoString &a_where)
 {
 	qType = DBBASE_REQUEST_SELECT;
 
 	pre_table = a_table;
-	pre_fieldsNames = a_fieldsNames;
+	pre_fields = a_fields;
 
 	if (a_where.size() != 0)
 	{
@@ -165,7 +165,7 @@ dbBase::selectAll(const dodoString &a_table,
 	qType = DBBASE_REQUEST_SELECT;
 
 	pre_table = a_table;
-	pre_fieldsNames.push_back("*");
+	pre_fields.push_back("*");
 
 	if (a_where.size() != 0)
 	{
@@ -186,18 +186,18 @@ dbBase::insert(const dodoString &a_table,
 
 	pre_table = a_table;
 
-	pre_fieldsNames.clear();
-	pre_fieldsVal.clear();
+	pre_fields.clear();
+	pre_values.clear();
 
 	dodoStringArray temp;
 
 	dodoStringMap::const_iterator i = (a_fields.begin()), j(a_fields.end());
 	for (; i != j; ++i)
 	{
-		pre_fieldsNames.push_back(i->first);
+		pre_fields.push_back(i->first);
 		temp.push_back(i->second);
 	}
-	pre_fieldsVal.push_back(temp);
+	pre_values.push_back(temp);
 
 	show = false;
 }
@@ -214,12 +214,12 @@ dbBase::insert(const dodoString &a_table,
 
 	dodoArray<dodoStringMap>::const_iterator v(a_fields.begin()), b(a_fields.end());
 
-	pre_fieldsNames.clear();
-	pre_fieldsVal.clear();
+	pre_fields.clear();
+	pre_values.clear();
 
 	dodoStringMap::const_iterator i(v->begin()), j(v->end());
 	for (; i != j; ++i)
-		pre_fieldsNames.push_back(i->first);
+		pre_fields.push_back(i->first);
 
 	dodoStringArray temp;
 
@@ -231,7 +231,7 @@ dbBase::insert(const dodoString &a_table,
 		for (i = v->begin(); i != j; ++i)
 			temp.push_back(i->second);
 
-		pre_fieldsVal.push_back(temp);
+		pre_values.push_back(temp);
 	}
 
 	show = false;
@@ -241,17 +241,17 @@ dbBase::insert(const dodoString &a_table,
 
 void
 dbBase::insert(const dodoString &a_table,
-			   const dodoStringArray &a_fieldsVal,
-			   const dodoStringArray &a_fieldsNames)
+			   const dodoStringArray &a_values,
+			   const dodoStringArray &a_fields)
 {
 	qType = DBBASE_REQUEST_INSERT;
 
 	pre_table = a_table;
-	pre_fieldsNames = a_fieldsNames;
+	pre_fields = a_fields;
 
-	pre_fieldsVal.clear();
+	pre_values.clear();
 
-	pre_fieldsVal.push_back(a_fieldsVal);
+	pre_values.push_back(a_values);
 
 	show = false;
 }
@@ -260,17 +260,17 @@ dbBase::insert(const dodoString &a_table,
 
 void
 dbBase::insert(const dodoString &a_table,
-			   const dodoArray<dodoStringArray> &a_fieldsVal,
-			   const dodoStringArray &a_fieldsNames)
+			   const dodoArray<dodoStringArray> &a_values,
+			   const dodoStringArray &a_fields)
 {
 	qType = DBBASE_REQUEST_INSERT;
 
 	pre_table = a_table;
-	pre_fieldsNames = a_fieldsNames;
+	pre_fields = a_fields;
 
-	dodoArray<dodoStringArray>::const_iterator k(a_fieldsVal.begin()), l(a_fieldsVal.end());
+	dodoArray<dodoStringArray>::const_iterator k(a_values.begin()), l(a_values.end());
 	for (; k != l; ++k)
-		pre_fieldsVal.push_back(*k);
+		pre_values.push_back(*k);
 
 	show = false;
 
@@ -281,19 +281,19 @@ dbBase::insert(const dodoString &a_table,
 void
 dbBase::insertSelect(const dodoString &a_tableTo,
 					 const dodoString &a_tableFrom,
-					 const dodoStringArray &a_fieldsNamesTo,
-					 const dodoStringArray &a_fieldsNamesFrom,
+					 const dodoStringArray &a_fieldsTo,
+					 const dodoStringArray &a_fieldsFrom,
 					 const dodoString &a_where)
 {
 	qType = DBBASE_REQUEST_INSERT_SELECT;
 
 	pre_tableTo = a_tableTo;
 	pre_table = a_tableFrom;
-	pre_fieldsNames = a_fieldsNamesTo;
+	pre_fields = a_fieldsTo;
 
-	pre_fieldsVal.clear();
+	pre_values.clear();
 
-	pre_fieldsVal.push_back(a_fieldsNamesFrom);
+	pre_values.push_back(a_fieldsFrom);
 
 	if (a_where.size() != 0)
 	{
@@ -317,17 +317,17 @@ dbBase::update(const dodoString &a_table,
 
 	dodoStringMap::const_iterator i(a_fields.begin()), j(a_fields.end());
 
-	pre_fieldsNames.clear();
-	pre_fieldsVal.clear();
+	pre_fields.clear();
+	pre_values.clear();
 
 	dodoStringArray temp;
 
 	for (; i != j; ++i)
 	{
-		pre_fieldsNames.push_back((*i).first);
+		pre_fields.push_back((*i).first);
 		temp.push_back((*i).second);
 	}
-	pre_fieldsVal.push_back(temp);
+	pre_values.push_back(temp);
 
 	if (a_where.size() != 0)
 	{
@@ -342,18 +342,18 @@ dbBase::update(const dodoString &a_table,
 
 void
 dbBase::update(const dodoString &a_table,
-			   const dodoStringArray &a_fieldsVal,
-			   const dodoStringArray &a_fieldsNames,
+			   const dodoStringArray &a_values,
+			   const dodoStringArray &a_fields,
 			   const dodoString &a_where)
 {
 	qType = DBBASE_REQUEST_UPDATE;
 
 	pre_table = a_table;
-	pre_fieldsNames = a_fieldsNames;
+	pre_fields = a_fields;
 
-	pre_fieldsVal.clear();
+	pre_values.clear();
 
-	pre_fieldsVal.push_back(a_fieldsVal);
+	pre_values.push_back(a_values);
 
 	if (a_where.size() != 0)
 	{
@@ -436,7 +436,7 @@ dbBase::createIndex(const dodoString &table,
 {
 	qType = DBBASE_REQUEST_CREATE_INDEX;
 	pre_table = table;
-	pre_fieldsNames.push_back(field);
+	pre_fields.push_back(field);
 	pre_having = name;
 	show = false;
 }
@@ -450,7 +450,7 @@ dbBase::createIndex(const dodoString &table,
 {
 	qType = DBBASE_REQUEST_CREATE_INDEX;
 	pre_table = table;
-	pre_fieldsNames = fields;
+	pre_fields = fields;
 	pre_having = name;
 	show = false;
 }
@@ -564,7 +564,7 @@ dbBase::limit(unsigned int a_number)
 {
 	addFlag(qShift, 1 << DBBASE_ADDREQUEST_LIMIT);
 
-	pre_limNumber = stringTools::lToString(a_number);
+	pre_limit = stringTools::lToString(a_number);
 }
 //-------------------------------------------------------------------
 
@@ -573,7 +573,7 @@ dbBase::offset(unsigned int a_number)
 {
 	addFlag(qShift, 1 << DBBASE_ADDREQUEST_OFFSET);
 
-	pre_limOffset = stringTools::lToString(a_number);
+	pre_offset = stringTools::lToString(a_number);
 }
 
 //-------------------------------------------------------------------
@@ -783,15 +783,15 @@ dbBase::cleanCollected()
 	qDbDepDelShift = DB_EMPTY;
 	
 	pre_where.clear();
-	pre_fieldsNames.clear();
-	pre_fieldsVal.clear();
+	pre_fields.clear();
+	pre_values.clear();
 	pre_table.clear();
 	pre_tableTo.clear();
 	pre_order.clear();
 	pre_having.clear();
 	pre_group.clear();
-	pre_limNumber.clear();
-	pre_limOffset.clear();
+	pre_limit.clear();
+	pre_offset.clear();
 	pre_subQueries.clear();
 	pre_joinTables.clear();
 	pre_joinConds.clear();

@@ -228,11 +228,11 @@ namespace dodo
 
 			/**
 			 * @return string from fields' names and 'em values
-			 * @param fieldsVal is array of fields
-			 * @param fieldsNames is array of names
+			 * @param values is array of fields
+			 * @param fields is array of names
 			 * @param frame is value with what values will be framed
 			 */
-			virtual dodoString fieldsValName(const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &frame = "'");
+			virtual dodoString valuesName(const dodoStringArray &values, const dodoStringArray &fields, const dodoString &frame = "'");
 
 			/**
 			 * @return sql compliant data type

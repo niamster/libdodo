@@ -32,7 +32,7 @@
 namespace dodo
 {
 	/**
-	 * @enum dbEmptyEnum indicates that no action will be performed
+	 * @enum dbEmptyEnum defines empty state of the db object
 	 */
 	enum dbEmptyEnum
 	{
@@ -40,14 +40,14 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __dbStorage contains data that could be retrieved from result [select...]
+	 * @struct __dbStorage defines fetched data from db
 	 */
 	struct __dbStorage
 	{
 		/**
 		 * constructor
-		 * @param rows
-		 * @param fields
+		 * @param rows defines rows of data
+		 * @param fields defines names of fields
 		 */
 		__dbStorage(dodoArray<dodoStringArray> rows, dodoStringArray fields);
 		
@@ -56,29 +56,28 @@ namespace dodo
 		 */
 		__dbStorage();
 
-		dodoArray<dodoStringArray> rows;    ///< array of rows returned in request
-		dodoStringArray fields;             ///< array of fields returned in request
+		dodoArray<dodoStringArray> rows;    ///< rows of data
+		dodoStringArray fields;             ///< names of fields
 	};
 
 	/**
-	 * @struct __xexexDbBaseCollectedData contains data that could be retrieved from class(to modificate)[contains references]
+	 * @struct __xexexDbBaseCollectedData defines data that could be retrieved from the db object
 	 */
 	struct __xexexDbBaseCollectedData
 	{
 		/**
 		 * constructor
-		 * initiates references
 		 */
 		__xexexDbBaseCollectedData(dodoString &pre_where,
-								   dodoStringArray &pre_fieldsNames,
-								   dodoArray<dodoStringArray> &pre_fieldsVal,
+								   dodoStringArray &pre_fields,
+								   dodoArray<dodoStringArray> &pre_values,
 								   dodoString &pre_table,
 								   dodoString &pre_tableTo,
 								   dodoString &pre_order,
 								   dodoString &pre_having,
 								   dodoString &pre_group,
-								   dodoString &pre_limNumber,
-								   dodoString &pre_limOffset,
+								   dodoString &pre_limit,
+								   dodoString &pre_offset,
 								   dodoStringArray &pre_subQueries,
 								   dodoStringArray &pre_joinTables,
 								   dodoStringArray &pre_joinConds,
@@ -92,37 +91,37 @@ namespace dodo
 								   int &operType,
 								   void *executor);
 
-		dodoString &pre_where;                          ///< where statement of the request(can be used as `as` for callFunction)
-		dodoStringArray &pre_fieldsNames;               ///< names of fields of request(can be used for `insert_select` as fields' names where to store result; as arguments for callFunction)
-		dodoArray<dodoStringArray> &pre_fieldsVal;      ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested(can be used for `insert_select` as fields' names from data requested)
-		dodoString &pre_table;                          ///< table for request;(can be used for `insert_select` as table from what to take request); as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods; as name of function for callFunction)
-		dodoString &pre_tableTo;                        ///< string of table where to store request(insert_select)(can be used as 'field' for rename(delete)Field method)
-		dodoString &pre_order;                          ///< order statement(can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-		dodoString &pre_having;                         ///< having statement(can be used as ['charset' for db creation method] [table/field/database for rename methods])
-		dodoString &pre_group;                          ///< group statement
-		dodoString &pre_limNumber;                      ///< limit of result
-		dodoString &pre_limOffset;                      ///< offset of requested result
-		dodoStringArray &pre_subQueries;                ///< subquery
+		dodoString &pre_where;                          ///< `where` for the request(can be used as `as` for `callFunction`)
+		dodoStringArray &pre_fields;               ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
+		dodoArray<dodoStringArray> &pre_values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
+		dodoString &pre_table;                          ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+		dodoString &pre_tableTo;                        ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
+		dodoString &pre_order;                          ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
+		dodoString &pre_having;                         ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
+		dodoString &pre_group;                          ///< `group` for the request
+		dodoString &pre_limit;                      ///< `limit` for the result
+		dodoString &pre_offset;                      ///< `offset` for the result
+		dodoStringArray &pre_subQueries;                ///< `subquery`
 		dodoStringArray &pre_joinTables;                ///< join tables
 		dodoStringArray &pre_joinConds;                 ///< join conditions
 		dodoArray<int> &pre_joinTypes;                  ///< join types
 
-		int &qType;                                     ///< type of operation[see qStEnum]
+		int &qType;                                     ///< type of operation
 
-		int &qShift;                                    ///< indicates if AddEnum's values was set [can be or'ed with | ][see AddEnum]
+		int &qShift;                                    ///< additional actions[see dbBaseAddEnum]
 
-		int &qSelShift;                                 ///< additional select statements[see addSelEnum]
-		int &qInsShift;                                 ///< additional insert statements[see addInsEnum]
-		int &qUpShift;                                  ///< additional update statements[see addUpEnum]
-		int &qDelShift;                                 ///< additional delete statements[see addDelEnum]
+		int &qSelShift;                                 ///< additional select statements[see dbBaseAddSelEnum]
+		int &qInsShift;                                 ///< additional insert statements[see dbBaseAddInsEnum]
+		int &qUpShift;                                  ///< additional update statements[see dbBaseAddUpEnum]
+		int &qDelShift;                                 ///< additional delete statements[see dbBaseAddDelEnum]
 
-		int &operType;                                  ///< operation type set by main action; can be used in hook to determine type of action
+		int &operType;                                  ///< xexec operation
 
 		void *executor;                                 ///< class that executed hook
 	};
 
 	/**
-	 * @struct __sqlInfo that contains connection optioins to server
+	 * @struct __sqlInfo defines connection options for the server
 	 */
 	struct __dbInfo
 	{
@@ -134,7 +133,12 @@ namespace dodo
 
 		/**
 		 * constructor
-		 * @note defines structure data with user data
+		 * @param db defines name of db
+		 * @param host defines host
+		 * @param user defines user
+		 * @param password defines password
+		 * @param path defines path to db or unix socket
+		 * @param port defines port
 		 */
 		__dbInfo(const dodoString &db, const dodoString &host, const dodoString &user, const dodoString &password, const dodoString &path, int port);
 
@@ -148,7 +152,7 @@ namespace dodo
 
 	
 	/**
-	 * @enum dbJoinTypeEnum define join types
+	 * @enum dbJoinTypeEnum defines join types
 	 */
 	enum dbJoinTypeEnum
 	{
@@ -161,8 +165,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class db is an interface to mysql db through sql-, database- independent interfaces;
-	 * you should derive from it if you want to write 'plugin' for your database
+	 * @class db implement an interface to db through sql and database independent interfaces
 	 */
 	class db : public xexec
 	{
@@ -179,266 +182,261 @@ namespace dodo
 			virtual ~db() = 0;
 
 			/**
-			 * connect to database
+			 * connect to the database
 			 */
 			virtual void connect() = 0;
 
 			/**
-			 * disconnect from database
+			 * disconnect from the database
 			 */
 			virtual void disconnect() = 0;
+			
 			/**
-			 * sets info for database
-			 * @param db is database name
-			 * @param host is host, to connect to server
-			 * @param port is port, to connect to server
-			 * @param user is username, to connect to server
-			 * @param password is password, to connect to server
-			 * @param socket is path to unix socket
+			 * set connection information for database
+			 * @param db defines name of db
+			 * @param host defines host
+			 * @param user defines user
+			 * @param password defines password
+			 * @param path defines path to db or unix socket
+			 * @param port defines port
 			 */
 			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __dodostring__) = 0;
 
 			/**
-			 * sets info for database
-			 * @param info is info for database
+			 * set connection information for database
+			 * @param info defines connection information
 			 */
 			virtual void setDbInfo(const __dbInfo &dbInfo) = 0;
 
 			/**
-			 * @param name is function name
-			 * @param arguments is array of arguments
-			 * @param as is name of the result
+			 * @param name defines function name
+			 * @param arguments defines arguments
+			 * @param as defines name of the result row
 			 */
 			virtual void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__) = 0;
 
 			/**
-			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
-			 * @param fields is array of fields' names
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param fields defines names of fields
+			 * @param where defines `where` statement
+			 * @note if (length(table) == 0) => 'from `table`' is not used
 			 */
-			virtual void select(const dodoString &table, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__) = 0;
+			virtual void select(const dodoString &table, const dodoStringArray &fields, const dodoString &where = __dodostring__) = 0;
 
 			/**
-			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param where defines `where` statement
 			 */
 			virtual void selectAll(const dodoString &table, const dodoString &where = __dodostring__) = 0;
 
 			/**
-			 * @param table is table name
-			 * @param fields is array of fields' names
-			 * 			key => field's name
-			 * 			value => field's value
+			 * @param table defines table name
+			 * @param fields defines hash of field=>value
 			 */
 			virtual void insert(const dodoString &table, const dodoStringMap &fields) = 0;
 
 			/**
-			 * @param table is table name
-			 * @param fields is array of (array of fields' names)
-			 * 			key => field's name
-			 * 			value => field's value
+			 * @param table defines table name
+			 * @param fields defines set of hashes of field=>value
 			 */
 			virtual void insert(const dodoString &table, const dodoArray<dodoStringMap> &fields) = 0;
 
 			/**
-			 * @param table is table name
-			 * @param fieldsVal is array of fields' values
-			 * @param fieldsNames is array of fields' names
+			 * @param table defines table name
+			 * @param values defines values
+			 * @param fields defines names of fields
 			 */
-			virtual void insert(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__) = 0;
+			virtual void insert(const dodoString &table, const dodoStringArray &values, const dodoStringArray &fields = __dodostringarray__) = 0;
 
 			/**
-			 * @param table is table name
-			 * @param fieldsVal - array of array of (array of fields' values)
-			 * @param fieldsNames is array of fields' names
+			 * @param table defines table name
+			 * @param values defines values
+			 * @param fields defines names of fields
 			 */
-			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &fieldsVal, const dodoStringArray &fieldsNames = __dodostringarray__) = 0;
+			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &values, const dodoStringArray &fields = __dodostringarray__) = 0;
 
 			/**
-			 * @param table(To/From) is table name To/From
-			 * @param fieldsNames is array of fields' names
+			 * @param tableTo defines table where data will be stored
+			 * @param tableFrom defines table where data will be fetched
+			 * @param fieldsTo defines fields where data will be stored
+			 * @param fieldsFrom defines fields that will be fetched
 			 */
-			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsNamesTo, const dodoStringArray &fieldsNamesFrom = __dodostringarray__, const dodoString &where = __dodostring__) = 0;
+			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsTo, const dodoStringArray &fieldsFrom = __dodostringarray__, const dodoString &where = __dodostring__) = 0;
 
 			/**
-			 * @param table is table name
-			 * @param fields - array of (char*)/(string)
-			 * 			key => field's name
-			 * 			value => field's value
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param fields defines hash of field=>value
+			 * @param where defines `where` statement
 			 */
 			virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where = __dodostring__) = 0;
 
 			/**
-			 * @param table is table name
-			 * @param fieldsVal is array of fields' values
-			 * @param fieldsNames is array of fields' names
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param values defines values
+			 * @param fields defines names of fields
+			 * @param where defines `where` statement
 			 */
-			virtual void update(const dodoString &table, const dodoStringArray &fieldsVal, const dodoStringArray &fieldsNames, const dodoString &where = __dodostring__) = 0;
+			virtual void update(const dodoString &table, const dodoStringArray &values, const dodoStringArray &fields, const dodoString &where = __dodostring__) = 0;
 
 			/**
-			 * @param table is table name
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param where defines `where` statement
 			 */
 			virtual void del(const dodoString &table, const dodoString &where = __dodostring__) = 0;
 
 			/**
-			 * truncates table
+			 * truncate table
 			 * @param table is name name of table to truncate
 			 */
 			virtual void truncate(const dodoString &table) = 0;
 
 			/**
-			 * add where statement
-			 * overwites previous is it was defined
-			 * @param where is where statement
+			 * set `where` statement
+			 * @param where defines `where` statement
+			 * @note overwites previous definition
 			 */
 			virtual void where(const dodoString &where) = 0;
 
 			/**
-			 * sets limit for request
-			 * @param number indicates the number of rows to show
+			 * set `limit` property
+			 * @param number defines `limit` value
 			 */
 			virtual void limit(unsigned int number) = 0;
 
 			/**
-			 * sets offset for request
-			 * @param number indicates offset of the reading result
+			 * set `offset` property
+			 * @param number defines `offset` value
 			 */
 			virtual void offset(unsigned int number) = 0;
 
 			/**
-			 * sets order for request
-			 * @param order is order statement
+			 * set `order` property
+			 * @param order defines `order` value
 			 */
 			virtual void order(const dodoString &order) = 0;
 
 			/**
-			 * sets group for request
-			 * @param group is group statement
+			 * set `group` property
+			 * @param group defines `group` value
 			 */
 			virtual void group(const dodoString &group) = 0;
 
 			/**
-			 * sets having for request
-			 * @param having is having statement
+			 * set having property
+			 * @param having defines having value
 			 */
 			virtual void having(const dodoString &having) = 0;
 
 			/**
-			 * appends join for request
-			 * @param table defines what table to join
+			 * append join statement
+			 * @param table defines table to join
 			 * @param condition defines condition for joining
 			 * @param type defines join type[see dbBaseJoinTypeEnum]
 			 */
 			virtual void join(const dodoString &table, int type, const dodoString &condition) = 0;
 
 			/**
-			 * remove where statement
+			 * remove `where` statement
 			 */
 			virtual void unwhere() = 0;
 
 			/**
-			 * remove limit for request
+			 * remove `limit` property
 			 */
 			virtual void unlimit() = 0;
 
 			/**
-			 * remove offset for request
+			 * remove `offset` property
 			 */
 			virtual void unoffset() = 0;
 
 			/**
-			 * remove order for request
+			 * remove `order` property
 			 */
 			virtual void unorder() = 0;
 
 			/**
-			 * remove group for request
+			 * remove `group` property
 			 */
 			virtual void ungroup() = 0;
 
 			/**
-			 * remove having for request
+			 * remove `having` property
 			 */
 			virtual void unhaving() = 0;
 
 			/**
-			 * @return amount of affected rows(update, delete...)
+			 * @return amount of affected rows
 			 */
 			virtual unsigned int affectedRowsCount() const = 0;
 
 			/**
-			 * @return amount of rows got from request(select ...)
+			 * @return amount of rows got from the request
 			 */
 			virtual unsigned int rowsCount() const = 0;
 
 			/**
-			 * @return amount of fields got from request(select ...)
+			 * @return amount of fields got from the request
 			 */
 			virtual unsigned int fieldsCount() const = 0;
 
 			/**
-			 * @return array of rows got from request
+			 * @return rows got from the request
 			 */
 			virtual dodoArray<dodoStringArray> fetchRow() const = 0;
 
 			/**
-			 * @return array of fields got from request
+			 * @return fields got from the request
 			 */
 			virtual dodoStringArray fetchField() const = 0;
 
 			/**
-			 * @return structure that holds array of rows and array of fields got from request
+			 * @return result got from the request
 			 */
 			virtual __dbStorage fetch() const = 0;
 
 			/**
-			 * @return array that holds assoc array['fiels'=>'value'] got from request
+			 * @return set of hashes of field=>value
 			 */
 			virtual dodoStringMapArray fetchAssoc() const = 0;
 
 			/**
-			 * executes collected request
-			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
-			 * @param result describes whether request returns result[show, select...] or not[delete, update]
+			 * execute collected request
+			 * @param query contains query for DB
+			 * @param result defines type of result(true for quering data, false for data operation)
+			 * @note if query is empty request will be constructed from the data that was defined using object's methods 
 			 */
 			virtual void exec(const dodoString &query = __dodostring__, bool result = false) = 0;
 
-			bool reconnect; ///< tries to recconect if exec failed with connection error[true by default]
+			bool reconnect; ///< if true tries to reconect in case when `exec` failed with connection error[true by default]
 
 		protected:
 
-			bool connected; ///< connected or not
+			bool connected; ///< true if connected to the db
 
-			/**
-			 * collected data
-			 * some of variables can be used not only as they are named. Some variables can hold another data, to save space
-			 */
-			dodoString pre_where;                       ///< where statement of the request(can be used as `as` for callFunction)
-			dodoStringArray pre_fieldsNames;            ///< names of fields of request(can be used for `insert_select` as fields' names where to store result, as field(s) for createIndex; as arguments for callFunction)
-			dodoArray<dodoStringArray> pre_fieldsVal;   ///< array of fields' values(accordingly to pre_fieldsNames). if simple action - contains 1 element(1 array of values); multiply array in case when multyply insert requested; (can be used for `insert_select` as fields' names from data requested)
-			dodoString pre_table;                       ///< table for request;(can be used for `insert_select` as table from what to take request); can be used as 'table' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods, create(delete)Index methods; as name for callFunction)
-			dodoString pre_tableTo;                     ///< string of table where to store request(insert_select)(can be used as 'field' for rename(delete)Field method)
-			dodoString pre_order;                       ///< order statement(can be used as 'db' for rename(delete)Field, rename(delete)Db, rename(delete)Table methods)
-			dodoString pre_having;                      ///< having statement(can be used as ['charset' for db creation method] [table/field/database for rename methods], name for index in create(delete)Indexes)
-			dodoString pre_group;                       ///< group statement
-			dodoString pre_limNumber;                   ///< limit of result
-			dodoString pre_limOffset;                   ///< offset of requested result
-			dodoStringArray pre_subQueries;             ///< subquery
-			dodoStringArray pre_joinTables;            ///< join tables
-			dodoStringArray pre_joinConds;             ///< join conditions
-			dodoArray<int> pre_joinTypes;              ///< join types
+			dodoString pre_where;                          ///< `where` for the request(can be used as `as` for `callFunction`)
+			dodoStringArray pre_fields;               ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
+			dodoArray<dodoStringArray> pre_values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
+			dodoString pre_table;                          ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+			dodoString pre_tableTo;                        ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
+			dodoString pre_order;                          ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
+			dodoString pre_having;                         ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
+			dodoString pre_group;                          ///< `group` for the request
+			dodoString pre_limit;                      ///< `limit` for the result
+			dodoString pre_offset;                      ///< `offset` for the result
+			dodoStringArray pre_subQueries;                ///< `subquery`
+			dodoStringArray pre_joinTables;                ///< join tables
+			dodoStringArray pre_joinConds;                 ///< join conditions
+			dodoArray<int> pre_joinTypes;                  ///< join types
 
-			int qType;                                  ///< type of operation
+			int qType;                                     ///< type of operation
 
-			int qShift;                                 ///< indicates if AddEnum's values was set [can be or'ed with | ]
+			int qShift;                                    ///< additional actions[see dbBaseAddEnum]
 
-			int qSelShift;                              ///< additional select statements
-			int qInsShift;                              ///< additional insert statements
-			int qUpShift;                               ///< additional update statements
-			int qDelShift;                              ///< additional delete statements
+			int qSelShift;                                 ///< additional select statements[see dbBaseAddSelEnum]
+			int qInsShift;                                 ///< additional insert statements[see dbBaseAddInsEnum]
+			int qUpShift;                                  ///< additional update statements[see dbBaseAddUpEnum]
+			int qDelShift;                                 ///< additional delete statements[see dbBaseAddDelEnum]
 
 			__xexexDbBaseCollectedData collectedData;   ///< data collected for xexec
 

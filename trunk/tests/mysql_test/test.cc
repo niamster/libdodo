@@ -20,7 +20,7 @@ using namespace std;
 		{
 			cout << endl << endl << "table was " << sql->pre_table << endl << endl;
 			
-			sql->pre_limNumber = "70";
+			sql->pre_limit = "70";
 		}
 	}
 

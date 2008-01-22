@@ -127,17 +127,17 @@ dbSqlBase::~dbSqlBase()
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::fieldsValName(const dodoStringArray &fieldsVal,
-						 const dodoStringArray &fieldsNames,
+dbSqlBase::valuesName(const dodoStringArray &values,
+						 const dodoStringArray &fields,
 						 const dodoString &frame)
 {
 	dodoString temp;
 
-	unsigned int fn(fieldsNames.size()), fv(fieldsVal.size());
+	unsigned int fn(fields.size()), fv(values.size());
 
 	unsigned int o(fn <= fv ? fn : fv);
 
-	dodoStringArray::const_iterator i(fieldsNames.begin()), j(fieldsVal.begin());
+	dodoStringArray::const_iterator i(fields.begin()), j(values.begin());
 	if (i != j)
 	{
 		--o;
@@ -254,9 +254,9 @@ dbSqlBase::callFunctionCollect()
 		frame[0] = ' ';
 
 	if (preventEscaping)
-		request.append(tools::implode(pre_fieldsNames, ",", frame));
+		request.append(tools::implode(pre_fields, ",", frame));
 	else
-		request.append(tools::implode(pre_fieldsNames, escapeFields, ",", frame));
+		request.append(tools::implode(pre_fields, escapeFields, ",", frame));
 
 	request.append(")");
 }
@@ -275,9 +275,9 @@ dbSqlBase::callProcedureCollect()
 		frame[0] = ' ';
 
 	if (preventEscaping)
-		request.append(tools::implode(pre_fieldsNames, ",", frame));
+		request.append(tools::implode(pre_fields, ",", frame));
 	else
-		request.append(tools::implode(pre_fieldsNames, escapeFields, ",", frame));
+		request.append(tools::implode(pre_fields, escapeFields, ",", frame));
 
 	request.append(")");
 }
@@ -292,7 +292,7 @@ dbSqlBase::selectCollect()
 
 	if (pre_table.size() > 0)
 	{
-		temp.append(tools::implode(pre_fieldsNames, ","));
+		temp.append(tools::implode(pre_fields, ","));
 
 		request = "select ";
 		request.append(temp);
@@ -301,7 +301,7 @@ dbSqlBase::selectCollect()
 	}
 	else
 	{
-		temp.append(tools::implode(pre_fieldsNames, ","));
+		temp.append(tools::implode(pre_fields, ","));
 		request = "select ";
 		request.append(temp);
 	}
@@ -314,11 +314,11 @@ dbSqlBase::insertCollect()
 {
 	dodoStringArray fieldsVPart;
 
-	dodoArray<dodoStringArray>::iterator k(pre_fieldsVal.begin()), l(pre_fieldsVal.end());
+	dodoArray<dodoStringArray>::iterator k(pre_values.begin()), l(pre_values.end());
 
 	std::map<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 
-	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
+	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fields.size() != 0)
 	{
 		dodoStringArray::iterator t;
 
@@ -328,7 +328,7 @@ dbSqlBase::insertCollect()
 		{
 			temp.clear();
 
-			t = pre_fieldsNames.begin();
+			t = pre_fields.begin();
 
 			dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
 			for (; i != j; ++i, ++t)
@@ -393,10 +393,10 @@ dbSqlBase::insertCollect()
 
 	dodoString temp1 = pre_table;
 
-	if (pre_fieldsNames.size() != 0)
+	if (pre_fields.size() != 0)
 	{
 		temp1.append(" (");
-		temp1.append(tools::implode(pre_fieldsNames, ","));
+		temp1.append(tools::implode(pre_fields, ","));
 		temp1.append(") ");
 	}
 
@@ -414,8 +414,8 @@ void
 dbSqlBase::insertSelectCollect()
 {
 
-	dodoString fieldsPartTo = tools::implode(pre_fieldsNames, ",");
-	dodoString fieldsPartFrom = tools::implode(pre_fieldsVal.front(), ",");
+	dodoString fieldsPartTo = tools::implode(pre_fields, ",");
+	dodoString fieldsPartFrom = tools::implode(pre_values.front(), ",");
 
 	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
@@ -446,12 +446,12 @@ dbSqlBase::updateCollect()
 
 	std::map<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 
-	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fieldsNames.size() != 0)
+	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fields.size() != 0)
 	{
-		unsigned int fn(pre_fieldsNames.size()), fv(pre_fieldsVal.front().size());
+		unsigned int fn(pre_fields.size()), fv(pre_values.front().size());
 		unsigned int o(fn <= fv ? fn : fv);
 
-		dodoStringArray::iterator i(pre_fieldsNames.begin()), j(pre_fieldsVal.front().begin());
+		dodoStringArray::iterator i(pre_fields.begin()), j(pre_values.front().begin());
 		for (unsigned int k(0); k < o - 1; ++i, ++j, ++k)
 		{
 			if (tools::isInArray(y->second, *i, true))
@@ -489,7 +489,7 @@ dbSqlBase::updateCollect()
 		if (preventFraming)
 			frame[0] = ' ';
 
-		setPart = fieldsValName(pre_fieldsVal.front(), pre_fieldsNames, frame);
+		setPart = valuesName(pre_values.front(), pre_fields, frame);
 	}
 
 	insideAddCollect(addUpEnumArr, sqlAddUpArr, qUpShift);
@@ -596,7 +596,7 @@ dbSqlBase::createBaseCollect()
 void
 dbSqlBase::createIndexCollect()
 {
-	request = "create index " + pre_having + " on " + pre_table + " (" + tools::implode(pre_fieldsNames, ",") + ")";
+	request = "create index " + pre_having + " on " + pre_table + " (" + tools::implode(pre_fields, ",") + ")";
 }
 
 //-------------------------------------------------------------------
@@ -880,8 +880,8 @@ dbSqlBase::queryCollect()
 			additionalCollect(DBBASE_ADDREQUEST_HAVING, pre_having);
 		}
 		additionalCollect(DBBASE_ADDREQUEST_ORDERBY, pre_order);
-		additionalCollect(DBBASE_ADDREQUEST_LIMIT, pre_limNumber);
-		additionalCollect(DBBASE_ADDREQUEST_OFFSET, pre_limOffset);
+		additionalCollect(DBBASE_ADDREQUEST_LIMIT, pre_limit);
+		additionalCollect(DBBASE_ADDREQUEST_OFFSET, pre_offset);
 	}
 
 	return request;
