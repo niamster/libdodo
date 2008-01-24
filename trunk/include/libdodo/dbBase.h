@@ -33,7 +33,7 @@
 namespace dodo
 {
 	/**
-	 * @enum dbBaseAddEnum describes additional statement
+	 * @enum dbBaseAddEnum defines additional properties for the request
 	 */
 	enum dbBaseAddEnum
 	{
@@ -48,7 +48,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum dbBaseRequestEnum indicates what type of operaion will be performed
+	 * @enum dbBaseRequestEnum defines type of request
 	 */
 	enum dbBaseRequestEnum
 	{
@@ -85,7 +85,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum dbBaseAddSelEnum describes additional statements for select
+	 * @enum dbBaseAddSelEnum defines additional properties for the `select` request
 	 */
 	enum dbBaseAddSelEnum
 	{
@@ -94,7 +94,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum dbBaseAddDelEnum describes additional statements for delete
+	 * @enum dbBaseAddDelEnum defines additional properties for the `delete` request
 	 */
 	enum dbBaseAddDelEnum
 	{
@@ -102,7 +102,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum dbBaseAddUpEnum describes additional statements for update
+	 * @enum dbBaseAddUpEnum defines additional properties for the `update` request
 	 */
 	enum dbBaseAddUpEnum
 	{
@@ -110,7 +110,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum addInsEnum describes additional statements for insert
+	 * @enum dbBaseAddInsEnum defines additional properties for the `insert` request
 	 */
 	enum dbBaseAddInsEnum
 	{
@@ -118,23 +118,23 @@ namespace dodo
 	};
 
 	/**
-	 * @enum dbFieldTypeEnum defines Data types;
-	 * @note with '**' need range
-	 * with '*' may have range
+	 * @enum dbBaseFieldTypeEnum defines data types
+	 * @note with data marked with '**' may have length
+	 * with data marked with '**' needs to specify length
 	 */
-	enum dbFieldTypeEnum
+	enum dbBaseFieldTypeEnum
 	{
-		DBBASE_FIELDTYPE_TINYINT,                           ///< *; The signed range is -128 to 127. The unsigned range is 0 to 255.
-		DBBASE_FIELDTYPE_SMALLINT,                          ///< *; The signed range is -32768 to 32767. The unsigned range is 0 to 65535.
-		DBBASE_FIELDTYPE_MEDIUMINT,                         ///< *; The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215.
-		DBBASE_FIELDTYPE_INTEGER, DBBASE_FIELDTYPE_INT,     ///< *; The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295.
-		DBBASE_FIELDTYPE_BIGINT,                            ///< *; The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615.
-		DBBASE_FIELDTYPE_FLOAT,                             ///< *; Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38.
-		DBBASE_FIELDTYPE_REAL, DBBASE_FIELDTYPE_DOUBLE,     ///< *; [DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308.
-		DBBASE_FIELDTYPE_DECIMAL,                           ///< **; An unpacked(the number is stored as a string) fixed-point number.
-		DBBASE_FIELDTYPE_DATE,                              ///< The supported range is '1000-01-01' to '9999-12-31'.
+		DBBASE_FIELDTYPE_TINYINT,                           ///< *The signed range is -128 to 127. The unsigned range is 0 to 255
+		DBBASE_FIELDTYPE_SMALLINT,                          ///< *The signed range is -32768 to 32767. The unsigned range is 0 to 65535
+		DBBASE_FIELDTYPE_MEDIUMINT,                         ///< *The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215
+		DBBASE_FIELDTYPE_INTEGER, DBBASE_FIELDTYPE_INT,     ///< *The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295
+		DBBASE_FIELDTYPE_BIGINT,                            ///< *The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615
+		DBBASE_FIELDTYPE_FLOAT,                             ///< *Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38
+		DBBASE_FIELDTYPE_REAL, DBBASE_FIELDTYPE_DOUBLE,     ///< *[DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308
+		DBBASE_FIELDTYPE_DECIMAL,                           ///< **An unpacked(the number is stored as a string) fixed-point number
+		DBBASE_FIELDTYPE_DATE,                              ///< The supported range is '1000-01-01' to '9999-12-31'
 		DBBASE_FIELDTYPE_TIME,                              ///< The range is '-838:59:59' to '838:59:59'
-		DBBASE_FIELDTYPE_TIMESTAMP,                         ///< *; The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself.
+		DBBASE_FIELDTYPE_TIMESTAMP,                         ///< *The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself
 		/**
 		 * TIMESTAMP(14) 	YYYYMMDDHHMMSS
 		 * TIMESTAMP(12) 	YYMMDDHHMMSS
@@ -144,33 +144,33 @@ namespace dodo
 		 * TIMESTAMP(4) 		YYMM
 		 * TIMESTAMP(2) 		YY
 		 */
-		DBBASE_FIELDTYPE_CHAR,                              ///< **; The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored.
-		DBBASE_FIELDTYPE_VARCHAR,                           ///< **; The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length.
-		DBBASE_FIELDTYPE_TINYBLOB,                          ///< A column with a maximum length of 255 (2^8 - 1) characters.
-		DBBASE_FIELDTYPE_BLOB,                              ///< A column with a maximum length of 65, 535 (2^16 -1) characters.
-		DBBASE_FIELDTYPE_MEDIUMBLOB,                        ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters.
-		DBBASE_FIELDTYPE_LONGBLOB,                          ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
-		DBBASE_FIELDTYPE_TINYTEXT,                          ///< A column with a maximum length of 255 (2^8 - 1) characters.
-		DBBASE_FIELDTYPE_TEXT,                              ///< A column with a maximum length of 65, 535 (2^16 -1) characters.
-		DBBASE_FIELDTYPE_MEDIUMTEXT,                        ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters.
-		DBBASE_FIELDTYPE_LONGTEXT,                          ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters.
-		DBBASE_FIELDTYPE_ENUM,                              ///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values.
-		DBBASE_FIELDTYPE_SET,                               ///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members.
+		DBBASE_FIELDTYPE_CHAR,                              ///< **The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored
+		DBBASE_FIELDTYPE_VARCHAR,                           ///< **The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length
+		DBBASE_FIELDTYPE_TINYBLOB,                          ///< A column with a maximum length of 255 (2^8 - 1) characters
+		DBBASE_FIELDTYPE_BLOB,                              ///< A column with a maximum length of 65, 535 (2^16 -1) characters
+		DBBASE_FIELDTYPE_MEDIUMBLOB,                        ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
+		DBBASE_FIELDTYPE_LONGBLOB,                          ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
+		DBBASE_FIELDTYPE_TINYTEXT,                          ///< A column with a maximum length of 255 (2^8 - 1) characters
+		DBBASE_FIELDTYPE_TEXT,                              ///< A column with a maximum length of 65, 535 (2^16 -1) characters
+		DBBASE_FIELDTYPE_MEDIUMTEXT,                        ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
+		DBBASE_FIELDTYPE_LONGTEXT,                          ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
+		DBBASE_FIELDTYPE_ENUM,                              ///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values
+		DBBASE_FIELDTYPE_SET,                               ///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members
 	};
 	
 	/**
-	 *  @enum dbFieldFlagEnum describes type of field [in field creation]
+	 *  @enum dbBaseFieldFlagEnum defines additional field properties
 	 */
-	enum dbFieldFlagEnum
+	enum dbBaseFieldFlagEnum
 	{
-		DBBASE_FIELDFLAG_NULL = 2,              ///< NULL type
+		DBBASE_FIELDFLAG_NULL = 2,              ///< may be NULL
 		DBBASE_FIELDFLAG_AUTO_INCREMENT = 4,    ///< if is not set by request, will be incremented relatevly to previous
 	};
 
 	/**
-	 * @enum dbReferenceEnum describes reference type on field [in field creation]
+	 * @enum dbBaseReferenceEnum defines reference type assigned to the field
 	 */
-	enum dbReferenceEnum
+	enum dbBaseReferenceEnum
 	{
 		DBBASE_REFERENCE_RESTRICT = 1,  ///< does not allow the action of any of those parent rows
 		DBBASE_REFERENCE_CASCADE,       ///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
@@ -180,7 +180,7 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __fieldInfo contains info for field creation
+	 * @struct __fieldInfo defines data for field creation
 	 */
 	struct __fieldInfo
 	{
@@ -191,31 +191,28 @@ namespace dodo
 
 		/**
 		 * overloaded operator '='
+		 * @param from defines object where get properties
 		 */
 		const __fieldInfo &operator=(const __fieldInfo &from);
 
 		dodoString name;    ///< name of the field
-		int type;           ///< type of field[see dbFieldFlagEnum]
-		int length;         ///< length of field; is valuable for all except [DATE, TIME, *TEXT, *BLOB, SET, ENUM] => for those will be ignored
-		int flag;           ///< default=NULL; set it with '|'[see dbFieldFlagEnum]
+		int type;           ///< type of field[see dbBaseFieldTypeEnum]
+		int length;         ///< length of the field[see dbBaseFieldTypeEnum notes]
+		int flag;           ///< flags of the field; may be combined with '|'[see dbBaseFieldFlagEnum][DBBASE_FIELDFLAG_NULL by default]
 
-		/**
-		 * @note for reference: set flag with (MATCH FULL or MATCH PARTIAL or MATCH SIMPLE); ON DELETE 'ref'; ON UPDATE 'ref';
-		 * for [ON DELETE or ON UPDATE] use on flag (RESTRICT or CASCADE or SET NULL or NO ACTION or SET DEFAULT)
-		 */
-		dodoString refTable;            ///< table on what is reference
-		dodoStringArray refFields;      ///< array of fields on what is references
-		int onDelete;                   ///< reference on action[see dbReferenceEnum]
-		int onUpdate;                   ///< reference on action[see dbReferenceEnum]
+		dodoString refTable;            ///< table where reference points
+		dodoStringArray refFields;      ///< fields where reference points
+		int onDelete;                   ///< reference action on delete operation[see dbReferenceEnum]
+		int onUpdate;                   ///< reference action on update operation[see dbReferenceEnum]
 
-		dodoString defaultVal;          ///< default value of field
-		dodoStringArray set_enum;       ///< array of statements for SET or ENUM if these type difined
+		dodoString defaultVal;          ///< default value of the field
+		dodoStringArray set_enum;       ///< statements for SET or ENUM types
 
-		dodoString charset;             ///< field's collate charset
+		dodoString charset;             ///< collate charset of the field
 	};
 
 	/*
-	 * @struct __tableInfo contains info for table creation
+	 * @struct __tableInfo defines data for table creation
 	 */
 	struct __tableInfo
 	{
@@ -226,21 +223,21 @@ namespace dodo
 
 		/**
 		 * overloaded operator '='
+		 * @param from defines object where get properties
 		 */
 		const __tableInfo &operator=(const __tableInfo &from);
 
 		dodoString name;                    ///< name of the table
-		dodoArray<__fieldInfo> fields;      ///< array of fields[see __fieldInfo]
+		dodoArray<__fieldInfo> fields;      ///< fields[see __fieldInfo]
 
-		dodoStringArray primKeys;           ///< array of primary keys in table (field names)
-		dodoStringArray uniq;               ///< array of unique in table (field names)
+		dodoStringArray primKeys;           ///< primary keys of the table
+		dodoStringArray uniq;               ///< fields of the table that may contain only unique values
 
-		bool ifNotExists;                   ///< no warning message if table already exixts [false by default]
+		bool ifNotExists;                   ///< do not throw exception if table already exixts[false by default]
 	};
 	
 	/**
-	 * @class dbBase provides wide abilities for sql manipulations
-	 * @note for xexec => you may use store/restore methods in hook if you want to leave data unchanged after it!
+	 * @class dbBase provides wide abilities for db manipulations
 	 */
 	class dbBase : public db
 	{
@@ -257,368 +254,367 @@ namespace dodo
 			virtual ~dbBase();
 
 			/**
-			 * next functions just modify internal data, but don't make a query. that's usefull to make hooks [preExec or postExec actions]
-			 * in any time you can unset additional statement with callin' same function with `un` preffix (unlimit,..)
-			 */
-
-			/**
-			 * sets info for database
-			 * @param db is database name
-			 * @param host is host, to connect to server
-			 * @param port is port, to connect to server
-			 * @param user is username, to connect to server
-			 * @param password is password, to connect to server
-			 * @param socket is path to unix socket
+			 * set connection information for database
+			 * @param db defines name of db
+			 * @param host defines host
+			 * @param user defines user
+			 * @param password defines password
+			 * @param path defines path to db or unix socket
+			 * @param port defines port
 			 */
 			virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __dodostring__);
 
 			/**
-			 * sets info for database
-			 * @param info is info for database
+			 * set connection information for database
+			 * @param info defines connection information
 			 */
 			virtual void setDbInfo(const __dbInfo &dbInfo);
 
 			/**
-			 * @param name is function name
-			 * @param arguments is array of arguments
-			 * @param as is name of the result
+			 * call stored function
+			 * @param name defines function name
+			 * @param arguments defines arguments
+			 * @param as defines name of the result row
 			 */
 			void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__);
 
 			/**
+			 * call stored procedure
 			 * @param name is procedure name
 			 * @param arguments is array of arguments
 			 */
 			void callProcedure(const dodoString &name, const dodoStringArray &arguments);
 
 			/**
-			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
-			 * @param fields is array of fields' names
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param fields defines names of fields
+			 * @param where defines `where` statement
+			 * @note if (length(table) == 0) => 'from `table`' is not used
 			 */
 			virtual void select(const dodoString &table, const dodoStringArray &fields, const dodoString &where = __dodostring__);
 
 			/**
-			 * @param table is table name; if length(table)==0 => 'from `table`' doesn't use
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param where defines `where` statement
 			 */
 			virtual void selectAll(const dodoString &table, const dodoString &where = __dodostring__);
 
 			/**
-			 * @param table is table name
-			 * @param fields is array of fields' names
-			 * 			key => field's name
-			 * 			value => field's value
+			 * @param table defines table name
+			 * @param fields defines hash of field=>value
 			 */
 			virtual void insert(const dodoString &table, const dodoStringMap &fields);
 
 			/**
-			 * @param table is table name
-			 * @param fields is array of (array of fields' names)
-			 * 			key => field's name
-			 * 			value => field's value
+			 * @param table defines table name
+			 * @param fields defines set of hashes of field=>value
 			 */
 			virtual void insert(const dodoString &table, const dodoArray<dodoStringMap> &fields);
 
 			/**
-			 * @param table is table name
-			 * @param values is array of fields' values
-			 * @param fields is array of fields' names
+			 * @param table defines table name
+			 * @param values defines values
+			 * @param fields defines names of fields
 			 */
 			virtual void insert(const dodoString &table, const dodoStringArray &values, const dodoStringArray &fields = __dodostringarray__);
 
 			/**
-			 * @param table is table name
-			 * @param values - array of array of (array of fields' values)
-			 * @param fields is array of fields' names
+			 * @param table defines table name
+			 * @param values defines values
+			 * @param fields defines names of fields
 			 */
 			virtual void insert(const dodoString &table, const dodoArray<dodoStringArray> &values, const dodoStringArray &fields = __dodostringarray__);
 
 			/**
-			 * @param table(To/From) is table name To/From
-			 * @param fields is array of fields' names
+			 * @param tableTo defines table where data will be stored
+			 * @param tableFrom defines table where data will be fetched
+			 * @param fieldsTo defines fields where data will be stored
+			 * @param fieldsFrom defines fields that will be fetched
 			 */
 			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsTo, const dodoStringArray &fieldsFrom = __dodostringarray__, const dodoString &where = __dodostring__);
 
 			/**
-			 * @param table is table name
-			 * @param fields - array of (char*)/(string)
-			 * 			key => field's name
-			 * 			value => field's value
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param fields defines hash of field=>value
+			 * @param where defines `where` statement
 			 */
 			virtual void update(const dodoString &table, const dodoStringMap &fields, const dodoString &where = __dodostring__);
 
 			/**
-			 * @param table is table name
-			 * @param values is array of fields' values
-			 * @param fields is array of fields' names
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param values defines values
+			 * @param fields defines names of fields
+			 * @param where defines `where` statement
 			 */
 			virtual void update(const dodoString &table, const dodoStringArray &values, const dodoStringArray &fields, const dodoString &where = __dodostring__);
 
 			/**
-			 * @param table is table name
-			 * @param where is where statement for request
+			 * @param table defines table name
+			 * @param where defines `where` statement
 			 */
 			virtual void del(const dodoString &table, const dodoString &where = __dodostring__);
 
 			/**
 			 * store query, made from subquery with requested method
-			 * @param sub is array of subqueries
-			 * @param type is type of "subquering"[see qStEnum]
+			 * @param subqueries defines subqueries
+			 * @param type defines type of combining subqueries[see dbBaseRequestEnum]
 			 */
-			virtual void subquery(const dodoStringArray &sub, int type = DBBASE_REQUEST_UNION /*DBBASE_REQUEST_UNION_ALL, DBBASE_REQUEST_MINUS, DBBASE_REQUEST_INTERSECT*/);
+			virtual void subquery(const dodoStringArray &subqueries, int type = DBBASE_REQUEST_UNION);
 
 			/**
-			 * create index in table
-			 * @param table is where to create index
-			 * @param field is field's name to be index
+			 * create index in the table
+			 * @param table defines table where create index
+			 * @param field defines field that would be index
+			 * @param name defines name of the index
 			 */
 			virtual void createIndex(const dodoString &table, const dodoString &field, const dodoString &name);
 
 			/**
-			 * create index in table
-			 * @param table is where to create index
-			 * @param fields is fields' name to be index
+			 * create index in the table
+			 * @param table defines table where create index
+			 * @param fields defines fields that would be index
+			 * @param name defines name of the index
 			 */
 			virtual void createIndex(const dodoString &table, const dodoStringArray &fields, const dodoString &name);
 
 			/**
-			 * delete index in table
-			 * @param table is where to delete index
-			 * @param name is index's name
+			 * delete index in the table
+			 * @param table defines table where delete index
+			 * @param name defines name of the index
 			 */
 			virtual void deleteIndex(const dodoString &table, const dodoString &name);
 
 			/**
 			 * rename database
-			 * @param db is current name
-			 * @param to_db is new name
+			 * @param db defines current name of the database
+			 * @param to_db defines new name of the database
 			 */
 			virtual void renameDb(const dodoString &db, const dodoString &to_db);
 
 			/**
-			 * renames table
-			 * @param table is current name
-			 * @param to_table is new name
+			 * rename table
+			 * @param table defines current name of the table
+			 * @param to_table defines new name of the table
 			 */
 			virtual void renameTable(const dodoString &table, const dodoString &to_table);
 
 			/**
-			 * renames field
-			 * @param field is current name
-			 * @param to_field is new name
-			 * @param is table where field is stored
+			 * rename field
+			 * @param field defines current name of the field
+			 * @param to_field defines new name of the field
+			 * @param table defines table that contains the field
 			 */
 			virtual void renameField(const dodoString &field, const dodoString &to_field, const dodoString &table);
 
 			/**
-			 * deletes database
-			 * @param db indicates what database to delete
+			 * delete database
+			 * @param db defines the database
 			 */
 			virtual void deleteDb(const dodoString &db);
 
 			/**
-			 * deletes table
-			 * @param table indicates what table to delete
+			 * delete table
+			 * @param db defines the table
 			 */
 			virtual void deleteTable(const dodoString &table);
 
 			/**
-			 * deletes field
-			 * @param field indicates what field to delete
-			 * @param table is table where field is stored
+			 * delete field
+			 * @param field defines field that will be deleted
+			 * @param table defines table that contains the field
 			 */
 			virtual void deleteField(const dodoString &field, const dodoString &table);
 
 			/**
-			 * creates database
-			 * @param db is name of new database
-			 * @param charset indicates what type of charset will be used
+			 * create database
+			 * @param db the name of the new database
+			 * @param charset defines charset of the database
 			 */
 			virtual void createDb(const dodoString &db, const dodoString &charset = __dodostring__);
 
 			/**
-			 * creates table
-			 * @param tableInfo[see __tableInfo]
+			 * create table
+			 * @param tableInfo defines table definition[see __tableInfo]
 			 */
 			virtual void createTable(const __tableInfo &tableInfo);
 
 			/**
-			 * creates field
-			 * @param fieldInfo[see __fieldInfo]
-			 * @param table indicates in what table create field
+			 * create field
+			 * @param fieldInfo defines field definition[see __fieldInfo]
+			 * @param table defines table that will contain the field
 			 */
 			virtual void createField(const __fieldInfo &fieldInfo, const dodoString &table);
 
 			/**
-			 * truncates table
+			 * truncate table
 			 * @param table is name name of table to truncate
 			 */
 			virtual void truncate(const dodoString &table);
 
 			/**
-			 * add where statement
-			 * overwites previous is it was defined
-			 * @param where is where statement
+			 * set `where` statement
+			 * @param where defines `where` statement
+			 * @note overwrites previous definition[from methods that may define it]
 			 */
 			virtual void where(const dodoString &where);
 
 			/**
-			 * sets limit for request
-			 * @param number indicates the number of rows to show
+			 * set `limit` property
+			 * @param number defines `limit` value
 			 */
 			virtual void limit(unsigned int number);
 
 			/**
-			 * sets offset for request
-			 * @param number indicates offset of the reading result
+			 * set `offset` property
+			 * @param number defines `offset` value
 			 */
 			virtual void offset(unsigned int number);
 
 			/**
-			 * sets order for request
-			 * @param order is order statement
+			 * set `order` property
+			 * @param order defines `order` value
 			 */
 			virtual void order(const dodoString &order);
 
 			/**
-			 * sets group for request
-			 * @param group is group statement
+			 * set `group` property
+			 * @param group defines `group` value
 			 */
 			virtual void group(const dodoString &group);
 
 			/**
-			 * sets having for request
-			 * @param having is having statement
+			 * set having property
+			 * @param having defines having value
 			 */
 			virtual void having(const dodoString &having);
 
 			/**
-			 * appends join for request
-			 * @param table defines what table to join
-			 * @param type defines join type[see dbBaseJoinTypeEnum]
+			 * append join statement
+			 * @param table defines table to join
 			 * @param condition defines condition for joining
+			 * @param type defines join type[see dbBaseJoinTypeEnum]
 			 */
 			virtual void join(const dodoString &table, int type, const dodoString &condition);
 
 			/**
-			 * remove where statement
+			 * remove `where` statement
 			 */
 			virtual void unwhere();
 
 			/**
-			 * remove limit for request
+			 * remove `limit` property
 			 */
 			virtual void unlimit();
 
 			/**
-			 * remove offset for request
+			 * remove `offset` property
 			 */
 			virtual void unoffset();
 
 			/**
-			 * remove order for request
+			 * remove `order` property
 			 */
 			virtual void unorder();
 
 			/**
-			 * remove group for request
+			 * remove `group` property
 			 */
 			virtual void ungroup();
 
 			/**
-			 * remove having for request
+			 * remove `having` property
 			 */
 			virtual void unhaving();
 
 			/**
-			 * sets additional parameters for INSERT
-			 * @param statement indicates what kind of additional parameters to add[see addInsEnum]
+			 * set additional parameters for `insert` request
+			 * @param statement defines additional parameters of the statement; may be combined with '|'[see dbBaseAddInsEnum]
 			 */
 			virtual void setAddInsSt(unsigned int statement);
 
 			/**
-			 * sets additional parameters for UPDATE
-			 * @param statement indicates what kind of additional parameters to add[see addUpEnum]
+			 * set additional parameters for `update` request
+			 * @param statement defines additional parameters of the statement; may be combined with '|'[see dbBaseAddUpEnum]
 			 */
 			virtual void setAddUpSt(unsigned int statement);
 
 			/**
-			 * sets additional parameters for SELECT
-			 * @param statement indicates what kind of additional parameters to add[see addSelEnum]
+			 * sets additional parameters for `select` request
+			 * @param statement defines additional parameters of the statement; may be combined with '|'[see dbBaseAddSelEnum]
 			 */
 			virtual void setAddSelSt(unsigned int statement);
 
 			/**
-			 * sets additional parameters for DELETE
-			 * @param statement indicates what kind of additional parameters to add[see addDelEnum]
+			 * sets additional parameters for `delete` request
+			 * @param statement defines additional parameters of the statement; may be combined with '|'[see dbBaseAddDelEnum]
 			 */
 			virtual void setAddDelSt(unsigned int statement);
 
 			/**
-			 * removes additional parameters for INSERT
-			 * @param statement indicates what kind of additional parameters to remove[see addInsEnum]
+			 * remove additional parameters from `insert` request
+			 * @param statement defines additional parameters of the statemente; may be combined with '|'[see dbBaseAddInsEnum]
 			 */
 			virtual void unsetAddInsSt(unsigned int statement);
 
 			/**
-			 * removes additional parameters for UPDATE
-			 * @param statement indicates what kind of additional parameters to remove[see addUpEnum]
+			 * remove additional parameters from `update` request
+			 * @param statement defines additional parameters of the statement; may be combined with '|'[see dbBaseAddUpEnum]
 			 */
 			virtual void unsetAddUpSt(unsigned int statement);
 
 			/**
-			 * removes additional parameters for SELECT
-			 * @param statement indicates what kind of additional parameters to remove[see addSelEnum]
+			 * remove additional parameters from `select` request
+			 * @param statement defines additional parameters of the statement; may be combined with '|'[see dbBaseAddSelEnum]
 			 */
 			virtual void unsetAddSelSt(unsigned int statement);
 
 			/**
-			 * removes additional parameters for DELETE
-			 * @param statement indicates what kind of additional parameters to remove[see addDelEnum]
+			 * remove additional parameters from `delete` request
+			 * @param statement defines additional parameters of the statement; may be combined with '|'[see dbBaseAddDelEnum]
 			 */
 			virtual void unsetAddDelSt(unsigned int statement);
 
 			/**
-			 * set default values for table (if you want safelly reuse)
+			 * set default values for table
+			 * @param table defines table structure that will be initialized
 			 */
 			static void initTableInfo(__tableInfo &table);
 
 			/**
-			 * set default values for field (if you want safelly reuse)
+			 * set default values for field
+			 * @param field defines field structure that will be initialized
 			 */
 			static void initFieldInfo(__fieldInfo &field);
 
 		protected:
 
 			/**
-			 * frees collected data
+			 * free collected data
 			 */
 			virtual void cleanCollected();
 
-			bool show;                              ///< is request was with result(show, select)
+			bool show;                              ///< if true try to get result from the request[select]
 
-			__tableInfo pre_tableInfo;              ///< info about table to create
-			__fieldInfo pre_fieldInfo;              ///< info about field to create
+			__tableInfo pre_tableInfo;              ///< table structure for creation
+			__fieldInfo pre_fieldInfo;              ///< field structure for creation
 
-			__dbInfo dbInfo;                        ///< data to connect to server
+			__dbInfo dbInfo;                        ///< data info to connect to the server
 
 			/*
-			 * additional statements for query, db-dependent, that can be implemented in derived class;
-			 * these arrays take part after generalSQL statements !!! See (mysqlpp::addSQL()) for more details
-			 * every in this class has 1 empty("") element
+			 * additional statements for query, db-dependent
+			 * can be implemented in derived class
+			 * these arrays take part after generalSQL statements
+			 * every of these objects has one empty("") element
 			 */
-			dodoStringArray sqlDbDepAddSelArr;      ///< additional SELECT statement
-			dodoStringArray sqlDbDepAddInsArr;      ///< additional INSERT statement
-			dodoStringArray sqlDbDepAddUpArr;       ///< additional UPDATE statement
-			dodoStringArray sqlDbDepAddDelArr;      ///< additional DELETE statement
+			dodoStringArray sqlDbDepAddSelArr;      ///< additional `select` statement
+			dodoStringArray sqlDbDepAddInsArr;      ///< additional `insert` statement
+			dodoStringArray sqlDbDepAddUpArr;       ///< additional `update` statement
+			dodoStringArray sqlDbDepAddDelArr;      ///< additional `delete` statement
 
-			int qDbDepSelShift;                     ///< value to shift query template for specific
-			int qDbDepInsShift;                     ///< value to shift query template for specific
-			int qDbDepUpShift;                      ///< value to shift query template for specific
-			int qDbDepDelShift;                     ///< value to shift query template for specific
+			int qDbDepSelShift;                     ///< additional db-dependent `select` actions[see sqlDbDepAddSelArr]
+			int qDbDepInsShift;                     ///< additional db-dependent `insert` actions[see sqlDbDepAddInsArr]
+			int qDbDepUpShift;                      ///< additional db-dependent `update` actions[see sqlDbDepAddUpArr]
+			int qDbDepDelShift;                     ///< additional db-dependent `delete` actions[see sqlDbDepAddDelArr]
 	};
 
 };

@@ -39,12 +39,12 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define DBMYSQLEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum dbMysqlFunctionsID
 	{

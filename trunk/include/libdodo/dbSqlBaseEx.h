@@ -31,7 +31,6 @@
 
 namespace dodo
 {
-
 	/**
 	 * libdodo defined errors
 	 */
@@ -42,13 +41,13 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define DBSQLBASEEX_EMPTYREQUEST_STR "Query is empty. Are you sure?"
 #define DBSQLBASEEX_UNKNOWNJOINTYPE_STR "Unknown join type."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum dbSqlBaseFunctionsID
 	{

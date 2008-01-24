@@ -209,12 +209,20 @@ namespace dodo
 			virtual void setDbInfo(const __dbInfo &dbInfo) = 0;
 
 			/**
+			 * call stored function
 			 * @param name defines function name
 			 * @param arguments defines arguments
 			 * @param as defines name of the result row
 			 */
 			virtual void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__) = 0;
 
+			/**
+			 * call stored procedure
+			 * @param name is procedure name
+			 * @param arguments is array of arguments
+			 */
+			void callProcedure(const dodoString &name, const dodoStringArray &arguments) = 0;
+			
 			/**
 			 * @param table defines table name
 			 * @param fields defines names of fields
@@ -293,7 +301,7 @@ namespace dodo
 			/**
 			 * set `where` statement
 			 * @param where defines `where` statement
-			 * @note overwites previous definition
+			 * @note overwrites previous definition[from methods that may define it]
 			 */
 			virtual void where(const dodoString &where) = 0;
 

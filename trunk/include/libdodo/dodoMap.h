@@ -44,11 +44,6 @@ namespace dodo
 			 * @typedef type of pointer on function to compare two values
 			 */
 			typedef bool (*cmpFunc)(const keyType &, const keyType &);
-
-			/**
-			 * @typedef type of pointer on function to generate hash for keyType
-			 */
-			typedef unsigned long (*hashFunc)(const keyType &);
 	};
 
 	/**
