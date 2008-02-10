@@ -38,7 +38,7 @@ namespace dodo
 {
 
 	/**
-	 * @enum dbSqliteOperTypeEnum describes type of operation for hook
+	 * @enum dbSqliteOperTypeEnum defines type of operation for hook
 	 */
 	enum dbSqliteOperTypeEnum
 	{
@@ -49,20 +49,11 @@ namespace dodo
 		DBSQLITE_OPERATION_FETCHFIELD,
 	};
 
-	class dbSqlite;    ///< to make struct with this class before class declaration
+	class dbSqlite;
 
 	/**
-	 * @struct __sqliteCallbackData passes to callback function
-	 */
-	struct __sqliteCallbackData
-	{
-		dbSqlite *data;
-		bool first;
-	};
-
-	/**
-	 * @class dbSqlite is an interface to sqlite db through sql-, database- independent interfaces
-	 * @note for autoFraming sqlite must be compiled with SQLITE_ENABLE_COLUMN_METADATA defined
+	 * @class dbSqlite provides an interface to sqlite db
+	 * @note for autoFraming sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
 	 */
 	class dbSqlite : public dbSqlBase
 	{
@@ -70,7 +61,7 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * to prevent from copying
+			 * prevent copying
 			 */
 			dbSqlite(dbSqlite &a_pp);
 
@@ -87,117 +78,119 @@ namespace dodo
 			virtual ~dbSqlite();
 
 			/**
-			 * connect to database
+			 * connect to the database
 			 */
 			virtual void connect();
 
 			/**
-			 * disconnect from database
+			 * disconnect from the database
 			 */
 			virtual void disconnect();
 
 			/**
-			 * @return amount of affected rows(update, delete...)
+			 * @return amount of affected rows from the evaluated request
 			 */
 			virtual unsigned int affectedRowsCount() const;
 
 			/**
-			 * @return amount of rows got from request(select ...)
+			 * @return amount of received rows from the evaluated request
 			 */
 			virtual unsigned int rowsCount() const;
 
 			/**
-			 * @return amount of fields got from request(select ...)
+			 * @return amount of received fields from the evaluated request
 			 */
 			virtual unsigned int fieldsCount() const;
 
 			/**
-			 * @return array of rows got from request
+			 * @return received rows from the evaluated request
 			 */
 			virtual dodoArray<dodoStringArray> fetchRow() const;
 
 			/**
-			 * @return array of fields got from request
+			 * @return received fields from the evaluated request
 			 */
 			virtual dodoStringArray fetchField() const;
 
 			/**
-			 * @return structure that holds array of rows and array of fields got from request
+			 * @return structure received rows and fields from the evaluated request
 			 */
 			virtual __dbStorage fetch() const;
 
 			/**
-			 * @return array that holds assoc array['fiels'=>'value'] got from request
+			 * @return received rows and fields from the evaluated request using hash `key`=>`value`
 			 */
 			virtual dodoStringMapArray fetchAssoc() const;
 
 			/**
-			 * executes collected request
-			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
-			 * @param result describes whether request returns result[show, select...] or not[delete, update]
+			 * execute request
+			 * @param query defines query; you may define it if you don't use db methods like select, update
+			 * @param result defines type of result; if true query return the result
 			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
 			 * 		call exec method with query="dodo:hint:db:blob"
 			 * 		YOU MUST
-			 * 				set preventFraming and preventEscaping to true
+			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
 			virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
 			/**
-			 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
+			 * set BLOB data for the request
+			 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
 			 */
 			virtual void setBLOBValues(const dodoStringArray &values);
 
 #ifndef DBSQLITE_WO_XEXEC
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPostExec(inExec func, void *data);
 
 			/**
-			 * adds hook before the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook before the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
-
-			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+
+			/**
+			 * set hook from the library that will be executed before/after the operation
+			 * @return number in list where function is set
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in the library
+			 */
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 #endif
 
@@ -206,22 +199,20 @@ namespace dodo
 		protected:
 
 			/**
-			 * constructs from collected data to sql adaptive field info for proper fields representation
+			 * construct adaptive field info for statements
 			 */
 			virtual dodoString fieldCollect(const __fieldInfo &row);
 
 			/**
-			 * executes request
-			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
-			 * @param result describes whether request returns result[show, select...] or not[delete, update]
-			 * @note pure sqlite actions
-			 * in function without `_` hooks are calling
-			 * to insert|update using BLOB values use hint:
+			 * execute request
+			 * @param query defines query; you may define it if you don't use db methods like select, update
+			 * @param result defines type of result; if true query return the result
+			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
 			 * 		call exec method with query="dodo:hint:db:blob"
 			 * 		YOU MUST
-			 * 				set preventFraming and preventEscaping to true
+			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
@@ -229,12 +220,12 @@ namespace dodo
 
 		private:
 
-			sqlite3 *lite;                  ///< handle to DB
-			sqlite3_stmt *liteStmt;         ///< handlde to sqlite statement[e.g. result]
+			sqlite3 *lite;                  ///< DB handle
+			sqlite3_stmt *liteStmt;         ///< handlde to result
 
-			bool empty;                     ///< for detectin' whether liteStmt is empty or not
+			bool empty;                     ///< true if liteStmt is empty
 
-			dodoStringArray blobs;          ///< to store blob data
+			dodoStringArray blobs;          ///< blob data
 	};
 
 };

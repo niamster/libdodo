@@ -28,7 +28,7 @@
 
 #ifdef POSTGRESQL_EXT
 
-#include <libpq-fe.h>
+#include <postgresql/libpq-fe.h>
 
 #include <libdodo/tools.h>
 #include <libdodo/dbPostgresqlEx.h>
@@ -39,7 +39,7 @@ namespace dodo
 {
 
 	/**
-	 * @enum dbPostgresqlOperTypeEnum describes type of operation for hook
+	 * @enum dbPostgresqlOperTypeEnum defines type of operation for hook
 	 */
 	enum dbPostgresqlOperTypeEnum
 	{
@@ -51,7 +51,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class dbPostgresql is an interface to Postgresql db through sql-, database- independent interfaces
+	 * @class dbPostgresql provides an interface to postgresql db
 	 */
 	class dbPostgresql : public dbSqlBase
 	{
@@ -59,7 +59,7 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * to prevent from copying
+			 * prevent copying
 			 */
 			dbPostgresql(dbPostgresql &a_pgpp);
 
@@ -76,163 +76,202 @@ namespace dodo
 			virtual ~dbPostgresql();
 
 			/**
-			 * connect to database
+			 * connect to the database
 			 */
 			virtual void connect();
 
 			/**
-			 * disconnect from database
+			 * disconnect from the database
 			 */
 			virtual void disconnect();
 
 			/**
-			 * @return amount of affected rows(update, delete...)
+			 * @return amount of affected rows from the evaluated request
 			 */
 			virtual unsigned int affectedRowsCount() const;
 
 			/**
-			 * @return amount of rows got from request(select ...)
+			 * @return amount of received rows from the evaluated request
 			 */
 			virtual unsigned int rowsCount() const;
 
 			/**
-			 * @return amount of fields got from request(select ...)
+			 * @return amount of received fields from the evaluated request
 			 */
 			virtual unsigned int fieldsCount() const;
 
 			/**
-			 * @return array of rows got from request
+			 * @return received rows from the evaluated request
 			 */
 			virtual dodoArray<dodoStringArray> fetchRow() const;
 
 			/**
-			 * @return array of fields got from request
+			 * @return received fields from the evaluated request
 			 */
 			virtual dodoStringArray fetchField() const;
 
 			/**
-			 * @return structure that holds array of rows and array of fields got from request
+			 * @return structure received rows and fields from the evaluated request
 			 */
 			virtual __dbStorage fetch() const;
 
 			/**
-			 * @return array that holds assoc array['fiels'=>'value'] got from request
+			 * @return received rows and fields from the evaluated request using hash `key`=>`value`
 			 */
 			virtual dodoStringMapArray fetchAssoc() const;
 
 			/**
-			 * executes collected request
-			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
-			 * @param result describes whether request returns result[show, select...] or not[delete, update]
-			 * @note to insert|update|select using BLOB values use hint:
+			 * execute request
+			 * @param query defines query; you may define it if you don't use db methods like select, update
+			 * @param result defines type of result; if true query return the result
+			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
 			 * 		call exec method with query="dodo:hint:db:blob"
 			 * 		YOU MUST
-			 * 				set preventFraming and preventEscaping to true
+			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
 			virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
+			/**
+			 * set BLOB data for the request
+			 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
+			 */
+			virtual void setBLOBValues(const dodoStringArray &values);
+
 #ifndef DBPOSTGRESQL_WO_XEXEC
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPostExec(inExec func, void *data);
 
 			/**
-			 * adds hook before the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook before the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
-
-			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
+			/**
+			 * set hook from the library that will be executed before/after the operation
+			 * @return number in list where function is set
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in the library
+			 */
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+
 #endif
 
 #endif
 
 			/**
-			 * sets sessions charset
-			 * @param charset indicates what type of charset would be used for session
+			 * set sessions charset
+			 * @param charset defines charset
 			 */
 			virtual void setCharset(const dodoString &charset);
 
 			/**
 			 * @return current session charset
+			 * @note return value can be
+			 * PG_SQL_ASCII[SQL/ASCII]
+			 * PG_EUC_JP[EUC for Japanese]
+			 * PG_EUC_CN[EUC for Chinese]
+			 * PG_EUC_KR[EUC for Korean]
+			 * PG_EUC_TW[EUC for Taiwan]
+			 * PG_JOHAB[EUC for Korean JOHAB]
+			 * PG_UTF8[Unicode UTF8]
+			 * PG_LATIN1[ISO-8859-1 Latin 1]
+			 * PG_LATIN2[ISO-8859-2 Latin 2]
+			 * PG_LATIN3[ISO-8859-3 Latin 3]
+			 * PG_LATIN4[ISO-8859-4 Latin 4]
+			 * PG_LATIN5[ISO-8859-5 Latin 5]
+			 * PG_LATIN6[ISO-8859-10 Latin 6]
+			 * PG_LATIN7[ISO-8859-13 Latin 7]
+			 * PG_LATIN8[ISO-8859-14 Latin 8]
+			 * PG_LATIN9[ISO-8859-15 Latin 9]
+			 * PG_LATIN10[ISO-8859-16 Latin 10]
+			 * PG_WIN1256[windows-1256]
+			 * PG_WIN1258[windows-1258]
+			 * PG_WIN866[CP866]
+			 * PG_WIN874[windows-874]
+			 * PG_WIN1251[windows-1251]
+			 * PG_WIN1252[windows-1252]
+			 * PG_WIN1250[windows-1250]
+			 * PG_WIN1253[windows-1253]
+			 * PG_WIN1254[windows-1254]
+			 * PG_WIN1255[windows-1255]
+			 * PG_WIN1257[windows-1257]
+			 * PG_KOI8R[KOI8-R]
+			 * PG_ISO_8859_5[ISO-8859-5]
+			 * PG_ISO_8859_6[ISO-8859-6]
+			 * PG_ISO_8859_7[ISO-8859-7]
+			 * PG_ISO_8859_8[ISO-8859-8]
+			 * PG_SJIS[Shift JIS (Windows-932)]
+			 * PG_BIG5[Big5 (Windows-950)]
+			 * PG_GBK[GBK (Windows-936)]
+			 * PG_UHC[UHC (Windows-949)]
+			 * PG_GB18030[GB18030]
 			 */
 			virtual int getCharset() const;
-
-			/**
-			 * @param values defines what blob-type values will be applied for dodo:hint:db:blob instead of identificators
-			 */
-			virtual void setBLOBValues(const dodoStringArray &values);
 
 		protected:
 
 			/**
-			 * @return sql compliant data type
-			 * @param type indicates the data type
+			 * @return SQL compliant data type
+			 * @param type defines data type
 			 */
 			virtual dodoString sqlDataType(int type);
 			
 			/**
-			 * constructs from collected data to RENAME sql statement
+			 * construct `rename database` statement
 			 */
 			virtual void renameDbCollect();
-			
+
 			/**
-			 * constructs from collected data to RENAME sql statement
+			 * construct `alter table` statement
 			 */
 			virtual void renameFieldCollect();
 
 			/**
-			 * executes request
-			 * @param query contains query for DB. You may pass it if you don't use methods like select, update of libdodo
-			 * @param result describes whether request returns result[show, select...] or not[delete, update]
-			 * @note pure postgresql actions
-			 * in function without `_` hooks are calling
-			 * to insert|update using BLOB values use hint:
+			 * execute request
+			 * @param query defines query; you may define it if you don't use db methods like select, update
+			 * @param result defines type of result; if true query return the result
+			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
 			 * 		call exec method with query="dodo:hint:db:blob"
 			 * 		YOU MUST
-			 * 				set preventFraming and preventEscaping to true
+			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
 			 */
@@ -240,12 +279,12 @@ namespace dodo
 
 		private:
 
-			bool empty;                 ///< for detectin' whether pgResult is empty or not
+			bool empty;                 ///< true id pgResult is empty
 
-			PGconn *conn;               ///< handle for connection to PG SQL server
-			PGresult *pgResult;         ///< holds result from request
+			PGconn *conn;               ///< DB handle
+			PGresult *pgResult;         ///< handlde to result
 
-			dodoStringArray blobs;      ///< to store blob data
+			dodoStringArray blobs;      ///< blob data
 	};
 
 };
