@@ -49,7 +49,16 @@ namespace dodo
 		DBPOSTGRESQL_OPERATION_FETCHROW,
 		DBPOSTGRESQL_OPERATION_FETCHFIELD,
 	};
-
+	
+	/**
+	 * @enum dbPostgresqlHintEnum define DB hints
+	 */
+	enum dbPostgresqlHintEnum
+	{
+		DBPOSTGRESQL_HINT_NONE = 0,
+		DBPOSTGRESQL_HINT_BLOB = 2,///< insert|update using BLOB values
+	};
+	
 	/**
 	 * @class dbPostgresql provides an interface to postgresql db
 	 */
@@ -127,13 +136,17 @@ namespace dodo
 			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
-			 * 		call exec method with query="dodo:hint:db:blob"
+			 * 		define hint class attribute as DBPOSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 			 * 		YOU MUST
 			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
+			 * to select BLOB values use hint:
+			 * 		define hint class attribute as DBPOSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 			 */
 			virtual void exec(const dodoString &query = __dodostring__, bool result = false);
+			
+			unsigned short hint;///< DB hint[see dbPostgresqlHintEnum]
 
 			/**
 			 * set BLOB data for the request
@@ -269,11 +282,13 @@ namespace dodo
 			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
-			 * 		call exec method with query="dodo:hint:db:blob"
+			 * 		define hint class attribute as DBPOSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 			 * 		YOU MUST
 			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
 			 * 				by yourself escape[using dbSqlBase::unescapeFields] non-blob text data after selecting
+			 * to select BLOB values use hint:
+			 * 		define hint class attribute as DBPOSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 			 */
 			virtual void _exec(const dodoString &query, bool result);
 

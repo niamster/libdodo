@@ -48,6 +48,15 @@ namespace dodo
 		DBSQLITE_OPERATION_FETCHROW,
 		DBSQLITE_OPERATION_FETCHFIELD,
 	};
+	
+	/**
+	 * @enum dbSqliteHintEnum define DB hints
+	 */
+	enum dbSqliteHintEnum
+	{
+		DBSQLITE_HINT_NONE = 0,
+		DBSQLITE_HINT_BLOB = 2,///< insert|update using BLOB values
+	};
 
 	class dbSqlite;
 
@@ -129,7 +138,7 @@ namespace dodo
 			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
-			 * 		call exec method with query="dodo:hint:db:blob"
+			 * 		define hint class attribute as DBSQLITE_HINT_BLOB[you have to define it each time before this call]
 			 * 		YOU MUST
 			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating
@@ -137,6 +146,8 @@ namespace dodo
 			 */
 			virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
+			unsigned short hint;///< DB hint[see dbSqliteHintEnum]
+			
 			/**
 			 * set BLOB data for the request
 			 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
@@ -210,7 +221,7 @@ namespace dodo
 			 * @note to insert|update using BLOB values use hint:
 			 * 		make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 			 * 		call setBLOBValues method to set blob values according to id
-			 * 		call exec method with query="dodo:hint:db:blob"
+			 * 		define hint class attribute as DBSQLITE_HINT_BLOB[you have to define it each time before this call]
 			 * 		YOU MUST
 			 * 				define preventFraming and preventEscaping as true
 			 * 				by yourself escape[using dbSqlBase::escapeFields] and frame with '' non-blob text data before inserting/updating

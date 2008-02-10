@@ -27,7 +27,8 @@
 
 using namespace dodo;
 
-dbPostgresql::dbPostgresql() : empty(true)
+dbPostgresql::dbPostgresql() : empty(true),
+								hint(DBPOSTGRESQL_HINT_NONE)
 {
 }
 
@@ -228,24 +229,6 @@ dbPostgresql::_exec(const dodoString &query,
 		}
 
 		queryCollect();
-
-		blobHint = false;
-	}
-	else
-	{
-		if (stringTools::equal(query, "dodo:hint:db:blob"))
-		{
-			queryCollect();
-
-			blobHint = true;
-		}
-		else
-		{
-			request = query;
-			show = result;
-
-			blobHint = false;
-		}
 	}
 
 	if (!empty)
@@ -254,8 +237,10 @@ dbPostgresql::_exec(const dodoString &query,
 		empty = true;
 	}
 
-	if (blobHint)
+	if (isSetFlag(hint, DBPOSTGRESQL_HINT_BLOB))
 	{
+		removeFlag(hint, DBPOSTGRESQL_HINT_BLOB);
+		
 		switch (qType)
 		{
 			case DBBASE_REQUEST_UPDATE:

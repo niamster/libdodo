@@ -209,16 +209,18 @@ int main(int argc, char **argv)
 
 		pp->insert("test",arr);
 
-		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
-			pp->exec("dodo:hint:db:blob");
-		else
-			pp->exec();
+		if (strcasecmp(argv[1],"sqlite") == 0)
+			addFlag(((dbSqlite *)pp)->hint, DBSQLITE_HINT_BLOB);
+		else if (strcasecmp(argv[1],"postgres") == 0)
+			addFlag(((dbPostgresql *)pp)->hint, DBPOSTGRESQL_HINT_BLOB);
+		
+		pp->exec();
 
 		pp->select("test",select,"operation='ma'");
 		if (strcasecmp(argv[1],"postgres") == 0)
-			pp->exec("dodo:hint:db:blob");
-		else
-			pp->exec();
+			addFlag(((dbSqlite *)pp)->hint, DBSQLITE_HINT_BLOB);
+
+		pp->exec();
 
 		store = pp->fetch();
 

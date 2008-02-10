@@ -28,7 +28,8 @@
 using namespace dodo;
 
 
-dbSqlite::dbSqlite() : empty(true)
+dbSqlite::dbSqlite() : empty(true),
+						hint(DBSQLITE_HINT_NONE)
 {
 }
 
@@ -161,8 +162,6 @@ void
 dbSqlite::_exec(const dodoString &query,
 				bool result)
 {
-	bool blobHint = false;
-
 	if (query.size() == 0)
 	{
 		if (autoFraming)
@@ -241,25 +240,6 @@ dbSqlite::_exec(const dodoString &query,
 		}
 
 		queryCollect();
-
-		blobHint = false;
-	}
-	else
-	{
-		if (stringTools::equal(query, "dodo:hint:db:blob"))
-		{
-			queryCollect();
-
-			if (!show)
-				blobHint = true;
-		}
-		else
-		{
-			request = query;
-			show = result;
-
-			blobHint = false;
-		}
 	}
 
 	if (!empty)
@@ -271,8 +251,10 @@ dbSqlite::_exec(const dodoString &query,
 	if (sqlite3_prepare(lite, request.c_str(), request.size(), &liteStmt, NULL) != SQLITE_OK)
 		throw baseEx(ERRMODULE_DBSQLITE, DBSQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(lite), sqlite3_errmsg(lite), __LINE__, __FILE__, request);
 
-	if (blobHint)
+	if (isSetFlag(hint, DBSQLITE_HINT_BLOB))
 	{
+		removeFlag(hint, DBSQLITE_HINT_BLOB);
+		
 		switch (qType)
 		{
 			case DBBASE_REQUEST_UPDATE:
