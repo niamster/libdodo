@@ -221,7 +221,7 @@ namespace dodo
 			 * @param name is procedure name
 			 * @param arguments is array of arguments
 			 */
-			void callProcedure(const dodoString &name, const dodoStringArray &arguments) = 0;
+			virtual void callProcedure(const dodoString &name, const dodoStringArray &arguments) = 0;
 			
 			/**
 			 * @param table defines table name

@@ -171,7 +171,7 @@ dbSqlBase::exists(const dodoString &statement)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::noexists(const dodoString &statement)
+dbSqlBase::notexists(const dodoString &statement)
 {
 	return dodoString("not exists(" + statement + ')');
 }
@@ -536,7 +536,7 @@ dbSqlBase::truncateCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::delBaseCollect()
+dbSqlBase::delDbCollect()
 {
 	request = "drop database " + pre_order;
 }
@@ -584,7 +584,7 @@ dbSqlBase::renameFieldCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::createBaseCollect()
+dbSqlBase::createDbCollect()
 {
 	request = "create database " + pre_order;
 	if (pre_having.size() != 0)
@@ -818,7 +818,7 @@ dbSqlBase::queryCollect()
 
 		case DBBASE_REQUEST_DELETE_DB:
 
-			delBaseCollect();
+			delDbCollect();
 			additionalActions = false;
 
 			break;
@@ -839,7 +839,7 @@ dbSqlBase::queryCollect()
 
 		case DBBASE_REQUEST_CREATE_DB:
 
-			createBaseCollect();
+			createDbCollect();
 			additionalActions = false;
 
 			break;

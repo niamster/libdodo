@@ -233,7 +233,7 @@ namespace dodo
 		dodoStringArray primKeys;           ///< primary keys of the table
 		dodoStringArray uniq;               ///< fields of the table that may contain only unique values
 
-		bool ifNotExists;                   ///< do not throw exception if table already exixts[false by default]
+		bool ifNotExists;                   ///< do not throw exception if table already exists[false by default]
 	};
 	
 	/**
