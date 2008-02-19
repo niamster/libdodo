@@ -37,7 +37,7 @@
 namespace dodo
 {
 	/**
-	 * @enum imageOperTypeEnum describes type of operation for hook
+	 * @enum imageOperTypeEnum defines type of operation for hook
 	 */
 	enum imageOperTypeEnum
 	{
@@ -46,29 +46,28 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __xexexImageCollectedData contains data that could be retrieved from class(to modificate)[contains references]
+	 * @struct __xexexImageCollectedData defines data that could be retrieved from the image object
 	 */
 	struct __xexexImageCollectedData
 	{
 		/**
 		 * constructor
-		 * initiates references
 		 */
 		__xexexImageCollectedData(ImageInfo &imInfo,
 								  Image &im,
 								  int &operType,
 								  void *executor);
 
-		ImageInfo &imInfo;  ///< image info handler
+		ImageInfo &imInfo;  ///< info handler
 		Image &im;          ///< image handler
 
-		int &operType;      ///< operation type set by main action; can be used in hook to determine type of action
+		int &operType;      ///< xexec operation
 
 		void *executor;     ///< class that executed hook
 	};
 
 	/**
-	 * @enum imageMappingEnum describes the order of pixels
+	 * @enum imageMappingEnum defines the order of pixels
 	 */
 	enum imageMappingEnum
 	{
@@ -78,7 +77,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum imagePixelSizeEnum describes pixel's size
+	 * @enum imagePixelSizeEnum defines size of pixel
 	 */
 	enum imagePixelSizeEnum
 	{
@@ -91,7 +90,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum imageEncoderEnum describes image encoder
+	 * @enum imageEncoderEnum defines image encoder
 	 */
 	enum imageEncoderEnum
 	{
@@ -104,7 +103,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum imageRotateDirAngEnum describes parameters for rotation
+	 * @enum imageRotateDirAngEnum defines rotation options
 	 */
 	enum imageRotateDirectionAngleEnum
 	{
@@ -116,7 +115,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum imageCompressionEnum describes type of compression
+	 * @enum imageCompressionEnum defines type of compression
 	 */
 	enum imageCompressionEnum
 	{
@@ -143,7 +142,7 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __imageSize defines image width/height
+	 * @struct __imageSize defines image dimensions
 	 */
 	struct __imageSize
 	{
@@ -152,7 +151,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class image for simple image manipulations
+	 * @class image provides simple image manipulations
 	 */
 	class image : public xexec
 	{
@@ -177,39 +176,39 @@ namespace dodo
 			virtual ~image();
 
 			/**
-			 * reads image
-			 * @param path describes path to image
+			 * read image
+			 * @param path defines path to image
 			 */
 			virtual void read(const dodoString &path);
 
 			/**
-			 * reads image
-			 * @param info describes image info
+			 * read image
+			 * @param info defines image info
 			 */
 			virtual void read(const __imageInfo &info);
 
 			/**
-			 * reads image
-			 * @param data describes image data
-			 * @param size describes image data size
+			 * read image
+			 * @param data defines image data
+			 * @param size defines size of image data
 			 */
 			virtual void read(const unsigned char * const data, unsigned long size);
 
 			/**
-			 * writes image
+			 * write image
 			 * @param path describes path to image
 			 */
 			virtual void write(const dodoString &path);
 
 			/**
-			 * writes image
-			 * @param data describes pointer to image
-			 * @param size describes size of data
+			 * write image
+			 * @param data defines image data
+			 * @param size defines size of image data
 			 */
 			virtual void write(unsigned char **data, unsigned int &size);
 
 			/**
-			 * closes access to image
+			 * close access to image
 			 */
 			virtual void close();
 
@@ -219,20 +218,20 @@ namespace dodo
 			virtual __imageSize getImageSize();
 
 			/**
-			 * sets image output encoder
-			 * @param encoder describes codec to encode image[see imageEncoderEnum]
+			 * set image output encoder
+			 * @param encoder defines image encoder[see imageEncoderEnum]
 			 */
 			virtual void setEncoder(short encoder);
 
 			/**
-			 * sets image compression type
-			 * @param type describes type of image compression[see imageCompressionEnum]
+			 * set image compression type
+			 * @param type defines type of image compression[see imageCompressionEnum]
 			 */
 			virtual void setCompression(short type);
 
 			/**
-			 * sets image quality
-			 * @param quality describes quality of image
+			 * set image quality
+			 * @param quality defines image quality
 			 */
 			virtual void setQuality(short quality);
 
@@ -252,71 +251,72 @@ namespace dodo
 			virtual short getQuality();
 
 			/**
-			 * scales image
-			 * @param width describes width of the image
-			 * @param height describes height of the image
+			 * scale image
+			 * @param width defines width of the image
+			 * @param height defines height of the image
 			 */
 			virtual void scale(unsigned long width, unsigned long height);
 
 			/**
-			 * rotates image
-			 * @param angle describes the number of degrees to rotate the image[see also imageRotateDirAngEnum]
+			 * rotate image
+			 * @param angle defines rotation degree[see also imageRotateDirAngEnum]
 			 */
 			virtual void rotate(double angle);
 
 			/**
-			 * destroys image data got from write
-			 * @param data describes pointer to image
+			 * destroy image data got from write
+			 * @param data defines image data
 			 */
 			virtual void destroyImageData(unsigned char **data);
 
 #ifndef IMAGE_WO_XEXEC
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPostExec(inExec func, void *data);
 
 			/**
-			 * adds hook before the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook before the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
-
-			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+
+			/**
+			 * set hook from the library that will be executed before/after the operation
+			 * @return number in list where function is set
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in the library
+			 */
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
 #endif
 
@@ -335,7 +335,7 @@ namespace dodo
 			static const __statements mappingStArr[3];          ///< image mapping statements
 			static const StorageType pixelSizeStArr[6];         ///< pixel type statements
 			static const __statements encoderStArr[6];          ///< image encoder
-			static const CompressionType compressionStArr[8];   ///< image encoder
+			static const CompressionType compressionStArr[8];   ///< image compression
 	};
 
 	/**
@@ -357,7 +357,7 @@ namespace dodo
 
 		private:
 
-			bool initialized; ///< indicates if environment was initialized in the object
+			bool initialized; ///< true if environment was initialized in the object
 	};
 
 	extern __image_init__ __image_init_object__;
