@@ -43,7 +43,7 @@
 namespace dodo
 {
 	/**
-	 * @enum ioSTDOperationTypeEnum describes type of operation for hook
+	 * @enum ioSTDOperationTypeEnum defines type of operation for hook
 	 */
 	enum ioSTDOperationTypeEnum
 	{
@@ -60,8 +60,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class ioSTD performs actions with stdin/out.
-	 * @note it's usefull when you are using in/out operations through some proxy -> for example inetd!
+	 * @class ioSTD provides interface for stdin/stdout/stderr I/O operations
 	 */
 
 	class ioSTD : public io,
@@ -89,55 +88,56 @@ namespace dodo
 
 			/**
 			 * @return info about source of inputting
-			 * @note it can be used to get info foreign `inputter` if you ar usin'g inetd
+			 * @note it can be used to get info foreign 'inputter' if you ar using inetd
 			 */
 			__connInfo inputterInfo();
 
 #ifndef IOSTD_WO_XEXEC
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPostExec(inExec func, void *data);
 
 			/**
-			 * adds hook before the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook before the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
+			 * set hook from the library that will be executed before/after the operation
 			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in the library
 			 */
 			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
 
@@ -146,59 +146,55 @@ namespace dodo
 #endif
 
 			/**
-			 * read
-			 * @param data is filled with read string
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readString(dodoString &data);
 
 			/**
-			 * read
-			 * @param data is filled with read data
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void read(char * const data);
 
 			/**
-			 * write
-			 * @param data is string that will be written
+			 * @param data defines data that will be written
 			 */
 			virtual void writeString(const dodoString &data);
 
 			/**
-			 * write
-			 * @param data is data that will be written
+			 * @param data defines data that will be written
 			 */
 			virtual void write(const char * const data);
 
 			/**
-			 * read from stream - null[or \n]-terminated string
-			 * @param data is filled with read string
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStreamString(dodoString &data);
 
 			/**
-			 * read from stream - null[or \n]-terminated string
-			 * @param data is filled with read data
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStream(char * const data);
 
 			/**
-			 * write to stream - null-terminated string
-			 * @param data is string that will be written
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
 			 */
 			virtual void writeStreamString(const dodoString &data);
 
 			/**
-			 * write to stream - null-terminated string
-			 * @param data is data that will be written
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
 			 */
 			virtual void writeStream(const char * const data);
 
 			/**
-			 * flushes to output
+			 * flush output
 			 */
 			virtual void flush();
 
@@ -214,65 +210,56 @@ namespace dodo
 			virtual void block(bool flag);
 
 			/**
-			 * redirects stream to stderr/stdout
-			 * @param toSTDErr indicates whether redirects stream to stderr or to stdout
+			 * redirect output stream to stderr or stdout
+			 * @param toSTDErr defines to redirect stream to stderr if true
 			 */
 			virtual void redirectToSTDErr(bool toSTDErr);
 
 			/**
-			 * redirects stream to stderr/stdout
-			 * @param toSTDErr indicates whether redirects stream to stderr or to stdout
+			 * @return true if output stream is redirected to stderr
 			 */
 			virtual bool isRedirectedToSTDErr();
 
-			/**
-			 * sometimes, when you ouput/input from some other programs, you have bounds in input/output buffer
-			 * this parameters will help you;
-			 * by default, they are too large, so you don't have to change it
-			 */
 			int inSTDBuffer;    ///< input buffer
 			int outSTDBuffer;   ///< output buffer
 
 		protected:
 
 			/**
-			 * @return descriptor of input stream
+			 * @return descriptor of the input stream
 			 */
 			virtual int getInDescriptor() const;
 
 			/**
-			 * @return descriptor of output stream
+			 * @return descriptor of the output stream
 			 */
 			virtual int getOutDescriptor() const;
 
 			/**
-			 * read
-			 * @param data is filled with read data
-			 * if inSize bigger than buffer size - reads with few iterations
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void _read(char * const data);
 
 			/**
-			 * read from stream - null[or \n]-terminated string
-			 * @param data is filled with read data
-			 * max size of data is inSTDBuffer
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void _readStream(char * const data);
 
 			/**
-			 * write
-			 * @param data is data that will be written
-			 * if outSize bigger than buffer size - writes with few iterations
+			 * @param data defines data that will be written
 			 */
 			virtual void _write(const char * const data);
 
 		private:
 
-			FILE *desc;         ///< descriptor that is needed for redirection
+			FILE *desc;         ///< stream descriptor
 
-			bool blocked;       ///< indicates, whether blocked or not;
+			bool blocked;       ///< true if stream is blocked
 
-			bool err;           ///< redirect output to stderr; false by default
+			bool err;           ///< true if output stream is redirected to stderr
 	};
 
 };

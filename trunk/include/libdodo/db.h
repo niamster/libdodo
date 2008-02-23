@@ -165,7 +165,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class db implement an interface to db through sql and database independent interfaces
+	 * @class db implements an interface to db through sql and database independent interfaces
 	 */
 	class db : public xexec
 	{

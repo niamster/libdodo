@@ -43,7 +43,7 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define IODISKTOOLSEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 #define IODISKTOOLSEX_DESTINATIONEXISTS_STR "Destination file/dir/etc. exists. Won't overvrite"
@@ -51,7 +51,7 @@ namespace dodo
 #define IODISKTOOLSEX_TOOLONGPATH_STR "Too long path."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum ioDiskToolsFunctionsID
 	{

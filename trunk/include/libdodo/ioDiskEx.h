@@ -42,14 +42,14 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define IODISKEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 #define IODISKEX_CANNOTOVEWRITE_STR "You set option not to overwrite, but try to do that =)"
 #define IODISKEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum ioDiskFunctionsID
 	{

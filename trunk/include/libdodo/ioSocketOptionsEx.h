@@ -31,10 +31,6 @@
 namespace dodo
 {
 	/**
-	 * next for ioSocketOptions
-	 */
-
-	/**
 	 * libdodo defined errors
 	 */
 	enum ioSocketOptionsExR
@@ -44,13 +40,13 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define IOSOCKETOPTIONSEX_NOSOCKETCREATED_STR "No socket was created =(."
 #define IOSOCKETOPTIONSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum ioSocketOptionsFunctionsID
 	{

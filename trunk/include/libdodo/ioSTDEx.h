@@ -31,7 +31,7 @@
 namespace dodo
 {
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum ioSTDFunctionsID
 	{

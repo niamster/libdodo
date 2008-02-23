@@ -40,7 +40,7 @@
 namespace dodo
 {
 	/**
-	 * @enum ioDiskOperationTypeEnum describes type of operation for hook
+	 * @enum ioDiskOperationTypeEnum defines type of operation for hook
 	 */
 	enum ioDiskOperationTypeEnum
 	{
@@ -57,7 +57,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum ioDiskModesEnum descibes modes to open file
+	 * @enum ioDiskModesEnum defines modes to open file
 	 */
 	enum ioDiskModesEnum
 	{
@@ -68,18 +68,18 @@ namespace dodo
 	};
 
 	/**
-	 * @enum ioDiskFileToCreateEnum describes file type you can create
+	 * @enum ioDiskFileToCreateEnum defines file type you can create
 	 */
 	enum ioDiskFileToCreateEnum
 	{
 		IODISK_FILETYPE_REG_FILE,   ///< regular file
-		IODISK_FILETYPE_TMP_FILE,   ///< temporary file. will be deleted after you exit program(or close it)
+		IODISK_FILETYPE_TMP_FILE,   ///< temporary file[will be deleted after exit(or close)]
 		IODISK_FILETYPE_FIFO_FILE,  ///< FIFO file
 		IODISK_FILETYPE_CHAR_FILE   ///< CHAR file
 	};
 
 	/**
-	 * @class ioDisk allows disk I/O manipulations
+	 * @class ioDisk provides disk I/O manipulations
 	 */
 
 	class ioDisk : public io,
@@ -90,7 +90,8 @@ namespace dodo
 		private:
 
 			/**
-			 * cosrtructor prevents from copyin'
+			 * copy constructor
+			 * to prevent copying
 			 */
 			ioDisk(ioDisk &fd);
 
@@ -98,10 +99,10 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param path is path to the file
-			 * @param type describes type of file with what manipulation will be made
-			 * @param mode defines mode to open file
-			 * @note if type == TMP_FILE, u don't have to specify path
+			 * @param path defines path to the file
+			 * @param type defines type of file[see ioDiskFileToCreateEnum]
+			 * @param mode defines mode to open file[see ioDiskModesEnum]
+			 * @note if type is TMP_FILE path is ignored
 			 */
 			ioDisk(const dodoString &path = __dodostring__, short fileType = IODISK_FILETYPE_REG_FILE, short mode = IODISK_OPENMODE_READ_WRITE);
 
@@ -113,144 +114,127 @@ namespace dodo
 #ifndef IODISK_WO_XEXEC
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPostExec(inExec func, void *data);
 
 			/**
-			 * adds hook before the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook before the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
-
-			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
+			/**
+			 * set hook from the library that will be executed before/after the operation
+			 * @return number in list where function is set
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in the library
+			 */
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+
 #endif
 
 #endif
 
 			/**
-			 * opens file
-			 * @param path describes path to file
-			 * @param mode defines mode to open file
-			 * @note closes previous opened file if needed
-			 * if you want to create pipe, but not a pipe was created with the same name - false will be returned
-			 * if you want to create regular file, but not regular file was created with the same name - false will be returned
+			 * open file
+			 * @param path defines path to the file
+			 * @param type defines type of file[see ioDiskFileToCreateEnum]
+			 * @param mode defines mode to open file[see ioDiskModesEnum]
+			 * @note if type is TMP_FILE path is ignored
 			 */
 			virtual void open(const dodoString &path, short fileType, short mode);
 
 			/**
-			 * closes file
-			 */
-			virtual void close();
-
-			/**
-			 * read string
-			 * @param data will be filled with data
-			 * @param pos indicates position in file
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readString(dodoString &data);
 
 			/**
-			 * read data
-			 * @param data will be filled with data
-			 * @param pos indicates position in file
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void read(char * const data);
 
 			/**
-			 * write string
-			 * @param data will be written to file
-			 * @param pos indicates position in file
+			 * @param data defines data that will be written
 			 */
 			virtual void writeString(const dodoString &data);
 
 			/**
-			 * write string
-			 * @param data will be written to file
-			 * @param pos indicates position in file
+			 * @param data defines data that will be written
 			 */
 			virtual void write(const char * const data);
 
 			/**
-			 * read string - null[or \n]-terminated string
-			 * @param data will be filled with data
-			 * @param pos indicates position in file [string that has pos-1 strings before]
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStreamString(dodoString &data);
 
 			/**
-			 * read data - null[or \n]-terminated string
-			 * @param data will be filled with data
-			 * @param pos indicates position in file [string that has pos-1 strings before]
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStream(char * const data);
 
 			/**
-			 * write string - null-terminated string [append only]
-			 * @param data will be written to file
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
 			 */
 			virtual void writeStreamString(const dodoString &data);
 
 			/**
-			 * write string - null-terminated string [append only]
-			 * @param data will be written to file
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
 			 */
 			virtual void writeStream(const char * const data);
 
 			/**
+			 * flush output
+			 */
+			virtual void flush();
+
+			/**
 			 * erase node on position
-			 * @param pos indicates position in file
-			 * @note for xexec  - no call for pre/postExec is performed, no operation type is set, 'cos it's only special type of write!!
 			 */
 			virtual void erase();
 			
 			unsigned long pos;///< read/write/erase position[0 by default]
 
-			/**
-			 * flushes to disk
-			 */
-			virtual void flush();
-
-			bool over;      ///< indicates whether overwrite or not; if you want to write to nonempty node error will be occured; for files, tmp_files only
-			bool append;    ///< if true, will append to the end of the file, even pos is set.
+			bool over;      ///< if true block will be overwritten; for regular and temp files only
+			bool append;    ///< if true, will append to the end of the file, even if pos is set
 
 			/**
 			 * @return path of the opened file
@@ -265,46 +249,42 @@ namespace dodo
 		protected:
 
 			/**
-			 * @return descriptor of input stream
+			 * @return descriptor of the input stream
 			 */
 			virtual int getInDescriptor() const;
 
 			/**
-			 * @return descriptor of output stream
+			 * @return descriptor of the output stream
 			 */
 			virtual int getOutDescriptor() const;
 
 			/**
-			 * read data
-			 * @param data will be filled with data
-			 * @param pos indicates position in file
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void _read(char * const data);
 
 			/**
-			 * read data - null[or \n]-terminated string
-			 * @param data will be filled with data
-			 * @param pos indicates position in file [string that has pos-1 strings before]
-			 * @note max size is inSize
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void _readStream(char * const data);
 
 			/**
-			 * write string
-			 * @param data will be written to file
-			 * @param pos indicates position in file
+			 * @param data defines data that will be written
 			 */
 			virtual void _write(const char * const data);
 
 			/**
-			 * write string - null-terminated string [append only]
-			 * @param data will be written to file
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
 			 */
 			virtual void _writeStream(const char * const data);
 
 		private:
 
-			dodoString path;    ///< file name
+			dodoString path;    ///< file path
 			short fileType;     ///< type of file
 
 			FILE *file;         ///< file handler

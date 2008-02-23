@@ -46,7 +46,7 @@ namespace dodo
 {
 
 	/**
-	 * @enum ioSocketOperationTypeEnum describes type of operation for hook
+	 * @enum ioSocketOperationTypeEnum defines type of operation for hook
 	 */
 	enum ioSocketExchangeOperationTypeEnum
 	{
@@ -78,26 +78,23 @@ namespace dodo
 
 			/**
 			 * copy constructor
-			 * @note if you want to copy it, the object, from what was copy is not be able to init new session => you have to reinit it with accept method!
+			 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ioSocket::accept method
 			 */
 			__initialAccept(__initialAccept &init);
 
 		private:
 
-			int socket;             ///< id of socket
+			int socket;             ///< socket
 
 			short family;           ///< socket family[see socketProtoFamilyEnum]
 			short type;             ///< socket type[see socketTransferTypeEnum]
 
-			bool blocked;           ///< if blocked
-			bool blockInherited;    ///< if block inherited
+			bool blocked;           ///< true if blocked
+			bool blockInherited;    ///< true if block flag is inherited
 	};
 
 	/**
-	 * @class ioSocketExchange used for communication[send/receive data]
-	 * you may use it's functions only after passing it to connect(accept)
-	 * otherwise you'll receive exeptions about socket(or false) from all of this' class' methods
-	 * if you'll init this class again with another connection=previous will be closed
+	 * @class ioSocketExchange provides communication interface[send/receive data]
 	 */
 	class ioSocketExchange : public ioSocketOptions,
 							 public io,
@@ -115,15 +112,14 @@ namespace dodo
 
 			/**
 			 * copy constructor
-			 * @note object that inited new object of this class you can use for future connections;
-			 * you can safely pass it to the functions;
+			 * @note the object that has inited the object of current instance can be used for another connections
 			 */
 			ioSocketExchange(ioSocketExchange &fse);
 
 			/**
 			 * constructor
-			 * @param init is initial data[got from accept method]
-			 * @note object that inited new object of this class you can use for future connections;
+			 * @param init is initial data[got from the ioSocket::accept method]
+			 * @note the object that has inited the object of current instance can be used for another connections
 			 */
 			ioSocketExchange(__initialAccept &init);
 
@@ -133,71 +129,73 @@ namespace dodo
 			virtual ~ioSocketExchange();
 
 			/**
-			 * @return copy of object
+			 * @return copy of the instance
+			 * @note current instance can't be used any more
 			 */
 			virtual ioSocketExchange *createCopy();
 
 			/**
-			 * deletes copy of object
-			 * @param copy is copy of object to delete
+			 * delete a copy of an object
+			 * @param copy defines an instance of an object
 			 */
 			static void deleteCopy(ioSocketExchange *copy);
 
 #ifndef IOSOCKETEXCHANGE_WO_XEXEC
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPostExec(inExec func, void *data);
 
 			/**
-			 * adds hook before the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * add hook before the operation
+			 * @return id of the hook method
+			 * @param func defines hook function
+			 * @param data defines data that will be passed to hook function
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 */
-			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
-
-			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * add hook after the operation
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 
+			/**
+			 * set hook from the library that will be executed before/after the operation
+			 * @return number in list where function is set
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines data that will be passed to hook function
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in the library
+			 */
+			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+
 #endif
 
 #endif
 
 			/**
-			 * init oject with given data
-			 * @param init is initial data[got from accept method]
+			 * init object
+			 * @param init defines initial data[got from ioSocket::accept method]
 			 */
 			virtual void init(__initialAccept &init);
 
@@ -207,60 +205,52 @@ namespace dodo
 			virtual bool alive();
 
 			/**
-			 * write
-			 * @param data is data that would be sent
-			 * @param urgent -> send out-of-band data
-			 */
-			virtual void write(const char * const data);
-
-			/**
-			 * write
-			 * @param data is string that would be sent
-			 * @note sends no longer than outSize
-			 */
-			virtual void writeString(const dodoString &data);
-
-			/**
-			 * receive
-			 * @param data is data that would be received
-			 * @note not more then inSize(including '\0')
-			 */
-			virtual void read(char * const data);
-
-			/**
-			 * read
-			 * @param data is string that would be received
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readString(dodoString &data);
 
 			/**
-			 * write - null-terminated string
-			 * @param data is data that would be sent
-			 * @note sends no longer than outSize
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
 			 */
-			virtual void writeStream(const char * const data);
+			virtual void read(char * const data);
 
 			/**
-			 * write - null-terminated string
-			 * @param data is string that would be sent
-			 * @note sends no longer than outSize
+			 * @param data defines data that will be written
 			 */
-			virtual void writeStreamString(const dodoString &data);
+			virtual void writeString(const dodoString &data);
 
 			/**
-			 * read - null-terminated string
-			 * @param data is data that would be received
+			 * @param data defines data that will be written
+			 */
+			virtual void write(const char * const data);
+
+			/**
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
+			 */
+			virtual void readStreamString(dodoString &data);
+
+			/**
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
 			virtual void readStream(char * const data);
 
 			/**
-			 * read - null-terminated string
-			 * @param data is string that would be received
-			 * @note not more then inSize(including '\0')
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
 			 */
-			virtual void readStreamString(dodoString &data);
+			virtual void writeStreamString(const dodoString &data);
+
+			/**
+			 * write to stream - '\0' - terminated string
+			 * @param data defines data that will be written
+			 */
+			virtual void writeStream(const char * const data);
 
 			/**
 			 * flush output
@@ -268,7 +258,7 @@ namespace dodo
 			virtual void flush();
 
 			/**
-			 * closes this socket
+			 * close connection
 			 */
 			virtual void close();
 
@@ -285,38 +275,27 @@ namespace dodo
 			virtual int getOutDescriptor() const;
 
 			/**
-			 * inits this class' data
-			 * @param socket is id of socket
-			 * @param blockInherited indicates whether to inherit block of parent
+			 * init current instance
+			 * @param socket defines socket
+			 * @param blockInherited defines block flag inheritance
 			 */
 			virtual void init(int socket, bool blockInherited);
 
 			/**
-			 * receive
-			 * @param data is data that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * signal safe
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void _read(char * const data);
 
 			/**
-			 * read - null-terminated string
-			 * @param data is data that would be received
-			 * @note receives no longer than inSize
-			 * if inSize bigger than socket buffer size - receives with few iterations
-			 * max data size is inSocketBuffer
-			 * signal safe
+			 * read from stream - '\0' or '\n' - terminated string
+			 * @param data defines buffer that will be filled
+			 * @note not more then inSize(including '\0')
 			 */
 			virtual void _readStream(char * const data);
 
 			/**
-			 * write
-			 * @param data is data that would be sent
-			 * @param urgent -> send out-of-band data
-			 * @note sends no longer than outSize
-			 * if outSize bigger than socket buffer size - sends with few iterations
-			 * signal safe
+			 * @param data defines data that will be written
 			 */
 			virtual void _write(const char * const data);
 	};

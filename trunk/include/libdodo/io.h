@@ -33,28 +33,26 @@
 namespace dodo
 {
 	/**
-	 * @struct __xexexIoCollectedData contains data that could be retrieved from class(to modificate)[contains references]
+	 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 	 */
 	struct __xexexIoCollectedData
 	{
 		/**
 		 * constructor
-		 * initiates references
 		 */
 		__xexexIoCollectedData(dodoString &buffer,
 							   int &operType,
 							   void *executor);
 
-		dodoString &buffer;         ///< buffer where data is stored
+		dodoString &buffer;         ///< data buffer
 
-		int &operType;              ///< operation type set by main action; can be used in hook to determine type of action
+		int &operType;              ///< xexec operation
 
 		void *executor;             ///< class that executed hook
 	};
 
 	/**
-	 * @class io is a base class for I/O operations.
-	 * all I/O operations are blockable => read/write inSize/outSize block.
+	 * @class io implements an interface for I/O operations
 	 */
 	class io : public xexec,
 				virtual public ioNBAInfo
@@ -70,6 +68,7 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~io() = 0;
+			
 			/**
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
@@ -123,14 +122,14 @@ namespace dodo
 			 */
 			virtual void flush() = 0;
 
-			unsigned long inSize;   ///< size of data block;
-			unsigned long outSize;  ///< size of data block;
+			unsigned long inSize;   ///< size of data block for read* operations
+			unsigned long outSize;  ///< size of data block for write* operations
 
 		protected:
 
-			bool opened; ///< indicates whether file(connection) opened or not
+			bool opened; ///< true if I/O *session* is opened
 
-			dodoString buffer;                      ///< buffer where data is stored
+			dodoString buffer;                      ///< buffer
 
 			__xexexIoCollectedData collectedData;   ///< data collected for xexec
 	};

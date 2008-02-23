@@ -31,10 +31,6 @@
 namespace dodo
 {
 	/**
-	 * next for ioSocket*
-	 */
-
-	/**
 	 * libdodo defined errors
 	 */
 	enum ioSocketExR
@@ -49,7 +45,7 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define IOSOCKETEX_NOSOCKETCREATED_STR "No socket was created =(."
 #define IOSOCKETEX_CANNOTBIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
@@ -60,7 +56,7 @@ namespace dodo
 #define IOSOCKETEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum ioSocketFunctionsID
 	{
