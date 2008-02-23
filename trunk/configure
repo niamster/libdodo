@@ -1258,8 +1258,8 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
-  --disable-image-xexec-support
-                          compile image w/o xexec support
+  --disable-cgiFast-xexec-support
+                          compile cgiFast w/o xexec support
   --disable-ioSTD-xexec-support
                           compile ioSTD w/o xexec support
   --disable-ioSocketExchange-xexec-support
@@ -3466,13 +3466,22 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-# Check whether --enable-image-xexec-support was given.
-if test "${enable_image_xexec_support+set}" = set; then
-  enableval=$enable_image_xexec_support; IMAGE_W_XEXEC="$enableval"
+# Check whether --enable-cgiFast-xexec-support was given.
+if test "${enable_cgiFast_xexec_support+set}" = set; then
+  enableval=$enable_cgiFast_xexec_support; CGIFAST_W_XEXEC="$enableval"
 else
-  IMAGE_W_XEXEC="yes"
+  CGIFAST_W_XEXEC="yes"
 fi
 
+
+if test "$CGIFAST_W_XEXEC" = "no"
+then
+	echo -n -e "#define CGIFAST_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tenabled"
+fi
 
 if test "$IMAGE_W_XEXEC" = "no"
 then
@@ -3756,6 +3765,10 @@ _ACEOF
 
   LIBS="-lsqlite3 $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: sqlite3 lib was not found" >&5
+echo "$as_me: error: sqlite3 lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 
@@ -4294,6 +4307,13 @@ fi
 echo "${ECHO_T}$ac_cv_header_sqlite3_h" >&6; }
 
 fi
+if test $ac_cv_header_sqlite3_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: sqlite3 header was not found" >&5
+echo "$as_me: error: sqlite3 header was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 
 		echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -4388,6 +4408,10 @@ _ACEOF
 
   LIBS="-lpq $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: postgresql lib was not found" >&5
+echo "$as_me: error: postgresql lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 		if test "${ac_cv_header_libpq_fe_h+set}" = set; then
@@ -4520,6 +4544,13 @@ fi
 echo "${ECHO_T}$ac_cv_header_libpq_fe_h" >&6; }
 
 fi
+if test $ac_cv_header_libpq_fe_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: postgresql header was not found" >&5
+echo "$as_me: error: postgresql header was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 
 		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -4539,7 +4570,7 @@ fi
 
 	if test "$MOD_MYSQL" != "no"
 	then
-		if test "$MOD_MYSQL_DIR" = "yes"
+		if test "$MOD_MYSQL_DIR" = "yes" -a $(which mysql_config 2>/dev/null)
 		then
 			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
 			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
@@ -4617,6 +4648,10 @@ _ACEOF
 
   LIBS="-lmysqlclient $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: mySQL lib was not found" >&5
+echo "$as_me: error: mySQL lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 		if test "${ac_cv_header_mysql_h+set}" = set; then
@@ -4749,6 +4784,13 @@ fi
 echo "${ECHO_T}$ac_cv_header_mysql_h" >&6; }
 
 fi
+if test $ac_cv_header_mysql_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: mySQL header was not found" >&5
+echo "$as_me: error: mySQL header was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 
 		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -4843,6 +4885,10 @@ _ACEOF
 
   LIBS="-lfcgi $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: fcgi lib was not found" >&5
+echo "$as_me: error: fcgi lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 		if test "${ac_cv_header_fcgiapp_h+set}" = set; then
@@ -4975,6 +5021,13 @@ fi
 echo "${ECHO_T}$ac_cv_header_fcgiapp_h" >&6; }
 
 fi
+if test $ac_cv_header_fcgiapp_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: fcgi header was not found" >&5
+echo "$as_me: error: fcgi header was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 
 		echo -n -e "#define FCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -5072,6 +5125,10 @@ _ACEOF
 
   LIBS="-lpcre $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: pcre lib was not found" >&5
+echo "$as_me: error: pcre lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 		if test "${ac_cv_header_pcre_h+set}" = set; then
@@ -5203,6 +5260,13 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_header_pcre_h" >&5
 echo "${ECHO_T}$ac_cv_header_pcre_h" >&6; }
 
+fi
+if test $ac_cv_header_pcre_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: pcre header was not found" >&5
+echo "$as_me: error: pcre header was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 
@@ -5370,7 +5434,8 @@ fi
 
                 if test "$MOD_DL_LIB" = "yes"
                 then
-			{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
+
+{ echo "$as_me:$LINENO: checking for dlopen in -ldl" >&5
 echo $ECHO_N "checking for dlopen in -ldl... $ECHO_C" >&6; }
 if test "${ac_cv_lib_dl_dlopen+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -5432,9 +5497,16 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_lib_dl_dlopen" >&5
 echo "${ECHO_T}$ac_cv_lib_dl_dlopen" >&6; }
 if test $ac_cv_lib_dl_dlopen = yes; then
-  RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tenabled"
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBDL 1
+_ACEOF
+
+  LIBS="-ldl $LIBS"
+
 else
-  RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tdisabled"
+  { { echo "$as_me:$LINENO: error: dl lib was not found" >&5
+echo "$as_me: error: dl lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 			LDFLAGS="$LDFLAGS -ldl"
@@ -5465,6 +5537,81 @@ fi
 			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
 			LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
 		fi
+
+{ echo "$as_me:$LINENO: checking for xmlInitParser in -lxml2" >&5
+echo $ECHO_N "checking for xmlInitParser in -lxml2... $ECHO_C" >&6; }
+if test "${ac_cv_lib_xml2_xmlInitParser+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lxml2  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char xmlInitParser ();
+int
+main ()
+{
+return xmlInitParser ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_lib_xml2_xmlInitParser=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_xml2_xmlInitParser=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_xml2_xmlInitParser" >&5
+echo "${ECHO_T}$ac_cv_lib_xml2_xmlInitParser" >&6; }
+if test $ac_cv_lib_xml2_xmlInitParser = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBXML2 1
+_ACEOF
+
+  LIBS="-lxml2 $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: libxml2 lib was not found" >&5
+echo "$as_me: error: libxml2 lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 		if test "${ac_cv_header_libxml_xmlmemory_h+set}" = set; then
   { echo "$as_me:$LINENO: checking for libxml/xmlmemory.h" >&5
 echo $ECHO_N "checking for libxml/xmlmemory.h... $ECHO_C" >&6; }
@@ -5595,78 +5742,14 @@ fi
 echo "${ECHO_T}$ac_cv_header_libxml_xmlmemory_h" >&6; }
 
 fi
-
-
-
-{ echo "$as_me:$LINENO: checking for xmlInitParser in -lxml2" >&5
-echo $ECHO_N "checking for xmlInitParser in -lxml2... $ECHO_C" >&6; }
-if test "${ac_cv_lib_xml2_xmlInitParser+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
+if test $ac_cv_header_libxml_xmlmemory_h = yes; then
+  :
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lxml2  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char xmlInitParser ();
-int
-main ()
-{
-return xmlInitParser ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest$ac_exeext &&
-       $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_xml2_xmlInitParser=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_xml2_xmlInitParser=no
+  { { echo "$as_me:$LINENO: error: libxml2 header was not found" >&5
+echo "$as_me: error: libxml2 header was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
-rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_xml2_xmlInitParser" >&5
-echo "${ECHO_T}$ac_cv_lib_xml2_xmlInitParser" >&6; }
-if test $ac_cv_lib_xml2_xmlInitParser = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBXML2 1
-_ACEOF
-
-  LIBS="-lxml2 $LIBS"
-
-fi
 
 		echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
 
@@ -5770,6 +5853,10 @@ _ACEOF
 
   LIBS="-l$MOD_PTHREAD_LIB $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: $MOD_PTHREAD_LIB lib was not found" >&5
+echo "$as_me: error: $MOD_PTHREAD_LIB lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 		if test "${ac_cv_header_pthread_h+set}" = set; then
@@ -5902,6 +5989,13 @@ fi
 echo "${ECHO_T}$ac_cv_header_pthread_h" >&6; }
 
 fi
+if test $ac_cv_header_pthread_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: pthread header was not found" >&5
+echo "$as_me: error: pthread header was not found" >&2;}
+   { (exit 1); exit 1; }; }
+fi
 
 
 		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -5996,6 +6090,10 @@ _ACEOF
 
   LIBS="-lbz2 $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: bz2 lib was not found" >&5
+echo "$as_me: error: bz2 lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 		if test "${ac_cv_header_bzlib_h+set}" = set; then
@@ -6127,6 +6225,13 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_header_bzlib_h" >&5
 echo "${ECHO_T}$ac_cv_header_bzlib_h" >&6; }
 
+fi
+if test $ac_cv_header_bzlib_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: bz2 header was not found" >&5
+echo "$as_me: error: bz2 header was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 
@@ -6361,6 +6466,10 @@ _ACEOF
 
   LIBS="-lz $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: zlib lib was not found" >&5
+echo "$as_me: error: zlib lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 			LDFLAGS="$LDFLAGS -lz"
@@ -6596,6 +6705,10 @@ _ACEOF
 
   LIBS="-liconv $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: iconv lib was not found" >&5
+echo "$as_me: error: iconv lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 			LDFLAGS="$LDFLAGS -liconv"
@@ -6695,6 +6808,10 @@ _ACEOF
 
   LIBS="-lMagick $LIBS"
 
+else
+  { { echo "$as_me:$LINENO: error: Magick lib was not found" >&5
+echo "$as_me: error: Magick lib was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 		if test "${ac_cv_header_magick_MagickCore_h+set}" = set; then
@@ -6826,6 +6943,13 @@ fi
 { echo "$as_me:$LINENO: result: $ac_cv_header_magick_MagickCore_h" >&5
 echo "${ECHO_T}$ac_cv_header_magick_MagickCore_h" >&6; }
 
+fi
+if test $ac_cv_header_magick_MagickCore_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: Magick header was not found" >&5
+echo "$as_me: error: Magick header was not found" >&2;}
+   { (exit 1); exit 1; }; }
 fi
 
 

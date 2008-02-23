@@ -185,8 +185,8 @@ fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
 		AC_CHECK_LIB([sqlite3], [sqlite3_table_column_metadata], RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tenabled", RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled")
-		AC_CHECK_LIB([sqlite3], [sqlite3_exec])
-		AC_CHECK_HEADER([sqlite3.h])
+		AC_CHECK_LIB([sqlite3], [sqlite3_exec], [], AC_MSG_ERROR(sqlite3 lib was not found))
+		AC_CHECK_HEADER([sqlite3.h], [], AC_MSG_ERROR(sqlite3 header was not found))
 		echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
@@ -205,8 +205,8 @@ fi
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
-		AC_CHECK_LIB([pq], [PQclear])
-		AC_CHECK_HEADER([libpq-fe.h])
+		AC_CHECK_LIB([pq], [PQclear], [], AC_MSG_ERROR(postgresql lib was not found))
+		AC_CHECK_HEADER([libpq-fe.h], [], AC_MSG_ERROR(postgresql header was not found))
 		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nPostresql\t\t\t\t\t\tenabled"
@@ -219,7 +219,7 @@ fi
 		[MOD_MYSQL_DIR="$withval"], [MOD_MYSQL="no"])
 	if test "$MOD_MYSQL" != "no"
 	then
-		if test "$MOD_MYSQL_DIR" = "yes"
+		if test "$MOD_MYSQL_DIR" = "yes" -a $(which mysql_config 2>/dev/null)
 		then
 			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
 			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
@@ -228,8 +228,8 @@ fi
 			CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
 		fi
-		AC_CHECK_LIB([mysqlclient], [mysql_init])
-		AC_CHECK_HEADER([mysql.h])
+		AC_CHECK_LIB([mysqlclient], [mysql_init], [], AC_MSG_ERROR(mySQL lib was not found))
+		AC_CHECK_HEADER([mysql.h], [], AC_MSG_ERROR(mySQL header was not found))
 		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
@@ -248,8 +248,8 @@ fi
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_FCGI_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_FCGI_DIR/lib -lfcgi"
-		AC_CHECK_LIB([fcgi], [FCGX_Init])
-		AC_CHECK_HEADER([fcgiapp.h])
+		AC_CHECK_LIB([fcgi], [FCGX_Init], [], AC_MSG_ERROR(fcgi lib was not found))
+		AC_CHECK_HEADER([fcgiapp.h], [], AC_MSG_ERROR(fcgi header was not found))
 		echo -n -e "#define FCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
@@ -271,8 +271,8 @@ fi
 			CPPFLAGS="$CPPFLAGS -I$MOD_PCRE_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_PCRE_DIR/lib -lpcre"
 		fi
-		AC_CHECK_LIB([pcre], [pcre_exec])
-		AC_CHECK_HEADER([pcre.h])
+		AC_CHECK_LIB([pcre], [pcre_exec], [], AC_MSG_ERROR(pcre lib was not found))
+		AC_CHECK_HEADER([pcre.h], [], AC_MSG_ERROR(pcre header was not found))
 		echo -n -e "#define PCRE_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nPCRE\t\t\t\t\t\tenabled"
@@ -297,7 +297,7 @@ fi
                         [MOD_DL_LIB="$enableval"], [MOD_DL_LIB="no"])
                 if test "$MOD_DL_LIB" = "yes"
                 then
-			AC_CHECK_LIB([dl], [dlopen], RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tenabled", RESULT="$RESULT\nDynamic linking as lib\t\t\t\t\t\tdisabled")
+			AC_CHECK_LIB([dl], [dlopen], [], AC_MSG_ERROR(dl lib was not found))
 			LDFLAGS="$LDFLAGS -ldl"
 		fi
 		echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -321,8 +321,8 @@ fi
 			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
 			LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
 		fi
-		AC_CHECK_HEADER([libxml/xmlmemory.h])
-		AC_CHECK_LIB([xml2], [xmlInitParser])
+		AC_CHECK_LIB([xml2], [xmlInitParser], [], AC_MSG_ERROR(libxml2 lib was not found))
+		AC_CHECK_HEADER([libxml/xmlmemory.h], [], AC_MSG_ERROR(libxml2 header was not found))
 		echo -n -e "#define LIBXML2_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nlibxml2\t\t\t\t\t\tenabled"
@@ -344,8 +344,8 @@ fi
 		[MOD_PTHREAD_LIB="$withval"], [MOD_PTHREAD_LIB="pthread"])
 		CPPFLAGS="$CPPFLAGS -I$MOD_PTHREAD_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_PTHREAD_DIR/lib -l$MOD_PTHREAD_LIB"
-		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create])
-		AC_CHECK_HEADER([pthread.h])
+		AC_CHECK_LIB([$MOD_PTHREAD_LIB], [pthread_create], [], AC_MSG_ERROR($MOD_PTHREAD_LIB lib was not found))
+		AC_CHECK_HEADER([pthread.h], [], AC_MSG_ERROR(pthread header was not found))
 		echo -n -e "#define PTHREAD_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\npthread\t\t\t\t\t\tenabled($MOD_PTHREAD_LIB)"
@@ -364,8 +364,8 @@ fi
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_BZIP2_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_BZIP2_DIR/lib -lbz2"
-		AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress])
-		AC_CHECK_HEADER([bzlib.h])
+		AC_CHECK_LIB([bz2], [BZ2_bzBuffToBuffCompress], [], AC_MSG_ERROR(bz2 lib was not found))
+		AC_CHECK_HEADER([bzlib.h], [], AC_MSG_ERROR(bz2 header was not found))
 		echo -n -e "#define BZIP2_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nBZIP2\t\t\t\t\t\tenabled"
@@ -390,7 +390,7 @@ fi
 			[MOD_ZLIB_LIB="yes"])
 	        if test "$MOD_ZLIB_LIB" = "yes"
 		then
-			AC_CHECK_LIB([z], [deflateInit2])
+			AC_CHECK_LIB([z], [deflateInit2], [], AC_MSG_ERROR(zlib lib was not found))
 			LDFLAGS="$LDFLAGS -lz"
 		fi
 		echo -n -e "#define ZLIB_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -417,7 +417,7 @@ fi
 			[MOD_ICONV_LIB="yes"])
 	        if test "$MOD_ICONV_LIB" = "yes"
 		then
-			AC_CHECK_LIB([iconv], [iconv])
+			AC_CHECK_LIB([iconv], [iconv], [], AC_MSG_ERROR(iconv lib was not found))
 			LDFLAGS="$LDFLAGS -liconv"
 		fi
 		echo -n -e "#define ICONV_EXT\n\n" >> include/libdodo/directives.runtime.h
@@ -441,8 +441,8 @@ fi
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
 		fi
-		AC_CHECK_LIB([Magick], [MagickCoreGenesis])
-		AC_CHECK_HEADER([magick/MagickCore.h])
+		AC_CHECK_LIB([Magick], [MagickCoreGenesis], [], AC_MSG_ERROR(Magick lib was not found))
+		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
 		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
