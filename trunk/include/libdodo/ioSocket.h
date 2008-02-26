@@ -50,7 +50,7 @@ namespace dodo
 {
 
 	/**
-	 * @enum ioSocketOperationTypeEnum describes type of operation for hook
+	 * @enum ioSocketOperationTypeEnum defines type of operation for hook
 	 */
 	enum ioSocketOperationTypeEnum
 	{
@@ -63,35 +63,32 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __connInfo describes connections info
-	 * you may use it for connect() method or accept()[info about remote connected host]
+	 * @struct __connInfo defines connection information
 	 */
 	struct __connInfo
 	{
-		dodoString host;
-		int port;
+		dodoString host;///< host of the box 
+		int port;///< port of the box
 	};
 
 	/**
-	 * @struct __xexexIoCollectedData contains data that could be retrieved from class(to modificate)[contains references]
+	 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 	 */
 	struct __xexexIoSocketCollectedData
 	{
 		/**
 		 * constructor
-		 * initiates references
 		 */
 		__xexexIoSocketCollectedData(int &operType,
 							   		void *executor);
 
-		int &operType;              ///< operation type set by main action; can be used in hook to determine type of action
+		int &operType;              ///< xexec operation 
 
 		void *executor;             ///< class that executed hook
 	};
 	
 	/**
-	 * @class ioSocket performs communication actions!!
-	 * exchange of data is ioSocketExchange class' task; ou init it with connect or accept methods
+	 * @class ioSocket provides network connection interface
 	 */
 	class ioSocket : public xexec, 
 					public ioSocketOptions,
@@ -110,10 +107,10 @@ namespace dodo
 		public:
 
 			/**
-			 * constructors
-			 * @param server indicates what type of oject will be
-			 * @param family is family of the socket[see socketProtoFamilyEnum]
-			 * @param type is type of the socket[see socketTransferTypeEnum]
+			 * constructor
+			 * @param server define type of service; if true as a server
+			 * @param family defines family of the socket[see socketProtoFamilyEnum]
+			 * @param type defines type of the socket[see socketTransferTypeEnum]
 			 */
 			ioSocket(bool server, short family, short type);
 
@@ -175,86 +172,90 @@ namespace dodo
 #endif
 
 			/**
-			 * connect from specific address. for client part
-			 * @param host is ip address where to connect
-			 * @param port is port where to connect
-			 * @param exchange is reference to oject that will perform communication actions
+			 * connect from specific address
+			 * @param local defines ip address to bind
+			 * @param host defines ip address of host to connect
+			 * @param port defines port of host to connect
+			 * @param exchange defines an oject that will perform I/O operations
 			 */
 			virtual void connectFrom(const dodoString &local, const dodoString &host, int port, ioSocketExchange &exchange);
 
 			/**
-			 * connect from specific address. for client part
-			 * @param destinaton is structure that describes destination
-			 * @param exchange is reference to oject that will perform communication actions
-			 * the same as previous, but more pretty
+			 * connect from specific address
+			 * @param local defines ip address to bind
+			 * @param destinaton defines destinaton ip address/port of host to connect
+			 * @param exchange defines an oject that will perform I/O operations
 			 */
 			virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, ioSocketExchange &exchange);
 
 			/**
-			 * connect. for client part
-			 * @param host is ip address where to connect
-			 * @param port is port where to connect
-			 * @param exchange is reference to oject that will perform communication actions
+			 * connect
+			 * @param host defines ip address of host to connect
+			 * @param port defines port of host to connect
+			 * @param exchange defines an oject that will perform I/O operations
 			 */
 			virtual void connect(const dodoString &host, int port, ioSocketExchange &exchange);
 
 			/**
-			 * connect. for client part
-			 * @param destinaton is structure that describes destination
-			 * @param exchange is reference to oject that will perform communication actions
-			 * the same as previous, but more pretty
+			 * connect
+			 * @param destinaton defines destinaton ip address/port of host to connect
+			 * @param exchange defines an oject that will perform I/O operations
 			 */
 			virtual void connect(const __connInfo &destinaton, ioSocketExchange &exchange);
 
 			/**
-			 * connect. for client part
-			 * @param path is path to unix socket
-			 * @param exchange is reference to oject that will perform communication actions
+			 * connect
+			 * @param path defines path to unix socket
+			 * @param exchange defines an oject that will perform I/O operations
 			 */
-			virtual void connect(const dodoString &path, ioSocketExchange &exchange);                  ///< if socket is already created - nothin' will be done for creation. if file exists, but not socket - ex will be thrown (or false will be returned)!
+			virtual void connect(const dodoString &path, ioSocketExchange &exchange);
 
 			/**
-			 * connect. for server part
-			 * @param host is ip address that would be listen; can be '*' -> any address
-			 * @param port is port where to listen
+			 * bind to address and start to listen
+			 * @param host defines local ip address to listen
+			 * @param port defines local port to listen
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
+			 * @note host can be '*' to specify all interfaces on the box
 			 */
 			virtual void bindNListen(const dodoString &host, int port, int numberOfConnections);
 
 			/**
-			 * connect. for server part
-			 * @param destinaton is structure that describes destination
+			 * bind to address and start to listen
+			 * @param destinaton defines local ip address/port of host to connect
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-			 * the same as previous, but more pretty
+			 * @note host can be '*' to specify all interfaces on the box
 			 */
 			virtual void bindNListen(const __connInfo &destinaton, int numberOfConnections);
 
 			/**
-			 * connect. for server part
-			 * @param path is path to unix socket
+			 * bind to unix socket and start to listen
+			 * @param path defines path to unix socket
 			 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-			 * @note if socket is already created and force=true and it's a socket - delete it!!
+			 * @param force defines if unix socket should be deleted if it exists 
+			 * @note host can be '*' to specify all interfaces on the box
 			 */
 			virtual void bindNListen(const dodoString &path, int numberOfConnections, bool force = false);
 
 			/**
-			 * accepts incommin' connections(as for server)
-			 * @return true on accept; with IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
-			 * @param init will be filled with info that will init ioSocketExchange object
-			 * @param info is info about connected host
-			 * with IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty, so you may use second function
+			 * accept incoming connections
+			 * @return true on new connection acceptance
+			 * @param init defines object that will be filled with info that may init ioSocketExchange object
+			 * @param info defines info about remote host
+			 * @note for IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
+			 * for IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 			 */
 			virtual bool accept(__initialAccept &init, __connInfo &info);
 
 			/**
-			 * accepts incommin' connections(as for server)
-			 * @return true on accept; with IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM is always returns true, so u should skip calling this function
-			 * @param init will be filled with info that will init ioSocketExchange object
-			 * if you don't want to know anythin' about remote; not just alias. a little bit faster!
+			 * accept incoming connections
+			 * @return true on new connection acceptance
+			 * @param init defines object that will be filled with info that may init ioSocketExchange object
+			 * @note for IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
+			 * for IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 			 */
 			virtual bool accept(__initialAccept &init);
 
-			bool blockInherited; ///< if true - children(ioSocketExchange) became unblocked, if parent(ioSocket) in unblocked; false by default
+			bool blockInherited; ///< if true - children(ioSocketExchange objects) become unblocked, if parent(ioSocket) in unblocked; false by default
 
 			/**
 			 * @return descriptor of input stream
@@ -269,20 +270,20 @@ namespace dodo
 		protected:
 
 			/**
-			 * restores options on connect/bind
+			 * restore options on connect/bind
 			 */
 			virtual void restoreOptions();
 
 			/**
-			 * creates socket with given data
+			 * create socket
 			 */
 			virtual void makeSocket();
 
-			bool opened; ///< indicates whether file(connection) opened or not
+			bool opened; ///< true if I/O session is opened
 
-			bool server;            ///< indicates whether server object or not
+			bool server;            ///< true if type of service is server
 
-			dodoString unixSock;    ///< to remember, 'cos have to unlink in destructor
+			dodoString unixSock;    ///< path to unix socket
 			
 			__xexexIoSocketCollectedData collectedData;   ///< data collected for xexec
 	};
