@@ -44,7 +44,7 @@ namespace dodo
 {
 
 	/**
-	 * @struct __ifInfo describes interface info
+	 * @struct __ifInfo defines interface information
 	 */
 	struct __ifInfo
 	{
@@ -54,11 +54,11 @@ namespace dodo
 		dodoString hwaddr;      ///< harware address of the interface(MAC)
 
 		bool up;                ///< true if interface is up
-		bool loop;              ///< true is a loopback
+		bool loop;              ///< true if interface is a loopback
 	};
 
 	/**
-	 * @struct __hostInfo describes info about host
+	 * @struct __hostInfo defines information about host
 	 */
 	struct __hostInfo
 	{
@@ -68,18 +68,17 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __servInfo describes info about service
+	 * @struct __servInfo defines info about service
 	 */
 	struct __servInfo
 	{
 		dodoString name;            ///< original name of the service
-		dodoStringArray aliases;    ///< sevice's aliases
-		int port;                   ///< port of service
+		dodoStringArray aliases;    ///< aliases of the service
+		int port;                   ///< port of the service
 	};
 
 	/**
-	 * @class ioSocket performs communication actions!!
-	 * exchange of data is ioSocketExchange class' task; ou init it with connect or accept methods
+	 * @class ioSocketTools provides information about network environment
 	 */
 	class ioSocketTools
 
@@ -88,44 +87,44 @@ namespace dodo
 		public:
 
 			/**
-			 * @return a list of interfaces in system
+			 * @return a list of interfaces
 			 */
 			static dodoStringArray getInterfacesNames();
 
 			/**
-			 * @return info about interface
-			 * @param interface is name of interface about what info is needed
+			 * @return information about the interface
+			 * @param interface defines a name of the interface
 			 */
 			static __ifInfo getInterfaceInfo(const dodoString &interface);
 
 			/**
-			 * @return info about given host
-			 * @param host points to host about what info would be given
+			 * @return information about the given host
+			 * @param interface defines a name of the host
 			 */
 			static __hostInfo getHostInfo(const dodoString &host);
 
 			/**
-			 * @return name of local host
+			 * @return name of the local host
 			 */
 			static dodoString getLocalName();
 
 			/**
-			 * sets local name
-			 * @param host is new  name of the host
+			 * set local host name
+			 * @param host defines name of the host
 			 */
 			static void setLocalName(const dodoString &host);
 
 			/**
-			 * @return info about service
-			 * @param service is service name
-			 * @param protocol specifies protocol of service(tcp, udp ..)
+			 * @return information about the service
+			 * @param service defices name of the service
+			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
 			static __servInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
 
 			/**
-			 * @return info about service
-			 * @param port is port of service
-			 * @param protocol specifies protocol of service(tcp, udp ..)
+			 * @return information about the service
+			 * @param port defices port of the service
+			 * @param protocol defines protocol of the service(tcp, udp ..)
 			 */
 			static __servInfo getServiceInfo(int port, const dodoString &protocol);
 
