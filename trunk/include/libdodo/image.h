@@ -259,7 +259,7 @@ namespace dodo
 
 			/**
 			 * rotate image
-			 * @param angle defines rotation degree[see also imageRotateDirAngEnum]
+			 * @param angle defines rotation degree[see also imageRotateDirectionAngleEnum]
 			 */
 			virtual void rotate(double angle);
 

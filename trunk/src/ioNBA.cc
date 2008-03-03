@@ -63,22 +63,11 @@ ioNBA::addFlush(const ioNBAInfo &fl)
 
 //-------------------------------------------------------------------
 
-void
-ioNBA::makeFalse(int count) const
-{
-	for (int i = 0; i < count; ++i)
-		tempRB.push_back(false);
-}
-
-//-------------------------------------------------------------------
-
 dodoArray<bool>
 ioNBA::isReadable(const dodoArray<int> &pos,
 				  int timeout) const
 {
 	guard pg(this);
-
-	tempRB.clear();
 
 	int count = -1;
 
@@ -102,6 +91,8 @@ ioNBA::isReadable(const dodoArray<int> &pos,
 
 	++count;
 
+	dodoArray<bool> tempRB;
+
 	if (count > 0)
 	{
 		int res = poll(fds, count, timeout);
@@ -124,7 +115,8 @@ ioNBA::isReadable(const dodoArray<int> &pos,
 		{
 			if (res == 0)
 			{
-				makeFalse(count);
+				for (int i = 0; i < count; ++i)
+					tempRB.push_back(false);
 
 				delete [] fds;
 
@@ -141,7 +133,8 @@ ioNBA::isReadable(const dodoArray<int> &pos,
 
 	delete [] fds;
 
-	makeFalse(count);
+	for (int i = 0; i < count; ++i)
+		tempRB.push_back(false);
 
 	return tempRB;
 }
@@ -153,8 +146,6 @@ ioNBA::isWritable(const dodoArray<int> &pos,
 				  int timeout) const
 {
 	guard pg(this);
-
-	tempRB.clear();
 
 	int count = -1;
 
@@ -177,6 +168,8 @@ ioNBA::isWritable(const dodoArray<int> &pos,
 	}
 
 	++count;
+
+	dodoArray<bool> tempRB;
 
 	if (count > 0)
 	{
@@ -202,7 +195,8 @@ ioNBA::isWritable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				makeFalse(count);
+				for (int i = 0; i < count; ++i)
+					tempRB.push_back(false);
 
 				return tempRB;
 			}
@@ -217,7 +211,8 @@ ioNBA::isWritable(const dodoArray<int> &pos,
 
 	delete [] fds;
 
-	makeFalse(count);
+	for (int i = 0; i < count; ++i)
+		tempRB.push_back(false);
 
 	return tempRB;
 }

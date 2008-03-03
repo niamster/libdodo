@@ -512,9 +512,8 @@ ioDiskTools::getDirInfo(const dodoString &path)
 
 //-------------------------------------------------------------------
 
-void
-ioDiskTools::followSymlink(const dodoString &path,
-						   dodoString &original)
+dodoString
+ioDiskTools::followSymlink(const dodoString &path)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -530,7 +529,7 @@ ioDiskTools::followSymlink(const dodoString &path,
 	if ((count = ::readlink(path.c_str(), buffer, MAXPATHLEN)) == -1)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	original.assign(buffer, count);
+	return buffer;
 }
 
 //-------------------------------------------------------------------

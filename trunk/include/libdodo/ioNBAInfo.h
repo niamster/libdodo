@@ -30,7 +30,7 @@
 namespace dodo
 {
 	/**
-	 * @class ioNBAInfo 
+	 * @class ioNBAInfo provides interface for ioNBA  
 	 */
 	class ioNBAInfo
 	{
