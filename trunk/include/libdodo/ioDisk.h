@@ -172,6 +172,11 @@ namespace dodo
 			 * @note if type is TMP_FILE path is ignored
 			 */
 			virtual void open(const dodoString &path, short fileType, short mode);
+			
+			/**
+			 * close file
+			 */
+			virtual void close();
 
 			/**
 			 * @param data defines buffer that will be filled

@@ -186,7 +186,7 @@ ioSocketOptions::getOutTimeout() const
 //-------------------------------------------------------------------
 
 bool
-ioSocketOptions::getSocketOpts(int option) const
+ioSocketOptions::getOption(int option) const
 {
 	if  ((option & socketOpts) == option)
 		return true;
@@ -196,7 +196,7 @@ ioSocketOptions::getSocketOpts(int option) const
 //-------------------------------------------------------------------
 
 void
-ioSocketOptions::setSockOption(short option,
+ioSocketOptions::setOption(short option,
 							   bool flag)
 {
 	if (socket == -1)
@@ -211,31 +211,31 @@ ioSocketOptions::setSockOption(short option,
 
 	switch (option)
 	{
-		case IOSOCKETOPTIONS_SOCKET_KEEP_ALIVE:
+		case IOSOCKETOPTIONS_OPTION_KEEP_ALIVE:
 
 			real_option = SO_KEEPALIVE;
 
 			break;
 
-		case IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS:
+		case IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS:
 
 			real_option = SO_REUSEADDR;
 
 			break;
 
-		case IOSOCKETOPTIONS_SOCKET_DONOT_USE_GATEWAY:
+		case IOSOCKETOPTIONS_OPTION_DONOT_USE_GATEWAY:
 
 			real_option = SO_DONTROUTE;
 
 			break;
 
-		case IOSOCKETOPTIONS_SOCKET_BROADCAST:
+		case IOSOCKETOPTIONS_OPTION_BROADCAST:
 
 			real_option = SO_BROADCAST;
 
 			break;
 
-		case IOSOCKETOPTIONS_SOCKET_OOB_INLINE:
+		case IOSOCKETOPTIONS_OPTION_OOB_INLINE:
 
 			real_option = SO_OOBINLINE;
 
@@ -243,7 +243,7 @@ ioSocketOptions::setSockOption(short option,
 
 #ifdef SO_REUSEPORT
 
-		case IOSOCKETOPTIONS_SOCKET_REUSE_PORT:
+		case IOSOCKETOPTIONS_OPTION_REUSE_PORT:
 
 			real_option = SO_REUSEPORT;
 
@@ -278,20 +278,20 @@ ioSocketOptions::setLingerSockOption(short option,
 
 	switch (option)
 	{
-		case IOSOCKETOPTIONS_SOCKET_GRACEFUL_CLOSE:
+		case IOSOCKETOPTIONS_LINGEROPTION_GRACEFUL_CLOSE:
 
 			lin.l_onoff = 0;
 
 			break;
 
-		case IOSOCKETOPTIONS_SOCKET_HARD_CLOSE:
+		case IOSOCKETOPTIONS_LINGEROPTION_HARD_CLOSE:
 
 			lin.l_onoff = 1;
 			lin.l_linger = 0;
 
 			break;
 
-		case IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE:
+		case IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE:
 
 			lin.l_onoff = 1;
 			lin.l_linger = seconds;

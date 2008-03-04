@@ -41,18 +41,18 @@ namespace dodo
 {
 
 	/**
-	 * @enum socketTransferTypeEnum type of socket to use
+	 * @enum ioSocketOptionsTransferTypeEnum defines type of socket
 	 */
-	enum socketOptionsTransferTypeEnum
+	enum ioSocketOptionsTransferTypeEnum
 	{
 		IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM,   ///< Sequenced, reliable, connection-based byte streams
 		IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM, ///< Connectionless, unreliable datagrams of fixed maximum length
 	};
 
 	/**
-	 * @enum socketProtoFamilyEnum describes type of domain of socket to use
+	 * @enum ioSocketOptionsProtoFamilyEnum defines type of domain of socket
 	 */
-	enum socketOptionsProtoFamilyEnum
+	enum ioSocketOptionsProtoFamilyEnum
 	{
 		IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,
 		IOSOCKETOPTIONS_PROTO_FAMILY_IPV6,
@@ -60,32 +60,32 @@ namespace dodo
 	};
 
 	/**
-	 * @enum socketOptionsEnum defines options for socket
+	 * @enum ioSocketOptionOptionsEnum defines options for socket
 	 */
-	enum socketOptionsOptionsEnum
+	enum ioSocketOptionsOptionEnum
 	{
-		IOSOCKETOPTIONS_SOCKET_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-		IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS,       ///<  should allow reuse of local addresses[it's accepted by default]
-		IOSOCKETOPTIONS_SOCKET_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
-		IOSOCKETOPTIONS_SOCKET_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
-		IOSOCKETOPTIONS_SOCKET_OOB_INLINE,          ///< out-of-band(marked urgent) data keep inline in recieve operation
+		IOSOCKETOPTIONS_OPTION_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+		IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS,       ///< Should allow reuse of local addresses[it's accepted by default].
+		IOSOCKETOPTIONS_OPTION_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
+		IOSOCKETOPTIONS_OPTION_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
+		IOSOCKETOPTIONS_OPTION_OOB_INLINE,          ///< Out-of-band(marked urgent) data keep inline in recieve operation.
 #ifdef SO_REUSEPORT
-		IOSOCKETOPTIONS_SOCKET_REUSE_PORT,
+		IOSOCKETOPTIONS_OPTION_REUSE_PORT,			///< Should allow reuse of local port.
 #endif
 	};
 
 	/**
-	 * @enum socketLingerOption defines linger options for socket
+	 * @enum ioSocketOptionsLingerOptionEnum defines linger options for socket
 	 */
-	enum socketOptionsLingerOptionEnum
+	enum ioSocketOptionsLingerOptionEnum
 	{
-		IOSOCKETOPTIONS_SOCKET_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
-		IOSOCKETOPTIONS_SOCKET_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
-		IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+		IOSOCKETOPTIONS_LINGEROPTION_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
+		IOSOCKETOPTIONS_LINGEROPTION_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
+		IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	};
 
 	/**
-	 * @class ioSocketOptions defines options for socket connections
+	 * @class ioSocketOptions provides option manipulation for network connections
 	 */
 	class ioSocketOptions
 	{
@@ -94,8 +94,8 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param family is family of the socket
-			 * @param type is type of the socket
+			 * @param family defines transfer type of domain of the socket[see ioSocketOptionsProtoFamilyEnum]
+			 * @param type defines type of the socket[see ioSocketOptionsProtoFamilyEnum]
 			 */
 			ioSocketOptions(short family, short type);
 
@@ -113,77 +113,78 @@ namespace dodo
 
 			/**
 			 * set socket options
-			 * @param options is option to set to socket
-			 * @param flag indicates whether to set or unset option
+			 * @param option defines option that will be applied to the socket[see ioSocketOptionsOptionEnum]
+			 * @param flag defines state of option
 			 */
-			virtual void setSockOption(short option, bool flag);
+			virtual void setOption(short option, bool flag);
+
+			/**
+			 * @return true if socket option is set[see ioSocketOptionsOptionEnum]
+			 */
+			virtual bool getOption(int option) const;
 
 			/**
 			 * set linger option
-			 * @param option is linger option[see socketLingerOption]
-			 * @param seconds how long to wait(for IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE only)
+			 * @param option is linger option[see ioSocketOptionsLingerOptionEnum]
+			 * @param seconds how long to wait
+			 * @note for IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE only
 			 */
 			virtual void setLingerSockOption(short option, int seconds = 1);
 
 			/**
-			 * @return linger option that was set[see socketLingerOption]
+			 * @return linger option that was set[see ioSocketOptionsLingerOptionEnum]
 			 */
 			virtual short getLingerOption() const;
 
 			/**
-			 * @return amount of seconds to wait(for IOSOCKETOPTIONS_SOCKET_WAIT_CLOSE only)
+			 * @return amount of seconds to wait
+			 * @note for IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE only
 			 */
 			virtual int getLingerPeriod() const;
 
 			/**
-			 * sets incoming buffer size of socket
-			 * @param bytes is size of buffer in bytes
+			 * set input buffer size
+			 * @param bytes defines size of the buffer in bytes
 			 */
 			virtual void setInBufferSize(unsigned long bytes);
 
 			/**
-			 * sets outgoing buffer size of socket
-			 * @param bytes is size of buffer in bytes
+			 * set output buffer size
+			 * @param bytes defines size of the buffer in bytes
 			 */
 			virtual void setOutBufferSize(unsigned long bytes);
 
 			/**
-			 * @return incoming buffer size of socket
+			 * @return input buffer size in bytes
 			 */
-			virtual unsigned long  getInBufferSize() const;
+			virtual unsigned long getInBufferSize() const;
 
 			/**
-			 * @return outgoing buffer size of socket
+			 * @return output buffer size in bytes
 			 */
-			virtual unsigned long  getOutBufferSize() const;
+			virtual unsigned long getOutBufferSize() const;
 
 			/**
-			 * sets incomming operation timeout of socket
-			 * @param microseconds is amount of time to wait for action
+			 * set input timeout value of socket
+			 * @param microseconds defines amount of time of timeout
 			 */
 			virtual void setInTimeout(unsigned long microseconds);
 
 			/**
-			 * sets outgoing operation timeout of socket
-			 * @param microseconds is amount of time to wait for action
+			 * set output timeout value of socket
+			 * @param microseconds defines amount of time of timeout
 			 */
 			virtual void setOutTimeout(unsigned long microseconds);
 
 			/**
-			 * @return incomming operation timeout of socket
+			 * @return input timeout value
 			 */
 			virtual unsigned long getInTimeout() const;
 
 			/**
-			 * @return outgoing operation timeout of socket
+			 * @return output timeout value
 			 */
 			virtual unsigned long getOutTimeout() const;
-
-
-			/**
-			 * @return true if socket option was set
-			 */
-			virtual bool getSocketOpts(int option) const;
 
 			/**
 			 * @return true if socked is blocked
@@ -191,15 +192,16 @@ namespace dodo
 			virtual bool isBlocked() const;
 
 			/**
-			 * blocks/unblocks socket
-			 * @param flag indicates ehether to block or unblock socket
+			 * block/unblock socket
+			 * @param flag defines block statement
 			 */
 			virtual void block(bool flag);
 
 		protected:
 
 			/**
-			 * closes connection for socket
+			 * close socket connection
+			 * @param socket defines socket descriptor
 			 */
 			static void _close(int socket);
 
@@ -217,9 +219,9 @@ namespace dodo
 			unsigned long inSocketBuffer;   ///< incoming buffer size of socket; in bytes
 			unsigned long outSocketBuffer;  ///< outgoing buffer size of socket; in bytes
 
-			int socket;                     ///< id of socket
+			int socket;                     ///< socket descriptor
 
-			bool blocked;                   ///< indicates, whether blocked or not;
+			bool blocked;                   ///< if true socket is blocked
 	};
 
 };

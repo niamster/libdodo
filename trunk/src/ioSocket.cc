@@ -298,7 +298,7 @@ ioSocket::connectFrom(const dodoString &local,
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS);
 
 	if (family == IOSOCKETOPTIONS_PROTO_FAMILY_IPV6)
 	{
@@ -437,7 +437,7 @@ ioSocket::bindNListen(const dodoString &host,
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS);
 
 	setLingerSockOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
 
@@ -536,7 +536,7 @@ ioSocket::bindNListen(const dodoString &path,
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS);
 
 	setLingerSockOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
 
