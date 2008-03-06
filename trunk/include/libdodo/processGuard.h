@@ -34,7 +34,7 @@
 namespace dodo
 {
 	/**
-	 * @class processGuardHolder contains mutex lock and processGuard class
+	 * @class processGuardHolder provides concurrent lock for processes interconnection
 	 */
 	class processGuardHolder : public guardHolder
 	{

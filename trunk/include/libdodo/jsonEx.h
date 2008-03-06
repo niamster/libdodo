@@ -31,10 +31,6 @@
 namespace dodo
 {
 	/**
-	 * next for json
-	 */
-
-	/**
 	 * libdodo defined errors
 	 */
 	enum jsonFunctionsExR
@@ -48,7 +44,7 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
 #define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
@@ -57,9 +53,8 @@ namespace dodo
 #define JSONEX_MALFORMEDJSONNULL_STR "Malformed json object: null."
 #define JSONEX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
 
-
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum jsonFunctionsID
 	{

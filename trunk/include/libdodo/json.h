@@ -33,7 +33,7 @@
 namespace dodo
 {
 	/**
-	 * @enum jsonDataTypeEnum
+	 * @enum jsonDataTypeEnum defines JSON data types
 	 */
 	enum jsonDataTypeEnum
 	{
@@ -46,7 +46,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class jsonObject represents json object data
+	 * @class jsonObject defines JSON object data
 	 */
 	struct __jsonNodeDef
 	{
@@ -60,7 +60,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class jsonObject represents json object
+	 * @class jsonObject defines JSON object reprasentation
 	 */
 	class jsonNode
 	{
@@ -85,14 +85,14 @@ namespace dodo
 
 			/**
 			 * @return node by string key
-			 * @param key describes string key to search for node
+			 * @param key defines key to search for node
 			 * @note throws exception if data type is not JSON_DATATYPE_OBJECT
 			 */
 			virtual jsonNode operator[](const dodoString &key);
 
 			/**
 			 * @return node by numeric key
-			 * @param key describes numeric key to search for node
+			 * @param key defines key to search for node
 			 * @note throws exception if data type is not JSON_DATATYPE_ARRAY
 			 */
 			virtual jsonNode operator[](unsigned long key);
@@ -103,42 +103,42 @@ namespace dodo
 			virtual short getType();
 
 			/**
-			 * @return true if node is NULL
+			 * @return true if node is `null`
 			 */
 			virtual bool isNull();
 
 			/**
-			 * @return value as string
+			 * @return string value
 			 * @note throws exception if data type is not JSON_DATATYPE_STRING
 			 */
 			virtual dodoString getString();
 
 			/**
-			 * @return value as bool
+			 * @return boolean value
 			 * @note throws exception if data type is not JSON_DATATYPE_BOOLEAN
 			 */
 			virtual bool getBoolean();
 
 			/**
-			 * @return value as numeric
+			 * @return numeric value
 			 * @note throws exception if data type is not JSON_DATATYPE_NUMERIC
 			 */
 			virtual long getNumeric();
 
 			/**
-			 * @return value as array
+			 * @return array value
 			 * @note throws exception if data type is not JSON_DATATYPE_ARRAY
 			 */
 			virtual dodoArray<jsonNode> getArray();
 
 			/**
-			 * @return value as object
+			 * @return object value
 			 * @note throws exception if data type is not JSON_DATATYPE_OBJECT
 			 */
 			virtual dodoMap<dodoString, jsonNode, stringTools::equal> getObject();
 
 			/**
-			 * clears internal data
+			 * clear internal data
 			 */
 			virtual void clear();
 
@@ -154,7 +154,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class json is to perform json operations
+	 * @class json provides JSON operations
 	 */
 	class json
 	{
@@ -179,90 +179,90 @@ namespace dodo
 			virtual ~json();
 
 			/**
-			 * @return string that contain json object
-			 * @param root describes root of json object
+			 * @return string that contains serialized JSON object
+			 * @param root defines root of unserialized JSON object
 			 */
 			virtual dodoString makeJSON(const __jsonNodeDef &root);
 
 			/**
-			 * @return root of json object
-			 * @param root describes string that contain json object
+			 * @return root of unserialized JSON object
+			 * @param root defines string that contains serialized JSON object
 			 */
 			virtual jsonNode processJSON(const dodoString &root);
 
 			/**
-			 * @return string that contain json object
-			 * @param root describes map that contain json object
+			 * @return string that contains serialized JSON object
+			 * @param root defines root of unserialized JSON object
 			 */
 			virtual dodoString mapToJSON(const dodoStringMap &root);
 
 			/**
-			 * @return string to string map that contain json object
-			 * @param root describes map that contain json object
+			 * @return root of unserialized JSON object
+			 * @param root defines string that contains serialized JSON object
 			 */
 			virtual dodoStringMap JSONToMap(const dodoString &node);
 
 		protected:
 
 			/**
-			 * processes string value
-			 * @return last symbol of processed string
-			 * @param root describes json object that is forming
-			 * @param symbol describes string to process
-			 * @param pos describes start position in string
+			 * process string value
+			 * @return position of last processed symbol of serialized JSON string object
+			 * @param node defines buffer for unserialized JSON string
+			 * @param root defines serialized JSON string object
+			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
 			virtual unsigned long processString(dodoString &node, const dodoString &root, unsigned long pos);
 
 			/**
-			 * processes string value
-			 * @return last symbol of processed string
-			 * @param root describes json object that is forming
-			 * @param symbol describes string to process
-			 * @param pos describes start position in string
+			 * process array value
+			 * @return position of last processed symbol of serialized JSON string object
+			 * @param node defines buffer for unserialized JSON array
+			 * @param root defines serialized JSON string object
+			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
 			virtual unsigned long processArray(dodoArray<jsonNode> &node, const dodoString &root, unsigned long pos);
 
 			/**
-			 * processes json object
-			 * @return last symbol of processed object
-			 * @param node describes root of json object
-			 * @param root describes string that contain json object
-			 * @param pos describes start position in string
+			 * process object value
+			 * @return position of last processed symbol of serialized JSON string object
+			 * @param node defines buffer for unserialized JSON object
+			 * @param root defines serialized JSON string object
+			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
 			virtual unsigned long processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, const dodoString &root, unsigned long pos);
 
 			/**
-			 * processes json object value
-			 * @return last symbol of processed object value
-			 * @param node describes value of json object
-			 * @param root describes string that contain json object
-			 * @param pos describes start position in string
+			 * process json value
+			 * @return position of last processed symbol of serialized JSON string object
+			 * @param node defines buffer for unserialized JSON object
+			 * @param root defines serialized JSON string object
+			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
 			virtual unsigned long processValue(jsonNode &node, const dodoString &root, unsigned long pos);
 
 			/**
-			 * processes json boolean value
-			 * @return last symbol of processed object value
-			 * @param node describes value of json object
-			 * @param root describes string that contain json object
-			 * @param pos describes start position in string
+			 * process json boolean value
+			 * @return position of last processed symbol of serialized JSON string object
+			 * @param node defines buffer for unserialized JSON boolean
+			 * @param root defines serialized JSON string object
+			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
 			virtual unsigned long processBoolean(bool &node, const dodoString &root, unsigned long pos);
 
 			/**
 			 * processes json numeric value
-			 * @return last symbol of processed object value
-			 * @param node describes value of json object
-			 * @param root describes string that contain json object
-			 * @param pos describes start position in string
+			 * @return position of last processed symbol of serialized JSON string object
+			 * @param node defines buffer for unserialized JSON numeric
+			 * @param root defines serialized JSON string object
+			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
 			virtual unsigned long processNumeric(long &node, const dodoString &root, unsigned long pos);
 
 			/**
-			 * processes json null value
-			 * @return last symbol of processed object value
-			 * @param root describes string that contain json object
-			 * @param pos describes start position in string
+			 * process json null value
+			 * @return position of last processed symbol of serialized JSON string object
+			 * @param root defines serialized JSON string object
+			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
 			virtual unsigned long processNull(const dodoString &root, unsigned long pos);
 
