@@ -50,7 +50,9 @@ namespace dodo
 		ERR_ZLIB,
 		ERR_SQLITE,
 		ERR_BZIP,
-		ERR_IMAGEMAGICK
+		ERR_IMAGEMAGICK,
+		ERR_POSIXREGEX,
+		ERR_PCRE
 	};
 
 	/**

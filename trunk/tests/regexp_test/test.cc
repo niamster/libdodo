@@ -12,32 +12,32 @@ int main(int argc, char **argv)
 	dodoStringArray pock;
 	
 	expr.multiline = true;
+	expr.greedy = false;
 
-	std::string sample = "dsdasa4565a\naa";
+	std::string sample = "string1234\n";
 
-	std::string pattern = "^(.*)a([0-9]+)(f*)(a*)(.*)$";
+	std::string pattern = "^(.*)([0-9]+)([^0-9]+)";
 
-	cout << "\npattern: "<<pattern<<"\n\ntest string: "<<sample<<"\n\npockets:\n";
+	cout << "\nMatch: pattern: " << pattern << "\n\ntest string: " << sample << "\n\npockets:\n";
 	
 	if (expr.match(pattern,sample,pock))
 	{
-		cout << pock.size() << " ::size\n";
+		cout << "size: " << pock.size() << "\n";
 		
-		cout << pock[0] << " >>0\n";
-		cout << pock[1] << " >>1\n";
-		cout << pock[2] << " >>2\n";
-		cout << pock[3] << " >>3\n";
-		cout << pock[4] << " >>4\n";
+		cout << "1:" << pock[0] << "\n";
+		cout << "2:" << pock[1] << "\n";
+		cout << "3:" << pock[2] << "\n";
 	}
 	else
 		cout << "not matched";
 	
-	cout << "\nReplacemets: a-> '!!!', '@@'=> result:\n";
+	sample = "string12345string";
+	cout << "\nReplacement: pattern: " << pattern << "\n\ntest string: " << sample << "\n\nreplace with '!!!', '@@'\nResult:\n";
 	
 	dodoStringArray a;
 	a.push_back("!!!");
 	a.push_back("@@");
-	cout << expr.reReplace("dsdasa4565aaa",a) << "\n";
+	cout << expr.replace(pattern, sample, a) << "\n";
 	
 	return 0;
 }
