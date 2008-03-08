@@ -56,7 +56,7 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define TOOLSEX_BADASCII85_STR "Bad character in ASCII85."
 
@@ -77,7 +77,7 @@ namespace dodo
 #define TOOLSEX_WRONGSTRENGTH_STR "Wrong strength argument."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum toolsFunctionsID
 	{

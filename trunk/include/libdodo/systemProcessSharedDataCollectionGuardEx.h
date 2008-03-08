@@ -39,12 +39,12 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_NOTFOUND_STR "Share not found."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum systemProcessSharedDataCollectionGuardFunctionsID
 	{

@@ -134,7 +134,7 @@ ioSocket::restoreOptions()
 	setInTimeout(inTimeout);
 	setOutTimeout(outTimeout);
 
-	setLingerSockOption(lingerOpts, lingerSeconds);
+	setLingerOption(lingerOpts, lingerSeconds);
 
 	block(blocked);
 }
@@ -439,7 +439,7 @@ ioSocket::bindNListen(const dodoString &host,
 
 	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS);
 
-	setLingerSockOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
+	setLingerOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
 
 	if (family == IOSOCKETOPTIONS_PROTO_FAMILY_IPV6)
 	{
@@ -538,7 +538,7 @@ ioSocket::bindNListen(const dodoString &path,
 
 	addFlag(socketOpts, 1 << IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS);
 
-	setLingerSockOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
+	setLingerOption(IOSOCKETOPTIONS_SOCKET_LINGER_OPTION, IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD);
 
 	struct sockaddr_un sa;
 

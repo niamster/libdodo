@@ -487,46 +487,6 @@ systemThreads::getModuleInfo(const dodoString &module,
 unsigned long
 systemThreads::add(const dodoString &module,
 				   void             *data,
-				   void             *toInit,
-				   bool detached,
-				   short action,
-				   int stackSize)
-{
-	__threadInfo thread;
-
-	thread.detached = detached;
-	thread.data = data;
-	thread.position = ++threadNum;
-	thread.stackSize = stackSize;
-	thread.action = action;
-
-	thread.handle = dlopen(module.c_str(), RTLD_LAZY);
-	if (thread.handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
-	initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
-	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
-	__systemThreadsMod temp = init(toInit);
-
-	threadFunc in = (threadFunc)dlsym(thread.handle, temp.hook);
-	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADS, SYSTEMTHREADSEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
-	thread.executeLimit = temp.executeLimit;
-	thread.func = in;
-
-	threads.push_back(thread);
-
-	return thread.position;
-}
-
-//-------------------------------------------------------------------
-
-unsigned long
-systemThreads::add(const dodoString &module,
-				   void             *data,
 				   void             *toInit)
 {
 	__threadInfo thread;

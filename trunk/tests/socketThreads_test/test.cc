@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 		__initialAccept fake;
 				
 		sock.bindNListen("127.0.0.1",7778,3);
-		sock.setLingerSockOption(IOSOCKETOPTIONS_SOCKET_HARD_CLOSE);	
+		sock.setLingerOption(IOSOCKETOPTIONS_LINGEROPTION_HARD_CLOSE);	
 		sock.blockInherited = false;
 		sock.block(false);
 		

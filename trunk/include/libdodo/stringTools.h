@@ -38,130 +38,131 @@ namespace dodo
 		public:
 
 			/**
-			 * replaces nodes in string
-			 * @param needle indicates what to replace in string
-			 * @param replacement indicates with what to replace
-			 * @param data specifies wher to replace
+			 * replace substrings in string
+			 * @param needle defines substring which to replace
+			 * @param replacement defines string which to replace with
+			 * @param data defines string where to replace substrings
 			 */
 			static void replace(const dodoString &needle, const dodoString &replacement, dodoString &data);
 
 			/**
 			 * @return true if strings are equal
-			 * @param first string to compare
-			 * @param second string to compare
+			 * @param first defines string to compare
+			 * @param second defines string for compare
 			 */
 			static bool equal(const dodoString &first, const dodoString &second);
 
 			/**
 			 * @return true if strings are equal
-			 * @param first string to compare
-			 * @param second string to compare
-			 * @note it ignores case
+			 * @param first defines string to compare
+			 * @param second defines string for compare
+			 * @note string case is ignored
 			 */
 			static bool iequal(const dodoString &first, const dodoString &second);
 
 			/**
 			 * @return formated string
-			 * @param format represents format of the string
+			 * @param format defines format of the result string
+			 * @note format according to the printf
 			 */
 			static dodoString format(const dodoString &format, ...);
 
 			/**
-			 * removes symbols from the end and from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbol is symbol to remove
+			 * remove symbols from the end and from the begin of the string
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @param symbol defines symbol to remove
 			 */
 			static dodoString trim(const dodoString &data, const char symbol = ' ');
 
 			/**
-			 * removes symbols[from given array] from the end and from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbols is an array of symbols to remove
+			 * remove symbols from the end and from the begin of the string
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @param symbols defines symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
 			static dodoString trim(const dodoString &data, const char symbols[], int symCount);
 
 			/**
-			 * removes symbols[from given array] from the end of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbols is an array of symbols to remove
+			 * remove symbols from the end of the string
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @param symbols defines symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
 			static dodoString rTrim(const dodoString &data, const char symbols[], int symCount);
 
 			/**
-			 * removes symbols[from given array] from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbols is an array of symbols to remove
+			 * remove symbols from the begin of the string
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @param symbols defines symbols to remove
 			 * @param symCount is amount of symbols in @param symbols
 			 */
 			static dodoString lTrim(const dodoString &data, const char symbols[], int symCount);
 
 			/**
-			 * removes symbols from the end of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbol is symbol to remove
+			 * remove symbols from the end of the string
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @param symbol defines symbol to remove
 			 */
 			static dodoString rTrim(const dodoString &data, char symbol = ' ');
 
 			/**
-			 * removes symbols from the begin of given string
-			 * @return processed string
-			 * @param data is string to process
-			 * @param symbol is symbol to remove
+			 * remove symbols from the begin of the string
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @param symbol defines symbol to remove
 			 */
 			static dodoString lTrim(const dodoString &data, char symbol = ' ');
 
 			/**
 			 * @return converted long to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString lToString(long number);
 
 			/**
 			 * @return converted unsigned long to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString ulToString(unsigned long number);
 
 			/**
 			 * @return converted int to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString iToString(int number);
 
 			/**
 			 * @return converted unsigned int to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString uiToString(unsigned int number);
 
 			/**
 			 * @return converted short to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString sToString(short number);
 
 			/**
 			 * @return converted unsigned short to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString usToString(unsigned short number);
 
 			/**
 			 * @return converted float to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString fToString(float number);
 
 			/**
 			 * @return converted double to string
-			 * @param number is number to convert
+			 * @param number defines number to convert
 			 */
 			static dodoString dToString(double number);
 

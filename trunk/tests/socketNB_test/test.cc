@@ -17,8 +17,8 @@ int main(int argc, char **argv)
 		
 		__initialAccept fake;
 
-		sock.setSockOption(IOSOCKETOPTIONS_SOCKET_REUSE_ADDRESS,true);
-		sock.setLingerSockOption(IOSOCKETOPTIONS_SOCKET_HARD_CLOSE);	
+		sock.setOption(IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS,true);
+		sock.setLingerOption(IOSOCKETOPTIONS_LINGEROPTION_HARD_CLOSE);	
 		sock.blockInherited = true;
 		sock.block(false);
 						

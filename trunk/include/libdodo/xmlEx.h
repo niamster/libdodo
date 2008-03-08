@@ -39,12 +39,12 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define XMLEX_NOTPARCEDBEFORE_STR "The document haven't been parsed before."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum xmlFunctionsID
 	{

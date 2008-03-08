@@ -129,7 +129,7 @@ namespace dodo
 			 * @param seconds how long to wait
 			 * @note for IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE only
 			 */
-			virtual void setLingerSockOption(short option, int seconds = 1);
+			virtual void setLingerOption(short option, int seconds = 1);
 
 			/**
 			 * @return linger option that was set[see ioSocketOptionsLingerOptionEnum]

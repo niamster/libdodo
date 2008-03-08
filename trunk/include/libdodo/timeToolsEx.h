@@ -30,9 +30,8 @@
 
 namespace dodo
 {
-
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum timeToolsFunctionsID
 	{
@@ -40,7 +39,6 @@ namespace dodo
 		TIMETOOLSEX_NOW,
 		TIMETOOLSEX_MAKETIME,
 	};
-
 };
 
 #endif

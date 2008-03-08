@@ -30,7 +30,6 @@
 
 namespace dodo
 {
-
 	/**
 	 * libdodo defined errors
 	 */
@@ -40,12 +39,12 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define SYSTEMTOOLSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum systemToolsFunctionsID
 	{

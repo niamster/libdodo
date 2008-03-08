@@ -89,7 +89,7 @@ namespace dodo
 	/**
 	 * @enum systemSygnalsEnum describes system signals
 	 */
-	enum systemSignalsEnum
+	enum systemToolsSignalsEnum
 	{
 		SYSTEMTOOLS_SIGNAL_HANGUP = 0,
 		SYSTEMTOOLS_SIGNAL_INTERRUPT = 1 << 1,
@@ -373,21 +373,21 @@ namespace dodo
 
 			/**
 			 * set signal handler
-			 * @param signal is signal on what set handler[see systemSignalsEnum]
+			 * @param signal is signal on what set handler[see systemToolsSignalsEnum]
 			 * @param handler is function that will be called
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
 			 */
 			static void setSignalHandler(long signal, signalHandler handler, int blockSignals = -1);
 
 			/**
-			 * determines whether handler was set on signal[see systemSignalsEnum]
+			 * determines whether handler was set on signal[see systemToolsSignalsEnum]
 			 * @param is signal is on what set handler
 			 */
 			static bool isSignalHandled(long signal);
 
 			/**
 			 * removes signal handler
-			 * @param is signal is from what unset handler[see systemSignalsEnum]
+			 * @param is signal is from what unset handler[see systemToolsSignalsEnum]
 			 */
 			static void unsetSignalHandler(long signal);
 
@@ -402,7 +402,7 @@ namespace dodo
 
 			/**
 			 * set handler on signal from specific module
-			 * @param signal indicates for what signal to set handler[see systemSignalsEnum]
+			 * @param signal indicates for what signal to set handler[see systemToolsSignalsEnum]
 			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
 			 * @param toInit indicates data that will path to initialize function
 			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
@@ -423,7 +423,7 @@ namespace dodo
 			/**
 			 * send signal to process
 			 * @param pid indicates where to send signal
-			 * @param is signal is what signal to send[see systemSignalsEnum]
+			 * @param is signal is what signal to send[see systemToolsSignalsEnum]
 			 */
 			static void sendSignal(int pid, long signal);
 
@@ -447,13 +447,13 @@ namespace dodo
 			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
 
 			/**
-			 * @return system signal number that refers to given systemSignalsEnum
+			 * @return system signal number that refers to given systemToolsSignalsEnum
 			 * @param signal describes signal to convert
 			 */
 			static int toRealSignal(long signal);
 
 			/**
-			 * @return signal number that refers to given systemSignalsEnum
+			 * @return signal number that refers to given systemToolsSignalsEnum
 			 * @param signal describes signal to convert
 			 */
 			static int toSignalNumber(long signal);

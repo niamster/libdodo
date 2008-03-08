@@ -152,7 +152,7 @@ ioSocketExchange::init(int a_socket,
 	setInTimeout(inTimeout);
 	setOutTimeout(outTimeout);
 
-	setLingerSockOption(lingerOpts, lingerSeconds);
+	setLingerOption(lingerOpts, lingerSeconds);
 
 	if (!blocked)
 	{

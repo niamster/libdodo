@@ -42,14 +42,13 @@
 
 namespace dodo
 {
-
 	/**
-	 * @typedef describes function to be passed as process
+	 * @typedef defines function that will be executed as a process
 	 */
 	typedef void *(*processFunc)(void *);
 
 	/**
-	 *
+	 * @enum systemProcessOnDestructEnum defines action with processes on object destruction
 	 */
 	enum systemProcessOnDestructEnum
 	{
@@ -59,7 +58,7 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __processInfo describes process
+	 * @struct __processInfo defines process information
 	 */
 	struct __processInfo
 	{
@@ -69,45 +68,48 @@ namespace dodo
 		__processInfo();
 
 		pid_t pid;                  ///< process pid
-		void *data;                 ///< data that will be passed on run
-		bool isRunning;             ///< whether process is running
-		unsigned long position;     ///< position in queue
+		void *data;                 ///< process data
+		bool isRunning;             ///< true process is running
+		unsigned long position;     ///< identificator
 		processFunc func;           ///< function to execute
-		short action;               ///< action on class destruction[see systemProcessOnDestructEnum]
-		unsigned long executed;     ///< amount of times thread was executed
-		unsigned long executeLimit; ///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
+		short action;               ///< action on object destruction[see systemProcessOnDestructEnum]
+		unsigned long executed;     ///< amount of times process was executed
+		unsigned long executeLimit; ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
 
 #ifdef DL_EXT
-		void *handle;    ///< handle to module
+		void *handle;    ///< handle to library
 #endif
 	};
 
 #ifdef DL_EXT
 
 	/**
-	 * @struct __systemProcessesMod must be returned from initSystemProcessesModule in the module
+	 * @struct __systemProcessesMod defines data that is returned from initSystemProcessesModule in the library
 	 */
 	struct __systemProcessesMod
 	{
 		char name[64];                  ///< name of module
 		char discription[256];          ///< discription of module
 		char hook[64];                  ///< name of function in module that will be a hook
-		unsigned long executeLimit;     ///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
-		short action;                   ///< action on class destruction[see systemProcessOnDestructEnum]
+		unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
+		short action;                   ///< action on object destruction[see systemProcessOnDestructEnum]
 	};
 
 	/**
-	 * @typedef describes function in module that must return info for the hook
+	 * @typedef defines type of init function for library
 	 */
 	typedef __systemProcessesMod (*initSystemProcessesModule)(void *);
 
 	/**
-	 * @typedef describes function in module that will be called during module unloading
+	 * @typedef defines type of deinit function for library
 	 */
 	typedef void (*deinitSystemProcessesModule)();
 
 #endif
 
+	/**
+	 * @class systemProcesses provides processes management functionality
+	 */
 	class systemProcesses : public systemJobs
 	{
 		private:
@@ -130,103 +132,102 @@ namespace dodo
 			 */
 			virtual ~systemProcesses();
 
-
 			/**
-			 * adds function to became a process[not executing]
-			 * @return position of process in queue
-			 * @param func indicates function to be executed[function should return NULL to exit]
-			 * @param data describes data to be passed to func
-			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
+			 * add function as a process
+			 * @return process identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param action defines action on object destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
 			 */
 			virtual unsigned long add(processFunc func, void *data, short action);
 
 			/**
-			 * adds function to became a process[executing]
-			 * @return position of process in queue
-			 * @param func indicates function to be executed[function should return NULL to exit]
-			 * @param data describes data to be passed to func
-			 * @param limit indicates the thread's limit on executions
-			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
+			 * add function as a process
+			 * @return process identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param limit defines limit on executions
+			 * @param action defines action on object destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
+			 * this will immediately execute the process
 			 */
 			virtual unsigned long addNRun(processFunc func, void *data, unsigned long limit = 1, short action = SYSTEMPROCESS_WAIT);
-
+			
 			/**
-			 * adds function to became a job[not executing]
-			 * @return position of jobFunc in queue[function should return NULL to exit]
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func
+			 * add function as a process
+			 * @return process identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param action defines action on object destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
-			 * action=SYSTEMPROCESS_WAIT
+			 * action = SYSTEMPROCESS_WAIT
 			 */
-			virtual unsigned long add(jobFunc func, void *data);
+			virtual unsigned long add(processFunc func, void *data);
 
 			/**
-			 * adds function to became a job[executing]
-			 * @return position of job in queue[function should return NULL to exit]
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func
+			 * add function as a process
+			 * @return process identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param limit defines limit on executions
+			 * @param action defines action on object destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
-			 * limit=1
-			 * action=SYSTEMPROCESS_WAIT
+			 * this will immediately execute the process
+			 * action = SYSTEMPROCESS_WAIT
 			 */
-			virtual unsigned long addNRun(jobFunc func, void *data);
+			virtual unsigned long addNRun(processFunc func, void *data);
 
 			/**
-			 * removes registered process
-			 * @param position indicates on process to remove
-			 * @param force if is set to true stops execution if this process is running
-			 * @note - exception if it's currently running
-			 * send SIGINT to process
+			 * remove registered process
+			 * @param position defines process identificator
+			 * @param force defines termination condition; if true and process is running stop execution of the process 
 			 */
 			virtual void del(unsigned long position, bool force = false);
 
 			/**
-			 * replaces function to became a process[not executing]
-			 * @param position indicates on process to replace
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func[function should return NULL to exit]
-			 * @param force if is set to true stops execution if this process is running
-			 * @param action describes action with thread on destruction if process is running[see systemProcessOnDestructEnum]
-			 * @note - exception if it's currently running
+			 * replace process function
+			 * @param position defines process identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param force defines termination condition; if true and process is running stop execution of the process 
+			 * @param action defines action on object destruction if process is running[see systemProcessOnDestructEnum]
 			 */
 			virtual void replace(unsigned long position, processFunc func, void *data, bool force = false, short action = SYSTEMPROCESS_WAIT);
 
 			/**
-			 * executes process
-			 * @param position indicates what process to run
-			 * @param force if is set to true permits execution even if this process is running
-			 * @note - exception if it's currently running
+			 * execute process
+			 * @param position defines process identificator
+			 * @param force defines run condition; if true and job is running run process anyway
 			 */
 			virtual void run(unsigned long position, bool force = false);
 
 			/**
-			 * stops process
-			 * @param position indicates what process to stop
-			 * @note sends signal 9 to preocess
+			 * stop process
+			 * @param position defines process identificator
+			 * @note sends SIGKILL to process
 			 */
 			virtual void stop(unsigned long position);
 
 			/**
-			 * stops all registered processes
+			 * stop all registered processes
 			 */
 			virtual void stop();
 
 			/**
-			 * waits for process's termination
-			 * @param position indicates for what process to wait
+			 * waits for process termination
+			 * @param position defines process identificator
 			 */
 			virtual void wait(unsigned long position);
 
 			/**
-			 * waits for all registered process' termination
+			 * wait for all registered processes termination
 			 */
 			virtual void wait();
 
 			/**
 			 * @return true if process is running
-			 * @param position indicates for what process to indicate
+			 * @param position defines process identificator
 			 */
 			virtual bool isRunning(unsigned long position) const;
 
@@ -236,39 +237,37 @@ namespace dodo
 			virtual unsigned long running() const;
 
 			/**
-			 * sweep processes if their time are already passed
+			 * sweep processes if their time has been already passed
 			 */
 			virtual void sweepTrash();
 
 			/**
-			 * @return list of jobs in object
+			 * @return list of processes in object
 			 */
 			virtual dodoList<unsigned long> getJobsIds();
 
 			/**
 			 * set maximum execution time
-			 * @param position indicates for what process to set limit
-			 * @param limit indicates the process' limit on executions
+			 * @param position defines process identificator
+			 * @param limit defines the limit on executions of the process 
 			 */
 			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
-
 
 #ifdef DL_EXT
 
 			/**
-			 * adds function to became a process[not executing] from module
-			 * @return position of process in queue
-			 * @param module indicates mudule where is function to be executed
-			 * @param data describes data to be passed to func
-			 * @param toInit indicates data that will path to initialize function
+			 * add function as a process from library
+			 * @return process identificator
+			 * @param module defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines process data
+			 * @param toInit defines library init data
 			 */
 			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
 
-
 			/**
-			 * @return info about module
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param toInit indicates data that will path to initialize function
+			 * @return info about library
+			 * @param module defines path to the library[if not in ldconfig db] or library name
+			 * @param toInit defines library init data
 			 */
 			static __systemProcessesMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
@@ -277,22 +276,22 @@ namespace dodo
 		protected:
 
 			/**
-			 * @return true if thread is process
-			 * @param position indicates for what process to indicate
+			 * @return true if process is running
+			 * @param position defines process identificator
 			 */
 			virtual bool _isRunning(dodoList<__processInfo>::iterator &position) const;
 
 			/**
-			 * searches processes by position
-			 * @return true if found
-			 * @param position describes position of wanted process
-			 * @note sets internal parameter 'current' to found process
+			 * search processes by identificator
+			 * @return true if process has been found
+			 * @param position defines process identificator
+			 * @note this sets internal class parameter 'current' to found process
 			 */
 			virtual bool getProcess(unsigned long position) const;
 
 			unsigned long processNum;                           ///< number of registered processes
 
-			dodoList<__processInfo> processes;                  ///< vector of processes
+			dodoList<__processInfo> processes;                  ///< identificators of processes
 
 			mutable dodoList<__processInfo>::iterator current;  ///< iterator for list of processes[for matched with getProcess method]
 	};

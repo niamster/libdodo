@@ -40,13 +40,13 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define SYSTEMPROCESSSHAREDDATAGUARDEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
 #define SYSTEMPROCESSSHAREDDATAGUARDEX_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum systemProcessSharedDataGuardFunctionsID
 	{

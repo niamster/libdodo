@@ -30,79 +30,78 @@
 namespace dodo
 {
 	/**
-	 * @typedef describes function to be passed as job
+	 * @typedef defines job function
 	 */
 	typedef void *(*jobFunc)(void *);
 
 	/**
-	 * @class systemJobs is to manage jobs
+	 * @class systemJobs provides interface for jobs management
 	 */
 	class systemJobs
 	{
 		public:
 
 			/**
-			 *destructor
+			 * destructor
 			 */
 			virtual ~systemJobs() = 0;
 
 			/**
-			 * adds function to became a job[not executing]
-			 * @return position of jobFunc in queue[function should return NULL to exit]
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func
+			 * add function as a job
+			 * @return job identificator
+			 * @param func defines function to execute
+			 * @param data defines job data
 			 */
 			virtual unsigned long add(jobFunc func, void *data) = 0;
 
 			/**
-			 * adds function to became a job[executing]
-			 * @return position of job in queue[function should return NULL to exit]
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func
+			 * add function as a job
+			 * @return job identificator
+			 * @param func defines function to execute
+			 * @param data defines job data
+			 * @note this will immediately execute the job
 			 */
 			virtual unsigned long addNRun(jobFunc func, void *data) = 0;
 
 			/**
-			 * removes registered job
-			 * @param position indicates on job to remove
-			 * @param force if is set to true stops execution if this job is running
-			 * @note - exception if it's currently running
+			 * remove registered job
+			 * @param position defines job identificator
+			 * @param force defines termination condition; if true and job is running stop execution of the job 
 			 */
 			virtual void del(unsigned long position, bool force = false) = 0;
 
 			/**
-			 * executes job
-			 * @param position indicates what job to run
-			 * @param force if is set to true permits execution even if this job is running
-			 * @note - exception if it's currently running
+			 * execute job
+			 * @param position defines job identificator
+			 * @param force defines run condition; if true and job is running run job anyway
 			 */
 			virtual void run(unsigned long position, bool force = false) = 0;
 
 			/**
-			 * stops job
-			 * @param position indicates what job to stop
+			 * stop job
+			 * @param position defines job identificator
 			 */
 			virtual void stop(unsigned long position) = 0;
 
 			/**
-			 * stops all registered jobs
+			 * stop all registered jobs
 			 */
 			virtual void stop() = 0;
 
 			/**
-			 * waits for job's termination
-			 * @param position indicates for what job to wait
+			 * wait for job termination
+			 * @param position defines job identificator
 			 */
 			virtual void wait(unsigned long position) = 0;
 
 			/**
-			 * waits for all registered jobs' termination
+			 * wait for all registered jobs termination
 			 */
 			virtual void wait() = 0;
 
 			/**
 			 * @return true if job is running
-			 * @param position indicates for what job to indicate
+			 * @param position defines job identificator
 			 */
 			virtual bool isRunning(unsigned long position) const = 0;
 
@@ -112,7 +111,7 @@ namespace dodo
 			virtual unsigned long running() const = 0;
 
 			/**
-			 * sweep jobs if their time are already passed
+			 * sweep jobs if their time has been already passed
 			 */
 			virtual void sweepTrash() = 0;
 
@@ -123,8 +122,8 @@ namespace dodo
 
 			/**
 			 * set maximum execution time
-			 * @param position indicates for what job to set limit
-			 * @param limit indicates the job's limit on executions
+			 * @param position defines job identificator
+			 * @param limit defines the limit on executions of the job 
 			 */
 			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1) = 0;
 
@@ -132,11 +131,11 @@ namespace dodo
 #ifdef DL_EXT
 
 			/**
-			 * adds function to became a job[not executing] from module
-			 * @return position of job in queue
-			 * @param module indicates mudule where is function to be executed
-			 * @param data describes data to be passed to func
-			 * @param toInit indicates data that will path to initialize function
+			 * add function as a job from library
+			 * @return job identificator
+			 * @param module defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines job data
+			 * @param toInit defines library init data
 			 */
 			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL) = 0;
 

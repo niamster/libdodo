@@ -42,7 +42,7 @@ namespace dodo
 	};
 
 	/**
-	 * libdodo defined errors' explanation
+	 * explanations for libdodo defined errors
 	 */
 #define SYSTEMPROCESSESEX_ISALREADYRUNNING_STR "The process is currently running. Please wait."
 #define SYSTEMPROCESSESEX_NOTFOUND_STR "Process not found."
@@ -50,7 +50,7 @@ namespace dodo
 #define SYSTEMPROCESSESEX_ISNOTRUNNING_STR "The process is currently not running."
 
 	/**
-	 * ID of function where exception was thrown
+	 * IDs of functions where exception might be thrown
 	 */
 	enum systemProcessesFunctionsID
 	{

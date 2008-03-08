@@ -268,7 +268,7 @@ ioSocketOptions::setOption(short option,
 //-------------------------------------------------------------------
 
 void
-ioSocketOptions::setLingerSockOption(short option,
+ioSocketOptions::setLingerOption(short option,
 									 int seconds)
 {
 	if (socket == -1)

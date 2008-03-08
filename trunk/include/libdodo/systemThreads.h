@@ -46,12 +46,12 @@ namespace dodo
 {
 
 	/**
-	 * @typedef describes function to be passed as thread
+	 * @typedef defines function that will be executed as a thread
 	 */
 	typedef void *(*threadFunc)(void *);
 
 	/**
-	 * @enum systemThreadOnDestructEnum describes what to do with thread if class destructs
+	 * @enum systemThreadOnDestructEnum defines action with thread on object destruction
 	 */
 	enum systemThreadOnDestructEnum
 	{
@@ -61,7 +61,7 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __thredInfo describes thread
+	 * @struct __thredInfo defines process information
 	 */
 	struct __threadInfo
 	{
@@ -71,51 +71,51 @@ namespace dodo
 		__threadInfo();
 
 		pthread_t thread;               ///< thread descriptor
-		void *data;                     ///< data that will be passed on run
-		bool isRunning;                 ///< whether thread is running
-		bool detached;                  ///< if thread is detached
-		unsigned long position;         ///< position in queue
+		void *data;                     ///< thread data
+		bool isRunning;                 ///< true if thread is running
+		bool detached;                  ///< true if thread is detached
+		unsigned long position;         ///< identificator
 		threadFunc func;                ///< function to execute
-		int stackSize;                  ///< amount of stack for thread[in bytes]
-		short action;                   ///< action on class destruction[see systemThreadOnDestructEnum]
+		int stackSize;                  ///< size of stack for thread[in bytes]
+		short action;                   ///< action on object destruction[see systemThreadOnDestructEnum]
 		unsigned long executed;         ///< amount of times thread was executed
-		unsigned long executeLimit;     ///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
+		unsigned long executeLimit; ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
 
 #ifdef DL_EXT
-		void *handle;        ///< handle to module
+		void *handle;        ///< handle to library
 #endif
 	};
 
 #ifdef DL_EXT
 
 	/**
-	 * @struct __systemThreadsMod must be returned from initSystemThreadsModule in the module
+	 * @struct __systemThreadsMod defines data that is returned from initSystemThreadsModule in the library
 	 */
 	struct __systemThreadsMod
 	{
-		char name[64];                      ///< name of module
-		char discription[256];              ///< discription of module
-		char hook[64];                      ///< name of function in module that will be a hook
-		unsigned long executeLimit;         ///< if more than one will be autodleted or with `sweepTrash` method; default is 0(unlimit);
-		bool detached;                      ///< if thread is detached
-		int stackSize;                      ///< amount of stack for thread[in bytes]
-		short action;                       ///< action on class destruction[see systemThreadOnDestructEnum]
+		char name[64];                  ///< name of module
+		char discription[256];          ///< discription of module
+		char hook[64];                  ///< name of function in module that will be a hook
+		unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
+		bool detached;                      ///< true if thread is detached
+		int stackSize;                      ///< size of stack for thread[in bytes]
+		short action;                       ///< action on object destruction[see systemThreadOnDestructEnum]
 	};
 
 	/**
-	 * @typedef describes function in module that must return info for the hook
+	 * @typedef defines type of init function for library
 	 */
 	typedef __systemThreadsMod (*initSystemThreadsModule)(void *);
 
 	/**
-	 * @typedef describes function in module that will be called during module unloading
+	 * @typedef defines type of deinit function for library
 	 */
 	typedef void (*deinitSystemThreadsModule)();
 
 #endif
 
 	/**
-	 * @class systemThreads is to manage threads(based on POSIX threads)
+	 * @class systemThreads provides threads management functionality
 	 */
 	class systemThreads : public systemJobs
 	{
@@ -140,33 +140,33 @@ namespace dodo
 			virtual ~systemThreads();
 
 			/**
-			 * adds function to became a thread[not executing]
-			 * @return position of thread in queue
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func[function should return NULL to exit]
-			 * @param detached indicates whether thread will be detached
-			 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
-			 * @param stackSize describes stack siae of the thread
+			 * add function to became a thread
+			 * @return thread identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param detached defines whether thread will be detached
+			 * @param action defines action on object destruction if thread is running[see systemThreadOnDestructEnum]
+			 * @param stackSize defines stack thread size
 			 */
 			virtual unsigned long add(threadFunc func, void *data, bool detached, short action, int stackSize = 2097152);
 
 			/**
-			 * adds function to became a thread[executing]
-			 * @return position of thread in queue
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func[function should return NULL to exit]
-			 * @param limit indicates the thread's limit on executions
-			 * @param detached indicates whether thread will be detached
-			 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
-			 * @param stackSize describes stack siae of the thread
+			 * add function to became a thread
+			 * @return thread identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param detached defines whether thread will be detached
+			 * @param action defines action on object destruction if thread is running[see systemThreadOnDestructEnum]
+			 * @param stackSize defines stack thread size
+			 * @note this will immediately execute the process
 			 */
 			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit = 1, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
-			 * adds function to became a job[not executing]
-			 * @return position of jobFunc in queue[function should return NULL to exit]
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func
+			 * add function to became a thread
+			 * @return thread identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
 			 * @note
 			 * detached=false
 			 * action=SYSTEMTHREADS_WAIT
@@ -175,11 +175,11 @@ namespace dodo
 			virtual unsigned long add(jobFunc func, void *data);
 
 			/**
-			 * adds function to became a job[executing]
-			 * @return position of job in queue[function should return NULL to exit]
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func
-			 * @note
+			 * add function to became a thread
+			 * @return thread identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @note this will immediately execute the process
 			 * limit=1
 			 * detached=false
 			 * action=SYSTEMTHREADS_WAIT
@@ -188,59 +188,56 @@ namespace dodo
 			virtual unsigned long addNRun(jobFunc func, void *data);
 
 			/**
-			 * removes registered thread
-			 * @param position indicates on thread to remove
-			 * @param force if is set to true stops execution if this thread is running
-			 * @note - exception if it's currently running
+			 * remove registered thread
+			 * @param position defines thread identificator
+			 * @param force defines termination condition; if true and thread is running stop execution of the process
 			 */
 			virtual void del(unsigned long position, bool force = false);
 
 			/**
-			 * replaces function to became a thread[not executing]
-			 * @param position indicates on thread to replace
-			 * @param func indicates function to be executed
-			 * @param data describes data to be passed to func[function should return NULL to exit]
-			 * @param force if is set to true stops execution if this thread is running
-			 * @param detached indicates whether thread will be detached
-			 * @param action describes action with thread on destruction if thread is running[see systemThreadOnDestructEnum]
-			 * @param stackSize describes stack siae of the thread
-			 * @note - exception if it's currently running
+			 * replace thread function
+			 * @param position defines thread identificator
+			 * @param func defines function to execute
+			 * @param data defines process data
+			 * @param force defines termination condition; if true and thread is running stop execution of the process
+			 * @param detached defines whether thread will be detached
+			 * @param action defines action on object destruction if thread is running[see systemThreadOnDestructEnum]
+			 * @param stackSize defines stack thread size
 			 */
 			virtual void replace(unsigned long position, threadFunc func, void *data, bool force = false, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
 
 			/**
-			 * executes thread
-			 * @param position indicates what thread to run
-			 * @param force if is set to true permits execution even if this thread is running
-			 * @note - exception if it's currently running
+			 * execute thread
+			 * @param position defines thread identificator
+			 * @param force defines run condition; if true and thread is running run thread anyway
 			 */
 			virtual void run(unsigned long position, bool force = false);
 
 			/**
-			 * stops thread
-			 * @param position indicates what thread to stop
+			 * stop thread
+			 * @param position defines thread identificator
 			 */
 			virtual void stop(unsigned long position);
 
 			/**
-			 * stops all registered threads
+			 * stop all registered threads
 			 */
 			virtual void stop();
 
 			/**
-			 * waits for thread's termination
-			 * @param position indicates for what thread to wait
+			 * wait for thread termination
+			 * @param position defines thread identificator
 			 */
 			virtual void wait(unsigned long position);
 
 			/**
-			 * waits for all registered threads' termination
+			 * wait for all registered threads termination
 			 */
 			virtual void wait();
 
 			/**
 			 * @return true if thread is running
-			 * @param position indicates for what thread to indicate
+			 * @param position defines thread identificator
 			 */
 			virtual bool isRunning(unsigned long position) const;
 
@@ -250,19 +247,19 @@ namespace dodo
 			virtual unsigned long running() const;
 
 			/**
-			 * sweep threads if their time are already passed
+			 * sweep threads if their time has been already passed
 			 */
 			virtual void sweepTrash();
 
 			/**
-			 * @return list of jobs in object
+			 * @return list of threads in object
 			 */
 			virtual dodoList<unsigned long> getJobsIds();
 
 			/**
 			 * set maximum execution time
-			 * @param position indicates for what thread to set limit
-			 * @param limit indicates the thread's limit on executions
+			 * @param position defines thread identificator
+			 * @param limit defines the limit on executions of the thread 
 			 */
 			virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
@@ -270,39 +267,27 @@ namespace dodo
 #ifdef DL_EXT
 
 			/**
-			 * adds function to became a thread[not executing] from module
-			 * @return position of thread in queue
-			 * @param module indicates mudule where is function to be executed
-			 * @param data describes data to be passed to func
-			 * @param toInit indicates data that will path to initialize function
-			 * @param detached indicates whether thread will be detached
-			 * @param action describes action with thread on destruction if thread is running
-			 * @param stackSize describes stack siae of the thread
-			 */
-			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
-
-			/**
-			 * adds function to became a thread[not executing] from module
-			 * @return position of thread in queue
-			 * @param module indicates mudule where is function to be executed
-			 * @param data describes data to be passed to func
-			 * @param toInit indicates data that will path to initialize function
+			 * add function as a thread from library
+			 * @return thread identificator
+			 * @param module defines path to the library[if not in ldconfig db] or library name
+			 * @param data defines thread data
+			 * @param toInit defines library init data
 			 */
 			virtual unsigned long add(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
-			 * @return info about module
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param toInit indicates data that will path to initialize function
+			 * @return info about library
+			 * @param module defines path to the library[if not in ldconfig db] or library name
+			 * @param toInit defines library init data
 			 */
 			static __systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 #endif
 
 			/**
-			 * block or unblock signals to thread
-			 * @param signal indicates what signals to block/unblock; can be or'ed;
-			 * @param block indicates whether to block or unblock
+			 * block signals to thread
+			 * @param signal defines signals to block/unblock[see systemToolsSignalsEnum]
+			 * @param block defines block condition
 			 */
 			static void blockSignal(int signals, bool block = true);
 
@@ -310,23 +295,23 @@ namespace dodo
 
 			/**
 			 * @return true if thread is running
-			 * @param position indicates for what thread to indicate
+			 * @param position indicates for what thread to set limit
 			 */
 			virtual bool _isRunning(dodoList<__threadInfo>::iterator &position) const;
 
 			/**
-			 * searches threads by position
-			 * @return true if found
-			 * @param position describes position of wanted thread
-			 * @note sets internal parameter 'current' to found thread
+			 * search threads by identificator
+			 * @return true if thread has been found
+			 * @param position defines thread identificator
+			 * @note this sets internal class parameter 'current' to found thread
 			 */
 			virtual bool getThread(unsigned long position) const;
 
-			mutable dodoList<__threadInfo> threads;                         ///< vector of threads
+			mutable dodoList<__threadInfo> threads;                         ///< identificators of threads
 
 			unsigned long threadNum;                                        ///< number of registered threads
 
-			pthread_attr_t attr;                                            ///< attribute that indicates joinability
+			pthread_attr_t attr;                                            ///< thread join attribute
 
 			mutable dodoList<__threadInfo>::iterator current;               ///< iterator for list of threads[for matched with getThread method]
 	};
