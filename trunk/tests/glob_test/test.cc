@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 		
 		baseEx::setErrorHandler(ERRMODULE_IODISK,&baseHandler,NULL);
 #ifdef DL_EXT
-		if(!baseEx::setErrorHandler(ERRMODULE_IODISK,"./module",NULL))
+		if(!baseEx::setErrorHandler("./module",NULL))
 			cout << "WTF";
 #endif
 		

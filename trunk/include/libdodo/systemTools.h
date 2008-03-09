@@ -51,25 +51,25 @@ namespace dodo
 {
 
 	/**
-	 * @struct __usage contains info about process
+	 * @struct __usage defines process information
 	 */
 	struct __usage
 	{
-		long time;  ///<  amount of processor time of execution in miliseconds
-		long mem;   ///< amount of memmory usage in bytes
+		long time;  ///< processor time of execution in miliseconds
+		long mem;   ///< memory usage in bytes
 	};
 
 	/**
-	 * @struct __limits describes system limits
+	 * @struct __limits defines system limits
 	 */
 	struct __limits
 	{
-		unsigned long current;  ///< can use current process
-		unsigned long max;      ///< max amount
+		unsigned long current;  ///< current limit
+		unsigned long max;      ///< max limit
 	};
 
 	/**
-	 * @enum systemToolsLimitEnum describes what type of limits you can get
+	 * @enum systemToolsLimitEnum defines limit types
 	 */
 	enum systemToolsLimitEnum
 	{
@@ -82,12 +82,12 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef describes handler function on signal
+	 * @typedef defines handler function on signal
 	 */
 	typedef void (*signalHandler)(int, siginfo_t *, void *);
 
 	/**
-	 * @enum systemSygnalsEnum describes system signals
+	 * @enum systemSygnalsEnum defines system signals
 	 */
 	enum systemToolsSignalsEnum
 	{
@@ -113,88 +113,90 @@ namespace dodo
 	};
 
 	/**
-	 * @enum uidTypeEnum describes type of UID
-	 * @note real - what ID started process
-	 * effective - what ID's permissions process has
+	 * @enum systemToolsIdTypeEnum defines type of UID
 	 */
-	enum uidTypeEnum
+	enum systemToolsIdTypeEnum
 	{
 		SYSTEMTOOLS_UID,
 		SYSTEMTOOLS_EUID
 	};
 
 	/**
-	 * @struct	__userInfo contains user info
+	 * @struct__userInfo defines user info
 	 */
 	struct  __userInfo
 	{
-		dodoString name;        ///< user's name
-		dodoString pass;        ///< user's password
-		int uid;                ///< user's id
-		int gid;                ///< user's group
-		dodoString realName;    ///< user's real name
-		dodoString home;        ///< user's home directory
-		dodoString shell;       ///< user's default shell
+		dodoString name;        ///< user name
+		dodoString pass;        ///< user password
+		int uid;                ///< user id
+		int gid;                ///< user group
+		dodoString realName;    ///< user real name
+		dodoString home;        ///< user home directory
+		dodoString shell;       ///< user default shell
 	};
 
 	/**
-	 * @struct __groupInfo contains group info
+	 * @struct __groupInfo defines group info
 	 */
 	struct __groupInfo
 	{
-		dodoString name;            ///< name of the group
+		dodoString name;            ///< group name
 		int gid;                    ///< group id
-		dodoStringArray members;    ///< list of group members
+		dodoStringArray members;    ///< group members
 	};
 
 #ifdef DL_EXT
 
 	/**
-	 * @struct __sigMod must be returned from initSigModule in the module
+	 * @struct __sigMod is returned from initSigModule in the library
 	 */
 	struct __sigMod
 	{
-		char name[64];              ///< name of module
-		char discription[256];      ///< discription of module
-		char hook[64];              ///< name of function in module that will be a hook
-		long signal;                ///< on what signal to set handler
-		int blockSignals;           ///< signals to block during signal handling; can be or'ed; -1 - ignore
+		char name[64];              ///< name of the library
+		char discription[256];      ///< discription of the library
+		char hook[64];              ///< name of function in module that will be as a hook
+		long signal;                ///< signal to set handler
+		int blockSignals;           ///< signals to block during signal handling; -1 to ignore
 	};
 
 	/**
-	 * @typedef describes function in module that must return info for the hook
+	 * @typedef defines type of init function for library
 	 */
 	typedef __sigMod (*initSigModule)(void *);
 
 	/**
-	 * @typedef describes function in module that will be called during module unloading
+	 * @typedef defines type of deinit function for library
 	 */
 	typedef void (*deinitSigModule)();
 
 #endif
 
-
 	/**
-	 * @class systemTools provides misc system operations, gets diff info about system
+	 * @class systemTools provides system operations
 	 */
 	class systemTools
 	{
-
 			friend class systemThreads;
 
 		public:
 
 			/**
-			 * registers functions that will be called on normal program exit
-			 * @note you can register more than one
+			 * register function that will be called on normal program exit
+			 * @note can be registered more than one
 			 */
 			static void atExit(void (*func)());
 
 			/**
-			 * suspend for given microseconds
-			 * @param period is time in microseconds
+			 * suspend
+			 * @param period defines time in microseconds
 			 */
 			static void microSleep(unsigned long period);
+
+			/**
+			 * suspend
+			 * @param period defines time in seconds
+			 */
+			static void sleep(long period);
 
 			/**
 			 * daemonize application
@@ -202,101 +204,96 @@ namespace dodo
 			static void daemonize();
 
 			/**
-			 * suspend for given seconds
-			 * @param period is time in seconds
-			 */
-			static void sleep(long period);
-
-			/**
-			 * prints message to stderr end exits from program
-			 * @param message is message to print
-			 * @param status indicate with what status to exit
+			 * print message to stderr end exit the program
+			 * @param message defines message
+			 * @param status defines exit status
 			 */
 			static void die(const dodoString &message, int status = 1);
 
 			/**
-			 * changes root(/) to new
-			 * @param path indicates where to change root(/) directory
-			 * @note you will appear in the root(/)
+			 * changes root(/) of the application
+			 * @param path defines new root(/) directory
+			 * @note automaticaly changes current directory to the new root(/)
 			 */
 			static void changeRoot(const dodoString &path);
+			
 			/**
 			 * @return current working directory
 			 */
 			static dodoString getWorkingDir();
 
 			/**
-			 * set current working directory (cd path)
-			 * @param path is path where to go
+			 * set current working directory
+			 * @param path defines path to the new working directory
 			 */
 			static void setWorkingDir(const dodoString &path);
 
 			/**
-			 * @return info filled with system usage info
+			 * @return system usage info
 			 */
 			static __usage getUsageInfo();
 
 			/**
-			 * @return limit info
-			 * @param type is type of info to get[see systemToolsLimitEnum]
+			 * @return system limits info
+			 * @param type defines type of limits[see systemToolsLimitEnum]
 			 */
 			static __limits getLimit(short type);
 
 			/**
-			 * set limits from systemToolsLimitEnum
-			 * @param type is type of info to set[see systemToolsLimitEnum]
-			 * @param lim will fill with requested values
+			 * set system limits
+			 * @param type defines type limits[see systemToolsLimitEnum]
+			 * @param lim defines system limits
 			 */
 			static void setLimit(short type, const __limits &lim);
 
 			/**
-			 * @return priority of current process for uidTypeEnum
-			 * @param type is type of UID to use[see uidTypeEnum]
+			 * @return priority of current process
+			 * @param type defines type of UID[see systemToolsIdTypeEnum]
 			 */
 			static int getPriority(short type);
 
 			/**
-			 * sets priority of current process (nice)
-			 * @param type is type of UID to use[see uidTypeEnum]
-			 * @param prio is value of priority
+			 * set priority of current process
+			 * @param type defines type of UID[see systemToolsIdTypeEnum]
+			 * @param prio defines priority
 			 */
 			static void setPriority(short type, int prio);
 
 			/**
-			 * @return user id of the current process
-			 * @param type is type of UID to use[see uidTypeEnum]
+			 * @return UID of the current process
+			 * @param type defines type of UID[see systemToolsIdTypeEnum]
 			 */
 			static int getUID(short type);
 
 			/**
 			 * set user id of the current process
-			 * @param type is type of UID to use[see uidTypeEnum]
-			 * @param uid is user's id
+			 * @param type defines type of UID[see systemToolsIdTypeEnum]
+			 * @param uid defines UID
 			 */
 			static void setUID(short type, int uid);
 
 			/**
 			 * get group id of the current process
-			 * @param type is type of UID to use[see uidTypeEnum]
+			 * @param type defines type of GID[see systemToolsIdTypeEnum]
 			 */
 			static int getGID(short type);
 
 			/**
-			 * sets group id of the current process
-			 * @param type is type of UID to use[see uidTypeEnum]
-			 * @param gid is group id
+			 * set group id of the current process
+			 * @param type defines type of GID[see systemToolsIdTypeEnum]
+			 * @param gid defines group id
 			 */
 			static void setGID(short type, int gid);
 
 			/**
-			 * @return info filled with user's info
-			 * @param uid is user's id about what to get info
+			 * @return user info
+			 * @param uid defines user id
 			 */
 			static __userInfo getUserInfo(int uid);
 
 			/**
-			 * @return info filled with user's info
-			 * @param name is user's login name about what to get info
+			 * @return user info
+			 * @param name defines user login name
 			 */
 			static __userInfo getUserInfo(const dodoString &uid);
 
@@ -307,13 +304,13 @@ namespace dodo
 
 			/**
 			 * @return group info
-			 * @param name is group's id name about what to get info
+			 * @param gid defines group id
 			 */
 			static __groupInfo getGroupInfo(int gid);
 
 			/**
 			 * @return group info
-			 * @param name is group's name about what to get info
+			 * @param name defines group name
 			 */
 			static __groupInfo getGroupInfo(const dodoString &gid);
 
@@ -321,6 +318,7 @@ namespace dodo
 			 * @return groups of the system
 			 */
 			static dodoArray<__groupInfo> getGroups();
+			
 			/**
 			 * @return PID of current process
 			 */
@@ -338,128 +336,127 @@ namespace dodo
 
 			/**
 			 * @return group PID of given PID
-			 * @param pid is process id from what to get group PID
+			 * @param pid defines PID
 			 */
 			static int getGroupPID(int pid);
 
 			/**
-			 * sets group PID of current process
-			 * @param pgid specifies the group PID where to move current process
+			 * set group PID of current process
+			 * @param pgid defines group PID where to move current process
 			 */
 			static void setGroupPID(int gpid);
 
 			/**
-			 * sets group PID of given process
-			 * @param pid specifies what pid to move
-			 * @param pgid specifies the group PID where to move current process
+			 * set group PID of given process
+			 * @param pid defines PID to move
+			 * @param pgid defines group PID where to move process
 			 */
 			static void setGroupPID(int pid, int gpid);
 
 			/**
 			 * set timer and onTimer function
-			 * @param timeout is timer period in microseconds
-			 * @param handler is function that will be called
-			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
+			 * @param timeout defines timer period in microseconds
+			 * @param handler defines timer function
+			 * @param blockSignals defines signals to block during signal handling; -1 to ignore
 			 */
 			static void setMicroTimer(unsigned long timeout, signalHandler handler, int blockSignals = -1);
 
 			/**
 			 * set timer and onTimer function
-			 * @param timeout is timer period in seconds
-			 * @param handler is function that will be called
-			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
+			 * @param timeout defines timer period in seconds
+			 * @param handler defines timer function
+			 * @param blockSignals defines signals to block during signal handling; -1 to ignore
 			 */
 			static void setTimer(long timeout, signalHandler handler, int blockSignals = -1);
 
 			/**
 			 * set signal handler
-			 * @param signal is signal on what set handler[see systemToolsSignalsEnum]
-			 * @param handler is function that will be called
-			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
+			 * @param signal defines system signal[see systemToolsSignalsEnum]
+			 * @param handler defines handle function
+			 * @param blockSignals defines signals to block during signal handling; -1 to ignore
 			 */
 			static void setSignalHandler(long signal, signalHandler handler, int blockSignals = -1);
 
 			/**
-			 * determines whether handler was set on signal[see systemToolsSignalsEnum]
-			 * @param is signal is on what set handler
+			 * @return true if handler is set on signal
+			 * @param signal defines system signal[see systemToolsSignalsEnum]
 			 */
 			static bool isSignalHandled(long signal);
 
 			/**
-			 * removes signal handler
-			 * @param is signal is from what unset handler[see systemToolsSignalsEnum]
+			 * remove signal handler
+			 * @param signal defines system signal[see systemToolsSignalsEnum]
 			 */
 			static void unsetSignalHandler(long signal);
 
 #ifdef DL_EXT
 
 			/**
-			 * @return info about module
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param toInit indicates data that will path to initialize function
+			 * @return information about module
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			static __sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 			/**
 			 * set handler on signal from specific module
-			 * @param signal indicates for what signal to set handler[see systemToolsSignalsEnum]
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param toInit indicates data that will path to initialize function
-			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore; if != -1 => overrides given from module
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param data decribes data that will be passed to the handler
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			static void setSignalHandler(long signal, const dodoString &module, void *toInit = NULL, int blockSignals = -1);
-
-			/**
-			 * set handler on signal from specific module
-			 * @param signal indicates for what signal to set handler
-			 * @param @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param toInit indicates data that will path to initialize function
-			 * @param blockSignals indicates what signals to block during signal handling; can be or'ed; -1 - ignore
-			 */
-			static void setSignalHandler(const dodoString &module, void *toInit = NULL, int blockSignals = -1);
+			static void setSignalHandler(const dodoString &module, void *toInit = NULL);
 
 #endif
 
 			/**
 			 * send signal to process
-			 * @param pid indicates where to send signal
-			 * @param is signal is what signal to send[see systemToolsSignalsEnum]
+			 * @param pid defines PID of the process
+			 * @param signal defines system signal[see systemToolsSignalsEnum]
 			 */
 			static void sendSignal(int pid, long signal);
 
 			/**
 			 * block or unblock signals
-			 * @param signal indicates what signals to block/unblock; can be or'ed;
-			 * @param block indicates whether to block or unblock
+			 * @param signal defines system signal[see systemToolsSignalsEnum]
+			 * @param block defines block condition
 			 */
-			static void blockSignal(long signals, bool block = true);
+			static void blockSignal(long signal, bool block = true);
 
 		protected:
 
 			/**
-			 * fills __userInfo with values from passwd structure
+			 * fill __userInfo with values from passwd structure
+			 * @return user info
+			 * @param info defines structure to fill
+			 * @param pw defines structure with info
 			 */
 			static __userInfo &fillUserInfo(__userInfo &info, passwd *pw);
 
 			/**
-			 * fills __groupInfo with values from group structure
+			 * fill __groupInfo with values from group structure
+			 * @return group info
+			 * @param info defines structure to fill
+			 * @param pw defines structure with info
 			 */
 			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
 
 			/**
-			 * @return system signal number that refers to given systemToolsSignalsEnum
-			 * @param signal describes signal to convert
+			 * @return system signal number that refers to systemToolsSignalsEnum
+			 * @param signal defines signal to convert[see systemToolsSignalsEnum]
 			 */
 			static int toRealSignal(long signal);
 
 			/**
 			 * @return signal number that refers to given systemToolsSignalsEnum
-			 * @param signal describes signal to convert
+			 * @param signal defines signal to convert[see systemToolsSignalsEnum]
+			 * @note returns position in the internal structures
 			 */
 			static int toSignalNumber(long signal);
 
 			/**
-			 * fills 'set' structure with given signal mask
+			 * fill 'set' structure with given signal mask
+			 * @param set defines set of signals
+			 * @param signal defines system signal
 			 */
 			static void sigMask(sigset_t *set, long signal);
 
@@ -469,9 +466,7 @@ namespace dodo
 			static bool handlesOpenedSig[19];   ///< map of opened modules
 
 #endif
-
 	};
-
 };
 
 #endif

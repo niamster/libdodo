@@ -36,7 +36,7 @@
 namespace dodo
 {
 	/**
-	 * @class systemThreadSharedDataGuard is to manage data between threads(based on POSIX threads)
+	 * @class systemThreadSharedDataGuard provides shared data management functionality for threads
 	 */
 	class systemThreadSharedDataGuard : public systemSharedDataGuard
 	{
@@ -61,36 +61,35 @@ namespace dodo
 			virtual ~systemThreadSharedDataGuard();
 
 			/**
-			 * sets data to became a shared
-			 * @param data describes data to be shared
+			 * set shared data
+			 * @param data defines shared data
 			 */
 			virtual void set(void *data);
 
 			/**
-			 * sets shared data to NULL
+			 * set shared data to NULL
 			 */
 			virtual void del();
 
 			/**
 			 * lock and return shared data
-			 * @return data points on shared data or NULL in error case
-			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
-			 * @note if microseconds==0 - infinite sleep
+			 * @return shared data
+			 * @param microseconds defines wait timeout for unlock
+			 * @note if microseconds is 0 it will wait infinitely
 			 */
 			virtual void *lock(unsigned long microseconds = 0);
 
-
 			/**
-			 * lock and return shared data
+			 * unlock shared data
 			 */
 			virtual void unlock();
 
 		protected:
 
-			void *data;             ///< data that will be shared
+			void *data;             ///< shared data
 			pthread_mutex_t mutex;  ///< lock
 
-			timespec timeout;       ///< timeout to lock mutex check
+			timespec timeout;       ///< lcok timeout
 	};
 
 };

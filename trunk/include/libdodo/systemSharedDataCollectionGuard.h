@@ -35,16 +35,16 @@
 namespace dodo
 {
 	/**
-	 * @struct __shareInfo describes shared data
+	 * @struct __shareInfo defines shared data
 	 */
 	struct __shareInfo
 	{
-		unsigned long position; ///< position in queue
-		void *data;             ///< data that will be shared
+		unsigned long position; ///< shared data identificator
+		void *data;             ///< shared data
 	};
 
 	/**
-	 * @class systemSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
+	 * @class systemSharedDataCollectionGuard implements collection of shared data 
 	 */
 	class systemSharedDataCollectionGuard
 	{
@@ -56,34 +56,34 @@ namespace dodo
 			virtual ~systemSharedDataCollectionGuard() = 0;
 
 			/**
-			 * adds data to became a shared
-			 * @return position of shared in queue
-			 * @param data describes data to be shared
+			 * add shared data
+			 * @return shared data identificator
+			 * @param data defines shared data
 			 */
 			virtual unsigned long add(void *data) = 0;
 
 			/**
-			 * sets shared data to NULL
-			 * @param position indicates on shared data to lock
+			 * delete data from collection
+			 * @param position defines shared data identificator
 			 */
 			virtual void del(unsigned long position) = 0;
 
 			/**
-			 * locks, sets data, unlocks
-			 * @param position indicates on shared data to lock
-			 * @param data describes data to be set
+			 * lock, set data, unlock
+			 * @param position defines shared data identificator
+			 * @param data defines shared data
 			 */
 			virtual void set(unsigned long position, void *data) = 0;
 
 			/**
-			 * locks, gets data, unlocks
-			 * @return data points on shared data or NULL in error case
-			 * @param position indicates on shared data to lock
+			 * lock, return data, unlock
+			 * @return shared data
+			 * @param position defines shared data identificator
 			 */
 			virtual const void *get(unsigned long position) = 0;
 
 			/**
-			 * @return list of ids of shared data in object
+			 * @return list of shared data in object
 			 */
 			virtual dodoList<unsigned long> getSharedDataIds() = 0;
 	};

@@ -37,7 +37,7 @@
 namespace dodo
 {
 	/**
-	 * @class systemProcessSharedDataCollectionGuard is to manage data between threads(based on POSIX threads)
+	 * @class systemProcessSharedDataCollectionGuard implements collection of shared data for processes
 	 */
 	class systemProcessSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
 												   virtual public processGuardHolder
@@ -63,52 +63,52 @@ namespace dodo
 			virtual ~systemProcessSharedDataCollectionGuard();
 
 			/**
-			 * adds data to became a shared
-			 * @return position of shared in queue
-			 * @param data describes data to be shared
+			 * add shared data
+			 * @return shared data identificator
+			 * @param data defines shared data
 			 */
 			virtual unsigned long add(void *data);
 
 			/**
-			 * sets shared data to NULL
-			 * @param position indicates on shared data to lock
+			 * delete data from collection
+			 * @param position defines shared data identificator
 			 */
 			virtual void del(unsigned long position);
 
 			/**
-			 * locks, sets data, unlocks
-			 * @param position indicates on shared data to lock
-			 * @param data describes data to be set
+			 * lock, set data, unlock
+			 * @param position defines shared data identificator
+			 * @param data defines shared data
 			 */
 			virtual void set(unsigned long position, void *data);
 
 			/**
-			 * locks, gets data, unlocks
-			 * @return data points on shared data or NULL in error case
-			 * @param position indicates on shared data to lock
+			 * lock, return data, unlock
+			 * @return shared data
+			 * @param position defines shared data identificator
 			 */
 			virtual const void *get(unsigned long position);
 
 			/**
-			 * @return list of ids of shared data in object
+			 * @return list of shared data in object
 			 */
 			virtual dodoList<unsigned long> getSharedDataIds();
 
 		protected:
 
 			/**
-			 * searches shares by position
+			 * search shared data by identificator
 			 * @return true if found
-			 * @param position describes position of wanted thread
-			 * @note sets internal parameter 'current' to found share
+			 * @param position describes defines shared data identificator
+			 * @note this sets internal class parameter 'current' to found shared data
 			 */
 			virtual bool getShare(unsigned long position);
 
-			dodoList<__shareInfo> shares;               ///< list of shared data
+			dodoList<__shareInfo> shares;               ///< identificators of shared data
 
 			unsigned long shareNum;                     ///< number of registered shares
 
-			dodoList<__shareInfo>::iterator current;    ///< iterator for list of shares[for matched with getShare method]
+			dodoList<__shareInfo>::iterator current;    ///< iterator for list of shared data[for matched with getShare method]
 	};
 
 };

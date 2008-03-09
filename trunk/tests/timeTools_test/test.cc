@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 		
 		cout << timeTools::week(timeTools::now(),"%A")[0] << endl;
 		
-		cout << timeTools::makeTime(timeTools::now()).sec << endl;
+		cout << timeTools::time(timeTools::now()).sec << endl;
 	}
 	catch (baseEx ex)
 	{

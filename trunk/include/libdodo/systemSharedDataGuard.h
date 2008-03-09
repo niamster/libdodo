@@ -29,7 +29,7 @@
 namespace dodo
 {
 	/**
-	 * @class systemSharedDataGuard is to manage data between jobs
+	 * @class systemSharedDataGuard provides shared data management functionality
 	 */
 	class systemSharedDataGuard
 	{
@@ -41,27 +41,26 @@ namespace dodo
 			virtual ~systemSharedDataGuard() = 0;
 
 			/**
-			 * sets data to became a shared
-			 * @param data describes data to be shared
+			 * set shared data
+			 * @param data defines shared data
 			 */
 			virtual void set(void *data) = 0;
 
 			/**
-			 * sets shared data to NULL
+			 * set shared data to NULL
 			 */
 			virtual void del() = 0;
 
 			/**
 			 * lock and return shared data
-			 * @return data points on shared data or NULL in error case
-			 * @param microseconds indicates how many time to wait for locking; if time expired and can't unlock - error =(; only if realization of pthreads supports it!
-			 * @note if microseconds==0 - infinite sleep
+			 * @return shared data
+			 * @param microseconds defines wait timeout for unlock
+			 * @note if microseconds is 0 it will wait infinitely
 			 */
 			virtual void *lock(unsigned long microseconds) = 0;
 
-
 			/**
-			 * lock and return shared data
+			 * unlock shared data
 			 */
 			virtual void unlock() = 0;
 	};

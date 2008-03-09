@@ -917,64 +917,8 @@ systemTools::getModuleInfo(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-systemTools::setSignalHandler(long signal,
-							  const dodoString &path,
-							  void             *toInit,
-							  int blockSignals)
-{
-	deinitSigModule deinit;
-
-	int handleSignal = toSignalNumber(signal);
-	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
-	{
-		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
-		if (deinit != NULL)
-			deinit();
-
-		dlclose(handlesSig[handleSignal]);
-
-		handlesOpenedSig[handleSignal] = false;
-		handlesSig[handleSignal] = NULL;
-	}
-
-	handlesSig[signal] = dlopen(path.c_str(), RTLD_LAZY);
-	if (handlesSig[signal] == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	initSigModule init = (initSigModule)dlsym(handlesSig[signal], "initSigModule");
-	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	__sigMod mod = init(toInit);
-
-	signalHandler in = (signalHandler)dlsym(handlesSig[signal], mod.hook);
-	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	struct sigaction act;
-	act.sa_sigaction = in;
-	act.sa_flags = SA_SIGINFO | SA_RESTART;
-
-	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	if (blockSignals != -1)
-		sigMask(&act.sa_mask, blockSignals);
-	else
-		sigMask(&act.sa_mask, mod.blockSignals);
-
-	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == 1)
-		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	handlesOpenedSig[handleSignal] = true;
-}
-
-//-------------------------------------------------------------------
-
-void
 systemTools::setSignalHandler(const dodoString &path,
-							  void             *toInit,
-							  int blockSignals)
+							  void             *toInit)
 {
 
 	void *handle = dlopen(path.c_str(), RTLD_LAZY);
@@ -1015,10 +959,7 @@ systemTools::setSignalHandler(const dodoString &path,
 	if (sigemptyset(&act.sa_mask) == -1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	if (blockSignals != -1)
-		sigMask(&act.sa_mask, blockSignals);
-	else
-		sigMask(&act.sa_mask, mod.blockSignals);
+	sigMask(&act.sa_mask, mod.blockSignals);
 
 	if (sigaction(systemTools::toRealSignal(mod.signal), &act, NULL) == 1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

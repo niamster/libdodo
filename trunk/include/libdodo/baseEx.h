@@ -208,16 +208,6 @@ namespace dodo
 			/**
 			 * set handler for exceptions for specific module
 			 * @return false on error
-			 * @param module defines for what module to set handler
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param data decribes data that will be passed to the handler
-			 * @param toInit defines data that will be passed to the init function
-			 */
-			static bool setErrorHandler(errorModuleEnum module, const dodoString &path, void *data, void *toInit = NULL);
-
-			/**
-			 * set handler for exceptions for specific module
-			 * @return false on error
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param data decribes data that will be passed to the handler
 			 * @param toInit defines data that will be passed to the init function

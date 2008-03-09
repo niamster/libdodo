@@ -33,7 +33,7 @@
 namespace dodo
 {
 	/**
-	 * @class threadGuardHolder contains mutex lock and threadGuard class
+	 * @class threadGuardHolder provides mutex lock
 	 */
 	class threadGuardHolder : public guardHolder
 	{
@@ -49,7 +49,6 @@ namespace dodo
 			 */
 			virtual ~threadGuardHolder();
 	};
-
 };
 
 #endif /*THREADGUARD_H_*/

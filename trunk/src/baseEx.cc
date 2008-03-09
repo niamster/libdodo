@@ -435,49 +435,6 @@ baseEx::setErrorHandlers(const dodoString &path,
 //-------------------------------------------------------------------
 
 bool
-baseEx::setErrorHandler(errorModuleEnum module,
-						const dodoString &path,
-						void *data,
-						void *toInit)
-{
-	deinitExModule deinit;
-
-	if (handlesOpenedEx[module])
-	{
-		deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
-		if (deinit != NULL)
-			deinit();
-
-		dlclose(handlesEx[module]);
-
-		handlesOpenedEx[module] = false;
-		handlesEx[module] = NULL;
-	}
-
-	handlesEx[module] = dlopen(path.c_str(), RTLD_LAZY);
-	if (handlesEx[module] == NULL)
-		return false;
-
-	initExModule init = (initExModule)dlsym(handlesEx[module], "initExModule");
-	if (init == NULL)
-		return false;
-
-	errorHandler in = (errorHandler)dlsym(handlesEx[module], init(toInit).hook);
-	if (in == NULL)
-		return false;
-
-	handlesOpenedEx[module] = true;
-
-	handlersEx[module] = in;
-	handlerSetEx[module] = true;
-	handlerDataEx[module] = data;
-
-	return true;
-}
-
-//-------------------------------------------------------------------
-
-bool
 baseEx::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)

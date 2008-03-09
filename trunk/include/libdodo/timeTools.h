@@ -36,9 +36,7 @@ namespace dodo
 {
 
 	/**
-	 * @note time/date format can be specified:
-	 *
-	 *
+	 * @note time/date format can be specified as:
 	 * %w     Weekday number (Sunday=[0, 6]).
 	 * %a     Abbreviated weekday name.
 	 * %A     Full weekday name.
@@ -58,37 +56,42 @@ namespace dodo
 	 * %M     Minute [00, 59].
 	 * %S     Seconds  [00, 60]. The range goes to 60 (rather than stopping at 59) to allow positive leap seconds to be expressed. Since leap
 	 * seconds cannot be predicted by any algorithm, leap second data must come from some external source.
-	 *
 	 */
 
 	/**
-	 * @struct __mktime holds info about time
+	 * @struct __mktime defines time info
 	 */
-	struct __mktime
+	struct __time
 	{
 		/**
 		 * constructor
 		 */
-		__mktime();
+		__time();
 
 		/**
 		 * constructor
-		 * @note set structure's data with user data
+		 * @param sec defines seconds
+		 * @param min defines minutes
+		 * @param hour defines hours
+		 * @param day defines day of month
+		 * @param month defines month
+		 * @param year defines year
+		 * @param daylight defines daylight savings condition
 		 */
-		__mktime(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight = true);
+		__time(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight = true);
 
-		unsigned int sec;   ///< Seconds [0, 60]
-		unsigned int min;   ///< Minutes [0, 59]
-		unsigned int hour;  ///< Hour [0, 23]
-		unsigned int day;   ///< Day of month [1, 31]
-		unsigned int month; ///< Month of year [1, 12]
-		unsigned int year;  ///< Years since 1900
+		unsigned int sec;   ///< seconds [0, 60]
+		unsigned int min;   ///< minutes [0, 59]
+		unsigned int hour;  ///< hours [0, 23]
+		unsigned int day;   ///< day of month [1, 31]
+		unsigned int month; ///< month [1, 12]
+		unsigned int year;  ///< year [since 1900]
 
-		bool daylight;      ///< Daylight Savings flag; true by default
+		bool daylight;      ///< daylight saving flag; true by default
 	};
 
 	/**
-	 * @class timeTools present different tools to manipulate with time
+	 * @class timeTools provides time functionality
 	 */
 	class timeTools
 	{
@@ -97,62 +100,60 @@ namespace dodo
 
 			/**
 			 * @return number of days in the month [detecting leap year]
-			 * @param year is to detect leap year
-			 * @param month is describes month where to calculate number of days
+			 * @param year defines year
+			 * @param month defines month[1, 12]
 			 */
 			static unsigned short int daysInMonth(unsigned int year, unsigned short int month);
 
 			/**
-			 * @return formated time[date...]
-			 * @param format is string contains format presented above
-			 * @param timestamp is amount of seconds from 01.01.1970
-			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
+			 * @return formated time/date/...
+			 * @param format defines time/date/... format string
+			 * @param timestamp defines number of seconds from 00:00:00 UTC, January 1, 1970
+			 * @param local defines local time condition; if true time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 */
 			static dodoString byFormat(const dodoString &format, long timestamp, bool local = true);
 
 			/**
-			 * @return timestamp[amount of seconds from 01.01.1970]
-			 * @param format is string contains format presented above
-			 * @param dt contais formated time[date...]
+			 * @return number of seconds from 00:00:00 UTC, January 1, 1970
+			 * @param format defines time/date/... format string
+			 * @param dt defines formated string of time/date/...
 			 */
 			static long byFormat(const dodoString &format, const dodoString &dt);
 
 			/**
-			 * @return amount of seconds from 00:00:00 UTC, January 1, 1970
+			 * @return number of seconds from 00:00:00 UTC, January 1, 1970 till now
 			 */
 			static long now();
 
 			/**
-			 * @return array of dates that specifies week, where date(in seconds) is specified
-			 * @param date indicates date for what to build array
-			 * @param format is string contains format presented above
-			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
-			 * @note monday is first in the array
+			 * @return dates of the week
+			 * @param date defines timestamp in the weekv
+			 * @note monday is first
 			 */
 			static dodoStringArray week(long date, const dodoString &format, bool local = true);
 
 			/**
-			 * @return array of dates between specified period
-			 * @param dateFrom indicates date for start
-			 * @param dateTo indicates date for end
-			 * @param format is string contains format presented above
-			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
-			 * @note you should't set the date in 00:00, add some hours; you can get strange result in periods whe daytime changes
+			 * @return dates of the specified period
+			 * @param dateFrom defines start date
+			 * @param dateTo defines end date
+			 * @param format defines time/date/... format string
+			 * @param local defines local time condition; if true time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
+			 * @note you should't set the date in 00:00: add some hours to avoid undefined behaivior in periods of daytime changes
 			 */
-			static dodoStringArray datesArr(long dateFrom, long dateTo, const dodoString &format, bool local = true);
+			static dodoStringArray dates(long dateFrom, long dateTo, const dodoString &format, bool local = true);
 
 			/**
-			 * @return second that describes __mktime
-			 * @timeInfo holds parameters about time that will be converted into seconds
+			 * @return number of seconds from 00:00:00 UTC, January 1, 1970
+			 * @param timeInfo defines time info
 			 */
-			static long makeTime(const __mktime &timeInfo);
+			static long seconds(const __time &timeInfo);
 
 			/**
-			 * @return parameter about given time
-			 * @seconds is amount of secound that will be translated
-			 * @param local if true, time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
+			 * @return time info
+			 * @param seconds defines number of seconds from 00:00:00 UTC, January 1, 1970
+			 * @param local defines local time condition; if true time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 */
-			static __mktime makeTime(long seconds, bool local = true);
+			static __time time(long seconds, bool local = true);
 	};
 
 };

@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-__mktime::__mktime() : sec(0),
+__time::__time() : sec(0),
 					   min(0),
 					   hour(0),
 					   day(1),
@@ -37,7 +37,7 @@ __mktime::__mktime() : sec(0),
 
 //-------------------------------------------------------------------
 
-__mktime::__mktime(unsigned int a_sec,
+__time::__time(unsigned int a_sec,
 				   unsigned int a_min,
 				   unsigned int a_hour,
 				   unsigned int a_day,
@@ -112,7 +112,7 @@ timeTools::week(long date,
 //-------------------------------------------------------------------
 
 dodoStringArray
-timeTools::datesArr(long dateFrom,
+timeTools::dates(long dateFrom,
 					long dateTo,
 					const dodoString &format,
 					bool local)
@@ -145,7 +145,7 @@ timeTools::datesArr(long dateFrom,
 //-------------------------------------------------------------------
 
 long
-timeTools::makeTime(const __mktime &timeInfo)
+timeTools::seconds(const __time &timeInfo)
 {
 	tm tTime;
 
@@ -162,8 +162,8 @@ timeTools::makeTime(const __mktime &timeInfo)
 
 //-------------------------------------------------------------------
 
-__mktime
-timeTools::makeTime(long seconds,
+__time
+timeTools::time(long seconds,
 					bool local)
 {
 	tm *tTime;
@@ -176,7 +176,7 @@ timeTools::makeTime(long seconds,
 	if (tTime == NULL)
 		throw baseEx(ERRMODULE_TIMETOOLS, TIMETOOLSEX_MAKETIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__mktime timeInfo;
+	__time timeInfo;
 
 	timeInfo.sec = tTime->tm_sec;
 	timeInfo.min = tTime->tm_min;
