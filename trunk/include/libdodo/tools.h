@@ -213,63 +213,63 @@ namespace dodo
 			static double dRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
-			 * @return true if needle found in array
-			 * @param arr is where to search
-			 * @param needle is what to search for
-			 * @param icase indicates whether to use or not caseless search
+			 * @return true if needle has been found
+			 * @param arr defines array to search in
+			 * @param needle defines string to search for
+			 * @param icase defines case sensitivity 
 			 */
 			static bool isInArray(const dodoStringArray &arr, const dodoString &needle, bool icase);
 
 			/**
-			 * @return array of strings made from string using separtator
-			 * @param fields is string to explode
-			 * @param separator is value that separates parts
-			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
+			 * @return array of substrings
+			 * @param string defines string to explode 
+			 * @param separator defines separator string
+			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
 			 */
-			static dodoStringArray explode(const dodoString &fields, const dodoString &separator, int limit = -1);
+			static dodoStringArray explode(const dodoString &string, const dodoString &separator, int limit = -1);
 
 			/**
-			 * @return array of strings made from string using separtator
-			 * @param escapeF is callback function that will process with every made node
-			 * @param fields is string to explode
-			 * @param separator is value that separates parts
-			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
+			 * @return array of substrings
+			 * @param string defines string to explode
+			 * @param escapeF defines function which will escape every substring 
+			 * @param separator defines separator string
+			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
 			 */
-			static dodoStringArray explode(const dodoString &fields, escape escapeF, const dodoString &separator, int limit = -1);
+			static dodoStringArray explode(const dodoString &string, escape escapeF, const dodoString &separator, int limit = -1);
 
 			/**
-			 * @return string of fields, separated with separator;
-			 * @param fields is an array of nodes that will fiil the result string
-			 * @param escapeF is callback function that will process with every node
-			 * @param separator is value that separates parts
-			 * @param frame is node that will cover node [frame='; node => 'node']
-			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
+			 * @return string of substrings, separated with separator
+			 * @param fields defines substrings to implode
+			 * @param escapeF defines function which will escape every substring  
+			 * @param separator defines separator string
+			 * @param frame defines frame string[frame='; substring => 'substring']
+			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit = -1);
 
 			/**
-			 * @return string of fields, separated with separator;
-			 * @param fields is an array of nodes that will fiil the result string
-			 * @param escapeF is callback function that will process with every node
-			 * @param separator is value that separates parts
-			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
+			 * @return string of substrings, separated with separator
+			 * @param fields defines substrings to implode
+			 * @param escapeF defines function which will escape every substring  
+			 * @param separator defines separator string
+			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, int limit = -1);
 
 			/**
-			 * @return string of fields, separated with separator;
-			 * @param fields is an array of nodes that will fiil the result string
-			 * @param separator is value that separates parts
-			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
+			 * @return string of substrings, separated with separator
+			 * @param fields defines substrings to implode
+			 * @param separator defines separator string
+			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, int limit = -1);
 
 			/**
-			 * @return string of fields, separated with separator;
-			 * @param fields is an array of nodes that will fiil the result string
-			 * @param separator is value that separates parts
-			 * @param frame is node that will cover node [frame='; node => 'node']
-			 * @param limit describes what on how many parts to devide string;  -1 => unlimit
+			 * @return string of substrings, separated with separator
+			 * @param fields defines substrings to implode
+			 * @param separator defines separator string
+			 * @param frame defines frame string[frame='; substring => 'substring']
+			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
 
