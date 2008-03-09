@@ -56,12 +56,12 @@
 namespace dodo
 {
 	/**
-	 * @def adds bit flag to statement
+	 * @def add bit flag to the statement
 	 */
 #define addFlag(statement, flag)       (statement) |= (flag)
 
 	/**
-	 * @def removes bit flag from statement
+	 * @def remove bit flag from the statement
 	 */
 #define removeFlag(statement, flag)    (statement) &= (~(flag))
 
@@ -71,26 +71,28 @@ namespace dodo
 #define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
 	/**
-	 * @typedef that describes function that will escapes parts in explode/implode
-	 * @return converted string
+	 * @typedef defines escape function for explode/implode
 	 */
 	typedef dodoString (*escape)(const dodoString &);
 
 #ifdef ZLIB_EXT
 
 	/**
-	 * @enum zlibCompressionStrategyEnum
+	 * @enum toolsZlibCompressionStrategyEnum defines type of compression for zlib
 	 */
-	enum zlibCompressionStrategyEnum
+	enum toolsZlibCompressionStrategyEnum
 	{
-		ZLIB_FILTRED_COMRESSION = 1,
-		ZLIB_HUFFMAN_COMRESSION,
-		ZLIB_RLE_COMRESSION,
-		ZLIB_FIXED_COMRESSION
+		TOOLS_ZLIB_FILTRED_COMRESSION = 1,
+		TOOLS_ZLIB_HUFFMAN_COMRESSION,
+		TOOLS_ZLIB_RLE_COMRESSION,
+		TOOLS_ZLIB_FIXED_COMRESSION
 	};
 
 #endif
 
+	/**
+	 * @enum toolsRandomStrengthEnum defines type of randomness
+	 */
 	enum toolsRandomStrengthEnum
 	{
 		TOOLS_RANDOMSTRENGTH_DEFAULT,
@@ -98,49 +100,31 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __url describes info that could be retrieved from URL
+	 * @struct __url defines URL parts
 	 */
 	struct __url
 	{
-		dodoString protocol;
-		dodoString host;
-		dodoString path;
-		dodoString request;
-		dodoString login;
-		dodoString password;
-		dodoString port;
+		dodoString protocol; ///< scheme
+		dodoString host; ///< host name
+		dodoString path; ///< path to CGI
+		dodoString request; ///< CGI request
+		dodoString login; ///< login
+		dodoString password; ///< password
+		dodoString port; ///< port
 	};
 
 	/**
-	 * @class tools present different usefull functions
+	 * @class tools provides misc functionality
 	 */
 	class tools
 	{
-		private:
-
-			/**
-			 * copy constructor
-			 * to prevent copying
-			 */
-			tools(tools &tls);
-
 		public:
 
 			/**
-			 * constructor
-			 */
-			tools();
-
-			/**
-			 * destructor
-			 */
-			virtual ~tools();
-
-			/**
-			 * generates random data
-			 * @param data is pointer where to store data
-			 * @param size indicates amount of random data in bytes
-			 * @param strength indicate the ramndomness of the data
+			 * generate random data
+			 * @param data defines pointer to store data
+			 * @param size defines size of random data in bytes
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -148,17 +132,17 @@ namespace dodo
 
 			/**
 			 * @return random data
-			 * @param size indicates amount of random data in bytes
-			 * @param strength indicate the ramndomness of the data
+			 * @param size defines size of random data in bytes
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
-			 * '\0' will be replaced with '*'
+			 * '\0' is replaced with '*'
 			 */
 			static dodoString stringRandom(unsigned long size, short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -166,7 +150,7 @@ namespace dodo
 
 			/**
 			 * @return random long
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -174,7 +158,7 @@ namespace dodo
 
 			/**
 			 * @return random unsigned int
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -182,7 +166,7 @@ namespace dodo
 
 			/**
 			 * @return random int
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -190,7 +174,7 @@ namespace dodo
 
 			/**
 			 * @return random unsigned short
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -198,7 +182,7 @@ namespace dodo
 
 			/**
 			 * @return random short
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -206,7 +190,7 @@ namespace dodo
 
 			/**
 			 * @return random unsigned char
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -214,7 +198,7 @@ namespace dodo
 
 			/**
 			 * @return random char
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -222,7 +206,7 @@ namespace dodo
 
 			/**
 			 * @return random double
-			 * @param strength indicate the ramndomness of the data
+			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
 			 * TOOLS_RANDOMSTRENGTH_STRONG may block
 			 */
@@ -310,10 +294,10 @@ namespace dodo
 			 * @return compressed buffer
 			 * @param buffer contains data to compress
 			 * @param level is level to compress [1..9]
-			 * @param type descibes compression strategy[see zlibCompressionStrategyEnum]
+			 * @param type descibes compression strategy[see toolsZlibCompressionStrategyEnum]
 			 * @note if compiled without exeptions - on error buffer will be returned
 			 */
-			static dodoString zCompress(const dodoString &buffer, unsigned short level = 6, short type = ZLIB_HUFFMAN_COMRESSION);
+			static dodoString zCompress(const dodoString &buffer, unsigned short level = 6, short type = TOOLS_ZLIB_HUFFMAN_COMRESSION);
 
 			/**
 			 * @return decompressed buffer

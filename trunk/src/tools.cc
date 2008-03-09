@@ -154,31 +154,6 @@ tools::dummyTools(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-tools::tools(tools &tls)
-{
-}
-
-//-------------------------------------------------------------------
-
-tools::tools()
-{
-#ifdef CODECONV_EXT
-	convSet = false;
-#endif
-}
-
-//-------------------------------------------------------------------
-
-tools::~tools()
-{
-#ifdef CODECONV_EXT
-	if (convSet)
-		iconv_close(conv);
-#endif
-}
-
-//-------------------------------------------------------------------
-
 void
 tools::random(void *data,
 			  unsigned long size,
