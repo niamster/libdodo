@@ -276,15 +276,13 @@ namespace dodo
 #ifdef ICONV_EXT
 
 			/**
-			 * converts from one codeset to another
+			 * convert from one codeset to another
 			 * @return converted string
-			 * @param buffer contains string to convert
-			 * @param toCode indicates codeset in what perform conversion
-			 * @param fromCode indicates codeset in what buffer coded
-			 * @note if compiled without exeptions - on error buffer will be returned
+			 * @param buffer defines string to convert
+			 * @param toCode defines codeset in what perform conversion
+			 * @param fromCode defines buffer codeset
 			 */
 			static dodoString codesetConversion(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
-
 
 #endif
 
@@ -292,134 +290,128 @@ namespace dodo
 
 			/**
 			 * @return compressed buffer
-			 * @param buffer contains data to compress
-			 * @param level is level to compress [1..9]
-			 * @param type descibes compression strategy[see toolsZlibCompressionStrategyEnum]
-			 * @note if compiled without exeptions - on error buffer will be returned
+			 * @param buffer defines data to compress
+			 * @param level defines compression level[1..9]
+			 * @param type defines compression strategy[see toolsZlibCompressionStrategyEnum]
 			 */
 			static dodoString zCompress(const dodoString &buffer, unsigned short level = 6, short type = TOOLS_ZLIB_HUFFMAN_COMRESSION);
 
 			/**
 			 * @return decompressed buffer
-			 * @param buffer contains data to decompress
-			 * @note if compiled without exeptions - on error buffer will be returned
+			 * @param buffer defines data to decompress
 			 */
 			static dodoString zDecompress(const dodoString &buffer);
 
 #endif
 
 			/**
-			 * @return url decoded string
-			 * @param string to decode
+			 * @return decoded URL
+			 * @param string defines URL to decode
 			 */
 			static dodoString decodeURL(const dodoString &string);
 
 			/**
-			 * @return url encoded string
-			 * @param string to encode
+			 * @return encoded URL
+			 * @param string defines URL to encode
 			 */
 			static dodoString encodeURL(const dodoString &string);
 
 			/**
 			 * @return converted from HEX
-			 * @param first is first part of HEX
-			 * @param seconf is second part of HEX
+			 * @param first defines first part of HEX
+			 * @param seconf defines second part of HEX
 			 */
 			static char hexToChar(char first, char second);
 
 			/**
-			 * @return converted to HEX
-			 * @param first is char to convert
+			 * @param result defines converted to HEX
+			 * @param first defines char to convert
 			 */
 			static void charToHex(char result[3], char first);
 
 			/**
 			 * @return encoded string with ASCII85 method
-			 * @param string is data to encode
+			 * @param string defines data to encode
 			 */
 			static dodoString encodeASCII85(const dodoString &string);
 
 			/**
-			 * @return decoded string from ASCII85 method
-			 * @param string is data to decode
+			 * @return decoded string with ASCII85 method
+			 * @param string defines data to decode
 			 */
 			static dodoString decodeASCII85(const dodoString &string);
 
 			/**
 			 * @return encoded string with base64 method
-			 * @param string is data to encode
+			 * @param string defines data to encode
 			 */
 			static dodoString encodeBase64(const dodoString &string);
 
 			/**
-			 * @return decoded string from base64method
-			 * @param string is data to decode
+			 * @return decoded string with base64 method
+			 * @param string defines data to decode
 			 */
 			static dodoString decodeBase64(const dodoString &string);
 
 			/**
-			 * @return struct that contains parts of URL
-			 * @param url describes URL to parse
+			 * @return parts of URL
+			 * @param url defines URL
 			 */
 			static __url parseURL(const dodoString &url);
 
 			/**
 			 * @return MD5 hash of string
-			 * @param string indicates string for what generate hash
+			 * @param string defines string for what generate hash
 			 */
 			static dodoString MD5(const dodoString &string);
 
 			/**
 			 * @return MD5 hash of string in 'hex' representation(e.g. 'fbc093901857fcd118f065f900982c24')
-			 * @param string indicates string for what generate hash
+			 * @param string defines string for what generate hash
 			 */
 			static dodoString MD5Hex(const dodoString &string);
 
 #ifdef BZIP2_EXT
 
-
 			/**
 			 * @return compressed buffer
-			 * @param buffer contains data to compress
-			 * @param level is level to compress [1..9]
-			 * @param type descibes compression strategy[0..250] => controls how the compression phase behaves when presented with worst case, highly repetitive, input data
-			 * @note if compiled without exeptions - on error buffer will be returned
-			 * Lower values of workFactor reduce the amount of effort the standard algorithm will expend before resorting to the fallback
+			 * @param buffer defines data to compress
+			 * @param level defines compression level[1..9]
+			 * @param type defines compression strategy;controls how the compression phase behaves when presented with worst case, highly repetitive, input data[0..250]
 			 */
 			static dodoString bzCompress(const dodoString &buffer, unsigned short level = 6, unsigned short type = 30);
 
 			/**
 			 * @return decompressed buffer
-			 * @param buffer contains data to decompress
-			 * @note if compiled without exeptions - on error buffer will be returned
+			 * @param buffer defines data to decompress
 			 */
 			static dodoString bzDecompress(const dodoString &buffer);
 
 #endif
 
 			/**
-			 * sends mail using sendmail
-			 * @param path is path to sendmail
-			 * @param to is mail address where to send[possible multiply separated with coma]
-			 * @param subject is a subject of the letter
-			 * @param message is a message to send
-			 * @param headers - extra headers
-			 * @note if login is emty - no auth
+			 * send mail using sendmail external program
+			 * @param path defines path to sendmail
+			 * @param to defines mail address[possible multiply separated with coma]
+			 * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
+			 * @param message defines a message to send
+			 * @param headers defines extra headers
 			 */
 			static void mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__);
 
 			/**
-			 * sends mail
-			 * @param host is host of smtp server(ip)
-			 * @param type is type of `socketProtoFamilyEnum`
-			 * @param port is port of smtp server
-			 * @param to is mail address where to send[possible multiply separated with coma]
-			 * @param from is mail address of sender
-			 * @param subject is a subject of the letter[for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`]
-			 * @param message is a message to send
-			 * @param login is a login for auth
-			 * @param pass is a password for auth
-			 * @param headers - extra headers [each must ends with `\r\n`]
+			 * send mail
+			 * @param host defines host of smtp server(ip)
+			 * @param type defines type of `socketProtoFamilyEnum`
+			 * @param port defines port of smtp server
+			 * @param to defines mail address where to send[possible multiply separated with coma]
+			 * @param from defines mail address of sender
+			 * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
+			 * @param message defines a message to send
+			 * @param login defines a login for auth
+			 * @param pass defines a password for auth
+			 * @param headers defines extra headers[each must ends with `\r\n`]
+			 * @note if login is emty no auth is performed
 			 */
 			static void mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
 
@@ -427,32 +419,32 @@ namespace dodo
 
 			/**
 			 * decode block from base64
-			 * @param in demonstrates input block
-			 * @param in demonstrates result block
+			 * @param in defines input block
+			 * @param in defines result block
 			 */
 			static void _decodeBase64(unsigned char in[4], unsigned char out[3]);
 
 			/**
 			 * encode block to base64
-			 * @param in demonstrates input block
-			 * @param in demonstrates result block
-			 * @param len is length of 'in' block
+			 * @param in defines input block
+			 * @param in defines result block
+			 * @param len defines size of 'in' block
 			 */
 			static void _encodeBase64(unsigned char in[3], unsigned char out[4], int len);
 
 			/**
-			 * encodes tuple to ASCII85 and stores to string
-			 * @param string is storage for encoded symbol[append]
-			 * @param tuple is part of decoded data
-			 * @param count is amount of encoded data
+			 * encode tuple to ASCII85 and stores to result string
+			 * @param string defines storage for encoded symbol[append]
+			 * @param tuple defines part of data
+			 * @param count defines size of data
 			 */
 			static void _encodeASCII85(dodoString &result, unsigned long tuple, int count);
 
 			/**
-			 * encodes tuple from ASCII85 and stores to string
-			 * @param string is storage for encoded symbol[append]
-			 * @param tuple is part of encoded data
-			 * @param count is amount of encoded data
+			 * decode tuple from ASCII85 and stores to string
+			 * @param string defines storage for decoded symbol[append]
+			 * @param tuple defines part of encoded data
+			 * @param count defines size of encoded data
 			 */
 			static void _decodeASCII85(dodoString &result, unsigned long tuple, int count);
 
@@ -461,73 +453,80 @@ namespace dodo
 			 */
 			struct MD5_CTX
 			{
-				unsigned int state[4];      ///< state (ABCD)
+				unsigned int state[4];      ///< state[A,B,C,D]
 				unsigned int count[2];      ///< number of bits, modulo 2^64 (lsb first)
 				unsigned char buffer[64];   ///< input buffer
 			};
 
 			/**
-			 * inits MD5 structure
-			 * @param contex describes MD5 structure
+			 * init MD5 structure
+			 * @param contex defines MD5 structure
 			 */
 			static void MD5Init(MD5_CTX *context);
 
 			/**
-			 *  MD5 block update operation. Continues an MD5 message-digest
-			 * operation, processing another message block, and updating the context.
+			 * MD5 block update operation
+			 * @param context defines MD5 structure
+			 * @param input defines input data
+			 * @param inputLen defines size of input data 
+			 * @note continues an MD5 message-digest operation, processing another message block, and updating the context.
 			 */
 			static void MD5Update(MD5_CTX *context, unsigned char *input, unsigned int inputLen);
 			/**
-			 * MD5 basic transformation. Transforms state based on block.
-			 *
+			 * MD5 basic transformation
+			 * @param defines state of transformation[A,B,C,D]
+			 * @param block defines transformation block
+			 * @note transforms state based on block
 			 */
 			static void MD5Transform(unsigned int state[4], unsigned char block[64]);
 
 			/**
-			 * MD5 finalization. Ends an MD5 message-digest operation, writing the
-			 * the message digest and zeroizing the context.
-			 * @param digest is digest =)
-			 * @param contex describes MD5 structure
+			 * MD5 finalization
+			 * @param digest defines digest
+			 * @param contex defines MD5 structure
+			 * @note ends an MD5 message-digest operation, writing the the message digest and zeroizing the context
 			 */
 			static void MD5Final(unsigned char digest[16], MD5_CTX * context);
 
 			/**
 			 * dummy callback function for implode/explode
-			 * nothing does with passed data
+			 * @return result string
+			 * @param data defines data to process
+			 * @note nothing does with passed data
 			 */
 			inline static dodoString dummyTools(const dodoString &data);
 
 			/**
-			 * sends data through socket
-			 * @param socket is socket descriptor
-			 * @param mess is data to send
-			 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
+			 * send data through socket
+			 * @param socket defines socket descriptor
+			 * @param mess defines data to send
+			 * @note size of message must be not more than TOOLS_SHORT_DATA_SIZE bytes
 			 */
 			static void sendShortData(int socket, const dodoString &mess);
 
 			/**
-			 * sends data through socket
-			 * @param socket is socket descriptor
-			 * @param mess is data to send
-			 * @param data what to delete on exception
-			 * @note mess's length not more than TOOLS_SHORT_DATA_SIZE bytes
+			 * send data through socket
+			 * @param socket defines socket descriptor
+			 * @param mess defines data to send
+			 * @param data defines data to delete on exception
+			 * @note size of message must be not more than TOOLS_SHORT_DATA_SIZE bytes
 			 * on exception deletes data
 			 */
 			static void sendShortDataDel(int socket, const dodoString &mess, char *data);
 
 			/**
-			 * sends data through socket
-			 * @param socket is socket descriptor
-			 * @param mess is data to send
-			 * @note mess's length can be more than TOOLS_SHORT_DATA_SIZE bytes
+			 * send data through socket
+			 * @param socket defines socket descriptor
+			 * @param mess defines data to send
+			 * @note size of message must be not more than TOOLS_SHORT_DATA_SIZE bytes
 			 */
 			static void sendLongData(int socket, const dodoString &mess);
 
 			/**
-			 * receives data through socket
-			 * @param socket is socket descriptor
-			 * @param data is where to receive
-			 * @note data's length not more than TOOLS_SHORT_DATA_SIZE bytes
+			 * receive data through socket
+			 * @param socket defines socket descriptor
+			 * @param data defines receive buffer
+			 * @note size of data must be not more than TOOLS_SHORT_DATA_SIZE bytes
 			 * on exception deletes data
 			 */
 			static void receiveShortDataDel(int socket, char *data);
