@@ -86,17 +86,6 @@ xml::~xml()
 
 //-------------------------------------------------------------------
 
-__xmlNode
-xml::reParse(const __xmlNodeDef &definition)
-{
-	if (document == NULL)
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_REPARCE, ERR_LIBDODO, XMLEX_NOTPARCEDBEFORE, XMLEX_NOTPARCEDBEFORE_STR, __LINE__, __FILE__);
-
-	return parse(definition);
-}
-
-//-------------------------------------------------------------------
-
 bool
 xml::isCDATA(xmlNodePtr chNode)
 {
@@ -148,38 +137,6 @@ xml::parseBuffer(const __xmlNodeDef &definition,
 	}
 
 	return parse(definition);
-}
-
-//-------------------------------------------------------------------
-
-void
-xml::parseFileInt(const dodoString &file)
-{
-	xmlFreeDoc(document);
-
-	document = xmlParseFile(file.c_str());
-	if (document == NULL)
-	{
-		xmlErrorPtr error = xmlGetLastError();
-
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEFILEINT, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-xml::parseBufferInt(const dodoString &buffer)
-{
-	xmlFreeDoc(document);
-
-	document = xmlParseMemory(buffer.c_str(), buffer.size());
-	if (document == NULL)
-	{
-		xmlErrorPtr error = xmlGetLastError();
-
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEBUFFERINT, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
