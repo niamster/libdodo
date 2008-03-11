@@ -31,6 +31,19 @@
 namespace dodo
 {
 	/**
+	 * libdodo defined errors
+	 */
+	enum xexecExR
+	{
+		XEXECEX_EXECNOTFOUND,
+	};
+	
+	/**
+	 * explanations for libdodo defined errors
+	 */
+#define XEXECEX_EXECNOTFOUND_STR "XExec is not found."
+	
+	/**
 	 * IDs of functions where exception might be thrown
 	 */
 	enum xexecFunctionsID

@@ -39,7 +39,7 @@ namespace dodo
 {
 
 	/**
-	 * @enum xexecObjectEnum describes object that passes to module
+	 * @enum xexecObjectEnum defines objects that access xexec
 	 */
 	enum xexecObjTypeEnum
 	{
@@ -55,7 +55,7 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef that describes function that will be called as hook
+	 * @typedef defines function that will be called as hook
 	 * @param first is pointer class object that uses hook
 	 * @param second is type of object that called hook
 	 * @param third is data needed for hook
@@ -63,33 +63,33 @@ namespace dodo
 	typedef void (*inExec)(void *, short, void *);
 
 	/**
-	 * @struct __execItem describes a node for Xexec
+	 * @struct __execItem defines xexec node
 	 */
 	struct __execItem
 	{
 		inExec func;    ///< function to execute
-		short type;     ///< type of object that passes to hook
-		void *data;     ///< data passed to func
+		short type;     ///< type of object[see xexecObjTypeEnum]
+		void *data;     ///< function data
 		void *obj;      ///< pointer to object that uses hook
-		bool enabled;   ///< disable or enable hook
-		int position;   ///< identificator of object
+		bool enabled;   ///< if true hook is enabled
+		int position;   ///< object identificator
 
 #ifdef DL_EXT
-		void *handle;    ///< handle to module
+		void *handle;    ///< handle to library
 #endif
 	};
 
 	/**
-	 * @struct __execItemList holds vector of hooks
+	 * @struct __execItemList defines collection of hooks
 	 */
 	struct __execItemList
 	{
-		dodoList<__execItem> exec;  ///< vector of hooks
-		bool execDisabled;          ///< enable or disable list
+		dodoList<__execItem> exec;  ///< hooks
+		bool execDisabled;          ///< if true hooks are disabled
 	};
 
 	/**
-	 * @enum xexecOperTypeEnum describes the very default value of operation type
+	 * @enum xexecOperTypeEnum defines default operation type
 	 */
 	enum xexecOperTypeEnum
 	{
@@ -109,29 +109,29 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __xexecExMod must be returned from initXexecModule in the module
+	 * @struct __xexecExMod is returned from initXexecModule in the library
 	 */
 	struct __xexecMod
 	{
-		char name[64];              ///< name of module
-		char discription[256];      ///< discription of module
+		char name[64];              ///< name of the library
+		char discription[256];      ///< discription of the library
 		char hook[64];              ///< name of function in module that will be a hook
-		short execType;             ///< type of execType to use; it is skipped if you define module in your program[see execTypeEnum]
+		short execType;             ///< type of hook[see xexecModuleActionTypeEnum]
 	};
 
 	/**
-	 * @typedef describes function in module that must return info for the hook
+	 * @typedef defines type of init function for library
 	 */
 	typedef __xexecMod (*initXexecModule)(void *);
 
 	/**
-	 * @typedef describes function in module that will be called during module unloading
+	 * @typedef defines type of deinit function for library
 	 */
 	typedef void (*deinitXexecModule)();
 
 	/**
-	 * @struct __xexecCounts describes what position of pre or[and] post exec was set from module;
-	 * @note if not set=-1
+	 * @struct __xexecCounts defines identificator of pre or/and post exec
+	 * @note -1 if not set
 	 */
 	struct __xexecCounts
 	{
@@ -140,30 +140,26 @@ namespace dodo
 		 */
 		__xexecCounts();
 
-		int pre;        ///< position of preExec
-		int post;       ///< position of postExec
+		int pre;        ///< identificator of preExec
+		int post;       ///< identificator of postExec
 	};
 
 #endif
 
 	/**
 	 * example of exec function that performs xexec
-	 * !!!you must overload it if you want to you same
-	 * this simply does preExec and postExec
 	 *
-	 *	bool
-	 *	derivedClass::exec() const
+	 *	void
+	 *	derivedClass::exec()
 	 *	{
 	 *		performXExec(preExec);
-	 *		///< execute
+	 *		///< execute routine
 	 *		performXExec(postExec);
 	 *	}
-	 *
 	 */
 
 	/**
-	 * @class xexec provides wide abilities exec manipulations
-	 * you can derive from this class and use pre/post manipulations before main actions
+	 * @class xexec provides pre/post exec actions for defrived classes
 	 */
 	class xexec
 	{
@@ -181,274 +177,263 @@ namespace dodo
 
 			/**
 			 * set function that will be executed after the main action call
-			 * @return number in list where function is set
-			 * @param func is reference to functions that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param type is describes what object called hook[see xexecObjTypeEnum]
-			 * @param data is pointer to data that will pass to hook
-			 * @attention data is not copied!!!
+			 * @return postExec identificator
+			 * @param func defines function that will be called
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
 			 */
 			virtual int _addPostExec(inExec func, void *obj, short type, void *data);
 
 			/**
-			 * set function that will be executed before  the main action call
-			 * @return number in list where function is set
-			 * @param func is reference to functions that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param type is describes what object called hook[see xexecObjTypeEnum]
-			 * @param data is pointer to data that will pass to hook
-			 * @attention data is not copied!!!
+			 * set function that will be executed before the main action call
+			 * @return preExec identificator
+			 * @param func defines function that will be called
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
 			 */
 			virtual int _addPreExec(inExec func, void *obj, short type, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from module that will be executed after  the main action call
-			 * @return number in list where function is set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param type is describes what object called hook[see xexecObjTypeEnum]
-			 * @param data is pointer to data that will pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 * @attention data is not copied!!!
+			 * set function that will be executed after the main action call
+			 * @return postExec identificator
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual int _addPostExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual int _addPostExec(const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 			/**
-			 * set function from module that will be executed before  the main action call
-			 * @return number in list where function is set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param type is describes what object called hook[see xexecObjTypeEnum]
-			 * @param data is pointer to data that will pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 * @attention data is not copied!!!
+			 * set function that will be executed before the main action call
+			 * @return preExec identificator
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual int _addPreExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual int _addPreExec(const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param type is describes what object called hook[see xexecObjTypeEnum]
-			 * @param data is pointer to data that will pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 * @attention data is not copied!!!
+			 * set function that will be executed before/after the main action call
+			 * @return pre/postExec identificators
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in module
 			 */
-			virtual __xexecCounts _addExec(const dodoString &module, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual __xexecCounts _addExec(const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 
 #endif
 
 			/**
-			 * deletes hook from list
-			 * @param position is position in list of hooks[returned from addPostExec]
+			 * delete hook
+			 * @param position defines postExec identificator
 			 */
 			virtual void delPostExec(int position);
 
 			/**
-			 * deletes hook from list
-			 * @param position is position in list of hooks[returned from addPreExec]
+			 * delete hook
+			 * @param position defines preExec identificator
 			 */
 			virtual void delPreExec(int position);
 
 			/**
-			 * replaces hook from list with another
-			 * @return false if nothing to replace
-			 * @param position is position in list of hooks[returned from addPostExec]
-			 * @param func is reference to functions that will be called as a hook
-			 * @param data is pointer to data that will pass to hook
+			 * replace hook with another one
+			 * @param position defines postExec identificator
+			 * @param func defines function that will be called
+			 * @param data defines hook data
 			 */
-			virtual bool replacePostExec(int position, inExec func, void *data);
+			virtual void replacePostExec(int position, inExec func, void *data);
 
 			/**
-			 * replaces hook from list
-			 * @return false if nothing to replace
-			 * @param position is position in list of hooks[returned from addPreExec]
-			 * @param func is reference to functions that will be called as a hook
-			 * @param data is pointer to data that will pass to hook
+			 * replace hook with another one
+			 * @param position defines preExec identificator
+			 * @param func defines function that will be called
+			 * @param data defines hook data
 			 */
-			virtual bool replacePreExec(int position, inExec func, void *data);
+			virtual void replacePreExec(int position, inExec func, void *data);
 
 			/**
 			 * disable hook
-			 * @param position is position in list of hooks[returned from addPostExec]
-			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
+			 * @param position defines postExec identificator
+			 * @note usefull to avoid hook calling during hook execution
 			 */
 			virtual void disablePostExec(int position);
 
 			/**
 			 * disable hook
-			 * @param position is position in list of hooks[returned from addPreExec]
-			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
+			 * @param position defines preExec identificator
+			 * @note usefull to avoid hook calling during hook execution
 			 */
 			virtual void disablePreExec(int position);
 
 			/**
 			 * enable hook
-			 * @param position is position in list of hooks[returned from addPostExec]
+			 * @param position defines postExec identificator
 			 */
 			virtual void enablePostExec(int position);
 
 			/**
 			 * enable hook
-			 * @param position is position in list of hooks[returned from addPreExec]
+			 * @param position defines preExec identificator
 			 */
 			virtual void enablePreExec(int position);
 
 			/**
-			 * enable all PreExec hooks
+			 * enable all preExec hooks
 			 */
 			virtual void enableAllPreExec();
 
 			/**
-			 * enable all PostExec hooks
+			 * enable all postExec hooks
 			 */
 			virtual void enableAllPostExec();
 
 			/**
-			 * disable all PreExec hooks
-			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
+			 * disable all preExec hooks
+			 * @note useful to avoid hooks calling during hook execution
 			 */
 			virtual void disableAllPreExec();
 
 			/**
-			 * disable all PostExec hooks
-			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
+			 * disable all postExec hooks
+			 * @note useful to avoid hooks calling during hook execution
 			 */
 			virtual void disableAllPostExec();
 
 			/**
-			 * disable all PostExec and PreExec hooks
-			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
+			 * disable all postExec and preExec hooks
+			 * @note useful to avoid hooks calling during hook execution
 			 */
 			virtual void disableAll();
 
 			/**
-			 * enable all PostExec and PreExec hooks
+			 * enable all postExec and preExec hooks
 			 */
 			virtual void enableAll();
 
 			/**
-			 * enable\disable other hooks when executing hook
-			 * prevent recursive hooks if u for example call exec in hook, if safeHooks disabled, all hooks set to this class will be called
+			 * enable\disable other hooks during hook execution
+			 * @note this prevents recursive hooks calls
 			 */
 			bool safeHooks;
 
 #ifdef DL_EXT
 
 			/**
-			 * @return info about module
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param toInit indicates data that will path to initialize function
+			 * @return information about module
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param toInit defines data that will be passed to the init function
 			 */
-			static __xexecMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __xexecMod getModuleInfo(const dodoString &path, void *toInit = NULL);
 
 #endif
 
 		protected:
 
 			/**
-			 * enable all PreExec hooks
+			 * enable all preExec hooks
 			 */
 			virtual void enableAllPreExec() const;
 
 			/**
-			 * enable all PostExec hooks
+			 * enable all postExec hooks
 			 */
 			virtual void enableAllPostExec() const;
 
 			/**
-			 * disable all PreExec hooks
-			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
+			 * disable all preExec hooks
+			 * @note useful to avoid hooks calling during hook execution
 			 */
 			virtual void disableAllPreExec() const;
 
 			/**
-			 * disable all PostExec hooks
-			 * @note usefull when u don't want to make cyclic hook using for examle exec of main action in hook from the class that called that hook
+			 * disable all postExec hooks
+			 * @note useful to avoid hooks calling during hook execution
 			 */
 			virtual void disableAllPostExec() const;
 
 			/**
 			 * @return true if found
-			 * @param list describes list where to search
-			 * @param position is position in list of hooks
-			 * @param iter is iterator that is specified with position
+			 * @param list defines list of hooks
+			 * @param position defines XExec identificator
 			 */
 			virtual bool getXexec(dodoList<__execItem> &list, int position);
 
 			/**
-			 * set function that will be executed before  the main action call
-			 * @return number in list where function is set
-			 * @param list describes list where hook will be set
-			 * @param func is reference to functions that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param type is describes what object called hook[see xexecObjTypeEnum]
-			 * @param data is pointer to data that will pass to hook
-			 * @attention data is not copied!!!
+			 * set hook function
+			 * @return postExec identificator
+			 * @param list defines list of hooks
+			 * @param func defines function that will be called
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
 			 */
 			virtual int addXExec(dodoList<__execItem> &list, inExec func, void *obj, short type, void *data);
 
 			/**
-			 * deletes hook from list
-			 * @param list describes list where is set hook
-			 * @param position is position in list of hooks
+			 * delete hook from list
+			 * @param list defines list of hooks
+			 * @param position defines XExec identificator
 			 */
 			virtual void delXExec(dodoList<__execItem> &list, int position);
 
 			/**
-			 * replaces hook from list
-			 * @param list describes list where is set hook
-			 * @param position is position in list of hooks
-			 * @param func is reference to functions that will be called as a hook
-			 * @param data is pointer to data that will pass to hook
+			 * replace hook with another one
+			 * @param list defines list of hooks
+			 * @param position defines postExec identificator
+			 * @param func defines function that will be called
+			 * @param data defines hook data
 			 */
-			virtual bool replaceXExec(dodoList<__execItem> &list, int position, inExec func, void *data);
+			virtual void replaceXExec(dodoList<__execItem> &list, int position, inExec func, void *data);
 
 			/**
 			 * set state(enable/disable) for XExec
-			 * @param list describes list where to get hooks
-			 * @param position is position in list where to set state
-			 * @param stat indicates what state to set
+			 * @param list defines list of hooks
+			 * @param position defines postExec identificator
+			 * @param stat defines hook enabled state
 			 */
 			virtual void setStatXExec(dodoList<__execItem> &list, int position, bool stat);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from  module that will be executed before  the main action call
-			 * @return number in list where function is set
-			 * @param list describes list where hook will be set
-			 * @param module is path[if not in ldconfig db] to module or module name [if in ldconfig db] where function that will be called as a hook
-			 * @param obj is pouinter to object that is uses this hook
-			 * @param type is describes what object called hook[see xexecObjTypeEnum]
-			 * @param data is pointer to data that will pass to hook
-			 * @param toInit indicates data that will path to initialize function
-			 * @attention data is not copied!!!
+			 * set function that will be executed after the main action call
+			 * @return XExec identificator
+			 * @param list defines list of hooks
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
 			 */
-			virtual int addXExecModule(dodoList<__execItem> &list, void *obj, short type, const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addXExecModule(dodoList<__execItem> &list, const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);
 
 #endif
 
 			/**
-			 * perform enabled hooks from the list
-			 * @param list describes list where to get hooks
+			 * perform enabled hooks
+			 * @param list defines list of hooks
 			 */
 			virtual void performXExec(__execItemList &list) const;
 
-			mutable __execItemList preExec;             ///< list of hooks executed before exec
-			mutable __execItemList postExec;            ///< list of hooks executed after exec
+			mutable __execItemList preExec;             ///< preExec hooks
+			mutable __execItemList postExec;            ///< postExec hooks
 
-			int execs;                                  ///< execs counter
+			int execs;                                  ///< hook counter
 
-			dodoList<__execItem>::iterator current;     ///< iterator for list[for matched]
+			dodoList<__execItem>::iterator current;     ///< iterator for list[for matched with getXexec method]
 
-			mutable bool collectData;                   ///< to collect data for xexec[true by default]
+			mutable bool collectData;                   ///< if true to collect data for xexec[true by default]
 
-			mutable int operType;                       ///< operation type set by main action; can be used in hook to determine type of action
+			mutable int operType;                       ///< operation type set by main action
 	};
 
 };

@@ -292,27 +292,27 @@ xexec::enableAll()
 
 //-------------------------------------------------------------------
 
-bool
+void
 xexec::replacePostExec(int position,
 					   inExec func,
 					   void   *data)
 {
-	return replaceXExec(postExec.exec, position, func, data);
+	replaceXExec(postExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
 
-bool
+void
 xexec::replacePreExec(int position,
 					  inExec func,
 					  void   *data)
 {
-	return replaceXExec(preExec.exec, position, func, data);
+	replaceXExec(preExec.exec, position, func, data);
 }
 
 //-------------------------------------------------------------------
 
-bool
+void
 xexec::replaceXExec(dodoList<__execItem> &list,
 					int position,
 					inExec func,
@@ -345,11 +345,9 @@ xexec::replaceXExec(dodoList<__execItem> &list,
 #ifdef DL_EXT
 		current->handle = NULL;
 #endif
-
-		return true;
 	}
 	else
-		return false;
+		throw baseEx(ERRMODULE_XEXEC, XEXECEX_REPLACEXEXEC, ERR_LIBDODO, XEXECEX_EXECNOTFOUND, XEXECEX_EXECNOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -391,9 +389,9 @@ __xexecCounts::__xexecCounts() : pre(-1),
 
 int
 xexec::addXExecModule(dodoList<__execItem> &list,
+		  			  const dodoString &module,
 					  void                  *obj,
 					  short type,
-					  const dodoString &module,
 					  void                  *data,
 					  void                  *toInit)
 {
@@ -433,7 +431,7 @@ xexec::_addPostExec(const dodoString &module,
 					void             *data,
 					void             *toInit)
 {
-	return addXExecModule(postExec.exec, obj, type, module, data, toInit);
+	return addXExecModule(postExec.exec, module, obj, type, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -445,7 +443,7 @@ xexec::_addPreExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
-	return addXExecModule(preExec.exec, obj, type, module, data, toInit);
+	return addXExecModule(preExec.exec, module, obj, type, data, toInit);
 }
 
 //-------------------------------------------------------------------
