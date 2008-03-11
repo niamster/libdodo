@@ -1173,9 +1173,22 @@ systemTools::daemonize()
 
 	if (pid == 0)
 	{
-		fclose(stdin);
-		fclose(stdout);
-		fclose(stderr);
+		int tty = open("/dev/tty", O_RDWR);
+		if (tty == -1)
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		
+		if (ioctl(tty, TIOCNOTTY, (char *) 0) == -1)
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		
+		if (close(tty) == -1)
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		
+		if (close(0) == -1)
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		if (close(1) == -1)
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		if (close(2) == -1)
+			throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{

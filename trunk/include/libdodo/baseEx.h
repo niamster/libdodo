@@ -92,9 +92,10 @@ namespace dodo
 		ERRMODULE_IMAGE,
 		ERRMODULE_JSON,
 		ERRMODULE_CGIFAST,
+		ERRMODULE_CGI,
 	};
 
-#define AM_MODULES    32
+#define AM_MODULES    33
 
 #ifdef DL_EXT
 

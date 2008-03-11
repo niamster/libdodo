@@ -319,7 +319,8 @@ ioDiskTools::rm(const dodoString &path,
 						throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 
-			closedir(directory);
+			if (closedir(directory) == -1)
+				throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_RM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 			if (::rmdir(path.c_str()) == -1)
 				if (errno != ENOENT || !force)
@@ -889,7 +890,8 @@ ioDiskTools::copyDir(const dodoString &from,
 			ioDiskTools::copyDir(attachedFrom, attachedTo, force);
 		}
 
-		closedir(directory);
+		if (closedir(directory) == -1)
+			throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_COPYDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from);
 	}
 }
 

@@ -235,7 +235,9 @@ ioSocket::connect(const dodoString &host,
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
-			::close(socket);
+			if (::close(socket) == -1)
+				throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			
 			socket = -1;
 
 			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -250,7 +252,9 @@ ioSocket::connect(const dodoString &host,
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
-			::close(socket);
+			if (::close(socket) == -1)
+				throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 			socket = -1;
 
 			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -317,7 +321,9 @@ ioSocket::connectFrom(const dodoString &local,
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
-			::close(socket);
+			if (::close(socket) == -1)
+				throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 			socket = -1;
 
 			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -338,7 +344,9 @@ ioSocket::connectFrom(const dodoString &local,
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
-			::close(socket);
+			if (::close(socket) == -1)
+				throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 			socket = -1;
 
 			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -387,7 +395,9 @@ ioSocket::connect(const dodoString &path,
 
 	if (::connect(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
 	{
-		::close(socket);
+		if (::close(socket) == -1)
+			throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
 		socket = -1;
 
 		throw baseEx(ERRMODULE_IOSOCKET, IOSOCKETEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

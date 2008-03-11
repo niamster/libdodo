@@ -522,14 +522,30 @@ cgi::makePost()
 								file.error = CGI_POSTFILEERR_NO_SPACE;
 
 								break;
+							
+							default:
+								
+								throw baseEx(ERRMODULE_CGI, CGIEX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 						}
 					}
 					else
 					{
-						fwrite(i->c_str() + temp1, file.size, 1, fp);
-						if (errno == ENOMEM)
-							file.error = CGI_POSTFILEERR_NO_SPACE;
-						fclose(fp);
+						if (fwrite(i->c_str() + temp1, file.size, 1, fp) < file.size)
+						{
+							if (errno == ENOMEM)
+								file.error = CGI_POSTFILEERR_NO_SPACE;
+							else
+							{
+
+								if (fclose(fp) != 0)
+									throw baseEx(ERRMODULE_CGI, CGIEX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+							
+								throw baseEx(ERRMODULE_CGI, CGIEX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+							}
+						}
+
+						if (fclose(fp) != 0)
+							throw baseEx(ERRMODULE_CGI, CGIEX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 					}
 				}
 

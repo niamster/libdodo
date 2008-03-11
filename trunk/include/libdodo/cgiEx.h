@@ -1,8 +1,8 @@
 /***************************************************************************
- *            xexecEx.h
+ *            cgiEx.h
  *
- *  Wed Oct 5 16:25:14 2005
- *  Copyright  2005  Ni@m
+ *  Wed Mar 12 01:01:14 2008
+ *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -31,33 +31,11 @@
 namespace dodo
 {
 	/**
-	 * libdodo defined errors
-	 */
-	enum xexecExR
-	{
-		XEXECEX_EXECNOTFOUND,
-	};
-	
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define XEXECEX_EXECNOTFOUND_STR "XExec is not found."
-	
-	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum xexecFunctionsID
+	enum cgiFunctionsID
 	{
-		XEXECEX_REPLACEXEXEC,
-		
-#ifdef DL_EXT
-
-		XEXECEX_ADDXEXECMODULE,
-		XEXECEX_GETMODULEINFO,
-		XEXECEX_DELXEXEC,
-
-#endif
-
+		CGIEX_MAKEPOST,
 	};
 };
 

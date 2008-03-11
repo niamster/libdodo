@@ -29,6 +29,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <libdodo/cgiEx.h>
 #include <libdodo/tools.h>
 #include <libdodo/types.h>
 #include <libdodo/dodoMap.h>

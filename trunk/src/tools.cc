@@ -179,9 +179,16 @@ tools::random(void *data,
 			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_LIBDODO, TOOLSEX_WRONGSTRENGTH, TOOLSEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
 	}
 
-	fread(data, size, 1, file);
+	if (fread(data, size, 1, file) < size)
+	{
+		if (fclose(file) != 0)
+			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	fclose(file);
+		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	}
+
+	if (fclose(file) != 0)
+		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
