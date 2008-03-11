@@ -29,6 +29,7 @@
 #ifdef IMAGEMAGICK_EXT
 
 #include <magick/MagickCore.h>
+#include <math.h>
 
 #include <libdodo/types.h>
 #include <libdodo/imageEx.h>
@@ -256,6 +257,13 @@ namespace dodo
 			 * @param height defines height of the image
 			 */
 			virtual void scale(unsigned long width, unsigned long height);
+
+			/**
+			 * scale image
+			 * @param width defines size of the image
+			 * @note scales image by reducing size of the greater side saving proportions
+			 */
+			virtual void scale(unsigned long size);
 
 			/**
 			 * rotate image
