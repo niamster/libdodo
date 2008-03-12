@@ -188,7 +188,7 @@ namespace dodo
 			 * @return environment variable
 			 * @param data defines name of environment variable
 			 */
-			virtual char *getenv(const char *buf);
+			virtual char *getenv(const char *data);
 			
 		protected:
 

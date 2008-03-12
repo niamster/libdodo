@@ -460,7 +460,7 @@ namespace dodo
 
 			/**
 			 * init MD5 structure
-			 * @param contex defines MD5 structure
+			 * @param context defines MD5 structure
 			 */
 			static void MD5Init(MD5_CTX *context);
 
