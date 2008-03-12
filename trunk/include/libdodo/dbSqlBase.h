@@ -206,7 +206,7 @@ namespace dodo
 			/**
 			 * add additional statements for query
 			 * @param qTypeToCheck defines type of additional info to check
-			 * @collectedString defines string that defines additional statement
+			 * @param collectedString defines string that defines additional statement
 			 */
 			virtual void additionalCollect(unsigned int qTypeToCheck, const dodoString &collectedString);
 
@@ -220,7 +220,7 @@ namespace dodo
 
 			/**
 			 * @return string constructed from additional statements(DB-dependent)
-			 * @param sqlAddEnumArr defines statements
+			 * @param statements defines statements
 			 * @param qTypeShift defines additional statements that has been set
 			 */
 			virtual dodoString insideAddCollect(const dodoStringArray &statements, int qTypeShift);

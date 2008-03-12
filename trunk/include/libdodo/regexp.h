@@ -85,7 +85,6 @@ namespace dodo
 			/**
 			 * match with pattern previously given for match/compile method
 			 * @return true if matched pattern
-			 * @param pattern defines regex pattern
 			 * @param sample defines a match string
 			 * @param pockets defines array that will be filled with matched substrings in '()'
 			 * @note first in pocket is a first match
@@ -97,7 +96,7 @@ namespace dodo
 			 * @return string with replaced substrings
 			 * @param pattern defines regex pattern
 			 * @param sample defines a match string
-			 * @param pockets defines array that will be filled with matched substrings in '()'
+			 * @param replacements defines array that will be filled with matched substrings in '()'
 			 * @note if pattern is not matched - the sample will be returned
 			 */
 			dodoString replace(const dodoString &pattern, const dodoString &sample, const dodoStringArray &replacements);
@@ -105,9 +104,8 @@ namespace dodo
 			/**
 			 * replace substrings in match string with pattern previously given for match/compile method
 			 * @return string with replaced substrings
-			 * @param pattern defines regex pattern
 			 * @param sample defines a match string
-			 * @param pockets defines array that will be filled with matched substrings in '()'
+			 * @param replacements defines array that will be filled with matched substrings in '()'
 			 * @note if pattern is not matched - the sample will be returned
 			 */
 			dodoString replace(const dodoString &sample, const dodoStringArray &replacements);

@@ -159,7 +159,6 @@ namespace dodo
 			 * @return process identificator
 			 * @param func defines function to execute
 			 * @param data defines process data
-			 * @param action defines action on object destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
 			 * action = SYSTEMPROCESS_WAIT
 			 */
@@ -170,8 +169,6 @@ namespace dodo
 			 * @return process identificator
 			 * @param func defines function to execute
 			 * @param data defines process data
-			 * @param limit defines limit on executions
-			 * @param action defines action on object destruction if process is running[see systemProcessOnDestructEnum]
 			 * @note func must not call `exit` family call
 			 * this will immediately execute the process
 			 * action = SYSTEMPROCESS_WAIT

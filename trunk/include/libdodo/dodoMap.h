@@ -162,7 +162,7 @@ namespace dodo
 			/**
 			 * insert into hash
 			 * @param varName defines name of the node in hash
-			 * @param varName defines value of the node in hash
+			 * @param varVal defines value of the node in hash
 			 */
 			void
 			insert(const keyType &varName,

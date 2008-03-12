@@ -161,13 +161,13 @@ namespace dodo
             
 			/**
 			 * @return basename of path string
-			 * @param defines path string
+			 * @param path defines path string
 			 */
 			static dodoString lastname(const dodoString &path);
 
 			/**
 			 * @return dirname of path string
-			 * @param defines path string
+			 * @param path defines path string
 			 */
 			static dodoString dirname(const dodoString &path);
 
@@ -303,7 +303,7 @@ namespace dodo
 			/**
 			 * change group owner of the file/directory/...
 			 * @param path defines path to file/directory/...
-			 * @param uid defines group id
+			 * @param gid defines group id
 			 */
 			static void chgrp(const dodoString &path, int gid);
 
@@ -349,7 +349,7 @@ namespace dodo
 			 * write string to file
 			 * @param path defines path to file
 			 * @param content defines string that will be written to the file
-			 * @param come defines mode to open file
+			 * @param mode defines mode to open file
 			 */                     
 			static void _writeToFile(const dodoString &path, const dodoString &content, const char *mode);
 
@@ -357,7 +357,7 @@ namespace dodo
 			 * writes array of strings to file
 			 * @param path defines path to file
 			 * @param content defines array of strings that will be written to the file
-			 * @param come defines mode to open file
+			 * @param mode defines mode to open file
 			 */                     
 			static void _writeToFile(const dodoString &path, const dodoStringArray &content, const char *mode);
 	};

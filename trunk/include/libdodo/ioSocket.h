@@ -108,7 +108,7 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param server define type of service; if true as a server
+			 * @param server defines type of service; if true as a server
 			 * @param family defines family of the socket[see socketProtoFamilyEnum]
 			 * @param type defines type of the socket[see socketTransferTypeEnum]
 			 */
@@ -123,47 +123,53 @@ namespace dodo
 
 			/**
 			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * @return id of the hook method
+			 * @param func defines function that will be called
+			 * @param data defines hook data
 			 */
 			virtual int addPostExec(inExec func, void *data);
 
 			/**
 			 * adds hook before the operation by callback
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
+			 * @return id of the hook method
+			 * @param func defines function that will be called
+			 * @param data defines hook data
 			 */
 			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
 			/**
-			 * set function from module that will be executed before/after the main action call
-			 * the type of hook[pre/post] is defined in module
-			 * @return number in list where function is set
-			 * @param func is a pointer to function
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * set function that will be executed before/after the main action call
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
+			 * @param toInit defines data that will be passed to the init function
+			 * @note type of hook[pre/post] is defined in module
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * set function that will be executed after the main action call
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPostExec(const dodoString &module, void *data, void *toInit = NULL);
 
 			/**
-			 * adds hook after the operation by callback
-			 * @return number in list where function is set
-			 * @param module is a path to module, whrere hook exists
-			 * @param data is pointer to data toy want to pass to hook
-			 * @param toInit indicates data that will path to initialize function
+			 * set function that will be executed before the main action call
+			 * @return id of the hook method
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 * @param obj defines object that called the hook
+			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param data defines hook data
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
 

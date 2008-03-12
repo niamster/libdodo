@@ -277,7 +277,7 @@ namespace dodo
 
 			/**
 			 * print cgi headers
-			 * @tone print cookies also
+			 * @note print cookies also
 			 */
 			virtual void printHeaders() const;
 
@@ -294,7 +294,7 @@ namespace dodo
 			 * @param data defines data that would be printed
 			 * @note print until '\n' is reached
 			 */
-			virtual void printStream(const dodoString &buf);
+			virtual void printStream(const dodoString &data);
 
 			/**
 			 * flushe output

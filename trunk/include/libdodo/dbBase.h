@@ -266,7 +266,7 @@ namespace dodo
 
 			/**
 			 * set connection information for database
-			 * @param info defines connection information
+			 * @param dbInfo defines connection information
 			 */
 			virtual void setDbInfo(const __dbInfo &dbInfo);
 
@@ -330,6 +330,7 @@ namespace dodo
 			 * @param tableFrom defines table where data will be fetched
 			 * @param fieldsTo defines fields where data will be stored
 			 * @param fieldsFrom defines fields that will be fetched
+			 * @param where defines `where` statement
 			 */
 			virtual void insertSelect(const dodoString &tableTo, const dodoString &tableFrom, const dodoStringArray &fieldsTo, const dodoStringArray &fieldsFrom = __dodostringarray__, const dodoString &where = __dodostring__);
 
@@ -414,7 +415,7 @@ namespace dodo
 
 			/**
 			 * delete table
-			 * @param db defines the table
+			 * @param table defines the table
 			 */
 			virtual void deleteTable(const dodoString &table);
 

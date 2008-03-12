@@ -123,7 +123,7 @@ namespace dodo
 	};
 
 	/**
-	 * @struct__userInfo defines user info
+	 * @struct __userInfo defines user info
 	 */
 	struct  __userInfo
 	{
@@ -296,7 +296,7 @@ namespace dodo
 			 * @return user info
 			 * @param name defines user login name
 			 */
-			static __userInfo getUserInfo(const dodoString &uid);
+			static __userInfo getUserInfo(const dodoString &name);
 
 			/**
 			 * @return users of the system
@@ -313,7 +313,7 @@ namespace dodo
 			 * @return group info
 			 * @param name defines group name
 			 */
-			static __groupInfo getGroupInfo(const dodoString &gid);
+			static __groupInfo getGroupInfo(const dodoString &name);
 
 			/**
 			 * @return groups of the system
@@ -343,14 +343,14 @@ namespace dodo
 
 			/**
 			 * set group PID of current process
-			 * @param pgid defines group PID where to move current process
+			 * @param gpid defines group PID where to move current process
 			 */
 			static void setGroupPID(int gpid);
 
 			/**
 			 * set group PID of given process
 			 * @param pid defines PID to move
-			 * @param pgid defines group PID where to move process
+			 * @param gpid defines group PID where to move process
 			 */
 			static void setGroupPID(int pid, int gpid);
 
@@ -397,15 +397,14 @@ namespace dodo
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			static __sigMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __sigMod getModuleInfo(const dodoString &path, void *toInit = NULL);
 
 			/**
 			 * set handler on signal from specific module
 			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param data decribes data that will be passed to the handler
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			static void setSignalHandler(const dodoString &module, void *toInit = NULL);
+			static void setSignalHandler(const dodoString &path, void *toInit = NULL);
 
 #endif
 

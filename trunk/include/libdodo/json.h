@@ -200,7 +200,7 @@ namespace dodo
 			 * @return root of unserialized JSON object
 			 * @param root defines string that contains serialized JSON object
 			 */
-			virtual dodoStringMap JSONToMap(const dodoString &node);
+			virtual dodoStringMap JSONToMap(const dodoString &root);
 
 		protected:
 

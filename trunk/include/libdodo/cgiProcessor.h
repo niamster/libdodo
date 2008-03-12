@@ -114,7 +114,7 @@ namespace dodo
 			virtual dodoString _processString(const dodoString &buffer, const dodoString &path);
 
 			/**
-			 * processe `if` statement
+			 * process `if` statement
 			 * @return position of cursor where to continue processing
 			 * @param buffer defines buffer where template is stored
 			 * @param start defines position in buffer after ')>' of `<( if ... )>` block
@@ -125,7 +125,7 @@ namespace dodo
 			virtual unsigned long _if(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &processed, const dodoString &path);
 
 			/**
-			 * processe `for` statement
+			 * process `for` statement
 			 * @return position of cursor where to continue processing
 			 * @param buffer defines buffer where template is stored
 			 * @param start defines position in buffer after ')>' of `<( for ... )>` block
@@ -136,7 +136,7 @@ namespace dodo
 			virtual unsigned long _for(const dodoString &buffer, unsigned long start, const dodoString &statement, dodoString &processed, const dodoString &path);
 
 			/**
-			 * processe `for` statement
+			 * process `for` statement
 			 * @return position of cursor where to continue processing
 			 * @param buffer defines buffer where template is stored
 			 * @param start defines position in buffer after ')>' of `<( namespace ... )>` block
@@ -146,7 +146,7 @@ namespace dodo
 			virtual unsigned long _ns(const dodoString &buffer, unsigned long start, dodoString &processed, const dodoString &path);
 
 			/**
-			 * processe `print` statement
+			 * process `print` statement
 			 * @return position of cursor where to continue processing
 			 * @param start defines position in buffer after ')>' of `<( print ... )>` block
 			 * @param statement defines `print` statement
@@ -156,7 +156,7 @@ namespace dodo
 			virtual unsigned long _print(unsigned long start, const dodoString &statement, dodoString &processed, const dodoString &path);
 
 			/**
-			 * processe `break` statement
+			 * process `break` statement
 			 * @return true if process must break
 			 * @param start defines position in buffer after ')>' of `<( break ... )>` block
 			 * @param statement defines `break` statement
@@ -165,7 +165,7 @@ namespace dodo
 			virtual bool _break(unsigned long start, const dodoString &statement, const dodoString &path);
 
 			/**
-			 * processe `assign` statement
+			 * process `assign` statement
 			 * @return position of cursor where to continue processing
 			 * @param start defines position in buffer after ')>' of `<( assign ... )>` block
 			 * @param statement defines `assign` statement
@@ -174,7 +174,7 @@ namespace dodo
 			virtual unsigned long _assign(unsigned long start, const dodoString &statement, const dodoString &path);
 
 			/**
-			 * processe `include` statement
+			 * process `include` statement
 			 * @return position of cursor where to continue processing
 			 * @param start defines position in buffer after ')>' of `<( include ... )>` block
 			 * @param statement defines `include` statement
@@ -189,7 +189,7 @@ namespace dodo
 			virtual void cleanNamespace();
 
 			/**
-			 * @returnposition in buffer after ')>' of the end block
+			 * @return position in buffer after ')>' of the end block
 			 * @param buffer defines buffer where template is stored
 			 * @param start defines position in buffer after ')>' of the block
 			 * @param st defines open statement[if, for ...]

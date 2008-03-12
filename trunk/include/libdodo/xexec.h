@@ -321,7 +321,7 @@ namespace dodo
 			virtual void enableAll();
 
 			/**
-			 * enable\disable other hooks during hook execution
+			 * enable/disable other hooks during hook execution
 			 * @note this prevents recursive hooks calls
 			 */
 			bool safeHooks;
@@ -413,6 +413,7 @@ namespace dodo
 			 * @param obj defines object that called the hook
 			 * @param type defines hook type[see xexecObjTypeEnum]
 			 * @param data defines hook data
+			 * @param toInit defines data that will be passed to the init function
 			 */
 			virtual int addXExecModule(dodoList<__execItem> &list, const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);
 

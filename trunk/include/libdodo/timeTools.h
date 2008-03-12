@@ -128,6 +128,8 @@ namespace dodo
 			/**
 			 * @return dates of the week
 			 * @param date defines timestamp in the weekv
+			 * @param format defines time/date/... format string
+			 * @param local defines local time condition; if true time represents as local(according to timezone), otherwice as Coordinated Universal Time (UTC)
 			 * @note monday is first
 			 */
 			static dodoStringArray week(long date, const dodoString &format, bool local = true);

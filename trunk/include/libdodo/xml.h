@@ -208,7 +208,7 @@ namespace dodo
 
 			/**
 			 * @return XML string
-			 * @param root defines root node of XML document
+			 * @param node defines root node of XML document
 			 */
 			virtual dodoString createNode(const __xmlNode &node) const;
 

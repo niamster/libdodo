@@ -155,6 +155,7 @@ namespace dodo
 			 * @return thread identificator
 			 * @param func defines function to execute
 			 * @param data defines process data
+			 * @param limit defines limit on executions
 			 * @param detached defines whether thread will be detached
 			 * @param action defines action on object destruction if thread is running[see systemThreadOnDestructEnum]
 			 * @param stackSize defines stack thread size
@@ -286,7 +287,7 @@ namespace dodo
 
 			/**
 			 * block signals to thread
-			 * @param signal defines signals to block/unblock[see systemToolsSignalsEnum]
+			 * @param signals defines signals to block/unblock[see systemToolsSignalsEnum]
 			 * @param block defines block condition
 			 */
 			static void blockSignal(int signals, bool block = true);

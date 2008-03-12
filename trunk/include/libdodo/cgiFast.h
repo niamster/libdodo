@@ -115,7 +115,7 @@ namespace dodo
 			 * @param data defines data that will be passed to hook function
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual int addPreExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
 			 * set hook from the library that will be executed before/after the operation
@@ -126,7 +126,7 @@ namespace dodo
 			 * @param toInit defines data that will be passed to the init function
 			 * @note type of hook[pre/post] is defined in the library
 			 */
-			virtual __xexecCounts addExec(const dodoString &module, void *data, void *toInit = NULL);
+			virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
 
 #endif
 

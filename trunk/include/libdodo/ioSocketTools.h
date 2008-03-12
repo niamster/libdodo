@@ -99,7 +99,7 @@ namespace dodo
 
 			/**
 			 * @return information about the given host
-			 * @param interface defines a name of the host
+			 * @param host defines a name of the host
 			 */
 			static __hostInfo getHostInfo(const dodoString &host);
 

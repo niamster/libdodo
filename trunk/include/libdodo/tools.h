@@ -319,7 +319,7 @@ namespace dodo
 			/**
 			 * @return converted from HEX
 			 * @param first defines first part of HEX
-			 * @param seconf defines second part of HEX
+			 * @param second defines second part of HEX
 			 */
 			static char hexToChar(char first, char second);
 
@@ -420,21 +420,21 @@ namespace dodo
 			/**
 			 * decode block from base64
 			 * @param in defines input block
-			 * @param in defines result block
+			 * @param out defines result block
 			 */
 			static void _decodeBase64(unsigned char in[4], unsigned char out[3]);
 
 			/**
 			 * encode block to base64
 			 * @param in defines input block
-			 * @param in defines result block
+			 * @param out defines result block
 			 * @param len defines size of 'in' block
 			 */
 			static void _encodeBase64(unsigned char in[3], unsigned char out[4], int len);
 
 			/**
 			 * encode tuple to ASCII85 and stores to result string
-			 * @param string defines storage for encoded symbol[append]
+			 * @param result defines storage for encoded symbol[append]
 			 * @param tuple defines part of data
 			 * @param count defines size of data
 			 */
@@ -442,7 +442,7 @@ namespace dodo
 
 			/**
 			 * decode tuple from ASCII85 and stores to string
-			 * @param string defines storage for decoded symbol[append]
+			 * @param result defines storage for decoded symbol[append]
 			 * @param tuple defines part of encoded data
 			 * @param count defines size of encoded data
 			 */
@@ -474,7 +474,7 @@ namespace dodo
 			static void MD5Update(MD5_CTX *context, unsigned char *input, unsigned int inputLen);
 			/**
 			 * MD5 basic transformation
-			 * @param defines state of transformation[A,B,C,D]
+			 * @param state defines state of transformation[A,B,C,D]
 			 * @param block defines transformation block
 			 * @note transforms state based on block
 			 */
@@ -483,7 +483,7 @@ namespace dodo
 			/**
 			 * MD5 finalization
 			 * @param digest defines digest
-			 * @param contex defines MD5 structure
+			 * @param context defines MD5 structure
 			 * @note ends an MD5 message-digest operation, writing the the message digest and zeroizing the context
 			 */
 			static void MD5Final(unsigned char digest[16], MD5_CTX * context);
