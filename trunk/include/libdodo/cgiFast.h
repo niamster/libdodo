@@ -222,7 +222,7 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines type of function that will be called on new cgi request
+	 * @typedef cgiProc defines type of function that will be called on new cgi request
 	 */
 	typedef void (*cgiProc)(ioCGIFast *);
 

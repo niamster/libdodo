@@ -83,12 +83,12 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines handler function on signal
+	 * @typedef signalHandler defines handler function on signal
 	 */
 	typedef void (*signalHandler)(int, siginfo_t *, void *);
 
 	/**
-	 * @enum systemSygnalsEnum defines system signals
+	 * @enum systemToolsSignalsEnum defines system signals
 	 */
 	enum systemToolsSignalsEnum
 	{
@@ -161,12 +161,12 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines type of init function for library
+	 * @typedef initSigModule defines type of init function for library
 	 */
 	typedef __sigMod (*initSigModule)(void *);
 
 	/**
-	 * @typedef defines type of deinit function for library
+	 * @typedef deinitSigModule defines type of deinit function for library
 	 */
 	typedef void (*deinitSigModule)();
 

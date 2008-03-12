@@ -56,22 +56,22 @@
 namespace dodo
 {
 	/**
-	 * @def add bit flag to the statement
+	 * @def addFlag add bit flag to the statement
 	 */
 #define addFlag(statement, flag)       (statement) |= (flag)
 
 	/**
-	 * @def remove bit flag from the statement
+	 * @def removeFlag remove bit flag from the statement
 	 */
 #define removeFlag(statement, flag)    (statement) &= (~(flag))
 
 	/**
-	 * @def return true if bit flag is set
+	 * @def isSetFlag return true if bit flag is set
 	 */
 #define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
 	/**
-	 * @typedef defines escape function for explode/implode
+	 * @typedef escape defines escape function for explode/implode
 	 */
 	typedef dodoString (*escape)(const dodoString &);
 

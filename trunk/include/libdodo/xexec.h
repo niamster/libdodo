@@ -39,9 +39,9 @@ namespace dodo
 {
 
 	/**
-	 * @enum xexecObjectEnum defines objects that access xexec
+	 * @enum xexecObjectTypeEnum defines objects that access xexec
 	 */
-	enum xexecObjTypeEnum
+	enum xexecObjectTypeEnum
 	{
 		XEXEC_OBJECT_DBMYSQL,
 		XEXEC_OBJECT_DBSQLITE,
@@ -55,7 +55,7 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines function that will be called as hook
+	 * @typedef inExec defines function that will be called as hook
 	 * @param first is pointer class object that uses hook
 	 * @param second is type of object that called hook
 	 * @param third is data needed for hook
@@ -120,12 +120,12 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines type of init function for library
+	 * @typedef initXexecModule defines type of init function for library
 	 */
 	typedef __xexecMod (*initXexecModule)(void *);
 
 	/**
-	 * @typedef defines type of deinit function for library
+	 * @typedef deinitXexecModule defines type of deinit function for library
 	 */
 	typedef void (*deinitXexecModule)();
 

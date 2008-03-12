@@ -111,12 +111,12 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines type of init function for library
+	 * @typedef initExModule defines type of init function for library
 	 */
 	typedef __exMod (*initExModule)(void *);
 
 	/**
-	 * @typedef defines type of deinit function for library
+	 * @typedef deinitExModule defines type of deinit function for library
 	 */
 	typedef void (*deinitExModule)();
 
@@ -125,7 +125,7 @@ namespace dodo
 	class baseEx;
 
 	/**
-	 * @typedef defines type of hook function
+	 * @typedef errorHandler defines type of hook function
 	 */
 	typedef void (*errorHandler)(errorModuleEnum, baseEx *, void *);
 

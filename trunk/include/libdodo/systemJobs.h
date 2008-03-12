@@ -30,7 +30,7 @@
 namespace dodo
 {
 	/**
-	 * @typedef defines job function
+	 * @typedef jobFunc defines job function
 	 */
 	typedef void *(*jobFunc)(void *);
 

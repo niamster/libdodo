@@ -41,7 +41,7 @@ namespace dodo
 		public:
 
 			/**
-			 * @typedef type of pointer on function to compare two values
+			 * @typedef cmpFunc defines function to compare two values
 			 */
 			typedef bool (*cmpFunc)(const keyType &, const keyType &);
 	};

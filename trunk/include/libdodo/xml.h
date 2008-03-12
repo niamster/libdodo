@@ -268,7 +268,7 @@ namespace dodo
 		private:
 
 			/**
-			 * @typedef defines name compare function 
+			 * @typedef xcharCmp defines name compare function 
 			 */
 			typedef int (*xcharCmp)(const xmlChar *, const xmlChar *);
 

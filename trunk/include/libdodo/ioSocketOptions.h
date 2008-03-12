@@ -60,7 +60,7 @@ namespace dodo
 	};
 
 	/**
-	 * @enum ioSocketOptionOptionsEnum defines options for socket
+	 * @enum ioSocketOptionsOptionEnum defines options for socket
 	 */
 	enum ioSocketOptionsOptionEnum
 	{

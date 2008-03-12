@@ -43,7 +43,7 @@
 namespace dodo
 {
 	/**
-	 * @typedef defines function that will be executed as a process
+	 * @typedef processFunc defines function that will be executed as a process
 	 */
 	typedef void *(*processFunc)(void *);
 
@@ -96,12 +96,12 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines type of init function for library
+	 * @typedef initSystemProcessesModule defines type of init function for library
 	 */
 	typedef __systemProcessesMod (*initSystemProcessesModule)(void *);
 
 	/**
-	 * @typedef defines type of deinit function for library
+	 * @typedef deinitSystemProcessesModule defines type of deinit function for library
 	 */
 	typedef void (*deinitSystemProcessesModule)();
 

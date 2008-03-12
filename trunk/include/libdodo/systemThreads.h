@@ -46,7 +46,7 @@ namespace dodo
 {
 
 	/**
-	 * @typedef defines function that will be executed as a thread
+	 * @typedef threadFunc defines function that will be executed as a thread
 	 */
 	typedef void *(*threadFunc)(void *);
 
@@ -103,12 +103,12 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef defines type of init function for library
+	 * @typedef initSystemThreadsModule defines type of init function for library
 	 */
 	typedef __systemThreadsMod (*initSystemThreadsModule)(void *);
 
 	/**
-	 * @typedef defines type of deinit function for library
+	 * @typedef deinitSystemThreadsModule defines type of deinit function for library
 	 */
 	typedef void (*deinitSystemThreadsModule)();
 
