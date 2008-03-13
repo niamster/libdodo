@@ -48,7 +48,7 @@ OBJECTS:=dbBase.o \
 		image.o \
 		dbSqlite.o \
 		systemProcesses.o \
-		systemThreads.o \
+		systemThreadCollection.o \
 		systemJobs.o \
 		threadGuard.o \
 		processGuard.o \

@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/ioSocket.h>
 #include <libdodo/ioSocketTools.h>
-#include <libdodo/systemThreads.h>
+#include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 
 #include <iostream>
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 		bool exit_st(false);
 
 #ifdef PTHREAD_EXT
-		systemThreads th;
+		systemThreadCollection th;
 		std::vector<int> positions;
 #endif
 		

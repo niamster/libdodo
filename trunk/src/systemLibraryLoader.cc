@@ -23,6 +23,8 @@
 
 #include <libdodo/systemLibraryLoader.h>
 
+#ifdef DL_EXT
+
 using namespace dodo;
 
 systemLibraryLoader::systemLibraryLoader()
@@ -37,3 +39,4 @@ systemLibraryLoader::~systemLibraryLoader()
 
 //-------------------------------------------------------------------
 
+#endif

@@ -68,7 +68,7 @@ namespace dodo
 	struct __execItem
 	{
 		inExec func;    ///< function to execute
-		short type;     ///< type of object[see xexecObjTypeEnum]
+		short type;     ///< type of object[see xexecObjectTypeEnum]
 		void *data;     ///< function data
 		void *obj;      ///< pointer to object that uses hook
 		bool enabled;   ///< if true hook is enabled
@@ -180,7 +180,7 @@ namespace dodo
 			 * @return postExec identificator
 			 * @param func defines function that will be called
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
 			virtual int _addPostExec(inExec func, void *obj, short type, void *data);
@@ -190,7 +190,7 @@ namespace dodo
 			 * @return preExec identificator
 			 * @param func defines function that will be called
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
 			virtual int _addPreExec(inExec func, void *obj, short type, void *data);
@@ -202,7 +202,7 @@ namespace dodo
 			 * @return postExec identificator
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 */
@@ -213,7 +213,7 @@ namespace dodo
 			 * @return preExec identificator
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 */
@@ -224,7 +224,7 @@ namespace dodo
 			 * @return pre/postExec identificators
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 * @note type of hook[pre/post] is defined in module
@@ -374,7 +374,7 @@ namespace dodo
 			 * @param list defines list of hooks
 			 * @param func defines function that will be called
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
 			virtual int addXExec(dodoList<__execItem> &list, inExec func, void *obj, short type, void *data);
@@ -411,7 +411,7 @@ namespace dodo
 			 * @param list defines list of hooks
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjTypeEnum]
+			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 */

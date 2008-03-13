@@ -177,7 +177,7 @@ namespace dodo
 	 */
 	class systemTools
 	{
-			friend class systemThreads;
+			friend class systemThreadCollection;
 
 		public:
 

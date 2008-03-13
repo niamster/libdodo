@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/systemJobs.h>
 #include <libdodo/systemProcesses.h>
-#include <libdodo/systemThreads.h>
+#include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemTools.h>
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 				pr[i] = new systemProcesses;
 #ifdef PTHREAD_EXT
 			else
-				pr[i] = new systemThreads;
+				pr[i] = new systemThreadCollection;
 #endif
 
 			ids[i] = stringTools::lToString(i);

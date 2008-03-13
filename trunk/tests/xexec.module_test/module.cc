@@ -14,7 +14,7 @@ extern "C"
 
 	void
 	hook(void *base, 
-		xexecObjTypeEnum type,
+		xexecObjectTypeEnum type,
 		void *yep)
 	{
 		if (type == XEXEC_OBJECT_IOSTD)
@@ -37,7 +37,7 @@ extern "C"
 
 	void
 	empty(void *base, 
-		xexecObjTypeEnum type,
+		xexecObjectTypeEnum type,
 		void *yep)
 	{
 	

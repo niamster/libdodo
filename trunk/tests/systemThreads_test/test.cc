@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemThreads.h>
+#include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 #include <libdodo/systemThreadSharedDataCollectionGuard.h>
 #include <libdodo/systemTools.h>
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 		sh.set((void *)shared);
 
 #ifdef PTHREAD_EXT
-		systemThreads th;
+		systemThreadCollection th;
 
 		const int amount = 10;
 

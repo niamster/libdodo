@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemThreads.h
+ *            systemThreadCollection.h
  *
  *  Tue Nov 29 23:31:55 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADS_H_
-#define _SYSTEMTHREADS_H_
+#ifndef _SYSTEMTHREADCOLLECTION_H_
+#define _SYSTEMTHREADCOLLECTION_H_
 
 #include <libdodo/directives.h>
 
@@ -39,7 +39,7 @@
 
 #include <libdodo/systemJobs.h>
 #include <libdodo/systemTools.h>
-#include <libdodo/systemThreadsEx.h>
+#include <libdodo/systemThreadCollectionEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
@@ -55,9 +55,9 @@ namespace dodo
 	 */
 	enum systemThreadOnDestructEnum
 	{
-		SYSTEMTHREADS_KEEP_ALIVE,
-		SYSTEMTHREADS_STOP,
-		SYSTEMTHREADS_WAIT
+		SYSTEMTHREADCOLLECTION_KEEP_ALIVE,
+		SYSTEMTHREADCOLLECTION_STOP,
+		SYSTEMTHREADCOLLECTION_WAIT
 	};
 
 	/**
@@ -89,9 +89,9 @@ namespace dodo
 #ifdef DL_EXT
 
 	/**
-	 * @struct __systemThreadsMod defines data that is returned from initSystemThreadsModule in the library
+	 * @struct __systemThreadCollectionMod defines data that is returned from initSystemThreadsModule in the library
 	 */
-	struct __systemThreadsMod
+	struct __systemThreadCollectionMod
 	{
 		char name[64];                  ///< name of module
 		char discription[256];          ///< discription of module
@@ -105,7 +105,7 @@ namespace dodo
 	/**
 	 * @typedef initSystemThreadsModule defines type of init function for library
 	 */
-	typedef __systemThreadsMod (*initSystemThreadsModule)(void *);
+	typedef __systemThreadCollectionMod (*initSystemThreadsModule)(void *);
 
 	/**
 	 * @typedef deinitSystemThreadsModule defines type of deinit function for library
@@ -115,9 +115,9 @@ namespace dodo
 #endif
 
 	/**
-	 * @class systemThreads provides threads management functionality
+	 * @class systemThreadCollection provides threads management functionality
 	 */
-	class systemThreads : public systemJobs
+	class systemThreadCollection : public systemJobs
 	{
 		private:
 
@@ -125,19 +125,19 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			systemThreads(systemThreads &st);
+			systemThreadCollection(systemThreadCollection &st);
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			systemThreads();
+			systemThreadCollection();
 
 			/**
 			 * destructor
 			 */
-			virtual ~systemThreads();
+			virtual ~systemThreadCollection();
 
 			/**
 			 * add function to became a thread
@@ -161,7 +161,7 @@ namespace dodo
 			 * @param stackSize defines stack thread size
 			 * @note this will immediately execute the process
 			 */
-			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit = 1, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
+			virtual unsigned long addNRun(threadFunc func, void *data, unsigned long limit = 1, bool detached = false, short action = SYSTEMTHREADCOLLECTION_WAIT, int stackSize = 2097152);
 
 			/**
 			 * add function to became a thread
@@ -170,7 +170,7 @@ namespace dodo
 			 * @param data defines process data
 			 * @note
 			 * detached=false
-			 * action=SYSTEMTHREADS_WAIT
+			 * action=SYSTEMTHREADCOLLECTION_WAIT
 			 * stackSize=2097152
 			 */
 			virtual unsigned long add(jobFunc func, void *data);
@@ -183,7 +183,7 @@ namespace dodo
 			 * @note this will immediately execute the process
 			 * limit=1
 			 * detached=false
-			 * action=SYSTEMTHREADS_WAIT
+			 * action=SYSTEMTHREADCOLLECTION_WAIT
 			 * stackSize=2097152
 			 */
 			virtual unsigned long addNRun(jobFunc func, void *data);
@@ -205,7 +205,7 @@ namespace dodo
 			 * @param action defines action on object destruction if thread is running[see systemThreadOnDestructEnum]
 			 * @param stackSize defines stack thread size
 			 */
-			virtual void replace(unsigned long position, threadFunc func, void *data, bool force = false, bool detached = false, short action = SYSTEMTHREADS_WAIT, int stackSize = 2097152);
+			virtual void replace(unsigned long position, threadFunc func, void *data, bool force = false, bool detached = false, short action = SYSTEMTHREADCOLLECTION_WAIT, int stackSize = 2097152);
 
 			/**
 			 * execute thread
@@ -281,7 +281,7 @@ namespace dodo
 			 * @param module defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines library init data
 			 */
-			static __systemThreadsMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __systemThreadCollectionMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 #endif
 

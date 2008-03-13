@@ -26,6 +26,8 @@
 
 #include <libdodo/directives.h>
 
+#ifdef DL_EXT
+
 #include <pthread.h>
 
 #include <libdodo/atomicLock.h>
@@ -54,5 +56,7 @@ namespace dodo
 		protected:
 	};
 };
+
+#endif
 
 #endif
