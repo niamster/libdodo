@@ -66,6 +66,7 @@ OBJECTS:=dbBase.o \
 		cgiFast.o \
 		cgiProcessor.o \
 		ioNBA.o \
+		systemLibraryLoader.o \
 		ioNBAInfo.o
 
 ###########################################################

@@ -194,6 +194,26 @@ fi
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tdisabled"
 	fi
 
+	AC_ARG_WITH([bfd],
+		AS_HELP_STRING([--with-bfd(=/path)],[support library name resolution]),
+		[MOD_BFD_DIR="$withval"], [MOD_BFD="no"])
+	if test "$MOD_BFD" != "no"
+	then
+		if test "$MOD_BFD_DIR" = "yes"
+		then
+			MOD_BFD_DIR=/usr
+		fi
+		CPPFLAGS="$CPPFLAGS -I$MOD_BFD_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_BFD_DIR/lib -lbfd"
+		AC_CHECK_LIB([bfd], [bfd_fopen], [], AC_MSG_ERROR(bfd lib was not found))
+		AC_CHECK_HEADER([bfd.h], [], AC_MSG_ERROR(bfd header was not found))
+		echo -n -e "#define BFD_EXT\n\n" >> include/libdodo/directives.runtime.h
+
+		RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tenabled"
+	else
+		RESULT="$RESULT\nLibrary name resolution\t\t\t\t\t\tdisabled"
+	fi
+
 	AC_ARG_WITH([postgresql],
 		AS_HELP_STRING([--with-postgresql(=/path)],[use postgresql]),
 		[MOD_POSTGRESQL_DIR="$withval"], [MOD_POSTGRESQL="no"])
