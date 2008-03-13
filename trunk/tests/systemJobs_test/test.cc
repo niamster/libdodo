@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/systemJobs.h>
-#include <libdodo/systemProcesses.h>
+#include <libdodo/systemProcessCollection.h>
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemTools.h>
 #include <libdodo/timeTools.h>
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 		for (int i=0;i<amount;++i)
 		{
 			if (i%2 == 0)	
-				pr[i] = new systemProcesses;
+				pr[i] = new systemProcessCollection;
 #ifdef PTHREAD_EXT
 			else
 				pr[i] = new systemThreadCollection;

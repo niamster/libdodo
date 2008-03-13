@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemProcesses.h>
+#include <libdodo/systemProcessCollection.h>
 #include <libdodo/systemTools.h>
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 		dgCI = dgC.add((char *)"@test@\n");
 		dg.set((char *)"!test!\n");
 
-		systemProcesses pr;
+		systemProcessCollection pr;
 
 		const int amount = 10;
 

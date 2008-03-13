@@ -89,7 +89,7 @@ namespace dodo
 #ifdef DL_EXT
 
 	/**
-	 * @struct __systemThreadCollectionMod defines data that is returned from initSystemThreadsModule in the library
+	 * @struct __systemThreadCollectionMod defines data that is returned from initSystemThreadCollectionModule in the library
 	 */
 	struct __systemThreadCollectionMod
 	{
@@ -103,14 +103,14 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef initSystemThreadsModule defines type of init function for library
+	 * @typedef initSystemThreadCollectionModule defines type of init function for library
 	 */
-	typedef __systemThreadCollectionMod (*initSystemThreadsModule)(void *);
+	typedef __systemThreadCollectionMod (*initSystemThreadCollectionModule)(void *);
 
 	/**
-	 * @typedef deinitSystemThreadsModule defines type of deinit function for library
+	 * @typedef deinitSystemThreadCollectionModule defines type of deinit function for library
 	 */
-	typedef void (*deinitSystemThreadsModule)();
+	typedef void (*deinitSystemThreadCollectionModule)();
 
 #endif
 

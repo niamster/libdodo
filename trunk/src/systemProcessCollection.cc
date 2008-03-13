@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemProcesses.cc
+ *            systemProcessCollection.cc
  *
  *  Tue Feb 27 08:47:16 2007
  *  Copyright  2007  Ni@m
@@ -22,7 +22,7 @@
  */
 
 
-#include <libdodo/systemProcesses.h>
+#include <libdodo/systemProcessCollection.h>
 
 using namespace dodo;
 
@@ -34,24 +34,24 @@ __processInfo::__processInfo() : isRunning(false),
 
 //-------------------------------------------------------------------
 
-systemProcesses::systemProcesses(systemProcesses &sp)
+systemProcessCollection::systemProcessCollection(systemProcessCollection &sp)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemProcesses::systemProcesses() : processNum(0)
+systemProcessCollection::systemProcessCollection() : processNum(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemProcesses::~systemProcesses()
+systemProcessCollection::~systemProcessCollection()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 
 #ifdef DL_EXT
-	deinitSystemProcessesModule deinit;
+	deinitSystemProcessCollectionModule deinit;
 #endif
 
 	for (; i != j; ++i)
@@ -83,7 +83,7 @@ systemProcesses::~systemProcesses()
 
 		if (i->handle != NULL)
 		{
-			deinit = (deinitSystemProcessesModule)dlsym(i->handle, "deinitSystemProcessesModule");
+			deinit = (deinitSystemProcessCollectionModule)dlsym(i->handle, "deinitSystemProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -97,7 +97,7 @@ systemProcesses::~systemProcesses()
 //-------------------------------------------------------------------
 
 unsigned long
-systemProcesses::add(processFunc func,
+systemProcessCollection::add(processFunc func,
 					 void        *data,
 					 short action)
 {
@@ -121,7 +121,7 @@ systemProcesses::add(processFunc func,
 //-------------------------------------------------------------------
 
 unsigned long
-systemProcesses::add(jobFunc func,
+systemProcessCollection::add(jobFunc func,
 					 void    *data)
 {
 	return add(func, data, SYSTEMPROCESS_WAIT);
@@ -130,7 +130,7 @@ systemProcesses::add(jobFunc func,
 //-------------------------------------------------------------------
 
 unsigned long
-systemProcesses::addNRun(jobFunc func,
+systemProcessCollection::addNRun(jobFunc func,
 						 void    *data)
 {
 	return addNRun(func, data, 1, SYSTEMPROCESS_WAIT);
@@ -139,7 +139,7 @@ systemProcesses::addNRun(jobFunc func,
 //-------------------------------------------------------------------
 
 unsigned long
-systemProcesses::addNRun(processFunc func,
+systemProcessCollection::addNRun(processFunc func,
 						 void          *data,
 						 unsigned long limit,
 						 short action)
@@ -167,7 +167,7 @@ systemProcesses::addNRun(processFunc func,
 	else
 	{
 		if (pid == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			process.pid = pid;
 	}
@@ -183,7 +183,7 @@ systemProcesses::addNRun(processFunc func,
 //-------------------------------------------------------------------
 
 void
-systemProcesses::del(unsigned long position,
+systemProcessCollection::del(unsigned long position,
 					 bool force)
 {
 	if (getProcess(position))
@@ -191,11 +191,11 @@ systemProcesses::del(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_LIBDODO, SYSTEMPROCESSESEX_ISALREADYRUNNING, SYSTEMPROCESSESEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_DEL, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING, SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -203,14 +203,14 @@ systemProcesses::del(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemProcessesModule deinit;
+			deinitSystemProcessCollectionModule deinit;
 
-			deinit = (deinitSystemProcessesModule)dlsym(current->handle, "deinitSystemProcessesModule");
+			deinit = (deinitSystemProcessCollectionModule)dlsym(current->handle, "deinitSystemProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
 #endif
@@ -218,13 +218,13 @@ systemProcesses::del(unsigned long position,
 		processes.erase(current);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_DEL, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_DEL, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 bool
-systemProcesses::getProcess(unsigned long position) const
+systemProcessCollection::getProcess(unsigned long position) const
 {
 	dodoList<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
@@ -240,7 +240,7 @@ systemProcesses::getProcess(unsigned long position) const
 //-------------------------------------------------------------------
 
 bool
-systemProcesses::_isRunning(dodoList<__processInfo>::iterator &position) const
+systemProcessCollection::_isRunning(dodoList<__processInfo>::iterator &position) const
 {
 	if (!position->isRunning)
 		return false;
@@ -255,7 +255,7 @@ systemProcesses::_isRunning(dodoList<__processInfo>::iterator &position) const
 			return false;
 		}
 
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	return true;
@@ -264,7 +264,7 @@ systemProcesses::_isRunning(dodoList<__processInfo>::iterator &position) const
 //-------------------------------------------------------------------
 
 void
-systemProcesses::replace(unsigned long position,
+systemProcessCollection::replace(unsigned long position,
 						 processFunc func,
 						 void          *data,
 						 bool force,
@@ -275,11 +275,11 @@ systemProcesses::replace(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_LIBDODO, SYSTEMPROCESSESEX_ISALREADYRUNNING, SYSTEMPROCESSESEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_REPLACE, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING, SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -288,14 +288,14 @@ systemProcesses::replace(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemProcessesModule deinit;
+			deinitSystemProcessCollectionModule deinit;
 
-			deinit = (deinitSystemProcessesModule)dlsym(current->handle, "deinitSystemProcessesModule");
+			deinit = (deinitSystemProcessCollectionModule)dlsym(current->handle, "deinitSystemProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 		}
 
 #endif
@@ -306,13 +306,13 @@ systemProcesses::replace(unsigned long position,
 		current->action = action;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_REPLACE, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_REPLACE, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemProcesses::run(unsigned long position,
+systemProcessCollection::run(unsigned long position,
 					 bool force)
 {
 	if (getProcess(position))
@@ -321,11 +321,11 @@ systemProcesses::run(unsigned long position,
 		{
 			processes.erase(current);
 
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_LIBDODO, SYSTEMPROCESSESEX_SWEPT, SYSTEMPROCESSESEX_SWEPT_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_RUN, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_SWEPT, SYSTEMPROCESSCOLLECTIONEX_SWEPT_STR, __LINE__, __FILE__);
 		}
 
 		if (_isRunning(current) && !force)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_LIBDODO, SYSTEMPROCESSESEX_ISALREADYRUNNING, SYSTEMPROCESSESEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_RUN, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING, SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 		pid_t pid = fork();
 
@@ -338,7 +338,7 @@ systemProcesses::run(unsigned long position,
 		else
 		{
 			if (pid == -1)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			else
 				current->pid = pid;
 		}
@@ -347,32 +347,32 @@ systemProcesses::run(unsigned long position,
 		++ (current->executed);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_RUN, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_RUN, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemProcesses::stop(unsigned long position)
+systemProcessCollection::stop(unsigned long position)
 {
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_LIBDODO, SYSTEMPROCESSESEX_ISNOTRUNNING, SYSTEMPROCESSESEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_STOP, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_ISNOTRUNNING, SYSTEMPROCESSCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 		if (kill(current->pid, 9) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_STOP, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemProcesses::stop()
+systemProcessCollection::stop()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
@@ -382,7 +382,7 @@ systemProcesses::stop()
 
 
 		if (kill(i->pid, 9) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		i->isRunning = false;
 	}
@@ -391,26 +391,26 @@ systemProcesses::stop()
 //-------------------------------------------------------------------
 
 void
-systemProcesses::wait(unsigned long position)
+systemProcessCollection::wait(unsigned long position)
 {
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_LIBDODO, SYSTEMPROCESSESEX_ISNOTRUNNING, SYSTEMPROCESSESEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_WAIT, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_ISNOTRUNNING, SYSTEMPROCESSCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 		if (waitpid(current->pid, NULL, 0) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_WAIT, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemProcesses::wait()
+systemProcessCollection::wait()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
@@ -419,7 +419,7 @@ systemProcesses::wait()
 			continue;
 
 		if (waitpid(i->pid, NULL, 0) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		i->isRunning = false;
 	}
@@ -428,18 +428,18 @@ systemProcesses::wait()
 //-------------------------------------------------------------------
 
 bool
-systemProcesses::isRunning(unsigned long position) const
+systemProcessCollection::isRunning(unsigned long position) const
 {
 	if (getProcess(position))
 		return _isRunning(current);
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ISRUNNING, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_ISRUNNING, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-systemProcesses::running() const
+systemProcessCollection::running() const
 {
 	unsigned long amount(0);
 
@@ -454,7 +454,7 @@ systemProcesses::running() const
 //-------------------------------------------------------------------
 
 void
-systemProcesses::sweepTrash()
+systemProcessCollection::sweepTrash()
 {
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	while (i != j)
@@ -480,35 +480,35 @@ systemProcesses::sweepTrash()
 //-------------------------------------------------------------------
 
 void
-systemProcesses::setExecutionLimit(unsigned long position,
+systemProcessCollection::setExecutionLimit(unsigned long position,
 								   unsigned long limit)
 {
 	if (getProcess(position))
 		current->executeLimit = limit;
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_SETEXECUTIONLIMIT, ERR_LIBDODO, SYSTEMPROCESSESEX_NOTFOUND, SYSTEMPROCESSESEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_SETEXECUTIONLIMIT, ERR_LIBDODO, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND, SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
 
-__systemProcessesMod
-systemProcesses::getModuleInfo(const dodoString &module,
+__systemProcessCollectionMod
+systemProcessCollection::getModuleInfo(const dodoString &module,
 							   void             *toInit)
 {
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemProcessesModule init = (initSystemProcessesModule)dlsym(handle, "initSystemProcessesModule");
+	initSystemProcessCollectionModule init = (initSystemProcessCollectionModule)dlsym(handle, "initSystemProcessCollectionModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__systemProcessesMod mod = init(toInit);
+	__systemProcessCollectionMod mod = init(toInit);
 
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	return mod;
 }
@@ -516,7 +516,7 @@ systemProcesses::getModuleInfo(const dodoString &module,
 //-------------------------------------------------------------------
 
 unsigned long
-systemProcesses::add(const dodoString &module,
+systemProcessCollection::add(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
@@ -527,17 +527,17 @@ systemProcesses::add(const dodoString &module,
 
 	process.handle = dlopen(module.c_str(), RTLD_LAZY);
 	if (process.handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemProcessesModule init = (initSystemProcessesModule)dlsym(process.handle, "initSystemProcessesModule");
+	initSystemProcessCollectionModule init = (initSystemProcessCollectionModule)dlsym(process.handle, "initSystemProcessCollectionModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__systemProcessesMod temp = init(toInit);
+	__systemProcessCollectionMod temp = init(toInit);
 
 	processFunc in = (processFunc)dlsym(process.handle, temp.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSES, SYSTEMPROCESSESEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	process.executeLimit = temp.executeLimit;
 	process.action = temp.action;
@@ -553,7 +553,7 @@ systemProcesses::add(const dodoString &module,
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-systemProcesses::getJobsIds()
+systemProcessCollection::getJobsIds()
 {
 	dodoList<unsigned long> ids;
 

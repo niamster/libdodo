@@ -57,7 +57,7 @@ systemThreadCollection::~systemThreadCollection()
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 
 #ifdef DL_EXT
-	deinitSystemThreadsModule deinit;
+	deinitSystemThreadCollectionModule deinit;
 #endif
 
 	for (; i != j; ++i)
@@ -89,7 +89,7 @@ systemThreadCollection::~systemThreadCollection()
 
 		if (i->handle != NULL)
 		{
-			deinit = (deinitSystemThreadsModule)dlsym(i->handle, "deinitSystemThreadsModule");
+			deinit = (deinitSystemThreadCollectionModule)dlsym(i->handle, "deinitSystemThreadCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -177,9 +177,9 @@ systemThreadCollection::del(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemThreadsModule deinit;
+			deinitSystemThreadCollectionModule deinit;
 
-			deinit = (deinitSystemThreadsModule)dlsym(current->handle, "deinitSystemThreadsModule");
+			deinit = (deinitSystemThreadCollectionModule)dlsym(current->handle, "deinitSystemThreadCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -225,9 +225,9 @@ systemThreadCollection::replace(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemThreadsModule deinit;
+			deinitSystemThreadCollectionModule deinit;
 
-			deinit = (deinitSystemThreadsModule)dlsym(current->handle, "deinitSystemThreadsModule");
+			deinit = (deinitSystemThreadCollectionModule)dlsym(current->handle, "deinitSystemThreadCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -470,7 +470,7 @@ systemThreadCollection::getModuleInfo(const dodoString &module,
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemThreadsModule init = (initSystemThreadsModule)dlsym(handle, "initSystemThreadsModule");
+	initSystemThreadCollectionModule init = (initSystemThreadCollectionModule)dlsym(handle, "initSystemThreadCollectionModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -498,7 +498,7 @@ systemThreadCollection::add(const dodoString &module,
 	if (thread.handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemThreadsModule init = (initSystemThreadsModule)dlsym(thread.handle, "initSystemThreadsModule");
+	initSystemThreadCollectionModule init = (initSystemThreadCollectionModule)dlsym(thread.handle, "initSystemThreadCollectionModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 

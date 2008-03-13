@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemProcesses.h
+ *            systemProcessCollection.h
  *
  *  Tue Feb 27 08:38:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMPROCESSES_H_
-#define _SYSTEMPROCESSES_H_
+#ifndef _SYSTEMPROCESSCOLLECTION_H_
+#define _SYSTEMPROCESSCOLLECTION_H_
 
 #ifdef DL_EXT
 
@@ -38,7 +38,7 @@
 #include <libdodo/directives.h>
 #include <libdodo/types.h>
 #include <libdodo/systemJobs.h>
-#include <libdodo/systemProcessesEx.h>
+#include <libdodo/systemProcessCollectionEx.h>
 
 namespace dodo
 {
@@ -84,9 +84,9 @@ namespace dodo
 #ifdef DL_EXT
 
 	/**
-	 * @struct __systemProcessesMod defines data that is returned from initSystemProcessesModule in the library
+	 * @struct __systemProcessCollectionMod defines data that is returned from initSystemProcessCollectionModule in the library
 	 */
-	struct __systemProcessesMod
+	struct __systemProcessCollectionMod
 	{
 		char name[64];                  ///< name of module
 		char discription[256];          ///< discription of module
@@ -96,21 +96,21 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef initSystemProcessesModule defines type of init function for library
+	 * @typedef initSystemProcessCollectionModule defines type of init function for library
 	 */
-	typedef __systemProcessesMod (*initSystemProcessesModule)(void *);
+	typedef __systemProcessCollectionMod (*initSystemProcessCollectionModule)(void *);
 
 	/**
-	 * @typedef deinitSystemProcessesModule defines type of deinit function for library
+	 * @typedef deinitSystemProcessCollectionModule defines type of deinit function for library
 	 */
-	typedef void (*deinitSystemProcessesModule)();
+	typedef void (*deinitSystemProcessCollectionModule)();
 
 #endif
 
 	/**
-	 * @class systemProcesses provides processes management functionality
+	 * @class systemProcessCollection provides processes management functionality
 	 */
-	class systemProcesses : public systemJobs
+	class systemProcessCollection : public systemJobs
 	{
 		private:
 
@@ -118,19 +118,19 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			systemProcesses(systemProcesses &sp);
+			systemProcessCollection(systemProcessCollection &sp);
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			systemProcesses();
+			systemProcessCollection();
 
 			/**
 			 * destructor
 			 */
-			virtual ~systemProcesses();
+			virtual ~systemProcessCollection();
 
 			/**
 			 * add function as a process
@@ -266,7 +266,7 @@ namespace dodo
 			 * @param module defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines library init data
 			 */
-			static __systemProcessesMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+			static __systemProcessCollectionMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
 #endif
 

@@ -47,7 +47,7 @@ OBJECTS:=dbBase.o \
 		xml.o \
 		image.o \
 		dbSqlite.o \
-		systemProcesses.o \
+		systemProcessCollection.o \
 		systemThreadCollection.o \
 		systemJobs.o \
 		threadGuard.o \
