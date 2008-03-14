@@ -419,7 +419,9 @@ baseEx::setErrorHandlers(const dodoString &path,
 			handlesEx[i] = NULL;
 		}
 
-		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
+		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+		if (handlesEx[i] == NULL)
+			handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
 		if (handlesEx[i] == NULL)
 			return false;
 
@@ -449,8 +451,9 @@ baseEx::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
-
-	void *handler = dlopen(path.c_str(), RTLD_LAZY);
+	void *handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (handler == NULL)
+		handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (handler == NULL)
 		return false;
 
@@ -495,7 +498,9 @@ __exMod
 baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (handle == NULL)
+		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (handle == NULL)
 		return __exMod();
 

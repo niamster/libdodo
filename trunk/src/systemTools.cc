@@ -898,7 +898,9 @@ __sigMod
 systemTools::getModuleInfo(const dodoString &module,
 						   void             *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (handle == NULL)
+		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -921,7 +923,9 @@ systemTools::setSignalHandler(const dodoString &path,
 							  void             *toInit)
 {
 
-	void *handle = dlopen(path.c_str(), RTLD_LAZY);
+	void *handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (handle == NULL)
+		handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 

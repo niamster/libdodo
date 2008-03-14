@@ -497,7 +497,9 @@ __systemProcessCollectionMod
 systemProcessCollection::getModuleInfo(const dodoString &module,
 							   void             *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (handle == NULL)
+		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -525,7 +527,9 @@ systemProcessCollection::add(const dodoString &module,
 	process.data = data;
 	process.position = ++processNum;
 
-	process.handle = dlopen(module.c_str(), RTLD_LAZY);
+	process.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (process.handle == NULL)
+		process.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (process.handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 

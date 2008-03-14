@@ -466,7 +466,9 @@ __systemThreadCollectionMod
 systemThreadCollection::getModuleInfo(const dodoString &module,
 							 void             *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (handle == NULL)
+		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -494,7 +496,9 @@ systemThreadCollection::add(const dodoString &module,
 	thread.data = data;
 	thread.position = ++threadNum;
 
-	thread.handle = dlopen(module.c_str(), RTLD_LAZY);
+	thread.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (thread.handle == NULL)
+		thread.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (thread.handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 

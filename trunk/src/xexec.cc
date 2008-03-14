@@ -403,7 +403,9 @@ xexec::addXExecModule(dodoList<__execItem> &list,
 	temp.enabled = true;
 	temp.type = type;
 
-	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
+	temp.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (temp.handle == NULL)
+		temp.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (temp.handle == NULL)
 		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -452,7 +454,9 @@ __xexecMod
 xexec::getModuleInfo(const dodoString &module,
 					 void             *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (handle == NULL)
+		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -484,7 +488,9 @@ xexec::_addExec(const dodoString &module,
 	temp.enabled = true;
 	temp.type = type;
 
-	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
+	temp.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
+	if (temp.handle == NULL)
+		temp.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 	if (temp.handle == NULL)
 		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
