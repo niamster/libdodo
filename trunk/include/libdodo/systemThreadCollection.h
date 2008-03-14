@@ -37,7 +37,7 @@
 #include <signal.h>
 #include <pthread.h>
 
-#include <libdodo/systemJobs.h>
+#include <libdodo/systemJobCollection.h>
 #include <libdodo/systemTools.h>
 #include <libdodo/systemThreadCollectionEx.h>
 #include <libdodo/types.h>
@@ -117,7 +117,7 @@ namespace dodo
 	/**
 	 * @class systemThreadCollection provides threads management functionality
 	 */
-	class systemThreadCollection : public systemJobs
+	class systemThreadCollection : public systemJobCollection
 	{
 		private:
 

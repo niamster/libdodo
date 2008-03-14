@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemJobs.cc
+ *            systemJobCollection.cc
  *
  *  Sun Oct  30 13:24:19 2007
  *  Copyright  2007  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/systemJobs.h>
+#include <libdodo/systemJobCollection.h>
 
 using namespace dodo;
 
-systemJobs::~systemJobs()
+systemJobCollection::~systemJobCollection()
 {
 }
 

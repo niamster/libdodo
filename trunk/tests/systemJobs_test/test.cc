@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemJobs.h>
+#include <libdodo/systemJobCollection.h>
 #include <libdodo/systemProcessCollection.h>
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemTools.h>
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
 		const int amount = 10;
 		
-		systemJobs *pr[amount];
+		systemJobCollection *pr[amount];
 
 		int pos[amount];
 		std::string ids[amount];

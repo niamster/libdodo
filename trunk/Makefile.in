@@ -49,7 +49,7 @@ OBJECTS:=dbBase.o \
 		dbSqlite.o \
 		systemProcessCollection.o \
 		systemThreadCollection.o \
-		systemJobs.o \
+		systemJobCollection.o \
 		threadGuard.o \
 		processGuard.o \
 		systemThreadSharedDataGuard.o \

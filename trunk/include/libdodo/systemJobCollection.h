@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemJobs.h
+ *            systemJobCollection.h
  *
  *  Mon Mar 05 13:01:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _systemJobs_H_
-#define _systemJobs_H_
+#ifndef _SYSTEMJOBCOLLECTION_H_
+#define _SYSTEMJOBCOLLECTION_H_
 
 #include <libdodo/directives.h>
 #include <libdodo/types.h>
@@ -35,16 +35,16 @@ namespace dodo
 	typedef void *(*jobFunc)(void *);
 
 	/**
-	 * @class systemJobs provides interface for jobs management
+	 * @class systemJobCollection provides interface for jobs management
 	 */
-	class systemJobs
+	class systemJobCollection
 	{
 		public:
 
 			/**
 			 * destructor
 			 */
-			virtual ~systemJobs() = 0;
+			virtual ~systemJobCollection() = 0;
 
 			/**
 			 * add function as a job

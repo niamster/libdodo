@@ -37,7 +37,7 @@
 
 #include <libdodo/directives.h>
 #include <libdodo/types.h>
-#include <libdodo/systemJobs.h>
+#include <libdodo/systemJobCollection.h>
 #include <libdodo/systemProcessCollectionEx.h>
 
 namespace dodo
@@ -110,7 +110,7 @@ namespace dodo
 	/**
 	 * @class systemProcessCollection provides processes management functionality
 	 */
-	class systemProcessCollection : public systemJobs
+	class systemProcessCollection : public systemJobCollection
 	{
 		private:
 
