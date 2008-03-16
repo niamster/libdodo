@@ -93,7 +93,9 @@ systemThreadCollection::~systemThreadCollection()
 			if (deinit != NULL)
 				deinit();
 
+#ifndef DL_FAST
 			dlclose(i->handle);
+#endif
 		}
 
 #endif
@@ -183,8 +185,10 @@ systemThreadCollection::del(unsigned long position,
 			if (deinit != NULL)
 				deinit();
 
+#ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
 				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+#endif
 		}
 
 #endif
@@ -231,8 +235,10 @@ systemThreadCollection::replace(unsigned long position,
 			if (deinit != NULL)
 				deinit();
 
+#ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
 				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+#endif
 
 			current->handle = NULL;
 		}
@@ -466,9 +472,11 @@ __systemThreadCollectionMod
 systemThreadCollection::getModuleInfo(const dodoString &module,
 							 void             *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (handle == NULL)
-		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+#endif
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -478,8 +486,10 @@ systemThreadCollection::getModuleInfo(const dodoString &module,
 
 	__systemThreadCollectionMod mod = init(toInit);
 
+#ifndef DL_FAST
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+#endif
 
 	return mod;
 }
@@ -496,9 +506,11 @@ systemThreadCollection::add(const dodoString &module,
 	thread.data = data;
 	thread.position = ++threadNum;
 
-	thread.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (thread.handle == NULL)
-		thread.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	thread.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	thread.handle = dlopen(module.c_str(), RTLD_LAZY);
+#endif
 	if (thread.handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 

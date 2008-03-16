@@ -86,8 +86,11 @@ systemProcessCollection::~systemProcessCollection()
 			deinit = (deinitSystemProcessCollectionModule)dlsym(i->handle, "deinitSystemProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
-
-			dlclose(i->handle);
+			
+#ifndef DL_FAST
+			dlclose(i->handle);	
+#endif
+			
 		}
 
 #endif
@@ -209,8 +212,10 @@ systemProcessCollection::del(unsigned long position,
 			if (deinit != NULL)
 				deinit();
 
+#ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
 				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+#endif				
 		}
 
 #endif
@@ -293,9 +298,11 @@ systemProcessCollection::replace(unsigned long position,
 			deinit = (deinitSystemProcessCollectionModule)dlsym(current->handle, "deinitSystemProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
-
+			
+#ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);			
+#endif
 		}
 
 #endif
@@ -497,9 +504,11 @@ __systemProcessCollectionMod
 systemProcessCollection::getModuleInfo(const dodoString &module,
 							   void             *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (handle == NULL)
-		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+#endif
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -508,10 +517,12 @@ systemProcessCollection::getModuleInfo(const dodoString &module,
 		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__systemProcessCollectionMod mod = init(toInit);
-
+	
+#ifndef DL_FAST
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-
+#endif	
+	
 	return mod;
 }
 
@@ -527,9 +538,11 @@ systemProcessCollection::add(const dodoString &module,
 	process.data = data;
 	process.position = ++processNum;
 
-	process.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (process.handle == NULL)
-		process.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	process.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	process.handle = dlopen(module.c_str(), RTLD_LAZY);
+#endif
 	if (process.handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, SYSTEMPROCESSCOLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 

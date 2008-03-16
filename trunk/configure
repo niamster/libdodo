@@ -1275,6 +1275,8 @@ Optional Features:
   --disable-dbMysql-xexec-support
                           compile dbMysql w/o xexec support
   --disable-dl-lib        disable dl as lib
+  --disable-fast-dynamic-loading
+                          do not unload library to produce better performance
   --enable-zlib-lib       enable zlib as lib
   --enable-iconv-lib      enable iconv as lib
 
@@ -5750,6 +5752,23 @@ fi
 			LDFLAGS="$LDFLAGS -ldl"
 		fi
 		echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
+
+		# Check whether --enable-fast-dynamic-loading was given.
+if test "${enable_fast_dynamic_loading+set}" = set; then
+  enableval=$enable_fast_dynamic_loading; DL_FAST="$enableval"
+else
+  DL_FAST="yes"
+fi
+
+
+		if test "$DL_FAST" = "yes"
+		then
+			echo -n -e "#define DL_FAST\n\n" >> include/libdodo/directives.runtime.h
+
+			RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tenabled"
+		else
+			RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tdisabled"
+		fi
 
 		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
 	else

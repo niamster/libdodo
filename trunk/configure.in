@@ -322,6 +322,19 @@ fi
 		fi
 		echo -n -e "#define DL_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
+		AC_ARG_ENABLE(fast-dynamic-loading,
+        	AS_HELP_STRING([--disable-fast-dynamic-loading],[do not unload library to produce better performance]),
+        		[DL_FAST="$enableval"], [DL_FAST="yes"])
+
+		if test "$DL_FAST" = "yes"
+		then
+			echo -n -e "#define DL_FAST\n\n" >> include/libdodo/directives.runtime.h        
+	
+			RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tenabled"
+		else
+			RESULT="$RESULT\nFast dynamic loading\t\t\t\t\t\tdisabled"
+		fi
+
 		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tenabled"
 	else
 		RESULT="$RESULT\nDynamic linking\t\t\t\t\t\tdisabled"

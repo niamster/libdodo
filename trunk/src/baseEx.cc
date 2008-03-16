@@ -253,7 +253,10 @@ baseEx::~baseEx()
 
 		handlesOpenedEx[i] = false;
 
+#ifndef DL_FAST
 		dlclose(handlesEx[i]);
+#endif
+		
 	}
 
 #endif
@@ -282,8 +285,10 @@ baseEx::setErrorHandler(errorModuleEnum module,
 		deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
 		if (deinit != NULL)
 			deinit();
-
+		
+#ifndef DL_FAST
 		dlclose(handlesEx[module]);
+#endif
 
 		handlesOpenedEx[module] = false;
 		handlesEx[module] = NULL;
@@ -316,7 +321,9 @@ baseEx::setErrorHandlers(errorHandler handler,
 			if (deinit != NULL)
 				deinit();
 
+#ifndef DL_FAST
 			dlclose(handlesEx[i]);
+#endif
 
 			handlesOpenedEx[i] = false;
 			handlesEx[i] = NULL;
@@ -344,8 +351,10 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 		deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
 		if (deinit != NULL)
 			deinit();
-
+		
+#ifndef DL_FAST
 		dlclose(handlesEx[module]);
+#endif
 
 		handlesOpenedEx[module] = false;
 		handlesEx[module] = NULL;
@@ -377,7 +386,9 @@ baseEx::unsetErrorHandlers()
 			if (deinit != NULL)
 				deinit();
 
-			dlclose(handlesEx[i]);
+#ifndef DL_FAST
+			dlclose(handlesEx[i]);	
+#endif
 
 			handlesOpenedEx[i] = false;
 			handlesEx[i] = NULL;
@@ -412,16 +423,20 @@ baseEx::setErrorHandlers(const dodoString &path,
 			deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
 			if (deinit != NULL)
 				deinit();
-
+			
+#ifndef DL_FAST
 			dlclose(handlesEx[i]);
+#endif
 
 			handlesOpenedEx[i] = false;
 			handlesEx[i] = NULL;
 		}
-
-		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-		if (handlesEx[i] == NULL)
-			handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+		
+#ifdef DL_FAST
+		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);	
+#else
+		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
+#endif
 		if (handlesEx[i] == NULL)
 			return false;
 
@@ -451,9 +466,11 @@ baseEx::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
-	void *handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (handler == NULL)
-		handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	void *handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	void *handler = dlopen(path.c_str(), RTLD_LAZY);
+#endif
 	if (handler == NULL)
 		return false;
 
@@ -470,8 +487,10 @@ baseEx::setErrorHandler(const dodoString &path,
 		deinit = (deinitExModule)dlsym(handlesEx[mod.module], "deinitExModule");
 		if (deinit != NULL)
 			deinit();
-
+		
+#ifndef DL_FAST
 		dlclose(handlesEx[mod.module]);
+#endif
 
 		handlesOpenedEx[mod.module] = false;
 		handlesEx[mod.module] = NULL;
@@ -498,9 +517,11 @@ __exMod
 baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (handle == NULL)
-		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+#endif
 	if (handle == NULL)
 		return __exMod();
 
@@ -509,9 +530,11 @@ baseEx::getModuleInfo(const dodoString &module,
 		return __exMod();
 
 	__exMod mod = init(toInit);
-
+	
+#ifndef DL_FAST
 	if (dlclose(handle) != 0)
 		return mod;
+#endif
 
 	return mod;
 }

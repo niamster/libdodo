@@ -709,7 +709,9 @@ systemTools::setSignalHandler(long signal,
 		if (deinit != NULL)
 			deinit();
 
+#ifndef DL_FAST
 		dlclose(handlesSig[handleSignal]);
+#endif
 
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
@@ -748,7 +750,9 @@ systemTools::setMicroTimer(unsigned long timeout,
 		if (deinit != NULL)
 			deinit();
 
+#ifndef DL_FAST
 		dlclose(handlesSig[handleSignal]);
+#endif
 
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
@@ -804,7 +808,9 @@ systemTools::setTimer(long timeout,
 		if (deinit != NULL)
 			deinit();
 
+#ifndef DL_FAST
 		dlclose(handlesSig[handleSignal]);
+#endif
 
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
@@ -875,7 +881,9 @@ systemTools::unsetSignalHandler(long signal)
 		if (deinit != NULL)
 			deinit();
 
+#ifndef DL_FAST
 		dlclose(handlesSig[handleSignal]);
+#endif
 
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;
@@ -898,9 +906,11 @@ __sigMod
 systemTools::getModuleInfo(const dodoString &module,
 						   void             *toInit)
 {
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (handle == NULL)
-		handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	void *handle = dlopen(module.c_str(), RTLD_LAZY);
+#endif
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
@@ -910,8 +920,10 @@ systemTools::getModuleInfo(const dodoString &module,
 
 	__sigMod mod = init(toInit);
 
+#ifndef DL_FAST
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+#endif
 
 	return mod;
 }
@@ -922,10 +934,11 @@ void
 systemTools::setSignalHandler(const dodoString &path,
 							  void             *toInit)
 {
-
-	void *handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NOLOAD|RTLD_NODELETE);
-	if (handle == NULL)
-		handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	void *handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	void *handle = dlopen(path.c_str(), RTLD_LAZY);
+#endif
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -944,7 +957,9 @@ systemTools::setSignalHandler(const dodoString &path,
 		if (deinit != NULL)
 			deinit();
 
+#ifndef DL_FAST
 		dlclose(handlesSig[handleSignal]);
+#endif
 
 		handlesOpenedSig[handleSignal] = false;
 		handlesSig[handleSignal] = NULL;

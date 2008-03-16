@@ -37,6 +37,16 @@
 namespace dodo
 {
 	/**
+	 * @struct __library defines library node
+	 */
+	struct __library
+	{
+		int position;   ///< object identificator
+	
+		void *handle;    ///< handle to library
+	};
+
+	/**
 	 * @class systemLibraryLoader provides handling object from static and dynamic libraries 
 	 */
 	class systemLibraryLoader
