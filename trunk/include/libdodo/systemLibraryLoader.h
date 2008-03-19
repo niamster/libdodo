@@ -37,16 +37,6 @@
 namespace dodo
 {
 	/**
-	 * @struct __library defines library node
-	 */
-	struct __library
-	{
-		int position;   ///< object identificator
-	
-		void *handle;    ///< handle to library
-	};
-
-	/**
 	 * @class systemLibraryLoader provides handling object from static and dynamic libraries 
 	 */
 	class systemLibraryLoader
@@ -59,11 +49,43 @@ namespace dodo
 			systemLibraryLoader();
 
 			/**
+			 * consructor
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 */
+			systemLibraryLoader(const dodoString &path);
+
+			/**
 			 * destructor
 			 */
 			virtual ~systemLibraryLoader();
 
+			/**
+			 * open library
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 */			
+			void open(const dodoString &path);
+			
+			/**
+			 * close library
+			 * @note function exported from the library will be inaccessible
+			 */
+			void close();
+			
+			/**
+			 * get function from the library
+			 * @param name defines function name
+			 */
+			void *get(const dodoString &name);
+			
+			/**
+			 * get function from the library
+			 * @param name defines function name
+			 */
+			void *operator[](const dodoString &name);
+
 		protected:
+			
+			void *handle;    ///< handle to library
 	};
 };
 

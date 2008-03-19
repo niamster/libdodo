@@ -525,6 +525,7 @@ AC_CONFIG_FILES([Makefile
                  tests/systemTools_test/Makefile
                  tests/timeTools_test/Makefile
                  tests/xexec.module_test/Makefile
+                 tests/systemLibraryLoader_test/Makefile
                  tests/xml_test/Makefile])
 
 AC_OUTPUT

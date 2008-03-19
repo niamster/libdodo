@@ -31,12 +31,26 @@
 namespace dodo
 {
 	/**
+	 * libdodo defined errors
+	 */
+	enum xexecExR
+	{
+		SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED,
+	};
+	
+	/**
+	 * explanations for libdodo defined errors
+	 */
+#define SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED_STR "Library was not opened."
+	/**
 	 * IDs of functions where exception might be thrown
 	 */
 	enum systemLibraryLoaderFunctionsID
 	{
-		ATOMICMUTEXEX_LOCK,
-		ATOMICMUTEXEX_UNLOCK,
+		SYSTEMLIBRARYLOADEREX_OPEN,
+		SYSTEMLIBRARYLOADEREX_CLOSE,
+		SYSTEMLIBRARYLOADEREX_GET,
+		SYSTEMLIBRARYLOADEREX_BROPERATORSTRING,
 	};
 };
 

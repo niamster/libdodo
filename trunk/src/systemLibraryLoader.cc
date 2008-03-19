@@ -27,16 +27,82 @@
 
 using namespace dodo;
 
-systemLibraryLoader::systemLibraryLoader()
+systemLibraryLoader::systemLibraryLoader() : handle(NULL)
 {
+}
+
+//-------------------------------------------------------------------
+
+systemLibraryLoader::systemLibraryLoader(const dodoString &path) : handle(NULL)
+{
+#ifdef DL_FAST
+	handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	handle = dlopen(path.c_str(), RTLD_LAZY);
+#endif
 }
 
 //-------------------------------------------------------------------
 
 systemLibraryLoader::~systemLibraryLoader()
 {
+#ifdef DL_FAST	
+	if (handle != NULL)
+		dlclose(handle);
+#endif
 }
 
 //-------------------------------------------------------------------
 
+void
+systemLibraryLoader::open(const dodoString &path)
+{
+#ifdef DL_FAST
+	handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#else
+	handle = dlopen(path.c_str(), RTLD_LAZY);
 #endif
+	if (handle == NULL)
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_OPEN, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void
+systemLibraryLoader::close()
+{
+#ifndef DL_FAST
+	if (dlclose(handle) != 0)
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_CLOSE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void *
+systemLibraryLoader::get(const dodoString &name)
+{
+	if (handle == NULL)
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GET, ERR_LIBDODO, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+	
+	void *func = dlsym(handle, name.c_str());
+	if (func == NULL)
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GET, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void *
+systemLibraryLoader::operator[](const dodoString &name)
+{
+	if (handle == NULL)
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_BROPERATORSTRING, ERR_LIBDODO, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+	
+	void *func = dlsym(handle, name.c_str());
+	if (func == NULL)
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_BROPERATORSTRING, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+}
+
+#endif
+
+//-------------------------------------------------------------------
