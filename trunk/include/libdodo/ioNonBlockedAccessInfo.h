@@ -1,8 +1,8 @@
 /***************************************************************************
- *            ioNBAEx.h
+ *            ioNonBlockedAccessInfo.h
  *
- *  Thu Sep 09 03:41:24 2006
- *  Copyright  2006  Ni@m
+ *  Fri Jan 18 02:51:24 2008
+ *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,24 +21,38 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IONBAEX_H_
-#define _IONBAEX_H_
+
+#ifndef _IONONBLOCKEDACCESSINFO_H_
+#define _IONONBLOCKEDACCESSINFO_H_
 
 #include <libdodo/directives.h>
-
-#include <libdodo/baseEx.h>
 
 namespace dodo
 {
 	/**
-	 * IDs of functions where exception might be thrown
+	 * @class ioNonBlockedAccessInfo provides interface for ioNonBlockedAccess  
 	 */
-	enum ioNBAFunctionsID
+	class ioNonBlockedAccessInfo
 	{
-		IONBAEX_ISREADABLE,
-		IONBAEX_ISWRITABLE,
+		friend class ioNonBlockedAccess;
+		
+		public:
+			
+			/**
+			 * destructor
+			 */
+			virtual ~ioNonBlockedAccessInfo() = 0;
+	
+			/**
+			 * @return descriptor of input stream
+			 */
+			virtual int getInDescriptor() const = 0;
+	
+			/**
+			 * @return descriptor of output stream
+			 */
+			virtual int getOutDescriptor() const = 0;
 	};
-
 };
 
 #endif

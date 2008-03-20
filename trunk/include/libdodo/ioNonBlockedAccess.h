@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNBA.h
+ *            ioNonBlockedAccess.h
  *
  *  Thu Sep 09 03:21:24 2006
  *  Copyright  2006  Ni@m
@@ -22,14 +22,14 @@
  */
 
 
-#ifndef _IONBA_H_
-#define _IONBA_H_
+#ifndef _IONONBLOCKEDACCESS_H_
+#define _IONONBLOCKEDACCESS_H_
 
 #include <libdodo/directives.h>
 
 #include <poll.h>
 
-#include <libdodo/ioNBAEx.h>
+#include <libdodo/ioNonBlockedAccessEx.h>
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
 #include <libdodo/threadGuard.h>
@@ -49,9 +49,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class ioNBA provides information if in/output stream is readable/writable
+	 * @class ioNonBlockedAccess provides information if in/output stream is readable/writable
 	 */
-	class ioNBA : virtual public threadGuardHolder
+	class ioNonBlockedAccess : virtual public threadGuardHolder
 	{
 
 		private:
@@ -60,25 +60,25 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			ioNBA(ioNBA &rt);
+			ioNonBlockedAccess(ioNonBlockedAccess &rt);
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			ioNBA();
+			ioNonBlockedAccess();
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioNBA();
+			virtual ~ioNonBlockedAccess();
 
 			/**
 			 * @return identificator of stream pair
 			 * @param fl defines a stream[ioDisk, ioSTD, ioSocketExchange, ...]
 			 */
-			virtual int addFlush(const ioNBAInfo &fl);
+			virtual int addFlush(const ioNonBlockedAccessInfo &fl);
 
 			/**
 			 * delete stream pair from watchers

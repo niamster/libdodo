@@ -1,7 +1,7 @@
 /***************************************************************************
- *            ioNBAInfo.cc
+ *            logger.cc
  *
- *  Fri Jan 18 02:51:24 2008
+ *  Fri Mar 21 00:57:57 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,14 +21,37 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/ioNBAInfo.h>
+#include <libdodo/logger.h>
 
 using namespace dodo;
 
-ioNBAInfo::~ioNBAInfo()
+logger::logger() : handlersNum(0)
 {
 	
 }
 
 //-------------------------------------------------------------------
 
+logger::~logger()
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+unsigned long
+logger::set(short level, 
+			io *handler)
+{
+	__logMap lm;
+	
+	lm.handler = handler;
+	lm.level = level;
+	lm.position = ++handlersNum;
+	
+	handlers.push_back(lm);
+	
+	return handlersNum;
+}
+
+//-------------------------------------------------------------------

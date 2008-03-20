@@ -1,7 +1,7 @@
 /***************************************************************************
- *            ioNBAInfo.h
+ *            logger.h
  *
- *  Fri Jan 18 02:51:24 2008
+ *  Fri Mar 21 00:57:57 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,38 +21,68 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-
-#ifndef _IONBAINFO_H_
-#define _IONBAINFO_H_
+#ifndef _LOGGER_H_
+#define _LOGGER_H_
 
 #include <libdodo/directives.h>
+
+#include <libdodo/io.h>
 
 namespace dodo
 {
 	/**
-	 * @class ioNBAInfo provides interface for ioNBA  
+	 * @enum loggerLogLevelEnum defines log levels
 	 */
-	class ioNBAInfo
+	enum loggerLogLevelEnum
 	{
-		friend class ioNBA;
-		
+		LOGGER_INFO,
+		LOGGER_WARNING,
+		LOGGER_ERROR,
+		LOGGER_DEBUG
+	};
+
+	/**
+	 * @struct __logMap defines map between log level and log handler
+	 */
+	struct __logMap
+	{
+		short level;///< log level[see loggerLogLevelEnum]
+		io *handler;///< log handler
+		long position;///< log handler identificator
+	};
+
+	/**
+	 * @class logger provides logging function
+	 */
+	class logger
+	{
 		public:
+			
+			/**
+			 * constructor
+			 */
+			logger();
 			
 			/**
 			 * destructor
 			 */
-			virtual ~ioNBAInfo() = 0;
-	
+			virtual ~logger();
+			
 			/**
-			 * @return descriptor of input stream
+			 * register log handler
+			 * @return log handler identificator
+			 * @param level defines log level[see loggerLogLevelEnum]
+			 * @param handler defines log handler
 			 */
-			virtual int getInDescriptor() const = 0;
-	
-			/**
-			 * @return descriptor of output stream
-			 */
-			virtual int getOutDescriptor() const = 0;
+			virtual unsigned long set(short level, io *handler);
+		
+		private:
+			
+			dodoList<__logMap> handlers;///< list of log maps
+			
+			unsigned long handlersNum;///< number of registered handlers
 	};
+
 };
 
 #endif

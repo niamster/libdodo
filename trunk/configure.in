@@ -509,22 +509,22 @@ AC_CONFIG_FILES([Makefile
                  tests/STD_test/Makefile
                  tests/cgiFast_test/Makefile
                  tests/cgi_test/Makefile
-                 tests/dbinterface_test/Makefile
+                 tests/db_test/Makefile
                  tests/disk_test/Makefile
                  tests/glob_test/Makefile
                  tests/mysql_test/Makefile
                  tests/postgresql_test/Makefile
                  tests/regexp_test/Makefile
-                 tests/socketNB_test/Makefile
+                 tests/non_blocked_socket_test/Makefile
+                 tests/systemThreadCollection_test/Makefile
                  tests/socketThreads_test/Makefile
                  tests/socket_test/Makefile
                  tests/sqlite_test/Makefile
-                 tests/systemThreads_test/Makefile
-                 tests/systemProcesses_test/Makefile
-                 tests/systemJobs_test/Makefile
+                 tests/systemProcessCollection_test/Makefile
+                 tests/systemJobCollection_test/Makefile
                  tests/systemTools_test/Makefile
                  tests/timeTools_test/Makefile
-                 tests/xexec.module_test/Makefile
+                 tests/xexec_test/Makefile
                  tests/systemLibraryLoader_test/Makefile
                  tests/xml_test/Makefile])
 

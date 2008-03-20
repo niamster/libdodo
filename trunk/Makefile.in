@@ -35,6 +35,7 @@ OBJECTS:=dbBase.o \
 		dbMysql.o \
 		cgi.o \
 		regexp.o \
+		logger.o \
 		ioSocketOptions.o \
 		ioSocketExchange.o \
 		ioSocketTools.o \
@@ -65,9 +66,9 @@ OBJECTS:=dbBase.o \
 		db.o \
 		cgiFast.o \
 		cgiProcessor.o \
-		ioNBA.o \
+		ioNonBlockedAccess.o \
 		systemLibraryLoader.o \
-		ioNBAInfo.o
+		ioNonBlockedAccessInfo.o
 
 ###########################################################
 

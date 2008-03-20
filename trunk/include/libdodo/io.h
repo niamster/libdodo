@@ -28,7 +28,7 @@
 
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
-#include <libdodo/ioNBAInfo.h>
+#include <libdodo/ioNonBlockedAccessInfo.h>
 
 namespace dodo
 {
@@ -55,7 +55,7 @@ namespace dodo
 	 * @class io implements an interface for I/O operations
 	 */
 	class io : public xexec,
-				virtual public ioNBAInfo
+				virtual public ioNonBlockedAccessInfo
 	{
 		public:
 

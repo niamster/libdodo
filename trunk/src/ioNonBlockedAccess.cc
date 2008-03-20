@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNBA.cc
+ *            ioNonBlockedAccess.cc
  *
  *  Thu Sep 09 03:21:24 2006
  *  Copyright  2006  Ni@m
@@ -21,32 +21,32 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/ioNBA.h>
+#include <libdodo/ioNonBlockedAccess.h>
 
 using namespace dodo;
 
 //-------------------------------------------------------------------
 
-ioNBA::ioNBA(ioNBA &rt)
+ioNonBlockedAccess::ioNonBlockedAccess(ioNonBlockedAccess &rt)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNBA::ioNBA() : descs(0)
+ioNonBlockedAccess::ioNonBlockedAccess() : descs(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNBA::~ioNBA()
+ioNonBlockedAccess::~ioNonBlockedAccess()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-ioNBA::addFlush(const ioNBAInfo &fl)
+ioNonBlockedAccess::addFlush(const ioNonBlockedAccessInfo &fl)
 {
 	guard pg(this);
 
@@ -64,7 +64,7 @@ ioNBA::addFlush(const ioNBAInfo &fl)
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-ioNBA::isReadable(const dodoArray<int> &pos,
+ioNonBlockedAccess::isReadable(const dodoArray<int> &pos,
 				  int timeout) const
 {
 	guard pg(this);
@@ -126,7 +126,7 @@ ioNBA::isReadable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IONBA, IONBAEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -142,7 +142,7 @@ ioNBA::isReadable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-ioNBA::isWritable(const dodoArray<int> &pos,
+ioNonBlockedAccess::isWritable(const dodoArray<int> &pos,
 				  int timeout) const
 {
 	guard pg(this);
@@ -204,7 +204,7 @@ ioNBA::isWritable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IONBA, IONBAEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -220,7 +220,7 @@ ioNBA::isWritable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 bool
-ioNBA::isReadable(int pos,
+ioNonBlockedAccess::isReadable(int pos,
 				  int timeout) const
 {
 	guard pg(this);
@@ -248,7 +248,7 @@ ioNBA::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IONBA, IONBAEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -258,7 +258,7 @@ ioNBA::isReadable(int pos,
 //-------------------------------------------------------------------
 
 void
-ioNBA::delFlush(int pos)
+ioNonBlockedAccess::delFlush(int pos)
 {
 	guard pg(this);
 
@@ -275,7 +275,7 @@ ioNBA::delFlush(int pos)
 //-------------------------------------------------------------------
 
 bool
-ioNBA::isWritable(int pos,
+ioNonBlockedAccess::isWritable(int pos,
 				  int timeout) const
 {
 	guard pg(this);
@@ -303,7 +303,7 @@ ioNBA::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IONBA, IONBAEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 

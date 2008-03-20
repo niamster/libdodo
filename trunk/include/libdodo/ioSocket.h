@@ -44,7 +44,7 @@
 #include <libdodo/ioSocketOptions.h>
 #include <libdodo/ioSocketExchange.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ioNBAInfo.h>
+#include <libdodo/ioNonBlockedAccessInfo.h>
 
 namespace dodo
 {
@@ -92,7 +92,7 @@ namespace dodo
 	 */
 	class ioSocket : public xexec, 
 					public ioSocketOptions,
-					virtual public ioNBAInfo
+					virtual public ioNonBlockedAccessInfo
 	{
 			friend class ioSocketExchange;
 

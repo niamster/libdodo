@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/ioSocket.h>
 #include <libdodo/ioSocketTools.h>
-#include <libdodo/ioNBA.h>
+#include <libdodo/ioNonBlockedAccess.h>
 
 #include <iostream>
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 				
 		ioSocketExchange conn;
 
-		ioNBA nb;
+		ioNonBlockedAccess nb;
 		
 		while(true)
 		{
