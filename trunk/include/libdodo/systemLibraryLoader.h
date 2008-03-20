@@ -28,11 +28,15 @@
 
 #ifdef DL_EXT
 
-#include <pthread.h>
+#ifdef BFD_EXT
 
-#include <libdodo/atomicLock.h>
+#include <bfd.h>
+
+#endif
+
 #include <libdodo/systemLibraryLoaderEx.h>
 #include <libdodo/types.h>
+#include <libdodo/tools.h>
 
 namespace dodo
 {
@@ -63,25 +67,36 @@ namespace dodo
 			 * open library
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 */			
-			void open(const dodoString &path);
+			virtual void open(const dodoString &path);
 			
 			/**
 			 * close library
 			 * @note function exported from the library will be inaccessible
 			 */
-			void close();
+			virtual void close();
 			
 			/**
 			 * get function from the library
 			 * @param name defines function name
 			 */
-			void *get(const dodoString &name);
+			virtual void *get(const dodoString &name);
 			
 			/**
 			 * get function from the library
 			 * @param name defines function name
 			 */
-			void *operator[](const dodoString &name);
+			virtual void *operator[](const dodoString &name);
+			
+#ifdef BFD_EXT
+			
+			/**
+			 * get symbols from the library
+			 * @return symbols of the library
+			 * @param path defines path to the library[if not in ldconfig db] or library name
+			 */
+			static dodoStringArray getSymbols(const dodoString &path);
+			
+#endif
 
 		protected:
 			

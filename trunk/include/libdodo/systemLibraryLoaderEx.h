@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum xexecExR
+	enum systemLibraryLoaderExR
 	{
 		SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED,
 	};
@@ -51,6 +51,7 @@ namespace dodo
 		SYSTEMLIBRARYLOADEREX_CLOSE,
 		SYSTEMLIBRARYLOADEREX_GET,
 		SYSTEMLIBRARYLOADEREX_BROPERATORSTRING,
+		SYSTEMLIBRARYLOADEREX_GETSYMBOLS,
 	};
 };
 

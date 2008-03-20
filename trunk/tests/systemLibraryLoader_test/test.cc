@@ -17,6 +17,15 @@ int main(int argc, char **argv)
 	{
 
 #ifdef DL_EXT
+
+#ifdef BFD_EXT
+		dodoStringArray arr = systemLibraryLoader::getSymbols("./module");\
+		dodoStringArray::iterator i = arr.begin(), j = arr.end();
+		for (;i!=j;++i)
+			cout << *i << endl;
+		cout << endl;
+#endif
+
 		systemLibraryLoader sll("./module");
 
 		print pr;

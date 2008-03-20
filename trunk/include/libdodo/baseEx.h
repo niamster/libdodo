@@ -52,7 +52,8 @@ namespace dodo
 		ERR_BZIP,
 		ERR_IMAGEMAGICK,
 		ERR_POSIXREGEX,
-		ERR_PCRE
+		ERR_PCRE,
+		ERR_BFD
 	};
 
 	/**

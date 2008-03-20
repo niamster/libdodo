@@ -103,6 +103,65 @@ systemLibraryLoader::operator[](const dodoString &name)
 		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_BROPERATORSTRING, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
+//-------------------------------------------------------------------
+
+#ifdef BFD_EXT
+
+dodoStringArray 
+systemLibraryLoader::getSymbols(const dodoString &path)
+{
+	bfd_init();
+	
+	bfd *lib = bfd_openr(path.c_str(), NULL);
+	if (lib == NULL)
+	{
+		bfd_error_type err = bfd_get_error();
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+	}
+    
+	if (bfd_check_format(lib, bfd_object) == FALSE)
+	{
+		bfd_error_type err = bfd_get_error();
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+	}
+
+	long storageSize = bfd_get_symtab_upper_bound(lib);
+	
+	if (storageSize < 0)
+	{
+		bfd_error_type err = bfd_get_error();
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+	}
+	
+	if (storageSize == 0)
+	   return dodoStringArray();
+
+	asymbol **symbolTable = (asymbol **)malloc(storageSize);
+
+	long numberOfSymbols = bfd_canonicalize_symtab(lib, symbolTable);
+	
+	if (numberOfSymbols < 0)
+	{
+		bfd_error_type err = bfd_get_error();
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+	}
+	
+	dodoStringArray arr;
+	for (long i=0;i<numberOfSymbols;++i)
+		if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION))
+		arr.push_back(symbolTable[i]->name);
+    
+	if (bfd_close(lib) == FALSE)
+	{
+		bfd_error_type err = bfd_get_error();
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+	}
+	
+	return arr;
+}
+
+#endif
+
 #endif
 
 //-------------------------------------------------------------------
