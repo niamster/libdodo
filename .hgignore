@@ -1,0 +1,16 @@
+syntax:glob
+*.o
+.cdtproject
+.project
+.cproject
+.settings
+*.so*
+*.cgi
+*.fcgi
+test
+module
+directives.runtime.h
+dodo-config
+config.*
+Makefile
+autom4te.cache
