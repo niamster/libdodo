@@ -148,7 +148,7 @@ systemLibraryLoader::getSymbols(const dodoString &path)
 	
 	dodoStringArray arr;
 	for (long i=0;i<numberOfSymbols;++i)
-		if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION))
+		if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION) && isSetFlag(symbolTable[i]->flags, BSF_GLOBAL))
 		arr.push_back(symbolTable[i]->name);
     
 	if (bfd_close(lib) == FALSE)
