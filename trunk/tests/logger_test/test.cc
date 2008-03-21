@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 		std->redirectToSTDErr(true);
 
 		log.add(LOGGER_ERROR, disk);
+		log.add(LOGGER_ERROR, NULL);
 		log.add(LOGGER_ERROR, std);
 		log.add(LOGGER_INFO, std);
 		unsigned long infoDiskId = log.add(LOGGER_INFO, disk);

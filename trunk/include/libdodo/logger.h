@@ -29,6 +29,8 @@
 #include <libdodo/io.h>
 #include <libdodo/timeTools.h>
 
+#include <syslog.h>
+
 namespace dodo
 {
 	/**
@@ -37,9 +39,13 @@ namespace dodo
 	enum loggerLogLevelEnum
 	{
 		LOGGER_INFO = 0,
+		LOGGER_NOTICE,
+		LOGGER_DEBUG,
 		LOGGER_WARNING,
 		LOGGER_ERROR,
-		LOGGER_DEBUG
+		LOGGER_ALERT,
+		LOGGER_CRITICAL,
+		LOGGER_EMERGENCY,
 	};
 
 	/**
@@ -74,6 +80,7 @@ namespace dodo
 			 * @return log handler identificator
 			 * @param level defines log level[see loggerLogLevelEnum]
 			 * @param handler defines log handler
+			 * @note if handler is NULL logger will pass message to the syslog
 			 */
 			virtual unsigned long add(short level, io *handler);
 			
@@ -93,6 +100,7 @@ namespace dodo
 			/**
 			 * set date/time format for log messages
 			 * @param format defines date/time format[see timeTools]
+			 * @note date/time format is not used for syslog
 			 */
 			virtual void setTimeFormat(const dodoString &format);
 		
@@ -104,7 +112,8 @@ namespace dodo
 			
 			unsigned long handlersNum;///< number of registered handlers
 			
-			static const dodoString levels[4];
+			static const dodoString levels[8];
+			static const int syslogLevels[8];
 	};
 
 };

@@ -26,9 +26,25 @@
 using namespace dodo;
 
 const dodoString logger::levels[] = { "INFO",
-	"WARNING",
-	"ERROR",
-	"DEBUG",
+		"NOTICE",
+		"DEBUG",
+		"WARNING",
+		"ERROR",
+		"ALERT",
+		"CRITICAL",
+		"EMERGENCY"
+};
+
+//-------------------------------------------------------------------
+
+const int logger::syslogLevels[] = { LOG_INFO,
+		LOG_NOTICE,
+		LOG_DEBUG,
+		LOG_WARNING,
+		LOG_ERR,
+		LOG_ALERT,
+		LOG_CRIT,
+		LOG_EMERG,
 };
 
 //-------------------------------------------------------------------
@@ -86,8 +102,13 @@ logger::log(short level,
 	for (;i!=j;++i)
 		if (i->level == level)
 		{
-			i->handler->writeStreamString(levels[level] + timeTools::byFormat(timeFormat, timeTools::now()) + msg + "\n");
-			i->handler->flush();
+			if (i->handler != NULL)
+			{
+				i->handler->writeStreamString(levels[level] + timeTools::byFormat(timeFormat, timeTools::now()) + msg + "\n");
+				i->handler->flush();
+			}
+			else
+				syslog(syslogLevels[level], msg.c_str());
 		}
 }
 
