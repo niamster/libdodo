@@ -25,22 +25,29 @@
 
 using namespace dodo;
 
-logger::logger() : handlersNum(0)
-{
-	
+const dodoString logger::levels[] = { "INFO",
+	"WARNING",
+	"ERROR",
+	"DEBUG",
+};
+
+//-------------------------------------------------------------------
+
+logger::logger() : handlersNum(0),
+					timeFormat(" %d/%m/%Y.%H-%M-%S: ")
+{	
 }
 
 //-------------------------------------------------------------------
 
 logger::~logger()
 {
-	
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-logger::set(short level, 
+logger::add(short level, 
 			io *handler)
 {
 	__logMap lm;
@@ -52,6 +59,44 @@ logger::set(short level,
 	handlers.push_back(lm);
 	
 	return handlersNum;
+}
+
+//-------------------------------------------------------------------
+
+void
+logger::remove(unsigned long position)
+{
+	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
+	for (;i!=j;++i)
+		if (i->position == position)
+		{
+			handlers.erase(i);
+			
+			break;
+		}
+}
+
+//-------------------------------------------------------------------
+
+void 
+logger::log(short level, 
+			const dodoString &msg)
+{
+	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
+	for (;i!=j;++i)
+		if (i->level == level)
+		{
+			i->handler->writeStreamString(levels[level] + timeTools::byFormat(timeFormat, timeTools::now()) + msg + "\n");
+			i->handler->flush();
+		}
+}
+
+//-------------------------------------------------------------------
+
+void 
+logger::setTimeFormat(const dodoString &format)
+{
+	timeFormat = " " + format + ": ";
 }
 
 //-------------------------------------------------------------------

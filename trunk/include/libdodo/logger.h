@@ -27,6 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/io.h>
+#include <libdodo/timeTools.h>
 
 namespace dodo
 {
@@ -35,7 +36,7 @@ namespace dodo
 	 */
 	enum loggerLogLevelEnum
 	{
-		LOGGER_INFO,
+		LOGGER_INFO = 0,
 		LOGGER_WARNING,
 		LOGGER_ERROR,
 		LOGGER_DEBUG
@@ -74,13 +75,36 @@ namespace dodo
 			 * @param level defines log level[see loggerLogLevelEnum]
 			 * @param handler defines log handler
 			 */
-			virtual unsigned long set(short level, io *handler);
+			virtual unsigned long add(short level, io *handler);
+			
+			/**
+			 * unregister log handler
+			 * @param position defines log handler identificator
+			 */
+			virtual void remove(unsigned long position);
+			
+			/**
+			 * log message
+			 * @param level defines log level[see loggerLogLevelEnum]
+			 * @param msg defines log message
+			 */
+			virtual void log(short level, const dodoString &msg);
+			
+			/**
+			 * set date/time format for log messages
+			 * @param format defines date/time format[see timeTools]
+			 */
+			virtual void setTimeFormat(const dodoString &format);
 		
 		private:
+			
+			dodoString timeFormat;///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 			
 			dodoList<__logMap> handlers;///< list of log maps
 			
 			unsigned long handlersNum;///< number of registered handlers
+			
+			static const dodoString levels[4];
 	};
 
 };
