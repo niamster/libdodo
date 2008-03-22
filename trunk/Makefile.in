@@ -46,6 +46,7 @@ OBJECTS:=dbBase.o \
 		systemTools.o \
 		timeTools.o \
 		xml.o \
+		rpc.o \
 		image.o \
 		dbSqlite.o \
 		systemProcessCollection.o \

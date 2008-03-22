@@ -46,7 +46,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class jsonObject defines JSON object data
+	 * @struct __jsonNodeDef defines JSON object data
 	 */
 	struct __jsonNodeDef
 	{
@@ -60,7 +60,7 @@ namespace dodo
 	};
 
 	/**
-	 * @class jsonObject defines JSON object reprasentation
+	 * @class jsonNode defines JSON object reprasentation
 	 */
 	class jsonNode
 	{
