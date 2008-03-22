@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum cgiFastFunctionsExR
+	enum cgiFastExR
 	{
 		CGIFASTIOEX_FAILEDTOFLUSH,
 		CGIFASTIOEX_FAILEDTOPRINTSTRING,

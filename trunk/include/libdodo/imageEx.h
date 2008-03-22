@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum imageFunctionsExR
+	enum imageExR
 	{
 		IMAGEEX_BADINFO,
 		IMAGEEX_EMPTYIMAGE

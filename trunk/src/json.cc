@@ -25,6 +25,7 @@
 
 using namespace dodo;
 
+
 jsonNode::jsonNode() : valueDataType(JSON_DATATYPE_NULL)
 {
 
@@ -32,15 +33,42 @@ jsonNode::jsonNode() : valueDataType(JSON_DATATYPE_NULL)
 
 //-------------------------------------------------------------------
 
-jsonNode::jsonNode(const jsonNode &node)
+jsonNode::jsonNode(const dodoString &value) : valueDataType(JSON_DATATYPE_STRING),
+											stringValue(value)
 {
-	stringValue = node.stringValue;
-	objectValue = node.objectValue;
-	arrayValue = node.arrayValue;
-	booleanValue = node.booleanValue;
-	numericValue = node.numericValue;
+	
+}
 
-	valueDataType = node.valueDataType;
+//-------------------------------------------------------------------
+
+jsonNode::jsonNode(long value) : valueDataType(JSON_DATATYPE_NUMERIC),
+											numericValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+jsonNode::jsonNode(bool value) : valueDataType(JSON_DATATYPE_BOOLEAN),
+											booleanValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+jsonNode::jsonNode(const dodoArray<jsonNode> &value) : valueDataType(JSON_DATATYPE_ARRAY),
+											arrayValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+jsonNode::jsonNode(const dodoMap<dodoString, jsonNode, stringTools::equal> &value) : valueDataType(JSON_DATATYPE_OBJECT),
+											objectValue(value)
+{
+	
 }
 
 //-------------------------------------------------------------------
@@ -48,6 +76,71 @@ jsonNode::jsonNode(const jsonNode &node)
 jsonNode::~jsonNode()
 {
 
+}
+
+//-------------------------------------------------------------------
+
+void
+jsonNode::setType(short type)
+{
+	valueDataType = type;
+}
+
+//-------------------------------------------------------------------
+
+void
+jsonNode::setString(const dodoString &value)
+{
+	stringValue = value;
+}
+
+//-------------------------------------------------------------------
+
+void
+jsonNode::setBoolean(bool value)
+{
+	booleanValue = value;
+}
+
+//-------------------------------------------------------------------
+
+void
+jsonNode::setNumeric(long value)
+{
+	numericValue = value;
+}
+
+//-------------------------------------------------------------------
+
+void
+jsonNode::addArrayElement(const jsonNode &value)
+{
+	arrayValue.push_back(value);
+}
+
+//-------------------------------------------------------------------
+
+void
+jsonNode::addObjectMember(const dodoString &name, 
+								const jsonNode &value)
+{
+	objectValue.insert(name, value);
+}
+
+//-------------------------------------------------------------------
+
+void 
+jsonNode::setArray(const dodoArray<jsonNode> &value)
+{
+	arrayValue = value;
+}
+
+//-------------------------------------------------------------------
+
+void 
+jsonNode::setObject(const dodoMap<dodoString, jsonNode, stringTools::equal> &value)
+{
+	objectValue = value;
 }
 
 //-------------------------------------------------------------------
@@ -111,7 +204,7 @@ long
 jsonNode::getNumeric()
 {
 	if (valueDataType != JSON_DATATYPE_NUMERIC)
-		throw baseEx(ERRMODULE_JSON, JSONNODEEX_NUMERIC, ERR_LIBDODO, JSONNODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_JSON, JSONNODEEX_GETNUMERIC, ERR_LIBDODO, JSONNODEEX_WRONGTYPEREQUESTED, JSONNODEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return numericValue;
 }
@@ -180,7 +273,7 @@ json::~json()
 //-------------------------------------------------------------------
 
 dodoString
-json::makeJSON(const __jsonNodeDef &root)
+json::makeJSON(const jsonNode &root)
 {
 	switch (root.valueDataType)
 	{
@@ -200,7 +293,7 @@ json::makeJSON(const __jsonNodeDef &root)
 		{
 			dodoString jsonObject = "{";
 
-			dodoMap<dodoString, __jsonNodeDef, stringTools::equal>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
+			dodoMap<dodoString, jsonNode, stringTools::equal>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
 			if (i != j)
 			{
 				for (--j; i != j; ++i)
@@ -228,7 +321,7 @@ json::makeJSON(const __jsonNodeDef &root)
 		{
 			dodoString jsonObject = "[";
 
-			dodoArray<__jsonNodeDef>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
+			dodoArray<jsonNode>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
 			if (i != j)
 			{
 				--j;
@@ -582,8 +675,8 @@ json::processJSON(const dodoString &root)
 dodoString
 json::mapToJSON(const dodoStringMap &root)
 {
-	__jsonNodeDef nodeDef;
-	__jsonNodeDef subNodeDef;
+	jsonNode nodeDef;
+	jsonNode subNodeDef;
 
 	nodeDef.valueDataType = JSON_DATATYPE_OBJECT;
 	subNodeDef.valueDataType = JSON_DATATYPE_STRING;

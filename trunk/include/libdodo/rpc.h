@@ -28,6 +28,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
+#include <libdodo/rpcEx.h>
 
 namespace dodo
 {
@@ -47,27 +48,58 @@ namespace dodo
 	};
 
 	/**
-	 * @class rpcMethodArgument defines RPC argumet for method reprasentation
+	 * @class rpcValue defines RPC value
 	 */
-	class rpcMethodArgument
+	class rpcValue
 	{
 		public:
 			
 			/**
 			 * constructor
+			 * @note constructs empty string value
 			 */
-			rpcMethodArgument();
+			rpcValue();
+
+			/**
+			 * constructor
+			 * @param value defines string, date/time, base64 value
+			 */
+			rpcValue(const dodoString &value);
+
+			/**
+			 * constructor
+			 * @param value defines integer value
+			 */
+			rpcValue(long value);
+
+			/**
+			 * constructor
+			 * @param value defines double value
+			 */
+			rpcValue(double value);
+
+			/**
+			 * constructor
+			 * @param value defines boolean value
+			 */
+			rpcValue(bool value);
+
+			/**
+			 * constructor
+			 * @param value defines array value
+			 */
+			rpcValue(const dodoArray<rpcValue> &value);
+
+			/**
+			 * constructor
+			 * @param value defines object value
+			 */
+			rpcValue(const dodoMap<dodoString, rpcValue, stringTools::equal> &value);
 
 			/**
 			 * destructor
 			 */
-			virtual ~rpcMethodArgument();
-
-			/**
-			 * set argument name
-			 * @param name defines method name
-			 */
-			virtual void setName(const dodoString &name);
+			virtual ~rpcValue();
 
 			/**
 			 * clear arguments information
@@ -84,52 +116,118 @@ namespace dodo
 			 * set string, date/time, base64 value
 			 * @param value defines string value
 			 */
-			virtual void setStringValue(const dodoString &value);
+			virtual void setString(const dodoString &value);
 			
 			/**
 			 * set boolean value
 			 * @param value defines boolean value
 			 */
-			virtual void setBooleanValue(bool value);
+			virtual void setBoolean(bool value);
 			
 			/**
 			 * set integer value
 			 * @param value defines integer value
 			 */
-			virtual void setIntegerValue(long value);
+			virtual void setInteger(long value);
 			
 			/**
 			 * set double value
 			 * @param value defines double value
 			 */
-			virtual void setDoubleValue(double value);
+			virtual void setDouble(double value);
 			
 			/**
 			 * add array value
 			 * @param value defines array member value
 			 */
-			virtual void addArrayValue(const rpcMethodArgument &value);
+			virtual void addArrayElement(const rpcValue &value);
 			
 			/**
-			 * add struct value
+			 * add struct value element
 			 * @param name defines struct member name
 			 * @param value defines struct member value
 			 */
-			virtual void addStructValue(const dodoString &name, const rpcMethodArgument &value);
+			virtual void addStructMember(const dodoString &name, const rpcValue &value);
+			
+			/**
+			 * set array value member
+			 * @param value defines array value
+			 */
+			virtual void setArray(const dodoArray<rpcValue> &value);
+			
+			/**
+			 * set struct value
+			 * @param value defines struct value
+			 */
+			virtual void setStruct(const dodoMap<dodoString, rpcValue, stringTools::equal> &value);
+			
+			/**
+			 * @return structure member
+			 * @param name defines structure member name
+			 * @note throws exception if data type is not RPC_DATATYPE_STRUCT
+			 */
+			virtual rpcValue operator[](const dodoString &name);
+
+			/**
+			 * @return array element
+			 * @param index defines array index
+			 * @note throws exception if data type is not RPC_DATATYPE_ARRAY
+			 */
+			virtual rpcValue operator[](unsigned long key);
+			
+			/**
+			 * get argument type 
+			 */
+			virtual short getType();
+			
+			/**
+			 * get string, date/time, base64 value
+			 * @note throws exception if data type is not RPC_DATATYPE_STRING, RPC_DATATYPE_DATETIME, RPC_DATATYPE_BASE64
+			 */
+			virtual dodoString getString();
+			
+			/**
+			 * get boolean value
+			 * @note throws exception if data type is not RPC_DATATYPE_BOOLEAN
+			 */
+			virtual bool getBoolean();
+			
+			/**
+			 * get integer value
+			 * @note throws exception if data type is not RPC_DATATYPE_INTEGER
+			 */
+			virtual long getInteger();
+			
+			/**
+			 * get double value
+			 * @note throws exception if data type is not RPC_DATATYPE_DOUBLE
+			 */
+			virtual double getDouble();
+			
+			/**
+			 * get array value
+			 * @note throws exception if data type is not RPC_DATATYPE_ARRAY
+			 */
+			virtual dodoArray<rpcValue> getArray();
+			
+			/**
+			 * get struct value
+			 * @note throws exception if data type is not RPC_DATATYPE_STRUCT
+			 */
+			virtual dodoMap<dodoString, rpcValue, stringTools::equal> getStruct();
 			
 		protected:
 			
-			short type;///< argument type
-			dodoString name;///< argument name
+			short valueDataType;///< argument type[see rpcDataTypeEnum]
 			
 			dodoString stringValue;///< string, datetime, base64 value
 			long integerValue;///< integer value
 			bool booleanValue;///< boolean value
 			double doubleValue;///< double value
-			dodoArray<rpcMethodArgument> arrayValue;///< array value
-			dodoMap<dodoString, rpcMethodArgument, stringTools::equal> structValue;///< struct value
+			dodoArray<rpcValue> arrayValue;///< array value
+			dodoMap<dodoString, rpcValue, stringTools::equal> structValue;///< struct value
 	};
-
+	
 	/**
 	 * @class rpcMethod defines RPC method reprasentation
 	 */
@@ -162,11 +260,11 @@ namespace dodo
 			 * add argument
 			 * @param argument defines method argument 
 			 */
-			virtual void addArgument(const rpcMethodArgument &argument);
+			virtual void addArgument(const dodoString &name, const rpcValue &argument);
 			
 		private:
 			
-			dodoArray<rpcMethodArgument> arguments;///< method arguments
+			dodoMap<dodoString, rpcValue, stringTools::equal> arguments;///< method arguments
 			dodoString name;///< method name
 	};
 };

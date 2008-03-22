@@ -12,32 +12,40 @@ int main(int argc, char **argv)
 	{
 		json js;
 
-		__jsonNodeDef node, node1, node2;
+		jsonNode node, node1, node2;
 		
-		node.valueDataType = JSON_DATATYPE_OBJECT;
+		node.setType(JSON_DATATYPE_OBJECT);
 		
-		node2.valueDataType = JSON_DATATYPE_ARRAY;
+		node2.setType(JSON_DATATYPE_ARRAY);
 
-		node1.valueDataType = JSON_DATATYPE_BOOLEAN;
-		node1.booleanValue = true;
-		node.objectValue["bool"] = node1;
-		node2.arrayValue.push_back(node1);
+		node1.setType(JSON_DATATYPE_BOOLEAN);
+		node1.setBoolean(true);
+		node.addObjectMember("bool", node1);
+		node2.addArrayElement(node1);
 		
-		node1.valueDataType = JSON_DATATYPE_STRING;
-		node1.stringValue = "test string";
-		node.objectValue["string"] = node1;
-		node2.arrayValue.push_back(node1);
+		node1.setType(JSON_DATATYPE_STRING);
+		node1.setString("test string");
+		node.addObjectMember("string", node1);
+		node2.addArrayElement(node1);
 
-		node1.valueDataType = JSON_DATATYPE_NUMERIC;
-		node1.numericValue = 1234;
-		node.objectValue["numeric"] = node1;
-		node2.arrayValue.push_back(node1);
+		node1.setType(JSON_DATATYPE_NUMERIC);
+		node1.setNumeric(1234);
+		node.addObjectMember("numeric", node1);
+		node2.addArrayElement(node1);
 
-		node1.valueDataType = JSON_DATATYPE_NULL;
-		node.objectValue["null"] = node1;
-		node2.arrayValue.push_back(node1);
+		node1.setType(JSON_DATATYPE_NULL);
+		node.addObjectMember("null", node1);
+		node2.addArrayElement(node1);
 
-		node.objectValue["object"] = node2;
+		node.addObjectMember("big numeric", (long)1234567890);
+		node2.addArrayElement(node);
+
+		node1.setType(JSON_DATATYPE_OBJECT);
+		node1.addObjectMember("string", dodoString("string in object"));
+		node.addObjectMember("null", node1);
+		node2.addArrayElement(node1);
+
+		node.addObjectMember("object", node2);
 
 		cout << js.makeJSON(node) << endl;
 		

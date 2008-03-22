@@ -25,14 +25,62 @@
 
 using namespace dodo;
 
-rpcMethodArgument::rpcMethodArgument()
+rpcValue::rpcValue() : valueDataType(RPC_DATATYPE_STRING)
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcMethodArgument::~rpcMethodArgument()
+rpcValue::rpcValue(const dodoString &value) : valueDataType(RPC_DATATYPE_STRING),
+						stringValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+rpcValue::rpcValue(long value) : valueDataType(RPC_DATATYPE_INTEGER),
+						integerValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+rpcValue::rpcValue(double value) : valueDataType(RPC_DATATYPE_DOUBLE),
+						doubleValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+rpcValue::rpcValue(bool value) : valueDataType(RPC_DATATYPE_BOOLEAN),
+						booleanValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+rpcValue::rpcValue(const dodoArray<rpcValue> &value) : valueDataType(RPC_DATATYPE_ARRAY),
+						arrayValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+rpcValue::rpcValue(const dodoMap<dodoString, rpcValue, stringTools::equal> &value) : valueDataType(RPC_DATATYPE_STRUCT),
+						structValue(value)
+{
+	
+}
+
+//-------------------------------------------------------------------
+
+rpcValue::~rpcValue()
 {
 	
 }
@@ -40,15 +88,7 @@ rpcMethodArgument::~rpcMethodArgument()
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::setName(const dodoString &name)
-{
-	this->name = name;
-}
-
-//-------------------------------------------------------------------
-
-void
-rpcMethodArgument::clear()
+rpcValue::clear()
 {
 	stringValue.clear();
 	arrayValue.clear();
@@ -58,15 +98,15 @@ rpcMethodArgument::clear()
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::setType(short type)
+rpcValue::setType(short type)
 {
-	this->type = type;
+	valueDataType = type;
 }
 
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::setStringValue(const dodoString &value)
+rpcValue::setString(const dodoString &value)
 {
 	stringValue = value;
 }
@@ -74,7 +114,7 @@ rpcMethodArgument::setStringValue(const dodoString &value)
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::setBooleanValue(bool value)
+rpcValue::setBoolean(bool value)
 {
 	booleanValue = value;
 }
@@ -82,7 +122,7 @@ rpcMethodArgument::setBooleanValue(bool value)
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::setIntegerValue(long value)
+rpcValue::setInteger(long value)
 {
 	integerValue = value;
 }
@@ -90,7 +130,7 @@ rpcMethodArgument::setIntegerValue(long value)
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::setDoubleValue(double value)
+rpcValue::setDouble(double value)
 {
 	doubleValue = value;
 }
@@ -98,7 +138,7 @@ rpcMethodArgument::setDoubleValue(double value)
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::addArrayValue(const rpcMethodArgument &value)
+rpcValue::addArrayElement(const rpcValue &value)
 {
 	arrayValue.push_back(value);
 }
@@ -106,10 +146,128 @@ rpcMethodArgument::addArrayValue(const rpcMethodArgument &value)
 //-------------------------------------------------------------------
 
 void
-rpcMethodArgument::addStructValue(const dodoString &name, 
-								const rpcMethodArgument &value)
+rpcValue::addStructMember(const dodoString &name, 
+								const rpcValue &value)
 {
 	structValue.insert(name, value);
+}
+
+//-------------------------------------------------------------------
+
+void 
+rpcValue::setArray(const dodoArray<rpcValue> &value)
+{
+	arrayValue = value;
+}
+
+//-------------------------------------------------------------------
+
+void 
+rpcValue::setStruct(const dodoMap<dodoString, rpcValue, stringTools::equal> &value)
+{
+	structValue = value;
+}
+
+//-------------------------------------------------------------------
+
+rpcValue 
+rpcValue::operator[](const dodoString &name)
+{
+	if (valueDataType != RPC_DATATYPE_STRUCT)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_BROPERATORSTRING, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	return structValue[name];
+}
+
+//-------------------------------------------------------------------
+
+rpcValue 
+rpcValue::operator[](unsigned long key)
+{
+	if (valueDataType != RPC_DATATYPE_ARRAY)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_BROPERATORNUMERIC, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	if (key >= arrayValue.size())
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_BROPERATORNUMERIC, ERR_LIBDODO, RPCVALUEEX_ARRAYOUTOFRANGE, RPCVALUEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
+
+	return arrayValue[key];
+}
+
+//-------------------------------------------------------------------
+
+short 
+rpcValue::getType()
+{
+	return valueDataType;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+rpcValue::getString()
+{
+	if (valueDataType != RPC_DATATYPE_STRING)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETSTRING, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	return stringValue;
+}
+
+//-------------------------------------------------------------------
+
+bool 
+rpcValue::getBoolean()
+{
+	if (valueDataType != RPC_DATATYPE_BOOLEAN)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETBOOLEAN, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	return booleanValue;
+}
+
+//-------------------------------------------------------------------
+
+long 
+rpcValue::getInteger()
+{
+	if (valueDataType != RPC_DATATYPE_INTEGER)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETINTEGER, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	return integerValue;
+	
+}
+
+//-------------------------------------------------------------------
+
+double 
+rpcValue::getDouble()
+{
+	if (valueDataType != RPC_DATATYPE_DOUBLE)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETDOUBLE, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	return doubleValue;
+	
+}
+
+//-------------------------------------------------------------------
+
+dodoArray<rpcValue> 
+rpcValue::getArray()
+{
+	if (valueDataType != RPC_DATATYPE_ARRAY)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETARRAY, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	return arrayValue;
+}
+
+//-------------------------------------------------------------------
+
+dodoMap<dodoString, rpcValue, stringTools::equal> 
+rpcValue::getStruct()
+{
+	if (valueDataType != RPC_DATATYPE_STRUCT)
+		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETSTRUCT, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+
+	return structValue;
+	
 }
 
 //-------------------------------------------------------------------
@@ -145,9 +303,10 @@ rpcMethod::clear()
 //-------------------------------------------------------------------
 
 void
-rpcMethod::addArgument(const rpcMethodArgument &argument)
+rpcMethod::addArgument(const dodoString &name,
+					const rpcValue &argument)
 {
-	arguments.push_back(argument);
+	arguments.insert(name, argument);
 }
 
 //-------------------------------------------------------------------

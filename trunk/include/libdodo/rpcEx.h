@@ -1,5 +1,5 @@
 /***************************************************************************
- *            jsonEx.h
+ *            rpcEx.h
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _JSONEX_H_
-#define _JSONEX_H_
+#ifndef _RPCEX_H_
+#define _RPCEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,41 +33,31 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum jsonExR
+	enum rpcExR
 	{
-		JSONNODEEX_WRONGTYPEREQUESTED,
-		JSONNODEEX_ARRAYOUTOFRANGE,
-		JSONNODEEX_MALFORMEDJSON,
-		JSONEX_MALFORMEDJSONNUMERIC,
-		JSONEX_MALFORMEDJSONNULL,
-		JSONEX_MALFORMEDJSONBOOLEAN,
+		RPCVALUEEX_WRONGTYPEREQUESTED,
+		RPCVALUEEX_ARRAYOUTOFRANGE,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
-#define JSONNODEEX_MALFORMEDJSON_STR "Malformed json object."
-#define JSONEX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-#define JSONEX_MALFORMEDJSONNULL_STR "Malformed json object: null."
-#define JSONEX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
+#define RPCVALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+#define RPCVALUEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum jsonFunctionsID
+	enum rpcFunctionsID
 	{
-		JSONNODEEX_BROPERATORSTRING,
-		JSONNODEEX_BROPERATORNUMERIC,
-		JSONNODEEX_GETSTRING,
-		JSONNODEEX_GETBOOLEAN,
-		JSONNODEEX_GETNUMERIC,
-		JSONNODEEX_GETARRAY,
-		JSONNODEEX_GETOBJECT,
-		JSONEX_PROCESSBOOLEAN,
-		JSONEX_PROCESSNULL,
-		JSONEX_PROCESSNUMERIC,
+		RPCVALUEEX_BROPERATORSTRING,
+		RPCVALUEEX_BROPERATORNUMERIC,
+		RPCVALUEEX_GETSTRING,
+		RPCVALUEEX_GETBOOLEAN,
+		RPCVALUEEX_GETINTEGER,
+		RPCVALUEEX_GETDOUBLE,
+		RPCVALUEEX_GETARRAY,
+		RPCVALUEEX_GETSTRUCT,
 	};
 
 };

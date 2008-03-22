@@ -46,20 +46,6 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __jsonNodeDef defines JSON object data
-	 */
-	struct __jsonNodeDef
-	{
-		dodoString stringValue;                                             ///< string value of node
-		dodoMap<dodoString, __jsonNodeDef, stringTools::equal> objectValue; ///< object value of node
-		dodoArray<__jsonNodeDef> arrayValue;                                ///< array value of node
-		bool booleanValue;                                                  ///< boolean value of node
-		long numericValue;                                                  ///< numeric value of node
-
-		short valueDataType;                                                ///< data type of value
-	};
-
-	/**
 	 * @class jsonNode defines JSON object reprasentation
 	 */
 	class jsonNode
@@ -69,19 +55,94 @@ namespace dodo
 		public:
 
 			/**
-			 * copy constructor
+			 * constructor
+			 * @note constructs `null` object
 			 */
-			jsonNode(const jsonNode &node);
+			jsonNode();
 
 			/**
 			 * constructor
+			 * @param value defines string value
 			 */
-			jsonNode();
+			jsonNode(const dodoString &value);
+
+			/**
+			 * constructor
+			 * @param value defines numeric value
+			 */
+			jsonNode(long value);
+
+			/**
+			 * constructor
+			 * @param value defines boolean value
+			 */
+			jsonNode(bool value);
+
+			/**
+			 * constructor
+			 * @param value defines array value
+			 */
+			jsonNode(const dodoArray<jsonNode> &value);
+
+			/**
+			 * constructor
+			 * @param value defines object value
+			 */
+			jsonNode(const dodoMap<dodoString, jsonNode, stringTools::equal> &value);
 
 			/**
 			 * destructor
 			 */
 			virtual ~jsonNode();
+			
+			/**
+			 * set argument type 
+			 * @param type defines argument type[see jsonDataTypeEnum]
+			 */
+			virtual void setType(short type);
+			
+			/**
+			 * set string, date/time, base64 value
+			 * @param value defines string value
+			 */
+			virtual void setString(const dodoString &value);
+			
+			/**
+			 * set boolean value
+			 * @param value defines boolean value
+			 */
+			virtual void setBoolean(bool value);
+			
+			/**
+			 * set integer value
+			 * @param value defines integer value
+			 */
+			virtual void setNumeric(long value);
+			
+			/**
+			 * add array value
+			 * @param value defines array member value
+			 */
+			virtual void addArrayElement(const jsonNode &value);
+			
+			/**
+			 * add struct value element
+			 * @param name defines struct member name
+			 * @param value defines struct member value
+			 */
+			virtual void addObjectMember(const dodoString &name, const jsonNode &value);
+			
+			/**
+			 * set array value member
+			 * @param value defines array value
+			 */
+			virtual void setArray(const dodoArray<jsonNode> &value);
+			
+			/**
+			 * set struct value
+			 * @param value defines struct value
+			 */
+			virtual void setObject(const dodoMap<dodoString, jsonNode, stringTools::equal> &value);
 
 			/**
 			 * @return node by string key
@@ -182,7 +243,7 @@ namespace dodo
 			 * @return string that contains serialized JSON object
 			 * @param root defines root of unserialized JSON object
 			 */
-			virtual dodoString makeJSON(const __jsonNodeDef &root);
+			virtual dodoString makeJSON(const jsonNode &root);
 
 			/**
 			 * @return root of unserialized JSON object
