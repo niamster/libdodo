@@ -51,4 +51,4 @@ namespace dodo
 	};
 };
 
-#endif /*THREADGUARD_H_*/
+#endif 

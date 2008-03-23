@@ -208,4 +208,4 @@ namespace dodo
 	};
 };
 
-#endif /*STRINGTOOLS_H_*/
+#endif 

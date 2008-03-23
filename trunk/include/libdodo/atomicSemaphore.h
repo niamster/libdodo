@@ -69,4 +69,4 @@ namespace dodo
 	};
 };
 
-#endif /*_ATOMICSEMAPHORE_H_*/
+#endif

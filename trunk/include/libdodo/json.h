@@ -339,4 +339,4 @@ namespace dodo
 	};
 };
 
-#endif /*_JSON_H_*/
+#endif

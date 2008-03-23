@@ -52,6 +52,8 @@ namespace dodo
 	 */
 	class rpcValue
 	{
+		friend class rpcClient;
+		
 		public:
 			
 			/**
@@ -233,6 +235,8 @@ namespace dodo
 	 */
 	class rpcMethod
 	{
+		friend class rpcClient;
+		
 		public:
 
 			/**
@@ -267,6 +271,86 @@ namespace dodo
 			dodoMap<dodoString, rpcValue, stringTools::equal> arguments;///< method arguments
 			dodoString name;///< method name
 	};
+	
+	/**
+	 * @class rpcResponse defines RPC response reprasentation
+	 */
+	class rpcResponse
+	{
+		friend class rpcClient;
+		
+		public:
+
+			/**
+			 * constructor
+			 */
+			rpcResponse();
+
+			/**
+			 * destructor
+			 */
+			virtual ~rpcResponse();
+
+			/**
+			 * @return response value
+			 */
+			virtual rpcValue getValue();
+			
+			/**
+			 * @return true if request has  
+			 */
+			virtual bool successful();
+			
+			/**
+			 * @return rpcValue for type casting  
+			 */
+			virtual operator rpcValue(); 
+			
+		private:
+			
+			rpcValue value;///< response value
+			bool succ;///< true if server returned non-fail response
+	};
+	
+	class ioHTTP;
+	
+	/**
+	 * @class rpcClient defines 
+	 */
+	class rpcClient
+	{
+		public:
+
+			/**
+			 * constructor
+			 */
+			rpcClient();
+
+			/**
+			 * destructor
+			 */
+			virtual ~rpcClient() = 0;
+		
+			/**
+			 * @param method defines rpc method call
+			 */
+			virtual void sendRequest(const rpcMethod &method) = 0;
+			
+			/**
+			 * @return rpc response result 
+			 */
+			virtual rpcResponse receiveResponse() = 0;
+			
+			/**
+			 * set transport layer provider
+			 * @param provider defines trasport layer provider
+			 */
+			virtual void setIOProvider(ioHTTP *provider);
+		
+		protected:
+			
+			ioHTTP *ioProvider;
+	};
 };
 
-#endif /*_RPC_H_*/
+#endif
