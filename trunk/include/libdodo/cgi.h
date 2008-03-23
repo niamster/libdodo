@@ -39,56 +39,47 @@
 namespace dodo
 {
 
-#define HTTP_ENV_SIZE    34
+#define HTTP_ENVIRONMENT_SIZE    34
 
 	/**
-	 * @var HTTP_ENV defines names of the environment variables that would be pushed into ENVIRONMENT cgi class property
+	 * @enum cgiEnvironmentEnum defines CGI environment
 	 */
-	const __statements HTTP_ENV[HTTP_ENV_SIZE] =
+	enum cgiEnvironmentEnum
 	{
-		{ "REQUEST_METHOD"                            },
-		{ "REQUEST_URI"                               },
-
-		{ "QUERY_STRING"                              },
-
-		{ "CONTENT_TYPE"                              },
-		{ "CONTENT_LENGTH"                            },
-		{ "CONTENT_IONETWORKOPTIONS_TRANSFER_ENCODING" },
-
-		{ "HTTP_HOST"                                 },
-		{ "HTTP_USER_AGENT"                           },
-		{ "HTTP_COOKIE"                               },
-		{ "HTTP_ACCEPT"                               },
-		{ "HTTP_ACCEPT_LANGUAGE"                      },
-		{ "HTTP_ACCEPT_ENCODING"                      },
-		{ "HTTP_ACCEPT_CHARSET"                       },
-		{ "HTTP_KEEP_ALIVE"                           },
-		{ "HTTP_CONNECTION"                           },
-		{ "HTTP_REFERER"                              },
-		{ "HTTP_VIA"                                  },
-		{ "HTTP_X_FORWARDED_FOR"                      },
-
-		{ "REMOTE_ADDR"                               },
-		{ "REMOTE_PORT"                               },
-
-		{ "REDIRECT_STATUS"                           },
-		{ "REDIRECT_QUERY_STRING"                     },
-		{ "REDIRECT_URL"                              },
-
-		{ "GATEWAY_INTERFACE"                         },
-
-		{ "PATH"                                      },
-
-		{ "SERVER_SIGNATURE"                          },
-		{ "SERVER_SOFTWARE"                           },
-		{ "SERVER_NAME"                               },
-		{ "SERVER_ADDR"                               },
-		{ "SERVER_PORT"                               },
-		{ "SERVER_ADMIN"                              },
-		{ "SERVER_PROTOCOL"                           },
-
-		{ "SCRIPT_FILENAME"                           },
-		{ "SCRIPT_NAME"                               }
+		CGI_ENVIRONMENT_REQUESTMETHOD,
+		CGI_ENVIRONMENT_REQUESTURI,
+		CGI_ENVIRONMENT_QUERYSTRING,
+		CGI_ENVIRONMENT_CONTENTTYPE,
+		CGI_ENVIRONMENT_CONTENTLENGTH,
+		CGI_ENVIRONMENT_CONTENTTRANSFERENCODING,
+		CGI_ENVIRONMENT_HTTPHOST,
+		CGI_ENVIRONMENT_HTTPUSERAGENT,
+		CGI_ENVIRONMENT_HTTPCOOKIE,
+		CGI_ENVIRONMENT_HTTPACCEPT,
+		CGI_ENVIRONMENT_HTTPACCEPTLANGUAGE,
+		CGI_ENVIRONMENT_HTTPACCEPTENCODING,
+		CGI_ENVIRONMENT_HTTPACCEPTCHARSET,
+		CGI_ENVIRONMENT_HTTPKEEPALIVE,
+		CGI_ENVIRONMENT_HTTPCONNECTION,
+		CGI_ENVIRONMENT_HTTPREFERER,
+		CGI_ENVIRONMENT_HTTPVIA,
+		CGI_ENVIRONMENT_HTTPXFORWARDEDFOR,
+		CGI_ENVIRONMENT_REMOTEADDR,
+		CGI_ENVIRONMENT_REMOTEPORT,
+		CGI_ENVIRONMENT_REDIRECTSTATUS,
+		CGI_ENVIRONMENT_REDIRECTQUERYSTRING,
+		CGI_ENVIRONMENT_REDIRECTURL,
+		CGI_ENVIRONMENT_GATEWAYINTERFACE,
+		CGI_ENVIRONMENT_PATH,
+		CGI_ENVIRONMENT_SERVERSIGNATURE,
+		CGI_ENVIRONMENT_SERVERSOFTWARE,
+		CGI_ENVIRONMENT_SERVERNAME,
+		CGI_ENVIRONMENT_SERVERADDR,
+		CGI_ENVIRONMENT_SERVERPORT,
+		CGI_ENVIRONMENT_SERVERADMIN,
+		CGI_ENVIRONMENT_SERVERPROTOCOL,
+		CGI_ENVIRONMENT_SCRIPTFILENAME,
+		CGI_ENVIRONMENT_SCRIPTNAME,
 
 	};
 
@@ -264,7 +255,7 @@ namespace dodo
 			 */
 			dodoStringMap POST;                                      ///< POST variables
 			dodoStringMap GET;                                       ///< GET variables
-			dodoStringMap ENVIRONMENT;                                      ///< environment variables
+			dodoString ENVIRONMENT[HTTP_ENVIRONMENT_SIZE];                                      ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                          ///< cookies sent by browser
 			dodoMap<dodoString, __cgiFile, stringTools::equal> FILES;       ///< POST files
 
@@ -386,6 +377,8 @@ namespace dodo
 			io *cgiIO;///< CGI I/O instance
 
 			mutable bool headersPrinted;///< true if headers have been printed 
+
+			static const __statements environmentStatements[HTTP_ENVIRONMENT_SIZE];///< names of environment variables 
 	};
 };
 

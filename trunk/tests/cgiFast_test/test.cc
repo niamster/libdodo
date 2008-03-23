@@ -23,7 +23,7 @@ using namespace std;
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["e"] + "!<br>");
-		fcgi->writeStreamString("!" + cgit.ENVIRONMENT["QUERY_STRING"] + "<br>");
+		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
 		fcgi->writeStreamString("!" + cgit.COOKIES["test"] + "<br>");
 		
 		fcgi->writeStreamString("!!!\n\n\n");

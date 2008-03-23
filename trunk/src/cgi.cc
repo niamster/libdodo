@@ -25,6 +25,46 @@
 
 using namespace dodo;
 
+const __statements cgi::environmentStatements[] =
+{
+	"REQUEST_METHOD",
+	"REQUEST_URI",
+	"QUERY_STRING",
+	"CONTENT_TYPE",
+	"CONTENT_LENGTH",
+	"CONTENT_TRANSFER_ENCODING",
+	"HTTP_HOST",
+	"HTTP_USER_AGENT",
+	"HTTP_COOKIE",
+	"HTTP_ACCEPT",
+	"HTTP_ACCEPT_LANGUAGE",
+	"HTTP_ACCEPT_ENCODING",
+	"HTTP_ACCEPT_CHARSET",
+	"HTTP_KEEP_ALIVE",
+	"HTTP_CONNECTION",
+	"HTTP_REFERER",
+	"HTTP_VIA",
+	"HTTP_X_FORWARDED_FOR",
+	"REMOTE_ADDR",
+	"REMOTE_PORT",
+	"REDIRECT_STATUS",
+	"REDIRECT_QUERY_STRING",
+	"REDIRECT_URL",
+	"GATEWAY_INTERFACE",
+	"PATH",
+	"SERVER_SIGNATURE",
+	"SERVER_SOFTWARE",
+	"SERVER_NAME",
+	"SERVER_ADDR",
+	"SERVER_PORT",
+	"SERVER_ADMIN",
+	"SERVER_PROTOCOL",
+	"SCRIPT_FILENAME",
+	"SCRIPT_NAME",
+};
+
+//-------------------------------------------------------------------
+	
 __cgiFile::__cgiFile() : size(0),
 						error(CGI_POSTFILEERR_NO_FILE)
 {
@@ -92,8 +132,8 @@ cgi::cgi(dodoStringMap &headers,
 	if (autocleanContent)
 		content.clear();
 
-	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(GET, ENVIRONMENT["QUERY_STRING"]);
+	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
@@ -129,8 +169,8 @@ cgi::cgi(bool silent,
 	if (autocleanContent)
 		content.clear();
 
-	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(GET, ENVIRONMENT["QUERY_STRING"]);
+	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
@@ -165,8 +205,8 @@ cgi::cgi(ioCGIFast    *a_cf,
 	if (autocleanContent)
 		content.clear();
 
-	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(GET, ENVIRONMENT["QUERY_STRING"]);
+	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 //-------------------------------------------------------------------
@@ -200,8 +240,8 @@ cgi::cgi(ioCGIFast    *a_cf,
 	if (autocleanContent)
 		content.clear();
 
-	make(COOKIES, ENVIRONMENT["HTTP_COOKIE"], "; ");
-	make(GET, ENVIRONMENT["QUERY_STRING"]);
+	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
+	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
 
 
@@ -285,11 +325,11 @@ cgi::cleanTmp()
 void
 cgi::detectMethod()
 {
-	if (stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "GET"))
+	if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "GET"))
 		method = CGI_REQUESTMETHOD_GET;
 	else
 	{
-		if (stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "POST") && ENVIRONMENT["REQUEST_METHOD"].empty())
+		if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD].empty())
 			method = CGI_REQUESTMETHOD_POST;
 		else
 			method = CGI_REQUESTMETHOD_GET_POST;
@@ -332,16 +372,16 @@ cgi::makeEnv()
 {
 	char *env;
 
-	for (int i = 0; i < HTTP_ENV_SIZE; ++i)
+	for (int i = 0; i < HTTP_ENVIRONMENT_SIZE; ++i)
 	{
 #ifdef FCGI_EXT
 		if (cgiFastSet)
-			env = ((ioCGIFast *)cgiIO)->getenv(HTTP_ENV[i].str);
+			env = ((ioCGIFast *)cgiIO)->getenv(environmentStatements[i].str);
 		else
 #endif
-		env = getenv(HTTP_ENV[i].str);
+		env = getenv(environmentStatements[i].str);
 
-		ENVIRONMENT.insert(HTTP_ENV[i].str, env == NULL ? "NULL" : env);
+		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
 }
 
@@ -405,7 +445,7 @@ cgi::printHeaders() const
 void
 cgi::makeContent()
 {
-	unsigned long inSize = stringTools::stringToUL(ENVIRONMENT["CONTENT_LENGTH"]);
+	unsigned long inSize = stringTools::stringToUL(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTLENGTH]);
 
 	if (inSize <= 0)
 		return ;
@@ -423,21 +463,21 @@ cgi::makePost()
 	if (content.size() == 0)
 		return ;
 
-	if (!stringTools::iequal(ENVIRONMENT["REQUEST_METHOD"], "POST"))
+	if (!stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST"))
 		return ;
 
-	if (stringTools::iequal(ENVIRONMENT["CONTENT_TYPE"], "application/x-www-form-urlencoded"))
+	if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
 	{
 		make(POST, content);
 	}
 	else
 	{
-		if (stringTools::iequal(ENVIRONMENT["CONTENT_IONETWORKOPTIONS_TRANSFER_ENCODING"], "base64"))
+		if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
 			content = tools::decodeBase64(content);
 
 		unsigned int temp0;
-		temp0 = ENVIRONMENT["CONTENT_TYPE"].find("boundary=");
-		dodoStringArray postPartd = tools::explode(content, "--" + ENVIRONMENT["CONTENT_TYPE"].substr(temp0 + 9));
+		temp0 = ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE].find("boundary=");
+		dodoStringArray postPartd = tools::explode(content, "--" + ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE].substr(temp0 + 9));
 
 		dodoStringArray::iterator i(postPartd.begin()), j(postPartd.end());
 
