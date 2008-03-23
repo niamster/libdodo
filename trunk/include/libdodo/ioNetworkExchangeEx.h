@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocketToolsEx.h
+ *            ioNetworkExchangeEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSOCKETTOOLSEX_H_
-#define _IOSOCKETTOOLSEX_H_
+#ifndef _IONETWORKEXCHANGEEX_H_
+#define _IONETWORKEXCHANGEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,16 +33,11 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioSocketToolsFunctionsID
+	enum ioNetworkExchangeFunctionsID
 	{
-		IOSOCKETTOOLSEX_GETHOSTINFO,
-		IOSOCKETTOOLSEX_SETLOCALNAME,
-		IOSOCKETTOOLSEX_GETLOCALNAME,
-		IOSOCKETTOOLSEX_GETSERVICEINFO,
-		IOSOCKETTOOLSEX_GETLOCALDOMAIN,
-		IOSOCKETTOOLSEX_SETLOCALDOMAIN,
-		IOSOCKETTOOLSEX_GETINTERFACEINFO,
-		IOSOCKETTOOLSEX_GETINTERFACESNAMES,
+		IONETWORKEXCHANGEEX__WRITE,
+		IONETWORKEXCHANGEEX__READ,
+		IONETWORKEXCHANGEEX__READSTREAM,
 	};
 
 };

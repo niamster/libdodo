@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocket.h
+ *            ioNetwork.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSOCKETTOOLS_H_
-#define _IOSOCKETTOOLS_H_
+#ifndef _IONETWORKTOOLS_H_
+#define _IONETWORKTOOLS_H_
 
 #include <libdodo/directives.h>
 
@@ -36,7 +36,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/ioSocketToolsEx.h>
+#include <libdodo/ioNetworkToolsEx.h>
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
 
@@ -78,9 +78,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class ioSocketTools provides information about network environment
+	 * @class ioNetworkTools provides information about network environment
 	 */
-	class ioSocketTools
+	class ioNetworkTools
 
 	{
 

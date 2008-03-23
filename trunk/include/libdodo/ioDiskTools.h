@@ -109,7 +109,7 @@ namespace dodo
 	class ioDiskTools
 	{
 
-			friend class ioSocket;
+			friend class ioNetwork;
 
 		public:
 

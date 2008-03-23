@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocket.h
+ *            ioNetwork.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSOCKETEXCHANGE_H_
-#define _IOSOCKETEXCHANGE_H_
+#ifndef _IONETWORKEXCHANGE_H_
+#define _IONETWORKEXCHANGE_H_
 
 #include <libdodo/directives.h>
 
@@ -36,8 +36,8 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/ioSocketOptions.h>
-#include <libdodo/ioSocketExchangeEx.h>
+#include <libdodo/ioNetworkOptions.h>
+#include <libdodo/ioNetworkExchangeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
 #include <libdodo/threadGuard.h>
@@ -46,28 +46,28 @@ namespace dodo
 {
 
 	/**
-	 * @enum ioSocketOperationTypeEnum defines type of operation for hook
+	 * @enum ioNetworkOperationTypeEnum defines type of operation for hook
 	 */
-	enum ioSocketExchangeOperationTypeEnum
+	enum ioNetworkExchangeOperationTypeEnum
 	{
-		IOSOCKETEXCHANGE_OPERATION_READ,
-		IOSOCKETEXCHANGE_OPERATION_READSTRING,
-		IOSOCKETEXCHANGE_OPERATION_READSTREAM,
-		IOSOCKETEXCHANGE_OPERATION_READSTREAMSTRING,
-		IOSOCKETEXCHANGE_OPERATION_WRITE,
-		IOSOCKETEXCHANGE_OPERATION_WRITESTRING,
-		IOSOCKETEXCHANGE_OPERATION_WRITESTREAM,
-		IOSOCKETEXCHANGE_OPERATION_WRITESTREAMSTRING,
-		IOSOCKETEXCHANGE_OPERATION_CLOSE,
+		IONETWORKEXCHANGE_OPERATION_READ,
+		IONETWORKEXCHANGE_OPERATION_READSTRING,
+		IONETWORKEXCHANGE_OPERATION_READSTREAM,
+		IONETWORKEXCHANGE_OPERATION_READSTREAMSTRING,
+		IONETWORKEXCHANGE_OPERATION_WRITE,
+		IONETWORKEXCHANGE_OPERATION_WRITESTRING,
+		IONETWORKEXCHANGE_OPERATION_WRITESTREAM,
+		IONETWORKEXCHANGE_OPERATION_WRITESTREAMSTRING,
+		IONETWORKEXCHANGE_OPERATION_CLOSE,
 	};
 
 	/**
-	 * @class __initialAccept holds info that passes to accept call, and then inits ioSocketExchange;
+	 * @class __initialAccept holds info that passes to accept call, and then inits ioNetworkExchange;
 	 */
 	class __initialAccept
 	{
-			friend class ioSocketExchange;
-			friend class ioSocket;
+			friend class ioNetworkExchange;
+			friend class ioNetwork;
 
 		public:
 
@@ -78,7 +78,7 @@ namespace dodo
 
 			/**
 			 * copy constructor
-			 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ioSocket::accept method
+			 * @note if you want to copy it, the object, from what has been copied is not more able to init new session: you have to reinit it with ioNetwork::accept method
 			 */
 			__initialAccept(__initialAccept &init);
 
@@ -94,53 +94,53 @@ namespace dodo
 	};
 
 	/**
-	 * @class ioSocketExchange provides communication interface[send/receive data]
+	 * @class ioNetworkExchange provides communication interface[send/receive data]
 	 */
-	class ioSocketExchange : public ioSocketOptions,
+	class ioNetworkExchange : public ioNetworkOptions,
 							 public io,
 							 virtual public threadGuardHolder
 	{
 
-			friend class ioSocket;
+			friend class ioNetwork;
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			ioSocketExchange();
+			ioNetworkExchange();
 
 			/**
 			 * copy constructor
 			 * @note the object that has inited the object of current instance can be used for another connections
 			 */
-			ioSocketExchange(ioSocketExchange &fse);
+			ioNetworkExchange(ioNetworkExchange &fse);
 
 			/**
 			 * constructor
-			 * @param init is initial data[got from the ioSocket::accept method]
+			 * @param init is initial data[got from the ioNetwork::accept method]
 			 * @note the object that has inited the object of current instance can be used for another connections
 			 */
-			ioSocketExchange(__initialAccept &init);
+			ioNetworkExchange(__initialAccept &init);
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioSocketExchange();
+			virtual ~ioNetworkExchange();
 
 			/**
 			 * @return copy of the instance
 			 * @note current instance can't be used any more
 			 */
-			virtual ioSocketExchange *createCopy();
+			virtual ioNetworkExchange *createCopy();
 
 			/**
 			 * delete a copy of an object
 			 * @param copy defines an instance of an object
 			 */
-			static void deleteCopy(ioSocketExchange *copy);
+			static void deleteCopy(ioNetworkExchange *copy);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 
 			/**
 			 * add hook after the operation
@@ -194,7 +194,7 @@ namespace dodo
 
 			/**
 			 * init object
-			 * @param init defines initial data[got from ioSocket::accept method]
+			 * @param init defines initial data[got from ioNetwork::accept method]
 			 */
 			virtual void init(__initialAccept &init);
 

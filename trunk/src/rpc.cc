@@ -363,7 +363,7 @@ rpcClient::~rpcClient()
 //-------------------------------------------------------------------
 
 void
-rpcClient::setIOProvider(io *provider)
+rpcClient::setIOProvider(ioHTTP *provider)
 {
 	ioProvider = provider;
 }

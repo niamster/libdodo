@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocketOptionsEx.h
+ *            ioNetworkToolsEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSOCKETOPTIONSEX_H_
-#define _IOSOCKETOPTIONSEX_H_
+#ifndef _IONETWORKTOOLSEX_H_
+#define _IONETWORKTOOLSEX_H_
 
 #include <libdodo/directives.h>
 
@@ -31,33 +31,18 @@
 namespace dodo
 {
 	/**
-	 * libdodo defined errors
-	 */
-	enum ioSocketOptionsExR
-	{
-		IOSOCKETOPTIONSEX_NOSOCKETCREATED,
-		IOSOCKETOPTIONSEX_WRONGPARAMETER,
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define IOSOCKETOPTIONSEX_NOSOCKETCREATED_STR "No socket was created =(."
-#define IOSOCKETOPTIONSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-
-	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioSocketOptionsFunctionsID
+	enum ioNetworkToolsFunctionsID
 	{
-		IOSOCKETOPTIONSEX_SETINBUFFERSIZE,
-		IOSOCKETOPTIONSEX_SETOUTBUFFERSIZE,
-		IOSOCKETOPTIONSEX_SETINTIMEOUT,
-		IOSOCKETOPTIONSEX_SETOUTTIMEOUT,
-		IOSOCKETOPTIONSEX_SETSOCKOPT,
-		IOSOCKETOPTIONSEX_SETLINGERSOCKOPT,
-		IOSOCKETOPTIONSEX_BLOCK,
-		IOSOCKETOPTIONSEX__CLOSE,
+		IONETWORKTOOLSEX_GETHOSTINFO,
+		IONETWORKTOOLSEX_SETLOCALNAME,
+		IONETWORKTOOLSEX_GETLOCALNAME,
+		IONETWORKTOOLSEX_GETSERVICEINFO,
+		IONETWORKTOOLSEX_GETLOCALDOMAIN,
+		IONETWORKTOOLSEX_SETLOCALDOMAIN,
+		IONETWORKTOOLSEX_GETINTERFACEINFO,
+		IONETWORKTOOLSEX_GETINTERFACESNAMES,
 	};
 
 };

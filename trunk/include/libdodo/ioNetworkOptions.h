@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocketOptions.h
+ *            ioNetworkOptions.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSOCKETOPTIONS_H_
-#define _IOSOCKETOPTIONS_H_
+#ifndef _IONETWORKOPTIONS_H_
+#define _IONETWORKOPTIONS_H_
 
 #include <libdodo/directives.h>
 
@@ -33,7 +33,7 @@
 
 #include <libdodo/ioDiskTools.h>
 #include <libdodo/tools.h>
-#include <libdodo/ioSocketOptionsEx.h>
+#include <libdodo/ioNetworkOptionsEx.h>
 #include <libdodo/types.h>
 #include <libdodo/io.h>
 
@@ -41,104 +41,104 @@ namespace dodo
 {
 
 	/**
-	 * @enum ioSocketOptionsTransferTypeEnum defines type of socket
+	 * @enum ioNetworkOptionsTransferTypeEnum defines type of socket
 	 */
-	enum ioSocketOptionsTransferTypeEnum
+	enum ioNetworkOptionsTransferTypeEnum
 	{
-		IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM,   ///< Sequenced, reliable, connection-based byte streams
-		IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM, ///< Connectionless, unreliable datagrams of fixed maximum length
+		IONETWORKOPTIONS_TRANSFER_TYPE_STREAM,   ///< Sequenced, reliable, connection-based byte streams
+		IONETWORKOPTIONS_TRANSFER_TYPE_DATAGRAM, ///< Connectionless, unreliable datagrams of fixed maximum length
 	};
 
 	/**
-	 * @enum ioSocketOptionsProtoFamilyEnum defines type of domain of socket
+	 * @enum ioNetworkOptionsProtoFamilyEnum defines type of domain of socket
 	 */
-	enum ioSocketOptionsProtoFamilyEnum
+	enum ioNetworkOptionsProtoFamilyEnum
 	{
-		IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,
-		IOSOCKETOPTIONS_PROTO_FAMILY_IPV6,
-		IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET,
+		IONETWORKOPTIONS_PROTO_FAMILY_IPV4,
+		IONETWORKOPTIONS_PROTO_FAMILY_IPV6,
+		IONETWORKOPTIONS_PROTO_FAMILY_UNIX_SOCKET,
 	};
 
 	/**
-	 * @enum ioSocketOptionsOptionEnum defines options for socket
+	 * @enum ioNetworkOptionsOptionEnum defines options for socket
 	 */
-	enum ioSocketOptionsOptionEnum
+	enum ioNetworkOptionsOptionEnum
 	{
-		IOSOCKETOPTIONS_OPTION_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-		IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS,       ///< Should allow reuse of local addresses[it's accepted by default].
-		IOSOCKETOPTIONS_OPTION_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
-		IOSOCKETOPTIONS_OPTION_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
-		IOSOCKETOPTIONS_OPTION_OOB_INLINE,          ///< Out-of-band(marked urgent) data keep inline in recieve operation.
+		IONETWORKOPTIONS_OPTION_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+		IONETWORKOPTIONS_OPTION_REUSE_ADDRESS,       ///< Should allow reuse of local addresses[it's accepted by default].
+		IONETWORKOPTIONS_OPTION_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
+		IONETWORKOPTIONS_OPTION_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
+		IONETWORKOPTIONS_OPTION_OOB_INLINE,          ///< Out-of-band(marked urgent) data keep inline in recieve operation.
 #ifdef SO_REUSEPORT
-		IOSOCKETOPTIONS_OPTION_REUSE_PORT,			///< Should allow reuse of local port.
+		IONETWORKOPTIONS_OPTION_REUSE_PORT,			///< Should allow reuse of local port.
 #endif
 	};
 
 	/**
-	 * @enum ioSocketOptionsLingerOptionEnum defines linger options for socket
+	 * @enum ioNetworkOptionsLingerOptionEnum defines linger options for socket
 	 */
-	enum ioSocketOptionsLingerOptionEnum
+	enum ioNetworkOptionsLingerOptionEnum
 	{
-		IOSOCKETOPTIONS_LINGEROPTION_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
-		IOSOCKETOPTIONS_LINGEROPTION_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
-		IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+		IONETWORKOPTIONS_LINGEROPTION_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
+		IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
+		IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
 	};
 
 	/**
-	 * @class ioSocketOptions provides option manipulation for network connections
+	 * @class ioNetworkOptions provides option manipulation for network connections
 	 */
-	class ioSocketOptions
+	class ioNetworkOptions
 	{
 
 		protected:
 
 			/**
 			 * constructor
-			 * @param family defines transfer type of domain of the socket[see ioSocketOptionsProtoFamilyEnum]
-			 * @param type defines type of the socket[see ioSocketOptionsProtoFamilyEnum]
+			 * @param family defines transfer type of domain of the socket[see ioNetworkOptionsProtoFamilyEnum]
+			 * @param type defines type of the socket[see ioNetworkOptionsProtoFamilyEnum]
 			 */
-			ioSocketOptions(short family, short type);
+			ioNetworkOptions(short family, short type);
 
 			/**
 			 * constructor
 			 */
-			ioSocketOptions();
+			ioNetworkOptions();
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioSocketOptions();
+			virtual ~ioNetworkOptions();
 
 		public:
 
 			/**
 			 * set socket options
-			 * @param option defines option that will be applied to the socket[see ioSocketOptionsOptionEnum]
+			 * @param option defines option that will be applied to the socket[see ioNetworkOptionsOptionEnum]
 			 * @param flag defines state of option
 			 */
 			virtual void setOption(short option, bool flag);
 
 			/**
-			 * @return true if socket option is set[see ioSocketOptionsOptionEnum]
+			 * @return true if socket option is set[see ioNetworkOptionsOptionEnum]
 			 */
 			virtual bool getOption(int option) const;
 
 			/**
 			 * set linger option
-			 * @param option is linger option[see ioSocketOptionsLingerOptionEnum]
+			 * @param option is linger option[see ioNetworkOptionsLingerOptionEnum]
 			 * @param seconds how long to wait
-			 * @note for IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE only
+			 * @note for IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE only
 			 */
 			virtual void setLingerOption(short option, int seconds = 1);
 
 			/**
-			 * @return linger option that was set[see ioSocketOptionsLingerOptionEnum]
+			 * @return linger option that was set[see ioNetworkOptionsLingerOptionEnum]
 			 */
 			virtual short getLingerOption() const;
 
 			/**
 			 * @return amount of seconds to wait
-			 * @note for IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE only
+			 * @note for IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE only
 			 */
 			virtual int getLingerPeriod() const;
 

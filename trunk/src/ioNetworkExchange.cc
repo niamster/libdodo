@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocketExchange.cc
+ *            ioNetworkExchange.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/ioSocketExchange.h>
+#include <libdodo/ioNetworkExchange.h>
 
 using namespace dodo;
 
@@ -42,7 +42,7 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
 
 //-------------------------------------------------------------------
 
-ioSocketExchange::ioSocketExchange(ioSocketExchange &fse)
+ioNetworkExchange::ioNetworkExchange(ioNetworkExchange &fse)
 {
 	socket = fse.socket;
 	opened = fse.opened;
@@ -65,20 +65,20 @@ ioSocketExchange::ioSocketExchange(ioSocketExchange &fse)
 
 //-------------------------------------------------------------------
 
-ioSocketExchange::ioSocketExchange()
+ioNetworkExchange::ioNetworkExchange()
 {
 }
 
 //-------------------------------------------------------------------
 
-ioSocketExchange::ioSocketExchange(__initialAccept &a_init)
+ioNetworkExchange::ioNetworkExchange(__initialAccept &a_init)
 {
 	init(a_init.socket, a_init.blockInherited);
 }
 
 //-------------------------------------------------------------------
 
-ioSocketExchange::~ioSocketExchange()
+ioNetworkExchange::~ioNetworkExchange()
 {
 	if (opened)
 	{
@@ -91,7 +91,7 @@ ioSocketExchange::~ioSocketExchange()
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::init(__initialAccept &a_init)
+ioNetworkExchange::init(__initialAccept &a_init)
 {
 	family = a_init.family;
 	type = a_init.type;
@@ -104,25 +104,25 @@ ioSocketExchange::init(__initialAccept &a_init)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::close()
+ioNetworkExchange::close()
 {
 	guard pg(this);
 
-#ifndef IOSOCKETOPTIONS_SOCKET_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_CLOSE;
+#ifndef IONETWORKOPTIONS_SOCKET_WO_XEXEC
+	operType = IONETWORKEXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
 #endif
 
 	if (!opened)
 		return ;
 
-	ioSocketOptions::_close(socket);
+	ioNetworkOptions::_close(socket);
 
 	socket = -1;
 
 	opened = false;
 
-#ifndef IOSOCKETOPTIONS_SOCKET_WO_XEXEC
+#ifndef IONETWORKOPTIONS_SOCKET_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -130,14 +130,14 @@ ioSocketExchange::close()
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::init(int a_socket,
+ioNetworkExchange::init(int a_socket,
 					   bool blockInherited)
 {
 	guard pg(this);
 
 	if (opened)
 	{
-		ioSocketOptions::_close(socket);
+		ioNetworkOptions::_close(socket);
 
 		socket = -1;
 
@@ -170,7 +170,7 @@ ioSocketExchange::init(int a_socket,
 //-------------------------------------------------------------------
 
 bool
-ioSocketExchange::alive()
+ioNetworkExchange::alive()
 {
 	guard pg(this);
 
@@ -181,7 +181,7 @@ ioSocketExchange::alive()
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::_write(const char * const data)
+ioNetworkExchange::_write(const char * const data)
 {
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -202,7 +202,7 @@ ioSocketExchange::_write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -225,7 +225,7 @@ ioSocketExchange::_write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -240,14 +240,14 @@ ioSocketExchange::_write(const char * const data)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::write(const char * const a_buf)
+ioNetworkExchange::write(const char * const a_buf)
 {
 	guard pg(this);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
 
-	operType = IOSOCKETEXCHANGE_OPERATION_WRITE;
+	operType = IONETWORKEXCHANGE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -265,7 +265,7 @@ ioSocketExchange::write(const char * const a_buf)
 #endif
 
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -275,14 +275,14 @@ ioSocketExchange::write(const char * const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::writeString(const dodoString &a_buf)
+ioNetworkExchange::writeString(const dodoString &a_buf)
 {
 	guard pg(this);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOSOCKETEXCHANGE_OPERATION_WRITESTRING;
+	operType = IONETWORKEXCHANGE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -300,7 +300,7 @@ ioSocketExchange::writeString(const dodoString &a_buf)
 #endif
 
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -310,7 +310,7 @@ ioSocketExchange::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::_read(char * const data)
+ioNetworkExchange::_read(char * const data)
 {
 	memset(data, '\0', inSize);
 
@@ -336,7 +336,7 @@ ioSocketExchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -365,7 +365,7 @@ ioSocketExchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -383,18 +383,18 @@ ioSocketExchange::_read(char * const data)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::read(char * const a_void)
+ioNetworkExchange::read(char * const a_void)
 {
 	guard pg(this);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_READ;
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+	operType = IONETWORKEXCHANGE_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
 #endif
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	try
 	{
 		_read(a_void);
@@ -409,7 +409,7 @@ ioSocketExchange::read(char * const a_void)
 	_read(a_void);
 #endif
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
@@ -422,12 +422,12 @@ ioSocketExchange::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::readString(dodoString &a_str)
+ioNetworkExchange::readString(dodoString &a_str)
 {
 	guard pg(this);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_READSTRING;
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+	operType = IONETWORKEXCHANGE_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -443,14 +443,14 @@ ioSocketExchange::readString(dodoString &a_str)
 	{
 		delete [] data;
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 		buffer.clear();
 #endif
 
 		throw;
 	}
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer.assign(data, inSize);
 	delete [] data;
 
@@ -464,24 +464,24 @@ ioSocketExchange::readString(dodoString &a_str)
 #endif
 }
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 
 //-------------------------------------------------------------------
 
 int
-ioSocketExchange::addPostExec(inExec func,
+ioNetworkExchange::addPostExec(inExec func,
 							  void   *data)
 {
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
 
 int
-ioSocketExchange::addPreExec(inExec func,
+ioNetworkExchange::addPreExec(inExec func,
 							 void   *data)
 {
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
@@ -489,31 +489,31 @@ ioSocketExchange::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-ioSocketExchange::addPostExec(const dodoString &module,
+ioNetworkExchange::addPostExec(const dodoString &module,
 							  void             *data,
 							  void             *toInit)
 {
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 int
-ioSocketExchange::addPreExec(const dodoString &module,
+ioNetworkExchange::addPreExec(const dodoString &module,
 							 void             *data,
 							 void             *toInit)
 {
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 __xexecCounts
-ioSocketExchange::addExec(const dodoString &module,
+ioNetworkExchange::addExec(const dodoString &module,
 						  void             *data,
 						  void             *toInit)
 {
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSOCKETEXCHANGE, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
 }
 
 #endif
@@ -523,16 +523,16 @@ ioSocketExchange::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::writeStream(const char * const a_buf)
+ioNetworkExchange::writeStream(const char * const a_buf)
 {
 	guard pg(this);
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOSOCKETEXCHANGE_OPERATION_WRITESTREAM;
+	operType = IONETWORKEXCHANGE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -568,7 +568,7 @@ ioSocketExchange::writeStream(const char * const a_buf)
 	}
 #endif
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -578,16 +578,16 @@ ioSocketExchange::writeStream(const char * const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::writeStreamString(const dodoString &a_buf)
+ioNetworkExchange::writeStreamString(const dodoString &a_buf)
 {
 	guard pg(this);
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOSOCKETEXCHANGE_OPERATION_WRITESTREAMSTRING;
+	operType = IONETWORKEXCHANGE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -623,7 +623,7 @@ ioSocketExchange::writeStreamString(const dodoString &a_buf)
 	}
 #endif
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -633,7 +633,7 @@ ioSocketExchange::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::_readStream(char * const data)
+ioNetworkExchange::_readStream(char * const data)
 {
 	memset(data, '\0', inSize);
 
@@ -646,7 +646,7 @@ ioSocketExchange::_readStream(char * const data)
 			if (errno == EINTR)
 				continue;
 
-			throw baseEx(ERRMODULE_IOSOCKETEXCHANGE, IOSOCKETEXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -659,18 +659,18 @@ ioSocketExchange::_readStream(char * const data)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::readStream(char * const a_void)
+ioNetworkExchange::readStream(char * const a_void)
 {
 	guard pg(this);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_READSTREAM;
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+	operType = IONETWORKEXCHANGE_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
 	_readStream(a_void);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_void;
 
 	performXExec(postExec);
@@ -685,12 +685,12 @@ ioSocketExchange::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::readStreamString(dodoString &a_str)
+ioNetworkExchange::readStreamString(dodoString &a_str)
 {
 	guard pg(this);
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
-	operType = IOSOCKETEXCHANGE_OPERATION_READSTREAMSTRING;
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+	operType = IONETWORKEXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -707,7 +707,7 @@ ioSocketExchange::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-#ifndef IOSOCKETEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = data;
 	delete [] data;
 
@@ -723,12 +723,12 @@ ioSocketExchange::readStreamString(dodoString &a_str)
 
 //-------------------------------------------------------------------
 
-ioSocketExchange *
-ioSocketExchange::createCopy()
+ioNetworkExchange *
+ioNetworkExchange::createCopy()
 {
 	guard pg(this);
 
-	ioSocketExchange *copy = new ioSocketExchange;
+	ioNetworkExchange *copy = new ioNetworkExchange;
 
 	copy->socket = socket;
 	copy->opened = opened;
@@ -754,7 +754,7 @@ ioSocketExchange::createCopy()
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::deleteCopy(ioSocketExchange *copy)
+ioNetworkExchange::deleteCopy(ioNetworkExchange *copy)
 {
 	delete copy;
 }
@@ -762,14 +762,14 @@ ioSocketExchange::deleteCopy(ioSocketExchange *copy)
 //-------------------------------------------------------------------
 
 void
-ioSocketExchange::flush()
+ioNetworkExchange::flush()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-ioSocketExchange::getInDescriptor() const
+ioNetworkExchange::getInDescriptor() const
 {
 	guard pg(this);
 
@@ -779,7 +779,7 @@ ioSocketExchange::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-ioSocketExchange::getOutDescriptor() const
+ioNetworkExchange::getOutDescriptor() const
 {
 	guard pg(this);
 

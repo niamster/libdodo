@@ -79,8 +79,8 @@
 /**
  * socket default timeouts
  */
-#define IOSOCKET_RECIEVE_TIMEOUT          1000
-#define IOSOCKET_SEND_TIMEOUT             1000
+#define IONETWORK_RECIEVE_TIMEOUT          1000
+#define IONETWORK_SEND_TIMEOUT             1000
 
 /**
  * default values of buffer for io operations(io*)
@@ -94,10 +94,10 @@
 #define IODISK_MAXLINELEN          10240
 
 /**
- * default values of socket buffer for io operations(ioSocket)
+ * default values of socket buffer for io operations(ioNetwork)
  */
-#define IOSOCKETOPTIONS_SOCKET_INSIZE            102400
-#define IOSOCKETOPTIONS_SOCKET_OUTSIZE           102400
+#define IONETWORKOPTIONS_SOCKET_INSIZE            102400
+#define IONETWORKOPTIONS_SOCKET_OUTSIZE           102400
 
 /**
  * default values of stdin/out buffer for io operations(ioSTD)
@@ -108,8 +108,8 @@
 /**
  * linger options
  */
-#define IOSOCKETOPTIONS_SOCKET_LINGER_PERIOD     1
-#define IOSOCKETOPTIONS_SOCKET_LINGER_OPTION     IOSOCKETOPTIONS_LINGEROPTION_WAIT_CLOSE
+#define IONETWORKOPTIONS_SOCKET_LINGER_PERIOD     1
+#define IONETWORKOPTIONS_SOCKET_LINGER_OPTION     IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE
 
 /**
  * size of the short messages

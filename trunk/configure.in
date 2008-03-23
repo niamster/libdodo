@@ -94,30 +94,30 @@ else
 	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(ioSocketExchange-xexec-support,
-        AS_HELP_STRING([--disable-ioSocketExchange-xexec-support],[compile ioSocketExchange w/o xexec support]),
-        [IOSOCKETEXCHANGE_W_XEXEC="$enableval"], [IOSOCKETEXCHANGE_W_XEXEC="yes"])
+AC_ARG_ENABLE(ioNetworkExchange-xexec-support,
+        AS_HELP_STRING([--disable-ioNetworkExchange-xexec-support],[compile ioNetworkExchange w/o xexec support]),
+        [IONETWORKEXCHANGE_W_XEXEC="$enableval"], [IONETWORKEXCHANGE_W_XEXEC="yes"])
 
-if test "$IOSOCKETEXCHANGE_W_XEXEC" = "no"
+if test "$IONETWORKEXCHANGE_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOSOCKETEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define IONETWORKEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioSocketExchange xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioSocketExchange xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(ioSocket-xexec-support,
-        AS_HELP_STRING([--disable-ioSocket-xexec-support],[compile ioSocket w/o xexec support]),
-        [IOSOCKET_W_XEXEC="$enableval"], [IOSOCKET_W_XEXEC="yes"])
+AC_ARG_ENABLE(ioNetwork-xexec-support,
+        AS_HELP_STRING([--disable-ioNetwork-xexec-support],[compile ioNetwork w/o xexec support]),
+        [IONETWORK_W_XEXEC="$enableval"], [IONETWORK_W_XEXEC="yes"])
 
-if test "$IOSOCKET_W_XEXEC" = "no"
+if test "$IONETWORK_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOSOCKET_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define IONETWORK_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioSocket xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioSocket xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_ENABLE(ioDisk-xexec-support,
@@ -474,7 +474,7 @@ fi
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
 		fi
-		AC_CHECK_LIB([Magick], [MagickCoreGenesis], [], AC_MSG_ERROR(Magick lib was not found))
+		AC_CHECK_LIB([MagickCore], [MagickCoreGenesis], [], AC_MSG_ERROR(Magick lib was not found))
 		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
 		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
 		

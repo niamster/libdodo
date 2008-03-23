@@ -36,10 +36,10 @@ OBJECTS:=dbBase.o \
 		cgi.o \
 		regexp.o \
 		logger.o \
-		ioSocketOptions.o \
-		ioSocketExchange.o \
-		ioSocketTools.o \
-		ioSocket.o \
+		ioNetworkOptions.o \
+		ioNetworkExchange.o \
+		ioNetworkTools.o \
+		ioNetwork.o \
 		ioDiskTools.o \
 		ioDisk.o \
 		ioSTD.o \

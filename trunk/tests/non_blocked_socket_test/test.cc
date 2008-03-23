@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/ioSocket.h>
-#include <libdodo/ioSocketTools.h>
+#include <libdodo/ioNetwork.h>
+#include <libdodo/ioNetworkTools.h>
 #include <libdodo/ioNonBlockedAccess.h>
 
 #include <iostream>
@@ -13,18 +13,18 @@ int main(int argc, char **argv)
 {
 	try
 	{						
-		ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+		ioNetwork sock(true,IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__initialAccept fake;
 
-		sock.setOption(IOSOCKETOPTIONS_OPTION_REUSE_ADDRESS,true);
-		sock.setLingerOption(IOSOCKETOPTIONS_LINGEROPTION_HARD_CLOSE);	
+		sock.setOption(IONETWORKOPTIONS_OPTION_REUSE_ADDRESS,true);
+		sock.setLingerOption(IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE);	
 		sock.blockInherited = true;
 		sock.block(false);
 						
 		sock.bindNListen("127.0.0.1",7778,1);
 				
-		ioSocketExchange conn;
+		ioNetworkExchange conn;
 
 		ioNonBlockedAccess nb;
 		

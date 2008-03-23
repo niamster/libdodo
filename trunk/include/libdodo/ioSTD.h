@@ -37,7 +37,7 @@
 #include <libdodo/ioSTDEx.h>
 #include <libdodo/types.h>
 #include <libdodo/io.h>
-#include <libdodo/ioSocket.h>
+#include <libdodo/ioNetwork.h>
 #include <libdodo/threadGuard.h>
 
 namespace dodo

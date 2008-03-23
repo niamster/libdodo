@@ -1,7 +1,7 @@
 
 #include <libdodo/baseEx.h>
-#include <libdodo/ioSocket.h>
-#include <libdodo/ioSocketTools.h>
+#include <libdodo/ioNetwork.h>
+#include <libdodo/ioNetworkTools.h>
 #include <libdodo/types.h>
 
 #include <iostream>
@@ -11,7 +11,7 @@ using namespace dodo;
 using namespace std;
 
 void
-process(ioSocketExchange fse)
+process(ioNetworkExchange fse)
 {
 	
 	if (fse.isBlocked())
@@ -60,14 +60,14 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		dodoStringArray ifaces = ioSocketTools::getInterfacesNames();
+		dodoStringArray ifaces = ioNetworkTools::getInterfacesNames();
 		for (unsigned int i(0);i<ifaces.size();i++)
 		{
 			try
 			{
-				cout << ifaces[i] << ":\t" << ioSocketTools::getInterfaceInfo(ifaces[i]).hwaddr << endl;	
-				cout << ifaces[i] << ":\t" << ioSocketTools::getInterfaceInfo(ifaces[i]).broadcast << endl;	
-				cout << ifaces[i] << ":\t" << ioSocketTools::getInterfaceInfo(ifaces[i]).netmask << endl;	
+				cout << ifaces[i] << ":\t" << ioNetworkTools::getInterfaceInfo(ifaces[i]).hwaddr << endl;	
+				cout << ifaces[i] << ":\t" << ioNetworkTools::getInterfaceInfo(ifaces[i]).broadcast << endl;	
+				cout << ifaces[i] << ":\t" << ioNetworkTools::getInterfaceInfo(ifaces[i]).netmask << endl;	
 			}
 			catch (baseEx ex)
 			{
@@ -75,12 +75,12 @@ int main(int argc, char **argv)
 			}
 		}
 		
-		cout << ioSocketTools::getInterfaceInfo("lo").hwaddr << endl;
+		cout << ioNetworkTools::getInterfaceInfo("lo").hwaddr << endl;
 		
 		try
 		{
-			ioSocket st(false,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
-			ioSocketExchange exch;
+			ioNetwork st(false,IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+			ioNetworkExchange exch;
 			dodoString str;
 			
 			try
@@ -102,14 +102,14 @@ int main(int argc, char **argv)
 			cout.flush();
 		}
 			
-		/*ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
-		//ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV6,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
-		//ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+		/*ioNetwork sock(true,IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+		//ioNetwork sock(true,IONETWORKOPTIONS_PROTO_FAMILY_IPV6,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+		//ioNetwork sock(true,IONETWORKOPTIONS_PROTO_FAMILY_UNIX_SOCKET,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__connInfo info;
 		__initialAccept fake;
 				
-		sock.setLingerSockOption(IOSOCKETOPTIONS_SOCKET_HARD_CLOSE);	
+		sock.setLingerSockOption(IONETWORKOPTIONS_SOCKET_HARD_CLOSE);	
 		sock.blockInherited = false;
 		sock.block(false);
 		
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",10,true);
 		
-		ioSocketExchange conn;
+		ioNetworkExchange conn;
 		
 		while(true)
 		{
@@ -135,11 +135,11 @@ int main(int argc, char **argv)
 			}
 		}*/
 		
-		cout << ioSocketTools::getLocalName() << endl;
+		cout << ioNetworkTools::getLocalName() << endl;
 		
-		cout << ioSocketTools::getHostInfo("google.com").name << " : " << endl;
+		cout << ioNetworkTools::getHostInfo("google.com").name << " : " << endl;
 		
-		dodoStringArray addresses = ioSocketTools::getHostInfo("google.com").addresses;
+		dodoStringArray addresses = ioNetworkTools::getHostInfo("google.com").addresses;
 		dodoStringArray::iterator i = addresses.begin(), j = addresses.end();
 		for (;i!=j;++i)
 			cout << *i << endl;

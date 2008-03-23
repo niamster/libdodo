@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocketEx.h
+ *            ioNetworkOptionsEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSOCKETEX_H_
-#define _IOSOCKETEX_H_
+#ifndef _IONETWORKOPTIONSEX_H_
+#define _IONETWORKOPTIONSEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,41 +33,31 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum ioSocketExR
+	enum ioNetworkOptionsExR
 	{
-		IOSOCKETEX_NOSOCKETCREATED,
-		IOSOCKETEX_CANNOTBIND,
-		IOSOCKETEX_CANNOTCONNECT,
-		IOSOCKETEX_CANNOTACCEPT,
-		IOSOCKETEX_ACCEPTWOBIND,
-		IOSOCKETEX_WRONGPARAMETER,
-		IOSOCKETEX_WRONGFILENAME,
+		IONETWORKOPTIONSEX_NOSOCKETCREATED,
+		IONETWORKOPTIONSEX_WRONGPARAMETER,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define IOSOCKETEX_NOSOCKETCREATED_STR "No socket was created =(."
-#define IOSOCKETEX_CANNOTBIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
-#define IOSOCKETEX_CANNOTCONNECT_STR "You cannot <connect> with this constructor; choose another one!"
-#define IOSOCKETEX_CANNOTACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
-#define IOSOCKETEX_ACCEPTWOBIND_STR "You try to accept without called bindNListen or bindNListen failed."
-#define IOSOCKETEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define IOSOCKETEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+#define IONETWORKOPTIONSEX_NOSOCKETCREATED_STR "No socket was created =(."
+#define IONETWORKOPTIONSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioSocketFunctionsID
+	enum ioNetworkOptionsFunctionsID
 	{
-		IOSOCKETEX_MAKESOCKET,
-		IOSOCKETEX_CONNECT,
-		IOSOCKETEX_MAKEUNIXSOCKET,
-		IOSOCKETEX_BINDNLISTEN,
-		IOSOCKETEX_ACCEPT,
-		IOSOCKETEX_SEND,
-		IOSOCKETEX_RECIEVE,
-		IOSOCKETEX_CONNECTFROM
+		IONETWORKOPTIONSEX_SETINBUFFERSIZE,
+		IONETWORKOPTIONSEX_SETOUTBUFFERSIZE,
+		IONETWORKOPTIONSEX_SETINTIMEOUT,
+		IONETWORKOPTIONSEX_SETOUTTIMEOUT,
+		IONETWORKOPTIONSEX_SETSOCKOPT,
+		IONETWORKOPTIONSEX_SETLINGERSOCKOPT,
+		IONETWORKOPTIONSEX_BLOCK,
+		IONETWORKOPTIONSEX__CLOSE,
 	};
 
 };

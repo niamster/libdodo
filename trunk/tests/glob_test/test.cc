@@ -2,7 +2,7 @@
 #include <libdodo/ioDisk.h>
 #include <libdodo/baseEx.h>
 #include <libdodo/ioDiskTools.h>
-#include <libdodo/ioSocket.h>
+#include <libdodo/ioNetwork.h>
 
 #include <iostream>
 

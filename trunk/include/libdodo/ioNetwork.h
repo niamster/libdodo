@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSocket.h
+ *            ioNetwork.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSOCKET_H_
-#define _IOSOCKET_H_
+#ifndef _IONETWORK_H_
+#define _IONETWORK_H_
 
 #include <libdodo/directives.h>
 
@@ -39,10 +39,10 @@
 
 #include <libdodo/ioDiskTools.h>
 #include <libdodo/tools.h>
-#include <libdodo/ioSocketEx.h>
+#include <libdodo/ioNetworkEx.h>
 #include <libdodo/types.h>
-#include <libdodo/ioSocketOptions.h>
-#include <libdodo/ioSocketExchange.h>
+#include <libdodo/ioNetworkOptions.h>
+#include <libdodo/ioNetworkExchange.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ioNonBlockedAccessInfo.h>
 
@@ -50,16 +50,16 @@ namespace dodo
 {
 
 	/**
-	 * @enum ioSocketOperationTypeEnum defines type of operation for hook
+	 * @enum ioNetworkOperationTypeEnum defines type of operation for hook
 	 */
-	enum ioSocketOperationTypeEnum
+	enum ioNetworkOperationTypeEnum
 	{
-		IOSOCKET_OPERATION_CONNECT,
-		IOSOCKET_OPERATION_CONNECTFROM,
-		IOSOCKET_OPERATION_CONNECT_UNIX,
-		IOSOCKET_OPERATION_BINDNLISTEN,
-		IOSOCKET_OPERATION_BINDNLISTEN_UNIX,
-		IOSOCKET_OPERATION_ACCEPT,
+		IONETWORK_OPERATION_CONNECT,
+		IONETWORK_OPERATION_CONNECTFROM,
+		IONETWORK_OPERATION_CONNECT_UNIX,
+		IONETWORK_OPERATION_BINDNLISTEN,
+		IONETWORK_OPERATION_BINDNLISTEN_UNIX,
+		IONETWORK_OPERATION_ACCEPT,
 	};
 
 	/**
@@ -74,12 +74,12 @@ namespace dodo
 	/**
 	 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 	 */
-	struct __xexexIoSocketCollectedData
+	struct __xexexIoNetworkCollectedData
 	{
 		/**
 		 * constructor
 		 */
-		__xexexIoSocketCollectedData(int &operType,
+		__xexexIoNetworkCollectedData(int &operType,
 							   		void *executor);
 
 		int &operType;              ///< xexec operation 
@@ -88,13 +88,13 @@ namespace dodo
 	};
 	
 	/**
-	 * @class ioSocket provides network connection interface
+	 * @class ioNetwork provides network connection interface
 	 */
-	class ioSocket : public xexec, 
-					public ioSocketOptions,
+	class ioNetwork : public xexec, 
+					public ioNetworkOptions,
 					virtual public ioNonBlockedAccessInfo
 	{
-			friend class ioSocketExchange;
+			friend class ioNetworkExchange;
 
 		private:
 
@@ -102,7 +102,7 @@ namespace dodo
 			 * connstructor
 			 * to prevent copying
 			 */
-			ioSocket(ioSocket &fs);
+			ioNetwork(ioNetwork &fs);
 
 		public:
 
@@ -112,14 +112,14 @@ namespace dodo
 			 * @param family defines family of the socket[see socketProtoFamilyEnum]
 			 * @param type defines type of the socket[see socketTransferTypeEnum]
 			 */
-			ioSocket(bool server, short family, short type);
+			ioNetwork(bool server, short family, short type);
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioSocket();
+			virtual ~ioNetwork();
 
-#ifndef IOSOCKET_WO_XEXEC
+#ifndef IONETWORK_WO_XEXEC
 
 			/**
 			 * adds hook after the operation by callback
@@ -178,7 +178,7 @@ namespace dodo
 			 * @param port defines port of host to connect
 			 * @param exchange defines an oject that will perform I/O operations
 			 */
-			virtual void connectFrom(const dodoString &local, const dodoString &host, int port, ioSocketExchange &exchange);
+			virtual void connectFrom(const dodoString &local, const dodoString &host, int port, ioNetworkExchange &exchange);
 
 			/**
 			 * connect from specific address
@@ -186,7 +186,7 @@ namespace dodo
 			 * @param destinaton defines destinaton ip address/port of host to connect
 			 * @param exchange defines an oject that will perform I/O operations
 			 */
-			virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, ioSocketExchange &exchange);
+			virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, ioNetworkExchange &exchange);
 
 			/**
 			 * connect
@@ -194,21 +194,21 @@ namespace dodo
 			 * @param port defines port of host to connect
 			 * @param exchange defines an oject that will perform I/O operations
 			 */
-			virtual void connect(const dodoString &host, int port, ioSocketExchange &exchange);
+			virtual void connect(const dodoString &host, int port, ioNetworkExchange &exchange);
 
 			/**
 			 * connect
 			 * @param destinaton defines destinaton ip address/port of host to connect
 			 * @param exchange defines an oject that will perform I/O operations
 			 */
-			virtual void connect(const __connInfo &destinaton, ioSocketExchange &exchange);
+			virtual void connect(const __connInfo &destinaton, ioNetworkExchange &exchange);
 
 			/**
 			 * connect
 			 * @param path defines path to unix socket
 			 * @param exchange defines an oject that will perform I/O operations
 			 */
-			virtual void connect(const dodoString &path, ioSocketExchange &exchange);
+			virtual void connect(const dodoString &path, ioNetworkExchange &exchange);
 
 			/**
 			 * bind to address and start to listen
@@ -239,23 +239,23 @@ namespace dodo
 			/**
 			 * accept incoming connections
 			 * @return true on new connection acceptance
-			 * @param init defines object that will be filled with info that may init ioSocketExchange object
+			 * @param init defines object that will be filled with info that may init ioNetworkExchange object
 			 * @param info defines info about remote host
-			 * @note for IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
-			 * for IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
+			 * @note for IONETWORKOPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
+			 * for IONETWORKOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 			 */
 			virtual bool accept(__initialAccept &init, __connInfo &info);
 
 			/**
 			 * accept incoming connections
 			 * @return true on new connection acceptance
-			 * @param init defines object that will be filled with info that may init ioSocketExchange object
-			 * @note for IOSOCKETOPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
-			 * for IOSOCKETOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
+			 * @param init defines object that will be filled with info that may init ioNetworkExchange object
+			 * @note for IONETWORKOPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
+			 * for IONETWORKOPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 			 */
 			virtual bool accept(__initialAccept &init);
 
-			bool blockInherited; ///< if true - children(ioSocketExchange objects) become unblocked, if parent(ioSocket) in unblocked; false by default
+			bool blockInherited; ///< if true - children(ioNetworkExchange objects) become unblocked, if parent(ioNetwork) in unblocked; false by default
 
 			/**
 			 * @return descriptor of input stream
@@ -285,7 +285,7 @@ namespace dodo
 
 			dodoString unixSock;    ///< path to unix socket
 			
-			__xexexIoSocketCollectedData collectedData;   ///< data collected for xexec
+			__xexexIoNetworkCollectedData collectedData;   ///< data collected for xexec
 	};
 
 };

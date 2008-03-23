@@ -1262,10 +1262,10 @@ Optional Features:
                           compile cgiFast w/o xexec support
   --disable-ioSTD-xexec-support
                           compile ioSTD w/o xexec support
-  --disable-ioSocketExchange-xexec-support
-                          compile ioSocketExchange w/o xexec support
-  --disable-ioSocket-xexec-support
-                          compile ioSocket w/o xexec support
+  --disable-ioNetworkExchange-xexec-support
+                          compile ioNetworkExchange w/o xexec support
+  --disable-ioNetwork-xexec-support
+                          compile ioNetwork w/o xexec support
   --disable-ioDisk-xexec-support
                           compile ioDisk w/o xexec support
   --disable-dbPostgresql-xexec-support
@@ -3512,38 +3512,38 @@ else
 	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tenabled"
 fi
 
-# Check whether --enable-ioSocketExchange-xexec-support was given.
-if test "${enable_ioSocketExchange_xexec_support+set}" = set; then
-  enableval=$enable_ioSocketExchange_xexec_support; IOSOCKETEXCHANGE_W_XEXEC="$enableval"
+# Check whether --enable-ioNetworkExchange-xexec-support was given.
+if test "${enable_ioNetworkExchange_xexec_support+set}" = set; then
+  enableval=$enable_ioNetworkExchange_xexec_support; IONETWORKEXCHANGE_W_XEXEC="$enableval"
 else
-  IOSOCKETEXCHANGE_W_XEXEC="yes"
+  IONETWORKEXCHANGE_W_XEXEC="yes"
 fi
 
 
-if test "$IOSOCKETEXCHANGE_W_XEXEC" = "no"
+if test "$IONETWORKEXCHANGE_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOSOCKETEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IONETWORKEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioSocketExchange xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioSocketExchange xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tenabled"
 fi
 
-# Check whether --enable-ioSocket-xexec-support was given.
-if test "${enable_ioSocket_xexec_support+set}" = set; then
-  enableval=$enable_ioSocket_xexec_support; IOSOCKET_W_XEXEC="$enableval"
+# Check whether --enable-ioNetwork-xexec-support was given.
+if test "${enable_ioNetwork_xexec_support+set}" = set; then
+  enableval=$enable_ioNetwork_xexec_support; IONETWORK_W_XEXEC="$enableval"
 else
-  IOSOCKET_W_XEXEC="yes"
+  IONETWORK_W_XEXEC="yes"
 fi
 
 
-if test "$IOSOCKET_W_XEXEC" = "no"
+if test "$IONETWORK_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOSOCKET_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IONETWORK_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioSocket xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioSocket xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioDisk-xexec-support was given.
@@ -6997,13 +6997,13 @@ fi
 			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
 		fi
 
-{ echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagick" >&5
-echo $ECHO_N "checking for MagickCoreGenesis in -lMagick... $ECHO_C" >&6; }
-if test "${ac_cv_lib_Magick_MagickCoreGenesis+set}" = set; then
+{ echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagickCore" >&5
+echo $ECHO_N "checking for MagickCoreGenesis in -lMagickCore... $ECHO_C" >&6; }
+if test "${ac_cv_lib_MagickCore_MagickCoreGenesis+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lMagick  $LIBS"
+LIBS="-lMagickCore  $LIBS"
 cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -7044,26 +7044,26 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
        $as_test_x conftest$ac_exeext; then
-  ac_cv_lib_Magick_MagickCoreGenesis=yes
+  ac_cv_lib_MagickCore_MagickCoreGenesis=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	ac_cv_lib_Magick_MagickCoreGenesis=no
+	ac_cv_lib_MagickCore_MagickCoreGenesis=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_Magick_MagickCoreGenesis" >&5
-echo "${ECHO_T}$ac_cv_lib_Magick_MagickCoreGenesis" >&6; }
-if test $ac_cv_lib_Magick_MagickCoreGenesis = yes; then
+{ echo "$as_me:$LINENO: result: $ac_cv_lib_MagickCore_MagickCoreGenesis" >&5
+echo "${ECHO_T}$ac_cv_lib_MagickCore_MagickCoreGenesis" >&6; }
+if test $ac_cv_lib_MagickCore_MagickCoreGenesis = yes; then
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBMAGICK 1
+#define HAVE_LIBMAGICKCORE 1
 _ACEOF
 
-  LIBS="-lMagick $LIBS"
+  LIBS="-lMagickCore $LIBS"
 
 else
   { { echo "$as_me:$LINENO: error: Magick lib was not found" >&5

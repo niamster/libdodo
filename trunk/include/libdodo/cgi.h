@@ -53,7 +53,7 @@ namespace dodo
 
 		{ "CONTENT_TYPE"                              },
 		{ "CONTENT_LENGTH"                            },
-		{ "CONTENT_IOSOCKETOPTIONS_TRANSFER_ENCODING" },
+		{ "CONTENT_IONETWORKOPTIONS_TRANSFER_ENCODING" },
 
 		{ "HTTP_HOST"                                 },
 		{ "HTTP_USER_AGENT"                           },

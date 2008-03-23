@@ -85,7 +85,7 @@ namespace dodo
 	class ioDisk : public io,
 				   virtual public threadGuardHolder
 	{
-			friend class ioSocket;
+			friend class ioNetwork;
 
 		private:
 

@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/ioSocket.h>
-#include <libdodo/ioSocketTools.h>
+#include <libdodo/ioNetwork.h>
+#include <libdodo/ioNetworkTools.h>
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 
@@ -15,7 +15,7 @@ systemThreadSharedDataGuard sh;
 void *
 process(void *data)
 {
-	ioSocketExchange *fse = (ioSocketExchange *)data;
+	ioNetworkExchange *fse = (ioNetworkExchange *)data;
 	
 	if (fse->isBlocked())
 	{
@@ -61,7 +61,7 @@ process(void *data)
 		cout.flush();		
 	}
 	
-	ioSocketExchange::deleteCopy(fse);
+	ioNetworkExchange::deleteCopy(fse);
 	
 	return NULL;
 }
@@ -70,17 +70,17 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		ioSocket sock(true,IOSOCKETOPTIONS_PROTO_FAMILY_IPV4,IOSOCKETOPTIONS_TRANSFER_TYPE_STREAM);
+		ioNetwork sock(true,IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__connInfo info;
 		__initialAccept fake;
 				
 		sock.bindNListen("127.0.0.1",7778,3);
-		sock.setLingerOption(IOSOCKETOPTIONS_LINGEROPTION_HARD_CLOSE);	
+		sock.setLingerOption(IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE);	
 		sock.blockInherited = false;
 		sock.block(false);
 		
-		ioSocketExchange conn;
+		ioNetworkExchange conn;
 
 		bool exit_st(false);
 

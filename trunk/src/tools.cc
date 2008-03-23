@@ -1556,13 +1556,13 @@ tools::mail(const dodoString &host,
 
 	switch (type)
 	{
-		case IOSOCKETOPTIONS_PROTO_FAMILY_IPV4:
+		case IONETWORKOPTIONS_PROTO_FAMILY_IPV4:
 
 			real_domain = PF_INET;
 
 			break;
 
-		case IOSOCKETOPTIONS_PROTO_FAMILY_IPV6:
+		case IONETWORKOPTIONS_PROTO_FAMILY_IPV6:
 
 			real_domain = PF_INET6;
 
@@ -1577,7 +1577,7 @@ tools::mail(const dodoString &host,
 	if (socket == -1)
 		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	if (type == IOSOCKETOPTIONS_PROTO_FAMILY_IPV6)
+	if (type == IONETWORKOPTIONS_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;

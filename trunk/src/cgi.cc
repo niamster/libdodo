@@ -432,7 +432,7 @@ cgi::makePost()
 	}
 	else
 	{
-		if (stringTools::iequal(ENVIRONMENT["CONTENT_IOSOCKETOPTIONS_TRANSFER_ENCODING"], "base64"))
+		if (stringTools::iequal(ENVIRONMENT["CONTENT_IONETWORKOPTIONS_TRANSFER_ENCODING"], "base64"))
 			content = tools::decodeBase64(content);
 
 		unsigned int temp0;
