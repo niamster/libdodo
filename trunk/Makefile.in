@@ -47,7 +47,10 @@ OBJECTS:=dbBase.o \
 		systemTools.o \
 		timeTools.o \
 		xml.o \
-		rpc.o \
+		rpcValue.o \
+		rpcMethod.o \
+		rpcResponse.o \
+		rpcClient.o \
 		image.o \
 		dbSqlite.o \
 		systemProcessCollection.o \

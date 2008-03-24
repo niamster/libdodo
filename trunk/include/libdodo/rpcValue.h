@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpc.h
+ *            rpcValue.h
  *
  *  Sat Mar 22 00:06:55 2008
  *  Copyright  2008  Ni@m
@@ -21,14 +21,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _RPC_H_
-#define _RPC_H_
+#ifndef _RPCVALUE_H_
+#define _RPCVALUE_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
-#include <libdodo/rpcEx.h>
+#include <libdodo/rpcValueEx.h>
 
 namespace dodo
 {
@@ -228,128 +228,6 @@ namespace dodo
 			double doubleValue;///< double value
 			dodoArray<rpcValue> arrayValue;///< array value
 			dodoMap<dodoString, rpcValue, stringTools::equal> structValue;///< struct value
-	};
-	
-	/**
-	 * @class rpcMethod defines RPC method reprasentation
-	 */
-	class rpcMethod
-	{
-		friend class rpcClient;
-		
-		public:
-
-			/**
-			 * constructor
-			 */
-			rpcMethod();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcMethod();
-
-			/**
-			 * set method name
-			 * @param name defines method name
-			 */
-			virtual void setName(const dodoString &name);
-
-			/**
-			 * clear arguments information
-			 */
-			virtual void clear();
-			
-			/**
-			 * add argument
-			 * @param argument defines method argument 
-			 */
-			virtual void addArgument(const dodoString &name, const rpcValue &argument);
-			
-		private:
-			
-			dodoMap<dodoString, rpcValue, stringTools::equal> arguments;///< method arguments
-			dodoString name;///< method name
-	};
-	
-	/**
-	 * @class rpcResponse defines RPC response reprasentation
-	 */
-	class rpcResponse
-	{
-		friend class rpcClient;
-		
-		public:
-
-			/**
-			 * constructor
-			 */
-			rpcResponse();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcResponse();
-
-			/**
-			 * @return response value
-			 */
-			virtual rpcValue getValue();
-			
-			/**
-			 * @return true if request has  
-			 */
-			virtual bool successful();
-			
-			/**
-			 * @return rpcValue for type casting  
-			 */
-			virtual operator rpcValue(); 
-			
-		private:
-			
-			rpcValue value;///< response value
-			bool succ;///< true if server returned non-fail response
-	};
-	
-	class ioHTTP;
-	
-	/**
-	 * @class rpcClient defines 
-	 */
-	class rpcClient
-	{
-		public:
-
-			/**
-			 * constructor
-			 */
-			rpcClient();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcClient() = 0;
-		
-			/**
-			 * @param method defines rpc method call
-			 */
-			virtual void sendRequest(const rpcMethod &method) = 0;
-			
-			/**
-			 * @return rpc response result 
-			 */
-			virtual rpcResponse receiveResponse() = 0;
-			
-			/**
-			 * set transport layer provider
-			 * @param provider defines trasport layer provider
-			 */
-			virtual void setIOProvider(ioHTTP *provider);
-		
-		protected:
-			
-			ioHTTP *ioProvider;
 	};
 };
 

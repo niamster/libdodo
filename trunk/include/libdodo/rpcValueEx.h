@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpcEx.h
+ *            rpcValueEx.h
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _RPCEX_H_
-#define _RPCEX_H_
+#ifndef _RPCVALUEEX_H_
+#define _RPCVALUEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum rpcExR
+	enum rpcValueExR
 	{
 		RPCVALUEEX_WRONGTYPEREQUESTED,
 		RPCVALUEEX_ARRAYOUTOFRANGE,
@@ -48,7 +48,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum rpcFunctionsID
+	enum rpcValueFunctionsID
 	{
 		RPCVALUEEX_BROPERATORSTRING,
 		RPCVALUEEX_BROPERATORNUMERIC,

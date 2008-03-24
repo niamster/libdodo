@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpc.cc
+ *            rpcValue.cc
  *
  *  Sat Mar 22 00:06:55 2008
  *  Copyright  2008  Ni@m
@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/rpc.h>
+#include <libdodo/rpcValue.h>
 
 using namespace dodo;
 
@@ -174,7 +174,7 @@ rpcValue
 rpcValue::operator[](const dodoString &name)
 {
 	if (valueDataType != RPC_DATATYPE_STRUCT)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_BROPERATORSTRING, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_BROPERATORSTRING, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return structValue[name];
 }
@@ -185,10 +185,10 @@ rpcValue
 rpcValue::operator[](unsigned long key)
 {
 	if (valueDataType != RPC_DATATYPE_ARRAY)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_BROPERATORNUMERIC, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_BROPERATORNUMERIC, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	if (key >= arrayValue.size())
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_BROPERATORNUMERIC, ERR_LIBDODO, RPCVALUEEX_ARRAYOUTOFRANGE, RPCVALUEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_BROPERATORNUMERIC, ERR_LIBDODO, RPCVALUEEX_ARRAYOUTOFRANGE, RPCVALUEEX_ARRAYOUTOFRANGE_STR, __LINE__, __FILE__);
 
 	return arrayValue[key];
 }
@@ -207,7 +207,7 @@ dodoString
 rpcValue::getString()
 {
 	if (valueDataType != RPC_DATATYPE_STRING)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETSTRING, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_GETSTRING, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return stringValue;
 }
@@ -218,7 +218,7 @@ bool
 rpcValue::getBoolean()
 {
 	if (valueDataType != RPC_DATATYPE_BOOLEAN)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETBOOLEAN, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_GETBOOLEAN, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return booleanValue;
 }
@@ -229,7 +229,7 @@ long
 rpcValue::getInteger()
 {
 	if (valueDataType != RPC_DATATYPE_INTEGER)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETINTEGER, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_GETINTEGER, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return integerValue;
 	
@@ -241,7 +241,7 @@ double
 rpcValue::getDouble()
 {
 	if (valueDataType != RPC_DATATYPE_DOUBLE)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETDOUBLE, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_GETDOUBLE, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return doubleValue;
 	
@@ -253,7 +253,7 @@ dodoArray<rpcValue>
 rpcValue::getArray()
 {
 	if (valueDataType != RPC_DATATYPE_ARRAY)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETARRAY, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_GETARRAY, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return arrayValue;
 }
@@ -264,108 +264,10 @@ dodoMap<dodoString, rpcValue, stringTools::equal>
 rpcValue::getStruct()
 {
 	if (valueDataType != RPC_DATATYPE_STRUCT)
-		throw baseEx(ERRMODULE_RPC, RPCVALUEEX_GETSTRUCT, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCVALUE, RPCVALUEEX_GETSTRUCT, ERR_LIBDODO, RPCVALUEEX_WRONGTYPEREQUESTED, RPCVALUEEX_WRONGTYPEREQUESTED_STR, __LINE__, __FILE__);
 
 	return structValue;
 	
-}
-
-//-------------------------------------------------------------------
-
-rpcMethod::rpcMethod()
-{
-	
-}
-
-//-------------------------------------------------------------------
-
-rpcMethod::~rpcMethod()
-{
-	
-}
-
-//-------------------------------------------------------------------
-
-void
-rpcMethod::setName(const dodoString &name)
-{
-	this->name = name;
-}
-
-//-------------------------------------------------------------------
-
-void
-rpcMethod::clear()
-{
-	arguments.clear();
-}
-
-//-------------------------------------------------------------------
-
-void
-rpcMethod::addArgument(const dodoString &name,
-					const rpcValue &argument)
-{
-	arguments.insert(name, argument);
-}
-
-//-------------------------------------------------------------------
-
-rpcResponse::rpcResponse() : succ(false)
-{
-	
-}
-
-//-------------------------------------------------------------------
-
-rpcResponse::~rpcResponse()
-{
-	
-}
-
-//-------------------------------------------------------------------
-
-rpcValue
-rpcResponse::getValue()
-{
-	return value;
-}
-
-//-------------------------------------------------------------------
-
-bool
-rpcResponse::successful()
-{
-	return succ;
-}
-
-//-------------------------------------------------------------------
-
-rpcResponse::operator rpcValue()
-{
-	return value;
-}
-
-//-------------------------------------------------------------------
-
-rpcClient::rpcClient() : ioProvider(NULL)
-{
-	
-}
-
-//-------------------------------------------------------------------
-
-rpcClient::~rpcClient()
-{
-	
-}
-
-//-------------------------------------------------------------------
-
-void
-rpcClient::setIOProvider(ioHTTP *provider)
-{
-	ioProvider = provider;
 }
 
 //-------------------------------------------------------------------
