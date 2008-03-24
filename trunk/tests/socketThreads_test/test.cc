@@ -27,7 +27,14 @@ process(void *data)
 		std::cout << "CHILD UNBLOCKED\n";
 		cout.flush();
 	}
+
+	if (fse->isAlive())
+	{
+		std::cout << "IT'S ALIVE!\n";
+		cout.flush();
+	}
 	
+
 	fse->inSize = 4;
 	fse->setInBufferSize(1);
 	fse->setOutBufferSize(1);
@@ -61,6 +68,19 @@ process(void *data)
 		cout.flush();		
 	}
 	
+	fse->close();
+
+	if (fse->isAlive())
+	{
+		std::cout << "IT'S ALIVE?????\n";
+		cout.flush();
+	}
+	else
+	{
+		std::cout << "CLOSED!\n";
+		cout.flush();
+	}
+
 	ioNetworkExchange::deleteCopy(fse);
 	
 	return NULL;
