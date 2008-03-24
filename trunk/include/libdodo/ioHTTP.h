@@ -99,15 +99,8 @@ namespace dodo
 
 			/**
 			 * constructor
-			 * @param url defines URL
 			 */
-			ioHTTP(const dodoString &url = __dodostring__);
-
-			/**
-			 * constructor
-			 * @param url defines URL
-			 */
-			ioHTTP(const __url &url);
+			ioHTTP();
 
 			/**
 			 * destructor
@@ -116,11 +109,22 @@ namespace dodo
 
 			dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see ioHTTPRequestHeaderEnum]
 			dodoMap<short, dodoString> responseHeaders; ///< headers that will be received with response[see ioHTTPResponseHeaderEnum]
+			
+			/**
+			 * @return server response
+			 * @param url defines URL
+			 */
+			virtual dodoString GET(const __url &url);
+			
+			/**
+			 * @return server response
+			 * @param url defines URL
+			 */
+			virtual dodoString GET(const dodoString &url);
 
 		private:
 			
 			ioNetworkExchange ex;
-			__url url;
 			
 			static const dodoString requestHeaderStatements[IOHTTP_REQUESTHEADERSTATEMENTS_SIZE];///< HTTP request headers[see ioHTTPRequestHeaderEnum]
 			static const dodoString responseHeaderStatements[IOHTTP_RESPONSEHEADERSTATEMENTS_SIZE];///< HTTP response headers[see ioHTTPResponseHeaderEnum]

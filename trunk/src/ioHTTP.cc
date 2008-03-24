@@ -60,21 +60,8 @@ const dodoString responseHeaderStatements[] = { "Accept-Ranges",
 
 //-------------------------------------------------------------------
 
-ioHTTP::ioHTTP(const dodoString &url)
+ioHTTP::ioHTTP()
 {
-	this->url = tools::parseURL(url);
-
-	requestHeaders[IOHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
-	requestHeaders[IOHTTP_REQUESTHEADER_ACCEPT] = "*/*";
-	requestHeaders[IOHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
-}
-
-//-------------------------------------------------------------------
-
-ioHTTP::ioHTTP(const __url &url)
-{
-	this->url = url;
-	
 	requestHeaders[IOHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
 	requestHeaders[IOHTTP_REQUESTHEADER_ACCEPT] = "*/*";
 	requestHeaders[IOHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
@@ -90,6 +77,25 @@ ioHTTP::ioHTTP(ioHTTP &fd)
 
 ioHTTP::~ioHTTP()
 {
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+ioHTTP::GET(const __url &url)
+{
+	dodoString response;
+	
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+ioHTTP::GET(const dodoString &a_url)
+{
+	return GET(tools::parseURL(a_url));
 }
 
 //-------------------------------------------------------------------
