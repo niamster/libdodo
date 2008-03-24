@@ -67,6 +67,7 @@ OBJECTS:=dbBase.o \
 		ioHTTP.o \
 		db.o \
 		cgiFast.o \
+		ioCgiFastExchange.o \
 		cgiProcessor.o \
 		ioNonBlockedAccess.o \
 		systemLibraryLoader.o \

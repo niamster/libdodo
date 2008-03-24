@@ -1258,8 +1258,8 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
-  --disable-cgiFast-xexec-support
-                          compile cgiFast w/o xexec support
+  --disable-ioCgiFastExchange-xexec-support
+                          compile ioCgiFastExchange w/o xexec support
   --disable-ioSTD-xexec-support
                           compile ioSTD w/o xexec support
   --disable-ioNetworkExchange-xexec-support
@@ -3479,7 +3479,7 @@ fi
 
 if test "$CGIFAST_W_XEXEC" = "no"
 then
-	echo -n -e "#define CGIFAST_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IOCGIFASTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
 	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tdisabled"
 else

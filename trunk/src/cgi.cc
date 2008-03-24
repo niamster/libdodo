@@ -177,7 +177,7 @@ cgi::cgi(bool silent,
 
 #ifdef FCGI_EXT
 
-cgi::cgi(ioCGIFast    *a_cf,
+cgi::cgi(ioCgiFastExchange    *a_cf,
 		 bool silent,
 		 bool autocleanContent,
 		 bool a_autocleanFiles,
@@ -211,7 +211,7 @@ cgi::cgi(ioCGIFast    *a_cf,
 
 //-------------------------------------------------------------------
 
-cgi::cgi(ioCGIFast    *a_cf,
+cgi::cgi(ioCgiFastExchange    *a_cf,
 		 dodoStringMap &headers,
 		 bool silent,
 		 bool autocleanContent,
@@ -376,7 +376,7 @@ cgi::makeEnv()
 	{
 #ifdef FCGI_EXT
 		if (cgiFastSet)
-			env = ((ioCGIFast *)cgiIO)->getenv(environmentStatements[i].str);
+			env = ((ioCgiFastExchange *)cgiIO)->getenv(environmentStatements[i].str);
 		else
 #endif
 		env = getenv(environmentStatements[i].str);

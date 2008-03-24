@@ -3,6 +3,7 @@
 #include <libdodo/cgiProcessor.h>
 #include <libdodo/tools.h>
 #include <libdodo/cgiFast.h>
+#include <libdodo/systemThreadSharedDataGuard.h>
 
 #include <iostream>
 
@@ -12,14 +13,21 @@ using namespace std;
 
 #ifdef FCGI_EXT
 
+systemThreadSharedDataGuard sh;
+
 	void 
-	cgif(ioCGIFast *fcgi)
+	cgif(ioCgiFastExchange *fcgi)
 	{
 		cgi cgit(fcgi, true);
 		cgit.setCookie("test","Ni@m");
 		cgit.printHeaders();
-		 
+			
+		int *inc = (int *)sh.lock();
+		(*inc)++;
+		sh.unlock();
+	 
 		
+		fcgi->writeStreamString("!" + stringTools::iToString(*inc) + "!<br>");
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["e"] + "!<br>");
@@ -72,6 +80,9 @@ int main(int argc, char **argv)
 	
 	try
 	{
+		int *shared = new int(1);
+		sh.set((void *)shared);
+
 		cgiFast cf;
 		if (!cf.isFastCGI())
 		{
@@ -82,12 +93,14 @@ int main(int argc, char **argv)
 		cf.setCGIFunction(&cgif);
 	
 		cf.listen();
+
+		delete shared;
 	}
 	catch (baseEx &ex)
 	{
 		cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
 	}
-	
+
 #else
 	
 		cout << "No fastCGI extension was compiled!";
