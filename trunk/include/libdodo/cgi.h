@@ -80,7 +80,6 @@ namespace dodo
 		CGI_ENVIRONMENT_SERVERPROTOCOL,
 		CGI_ENVIRONMENT_SCRIPTFILENAME,
 		CGI_ENVIRONMENT_SCRIPTNAME,
-
 	};
 
 	/**
@@ -255,7 +254,7 @@ namespace dodo
 			 */
 			dodoStringMap POST;                                      ///< POST variables
 			dodoStringMap GET;                                       ///< GET variables
-			dodoString ENVIRONMENT[HTTP_ENVIRONMENT_SIZE];                                      ///< environment variables[see cgiEnvironmentEnum]
+			dodoMap<short, dodoString> ENVIRONMENT;                  ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                          ///< cookies sent by browser
 			dodoMap<dodoString, __cgiFile, stringTools::equal> FILES;       ///< POST files
 

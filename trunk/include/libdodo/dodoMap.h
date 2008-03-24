@@ -44,15 +44,19 @@ namespace dodo
 			 * @typedef cmpFunc defines function to compare two values
 			 */
 			typedef bool (*cmpFunc)(const keyType &, const keyType &);
+			
+			static bool cmp(const keyType &A, const keyType &B)
+			{
+				return A == B;
+			}
 	};
 
 	/**
 	 * @class dodoMap is a wrapper for std::map<keyType, valueType>
-	 * TODO: apply hash function
 	 */
 	template <typename keyType,
 			  typename valueType,
-			  typename dodoMapFunc<keyType>::cmpFunc cmpFunc>
+			  typename dodoMapFunc<keyType>::cmpFunc cmpFunc = dodoMapFunc<keyType>::cmp>
 	class dodoMap
 	{
 

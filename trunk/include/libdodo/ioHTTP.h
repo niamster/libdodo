@@ -36,7 +36,9 @@
 #include <libdodo/types.h>
 
 namespace dodo
-{
+{	
+#define IOHTTP_REQUESTHEADERSTATEMENTS_SIZE 11
+
 	/**
 	 * @enum ioHTTPRequestHeaderEnum defines HTTP request headers
 	 */
@@ -54,6 +56,8 @@ namespace dodo
 		IOHTTP_REQUESTHEADER_IFMODIFIEDSINCE,///< allows a 304 Not Modified to be returned
 		IOHTTP_REQUESTHEADER_USERAGENT,///< the user agent string of the user agent
 	};
+
+#define IOHTTP_RESPONSEHEADERSTATEMENTS_SIZE 16
 	
 	/**
 	 * @enum ioHTTPResponseHeaderEnum defines HTTP response headers
@@ -110,16 +114,16 @@ namespace dodo
 			 */
 			virtual ~ioHTTP();
 
+			dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see ioHTTPRequestHeaderEnum]
+			dodoMap<short, dodoString> responseHeaders; ///< headers that will be received with response[see ioHTTPResponseHeaderEnum]
+
 		private:
 			
 			ioNetworkExchange ex;
 			__url url;
 			
-			static const dodoString requestHeaderStatements[11];///< HTTP request headers
-			static const dodoString responseHeaderStatements[16];///< HTTP response headers
-
-			dodoStringMap requestHeaders; ///< headers that will be sent with request
-			dodoStringMap responseHeaders; ///< headers that will be received with response
+			static const dodoString requestHeaderStatements[IOHTTP_REQUESTHEADERSTATEMENTS_SIZE];///< HTTP request headers[see ioHTTPRequestHeaderEnum]
+			static const dodoString responseHeaderStatements[IOHTTP_RESPONSEHEADERSTATEMENTS_SIZE];///< HTTP response headers[see ioHTTPResponseHeaderEnum]
 	};
 
 };

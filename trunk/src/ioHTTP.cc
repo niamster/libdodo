@@ -63,10 +63,10 @@ const dodoString responseHeaderStatements[] = { "Accept-Ranges",
 ioHTTP::ioHTTP(const dodoString &url)
 {
 	this->url = tools::parseURL(url);
-	
-	requestHeaders[requestHeaderStatements[IOHTTP_REQUESTHEADER_USERAGENT]] = PACKAGE_NAME "/" PACKAGE_VERSION;
-	requestHeaders[requestHeaderStatements[IOHTTP_REQUESTHEADER_ACCEPT]] = "*/*";
-	requestHeaders[requestHeaderStatements[IOHTTP_REQUESTHEADER_CONNECTION]] = "Keep-Alive";
+
+	requestHeaders[IOHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
+	requestHeaders[IOHTTP_REQUESTHEADER_ACCEPT] = "*/*";
+	requestHeaders[IOHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
 }
 
 //-------------------------------------------------------------------
@@ -75,9 +75,9 @@ ioHTTP::ioHTTP(const __url &url)
 {
 	this->url = url;
 	
-	requestHeaders[requestHeaderStatements[IOHTTP_REQUESTHEADER_USERAGENT]] = PACKAGE_NAME "/" PACKAGE_VERSION;
-	requestHeaders[requestHeaderStatements[IOHTTP_REQUESTHEADER_ACCEPT]] = "*/*";
-	requestHeaders[requestHeaderStatements[IOHTTP_REQUESTHEADER_CONNECTION]] = "Keep-Alive";
+	requestHeaders[IOHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
+	requestHeaders[IOHTTP_REQUESTHEADER_ACCEPT] = "*/*";
+	requestHeaders[IOHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
 }
 
 //-------------------------------------------------------------------
