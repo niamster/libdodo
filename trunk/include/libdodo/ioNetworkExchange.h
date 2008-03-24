@@ -35,6 +35,7 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <poll.h>
 
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetworkExchangeEx.h>
@@ -201,7 +202,7 @@ namespace dodo
 			/**
 			 * @return true if connection is alive
 			 */
-			virtual bool alive();
+			virtual bool isAlive();
 
 			/**
 			 * @param data defines buffer that will be filled

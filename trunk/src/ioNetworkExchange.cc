@@ -170,11 +170,27 @@ ioNetworkExchange::init(int a_socket,
 //-------------------------------------------------------------------
 
 bool
-ioNetworkExchange::alive()
+ioNetworkExchange::isAlive()
 {
 	guard pg(this);
+	
+	if (!opened)
+		return false;
+	
+	pollfd fd;
+	fd.fd = socket;
+	fd.events = POLLOUT;
+	
+	if (poll(&fd, 1, -1) > 0)
+		if (isSetFlag(fd.revents, POLLOUT))
+			return true;
+	
+	ioNetworkOptions::_close(socket);
 
-	return opened;
+	socket = -1;
+	opened = false;
+
+	return false;
 }
 
 
