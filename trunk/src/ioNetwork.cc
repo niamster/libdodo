@@ -46,7 +46,8 @@ ioNetwork::ioNetwork(bool a_server,
 								   blockInherited(false),
 								   server(a_server),
 								   collectedData(operType,
-												 (void *) this)
+												 (void *) this),
+									opened(false)
 {
 	makeSocket();
 }
