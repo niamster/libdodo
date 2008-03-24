@@ -27,6 +27,7 @@ OBJECTS:=dbBase.o \
 		atomicSemaphore.o \
 		tools.o \
 		json.o \
+		jsonNode.o \
 		types.o \
 		stringTools.o \
 		xexec.o \

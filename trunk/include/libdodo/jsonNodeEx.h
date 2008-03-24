@@ -1,5 +1,5 @@
 /***************************************************************************
- *            jsonEx.h
+ *            jsonNodeEx.h
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _JSONEX_H_
-#define _JSONEX_H_
+#ifndef _JSONNODEEX_H_
+#define _JSONNODEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,28 +33,32 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum jsonExR
+	enum jsonNodeExR
 	{
-		JSONEX_MALFORMEDJSONNUMERIC,
-		JSONEX_MALFORMEDJSONNULL,
-		JSONEX_MALFORMEDJSONBOOLEAN,
+		JSONNODEEX_WRONGTYPEREQUESTED,
+		JSONNODEEX_ARRAYOUTOFRANGE,
+		JSONNODEEX_MALFORMEDJSON,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define JSONEX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-#define JSONEX_MALFORMEDJSONNULL_STR "Malformed json object: null."
-#define JSONEX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
+#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
+#define JSONNODEEX_MALFORMEDJSON_STR "Malformed json object."
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum jsonFunctionsID
+	enum jsonNodeFunctionsID
 	{
-		JSONEX_PROCESSBOOLEAN,
-		JSONEX_PROCESSNULL,
-		JSONEX_PROCESSNUMERIC,
+		JSONNODEEX_BROPERATORSTRING,
+		JSONNODEEX_BROPERATORNUMERIC,
+		JSONNODEEX_GETSTRING,
+		JSONNODEEX_GETBOOLEAN,
+		JSONNODEEX_GETNUMERIC,
+		JSONNODEEX_GETARRAY,
+		JSONNODEEX_GETOBJECT,
 	};
 
 };
