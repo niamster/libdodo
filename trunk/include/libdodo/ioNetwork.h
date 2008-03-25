@@ -109,8 +109,8 @@ namespace dodo
 			/**
 			 * constructor
 			 * @param server defines type of service; if true as a server
-			 * @param family defines family of the socket[see socketProtoFamilyEnum]
-			 * @param type defines type of the socket[see socketTransferTypeEnum]
+			 * @param family defines family of the socket[see ioNetworkOptionsProtoFamilyEnum]
+			 * @param type defines type of the socket[see ioNetworkOptionsTransferTypeEnum]
 			 */
 			ioNetwork(bool server, short family, short type);
 

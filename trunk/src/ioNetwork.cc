@@ -49,7 +49,6 @@ ioNetwork::ioNetwork(bool a_server,
 												 (void *) this),
 									opened(false)
 {
-	makeSocket();
 }
 
 
@@ -387,6 +386,7 @@ ioNetwork::connect(const dodoString &path,
 
 	if (server)
 		throw baseEx(ERRMODULE_IONETWORK, IONETWORKEX_CONNECT, ERR_LIBDODO, IONETWORKEX_CANNOTCONNECT, IONETWORKEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+
 	makeSocket();
 
 	struct sockaddr_un sa;
@@ -429,19 +429,8 @@ ioNetwork::bindNListen(const dodoString &host,
 	if (!server)
 		throw baseEx(ERRMODULE_IONETWORK, IONETWORKEX_BINDNLISTEN, ERR_LIBDODO, IONETWORKEX_CANNOTBIND, IONETWORKEX_CANNOTBIND_STR, __LINE__, __FILE__);
 
-	if (opened)
-	{
-		if (::shutdown(socket, SHUT_RDWR) == -1)
-			throw baseEx(ERRMODULE_IONETWORK, IONETWORKEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IONETWORK, IONETWORKEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		socket = -1;
-
-		opened = false;
-	}
-
+	opened = false;
+	
 	makeSocket();
 
 	int sockFlag(1);
@@ -518,18 +507,7 @@ ioNetwork::bindNListen(const dodoString &path,
 	if (!server)
 		throw baseEx(ERRMODULE_IONETWORK, IONETWORKEX_BINDNLISTEN, ERR_LIBDODO, IONETWORKEX_CANNOTBIND, IONETWORKEX_CANNOTBIND_STR, __LINE__, __FILE__);
 
-	if (opened)
-	{
-		if (::shutdown(socket, SHUT_RDWR) == -1)
-			throw baseEx(ERRMODULE_IONETWORK, IONETWORKEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IONETWORK, IONETWORKEX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		socket = -1;
-
-		opened = false;
-	}
+	opened = false;
 
 	makeSocket();
 
