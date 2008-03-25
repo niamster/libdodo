@@ -69,6 +69,12 @@ namespace dodo
 			regexp();
 
 			/**
+			 * constructor
+			 * @param pattern defines regex pattern
+			 */
+			regexp(const dodoString &pattern);
+
+			/**
 			 * destructor
 			 */
 			virtual ~regexp();

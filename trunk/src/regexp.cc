@@ -44,6 +44,29 @@ regexp::regexp() : extended(true),
 
 //-------------------------------------------------------------------
 
+regexp::regexp(const dodoString &pattern) : extended(true),
+				   icase(false),
+				   greedy(true),
+				   multiline(false)
+{
+#ifdef PCRE_EXT
+#else
+	notCompiled = true;
+#endif
+	
+	try
+	{
+		compile(pattern);
+	}
+	catch(baseEx &ex)
+	{
+		if (ex.funcID != REGEXPEX_COMPILE)
+			throw;
+	}
+}
+
+//-------------------------------------------------------------------
+
 regexp::~regexp()
 {
 #ifdef PCRE_EXT
