@@ -357,7 +357,7 @@ tools::explode(const dodoString &fields,
 			   int limit)
 {
 	unsigned long i(0), j(0), sep_size(separator.size());
-	int k(0);
+	int k(1);
 	dodoStringArray arr;
 
 	while (true)
@@ -365,7 +365,11 @@ tools::explode(const dodoString &fields,
 		if (limit != -1)
 		{
 			if (k > limit)
+			{
+				arr.back().append(escapeF(fields.substr(j - sep_size)));
+				
 				break;
+			}
 			++k;
 		}
 

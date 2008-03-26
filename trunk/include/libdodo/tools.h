@@ -224,7 +224,8 @@ namespace dodo
 			 * @return array of substrings
 			 * @param string defines string to explode 
 			 * @param separator defines separator string
-			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
+			 * @note explode will stop when amount of parts exceed limit and the rest of the buffer will be appended to the last piece
 			 */
 			static dodoStringArray explode(const dodoString &string, const dodoString &separator, int limit = -1);
 
@@ -233,7 +234,8 @@ namespace dodo
 			 * @param string defines string to explode
 			 * @param escapeF defines function which will escape every substring 
 			 * @param separator defines separator string
-			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
+			 * @note explode will stop when amount of parts exceed limit and the rest of the buffer will be appended to the last piece
 			 */
 			static dodoStringArray explode(const dodoString &string, escape escapeF, const dodoString &separator, int limit = -1);
 
@@ -243,7 +245,7 @@ namespace dodo
 			 * @param escapeF defines function which will escape every substring  
 			 * @param separator defines separator string
 			 * @param frame defines frame string[frame='; substring => 'substring']
-			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, const dodoString &frame, int limit = -1);
 
@@ -252,7 +254,7 @@ namespace dodo
 			 * @param fields defines substrings to implode
 			 * @param escapeF defines function which will escape every substring  
 			 * @param separator defines separator string
-			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, escape escapeF, const dodoString &separator, int limit = -1);
 
@@ -260,7 +262,7 @@ namespace dodo
 			 * @return string of substrings, separated with separator
 			 * @param fields defines substrings to implode
 			 * @param separator defines separator string
-			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, int limit = -1);
 
@@ -269,7 +271,7 @@ namespace dodo
 			 * @param fields defines substrings to implode
 			 * @param separator defines separator string
 			 * @param frame defines frame string[frame='; substring => 'substring']
-			 * @param limit defines maxim number of parts to divide string; -1 for unlimit
+			 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 			 */
 			static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
 
