@@ -40,7 +40,7 @@ rpcClient::~rpcClient()
 //-------------------------------------------------------------------
 
 void
-rpcClient::setIOProvider(ioHTTP *provider)
+rpcClient::setIOProvider(ioNetworkHTTP *provider)
 {
 	ioProvider = provider;
 }

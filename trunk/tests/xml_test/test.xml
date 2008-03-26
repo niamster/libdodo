@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<edi:test xmlns:edi="http://ecommerce.org/shema" id="df">		
-	<test id="dddasfasdhsff" do="sd">
+<cns:test xmlns:cns="http://ecommerce.org/shema" id="@ID@">		
+	<test id="#ID#" do="action();">
 		<dust id="dustNode" />
-		asd
+		text 0
 	</test>
-	<bubu>
-		<mimi>
-			<edi:hehe id="found!">
-				<![CDATA[ aszdfszz\\0zzzzzzzzzzdasf]]>
-				<bebe id="kl">dsd
-					<bebe id="ddffssssssdfdddasdfsdgshssd">asqd</bebe>
-					<bebe id="ffdda">asddsa</bebe>	
-				</bebe>
-				<bebe id="km">dsd
-					<bebe id="asdfsdgshssd">asd</bebe>
-					<bebe id="ffddhgggggggggga">asddsa</bebe>	
-				</bebe>
-			</edi:hehe>
-		</mimi>	
-	</bubu>		
-	<edi:tesT id="ffdda">asddsa</edi:tesT>		
+	<node0>
+		<node1>
+			<cns:div id="$ID$">
+				<![CDATA[ CDATA  ]]>
+				<span id="%ID%">text 1
+					<span id="1">text 2</span>
+					<span id="2">text 3</span>	
+				</span>
+				<span id="*ID*">text 4
+					<span id="3">text 5</span>
+					<span id="4">test 6</span>	
+				</span>
+			</cns:div>
+		</node1>	
+	</node0>		
+	<cns:tesT id="^ID^">tEsT</cns:tesT>		
 	<![CDATA[
-	hahas]]>
-</edi:test>
+	cdata]]>
+</cns:test>

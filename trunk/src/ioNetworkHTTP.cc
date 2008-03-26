@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioHTTP.cc
+ *            ioNetworkHTTP.cc
  *
  *  Wed Oct 8 01:44:18 2005
  *  Copyright  2005  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/ioHTTP.h>
+#include <libdodo/ioNetworkHTTP.h>
 
 using namespace dodo;
 
-const dodoString ioHTTP::requestHeaderStatements[] = { "Accept",
+const dodoString ioNetworkHTTP::requestHeaderStatements[] = { "Accept",
 		"Accept-Charset",
 		"Accept-Encoding",
 		"Accept-Language",
@@ -40,7 +40,7 @@ const dodoString ioHTTP::requestHeaderStatements[] = { "Accept",
 
 //-------------------------------------------------------------------
 
-const dodoString ioHTTP::responseHeaderStatements[] = { "Accept-Ranges",
+const dodoString ioNetworkHTTP::responseHeaderStatements[] = { "Accept-Ranges",
 		"Age",
 		"Allow",
 		"Cache-Control",
@@ -58,35 +58,35 @@ const dodoString ioHTTP::responseHeaderStatements[] = { "Accept-Ranges",
 		"Server",
 };
 
-const char ioHTTP::trimSymbols[] = {' ',
+const char ioNetworkHTTP::trimSymbols[] = {' ',
 		'\r'
 };
 
 //-------------------------------------------------------------------
 
-ioHTTP::ioHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$")
+ioNetworkHTTP::ioNetworkHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$")
 {	
-	requestHeaders[IOHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
-	requestHeaders[IOHTTP_REQUESTHEADER_ACCEPT] = "*/*";
-	requestHeaders[IOHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
+	requestHeaders[IONETWORKHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
+	requestHeaders[IONETWORKHTTP_REQUESTHEADER_ACCEPT] = "*/*";
+	requestHeaders[IONETWORKHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
 }
 
 //-------------------------------------------------------------------
 
-ioHTTP::ioHTTP(ioHTTP &fd)
+ioNetworkHTTP::ioNetworkHTTP(ioNetworkHTTP &fd)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioHTTP::~ioHTTP()
+ioNetworkHTTP::~ioNetworkHTTP()
 {
 }
 
 //-------------------------------------------------------------------
 
 bool
-ioHTTP::extractHeaders(const dodoString &data,
+ioNetworkHTTP::extractHeaders(const dodoString &data,
 						__httpResponse &response)
 {
 	unsigned long i(0), j(0);
@@ -135,7 +135,7 @@ ioHTTP::extractHeaders(const dodoString &data,
 		}
 		else
 		{
-			for (o = 0;o<IOHTTP_RESPONSEHEADERSTATEMENTS_SIZE;++o)
+			for (o = 0;o<IONETWORKHTTP_RESPONSEHEADERSTATEMENTS_SIZE;++o)
 				if (stringTools::equal(responseHeaderStatements[o], arr[0]))
 					response.headers[o] = stringTools::trim(arr[1], trimSymbols, 2);
 		}
@@ -152,7 +152,7 @@ ioHTTP::extractHeaders(const dodoString &data,
 //-------------------------------------------------------------------
 
 __httpResponse
-ioHTTP::GET(const __url &url)
+ioNetworkHTTP::GET(const __url &url)
 {	
 	__httpResponse response;
 	
@@ -187,7 +187,7 @@ ioHTTP::GET(const __url &url)
 		data.append(i->second);
 		data.append("\r\n");
 	}
-	data.append(requestHeaderStatements[IOHTTP_REQUESTHEADER_HOST]);
+	data.append(requestHeaderStatements[IONETWORKHTTP_REQUESTHEADER_HOST]);
 	data.append(": ");
 	data.append(url.host);
 	data.append("\r\n\r\n");
@@ -216,7 +216,7 @@ ioHTTP::GET(const __url &url)
 				endOfHeaders = extractHeaders(data, response);
 				
 				if (endOfHeaders)
-					contentSize = stringTools::stringToUL(response.headers[IOHTTP_RESPONSEHEADER_CONTENTLENGTH]);
+					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
 			}
 			
 			if (response.data.size() == contentSize)
@@ -235,7 +235,7 @@ ioHTTP::GET(const __url &url)
 //-------------------------------------------------------------------
 
 __httpResponse
-ioHTTP::GET(const dodoString &a_url)
+ioNetworkHTTP::GET(const dodoString &a_url)
 {
 	return GET(tools::parseURL(a_url));
 }

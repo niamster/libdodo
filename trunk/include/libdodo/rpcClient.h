@@ -33,7 +33,7 @@
 
 namespace dodo
 {	
-	class ioHTTP;
+	class ioNetworkHTTP;
 	
 	/**
 	 * @class rpcClient defines 
@@ -66,11 +66,11 @@ namespace dodo
 			 * set transport layer provider
 			 * @param provider defines trasport layer provider
 			 */
-			virtual void setIOProvider(ioHTTP *provider);
+			virtual void setIOProvider(ioNetworkHTTP *provider);
 		
 		protected:
 			
-			ioHTTP *ioProvider;
+			ioNetworkHTTP *ioProvider;
 	};
 };
 

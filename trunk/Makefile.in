@@ -68,7 +68,7 @@ OBJECTS:=dbBase.o \
 		dbPostgresql.o \
 		cgiPreprocessor.o \
 		io.o \
-		ioHTTP.o \
+		ioNetworkHTTP.o \
 		db.o \
 		cgiFast.o \
 		ioCgiFastExchange.o \

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioHTTPEx.h
+ *            ioNetworkHTTPEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOHTTPEX_H_
-#define _IOHTTPEX_H_
+#ifndef _IONETWORKHTTPEX_H_
+#define _IONETWORKHTTPEX_H_
 
 #include <libdodo/directives.h>
 
@@ -34,22 +34,22 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum ioHTTPExR
+	enum ioNetworkHTTPExR
 	{
-		//IOHTTPEX_,
+		//IONETWORKHTTPEX_,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-//#define IOHTTPEX__STR ""
+//#define IONETWORKHTTPEX__STR ""
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioHTTPFunctionsID
+	enum ioNetworkHTTPFunctionsID
 	{
-		//IOHTTPEX_,
+		//IONETWORKHTTPEX_,
 	};
 };
 
