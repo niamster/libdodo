@@ -137,11 +137,11 @@ regexp::boundMatch(const dodoString &sample)
 	subs += 3;
 
 	int *oVector = new int[subs];
-
 	int rc = pcre_exec(code, NULL, sample.c_str(), sample.size(), 0, 0, oVector, subs);
 	if (rc <= 0)
 	{
 		delete [] oVector;
+		
 		return false;
 	}
 
@@ -196,8 +196,6 @@ regexp::compile(const dodoString &pattern)
 
 #ifdef PCRE_EXT
 
-	if (extended)
-		bits |= PCRE_EXTENDED;
 	if (icase)
 		bits |= PCRE_CASELESS;
 	if (!greedy)
