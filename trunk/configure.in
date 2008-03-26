@@ -527,6 +527,7 @@ AC_CONFIG_FILES([Makefile
                  tests/xexec_test/Makefile
                  tests/systemLibraryLoader_test/Makefile
                  tests/logger_test/Makefile
+                 tests/iohttp_test/Makefile
                  tests/xml_test/Makefile])
 
 AC_OUTPUT

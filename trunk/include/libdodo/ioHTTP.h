@@ -31,9 +31,11 @@
 #include <sys/stat.h>
 
 #include <libdodo/tools.h>
-#include <libdodo/ioNetworkExchange.h>
+#include <libdodo/ioNetwork.h>
+#include <libdodo/ioNetworkTools.h>
 #include <libdodo/ioHTTPEx.h>
 #include <libdodo/types.h>
+#include <libdodo/regexp.h>
 
 namespace dodo
 {	
@@ -83,6 +85,16 @@ namespace dodo
 	};
 
 	/**
+	 * @struct __httpResponse defines HTTP response 
+	 */
+	struct __httpResponse
+	{
+		dodoMap<short, dodoString> headers; ///< response headers[see ioHTTPResponseHeaderEnum]
+		dodoString data; ///< response data
+		short code; ///< response code
+	};
+	
+	/**
 	 * @class ioHTTP provides disk I/O manipulations
 	 */
 	class ioHTTP
@@ -108,26 +120,34 @@ namespace dodo
 			virtual ~ioHTTP();
 
 			dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see ioHTTPRequestHeaderEnum]
-			dodoMap<short, dodoString> responseHeaders; ///< headers that will be received with response[see ioHTTPResponseHeaderEnum]
 			
 			/**
 			 * @return server response
 			 * @param url defines URL
 			 */
-			virtual dodoString GET(const __url &url);
+			virtual __httpResponse GET(const __url &url);
 			
 			/**
 			 * @return server response
 			 * @param url defines URL
 			 */
-			virtual dodoString GET(const dodoString &url);
+			virtual __httpResponse GET(const dodoString &url);
 
 		private:
 			
-			ioNetworkExchange ex;
-			
 			static const dodoString requestHeaderStatements[IOHTTP_REQUESTHEADERSTATEMENTS_SIZE];///< HTTP request headers[see ioHTTPRequestHeaderEnum]
 			static const dodoString responseHeaderStatements[IOHTTP_RESPONSEHEADERSTATEMENTS_SIZE];///< HTTP response headers[see ioHTTPResponseHeaderEnum]
+			
+			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the header value  
+			
+			regexp httpStatusRE;///< parser for HTTP response status code
+			
+			/**
+			 * @return true if no more headers should be processed
+			 * @param data defines response data
+			 * @param response defines structed response data
+			 */
+			virtual bool extractHeaders(const dodoString &data, __httpResponse &response); 
 	};
 
 };

@@ -8340,7 +8340,7 @@ echo "${ECHO_T}$ac_cv_prog_gcc_traditional" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/db_test/Makefile tests/disk_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/non_blocked_socket_test/Makefile tests/systemThreadCollection_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemProcessCollection_test/Makefile tests/systemJobCollection_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec_test/Makefile tests/systemLibraryLoader_test/Makefile tests/logger_test/Makefile tests/xml_test/Makefile"
+ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/STD_test/Makefile tests/cgiFast_test/Makefile tests/cgi_test/Makefile tests/db_test/Makefile tests/disk_test/Makefile tests/glob_test/Makefile tests/mysql_test/Makefile tests/postgresql_test/Makefile tests/regexp_test/Makefile tests/non_blocked_socket_test/Makefile tests/systemThreadCollection_test/Makefile tests/socketThreads_test/Makefile tests/socket_test/Makefile tests/sqlite_test/Makefile tests/systemProcessCollection_test/Makefile tests/systemJobCollection_test/Makefile tests/systemTools_test/Makefile tests/timeTools_test/Makefile tests/xexec_test/Makefile tests/systemLibraryLoader_test/Makefile tests/logger_test/Makefile tests/iohttp_test/Makefile tests/xml_test/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -8937,6 +8937,7 @@ do
     "tests/xexec_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/xexec_test/Makefile" ;;
     "tests/systemLibraryLoader_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/systemLibraryLoader_test/Makefile" ;;
     "tests/logger_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/logger_test/Makefile" ;;
+    "tests/iohttp_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/iohttp_test/Makefile" ;;
     "tests/xml_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/xml_test/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5

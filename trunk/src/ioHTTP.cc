@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-const dodoString requestHeaderStatements[] = { "Accept",
+const dodoString ioHTTP::requestHeaderStatements[] = { "Accept",
 		"Accept-Charset",
 		"Accept-Encoding",
 		"Accept-Language",
@@ -40,7 +40,7 @@ const dodoString requestHeaderStatements[] = { "Accept",
 
 //-------------------------------------------------------------------
 
-const dodoString responseHeaderStatements[] = { "Accept-Ranges",
+const dodoString ioHTTP::responseHeaderStatements[] = { "Accept-Ranges",
 		"Age",
 		"Allow",
 		"Cache-Control",
@@ -58,10 +58,14 @@ const dodoString responseHeaderStatements[] = { "Accept-Ranges",
 		"Server",
 };
 
+const char ioHTTP::trimSymbols[] = {' ',
+		'\r'
+};
+
 //-------------------------------------------------------------------
 
-ioHTTP::ioHTTP()
-{
+ioHTTP::ioHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$")
+{	
 	requestHeaders[IOHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
 	requestHeaders[IOHTTP_REQUESTHEADER_ACCEPT] = "*/*";
 	requestHeaders[IOHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
@@ -81,18 +85,156 @@ ioHTTP::~ioHTTP()
 
 //-------------------------------------------------------------------
 
-dodoString
-ioHTTP::GET(const __url &url)
+bool
+ioHTTP::extractHeaders(const dodoString &data,
+						__httpResponse &response)
 {
-	dodoString response;
+	unsigned long i(0), j(0);
+	unsigned long size = data.size();
+	dodoStringArray arr;
+	dodoString piece;
 	
+	short o;
+	
+	bool statusCode = false;
+	
+	while (i < size)
+	{
+		i = data.find("\n", i);
+		if (i == dodoString::npos)
+		{
+			response.data.append(data.substr(j));
+			
+			return true;
+		}
+		
+		piece = stringTools::trim(data.substr(j, i - j), '\r');
+		if (piece.size() == 0)
+		{
+			response.data.append(data.substr(i + 1));
+			
+			return true;
+		}
+
+		arr = tools::explode(piece, ":", 2);
+		if (arr.size() != 2)
+		{
+			if (!statusCode)
+			{ 
+				statusCode = true;
+
+				if (httpStatusRE.match(piece, arr))
+					response.code = stringTools::stringToS(stringTools::trim(arr[0], trimSymbols, 2));
+			}
+			else
+			{
+				response.data.append(data.substr(j));
+				
+				return true;
+			}
+		}
+		else
+		{
+			for (o = 0;o<IOHTTP_RESPONSEHEADERSTATEMENTS_SIZE;++o)
+				if (stringTools::equal(responseHeaderStatements[o], arr[0]))
+					response.headers[o] = stringTools::trim(arr[1], trimSymbols, 2);
+		}
+		
+		i += 1;
+		j = i;
+	}
+	
+	response.data.append(data.substr(j));
+	
+	return false;
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse
+ioHTTP::GET(const __url &url)
+{	
+	__httpResponse response;
+	
+	ioNetworkExchange ex;
+	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	
+	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
+	
+	dodoString protocol = url.protocol; 
+	if (protocol.size() == 0)
+		protocol = "http";
+	
+	int port = stringTools::stringToI(url.port);
+	if (port == 0)
+	{
+		if (stringTools::iequal(protocol, "http"))
+			port = 80;
+	}
+	
+	net.connect(host.addresses[0], port, ex);
+	
+	dodoString data;
+	
+	data.append("GET ");
+	data.append(url.request.size()>0?url.request:"/");
+	data.append(" HTTP/1.0\r\n");
+	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
+	for (;i!=j;++i)
+	{
+		data.append(requestHeaderStatements[i->first]);
+		data.append(": ");
+		data.append(i->second);
+		data.append("\r\n");
+	}
+	data.append(requestHeaderStatements[IOHTTP_REQUESTHEADER_HOST]);
+	data.append(": ");
+	data.append(url.host);
+	data.append("\r\n\r\n");
+	
+	ex.writeStreamString(data);
+
+	ex.setInBufferSize(8096);
+	ex.inSize = 8096;
+	
+	unsigned long contentSize = 0;
+	
+	bool endOfHeaders = false;
+	try
+	{
+		while (true)
+		{
+			ex.readStreamString(data);
+			
+			if (data.size() == 0)
+				break;
+			
+			if (endOfHeaders)
+				response.data.append(data);
+			else
+			{
+				endOfHeaders = extractHeaders(data, response);
+				
+				if (endOfHeaders)
+					contentSize = stringTools::stringToUL(response.headers[IOHTTP_RESPONSEHEADER_CONTENTLENGTH]);
+			}
+			
+			if (response.data.size() == contentSize)
+				break;
+		}
+	}
+	catch (baseEx &ex)
+	{
+		if (ex.funcID != IONETWORKEXCHANGEEX__READSTREAM)
+			throw;
+	}
 	
 	return response;
 }
 
 //-------------------------------------------------------------------
 
-dodoString
+__httpResponse
 ioHTTP::GET(const dodoString &a_url)
 {
 	return GET(tools::parseURL(a_url));

@@ -38,6 +38,6 @@ int main(int argc, char **argv)
 	a.push_back("!!!");
 	a.push_back("@@");
 	cout << expr.replace(pattern, sample, a) << "\n";
-	
+
 	return 0;
 }
