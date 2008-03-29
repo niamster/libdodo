@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-rpcClient::rpcClient() : ioProvider(NULL)
+rpcClient::rpcClient()
 {
 	
 }
@@ -39,18 +39,10 @@ rpcClient::~rpcClient()
 
 //-------------------------------------------------------------------
 
-void
-rpcClient::setIOProvider(ioNetworkHTTP *provider)
-{
-	ioProvider = provider;
-}
-
-//-------------------------------------------------------------------
-
 void 
 rpcClient::sendRequest(const rpcMethod &method)
 {
-	ioProvider->POST(processRPCCall(method));
+	sendTextRequest(processRPCCall(method));
 }
 
 //-------------------------------------------------------------------
@@ -58,7 +50,7 @@ rpcClient::sendRequest(const rpcMethod &method)
 rpcResponse 
 rpcClient::receiveResponse()
 {
-	return processRPCCallResult(ioProvider->getResponse().data);
+	return processRPCCallResult(receiveTextResponse());
 }
 
 //-------------------------------------------------------------------

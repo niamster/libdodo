@@ -28,11 +28,9 @@
 
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
-#include <libdodo/rpcServerEx.h>
 #include <libdodo/rpcValue.h>
 #include <libdodo/rpcResponse.h>
 #include <libdodo/rpcMethod.h>
-#include <libdodo/cgi.h>
 
 namespace dodo
 {	
@@ -78,12 +76,6 @@ namespace dodo
 			virtual void setDefault(rpcHandler handler);
 			
 			/**
-			 * set transport layer provider
-			 * @param provider defines trasport layer provider
-			 */
-			virtual void setIOProvider(cgi *provider);
-			
-			/**
 			 * serve rpc call
 			 */
 			virtual void serve();
@@ -110,8 +102,18 @@ namespace dodo
 			 * @param arguments defines method arguments
 			 */
 			static rpcResponse rpcDefaultHandler(const dodoString &method, const dodoMap<dodoString, rpcValue, stringTools::equal> &arguments);
+		
+			/**
+			 * send request
+			 * @param method defines rpc method call
+			 */
+			virtual void sendTextRequest(const dodoString &method) = 0;
 			
-			cgi *ioProvider;///< I/O provider
+			/**
+			 * get response
+			 * @return rpc response result 
+			 */
+			virtual dodoString receiveTextResponse() = 0;
 			
 			dodoMap<dodoString, rpcHandler, stringTools::equal> handlers;///< method handlers
 			rpcHandler defaultHandler;///< default handler

@@ -30,7 +30,6 @@
 #include <libdodo/stringTools.h>
 #include <libdodo/rpcMethod.h>
 #include <libdodo/rpcResponse.h>
-#include <libdodo/ioNetworkHTTP.h>
 
 namespace dodo
 {
@@ -60,12 +59,6 @@ namespace dodo
 			 * @return rpc response result 
 			 */
 			virtual rpcResponse receiveResponse();
-			
-			/**
-			 * set transport layer provider
-			 * @param provider defines trasport layer provider
-			 */
-			virtual void setIOProvider(ioNetworkHTTP *provider);
 		
 		protected:
 			
@@ -82,8 +75,18 @@ namespace dodo
 			 * @param data defines buffer that contains RPC response
 			 */
 			virtual rpcResponse processRPCCallResult(const dodoString &data) = 0;
+		
+			/**
+			 * send request
+			 * @param method defines rpc method call
+			 */
+			virtual void sendTextRequest(const dodoString &method) = 0;
 			
-			ioNetworkHTTP *ioProvider;///< I/O provider
+			/**
+			 * get response
+			 * @return rpc response result 
+			 */
+			virtual dodoString receiveTextResponse() = 0;
 	};
 };
 

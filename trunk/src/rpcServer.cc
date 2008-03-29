@@ -25,8 +25,7 @@
 
 using namespace dodo;
 
-rpcServer::rpcServer() : ioProvider(NULL),
-						defaultHandler(&rpcDefaultHandler)
+rpcServer::rpcServer() : defaultHandler(&rpcDefaultHandler)
 {
 	
 }
@@ -45,14 +44,6 @@ rpcServer::rpcDefaultHandler(const dodoString &method,
 		const dodoMap<dodoString, rpcValue, stringTools::equal> &arguments)
 {
 	return rpcResponse();
-}
-
-//-------------------------------------------------------------------
-
-void
-rpcServer::setIOProvider(cgi *provider)
-{
-	ioProvider = provider;
 }
 
 //-------------------------------------------------------------------
@@ -85,15 +76,15 @@ rpcServer::removeHandler(const dodoString &method)
 void 
 rpcServer::serve()
 {
-	rpcMethod method = processRPCCall(ioProvider->getContent());
+	rpcMethod method = processRPCCall(receiveTextResponse());
 	
 	dodoMap<dodoString, rpcHandler, stringTools::equal>::iterator end = handlers.end();
 	
 	dodoMap<dodoString, rpcHandler, stringTools::equal>::iterator handler = handlers.find(method.name);
 	if (handler == end)
-		ioProvider->printStream(processRPCCallResult(defaultHandler(method.name, method.arguments)));
+		sendTextRequest(processRPCCallResult(defaultHandler(method.name, method.arguments)));
 	else
-		ioProvider->printStream(processRPCCallResult(handler->second(method.name, method.arguments)));
+		sendTextRequest(processRPCCallResult(handler->second(method.name, method.arguments)));
 }
 
 //-------------------------------------------------------------------
