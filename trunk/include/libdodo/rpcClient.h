@@ -30,13 +30,12 @@
 #include <libdodo/stringTools.h>
 #include <libdodo/rpcMethod.h>
 #include <libdodo/rpcResponse.h>
+#include <libdodo/ioNetworkHTTP.h>
 
 namespace dodo
-{	
-	class ioNetworkHTTP;
-	
+{
 	/**
-	 * @class rpcClient defines 
+	 * @class rpcClient defines client-side RPC instrument
 	 */
 	class rpcClient
 	{
@@ -50,17 +49,17 @@ namespace dodo
 			/**
 			 * destructor
 			 */
-			virtual ~rpcClient() = 0;
+			virtual ~rpcClient();
 		
 			/**
 			 * @param method defines rpc method call
 			 */
-			virtual void sendRequest(const rpcMethod &method) = 0;
+			virtual void sendRequest(const rpcMethod &method);
 			
 			/**
 			 * @return rpc response result 
 			 */
-			virtual rpcResponse receiveResponse() = 0;
+			virtual rpcResponse receiveResponse();
 			
 			/**
 			 * set transport layer provider
@@ -70,7 +69,21 @@ namespace dodo
 		
 		protected:
 			
-			ioNetworkHTTP *ioProvider;
+			/**
+			 * process RPC call
+			 * @return RPC method
+			 * @param method defines RPC method representation
+			 */
+			virtual dodoString processRPCCall(const rpcMethod &method) = 0;
+			
+			/**
+			 * process RPC call
+			 * @return RPC response represantation
+			 * @param data defines buffer that contains RPC response
+			 */
+			virtual rpcResponse processRPCCallResult(const dodoString &data) = 0;
+			
+			ioNetworkHTTP *ioProvider;///< I/O provider
 	};
 };
 

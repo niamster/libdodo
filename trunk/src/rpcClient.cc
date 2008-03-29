@@ -46,3 +46,19 @@ rpcClient::setIOProvider(ioNetworkHTTP *provider)
 }
 
 //-------------------------------------------------------------------
+
+void 
+rpcClient::sendRequest(const rpcMethod &method)
+{
+	ioProvider->POST(processRPCCall(method));
+}
+
+//-------------------------------------------------------------------
+
+rpcResponse 
+rpcClient::receiveResponse()
+{
+	return processRPCCallResult(ioProvider->getResponse().data);
+}
+
+//-------------------------------------------------------------------

@@ -39,7 +39,7 @@
 
 namespace dodo
 {	
-#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS_SIZE 11
+#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS_SIZE 10
 
 	/**
 	 * @enum ioNetworkHTTPRequestHeaderEnum defines HTTP request headers
@@ -54,7 +54,6 @@ namespace dodo
 		IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION,///< authentication credentials for HTTP authentication
 		IONETWORKHTTP_REQUESTHEADER_CONNECTION,///< what type of connection the user-agent would prefer
 		IONETWORKHTTP_REQUESTHEADER_DATE,///< the date and time that the message was sent
-		IONETWORKHTTP_REQUESTHEADER_HOST,///< the domain name of the server (for virtual hosting)
 		IONETWORKHTTP_REQUESTHEADER_IFMODIFIEDSINCE,///< allows a 304 Not Modified to be returned
 		IONETWORKHTTP_REQUESTHEADER_USERAGENT,///< the user agent string of the user agent
 	};
@@ -123,15 +122,63 @@ namespace dodo
 			
 			/**
 			 * @return server response
+			 */
+			virtual __httpResponse getResponse();
+			
+			/**
+			 * @param url defines URL
+			 */
+			virtual void setUrl(const __url &url);
+			
+			/**
+			 * @param url defines URL
+			 */
+			virtual void setUrl(const dodoString &url);
+			
+			/**
+			 * perform GET request
+			 * @return server response
 			 * @param url defines URL
 			 */
 			virtual __httpResponse GET(const __url &url);
 			
 			/**
+			 * perform GET request
 			 * @return server response
 			 * @param url defines URL
 			 */
 			virtual __httpResponse GET(const dodoString &url);
+			
+			/**
+			 * perform GET request
+			 * @return server response
+			 * @param url defines URL
+			 */
+			virtual void GET();
+			
+			/**
+			 * perform POST request
+			 * @return server response
+			 * @param url defines URL
+			 * @param data defines POST data
+			 */
+			virtual __httpResponse POST(const __url &url, const dodoString &data);
+			
+			/**
+			 * perform POST request
+			 * @return server response
+			 * @param url defines URL
+			 * @param data defines POST data
+			 */
+			virtual __httpResponse POST(const dodoString &url, const dodoString &data);
+			
+			/**
+			 * perform POST request
+			 * @return server response
+			 * @param url defines URL
+			 * @param data defines POST data
+			 */
+			virtual void POST(const dodoString &data);
 
 		private:
 			
@@ -141,6 +188,9 @@ namespace dodo
 			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the header value  
 			
 			regexp httpStatusRE;///< parser for HTTP response status code
+			
+			__httpResponse response;///< HTTP response data
+			__url url;///< HTTP URL
 			
 			/**
 			 * @return true if no more headers should be processed

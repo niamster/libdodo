@@ -33,7 +33,6 @@ const dodoString ioNetworkHTTP::requestHeaderStatements[] = { "Accept",
 		"Authorization",
 		"Connection",
 		"Date",
-		"Host",
 		"If-Modified-Since",
 		"User-Agent",
 };
@@ -151,10 +150,34 @@ ioNetworkHTTP::extractHeaders(const dodoString &data,
 
 //-------------------------------------------------------------------
 
-__httpResponse
-ioNetworkHTTP::GET(const __url &url)
+__httpResponse 
+ioNetworkHTTP::getResponse()
+{
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+void 
+ioNetworkHTTP::setUrl(const __url &url)
+{
+	this->url = url;
+}
+
+//-------------------------------------------------------------------
+
+void 
+ioNetworkHTTP::setUrl(const dodoString &a_url)
+{
+	this->url = tools::parseURL(a_url);
+}
+
+//-------------------------------------------------------------------
+
+void
+ioNetworkHTTP::GET()
 {	
-	__httpResponse response;
+	response = __httpResponse();
 	
 	ioNetworkExchange ex;
 	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
@@ -187,8 +210,7 @@ ioNetworkHTTP::GET(const __url &url)
 		data.append(i->second);
 		data.append("\r\n");
 	}
-	data.append(requestHeaderStatements[IONETWORKHTTP_REQUESTHEADER_HOST]);
-	data.append(": ");
+	data.append("Host: ");
 	data.append(url.host);
 	data.append("\r\n\r\n");
 	
@@ -228,6 +250,16 @@ ioNetworkHTTP::GET(const __url &url)
 		if (ex.funcID != IONETWORKEXCHANGEEX__READSTREAM)
 			throw;
 	}
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse
+ioNetworkHTTP::GET(const __url &url)
+{	
+	setUrl(url);
+	
+	GET();
 	
 	return response;
 }
@@ -237,7 +269,45 @@ ioNetworkHTTP::GET(const __url &url)
 __httpResponse
 ioNetworkHTTP::GET(const dodoString &a_url)
 {
-	return GET(tools::parseURL(a_url));
+	setUrl(tools::parseURL(a_url));
+	
+	GET();
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse
+ioNetworkHTTP::POST(const __url &url, 
+					const dodoString &data)
+{	
+	setUrl(url);
+	
+	POST(data);
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse
+ioNetworkHTTP::POST(const dodoString &a_url, 
+					const dodoString &data)
+{
+	setUrl(tools::parseURL(a_url));
+	
+	POST(data);
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+void
+ioNetworkHTTP::POST(const dodoString &data)
+{	
+	response = __httpResponse();
 }
 
 //-------------------------------------------------------------------

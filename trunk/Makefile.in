@@ -51,6 +51,7 @@ OBJECTS:=dbBase.o \
 		rpcMethod.o \
 		rpcResponse.o \
 		rpcClient.o \
+		rpcServer.o \
 		image.o \
 		dbSqlite.o \
 		systemProcessCollection.o \

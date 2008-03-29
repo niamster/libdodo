@@ -15,8 +15,8 @@ int main(int argc, char **argv)
 	try
 	{	
 		ioNetworkHTTP http;
-		//__httpResponse res =  http.GET("http://google.com");
-		__httpResponse res =  http.GET("http://62.80.178.137/file/5050058/4156786/12.jpg");
+		__httpResponse res =  http.GET("http://google.com");
+		//__httpResponse res =  http.GET("http://62.80.178.137/file/5050058/4156786/12.jpg");
 
 		cout << res.code << "\n~~\n";
 		cout << res.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
