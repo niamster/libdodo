@@ -23,11 +23,11 @@ int main(int argc, char **argv)
 	 
 	
 	cout << "!" << cgit.GET["a"] << "!<br>";
-	cout << "!" << cgit.POST["a"] << "!<br>";
-	cout << "!" << cgit.POST["e"] << "!<br>";
+	cout << "!" << cgit.POST["b"] << "!<br>";
+	cout << "!" << cgit.POST["c"] << "!<br>";
 	cout << "!" << cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] << "<br>";
 	cout << "!" << cgit.COOKIES["test"] << "<br>";
-	cout << "!" << cgit.FILES["qsadasdaf"].error << "<br>";
+	cout << "!" << cgit.FILES["file"].size << "<br>";
 	
 	cout << "\n\n\n";
 	

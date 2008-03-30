@@ -1,3 +1,4 @@
+
 <(> not )> parsed  <)>
 
 <(* if statement *)>
@@ -7,6 +8,11 @@
 <(else)>
 	NULL
 <(fi)>
+
+<form enctype="multipart/form-data" method="POST">
+	<input type="file" name="file">
+	<input type="submit" value="push file">
+</form>
 
 <(if $test )>
 	$test

@@ -29,10 +29,11 @@ systemThreadSharedDataGuard sh;
 		
 		fcgi->writeStreamString("!" + stringTools::iToString(*inc) + "!<br>");
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
-		fcgi->writeStreamString("!" + cgit.POST["a"] + "!<br>");
-		fcgi->writeStreamString("!" + cgit.POST["e"] + "!<br>");
+		fcgi->writeStreamString("!" + cgit.POST["b"] + "!<br>");
+		fcgi->writeStreamString("!" + cgit.POST["c"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
 		fcgi->writeStreamString("!" + cgit.COOKIES["test"] + "<br>");
+		fcgi->writeStreamString("!" + stringTools::iToString(cgit.FILES["file"].size) + "<br>");
 		
 		fcgi->writeStreamString("!!!\n\n\n");
 		
