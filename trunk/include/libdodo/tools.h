@@ -50,6 +50,7 @@
 
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetwork.h>
+#include <libdodo/ioNetworkTools.h>
 #include <libdodo/toolsEx.h>
 #include <libdodo/types.h>
 
@@ -404,7 +405,6 @@ namespace dodo
 			/**
 			 * send mail
 			 * @param host defines host of smtp server(ip)
-			 * @param type defines type of `socketProtoFamilyEnum`
 			 * @param port defines port of smtp server
 			 * @param to defines mail address where to send[possible multiply separated with coma]
 			 * @param from defines mail address of sender
@@ -415,7 +415,7 @@ namespace dodo
 			 * @param headers defines extra headers[each must ends with `\r\n`]
 			 * @note if login is emty no auth is performed
 			 */
-			static void mail(const dodoString &host, short type, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
+			static void mail(const dodoString &host, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
 
 		private:
 
@@ -497,41 +497,6 @@ namespace dodo
 			 * @note nothing does with passed data
 			 */
 			inline static dodoString dummyTools(const dodoString &data);
-
-			/**
-			 * send data through socket
-			 * @param socket defines socket descriptor
-			 * @param mess defines data to send
-			 * @note size of message must be not more than TOOLS_SHORT_DATA_SIZE bytes
-			 */
-			static void sendShortData(int socket, const dodoString &mess);
-
-			/**
-			 * send data through socket
-			 * @param socket defines socket descriptor
-			 * @param mess defines data to send
-			 * @param data defines data to delete on exception
-			 * @note size of message must be not more than TOOLS_SHORT_DATA_SIZE bytes
-			 * on exception deletes data
-			 */
-			static void sendShortDataDel(int socket, const dodoString &mess, char *data);
-
-			/**
-			 * send data through socket
-			 * @param socket defines socket descriptor
-			 * @param mess defines data to send
-			 * @note size of message must be not more than TOOLS_SHORT_DATA_SIZE bytes
-			 */
-			static void sendLongData(int socket, const dodoString &mess);
-
-			/**
-			 * receive data through socket
-			 * @param socket defines socket descriptor
-			 * @param data defines receive buffer
-			 * @note size of data must be not more than TOOLS_SHORT_DATA_SIZE bytes
-			 * on exception deletes data
-			 */
-			static void receiveShortDataDel(int socket, char *data);
 	};
 
 };

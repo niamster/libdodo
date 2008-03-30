@@ -59,6 +59,14 @@ namespace dodo
 			 * @note string case is ignored
 			 */
 			static bool iequal(const dodoString &first, const dodoString &second);
+			
+			/**
+			 * @return true in needle is found
+			 * @param data defines string where to look for the needle
+			 * @param needle defines string which to look for
+			 * @param icase defines case sensitivity
+			 */
+			static bool contains(const dodoString &str, const dodoString &needle, bool icase = false);
 
 			/**
 			 * @return formated string

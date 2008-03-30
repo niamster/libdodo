@@ -44,6 +44,27 @@ stringTools::iequal(const dodoString &first,
 
 //-------------------------------------------------------------------
 
+bool 
+stringTools::contains(const dodoString &str, 
+					const dodoString &needle,
+					bool icase)
+{
+	if (icase)
+	{
+		if (strcasestr(str.c_str(), needle.c_str()) != NULL)
+			return true;
+	}
+	else
+	{
+		if (strstr(str.c_str(), needle.c_str()) != NULL)
+			return true;
+	}
+	
+	return false;
+}
+
+//-------------------------------------------------------------------
+
 dodoString
 stringTools::format(const dodoString &format, ...)
 {

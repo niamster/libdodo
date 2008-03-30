@@ -1541,7 +1541,6 @@ tools::MD5Hex(const dodoString &string)
 
 void
 tools::mail(const dodoString &host,
-			short type,
 			int port,
 			const dodoString &to,
 			const dodoString &from,
@@ -1561,99 +1560,39 @@ tools::mail(const dodoString &host,
 	unsigned short authType = 0;
 
 	bool auth = login.size() > 0 ? true : false;
-
-	int real_domain(PF_INET);
-
-	switch (type)
-	{
-		case IONETWORKOPTIONS_PROTO_FAMILY_IPV4:
-
-			real_domain = PF_INET;
-
-			break;
-
-		case IONETWORKOPTIONS_PROTO_FAMILY_IPV6:
-
-			real_domain = PF_INET6;
-
-			break;
-
-		default:
-
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_LIBDODO, TOOLSEX_WRONGPARAMETER, TOOLSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
-	}
-
-	int socket = ::socket(real_domain, SOCK_STREAM, 0);
-	if (socket == -1)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	if (type == IONETWORKOPTIONS_PROTO_FAMILY_IPV6)
-	{
-		struct sockaddr_in6 sa;
-		sa.sin6_family = AF_INET6;
-		sa.sin6_port = htons(port);
-		sa.sin6_flowinfo = 0;
-		sa.sin6_scope_id = 0;
-		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
-
-		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == 1)
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
-	else
-	{
-		struct sockaddr_in sa;
-		sa.sin_family = AF_INET;
-		sa.sin_port = htons(port);
-		inet_aton(host.c_str(), &sa.sin_addr);
-
-		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == 1)
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
-
-	int outSocketBuffer = TOOLS_SHORT_DATA_SIZE;
-	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+	short family = IONETWORKOPTIONS_PROTO_FAMILY_IPV4;
+	if (host.find(":") != dodoString::npos)
+		family = IONETWORKOPTIONS_PROTO_FAMILY_IPV6;
+	
+	ioNetworkExchange ex;
+	
+	ioNetwork net(false, family, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	net.connect(host, port, ex);
+	
+	ex.setOutBufferSize(TOOLS_SHORT_DATA_SIZE);
+	ex.outSize = TOOLS_SHORT_DATA_SIZE;
+	ex.setInBufferSize(TOOLS_SHORT_DATA_SIZE);
+	ex.inSize = TOOLS_SHORT_DATA_SIZE;
 
 	dodoString mess;
+	
+	ex.readStreamString(mess);
+	ex.writeStreamString("EHLO " + ioNetworkTools::getLocalName() + "\r\n");
+	ex.readStreamString(mess);
 
-	int code = 0;
-	char *data = new char[TOOLS_SHORT_DATA_SIZE];
-
-	receiveShortDataDel(socket, data);
-
-	if (::gethostname(data, 255) == -1)
-	{
-		delete [] data;
-
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
-
-	mess = "EHLO " + dodoString(data) + "\r\n";
-	sendShortDataDel(socket, mess, data);
-
-	memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-	receiveShortDataDel(socket, data);
-
-	char _code[3];
-
-	strncpy(_code, data, 3);
-	code = atoi(_code);
-	if (code != 250)
-	{
-		delete [] data;
-
+	if (stringTools::stringToI(mess.substr(0, 3)) != 250)
 		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_LIBDODO, TOOLSEX_BADMAILHELO, TOOLSEX_BADMAILHELO_STR, __LINE__, __FILE__);
-	}
 
 	if (auth)
 	{
-		if (strcasestr(data + 4, "CRAM-MD5") != NULL)
+		if (stringTools::contains(mess, "CRAM-MD5"))
 			addFlag(authType, SMTPAUTH_CRAMMD5);
 
-		if (strcasestr(data + 4, "LOGIN") != NULL)
+		if (stringTools::contains(mess, "LOGIN"))
 			addFlag(authType, SMTPAUTH_LOGIN);
 
-		if (strcasestr(data + 4, "PLAIN") != NULL)
+		if (stringTools::contains(mess, "PLAIN"))
 			addFlag(authType, SMTPAUTH_PLAIN);
 	}
 
@@ -1661,22 +1600,13 @@ tools::mail(const dodoString &host,
 	{
 		if (isSetFlag(authType, SMTPAUTH_CRAMMD5))
 		{
-			mess = "AUTH CRAM-MD5\r\n";
-			sendShortDataDel(socket, mess, data);
+			ex.writeStreamString("AUTH CRAM-MD5\r\n");
+			ex.readStreamString(mess);
 
-			memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-			receiveShortDataDel(socket, data);
-
-			strncpy(_code, data, 3);
-			code = atoi(_code);
-			if (code != 334)
-			{
-				delete [] data;
-
+			if (stringTools::stringToI(mess.substr(0, 3)) != 334)
 				throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-			}
 
-			dodoString ticket = decodeBase64(data + 4);
+			dodoString ticket = decodeBase64(mess.substr(4));
 
 			dodoString md5pass;
 			if (pass.size() > 64)
@@ -1687,6 +1617,9 @@ tools::mail(const dodoString &host,
 			unsigned char ipad[65];
 			unsigned char opad[65];
 
+			memset(ipad, 0, 65);
+			memset(opad, 0, 65);
+			
 			memcpy(ipad, md5pass.c_str(), md5pass.size());
 			memcpy(opad, md5pass.c_str(), md5pass.size());
 
@@ -1698,7 +1631,7 @@ tools::mail(const dodoString &host,
 
 			MD5_CTX context;
 			unsigned char digest[16];
-
+			
 			MD5Init(&context);
 			MD5Update(&context, ipad, 64);
 			MD5Update(&context, (unsigned char *)ticket.c_str(), ticket.size());
@@ -1716,298 +1649,71 @@ tools::mail(const dodoString &host,
 				md5pass.append((char *)ipad);
 			}
 
-			mess = encodeBase64(login + " " + md5pass) + "\r\n";
-			sendShortDataDel(socket, mess, data);
+			ex.writeStreamString(encodeBase64(login + " " + md5pass) + "\r\n");
+			ex.readStreamString(mess);
 
-			memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-			receiveShortDataDel(socket, data);
-
-			strncpy(_code, data, 3);
-			code = atoi(_code);
-			if (code != 334)
-			{
-				delete [] data;
-
+			if (stringTools::stringToI(mess.substr(0, 3)) != 235)
 				throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-			}
 		}
 		else
 		{
 			if (isSetFlag(authType, SMTPAUTH_LOGIN))
 			{
-				mess = "AUTH LOGIN\r\n";
-				sendShortDataDel(socket, mess, data);
+				ex.writeStreamString("AUTH LOGIN\r\n");
+				ex.readStreamString(mess);
 
-				memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-				receiveShortDataDel(socket, data);
-
-				strncpy(_code, data, 3);
-
-				code = atoi(_code);
-
-				if (code != 334)
-				{
-					delete [] data;
-
+				if (stringTools::stringToI(mess.substr(0, 3)) != 334)
 					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-				}
 
-				mess = encodeBase64(login) + "\r\n";
-				sendShortDataDel(socket, mess, data);
-
-				memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-				receiveShortDataDel(socket, data);
-
-				strncpy(_code, data, 3);
-				code = atoi(_code);
-				if (code != 334)
-				{
-					delete [] data;
-
+				ex.writeStreamString(encodeBase64(login) + "\r\n");
+				ex.readStreamString(mess);
+				
+				if (stringTools::stringToI(mess.substr(0, 3)) != 334)
 					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-				}
 
-				mess = encodeBase64(pass) + "\r\n";
-				sendShortDataDel(socket, mess, data);
-
-				memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-				receiveShortDataDel(socket, data);
-
-				strncpy(_code, data, 3);
-				code = atoi(_code);
-				if (code != 235)
-				{
-					delete [] data;
-
+				ex.writeStreamString(encodeBase64(pass) + "\r\n");
+				ex.readStreamString(mess);
+				
+				if (stringTools::stringToI(mess.substr(0, 3)) != 235)
 					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-				}
 			}
 			else
 			{
 				if (isSetFlag(authType, SMTPAUTH_PLAIN))
 				{
-					mess = "AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n";
-					sendShortDataDel(socket, mess, data);
+					ex.writeStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
+					ex.readStreamString(mess);
 
-					memset(data, '\0', TOOLS_SHORT_DATA_SIZE);
-					receiveShortDataDel(socket, data);
-
-					strncpy(_code, data, 3);
-					code = atoi(_code);
-
-					if (code != 334)
-					{
-						delete [] data;
-
+					if (stringTools::stringToI(mess.substr(0, 3)) != 334)
 						throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
-					}
 				}
 			}
 		}
 	}
 
-	mess = "MAIL FROM: <" + from + ">\r\n";
-	sendShortDataDel(socket, mess, data);
-
-	receiveShortDataDel(socket, data);
+	ex.writeStreamString("MAIL FROM: <" + from + ">\r\n");
+	ex.readStreamString(mess);
 
 	dodoStringArray pock = explode(to, ",");
 
 	dodoStringArray::iterator i = pock.begin(), j = pock.end();
 	for (; i != j; ++i)
 	{
-		mess = "RCPT TO: <" + *i + ">\r\n";
-		sendShortDataDel(socket, mess, data);
-
-		receiveShortDataDel(socket, data);
+		ex.writeStreamString("RCPT TO: <" + *i + ">\r\n");
+		ex.readStreamString(mess);
 	}
 
-	mess = "DATA\r\n";
-	sendShortDataDel(socket, mess, data);
+	ex.writeStreamString("DATA\r\n");
+	ex.readStreamString(mess);
 
-	receiveShortDataDel(socket, data);
-
-	delete [] data;
-
-	mess = "DATA\r\n";
-	sendShortData(socket, mess);
-
-	mess = "To: " + to + "\r\n";
-	sendShortData(socket, mess);
-
-	mess = "From: " + from + "\r\n";
-	sendShortData(socket, mess);
-
-	mess = "X-Mailer: libdodo\n";
-	sendShortData(socket, mess);
-
-	mess = "Subject: " + subject  + "\r\n";
-	sendShortData(socket, mess);
-
-	sendLongData(socket, headers);
-
-	sendLongData(socket, message);
-
-	mess = "\r\n.\r";
-	sendShortData(socket, mess);
-
-	mess = "QUIT\r";
-	sendShortData(socket, mess);
-
-	if (::shutdown(socket, SHUT_RDWR) == -1)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	if (::close(socket) == -1)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	ex.writeStreamString("To: " + to + "\r\n");
+	ex.writeStreamString("From: " + from + "\r\n");
+	ex.writeStreamString("X-Mailer: " PACKAGE_NAME "/" PACKAGE_VERSION "\r\n");
+	ex.writeStreamString("Subject: " + subject  + "\r\n");
+	ex.writeStreamString(headers);
+	ex.writeStreamString(message);
+	ex.writeStreamString("\r\n.\r\n");
+	ex.writeStreamString("QUIT\r\n");
 }
 
 //-------------------------------------------------------------------
-
-void
-tools::sendShortDataDel(int socket,
-						const dodoString &mess,
-						char             *data)
-{
-#ifndef FAST
-
-	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDSHORTDATADEL, ERR_LIBDODO, TOOLSEX_DATATOOLONG, TOOLSEX_DATATOOLONG_STR, __LINE__, __FILE__);
-
-#endif
-
-	while (true)
-	{
-		if (::send(socket, mess.c_str(), mess.size(), 0) == -1)
-		{
-			if (errno == EINTR)
-				continue;
-
-			delete [] data;
-
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDSHORTDATADEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-
-		break;
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-tools::sendShortData(int socket,
-					 const dodoString &mess)
-{
-#ifndef FAST
-
-	if (mess.size() > TOOLS_SHORT_DATA_SIZE)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDSHORTDATA, ERR_LIBDODO, TOOLSEX_DATATOOLONG, TOOLSEX_DATATOOLONG_STR, __LINE__, __FILE__);
-
-#endif
-
-	while (true)
-	{
-		if (::send(socket, mess.c_str(), mess.size(), 0) == -1)
-		{
-			if (errno == EINTR)
-				continue;
-
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDSHORTDATA, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-
-		break;
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-tools::sendLongData(int socket,
-					const dodoString &mess)
-{
-	unsigned long outSize = mess.size();
-
-	unsigned long iter = outSize / TOOLS_SHORT_DATA_SIZE;
-	unsigned long rest = outSize % TOOLS_SHORT_DATA_SIZE;
-
-	unsigned long sent_received = 0;
-
-	unsigned long batch;
-	long n;
-
-	for (unsigned long i = 0; i < iter; ++i)
-	{
-		batch = 0;
-		while (batch < TOOLS_SHORT_DATA_SIZE)
-		{
-			while (true)
-			{
-				n = ::send(socket, mess.c_str() + sent_received, TOOLS_SHORT_DATA_SIZE, 0);
-				if (n == -1)
-				{
-					if (errno == EINTR)
-						continue;
-
-					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDLONGDATA, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch += n;
-			sent_received += n;
-		}
-	}
-
-	if (rest > 0)
-	{
-		batch = 0;
-		while (batch < rest)
-		{
-			while (true)
-			{
-				n = ::send(socket, mess.c_str() + sent_received, rest, 0);
-				if (n == -1)
-				{
-					if (errno == EINTR)
-						continue;
-
-					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_SENDLONGDATA, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
-			}
-
-			batch += n;
-			sent_received += n;
-		}
-	}
-}
-
-//-------------------------------------------------------------------
-
-void
-tools::receiveShortDataDel(int socket,
-						   char *data)
-{
-	int n;
-
-	while (true)
-	{
-		if ((n = ::recv(socket, data, TOOLS_SHORT_DATA_SIZE, 0)) == -1)
-		{
-			if (errno == EINTR)
-				continue;
-
-			delete [] data;
-
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RECEIVESHORTDATADEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
-
-		break;
-	}
-
-	data[n] = '\0';
-}
-
-//-------------------------------------------------------------------
-
