@@ -279,31 +279,18 @@ ioDisk::_read(char * const a_void)
 
 	memset(a_void, '\0', inSize);
 
-	unsigned long sent_received = 0;
-
-	unsigned long batch = 0, n;
-
-	while (batch < inSize)
+	while (true)
 	{
-		while (true)
+		if (fread(a_void, inSize, 1, file) == 0)
 		{
-			if ((n = fread(a_void + sent_received, 1, inSize, file)) == 0)
-			{
-				if (errno == EINTR)
-					continue;
+			if (errno == EINTR)
+				continue;
 
-				if (ferror(file) != 0)
-					throw baseEx(ERRMODULE_IODISK, IODISKEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-
-			break;
+			if (ferror(file) != 0)
+				throw baseEx(ERRMODULE_IODISK, IODISKEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		if (n == 0)
-			break;
-
-		batch += n;
-		sent_received += n;
+		break;
 	}
 }
 
@@ -443,7 +430,7 @@ ioDisk::_write(const char *const a_buf)
 		{
 			if (!over)
 			{
-				size_t read_bytes(0);
+				size_t read = 0;
 				char *t_buf = new char[outSize];
 
 				if (fseek(file, pos, SEEK_SET) == -1)
@@ -453,11 +440,11 @@ ioDisk::_write(const char *const a_buf)
 					throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
-				read_bytes = fread(t_buf, outSize, 1, file);
+				read = fread(t_buf, outSize, 1, file);
 
 				delete [] t_buf;
 
-				if (read_bytes != 0)
+				if (read != 0)
 					throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_LIBDODO, IODISKEX_CANNOTOVEWRITE, IODISKEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
 			}
 
@@ -469,31 +456,18 @@ ioDisk::_write(const char *const a_buf)
 			throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
-	unsigned long sent_received = 0;
-
-	unsigned long batch = 0, n;
-
-	while (batch < outSize)
+	while (true)
 	{
-		while (true)
+		if (fwrite(a_buf, outSize, 1, file) == 0)
 		{
-			if ((n = fwrite(a_buf + sent_received, 1, outSize, file)) == 0)
-			{
-				if (errno == EINTR)
-					continue;
+			if (errno == EINTR)
+				continue;
 
-				if (ferror(file) != 0)
-					throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			}
-
-			break;
+			if (ferror(file) != 0)
+				throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
-		if (n == 0)
-			break;
-
-		batch += n;
-		sent_received += n;
+		break;
 	}
 }
 

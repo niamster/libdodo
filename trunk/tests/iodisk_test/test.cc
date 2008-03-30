@@ -40,7 +40,6 @@ int main(int argc, char **argv)
 		ioDiskTools::rename("testDir","DirTest");
 		
 		ioDiskTools::symlink("test", "TEST");
-		ioDiskTools::chmod("my.dat", IODISKTOOLS_PERM_ALL_ALL_ACCESS);
 		
 		cout << ioDiskTools::getPermissions("Makefile") << endl;
 
@@ -54,7 +53,8 @@ int main(int argc, char **argv)
 		
 		ioDiskTools::unlink("my.dat");
 		
-		ioDisk io("my.dat");
+		ioDisk io("my.dat", IODISK_FILETYPE_REG_FILE, IODISK_OPENMODE_READ_WRITE_TRUNCATE);
+		ioDiskTools::chmod("my.dat", IODISKTOOLS_PERM_ALL_ALL_ACCESS);
 		
 		io.inSize = io.outSize = 14;
 		io.over = true;

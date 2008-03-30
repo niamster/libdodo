@@ -570,13 +570,12 @@ cgi::makePost()
 					}
 					else
 					{
-						if (fwrite(i->c_str() + temp1, file.size, 1, fp) < file.size)
+						if (fwrite(i->c_str() + temp1, file.size, 1, fp) == 0)
 						{
 							if (errno == ENOMEM)
 								file.error = CGI_POSTFILEERR_NO_SPACE;
 							else
 							{
-
 								if (fclose(fp) != 0)
 									throw baseEx(ERRMODULE_CGI, CGIEX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 							

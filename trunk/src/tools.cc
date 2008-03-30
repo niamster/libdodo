@@ -178,14 +178,20 @@ tools::random(void *data,
 		else
 			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_LIBDODO, TOOLSEX_WRONGSTRENGTH, TOOLSEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
 	}
+	
+    while (true)
+    {
+            if (fread(data, size, 1, file) == 0)
+            {
+                    if (errno == EINTR)
+                            continue;
 
-	if (fread(data, size, 1, file) < size)
-	{
-		if (fclose(file) != 0)
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    if (ferror(file) != 0)
+                    	throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+            }
 
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	}
+            break;
+    }
 
 	if (fclose(file) != 0)
 		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -1307,11 +1313,11 @@ tools::bzDecompress(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 void
-tools::mail(const dodoString &path,
-			const dodoString &to,
+tools::mail(const dodoString &to,
 			const dodoString &subject,
 			const dodoString &message,
-			const dodoString &headers)
+			const dodoString &headers,
+			const dodoString &path)
 {
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 

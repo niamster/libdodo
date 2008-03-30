@@ -129,63 +129,46 @@ ioSTD::addPreExec(const dodoString &module,
 void
 ioSTD::_read(char * const a_void)
 {
+	char *data = a_void;
+
 	memset(a_void, '\0', inSize);
 
 	unsigned long iter = inSize / inSTDBuffer;
 	unsigned long rest = inSize % inSTDBuffer;
 
-	unsigned long sent_received = 0;
-
-	unsigned long batch, n;
-
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		batch = 0;
-		while (batch < inSTDBuffer)
+		while (true)
 		{
-			while (true)
+			if (fread(data, inSTDBuffer, 1, stdin) == 0)
 			{
-				if ((n = fread(a_void + sent_received, 1, inSTDBuffer, stdin)) == 0)
-				{
-					if (errno == EINTR)
-						continue;
+				if (errno == EINTR)
+					continue;
 
-					if (ferror(stdin) != 0)
-						throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(stdin) != 0)
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			batch += n;
-			sent_received += n;
+			break;
 		}
+
+		data += inSTDBuffer;
 	}
 
 	if (rest > 0)
 	{
-		batch = 0;
-		while (batch < rest)
+		while (true)
 		{
-			while (true)
+			if (fread(data, rest, 1, stdin) == 0)
 			{
-				if ((n = fread(a_void + sent_received, 1, rest, stdin)) == 0)
-				{
-					if (errno == EINTR)
-						continue;
+				if (errno == EINTR)
+					continue;
 
-					if (ferror(stdin) != 0)
-						throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(stdin) != 0)
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			if (n == 0)
-				break;
-
-			batch += n;
-			sent_received += n;
+			break;
 		}
 	}
 }
@@ -349,64 +332,44 @@ ioSTD::write(const char *const a_buf)
 void
 ioSTD::_write(const char *const buf)
 {
+	char *data = (char *)buf;
+
 	unsigned long iter = outSize / outSTDBuffer;
 	unsigned long rest = outSize % outSTDBuffer;
 
-	unsigned long sent_received = 0;
-
-	unsigned long batch, n;
-
 	for (unsigned long i = 0; i < iter; ++i)
 	{
-		batch = 0;
-		while (batch < outSTDBuffer)
+		while (true)
 		{
-			while (true)
+			if (fwrite(data, outSTDBuffer, 1, desc) == 0)
 			{
-				if ((n = fwrite(buf + sent_received, 1, outSTDBuffer, desc)) == 0)
-				{
-					if (errno == EINTR)
-						continue;
+				if (errno == EINTR)
+					continue;
 
-					if (ferror(desc) != 0)
-						throw baseEx(ERRMODULE_IOSTD, IOSTDEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(desc) != 0)
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			if (n == 0)
-				break;
-
-			batch += n;
-			sent_received += n;
+			break;
 		}
+
+		data += outSTDBuffer;
 	}
 
 	if (rest > 0)
 	{
-		batch = 0;
-		while (batch < rest)
+		while (true)
 		{
-			while (true)
+			if (fwrite(data, 1, rest, desc) == 0)
 			{
-				if ((n = fwrite(buf + sent_received, 1, rest, desc)) == 0)
-				{
-					if (errno == EINTR)
-						continue;
+				if (errno == EINTR)
+					continue;
 
-					if (ferror(desc) != 0)
-						throw baseEx(ERRMODULE_IOSTD, IOSTDEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
-
-				break;
+				if (ferror(desc) != 0)
+					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
-			if (n == 0)
-				break;
-
-			batch += n;
-			sent_received += n;
+			break;
 		}
 	}
 }

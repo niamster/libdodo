@@ -63,7 +63,11 @@ int main(int argc, char **argv)
 #ifndef IOSTD_WO_XEXEC
 		st.disablePreExec(pos);
 #endif
-		
+	
+		st.outSize = 4;
+		st.writeString("1234567890");
+		st.writeString("\n");
+
 		st.writeStreamString(o);
 		st.writeStreamString("\nexiting\n");
 	}

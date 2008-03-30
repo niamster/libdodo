@@ -78,6 +78,8 @@ int main(int argc, char **argv)
 		
 		dodoString rnd = tools::stringRandom(12);
 		cout << tools::MD5Hex(rnd) << endl;	
+
+		tools::mail("niam", "test", "test");
 	}
     catch(baseEx ex)
     {

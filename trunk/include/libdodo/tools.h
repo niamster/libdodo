@@ -44,12 +44,12 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <sys/un.h>
-#include <sys/socket.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
 #include <libdodo/ioNetworkOptions.h>
+#include <libdodo/ioNetwork.h>
 #include <libdodo/toolsEx.h>
 #include <libdodo/types.h>
 
@@ -393,13 +393,13 @@ namespace dodo
 
 			/**
 			 * send mail using sendmail external program
-			 * @param path defines path to sendmail
 			 * @param to defines mail address[possible multiply separated with coma]
 			 * @param subject defines a subject of the letter;for utf should use: `'=?utf-8?B?'.encodeBase64(subject).'?='`
 			 * @param message defines a message to send
 			 * @param headers defines extra headers
+			 * @param path defines path to sendmail
 			 */
-			static void mail(const dodoString &path, const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__);
+			static void mail(const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__, const dodoString &path="/usr/sbin/sendmail");
 
 			/**
 			 * send mail
