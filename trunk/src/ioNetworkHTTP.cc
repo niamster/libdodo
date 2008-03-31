@@ -57,6 +57,15 @@ const dodoString ioNetworkHTTP::responseHeaderStatements[] = { "Accept-Ranges",
 		"Server",
 };
 
+//-------------------------------------------------------------------
+
+const dodoString ioNetworkHTTP::postContentTypeHeaderStatements[] = { "application/x-www-form-urlencoded",
+		"multipart/form-data",
+		"text/xml",
+};
+
+//-------------------------------------------------------------------
+
 const char ioNetworkHTTP::trimSymbols[] = {' ',
 		'\r'
 };
@@ -345,6 +354,9 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 	}
 	data.append("Host: ");
 	data.append(url.host);
+	
+	data.append("Content-Type: ");
+	data.append(postContentTypeHeaderStatements[type]);
 	
 	data.append("Content-Length: ");
 	data.append(stringTools::lToString(a_data.size()));

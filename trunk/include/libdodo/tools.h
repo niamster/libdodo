@@ -48,7 +48,6 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/ioNetworkTools.h>
 #include <libdodo/toolsEx.h>
@@ -56,21 +55,6 @@
 
 namespace dodo
 {
-	/**
-	 * @def addFlag add bit flag to the statement
-	 */
-#define addFlag(statement, flag)       (statement) |= (flag)
-
-	/**
-	 * @def removeFlag remove bit flag from the statement
-	 */
-#define removeFlag(statement, flag)    (statement) &= (~(flag))
-
-	/**
-	 * @def isSetFlag return true if bit flag is set
-	 */
-#define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
-
 	/**
 	 * @typedef escape defines escape function for explode/implode
 	 */

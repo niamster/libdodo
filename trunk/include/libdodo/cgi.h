@@ -377,7 +377,7 @@ namespace dodo
 
 			mutable bool headersPrinted;///< true if headers have been printed 
 
-			static const __statements environmentStatements[HTTP_ENVIRONMENT_SIZE];///< names of environment variables 
+			static const char *environmentStatements[HTTP_ENVIRONMENT_SIZE];///< names of environment variables 
 	};
 };
 

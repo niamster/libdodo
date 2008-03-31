@@ -216,7 +216,7 @@ namespace dodo
 			 * @param sqlAddArr defines statements[see sqlAddArr]
 			 * @param qTypeShift defines additional statements that has been set
 			 */
-			virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const __statements sqlAddArr[], int qTypeShift);
+			virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const dodoString sqlAddArr[], int qTypeShift);
 
 			/**
 			 * @return string constructed from additional statements(DB-dependent)
@@ -255,14 +255,14 @@ namespace dodo
 
 		private:
 
-			static const __statements sqlAddSelArr[3];  ///< additional `select` statement
-			static const __statements sqlAddDelArr[2];  ///< additional `delete` statement
-			static const __statements sqlAddUpArr[2];   ///< additional `update` statement
-			static const __statements sqlAddInsArr[2];  ///< additional `insert` statement
+			static const dodoString sqlAddSelArr[3];  ///< additional `select` statement
+			static const dodoString sqlAddDelArr[2];  ///< additional `delete` statement
+			static const dodoString sqlAddUpArr[2];   ///< additional `update` statement
+			static const dodoString sqlAddInsArr[2];  ///< additional `insert` statement
 
-			static const __statements sqlAddArr[8];     ///< additional statements(where, limit, ...)
+			static const dodoString sqlAddArr[8];     ///< additional statements(where, limit, ...)
 
-			static const __statements sqlQStArr[5];     ///< statements for complex queries(union, ...)
+			static const dodoString sqlQStArr[5];     ///< statements for complex queries(union, ...)
 
 			static const unsigned int addSelEnumArr[2]; ///< positions in sqlAddSelArr additional `select` statement
 			static const unsigned int addDelEnumArr[1]; ///< positions in sqlAddDelArr additional `delete` statement

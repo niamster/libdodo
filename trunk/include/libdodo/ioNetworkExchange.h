@@ -38,6 +38,7 @@
 #include <poll.h>
 
 #include <libdodo/ioNetworkOptions.h>
+#include <libdodo/io.h>
 #include <libdodo/ioNetworkExchangeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>

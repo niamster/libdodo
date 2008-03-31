@@ -54,60 +54,60 @@ const unsigned int dbSqlBase::addSelEnumArr[] =
 
 //-------------------------------------------------------------------
 
-const __statements dbSqlBase::sqlQStArr[] =
+const dodoString dbSqlBase::sqlQStArr[] =
 {
-	{ ""             },
-	{ " union "      },
-	{ " union all "  },
-	{ " minus "      },
-	{ " intersect "  }
+	""             ,
+	" union "      ,
+	" union all "  ,
+	" minus "      ,
+	" intersect "  
 };
 
 //-------------------------------------------------------------------
 
-const __statements dbSqlBase::sqlAddArr[] =
+const dodoString dbSqlBase::sqlAddArr[] =
 {
-	{ ""           },
-	{ " where "    },
-	{ " having "   },
-	{ " group by " },
-	{ " order by " },
-	{ " limit "    },
-	{ " offset "   },
-	{ " as "       },
+	""           ,
+	" where "    ,
+	" having "   ,
+	" group by " ,
+	" order by " ,
+	" limit "    ,
+	" offset "   ,
+	" as "       ,
 };
 
 //-------------------------------------------------------------------
 
-const __statements dbSqlBase::sqlAddInsArr[] =
+const dodoString dbSqlBase::sqlAddInsArr[] =
 {
-	{ ""         },
-	{ " ignore " },
+	""         ,
+	" ignore " ,
 };
 
 //-------------------------------------------------------------------
 
-const __statements dbSqlBase::sqlAddUpArr[] =
+const dodoString dbSqlBase::sqlAddUpArr[] =
 {
-	{ ""         },
-	{ " ignore " },
+	""         ,
+	" ignore " ,
 };
 
 //-------------------------------------------------------------------
 
-const __statements dbSqlBase::sqlAddDelArr[] =
+const dodoString dbSqlBase::sqlAddDelArr[] =
 {
-	{ ""         },
-	{ " ignore " },
+	""         ,
+	" ignore " ,
 };
 
 //-------------------------------------------------------------------
 
-const __statements dbSqlBase::sqlAddSelArr[] =
+const dodoString dbSqlBase::sqlAddSelArr[] =
 {
-	{ ""           },
-	{ " distinct " },
-	{ " all "      },
+	""           ,
+	" distinct " ,
+	" all "      ,
 };
 
 //-------------------------------------------------------------------
@@ -188,7 +188,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 	int tempQTypeTocheck = 1 << qTypeTocheck;
 	if (isSetFlag(qShift, tempQTypeTocheck))
 	{
-		request.append(sqlAddArr[qTypeTocheck].str);
+		request.append(sqlAddArr[qTypeTocheck]);
 		request.append(collectedString);
 	}
 }
@@ -197,7 +197,7 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 
 dodoString
 dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
-							const __statements sqlAddArr[],
+							const dodoString sqlAddArr[],
 							int qTypeShift)
 {
 	if (qTypeShift == DB_EMPTY)
@@ -210,7 +210,7 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 	for (unsigned int i = 0; i < arrLen; ++i)
 	{
 		if (isSetFlag(qTypeShift, 1 << sqlAddEnumArr[i]))
-			temp.append(sqlAddArr[sqlAddEnumArr[i]].str);
+			temp.append(sqlAddArr[sqlAddEnumArr[i]]);
 	}
 
 	return temp;
@@ -522,7 +522,7 @@ dbSqlBase::delCollect()
 void
 dbSqlBase::subCollect()
 {
-	request = tools::implode(pre_subQueries, sqlQStArr[qType].str);
+	request = tools::implode(pre_subQueries, sqlQStArr[qType]);
 }
 
 //-------------------------------------------------------------------

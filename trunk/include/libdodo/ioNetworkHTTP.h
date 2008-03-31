@@ -83,7 +83,7 @@ namespace dodo
 		IONETWORKHTTP_RESPONSEHEADER_SERVER,///< a name for the server
 	};
 
-#define IONETWORKHTTP_POSTCONTENTTYPE_SIZE 2
+#define IONETWORKHTTP_POSTCONTENTTYPE_SIZE 3
 	
 	/**
 	 * @enum ioNetworkHTTPResponseHeaderEnum defines HTTP response headers
@@ -197,6 +197,7 @@ namespace dodo
 			
 			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS_SIZE];///< HTTP request headers[see ioNetworkHTTPRequestHeaderEnum]
 			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS_SIZE];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
+			static const dodoString postContentTypeHeaderStatements[IONETWORKHTTP_POSTCONTENTTYPE_SIZE];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
 			
 			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the header value  
 			

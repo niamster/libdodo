@@ -32,10 +32,8 @@
 #include <fcntl.h>
 
 #include <libdodo/ioDiskTools.h>
-#include <libdodo/tools.h>
 #include <libdodo/ioNetworkOptionsEx.h>
 #include <libdodo/types.h>
-#include <libdodo/io.h>
 
 namespace dodo
 {

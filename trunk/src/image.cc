@@ -52,7 +52,7 @@ __image_init__ __image_init_object__;
 
 //-------------------------------------------------------------------
 
-const __statements image::mappingStArr[] =
+const char *image::mappingStArr[] =
 {
 	"RGB",
 	"RGBA",
@@ -73,7 +73,7 @@ const StorageType image::pixelSizeStArr[] =
 
 //-------------------------------------------------------------------
 
-const __statements image::encoderStArr[] =
+const char *image::encoderStArr[] =
 {
 	"PNG",
 	"JPEG",
@@ -206,13 +206,13 @@ image::read(const __imageInfo &info)
 	performXExec(preExec);
 #endif
 
-	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr) / sizeof(__statements) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr) / sizeof(StorageType))
+	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr) / sizeof(char *) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr) / sizeof(StorageType))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
 	if (im != NULL)
 		DestroyImage(im);
 
-	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping].str, pixelSizeStArr[info.pixelSize], info.data, exInfo);
+	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping], pixelSizeStArr[info.pixelSize], info.data, exInfo);
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
@@ -309,10 +309,10 @@ image::setQuality(short quality)
 void
 image::setEncoder(short encoder)
 {
-	if (encoder < 0 || encoder >= sizeof(encoderStArr) / sizeof(__statements))
+	if (encoder < 0 || encoder >= sizeof(encoderStArr) / sizeof(char *))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
-	strcpy(imInfo->magick, encoderStArr[encoder].str);
+	strcpy(imInfo->magick, encoderStArr[encoder]);
 }
 
 //-------------------------------------------------------------------
@@ -339,9 +339,9 @@ image::getQuality()
 short
 image::getEncoder()
 {
-	int i = 0, j = sizeof(encoderStArr) / sizeof(__statements);
+	int i = 0, j = sizeof(encoderStArr) / sizeof(char *);
 	for (; i < j; ++i)
-		if (strcmp(imInfo->magick, encoderStArr[i].str) == 0)
+		if (strcmp(imInfo->magick, encoderStArr[i]) == 0)
 			return i;
 }
 

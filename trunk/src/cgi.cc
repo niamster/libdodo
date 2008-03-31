@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-const __statements cgi::environmentStatements[] =
+const char *cgi::environmentStatements[] =
 {
 	"REQUEST_METHOD",
 	"REQUEST_URI",
@@ -376,10 +376,10 @@ cgi::makeEnv()
 	{
 #ifdef FCGI_EXT
 		if (cgiFastSet)
-			env = ((ioCgiFastExchange *)cgiIO)->getenv(environmentStatements[i].str);
+			env = ((ioCgiFastExchange *)cgiIO)->getenv(environmentStatements[i]);
 		else
 #endif
-		env = getenv(environmentStatements[i].str);
+		env = getenv(environmentStatements[i]);
 
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}

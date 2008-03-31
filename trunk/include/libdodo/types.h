@@ -41,6 +41,25 @@
 namespace dodo
 {
 	/**
+	 * macroses
+	 */
+
+/**
+ * @def addFlag add bit flag to the statement
+ */
+#define addFlag(statement, flag)       (statement) |= (flag)
+
+/**
+ * @def removeFlag remove bit flag from the statement
+ */
+#define removeFlag(statement, flag)    (statement) &= (~(flag))
+
+/**
+ * @def isSetFlag return true if bit flag is set
+ */
+#define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
+
+	/**
 	 * diferent predifined types
 	 */
 
@@ -58,9 +77,14 @@ namespace dodo
 
 	typedef dodoArray<dodoStringMap> dodoStringMapArray;                            ///< array of hashes of string
 
-	struct __statements
+	struct __statements_pchar
 	{
 		const char *str;
+	};
+	
+	struct __statements_dodostring
+	{
+		const dodoString str;
 	};
 
 	/**

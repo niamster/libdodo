@@ -36,7 +36,6 @@
 #include <libgen.h>
 #include <unistd.h>
 
-#include <libdodo/tools.h>
 #include <libdodo/ioDiskToolsEx.h>
 #include <libdodo/types.h>
 
