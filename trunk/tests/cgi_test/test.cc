@@ -22,14 +22,14 @@ int main(int argc, char **argv)
 	cgit.printHeaders();
 	 
 	
-	cout << "!" << cgit.GET["a"] << "!<br>";
-	cout << "!" << cgit.POST["b"] << "!<br>";
-	cout << "!" << cgit.POST["c"] << "!<br>";
-	cout << "!" << cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] << "<br>";
-	cout << "!" << cgit.COOKIES["test"] << "<br>";
-	cout << "!" << cgit.FILES["file"].size << "<br>";
+	cgit.printStream( "!" + cgit.GET["a"] + "!<br>" );
+	cgit.printStream( "!" + cgit.POST["hidden"] + "!<br>" );
+	cgit.printStream( "!" + cgit.POST["text"] + "!<br>" );
+	cgit.printStream( "!" + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>" );
+	cgit.printStream( "!" + cgit.COOKIES["test"] + "<br>" );
+	cgit.printStream( "!" + stringTools::ulToString(cgit.FILES["file"].size) + "<br>" );
 	
-	cout << "\n\n\n";
+	cgit.printStream( "\n\n\n" );
 	
 	try
 	{
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cout << (string)ex << " " << ex.line << " " << ex.message;
+		cgit.printStream( (string)ex + " " + stringTools::lToString(ex.line) + " " + ex.message );
 	}	
 		
 	return 0;

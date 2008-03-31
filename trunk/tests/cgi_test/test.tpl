@@ -13,7 +13,14 @@ included $main <(include $main)>
 
 <form enctype="multipart/form-data" method="POST">
 	<input type="file" name="file">
+	<input type="hidden" name="hidden" value="post">
+	<input type="text" name="text" value="text">
 	<input type="submit" value="push file">
+</form>
+<form method="POST">
+	<input type="hidden" name="hidden" value="post">
+	<input type="text" name="text" value="text">
+	<input type="submit" value="push">
 </form>
 
 <(if $test )>

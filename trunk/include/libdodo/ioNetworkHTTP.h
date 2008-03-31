@@ -83,6 +83,17 @@ namespace dodo
 		IONETWORKHTTP_RESPONSEHEADER_SERVER,///< a name for the server
 	};
 
+#define IONETWORKHTTP_POSTCONTENTTYPE_SIZE 2
+	
+	/**
+	 * @enum ioNetworkHTTPResponseHeaderEnum defines HTTP response headers
+	 */
+	enum ioNetworkHTTPPostContentTypeHeaderEnum
+	{
+		IONETWORKHTTP_POSTCONTENTTYPE_URLENCODED,///< application/x-www-form-urlencoded
+		IONETWORKHTTP_POSTCONTENTTYPE_DATA,///< multipart/form-data
+		IONETWORKHTTP_POSTCONTENTTYPE_TEXTXML,///< text/xml
+	};
 	/**
 	 * @struct __httpResponse defines HTTP response 
 	 */
@@ -161,24 +172,26 @@ namespace dodo
 			 * @return server response
 			 * @param url defines URL
 			 * @param data defines POST data
+			 * @param type defines type of data[see ioNetworkHTTPPostContentTypeHeaderEnum]
 			 */
-			virtual __httpResponse POST(const __url &url, const dodoString &data);
+			virtual __httpResponse POST(const __url &url, const dodoString &data, short type);
 			
 			/**
 			 * perform POST request
 			 * @return server response
 			 * @param url defines URL
 			 * @param data defines POST data
+			 * @param type defines type of data[see ioNetworkHTTPPostContentTypeHeaderEnum]
 			 */
-			virtual __httpResponse POST(const dodoString &url, const dodoString &data);
+			virtual __httpResponse POST(const dodoString &url, const dodoString &data, short type);
 			
 			/**
 			 * perform POST request
 			 * @return server response
-			 * @param url defines URL
 			 * @param data defines POST data
+			 * @param type defines type of data[see ioNetworkHTTPPostContentTypeHeaderEnum]
 			 */
-			virtual void POST(const dodoString &data);
+			virtual void POST(const dodoString &data, short type);
 
 		private:
 			

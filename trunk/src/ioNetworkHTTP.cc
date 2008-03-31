@@ -280,11 +280,12 @@ ioNetworkHTTP::GET(const dodoString &a_url)
 
 __httpResponse
 ioNetworkHTTP::POST(const __url &url, 
-					const dodoString &data)
+					const dodoString &data, 
+					short type)
 {	
 	setUrl(url);
 	
-	POST(data);
+	POST(data, type);
 	
 	return response;
 }
@@ -293,11 +294,12 @@ ioNetworkHTTP::POST(const __url &url,
 
 __httpResponse
 ioNetworkHTTP::POST(const dodoString &a_url, 
-					const dodoString &data)
+					const dodoString &data, 
+					short type)
 {
 	setUrl(tools::parseURL(a_url));
 	
-	POST(data);
+	POST(data, type);
 	
 	return response;
 }
@@ -305,9 +307,89 @@ ioNetworkHTTP::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 void
-ioNetworkHTTP::POST(const dodoString &data)
+ioNetworkHTTP::POST(const dodoString &a_data, 
+					short type)
 {	
 	response = __httpResponse();
+	
+	ioNetworkExchange ex;
+	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	
+	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
+	
+	dodoString protocol = url.protocol; 
+	if (protocol.size() == 0)
+		protocol = "http";
+	
+	int port = stringTools::stringToI(url.port);
+	if (port == 0)
+	{
+		if (stringTools::iequal(protocol, "http"))
+			port = 80;
+	}
+	
+	net.connect(host.addresses[0], port, ex);
+	
+	dodoString data;
+	
+	data.append("POST ");
+	data.append(url.request.size()>0?url.request:"/");
+	data.append(" HTTP/1.0\r\n");
+	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
+	for (;i!=j;++i)
+	{
+		data.append(requestHeaderStatements[i->first]);
+		data.append(": ");
+		data.append(i->second);
+		data.append("\r\n");
+	}
+	data.append("Host: ");
+	data.append(url.host);
+	
+	data.append("Content-Length: ");
+	data.append(stringTools::lToString(a_data.size()));
+	
+	data.append("\r\n\r\n");
+	
+	ex.writeStreamString(data);
+	
+	ex.outSize = a_data.size();
+	ex.writeString(a_data);
+
+	ex.setInBufferSize(8096);
+	ex.inSize = 8096;
+	
+	unsigned long contentSize = 0;
+	
+	bool endOfHeaders = false;
+	try
+	{
+		while (true)
+		{
+			ex.readStreamString(data);
+			
+			if (data.size() == 0)
+				break;
+			
+			if (endOfHeaders)
+				response.data.append(data);
+			else
+			{
+				endOfHeaders = extractHeaders(data, response);
+				
+				if (endOfHeaders)
+					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
+			}
+			
+			if (response.data.size() == contentSize)
+				break;
+		}
+	}
+	catch (baseEx &ex)
+	{
+		if (ex.funcID != IONETWORKEXCHANGEEX__READSTREAM)
+			throw;
+	}
 }
 
 //-------------------------------------------------------------------
