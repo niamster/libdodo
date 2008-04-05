@@ -25,13 +25,14 @@ int main(int argc, char **argv)
 
 		ioNetworkHTTP http;
 		__httpResponse res;
+		
 		//res =  http.GET("http://temp.niam.mu/libdodo/cgi_test/test.cgi");
 		//res =  http.GET("http://google.com");
 		
 		//res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map);
 		//res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map, files);
 		
-		res =  http.GET("http://static.btmon.com/Audio/Unsorted/Music_Red_Elvises.torrent");
+		//res =  http.GET("http://static.btmon.com/Audio/Unsorted/Music_Red_Elvises.torrent");
 		
 		
 		ioDiskTools::writeToFile("test.dat", res.data);

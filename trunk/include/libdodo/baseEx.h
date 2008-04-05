@@ -34,6 +34,8 @@
 
 #endif
 
+#include <pthread.h>
+
 namespace dodo
 {
 	/**
@@ -248,6 +250,59 @@ namespace dodo
 			static bool handlesOpenedEx[BASEEX_MODULES];        //< map of the opened libraries
 
 #endif
+			
+			/**
+			 * @class staticAtomicMutex performs atomic locks using mutexes
+			 */
+			class staticAtomicMutex
+			{
+				public:
+
+					/**
+					 * consructor
+					 */
+					staticAtomicMutex();
+
+					/**
+					 * destructor
+					 */
+					virtual ~staticAtomicMutex();
+
+					/**
+					 * lock critical section
+					 */
+					virtual void lock();
+
+					/**
+					 * unlock critical section
+					 */
+					virtual void unlock();
+
+				protected:
+
+					static pthread_mutex_t mutex; ///< mutex
+			};
+
+			static staticAtomicMutex mutex;///< lock
+			
+			/**
+			 * @class guard provides thread safe behaviour
+			 * @note it locks in constructor and unlocks in destructor
+			 */
+			class guard
+			{
+				public:
+
+					/**
+					 * contructor
+					 */
+					guard();
+
+					/**
+					 * destructor
+					 */
+					virtual ~guard();
+			};
 	};
 };
 

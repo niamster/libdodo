@@ -234,6 +234,56 @@ void *baseEx::handlesEx[] = { NULL,
 
 //-------------------------------------------------------------------
 
+baseEx::staticAtomicMutex::staticAtomicMutex()
+{
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+
+	pthread_mutex_init(&mutex, &attr);
+
+	pthread_mutexattr_destroy(&attr);
+}
+
+//-------------------------------------------------------------------
+
+baseEx::staticAtomicMutex::~staticAtomicMutex()
+{
+	pthread_mutex_destroy(&mutex);
+}
+
+//-------------------------------------------------------------------
+
+void
+baseEx::staticAtomicMutex::lock()
+{
+	pthread_mutex_lock(&mutex);
+}
+
+//-------------------------------------------------------------------
+
+void
+baseEx::staticAtomicMutex::unlock()
+{
+	pthread_mutex_unlock(&mutex);
+}
+
+//-------------------------------------------------------------------
+
+baseEx::guard::guard()
+{
+	mutex.lock();
+}
+
+//-------------------------------------------------------------------
+
+baseEx::guard::~guard()
+{
+	mutex.unlock();
+}
+
+//-------------------------------------------------------------------
+
 baseEx::baseEx(errorModuleEnum a_errModule,
 			   unsigned long functionID,
 			   errnoSourceEnum errnoSource,
@@ -250,6 +300,8 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 											  file(a_file),
 											  message(a_message)
 {
+	guard tg;
+	
 	if (handlerSetEx[errModule])
 		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
 }
@@ -258,6 +310,8 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 
 baseEx::~baseEx()
 {
+	guard tg;
+	
 #ifdef DL_EXT
 
 	deinitExModule deinit;
@@ -286,6 +340,8 @@ baseEx::~baseEx()
 
 baseEx::operator const dodoString & ()
 {
+	guard tg;
+	
 	return baseErrstr;
 }
 
@@ -296,6 +352,8 @@ baseEx::setErrorHandler(errorModuleEnum module,
 						errorHandler handler,
 						void *data)
 {
+	guard tg;
+	
 #ifdef DL_EXT
 
 	if (handlesOpenedEx[module])
@@ -327,6 +385,8 @@ void
 baseEx::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
+	guard tg;
+	
 #ifdef DL_EXT
 	deinitExModule deinit;
 #endif
@@ -362,6 +422,8 @@ baseEx::setErrorHandlers(errorHandler handler,
 void
 baseEx::unsetErrorHandler(errorModuleEnum module)
 {
+	guard tg;
+	
 #ifdef DL_EXT
 
 	if (handlesOpenedEx[module])
@@ -392,6 +454,8 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 void
 baseEx::unsetErrorHandlers()
 {
+	guard tg;
+	
 #ifdef DL_EXT
 	deinitExModule deinit;
 #endif
@@ -431,6 +495,8 @@ baseEx::setErrorHandlers(const dodoString &path,
 						 void *data,
 						 void *toInit)
 {
+	guard tg;
+	
 	initExModule init;
 	errorHandler in;
 	deinitExModule deinit;
@@ -486,6 +552,8 @@ baseEx::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
+	guard tg;
+	
 #ifdef DL_FAST
 	void *handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
 #else
@@ -537,6 +605,8 @@ __exMod
 baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
+	guard tg;
+	
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
 #else

@@ -47,7 +47,7 @@ namespace dodo
 			virtual ~guardHolder() = 0;
 
 			/**
-			 * @class threadGuard provides thread safe behaviour
+			 * @class guard provides thread safe behaviour
 			 * @note it locks in constructor and unlocks in destructor
 			 */
 			class guard
@@ -69,7 +69,6 @@ namespace dodo
 					guardHolder *parent; ///< lock
 			};
 	};
-
 };
 
 #endif
