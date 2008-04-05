@@ -1,5 +1,5 @@
 /***************************************************************************
- *            threadGuard.h
+ *            systemProcessGuard.h
  *
  *  Tue Jul  10 22:00:57 2007
  *  Copyright  2007  Ni@m
@@ -21,34 +21,38 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _THREADGUARD_H_
-#define _THREADGUARD_H_
+#ifndef _PROCESSGUARD_H_
+#define _PROCESSGUARD_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
 #include <libdodo/systemRaceHazardGuard.h>
-#include <libdodo/systemAtomicMutex.h>
+#include <libdodo/tools.h>
+#include <libdodo/systemAtomicSemaphore.h>
 
 namespace dodo
 {
 	/**
-	 * @class threadGuardHolder provides mutex lock
+	 * @class systemProcessGuardHolder provides concurrent lock for processes interconnection
 	 */
-	class threadGuardHolder : public systemRaceHazardGuardHolder
+	class systemProcessGuardHolder : public systemRaceHazardGuardHolder
 	{
 		protected:
 
 			/**
 			 * contructor
 			 */
-			threadGuardHolder();
+			systemProcessGuardHolder();
 
 			/**
 			 * destructor
 			 */
-			virtual ~threadGuardHolder();
+			virtual ~systemProcessGuardHolder();
+
+			char key[32]; ///< key for the semaphore
 	};
+
 };
 
 #endif 

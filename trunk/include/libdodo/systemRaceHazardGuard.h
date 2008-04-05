@@ -33,7 +33,7 @@
 namespace dodo
 {
 	/**
-	 * @class systemRaceHazardGuardHolder provides mutex lock and threadGuard class
+	 * @class systemRaceHazardGuardHolder provides mutex lock and systemThreadGuard class
 	 */
 	class systemRaceHazardGuardHolder
 	{

@@ -38,7 +38,7 @@
 #include <libdodo/types.h>
 #include <libdodo/io.h>
 #include <libdodo/ioNetwork.h>
-#include <libdodo/threadGuard.h>
+#include <libdodo/systemThreadGuard.h>
 
 namespace dodo
 {
@@ -64,7 +64,7 @@ namespace dodo
 	 */
 
 	class ioSTD : public io,
-				  virtual public threadGuardHolder
+				  virtual public systemThreadGuardHolder
 	{
 		private:
 

@@ -32,7 +32,7 @@
 #include <libdodo/types.h>
 #include <libdodo/systemSharedDataCollectionGuard.h>
 #include <libdodo/systemProcessSharedDataCollectionGuardEx.h>
-#include <libdodo/processGuard.h>
+#include <libdodo/systemProcessGuard.h>
 
 namespace dodo
 {
@@ -40,7 +40,7 @@ namespace dodo
 	 * @class systemProcessSharedDataCollectionGuard implements collection of shared data for processes
 	 */
 	class systemProcessSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
-												   virtual public processGuardHolder
+												   virtual public systemProcessGuardHolder
 	{
 		private:
 

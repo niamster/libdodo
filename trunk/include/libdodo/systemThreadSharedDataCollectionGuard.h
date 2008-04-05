@@ -32,7 +32,7 @@
 #include <libdodo/types.h>
 #include <libdodo/systemSharedDataCollectionGuard.h>
 #include <libdodo/systemThreadSharedDataCollectionGuardEx.h>
-#include <libdodo/threadGuard.h>
+#include <libdodo/systemThreadGuard.h>
 
 namespace dodo
 {
@@ -40,7 +40,7 @@ namespace dodo
 	 * @class systemThreadSharedDataCollectionGuard implements collection of shared data for threads
 	 */
 	class systemThreadSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
-												  virtual public threadGuardHolder
+												  virtual public systemThreadGuardHolder
 	{
 		private:
 

@@ -33,7 +33,7 @@
 #include <libdodo/types.h>
 #include <libdodo/ioCgiFastExchangeEx.h>
 #include <libdodo/io.h>
-#include <libdodo/threadGuard.h>
+#include <libdodo/systemThreadGuard.h>
 
 namespace dodo
 {
@@ -56,7 +56,7 @@ namespace dodo
 	 * @class cgiFastIO provides interface to fast CGI I/O functionality
 	 */
 	class ioCgiFastExchange : public io,
-					virtual public threadGuardHolder
+					virtual public systemThreadGuardHolder
 	{
 		private:
 

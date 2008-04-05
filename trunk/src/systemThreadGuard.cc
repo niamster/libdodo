@@ -1,5 +1,5 @@
 /***************************************************************************
- *            threadGuard.cc
+ *            systemThreadGuard.cc
  *
  *  Tue Jul  10 22:10:57 2007
  *  Copyright  2007  Ni@m
@@ -21,18 +21,18 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/threadGuard.h>
+#include <libdodo/systemThreadGuard.h>
 
 using namespace dodo;
 
-threadGuardHolder::threadGuardHolder()
+systemThreadGuardHolder::systemThreadGuardHolder()
 {
 	mutex = new systemAtomicMutex;
 }
 
 //-------------------------------------------------------------------
 
-threadGuardHolder::~threadGuardHolder()
+systemThreadGuardHolder::~systemThreadGuardHolder()
 {
 	delete mutex;
 }

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            processGuard.cc
+ *            systemProcessGuard.cc
  *
  *  Tue Jul  10 22:10:57 2007
  *  Copyright  2007  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/processGuard.h>
+#include <libdodo/systemProcessGuard.h>
 
 using namespace dodo;
 
-processGuardHolder::processGuardHolder()
+systemProcessGuardHolder::systemProcessGuardHolder()
 {
 	tools::random(key, 31);
 	key[31] = '\0';
@@ -35,7 +35,7 @@ processGuardHolder::processGuardHolder()
 
 //-------------------------------------------------------------------
 
-processGuardHolder::~processGuardHolder()
+systemProcessGuardHolder::~systemProcessGuardHolder()
 {
 	delete mutex;
 }

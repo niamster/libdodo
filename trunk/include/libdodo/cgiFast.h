@@ -34,7 +34,7 @@
 #include <libdodo/cgiFastEx.h>
 #include <libdodo/ioCgiFastExchange.h>
 #include <libdodo/io.h>
-#include <libdodo/threadGuard.h>
+#include <libdodo/systemThreadGuard.h>
 
 namespace dodo
 {

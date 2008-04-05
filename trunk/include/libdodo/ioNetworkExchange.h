@@ -42,7 +42,7 @@
 #include <libdodo/ioNetworkExchangeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
-#include <libdodo/threadGuard.h>
+#include <libdodo/systemThreadGuard.h>
 
 namespace dodo
 {
@@ -100,7 +100,7 @@ namespace dodo
 	 */
 	class ioNetworkExchange : public ioNetworkOptions,
 							 public io,
-							 virtual public threadGuardHolder
+							 virtual public systemThreadGuardHolder
 	{
 
 			friend class ioNetwork;
