@@ -28,6 +28,7 @@
 
 #include <libdodo/io.h>
 #include <libdodo/timeTools.h>
+#include <libdodo/systemThreadGuard.h>
 
 #include <syslog.h>
 
@@ -61,7 +62,7 @@ namespace dodo
 	/**
 	 * @class logger provides logging function
 	 */
-	class logger
+	class logger : virtual public systemThreadGuardHolder
 	{
 		public:
 			
