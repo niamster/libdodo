@@ -466,6 +466,58 @@ namespace dodo
 			static bool handlesOpenedSig[19];   ///< map of opened modules
 
 #endif
+			/**
+			 * @class staticAtomicMutex performs atomic locks using mutexes
+			 */
+			class staticAtomicMutex
+			{
+				public:
+
+					/**
+					 * consructor
+					 */
+					staticAtomicMutex();
+
+					/**
+					 * destructor
+					 */
+					virtual ~staticAtomicMutex();
+
+					/**
+					 * lock critical section
+					 */
+					virtual void lock();
+
+					/**
+					 * unlock critical section
+					 */
+					virtual void unlock();
+
+				protected:
+
+					static pthread_mutex_t mutex; ///< mutex
+			};
+
+			static staticAtomicMutex mutex;///< lock
+			
+			/**
+			 * @class systemRaceHazardGuard provides thread safe behaviour
+			 * @note it locks in constructor and unlocks in destructor
+			 */
+			class systemRaceHazardGuard
+			{
+				public:
+
+					/**
+					 * contructor
+					 */
+					systemRaceHazardGuard();
+
+					/**
+					 * destructor
+					 */
+					virtual ~systemRaceHazardGuard();
+			};	
 	};
 };
 

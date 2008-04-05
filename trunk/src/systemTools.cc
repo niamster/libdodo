@@ -73,6 +73,60 @@ bool systemTools::handlesOpenedSig[] = { false,
 
 //-------------------------------------------------------------------
 
+systemTools::staticAtomicMutex::staticAtomicMutex()
+{
+	pthread_mutexattr_t attr;
+	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
+
+	pthread_mutex_init(&mutex, &attr);
+
+	pthread_mutexattr_destroy(&attr);
+}
+
+//-------------------------------------------------------------------
+
+systemTools::staticAtomicMutex::~staticAtomicMutex()
+{
+	pthread_mutex_destroy(&mutex);
+}
+
+//-------------------------------------------------------------------
+
+void
+systemTools::staticAtomicMutex::lock()
+{
+	errno = pthread_mutex_lock(&mutex);
+	if (errno != 0 && errno != EDEADLK)
+		throw baseEx(ERRMODULE_SYSTEMTOOLSSYSTEMATOMICMUTEX, SYSTEMTOOLSSYSTEMATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void
+systemTools::staticAtomicMutex::unlock()
+{
+	errno = pthread_mutex_unlock(&mutex);
+	if (errno != 0)
+		throw baseEx(ERRMODULE_SYSTEMTOOLSSYSTEMATOMICMUTEX, SYSTEMTOOLSSYSTEMATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+systemTools::systemRaceHazardGuard::systemRaceHazardGuard()
+{
+	mutex.lock();
+}
+
+//-------------------------------------------------------------------
+
+systemTools::systemRaceHazardGuard::~systemRaceHazardGuard()
+{
+	mutex.unlock();
+}
+
+//-------------------------------------------------------------------
+
 dodoString
 systemTools::getWorkingDir()
 {
@@ -698,6 +752,8 @@ systemTools::setSignalHandler(long signal,
 							  signalHandler handler,
 							  int blockSignals)
 {
+	systemRaceHazardGuard tg;
+	
 #ifdef DL_EXT
 
 	deinitSigModule deinit;
@@ -739,6 +795,8 @@ systemTools::setMicroTimer(unsigned long timeout,
 						   signalHandler handler,
 						   int blockSignals)
 {
+	systemRaceHazardGuard tg;
+	
 #ifdef DL_EXT
 
 	deinitSigModule deinit;
@@ -797,6 +855,8 @@ systemTools::setTimer(long timeout,
 					  signalHandler handler,
 					  int blockSignals)
 {
+	systemRaceHazardGuard tg;
+	
 #ifdef DL_EXT
 
 	deinitSigModule deinit;
@@ -870,6 +930,8 @@ systemTools::sendSignal(int pid,
 void
 systemTools::unsetSignalHandler(long signal)
 {
+	systemRaceHazardGuard tg;
+	
 #ifdef DL_EXT
 
 	deinitSigModule deinit;
@@ -934,6 +996,8 @@ void
 systemTools::setSignalHandler(const dodoString &path,
 							  void             *toInit)
 {
+	systemRaceHazardGuard tg;
+	
 #ifdef DL_FAST
 	void *handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
 #else
