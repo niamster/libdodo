@@ -27,7 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/atomicLock.h>
+#include <libdodo/systemAtomicLock.h>
 #include <libdodo/baseEx.h>
 
 namespace dodo
@@ -39,7 +39,7 @@ namespace dodo
 	{
 		protected:
 
-			atomicLock *mutex; ///< lock
+			systemAtomicLock *mutex; ///< lock
 
 			/**
 			 * destructor

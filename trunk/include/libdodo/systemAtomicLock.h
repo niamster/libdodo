@@ -1,7 +1,7 @@
 /***************************************************************************
- *            atomicSemaphoreEx.h
+ *            systemAtomicLock.h
  *
- *  Sat Oct 20 02:00:55 2007
+ *  Sat Oct 20 10:50:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,22 +21,36 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICSEMAPHOREEX_H_
-#define _ATOMICSEMAPHOREEX_H_
+#ifndef _ATOMICLOCK_H_
+#define _ATOMICLOCK_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/baseEx.h>
+#include <libdodo/types.h>
 
 namespace dodo
 {
 	/**
-	 * IDs of functions where exception might be thrown
+	 * @class systemAtomicLock performs atomic locks
 	 */
-	enum atomicSemaphoreFunctionsID
+	class systemAtomicLock
 	{
-		ATOMICSEMAPHOREEX_LOCK,
-		ATOMICSEMAPHOREEX_UNLOCK,
+		public:
+
+			/**
+			 * destructor
+			 */
+			virtual ~systemAtomicLock() = 0;
+
+			/**
+			 * lock critical section
+			 */
+			virtual void lock() = 0;
+
+			/**
+			 * unlock critical section
+			 */
+			virtual void unlock() = 0;
 	};
 };
 

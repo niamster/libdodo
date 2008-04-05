@@ -1,7 +1,7 @@
 /***************************************************************************
- *            atomicLock.h
+ *            systemAtomicSemaphore.h
  *
- *  Sat Oct 20 10:50:55 2007
+ *  Sat Oct 20 02:00:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,36 +21,51 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICLOCK_H_
-#define _ATOMICLOCK_H_
+#ifndef _ATOMICSEMAPHORE_H_
+#define _ATOMICSEMAPHORE_H_
 
 #include <libdodo/directives.h>
 
+#include <fcntl.h>
+#include <semaphore.h>
+
+#include <libdodo/systemAtomicLock.h>
+#include <libdodo/systemAtomicSemaphoreEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
 {
 	/**
-	 * @class atomicLock performs atomic locks
+	 * @class systemAtomicSemaphore performs atomic locks using semaphores
 	 */
-	class atomicLock
+	class systemAtomicSemaphore : public systemAtomicLock
 	{
 		public:
 
 			/**
+			 * consructor
+			 */
+			systemAtomicSemaphore(unsigned int value, const char *key);
+
+			/**
 			 * destructor
 			 */
-			virtual ~atomicLock() = 0;
+			virtual ~systemAtomicSemaphore();
 
 			/**
 			 * lock critical section
 			 */
-			virtual void lock() = 0;
+			virtual void lock();
 
 			/**
 			 * unlock critical section
 			 */
-			virtual void unlock() = 0;
+			virtual void unlock();
+
+		protected:
+
+			sem_t *semaphore;   ///< semaphore
+			char *key;          ///< key for the semaphore
 	};
 };
 

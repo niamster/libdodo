@@ -28,7 +28,7 @@
 
 #include <pthread.h>
 
-#include <libdodo/atomicLock.h>
+#include <libdodo/systemAtomicLock.h>
 #include <libdodo/systemAtomicMutexEx.h>
 #include <libdodo/types.h>
 
@@ -37,7 +37,7 @@ namespace dodo
 	/**
 	 * @class systemAtomicMutex performs atomic locks using mutexes
 	 */
-	class systemAtomicMutex : public atomicLock
+	class systemAtomicMutex : public systemAtomicLock
 	{
 		public:
 

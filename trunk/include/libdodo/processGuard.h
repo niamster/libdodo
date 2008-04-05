@@ -29,7 +29,7 @@
 #include <libdodo/types.h>
 #include <libdodo/guard.h>
 #include <libdodo/tools.h>
-#include <libdodo/atomicSemaphore.h>
+#include <libdodo/systemAtomicSemaphore.h>
 
 namespace dodo
 {

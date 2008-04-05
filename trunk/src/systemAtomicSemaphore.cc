@@ -1,5 +1,5 @@
 /***************************************************************************
- *            atomicSemaphore.cc
+ *            systemAtomicSemaphore.cc
  *
  *  Sat Oct 20 02:00:55 2007
  *  Copyright  2007  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/atomicSemaphore.h>
+#include <libdodo/systemAtomicSemaphore.h>
 
 using namespace dodo;
 
-atomicSemaphore::atomicSemaphore(unsigned int value,
+systemAtomicSemaphore::systemAtomicSemaphore(unsigned int value,
 								 const char   *a_key)
 {
 	key = new char[strlen(a_key) + 1];
@@ -36,7 +36,7 @@ atomicSemaphore::atomicSemaphore(unsigned int value,
 
 //-------------------------------------------------------------------
 
-atomicSemaphore::~atomicSemaphore()
+systemAtomicSemaphore::~systemAtomicSemaphore()
 {
 	sem_close(semaphore);
 
@@ -46,7 +46,7 @@ atomicSemaphore::~atomicSemaphore()
 //-------------------------------------------------------------------
 
 void
-atomicSemaphore::lock()
+systemAtomicSemaphore::lock()
 {
 	if (sem_wait(semaphore) != 0)
 		throw baseEx(ERRMODULE_ATOMICSEMAPHORE, ATOMICSEMAPHOREEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -55,7 +55,7 @@ atomicSemaphore::lock()
 //-------------------------------------------------------------------
 
 void
-atomicSemaphore::unlock()
+systemAtomicSemaphore::unlock()
 {
 	if (sem_post(semaphore) != 0)
 		throw baseEx(ERRMODULE_ATOMICSEMAPHORE, ATOMICSEMAPHOREEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
