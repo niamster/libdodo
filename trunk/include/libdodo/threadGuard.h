@@ -27,7 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/guard.h>
+#include <libdodo/systemRaceHazardGuard.h>
 #include <libdodo/systemAtomicMutex.h>
 
 namespace dodo
@@ -35,7 +35,7 @@ namespace dodo
 	/**
 	 * @class threadGuardHolder provides mutex lock
 	 */
-	class threadGuardHolder : public guardHolder
+	class threadGuardHolder : public systemRaceHazardGuardHolder
 	{
 		protected:
 

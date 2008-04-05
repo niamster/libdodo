@@ -106,7 +106,7 @@ ioNetworkExchange::init(__initialAccept &a_init)
 void
 ioNetworkExchange::close()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKOPTIONS_SOCKET_WO_XEXEC
 	operType = IONETWORKEXCHANGE_OPERATION_CLOSE;
@@ -133,7 +133,7 @@ void
 ioNetworkExchange::init(int a_socket,
 					   bool blockInherited)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	if (opened)
 	{
@@ -172,7 +172,7 @@ ioNetworkExchange::init(int a_socket,
 bool
 ioNetworkExchange::isAlive()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 	
 	if (!opened)
 		return false;
@@ -264,7 +264,7 @@ ioNetworkExchange::_write(const char * const data)
 void
 ioNetworkExchange::write(const char * const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
@@ -299,7 +299,7 @@ ioNetworkExchange::write(const char * const a_buf)
 void
 ioNetworkExchange::writeString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
@@ -407,7 +407,7 @@ ioNetworkExchange::_read(char * const data)
 void
 ioNetworkExchange::read(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = IONETWORKEXCHANGE_OPERATION_READ;
@@ -446,7 +446,7 @@ ioNetworkExchange::read(char * const a_void)
 void
 ioNetworkExchange::readString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = IONETWORKEXCHANGE_OPERATION_READSTRING;
@@ -547,7 +547,7 @@ ioNetworkExchange::addExec(const dodoString &module,
 void
 ioNetworkExchange::writeStream(const char * const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -602,7 +602,7 @@ ioNetworkExchange::writeStream(const char * const a_buf)
 void
 ioNetworkExchange::writeStreamString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -685,7 +685,7 @@ ioNetworkExchange::_readStream(char * const data)
 void
 ioNetworkExchange::readStream(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = IONETWORKEXCHANGE_OPERATION_READSTREAM;
@@ -713,7 +713,7 @@ ioNetworkExchange::readStream(char * const a_void)
 void
 ioNetworkExchange::readStreamString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = IONETWORKEXCHANGE_OPERATION_READSTREAMSTRING;
@@ -753,7 +753,7 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 ioNetworkExchange *
 ioNetworkExchange::createCopy()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	ioNetworkExchange *copy = new ioNetworkExchange;
 
@@ -798,7 +798,7 @@ ioNetworkExchange::flush()
 int
 ioNetworkExchange::getInDescriptor() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	return socket;
 }
@@ -808,7 +808,7 @@ ioNetworkExchange::getInDescriptor() const
 int
 ioNetworkExchange::getOutDescriptor() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	return socket;
 }

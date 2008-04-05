@@ -1,7 +1,7 @@
 /***************************************************************************
- *            processGuard.h
+ *            systemRaceHazardGuard.h
  *
- *  Tue Jul  10 22:00:57 2007
+ *  Sat Oct 20 02:00:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,38 +21,54 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _PROCESSGUARD_H_
-#define _PROCESSGUARD_H_
+#ifndef _GUARD_H_
+#define _GUARD_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/systemRaceHazardGuard.h>
-#include <libdodo/tools.h>
-#include <libdodo/systemAtomicSemaphore.h>
+#include <libdodo/systemAtomicLock.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {
 	/**
-	 * @class processGuardHolder provides concurrent lock for processes interconnection
+	 * @class systemRaceHazardGuardHolder provides mutex lock and threadGuard class
 	 */
-	class processGuardHolder : public systemRaceHazardGuardHolder
+	class systemRaceHazardGuardHolder
 	{
 		protected:
 
-			/**
-			 * contructor
-			 */
-			processGuardHolder();
+			systemAtomicLock *mutex; ///< lock
 
 			/**
 			 * destructor
 			 */
-			virtual ~processGuardHolder();
+			virtual ~systemRaceHazardGuardHolder() = 0;
 
-			char key[32]; ///< key for the semaphore
+			/**
+			 * @class systemRaceHazardGuard provides thread safe behaviour
+			 * @note it locks in constructor and unlocks in destructor
+			 */
+			class systemRaceHazardGuard
+			{
+				public:
+
+					/**
+					 * contructor
+					 */
+					systemRaceHazardGuard(const systemRaceHazardGuardHolder *parent);
+
+					/**
+					 * destructor
+					 */
+					virtual ~systemRaceHazardGuard();
+
+				protected:
+
+					systemRaceHazardGuardHolder *parent; ///< lock
+			};
 	};
-
 };
 
-#endif 
+#endif

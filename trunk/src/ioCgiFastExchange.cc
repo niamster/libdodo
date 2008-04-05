@@ -147,7 +147,7 @@ ioCgiFastExchange::_read(char * const a_void)
 void
 ioCgiFastExchange::read(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 	operType = IOCGIFASTEXCHANGE_OPERATION_READ;
@@ -186,7 +186,7 @@ ioCgiFastExchange::read(char * const a_void)
 void
 ioCgiFastExchange::readString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 	operType = IOCGIFASTEXCHANGE_OPERATION_READSTRING;
@@ -231,7 +231,7 @@ ioCgiFastExchange::readString(dodoString &a_str)
 void
 ioCgiFastExchange::writeString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 	buffer = a_buf;
@@ -266,7 +266,7 @@ ioCgiFastExchange::writeString(const dodoString &a_buf)
 void
 ioCgiFastExchange::write(const char *const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
@@ -310,7 +310,7 @@ ioCgiFastExchange::_write(const char *const buf)
 void
 ioCgiFastExchange::readStream(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 	operType = IOCGIFASTEXCHANGE_OPERATION_READSTREAM;
@@ -336,7 +336,7 @@ ioCgiFastExchange::readStream(char * const a_void)
 void
 ioCgiFastExchange::readStreamString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 	operType = IOCGIFASTEXCHANGE_OPERATION_READSTREAMSTRING;
@@ -375,7 +375,7 @@ ioCgiFastExchange::readStreamString(dodoString &a_str)
 void
 ioCgiFastExchange::writeStreamString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -430,7 +430,7 @@ ioCgiFastExchange::writeStreamString(const dodoString &a_buf)
 void
 ioCgiFastExchange::writeStream(const char *const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 

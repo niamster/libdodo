@@ -47,7 +47,7 @@ systemProcessSharedDataCollectionGuard::~systemProcessSharedDataCollectionGuard(
 unsigned long
 systemProcessSharedDataCollectionGuard::add(void *data)
 {
-	guard tg(this);
+	systemRaceHazardGuard tg(this);
 
 	__shareInfo share;
 
@@ -64,7 +64,7 @@ systemProcessSharedDataCollectionGuard::add(void *data)
 void
 systemProcessSharedDataCollectionGuard::del(unsigned long position)
 {
-	guard tg(this);
+	systemRaceHazardGuard tg(this);
 
 	if (getShare(position))
 		shares.erase(current);
@@ -78,7 +78,7 @@ void
 systemProcessSharedDataCollectionGuard::set(unsigned long position,
 											void          *data)
 {
-	guard tg(this);
+	systemRaceHazardGuard tg(this);
 
 	if (getShare(position))
 		current->data = data;
@@ -91,7 +91,7 @@ systemProcessSharedDataCollectionGuard::set(unsigned long position,
 const void *
 systemProcessSharedDataCollectionGuard::get(unsigned long position)
 {
-	guard tg(this);
+	systemRaceHazardGuard tg(this);
 
 	if (getShare(position))
 		return current->data;

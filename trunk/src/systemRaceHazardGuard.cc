@@ -1,7 +1,7 @@
 /***************************************************************************
- *            guard.h
+ *            systemRaceHazardGuard.cc
  *
- *  Sat Oct 20 02:00:55 2007
+ *  Sat Oct 20 11:00:55 2007
  *  Copyright  2007  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,54 +21,34 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _GUARD_H_
-#define _GUARD_H_
+#include <libdodo/systemRaceHazardGuard.h>
 
-#include <libdodo/directives.h>
+using namespace dodo;
 
-#include <libdodo/types.h>
-#include <libdodo/systemAtomicLock.h>
-#include <libdodo/baseEx.h>
-
-namespace dodo
+systemRaceHazardGuardHolder::~systemRaceHazardGuardHolder()
 {
-	/**
-	 * @class guardHolder provides mutex lock and threadGuard class
-	 */
-	class guardHolder
+}
+
+//-------------------------------------------------------------------
+
+systemRaceHazardGuardHolder::systemRaceHazardGuard::systemRaceHazardGuard(const systemRaceHazardGuardHolder *a_parent) : parent((systemRaceHazardGuardHolder *)a_parent)
+{
+	parent->mutex->lock();
+}
+
+//-------------------------------------------------------------------
+
+systemRaceHazardGuardHolder::systemRaceHazardGuard::~systemRaceHazardGuard()
+{
+	try
 	{
-		protected:
+		parent->mutex->unlock();
+	}
+	catch (baseEx &ex)
+	{
 
-			systemAtomicLock *mutex; ///< lock
+	}
+}
 
-			/**
-			 * destructor
-			 */
-			virtual ~guardHolder() = 0;
+//-------------------------------------------------------------------
 
-			/**
-			 * @class guard provides thread safe behaviour
-			 * @note it locks in constructor and unlocks in destructor
-			 */
-			class guard
-			{
-				public:
-
-					/**
-					 * contructor
-					 */
-					guard(const guardHolder *parent);
-
-					/**
-					 * destructor
-					 */
-					virtual ~guard();
-
-				protected:
-
-					guardHolder *parent; ///< lock
-			};
-	};
-};
-
-#endif

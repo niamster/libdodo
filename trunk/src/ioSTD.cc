@@ -50,7 +50,7 @@ ioSTD::~ioSTD()
 int
 ioSTD::getInDescriptor() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	return fileno(stdin);
 }
@@ -60,7 +60,7 @@ ioSTD::getInDescriptor() const
 int
 ioSTD::getOutDescriptor() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	if (err)
 		return fileno(stderr);
@@ -184,7 +184,7 @@ ioSTD::_read(char * const a_void)
 void
 ioSTD::read(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READ;
@@ -223,7 +223,7 @@ ioSTD::read(char * const a_void)
 void
 ioSTD::readString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTRING;
@@ -268,7 +268,7 @@ ioSTD::readString(dodoString &a_str)
 void
 ioSTD::writeString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTD_WO_XEXEC
 	buffer = a_buf;
@@ -303,7 +303,7 @@ ioSTD::writeString(const dodoString &a_buf)
 void
 ioSTD::write(const char *const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTD_WO_XEXEC
 	buffer.assign(a_buf, outSize);
@@ -391,7 +391,7 @@ ioSTD::_write(const char *const buf)
 void
 ioSTD::flush()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	if (fflush(desc) != 0)
 		throw baseEx(ERRMODULE_IOSTD, IOSTDEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -402,7 +402,7 @@ ioSTD::flush()
 __connInfo
 ioSTD::inputterInfo()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	__connInfo info;
 
@@ -457,7 +457,7 @@ ioSTD::inputterInfo()
 bool
 ioSTD::isBlocked()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	return blocked;
 }
@@ -488,7 +488,7 @@ ioSTD::isRedirectedToSTDErr()
 void
 ioSTD::block(bool flag)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	int block[3] = { O_NONBLOCK, O_NONBLOCK, O_NONBLOCK };
 
@@ -555,7 +555,7 @@ ioSTD::_readStream(char * const a_void)
 void
 ioSTD::readStream(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTREAM;
@@ -581,7 +581,7 @@ ioSTD::readStream(char * const a_void)
 void
 ioSTD::readStreamString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTD_WO_XEXEC
 	operType = IOSTD_OPERATION_READSTREAMSTRING;
@@ -620,7 +620,7 @@ ioSTD::readStreamString(dodoString &a_str)
 void
 ioSTD::writeStreamString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -675,7 +675,7 @@ ioSTD::writeStreamString(const dodoString &a_buf)
 void
 ioSTD::writeStream(const char *const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 

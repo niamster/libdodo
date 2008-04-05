@@ -286,22 +286,22 @@ namespace dodo
 			static staticAtomicMutex mutex;///< lock
 			
 			/**
-			 * @class guard provides thread safe behaviour
+			 * @class systemRaceHazardGuard provides thread safe behaviour
 			 * @note it locks in constructor and unlocks in destructor
 			 */
-			class guard
+			class systemRaceHazardGuard
 			{
 				public:
 
 					/**
 					 * contructor
 					 */
-					guard();
+					systemRaceHazardGuard();
 
 					/**
 					 * destructor
 					 */
-					virtual ~guard();
+					virtual ~systemRaceHazardGuard();
 			};
 	};
 };

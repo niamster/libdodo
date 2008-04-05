@@ -63,7 +63,7 @@ ioDisk::~ioDisk()
 int
 ioDisk::getInDescriptor() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	if (!opened)
 		return -1;
@@ -76,7 +76,7 @@ ioDisk::getInDescriptor() const
 int
 ioDisk::getOutDescriptor() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	if (!opened)
 		return -1;
@@ -145,7 +145,7 @@ ioDisk::addExec(const dodoString &module,
 void
 ioDisk::close()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_CLOSE;
@@ -175,7 +175,7 @@ ioDisk::open(const dodoString &a_path,
 			 short a_fileType,
 			 short mode)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_OPEN;
@@ -302,7 +302,7 @@ ioDisk::_read(char * const a_void)
 void
 ioDisk::read(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READ;
@@ -341,7 +341,7 @@ ioDisk::read(char * const a_void)
 void
 ioDisk::readString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTRING;
@@ -386,7 +386,7 @@ ioDisk::readString(dodoString &a_str)
 void
 ioDisk::writeString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	buffer = a_buf;
@@ -482,7 +482,7 @@ ioDisk::_write(const char *const a_buf)
 void
 ioDisk::write(const char *const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	buffer.assign(a_buf, outSize);
@@ -517,7 +517,7 @@ ioDisk::write(const char *const a_buf)
 void
 ioDisk::erase()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	char *empty = new char[outSize];
 
@@ -533,7 +533,7 @@ ioDisk::erase()
 void
 ioDisk::flush()
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	if (fflush(file) != 0)
 		throw baseEx(ERRMODULE_IODISK, IODISKEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -544,7 +544,7 @@ ioDisk::flush()
 dodoString
 ioDisk::getPath() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	return path;
 }
@@ -607,7 +607,7 @@ ioDisk::_readStream(char * const a_void)
 void
 ioDisk::readStream(char * const a_void)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTREAM;
@@ -633,7 +633,7 @@ ioDisk::readStream(char * const a_void)
 void
 ioDisk::readStreamString(dodoString &a_str)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 #ifndef IODISK_WO_XEXEC
 	operType = IODISK_OPERATION_READSTREAMSTRING;
@@ -706,7 +706,7 @@ ioDisk::_writeStream(const char *const a_buf)
 void
 ioDisk::writeStreamString(const dodoString &a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -762,7 +762,7 @@ ioDisk::writeStreamString(const dodoString &a_buf)
 void
 ioDisk::writeStream(const char *const a_buf)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -817,7 +817,7 @@ ioDisk::writeStream(const char *const a_buf)
 short
 ioDisk::getFileType() const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	return fileType;
 }

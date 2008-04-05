@@ -270,14 +270,14 @@ baseEx::staticAtomicMutex::unlock()
 
 //-------------------------------------------------------------------
 
-baseEx::guard::guard()
+baseEx::systemRaceHazardGuard::systemRaceHazardGuard()
 {
 	mutex.lock();
 }
 
 //-------------------------------------------------------------------
 
-baseEx::guard::~guard()
+baseEx::systemRaceHazardGuard::~systemRaceHazardGuard()
 {
 	mutex.unlock();
 }
@@ -300,7 +300,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 											  file(a_file),
 											  message(a_message)
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 	if (handlerSetEx[errModule])
 		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
@@ -310,7 +310,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 
 baseEx::~baseEx()
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -340,7 +340,7 @@ baseEx::~baseEx()
 
 baseEx::operator const dodoString & ()
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 	return baseErrstr;
 }
@@ -352,7 +352,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 						errorHandler handler,
 						void *data)
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -385,7 +385,7 @@ void
 baseEx::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 #ifdef DL_EXT
 	deinitExModule deinit;
@@ -422,7 +422,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 void
 baseEx::unsetErrorHandler(errorModuleEnum module)
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -454,7 +454,7 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 void
 baseEx::unsetErrorHandlers()
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 #ifdef DL_EXT
 	deinitExModule deinit;
@@ -495,7 +495,7 @@ baseEx::setErrorHandlers(const dodoString &path,
 						 void *data,
 						 void *toInit)
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 	initExModule init;
 	errorHandler in;
@@ -552,7 +552,7 @@ baseEx::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 #ifdef DL_FAST
 	void *handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
@@ -605,7 +605,7 @@ __exMod
 baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
-	guard tg;
+	systemRaceHazardGuard tg;
 	
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);

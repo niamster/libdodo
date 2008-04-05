@@ -30,7 +30,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/guard.h>
+#include <libdodo/systemRaceHazardGuard.h>
 
 namespace dodo
 {

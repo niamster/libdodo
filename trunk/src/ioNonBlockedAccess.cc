@@ -48,7 +48,7 @@ ioNonBlockedAccess::~ioNonBlockedAccess()
 int
 ioNonBlockedAccess::addFlush(const ioNonBlockedAccessInfo &fl)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	__inOutDescriptors tempD;
 
@@ -67,7 +67,7 @@ dodoArray<bool>
 ioNonBlockedAccess::isReadable(const dodoArray<int> &pos,
 				  int timeout) const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	int count = -1;
 
@@ -145,7 +145,7 @@ dodoArray<bool>
 ioNonBlockedAccess::isWritable(const dodoArray<int> &pos,
 				  int timeout) const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	int count = -1;
 
@@ -223,7 +223,7 @@ bool
 ioNonBlockedAccess::isReadable(int pos,
 				  int timeout) const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	pollfd fd;
 
@@ -260,7 +260,7 @@ ioNonBlockedAccess::isReadable(int pos,
 void
 ioNonBlockedAccess::delFlush(int pos)
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
@@ -278,7 +278,7 @@ bool
 ioNonBlockedAccess::isWritable(int pos,
 				  int timeout) const
 {
-	guard pg(this);
+	systemRaceHazardGuard pg(this);
 
 	pollfd fd;
 
