@@ -50,7 +50,7 @@ systemAtomicMutex::lock()
 {
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0 && errno != EDEADLK)
-		throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, SYSTEMATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -60,7 +60,7 @@ systemAtomicMutex::unlock()
 {
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_ATOMICMUTEX, ATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, SYSTEMATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

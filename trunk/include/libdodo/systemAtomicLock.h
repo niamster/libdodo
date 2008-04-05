@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICLOCK_H_
-#define _ATOMICLOCK_H_
+#ifndef _SYSTEMATOMICLOCK_H_
+#define _SYSTEMATOMICLOCK_H_
 
 #include <libdodo/directives.h>
 

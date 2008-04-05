@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICSEMAPHOREEX_H_
-#define _ATOMICSEMAPHOREEX_H_
+#ifndef _SYSTEMATOMICSEMAPHOREEX_H_
+#define _SYSTEMATOMICSEMAPHOREEX_H_
 
 #include <libdodo/directives.h>
 
@@ -35,8 +35,8 @@ namespace dodo
 	 */
 	enum systemAtomicSemaphoreFunctionsID
 	{
-		ATOMICSEMAPHOREEX_LOCK,
-		ATOMICSEMAPHOREEX_UNLOCK,
+		SYSTEMATOMICSEMAPHOREEX_LOCK,
+		SYSTEMATOMICSEMAPHOREEX_UNLOCK,
 	};
 };
 

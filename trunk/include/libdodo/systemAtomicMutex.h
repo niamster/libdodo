@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _ATOMICMUTEX_H_
-#define _ATOMICMUTEX_H_
+#ifndef _SYSTEMATOMICMUTEX_H_
+#define _SYSTEMATOMICMUTEX_H_
 
 #include <libdodo/directives.h>
 

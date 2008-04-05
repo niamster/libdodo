@@ -49,7 +49,7 @@ void
 systemAtomicSemaphore::lock()
 {
 	if (sem_wait(semaphore) != 0)
-		throw baseEx(ERRMODULE_ATOMICSEMAPHORE, ATOMICSEMAPHOREEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMATOMICSEMAPHORE, SYSTEMATOMICSEMAPHOREEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -58,7 +58,7 @@ void
 systemAtomicSemaphore::unlock()
 {
 	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_ATOMICSEMAPHORE, ATOMICSEMAPHOREEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMATOMICSEMAPHORE, SYSTEMATOMICSEMAPHOREEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
