@@ -1,5 +1,5 @@
 /***************************************************************************
- *            atomicMutex.cc
+ *            systemAtomicMutex.cc
  *
  *  Mon Jul 09 11:31:55 2007
  *  Copyright  2007  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/atomicMutex.h>
+#include <libdodo/systemAtomicMutex.h>
 
 using namespace dodo;
 
-atomicMutex::atomicMutex()
+systemAtomicMutex::systemAtomicMutex()
 {
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
@@ -38,7 +38,7 @@ atomicMutex::atomicMutex()
 
 //-------------------------------------------------------------------
 
-atomicMutex::~atomicMutex()
+systemAtomicMutex::~systemAtomicMutex()
 {
 	pthread_mutex_destroy(&mutex);
 }
@@ -46,7 +46,7 @@ atomicMutex::~atomicMutex()
 //-------------------------------------------------------------------
 
 void
-atomicMutex::lock()
+systemAtomicMutex::lock()
 {
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0 && errno != EDEADLK)
@@ -56,7 +56,7 @@ atomicMutex::lock()
 //-------------------------------------------------------------------
 
 void
-atomicMutex::unlock()
+systemAtomicMutex::unlock()
 {
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)

@@ -27,7 +27,7 @@ using namespace dodo;
 
 threadGuardHolder::threadGuardHolder()
 {
-	mutex = new atomicMutex;
+	mutex = new systemAtomicMutex;
 }
 
 //-------------------------------------------------------------------

@@ -28,7 +28,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/guard.h>
-#include <libdodo/atomicMutex.h>
+#include <libdodo/systemAtomicMutex.h>
 
 namespace dodo
 {
