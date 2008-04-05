@@ -218,6 +218,9 @@ ioNetworkExchange::_write(const char * const data)
 					if (errno == EINTR)
 						continue;
 
+					if (errno == EAGAIN)
+						break;
+
 					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
@@ -240,6 +243,9 @@ ioNetworkExchange::_write(const char * const data)
 				{
 					if (errno == EINTR)
 						continue;
+
+					if (errno == EAGAIN)
+						break;
 
 					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
@@ -661,6 +667,9 @@ ioNetworkExchange::_readStream(char * const data)
 		{
 			if (errno == EINTR)
 				continue;
+
+			if (errno == EAGAIN)
+				break;
 
 			throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}

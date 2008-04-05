@@ -145,6 +145,9 @@ ioSTD::_read(char * const a_void)
 				if (errno == EINTR)
 					continue;
 
+				if (errno == EAGAIN)
+					break;
+
 				if (ferror(stdin) != 0)
 					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
@@ -163,6 +166,9 @@ ioSTD::_read(char * const a_void)
 			{
 				if (errno == EINTR)
 					continue;
+
+				if (errno == EAGAIN)
+					break;
 
 				if (ferror(stdin) != 0)
 					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -346,6 +352,9 @@ ioSTD::_write(const char *const buf)
 				if (errno == EINTR)
 					continue;
 
+				if (errno == EAGAIN)
+					break;
+
 				if (ferror(desc) != 0)
 					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
@@ -364,6 +373,9 @@ ioSTD::_write(const char *const buf)
 			{
 				if (errno == EINTR)
 					continue;
+
+				if (errno == EAGAIN)
+					break;
 
 				if (ferror(desc) != 0)
 					throw baseEx(ERRMODULE_IOSTD, IOSTDEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -526,6 +538,9 @@ ioSTD::_readStream(char * const a_void)
 		{
 			if (errno == EINTR)
 				continue;
+
+			if (errno == EAGAIN)
+				break;
 
 			if (ferror(stdin) != 0)
 				throw baseEx(ERRMODULE_IOSTD, IOSTDEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

@@ -102,7 +102,6 @@ cgi::cgi(cgi &ct)
 
 cgi::cgi(dodoStringMap &headers,
 		 bool silent,
-		 bool autocleanContent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -129,9 +128,6 @@ cgi::cgi(dodoStringMap &headers,
 	makeContent();
 	makePost();
 
-	if (autocleanContent)
-		content.clear();
-
 	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
 	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
@@ -139,7 +135,6 @@ cgi::cgi(dodoStringMap &headers,
 //-------------------------------------------------------------------
 
 cgi::cgi(bool silent,
-		 bool autocleanContent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -166,9 +161,6 @@ cgi::cgi(bool silent,
 	makeContent();
 	makePost();
 
-	if (autocleanContent)
-		content.clear();
-
 	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
 	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
 }
@@ -179,7 +171,6 @@ cgi::cgi(bool silent,
 
 cgi::cgi(ioCgiFastExchange    *a_cf,
 		 bool silent,
-		 bool autocleanContent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -201,9 +192,6 @@ cgi::cgi(ioCgiFastExchange    *a_cf,
 
 	makeContent();
 	makePost();
-
-	if (autocleanContent)
-		content.clear();
 
 	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
 	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
@@ -214,7 +202,6 @@ cgi::cgi(ioCgiFastExchange    *a_cf,
 cgi::cgi(ioCgiFastExchange    *a_cf,
 		 dodoStringMap &headers,
 		 bool silent,
-		 bool autocleanContent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
@@ -236,9 +223,6 @@ cgi::cgi(ioCgiFastExchange    *a_cf,
 
 	makeContent();
 	makePost();
-
-	if (autocleanContent)
-		content.clear();
 
 	make(COOKIES, ENVIRONMENT[CGI_ENVIRONMENT_HTTPCOOKIE], "; ");
 	make(GET, ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING]);
@@ -372,7 +356,7 @@ cgi::makeEnv()
 {
 	char *env;
 
-	for (int i = 0; i < HTTP_ENVIRONMENT_SIZE; ++i)
+	for (int i = 0; i < HTTP_ENVIRONMENT; ++i)
 	{
 #ifdef FCGI_EXT
 		if (cgiFastSet)
@@ -469,6 +453,8 @@ cgi::makePost()
 	if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
 	{
 		make(POST, content);
+		
+		content.clear();
 	}
 	else
 	{
@@ -514,7 +500,7 @@ cgi::makePost()
 		
 						file.name = i->substr(temp0, temp1 - temp0);
 		
-						temp0 = i->find("Content-Type: ", temp1);
+						temp0 = stringTools::find(*i, "Content-Type: ", temp1, true);
 						temp0 += 14;
 						temp1 = i->find("\n", temp0);
 						file.type = i->substr(temp0, temp1 - temp0);
@@ -523,7 +509,7 @@ cgi::makePost()
 						file.size = i->size() - temp1 - 2;
 		
 						if (postFilesInMem)
-							file.buf.assign(i->c_str() + temp1, file.size);
+							file.data.assign(i->c_str() + temp1, file.size);
 						else
 						{
 							file.error = CGI_POSTFILEERR_NONE;
@@ -609,6 +595,8 @@ cgi::makePost()
 					}
 				}
 			}
+			
+			content.clear();
 		}
 	}
 }

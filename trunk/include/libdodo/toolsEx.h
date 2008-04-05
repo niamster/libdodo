@@ -72,7 +72,6 @@ namespace dodo
 #define TOOLSEX_BADMAILHELO_STR "Error occurd while sending EHLO."
 #define TOOLSEX_BADMAILAUTH_STR "Error during authentification."
 #define TOOLSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define TOOLSEX_DATATOOLONG_STR "Data size is bigger than TOOLSEX_SHORT_DATA_SIZE."
 #define TOOLSEX_EMPTYARRAY_STR "Array is empty."
 #define TOOLSEX_WRONGSTRENGTH_STR "Wrong strength argument."
 

@@ -39,7 +39,7 @@
 
 namespace dodo
 {	
-#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS_SIZE 10
+#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS 10
 
 	/**
 	 * @enum ioNetworkHTTPRequestHeaderEnum defines HTTP request headers
@@ -58,7 +58,7 @@ namespace dodo
 		IONETWORKHTTP_REQUESTHEADER_USERAGENT,///< the user agent string of the user agent
 	};
 
-#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS_SIZE 16
+#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 16
 	
 	/**
 	 * @enum ioNetworkHTTPResponseHeaderEnum defines HTTP response headers
@@ -82,18 +82,7 @@ namespace dodo
 		IONETWORKHTTP_RESPONSEHEADER_LOCATION,///< used in redirection
 		IONETWORKHTTP_RESPONSEHEADER_SERVER,///< a name for the server
 	};
-
-#define IONETWORKHTTP_POSTCONTENTTYPE_SIZE 3
 	
-	/**
-	 * @enum ioNetworkHTTPResponseHeaderEnum defines HTTP response headers
-	 */
-	enum ioNetworkHTTPPostContentTypeHeaderEnum
-	{
-		IONETWORKHTTP_POSTCONTENTTYPE_URLENCODED,///< application/x-www-form-urlencoded
-		IONETWORKHTTP_POSTCONTENTTYPE_DATA,///< multipart/form-data
-		IONETWORKHTTP_POSTCONTENTTYPE_TEXTXML,///< text/xml
-	};
 	/**
 	 * @struct __httpResponse defines HTTP response 
 	 */
@@ -139,19 +128,7 @@ namespace dodo
 			/**
 			 * @param url defines URL
 			 */
-			virtual void setUrl(const __url &url);
-			
-			/**
-			 * @param url defines URL
-			 */
 			virtual void setUrl(const dodoString &url);
-			
-			/**
-			 * perform GET request
-			 * @return server response
-			 * @param url defines URL
-			 */
-			virtual __httpResponse GET(const __url &url);
 			
 			/**
 			 * perform GET request
@@ -162,8 +139,6 @@ namespace dodo
 			
 			/**
 			 * perform GET request
-			 * @return server response
-			 * @param url defines URL
 			 */
 			virtual void GET();
 			
@@ -172,32 +147,58 @@ namespace dodo
 			 * @return server response
 			 * @param url defines URL
 			 * @param data defines POST data
-			 * @param type defines type of data[see ioNetworkHTTPPostContentTypeHeaderEnum]
+			 * @param type defines content type of the POST request
 			 */
-			virtual __httpResponse POST(const __url &url, const dodoString &data, short type);
+			virtual __httpResponse POST(const dodoString &url, const dodoString &data, const dodoString &type);
+			
+			/**
+			 * perform POST request
+			 * @param data defines POST data
+			 * @param type defines content type of the POST request
+			 */
+			virtual void POST(const dodoString &data, const dodoString &type);
 			
 			/**
 			 * perform POST request
 			 * @return server response
 			 * @param url defines URL
-			 * @param data defines POST data
-			 * @param type defines type of data[see ioNetworkHTTPPostContentTypeHeaderEnum]
+			 * @param arguments defines request arguments
 			 */
-			virtual __httpResponse POST(const dodoString &url, const dodoString &data, short type);
+			virtual __httpResponse POST(const dodoString &url, const dodoStringMap &arguments);
+			
+			/**
+			 * perform POST request
+			 * @param arguments defines request arguments
+			 */
+			virtual void POST(const dodoStringMap &arguments);
 			
 			/**
 			 * perform POST request
 			 * @return server response
-			 * @param data defines POST data
-			 * @param type defines type of data[see ioNetworkHTTPPostContentTypeHeaderEnum]
+			 * @param url defines URL
+			 * @param arguments defines request arguments
+			 * @param files defines path to files
 			 */
-			virtual void POST(const dodoString &data, short type);
+			virtual __httpResponse POST(const dodoString &url, const dodoStringMap &arguments, const dodoStringMap &files);
+			
+			/**
+			 * perform POST request
+			 * @param arguments defines request arguments
+			 * @param files defines path to files
+			 */
+			virtual void POST(const dodoStringMap &arguments, const dodoStringMap &files);
 
 		private:
 			
-			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS_SIZE];///< HTTP request headers[see ioNetworkHTTPRequestHeaderEnum]
-			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS_SIZE];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
-			static const dodoString postContentTypeHeaderStatements[IONETWORKHTTP_POSTCONTENTTYPE_SIZE];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
+			/**
+			 * get response data and fetch headers
+			 * @param data defines buffer to store response
+			 * @param ex defines network connection
+			 */
+			virtual void getContent(dodoString &data, ioNetworkExchange &ex);
+			
+			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS];///< HTTP request headers[see ioNetworkHTTPRequestHeaderEnum]
+			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
 			
 			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the header value  
 			

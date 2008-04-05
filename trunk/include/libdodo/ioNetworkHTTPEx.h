@@ -36,20 +36,21 @@ namespace dodo
 	 */
 	enum ioNetworkHTTPExR
 	{
-		//IONETWORKHTTPEX_,
+		IONETWORKHTTPEX_CANNOTCONNECT,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-//#define IONETWORKHTTPEX__STR ""
+#define IONETWORKHTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
 	enum ioNetworkHTTPFunctionsID
 	{
-		//IONETWORKHTTPEX_,
+		IONETWORKHTTPEX_POST,
+		IONETWORKHTTPEX_GET,
 	};
 };
 

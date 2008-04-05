@@ -59,13 +59,6 @@ const dodoString ioNetworkHTTP::responseHeaderStatements[] = { "Accept-Ranges",
 
 //-------------------------------------------------------------------
 
-const dodoString ioNetworkHTTP::postContentTypeHeaderStatements[] = { "application/x-www-form-urlencoded",
-		"multipart/form-data",
-		"text/xml",
-};
-
-//-------------------------------------------------------------------
-
 const char ioNetworkHTTP::trimSymbols[] = {' ',
 		'\r'
 };
@@ -89,6 +82,294 @@ ioNetworkHTTP::ioNetworkHTTP(ioNetworkHTTP &fd)
 
 ioNetworkHTTP::~ioNetworkHTTP()
 {
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse 
+ioNetworkHTTP::getResponse()
+{
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+void 
+ioNetworkHTTP::setUrl(const dodoString &a_url)
+{
+	url = tools::parseURL(a_url);
+}
+
+//-------------------------------------------------------------------
+
+void
+ioNetworkHTTP::GET()
+{	
+	response = __httpResponse();
+	
+	ioNetworkExchange ex;
+	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	
+	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
+	
+	dodoString str = url.protocol; 
+	if (str.size() == 0)
+		str = "http";
+	
+	int port = stringTools::stringToI(url.port);
+	if (port == 0)
+	{
+		if (stringTools::iequal(str, "http"))
+			port = 80;
+	}
+	
+	str = url.path + url.request;
+	
+	dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
+	for (;o!=p;++o)
+		try
+		{
+			net.connect(*o, port, ex);
+			break;
+		}
+		catch (baseEx &ex)
+		{
+			if (ex.funcID == IONETWORKEX_CONNECT)
+			{
+				if (*o == *p)
+					throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+				else
+					continue;
+			}
+			
+			throw;
+		}
+	
+	dodoString data;
+	
+	data.append("GET ");
+	data.append(str.size()>0?str:"/");
+	data.append(" HTTP/1.0\r\n");
+	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
+	for (;i!=j;++i)
+	{
+		data.append(requestHeaderStatements[i->first]);
+		data.append(": ");
+		data.append(i->second);
+		data.append("\r\n");
+	}
+	data.append("Host: ");
+	data.append(url.host);
+	
+	data.append("\r\n\r\n");
+	
+	ex.writeStreamString(data);
+
+	getContent(data, ex);
+}
+
+//-------------------------------------------------------------------
+
+
+__httpResponse
+ioNetworkHTTP::GET(const dodoString &a_url)
+{
+	url = tools::parseURL(a_url);
+	
+	GET();
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse 
+ioNetworkHTTP::POST(const dodoString &a_url, 
+							const dodoStringMap &arguments, 
+							const dodoStringMap &files)
+{
+	url = tools::parseURL(a_url);
+	
+	POST(arguments, files);
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+void
+ioNetworkHTTP::POST(const dodoStringMap &arguments, 
+							const dodoStringMap &files)
+{
+	dodoString boundary = "---------------------------" + stringTools::ulToString(tools::ulRandom()) + stringTools::ulToString(tools::ulRandom());
+	dodoString type = "multipart/form-data; boundary=" + boundary;
+	boundary.insert(0, "--");
+	
+	dodoString data;
+	
+	dodoStringMap::const_iterator i = files.begin(), j = files.end();
+	
+	for (;i!=j;++i)
+	{
+		data.append(boundary);
+		data.append("\r\nContent-Disposition: form-data; name=\"");
+		data.append(i->first);
+		data.append("\"; filename=\"");
+		data.append(ioDiskTools::lastname(i->second));
+		data.append("\"\r\n");
+		
+		data.append("Content-Type: application/octet-stream\r\n\r\n");
+		
+		data.append(ioDiskTools::getFileContents(i->second));
+		data.append("\r\n");
+	}
+
+	i = arguments.begin();
+	j = arguments.end();
+	for (;i!=j;++i)
+	{
+		data.append(boundary);
+		data.append("\r\nContent-Disposition: form-data; name=\"");
+		data.append(i->first);
+		data.append("\"\r\n\r\n");
+		
+		data.append(i->second);
+		data.append("\r\n");
+	}
+	data.append(boundary);
+	data.append("--");
+	
+	POST(data, type);
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse 
+ioNetworkHTTP::POST(const dodoString &a_url, 
+					const dodoStringMap &arguments)
+{
+	url = tools::parseURL(a_url);
+	
+	POST(arguments);
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+void 
+ioNetworkHTTP::POST(const dodoStringMap &arguments)
+{
+	dodoString data;
+	
+	dodoStringMap::const_iterator i(arguments.begin()), j(arguments.end());
+	--j;
+	
+	for (;i!=j;++i)
+	{
+		data.append(tools::encodeURL(i->first));
+		data.append("=");
+		data.append(tools::encodeURL(i->second));
+		data.append("&");
+	}
+	data.append(tools::encodeURL(i->first));
+	data.append("=");
+	data.append(tools::encodeURL(i->second));
+	
+	POST(data, "application/x-www-form-urlencoded");
+}
+
+//-------------------------------------------------------------------
+
+__httpResponse
+ioNetworkHTTP::POST(const dodoString &a_url, 
+					const dodoString &data,
+					const dodoString &type)
+{
+	url = tools::parseURL(a_url);
+	
+	POST(data, type);
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+void
+ioNetworkHTTP::POST(const dodoString &a_data,
+					const dodoString &type)
+{	
+	response = __httpResponse();
+	
+	ioNetworkExchange ex;
+	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	
+	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
+	
+	dodoString str = url.protocol; 
+	if (str.size() == 0)
+		str = "http";
+	
+	int port = stringTools::stringToI(url.port);
+	if (port == 0)
+	{
+		if (stringTools::iequal(str, "http"))
+			port = 80;
+	}
+	
+	str = url.path + url.request;
+	
+	dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
+	for (;o!=p;++o)
+		try
+		{
+			net.connect(*o, port, ex);
+			break;
+		}
+		catch (baseEx &ex)
+		{
+			if (ex.funcID == IONETWORKEX_CONNECT)
+			{
+				if (*o == *p)
+					throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+				else
+					continue;
+			}
+			
+			throw;
+		}
+	
+	dodoString data;
+	
+	data.append("POST ");
+	data.append(str.size()>0?str:"/");
+	data.append(" HTTP/1.0\r\n");
+	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
+	for (;i!=j;++i)
+	{
+		data.append(requestHeaderStatements[i->first]);
+		data.append(": ");
+		data.append(i->second);
+		data.append("\r\n");
+	}
+	data.append("Host: ");
+	data.append(url.host);
+	data.append("\r\n");
+	
+	data.append("Content-length: ");
+	data.append(stringTools::ulToString(a_data.size()));
+	data.append("\r\n");
+	
+	data.append("Content-type: ");
+	data.append(type);
+	data.append("\r\n\r\n");
+	
+	ex.writeStreamString(data);
+	
+	ex.outSize = a_data.size();
+	ex.writeString(a_data);
+	
+	getContent(data, ex);
 }
 
 //-------------------------------------------------------------------
@@ -143,7 +424,7 @@ ioNetworkHTTP::extractHeaders(const dodoString &data,
 		}
 		else
 		{
-			for (o = 0;o<IONETWORKHTTP_RESPONSEHEADERSTATEMENTS_SIZE;++o)
+			for (o = 0;o<IONETWORKHTTP_RESPONSEHEADERSTATEMENTS;++o)
 				if (stringTools::equal(responseHeaderStatements[o], arr[0]))
 					response.headers[o] = stringTools::trim(arr[1], trimSymbols, 2);
 		}
@@ -159,78 +440,16 @@ ioNetworkHTTP::extractHeaders(const dodoString &data,
 
 //-------------------------------------------------------------------
 
-__httpResponse 
-ioNetworkHTTP::getResponse()
-{
-	return response;
-}
-
-//-------------------------------------------------------------------
-
 void 
-ioNetworkHTTP::setUrl(const __url &url)
+ioNetworkHTTP::getContent(dodoString &data, 
+						ioNetworkExchange &ex)
 {
-	this->url = url;
-}
-
-//-------------------------------------------------------------------
-
-void 
-ioNetworkHTTP::setUrl(const dodoString &a_url)
-{
-	this->url = tools::parseURL(a_url);
-}
-
-//-------------------------------------------------------------------
-
-void
-ioNetworkHTTP::GET()
-{	
-	response = __httpResponse();
-	
-	ioNetworkExchange ex;
-	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
-	
-	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
-	
-	dodoString protocol = url.protocol; 
-	if (protocol.size() == 0)
-		protocol = "http";
-	
-	int port = stringTools::stringToI(url.port);
-	if (port == 0)
-	{
-		if (stringTools::iequal(protocol, "http"))
-			port = 80;
-	}
-	
-	net.connect(host.addresses[0], port, ex);
-	
-	dodoString data;
-	
-	data.append("GET ");
-	data.append(url.request.size()>0?url.request:"/");
-	data.append(" HTTP/1.0\r\n");
-	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
-	for (;i!=j;++i)
-	{
-		data.append(requestHeaderStatements[i->first]);
-		data.append(": ");
-		data.append(i->second);
-		data.append("\r\n");
-	}
-	data.append("Host: ");
-	data.append(url.host);
-	data.append("\r\n\r\n");
-	
-	ex.writeStreamString(data);
-
 	ex.setInBufferSize(8096);
 	ex.inSize = 8096;
 	
 	unsigned long contentSize = 0;
-	
 	bool endOfHeaders = false;
+	
 	try
 	{
 		while (true)
@@ -258,150 +477,7 @@ ioNetworkHTTP::GET()
 	{
 		if (ex.funcID != IONETWORKEXCHANGEEX__READSTREAM)
 			throw;
-	}
-}
-
-//-------------------------------------------------------------------
-
-__httpResponse
-ioNetworkHTTP::GET(const __url &url)
-{	
-	setUrl(url);
-	
-	GET();
-	
-	return response;
-}
-
-//-------------------------------------------------------------------
-
-__httpResponse
-ioNetworkHTTP::GET(const dodoString &a_url)
-{
-	setUrl(tools::parseURL(a_url));
-	
-	GET();
-	
-	return response;
-}
-
-//-------------------------------------------------------------------
-
-__httpResponse
-ioNetworkHTTP::POST(const __url &url, 
-					const dodoString &data, 
-					short type)
-{	
-	setUrl(url);
-	
-	POST(data, type);
-	
-	return response;
-}
-
-//-------------------------------------------------------------------
-
-__httpResponse
-ioNetworkHTTP::POST(const dodoString &a_url, 
-					const dodoString &data, 
-					short type)
-{
-	setUrl(tools::parseURL(a_url));
-	
-	POST(data, type);
-	
-	return response;
-}
-
-//-------------------------------------------------------------------
-
-void
-ioNetworkHTTP::POST(const dodoString &a_data, 
-					short type)
-{	
-	response = __httpResponse();
-	
-	ioNetworkExchange ex;
-	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
-	
-	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
-	
-	dodoString protocol = url.protocol; 
-	if (protocol.size() == 0)
-		protocol = "http";
-	
-	int port = stringTools::stringToI(url.port);
-	if (port == 0)
-	{
-		if (stringTools::iequal(protocol, "http"))
-			port = 80;
-	}
-	
-	net.connect(host.addresses[0], port, ex);
-	
-	dodoString data;
-	
-	data.append("POST ");
-	data.append(url.request.size()>0?url.request:"/");
-	data.append(" HTTP/1.0\r\n");
-	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
-	for (;i!=j;++i)
-	{
-		data.append(requestHeaderStatements[i->first]);
-		data.append(": ");
-		data.append(i->second);
-		data.append("\r\n");
-	}
-	data.append("Host: ");
-	data.append(url.host);
-	
-	data.append("Content-Type: ");
-	data.append(postContentTypeHeaderStatements[type]);
-	
-	data.append("Content-Length: ");
-	data.append(stringTools::lToString(a_data.size()));
-	
-	data.append("\r\n\r\n");
-	
-	ex.writeStreamString(data);
-	
-	ex.outSize = a_data.size();
-	ex.writeString(a_data);
-
-	ex.setInBufferSize(8096);
-	ex.inSize = 8096;
-	
-	unsigned long contentSize = 0;
-	
-	bool endOfHeaders = false;
-	try
-	{
-		while (true)
-		{
-			ex.readStreamString(data);
-			
-			if (data.size() == 0)
-				break;
-			
-			if (endOfHeaders)
-				response.data.append(data);
-			else
-			{
-				endOfHeaders = extractHeaders(data, response);
-				
-				if (endOfHeaders)
-					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
-			}
-			
-			if (response.data.size() == contentSize)
-				break;
-		}
-	}
-	catch (baseEx &ex)
-	{
-		if (ex.funcID != IONETWORKEXCHANGEEX__READSTREAM)
-			throw;
-	}
+	}	
 }
 
 //-------------------------------------------------------------------

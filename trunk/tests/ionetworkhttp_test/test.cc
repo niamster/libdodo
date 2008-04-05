@@ -13,10 +13,24 @@ using namespace std;
 int main(int argc, char **argv)
 {
 	try
-	{	
+	{
+		dodoStringMap map;
+
+		map["hidden"] = "hidden";
+		map["text"] = "text";
+
+		dodoStringMap files;
+
+		files["file"] = "./test.cc";
+
 		ioNetworkHTTP http;
-		__httpResponse res =  http.GET("http://google.com");
-		//__httpResponse res =  http.GET("http://62.80.178.137/file/5050058/4156786/12.jpg");
+		__httpResponse res;
+		//res =  http.GET("http://temp.niam.mu/libdodo/cgi_test/test.cgi");
+		//res =  http.GET("http://google.com");
+		
+		//res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map);
+		res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map, files);
+		
 
 		cout << res.code << "\n~~\n";
 		cout << res.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";

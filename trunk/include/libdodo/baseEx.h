@@ -77,6 +77,7 @@ namespace dodo
 		ERRMODULE_IONETWORKOPTIONS,
 		ERRMODULE_IONETWORKEXCHANGE,
 		ERRMODULE_IONETWORKTOOLS,
+		ERRMODULE_IONETWORKHTTP,
 		ERRMODULE_SYSTEMPROCESSCOLLECTION,
 		ERRMODULE_SYSTEMTHREADCOLLECTION,
 		ERRMODULE_SYSTEMSHAREDDATA,
@@ -100,7 +101,7 @@ namespace dodo
 		ERRMODULE_RPCVALUE,
 	};
 
-#define AM_MODULES    37
+#define BASEEX_MODULES    38
 
 #ifdef DL_EXT
 
@@ -234,17 +235,17 @@ namespace dodo
 
 		protected:
 
-			static errorHandler handlersEx[AM_MODULES];     ///< exception handlers
+			static errorHandler handlersEx[BASEEX_MODULES];     ///< exception handlers
 
-			static bool handlerSetEx[AM_MODULES];           ///< map of set handlers
+			static bool handlerSetEx[BASEEX_MODULES];           ///< map of set handlers
 
-			static void *handlerDataEx[AM_MODULES];         ///< data that will be passed to the handler
+			static void *handlerDataEx[BASEEX_MODULES];         ///< data that will be passed to the handler
 
 #ifdef DL_EXT
 
-			static void *handlesEx[AM_MODULES];             ///< handles to the libraries
+			static void *handlesEx[BASEEX_MODULES];             ///< handles to the libraries
 
-			static bool handlesOpenedEx[AM_MODULES];        //< map of the opened libraries
+			static bool handlesOpenedEx[BASEEX_MODULES];        //< map of the opened libraries
 
 #endif
 	};

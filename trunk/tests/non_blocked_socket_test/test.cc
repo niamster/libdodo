@@ -1,4 +1,5 @@
 #include <libdodo/baseEx.h>
+#include <libdodo/systemTools.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/ioNetworkTools.h>
 #include <libdodo/ioNonBlockedAccess.h>
@@ -17,17 +18,18 @@ int main(int argc, char **argv)
 		
 		__initialAccept fake;
 
+		sock.bindNListen("127.0.0.1",7778,1);
 		sock.setOption(IONETWORKOPTIONS_OPTION_REUSE_ADDRESS,true);
 		sock.setLingerOption(IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE);	
 		sock.blockInherited = true;
 		sock.block(false);
-						
-		sock.bindNListen("127.0.0.1",7778,1);
 				
 		ioNetworkExchange conn;
 
 		ioNonBlockedAccess nb;
 		
+		char trimSym[] = {'\r', '\n'};
+
 		while(true)
 		{
 			if (sock.accept(fake))
@@ -49,6 +51,9 @@ int main(int argc, char **argv)
 					{
 						conn.readStreamString(data);
 						cout << data << endl;
+
+						if (stringTools::trim(data, trimSym, 2) == "exit")
+							systemTools::die(data);
 					}
 				}
 			}

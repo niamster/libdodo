@@ -286,6 +286,9 @@ ioDisk::_read(char * const a_void)
 			if (errno == EINTR)
 				continue;
 
+			if (errno == EAGAIN)
+				break;
+
 			if (ferror(file) != 0)
 				throw baseEx(ERRMODULE_IODISK, IODISKEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
@@ -463,6 +466,9 @@ ioDisk::_write(const char *const a_buf)
 			if (errno == EINTR)
 				continue;
 
+			if (errno == EAGAIN)
+				break;
+
 			if (ferror(file) != 0)
 				throw baseEx(ERRMODULE_IODISK, IODISKEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
@@ -584,6 +590,9 @@ ioDisk::_readStream(char * const a_void)
 		{
 			if (errno == EINTR)
 				continue;
+
+			if (errno == EAGAIN)
+				break;
 
 			if (ferror(file) != 0)
 				throw baseEx(ERRMODULE_IODISK, IODISKEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

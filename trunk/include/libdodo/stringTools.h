@@ -67,6 +67,23 @@ namespace dodo
 			 * @param icase defines case sensitivity
 			 */
 			static bool contains(const dodoString &str, const dodoString &needle, bool icase = false);
+			
+			/**
+			 * @return position of needle if it is found
+			 * @param data defines string where to look for the needle
+			 * @param needle defines string which to look for
+			 * @param icase defines case sensitivity
+			 */
+			static unsigned long find(const dodoString &str, const dodoString &needle, bool icase = false);
+			
+			/**
+			 * @return position of needle if it is found
+			 * @param data defines string where to look for the needle
+			 * @param needle defines string which to look for
+			 * @param position defines start position for search
+			 * @param icase defines case sensitivity
+			 */
+			static unsigned long find(const dodoString &str, const dodoString &needle, unsigned long position, bool icase = false);
 
 			/**
 			 * @return formated string

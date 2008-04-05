@@ -65,6 +65,47 @@ stringTools::contains(const dodoString &str,
 
 //-------------------------------------------------------------------
 
+unsigned long 
+stringTools::find(const dodoString &str, 
+					const dodoString &needle,
+					unsigned long position,
+					bool icase)
+{
+	if (position > str.size())
+		return dodoString::npos;
+	
+	char *pos = NULL;
+	
+	if (icase)
+	{
+		if ((pos = strcasestr(str.c_str() + position, needle.c_str())) == NULL)
+			return dodoString::npos;
+		else
+			return (pos - str.c_str());
+	}
+	else
+	{
+		if ((pos = strstr(str.c_str() + position, needle.c_str())) == NULL)
+			return dodoString::npos;
+		else
+			return (pos - str.c_str());
+	}
+	
+	return dodoString::npos;
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+stringTools::find(const dodoString &str, 
+					const dodoString &needle,
+					bool icase)
+{	
+	return find(str, needle, 0, icase);
+}
+
+//-------------------------------------------------------------------
+
 dodoString
 stringTools::format(const dodoString &format, ...)
 {

@@ -51,7 +51,7 @@ using namespace dodo;
 
 //-------------------------------------------------------------------
 
-static unsigned char PADDING[64] = {
+static unsigned char PADDING[] = {
 	0x80, 0,	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0,    0,	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0,    0,	0,    0,	0,    0,	0,    0,	0,    0,	0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -184,7 +184,10 @@ tools::random(void *data,
             if (fread(data, size, 1, file) == 0)
             {
                     if (errno == EINTR)
-                            continue;
+                    	continue;
+
+					if (errno == EAGAIN)
+						break;
 
                     if (ferror(file) != 0)
                     	throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -1570,11 +1573,6 @@ tools::mail(const dodoString &host,
 	ioNetwork net(false, family, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 	net.connect(host, port, ex);
 	
-	ex.setOutBufferSize(TOOLS_SHORT_DATA_SIZE);
-	ex.outSize = TOOLS_SHORT_DATA_SIZE;
-	ex.setInBufferSize(TOOLS_SHORT_DATA_SIZE);
-	ex.inSize = TOOLS_SHORT_DATA_SIZE;
-
 	dodoString mess;
 	
 	ex.readStreamString(mess);

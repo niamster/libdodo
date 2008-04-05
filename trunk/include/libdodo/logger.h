@@ -112,8 +112,8 @@ namespace dodo
 			
 			unsigned long handlersNum;///< number of registered handlers
 			
-			static const dodoString levels[8];
-			static const int syslogLevels[8];
+			static const dodoString levels[8];///< log levels statements
+			static const int syslogLevels[8];///< systemlog log levels
 	};
 
 };

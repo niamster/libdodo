@@ -112,11 +112,6 @@
 #define IONETWORKOPTIONS_SOCKET_LINGER_OPTION     IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE
 
 /**
- * size of the short messages
- */
-#define TOOLS_SHORT_DATA_SIZE    2048
-
-/**
  * max length of the filesystem path
  */
 #define MAXPATHLEN               FILENAME_MAX
