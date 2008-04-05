@@ -654,7 +654,7 @@ ioNetworkExchange::writeStreamString(const dodoString &a_buf)
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 ioNetworkExchange::_readStream(char * const data)
 {
 	memset(data, '\0', inSize);
@@ -677,8 +677,7 @@ ioNetworkExchange::_readStream(char * const data)
 		break;
 	}
 	
-	if (n == inSize)
-		data[n] = '\0';
+	return n;
 }
 
 //-------------------------------------------------------------------
@@ -693,7 +692,9 @@ ioNetworkExchange::readStream(char * const a_void)
 	performXExec(preExec);
 #endif
 
-	_readStream(a_void);
+	unsigned long n = _readStream(a_void);
+	if (n == inSize)
+		a_void[n] = '\0';
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_void;
@@ -720,10 +721,11 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 #endif
 
 	char *data = new char[inSize];
-
+	unsigned long n = 0;
+	
 	try
 	{
-		_readStream(data);
+		n = _readStream(data);
 	}
 	catch (...)
 	{
@@ -733,7 +735,7 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 	}
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
-	buffer = data;
+	buffer.assign(data, n);
 	delete [] data;
 
 	performXExec(postExec);
@@ -741,7 +743,7 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 	a_str = buffer;
 	buffer.clear();
 #else
-	a_str = data;
+	a_str.assign(data, n);
 	delete [] data;
 #endif
 }

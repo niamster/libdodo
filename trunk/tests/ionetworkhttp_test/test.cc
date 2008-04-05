@@ -29,12 +29,17 @@ int main(int argc, char **argv)
 		//res =  http.GET("http://google.com");
 		
 		//res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map);
-		res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map, files);
+		//res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map, files);
+		
+		res =  http.GET("http://static.btmon.com/Audio/Unsorted/Music_Red_Elvises.torrent");
+		
+		
+		ioDiskTools::writeToFile("test.dat", res.data);
 		
 
 		cout << res.code << "\n~~\n";
 		cout << res.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
-		cout << res.data << "\n~~\n";
+		//cout << res.data << "\n~~\n";
 		cout << res.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH] << "\n~~\n";
 		cout << res.data.size() << "\n~~\n";
 	}

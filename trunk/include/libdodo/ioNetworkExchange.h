@@ -231,6 +231,7 @@ namespace dodo
 			 * read from stream - '\0' or '\n' - terminated string
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
+			 * if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
 			 */
 			virtual void readStreamString(dodoString &data);
 
@@ -293,7 +294,7 @@ namespace dodo
 			 * @param data defines buffer that will be filled
 			 * @note not more then inSize(including '\0')
 			 */
-			virtual void _readStream(char * const data);
+			virtual unsigned long _readStream(char * const data);
 
 			/**
 			 * @param data defines data that will be written

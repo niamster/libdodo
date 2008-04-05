@@ -112,18 +112,16 @@ ioNetworkHTTP::GET()
 	
 	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
 	
-	dodoString str = url.protocol; 
-	if (str.size() == 0)
-		str = "http";
+	dodoString protocol = url.protocol; 
+	if (protocol.size() == 0)
+		protocol = "http";
 	
 	int port = stringTools::stringToI(url.port);
 	if (port == 0)
 	{
-		if (stringTools::iequal(str, "http"))
+		if (stringTools::iequal(protocol, "http"))
 			port = 80;
 	}
-	
-	str = url.path + url.request;
 	
 	dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
 	for (;o!=p;++o)
@@ -147,8 +145,9 @@ ioNetworkHTTP::GET()
 	
 	dodoString data;
 	
-	data.append("GET ");
-	data.append(str.size()>0?str:"/");
+	data.append("GET /");
+	data.append(url.path);
+	data.append(url.request);
 	data.append(" HTTP/1.0\r\n");
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (;i!=j;++i)
@@ -306,18 +305,16 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 	
 	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
 	
-	dodoString str = url.protocol; 
-	if (str.size() == 0)
-		str = "http";
+	dodoString protocol = url.protocol; 
+	if (protocol.size() == 0)
+		protocol = "http";
 	
 	int port = stringTools::stringToI(url.port);
 	if (port == 0)
 	{
-		if (stringTools::iequal(str, "http"))
+		if (stringTools::iequal(protocol, "http"))
 			port = 80;
 	}
-	
-	str = url.path + url.request;
 	
 	dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
 	for (;o!=p;++o)
@@ -341,8 +338,9 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 	
 	dodoString data;
 	
-	data.append("POST ");
-	data.append(str.size()>0?str:"/");
+	data.append("POST /");
+	data.append(url.path);
+	data.append(url.request);
 	data.append(" HTTP/1.0\r\n");
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (;i!=j;++i)
@@ -450,13 +448,13 @@ ioNetworkHTTP::getContent(dodoString &data,
 	unsigned long contentSize = 0;
 	bool endOfHeaders = false;
 	
-	try
+	while (true)
 	{
-		while (true)
+		try
 		{
 			ex.readStreamString(data);
 			
-			if (data.size() == 0)
+			if (data.size() == 0 && contentSize <= 0)
 				break;
 			
 			if (endOfHeaders)
@@ -469,15 +467,17 @@ ioNetworkHTTP::getContent(dodoString &data,
 					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
 			}
 			
-			if (response.data.size() == contentSize)
+			if (contentSize > 0 && response.data.size() == contentSize)
 				break;
 		}
+		catch (baseEx &ex)
+		{
+			if (ex.funcID == IONETWORKEXCHANGEEX__READSTREAM)
+				break;
+			else
+				throw;
+		}
 	}
-	catch (baseEx &ex)
-	{
-		if (ex.funcID != IONETWORKEXCHANGEEX__READSTREAM)
-			throw;
-	}	
 }
 
 //-------------------------------------------------------------------
