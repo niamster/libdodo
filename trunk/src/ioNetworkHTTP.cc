@@ -196,8 +196,13 @@ ioNetworkHTTP::GET()
 	data.append("\r\n\r\n");
 	
 	ex.writeStreamString(data);
-
-	getContent(data, ex);
+	
+	if (getContent(data, ex))
+	{
+		url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+		
+		GET();
+	}
 }
 
 //-------------------------------------------------------------------
@@ -400,7 +405,12 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 	ex.outSize = a_data.size();
 	ex.writeString(a_data);
 	
-	getContent(data, ex);
+	if (getContent(data, ex))
+	{
+		url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+		
+		POST(data, type);
+	}
 }
 
 //-------------------------------------------------------------------
@@ -471,7 +481,7 @@ ioNetworkHTTP::extractHeaders(const dodoString &data,
 
 //-------------------------------------------------------------------
 
-void 
+bool 
 ioNetworkHTTP::getContent(dodoString &data, 
 						ioNetworkExchange &ex)
 {
@@ -497,7 +507,16 @@ ioNetworkHTTP::getContent(dodoString &data,
 				endOfHeaders = extractHeaders(data, response);
 				
 				if (endOfHeaders)
+				{
 					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
+
+					if (followRedirection && (response.code / 100) == 3 && response.code != 304)
+					{
+						response.redirected = true;
+					
+						return true;
+					}
+				}
 			}
 			
 			if (contentSize > 0 && response.data.size() == contentSize)
@@ -511,6 +530,8 @@ ioNetworkHTTP::getContent(dodoString &data,
 				throw;
 		}
 	}
+	
+	return false;
 }
 
 //-------------------------------------------------------------------

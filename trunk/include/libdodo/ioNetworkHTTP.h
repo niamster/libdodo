@@ -207,10 +207,11 @@ namespace dodo
 			
 			/**
 			 * get response data and fetch headers
+			 * @return true if redirection is going to be performed
 			 * @param data defines buffer to store response
 			 * @param ex defines network connection
 			 */
-			virtual void getContent(dodoString &data, ioNetworkExchange &ex);
+			virtual bool getContent(dodoString &data, ioNetworkExchange &ex);
 			
 			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS];///< HTTP request headers[see ioNetworkHTTPRequestHeaderEnum]
 			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
