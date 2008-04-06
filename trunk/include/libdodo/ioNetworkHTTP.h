@@ -39,7 +39,7 @@
 
 namespace dodo
 {	
-#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS 10
+#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS 11
 
 	/**
 	 * @enum ioNetworkHTTPRequestHeaderEnum defines HTTP request headers
@@ -56,6 +56,7 @@ namespace dodo
 		IONETWORKHTTP_REQUESTHEADER_DATE,///< the date and time that the message was sent
 		IONETWORKHTTP_REQUESTHEADER_IFMODIFIEDSINCE,///< allows a 304 Not Modified to be returned
 		IONETWORKHTTP_REQUESTHEADER_USERAGENT,///< the user agent string of the user agent
+		IONETWORKHTTP_REQUESTHEADER_COOKIE,///< the user agent string of the user agent
 	};
 
 #define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 16
@@ -135,6 +136,12 @@ namespace dodo
 			 * @param url defines URL
 			 */
 			virtual void setUrl(const dodoString &url);
+			
+			/**
+			 * set cookies for the request
+			 * @param cookies defines cookies
+			 */
+			virtual void setCookies(const dodoStringMap &cookies);
 			
 			/**
 			 * perform GET request

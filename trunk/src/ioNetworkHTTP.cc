@@ -35,6 +35,7 @@ const dodoString ioNetworkHTTP::requestHeaderStatements[] = { "Accept",
 		"Date",
 		"If-Modified-Since",
 		"User-Agent",
+		"Cookie",
 };
 
 //-------------------------------------------------------------------
@@ -106,6 +107,30 @@ void
 ioNetworkHTTP::setUrl(const dodoString &a_url)
 {
 	url = tools::parseURL(a_url);
+}
+
+//-------------------------------------------------------------------
+
+void 
+ioNetworkHTTP::setCookies(const dodoStringMap &cookies)
+{
+	dodoString data;
+	
+	dodoStringMap::const_iterator i = cookies.begin(), j = cookies.end();
+	--j;
+	
+	for (;i!=j;++i)
+	{
+		data.append(i->first);
+		data.append("=");
+		data.append(tools::encodeURL(i->second));
+		data.append("; ");
+	}
+	data.append(i->first);
+	data.append("=");
+	data.append(tools::encodeURL(i->second));
+	
+	requestHeaders[IONETWORKHTTP_REQUESTHEADER_COOKIE] = data;
 }
 
 //-------------------------------------------------------------------
