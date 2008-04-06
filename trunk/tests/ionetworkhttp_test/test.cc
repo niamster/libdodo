@@ -31,11 +31,10 @@ int main(int argc, char **argv)
 
 		http.setCookies(cookies);
 		
-		//res =  http.GET("http://temp.niam.mu/libdodo/cgi_test/test.cgi");
 		res =  http.GET("http://google.com");
-		
-		//res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map);
-		//res =  http.POST("http://temp.niam.mu/libdodo/cgi_test/test.cgi", map, files);
+		//res =  http.GET("http://localhost/libdodo/cgi_test/test.cgi");
+		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
+		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map, files);
 		
 		ioDiskTools::writeToFile("test.dat", res.data);
 		

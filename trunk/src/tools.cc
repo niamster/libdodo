@@ -641,8 +641,8 @@ tools::zDecompress(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 char
-tools::hexToChar(const char first,
-				 const char second)
+tools::hexToChar(char first,
+				 char second)
 {
 	int val = 0;
 
@@ -664,6 +664,9 @@ tools::hexToChar(const char first,
 			break;
 
 		default:
+			
+			if (first > 90)
+				first -= 32;
 
 			val = (16 * (int (first) - 55));
 	}
@@ -686,6 +689,9 @@ tools::hexToChar(const char first,
 			break;
 
 		default:
+			
+			if (second > 90)
+				second -= 32;
 
 			val += (int (second) - 55);
 	}
@@ -697,9 +703,9 @@ tools::hexToChar(const char first,
 
 void
 tools::charToHex(char result[3],
-				 const char first)
+				 char first)
 {
-	sprintf(result, "%02x", first);
+	sprintf(result, "%02X", first);
 }
 
 //-------------------------------------------------------------------
@@ -1098,8 +1104,6 @@ tools::encodeBase64(const dodoString &string)
 				result.append(1, out[i]);
 		}
 	}
-
-	result.append("\r\n");
 
 	return result;
 }
@@ -1533,7 +1537,7 @@ tools::MD5Hex(const dodoString &string)
 
 	for (int i = 0; i < j; ++i)
 	{
-		sprintf(tmp, "%02x", (unsigned char)md5[i]);
+		sprintf(tmp, "%02X", (unsigned char)md5[i]);
 		md5Hex.append(tmp);
 	}
 
@@ -1643,7 +1647,7 @@ tools::mail(const dodoString &host,
 			md5pass.clear();
 			for (short i = 0; i < 16; ++i)
 			{
-				sprintf((char *)ipad, "%02x", digest[i]);
+				sprintf((char *)ipad, "%02X", digest[i]);
 				md5pass.append((char *)ipad);
 			}
 

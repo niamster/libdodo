@@ -37,12 +37,14 @@ namespace dodo
 	enum ioNetworkHTTPExR
 	{
 		IONETWORKHTTPEX_CANNOTCONNECT,
+		IONETWORKHTTPEX_NOTAUTHORIZED
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
 #define IONETWORKHTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
+#define IONETWORKHTTPEX_NOTAUTHORIZED_STR "Aythorization required."
 
 	/**
 	 * IDs of functions where exception might be thrown

@@ -56,6 +56,7 @@ const dodoString ioNetworkHTTP::responseHeaderStatements[] = { "Accept-Ranges",
 		"Last-Modified",
 		"Location",
 		"Server",
+		"WWW-Authenticate",
 };
 
 //-------------------------------------------------------------------
@@ -74,7 +75,8 @@ __httpResponse::__httpResponse() : code(0),
 //-------------------------------------------------------------------
 
 ioNetworkHTTP::ioNetworkHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
-								followRedirection(true)
+								followRedirection(true),
+								authTries(0)
 {	
 	requestHeaders[IONETWORKHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
 	requestHeaders[IONETWORKHTTP_REQUESTHEADER_ACCEPT] = "*/*";
@@ -197,11 +199,40 @@ ioNetworkHTTP::GET()
 	
 	ex.writeStreamString(data);
 	
-	if (getContent(data, ex))
+	switch (getContent(data, ex))
 	{
-		url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
-		
-		GET();
+		case GETCONTENTSTATUS_NORMAL:
+			
+			break;
+			
+		case GETCONTENTSTATUS_REDIRECT:
+			
+			url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+			
+			GET();
+			
+			break;
+			
+		case GETCONTENTSTATUS_BASICAUTH:
+			
+			if (authTries > 2)
+			{
+				authTries = 0;
+				
+				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+			
+			requestHeaders[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION] = "Basic " + tools::encodeBase64(url.login + ":" + url.password);
+			
+			GET();
+			
+			break;
+			
+		case GETCONTENTSTATUS_DIGESTAUTH:
+			
+			
+			
+			break;
 	}
 }
 
@@ -405,11 +436,40 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 	ex.outSize = a_data.size();
 	ex.writeString(a_data);
 	
-	if (getContent(data, ex))
+	switch (getContent(data, ex))
 	{
-		url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
-		
-		POST(data, type);
+		case GETCONTENTSTATUS_NORMAL:
+			
+			break;
+			
+		case GETCONTENTSTATUS_REDIRECT:
+			
+			url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+			
+			POST(data, type);
+			
+			break;
+			
+		case GETCONTENTSTATUS_BASICAUTH:
+			
+			if (authTries > 2)
+			{
+				authTries = 0;
+				
+				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+			
+			requestHeaders[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION] = "Basic " + tools::encodeBase64(url.login + ":" + url.password);
+			
+			POST(data, type);
+			
+			break;
+			
+		case GETCONTENTSTATUS_DIGESTAUTH:
+			
+			
+			
+			break;
 	}
 }
 
@@ -481,12 +541,12 @@ ioNetworkHTTP::extractHeaders(const dodoString &data,
 
 //-------------------------------------------------------------------
 
-bool 
+short 
 ioNetworkHTTP::getContent(dodoString &data, 
 						ioNetworkExchange &ex)
 {
-	ex.setInBufferSize(8096);
-	ex.inSize = 8096;
+	ex.setInBufferSize(1024);
+	ex.inSize = 1024;
 	
 	unsigned long contentSize = 0;
 	bool endOfHeaders = false;
@@ -514,8 +574,22 @@ ioNetworkHTTP::getContent(dodoString &data,
 					{
 						response.redirected = true;
 					
-						return true;
+						return GETCONTENTSTATUS_REDIRECT;
 					}
+					
+					if (response.code == 401)
+					{
+						++authTries;
+						
+						if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+							return GETCONTENTSTATUS_BASICAUTH;
+						else 
+							if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
+								return GETCONTENTSTATUS_DIGESTAUTH;
+					}
+					
+					ex.setInBufferSize(8192);
+					ex.inSize = 8192;
 				}
 			}
 			
@@ -531,7 +605,9 @@ ioNetworkHTTP::getContent(dodoString &data,
 		}
 	}
 	
-	return false;
+	authTries = 0;
+	
+	return GETCONTENTSTATUS_NORMAL;
 }
 
 //-------------------------------------------------------------------

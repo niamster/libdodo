@@ -59,7 +59,7 @@ namespace dodo
 		IONETWORKHTTP_REQUESTHEADER_COOKIE,///< the user agent string of the user agent
 	};
 
-#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 16
+#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 17
 	
 	/**
 	 * @enum ioNetworkHTTPResponseHeaderEnum defines HTTP response headers
@@ -82,6 +82,7 @@ namespace dodo
 		IONETWORKHTTP_RESPONSEHEADER_LASTMODIFIED,///< the last modified date for the requested object
 		IONETWORKHTTP_RESPONSEHEADER_LOCATION,///< used in redirection
 		IONETWORKHTTP_RESPONSEHEADER_SERVER,///< a name for the server
+		IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE,///< auuthentification request
 	};
 	
 	/**
@@ -206,12 +207,25 @@ namespace dodo
 		private:
 			
 			/**
+			 * @enum getContentStatus defines status of getContent routine
+			 */
+			enum getContentStatusEnum
+			{
+				GETCONTENTSTATUS_NORMAL,
+				GETCONTENTSTATUS_REDIRECT,
+				GETCONTENTSTATUS_BASICAUTH,
+				GETCONTENTSTATUS_DIGESTAUTH
+			};
+			
+			/**
 			 * get response data and fetch headers
 			 * @return true if redirection is going to be performed
 			 * @param data defines buffer to store response
 			 * @param ex defines network connection
 			 */
-			virtual bool getContent(dodoString &data, ioNetworkExchange &ex);
+			virtual short getContent(dodoString &data, ioNetworkExchange &ex);
+			
+			unsigned short authTries;///< autherization request counter
 			
 			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS];///< HTTP request headers[see ioNetworkHTTPRequestHeaderEnum]
 			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
