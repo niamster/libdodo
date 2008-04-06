@@ -88,9 +88,15 @@ namespace dodo
 	 */
 	struct __httpResponse
 	{
+		/**
+		 * constructor
+		 */
+		__httpResponse();
+		
 		dodoMap<short, dodoString> headers; ///< response headers[see ioNetworkHTTPResponseHeaderEnum]
 		dodoString data; ///< response data
 		short code; ///< response code
+		bool redirected;///< true if redirection was performeed
 	};
 	
 	/**
@@ -187,6 +193,8 @@ namespace dodo
 			 * @param files defines path to files
 			 */
 			virtual void POST(const dodoStringMap &arguments, const dodoStringMap &files);
+			
+			bool followRedirection;///< if true follow the `Location` header; true by default
 
 		private:
 			

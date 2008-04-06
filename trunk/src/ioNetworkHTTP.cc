@@ -65,7 +65,15 @@ const char ioNetworkHTTP::trimSymbols[] = {' ',
 
 //-------------------------------------------------------------------
 
-ioNetworkHTTP::ioNetworkHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$")
+__httpResponse::__httpResponse() : code(0),
+								redirected(false)
+{
+}
+
+//-------------------------------------------------------------------
+
+ioNetworkHTTP::ioNetworkHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
+								followRedirection(true)
 {	
 	requestHeaders[IONETWORKHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
 	requestHeaders[IONETWORKHTTP_REQUESTHEADER_ACCEPT] = "*/*";

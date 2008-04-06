@@ -73,6 +73,14 @@ bool systemTools::handlesOpenedSig[] = { false,
 
 //-------------------------------------------------------------------
 
+pthread_mutex_t systemTools::staticAtomicMutex::mutex;
+
+//-------------------------------------------------------------------
+
+systemTools::staticAtomicMutex systemTools::mutex;
+
+//-------------------------------------------------------------------
+
 systemTools::staticAtomicMutex::staticAtomicMutex()
 {
 	pthread_mutexattr_t attr;

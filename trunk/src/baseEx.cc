@@ -239,6 +239,14 @@ void *baseEx::handlesEx[] = { NULL,
 
 //-------------------------------------------------------------------
 
+pthread_mutex_t baseEx::staticAtomicMutex::mutex;
+
+//-------------------------------------------------------------------
+
+baseEx::staticAtomicMutex baseEx::mutex;
+
+//-------------------------------------------------------------------
+
 baseEx::staticAtomicMutex::staticAtomicMutex()
 {
 	pthread_mutexattr_t attr;
