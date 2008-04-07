@@ -253,7 +253,7 @@ namespace dodo
 			dodoStringMap GET;                                       ///< GET variables
 			dodoMap<short, dodoString> ENVIRONMENT;                  ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                          ///< cookies sent by browser
-			dodoMap<dodoString, __cgiFile, stringTools::equal> FILES;       ///< POST files
+			dodoMap<dodoString, __cgiFile, dodoMapStringCompare> FILES;       ///< POST files
 
 			/**
 			 * @return value of the requested variable from POST or GET

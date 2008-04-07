@@ -64,7 +64,7 @@ jsonNode::jsonNode(const dodoArray<jsonNode> &value) : valueDataType(JSON_DATATY
 
 //-------------------------------------------------------------------
 
-jsonNode::jsonNode(const dodoMap<dodoString, jsonNode, stringTools::equal> &value) : valueDataType(JSON_DATATYPE_OBJECT),
+jsonNode::jsonNode(const dodoMap<dodoString, jsonNode, dodoMapStringCompare> &value) : valueDataType(JSON_DATATYPE_OBJECT),
 											objectValue(value)
 {
 	
@@ -123,7 +123,7 @@ void
 jsonNode::addObjectMember(const dodoString &name, 
 								const jsonNode &value)
 {
-	objectValue.insert(name, value);
+	objectValue.insert(make_pair(name, value));
 }
 
 //-------------------------------------------------------------------
@@ -137,7 +137,7 @@ jsonNode::setArray(const dodoArray<jsonNode> &value)
 //-------------------------------------------------------------------
 
 void 
-jsonNode::setObject(const dodoMap<dodoString, jsonNode, stringTools::equal> &value)
+jsonNode::setObject(const dodoMap<dodoString, jsonNode, dodoMapStringCompare> &value)
 {
 	objectValue = value;
 }
@@ -221,7 +221,7 @@ jsonNode::getArray()
 
 //-------------------------------------------------------------------
 
-dodoMap<dodoString, jsonNode, stringTools::equal>
+dodoMap<dodoString, jsonNode, dodoMapStringCompare>
 jsonNode::getObject()
 {
 	if (valueDataType != JSON_DATATYPE_OBJECT)

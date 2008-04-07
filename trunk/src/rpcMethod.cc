@@ -59,7 +59,7 @@ void
 rpcMethod::addArgument(const dodoString &name,
 					const rpcValue &argument)
 {
-	arguments.insert(name, argument);
+	arguments.insert(make_pair(name, argument));
 }
 
 //-------------------------------------------------------------------

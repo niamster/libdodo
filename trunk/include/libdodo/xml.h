@@ -51,7 +51,7 @@ namespace dodo
 
 		dodoString name;                                                                ///< name of the node [[tag]]
 
-		dodoMap<dodoString, dodoArray<__xmlNode>, stringTools::equal> children;         ///< children
+		dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare> children;         ///< children
 
 		dodoStringMap attributes;                                                       ///< attributes
 
@@ -78,7 +78,7 @@ namespace dodo
 
 		dodoString name;                                    ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-		std::map<dodoString, __xmlNodeDef> children;        ///< children definitions
+		dodoMap<dodoString, __xmlNodeDef> children;        ///< children definitions
 
 		long chLimit;                                       ///< limit of children to search for[-1 for unlimit, default]
 		bool ignoreChildrenDef;                             ///< if true - parse all children tree if no children definition is given; false by default

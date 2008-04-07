@@ -72,7 +72,7 @@ rpcValue::rpcValue(const dodoArray<rpcValue> &value) : valueDataType(RPC_DATATYP
 
 //-------------------------------------------------------------------
 
-rpcValue::rpcValue(const dodoMap<dodoString, rpcValue, stringTools::equal> &value) : valueDataType(RPC_DATATYPE_STRUCT),
+rpcValue::rpcValue(const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &value) : valueDataType(RPC_DATATYPE_STRUCT),
 						structValue(value)
 {
 	
@@ -149,7 +149,7 @@ void
 rpcValue::addStructMember(const dodoString &name, 
 								const rpcValue &value)
 {
-	structValue.insert(name, value);
+	structValue.insert(make_pair(name, value));
 }
 
 //-------------------------------------------------------------------
@@ -163,7 +163,7 @@ rpcValue::setArray(const dodoArray<rpcValue> &value)
 //-------------------------------------------------------------------
 
 void 
-rpcValue::setStruct(const dodoMap<dodoString, rpcValue, stringTools::equal> &value)
+rpcValue::setStruct(const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &value)
 {
 	structValue = value;
 }
@@ -260,7 +260,7 @@ rpcValue::getArray()
 
 //-------------------------------------------------------------------
 
-dodoMap<dodoString, rpcValue, stringTools::equal> 
+dodoMap<dodoString, rpcValue, dodoMapStringCompare> 
 rpcValue::getStruct()
 {
 	if (valueDataType != RPC_DATATYPE_STRUCT)

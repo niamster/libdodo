@@ -221,12 +221,12 @@ namespace dodo
 			dodoList<dodoString> processed;                                         ///< files that will be skipped due to the recursion
 
 			dodoStringMap global;                                                   ///< set of global variables[user-set]
-			std::map<dodoString, dodoStringArray> globalArray;                      ///< global user-defined variables(arrays)
-			std::map<dodoString, dodoStringMap> globalHash;                         ///< global user-defined variables(hashes)
-			std::map<dodoString, dodoArray<dodoStringMap> > globalArrayHash;        ///< global user-defined variables(array of hashes)
+			dodoMap<dodoString, dodoStringArray> globalArray;                      ///< global user-defined variables(arrays)
+			dodoMap<dodoString, dodoStringMap> globalHash;                         ///< global user-defined variables(hashes)
+			dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;        ///< global user-defined variables(array of hashes)
 
 			dodoStringMap local;                                                    ///< local variables[occur in `for` block]
-			std::map<dodoString, dodoStringMap> localHash;                          ///< local variables(hashes)[occur in `for` block]
+			dodoMap<dodoString, dodoStringMap> localHash;                          ///< local variables(hashes)[occur in `for` block]
 
 			dodoStringMap dodo;                                                     ///< auxillary variables[dodo defined][for dodo.*]
 
@@ -238,8 +238,8 @@ namespace dodo
 			unsigned long iterator;                                                 ///< amount of iterations of the loop
 
 			unsigned int namespaceDeepness;                                         ///< deepness of the namespace
-			std::map<unsigned int, dodoStringMap> localNamespace;                   ///< local variables invisible due to overwrite in deeper namespace
-			std::map<unsigned int, dodoStringArray> namespaceVars;                  ///< names of vars in namespaces
+			dodoMap<unsigned int, dodoStringMap> localNamespace;                   ///< local variables invisible due to overwrite in deeper namespace
+			dodoMap<unsigned int, dodoStringArray> namespaceVars;                  ///< names of vars in namespaces
 
 			cgi &CGI;                                                               ///< cgi object through what output will be performed
 	};

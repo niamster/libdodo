@@ -545,8 +545,8 @@ short
 ioNetworkHTTP::getContent(dodoString &data, 
 						ioNetworkExchange &ex)
 {
-	ex.setInBufferSize(1024);
-	ex.inSize = 1024;
+	ex.setInBufferSize(2048);
+	ex.inSize = 2048;
 	
 	unsigned long contentSize = 0;
 	bool endOfHeaders = false;
@@ -588,8 +588,8 @@ ioNetworkHTTP::getContent(dodoString &data,
 								return GETCONTENTSTATUS_DIGESTAUTH;
 					}
 					
-					ex.setInBufferSize(8192);
-					ex.inSize = 8192;
+					ex.setInBufferSize(16384);
+					ex.inSize = 16384;
 				}
 			}
 			

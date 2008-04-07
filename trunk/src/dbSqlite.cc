@@ -637,13 +637,13 @@ dbSqlite::fetchAssoc() const
 					{
 						case SQLITE_INTEGER:
 
-							rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), stringTools::lToString(sqlite3_column_int(liteStmt, i)));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), stringTools::lToString(sqlite3_column_int(liteStmt, i))));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), stringTools::dToString(sqlite3_column_double(liteStmt, i)));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), stringTools::dToString(sqlite3_column_double(liteStmt, i))));
 
 							break;
 
@@ -651,9 +651,9 @@ dbSqlite::fetchAssoc() const
 
 							rowPart = (const char *)sqlite3_column_text(liteStmt, i);
 							if (preventEscaping)
-								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), rowPart);
+								rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), rowPart));
 							else
-								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), unescapeFields(rowPart));
+								rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), unescapeFields(rowPart)));
 
 							break;
 
@@ -661,16 +661,16 @@ dbSqlite::fetchAssoc() const
 
 							rowPart.assign((const char *)sqlite3_column_blob(liteStmt, i), sqlite3_column_bytes(liteStmt, i));
 							if (preventEscaping)
-								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), rowPart);
+								rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), rowPart));
 							else
-								rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), unescapeFields(rowPart));
+								rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), unescapeFields(rowPart)));
 
 							break;
 
 						case SQLITE_NULL:
 						default:
 
-							rowFieldsPart.insert(sqlite3_column_name(liteStmt, i), "NULL");
+							rowFieldsPart.insert(make_pair(dodoString(sqlite3_column_name(liteStmt, i)), "NULL"));
 
 							break;
 					}

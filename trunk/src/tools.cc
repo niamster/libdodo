@@ -345,9 +345,9 @@ tools::isInArray(const dodoStringArray &arr,
 	bool (*cmpFunc)(const dodoString &, const dodoString &);
 
 	if (icase)
-		cmpFunc = stringTools::iequal;
-	else
 		cmpFunc = stringTools::equal;
+	else
+		cmpFunc = stringTools::iequal;
 
 	dodoStringArray::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)

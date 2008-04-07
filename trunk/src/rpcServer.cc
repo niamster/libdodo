@@ -41,7 +41,7 @@ rpcServer::~rpcServer()
 
 rpcResponse 
 rpcServer::rpcDefaultHandler(const dodoString &method, 
-		const dodoMap<dodoString, rpcValue, stringTools::equal> &arguments)
+		const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &arguments)
 {
 	return rpcResponse();
 }
@@ -60,7 +60,7 @@ void
 rpcServer::setHandler(const dodoString &method, 
 					rpcHandler handler)
 {
-	handlers.insert(method, handler);
+	handlers.insert(make_pair(method, handler));
 }
 
 //-------------------------------------------------------------------
@@ -78,9 +78,9 @@ rpcServer::serve()
 {
 	rpcMethod method = processRPCCall(receiveTextResponse());
 	
-	dodoMap<dodoString, rpcHandler, stringTools::equal>::iterator end = handlers.end();
+	dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator end = handlers.end();
 	
-	dodoMap<dodoString, rpcHandler, stringTools::equal>::iterator handler = handlers.find(method.name);
+	dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
 	if (handler == end)
 		sendTextRequest(processRPCCallResult(defaultHandler(method.name, method.arguments)));
 	else

@@ -169,7 +169,7 @@ dbPostgresql::_exec(const dodoString &query,
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 
-				if (!framingFields.isset(temp))
+				if (framingFields.find(temp) == framingFields.end())
 				{
 					request = "select column_name, data_type from information_schema.columns where table_name='" + pre_table + "'";
 
@@ -223,7 +223,7 @@ dbPostgresql::_exec(const dodoString &query,
 						empty = true;
 					}
 
-					framingFields.insert(temp, rowsPart);
+					framingFields.insert(make_pair(temp, rowsPart));
 				}
 			}
 		}
@@ -553,7 +553,7 @@ dbPostgresql::fetchAssoc() const
 					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
 			}
 
-			rowFieldsPart.insert(PQfname(pgResult, j), rowPart);
+			rowFieldsPart.insert(make_pair(PQfname(pgResult, j), rowPart));
 		}
 
 		rowsFields.push_back(rowFieldsPart);

@@ -259,7 +259,7 @@ dbMysql::_exec(const dodoString &query,
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 
-				if (!framingFields.isset(temp))
+				if (framingFields.find(temp) == framingFields.end())
 				{
 					request = "describe " + pre_table;
 
@@ -304,7 +304,7 @@ dbMysql::_exec(const dodoString &query,
 
 					empty = true;
 
-					framingFields.insert(temp, rowsPart);
+					framingFields.insert(make_pair(temp, rowsPart));
 				}
 			}
 		}
@@ -312,10 +312,7 @@ dbMysql::_exec(const dodoString &query,
 		queryCollect();
 	}
 	else
-	{
-		if (stringTools::equal(query, "dodo:hint:db:blob"))
-			throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_LIBDODO, DBMYSQLEX_WRONGHINTUSAGE, DBMYSQLEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
-		
+	{	
 		request = query;
 		show = result;
 	}
@@ -620,9 +617,9 @@ dbMysql::fetchAssoc() const
 		{
 			rowPart.assign(mysqlRow[j] != NULL ? mysqlRow[j] : "NULL", mysqlRow[j] ? length[j] : 4);
 			if (preventEscaping)
-				rowFieldsPart.insert(mysqlFields[j].name, rowPart);
+				rowFieldsPart.insert(make_pair(mysqlFields[j].name, rowPart));
 			else
-				rowFieldsPart.insert(mysqlFields[j].name, unescapeFields(rowPart));
+				rowFieldsPart.insert(make_pair(mysqlFields[j].name, unescapeFields(rowPart)));
 		}
 
 		rowsFields.push_back(rowFieldsPart);

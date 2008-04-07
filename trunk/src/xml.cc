@@ -173,9 +173,9 @@ xml::parse(const __xmlNodeDef &definition)
 
 	if (definition.children.size() > 0)
 	{
-		std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+		dodoMap<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 		for (; i != j; ++i)
-			sample.children.insert(i->first, parse(i->second, node->children, definition.chLimit));
+			sample.children.insert(make_pair(i->first, parse(i->second, node->children, definition.chLimit)));
 	}
 	else
 	{
@@ -291,9 +291,9 @@ xml::parse(const __xmlNodeDef &definition,
 
 		if (definition.children.size() > 0)
 		{
-			std::map<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
+			dodoMap<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (; i != j; ++i)
-				sample.children.insert(i->first, parse(i->second, node->children, definition.chLimit));
+				sample.children.insert(make_pair(i->first, parse(i->second, node->children, definition.chLimit)));
 
 		}
 		else
@@ -741,7 +741,7 @@ xml::createNode(const __xmlNode &node) const
 		xml.append("\" ");
 	}
 
-	dodoMap<dodoString, dodoString, stringTools::equal>::const_iterator i = node.attributes.begin(), j = node.attributes.end();
+	dodoMap<dodoString, dodoString, dodoMapStringCompare>::const_iterator i = node.attributes.begin(), j = node.attributes.end();
 	for (; i != j; ++i)
 	{
 		xml.append(i->first);
@@ -772,7 +772,7 @@ xml::createNode(const __xmlNode &node) const
 		}
 	}
 
-	dodoMap<dodoString, dodoArray<__xmlNode>, stringTools::equal>::const_iterator o = node.children.begin(), p = node.children.end();
+	dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare>::const_iterator o = node.children.begin(), p = node.children.end();
 	dodoArray<__xmlNode>::const_iterator x, y;
 	for (; o != p; ++o)
 	{

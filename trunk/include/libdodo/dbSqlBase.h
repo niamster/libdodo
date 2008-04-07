@@ -251,7 +251,7 @@ namespace dodo
 			 */
 			virtual dodoString stringReference(int type);
 
-			dodoMap<dodoString, dodoStringArray, stringTools::iequal> framingFields;   ///< hash of 'db:table' => `array of fields to frame`
+			dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;   ///< hash of 'db:table' => `array of fields to frame`
 
 		private:
 

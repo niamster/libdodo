@@ -88,7 +88,7 @@ namespace dodo
 			 * constructor
 			 * @param value defines object value
 			 */
-			jsonNode(const dodoMap<dodoString, jsonNode, stringTools::equal> &value);
+			jsonNode(const dodoMap<dodoString, jsonNode, dodoMapStringCompare> &value);
 
 			/**
 			 * destructor
@@ -142,7 +142,7 @@ namespace dodo
 			 * set struct value
 			 * @param value defines struct value
 			 */
-			virtual void setObject(const dodoMap<dodoString, jsonNode, stringTools::equal> &value);
+			virtual void setObject(const dodoMap<dodoString, jsonNode, dodoMapStringCompare> &value);
 
 			/**
 			 * @return node by string key
@@ -196,7 +196,7 @@ namespace dodo
 			 * @return object value
 			 * @note throws exception if data type is not JSON_DATATYPE_OBJECT
 			 */
-			virtual dodoMap<dodoString, jsonNode, stringTools::equal> getObject();
+			virtual dodoMap<dodoString, jsonNode, dodoMapStringCompare> getObject();
 
 			/**
 			 * clear internal data
@@ -206,7 +206,7 @@ namespace dodo
 		private:
 
 			dodoString stringValue;                                         ///< string value of node
-			dodoMap<dodoString, jsonNode, stringTools::equal> objectValue;  ///< object value of node
+			dodoMap<dodoString, jsonNode, dodoMapStringCompare> objectValue;  ///< object value of node
 			dodoArray<jsonNode> arrayValue;                                 ///< array value of node
 			bool booleanValue;                                              ///< boolean value of node
 			long numericValue;                                              ///< numeric value of node

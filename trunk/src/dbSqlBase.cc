@@ -316,7 +316,7 @@ dbSqlBase::insertCollect()
 
 	dodoArray<dodoStringArray>::iterator k(pre_values.begin()), l(pre_values.end());
 
-	std::map<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
+	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fields.size() != 0)
 	{
@@ -444,7 +444,7 @@ dbSqlBase::updateCollect()
 {
 	dodoString setPart;
 
-	std::map<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
+	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + ":" + pre_table);
 
 	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fields.size() != 0)
 	{

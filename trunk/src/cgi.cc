@@ -296,7 +296,7 @@ cgi::clearContent()
 void
 cgi::cleanTmp()
 {
-	std::map<dodoString, __cgiFile>::iterator i(FILES.begin()), j(FILES.end());
+	dodoMap<dodoString, __cgiFile>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
 	{
 		if (!postFilesInMem)
@@ -345,7 +345,7 @@ cgi::make(dodoStringMap &val,
 	{
 		temp = tools::explode(*l, "=");
 		if (temp.size() > 1)
-			val.insert(temp[0], temp[1]);
+			val.insert(make_pair(temp[0], temp[1]));
 	}
 }
 
@@ -376,14 +376,12 @@ cgi::initHeaders(dodoStringMap &headers)
 {
 	if (headers.size() > 0)
 	{
-		dodoStringMap::iterator i(headers.begin()), j(headers.end());
-		for (; i != j; ++i)
-			HEADERS.insert(i->first, i->second);
+		HEADERS.insert(headers.begin(), headers.end());
 	}
 	else
 	{
-		HEADERS.insert("Content-type", "text/html");
-		HEADERS.insert("X-Powered-By", PACKAGE_NAME "/" PACKAGE_VERSION);
+		HEADERS.insert(make_pair(dodoString("Content-type"), "text/html"));
+		HEADERS.insert(make_pair(dodoString("X-Powered-By"), PACKAGE_NAME "/" PACKAGE_VERSION));
 	}
 }
 
@@ -522,7 +520,7 @@ cgi::makePost()
 								delete [] ptr;
 		
 								file.error = CGI_POSTFILEERR_BAD_FILE_NAME;
-								FILES.insert(post_name, file);
+								FILES.insert(make_pair(post_name, file));
 		
 								continue;
 							}
@@ -581,7 +579,7 @@ cgi::makePost()
 							}
 						}
 		
-						FILES.insert(post_name, file);
+						FILES.insert(make_pair(post_name, file));
 					}
 					else
 					{	
@@ -591,7 +589,7 @@ cgi::makePost()
 						temp0 += 6;
 						temp1 = i->find("\"", temp0);
 		
-						POST.insert(i->substr(temp0, temp1 - temp0), i->substr(temp1 + 5, i->size() - temp1 - 7));
+						POST.insert(make_pair(i->substr(temp0, temp1 - temp0), i->substr(temp1 + 5, i->size() - temp1 - 7)));
 					}
 				}
 			}

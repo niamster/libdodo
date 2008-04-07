@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 			cout << pp.queryCollect() << endl;
 			pp.exec();
 			
-			map<dodoString,dodoString> arr;
+			dodoStringMap arr;
 			arr["date"] = "2005-07-08";
 			arr["operation"] = "mu";
 			

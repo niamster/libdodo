@@ -55,9 +55,9 @@ int main(int argc, char **argv)
 		{		
 			case JSON_DATATYPE_OBJECT:
 
-				dodoMap<dodoString, jsonNode, stringTools::equal> objectValue = jsN.getObject();
+				dodoMap<dodoString, jsonNode, dodoMapStringCompare> objectValue = jsN.getObject();
 				cout << "size: " << objectValue.size() << endl;
-				std::map<dodoString, jsonNode>::iterator i = objectValue.begin(), j = objectValue.end();
+				dodoMap<dodoString, jsonNode>::iterator i = objectValue.begin(), j = objectValue.end();
 				
 				for (;i!=j;++i)
 				{

@@ -58,7 +58,7 @@ json::makeJSON(const jsonNode &root)
 		{
 			dodoString jsonObject = "{";
 
-			dodoMap<dodoString, jsonNode, stringTools::equal>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
+			dodoMap<dodoString, jsonNode, dodoMapStringCompare>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
 			if (i != j)
 			{
 				for (--j; i != j; ++i)
@@ -333,7 +333,7 @@ json::processNumeric(long &node,
 //-------------------------------------------------------------------
 
 unsigned long
-json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
+json::processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node,
 					const dodoString &root,
 					unsigned long pos)
 {
@@ -366,7 +366,7 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
 						i = processValue(subNodeValue, root, i);
-						node.insert(subNodeName, subNodeValue);
+						node.insert(make_pair(subNodeName, subNodeValue));
 
 						state = JSON_STATE_OBJECT_OBJECTNAME;
 					}
@@ -401,7 +401,7 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
 						i = processValue(subNodeValue, root, i);
-						node.insert(subNodeName, subNodeValue);
+						node.insert(make_pair(subNodeName, subNodeValue));
 
 						state = JSON_STATE_OBJECT_OBJECTNAME;
 					}
@@ -412,7 +412,7 @@ json::processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node,
 				if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 				{
 					i = processValue(subNodeValue, root, i);
-					node.insert(subNodeName, subNodeValue);
+					node.insert(make_pair(subNodeName, subNodeValue));
 
 					state = JSON_STATE_OBJECT_OBJECTNAME;
 				}
@@ -450,7 +450,7 @@ json::mapToJSON(const dodoStringMap &root)
 	for (; i != j; ++i)
 	{
 		subNodeDef.stringValue = i->second;
-		nodeDef.objectValue.insert(i->first, subNodeDef);
+		nodeDef.objectValue.insert(make_pair(i->first, subNodeDef));
 	}
 
 	return makeJSON(nodeDef);
@@ -465,9 +465,9 @@ json::JSONToMap(const dodoString &node)
 
 	dodoStringMap map;
 
-	dodoMap<dodoString, jsonNode, stringTools::equal>::iterator i = JSON.objectValue.begin(), j = JSON.objectValue.end();
+	dodoMap<dodoString, jsonNode, dodoMapStringCompare>::iterator i = JSON.objectValue.begin(), j = JSON.objectValue.end();
 	for (; i != j; ++i)
-		map.insert(i->first, i->second.stringValue);
+		map.insert(make_pair(i->first, i->second.stringValue));
 
 	return map;
 }

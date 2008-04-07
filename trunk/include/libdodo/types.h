@@ -73,19 +73,10 @@ namespace dodo
 
 #define dodoList std::list
 
-	typedef dodoMap<dodoString, dodoString, stringTools::equal> dodoStringMap;      ///< hash of strings
+	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;      ///< hash of strings
+	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
 
 	typedef dodoArray<dodoStringMap> dodoStringMapArray;                            ///< array of hashes of string
-
-	struct __statements_pchar
-	{
-		const char *str;
-	};
-	
-	struct __statements_dodostring
-	{
-		const dodoString str;
-	};
 
 	/**
 	 * diferent predifined constants

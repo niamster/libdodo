@@ -109,7 +109,7 @@ namespace dodo
 			 * @param root defines serialized JSON string object
 			 * @param pos defines start position for parsing in serialized JSON string object
 			 */
-			virtual unsigned long processObject(dodoMap<dodoString, jsonNode, stringTools::equal> &node, const dodoString &root, unsigned long pos);
+			virtual unsigned long processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node, const dodoString &root, unsigned long pos);
 
 			/**
 			 * process json value

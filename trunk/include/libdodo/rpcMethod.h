@@ -71,7 +71,7 @@ namespace dodo
 			
 		private:
 			
-			dodoMap<dodoString, rpcValue, stringTools::equal> arguments;///< method arguments
+			dodoMap<dodoString, rpcValue, dodoMapStringCompare> arguments;///< method arguments
 			dodoString name;///< method name
 	};
 };

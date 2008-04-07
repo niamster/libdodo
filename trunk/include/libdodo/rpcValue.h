@@ -96,7 +96,7 @@ namespace dodo
 			 * constructor
 			 * @param value defines object value
 			 */
-			rpcValue(const dodoMap<dodoString, rpcValue, stringTools::equal> &value);
+			rpcValue(const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &value);
 
 			/**
 			 * destructor
@@ -161,7 +161,7 @@ namespace dodo
 			 * set struct value
 			 * @param value defines struct value
 			 */
-			virtual void setStruct(const dodoMap<dodoString, rpcValue, stringTools::equal> &value);
+			virtual void setStruct(const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &value);
 			
 			/**
 			 * @return structure member
@@ -216,7 +216,7 @@ namespace dodo
 			 * get struct value
 			 * @note throws exception if data type is not RPC_DATATYPE_STRUCT
 			 */
-			virtual dodoMap<dodoString, rpcValue, stringTools::equal> getStruct();
+			virtual dodoMap<dodoString, rpcValue, dodoMapStringCompare> getStruct();
 			
 		protected:
 			
@@ -227,7 +227,7 @@ namespace dodo
 			bool booleanValue;///< boolean value
 			double doubleValue;///< double value
 			dodoArray<rpcValue> arrayValue;///< array value
-			dodoMap<dodoString, rpcValue, stringTools::equal> structValue;///< struct value
+			dodoMap<dodoString, rpcValue, dodoMapStringCompare> structValue;///< struct value
 	};
 };
 

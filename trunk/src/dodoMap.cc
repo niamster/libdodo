@@ -1,8 +1,8 @@
 /***************************************************************************
- *            dbMysqlEx.h
+ *            dodoMap.cc
  *
- *  Thu Jul  7 00:25:19 2005
- *  Copyright  2005  Ni@m
+ *  Mon Apr 07 23:39:55 2008
+ *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,23 +21,25 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _DBMYSQLEX_H_
-#define _DBMYSQLEX_H_
+#include <libdodo/dodoMap.h>
 
-#include <libdodo/directives.h>
+using namespace dodo;
 
-#include <libdodo/baseEx.h>
-
-namespace dodo
+bool
+dodoMapStringCompare::operator()(const dodoString &first, 
+								const dodoString &second)
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum dbMysqlFunctionsID
-	{
-		DBMYSQLEX_CONNECT,
-		DBMYSQLEX__EXEC,
-	};
-};
+	return strcmp(first.c_str(), second.c_str()) < 0 ? true : false;
+}
 
-#endif
+//-------------------------------------------------------------------
+
+bool
+dodoMapICaseStringCompare::operator()(const dodoString &first, 
+								const dodoString &second)
+{
+	return strcasecmp(first.c_str(), second.c_str()) < 0 ? true : false;
+}
+
+//-------------------------------------------------------------------
+
