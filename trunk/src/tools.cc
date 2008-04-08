@@ -705,7 +705,21 @@ void
 tools::charToHex(char result[3],
 				 char first)
 {
-	sprintf(result, "%02X", first);
+	unsigned char j;
+
+	j = (first >> 4) & 0xf;
+	if (j <= 9)
+		result[0] = (j + '0');
+	else
+		result[0] = (j + 'A' - 10);
+	
+	j = first & 0xf;
+	if (j <= 9)
+		result[1] = (j + '0');
+	else
+		result[1] = (j + 'A' - 10);
+	
+	result[2] = '\0';
 }
 
 //-------------------------------------------------------------------
@@ -1234,6 +1248,14 @@ tools::parseURL(const dodoString &url)
 	}
 
 	return temp;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+tools::makeURL(const __url &url)
+{
+	return url.protocol + "://" + url.login + ":" + url.password + "@" + url.host + ":" + url.port + "/" + url.path + "?" + url.request;
 }
 
 //-------------------------------------------------------------------
