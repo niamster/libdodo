@@ -501,7 +501,7 @@ cgi::makePost()
 						temp0 = stringTools::find(*i, "Content-Type: ", temp1, true);
 						temp0 += 14;
 						temp1 = i->find("\n", temp0);
-						file.type = i->substr(temp0, temp1 - temp0);
+						file.type = tools::explode(i->substr(temp0, temp1 - temp0), ";")[0];
 						temp1 += 3;
 		
 						file.size = i->size() - temp1 - 2;
