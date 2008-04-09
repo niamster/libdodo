@@ -143,7 +143,7 @@ ioNetworkHTTP::GET()
 	response = __httpResponse();
 	
 	ioNetworkExchange ex;
-	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	ioNetworkClient net(IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 	
 	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
 	
@@ -167,7 +167,7 @@ ioNetworkHTTP::GET()
 		}
 		catch (baseEx &ex)
 		{
-			if (ex.funcID == IONETWORKEX_CONNECT)
+			if (ex.funcID == IONETWORKCLIENTEX_CONNECT)
 			{
 				if (*o == *p)
 					throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
@@ -454,7 +454,7 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 	response = __httpResponse();
 	
 	ioNetworkExchange ex;
-	ioNetwork net(false, IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	ioNetworkClient net(IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 	
 	__hostInfo host = ioNetworkTools::getHostInfo(url.host);
 	
@@ -478,7 +478,7 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 		}
 		catch (baseEx &ex)
 		{
-			if (ex.funcID == IONETWORKEX_CONNECT)
+			if (ex.funcID == IONETWORKCLIENTEX_CONNECT)
 			{
 				if (*o == *p)
 					throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);

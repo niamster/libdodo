@@ -31,7 +31,7 @@
 #include <sys/stat.h>
 
 #include <libdodo/tools.h>
-#include <libdodo/ioNetwork.h>
+#include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioNetworkTools.h>
 #include <libdodo/ioNetworkHTTPEx.h>
 #include <libdodo/types.h>

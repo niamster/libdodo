@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 {
 	try
 	{						
-		ioNetwork sock(true,IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+		ioNetworkServer sock(IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__initialAccept fake;
 

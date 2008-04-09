@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkEx.h
+ *            ioNetworkClientEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IONETWORKEX_H_
-#define _IONETWORKEX_H_
+#ifndef _IONETWORKCLIENTEX_H_
+#define _IONETWORKCLIENTEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,41 +33,30 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum ioNetworkExR
+	enum ioNetworkClientExR
 	{
-		IONETWORKEX_NOSOCKETCREATED,
-		IONETWORKEX_CANNOTBIND,
-		IONETWORKEX_CANNOTCONNECT,
-		IONETWORKEX_CANNOTACCEPT,
-		IONETWORKEX_ACCEPTWOBIND,
-		IONETWORKEX_WRONGPARAMETER,
-		IONETWORKEX_WRONGFILENAME,
+		IONETWORKCLIENTEX_NOSOCKETCREATED,
+		IONETWORKCLIENTEX_CANNOTCONNECT,
+		IONETWORKCLIENTEX_WRONGPARAMETER,
+		IONETWORKCLIENTEX_WRONGFILENAME,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define IONETWORKEX_NOSOCKETCREATED_STR "No socket was created =(."
-#define IONETWORKEX_CANNOTBIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
-#define IONETWORKEX_CANNOTCONNECT_STR "You cannot <connect> with this constructor; choose another one!"
-#define IONETWORKEX_CANNOTACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
-#define IONETWORKEX_ACCEPTWOBIND_STR "You try to accept without called bindNListen or bindNListen failed."
-#define IONETWORKEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define IONETWORKEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+#define IONETWORKCLIENTEX_NOSOCKETCREATED_STR "No socket was created =(."
+#define IONETWORKCLIENTEX_CANNOTCONNECT_STR "You cannot <connect> with this constructor; choose another one!"
+#define IONETWORKCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+#define IONETWORKCLIENTEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioNetworkFunctionsID
+	enum ioNetworkClientFunctionsID
 	{
-		IONETWORKEX_MAKESOCKET,
-		IONETWORKEX_CONNECT,
-		IONETWORKEX_MAKEUNIXSOCKET,
-		IONETWORKEX_BINDNLISTEN,
-		IONETWORKEX_ACCEPT,
-		IONETWORKEX_SEND,
-		IONETWORKEX_RECIEVE,
-		IONETWORKEX_CONNECTFROM
+		IONETWORKCLIENTEX_MAKESOCKET,
+		IONETWORKCLIENTEX_CONNECT,
+		IONETWORKCLIENTEX_CONNECTFROM,
 	};
 
 };

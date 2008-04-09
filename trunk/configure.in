@@ -107,17 +107,30 @@ else
 	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(ioNetwork-xexec-support,
-        AS_HELP_STRING([--disable-ioNetwork-xexec-support],[compile ioNetwork w/o xexec support]),
-        [IONETWORK_W_XEXEC="$enableval"], [IONETWORK_W_XEXEC="yes"])
+AC_ARG_ENABLE(ioNetworkClient-xexec-support,
+        AS_HELP_STRING([--disable-ioNetworkClient-xexec-support],[compile ioNetworkClient w/o xexec support]),
+        [IONETWORKCLIENT_W_XEXEC="$enableval"], [IONETWORKCLIENT_W_XEXEC="yes"])
 
-if test "$IONETWORK_W_XEXEC" = "no"
+if test "$IONETWORKCLIENT_W_XEXEC" = "no"
 then
-	echo -n -e "#define IONETWORK_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define IONETWORKCLIENT_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tenabled"
+fi
+
+AC_ARG_ENABLE(ioNetworkServer-xexec-support,
+        AS_HELP_STRING([--disable-ioNetworkServer-xexec-support],[compile ioNetworkServer w/o xexec support]),
+        [IONETWORKSERVER_W_XEXEC="$enableval"], [IONETWORKSERVER_W_XEXEC="yes"])
+
+if test "$IONETWORKSERVER_W_XEXEC" = "no"
+then
+	echo -n -e "#define IONETWORKSERVER_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	
+	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_ENABLE(ioDisk-xexec-support,

@@ -41,7 +41,8 @@ OBJECTS:=dbBase.o \
 		ioNetworkOptions.o \
 		ioNetworkExchange.o \
 		ioNetworkTools.o \
-		ioNetwork.o \
+		ioNetworkServer.o \
+		ioNetworkClient.o \
 		ioDiskTools.o \
 		ioDisk.o \
 		ioSTD.o \

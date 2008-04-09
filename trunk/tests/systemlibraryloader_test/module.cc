@@ -7,7 +7,7 @@
 extern "C"
 {
 	void
-	print(const dodoString &str)
+	print(const std::string &str)
 	{
 		std::cout << str << std::endl;
 	}

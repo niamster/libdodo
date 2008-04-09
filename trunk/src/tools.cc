@@ -1602,8 +1602,8 @@ tools::mail(const dodoString &host,
 		family = IONETWORKOPTIONS_PROTO_FAMILY_IPV6;
 	
 	ioNetworkExchange ex;
+	ioNetworkClient net(family, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 	
-	ioNetwork net(false, family, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 	net.connect(host, port, ex);
 	
 	dodoString mess;

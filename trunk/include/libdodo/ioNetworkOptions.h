@@ -83,6 +83,15 @@ namespace dodo
 	};
 
 	/**
+	 * @struct __connInfo defines connection information
+	 */
+	struct __connInfo
+	{
+		dodoString host;///< host of the box 
+		int port;///< port of the box
+	};
+	
+	/**
 	 * @class ioNetworkOptions provides option manipulation for network connections
 	 */
 	class ioNetworkOptions

@@ -69,7 +69,8 @@ namespace dodo
 	class __initialAccept
 	{
 			friend class ioNetworkExchange;
-			friend class ioNetwork;
+			friend class ioNetworkClient;
+			friend class ioNetworkServer;
 
 		public:
 
@@ -102,8 +103,8 @@ namespace dodo
 							 public io,
 							 virtual public systemThreadGuardHolder
 	{
-
-			friend class ioNetwork;
+			friend class ioNetworkServer;
+			friend class ioNetworkClient;
 
 		public:
 
