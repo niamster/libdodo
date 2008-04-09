@@ -695,6 +695,9 @@ ioNetworkHTTP::extractHeaders(const dodoString &data,
 			for (o = 0;o<IONETWORKHTTP_RESPONSEHEADERSTATEMENTS;++o)
 				if (stringTools::equal(responseHeaderStatements[o], arr[0]))
 					response.headers[o] = stringTools::trim(arr[1], trimSymbols, 2);
+			
+			if (stringTools::equal("Set-Cookie", arr[0]))
+				response.cookies.push_back(parseCookie(stringTools::trim(arr[1], trimSymbols, 2)));
 		}
 		
 		i += 1;
@@ -787,6 +790,52 @@ dodoString
 ioNetworkHTTP::trim(const dodoString &data)
 {
 	return stringTools::trim(data, ' ');
+}
+
+//-------------------------------------------------------------------
+
+__cookie 
+ioNetworkHTTP::parseCookie(const dodoString &header)
+{
+	dodoStringArray parts = tools::explode(header, &trim, ";");
+	dodoStringArray tuple;
+	
+	dodoStringArray::iterator i = parts.begin(), j = parts.end();
+	
+	tuple = tools::explode(*i, "=", 2);
+	if (tuple.size() != 2)
+		return __cookie();
+		
+	__cookie cookie;
+	cookie.name = tuple[0];
+	cookie.value = tools::decodeURL(tuple[1]);
+	
+	++i;
+	
+	for (;i!=j;++i)
+	{
+		tuple = tools::explode(*i, "=");
+		
+		if (stringTools::iequal(tuple[0], "path"))
+			cookie.path = tuple[1];
+		else
+		{
+			if (stringTools::iequal(tuple[0], "expires"))
+				cookie.expires = tuple[1];
+			else
+			{
+				if (stringTools::iequal(tuple[0], "domain"))
+					cookie.domain = tuple[1];
+				else
+				{
+					if (stringTools::iequal(tuple[0], "secure"))
+						cookie.secure = true;
+				}
+			}
+		}
+	}
+	
+	return cookie;
 }
 
 //-------------------------------------------------------------------

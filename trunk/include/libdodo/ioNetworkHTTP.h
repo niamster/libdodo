@@ -36,6 +36,7 @@
 #include <libdodo/ioNetworkHTTPEx.h>
 #include <libdodo/types.h>
 #include <libdodo/regexp.h>
+#include <libdodo/cgi.h>
 
 namespace dodo
 {	
@@ -96,6 +97,7 @@ namespace dodo
 		__httpResponse();
 		
 		dodoMap<short, dodoString> headers; ///< response headers[see ioNetworkHTTPResponseHeaderEnum]
+		dodoArray<__cookie> cookies;///< cookies from the server
 		dodoString data; ///< response data
 		short code; ///< response code
 		bool redirected;///< true if redirection was performeed
@@ -205,6 +207,12 @@ namespace dodo
 			bool followRedirection;///< if true follow the `Location` header; true by default
 
 		private:
+			
+			/**
+			 * @return cookie parse from the header
+			 * @param header defines `Set-Cookie` value
+			 */
+			virtual __cookie parseCookie(const dodoString &header);
 			
 			/**
 			 * @enum getContentStatus defines status of getContent routine

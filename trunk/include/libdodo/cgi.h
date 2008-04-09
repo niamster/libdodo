@@ -121,6 +121,11 @@ namespace dodo
 		/**
 		 * constructor
 		 */
+		__cookie();
+		
+		/**
+		 * constructor
+		 */
 		__cookie(bool secure);
 
 		/**
@@ -132,7 +137,7 @@ namespace dodo
 		dodoString name;    ///< name of the cookie
 		dodoString value;   ///< value of the cookie
 
-		dodoString exDate;  ///< expiration date
+		dodoString expires;  ///< expiration date
 		dodoString path;    ///< cookie path
 		dodoString domain;  ///< cookie domain
 		bool secure;        ///< defines cookie security; false by default

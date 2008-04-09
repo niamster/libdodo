@@ -74,15 +74,21 @@ __cgiFile::__cgiFile() : size(0),
 
 __cookie::__cookie(const dodoString &a_name,
 					 const dodoString &a_value,
-					 const dodoString &a_exDate,
+					 const dodoString &a_expires,
 					 const dodoString &a_path,
 					 const dodoString &a_domain,
 					 bool a_secure) : name(a_name),
 									  value(a_value),
-									  exDate(a_exDate),
+									  expires(a_expires),
 									  path(a_path),
 									  domain(a_domain),
 									  secure(a_secure)
+{
+}
+
+//-------------------------------------------------------------------
+
+__cookie::__cookie() : secure(false)
 {
 }
 
@@ -408,8 +414,8 @@ cgi::printHeaders() const
 			cgiIO->writeStreamString(i->name + "=" + i->value + "; ");
 			if (i->path.size() > 0)
 				cgiIO->writeStreamString("path=" + i->path + "; ");
-			if (i->exDate.size() > 0)
-				cgiIO->writeStreamString("expires=" + i->exDate + "; ");
+			if (i->expires.size() > 0)
+				cgiIO->writeStreamString("expires=" + i->expires + "; ");
 			if (i->domain.size() > 0)
 				cgiIO->writeStreamString("domain=" + i->domain + "; ");
 			if (i->secure)
@@ -637,7 +643,7 @@ cgi::request(const dodoString &varName,
 void
 cgi::setCookie(const dodoString &name,
 			   const dodoString &value,
-			   const dodoString &exDate,
+			   const dodoString &expires,
 			   const dodoString &path,
 			   const dodoString &domain,
 			   bool secure)
@@ -645,7 +651,7 @@ cgi::setCookie(const dodoString &name,
 	__cookie temp(secure);
 	temp.name = name;
 	temp.value = tools::encodeURL(value);
-	temp.exDate = exDate;
+	temp.expires = expires;
 	temp.path = path;
 	temp.domain = domain;
 	cookies.push_back(temp);
