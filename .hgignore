@@ -8,6 +8,7 @@ syntax:glob
 *.cgi
 *.fcgi
 *.log
+*.dat
 test
 module
 directives.runtime.h

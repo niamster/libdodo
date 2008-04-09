@@ -21,10 +21,11 @@ DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_XOPEN_SOURCE=600 \
 ###########################################################
 
 OBJECTS:=dbBase.o \
-		systemRaceHazardGuard.o \
-		systemAtomicLock.o \
-		systemAtomicMutex.o \
-		systemAtomicSemaphore.o \
+		db.o \
+		dbPostgresql.o \
+		dbMysql.o \
+		dbSqlBase.o \
+		dbSqlite.o \
 		tools.o \
 		json.o \
 		jsonNode.o \
@@ -32,12 +33,14 @@ OBJECTS:=dbBase.o \
 		dodoMap.o \
 		stringTools.o \
 		xexec.o \
-		dbSqlBase.o \
 		baseEx.o \
-		dbMysql.o \
-		cgi.o \
 		regexp.o \
 		logger.o \
+		io.o \
+		ioNetworkHTTP.o \
+		ioCgiFastExchange.o \
+		ioNonBlockedAccess.o \
+		ioNonBlockedAccessInfo.o \
 		ioNetworkOptions.o \
 		ioNetworkExchange.o \
 		ioNetworkTools.o \
@@ -46,7 +49,6 @@ OBJECTS:=dbBase.o \
 		ioDiskTools.o \
 		ioDisk.o \
 		ioSTD.o \
-		systemTools.o \
 		timeTools.o \
 		xml.o \
 		rpcValue.o \
@@ -54,8 +56,14 @@ OBJECTS:=dbBase.o \
 		rpcResponse.o \
 		rpcClient.o \
 		rpcServer.o \
+		rpcXmlClient.o \
+		rpcXmlServer.o \
 		image.o \
-		dbSqlite.o \
+		systemTools.o \
+		systemRaceHazardGuard.o \
+		systemAtomicLock.o \
+		systemAtomicMutex.o \
+		systemAtomicSemaphore.o \
 		systemProcessCollection.o \
 		systemThreadCollection.o \
 		systemJobCollection.o \
@@ -68,17 +76,11 @@ OBJECTS:=dbBase.o \
 		systemThreadSharedDataCollectionGuard.o \
 		systemProcessSharedDataCollectionGuard.o \
 		systemSharedDataCollectionGuard.o \
-		dbPostgresql.o \
-		cgiPreprocessor.o \
-		io.o \
-		ioNetworkHTTP.o \
-		db.o \
-		cgiFast.o \
-		ioCgiFastExchange.o \
-		cgiProcessor.o \
-		ioNonBlockedAccess.o \
 		systemLibraryLoader.o \
-		ioNonBlockedAccessInfo.o
+		cgi.o \
+		cgiFast.o \
+		cgiPreprocessor.o \
+		cgiProcessor.o
 
 ###########################################################
 
