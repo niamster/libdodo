@@ -1264,8 +1264,10 @@ Optional Features:
                           compile ioSTD w/o xexec support
   --disable-ioNetworkExchange-xexec-support
                           compile ioNetworkExchange w/o xexec support
-  --disable-ioNetwork-xexec-support
-                          compile ioNetwork w/o xexec support
+  --disable-ioNetworkClient-xexec-support
+                          compile ioNetworkClient w/o xexec support
+  --disable-ioNetworkServer-xexec-support
+                          compile ioNetworkServer w/o xexec support
   --disable-ioDisk-xexec-support
                           compile ioDisk w/o xexec support
   --disable-dbPostgresql-xexec-support
@@ -3529,21 +3531,38 @@ else
 	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tenabled"
 fi
 
-# Check whether --enable-ioNetwork-xexec-support was given.
-if test "${enable_ioNetwork_xexec_support+set}" = set; then
-  enableval=$enable_ioNetwork_xexec_support; IONETWORK_W_XEXEC="$enableval"
+# Check whether --enable-ioNetworkClient-xexec-support was given.
+if test "${enable_ioNetworkClient_xexec_support+set}" = set; then
+  enableval=$enable_ioNetworkClient_xexec_support; IONETWORKCLIENT_W_XEXEC="$enableval"
 else
-  IONETWORK_W_XEXEC="yes"
+  IONETWORKCLIENT_W_XEXEC="yes"
 fi
 
 
-if test "$IONETWORK_W_XEXEC" = "no"
+if test "$IONETWORKCLIENT_W_XEXEC" = "no"
 then
-	echo -n -e "#define IONETWORK_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IONETWORKCLIENT_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetwork xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tenabled"
+fi
+
+# Check whether --enable-ioNetworkServer-xexec-support was given.
+if test "${enable_ioNetworkServer_xexec_support+set}" = set; then
+  enableval=$enable_ioNetworkServer_xexec_support; IONETWORKSERVER_W_XEXEC="$enableval"
+else
+  IONETWORKSERVER_W_XEXEC="yes"
+fi
+
+
+if test "$IONETWORKSERVER_W_XEXEC" = "no"
+then
+	echo -n -e "#define IONETWORKSERVER_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tdisabled"
+else
+	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioDisk-xexec-support was given.

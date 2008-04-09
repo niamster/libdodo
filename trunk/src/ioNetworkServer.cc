@@ -44,8 +44,7 @@ ioNetworkServer::ioNetworkServer(short a_family,
 				   short a_type) : ioNetworkOptions(a_family, a_type),
 								   blockInherited(false),
 								   collectedData(operType,
-												 (void *) this),
-									opened(false)
+												 (void *) this)
 {
 }
 
@@ -216,8 +215,6 @@ ioNetworkServer::bindNListen(const dodoString &host,
 	operType = IONETWORKSERVER_OPERATION_BINDNLISTEN;
 	performXExec(preExec);
 #endif
-
-	opened = false;
 	
 	makeSocket();
 
@@ -263,8 +260,6 @@ ioNetworkServer::bindNListen(const dodoString &host,
 		if (::listen(socket, numberOfConnections) == -1)
 			throw baseEx(ERRMODULE_IONETWORKSERVER, IONETWORKSERVEREX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	opened = true;
-
 #ifndef IONETWORKSERVER_WO_XEXEC
 	performXExec(postExec);
 #endif
@@ -291,8 +286,6 @@ ioNetworkServer::bindNListen(const dodoString &path,
 	operType = IONETWORKSERVER_OPERATION_BINDNLISTEN_UNIX;
 	performXExec(preExec);
 #endif
-
-	opened = false;
 
 	makeSocket();
 
@@ -327,8 +320,6 @@ ioNetworkServer::bindNListen(const dodoString &path,
 
 	unixSock = path;
 
-	opened = true;
-
 #ifndef IONETWORKSERVER_WO_XEXEC
 	performXExec(postExec);
 #endif
@@ -355,9 +346,6 @@ ioNetworkServer::accept(__initialAccept &init,
 
 		return true;
 	}
-
-	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKSERVER, IONETWORKSERVEREX_ACCEPT, ERR_LIBDODO, IONETWORKSERVEREX_ACCEPTWOBIND, IONETWORKSERVEREX_ACCEPTWOBIND_STR, __LINE__, __FILE__);
 
 	int sock(-1);
 	info.host.clear();
@@ -456,9 +444,6 @@ ioNetworkServer::accept(__initialAccept &init)
 
 		return true;
 	}
-
-	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKSERVER, IONETWORKSERVEREX_ACCEPT, ERR_LIBDODO, IONETWORKSERVEREX_ACCEPTWOBIND, IONETWORKSERVEREX_ACCEPTWOBIND_STR, __LINE__, __FILE__);
 
 	int sock = ::accept(socket, NULL, NULL);
 	if (sock == -1)

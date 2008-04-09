@@ -44,8 +44,7 @@ ioNetworkClient::ioNetworkClient(short a_family,
 				   short a_type) : ioNetworkOptions(a_family, a_type),
 								   blockInherited(false),
 								   collectedData(operType,
-												 (void *) this),
-									opened(false)
+												 (void *) this)
 {
 }
 
@@ -54,12 +53,6 @@ ioNetworkClient::ioNetworkClient(short a_family,
 
 ioNetworkClient::~ioNetworkClient()
 {
-	if (socket != -1)
-	{
-		::shutdown(socket, SHUT_RDWR);
-
-		::close(socket);
-	}
 }
 
 //-------------------------------------------------------------------

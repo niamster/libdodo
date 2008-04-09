@@ -35,19 +35,13 @@ namespace dodo
 	 */
 	enum ioNetworkClientExR
 	{
-		IONETWORKCLIENTEX_NOSOCKETCREATED,
-		IONETWORKCLIENTEX_CANNOTCONNECT,
 		IONETWORKCLIENTEX_WRONGPARAMETER,
-		IONETWORKCLIENTEX_WRONGFILENAME,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define IONETWORKCLIENTEX_NOSOCKETCREATED_STR "No socket was created =(."
-#define IONETWORKCLIENTEX_CANNOTCONNECT_STR "You cannot <connect> with this constructor; choose another one!"
 #define IONETWORKCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define IONETWORKCLIENTEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 
 	/**
 	 * IDs of functions where exception might be thrown

@@ -212,10 +212,6 @@ namespace dodo
 			 */
 			virtual void makeSocket();
 
-			bool opened; ///< true if I/O session is opened
-
-			bool server;            ///< true if type of service is server
-
 			dodoString unixSock;    ///< path to unix socket
 			
 			__xexexIoNetworkClientCollectedData collectedData;   ///< data collected for xexec

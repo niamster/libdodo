@@ -35,10 +35,6 @@ namespace dodo
 	 */
 	enum ioNetworkExR
 	{
-		IONETWORKSERVEREX_NOSOCKETCREATED,
-		IONETWORKSERVEREX_CANNOTBIND,
-		IONETWORKSERVEREX_CANNOTACCEPT,
-		IONETWORKSERVEREX_ACCEPTWOBIND,
 		IONETWORKSERVEREX_WRONGPARAMETER,
 		IONETWORKSERVEREX_WRONGFILENAME,
 	};
@@ -46,10 +42,6 @@ namespace dodo
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define IONETWORKSERVEREX_NOSOCKETCREATED_STR "No socket was created =(."
-#define IONETWORKSERVEREX_CANNOTBIND_STR "You cannot <bindNListen> with this constructor; choose another one!"
-#define IONETWORKSERVEREX_CANNOTACCEPT_STR "You cannot <accept> with this constructor; choose another one!"
-#define IONETWORKSERVEREX_ACCEPTWOBIND_STR "You tried to accept without called bindNListen or bindNListen failed."
 #define IONETWORKSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 #define IONETWORKSERVEREX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
 
