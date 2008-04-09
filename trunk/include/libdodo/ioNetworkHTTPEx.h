@@ -37,7 +37,8 @@ namespace dodo
 	enum ioNetworkHTTPExR
 	{
 		IONETWORKHTTPEX_CANNOTCONNECT,
-		IONETWORKHTTPEX_NOTAUTHORIZED
+		IONETWORKHTTPEX_NOTAUTHORIZED,
+		IONETWORKHTTPEX_UNKNOWNAUTHTYPE,
 	};
 
 	/**
@@ -45,6 +46,7 @@ namespace dodo
 	 */
 #define IONETWORKHTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
 #define IONETWORKHTTPEX_NOTAUTHORIZED_STR "Aythorization required."
+#define IONETWORKHTTPEX_UNKNOWNAUTHTYPE_STR "Unknown auth type."
 
 	/**
 	 * IDs of functions where exception might be thrown
@@ -53,6 +55,7 @@ namespace dodo
 	{
 		IONETWORKHTTPEX_POST,
 		IONETWORKHTTPEX_GET,
+		IONETWORKHTTPEX_GETCONTENT,
 	};
 };
 

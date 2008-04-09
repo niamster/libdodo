@@ -23,13 +23,13 @@ hook(void *base,
 		io->enableAll();
                 
                 st->buffer.clear();
-		
-		char q[100];
-		++a;
-		sprintf(q,"%d\n",a);
 
-		io->outSize = strlen(q);
-		st->buffer.assign(q, io->outSize);
+	
+		++a;
+		dodoString str = stringTools::iToString(a) + "\n";
+
+		io->outSize = str.size();
+		st->buffer.assign(str);
 	}
 }
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 		
 		st.readString(o);
 		
-		std::cout << o.size() << "\n";
+		cout << o.size() << "\n";
 		
 #ifndef IOSTD_WO_XEXEC
 		st.disablePreExec(pos);

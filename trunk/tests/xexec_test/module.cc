@@ -24,12 +24,8 @@ extern "C"
 			__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
 			if (st->operType == IOSTD_OPERATION_WRITE)
 			{
-				char q[100];
-				int *a;
-				
-				a = (int *)(st->buffer.c_str());
-				sprintf(q,"%d\n",*a*3);
-				st->buffer.assign(q);
+				int *a = (int *)(st->buffer.c_str());
+				st->buffer.assign(stringTools::iToString(*a*3) + "\n");
 			}
 		}
 		std::cout << "activation\n";

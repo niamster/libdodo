@@ -7,7 +7,7 @@ using namespace dodo;
 using namespace std;
 
 #ifdef DL_EXT
-	typedef void (* print)(const std::string &data);
+	typedef void (* print)(const dodoString &data);
 #endif
 
 int main(int argc, char **argv)

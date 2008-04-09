@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 		systemJobCollection *pr[amount];
 
 		int pos[amount];
-		std::string ids[amount];
+		dodoString ids[amount];
 		for (int i=0;i<amount;++i)
 		{
 			if (i%2 == 0)	

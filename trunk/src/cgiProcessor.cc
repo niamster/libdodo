@@ -47,7 +47,7 @@ cgiProcessor::~cgiProcessor()
 dodoString
 cgiProcessor::processString(const dodoString &tpl)
 {
-	std::string tmp = _processString(preProcessString(tpl), "memory");
+	dodoString tmp = _processString(preProcessString(tpl), "memory");
 
 	newLinePositions.pop_back();
 
@@ -59,7 +59,7 @@ cgiProcessor::processString(const dodoString &tpl)
 dodoString
 cgiProcessor::process(const dodoString &path)
 {
-	std::string tmp = _processString(preProcess(path), path);
+	dodoString tmp = _processString(preProcess(path), path);
 
 	newLinePositions.pop_back();
 
@@ -385,12 +385,7 @@ cgiProcessor::_if(const dodoString &buffer,
 	if (temp2.size() != 2)
 	{
 		if (temp2.size() != 1)
-		{
-			char message[128];
-			sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX__IF, ERR_LIBDODO, CGIPROCESSOREX_WRONGIFSTATEMENT, CGIPROCESSOREX_WRONGIFSTATEMENT_STR, __LINE__, __FILE__, message);
-		}
+			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX__IF, ERR_LIBDODO, CGIPROCESSOREX_WRONGIFSTATEMENT, CGIPROCESSOREX_WRONGIFSTATEMENT_STR, __LINE__, __FILE__, stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 		dodoString temp1 = stringTools::trim(temp2[0], " \t\n", 3);
 
@@ -497,21 +492,11 @@ cgiProcessor::blockEnd(const dodoString &buffer,
 	{
 		u = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_OPEN_ST], m);
 		if (u == dodoString::npos)
-		{
-			char message[128];
-			sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_BLOCKEND, ERR_LIBDODO, CGIPROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, message);
-		}
+			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_BLOCKEND, ERR_LIBDODO, CGIPROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 		b = buffer.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], u + 2);
 		if (b == dodoString::npos)
-		{
-			char message[128];
-			sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_BLOCKEND, ERR_LIBDODO, CGIPROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, message);
-		}
+			throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_BLOCKEND, ERR_LIBDODO, CGIPROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 		for (p = u; p < b; ++p)
 			if (buffer[p] != ' ' && buffer[p] != '\t' && buffer[p] != '\n')
@@ -611,32 +596,17 @@ cgiProcessor::_assign(unsigned long start,
 	dodoStringArray temp = tools::explode(statement, statements[CGIPREPROCESSOR_CGIPREPROCESSOR_PROCESSORSTATEMENT_ASSIGN_OP], 2);
 
 	if (temp.size() == 0)
-	{
-		char message[128];
-		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_ASSIGN, ERR_LIBDODO, CGIPROCESSOREX_WRONGASSIGNSTATEMENT, CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, message);
-	}
+		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_ASSIGN, ERR_LIBDODO, CGIPROCESSOREX_WRONGASSIGNSTATEMENT, CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	dodoString varName = trim(temp[0]);
 	if (varName.size() == 0)
-	{
-		char message[128];
-		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_ASSIGN, ERR_LIBDODO, CGIPROCESSOREX_WRONGASSIGNSTATEMENT, CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, message);
-	}
+		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_ASSIGN, ERR_LIBDODO, CGIPROCESSOREX_WRONGASSIGNSTATEMENT, CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
 	if (stringTools::equal(varName, statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_DODO]))
-	{
-		char message[128];
-		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_ASSIGN, ERR_LIBDODO, CGIPROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, message);
-	}
+		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_ASSIGN, ERR_LIBDODO, CGIPROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	dodoStringMap::iterator i = local.find(varName);
 	if (i != local.end())
@@ -735,12 +705,7 @@ cgiProcessor::_for(const dodoString &buffer,
 
 	p = statement.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_IN], i + 1);
 	if (p == dodoString::npos)
-	{
-		char message[128];
-		sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX__FOR, ERR_LIBDODO, CGIPROCESSOREX_WRONGFORSTATEMENT, CGIPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, message);
-	}
+		throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX__FOR, ERR_LIBDODO, CGIPROCESSOREX_WRONGFORSTATEMENT, CGIPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	dodoString targetVar = trim(statement.substr(p + 2));
 	dodoString forSpace = buffer.substr(start, u - start);
@@ -1511,12 +1476,7 @@ cgiProcessor::getVar(const dodoString &a_varName,
 		{
 			b = varName.find(statements[CGIPREPROCESSOR_PROCESSORSTATEMENT_CLOSE_VARPART], c + 1);
 			if (b == dodoString::npos)
-			{
-				char message[128];
-				sprintf(message, " Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str());
-
-				throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_GETVAR, ERR_LIBDODO, CGIPROCESSOREX_WRONGVARSTATEMENT, CGIPROCESSOREX_WRONGVARSTATEMENT_STR, __LINE__, __FILE__, message);
-			}
+				throw baseEx(ERRMODULE_CGIPROCESSOR, CGIPROCESSOREX_GETVAR, ERR_LIBDODO, CGIPROCESSOREX_WRONGVARSTATEMENT, CGIPROCESSOREX_WRONGVARSTATEMENT_STR, __LINE__, __FILE__,stringTools::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 			++cb;
 

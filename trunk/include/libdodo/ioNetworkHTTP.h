@@ -243,6 +243,8 @@ namespace dodo
 			 * @param response defines structed response data
 			 */
 			virtual bool extractHeaders(const dodoString &data, __httpResponse &response); 
+			
+			static dodoString trim(const dodoString &data);
 	};
 
 };

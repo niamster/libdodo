@@ -31,8 +31,8 @@ int main(int argc, char **argv)
 
 		http.setCookies(cookies);
 		
-		res =  http.GET("http://google.com");
-		//res =  http.GET("http://localhost/libdodo/cgi_test/test.cgi");
+		//res =  http.GET("http://google.com");
+		res =  http.GET("http://niam:niam@localhost/auth/libdodo/cgi_test/test.cgi");
 		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
 		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map, files);
 		

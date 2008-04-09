@@ -230,7 +230,91 @@ ioNetworkHTTP::GET()
 			
 		case GETCONTENTSTATUS_DIGESTAUTH:
 			
+			if (authTries > 2)
+			{
+				authTries = 0;
+				
+				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
 			
+			dodoString nonce, opaque, realm;
+			
+			dodoStringArray parts = tools::explode(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE].substr(6), &trim, ",");
+
+			dodoString HA1;
+
+			unsigned char HA[16];			
+			tools::MD5_CTX context;
+			
+			dodoStringArray tuple;
+			
+			dodoStringArray::iterator i = parts.begin(), j = parts.end();
+			for (;i!=j;++i)
+			{
+				tuple = tools::explode(*i, "=");
+				if (tuple.size() != 2)
+					continue;
+				
+				if (stringTools::iequal(tuple[0], "realm"))
+				{
+					realm = stringTools::trim(tuple[1], '"');
+					
+					tools::MD5Init(&context);
+					tools::MD5Update(&context, (unsigned char *)url.login.c_str(), url.login.size());
+					tools::MD5Update(&context, (unsigned char *)":", 1);
+					tools::MD5Update(&context, (unsigned char *)realm.c_str(), realm.size());
+					tools::MD5Update(&context, (unsigned char *)":", 1);
+					tools::MD5Update(&context, (unsigned char *)url.password.c_str(), url.password.size());
+					tools::MD5Final(HA, &context);
+					
+					HA1 = tools::binToHex(dodoString((char *)&HA, 16));
+				}
+				else
+				{
+					if (stringTools::iequal(tuple[0], "nonce"))
+						nonce = stringTools::trim(tuple[1], '"');
+					else
+					{
+						if (stringTools::iequal(tuple[0], "opaque"))
+							opaque = stringTools::trim(tuple[1], '"');
+					}
+				}
+			}
+			
+			dodoString uri = "/" + url.path + url.request;
+			dodoString cnonce = tools::MD5Hex(tools::stringRandom(5));
+
+			tools::MD5Init(&context);
+			tools::MD5Update(&context, (unsigned char *)"GET:", 4);
+			tools::MD5Update(&context, (unsigned char *)uri.c_str(), uri.size());
+			tools::MD5Final(HA, &context);
+
+
+			dodoString HA2 = tools::binToHex(dodoString((char *)&HA, 16));
+			
+			tools::MD5Init(&context);
+			tools::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)nonce.c_str(), nonce.size());
+			tools::MD5Update(&context, (unsigned char *)":00000001:", 10);
+			tools::MD5Update(&context, (unsigned char *)cnonce.c_str(), cnonce.size());
+			tools::MD5Update(&context, (unsigned char *)":auth:", 6);
+			tools::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
+			tools::MD5Final(HA, &context);
+
+			dodoString response = tools::binToHex(dodoString((char *)&HA, 16));
+
+			requestHeaders[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION] = "Digest username=\"" + url.login + 
+																		"\", realm=\"" + realm + 
+																		 + "\", nonce=\"" + nonce + 
+																		 + "\", uri=\"" + uri + 
+																		 + "\", qop=auth" + 
+																		 + ", nc=00000001" + 
+																		 + ", cnonce=\"" + cnonce + 
+																		 + "\", response=\"" + response + 
+																		 + "\", opaque=\"" + opaque + "\"";
+			
+			GET();
 			
 			break;
 	}
@@ -459,7 +543,7 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 			
-			requestHeaders[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION] = "Basic " + tools::encodeBase64(url.login + ":" + url.password);
+			requestHeaders[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION] = "Basic" + tools::encodeBase64(url.login + ":" + url.password);
 			
 			POST(data, type);
 			
@@ -467,8 +551,91 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 			
 		case GETCONTENTSTATUS_DIGESTAUTH:
 			
+			if (authTries > 2)
+			{
+				authTries = 0;
+				
+				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
 			
+			dodoString nonce, opaque, realm;
 			
+			dodoStringArray parts = tools::explode(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE].substr(6), &trim, ",");
+
+			dodoString HA1;
+
+			unsigned char HA[16];			
+			tools::MD5_CTX context;
+			
+			dodoStringArray tuple;
+			
+			dodoStringArray::iterator i = parts.begin(), j = parts.end();
+			for (;i!=j;++i)
+			{
+				tuple = tools::explode(*i, "=");
+				if (tuple.size() != 2)
+					continue;
+				
+				if (stringTools::iequal(tuple[0], "realm"))
+				{
+					realm = stringTools::trim(tuple[1], '"');
+					
+					tools::MD5Init(&context);
+					tools::MD5Update(&context, (unsigned char *)url.login.c_str(), url.login.size());
+					tools::MD5Update(&context, (unsigned char *)":", 1);
+					tools::MD5Update(&context, (unsigned char *)realm.c_str(), realm.size());
+					tools::MD5Update(&context, (unsigned char *)":", 1);
+					tools::MD5Update(&context, (unsigned char *)url.password.c_str(), url.password.size());
+					tools::MD5Final(HA, &context);
+
+					HA1 = tools::binToHex(dodoString((char *)&HA, 16));
+				}
+				else
+				{
+					if (stringTools::iequal(tuple[0], "nonce"))
+						nonce = stringTools::trim(tuple[1], '"');
+					else
+					{
+						if (stringTools::iequal(tuple[0], "opaque"))
+							opaque = stringTools::trim(tuple[1], '"');
+					}
+				}
+			}
+			
+			dodoString uri = "/" + url.path + url.request;
+			dodoString cnonce = tools::MD5Hex(tools::stringRandom(5));
+			
+			tools::MD5Init(&context);
+			tools::MD5Update(&context, (unsigned char *)"POST:", 5);
+			tools::MD5Update(&context, (unsigned char *)uri.c_str(), uri.size());
+			tools::MD5Final(HA, &context);
+
+			dodoString HA2 = tools::binToHex(dodoString((char *)&HA, 16));
+			
+			tools::MD5Init(&context);
+			tools::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)nonce.c_str(), nonce.size());
+			tools::MD5Update(&context, (unsigned char *)":00000001:", 10);
+			tools::MD5Update(&context, (unsigned char *)cnonce.c_str(), cnonce.size());
+			tools::MD5Update(&context, (unsigned char *)":auth:", 6);
+			tools::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
+			tools::MD5Final(HA, &context);
+
+			dodoString response = tools::binToHex(dodoString((char *)&HA, 16));
+
+			requestHeaders[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION] = "Digest username=\"" + url.login + 
+																		"\", realm=" + realm + 
+																		 + ", nonce=" + nonce + 
+																		 + ", uri=\"" + uri + 
+																		 + "\", qop=auth" + 
+																		 + ", nc=00000001" + 
+																		 + ", cnonce=\"" + cnonce + 
+																		 + "\", response=\"" + response + 
+																		 + "\", opaque=\"" + opaque + "\"";
+			
+			POST(data, type);
+
 			break;
 	}
 }
@@ -584,8 +751,12 @@ ioNetworkHTTP::getContent(dodoString &data,
 						if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 							return GETCONTENTSTATUS_BASICAUTH;
 						else 
+						{
 							if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 								return GETCONTENTSTATUS_DIGESTAUTH;
+							else
+								throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GETCONTENT, ERR_LIBDODO, IONETWORKHTTPEX_UNKNOWNAUTHTYPE, IONETWORKHTTPEX_UNKNOWNAUTHTYPE_STR, __LINE__, __FILE__);
+						}
 					}
 					
 					ex.setInBufferSize(16384);
@@ -608,6 +779,14 @@ ioNetworkHTTP::getContent(dodoString &data,
 	authTries = 0;
 	
 	return GETCONTENTSTATUS_NORMAL;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+ioNetworkHTTP::trim(const dodoString &data)
+{
+	return stringTools::trim(data, ' ');
 }
 
 //-------------------------------------------------------------------

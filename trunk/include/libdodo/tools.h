@@ -103,6 +103,8 @@ namespace dodo
 	 */
 	class tools
 	{
+		friend class ioNetworkHTTP;
+		
 		public:
 
 			/**
@@ -347,6 +349,12 @@ namespace dodo
 			static __url parseURL(const dodoString &url);
 
 			/**
+			 * @return URL
+			 * @param url defines URL parts
+			 */
+			static dodoString makeURL(const __url &url);
+
+			/**
 			 * @return MD5 hash of string
 			 * @param string defines string for what generate hash
 			 */
@@ -354,9 +362,15 @@ namespace dodo
 
 			/**
 			 * @return MD5 hash of string in 'hex' representation(e.g. 'fbc093901857fcd118f065f900982c24')
-			 * @param string defines string for what generate hash
+			 * @param string defines string to convert
 			 */
 			static dodoString MD5Hex(const dodoString &string);
+			
+			/**
+			 * @return binary string represented in 'hex'
+			 * @param string defines string to convert
+			 */
+			static dodoString binToHex(const dodoString &string);
 
 #ifdef BZIP2_EXT
 

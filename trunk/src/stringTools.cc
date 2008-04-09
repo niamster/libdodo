@@ -110,12 +110,15 @@ dodoString
 stringTools::format(const dodoString &format, ...)
 {
 	unsigned long length = format.size() * 3;
-	char *str = new char[length];
+	char *str = new char[length + 1];
+	
 	va_list ap;
 
+	va_start(ap, format);
 	vsnprintf(str, length, format.c_str(), ap);
+	va_end(ap);
 
-	std::string res = str;
+	dodoString res = str;
 
 	delete [] str;
 

@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		const int amount = 10;
 
 		int pos[amount];
-		std::string ids[amount];
+		dodoString ids[amount];
 		for (int i=0;i<amount;++i)
 		{
 			ids[i] = stringTools::lToString(i);

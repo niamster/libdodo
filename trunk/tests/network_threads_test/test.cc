@@ -19,18 +19,18 @@ process(void *data)
 	
 	if (fse->isBlocked())
 	{
-		std::cout << "CHILD BLOCKED\n";
+		cout << "CHILD BLOCKED\n";
 		cout.flush();
 	}
 	else
 	{
-		std::cout << "CHILD UNBLOCKED\n";
+		cout << "CHILD UNBLOCKED\n";
 		cout.flush();
 	}
 
 	if (fse->isAlive())
 	{
-		std::cout << "IT'S ALIVE!\n";
+		cout << "IT'S ALIVE!\n";
 		cout.flush();
 	}
 	
@@ -72,12 +72,12 @@ process(void *data)
 
 	if (fse->isAlive())
 	{
-		std::cout << "IT'S ALIVE?????\n";
+		cout << "IT'S ALIVE?????\n";
 		cout.flush();
 	}
 	else
 	{
-		std::cout << "CLOSED!\n";
+		cout << "CLOSED!\n";
 		cout.flush();
 	}
 
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 
 #ifdef PTHREAD_EXT
 		systemThreadCollection th;
-		std::vector<int> positions;
+		vector<int> positions;
 #endif
 		
 		sh.set((void *)&exit_st);
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 			{
 				if (sock.isBlocked())
 				{
-					std::cout << "PARENT BLOCKED\n";
+					cout << "PARENT BLOCKED\n";
 					cout.flush();
 				}
 					
@@ -139,7 +139,7 @@ int main(int argc, char **argv)
 				{
 					if (th.isRunning(1))
 					{
-						std::cout << "Running!\n";
+						cout << "Running!\n";
 						cout.flush();
 					}
 				}

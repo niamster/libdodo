@@ -711,13 +711,13 @@ tools::charToHex(char result[3],
 	if (j <= 9)
 		result[0] = (j + '0');
 	else
-		result[0] = (j + 'A' - 10);
+		result[0] = (j + 'a' - 10);
 	
 	j = first & 0xf;
 	if (j <= 9)
 		result[1] = (j + '0');
 	else
-		result[1] = (j + 'A' - 10);
+		result[1] = (j + 'a' - 10);
 	
 	result[2] = '\0';
 }
@@ -855,7 +855,7 @@ tools::encodeURL(const dodoString &string)
 			default:
 
 				result.append(1, '%');
-				tools::charToHex(temp, string[i]);
+				charToHex(temp, string[i]);
 				result.append(temp);
 		}
 	}
@@ -1552,18 +1552,25 @@ tools::MD5(const dodoString &string)
 dodoString
 tools::MD5Hex(const dodoString &string)
 {
-	std::string md5 = MD5(string);
-	int j = md5.size();
-	std::string md5Hex;
+	return binToHex(MD5(string));
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+tools::binToHex(const dodoString &string)
+{
+	int j = string.size();
+	dodoString hex;
 	char tmp[3];
 
 	for (int i = 0; i < j; ++i)
 	{
-		sprintf(tmp, "%02X", (unsigned char)md5[i]);
-		md5Hex.append(tmp);
+		charToHex(tmp, string[i]);
+		hex.append(tmp, 2);
 	}
-
-	return md5Hex;
+	
+	return hex;
 }
 
 //-------------------------------------------------------------------
@@ -1666,12 +1673,7 @@ tools::mail(const dodoString &host,
 			MD5Update(&context, digest, 16);
 			MD5Final(digest, &context);
 
-			md5pass.clear();
-			for (short i = 0; i < 16; ++i)
-			{
-				sprintf((char *)ipad, "%02X", digest[i]);
-				md5pass.append((char *)ipad);
-			}
+			md5pass = binToHex(dodoString((char *)&digest, 16));
 
 			ex.writeStreamString(encodeBase64(login + " " + md5pass) + "\r\n");
 			ex.readStreamString(mess);

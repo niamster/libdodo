@@ -25,11 +25,7 @@ int main(int argc, char **argv)
 #endif
 		
 		cout << "MD5 of \"\"" << endl;
-		dodoString md5 = tools::MD5("");
-
-		for (int i = 0; i < 16; i++)
- 			printf ("%02x", (unsigned char)md5[i]);
-		cout << endl;
+		cout << tools::MD5Hex("") <<  endl;
 		
 		baseEx::setErrorHandler(ERRMODULE_IODISK,&baseHandler,NULL);
 #ifdef DL_EXT
@@ -86,7 +82,7 @@ int main(int argc, char **argv)
     {
     	cout << endl << ex.baseErrno << "!!" << ex.baseErrstr  << ex.line << "!!" << "!!" << ex.file << endl;
     }
-    catch(std::exception ex)
+    catch(exception ex)
     {
     	cout << endl << ex.what() << endl;
     }

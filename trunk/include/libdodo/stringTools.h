@@ -31,7 +31,7 @@
 namespace dodo
 {
 	/**
-	 * @class stringToolst extends standart std::string class
+	 * @class stringTools provides various string tools 
 	 */
 	class stringTools
 	{

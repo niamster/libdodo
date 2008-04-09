@@ -955,7 +955,8 @@ ioDiskTools::_writeToFile(const dodoString &path,
 	if (file == NULL)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	
-	if (fwrite(content.c_str(), content.size(), 1, file) == 0)
+	unsigned long size = content.size();
+	if (fwrite(content.c_str(), size, 1, file) != size)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 

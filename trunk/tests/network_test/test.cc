@@ -16,12 +16,12 @@ process(ioNetworkExchange fse)
 	
 	if (fse.isBlocked())
 	{
-		std::cout << "CHILD BLOCKED\n";
+		cout << "CHILD BLOCKED\n";
 		cout.flush();
 	}
 	else
 	{
-		std::cout << "CHILD UNBLOCKED\n";
+		cout << "CHILD UNBLOCKED\n";
 		cout.flush();
 	}
 	
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 				st.connectFrom("127.0.0.1","127.0.0.1",21,exch);
 
 				exch.readStreamString(str);
-				std::cout << "\ngot:\n" << str << "\n";
+				cout << "\ngot:\n" << str << "\n";
 			}
 			catch(baseEx ex)
 			{
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
 			{
 				if (sock.isBlocked())
 				{
-					std::cout << "PARENT BLOCKED\n";
+					cout << "PARENT BLOCKED\n";
 					cout.flush();
 				}
 					
