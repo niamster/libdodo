@@ -1,7 +1,7 @@
 /***************************************************************************
  *            rpcXmlServer.h
  *
- *  Sat Mar 29 00:06:55 2008
+ *  Wed Apr 09 23:30:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -29,7 +29,8 @@
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
 #include <libdodo/rpcServer.h>
-#include <libdodo/xml.h>
+#include <libdodo/rpcXmlMethod.h>
+#include <libdodo/rpcXmlResponse.h>
 
 namespace dodo
 {

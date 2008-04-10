@@ -38,8 +38,6 @@ namespace dodo
 	enum rpcDataTypeEnum
 	{
 		RPC_DATATYPE_STRING,
-		RPC_DATATYPE_DATETIME,
-		RPC_DATATYPE_BASE64,
 		RPC_DATATYPE_BOOLEAN,
 		RPC_DATATYPE_INTEGER,
 		RPC_DATATYPE_DOUBLE,
@@ -53,6 +51,7 @@ namespace dodo
 	class rpcValue
 	{
 		friend class rpcClient;
+		friend class rpcXmlValue;
 		
 		public:
 			

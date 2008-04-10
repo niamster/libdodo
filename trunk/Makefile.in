@@ -58,6 +58,9 @@ OBJECTS:=dbBase.o \
 		rpcServer.o \
 		rpcXmlClient.o \
 		rpcXmlServer.o \
+		rpcXmlValue.o \
+		rpcXmlMethod.o \
+		rpcXmlResponse.o \
 		image.o \
 		systemTools.o \
 		systemRaceHazardGuard.o \

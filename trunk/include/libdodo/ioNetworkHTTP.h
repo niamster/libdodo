@@ -238,8 +238,6 @@ namespace dodo
 			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS];///< HTTP request headers[see ioNetworkHTTPRequestHeaderEnum]
 			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
 			
-			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the header value  
-			
 			regexp httpStatusRE;///< parser for HTTP response status code
 			
 			__httpResponse response;///< HTTP response data
@@ -252,6 +250,13 @@ namespace dodo
 			 */
 			virtual bool extractHeaders(const dodoString &data, __httpResponse &response); 
 			
+			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the header value  
+			
+			/**
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @note uses trimSymbols to trim
+			 */
 			static dodoString trim(const dodoString &data);
 	};
 

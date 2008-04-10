@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpcXmlClient.cc
+ *            rpcXmlResponse.cc
  *
  *  Wed Apr 09 23:30:55 2008
  *  Copyright  2008  Ni@m
@@ -21,40 +21,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/rpcXmlClient.h>
+#include <libdodo/rpcXmlResponse.h>
 
 using namespace dodo;
 
-rpcXmlClient::rpcXmlClient()
-{
-	
-}
+using namespace dodo;
 
-//-------------------------------------------------------------------
-
-rpcXmlClient::~rpcXmlClient()
+rpcResponse
+rpcXmlResponse::xmlToRpcResponse(const dodoString &data)
 {
+	rpcResponse response;
 	
+	return response;
 }
 
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlClient::processRPCCall(const rpcMethod &method)
+rpcXmlResponse::rpcResponseToXml(const rpcResponse &data)
 {
-	dodoString data;
+	dodoString response;
 	
-	return data;
-}
-
-//-------------------------------------------------------------------
-
-rpcResponse 
-rpcXmlClient::processRPCCallResult(const dodoString &data)
-{	
-	rpcResponse result;
-
-	return result;
+	return response;
 }
 
 //-------------------------------------------------------------------

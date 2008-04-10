@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpcXmlClient.h
+ *            rpcXmlValue.h
  *
  *  Wed Apr 09 23:30:55 2008
  *  Copyright  2008  Ni@m
@@ -21,51 +21,55 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _RPCXMLCLIENT_H_
-#define _RPCXMLCLIENT_H_
+#ifndef _RPCXMLVALUE_H_
+#define _RPCXMLVALUE_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
-#include <libdodo/rpcClient.h>
-#include <libdodo/rpcXmlMethod.h>
-#include <libdodo/rpcXmlResponse.h>
+#include <libdodo/rpcValue.h>
+#include <libdodo/xml.h>
 
 namespace dodo
 {
 	/**
-	 * @class rpcXmlClient defines client-side XML-RPC instrument
+	 * @class rpcXmlValue defines RPC value in XML representation
 	 */
-	class rpcXmlClient : public rpcClient
+	class rpcXmlValue
 	{
+		friend class rpcXmlMethod;
+		friend class rpcXmlResponse;
+		
 		public:
-
+			
 			/**
-			 * constructor
+			 * @return rpcValue parsed from XML
+			 * @param data defines XML string
 			 */
-			rpcXmlClient();
-
+			static rpcValue xmlToRpcValue(const dodoString &data);
+			
 			/**
-			 * destructor
+			 * @return XML parsed from rpcValue
+			 * @param data defines rpcValue structure
 			 */
-			virtual ~rpcXmlClient();
+			static dodoString rpcValueToXml(const rpcValue &data); 
 		
 		protected:
 			
-			/**
-			 * process RPC call
-			 * @return RPC method
-			 * @param method defines RPC method representation
-			 */
-			virtual dodoString processRPCCall(const rpcMethod &method);
+			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value  
 			
 			/**
-			 * process RPC call
-			 * @return RPC response represantation
-			 * @param data defines buffer that contains RPC response
+			 * @return rpcValue parsed from XML node
+			 * @param data defines XML node
 			 */
-			virtual rpcResponse processRPCCallResult(const dodoString &data);
+			static rpcValue xmlToRpcValue(__xmlNode &node);
+			
+			/**
+			 * @return XML node from rpcValue
+			 * @param data defines rpcValue structure
+			 */
+			static __xmlNode rpcValueToXmlNode(const rpcValue &data); 
 	};
 };
 

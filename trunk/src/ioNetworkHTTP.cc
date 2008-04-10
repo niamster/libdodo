@@ -207,7 +207,7 @@ ioNetworkHTTP::GET()
 			
 		case GETCONTENTSTATUS_REDIRECT:
 			
-			url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+			setUrl(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
 			
 			GET();
 			
@@ -326,7 +326,7 @@ ioNetworkHTTP::GET()
 __httpResponse
 ioNetworkHTTP::GET(const dodoString &a_url)
 {
-	url = tools::parseURL(a_url);
+	setUrl(a_url);
 	
 	GET();
 	
@@ -340,7 +340,7 @@ ioNetworkHTTP::POST(const dodoString &a_url,
 							const dodoStringMap &arguments, 
 							const dodoStringMap &files)
 {
-	url = tools::parseURL(a_url);
+	setUrl(a_url);
 	
 	POST(arguments, files);
 	
@@ -400,7 +400,7 @@ __httpResponse
 ioNetworkHTTP::POST(const dodoString &a_url, 
 					const dodoStringMap &arguments)
 {
-	url = tools::parseURL(a_url);
+	setUrl(a_url);
 	
 	POST(arguments);
 	
@@ -438,7 +438,7 @@ ioNetworkHTTP::POST(const dodoString &a_url,
 					const dodoString &data,
 					const dodoString &type)
 {
-	url = tools::parseURL(a_url);
+	setUrl(a_url);
 	
 	POST(data, type);
 	
@@ -528,7 +528,7 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 			
 		case GETCONTENTSTATUS_REDIRECT:
 			
-			url = tools::parseURL(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+			setUrl(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
 			
 			POST(data, type);
 			
