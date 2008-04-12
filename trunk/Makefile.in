@@ -37,7 +37,7 @@ OBJECTS:=dbBase.o \
 		regexp.o \
 		logger.o \
 		io.o \
-		ioNetworkHTTP.o \
+		ioNetworkHttp.o \
 		ioCgiFastExchange.o \
 		ioNonBlockedAccess.o \
 		ioNonBlockedAccessInfo.o \
@@ -57,7 +57,7 @@ OBJECTS:=dbBase.o \
 		rpcClient.o \
 		rpcServer.o \
 		rpcXmlClient.o \
-		rpcXmlHTTPClient.o \
+		rpcXmlHttpClient.o \
 		rpcXmlServer.o \
 		rpcXmlCgiServer.o \
 		rpcXmlValue.o \

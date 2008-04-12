@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpcXmlHTTPClient.h
+ *            rpcXmlHttpClient.h
  *
  *  Sat Apr 12 16:49:55 2008
  *  Copyright  2008  Ni@m
@@ -28,26 +28,26 @@
 
 #include <libdodo/types.h>
 #include <libdodo/rpcXmlClient.h>
-#include <libdodo/ioNetworkHTTP.h>
+#include <libdodo/ioNetworkHttp.h>
 
 namespace dodo
 {
 	/**
-	 * @class rpcXmlHTTPClient defines client-side RPC instrument
+	 * @class rpcXmlHttpClient defines client-side RPC instrument
 	 */
-	class rpcXmlHTTPClient : public rpcXmlClient
+	class rpcXmlHttpClient : public rpcXmlClient
 	{
 		public:
 
 			/**
 			 * constructor
 			 */
-			rpcXmlHTTPClient();
+			rpcXmlHttpClient();
 
 			/**
 			 * destructor
 			 */
-			virtual ~rpcXmlHTTPClient();
+			virtual ~rpcXmlHttpClient();
 			
 			/**
 			 * set url to XML-RPC server
@@ -69,7 +69,7 @@ namespace dodo
 			 */
 			virtual dodoString receiveTextResponse();
 			
-			ioNetworkHTTP http;
+			ioNetworkHttp http;
 	};
 };
 

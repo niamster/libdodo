@@ -1,6 +1,6 @@
 
 #include <libdodo/baseEx.h>
-#include <libdodo/ioNetworkHTTP.h>
+#include <libdodo/ioNetworkHttp.h>
 #include <libdodo/types.h>
 
 #include <iostream>
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
 		files["file"] = "./test.cc";
 
-		ioNetworkHTTP http;
+		ioNetworkHttp http;
 		__httpResponse res;
 
 		http.setCookies(cookies);

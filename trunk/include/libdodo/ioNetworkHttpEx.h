@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkHTTPEx.h
+ *            ioNetworkHttpEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -34,7 +34,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum ioNetworkHTTPExR
+	enum ioNetworkHttpExR
 	{
 		IONETWORKHTTPEX_CANNOTCONNECT,
 		IONETWORKHTTPEX_NOTAUTHORIZED,
@@ -51,7 +51,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioNetworkHTTPFunctionsID
+	enum ioNetworkHttpFunctionsID
 	{
 		IONETWORKHTTPEX_POST,
 		IONETWORKHTTPEX_GET,

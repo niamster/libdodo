@@ -1,5 +1,5 @@
 /***************************************************************************
- *            rpcXmlHTTPClient.cc
+ *            rpcXmlHttpClient.cc
  *
  *  Sat Apr 12 16:49:55 2008
  *  Copyright  2008  Ni@m
@@ -21,18 +21,18 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/rpcXmlHTTPClient.h>
+#include <libdodo/rpcXmlHttpClient.h>
 
 using namespace dodo;
 
-rpcXmlHTTPClient::rpcXmlHTTPClient()
+rpcXmlHttpClient::rpcXmlHttpClient()
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcXmlHTTPClient::~rpcXmlHTTPClient()
+rpcXmlHttpClient::~rpcXmlHttpClient()
 {
 	
 }
@@ -40,7 +40,7 @@ rpcXmlHTTPClient::~rpcXmlHTTPClient()
 //-------------------------------------------------------------------
 
 void 
-rpcXmlHTTPClient::sendTextRequest(const dodoString &method)
+rpcXmlHttpClient::sendTextRequest(const dodoString &method)
 {
 	http.POST(method, "text/xml");
 }
@@ -48,7 +48,7 @@ rpcXmlHTTPClient::sendTextRequest(const dodoString &method)
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlHTTPClient::receiveTextResponse()
+rpcXmlHttpClient::receiveTextResponse()
 {
 	__httpResponse response = http.getResponse();
 	
@@ -58,7 +58,7 @@ rpcXmlHTTPClient::receiveTextResponse()
 //-------------------------------------------------------------------
 
 void 
-rpcXmlHTTPClient::setUrl(const dodoString &url)
+rpcXmlHttpClient::setUrl(const dodoString &url)
 {
 	http.setUrl(url);
 }

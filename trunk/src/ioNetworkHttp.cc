@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkHTTP.cc
+ *            ioNetworkHttp.cc
  *
  *  Wed Oct 8 01:44:18 2005
  *  Copyright  2005  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/ioNetworkHTTP.h>
+#include <libdodo/ioNetworkHttp.h>
 
 using namespace dodo;
 
-const dodoString ioNetworkHTTP::requestHeaderStatements[] = { "Accept",
+const dodoString ioNetworkHttp::requestHeaderStatements[] = { "Accept",
 		"Accept-Charset",
 		"Accept-Encoding",
 		"Accept-Language",
@@ -40,7 +40,7 @@ const dodoString ioNetworkHTTP::requestHeaderStatements[] = { "Accept",
 
 //-------------------------------------------------------------------
 
-const dodoString ioNetworkHTTP::responseHeaderStatements[] = { "Accept-Ranges",
+const dodoString ioNetworkHttp::responseHeaderStatements[] = { "Accept-Ranges",
 		"Age",
 		"Allow",
 		"Cache-Control",
@@ -61,7 +61,7 @@ const dodoString ioNetworkHTTP::responseHeaderStatements[] = { "Accept-Ranges",
 
 //-------------------------------------------------------------------
 
-const char ioNetworkHTTP::trimSymbols[] = {' ',
+const char ioNetworkHttp::trimSymbols[] = {' ',
 		'\r'
 };
 
@@ -74,7 +74,7 @@ __httpResponse::__httpResponse() : code(0),
 
 //-------------------------------------------------------------------
 
-ioNetworkHTTP::ioNetworkHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
+ioNetworkHttp::ioNetworkHttp() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
 								followRedirection(true),
 								authTries(0)
 {	
@@ -85,20 +85,20 @@ ioNetworkHTTP::ioNetworkHTTP() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*
 
 //-------------------------------------------------------------------
 
-ioNetworkHTTP::ioNetworkHTTP(ioNetworkHTTP &fd)
+ioNetworkHttp::ioNetworkHttp(ioNetworkHttp &fd)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNetworkHTTP::~ioNetworkHTTP()
+ioNetworkHttp::~ioNetworkHttp()
 {
 }
 
 //-------------------------------------------------------------------
 
 __httpResponse 
-ioNetworkHTTP::getResponse()
+ioNetworkHttp::getResponse()
 {
 	return response;
 }
@@ -106,7 +106,7 @@ ioNetworkHTTP::getResponse()
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHTTP::setUrl(const dodoString &a_url)
+ioNetworkHttp::setUrl(const dodoString &a_url)
 {
 	url = tools::parseUrl(a_url);
 }
@@ -114,7 +114,7 @@ ioNetworkHTTP::setUrl(const dodoString &a_url)
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHTTP::setCookies(const dodoStringMap &cookies)
+ioNetworkHttp::setCookies(const dodoStringMap &cookies)
 {
 	dodoString data;
 	
@@ -138,7 +138,7 @@ ioNetworkHTTP::setCookies(const dodoStringMap &cookies)
 //-------------------------------------------------------------------
 
 void
-ioNetworkHTTP::GET()
+ioNetworkHttp::GET()
 {	
 	response = __httpResponse();
 	
@@ -324,7 +324,7 @@ ioNetworkHTTP::GET()
 
 
 __httpResponse
-ioNetworkHTTP::GET(const dodoString &a_url)
+ioNetworkHttp::GET(const dodoString &a_url)
 {
 	setUrl(a_url);
 	
@@ -336,7 +336,7 @@ ioNetworkHTTP::GET(const dodoString &a_url)
 //-------------------------------------------------------------------
 
 __httpResponse 
-ioNetworkHTTP::POST(const dodoString &a_url, 
+ioNetworkHttp::POST(const dodoString &a_url, 
 							const dodoStringMap &arguments, 
 							const dodoStringMap &files)
 {
@@ -350,7 +350,7 @@ ioNetworkHTTP::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 void
-ioNetworkHTTP::POST(const dodoStringMap &arguments, 
+ioNetworkHttp::POST(const dodoStringMap &arguments, 
 							const dodoStringMap &files)
 {
 	dodoString boundary = "---------------------------" + stringTools::ulToString(tools::ulRandom()) + stringTools::ulToString(tools::ulRandom());
@@ -397,7 +397,7 @@ ioNetworkHTTP::POST(const dodoStringMap &arguments,
 //-------------------------------------------------------------------
 
 __httpResponse 
-ioNetworkHTTP::POST(const dodoString &a_url, 
+ioNetworkHttp::POST(const dodoString &a_url, 
 					const dodoStringMap &arguments)
 {
 	setUrl(a_url);
@@ -410,7 +410,7 @@ ioNetworkHTTP::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHTTP::POST(const dodoStringMap &arguments)
+ioNetworkHttp::POST(const dodoStringMap &arguments)
 {
 	dodoString data;
 	
@@ -434,7 +434,7 @@ ioNetworkHTTP::POST(const dodoStringMap &arguments)
 //-------------------------------------------------------------------
 
 __httpResponse
-ioNetworkHTTP::POST(const dodoString &a_url, 
+ioNetworkHttp::POST(const dodoString &a_url, 
 					const dodoString &data,
 					const dodoString &type)
 {
@@ -448,7 +448,7 @@ ioNetworkHTTP::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 void
-ioNetworkHTTP::POST(const dodoString &a_data,
+ioNetworkHttp::POST(const dodoString &a_data,
 					const dodoString &type)
 {	
 	response = __httpResponse();
@@ -643,7 +643,7 @@ ioNetworkHTTP::POST(const dodoString &a_data,
 //-------------------------------------------------------------------
 
 bool
-ioNetworkHTTP::extractHeaders(const dodoString &data,
+ioNetworkHttp::extractHeaders(const dodoString &data,
 						__httpResponse &response)
 {
 	unsigned long i(0), j(0);
@@ -712,7 +712,7 @@ ioNetworkHTTP::extractHeaders(const dodoString &data,
 //-------------------------------------------------------------------
 
 short 
-ioNetworkHTTP::getContent(dodoString &data, 
+ioNetworkHttp::getContent(dodoString &data, 
 						ioNetworkExchange &ex)
 {
 	ex.setInBufferSize(2048);
@@ -787,7 +787,7 @@ ioNetworkHTTP::getContent(dodoString &data,
 //-------------------------------------------------------------------
 
 dodoString 
-ioNetworkHTTP::trim(const dodoString &data)
+ioNetworkHttp::trim(const dodoString &data)
 {
 	return stringTools::trim(data, ' ');
 }
@@ -795,7 +795,7 @@ ioNetworkHTTP::trim(const dodoString &data)
 //-------------------------------------------------------------------
 
 __cookie 
-ioNetworkHTTP::parseCookie(const dodoString &header)
+ioNetworkHttp::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::explode(header, &trim, ";");
 	dodoStringArray tuple;

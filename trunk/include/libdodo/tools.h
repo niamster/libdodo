@@ -103,7 +103,7 @@ namespace dodo
 	 */
 	class tools
 	{
-		friend class ioNetworkHTTP;
+		friend class ioNetworkHttp;
 		
 		public:
 

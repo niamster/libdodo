@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkHTTP.h
+ *            ioNetworkHttp.h
  *
  *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
@@ -33,7 +33,7 @@
 #include <libdodo/tools.h>
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioNetworkTools.h>
-#include <libdodo/ioNetworkHTTPEx.h>
+#include <libdodo/ioNetworkHttpEx.h>
 #include <libdodo/types.h>
 #include <libdodo/regexp.h>
 #include <libdodo/cgi.h>
@@ -43,9 +43,9 @@ namespace dodo
 #define IONETWORKHTTP_REQUESTHEADERSTATEMENTS 11
 
 	/**
-	 * @enum ioNetworkHTTPRequestHeaderEnum defines HTTP request headers
+	 * @enum ioNetworkHttpRequestHeaderEnum defines HTTP request headers
 	 */
-	enum ioNetworkHTTPRequestHeaderEnum
+	enum ioNetworkHttpRequestHeaderEnum
 	{
 		IONETWORKHTTP_REQUESTHEADER_ACCEPT,///< content-types that are acceptable
 		IONETWORKHTTP_REQUESTHEADER_ACCEPTCHARSET,///< character sets that are acceptable
@@ -63,9 +63,9 @@ namespace dodo
 #define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 17
 	
 	/**
-	 * @enum ioNetworkHTTPResponseHeaderEnum defines HTTP response headers
+	 * @enum ioNetworkHttpResponseHeaderEnum defines HTTP response headers
 	 */
-	enum ioNetworkHTTPResponseHeaderEnum
+	enum ioNetworkHttpResponseHeaderEnum
 	{
 		IONETWORKHTTP_RESPONSEHEADER_ACCEPTRANGES,///< what partial content range types this server supports
 		IONETWORKHTTP_RESPONSEHEADER_AGE,///< the age the object has been in a proxy cache in seconds
@@ -96,7 +96,7 @@ namespace dodo
 		 */
 		__httpResponse();
 		
-		dodoMap<short, dodoString> headers; ///< response headers[see ioNetworkHTTPResponseHeaderEnum]
+		dodoMap<short, dodoString> headers; ///< response headers[see ioNetworkHttpResponseHeaderEnum]
 		dodoArray<__cookie> cookies;///< cookies from the server
 		dodoString data; ///< response data
 		short code; ///< response code
@@ -104,9 +104,9 @@ namespace dodo
 	};
 	
 	/**
-	 * @class ioNetworkHTTP provides disk I/O manipulations
+	 * @class ioNetworkHttp provides disk I/O manipulations
 	 */
-	class ioNetworkHTTP
+	class ioNetworkHttp
 	{
 		private:
 
@@ -114,21 +114,21 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			ioNetworkHTTP(ioNetworkHTTP &fd);
+			ioNetworkHttp(ioNetworkHttp &fd);
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			ioNetworkHTTP();
+			ioNetworkHttp();
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioNetworkHTTP();
+			virtual ~ioNetworkHttp();
 
-			dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see ioNetworkHTTPRequestHeaderEnum]
+			dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see ioNetworkHttpRequestHeaderEnum]
 			
 			/**
 			 * @return server response
@@ -235,8 +235,8 @@ namespace dodo
 			
 			unsigned short authTries;///< autherization request counter
 			
-			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS];///< HTTP request headers[see ioNetworkHTTPRequestHeaderEnum]
-			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see ioNetworkHTTPResponseHeaderEnum]
+			static const dodoString requestHeaderStatements[IONETWORKHTTP_REQUESTHEADERSTATEMENTS];///< HTTP request headers[see ioNetworkHttpRequestHeaderEnum]
+			static const dodoString responseHeaderStatements[IONETWORKHTTP_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see ioNetworkHttpResponseHeaderEnum]
 			
 			regexp httpStatusRE;///< parser for HTTP response status code
 			

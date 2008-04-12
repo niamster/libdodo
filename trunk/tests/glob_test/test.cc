@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContents("test.cc")));
 #endif
 		
-		cout << tools::decodeUrl(tools::encodeURL("@!()HEY, that's working!")) << endl;
+		cout << tools::decodeUrl(tools::encodeUrl("@!()HEY, that's working!")) << endl;
 		cout << tools::encodeUrl("@!()HEY, that's working!") << endl;
 		
 		cout << tools::encodeASCII85("HEY, that's working!") << endl;

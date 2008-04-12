@@ -1,6 +1,6 @@
 
 #include <libdodo/baseEx.h>
-#include <libdodo/rpcXmlHTTPClient.h>
+#include <libdodo/rpcXmlHttpClient.h>
 #include <libdodo/types.h>
 
 #include <iostream>
@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		rpcXmlHTTPClient client;
+		rpcXmlHttpClient client;
 
 		client.setUrl("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
 
