@@ -39,6 +39,8 @@ namespace dodo
 	 */
 	class rpcXmlMethod
 	{	
+		friend class rpcXmlClient;
+		
 		public:
 			
 			/**

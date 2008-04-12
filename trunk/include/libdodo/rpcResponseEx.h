@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlServer.cc
+ *            rpcResponseEx.h
  *
- *  Wed Apr 09 23:30:55 2008
+ *  Mon Mar 24 02:15:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,38 +21,37 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/rpcXmlServer.h>
+#ifndef _RPCRESPONSEEX_H_
+#define _RPCRESPONSEEX_H_
 
-using namespace dodo;
+#include <libdodo/directives.h>
 
-rpcXmlServer::rpcXmlServer()
+#include <libdodo/baseEx.h>
+
+namespace dodo
 {
-	
-}
+	/**
+	 * libdodo defined errors
+	 */
+	enum rpcResponseExR
+	{
+		RPCRESPONSEEX_ARRAYOUTOFBOUNDS,
+	};
 
-//-------------------------------------------------------------------
+	/**
+	 * explanations for libdodo defined errors
+	 */
+#define RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR "Array index out of bounds."
 
-rpcXmlServer::~rpcXmlServer()
-{
-	
-}
+	/**
+	 * IDs of functions where exception might be thrown
+	 */
+	enum rpcResponseFunctionsID
+	{
+		RPCRESPONSEEX_BROPERATORUNSIGNEDLONG,
+		RPCRESPONSEEX_GETVALUE,
+	};
 
-//-------------------------------------------------------------------
+};
 
-rpcMethod 
-rpcXmlServer::processRPCCall(const dodoString &data)
-{
-	return rpcXmlMethod::xmlToRpcMethod(data);
-}
-
-//-------------------------------------------------------------------
-
-dodoString 
-rpcXmlServer::processRPCCallResult(const rpcResponse &response)
-{
-	xml xmlMethod;
-	
-	return xmlMethod.createXML(rpcXmlResponse::rpcResponseToXmlNode(response));
-}
-
-//-------------------------------------------------------------------
+#endif

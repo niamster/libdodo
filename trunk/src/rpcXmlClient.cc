@@ -44,17 +44,15 @@ rpcXmlClient::processRPCCall(const rpcMethod &method)
 {
 	xml xmlMethod;
 	
-	xmlMethod.createXML(rpcXmlMethod::rpcMethodToXmlNode(method));
+	return xmlMethod.createXML(rpcXmlMethod::rpcMethodToXmlNode(method));
 }
 
 //-------------------------------------------------------------------
 
 rpcResponse 
 rpcXmlClient::processRPCCallResult(const dodoString &data)
-{	
-	rpcResponse result;
-
-	return result;
+{
+	return rpcXmlResponse::xmlToRpcResponse(data);
 }
 
 //-------------------------------------------------------------------

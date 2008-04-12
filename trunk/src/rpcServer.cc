@@ -41,7 +41,7 @@ rpcServer::~rpcServer()
 
 rpcResponse 
 rpcServer::rpcDefaultHandler(const dodoString &method, 
-		const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &arguments)
+		const dodoArray<rpcValue> &arguments)
 {
 	return rpcResponse();
 }

@@ -29,6 +29,7 @@
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
 #include <libdodo/rpcValue.h>
+#include <libdodo/rpcResponseEx.h>
 
 namespace dodo
 {	

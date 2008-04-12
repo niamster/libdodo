@@ -39,6 +39,8 @@ namespace dodo
 	 */
 	class rpcXmlResponse
 	{	
+		friend class rpcXmlServer;
+		
 		public:
 			
 			/**
@@ -53,7 +55,7 @@ namespace dodo
 			 */
 			static dodoString rpcResponseToXml(const rpcResponse &data); 
 			
-		public:
+		protected:
 			
 			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
 			

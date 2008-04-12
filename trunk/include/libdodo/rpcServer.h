@@ -37,7 +37,7 @@ namespace dodo
 	/**
 	 * @typedef rpcHandler defines type of rpc method handler
 	 */
-	typedef rpcResponse (*rpcHandler)(const dodoString &, const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &);
+	typedef rpcResponse (*rpcHandler)(const dodoString &, const dodoArray<rpcValue> &);
 	
 	/**
 	 * @class rpcServer defines server-side RPC instrument
@@ -101,7 +101,7 @@ namespace dodo
 			 * @param handler defines function that will process rpc call
 			 * @param arguments defines method arguments
 			 */
-			static rpcResponse rpcDefaultHandler(const dodoString &method, const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &arguments);
+			static rpcResponse rpcDefaultHandler(const dodoString &method, const dodoArray<rpcValue> &arguments);
 		
 			/**
 			 * send request
