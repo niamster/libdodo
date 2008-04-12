@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	{
 		rpcXmlHTTPClient client;
 
-		client.setUrl("http://localhost/libdodo/cgi_test/test.cgi");
+		client.setUrl("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
 
 		rpcMethod method;
 		rpcValue argument;
@@ -39,7 +39,9 @@ int main(int argc, char **argv)
 
 		client.sendRequest(method);
 
-		//rpcResponse response = client.receiveResponse();
+		rpcResponse response = client.receiveResponse();
+
+		cout << response.getValue().getString() << endl;
 	}
 	catch(baseEx ex)
 	{

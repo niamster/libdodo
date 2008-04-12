@@ -104,6 +104,8 @@ rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
 		__xmlNode param;
 		param.name = "param";
 		
+		dodoArray<__xmlNode> subNodeArr; 
+		
 		dodoArray<rpcValue>::const_iterator i = data.values.begin(), j = data.values.end();
 		for (;i!=j;++i)
 		{
@@ -111,7 +113,10 @@ rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
 			
 			nodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
 			param.children.insert(make_pair("value", nodeArr));
+			
+			subNodeArr.push_back(param);
 		}
+		params.children.insert(make_pair("param", subNodeArr));
 
 		nodeArr.assign(1, params);
 		response.children.insert(make_pair(params.name, nodeArr));

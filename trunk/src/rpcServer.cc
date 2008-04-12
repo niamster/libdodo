@@ -43,7 +43,10 @@ rpcResponse
 rpcServer::rpcDefaultHandler(const dodoString &method, 
 		const dodoArray<rpcValue> &arguments)
 {
-	return rpcResponse();
+	rpcResponse response;
+	response.fault(dodoString("rpcDefaultHandler"));
+	
+	return response;
 }
 
 //-------------------------------------------------------------------
@@ -76,15 +79,33 @@ rpcServer::removeHandler(const dodoString &method)
 void 
 rpcServer::serve()
 {
-	rpcMethod method = processRPCCall(receiveTextResponse());
+	try
+	{
+		rpcMethod method = processRPCCall(receiveTextResponse());
+		
+		dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator end = handlers.end();
+		
+		dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
 	
-	dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator end = handlers.end();
-	
-	dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
-	if (handler == end)
-		sendTextRequest(processRPCCallResult(defaultHandler(method.name, method.arguments)));
-	else
-		sendTextRequest(processRPCCallResult(handler->second(method.name, method.arguments)));
+		if (handler == end)
+			sendTextRequest(processRPCCallResult(defaultHandler(method.name, method.arguments)));
+		else
+			sendTextRequest(processRPCCallResult(handler->second(method.name, method.arguments)));
+	}
+	catch (baseEx ex)
+	{
+		rpcResponse response;
+		response.fault(ex.baseErrstr);
+		
+		sendTextRequest(processRPCCallResult(response));
+	}
+	catch (...)
+	{
+		rpcResponse response;
+		response.fault(dodoString("An unknown error."));
+		
+		sendTextRequest(processRPCCallResult(response));
+	}
 }
 
 //-------------------------------------------------------------------
