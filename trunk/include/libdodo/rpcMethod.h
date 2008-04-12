@@ -68,11 +68,11 @@ namespace dodo
 			 * add argument
 			 * @param argument defines method argument 
 			 */
-			virtual void addArgument(const dodoString &name, const rpcValue &argument);
+			virtual void addArgument(const rpcValue &argument);
 			
 		private:
 			
-			dodoMap<dodoString, rpcValue, dodoMapStringCompare> arguments;///< method arguments
+			dodoArray<rpcValue> arguments;///< method arguments
 			dodoString name;///< method name
 	};
 };

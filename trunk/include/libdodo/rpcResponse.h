@@ -39,6 +39,7 @@ namespace dodo
 	{
 		friend class rpcClient;
 		friend class rpcServer;
+		friend class rpcXmlResponse;
 		
 		public:
 
@@ -54,22 +55,46 @@ namespace dodo
 
 			/**
 			 * @return response value
+			 * @param position defines index of returned value
 			 */
-			virtual rpcValue getValue();
+			virtual rpcValue getValue(unsigned long position = 0);
+
+			/**
+			 * @return response values
+			 */
+			virtual dodoArray<rpcValue> getValues();
+
+			/**
+			 * @return response values count
+			 */
+			virtual unsigned long getValuesCount();
 			
 			/**
 			 * @return true if request has  
 			 */
-			virtual bool successful();
+			virtual bool isSuccessful();
+			
+			/**
+			 * set argument for fault response
+			 * @param argument defines response argument 
+			 */
+			virtual void fault(const rpcValue &argument);
+			
+			/**
+			 * add argument for successful response
+			 * @param argument defines response argument 
+			 */
+			virtual void addArgument(const rpcValue &argument);
 			
 			/**
 			 * @return rpcValue for type casting  
+			 * @param position defines index of returned value
 			 */
-			virtual operator rpcValue(); 
+			virtual rpcValue operator[](unsigned long position); 
 			
 		private:
 			
-			rpcValue value;///< response value
+			dodoArray<rpcValue> values;///< response values
 			bool succ;///< true if server returned non-fail response
 	};
 };

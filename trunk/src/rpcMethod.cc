@@ -56,10 +56,9 @@ rpcMethod::clear()
 //-------------------------------------------------------------------
 
 void
-rpcMethod::addArgument(const dodoString &name,
-					const rpcValue &argument)
+rpcMethod::addArgument(const rpcValue &argument)
 {
-	arguments.insert(make_pair(name, argument));
+	arguments.push_back(argument);
 }
 
 //-------------------------------------------------------------------

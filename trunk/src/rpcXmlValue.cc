@@ -69,7 +69,6 @@ rpcXmlValue::xmlToRpcValue(__xmlNode &node)
 					{
 						value.valueDataType = RPC_DATATYPE_STRUCT;
 						
-						rpcValue subValue;
 						dodoArray<__xmlNode> &nodeArray = i->second[0].children["member"];
 						
 						dodoArray<__xmlNode>::iterator o = nodeArray.begin(), p = nodeArray.end();
@@ -82,7 +81,6 @@ rpcXmlValue::xmlToRpcValue(__xmlNode &node)
 						{
 							value.valueDataType = RPC_DATATYPE_ARRAY;
 							
-							rpcValue subValue;
 							dodoArray<__xmlNode> &nodeArray = i->second[0].children["data"][0].children["value"];
 							
 							dodoArray<__xmlNode>::iterator o = nodeArray.begin(), p = nodeArray.end();
@@ -119,11 +117,12 @@ rpcXmlValue::xmlToRpcValue(const dodoString &data)
 __xmlNode
 rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 {
+	dodoArray<__xmlNode> subNodeArr; 
+	
 	__xmlNode node;
 	node.name = "value";
 	
 	__xmlNode subNode;
-	dodoArray<__xmlNode> subNodeArr; 
 	
 	switch (data.valueDataType)
 	{
@@ -132,7 +131,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "string";
 			subNode.value = data.stringValue;
 			
-			subNodeArr.push_back(subNode);
+			subNodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, subNodeArr));
 			
 			break;
@@ -142,7 +141,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "boolean";
 			subNode.value = data.booleanValue?"1":"0";
 
-			subNodeArr.push_back(subNode);
+			subNodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, subNodeArr));
 			
 			break;
@@ -152,7 +151,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "int";
 			subNode.value = stringTools::iToString(data.integerValue);
 
-			subNodeArr.push_back(subNode);
+			subNodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, subNodeArr));
 		
 			break;
@@ -162,7 +161,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "double";
 			subNode.value = stringTools::dToString(data.doubleValue);
 
-			subNodeArr.push_back(subNode);
+			subNodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, subNodeArr));
 			
 			break;
@@ -179,12 +178,10 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 				subNodeArr.push_back(rpcValueToXmlNode(*i));
 			dataNode.children.insert(make_pair("value", subNodeArr));
 			
-			subNodeArr.clear();
-			subNodeArr.push_back(dataNode);
+			subNodeArr.assign(1, dataNode);
 			subNode.children.insert(make_pair(dataNode.name, subNodeArr));
 			
-			subNodeArr.clear();
-			subNodeArr.push_back(subNode);
+			subNodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, subNodeArr));
 			
 			break;
@@ -205,27 +202,21 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 				memberNode.children.clear();
 				memberValueNode.children.clear();
 				
-				subNodeArr.clear();
 				memberNameNode.value = i->first;
-				subNodeArr.push_back(memberNameNode);
+				subNodeArr.assign(1, memberNameNode);
 				memberNode.children.insert(make_pair(memberNameNode.name, subNodeArr));
 
-				subNodeArr.clear();
 				memberValueContentsNode = rpcValueToXmlNode(i->second);
-				subNodeArr.push_back(memberValueContentsNode);
+				subNodeArr.assign(1, memberValueContentsNode);
 				memberValueNode.children.insert(make_pair(memberValueContentsNode.name, subNodeArr));
-				
-				subNodeArr.clear();
-				subNodeArr.push_back(memberValueNode);
+				subNodeArr.assign(1, memberValueNode);
 				memberNode.children.insert(make_pair(memberValueNode.name, subNodeArr));
 				
-				subNodeArr.clear();
-				subNodeArr.push_back(memberNode);
+				subNodeArr.assign(1, memberNode);
 				subNode.children.insert(make_pair(memberNode.name, subNodeArr));
 			}
 			
-			subNodeArr.clear();
-			subNodeArr.push_back(subNode);
+			subNodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, subNodeArr));
 			
 			break;

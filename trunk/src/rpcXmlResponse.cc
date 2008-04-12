@@ -25,14 +25,24 @@
 
 using namespace dodo;
 
-using namespace dodo;
+const char rpcXmlResponse::trimSymbols[] = {' ',
+		'\r'
+};
+
+//-------------------------------------------------------------------
 
 rpcResponse
 rpcXmlResponse::xmlToRpcResponse(const dodoString &data)
 {
-	rpcResponse response;
+	__xmlNodeDef xmlMethodResponse;
+	xmlMethodResponse.name = "methodResponse";
+	xmlMethodResponse.ignoreChildrenDef = true;
 	
-	return response;
+	xml xmlValue;
+
+	__xmlNode node = xmlValue.parseBuffer(xmlMethodResponse, data);
+	
+	return xmlToRpcResponse(node);
 }
 
 //-------------------------------------------------------------------
@@ -40,7 +50,83 @@ rpcXmlResponse::xmlToRpcResponse(const dodoString &data)
 dodoString 
 rpcXmlResponse::rpcResponseToXml(const rpcResponse &data)
 {
-	dodoString response;
+	xml xmlValue;
+	
+	return xmlValue.createNode(rpcResponseToXmlNode(data));
+}
+
+//-------------------------------------------------------------------
+
+rpcResponse
+rpcXmlResponse::xmlToRpcResponse(__xmlNode &node)
+{
+	rpcResponse response;
+	
+	dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare>::iterator i = node.children.begin();
+	if (stringTools::iequal(i->first, "fault"))
+	{
+		response.succ = false;
+		
+		response.values.assign(1, rpcXmlValue::xmlToRpcValue(i->second[0].children["value"][0]));
+	}
+	else
+	{
+		if (stringTools::iequal(i->first, "params"))
+		{
+			response.succ = true;
+			
+			dodoArray<__xmlNode> &nodeArray = i->second[0].children["param"];
+			
+			dodoArray<__xmlNode>::iterator o = nodeArray.begin(), p = nodeArray.end();
+			for (;o!=p;++o)
+				response.values.push_back(rpcXmlValue::xmlToRpcValue(o->children["value"][0]));
+		}
+	}
+	
+	return response;
+}
+
+//-------------------------------------------------------------------
+
+__xmlNode 
+rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
+{
+	dodoArray<__xmlNode> subNodeArr; 
+	
+	__xmlNode response;
+	response.name = "methodResponse";
+	
+	if (data.succ)
+	{
+		__xmlNode params;
+		params.name = "params";
+		
+		__xmlNode param;
+		param.name = "param";
+		
+		dodoArray<rpcValue>::const_iterator i = data.values.begin(), j = data.values.end();
+		for (;i!=j;++i)
+		{
+			param.children.clear();
+			
+			subNodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
+			param.children.insert(make_pair("value", subNodeArr));
+		}
+
+		subNodeArr.assign(1, params);
+		response.children.insert(make_pair(params.name, subNodeArr));
+	}
+	else
+	{
+		__xmlNode fault;
+		fault.name = "fault";
+		
+		subNodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(data.values.front()));
+		fault.children.insert(make_pair("value", subNodeArr));
+
+		subNodeArr.assign(1, fault);
+		response.children.insert(make_pair(fault.name, subNodeArr));
+	}
 	
 	return response;
 }

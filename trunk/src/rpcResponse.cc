@@ -40,24 +40,61 @@ rpcResponse::~rpcResponse()
 //-------------------------------------------------------------------
 
 rpcValue
-rpcResponse::getValue()
+rpcResponse::getValue(unsigned long position)
 {
-	return value;
+	return values[position];
 }
 
 //-------------------------------------------------------------------
 
 bool
-rpcResponse::successful()
+rpcResponse::isSuccessful()
 {
 	return succ;
 }
 
 //-------------------------------------------------------------------
 
-rpcResponse::operator rpcValue()
+void
+rpcResponse::addArgument(const rpcValue &argument)
 {
-	return value;
+	succ = true;
+	
+	values.push_back(argument);
+}
+
+//-------------------------------------------------------------------
+
+void
+rpcResponse::fault(const rpcValue &argument)
+{
+	succ = false;
+	
+	values.assign(1, argument);
+}
+
+//-------------------------------------------------------------------
+
+rpcValue
+rpcResponse::operator[](unsigned long position)
+{
+	return values[position];
+}
+
+//-------------------------------------------------------------------
+
+unsigned long 
+rpcResponse::getValuesCount()
+{
+	return values.size();
+}
+
+//-------------------------------------------------------------------
+
+dodoArray<rpcValue> 
+rpcResponse::getValues()
+{
+	return values;
 }
 
 //-------------------------------------------------------------------

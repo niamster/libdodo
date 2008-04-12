@@ -29,6 +29,7 @@
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
 #include <libdodo/rpcMethod.h>
+#include <libdodo/rpcXmlValue.h>
 #include <libdodo/xml.h>
 
 namespace dodo
@@ -37,7 +38,7 @@ namespace dodo
 	 * @class rpcXmlMethod defines RPC method in XML representation
 	 */
 	class rpcXmlMethod
-	{
+	{	
 		public:
 			
 			/**
@@ -51,6 +52,22 @@ namespace dodo
 			 * @param data defines rpcMethod structure
 			 */
 			static dodoString rpcMethodToXml(const rpcMethod &data); 
+			
+		protected:
+			
+			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
+			
+			/**
+			 * @return rpcMethod parsed from XML node
+			 * @param data defines XML string
+			 */
+			static rpcMethod xmlToRpcMethod(__xmlNode &node);
+			
+			/**
+			 * @return XML node parsed from rpcMethod
+			 * @param data defines rpcMethod structure
+			 */
+			static __xmlNode rpcMethodToXmlNode(const rpcMethod &data); 
 	};
 };
 

@@ -25,14 +25,24 @@
 
 using namespace dodo;
 
-using namespace dodo;
+const char rpcXmlMethod::trimSymbols[] = {' ',
+		'\r'
+};
+
+//-------------------------------------------------------------------
 
 rpcMethod
 rpcXmlMethod::xmlToRpcMethod(const dodoString &data)
 {
-	rpcMethod method;
+	__xmlNodeDef xmlMethodCall;
+	xmlMethodCall.name = "methodCall";
+	xmlMethodCall.ignoreChildrenDef = true;
 	
-	return method;
+	xml xmlValue;
+
+	__xmlNode node = xmlValue.parseBuffer(xmlMethodCall, data);
+	
+	return xmlToRpcMethod(node);
 }
 
 //-------------------------------------------------------------------
@@ -40,7 +50,74 @@ rpcXmlMethod::xmlToRpcMethod(const dodoString &data)
 dodoString 
 rpcXmlMethod::rpcMethodToXml(const rpcMethod &data)
 {
-	dodoString method;
+	xml xmlValue;
+	
+	return xmlValue.createNode(rpcMethodToXmlNode(data));
+}
+
+//-------------------------------------------------------------------
+
+
+rpcMethod
+rpcXmlMethod::xmlToRpcMethod(__xmlNode &node)
+{
+	rpcMethod method;
+	
+	dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare>::iterator i = node.children.begin();
+	if (stringTools::iequal(i->first, "methodName"))
+		method.name = stringTools::trim(i->second[0].value, trimSymbols, 2);
+	else
+	{
+		if (stringTools::iequal(i->first, "params"))
+		{
+			dodoArray<__xmlNode> &nodeArray = i->second[0].children["param"];
+			
+			dodoArray<__xmlNode>::iterator o = nodeArray.begin(), p = nodeArray.end();
+			for (;o!=p;++o)
+				method.arguments.push_back(rpcXmlValue::xmlToRpcValue(o->children["value"][0]));
+		}
+	}
+	
+	return method;
+}
+
+//-------------------------------------------------------------------
+
+__xmlNode 
+rpcXmlMethod::rpcMethodToXmlNode(const rpcMethod &data)
+{
+	dodoArray<__xmlNode> subNodeArr; 
+	
+	__xmlNode method;
+	method.name = "methodCall";
+	
+	__xmlNode methodName;
+	methodName.name = "methodName";
+	methodName.value = data.name;
+	
+	subNodeArr.assign(1, methodName);
+	method.children.insert(make_pair(methodName.name, subNodeArr));
+	
+	dodoArray<rpcValue>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
+	if (i!=j)
+	{
+		__xmlNode params;
+		params.name = "params";
+		
+		__xmlNode param;
+		param.name = "param";
+		
+		for (;i!=j;++i)
+		{
+			param.children.clear();
+			
+			subNodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
+			param.children.insert(make_pair("value", subNodeArr));
+		}
+
+		subNodeArr.assign(1, params);
+		method.children.insert(make_pair(params.name, subNodeArr));
+	}
 	
 	return method;
 }

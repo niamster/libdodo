@@ -29,6 +29,7 @@
 #include <libdodo/types.h>
 #include <libdodo/stringTools.h>
 #include <libdodo/rpcResponse.h>
+#include <libdodo/rpcXmlValue.h>
 #include <libdodo/xml.h>
 
 namespace dodo
@@ -37,7 +38,7 @@ namespace dodo
 	 * @class rpcXmlResponse defines RPC response in XML representation
 	 */
 	class rpcXmlResponse
-	{
+	{	
 		public:
 			
 			/**
@@ -51,6 +52,22 @@ namespace dodo
 			 * @param data defines rpcResponse structure
 			 */
 			static dodoString rpcResponseToXml(const rpcResponse &data); 
+			
+		public:
+			
+			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
+			
+			/**
+			 * @return rpcResponse parsed from XML node
+			 * @param data defines XML string
+			 */
+			static rpcResponse xmlToRpcResponse(__xmlNode &node);
+			
+			/**
+			 * @return XML node parsed from rpcResponse
+			 * @param data defines rpcResponse structure
+			 */
+			static __xmlNode rpcResponseToXmlNode(const rpcResponse &data); 
 	};
 };
 

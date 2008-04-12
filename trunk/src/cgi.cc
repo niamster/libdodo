@@ -373,6 +373,8 @@ cgi::makeEnv()
 
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
+	
+	ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE] = tools::explode(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], ";", 2).front();
 }
 
 //-------------------------------------------------------------------
