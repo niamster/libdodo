@@ -42,9 +42,9 @@ rpcXmlClient::~rpcXmlClient()
 dodoString 
 rpcXmlClient::processRPCCall(const rpcMethod &method)
 {
-	dodoString data;
+	xml xmlMethod;
 	
-	return data;
+	xmlMethod.createXML(rpcXmlMethod::rpcMethodToXmlNode(method));
 }
 
 //-------------------------------------------------------------------
