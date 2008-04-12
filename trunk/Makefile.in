@@ -38,7 +38,7 @@ OBJECTS:=dbBase.o \
 		logger.o \
 		io.o \
 		ioNetworkHttp.o \
-		ioCgiFastExchange.o \
+		cgiFastExchange.o \
 		ioNonBlockedAccess.o \
 		ioNonBlockedAccessInfo.o \
 		ioNetworkOptions.o \

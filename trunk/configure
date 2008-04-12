@@ -1364,8 +1364,8 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
-  --disable-ioCgiFastExchange-xexec-support
-                          compile ioCgiFastExchange w/o xexec support
+  --disable-cgiFastExchange-xexec-support
+                          compile cgiFastExchange w/o xexec support
   --disable-ioSTD-xexec-support
                           compile ioSTD w/o xexec support
   --disable-ioNetworkExchange-xexec-support

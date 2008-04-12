@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioCgiFastExchangeEx.h
+ *            cgiFastExchangeEx.h
  *
  *  Mon Dec 31 01:51:55 2007
  *  Copyright  2007  Ni@m
@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum ioCgiFastExchangeExR
+	enum cgiFastExchangeExR
 	{
 		IOCGIFASTEXCHANGEEX_FAILEDTOFLUSH,
 		IOCGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING,
@@ -48,7 +48,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioCgiFastExchangeFunctionsID
+	enum cgiFastExchangeFunctionsID
 	{
 		IOCGIFASTEXCHANGEEX_FLUSH,
 		IOCGIFASTEXCHANGEEX__WRITE,

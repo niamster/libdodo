@@ -36,7 +36,7 @@ pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(ioCgiFastExchange *data)
+dummyStackThread(cgiFastExchange *data)
 {
 }
 
@@ -105,7 +105,7 @@ cgiFast::stackThread(void *data)
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
 
-	ioCgiFastExchange cfSTD(&request);
+	cgiFastExchange cfSTD(&request);
 
 	int res = 0;
 
@@ -157,7 +157,7 @@ cgiFast::listen()
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);
 
-		ioCgiFastExchange cfSTD(&request);
+		cgiFastExchange cfSTD(&request);
 
 		while (true)
 		{

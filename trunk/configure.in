@@ -60,7 +60,7 @@ else
 fi
 
 AC_ARG_ENABLE(cgiFast-xexec-support,
-        AS_HELP_STRING([--disable-ioCgiFastExchange-xexec-support],[compile ioCgiFastExchange w/o xexec support]),
+        AS_HELP_STRING([--disable-cgiFastExchange-xexec-support],[compile cgiFastExchange w/o xexec support]),
         [CGIFAST_W_XEXEC="$enableval"], [CGIFAST_W_XEXEC="yes"])
 
 if test "$CGIFAST_W_XEXEC" = "no"

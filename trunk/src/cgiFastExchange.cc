@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioCgiFastExchange.cc
+ *            cgiFastExchange.cc
  *
  *  Sat Aug  5 03:37:19 2006
  *  Copyright  2006  Ni@m
@@ -27,26 +27,26 @@
 
 using namespace dodo;
 
-ioCgiFastExchange::ioCgiFastExchange(ioCgiFastExchange &cf)
+cgiFastExchange::cgiFastExchange(cgiFastExchange &cf)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioCgiFastExchange::ioCgiFastExchange(FCGX_Request *a_request) : request(a_request)
+cgiFastExchange::cgiFastExchange(FCGX_Request *a_request) : request(a_request)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioCgiFastExchange::~ioCgiFastExchange()
+cgiFastExchange::~cgiFastExchange()
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::flush()
+cgiFastExchange::flush()
 {
 	if (FCGX_FFlush(request->out) == -1)
 		throw baseEx(ERRMODULE_CGIFAST, IOCGIFASTEXCHANGEEX_FLUSH, ERR_LIBDODO, IOCGIFASTEXCHANGEEX_FAILEDTOFLUSH, IOCGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
@@ -55,7 +55,7 @@ ioCgiFastExchange::flush()
 //-------------------------------------------------------------------
 
 char *
-ioCgiFastExchange::getenv(const char *buf)
+cgiFastExchange::getenv(const char *buf)
 {
 	return FCGX_GetParam(buf, request->envp);
 }
@@ -63,7 +63,7 @@ ioCgiFastExchange::getenv(const char *buf)
 //-------------------------------------------------------------------
 
 int
-ioCgiFastExchange::getInDescriptor() const
+cgiFastExchange::getInDescriptor() const
 {
 	return -1;
 }
@@ -71,7 +71,7 @@ ioCgiFastExchange::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-ioCgiFastExchange::getOutDescriptor() const
+cgiFastExchange::getOutDescriptor() const
 {
 	return -1;
 }
@@ -81,7 +81,7 @@ ioCgiFastExchange::getOutDescriptor() const
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 
 int
-ioCgiFastExchange::addPostExec(inExec func,
+cgiFastExchange::addPostExec(inExec func,
 				   void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOCGIFASTEXCHANGE, data);
@@ -90,7 +90,7 @@ ioCgiFastExchange::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-ioCgiFastExchange::addPreExec(inExec func,
+cgiFastExchange::addPreExec(inExec func,
 				  void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOCGIFASTEXCHANGE, data);
@@ -101,7 +101,7 @@ ioCgiFastExchange::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-ioCgiFastExchange::addPostExec(const dodoString &module,
+cgiFastExchange::addPostExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
@@ -111,7 +111,7 @@ ioCgiFastExchange::addPostExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 __xexecCounts
-ioCgiFastExchange::addExec(const dodoString &module,
+cgiFastExchange::addExec(const dodoString &module,
 			   void             *data,
 			   void             *toInit)
 {
@@ -121,7 +121,7 @@ ioCgiFastExchange::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-ioCgiFastExchange::addPreExec(const dodoString &module,
+cgiFastExchange::addPreExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
@@ -135,7 +135,7 @@ ioCgiFastExchange::addPreExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::_read(char * const a_void)
+cgiFastExchange::_read(char * const a_void)
 {
 	memset(a_void, '\0', inSize);
 
@@ -145,7 +145,7 @@ ioCgiFastExchange::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::read(char * const a_void)
+cgiFastExchange::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -184,7 +184,7 @@ ioCgiFastExchange::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::readString(dodoString &a_str)
+cgiFastExchange::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -229,7 +229,7 @@ ioCgiFastExchange::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::writeString(const dodoString &a_buf)
+cgiFastExchange::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -264,7 +264,7 @@ ioCgiFastExchange::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::write(const char *const a_buf)
+cgiFastExchange::write(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -299,7 +299,7 @@ ioCgiFastExchange::write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::_write(const char *const buf)
+cgiFastExchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->out) == -1)
 		throw baseEx(ERRMODULE_CGIFAST, IOCGIFASTEXCHANGEEX__WRITE, ERR_LIBDODO, IOCGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING, IOCGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
@@ -308,7 +308,7 @@ ioCgiFastExchange::_write(const char *const buf)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::readStream(char * const a_void)
+cgiFastExchange::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -334,7 +334,7 @@ ioCgiFastExchange::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::readStreamString(dodoString &a_str)
+cgiFastExchange::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -373,7 +373,7 @@ ioCgiFastExchange::readStreamString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::writeStreamString(const dodoString &a_buf)
+cgiFastExchange::writeStreamString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -428,7 +428,7 @@ ioCgiFastExchange::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioCgiFastExchange::writeStream(const char *const a_buf)
+cgiFastExchange::writeStream(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 

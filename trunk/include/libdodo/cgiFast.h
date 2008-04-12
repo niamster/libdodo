@@ -32,7 +32,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/cgiFastEx.h>
-#include <libdodo/ioCgiFastExchange.h>
+#include <libdodo/cgiFastExchange.h>
 #include <libdodo/io.h>
 #include <libdodo/systemThreadGuard.h>
 
@@ -41,7 +41,7 @@ namespace dodo
 	/**
 	 * @typedef cgiProc defines type of function that will be called on new cgi request
 	 */
-	typedef void (*cgiProc)(ioCgiFastExchange *);
+	typedef void (*cgiProc)(cgiFastExchange *);
 
 	/**
 	 * @class cgiFast provides fast CGI functionality

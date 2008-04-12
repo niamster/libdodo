@@ -16,7 +16,7 @@ using namespace std;
 systemThreadSharedDataGuard sh;
 
 	void 
-	cgif(ioCgiFastExchange *fcgi)
+	cgif(cgiFastExchange *fcgi)
 	{
 		cgi cgit(fcgi, true);
 		cgit.setCookie("test","Ni@m");

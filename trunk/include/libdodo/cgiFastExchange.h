@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioCgiFastExchange.h
+ *            cgiFastExchange.h
  *
  *  Sat Aug  5 03:31:19 2006
  *  Copyright  2006  Ni@m
@@ -31,7 +31,7 @@
 #include <fcgiapp.h>
 
 #include <libdodo/types.h>
-#include <libdodo/ioCgiFastExchangeEx.h>
+#include <libdodo/cgiFastExchangeEx.h>
 #include <libdodo/io.h>
 #include <libdodo/systemThreadGuard.h>
 
@@ -55,7 +55,7 @@ namespace dodo
 	/**
 	 * @class cgiFastIO provides interface to fast CGI I/O functionality
 	 */
-	class ioCgiFastExchange : public io,
+	class cgiFastExchange : public io,
 					virtual public systemThreadGuardHolder
 	{
 		private:
@@ -64,7 +64,7 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			ioCgiFastExchange(ioCgiFastExchange &cf);
+			cgiFastExchange(cgiFastExchange &cf);
 
 		public:
 
@@ -72,12 +72,12 @@ namespace dodo
 			 * constructor
 			 * @param request defines CGI request descriptor
 			 */
-			ioCgiFastExchange(FCGX_Request *request);
+			cgiFastExchange(FCGX_Request *request);
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioCgiFastExchange();
+			virtual ~cgiFastExchange();
 			
 #ifndef IOCGIFASTEXCHANGE_WO_XEXEC
 
