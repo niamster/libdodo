@@ -28,6 +28,8 @@
 
 #include <libdodo/dodoString.h>
 
+#include <ctype.h>
+
 namespace dodo
 {
 	/**

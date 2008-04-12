@@ -35,7 +35,14 @@ stringTools::equal(const dodoString &first,
 	if (firstSize != second.size())
 		return false;
 	
-	return strcmp(first.c_str(), second.c_str()) == 0 ? true : false;
+	if (firstSize == 0)
+		return true;
+	
+	for (unsigned long i=0; i<firstSize; ++i)
+		if (first[i] != second[i])
+			return false;
+	
+	return true;
 }
 
 //-------------------------------------------------------------------
@@ -49,7 +56,14 @@ stringTools::iequal(const dodoString &first,
 	if (firstSize != second.size())
 		return false;
 	
-	return strcasecmp(first.c_str(), second.c_str()) == 0 ? true : false;
+	if (firstSize == 0)
+		return true;
+	
+	for (unsigned long i=0; i<firstSize; ++i)
+		if (tolower(first[i]) != tolower(second[i]))
+			return false;
+	
+	return true;
 }
 
 //-------------------------------------------------------------------
