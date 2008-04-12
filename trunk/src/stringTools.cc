@@ -30,6 +30,11 @@ bool
 stringTools::equal(const dodoString &first,
 				   const dodoString &second)
 {
+	unsigned long firstSize = first.size();
+	
+	if (firstSize != second.size())
+		return false;
+	
 	return strcmp(first.c_str(), second.c_str()) == 0 ? true : false;
 }
 
@@ -39,6 +44,11 @@ bool
 stringTools::iequal(const dodoString &first,
 					const dodoString &second)
 {
+	unsigned long firstSize = first.size();
+	
+	if (firstSize != second.size())
+		return false;
+	
 	return strcasecmp(first.c_str(), second.c_str()) == 0 ? true : false;
 }
 

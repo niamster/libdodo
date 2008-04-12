@@ -12,7 +12,7 @@ handler(const dodoString &method, const dodoArray<rpcValue> &values)
 {
 	rpcResponse response;
 
-	response.addArgument(dodoString("Got method: ") + method);
+	//response.addArgument(dodoString("Got method: ") + method);
 
 	return response;
 }

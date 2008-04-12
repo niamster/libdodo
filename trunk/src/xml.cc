@@ -175,6 +175,7 @@ xml::parse(const __xmlNodeDef &definition)
 	if (node->children == NULL)
 	{
 		sample.empty = true;
+		
 		return sample;
 	}
 
@@ -194,7 +195,7 @@ xml::parse(const __xmlNodeDef &definition)
 
 			__xmlNode one;
 			
-			dodoArray<__xmlNode> chldrn;
+			dodoArray<__xmlNode> children;
 			dodoArray<__xmlNode>::iterator i, j;
 
 			while (node != NULL)
@@ -215,9 +216,9 @@ xml::parse(const __xmlNodeDef &definition)
 					one.empty = true;
 				else
 				{
-					chldrn = parse(node->children);
-					i = chldrn.begin();
-					j = chldrn.end();
+					children = parse(node->children);
+					i = children.begin();
+					j = children.end();
 					for (;i!=j;++i)
 						one.children[i->name].push_back(*i);
 				}
@@ -533,7 +534,7 @@ xml::parse(xmlNodePtr node)
 
 	__xmlNode one;
 	
-	dodoArray<__xmlNode> chldrn;
+	dodoArray<__xmlNode> children;
 	dodoArray<__xmlNode>::iterator i, j;
 
 	while (node != NULL)
@@ -554,9 +555,9 @@ xml::parse(xmlNodePtr node)
 			one.empty = true;
 		else
 		{
-			chldrn = parse(node->children);
-			i = chldrn.begin();
-			j = chldrn.end();
+			children = parse(node->children);
+			i = children.begin();
+			j = children.end();
 			for (;i!=j;++i)
 				one.children[i->name].push_back(*i);
 		}
