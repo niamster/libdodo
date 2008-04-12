@@ -80,16 +80,10 @@ jsonNode::~jsonNode()
 //-------------------------------------------------------------------
 
 void
-jsonNode::setType(short type)
-{
-	valueDataType = type;
-}
-
-//-------------------------------------------------------------------
-
-void
 jsonNode::setString(const dodoString &value)
 {
+	valueDataType = JSON_DATATYPE_STRING;
+	
 	stringValue = value;
 }
 
@@ -98,6 +92,8 @@ jsonNode::setString(const dodoString &value)
 void
 jsonNode::setBoolean(bool value)
 {
+	valueDataType = JSON_DATATYPE_BOOLEAN;
+	
 	booleanValue = value;
 }
 
@@ -106,7 +102,17 @@ jsonNode::setBoolean(bool value)
 void
 jsonNode::setNumeric(long value)
 {
+	valueDataType = JSON_DATATYPE_NUMERIC;
+	
 	numericValue = value;
+}
+
+//-------------------------------------------------------------------
+
+void
+jsonNode::setNull()
+{
+	valueDataType = JSON_DATATYPE_NULL;
 }
 
 //-------------------------------------------------------------------
@@ -114,6 +120,8 @@ jsonNode::setNumeric(long value)
 void
 jsonNode::addArrayElement(const jsonNode &value)
 {
+	valueDataType = JSON_DATATYPE_ARRAY;
+	
 	arrayValue.push_back(value);
 }
 
@@ -123,6 +131,8 @@ void
 jsonNode::addObjectMember(const dodoString &name, 
 								const jsonNode &value)
 {
+	valueDataType = JSON_DATATYPE_OBJECT;
+	
 	objectValue.insert(make_pair(name, value));
 }
 
@@ -131,6 +141,8 @@ jsonNode::addObjectMember(const dodoString &name,
 void 
 jsonNode::setArray(const dodoArray<jsonNode> &value)
 {
+	valueDataType = JSON_DATATYPE_ARRAY;
+	
 	arrayValue = value;
 }
 
@@ -139,6 +151,8 @@ jsonNode::setArray(const dodoArray<jsonNode> &value)
 void 
 jsonNode::setObject(const dodoMap<dodoString, jsonNode, dodoMapStringCompare> &value)
 {
+	valueDataType = JSON_DATATYPE_OBJECT;
+	
 	objectValue = value;
 }
 

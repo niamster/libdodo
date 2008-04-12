@@ -14,33 +14,25 @@ int main(int argc, char **argv)
 
 		jsonNode node, node1, node2;
 		
-		node.setType(JSON_DATATYPE_OBJECT);
-		
-		node2.setType(JSON_DATATYPE_ARRAY);
-
-		node1.setType(JSON_DATATYPE_BOOLEAN);
 		node1.setBoolean(true);
 		node.addObjectMember("bool", node1);
 		node2.addArrayElement(node1);
 		
-		node1.setType(JSON_DATATYPE_STRING);
 		node1.setString("test string");
 		node.addObjectMember("string", node1);
 		node2.addArrayElement(node1);
 
-		node1.setType(JSON_DATATYPE_NUMERIC);
 		node1.setNumeric(1234);
 		node.addObjectMember("numeric", node1);
 		node2.addArrayElement(node1);
 
-		node1.setType(JSON_DATATYPE_NULL);
+		node1.setNull();
 		node.addObjectMember("null", node1);
 		node2.addArrayElement(node1);
 
 		node.addObjectMember("big numeric", (long)1234567890);
 		node2.addArrayElement(node);
 
-		node1.setType(JSON_DATATYPE_OBJECT);
 		node1.addObjectMember("string", dodoString("string in object"));
 		node.addObjectMember("null", node1);
 		node2.addArrayElement(node1);

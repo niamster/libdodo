@@ -96,12 +96,6 @@ namespace dodo
 			virtual ~jsonNode();
 			
 			/**
-			 * set argument type 
-			 * @param type defines argument type[see jsonDataTypeEnum]
-			 */
-			virtual void setType(short type);
-			
-			/**
 			 * set string, date/time, base64 value
 			 * @param value defines string value
 			 */
@@ -118,6 +112,11 @@ namespace dodo
 			 * @param value defines integer value
 			 */
 			virtual void setNumeric(long value);
+			
+			/**
+			 * set null value
+			 */
+			virtual void setNull();
 			
 			/**
 			 * add array value
