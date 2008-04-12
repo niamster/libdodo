@@ -92,6 +92,11 @@ namespace dodo
 			 * @param position defines index of returned value
 			 */
 			virtual rpcValue operator[](unsigned long position); 
+
+			/**
+			 * clear arguments information
+			 */
+			virtual void clear();
 			
 		private:
 			
