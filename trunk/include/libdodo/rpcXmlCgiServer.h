@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlHTTPClient.h
+ *            rpcXmlCgiServer.h
  *
- *  Sat Apr 12 16:49:55 2008
+ *  Sat Apr 12 23:06:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,47 +21,41 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _RPCXMLHTTPCLIENT_H_
-#define _RPCXMLHTTPCLIENT_H_
+#ifndef _RPCXMLCGISERVER_H_
+#define _RPCXMLCGISERVER_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/rpcXmlClient.h>
-#include <libdodo/ioNetworkHTTP.h>
+#include <libdodo/cgi.h>
+#include <libdodo/rpcXmlServer.h>
 
 namespace dodo
-{
+{	
 	/**
-	 * @class rpcXmlHTTPClient defines client-side RPC instrument
+	 * @class rpcServer defines server-side RPC instrument
 	 */
-	class rpcXmlHTTPClient : public rpcXmlClient
+	class rpcXmlCgiServer : public rpcXmlServer
 	{
 		public:
 
 			/**
 			 * constructor
 			 */
-			rpcXmlHTTPClient();
+			rpcXmlCgiServer();
 
 			/**
 			 * destructor
 			 */
-			virtual ~rpcXmlHTTPClient();
-			
-			/**
-			 * set url to XML-RPC server
-			 * @param url define url to XML-RPC server 
-			 */
-			virtual void setUrl(const dodoString &url);
+			virtual ~rpcXmlCgiServer();
 		
 		protected:
-		
+			
 			/**
 			 * send request
-			 * @param method defines rpc method call
+			 * @param response defines rpc method call
 			 */
-			virtual void sendTextRequest(const dodoString &method);
+			virtual void sendTextRequest(const dodoString &response);
 			
 			/**
 			 * get response
@@ -69,7 +63,7 @@ namespace dodo
 			 */
 			virtual dodoString receiveTextResponse();
 			
-			ioNetworkHTTP http;
+			cgi provider;
 	};
 };
 

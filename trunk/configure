@@ -8652,7 +8652,7 @@ $as_echo "$ac_cv_prog_gcc_traditional" >&6; }
 fi
 
 
-ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/iostd_test/Makefile tests/cgifast_test/Makefile tests/cgi_test/Makefile tests/db_test/Makefile tests/iodisk_test/Makefile tests/glob_test/Makefile tests/dbmysql_test/Makefile tests/dbpostgresql_test/Makefile tests/regexp_test/Makefile tests/non_blocked_socket_test/Makefile tests/systemthreadcollection_test/Makefile tests/network_threads_test/Makefile tests/network_test/Makefile tests/dbsqlite_test/Makefile tests/systemprocesscollection_test/Makefile tests/systemjobcollection_test/Makefile tests/systemtools_test/Makefile tests/timetools_test/Makefile tests/xexec_test/Makefile tests/systemlibraryloader_test/Makefile tests/logger_test/Makefile tests/ionetworkhttp_test/Makefile tests/rpcxmlhttpclient_test/Makefile tests/xml_test/Makefile"
+ac_config_files="$ac_config_files Makefile bin/dodo-config tests/Makefile tests/image_test/Makefile tests/json_test/Makefile tests/iostd_test/Makefile tests/cgifast_test/Makefile tests/cgi_test/Makefile tests/db_test/Makefile tests/iodisk_test/Makefile tests/glob_test/Makefile tests/dbmysql_test/Makefile tests/dbpostgresql_test/Makefile tests/regexp_test/Makefile tests/non_blocked_socket_test/Makefile tests/systemthreadcollection_test/Makefile tests/network_threads_test/Makefile tests/network_test/Makefile tests/dbsqlite_test/Makefile tests/systemprocesscollection_test/Makefile tests/systemjobcollection_test/Makefile tests/systemtools_test/Makefile tests/timetools_test/Makefile tests/xexec_test/Makefile tests/systemlibraryloader_test/Makefile tests/logger_test/Makefile tests/ionetworkhttp_test/Makefile tests/rpcxmlhttpclient_test/Makefile tests/rpcxmlcgiserver_test/Makefile tests/xml_test/Makefile"
 
 
 cat >confcache <<\_ACEOF
@@ -9285,6 +9285,7 @@ do
     "tests/logger_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/logger_test/Makefile" ;;
     "tests/ionetworkhttp_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/ionetworkhttp_test/Makefile" ;;
     "tests/rpcxmlhttpclient_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcxmlhttpclient_test/Makefile" ;;
+    "tests/rpcxmlcgiserver_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/rpcxmlcgiserver_test/Makefile" ;;
     "tests/xml_test/Makefile") CONFIG_FILES="$CONFIG_FILES tests/xml_test/Makefile" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5

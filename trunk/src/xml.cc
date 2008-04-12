@@ -114,7 +114,10 @@ xml::parseFile(const __xmlNodeDef &definition,
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBDODO, XMLEX_EMPTYDOCUMENT, XMLEX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	return parse(definition);
@@ -132,8 +135,11 @@ xml::parseBuffer(const __xmlNodeDef &definition,
 	if (document == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
-
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBDODO, XMLEX_EMPTYDOCUMENT, XMLEX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	return parse(definition);
@@ -149,7 +155,10 @@ xml::parse(const __xmlNodeDef &definition)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSE, ERR_LIBDODO, XMLEX_NOROOTNODE, XMLEX_NOROOTNODE_STR, __LINE__, __FILE__);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	__xmlNode sample;
@@ -294,7 +303,6 @@ xml::parse(const __xmlNodeDef &definition,
 			dodoMap<dodoString, __xmlNodeDef>::const_iterator i(definition.children.begin()), j(definition.children.end());
 			for (; i != j; ++i)
 				sample.children.insert(make_pair(i->first, parse(i->second, node->children, definition.chLimit)));
-
 		}
 		else
 		{
@@ -485,7 +493,10 @@ xml::getXMLFileInfo(const dodoString &file)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_GETXMLFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_GETXMLFILEINFO, ERR_LIBDODO, XMLEX_EMPTYDOCUMENT, XMLEX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_GETXMLFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	return __xmlInfo(document->version != NULL ? (char *)document->version : __dodostring__,
@@ -504,7 +515,10 @@ xml::getXMLBufferInfo(const dodoString &buffer)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_GETXMLBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_GETXMLBUFFERINFO, ERR_LIBDODO, XMLEX_EMPTYDOCUMENT, XMLEX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_GETXMLBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	return __xmlInfo((char *)document->version, (char *)document->encoding, (char *)document->children->name, document->compression);
@@ -584,7 +598,10 @@ xml::parseFile(const dodoString &file)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBDODO, XMLEX_EMPTYDOCUMENT, XMLEX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	xmlNodePtr node = xmlDocGetRootElement(document);
@@ -592,7 +609,10 @@ xml::parseFile(const dodoString &file)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBDODO, XMLEX_NOROOTNODE, XMLEX_NOROOTNODE_STR, __LINE__, __FILE__, file);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	__xmlNode sample = *(parse(node).begin());
@@ -612,7 +632,10 @@ xml::parseBuffer(const dodoString &buffer)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBDODO, XMLEX_EMPTYDOCUMENT, XMLEX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	xmlNodePtr node = xmlDocGetRootElement(document);
@@ -620,7 +643,10 @@ xml::parseBuffer(const dodoString &buffer)
 	{
 		xmlErrorPtr error = xmlGetLastError();
 
-		throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARCEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+		if (error == NULL)
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBDODO, XMLEX_NOROOTNODE, XMLEX_NOROOTNODE_STR, __LINE__, __FILE__);
+		else
+			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	__xmlNode sample = *(parse(node).begin());

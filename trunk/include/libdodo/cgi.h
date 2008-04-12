@@ -168,7 +168,8 @@ namespace dodo
 	 */
 	class cgi
 	{
-
+		friend class rpcXmlCgiServer;
+		
 		private:
 
 			/**

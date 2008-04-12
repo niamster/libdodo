@@ -59,6 +59,7 @@ OBJECTS:=dbBase.o \
 		rpcXmlClient.o \
 		rpcXmlHTTPClient.o \
 		rpcXmlServer.o \
+		rpcXmlCgiServer.o \
 		rpcXmlValue.o \
 		rpcXmlMethod.o \
 		rpcXmlResponse.o \
