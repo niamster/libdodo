@@ -117,7 +117,7 @@ rpcXmlValue::xmlToRpcValue(const dodoString &data)
 __xmlNode
 rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 {
-	dodoArray<__xmlNode> subNodeArr; 
+	dodoArray<__xmlNode> nodeArr; 
 	
 	__xmlNode node;
 	node.name = "value";
@@ -131,8 +131,8 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "string";
 			subNode.value = data.stringValue;
 			
-			subNodeArr.assign(1, subNode);
-			node.children.insert(make_pair(subNode.name, subNodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 			
 			break;
 			
@@ -141,8 +141,8 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "boolean";
 			subNode.value = data.booleanValue?"1":"0";
 
-			subNodeArr.assign(1, subNode);
-			node.children.insert(make_pair(subNode.name, subNodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 			
 			break;
 			
@@ -151,8 +151,8 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "int";
 			subNode.value = stringTools::iToString(data.integerValue);
 
-			subNodeArr.assign(1, subNode);
-			node.children.insert(make_pair(subNode.name, subNodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 		
 			break;
 			
@@ -161,8 +161,8 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			subNode.name = "double";
 			subNode.value = stringTools::dToString(data.doubleValue);
 
-			subNodeArr.assign(1, subNode);
-			node.children.insert(make_pair(subNode.name, subNodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 			
 			break;
 			
@@ -175,14 +175,14 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			
 			dodoArray<rpcValue>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
 			for (;i!=j;++i)
-				subNodeArr.push_back(rpcValueToXmlNode(*i));
-			dataNode.children.insert(make_pair("value", subNodeArr));
+				nodeArr.push_back(rpcValueToXmlNode(*i));
+			dataNode.children.insert(make_pair("value", nodeArr));
 			
-			subNodeArr.assign(1, dataNode);
-			subNode.children.insert(make_pair(dataNode.name, subNodeArr));
+			nodeArr.assign(1, dataNode);
+			subNode.children.insert(make_pair(dataNode.name, nodeArr));
 			
-			subNodeArr.assign(1, subNode);
-			node.children.insert(make_pair(subNode.name, subNodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 			
 			break;
 		}
@@ -191,10 +191,12 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 		{	
 			subNode.name = "struct";
 			
-			__xmlNode memberNode, memberNameNode, memberValueNode, memberValueContentsNode;
+			__xmlNode memberNode, memberNameNode, memberValueNode;
 			memberNode.name = "member";
 			memberNameNode.name = "name";
 			memberValueNode.name = "value";
+			
+			dodoArray<__xmlNode> subNodeArr; 
 			
 			dodoMap<dodoString, rpcValue, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
 			for (;i!=j;++i)
@@ -203,21 +205,18 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 				memberValueNode.children.clear();
 				
 				memberNameNode.value = i->first;
-				subNodeArr.assign(1, memberNameNode);
-				memberNode.children.insert(make_pair(memberNameNode.name, subNodeArr));
+				nodeArr.assign(1, memberNameNode);
+				memberNode.children.insert(make_pair(memberNameNode.name, nodeArr));
 
-				memberValueContentsNode = rpcValueToXmlNode(i->second);
-				subNodeArr.assign(1, memberValueContentsNode);
-				memberValueNode.children.insert(make_pair(memberValueContentsNode.name, subNodeArr));
-				subNodeArr.assign(1, memberValueNode);
-				memberNode.children.insert(make_pair(memberValueNode.name, subNodeArr));
+				nodeArr.assign(1, rpcValueToXmlNode(i->second));
+				memberNode.children.insert(make_pair(memberValueNode.name, nodeArr));
 				
-				subNodeArr.assign(1, memberNode);
-				subNode.children.insert(make_pair(memberNode.name, subNodeArr));
+				subNodeArr.push_back(memberNode);
 			}
+			subNode.children.insert(make_pair(memberNode.name, subNodeArr));
 			
-			subNodeArr.assign(1, subNode);
-			node.children.insert(make_pair(subNode.name, subNodeArr));
+			nodeArr.assign(1, subNode);
+			node.children.insert(make_pair(subNode.name, nodeArr));
 			
 			break;
 		}

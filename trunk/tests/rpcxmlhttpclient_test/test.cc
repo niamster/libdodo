@@ -22,11 +22,20 @@ int main(int argc, char **argv)
 		rpcValue argument;
 
 		method.setName("callTest");
+
 		argument.setString("argument");
 		method.addArgument(argument);
+
 		argument.setBoolean(true);
 		method.addArgument(argument);
 
+		argument.addStructMember("string", dodoString("string"));
+		argument.addStructMember("integer", (long)10);
+		method.addArgument(argument);
+
+		argument.addArrayElement(dodoString("string"));
+		argument.addArrayElement((double)10.0);
+		method.addArgument(argument);
 
 		client.sendRequest(method);
 

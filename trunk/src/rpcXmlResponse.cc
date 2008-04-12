@@ -91,7 +91,7 @@ rpcXmlResponse::xmlToRpcResponse(__xmlNode &node)
 __xmlNode 
 rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
 {
-	dodoArray<__xmlNode> subNodeArr; 
+	dodoArray<__xmlNode> nodeArr; 
 	
 	__xmlNode response;
 	response.name = "methodResponse";
@@ -109,23 +109,23 @@ rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
 		{
 			param.children.clear();
 			
-			subNodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
-			param.children.insert(make_pair("value", subNodeArr));
+			nodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
+			param.children.insert(make_pair("value", nodeArr));
 		}
 
-		subNodeArr.assign(1, params);
-		response.children.insert(make_pair(params.name, subNodeArr));
+		nodeArr.assign(1, params);
+		response.children.insert(make_pair(params.name, nodeArr));
 	}
 	else
 	{
 		__xmlNode fault;
 		fault.name = "fault";
 		
-		subNodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(data.values.front()));
-		fault.children.insert(make_pair("value", subNodeArr));
+		nodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(data.values.front()));
+		fault.children.insert(make_pair("value", nodeArr));
 
-		subNodeArr.assign(1, fault);
-		response.children.insert(make_pair(fault.name, subNodeArr));
+		nodeArr.assign(1, fault);
+		response.children.insert(make_pair(fault.name, nodeArr));
 	}
 	
 	return response;
