@@ -98,16 +98,10 @@ rpcValue::clear()
 //-------------------------------------------------------------------
 
 void
-rpcValue::setType(short type)
-{
-	valueDataType = type;
-}
-
-//-------------------------------------------------------------------
-
-void
 rpcValue::setString(const dodoString &value)
 {
+	valueDataType = RPC_DATATYPE_STRING;
+	
 	stringValue = value;
 }
 
@@ -116,6 +110,8 @@ rpcValue::setString(const dodoString &value)
 void
 rpcValue::setBoolean(bool value)
 {
+	valueDataType = RPC_DATATYPE_BOOLEAN;
+
 	booleanValue = value;
 }
 
@@ -124,6 +120,8 @@ rpcValue::setBoolean(bool value)
 void
 rpcValue::setInteger(long value)
 {
+	valueDataType = RPC_DATATYPE_INTEGER;
+
 	integerValue = value;
 }
 
@@ -132,6 +130,8 @@ rpcValue::setInteger(long value)
 void
 rpcValue::setDouble(double value)
 {
+	valueDataType = RPC_DATATYPE_DOUBLE;
+
 	doubleValue = value;
 }
 
@@ -140,6 +140,8 @@ rpcValue::setDouble(double value)
 void
 rpcValue::addArrayElement(const rpcValue &value)
 {
+	valueDataType = RPC_DATATYPE_ARRAY;
+
 	arrayValue.push_back(value);
 }
 
@@ -149,6 +151,8 @@ void
 rpcValue::addStructMember(const dodoString &name, 
 								const rpcValue &value)
 {
+	valueDataType = RPC_DATATYPE_STRUCT;
+
 	structValue.insert(make_pair(name, value));
 }
 
@@ -157,6 +161,8 @@ rpcValue::addStructMember(const dodoString &name,
 void 
 rpcValue::setArray(const dodoArray<rpcValue> &value)
 {
+	valueDataType = RPC_DATATYPE_ARRAY;
+
 	arrayValue = value;
 }
 
@@ -165,6 +171,8 @@ rpcValue::setArray(const dodoArray<rpcValue> &value)
 void 
 rpcValue::setStruct(const dodoMap<dodoString, rpcValue, dodoMapStringCompare> &value)
 {
+	valueDataType = RPC_DATATYPE_STRUCT;
+
 	structValue = value;
 }
 

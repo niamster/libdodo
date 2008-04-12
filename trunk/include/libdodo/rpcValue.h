@@ -108,12 +108,6 @@ namespace dodo
 			virtual void clear();
 			
 			/**
-			 * set argument type 
-			 * @param type defines argument type[see rpcDataTypeEnum]
-			 */
-			virtual void setType(short type);
-			
-			/**
 			 * set string, date/time, base64 value
 			 * @param value defines string value
 			 */

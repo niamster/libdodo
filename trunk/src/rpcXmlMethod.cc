@@ -86,7 +86,7 @@ rpcXmlMethod::xmlToRpcMethod(__xmlNode &node)
 __xmlNode 
 rpcXmlMethod::rpcMethodToXmlNode(const rpcMethod &data)
 {
-	dodoArray<__xmlNode> subNodeArr; 
+	dodoArray<__xmlNode> nodeArr; 
 	
 	__xmlNode method;
 	method.name = "methodCall";
@@ -95,8 +95,8 @@ rpcXmlMethod::rpcMethodToXmlNode(const rpcMethod &data)
 	methodName.name = "methodName";
 	methodName.value = data.name;
 	
-	subNodeArr.assign(1, methodName);
-	method.children.insert(make_pair(methodName.name, subNodeArr));
+	nodeArr.assign(1, methodName);
+	method.children.insert(make_pair(methodName.name, nodeArr));
 	
 	dodoArray<rpcValue>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
 	if (i!=j)
@@ -107,16 +107,21 @@ rpcXmlMethod::rpcMethodToXmlNode(const rpcMethod &data)
 		__xmlNode param;
 		param.name = "param";
 		
+		dodoArray<__xmlNode> subNodeArr; 
+		
 		for (;i!=j;++i)
 		{
 			param.children.clear();
 			
-			subNodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
-			param.children.insert(make_pair("value", subNodeArr));
+			nodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
+			param.children.insert(make_pair("value", nodeArr));
+			
+			subNodeArr.push_back(param);
 		}
-
-		subNodeArr.assign(1, params);
-		method.children.insert(make_pair(params.name, subNodeArr));
+		params.children.insert(make_pair("param", subNodeArr));
+		
+		nodeArr.assign(1, params);
+		method.children.insert(make_pair(params.name, nodeArr));
 	}
 	
 	return method;
