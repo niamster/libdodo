@@ -150,7 +150,7 @@ namespace dodo
 	{
 		CGI_REQUESTMETHOD_GET,
 		CGI_REQUESTMETHOD_POST,
-		CGI_REQUESTMETHOD_GET_POST ///< if POST method and request URL also contains ?name=value&.... format data
+		CGI_REQUESTMETHOD_GET_POST ///< if POST method and request Url also contains ?name=value&.... format data
 	};
 
 	/**

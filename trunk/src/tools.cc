@@ -725,7 +725,7 @@ tools::charToHex(char result[3],
 //-------------------------------------------------------------------
 
 dodoString
-tools::decodeURL(const dodoString &string)
+tools::decodeUrl(const dodoString &string)
 {
 	dodoString result;
 	unsigned long o(0), k(string.size());
@@ -764,7 +764,7 @@ tools::decodeURL(const dodoString &string)
 //-------------------------------------------------------------------
 
 dodoString
-tools::encodeURL(const dodoString &string)
+tools::encodeUrl(const dodoString &string)
 {
 	dodoString result;
 
@@ -1181,7 +1181,7 @@ tools::decodeBase64(const dodoString &string)
 //-------------------------------------------------------------------
 
 __url
-tools::parseURL(const dodoString &url)
+tools::parseUrl(const dodoString &url)
 {
 	unsigned long begin(0), pos, pos1;
 
@@ -1253,7 +1253,7 @@ tools::parseURL(const dodoString &url)
 //-------------------------------------------------------------------
 
 dodoString 
-tools::makeURL(const __url &url)
+tools::makeUrl(const __url &url)
 {
 	return url.protocol + "://" + url.login + ":" + url.password + "@" + url.host + ":" + url.port + "/" + url.path + "?" + url.request;
 }

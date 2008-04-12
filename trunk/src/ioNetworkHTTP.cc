@@ -108,7 +108,7 @@ ioNetworkHTTP::getResponse()
 void 
 ioNetworkHTTP::setUrl(const dodoString &a_url)
 {
-	url = tools::parseURL(a_url);
+	url = tools::parseUrl(a_url);
 }
 
 //-------------------------------------------------------------------
@@ -125,12 +125,12 @@ ioNetworkHTTP::setCookies(const dodoStringMap &cookies)
 	{
 		data.append(i->first);
 		data.append("=");
-		data.append(tools::encodeURL(i->second));
+		data.append(tools::encodeUrl(i->second));
 		data.append("; ");
 	}
 	data.append(i->first);
 	data.append("=");
-	data.append(tools::encodeURL(i->second));
+	data.append(tools::encodeUrl(i->second));
 	
 	requestHeaders[IONETWORKHTTP_REQUESTHEADER_COOKIE] = data;
 }
@@ -419,14 +419,14 @@ ioNetworkHTTP::POST(const dodoStringMap &arguments)
 	
 	for (;i!=j;++i)
 	{
-		data.append(tools::encodeURL(i->first));
+		data.append(tools::encodeUrl(i->first));
 		data.append("=");
-		data.append(tools::encodeURL(i->second));
+		data.append(tools::encodeUrl(i->second));
 		data.append("&");
 	}
-	data.append(tools::encodeURL(i->first));
+	data.append(tools::encodeUrl(i->first));
 	data.append("=");
-	data.append(tools::encodeURL(i->second));
+	data.append(tools::encodeUrl(i->second));
 	
 	POST(data, "application/x-www-form-urlencoded");
 }
@@ -808,7 +808,7 @@ ioNetworkHTTP::parseCookie(const dodoString &header)
 		
 	__cookie cookie;
 	cookie.name = tuple[0];
-	cookie.value = tools::decodeURL(tuple[1]);
+	cookie.value = tools::decodeUrl(tuple[1]);
 	
 	++i;
 	

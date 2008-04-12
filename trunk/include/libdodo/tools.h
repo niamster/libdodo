@@ -85,7 +85,7 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __url defines URL parts
+	 * @struct __url defines Url parts
 	 */
 	struct __url
 	{
@@ -294,16 +294,16 @@ namespace dodo
 #endif
 
 			/**
-			 * @return decoded URL
-			 * @param string defines URL to decode
+			 * @return decoded Url
+			 * @param string defines Url to decode
 			 */
-			static dodoString decodeURL(const dodoString &string);
+			static dodoString decodeUrl(const dodoString &string);
 
 			/**
-			 * @return encoded URL
-			 * @param string defines URL to encode
+			 * @return encoded Url
+			 * @param string defines Url to encode
 			 */
-			static dodoString encodeURL(const dodoString &string);
+			static dodoString encodeUrl(const dodoString &string);
 
 			/**
 			 * @return converted from HEX
@@ -343,16 +343,16 @@ namespace dodo
 			static dodoString decodeBase64(const dodoString &string);
 
 			/**
-			 * @return parts of URL
-			 * @param url defines URL
+			 * @return parts of Url
+			 * @param url defines Url
 			 */
-			static __url parseURL(const dodoString &url);
+			static __url parseUrl(const dodoString &url);
 
 			/**
-			 * @return URL
-			 * @param url defines URL parts
+			 * @return Url
+			 * @param url defines Url parts
 			 */
-			static dodoString makeURL(const __url &url);
+			static dodoString makeUrl(const __url &url);
 
 			/**
 			 * @return MD5 hash of string

@@ -341,7 +341,7 @@ cgi::make(dodoStringMap &val,
 		  const dodoString &string,
 		  const char       *delim)
 {
-	dodoStringArray getPair = tools::explode(tools::decodeURL(string), delim);
+	dodoStringArray getPair = tools::explode(tools::decodeUrl(string), delim);
 
 	dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
 
@@ -652,7 +652,7 @@ cgi::setCookie(const dodoString &name,
 {
 	__cookie temp(secure);
 	temp.name = name;
-	temp.value = tools::encodeURL(value);
+	temp.value = tools::encodeUrl(value);
 	temp.expires = expires;
 	temp.path = path;
 	temp.domain = domain;

@@ -136,7 +136,7 @@ namespace dodo
 			virtual __httpResponse getResponse();
 			
 			/**
-			 * @param url defines URL
+			 * @param url defines Url
 			 */
 			virtual void setUrl(const dodoString &url);
 			
@@ -149,7 +149,7 @@ namespace dodo
 			/**
 			 * perform GET request
 			 * @return server response
-			 * @param url defines URL
+			 * @param url defines Url
 			 */
 			virtual __httpResponse GET(const dodoString &url);
 			
@@ -161,7 +161,7 @@ namespace dodo
 			/**
 			 * perform POST request
 			 * @return server response
-			 * @param url defines URL
+			 * @param url defines Url
 			 * @param data defines POST data
 			 * @param type defines content type of the POST request
 			 */
@@ -177,7 +177,7 @@ namespace dodo
 			/**
 			 * perform POST request
 			 * @return server response
-			 * @param url defines URL
+			 * @param url defines Url
 			 * @param arguments defines request arguments
 			 */
 			virtual __httpResponse POST(const dodoString &url, const dodoStringMap &arguments);
@@ -191,7 +191,7 @@ namespace dodo
 			/**
 			 * perform POST request
 			 * @return server response
-			 * @param url defines URL
+			 * @param url defines Url
 			 * @param arguments defines request arguments
 			 * @param files defines path to files
 			 */
@@ -241,7 +241,7 @@ namespace dodo
 			regexp httpStatusRE;///< parser for HTTP response status code
 			
 			__httpResponse response;///< HTTP response data
-			__url url;///< HTTP URL
+			__url url;///< HTTP Url
 			
 			/**
 			 * @return true if no more headers should be processed

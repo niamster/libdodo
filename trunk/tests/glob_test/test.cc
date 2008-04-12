@@ -42,8 +42,8 @@ int main(int argc, char **argv)
 		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContents("test.cc")));
 #endif
 		
-		cout << tools::decodeURL(tools::encodeURL("@!()HEY, that's working!")) << endl;
-		cout << tools::encodeURL("@!()HEY, that's working!") << endl;
+		cout << tools::decodeUrl(tools::encodeURL("@!()HEY, that's working!")) << endl;
+		cout << tools::encodeUrl("@!()HEY, that's working!") << endl;
 		
 		cout << tools::encodeASCII85("HEY, that's working!") << endl;
 		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's working!")) << endl;
@@ -55,13 +55,13 @@ int main(int argc, char **argv)
 		
 		dodoString tt = "ftp://user:pass@localhost.domain:32/init.cgi?net=true&work=true";
 		cout << endl << tt << endl;
-		cout << tools::parseURL(tt).host << endl;
-		cout << tools::parseURL(tt).login << endl;
-		cout << tools::parseURL(tt).password << endl;
-		cout << tools::parseURL(tt).path << endl;
-		cout << tools::parseURL(tt).port << endl;
-		cout << tools::parseURL(tt).protocol << endl;
-		cout << tools::parseURL(tt).request << endl;
+		cout << tools::parseUrl(tt).host << endl;
+		cout << tools::parseUrl(tt).login << endl;
+		cout << tools::parseUrl(tt).password << endl;
+		cout << tools::parseUrl(tt).path << endl;
+		cout << tools::parseUrl(tt).port << endl;
+		cout << tools::parseUrl(tt).protocol << endl;
+		cout << tools::parseUrl(tt).request << endl;
 
 		cout << ioDiskTools::getFileContents("Makefile").size() << endl;
 #ifdef BZ2_EXT
