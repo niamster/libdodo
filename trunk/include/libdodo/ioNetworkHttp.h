@@ -60,7 +60,7 @@ namespace dodo
 		IONETWORKHTTP_REQUESTHEADER_COOKIE,///< the user agent string of the user agent
 	};
 
-#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 17
+#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 18
 	
 	/**
 	 * @enum ioNetworkHttpResponseHeaderEnum defines HTTP response headers
@@ -83,7 +83,8 @@ namespace dodo
 		IONETWORKHTTP_RESPONSEHEADER_LASTMODIFIED,///< the last modified date for the requested object
 		IONETWORKHTTP_RESPONSEHEADER_LOCATION,///< used in redirection
 		IONETWORKHTTP_RESPONSEHEADER_SERVER,///< a name for the server
-		IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE,///< auuthentification request
+		IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE,///< authentification request
+		IONETWORKHTTP_RESPONSEHEADER_XPOWEREDBY,///< cgi provider
 	};
 	
 	/**

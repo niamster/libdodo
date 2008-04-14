@@ -19,7 +19,8 @@ handler(const dodoString &method, const dodoArray<rpcValue> &values)
 
 int main(int argc, char **argv)
 {		
-	rpcXmlCgiServer server;
+	cgi provider(false);
+	rpcXmlCgiServer server(provider);
 	
 	try
 	{

@@ -25,21 +25,23 @@
 
 using namespace dodo;
 
-const char *cgi::environmentStatements[] =
-{
-	"REQUEST_METHOD",
+const char *cgi::environmentStatements[] ={ "REQUEST_METHOD",
 	"REQUEST_URI",
 	"QUERY_STRING",
 	"CONTENT_TYPE",
 	"CONTENT_LENGTH",
 	"CONTENT_TRANSFER_ENCODING",
+	"HTTP_AUTHORIZATION",
 	"HTTP_HOST",
 	"HTTP_USER_AGENT",
 	"HTTP_COOKIE",
+	"HTTP_DATE",
+	"HTTP_IF_MODIFIED_SINCE",
 	"HTTP_ACCEPT",
 	"HTTP_ACCEPT_LANGUAGE",
 	"HTTP_ACCEPT_ENCODING",
 	"HTTP_ACCEPT_CHARSET",
+	"HTTP_ACCEPT_RANGES",
 	"HTTP_KEEP_ALIVE",
 	"HTTP_CONNECTION",
 	"HTTP_REFERER",
@@ -61,6 +63,28 @@ const char *cgi::environmentStatements[] =
 	"SERVER_PROTOCOL",
 	"SCRIPT_FILENAME",
 	"SCRIPT_NAME",
+};
+
+//-------------------------------------------------------------------
+
+const dodoString cgi::responseHeaderStatements[] = { "Accept-Ranges",
+		"Age",
+		"Allow",
+		"Cache-Control",
+		"Content-Encoding",
+		"Content-Language",
+		"Content-Length",
+		"Content-Location",
+		"Content-Disposition",
+		"Content-MD5",
+		"Content-Range",
+		"Content-Type",
+		"Date",
+		"Last-Modified",
+		"Location",
+		"Server",
+		"WWW-Authenticate",
+		"X-Powered-By",
 };
 
 //-------------------------------------------------------------------
@@ -106,7 +130,7 @@ cgi::cgi(cgi &ct)
 
 //-------------------------------------------------------------------
 
-cgi::cgi(dodoStringMap &headers,
+cgi::cgi(dodoMap<short, dodoString> &headers,
 		 bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
@@ -155,7 +179,8 @@ cgi::cgi(bool silent,
 {
 	cgiIO = new ioSTD;
 
-	initHeaders(__dodostringmap__);
+	dodoMap<short, dodoString> headers;
+	initHeaders(headers);
 
 	if (!silent)
 		printHeaders();
@@ -187,7 +212,8 @@ cgi::cgi(cgiFastExchange    *a_cf,
 										 headersPrinted(false)
 
 {
-	initHeaders(__dodostringmap__);
+	dodoMap<short, dodoString> headers;
+	initHeaders(headers);
 
 	if (!silent)
 		printHeaders();
@@ -206,7 +232,7 @@ cgi::cgi(cgiFastExchange    *a_cf,
 //-------------------------------------------------------------------
 
 cgi::cgi(cgiFastExchange    *a_cf,
-		 dodoStringMap &headers,
+		dodoMap<short, dodoString> &headers,
 		 bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
@@ -362,7 +388,7 @@ cgi::makeEnv()
 {
 	char *env;
 
-	for (int i = 0; i < HTTP_ENVIRONMENT; ++i)
+	for (int i = 0; i < CGI_ENVIRONMENT; ++i)
 	{
 #ifdef FCGI_EXT
 		if (cgiFastSet)
@@ -380,7 +406,7 @@ cgi::makeEnv()
 //-------------------------------------------------------------------
 
 void
-cgi::initHeaders(dodoStringMap &headers)
+cgi::initHeaders(dodoMap<short, dodoString> &headers)
 {
 	if (headers.size() > 0)
 	{
@@ -388,8 +414,8 @@ cgi::initHeaders(dodoStringMap &headers)
 	}
 	else
 	{
-		HEADERS.insert(make_pair(dodoString("Content-type"), "text/html"));
-		HEADERS.insert(make_pair(dodoString("X-Powered-By"), PACKAGE_NAME "/" PACKAGE_VERSION));
+		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_CONTENTTYPE, dodoString("text/html")));
+		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
 	}
 }
 
@@ -403,9 +429,9 @@ cgi::printHeaders() const
 
 	headersPrinted = true;
 
-	dodoStringMap::const_iterator i(HEADERS.begin()), j(HEADERS.end());
+	dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
-		cgiIO->writeStreamString(i->first + ": " + i->second + "\r\n");
+		cgiIO->writeStreamString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
 
 	if (cookies.size() > 0)
 	{

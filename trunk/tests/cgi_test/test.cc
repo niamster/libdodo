@@ -12,12 +12,12 @@ int main(int argc, char **argv)
 {		
 ///first type
 //	dodoStringMap head;
-//	head["Content-type"] = "text/html";
+//	head[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 //	cgi cgi(head, false);
 	
 ///second type
 	cgi cgit(true);
-	cgit.HEADERS["Content-type"] = "text/html";
+	cgit.HEADERS[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 	cgit.setCookie("test","Ni@m");
 	cgit.printHeaders();
 	 

@@ -25,9 +25,9 @@
 
 using namespace dodo;
 
-rpcXmlCgiServer::rpcXmlCgiServer() : provider(true)
+rpcXmlCgiServer::rpcXmlCgiServer(cgi &a_provider) : provider(a_provider)
 {
-	provider.HEADERS["Content-type"] = "text/xml";
+	provider.HEADERS.insert(make_pair(CGI_RESPONSEHEADER_CONTENTTYPE, dodoString("text/xml")));
 	
 	provider.printHeaders();
 }

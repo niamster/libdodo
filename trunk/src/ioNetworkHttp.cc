@@ -57,6 +57,7 @@ const dodoString ioNetworkHttp::responseHeaderStatements[] = { "Accept-Ranges",
 		"Location",
 		"Server",
 		"WWW-Authenticate",
+		"X-Powered-By",
 };
 
 //-------------------------------------------------------------------

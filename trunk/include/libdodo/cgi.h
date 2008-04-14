@@ -40,7 +40,7 @@
 namespace dodo
 {
 
-#define HTTP_ENVIRONMENT    34
+#define CGI_ENVIRONMENT    38
 
 	/**
 	 * @enum cgiEnvironmentEnum defines CGI environment
@@ -53,15 +53,19 @@ namespace dodo
 		CGI_ENVIRONMENT_CONTENTTYPE,
 		CGI_ENVIRONMENT_CONTENTLENGTH,
 		CGI_ENVIRONMENT_CONTENTTRANSFERENCODING,
+		CGI_ENVIRONMENT_HTTPAUTHORIZATION,///< authentication credentials for HTTP authentication
 		CGI_ENVIRONMENT_HTTPHOST,
-		CGI_ENVIRONMENT_HTTPUSERAGENT,
-		CGI_ENVIRONMENT_HTTPCOOKIE,
-		CGI_ENVIRONMENT_HTTPACCEPT,
-		CGI_ENVIRONMENT_HTTPACCEPTLANGUAGE,
-		CGI_ENVIRONMENT_HTTPACCEPTENCODING,
-		CGI_ENVIRONMENT_HTTPACCEPTCHARSET,
+		CGI_ENVIRONMENT_HTTPUSERAGENT,///< the user agent string of the user agent
+		CGI_ENVIRONMENT_HTTPCOOKIE,///< the user agent string of the user agent
+		CGI_ENVIRONMENT_HTTPIFMODIFIEDSINCE,///< allows a 304 Not Modified to be returned
+		CGI_ENVIRONMENT_HTTPDATE,///< the date and time that the message was sent
+		CGI_ENVIRONMENT_HTTPACCEPT,///< content-types that are acceptable by client
+		CGI_ENVIRONMENT_HTTPACCEPTLANGUAGE,///< acceptable languages for response
+		CGI_ENVIRONMENT_HTTPACCEPTENCODING,///< acceptable encodings
+		CGI_ENVIRONMENT_HTTPACCEPTCHARSET,///< character sets that are acceptable
+		CGI_ENVIRONMENT_HTTPACCEPTRANGES,///< character sets that are acceptable
 		CGI_ENVIRONMENT_HTTPKEEPALIVE,
-		CGI_ENVIRONMENT_HTTPCONNECTION,
+		CGI_ENVIRONMENT_HTTPCONNECTION,///< what type of connection the user-agent would prefer
 		CGI_ENVIRONMENT_HTTPREFERER,
 		CGI_ENVIRONMENT_HTTPVIA,
 		CGI_ENVIRONMENT_HTTPXFORWARDEDFOR,
@@ -81,6 +85,33 @@ namespace dodo
 		CGI_ENVIRONMENT_SERVERPROTOCOL,
 		CGI_ENVIRONMENT_SCRIPTFILENAME,
 		CGI_ENVIRONMENT_SCRIPTNAME,
+	};
+
+#define CGI_RESPONSEHEADERSTATEMENTS 18
+	
+	/**
+	 * @enum cgiResponseHeaderEnum defines HTTP response headers
+	 */
+	enum cgiResponseHeaderEnum
+	{
+		CGI_RESPONSEHEADER_ACCEPTRANGES,///< what partial content range types this server supports
+		CGI_RESPONSEHEADER_AGE,///< the age the object has been in a proxy cache in seconds
+		CGI_RESPONSEHEADER_ALLOW,///< valid actions for a specified resource. To be used for a 405 Method not allowed
+		CGI_RESPONSEHEADER_CACHECONTROL,///< tells all caching mechanisms from server to client whether they may cache this object
+		CGI_RESPONSEHEADER_CONTENTENCODING,///< the type of encoding used on the data
+		CGI_RESPONSEHEADER_CONTENTLANGUAGE,///< the language the content is in
+		CGI_RESPONSEHEADER_CONTENTLENGTH,///< the length of the content in bytes
+		CGI_RESPONSEHEADER_CONTENTLOCATION,///< an alternate location for the returned data
+		CGI_RESPONSEHEADER_CONTENTDISPOSITION,///< an opportunity to raise a "File Download" dialog box for a known MIME type
+		CGI_RESPONSEHEADER_CONTENTMD5,///< an MD5 sum of the content of the response
+		CGI_RESPONSEHEADER_CONTENTRANGE,///< where in a full body message this partial message belongs
+		CGI_RESPONSEHEADER_CONTENTTYPE,///< the mime type of this content
+		CGI_RESPONSEHEADER_DATE,///< the date and time that the message was sent
+		CGI_RESPONSEHEADER_LASTMODIFIED,///< the last modified date for the requested object
+		CGI_RESPONSEHEADER_LOCATION,///< used in redirection
+		CGI_RESPONSEHEADER_SERVER,///< a name for the server
+		CGI_RESPONSEHEADER_WWWAUTHENTICATE,///< auuthentification request
+		CGI_RESPONSEHEADER_XPOWEREDBY,///< cgi provider
 	};
 
 	/**
@@ -188,7 +219,7 @@ namespace dodo
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
-			cgi(dodoStringMap &headers, bool silent = false, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 
 			/**
@@ -221,7 +252,7 @@ namespace dodo
 			 * @param postFilesInMem defines place of POST files[disk or memory]
 			 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 			 */
-			cgi(cgiFastExchange *cf, dodoStringMap &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+			cgi(cgiFastExchange *cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
 #endif
 
@@ -260,6 +291,7 @@ namespace dodo
 			dodoMap<short, dodoString> ENVIRONMENT;                  ///< environment variables[see cgiEnvironmentEnum]
 			dodoStringMap COOKIES;                                          ///< cookies sent by browser
 			dodoMap<dodoString, __cgiFile, dodoMapStringCompare> FILES;       ///< POST files
+			dodoMap<short, dodoString> HEADERS; ///< headers that will be printed with printHeaders method
 
 			/**
 			 * @return value of the requested variable from POST or GET
@@ -273,8 +305,6 @@ namespace dodo
 			 * @note print cookies also
 			 */
 			virtual void printHeaders() const;
-
-			dodoStringMap HEADERS; ///< headers that will be printed with printHeaders method
 
 			/**
 			 * print data to the output
@@ -339,7 +369,7 @@ namespace dodo
 			 * initiate HEADERS class property with given tuples name->value
 			 * @param headers defines init headers
 			 */
-			virtual void initHeaders(dodoStringMap &headers);
+			virtual void initHeaders(dodoMap<short, dodoString> &headers);
 
 			/**
 			 * process serialized string of tuples key->value
@@ -380,7 +410,8 @@ namespace dodo
 
 			mutable bool headersPrinted;///< true if headers have been printed 
 
-			static const char *environmentStatements[HTTP_ENVIRONMENT];///< names of environment variables 
+			static const char *environmentStatements[CGI_ENVIRONMENT];///< names of environment variables[see cgiEnvironmentEnum]
+			static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see cgiResponseHeaderEnum]
 	};
 };
 

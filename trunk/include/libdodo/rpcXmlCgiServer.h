@@ -42,7 +42,7 @@ namespace dodo
 			/**
 			 * constructor
 			 */
-			rpcXmlCgiServer();
+			rpcXmlCgiServer(cgi &provider);
 
 			/**
 			 * destructor
@@ -63,7 +63,7 @@ namespace dodo
 			 */
 			virtual dodoString receiveTextResponse();
 			
-			cgi provider;
+			cgi &provider;
 	};
 };
 
