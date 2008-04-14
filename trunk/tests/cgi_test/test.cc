@@ -17,6 +17,24 @@ int main(int argc, char **argv)
 	
 ///second type
 	cgi cgit(true);
+
+	if (cgit.GET["a"] == "forbidden")
+	{
+		cgit.setResponseStatus(CGI_STATUSCODE_FORBIDDEN);
+
+		cgit.printStream( "<b>FORBIDDEN</b><br>" );
+
+		return 0;
+	}
+	else if (cgit.GET["a"] == "notfound")
+	{
+		cgit.setResponseStatus(CGI_STATUSCODE_NOTFOUND);
+
+		cgit.printStream( "<b>NOT FOUND</b><br>" );
+
+		return 0;
+	}
+
 	cgit.HEADERS[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 	cgit.setCookie("test","Ni@m");
 	cgit.printHeaders();

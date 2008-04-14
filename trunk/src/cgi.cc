@@ -87,6 +87,48 @@ const dodoString cgi::responseHeaderStatements[] = { "Accept-Ranges",
 		"X-Powered-By",
 };
 
+const dodoString cgi::responseStatusStatements[] = { "HTTP/1.1 100 Continue\r\n",
+		"HTTP/1.1 101 Switching Protocols\r\n",
+		"HTTP/1.1 200 OK\r\n",
+		"HTTP/1.1 201 Created\r\n",
+		"HTTP/1.1 202 Accepted\r\n",
+		"HTTP/1.1 203 Non-Authoritative Information\r\n",
+		"HTTP/1.1 204 No Content\r\n",
+		"HTTP/1.1 205 Reset Content\r\n",
+		"HTTP/1.1 206 Partial Content\r\n",
+		"HTTP/1.1 300 Multiple Choices\r\n",
+		"HTTP/1.1 301 Moved Permanently\r\n",
+		"HTTP/1.1 302 Found\r\n",
+		"HTTP/1.1 303 See Other\r\n",
+		"HTTP/1.1 304 Not Modified\r\n",
+		"HTTP/1.1 305 Use Proxy\r\n",
+		"HTTP/1.1 307 Temporary Redirect\r\n",
+		"HTTP/1.1 400 Bad Request\r\n",
+		"HTTP/1.1 401 Unauthorized\r\n",
+		"HTTP/1.1 402 Payment Required\r\n",
+		"HTTP/1.1 403 Forbidden\r\n",
+		"HTTP/1.1 404 Not Found\r\n",
+		"HTTP/1.1 405 Method Not Allowed\r\n",
+		"HTTP/1.1 406 Not Acceptable\r\n",
+		"HTTP/1.1 407 Proxy Authentication Required\r\n",
+		"HTTP/1.1 408 Request Timeout\r\n",
+		"HTTP/1.1 409 Conflict\r\n",
+		"HTTP/1.1 410 Gone\r\n",
+		"HTTP/1.1 411 Length Required\r\n",
+		"HTTP/1.1 412 Precondition Failed\r\n",
+		"HTTP/1.1 413 Request Entity Too Large\r\n",
+		"HTTP/1.1 414 Request-URI Too Long\r\n",
+		"HTTP/1.1 415 Unsupported Media Type\r\n",
+		"HTTP/1.1 416 Requested Range Not Satisfiable\r\n",
+		"HTTP/1.1 417 Expectation Failed\r\n",
+		"HTTP/1.1 500 Internal Server Error\r\n",
+		"HTTP/1.1 501 Not Implemented\r\n",
+		"HTTP/1.1 502 Bad Gateway\r\n",
+		"HTTP/1.1 503 Service Unavailable\r\n",
+		"HTTP/1.1 504 Gateway Timeout\r\n",
+		"HTTP/1.1 505 HTTP Version Not Supported\r\n",
+};
+
 //-------------------------------------------------------------------
 	
 __cgiFile::__cgiFile() : size(0),
@@ -137,7 +179,8 @@ cgi::cgi(dodoMap<short, dodoString> &headers,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 autocleanFiles(a_autocleanFiles),
-										 headersPrinted(false)
+										 headersPrinted(false),
+										  returnCode(CGI_STATUSCODE_OK)
 #ifdef FCGI_EXT
 										 ,
 										 cgiFastSet(false)
@@ -170,7 +213,8 @@ cgi::cgi(bool silent,
 		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 autocleanFiles(a_autocleanFiles),
-										 headersPrinted(false)
+										 headersPrinted(false),
+										  returnCode(CGI_STATUSCODE_OK)
 #ifdef FCGI_EXT
 										 ,
 										 cgiFastSet(false)
@@ -209,7 +253,8 @@ cgi::cgi(cgiFastExchange    *a_cf,
 										 cgiFastSet(true),
 										 cgiIO(a_cf),
 										 autocleanFiles(a_autocleanFiles),
-										 headersPrinted(false)
+										 headersPrinted(false),
+										  returnCode(CGI_STATUSCODE_OK)
 
 {
 	dodoMap<short, dodoString> headers;
@@ -241,7 +286,8 @@ cgi::cgi(cgiFastExchange    *a_cf,
 										 cgiFastSet(true),
 										 cgiIO(a_cf),
 										 autocleanFiles(a_autocleanFiles),
-										 headersPrinted(false)
+										 headersPrinted(false),
+										  returnCode(CGI_STATUSCODE_OK)
 
 {
 	initHeaders(headers);
@@ -388,7 +434,7 @@ cgi::makeEnv()
 {
 	char *env;
 
-	for (int i = 0; i < CGI_ENVIRONMENT; ++i)
+	for (int i = 0; i < CGI_ENVIRONMENTSTATEMENTS; ++i)
 	{
 #ifdef FCGI_EXT
 		if (cgiFastSet)
@@ -421,6 +467,15 @@ cgi::initHeaders(dodoMap<short, dodoString> &headers)
 
 //-------------------------------------------------------------------
 
+void 
+cgi::setResponseStatus(short code)
+{
+	if (code <= CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
+		returnCode = code;
+}
+
+//-------------------------------------------------------------------
+
 void
 cgi::printHeaders() const
 {
@@ -429,6 +484,8 @@ cgi::printHeaders() const
 
 	headersPrinted = true;
 
+	cgiIO->writeStreamString(responseStatusStatements[returnCode]);
+	
 	dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
 		cgiIO->writeStreamString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");

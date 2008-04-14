@@ -40,7 +40,7 @@
 namespace dodo
 {
 
-#define CGI_ENVIRONMENT    38
+#define CGI_ENVIRONMENTSTATEMENTS    38
 
 	/**
 	 * @enum cgiEnvironmentEnum defines CGI environment
@@ -112,6 +112,55 @@ namespace dodo
 		CGI_RESPONSEHEADER_SERVER,///< a name for the server
 		CGI_RESPONSEHEADER_WWWAUTHENTICATE,///< auuthentification request
 		CGI_RESPONSEHEADER_XPOWEREDBY,///< cgi provider
+	};
+
+#define CGI_STATUSSTATEMENTS 40
+	
+	/**
+	 * @enum cgiStatusCodeEnum defines HTTP response status code
+	 */	
+	enum cgiStatusCodeEnum
+	{
+		CGI_STATUSCODE_CONTINUE,///< 100
+		CGI_STATUSCODE_SWITCHINGPROTOCOLS,///< 101
+		CGI_STATUSCODE_OK,///< 200
+		CGI_STATUSCODE_CREATED,///< 201
+		CGI_STATUSCODE_ACCEPTED,///< 202
+		CGI_STATUSCODE_NONAUTHORITATIVE,///< 203
+		CGI_STATUSCODE_NOCONTENT,///< 204
+		CGI_STATUSCODE_RESETCONTENT,///< 205
+		CGI_STATUSCODE_PARTIALCONTENT,///< 206
+		CGI_STATUSCODE_MULTIPLECHOISES,///< 300
+		CGI_STATUSCODE_MOVEDPERMANENTLY,///< 301
+		CGI_STATUSCODE_FOUND,///< 302
+		CGI_STATUSCODE_SEEOTHER,///< 303
+		CGI_STATUSCODE_NOTMODIFIED,///< 304
+		CGI_STATUSCODE_USEPROXY,///< 305
+		CGI_STATUSCODE_TEMPORARYREDIRECT,///< 307
+		CGI_STATUSCODE_BADREQUEST,///< 400
+		CGI_STATUSCODE_UNAUTHORIZED,///< 401
+		CGI_STATUSCODE_PAYMENTREQUIRED,///< 402
+		CGI_STATUSCODE_FORBIDDEN,///< 403
+		CGI_STATUSCODE_NOTFOUND,///< 404
+		CGI_STATUSCODE_METHODNOTALLOWED,///< 405
+		CGI_STATUSCODE_NOTACCEPTABLE,///< 406
+		CGI_STATUSCODE_PROXYAUTHENTIFICATIONREQUIRED,///< 407 
+		CGI_STATUSCODE_REQUESTTIMEOUT,///< 408
+		CGI_STATUSCODE_CONFLICT,///< 409
+		CGI_STATUSCODE_GONE,///< 410 
+		CGI_STATUSCODE_LENGTHREQUIRED,///< 411
+		CGI_STATUSCODE_PRECONDITIONFAILED,///< 412
+		CGI_STATUSCODE_REQUESTENTITYTOOLARGE,///< 413
+		CGI_STATUSCODE_REQUESTURITOOLONG,///< 414
+		CGI_STATUSCODE_UNSUPPORTEDMEDIATYPE,///< 415
+		CGI_STATUSCODE_REQUESTRANGENOTSATISFIABLE,///< 416
+		CGI_STATUSCODE_EXPECTATIONFAILED,///< 417
+		CGI_STATUSCODE_INTERNALSERVERERROR,///< 500
+		CGI_STATUSCODE_NOTIMPLEMENTED,///< 501
+		CGI_STATUSCODE_BADGATEWAY,///< 502
+		CGI_STATUSCODE_SERVICEUNAVAILABLE,///< 503
+		CGI_STATUSCODE_GATEWAYTIMEOUT,///< 504
+		CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED,///< 505
 	};
 
 	/**
@@ -264,12 +313,18 @@ namespace dodo
 			/**
 			 * @return contents of stdin got for the POST request
 			 */
-			dodoString getContent();
+			virtual dodoString getContent();
 
 			/**
 			 * clears contents of stdin got for the POST request
 			 */
-			void clearContent();
+			virtual void clearContent();
+
+			/**
+			 * set response code and message
+			 * @param code defines return code[see cgiStatusCodeEnum]
+			 */
+			virtual void setResponseStatus(short code);
 
 			/**
 			 * @return method type
@@ -383,6 +438,9 @@ namespace dodo
 			virtual void make(dodoStringMap &val, const dodoString &string, const char *delim = "&");
 
 		private:
+			
+			short returnCode;///< HTTP return code
+			dodoString returnMessage;///< HTTP return message
 
 			bool postFilesInMem;                ///< place of POST files
 
@@ -410,8 +468,9 @@ namespace dodo
 
 			mutable bool headersPrinted;///< true if headers have been printed 
 
-			static const char *environmentStatements[CGI_ENVIRONMENT];///< names of environment variables[see cgiEnvironmentEnum]
+			static const char *environmentStatements[CGI_ENVIRONMENTSTATEMENTS];///< names of environment variables[see cgiEnvironmentEnum]
 			static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see cgiResponseHeaderEnum]
+			static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];///< HTTP response headers[see cgiStatusCodeEnum]
 	};
 };
 
