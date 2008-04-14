@@ -31,11 +31,25 @@
 namespace dodo
 {
 	/**
+	 * libdodo defined errors
+	 */
+	enum cgiExR
+	{
+		CGIEX_WRONGSTATUSCODE,
+	};
+	
+	/**
+	 * explanations for libdodo defined errors
+	 */
+#define CGIEX_WRONGSTATUSCODE_STR "Wrong status code."
+	
+	/**
 	 * IDs of functions where exception might be thrown
 	 */
 	enum cgiFunctionsID
 	{
 		CGIEX_MAKEPOST,
+		CGIEX_SETRESPONSESTATUS,
 	};
 };
 

@@ -472,6 +472,8 @@ cgi::setResponseStatus(short code)
 {
 	if (code <= CGI_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
 		returnCode = code;
+	else
+		throw baseEx(ERRMODULE_CGI, CGIEX_SETRESPONSESTATUS, ERR_LIBDODO, CGIEX_WRONGSTATUSCODE, CGIEX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
