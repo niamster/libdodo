@@ -15,8 +15,11 @@ int main(int argc, char **argv)
 //	head[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 //	cgi cgi(head, false);
 	
-///second type
+///second type									}
+
 	cgi cgit(true);
+
+	dodoString user = cgit.getAuthentificationInfo().user;
 
 	if (cgit.GET["a"] == "forbidden")
 	{
@@ -34,10 +37,21 @@ int main(int argc, char **argv)
 
 		return 0;
 	}
+	else if (cgit.GET["a"] == "auth")
+	{
+		if (user.size() == 0 || !cgit.checkBasicAuthentification("libdodo", "password"))
+		{
+			cgit.requestBasicAuthentification("libdodo");
+
+			return 0;
+		}
+	}
 
 	cgit.HEADERS[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 	cgit.setCookie("test","Ni@m");
 	cgit.printHeaders();
+	
+	cgit.printStream( "User: " + user + "<br>" );
 	 
 	
 	cgit.printStream( "!" + cgit.GET["a"] + "!<br>" );

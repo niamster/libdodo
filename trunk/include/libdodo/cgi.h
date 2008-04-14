@@ -232,6 +232,25 @@ namespace dodo
 		CGI_REQUESTMETHOD_POST,
 		CGI_REQUESTMETHOD_GET_POST ///< if POST method and request Url also contains ?name=value&.... format data
 	};
+	
+	/**
+	 * @enum cgiAuthTypeEnum defines authentification types
+	 */
+	enum cgiAuthTypeEnum
+	{
+		CGI_AUTHTYPE_NONE,
+		CGI_AUTHTYPE_BASIC,
+		CGI_AUTHTYPE_DIGEST
+	};
+	
+	/**
+	 * @struct __authInfo defines authenfication information
+	 */
+	struct __authInfo
+	{
+		dodoString user;///< user name
+		short type;///< authenfication type[see cgiAuthTypeEnum]
+	};
 
 	/**
 	 * @note
@@ -309,6 +328,24 @@ namespace dodo
 			 * destructor
 			 */
 			virtual ~cgi();
+
+			/**
+			 * @return authentification info
+			 */
+			virtual __authInfo getAuthentificationInfo();
+			
+			/**
+			 * request basic authentification
+			 * @param realm defines authentification request string
+			 */
+			virtual void requestBasicAuthentification(const dodoString &realm);
+			
+			/**
+			 * check basic authentification
+			 * @param user defines user for authentification
+			 * @param password defined user's password for authentification
+			 */
+			virtual bool checkBasicAuthentification(const dodoString &user, const dodoString &password);
 
 			/**
 			 * @return contents of stdin got for the POST request
@@ -401,6 +438,11 @@ namespace dodo
 		protected:
 
 			/**
+			 * fetch auth information
+			 */
+			virtual void makeAuth();
+
+			/**
 			 * write detected method to method class property
 			 */
 			virtual void detectMethod();
@@ -408,12 +450,12 @@ namespace dodo
 			/**
 			 * fill POST variables and files if defined
 			 */
-			void makePost();
+			virtual void makePost();
 
 			/**
 			 * get contents of stdin for the POST request
 			 */
-			void makeContent();
+			virtual void makeContent();
 
 			/**
 			 * get environment variables
@@ -471,6 +513,18 @@ namespace dodo
 			static const char *environmentStatements[CGI_ENVIRONMENTSTATEMENTS];///< names of environment variables[see cgiEnvironmentEnum]
 			static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see cgiResponseHeaderEnum]
 			static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];///< HTTP response headers[see cgiStatusCodeEnum]
+			
+			/**
+			 * @struct __authFullInfo defines full authentification information
+			 */
+			struct __authFullInfo
+			{
+				dodoString user;///< user name
+				dodoString password;///< user password
+				short type;///< authenfication type[see cgiAuthTypeEnum]
+			};
+			
+			__authFullInfo authInfo;///< authentification information
 	};
 };
 

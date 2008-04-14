@@ -187,6 +187,8 @@ cgi::cgi(dodoMap<short, dodoString> &headers,
 #endif
 
 {
+	authInfo.type = CGI_AUTHTYPE_NONE;
+	
 	cgiIO = new ioSTD;
 
 	initHeaders(headers);
@@ -195,6 +197,8 @@ cgi::cgi(dodoMap<short, dodoString> &headers,
 		printHeaders();
 
 	makeEnv();
+	
+	makeAuth();
 
 	detectMethod();
 
@@ -221,6 +225,8 @@ cgi::cgi(bool silent,
 #endif
 
 {
+	authInfo.type = CGI_AUTHTYPE_NONE;
+	
 	cgiIO = new ioSTD;
 
 	dodoMap<short, dodoString> headers;
@@ -230,6 +236,8 @@ cgi::cgi(bool silent,
 		printHeaders();
 
 	makeEnv();
+	
+	makeAuth();
 
 	detectMethod();
 
@@ -257,6 +265,8 @@ cgi::cgi(cgiFastExchange    *a_cf,
 										  returnCode(CGI_STATUSCODE_OK)
 
 {
+	authInfo.type = CGI_AUTHTYPE_NONE;
+	
 	dodoMap<short, dodoString> headers;
 	initHeaders(headers);
 
@@ -264,6 +274,8 @@ cgi::cgi(cgiFastExchange    *a_cf,
 		printHeaders();
 
 	makeEnv();
+	
+	makeAuth();
 
 	detectMethod();
 
@@ -290,12 +302,16 @@ cgi::cgi(cgiFastExchange    *a_cf,
 										  returnCode(CGI_STATUSCODE_OK)
 
 {
+	authInfo.type = CGI_AUTHTYPE_NONE;
+			
 	initHeaders(headers);
 
 	if (!silent)
 		printHeaders();
 
 	makeEnv();
+	
+	makeAuth();
 
 	detectMethod();
 
@@ -351,6 +367,58 @@ cgi::print(const dodoString &buf)
 
 	cgiIO->outSize = buf.size();
 	cgiIO->writeString(buf);
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgi::makeAuth()
+{
+	if (stringTools::contains(ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION], "Basic"))
+	{
+		dodoStringArray arr = tools::explode(tools::decodeBase64(stringTools::trim(ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION].substr(6),' ')), ":", 2);
+		
+		authInfo.type = CGI_AUTHTYPE_BASIC;
+		authInfo.user = arr[0];
+		if (arr.size() == 2)
+			authInfo.password = arr[1];
+	}
+	else 
+	{
+		if (stringTools::contains(ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION], "Digest"))
+		{
+			
+		}
+	}
+}
+
+//-------------------------------------------------------------------
+
+void 
+cgi::requestBasicAuthentification(const dodoString &realm)
+{
+	returnCode = CGI_STATUSCODE_UNAUTHORIZED;
+	
+	HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
+}
+
+//-------------------------------------------------------------------
+
+__authInfo 
+cgi::getAuthentificationInfo()
+{
+	__authInfo info = {authInfo.user, authInfo.type};
+	
+	return info;
+}
+
+//-------------------------------------------------------------------
+
+bool 
+cgi::checkBasicAuthentification(const dodoString &user, 
+								const dodoString &password)
+{
+	return (stringTools::equal(user,authInfo.user) && stringTools::equal(password,authInfo.password));
 }
 
 //-------------------------------------------------------------------
