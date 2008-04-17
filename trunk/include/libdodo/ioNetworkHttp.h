@@ -40,7 +40,7 @@
 
 namespace dodo
 {	
-#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS 11
+#define IONETWORKHTTP_REQUESTHEADERSTATEMENTS 12
 
 	/**
 	 * @enum ioNetworkHttpRequestHeaderEnum defines HTTP request headers
@@ -53,6 +53,7 @@ namespace dodo
 		IONETWORKHTTP_REQUESTHEADER_ACCEPTLANGUAGE,///< acceptable languages for response
 		IONETWORKHTTP_REQUESTHEADER_ACCEPTRANGES,///< allows the server to indicate its acceptance of range requests for a resource
 		IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION,///< authentication credentials for HTTP authentication
+		IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION,///< authentication credentials for HTTP proxy authentication
 		IONETWORKHTTP_REQUESTHEADER_CONNECTION,///< what type of connection the user-agent would prefer
 		IONETWORKHTTP_REQUESTHEADER_DATE,///< the date and time that the message was sent
 		IONETWORKHTTP_REQUESTHEADER_IFMODIFIEDSINCE,///< allows a 304 Not Modified to be returned
@@ -60,7 +61,7 @@ namespace dodo
 		IONETWORKHTTP_REQUESTHEADER_COOKIE,///< the user agent string of the user agent
 	};
 
-#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 18
+#define IONETWORKHTTP_RESPONSEHEADERSTATEMENTS 19
 	
 	/**
 	 * @enum ioNetworkHttpResponseHeaderEnum defines HTTP response headers
@@ -84,6 +85,7 @@ namespace dodo
 		IONETWORKHTTP_RESPONSEHEADER_LOCATION,///< used in redirection
 		IONETWORKHTTP_RESPONSEHEADER_SERVER,///< a name for the server
 		IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE,///< authentification request
+		IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE,///< proxy authentification request
 		IONETWORKHTTP_RESPONSEHEADER_XPOWEREDBY,///< cgi provider
 	};
 	
@@ -140,6 +142,19 @@ namespace dodo
 			 * @param url defines Url
 			 */
 			virtual void setUrl(const dodoString &url);
+			
+			/**
+			 * @param host defines proxy ip
+			 * @param port defines proxy port
+			 * @param user defines proxy user for authentification
+			 * @param password defines proxy password for authentification
+			 */
+			virtual void setProxyInformation(const dodoString &host, unsigned int port = 3128, const dodoString &user = __dodostring__, const dodoString &password = __dodostring__);
+			
+			/**
+			 * disable proxy usage
+			 */
+			virtual void disableProxy();
 			
 			/**
 			 * set cookies for the request
@@ -222,8 +237,12 @@ namespace dodo
 			{
 				GETCONTENTSTATUS_NORMAL,
 				GETCONTENTSTATUS_REDIRECT,
-				GETCONTENTSTATUS_BASICAUTH,
-				GETCONTENTSTATUS_DIGESTAUTH
+				GETCONTENTSTATUS_WWWBASICAUTH,
+				GETCONTENTSTATUS_WWWDIGESTAUTH,
+				GETCONTENTSTATUS_WWWPROXYBASICAUTH,
+				GETCONTENTSTATUS_WWWPROXYDIGESTAUTH,
+				GETCONTENTSTATUS_PROXYBASICAUTH,
+				GETCONTENTSTATUS_PROXYDIGESTAUTH,
 			};
 			
 			/**
@@ -242,7 +261,8 @@ namespace dodo
 			regexp httpStatusRE;///< parser for HTTP response status code
 			
 			__httpResponse response;///< HTTP response data
-			__url url;///< HTTP Url
+			__url urlComponents;///< HTTP Url
+			dodoString url;
 			
 			/**
 			 * @return true if no more headers should be processed
@@ -259,6 +279,37 @@ namespace dodo
 			 * @note uses trimSymbols to trim
 			 */
 			static dodoString trim(const dodoString &data);
+			
+			/**
+			 * @param responseHeader defines what header create[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION or IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION]
+			 * @param user defines user name 
+			 * @param password defines user password 
+			 */
+			virtual void makeBasicAuth(short responseHeader, const dodoString &user, const dodoString &password);
+			
+			/**
+			 * @param requestHeader defines what header parse[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE or IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE]
+			 * @param responseHeader defines what header create[IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION or IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION]
+			 * @param method defines request method
+			 * @param user defines user name 
+			 * @param password defines user password 
+			 */
+			virtual void makeDigestAuth(short requestHeader, short responseHeader, const dodoString &method, const dodoString &user, const dodoString &password);
+			
+			/**
+			 * @struct __proxyAuthInfo defines proxy authentification information
+			 */
+			struct __proxyAuthInfo
+			{
+				dodoString user;///< user name
+				dodoString password;///< user password
+				dodoString host;///< proxy ip address
+				unsigned int port;///< proxy port
+				bool enabled;///< if true proxy settings are enabled
+				bool authRequired;///< if true proxy authentification is required
+			};
+			
+			__proxyAuthInfo proxyAuthInfo;///< proxy authentification information 
 	};
 
 };

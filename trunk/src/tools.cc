@@ -1254,8 +1254,40 @@ tools::parseUrl(const dodoString &url)
 
 dodoString 
 tools::makeUrl(const __url &url)
-{
-	return url.protocol + "://" + url.login + ":" + url.password + "@" + url.host + ":" + url.port + "/" + url.path + "?" + url.request;
+{	
+	dodoString stringUrl;
+	
+	unsigned long loginSize = url.login.size();
+	
+	if (url.protocol.size() > 0)
+	{
+		stringUrl.append(url.protocol);
+		stringUrl.append("://" );
+	}
+	if (loginSize > 0)
+		stringUrl.append(url.login);
+	if (url.password.size() > 0)
+	{
+		stringUrl.append(":");
+		stringUrl.append(url.password);
+	}
+	if (loginSize > 0)
+		stringUrl.append("@");
+	stringUrl.append(url.host);
+	if (url.port.size() > 0)
+	{
+		stringUrl.append(":");
+		stringUrl.append(url.port);
+	}
+	stringUrl.append("/");
+	stringUrl.append(url.path);
+	if (url.request.size() > 0)
+	{
+		stringUrl.append("?");
+		stringUrl.append(url.request);
+	}
+	
+	return stringUrl;
 }
 
 //-------------------------------------------------------------------

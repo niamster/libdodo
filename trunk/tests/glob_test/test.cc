@@ -63,6 +63,8 @@ int main(int argc, char **argv)
 		cout << tools::parseUrl(tt).protocol << endl;
 		cout << tools::parseUrl(tt).request << endl;
 
+		cout << tools::makeUrl(tools::parseUrl(tt)) << endl;
+
 		cout << ioDiskTools::getFileContents("Makefile").size() << endl;
 #ifdef BZ2_EXT
 		cout << tools::bzCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;

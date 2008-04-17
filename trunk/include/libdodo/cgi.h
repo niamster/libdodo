@@ -249,6 +249,7 @@ namespace dodo
 	struct __authInfo
 	{
 		dodoString user;///< user name
+		dodoString password;///< user password
 		short type;///< authenfication type[see cgiAuthTypeEnum]
 	};
 
@@ -345,7 +346,7 @@ namespace dodo
 			 * @param user defines user for authentification
 			 * @param password defined user's password for authentification
 			 */
-			virtual bool checkBasicAuthentification(const dodoString &user, const dodoString &password);
+			virtual bool checkAuthentification(const dodoString &user, const dodoString &password);
 
 			/**
 			 * @return contents of stdin got for the POST request
@@ -514,17 +515,7 @@ namespace dodo
 			static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see cgiResponseHeaderEnum]
 			static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];///< HTTP response headers[see cgiStatusCodeEnum]
 			
-			/**
-			 * @struct __authFullInfo defines full authentification information
-			 */
-			struct __authFullInfo
-			{
-				dodoString user;///< user name
-				dodoString password;///< user password
-				short type;///< authenfication type[see cgiAuthTypeEnum]
-			};
-			
-			__authFullInfo authInfo;///< authentification information
+			__authInfo authInfo;///< authentification information
 	};
 };
 

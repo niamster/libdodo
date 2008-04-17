@@ -715,6 +715,8 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
+	a_str.clear();
+	
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = IONETWORKEXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
@@ -735,7 +737,9 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 	}
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
-	buffer.assign(data, n);
+	if (n > 0)
+		buffer.assign(data, n);
+	
 	delete [] data;
 
 	performXExec(postExec);
@@ -743,7 +747,9 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 	a_str = buffer;
 	buffer.clear();
 #else
-	a_str.assign(data, n);
+	if (n > 0)
+		a_str.assign(data, n);
+	
 	delete [] data;
 #endif
 }

@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 	}
 	else if (cgit.GET["a"] == "auth")
 	{
-		if (user.size() == 0 || !cgit.checkBasicAuthentification("libdodo", "password"))
+		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
 		{
 			cgit.requestBasicAuthentification("libdodo");
 

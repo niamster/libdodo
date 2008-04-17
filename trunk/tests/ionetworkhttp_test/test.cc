@@ -31,6 +31,8 @@ int main(int argc, char **argv)
 
 		http.setCookies(cookies);
 		
+		//http.setProxyInformation("127.0.0.1");
+
 		res =  http.GET("http://google.com");
 		//res =  http.GET("http://niam:niam@localhost/auth/libdodo/cgi_test/test.cgi");
 		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map);

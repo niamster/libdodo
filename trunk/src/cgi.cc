@@ -407,15 +407,13 @@ cgi::requestBasicAuthentification(const dodoString &realm)
 __authInfo 
 cgi::getAuthentificationInfo()
 {
-	__authInfo info = {authInfo.user, authInfo.type};
-	
-	return info;
+	return authInfo;
 }
 
 //-------------------------------------------------------------------
 
 bool 
-cgi::checkBasicAuthentification(const dodoString &user, 
+cgi::checkAuthentification(const dodoString &user, 
 								const dodoString &password)
 {
 	return (stringTools::equal(user,authInfo.user) && stringTools::equal(password,authInfo.password));

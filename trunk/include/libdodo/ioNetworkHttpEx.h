@@ -38,7 +38,8 @@ namespace dodo
 	{
 		IONETWORKHTTPEX_CANNOTCONNECT,
 		IONETWORKHTTPEX_NOTAUTHORIZED,
-		IONETWORKHTTPEX_UNKNOWNAUTHTYPE,
+		IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE,
+		IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE,
 	};
 
 	/**
@@ -46,7 +47,8 @@ namespace dodo
 	 */
 #define IONETWORKHTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
 #define IONETWORKHTTPEX_NOTAUTHORIZED_STR "Aythorization required."
-#define IONETWORKHTTPEX_UNKNOWNAUTHTYPE_STR "Unknown auth type."
+#define IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR "Unknown HTTP authentification type."
+#define IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentification type."
 
 	/**
 	 * IDs of functions where exception might be thrown
