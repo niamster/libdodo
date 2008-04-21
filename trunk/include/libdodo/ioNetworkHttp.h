@@ -267,11 +267,15 @@ namespace dodo
 			/**
 			 * @return true if no more headers should be processed
 			 * @param data defines response data
-			 * @param response defines structed response data
+			 * @param headers defines data with headers
 			 */
-			virtual bool extractHeaders(const dodoString &data, __httpResponse &response); 
+			virtual bool extractHeaders(const dodoString &data, dodoString &headers); 
 			
-			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the header value  
+			/**
+			 * fetch headers
+			 * @param headers defines data with headers
+			 */
+			virtual void getHeaders(const dodoString &headers);
 			
 			/**
 			 * @return trimmed string

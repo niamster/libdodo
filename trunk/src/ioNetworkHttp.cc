@@ -64,12 +64,6 @@ const dodoString ioNetworkHttp::responseHeaderStatements[] = { "Accept-Ranges",
 
 //-------------------------------------------------------------------
 
-const char ioNetworkHttp::trimSymbols[] = {' ',
-		'\r'
-};
-
-//-------------------------------------------------------------------
-
 __httpResponse::__httpResponse() : code(0),
 								redirected(false)
 {
@@ -663,12 +657,12 @@ ioNetworkHttp::setProxyInformation(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-bool
-ioNetworkHttp::extractHeaders(const dodoString &data,
-						__httpResponse &response)
+void 
+ioNetworkHttp::getHeaders(const dodoString &headers)
 {
 	unsigned long i(0), j(0);
-	unsigned long size = data.size();
+	unsigned long size = headers.size();
+	
 	dodoStringArray arr;
 	dodoString piece;
 	
@@ -678,21 +672,11 @@ ioNetworkHttp::extractHeaders(const dodoString &data,
 	
 	while (i < size)
 	{
-		i = data.find("\n", i);
+		i = headers.find("\n", i);
 		if (i == dodoString::npos)
-		{
-			response.data.append(data.substr(j));
-			
-			return true;
-		}
+			return;
 		
-		piece = stringTools::trim(data.substr(j, i - j), '\r');
-		if (piece.size() == 0)
-		{
-			response.data.append(data.substr(i + 1));
-			
-			return true;
-		}
+		piece = stringTools::trim(headers.substr(j, i - j), '\r');
 
 		arr = tools::explode(piece, ":", 2);
 		if (arr.size() != 2)
@@ -702,30 +686,55 @@ ioNetworkHttp::extractHeaders(const dodoString &data,
 				statusCode = true;
 
 				if (httpStatusRE.match(piece, arr))
-					response.code = stringTools::stringToS(stringTools::trim(arr[0], trimSymbols, 2));
-			}
-			else
-			{
-				response.data.append(data.substr(j));
-				
-				return true;
+					response.code = stringTools::stringToS(stringTools::lTrim(arr[0], ' '));
 			}
 		}
 		else
 		{
 			for (o = 0;o<IONETWORKHTTP_RESPONSEHEADERSTATEMENTS;++o)
 				if (stringTools::equal(responseHeaderStatements[o], arr[0]))
-					response.headers[o] = stringTools::trim(arr[1], trimSymbols, 2);
+					response.headers[o] = stringTools::lTrim(arr[1], ' ');
 			
 			if (stringTools::equal("Set-Cookie", arr[0]))
-				response.cookies.push_back(parseCookie(stringTools::trim(arr[1], trimSymbols, 2)));
+				response.cookies.push_back(parseCookie(stringTools::lTrim(arr[1], ' ')));
 		}
 		
-		i += 1;
+		++i;
 		j = i;
 	}
+}
+
+//-------------------------------------------------------------------
+
+bool
+ioNetworkHttp::extractHeaders(const dodoString &data,
+						dodoString &headers)
+{
+	headers.append(data);
 	
-	response.data.append(data.substr(j));
+	unsigned long i = headers.find("\r\n\r\n", i);
+	if (i == dodoString::npos)
+	{
+		i = headers.find("\n\n", i);
+		if (i == dodoString::npos)
+			return false;
+		else
+		{
+			response.data.append(headers.substr(i + 2));
+
+			headers.resize(i + 1);
+			
+			return true;
+		}	
+	}
+	else
+	{
+		response.data.append(headers.substr(i + 4));
+		
+		headers.resize(i + 2);
+		
+		return true;
+	}
 	
 	return false;
 }
@@ -736,11 +745,13 @@ short
 ioNetworkHttp::getContent(dodoString &data, 
 						ioNetworkExchange &ex)
 {
-	ex.setInBufferSize(2048);
-	ex.inSize = 2048;
+	ex.setInBufferSize(512);
+	ex.inSize = 512;
 	
 	unsigned long contentSize = 0;
 	bool endOfHeaders = false;
+	
+	dodoString headers;
 	
 	while (true)
 	{
@@ -749,16 +760,25 @@ ioNetworkHttp::getContent(dodoString &data,
 			ex.readStreamString(data);
 			
 			if (data.size() == 0 && contentSize <= 0)
+			{
+				if (!endOfHeaders)
+					response.data.assign(headers);
+				
 				break;
+			}
 			
 			if (endOfHeaders)
 				response.data.append(data);
 			else
 			{
-				endOfHeaders = extractHeaders(data, response);
+				endOfHeaders = extractHeaders(data, headers);
 				
 				if (endOfHeaders)
 				{
+					getHeaders(headers);
+					headers.clear();
+					
+					
 					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
 
 					if (followRedirection && (response.code / 100) == 3 && response.code != 304)
@@ -827,7 +847,12 @@ ioNetworkHttp::getContent(dodoString &data,
 		catch (baseEx &ex)
 		{
 			if (ex.funcID == IONETWORKEXCHANGEEX__READSTREAM)
+			{
+				if (!endOfHeaders)
+					response.data.assign(headers);
+				
 				break;
+			}
 			else
 				throw;
 		}
