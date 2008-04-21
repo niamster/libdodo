@@ -632,7 +632,7 @@ ioDiskTools::getFileContentsArr(const dodoString &path)
 //-------------------------------------------------------------------
 
 dodoString
-ioDiskTools::lastname(const dodoString &path)
+ioDiskTools::basename(const dodoString &path)
 {
 	if (path.size() >= MAXPATHLEN)
 		throw baseEx(ERRMODULE_IODISKTOOLS, IODISKTOOLSEX_LASTNAME, ERR_LIBDODO, IODISKTOOLSEX_TOOLONGPATH, IODISKTOOLSEX_TOOLONGPATH_STR, __LINE__, __FILE__, path);

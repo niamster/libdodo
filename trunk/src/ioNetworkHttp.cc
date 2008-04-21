@@ -382,7 +382,7 @@ ioNetworkHttp::POST(const dodoStringMap &arguments,
 		data.append("\r\nContent-Disposition: form-data; name=\"");
 		data.append(i->first);
 		data.append("\"; filename=\"");
-		data.append(ioDiskTools::lastname(i->second));
+		data.append(ioDiskTools::basename(i->second));
 		data.append("\"\r\n");
 		
 		data.append("Content-Type: application/octet-stream\r\n\r\n");

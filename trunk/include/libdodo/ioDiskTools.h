@@ -162,7 +162,7 @@ namespace dodo
 			 * @return basename of path string
 			 * @param path defines path string
 			 */
-			static dodoString lastname(const dodoString &path);
+			static dodoString basename(const dodoString &path);
 
 			/**
 			 * @return dirname of path string
