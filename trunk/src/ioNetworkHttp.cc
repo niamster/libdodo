@@ -135,6 +135,8 @@ ioNetworkHttp::setUrl(const dodoString &a_url)
 		url.append("?");
 		url.append(urlComponents.request);
 	}
+	
+	url = tools::encodeURL(url);
 }
 
 //-------------------------------------------------------------------
