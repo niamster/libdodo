@@ -34,7 +34,11 @@
 
 #endif
 
+#ifdef PTHREAD_EXT
+
 #include <pthread.h>
+
+#endif
 
 namespace dodo
 {
@@ -283,7 +287,11 @@ namespace dodo
 
 				protected:
 
+#ifdef PTHREAD_EXT
+					
 					static pthread_mutex_t mutex; ///< mutex
+					
+#endif
 			};
 
 			static staticAtomicMutex mutex;///< lock

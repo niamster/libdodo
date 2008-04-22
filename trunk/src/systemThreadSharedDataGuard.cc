@@ -34,6 +34,8 @@ systemThreadSharedDataGuard::systemThreadSharedDataGuard(systemThreadSharedDataG
 
 systemThreadSharedDataGuard::systemThreadSharedDataGuard() : data(NULL)
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -44,16 +46,22 @@ systemThreadSharedDataGuard::systemThreadSharedDataGuard() : data(NULL)
 
 	timeout.tv_nsec = 1000;
 	timeout.tv_sec = 0;
+	
+#endif
 }
 
 //-------------------------------------------------------------------
 
 systemThreadSharedDataGuard::~systemThreadSharedDataGuard()
 {
+#ifdef PTHREAD_EXT
+	
 	if (pthread_mutex_trylock(&mutex) == 0)
 		pthread_mutex_unlock(&mutex);
 
 	pthread_mutex_destroy(&mutex);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -61,6 +69,8 @@ systemThreadSharedDataGuard::~systemThreadSharedDataGuard()
 void
 systemThreadSharedDataGuard::set(void *a_data)
 {
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATAGUARD, SYSTEMTHREADSHAREDDATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -70,6 +80,8 @@ systemThreadSharedDataGuard::set(void *a_data)
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATAGUARD, SYSTEMTHREADSHAREDDATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -77,6 +89,8 @@ systemThreadSharedDataGuard::set(void *a_data)
 void
 systemThreadSharedDataGuard::del()
 {
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATAGUARD, SYSTEMTHREADSHAREDDATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -86,6 +100,8 @@ systemThreadSharedDataGuard::del()
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATAGUARD, SYSTEMTHREADSHAREDDATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -93,6 +109,8 @@ systemThreadSharedDataGuard::del()
 void *
 systemThreadSharedDataGuard::lock(unsigned long microseconds)
 {
+#ifdef PTHREAD_EXT
+	
 	if (microseconds == 0)
 	{
 		errno = pthread_mutex_lock(&mutex);
@@ -125,6 +143,8 @@ systemThreadSharedDataGuard::lock(unsigned long microseconds)
 		}
 	}
 
+#endif
+	
 	return data;
 }
 
@@ -133,9 +153,13 @@ systemThreadSharedDataGuard::lock(unsigned long microseconds)
 void
 systemThreadSharedDataGuard::unlock()
 {
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATAGUARD, SYSTEMTHREADSHAREDDATAGUARDEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+#endif
 }
 
 //-------------------------------------------------------------------

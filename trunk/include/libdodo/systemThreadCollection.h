@@ -26,8 +26,6 @@
 
 #include <libdodo/directives.h>
 
-#ifdef PTHREAD_EXT
-
 #ifdef DL_EXT
 
 #include <dlfcn.h>
@@ -35,7 +33,12 @@
 #endif
 
 #include <signal.h>
+
+#ifdef PTHREAD_EXT
+
 #include <pthread.h>
+
+#endif
 
 #include <libdodo/systemJobCollection.h>
 #include <libdodo/systemTools.h>
@@ -70,7 +73,12 @@ namespace dodo
 		 */
 		__threadInfo();
 
+#ifdef PTHREAD_EXT
+		
 		pthread_t thread;               ///< thread descriptor
+		
+#endif
+		
 		void *data;                     ///< thread data
 		bool isRunning;                 ///< true if thread is running
 		bool detached;                  ///< true if thread is detached
@@ -312,13 +320,15 @@ namespace dodo
 
 			unsigned long threadNum;                                        ///< number of registered threads
 
+#ifdef PTHREAD_EXT
+			
 			pthread_attr_t attr;                                            ///< thread join attribute
+			
+#endif
 
 			mutable dodoList<__threadInfo>::iterator current;               ///< iterator for list of threads[for matched with getThread method]
 	};
 
 };
-
-#endif
 
 #endif

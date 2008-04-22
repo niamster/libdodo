@@ -28,6 +28,12 @@
 
 #ifdef FCGI_EXT
 
+#ifdef PTHREAD_EXT
+
+#include <pthread.h>
+
+#endif
+
 #include <fcgiapp.h>
 
 #include <libdodo/types.h>

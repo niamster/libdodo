@@ -73,7 +73,11 @@ bool systemTools::handlesOpenedSig[] = { false,
 
 //-------------------------------------------------------------------
 
+#ifdef PTHREAD_EXT
+
 pthread_mutex_t systemTools::staticAtomicMutex::mutex;
+
+#endif
 
 //-------------------------------------------------------------------
 
@@ -83,6 +87,8 @@ systemTools::staticAtomicMutex systemTools::mutex;
 
 systemTools::staticAtomicMutex::staticAtomicMutex()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -90,13 +96,19 @@ systemTools::staticAtomicMutex::staticAtomicMutex()
 	pthread_mutex_init(&mutex, &attr);
 
 	pthread_mutexattr_destroy(&attr);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
 
 systemTools::staticAtomicMutex::~staticAtomicMutex()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutex_destroy(&mutex);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -104,9 +116,13 @@ systemTools::staticAtomicMutex::~staticAtomicMutex()
 void
 systemTools::staticAtomicMutex::lock()
 {
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0 && errno != EDEADLK)
 		throw baseEx(ERRMODULE_SYSTEMTOOLSSYSTEMATOMICMUTEX, SYSTEMTOOLSSYSTEMATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -114,9 +130,13 @@ systemTools::staticAtomicMutex::lock()
 void
 systemTools::staticAtomicMutex::unlock()
 {
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMTOOLSSYSTEMATOMICMUTEX, SYSTEMTOOLSSYSTEMATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+#endif
 }
 
 //-------------------------------------------------------------------

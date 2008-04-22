@@ -87,7 +87,12 @@ namespace dodo
 		protected:
 
 			void *data;             ///< shared data
+			
+#ifdef PTHREAD_EXT
+			
 			pthread_mutex_t mutex;  ///< lock
+			
+#endif
 
 			timespec timeout;       ///< lcok timeout
 	};

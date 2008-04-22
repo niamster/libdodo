@@ -24,9 +24,6 @@
 #ifndef _SYSTEMPROCESSSHAREDDATACOLLECTIONGUARD_H_
 #define _SYSTEMPROCESSSHAREDDATACOLLECTIONGUARD_H_
 
-#include <pthread.h>
-#include <time.h>
-
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>

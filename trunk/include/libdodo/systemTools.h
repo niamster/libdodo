@@ -38,6 +38,12 @@
 #include <stdio.h>
 #include <errno.h>
 
+#ifdef PTHREAD_EXT
+
+#include <pthread.h>
+
+#endif
+
 #ifdef DL_EXT
 
 #include <dlfcn.h>
@@ -495,7 +501,9 @@ namespace dodo
 
 				protected:
 
+#ifdef PTHREAD_EXT
 					static pthread_mutex_t mutex; ///< mutex
+#endif
 			};
 
 			static staticAtomicMutex mutex;///< lock

@@ -249,7 +249,11 @@ void *baseEx::handlesEx[] = { NULL,
 
 //-------------------------------------------------------------------
 
+#ifdef PTHREAD_EXT
+
 pthread_mutex_t baseEx::staticAtomicMutex::mutex;
+
+#endif
 
 //-------------------------------------------------------------------
 
@@ -259,6 +263,8 @@ baseEx::staticAtomicMutex baseEx::mutex;
 
 baseEx::staticAtomicMutex::staticAtomicMutex()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -266,13 +272,19 @@ baseEx::staticAtomicMutex::staticAtomicMutex()
 	pthread_mutex_init(&mutex, &attr);
 
 	pthread_mutexattr_destroy(&attr);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
 
 baseEx::staticAtomicMutex::~staticAtomicMutex()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutex_destroy(&mutex);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -280,7 +292,11 @@ baseEx::staticAtomicMutex::~staticAtomicMutex()
 void
 baseEx::staticAtomicMutex::lock()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutex_lock(&mutex);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -288,7 +304,11 @@ baseEx::staticAtomicMutex::lock()
 void
 baseEx::staticAtomicMutex::unlock()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutex_unlock(&mutex);
+	
+#endif
 }
 
 //-------------------------------------------------------------------

@@ -24,11 +24,16 @@
 
 #include <libdodo/systemThreadCollection.h>
 
-#ifdef PTHREAD_EXT
-
 using namespace dodo;
 
-__threadInfo::__threadInfo() : thread(0),
+__threadInfo::__threadInfo() :
+	
+#ifdef PTHREAD_EXT
+	
+	thread(0),
+	
+#endif
+	
 							   isRunning(false),
 							   executed(0),
 							   executeLimit(0)
@@ -45,14 +50,22 @@ systemThreadCollection::systemThreadCollection(systemThreadCollection &st)
 
 systemThreadCollection::systemThreadCollection() : threadNum(0)
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_attr_init(&attr);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
 
 systemThreadCollection::~systemThreadCollection()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_attr_destroy(&attr);
+	
+#endif
 
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 
@@ -69,20 +82,34 @@ systemThreadCollection::~systemThreadCollection()
 		{
 			case SYSTEMTHREADCOLLECTION_KEEP_ALIVE:
 
+#ifdef PTHREAD_EXT
+				
 				pthread_detach(i->thread);
+				
+#endif
 
 				break;
 
 			case SYSTEMTHREADCOLLECTION_STOP:
 
+#ifdef PTHREAD_EXT
+				
 				pthread_cancel(i->thread);
+				
+#endif
 
 				break;
 
 			case SYSTEMTHREADCOLLECTION_WAIT:
 			default:
 
+#ifdef PTHREAD_EXT
+				
 				pthread_join(i->thread, NULL);
+				
+#endif
+				
+				break;
 		}
 
 #ifdef DL_EXT
@@ -169,9 +196,13 @@ systemThreadCollection::del(unsigned long position,
 				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_DEL, ERR_LIBDODO, SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING, SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
+#ifdef PTHREAD_EXT
+				
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
 					throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				
+#endif
 			}
 		}
 
@@ -218,9 +249,13 @@ systemThreadCollection::replace(unsigned long position,
 				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_REPLACE, ERR_LIBDODO, SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING, SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
+#ifdef PTHREAD_EXT
+				
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
 					throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				
+#endif
 			}
 		}
 
@@ -274,6 +309,8 @@ systemThreadCollection::run(unsigned long position,
 		if (_isRunning(current) && !force)
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_RUN, ERR_LIBDODO, SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING, SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
+#ifdef PTHREAD_EXT
+		
 		if (current->detached)
 			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 		else
@@ -287,6 +324,8 @@ systemThreadCollection::run(unsigned long position,
 		if (errno != 0)
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+#endif
+		
 		current->isRunning = true;
 		++ (current->executed);
 	}
@@ -307,10 +346,14 @@ systemThreadCollection::wait(unsigned long position)
 		if (current->detached)
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_WAIT, ERR_LIBDODO, SYSTEMTHREADCOLLECTIONEX_ISDETACHED, SYSTEMTHREADCOLLECTIONEX_ISDETACHED_STR, __LINE__, __FILE__);
 
+#ifdef PTHREAD_EXT
+		
 		errno = pthread_join(current->thread, NULL);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+#endif
+		
 		current->isRunning = false;
 	}
 	else
@@ -328,10 +371,14 @@ systemThreadCollection::wait()
 		if (!_isRunning(i) || i->detached)
 			continue;
 
+#ifdef PTHREAD_EXT
+		
 		errno = pthread_join(i->thread, NULL);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+#endif
+		
 		i->isRunning = false;
 	}
 }
@@ -346,10 +393,14 @@ systemThreadCollection::stop(unsigned long position)
 		if (!_isRunning(current))
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_STOP, ERR_LIBDODO, SYSTEMTHREADCOLLECTIONEX_ISNOTRUNNING, SYSTEMTHREADCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
+#ifdef PTHREAD_EXT
+		
 		errno = pthread_cancel(current->thread);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+#endif
+		
 		current->isRunning = false;
 	}
 	else
@@ -367,10 +418,14 @@ systemThreadCollection::stop()
 		if (!_isRunning(i))
 			continue;
 
+#ifdef PTHREAD_EXT
+		
 		errno = pthread_cancel(i->thread);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+#endif
+		
 		i->isRunning = false;
 	}
 }
@@ -395,6 +450,8 @@ systemThreadCollection::_isRunning(dodoList<__threadInfo>::iterator &position) c
 	if (!position->isRunning)
 		return false;
 
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_kill(position->thread, 0);
 	if (errno != 0)
 	{
@@ -407,6 +464,8 @@ systemThreadCollection::_isRunning(dodoList<__threadInfo>::iterator &position) c
 
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
+	
+#endif
 
 	return true;
 }
@@ -548,10 +607,14 @@ systemThreadCollection::blockSignal(int signals,
 
 	systemTools::sigMask(&signal_mask, signals);
 
+#ifdef PTHREAD_EXT
+	
 	if (block)
 		pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
 	else
 		pthread_sigmask(SIG_UNBLOCK, &signal_mask, NULL);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -587,6 +650,8 @@ systemThreadCollection::addNRun(threadFunc func,
 	thread.handle = NULL;
 #endif
 
+#ifdef PTHREAD_EXT
+	
 	if (detached)
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 	else
@@ -600,6 +665,8 @@ systemThreadCollection::addNRun(threadFunc func,
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, SYSTEMTHREADCOLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
+#endif
+	
 	thread.isRunning = true;
 	++ (thread.executed);
 
@@ -622,9 +689,6 @@ systemThreadCollection::getJobsIds()
 	return ids;
 
 }
-
-#endif
-
 
 //-------------------------------------------------------------------
 

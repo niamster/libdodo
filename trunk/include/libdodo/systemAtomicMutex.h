@@ -26,7 +26,11 @@
 
 #include <libdodo/directives.h>
 
+#ifdef PTHREAD_EXT
+
 #include <pthread.h>
+
+#endif
 
 #include <libdodo/systemAtomicLock.h>
 #include <libdodo/systemAtomicMutexEx.h>
@@ -63,7 +67,12 @@ namespace dodo
 
 		protected:
 
+#ifdef PTHREAD_EXT
+			
 			pthread_mutex_t mutex; ///< mutex
+			
+#endif
+			
 	};
 };
 

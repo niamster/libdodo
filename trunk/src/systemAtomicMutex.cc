@@ -27,6 +27,8 @@ using namespace dodo;
 
 systemAtomicMutex::systemAtomicMutex()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -34,13 +36,19 @@ systemAtomicMutex::systemAtomicMutex()
 	pthread_mutex_init(&mutex, &attr);
 
 	pthread_mutexattr_destroy(&attr);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
 
 systemAtomicMutex::~systemAtomicMutex()
 {
+#ifdef PTHREAD_EXT
+	
 	pthread_mutex_destroy(&mutex);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -48,9 +56,13 @@ systemAtomicMutex::~systemAtomicMutex()
 void
 systemAtomicMutex::lock()
 {
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0 && errno != EDEADLK)
 		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, SYSTEMATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -58,9 +70,13 @@ systemAtomicMutex::lock()
 void
 systemAtomicMutex::unlock()
 {
+#ifdef PTHREAD_EXT
+	
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, SYSTEMATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+#endif
 }
 
 //-------------------------------------------------------------------
