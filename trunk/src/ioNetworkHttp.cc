@@ -80,7 +80,7 @@ ioNetworkHttp::ioNetworkHttp() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*
 	
 	requestHeaders[IONETWORKHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
 	requestHeaders[IONETWORKHTTP_REQUESTHEADER_ACCEPT] = "*/*";
-	requestHeaders[IONETWORKHTTP_REQUESTHEADER_CONNECTION] = "Keep-Alive";
+	requestHeaders[IONETWORKHTTP_REQUESTHEADER_CONNECTION] = "Close";
 }
 
 //-------------------------------------------------------------------
@@ -133,10 +133,8 @@ ioNetworkHttp::setUrl(const dodoString &a_url)
 	if (urlComponents.request.size() > 0)
 	{
 		url.append("?");
-		url.append(urlComponents.request);
+		url.append(tools::encodeUrl(urlComponents.request));
 	}
-	
-	url = tools::encodeUrl(url);
 }
 
 //-------------------------------------------------------------------
@@ -207,7 +205,10 @@ ioNetworkHttp::GET()
 	
 	data.append("GET ");
 	data.append(url);
-	data.append(" HTTP/1.1\r\n");
+	if (proxyAuthInfo.enabled)
+		data.append(" HTTP/1.1\r\n");
+	else
+		data.append(" HTTP/1.0\r\n");
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (;i!=j;++i)
 	{
@@ -499,7 +500,10 @@ ioNetworkHttp::POST(const dodoString &a_data,
 	
 	data.append("POST ");
 	data.append(url);
-	data.append(" HTTP/1.1\r\n");
+	if (proxyAuthInfo.enabled)
+		data.append(" HTTP/1.1\r\n");
+	else
+		data.append(" HTTP/1.0\r\n");
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (;i!=j;++i)
 	{
@@ -711,13 +715,13 @@ ioNetworkHttp::getHeaders(const dodoString &headers)
 bool
 ioNetworkHttp::extractHeaders(const dodoString &data,
 						dodoString &headers)
-{
+{	
 	headers.append(data);
 	
-	unsigned long i = headers.find("\r\n\r\n", i);
+	unsigned long i = headers.find("\r\n\r\n");
 	if (i == dodoString::npos)
 	{
-		i = headers.find("\n\n", i);
+		i = headers.find("\n\n");
 		if (i == dodoString::npos)
 			return false;
 		else
@@ -763,7 +767,7 @@ ioNetworkHttp::getContent(dodoString &data,
 			
 			if (data.size() == 0 && contentSize <= 0)
 			{
-				if (!endOfHeaders)
+				if (!endOfHeaders && headers.size() > 0)
 					response.data.assign(headers);
 				
 				break;
@@ -779,7 +783,6 @@ ioNetworkHttp::getContent(dodoString &data,
 				{
 					getHeaders(headers);
 					headers.clear();
-					
 					
 					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
 
@@ -850,7 +853,7 @@ ioNetworkHttp::getContent(dodoString &data,
 		{
 			if (ex.funcID == IONETWORKEXCHANGEEX__READSTREAM)
 			{
-				if (!endOfHeaders)
+				if (!endOfHeaders && headers.size() > 0)
 					response.data.assign(headers);
 				
 				break;
