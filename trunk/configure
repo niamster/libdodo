@@ -3805,7 +3805,7 @@ else
   MOD_SQLITE="no"
 fi
 
-	if test "$MOD_SQLITE" != "no"
+	if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
 	then
 		if test "$MOD_SQLITE_DIR" = "yes"
 		then
@@ -4505,7 +4505,7 @@ else
   MOD_BFD="no"
 fi
 
-	if test "$MOD_BFD" != "no"
+	if test "$MOD_BFD" != "no" -a "$MOD_BFD_DIR" != "no"
 	then
 		if test "$MOD_BFD_DIR" = "yes"
 		then
@@ -4748,7 +4748,7 @@ else
   MOD_POSTGRESQL="no"
 fi
 
-	if test "$MOD_POSTGRESQL" != "no"
+	if test "$MOD_POSTGRESQL" != "no" -a "$MOD_POSTGRESQL_DIR" != "no"
 	then
 		if test "$MOD_POSTGRESQL_DIR" = "yes"
 		then
@@ -4991,7 +4991,7 @@ else
   MOD_MYSQL="no"
 fi
 
-	if test "$MOD_MYSQL" != "no"
+	if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
 	then
 		if test "$MOD_MYSQL_DIR" = "yes" -a $(which mysql_config 2>/dev/null)
 		then
@@ -5237,7 +5237,7 @@ else
   MOD_FCGI="no"
 fi
 
-	if test "$MOD_FCGI" != "no"
+	if test "$MOD_FCGI" != "no" -a "$MOD_FCGI_DIR" != "no"
 	then
 		if test "$MOD_FCGI_DIR" = "yes"
 		then
@@ -5480,7 +5480,7 @@ else
   MOD_PCRE="no"
 fi
 
-	if test "$MOD_PCRE" != "no"
+	if test "$MOD_PCRE" != "no" -a "$MOD_PCRE_DIR" != "no"
 	then
 		if test "$MOD_PCRE_DIR" = "yes"
 		then
@@ -5726,7 +5726,7 @@ else
   MOD_DL="no"
 fi
 
-	if test "$MOD_DL" != "no"
+	if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
 	then
 		if test "$MOD_DL_DIR" = "yes"
 		then
@@ -5990,7 +5990,7 @@ else
   MOD_LIBXML2="no"
 fi
 
-	if test "$MOD_LIBXML2" != "no"
+	if test "$MOD_LIBXML2" != "no" -a "$MOD_LIBXML2_DIR" != "no"
 	then
 		if test "$MOD_LIBXML2_DIR" = "yes"
 		then
@@ -6236,7 +6236,7 @@ else
   MOD_PTHREAD="no"
 fi
 
-	if test "$MOD_PTHREAD" != "no"
+	if test "$MOD_PTHREAD" != "no" -a "$MOD_PTHREAD_DIR" != "no"
 	then
 		if test "$MOD_PTHREAD_DIR" = "yes"
 		then
@@ -6491,7 +6491,7 @@ else
   MOD_BZIP2="no"
 fi
 
-	if test "$MOD_BZIP2" != "no"
+	if test "$MOD_BZIP2" != "no" -a "$MOD_BZIP2_DIR" != "no"
 	then
 		if test "$MOD_BZIP2_DIR" = "yes"
 		then
@@ -6734,7 +6734,7 @@ else
   MOD_ZLIB="no"
 fi
 
-	if test "$MOD_ZLIB" != "no"
+	if test "$MOD_ZLIB" != "no" -a "$MOD_ZLIB_DIR" != "no"
 	then
 		if test "$MOD_ZLIB_DIR" = "yes"
 		then
@@ -6979,7 +6979,7 @@ else
   MOD_ICONV="no"
 fi
 
-	if test "$MOD_ICONV" != "no"
+	if test "$MOD_ICONV" != "no" -a "$MOD_ICONV_DIR" != "no"
 	then
 		if test "$MOD_ICONV_DIR" = "yes"
 		then
@@ -7224,7 +7224,7 @@ else
   MOD_IMAGEMAGICK="no"
 fi
 
-	if test "$MOD_IMAGEMAGICK" != "no"
+	if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 	then
 		if test "$MOD_IMAGEMAGICK_DIR" = "yes"
 		then

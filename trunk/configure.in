@@ -189,7 +189,7 @@ fi
 	AC_ARG_WITH([sqlite3],
 		AS_HELP_STRING([--with-sqlite3(=/path)],[use sqlite3]),
 		[MOD_SQLITE_DIR="$withval"], [MOD_SQLITE="no"])
-	if test "$MOD_SQLITE" != "no"
+	if test "$MOD_SQLITE" != "no" -a "$MOD_SQLITE_DIR" != "no"
 	then
 		if test "$MOD_SQLITE_DIR" = "yes"
 		then
@@ -210,7 +210,7 @@ fi
 	AC_ARG_WITH([bfd],
 		AS_HELP_STRING([--with-bfd(=/path)],[support library name resolution]),
 		[MOD_BFD_DIR="$withval"], [MOD_BFD="no"])
-	if test "$MOD_BFD" != "no"
+	if test "$MOD_BFD" != "no" -a "$MOD_BFD_DIR" != "no"
 	then
 		if test "$MOD_BFD_DIR" = "yes"
 		then
@@ -230,7 +230,7 @@ fi
 	AC_ARG_WITH([postgresql],
 		AS_HELP_STRING([--with-postgresql(=/path)],[use postgresql]),
 		[MOD_POSTGRESQL_DIR="$withval"], [MOD_POSTGRESQL="no"])
-	if test "$MOD_POSTGRESQL" != "no"
+	if test "$MOD_POSTGRESQL" != "no" -a "$MOD_POSTGRESQL_DIR" != "no"
 	then
 		if test "$MOD_POSTGRESQL_DIR" = "yes"
 		then
@@ -250,7 +250,7 @@ fi
 	AC_ARG_WITH([mysql],
 		AS_HELP_STRING([--with-mysql(=/path)],[use mysql]),
 		[MOD_MYSQL_DIR="$withval"], [MOD_MYSQL="no"])
-	if test "$MOD_MYSQL" != "no"
+	if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
 	then
 		if test "$MOD_MYSQL_DIR" = "yes" -a $(which mysql_config 2>/dev/null)
 		then
@@ -273,7 +273,7 @@ fi
 	AC_ARG_WITH([fcgi],
 		AS_HELP_STRING([--with-fcgi(=/path)],[use fast CGI]),
 		[MOD_FCGI_DIR="$withval"], [MOD_FCGI="no"])
-	if test "$MOD_FCGI" != "no"		
+	if test "$MOD_FCGI" != "no" -a "$MOD_FCGI_DIR" != "no"
 	then
 		if test "$MOD_FCGI_DIR" = "yes"
 		then
@@ -293,7 +293,7 @@ fi
 	AC_ARG_WITH([pcre],
 		AS_HELP_STRING([--with-pcre(=/path)],[use pcre]),
 		[MOD_PCRE_DIR="$withval"], [MOD_PCRE="no"])
-	if test "$MOD_PCRE" != "no"
+	if test "$MOD_PCRE" != "no" -a "$MOD_PCRE_DIR" != "no"
 	then
 		if test "$MOD_PCRE_DIR" = "yes"
 		then
@@ -316,7 +316,7 @@ fi
 	AC_ARG_WITH([dl],
 		AS_HELP_STRING([--with-dl(=/path)],[use dl]),
 		[MOD_DL_DIR="$withval"], [MOD_DL="no"])
-	if test "$MOD_DL" != "no"
+	if test "$MOD_DL" != "no" -a "$MOD_DL_DIR" != "no"
 	then
 		if test "$MOD_DL_DIR" = "yes"
 		then
@@ -356,7 +356,7 @@ fi
 	AC_ARG_WITH([libxml2],
 		AS_HELP_STRING([--with-libxml2(=/path)],[use libxml2]),
 		[MOD_LIBXML2_DIR="$withval"], [MOD_LIBXML2="no"])
-	if test "$MOD_LIBXML2" != "no"
+	if test "$MOD_LIBXML2" != "no" -a "$MOD_LIBXML2_DIR" != "no"
 	then
 		if test "$MOD_LIBXML2_DIR" = "yes"
 		then
@@ -379,7 +379,7 @@ fi
 	AC_ARG_WITH([pthread],
 		AS_HELP_STRING([--with-pthread(=/path)],[use pthread]),
 		[MOD_PTHREAD_DIR="$withval"], [MOD_PTHREAD="no"])
-	if test "$MOD_PTHREAD" != "no"
+	if test "$MOD_PTHREAD" != "no" -a "$MOD_PTHREAD_DIR" != "no"
 	then
 		if test "$MOD_PTHREAD_DIR" = "yes"
 		then
@@ -402,7 +402,7 @@ fi
 	AC_ARG_WITH([bzip2],
 		AS_HELP_STRING([--with-bzip2(=/path)],[use bzip2]),
 		[MOD_BZIP2_DIR="$withval"], [MOD_BZIP2="no"])
-	if test "$MOD_BZIP2" != "no"
+	if test "$MOD_BZIP2" != "no" -a "$MOD_BZIP2_DIR" != "no"
 	then
 		if test "$MOD_BZIP2_DIR" = "yes"
 		then
@@ -422,7 +422,7 @@ fi
 	AC_ARG_WITH([zlib],
 		AS_HELP_STRING([--with-zlib(=/path)],[use zlib]),
 		[MOD_ZLIB_DIR="$withval"], [MOD_ZLIB="no"])
-	if test "$MOD_ZLIB" != "no"
+	if test "$MOD_ZLIB" != "no" -a "$MOD_ZLIB_DIR" != "no"
 	then
 		if test "$MOD_ZLIB_DIR" = "yes"
 		then
@@ -449,7 +449,7 @@ fi
 	AC_ARG_WITH([iconv],
 		AS_HELP_STRING([--with-iconv(=/path)],[use iconv]),
 		[MOD_ICONV_DIR="$withval"], [MOD_ICONV="no"])
-	if test "$MOD_ICONV" != "no"
+	if test "$MOD_ICONV" != "no" -a "$MOD_ICONV_DIR" != "no"
 	then
 		if test "$MOD_ICONV_DIR" = "yes"
 		then
@@ -476,7 +476,7 @@ fi
 	AC_ARG_WITH([imagemagick],
 		AS_HELP_STRING([--with-imagemagick(=/path)],[use ImageMagick]),
 		[MOD_IMAGEMAGICK_DIR="$withval"], [MOD_IMAGEMAGICK="no"])
-	if test "$MOD_IMAGEMAGICK" != "no"
+	if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 	then
 		if test "$MOD_IMAGEMAGICK_DIR" = "yes"
 		then
