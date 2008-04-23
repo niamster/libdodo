@@ -252,12 +252,18 @@ fi
 		[MOD_MYSQL_DIR="$withval"], [MOD_MYSQL="no"])
 	if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
 	then
-		if test "$MOD_MYSQL_DIR" = "yes" -a $(which mysql_config 2>/dev/null)
+		if test "$MOD_MYSQL_DIR" = "yes"
 		then
-			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
-			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
+			if test "$(which mysql_config 2>/dev/null)" != ""
+			then
+				CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
+				LDFLAGS="$LDFLAGS $(mysql_config --libs)"
+			else
+				MOD_MYSQL_DIR=/usr
+				CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
+				LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
+			fi
 		else
-			MOD_MYSQL_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
 		fi
@@ -360,10 +366,16 @@ fi
 	then
 		if test "$MOD_LIBXML2_DIR" = "yes"
 		then
-			CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
-			LDFLAGS="$LDFLAGS $(xml2-config --libs)"
+			if test "$(which xml2-config 2>/dev/null)" != ""
+			then
+				CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
+				LDFLAGS="$LDFLAGS $(xml2-config --libs)"
+			else
+				MOD_LIBXML2_DIR=/usr
+				CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
+				LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
+			fi
 		else
-			MOD_LIBXML2_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
 			LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
 		fi
@@ -478,16 +490,29 @@ fi
 		[MOD_IMAGEMAGICK_DIR="$withval"], [MOD_IMAGEMAGICK="no"])
 	if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 	then
-		if test "$MOD_IMAGEMAGICK_DIR" = "yes"
+		ORIGINAL_CPPFLAGS=$CPPFLAGS
+		if test "$MOD_IMAGEMAGICK_DIR" = "yes" -a "$(which Magick-config 2>/dev/null)" != ""
 		then
-			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
-			LDFLAGS="$LDFLAGS $(Magick-config --ldflags) $(Magick-config --libs)"
+			if test "$(which Magick-config 2>/dev/null)" != ""
+			then
+				CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
+				LDFLAGS="$LDFLAGS $(Magick-config --libs)"
+			else
+				MOD_IMAGEMAGICK_DIR=/usr
+				CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
+				LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
+			fi
 		else
-			MOD_ICONV_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
-			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
+			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 		fi
-		AC_CHECK_LIB([MagickCore], [MagickCoreGenesis], [], AC_MSG_ERROR(Magick lib was not found))
+		AC_CHECK_LIB([MagickCore], [MagickCoreGenesis], [], OLD_MAGICK_LIB="yes")
+		if test "$OLD_MAGICK_LIB" == "yes"
+		then
+			LDFLAGS="$ORIGINAL_LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
+			
+			AC_CHECK_LIB([Magick], [MagickCoreGenesis], [], AC_MSG_ERROR(Magick lib was not found))
+		fi
 		AC_CHECK_HEADER([magick/MagickCore.h], [], AC_MSG_ERROR(Magick header was not found))
 		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
 		

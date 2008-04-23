@@ -4993,12 +4993,18 @@ fi
 
 	if test "$MOD_MYSQL" != "no" -a "$MOD_MYSQL_DIR" != "no"
 	then
-		if test "$MOD_MYSQL_DIR" = "yes" -a $(which mysql_config 2>/dev/null)
+		if test "$MOD_MYSQL_DIR" = "yes"
 		then
-			CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
-			LDFLAGS="$LDFLAGS $(mysql_config --libs)"
+			if test "$(which mysql_config 2>/dev/null)" != ""
+			then
+				CPPFLAGS="$CPPFLAGS $(mysql_config --cflags)"
+				LDFLAGS="$LDFLAGS $(mysql_config --libs)"
+			else
+				MOD_MYSQL_DIR=/usr
+				CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
+				LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
+			fi
 		else
-			MOD_MYSQL_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_MYSQL_DIR/include"
 			LDFLAGS="$LDFLAGS -L$MOD_MYSQL_DIR/lib -lmysqlclient"
 		fi
@@ -5994,10 +6000,16 @@ fi
 	then
 		if test "$MOD_LIBXML2_DIR" = "yes"
 		then
-			CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
-			LDFLAGS="$LDFLAGS $(xml2-config --libs)"
+			if test "$(which xml2-config 2>/dev/null)" != ""
+			then
+				CPPFLAGS="$CPPFLAGS $(xml2-config --cflags)"
+				LDFLAGS="$LDFLAGS $(xml2-config --libs)"
+			else
+				MOD_LIBXML2_DIR=/usr
+				CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
+				LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
+			fi
 		else
-			MOD_LIBXML2_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_LIBXML2_DIR/include/libxml2"
 			LDFLAGS="$LDFLAGS -L$MOD_LIBXML2_DIR/lib -lxml2"
 		fi
@@ -7226,14 +7238,21 @@ fi
 
 	if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 	then
-		if test "$MOD_IMAGEMAGICK_DIR" = "yes"
+		ORIGINAL_CPPFLAGS=$CPPFLAGS
+		if test "$MOD_IMAGEMAGICK_DIR" = "yes" -a "$(which Magick-config 2>/dev/null)" != ""
 		then
-			CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
-			LDFLAGS="$LDFLAGS $(Magick-config --ldflags) $(Magick-config --libs)"
+			if test "$(which Magick-config 2>/dev/null)" != ""
+			then
+				CPPFLAGS="$CPPFLAGS $(Magick-config --cppflags)"
+				LDFLAGS="$LDFLAGS $(Magick-config --libs)"
+			else
+				MOD_IMAGEMAGICK_DIR=/usr
+				CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
+				LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
+			fi
 		else
-			MOD_ICONV_DIR=/usr
 			CPPFLAGS="$CPPFLAGS -I$MOD_IMAGEMAGICK_DIR/include"
-			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
+			LDFLAGS="$LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagickCore"
 		fi
 
 { $as_echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagickCore" >&5
@@ -7309,11 +7328,93 @@ _ACEOF
   LIBS="-lMagickCore $LIBS"
 
 else
+  OLD_MAGICK_LIB="yes"
+fi
+
+		if test "$OLD_MAGICK_LIB" == "yes"
+		then
+			LDFLAGS="$ORIGINAL_LDFLAGS -L$MOD_IMAGEMAGICK_DIR/lib -lMagick"
+
+
+{ $as_echo "$as_me:$LINENO: checking for MagickCoreGenesis in -lMagick" >&5
+$as_echo_n "checking for MagickCoreGenesis in -lMagick... " >&6; }
+if test "${ac_cv_lib_Magick_MagickCoreGenesis+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lMagick  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char MagickCoreGenesis ();
+int
+main ()
+{
+return MagickCoreGenesis ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+  ac_cv_lib_Magick_MagickCoreGenesis=yes
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_lib_Magick_MagickCoreGenesis=no
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:$LINENO: result: $ac_cv_lib_Magick_MagickCoreGenesis" >&5
+$as_echo "$ac_cv_lib_Magick_MagickCoreGenesis" >&6; }
+if test $ac_cv_lib_Magick_MagickCoreGenesis = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMAGICK 1
+_ACEOF
+
+  LIBS="-lMagick $LIBS"
+
+else
   { { $as_echo "$as_me:$LINENO: error: Magick lib was not found" >&5
 $as_echo "$as_me: error: Magick lib was not found" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
+		fi
 		if test "${ac_cv_header_magick_MagickCore_h+set}" = set; then
   { $as_echo "$as_me:$LINENO: checking for magick/MagickCore.h" >&5
 $as_echo_n "checking for magick/MagickCore.h... " >&6; }

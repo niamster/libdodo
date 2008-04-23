@@ -28,7 +28,7 @@
 
 #ifdef POSTGRESQL_EXT
 
-#include <postgresql/libpq-fe.h>
+#include <libpq-fe.h>
 
 #include <libdodo/tools.h>
 #include <libdodo/dbPostgresqlEx.h>
