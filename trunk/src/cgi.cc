@@ -395,11 +395,13 @@ cgi::makeAuth()
 //-------------------------------------------------------------------
 
 void 
-cgi::requestBasicAuthentification(const dodoString &realm)
+cgi::requestAuthentification(const dodoString &realm,
+			short type)
 {
 	returnCode = CGI_STATUSCODE_UNAUTHORIZED;
 	
-	HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
+	if (type == CGI_AUTHTYPE_BASIC)
+		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
 }
 
 //-------------------------------------------------------------------

@@ -336,10 +336,11 @@ namespace dodo
 			virtual __authInfo getAuthentificationInfo();
 			
 			/**
-			 * request basic authentification
+			 * request the authentification
 			 * @param realm defines authentification request string
+			 * @param type defines type of authentification[see cgiAuthTypeEnum]
 			 */
-			virtual void requestBasicAuthentification(const dodoString &realm);
+			virtual void requestAuthentification(const dodoString &realm, short type=CGI_AUTHTYPE_DIGEST);
 			
 			/**
 			 * check basic authentification
