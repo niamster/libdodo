@@ -29,6 +29,7 @@
 #include <libdodo/dodoString.h>
 
 #include <ctype.h>
+#include <stdarg.h>
 
 namespace dodo
 {
