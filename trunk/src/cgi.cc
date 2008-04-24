@@ -416,7 +416,10 @@ bool
 cgi::checkAuthentification(const dodoString &user, 
 								const dodoString &password)
 {
-	return (stringTools::equal(user,authInfo.user) && stringTools::equal(password,authInfo.password));
+	if (authInfo.type == CGI_AUTHTYPE_BASIC)
+		return (stringTools::equal(user,authInfo.user) && stringTools::equal(password,authInfo.password));
+	else
+		return false;
 }
 
 //-------------------------------------------------------------------
