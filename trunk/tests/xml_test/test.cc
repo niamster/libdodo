@@ -9,9 +9,7 @@ using namespace std;
 
 
 int main(int argc, char **argv)
-{
-#ifdef LIBXML2_EXT
-		
+{		
 		try
 		{
 			xml tool;
@@ -79,7 +77,7 @@ int main(int argc, char **argv)
 			cout << "WTF";
 		}
 	
-#else
+#ifndef LIBXML2_EXT
 	
 		cout << "No XML extension was compiled!";
 	

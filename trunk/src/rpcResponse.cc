@@ -42,7 +42,7 @@ rpcResponse::~rpcResponse()
 rpcValue
 rpcResponse::getValue(unsigned long position)
 {
-	if (position > values.size())
+	if (position >= values.size())
 		throw baseEx(ERRMODULE_RPCRESPONSE, RPCRESPONSEEX_GETVALUE, ERR_LIBDODO, RPCRESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 	
 	return values[position];
@@ -81,7 +81,7 @@ rpcResponse::fault(const rpcValue &argument)
 rpcValue
 rpcResponse::operator[](unsigned long position)
 {
-	if (position > values.size())
+	if (position >= values.size())
 		throw baseEx(ERRMODULE_RPCRESPONSE, RPCRESPONSEEX_BROPERATORUNSIGNEDLONG, ERR_LIBDODO, RPCRESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 	
 	return values[position];

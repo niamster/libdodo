@@ -31,6 +31,8 @@
 #include <libxml/parser.h>
 #include <libxml/xmlmemory.h>
 
+#endif
+
 #include <libdodo/xmlEx.h>
 #include <libdodo/types.h>
 #include <libdodo/dodoMap.h>
@@ -215,6 +217,15 @@ namespace dodo
 		protected:
 
 			/**
+			 * parse XML using __xmlNodeDef XML definition
+			 * @return parsed XML in __xmlNode structure
+			 * @param definition defines structure of XML
+			 */
+			virtual __xmlNode parse(const __xmlNodeDef &definition);
+
+#ifdef LIBXML2_EXT
+
+			/**
 			 * @return true if content is in CDATA
 			 * @param node defines XML tree node
 			 */
@@ -226,13 +237,6 @@ namespace dodo
 			 * @param node defines XML tree node
 			 */
 			virtual dodoArray<__xmlNode> parse(xmlNodePtr node);
-
-			/**
-			 * parse XML using __xmlNodeDef XML definition
-			 * @return parsed XML in __xmlNode structure
-			 * @param definition defines structure of XML
-			 */
-			virtual __xmlNode parse(const __xmlNodeDef &definition);
 
 			/**
 			 * parses XML using __xmlNodeDef XML definition
@@ -265,7 +269,11 @@ namespace dodo
 			 */
 			virtual void getNodeInfo(const xmlNodePtr node, __xmlNode &sample);
 
+#endif
+
 		private:
+
+#ifdef LIBXML2_EXT
 
 			/**
 			 * @typedef xcharCmp defines name compare function 
@@ -290,9 +298,11 @@ namespace dodo
 			 * @param error defines error descriptor
 			 */
 			static void errHandler(void *data, xmlErrorPtr error);
+
+#endif
+
 	};
 };
 
 #endif
 
-#endif

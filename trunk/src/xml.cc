@@ -24,8 +24,6 @@
 
 #include <libdodo/xml.h>
 
-#ifdef LIBXML2_EXT
-
 using namespace dodo;
 
 __xmlInfo::__xmlInfo(const dodoString &a_version,
@@ -67,24 +65,41 @@ xml::xml(xml &xt)
 
 //-------------------------------------------------------------------
 
-xml::xml() : icaseNames(false),
+xml::xml() : icaseNames(false)
+
+#ifdef LIBXML2_EXT
+
+,
 			 document(NULL)
+
+#endif
+
 {
+#ifdef LIBXML2_EXT
+
 	xmlPedanticParserDefault(0);
 	xmlInitParser();
 	xmlSetStructuredErrorFunc(NULL, xml::errHandler);
+
+#endif
 }
 
 //-------------------------------------------------------------------
 
 xml::~xml()
 {
+#ifdef LIBXML2_EXT
+
 	xmlFreeDoc(document);
 
 	xmlCleanupParser();
+
+#endif
 }
 
 //-------------------------------------------------------------------
+
+#ifdef LIBXML2_EXT
 
 bool
 xml::isCDATA(xmlNodePtr chNode)
@@ -101,12 +116,16 @@ xml::isCDATA(xmlNodePtr chNode)
 	return false;
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
 __xmlNode
 xml::parseFile(const __xmlNodeDef &definition,
 			   const dodoString &file)
 {
+#ifdef LIBXML2_EXT
+
 	xmlFreeDoc(document);
 
 	document = xmlParseFile(file.c_str());
@@ -120,6 +139,8 @@ xml::parseFile(const __xmlNodeDef &definition,
 			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
+#endif
+
 	return parse(definition);
 }
 
@@ -129,6 +150,8 @@ __xmlNode
 xml::parseBuffer(const __xmlNodeDef &definition,
 				 const dodoString &buffer)
 {
+#ifdef LIBXML2_EXT
+
 	xmlFreeDoc(document);
 
 	document = xmlParseMemory(buffer.c_str(), buffer.size());
@@ -142,6 +165,8 @@ xml::parseBuffer(const __xmlNodeDef &definition,
 			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
+#endif
+
 	return parse(definition);
 }
 
@@ -150,6 +175,8 @@ xml::parseBuffer(const __xmlNodeDef &definition,
 __xmlNode
 xml::parse(const __xmlNodeDef &definition)
 {
+#ifdef LIBXML2_EXT
+
 	xmlNodePtr node = xmlDocGetRootElement(document);
 	if (node == NULL)
 	{
@@ -161,12 +188,12 @@ xml::parse(const __xmlNodeDef &definition)
 			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
-	__xmlNode sample;
-
 	node = findNode(definition, node);
 
 	if (node == NULL)
-		return sample;
+		return __xmlNode();
+
+	__xmlNode sample;
 
 	getNodeInfo(node, sample);
 
@@ -233,9 +260,17 @@ xml::parse(const __xmlNodeDef &definition)
 	}
 
 	return sample;
+
+#else
+
+	return __xmlNode();
+
+#endif
 }
 
 //-------------------------------------------------------------------
+
+#ifdef LIBXML2_EXT
 
 dodoArray<__xmlNode>
 xml::parse(const __xmlNodeDef &definition,
@@ -360,7 +395,11 @@ xml::parse(const __xmlNodeDef &definition,
 	return sampleArr;
 }
 
+#endif
+
 //-------------------------------------------------------------------
+
+#ifdef LIBXML2_EXT
 
 void
 xml::errHandler(void        *data,
@@ -484,11 +523,15 @@ xml::getNodeInfo(const xmlNodePtr node,
 	}
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
 __xmlInfo
 xml::getXMLFileInfo(const dodoString &file)
 {
+#ifdef LIBXML2_EXT
+
 	document = xmlParseFile(file.c_str());
 	if (document == NULL)
 	{
@@ -504,6 +547,12 @@ xml::getXMLFileInfo(const dodoString &file)
 					 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
 					 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
 					 document->compression);
+
+#else
+
+	return __xmlInfo();
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -511,6 +560,8 @@ xml::getXMLFileInfo(const dodoString &file)
 __xmlInfo
 xml::getXMLBufferInfo(const dodoString &buffer)
 {
+#ifdef LIBXML2_EXT
+
 	document = xmlParseMemory(buffer.c_str(), buffer.size());
 	if (document == NULL)
 	{
@@ -523,9 +574,17 @@ xml::getXMLBufferInfo(const dodoString &buffer)
 	}
 
 	return __xmlInfo((char *)document->version, (char *)document->encoding, (char *)document->children->name, document->compression);
+
+#else
+
+	return __xmlInfo();
+
+#endif
 }
 
 //-------------------------------------------------------------------
+
+#ifdef LIBXML2_EXT
 
 dodoArray<__xmlNode>
 xml::parse(xmlNodePtr node)
@@ -572,6 +631,8 @@ xml::parse(xmlNodePtr node)
 	return sample;
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
 void
@@ -592,6 +653,8 @@ xml::initNode(__xmlNode &node)
 __xmlNode
 xml::parseFile(const dodoString &file)
 {
+#ifdef LIBXML2_EXT
+
 	xmlFreeDoc(document);
 
 	document = xmlParseFile(file.c_str());
@@ -616,9 +679,13 @@ xml::parseFile(const dodoString &file)
 			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
-	__xmlNode sample = *(parse(node).begin());
+	return *(parse(node).begin());
 
-	return sample;
+#else
+
+	return __xmlNode();
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -626,6 +693,8 @@ xml::parseFile(const dodoString &file)
 __xmlNode
 xml::parseBuffer(const dodoString &buffer)
 {
+#ifdef LIBXML2_EXT
+
 	xmlFreeDoc(document);
 
 	document = xmlParseMemory(buffer.c_str(), buffer.size());
@@ -650,9 +719,13 @@ xml::parseBuffer(const dodoString &buffer)
 			throw baseEx(ERRMODULE_LIBXML2, XMLEX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
-	__xmlNode sample = *(parse(node).begin());
+	return *(parse(node).begin());
 
-	return sample;
+#else
+
+	return __xmlNode();
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -668,6 +741,8 @@ xml::initNodeDef(__xmlNodeDef &node)
 }
 
 //-------------------------------------------------------------------
+
+#ifdef LIBXML2_EXT
 
 xmlNodePtr
 xml::findNode(const __xmlNodeDef &definition,
@@ -715,13 +790,19 @@ xml::findNode(const __xmlNodeDef &definition,
 	return NULL;
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
 void
 xml::clear()
 {
+#ifdef LIBXML2_EXT
+
 	xmlFreeDoc(document);
 	document = NULL;
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -822,8 +903,6 @@ xml::createNode(const __xmlNode &node) const
 
 	return xml;
 }
-
-#endif
 
 //-------------------------------------------------------------------
 
