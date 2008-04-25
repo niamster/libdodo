@@ -249,7 +249,6 @@ namespace dodo
 	struct __authInfo
 	{
 		dodoString user;///< user name
-		dodoString password;///< user password
 		short type;///< authenfication type[see cgiAuthTypeEnum]
 	};
 
@@ -516,7 +515,25 @@ namespace dodo
 			static const dodoString responseHeaderStatements[CGI_RESPONSEHEADERSTATEMENTS];///< HTTP response headers[see cgiResponseHeaderEnum]
 			static const dodoString responseStatusStatements[CGI_STATUSSTATEMENTS];///< HTTP response headers[see cgiStatusCodeEnum]
 			
-			__authInfo authInfo;///< authentification information
+			/**
+			 * @struct __authInfo defines authenfication information
+			 */
+			struct __internalAuthInfo
+			{
+				dodoString user;///< user name
+				dodoString password;///< user password
+				dodoString realm;///< explanation of the authentification request
+				dodoString nonce;///< server-specified uniquely generated data
+				dodoString opaque;///< server-specified uniquely generated data, which should be returned by the client unchanged
+				dodoString cnonce;///< client-specified uniquely generated data
+				dodoString nonceCount;///< hexadecimal count of the number of requests (including the current request) that the client has sent with the nonce value in this request
+				dodoString uri;///< URI from Request-URI
+				dodoString qop;///< quality of protection
+				dodoString response;///< 32 hex digits. which proves that the user knows a password
+				short type;///< authenfication type[see cgiAuthTypeEnum]
+			};
+		
+			__internalAuthInfo authInfo;///< authentification information
 	};
 };
 

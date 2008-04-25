@@ -409,7 +409,9 @@ cgi::requestAuthentification(const dodoString &realm,
 __authInfo 
 cgi::getAuthentificationInfo()
 {
-	return authInfo;
+	__authInfo info = {authInfo.user, authInfo.type};
+
+	return info;
 }
 
 //-------------------------------------------------------------------

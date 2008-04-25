@@ -37,11 +37,21 @@ int main(int argc, char **argv)
 
 		return 0;
 	}
-	else if (cgit.GET["a"] == "auth")
+	else if (cgit.GET["a"] == "basic_auth")
 	{
 		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
 		{
-			cgit.requestBasicAuthentification("libdodo");
+			cgit.requestAuthentification("libdodo", CGI_AUTHTYPE_BASIC);
+
+			return 0;
+		}
+	}
+
+	else if (cgit.GET["a"] == "digest_auth")
+	{
+		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
+		{
+			cgit.requestAuthentification("libdodo", CGI_AUTHTYPE_DIGEST);
 
 			return 0;
 		}
