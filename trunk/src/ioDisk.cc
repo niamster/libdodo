@@ -323,7 +323,7 @@ ioDisk::read(char * const a_void)
 		throw;
 	}
 #else
-	_read(a_void, a_pos);
+	_read(a_void);
 #endif
 
 #ifndef IODISK_WO_XEXEC
