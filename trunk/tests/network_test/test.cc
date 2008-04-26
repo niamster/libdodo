@@ -30,7 +30,7 @@ process(ioNetworkExchange fse)
 	fse.setOutBufferSize(1);
 	
 	fse.outSize = 7;
-	fse.writeString("dasdasd");
+	fse.writeString("session");
 	
 	dodoString rec = "";
 	try
@@ -60,6 +60,8 @@ int main(int argc, char **argv)
 {
 	try
 	{	
+		cout << ioNetworkTools::getHostPrimaryIp("google.com") << endl;
+
 		dodoStringArray ifaces = ioNetworkTools::getInterfacesNames();
 		for (unsigned int i(0);i<ifaces.size();i++)
 		{

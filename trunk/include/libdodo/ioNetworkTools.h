@@ -104,6 +104,12 @@ namespace dodo
 			static __hostInfo getHostInfo(const dodoString &host);
 
 			/**
+			 * @return primary host ip
+			 * @param host defines a name of the host
+			 */
+			static dodoString getHostPrimaryIp(const dodoString &host);
+
+			/**
 			 * @return name of the local host
 			 */
 			static dodoString getLocalName();

@@ -80,6 +80,41 @@ ioNetworkTools::getHostInfo(const dodoString &host)
 
 //-------------------------------------------------------------------
 
+dodoString 
+ioNetworkTools::getHostPrimaryIp(const dodoString &host)
+{
+	hostent *ent = gethostbyname(host.c_str());
+
+	if (ent == NULL)
+		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+
+	char temp[INET6_ADDRSTRLEN];
+
+	if (ent->h_addr_list[0] != NULL)
+	{
+		switch (ent->h_addrtype)
+		{
+			case AF_INET:
+
+				if (inet_ntop(AF_INET, ent->h_addr_list[0], temp, INET_ADDRSTRLEN) == NULL)
+					throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+
+				break;
+
+			case AF_INET6:
+
+				if (inet_ntop(AF_INET6, ent->h_addr_list[0], temp, INET6_ADDRSTRLEN) == NULL)
+					throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+
+				break;
+		}
+	}
+
+	return temp;
+}
+
+//-------------------------------------------------------------------
+
 dodoStringArray
 ioNetworkTools::getInterfacesNames()
 {
