@@ -887,7 +887,7 @@ ioNetworkHttp::makeDigestAuth(short requestHeader,
 {
 	dodoString nonce, opaque, realm;
 	
-	dodoStringArray parts = tools::explode(response.headers[requestHeader].substr(6), &trim, ",");
+	dodoStringArray parts = tools::explode(response.headers[requestHeader].substr(7), &trim, ",");
 
 	dodoString HA1;
 
@@ -949,15 +949,14 @@ ioNetworkHttp::makeDigestAuth(short requestHeader,
 	tools::MD5Update(&context, (unsigned char *)":auth:", 6);
 	tools::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
 	tools::MD5Final(HA, &context);
-
+	
 	dodoString response = tools::binToHex(dodoString((char *)&HA, 16));
 
 	requestHeaders[responseHeader] = "Digest username=\"" + user + 
-										"\", realm=" + realm + 
-										 + ", nonce=" + nonce + 
-										 + ", uri=\"" + url + 
-										 + "\", qop=auth" + 
-										 + ", nc=00000001" + 
+										"\", realm=\"" + realm + 
+										 + "\", nonce=\"" + nonce + 
+										 + "\", uri=\"" + url + 
+										 + "\", qop=\"auth\", nc=00000001" + 
 										 + ", cnonce=\"" + cnonce + 
 										 + "\", response=\"" + response + 
 										 + "\", opaque=\"" + opaque + "\"";

@@ -374,9 +374,11 @@ cgi::print(const dodoString &buf)
 void 
 cgi::makeAuth()
 {
-	if (stringTools::contains(ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION], "Basic"))
+	dodoString &httpAuthorization = ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION];
+	
+	if (stringTools::contains(httpAuthorization, "Basic"))
 	{
-		dodoStringArray arr = tools::explode(tools::decodeBase64(stringTools::trim(ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION].substr(6),' ')), ":", 2);
+		dodoStringArray arr = tools::explode(tools::decodeBase64(stringTools::trim(httpAuthorization.substr(6),' ')), ":", 2);
 		
 		authInfo.type = CGI_AUTHTYPE_BASIC;
 		authInfo.user = arr[0];
@@ -385,10 +387,69 @@ cgi::makeAuth()
 	}
 	else 
 	{
-		if (stringTools::contains(ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION], "Digest"))
+		if (stringTools::contains(httpAuthorization, "Digest"))
 		{
+			authInfo.type = CGI_AUTHTYPE_DIGEST;
 			
+			dodoStringArray parts = tools::explode(httpAuthorization.substr(7), &trim, ",");
+			
+			dodoStringArray tuple;
+			
+			dodoStringArray::iterator i = parts.begin(), j = parts.end();
+			for (;i!=j;++i)
+			{
+				tuple = tools::explode(*i, "=", 2);
+				if (tuple.size() != 2)
+					continue;
+				
+				dodoString &challengePart = tuple[0];
+				
+				if (stringTools::iequal(challengePart, "realm"))
+					authInfo.realm = stringTools::trim(tuple[1], '"');
+				else
+				{
+					if (stringTools::iequal(challengePart, "nonce"))
+						authInfo.nonce = stringTools::trim(tuple[1], '"');
+					else
+					{
+						if (stringTools::iequal(challengePart, "opaque"))
+							authInfo.opaque = stringTools::trim(tuple[1], '"');
+						else
+						{
+							if (stringTools::iequal(challengePart, "username"))
+								authInfo.user = stringTools::trim(tuple[1], '"');
+							else
+							{
+								if (stringTools::iequal(challengePart, "uri"))
+									authInfo.uri = stringTools::trim(tuple[1], '"');
+								else
+								{
+									if (stringTools::iequal(challengePart, "qop"))
+										authInfo.qop = stringTools::trim(tuple[1], '"');
+									else
+									{
+										if (stringTools::iequal(challengePart, "nc"))
+											authInfo.nonceCount = stringTools::trim(tuple[1], '"');
+										else
+										{
+											if (stringTools::iequal(challengePart, "cnonce"))
+												authInfo.cnonce = stringTools::trim(tuple[1], '"');
+											else
+											{
+												if (stringTools::iequal(challengePart, "response"))
+													authInfo.response = stringTools::trim(tuple[1], '"');
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
+		else
+			authInfo.type = CGI_AUTHTYPE_NONE;
 	}
 }
 
@@ -402,6 +463,14 @@ cgi::requestAuthentification(const dodoString &realm,
 	
 	if (type == CGI_AUTHTYPE_BASIC)
 		HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
+	else
+		if (type == CGI_AUTHTYPE_DIGEST)
+			HEADERS.insert(make_pair(CGI_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") + 
+																					realm + 
+																					"\", qop=\"auth\", nonce=\"" + 
+																					tools::MD5Hex(tools::stringRandom(16)) + 
+																					"\", opaque=\"" + 
+																					tools::MD5Hex(tools::stringRandom(16)) + "\""));
 }
 
 //-------------------------------------------------------------------
@@ -423,7 +492,52 @@ cgi::checkAuthentification(const dodoString &user,
 	if (authInfo.type == CGI_AUTHTYPE_BASIC)
 		return (stringTools::equal(user,authInfo.user) && stringTools::equal(password,authInfo.password));
 	else
-		return false;
+	{
+		if (authInfo.type == CGI_AUTHTYPE_DIGEST)
+		{
+
+			unsigned char HA[16];			
+			tools::MD5_CTX context;
+						
+			tools::MD5Init(&context);
+			tools::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)authInfo.realm.c_str(), authInfo.realm.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
+			tools::MD5Final(HA, &context);
+
+			dodoString HA1 = tools::binToHex(dodoString((char *)&HA, 16));
+			
+			dodoString &methodForAuth = ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD]; 
+			
+			tools::MD5Init(&context);
+			tools::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)authInfo.uri.c_str(), authInfo.uri.size());
+			tools::MD5Final(HA, &context);
+
+			dodoString HA2 = tools::binToHex(dodoString((char *)&HA, 16));
+			
+			tools::MD5Init(&context);
+			tools::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)authInfo.nonce.c_str(), authInfo.nonce.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)authInfo.nonceCount.c_str(), authInfo.nonceCount.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)authInfo.cnonce.c_str(), authInfo.cnonce.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)authInfo.qop.c_str(), authInfo.qop.size());
+			tools::MD5Update(&context, (unsigned char *)":", 1);
+			tools::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
+			tools::MD5Final(HA, &context);
+			
+			return (stringTools::equal(tools::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
+		}
+		else
+			return false;
+	}
 }
 
 //-------------------------------------------------------------------
@@ -823,6 +937,14 @@ void
 cgi::setCookie(const __cookie &cookie)
 {
 	cookies.push_back(cookie);
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+cgi::trim(const dodoString &data)
+{
+	return stringTools::trim(data, ' ');
 }
 
 //-------------------------------------------------------------------

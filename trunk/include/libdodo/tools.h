@@ -104,6 +104,7 @@ namespace dodo
 	class tools
 	{
 		friend class ioNetworkHttp;
+		friend class cgi;
 		
 		public:
 

@@ -34,6 +34,7 @@ int main(int argc, char **argv)
 		//http.setProxyInformation("127.0.0.1");
 
 		res =  http.GET("http://google.com");
+		//res =  http.GET("http://libdodo:password@temp.niam.mu/libdodo/cgi_test/test.cgi?a=digest_auth");
 		//res =  http.GET("http://niam:niam@localhost/auth/libdodo/cgi_test/test.cgi");
 		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
 		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map, files);

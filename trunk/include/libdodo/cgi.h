@@ -500,6 +500,13 @@ namespace dodo
 			 * delete temp POST files that have been created
 			 */
 			virtual void cleanTmp();
+			
+			/**
+			 * @return trimmed string
+			 * @param data defines string to trim
+			 * @note uses trimSymbols to trim
+			 */
+			static dodoString trim(const dodoString &data);
 
 #ifdef FCGI_EXT
 
