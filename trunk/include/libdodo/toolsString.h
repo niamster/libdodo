@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _STRINGTOOLS_H_
-#define _STRINGTOOLS_H_
+#ifndef _TOOLSSTRING_H_
+#define _TOOLSSTRING_H_
 
 #include <libdodo/directives.h>
 

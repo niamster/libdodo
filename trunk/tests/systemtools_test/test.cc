@@ -31,13 +31,13 @@ int main(int argc, char **argv)
 	
 	cout << toolsSystem::getPID() << endl;
 	
-	toolsSystem::setSignalHandler(SYSTEMTOOLS_SIGNAL_HANGUP,exit);
-	toolsSystem::setSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT,signaler);
+	toolsSystem::setSignalHandler(TOOLSSYSTEM_SIGNAL_HANGUP,exit);
+	toolsSystem::setSignalHandler(TOOLSSYSTEM_SIGNAL_INTERRUPT,signaler);
 	
-	if (toolsSystem::isSignalHandled(SYSTEMTOOLS_SIGNAL_HANGUP))
-		cout << "SYSTEMTOOLS_SIGNAL_HANGUP IS SET ... !\n";
+	if (toolsSystem::isSignalHandled(TOOLSSYSTEM_SIGNAL_HANGUP))
+		cout << "TOOLSSYSTEM_SIGNAL_HANGUP IS SET ... !\n";
 	else
-		cout << "SYSTEMTOOLS_SIGNAL_HANGUP IS NOT SET ... !\n";
+		cout << "TOOLSSYSTEM_SIGNAL_HANGUP IS NOT SET ... !\n";
 		
 	while (run)
 	{
@@ -45,10 +45,10 @@ int main(int argc, char **argv)
 		if (cought)
 		{
 			cought = false;
-			cout << "\nSYSTEMTOOLS_SIGNAL_HANGUP =)\n";
+			cout << "\nTOOLSSYSTEM_SIGNAL_HANGUP =)\n";
 			cout.flush();
 			
-			toolsSystem::unsetSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT);
+			toolsSystem::unsetSignalHandler(TOOLSSYSTEM_SIGNAL_INTERRUPT);
 		}
 		
 	}

@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _TIMETOOLSEX_H_
-#define _TIMETOOLSEX_H_
+#ifndef _TOOLSTIMEEX_H_
+#define _TOOLSTIMEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -35,9 +35,9 @@ namespace dodo
 	 */
 	enum toolsTimeFunctionsID
 	{
-		TIMETOOLSEX_GETBYFORMAT,
-		TIMETOOLSEX_NOW,
-		TIMETOOLSEX_MAKETIME,
+		TOOLSTIMEEX_GETBYFORMAT,
+		TOOLSTIMEEX_NOW,
+		TOOLSTIMEEX_MAKETIME,
 	};
 };
 

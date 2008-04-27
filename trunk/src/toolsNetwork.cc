@@ -31,7 +31,7 @@ toolsNetwork::getHostInfo(const dodoString &host)
 	hostent *ent = gethostbyname(host.c_str());
 
 	if (ent == NULL)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETHOSTINFO, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETHOSTINFO, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
 
 	__hostInfo info;
 	info.name = ent->h_name;
@@ -86,7 +86,7 @@ toolsNetwork::getHostPrimaryIp(const dodoString &host)
 	hostent *ent = gethostbyname(host.c_str());
 
 	if (ent == NULL)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
 
 	char temp[INET6_ADDRSTRLEN];
 
@@ -97,14 +97,14 @@ toolsNetwork::getHostPrimaryIp(const dodoString &host)
 			case AF_INET:
 
 				if (inet_ntop(AF_INET, ent->h_addr_list[0], temp, INET_ADDRSTRLEN) == NULL)
-					throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
 
 				break;
 
 			case AF_INET6:
 
 				if (inet_ntop(AF_INET6, ent->h_addr_list[0], temp, INET6_ADDRSTRLEN) == NULL)
-					throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETHOSTPRIMARYIP, ERR_H_ERRNO, h_errno, hstrerror(h_errno), __LINE__, __FILE__);
 
 				break;
 		}
@@ -120,7 +120,7 @@ toolsNetwork::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
 	if (ifaces == NULL)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACESNAMES, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACESNAMES, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	int i(-1);
 	dodoStringArray arr;
@@ -191,7 +191,7 @@ toolsNetwork::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	ifreq ifr;
 	strcpy(ifr.ifr_name, interface.c_str());
@@ -202,7 +202,7 @@ toolsNetwork::getInterfaceInfo(const dodoString &interface)
 	sockaddr_in sin;
 
 	if (::ioctl(socket, SIOCGIFADDR, &ifr) == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_addr, sizeof(sockaddr));
 
@@ -215,7 +215,7 @@ toolsNetwork::getInterfaceInfo(const dodoString &interface)
 #else
 
 	if (::ioctl(socket, SIOCGIFNETMASK, &ifr) == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_netmask, sizeof(sockaddr));
 
@@ -225,7 +225,7 @@ toolsNetwork::getInterfaceInfo(const dodoString &interface)
 #endif
 
 	if (::ioctl(socket, SIOCGIFBRDADDR, &ifr) == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	memcpy((void *)&sin, &ifr.ifr_ifru.ifru_broadaddr, sizeof(sockaddr));
 
@@ -238,7 +238,7 @@ toolsNetwork::getInterfaceInfo(const dodoString &interface)
 #else
 
 	if (::ioctl(socket, SIOCGIFHWADDR, &ifr) == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sprintf(add, "%.2X:%.2X:%.2X:%.2X:%.2X:%.2X", ifr.ifr_ifru.ifru_hwaddr.sa_data[0] & 0xff,
 			ifr.ifr_ifru.ifru_hwaddr.sa_data[1] & 0xff,
@@ -252,10 +252,10 @@ toolsNetwork::getInterfaceInfo(const dodoString &interface)
 	info.hwaddr = add;
 
 	if (::ioctl(socket, SIOCGIFFLAGS, &ifr) == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::close(socket) == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #ifdef __FreeBSD__
 
@@ -289,7 +289,7 @@ toolsNetwork::getLocalName()
 	{
 		delete [] temp1;
 
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_GETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_GETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	temp0.assign(temp1);
@@ -305,7 +305,7 @@ void
 toolsNetwork::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(), host.size()) == -1)
-		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_SETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSNETWORK, TOOLSNETWORKEX_SETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
