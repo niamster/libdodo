@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/toolsSystem.h>
 #include <libdodo/ioNetwork.h>
-#include <libdodo/ioNetworkTools.h>
+#include <libdodo/toolsNetwork.h>
 #include <libdodo/ioNonBlockedAccess.h>
 
 #include <iostream>

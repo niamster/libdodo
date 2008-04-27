@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkTools.cc
+ *            toolsNetwork.cc
  *
  *  Thu Sep 20 01:43:24 2005
  *  Copyright  2005  Ni@m
@@ -21,12 +21,12 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/ioNetworkTools.h>
+#include <libdodo/toolsNetwork.h>
 
 using namespace dodo;
 
 __hostInfo
-ioNetworkTools::getHostInfo(const dodoString &host)
+toolsNetwork::getHostInfo(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
 
@@ -81,7 +81,7 @@ ioNetworkTools::getHostInfo(const dodoString &host)
 //-------------------------------------------------------------------
 
 dodoString 
-ioNetworkTools::getHostPrimaryIp(const dodoString &host)
+toolsNetwork::getHostPrimaryIp(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
 
@@ -116,7 +116,7 @@ ioNetworkTools::getHostPrimaryIp(const dodoString &host)
 //-------------------------------------------------------------------
 
 dodoStringArray
-ioNetworkTools::getInterfacesNames()
+toolsNetwork::getInterfacesNames()
 {
 	struct if_nameindex *ifaces = if_nameindex();
 	if (ifaces == NULL)
@@ -137,7 +137,7 @@ ioNetworkTools::getInterfacesNames()
 //-------------------------------------------------------------------
 
 __servInfo
-ioNetworkTools::getServiceInfo(const dodoString &host,
+toolsNetwork::getServiceInfo(const dodoString &host,
 							  const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
@@ -161,7 +161,7 @@ ioNetworkTools::getServiceInfo(const dodoString &host,
 //-------------------------------------------------------------------
 
 __servInfo
-ioNetworkTools::getServiceInfo(int port,
+toolsNetwork::getServiceInfo(int port,
 							  const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
@@ -187,7 +187,7 @@ ioNetworkTools::getServiceInfo(int port,
 //-------------------------------------------------------------------
 
 __ifInfo
-ioNetworkTools::getInterfaceInfo(const dodoString &interface)
+toolsNetwork::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if (socket == -1)
@@ -280,7 +280,7 @@ ioNetworkTools::getInterfaceInfo(const dodoString &interface)
 //-------------------------------------------------------------------
 
 dodoString
-ioNetworkTools::getLocalName()
+toolsNetwork::getLocalName()
 {
 	dodoString temp0;
 	char *temp1 = new char[256];
@@ -302,7 +302,7 @@ ioNetworkTools::getLocalName()
 //-------------------------------------------------------------------
 
 void
-ioNetworkTools::setLocalName(const dodoString &host)
+toolsNetwork::setLocalName(const dodoString &host)
 {
 	if (::sethostname(host.c_str(), host.size()) == -1)
 		throw baseEx(ERRMODULE_IONETWORKTOOLS, IONETWORKTOOLSEX_SETLOCALNAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

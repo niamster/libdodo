@@ -32,7 +32,7 @@
 
 #include <libdodo/tools.h>
 #include <libdodo/ioNetworkClient.h>
-#include <libdodo/ioNetworkTools.h>
+#include <libdodo/toolsNetwork.h>
 #include <libdodo/ioNetworkHttpEx.h>
 #include <libdodo/types.h>
 #include <libdodo/regexp.h>

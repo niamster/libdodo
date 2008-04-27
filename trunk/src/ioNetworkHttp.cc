@@ -171,13 +171,13 @@ ioNetworkHttp::GET()
 	ioNetworkExchange ex;
 	ioNetworkClient net(IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
 	
-	__hostInfo host = ioNetworkTools::getHostInfo(urlComponents.host);
+	__hostInfo host = toolsNetwork::getHostInfo(urlComponents.host);
 	
 	if (proxyAuthInfo.enabled)
 		net.connect(proxyAuthInfo.host, proxyAuthInfo.port, ex);
 	else
 	{
-		__hostInfo host = ioNetworkTools::getHostInfo(urlComponents.host);
+		__hostInfo host = toolsNetwork::getHostInfo(urlComponents.host);
 		
 		dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
 		for (;o!=p;++o)
@@ -472,7 +472,7 @@ ioNetworkHttp::POST(const dodoString &a_data,
 		net.connect(proxyAuthInfo.host, proxyAuthInfo.port, ex);
 	else
 	{
-		__hostInfo host = ioNetworkTools::getHostInfo(urlComponents.host);
+		__hostInfo host = toolsNetwork::getHostInfo(urlComponents.host);
 		
 		dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
 		for (;o!=p;++o)

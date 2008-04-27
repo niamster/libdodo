@@ -49,7 +49,7 @@
 #include <fcntl.h>
 
 #include <libdodo/ioNetwork.h>
-#include <libdodo/ioNetworkTools.h>
+#include <libdodo/toolsNetwork.h>
 #include <libdodo/toolsEx.h>
 #include <libdodo/types.h>
 

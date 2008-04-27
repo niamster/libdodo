@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/ioSTD.h>
-#include <libdodo/ioNetworkTools.h>
+#include <libdodo/toolsNetwork.h>
 
 #include <iostream>
 

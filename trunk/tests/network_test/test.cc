@@ -1,7 +1,7 @@
 
 #include <libdodo/baseEx.h>
 #include <libdodo/ioNetwork.h>
-#include <libdodo/ioNetworkTools.h>
+#include <libdodo/toolsNetwork.h>
 #include <libdodo/types.h>
 
 #include <iostream>
@@ -60,16 +60,16 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		cout << ioNetworkTools::getHostPrimaryIp("google.com") << endl;
+		cout << toolsNetwork::getHostPrimaryIp("google.com") << endl;
 
-		dodoStringArray ifaces = ioNetworkTools::getInterfacesNames();
+		dodoStringArray ifaces = toolsNetwork::getInterfacesNames();
 		for (unsigned int i(0);i<ifaces.size();i++)
 		{
 			try
 			{
-				cout << ifaces[i] << ":\t" << ioNetworkTools::getInterfaceInfo(ifaces[i]).hwaddr << endl;	
-				cout << ifaces[i] << ":\t" << ioNetworkTools::getInterfaceInfo(ifaces[i]).broadcast << endl;	
-				cout << ifaces[i] << ":\t" << ioNetworkTools::getInterfaceInfo(ifaces[i]).netmask << endl;	
+				cout << ifaces[i] << ":\t" << toolsNetwork::getInterfaceInfo(ifaces[i]).hwaddr << endl;	
+				cout << ifaces[i] << ":\t" << toolsNetwork::getInterfaceInfo(ifaces[i]).broadcast << endl;	
+				cout << ifaces[i] << ":\t" << toolsNetwork::getInterfaceInfo(ifaces[i]).netmask << endl;	
 			}
 			catch (baseEx ex)
 			{
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
 			}
 		}
 		
-		cout << ioNetworkTools::getInterfaceInfo("lo").hwaddr << endl;
+		cout << toolsNetwork::getInterfaceInfo("lo").hwaddr << endl;
 		
 		try
 		{
@@ -137,11 +137,11 @@ int main(int argc, char **argv)
 			}
 		}*/
 		
-		cout << ioNetworkTools::getLocalName() << endl;
+		cout << toolsNetwork::getLocalName() << endl;
 		
-		cout << ioNetworkTools::getHostInfo("google.com").name << " : " << endl;
+		cout << toolsNetwork::getHostInfo("google.com").name << " : " << endl;
 		
-		dodoStringArray addresses = ioNetworkTools::getHostInfo("google.com").addresses;
+		dodoStringArray addresses = toolsNetwork::getHostInfo("google.com").addresses;
 		dodoStringArray::iterator i = addresses.begin(), j = addresses.end();
 		for (;i!=j;++i)
 			cout << *i << endl;

@@ -1641,7 +1641,7 @@ tools::mail(const dodoString &host,
 	dodoString mess;
 	
 	ex.readStreamString(mess);
-	ex.writeStreamString("EHLO " + ioNetworkTools::getLocalName() + "\r\n");
+	ex.writeStreamString("EHLO " + toolsNetwork::getLocalName() + "\r\n");
 	ex.readStreamString(mess);
 
 	if (stringTools::stringToI(mess.substr(0, 3)) != 250)

@@ -36,7 +36,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/ioNetworkToolsEx.h>
+#include <libdodo/toolsNetworkEx.h>
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
 
@@ -78,9 +78,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class ioNetworkTools provides information about network environment
+	 * @class toolsNetwork provides information about network environment
 	 */
-	class ioNetworkTools
+	class toolsNetwork
 
 	{
 

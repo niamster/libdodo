@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/ioNetwork.h>
-#include <libdodo/ioNetworkTools.h>
+#include <libdodo/toolsNetwork.h>
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 

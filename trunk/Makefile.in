@@ -45,7 +45,7 @@ OBJECTS:=dbBase.o \
 		ioNonBlockedAccessInfo.o \
 		ioNetworkOptions.o \
 		ioNetworkExchange.o \
-		ioNetworkTools.o \
+		toolsNetwork.o \
 		ioNetworkServer.o \
 		ioNetworkClient.o \
 		ioDisk.o \

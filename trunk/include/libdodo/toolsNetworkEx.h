@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkToolsEx.h
+ *            toolsNetworkEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioNetworkToolsFunctionsID
+	enum toolsNetworkFunctionsID
 	{
 		IONETWORKTOOLSEX_GETHOSTINFO,
 		IONETWORKTOOLSEX_GETHOSTPRIMARYIP,
