@@ -1,5 +1,3 @@
-cgiProcessor:
-
 elements of syntax:
 
 <(	open bracket
@@ -75,9 +73,7 @@ blocks:
 		`if` statement is false if statement is false(for 2 arguments) or if argument == false(string) or empty(for 1 argument)
 	
 	for:
-		/**
-		c++ code:
-		*/
+		//c++ code:
 				cgiProcessor cgip;
 				
 				dodoStringArr arr;
@@ -98,9 +94,7 @@ blocks:
 				arr2.push_back(arr1);
 				cgip.assign("arr2",arr2);
 		
-		/**
-		template
-		*/			
+		//template
 			<(for $b in $arr)>
 				<div class="test"><(print $b)></div>
 			<(rof)>
