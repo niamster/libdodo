@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 		
 	cout << toolsSystem::getWorkingDir() << endl;	
 
-	toolsSystem::die(stringTools::rTrim("    rTrim    "));
+	toolsSystem::die(toolsString::rTrim("    rTrim    "));
 
 	cout << toolsSystem::getWorkingDir();
 		

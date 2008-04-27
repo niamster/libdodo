@@ -64,7 +64,7 @@ dbSqlite::fieldCollect(const __fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, ",") + ")" : __dodostring__);
 	else
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
-	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + stringTools::lToString(row.length) + ") " : __dodostring__);
+	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + toolsString::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
 	resRow.append(isSetFlag(flag, DBBASE_FIELDFLAG_NULL) ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
@@ -349,13 +349,13 @@ dbSqlite::fetchRow() const
 					{
 						case SQLITE_INTEGER:
 
-							rowsPart.push_back(stringTools::lToString(sqlite3_column_int(liteStmt, i)));
+							rowsPart.push_back(toolsString::lToString(sqlite3_column_int(liteStmt, i)));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowsPart.push_back(stringTools::dToString(sqlite3_column_double(liteStmt, i)));
+							rowsPart.push_back(toolsString::dToString(sqlite3_column_double(liteStmt, i)));
 
 							break;
 
@@ -637,13 +637,13 @@ dbSqlite::fetchAssoc() const
 					{
 						case SQLITE_INTEGER:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), stringTools::lToString(sqlite3_column_int(liteStmt, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), toolsString::lToString(sqlite3_column_int(liteStmt, i))));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), stringTools::dToString(sqlite3_column_double(liteStmt, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(liteStmt, i), toolsString::dToString(sqlite3_column_double(liteStmt, i))));
 
 							break;
 

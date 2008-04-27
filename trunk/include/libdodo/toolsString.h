@@ -1,5 +1,5 @@
 /***************************************************************************
- *            stringTools.h
+ *            toolsString.h
  *
  *  Sun Oct 30 11:43:19 2007
  *  Copyright  2007  Ni@m
@@ -34,9 +34,9 @@
 namespace dodo
 {
 	/**
-	 * @class stringTools provides various string tools 
+	 * @class toolsString provides various string tools 
 	 */
-	class stringTools
+	class toolsString
 	{
 		public:
 

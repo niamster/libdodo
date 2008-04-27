@@ -25,7 +25,7 @@ extern "C"
 			if (st->operType == IOSTD_OPERATION_WRITE)
 			{
 				int *a = (int *)(st->buffer.c_str());
-				st->buffer.assign(stringTools::iToString(*a*3) + "\n");
+				st->buffer.assign(toolsString::iToString(*a*3) + "\n");
 			}
 		}
 		std::cout << "activation\n";

@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/dbMysql.h>
-#include <libdodo/timeTools.h>
+#include <libdodo/toolsTime.h>
 
 #include <iostream>
 
@@ -28,7 +28,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-	long now = timeTools::now();
+	long now = toolsTime::now();
 
 #ifdef MYSQL_EXT
 
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     	
 #endif
 
-    	now = timeTools::now() - now;
+    	now = toolsTime::now() - now;
 
     	cout << "SpentTime: " << now << endl;
     

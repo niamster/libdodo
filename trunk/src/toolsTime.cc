@@ -1,5 +1,5 @@
 /***************************************************************************
- *            timeTools.cc
+ *            toolsTime.cc
  *
  *  Sun Nov 27 05:05:19 2005
  *  Copyright  2005  Ni@m
@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/timeTools.h>
+#include <libdodo/toolsTime.h>
 
 using namespace dodo;
 
@@ -56,7 +56,7 @@ __time::__time(unsigned int a_sec,
 //-------------------------------------------------------------------
 
 dodoString
-timeTools::byFormat(const dodoString &format,
+toolsTime::byFormat(const dodoString &format,
 					long timestamp,
 					bool local)
 {
@@ -80,7 +80,7 @@ timeTools::byFormat(const dodoString &format,
 //-------------------------------------------------------------------
 
 long
-timeTools::now()
+toolsTime::now()
 {
 	time_t tTime = ::time(NULL);
 	if (tTime == (time_t)-1)
@@ -92,11 +92,11 @@ timeTools::now()
 //-------------------------------------------------------------------
 
 dodoStringArray
-timeTools::week(long date,
+toolsTime::week(long date,
 				const dodoString &format,
 				bool local)
 {
-	long daynum = stringTools::stringToL(timeTools::byFormat("%w", date, local));
+	long daynum = toolsString::stringToL(toolsTime::byFormat("%w", date, local));
 	if (daynum == 0)
 		daynum = 7;
 
@@ -104,7 +104,7 @@ timeTools::week(long date,
 	long mon = date - (daynum - 1) * 86400;
 
 	for (short int i(0); i < 7; ++i, mon += 86400)
-		week.push_back(timeTools::byFormat(format, mon, local));
+		week.push_back(toolsTime::byFormat(format, mon, local));
 
 	return week;
 }
@@ -112,7 +112,7 @@ timeTools::week(long date,
 //-------------------------------------------------------------------
 
 dodoStringArray
-timeTools::dates(long dateFrom,
+toolsTime::dates(long dateFrom,
 					long dateTo,
 					const dodoString &format,
 					bool local)
@@ -121,7 +121,7 @@ timeTools::dates(long dateFrom,
 
 	if ((dateFrom == dateTo) || (dateFrom - dateTo < 86400))
 	{
-		result.push_back(timeTools::byFormat(format, dateFrom, local));
+		result.push_back(toolsTime::byFormat(format, dateFrom, local));
 		return result;
 	}
 
@@ -134,10 +134,10 @@ timeTools::dates(long dateFrom,
 
 	while (dateFrom < dateTo)
 	{
-		result.push_back(timeTools::byFormat(format, dateFrom, local));
+		result.push_back(toolsTime::byFormat(format, dateFrom, local));
 		dateFrom += 86400;
 	}
-	result.push_back(timeTools::byFormat(format, dateTo, local));
+	result.push_back(toolsTime::byFormat(format, dateTo, local));
 
 	return result;
 }
@@ -145,7 +145,7 @@ timeTools::dates(long dateFrom,
 //-------------------------------------------------------------------
 
 long
-timeTools::seconds(const __time &timeInfo)
+toolsTime::seconds(const __time &timeInfo)
 {
 	tm tTime;
 
@@ -163,7 +163,7 @@ timeTools::seconds(const __time &timeInfo)
 //-------------------------------------------------------------------
 
 __time
-timeTools::time(long seconds,
+toolsTime::time(long seconds,
 					bool local)
 {
 	tm *tTime;
@@ -192,7 +192,7 @@ timeTools::time(long seconds,
 //-------------------------------------------------------------------
 
 unsigned short int
-timeTools::daysInMonth(unsigned int year,
+toolsTime::daysInMonth(unsigned int year,
 					   unsigned short int month)
 {
 	unsigned short int day(0);
@@ -243,7 +243,7 @@ timeTools::daysInMonth(unsigned int year,
 //-------------------------------------------------------------------
 
 long
-timeTools::byFormat(const dodoString &format,
+toolsTime::byFormat(const dodoString &format,
 					const dodoString &dt)
 {
 	tm tTime;

@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 #endif
 			
 		dodoString t = "abcddF";
-		stringTools::replace("cd","WW",t);
+		toolsString::replace("cd","WW",t);
 		cout << t << endl;	
 		
 		dodoString rnd = tools::stringRandom(12);

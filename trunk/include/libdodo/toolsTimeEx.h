@@ -1,5 +1,5 @@
 /***************************************************************************
- *            timeToolsEx.h
+ *            toolsTimeEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum timeToolsFunctionsID
+	enum toolsTimeFunctionsID
 	{
 		TIMETOOLSEX_GETBYFORMAT,
 		TIMETOOLSEX_NOW,

@@ -376,9 +376,9 @@ cgi::makeAuth()
 {
 	dodoString &httpAuthorization = ENVIRONMENT[CGI_ENVIRONMENT_HTTPAUTHORIZATION];
 	
-	if (stringTools::contains(httpAuthorization, "Basic"))
+	if (toolsString::contains(httpAuthorization, "Basic"))
 	{
-		dodoStringArray arr = tools::explode(tools::decodeBase64(stringTools::trim(httpAuthorization.substr(6),' ')), ":", 2);
+		dodoStringArray arr = tools::explode(tools::decodeBase64(toolsString::trim(httpAuthorization.substr(6),' ')), ":", 2);
 		
 		authInfo.type = CGI_AUTHTYPE_BASIC;
 		authInfo.user = arr[0];
@@ -387,7 +387,7 @@ cgi::makeAuth()
 	}
 	else 
 	{
-		if (stringTools::contains(httpAuthorization, "Digest"))
+		if (toolsString::contains(httpAuthorization, "Digest"))
 		{
 			authInfo.type = CGI_AUTHTYPE_DIGEST;
 			
@@ -404,40 +404,40 @@ cgi::makeAuth()
 				
 				dodoString &challengePart = tuple[0];
 				
-				if (stringTools::iequal(challengePart, "realm"))
-					authInfo.realm = stringTools::trim(tuple[1], '"');
+				if (toolsString::iequal(challengePart, "realm"))
+					authInfo.realm = toolsString::trim(tuple[1], '"');
 				else
 				{
-					if (stringTools::iequal(challengePart, "nonce"))
-						authInfo.nonce = stringTools::trim(tuple[1], '"');
+					if (toolsString::iequal(challengePart, "nonce"))
+						authInfo.nonce = toolsString::trim(tuple[1], '"');
 					else
 					{
-						if (stringTools::iequal(challengePart, "opaque"))
-							authInfo.opaque = stringTools::trim(tuple[1], '"');
+						if (toolsString::iequal(challengePart, "opaque"))
+							authInfo.opaque = toolsString::trim(tuple[1], '"');
 						else
 						{
-							if (stringTools::iequal(challengePart, "username"))
-								authInfo.user = stringTools::trim(tuple[1], '"');
+							if (toolsString::iequal(challengePart, "username"))
+								authInfo.user = toolsString::trim(tuple[1], '"');
 							else
 							{
-								if (stringTools::iequal(challengePart, "uri"))
-									authInfo.uri = stringTools::trim(tuple[1], '"');
+								if (toolsString::iequal(challengePart, "uri"))
+									authInfo.uri = toolsString::trim(tuple[1], '"');
 								else
 								{
-									if (stringTools::iequal(challengePart, "qop"))
-										authInfo.qop = stringTools::trim(tuple[1], '"');
+									if (toolsString::iequal(challengePart, "qop"))
+										authInfo.qop = toolsString::trim(tuple[1], '"');
 									else
 									{
-										if (stringTools::iequal(challengePart, "nc"))
-											authInfo.nonceCount = stringTools::trim(tuple[1], '"');
+										if (toolsString::iequal(challengePart, "nc"))
+											authInfo.nonceCount = toolsString::trim(tuple[1], '"');
 										else
 										{
-											if (stringTools::iequal(challengePart, "cnonce"))
-												authInfo.cnonce = stringTools::trim(tuple[1], '"');
+											if (toolsString::iequal(challengePart, "cnonce"))
+												authInfo.cnonce = toolsString::trim(tuple[1], '"');
 											else
 											{
-												if (stringTools::iequal(challengePart, "response"))
-													authInfo.response = stringTools::trim(tuple[1], '"');
+												if (toolsString::iequal(challengePart, "response"))
+													authInfo.response = toolsString::trim(tuple[1], '"');
 											}
 										}
 									}
@@ -490,7 +490,7 @@ cgi::checkAuthentification(const dodoString &user,
 								const dodoString &password)
 {
 	if (authInfo.type == CGI_AUTHTYPE_BASIC)
-		return (stringTools::equal(user,authInfo.user) && stringTools::equal(password,authInfo.password));
+		return (toolsString::equal(user,authInfo.user) && toolsString::equal(password,authInfo.password));
 	else
 	{
 		if (authInfo.type == CGI_AUTHTYPE_DIGEST)
@@ -533,7 +533,7 @@ cgi::checkAuthentification(const dodoString &user,
 			tools::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
 			tools::MD5Final(HA, &context);
 			
-			return (stringTools::equal(tools::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
+			return (toolsString::equal(tools::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
 		}
 		else
 			return false;
@@ -574,11 +574,11 @@ cgi::cleanTmp()
 void
 cgi::detectMethod()
 {
-	if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "GET"))
+	if (toolsString::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "GET"))
 		method = CGI_REQUESTMETHOD_GET;
 	else
 	{
-		if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD].empty())
+		if (toolsString::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD].empty())
 			method = CGI_REQUESTMETHOD_POST;
 		else
 			method = CGI_REQUESTMETHOD_GET_POST;
@@ -707,7 +707,7 @@ cgi::printHeaders() const
 void
 cgi::makeContent()
 {
-	unsigned long inSize = stringTools::stringToUL(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTLENGTH]);
+	unsigned long inSize = toolsString::stringToUL(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTLENGTH]);
 
 	if (inSize <= 0)
 		return ;
@@ -725,10 +725,10 @@ cgi::makePost()
 	if (content.size() == 0)
 		return ;
 
-	if (!stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST"))
+	if (!toolsString::iequal(ENVIRONMENT[CGI_ENVIRONMENT_REQUESTMETHOD], "POST"))
 		return ;
 
-	if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
+	if (toolsString::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
 	{
 		make(POST, content);
 		
@@ -736,9 +736,9 @@ cgi::makePost()
 	}
 	else
 	{
-		if (stringTools::contains(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
+		if (toolsString::contains(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
 		{
-			if (stringTools::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
+			if (toolsString::iequal(ENVIRONMENT[CGI_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
 				content = tools::decodeBase64(content);
 	
 			unsigned int temp0;
@@ -755,7 +755,7 @@ cgi::makePost()
 
 			for (; i != j; ++i)
 			{
-				if (stringTools::iequal(i->substr(0, 2), "--"))
+				if (toolsString::iequal(i->substr(0, 2), "--"))
 					break;
 				else
 				{
@@ -778,7 +778,7 @@ cgi::makePost()
 		
 						file.name = i->substr(temp0, temp1 - temp0);
 		
-						temp0 = stringTools::find(*i, "Content-Type: ", temp1, true);
+						temp0 = toolsString::find(*i, "Content-Type: ", temp1, true);
 						temp0 += 14;
 						temp1 = i->find("\n", temp0);
 						file.type = tools::explode(i->substr(temp0, temp1 - temp0), ";")[0];
@@ -944,7 +944,7 @@ cgi::setCookie(const __cookie &cookie)
 dodoString 
 cgi::trim(const dodoString &data)
 {
-	return stringTools::trim(data, ' ');
+	return toolsString::trim(data, ' ');
 }
 
 //-------------------------------------------------------------------

@@ -26,7 +26,7 @@ hook(void *base,
 
 	
 		++a;
-		dodoString str = stringTools::iToString(a) + "\n";
+		dodoString str = toolsString::iToString(a) + "\n";
 
 		io->outSize = str.size();
 		st->buffer.assign(str);

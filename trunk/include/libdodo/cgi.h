@@ -33,7 +33,7 @@
 #include <libdodo/tools.h>
 #include <libdodo/types.h>
 #include <libdodo/dodoMap.h>
-#include <libdodo/stringTools.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/cgiFast.h>
 #include <libdodo/ioSTD.h>
 

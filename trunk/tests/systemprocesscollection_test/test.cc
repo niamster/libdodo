@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/systemProcessCollection.h>
 #include <libdodo/toolsSystem.h>
-#include <libdodo/timeTools.h>
+#include <libdodo/toolsTime.h>
 #include <libdodo/tools.h>
 #include <libdodo/systemSharedData.h>
 #include <libdodo/systemProcessSharedDataGuard.h>
@@ -28,12 +28,12 @@ process(void *data)
 		cout << (char *)dgC.get(dgCI);
 		cout << (char *)dg.lock();dg.unlock();
 
-		cout << endl << (char *)data << ": " << timeTools::now() << endl;
+		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
 		cout.flush();
 		
 		toolsSystem::sleep(10);
 		
-		cout << endl << (char *)data << ": " << timeTools::now() << endl;
+		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
 		cout.flush();
 	}
 	catch(baseEx ex)
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 		dodoString ids[amount];
 		for (int i=0;i<amount;++i)
 		{
-			ids[i] = stringTools::lToString(i);
+			ids[i] = toolsString::lToString(i);
 			pos[i] = pr.add(process,(void *)ids[i].c_str());
 		}
 		
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 			pr.run(pos[i]);
 		
 		cout << endl << endl << "STARTED" << endl;
-		cout << timeTools::now() << endl;
+		cout << toolsTime::now() << endl;
 		cout.flush();
 		
 		pr.wait();

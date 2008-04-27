@@ -1,5 +1,5 @@
 /***************************************************************************
- *            timeTools.h
+ *            toolsTime.h
  *
  *  Sun Nov 27 04:45:19 2005
  *  Copyright  2005  Ni@m
@@ -29,7 +29,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#include <libdodo/timeToolsEx.h>
+#include <libdodo/toolsTimeEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
@@ -91,9 +91,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class timeTools provides time functionality
+	 * @class toolsTime provides time functionality
 	 */
-	class timeTools
+	class toolsTime
 	{
 
 		public:

@@ -27,7 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/stringTools.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/rpcResponse.h>
 #include <libdodo/rpcXmlValue.h>
 #include <libdodo/xml.h>

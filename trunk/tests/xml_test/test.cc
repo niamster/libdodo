@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 					
 			cout << node.attributes["iD"] << endl;
 			cout << node.name << endl;
-			cout << stringTools::trim(node.value," \n\t\r", 4) << endl;
+			cout << toolsString::trim(node.value," \n\t\r", 4) << endl;
 			cout << node.children.size() << endl;
 			
 			if (node.children.size()>0)

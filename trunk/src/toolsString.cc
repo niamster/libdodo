@@ -1,5 +1,5 @@
 /***************************************************************************
- *            stringTools.cc
+ *            toolsString.cc
  *
  *  Sun Oct 30 11:44:19 2007
  *  Copyright  2007  Ni@m
@@ -22,12 +22,12 @@
  */
 
 
-#include <libdodo/stringTools.h>
+#include <libdodo/toolsString.h>
 
 using namespace dodo;
 
 bool
-stringTools::equal(const dodoString &first,
+toolsString::equal(const dodoString &first,
 				   const dodoString &second)
 {
 	unsigned long firstSize = first.size();
@@ -48,7 +48,7 @@ stringTools::equal(const dodoString &first,
 //-------------------------------------------------------------------
 
 bool
-stringTools::iequal(const dodoString &first,
+toolsString::iequal(const dodoString &first,
 					const dodoString &second)
 {
 	unsigned long firstSize = first.size();
@@ -69,7 +69,7 @@ stringTools::iequal(const dodoString &first,
 //-------------------------------------------------------------------
 
 bool 
-stringTools::contains(const dodoString &str, 
+toolsString::contains(const dodoString &str, 
 					const dodoString &needle,
 					bool icase)
 {
@@ -90,7 +90,7 @@ stringTools::contains(const dodoString &str,
 //-------------------------------------------------------------------
 
 unsigned long 
-stringTools::find(const dodoString &str, 
+toolsString::find(const dodoString &str, 
 					const dodoString &needle,
 					unsigned long position,
 					bool icase)
@@ -121,7 +121,7 @@ stringTools::find(const dodoString &str,
 //-------------------------------------------------------------------
 
 unsigned long 
-stringTools::find(const dodoString &str, 
+toolsString::find(const dodoString &str, 
 					const dodoString &needle,
 					bool icase)
 {	
@@ -131,7 +131,7 @@ stringTools::find(const dodoString &str,
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::format(const dodoString &format, ...)
+toolsString::format(const dodoString &format, ...)
 {
 	unsigned long length = format.size() * 3;
 	char *str = new char[length + 1];
@@ -152,7 +152,7 @@ stringTools::format(const dodoString &format, ...)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::lToString(long number)
+toolsString::lToString(long number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%ld", number);
@@ -163,7 +163,7 @@ stringTools::lToString(long number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::ulToString(unsigned long number)
+toolsString::ulToString(unsigned long number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%ld", number);
@@ -174,7 +174,7 @@ stringTools::ulToString(unsigned long number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::iToString(int number)
+toolsString::iToString(int number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%d", number);
@@ -185,7 +185,7 @@ stringTools::iToString(int number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::uiToString(unsigned int number)
+toolsString::uiToString(unsigned int number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%u", number);
@@ -196,7 +196,7 @@ stringTools::uiToString(unsigned int number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::sToString(short number)
+toolsString::sToString(short number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%sd", number);
@@ -207,7 +207,7 @@ stringTools::sToString(short number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::usToString(unsigned short number)
+toolsString::usToString(unsigned short number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%sd", number);
@@ -219,7 +219,7 @@ stringTools::usToString(unsigned short number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::fToString(float number)
+toolsString::fToString(float number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%f", number);
@@ -230,7 +230,7 @@ stringTools::fToString(float number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::dToString(double number)
+toolsString::dToString(double number)
 {
 	char temp[SIZEOFNUM];
 	sprintf(temp, "%f", number);
@@ -241,7 +241,7 @@ stringTools::dToString(double number)
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::lTrim(const dodoString &data,
+toolsString::lTrim(const dodoString &data,
 				   char symbol)
 {
 	int size = data.size(), i(0);
@@ -256,7 +256,7 @@ stringTools::lTrim(const dodoString &data,
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::rTrim(const dodoString &data,
+toolsString::rTrim(const dodoString &data,
 				   char symbol)
 {
 	int i(data.size() - 1);
@@ -271,7 +271,7 @@ stringTools::rTrim(const dodoString &data,
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::rTrim(const dodoString &data,
+toolsString::rTrim(const dodoString &data,
 				   const char symbols[],
 				   int symCount)
 {
@@ -292,7 +292,7 @@ stringTools::rTrim(const dodoString &data,
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::lTrim(const dodoString &data,
+toolsString::lTrim(const dodoString &data,
 				   const char symbols[],
 				   int symCount)
 {
@@ -313,7 +313,7 @@ stringTools::lTrim(const dodoString &data,
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::trim(const dodoString &data,
+toolsString::trim(const dodoString &data,
 				  const char symbols[],
 				  int symCount)
 {
@@ -323,7 +323,7 @@ stringTools::trim(const dodoString &data,
 //-------------------------------------------------------------------
 
 dodoString
-stringTools::trim(const dodoString &data,
+toolsString::trim(const dodoString &data,
 				  char symbol)
 {
 	return rTrim(lTrim(data, symbol), symbol);
@@ -332,7 +332,7 @@ stringTools::trim(const dodoString &data,
 //-------------------------------------------------------------------
 
 long
-stringTools::stringToL(const dodoString &data)
+toolsString::stringToL(const dodoString &data)
 {
 	return atol(data.c_str());
 }
@@ -340,7 +340,7 @@ stringTools::stringToL(const dodoString &data)
 //-------------------------------------------------------------------
 
 unsigned long
-stringTools::stringToUL(const dodoString &data)
+toolsString::stringToUL(const dodoString &data)
 {
 	return strtoul(data.c_str(), NULL, 10);
 }
@@ -348,7 +348,7 @@ stringTools::stringToUL(const dodoString &data)
 //-------------------------------------------------------------------
 
 int
-stringTools::stringToI(const dodoString &data)
+toolsString::stringToI(const dodoString &data)
 {
 	return atoi(data.c_str());
 }
@@ -356,7 +356,7 @@ stringTools::stringToI(const dodoString &data)
 //-------------------------------------------------------------------
 
 unsigned int
-stringTools::stringToUI(const dodoString &data)
+toolsString::stringToUI(const dodoString &data)
 {
 	return (unsigned int)atol(data.c_str());
 }
@@ -364,7 +364,7 @@ stringTools::stringToUI(const dodoString &data)
 //-------------------------------------------------------------------
 
 short
-stringTools::stringToS(const dodoString &data)
+toolsString::stringToS(const dodoString &data)
 {
 	return (short)atoi(data.c_str());
 }
@@ -372,7 +372,7 @@ stringTools::stringToS(const dodoString &data)
 //-------------------------------------------------------------------
 
 unsigned short
-stringTools::stringToUS(const dodoString &data)
+toolsString::stringToUS(const dodoString &data)
 {
 	return (unsigned short)atoi(data.c_str());
 }
@@ -380,7 +380,7 @@ stringTools::stringToUS(const dodoString &data)
 //-------------------------------------------------------------------
 
 float
-stringTools::stringToF(const dodoString &data)
+toolsString::stringToF(const dodoString &data)
 {
 	return (float)atof(data.c_str());
 }
@@ -388,7 +388,7 @@ stringTools::stringToF(const dodoString &data)
 //-------------------------------------------------------------------
 
 double
-stringTools::stringToD(const dodoString &data)
+toolsString::stringToD(const dodoString &data)
 {
 	return atof(data.c_str());
 }
@@ -396,7 +396,7 @@ stringTools::stringToD(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
-stringTools::replace(const dodoString &needle,
+toolsString::replace(const dodoString &needle,
 					 const dodoString &replacement,
 					 dodoString &data)
 {

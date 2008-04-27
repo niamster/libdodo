@@ -67,17 +67,17 @@ rpcXmlMethod::xmlToRpcMethod(__xmlNode &node)
 
 	rpcMethod method;
 	
-	if (stringTools::iequal(i->first, "methodName"))
+	if (toolsString::iequal(i->first, "methodName"))
 	{
 		dodoArray<__xmlNode> &arr0 = i->second;
 		if (arr0.size() > 0)
-			method.name = stringTools::trim(arr0[0].value, trimSymbols, 2);
+			method.name = toolsString::trim(arr0[0].value, trimSymbols, 2);
 		else
 			method.name = __dodostring__;
 	}
 	else
 	{
-		if (stringTools::iequal(i->first, "params"))
+		if (toolsString::iequal(i->first, "params"))
 		{
 			dodoArray<__xmlNode> &arr0 = i->second;
 			if (arr0.size() == 0)

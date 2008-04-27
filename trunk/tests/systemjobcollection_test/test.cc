@@ -3,7 +3,7 @@
 #include <libdodo/systemProcessCollection.h>
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/toolsSystem.h>
-#include <libdodo/timeTools.h>
+#include <libdodo/toolsTime.h>
 #include <libdodo/tools.h>
 
 #include <iostream>
@@ -16,12 +16,12 @@ process(void *data)
 {
 	try
 	{
-		cout << endl << (char *)data << ": " << timeTools::now() << endl;
+		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
 		cout.flush();
 		
 		toolsSystem::sleep(10);
 		
-		cout << endl << (char *)data << ": " << timeTools::now() << endl;
+		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
 		cout.flush();
 	}
 	catch(baseEx ex)
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 				pr[i] = new systemThreadCollection;
 #endif
 
-			ids[i] = stringTools::lToString(i);
+			ids[i] = toolsString::lToString(i);
 			pos[i] = pr[i]->add(process,(void *)ids[i].c_str());
 		}
 		
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 			pr[i]->run(pos[i]);
 		
 		cout << endl << endl << "STARTED" << endl;
-		cout << timeTools::now() << endl;
+		cout << toolsTime::now() << endl;
 		cout.flush();
 		
 		for (int i=0;i<amount;++i)

@@ -66,7 +66,7 @@ rpcXmlResponse::xmlToRpcResponse(__xmlNode &node)
 
 	rpcResponse response;
 	
-	if (stringTools::iequal(i->first, "fault"))
+	if (toolsString::iequal(i->first, "fault"))
 	{
 		response.succ = false;
 		
@@ -80,7 +80,7 @@ rpcXmlResponse::xmlToRpcResponse(__xmlNode &node)
 	}
 	else
 	{
-		if (stringTools::iequal(i->first, "params"))
+		if (toolsString::iequal(i->first, "params"))
 		{
 			response.succ = true;
 			

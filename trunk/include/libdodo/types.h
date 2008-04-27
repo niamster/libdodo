@@ -35,7 +35,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/dodoString.h>
-#include <libdodo/stringTools.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/dodoMap.h>
 
 namespace dodo

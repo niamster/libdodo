@@ -27,7 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/io.h>
-#include <libdodo/timeTools.h>
+#include <libdodo/toolsTime.h>
 #include <libdodo/systemThreadGuard.h>
 
 #include <syslog.h>
@@ -100,7 +100,7 @@ namespace dodo
 			
 			/**
 			 * set date/time format for log messages
-			 * @param format defines date/time format[see timeTools]
+			 * @param format defines date/time format[see toolsTime]
 			 * @note date/time format is not used for syslog
 			 */
 			virtual void setTimeFormat(const dodoString &format);

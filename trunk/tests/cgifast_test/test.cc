@@ -27,13 +27,13 @@ systemThreadSharedDataGuard sh;
 		sh.unlock();
 	 
 		
-		fcgi->writeStreamString("!" + stringTools::iToString(*inc) + "!<br>");
+		fcgi->writeStreamString("!" + toolsString::iToString(*inc) + "!<br>");
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["hidden"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["test"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
 		fcgi->writeStreamString("!" + cgit.COOKIES["test"] + "<br>");
-		fcgi->writeStreamString("!" + stringTools::iToString(cgit.FILES["file"].size) + "<br>");
+		fcgi->writeStreamString("!" + toolsString::iToString(cgit.FILES["file"].size) + "<br>");
 		
 		fcgi->writeStreamString("!!!\n\n\n");
 		
@@ -67,7 +67,7 @@ systemThreadSharedDataGuard sh;
 		}
 		catch(baseEx ex)
 		{
-			fcgi->writeStreamString(ex.baseErrstr + " " + stringTools::lToString(ex.line));
+			fcgi->writeStreamString(ex.baseErrstr + " " + toolsString::lToString(ex.line));
 		}	
 		
 		fcgi->writeStreamString("\n\n\n!!!");

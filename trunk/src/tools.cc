@@ -345,9 +345,9 @@ tools::isInArray(const dodoStringArray &arr,
 	bool (*cmpFunc)(const dodoString &, const dodoString &);
 
 	if (icase)
-		cmpFunc = stringTools::equal;
+		cmpFunc = toolsString::equal;
 	else
-		cmpFunc = stringTools::iequal;
+		cmpFunc = toolsString::iequal;
 
 	dodoStringArray::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)
@@ -1644,18 +1644,18 @@ tools::mail(const dodoString &host,
 	ex.writeStreamString("EHLO " + toolsNetwork::getLocalName() + "\r\n");
 	ex.readStreamString(mess);
 
-	if (stringTools::stringToI(mess.substr(0, 3)) != 250)
+	if (toolsString::stringToI(mess.substr(0, 3)) != 250)
 		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_LIBDODO, TOOLSEX_BADMAILHELO, TOOLSEX_BADMAILHELO_STR, __LINE__, __FILE__);
 
 	if (auth)
 	{
-		if (stringTools::contains(mess, "CRAM-MD5"))
+		if (toolsString::contains(mess, "CRAM-MD5"))
 			addFlag(authType, SMTPAUTH_CRAMMD5);
 
-		if (stringTools::contains(mess, "LOGIN"))
+		if (toolsString::contains(mess, "LOGIN"))
 			addFlag(authType, SMTPAUTH_LOGIN);
 
-		if (stringTools::contains(mess, "PLAIN"))
+		if (toolsString::contains(mess, "PLAIN"))
 			addFlag(authType, SMTPAUTH_PLAIN);
 	}
 
@@ -1666,7 +1666,7 @@ tools::mail(const dodoString &host,
 			ex.writeStreamString("AUTH CRAM-MD5\r\n");
 			ex.readStreamString(mess);
 
-			if (stringTools::stringToI(mess.substr(0, 3)) != 334)
+			if (toolsString::stringToI(mess.substr(0, 3)) != 334)
 				throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 			dodoString ticket = decodeBase64(mess.substr(4));
@@ -1710,7 +1710,7 @@ tools::mail(const dodoString &host,
 			ex.writeStreamString(encodeBase64(login + " " + md5pass) + "\r\n");
 			ex.readStreamString(mess);
 
-			if (stringTools::stringToI(mess.substr(0, 3)) != 235)
+			if (toolsString::stringToI(mess.substr(0, 3)) != 235)
 				throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 		}
 		else
@@ -1720,19 +1720,19 @@ tools::mail(const dodoString &host,
 				ex.writeStreamString("AUTH LOGIN\r\n");
 				ex.readStreamString(mess);
 
-				if (stringTools::stringToI(mess.substr(0, 3)) != 334)
+				if (toolsString::stringToI(mess.substr(0, 3)) != 334)
 					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(login) + "\r\n");
 				ex.readStreamString(mess);
 				
-				if (stringTools::stringToI(mess.substr(0, 3)) != 334)
+				if (toolsString::stringToI(mess.substr(0, 3)) != 334)
 					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(pass) + "\r\n");
 				ex.readStreamString(mess);
 				
-				if (stringTools::stringToI(mess.substr(0, 3)) != 235)
+				if (toolsString::stringToI(mess.substr(0, 3)) != 235)
 					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 			}
 			else
@@ -1742,7 +1742,7 @@ tools::mail(const dodoString &host,
 					ex.writeStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
 					ex.readStreamString(mess);
 
-					if (stringTools::stringToI(mess.substr(0, 3)) != 334)
+					if (toolsString::stringToI(mess.substr(0, 3)) != 334)
 						throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 				}
 			}

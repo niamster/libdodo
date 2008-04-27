@@ -47,7 +47,7 @@ json::makeJSON(const jsonNode &root)
 
 			dodoString jsonObject = "\"";
 			dodoString stringValue = root.stringValue;
-			stringTools::replace("\"", "\\\"", stringValue);
+			toolsString::replace("\"", "\\\"", stringValue);
 			jsonObject.append(stringValue);
 			jsonObject.append("\"");
 
@@ -105,7 +105,7 @@ json::makeJSON(const jsonNode &root)
 
 		case JSON_DATATYPE_NUMERIC:
 
-			return stringTools::lToString(root.numericValue);
+			return toolsString::lToString(root.numericValue);
 
 		case JSON_DATATYPE_BOOLEAN:
 
@@ -325,7 +325,7 @@ json::processNumeric(long &node,
 			break;
 	}
 
-	node = stringTools::stringToL(numeric);
+	node = toolsString::stringToL(numeric);
 
 	return i;
 }

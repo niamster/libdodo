@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 						conn.readStreamString(data);
 						cout << data << endl;
 
-						if (stringTools::trim(data, trimSym, 2) == "exit")
+						if (toolsString::trim(data, trimSym, 2) == "exit")
 							toolsSystem::die(data);
 					}
 				}

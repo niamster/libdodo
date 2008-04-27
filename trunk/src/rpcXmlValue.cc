@@ -40,53 +40,53 @@ rpcXmlValue::xmlToRpcValue(__xmlNode &node)
 
 	rpcValue value;
 	
-	if (stringTools::iequal(i->first, "int") || stringTools::iequal(i->first, "i4"))
+	if (toolsString::iequal(i->first, "int") || toolsString::iequal(i->first, "i4"))
 	{
 		value.valueDataType = RPC_DATATYPE_INTEGER;
 		
 		dodoArray<__xmlNode> &arr0 = i->second;
 		if (arr0.size() > 0)
-			value.integerValue = stringTools::stringToI(stringTools::trim(arr0[0].value, trimSymbols, 2));
+			value.integerValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2));
 		else
 			value.integerValue = 0;
 	}
 	else
 	{
-		if (stringTools::iequal(i->first, "boolean"))
+		if (toolsString::iequal(i->first, "boolean"))
 		{
 			value.valueDataType = RPC_DATATYPE_BOOLEAN;
 
 			dodoArray<__xmlNode> &arr0 = i->second;
 			if (arr0.size() > 0)
-				value.booleanValue = stringTools::stringToI(stringTools::trim(arr0[0].value, trimSymbols, 2)) == 1?true:false;
+				value.booleanValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2)) == 1?true:false;
 			else
 				value.booleanValue = false;
 		}
 		else
 		{
-			if (stringTools::iequal(i->first, "string") || stringTools::iequal(i->first, "base64") || stringTools::iequal(i->first, "dateTime.iso8601"))
+			if (toolsString::iequal(i->first, "string") || toolsString::iequal(i->first, "base64") || toolsString::iequal(i->first, "dateTime.iso8601"))
 			{
 				value.valueDataType = RPC_DATATYPE_STRING;
 
 				dodoArray<__xmlNode> &arr0 = i->second;
 				if (arr0.size() > 0)
-					value.stringValue = stringTools::trim(arr0[0].value, trimSymbols, 2);
+					value.stringValue = toolsString::trim(arr0[0].value, trimSymbols, 2);
 			}
 			else
 			{
-				if (stringTools::iequal(i->first, "double"))
+				if (toolsString::iequal(i->first, "double"))
 				{
 					value.valueDataType = RPC_DATATYPE_DOUBLE;
 					
 					dodoArray<__xmlNode> &arr0 = i->second;
 					if (arr0.size() > 0)
-						value.doubleValue = stringTools::stringToD(stringTools::trim(arr0[0].value, trimSymbols, 2));
+						value.doubleValue = toolsString::stringToD(toolsString::trim(arr0[0].value, trimSymbols, 2));
 					else
 						value.doubleValue = 0;
 				}
 				else
 				{
-					if (stringTools::iequal(i->first, "struct"))
+					if (toolsString::iequal(i->first, "struct"))
 					{
 						value.valueDataType = RPC_DATATYPE_STRUCT;
 
@@ -102,12 +102,12 @@ rpcXmlValue::xmlToRpcValue(__xmlNode &node)
 							dodoArray<__xmlNode> &arr1 = o->children["name"];
 							dodoArray<__xmlNode> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
-								value.structValue.insert(make_pair(stringTools::trim(arr1[0].value, trimSymbols, 2), xmlToRpcValue(arr2[0])));
+								value.structValue.insert(make_pair(toolsString::trim(arr1[0].value, trimSymbols, 2), xmlToRpcValue(arr2[0])));
 						}
 					}
 					else
 					{
-						if (stringTools::iequal(i->first, "array"))
+						if (toolsString::iequal(i->first, "array"))
 						{
 							value.valueDataType = RPC_DATATYPE_ARRAY;
 							
@@ -187,7 +187,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 		case RPC_DATATYPE_INTEGER:
 			
 			subNode.name = "int";
-			subNode.value = stringTools::iToString(data.integerValue);
+			subNode.value = toolsString::iToString(data.integerValue);
 
 			nodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, nodeArr));
@@ -197,7 +197,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 		case RPC_DATATYPE_DOUBLE:
 			
 			subNode.name = "double";
-			subNode.value = stringTools::dToString(data.doubleValue);
+			subNode.value = toolsString::dToString(data.doubleValue);
 
 			nodeArr.assign(1, subNode);
 			node.children.insert(make_pair(subNode.name, nodeArr));

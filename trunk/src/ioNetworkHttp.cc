@@ -115,7 +115,7 @@ ioNetworkHttp::setUrl(const dodoString &a_url)
 	
 	unsigned long portSize = urlComponents.port.size();
 	
-	if (portSize == 0 && stringTools::iequal(urlComponents.protocol, "http"))
+	if (portSize == 0 && toolsString::iequal(urlComponents.protocol, "http"))
 		urlComponents.port = "80";
 	
 	url.clear();
@@ -183,7 +183,7 @@ ioNetworkHttp::GET()
 		for (;o!=p;++o)
 			try
 			{
-				net.connect(*o, stringTools::stringToI(urlComponents.port), ex);
+				net.connect(*o, toolsString::stringToI(urlComponents.port), ex);
 				
 				break;
 			}
@@ -365,7 +365,7 @@ void
 ioNetworkHttp::POST(const dodoStringMap &arguments, 
 							const dodoStringMap &files)
 {
-	dodoString boundary = "---------------------------" + stringTools::ulToString(tools::ulRandom()) + stringTools::ulToString(tools::ulRandom());
+	dodoString boundary = "---------------------------" + toolsString::ulToString(tools::ulRandom()) + toolsString::ulToString(tools::ulRandom());
 	dodoString type = "multipart/form-data; boundary=" + boundary;
 	boundary.insert(0, "--");
 	
@@ -478,7 +478,7 @@ ioNetworkHttp::POST(const dodoString &a_data,
 		for (;o!=p;++o)
 			try
 			{		
-				net.connect(*o, stringTools::stringToI(urlComponents.port), ex);
+				net.connect(*o, toolsString::stringToI(urlComponents.port), ex);
 				
 				break;
 			}
@@ -517,7 +517,7 @@ ioNetworkHttp::POST(const dodoString &a_data,
 	data.append("\r\n");
 	
 	data.append("Content-length: ");
-	data.append(stringTools::ulToString(a_data.size()));
+	data.append(toolsString::ulToString(a_data.size()));
 	data.append("\r\n");
 	
 	data.append("Content-type: ");
@@ -682,7 +682,7 @@ ioNetworkHttp::getHeaders(const dodoString &headers)
 		if (i == dodoString::npos)
 			return;
 		
-		piece = stringTools::trim(headers.substr(j, i - j), '\r');
+		piece = toolsString::trim(headers.substr(j, i - j), '\r');
 
 		arr = tools::explode(piece, ":", 2);
 		if (arr.size() != 2)
@@ -692,17 +692,17 @@ ioNetworkHttp::getHeaders(const dodoString &headers)
 				statusCode = true;
 
 				if (httpStatusRE.match(piece, arr))
-					response.code = stringTools::stringToS(stringTools::lTrim(arr[0], ' '));
+					response.code = toolsString::stringToS(toolsString::lTrim(arr[0], ' '));
 			}
 		}
 		else
 		{
 			for (o = 0;o<IONETWORKHTTP_RESPONSEHEADERSTATEMENTS;++o)
-				if (stringTools::equal(responseHeaderStatements[o], arr[0]))
-					response.headers[o] = stringTools::lTrim(arr[1], ' ');
+				if (toolsString::equal(responseHeaderStatements[o], arr[0]))
+					response.headers[o] = toolsString::lTrim(arr[1], ' ');
 			
-			if (stringTools::equal("Set-Cookie", arr[0]))
-				response.cookies.push_back(parseCookie(stringTools::lTrim(arr[1], ' ')));
+			if (toolsString::equal("Set-Cookie", arr[0]))
+				response.cookies.push_back(parseCookie(toolsString::lTrim(arr[1], ' ')));
 		}
 		
 		++i;
@@ -784,7 +784,7 @@ ioNetworkHttp::getContent(dodoString &data,
 					getHeaders(headers);
 					headers.clear();
 					
-					contentSize = stringTools::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
+					contentSize = toolsString::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
 
 					if (followRedirection && (response.code / 100) == 3 && response.code != 304)
 					{
@@ -799,11 +799,11 @@ ioNetworkHttp::getContent(dodoString &data,
 						
 						if (proxyAuthInfo.authRequired)
 						{
-							if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+							if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 								return GETCONTENTSTATUS_WWWPROXYBASICAUTH;
 							else 
 							{
-								if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
+								if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
 								else
 									throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GETCONTENT, ERR_LIBDODO, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
@@ -811,11 +811,11 @@ ioNetworkHttp::getContent(dodoString &data,
 						}
 						else
 						{
-							if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+							if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 								return GETCONTENTSTATUS_WWWBASICAUTH;
 							else 
 							{
-								if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
+								if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWDIGESTAUTH;
 								else
 									throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GETCONTENT, ERR_LIBDODO, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
@@ -829,11 +829,11 @@ ioNetworkHttp::getContent(dodoString &data,
 						
 						proxyAuthInfo.authRequired = true;
 						
-						if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
+						if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
 							return GETCONTENTSTATUS_PROXYBASICAUTH;
 						else 
 						{
-							if (stringTools::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
+							if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
 								return GETCONTENTSTATUS_PROXYDIGESTAUTH;
 							else
 								throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GETCONTENT, ERR_LIBDODO, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
@@ -873,7 +873,7 @@ ioNetworkHttp::getContent(dodoString &data,
 dodoString 
 ioNetworkHttp::trim(const dodoString &data)
 {
-	return stringTools::trim(data, ' ');
+	return toolsString::trim(data, ' ');
 }
 
 //-------------------------------------------------------------------
@@ -903,9 +903,9 @@ ioNetworkHttp::makeDigestAuth(short requestHeader,
 		if (tuple.size() != 2)
 			continue;
 		
-		if (stringTools::iequal(tuple[0], "realm"))
+		if (toolsString::iequal(tuple[0], "realm"))
 		{
-			realm = stringTools::trim(tuple[1], '"');
+			realm = toolsString::trim(tuple[1], '"');
 			
 			tools::MD5Init(&context);
 			tools::MD5Update(&context, (unsigned char *)user.c_str(), user.size());
@@ -919,12 +919,12 @@ ioNetworkHttp::makeDigestAuth(short requestHeader,
 		}
 		else
 		{
-			if (stringTools::iequal(tuple[0], "nonce"))
-				nonce = stringTools::trim(tuple[1], '"');
+			if (toolsString::iequal(tuple[0], "nonce"))
+				nonce = toolsString::trim(tuple[1], '"');
 			else
 			{
-				if (stringTools::iequal(tuple[0], "opaque"))
-					opaque = stringTools::trim(tuple[1], '"');
+				if (toolsString::iequal(tuple[0], "opaque"))
+					opaque = toolsString::trim(tuple[1], '"');
 			}
 		}
 	}
@@ -996,19 +996,19 @@ ioNetworkHttp::parseCookie(const dodoString &header)
 	{
 		tuple = tools::explode(*i, "=");
 		
-		if (stringTools::iequal(tuple[0], "path"))
+		if (toolsString::iequal(tuple[0], "path"))
 			cookie.path = tuple[1];
 		else
 		{
-			if (stringTools::iequal(tuple[0], "expires"))
+			if (toolsString::iequal(tuple[0], "expires"))
 				cookie.expires = tuple[1];
 			else
 			{
-				if (stringTools::iequal(tuple[0], "domain"))
+				if (toolsString::iequal(tuple[0], "domain"))
 					cookie.domain = tuple[1];
 				else
 				{
-					if (stringTools::iequal(tuple[0], "secure"))
+					if (toolsString::iequal(tuple[0], "secure"))
 						cookie.secure = true;
 				}
 			}

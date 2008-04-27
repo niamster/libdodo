@@ -564,7 +564,7 @@ dbBase::limit(unsigned int a_number)
 {
 	addFlag(qShift, 1 << DBBASE_ADDREQUEST_LIMIT);
 
-	pre_limit = stringTools::lToString(a_number);
+	pre_limit = toolsString::lToString(a_number);
 }
 //-------------------------------------------------------------------
 
@@ -573,7 +573,7 @@ dbBase::offset(unsigned int a_number)
 {
 	addFlag(qShift, 1 << DBBASE_ADDREQUEST_OFFSET);
 
-	pre_offset = stringTools::lToString(a_number);
+	pre_offset = toolsString::lToString(a_number);
 }
 
 //-------------------------------------------------------------------
