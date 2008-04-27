@@ -27,6 +27,7 @@ OBJECTS:=dbBase.o \
 		dbSqlBase.o \
 		dbSqlite.o \
 		tools.o \
+		toolsFilesystem.o \
 		json.o \
 		jsonNode.o \
 		types.o \
@@ -46,7 +47,6 @@ OBJECTS:=dbBase.o \
 		ioNetworkTools.o \
 		ioNetworkServer.o \
 		ioNetworkClient.o \
-		ioDiskTools.o \
 		ioDisk.o \
 		ioSTD.o \
 		timeTools.o \

@@ -31,7 +31,7 @@
 #include <sys/stat.h>
 
 #include <libdodo/tools.h>
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioDiskEx.h>
 #include <libdodo/types.h>
 #include <libdodo/io.h>

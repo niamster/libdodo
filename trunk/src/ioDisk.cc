@@ -217,7 +217,7 @@ ioDisk::open(const dodoString &a_path,
 				if (exists && !S_ISFIFO(st.st_mode))
 					throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_LIBDODO, IODISKEX_WRONGFILENAME, IODISKEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 				if (!exists)
-					ioDiskTools::mkfifo(path, DEFAULT_FILE_PERM);
+					toolsFilesystem::mkfifo(path, DEFAULT_FILE_PERM);
 			}
 			else
 			{
@@ -259,7 +259,7 @@ ioDisk::open(const dodoString &a_path,
 	if (file == NULL)
 		throw baseEx(ERRMODULE_IODISK, IODISKEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	ioDiskTools::chmod(path, DEFAULT_FILE_PERM);
+	toolsFilesystem::chmod(path, DEFAULT_FILE_PERM);
 
 #ifndef IODISK_WO_XEXEC
 	performXExec(postExec);

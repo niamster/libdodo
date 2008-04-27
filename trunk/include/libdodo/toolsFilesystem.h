@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioDiskTools.h
+ *            toolsFilesystem.h
  *
  *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
@@ -36,15 +36,15 @@
 #include <libgen.h>
 #include <unistd.h>
 
-#include <libdodo/ioDiskToolsEx.h>
+#include <libdodo/toolsFilesystemEx.h>
 #include <libdodo/types.h>
 
 namespace dodo
 {
 	/**
-	 * @enum ioDiskToolsFileTypeEnum defines file type
+	 * @enum toolsFilesystemFileTypeEnum defines file type
 	 */
-	enum ioDiskToolsFileTypeEnum
+	enum toolsFilesystemFileTypeEnum
 	{
 		IODISKTOOLS_FILETYPE_REGULAR_FILE,
 		IODISKTOOLS_FILETYPE_LOCAL_SOCKET,
@@ -94,7 +94,7 @@ namespace dodo
 	{
 		dodoString name;    ///< file name
 		int perm;           ///< file permissions[see ioDiskPermissionModesEnum]
-		int type;           ///< file type[see ioDiskToolsFileTypeEnum]
+		int type;           ///< file type[see toolsFilesystemFileTypeEnum]
 		long size;          ///< file size
 		long modTime;       ///< modyfication time
 		long accTime;       ///< access time
@@ -103,9 +103,9 @@ namespace dodo
 	};
 
 	/**
-	 * @class ioDiskTools provides disk I/O manipulations
+	 * @class toolsFilesystem provides disk I/O manipulations
 	 */
-	class ioDiskTools
+	class toolsFilesystem
 	{
 
 			friend class ioNetwork;

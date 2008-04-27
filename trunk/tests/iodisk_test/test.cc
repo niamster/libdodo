@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/ioDisk.h>
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
 
@@ -12,10 +12,10 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		cout << ioDiskTools::getFileContents("test.cc");
-		ioDiskTools::copy("test.cc", "test.cc.copy", true);
+		cout << toolsFilesystem::getFileContents("test.cc");
+		toolsFilesystem::copy("test.cc", "test.cc.copy", true);
 
-		dodoStringArray arr = ioDiskTools::getFileContentsArr("test.cc");		
+		dodoStringArray arr = toolsFilesystem::getFileContentsArr("test.cc");		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
@@ -31,19 +31,19 @@ int main(int argc, char **argv)
 	}
 	try
 	{	
-		ioDiskTools::rm("./test.cc.copy");
+		toolsFilesystem::rm("./test.cc.copy");
 
-		ioDiskTools::mkdir("testDir");
-		ioDiskTools::mkdirRecursive("testDir/1/2/3/4");
+		toolsFilesystem::mkdir("testDir");
+		toolsFilesystem::mkdirRecursive("testDir/1/2/3/4");
 
-		ioDiskTools::rm("DirTest");
-		ioDiskTools::rename("testDir","DirTest");
+		toolsFilesystem::rm("DirTest");
+		toolsFilesystem::rename("testDir","DirTest");
 		
-		ioDiskTools::symlink("test", "TEST");
+		toolsFilesystem::symlink("test", "TEST");
 		
-		cout << ioDiskTools::getPermissions("Makefile") << endl;
+		cout << toolsFilesystem::getPermissions("Makefile") << endl;
 
-		dodoArray<__fileInfo> dir = ioDiskTools::getDirInfo("./");
+		dodoArray<__fileInfo> dir = toolsFilesystem::getDirInfo("./");
 		if (dir.size() > 0)
 		{
 			cout << endl << dir.size() << endl;
@@ -51,10 +51,10 @@ int main(int argc, char **argv)
 				cout << i->size << "!" << i->name << endl; 
 		}
 		
-		ioDiskTools::unlink("my.dat");
+		toolsFilesystem::unlink("my.dat");
 		
 		ioDisk io("my.dat", IODISK_FILETYPE_REG_FILE, IODISK_OPENMODE_READ_WRITE_TRUNCATE);
-		ioDiskTools::chmod("my.dat", IODISKTOOLS_PERM_ALL_ALL_ACCESS);
+		toolsFilesystem::chmod("my.dat", IODISKTOOLS_PERM_ALL_ALL_ACCESS);
 		
 		io.inSize = io.outSize = 14;
 		io.over = true;

@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/dbSqlite.h>
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
 
@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 		try
 		{
 			
-			ioDiskTools::unlink("test.lite",true);
+			toolsFilesystem::unlink("test.lite",true);
 			
 			__dbInfo info;
 			

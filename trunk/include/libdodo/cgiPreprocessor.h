@@ -33,7 +33,7 @@
 #include <libdodo/tools.h>
 #include <libdodo/cgiPreprocessorEx.h>
 #include <libdodo/types.h>
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 
 namespace dodo
 {

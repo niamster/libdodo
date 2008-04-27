@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
 		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map, files);
 		
-		ioDiskTools::writeToFile("test.dat", res.data);
+		toolsFilesystem::writeToFile("test.dat", res.data);
 		
 
 		cout << res.code << "\n~~\n";

@@ -189,9 +189,9 @@ dodoString
 cgiPreprocessor::preProcess(const dodoString &path)
 {
 	if (tplBasePath.empty())
-		return _preProcessString(ioDiskTools::getFileContents(path), path);
+		return _preProcessString(toolsFilesystem::getFileContents(path), path);
 	else
-		return _preProcessString(ioDiskTools::getFileContents(tplBasePath + FILE_DELIM + path), path);
+		return _preProcessString(toolsFilesystem::getFileContents(tplBasePath + FILE_DELIM + path), path);
 }
 
 //-------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioDiskToolsEx.h
+ *            toolsFilesystemEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -34,7 +34,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum ioDiskToolsExR
+	enum toolsFilesystemExR
 	{
 		IODISKTOOLSEX_WRONGFILENAME,
 		IODISKTOOLSEX_DESTINATIONEXISTS,
@@ -53,7 +53,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioDiskToolsFunctionsID
+	enum toolsFilesystemFunctionsID
 	{
 		IODISKTOOLSEX_UNLINK,
 		IODISKTOOLSEX_RENAME,

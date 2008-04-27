@@ -1,7 +1,7 @@
 #include <libdodo/tools.h>
 #include <libdodo/ioDisk.h>
 #include <libdodo/baseEx.h>
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetwork.h>
 
 #include <iostream>
@@ -34,12 +34,12 @@ int main(int argc, char **argv)
 #endif
 		
 #ifdef ICONV_EXT
-		tools::codesetConversion(ioDiskTools::getFileContents("test.cc"),"cp1251","utf-8");
+		tools::codesetConversion(toolsFilesystem::getFileContents("test.cc"),"cp1251","utf-8");
 #endif
 
 #ifdef ZLIB_EXT
-		cout << tools::zCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;
-		cout << tools::zDecompress(tools::zCompress(ioDiskTools::getFileContents("test.cc")));
+		cout << tools::zCompress(toolsFilesystem::getFileContents("Makefile"),9).size() << endl;
+		cout << tools::zDecompress(tools::zCompress(toolsFilesystem::getFileContents("test.cc")));
 #endif
 		
 		cout << tools::decodeUrl(tools::encodeUrl("@!()HEY, that's working!")) << endl;
@@ -47,11 +47,11 @@ int main(int argc, char **argv)
 		
 		cout << tools::encodeASCII85("HEY, that's working!") << endl;
 		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's working!")) << endl;
-		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(ioDiskTools::getFileContents("test")).size() << endl;
+		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(toolsFilesystem::getFileContents("test")).size() << endl;
 		
 		cout << tools::encodeBase64("HEY, that's working!") << endl;
 		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
-		cout << "size of test base64-encoded : " <<  tools::encodeBase64(ioDiskTools::getFileContents("test")).size() << endl;
+		cout << "size of test base64-encoded : " <<  tools::encodeBase64(toolsFilesystem::getFileContents("test")).size() << endl;
 		
 		dodoString tt = "ftp://user:pass@localhost.domain:32/init.cgi?net=true&work=true";
 		cout << endl << tt << endl;
@@ -65,9 +65,9 @@ int main(int argc, char **argv)
 
 		cout << tools::makeUrl(tools::parseUrl(tt)) << endl;
 
-		cout << ioDiskTools::getFileContents("Makefile").size() << endl;
+		cout << toolsFilesystem::getFileContents("Makefile").size() << endl;
 #ifdef BZ2_EXT
-		cout << tools::bzCompress(ioDiskTools::getFileContents("Makefile"),9).size() << endl;
+		cout << tools::bzCompress(toolsFilesystem::getFileContents("Makefile"),9).size() << endl;
 #endif
 			
 		dodoString t = "abcddF";

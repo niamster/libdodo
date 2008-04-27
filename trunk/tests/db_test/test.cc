@@ -4,7 +4,7 @@
 #include <libdodo/dbMysql.h>
 #include <libdodo/dbSqlite.h>
 #include <libdodo/dbSqlBase.h>
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
 
@@ -163,11 +163,11 @@ int main(int argc, char **argv)
 
 		arr.clear();
 
-		ioDiskTools::unlink("test.1");
-		ioDiskTools::unlink("test.2");
+		toolsFilesystem::unlink("test.1");
+		toolsFilesystem::unlink("test.2");
 
-		dodoString dt = ioDiskTools::getFileContents("test");
-		ioDiskTools::writeToFile("test.1", dt);
+		dodoString dt = toolsFilesystem::getFileContents("test");
+		toolsFilesystem::writeToFile("test.1", dt);
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 			arr["b"] = "$1";
@@ -225,7 +225,7 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			ioDiskTools::writeToFile("test.2",(*store.rows.begin())[2]);	
+			toolsFilesystem::writeToFile("test.2",(*store.rows.begin())[2]);	
 	}
 	catch(baseEx ex)
 	{

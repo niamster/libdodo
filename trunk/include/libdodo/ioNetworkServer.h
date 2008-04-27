@@ -37,7 +37,7 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkServerEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkOptions.h>

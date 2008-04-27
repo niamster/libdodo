@@ -31,7 +31,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <libdodo/ioDiskTools.h>
+#include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkOptionsEx.h>
 #include <libdodo/types.h>
 
