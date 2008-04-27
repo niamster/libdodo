@@ -30,40 +30,43 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum cgiProcessorExR
+	namespace cgi
 	{
-		CGIPROCESSOREX_WRONGIFSTATEMENT,
-		CGIPROCESSOREX_WRONGFORSTATEMENT,
-		CGIPROCESSOREX_WRONGVARSTATEMENT,
-		CGIPROCESSOREX_DODOISRESERVEDVARNAME,
-		CGIPROCESSOREX_WRONGASSIGNSTATEMENT,
-		CGIPROCESSOREX_WRONGBLOCK
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define CGIPROCESSOREX_WRONGIFSTATEMENT_STR "Wrong `if` statement."
-#define CGIPROCESSOREX_WRONGFORSTATEMENT_STR "Wrong `for` statement."
-#define CGIPROCESSOREX_WRONGVARSTATEMENT_STR "In variable statement `}` wasn't closed."
-#define CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name."
-#define CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR "Wrong `assing` statement."
-#define CGIPROCESSOREX_WRONGBLOCK_STR "Wrong block construction."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum cgiProcessorFunctionsID
-	{
-		CGIPROCESSOREX__IF,
-		CGIPROCESSOREX_BLOCKEND,
-		CGIPROCESSOREX__FOR,
-		CGIPROCESSOREX_GETVAR,
-		CGIPROCESSOREX_ASSIGN,
-		CGIPROCESSOREX__ASSIGN
+		/**
+		 * libdodo defined errors
+		 */
+		enum cgiProcessorExR
+		{
+			PROCESSOREX_WRONGIFSTATEMENT,
+			PROCESSOREX_WRONGFORSTATEMENT,
+			PROCESSOREX_WRONGVARSTATEMENT,
+			PROCESSOREX_DODOISRESERVEDVARNAME,
+			PROCESSOREX_WRONGASSIGNSTATEMENT,
+			PROCESSOREX_WRONGBLOCK
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+#define PROCESSOREX_WRONGIFSTATEMENT_STR "Wrong `if` statement."
+#define PROCESSOREX_WRONGFORSTATEMENT_STR "Wrong `for` statement."
+#define PROCESSOREX_WRONGVARSTATEMENT_STR "In variable statement `}` wasn't closed."
+#define PROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name."
+#define PROCESSOREX_WRONGASSIGNSTATEMENT_STR "Wrong `assing` statement."
+#define PROCESSOREX_WRONGBLOCK_STR "Wrong block construction."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum cgiProcessorFunctionsID
+		{
+			PROCESSOREX__IF,
+			PROCESSOREX_BLOCKEND,
+			PROCESSOREX__FOR,
+			PROCESSOREX_GETVAR,
+			PROCESSOREX_ASSIGN,
+			PROCESSOREX__ASSIGN
+		};
 	};
 };
 

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastEx.h
+ *            cgiFastClientExchangeEx.h
  *
  *  Mon Dec 31 01:51:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGIFASTEX_H_
-#define _CGIFASTEX_H_
+#ifndef _CGIFASTCLIENTEXCHANGEEX_H_
+#define _CGIFASTCLIENTEXCHANGEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,28 +30,31 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum cgiFastExR
+	namespace cgi
 	{
-		CGIFASTEX_ACCEPTFAILED,
-		CGIFASTEX_ISCGI,
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define CGIFASTEX_ACCEPTFAILED_STR "Accept call failed."
-#define CGIFASTEX_ISCGI_STR "Called as a CGI."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum cgiFastFunctionsID
-	{
-		CGIFASTEX_LISTEN,
-		CGIFASTEX_STACKTHREAD,
+		/**
+		 * libdodo defined errors
+		 */
+		enum cgiFastExchangeExR
+		{
+			FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH,
+			FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH_STR "Failed to flush."
+	#define FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum cgiFastExchangeFunctionsID
+		{
+			FASTCLIENTEXCHANGEEX_FLUSH,
+			FASTCLIENTEXCHANGEEX__WRITE,
+		};
 	};
 };
 

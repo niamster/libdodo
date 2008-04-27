@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiEx.h
+ *            cgiClientEx.h
  *
  *  Wed Mar 12 01:01:14 2008
  *  Copyright  2008  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _XEXECEX_H_
-#define _XEXECEX_H_
+#ifndef _CGICLIENTEX_H_
+#define _CGICLIENTEX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,26 +30,29 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum cgiExR
+	namespace cgi
 	{
-		CGIEX_WRONGSTATUSCODE,
-	};
-	
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define CGIEX_WRONGSTATUSCODE_STR "Wrong status code."
-	
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum cgiFunctionsID
-	{
-		CGIEX_MAKEPOST,
-		CGIEX_SETRESPONSESTATUS,
+		/**
+		 * libdodo defined errors
+		 */
+		enum clientExR
+		{
+			CLIENTEX_WRONGSTATUSCODE,
+		};
+		
+		/**
+		 * explanations for libdodo defined errors
+		 */
+#define CLIENTEX_WRONGSTATUSCODE_STR "Wrong status code."
+		
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum clientFunctionsID
+		{
+			CLIENTEX_MAKEPOST,
+			CLIENTEX_SETRESPONSESTATUS,
+		};
 	};
 };
 

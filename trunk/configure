@@ -700,7 +700,7 @@ enable_option_checking
 enable_debug
 enable_profiling
 enable_deque
-enable_cgiFast_xexec_support
+enable_fastClientExchange_xexec_support
 enable_ioSTD_xexec_support
 enable_ioNetworkExchange_xexec_support
 enable_ioNetworkClient_xexec_support
@@ -1364,8 +1364,8 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
-  --disable-cgiFastExchange-xexec-support
-                          compile cgiFastExchange w/o xexec support
+  --disable-fastClientExchange-xexec-support
+                          compile fastClientExchange w/o xexec support
   --disable-ioSTD-xexec-support
                           compile ioSTD w/o xexec support
   --disable-ioNetworkExchange-xexec-support
@@ -3634,21 +3634,21 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-# Check whether --enable-cgiFast-xexec-support was given.
-if test "${enable_cgiFast_xexec_support+set}" = set; then
-  enableval=$enable_cgiFast_xexec_support; CGIFAST_W_XEXEC="$enableval"
+# Check whether --enable-fastClientExchange-xexec-support was given.
+if test "${enable_fastClientExchange_xexec_support+set}" = set; then
+  enableval=$enable_fastClientExchange_xexec_support; FASTCLIENTEXCHANGE_W_XEXEC="$enableval"
 else
-  CGIFAST_W_XEXEC="yes"
+  FASTCLIENTEXCHANGE_W_XEXEC="yes"
 fi
 
 
-if test "$CGIFAST_W_XEXEC" = "no"
+if test "$FASTCLIENTEXCHANGE_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOCGIFASTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define FASTCLIENTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nfastClientExchange xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nfastClientExchange xexec support\t\t\t\t\t\tenabled"
 fi
 
 if test "$IMAGE_W_XEXEC" = "no"
@@ -5238,19 +5238,19 @@ fi
 
 # Check whether --with-fcgi was given.
 if test "${with_fcgi+set}" = set; then
-  withval=$with_fcgi; MOD_FCGI_DIR="$withval"
+  withval=$with_fcgi; MOD_FASTCGI_DIR="$withval"
 else
-  MOD_FCGI="no"
+  MOD_FASTCGI="no"
 fi
 
-	if test "$MOD_FCGI" != "no" -a "$MOD_FCGI_DIR" != "no"
+	if test "$MOD_FASTCGI" != "no" -a "$MOD_FASTCGI_DIR" != "no"
 	then
-		if test "$MOD_FCGI_DIR" = "yes"
+		if test "$MOD_FASTCGI_DIR" = "yes"
 		then
-			MOD_FCGI_DIR=/usr
+			MOD_FASTCGI_DIR=/usr
 		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_FCGI_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_FCGI_DIR/lib -lfcgi"
+		CPPFLAGS="$CPPFLAGS -I$MOD_FASTCGI_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_FASTCGI_DIR/lib -lfcgi"
 
 { $as_echo "$as_me:$LINENO: checking for FCGX_Init in -lfcgi" >&5
 $as_echo_n "checking for FCGX_Init in -lfcgi... " >&6; }
@@ -5471,7 +5471,7 @@ $as_echo "$as_me: error: fcgi header was not found" >&2;}
 fi
 
 
-		echo -n -e "#define FCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
+		echo -n -e "#define FASTCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 	else

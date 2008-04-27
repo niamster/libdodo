@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastExchange.cc
+ *            cgiFastClientExchange.cc
  *
  *  Sat Aug  5 03:37:19 2006
  *  Copyright  2006  Ni@m
@@ -21,41 +21,41 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/cgiFast.h>
+#include <libdodo/cgiFastClientExchange.h>
 
-#ifdef FCGI_EXT
+#ifdef FASTCGI_EXT
 
-using namespace dodo;
+using namespace dodo::cgi;
 
-cgiFastExchange::cgiFastExchange(cgiFastExchange &cf)
+fastClientExchange::fastClientExchange(fastClientExchange &cf)
 {
 }
 
 //-------------------------------------------------------------------
 
-cgiFastExchange::cgiFastExchange(FCGX_Request *a_request) : request(a_request)
+fastClientExchange::fastClientExchange(FCGX_Request *a_request) : request(a_request)
 {
 }
 
 //-------------------------------------------------------------------
 
-cgiFastExchange::~cgiFastExchange()
+fastClientExchange::~fastClientExchange()
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::flush()
+fastClientExchange::flush()
 {
 	if (FCGX_FFlush(request->out) == -1)
-		throw baseEx(ERRMODULE_CGIFAST, IOCGIFASTEXCHANGEEX_FLUSH, ERR_LIBDODO, IOCGIFASTEXCHANGEEX_FAILEDTOFLUSH, IOCGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_CGIFASTCLIENTEXCHANGE, FASTCLIENTEXCHANGEEX_FLUSH, ERR_LIBDODO, FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH, FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 char *
-cgiFastExchange::getenv(const char *buf)
+fastClientExchange::getenv(const char *buf)
 {
 	return FCGX_GetParam(buf, request->envp);
 }
@@ -63,7 +63,7 @@ cgiFastExchange::getenv(const char *buf)
 //-------------------------------------------------------------------
 
 int
-cgiFastExchange::getInDescriptor() const
+fastClientExchange::getInDescriptor() const
 {
 	return -1;
 }
@@ -71,29 +71,29 @@ cgiFastExchange::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-cgiFastExchange::getOutDescriptor() const
+fastClientExchange::getOutDescriptor() const
 {
 	return -1;
 }
 
 //-------------------------------------------------------------------
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 
 int
-cgiFastExchange::addPostExec(inExec func,
+fastClientExchange::addPostExec(inExec func,
 				   void   *data)
 {
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOCGIFASTEXCHANGE, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
 
 int
-cgiFastExchange::addPreExec(inExec func,
+fastClientExchange::addPreExec(inExec func,
 				  void   *data)
 {
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOCGIFASTEXCHANGE, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
@@ -101,31 +101,31 @@ cgiFastExchange::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-cgiFastExchange::addPostExec(const dodoString &module,
+fastClientExchange::addPostExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOCGIFASTEXCHANGE, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-cgiFastExchange::addExec(const dodoString &module,
+dodo::__xexecCounts
+fastClientExchange::addExec(const dodoString &module,
 			   void             *data,
 			   void             *toInit)
 {
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOCGIFASTEXCHANGE, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 int
-cgiFastExchange::addPreExec(const dodoString &module,
+fastClientExchange::addPreExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOCGIFASTEXCHANGE, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data, toInit);
 }
 
 #endif
@@ -135,7 +135,7 @@ cgiFastExchange::addPreExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::_read(char * const a_void)
+fastClientExchange::_read(char * const a_void)
 {
 	memset(a_void, '\0', inSize);
 
@@ -145,18 +145,18 @@ cgiFastExchange::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::read(char * const a_void)
+fastClientExchange::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
-	operType = IOCGIFASTEXCHANGE_OPERATION_READ;
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+	operType = FASTCLIENTEXCHANGE_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
 #endif
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	try
 	{
 		_read(a_void);
@@ -171,7 +171,7 @@ cgiFastExchange::read(char * const a_void)
 	_read(a_void);
 #endif
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
@@ -184,12 +184,12 @@ cgiFastExchange::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::readString(dodoString &a_str)
+fastClientExchange::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
-	operType = IOCGIFASTEXCHANGE_OPERATION_READSTRING;
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+	operType = FASTCLIENTEXCHANGE_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -205,14 +205,14 @@ cgiFastExchange::readString(dodoString &a_str)
 	{
 		delete [] data;
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 		buffer.clear();
 #endif
 
 		throw;
 	}
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer.assign(data, inSize);
 	delete [] data;
 
@@ -229,14 +229,14 @@ cgiFastExchange::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::writeString(const dodoString &a_buf)
+fastClientExchange::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOCGIFASTEXCHANGE_OPERATION_WRITESTRING;
+	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -254,7 +254,7 @@ cgiFastExchange::writeString(const dodoString &a_buf)
 #endif
 
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -264,14 +264,14 @@ cgiFastExchange::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::write(const char *const a_buf)
+fastClientExchange::write(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
 
-	operType = IOCGIFASTEXCHANGE_OPERATION_WRITE;
+	operType = FASTCLIENTEXCHANGE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -289,7 +289,7 @@ cgiFastExchange::write(const char *const a_buf)
 #endif
 
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -299,27 +299,27 @@ cgiFastExchange::write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::_write(const char *const buf)
+fastClientExchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->out) == -1)
-		throw baseEx(ERRMODULE_CGIFAST, IOCGIFASTEXCHANGEEX__WRITE, ERR_LIBDODO, IOCGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING, IOCGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_CGIFASTCLIENTEXCHANGE, FASTCLIENTEXCHANGEEX__WRITE, ERR_LIBDODO, FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING, FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::readStream(char * const a_void)
+fastClientExchange::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
-	operType = IOCGIFASTEXCHANGE_OPERATION_READSTREAM;
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+	operType = FASTCLIENTEXCHANGE_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
 	_read(a_void);
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_void;
 
 	performXExec(postExec);
@@ -334,12 +334,12 @@ cgiFastExchange::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::readStreamString(dodoString &a_str)
+fastClientExchange::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
-	operType = IOCGIFASTEXCHANGE_OPERATION_READSTREAMSTRING;
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+	operType = FASTCLIENTEXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -356,7 +356,7 @@ cgiFastExchange::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = data;
 	delete [] data;
 
@@ -373,16 +373,16 @@ cgiFastExchange::readStreamString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::writeStreamString(const dodoString &a_buf)
+fastClientExchange::writeStreamString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOCGIFASTEXCHANGE_OPERATION_WRITESTREAMSTRING;
+	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -418,7 +418,7 @@ cgiFastExchange::writeStreamString(const dodoString &a_buf)
 	}
 #endif
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -428,16 +428,16 @@ cgiFastExchange::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-cgiFastExchange::writeStream(const char *const a_buf)
+fastClientExchange::writeStream(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOCGIFASTEXCHANGE_OPERATION_WRITESTREAM;
+	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -473,7 +473,7 @@ cgiFastExchange::writeStream(const char *const a_buf)
 	}
 #endif
 
-#ifndef IOCGIFASTEXCHANGE_WO_XEXEC
+#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();

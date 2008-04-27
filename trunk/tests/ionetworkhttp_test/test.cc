@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 		cout << res.data.size() << "\n~~\n";
 
 		cout << "Cookies:\n";
-		dodoArray<__cookie>::iterator i(res.cookies.begin()), j(res.cookies.end());
+		dodoArray<cgi::__clientCookie>::iterator i(res.cookies.begin()), j(res.cookies.end());
 		for (;i!=j;++i)
 			cout << i->name << "=" << i->value << "\n~~\n";
 	}

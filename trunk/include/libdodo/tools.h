@@ -55,6 +55,11 @@
 
 namespace dodo
 {
+	namespace cgi
+	{
+		class client;
+	};
+
 	/**
 	 * @typedef escape defines escape function for explode/implode
 	 */
@@ -97,14 +102,14 @@ namespace dodo
 		dodoString password; ///< password
 		dodoString port; ///< port
 	};
-
+	
 	/**
 	 * @class tools provides misc functionality
 	 */
 	class tools
 	{
 		friend class ioNetworkHttp;
-		friend class cgi;
+		friend class cgi::client;
 		
 		public:
 

@@ -1,37 +1,37 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/cgi.h>
+#include <libdodo/cgiClient.h>
 #include <libdodo/cgiProcessor.h>
 #include <libdodo/tools.h>
-#include <libdodo/cgiFast.h>
+#include <libdodo/cgiFastClient.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 
 #include <iostream>
 
 using namespace dodo;
+using namespace cgi;
 
 using namespace std;
 
-#ifdef FCGI_EXT
+#ifdef FASTCGI_EXT
 
 systemThreadSharedDataGuard sh;
 
 	void 
-	cgif(cgiFastExchange *fcgi)
+	cgif(fastClientExchange *fcgi)
 	{
-		cgi cgit(fcgi, true);
+		client cgit(fcgi, true);
 		cgit.setCookie("test","Ni@m");
 		cgit.printHeaders();
 			
 		int *inc = (int *)sh.lock();
 		(*inc)++;
 		sh.unlock();
-	 
 		
 		fcgi->writeStreamString("!" + toolsString::iToString(*inc) + "!<br>");
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["hidden"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["test"] + "!<br>");
-		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>");
+		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[CLIENT_ENVIRONMENT_QUERYSTRING] + "<br>");
 		fcgi->writeStreamString("!" + cgit.COOKIES["test"] + "<br>");
 		fcgi->writeStreamString("!" + toolsString::iToString(cgit.FILES["file"].size) + "<br>");
 		
@@ -39,7 +39,7 @@ systemThreadSharedDataGuard sh;
 		
 		try
 		{
-			cgiProcessor cgip(cgit);
+			processor cgip(cgit);
 			cgip.assign("test","hoho");
 			cgip.assign("show","That's works!");
 			
@@ -77,21 +77,21 @@ systemThreadSharedDataGuard sh;
 
 int main(int argc, char **argv)
 {	
-#ifdef FCGI_EXT
+#ifdef FASTCGI_EXT
 	
 	try
 	{
 		int *shared = new int(1);
 		sh.set((void *)shared);
 
-		cgiFast cf;
-		if (!cf.isFastCGI())
+		fastClient cf;
+		if (!cf.isFastCgi())
 		{
 			cout << "Not a fastCGI.";
 			cout.flush();
 		}
 		
-		cf.setCGIFunction(&cgif);
+		cf.setHandler(&cgif);
 	
 		cf.listen();
 

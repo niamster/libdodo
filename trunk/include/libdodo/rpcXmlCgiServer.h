@@ -27,7 +27,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/cgi.h>
+#include <libdodo/cgiClient.h>
 #include <libdodo/rpcXmlServer.h>
 
 namespace dodo
@@ -42,7 +42,7 @@ namespace dodo
 			/**
 			 * constructor
 			 */
-			rpcXmlCgiServer(cgi &provider);
+			rpcXmlCgiServer(cgi::client &provider);
 
 			/**
 			 * destructor
@@ -63,7 +63,7 @@ namespace dodo
 			 */
 			virtual dodoString receiveTextResponse();
 			
-			cgi &provider;
+			cgi::client &provider;
 	};
 };
 

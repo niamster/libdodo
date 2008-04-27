@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFast.cc
+ *            cgiFastClient.cc
  *
  *  Sat Aug  5 03:37:19 2006
  *  Copyright  2006  Ni@m
@@ -21,32 +21,32 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/cgiFast.h>
+#include <libdodo/cgiFastClient.h>
 
-#ifdef FCGI_EXT
+#ifdef FASTCGI_EXT
 
-using namespace dodo;
+using namespace dodo::cgi;
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t cgiFast::accept = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t fastClient::accept = PTHREAD_MUTEX_INITIALIZER;
 
 #endif
 
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(cgiFastExchange *data)
+dummyStackThread(fastClientExchange *data)
 {
 }
 
 //-------------------------------------------------------------------
 
-cgiProc cgiFast::cgiF = &dummyStackThread;
+fastClientHandler fastClient::handler = &dummyStackThread;
 
 //-------------------------------------------------------------------
 
-cgiFast::cgiFast(cgiFast &cf)
+fastClient::fastClient(fastClient &cf)
 {
 }
 
@@ -54,7 +54,7 @@ cgiFast::cgiFast(cgiFast &cf)
 
 #ifdef PTHREAD_EXT
 
-cgiFast::cgiFast(bool a_threading,
+fastClient::fastClient(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
 											  threadsNum(a_threadsNum)
 {
@@ -73,7 +73,7 @@ cgiFast::cgiFast(bool a_threading,
 
 #else
 
-cgiFast::cgiFast()
+fastClient::fastClient()
 {
 	FCGX_Init();
 }
@@ -82,7 +82,7 @@ cgiFast::cgiFast()
 
 //-------------------------------------------------------------------
 
-cgiFast::~cgiFast()
+fastClient::~fastClient()
 {
 	FCGX_Finish();
 }
@@ -90,9 +90,9 @@ cgiFast::~cgiFast()
 //-------------------------------------------------------------------
 
 void
-cgiFast::setCGIFunction(cgiProc func)
+fastClient::setHandler(fastClientHandler func)
 {
-	cgiF = func;
+	handler = func;
 }
 
 //-------------------------------------------------------------------
@@ -100,12 +100,12 @@ cgiFast::setCGIFunction(cgiProc func)
 #ifdef PTHREAD_EXT
 
 void *
-cgiFast::stackThread(void *data)
+fastClient::stackThread(void *data)
 {
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
 
-	cgiFastExchange cfSTD(&request);
+	fastClientExchange cfSTD(&request);
 
 	int res = 0;
 
@@ -116,9 +116,9 @@ cgiFast::stackThread(void *data)
 		pthread_mutex_unlock(&accept);
 
 		if (res == -1)
-			throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_STACKTHREAD, ERR_LIBDODO, CGIFASTEX_ACCEPTFAILED, CGIFASTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_CGIFASTCLIENT, FASTCLIENTEX_STACKTHREAD, ERR_LIBDODO, FASTCLIENTEX_ACCEPTFAILED, FASTCLIENTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
-		cgiF(&cfSTD);
+		handler(&cfSTD);
 
 		FCGX_Finish_r(&request);
 	}
@@ -131,10 +131,10 @@ cgiFast::stackThread(void *data)
 //-------------------------------------------------------------------
 
 void
-cgiFast::listen()
+fastClient::listen()
 {
-	if (!isFastCGI())
-		throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_LISTEN, ERR_LIBDODO, CGIFASTEX_ISCGI, CGIFASTEX_ISCGI_STR, __LINE__, __FILE__);
+	if (!isFastCgi())
+		throw baseEx(ERRMODULE_CGIFASTCLIENT, FASTCLIENTEX_LISTEN, ERR_LIBDODO, FASTCLIENTEX_ISCGI, FASTCLIENTEX_ISCGI_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
 	if (threading)
@@ -157,14 +157,14 @@ cgiFast::listen()
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);
 
-		cgiFastExchange cfSTD(&request);
+		fastClientExchange cfSTD(&request);
 
 		while (true)
 		{
 			if (FCGX_Accept_r(&request) == -1)
-				throw baseEx(ERRMODULE_CGIFAST, CGIFASTEX_LISTEN, ERR_LIBDODO, CGIFASTEX_ACCEPTFAILED, CGIFASTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_CGIFASTCLIENT, FASTCLIENTEX_LISTEN, ERR_LIBDODO, FASTCLIENTEX_ACCEPTFAILED, FASTCLIENTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
-			cgiF(&cfSTD);
+			handler(&cfSTD);
 
 			FCGX_Finish_r(&request);
 		}
@@ -174,7 +174,7 @@ cgiFast::listen()
 //-------------------------------------------------------------------
 
 bool
-cgiFast::isFastCGI()
+fastClient::isFastCgi()
 {
 	return !FCGX_IsCGI();
 }

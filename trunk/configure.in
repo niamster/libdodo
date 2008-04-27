@@ -59,17 +59,17 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_ENABLE(cgiFast-xexec-support,
-        AS_HELP_STRING([--disable-cgiFastExchange-xexec-support],[compile cgiFastExchange w/o xexec support]),
-        [CGIFAST_W_XEXEC="$enableval"], [CGIFAST_W_XEXEC="yes"])
+AC_ARG_ENABLE(fastClientExchange-xexec-support,
+        AS_HELP_STRING([--disable-fastClientExchange-xexec-support],[compile fastClientExchange w/o xexec support]),
+        [FASTCLIENTEXCHANGE_W_XEXEC="$enableval"], [FASTCLIENTEXCHANGE_W_XEXEC="yes"])
 
-if test "$CGIFAST_W_XEXEC" = "no"
+if test "$FASTCLIENTEXCHANGE_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOCGIFASTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define FASTCLIENTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nfastClientExchange xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\ncgiFast xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nfastClientExchange xexec support\t\t\t\t\t\tenabled"
 fi
 
 if test "$IMAGE_W_XEXEC" = "no"
@@ -278,18 +278,18 @@ fi
 
 	AC_ARG_WITH([fcgi],
 		AS_HELP_STRING([--with-fcgi(=/path)],[use fast CGI]),
-		[MOD_FCGI_DIR="$withval"], [MOD_FCGI="no"])
-	if test "$MOD_FCGI" != "no" -a "$MOD_FCGI_DIR" != "no"
+		[MOD_FASTCGI_DIR="$withval"], [MOD_FASTCGI="no"])
+	if test "$MOD_FASTCGI" != "no" -a "$MOD_FASTCGI_DIR" != "no"
 	then
-		if test "$MOD_FCGI_DIR" = "yes"
+		if test "$MOD_FASTCGI_DIR" = "yes"
 		then
-			MOD_FCGI_DIR=/usr
+			MOD_FASTCGI_DIR=/usr
 		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_FCGI_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_FCGI_DIR/lib -lfcgi"
+		CPPFLAGS="$CPPFLAGS -I$MOD_FASTCGI_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_FASTCGI_DIR/lib -lfcgi"
 		AC_CHECK_LIB([fcgi], [FCGX_Init], [], AC_MSG_ERROR(fcgi lib was not found))
 		AC_CHECK_HEADER([fcgiapp.h], [], AC_MSG_ERROR(fcgi header was not found))
-		echo -n -e "#define FCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
+		echo -n -e "#define FASTCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 	else

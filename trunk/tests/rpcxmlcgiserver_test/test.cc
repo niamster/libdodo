@@ -4,6 +4,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace cgi;
 
 using namespace std;
 
@@ -19,7 +20,7 @@ handler(const dodoString &method, const dodoArray<rpcValue> &values)
 
 int main(int argc, char **argv)
 {		
-	cgi provider(false);
+	client provider(false);
 	rpcXmlCgiServer server(provider);
 	
 	try

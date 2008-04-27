@@ -974,7 +974,7 @@ ioNetworkHttp::makeBasicAuth(short responseHeader,
 
 //-------------------------------------------------------------------
 
-__cookie 
+cgi::__clientCookie 
 ioNetworkHttp::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::explode(header, &trim, ";");
@@ -984,9 +984,9 @@ ioNetworkHttp::parseCookie(const dodoString &header)
 	
 	tuple = tools::explode(*i, "=", 2);
 	if (tuple.size() != 2)
-		return __cookie();
+		return cgi::__clientCookie();
 		
-	__cookie cookie;
+	cgi::__clientCookie cookie;
 	cookie.name = tuple[0];
 	cookie.value = tools::decodeUrl(tuple[1]);
 	

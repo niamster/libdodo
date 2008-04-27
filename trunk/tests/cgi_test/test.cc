@@ -1,10 +1,11 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/cgi.h>
+#include <libdodo/cgiClient.h>
 #include <libdodo/cgiProcessor.h>
 
 #include <iostream>
 
 using namespace dodo;
+using namespace cgi;
 
 using namespace std;
 
@@ -12,18 +13,18 @@ int main(int argc, char **argv)
 {		
 ///first type
 //	dodoStringMap head;
-//	head[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+//	head[CLIENT_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 //	cgi cgi(head, false);
 	
 ///second type									}
 
-	cgi cgit(true);
+	client cgit(true);
 
 	dodoString user = cgit.getAuthentificationInfo().user;
 
 	if (cgit.GET["a"] == "forbidden")
 	{
-		cgit.setResponseStatus(CGI_STATUSCODE_FORBIDDEN);
+		cgit.setResponseStatus(CLIENT_STATUSCODE_FORBIDDEN);
 
 		cgit.printStream( "<b>FORBIDDEN</b><br>" );
 
@@ -31,7 +32,7 @@ int main(int argc, char **argv)
 	}
 	else if (cgit.GET["a"] == "notfound")
 	{
-		cgit.setResponseStatus(CGI_STATUSCODE_NOTFOUND);
+		cgit.setResponseStatus(CLIENT_STATUSCODE_NOTFOUND);
 
 		cgit.printStream( "<b>NOT FOUND</b><br>" );
 
@@ -41,7 +42,7 @@ int main(int argc, char **argv)
 	{
 		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
 		{
-			cgit.requestAuthentification("libdodo", CGI_AUTHTYPE_BASIC);
+			cgit.requestAuthentification("libdodo", CLIENT_AUTHTYPE_BASIC);
 
 			return 0;
 		}
@@ -51,13 +52,13 @@ int main(int argc, char **argv)
 	{
 		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
 		{
-			cgit.requestAuthentification("libdodo", CGI_AUTHTYPE_DIGEST);
+			cgit.requestAuthentification("libdodo", CLIENT_AUTHTYPE_DIGEST);
 
 			return 0;
 		}
 	}
 
-	cgit.HEADERS[CGI_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+	cgit.HEADERS[CLIENT_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 	cgit.setCookie("test","Ni@m");
 	cgit.printHeaders();
 	
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
 	cgit.printStream( "!" + cgit.GET["a"] + "!<br>" );
 	cgit.printStream( "!" + cgit.POST["hidden"] + "!<br>" );
 	cgit.printStream( "!" + cgit.POST["text"] + "!<br>" );
-	cgit.printStream( "!" + cgit.ENVIRONMENT[CGI_ENVIRONMENT_QUERYSTRING] + "<br>" );
+	cgit.printStream( "!" + cgit.ENVIRONMENT[CLIENT_ENVIRONMENT_QUERYSTRING] + "<br>" );
 	cgit.printStream( "!" + cgit.COOKIES["test"] + "<br>" );
 	cgit.printStream( "!" + toolsString::ulToString(cgit.FILES["file"].size) + "<br>" );
 	
@@ -75,7 +76,7 @@ int main(int argc, char **argv)
 	
 	try
 	{
-		cgiProcessor cgip(cgit);
+		processor cgip(cgit);
 		cgip.assign("main","index.tpl");
 		cgip.assign("test","test");
 		cgip.assign("show","show");

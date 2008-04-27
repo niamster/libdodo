@@ -81,9 +81,9 @@ OBJECTS:=dbBase.o \
 	systemProcessSharedDataCollectionGuard.o \
 	systemSharedDataCollectionGuard.o \
 	systemLibraryLoader.o \
-	cgi.o \
-	cgiFast.o \
-	cgiFastExchange.o \
+	cgiClient.o \
+	cgiFastClient.o \
+	cgiFastClientExchange.o \
 	cgiPreprocessor.o \
 	cgiProcessor.o
 
