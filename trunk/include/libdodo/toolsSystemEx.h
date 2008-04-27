@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemTools.h
+ *            toolsSystem.h
  *
  *  Sat Nov 19 15:19:57 2005
  *  Copyright  2005  Ni@m
@@ -33,7 +33,7 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum systemToolsExR
+	enum toolsSystemExR
 	{
 		SYSTEMTOOLSEX_WRONGPARAMETER,
 	};
@@ -46,7 +46,7 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum systemToolsFunctionsID
+	enum toolsSystemFunctionsID
 	{
 		SYSTEMTOOLSSYSTEMATOMICMUTEXEX_UNLOCK,
 		SYSTEMTOOLSSYSTEMATOMICMUTEXEX_LOCK,

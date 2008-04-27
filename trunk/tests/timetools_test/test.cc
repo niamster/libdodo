@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemTools.h>
+#include <libdodo/toolsSystem.h>
 #include <libdodo/tools.h>
 #include <libdodo/timeTools.h>
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 		
 		cout << timeTools::now() << endl;
 		
-		systemTools::sleep(3);
+		toolsSystem::sleep(3);
 		
 		cout << timeTools::now() << endl;
 		

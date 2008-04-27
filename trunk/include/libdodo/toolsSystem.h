@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemTools.h
+ *            toolsSystem.h
  *
  *  Sat Nov 19 15:19:57 2005
  *  Copyright  2005  Ni@m
@@ -50,7 +50,7 @@
 
 #endif
 
-#include <libdodo/systemToolsEx.h>
+#include <libdodo/toolsSystemEx.h>
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
 
@@ -76,9 +76,9 @@ namespace dodo
 	};
 
 	/**
-	 * @enum systemToolsLimitEnum defines limit types
+	 * @enum toolsSystemLimitEnum defines limit types
 	 */
-	enum systemToolsLimitEnum
+	enum toolsSystemLimitEnum
 	{
 		SYSTEMTOOLS_CPUTIME,
 		SYSTEMTOOLS_MAXFILESIZE,
@@ -94,9 +94,9 @@ namespace dodo
 	typedef void (*signalHandler)(int, siginfo_t *, void *);
 
 	/**
-	 * @enum systemToolsSignalsEnum defines system signals
+	 * @enum toolsSystemSignalsEnum defines system signals
 	 */
-	enum systemToolsSignalsEnum
+	enum toolsSystemSignalsEnum
 	{
 		SYSTEMTOOLS_SIGNAL_HANGUP = 0,
 		SYSTEMTOOLS_SIGNAL_INTERRUPT = 1 << 1,
@@ -120,9 +120,9 @@ namespace dodo
 	};
 
 	/**
-	 * @enum systemToolsIdTypeEnum defines type of UID
+	 * @enum toolsSystemIdTypeEnum defines type of UID
 	 */
-	enum systemToolsIdTypeEnum
+	enum toolsSystemIdTypeEnum
 	{
 		SYSTEMTOOLS_UID,
 		SYSTEMTOOLS_EUID
@@ -179,9 +179,9 @@ namespace dodo
 #endif
 
 	/**
-	 * @class systemTools provides system operations
+	 * @class toolsSystem provides system operations
 	 */
-	class systemTools
+	class toolsSystem
 	{
 			friend class systemThreadCollection;
 
@@ -242,52 +242,52 @@ namespace dodo
 
 			/**
 			 * @return system limits info
-			 * @param type defines type of limits[see systemToolsLimitEnum]
+			 * @param type defines type of limits[see toolsSystemLimitEnum]
 			 */
 			static __limits getLimit(short type);
 
 			/**
 			 * set system limits
-			 * @param type defines type limits[see systemToolsLimitEnum]
+			 * @param type defines type limits[see toolsSystemLimitEnum]
 			 * @param lim defines system limits
 			 */
 			static void setLimit(short type, const __limits &lim);
 
 			/**
 			 * @return priority of current process
-			 * @param type defines type of UID[see systemToolsIdTypeEnum]
+			 * @param type defines type of UID[see toolsSystemIdTypeEnum]
 			 */
 			static int getPriority(short type);
 
 			/**
 			 * set priority of current process
-			 * @param type defines type of UID[see systemToolsIdTypeEnum]
+			 * @param type defines type of UID[see toolsSystemIdTypeEnum]
 			 * @param prio defines priority
 			 */
 			static void setPriority(short type, int prio);
 
 			/**
 			 * @return UID of the current process
-			 * @param type defines type of UID[see systemToolsIdTypeEnum]
+			 * @param type defines type of UID[see toolsSystemIdTypeEnum]
 			 */
 			static int getUID(short type);
 
 			/**
 			 * set user id of the current process
-			 * @param type defines type of UID[see systemToolsIdTypeEnum]
+			 * @param type defines type of UID[see toolsSystemIdTypeEnum]
 			 * @param uid defines UID
 			 */
 			static void setUID(short type, int uid);
 
 			/**
 			 * get group id of the current process
-			 * @param type defines type of GID[see systemToolsIdTypeEnum]
+			 * @param type defines type of GID[see toolsSystemIdTypeEnum]
 			 */
 			static int getGID(short type);
 
 			/**
 			 * set group id of the current process
-			 * @param type defines type of GID[see systemToolsIdTypeEnum]
+			 * @param type defines type of GID[see toolsSystemIdTypeEnum]
 			 * @param gid defines group id
 			 */
 			static void setGID(short type, int gid);
@@ -378,7 +378,7 @@ namespace dodo
 
 			/**
 			 * set signal handler
-			 * @param signal defines system signal[see systemToolsSignalsEnum]
+			 * @param signal defines system signal[see toolsSystemSignalsEnum]
 			 * @param handler defines handle function
 			 * @param blockSignals defines signals to block during signal handling; -1 to ignore
 			 */
@@ -386,13 +386,13 @@ namespace dodo
 
 			/**
 			 * @return true if handler is set on signal
-			 * @param signal defines system signal[see systemToolsSignalsEnum]
+			 * @param signal defines system signal[see toolsSystemSignalsEnum]
 			 */
 			static bool isSignalHandled(long signal);
 
 			/**
 			 * remove signal handler
-			 * @param signal defines system signal[see systemToolsSignalsEnum]
+			 * @param signal defines system signal[see toolsSystemSignalsEnum]
 			 */
 			static void unsetSignalHandler(long signal);
 
@@ -417,13 +417,13 @@ namespace dodo
 			/**
 			 * send signal to process
 			 * @param pid defines PID of the process
-			 * @param signal defines system signal[see systemToolsSignalsEnum]
+			 * @param signal defines system signal[see toolsSystemSignalsEnum]
 			 */
 			static void sendSignal(int pid, long signal);
 
 			/**
 			 * block or unblock signals
-			 * @param signal defines system signal[see systemToolsSignalsEnum]
+			 * @param signal defines system signal[see toolsSystemSignalsEnum]
 			 * @param block defines block condition
 			 */
 			static void blockSignal(long signal, bool block = true);
@@ -447,14 +447,14 @@ namespace dodo
 			static __groupInfo &fillGroupInfo(__groupInfo &info, group *pw);
 
 			/**
-			 * @return system signal number that refers to systemToolsSignalsEnum
-			 * @param signal defines signal to convert[see systemToolsSignalsEnum]
+			 * @return system signal number that refers to toolsSystemSignalsEnum
+			 * @param signal defines signal to convert[see toolsSystemSignalsEnum]
 			 */
 			static int toRealSignal(long signal);
 
 			/**
-			 * @return signal number that refers to given systemToolsSignalsEnum
-			 * @param signal defines signal to convert[see systemToolsSignalsEnum]
+			 * @return signal number that refers to given toolsSystemSignalsEnum
+			 * @param signal defines signal to convert[see toolsSystemSignalsEnum]
 			 * @note returns position in the internal structures
 			 */
 			static int toSignalNumber(long signal);

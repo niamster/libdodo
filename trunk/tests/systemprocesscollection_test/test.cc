@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/systemProcessCollection.h>
-#include <libdodo/systemTools.h>
+#include <libdodo/toolsSystem.h>
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
 #include <libdodo/systemSharedData.h>
@@ -31,7 +31,7 @@ process(void *data)
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
 		cout.flush();
 		
-		systemTools::sleep(10);
+		toolsSystem::sleep(10);
 		
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;
 		cout.flush();

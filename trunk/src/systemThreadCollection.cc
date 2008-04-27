@@ -605,7 +605,7 @@ systemThreadCollection::blockSignal(int signals,
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
 
-	systemTools::sigMask(&signal_mask, signals);
+	toolsSystem::sigMask(&signal_mask, signals);
 
 #ifdef PTHREAD_EXT
 	

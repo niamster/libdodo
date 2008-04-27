@@ -2,7 +2,7 @@
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 #include <libdodo/systemThreadSharedDataCollectionGuard.h>
-#include <libdodo/systemTools.h>
+#include <libdodo/toolsSystem.h>
 #include <libdodo/timeTools.h>
 #include <libdodo/tools.h>
 
@@ -25,7 +25,7 @@ thread(void *data)
 		cout.flush();
 		
 		int timeout = *(int *)sh.lock();
-		systemTools::sleep(timeout);
+		toolsSystem::sleep(timeout);
 		sh.unlock();
 		
 		cout << endl << (char *)data << ": " << timeTools::now() << endl;

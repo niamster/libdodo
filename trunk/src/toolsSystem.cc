@@ -1,5 +1,5 @@
 /***************************************************************************
- *            systemTools.cc
+ *            toolsSystem.cc
  *
  *  Sat Nov 19 15:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,13 +21,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/systemTools.h>
+#include <libdodo/toolsSystem.h>
 
 using namespace dodo;
 
 #ifdef DL_EXT
 
-void *systemTools::handlesSig[] = { NULL,
+void *toolsSystem::handlesSig[] = { NULL,
 									NULL,
 									NULL,
 									NULL,
@@ -49,7 +49,7 @@ void *systemTools::handlesSig[] = { NULL,
 
 //-------------------------------------------------------------------
 
-bool systemTools::handlesOpenedSig[] = { false,
+bool toolsSystem::handlesOpenedSig[] = { false,
 										 false,
 										 false,
 										 false,
@@ -75,17 +75,17 @@ bool systemTools::handlesOpenedSig[] = { false,
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t systemTools::staticAtomicMutex::mutex;
+pthread_mutex_t toolsSystem::staticAtomicMutex::mutex;
 
 #endif
 
 //-------------------------------------------------------------------
 
-systemTools::staticAtomicMutex systemTools::mutex;
+toolsSystem::staticAtomicMutex toolsSystem::mutex;
 
 //-------------------------------------------------------------------
 
-systemTools::staticAtomicMutex::staticAtomicMutex()
+toolsSystem::staticAtomicMutex::staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 	
@@ -102,7 +102,7 @@ systemTools::staticAtomicMutex::staticAtomicMutex()
 
 //-------------------------------------------------------------------
 
-systemTools::staticAtomicMutex::~staticAtomicMutex()
+toolsSystem::staticAtomicMutex::~staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 	
@@ -114,7 +114,7 @@ systemTools::staticAtomicMutex::~staticAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-systemTools::staticAtomicMutex::lock()
+toolsSystem::staticAtomicMutex::lock()
 {
 #ifdef PTHREAD_EXT
 	
@@ -128,7 +128,7 @@ systemTools::staticAtomicMutex::lock()
 //-------------------------------------------------------------------
 
 void
-systemTools::staticAtomicMutex::unlock()
+toolsSystem::staticAtomicMutex::unlock()
 {
 #ifdef PTHREAD_EXT
 	
@@ -141,14 +141,14 @@ systemTools::staticAtomicMutex::unlock()
 
 //-------------------------------------------------------------------
 
-systemTools::systemRaceHazardGuard::systemRaceHazardGuard()
+toolsSystem::systemRaceHazardGuard::systemRaceHazardGuard()
 {
 	mutex.lock();
 }
 
 //-------------------------------------------------------------------
 
-systemTools::systemRaceHazardGuard::~systemRaceHazardGuard()
+toolsSystem::systemRaceHazardGuard::~systemRaceHazardGuard()
 {
 	mutex.unlock();
 }
@@ -156,7 +156,7 @@ systemTools::systemRaceHazardGuard::~systemRaceHazardGuard()
 //-------------------------------------------------------------------
 
 dodoString
-systemTools::getWorkingDir()
+toolsSystem::getWorkingDir()
 {
 	char wd[MAXPATHLEN];
 
@@ -169,7 +169,7 @@ systemTools::getWorkingDir()
 //-------------------------------------------------------------------
 
 void
-systemTools::setWorkingDir(const dodoString &path)
+toolsSystem::setWorkingDir(const dodoString &path)
 {
 	if (chdir(path.c_str()) == -1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -179,7 +179,7 @@ systemTools::setWorkingDir(const dodoString &path)
 
 
 __usage
-systemTools::getUsageInfo()
+toolsSystem::getUsageInfo()
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
@@ -195,7 +195,7 @@ systemTools::getUsageInfo()
 //-------------------------------------------------------------------
 
 void
-systemTools::changeRoot(const dodoString &path)
+toolsSystem::changeRoot(const dodoString &path)
 {
 	setWorkingDir(path);
 
@@ -206,7 +206,7 @@ systemTools::changeRoot(const dodoString &path)
 //-------------------------------------------------------------------
 
 __limits
-systemTools::getLimit(short type)
+toolsSystem::getLimit(short type)
 {
 	rlimit limit;
 
@@ -273,7 +273,7 @@ systemTools::getLimit(short type)
 //-------------------------------------------------------------------
 
 void
-systemTools::setLimit(short type,
+toolsSystem::setLimit(short type,
 					  const __limits &lim)
 {
 	rlimit limit;
@@ -337,7 +337,7 @@ systemTools::setLimit(short type,
 //-------------------------------------------------------------------
 
 int
-systemTools::getPriority(short type)
+toolsSystem::getPriority(short type)
 {
 	int prio = getpriority(PRIO_PROCESS, getUID(type));
 	if (prio == -1)
@@ -349,7 +349,7 @@ systemTools::getPriority(short type)
 //-------------------------------------------------------------------
 
 void
-systemTools::setPriority(short type,
+toolsSystem::setPriority(short type,
 						 int prio)
 {
 	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
@@ -359,7 +359,7 @@ systemTools::setPriority(short type,
 //-------------------------------------------------------------------
 
 int
-systemTools::getUID(short type)
+toolsSystem::getUID(short type)
 {
 	switch (type)
 	{
@@ -380,7 +380,7 @@ systemTools::getUID(short type)
 //-------------------------------------------------------------------
 
 void
-systemTools::setUID(short type,
+toolsSystem::setUID(short type,
 					int uid)
 {
 	int res(0);
@@ -411,7 +411,7 @@ systemTools::setUID(short type,
 //-------------------------------------------------------------------
 
 int
-systemTools::getGID(short type)
+toolsSystem::getGID(short type)
 {
 	switch (type)
 	{
@@ -432,7 +432,7 @@ systemTools::getGID(short type)
 //-------------------------------------------------------------------
 
 void
-systemTools::setGID(short type,
+toolsSystem::setGID(short type,
 					int uid)
 {
 	int res(0);
@@ -463,7 +463,7 @@ systemTools::setGID(short type,
 //-------------------------------------------------------------------
 
 __userInfo
-systemTools::getUserInfo(int uid)
+toolsSystem::getUserInfo(int uid)
 {
 	passwd *in = getpwuid(uid);
 	if (in == NULL)
@@ -477,7 +477,7 @@ systemTools::getUserInfo(int uid)
 //-------------------------------------------------------------------
 
 __userInfo
-systemTools::getUserInfo(const dodoString &uid)
+toolsSystem::getUserInfo(const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
@@ -491,7 +491,7 @@ systemTools::getUserInfo(const dodoString &uid)
 //-------------------------------------------------------------------
 
 dodoArray<__userInfo>
-systemTools::getUsers()
+toolsSystem::getUsers()
 {
 	dodoArray<__userInfo> users;
 
@@ -520,7 +520,7 @@ systemTools::getUsers()
 //-------------------------------------------------------------------
 
 __userInfo &
-systemTools::fillUserInfo(__userInfo &info,
+toolsSystem::fillUserInfo(__userInfo &info,
 						  passwd     *in)
 {
 	info.gid = in->pw_gid;
@@ -537,7 +537,7 @@ systemTools::fillUserInfo(__userInfo &info,
 //-------------------------------------------------------------------
 
 __groupInfo &
-systemTools::fillGroupInfo(__groupInfo &info,
+toolsSystem::fillGroupInfo(__groupInfo &info,
 						   group       *pw)
 {
 	info.gid = pw->gr_gid;
@@ -556,7 +556,7 @@ systemTools::fillGroupInfo(__groupInfo &info,
 //-------------------------------------------------------------------
 
 __groupInfo
-systemTools::getGroupInfo(int uid)
+toolsSystem::getGroupInfo(int uid)
 {
 	group *in = getgrgid(uid);
 	if (in == NULL)
@@ -570,7 +570,7 @@ systemTools::getGroupInfo(int uid)
 //-------------------------------------------------------------------
 
 __groupInfo
-systemTools::getGroupInfo(const dodoString &uid)
+toolsSystem::getGroupInfo(const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
@@ -584,7 +584,7 @@ systemTools::getGroupInfo(const dodoString &uid)
 //-------------------------------------------------------------------
 
 dodoArray<__groupInfo>
-systemTools::getGroups()
+toolsSystem::getGroups()
 {
 	dodoArray<__groupInfo> groups;
 
@@ -614,7 +614,7 @@ systemTools::getGroups()
 //-------------------------------------------------------------------
 
 void
-systemTools::die(const dodoString &message,
+toolsSystem::die(const dodoString &message,
 				 int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
@@ -626,7 +626,7 @@ systemTools::die(const dodoString &message,
 //-------------------------------------------------------------------
 
 void
-systemTools::microSleep(unsigned long period)
+toolsSystem::microSleep(unsigned long period)
 {
 	if (period < 1000000)
 		::usleep(period);
@@ -637,7 +637,7 @@ systemTools::microSleep(unsigned long period)
 //-------------------------------------------------------------------
 
 void
-systemTools::sleep(long period)
+toolsSystem::sleep(long period)
 {
 	::sleep(period);
 }
@@ -645,7 +645,7 @@ systemTools::sleep(long period)
 //-------------------------------------------------------------------
 
 void
-systemTools::atExit(void (*func)())
+toolsSystem::atExit(void (*func)())
 {
 	if (atexit(func) != 0)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_ATEXIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -654,7 +654,7 @@ systemTools::atExit(void (*func)())
 //-------------------------------------------------------------------
 
 int
-systemTools::getPID()
+toolsSystem::getPID()
 {
 	return getpid();
 }
@@ -662,7 +662,7 @@ systemTools::getPID()
 //-------------------------------------------------------------------
 
 int
-systemTools::getParentPID()
+toolsSystem::getParentPID()
 {
 	return getppid();
 }
@@ -670,7 +670,7 @@ systemTools::getParentPID()
 //-------------------------------------------------------------------
 
 int
-systemTools::getGroupPID()
+toolsSystem::getGroupPID()
 {
 	return getpgrp();
 }
@@ -678,7 +678,7 @@ systemTools::getGroupPID()
 //-------------------------------------------------------------------
 
 int
-systemTools::getGroupPID(int pid)
+toolsSystem::getGroupPID(int pid)
 {
 	int pgid = getpgid(pid);
 	if (pgid == -1)
@@ -690,7 +690,7 @@ systemTools::getGroupPID(int pid)
 //-------------------------------------------------------------------
 
 void
-systemTools::setGroupPID(int gpid)
+toolsSystem::setGroupPID(int gpid)
 {
 	if (setpgid(0, gpid) == 1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -699,7 +699,7 @@ systemTools::setGroupPID(int gpid)
 //-------------------------------------------------------------------
 
 void
-systemTools::setGroupPID(int pid,
+toolsSystem::setGroupPID(int pid,
 						 int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
@@ -709,7 +709,7 @@ systemTools::setGroupPID(int pid,
 //-------------------------------------------------------------------
 
 void
-systemTools::sigMask(sigset_t *set,
+toolsSystem::sigMask(sigset_t *set,
 					 long blockSignals)
 {
 	if (blockSignals != -1)
@@ -776,7 +776,7 @@ systemTools::sigMask(sigset_t *set,
 //-------------------------------------------------------------------
 
 void
-systemTools::setSignalHandler(long signal,
+toolsSystem::setSignalHandler(long signal,
 							  signalHandler handler,
 							  int blockSignals)
 {
@@ -812,14 +812,14 @@ systemTools::setSignalHandler(long signal,
 
 	sigMask(&act.sa_mask, blockSignals);
 
-	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == -1)
+	if (sigaction(toolsSystem::toRealSignal(signal), &act, NULL) == -1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemTools::setMicroTimer(unsigned long timeout,
+toolsSystem::setMicroTimer(unsigned long timeout,
 						   signalHandler handler,
 						   int blockSignals)
 {
@@ -879,7 +879,7 @@ systemTools::setMicroTimer(unsigned long timeout,
 //-------------------------------------------------------------------
 
 void
-systemTools::setTimer(long timeout,
+toolsSystem::setTimer(long timeout,
 					  signalHandler handler,
 					  int blockSignals)
 {
@@ -931,10 +931,10 @@ systemTools::setTimer(long timeout,
 //-------------------------------------------------------------------
 
 bool
-systemTools::isSignalHandled(long signal)
+toolsSystem::isSignalHandled(long signal)
 {
 	struct sigaction act;
-	if (sigaction(systemTools::toRealSignal(signal), NULL, &act) == 1)
+	if (sigaction(toolsSystem::toRealSignal(signal), NULL, &act) == 1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (act.sa_sigaction != NULL || act.sa_handler != NULL)
@@ -946,17 +946,17 @@ systemTools::isSignalHandled(long signal)
 //-------------------------------------------------------------------
 
 void
-systemTools::sendSignal(int pid,
+toolsSystem::sendSignal(int pid,
 						long signal)
 {
-	if (kill(pid, systemTools::toRealSignal(signal)) == -1)
+	if (kill(pid, toolsSystem::toRealSignal(signal)) == -1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemTools::unsetSignalHandler(long signal)
+toolsSystem::unsetSignalHandler(long signal)
 {
 	systemRaceHazardGuard tg;
 	
@@ -984,7 +984,7 @@ systemTools::unsetSignalHandler(long signal)
 	struct sigaction act;
 	act.sa_sigaction = NULL;
 
-	if (sigaction(systemTools::toRealSignal(signal), &act, NULL) == 1)
+	if (sigaction(toolsSystem::toRealSignal(signal), &act, NULL) == 1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_UNSETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
@@ -993,7 +993,7 @@ systemTools::unsetSignalHandler(long signal)
 #ifdef DL_EXT
 
 __sigMod
-systemTools::getModuleInfo(const dodoString &module,
+toolsSystem::getModuleInfo(const dodoString &module,
 						   void             *toInit)
 {
 #ifdef DL_FAST
@@ -1021,7 +1021,7 @@ systemTools::getModuleInfo(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-systemTools::setSignalHandler(const dodoString &path,
+toolsSystem::setSignalHandler(const dodoString &path,
 							  void             *toInit)
 {
 	systemRaceHazardGuard tg;
@@ -1072,7 +1072,7 @@ systemTools::setSignalHandler(const dodoString &path,
 
 	sigMask(&act.sa_mask, mod.blockSignals);
 
-	if (sigaction(systemTools::toRealSignal(mod.signal), &act, NULL) == 1)
+	if (sigaction(toolsSystem::toRealSignal(mod.signal), &act, NULL) == 1)
 		throw baseEx(ERRMODULE_SYSTEMTOOLS, SYSTEMTOOLSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	handlesOpenedSig[handleSignal] = true;
@@ -1083,7 +1083,7 @@ systemTools::setSignalHandler(const dodoString &path,
 //-------------------------------------------------------------------
 
 int
-systemTools::toSignalNumber(long signal)
+toolsSystem::toSignalNumber(long signal)
 {
 	switch (signal)
 	{
@@ -1172,7 +1172,7 @@ systemTools::toSignalNumber(long signal)
 //-------------------------------------------------------------------
 
 int
-systemTools::toRealSignal(long signal)
+toolsSystem::toRealSignal(long signal)
 {
 	switch (signal)
 	{
@@ -1261,13 +1261,13 @@ systemTools::toRealSignal(long signal)
 //-------------------------------------------------------------------
 
 void
-systemTools::blockSignal(long signals,
+toolsSystem::blockSignal(long signals,
 						 bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
 
-	systemTools::sigMask(&signal_mask, signals);
+	toolsSystem::sigMask(&signal_mask, signals);
 
 	if (block)
 		sigprocmask(SIG_BLOCK, &signal_mask, NULL);
@@ -1278,7 +1278,7 @@ systemTools::blockSignal(long signals,
 //-------------------------------------------------------------------
 
 void
-systemTools::daemonize()
+toolsSystem::daemonize()
 {
 	pid_t pid = fork();
 

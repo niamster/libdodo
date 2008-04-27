@@ -28,6 +28,7 @@ OBJECTS:=dbBase.o \
 		dbSqlite.o \
 		tools.o \
 		toolsFilesystem.o \
+		toolsSystem.o \
 		json.o \
 		jsonNode.o \
 		types.o \
@@ -64,7 +65,6 @@ OBJECTS:=dbBase.o \
 		rpcXmlMethod.o \
 		rpcXmlResponse.o \
 		image.o \
-		systemTools.o \
 		systemRaceHazardGuard.o \
 		systemAtomicLock.o \
 		systemAtomicMutex.o \

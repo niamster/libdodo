@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemTools.h>
+#include <libdodo/toolsSystem.h>
 #include <libdodo/tools.h>
 
 #include <iostream>
@@ -29,12 +29,12 @@ exit(int, siginfo_t *, void *)
 int main(int argc, char **argv)
 {
 	
-	cout << systemTools::getPID() << endl;
+	cout << toolsSystem::getPID() << endl;
 	
-	systemTools::setSignalHandler(SYSTEMTOOLS_SIGNAL_HANGUP,exit);
-	systemTools::setSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT,signaler);
+	toolsSystem::setSignalHandler(SYSTEMTOOLS_SIGNAL_HANGUP,exit);
+	toolsSystem::setSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT,signaler);
 	
-	if (systemTools::isSignalHandled(SYSTEMTOOLS_SIGNAL_HANGUP))
+	if (toolsSystem::isSignalHandled(SYSTEMTOOLS_SIGNAL_HANGUP))
 		cout << "SYSTEMTOOLS_SIGNAL_HANGUP IS SET ... !\n";
 	else
 		cout << "SYSTEMTOOLS_SIGNAL_HANGUP IS NOT SET ... !\n";
@@ -48,17 +48,17 @@ int main(int argc, char **argv)
 			cout << "\nSYSTEMTOOLS_SIGNAL_HANGUP =)\n";
 			cout.flush();
 			
-			systemTools::unsetSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT);
+			toolsSystem::unsetSignalHandler(SYSTEMTOOLS_SIGNAL_INTERRUPT);
 		}
 		
 	}
 	
-	systemTools::setWorkingDir("/");
+	toolsSystem::setWorkingDir("/");
 	
-	cout << systemTools::getWorkingDir() << endl;
+	cout << toolsSystem::getWorkingDir() << endl;
 	
 	{
-		dodoArray<__userInfo> info = systemTools::getUsers();
+		dodoArray<__userInfo> info = toolsSystem::getUsers();
 		
 		for (int i(0);i<info.size();i++)
 			cout << info[i].name << endl;
@@ -67,17 +67,17 @@ int main(int argc, char **argv)
 	cout << endl << endl;
 	
 	{	
-		dodoArray<__groupInfo> info = systemTools::getGroups();
+		dodoArray<__groupInfo> info = toolsSystem::getGroups();
 		
 		for (int i(0);i<info.size();i++)
 			cout << info[i].name << endl;	
 	}
 		
-	cout << systemTools::getWorkingDir() << endl;	
+	cout << toolsSystem::getWorkingDir() << endl;	
 
-	systemTools::die(stringTools::rTrim("    rTrim    "));
+	toolsSystem::die(stringTools::rTrim("    rTrim    "));
 
-	cout << systemTools::getWorkingDir();
+	cout << toolsSystem::getWorkingDir();
 		
 	return 0;
 }

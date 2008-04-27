@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemTools.h>
+#include <libdodo/toolsSystem.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/ioNetworkTools.h>
 #include <libdodo/ioNonBlockedAccess.h>
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 						cout << data << endl;
 
 						if (stringTools::trim(data, trimSym, 2) == "exit")
-							systemTools::die(data);
+							toolsSystem::die(data);
 					}
 				}
 			}
