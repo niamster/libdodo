@@ -38,6 +38,14 @@ int main(int argc, char **argv)
 
 		return 0;
 	}
+	/**
+ 	 * A workaround for apache web server to get auth headers:
+ 	 *
+	 * RewriteEngine on 
+	 * RewriteBase /
+	 * RewriteCond %{HTTP:Authorization}  ^(.*)
+	 * RewriteRule ^(.*)$ $1 [e=HTTP_AUTHORIZATION:%1
+	 */
 	else if (cgit.GET["a"] == "basic_auth")
 	{
 		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
@@ -47,7 +55,6 @@ int main(int argc, char **argv)
 			return 0;
 		}
 	}
-
 	else if (cgit.GET["a"] == "digest_auth")
 	{
 		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
@@ -63,7 +70,6 @@ int main(int argc, char **argv)
 	cgit.printHeaders();
 	
 	cgit.printStream( "User: " + user + "<br>" );
-	 
 	
 	cgit.printStream( "!" + cgit.GET["a"] + "!<br>" );
 	cgit.printStream( "!" + cgit.POST["hidden"] + "!<br>" );
