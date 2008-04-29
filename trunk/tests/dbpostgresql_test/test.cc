@@ -4,26 +4,28 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace db;
 
 using namespace std;
 
 void
-hook(void *object, short int type, void *data)
+hook(void *odata, short int type, void *udata)
 {
-	cout << "executed" << endl;
+	__xexexDbAccumulatorCollectedData *db = (__xexexDbAccumulatorCollectedData *)odata;
+	cout << ((sqlConstructor *)db->executor)->queryCollect() << endl;
 }
 
 int main(int argc, char **argv)
 {
 #ifdef POSTGRESQL_EXT
 	
-		dbPostgresql pp;	
+		postgresql pp;
 		
 		try
 		{
 			pp.addPreExec(&hook,NULL);
 			
-			__dbInfo info;
+			__connectorInfo info;
 			
 			info.db = "test";
 			info.host = "localhost";
@@ -32,25 +34,31 @@ int main(int argc, char **argv)
 			
 			pp.setDbInfo(info);
 			pp.connect();	
+
+			try
+			{
+				pp.deleteTable("test");
+				pp.exec();
+			}
+			catch (...)
+			{
+			}
 	
-			pp.deleteTable("test");
-			pp.exec();
-	
-			__fieldInfo fi;
+			__connectorField fi;
 			fi.name = "date";
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;
 			
-			__tableInfo ti;
-			ti.name = "leg";
+			__connectorTable ti;
+			ti.name = "test";
 			ti.fields.push_back(fi);
 			
 			fi.name = "operation";
-			fi.type = DBBASE_FIELDTYPE_TEXT;		
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;		
 			ti.fields.push_back(fi);
 			
 			fi.name = "id";
-			fi.type = DBBASE_FIELDTYPE_INTEGER;
-			fi.flag = DBBASE_FIELDFLAG_NULL;
+			fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+			fi.flag = CONNECTOR_FIELDFLAG_NULL;
 			ti.fields.push_back(fi);		
 			
 			pp.createTable(ti);
@@ -86,7 +94,7 @@ int main(int argc, char **argv)
 			
 			cout << pp.fetch().rows.size() << endl;
 			
-			__dbStorage store = pp.fetch();
+			__connectorStorage store = pp.fetch();
 			
 			dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 			

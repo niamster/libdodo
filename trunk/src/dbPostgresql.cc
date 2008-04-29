@@ -25,59 +25,59 @@
 
 #ifdef POSTGRESQL_EXT
 
-using namespace dodo;
+using namespace dodo::db;
 
-dbPostgresql::dbPostgresql() : empty(true),
-								hint(DBPOSTGRESQL_HINT_NONE)
+postgresql::postgresql() : empty(true),
+								hint(POSTGRESQL_HINT_NONE)
 {
 }
 
 //-------------------------------------------------------------------
 
-dbPostgresql::dbPostgresql(dbPostgresql &a_mypp)
+postgresql::postgresql(postgresql &a_mypp)
 {
 }
 
 //-------------------------------------------------------------------
 
-dbPostgresql::~dbPostgresql()
+postgresql::~postgresql()
 {
 	if (connected)
 	{
 		if (!empty)
 			PQclear(pgResult);
 
-		PQfinish(conn);
+		PQfinish(pgHandle);
 	}
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-dbPostgresql::sqlDataType(int type)
+postgresql::sqlDataType(int type)
 {
 	switch (type)
 	{
-		case DBBASE_FIELDTYPE_TINYBLOB:
-		case DBBASE_FIELDTYPE_BLOB:
-		case DBBASE_FIELDTYPE_MEDIUMBLOB:
-		case DBBASE_FIELDTYPE_LONGBLOB:
+		case CONNECTOR_FIELDTYPE_TINYBLOB:
+		case CONNECTOR_FIELDTYPE_BLOB:
+		case CONNECTOR_FIELDTYPE_MEDIUMBLOB:
+		case CONNECTOR_FIELDTYPE_LONGBLOB:
 
 			return dodoString("BYTEA");
 
 		default:
 
-			return dbSqlBase::sqlDataType(type);
+			return sqlConstructor::sqlDataType(type);
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::connect()
+postgresql::connect()
 {
 #ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPERATION_CONNECT;
+	operType = POSTGRESQL_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
@@ -89,12 +89,12 @@ dbPostgresql::connect()
 			empty = true;
 		}
 
-		PQfinish(conn);
+		PQfinish(pgHandle);
 
 		connected = false;
 	}
 
-	conn = PQsetdbLogin(
+	pgHandle = PQsetdbLogin(
 		dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
 		toolsString::iToString(dbInfo.port).c_str(),
 		NULL,
@@ -103,10 +103,10 @@ dbPostgresql::connect()
 		dbInfo.user.size() == 0 ? NULL : dbInfo.user.c_str(),
 		dbInfo.password.size() == 0 ? NULL : dbInfo.password.c_str());
 
-	int status = PQstatus(conn);
+	int status = PQstatus(pgHandle);
 
 	if (status != CONNECTION_OK)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX_CONNECT, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_CONNECT, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 
 #ifndef DBPOSTGRESQL_WO_XEXEC
 	performXExec(postExec);
@@ -118,12 +118,12 @@ dbPostgresql::connect()
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::disconnect()
+postgresql::disconnect()
 {
 	if (connected)
 	{
 #ifndef DBPOSTGRESQL_WO_XEXEC
-		operType = DBPOSTGRESQL_OPERATION_DISCONNECT;
+		operType = POSTGRESQL_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
@@ -133,7 +133,7 @@ dbPostgresql::disconnect()
 			empty = true;
 		}
 
-		PQfinish(conn);
+		PQfinish(pgHandle);
 
 #ifndef DBPOSTGRESQL_WO_XEXEC
 		performXExec(postExec);
@@ -146,7 +146,7 @@ dbPostgresql::disconnect()
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::setBLOBValues(const dodoStringArray &values)
+postgresql::setBLOBValues(const dodoStringArray &values)
 {
 	blobs = values;
 }
@@ -154,7 +154,7 @@ dbPostgresql::setBLOBValues(const dodoStringArray &values)
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::_exec(const dodoString &query,
+postgresql::_exec(const dodoString &query,
 					bool result)
 {
 	bool blobHint;
@@ -165,7 +165,7 @@ dbPostgresql::_exec(const dodoString &query,
 
 		if (autoFraming)
 		{
-			if (qType == DBBASE_REQUEST_INSERT || qType == DBBASE_REQUEST_UPDATE)
+			if (qType == ACCUMULATOR_REQUEST_INSERT || qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 
@@ -179,9 +179,9 @@ dbPostgresql::_exec(const dodoString &query,
 						empty = true;
 					}
 
-					pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
+					pgResult = PQexecParams(pgHandle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 					if (pgResult == NULL)
-						throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
+						throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__, request);
 
 					status = PQresultStatus(pgResult);
 
@@ -192,7 +192,7 @@ dbPostgresql::_exec(const dodoString &query,
 						case PGRES_NONFATAL_ERROR:
 						case PGRES_FATAL_ERROR:
 
-							throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+							throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 					}
 
 					empty = false;
@@ -237,14 +237,14 @@ dbPostgresql::_exec(const dodoString &query,
 		empty = true;
 	}
 
-	if (isSetFlag(hint, DBPOSTGRESQL_HINT_BLOB))
+	if (isSetFlag(hint, POSTGRESQL_HINT_BLOB))
 	{
-		removeFlag(hint, DBPOSTGRESQL_HINT_BLOB);
+		removeFlag(hint, POSTGRESQL_HINT_BLOB);
 		
 		switch (qType)
 		{
-			case DBBASE_REQUEST_UPDATE:
-			case DBBASE_REQUEST_INSERT:
+			case ACCUMULATOR_REQUEST_UPDATE:
+			case ACCUMULATOR_REQUEST_INSERT:
 
 			{
 				long size = blobs.size();
@@ -261,34 +261,34 @@ dbPostgresql::_exec(const dodoString &query,
 					formats[o] = 1;
 				}
 
-				pgResult = PQexecParams(conn, request.c_str(), size, NULL, values, lengths, formats, 0);
+				pgResult = PQexecParams(pgHandle, request.c_str(), size, NULL, values, lengths, formats, 0);
 
 				delete [] values;
 				delete [] lengths;
 				delete [] formats;
 
 				if (pgResult == NULL)
-					throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 			}
 
 				break;
 			
-			case DBBASE_REQUEST_SELECT:
+			case ACCUMULATOR_REQUEST_SELECT:
 				
-				pgResult = PQexecParams(conn, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
+				pgResult = PQexecParams(pgHandle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 				
 				break;
 				
 			default:
 				
-				throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_LIBDODO, DBPOSTGRESQLEX_WRONGHINTUSAGE, DBPOSTGRESQLEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_LIBDODO, POSTGRESQLEX_WRONGHINTUSAGE, POSTGRESQLEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
 		}
 	}
 	else
 	{
-		pgResult = PQexec(conn, request.c_str());
+		pgResult = PQexec(pgHandle, request.c_str());
 		if (pgResult == NULL)
-			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(conn), __LINE__, __FILE__, request);
+			throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__, request);
 	}
 
 	status = PQresultStatus(pgResult);
@@ -300,7 +300,7 @@ dbPostgresql::_exec(const dodoString &query,
 		case PGRES_NONFATAL_ERROR:
 		case PGRES_FATAL_ERROR:
 
-			throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX__EXEC, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -308,12 +308,12 @@ dbPostgresql::_exec(const dodoString &query,
 
 //-------------------------------------------------------------------
 
-dodoArray<dodoStringArray>
-dbPostgresql::fetchRow() const
+dodoArray<dodo::dodoStringArray>
+postgresql::fetchRow() const
 {
 
 #ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPERATION_FETCHROW;
+	operType = POSTGRESQL_OPERATION_FETCHROW;
 	performXExec(preExec);
 #endif
 
@@ -369,11 +369,11 @@ dbPostgresql::fetchRow() const
 
 //-------------------------------------------------------------------
 
-dodoStringArray
-dbPostgresql::fetchField() const
+dodo::dodoStringArray
+postgresql::fetchField() const
 {
 #ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPERATION_FETCHFIELD;
+	operType = POSTGRESQL_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 #endif
 
@@ -400,16 +400,16 @@ dbPostgresql::fetchField() const
 
 //-------------------------------------------------------------------
 
-__dbStorage
-dbPostgresql::fetch() const
+__connectorStorage
+postgresql::fetch() const
 {
-	return __dbStorage(fetchRow(), fetchField());
+	return __connectorStorage(fetchRow(), fetchField());
 }
 
 //-------------------------------------------------------------------
 
 unsigned int
-dbPostgresql::rowsCount() const
+postgresql::rowsCount() const
 {
 	if (empty || !show)
 		return 0;
@@ -420,7 +420,7 @@ dbPostgresql::rowsCount() const
 //-------------------------------------------------------------------
 
 unsigned int
-dbPostgresql::fieldsCount() const
+postgresql::fieldsCount() const
 {
 	if (empty || !show)
 		return 0;
@@ -431,7 +431,7 @@ dbPostgresql::fieldsCount() const
 //-------------------------------------------------------------------
 
 unsigned int
-dbPostgresql::affectedRowsCount() const
+postgresql::affectedRowsCount() const
 {
 	if (empty || show)
 		return 0;
@@ -442,11 +442,11 @@ dbPostgresql::affectedRowsCount() const
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::exec(const dodoString &query,
+postgresql::exec(const dodoString &query,
 				   bool result)
 {
 #ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = DBPOSTGRESQL_OPERATION_EXEC;
+	operType = POSTGRESQL_OPERATION_EXEC;
 	performXExec(preExec);
 #endif
 
@@ -464,7 +464,7 @@ dbPostgresql::exec(const dodoString &query,
 #ifndef DBPOSTGRESQL_WO_XEXEC
 
 int
-dbPostgresql::addPostExec(inExec func,
+postgresql::addPostExec(inExec func,
 						  void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
@@ -473,7 +473,7 @@ dbPostgresql::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-dbPostgresql::addPreExec(inExec func,
+postgresql::addPreExec(inExec func,
 						 void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
@@ -484,7 +484,7 @@ dbPostgresql::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-dbPostgresql::addPostExec(const dodoString &module,
+postgresql::addPostExec(const dodoString &module,
 						  void             *data,
 						  void             *toInit)
 {
@@ -494,7 +494,7 @@ dbPostgresql::addPostExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-dbPostgresql::addPreExec(const dodoString &module,
+postgresql::addPreExec(const dodoString &module,
 						 void             *data,
 						 void             *toInit)
 {
@@ -503,8 +503,8 @@ dbPostgresql::addPreExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-dbPostgresql::addExec(const dodoString &module,
+dodo::__xexecCounts
+postgresql::addExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
@@ -517,8 +517,8 @@ dbPostgresql::addExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-dodoStringMapArray
-dbPostgresql::fetchAssoc() const
+dodo::dodoStringMapArray
+postgresql::fetchAssoc() const
 {
 	if (empty || !show)
 		return __dodostringmaparray__;
@@ -565,24 +565,24 @@ dbPostgresql::fetchAssoc() const
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::setCharset(const dodoString &charset)
+postgresql::setCharset(const dodoString &charset)
 {
-	int status = PQsetClientEncoding(conn, charset.c_str());
+	int status = PQsetClientEncoding(pgHandle, charset.c_str());
 	if (status == -1)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, DBPOSTGRESQLEX_SETCHARSET, ERR_MYSQL, status, PQerrorMessage(conn), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_SETCHARSET, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-dbPostgresql::getCharset() const
+postgresql::getCharset() const
 {
-	return PQclientEncoding(conn);
+	return PQclientEncoding(pgHandle);
 }
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::renameDbCollect()
+postgresql::renameDbCollect()
 {
 	request = "alter database " + pre_order + " rename to " + pre_having;
 }
@@ -590,7 +590,7 @@ dbPostgresql::renameDbCollect()
 //-------------------------------------------------------------------
 
 void
-dbPostgresql::renameFieldCollect()
+postgresql::renameFieldCollect()
 {
 	request = "alter table " + pre_table + " rename column " + pre_tableTo + " to " + pre_having;
 }

@@ -30,27 +30,30 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum dbPostgresqlExR
+	namespace db
 	{
-		DBPOSTGRESQLEX_WRONGHINTUSAGE,
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define DBPOSTGRESQLEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum dbPostgresqlFunctionsID
-	{
-		DBPOSTGRESQLEX_CONNECT,
-		DBPOSTGRESQLEX__EXEC,
-		DBPOSTGRESQLEX_SETCHARSET,
+		/**
+		 * libdodo defined errors
+		 */
+		enum postgresqlExR
+		{
+			POSTGRESQLEX_WRONGHINTUSAGE,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define POSTGRESQLEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum postgresqlFunctionsID
+		{
+			POSTGRESQLEX_CONNECT,
+			POSTGRESQLEX__EXEC,
+			POSTGRESQLEX_SETCHARSET,
+		};
 	};
 };
 

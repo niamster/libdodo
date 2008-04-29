@@ -1,5 +1,5 @@
 /***************************************************************************
- *            db.cc
+ *            dbConnector.cc
  *
  *  Sun Jan  15 19:45:19 2005
  *  Copyright  2005  Ni@m
@@ -21,11 +21,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/db.h>
+#include <libdodo/dbConnector.h>
 
-using namespace dodo;
+using namespace dodo::db;
 
-__dbInfo::__dbInfo(const dodoString &a_db,
+__connectorInfo::__connectorInfo(const dodoString &a_db,
 				   const dodoString &a_host,
 				   const dodoString &a_user,
 				   const dodoString &a_password,
@@ -41,34 +41,34 @@ __dbInfo::__dbInfo(const dodoString &a_db,
 
 //-------------------------------------------------------------------
 
-__dbInfo::__dbInfo()
+__connectorInfo::__connectorInfo()
 {
 }
 
 //-------------------------------------------------------------------
 
-__dbStorage::__dbStorage(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
+__connectorStorage::__connectorStorage(dodoArray<dodoStringArray> a_rows, dodoStringArray a_fields) : rows(a_rows),
 																						fields(a_fields)
 {
 }
 
 //-------------------------------------------------------------------
 
-__dbStorage::__dbStorage()
+__connectorStorage::__connectorStorage()
 {
 	
 }
 
 //-------------------------------------------------------------------
 	
-db::db() : connected(false),
+connector::connector() : connected(false),
 		   reconnect(true)
 {
 }
 
 //-------------------------------------------------------------------
 
-db::~db()
+connector::~connector()
 {
 }
 

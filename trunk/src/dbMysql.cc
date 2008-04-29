@@ -25,7 +25,7 @@
 
 #ifdef MYSQL_EXT
 
-using namespace dodo;
+using namespace dodo::db;
 
 __mysqlSSLOptions::__mysqlSSLOptions()
 {
@@ -47,7 +47,7 @@ __mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key,
 
 //-------------------------------------------------------------------
 
-dbMysql::dbMysql() : empty(true),
+mysql::mysql() : empty(true),
 					 type(CLIENT_MULTI_STATEMENTS)
 {
 	addSQL();
@@ -55,27 +55,27 @@ dbMysql::dbMysql() : empty(true),
 
 //-------------------------------------------------------------------
 
-dbMysql::dbMysql(dbMysql &a_mypp)
+mysql::mysql(mysql &a_mypp)
 {
 }
 
 //-------------------------------------------------------------------
 
-dbMysql::~dbMysql()
+mysql::~mysql()
 {
 	if (connected)
 	{
 		if (!empty)
-			mysql_free_result(mysqlRes);
+			mysql_free_result(mysqlResult);
 
-		mysql_close(mysql);
+		mysql_close(mysqlHandle);
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-dbMysql::addSQL()
+mysql::addSQL()
 {
 	sqlDbDepAddInsArr.push_back(" delayed ");
 	sqlDbDepAddInsArr.push_back(" low_priority ");
@@ -94,11 +94,11 @@ dbMysql::addSQL()
 //-------------------------------------------------------------------
 
 void
-dbMysql::setMyAddInsSt(short statement)
+mysql::setMyAddInsSt(short statement)
 {
-	removeFlag(qDbDepInsShift, 1 << DBMYSQL_ADDREQUEST_INSERT_DELAYED);
-	removeFlag(qDbDepInsShift, 1 << DBMYSQL_ADDREQUEST_INSERT_LOW_PRIORITY);
-	removeFlag(qDbDepInsShift, 1 << DBMYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY);
+	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_DELAYED);
+	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_LOW_PRIORITY);
+	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY);
 
 	addFlag(qDbDepInsShift, 1 << statement);
 }
@@ -106,7 +106,7 @@ dbMysql::setMyAddInsSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::setMyAddUpSt(short statement)
+mysql::setMyAddUpSt(short statement)
 {
 	addFlag(qDbDepUpShift, 1 << statement);
 }
@@ -114,7 +114,7 @@ dbMysql::setMyAddUpSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::setMyAddSelSt(short statement)
+mysql::setMyAddSelSt(short statement)
 {
 	addFlag(qDbDepSelShift, 1 << statement);
 }
@@ -122,7 +122,7 @@ dbMysql::setMyAddSelSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::setMyAddDelSt(short statement)
+mysql::setMyAddDelSt(short statement)
 {
 	addFlag(qDbDepDelShift, 1 << statement);
 }
@@ -130,7 +130,7 @@ dbMysql::setMyAddDelSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::unsetMyAddInsSt(short statement)
+mysql::unsetMyAddInsSt(short statement)
 {
 	removeFlag(qDbDepInsShift, 1 << statement);
 }
@@ -138,7 +138,7 @@ dbMysql::unsetMyAddInsSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::unsetMyAddUpSt(short statement)
+mysql::unsetMyAddUpSt(short statement)
 {
 	removeFlag(qDbDepUpShift, 1 << statement);
 }
@@ -146,7 +146,7 @@ dbMysql::unsetMyAddUpSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::unsetMyAddSelSt(short statement)
+mysql::unsetMyAddSelSt(short statement)
 {
 	removeFlag(qDbDepSelShift, 1 << statement);
 }
@@ -154,7 +154,7 @@ dbMysql::unsetMyAddSelSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::unsetMyAddDelSt(short statement)
+mysql::unsetMyAddDelSt(short statement)
 {
 	removeFlag(qDbDepDelShift, 1 << statement);
 }
@@ -162,12 +162,12 @@ dbMysql::unsetMyAddDelSt(short statement)
 //-------------------------------------------------------------------
 
 void
-dbMysql::connectSettings(unsigned long a_type,
+mysql::connectSettings(unsigned long a_type,
 						 const __mysqlSSLOptions &options)
 {
 	type = a_type;
 
-	mysql_ssl_set(mysql,
+	mysql_ssl_set(mysqlHandle,
 				  options.key.size() == 0 ? NULL : options.key.c_str(),
 				  options.cert.size() == 0 ? NULL : options.cert.c_str(),
 				  options.ca.size() == 0 ? NULL : options.ca.c_str(),
@@ -178,10 +178,10 @@ dbMysql::connectSettings(unsigned long a_type,
 //-------------------------------------------------------------------
 
 void
-dbMysql::connect()
+mysql::connect()
 {
 #ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPERATION_CONNECT;
+	operType = MYSQL_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
@@ -190,17 +190,17 @@ dbMysql::connect()
 		if (!empty)
 		{
 			empty = true;
-			mysql_free_result(mysqlRes);
+			mysql_free_result(mysqlResult);
 		}
 
-		mysql_close(mysql);
+		mysql_close(mysqlHandle);
 
 		connected = false;
 	}
 
-	mysql = mysql_init(NULL);
+	mysqlHandle = mysql_init(NULL);
 
-	if (!mysql_real_connect(mysql,
+	if (!mysql_real_connect(mysqlHandle,
 							dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
 							dbInfo.user.size() == 0 ? NULL : dbInfo.user.c_str(),
 							dbInfo.password.size() == 0 ? NULL : dbInfo.password.c_str(),
@@ -208,7 +208,7 @@ dbMysql::connect()
 							dbInfo.port,
 							dbInfo.path.size() == 0 ? NULL : dbInfo.path.c_str(),
 							type))
-		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 #ifndef DBMYSQL_WO_XEXEC
 	performXExec(postExec);
@@ -220,22 +220,22 @@ dbMysql::connect()
 //-------------------------------------------------------------------
 
 void
-dbMysql::disconnect()
+mysql::disconnect()
 {
 	if (connected)
 	{
 #ifndef DBMYSQL_WO_XEXEC
-		operType = DBMYSQL_OPERATION_DISCONNECT;
+		operType = MYSQL_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
 		if (!empty)
 		{
 			empty = true;
-			mysql_free_result(mysqlRes);
+			mysql_free_result(mysqlResult);
 		}
 
-		mysql_close(mysql);
+		mysql_close(mysqlHandle);
 
 #ifndef DBMYSQL_WO_XEXEC
 		performXExec(postExec);
@@ -248,14 +248,14 @@ dbMysql::disconnect()
 //-------------------------------------------------------------------
 
 void
-dbMysql::_exec(const dodoString &query,
+mysql::_exec(const dodoString &query,
 			   bool result)
 {
 	if (query.size() == 0)
 	{
 		if (autoFraming)
 		{
-			if (qType == DBBASE_REQUEST_INSERT || qType == DBBASE_REQUEST_UPDATE)
+			if (qType == ACCUMULATOR_REQUEST_INSERT || qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 
@@ -263,32 +263,32 @@ dbMysql::_exec(const dodoString &query,
 				{
 					request = "describe " + pre_table;
 
-					if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
+					if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
 					{
-						int mysqlErrno = mysql_errno(mysql);
+						int mysqlErrno = mysql_errno(mysqlHandle);
 						if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
 						{
 							connect();
-							if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-								throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+							if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+								throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 						}
 						else
-							throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+							throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 					}
 
-					mysqlRes = mysql_store_result(mysql);
-					if (mysqlRes == NULL)
-						throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
+					mysqlResult = mysql_store_result(mysqlHandle);
+					if (mysqlResult == NULL)
+						throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 					empty = false;
 
-					mysql_field_seek(mysqlRes, 0);
+					mysql_field_seek(mysqlResult, 0);
 
 					dodoStringArray rowsPart;
 
 					MYSQL_ROW mysqlRow;
 
-					while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
+					while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 					{
 						if (strcasestr(mysqlRow[1], "char") != NULL ||
 							strcasestr(mysqlRow[1], "date") != NULL ||
@@ -300,7 +300,7 @@ dbMysql::_exec(const dodoString &query,
 							rowsPart.push_back(mysqlRow[0]);
 					}
 
-					mysql_free_result(mysqlRes);
+					mysql_free_result(mysqlResult);
 
 					empty = true;
 
@@ -317,17 +317,17 @@ dbMysql::_exec(const dodoString &query,
 		show = result;
 	}
 
-	if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
+	if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
 	{
-		int mysqlErrno = mysql_errno(mysql);
+		int mysqlErrno = mysql_errno(mysqlHandle);
 		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
 		{
 			connect();
-			if (mysql_real_query(mysql, request.c_str(), request.size()) != 0)
-				throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 		}
 		else
-			throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysql), __LINE__, __FILE__, request);
+			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 	}
 
 	if (!show)
@@ -335,38 +335,38 @@ dbMysql::_exec(const dodoString &query,
 
 	if (!empty)
 	{
-		mysql_free_result(mysqlRes);
+		mysql_free_result(mysqlResult);
 		empty = true;
 	}
 
-	mysqlRes = mysql_store_result(mysql);
-	if (mysqlRes == NULL)
-		throw baseEx(ERRMODULE_DBMYSQL, DBMYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysql), mysql_error(mysql), __LINE__, __FILE__);
+	mysqlResult = mysql_store_result(mysqlHandle);
+	if (mysqlResult == NULL)
+		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 	empty = false;
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<dodoStringArray>
-dbMysql::fetchRow() const
+dodoArray<dodo::dodoStringArray>
+mysql::fetchRow() const
 {
 #ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPERATION_FETCHROW;
+	operType = MYSQL_OPERATION_FETCHROW;
 	performXExec(preExec);
 #endif
 
 	if (empty || !show)
 		return __dodostringarrayarray__;
 
-	mysql_field_seek(mysqlRes, 0);
+	mysql_field_seek(mysqlResult, 0);
 
-	unsigned int numFields = mysql_num_fields(mysqlRes);
+	unsigned int numFields = mysql_num_fields(mysqlResult);
 
 	dodoArray<dodoStringArray> rows;
 
 #ifndef USE_DEQUE
-	rows.reserve(mysql_num_rows(mysqlRes));
+	rows.reserve(mysql_num_rows(mysqlResult));
 #endif
 
 	unsigned long *length, j;
@@ -377,9 +377,9 @@ dbMysql::fetchRow() const
 
 	dodoString rowPart;
 
-	while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
+	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 	{
-		length = mysql_fetch_lengths(mysqlRes);
+		length = mysql_fetch_lengths(mysqlResult);
 
 		rowsPart.clear();
 
@@ -408,19 +408,19 @@ dbMysql::fetchRow() const
 
 //-------------------------------------------------------------------
 
-dodoStringArray
-dbMysql::fetchField() const
+dodo::dodoStringArray
+mysql::fetchField() const
 {
 #ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPERATION_FETCHFIELD;
+	operType = MYSQL_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 #endif
 
 	if (empty || !show)
 		return __dodostringarray__;
 
-	unsigned int numFields = mysql_num_fields(mysqlRes);
-	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlRes);
+	unsigned int numFields = mysql_num_fields(mysqlResult);
+	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlResult);
 
 	dodoStringArray fields;
 
@@ -440,54 +440,54 @@ dbMysql::fetchField() const
 
 //-------------------------------------------------------------------
 
-__dbStorage
-dbMysql::fetch() const
+__connectorStorage
+mysql::fetch() const
 {
-	return __dbStorage(fetchRow(), fetchField());
+	return __connectorStorage(fetchRow(), fetchField());
 }
 
 //-------------------------------------------------------------------
 
 unsigned int
-dbMysql::rowsCount() const
-{
-	if (empty || !show)
-		return 0;
-	else
-		return mysql_num_rows(mysqlRes);
-}
-
-//-------------------------------------------------------------------
-
-unsigned int
-dbMysql::fieldsCount() const
+mysql::rowsCount() const
 {
 	if (empty || !show)
 		return 0;
 	else
-		return mysql_num_fields(mysqlRes);
+		return mysql_num_rows(mysqlResult);
 }
 
 //-------------------------------------------------------------------
 
 unsigned int
-dbMysql::affectedRowsCount() const
+mysql::fieldsCount() const
+{
+	if (empty || !show)
+		return 0;
+	else
+		return mysql_num_fields(mysqlResult);
+}
+
+//-------------------------------------------------------------------
+
+unsigned int
+mysql::affectedRowsCount() const
 {
 	if (empty || show)
 		return 0;
 	else
-		return mysql_affected_rows(mysql);
+		return mysql_affected_rows(mysqlHandle);
 }
 
 //-------------------------------------------------------------------
 
 
 void
-dbMysql::exec(const dodoString &query,
+mysql::exec(const dodoString &query,
 			  bool result)
 {
 #ifndef DBMYSQL_WO_XEXEC
-	operType = DBMYSQL_OPERATION_EXEC;
+	operType = MYSQL_OPERATION_EXEC;
 	performXExec(preExec);
 #endif
 
@@ -505,7 +505,7 @@ dbMysql::exec(const dodoString &query,
 #ifndef DBMYSQL_WO_XEXEC
 
 int
-dbMysql::addPostExec(inExec func,
+mysql::addPostExec(inExec func,
 					 void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
@@ -514,7 +514,7 @@ dbMysql::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-dbMysql::addPreExec(inExec func,
+mysql::addPreExec(inExec func,
 					void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
@@ -525,7 +525,7 @@ dbMysql::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-dbMysql::addPostExec(const dodoString &module,
+mysql::addPostExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
@@ -535,7 +535,7 @@ dbMysql::addPostExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-dbMysql::addPreExec(const dodoString &module,
+mysql::addPreExec(const dodoString &module,
 					void             *data,
 					void             *toInit)
 {
@@ -544,8 +544,8 @@ dbMysql::addPreExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-dbMysql::addExec(const dodoString &module,
+dodo::__xexecCounts
+mysql::addExec(const dodoString &module,
 				 void             *data,
 				 void             *toInit)
 {
@@ -559,44 +559,44 @@ dbMysql::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-dbMysql::setCharset(const dodoString &charset)
+mysql::setCharset(const dodoString &charset)
 {
-	mysql_options(mysql, MYSQL_READ_DEFAULT_FILE, charset.c_str());
+	mysql_options(mysqlHandle, MYSQL_READ_DEFAULT_FILE, charset.c_str());
 }
 
 //-------------------------------------------------------------------
 
 void
-dbMysql::setConnectTimeout(unsigned int time)
+mysql::setConnectTimeout(unsigned int time)
 {
-	mysql_options(mysql, MYSQL_OPT_CONNECT_TIMEOUT, (char *)&time);
+	mysql_options(mysqlHandle, MYSQL_OPT_CONNECT_TIMEOUT, (char *)&time);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-dbMysql::getCharset() const
+mysql::getCharset() const
 {
-	return mysql_character_set_name(mysql);
+	return mysql_character_set_name(mysqlHandle);
 }
 
 //-------------------------------------------------------------------
 
-dodoStringMapArray
-dbMysql::fetchAssoc() const
+dodo::dodoStringMapArray
+mysql::fetchAssoc() const
 {
 	if (empty || !show)
 		return __dodostringmaparray__;
 
-	mysql_field_seek(mysqlRes, 0);
+	mysql_field_seek(mysqlResult, 0);
 
-	unsigned int numFields = mysql_num_fields(mysqlRes);
-	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlRes);
+	unsigned int numFields = mysql_num_fields(mysqlResult);
+	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlResult);
 
 	dodoStringMapArray rowsFields;
 
 #ifndef USE_DEQUE
-	rowsFields.reserve(mysql_num_rows(mysqlRes));
+	rowsFields.reserve(mysql_num_rows(mysqlResult));
 #endif
 
 	dodoStringMap rowFieldsPart;
@@ -607,9 +607,9 @@ dbMysql::fetchAssoc() const
 
 	MYSQL_ROW mysqlRow;
 
-	while ((mysqlRow = mysql_fetch_row(mysqlRes)) != NULL)
+	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 	{
-		length = mysql_fetch_lengths(mysqlRes);
+		length = mysql_fetch_lengths(mysqlResult);
 
 		rowFieldsPart.clear();
 
@@ -631,7 +631,7 @@ dbMysql::fetchAssoc() const
 //-------------------------------------------------------------------
 
 void
-dbMysql::renameDbCollect()
+mysql::renameDbCollect()
 {
 	request = "rename database " + pre_order + " to " + pre_having;
 }
@@ -639,7 +639,7 @@ dbMysql::renameDbCollect()
 //-------------------------------------------------------------------
 
 void
-dbMysql::renameFieldCollect()
+mysql::renameFieldCollect()
 {
 	request = "alter table " + pre_table + " change " + pre_tableTo + " " + fieldCollect(pre_fieldInfo);
 }
@@ -647,11 +647,11 @@ dbMysql::renameFieldCollect()
 //-------------------------------------------------------------------
 
 void 
-dbMysql::renameField(const dodoString &field, 
-					const __fieldInfo &to_field,
+mysql::renameField(const dodoString &field, 
+					const __connectorField &to_field,
 					const dodoString &table)
 {
-	qType = DBBASE_REQUEST_RENAME_FIELD;
+	qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
 	pre_tableTo = field;
 	pre_table = table;
 	pre_fieldInfo = to_field;

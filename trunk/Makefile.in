@@ -20,11 +20,11 @@ DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_XOPEN_SOURCE=600 \
 
 ###########################################################
 
-OBJECTS:=dbBase.o \
-	db.o \
+OBJECTS:=dbAccumulator.o \
+	dbConnector.o \
+	dbSqlConstructor.o \
 	dbPostgresql.o \
 	dbMysql.o \
-	dbSqlBase.o \
 	dbSqlite.o \
 	tools.o \
 	toolsFilesystem.o \

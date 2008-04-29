@@ -1,40 +1,39 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/dbBase.h>
 #include <libdodo/dbPostgresql.h>
 #include <libdodo/dbMysql.h>
 #include <libdodo/dbSqlite.h>
-#include <libdodo/dbSqlBase.h>
 #include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
 
 using namespace dodo;
+using namespace db;
 
 using namespace std;
 
 int main(int argc, char **argv)
 {	
-	db *pp;	
+	connector *pp;	
 	
 	if (argc == 2)
 	{
-		if (strcasecmp(argv[1],"postgres") == 0)
+		if (strcasecmp(argv[1],"postgresql") == 0)
 #ifdef POSTGRESQL_EXT
-				pp = new dbPostgresql;
+				pp = new postgresql;
 #else
 				return 1;
 #endif
 			
 		else if (strcasecmp(argv[1],"mysql") == 0)
 #ifdef MYSQL_EXT
-				pp = new dbMysql;
+				pp = new mysql;
 #else
 				return 1;
 #endif
 			
 		else if (strcasecmp(argv[1],"sqlite") == 0)
 #ifdef SQLITE_EXT	
-				pp = new dbSqlite;
+				pp = new sqlite;
 #else
 				return 1;
 #endif
@@ -47,7 +46,7 @@ int main(int argc, char **argv)
 	
 	try
 	{
-		__dbInfo info;
+		__connectorInfo info;
 		
 		info.db = "test";
 		info.host = "localhost";
@@ -71,7 +70,7 @@ int main(int argc, char **argv)
 		pp->setDbInfo(info);
 		pp->connect();	
 
-		((dbBase *)pp)->deleteTable("test");
+		pp->deleteTable("test");
 		
 		try
 		{
@@ -81,34 +80,34 @@ int main(int argc, char **argv)
 		{
 		}
 
-		__fieldInfo fi;
+		__connectorField fi;
 		fi.name = "date";
-		fi.type = DBBASE_FIELDTYPE_TEXT;
+		fi.type = CONNECTOR_FIELDTYPE_TEXT;
 		
-		__tableInfo ti;
+		__connectorTable ti;
 		ti.name = "test";
 		ti.fields.push_back(fi);
 		
 		fi.name = "operation";
-		fi.type = DBBASE_FIELDTYPE_TEXT;		
+		fi.type = CONNECTOR_FIELDTYPE_TEXT;		
 		ti.fields.push_back(fi);
 		
 		fi.name = "id";
-		fi.type = DBBASE_FIELDTYPE_INTEGER;
-		fi.flag = DBBASE_FIELDFLAG_NULL;
+		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+		fi.flag = CONNECTOR_FIELDFLAG_NULL;
 		ti.fields.push_back(fi);		
 		
 		fi.name = "d";
-		fi.type = DBBASE_FIELDTYPE_INTEGER;
-		fi.flag = DBBASE_FIELDFLAG_NULL;
+		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+		fi.flag = CONNECTOR_FIELDFLAG_NULL;
 		ti.fields.push_back(fi);		
 		
 		fi.name = "b";
-		fi.type = DBBASE_FIELDTYPE_LONGBLOB;
-		fi.flag = DBBASE_FIELDFLAG_NULL;
+		fi.type = CONNECTOR_FIELDTYPE_LONGBLOB;
+		fi.flag = CONNECTOR_FIELDFLAG_NULL;
 		ti.fields.push_back(fi);		
 		
-		((dbBase *)pp)->createTable(ti);
+		pp->createTable(ti);
 		pp->exec();
 		
 		dodoStringMap arr;
@@ -129,13 +128,13 @@ int main(int argc, char **argv)
 			pp->fetch();
 			
 			pp->insert("test",arr);
-			cout << ((dbSqlBase *)pp)->queryCollect() << endl;
+			cout << ((sqlConstructor *)pp)->queryCollect() << endl;
 			pp->exec();
 			
 			arr["d"] = "d+1";
 			arr["operation"] = "um";
 			pp->update("test",arr);
-			cout << ((dbSqlBase *)pp)->queryCollect() << endl;
+			cout << ((sqlConstructor *)pp)->queryCollect() << endl;
 			arr["operation"] = "mu";
 			arr["d"] = "1";
 			pp->exec();
@@ -144,7 +143,7 @@ int main(int argc, char **argv)
 		pp->select("test",select,"operation='um'");
 		pp->exec();
 		
-		__dbStorage store = pp->fetch();
+		__connectorStorage store = pp->fetch();
 		
 		cout << store.rows.size() << endl;
 		
@@ -181,7 +180,7 @@ int main(int argc, char **argv)
 
 			if (strcasecmp(argv[1],"sqlite") == 0)
 #ifdef SQLITE_EXT
-					((dbSqlite *)pp)->setBLOBValues(blobs);
+					((sqlite *)pp)->setBLOBValues(blobs);
 #else
 					;
 #endif
@@ -189,14 +188,14 @@ int main(int argc, char **argv)
 			{
 				if (strcasecmp(argv[1],"postgres") == 0)
 #ifdef POSTGRESQL_EXT
-						((dbPostgresql *)pp)->setBLOBValues(blobs);
+						((postgresql *)pp)->setBLOBValues(blobs);
 #else
 						;
 #endif
 			}
                 	
-			((dbSqlBase *)pp)->preventFraming = true;
-            		((dbSqlBase *)pp)->preventEscaping = true;
+			((sqlConstructor *)pp)->preventFraming = true;
+            		((sqlConstructor *)pp)->preventEscaping = true;
 		
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";
@@ -211,14 +210,14 @@ int main(int argc, char **argv)
 
 		if (strcasecmp(argv[1],"sqlite") == 0)
 #ifdef SQLITE_EXT
-			addFlag(((dbSqlite *)pp)->hint, DBSQLITE_HINT_BLOB);
+			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
 #else
 			;
 #endif
 		else 
 			if (strcasecmp(argv[1],"postgres") == 0)
 #ifdef POSTGRESQL_EXT
-				addFlag(((dbPostgresql *)pp)->hint, DBPOSTGRESQL_HINT_BLOB);
+				addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
 #else
 				;
 #endif
@@ -228,7 +227,7 @@ int main(int argc, char **argv)
 		pp->select("test",select,"operation='ma'");
 		if (strcasecmp(argv[1],"postgres") == 0)
 #ifdef SQLITE_EXT
-			addFlag(((dbSqlite *)pp)->hint, DBSQLITE_HINT_BLOB);
+			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
 #else
 			;
 #endif

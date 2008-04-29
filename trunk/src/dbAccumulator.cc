@@ -1,5 +1,5 @@
 /***************************************************************************
- *            base.cc
+ *            dbAccumulator.cc
  *
  *  Thu Aug 25 22:03:07 2005
  *  Copyright  2005  Ni@m
@@ -21,26 +21,26 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/dbBase.h>
+#include <libdodo/dbAccumulator.h>
 
-using namespace dodo;
+using namespace dodo::db;
 
-__tableInfo::__tableInfo()
+__connectorTable::__connectorTable()
 {
 	ifNotExists = false;
 }
 
 //-------------------------------------------------------------------
 
-const __tableInfo &
-__tableInfo::operator=(const __tableInfo &from)
+const __connectorTable &
+__connectorTable::operator=(const __connectorTable &from)
 {
 	name = from.name;
 
 	fields.clear();
 
-	dodoArray<__fieldInfo>::const_iterator j = from.fields.end();
-	for (dodoArray<__fieldInfo>::const_iterator i = from.fields.begin(); i != j; ++i)
+	dodoArray<__connectorField>::const_iterator j = from.fields.end();
+	for (dodoArray<__connectorField>::const_iterator i = from.fields.begin(); i != j; ++i)
 		fields.push_back(*i);
 
 	primKeys = from.primKeys;
@@ -52,7 +52,7 @@ __tableInfo::operator=(const __tableInfo &from)
 
 //-------------------------------------------------------------------
 
-__fieldInfo::__fieldInfo()
+__connectorField::__connectorField()
 {
 	type = -1;
 	length = -1;
@@ -63,8 +63,8 @@ __fieldInfo::__fieldInfo()
 
 //-------------------------------------------------------------------
 
-const __fieldInfo &
-__fieldInfo::operator=(const __fieldInfo &from)
+const __connectorField &
+__connectorField::operator=(const __connectorField &from)
 {
 	name = from.name;
 	type = from.type;
@@ -86,7 +86,7 @@ __fieldInfo::operator=(const __fieldInfo &from)
 
 //-------------------------------------------------------------------
 
-__xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
+__xexexDbAccumulatorCollectedData::__xexexDbAccumulatorCollectedData(
 	dodoString &a_pre_where,
 	dodoStringArray &a_pre_fields,
 	dodoArray<dodoStringArray> &a_pre_values,
@@ -135,17 +135,17 @@ __xexexDbBaseCollectedData::__xexexDbBaseCollectedData(
 
 //-------------------------------------------------------------------
 
-dbBase::dbBase() : show(false),
-				   qDbDepSelShift(DB_EMPTY),
-				   qDbDepInsShift(DB_EMPTY),
-				   qDbDepUpShift(DB_EMPTY),
-				   qDbDepDelShift(DB_EMPTY),
+accumulator::accumulator() : show(false),
+				   qDbDepSelShift(ACCUMULATOR_NONE),
+				   qDbDepInsShift(ACCUMULATOR_NONE),
+				   qDbDepUpShift(ACCUMULATOR_NONE),
+				   qDbDepDelShift(ACCUMULATOR_NONE),
 				   qType(-1),
-				   qShift(DB_EMPTY),
-				   qSelShift(DB_EMPTY),
-				   qInsShift(DB_EMPTY),
-				   qUpShift(DB_EMPTY),
-				   qDelShift(DB_EMPTY),
+				   qShift(ACCUMULATOR_NONE),
+				   qSelShift(ACCUMULATOR_NONE),
+				   qInsShift(ACCUMULATOR_NONE),
+				   qUpShift(ACCUMULATOR_NONE),
+				   qDelShift(ACCUMULATOR_NONE),
 				   collectedData(pre_where,
 								 pre_fields,
 								 pre_values,
@@ -173,25 +173,25 @@ dbBase::dbBase() : show(false),
 
 //-------------------------------------------------------------------
 
-dbBase::~dbBase()
+accumulator::~accumulator()
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::callFunction(const dodoString &name,
+accumulator::callFunction(const dodoString &name,
 					 const dodoStringArray &arguments,
 					 const dodoString &as)
 {
-	qType = DBBASE_REQUEST_CALL_FUNCTION;
+	qType = ACCUMULATOR_REQUEST_CALL_FUNCTION;
 
 	pre_table = name;
 	pre_fields = arguments;
 
 	if (as.size() != 0)
 	{
-		addFlag(qShift, 1 << DBBASE_ADDREQUEST_AS);
+		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_AS);
 		pre_where = as;
 	}
 
@@ -201,10 +201,10 @@ dbBase::callFunction(const dodoString &name,
 //-------------------------------------------------------------------
 
 void
-dbBase::callProcedure(const dodoString &name,
+accumulator::callProcedure(const dodoString &name,
 					 const dodoStringArray &arguments)
 {
-	qType = DBBASE_REQUEST_CALL_PROCEDURE;
+	qType = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
 
 	pre_table = name;
 	pre_fields = arguments;
@@ -215,18 +215,18 @@ dbBase::callProcedure(const dodoString &name,
 //-------------------------------------------------------------------
 
 void
-dbBase::select(const dodoString &a_table,
+accumulator::select(const dodoString &a_table,
 			   const dodoStringArray &a_fields,
 			   const dodoString &a_where)
 {
-	qType = DBBASE_REQUEST_SELECT;
+	qType = ACCUMULATOR_REQUEST_SELECT;
 
 	pre_table = a_table;
 	pre_fields = a_fields;
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -236,17 +236,17 @@ dbBase::select(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::selectAll(const dodoString &a_table,
+accumulator::selectAll(const dodoString &a_table,
 			   const dodoString &a_where)
 {
-	qType = DBBASE_REQUEST_SELECT;
+	qType = ACCUMULATOR_REQUEST_SELECT;
 
 	pre_table = a_table;
 	pre_fields.push_back("*");
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -256,10 +256,10 @@ dbBase::selectAll(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString &a_table,
+accumulator::insert(const dodoString &a_table,
 			   const dodoStringMap &a_fields)
 {
-	qType = DBBASE_REQUEST_INSERT;
+	qType = ACCUMULATOR_REQUEST_INSERT;
 
 	pre_table = a_table;
 
@@ -282,10 +282,10 @@ dbBase::insert(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString &a_table,
+accumulator::insert(const dodoString &a_table,
 			   const dodoArray<dodoStringMap> &a_fields)
 {
-	qType = DBBASE_REQUEST_INSERT;
+	qType = ACCUMULATOR_REQUEST_INSERT;
 
 	pre_table = a_table;
 
@@ -317,11 +317,11 @@ dbBase::insert(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString &a_table,
+accumulator::insert(const dodoString &a_table,
 			   const dodoStringArray &a_values,
 			   const dodoStringArray &a_fields)
 {
-	qType = DBBASE_REQUEST_INSERT;
+	qType = ACCUMULATOR_REQUEST_INSERT;
 
 	pre_table = a_table;
 	pre_fields = a_fields;
@@ -336,11 +336,11 @@ dbBase::insert(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insert(const dodoString &a_table,
+accumulator::insert(const dodoString &a_table,
 			   const dodoArray<dodoStringArray> &a_values,
 			   const dodoStringArray &a_fields)
 {
-	qType = DBBASE_REQUEST_INSERT;
+	qType = ACCUMULATOR_REQUEST_INSERT;
 
 	pre_table = a_table;
 	pre_fields = a_fields;
@@ -356,13 +356,13 @@ dbBase::insert(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::insertSelect(const dodoString &a_tableTo,
+accumulator::insertSelect(const dodoString &a_tableTo,
 					 const dodoString &a_tableFrom,
 					 const dodoStringArray &a_fieldsTo,
 					 const dodoStringArray &a_fieldsFrom,
 					 const dodoString &a_where)
 {
-	qType = DBBASE_REQUEST_INSERT_SELECT;
+	qType = ACCUMULATOR_REQUEST_INSERT_SELECT;
 
 	pre_tableTo = a_tableTo;
 	pre_table = a_tableFrom;
@@ -374,7 +374,7 @@ dbBase::insertSelect(const dodoString &a_tableTo,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -384,11 +384,11 @@ dbBase::insertSelect(const dodoString &a_tableTo,
 //-------------------------------------------------------------------
 
 void
-dbBase::update(const dodoString &a_table,
+accumulator::update(const dodoString &a_table,
 			   const dodoStringMap &a_fields,
 			   const dodoString &a_where)
 {
-	qType = DBBASE_REQUEST_UPDATE;
+	qType = ACCUMULATOR_REQUEST_UPDATE;
 
 	pre_table = a_table;
 
@@ -408,7 +408,7 @@ dbBase::update(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -418,12 +418,12 @@ dbBase::update(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::update(const dodoString &a_table,
+accumulator::update(const dodoString &a_table,
 			   const dodoStringArray &a_values,
 			   const dodoStringArray &a_fields,
 			   const dodoString &a_where)
 {
-	qType = DBBASE_REQUEST_UPDATE;
+	qType = ACCUMULATOR_REQUEST_UPDATE;
 
 	pre_table = a_table;
 	pre_fields = a_fields;
@@ -434,7 +434,7 @@ dbBase::update(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -444,16 +444,16 @@ dbBase::update(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::del(const dodoString &a_table,
+accumulator::del(const dodoString &a_table,
 			const dodoString &a_where)
 {
-	qType = DBBASE_REQUEST_DELETE;
+	qType = ACCUMULATOR_REQUEST_DELETE;
 
 	pre_table = a_table;
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 		pre_where = a_where;
 	}
 
@@ -463,7 +463,7 @@ dbBase::del(const dodoString &a_table,
 //-------------------------------------------------------------------
 
 void
-dbBase::subquery(const dodoStringArray &sub,
+accumulator::subquery(const dodoStringArray &sub,
 				 int type)
 {
 	qType = type;
@@ -473,9 +473,9 @@ dbBase::subquery(const dodoStringArray &sub,
 //-------------------------------------------------------------------
 
 void
-dbBase::truncate(const dodoString &table)
+accumulator::truncate(const dodoString &table)
 {
-	qType = DBBASE_REQUEST_TRUNCATE;
+	qType = ACCUMULATOR_REQUEST_TRUNCATE;
 	pre_table = table;
 	show = false;
 }
@@ -483,10 +483,10 @@ dbBase::truncate(const dodoString &table)
 //-------------------------------------------------------------------
 
 void
-dbBase::renameDb(const dodoString &db,
+accumulator::renameDb(const dodoString &db,
 				 const dodoString &to_db)
 {
-	qType = DBBASE_REQUEST_RENAME_DB;
+	qType = ACCUMULATOR_REQUEST_RENAME_DB;
 	pre_order = db;
 	pre_having = to_db;
 	show = false;
@@ -495,10 +495,10 @@ dbBase::renameDb(const dodoString &db,
 //-------------------------------------------------------------------
 
 void
-dbBase::renameTable(const dodoString &table,
+accumulator::renameTable(const dodoString &table,
 					const dodoString &to_table)
 {
-	qType = DBBASE_REQUEST_RENAME_TABLE;
+	qType = ACCUMULATOR_REQUEST_RENAME_TABLE;
 	pre_table = table;
 	pre_having = to_table;
 	show = false;
@@ -507,11 +507,11 @@ dbBase::renameTable(const dodoString &table,
 //-------------------------------------------------------------------
 
 void
-dbBase::createIndex(const dodoString &table,
+accumulator::createIndex(const dodoString &table,
 					const dodoString &field,
 					const dodoString &name)
 {
-	qType = DBBASE_REQUEST_CREATE_INDEX;
+	qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
 	pre_table = table;
 	pre_fields.push_back(field);
 	pre_having = name;
@@ -521,11 +521,11 @@ dbBase::createIndex(const dodoString &table,
 //-------------------------------------------------------------------
 
 void
-dbBase::createIndex(const dodoString &table,
+accumulator::createIndex(const dodoString &table,
 					const dodoStringArray &fields,
 					const dodoString &name)
 {
-	qType = DBBASE_REQUEST_CREATE_INDEX;
+	qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
 	pre_table = table;
 	pre_fields = fields;
 	pre_having = name;
@@ -535,10 +535,10 @@ dbBase::createIndex(const dodoString &table,
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteIndex(const dodoString &table,
+accumulator::deleteIndex(const dodoString &table,
 					const dodoString &field)
 {
-	qType = DBBASE_REQUEST_DELETE_INDEX;
+	qType = ACCUMULATOR_REQUEST_DELETE_INDEX;
 	pre_table = table;
 	pre_having = field;
 	show = false;
@@ -547,11 +547,11 @@ dbBase::deleteIndex(const dodoString &table,
 //-------------------------------------------------------------------
 
 void
-dbBase::renameField(const dodoString &field,
+accumulator::renameField(const dodoString &field,
 					const dodoString &to_field,
 					const dodoString &table)
 {
-	qType = DBBASE_REQUEST_RENAME_FIELD;
+	qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
 	pre_tableTo = field;
 	pre_having = to_field;
 	pre_table = table;
@@ -561,9 +561,9 @@ dbBase::renameField(const dodoString &field,
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteDb(const dodoString &db)
+accumulator::deleteDb(const dodoString &db)
 {
-	qType = DBBASE_REQUEST_DELETE_DB;
+	qType = ACCUMULATOR_REQUEST_DELETE_DB;
 	pre_order = db;
 	show = false;
 }
@@ -571,9 +571,9 @@ dbBase::deleteDb(const dodoString &db)
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteTable(const dodoString &table)
+accumulator::deleteTable(const dodoString &table)
 {
-	qType = DBBASE_REQUEST_DELETE_TABLE;
+	qType = ACCUMULATOR_REQUEST_DELETE_TABLE;
 	pre_table = table;
 	show = false;
 }
@@ -581,10 +581,10 @@ dbBase::deleteTable(const dodoString &table)
 //-------------------------------------------------------------------
 
 void
-dbBase::deleteField(const dodoString &field,
+accumulator::deleteField(const dodoString &field,
 					const dodoString &table)
 {
-	qType = DBBASE_REQUEST_DELETE_FIELD;
+	qType = ACCUMULATOR_REQUEST_DELETE_FIELD;
 	pre_tableTo = field;
 	pre_table = table;
 	show = false;
@@ -593,10 +593,10 @@ dbBase::deleteField(const dodoString &field,
 //-------------------------------------------------------------------
 
 void
-dbBase::createDb(const dodoString &db,
+accumulator::createDb(const dodoString &db,
 				 const dodoString &charset)
 {
-	qType = DBBASE_REQUEST_CREATE_DB;
+	qType = ACCUMULATOR_REQUEST_CREATE_DB;
 	pre_order = db;
 	pre_having = charset;
 	show = false;
@@ -605,9 +605,9 @@ dbBase::createDb(const dodoString &db,
 //-------------------------------------------------------------------
 
 void
-dbBase::createTable(const __tableInfo &tableInfo)
+accumulator::createTable(const __connectorTable &tableInfo)
 {
-	qType = DBBASE_REQUEST_CREATE_TABLE;
+	qType = ACCUMULATOR_REQUEST_CREATE_TABLE;
 	pre_tableInfo = tableInfo;
 	show = false;
 }
@@ -615,10 +615,10 @@ dbBase::createTable(const __tableInfo &tableInfo)
 //-------------------------------------------------------------------
 
 void
-dbBase::createField(const __fieldInfo &row,
+accumulator::createField(const __connectorField &row,
 					const dodoString &table)
 {
-	qType = DBBASE_REQUEST_CREATE_FIELD;
+	qType = ACCUMULATOR_REQUEST_CREATE_FIELD;
 	pre_fieldInfo = row;
 	pre_table = table;
 	show = false;
@@ -627,28 +627,28 @@ dbBase::createField(const __fieldInfo &row,
 //-------------------------------------------------------------------
 
 void
-dbBase::where(const dodoString &where)
+accumulator::where(const dodoString &where)
 {
 	pre_where = where;
 
-	addFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::limit(unsigned int a_number)
+accumulator::limit(unsigned int a_number)
 {
-	addFlag(qShift, 1 << DBBASE_ADDREQUEST_LIMIT);
+	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
 
 	pre_limit = toolsString::lToString(a_number);
 }
 //-------------------------------------------------------------------
 
 void
-dbBase::offset(unsigned int a_number)
+accumulator::offset(unsigned int a_number)
 {
-	addFlag(qShift, 1 << DBBASE_ADDREQUEST_OFFSET);
+	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
 
 	pre_offset = toolsString::lToString(a_number);
 }
@@ -656,37 +656,37 @@ dbBase::offset(unsigned int a_number)
 //-------------------------------------------------------------------
 
 void
-dbBase::order(const dodoString &order)
+accumulator::order(const dodoString &order)
 {
 	pre_order = order;
 
-	addFlag(qShift, 1 << DBBASE_ADDREQUEST_ORDERBY);
+	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::group(const dodoString &group)
+accumulator::group(const dodoString &group)
 {
 	pre_group = group;
 
-	addFlag(qShift, 1 << DBBASE_ADDREQUEST_GROUPBY);
+	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::having(const dodoString &having)
+accumulator::having(const dodoString &having)
 {
 	pre_having = having;
 
-	addFlag(qShift, 1 << DBBASE_ADDREQUEST_HAVING);
+	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_HAVING);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::join(const dodoString &table,
+accumulator::join(const dodoString &table,
 		int type,
 		const dodoString &condition)
 {
@@ -694,62 +694,62 @@ dbBase::join(const dodoString &table,
 	pre_joinConds.push_back(condition);
 	pre_joinTypes.push_back(type);
 
-	addFlag(qShift, 1 << DBBASE_ADDREQUEST_JOIN);
+	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_JOIN);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::unwhere()
+accumulator::unwhere()
 {
-	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_WHERE);
+	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::unlimit()
+accumulator::unlimit()
 {
-	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_LIMIT);
+	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::unoffset()
+accumulator::unoffset()
 {
-	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_OFFSET);
+	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::unorder()
+accumulator::unorder()
 {
-	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_ORDERBY);
+	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::ungroup()
+accumulator::ungroup()
 {
-	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_GROUPBY);
+	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
 
 void
-dbBase::unhaving()
+accumulator::unhaving()
 {
-	removeFlag(qShift, 1 << DBBASE_ADDREQUEST_HAVING);
+	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_HAVING);
 }
 
 
 //-------------------------------------------------------------------
 
 void
-dbBase::setAddInsSt(unsigned int statement)
+accumulator::setAddInsSt(unsigned int statement)
 {
 	/*switch (statement)
 	   {
@@ -764,7 +764,7 @@ dbBase::setAddInsSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::setAddUpSt(unsigned int statement)
+accumulator::setAddUpSt(unsigned int statement)
 {
 	/*switch (statement)
 	   {
@@ -777,15 +777,15 @@ dbBase::setAddUpSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::setAddSelSt(unsigned int statement)
+accumulator::setAddSelSt(unsigned int statement)
 {
 	switch (statement)
 	{
-		case DBBASE_ADDREQUEST_SELECT_DISTINCT:
-		case DBBASE_ADDREQUEST_SELECT_ALL:
+		case ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT:
+		case ACCUMULATOR_ADDREQUEST_SELECT_ALL:
 
-			removeFlag(qSelShift, 1 << DBBASE_ADDREQUEST_SELECT_ALL);
-			removeFlag(qSelShift, 1 << DBBASE_ADDREQUEST_SELECT_DISTINCT);
+			removeFlag(qSelShift, 1 << ACCUMULATOR_ADDREQUEST_SELECT_ALL);
+			removeFlag(qSelShift, 1 << ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
 
 			break;
 
@@ -798,7 +798,7 @@ dbBase::setAddSelSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::setAddDelSt(unsigned int statement)
+accumulator::setAddDelSt(unsigned int statement)
 {
 	/*switch (statement)
 	   {
@@ -811,7 +811,7 @@ dbBase::setAddDelSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::unsetAddInsSt(unsigned int statement)
+accumulator::unsetAddInsSt(unsigned int statement)
 {
 	removeFlag(qInsShift, 1 << statement);
 }
@@ -819,7 +819,7 @@ dbBase::unsetAddInsSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::unsetAddUpSt(unsigned int statement)
+accumulator::unsetAddUpSt(unsigned int statement)
 {
 	removeFlag(qUpShift, 1 << statement);
 }
@@ -827,7 +827,7 @@ dbBase::unsetAddUpSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::unsetAddSelSt(unsigned int statement)
+accumulator::unsetAddSelSt(unsigned int statement)
 {
 	removeFlag(qSelShift, 1 << statement);
 }
@@ -835,7 +835,7 @@ dbBase::unsetAddSelSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::unsetAddDelSt(unsigned int statement)
+accumulator::unsetAddDelSt(unsigned int statement)
 {
 	removeFlag(qDelShift, 1 << statement);
 }
@@ -843,21 +843,21 @@ dbBase::unsetAddDelSt(unsigned int statement)
 //-------------------------------------------------------------------
 
 void
-dbBase::cleanCollected()
+accumulator::cleanCollected()
 {
 	qType = -1;
 
-	qShift = DB_EMPTY;
+	qShift = ACCUMULATOR_NONE;
 
-	qSelShift = DB_EMPTY;
-	qInsShift = DB_EMPTY;
-	qUpShift = DB_EMPTY;
-	qDelShift = DB_EMPTY;
+	qSelShift = ACCUMULATOR_NONE;
+	qInsShift = ACCUMULATOR_NONE;
+	qUpShift = ACCUMULATOR_NONE;
+	qDelShift = ACCUMULATOR_NONE;
 
-	qDbDepSelShift = DB_EMPTY;
-	qDbDepInsShift = DB_EMPTY;
-	qDbDepUpShift = DB_EMPTY;
-	qDbDepDelShift = DB_EMPTY;
+	qDbDepSelShift = ACCUMULATOR_NONE;
+	qDbDepInsShift = ACCUMULATOR_NONE;
+	qDbDepUpShift = ACCUMULATOR_NONE;
+	qDbDepDelShift = ACCUMULATOR_NONE;
 	
 	pre_where.clear();
 	pre_fields.clear();
@@ -878,7 +878,7 @@ dbBase::cleanCollected()
 //-------------------------------------------------------------------
 
 void
-dbBase::setDbInfo(const dodoString &db,
+accumulator::setDbInfo(const dodoString &db,
 				  const dodoString &host,
 				  unsigned int port,
 				  const dodoString &user,
@@ -896,7 +896,7 @@ dbBase::setDbInfo(const dodoString &db,
 //-------------------------------------------------------------------
 
 void
-dbBase::setDbInfo(const __dbInfo &info)
+accumulator::setDbInfo(const __connectorInfo &info)
 {
 	dbInfo.port = info.port;
 	dbInfo.db = info.db;
@@ -909,7 +909,7 @@ dbBase::setDbInfo(const __dbInfo &info)
 //-------------------------------------------------------------------
 
 void
-dbBase::initTableInfo(__tableInfo &table)
+accumulator::initTableInfo(__connectorTable &table)
 {
 	table.name.clear();
 
@@ -922,7 +922,7 @@ dbBase::initTableInfo(__tableInfo &table)
 //-------------------------------------------------------------------
 
 void
-dbBase::initFieldInfo(__fieldInfo &field)
+accumulator::initFieldInfo(__connectorField &field)
 {
 	field.type = -1;
 	field.length = -1;

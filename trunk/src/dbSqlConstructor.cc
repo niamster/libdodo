@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbSqlBase.cc
+ *            dbSqlConstructor.cc
  *
  *  Mon Jul 18 19:30:55 2005
  *  Copyright  2005  Ni@m
@@ -21,40 +21,40 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/dbSqlBase.h>
+#include <libdodo/dbSqlConstructor.h>
 
-using namespace dodo;
+using namespace dodo::db;
 
-const unsigned int dbSqlBase::addInsEnumArr[] =
+const unsigned int sqlConstructor::addInsEnumArr[] =
 {
-	DBBASE_ADDREQUEST_INSERT_IGNORE,
+	ACCUMULATOR_ADDREQUEST_INSERT_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
-const unsigned int dbSqlBase::addUpEnumArr[] =
+const unsigned int sqlConstructor::addUpEnumArr[] =
 {
-	DBBASE_ADDREQUEST_UPDATE_IGNORE,
+	ACCUMULATOR_ADDREQUEST_UPDATE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
-const unsigned int dbSqlBase::addDelEnumArr[] =
+const unsigned int sqlConstructor::addDelEnumArr[] =
 {
-	DBBASE_ADDREQUEST_DELETE_IGNORE,
+	ACCUMULATOR_ADDREQUEST_DELETE_IGNORE,
 };
 
 //-------------------------------------------------------------------
 
-const unsigned int dbSqlBase::addSelEnumArr[] =
+const unsigned int sqlConstructor::addSelEnumArr[] =
 {
-	DBBASE_ADDREQUEST_SELECT_DISTINCT,
-	DBBASE_ADDREQUEST_SELECT_ALL
+	ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT,
+	ACCUMULATOR_ADDREQUEST_SELECT_ALL
 };
 
 //-------------------------------------------------------------------
 
-const dodoString dbSqlBase::sqlQStArr[] =
+const dodoString sqlConstructor::sqlQStArr[] =
 {
 	""             ,
 	" union "      ,
@@ -65,7 +65,7 @@ const dodoString dbSqlBase::sqlQStArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString dbSqlBase::sqlAddArr[] =
+const dodoString sqlConstructor::sqlAddArr[] =
 {
 	""           ,
 	" where "    ,
@@ -79,7 +79,7 @@ const dodoString dbSqlBase::sqlAddArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString dbSqlBase::sqlAddInsArr[] =
+const dodoString sqlConstructor::sqlAddInsArr[] =
 {
 	""         ,
 	" ignore " ,
@@ -87,7 +87,7 @@ const dodoString dbSqlBase::sqlAddInsArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString dbSqlBase::sqlAddUpArr[] =
+const dodoString sqlConstructor::sqlAddUpArr[] =
 {
 	""         ,
 	" ignore " ,
@@ -95,7 +95,7 @@ const dodoString dbSqlBase::sqlAddUpArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString dbSqlBase::sqlAddDelArr[] =
+const dodoString sqlConstructor::sqlAddDelArr[] =
 {
 	""         ,
 	" ignore " ,
@@ -103,7 +103,7 @@ const dodoString dbSqlBase::sqlAddDelArr[] =
 
 //-------------------------------------------------------------------
 
-const dodoString dbSqlBase::sqlAddSelArr[] =
+const dodoString sqlConstructor::sqlAddSelArr[] =
 {
 	""           ,
 	" distinct " ,
@@ -112,7 +112,7 @@ const dodoString dbSqlBase::sqlAddSelArr[] =
 
 //-------------------------------------------------------------------
 
-dbSqlBase::dbSqlBase() : preventFraming(false),
+sqlConstructor::sqlConstructor() : preventFraming(false),
 						 preventEscaping(false),
 						 autoFraming(true)
 {
@@ -120,14 +120,14 @@ dbSqlBase::dbSqlBase() : preventFraming(false),
 
 //-------------------------------------------------------------------
 
-dbSqlBase::~dbSqlBase()
+sqlConstructor::~sqlConstructor()
 {
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::valuesName(const dodoStringArray &values,
+sqlConstructor::valuesName(const dodoStringArray &values,
 						 const dodoStringArray &fields,
 						 const dodoString &frame)
 {
@@ -163,7 +163,7 @@ dbSqlBase::valuesName(const dodoStringArray &values,
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::exists(const dodoString &statement)
+sqlConstructor::exists(const dodoString &statement)
 {
 	return dodoString("exists(" + statement + ')');
 }
@@ -171,7 +171,7 @@ dbSqlBase::exists(const dodoString &statement)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::notexists(const dodoString &statement)
+sqlConstructor::notexists(const dodoString &statement)
 {
 	return dodoString("not exists(" + statement + ')');
 }
@@ -179,10 +179,10 @@ dbSqlBase::notexists(const dodoString &statement)
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
+sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
 							 const dodoString &collectedString)
 {
-	if (qShift == DB_EMPTY)
+	if (qShift == ACCUMULATOR_NONE)
 		return ;
 
 	int tempQTypeTocheck = 1 << qTypeTocheck;
@@ -196,11 +196,11 @@ dbSqlBase::additionalCollect(unsigned int qTypeTocheck,
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
+sqlConstructor::insideAddCollect(const unsigned int sqlAddEnumArr[],
 							const dodoString sqlAddArr[],
 							int qTypeShift)
 {
-	if (qTypeShift == DB_EMPTY)
+	if (qTypeShift == ACCUMULATOR_NONE)
 		return __dodostring__;
 
 	dodoString temp;
@@ -219,10 +219,10 @@ dbSqlBase::insideAddCollect(const unsigned int sqlAddEnumArr[],
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::insideAddCollect(const dodoStringArray &statements,
+sqlConstructor::insideAddCollect(const dodoStringArray &statements,
 							int qTypeShift)
 {
-	if (qTypeShift == DB_EMPTY)
+	if (qTypeShift == ACCUMULATOR_NONE)
 		return __dodostring__;
 
 	dodoString temp;
@@ -243,7 +243,7 @@ dbSqlBase::insideAddCollect(const dodoStringArray &statements,
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::callFunctionCollect()
+sqlConstructor::callFunctionCollect()
 {
 	request = "select ";
 	request.append(pre_table);
@@ -264,7 +264,7 @@ dbSqlBase::callFunctionCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::callProcedureCollect()
+sqlConstructor::callProcedureCollect()
 {
 	request = "call ";
 	request.append(pre_table);
@@ -285,7 +285,7 @@ dbSqlBase::callProcedureCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::selectCollect()
+sqlConstructor::selectCollect()
 {
 	dodoString temp = insideAddCollect(addSelEnumArr, sqlAddSelArr, qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr, qDbDepSelShift));
@@ -310,7 +310,7 @@ dbSqlBase::selectCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::insertCollect()
+sqlConstructor::insertCollect()
 {
 	dodoStringArray fieldsVPart;
 
@@ -411,7 +411,7 @@ dbSqlBase::insertCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::insertSelectCollect()
+sqlConstructor::insertSelectCollect()
 {
 
 	dodoString fieldsPartTo = tools::implode(pre_fields, ",");
@@ -440,7 +440,7 @@ dbSqlBase::insertSelectCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::updateCollect()
+sqlConstructor::updateCollect()
 {
 	dodoString setPart;
 
@@ -506,7 +506,7 @@ dbSqlBase::updateCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::delCollect()
+sqlConstructor::delCollect()
 {
 	dodoString temp = insideAddCollect(addDelEnumArr, sqlAddDelArr, qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr, qDbDepDelShift));
@@ -520,7 +520,7 @@ dbSqlBase::delCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::subCollect()
+sqlConstructor::subCollect()
 {
 	request = tools::implode(pre_subQueries, sqlQStArr[qType]);
 }
@@ -528,7 +528,7 @@ dbSqlBase::subCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::truncateCollect()
+sqlConstructor::truncateCollect()
 {
 	request = "truncate " + pre_table;
 }
@@ -536,7 +536,7 @@ dbSqlBase::truncateCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::delDbCollect()
+sqlConstructor::delDbCollect()
 {
 	request = "drop database " + pre_order;
 }
@@ -544,7 +544,7 @@ dbSqlBase::delDbCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::delTableCollect()
+sqlConstructor::delTableCollect()
 {
 	request = "drop table " + pre_table;
 }
@@ -552,7 +552,7 @@ dbSqlBase::delTableCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::delFieldCollect()
+sqlConstructor::delFieldCollect()
 {
 	request = "alter " + pre_order + " drop " + pre_table;
 }
@@ -560,7 +560,7 @@ dbSqlBase::delFieldCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::renameDbCollect()
+sqlConstructor::renameDbCollect()
 {
 	request = __dodostring__;
 }
@@ -568,7 +568,7 @@ dbSqlBase::renameDbCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::renameTableCollect()
+sqlConstructor::renameTableCollect()
 {
 	request = "alter table " + pre_table + " rename to " + pre_having;
 }
@@ -576,7 +576,7 @@ dbSqlBase::renameTableCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::renameFieldCollect()
+sqlConstructor::renameFieldCollect()
 {
 	request = __dodostring__;
 }
@@ -584,7 +584,7 @@ dbSqlBase::renameFieldCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::createDbCollect()
+sqlConstructor::createDbCollect()
 {
 	request = "create database " + pre_order;
 	if (pre_having.size() != 0)
@@ -594,7 +594,7 @@ dbSqlBase::createDbCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::createIndexCollect()
+sqlConstructor::createIndexCollect()
 {
 	request = "create index " + pre_having + " on " + pre_table + " (" + tools::implode(pre_fields, ",") + ")";
 }
@@ -602,7 +602,7 @@ dbSqlBase::createIndexCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::deleteIndexCollect()
+sqlConstructor::deleteIndexCollect()
 {
 	request = "drop index " + pre_having + " on " + pre_table;
 }
@@ -610,7 +610,7 @@ dbSqlBase::deleteIndexCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::createTableCollect()
+sqlConstructor::createTableCollect()
 {
 	request = "create table ";
 
@@ -619,7 +619,7 @@ dbSqlBase::createTableCollect()
 	request.append(pre_tableInfo.name + "(");
 
 	{
-		dodoArray<__fieldInfo>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end());
+		dodoArray<__connectorField>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end());
 		if (i != j)
 		{
 			--j;
@@ -638,7 +638,7 @@ dbSqlBase::createTableCollect()
 //-------------------------------------------------------------------
 
 void
-dbSqlBase::createFieldCollect()
+sqlConstructor::createFieldCollect()
 {
 	request = "alter table " + pre_table + " add " + fieldCollect(pre_fieldInfo);
 }
@@ -646,7 +646,7 @@ dbSqlBase::createFieldCollect()
 //-------------------------------------------------------------------
 
 void 
-dbSqlBase::joinCollect()
+sqlConstructor::joinCollect()
 {
 	dodoStringArray::iterator i = pre_joinTables.begin(), j = pre_joinTables.end();
 	dodoStringArray::iterator o = pre_joinConds.begin(), p = pre_joinConds.end();
@@ -655,37 +655,37 @@ dbSqlBase::joinCollect()
 	{
 		switch (*m)
 		{
-			case DB_JOINTYPE_JOIN:
+			case CONNECTOR_JOINTYPE_JOIN:
 				
 				request.append(" join ");
 				
 				break;
 			
-			case DB_JOINTYPE_LEFTOUTER:
+			case CONNECTOR_JOINTYPE_LEFTOUTER:
 				
 				request.append(" left outer join ");
 				
 				break;
 				
-			case DB_JOINTYPE_RIGHTOUTER:
+			case CONNECTOR_JOINTYPE_RIGHTOUTER:
 
 				request.append(" right outer join ");
 				
 				break;
 				
-			case DB_JOINTYPE_FULLOUTER:
+			case CONNECTOR_JOINTYPE_FULLOUTER:
 
 				request.append(" full outer join ");
 				
 				break;
 				
-			case DB_JOINTYPE_INNER:
+			case CONNECTOR_JOINTYPE_INNER:
 
 				request.append(" inner join ");
 				
 				break;
 				
-			case DB_JOINTYPE_CROSS:
+			case CONNECTOR_JOINTYPE_CROSS:
 
 				request.append(" cross join ");
 				
@@ -693,7 +693,7 @@ dbSqlBase::joinCollect()
 				
 			default:
 				
-				throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASEEX_JOINCOLLECT, ERR_LIBDODO, DBSQLBASEEX_UNKNOWNJOINTYPE, DBSQLBASEEX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, ERR_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
 		}
 		
 		request.append(*i);
@@ -709,14 +709,14 @@ dbSqlBase::joinCollect()
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::queryCollect()
+sqlConstructor::queryCollect()
 {
 	bool additionalActions = true;
 	bool selectAction = false;
 
 	switch (qType)
 	{
-		case DBBASE_REQUEST_SELECT:
+		case ACCUMULATOR_REQUEST_SELECT:
 
 			selectCollect();
 			selectAction = true;
@@ -725,133 +725,133 @@ dbSqlBase::queryCollect()
 
 			break;
 
-		case DBBASE_REQUEST_INSERT:
+		case ACCUMULATOR_REQUEST_INSERT:
 
 			insertCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_UPDATE:
+		case ACCUMULATOR_REQUEST_UPDATE:
 
 			updateCollect();
 
 			break;
 
-		case DBBASE_REQUEST_DELETE:
+		case ACCUMULATOR_REQUEST_DELETE:
 
 			delCollect();
 
 			break;
 
-		case DBBASE_REQUEST_INSERT_SELECT:
+		case ACCUMULATOR_REQUEST_INSERT_SELECT:
 
 			insertSelectCollect();
 			selectAction = true;
 
 			break;
 
-		case DBBASE_REQUEST_UNION:
-		case DBBASE_REQUEST_UNION_ALL:
-		case DBBASE_REQUEST_MINUS:
-		case DBBASE_REQUEST_INTERSECT:
+		case CONNECTOR_SUBREQUEST_UNION:
+		case CONNECTOR_SUBREQUEST_UNION_ALL:
+		case CONNECTOR_SUBREQUEST_MINUS:
+		case CONNECTOR_SUBREQUEST_INTERSECT:
 
 			subCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_CALL_FUNCTION:
+		case ACCUMULATOR_REQUEST_CALL_FUNCTION:
 
 			callFunctionCollect();
 			selectAction = true;
 
 			break;
 
-		case DBBASE_REQUEST_CALL_PROCEDURE:
+		case ACCUMULATOR_REQUEST_CALL_PROCEDURE:
 
 			callProcedureCollect();
 
 			break;
 
-		case DBBASE_REQUEST_TRUNCATE:
+		case ACCUMULATOR_REQUEST_TRUNCATE:
 
 			truncateCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_RENAME_DB:
+		case ACCUMULATOR_REQUEST_RENAME_DB:
 
 			renameDbCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_CREATE_INDEX:
+		case ACCUMULATOR_REQUEST_CREATE_INDEX:
 
 			createIndexCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_DELETE_INDEX:
+		case ACCUMULATOR_REQUEST_DELETE_INDEX:
 
 			deleteIndexCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_RENAME_TABLE:
+		case ACCUMULATOR_REQUEST_RENAME_TABLE:
 
 			renameTableCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_RENAME_FIELD:
+		case ACCUMULATOR_REQUEST_RENAME_FIELD:
 
 			renameFieldCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_DELETE_DB:
+		case ACCUMULATOR_REQUEST_DELETE_DB:
 
 			delDbCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_DELETE_TABLE:
+		case ACCUMULATOR_REQUEST_DELETE_TABLE:
 
 			delTableCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_DELETE_FIELD:
+		case ACCUMULATOR_REQUEST_DELETE_FIELD:
 
 			delFieldCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_CREATE_DB:
+		case ACCUMULATOR_REQUEST_CREATE_DB:
 
 			createDbCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_CREATE_TABLE:
+		case ACCUMULATOR_REQUEST_CREATE_TABLE:
 
 			createTableCollect();
 			additionalActions = false;
 
 			break;
 
-		case DBBASE_REQUEST_CREATE_FIELD:
+		case ACCUMULATOR_REQUEST_CREATE_FIELD:
 
 			createFieldCollect();
 			additionalActions = false;
@@ -866,22 +866,22 @@ dbSqlBase::queryCollect()
 #ifndef FAST
 
 	if (request.size() == 0)
-		throw baseEx(ERRMODULE_DBSQLBASE, DBSQLBASEEX_QUERYCOLLECT, ERR_LIBDODO, DBSQLBASEEX_EMPTYREQUEST, DBSQLBASEEX_EMPTYREQUEST_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_QUERYCOLLECT, ERR_LIBDODO, SQLCONSTRUCTOREX_EMPTYREQUEST, SQLCONSTRUCTOREX_EMPTYREQUEST_STR, __LINE__, __FILE__);
 
 #endif
 
 	if (additionalActions)
 	{
-		additionalCollect(DBBASE_ADDREQUEST_AS, pre_where);
-		additionalCollect(DBBASE_ADDREQUEST_WHERE, pre_where);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_AS, pre_where);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_WHERE, pre_where);
 		if (selectAction)
 		{
-			additionalCollect(DBBASE_ADDREQUEST_GROUPBY, pre_group);
-			additionalCollect(DBBASE_ADDREQUEST_HAVING, pre_having);
+			additionalCollect(ACCUMULATOR_ADDREQUEST_GROUPBY, pre_group);
+			additionalCollect(ACCUMULATOR_ADDREQUEST_HAVING, pre_having);
 		}
-		additionalCollect(DBBASE_ADDREQUEST_ORDERBY, pre_order);
-		additionalCollect(DBBASE_ADDREQUEST_LIMIT, pre_limit);
-		additionalCollect(DBBASE_ADDREQUEST_OFFSET, pre_offset);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_ORDERBY, pre_order);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_LIMIT, pre_limit);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_OFFSET, pre_offset);
 	}
 
 	return request;
@@ -890,7 +890,7 @@ dbSqlBase::queryCollect()
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::unescapeFields(const dodoString &data)
+sqlConstructor::unescapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 
@@ -903,7 +903,7 @@ dbSqlBase::unescapeFields(const dodoString &data)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::escapeFields(const dodoString &data)
+sqlConstructor::escapeFields(const dodoString &data)
 {
 	dodoString temp = data;
 
@@ -916,7 +916,7 @@ dbSqlBase::escapeFields(const dodoString &data)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::fieldCollect(const __fieldInfo &row)
+sqlConstructor::fieldCollect(const __connectorField &row)
 {
 	int type = row.type, flag = row.flag;
 	dodoString resRow(row.name + " " + sqlDataType(type));
@@ -927,9 +927,9 @@ dbSqlBase::fieldCollect(const __fieldInfo &row)
 		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
 	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + toolsString::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
-	resRow.append(isSetFlag(flag, DBBASE_FIELDFLAG_NULL) ? " null " : " not null ");
+	resRow.append(isSetFlag(flag, CONNECTOR_FIELDFLAG_NULL) ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append(isSetFlag(flag, DBBASE_FIELDFLAG_AUTO_INCREMENT) ? " primary key auto_increment" : __dodostring__);
+	resRow.append(isSetFlag(flag, CONNECTOR_FIELDFLAG_AUTO_INCREMENT) ? " primary key auto_increment" : __dodostring__);
 
 	if (row.refTable.size() > 0)
 	{
@@ -945,101 +945,101 @@ dbSqlBase::fieldCollect(const __fieldInfo &row)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::sqlDataType(int type)
+sqlConstructor::sqlDataType(int type)
 {
 	switch (type)
 	{
-		case DBBASE_FIELDTYPE_INT:
-		case DBBASE_FIELDTYPE_INTEGER:
+		case CONNECTOR_FIELDTYPE_INT:
+		case CONNECTOR_FIELDTYPE_INTEGER:
 
 			return dodoString("INTEGER");
 
-		case DBBASE_FIELDTYPE_DATE:
+		case CONNECTOR_FIELDTYPE_DATE:
 
 			return dodoString("DATE");
 
-		case DBBASE_FIELDTYPE_VARCHAR:
+		case CONNECTOR_FIELDTYPE_VARCHAR:
 
 			return dodoString("VARCHAR");
 
-		case DBBASE_FIELDTYPE_TIMESTAMP:
+		case CONNECTOR_FIELDTYPE_TIMESTAMP:
 
 			return dodoString("TIMESTAMP");
 
-		case DBBASE_FIELDTYPE_TIME:
+		case CONNECTOR_FIELDTYPE_TIME:
 
 			return dodoString("TIME");
 
-		case DBBASE_FIELDTYPE_TINYINT:
+		case CONNECTOR_FIELDTYPE_TINYINT:
 
 			return dodoString("TINYINT");
 
-		case DBBASE_FIELDTYPE_SMALLINT:
+		case CONNECTOR_FIELDTYPE_SMALLINT:
 
 			return dodoString("SMALLINT");
 
-		case DBBASE_FIELDTYPE_MEDIUMINT:
+		case CONNECTOR_FIELDTYPE_MEDIUMINT:
 
 			return dodoString("MEDIUMINT");
 
-		case DBBASE_FIELDTYPE_BIGINT:
+		case CONNECTOR_FIELDTYPE_BIGINT:
 
 			return dodoString("BIGINT");
 
-		case DBBASE_FIELDTYPE_FLOAT:
+		case CONNECTOR_FIELDTYPE_FLOAT:
 
 			return dodoString("FLOAT");
 
-		case DBBASE_FIELDTYPE_REAL:
-		case DBBASE_FIELDTYPE_DOUBLE:
+		case CONNECTOR_FIELDTYPE_REAL:
+		case CONNECTOR_FIELDTYPE_DOUBLE:
 
 			return dodoString("REAL");
 
-		case DBBASE_FIELDTYPE_DECIMAL:
+		case CONNECTOR_FIELDTYPE_DECIMAL:
 
 			return dodoString("DECIMAL");
 
-		case DBBASE_FIELDTYPE_CHAR:
+		case CONNECTOR_FIELDTYPE_CHAR:
 
 			return dodoString("CHAR");
 
-		case DBBASE_FIELDTYPE_TINYBLOB:
+		case CONNECTOR_FIELDTYPE_TINYBLOB:
 
 			return dodoString("TINYBLOB");
 
-		case DBBASE_FIELDTYPE_BLOB:
+		case CONNECTOR_FIELDTYPE_BLOB:
 
 			return dodoString("BLOB");
 
-		case DBBASE_FIELDTYPE_MEDIUMBLOB:
+		case CONNECTOR_FIELDTYPE_MEDIUMBLOB:
 
 			return dodoString("MEDIUMBLOB");
 
-		case DBBASE_FIELDTYPE_LONGBLOB:
+		case CONNECTOR_FIELDTYPE_LONGBLOB:
 
 			return dodoString("LONGBLOB");
 
-		case DBBASE_FIELDTYPE_TINYTEXT:
+		case CONNECTOR_FIELDTYPE_TINYTEXT:
 
 			return dodoString("TINYTEXT");
 
-		case DBBASE_FIELDTYPE_TEXT:
+		case CONNECTOR_FIELDTYPE_TEXT:
 
 			return dodoString("TEXT");
 
-		case DBBASE_FIELDTYPE_MEDIUMTEXT:
+		case CONNECTOR_FIELDTYPE_MEDIUMTEXT:
 
 			return dodoString("MEDIUMTEXT");
 
-		case DBBASE_FIELDTYPE_LONGTEXT:
+		case CONNECTOR_FIELDTYPE_LONGTEXT:
 
 			return dodoString("LONGTEXT");
 
-		case DBBASE_FIELDTYPE_ENUM:
+		case CONNECTOR_FIELDTYPE_ENUM:
 
 			return dodoString("ENUM");
 
-		case DBBASE_FIELDTYPE_SET:
+		case CONNECTOR_FIELDTYPE_SET:
 
 			return dodoString("SET");
 
@@ -1052,41 +1052,41 @@ dbSqlBase::sqlDataType(int type)
 //-------------------------------------------------------------------
 
 int
-dbSqlBase::chkRange(int type)
+sqlConstructor::chkRange(int type)
 {
 	switch (type)
 	{
-		case DBBASE_FIELDTYPE_DATE:
-		case DBBASE_FIELDTYPE_TIME:
-		case DBBASE_FIELDTYPE_TINYBLOB:
-		case DBBASE_FIELDTYPE_BLOB:
-		case DBBASE_FIELDTYPE_MEDIUMBLOB:
-		case DBBASE_FIELDTYPE_LONGBLOB:
-		case DBBASE_FIELDTYPE_TINYTEXT:
-		case DBBASE_FIELDTYPE_TEXT:
-		case DBBASE_FIELDTYPE_MEDIUMTEXT:
-		case DBBASE_FIELDTYPE_LONGTEXT:
-		case DBBASE_FIELDTYPE_ENUM:
-		case DBBASE_FIELDTYPE_SET:
+		case CONNECTOR_FIELDTYPE_DATE:
+		case CONNECTOR_FIELDTYPE_TIME:
+		case CONNECTOR_FIELDTYPE_TINYBLOB:
+		case CONNECTOR_FIELDTYPE_BLOB:
+		case CONNECTOR_FIELDTYPE_MEDIUMBLOB:
+		case CONNECTOR_FIELDTYPE_LONGBLOB:
+		case CONNECTOR_FIELDTYPE_TINYTEXT:
+		case CONNECTOR_FIELDTYPE_TEXT:
+		case CONNECTOR_FIELDTYPE_MEDIUMTEXT:
+		case CONNECTOR_FIELDTYPE_LONGTEXT:
+		case CONNECTOR_FIELDTYPE_ENUM:
+		case CONNECTOR_FIELDTYPE_SET:
 
 			return -1;
 
-		case DBBASE_FIELDTYPE_INTEGER:
-		case DBBASE_FIELDTYPE_INT:
-		case DBBASE_FIELDTYPE_TINYINT:
-		case DBBASE_FIELDTYPE_SMALLINT:
-		case DBBASE_FIELDTYPE_MEDIUMINT:
-		case DBBASE_FIELDTYPE_BIGINT:
-		case DBBASE_FIELDTYPE_FLOAT:
-		case DBBASE_FIELDTYPE_REAL:
-		case DBBASE_FIELDTYPE_DOUBLE:
-		case DBBASE_FIELDTYPE_TIMESTAMP:
+		case CONNECTOR_FIELDTYPE_INTEGER:
+		case CONNECTOR_FIELDTYPE_INT:
+		case CONNECTOR_FIELDTYPE_TINYINT:
+		case CONNECTOR_FIELDTYPE_SMALLINT:
+		case CONNECTOR_FIELDTYPE_MEDIUMINT:
+		case CONNECTOR_FIELDTYPE_BIGINT:
+		case CONNECTOR_FIELDTYPE_FLOAT:
+		case CONNECTOR_FIELDTYPE_REAL:
+		case CONNECTOR_FIELDTYPE_DOUBLE:
+		case CONNECTOR_FIELDTYPE_TIMESTAMP:
 
 			return 0;
 
-		case DBBASE_FIELDTYPE_VARCHAR:
-		case DBBASE_FIELDTYPE_CHAR:
-		case DBBASE_FIELDTYPE_DECIMAL:
+		case CONNECTOR_FIELDTYPE_VARCHAR:
+		case CONNECTOR_FIELDTYPE_CHAR:
+		case CONNECTOR_FIELDTYPE_DECIMAL:
 
 			return 1;
 
@@ -1099,27 +1099,27 @@ dbSqlBase::chkRange(int type)
 //-------------------------------------------------------------------
 
 dodoString
-dbSqlBase::stringReference(int type)
+sqlConstructor::stringReference(int type)
 {
 	switch (type)
 	{
-		case DBBASE_REFERENCE_RESTRICT:
+		case CONNECTOR_REFERENCE_RESTRICT:
 
 			return dodoString("restrict");
 
-		case DBBASE_REFERENCE_CASCADE:
+		case CONNECTOR_REFERENCE_CASCADE:
 
 			return dodoString("cascade");
 
-		case DBBASE_REFERENCE_SET_NULL:
+		case CONNECTOR_REFERENCE_SET_NULL:
 
 			return dodoString("set null");
 
-		case DBBASE_REFERENCE_NO_ACTION:
+		case CONNECTOR_REFERENCE_NO_ACTION:
 
 			return dodoString("no action");
 
-		case DBBASE_REFERENCE_SET_DEFAULT:
+		case CONNECTOR_REFERENCE_SET_DEFAULT:
 
 			return dodoString("set default");
 

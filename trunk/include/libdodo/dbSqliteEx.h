@@ -30,31 +30,33 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum dbSqliteExR
+	namespace db
 	{
-		DBSQLITEEX_WRONGHINTUSAGE,
+		/**
+		 * libdodo defined errors
+		 */
+		enum sqliteExR
+		{
+			SQLITEEX_WRONGHINTUSAGE,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define SQLITEEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum sqliteFunctionsID
+		{
+			SQLITEEX_DISCONNECT,
+			SQLITEEX_CONNECT,
+			SQLITEEX__EXEC,
+			SQLITEEX_FETCHROW,
+			SQLITEEX_FETCHASSOC
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define DBSQLITEEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum dbSqliteFunctionsID
-	{
-		DBSQLITEEX_DISCONNECT,
-		DBSQLITEEX_CONNECT,
-		DBSQLITEEX__EXEC,
-		DBSQLITEEX_FETCHROW,
-		DBSQLITEEX_FETCHASSOC
-	};
-
 };
 
 #endif

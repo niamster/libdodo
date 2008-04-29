@@ -33,10 +33,10 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum dbMysqlFunctionsID
+	enum mysqlFunctionsID
 	{
-		DBMYSQLEX_CONNECT,
-		DBMYSQLEX__EXEC,
+		MYSQLEX_CONNECT,
+		MYSQLEX__EXEC,
 	};
 };
 

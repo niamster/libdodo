@@ -1,5 +1,5 @@
 /***************************************************************************
- *            dbSqlBaseEx.h
+ *            sqlConstructorEx.h
  *
  *  Mon Jul 18 20:25:14 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _DBSQLBASEEX_H_
-#define _DBSQLBASEEX_H_
+#ifndef _DBSQLCONSTRUCTOREX_H_
+#define _DBSQLCONSTRUCTOREX_H_
 
 #include <libdodo/directives.h>
 
@@ -31,30 +31,32 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum dbSqlBaseExR
+	namespace db
 	{
-		DBSQLBASEEX_EMPTYREQUEST,
-		DBSQLBASEEX_UNKNOWNJOINTYPE,
+		/**
+		 * libdodo defined errors
+		 */
+		enum sqlConstructorExR
+		{
+			SQLCONSTRUCTOREX_EMPTYREQUEST,
+			SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define SQLCONSTRUCTOREX_EMPTYREQUEST_STR "Query is empty. Are you sure?"
+	#define SQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum sqlConstructorFunctionsID
+		{
+			SQLCONSTRUCTOREX_QUERYCOLLECT,
+			SQLCONSTRUCTOREX_JOINCOLLECT,
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define DBSQLBASEEX_EMPTYREQUEST_STR "Query is empty. Are you sure?"
-#define DBSQLBASEEX_UNKNOWNJOINTYPE_STR "Unknown join type."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum dbSqlBaseFunctionsID
-	{
-		DBSQLBASEEX_QUERYCOLLECT,
-		DBSQLBASEEX_JOINCOLLECT,
-	};
-
 };
 
 #endif

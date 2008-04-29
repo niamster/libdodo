@@ -8,11 +8,11 @@ using namespace dodo;
 using namespace std;
 
 void 
-hook(void *base,
+hook(void *odata,
 	short int type, 
-	void *yep)
+	void *udata)
 {
-	__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
+	__xexexIoCollectedData *st = (__xexexIoCollectedData *)odata;
 	if (st->operType == IOSTDIO_OPERATION_WRITE)
 	{
 		int a = *(int *)(st->buffer.c_str());

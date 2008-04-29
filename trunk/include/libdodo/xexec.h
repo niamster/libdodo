@@ -45,21 +45,21 @@ namespace dodo
 	{
 		XEXEC_OBJECT_DBMYSQL,
 		XEXEC_OBJECT_DBSQLITE,
+		XEXEC_OBJECT_DBPOSTGRESQL,
 		XEXEC_OBJECT_IOSTDIO,
 		XEXEC_OBJECT_IOFILE,
 		XEXEC_OBJECT_IONETWORKCLIENT,
 		XEXEC_OBJECT_IONETWORKSERVER,
 		XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE,
 		XEXEC_OBJECT_IONETWORKEXCHANGE,
-		XEXEC_OBJECT_DBPOSTGRESQL,
 		XEXEC_OBJECT_IMAGE,
 	};
 
 	/**
 	 * @typedef inExec defines function that will be called as hook
-	 * @param first is pointer class object that uses hook
-	 * @param second is type of object that called hook
-	 * @param third is data needed for hook
+	 * @param first defines object data
+	 * @param second defines type of object that called hook[see xexecObjectTypeEnum]
+	 * @param third defines user data
 	 */
 	typedef void (*inExec)(void *, short, void *);
 
@@ -70,8 +70,8 @@ namespace dodo
 	{
 		inExec func;    ///< function to execute
 		short type;     ///< type of object[see xexecObjectTypeEnum]
-		void *data;     ///< function data
-		void *obj;      ///< pointer to object that uses hook
+		void *data;     ///< user data
+		void *obj;      ///< object data
 		bool enabled;   ///< if true hook is enabled
 		int position;   ///< object identificator
 

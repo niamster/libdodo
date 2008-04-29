@@ -1376,11 +1376,11 @@ Optional Features:
   --disable-ioFile-xexec-support
                           compile ioFile w/o xexec support
   --disable-dbSqlite-xexec-support
-                          compile dbSqlite w/o xexec support
+                          compile db::sqlite w/o xexec support
   --disable-dbPostgresql-xexec-support
-                          compile dbPostgresql w/o xexec support
+                          compile db::postgresql w/o xexec support
   --disable-dbMysql-xexec-support
-                          compile dbMysql w/o xexec support
+                          compile db::mysql w/o xexec support
   --disable-cgiFastClientExchange-xexec-support
                           compile cgi::fastClientExchange w/o xexec support
   --disable-dl-lib        disable dl as lib
@@ -4432,9 +4432,9 @@ fi
 		then
 			echo -n -e "#define DBSQLITE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tdisabled"
@@ -4935,9 +4935,9 @@ fi
 		then
 			echo -n -e "#define DBPOSTGRESQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tdisabled"
@@ -5204,9 +5204,9 @@ fi
 		then
 			echo -n -e "#define DBMYSQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tdisabled"

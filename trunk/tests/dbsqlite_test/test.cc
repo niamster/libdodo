@@ -5,6 +5,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace db;
 
 using namespace std;
 
@@ -12,34 +13,34 @@ int main(int argc, char **argv)
 {
 #ifdef SQLITE_EXT
 	
-		dbSqlite pp;	
+		sqlite pp;	
 		try
 		{
 			
 			toolsFilesystem::unlink("test.lite",true);
 			
-			__dbInfo info;
+			__connectorInfo info;
 			
 			info.path = "test.lite";
 			
 			pp.setDbInfo(info);
 			pp.connect();	
 	
-			__fieldInfo fi;
+			__connectorField fi;
 			fi.name = "date";
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;
 			
-			__tableInfo ti;
+			__connectorTable ti;
 			ti.name = "test";
 			ti.fields.push_back(fi);
 			
 			fi.name = "operation";
-			fi.type = DBBASE_FIELDTYPE_TEXT;		
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;		
 			ti.fields.push_back(fi);
 			
 			fi.name = "id";
-			fi.type = DBBASE_FIELDTYPE_INTEGER;
-			fi.flag = DBBASE_FIELDFLAG_AUTO_INCREMENT;
+			fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+			fi.flag = CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
 			ti.fields.push_back(fi);		
 			
 			pp.createTable(ti);
@@ -83,7 +84,7 @@ int main(int argc, char **argv)
 			
 			cout << pp.fetch().rows.size() << endl;
 			
-			__dbStorage store = pp.fetch();
+			__connectorStorage store = pp.fetch();
 			
 			dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 			

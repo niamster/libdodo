@@ -10,11 +10,11 @@ using namespace std;
 #ifdef IMAGEMAGICK_EXT
 
 	void 
-	hook(void *base,
+	hook(void *odata,
 		short int type,
-		void *yep)
+		void *udata)
 	{
-		__xexexImageCollectedData *imData = (__xexexImageCollectedData *)base;
+		__xexexImageCollectedData *imData = (__xexexImageCollectedData *)odata;
 	
 		if (imData->operType == IMAGE_OPERATION_WRITE)
 		{

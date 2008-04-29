@@ -13,15 +13,15 @@ extern "C"
 {
 
 	void
-	hook(void *base, 
+	hook(void *odata, 
 		xexecObjectTypeEnum type,
-		void *yep)
+		void *udata)
 	{
 		if (type == XEXEC_OBJECT_IOSTDIO)
 		{
 			std::cout << "ioStdio module\t";
 			
-			__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
+			__xexexIoCollectedData *st = (__xexexIoCollectedData *)odata;
 			if (st->operType == IOSTDIO_OPERATION_WRITE)
 			{
 				int *a = (int *)(st->buffer.c_str());
@@ -32,9 +32,9 @@ extern "C"
 	}
 
 	void
-	empty(void *base, 
+	empty(void *odata, 
 		xexecObjectTypeEnum type,
-		void *yep)
+		void *udata)
 	{
 	
 		std::cout << "empty activation\n";

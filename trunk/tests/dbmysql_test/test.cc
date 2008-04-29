@@ -5,18 +5,20 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace db;
+
 using namespace std;
 
 #ifdef MYSQL_EXT
 
 	void 
-	hook(void *base,
+	hook(void *odata,
 		short int type,
-		void *yep)
+		void *udata)
 	{
-		__xexexDbBaseCollectedData *sql = (__xexexDbBaseCollectedData *)base;
+		__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
 	
-		if (sql->operType == DBMYSQL_OPERATION_EXEC && sql->qType == DBBASE_REQUEST_SELECT)
+		if (sql->operType == MYSQL_OPERATION_EXEC && sql->qType == ACCUMULATOR_REQUEST_SELECT)
 		{
 			cout << endl << endl << "table was " << sql->pre_table << endl << endl;
 			
@@ -32,7 +34,7 @@ int main(int argc, char **argv)
 
 #ifdef MYSQL_EXT
 
-		dbMysql pp;
+		mysql pp;
 		try
 		{
 			
@@ -52,23 +54,23 @@ int main(int argc, char **argv)
 			{
 			}
 	
-			__tableInfo ti;
+			__connectorTable ti;
             ti.name = "test";
 
-            __fieldInfo fi;
+            __connectorField fi;
 
             fi.name = "id";
-            fi.type = DBBASE_FIELDTYPE_INTEGER;
-            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
+            fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+            fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
             ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			fi.name = "operation";
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			pp.createTable(ti);
@@ -79,17 +81,17 @@ int main(int argc, char **argv)
             ti.name = "test1";
 			
             fi.name = "id";
-            fi.type = DBBASE_FIELDTYPE_INTEGER;
-            fi.flag = DBBASE_FIELDFLAG_NULL | DBBASE_FIELDFLAG_AUTO_INCREMENT;
+            fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+            fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
             ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			fi.name = "operation";
-			fi.type = DBBASE_FIELDTYPE_TEXT;
+			fi.type = CONNECTOR_FIELDTYPE_TEXT;
 			ti.fields.push_back(fi);
 	
 			pp.createTable(ti);
@@ -102,7 +104,7 @@ int main(int argc, char **argv)
 	
 			/*create field*/
 			fi.name = "foo";
-			fi.type = DBBASE_FIELDTYPE_CHAR;
+			fi.type = CONNECTOR_FIELDTYPE_CHAR;
 			fi.length = 10;
 			
 			pp.createField(fi,"test");
@@ -115,11 +117,11 @@ int main(int argc, char **argv)
 			pp.exec();
 			
 			dodoStringArray fields;
-			__dbStorage storage;
+			__connectorStorage storage;
 			
 			/* select*/
 			pp.selectAll("test");
-			pp.join("test1", DB_JOINTYPE_JOIN, "test.operation = test1.operation");
+			pp.join("test1", CONNECTOR_JOINTYPE_JOIN, "test.operation = test1.operation");
 			pp.limit(10);
 			cout << pp.queryCollect() << endl;
 			pp.exec();
@@ -147,9 +149,9 @@ int main(int argc, char **argv)
 			assA.push_back(arr);
 			
 			/*additional statement*/
-			pp.setAddInsSt(DBBASE_ADDREQUEST_INSERT_IGNORE);//base SQL
-			pp.setAddSelSt(DBBASE_ADDREQUEST_SELECT_DISTINCT);//base SQL
-			pp.setMyAddSelSt(DBMYSQL_ADDREQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
+			pp.setAddInsSt(ACCUMULATOR_ADDREQUEST_INSERT_IGNORE);//base SQL
+			pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);//base SQL
+			pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
 					
 			pp.insert("test",assA);//multiply insert
 			cout << pp.queryCollect() << endl;
@@ -181,11 +183,11 @@ int main(int argc, char **argv)
 			dodoStringArray uni_all;
 			uni_all.push_back(pp.queryCollect());
 			uni_all.push_back(pp.queryCollect());
-			pp.subquery(uni_all,DBBASE_REQUEST_UNION_ALL);
+			pp.subquery(uni_all,CONNECTOR_SUBREQUEST_UNION_ALL);
 			
 			pp.order("id desc");
 			pp.limit(5);
-			pp.setAddSelSt(DBBASE_ADDREQUEST_SELECT_DISTINCT);
+			pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
 			cout << pp.queryCollect() << endl;//show query
 			pp.exec();
 			
