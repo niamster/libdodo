@@ -8,17 +8,19 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace cgi;
+using cgi::fast::clientExchange;
 
 using namespace std;
 
 #ifdef FASTCGI_EXT
 
-systemThreadSharedDataGuard sh;
+	systemThreadSharedDataGuard sh;
 
 	void 
-	cgif(fast::clientExchange *fcgi)
+	cgif(clientExchange *fcgi)
 	{
+		using namespace cgi;
+
 		client cgit(fcgi, true);
 		cgit.setCookie("test","Ni@m");
 		cgit.printHeaders();
@@ -83,8 +85,10 @@ int main(int argc, char **argv)
 	{
 		int *shared = new int(1);
 		sh.set((void *)shared);
+		
+		using namespace cgi::fast;
 
-		fast::client cf;
+		client cf;
 		if (!cf.isFastCgi())
 		{
 			cout << "Not a fastCGI.";

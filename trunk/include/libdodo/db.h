@@ -40,6 +40,210 @@ namespace dodo
 	};
 
 	/**
+	 * @enum dbBaseAddEnum defines additional properties for the request
+	 */
+	enum dbBaseAddEnum
+	{
+		DBBASE_ADDREQUEST_WHERE = 1,
+		DBBASE_ADDREQUEST_HAVING,
+		DBBASE_ADDREQUEST_GROUPBY,
+		DBBASE_ADDREQUEST_ORDERBY,
+		DBBASE_ADDREQUEST_LIMIT,
+		DBBASE_ADDREQUEST_OFFSET,
+		DBBASE_ADDREQUEST_AS,
+		DBBASE_ADDREQUEST_JOIN,
+	};
+	
+	/**
+	 * @enum dbBaseRequestEnum defines type of request
+	 */
+	enum dbBaseRequestEnum
+	{
+		DBBASE_REQUEST_UNION = 1,
+		DBBASE_REQUEST_UNION_ALL,
+		DBBASE_REQUEST_MINUS,
+		DBBASE_REQUEST_INTERSECT,
+	
+		DBBASE_REQUEST_SELECT,
+		DBBASE_REQUEST_INSERT,
+		DBBASE_REQUEST_INSERT_SELECT,
+		DBBASE_REQUEST_UPDATE,
+		DBBASE_REQUEST_DELETE,
+	
+		DBBASE_REQUEST_TRUNCATE,
+	
+		DBBASE_REQUEST_RENAME_DB,
+		DBBASE_REQUEST_RENAME_TABLE,
+		DBBASE_REQUEST_RENAME_FIELD,
+	
+		DBBASE_REQUEST_DELETE_DB,
+		DBBASE_REQUEST_DELETE_TABLE,
+		DBBASE_REQUEST_DELETE_FIELD,
+	
+		DBBASE_REQUEST_CREATE_DB,
+		DBBASE_REQUEST_CREATE_TABLE,
+		DBBASE_REQUEST_CREATE_FIELD,
+	
+		DBBASE_REQUEST_CREATE_INDEX,
+		DBBASE_REQUEST_DELETE_INDEX,
+	
+		DBBASE_REQUEST_CALL_FUNCTION,
+		DBBASE_REQUEST_CALL_PROCEDURE,
+	};
+	
+	/**
+	 * @enum dbBaseAddSelEnum defines additional properties for the `select` request
+	 */
+	enum dbBaseAddSelEnum
+	{
+		DBBASE_ADDREQUEST_SELECT_DISTINCT = 1,
+		DBBASE_ADDREQUEST_SELECT_ALL
+	};
+	
+	/**
+	 * @enum dbBaseAddDelEnum defines additional properties for the `delete` request
+	 */
+	enum dbBaseAddDelEnum
+	{
+		DBBASE_ADDREQUEST_DELETE_IGNORE = 1,
+	};
+	
+	/**
+	 * @enum dbBaseAddUpEnum defines additional properties for the `update` request
+	 */
+	enum dbBaseAddUpEnum
+	{
+		DBBASE_ADDREQUEST_UPDATE_IGNORE = 1,
+	};
+	
+	/**
+	 * @enum dbBaseAddInsEnum defines additional properties for the `insert` request
+	 */
+	enum dbBaseAddInsEnum
+	{
+		DBBASE_ADDREQUEST_INSERT_IGNORE = 1,
+	};
+	
+	/**
+	 * @enum dbBaseFieldTypeEnum defines data types
+	 * @note with data marked with '**' may have length
+	 * with data marked with '**' needs to specify length
+	 */
+	enum dbBaseFieldTypeEnum
+	{
+		DBBASE_FIELDTYPE_TINYINT,                           ///< *The signed range is -128 to 127. The unsigned range is 0 to 255
+		DBBASE_FIELDTYPE_SMALLINT,                          ///< *The signed range is -32768 to 32767. The unsigned range is 0 to 65535
+		DBBASE_FIELDTYPE_MEDIUMINT,                         ///< *The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215
+		DBBASE_FIELDTYPE_INTEGER, DBBASE_FIELDTYPE_INT,     ///< *The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295
+		DBBASE_FIELDTYPE_BIGINT,                            ///< *The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615
+		DBBASE_FIELDTYPE_FLOAT,                             ///< *Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38
+		DBBASE_FIELDTYPE_REAL, DBBASE_FIELDTYPE_DOUBLE,     ///< *[DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308
+		DBBASE_FIELDTYPE_DECIMAL,                           ///< **An unpacked(the number is stored as a string) fixed-point number
+		DBBASE_FIELDTYPE_DATE,                              ///< The supported range is '1000-01-01' to '9999-12-31'
+		DBBASE_FIELDTYPE_TIME,                              ///< The range is '-838:59:59' to '838:59:59'
+		DBBASE_FIELDTYPE_TIMESTAMP,                         ///< *The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself
+		/**
+		 * TIMESTAMP(14) 	YYYYMMDDHHMMSS
+		 * TIMESTAMP(12) 	YYMMDDHHMMSS
+		 * TIMESTAMP(10) 	YYMMDDHHMM
+		 * TIMESTAMP(8) 		YYYYMMDD
+		 * TIMESTAMP(6) 		YYMMDD
+		 * TIMESTAMP(4) 		YYMM
+		 * TIMESTAMP(2) 		YY
+		 */
+		DBBASE_FIELDTYPE_CHAR,                              ///< **The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored
+		DBBASE_FIELDTYPE_VARCHAR,                           ///< **The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length
+		DBBASE_FIELDTYPE_TINYBLOB,                          ///< A column with a maximum length of 255 (2^8 - 1) characters
+		DBBASE_FIELDTYPE_BLOB,                              ///< A column with a maximum length of 65, 535 (2^16 -1) characters
+		DBBASE_FIELDTYPE_MEDIUMBLOB,                        ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
+		DBBASE_FIELDTYPE_LONGBLOB,                          ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
+		DBBASE_FIELDTYPE_TINYTEXT,                          ///< A column with a maximum length of 255 (2^8 - 1) characters
+		DBBASE_FIELDTYPE_TEXT,                              ///< A column with a maximum length of 65, 535 (2^16 -1) characters
+		DBBASE_FIELDTYPE_MEDIUMTEXT,                        ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
+		DBBASE_FIELDTYPE_LONGTEXT,                          ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
+		DBBASE_FIELDTYPE_ENUM,                              ///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values
+		DBBASE_FIELDTYPE_SET,                               ///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members
+	};
+	
+	/**
+	 *  @enum dbBaseFieldFlagEnum defines additional field properties
+	 */
+	enum dbBaseFieldFlagEnum
+	{
+		DBBASE_FIELDFLAG_NULL = 2,              ///< may be NULL
+		DBBASE_FIELDFLAG_AUTO_INCREMENT = 4,    ///< if is not set by request, will be incremented relatevly to previous
+	};
+	
+	/**
+	 * @enum dbBaseReferenceEnum defines reference type assigned to the field
+	 */
+	enum dbBaseReferenceEnum
+	{
+		DBBASE_REFERENCE_RESTRICT = 1,  ///< does not allow the action of any of those parent rows
+		DBBASE_REFERENCE_CASCADE,       ///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
+		DBBASE_REFERENCE_SET_NULL,      ///< sets NULL on the action of any of those parent rows indicates on set action
+		DBBASE_REFERENCE_NO_ACTION,     ///< noacton on the action of any of those parent rows indicates on set action
+		DBBASE_REFERENCE_SET_DEFAULT    ///< sets default on the action of any of those parent rows indicates on set action
+	};
+	
+	/**
+	 * @struct __fieldInfo defines data for field creation
+	 */
+	struct __fieldInfo
+	{
+		/**
+		 * constructor
+		 */
+		__fieldInfo();
+	
+		/**
+		 * overloaded operator '='
+		 * @param from defines object where get properties
+		 */
+		const __fieldInfo &operator=(const __fieldInfo &from);
+	
+		dodoString name;    ///< name of the field
+		int type;           ///< type of field[see dbBaseFieldTypeEnum]
+		int length;         ///< length of the field[see dbBaseFieldTypeEnum notes]
+		int flag;           ///< flags of the field; may be combined with '|'[see dbBaseFieldFlagEnum][DBBASE_FIELDFLAG_NULL by default]
+	
+		dodoString refTable;            ///< table where reference points
+		dodoStringArray refFields;      ///< fields where reference points
+		int onDelete;                   ///< reference action on delete operation[see dbReferenceEnum]
+		int onUpdate;                   ///< reference action on update operation[see dbReferenceEnum]
+	
+		dodoString defaultVal;          ///< default value of the field
+		dodoStringArray set_enum;       ///< statements for SET or ENUM types
+	
+		dodoString charset;             ///< collate charset of the field
+	};
+	
+	/*
+	 * @struct __tableInfo defines data for table creation
+	 */
+	struct __tableInfo
+	{
+		/**
+		 * constructor
+		 */
+		__tableInfo();
+	
+		/**
+		 * overloaded operator '='
+		 * @param from defines object where get properties
+		 */
+		const __tableInfo &operator=(const __tableInfo &from);
+	
+		dodoString name;                    ///< name of the table
+		dodoArray<__fieldInfo> fields;      ///< fields[see __fieldInfo]
+	
+		dodoStringArray primKeys;           ///< primary keys of the table
+		dodoStringArray uniq;               ///< fields of the table that may contain only unique values
+	
+		bool ifNotExists;                   ///< do not throw exception if table already exists[false by default]
+	};
+
+	/**
 	 * @struct __dbStorage defines fetched data from db
 	 */
 	struct __dbStorage
@@ -58,66 +262,6 @@ namespace dodo
 
 		dodoArray<dodoStringArray> rows;    ///< rows of data
 		dodoStringArray fields;             ///< names of fields
-	};
-
-	/**
-	 * @struct __xexexDbBaseCollectedData defines data that could be retrieved from the db object
-	 */
-	struct __xexexDbBaseCollectedData
-	{
-		/**
-		 * constructor
-		 */
-		__xexexDbBaseCollectedData(dodoString &pre_where,
-								   dodoStringArray &pre_fields,
-								   dodoArray<dodoStringArray> &pre_values,
-								   dodoString &pre_table,
-								   dodoString &pre_tableTo,
-								   dodoString &pre_order,
-								   dodoString &pre_having,
-								   dodoString &pre_group,
-								   dodoString &pre_limit,
-								   dodoString &pre_offset,
-								   dodoStringArray &pre_subQueries,
-								   dodoStringArray &pre_joinTables,
-								   dodoStringArray &pre_joinConds,
-								   dodoArray<int> &pre_joinTypes,
-								   int &qType,
-								   int &qShift,
-								   int &qSelShift,
-								   int &qInsShift,
-								   int &qUpShift,
-								   int &qDelShift,
-								   int &operType,
-								   void *executor);
-
-		dodoString &pre_where;                          ///< `where` for the request(can be used as `as` for `callFunction`)
-		dodoStringArray &pre_fields;               ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-		dodoArray<dodoStringArray> &pre_values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-		dodoString &pre_table;                          ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-		dodoString &pre_tableTo;                        ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
-		dodoString &pre_order;                          ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
-		dodoString &pre_having;                         ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
-		dodoString &pre_group;                          ///< `group` for the request
-		dodoString &pre_limit;                      ///< `limit` for the result
-		dodoString &pre_offset;                      ///< `offset` for the result
-		dodoStringArray &pre_subQueries;                ///< `subquery`
-		dodoStringArray &pre_joinTables;                ///< join tables
-		dodoStringArray &pre_joinConds;                 ///< join conditions
-		dodoArray<int> &pre_joinTypes;                  ///< join types
-
-		int &qType;                                     ///< type of operation
-
-		int &qShift;                                    ///< additional actions[see dbBaseAddEnum]
-
-		int &qSelShift;                                 ///< additional select statements[see dbBaseAddSelEnum]
-		int &qInsShift;                                 ///< additional insert statements[see dbBaseAddInsEnum]
-		int &qUpShift;                                  ///< additional update statements[see dbBaseAddUpEnum]
-		int &qDelShift;                                 ///< additional delete statements[see dbBaseAddDelEnum]
-
-		int &operType;                                  ///< xexec operation
-
-		void *executor;                                 ///< class that executed hook
 	};
 
 	/**
@@ -294,6 +438,97 @@ namespace dodo
 			virtual void del(const dodoString &table, const dodoString &where = __dodostring__) = 0;
 
 			/**
+			 * store query, made from subquery with requested method
+			 * @param subqueries defines subqueries
+			 * @param type defines type of combining subqueries[see dbBaseRequestEnum]
+			 */
+			virtual void subquery(const dodoStringArray &subqueries, int type = DBBASE_REQUEST_UNION) = 0;
+
+			/**
+			 * create index in the table
+			 * @param table defines table where create index
+			 * @param field defines field that would be index
+			 * @param name defines name of the index
+			 */
+			virtual void createIndex(const dodoString &table, const dodoString &field, const dodoString &name) = 0;
+
+			/**
+			 * create index in the table
+			 * @param table defines table where create index
+			 * @param fields defines fields that would be index
+			 * @param name defines name of the index
+			 */
+			virtual void createIndex(const dodoString &table, const dodoStringArray &fields, const dodoString &name) = 0;
+
+			/**
+			 * delete index in the table
+			 * @param table defines table where delete index
+			 * @param name defines name of the index
+			 */
+			virtual void deleteIndex(const dodoString &table, const dodoString &name) = 0;
+
+			/**
+			 * rename database
+			 * @param db defines current name of the database
+			 * @param to_db defines new name of the database
+			 */
+			virtual void renameDb(const dodoString &db, const dodoString &to_db) = 0;
+
+			/**
+			 * rename table
+			 * @param table defines current name of the table
+			 * @param to_table defines new name of the table
+			 */
+			virtual void renameTable(const dodoString &table, const dodoString &to_table) = 0;
+
+			/**
+			 * rename field
+			 * @param field defines current name of the field
+			 * @param to_field defines new name of the field
+			 * @param table defines table that contains the field
+			 */
+			virtual void renameField(const dodoString &field, const dodoString &to_field, const dodoString &table) = 0;
+
+			/**
+			 * delete database
+			 * @param db defines the database
+			 */
+			virtual void deleteDb(const dodoString &db) = 0;
+
+			/**
+			 * delete table
+			 * @param table defines the table
+			 */
+			virtual void deleteTable(const dodoString &table) = 0;
+
+			/**
+			 * delete field
+			 * @param field defines field that will be deleted
+			 * @param table defines table that contains the field
+			 */
+			virtual void deleteField(const dodoString &field, const dodoString &table) = 0;
+
+			/**
+			 * create database
+			 * @param db the name of the new database
+			 * @param charset defines charset of the database
+			 */
+			virtual void createDb(const dodoString &db, const dodoString &charset = __dodostring__) = 0;
+
+			/**
+			 * create table
+			 * @param tableInfo defines table definition[see __tableInfo]
+			 */
+			virtual void createTable(const __tableInfo &tableInfo) = 0;
+
+			/**
+			 * create field
+			 * @param fieldInfo defines field definition[see __fieldInfo]
+			 * @param table defines table that will contain the field
+			 */
+			virtual void createField(const __fieldInfo &fieldInfo, const dodoString &table) = 0;
+
+			/**
 			 * truncate table
 			 * @param table is name name of table to truncate
 			 */
@@ -422,32 +657,6 @@ namespace dodo
 		protected:
 
 			bool connected; ///< true if connected to the db
-
-			dodoString pre_where;                          ///< `where` for the request(can be used as `as` for `callFunction`)
-			dodoStringArray pre_fields;               ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-			dodoArray<dodoStringArray> pre_values;      ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-			dodoString pre_table;                          ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-			dodoString pre_tableTo;                        ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
-			dodoString pre_order;                          ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
-			dodoString pre_having;                         ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
-			dodoString pre_group;                          ///< `group` for the request
-			dodoString pre_limit;                      ///< `limit` for the result
-			dodoString pre_offset;                      ///< `offset` for the result
-			dodoStringArray pre_subQueries;                ///< `subquery`
-			dodoStringArray pre_joinTables;                ///< join tables
-			dodoStringArray pre_joinConds;                 ///< join conditions
-			dodoArray<int> pre_joinTypes;                  ///< join types
-
-			int qType;                                     ///< type of operation
-
-			int qShift;                                    ///< additional actions[see dbBaseAddEnum]
-
-			int qSelShift;                                 ///< additional select statements[see dbBaseAddSelEnum]
-			int qInsShift;                                 ///< additional insert statements[see dbBaseAddInsEnum]
-			int qUpShift;                                  ///< additional update statements[see dbBaseAddUpEnum]
-			int qDelShift;                                 ///< additional delete statements[see dbBaseAddDelEnum]
-
-			__xexexDbBaseCollectedData collectedData;   ///< data collected for xexec
 
 	};
 
