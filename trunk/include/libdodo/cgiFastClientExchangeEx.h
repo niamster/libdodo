@@ -32,28 +32,31 @@ namespace dodo
 {
 	namespace cgi
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum cgiFastExchangeExR
+		namespace fast
 		{
-			FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH,
-			FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING,
-		};
-	
-		/**
-		 * explanations for libdodo defined errors
-		 */
-	#define FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH_STR "Failed to flush."
-	#define FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
-	
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum cgiFastExchangeFunctionsID
-		{
-			FASTCLIENTEXCHANGEEX_FLUSH,
-			FASTCLIENTEXCHANGEEX__WRITE,
+			/**
+			 * libdodo defined errors
+			 */
+			enum fastClientExchangeExR
+			{
+				FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH,
+				FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING,
+			};
+		
+			/**
+			 * explanations for libdodo defined errors
+			 */
+		#define FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH_STR "Failed to flush."
+		#define FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
+		
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum fastClientExchangeFunctionsID
+			{
+				FASTCLIENTEXCHANGEEX_FLUSH,
+				FASTCLIENTEXCHANGEEX__WRITE,
+			};
 		};
 	};
 };

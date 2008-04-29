@@ -46,84 +46,87 @@ namespace dodo
 {
 	namespace cgi
 	{
-		/**
-		 * @typedef fastClientHandler defines type of function that will be called on new cgi request
-		 */
-		typedef void (*fastClientHandler)(fastClientExchange *);
-	
-		/**
-		 * @class fast provides fast CGI functionality
-		 */
-		class fastClient
+		namespace fast
 		{
-			private:
-	
-				/**
-				 * copy constructor
-				 * to prevent copying
-				 */
-				fastClient(fastClient &cf);
-	
-			public:
-	
-	#ifdef PTHREAD_EXT
-	
-				/**
-				 * constructor
-				 * @param threading defines if to use threads on new CGI requests
-				 * @param threadsNum defines amount of threads for processing fast CGI queue
-				 */
-				fastClient(bool threading = true, unsigned int threadsNum = 10);
-	
-	#else
-	
-				/**
-				 * constructor
-				 */
-				fastClient();
-	
-	#endif
-	
-				/**
-				 * destructor
-				 */
-				virtual ~fastClient();
-	
-				/**
-				 * set function that will be called on new CGI request
-				 * @param func define function handler
-				 */
-				virtual void setHandler(fastClientHandler func);
-	
-				/**
-				 * listen for incoming requests
-				 */
-				virtual void listen();
-	
-				/**
-				 * @return true if called as a fast CGI[not as a CGI]
-				 */
-				virtual bool isFastCgi();
-	
-			private:
-	
-	#ifdef PTHREAD_EXT
-	
-				bool threading;                 ///< true use threading
-	
-				unsigned int threadsNum;        ///< amount of threads
-	
-				/**
-				 * thread that holds one queue of CGI requests
-				 * @param data defines the data that will be passed to the thread
-				 */
-				static void *stackThread(void *data);
-	
-				static pthread_mutex_t accept;        ///< accept request mutex
-	
-	#endif
-	
-				static fastClientHandler handler;    ///< function to be called on new request
+			/**
+			 * @typedef clientHandler defines type of function that will be called on new cgi request
+			 */
+			typedef void (*clientHandler)(clientExchange *);
+		
+			/**
+			 * @class fast provides fast CGI functionality
+			 */
+			class client
+			{
+				private:
+		
+					/**
+					 * copy constructor
+					 * to prevent copying
+					 */
+					client(client &cf);
+		
+				public:
+		
+		#ifdef PTHREAD_EXT
+		
+					/**
+					 * constructor
+					 * @param threading defines if to use threads on new CGI requests
+					 * @param threadsNum defines amount of threads for processing fast CGI queue
+					 */
+					client(bool threading = true, unsigned int threadsNum = 10);
+		
+		#else
+		
+					/**
+					 * constructor
+					 */
+					client();
+		
+		#endif
+		
+					/**
+					 * destructor
+					 */
+					virtual ~client();
+		
+					/**
+					 * set function that will be called on new CGI request
+					 * @param func define function handler
+					 */
+					virtual void setHandler(clientHandler func);
+		
+					/**
+					 * listen for incoming requests
+					 */
+					virtual void listen();
+		
+					/**
+					 * @return true if called as a fast CGI[not as a CGI]
+					 */
+					virtual bool isFastCgi();
+		
+				private:
+		
+		#ifdef PTHREAD_EXT
+		
+					bool threading;                 ///< true use threading
+		
+					unsigned int threadsNum;        ///< amount of threads
+		
+					/**
+					 * thread that holds one queue of CGI requests
+					 * @param data defines the data that will be passed to the thread
+					 */
+					static void *stackThread(void *data);
+		
+					static pthread_mutex_t accept;        ///< accept request mutex
+		
+		#endif
+		
+					static clientHandler handler;    ///< function to be called on new request
+			};
 		};
 	};
 };

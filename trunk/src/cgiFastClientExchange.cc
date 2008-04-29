@@ -25,28 +25,28 @@
 
 #ifdef FASTCGI_EXT
 
-using namespace dodo::cgi;
+using namespace dodo::cgi::fast;
 
-fastClientExchange::fastClientExchange(fastClientExchange &cf)
+clientExchange::clientExchange(clientExchange &cf)
 {
 }
 
 //-------------------------------------------------------------------
 
-fastClientExchange::fastClientExchange(FCGX_Request *a_request) : request(a_request)
+clientExchange::clientExchange(FCGX_Request *a_request) : request(a_request)
 {
 }
 
 //-------------------------------------------------------------------
 
-fastClientExchange::~fastClientExchange()
+clientExchange::~clientExchange()
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::flush()
+clientExchange::flush()
 {
 	if (FCGX_FFlush(request->out) == -1)
 		throw baseEx(ERRMODULE_CGIFASTCLIENTEXCHANGE, FASTCLIENTEXCHANGEEX_FLUSH, ERR_LIBDODO, FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH, FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
@@ -55,7 +55,7 @@ fastClientExchange::flush()
 //-------------------------------------------------------------------
 
 char *
-fastClientExchange::getenv(const char *buf)
+clientExchange::getenv(const char *buf)
 {
 	return FCGX_GetParam(buf, request->envp);
 }
@@ -63,7 +63,7 @@ fastClientExchange::getenv(const char *buf)
 //-------------------------------------------------------------------
 
 int
-fastClientExchange::getInDescriptor() const
+clientExchange::getInDescriptor() const
 {
 	return -1;
 }
@@ -71,7 +71,7 @@ fastClientExchange::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-fastClientExchange::getOutDescriptor() const
+clientExchange::getOutDescriptor() const
 {
 	return -1;
 }
@@ -81,7 +81,7 @@ fastClientExchange::getOutDescriptor() const
 #ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 
 int
-fastClientExchange::addPostExec(inExec func,
+clientExchange::addPostExec(inExec func,
 				   void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data);
@@ -90,7 +90,7 @@ fastClientExchange::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-fastClientExchange::addPreExec(inExec func,
+clientExchange::addPreExec(inExec func,
 				  void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data);
@@ -101,7 +101,7 @@ fastClientExchange::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-fastClientExchange::addPostExec(const dodoString &module,
+clientExchange::addPostExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
@@ -111,7 +111,7 @@ fastClientExchange::addPostExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 dodo::__xexecCounts
-fastClientExchange::addExec(const dodoString &module,
+clientExchange::addExec(const dodoString &module,
 			   void             *data,
 			   void             *toInit)
 {
@@ -121,7 +121,7 @@ fastClientExchange::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-fastClientExchange::addPreExec(const dodoString &module,
+clientExchange::addPreExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
@@ -135,7 +135,7 @@ fastClientExchange::addPreExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::_read(char * const a_void)
+clientExchange::_read(char * const a_void)
 {
 	memset(a_void, '\0', inSize);
 
@@ -145,7 +145,7 @@ fastClientExchange::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::read(char * const a_void)
+clientExchange::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -184,7 +184,7 @@ fastClientExchange::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::readString(dodoString &a_str)
+clientExchange::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -229,7 +229,7 @@ fastClientExchange::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::writeString(const dodoString &a_buf)
+clientExchange::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -264,7 +264,7 @@ fastClientExchange::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::write(const char *const a_buf)
+clientExchange::write(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -299,7 +299,7 @@ fastClientExchange::write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::_write(const char *const buf)
+clientExchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->out) == -1)
 		throw baseEx(ERRMODULE_CGIFASTCLIENTEXCHANGE, FASTCLIENTEXCHANGEEX__WRITE, ERR_LIBDODO, FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING, FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
@@ -308,7 +308,7 @@ fastClientExchange::_write(const char *const buf)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::readStream(char * const a_void)
+clientExchange::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -334,7 +334,7 @@ fastClientExchange::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::readStreamString(dodoString &a_str)
+clientExchange::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -373,7 +373,7 @@ fastClientExchange::readStreamString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::writeStreamString(const dodoString &a_buf)
+clientExchange::writeStreamString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -428,7 +428,7 @@ fastClientExchange::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-fastClientExchange::writeStream(const char *const a_buf)
+clientExchange::writeStream(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 

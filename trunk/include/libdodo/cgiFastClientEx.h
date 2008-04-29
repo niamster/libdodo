@@ -32,29 +32,32 @@ namespace dodo
 {
 	namespace cgi
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum fastExR
+		namespace fast
 		{
-			FASTCLIENTEX_ACCEPTFAILED,
-			FASTCLIENTEX_ISCGI,
-		};
-	
-		/**
-		 * explanations for libdodo defined errors
-		 */
-	#define FASTCLIENTEX_ACCEPTFAILED_STR "Accept call failed."
-	#define FASTCLIENTEX_ISCGI_STR "Called as a CGI."
-	
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum fastFunctionsID
-		{
-			FASTCLIENTEX_LISTEN,
-			FASTCLIENTEX_STACKTHREAD,
-		};
+			/**
+			 * libdodo defined errors
+			 */
+			enum fastExR
+			{
+				FASTCLIENTEX_ACCEPTFAILED,
+				FASTCLIENTEX_ISCGI,
+			};
+		
+			/**
+			 * explanations for libdodo defined errors
+			 */
+		#define FASTCLIENTEX_ACCEPTFAILED_STR "Accept call failed."
+		#define FASTCLIENTEX_ISCGI_STR "Called as a CGI."
+		
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum fastFunctionsID
+			{
+				FASTCLIENTEX_LISTEN,
+				FASTCLIENTEX_STACKTHREAD,
+			};
+		}
 	};
 };
 

@@ -252,7 +252,7 @@ client::client(bool silent,
 
 #ifdef FASTCGI_EXT
 
-client::client(fastClientExchange    *a_cf,
+client::client(fast::clientExchange    *a_cf,
 		 bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
@@ -288,7 +288,7 @@ client::client(fastClientExchange    *a_cf,
 
 //-------------------------------------------------------------------
 
-client::client(fastClientExchange    *a_cf,
+client::client(fast::clientExchange    *a_cf,
 		dodoMap<short, dodoString> &headers,
 		 bool silent,
 		 bool a_autocleanFiles,
@@ -625,7 +625,7 @@ client::makeEnv()
 	{
 #ifdef FASTCGI_EXT
 		if (clientFastSet)
-			env = ((fastClientExchange *)cgiIO)->getenv(environmentStatements[i]);
+			env = ((fast::clientExchange *)cgiIO)->getenv(environmentStatements[i]);
 		else
 #endif
 		env = getenv(environmentStatements[i]);

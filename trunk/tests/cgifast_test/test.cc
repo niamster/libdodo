@@ -17,7 +17,7 @@ using namespace std;
 systemThreadSharedDataGuard sh;
 
 	void 
-	cgif(fastClientExchange *fcgi)
+	cgif(fast::clientExchange *fcgi)
 	{
 		client cgit(fcgi, true);
 		cgit.setCookie("test","Ni@m");
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 		int *shared = new int(1);
 		sh.set((void *)shared);
 
-		fastClient cf;
+		fast::client cf;
 		if (!cf.isFastCgi())
 		{
 			cout << "Not a fastCGI.";

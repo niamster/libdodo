@@ -25,28 +25,28 @@
 
 #ifdef FASTCGI_EXT
 
-using namespace dodo::cgi;
+using namespace dodo::cgi::fast;
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t fastClient::accept = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t client::accept = PTHREAD_MUTEX_INITIALIZER;
 
 #endif
 
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(fastClientExchange *data)
+dummyStackThread(clientExchange *data)
 {
 }
 
 //-------------------------------------------------------------------
 
-fastClientHandler fastClient::handler = &dummyStackThread;
+clientHandler client::handler = &dummyStackThread;
 
 //-------------------------------------------------------------------
 
-fastClient::fastClient(fastClient &cf)
+client::client(client &cf)
 {
 }
 
@@ -54,7 +54,7 @@ fastClient::fastClient(fastClient &cf)
 
 #ifdef PTHREAD_EXT
 
-fastClient::fastClient(bool a_threading,
+client::client(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
 											  threadsNum(a_threadsNum)
 {
@@ -73,7 +73,7 @@ fastClient::fastClient(bool a_threading,
 
 #else
 
-fastClient::fastClient()
+client::client()
 {
 	FCGX_Init();
 }
@@ -82,7 +82,7 @@ fastClient::fastClient()
 
 //-------------------------------------------------------------------
 
-fastClient::~fastClient()
+client::~client()
 {
 	FCGX_Finish();
 }
@@ -90,7 +90,7 @@ fastClient::~fastClient()
 //-------------------------------------------------------------------
 
 void
-fastClient::setHandler(fastClientHandler func)
+client::setHandler(clientHandler func)
 {
 	handler = func;
 }
@@ -100,12 +100,12 @@ fastClient::setHandler(fastClientHandler func)
 #ifdef PTHREAD_EXT
 
 void *
-fastClient::stackThread(void *data)
+client::stackThread(void *data)
 {
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
 
-	fastClientExchange cfSTD(&request);
+	clientExchange cfSTD(&request);
 
 	int res = 0;
 
@@ -131,7 +131,7 @@ fastClient::stackThread(void *data)
 //-------------------------------------------------------------------
 
 void
-fastClient::listen()
+client::listen()
 {
 	if (!isFastCgi())
 		throw baseEx(ERRMODULE_CGIFASTCLIENT, FASTCLIENTEX_LISTEN, ERR_LIBDODO, FASTCLIENTEX_ISCGI, FASTCLIENTEX_ISCGI_STR, __LINE__, __FILE__);
@@ -157,7 +157,7 @@ fastClient::listen()
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);
 
-		fastClientExchange cfSTD(&request);
+		clientExchange cfSTD(&request);
 
 		while (true)
 		{
@@ -174,7 +174,7 @@ fastClient::listen()
 //-------------------------------------------------------------------
 
 bool
-fastClient::isFastCgi()
+client::isFastCgi()
 {
 	return !FCGX_IsCGI();
 }
