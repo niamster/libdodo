@@ -27,6 +27,7 @@
 #include <vector>
 #include <list>
 #include <deque>
+#include <map>
 
 #include <iostream>
 
@@ -34,16 +35,8 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/dodoString.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/dodoMap.h>
-
 namespace dodo
 {
-	/**
-	 * macroses
-	 */
-
 /**
  * @def addFlag add bit flag to the statement
  */
@@ -59,9 +52,39 @@ namespace dodo
  */
 #define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
+#define dodoString std::string
+
 	/**
-	 * diferent predifined types
+	 * @class dodoMapStringCompare defines compare functor
 	 */
+	class dodoMapStringCompare
+	{
+		public:
+			
+			/**
+			 * compares strings
+			 * @param first defines first string to compare
+			 * @param second defines second string to compare
+			 */
+			bool operator()(const dodoString &first, const dodoString &second);
+	};
+
+	/**
+	 * @class dodoMapStringCompare defines compare functor
+	 */
+	class dodoMapICaseStringCompare
+	{
+		public:
+			
+			/**
+			 * compares strings
+			 * @param first defines first string to compare
+			 * @param second defines second string to compare
+			 */
+			bool operator()(const dodoString &first, const dodoString &second);
+	};
+	
+#define dodoMap std::map
 
 #ifdef USE_DEQUE
 #define dodoArray    std::deque
@@ -79,7 +102,7 @@ namespace dodo
 	typedef dodoArray<dodoStringMap> dodoStringMapArray;                            ///< array of hashes of string
 
 	/**
-	 * diferent predifined constants
+	 * predifined constants
 	 */
 
 	extern dodoString __dodostring__;

@@ -35,7 +35,6 @@ OBJECTS:=dbBase.o \
 	json.o \
 	jsonNode.o \
 	types.o \
-	dodoMap.o \
 	xexec.o \
 	baseEx.o \
 	regexp.o \

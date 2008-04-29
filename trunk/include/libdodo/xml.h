@@ -35,7 +35,6 @@
 
 #include <libdodo/xmlEx.h>
 #include <libdodo/types.h>
-#include <libdodo/dodoMap.h>
 
 namespace dodo
 {

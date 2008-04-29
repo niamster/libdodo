@@ -26,7 +26,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/dodoString.h>
+#include <libdodo/types.h>
 
 #include <ctype.h>
 #include <stdarg.h>

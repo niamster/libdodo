@@ -30,6 +30,7 @@
 #include <stdlib.h>
 
 #include <libdodo/toolsTimeEx.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/types.h>
 
 namespace dodo

@@ -28,6 +28,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/db.h>
 
 namespace dodo

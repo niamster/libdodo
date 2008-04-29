@@ -48,10 +48,11 @@
 #include <sys/ioctl.h>
 #include <fcntl.h>
 
+#include <libdodo/types.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
+#include <libdodo/toolsString.h>
 #include <libdodo/toolsEx.h>
-#include <libdodo/types.h>
 
 namespace dodo
 {

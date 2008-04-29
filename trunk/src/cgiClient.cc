@@ -67,7 +67,7 @@ const char *client::environmentStatements[] ={ "REQUEST_METHOD",
 
 //-------------------------------------------------------------------
 
-const dodo::dodoString client::responseHeaderStatements[] = { "Accept-Ranges",
+const dodoString client::responseHeaderStatements[] = { "Accept-Ranges",
 		"Age",
 		"Allow",
 		"Cache-Control",
@@ -87,7 +87,7 @@ const dodo::dodoString client::responseHeaderStatements[] = { "Accept-Ranges",
 		"X-Powered-By",
 };
 
-const dodo::dodoString client::responseStatusStatements[] = { "Status: 100 Continue\r\n",
+const dodoString client::responseStatusStatements[] = { "Status: 100 Continue\r\n",
 		"Status: 101 Switching Protocols\r\n",
 		"Status: 200 OK\r\n",
 		"Status: 201 Created\r\n",
@@ -138,11 +138,11 @@ __clientFile::__clientFile() : size(0),
 
 //-------------------------------------------------------------------
 
-__clientCookie::__clientCookie(const dodo::dodoString &a_name,
-					 const dodo::dodoString &a_value,
-					 const dodo::dodoString &a_expires,
-					 const dodo::dodoString &a_path,
-					 const dodo::dodoString &a_domain,
+__clientCookie::__clientCookie(const dodoString &a_name,
+					 const dodoString &a_value,
+					 const dodoString &a_expires,
+					 const dodoString &a_path,
+					 const dodoString &a_domain,
 					 bool a_secure) : name(a_name),
 									  value(a_value),
 									  expires(a_expires),
@@ -172,11 +172,11 @@ client::client(client &ct)
 
 //-------------------------------------------------------------------
 
-client::client(dodoMap<short, dodo::dodoString> &headers,
+client::client(dodoMap<short, dodoString> &headers,
 		 bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
-		 dodo::dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 autocleanFiles(a_autocleanFiles),
 										 headersPrinted(false),
@@ -214,7 +214,7 @@ client::client(dodoMap<short, dodo::dodoString> &headers,
 client::client(bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
-		 dodo::dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 autocleanFiles(a_autocleanFiles),
 										 headersPrinted(false),
@@ -229,7 +229,7 @@ client::client(bool silent,
 	
 	cgiIO = new ioSTD;
 
-	dodoMap<short, dodo::dodoString> headers;
+	dodoMap<short, dodoString> headers;
 	initHeaders(headers);
 
 	if (!silent)
@@ -256,7 +256,7 @@ client::client(fastClientExchange    *a_cf,
 		 bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
-		 dodo::dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 clientFastSet(true),
 										 cgiIO(a_cf),
@@ -267,7 +267,7 @@ client::client(fastClientExchange    *a_cf,
 {
 	authInfo.type = CLIENT_AUTHTYPE_NONE;
 	
-	dodoMap<short, dodo::dodoString> headers;
+	dodoMap<short, dodoString> headers;
 	initHeaders(headers);
 
 	if (!silent)
@@ -289,11 +289,11 @@ client::client(fastClientExchange    *a_cf,
 //-------------------------------------------------------------------
 
 client::client(fastClientExchange    *a_cf,
-		dodoMap<short, dodo::dodoString> &headers,
+		dodoMap<short, dodoString> &headers,
 		 bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
-		 dodo::dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+		 dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 										 postFilesTmpDir(a_postFilesTmpDir),
 										 clientFastSet(true),
 										 cgiIO(a_cf),
@@ -351,7 +351,7 @@ client::flush()
 //-------------------------------------------------------------------
 
 void
-client::printStream(const dodo::dodoString &buf)
+client::printStream(const dodoString &buf)
 {
 	printHeaders();
 
@@ -361,7 +361,7 @@ client::printStream(const dodo::dodoString &buf)
 //-------------------------------------------------------------------
 
 void
-client::print(const dodo::dodoString &buf)
+client::print(const dodoString &buf)
 {
 	printHeaders();
 
@@ -374,11 +374,11 @@ client::print(const dodo::dodoString &buf)
 void 
 client::makeAuth()
 {
-	dodo::dodoString &httpAuthorization = ENVIRONMENT[CLIENT_ENVIRONMENT_HTTPAUTHORIZATION];
+	dodoString &httpAuthorization = ENVIRONMENT[CLIENT_ENVIRONMENT_HTTPAUTHORIZATION];
 	
 	if (toolsString::contains(httpAuthorization, "Basic"))
 	{
-		dodo::dodoStringArray arr = tools::explode(tools::decodeBase64(toolsString::trim(httpAuthorization.substr(6),' ')), ":", 2);
+		dodoStringArray arr = tools::explode(tools::decodeBase64(toolsString::trim(httpAuthorization.substr(6),' ')), ":", 2);
 		
 		authInfo.type = CLIENT_AUTHTYPE_BASIC;
 		authInfo.user = arr[0];
@@ -391,18 +391,18 @@ client::makeAuth()
 		{
 			authInfo.type = CLIENT_AUTHTYPE_DIGEST;
 			
-			dodo::dodoStringArray parts = tools::explode(httpAuthorization.substr(7), &trim, ",");
+			dodoStringArray parts = tools::explode(httpAuthorization.substr(7), &trim, ",");
 			
-			dodo::dodoStringArray tuple;
+			dodoStringArray tuple;
 			
-			dodo::dodoStringArray::iterator i = parts.begin(), j = parts.end();
+			dodoStringArray::iterator i = parts.begin(), j = parts.end();
 			for (;i!=j;++i)
 			{
 				tuple = tools::explode(*i, "=", 2);
 				if (tuple.size() != 2)
 					continue;
 				
-				dodo::dodoString &challengePart = tuple[0];
+				dodoString &challengePart = tuple[0];
 				
 				if (toolsString::iequal(challengePart, "realm"))
 					authInfo.realm = toolsString::trim(tuple[1], '"');
@@ -456,16 +456,16 @@ client::makeAuth()
 //-------------------------------------------------------------------
 
 void 
-client::requestAuthentification(const dodo::dodoString &realm,
+client::requestAuthentification(const dodoString &realm,
 			short type)
 {
 	returnCode = CLIENT_STATUSCODE_UNAUTHORIZED;
 	
 	if (type == CLIENT_AUTHTYPE_BASIC)
-		HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_WWWAUTHENTICATE, dodo::dodoString("Basic realm=\"") + realm + "\""));
+		HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Basic realm=\"") + realm + "\""));
 	else
 		if (type == CLIENT_AUTHTYPE_DIGEST)
-			HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_WWWAUTHENTICATE, dodo::dodoString("Digest realm=\"") + 
+			HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") + 
 																					realm + 
 																					"\", qop=\"auth\", nonce=\"" + 
 																					tools::MD5Hex(tools::stringRandom(16)) + 
@@ -486,8 +486,8 @@ client::getAuthentificationInfo()
 //-------------------------------------------------------------------
 
 bool 
-client::checkAuthentification(const dodo::dodoString &user, 
-								const dodo::dodoString &password)
+client::checkAuthentification(const dodoString &user, 
+								const dodoString &password)
 {
 	if (authInfo.type == CLIENT_AUTHTYPE_BASIC)
 		return (toolsString::equal(user,authInfo.user) && toolsString::equal(password,authInfo.password));
@@ -507,9 +507,9 @@ client::checkAuthentification(const dodo::dodoString &user,
 			tools::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
 			tools::MD5Final(HA, &context);
 
-			dodo::dodoString HA1 = tools::binToHex(dodo::dodoString((char *)&HA, 16));
+			dodoString HA1 = tools::binToHex(dodoString((char *)&HA, 16));
 			
-			dodo::dodoString &methodForAuth = ENVIRONMENT[CLIENT_ENVIRONMENT_REQUESTMETHOD]; 
+			dodoString &methodForAuth = ENVIRONMENT[CLIENT_ENVIRONMENT_REQUESTMETHOD]; 
 			
 			tools::MD5Init(&context);
 			tools::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
@@ -517,7 +517,7 @@ client::checkAuthentification(const dodo::dodoString &user,
 			tools::MD5Update(&context, (unsigned char *)authInfo.uri.c_str(), authInfo.uri.size());
 			tools::MD5Final(HA, &context);
 
-			dodo::dodoString HA2 = tools::binToHex(dodo::dodoString((char *)&HA, 16));
+			dodoString HA2 = tools::binToHex(dodoString((char *)&HA, 16));
 			
 			tools::MD5Init(&context);
 			tools::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
@@ -533,7 +533,7 @@ client::checkAuthentification(const dodo::dodoString &user,
 			tools::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
 			tools::MD5Final(HA, &context);
 			
-			return (toolsString::equal(tools::binToHex(dodo::dodoString((char *)&HA, 16)), authInfo.response));
+			return (toolsString::equal(tools::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
 		}
 		else
 			return false;
@@ -542,7 +542,7 @@ client::checkAuthentification(const dodo::dodoString &user,
 
 //-------------------------------------------------------------------
 
-dodo::dodoString
+dodoString
 client::getContent()
 {
 	return content;
@@ -561,7 +561,7 @@ client::clearContent()
 void
 client::cleanTmp()
 {
-	dodoMap<dodo::dodoString, __clientFile>::iterator i(FILES.begin()), j(FILES.end());
+	dodoMap<dodoString, __clientFile>::iterator i(FILES.begin()), j(FILES.end());
 	for (; i != j; ++i)
 	{
 		if (!postFilesInMem)
@@ -596,15 +596,15 @@ client::getMethod() const
 //-------------------------------------------------------------------
 
 void
-client::make(dodo::dodoStringMap &val,
-		  const dodo::dodoString &string,
+client::make(dodoStringMap &val,
+		  const dodoString &string,
 		  const char       *delim)
 {
-	dodo::dodoStringArray getPair = tools::explode(tools::decodeUrl(string), delim);
+	dodoStringArray getPair = tools::explode(tools::decodeUrl(string), delim);
 
-	dodo::dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
+	dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
 
-	dodo::dodoStringArray temp;
+	dodoStringArray temp;
 
 	for (; l != m; ++l)
 	{
@@ -639,7 +639,7 @@ client::makeEnv()
 //-------------------------------------------------------------------
 
 void
-client::initHeaders(dodoMap<short, dodo::dodoString> &headers)
+client::initHeaders(dodoMap<short, dodoString> &headers)
 {
 	if (headers.size() > 0)
 	{
@@ -647,8 +647,8 @@ client::initHeaders(dodoMap<short, dodo::dodoString> &headers)
 	}
 	else
 	{
-		HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_CONTENTTYPE, dodo::dodoString("text/html")));
-		HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_XPOWEREDBY, dodo::dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
+		HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_CONTENTTYPE, dodoString("text/html")));
+		HEADERS.insert(make_pair(CLIENT_RESPONSEHEADER_XPOWEREDBY, dodoString(PACKAGE_NAME "/" PACKAGE_VERSION)));
 	}
 }
 
@@ -675,7 +675,7 @@ client::printHeaders() const
 
 	cgiIO->writeStreamString(responseStatusStatements[returnCode]);
 	
-	dodoMap<short, dodo::dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
+	dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
 		cgiIO->writeStreamString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
 
@@ -743,9 +743,9 @@ client::makePost()
 	
 			unsigned int temp0;
 			temp0 = ENVIRONMENT[CLIENT_ENVIRONMENT_CONTENTTYPE].find("boundary=");
-			dodo::dodoStringArray postPartd = tools::explode(content, "--" + ENVIRONMENT[CLIENT_ENVIRONMENT_CONTENTTYPE].substr(temp0 + 9));
+			dodoStringArray postPartd = tools::explode(content, "--" + ENVIRONMENT[CLIENT_ENVIRONMENT_CONTENTTYPE].substr(temp0 + 9));
 	
-			dodo::dodoStringArray::iterator i(postPartd.begin() + 1), j(postPartd.end());
+			dodoStringArray::iterator i(postPartd.begin() + 1), j(postPartd.end());
 	
 			unsigned int temp1;
 			char *ptr;
@@ -759,14 +759,14 @@ client::makePost()
 					break;
 				else
 				{
-					if (i->find("filename") != dodo::dodoString::npos)
+					if (i->find("filename") != dodoString::npos)
 					{
-						if ((temp0 = i->find("name=\"")) == dodo::dodoString::npos)
+						if ((temp0 = i->find("name=\"")) == dodoString::npos)
 							continue;
 						temp0 += 6;
 						temp1 = i->find("\"", temp0);
 		
-						dodo::dodoString post_name = i->substr(temp0, temp1 - temp0);
+						dodoString post_name = i->substr(temp0, temp1 - temp0);
 		
 						__clientFile file;
 		
@@ -793,7 +793,7 @@ client::makePost()
 							file.error = CLIENT_POSTFILEERR_NONE;
 		
 							ptr = new char[pathLength];
-							strncpy(ptr, dodo::dodoString(postFilesTmpDir + FILE_DELIM + dodo::dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
+							strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
 							fd = mkstemp(ptr);
 							if (fd == -1)
 							{
@@ -863,7 +863,7 @@ client::makePost()
 					}
 					else
 					{	
-						if ((temp0 = i->find("name=\"")) == dodo::dodoString::npos)
+						if ((temp0 = i->find("name=\"")) == dodoString::npos)
 							continue;
 						
 						temp0 += 6;
@@ -892,12 +892,12 @@ client::operator[](short method)
 
 //-------------------------------------------------------------------
 
-dodo::dodoString
-client::request(const dodo::dodoString &varName,
+dodoString
+client::request(const dodoString &varName,
 			 short first)
 {
-	dodo::dodoString met0 = GET[varName];
-	dodo::dodoString met1 = POST[varName];
+	dodoString met0 = GET[varName];
+	dodoString met1 = POST[varName];
 
 	if (first == CLIENT_REQUESTMETHOD_GET)
 		if (met0.size() != 0)
@@ -915,11 +915,11 @@ client::request(const dodo::dodoString &varName,
 //-------------------------------------------------------------------
 
 void
-client::setCookie(const dodo::dodoString &name,
-			   const dodo::dodoString &value,
-			   const dodo::dodoString &expires,
-			   const dodo::dodoString &path,
-			   const dodo::dodoString &domain,
+client::setCookie(const dodoString &name,
+			   const dodoString &value,
+			   const dodoString &expires,
+			   const dodoString &path,
+			   const dodoString &domain,
 			   bool secure)
 {
 	__clientCookie temp(secure);
@@ -941,8 +941,8 @@ client::setCookie(const __clientCookie &cookie)
 
 //-------------------------------------------------------------------
 
-dodo::dodoString 
-client::trim(const dodo::dodoString &data)
+dodoString 
+client::trim(const dodoString &data)
 {
 	return toolsString::trim(data, ' ');
 }

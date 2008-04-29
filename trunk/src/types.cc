@@ -24,17 +24,43 @@
 
 #include <libdodo/types.h>
 
-namespace dodo
+using namespace dodo;
+
+dodoString __dodostring__;
+
+//-------------------------------------------------------------------
+
+dodoStringArray __dodostringarray__;
+
+//-------------------------------------------------------------------
+
+dodoStringMap __dodostringmap__;
+
+//-------------------------------------------------------------------
+
+dodoArray<dodoStringArray> __dodostringarrayarray__;
+
+//-------------------------------------------------------------------
+
+dodoStringMapArray __dodostringmaparray__;
+
+//-------------------------------------------------------------------
+
+bool
+dodoMapStringCompare::operator()(const dodoString &first, 
+								const dodoString &second)
 {
+	return strcmp(first.c_str(), second.c_str()) < 0 ? true : false;
+}
 
-	dodoString __dodostring__;
+//-------------------------------------------------------------------
 
-	dodoStringArray __dodostringarray__;
+bool
+dodoMapICaseStringCompare::operator()(const dodoString &first, 
+								const dodoString &second)
+{
+	return strcasecmp(first.c_str(), second.c_str()) < 0 ? true : false;
+}
 
-	dodoStringMap __dodostringmap__;
+//-------------------------------------------------------------------
 
-	dodoArray<dodoStringArray> __dodostringarrayarray__;
-
-	dodoStringMapArray __dodostringmaparray__;
-
-};
