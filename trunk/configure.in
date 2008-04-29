@@ -490,7 +490,7 @@ fi
 		[MOD_IMAGEMAGICK_DIR="$withval"], [MOD_IMAGEMAGICK="no"])
 	if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 	then
-		ORIGINAL_CPPFLAGS=$CPPFLAGS
+		ORIGINAL_LDFLAGS=$LDFLAGS
 		if test "$MOD_IMAGEMAGICK_DIR" = "yes" -a "$(which Magick-config 2>/dev/null)" != ""
 		then
 			if test "$(which Magick-config 2>/dev/null)" != ""

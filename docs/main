@@ -1,66 +1,53 @@
 Brief overview of libdodo's modules
-libdodo consists of such modules as:
 
 baseEx
-error handling through `throw` call; it’s possible to set handler[from external module also]
+	error handling through `throw` call; it's possible to set handler[also from external library]
 
-cgiTools
-server side `scripting`; [presents requests, headers, cookies, …]
+cgi::
+	HTTP server side routines present requests, headers, cookies, authentification, ...
+	
+	fast::
+		support for fast-cgi
 
-flush
-system of classes that works with input/output
+	processor:
+		file contents processor module
+		parses template files using specific syntax to create output content
 
-flushDisk[*]
-disk operations [read,write …]
+io:: 
+	input/output routines
+	files, network, stdin/stdout, HTTP requests
 
-flushDiskTools[*]
-disk operations [read,write,file/dir operations, …]
+db::
+	database related routines
+	SQL independent interface to communicate with databases
+	supports MySQL, PostreSQL, sqlite
 
-flushSocket[Options,Exchange][*]
-network operations [client/server connection and communication]
+regexp:
+	regular expression routines(match, replace)
+	supports POSIX/PCRE[compile-time]
 
-flushSocketTools[*]
-network operations
+xml:
+	xml-related routines(parsing, creation)
 
-flushSTD[*]
-stdin/stdout operations controlled in/out put
+tools::
+	system, time, string, filesystem, network
 
-dbBase
-system SQL independent interface to communicate with database
+xexec:
+	smart system of pre/post exec operations for other modules
 
-dbSqlBase
-convertions to SQL for SQLbase databases
+system::
+	job control(processes, threads), race condition control(for processes, threads), access to shared memory
 
-dbMysql[*]
-communication with mySQL database
+logger:
+	log routines
 
-dbSqlite[*]
-communication with Sqlite database
+json::
+	json-related routines(parsing, creation)
 
-regexpTools
-regexp operations [match, replace]
+rpc::
+	rpc client/server modules
+	supports xml-rpc
+	supports cgi-server, http-client
 
-systemTools
-different system tools [system, evironment info, …]
-
-timeTools
-different time/date manipulations
-
-xmlTools
-xml parsing
-
-tools
-different functions [trim, implode/explode, …]
-
-dodoMap
-cover for std::map = not fail if request not existant value; possible ignore case in keys
-
-xexec
-pre/post exec operations in other modules(marked with [*]) in different actions
-
-systemThreads[Shareds]
-threads routine[creation, starting, shared memory syncronizations]
-
-All libdodo methods throw exceptions on errors;
-you can compile it without exceptions, in this case you may chek by return values, but sometimes it’s danger.
+All libdodo methods throw exceptions on errors
 
