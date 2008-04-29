@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/logger.h>
-#include <libdodo/ioDisk.h>
+#include <libdodo/ioFile.h>
 #include <libdodo/ioSTD.h>
 
 #include <iostream>
@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 	{	
 		logger log;
 
-		ioDisk *disk = new ioDisk("./test.log", IODISK_FILETYPE_REG_FILE, IODISK_OPENMODE_APPEND);
+		ioFile *disk = new ioFile("./test.log", IOFILE_FILETYPE_REG_FILE, IOFILE_OPENMODE_APPEND);
 		ioSTD *std = new ioSTD;
 		std->redirectToSTDErr(true);
 

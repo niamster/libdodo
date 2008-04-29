@@ -111,17 +111,17 @@ else
 	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(ioDisk-xexec-support,
-        AS_HELP_STRING([--disable-ioDisk-xexec-support],[compile ioDisk w/o xexec support]),
-        [IODISK_W_XEXEC="$enableval"], [IODISK_W_XEXEC="yes"])
+AC_ARG_ENABLE(ioFile-xexec-support,
+        AS_HELP_STRING([--disable-ioFile-xexec-support],[compile ioFile w/o xexec support]),
+        [IOFILE_W_XEXEC="$enableval"], [IOFILE_W_XEXEC="yes"])
 
-if test "$IODISK_W_XEXEC" = "no"
+if test "$IOFILE_W_XEXEC" = "no"
 then
-	echo -n -e "#define IODISK_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define IOFILE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check for libraries.

@@ -1,6 +1,6 @@
 #include <libdodo/tools.h>
 #include <libdodo/image.h>
-#include <libdodo/ioDisk.h>
+#include <libdodo/ioFile.h>
 
 #include <iostream>
 
@@ -56,8 +56,8 @@ int main(int argc, char **argv)
 		im.setQuality(4);
 		im.write(&img, size);
 		
-		ioDisk io;
-		io.open("my.png", IODISK_FILETYPE_REG_FILE, IODISK_OPENMODE_READ_WRITE_TRUNCATE);
+		ioFile io;
+		io.open("my.png", IOFILE_FILETYPE_REG_FILE, IOFILE_OPENMODE_READ_WRITE_TRUNCATE);
 		io.outSize = size;
 		io.write((char *)img);
 		im.destroyImageData(&img);

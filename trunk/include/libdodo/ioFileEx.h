@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioDiskEx.h
+ *            ioFileEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IODISKEX_H_
-#define _IODISKEX_H_
+#ifndef _IOFILEEX_H_
+#define _IOFILEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -34,32 +34,32 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum ioDiskExR
+	enum ioFileExR
 	{
-		IODISKEX_WRONGFILENAME,
-		IODISKEX_CANNOTOVEWRITE,
-		IODISKEX_FILEISSHORTERTHANGIVENPOSITION,
+		IOFILEEX_WRONGFILENAME,
+		IOFILEEX_CANNOTOVEWRITE,
+		IOFILEEX_FILEISSHORTERTHANGIVENPOSITION,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define IODISKEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
-#define IODISKEX_CANNOTOVEWRITE_STR "You set option not to overwrite, but try to do that =)"
-#define IODISKEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
+#define IOFILEEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+#define IOFILEEX_CANNOTOVEWRITE_STR "You set option not to overwrite, but try to do that =)"
+#define IOFILEEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
 
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioDiskFunctionsID
+	enum ioFileFunctionsID
 	{
-		IODISKEX_CLOSE,
-		IODISKEX_OPEN,
-		IODISKEX__READ,
-		IODISKEX__WRITE,
-		IODISKEX__READSTREAM,
-		IODISKEX__WRITESTREAM,
-		IODISKEX_FLUSH,
+		IOFILEEX_CLOSE,
+		IOFILEEX_OPEN,
+		IOFILEEX__READ,
+		IOFILEEX__WRITE,
+		IOFILEEX__READSTREAM,
+		IOFILEEX__WRITESTREAM,
+		IOFILEEX_FLUSH,
 	};
 };
 

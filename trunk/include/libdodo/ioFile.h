@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioDisk.h
+ *            ioFile.h
  *
  *  Tue Oct 8 08:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IODISK_H_
-#define _IODISK_H_
+#ifndef _IOFILE_H_
+#define _IOFILE_H_
 
 #include <libdodo/directives.h>
 
@@ -32,7 +32,7 @@
 
 #include <libdodo/tools.h>
 #include <libdodo/toolsFilesystem.h>
-#include <libdodo/ioDiskEx.h>
+#include <libdodo/ioFileEx.h>
 #include <libdodo/types.h>
 #include <libdodo/io.h>
 #include <libdodo/systemThreadGuard.h>
@@ -40,49 +40,49 @@
 namespace dodo
 {
 	/**
-	 * @enum ioDiskOperationTypeEnum defines type of operation for hook
+	 * @enum ioFileOperationTypeEnum defines type of operation for hook
 	 */
-	enum ioDiskOperationTypeEnum
+	enum ioFileOperationTypeEnum
 	{
-		IODISK_OPERATION_READ,
-		IODISK_OPERATION_READSTRING,
-		IODISK_OPERATION_READSTREAM,
-		IODISK_OPERATION_READSTREAMSTRING,
-		IODISK_OPERATION_WRITE,
-		IODISK_OPERATION_WRITESTRING,
-		IODISK_OPERATION_WRITESTREAM,
-		IODISK_OPERATION_WRITESTREAMSTRING,
-		IODISK_OPERATION_OPEN,
-		IODISK_OPERATION_CLOSE
+		IOFILE_OPERATION_READ,
+		IOFILE_OPERATION_READSTRING,
+		IOFILE_OPERATION_READSTREAM,
+		IOFILE_OPERATION_READSTREAMSTRING,
+		IOFILE_OPERATION_WRITE,
+		IOFILE_OPERATION_WRITESTRING,
+		IOFILE_OPERATION_WRITESTREAM,
+		IOFILE_OPERATION_WRITESTREAMSTRING,
+		IOFILE_OPERATION_OPEN,
+		IOFILE_OPERATION_CLOSE
 	};
 
 	/**
-	 * @enum ioDiskModesEnum defines modes to open file
+	 * @enum ioFileModesEnum defines modes to open file
 	 */
-	enum ioDiskModesEnum
+	enum ioFileModesEnum
 	{
-		IODISK_OPENMODE_READ_ONLY,              ///< error if not exists file
-		IODISK_OPENMODE_READ_WRITE,             ///< creates if not exists
-		IODISK_OPENMODE_READ_WRITE_TRUNCATE,    ///< if exists=truncates
-		IODISK_OPENMODE_APPEND                  ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
+		IOFILE_OPENMODE_READ_ONLY,              ///< error if not exists file
+		IOFILE_OPENMODE_READ_WRITE,             ///< creates if not exists
+		IOFILE_OPENMODE_READ_WRITE_TRUNCATE,    ///< if exists=truncates
+		IOFILE_OPENMODE_APPEND                  ///< for readin'; writin' to the end; you may skip parameter `pos` for write method
 	};
 
 	/**
-	 * @enum ioDiskFileToCreateEnum defines file type you can create
+	 * @enum ioFileFileToCreateEnum defines file type you can create
 	 */
-	enum ioDiskFileToCreateEnum
+	enum ioFileFileToCreateEnum
 	{
-		IODISK_FILETYPE_REG_FILE,   ///< regular file
-		IODISK_FILETYPE_TMP_FILE,   ///< temporary file[will be deleted after exit(or close)]
-		IODISK_FILETYPE_FIFO_FILE,  ///< FIFO file
-		IODISK_FILETYPE_CHAR_FILE   ///< CHAR file
+		IOFILE_FILETYPE_REG_FILE,   ///< regular file
+		IOFILE_FILETYPE_TMP_FILE,   ///< temporary file[will be deleted after exit(or close)]
+		IOFILE_FILETYPE_FIFO_FILE,  ///< FIFO file
+		IOFILE_FILETYPE_CHAR_FILE   ///< CHAR file
 	};
 
 	/**
-	 * @class ioDisk provides disk I/O manipulations
+	 * @class ioFile provides disk I/O manipulations
 	 */
 
-	class ioDisk : public io,
+	class ioFile : public io,
 				   virtual public systemThreadGuardHolder
 	{
 			friend class ioNetwork;
@@ -93,25 +93,25 @@ namespace dodo
 			 * copy constructor
 			 * to prevent copying
 			 */
-			ioDisk(ioDisk &fd);
+			ioFile(ioFile &fd);
 
 		public:
 
 			/**
 			 * constructor
 			 * @param path defines path to the file
-			 * @param fileType defines type of file[see ioDiskFileToCreateEnum]
-			 * @param mode defines mode to open file[see ioDiskModesEnum]
+			 * @param fileType defines type of file[see ioFileFileToCreateEnum]
+			 * @param mode defines mode to open file[see ioFileModesEnum]
 			 * @note if type is TMP_FILE path is ignored
 			 */
-			ioDisk(const dodoString &path = __dodostring__, short fileType = IODISK_FILETYPE_REG_FILE, short mode = IODISK_OPENMODE_READ_WRITE);
+			ioFile(const dodoString &path = __dodostring__, short fileType = IOFILE_FILETYPE_REG_FILE, short mode = IOFILE_OPENMODE_READ_WRITE);
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioDisk();
+			virtual ~ioFile();
 
-#ifndef IODISK_WO_XEXEC
+#ifndef IOFILE_WO_XEXEC
 
 			/**
 			 * add hook after the operation
@@ -166,8 +166,8 @@ namespace dodo
 			/**
 			 * open file
 			 * @param path defines path to the file
-			 * @param fileType defines type of file[see ioDiskFileToCreateEnum]
-			 * @param mode defines mode to open file[see ioDiskModesEnum]
+			 * @param fileType defines type of file[see ioFileFileToCreateEnum]
+			 * @param mode defines mode to open file[see ioFileModesEnum]
 			 * @note if type is TMP_FILE path is ignored
 			 */
 			virtual void open(const dodoString &path, short fileType, short mode);

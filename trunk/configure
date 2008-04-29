@@ -1266,8 +1266,8 @@ Optional Features:
                           compile ioNetworkClient w/o xexec support
   --disable-ioNetworkServer-xexec-support
                           compile ioNetworkServer w/o xexec support
-  --disable-ioDisk-xexec-support
-                          compile ioDisk w/o xexec support
+  --disable-ioFile-xexec-support
+                          compile ioFile w/o xexec support
   --disable-dbSqlite-xexec-support
                           compile dbSqlite w/o xexec support
   --disable-dbPostgresql-xexec-support
@@ -3541,21 +3541,21 @@ else
 	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tenabled"
 fi
 
-# Check whether --enable-ioDisk-xexec-support was given.
-if test "${enable_ioDisk_xexec_support+set}" = set; then
-  enableval=$enable_ioDisk_xexec_support; IODISK_W_XEXEC="$enableval"
+# Check whether --enable-ioFile-xexec-support was given.
+if test "${enable_ioFile_xexec_support+set}" = set; then
+  enableval=$enable_ioFile_xexec_support; IOFILE_W_XEXEC="$enableval"
 else
-  IODISK_W_XEXEC="yes"
+  IOFILE_W_XEXEC="yes"
 fi
 
 
-if test "$IODISK_W_XEXEC" = "no"
+if test "$IOFILE_W_XEXEC" = "no"
 then
-	echo -n -e "#define IODISK_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IOFILE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check for libraries.

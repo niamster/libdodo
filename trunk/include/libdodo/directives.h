@@ -91,7 +91,7 @@
 /**
  * max line length
  */
-#define IODISK_MAXLINELEN          10240
+#define IOFILE_MAXLINELEN          10240
 
 /**
  * default values of socket buffer for io operations(ioNetwork)

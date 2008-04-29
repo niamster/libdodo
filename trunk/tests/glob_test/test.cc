@@ -1,5 +1,5 @@
 #include <libdodo/tools.h>
-#include <libdodo/ioDisk.h>
+#include <libdodo/ioFile.h>
 #include <libdodo/baseEx.h>
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetwork.h>
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		cout << "MD5 of \"\"" << endl;
 		cout << tools::MD5Hex("") <<  endl;
 		
-		baseEx::setErrorHandler(ERRMODULE_IODISK,&baseHandler,NULL);
+		baseEx::setErrorHandler(ERRMODULE_IOFILE,&baseHandler,NULL);
 #ifdef DL_EXT
 		if(!baseEx::setErrorHandler("./module",NULL))
 			cout << "WTF";

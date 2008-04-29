@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IODISKEX_H_
-#define _IODISKEX_H_
+#ifndef _IOFILEEX_H_
+#define _IOFILEEX_H_
 
 #include <libdodo/directives.h>
 

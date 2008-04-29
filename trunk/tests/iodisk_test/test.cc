@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/ioDisk.h>
+#include <libdodo/ioFile.h>
 #include <libdodo/toolsFilesystem.h>
 
 #include <iostream>
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 		
 		toolsFilesystem::unlink("my.dat");
 		
-		ioDisk io("my.dat", IODISK_FILETYPE_REG_FILE, IODISK_OPENMODE_READ_WRITE_TRUNCATE);
+		ioFile io("my.dat", IOFILE_FILETYPE_REG_FILE, IOFILE_OPENMODE_READ_WRITE_TRUNCATE);
 		toolsFilesystem::chmod("my.dat", TOOLSFILESYSTEM_PERM_ALL_ALL_ACCESS);
 		
 		io.inSize = io.outSize = 14;

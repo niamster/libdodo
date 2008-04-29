@@ -24,7 +24,7 @@ extern "C"
 		strcpy(module.name,"test");
 		strcpy(module.discription,"test module");
 		strcpy(module.hook,"baseHandler");
-		module.module = ERRMODULE_IODISK;
+		module.module = ERRMODULE_IOFILE;
 		
 		return module;
 	}

@@ -76,7 +76,7 @@ namespace dodo
 
 			/**
 			 * @return identificator of stream pair
-			 * @param fl defines a stream[ioDisk, ioSTD, ioNetworkExchange, ...]
+			 * @param fl defines a stream[ioFile, ioSTD, ioNetworkExchange, ...]
 			 */
 			virtual int addFlush(const ioNonBlockedAccessInfo &fl);
 
