@@ -1258,8 +1258,6 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
-  --disable-fastClientExchange-xexec-support
-                          compile fastClientExchange w/o xexec support
   --disable-ioSTD-xexec-support
                           compile ioSTD w/o xexec support
   --disable-ioNetworkExchange-xexec-support
@@ -1270,17 +1268,21 @@ Optional Features:
                           compile ioNetworkServer w/o xexec support
   --disable-ioDisk-xexec-support
                           compile ioDisk w/o xexec support
-  --disable-dbPostgresql-xexec-support
-                          compile dbPostgresql w/o xexec support
   --disable-dbSqlite-xexec-support
                           compile dbSqlite w/o xexec support
+  --disable-dbPostgresql-xexec-support
+                          compile dbPostgresql w/o xexec support
   --disable-dbMysql-xexec-support
                           compile dbMysql w/o xexec support
+  --disable-cgiFastClientExchange-xexec-support
+                          compile cgi::fastClientExchange w/o xexec support
   --disable-dl-lib        disable dl as lib
   --disable-fast-dynamic-loading
                           do not unload library to produce better performance
   --enable-zlib-lib       enable zlib as lib
   --enable-iconv-lib      enable iconv as lib
+  --disable-image-xexec-support
+                          compile image w/o xexec support
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -3471,32 +3473,6 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-# Check whether --enable-fastClientExchange-xexec-support was given.
-if test "${enable_fastClientExchange_xexec_support+set}" = set; then
-  enableval=$enable_fastClientExchange_xexec_support; FASTCLIENTEXCHANGE_W_XEXEC="$enableval"
-else
-  FASTCLIENTEXCHANGE_W_XEXEC="yes"
-fi
-
-
-if test "$FASTCLIENTEXCHANGE_W_XEXEC" = "no"
-then
-	echo -n -e "#define FASTCLIENTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\nfastClientExchange xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\nfastClientExchange xexec support\t\t\t\t\t\tenabled"
-fi
-
-if test "$IMAGE_W_XEXEC" = "no"
-then
-	echo -n -e "#define IMAGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tenabled"
-fi
-
 # Check whether --enable-ioSTD-xexec-support was given.
 if test "${enable_ioSTD_xexec_support+set}" = set; then
   enableval=$enable_ioSTD_xexec_support; IOSTD_W_XEXEC="$enableval"
@@ -3582,58 +3558,7 @@ else
 	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tenabled"
 fi
 
-# Check whether --enable-dbPostresql-xexec-support was given.
-if test "${enable_dbPostresql_xexec_support+set}" = set; then
-  enableval=$enable_dbPostresql_xexec_support; DBPOSTGRESQL_W_XEXEC="$enableval"
-else
-  DBPOSTGRESQL_W_XEXEC="yes"
-fi
-
-
-if test "$DBPOSTGRESQL_W_XEXEC" = "no"
-then
-	echo -n -e "#define DBPOSTGRESQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tenabled"
-fi
-
-# Check whether --enable-dbSqlite-xexec-support was given.
-if test "${enable_dbSqlite_xexec_support+set}" = set; then
-  enableval=$enable_dbSqlite_xexec_support; DBSQLITE_W_XEXEC="$enableval"
-else
-  DBSQLITE_W_XEXEC="yes"
-fi
-
-
-if test "$DBSQLITE_W_XEXEC" = "no"
-then
-	echo -n -e "#define DBSQLITE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tenabled"
-fi
-
-# Check whether --enable-dbMysql-xexec-support was given.
-if test "${enable_dbMysql_xexec_support+set}" = set; then
-  enableval=$enable_dbMysql_xexec_support; DBMYSQL_W_XEXEC="$enableval"
-else
-  DBMYSQL_W_XEXEC="yes"
-fi
-
-
-if test "$DBMYSQL_W_XEXEC" = "no"
-then
-	echo -n -e "#define DBMYSQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
-
-	RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tenabled"
-fi
-
-# Checks for libraries.
+# Check for libraries.
 
 # Check whether --with-sqlite3 was given.
 if test "${with_sqlite3+set}" = set; then
@@ -4341,6 +4266,23 @@ fi
 		echo -n -e "#define SQLITE_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
+
+		# Check whether --enable-dbSqlite-xexec-support was given.
+if test "${enable_dbSqlite_xexec_support+set}" = set; then
+  enableval=$enable_dbSqlite_xexec_support; DBSQLITE_W_XEXEC="$enableval"
+else
+  DBSQLITE_W_XEXEC="yes"
+fi
+
+
+		if test "$DBSQLITE_W_XEXEC" = "no"
+		then
+			echo -n -e "#define DBSQLITE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+			RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\ndbSqlite xexec support\t\t\t\t\t\tenabled"
+		fi
 	else
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tdisabled"
 	fi
@@ -4814,7 +4756,24 @@ fi
 
 		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
-		RESULT="$RESULT\nPostresql\t\t\t\t\t\tenabled"
+		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
+
+		# Check whether --enable-dbPostgresql-xexec-support was given.
+if test "${enable_dbPostgresql_xexec_support+set}" = set; then
+  enableval=$enable_dbPostgresql_xexec_support; DBPOSTGRESQL_W_XEXEC="$enableval"
+else
+  DBPOSTGRESQL_W_XEXEC="yes"
+fi
+
+
+		if test "$DBPOSTGRESQL_W_XEXEC" = "no"
+		then
+			echo -n -e "#define DBPOSTGRESQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+			RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\ndbPostgresql xexec support\t\t\t\t\t\tenabled"
+		fi
 	else
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tdisabled"
 	fi
@@ -5061,6 +5020,23 @@ fi
 		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
+
+		# Check whether --enable-dbMysql-xexec-support was given.
+if test "${enable_dbMysql_xexec_support+set}" = set; then
+  enableval=$enable_dbMysql_xexec_support; DBMYSQL_W_XEXEC="$enableval"
+else
+  DBMYSQL_W_XEXEC="yes"
+fi
+
+
+		if test "$DBMYSQL_W_XEXEC" = "no"
+		then
+			echo -n -e "#define DBMYSQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+			RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\ndbMysql xexec support\t\t\t\t\t\tenabled"
+		fi
 	else
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tdisabled"
 	fi
@@ -5298,6 +5274,23 @@ fi
 		echo -n -e "#define FASTCGI_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
+
+		# Check whether --enable-cgiFastClientExchange-xexec-support was given.
+if test "${enable_cgiFastClientExchange_xexec_support+set}" = set; then
+  enableval=$enable_cgiFastClientExchange_xexec_support; CGIFASTCLIENTEXCHANGE_W_XEXEC="$enableval"
+else
+  CGIFASTCLIENTEXCHANGE_W_XEXEC="yes"
+fi
+
+
+		if test "$CGIFASTCLIENTEXCHANGE_W_XEXEC" = "no"
+		then
+			echo -n -e "#define CGIFASTCLIENTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+			RESULT="$RESULT\ncgi::fastClientExchange xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\ncgi::fastClientExchange xexec support\t\t\t\t\t\tenabled"
+		fi
 	else
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tdisabled"
 	fi
@@ -7018,7 +7011,7 @@ fi
 
 	if test "$MOD_IMAGEMAGICK" != "no" -a "$MOD_IMAGEMAGICK_DIR" != "no"
 	then
-		ORIGINAL_CPPFLAGS=$CPPFLAGS
+		ORIGINAL_LDFLAGS=$LDFLAGS
 		if test "$MOD_IMAGEMAGICK_DIR" = "yes" -a "$(which Magick-config 2>/dev/null)" != ""
 		then
 			if test "$(which Magick-config 2>/dev/null)" != ""
@@ -7329,6 +7322,22 @@ fi
 		echo -n -e "#define IMAGEMAGICK_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
+
+		# Check whether --enable-image-xexec-support was given.
+if test "${enable_image_xexec_support+set}" = set; then
+  enableval=$enable_image_xexec_support; IMAGE_W_XEXEC="$enableval"
+else
+  IMAGE_W_XEXEC="yes"
+fi
+
+		if test "$IMAGE_W_XEXEC" = "no"
+		then
+			echo -n -e "#define IMAGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+
+			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tenabled"
+		fi
 	else
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"
 	fi

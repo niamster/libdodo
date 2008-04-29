@@ -81,7 +81,7 @@ namespace dodo
 				 */
 				virtual ~fastClientExchange();
 				
-	#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+	#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	
 				/**
 				 * add hook after the operation

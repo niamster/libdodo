@@ -78,7 +78,7 @@ fastClientExchange::getOutDescriptor() const
 
 //-------------------------------------------------------------------
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 
 int
 fastClientExchange::addPostExec(inExec func,
@@ -149,14 +149,14 @@ fastClientExchange::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	operType = FASTCLIENTEXCHANGE_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
 #endif
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	try
 	{
 		_read(a_void);
@@ -171,7 +171,7 @@ fastClientExchange::read(char * const a_void)
 	_read(a_void);
 #endif
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
@@ -188,7 +188,7 @@ fastClientExchange::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	operType = FASTCLIENTEXCHANGE_OPERATION_READSTRING;
 	performXExec(preExec);
 
@@ -205,14 +205,14 @@ fastClientExchange::readString(dodoString &a_str)
 	{
 		delete [] data;
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 		buffer.clear();
 #endif
 
 		throw;
 	}
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer.assign(data, inSize);
 	delete [] data;
 
@@ -233,7 +233,7 @@ fastClientExchange::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
 	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTRING;
@@ -254,7 +254,7 @@ fastClientExchange::writeString(const dodoString &a_buf)
 #endif
 
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -268,7 +268,7 @@ fastClientExchange::write(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
 
 	operType = FASTCLIENTEXCHANGE_OPERATION_WRITE;
@@ -289,7 +289,7 @@ fastClientExchange::write(const char *const a_buf)
 #endif
 
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -312,14 +312,14 @@ fastClientExchange::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	operType = FASTCLIENTEXCHANGE_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
 	_read(a_void);
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_void;
 
 	performXExec(postExec);
@@ -338,7 +338,7 @@ fastClientExchange::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	operType = FASTCLIENTEXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
@@ -356,7 +356,7 @@ fastClientExchange::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = data;
 	delete [] data;
 
@@ -379,7 +379,7 @@ fastClientExchange::writeStreamString(const dodoString &a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
 	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTREAMSTRING;
@@ -418,7 +418,7 @@ fastClientExchange::writeStreamString(const dodoString &a_buf)
 	}
 #endif
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -434,7 +434,7 @@ fastClientExchange::writeStream(const char *const a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
 	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTREAM;
@@ -473,7 +473,7 @@ fastClientExchange::writeStream(const char *const a_buf)
 	}
 #endif
 
-#ifndef FASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
