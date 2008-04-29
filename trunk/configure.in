@@ -59,17 +59,17 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_ENABLE(ioSTD-xexec-support,
-        AS_HELP_STRING([--disable-ioSTD-xexec-support],[compile ioSTD w/o xexec support]),
-        [IOSTD_W_XEXEC="$enableval"], [IOSTD_W_XEXEC="yes"])
+AC_ARG_ENABLE(ioStdio-xexec-support,
+        AS_HELP_STRING([--disable-ioStdio-xexec-support],[compile ioStdio w/o xexec support]),
+        [IOSTDIO_W_XEXEC="$enableval"], [IOSTDIO_W_XEXEC="yes"])
 
-if test "$IOSTD_W_XEXEC" = "no"
+if test "$IOSTDIO_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOSTD_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+	echo -n -e "#define IOSTDIO_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_ENABLE(ioNetworkExchange-xexec-support,

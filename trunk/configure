@@ -1258,8 +1258,8 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
-  --disable-ioSTD-xexec-support
-                          compile ioSTD w/o xexec support
+  --disable-ioStdio-xexec-support
+                          compile ioStdio w/o xexec support
   --disable-ioNetworkExchange-xexec-support
                           compile ioNetworkExchange w/o xexec support
   --disable-ioNetworkClient-xexec-support
@@ -3473,21 +3473,21 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-# Check whether --enable-ioSTD-xexec-support was given.
-if test "${enable_ioSTD_xexec_support+set}" = set; then
-  enableval=$enable_ioSTD_xexec_support; IOSTD_W_XEXEC="$enableval"
+# Check whether --enable-ioStdio-xexec-support was given.
+if test "${enable_ioStdio_xexec_support+set}" = set; then
+  enableval=$enable_ioStdio_xexec_support; IOSTDIO_W_XEXEC="$enableval"
 else
-  IOSTD_W_XEXEC="yes"
+  IOSTDIO_W_XEXEC="yes"
 fi
 
 
-if test "$IOSTD_W_XEXEC" = "no"
+if test "$IOSTDIO_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOSTD_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+	echo -n -e "#define IOSTDIO_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioSTD xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioNetworkExchange-xexec-support was given.

@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/ioSTD.h>
+#include <libdodo/ioStdio.h>
 #include <libdodo/toolsNetwork.h>
 
 #include <iostream>
@@ -13,11 +13,11 @@ hook(void *base,
 	void *yep)
 {
 	__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
-	if (st->operType == IOSTD_OPERATION_WRITE)
+	if (st->operType == IOSTDIO_OPERATION_WRITE)
 	{
 		int a = *(int *)(st->buffer.c_str());
 		
-		ioSTD *io = (ioSTD *)st->executor;
+		ioStdio *io = (ioStdio *)st->executor;
 		io->disableAll();
 		io->writeStreamString("\nhook\n");
 		io->enableAll();
@@ -38,10 +38,10 @@ int main(int argc, char **argv)
 
 	try
 	{
-		ioSTD st;
+		ioStdio st;
 		cout << st.inputterInfo().host << endl;
 
-#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTDIO_WO_XEXEC
 		int pos = st.addPreExec(&hook, NULL);
 #endif
 	
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		
 		cout << o.size() << "\n";
 		
-#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTDIO_WO_XEXEC
 		st.disablePreExec(pos);
 #endif
 	

@@ -34,7 +34,7 @@
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/cgiFastClient.h>
-#include <libdodo/ioSTD.h>
+#include <libdodo/ioStdio.h>
 
 namespace dodo
 {

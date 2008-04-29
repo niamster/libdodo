@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/ioSTD.h>
+#include <libdodo/ioStdio.h>
 #include <libdodo/directives.h>
 
 #include <iostream>
@@ -12,12 +12,12 @@ int main(int argc, char **argv)
 
 	try
 	{
-		ioSTD st;
+		ioStdio st;
 
 		st.outSize = sizeof(int);
 	
 #ifdef DL_EXT
-		cout << ioSTD::getModuleInfo("./module").name;
+		cout << ioStdio::getModuleInfo("./module").name;
 		
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;

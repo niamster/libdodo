@@ -48,7 +48,7 @@ OBJECTS:=dbBase.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
 	ioFile.o \
-	ioSTD.o \
+	ioStdio.o \
 	xml.o \
 	rpcValue.o \
 	rpcMethod.o \

@@ -1,5 +1,5 @@
 #include <libdodo/xexec.h>
-#include <libdodo/ioSTD.h>
+#include <libdodo/ioStdio.h>
 #include <libdodo/directives.h>
 
 #include <string.h>
@@ -17,12 +17,12 @@ extern "C"
 		xexecObjectTypeEnum type,
 		void *yep)
 	{
-		if (type == XEXEC_OBJECT_IOSTD)
+		if (type == XEXEC_OBJECT_IOSTDIO)
 		{
-			std::cout << "ioSTD module\t";
+			std::cout << "ioStdio module\t";
 			
 			__xexexIoCollectedData *st = (__xexexIoCollectedData *)base;
-			if (st->operType == IOSTD_OPERATION_WRITE)
+			if (st->operType == IOSTDIO_OPERATION_WRITE)
 			{
 				int *a = (int *)(st->buffer.c_str());
 				st->buffer.assign(toolsString::iToString(*a*3) + "\n");

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSTD.h
+ *            ioStdio.h
  *
  *  Tue Nov 15 21:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOSTD_H_
-#define _IOSTD_H_
+#ifndef _IOSTDIO_H_
+#define _IOSTDIO_H_
 
 #include <fcntl.h>
 #include <sys/un.h>
@@ -34,7 +34,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/tools.h>
-#include <libdodo/ioSTDEx.h>
+#include <libdodo/ioStdioEx.h>
 #include <libdodo/types.h>
 #include <libdodo/io.h>
 #include <libdodo/ioNetwork.h>
@@ -43,27 +43,27 @@
 namespace dodo
 {
 	/**
-	 * @enum ioSTDOperationTypeEnum defines type of operation for hook
+	 * @enum ioStdioOperationTypeEnum defines type of operation for hook
 	 */
-	enum ioSTDOperationTypeEnum
+	enum ioStdioOperationTypeEnum
 	{
-		IOSTD_OPERATION_READ,
-		IOSTD_OPERATION_READSTRING,
-		IOSTD_OPERATION_READSTREAM,
-		IOSTD_OPERATION_READSTREAMSTRING,
-		IOSTD_OPERATION_WRITE,
-		IOSTD_OPERATION_WRITESTRING,
-		IOSTD_OPERATION_WRITESTREAM,
-		IOSTD_OPERATION_WRITESTREAMSTRING,
-		IOSTD_OPERATION_OPEN,
-		IOSTD_OPERATION_CLOSE
+		IOSTDIO_OPERATION_READ,
+		IOSTDIO_OPERATION_READSTRING,
+		IOSTDIO_OPERATION_READSTREAM,
+		IOSTDIO_OPERATION_READSTREAMSTRING,
+		IOSTDIO_OPERATION_WRITE,
+		IOSTDIO_OPERATION_WRITESTRING,
+		IOSTDIO_OPERATION_WRITESTREAM,
+		IOSTDIO_OPERATION_WRITESTREAMSTRING,
+		IOSTDIO_OPERATION_OPEN,
+		IOSTDIO_OPERATION_CLOSE
 	};
 
 	/**
-	 * @class ioSTD provides interface for stdin/stdout/stderr I/O operations
+	 * @class ioStdio provides interface for stdin/stdout/stderr I/O operations
 	 */
 
-	class ioSTD : public io,
+	class ioStdio : public io,
 				  virtual public systemThreadGuardHolder
 	{
 		private:
@@ -72,19 +72,19 @@ namespace dodo
 			 * constructor
 			 * to prevent from copying
 			 */
-			ioSTD(ioSTD &fd);
+			ioStdio(ioStdio &fd);
 
 		public:
 
 			/**
 			 * constructor
 			 */
-			ioSTD();
+			ioStdio();
 
 			/**
 			 * destructor
 			 */
-			virtual ~ioSTD();
+			virtual ~ioStdio();
 
 			/**
 			 * @return info about source of inputting
@@ -92,7 +92,7 @@ namespace dodo
 			 */
 			__connInfo inputterInfo();
 
-#ifndef IOSTD_WO_XEXEC
+#ifndef IOSTDIO_WO_XEXEC
 
 			/**
 			 * add hook after the operation

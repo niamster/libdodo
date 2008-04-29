@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioSTD.h
+ *            ioStdio.h
  *
  *  Tue Nov 15 21:19:57 2005
  *  Copyright  2005  Ni@m
@@ -33,18 +33,18 @@ namespace dodo
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum ioSTDFunctionsID
+	enum ioStdioFunctionsID
 	{
-		IOSTDEX_CLOSE,
-		IOSTDEX_OPEN,
-		IOSTDEX__READ,
-		IOSTDEX__WRITE,
-		IOSTDEX__READSTREAM,
-		IOSTDEX_FLUSH,
-		IOSTDEX_LOCKOUT,
-		IOSTDEX_LOCKIN,
-		IOSTDEX_INPUTTERINFO,
-		IOSTDEX_BLOCK
+		IOSTDIOEX_CLOSE,
+		IOSTDIOEX_OPEN,
+		IOSTDIOEX__READ,
+		IOSTDIOEX__WRITE,
+		IOSTDIOEX__READSTREAM,
+		IOSTDIOEX_FLUSH,
+		IOSTDIOEX_LOCKOUT,
+		IOSTDIOEX_LOCKIN,
+		IOSTDIOEX_INPUTTERINFO,
+		IOSTDIOEX_BLOCK
 	};
 };
 

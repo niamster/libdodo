@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/logger.h>
 #include <libdodo/ioFile.h>
-#include <libdodo/ioSTD.h>
+#include <libdodo/ioStdio.h>
 
 #include <iostream>
 
@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 		logger log;
 
 		ioFile *disk = new ioFile("./test.log", IOFILE_FILETYPE_REG_FILE, IOFILE_OPENMODE_APPEND);
-		ioSTD *std = new ioSTD;
+		ioStdio *std = new ioStdio;
 		std->redirectToSTDErr(true);
 
 		log.add(LOGGER_ERROR, disk);

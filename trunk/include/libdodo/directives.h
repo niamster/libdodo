@@ -100,7 +100,7 @@
 #define IONETWORKOPTIONS_SOCKET_OUTSIZE           102400
 
 /**
- * default values of stdin/out buffer for io operations(ioSTD)
+ * default values of stdin/out buffer for io operations(ioStdio)
  */
 #define STD_INSIZE               102400
 #define STD_OUTSIZE              102400
