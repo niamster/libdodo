@@ -146,7 +146,7 @@ else
 	RESULT="$RESULT\nioDisk xexec support\t\t\t\t\t\tenabled"
 fi
 
-AC_ARG_ENABLE(dbPostresql-xexec-support,
+AC_ARG_ENABLE(dbPostgresql-xexec-support,
         AS_HELP_STRING([--disable-dbPostgresql-xexec-support],[compile dbPostgresql w/o xexec support]),
         [DBPOSTGRESQL_W_XEXEC="$enableval"], [DBPOSTGRESQL_W_XEXEC="yes"])
 
