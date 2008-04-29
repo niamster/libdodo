@@ -210,15 +210,28 @@ int main(int argc, char **argv)
 		pp->insert("test",arr);
 
 		if (strcasecmp(argv[1],"sqlite") == 0)
+#ifdef SQLITE_EXT
 			addFlag(((dbSqlite *)pp)->hint, DBSQLITE_HINT_BLOB);
-		else if (strcasecmp(argv[1],"postgres") == 0)
-			addFlag(((dbPostgresql *)pp)->hint, DBPOSTGRESQL_HINT_BLOB);
+#else
+			;
+#endif
+		else 
+			if (strcasecmp(argv[1],"postgres") == 0)
+#ifdef POSTGRESQL_EXT
+				addFlag(((dbPostgresql *)pp)->hint, DBPOSTGRESQL_HINT_BLOB);
+#else
+				;
+#endif
 		
 		pp->exec();
 
 		pp->select("test",select,"operation='ma'");
 		if (strcasecmp(argv[1],"postgres") == 0)
+#ifdef SQLITE_EXT
 			addFlag(((dbSqlite *)pp)->hint, DBSQLITE_HINT_BLOB);
+#else
+			;
+#endif
 
 		pp->exec();
 

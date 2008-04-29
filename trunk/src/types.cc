@@ -24,25 +24,30 @@
 
 #include <libdodo/types.h>
 
+namespace dodo
+{
+
+	dodoString __dodostring__;
+
+	//-------------------------------------------------------------------
+
+	dodoStringArray __dodostringarray__;
+
+	//-------------------------------------------------------------------
+
+	dodoStringMap __dodostringmap__;
+
+	//-------------------------------------------------------------------
+
+	dodoArray<dodoStringArray> __dodostringarrayarray__;
+
+	//-------------------------------------------------------------------
+
+	dodoStringMapArray __dodostringmaparray__;
+
+};
+
 using namespace dodo;
-
-dodoString __dodostring__;
-
-//-------------------------------------------------------------------
-
-dodoStringArray __dodostringarray__;
-
-//-------------------------------------------------------------------
-
-dodoStringMap __dodostringmap__;
-
-//-------------------------------------------------------------------
-
-dodoArray<dodoStringArray> __dodostringarrayarray__;
-
-//-------------------------------------------------------------------
-
-dodoStringMapArray __dodostringmaparray__;
 
 //-------------------------------------------------------------------
 

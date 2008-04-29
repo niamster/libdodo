@@ -1,5 +1,6 @@
-#include <libdodo/systemLibraryLoader.h>
 #include <libdodo/directives.h>
+#include <libdodo/systemLibraryLoader.h>
+#include <libdodo/baseEx.h>
 
 #include <iostream>
 
@@ -19,7 +20,7 @@ int main(int argc, char **argv)
 #ifdef DL_EXT
 
 #ifdef BFD_EXT
-		dodoStringArray arr = systemLibraryLoader::getSymbols("./module");\
+		dodoStringArray arr = systemLibraryLoader::getSymbols("./module");
 		dodoStringArray::iterator i = arr.begin(), j = arr.end();
 		for (;i!=j;++i)
 			cout << *i << endl;
