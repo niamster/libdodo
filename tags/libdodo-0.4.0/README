@@ -1,3 +1,0 @@
-To configure run `./configure` [to see configuration settings run `./configure --help` and edit include/directives.h] 
-To compile use `gmake`
-To install `gmake install`
