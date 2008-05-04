@@ -30,31 +30,36 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum ioNetworkExR
+	namespace io
 	{
-		IONETWORKSERVEREX_WRONGPARAMETER,
-		IONETWORKSERVEREX_WRONGFILENAME,
+		namespace network
+		{
+			/**
+			 * libdodo defined errors
+			 */
+			enum serverExR
+			{
+				SERVEREX_WRONGPARAMETER,
+				SERVEREX_WRONGFILENAME,
+			};
+			
+			/**
+			 * explanations for libdodo defined errors
+			 */
+			#define SERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+			#define SERVEREX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+			
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum serverFunctionsID
+			{
+				SERVEREX_MAKESOCKET,
+				SERVEREX_BINDNLISTEN,
+				SERVEREX_ACCEPT,
+			};
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define IONETWORKSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define IONETWORKSERVEREX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum ioNetworkFunctionsID
-	{
-		IONETWORKSERVEREX_MAKESOCKET,
-		IONETWORKSERVEREX_BINDNLISTEN,
-		IONETWORKSERVEREX_ACCEPT,
-	};
-
 };
 
 #endif

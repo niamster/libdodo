@@ -69,7 +69,7 @@ namespace dodo
 			 */
 			virtual dodoString receiveTextResponse();
 			
-			ioNetworkHttp http;
+			io::network::http http;
 	};
 };
 

@@ -6,6 +6,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io::network;
 
 using namespace std;
 
@@ -26,26 +27,26 @@ int main(int argc, char **argv)
 
 		files["file"] = "./test.cc";
 
-		ioNetworkHttp http;
+		http HTTP;
 		__httpResponse res;
 
-		http.setCookies(cookies);
+		HTTP.setCookies(cookies);
 		
-		//http.setProxyInformation("127.0.0.1");
+		//HTTP.setProxyInformation("127.0.0.1");
 
-		res =  http.GET("http://google.com");
-		//res =  http.GET("http://libdodo:password@temp.niam.mu/libdodo/cgi_test/test.cgi?a=digest_auth");
-		//res =  http.GET("http://niam:niam@localhost/auth/libdodo/cgi_test/test.cgi");
-		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
-		//res =  http.POST("http://localhost/libdodo/cgi_test/test.cgi", map, files);
+		res =  HTTP.GET("http://google.com");
+		//res =  HTTP.GET("http://libdodo:password@temp.niam.mu/libdodo/cgi_test/test.cgi?a=digest_auth");
+		//res =  HTTP.GET("http://niam:niam@localhost/auth/libdodo/cgi_test/test.cgi");
+		//res =  HTTP.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
+		//res =  HTTP.POST("http://localhost/libdodo/cgi_test/test.cgi", map, files);
 		
 		toolsFilesystem::writeToFile("test.dat", res.data);
 		
 
 		cout << res.code << "\n~~\n";
-		cout << res.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
+		cout << res.headers[HTTP_RESPONSEHEADER_CONTENTTYPE] << "\n~~\n";
 		//cout << res.data << "\n~~\n";
-		cout << res.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH] << "\n~~\n";
+		cout << res.headers[HTTP_RESPONSEHEADER_CONTENTLENGTH] << "\n~~\n";
 		cout << res.data.size() << "\n~~\n";
 
 		cout << "Cookies:\n";

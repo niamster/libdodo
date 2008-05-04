@@ -5,6 +5,8 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io;
+
 using namespace std;
 
 int main(int argc, char **argv)
@@ -12,12 +14,12 @@ int main(int argc, char **argv)
 
 	try
 	{
-		ioStdio st;
+		stdio st;
 
 		st.outSize = sizeof(int);
 	
 #ifdef DL_EXT
-		cout << ioStdio::getModuleInfo("./module").name;
+		cout << stdio::getModuleInfo("./module").name;
 		
 		cout << st.addPreExec("./module",NULL)<<endl;
 		cout << st.addPreExec("./module",NULL)<<endl;

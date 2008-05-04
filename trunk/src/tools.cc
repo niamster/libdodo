@@ -1618,6 +1618,8 @@ tools::mail(const dodoString &host,
 			const dodoString &pass,
 			const dodoString &headers)
 {
+	using namespace io::network;
+
 	enum mailAuthTypeEnum
 	{
 		SMTPAUTH_CRAMMD5 = 2,
@@ -1629,12 +1631,12 @@ tools::mail(const dodoString &host,
 
 	bool auth = login.size() > 0 ? true : false;
 	
-	short family = IONETWORKOPTIONS_PROTO_FAMILY_IPV4;
+	short family = OPTIONS_PROTO_FAMILY_IPV4;
 	if (host.find(":") != dodoString::npos)
-		family = IONETWORKOPTIONS_PROTO_FAMILY_IPV6;
+		family = OPTIONS_PROTO_FAMILY_IPV6;
 	
-	ioNetworkExchange ex;
-	ioNetworkClient net(family, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	exchange ex;
+	client net(family, OPTIONS_TRANSFER_TYPE_STREAM);
 	
 	net.connect(host, port, ex);
 	

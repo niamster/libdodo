@@ -47,174 +47,187 @@
 
 namespace dodo
 {
-
-	/**
-	 * @enum ioNetworkClientOperationTypeEnum defines type of operation for hook
-	 */
-	enum ioNetworkClientOperationTypeEnum
+	namespace io
 	{
-		IONETWORKCLIENT_OPERATION_CONNECT,
-		IONETWORKCLIENT_OPERATION_CONNECTFROM,
-		IONETWORKCLIENT_OPERATION_CONNECT_UNIX,
-		IONETWORKCLIENT_OPERATION_BINDNLISTEN,
-		IONETWORKCLIENT_OPERATION_BINDNLISTEN_UNIX,
-		IONETWORKCLIENT_OPERATION_ACCEPT,
-	};
-
-	/**
-	 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
-	 */
-	struct __xexexIoNetworkClientCollectedData
-	{
-		/**
-		 * constructor
-		 */
-		__xexexIoNetworkClientCollectedData(int &operType,
-							   		void *executor);
-
-		int &operType;              ///< xexec operation 
-
-		void *executor;             ///< class that executed hook
-	};
-	
-	/**
-	 * @class ioNetworkClient provides network connection interface
-	 */
-	class ioNetworkClient : public xexec, 
-					public ioNetworkOptions
-	{
-			friend class ioNetworkExchange;
-
-		private:
-
+		namespace network
+		{
 			/**
-			 * connstructor
-			 * to prevent copying
+			 * @enum clientOperationTypeEnum defines type of operation for hook
 			 */
-			ioNetworkClient(ioNetworkClient &fs);
-
-		public:
-
+			enum clientOperationTypeEnum
+			{
+				CLIENT_OPERATION_CONNECT,
+				CLIENT_OPERATION_CONNECTFROM,
+				CLIENT_OPERATION_CONNECT_UNIX,
+				CLIENT_OPERATION_BINDNLISTEN,
+				CLIENT_OPERATION_BINDNLISTEN_UNIX,
+				CLIENT_OPERATION_ACCEPT,
+			};
+		
+		#ifndef IONETWORKCLIENT_WO_XEXEC
+		
 			/**
-			 * constructor
-			 * @param server defines type of service; if true as a server
-			 * @param family defines family of the socket[see ioNetworkClientOptionsProtoFamilyEnum]
-			 * @param type defines type of the socket[see ioNetworkClientOptionsTransferTypeEnum]
+			 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			ioNetworkClient(short family, short type);
+			struct __xexexIoNetworkClientCollectedData
+			{
+				/**
+				 * constructor
+				 */
+				__xexexIoNetworkClientCollectedData(int &operType,
+									   		void *executor);
+		
+				int &operType;              ///< xexec operation 
+		
+				void *executor;             ///< class that executed hook
+			};
 
-			/**
-			 * destructor
-			 */
-			virtual ~ioNetworkClient();
-
-#ifndef IONETWORKCLIENT_WO_XEXEC
-
-			/**
-			 * adds hook after the operation by callback
-			 * @return id of the hook method
-			 * @param func defines function that will be called
-			 * @param data defines hook data
-			 */
-			virtual int addPostExec(inExec func, void *data);
-
-			/**
-			 * adds hook before the operation by callback
-			 * @return id of the hook method
-			 * @param func defines function that will be called
-			 * @param data defines hook data
-			 */
-			virtual int addPreExec(inExec func, void *data);
-
-#ifdef DL_EXT
-
-			/**
-			 * set function that will be executed before/after the main action call
-			 * @return id of the hook method
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param data defines hook data
-			 * @param toInit defines data that will be passed to the init function
-			 * @note type of hook[pre/post] is defined in module
-			 */
-			virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
-
-			/**
-			 * set function that will be executed after the main action call
-			 * @return id of the hook method
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param data defines hook data
-			 * @param toInit defines data that will be passed to the init function
-			 */
-			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
-
-			/**
-			 * set function that will be executed before the main action call
-			 * @return id of the hook method
-			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param data defines hook data
-			 * @param toInit defines data that will be passed to the init function
-			 */
-			virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
-
-#endif
-
-#endif
-			/**
-			 * connect from specific address
-			 * @param local defines ip address to bind
-			 * @param host defines ip address of host to connect
-			 * @param port defines port of host to connect
-			 * @param exchange defines an oject that will perform I/O operations
-			 */
-			virtual void connectFrom(const dodoString &local, const dodoString &host, int port, ioNetworkExchange &exchange);
-
-			/**
-			 * connect from specific address
-			 * @param local defines ip address to bind
-			 * @param destinaton defines destinaton ip address/port of host to connect
-			 * @param exchange defines an oject that will perform I/O operations
-			 */
-			virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, ioNetworkExchange &exchange);
-
-			/**
-			 * connect
-			 * @param host defines ip address of host to connect
-			 * @param port defines port of host to connect
-			 * @param exchange defines an oject that will perform I/O operations
-			 */
-			virtual void connect(const dodoString &host, int port, ioNetworkExchange &exchange);
-
-			/**
-			 * connect
-			 * @param destinaton defines destinaton ip address/port of host to connect
-			 * @param exchange defines an oject that will perform I/O operations
-			 */
-			virtual void connect(const __connInfo &destinaton, ioNetworkExchange &exchange);
-
-			/**
-			 * connect
-			 * @param path defines path to unix socket
-			 * @param exchange defines an oject that will perform I/O operations
-			 */
-			virtual void connect(const dodoString &path, ioNetworkExchange &exchange);
-
-			bool blockInherited; ///< if true - children(ioNetworkExchange objects) become unblocked, if parent(ioNetworkClient) in unblocked; false by default
-
-		protected:
-
-			/**
-			 * restore options on connect/bind
-			 */
-			virtual void restoreOptions();
-
-			/**
-			 * create socket
-			 */
-			virtual void makeSocket();
-
-			dodoString unixSock;    ///< path to unix socket
+		#endif
 			
-			__xexexIoNetworkClientCollectedData collectedData;   ///< data collected for xexec
+			/**
+			 * @class client provides network connection interface
+			 */
+			class client : public xexec, 
+							public options
+			{
+					friend class exchange;
+		
+				private:
+		
+					/**
+					 * connstructor
+					 * to prevent copying
+					 */
+					client(client &fs);
+		
+				public:
+		
+					/**
+					 * constructor
+					 * @param server defines type of service; if true as a server
+					 * @param family defines family of the socket[see ClientOptionsProtoFamilyEnum]
+					 * @param type defines type of the socket[see ClientOptionsTransferTypeEnum]
+					 */
+					client(short family, short type);
+		
+					/**
+					 * destructor
+					 */
+					virtual ~client();
+		
+		#ifndef IONETWORKCLIENT_WO_XEXEC
+		
+					/**
+					 * adds hook after the operation by callback
+					 * @return id of the hook method
+					 * @param func defines function that will be called
+					 * @param data defines hook data
+					 */
+					virtual int addPostExec(inExec func, void *data);
+		
+					/**
+					 * adds hook before the operation by callback
+					 * @return id of the hook method
+					 * @param func defines function that will be called
+					 * @param data defines hook data
+					 */
+					virtual int addPreExec(inExec func, void *data);
+		
+		#ifdef DL_EXT
+		
+					/**
+					 * set function that will be executed before/after the main action call
+					 * @return id of the hook method
+					 * @param path defines path to the library[if not in ldconfig db] or library name
+					 * @param data defines hook data
+					 * @param toInit defines data that will be passed to the init function
+					 * @note type of hook[pre/post] is defined in module
+					 */
+					virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
+		
+					/**
+					 * set function that will be executed after the main action call
+					 * @return id of the hook method
+					 * @param path defines path to the library[if not in ldconfig db] or library name
+					 * @param data defines hook data
+					 * @param toInit defines data that will be passed to the init function
+					 */
+					virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
+		
+					/**
+					 * set function that will be executed before the main action call
+					 * @return id of the hook method
+					 * @param path defines path to the library[if not in ldconfig db] or library name
+					 * @param data defines hook data
+					 * @param toInit defines data that will be passed to the init function
+					 */
+					virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
+		
+		#endif
+		
+		#endif
+					/**
+					 * connect from specific address
+					 * @param local defines ip address to bind
+					 * @param host defines ip address of host to connect
+					 * @param port defines port of host to connect
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connectFrom(const dodoString &local, const dodoString &host, int port, exchange &exchange);
+		
+					/**
+					 * connect from specific address
+					 * @param local defines ip address to bind
+					 * @param destinaton defines destinaton ip address/port of host to connect
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, exchange &exchange);
+		
+					/**
+					 * connect
+					 * @param host defines ip address of host to connect
+					 * @param port defines port of host to connect
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connect(const dodoString &host, int port, exchange &exchange);
+		
+					/**
+					 * connect
+					 * @param destinaton defines destinaton ip address/port of host to connect
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connect(const __connInfo &destinaton, exchange &exchange);
+		
+					/**
+					 * connect
+					 * @param path defines path to unix socket
+					 * @param exchange defines an oject that will perform I/O operations
+					 */
+					virtual void connect(const dodoString &path, exchange &exchange);
+		
+					bool blockInherited; ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
+		
+				protected:
+		
+					/**
+					 * restore options on connect/bind
+					 */
+					virtual void restoreOptions();
+		
+					/**
+					 * create socket
+					 */
+					virtual void makeSocket();
+		
+					dodoString unixSock;    ///< path to unix socket
+					
+		#ifndef IONETWORKCLIENT_WO_XEXEC
+
+					__xexexIoNetworkClientCollectedData collectedData;   ///< data collected for xexec
+
+		#endif
+			};
+		};
 	};
 
 };

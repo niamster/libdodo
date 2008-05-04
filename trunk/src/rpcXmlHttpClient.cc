@@ -50,7 +50,7 @@ rpcXmlHttpClient::sendTextRequest(const dodoString &method)
 dodoString 
 rpcXmlHttpClient::receiveTextResponse()
 {
-	__httpResponse response = http.getResponse();
+	io::network::__httpResponse response = http.getResponse();
 	
 	return response.data;
 }

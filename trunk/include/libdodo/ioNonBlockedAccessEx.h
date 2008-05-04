@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNonBlockedAccessEx.h
+ *            nonBlockedAccessEx.h
  *
  *  Thu Sep 09 03:41:24 2006
  *  Copyright  2006  Ni@m
@@ -30,15 +30,17 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum ioNonBlockedAccessFunctionsID
+	namespace io
 	{
-		IONONBLOCKEDACCESSEX_ISREADABLE,
-		IONONBLOCKEDACCESSEX_ISWRITABLE,
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum nonBlockedAccessFunctionsID
+		{
+			NONBLOCKEDACCESSEX_ISREADABLE,
+			NONBLOCKEDACCESSEX_ISWRITABLE,
+		};
 	};
-
 };
 
 #endif

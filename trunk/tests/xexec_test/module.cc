@@ -6,6 +6,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io;
 
 #ifdef DL_EXT
 
@@ -19,10 +20,10 @@ extern "C"
 	{
 		if (type == XEXEC_OBJECT_IOSTDIO)
 		{
-			std::cout << "ioStdio module\t";
+			std::cout << "stdio module\t";
 			
-			__xexexIoCollectedData *st = (__xexexIoCollectedData *)odata;
-			if (st->operType == IOSTDIO_OPERATION_WRITE)
+			__xexexIoStdioCollectedData *st = (__xexexIoStdioCollectedData *)odata;
+			if (st->operType == STDIO_OPERATION_WRITE)
 			{
 				int *a = (int *)(st->buffer.c_str());
 				st->buffer.assign(toolsString::iToString(*a*3) + "\n");

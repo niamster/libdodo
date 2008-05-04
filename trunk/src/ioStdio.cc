@@ -23,32 +23,62 @@
 
 #include <libdodo/ioStdio.h>
 
-using namespace dodo;
+using namespace dodo::io;
 
-ioStdio::ioStdio() : inSTDBuffer(STD_INSIZE),
+#ifndef IOSTDIO_WO_XEXEC
+
+__xexexIoStdioCollectedData::__xexexIoStdioCollectedData(dodoString &a_buffer,
+											   int &a_operType,
+											   void *a_executor) : buffer(a_buffer),
+																   operType(a_operType),
+																   executor(a_executor)
+{
+}
+
+#endif
+
+//-------------------------------------------------------------------
+
+stdio::stdio() : inSTDBuffer(STD_INSIZE),
 				 outSTDBuffer(STD_OUTSIZE),
 				 err(false),
 				 blocked(true),
 				 desc(stdout)
+				 
+#ifndef IOSTDIO_WO_XEXEC
+							 
+							 ,
+						   collectedData(buffer,
+										 operType,
+										 (void *) this)
+										 
+#endif
 {
 }
 
 //-------------------------------------------------------------------
 
-ioStdio::ioStdio(ioStdio &fd)
+stdio::stdio(stdio &fd)
+#ifndef IOSTDIO_WO_XEXEC
+							 
+						   : collectedData(buffer,
+										 operType,
+										 (void *) this)
+										 
+#endif
 {
 }
 
 //-------------------------------------------------------------------
 
-ioStdio::~ioStdio()
+stdio::~stdio()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-ioStdio::getInDescriptor() const
+stdio::getInDescriptor() const
 {
 	systemRaceHazardGuard pg(this);
 
@@ -58,7 +88,7 @@ ioStdio::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-ioStdio::getOutDescriptor() const
+stdio::getOutDescriptor() const
 {
 	systemRaceHazardGuard pg(this);
 
@@ -73,7 +103,7 @@ ioStdio::getOutDescriptor() const
 #ifndef IOSTDIO_WO_XEXEC
 
 int
-ioStdio::addPostExec(inExec func,
+stdio::addPostExec(inExec func,
 				   void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTDIO, data);
@@ -82,7 +112,7 @@ ioStdio::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-ioStdio::addPreExec(inExec func,
+stdio::addPreExec(inExec func,
 				  void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTDIO, data);
@@ -93,7 +123,7 @@ ioStdio::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-ioStdio::addPostExec(const dodoString &module,
+stdio::addPostExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
@@ -102,8 +132,8 @@ ioStdio::addPostExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-ioStdio::addExec(const dodoString &module,
+dodo::__xexecCounts
+stdio::addExec(const dodoString &module,
 			   void             *data,
 			   void             *toInit)
 {
@@ -113,7 +143,7 @@ ioStdio::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-ioStdio::addPreExec(const dodoString &module,
+stdio::addPreExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
@@ -127,7 +157,7 @@ ioStdio::addPreExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-ioStdio::_read(char * const a_void)
+stdio::_read(char * const a_void)
 {
 	char *data = a_void;
 
@@ -149,7 +179,7 @@ ioStdio::_read(char * const a_void)
 					break;
 
 				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTDIO, STDIOEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -171,7 +201,7 @@ ioStdio::_read(char * const a_void)
 					break;
 
 				if (ferror(stdin) != 0)
-					throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTDIO, STDIOEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -182,12 +212,12 @@ ioStdio::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioStdio::read(char * const a_void)
+stdio::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
-	operType = IOSTDIO_OPERATION_READ;
+	operType = STDIO_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -221,12 +251,12 @@ ioStdio::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioStdio::readString(dodoString &a_str)
+stdio::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
-	operType = IOSTDIO_OPERATION_READSTRING;
+	operType = STDIO_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -266,14 +296,14 @@ ioStdio::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-ioStdio::writeString(const dodoString &a_buf)
+stdio::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOSTDIO_OPERATION_WRITESTRING;
+	operType = STDIO_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -301,14 +331,14 @@ ioStdio::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioStdio::write(const char *const a_buf)
+stdio::write(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	buffer.assign(a_buf, outSize);
 
-	operType = IOSTDIO_OPERATION_WRITE;
+	operType = STDIO_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -336,7 +366,7 @@ ioStdio::write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioStdio::_write(const char *const buf)
+stdio::_write(const char *const buf)
 {
 	char *data = (char *)buf;
 
@@ -356,7 +386,7 @@ ioStdio::_write(const char *const buf)
 					break;
 
 				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTDIO, STDIOEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -378,7 +408,7 @@ ioStdio::_write(const char *const buf)
 					break;
 
 				if (ferror(desc) != 0)
-					throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOSTDIO, STDIOEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -389,22 +419,22 @@ ioStdio::_write(const char *const buf)
 //-------------------------------------------------------------------
 
 void
-ioStdio::flush()
+stdio::flush()
 {
 	systemRaceHazardGuard pg(this);
 
 	if (fflush(desc) != 0)
-		throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
-__connInfo
-ioStdio::inputterInfo()
+network::__connInfo
+stdio::inputterInfo()
 {
 	systemRaceHazardGuard pg(this);
 
-	__connInfo info;
+	network::__connInfo info;
 
 	struct sockaddr sa;
 
@@ -413,7 +443,7 @@ ioStdio::inputterInfo()
 	if (::getpeername(1, &sa, &len) == 1)
 	{
 		if (errno != ENOTSOCK)
-			throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_INPUTTERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_INPUTTERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			return info;
 	}
@@ -455,7 +485,7 @@ ioStdio::inputterInfo()
 //-------------------------------------------------------------------
 
 bool
-ioStdio::isBlocked()
+stdio::isBlocked()
 {
 	systemRaceHazardGuard pg(this);
 
@@ -465,7 +495,7 @@ ioStdio::isBlocked()
 //-------------------------------------------------------------------
 
 void
-ioStdio::redirectToSTDErr(bool toSTDErr)
+stdio::redirectToSTDErr(bool toSTDErr)
 {
 	err = toSTDErr;
 
@@ -478,7 +508,7 @@ ioStdio::redirectToSTDErr(bool toSTDErr)
 //-------------------------------------------------------------------
 
 bool
-ioStdio::isRedirectedToSTDErr()
+stdio::isRedirectedToSTDErr()
 {
 	return err;
 }
@@ -486,7 +516,7 @@ ioStdio::isRedirectedToSTDErr()
 //-------------------------------------------------------------------
 
 void
-ioStdio::block(bool flag)
+stdio::block(bool flag)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -496,31 +526,31 @@ ioStdio::block(bool flag)
 	{
 		block[0] = fcntl(0, F_GETFL);
 		if (block[0] == -1)
-			throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[0] &= ~O_NONBLOCK;
 
 		block[1] = fcntl(1, F_GETFL);
 		if (block[1] == -1)
-			throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[1] &= ~O_NONBLOCK;
 
 		block[2] = fcntl(2, F_GETFL);
 		if (block[2] == -1)
-			throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		block[2] &= ~O_NONBLOCK;
 	}
 
 	if (fcntl(0, F_SETFL, block[0]) == 1)
-		throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (fcntl(1, F_SETFL, block[1]) == 1)
-		throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (fcntl(2, F_SETFL, block[2]) == 1)
-		throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	blocked = flag;
 }
@@ -528,7 +558,7 @@ ioStdio::block(bool flag)
 //-------------------------------------------------------------------
 
 void
-ioStdio::_readStream(char * const a_void)
+stdio::_readStream(char * const a_void)
 {
 	memset(a_void, '\0', inSize);
 
@@ -543,7 +573,7 @@ ioStdio::_readStream(char * const a_void)
 				break;
 
 			if (ferror(stdin) != 0)
-				throw baseEx(ERRMODULE_IOSTDIO, IOSTDIOEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IOSTDIO, STDIOEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -553,12 +583,12 @@ ioStdio::_readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioStdio::readStream(char * const a_void)
+stdio::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
-	operType = IOSTDIO_OPERATION_READSTREAM;
+	operType = STDIO_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
@@ -579,12 +609,12 @@ ioStdio::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioStdio::readStreamString(dodoString &a_str)
+stdio::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
-	operType = IOSTDIO_OPERATION_READSTREAMSTRING;
+	operType = STDIO_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -618,7 +648,7 @@ ioStdio::readStreamString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-ioStdio::writeStreamString(const dodoString &a_buf)
+stdio::writeStreamString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -627,7 +657,7 @@ ioStdio::writeStreamString(const dodoString &a_buf)
 #ifndef IOSTDIO_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOSTDIO_OPERATION_WRITESTREAMSTRING;
+	operType = STDIO_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -673,7 +703,7 @@ ioStdio::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioStdio::writeStream(const char *const a_buf)
+stdio::writeStream(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -682,7 +712,7 @@ ioStdio::writeStream(const char *const a_buf)
 #ifndef IOSTDIO_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IOSTDIO_OPERATION_WRITESTREAM;
+	operType = STDIO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try

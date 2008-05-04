@@ -5,6 +5,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io;
 
 using namespace std;
 
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
 		
 		toolsFilesystem::unlink("my.dat");
 		
-		ioFile io("my.dat", IOFILE_FILETYPE_REG_FILE, IOFILE_OPENMODE_READ_WRITE_TRUNCATE);
+		file io("my.dat", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_READ_WRITE_TRUNCATE);
 		toolsFilesystem::chmod("my.dat", TOOLSFILESYSTEM_PERM_ALL_ALL_ACCESS);
 		
 		io.inSize = io.outSize = 14;

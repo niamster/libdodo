@@ -23,9 +23,9 @@
 
 #include <libdodo/ioNetworkOptions.h>
 
-using namespace dodo;
+using namespace dodo::io::network;
 
-ioNetworkOptions::ioNetworkOptions(short a_family,
+options::options(short a_family,
 								 short a_type) : family(a_family),
 												 type(a_type),
 												 lingerOpts(IONETWORKOPTIONS_SOCKET_LINGER_OPTION),
@@ -41,7 +41,7 @@ ioNetworkOptions::ioNetworkOptions(short a_family,
 
 //-------------------------------------------------------------------
 
-ioNetworkOptions::ioNetworkOptions() : lingerOpts(IONETWORKOPTIONS_SOCKET_LINGER_OPTION),
+options::options() : lingerOpts(IONETWORKOPTIONS_SOCKET_LINGER_OPTION),
 									 lingerSeconds(IONETWORKOPTIONS_SOCKET_LINGER_PERIOD),
 									 inTimeout(IONETWORK_RECIEVE_TIMEOUT),
 									 outTimeout(IONETWORK_SEND_TIMEOUT),
@@ -54,14 +54,14 @@ ioNetworkOptions::ioNetworkOptions() : lingerOpts(IONETWORKOPTIONS_SOCKET_LINGER
 
 //-------------------------------------------------------------------
 
-ioNetworkOptions::~ioNetworkOptions()
+options::~options()
 {
 }
 
 //-------------------------------------------------------------------
 
 bool
-ioNetworkOptions::isBlocked() const
+options::isBlocked() const
 {
 	return blocked;
 }
@@ -69,11 +69,11 @@ ioNetworkOptions::isBlocked() const
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::block(bool flag)
+options::block(bool flag)
 {
 	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (flag)
 		block &= ~O_NONBLOCK;
@@ -81,7 +81,7 @@ ioNetworkOptions::block(bool flag)
 		block |= O_NONBLOCK;
 
 	if (fcntl(socket, F_SETFL, block) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	blocked = flag;
 }
@@ -89,21 +89,21 @@ ioNetworkOptions::block(bool flag)
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::setInBufferSize(unsigned long bytes)
+options::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETINBUFFERSIZE, ERR_LIBDODO, IONETWORKOPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINBUFFERSIZE, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, OPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	inSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-ioNetworkOptions::getInBufferSize() const
+options::getInBufferSize() const
 {
 	return inSocketBuffer;
 }
@@ -111,21 +111,21 @@ ioNetworkOptions::getInBufferSize() const
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::setOutBufferSize(unsigned long bytes)
+options::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETOUTBUFFERSIZE, ERR_LIBDODO, IONETWORKOPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTBUFFERSIZE, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, OPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	outSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-ioNetworkOptions::getOutBufferSize() const
+options::getOutBufferSize() const
 {
 	return outSocketBuffer;
 }
@@ -133,10 +133,10 @@ ioNetworkOptions::getOutBufferSize() const
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::setInTimeout(unsigned long microseconds)
+options::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETINTIMEOUT, ERR_LIBDODO, IONETWORKOPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINTIMEOUT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, OPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	inTimeout = microseconds;
 
@@ -145,13 +145,13 @@ ioNetworkOptions::setInTimeout(unsigned long microseconds)
 	val.tv_usec = inTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-ioNetworkOptions::getInTimeout() const
+options::getInTimeout() const
 {
 	return inTimeout;
 }
@@ -159,10 +159,10 @@ ioNetworkOptions::getInTimeout() const
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::setOutTimeout(unsigned long microseconds)
+options::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETOUTTIMEOUT, ERR_LIBDODO, IONETWORKOPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTTIMEOUT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, OPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	outTimeout = microseconds;
 
@@ -171,14 +171,14 @@ ioNetworkOptions::setOutTimeout(unsigned long microseconds)
 	val.tv_usec = outTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 
 //-------------------------------------------------------------------
 
 unsigned long
-ioNetworkOptions::getOutTimeout() const
+options::getOutTimeout() const
 {
 	return outTimeout;
 }
@@ -186,7 +186,7 @@ ioNetworkOptions::getOutTimeout() const
 //-------------------------------------------------------------------
 
 bool
-ioNetworkOptions::getOption(int option) const
+options::getOption(int option) const
 {
 	if  ((option & socketOpts) == option)
 		return true;
@@ -196,11 +196,11 @@ ioNetworkOptions::getOption(int option) const
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::setOption(short option,
+options::setOption(short option,
 							   bool flag)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETSOCKOPT, ERR_LIBDODO, IONETWORKOPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, OPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	int sockFlag(1);
 
@@ -211,31 +211,31 @@ ioNetworkOptions::setOption(short option,
 
 	switch (option)
 	{
-		case IONETWORKOPTIONS_OPTION_KEEP_ALIVE:
+		case OPTIONS_OPTION_KEEP_ALIVE:
 
 			real_option = SO_KEEPALIVE;
 
 			break;
 
-		case IONETWORKOPTIONS_OPTION_REUSE_ADDRESS:
+		case OPTIONS_OPTION_REUSE_ADDRESS:
 
 			real_option = SO_REUSEADDR;
 
 			break;
 
-		case IONETWORKOPTIONS_OPTION_DONOT_USE_GATEWAY:
+		case OPTIONS_OPTION_DONOT_USE_GATEWAY:
 
 			real_option = SO_DONTROUTE;
 
 			break;
 
-		case IONETWORKOPTIONS_OPTION_BROADCAST:
+		case OPTIONS_OPTION_BROADCAST:
 
 			real_option = SO_BROADCAST;
 
 			break;
 
-		case IONETWORKOPTIONS_OPTION_OOB_INLINE:
+		case OPTIONS_OPTION_OOB_INLINE:
 
 			real_option = SO_OOBINLINE;
 
@@ -243,7 +243,7 @@ ioNetworkOptions::setOption(short option,
 
 #ifdef SO_REUSEPORT
 
-		case IONETWORKOPTIONS_OPTION_REUSE_PORT:
+		case OPTIONS_OPTION_REUSE_PORT:
 
 			real_option = SO_REUSEPORT;
 
@@ -253,11 +253,11 @@ ioNetworkOptions::setOption(short option,
 
 		default:
 
-			throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETSOCKOPT, ERR_LIBDODO, IONETWORKOPTIONSEX_WRONGPARAMETER, IONETWORKOPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, ERR_LIBDODO, OPTIONSEX_WRONGPARAMETER, OPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (!flag)
 		removeFlag(socketOpts, 1 << option);
@@ -268,30 +268,30 @@ ioNetworkOptions::setOption(short option,
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::setLingerOption(short option,
+options::setLingerOption(short option,
 									 int seconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, IONETWORKOPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, OPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	linger lin;
 
 	switch (option)
 	{
-		case IONETWORKOPTIONS_LINGEROPTION_GRACEFUL_CLOSE:
+		case OPTIONS_LINGEROPTION_GRACEFUL_CLOSE:
 
 			lin.l_onoff = 0;
 
 			break;
 
-		case IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE:
+		case OPTIONS_LINGEROPTION_HARD_CLOSE:
 
 			lin.l_onoff = 1;
 			lin.l_linger = 0;
 
 			break;
 
-		case IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE:
+		case OPTIONS_LINGEROPTION_WAIT_CLOSE:
 
 			lin.l_onoff = 1;
 			lin.l_linger = seconds;
@@ -300,11 +300,11 @@ ioNetworkOptions::setLingerOption(short option,
 
 		default:
 
-			throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, IONETWORKOPTIONSEX_WRONGPARAMETER, IONETWORKOPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, OPTIONSEX_WRONGPARAMETER, OPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	lingerOpts = option;
 	lingerSeconds = seconds;
@@ -313,7 +313,7 @@ ioNetworkOptions::setLingerOption(short option,
 //-------------------------------------------------------------------
 
 short
-ioNetworkOptions::getLingerOption() const
+options::getLingerOption() const
 {
 	return lingerOpts;
 }
@@ -321,7 +321,7 @@ ioNetworkOptions::getLingerOption() const
 //-------------------------------------------------------------------
 
 int
-ioNetworkOptions::getLingerPeriod() const
+options::getLingerPeriod() const
 {
 	return lingerSeconds;
 }
@@ -329,13 +329,13 @@ ioNetworkOptions::getLingerPeriod() const
 //-------------------------------------------------------------------
 
 void
-ioNetworkOptions::_close(int socket)
+options::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::close(socket) == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, IONETWORKOPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

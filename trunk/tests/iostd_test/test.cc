@@ -5,6 +5,8 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io;
+
 using namespace std;
 
 void 
@@ -12,12 +14,12 @@ hook(void *odata,
 	short int type, 
 	void *udata)
 {
-	__xexexIoCollectedData *st = (__xexexIoCollectedData *)odata;
-	if (st->operType == IOSTDIO_OPERATION_WRITE)
+	__xexexIoStdioCollectedData *st = (__xexexIoStdioCollectedData *)odata;
+	if (st->operType == STDIO_OPERATION_WRITE)
 	{
 		int a = *(int *)(st->buffer.c_str());
 		
-		ioStdio *io = (ioStdio *)st->executor;
+		stdio *io = (stdio *)st->executor;
 		io->disableAll();
 		io->writeStreamString("\nhook\n");
 		io->enableAll();
@@ -38,7 +40,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		ioStdio st;
+		stdio st;
 		cout << st.inputterInfo().host << endl;
 
 #ifndef IOSTDIO_WO_XEXEC

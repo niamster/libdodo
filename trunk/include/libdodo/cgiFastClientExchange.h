@@ -32,7 +32,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/cgiFastClientExchangeEx.h>
-#include <libdodo/io.h>
+#include <libdodo/ioChannel.h>
 #include <libdodo/systemThreadGuard.h>
 
 namespace dodo
@@ -55,11 +55,34 @@ namespace dodo
 				FASTCLIENTEXCHANGE_OPERATION_WRITESTREAM,
 				FASTCLIENTEXCHANGE_OPERATION_WRITESTREAMSTRING,
 			};
-		
+			
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+			
+			/**
+			 * @struct __xexexCgiFastClientExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+			 */
+			struct __xexexCgiFastClientExchangeCollectedData
+			{
+				/**
+				 * constructor
+				 */
+				__xexexCgiFastClientExchangeCollectedData(dodoString &buffer,
+									   int &operType,
+									   void *executor);
+
+				dodoString &buffer;         ///< data buffer
+
+				int &operType;              ///< xexec operation
+
+				void *executor;             ///< class that executed hook
+			};
+			
+#endif
+			
 			/**
 			 * @class clientExchange provides interface to fast CGI I/O functionality
 			 */
-			class clientExchange : public io,
+			class clientExchange : public io::channel,
 							virtual public systemThreadGuardHolder
 			{
 				private:
@@ -223,6 +246,14 @@ namespace dodo
 				private:
 		
 					FCGX_Request *request;    ///< fast CGI descriptor
+					
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+					
+					dodoString buffer;                      ///< buffer
+		
+					__xexexCgiFastClientExchangeCollectedData collectedData;   ///< data collected for xexec
+					
+#endif
 			};
 		};
 	};

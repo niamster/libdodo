@@ -23,7 +23,21 @@
 
 #include <libdodo/ioNetworkExchange.h>
 
-using namespace dodo;
+using namespace dodo::io::network;
+
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+__xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(dodoString &a_buffer,
+											   int &a_operType,
+											   void *a_executor) : buffer(a_buffer),
+																   operType(a_operType),
+																   executor(a_executor)
+{
+}
+
+#endif
+
+//-------------------------------------------------------------------
 
 __initialAccept::__initialAccept() : socket(-1),
 									 family(-1),
@@ -42,7 +56,16 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
 
 //-------------------------------------------------------------------
 
-ioNetworkExchange::ioNetworkExchange(ioNetworkExchange &fse)
+exchange::exchange(exchange &fse)
+
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+		: collectedData(buffer,
+					 operType,
+					 (void *) this)
+			 
+#endif
+			 
 {
 	socket = fse.socket;
 	opened = fse.opened;
@@ -65,20 +88,38 @@ ioNetworkExchange::ioNetworkExchange(ioNetworkExchange &fse)
 
 //-------------------------------------------------------------------
 
-ioNetworkExchange::ioNetworkExchange()
+exchange::exchange()
+
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+		: collectedData(buffer,
+					 operType,
+					 (void *) this)
+			 
+#endif
+			 
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNetworkExchange::ioNetworkExchange(__initialAccept &a_init)
+exchange::exchange(__initialAccept &a_init)
+
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+		: collectedData(buffer,
+					 operType,
+					 (void *) this)
+			 
+#endif
+			 
 {
 	init(a_init.socket, a_init.blockInherited);
 }
 
 //-------------------------------------------------------------------
 
-ioNetworkExchange::~ioNetworkExchange()
+exchange::~exchange()
 {
 	if (opened)
 	{
@@ -91,7 +132,7 @@ ioNetworkExchange::~ioNetworkExchange()
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::init(__initialAccept &a_init)
+exchange::init(__initialAccept &a_init)
 {
 	family = a_init.family;
 	type = a_init.type;
@@ -104,25 +145,25 @@ ioNetworkExchange::init(__initialAccept &a_init)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::close()
+exchange::close()
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef IONETWORKOPTIONS_SOCKET_WO_XEXEC
-	operType = IONETWORKEXCHANGE_OPERATION_CLOSE;
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+	operType = EXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
 #endif
 
 	if (!opened)
 		return ;
 
-	ioNetworkOptions::_close(socket);
+	options::_close(socket);
 
 	socket = -1;
 
 	opened = false;
 
-#ifndef IONETWORKOPTIONS_SOCKET_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -130,14 +171,14 @@ ioNetworkExchange::close()
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::init(int a_socket,
+exchange::init(int a_socket,
 					   bool blockInherited)
 {
 	systemRaceHazardGuard pg(this);
 
 	if (opened)
 	{
-		ioNetworkOptions::_close(socket);
+		options::_close(socket);
 
 		socket = -1;
 
@@ -170,7 +211,7 @@ ioNetworkExchange::init(int a_socket,
 //-------------------------------------------------------------------
 
 bool
-ioNetworkExchange::isAlive()
+exchange::isAlive()
 {
 	systemRaceHazardGuard pg(this);
 	
@@ -185,7 +226,7 @@ ioNetworkExchange::isAlive()
 		if (isSetFlag(fd.revents, POLLOUT))
 			return true;
 	
-	ioNetworkOptions::_close(socket);
+	options::_close(socket);
 
 	socket = -1;
 	opened = false;
@@ -197,7 +238,7 @@ ioNetworkExchange::isAlive()
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::_write(const char * const data)
+exchange::_write(const char * const data)
 {
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -221,7 +262,7 @@ ioNetworkExchange::_write(const char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -247,7 +288,7 @@ ioNetworkExchange::_write(const char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -262,14 +303,14 @@ ioNetworkExchange::_write(const char * const data)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::write(const char * const a_buf)
+exchange::write(const char * const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
 
-	operType = IONETWORKEXCHANGE_OPERATION_WRITE;
+	operType = EXCHANGE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -297,14 +338,14 @@ ioNetworkExchange::write(const char * const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::writeString(const dodoString &a_buf)
+exchange::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IONETWORKEXCHANGE_OPERATION_WRITESTRING;
+	operType = EXCHANGE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -332,7 +373,7 @@ ioNetworkExchange::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::_read(char * const data)
+exchange::_read(char * const data)
 {
 	memset(data, '\0', inSize);
 
@@ -358,7 +399,7 @@ ioNetworkExchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -387,7 +428,7 @@ ioNetworkExchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -405,12 +446,12 @@ ioNetworkExchange::_read(char * const data)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::read(char * const a_void)
+exchange::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = IONETWORKEXCHANGE_OPERATION_READ;
+	operType = EXCHANGE_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -444,12 +485,12 @@ ioNetworkExchange::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::readString(dodoString &a_str)
+exchange::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = IONETWORKEXCHANGE_OPERATION_READSTRING;
+	operType = EXCHANGE_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -491,7 +532,7 @@ ioNetworkExchange::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 int
-ioNetworkExchange::addPostExec(inExec func,
+exchange::addPostExec(inExec func,
 							  void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
@@ -500,7 +541,7 @@ ioNetworkExchange::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-ioNetworkExchange::addPreExec(inExec func,
+exchange::addPreExec(inExec func,
 							 void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
@@ -511,7 +552,7 @@ ioNetworkExchange::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-ioNetworkExchange::addPostExec(const dodoString &module,
+exchange::addPostExec(const dodoString &module,
 							  void             *data,
 							  void             *toInit)
 {
@@ -521,7 +562,7 @@ ioNetworkExchange::addPostExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-ioNetworkExchange::addPreExec(const dodoString &module,
+exchange::addPreExec(const dodoString &module,
 							 void             *data,
 							 void             *toInit)
 {
@@ -530,8 +571,8 @@ ioNetworkExchange::addPreExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-ioNetworkExchange::addExec(const dodoString &module,
+dodo::__xexecCounts
+exchange::addExec(const dodoString &module,
 						  void             *data,
 						  void             *toInit)
 {
@@ -545,7 +586,7 @@ ioNetworkExchange::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::writeStream(const char * const a_buf)
+exchange::writeStream(const char * const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -554,7 +595,7 @@ ioNetworkExchange::writeStream(const char * const a_buf)
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IONETWORKEXCHANGE_OPERATION_WRITESTREAM;
+	operType = EXCHANGE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -600,7 +641,7 @@ ioNetworkExchange::writeStream(const char * const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::writeStreamString(const dodoString &a_buf)
+exchange::writeStreamString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -609,7 +650,7 @@ ioNetworkExchange::writeStreamString(const dodoString &a_buf)
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = IONETWORKEXCHANGE_OPERATION_WRITESTREAMSTRING;
+	operType = EXCHANGE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -655,7 +696,7 @@ ioNetworkExchange::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 unsigned long
-ioNetworkExchange::_readStream(char * const data)
+exchange::_readStream(char * const data)
 {
 	memset(data, '\0', inSize);
 
@@ -671,7 +712,7 @@ ioNetworkExchange::_readStream(char * const data)
 			if (errno == EAGAIN)
 				break;
 
-			throw baseEx(ERRMODULE_IONETWORKEXCHANGE, IONETWORKEXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -683,12 +724,12 @@ ioNetworkExchange::_readStream(char * const data)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::readStream(char * const a_void)
+exchange::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = IONETWORKEXCHANGE_OPERATION_READSTREAM;
+	operType = EXCHANGE_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
@@ -711,14 +752,14 @@ ioNetworkExchange::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::readStreamString(dodoString &a_str)
+exchange::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
 	a_str.clear();
 	
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = IONETWORKEXCHANGE_OPERATION_READSTREAMSTRING;
+	operType = EXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -756,12 +797,12 @@ ioNetworkExchange::readStreamString(dodoString &a_str)
 
 //-------------------------------------------------------------------
 
-ioNetworkExchange *
-ioNetworkExchange::createCopy()
+exchange *
+exchange::createCopy()
 {
 	systemRaceHazardGuard pg(this);
 
-	ioNetworkExchange *copy = new ioNetworkExchange;
+	exchange *copy = new exchange;
 
 	copy->socket = socket;
 	copy->opened = opened;
@@ -787,7 +828,7 @@ ioNetworkExchange::createCopy()
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::deleteCopy(ioNetworkExchange *copy)
+exchange::deleteCopy(exchange *copy)
 {
 	delete copy;
 }
@@ -795,14 +836,14 @@ ioNetworkExchange::deleteCopy(ioNetworkExchange *copy)
 //-------------------------------------------------------------------
 
 void
-ioNetworkExchange::flush()
+exchange::flush()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-ioNetworkExchange::getInDescriptor() const
+exchange::getInDescriptor() const
 {
 	systemRaceHazardGuard pg(this);
 
@@ -812,7 +853,7 @@ ioNetworkExchange::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-ioNetworkExchange::getOutDescriptor() const
+exchange::getOutDescriptor() const
 {
 	systemRaceHazardGuard pg(this);
 

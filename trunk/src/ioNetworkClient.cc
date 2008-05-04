@@ -23,7 +23,9 @@
 
 #include <libdodo/ioNetworkClient.h>
 
-using namespace dodo;
+using namespace dodo::io::network;
+
+#ifndef IONETWORKCLIENT_WO_XEXEC
 
 __xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_operType,
 											   void *a_executor) : operType(a_operType),
@@ -31,27 +33,42 @@ __xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_
 {
 }
 
+#endif
+
 //-------------------------------------------------------------------
 
-ioNetworkClient::ioNetworkClient(ioNetworkClient &fs): collectedData(operType,
+client::client(client &fs)
+
+#ifndef IONETWORKCLIENT_WO_XEXEC
+
+: collectedData(operType,
 										 (void *) this)
+
+#endif
+
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNetworkClient::ioNetworkClient(short a_family,
-				   short a_type) : ioNetworkOptions(a_family, a_type),
-								   blockInherited(false),
+client::client(short a_family,
+				   short a_type) : options(a_family, a_type),
+								   blockInherited(false)
+#ifndef IONETWORKCLIENT_WO_XEXEC
+
+								   ,
 								   collectedData(operType,
 												 (void *) this)
+
+#endif
+
 {
 }
 
 
 //-------------------------------------------------------------------
 
-ioNetworkClient::~ioNetworkClient()
+client::~client()
 {
 }
 
@@ -60,7 +77,7 @@ ioNetworkClient::~ioNetworkClient()
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
 int
-ioNetworkClient::addPostExec(inExec func,
+client::addPostExec(inExec func,
 					  void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKCLIENT, data);
@@ -69,7 +86,7 @@ ioNetworkClient::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-ioNetworkClient::addPreExec(inExec func,
+client::addPreExec(inExec func,
 					 void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKCLIENT, data);
@@ -80,7 +97,7 @@ ioNetworkClient::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-ioNetworkClient::addPostExec(const dodoString &module,
+client::addPostExec(const dodoString &module,
 					  void             *data,
 					  void             *toInit)
 {
@@ -90,7 +107,7 @@ ioNetworkClient::addPostExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-ioNetworkClient::addPreExec(const dodoString &module,
+client::addPreExec(const dodoString &module,
 					 void             *data,
 					 void             *toInit)
 {
@@ -99,8 +116,8 @@ ioNetworkClient::addPreExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-ioNetworkClient::addExec(const dodoString &module,
+dodo::__xexecCounts
+client::addExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
@@ -114,7 +131,7 @@ ioNetworkClient::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-ioNetworkClient::restoreOptions()
+client::restoreOptions()
 {
 	setInBufferSize(inSocketBuffer);
 	setOutBufferSize(outSocketBuffer);
@@ -130,14 +147,14 @@ ioNetworkClient::restoreOptions()
 //-------------------------------------------------------------------
 
 void
-ioNetworkClient::makeSocket()
+client::makeSocket()
 {
 	if (socket != -1)
 	{
 		::shutdown(socket, SHUT_RDWR);
 
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 	}
@@ -146,19 +163,19 @@ ioNetworkClient::makeSocket()
 
 	switch (family)
 	{
-		case IONETWORKOPTIONS_PROTO_FAMILY_IPV4:
+		case OPTIONS_PROTO_FAMILY_IPV4:
 
 			real_domain = PF_INET;
 
 			break;
 
-		case IONETWORKOPTIONS_PROTO_FAMILY_IPV6:
+		case OPTIONS_PROTO_FAMILY_IPV6:
 
 			real_domain = PF_INET6;
 
 			break;
 
-		case IONETWORKOPTIONS_PROTO_FAMILY_UNIX_SOCKET:
+		case OPTIONS_PROTO_FAMILY_UNIX_SOCKET:
 
 			real_domain = PF_UNIX;
 
@@ -166,18 +183,18 @@ ioNetworkClient::makeSocket()
 
 		default:
 
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_MAKESOCKET, ERR_LIBDODO, IONETWORKCLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, ERR_LIBDODO, CLIENTEX_WRONGPARAMETER, CLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	switch (type)
 	{
-		case IONETWORKOPTIONS_TRANSFER_TYPE_STREAM:
+		case OPTIONS_TRANSFER_TYPE_STREAM:
 
 			real_type = SOCK_STREAM;
 
 			break;
 
-		case IONETWORKOPTIONS_TRANSFER_TYPE_DATAGRAM:
+		case OPTIONS_TRANSFER_TYPE_DATAGRAM:
 
 			real_type = SOCK_DGRAM;
 
@@ -185,12 +202,12 @@ ioNetworkClient::makeSocket()
 
 		default:
 
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_MAKESOCKET, ERR_LIBDODO, IONETWORKCLIENTEX_WRONGPARAMETER, IONETWORKCLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, ERR_LIBDODO, CLIENTEX_WRONGPARAMETER, CLIENTEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	socket = ::socket(real_domain, real_type, 0);
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	restoreOptions();
 }
@@ -198,18 +215,18 @@ ioNetworkClient::makeSocket()
 //-------------------------------------------------------------------
 
 void
-ioNetworkClient::connect(const dodoString &host,
+client::connect(const dodoString &host,
 				  int port,
-				  ioNetworkExchange &exchange)
+				  exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
-	operType = IONETWORKCLIENT_OPERATION_CONNECT;
+	operType = CLIENT_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
 	makeSocket();
 
-	if (family == IONETWORKOPTIONS_PROTO_FAMILY_IPV6)
+	if (family == OPTIONS_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
@@ -221,11 +238,11 @@ ioNetworkClient::connect(const dodoString &host,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
-				throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 	else
@@ -238,11 +255,11 @@ ioNetworkClient::connect(const dodoString &host,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
-				throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 
@@ -259,8 +276,8 @@ ioNetworkClient::connect(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-ioNetworkClient::connect(const __connInfo &destinaton,
-				  ioNetworkExchange &exchange)
+client::connect(const __connInfo &destinaton,
+				  exchange &exchange)
 {
 	connect(destinaton.host, destinaton.port, exchange);
 }
@@ -268,13 +285,13 @@ ioNetworkClient::connect(const __connInfo &destinaton,
 //-------------------------------------------------------------------
 
 void
-ioNetworkClient::connectFrom(const dodoString &local,
+client::connectFrom(const dodoString &local,
 					  const dodoString &host,
 					  int port,
-					  ioNetworkExchange &exchange)
+					  exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
-	operType = IONETWORKCLIENT_OPERATION_CONNECTFROM;
+	operType = CLIENT_OPERATION_CONNECTFROM;
 	performXExec(preExec);
 #endif
 	
@@ -282,11 +299,11 @@ ioNetworkClient::connectFrom(const dodoString &local,
 
 	int sockFlag(1);
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
-		throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << IONETWORKOPTIONS_OPTION_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << OPTIONS_OPTION_REUSE_ADDRESS);
 
-	if (family == IONETWORKOPTIONS_PROTO_FAMILY_IPV6)
+	if (family == OPTIONS_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
@@ -296,7 +313,7 @@ ioNetworkClient::connectFrom(const dodoString &local,
 		inet_pton(AF_INET6, local.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		sa.sin6_port = htons(port);
 		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
@@ -304,11 +321,11 @@ ioNetworkClient::connectFrom(const dodoString &local,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
-				throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 	else
@@ -319,7 +336,7 @@ ioNetworkClient::connectFrom(const dodoString &local,
 		inet_aton(local.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		sa.sin_port = htons(port);
 		inet_aton(host.c_str(), &sa.sin_addr);
@@ -327,11 +344,11 @@ ioNetworkClient::connectFrom(const dodoString &local,
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
 			if (::close(socket) == -1)
-				throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 			socket = -1;
 
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 	}
 
@@ -348,9 +365,9 @@ ioNetworkClient::connectFrom(const dodoString &local,
 //-------------------------------------------------------------------
 
 void
-ioNetworkClient::connectFrom(const dodoString &local,
+client::connectFrom(const dodoString &local,
 					  const __connInfo &destinaton,
-					  ioNetworkExchange &exchange)
+					  exchange &exchange)
 {
 	connectFrom(local, destinaton.host, destinaton.port, exchange);
 }
@@ -358,11 +375,11 @@ ioNetworkClient::connectFrom(const dodoString &local,
 //-------------------------------------------------------------------
 
 void
-ioNetworkClient::connect(const dodoString &path,
-				  ioNetworkExchange &exchange)
+client::connect(const dodoString &path,
+				  exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
-	operType = IONETWORKCLIENT_OPERATION_CONNECT_UNIX;
+	operType = CLIENT_OPERATION_CONNECT_UNIX;
 	performXExec(preExec);
 #endif
 
@@ -376,11 +393,11 @@ ioNetworkClient::connect(const dodoString &path,
 	if (::connect(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)
 	{
 		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		socket = -1;
 
-		throw baseEx(ERRMODULE_IONETWORKCLIENT, IONETWORKCLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	exchange.blocked = blocked;

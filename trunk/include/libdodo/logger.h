@@ -26,7 +26,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/io.h>
+#include <libdodo/ioChannel.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/systemThreadGuard.h>
 
@@ -55,7 +55,7 @@ namespace dodo
 	struct __logMap
 	{
 		short level;///< log level[see loggerLogLevelEnum]
-		io *handler;///< log handler
+		io::channel *handler;///< log handler
 		long position;///< log handler identificator
 	};
 
@@ -83,7 +83,7 @@ namespace dodo
 			 * @param handler defines log handler
 			 * @note if handler is NULL logger will pass message to the syslog
 			 */
-			virtual unsigned long add(short level, io *handler);
+			virtual unsigned long add(short level, io::channel *handler);
 			
 			/**
 			 * unregister log handler

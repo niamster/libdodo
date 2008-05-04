@@ -61,6 +61,14 @@ namespace dodo
 		class client;
 	};
 
+	namespace io
+	{
+		namespace network
+		{
+			class http;
+		};
+	};
+
 	/**
 	 * @typedef escape defines escape function for explode/implode
 	 */
@@ -109,7 +117,7 @@ namespace dodo
 	 */
 	class tools
 	{
-		friend class ioNetworkHttp;
+		friend class io::network::http;
 		friend class cgi::client;
 		
 		public:

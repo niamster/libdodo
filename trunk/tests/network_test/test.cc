@@ -7,11 +7,12 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io::network;
 
 using namespace std;
 
 void
-process(ioNetworkExchange fse)
+process(exchange fse)
 {
 	
 	if (fse.isBlocked())
@@ -81,8 +82,8 @@ int main(int argc, char **argv)
 		
 		try
 		{
-			ioNetworkClient st(IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
-			ioNetworkExchange exch;
+			client st(OPTIONS_PROTO_FAMILY_IPV4,OPTIONS_TRANSFER_TYPE_STREAM);
+			exchange exch;
 			dodoString str;
 			
 			try
@@ -104,9 +105,9 @@ int main(int argc, char **argv)
 			cout.flush();
 		}
 			
-		/*ioNetworkServer sock(IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
-		//ioNetworkServer sock(IONETWORKOPTIONS_PROTO_FAMILY_IPV6,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
-		//ioNetworkServer sock(IONETWORKOPTIONS_PROTO_FAMILY_UNIX_SOCKET,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+		/*server sock(OPTIONS_PROTO_FAMILY_IPV4,OPTIONS_TRANSFER_TYPE_STREAM);
+		//server sock(OPTIONS_PROTO_FAMILY_IPV6,OPTIONS_TRANSFER_TYPE_STREAM);
+		//server sock(OPTIONS_PROTO_FAMILY_UNIX_SOCKET,OPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__connInfo info;
 		__initialAccept fake;
@@ -119,7 +120,7 @@ int main(int argc, char **argv)
 		//sock.bindNListen("::",7777);
 		//sock.bindNListen("./sock",10,true);
 		
-		ioNetworkExchange conn;
+		exchange conn;
 		
 		while(true)
 		{

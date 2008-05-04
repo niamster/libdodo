@@ -7,6 +7,8 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io;
+
 using namespace std;
 
 void

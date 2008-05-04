@@ -6,6 +6,8 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io;
+
 using namespace std;
 
 int main(int argc, char **argv)
@@ -14,8 +16,8 @@ int main(int argc, char **argv)
 	{	
 		logger log;
 
-		ioFile *disk = new ioFile("./test.log", IOFILE_FILETYPE_REG_FILE, IOFILE_OPENMODE_APPEND);
-		ioStdio *std = new ioStdio;
+		file *disk = new file("./test.log", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_APPEND);
+		stdio *std = new stdio;
 		std->redirectToSTDErr(true);
 
 		log.add(LOGGER_ERROR, disk);

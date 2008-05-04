@@ -1366,15 +1366,15 @@ Optional Features:
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
   --disable-ioStdio-xexec-support
-                          compile ioStdio w/o xexec support
+                          compile io::stdio w/o xexec support
   --disable-ioNetworkExchange-xexec-support
-                          compile ioNetworkExchange w/o xexec support
+                          compile io::network::exchange w/o xexec support
   --disable-ioNetworkClient-xexec-support
-                          compile ioNetworkClient w/o xexec support
+                          compile io::network::client w/o xexec support
   --disable-ioNetworkServer-xexec-support
-                          compile ioNetworkServer w/o xexec support
+                          compile io::network::server w/o xexec support
   --disable-ioFile-xexec-support
-                          compile ioFile w/o xexec support
+                          compile io::file w/o xexec support
   --disable-dbSqlite-xexec-support
                           compile db::sqlite w/o xexec support
   --disable-dbPostgresql-xexec-support
@@ -1382,7 +1382,7 @@ Optional Features:
   --disable-dbMysql-xexec-support
                           compile db::mysql w/o xexec support
   --disable-cgiFastClientExchange-xexec-support
-                          compile cgi::fastClientExchange w/o xexec support
+                          compile cgi::fast::clientExchange w/o xexec support
   --disable-dl-lib        disable dl as lib
   --disable-fast-dynamic-loading
                           do not unload library to produce better performance
@@ -3649,9 +3649,9 @@ if test "$IOSTDIO_W_XEXEC" = "no"
 then
 	echo -n -e "#define IOSTDIO_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioNetworkExchange-xexec-support was given.
@@ -3666,9 +3666,9 @@ if test "$IONETWORKEXCHANGE_W_XEXEC" = "no"
 then
 	echo -n -e "#define IONETWORKEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioNetworkClient-xexec-support was given.
@@ -3683,9 +3683,9 @@ if test "$IONETWORKCLIENT_W_XEXEC" = "no"
 then
 	echo -n -e "#define IONETWORKCLIENT_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::network::client xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::client xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioNetworkServer-xexec-support was given.
@@ -3700,9 +3700,9 @@ if test "$IONETWORKSERVER_W_XEXEC" = "no"
 then
 	echo -n -e "#define IONETWORKSERVER_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::network::server xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::server xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check whether --enable-ioFile-xexec-support was given.
@@ -3717,9 +3717,9 @@ if test "$IOFILE_W_XEXEC" = "no"
 then
 	echo -n -e "#define IOFILE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::file xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::file xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check for libraries.
@@ -5464,9 +5464,9 @@ fi
 		then
 			echo -n -e "#define CGIFASTCLIENTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\ncgi::fastClientExchange xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ncgi::fast::clientExchange xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ncgi::fastClientExchange xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ncgi::fast::clientExchange xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tdisabled"

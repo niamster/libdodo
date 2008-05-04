@@ -7,6 +7,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io::network;
 
 using namespace std;
 
@@ -14,19 +15,19 @@ int main(int argc, char **argv)
 {
 	try
 	{						
-		ioNetworkServer sock(IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(OPTIONS_PROTO_FAMILY_IPV4,OPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__initialAccept fake;
 
 		sock.bindNListen("127.0.0.1",7778,1);
-		sock.setOption(IONETWORKOPTIONS_OPTION_REUSE_ADDRESS,true);
-		sock.setLingerOption(IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE);	
+		sock.setOption(OPTIONS_OPTION_REUSE_ADDRESS,true);
+		sock.setLingerOption(OPTIONS_LINGEROPTION_HARD_CLOSE);	
 		sock.blockInherited = true;
 		sock.block(false);
 				
-		ioNetworkExchange conn;
+		exchange conn;
 
-		ioNonBlockedAccess nb;
+		io::nonBlockedAccess nb;
 		
 		char trimSym[] = {'\r', '\n'};
 

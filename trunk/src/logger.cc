@@ -64,7 +64,7 @@ logger::~logger()
 
 unsigned long
 logger::add(short level, 
-			io *handler)
+			io::channel *handler)
 {
 	systemRaceHazardGuard tg(this);
 	

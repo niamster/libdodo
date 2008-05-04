@@ -27,6 +27,20 @@
 
 using namespace dodo;
 
+#ifndef IMAGE_WO_XEXEC
+
+__xexexImageCollectedData::__xexexImageCollectedData(ImageInfo &a_imInfo,
+													 Image &a_im,
+													 int &a_operType,
+													 void *a_executor) : imInfo(a_imInfo),
+																		 im(a_im),
+																		 operType(a_operType),
+																		 executor(a_executor)
+{
+}
+
+#endif
+
 //-------------------------------------------------------------------
 
 __image_init__::__image_init__() : initialized(false)
@@ -99,33 +113,34 @@ const CompressionType image::compressionStArr[] =
 
 //-------------------------------------------------------------------
 
+image::image(image &a_im)
 
-__xexexImageCollectedData::__xexexImageCollectedData(ImageInfo &a_imInfo,
-													 Image &a_im,
-													 int &a_operType,
-													 void *a_executor) : imInfo(a_imInfo),
-																		 im(a_im),
-																		 operType(a_operType),
-																		 executor(a_executor)
-{
-}
+#ifndef IMAGE_WO_XEXEC
 
-//-------------------------------------------------------------------
-
-image::image(image &a_im) : collectedData(*imInfo,
+: collectedData(*imInfo,
 										  *im,
 										  operType,
 										  (void *) this)
+
+#endif
+
 {
 }
 
 //-------------------------------------------------------------------
 
-image::image() : im(NULL),
+image::image() : im(NULL)
+
+#ifndef IMAGE_WO_XEXEC
+
+				,
 				 collectedData(*imInfo,
 							   *im,
 							   operType,
 							   (void *) this)
+
+#endif
+
 {
 	imInfo = AcquireImageInfo();
 	exInfo = AcquireExceptionInfo();
@@ -432,7 +447,7 @@ image::destroyImageData(unsigned char **data)
 
 //-------------------------------------------------------------------
 
-#ifndef DBSQLITE_WO_XEXEC
+#ifndef IMAGE_WO_XEXEC
 
 int
 image::addPostExec(inExec func,

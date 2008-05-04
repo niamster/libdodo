@@ -60,68 +60,68 @@ else
 fi
 
 AC_ARG_ENABLE(ioStdio-xexec-support,
-        AS_HELP_STRING([--disable-ioStdio-xexec-support],[compile ioStdio w/o xexec support]),
+        AS_HELP_STRING([--disable-ioStdio-xexec-support],[compile io::stdio w/o xexec support]),
         [IOSTDIO_W_XEXEC="$enableval"], [IOSTDIO_W_XEXEC="yes"])
 
 if test "$IOSTDIO_W_XEXEC" = "no"
 then
 	echo -n -e "#define IOSTDIO_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioStdio xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_ENABLE(ioNetworkExchange-xexec-support,
-        AS_HELP_STRING([--disable-ioNetworkExchange-xexec-support],[compile ioNetworkExchange w/o xexec support]),
+        AS_HELP_STRING([--disable-ioNetworkExchange-xexec-support],[compile io::network::exchange w/o xexec support]),
         [IONETWORKEXCHANGE_W_XEXEC="$enableval"], [IONETWORKEXCHANGE_W_XEXEC="yes"])
 
 if test "$IONETWORKEXCHANGE_W_XEXEC" = "no"
 then
 	echo -n -e "#define IONETWORKEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetworkExchange xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_ENABLE(ioNetworkClient-xexec-support,
-        AS_HELP_STRING([--disable-ioNetworkClient-xexec-support],[compile ioNetworkClient w/o xexec support]),
+        AS_HELP_STRING([--disable-ioNetworkClient-xexec-support],[compile io::network::client w/o xexec support]),
         [IONETWORKCLIENT_W_XEXEC="$enableval"], [IONETWORKCLIENT_W_XEXEC="yes"])
 
 if test "$IONETWORKCLIENT_W_XEXEC" = "no"
 then
 	echo -n -e "#define IONETWORKCLIENT_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::network::client xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetworkClient xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::client xexec support\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_ENABLE(ioNetworkServer-xexec-support,
-        AS_HELP_STRING([--disable-ioNetworkServer-xexec-support],[compile ioNetworkServer w/o xexec support]),
+        AS_HELP_STRING([--disable-ioNetworkServer-xexec-support],[compile io::network::server w/o xexec support]),
         [IONETWORKSERVER_W_XEXEC="$enableval"], [IONETWORKSERVER_W_XEXEC="yes"])
 
 if test "$IONETWORKSERVER_W_XEXEC" = "no"
 then
 	echo -n -e "#define IONETWORKSERVER_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::network::server xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioNetworkServer xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::server xexec support\t\t\t\t\t\tenabled"
 fi
 
 AC_ARG_ENABLE(ioFile-xexec-support,
-        AS_HELP_STRING([--disable-ioFile-xexec-support],[compile ioFile w/o xexec support]),
+        AS_HELP_STRING([--disable-ioFile-xexec-support],[compile io::file w/o xexec support]),
         [IOFILE_W_XEXEC="$enableval"], [IOFILE_W_XEXEC="yes"])
 
 if test "$IOFILE_W_XEXEC" = "no"
 then
 	echo -n -e "#define IOFILE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	
-	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tdisabled"
+	RESULT="$RESULT\nio::file xexec support\t\t\t\t\t\tdisabled"
 else
-	RESULT="$RESULT\nioFile xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::file xexec support\t\t\t\t\t\tenabled"
 fi
 
 # Check for libraries.
@@ -272,16 +272,16 @@ fi
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 
 		AC_ARG_ENABLE(cgiFastClientExchange-xexec-support,
-			AS_HELP_STRING([--disable-cgiFastClientExchange-xexec-support],[compile cgi::fastClientExchange w/o xexec support]),
+			AS_HELP_STRING([--disable-cgiFastClientExchange-xexec-support],[compile cgi::fast::clientExchange w/o xexec support]),
 			[CGIFASTCLIENTEXCHANGE_W_XEXEC="$enableval"], [CGIFASTCLIENTEXCHANGE_W_XEXEC="yes"])
 
 		if test "$CGIFASTCLIENTEXCHANGE_W_XEXEC" = "no"
 		then
 			echo -n -e "#define CGIFASTCLIENTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 			
-			RESULT="$RESULT\ncgi::fastClientExchange xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ncgi::fast::clientExchange xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ncgi::fastClientExchange xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ncgi::fast::clientExchange xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tdisabled"

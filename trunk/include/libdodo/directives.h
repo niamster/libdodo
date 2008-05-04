@@ -91,16 +91,16 @@
 /**
  * max line length
  */
-#define IOFILE_MAXLINELEN          10240
+#define PATH_MAXLINELEN          10240
 
 /**
- * default values of socket buffer for io operations(ioNetwork)
+ * default values of socket buffer for io operations()
  */
 #define IONETWORKOPTIONS_SOCKET_INSIZE            102400
 #define IONETWORKOPTIONS_SOCKET_OUTSIZE           102400
 
 /**
- * default values of stdin/out buffer for io operations(ioStdio)
+ * default values of stdin/out buffer for io operations(stdio)
  */
 #define STD_INSIZE               102400
 #define STD_OUTSIZE              102400
@@ -109,7 +109,7 @@
  * linger options
  */
 #define IONETWORKOPTIONS_SOCKET_LINGER_PERIOD     1
-#define IONETWORKOPTIONS_SOCKET_LINGER_OPTION     IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE
+#define IONETWORKOPTIONS_SOCKET_LINGER_OPTION     OPTIONS_LINGEROPTION_WAIT_CLOSE
 
 /**
  * max length of the filesystem path

@@ -56,9 +56,9 @@ namespace dodo
 	};
 
 	/**
-	 * @enum ioFilePermissionModesEnum defines file permissions
+	 * @enum filePermissionModesEnum defines file permissions
 	 */
-	enum ioFilePermissionModesEnum
+	enum filePermissionModesEnum
 	{
 		TOOLSFILESYSTEM_PERM_NONE,
 
@@ -93,7 +93,7 @@ namespace dodo
 	struct __fileInfo
 	{
 		dodoString name;    ///< file name
-		int perm;           ///< file permissions[see ioFilePermissionModesEnum]
+		int perm;           ///< file permissions[see filePermissionModesEnum]
 		int type;           ///< file type[see toolsFilesystemFileTypeEnum]
 		long size;          ///< file size
 		long modTime;       ///< modyfication time
@@ -107,9 +107,6 @@ namespace dodo
 	 */
 	class toolsFilesystem
 	{
-
-			friend class ioNetwork;
-
 		public:
 
 			/**
@@ -207,14 +204,14 @@ namespace dodo
 			/**
 			 * make fifo(pipe)
 			 * @param path defines path to file
-			 * @param permissions defines fifo permissions[see ioFilePermissionModesEnum]
+			 * @param permissions defines fifo permissions[see filePermissionModesEnum]
 			 */
 			static void mkfifo(const dodoString &path, int permissions = TOOLSFILESYSTEM_PERM_OWNER_ALL_ACCESS);
 
 			/**
 			 * make directory
 			 * @param path defines path to directory
-			 * @param permissions defines directory permissions[see ioFilePermissionModesEnum]
+			 * @param permissions defines directory permissions[see filePermissionModesEnum]
 			 * @param force defines overwrite condition[if it is true and directory already exists do not say anything]
 			 */
 			static void mkdir(const dodoString &path, int permissions = TOOLSFILESYSTEM_PERM_OWNER_ALL_ACCESS, bool force = true);
@@ -222,7 +219,7 @@ namespace dodo
 			/**
 			 * make directory recursively
 			 * @param path defines path to directory
-			 * @param permissions defines directory permissions[see ioFilePermissionModesEnum]
+			 * @param permissions defines directory permissions[see filePermissionModesEnum]
 			 */
 			static void mkdirRecursive(const dodoString &path, int permissions = TOOLSFILESYSTEM_PERM_OWNER_ALL_ACCESS);
 
@@ -242,7 +239,7 @@ namespace dodo
 			/**
 			 * change permissions
 			 * @param path defines path to file/directory/...
-			 * @param permissions defines file/directory/... permissions[see ioFilePermissionModesEnum]
+			 * @param permissions defines file/directory/... permissions[see filePermissionModesEnum]
 			 */
 			static void chmod(const dodoString &path, int permissions);
 

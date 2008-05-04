@@ -30,29 +30,34 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum ioNetworkClientExR
+	namespace io
 	{
-		IONETWORKCLIENTEX_WRONGPARAMETER,
+		namespace network
+		{
+			/**
+			 * libdodo defined errors
+			 */
+			enum clientExR
+			{
+				CLIENTEX_WRONGPARAMETER,
+			};
+		
+			/**
+			 * explanations for libdodo defined errors
+			 */
+		#define CLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+		
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum clientFunctionsID
+			{
+				CLIENTEX_MAKESOCKET,
+				CLIENTEX_CONNECT,
+				CLIENTEX_CONNECTFROM,
+			};
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define IONETWORKCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum ioNetworkClientFunctionsID
-	{
-		IONETWORKCLIENTEX_MAKESOCKET,
-		IONETWORKCLIENTEX_CONNECT,
-		IONETWORKCLIENTEX_CONNECTFROM,
-	};
-
 };
 
 #endif

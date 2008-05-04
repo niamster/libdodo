@@ -516,7 +516,7 @@ namespace dodo
 	
 	#endif
 	
-				io *cgiIO;///< CLIENT I/O instance
+				io::channel *cgiIO;///< CLIENT I/O instance
 	
 				mutable bool headersPrinted;///< true if headers have been printed 
 	

@@ -29,29 +29,32 @@
 
 namespace dodo
 {
-	/**
-	 * @class ioNonBlockedAccessInfo provides interface for ioNonBlockedAccess  
-	 */
-	class ioNonBlockedAccessInfo
+	namespace io
 	{
-		friend class ioNonBlockedAccess;
-		
-		public:
+		/**
+		 * @class nonBlockedAccessInfo provides interface for nonBlockedAccess  
+		 */
+		class nonBlockedAccessInfo
+		{
+			friend class nonBlockedAccess;
 			
-			/**
-			 * destructor
-			 */
-			virtual ~ioNonBlockedAccessInfo() = 0;
-	
-			/**
-			 * @return descriptor of input stream
-			 */
-			virtual int getInDescriptor() const = 0;
-	
-			/**
-			 * @return descriptor of output stream
-			 */
-			virtual int getOutDescriptor() const = 0;
+			public:
+				
+				/**
+				 * destructor
+				 */
+				virtual ~nonBlockedAccessInfo() = 0;
+		
+				/**
+				 * @return descriptor of input stream
+				 */
+				virtual int getInDescriptor() const = 0;
+		
+				/**
+				 * @return descriptor of output stream
+				 */
+				virtual int getOutDescriptor() const = 0;
+		};
 	};
 };
 

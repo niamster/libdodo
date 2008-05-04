@@ -39,16 +39,16 @@ OBJECTS:=dbAccumulator.o \
 	baseEx.o \
 	regexp.o \
 	logger.o \
-	io.o \
-	ioNetworkHttp.o \
+	ioChannel.o \
+	ioFile.o \
 	ioNonBlockedAccess.o \
 	ioNonBlockedAccessInfo.o \
+	ioStdio.o \
+	ioNetworkHttp.o \
 	ioNetworkOptions.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
-	ioFile.o \
-	ioStdio.o \
 	xml.o \
 	rpcValue.o \
 	rpcMethod.o \

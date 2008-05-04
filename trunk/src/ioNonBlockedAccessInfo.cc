@@ -23,9 +23,9 @@
 
 #include <libdodo/ioNonBlockedAccessInfo.h>
 
-using namespace dodo;
+using namespace dodo::io;
 
-ioNonBlockedAccessInfo::~ioNonBlockedAccessInfo()
+nonBlockedAccessInfo::~nonBlockedAccessInfo()
 {
 	
 }

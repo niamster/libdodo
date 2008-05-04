@@ -30,36 +30,41 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum ioNetworkOptionsExR
+	namespace io
 	{
-		IONETWORKOPTIONSEX_NOSOCKETCREATED,
-		IONETWORKOPTIONSEX_WRONGPARAMETER,
+		namespace network
+		{
+			/**
+			 * libdodo defined errors
+			 */
+			enum optionsExR
+			{
+				OPTIONSEX_NOSOCKETCREATED,
+				OPTIONSEX_WRONGPARAMETER,
+			};
+		
+			/**
+			 * explanations for libdodo defined errors
+			 */
+		#define OPTIONSEX_NOSOCKETCREATED_STR "No socket was created =(."
+		#define OPTIONSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+		
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum optionsFunctionsID
+			{
+				OPTIONSEX_SETINBUFFERSIZE,
+				OPTIONSEX_SETOUTBUFFERSIZE,
+				OPTIONSEX_SETINTIMEOUT,
+				OPTIONSEX_SETOUTTIMEOUT,
+				OPTIONSEX_SETSOCKOPT,
+				OPTIONSEX_SETLINGERSOCKOPT,
+				OPTIONSEX_BLOCK,
+				OPTIONSEX__CLOSE,
+			};
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define IONETWORKOPTIONSEX_NOSOCKETCREATED_STR "No socket was created =(."
-#define IONETWORKOPTIONSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum ioNetworkOptionsFunctionsID
-	{
-		IONETWORKOPTIONSEX_SETINBUFFERSIZE,
-		IONETWORKOPTIONSEX_SETOUTBUFFERSIZE,
-		IONETWORKOPTIONSEX_SETINTIMEOUT,
-		IONETWORKOPTIONSEX_SETOUTTIMEOUT,
-		IONETWORKOPTIONSEX_SETSOCKOPT,
-		IONETWORKOPTIONSEX_SETLINGERSOCKOPT,
-		IONETWORKOPTIONSEX_BLOCK,
-		IONETWORKOPTIONSEX__CLOSE,
-	};
-
 };
 
 #endif

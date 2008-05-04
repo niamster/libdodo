@@ -5,6 +5,8 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io;
+
 using namespace std;
 
 #ifdef IMAGEMAGICK_EXT
@@ -56,8 +58,8 @@ int main(int argc, char **argv)
 		im.setQuality(4);
 		im.write(&img, size);
 		
-		ioFile io;
-		io.open("my.png", IOFILE_FILETYPE_REG_FILE, IOFILE_OPENMODE_READ_WRITE_TRUNCATE);
+		file io;
+		io.open("my.png", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_READ_WRITE_TRUNCATE);
 		io.outSize = size;
 		io.write((char *)img);
 		im.destroyImageData(&img);

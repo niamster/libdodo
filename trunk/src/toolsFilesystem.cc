@@ -616,10 +616,10 @@ toolsFilesystem::getFileContentsArr(const dodoString &path)
 	if (file == NULL)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, TOOLSFILESYSTEMEX_GETFILECONTENTSARR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	char buffer[IOFILE_MAXLINELEN];
+	char buffer[PATH_MAXLINELEN];
 	dodoStringArray arr;
 
-	while (fgets(buffer, IOFILE_MAXLINELEN, file) != NULL)
+	while (fgets(buffer, PATH_MAXLINELEN, file) != NULL)
 		arr.push_back(buffer);
 
 	if (fclose(file) != 0)

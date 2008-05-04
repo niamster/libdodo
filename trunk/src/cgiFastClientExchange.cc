@@ -27,13 +27,46 @@
 
 using namespace dodo::cgi::fast;
 
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+
+__xexexCgiFastClientExchangeCollectedData::__xexexCgiFastClientExchangeCollectedData(dodoString &a_buffer,
+											   int &a_operType,
+											   void *a_executor) : buffer(a_buffer),
+																   operType(a_operType),
+																   executor(a_executor)
+{
+}
+
+#endif
+
+//-------------------------------------------------------------------
+
 clientExchange::clientExchange(clientExchange &cf)
+
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+
+: collectedData(buffer,
+			 operType,
+			 (void *) this)
+			 
+#endif
+			 
 {
 }
 
 //-------------------------------------------------------------------
 
 clientExchange::clientExchange(FCGX_Request *a_request) : request(a_request)
+
+#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+
+,
+collectedData(buffer,
+			 operType,
+			 (void *) this)
+			 
+#endif
+			 
 {
 }
 

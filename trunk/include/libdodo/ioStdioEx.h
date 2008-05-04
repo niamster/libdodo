@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IOFILEEX_H_
-#define _IOFILEEX_H_
+#ifndef _STDIOEX_H_
+#define _STDIOEX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,21 +30,24 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum ioStdioFunctionsID
+	namespace io
 	{
-		IOSTDIOEX_CLOSE,
-		IOSTDIOEX_OPEN,
-		IOSTDIOEX__READ,
-		IOSTDIOEX__WRITE,
-		IOSTDIOEX__READSTREAM,
-		IOSTDIOEX_FLUSH,
-		IOSTDIOEX_LOCKOUT,
-		IOSTDIOEX_LOCKIN,
-		IOSTDIOEX_INPUTTERINFO,
-		IOSTDIOEX_BLOCK
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum stdioFunctionsID
+		{
+			STDIOEX_CLOSE,
+			STDIOEX_OPEN,
+			STDIOEX__READ,
+			STDIOEX__WRITE,
+			STDIOEX__READSTREAM,
+			STDIOEX_FLUSH,
+			STDIOEX_LOCKOUT,
+			STDIOEX_LOCKIN,
+			STDIOEX_INPUTTERINFO,
+			STDIOEX_BLOCK
+		};
 	};
 };
 

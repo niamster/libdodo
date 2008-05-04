@@ -30,34 +30,39 @@
 
 namespace dodo
 {
-
-	/**
-	 * libdodo defined errors
-	 */
-	enum ioNetworkHttpExR
+	namespace io
 	{
-		IONETWORKHTTPEX_CANNOTCONNECT,
-		IONETWORKHTTPEX_NOTAUTHORIZED,
-		IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE,
-		IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE,
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define IONETWORKHTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
-#define IONETWORKHTTPEX_NOTAUTHORIZED_STR "Aythorization required."
-#define IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR "Unknown HTTP authentification type."
-#define IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentification type."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum ioNetworkHttpFunctionsID
-	{
-		IONETWORKHTTPEX_POST,
-		IONETWORKHTTPEX_GET,
-		IONETWORKHTTPEX_GETCONTENT,
+		namespace network
+		{
+			/**
+			 * libdodo defined errors
+			 */
+			enum httpExR
+			{
+				HTTPEX_CANNOTCONNECT,
+				HTTPEX_NOTAUTHORIZED,
+				HTTPEX_UNKNOWNWWWAUTHTYPE,
+				HTTPEX_UNKNOWNPROXYAUTHTYPE,
+			};
+		
+			/**
+			 * explanations for libdodo defined errors
+			 */
+		#define HTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
+		#define HTTPEX_NOTAUTHORIZED_STR "Aythorization required."
+		#define HTTPEX_UNKNOWNWWWAUTHTYPE_STR "Unknown HTTP authentification type."
+		#define HTTPEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentification type."
+		
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum httpFunctionsID
+			{
+				HTTPEX_POST,
+				HTTPEX_GET,
+				HTTPEX_GETCONTENT,
+			};
+		};
 	};
 };
 

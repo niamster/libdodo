@@ -23,15 +23,37 @@
 
 #include <libdodo/ioFile.h>
 
-using namespace dodo;
+using namespace dodo::io;
 
-ioFile::ioFile(const dodoString &a_path,
+#ifndef IOFILE_WO_XEXEC
+
+__xexexIoFileCollectedData::__xexexIoFileCollectedData(dodoString &a_buffer,
+											   int &a_operType,
+											   void *a_executor) : buffer(a_buffer),
+																   operType(a_operType),
+																   executor(a_executor)
+{
+}
+
+#endif
+
+//-------------------------------------------------------------------
+
+file::file(const dodoString &a_path,
 			   short a_fileType,
 			   short mode) : over(false),
 							 append(false),
 							 path(a_path),
 							 fileType(a_fileType),
 							 pos(0)
+#ifndef IOFILE_WO_XEXEC
+							 
+							 ,
+						   collectedData(buffer,
+										 operType,
+										 (void *) this)
+										 
+#endif
 {
 	if (path != __dodostring__)
 		try
@@ -46,42 +68,49 @@ ioFile::ioFile(const dodoString &a_path,
 
 //-------------------------------------------------------------------
 
-ioFile::ioFile(ioFile &fd)
+file::file(file &fd)
+#ifndef IOFILE_WO_XEXEC
+
+									: collectedData(buffer,
+									 operType,
+									 (void *) this)
+									 
+#endif
 {
 }
 
 //-------------------------------------------------------------------
 
-ioFile::~ioFile()
+file::~file()
 {
 	if (opened)
-		fclose(file);
+		fclose(handler);
 }
 
 //-------------------------------------------------------------------
 
 int
-ioFile::getInDescriptor() const
+file::getInDescriptor() const
 {
 	systemRaceHazardGuard pg(this);
 
 	if (!opened)
 		return -1;
 
-	return fileno(file);
+	return fileno(handler);
 }
 
 //-------------------------------------------------------------------
 
 int
-ioFile::getOutDescriptor() const
+file::getOutDescriptor() const
 {
 	systemRaceHazardGuard pg(this);
 
 	if (!opened)
 		return -1;
 
-	return fileno(file);
+	return fileno(handler);
 }
 
 //-------------------------------------------------------------------
@@ -89,7 +118,7 @@ ioFile::getOutDescriptor() const
 #ifndef IOFILE_WO_XEXEC
 
 int
-ioFile::addPostExec(inExec func,
+file::addPostExec(inExec func,
 					void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data);
@@ -98,7 +127,7 @@ ioFile::addPostExec(inExec func,
 //-------------------------------------------------------------------
 
 int
-ioFile::addPreExec(inExec func,
+file::addPreExec(inExec func,
 				   void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data);
@@ -109,7 +138,7 @@ ioFile::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-ioFile::addPostExec(const dodoString &module,
+file::addPostExec(const dodoString &module,
 					void             *data,
 					void             *toInit)
 {
@@ -119,7 +148,7 @@ ioFile::addPostExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 int
-ioFile::addPreExec(const dodoString &module,
+file::addPreExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
@@ -128,8 +157,8 @@ ioFile::addPreExec(const dodoString &module,
 
 //-------------------------------------------------------------------
 
-__xexecCounts
-ioFile::addExec(const dodoString &module,
+dodo::__xexecCounts
+file::addExec(const dodoString &module,
 				void             *data,
 				void             *toInit)
 {
@@ -143,12 +172,12 @@ ioFile::addExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-ioFile::close()
+file::close()
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	operType = IOFILE_OPERATION_CLOSE;
+	operType = FILE_OPERATION_CLOSE;
 #endif
 
 #ifndef IOFILE_WO_XEXEC
@@ -157,8 +186,8 @@ ioFile::close()
 
 	if (opened)
 	{
-		if (fclose(file) != 0)
-			throw baseEx(ERRMODULE_IOFILE, IOFILEEX_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		if (fclose(handler) != 0)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		opened = false;
 	}
@@ -171,14 +200,14 @@ ioFile::close()
 //-------------------------------------------------------------------
 
 void
-ioFile::open(const dodoString &a_path,
+file::open(const dodoString &a_path,
 			 short a_fileType,
 			 short mode)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	operType = IOFILE_OPERATION_OPEN;
+	operType = FILE_OPERATION_OPEN;
 	performXExec(preExec);
 #endif
 
@@ -187,18 +216,18 @@ ioFile::open(const dodoString &a_path,
 
 	if (opened)
 	{
-		if (fclose(file) != 0)
-			throw baseEx(ERRMODULE_IOFILE, IOFILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		if (fclose(handler) != 0)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		opened = false;
 	}
 
-	if (fileType == IOFILE_FILETYPE_TMP_FILE)
-		file = tmpfile();
+	if (fileType == FILE_FILETYPE_TMP_FILE)
+		handler = tmpfile();
 	else
 	{
 		if (path.size() == 0)
-			throw baseEx(ERRMODULE_IOFILE, IOFILEEX_OPEN, ERR_LIBDODO, IOFILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+			throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_LIBDODO, FILEEX_WRONGFILENAME, FILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 		else
 		{
 			struct stat st;
@@ -207,57 +236,57 @@ ioFile::open(const dodoString &a_path,
 			if (::lstat(path.c_str(), &st) == -1)
 			{
 				if (errno != ENOENT)
-					throw baseEx(ERRMODULE_IOFILE, IOFILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 			}
 			else
 				exists = true;
 
-			if (fileType == IOFILE_FILETYPE_FIFO_FILE)
+			if (fileType == FILE_FILETYPE_FIFO_FILE)
 			{
 				if (exists && !S_ISFIFO(st.st_mode))
-					throw baseEx(ERRMODULE_IOFILE, IOFILEEX_OPEN, ERR_LIBDODO, IOFILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_LIBDODO, FILEEX_WRONGFILENAME, FILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 				if (!exists)
 					toolsFilesystem::mkfifo(path, DEFAULT_FILE_PERM);
 			}
 			else
 			{
-				if ((fileType == IOFILE_FILETYPE_REG_FILE || fileType == IOFILE_FILETYPE_TMP_FILE || fileType ==  IOFILE_FILETYPE_CHAR_FILE) && exists && !S_ISREG(st.st_mode) && !S_ISCHR(st.st_mode))
-					throw baseEx(ERRMODULE_IOFILE, IOFILEEX_OPEN, ERR_LIBDODO, IOFILEEX_WRONGFILENAME, IOFILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
+				if ((fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE || fileType ==  FILE_FILETYPE_CHAR_FILE) && exists && !S_ISREG(st.st_mode) && !S_ISCHR(st.st_mode))
+					throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_LIBDODO, FILEEX_WRONGFILENAME, FILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 			}
 
 			switch (mode)
 			{
-				case IOFILE_OPENMODE_READ_WRITE:
+				case FILE_OPENMODE_READ_WRITE:
 
-					file = fopen(path.c_str(), "r+");
-					if (file == NULL)
-						file = fopen(path.c_str(), "w+");
-
-					break;
-
-				case IOFILE_OPENMODE_READ_WRITE_TRUNCATE:
-
-					file = fopen(path.c_str(), "w+");
+					handler = fopen(path.c_str(), "r+");
+					if (handler == NULL)
+						handler = fopen(path.c_str(), "w+");
 
 					break;
 
-				case IOFILE_OPENMODE_APPEND:
+				case FILE_OPENMODE_READ_WRITE_TRUNCATE:
 
-					file = fopen(path.c_str(), "a+");
+					handler = fopen(path.c_str(), "w+");
+
+					break;
+
+				case FILE_OPENMODE_APPEND:
+
+					handler = fopen(path.c_str(), "a+");
 					append = true;
 
 					break;
 
-				case IOFILE_OPENMODE_READ_ONLY:
+				case FILE_OPENMODE_READ_ONLY:
 				default:
 
-					file = fopen(path.c_str(), "r");
+					handler = fopen(path.c_str(), "r");
 			}
 		}
 	}
 
-	if (file == NULL)
-		throw baseEx(ERRMODULE_IOFILE, IOFILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	if (handler == NULL)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	toolsFilesystem::chmod(path, DEFAULT_FILE_PERM);
 
@@ -271,17 +300,17 @@ ioFile::open(const dodoString &a_path,
 //-------------------------------------------------------------------
 
 void
-ioFile::_read(char * const a_void)
+file::_read(char * const a_void)
 {
-	if (fileType == IOFILE_FILETYPE_REG_FILE || fileType == IOFILE_FILETYPE_TMP_FILE)
-		if (fseek(file, pos * inSize, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IOFILE, IOFILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
+		if (fseek(handler, pos * inSize, SEEK_SET) == -1)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	memset(a_void, '\0', inSize);
 
 	while (true)
 	{
-		if (fread(a_void, inSize, 1, file) == 0)
+		if (fread(a_void, inSize, 1, handler) == 0)
 		{
 			if (errno == EINTR)
 				continue;
@@ -289,8 +318,8 @@ ioFile::_read(char * const a_void)
 			if (errno == EAGAIN)
 				break;
 
-			if (ferror(file) != 0)
-				throw baseEx(ERRMODULE_IOFILE, IOFILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			if (ferror(handler) != 0)
+				throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -300,18 +329,19 @@ ioFile::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioFile::read(char * const a_void)
+file::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	operType = IOFILE_OPERATION_READ;
+	operType = FILE_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
 #endif
 
 #ifndef IOFILE_WO_XEXEC
+	
 	try
 	{
 		_read(a_void);
@@ -322,8 +352,11 @@ ioFile::read(char * const a_void)
 
 		throw;
 	}
+	
 #else
+	
 	_read(a_void);
+	
 #endif
 
 #ifndef IOFILE_WO_XEXEC
@@ -339,12 +372,12 @@ ioFile::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioFile::readString(dodoString &a_str)
+file::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	operType = IOFILE_OPERATION_READSTRING;
+	operType = FILE_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -368,6 +401,7 @@ ioFile::readString(dodoString &a_str)
 	}
 
 #ifndef IOFILE_WO_XEXEC
+	
 	buffer.assign(data, inSize);
 	delete [] data;
 
@@ -375,23 +409,27 @@ ioFile::readString(dodoString &a_str)
 
 	a_str = buffer;
 	buffer.clear();
+	
 #else
+	
 	a_str.assign(data, inSize);
 	delete [] data;
+	
 #endif
 }
 
 //-------------------------------------------------------------------
 
 void
-ioFile::writeString(const dodoString &a_buf)
+file::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
+	
 	buffer = a_buf;
 
-	operType = IOFILE_OPERATION_WRITESTRING;
+	operType = FILE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -404,8 +442,11 @@ ioFile::writeString(const dodoString &a_buf)
 
 		throw;
 	}
+	
 #else
+	
 	_write(a_buf.c_str());
+	
 #endif
 
 
@@ -421,11 +462,11 @@ ioFile::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioFile::_write(const char *const a_buf)
+file::_write(const char *const a_buf)
 {
 	unsigned long pos = this->pos;
 	
-	if (fileType == IOFILE_FILETYPE_REG_FILE || fileType == IOFILE_FILETYPE_TMP_FILE)
+	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
 		pos *= outSize;
 
@@ -436,32 +477,32 @@ ioFile::_write(const char *const a_buf)
 				size_t read = 0;
 				char *t_buf = new char[outSize];
 
-				if (fseek(file, pos, SEEK_SET) == -1)
+				if (fseek(handler, pos, SEEK_SET) == -1)
 				{
 					delete [] t_buf;
 
-					throw baseEx(ERRMODULE_IOFILE, IOFILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
-				read = fread(t_buf, outSize, 1, file);
+				read = fread(t_buf, outSize, 1, handler);
 
 				delete [] t_buf;
 
 				if (read != 0)
-					throw baseEx(ERRMODULE_IOFILE, IOFILEEX__WRITE, ERR_LIBDODO, IOFILEEX_CANNOTOVEWRITE, IOFILEEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
+					throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_LIBDODO, FILEEX_CANNOTOVEWRITE, FILEEX_CANNOTOVEWRITE_STR, __LINE__, __FILE__, path);
 			}
 
-			if (fseek(file, pos, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_IOFILE, IOFILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			if (fseek(handler, pos, SEEK_SET) == -1)
+				throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 		}
 		else
-		if (fseek(file, 0, SEEK_END) == -1)
-			throw baseEx(ERRMODULE_IOFILE, IOFILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		if (fseek(handler, 0, SEEK_END) == -1)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	}
 
 	while (true)
 	{
-		if (fwrite(a_buf, outSize, 1, file) == 0)
+		if (fwrite(a_buf, outSize, 1, handler) == 0)
 		{
 			if (errno == EINTR)
 				continue;
@@ -469,8 +510,8 @@ ioFile::_write(const char *const a_buf)
 			if (errno == EAGAIN)
 				break;
 
-			if (ferror(file) != 0)
-				throw baseEx(ERRMODULE_IOFILE, IOFILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			if (ferror(handler) != 0)
+				throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -480,14 +521,15 @@ ioFile::_write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioFile::write(const char *const a_buf)
+file::write(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
+	
 	buffer.assign(a_buf, outSize);
 
-	operType = IOFILE_OPERATION_WRITE;
+	operType = FILE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -500,8 +542,11 @@ ioFile::write(const char *const a_buf)
 
 		throw;
 	}
+	
 #else
+	
 	_write(a_buf);
+	
 #endif
 
 
@@ -515,7 +560,7 @@ ioFile::write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-ioFile::erase()
+file::erase()
 {
 	systemRaceHazardGuard pg(this);
 
@@ -531,18 +576,18 @@ ioFile::erase()
 //-------------------------------------------------------------------
 
 void
-ioFile::flush()
+file::flush()
 {
 	systemRaceHazardGuard pg(this);
 
-	if (fflush(file) != 0)
-		throw baseEx(ERRMODULE_IOFILE, IOFILEEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	if (fflush(handler) != 0)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-ioFile::getPath() const
+file::getPath() const
 {
 	systemRaceHazardGuard pg(this);
 
@@ -552,18 +597,18 @@ ioFile::getPath() const
 //-------------------------------------------------------------------
 
 void
-ioFile::_readStream(char * const a_void)
+file::_readStream(char * const a_void)
 {
 	unsigned long pos = this->pos;
 	
-	if (fileType == IOFILE_FILETYPE_REG_FILE || fileType == IOFILE_FILETYPE_TMP_FILE)
+	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
-		if (fseek(file, 0, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_IOFILE, IOFILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		if (fseek(handler, 0, SEEK_SET) == -1)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 		for (unsigned long i(0); i < pos; ++i)
 		{
-			if (fgets(a_void, inSize, file) == NULL)
+			if (fgets(a_void, inSize, handler) == NULL)
 			{
 				switch (errno)
 				{
@@ -574,10 +619,10 @@ ioFile::_readStream(char * const a_void)
 					case ENOMEM:
 					case ENXIO:
 
-						throw baseEx(ERRMODULE_IOFILE, IOFILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+						throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 				}
 
-				throw baseEx(ERRMODULE_IOFILE, IOFILEEX__READSTREAM, ERR_LIBDODO, IOFILEEX_FILEISSHORTERTHANGIVENPOSITION, IOFILEEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
+				throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_LIBDODO, FILEEX_FILEISSHORTERTHANGIVENPOSITION, FILEEX_FILEISSHORTERTHANGIVENPOSITION_STR, __LINE__, __FILE__, path);
 			}
 		}
 	}
@@ -586,7 +631,7 @@ ioFile::_readStream(char * const a_void)
 
 	while (true)
 	{
-		if (fgets(a_void, inSize, file) == NULL)
+		if (fgets(a_void, inSize, handler) == NULL)
 		{
 			if (errno == EINTR)
 				continue;
@@ -594,8 +639,8 @@ ioFile::_readStream(char * const a_void)
 			if (errno == EAGAIN)
 				break;
 
-			if (ferror(file) != 0)
-				throw baseEx(ERRMODULE_IOFILE, IOFILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			if (ferror(handler) != 0)
+				throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;
@@ -605,18 +650,19 @@ ioFile::_readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-ioFile::readStream(char * const a_void)
+file::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	operType = IOFILE_OPERATION_READSTREAM;
+	operType = FILE_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
 	_readStream(a_void);
 
 #ifndef IOFILE_WO_XEXEC
+	
 	buffer = a_void;
 
 	performXExec(postExec);
@@ -625,18 +671,19 @@ ioFile::readStream(char * const a_void)
 		buffer.resize(inSize);
 	strcpy(a_void, buffer.c_str());
 	buffer.clear();
+	
 #endif
 }
 
 //-------------------------------------------------------------------
 
 void
-ioFile::readStreamString(dodoString &a_str)
+file::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	operType = IOFILE_OPERATION_READSTREAMSTRING;
+	operType = FILE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -654,6 +701,7 @@ ioFile::readStreamString(dodoString &a_str)
 	}
 
 #ifndef IOFILE_WO_XEXEC
+	
 	buffer = data;
 	delete [] data;
 
@@ -661,19 +709,22 @@ ioFile::readStreamString(dodoString &a_str)
 
 	a_str = buffer;
 	buffer.clear();
+	
 #else
+	
 	a_str = data;
 	delete [] data;
+	
 #endif
 }
 
 //-------------------------------------------------------------------
 
 void
-ioFile::_writeStream(const char *const a_buf)
+file::_writeStream(const char *const a_buf)
 {
-	if (fseek(file, 0, SEEK_END) == -1)
-		throw baseEx(ERRMODULE_IOFILE, IOFILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+	if (fseek(handler, 0, SEEK_END) == -1)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 	
 	unsigned long sent_received = 0;
 
@@ -683,13 +734,13 @@ ioFile::_writeStream(const char *const a_buf)
 	{
 		while (true)
 		{
-			if ((n = fwrite(a_buf + sent_received, 1, outSize, file)) == 0)
+			if ((n = fwrite(a_buf + sent_received, 1, outSize, handler)) == 0)
 			{
 				if (errno == EINTR)
 					continue;
 
-				if (ferror(file) != 0)
-					throw baseEx(ERRMODULE_IOFILE, IOFILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				if (ferror(handler) != 0)
+					throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 
 			break;
@@ -704,16 +755,17 @@ ioFile::_writeStream(const char *const a_buf)
 }
 
 void
-ioFile::writeStreamString(const dodoString &a_buf)
+file::writeStreamString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
 #ifndef IOFILE_WO_XEXEC
+	
 	buffer = a_buf;
 
-	operType = IOFILE_OPERATION_WRITESTREAMSTRING;
+	operType = FILE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -732,6 +784,7 @@ ioFile::writeStreamString(const dodoString &a_buf)
 
 		throw;
 	}
+	
 #else
 
 	try
@@ -748,6 +801,7 @@ ioFile::writeStreamString(const dodoString &a_buf)
 
 		throw;
 	}
+	
 #endif
 
 #ifndef IOFILE_WO_XEXEC
@@ -760,16 +814,17 @@ ioFile::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-ioFile::writeStream(const char *const a_buf)
+file::writeStream(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
 #ifndef IOFILE_WO_XEXEC
+	
 	buffer = a_buf;
 
-	operType = IOFILE_OPERATION_WRITESTREAM;
+	operType = FILE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -788,7 +843,9 @@ ioFile::writeStream(const char *const a_buf)
 
 		throw;
 	}
+	
 #else
+	
 	try
 	{
 		outSize = strlen(a_buf);
@@ -803,6 +860,7 @@ ioFile::writeStream(const char *const a_buf)
 
 		throw;
 	}
+	
 #endif
 
 #ifndef IOFILE_WO_XEXEC
@@ -815,7 +873,7 @@ ioFile::writeStream(const char *const a_buf)
 //-------------------------------------------------------------------
 
 short
-ioFile::getFileType() const
+file::getFileType() const
 {
 	systemRaceHazardGuard pg(this);
 

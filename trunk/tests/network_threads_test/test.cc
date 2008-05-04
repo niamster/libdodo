@@ -7,6 +7,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace io::network;
 
 using namespace std;
 
@@ -15,7 +16,7 @@ systemThreadSharedDataGuard sh;
 void *
 process(void *data)
 {
-	ioNetworkExchange *fse = (ioNetworkExchange *)data;
+	exchange *fse = (exchange *)data;
 	
 	if (fse->isBlocked())
 	{
@@ -81,7 +82,7 @@ process(void *data)
 		cout.flush();
 	}
 
-	ioNetworkExchange::deleteCopy(fse);
+	exchange::deleteCopy(fse);
 	
 	return NULL;
 }
@@ -90,17 +91,17 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		ioNetworkServer sock(IONETWORKOPTIONS_PROTO_FAMILY_IPV4,IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(OPTIONS_PROTO_FAMILY_IPV4,OPTIONS_TRANSFER_TYPE_STREAM);
 		
 		__connInfo info;
 		__initialAccept fake;
 				
 		sock.bindNListen("127.0.0.1",7778,3);
-		sock.setLingerOption(IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE);	
+		sock.setLingerOption(OPTIONS_LINGEROPTION_HARD_CLOSE);	
 		sock.blockInherited = false;
 		sock.block(false);
 		
-		ioNetworkExchange conn;
+		exchange conn;
 
 		bool exit_st(false);
 

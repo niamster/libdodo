@@ -23,9 +23,9 @@
 
 #include <libdodo/ioNetworkHttp.h>
 
-using namespace dodo;
+using namespace dodo::io::network;
 
-const dodoString ioNetworkHttp::requestHeaderStatements[] = { "Accept",
+const dodoString http::requestHeaderStatements[] = { "Accept",
 		"Accept-Charset",
 		"Accept-Encoding",
 		"Accept-Language",
@@ -41,7 +41,7 @@ const dodoString ioNetworkHttp::requestHeaderStatements[] = { "Accept",
 
 //-------------------------------------------------------------------
 
-const dodoString ioNetworkHttp::responseHeaderStatements[] = { "Accept-Ranges",
+const dodoString http::responseHeaderStatements[] = { "Accept-Ranges",
 		"Age",
 		"Allow",
 		"Cache-Control",
@@ -71,34 +71,34 @@ __httpResponse::__httpResponse() : code(0),
 
 //-------------------------------------------------------------------
 
-ioNetworkHttp::ioNetworkHttp() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
+http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
 								followRedirection(true),
 								authTries(0)
 {	
 	proxyAuthInfo.enabled = false;
 	proxyAuthInfo.authRequired = false;
 	
-	requestHeaders[IONETWORKHTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
-	requestHeaders[IONETWORKHTTP_REQUESTHEADER_ACCEPT] = "*/*";
-	requestHeaders[IONETWORKHTTP_REQUESTHEADER_CONNECTION] = "Close";
+	requestHeaders[HTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
+	requestHeaders[HTTP_REQUESTHEADER_ACCEPT] = "*/*";
+	requestHeaders[HTTP_REQUESTHEADER_CONNECTION] = "Close";
 }
 
 //-------------------------------------------------------------------
 
-ioNetworkHttp::ioNetworkHttp(ioNetworkHttp &fd)
+http::http(http &fd)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNetworkHttp::~ioNetworkHttp()
+http::~http()
 {
 }
 
 //-------------------------------------------------------------------
 
 __httpResponse 
-ioNetworkHttp::getResponse()
+http::getResponse()
 {
 	return response;
 }
@@ -106,7 +106,7 @@ ioNetworkHttp::getResponse()
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::setUrl(const dodoString &a_url)
+http::setUrl(const dodoString &a_url)
 {
 	urlComponents = tools::parseUrl(a_url);
 	 
@@ -140,7 +140,7 @@ ioNetworkHttp::setUrl(const dodoString &a_url)
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::setCookies(const dodoStringMap &cookies)
+http::setCookies(const dodoStringMap &cookies)
 {
 	dodoString data;
 	
@@ -158,18 +158,18 @@ ioNetworkHttp::setCookies(const dodoStringMap &cookies)
 	data.append("=");
 	data.append(tools::encodeUrl(i->second));
 	
-	requestHeaders[IONETWORKHTTP_REQUESTHEADER_COOKIE] = data;
+	requestHeaders[HTTP_REQUESTHEADER_COOKIE] = data;
 }
 
 //-------------------------------------------------------------------
 
 void
-ioNetworkHttp::GET()
+http::GET()
 {	
 	response = __httpResponse();
 	
-	ioNetworkExchange ex;
-	ioNetworkClient net(IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	exchange ex;
+	client net(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
 	
 	__hostInfo host = toolsNetwork::getHostInfo(urlComponents.host);
 	
@@ -189,10 +189,10 @@ ioNetworkHttp::GET()
 			}
 			catch (baseEx &ex)
 			{
-				if (ex.funcID == IONETWORKCLIENTEX_CONNECT)
+				if (ex.funcID == CLIENTEX_CONNECT)
 				{
 					if (*o == *p)
-						throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+						throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_CANNOTCONNECT, HTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
 					else
 						continue;
 				}
@@ -232,7 +232,7 @@ ioNetworkHttp::GET()
 			
 		case GETCONTENTSTATUS_REDIRECT:
 			
-			setUrl(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+			setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 			
 			GET();
 			
@@ -244,10 +244,10 @@ ioNetworkHttp::GET()
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 			
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			GET();
 			
@@ -259,10 +259,10 @@ ioNetworkHttp::GET()
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 			
 			GET();
 			
@@ -274,10 +274,10 @@ ioNetworkHttp::GET()
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			GET();
 		
@@ -289,10 +289,10 @@ ioNetworkHttp::GET()
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 			
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
 			
 			GET();
 			
@@ -304,11 +304,11 @@ ioNetworkHttp::GET()
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			GET();
 			
@@ -320,11 +320,11 @@ ioNetworkHttp::GET()
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			GET();
 			
@@ -336,7 +336,7 @@ ioNetworkHttp::GET()
 
 
 __httpResponse
-ioNetworkHttp::GET(const dodoString &a_url)
+http::GET(const dodoString &a_url)
 {
 	setUrl(a_url);
 	
@@ -348,7 +348,7 @@ ioNetworkHttp::GET(const dodoString &a_url)
 //-------------------------------------------------------------------
 
 __httpResponse 
-ioNetworkHttp::POST(const dodoString &a_url, 
+http::POST(const dodoString &a_url, 
 							const dodoStringMap &arguments, 
 							const dodoStringMap &files)
 {
@@ -362,7 +362,7 @@ ioNetworkHttp::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 void
-ioNetworkHttp::POST(const dodoStringMap &arguments, 
+http::POST(const dodoStringMap &arguments, 
 							const dodoStringMap &files)
 {
 	dodoString boundary = "---------------------------" + toolsString::ulToString(tools::ulRandom()) + toolsString::ulToString(tools::ulRandom());
@@ -409,7 +409,7 @@ ioNetworkHttp::POST(const dodoStringMap &arguments,
 //-------------------------------------------------------------------
 
 __httpResponse 
-ioNetworkHttp::POST(const dodoString &a_url, 
+http::POST(const dodoString &a_url, 
 					const dodoStringMap &arguments)
 {
 	setUrl(a_url);
@@ -422,7 +422,7 @@ ioNetworkHttp::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::POST(const dodoStringMap &arguments)
+http::POST(const dodoStringMap &arguments)
 {
 	dodoString data;
 	
@@ -446,7 +446,7 @@ ioNetworkHttp::POST(const dodoStringMap &arguments)
 //-------------------------------------------------------------------
 
 __httpResponse
-ioNetworkHttp::POST(const dodoString &a_url, 
+http::POST(const dodoString &a_url, 
 					const dodoString &data,
 					const dodoString &type)
 {
@@ -460,13 +460,13 @@ ioNetworkHttp::POST(const dodoString &a_url,
 //-------------------------------------------------------------------
 
 void
-ioNetworkHttp::POST(const dodoString &a_data,
+http::POST(const dodoString &a_data,
 					const dodoString &type)
 {	
 	response = __httpResponse();
 	
-	ioNetworkExchange ex;
-	ioNetworkClient net(IONETWORKOPTIONS_PROTO_FAMILY_IPV4, IONETWORKOPTIONS_TRANSFER_TYPE_STREAM);
+	exchange ex;
+	client net(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
 	
 	if (proxyAuthInfo.enabled)
 		net.connect(proxyAuthInfo.host, proxyAuthInfo.port, ex);
@@ -484,10 +484,10 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			}
 			catch (baseEx &ex)
 			{
-				if (ex.funcID == IONETWORKCLIENTEX_CONNECT)
+				if (ex.funcID == CLIENTEX_CONNECT)
 				{
 					if (*o == *p)
-						throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+						throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_CANNOTCONNECT, HTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
 					else
 						continue;
 				}
@@ -537,7 +537,7 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			
 		case GETCONTENTSTATUS_REDIRECT:
 			
-			setUrl(response.headers[IONETWORKHTTP_RESPONSEHEADER_LOCATION]);
+			setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
 			
 			POST(data, type);
 			
@@ -549,10 +549,10 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 			
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			POST(data, type);
 			
@@ -564,10 +564,10 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 			
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 			
 			POST(data, type);
 			
@@ -579,10 +579,10 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 			
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			POST(data, type);
 
@@ -595,10 +595,10 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_POST, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 			
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
 			
 			POST(data, type);
 
@@ -610,11 +610,11 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-			makeBasicAuth(IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			POST(data, type);
 			
@@ -626,11 +626,11 @@ ioNetworkHttp::POST(const dodoString &a_data,
 			{
 				authTries = 0;
 				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GET, ERR_LIBDODO, IONETWORKHTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, HTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
-			makeDigestAuth(IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE, IONETWORKHTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
+			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
 			
 			POST(data, type);
 			
@@ -641,7 +641,7 @@ ioNetworkHttp::POST(const dodoString &a_data,
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::disableProxy()
+http::disableProxy()
 {
 	proxyAuthInfo.enabled = false;
 }
@@ -649,7 +649,7 @@ ioNetworkHttp::disableProxy()
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::setProxyInformation(const dodoString &host, 
+http::setProxyInformation(const dodoString &host, 
 									unsigned int port, 
 									const dodoString &user, 
 									const dodoString &password)
@@ -664,7 +664,7 @@ ioNetworkHttp::setProxyInformation(const dodoString &host,
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::getHeaders(const dodoString &headers)
+http::getHeaders(const dodoString &headers)
 {
 	unsigned long i(0), j(0);
 	unsigned long size = headers.size();
@@ -697,7 +697,7 @@ ioNetworkHttp::getHeaders(const dodoString &headers)
 		}
 		else
 		{
-			for (o = 0;o<IONETWORKHTTP_RESPONSEHEADERSTATEMENTS;++o)
+			for (o = 0;o<HTTP_RESPONSEHEADERSTATEMENTS;++o)
 				if (toolsString::equal(responseHeaderStatements[o], arr[0]))
 					response.headers[o] = toolsString::lTrim(arr[1], ' ');
 			
@@ -713,7 +713,7 @@ ioNetworkHttp::getHeaders(const dodoString &headers)
 //-------------------------------------------------------------------
 
 bool
-ioNetworkHttp::extractHeaders(const dodoString &data,
+http::extractHeaders(const dodoString &data,
 						dodoString &headers)
 {	
 	headers.append(data);
@@ -748,8 +748,8 @@ ioNetworkHttp::extractHeaders(const dodoString &data,
 //-------------------------------------------------------------------
 
 short 
-ioNetworkHttp::getContent(dodoString &data, 
-						ioNetworkExchange &ex)
+http::getContent(dodoString &data, 
+						exchange &ex)
 {
 	ex.setInBufferSize(512);
 	ex.inSize = 512;
@@ -784,7 +784,7 @@ ioNetworkHttp::getContent(dodoString &data,
 					getHeaders(headers);
 					headers.clear();
 					
-					contentSize = toolsString::stringToUL(response.headers[IONETWORKHTTP_RESPONSEHEADER_CONTENTLENGTH]);
+					contentSize = toolsString::stringToUL(response.headers[HTTP_RESPONSEHEADER_CONTENTLENGTH]);
 
 					if (followRedirection && (response.code / 100) == 3 && response.code != 304)
 					{
@@ -799,26 +799,26 @@ ioNetworkHttp::getContent(dodoString &data,
 						
 						if (proxyAuthInfo.authRequired)
 						{
-							if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+							if (toolsString::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 								return GETCONTENTSTATUS_WWWPROXYBASICAUTH;
 							else 
 							{
-								if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
+								if (toolsString::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
 								else
-									throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GETCONTENT, ERR_LIBDODO, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
+									throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, ERR_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, HTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
 							}
 						}
 						else
 						{
-							if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
+							if (toolsString::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 								return GETCONTENTSTATUS_WWWBASICAUTH;
 							else 
 							{
-								if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
+								if (toolsString::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWDIGESTAUTH;
 								else
-									throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GETCONTENT, ERR_LIBDODO, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
+									throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, ERR_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, HTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
 							}
 						}
 					}
@@ -829,14 +829,14 @@ ioNetworkHttp::getContent(dodoString &data,
 						
 						proxyAuthInfo.authRequired = true;
 						
-						if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
+						if (toolsString::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
 							return GETCONTENTSTATUS_PROXYBASICAUTH;
 						else 
 						{
-							if (toolsString::contains(response.headers[IONETWORKHTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
+							if (toolsString::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
 								return GETCONTENTSTATUS_PROXYDIGESTAUTH;
 							else
-								throw baseEx(ERRMODULE_IONETWORKHTTP, IONETWORKHTTPEX_GETCONTENT, ERR_LIBDODO, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
+								throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, ERR_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, HTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
 						}
 					}
 						
@@ -851,7 +851,7 @@ ioNetworkHttp::getContent(dodoString &data,
 		}
 		catch (baseEx &ex)
 		{
-			if (ex.funcID == IONETWORKEXCHANGEEX__READSTREAM)
+			if (ex.funcID == EXCHANGEEX__READSTREAM)
 			{
 				if (!endOfHeaders && headers.size() > 0)
 					response.data.assign(headers);
@@ -871,7 +871,7 @@ ioNetworkHttp::getContent(dodoString &data,
 //-------------------------------------------------------------------
 
 dodoString 
-ioNetworkHttp::trim(const dodoString &data)
+http::trim(const dodoString &data)
 {
 	return toolsString::trim(data, ' ');
 }
@@ -879,7 +879,7 @@ ioNetworkHttp::trim(const dodoString &data)
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::makeDigestAuth(short requestHeader, 
+http::makeDigestAuth(short requestHeader, 
 							short responseHeader, 
 							const dodoString &method, 
 							const dodoString &user, 
@@ -965,7 +965,7 @@ ioNetworkHttp::makeDigestAuth(short requestHeader,
 //-------------------------------------------------------------------
 
 void 
-ioNetworkHttp::makeBasicAuth(short responseHeader,
+http::makeBasicAuth(short responseHeader,
 							const dodoString &user, 
 							const dodoString &password)
 {
@@ -974,8 +974,8 @@ ioNetworkHttp::makeBasicAuth(short responseHeader,
 
 //-------------------------------------------------------------------
 
-cgi::__clientCookie 
-ioNetworkHttp::parseCookie(const dodoString &header)
+dodo::cgi::__clientCookie 
+http::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::explode(header, &trim, ";");
 	dodoStringArray tuple;

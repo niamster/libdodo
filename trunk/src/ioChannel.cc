@@ -1,5 +1,5 @@
 /***************************************************************************
- *            io.cc
+ *            ioChannle.cc
  *
  *  Tue Oct 11 00:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,32 +21,19 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/io.h>
+#include <libdodo/ioChannel.h>
 
-using namespace dodo;
+using namespace dodo::io;
 
-__xexexIoCollectedData::__xexexIoCollectedData(dodoString &a_buffer,
-											   int &a_operType,
-											   void *a_executor) : buffer(a_buffer),
-																   operType(a_operType),
-																   executor(a_executor)
-{
-}
-
-//-------------------------------------------------------------------
-
-io::io() : inSize(IO_INSIZE),
+channel::channel() : inSize(IO_INSIZE),
 		   outSize(IO_OUTSIZE),
-		   opened(false),
-		   collectedData(buffer,
-						 operType,
-						 (void *) this)
+		   opened(false)
 {
 }
 
 //-------------------------------------------------------------------
 
-io::~io()
+channel::~channel()
 {
 }
 

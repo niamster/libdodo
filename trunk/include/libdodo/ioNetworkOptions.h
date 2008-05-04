@@ -37,198 +37,203 @@
 
 namespace dodo
 {
-
-	/**
-	 * @enum ioNetworkOptionsTransferTypeEnum defines type of socket
-	 */
-	enum ioNetworkOptionsTransferTypeEnum
+	namespace io
 	{
-		IONETWORKOPTIONS_TRANSFER_TYPE_STREAM,   ///< Sequenced, reliable, connection-based byte streams
-		IONETWORKOPTIONS_TRANSFER_TYPE_DATAGRAM, ///< Connectionless, unreliable datagrams of fixed maximum length
-	};
-
-	/**
-	 * @enum ioNetworkOptionsProtoFamilyEnum defines type of domain of socket
-	 */
-	enum ioNetworkOptionsProtoFamilyEnum
-	{
-		IONETWORKOPTIONS_PROTO_FAMILY_IPV4,
-		IONETWORKOPTIONS_PROTO_FAMILY_IPV6,
-		IONETWORKOPTIONS_PROTO_FAMILY_UNIX_SOCKET,
-	};
-
-	/**
-	 * @enum ioNetworkOptionsOptionEnum defines options for socket
-	 */
-	enum ioNetworkOptionsOptionEnum
-	{
-		IONETWORKOPTIONS_OPTION_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-		IONETWORKOPTIONS_OPTION_REUSE_ADDRESS,       ///< Should allow reuse of local addresses[it's accepted by default].
-		IONETWORKOPTIONS_OPTION_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
-		IONETWORKOPTIONS_OPTION_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
-		IONETWORKOPTIONS_OPTION_OOB_INLINE,          ///< Out-of-band(marked urgent) data keep inline in recieve operation.
-#ifdef SO_REUSEPORT
-		IONETWORKOPTIONS_OPTION_REUSE_PORT,			///< Should allow reuse of local port.
-#endif
-	};
-
-	/**
-	 * @enum ioNetworkOptionsLingerOptionEnum defines linger options for socket
-	 */
-	enum ioNetworkOptionsLingerOptionEnum
-	{
-		IONETWORKOPTIONS_LINGEROPTION_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
-		IONETWORKOPTIONS_LINGEROPTION_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
-		IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
-	};
-
-	/**
-	 * @struct __connInfo defines connection information
-	 */
-	struct __connInfo
-	{
-		dodoString host;///< host of the box 
-		int port;///< port of the box
-	};
-	
-	/**
-	 * @class ioNetworkOptions provides option manipulation for network connections
-	 */
-	class ioNetworkOptions
-	{
-
-		protected:
-
+		namespace network
+		{
 			/**
-			 * constructor
-			 * @param family defines transfer type of domain of the socket[see ioNetworkOptionsProtoFamilyEnum]
-			 * @param type defines type of the socket[see ioNetworkOptionsProtoFamilyEnum]
+			 * @enum optionsTransferTypeEnum defines type of socket
 			 */
-			ioNetworkOptions(short family, short type);
-
+			enum optionsTransferTypeEnum
+			{
+				OPTIONS_TRANSFER_TYPE_STREAM,   ///< Sequenced, reliable, connection-based byte streams
+				OPTIONS_TRANSFER_TYPE_DATAGRAM, ///< Connectionless, unreliable datagrams of fixed maximum length
+			};
+		
 			/**
-			 * constructor
+			 * @enum optionsProtoFamilyEnum defines type of domain of socket
 			 */
-			ioNetworkOptions();
-
+			enum optionsProtoFamilyEnum
+			{
+				OPTIONS_PROTO_FAMILY_IPV4,
+				OPTIONS_PROTO_FAMILY_IPV6,
+				OPTIONS_PROTO_FAMILY_UNIX_SOCKET,
+			};
+		
 			/**
-			 * destructor
+			 * @enum optionsOptionEnum defines options for socket
 			 */
-			virtual ~ioNetworkOptions();
-
-		public:
-
+			enum optionsOptionEnum
+			{
+				OPTIONS_OPTION_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+				OPTIONS_OPTION_REUSE_ADDRESS,       ///< Should allow reuse of local addresses[it's accepted by default].
+				OPTIONS_OPTION_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
+				OPTIONS_OPTION_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
+				OPTIONS_OPTION_OOB_INLINE,          ///< Out-of-band(marked urgent) data keep inline in recieve operation.
+		#ifdef SO_REUSEPORT
+				OPTIONS_OPTION_REUSE_PORT,			///< Should allow reuse of local port.
+		#endif
+			};
+		
 			/**
-			 * set socket options
-			 * @param option defines option that will be applied to the socket[see ioNetworkOptionsOptionEnum]
-			 * @param flag defines state of option
+			 * @enum optionsLingerOptionEnum defines linger options for socket
 			 */
-			virtual void setOption(short option, bool flag);
-
+			enum optionsLingerOptionEnum
+			{
+				OPTIONS_LINGEROPTION_GRACEFUL_CLOSE,  ///< close returns immediately, but any unsent data is transmitted (after close returns).
+				OPTIONS_LINGEROPTION_HARD_CLOSE,      ///< close returns immediately, and any unsent data is discarded.
+				OPTIONS_LINGEROPTION_WAIT_CLOSE,      ///< (*default*) close does not return until all unsent data is transmitted (or the connection is closed by the remote system).
+			};
+		
 			/**
-			 * @return true if socket option is set[see ioNetworkOptionsOptionEnum]
+			 * @struct __connInfo defines connection information
 			 */
-			virtual bool getOption(int option) const;
-
+			struct __connInfo
+			{
+				dodoString host;///< host of the box 
+				int port;///< port of the box
+			};
+			
 			/**
-			 * set linger option
-			 * @param option is linger option[see ioNetworkOptionsLingerOptionEnum]
-			 * @param seconds how long to wait
-			 * @note for IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE only
+			 * @class options provides option manipulation for network connections
 			 */
-			virtual void setLingerOption(short option, int seconds = 1);
-
-			/**
-			 * @return linger option that was set[see ioNetworkOptionsLingerOptionEnum]
-			 */
-			virtual short getLingerOption() const;
-
-			/**
-			 * @return amount of seconds to wait
-			 * @note for IONETWORKOPTIONS_LINGEROPTION_WAIT_CLOSE only
-			 */
-			virtual int getLingerPeriod() const;
-
-			/**
-			 * set input buffer size
-			 * @param bytes defines size of the buffer in bytes
-			 */
-			virtual void setInBufferSize(unsigned long bytes);
-
-			/**
-			 * set output buffer size
-			 * @param bytes defines size of the buffer in bytes
-			 */
-			virtual void setOutBufferSize(unsigned long bytes);
-
-			/**
-			 * @return input buffer size in bytes
-			 */
-			virtual unsigned long getInBufferSize() const;
-
-			/**
-			 * @return output buffer size in bytes
-			 */
-			virtual unsigned long getOutBufferSize() const;
-
-			/**
-			 * set input timeout value of socket
-			 * @param microseconds defines amount of time of timeout
-			 */
-			virtual void setInTimeout(unsigned long microseconds);
-
-			/**
-			 * set output timeout value of socket
-			 * @param microseconds defines amount of time of timeout
-			 */
-			virtual void setOutTimeout(unsigned long microseconds);
-
-			/**
-			 * @return input timeout value
-			 */
-			virtual unsigned long getInTimeout() const;
-
-			/**
-			 * @return output timeout value
-			 */
-			virtual unsigned long getOutTimeout() const;
-
-			/**
-			 * @return true if socked is blocked
-			 */
-			virtual bool isBlocked() const;
-
-			/**
-			 * block/unblock socket
-			 * @param flag defines block statement
-			 */
-			virtual void block(bool flag);
-
-		protected:
-
-			/**
-			 * close socket connection
-			 * @param socket defines socket descriptor
-			 */
-			static void _close(int socket);
-
-			short family;                   ///< socket family
-			short type;                     ///< socket type
-
-			int socketOpts;                 ///< socket options
-
-			short lingerOpts;               ///< socket linger option
-			int lingerSeconds;              ///< socket linger timeout
-
-			unsigned long inTimeout;        ///< incomming operation timeout of socket; in microseconds
-			unsigned long outTimeout;       ///< outgoing operation timeout of socket; in microseconds
-
-			unsigned long inSocketBuffer;   ///< incoming buffer size of socket; in bytes
-			unsigned long outSocketBuffer;  ///< outgoing buffer size of socket; in bytes
-
-			int socket;                     ///< socket descriptor
-
-			bool blocked;                   ///< if true socket is blocked
+			class options
+			{
+		
+				protected:
+		
+					/**
+					 * constructor
+					 * @param family defines transfer type of domain of the socket[see OptionsProtoFamilyEnum]
+					 * @param type defines type of the socket[see OptionsProtoFamilyEnum]
+					 */
+					options(short family, short type);
+		
+					/**
+					 * constructor
+					 */
+					options();
+		
+					/**
+					 * destructor
+					 */
+					virtual ~options();
+		
+				public:
+		
+					/**
+					 * set socket options
+					 * @param option defines option that will be applied to the socket[see OptionsOptionEnum]
+					 * @param flag defines state of option
+					 */
+					virtual void setOption(short option, bool flag);
+		
+					/**
+					 * @return true if socket option is set[see OptionsOptionEnum]
+					 */
+					virtual bool getOption(int option) const;
+		
+					/**
+					 * set linger option
+					 * @param option is linger option[see OptionsLingerOptionEnum]
+					 * @param seconds how long to wait
+					 * @note for OPTIONS_LINGEROPTION_WAIT_CLOSE only
+					 */
+					virtual void setLingerOption(short option, int seconds = 1);
+		
+					/**
+					 * @return linger option that was set[see OptionsLingerOptionEnum]
+					 */
+					virtual short getLingerOption() const;
+		
+					/**
+					 * @return amount of seconds to wait
+					 * @note for OPTIONS_LINGEROPTION_WAIT_CLOSE only
+					 */
+					virtual int getLingerPeriod() const;
+		
+					/**
+					 * set input buffer size
+					 * @param bytes defines size of the buffer in bytes
+					 */
+					virtual void setInBufferSize(unsigned long bytes);
+		
+					/**
+					 * set output buffer size
+					 * @param bytes defines size of the buffer in bytes
+					 */
+					virtual void setOutBufferSize(unsigned long bytes);
+		
+					/**
+					 * @return input buffer size in bytes
+					 */
+					virtual unsigned long getInBufferSize() const;
+		
+					/**
+					 * @return output buffer size in bytes
+					 */
+					virtual unsigned long getOutBufferSize() const;
+		
+					/**
+					 * set input timeout value of socket
+					 * @param microseconds defines amount of time of timeout
+					 */
+					virtual void setInTimeout(unsigned long microseconds);
+		
+					/**
+					 * set output timeout value of socket
+					 * @param microseconds defines amount of time of timeout
+					 */
+					virtual void setOutTimeout(unsigned long microseconds);
+		
+					/**
+					 * @return input timeout value
+					 */
+					virtual unsigned long getInTimeout() const;
+		
+					/**
+					 * @return output timeout value
+					 */
+					virtual unsigned long getOutTimeout() const;
+		
+					/**
+					 * @return true if socked is blocked
+					 */
+					virtual bool isBlocked() const;
+		
+					/**
+					 * block/unblock socket
+					 * @param flag defines block statement
+					 */
+					virtual void block(bool flag);
+		
+				protected:
+		
+					/**
+					 * close socket connection
+					 * @param socket defines socket descriptor
+					 */
+					static void _close(int socket);
+		
+					short family;                   ///< socket family
+					short type;                     ///< socket type
+		
+					int socketOpts;                 ///< socket options
+		
+					short lingerOpts;               ///< socket linger option
+					int lingerSeconds;              ///< socket linger timeout
+		
+					unsigned long inTimeout;        ///< incomming operation timeout of socket; in microseconds
+					unsigned long outTimeout;       ///< outgoing operation timeout of socket; in microseconds
+		
+					unsigned long inSocketBuffer;   ///< incoming buffer size of socket; in bytes
+					unsigned long outSocketBuffer;  ///< outgoing buffer size of socket; in bytes
+		
+					int socket;                     ///< socket descriptor
+		
+					bool blocked;                   ///< if true socket is blocked
+			};
+		};
 	};
 
 };

@@ -30,16 +30,21 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum ioNetworkExchangeFunctionsID
+	namespace io
 	{
-		IONETWORKEXCHANGEEX__WRITE,
-		IONETWORKEXCHANGEEX__READ,
-		IONETWORKEXCHANGEEX__READSTREAM,
+		namespace network
+		{
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum exchangeFunctionsID
+			{
+				EXCHANGEEX__WRITE,
+				EXCHANGEEX__READ,
+				EXCHANGEEX__READSTREAM,
+			};
+		};
 	};
-
 };
 
 #endif

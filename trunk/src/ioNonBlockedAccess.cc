@@ -23,30 +23,30 @@
 
 #include <libdodo/ioNonBlockedAccess.h>
 
-using namespace dodo;
+using namespace dodo::io;
 
 //-------------------------------------------------------------------
 
-ioNonBlockedAccess::ioNonBlockedAccess(ioNonBlockedAccess &rt)
+nonBlockedAccess::nonBlockedAccess(nonBlockedAccess &rt)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNonBlockedAccess::ioNonBlockedAccess() : descs(0)
+nonBlockedAccess::nonBlockedAccess() : descs(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-ioNonBlockedAccess::~ioNonBlockedAccess()
+nonBlockedAccess::~nonBlockedAccess()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-ioNonBlockedAccess::addFlush(const ioNonBlockedAccessInfo &fl)
+nonBlockedAccess::addFlush(const nonBlockedAccessInfo &fl)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -64,7 +64,7 @@ ioNonBlockedAccess::addFlush(const ioNonBlockedAccessInfo &fl)
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-ioNonBlockedAccess::isReadable(const dodoArray<int> &pos,
+nonBlockedAccess::isReadable(const dodoArray<int> &pos,
 				  int timeout) const
 {
 	systemRaceHazardGuard pg(this);
@@ -126,7 +126,7 @@ ioNonBlockedAccess::isReadable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -142,7 +142,7 @@ ioNonBlockedAccess::isReadable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-ioNonBlockedAccess::isWritable(const dodoArray<int> &pos,
+nonBlockedAccess::isWritable(const dodoArray<int> &pos,
 				  int timeout) const
 {
 	systemRaceHazardGuard pg(this);
@@ -204,7 +204,7 @@ ioNonBlockedAccess::isWritable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -220,7 +220,7 @@ ioNonBlockedAccess::isWritable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 bool
-ioNonBlockedAccess::isReadable(int pos,
+nonBlockedAccess::isReadable(int pos,
 				  int timeout) const
 {
 	systemRaceHazardGuard pg(this);
@@ -248,7 +248,7 @@ ioNonBlockedAccess::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -258,7 +258,7 @@ ioNonBlockedAccess::isReadable(int pos,
 //-------------------------------------------------------------------
 
 void
-ioNonBlockedAccess::delFlush(int pos)
+nonBlockedAccess::delFlush(int pos)
 {
 	systemRaceHazardGuard pg(this);
 
@@ -275,7 +275,7 @@ ioNonBlockedAccess::delFlush(int pos)
 //-------------------------------------------------------------------
 
 bool
-ioNonBlockedAccess::isWritable(int pos,
+nonBlockedAccess::isWritable(int pos,
 				  int timeout) const
 {
 	systemRaceHazardGuard pg(this);
@@ -303,7 +303,7 @@ ioNonBlockedAccess::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, IONONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 

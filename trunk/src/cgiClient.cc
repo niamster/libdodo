@@ -189,7 +189,7 @@ client::client(dodoMap<short, dodoString> &headers,
 {
 	authInfo.type = CLIENT_AUTHTYPE_NONE;
 	
-	cgiIO = new ioStdio;
+	cgiIO = new dodo::io::stdio;
 
 	initHeaders(headers);
 
@@ -227,7 +227,7 @@ client::client(bool silent,
 {
 	authInfo.type = CLIENT_AUTHTYPE_NONE;
 	
-	cgiIO = new ioStdio;
+	cgiIO = new dodo::io::stdio;
 
 	dodoMap<short, dodoString> headers;
 	initHeaders(headers);
