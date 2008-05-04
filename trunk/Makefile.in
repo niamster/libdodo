@@ -80,9 +80,9 @@ OBJECTS:=dbAccumulator.o \
 	systemProcessSharedDataCollectionGuard.o \
 	systemSharedDataCollectionGuard.o \
 	systemLibraryLoader.o \
-	cgiClient.o \
-	cgiFastClient.o \
-	cgiFastClientExchange.o \
+	cgiServer.o \
+	cgiFastServer.o \
+	cgiFastServerExchange.o \
 	cgiPreprocessor.o \
 	cgiProcessor.o
 

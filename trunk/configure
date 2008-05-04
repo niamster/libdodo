@@ -713,7 +713,7 @@ enable_dbPostgresql_xexec_support
 with_mysql
 enable_dbMysql_xexec_support
 with_fcgi
-enable_cgiFastClientExchange_xexec_support
+enable_cgiFastServerExchange_xexec_support
 with_pcre
 with_dl
 enable_dl_lib
@@ -1381,8 +1381,9 @@ Optional Features:
                           compile db::postgresql w/o xexec support
   --disable-dbMysql-xexec-support
                           compile db::mysql w/o xexec support
-  --disable-cgiFastClientExchange-xexec-support
-                          compile cgi::fast::clientExchange w/o xexec support
+  --disable-cgiFastServerExchange-xexec-support
+                          compile cgi::fast::server::exchange w/o xexec
+                          support
   --disable-dl-lib        disable dl as lib
   --disable-fast-dynamic-loading
                           do not unload library to produce better performance
@@ -5452,21 +5453,21 @@ fi
 
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 
-		# Check whether --enable-cgiFastClientExchange-xexec-support was given.
-if test "${enable_cgiFastClientExchange_xexec_support+set}" = set; then
-  enableval=$enable_cgiFastClientExchange_xexec_support; CGIFASTCLIENTEXCHANGE_W_XEXEC="$enableval"
+		# Check whether --enable-cgiFastServerExchange-xexec-support was given.
+if test "${enable_cgiFastServerExchange_xexec_support+set}" = set; then
+  enableval=$enable_cgiFastServerExchange_xexec_support; CGIFASTSERVEREXCHANGE_W_XEXEC="$enableval"
 else
-  CGIFASTCLIENTEXCHANGE_W_XEXEC="yes"
+  CGIFASTSERVEREXCHANGE_W_XEXEC="yes"
 fi
 
 
-		if test "$CGIFASTCLIENTEXCHANGE_W_XEXEC" = "no"
+		if test "$CGIFASTSERVEREXCHANGE_W_XEXEC" = "no"
 		then
-			echo -n -e "#define CGIFASTCLIENTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+			echo -n -e "#define CGIFASTSERVEREXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\ncgi::fast::clientExchange xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ncgi::fast::server::exchange xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ncgi::fast::clientExchange xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ncgi::fast::server::exchange xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tdisabled"

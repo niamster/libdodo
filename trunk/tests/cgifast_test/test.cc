@@ -1,14 +1,14 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/cgiClient.h>
+#include <libdodo/cgiServer.h>
 #include <libdodo/cgiProcessor.h>
 #include <libdodo/tools.h>
-#include <libdodo/cgiFastClient.h>
+#include <libdodo/cgiFastServer.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 
 #include <iostream>
 
 using namespace dodo;
-using cgi::fast::clientExchange;
+using cgi::fast::serverExchange;
 
 using namespace std;
 
@@ -17,11 +17,11 @@ using namespace std;
 	systemThreadSharedDataGuard sh;
 
 	void 
-	cgif(clientExchange *fcgi)
+	cgif(serverExchange *fcgi)
 	{
 		using namespace cgi;
 
-		client cgit(fcgi, true);
+		server cgit(fcgi, true);
 		cgit.setCookie("test","Ni@m");
 		cgit.printHeaders();
 			
@@ -33,7 +33,7 @@ using namespace std;
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["hidden"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["test"] + "!<br>");
-		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[CLIENT_ENVIRONMENT_QUERYSTRING] + "<br>");
+		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
 		fcgi->writeStreamString("!" + cgit.COOKIES["test"] + "<br>");
 		fcgi->writeStreamString("!" + toolsString::iToString(cgit.FILES["file"].size) + "<br>");
 		
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 		
 		using namespace cgi::fast;
 
-		client cf;
+		server cf;
 		if (!cf.isFastCgi())
 		{
 			cout << "Not a fastCGI.";

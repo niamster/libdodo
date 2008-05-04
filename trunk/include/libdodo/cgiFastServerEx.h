@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastClientEx.h
+ *            cgiFastServerEx.h
  *
  *  Mon Dec 31 01:51:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGIFASTCLIENTEX_H_
-#define _CGIFASTCLIENTEX_H_
+#ifndef _CGIFASTSERVEREX_H_
+#define _CGIFASTSERVEREX_H_
 
 #include <libdodo/directives.h>
 
@@ -39,23 +39,23 @@ namespace dodo
 			 */
 			enum fastExR
 			{
-				FASTCLIENTEX_ACCEPTFAILED,
-				FASTCLIENTEX_ISCGI,
+				FASTSERVEREX_ACCEPTFAILED,
+				FASTSERVEREX_ISCGI,
 			};
 		
 			/**
 			 * explanations for libdodo defined errors
 			 */
-		#define FASTCLIENTEX_ACCEPTFAILED_STR "Accept call failed."
-		#define FASTCLIENTEX_ISCGI_STR "Called as a CGI."
+		#define FASTSERVEREX_ACCEPTFAILED_STR "Accept call failed."
+		#define FASTSERVEREX_ISCGI_STR "Called as a CGI."
 		
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
 			enum fastFunctionsID
 			{
-				FASTCLIENTEX_LISTEN,
-				FASTCLIENTEX_STACKTHREAD,
+				FASTSERVEREX_LISTEN,
+				FASTSERVEREX_STACKTHREAD,
 			};
 		}
 	};

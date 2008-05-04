@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/cgiClient.h>
+#include <libdodo/cgiServer.h>
 #include <libdodo/cgiProcessor.h>
 
 #include <iostream>
@@ -13,18 +13,18 @@ int main(int argc, char **argv)
 {		
 ///first type
 //	dodoStringMap head;
-//	head[CLIENT_RESPONSEHEADER_CONTENTTYPE] = "text/html";
-//	cgi cgi(head, false);
+//	head[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+//	server cgi(head, false);
 	
 ///second type									}
 
-	client cgit(true);
+	server cgit(true);
 
 	dodoString user = cgit.getAuthentificationInfo().user;
 
 	if (cgit.GET["a"] == "forbidden")
 	{
-		cgit.setResponseStatus(CLIENT_STATUSCODE_FORBIDDEN);
+		cgit.setResponseStatus(SERVER_STATUSCODE_FORBIDDEN);
 
 		cgit.printStream( "<b>FORBIDDEN</b><br>" );
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 	}
 	else if (cgit.GET["a"] == "notfound")
 	{
-		cgit.setResponseStatus(CLIENT_STATUSCODE_NOTFOUND);
+		cgit.setResponseStatus(SERVER_STATUSCODE_NOTFOUND);
 
 		cgit.printStream( "<b>NOT FOUND</b><br>" );
 
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 	{
 		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
 		{
-			cgit.requestAuthentification("libdodo", CLIENT_AUTHTYPE_BASIC);
+			cgit.requestAuthentification("libdodo", SERVER_AUTHTYPE_BASIC);
 
 			return 0;
 		}
@@ -59,13 +59,13 @@ int main(int argc, char **argv)
 	{
 		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
 		{
-			cgit.requestAuthentification("libdodo", CLIENT_AUTHTYPE_DIGEST);
+			cgit.requestAuthentification("libdodo", SERVER_AUTHTYPE_DIGEST);
 
 			return 0;
 		}
 	}
 
-	cgit.HEADERS[CLIENT_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+	cgit.HEADERS[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 	cgit.setCookie("test","Ni@m");
 	cgit.printHeaders();
 	
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 	cgit.printStream( "!" + cgit.GET["a"] + "!<br>" );
 	cgit.printStream( "!" + cgit.POST["hidden"] + "!<br>" );
 	cgit.printStream( "!" + cgit.POST["text"] + "!<br>" );
-	cgit.printStream( "!" + cgit.ENVIRONMENT[CLIENT_ENVIRONMENT_QUERYSTRING] + "<br>" );
+	cgit.printStream( "!" + cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>" );
 	cgit.printStream( "!" + cgit.COOKIES["test"] + "<br>" );
 	cgit.printStream( "!" + toolsString::ulToString(cgit.FILES["file"].size) + "<br>" );
 	

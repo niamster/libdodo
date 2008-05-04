@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastClient.h
+ *            cgiFastServer.h
  *
  *  Sat Aug  5 03:31:19 2006
  *  Copyright  2006  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGIFASTCLIENT_H_
-#define _CGIFASTCLIENT_H_
+#ifndef _CGIFASTSERVER_H_
+#define _CGIFASTSERVER_H_
 
 #include <libdodo/directives.h>
 
@@ -37,8 +37,8 @@
 #include <fcgiapp.h>
 
 #include <libdodo/types.h>
-#include <libdodo/cgiFastClientEx.h>
-#include <libdodo/cgiFastClientExchange.h>
+#include <libdodo/cgiFastServerEx.h>
+#include <libdodo/cgiFastServerExchange.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/systemThreadGuard.h>
 
@@ -49,14 +49,14 @@ namespace dodo
 		namespace fast
 		{
 			/**
-			 * @typedef clientHandler defines type of function that will be called on new cgi request
+			 * @typedef serverHandler defines type of function that will be called on new cgi request
 			 */
-			typedef void (*clientHandler)(clientExchange *);
+			typedef void (*serverHandler)(serverExchange *);
 		
 			/**
 			 * @class fast provides fast CGI functionality
 			 */
-			class client
+			class server
 			{
 				private:
 		
@@ -64,7 +64,7 @@ namespace dodo
 					 * copy constructor
 					 * to prevent copying
 					 */
-					client(client &cf);
+					server(server &cf);
 		
 				public:
 		
@@ -75,27 +75,27 @@ namespace dodo
 					 * @param threading defines if to use threads on new CGI requests
 					 * @param threadsNum defines amount of threads for processing fast CGI queue
 					 */
-					client(bool threading = true, unsigned int threadsNum = 10);
+					server(bool threading = true, unsigned int threadsNum = 10);
 		
 		#else
 		
 					/**
 					 * constructor
 					 */
-					client();
+					server();
 		
 		#endif
 		
 					/**
 					 * destructor
 					 */
-					virtual ~client();
+					virtual ~server();
 		
 					/**
 					 * set function that will be called on new CGI request
 					 * @param func define function handler
 					 */
-					virtual void setHandler(clientHandler func);
+					virtual void setHandler(serverHandler func);
 		
 					/**
 					 * listen for incoming requests
@@ -125,7 +125,7 @@ namespace dodo
 		
 		#endif
 		
-					static clientHandler handler;    ///< function to be called on new request
+					static serverHandler handler;    ///< function to be called on new request
 			};
 		};
 	};

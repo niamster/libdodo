@@ -25,7 +25,7 @@
 
 using namespace dodo::cgi;
 
-processor::processor(client &a_cgi) : continueFlag(false),
+processor::processor(server &a_cgi) : continueFlag(false),
 										 breakDeepness(0),
 										 loopDeepness(0),
 										 iterator(1),

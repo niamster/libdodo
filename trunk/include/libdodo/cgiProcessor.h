@@ -30,8 +30,8 @@
 #include <libdodo/types.h>
 #include <libdodo/tools.h>
 #include <libdodo/cgiPreprocessor.h>
-#include <libdodo/cgiFastClient.h>
-#include <libdodo/cgiClient.h>
+#include <libdodo/cgiFastServer.h>
+#include <libdodo/cgiServer.h>
 
 namespace dodo
 {
@@ -48,7 +48,7 @@ namespace dodo
 				 * constructor
 				 * @param CGI defines instance of cgi object
 				 */
-				processor(client &CGI);
+				processor(server &CGI);
 	
 				/**
 				 * destructor
@@ -243,7 +243,7 @@ namespace dodo
 				dodoMap<unsigned int, dodoStringMap> localNamespace;                   ///< local variables invisible due to overwrite in deeper namespace
 				dodoMap<unsigned int, dodoStringArray> namespaceVars;                  ///< names of vars in namespaces
 	
-				client &CGI;                                                               ///< cgi object through what output will be performed
+				server &CGI;                                                               ///< cgi object through what output will be performed
 		};
 	};
 };

@@ -58,7 +58,7 @@ namespace dodo
 {
 	namespace cgi
 	{
-		class client;
+		class server;
 	};
 
 	namespace io
@@ -118,7 +118,7 @@ namespace dodo
 	class tools
 	{
 		friend class io::network::http;
-		friend class cgi::client;
+		friend class cgi::server;
 		
 		public:
 

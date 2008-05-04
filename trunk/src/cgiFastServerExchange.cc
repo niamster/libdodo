@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastClientExchange.cc
+ *            cgiFastServerExchange.cc
  *
  *  Sat Aug  5 03:37:19 2006
  *  Copyright  2006  Ni@m
@@ -21,15 +21,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/cgiFastClientExchange.h>
+#include <libdodo/cgiFastServerExchange.h>
 
 #ifdef FASTCGI_EXT
 
 using namespace dodo::cgi::fast;
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 
-__xexexCgiFastClientExchangeCollectedData::__xexexCgiFastClientExchangeCollectedData(dodoString &a_buffer,
+__xexexCgiFastServerExchangeCollectedData::__xexexCgiFastServerExchangeCollectedData(dodoString &a_buffer,
 											   int &a_operType,
 											   void *a_executor) : buffer(a_buffer),
 																   operType(a_operType),
@@ -41,9 +41,9 @@ __xexexCgiFastClientExchangeCollectedData::__xexexCgiFastClientExchangeCollected
 
 //-------------------------------------------------------------------
 
-clientExchange::clientExchange(clientExchange &cf)
+serverExchange::serverExchange(serverExchange &cf)
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 
 : collectedData(buffer,
 			 operType,
@@ -56,9 +56,9 @@ clientExchange::clientExchange(clientExchange &cf)
 
 //-------------------------------------------------------------------
 
-clientExchange::clientExchange(FCGX_Request *a_request) : request(a_request)
+serverExchange::serverExchange(FCGX_Request *a_request) : request(a_request)
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 
 ,
 collectedData(buffer,
@@ -72,23 +72,23 @@ collectedData(buffer,
 
 //-------------------------------------------------------------------
 
-clientExchange::~clientExchange()
+serverExchange::~serverExchange()
 {
 }
 
 //-------------------------------------------------------------------
 
 void
-clientExchange::flush()
+serverExchange::flush()
 {
 	if (FCGX_FFlush(request->out) == -1)
-		throw baseEx(ERRMODULE_CGIFASTCLIENTEXCHANGE, FASTCLIENTEXCHANGEEX_FLUSH, ERR_LIBDODO, FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH, FASTCLIENTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_CGIFASTSERVEREXCHANGE, FASTSERVEREXCHANGEEX_FLUSH, ERR_LIBDODO, FASTSERVEREXCHANGEEX_FAILEDTOFLUSH, FASTSERVEREXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 char *
-clientExchange::getenv(const char *buf)
+serverExchange::getenv(const char *buf)
 {
 	return FCGX_GetParam(buf, request->envp);
 }
@@ -96,7 +96,7 @@ clientExchange::getenv(const char *buf)
 //-------------------------------------------------------------------
 
 int
-clientExchange::getInDescriptor() const
+serverExchange::getInDescriptor() const
 {
 	return -1;
 }
@@ -104,29 +104,29 @@ clientExchange::getInDescriptor() const
 //-------------------------------------------------------------------
 
 int
-clientExchange::getOutDescriptor() const
+serverExchange::getOutDescriptor() const
 {
 	return -1;
 }
 
 //-------------------------------------------------------------------
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 
 int
-clientExchange::addPostExec(inExec func,
+serverExchange::addPostExec(inExec func,
 				   void   *data)
 {
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data);
+	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTSERVEREXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
 
 int
-clientExchange::addPreExec(inExec func,
+serverExchange::addPreExec(inExec func,
 				  void   *data)
 {
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data);
+	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTSERVEREXCHANGE, data);
 }
 
 //-------------------------------------------------------------------
@@ -134,31 +134,31 @@ clientExchange::addPreExec(inExec func,
 #ifdef DL_EXT
 
 int
-clientExchange::addPostExec(const dodoString &module,
+serverExchange::addPostExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data, toInit);
+	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTSERVEREXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 dodo::__xexecCounts
-clientExchange::addExec(const dodoString &module,
+serverExchange::addExec(const dodoString &module,
 			   void             *data,
 			   void             *toInit)
 {
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data, toInit);
+	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTSERVEREXCHANGE, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 int
-clientExchange::addPreExec(const dodoString &module,
+serverExchange::addPreExec(const dodoString &module,
 				  void             *data,
 				  void             *toInit)
 {
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTCLIENTEXCHANGE, data, toInit);
+	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTSERVEREXCHANGE, data, toInit);
 }
 
 #endif
@@ -168,7 +168,7 @@ clientExchange::addPreExec(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-clientExchange::_read(char * const a_void)
+serverExchange::_read(char * const a_void)
 {
 	memset(a_void, '\0', inSize);
 
@@ -178,18 +178,18 @@ clientExchange::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-clientExchange::read(char * const a_void)
+serverExchange::read(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
-	operType = FASTCLIENTEXCHANGE_OPERATION_READ;
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
+	operType = FASTSERVEREXCHANGE_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
 #endif
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	try
 	{
 		_read(a_void);
@@ -204,7 +204,7 @@ clientExchange::read(char * const a_void)
 	_read(a_void);
 #endif
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
@@ -217,12 +217,12 @@ clientExchange::read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-clientExchange::readString(dodoString &a_str)
+serverExchange::readString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
-	operType = FASTCLIENTEXCHANGE_OPERATION_READSTRING;
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
+	operType = FASTSERVEREXCHANGE_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -238,14 +238,14 @@ clientExchange::readString(dodoString &a_str)
 	{
 		delete [] data;
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 		buffer.clear();
 #endif
 
 		throw;
 	}
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer.assign(data, inSize);
 	delete [] data;
 
@@ -262,14 +262,14 @@ clientExchange::readString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-clientExchange::writeString(const dodoString &a_buf)
+serverExchange::writeString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTRING;
+	operType = FASTSERVEREXCHANGE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -287,7 +287,7 @@ clientExchange::writeString(const dodoString &a_buf)
 #endif
 
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -297,14 +297,14 @@ clientExchange::writeString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-clientExchange::write(const char *const a_buf)
+serverExchange::write(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
 
-	operType = FASTCLIENTEXCHANGE_OPERATION_WRITE;
+	operType = FASTSERVEREXCHANGE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -322,7 +322,7 @@ clientExchange::write(const char *const a_buf)
 #endif
 
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -332,27 +332,27 @@ clientExchange::write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-clientExchange::_write(const char *const buf)
+serverExchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->out) == -1)
-		throw baseEx(ERRMODULE_CGIFASTCLIENTEXCHANGE, FASTCLIENTEXCHANGEEX__WRITE, ERR_LIBDODO, FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING, FASTCLIENTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_CGIFASTSERVEREXCHANGE, FASTSERVEREXCHANGEEX__WRITE, ERR_LIBDODO, FASTSERVEREXCHANGEEX_FAILEDTOPRINTSTRING, FASTSERVEREXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-clientExchange::readStream(char * const a_void)
+serverExchange::readStream(char * const a_void)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
-	operType = FASTCLIENTEXCHANGE_OPERATION_READSTREAM;
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
+	operType = FASTSERVEREXCHANGE_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
 	_read(a_void);
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_void;
 
 	performXExec(postExec);
@@ -367,12 +367,12 @@ clientExchange::readStream(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-clientExchange::readStreamString(dodoString &a_str)
+serverExchange::readStreamString(dodoString &a_str)
 {
 	systemRaceHazardGuard pg(this);
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
-	operType = FASTCLIENTEXCHANGE_OPERATION_READSTREAMSTRING;
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
+	operType = FASTSERVEREXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -389,7 +389,7 @@ clientExchange::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = data;
 	delete [] data;
 
@@ -406,16 +406,16 @@ clientExchange::readStreamString(dodoString &a_str)
 //-------------------------------------------------------------------
 
 void
-clientExchange::writeStreamString(const dodoString &a_buf)
+serverExchange::writeStreamString(const dodoString &a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTREAMSTRING;
+	operType = FASTSERVEREXCHANGE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -451,7 +451,7 @@ clientExchange::writeStreamString(const dodoString &a_buf)
 	}
 #endif
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();
@@ -461,16 +461,16 @@ clientExchange::writeStreamString(const dodoString &a_buf)
 //-------------------------------------------------------------------
 
 void
-clientExchange::writeStream(const char *const a_buf)
+serverExchange::writeStream(const char *const a_buf)
 {
 	systemRaceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = FASTCLIENTEXCHANGE_OPERATION_WRITESTREAM;
+	operType = FASTSERVEREXCHANGE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -506,7 +506,7 @@ clientExchange::writeStream(const char *const a_buf)
 	}
 #endif
 
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
 	buffer.clear();

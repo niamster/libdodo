@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastClientExchange.h
+ *            cgiFastServerExchange.h
  *
  *  Sat Aug  5 03:31:19 2006
  *  Copyright  2006  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGIFASTCLIENTEXCHANGE_H_
-#define _CGIFASTCLIENTEXCHANGE_H_
+#ifndef _CGIFASTSERVEREXCHANGE_H_
+#define _CGIFASTSERVEREXCHANGE_H_
 
 #include <libdodo/directives.h>
 
@@ -31,7 +31,7 @@
 #include <fcgiapp.h>
 
 #include <libdodo/types.h>
-#include <libdodo/cgiFastClientExchangeEx.h>
+#include <libdodo/cgiFastServerExchangeEx.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/systemThreadGuard.h>
 
@@ -42,31 +42,31 @@ namespace dodo
 		namespace fast
 		{
 			/**
-			 * @enum fastClientExchangeOperationTypeEnum describes type of operation for hook
+			 * @enum fastServerExchangeOperationTypeEnum describes type of operation for hook
 			 */
-			enum fastClientExchangeOperationTypeEnum
+			enum fastServerExchangeOperationTypeEnum
 			{
-				FASTCLIENTEXCHANGE_OPERATION_READ,
-				FASTCLIENTEXCHANGE_OPERATION_READSTRING,
-				FASTCLIENTEXCHANGE_OPERATION_READSTREAM,
-				FASTCLIENTEXCHANGE_OPERATION_READSTREAMSTRING,
-				FASTCLIENTEXCHANGE_OPERATION_WRITE,
-				FASTCLIENTEXCHANGE_OPERATION_WRITESTRING,
-				FASTCLIENTEXCHANGE_OPERATION_WRITESTREAM,
-				FASTCLIENTEXCHANGE_OPERATION_WRITESTREAMSTRING,
+				FASTSERVEREXCHANGE_OPERATION_READ,
+				FASTSERVEREXCHANGE_OPERATION_READSTRING,
+				FASTSERVEREXCHANGE_OPERATION_READSTREAM,
+				FASTSERVEREXCHANGE_OPERATION_READSTREAMSTRING,
+				FASTSERVEREXCHANGE_OPERATION_WRITE,
+				FASTSERVEREXCHANGE_OPERATION_WRITESTRING,
+				FASTSERVEREXCHANGE_OPERATION_WRITESTREAM,
+				FASTSERVEREXCHANGE_OPERATION_WRITESTREAMSTRING,
 			};
 			
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 			
 			/**
-			 * @struct __xexexCgiFastClientExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+			 * @struct __xexexCgiFastServerExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			struct __xexexCgiFastClientExchangeCollectedData
+			struct __xexexCgiFastServerExchangeCollectedData
 			{
 				/**
 				 * constructor
 				 */
-				__xexexCgiFastClientExchangeCollectedData(dodoString &buffer,
+				__xexexCgiFastServerExchangeCollectedData(dodoString &buffer,
 									   int &operType,
 									   void *executor);
 
@@ -80,9 +80,9 @@ namespace dodo
 #endif
 			
 			/**
-			 * @class clientExchange provides interface to fast CGI I/O functionality
+			 * @class serverExchange provides interface to fast CGI I/O functionality
 			 */
-			class clientExchange : public io::channel,
+			class serverExchange : public io::channel,
 							virtual public systemThreadGuardHolder
 			{
 				private:
@@ -91,7 +91,7 @@ namespace dodo
 					 * copy constructor
 					 * to prevent copying
 					 */
-					clientExchange(clientExchange &cf);
+					serverExchange(serverExchange &cf);
 		
 				public:
 		
@@ -99,14 +99,14 @@ namespace dodo
 					 * constructor
 					 * @param request defines CGI request descriptor
 					 */
-					clientExchange(FCGX_Request *request);
+					serverExchange(FCGX_Request *request);
 		
 					/**
 					 * destructor
 					 */
-					virtual ~clientExchange();
+					virtual ~serverExchange();
 					
-		#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+		#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 		
 					/**
 					 * add hook after the operation
@@ -247,11 +247,11 @@ namespace dodo
 		
 					FCGX_Request *request;    ///< fast CGI descriptor
 					
-#ifndef CGIFASTCLIENTEXCHANGE_WO_XEXEC
+#ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 					
 					dodoString buffer;                      ///< buffer
 		
-					__xexexCgiFastClientExchangeCollectedData collectedData;   ///< data collected for xexec
+					__xexexCgiFastServerExchangeCollectedData collectedData;   ///< data collected for xexec
 					
 #endif
 			};

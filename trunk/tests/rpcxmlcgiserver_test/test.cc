@@ -20,7 +20,7 @@ handler(const dodoString &method, const dodoArray<rpcValue> &values)
 
 int main(int argc, char **argv)
 {		
-	client provider(false);
+	server provider(false);
 	rpcXmlCgiServer server(provider);
 	
 	try

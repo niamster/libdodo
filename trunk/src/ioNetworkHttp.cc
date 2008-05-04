@@ -974,7 +974,7 @@ http::makeBasicAuth(short responseHeader,
 
 //-------------------------------------------------------------------
 
-dodo::cgi::__clientCookie 
+dodo::cgi::__serverCookie 
 http::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::explode(header, &trim, ";");
@@ -984,9 +984,9 @@ http::parseCookie(const dodoString &header)
 	
 	tuple = tools::explode(*i, "=", 2);
 	if (tuple.size() != 2)
-		return cgi::__clientCookie();
+		return cgi::__serverCookie();
 		
-	cgi::__clientCookie cookie;
+	cgi::__serverCookie cookie;
 	cookie.name = tuple[0];
 	cookie.value = tools::decodeUrl(tuple[1]);
 	

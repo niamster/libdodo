@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastClient.cc
+ *            cgiFastServer.cc
  *
  *  Sat Aug  5 03:37:19 2006
  *  Copyright  2006  Ni@m
@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/cgiFastClient.h>
+#include <libdodo/cgiFastServer.h>
 
 #ifdef FASTCGI_EXT
 
@@ -29,24 +29,24 @@ using namespace dodo::cgi::fast;
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t client::accept = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t server::accept = PTHREAD_MUTEX_INITIALIZER;
 
 #endif
 
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(clientExchange *data)
+dummyStackThread(serverExchange *data)
 {
 }
 
 //-------------------------------------------------------------------
 
-clientHandler client::handler = &dummyStackThread;
+serverHandler server::handler = &dummyStackThread;
 
 //-------------------------------------------------------------------
 
-client::client(client &cf)
+server::server(server &cf)
 {
 }
 
@@ -54,7 +54,7 @@ client::client(client &cf)
 
 #ifdef PTHREAD_EXT
 
-client::client(bool a_threading,
+server::server(bool a_threading,
 				 unsigned int a_threadsNum) : threading(a_threading),
 											  threadsNum(a_threadsNum)
 {
@@ -73,7 +73,7 @@ client::client(bool a_threading,
 
 #else
 
-client::client()
+server::server()
 {
 	FCGX_Init();
 }
@@ -82,7 +82,7 @@ client::client()
 
 //-------------------------------------------------------------------
 
-client::~client()
+server::~server()
 {
 	FCGX_Finish();
 }
@@ -90,7 +90,7 @@ client::~client()
 //-------------------------------------------------------------------
 
 void
-client::setHandler(clientHandler func)
+server::setHandler(serverHandler func)
 {
 	handler = func;
 }
@@ -100,12 +100,12 @@ client::setHandler(clientHandler func)
 #ifdef PTHREAD_EXT
 
 void *
-client::stackThread(void *data)
+server::stackThread(void *data)
 {
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
 
-	clientExchange cfSTD(&request);
+	serverExchange cfSTD(&request);
 
 	int res = 0;
 
@@ -116,7 +116,7 @@ client::stackThread(void *data)
 		pthread_mutex_unlock(&accept);
 
 		if (res == -1)
-			throw baseEx(ERRMODULE_CGIFASTCLIENT, FASTCLIENTEX_STACKTHREAD, ERR_LIBDODO, FASTCLIENTEX_ACCEPTFAILED, FASTCLIENTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_CGIFASTSERVER, FASTSERVEREX_STACKTHREAD, ERR_LIBDODO, FASTSERVEREX_ACCEPTFAILED, FASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
 		handler(&cfSTD);
 
@@ -131,10 +131,10 @@ client::stackThread(void *data)
 //-------------------------------------------------------------------
 
 void
-client::listen()
+server::listen()
 {
 	if (!isFastCgi())
-		throw baseEx(ERRMODULE_CGIFASTCLIENT, FASTCLIENTEX_LISTEN, ERR_LIBDODO, FASTCLIENTEX_ISCGI, FASTCLIENTEX_ISCGI_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_CGIFASTSERVER, FASTSERVEREX_LISTEN, ERR_LIBDODO, FASTSERVEREX_ISCGI, FASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
 	if (threading)
@@ -157,12 +157,12 @@ client::listen()
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);
 
-		clientExchange cfSTD(&request);
+		serverExchange cfSTD(&request);
 
 		while (true)
 		{
 			if (FCGX_Accept_r(&request) == -1)
-				throw baseEx(ERRMODULE_CGIFASTCLIENT, FASTCLIENTEX_LISTEN, ERR_LIBDODO, FASTCLIENTEX_ACCEPTFAILED, FASTCLIENTEX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_CGIFASTSERVER, FASTSERVEREX_LISTEN, ERR_LIBDODO, FASTSERVEREX_ACCEPTFAILED, FASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
 			handler(&cfSTD);
 
@@ -174,7 +174,7 @@ client::listen()
 //-------------------------------------------------------------------
 
 bool
-client::isFastCgi()
+server::isFastCgi()
 {
 	return !FCGX_IsCGI();
 }
