@@ -1,5 +1,5 @@
 /***************************************************************************
- *            jsonEx.h
+ *            jsonProcessorEx.h
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _JSONEX_H_
-#define _JSONEX_H_
+#ifndef _JSONPROCESSOREX_H_
+#define _JSONPROCESSOREX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,33 +30,35 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum jsonExR
+	namespace json
 	{
-		JSONEX_MALFORMEDJSONNUMERIC,
-		JSONEX_MALFORMEDJSONNULL,
-		JSONEX_MALFORMEDJSONBOOLEAN,
+		/**
+		 * libdodo defined errors
+		 */
+		enum processorExR
+		{
+			PROCESSOREX_MALFORMEDJSONNUMERIC,
+			PROCESSOREX_MALFORMEDJSONNULL,
+			PROCESSOREX_MALFORMEDJSONBOOLEAN,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define PROCESSOREX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
+	#define PROCESSOREX_MALFORMEDJSONNULL_STR "Malformed json object: null."
+	#define PROCESSOREX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum processorFunctionsID
+		{
+			PROCESSOREX_PROCESSBOOLEAN,
+			PROCESSOREX_PROCESSNULL,
+			PROCESSOREX_PROCESSNUMERIC,
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define JSONEX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-#define JSONEX_MALFORMEDJSONNULL_STR "Malformed json object: null."
-#define JSONEX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum jsonFunctionsID
-	{
-		JSONEX_PROCESSBOOLEAN,
-		JSONEX_PROCESSNULL,
-		JSONEX_PROCESSNUMERIC,
-	};
-
 };
 
 #endif

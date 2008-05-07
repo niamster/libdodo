@@ -1,5 +1,5 @@
 /***************************************************************************
- *            json.cc
+ *            jsonProcessor.cc
  *
  *  Mon Oct 20 02:15:55 2007
  *  Copyright  2007  Ni@m
@@ -21,28 +21,28 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/json.h>
+#include <libdodo/jsonProcessor.h>
 
-using namespace dodo;
+using namespace dodo::json;
 
-json::json()
+processor::processor()
 {
 }
 
 //-------------------------------------------------------------------
 
-json::~json()
+processor::~processor()
 {
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-json::make(const jsonNode &root)
+processor::make(const node &root)
 {
 	switch (root.valueDataType)
 	{
-		case JSON_DATATYPE_STRING:
+		case NODE_DATATYPE_STRING:
 		{
 
 			dodoString jsonObject = "\"";
@@ -54,11 +54,11 @@ json::make(const jsonNode &root)
 			return jsonObject;
 		}
 
-		case JSON_DATATYPE_OBJECT:
+		case NODE_DATATYPE_OBJECT:
 		{
 			dodoString jsonObject = "{";
 
-			dodoMap<dodoString, jsonNode, dodoMapStringCompare>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
+			dodoMap<dodoString, node, dodoMapStringCompare>::const_iterator i = root.objectValue.begin(), j = root.objectValue.end();
 			if (i != j)
 			{
 				for (--j; i != j; ++i)
@@ -82,11 +82,11 @@ json::make(const jsonNode &root)
 			return jsonObject;
 		}
 
-		case JSON_DATATYPE_ARRAY:
+		case NODE_DATATYPE_ARRAY:
 		{
 			dodoString jsonObject = "[";
 
-			dodoArray<jsonNode>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
+			dodoArray<node>::const_iterator i = root.arrayValue.begin(), j = root.arrayValue.end();
 			if (i != j)
 			{
 				--j;
@@ -103,15 +103,15 @@ json::make(const jsonNode &root)
 			return jsonObject;
 		}
 
-		case JSON_DATATYPE_NUMERIC:
+		case NODE_DATATYPE_NUMERIC:
 
 			return toolsString::lToString(root.numericValue);
 
-		case JSON_DATATYPE_BOOLEAN:
+		case NODE_DATATYPE_BOOLEAN:
 
 			return root.booleanValue ? "true" : "false";
 
-		case JSON_DATATYPE_NULL:
+		case NODE_DATATYPE_NULL:
 		default:
 
 			return "null";
@@ -123,15 +123,15 @@ json::make(const jsonNode &root)
 //-------------------------------------------------------------------
 
 unsigned long
-json::processArray(dodoArray<jsonNode> &node,
+processor::processArray(dodoArray<node> &jnode,
 				   const dodoString &root,
 				   unsigned long pos)
 {
-	node.clear();
+	jnode.clear();
 
 	bool initial = true;
 
-	jsonNode subNode;
+	node subNode;
 
 	unsigned long i(pos), j(root.size());
 	for (; i < j; ++i)
@@ -153,7 +153,7 @@ json::processArray(dodoArray<jsonNode> &node,
 				{
 					i = processValue(subNode, root, i);
 
-					node.push_back(subNode);
+					jnode.push_back(subNode);
 				}
 
 				break;
@@ -170,7 +170,7 @@ json::processArray(dodoArray<jsonNode> &node,
 
 				i = processValue(subNode, root, i);
 
-				node.push_back(subNode);
+				jnode.push_back(subNode);
 		}
 	}
 
@@ -180,7 +180,7 @@ json::processArray(dodoArray<jsonNode> &node,
 //-------------------------------------------------------------------
 
 unsigned long
-json::processValue(jsonNode &node,
+processor::processValue(node &node,
 				   const dodoString &root,
 				   unsigned long pos)
 {
@@ -193,33 +193,33 @@ json::processValue(jsonNode &node,
 		{
 			case '"':
 
-				node.valueDataType = JSON_DATATYPE_STRING;
+				node.valueDataType = NODE_DATATYPE_STRING;
 				return processString(node.stringValue, root, i);
 
 			case '{':
 
-				node.valueDataType = JSON_DATATYPE_OBJECT;
+				node.valueDataType = NODE_DATATYPE_OBJECT;
 				return processObject(node.objectValue, root, i);
 
 			case '[':
 
-				node.valueDataType = JSON_DATATYPE_ARRAY;
+				node.valueDataType = NODE_DATATYPE_ARRAY;
 				return processArray(node.arrayValue, root, i);
 
 			case 't':
 			case 'f':
 
-				node.valueDataType = JSON_DATATYPE_BOOLEAN;
+				node.valueDataType = NODE_DATATYPE_BOOLEAN;
 				return processBoolean(node.booleanValue, root, i);
 
 			case 'n':
 
-				node.valueDataType = JSON_DATATYPE_NULL;
+				node.valueDataType = NODE_DATATYPE_NULL;
 				return processNull(root, i);
 
 			default:
 
-				node.valueDataType = JSON_DATATYPE_NUMERIC;
+				node.valueDataType = NODE_DATATYPE_NUMERIC;
 				return processNumeric(node.numericValue, root, i);
 		}
 	}
@@ -228,12 +228,12 @@ json::processValue(jsonNode &node,
 //-------------------------------------------------------------------
 
 unsigned long
-json::processBoolean(bool &node,
+processor::processBoolean(bool &node,
 					 const dodoString &root,
 					 unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
-		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSONBOOLEAN, JSONEX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, PROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
 
 	if (root.substr(pos, 4) == "true")
 	{
@@ -250,7 +250,7 @@ json::processBoolean(bool &node,
 			return pos + 4;
 		}
 		else
-			throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSBOOLEAN, ERR_LIBDODO, JSONEX_MALFORMEDJSONBOOLEAN, JSONEX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, PROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
 	}
 
 	return pos;
@@ -259,16 +259,16 @@ json::processBoolean(bool &node,
 //-------------------------------------------------------------------
 
 unsigned long
-json::processNull(const dodoString &root,
+processor::processNull(const dodoString &root,
 				  unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
-		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSONNULL, JSONEX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNULL, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, PROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
 
 	if (root.substr(pos, 4) == "null")
 		return pos + 3;
 	else
-		throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNULL, ERR_LIBDODO, JSONEX_MALFORMEDJSONNULL, JSONEX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNULL, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, PROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
 
 	return pos;
 
@@ -277,7 +277,7 @@ json::processNull(const dodoString &root,
 //-------------------------------------------------------------------
 
 unsigned long
-json::processNumeric(long &node,
+processor::processNumeric(long &node,
 					 const dodoString &root,
 					 unsigned long pos)
 {
@@ -318,7 +318,7 @@ json::processNumeric(long &node,
 
 			default:
 
-				throw baseEx(ERRMODULE_JSON, JSONEX_PROCESSNUMERIC, ERR_LIBDODO, JSONEX_MALFORMEDJSONNUMERIC, numeric, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNUMERIC, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONNUMERIC, numeric, __LINE__, __FILE__);
 		}
 
 		if (endOfNumeric)
@@ -333,15 +333,15 @@ json::processNumeric(long &node,
 //-------------------------------------------------------------------
 
 unsigned long
-json::processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node,
+processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 					const dodoString &root,
 					unsigned long pos)
 {
-	node.clear();
+	jnode.clear();
 
 	short state = JSON_STATE_OBJECT_INITIAL;
 
-	jsonNode subNodeValue;
+	node subNodeValue;
 	dodoString subNodeName;
 
 	unsigned long i(pos), j(root.size());
@@ -366,7 +366,7 @@ json::processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node,
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
 						i = processValue(subNodeValue, root, i);
-						node.insert(make_pair(subNodeName, subNodeValue));
+						jnode.insert(make_pair(subNodeName, subNodeValue));
 
 						state = JSON_STATE_OBJECT_OBJECTNAME;
 					}
@@ -401,7 +401,7 @@ json::processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node,
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
 						i = processValue(subNodeValue, root, i);
-						node.insert(make_pair(subNodeName, subNodeValue));
+						jnode.insert(make_pair(subNodeName, subNodeValue));
 
 						state = JSON_STATE_OBJECT_OBJECTNAME;
 					}
@@ -412,7 +412,7 @@ json::processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node,
 				if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 				{
 					i = processValue(subNodeValue, root, i);
-					node.insert(make_pair(subNodeName, subNodeValue));
+					jnode.insert(make_pair(subNodeName, subNodeValue));
 
 					state = JSON_STATE_OBJECT_OBJECTNAME;
 				}
@@ -424,12 +424,12 @@ json::processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node,
 
 //-------------------------------------------------------------------
 
-jsonNode
-json::process(const dodoString &root)
+node
+processor::process(const dodoString &root)
 {
-	jsonNode node;
+	node node;
 
-	node.valueDataType = JSON_DATATYPE_OBJECT;
+	node.valueDataType = NODE_DATATYPE_OBJECT;
 	processObject(node.objectValue, root, 0);
 
 	return node;
@@ -438,13 +438,13 @@ json::process(const dodoString &root)
 //-------------------------------------------------------------------
 
 dodoString
-json::fromMap(const dodoStringMap &root)
+processor::fromMap(const dodoStringMap &root)
 {
-	jsonNode nodeDef;
-	jsonNode subNodeDef;
+	node nodeDef;
+	node subNodeDef;
 
-	nodeDef.valueDataType = JSON_DATATYPE_OBJECT;
-	subNodeDef.valueDataType = JSON_DATATYPE_STRING;
+	nodeDef.valueDataType = NODE_DATATYPE_OBJECT;
+	subNodeDef.valueDataType = NODE_DATATYPE_STRING;
 
 	dodoStringMap::const_iterator i = root.begin(), j = root.end();
 	for (; i != j; ++i)
@@ -458,14 +458,14 @@ json::fromMap(const dodoStringMap &root)
 
 //-------------------------------------------------------------------
 
-dodoStringMap
-json::toMap(const dodoString &node)
+dodo::dodoStringMap
+processor::toMap(const dodoString &jnode)
 {
-	jsonNode JSON = process(node);
+	node JSON = process(jnode);
 
 	dodoStringMap map;
 
-	dodoMap<dodoString, jsonNode, dodoMapStringCompare>::iterator i = JSON.objectValue.begin(), j = JSON.objectValue.end();
+	dodoMap<dodoString, node, dodoMapStringCompare>::iterator i = JSON.objectValue.begin(), j = JSON.objectValue.end();
 	for (; i != j; ++i)
 		map.insert(make_pair(i->first, i->second.stringValue));
 
@@ -475,11 +475,11 @@ json::toMap(const dodoString &node)
 //-------------------------------------------------------------------
 
 unsigned long
-json::processString(dodoString &node,
+processor::processString(dodoString &jnode,
 					const dodoString &root,
 					unsigned long pos)
 {
-	node.clear();
+	jnode.clear();
 
 	bool escape = false;
 	bool initial = true;
@@ -518,11 +518,11 @@ json::processString(dodoString &node,
 				{
 					escape = false;
 
-					node.append(1, '\\');
-					node.append(1, root[i]);
+					jnode.append(1, '\\');
+					jnode.append(1, root[i]);
 				}
 				else
-					node.append(1, root[i]);
+					jnode.append(1, root[i]);
 		}
 	}
 

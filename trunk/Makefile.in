@@ -32,7 +32,7 @@ OBJECTS:=dbAccumulator.o \
 	toolsTime.o \
 	toolsNetwork.o \
 	toolsString.o \
-	json.o \
+	jsonProcessor.o \
 	jsonNode.o \
 	types.o \
 	xexec.o \

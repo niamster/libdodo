@@ -30,37 +30,39 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum jsonNodeExR
+	namespace json
 	{
-		JSONNODEEX_WRONGTYPEREQUESTED,
-		JSONNODEEX_ARRAYOUTOFRANGE,
-		JSONNODEEX_MALFORMEDJSON,
+		/**
+		 * libdodo defined errors
+		 */
+		enum nodeExR
+		{
+			NODEEX_WRONGTYPEREQUESTED,
+			NODEEX_ARRAYOUTOFRANGE,
+			NODEEX_MALFORMEDJSON,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define NODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+	#define NODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
+	#define NODEEX_MALFORMEDJSON_STR "Malformed json object."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum nodeFunctionsID
+		{
+			NODEEX_BROPERATORSTRING,
+			NODEEX_BROPERATORNUMERIC,
+			NODEEX_GETSTRING,
+			NODEEX_GETBOOLEAN,
+			NODEEX_GETNUMERIC,
+			NODEEX_GETARRAY,
+			NODEEX_GETOBJECT,
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define JSONNODEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-#define JSONNODEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
-#define JSONNODEEX_MALFORMEDJSON_STR "Malformed json object."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum jsonNodeFunctionsID
-	{
-		JSONNODEEX_BROPERATORSTRING,
-		JSONNODEEX_BROPERATORNUMERIC,
-		JSONNODEEX_GETSTRING,
-		JSONNODEEX_GETBOOLEAN,
-		JSONNODEEX_GETNUMERIC,
-		JSONNODEEX_GETARRAY,
-		JSONNODEEX_GETOBJECT,
-	};
-
 };
 
 #endif
