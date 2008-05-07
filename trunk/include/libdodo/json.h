@@ -62,25 +62,25 @@ namespace dodo
 			 * @return string that contains serialized JSON object
 			 * @param root defines root of unserialized JSON object
 			 */
-			virtual dodoString makeJSON(const jsonNode &root);
+			virtual dodoString make(const jsonNode &root);
 
 			/**
 			 * @return root of unserialized JSON object
 			 * @param root defines string that contains serialized JSON object
 			 */
-			virtual jsonNode processJSON(const dodoString &root);
+			virtual jsonNode process(const dodoString &root);
 
 			/**
 			 * @return string that contains serialized JSON object
 			 * @param root defines root of unserialized JSON object
 			 */
-			virtual dodoString mapToJSON(const dodoStringMap &root);
+			virtual dodoString fromMap(const dodoStringMap &root);
 
 			/**
 			 * @return root of unserialized JSON object
 			 * @param root defines string that contains serialized JSON object
 			 */
-			virtual dodoStringMap JSONToMap(const dodoString &root);
+			virtual dodoStringMap toMap(const dodoString &root);
 
 		protected:
 

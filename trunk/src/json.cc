@@ -38,7 +38,7 @@ json::~json()
 //-------------------------------------------------------------------
 
 dodoString
-json::makeJSON(const jsonNode &root)
+json::make(const jsonNode &root)
 {
 	switch (root.valueDataType)
 	{
@@ -67,14 +67,14 @@ json::makeJSON(const jsonNode &root)
 					jsonObject.append(i->first);
 					jsonObject.append("\":");
 
-					jsonObject.append(makeJSON(i->second));
+					jsonObject.append(make(i->second));
 					jsonObject.append(",");
 				}
 				jsonObject.append("\"");
 				jsonObject.append(i->first);
 				jsonObject.append("\":");
 
-				jsonObject.append(makeJSON(i->second));
+				jsonObject.append(make(i->second));
 			}
 
 			jsonObject.append("}");
@@ -92,10 +92,10 @@ json::makeJSON(const jsonNode &root)
 				--j;
 				for (; i != j; ++i)
 				{
-					jsonObject.append(makeJSON(*i));
+					jsonObject.append(make(*i));
 					jsonObject.append(",");
 				}
-				jsonObject.append(makeJSON(*i));
+				jsonObject.append(make(*i));
 			}
 
 			jsonObject.append("]");
@@ -425,7 +425,7 @@ json::processObject(dodoMap<dodoString, jsonNode, dodoMapStringCompare> &node,
 //-------------------------------------------------------------------
 
 jsonNode
-json::processJSON(const dodoString &root)
+json::process(const dodoString &root)
 {
 	jsonNode node;
 
@@ -438,7 +438,7 @@ json::processJSON(const dodoString &root)
 //-------------------------------------------------------------------
 
 dodoString
-json::mapToJSON(const dodoStringMap &root)
+json::fromMap(const dodoStringMap &root)
 {
 	jsonNode nodeDef;
 	jsonNode subNodeDef;
@@ -453,15 +453,15 @@ json::mapToJSON(const dodoStringMap &root)
 		nodeDef.objectValue.insert(make_pair(i->first, subNodeDef));
 	}
 
-	return makeJSON(nodeDef);
+	return make(nodeDef);
 }
 
 //-------------------------------------------------------------------
 
 dodoStringMap
-json::JSONToMap(const dodoString &node)
+json::toMap(const dodoString &node)
 {
-	jsonNode JSON = processJSON(node);
+	jsonNode JSON = process(node);
 
 	dodoStringMap map;
 

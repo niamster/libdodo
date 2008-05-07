@@ -39,9 +39,9 @@ int main(int argc, char **argv)
 
 		node.addObjectMember("object", node2);
 
-		cout << js.makeJSON(node) << endl;
+		cout << js.make(node) << endl;
 		
-		jsonNode jsN = js.processJSON(js.makeJSON(node));
+		jsonNode jsN = js.process(js.make(node));
 	
 		switch (jsN.getType())
 		{		
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
 		map["foo"] = "bar";
 		map["one"] = "two";
 		
-		cout << endl << js.mapToJSON(map) << endl;
+		cout << endl << js.fromMap(map) << endl;
 	}
 	catch(baseEx ex)
 	{
