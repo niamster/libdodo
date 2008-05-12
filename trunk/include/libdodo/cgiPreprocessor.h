@@ -30,7 +30,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/cgiPreprocessorEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsFilesystem.h>

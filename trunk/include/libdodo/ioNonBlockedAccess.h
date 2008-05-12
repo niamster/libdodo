@@ -31,7 +31,7 @@
 
 #include <libdodo/ioNonBlockedAccessEx.h>
 #include <libdodo/types.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/systemThreadGuard.h>
 
 namespace dodo

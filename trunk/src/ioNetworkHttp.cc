@@ -108,7 +108,7 @@ http::getResponse()
 void 
 http::setUrl(const dodoString &a_url)
 {
-	urlComponents = tools::parseUrl(a_url);
+	urlComponents = misc::parseUrl(a_url);
 	 
 	if (urlComponents.protocol.size() == 0)
 		urlComponents.protocol = "http";
@@ -133,7 +133,7 @@ http::setUrl(const dodoString &a_url)
 	if (urlComponents.request.size() > 0)
 	{
 		url.append("?");
-		url.append(tools::encodeUrl(urlComponents.request));
+		url.append(misc::encodeUrl(urlComponents.request));
 	}
 }
 
@@ -151,12 +151,12 @@ http::setCookies(const dodoStringMap &cookies)
 	{
 		data.append(i->first);
 		data.append("=");
-		data.append(tools::encodeUrl(i->second));
+		data.append(misc::encodeUrl(i->second));
 		data.append("; ");
 	}
 	data.append(i->first);
 	data.append("=");
-	data.append(tools::encodeUrl(i->second));
+	data.append(misc::encodeUrl(i->second));
 	
 	requestHeaders[HTTP_REQUESTHEADER_COOKIE] = data;
 }
@@ -365,7 +365,7 @@ void
 http::POST(const dodoStringMap &arguments, 
 							const dodoStringMap &files)
 {
-	dodoString boundary = "---------------------------" + toolsString::ulToString(tools::ulRandom()) + toolsString::ulToString(tools::ulRandom());
+	dodoString boundary = "---------------------------" + toolsString::ulToString(misc::ulRandom()) + toolsString::ulToString(misc::ulRandom());
 	dodoString type = "multipart/form-data; boundary=" + boundary;
 	boundary.insert(0, "--");
 	
@@ -431,14 +431,14 @@ http::POST(const dodoStringMap &arguments)
 	
 	for (;i!=j;++i)
 	{
-		data.append(tools::encodeUrl(i->first));
+		data.append(misc::encodeUrl(i->first));
 		data.append("=");
-		data.append(tools::encodeUrl(i->second));
+		data.append(misc::encodeUrl(i->second));
 		data.append("&");
 	}
-	data.append(tools::encodeUrl(i->first));
+	data.append(misc::encodeUrl(i->first));
 	data.append("=");
-	data.append(tools::encodeUrl(i->second));
+	data.append(misc::encodeUrl(i->second));
 	
 	POST(data, "application/x-www-form-urlencoded");
 }
@@ -684,7 +684,7 @@ http::getHeaders(const dodoString &headers)
 		
 		piece = toolsString::trim(headers.substr(j, i - j), '\r');
 
-		arr = tools::explode(piece, ":", 2);
+		arr = misc::explode(piece, ":", 2);
 		if (arr.size() != 2)
 		{
 			if (!statusCode)
@@ -887,19 +887,19 @@ http::makeDigestAuth(short requestHeader,
 {
 	dodoString nonce, opaque, realm;
 	
-	dodoStringArray parts = tools::explode(response.headers[requestHeader].substr(7), &trim, ",");
+	dodoStringArray parts = misc::explode(response.headers[requestHeader].substr(7), &trim, ",");
 
 	dodoString HA1;
 
 	unsigned char HA[16];			
-	tools::MD5_CTX context;
+	misc::MD5_CTX context;
 	
 	dodoStringArray tuple;
 	
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
 	for (;i!=j;++i)
 	{
-		tuple = tools::explode(*i, "=");
+		tuple = misc::explode(*i, "=");
 		if (tuple.size() != 2)
 			continue;
 		
@@ -907,15 +907,15 @@ http::makeDigestAuth(short requestHeader,
 		{
 			realm = toolsString::trim(tuple[1], '"');
 			
-			tools::MD5Init(&context);
-			tools::MD5Update(&context, (unsigned char *)user.c_str(), user.size());
-			tools::MD5Update(&context, (unsigned char *)":", 1);
-			tools::MD5Update(&context, (unsigned char *)realm.c_str(), realm.size());
-			tools::MD5Update(&context, (unsigned char *)":", 1);
-			tools::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
-			tools::MD5Final(HA, &context);
+			misc::MD5Init(&context);
+			misc::MD5Update(&context, (unsigned char *)user.c_str(), user.size());
+			misc::MD5Update(&context, (unsigned char *)":", 1);
+			misc::MD5Update(&context, (unsigned char *)realm.c_str(), realm.size());
+			misc::MD5Update(&context, (unsigned char *)":", 1);
+			misc::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
+			misc::MD5Final(HA, &context);
 
-			HA1 = tools::binToHex(dodoString((char *)&HA, 16));
+			HA1 = misc::binToHex(dodoString((char *)&HA, 16));
 		}
 		else
 		{
@@ -929,28 +929,28 @@ http::makeDigestAuth(short requestHeader,
 		}
 	}
 	
-	dodoString cnonce = tools::MD5Hex(tools::stringRandom(5));
+	dodoString cnonce = misc::MD5Hex(misc::stringRandom(5));
 	
 	dodoString methodForAuth = method + ":"; 
 	
-	tools::MD5Init(&context);
-	tools::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
-	tools::MD5Update(&context, (unsigned char *)url.c_str(), url.size());
-	tools::MD5Final(HA, &context);
+	misc::MD5Init(&context);
+	misc::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
+	misc::MD5Update(&context, (unsigned char *)url.c_str(), url.size());
+	misc::MD5Final(HA, &context);
 
-	dodoString HA2 = tools::binToHex(dodoString((char *)&HA, 16));
+	dodoString HA2 = misc::binToHex(dodoString((char *)&HA, 16));
 	
-	tools::MD5Init(&context);
-	tools::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
-	tools::MD5Update(&context, (unsigned char *)":", 1);
-	tools::MD5Update(&context, (unsigned char *)nonce.c_str(), nonce.size());
-	tools::MD5Update(&context, (unsigned char *)":00000001:", 10);
-	tools::MD5Update(&context, (unsigned char *)cnonce.c_str(), cnonce.size());
-	tools::MD5Update(&context, (unsigned char *)":auth:", 6);
-	tools::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
-	tools::MD5Final(HA, &context);
+	misc::MD5Init(&context);
+	misc::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
+	misc::MD5Update(&context, (unsigned char *)":", 1);
+	misc::MD5Update(&context, (unsigned char *)nonce.c_str(), nonce.size());
+	misc::MD5Update(&context, (unsigned char *)":00000001:", 10);
+	misc::MD5Update(&context, (unsigned char *)cnonce.c_str(), cnonce.size());
+	misc::MD5Update(&context, (unsigned char *)":auth:", 6);
+	misc::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
+	misc::MD5Final(HA, &context);
 	
-	dodoString response = tools::binToHex(dodoString((char *)&HA, 16));
+	dodoString response = misc::binToHex(dodoString((char *)&HA, 16));
 
 	requestHeaders[responseHeader] = "Digest username=\"" + user + 
 										"\", realm=\"" + realm + 
@@ -969,7 +969,7 @@ http::makeBasicAuth(short responseHeader,
 							const dodoString &user, 
 							const dodoString &password)
 {
-	requestHeaders[responseHeader] = "Basic " + tools::encodeBase64(user + ":" + password);
+	requestHeaders[responseHeader] = "Basic " + misc::encodeBase64(user + ":" + password);
 }
 
 //-------------------------------------------------------------------
@@ -977,24 +977,24 @@ http::makeBasicAuth(short responseHeader,
 dodo::cgi::__serverCookie 
 http::parseCookie(const dodoString &header)
 {
-	dodoStringArray parts = tools::explode(header, &trim, ";");
+	dodoStringArray parts = misc::explode(header, &trim, ";");
 	dodoStringArray tuple;
 	
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
 	
-	tuple = tools::explode(*i, "=", 2);
+	tuple = misc::explode(*i, "=", 2);
 	if (tuple.size() != 2)
 		return cgi::__serverCookie();
 		
 	cgi::__serverCookie cookie;
 	cookie.name = tuple[0];
-	cookie.value = tools::decodeUrl(tuple[1]);
+	cookie.value = misc::decodeUrl(tuple[1]);
 	
 	++i;
 	
 	for (;i!=j;++i)
 	{
-		tuple = tools::explode(*i, "=");
+		tuple = misc::explode(*i, "=");
 		
 		if (toolsString::iequal(tuple[0], "path"))
 			cookie.path = tuple[1];

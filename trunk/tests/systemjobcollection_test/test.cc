@@ -4,7 +4,7 @@
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/toolsSystem.h>
 #include <libdodo/toolsTime.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 
 #include <iostream>
 

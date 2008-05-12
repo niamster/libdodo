@@ -32,7 +32,7 @@
 #include <libdodo/systemProcessSharedDataGuardEx.h>
 #include <libdodo/systemSharedDataGuard.h>
 #include <libdodo/types.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 
 namespace dodo
 {

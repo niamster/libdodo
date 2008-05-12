@@ -38,7 +38,7 @@ systemProcessSharedDataGuard::systemProcessSharedDataGuard(unsigned int value,
 	if (a_key == NULL)
 	{
 		key = new char[32];
-		tools::random(key, 31);
+		misc::random(key, 31);
 		key[31] = '\0';
 	}
 	else

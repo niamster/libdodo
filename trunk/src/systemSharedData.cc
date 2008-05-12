@@ -39,7 +39,7 @@ systemSharedData::systemSharedData(const char   *a_key) : data(NULL),
 	{
 		key = new char[33];
 		key[0] = '/';
-		tools::random(key + 1, 31);
+		misc::random(key + 1, 31);
 		key[31] = '\0';
 	}
 	else

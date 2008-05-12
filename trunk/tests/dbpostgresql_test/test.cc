@@ -4,9 +4,12 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace db;
 
 using namespace std;
+
+#ifdef POSTGRESQL_EXT
+	
+using namespace db;
 
 void
 hook(void *odata, short int type, void *udata)
@@ -14,6 +17,8 @@ hook(void *odata, short int type, void *udata)
 	__xexexDbAccumulatorCollectedData *db = (__xexexDbAccumulatorCollectedData *)odata;
 	cout << ((sqlConstructor *)db->executor)->queryCollect() << endl;
 }
+
+#endif
 
 int main(int argc, char **argv)
 {

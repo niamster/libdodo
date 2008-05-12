@@ -1,4 +1,4 @@
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/image.h>
 #include <libdodo/ioFile.h>
 

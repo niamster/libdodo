@@ -5,7 +5,12 @@
 #include <iostream>
 
 using namespace dodo;
+
+#ifdef SQLITE_EXT
+
 using namespace db;
+
+#endif
 
 using namespace std;
 

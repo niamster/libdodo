@@ -32,7 +32,7 @@
 #include <errmsg.h>
 #include <sys/socket.h>
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/dbMysqlEx.h>
 #include <libdodo/dbSqlConstructor.h>
 #include <libdodo/xexec.h>

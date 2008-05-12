@@ -31,7 +31,7 @@
 #include <fcntl.h>
 
 #include <libdodo/systemSharedDataEx.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 
 namespace dodo
 {

@@ -28,7 +28,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/systemRaceHazardGuard.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/systemAtomicSemaphore.h>
 
 namespace dodo

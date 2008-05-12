@@ -5,11 +5,12 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace db;
 
 using namespace std;
 
 #ifdef MYSQL_EXT
+
+using namespace db;
 
 	void 
 	hook(void *odata,

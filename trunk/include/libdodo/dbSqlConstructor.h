@@ -26,7 +26,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/dbSqlConstructorEx.h>
 #include <libdodo/types.h>
 #include <libdodo/dbAccumulator.h>

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            tools.h
+ *            toolsMisc.h
  *
  *  Wed Aug 24 00:42:51 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _TOOLS_H_
-#define _TOOLS_H_
+#ifndef _TOOLSMISC_H_
+#define _TOOLSMISC_H_
 
 #include <libdodo/directives.h>
 
@@ -52,7 +52,7 @@
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/toolsString.h>
-#include <libdodo/toolsEx.h>
+#include <libdodo/toolsMiscEx.h>
 
 namespace dodo
 {
@@ -77,25 +77,25 @@ namespace dodo
 #ifdef ZLIB_EXT
 
 	/**
-	 * @enum toolsZlibCompressionStrategyEnum defines type of compression for zlib
+	 * @enum toolsMiscZlibCompressionStrategyEnum defines type of compression for zlib
 	 */
-	enum toolsZlibCompressionStrategyEnum
+	enum toolsMiscZlibCompressionStrategyEnum
 	{
-		TOOLS_ZLIB_FILTRED_COMRESSION = 1,
-		TOOLS_ZLIB_HUFFMAN_COMRESSION,
-		TOOLS_ZLIB_RLE_COMRESSION,
-		TOOLS_ZLIB_FIXED_COMRESSION
+		MISC_ZLIB_FILTRED_COMRESSION = 1,
+		MISC_ZLIB_HUFFMAN_COMRESSION,
+		MISC_ZLIB_RLE_COMRESSION,
+		MISC_ZLIB_FIXED_COMRESSION
 	};
 
 #endif
 
 	/**
-	 * @enum toolsRandomStrengthEnum defines type of randomness
+	 * @enum toolsMiscRandomStrengthEnum defines type of randomness
 	 */
-	enum toolsRandomStrengthEnum
+	enum toolsMiscRandomStrengthEnum
 	{
-		TOOLS_RANDOMSTRENGTH_DEFAULT,
-		TOOLS_RANDOMSTRENGTH_STRONG
+		MISC_RANDOMSTRENGTH_DEFAULT,
+		MISC_RANDOMSTRENGTH_STRONG
 	};
 
 	/**
@@ -113,9 +113,9 @@ namespace dodo
 	};
 	
 	/**
-	 * @class tools provides misc functionality
+	 * @class misc provides misc functionality
 	 */
-	class tools
+	class misc
 	{
 		friend class io::network::http;
 		friend class cgi::server;
@@ -128,91 +128,91 @@ namespace dodo
 			 * @param size defines size of random data in bytes
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static void random(void *data, unsigned long size, short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static void random(void *data, unsigned long size, short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random data
 			 * @param size defines size of random data in bytes
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 * '\0' is replaced with '*'
 			 */
-			static dodoString stringRandom(unsigned long size, short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static dodoString stringRandom(unsigned long size, short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned long
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned long ulRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned long ulRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random long
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static long lRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static long lRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned int
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned int uiRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned int uiRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random int
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static int iRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static int iRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned short
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned short usRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned short usRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random short
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static short sRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static short sRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random unsigned char
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static unsigned char ucRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static unsigned char ucRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random char
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static char cRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static char cRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return random double
 			 * @param strength defines the ramndomness
 			 * @note based on /dev/(u)?random
-			 * TOOLS_RANDOMSTRENGTH_STRONG may block
+			 * MISC_RANDOMSTRENGTH_STRONG may block
 			 */
-			static double dRandom(short strength = TOOLS_RANDOMSTRENGTH_DEFAULT);
+			static double dRandom(short strength = MISC_RANDOMSTRENGTH_DEFAULT);
 
 			/**
 			 * @return true if needle has been found
@@ -296,9 +296,9 @@ namespace dodo
 			 * @return compressed buffer
 			 * @param buffer defines data to compress
 			 * @param level defines compression level[1..9]
-			 * @param type defines compression strategy[see toolsZlibCompressionStrategyEnum]
+			 * @param type defines compression strategy[see toolsMiscZlibCompressionStrategyEnum]
 			 */
-			static dodoString zCompress(const dodoString &buffer, unsigned short level = 6, short type = TOOLS_ZLIB_HUFFMAN_COMRESSION);
+			static dodoString zCompress(const dodoString &buffer, unsigned short level = 6, short type = MISC_ZLIB_HUFFMAN_COMRESSION);
 
 			/**
 			 * @return decompressed buffer

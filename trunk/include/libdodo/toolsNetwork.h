@@ -38,7 +38,7 @@
 
 #include <libdodo/toolsNetworkEx.h>
 #include <libdodo/types.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 
 namespace dodo
 {

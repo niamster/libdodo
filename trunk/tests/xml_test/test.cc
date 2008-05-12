@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/xml.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 
 #include <iostream>
 

@@ -254,9 +254,9 @@ sqlConstructor::callFunctionCollect()
 		frame[0] = ' ';
 
 	if (preventEscaping)
-		request.append(tools::implode(pre_fields, ",", frame));
+		request.append(misc::implode(pre_fields, ",", frame));
 	else
-		request.append(tools::implode(pre_fields, escapeFields, ",", frame));
+		request.append(misc::implode(pre_fields, escapeFields, ",", frame));
 
 	request.append(")");
 }
@@ -275,9 +275,9 @@ sqlConstructor::callProcedureCollect()
 		frame[0] = ' ';
 
 	if (preventEscaping)
-		request.append(tools::implode(pre_fields, ",", frame));
+		request.append(misc::implode(pre_fields, ",", frame));
 	else
-		request.append(tools::implode(pre_fields, escapeFields, ",", frame));
+		request.append(misc::implode(pre_fields, escapeFields, ",", frame));
 
 	request.append(")");
 }
@@ -292,7 +292,7 @@ sqlConstructor::selectCollect()
 
 	if (pre_table.size() > 0)
 	{
-		temp.append(tools::implode(pre_fields, ","));
+		temp.append(misc::implode(pre_fields, ","));
 
 		request = "select ";
 		request.append(temp);
@@ -301,7 +301,7 @@ sqlConstructor::selectCollect()
 	}
 	else
 	{
-		temp.append(tools::implode(pre_fields, ","));
+		temp.append(misc::implode(pre_fields, ","));
 		request = "select ";
 		request.append(temp);
 	}
@@ -333,7 +333,7 @@ sqlConstructor::insertCollect()
 			dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
 			for (; i != j; ++i, ++t)
 			{
-				if (tools::isInArray(y->second, *t, true))
+				if (misc::isInArray(y->second, *t, true))
 				{
 					if (preventEscaping)
 						temp.append("'" + *i + "',");
@@ -343,7 +343,7 @@ sqlConstructor::insertCollect()
 				else
 					temp.append(*i + ",");
 			}
-			if (tools::isInArray(y->second, *t, true))
+			if (misc::isInArray(y->second, *t, true))
 			{
 				if (preventEscaping)
 					temp.append("'" + *i + "'");
@@ -365,9 +365,9 @@ sqlConstructor::insertCollect()
 		for (; k != l; ++k)
 		{
 			if (preventEscaping)
-				fieldsVPart.push_back(tools::implode(*k, ",", frame));
+				fieldsVPart.push_back(misc::implode(*k, ",", frame));
 			else
-				fieldsVPart.push_back(tools::implode(*k, escapeFields, ",", frame));
+				fieldsVPart.push_back(misc::implode(*k, escapeFields, ",", frame));
 		}
 	}
 
@@ -396,7 +396,7 @@ sqlConstructor::insertCollect()
 	if (pre_fields.size() != 0)
 	{
 		temp1.append(" (");
-		temp1.append(tools::implode(pre_fields, ","));
+		temp1.append(misc::implode(pre_fields, ","));
 		temp1.append(") ");
 	}
 
@@ -414,8 +414,8 @@ void
 sqlConstructor::insertSelectCollect()
 {
 
-	dodoString fieldsPartTo = tools::implode(pre_fields, ",");
-	dodoString fieldsPartFrom = tools::implode(pre_values.front(), ",");
+	dodoString fieldsPartTo = misc::implode(pre_fields, ",");
+	dodoString fieldsPartFrom = misc::implode(pre_values.front(), ",");
 
 	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
@@ -454,7 +454,7 @@ sqlConstructor::updateCollect()
 		dodoStringArray::iterator i(pre_fields.begin()), j(pre_values.front().begin());
 		for (unsigned int k(0); k < o - 1; ++i, ++j, ++k)
 		{
-			if (tools::isInArray(y->second, *i, true))
+			if (misc::isInArray(y->second, *i, true))
 			{
 				setPart.append(*i);
 				setPart.append("='");
@@ -469,7 +469,7 @@ sqlConstructor::updateCollect()
 				setPart.append(",");
 			}
 		}
-		if (tools::isInArray(y->second, *i, true))
+		if (misc::isInArray(y->second, *i, true))
 		{
 			setPart.append(*i);
 			setPart.append("='");
@@ -522,7 +522,7 @@ sqlConstructor::delCollect()
 void
 sqlConstructor::subCollect()
 {
-	request = tools::implode(pre_subQueries, sqlQStArr[qType]);
+	request = misc::implode(pre_subQueries, sqlQStArr[qType]);
 }
 
 //-------------------------------------------------------------------
@@ -596,7 +596,7 @@ sqlConstructor::createDbCollect()
 void
 sqlConstructor::createIndexCollect()
 {
-	request = "create index " + pre_having + " on " + pre_table + " (" + tools::implode(pre_fields, ",") + ")";
+	request = "create index " + pre_having + " on " + pre_table + " (" + misc::implode(pre_fields, ",") + ")";
 }
 
 //-------------------------------------------------------------------
@@ -629,8 +629,8 @@ sqlConstructor::createTableCollect()
 		}
 	}
 
-	request.append(!pre_tableInfo.primKeys.empty() ? ", primary key (" + tools::implode(pre_tableInfo.primKeys, ",") + ") " : __dodostring__);
-	request.append(!pre_tableInfo.uniq.empty() ? ", unique " + tools::implode(pre_tableInfo.uniq, ",") : __dodostring__);
+	request.append(!pre_tableInfo.primKeys.empty() ? ", primary key (" + misc::implode(pre_tableInfo.primKeys, ",") + ") " : __dodostring__);
+	request.append(!pre_tableInfo.uniq.empty() ? ", unique " + misc::implode(pre_tableInfo.uniq, ",") : __dodostring__);
 
 	request.append(")");
 }
@@ -922,9 +922,9 @@ sqlConstructor::fieldCollect(const __connectorField &row)
 	dodoString resRow(row.name + " " + sqlDataType(type));
 
 	if (preventEscaping)
-		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, ",") + ")" : __dodostring__);
+		resRow.append(!row.set_enum.empty() ? " (" + misc::implode(row.set_enum, ",") + ")" : __dodostring__);
 	else
-		resRow.append(!row.set_enum.empty() ? " (" + tools::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
+		resRow.append(!row.set_enum.empty() ? " (" + misc::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
 	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + toolsString::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
 	resRow.append(isSetFlag(flag, CONNECTOR_FIELDFLAG_NULL) ? " null " : " not null ");
@@ -934,7 +934,7 @@ sqlConstructor::fieldCollect(const __connectorField &row)
 	if (row.refTable.size() > 0)
 	{
 		resRow.append(" references " + row.refTable);
-		resRow.append(!row.refFields.empty() ? "(" + tools::implode(row.set_enum, ",") + " )" : __dodostring__);
+		resRow.append(!row.refFields.empty() ? "(" + misc::implode(row.set_enum, ",") + " )" : __dodostring__);
 		resRow.append(row.onDelete >= 0 ? " on delete " + stringReference(row.onDelete) : __dodostring__);
 		resRow.append(row.onUpdate >= 0 ? " on update " + stringReference(row.onUpdate) : __dodostring__);
 	}

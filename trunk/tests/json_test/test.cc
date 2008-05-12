@@ -1,4 +1,4 @@
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/jsonProcessor.h>
 #include <libdodo/jsonNode.h>
 

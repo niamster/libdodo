@@ -1,4 +1,6 @@
 #include <libdodo/baseEx.h>
+#include <libdodo/dbConnector.h>
+#include <libdodo/dbSqlConstructor.h>
 #include <libdodo/dbPostgresql.h>
 #include <libdodo/dbMysql.h>
 #include <libdodo/dbSqlite.h>

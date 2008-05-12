@@ -29,7 +29,7 @@
 
 #include <sqlite3.h>
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/dbSqliteEx.h>
 #include <libdodo/dbSqlConstructor.h>
 #include <libdodo/xexec.h>

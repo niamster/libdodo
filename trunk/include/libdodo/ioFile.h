@@ -30,7 +30,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioFileEx.h>
 #include <libdodo/types.h>

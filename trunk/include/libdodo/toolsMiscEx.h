@@ -1,5 +1,5 @@
 /***************************************************************************
- *            toolsEx.h
+ *            toolsMiscEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _TOOLSEX_H_
-#define _TOOLSEX_H_
+#ifndef _TOOLSMISCEX_H_
+#define _TOOLSMISKEX_H_
 
 #include <libdodo/directives.h>
 
@@ -36,44 +36,44 @@ namespace dodo
 	 */
 	enum toolsExR
 	{
-		TOOLSEX_BADASCII85 = 1,
-		TOOLSEX_BADBZCOMPRESSION,
-		TOOLSEX_BADBZDECOMPRESSIONINIT,
-		TOOLSEX_BADBZDECOMPRESSIONFINISH,
-		TOOLSEX_BADBZDECOMPRESSION,
-		TOOLSEX_BADMAILHELO,
-		TOOLSEX_BADMAILAUTH,
-		TOOLSEX_WRONGPARAMETER,
+		MISCEX_BADASCII85 = 1,
+		MISCEX_BADBZCOMPRESSION,
+		MISCEX_BADBZDECOMPRESSIONINIT,
+		MISCEX_BADBZDECOMPRESSIONFINISH,
+		MISCEX_BADBZDECOMPRESSION,
+		MISCEX_BADMAILHELO,
+		MISCEX_BADMAILAUTH,
+		MISCEX_WRONGPARAMETER,
 
 #ifndef FAST
 
-		TOOLSEX_DATATOOLONG,
+		MISCEX_DATATOOLONG,
 
 #endif
 
-		TOOLSEX_EMPTYARRAY,
-		TOOLSEX_WRONGSTRENGTH
+		MISCEX_EMPTYARRAY,
+		MISCEX_WRONGSTRENGTH
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define TOOLSEX_BADASCII85_STR "Bad character in ASCII85."
+#define MISCEX_BADASCII85_STR "Bad character in ASCII85."
 
 #ifdef BZIP2_EXT
 
-#define TOOLSEX_BADBZCOMPRESSION_STR "Error occured during comression."
-#define TOOLSEX_BADBZDECOMPRESSIONINIT_STR "Error occured during preparations for decompression."
-#define TOOLSEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
-#define TOOLSEX_BADBZDECOMPRESSION_STR "Error occured during decompression."
+#define MISCEX_BADBZCOMPRESSION_STR "Error occured during comression."
+#define MISCEX_BADBZDECOMPRESSIONINIT_STR "Error occured during preparations for decompression."
+#define MISCEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
+#define MISCEX_BADBZDECOMPRESSION_STR "Error occured during decompression."
 
 #endif
 
-#define TOOLSEX_BADMAILHELO_STR "Error occurd while sending EHLO."
-#define TOOLSEX_BADMAILAUTH_STR "Error during authentification."
-#define TOOLSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define TOOLSEX_EMPTYARRAY_STR "Array is empty."
-#define TOOLSEX_WRONGSTRENGTH_STR "Wrong strength argument."
+#define MISCEX_BADMAILHELO_STR "Error occurd while sending EHLO."
+#define MISCEX_BADMAILAUTH_STR "Error during authentification."
+#define MISCEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+#define MISCEX_EMPTYARRAY_STR "Array is empty."
+#define MISCEX_WRONGSTRENGTH_STR "Wrong strength argument."
 
 	/**
 	 * IDs of functions where exception might be thrown
@@ -82,29 +82,29 @@ namespace dodo
 	{
 #ifdef ICONV_EXT
 
-		TOOLSEX_CODESETCONVERSION,
+		MISCEX_CODESETCONVERSION,
 
 #endif
 
 #ifdef ZLIB_EXT
 
-		TOOLSEX_ZCOMPRESS,
-		TOOLSEX_ZDECOMPRESS,
+		MISCEX_ZCOMPRESS,
+		MISCEX_ZDECOMPRESS,
 
 #endif
 
-		TOOLSEX_DECODEASCII85,
+		MISCEX_DECODEASCII85,
 
 #ifdef BZIP2_EXT
 
-		TOOLSEX_BZCOMPRESS,
-		TOOLSEX_BZDECOMPRESS,
+		MISCEX_BZCOMPRESS,
+		MISCEX_BZDECOMPRESS,
 
 #endif
 
-		TOOLSEX_MAIL,
-		TOOLSEX_IMPLODE,
-		TOOLSEX_RANDOM
+		MISCEX_MAIL,
+		MISCEX_IMPLODE,
+		MISCEX_RANDOM
 	};
 
 };

@@ -33,7 +33,7 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/ioStdioEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>

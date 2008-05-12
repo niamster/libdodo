@@ -1,18 +1,18 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/cgiServer.h>
 #include <libdodo/cgiProcessor.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 
 #include <iostream>
 
-using namespace dodo;
-using cgi::fast::serverExchange;
-
 using namespace std;
 
 #ifdef FASTCGI_EXT
+
+using namespace dodo;
+using cgi::fast::serverExchange;
 
 	systemThreadSharedDataGuard sh;
 

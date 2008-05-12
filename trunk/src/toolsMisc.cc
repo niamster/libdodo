@@ -21,7 +21,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 
 using namespace dodo;
 
@@ -147,7 +147,7 @@ static const char base64DecodeTr[] = "|$$$}rstuvwxyz{$$$$$$$>?@ABCDEFGHIJKLMNOPQ
 //-------------------------------------------------------------------
 
 inline dodoString
-tools::dummyTools(const dodoString &data)
+misc::dummyTools(const dodoString &data)
 {
 	return data;
 }
@@ -155,28 +155,28 @@ tools::dummyTools(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
-tools::random(void *data,
+misc::random(void *data,
 			  unsigned long size,
 			  short strength)
 {
 	FILE *file;
 
-	if (strength == TOOLS_RANDOMSTRENGTH_DEFAULT)
+	if (strength == MISC_RANDOMSTRENGTH_DEFAULT)
 	{
 		file = fopen("/dev/urandom", "r");
 		if (file == NULL)
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
-		if (strength == TOOLS_RANDOMSTRENGTH_STRONG)
+		if (strength == MISC_RANDOMSTRENGTH_STRONG)
 		{
 			file = fopen("/dev/random", "r");
 			if (file == NULL)
-				throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 		else
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_LIBDODO, TOOLSEX_WRONGSTRENGTH, TOOLSEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_LIBDODO, MISCEX_WRONGSTRENGTH, MISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
 	}
 	
     while (true)
@@ -190,20 +190,20 @@ tools::random(void *data,
 						break;
 
                     if (ferror(file) != 0)
-                    	throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+                    	throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
             }
 
             break;
     }
 
 	if (fclose(file) != 0)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-tools::stringRandom(unsigned long size,
+misc::stringRandom(unsigned long size,
 					short strength)
 {
 	char *data = new char[size + 1];
@@ -230,7 +230,7 @@ tools::stringRandom(unsigned long size,
 //-------------------------------------------------------------------
 
 unsigned long
-tools::ulRandom(short strength)
+misc::ulRandom(short strength)
 {
 	unsigned long rnd;
 
@@ -242,7 +242,7 @@ tools::ulRandom(short strength)
 //-------------------------------------------------------------------
 
 long
-tools::lRandom(short strength)
+misc::lRandom(short strength)
 {
 	long rnd;
 
@@ -254,7 +254,7 @@ tools::lRandom(short strength)
 //-------------------------------------------------------------------
 
 unsigned int
-tools::uiRandom(short strength)
+misc::uiRandom(short strength)
 {
 	unsigned int rnd;
 
@@ -266,7 +266,7 @@ tools::uiRandom(short strength)
 //-------------------------------------------------------------------
 
 int
-tools::iRandom(short strength)
+misc::iRandom(short strength)
 {
 	int rnd;
 
@@ -278,7 +278,7 @@ tools::iRandom(short strength)
 //-------------------------------------------------------------------
 
 unsigned short
-tools::usRandom(short strength)
+misc::usRandom(short strength)
 {
 	unsigned short rnd;
 
@@ -290,7 +290,7 @@ tools::usRandom(short strength)
 //-------------------------------------------------------------------
 
 short
-tools::sRandom(short strength)
+misc::sRandom(short strength)
 {
 	short rnd;
 
@@ -302,7 +302,7 @@ tools::sRandom(short strength)
 //-------------------------------------------------------------------
 
 unsigned char
-tools::ucRandom(short strength)
+misc::ucRandom(short strength)
 {
 	unsigned char rnd;
 
@@ -314,7 +314,7 @@ tools::ucRandom(short strength)
 //-------------------------------------------------------------------
 
 char
-tools::cRandom(short strength)
+misc::cRandom(short strength)
 {
 	char rnd;
 
@@ -326,7 +326,7 @@ tools::cRandom(short strength)
 //-------------------------------------------------------------------
 
 double
-tools::dRandom(short strength)
+misc::dRandom(short strength)
 {
 	double rnd;
 
@@ -338,7 +338,7 @@ tools::dRandom(short strength)
 //-------------------------------------------------------------------
 
 bool
-tools::isInArray(const dodoStringArray &arr,
+misc::isInArray(const dodoStringArray &arr,
 				 const dodoString &needle,
 				 bool icase)
 {
@@ -360,7 +360,7 @@ tools::isInArray(const dodoStringArray &arr,
 //-------------------------------------------------------------------
 
 dodoStringArray
-tools::explode(const dodoString &fields,
+misc::explode(const dodoString &fields,
 			   escape escapeF,
 			   const dodoString &separator,
 			   int limit)
@@ -397,7 +397,7 @@ tools::explode(const dodoString &fields,
 //-------------------------------------------------------------------
 
 dodoStringArray
-tools::explode(const dodoString &fields,
+misc::explode(const dodoString &fields,
 			   const dodoString &separator,
 			   int limit)
 {
@@ -407,14 +407,14 @@ tools::explode(const dodoString &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArray &fields,
+misc::implode(const dodoStringArray &fields,
 			   escape escapeF,
 			   const dodoString &separator,
 			   const dodoString &frame,
 			   int limit)
 {
 	if (fields.size() == 0)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_IMPLODE, ERR_LIBDODO, TOOLSEX_EMPTYARRAY, TOOLSEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, MISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 
@@ -442,7 +442,7 @@ tools::implode(const dodoStringArray &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArray &fields,
+misc::implode(const dodoStringArray &fields,
 			   const dodoString &separator,
 			   const dodoString &frame,
 			   int limit)
@@ -453,7 +453,7 @@ tools::implode(const dodoStringArray &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArray &fields,
+misc::implode(const dodoStringArray &fields,
 			   const dodoString &separator,
 			   int limit)
 {
@@ -463,13 +463,13 @@ tools::implode(const dodoStringArray &fields,
 //-------------------------------------------------------------------
 
 dodoString
-tools::implode(const dodoStringArray &fields,
+misc::implode(const dodoStringArray &fields,
 			   escape escapeF,
 			   const dodoString &separator,
 			   int limit)
 {
 	if (fields.size() == 0)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_IMPLODE, ERR_LIBDODO, TOOLSEX_EMPTYARRAY, TOOLSEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, MISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 
@@ -499,13 +499,13 @@ tools::implode(const dodoStringArray &fields,
 #ifdef ICONV_EXT
 
 dodoString
-tools::codesetConversion(const dodoString &buffer,
+misc::codesetConversion(const dodoString &buffer,
 						 const dodoString &toCode,
 						 const dodoString &fromCode)
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	size_t in, out, outBefore;
 	char *inFake, *outFake;
@@ -525,7 +525,7 @@ tools::codesetConversion(const dodoString &buffer,
 	{
 		delete [] outBuffer;
 
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_CODESETCONVERSION, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	dodoString result;
@@ -543,7 +543,7 @@ tools::codesetConversion(const dodoString &buffer,
 #ifdef ZLIB_EXT
 
 dodoString
-tools::zCompress(const dodoString &buffer,
+misc::zCompress(const dodoString &buffer,
 				 unsigned short level,
 				 short type)
 {
@@ -558,7 +558,7 @@ tools::zCompress(const dodoString &buffer,
 	strm.opaque = Z_NULL;
 
 	if ((ret = deflateInit2(&strm, level, Z_DEFLATED, 15, level, type)) < 0)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
 	strm.avail_in =  buffer.size();
 	strm.next_in = (Bytef *)buffer.c_str();
@@ -576,7 +576,7 @@ tools::zCompress(const dodoString &buffer,
 		{
 			delete [] byteBuf;
 
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_ZCOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -592,7 +592,7 @@ tools::zCompress(const dodoString &buffer,
 //-------------------------------------------------------------------
 
 dodoString
-tools::zDecompress(const dodoString &buffer)
+misc::zDecompress(const dodoString &buffer)
 {
 	z_stream strm;
 	int ret;
@@ -605,7 +605,7 @@ tools::zDecompress(const dodoString &buffer)
 	strm.opaque = Z_NULL;
 
 	if ((ret = inflateInit2(&strm, 15)) < 0)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 
 	byteBuf = new Bytef[ZLIB_CHUNK];
 
@@ -623,7 +623,7 @@ tools::zDecompress(const dodoString &buffer)
 		{
 			delete [] byteBuf;
 
-			throw baseEx(ERRMODULE_TOOLS, TOOLSEX_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_ZDECOMPRESS, ERR_ZLIB, ret, strm.msg == NULL ? "" : strm.msg, __LINE__, __FILE__);
 		}
 
 		strBuf.append((char *)byteBuf, ZLIB_CHUNK - strm.avail_out);
@@ -641,7 +641,7 @@ tools::zDecompress(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 char
-tools::hexToChar(char first,
+misc::hexToChar(char first,
 				 char second)
 {
 	int val = 0;
@@ -702,7 +702,7 @@ tools::hexToChar(char first,
 //-------------------------------------------------------------------
 
 void
-tools::charToHex(char result[3],
+misc::charToHex(char result[3],
 				 char first)
 {
 	unsigned char j;
@@ -725,7 +725,7 @@ tools::charToHex(char result[3],
 //-------------------------------------------------------------------
 
 dodoString
-tools::decodeUrl(const dodoString &string)
+misc::decodeUrl(const dodoString &string)
 {
 	dodoString result;
 	unsigned long o(0), k(string.size());
@@ -744,7 +744,7 @@ tools::decodeUrl(const dodoString &string)
 
 				if ((k - o) >= 2 && std::isxdigit(string[o + 1]) && std::isxdigit(string[o + 2]))
 				{
-					result.append(1, tools::hexToChar(string[o + 1], string[o + 2]));
+					result.append(1, misc::hexToChar(string[o + 1], string[o + 2]));
 					o += 2;
 				}
 				else
@@ -764,7 +764,7 @@ tools::decodeUrl(const dodoString &string)
 //-------------------------------------------------------------------
 
 dodoString
-tools::encodeUrl(const dodoString &string)
+misc::encodeUrl(const dodoString &string)
 {
 	dodoString result;
 
@@ -866,7 +866,7 @@ tools::encodeUrl(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-tools::_encodeASCII85(dodoString &result,
+misc::_encodeASCII85(dodoString &result,
 					  unsigned long tuple,
 					  int count)
 {
@@ -891,7 +891,7 @@ tools::_encodeASCII85(dodoString &result,
 //-------------------------------------------------------------------
 
 dodoString
-tools::encodeASCII85(const dodoString &string)
+misc::encodeASCII85(const dodoString &string)
 {
 	dodoString result("<~");
 	unsigned long tuple = 0;
@@ -928,7 +928,7 @@ tools::encodeASCII85(const dodoString &string)
 				if (tuple == 0)
 					result.append(1, 'z');
 				else
-					tools::_encodeASCII85(result, tuple, count);
+					misc::_encodeASCII85(result, tuple, count);
 
 				tuple = 0;
 				count = 0;
@@ -938,7 +938,7 @@ tools::encodeASCII85(const dodoString &string)
 	}
 
 	if (count > 0)
-		tools::_encodeASCII85(result, tuple, count);
+		misc::_encodeASCII85(result, tuple, count);
 
 	result.append("~>");
 
@@ -948,7 +948,7 @@ tools::encodeASCII85(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-tools::_decodeASCII85(dodoString &result,
+misc::_decodeASCII85(dodoString &result,
 					  unsigned long tuple,
 					  int count)
 {
@@ -989,7 +989,7 @@ tools::_decodeASCII85(dodoString &result,
 //-------------------------------------------------------------------
 
 dodoString
-tools::decodeASCII85(const dodoString &string)
+misc::decodeASCII85(const dodoString &string)
 {
 	unsigned long j = string.size(), count = 0, tuple = 0;
 	bool _break = false;
@@ -1009,7 +1009,7 @@ tools::decodeASCII85(const dodoString &string)
 						case 'z':
 
 							if (count != 0)
-								throw baseEx(ERRMODULE_TOOLS, TOOLSEX_DECODEASCII85, ERR_LIBDODO, TOOLSEX_BADASCII85, TOOLSEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, MISCEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							result.append(4, '\0');
 
@@ -1031,7 +1031,7 @@ tools::decodeASCII85(const dodoString &string)
 								break;
 							}
 
-							throw baseEx(ERRMODULE_TOOLS, TOOLSEX_DECODEASCII85, ERR_LIBDODO, TOOLSEX_BADASCII85, TOOLSEX_BADASCII85_STR, __LINE__, __FILE__);
+							throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, MISCEX_BADASCII85_STR, __LINE__, __FILE__);
 
 						case '\n':
 						case '\r':
@@ -1047,7 +1047,7 @@ tools::decodeASCII85(const dodoString &string)
 						default:
 
 							if (string[k] < '!' || string[k] > 'u')
-								throw baseEx(ERRMODULE_TOOLS, TOOLSEX_DECODEASCII85, ERR_LIBDODO, TOOLSEX_BADASCII85, TOOLSEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, MISCEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							tuple += (string[k] - '!') * powASCII85[count++];
 							if (count == 5)
@@ -1076,7 +1076,7 @@ tools::decodeASCII85(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-tools::_encodeBase64(unsigned char in[3],
+misc::_encodeBase64(unsigned char in[3],
 					 unsigned char out[4],
 					 int len)
 {
@@ -1089,7 +1089,7 @@ tools::_encodeBase64(unsigned char in[3],
 //-------------------------------------------------------------------
 
 dodoString
-tools::encodeBase64(const dodoString &string)
+misc::encodeBase64(const dodoString &string)
 {
 	unsigned long j = string.size();
 	unsigned char in[3], out[4];
@@ -1125,7 +1125,7 @@ tools::encodeBase64(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-tools::_decodeBase64(unsigned char in[4],
+misc::_decodeBase64(unsigned char in[4],
 					 unsigned char out[3])
 {
 	out[0] = (unsigned char )(in[0] << 2 | in[1] >> 4);
@@ -1136,7 +1136,7 @@ tools::_decodeBase64(unsigned char in[4],
 //-------------------------------------------------------------------
 
 dodoString
-tools::decodeBase64(const dodoString &string)
+misc::decodeBase64(const dodoString &string)
 {
 	unsigned long j = string.size() + 1;
 	unsigned char in[4], out[3], v;
@@ -1181,7 +1181,7 @@ tools::decodeBase64(const dodoString &string)
 //-------------------------------------------------------------------
 
 __url
-tools::parseUrl(const dodoString &url)
+misc::parseUrl(const dodoString &url)
 {
 	unsigned long begin(0), pos, pos1;
 
@@ -1253,7 +1253,7 @@ tools::parseUrl(const dodoString &url)
 //-------------------------------------------------------------------
 
 dodoString 
-tools::makeUrl(const __url &url)
+misc::makeUrl(const __url &url)
 {	
 	dodoString stringUrl;
 	
@@ -1295,7 +1295,7 @@ tools::makeUrl(const __url &url)
 #ifdef BZIP2_EXT
 
 dodoString
-tools::bzCompress(const dodoString &buffer,
+misc::bzCompress(const dodoString &buffer,
 				  unsigned short level,
 				  unsigned short type)
 {
@@ -1304,7 +1304,7 @@ tools::bzCompress(const dodoString &buffer,
 
 	int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_BZCOMPRESS, ERR_BZIP, TOOLSEX_BADBZCOMPRESSION, TOOLSEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZCOMPRESS, ERR_BZIP, MISCEX_BADBZCOMPRESSION, MISCEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
 
 	return dodoString(dst, len);
 }
@@ -1312,7 +1312,7 @@ tools::bzCompress(const dodoString &buffer,
 //-------------------------------------------------------------------
 
 dodoString
-tools::bzDecompress(const dodoString &buffer)
+misc::bzDecompress(const dodoString &buffer)
 {
 	bz_stream bzs;
 
@@ -1321,7 +1321,7 @@ tools::bzDecompress(const dodoString &buffer)
 
 	int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_BZDECOMPRESS, ERR_BZIP, TOOLSEX_BADBZDECOMPRESSIONINIT, TOOLSEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSIONINIT, MISCEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
 
 	int src_len = buffer.size();
 	char *src = new char[src_len + 1];
@@ -1359,12 +1359,12 @@ tools::bzDecompress(const dodoString &buffer)
 		delete [] src;
 		free(dst);
 
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_BZDECOMPRESS, ERR_BZIP, TOOLSEX_BADBZDECOMPRESSION, TOOLSEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSION, MISCEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
 	}
 
 	ret = BZ2_bzDecompressEnd(&bzs);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_BZDECOMPRESS, ERR_BZIP, TOOLSEX_BADBZDECOMPRESSIONFINISH, TOOLSEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSIONFINISH, MISCEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
 
 	return _buffer;
 }
@@ -1374,7 +1374,7 @@ tools::bzDecompress(const dodoString &buffer)
 //-------------------------------------------------------------------
 
 void
-tools::mail(const dodoString &to,
+misc::mail(const dodoString &to,
 			const dodoString &subject,
 			const dodoString &message,
 			const dodoString &headers,
@@ -1383,7 +1383,7 @@ tools::mail(const dodoString &to,
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
 	if (sendmail == NULL)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	fprintf(sendmail, "To: %s\n", to.c_str());
 	fprintf(sendmail, "Subject: %s\n", subject.c_str());
@@ -1392,13 +1392,13 @@ tools::mail(const dodoString &to,
 	fprintf(sendmail, "\n%s\n", message.c_str());
 
 	if (pclose(sendmail) == -1)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-tools::MD5Init(MD5_CTX *context)
+misc::MD5Init(MD5_CTX *context)
 {
 	context->count[0] = context->count[1] = 0;
 
@@ -1411,7 +1411,7 @@ tools::MD5Init(MD5_CTX *context)
 //-------------------------------------------------------------------
 
 void
-tools::MD5Transform(unsigned int state[4],
+misc::MD5Transform(unsigned int state[4],
 					unsigned char block[64])
 {
 	unsigned int a = state[0], b = state[1], c = state[2], d = state[3], x[16];
@@ -1496,7 +1496,7 @@ tools::MD5Transform(unsigned int state[4],
 //-------------------------------------------------------------------
 
 void
-tools::MD5Final(unsigned char digest[16],
+misc::MD5Final(unsigned char digest[16],
 				MD5_CTX       *context)
 {
 	unsigned char bits[8];
@@ -1532,7 +1532,7 @@ tools::MD5Final(unsigned char digest[16],
 //-------------------------------------------------------------------
 
 void
-tools::MD5Update(MD5_CTX       *context,
+misc::MD5Update(MD5_CTX       *context,
 				 unsigned char *input,
 				 unsigned int inputLen)
 {
@@ -1567,7 +1567,7 @@ tools::MD5Update(MD5_CTX       *context,
 //-------------------------------------------------------------------
 
 dodoString
-tools::MD5(const dodoString &string)
+misc::MD5(const dodoString &string)
 {
 	MD5_CTX context;
 	unsigned char digest[16];
@@ -1582,7 +1582,7 @@ tools::MD5(const dodoString &string)
 //-------------------------------------------------------------------
 
 dodoString
-tools::MD5Hex(const dodoString &string)
+misc::MD5Hex(const dodoString &string)
 {
 	return binToHex(MD5(string));
 }
@@ -1590,7 +1590,7 @@ tools::MD5Hex(const dodoString &string)
 //-------------------------------------------------------------------
 
 dodoString 
-tools::binToHex(const dodoString &string)
+misc::binToHex(const dodoString &string)
 {
 	int j = string.size();
 	dodoString hex;
@@ -1608,7 +1608,7 @@ tools::binToHex(const dodoString &string)
 //-------------------------------------------------------------------
 
 void
-tools::mail(const dodoString &host,
+misc::mail(const dodoString &host,
 			int port,
 			const dodoString &to,
 			const dodoString &from,
@@ -1647,7 +1647,7 @@ tools::mail(const dodoString &host,
 	ex.readStreamString(mess);
 
 	if (toolsString::stringToI(mess.substr(0, 3)) != 250)
-		throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_LIBDODO, TOOLSEX_BADMAILHELO, TOOLSEX_BADMAILHELO_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_LIBDODO, MISCEX_BADMAILHELO, MISCEX_BADMAILHELO_STR, __LINE__, __FILE__);
 
 	if (auth)
 	{
@@ -1669,7 +1669,7 @@ tools::mail(const dodoString &host,
 			ex.readStreamString(mess);
 
 			if (toolsString::stringToI(mess.substr(0, 3)) != 334)
-				throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 			dodoString ticket = decodeBase64(mess.substr(4));
 
@@ -1713,7 +1713,7 @@ tools::mail(const dodoString &host,
 			ex.readStreamString(mess);
 
 			if (toolsString::stringToI(mess.substr(0, 3)) != 235)
-				throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 		}
 		else
 		{
@@ -1723,19 +1723,19 @@ tools::mail(const dodoString &host,
 				ex.readStreamString(mess);
 
 				if (toolsString::stringToI(mess.substr(0, 3)) != 334)
-					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(login) + "\r\n");
 				ex.readStreamString(mess);
 				
 				if (toolsString::stringToI(mess.substr(0, 3)) != 334)
-					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(pass) + "\r\n");
 				ex.readStreamString(mess);
 				
 				if (toolsString::stringToI(mess.substr(0, 3)) != 235)
-					throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 			}
 			else
 			{
@@ -1745,7 +1745,7 @@ tools::mail(const dodoString &host,
 					ex.readStreamString(mess);
 
 					if (toolsString::stringToI(mess.substr(0, 3)) != 334)
-						throw baseEx(ERRMODULE_TOOLS, TOOLSEX_MAIL, ERR_ERRNO, TOOLSEX_BADMAILAUTH, TOOLSEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+						throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 				}
 			}
 		}

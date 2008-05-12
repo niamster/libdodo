@@ -27,7 +27,7 @@ using namespace dodo;
 
 systemProcessGuardHolder::systemProcessGuardHolder()
 {
-	tools::random(key, 31);
+	misc::random(key, 31);
 	key[31] = '\0';
 
 	mutex = new systemAtomicSemaphore(1, key);

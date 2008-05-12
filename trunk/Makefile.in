@@ -26,7 +26,7 @@ OBJECTS:=dbAccumulator.o \
 	dbPostgresql.o \
 	dbMysql.o \
 	dbSqlite.o \
-	tools.o \
+	toolsMisc.o \
 	toolsFilesystem.o \
 	toolsSystem.o \
 	toolsTime.o \

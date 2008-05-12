@@ -336,22 +336,22 @@ processor::_if(const dodoString &buffer,
 
 	unsigned short oper(0);
 
-	dodoArray<dodoString> temp2 = tools::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_EQ]);
+	dodoArray<dodoString> temp2 = misc::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_EQ]);
 	if (temp2.size() != 2)
 	{
-		temp2 = tools::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_NE]);
+		temp2 = misc::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_NE]);
 		if (temp2.size() != 2)
 		{
-			temp2 = tools::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_LE]);
+			temp2 = misc::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_LE]);
 			if (temp2.size() != 2)
 			{
-				temp2 = tools::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_GE]);
+				temp2 = misc::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_GE]);
 				if (temp2.size() != 2)
 				{
-					temp2 = tools::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_LT]);
+					temp2 = misc::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_LT]);
 					if (temp2.size() != 2)
 					{
-						temp2 = tools::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_GT]);
+						temp2 = misc::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_GT]);
 						if (temp2.size() == 2)
 						{
 							oper = 4;
@@ -547,7 +547,7 @@ processor::_print(unsigned long start,
 					 dodoString &tpl,
 					 const dodoString &path)
 {
-	dodoStringArray temp = tools::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_COMA]);
+	dodoStringArray temp = misc::explode(statement, statements[PREPROCESSOR_PROCESSORSTATEMENT_COMA]);
 	if (temp.size() == 1)
 		tpl.append(getVar(statement, start, path));
 	else
@@ -593,7 +593,7 @@ processor::_assign(unsigned long start,
 						const dodoString &statement,
 					  const dodoString &path)
 {
-	dodoStringArray temp = tools::explode(statement, statements[PREPROCESSOR_PREPROCESSOR_PROCESSORSTATEMENT_ASSIGN_OP], 2);
+	dodoStringArray temp = misc::explode(statement, statements[PREPROCESSOR_PREPROCESSOR_PROCESSORSTATEMENT_ASSIGN_OP], 2);
 
 	if (temp.size() == 0)
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, PROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, toolsString::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
@@ -716,7 +716,7 @@ processor::_for(const dodoString &buffer,
 	{
 		targetVar = targetVar.substr(1);
 
-		dodoStringArray temp = tools::explode(targetVar, statements[PREPROCESSOR_PROCESSORSTATEMENT_DOT]);
+		dodoStringArray temp = misc::explode(targetVar, statements[PREPROCESSOR_PROCESSORSTATEMENT_DOT]);
 
 		if (temp.size() == 1)
 		{
@@ -1504,7 +1504,7 @@ processor::getVar(const dodoString &a_varName,
 
 	varName.erase(0, 1);
 
-	dodoStringArray temp = tools::explode(varName, statements[PREPROCESSOR_PROCESSORSTATEMENT_DOT]);
+	dodoStringArray temp = misc::explode(varName, statements[PREPROCESSOR_PROCESSORSTATEMENT_DOT]);
 
 	if (temp.size() == 1)
 	{

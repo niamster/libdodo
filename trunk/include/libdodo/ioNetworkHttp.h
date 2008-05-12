@@ -30,7 +30,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/ioNetworkClient.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/ioNetworkHttpEx.h>

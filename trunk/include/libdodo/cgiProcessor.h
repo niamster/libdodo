@@ -28,7 +28,7 @@
 
 #include <libdodo/cgiProcessorEx.h>
 #include <libdodo/types.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/cgiPreprocessor.h>
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/cgiServer.h>

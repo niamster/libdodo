@@ -1,6 +1,6 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/toolsSystem.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/toolsTime.h>
 
 #include <iostream>

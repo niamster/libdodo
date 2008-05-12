@@ -2,7 +2,7 @@
 #include <libdodo/systemProcessCollection.h>
 #include <libdodo/toolsSystem.h>
 #include <libdodo/toolsTime.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/systemSharedData.h>
 #include <libdodo/systemProcessSharedDataGuard.h>
 #include <libdodo/systemProcessSharedDataCollectionGuard.h>

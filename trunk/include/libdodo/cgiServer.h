@@ -30,7 +30,7 @@
 #include <stdlib.h>
 
 #include <libdodo/cgiServerEx.h>
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/cgiFastServer.h>

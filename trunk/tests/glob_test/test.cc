@@ -1,4 +1,4 @@
-#include <libdodo/tools.h>
+#include <libdodo/toolsMisc.h>
 #include <libdodo/ioFile.h>
 #include <libdodo/baseEx.h>
 #include <libdodo/toolsFilesystem.h>
@@ -23,11 +23,11 @@ int main(int argc, char **argv)
 	{	
 		cout << "тест" << endl;
 #ifdef ICONV_EXT
-		cout << tools::codesetConversion(tools::codesetConversion("тест", "utf-8", "cp1251"), "cp1251", "utf-8") << endl;
+		cout << misc::codesetConversion(misc::codesetConversion("тест", "utf-8", "cp1251"), "cp1251", "utf-8") << endl;
 #endif
 		
 		cout << "MD5 of \"\"" << endl;
-		cout << tools::MD5Hex("") <<  endl;
+		cout << misc::MD5Hex("") <<  endl;
 		
 		baseEx::setErrorHandler(ERRMODULE_IOFILE,&baseHandler,NULL);
 #ifdef DL_EXT
@@ -36,51 +36,51 @@ int main(int argc, char **argv)
 #endif
 		
 #ifdef ICONV_EXT
-		tools::codesetConversion(toolsFilesystem::getFileContents("test.cc"),"cp1251","utf-8");
+		misc::codesetConversion(toolsFilesystem::getFileContents("test.cc"),"cp1251","utf-8");
 #endif
 
 #ifdef ZLIB_EXT
-		cout << tools::zCompress(toolsFilesystem::getFileContents("Makefile"),9).size() << endl;
-		cout << tools::zDecompress(tools::zCompress(toolsFilesystem::getFileContents("test.cc")));
+		cout << misc::zCompress(toolsFilesystem::getFileContents("Makefile"),9).size() << endl;
+		cout << misc::zDecompress(misc::zCompress(toolsFilesystem::getFileContents("test.cc")));
 #endif
 		
-		cout << tools::decodeUrl(tools::encodeUrl("@!()HEY, that's working!")) << endl;
-		cout << tools::encodeUrl("@!()HEY, that's working!") << endl;
+		cout << misc::decodeUrl(misc::encodeUrl("@!()HEY, that's working!")) << endl;
+		cout << misc::encodeUrl("@!()HEY, that's working!") << endl;
 		
-		cout << tools::encodeASCII85("HEY, that's working!") << endl;
-		cout << tools::decodeASCII85(tools::encodeASCII85("HEY, that's working!")) << endl;
-		cout << "size of test ASCII85-encoded : " <<  tools::encodeASCII85(toolsFilesystem::getFileContents("test")).size() << endl;
+		cout << misc::encodeASCII85("HEY, that's working!") << endl;
+		cout << misc::decodeASCII85(misc::encodeASCII85("HEY, that's working!")) << endl;
+		cout << "size of test ASCII85-encoded : " <<  misc::encodeASCII85(toolsFilesystem::getFileContents("test")).size() << endl;
 		
-		cout << tools::encodeBase64("HEY, that's working!") << endl;
-		cout << tools::decodeBase64(tools::encodeBase64("HEY, that's working!")) << endl;
-		cout << "size of test base64-encoded : " <<  tools::encodeBase64(toolsFilesystem::getFileContents("test")).size() << endl;
+		cout << misc::encodeBase64("HEY, that's working!") << endl;
+		cout << misc::decodeBase64(misc::encodeBase64("HEY, that's working!")) << endl;
+		cout << "size of test base64-encoded : " <<  misc::encodeBase64(toolsFilesystem::getFileContents("test")).size() << endl;
 		
 		dodoString tt = "ftp://user:pass@localhost.domain:32/init.cgi?net=true&work=true";
 		cout << endl << tt << endl;
-		cout << tools::parseUrl(tt).host << endl;
-		cout << tools::parseUrl(tt).login << endl;
-		cout << tools::parseUrl(tt).password << endl;
-		cout << tools::parseUrl(tt).path << endl;
-		cout << tools::parseUrl(tt).port << endl;
-		cout << tools::parseUrl(tt).protocol << endl;
-		cout << tools::parseUrl(tt).request << endl;
+		cout << misc::parseUrl(tt).host << endl;
+		cout << misc::parseUrl(tt).login << endl;
+		cout << misc::parseUrl(tt).password << endl;
+		cout << misc::parseUrl(tt).path << endl;
+		cout << misc::parseUrl(tt).port << endl;
+		cout << misc::parseUrl(tt).protocol << endl;
+		cout << misc::parseUrl(tt).request << endl;
 
-		cout << tools::makeUrl(tools::parseUrl(tt)) << endl;
+		cout << misc::makeUrl(misc::parseUrl(tt)) << endl;
 
 		cout << toolsFilesystem::getFileContents("Makefile").size() << endl;
 #ifdef BZ2_EXT
-		cout << tools::bzCompress(toolsFilesystem::getFileContents("Makefile"),9).size() << endl;
+		cout << misc::bzCompress(toolsFilesystem::getFileContents("Makefile"),9).size() << endl;
 #endif
 			
 		dodoString t = "abcddF";
 		toolsString::replace("cd","WW",t);
 		cout << t << endl;	
 		
-		dodoString rnd = tools::stringRandom(12);
-		cout << tools::MD5Hex(rnd) << endl;	
+		dodoString rnd = misc::stringRandom(12);
+		cout << misc::MD5Hex(rnd) << endl;	
 
-		//tools::mail("niam", "test", "test");
-		//tools::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
+		//misc::mail("niam", "test", "test");
+		//misc::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
 	}
     catch(baseEx ex)
     {
