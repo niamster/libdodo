@@ -34,38 +34,11 @@
 #endif
 
 #include <libdodo/xmlEx.h>
+#include <libdodo/xmlNode.h>
 #include <libdodo/types.h>
 
 namespace dodo
 {
-
-	/**
-	 * @struct __xmlNode defines xml tree
-	 * @note children[x][y]: [x] defines vector of xml nodes[y] that are realisation of __xmlNodeDef::children[x] definition
-	 */
-	struct __xmlNode
-	{
-		/**
-		 * constructor
-		 */
-		__xmlNode();
-
-		dodoString name;                                                                ///< name of the node [[tag]]
-
-		dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare> children;         ///< children
-
-		dodoStringMap attributes;                                                       ///< attributes
-
-		dodoString value;                                                               ///< value of the node
-
-		dodoString ns;                                                                  ///< namespace of the node
-		dodoString nsHref;                                                              ///< uri "value"
-		dodoString nsDef;                                                               ///< namespace
-		dodoString nsDefHref;                                                           ///< namespace URI
-
-		bool CDATA;                                                                     ///< true if CDATA
-		bool empty;                                                                     ///< true if node doesn't have contents : `<node />`
-	};
 
 	/**
 	 * @struct __xmlNodeDef defines xml tree definition

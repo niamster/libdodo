@@ -50,6 +50,7 @@ OBJECTS:=dbAccumulator.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
 	xml.o \
+	xmlNode.o \
 	rpcValue.o \
 	rpcMethod.o \
 	rpcResponse.o \
