@@ -32,44 +32,50 @@
 
 namespace dodo
 {
-	/**
-	 * @class rpcXmlHttpClient defines client-side RPC instrument
-	 */
-	class rpcXmlHttpClient : public rpcXmlClient
+	namespace rpc
 	{
-		public:
-
+		namespace xml
+		{
 			/**
-			 * constructor
+			 * @class httpClient defines client-side RPC instrument
 			 */
-			rpcXmlHttpClient();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcXmlHttpClient();
-			
-			/**
-			 * set url to XML-RPC server
-			 * @param url define url to XML-RPC server 
-			 */
-			virtual void setUrl(const dodoString &url);
+			class httpClient : public client
+			{
+				public:
 		
-		protected:
+					/**
+					 * constructor
+					 */
+					httpClient();
 		
-			/**
-			 * send request
-			 * @param method defines rpc method call
-			 */
-			virtual void sendTextRequest(const dodoString &method);
-			
-			/**
-			 * get response
-			 * @return rpc response result 
-			 */
-			virtual dodoString receiveTextResponse();
-			
-			io::network::http http;
+					/**
+					 * destructor
+					 */
+					virtual ~httpClient();
+					
+					/**
+					 * set url to XML-RPC server
+					 * @param url define url to XML-RPC server 
+					 */
+					virtual void setUrl(const dodoString &url);
+				
+				protected:
+				
+					/**
+					 * send request
+					 * @param method defines rpc method call
+					 */
+					virtual void sendTextRequest(const dodoString &method);
+					
+					/**
+					 * get response
+					 * @return rpc response result 
+					 */
+					virtual dodoString receiveTextResponse();
+					
+					io::network::http http;
+			};
+		};
 	};
 };
 

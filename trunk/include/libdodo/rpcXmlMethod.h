@@ -34,42 +34,48 @@
 
 namespace dodo
 {	
-	/**
-	 * @class rpcXmlMethod defines RPC method in XML representation
-	 */
-	class rpcXmlMethod
-	{	
-		friend class rpcXmlClient;
-		
-		public:
-			
+	namespace rpc
+	{
+		namespace xml
+		{
 			/**
-			 * @return rpcMethod parsed from XML
-			 * @param data defines XML string
+			 * @class method defines RPC method in XML representation
 			 */
-			static rpcMethod xmlToRpcMethod(const dodoString &data);
-			
-			/**
-			 * @return XML parsed from rpcMethod
-			 * @param data defines rpcMethod structure
-			 */
-			static dodoString rpcMethodToXml(const rpcMethod &data); 
-			
-		protected:
-			
-			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
-			
-			/**
-			 * @return rpcMethod parsed from XML node
-			 * @param data defines XML string
-			 */
-			static rpcMethod xmlToRpcMethod(__xmlNode &node);
-			
-			/**
-			 * @return XML node parsed from rpcMethod
-			 * @param data defines rpcMethod structure
-			 */
-			static __xmlNode rpcMethodToXmlNode(const rpcMethod &data); 
+			class method
+			{	
+				friend class client;
+				
+				public:
+					
+					/**
+					 * @return method parsed from XML
+					 * @param data defines XML string
+					 */
+					static rpc::method xmlToRpcMethod(const dodoString &data);
+					
+					/**
+					 * @return XML parsed from method
+					 * @param data defines method structure
+					 */
+					static dodoString methodToXml(const rpc::method &data); 
+					
+				protected:
+					
+					static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
+					
+					/**
+					 * @return method parsed from XML node
+					 * @param data defines XML string
+					 */
+					static rpc::method xmlToRpcMethod(__xmlNode &node);
+					
+					/**
+					 * @return XML node parsed from method
+					 * @param data defines method structure
+					 */
+					static __xmlNode methodToXmlNode(const rpc::method &data); 
+			};
+		};
 	};
 };
 

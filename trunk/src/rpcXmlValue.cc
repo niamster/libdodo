@@ -23,76 +23,76 @@
 
 #include <libdodo/rpcXmlValue.h>
 
-using namespace dodo;
+using namespace dodo::rpc::xml;
 
-const char rpcXmlValue::trimSymbols[] = {' ',
+const char value::trimSymbols[] = {' ',
 		'\r'
 };
 
 //-------------------------------------------------------------------
 
-rpcValue 
-rpcXmlValue::xmlToRpcValue(__xmlNode &node)
+dodo::rpc::value 
+value::xmlToRpcValue(__xmlNode &node)
 {
 	dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
-		return rpcValue();
+		return rpc::value();
 
-	rpcValue value;
+	rpc::value val;
 	
 	if (toolsString::iequal(i->first, "int") || toolsString::iequal(i->first, "i4"))
 	{
-		value.valueDataType = RPC_DATATYPE_INTEGER;
+		val.valueDataType = DATATYPE_INTEGER;
 		
 		dodoArray<__xmlNode> &arr0 = i->second;
 		if (arr0.size() > 0)
-			value.integerValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2));
+			val.integerValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2));
 		else
-			value.integerValue = 0;
+			val.integerValue = 0;
 	}
 	else
 	{
 		if (toolsString::iequal(i->first, "boolean"))
 		{
-			value.valueDataType = RPC_DATATYPE_BOOLEAN;
+			val.valueDataType = DATATYPE_BOOLEAN;
 
 			dodoArray<__xmlNode> &arr0 = i->second;
 			if (arr0.size() > 0)
-				value.booleanValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2)) == 1?true:false;
+				val.booleanValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2)) == 1?true:false;
 			else
-				value.booleanValue = false;
+				val.booleanValue = false;
 		}
 		else
 		{
 			if (toolsString::iequal(i->first, "string") || toolsString::iequal(i->first, "base64") || toolsString::iequal(i->first, "dateTime.iso8601"))
 			{
-				value.valueDataType = RPC_DATATYPE_STRING;
+				val.valueDataType = DATATYPE_STRING;
 
 				dodoArray<__xmlNode> &arr0 = i->second;
 				if (arr0.size() > 0)
-					value.stringValue = toolsString::trim(arr0[0].value, trimSymbols, 2);
+					val.stringValue = toolsString::trim(arr0[0].value, trimSymbols, 2);
 			}
 			else
 			{
 				if (toolsString::iequal(i->first, "double"))
 				{
-					value.valueDataType = RPC_DATATYPE_DOUBLE;
+					val.valueDataType = DATATYPE_DOUBLE;
 					
 					dodoArray<__xmlNode> &arr0 = i->second;
 					if (arr0.size() > 0)
-						value.doubleValue = toolsString::stringToD(toolsString::trim(arr0[0].value, trimSymbols, 2));
+						val.doubleValue = toolsString::stringToD(toolsString::trim(arr0[0].value, trimSymbols, 2));
 					else
-						value.doubleValue = 0;
+						val.doubleValue = 0;
 				}
 				else
 				{
 					if (toolsString::iequal(i->first, "struct"))
 					{
-						value.valueDataType = RPC_DATATYPE_STRUCT;
+						val.valueDataType = DATATYPE_STRUCT;
 
 						dodoArray<__xmlNode> &arr0 = i->second;
 						if (arr0.size() == 0)
-							return value;
+							return val;
 							
 						dodoArray<__xmlNode> &nodeArray = arr0[0].children["member"];
 						
@@ -102,28 +102,28 @@ rpcXmlValue::xmlToRpcValue(__xmlNode &node)
 							dodoArray<__xmlNode> &arr1 = o->children["name"];
 							dodoArray<__xmlNode> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
-								value.structValue.insert(make_pair(toolsString::trim(arr1[0].value, trimSymbols, 2), xmlToRpcValue(arr2[0])));
+								val.structValue.insert(make_pair(toolsString::trim(arr1[0].value, trimSymbols, 2), xmlToRpcValue(arr2[0])));
 						}
 					}
 					else
 					{
 						if (toolsString::iequal(i->first, "array"))
 						{
-							value.valueDataType = RPC_DATATYPE_ARRAY;
+							val.valueDataType = DATATYPE_ARRAY;
 							
 							dodoArray<__xmlNode> &arr0 = i->second;
 							if (arr0.size() == 0)
-								return value;
+								return val;
 							
 							dodoArray<__xmlNode> &arr1 = arr0[0].children["data"];
 							if (arr1.size() == 0)
-								return value;
+								return val;
 							
 							dodoArray<__xmlNode> &nodeArray = arr1[0].children["value"];
 							
 							dodoArray<__xmlNode>::iterator o = nodeArray.begin(), p = nodeArray.end();
 							for (;o!=p;++o)
-								value.arrayValue.push_back(xmlToRpcValue(*o));
+								val.arrayValue.push_back(xmlToRpcValue(*o));
 						}
 					}
 				}
@@ -131,19 +131,19 @@ rpcXmlValue::xmlToRpcValue(__xmlNode &node)
 		}
 	}
 	
-	return value;
+	return val;
 }
 
 //-------------------------------------------------------------------
 
-rpcValue
-rpcXmlValue::xmlToRpcValue(const dodoString &data)
+dodo::rpc::value
+value::xmlToRpcValue(const dodoString &data)
 {
 	__xmlNodeDef xmlValueNode;
 	xmlValueNode.name = "value";
 	xmlValueNode.ignoreChildrenDef = true;
 	
-	xml xmlValue;
+	dodo::xml xmlValue;
 
 	__xmlNode node = xmlValue.parseBuffer(xmlValueNode, data);
 	
@@ -152,8 +152,8 @@ rpcXmlValue::xmlToRpcValue(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-__xmlNode
-rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
+dodo::__xmlNode
+value::valueToXmlNode(const rpc::value &data)
 {
 	dodoArray<__xmlNode> nodeArr; 
 	
@@ -164,7 +164,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 	
 	switch (data.valueDataType)
 	{
-		case RPC_DATATYPE_STRING:
+		case DATATYPE_STRING:
 			
 			subNode.name = "string";
 			subNode.value = data.stringValue;
@@ -174,7 +174,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			
 			break;
 			
-		case RPC_DATATYPE_BOOLEAN:
+		case DATATYPE_BOOLEAN:
 			
 			subNode.name = "boolean";
 			subNode.value = data.booleanValue?"1":"0";
@@ -184,7 +184,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			
 			break;
 			
-		case RPC_DATATYPE_INTEGER:
+		case DATATYPE_INTEGER:
 			
 			subNode.name = "int";
 			subNode.value = toolsString::iToString(data.integerValue);
@@ -194,7 +194,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 		
 			break;
 			
-		case RPC_DATATYPE_DOUBLE:
+		case DATATYPE_DOUBLE:
 			
 			subNode.name = "double";
 			subNode.value = toolsString::dToString(data.doubleValue);
@@ -204,16 +204,16 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			
 			break;
 			
-		case RPC_DATATYPE_ARRAY:
+		case DATATYPE_ARRAY:
 		{
 			subNode.name = "array";
 			
 			__xmlNode dataNode;
 			dataNode.name = "data";
 			
-			dodoArray<rpcValue>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
+			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
 			for (;i!=j;++i)
-				nodeArr.push_back(rpcValueToXmlNode(*i));
+				nodeArr.push_back(valueToXmlNode(*i));
 			dataNode.children.insert(make_pair("value", nodeArr));
 			
 			nodeArr.assign(1, dataNode);
@@ -225,7 +225,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			break;
 		}
 			
-		case RPC_DATATYPE_STRUCT:
+		case DATATYPE_STRUCT:
 		{	
 			subNode.name = "struct";
 			
@@ -236,7 +236,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 			
 			dodoArray<__xmlNode> subNodeArr; 
 			
-			dodoMap<dodoString, rpcValue, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
+			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
 			for (;i!=j;++i)
 			{
 				memberNode.children.clear();
@@ -246,7 +246,7 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 				nodeArr.assign(1, memberNameNode);
 				memberNode.children.insert(make_pair(memberNameNode.name, nodeArr));
 
-				nodeArr.assign(1, rpcValueToXmlNode(i->second));
+				nodeArr.assign(1, valueToXmlNode(i->second));
 				memberNode.children.insert(make_pair(memberValueNode.name, nodeArr));
 				
 				subNodeArr.push_back(memberNode);
@@ -266,11 +266,11 @@ rpcXmlValue::rpcValueToXmlNode(const rpcValue &data)
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlValue::rpcValueToXml(const rpcValue &data)
+value::valueToXml(const rpc::value &data)
 {
-	xml xmlValue;
+	dodo::xml xmlValue;
 	
-	return xmlValue.createNode(rpcValueToXmlNode(data));
+	return xmlValue.createNode(valueToXmlNode(data));
 }
 
 //-------------------------------------------------------------------

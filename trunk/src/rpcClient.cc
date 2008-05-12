@@ -23,16 +23,16 @@
 
 #include <libdodo/rpcClient.h>
 
-using namespace dodo;
+using namespace dodo::rpc;
 
-rpcClient::rpcClient()
+client::client()
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcClient::~rpcClient()
+client::~client()
 {
 	
 }
@@ -40,17 +40,17 @@ rpcClient::~rpcClient()
 //-------------------------------------------------------------------
 
 void 
-rpcClient::sendRequest(const rpcMethod &method)
+client::sendRequest(const method &method)
 {
-	sendTextRequest(processRPCCall(method));
+	sendTextRequest(processRpcCall(method));
 }
 
 //-------------------------------------------------------------------
 
-rpcResponse 
-rpcClient::receiveResponse()
+response 
+client::receiveResponse()
 {
-	return processRPCCallResult(receiveTextResponse());
+	return processRpcCallResult(receiveTextResponse());
 }
 
 //-------------------------------------------------------------------

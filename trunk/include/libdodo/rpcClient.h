@@ -33,60 +33,63 @@
 
 namespace dodo
 {
-	/**
-	 * @class rpcClient defines client-side RPC instrument
-	 */
-	class rpcClient
+	namespace rpc
 	{
-		public:
-
-			/**
-			 * constructor
-			 */
-			rpcClient();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcClient();
-		
-			/**
-			 * @param method defines rpc method call
-			 */
-			virtual void sendRequest(const rpcMethod &method);
+		/**
+		 * @class client defines client-side RPC instrument
+		 */
+		class client
+		{
+			public:
+	
+				/**
+				 * constructor
+				 */
+				client();
+	
+				/**
+				 * destructor
+				 */
+				virtual ~client();
 			
-			/**
-			 * @return rpc response result 
-			 */
-			virtual rpcResponse receiveResponse();
-		
-		protected:
+				/**
+				 * @param method defines rpc method call
+				 */
+				virtual void sendRequest(const method &method);
+				
+				/**
+				 * @return rpc response result 
+				 */
+				virtual response receiveResponse();
 			
-			/**
-			 * process RPC call
-			 * @return RPC method
-			 * @param method defines RPC method representation
-			 */
-			virtual dodoString processRPCCall(const rpcMethod &method) = 0;
+			protected:
+				
+				/**
+				 * process RPC call
+				 * @return RPC method
+				 * @param method defines RPC method representation
+				 */
+				virtual dodoString processRpcCall(const method &method) = 0;
+				
+				/**
+				 * process RPC call
+				 * @return RPC response represantation
+				 * @param data defines buffer that contains RPC response
+				 */
+				virtual response processRpcCallResult(const dodoString &data) = 0;
 			
-			/**
-			 * process RPC call
-			 * @return RPC response represantation
-			 * @param data defines buffer that contains RPC response
-			 */
-			virtual rpcResponse processRPCCallResult(const dodoString &data) = 0;
-		
-			/**
-			 * send request
-			 * @param method defines rpc method call
-			 */
-			virtual void sendTextRequest(const dodoString &method) = 0;
-			
-			/**
-			 * get response
-			 * @return rpc response result 
-			 */
-			virtual dodoString receiveTextResponse() = 0;
+				/**
+				 * send request
+				 * @param method defines rpc method call
+				 */
+				virtual void sendTextRequest(const dodoString &method) = 0;
+				
+				/**
+				 * get response
+				 * @return rpc response result 
+				 */
+				virtual dodoString receiveTextResponse() = 0;
+		};
 	};
 };
 

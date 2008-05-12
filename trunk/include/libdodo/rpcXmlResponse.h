@@ -34,42 +34,48 @@
 
 namespace dodo
 {	
-	/**
-	 * @class rpcXmlResponse defines RPC response in XML representation
-	 */
-	class rpcXmlResponse
-	{	
-		friend class rpcXmlServer;
-		
-		public:
-			
+	namespace rpc
+	{
+		namespace xml
+		{
 			/**
-			 * @return rpcResponse parsed from XML
-			 * @param data defines XML string
+			 * @class response defines RPC response in XML representation
 			 */
-			static rpcResponse xmlToRpcResponse(const dodoString &data);
-			
-			/**
-			 * @return XML parsed from rpcResponse
-			 * @param data defines rpcResponse structure
-			 */
-			static dodoString rpcResponseToXml(const rpcResponse &data); 
-			
-		protected:
-			
-			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
-			
-			/**
-			 * @return rpcResponse parsed from XML node
-			 * @param data defines XML string
-			 */
-			static rpcResponse xmlToRpcResponse(__xmlNode &node);
-			
-			/**
-			 * @return XML node parsed from rpcResponse
-			 * @param data defines rpcResponse structure
-			 */
-			static __xmlNode rpcResponseToXmlNode(const rpcResponse &data); 
+			class response
+			{	
+				friend class server;
+				
+				public:
+					
+					/**
+					 * @return response parsed from XML
+					 * @param data defines XML string
+					 */
+					static rpc::response xmlToRpcResponse(const dodoString &data);
+					
+					/**
+					 * @return XML parsed from response
+					 * @param data defines response structure
+					 */
+					static dodoString responseToXml(const rpc::response &data); 
+					
+				protected:
+					
+					static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
+					
+					/**
+					 * @return response parsed from XML node
+					 * @param data defines XML string
+					 */
+					static rpc::response xmlToRpcResponse(__xmlNode &node);
+					
+					/**
+					 * @return XML node parsed from response
+					 * @param data defines response structure
+					 */
+					static __xmlNode responseToXmlNode(const rpc::response &data); 
+			};
+		};
 	};
 };
 

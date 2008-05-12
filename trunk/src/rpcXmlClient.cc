@@ -23,16 +23,16 @@
 
 #include <libdodo/rpcXmlClient.h>
 
-using namespace dodo;
+using namespace dodo::rpc::xml;
 
-rpcXmlClient::rpcXmlClient()
+client::client()
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcXmlClient::~rpcXmlClient()
+client::~client()
 {
 	
 }
@@ -40,19 +40,19 @@ rpcXmlClient::~rpcXmlClient()
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlClient::processRPCCall(const rpcMethod &method)
+client::processRpcCall(const rpc::method &meth)
 {
-	xml xmlMethod;
+	dodo::xml xmlMethod;
 	
-	return xmlMethod.createXML(rpcXmlMethod::rpcMethodToXmlNode(method));
+	return xmlMethod.createXML(method::methodToXmlNode(meth));
 }
 
 //-------------------------------------------------------------------
 
-rpcResponse 
-rpcXmlClient::processRPCCallResult(const dodoString &data)
+dodo::rpc::response 
+client::processRpcCallResult(const dodoString &data)
 {
-	return rpcXmlResponse::xmlToRpcResponse(data);
+	return response::xmlToRpcResponse(data);
 }
 
 //-------------------------------------------------------------------

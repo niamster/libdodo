@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _RPCVALUEEX_H_
-#define _RPCVALUEEX_H_
+#ifndef _VALUEEX_H_
+#define _VALUEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,36 +30,38 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum rpcValueExR
+	namespace rpc
 	{
-		RPCVALUEEX_WRONGTYPEREQUESTED,
-		RPCVALUEEX_ARRAYOUTOFRANGE,
+		/**
+		 * libdodo defined errors
+		 */
+		enum valueExR
+		{
+			VALUEEX_WRONGTYPEREQUESTED,
+			VALUEEX_ARRAYOUTOFRANGE,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define VALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+	#define VALUEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum valueFunctionsID
+		{
+			VALUEEX_BROPERATORSTRING,
+			VALUEEX_BROPERATORNUMERIC,
+			VALUEEX_GETSTRING,
+			VALUEEX_GETBOOLEAN,
+			VALUEEX_GETINTEGER,
+			VALUEEX_GETDOUBLE,
+			VALUEEX_GETARRAY,
+			VALUEEX_GETSTRUCT,
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define RPCVALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-#define RPCVALUEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum rpcValueFunctionsID
-	{
-		RPCVALUEEX_BROPERATORSTRING,
-		RPCVALUEEX_BROPERATORNUMERIC,
-		RPCVALUEEX_GETSTRING,
-		RPCVALUEEX_GETBOOLEAN,
-		RPCVALUEEX_GETINTEGER,
-		RPCVALUEEX_GETDOUBLE,
-		RPCVALUEEX_GETARRAY,
-		RPCVALUEEX_GETSTRUCT,
-	};
-
 };
 
 #endif

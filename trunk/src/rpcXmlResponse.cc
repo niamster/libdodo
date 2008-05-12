@@ -23,22 +23,22 @@
 
 #include <libdodo/rpcXmlResponse.h>
 
-using namespace dodo;
+using namespace dodo::rpc::xml;
 
-const char rpcXmlResponse::trimSymbols[] = {' ',
+const char response::trimSymbols[] = {' ',
 		'\r'
 };
 
 //-------------------------------------------------------------------
 
-rpcResponse
-rpcXmlResponse::xmlToRpcResponse(const dodoString &data)
+dodo::rpc::response
+response::xmlToRpcResponse(const dodoString &data)
 {
 	__xmlNodeDef xmlMethodResponse;
 	xmlMethodResponse.name = "methodResponse";
 	xmlMethodResponse.ignoreChildrenDef = true;
 	
-	xml xmlValue;
+	dodo::xml xmlValue;
 
 	__xmlNode node = xmlValue.parseBuffer(xmlMethodResponse, data);
 	
@@ -48,45 +48,45 @@ rpcXmlResponse::xmlToRpcResponse(const dodoString &data)
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlResponse::rpcResponseToXml(const rpcResponse &data)
+response::responseToXml(const rpc::response &data)
 {
-	xml xmlValue;
+	dodo::xml xmlValue;
 	
-	return xmlValue.createNode(rpcResponseToXmlNode(data));
+	return xmlValue.createNode(responseToXmlNode(data));
 }
 
 //-------------------------------------------------------------------
 
-rpcResponse
-rpcXmlResponse::xmlToRpcResponse(__xmlNode &node)
+dodo::rpc::response
+response::xmlToRpcResponse(__xmlNode &node)
 {
 	dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
-		return rpcResponse();
+		return rpc::response();
 
-	rpcResponse response;
+	rpc::response resp;
 	
 	if (toolsString::iequal(i->first, "fault"))
 	{
-		response.succ = false;
+		resp.succ = false;
 		
 		dodoArray<__xmlNode> &arr0 = i->second;
 		if (arr0.size() > 0)
 		{
 			dodoArray<__xmlNode> &arr1 = arr0[0].children["value"];
 			if (arr1.size() > 0)
-				response.values.assign(1, rpcXmlValue::xmlToRpcValue(arr1[0]));
+				resp.values.assign(1, value::xmlToRpcValue(arr1[0]));
 		}
 	}
 	else
 	{
 		if (toolsString::iequal(i->first, "params"))
 		{
-			response.succ = true;
+			resp.succ = true;
 			
 			dodoArray<__xmlNode> &arr0 = i->second;
 			if (arr0.size() == 0)
-				return response;
+				return resp;
 				
 			dodoArray<__xmlNode> &nodeArray = arr0[0].children["param"];
 			
@@ -95,23 +95,23 @@ rpcXmlResponse::xmlToRpcResponse(__xmlNode &node)
 			{
 				dodoArray<__xmlNode> &arr1 = o->children["value"];
 				if (arr1.size() > 0)
-					response.values.push_back(rpcXmlValue::xmlToRpcValue(arr1[0]));
+					resp.values.push_back(value::xmlToRpcValue(arr1[0]));
 			}
 		}
 	}
 	
-	return response;
+	return resp;
 }
 
 //-------------------------------------------------------------------
 
-__xmlNode 
-rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
+dodo::__xmlNode 
+response::responseToXmlNode(const rpc::response &data)
 {
 	dodoArray<__xmlNode> nodeArr; 
 	
-	__xmlNode response;
-	response.name = "methodResponse";
+	__xmlNode resp;
+	resp.name = "methodResponse";
 	
 	if (data.succ)
 	{
@@ -123,12 +123,12 @@ rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
 		
 		dodoArray<__xmlNode> subNodeArr; 
 		
-		dodoArray<rpcValue>::const_iterator i = data.values.begin(), j = data.values.end();
+		dodoArray<rpc::value>::const_iterator i = data.values.begin(), j = data.values.end();
 		for (;i!=j;++i)
 		{
 			param.children.clear();
 			
-			nodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
+			nodeArr.assign(1, value::valueToXmlNode(*i));
 			param.children.insert(make_pair("value", nodeArr));
 			
 			subNodeArr.push_back(param);
@@ -136,21 +136,21 @@ rpcXmlResponse::rpcResponseToXmlNode(const rpcResponse &data)
 		params.children.insert(make_pair("param", subNodeArr));
 
 		nodeArr.assign(1, params);
-		response.children.insert(make_pair(params.name, nodeArr));
+		resp.children.insert(make_pair(params.name, nodeArr));
 	}
 	else
 	{
 		__xmlNode fault;
 		fault.name = "fault";
 		
-		nodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(data.values.front()));
+		nodeArr.assign(1, value::valueToXmlNode(data.values.front()));
 		fault.children.insert(make_pair("value", nodeArr));
 
 		nodeArr.assign(1, fault);
-		response.children.insert(make_pair(fault.name, nodeArr));
+		resp.children.insert(make_pair(fault.name, nodeArr));
 	}
 	
-	return response;
+	return resp;
 }
 
 //-------------------------------------------------------------------

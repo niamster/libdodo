@@ -23,9 +23,9 @@
 
 #include <libdodo/rpcXmlCgiServer.h>
 
-using namespace dodo;
+using namespace dodo::rpc::xml;
 
-rpcXmlCgiServer::rpcXmlCgiServer(cgi::server &a_provider) : provider(a_provider)
+cgiServer::cgiServer(cgi::server &a_provider) : provider(a_provider)
 {
 	provider.HEADERS.insert(make_pair(cgi::SERVER_RESPONSEHEADER_CONTENTTYPE, dodoString("text/xml")));
 	
@@ -34,14 +34,14 @@ rpcXmlCgiServer::rpcXmlCgiServer(cgi::server &a_provider) : provider(a_provider)
 
 //-------------------------------------------------------------------
 
-rpcXmlCgiServer::~rpcXmlCgiServer()
+cgiServer::~cgiServer()
 {	
 }
 
 //-------------------------------------------------------------------
 
 void 
-rpcXmlCgiServer::sendTextRequest(const dodoString &response)
+cgiServer::sendTextRequest(const dodoString &response)
 {
 	provider.print(response);
 }
@@ -49,7 +49,7 @@ rpcXmlCgiServer::sendTextRequest(const dodoString &response)
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlCgiServer::receiveTextResponse()
+cgiServer::receiveTextResponse()
 {
 	return provider.content;
 }

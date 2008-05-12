@@ -4,30 +4,30 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace cgi;
+using namespace rpc;
 
 using namespace std;
 
-rpcResponse 
-handler(const dodoString &method, const dodoArray<rpcValue> &values)
+response 
+handler(const dodoString &method, const dodoArray<value> &values)
 {
-	rpcResponse response;
+	response resp;
 
-	response.addArgument(dodoString("Got method: ") + method);
+	resp.addArgument(dodoString("Got method: ") + method);
 
-	return response;
+	return resp;
 }
 
 int main(int argc, char **argv)
 {		
-	server provider(false);
-	rpcXmlCgiServer server(provider);
+	cgi::server provider(false);
+	rpc::xml::cgiServer srv(provider);
 	
 	try
 	{
-		server.setHandler("callTest", handler);
+		srv.setHandler("callTest", ::handler);
 
-		server.serve();
+		srv.serve();
 	}
 	catch(baseEx ex)
 	{

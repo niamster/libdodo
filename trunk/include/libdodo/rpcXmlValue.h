@@ -33,43 +33,49 @@
 
 namespace dodo
 {
-	/**
-	 * @class rpcXmlValue defines RPC value in XML representation
-	 */
-	class rpcXmlValue
+	namespace rpc
 	{
-		friend class rpcXmlMethod;
-		friend class rpcXmlResponse;
-		
-		public:
-			
+		namespace xml
+		{
 			/**
-			 * @return rpcValue parsed from XML
-			 * @param data defines XML string
+			 * @class value defines RPC value in XML representation
 			 */
-			static rpcValue xmlToRpcValue(const dodoString &data);
-			
-			/**
-			 * @return XML parsed from rpcValue
-			 * @param data defines rpcValue structure
-			 */
-			static dodoString rpcValueToXml(const rpcValue &data); 
-		
-		protected:
-			
-			static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value  
-			
-			/**
-			 * @return rpcValue parsed from XML node
-			 * @param data defines XML node
-			 */
-			static rpcValue xmlToRpcValue(__xmlNode &node);
-			
-			/**
-			 * @return XML node from rpcValue
-			 * @param data defines rpcValue structure
-			 */
-			static __xmlNode rpcValueToXmlNode(const rpcValue &data); 
+			class value
+			{
+				friend class method;
+				friend class response;
+				
+				public:
+					
+					/**
+					 * @return value parsed from XML
+					 * @param data defines XML string
+					 */
+					static rpc::value xmlToRpcValue(const dodoString &data);
+					
+					/**
+					 * @return XML parsed from value
+					 * @param data defines value structure
+					 */
+					static dodoString valueToXml(const rpc::value &data); 
+				
+				protected:
+					
+					static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value  
+					
+					/**
+					 * @return value parsed from XML node
+					 * @param data defines XML node
+					 */
+					static rpc::value xmlToRpcValue(__xmlNode &node);
+					
+					/**
+					 * @return XML node from value
+					 * @param data defines value structure
+					 */
+					static __xmlNode valueToXmlNode(const rpc::value &data); 
+			};
+		};
 	};
 };
 

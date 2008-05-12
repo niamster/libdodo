@@ -32,38 +32,44 @@
 
 namespace dodo
 {	
-	/**
-	 * @class rpcServer defines server-side RPC instrument
-	 */
-	class rpcXmlCgiServer : public rpcXmlServer
+	namespace rpc
 	{
-		public:
-
+		namespace xml
+		{
 			/**
-			 * constructor
+			 * @class server defines server-side RPC instrument
 			 */
-			rpcXmlCgiServer(cgi::server &provider);
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcXmlCgiServer();
+			class cgiServer : public server
+			{
+				public:
 		
-		protected:
-			
-			/**
-			 * send request
-			 * @param response defines rpc method call
-			 */
-			virtual void sendTextRequest(const dodoString &response);
-			
-			/**
-			 * get response
-			 * @return rpc response result 
-			 */
-			virtual dodoString receiveTextResponse();
-			
-			cgi::server &provider;
+					/**
+					 * constructor
+					 */
+					cgiServer(cgi::server &provider);
+		
+					/**
+					 * destructor
+					 */
+					virtual ~cgiServer();
+				
+				protected:
+					
+					/**
+					 * send request
+					 * @param response defines rpc method call
+					 */
+					virtual void sendTextRequest(const dodoString &response);
+					
+					/**
+					 * get response
+					 * @return rpc response result 
+					 */
+					virtual dodoString receiveTextResponse();
+					
+					cgi::server &provider;
+			};
+		};
 	};
 };
 

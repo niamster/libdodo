@@ -23,27 +23,27 @@
 
 #include <libdodo/rpcResponse.h>
 
-using namespace dodo;
+using namespace dodo::rpc;
 
-rpcResponse::rpcResponse() : succ(false)
+response::response() : succ(false)
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcResponse::~rpcResponse()
+response::~response()
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcValue
-rpcResponse::getValue(unsigned long position)
+value
+response::getValue(unsigned long position)
 {
 	if (position >= values.size())
-		throw baseEx(ERRMODULE_RPCRESPONSE, RPCRESPONSEEX_GETVALUE, ERR_LIBDODO, RPCRESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, ERR_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 	
 	return values[position];
 }
@@ -51,7 +51,7 @@ rpcResponse::getValue(unsigned long position)
 //-------------------------------------------------------------------
 
 bool
-rpcResponse::isSuccessful()
+response::isSuccessful()
 {
 	return succ;
 }
@@ -59,7 +59,7 @@ rpcResponse::isSuccessful()
 //-------------------------------------------------------------------
 
 void
-rpcResponse::addArgument(const rpcValue &argument)
+response::addArgument(const value &argument)
 {
 	succ = true;
 	
@@ -69,7 +69,7 @@ rpcResponse::addArgument(const rpcValue &argument)
 //-------------------------------------------------------------------
 
 void
-rpcResponse::fault(const rpcValue &argument)
+response::fault(const value &argument)
 {
 	succ = false;
 	
@@ -78,11 +78,11 @@ rpcResponse::fault(const rpcValue &argument)
 
 //-------------------------------------------------------------------
 
-rpcValue
-rpcResponse::operator[](unsigned long position)
+value
+response::operator[](unsigned long position)
 {
 	if (position >= values.size())
-		throw baseEx(ERRMODULE_RPCRESPONSE, RPCRESPONSEEX_BROPERATORUNSIGNEDLONG, ERR_LIBDODO, RPCRESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, ERR_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
 	
 	return values[position];
 }
@@ -90,15 +90,15 @@ rpcResponse::operator[](unsigned long position)
 //-------------------------------------------------------------------
 
 unsigned long 
-rpcResponse::getValuesCount()
+response::getValuesCount()
 {
 	return values.size();
 }
 
 //-------------------------------------------------------------------
 
-dodoArray<rpcValue> 
-rpcResponse::getValues()
+dodoArray<value> 
+response::getValues()
 {
 	return values;
 }
@@ -106,7 +106,7 @@ rpcResponse::getValues()
 //-------------------------------------------------------------------
 
 void
-rpcResponse::clear()
+response::clear()
 {
 	values.clear();
 }

@@ -23,16 +23,16 @@
 
 #include <libdodo/rpcMethod.h>
 
-using namespace dodo;
+using namespace dodo::rpc;
 
-rpcMethod::rpcMethod()
+method::method()
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcMethod::~rpcMethod()
+method::~method()
 {
 	
 }
@@ -40,7 +40,7 @@ rpcMethod::~rpcMethod()
 //-------------------------------------------------------------------
 
 void
-rpcMethod::setName(const dodoString &name)
+method::setName(const dodoString &name)
 {
 	this->name = name;
 }
@@ -48,7 +48,7 @@ rpcMethod::setName(const dodoString &name)
 //-------------------------------------------------------------------
 
 void
-rpcMethod::clear()
+method::clear()
 {
 	arguments.clear();
 }
@@ -56,7 +56,7 @@ rpcMethod::clear()
 //-------------------------------------------------------------------
 
 void
-rpcMethod::addArgument(const rpcValue &argument)
+method::addArgument(const value &argument)
 {
 	arguments.push_back(argument);
 }

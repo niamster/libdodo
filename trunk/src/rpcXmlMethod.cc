@@ -23,22 +23,22 @@
 
 #include <libdodo/rpcXmlMethod.h>
 
-using namespace dodo;
+using namespace dodo::rpc::xml;
 
-const char rpcXmlMethod::trimSymbols[] = {' ',
+const char method::trimSymbols[] = {' ',
 		'\r'
 };
 
 //-------------------------------------------------------------------
 
-rpcMethod
-rpcXmlMethod::xmlToRpcMethod(const dodoString &data)
+dodo::rpc::method
+method::xmlToRpcMethod(const dodoString &data)
 {
 	__xmlNodeDef xmlMethodCall;
 	xmlMethodCall.name = "methodCall";
 	xmlMethodCall.ignoreChildrenDef = true;
 	
-	xml xmlValue;
+	dodo::xml xmlValue;
 
 	__xmlNode node = xmlValue.parseBuffer(xmlMethodCall, data);
 	
@@ -48,32 +48,32 @@ rpcXmlMethod::xmlToRpcMethod(const dodoString &data)
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlMethod::rpcMethodToXml(const rpcMethod &data)
+method::methodToXml(const rpc::method &data)
 {
-	xml xmlValue;
+	dodo::xml xmlValue;
 	
-	return xmlValue.createNode(rpcMethodToXmlNode(data));
+	return xmlValue.createNode(methodToXmlNode(data));
 }
 
 //-------------------------------------------------------------------
 
 
-rpcMethod
-rpcXmlMethod::xmlToRpcMethod(__xmlNode &node)
+dodo::rpc::method
+method::xmlToRpcMethod(__xmlNode &node)
 {
 	dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
-		return rpcMethod();
+		return rpc::method();
 
-	rpcMethod method;
+	rpc::method meth;
 	
 	if (toolsString::iequal(i->first, "methodName"))
 	{
 		dodoArray<__xmlNode> &arr0 = i->second;
 		if (arr0.size() > 0)
-			method.name = toolsString::trim(arr0[0].value, trimSymbols, 2);
+			meth.name = toolsString::trim(arr0[0].value, trimSymbols, 2);
 		else
-			method.name = __dodostring__;
+			meth.name = __dodostring__;
 	}
 	else
 	{
@@ -81,7 +81,7 @@ rpcXmlMethod::xmlToRpcMethod(__xmlNode &node)
 		{
 			dodoArray<__xmlNode> &arr0 = i->second;
 			if (arr0.size() == 0)
-				return method;
+				return meth;
 			
 			dodoArray<__xmlNode> &nodeArray = arr0[0].children["param"];
 			
@@ -90,32 +90,32 @@ rpcXmlMethod::xmlToRpcMethod(__xmlNode &node)
 			{
 				dodoArray<__xmlNode> &arr1 = o->children["value"];
 				if (arr0.size() > 0)
-					method.arguments.push_back(rpcXmlValue::xmlToRpcValue(arr1[0]));
+					meth.arguments.push_back(value::xmlToRpcValue(arr1[0]));
 			}
 		}
 	}
 	
-	return method;
+	return meth;
 }
 
 //-------------------------------------------------------------------
 
-__xmlNode 
-rpcXmlMethod::rpcMethodToXmlNode(const rpcMethod &data)
+dodo::__xmlNode 
+method::methodToXmlNode(const rpc::method &data)
 {
 	dodoArray<__xmlNode> nodeArr; 
 	
-	__xmlNode method;
-	method.name = "methodCall";
+	__xmlNode meth;
+	meth.name = "methodCall";
 	
 	__xmlNode methodName;
 	methodName.name = "methodName";
 	methodName.value = data.name;
 	
 	nodeArr.assign(1, methodName);
-	method.children.insert(make_pair(methodName.name, nodeArr));
+	meth.children.insert(make_pair(methodName.name, nodeArr));
 	
-	dodoArray<rpcValue>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
+	dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
 	if (i!=j)
 	{
 		__xmlNode params;
@@ -130,7 +130,7 @@ rpcXmlMethod::rpcMethodToXmlNode(const rpcMethod &data)
 		{
 			param.children.clear();
 			
-			nodeArr.assign(1, rpcXmlValue::rpcValueToXmlNode(*i));
+			nodeArr.assign(1, value::valueToXmlNode(*i));
 			param.children.insert(make_pair("value", nodeArr));
 			
 			subNodeArr.push_back(param);
@@ -138,10 +138,10 @@ rpcXmlMethod::rpcMethodToXmlNode(const rpcMethod &data)
 		params.children.insert(make_pair("param", subNodeArr));
 		
 		nodeArr.assign(1, params);
-		method.children.insert(make_pair(params.name, nodeArr));
+		meth.children.insert(make_pair(params.name, nodeArr));
 	}
 	
-	return method;
+	return meth;
 }
 
 //-------------------------------------------------------------------

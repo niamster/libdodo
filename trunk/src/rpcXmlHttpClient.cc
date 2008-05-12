@@ -23,16 +23,16 @@
 
 #include <libdodo/rpcXmlHttpClient.h>
 
-using namespace dodo;
+using namespace dodo::rpc::xml;
 
-rpcXmlHttpClient::rpcXmlHttpClient()
+httpClient::httpClient()
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcXmlHttpClient::~rpcXmlHttpClient()
+httpClient::~httpClient()
 {
 	
 }
@@ -40,7 +40,7 @@ rpcXmlHttpClient::~rpcXmlHttpClient()
 //-------------------------------------------------------------------
 
 void 
-rpcXmlHttpClient::sendTextRequest(const dodoString &method)
+httpClient::sendTextRequest(const dodoString &method)
 {
 	http.POST(method, "text/xml");
 }
@@ -48,7 +48,7 @@ rpcXmlHttpClient::sendTextRequest(const dodoString &method)
 //-------------------------------------------------------------------
 
 dodoString 
-rpcXmlHttpClient::receiveTextResponse()
+httpClient::receiveTextResponse()
 {
 	io::network::__httpResponse response = http.getResponse();
 	
@@ -58,7 +58,7 @@ rpcXmlHttpClient::receiveTextResponse()
 //-------------------------------------------------------------------
 
 void 
-rpcXmlHttpClient::setUrl(const dodoString &url)
+httpClient::setUrl(const dodoString &url)
 {
 	http.setUrl(url);
 }

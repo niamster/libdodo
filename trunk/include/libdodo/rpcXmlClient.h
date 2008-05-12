@@ -34,38 +34,44 @@
 
 namespace dodo
 {
-	/**
-	 * @class rpcXmlClient defines client-side XML-RPC instrument
-	 */
-	class rpcXmlClient : public rpcClient
+	namespace rpc
 	{
-		public:
-
+		namespace xml
+		{
 			/**
-			 * constructor
+			 * @class client defines client-side XML-RPC instrument
 			 */
-			rpcXmlClient();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcXmlClient();
+			class client : public rpc::client
+			{
+				public:
 		
-		protected:
-			
-			/**
-			 * process RPC call
-			 * @return RPC method
-			 * @param method defines RPC method representation
-			 */
-			virtual dodoString processRPCCall(const rpcMethod &method);
-			
-			/**
-			 * process RPC call
-			 * @return RPC response represantation
-			 * @param data defines buffer that contains RPC response
-			 */
-			virtual rpcResponse processRPCCallResult(const dodoString &data);
+					/**
+					 * constructor
+					 */
+					client();
+		
+					/**
+					 * destructor
+					 */
+					virtual ~client();
+				
+				protected:
+					
+					/**
+					 * process RPC call
+					 * @return RPC method
+					 * @param method defines RPC method representation
+					 */
+					virtual dodoString processRpcCall(const rpc::method &meth);
+					
+					/**
+					 * process RPC call
+					 * @return RPC response represantation
+					 * @param data defines buffer that contains RPC response
+					 */
+					virtual rpc::response processRpcCallResult(const dodoString &data);
+			};
+		};
 	};
 };
 

@@ -6,6 +6,7 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace rpc;
 
 using namespace std;
 
@@ -14,12 +15,12 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		rpcXmlHttpClient client;
+		rpc::xml::httpClient client;
 
 		client.setUrl("http://localhost/libdodo/rpcxmlcgiserver_test/test.cgi");
 
-		rpcMethod method;
-		rpcValue argument;
+		method method;
+		value argument;
 
 		method.setName("callTest");
 
@@ -39,9 +40,9 @@ int main(int argc, char **argv)
 
 		client.sendRequest(method);
 
-		rpcResponse response = client.receiveResponse();
+		response resp = client.receiveResponse();
 
-		cout << response.getValue().getString() << endl;
+		cout << resp.getValue().getString() << endl;
 	}
 	catch(baseEx ex)
 	{

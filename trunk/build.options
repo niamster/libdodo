@@ -1,0 +1,20 @@
+#build options
+
+#everything enabled
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-dl --with-libxml2 --with-pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --prefix=/opt/libdodo
+
+#everything disabled
+./configure --prefix=/opt/libdodo
+
+#everything enabled except xexec actions
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-dl --with-libxml2 --with-pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --prefix=/opt/libdodo --disable-ioStdio-xexec-support --disable-ioNetworkExchange-xexec-support --disable-ioNetworkClient-xexec-support --disable-ioNetworkServer-xexec-support --disable-ioFile-xexec-support --disable-dbSqlite-xexec-support --disable-dbPostgresql-xexec-support --disable-dbMysql-xexec-support --disable-cgiFastClientExchange-xexec-support 
+
+#everything enabled except pcre
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-dl --with-libxml2 --with-pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-bfd --prefix=/opt/libdodo
+
+#everything enabled except pthreads
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-dl --with-libxml2 --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --prefix=/opt/libdodo
+
+#everything enabled except dl
+./configure --with-sqlite3 --with-postgresql --with-mysql --with-fcgi --with-libxml2 --with-pthread --with-bzip2 --with-zlib --with-iconv --with-imagemagick --enable-debug --with-pcre --with-bfd --prefix=/opt/libdodo
+

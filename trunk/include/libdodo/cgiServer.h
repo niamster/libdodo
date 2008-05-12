@@ -38,7 +38,13 @@
 
 namespace dodo
 {
-	class rpcXmlCgiServer;
+	namespace rpc
+	{
+		namespace xml
+		{
+			class cgiServer;
+		};
+	};
 
 	namespace cgi
 	{
@@ -269,7 +275,7 @@ namespace dodo
 		 */
 		class server
 		{
-			friend class dodo::rpcXmlCgiServer;
+			friend class rpc::xml::cgiServer;
 			
 			private:
 	

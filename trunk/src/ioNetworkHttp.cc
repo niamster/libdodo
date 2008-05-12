@@ -191,7 +191,7 @@ http::GET()
 			{
 				if (ex.funcID == CLIENTEX_CONNECT)
 				{
-					if (*o == *p)
+					if ((o + 1) == p)
 						throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_CANNOTCONNECT, HTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
 					else
 						continue;
@@ -471,7 +471,7 @@ http::POST(const dodoString &a_data,
 	if (proxyAuthInfo.enabled)
 		net.connect(proxyAuthInfo.host, proxyAuthInfo.port, ex);
 	else
-	{
+	{	
 		__hostInfo host = toolsNetwork::getHostInfo(urlComponents.host);
 		
 		dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
@@ -486,7 +486,7 @@ http::POST(const dodoString &a_data,
 			{
 				if (ex.funcID == CLIENTEX_CONNECT)
 				{
-					if (*o == *p)
+					if ((o + 1) == p)
 						throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_CANNOTCONNECT, HTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
 					else
 						continue;
@@ -497,6 +497,7 @@ http::POST(const dodoString &a_data,
 	}
 	
 	dodoString data;
+
 	
 	data.append("POST ");
 	data.append(url);

@@ -33,75 +33,83 @@
 
 namespace dodo
 {	
-	/**
-	 * @class rpcResponse defines RPC response reprasentation
-	 */
-	class rpcResponse
+	namespace rpc
 	{
-		friend class rpcClient;
-		friend class rpcServer;
-		friend class rpcXmlResponse;
-		
-		public:
+		namespace xml
+		{
+			class response;
+		};
 
-			/**
-			 * constructor
-			 */
-			rpcResponse();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcResponse();
-
-			/**
-			 * @return response value
-			 * @param position defines index of returned value
-			 */
-			virtual rpcValue getValue(unsigned long position = 0);
-
-			/**
-			 * @return response values
-			 */
-			virtual dodoArray<rpcValue> getValues();
-
-			/**
-			 * @return response values count
-			 */
-			virtual unsigned long getValuesCount();
+		/**
+		 * @class response defines RPC response reprasentation
+		 */
+		class response
+		{
+			friend class client;
+			friend class server;
+			friend class xml::response;
 			
-			/**
-			 * @return true if request has  
-			 */
-			virtual bool isSuccessful();
-			
-			/**
-			 * set argument for fault response
-			 * @param argument defines response argument 
-			 */
-			virtual void fault(const rpcValue &argument);
-			
-			/**
-			 * add argument for successful response
-			 * @param argument defines response argument 
-			 */
-			virtual void addArgument(const rpcValue &argument);
-			
-			/**
-			 * @return rpcValue for type casting  
-			 * @param position defines index of returned value
-			 */
-			virtual rpcValue operator[](unsigned long position); 
-
-			/**
-			 * clear arguments information
-			 */
-			virtual void clear();
-			
-		private:
-			
-			dodoArray<rpcValue> values;///< response values
-			bool succ;///< true if server returned non-fail response
+			public:
+	
+				/**
+				 * constructor
+				 */
+				response();
+	
+				/**
+				 * destructor
+				 */
+				virtual ~response();
+	
+				/**
+				 * @return response value
+				 * @param position defines index of returned value
+				 */
+				virtual value getValue(unsigned long position = 0);
+	
+				/**
+				 * @return response values
+				 */
+				virtual dodoArray<value> getValues();
+	
+				/**
+				 * @return response values count
+				 */
+				virtual unsigned long getValuesCount();
+				
+				/**
+				 * @return true if request has  
+				 */
+				virtual bool isSuccessful();
+				
+				/**
+				 * set argument for fault response
+				 * @param argument defines response argument 
+				 */
+				virtual void fault(const value &argument);
+				
+				/**
+				 * add argument for successful response
+				 * @param argument defines response argument 
+				 */
+				virtual void addArgument(const value &argument);
+				
+				/**
+				 * @return value for type casting  
+				 * @param position defines index of returned value
+				 */
+				virtual value operator[](unsigned long position); 
+	
+				/**
+				 * clear arguments information
+				 */
+				virtual void clear();
+				
+			private:
+				
+				dodoArray<value> values;///< response values
+				bool succ;///< true if server returned non-fail response
+		};
 	};
 };
 

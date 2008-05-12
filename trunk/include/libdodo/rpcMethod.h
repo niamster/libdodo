@@ -32,48 +32,56 @@
 
 namespace dodo
 {	
-	/**
-	 * @class rpcMethod defines RPC method reprasentation
-	 */
-	class rpcMethod
+	namespace rpc
 	{
-		friend class rpcClient;
-		friend class rpcServer;
-		friend class rpcXmlMethod;
-		
-		public:
+		namespace xml
+		{
+			class method;
+		};
 
-			/**
-			 * constructor
-			 */
-			rpcMethod();
-
-			/**
-			 * destructor
-			 */
-			virtual ~rpcMethod();
-
-			/**
-			 * set method name
-			 * @param name defines method name
-			 */
-			virtual void setName(const dodoString &name);
-
-			/**
-			 * clear arguments information
-			 */
-			virtual void clear();
+		/**
+		 * @class method defines RPC method reprasentation
+		 */
+		class method
+		{
+			friend class client;
+			friend class server;
+			friend class xml::method;
 			
-			/**
-			 * add argument
-			 * @param argument defines method argument 
-			 */
-			virtual void addArgument(const rpcValue &argument);
-			
-		private:
-			
-			dodoArray<rpcValue> arguments;///< method arguments
-			dodoString name;///< method name
+			public:
+	
+				/**
+				 * constructor
+				 */
+				method();
+	
+				/**
+				 * destructor
+				 */
+				virtual ~method();
+	
+				/**
+				 * set method name
+				 * @param name defines method name
+				 */
+				virtual void setName(const dodoString &name);
+	
+				/**
+				 * clear arguments information
+				 */
+				virtual void clear();
+				
+				/**
+				 * add argument
+				 * @param argument defines method argument 
+				 */
+				virtual void addArgument(const value &argument);
+				
+			private:
+				
+				dodoArray<value> arguments;///< method arguments
+				dodoString name;///< method name
+		};
 	};
 };
 

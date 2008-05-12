@@ -23,27 +23,27 @@
 
 #include <libdodo/rpcServer.h>
 
-using namespace dodo;
+using namespace dodo::rpc;
 
-rpcServer::rpcServer() : defaultHandler(&rpcDefaultHandler)
+server::server() : defaultHandler(&rpcDefaultHandler)
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcServer::~rpcServer()
+server::~server()
 {
 	
 }
 
 //-------------------------------------------------------------------
 
-rpcResponse 
-rpcServer::rpcDefaultHandler(const dodoString &method, 
-		const dodoArray<rpcValue> &arguments)
+response 
+server::rpcDefaultHandler(const dodoString &method, 
+		const dodoArray<value> &arguments)
 {
-	rpcResponse response;
+	response response;
 	response.fault(dodoString("rpcDefaultHandler"));
 	
 	return response;
@@ -52,7 +52,7 @@ rpcServer::rpcDefaultHandler(const dodoString &method,
 //-------------------------------------------------------------------
 
 void 
-rpcServer::setDefault(rpcHandler handler)
+server::setDefault(handler handler)
 {
 	defaultHandler = handler;
 }
@@ -60,8 +60,8 @@ rpcServer::setDefault(rpcHandler handler)
 //-------------------------------------------------------------------
 
 void 
-rpcServer::setHandler(const dodoString &method, 
-					rpcHandler handler)
+server::setHandler(const dodoString &method, 
+					handler handler)
 {
 	handlers.insert(make_pair(method, handler));
 }
@@ -69,7 +69,7 @@ rpcServer::setHandler(const dodoString &method,
 //-------------------------------------------------------------------
 
 void 
-rpcServer::removeHandler(const dodoString &method)
+server::removeHandler(const dodoString &method)
 {
 	handlers.erase(method);
 }
@@ -77,34 +77,34 @@ rpcServer::removeHandler(const dodoString &method)
 //-------------------------------------------------------------------
 
 void 
-rpcServer::serve()
+server::serve()
 {
 	try
 	{
-		rpcMethod method = processRPCCall(receiveTextResponse());
+		method method = processRpcCall(receiveTextResponse());
 		
-		dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator end = handlers.end();
+		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator end = handlers.end();
 		
-		dodoMap<dodoString, rpcHandler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
+		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
 	
 		if (handler == end)
-			sendTextRequest(processRPCCallResult(defaultHandler(method.name, method.arguments)));
+			sendTextRequest(processRpcCallResult(defaultHandler(method.name, method.arguments)));
 		else
-			sendTextRequest(processRPCCallResult(handler->second(method.name, method.arguments)));
+			sendTextRequest(processRpcCallResult(handler->second(method.name, method.arguments)));
 	}
 	catch (baseEx ex)
 	{
-		rpcResponse response;
+		response response;
 		response.fault(ex.baseErrstr);
 		
-		sendTextRequest(processRPCCallResult(response));
+		sendTextRequest(processRpcCallResult(response));
 	}
 	catch (...)
 	{
-		rpcResponse response;
+		response response;
 		response.fault(dodoString("An unknown error."));
 		
-		sendTextRequest(processRPCCallResult(response));
+		sendTextRequest(processRpcCallResult(response));
 	}
 }
 

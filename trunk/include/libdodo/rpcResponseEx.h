@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _RPCRESPONSEEX_H_
-#define _RPCRESPONSEEX_H_
+#ifndef _RESPONSEEX_H_
+#define _RESPONSEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,28 +30,30 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum rpcResponseExR
+	namespace rpc
 	{
-		RPCRESPONSEEX_ARRAYOUTOFBOUNDS,
+		/**
+		 * libdodo defined errors
+		 */
+		enum responseExR
+		{
+			RESPONSEEX_ARRAYOUTOFBOUNDS,
+		};
+	
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define RESPONSEEX_ARRAYOUTOFBOUNDS_STR "Array index out of bounds."
+	
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum responseFunctionsID
+		{
+			RESPONSEEX_BROPERATORUNSIGNEDLONG,
+			RESPONSEEX_GETVALUE,
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR "Array index out of bounds."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum rpcResponseFunctionsID
-	{
-		RPCRESPONSEEX_BROPERATORUNSIGNEDLONG,
-		RPCRESPONSEEX_GETVALUE,
-	};
-
 };
 
 #endif
