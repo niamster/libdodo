@@ -32,9 +32,9 @@ const char value::trimSymbols[] = {' ',
 //-------------------------------------------------------------------
 
 dodo::rpc::value 
-value::xmlToRpcValue(__xmlNode &node)
+value::xmlToRpcValue(dodo::xml::node &node)
 {
-	dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare>::iterator i = node.children.begin();
+	dodoMap<dodoString, dodoArray<dodo::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
 		return rpc::value();
 
@@ -44,7 +44,7 @@ value::xmlToRpcValue(__xmlNode &node)
 	{
 		val.valueDataType = DATATYPE_INTEGER;
 		
-		dodoArray<__xmlNode> &arr0 = i->second;
+		dodoArray<dodo::xml::node> &arr0 = i->second;
 		if (arr0.size() > 0)
 			val.integerValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2));
 		else
@@ -56,7 +56,7 @@ value::xmlToRpcValue(__xmlNode &node)
 		{
 			val.valueDataType = DATATYPE_BOOLEAN;
 
-			dodoArray<__xmlNode> &arr0 = i->second;
+			dodoArray<dodo::xml::node> &arr0 = i->second;
 			if (arr0.size() > 0)
 				val.booleanValue = toolsString::stringToI(toolsString::trim(arr0[0].value, trimSymbols, 2)) == 1?true:false;
 			else
@@ -68,7 +68,7 @@ value::xmlToRpcValue(__xmlNode &node)
 			{
 				val.valueDataType = DATATYPE_STRING;
 
-				dodoArray<__xmlNode> &arr0 = i->second;
+				dodoArray<dodo::xml::node> &arr0 = i->second;
 				if (arr0.size() > 0)
 					val.stringValue = toolsString::trim(arr0[0].value, trimSymbols, 2);
 			}
@@ -78,7 +78,7 @@ value::xmlToRpcValue(__xmlNode &node)
 				{
 					val.valueDataType = DATATYPE_DOUBLE;
 					
-					dodoArray<__xmlNode> &arr0 = i->second;
+					dodoArray<dodo::xml::node> &arr0 = i->second;
 					if (arr0.size() > 0)
 						val.doubleValue = toolsString::stringToD(toolsString::trim(arr0[0].value, trimSymbols, 2));
 					else
@@ -90,17 +90,17 @@ value::xmlToRpcValue(__xmlNode &node)
 					{
 						val.valueDataType = DATATYPE_STRUCT;
 
-						dodoArray<__xmlNode> &arr0 = i->second;
+						dodoArray<dodo::xml::node> &arr0 = i->second;
 						if (arr0.size() == 0)
 							return val;
 							
-						dodoArray<__xmlNode> &nodeArray = arr0[0].children["member"];
+						dodoArray<dodo::xml::node> &nodeArray = arr0[0].children["member"];
 						
-						dodoArray<__xmlNode>::iterator o = nodeArray.begin(), p = nodeArray.end();
+						dodoArray<dodo::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 						for (;o!=p;++o)
 						{
-							dodoArray<__xmlNode> &arr1 = o->children["name"];
-							dodoArray<__xmlNode> &arr2 = o->children["value"];
+							dodoArray<dodo::xml::node> &arr1 = o->children["name"];
+							dodoArray<dodo::xml::node> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
 								val.structValue.insert(make_pair(toolsString::trim(arr1[0].value, trimSymbols, 2), xmlToRpcValue(arr2[0])));
 						}
@@ -111,17 +111,17 @@ value::xmlToRpcValue(__xmlNode &node)
 						{
 							val.valueDataType = DATATYPE_ARRAY;
 							
-							dodoArray<__xmlNode> &arr0 = i->second;
+							dodoArray<dodo::xml::node> &arr0 = i->second;
 							if (arr0.size() == 0)
 								return val;
 							
-							dodoArray<__xmlNode> &arr1 = arr0[0].children["data"];
+							dodoArray<dodo::xml::node> &arr1 = arr0[0].children["data"];
 							if (arr1.size() == 0)
 								return val;
 							
-							dodoArray<__xmlNode> &nodeArray = arr1[0].children["value"];
+							dodoArray<dodo::xml::node> &nodeArray = arr1[0].children["value"];
 							
-							dodoArray<__xmlNode>::iterator o = nodeArray.begin(), p = nodeArray.end();
+							dodoArray<dodo::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 							for (;o!=p;++o)
 								val.arrayValue.push_back(xmlToRpcValue(*o));
 						}
@@ -139,28 +139,28 @@ value::xmlToRpcValue(__xmlNode &node)
 dodo::rpc::value
 value::xmlToRpcValue(const dodoString &data)
 {
-	__xmlNodeDef xmlValueNode;
+	dodo::xml::__nodeDef xmlValueNode;
 	xmlValueNode.name = "value";
 	xmlValueNode.ignoreChildrenDef = true;
 	
-	dodo::xml xmlValue;
+	dodo::xml::processor xmlValue;
 
-	__xmlNode node = xmlValue.parseBuffer(xmlValueNode, data);
+	dodo::xml::node node = xmlValue.parseBuffer(xmlValueNode, data);
 	
 	return xmlToRpcValue(node);
 }
 
 //-------------------------------------------------------------------
 
-dodo::__xmlNode
+dodo::xml::node
 value::valueToXmlNode(const rpc::value &data)
 {
-	dodoArray<__xmlNode> nodeArr; 
+	dodoArray<dodo::xml::node> nodeArr; 
 	
-	__xmlNode node;
+	dodo::xml::node node;
 	node.name = "value";
 	
-	__xmlNode subNode;
+	dodo::xml::node subNode;
 	
 	switch (data.valueDataType)
 	{
@@ -208,7 +208,7 @@ value::valueToXmlNode(const rpc::value &data)
 		{
 			subNode.name = "array";
 			
-			__xmlNode dataNode;
+			dodo::xml::node dataNode;
 			dataNode.name = "data";
 			
 			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
@@ -229,12 +229,12 @@ value::valueToXmlNode(const rpc::value &data)
 		{	
 			subNode.name = "struct";
 			
-			__xmlNode memberNode, memberNameNode, memberValueNode;
+			dodo::xml::node memberNode, memberNameNode, memberValueNode;
 			memberNode.name = "member";
 			memberNameNode.name = "name";
 			memberValueNode.name = "value";
 			
-			dodoArray<__xmlNode> subNodeArr; 
+			dodoArray<dodo::xml::node> subNodeArr; 
 			
 			dodoMap<dodoString, rpc::value, dodoMapStringCompare>::const_iterator i = data.structValue.begin(), j = data.structValue.end();
 			for (;i!=j;++i)
@@ -268,7 +268,7 @@ value::valueToXmlNode(const rpc::value &data)
 dodoString 
 value::valueToXml(const rpc::value &data)
 {
-	dodo::xml xmlValue;
+	dodo::xml::processor xmlValue;
 	
 	return xmlValue.createNode(valueToXmlNode(data));
 }

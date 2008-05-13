@@ -50,7 +50,7 @@ server::processRpcCall(const dodoString &data)
 dodoString 
 server::processRpcCallResult(const rpc::response &resp)
 {
-	dodo::xml xmlMethod;
+	dodo::xml::processor xmlMethod;
 	
 	return xmlMethod.createXML(response::responseToXmlNode(resp));
 }

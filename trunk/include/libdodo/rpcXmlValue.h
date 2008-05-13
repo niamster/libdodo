@@ -29,7 +29,7 @@
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcValue.h>
-#include <libdodo/xml.h>
+#include <libdodo/xmlProcessor.h>
 
 namespace dodo
 {
@@ -67,13 +67,13 @@ namespace dodo
 					 * @return value parsed from XML node
 					 * @param data defines XML node
 					 */
-					static rpc::value xmlToRpcValue(__xmlNode &node);
+					static rpc::value xmlToRpcValue(dodo::xml::node &node);
 					
 					/**
 					 * @return XML node from value
 					 * @param data defines value structure
 					 */
-					static __xmlNode valueToXmlNode(const rpc::value &data); 
+					static dodo::xml::node valueToXmlNode(const rpc::value &data); 
 			};
 		};
 	};

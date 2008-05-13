@@ -30,37 +30,38 @@
 
 namespace dodo
 {
-
-	/**
-	 * @class __xmlNode defines xml tree
-	 * @note children[x][y]: [x] defines vector of xml nodes[y] that are realisation of __xmlNodeDef::children[x] definition
-	 */
-	class __xmlNode
+	namespace xml
 	{
-		public:
+		/**
+		 * @class node defines processor tree
+		 * @note children[x][y]: [x] defines vector of processor nodes[y] that are realisation of __nodeDef::children[x] definition
+		 */
+		class node
+		{
+			public:
 
-			/**
-			 * constructor
-			 */
-			__xmlNode();
+				/**
+				 * constructor
+				 */
+				node();
 
-			dodoString name;                                                                ///< name of the node [[tag]]
+				dodoString name;                                                                ///< name of the node [[tag]]
 
-			dodoMap<dodoString, dodoArray<__xmlNode>, dodoMapStringCompare> children;         ///< children
+				dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;         ///< children
 
-			dodoStringMap attributes;                                                       ///< attributes
+				dodoStringMap attributes;                                                       ///< attributes
 
-			dodoString value;                                                               ///< value of the node
+				dodoString value;                                                               ///< value of the node
 
-			dodoString ns;                                                                  ///< namespace of the node
-			dodoString nsHref;                                                              ///< uri "value"
-			dodoString nsDef;                                                               ///< namespace
-			dodoString nsDefHref;                                                           ///< namespace URI
+				dodoString ns;                                                                  ///< namespace of the node
+				dodoString nsHref;                                                              ///< uri "value"
+				dodoString nsDef;                                                               ///< namespace
+				dodoString nsDefHref;                                                           ///< namespace URI
 
-			bool CDATA;                                                                     ///< true if CDATA
-			bool empty;                                                                     ///< true if node doesn't have contents : `<node />`
+				bool CDATA;                                                                     ///< true if CDATA
+				bool empty;                                                                     ///< true if node doesn't have contents : `<node />`
+		};
 	};
-
 };
 
 #endif

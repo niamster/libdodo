@@ -49,7 +49,7 @@ OBJECTS:=dbAccumulator.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
-	xml.o \
+	xmlProcessor.o \
 	xmlNode.o \
 	rpcValue.o \
 	rpcMethod.o \

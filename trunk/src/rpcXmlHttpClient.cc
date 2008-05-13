@@ -42,7 +42,7 @@ httpClient::~httpClient()
 void 
 httpClient::sendTextRequest(const dodoString &method)
 {
-	http.POST(method, "text/xml");
+	http.POST(method, "text/processor");
 }
 
 //-------------------------------------------------------------------

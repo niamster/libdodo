@@ -1,10 +1,12 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/xml.h>
+#include <libdodo/xmlProcessor.h>
 #include <libdodo/toolsMisc.h>
 
 #include <iostream>
 
 using namespace dodo;
+using namespace xml;
+
 using namespace std;
 
 
@@ -12,12 +14,12 @@ int main(int argc, char **argv)
 {		
 		try
 		{
-			xml tool;
-			tool.icaseNames = true;
+			processor xmlp;
+			xmlp.icaseNames = true;
 			
-			cout << tool.getXMLFileInfo("./test.xml").version;
+			cout << xmlp.getXMLFileInfo("./test.xml").version;
 			
-			__xmlNodeDef def;
+			__nodeDef def;
 			
 			dodoStringArray attr;
 			attr.push_back("iD");
@@ -26,42 +28,42 @@ int main(int argc, char **argv)
 			//def.chLimit = 1;
 			def.ns = "cns";
 			
-			__xmlNodeDef def1;
+			__nodeDef def1;
 			def1.name = "span";
 			def1.ignoreChildrenDef = true;
 			
 			def.children["span"] = def1;
 			
-			__xmlNode node = tool.parseFile(def,"./test.xml");
-			//__xmlNode node = tool.parseFile("./test.xml");
+			node xnode = xmlp.parseFile(def,"./test.xml");
+			//node node = tool.parseFile("./test.processor");
 					
-			cout << node.attributes["iD"] << endl;
-			cout << node.name << endl;
-			cout << toolsString::trim(node.value," \n\t\r", 4) << endl;
-			cout << node.children.size() << endl;
+			cout << xnode.attributes["iD"] << endl;
+			cout << xnode.name << endl;
+			cout << toolsString::trim(xnode.value," \n\t\r", 4) << endl;
+			cout << xnode.children.size() << endl;
 			
-			if (node.children.size()>0)
+			if (xnode.children.size()>0)
 			{
-				cout << node.children.begin()->first << endl;
-				cout << node.children.begin()->second.size() << endl;
+				cout << xnode.children.begin()->first << endl;
+				cout << xnode.children.begin()->second.size() << endl;
 			}
 			
-			if (node.children["span"].size() > 0)
+			if (xnode.children["span"].size() > 0)
 			{
-				if (node.children["span"][0].children["span"].size() > 0)
-					cout << node.children["span"][0].children["span"][0].value << endl;
+				if (xnode.children["span"][0].children["span"].size() > 0)
+					cout << xnode.children["span"][0].children["span"][0].value << endl;
 				
-				cout << node.children["span"][0].attributes["id"] << endl;
+				cout << xnode.children["span"][0].attributes["id"] << endl;
 				
-				if (node.children["span"].size() > 1)
-					cout << node.children["span"][1].attributes["id"] << endl;
+				if (xnode.children["span"].size() > 1)
+					cout << xnode.children["span"][1].attributes["id"] << endl;
 			}
 			
-			tool.clear();
+			xmlp.clear();
 			
 			cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 			
-			cout  << endl << tool.createXML(tool.parseFile("./test.xml")) << endl << endl;
+			cout  << endl << xmlp.createXML(xmlp.parseFile("./test.xml")) << endl << endl;
 			
 		}
 		catch(baseEx ex)

@@ -42,7 +42,7 @@ client::~client()
 dodoString 
 client::processRpcCall(const rpc::method &meth)
 {
-	dodo::xml xmlMethod;
+	dodo::xml::processor xmlMethod;
 	
 	return xmlMethod.createXML(method::methodToXmlNode(meth));
 }

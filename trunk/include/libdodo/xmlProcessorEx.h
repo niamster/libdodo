@@ -1,5 +1,5 @@
 /***************************************************************************
- *            xmlEx.h
+ *            xmlProcessorEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _XMLEX_H_
-#define _XMLEX_H_
+#ifndef _XMLPROCESSOREX_H_
+#define _XMLPROCESSOREX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,37 +30,39 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum xmlExR
+	namespace xml
 	{
-		XMLEX_EMPTYDOCUMENT,
-		XMLEX_NOROOTNODE,
+		/**
+		 * libdodo defined errors
+		 */
+		enum processorExR
+		{
+			PROCESSOREX_EMPTYDOCUMENT,
+			PROCESSOREX_NOROOTNODE,
+		};
+
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define PROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document."
+	#define PROCESSOREX_NOROOTNODE_STR "XML document doesn't have root node."
+
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum processorFunctionsID
+		{
+			PROCESSOREX_PARSEFILE,
+			PROCESSOREX_PARSE,
+			PROCESSOREX_ERRHANDLER,
+			PROCESSOREX_GETXMLBUFFERINFO,
+			PROCESSOREX_PARSEBUFFER,
+			PROCESSOREX_GETXMLFILEINFO,
+			PROCESSOREX_PARSEBUFFERINT,
+			PROCESSOREX_PARSEFILEINT,
+
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define XMLEX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document."
-#define XMLEX_NOROOTNODE_STR "XML document doesn't have root node."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum xmlFunctionsID
-	{
-		XMLEX_PARSEFILE,
-		XMLEX_PARSE,
-		XMLEX_ERRHANDLER,
-		XMLEX_GETXMLBUFFERINFO,
-		XMLEX_PARSEBUFFER,
-		XMLEX_GETXMLFILEINFO,
-		XMLEX_PARSEBUFFERINT,
-		XMLEX_PARSEFILEINT,
-
-	};
-
 };
 
 #endif

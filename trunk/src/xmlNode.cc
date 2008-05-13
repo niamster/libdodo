@@ -24,9 +24,9 @@
 
 #include <libdodo/xmlNode.h>
 
-using namespace dodo;
+using namespace dodo::xml;
 
-__xmlNode::__xmlNode() : CDATA(false),
+node::node() : CDATA(false),
 						 empty(false)
 {
 }
