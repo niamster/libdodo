@@ -27,7 +27,7 @@ using namespace dodo::system::process;
 
 guardHolder::guardHolder()
 {
-	misc::random(key, 31);
+	tools::misc::random(key, 31);
 	key[31] = '\0';
 
 	keeper = new atomic::semaphore(1, key);

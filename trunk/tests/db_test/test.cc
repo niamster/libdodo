@@ -164,11 +164,11 @@ int main(int argc, char **argv)
 
 		arr.clear();
 
-		toolsFilesystem::unlink("test.1");
-		toolsFilesystem::unlink("test.2");
+		tools::filesystem::unlink("test.1");
+		tools::filesystem::unlink("test.2");
 
-		dodoString dt = toolsFilesystem::getFileContents("test");
-		toolsFilesystem::writeToFile("test.1", dt);
+		dodoString dt = tools::filesystem::getFileContents("test");
+		tools::filesystem::writeToFile("test.1", dt);
 
 		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
 			arr["b"] = "$1";
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			toolsFilesystem::writeToFile("test.2",(*store.rows.begin())[2]);	
+			tools::filesystem::writeToFile("test.2",(*store.rows.begin())[2]);	
 	}
 	catch(baseEx ex)
 	{

@@ -67,17 +67,17 @@ method::xmlToRpcMethod(dodo::xml::node &node)
 
 	rpc::method meth;
 	
-	if (toolsString::iequal(i->first, "methodName"))
+	if (tools::string::iequal(i->first, "methodName"))
 	{
 		dodoArray<dodo::xml::node> &arr0 = i->second;
 		if (arr0.size() > 0)
-			meth.name = toolsString::trim(arr0[0].value, trimSymbols, 2);
+			meth.name = tools::string::trim(arr0[0].value, trimSymbols, 2);
 		else
 			meth.name = __dodostring__;
 	}
 	else
 	{
-		if (toolsString::iequal(i->first, "params"))
+		if (tools::string::iequal(i->first, "params"))
 		{
 			dodoArray<dodo::xml::node> &arr0 = i->second;
 			if (arr0.size() == 0)

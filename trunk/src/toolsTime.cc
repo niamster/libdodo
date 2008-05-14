@@ -25,7 +25,7 @@
 
 using namespace dodo;
 
-__time::__time() : sec(0),
+tools::__time::__time() : sec(0),
 					   min(0),
 					   hour(0),
 					   day(1),
@@ -37,7 +37,7 @@ __time::__time() : sec(0),
 
 //-------------------------------------------------------------------
 
-__time::__time(unsigned int a_sec,
+tools::__time::__time(unsigned int a_sec,
 				   unsigned int a_min,
 				   unsigned int a_hour,
 				   unsigned int a_day,
@@ -56,7 +56,7 @@ __time::__time(unsigned int a_sec,
 //-------------------------------------------------------------------
 
 dodoString
-toolsTime::byFormat(const dodoString &format,
+tools::time::byFormat(const dodoString &format,
 					long timestamp,
 					bool local)
 {
@@ -68,7 +68,7 @@ toolsTime::byFormat(const dodoString &format,
 		tTime = gmtime((const time_t *)&timestamp);
 
 	if (tTime == NULL)
-		throw baseEx(ERRMODULE_TOOLSTIME, TOOLSTIMEEX_GETBYFORMAT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSTIME, TIMEEX_GETBYFORMAT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	char formatted[30];
 
@@ -80,11 +80,11 @@ toolsTime::byFormat(const dodoString &format,
 //-------------------------------------------------------------------
 
 long
-toolsTime::now()
+tools::time::now()
 {
 	time_t tTime = ::time(NULL);
 	if (tTime == (time_t)-1)
-		throw baseEx(ERRMODULE_TOOLSTIME, TOOLSTIMEEX_NOW, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSTIME, TIMEEX_NOW, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return tTime;
 }
@@ -92,11 +92,11 @@ toolsTime::now()
 //-------------------------------------------------------------------
 
 dodoStringArray
-toolsTime::week(long date,
+tools::time::week(long date,
 				const dodoString &format,
 				bool local)
 {
-	long daynum = toolsString::stringToL(toolsTime::byFormat("%w", date, local));
+	long daynum = string::stringToL(tools::time::byFormat("%w", date, local));
 	if (daynum == 0)
 		daynum = 7;
 
@@ -104,7 +104,7 @@ toolsTime::week(long date,
 	long mon = date - (daynum - 1) * 86400;
 
 	for (short int i(0); i < 7; ++i, mon += 86400)
-		week.push_back(toolsTime::byFormat(format, mon, local));
+		week.push_back(tools::time::byFormat(format, mon, local));
 
 	return week;
 }
@@ -112,7 +112,7 @@ toolsTime::week(long date,
 //-------------------------------------------------------------------
 
 dodoStringArray
-toolsTime::dates(long dateFrom,
+tools::time::dates(long dateFrom,
 					long dateTo,
 					const dodoString &format,
 					bool local)
@@ -121,7 +121,7 @@ toolsTime::dates(long dateFrom,
 
 	if ((dateFrom == dateTo) || (dateFrom - dateTo < 86400))
 	{
-		result.push_back(toolsTime::byFormat(format, dateFrom, local));
+		result.push_back(tools::time::byFormat(format, dateFrom, local));
 		return result;
 	}
 
@@ -134,10 +134,10 @@ toolsTime::dates(long dateFrom,
 
 	while (dateFrom < dateTo)
 	{
-		result.push_back(toolsTime::byFormat(format, dateFrom, local));
+		result.push_back(tools::time::byFormat(format, dateFrom, local));
 		dateFrom += 86400;
 	}
-	result.push_back(toolsTime::byFormat(format, dateTo, local));
+	result.push_back(tools::time::byFormat(format, dateTo, local));
 
 	return result;
 }
@@ -145,7 +145,7 @@ toolsTime::dates(long dateFrom,
 //-------------------------------------------------------------------
 
 long
-toolsTime::seconds(const __time &timeInfo)
+tools::time::timestamp(const __time &timeInfo)
 {
 	tm tTime;
 
@@ -162,8 +162,8 @@ toolsTime::seconds(const __time &timeInfo)
 
 //-------------------------------------------------------------------
 
-__time
-toolsTime::time(long seconds,
+tools::__time
+tools::time::timestamp(long seconds,
 					bool local)
 {
 	tm *tTime;
@@ -174,7 +174,7 @@ toolsTime::time(long seconds,
 		tTime = gmtime((const time_t *)&seconds);
 
 	if (tTime == NULL)
-		throw baseEx(ERRMODULE_TOOLSTIME, TOOLSTIMEEX_MAKETIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSTIME, TIMEEX_MAKETIME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__time timeInfo;
 
@@ -192,7 +192,7 @@ toolsTime::time(long seconds,
 //-------------------------------------------------------------------
 
 unsigned short int
-toolsTime::daysInMonth(unsigned int year,
+tools::time::daysInMonth(unsigned int year,
 					   unsigned short int month)
 {
 	unsigned short int day(0);
@@ -243,7 +243,7 @@ toolsTime::daysInMonth(unsigned int year,
 //-------------------------------------------------------------------
 
 long
-toolsTime::byFormat(const dodoString &format,
+tools::time::byFormat(const dodoString &format,
 					const dodoString &dt)
 {
 	tm tTime;

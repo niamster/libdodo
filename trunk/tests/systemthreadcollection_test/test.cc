@@ -2,7 +2,7 @@
 #include <libdodo/systemThreadCollection.h>
 #include <libdodo/systemThreadSharedDataGuard.h>
 #include <libdodo/systemThreadSharedDataCollectionGuard.h>
-#include <libdodo/toolsSystem.h>
+#include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
 
@@ -24,14 +24,14 @@ thread(void *data)
 	try
 	{
 		cout << (char *)shC.get(shCI);
-		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
+		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 		
 		int timeout = *(int *)sh.acquire();
-		toolsSystem::sleep(timeout);
+		tools::os::sleep(timeout);
 		sh.release();
 		
-		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
+		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
 	catch(baseEx ex)
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 		dodoString ids[amount];
 		for (int i=0;i<amount;++i)
 		{
-			ids[i] = toolsString::lToString(i);
+			ids[i] = tools::string::lToString(i);
 			pos[i] = th.add(thread,(void *)ids[i].c_str());
 		}
 		
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 			th.run(pos[i]);
 		
 		cout << endl << endl << "STARTED" << endl;
-		cout << toolsTime::now() << endl;
+		cout << tools::time::now() << endl;
 		cout.flush();
 		
 		th.wait();

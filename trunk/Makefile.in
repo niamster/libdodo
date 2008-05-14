@@ -28,7 +28,7 @@ OBJECTS:=dbAccumulator.o \
 	dbSqlite.o \
 	toolsMisc.o \
 	toolsFilesystem.o \
-	toolsSystem.o \
+	toolsOs.o \
 	toolsTime.o \
 	toolsNetwork.o \
 	toolsString.o \

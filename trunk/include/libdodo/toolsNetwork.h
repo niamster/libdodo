@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetwork.h
+ *            toolsNetwork.h
  *
  *  Thu Oct 04 02:02:24 2005
  *  Copyright  2005  Ni@m
@@ -42,100 +42,100 @@
 
 namespace dodo
 {
-
-	/**
-	 * @struct __ifInfo defines interface information
-	 */
-	struct __ifInfo
+	namespace tools
 	{
-		dodoString address;     ///< ip address of the interface
-		dodoString broadcast;   ///< broadcast address of the interface
-		dodoString netmask;     ///< netmask of the interface
-		dodoString hwaddr;      ///< harware address of the interface(MAC)
+		/**
+		 * @struct __ifInfo defines interface information
+		 */
+		struct __ifInfo
+		{
+			dodoString address;     ///< ip address of the interface
+			dodoString broadcast;   ///< broadcast address of the interface
+			dodoString netmask;     ///< netmask of the interface
+			dodoString hwaddr;      ///< harware address of the interface(MAC)
 
-		bool up;                ///< true if interface is up
-		bool loop;              ///< true if interface is a loopback
+			bool up;                ///< true if interface is up
+			bool loop;              ///< true if interface is a loopback
+		};
+
+		/**
+		 * @struct __hostInfo defines information about host
+		 */
+		struct __hostInfo
+		{
+			dodoString name;                ///< original name of the host
+			dodoStringArray aliases;        ///< aliases of the host
+			dodoStringArray addresses;      ///< addresses of the host
+		};
+
+		/**
+		 * @struct __servInfo defines info about service
+		 */
+		struct __servInfo
+		{
+			dodoString name;            ///< original name of the service
+			dodoStringArray aliases;    ///< aliases of the service
+			int port;                   ///< port of the service
+		};
+
+		/**
+		 * @class network provides information about network environment
+		 */
+		class network
+		{
+
+			public:
+
+				/**
+				 * @return a list of interfaces
+				 */
+				static dodoStringArray getInterfacesNames();
+
+				/**
+				 * @return information about the interface
+				 * @param interface defines a name of the interface
+				 */
+				static __ifInfo getInterfaceInfo(const dodoString &interface);
+
+				/**
+				 * @return information about the given host
+				 * @param host defines a name of the host
+				 */
+				static __hostInfo getHostInfo(const dodoString &host);
+
+				/**
+				 * @return primary host ip
+				 * @param host defines a name of the host
+				 */
+				static dodoString getHostPrimaryIp(const dodoString &host);
+
+				/**
+				 * @return name of the local host
+				 */
+				static dodoString getLocalName();
+
+				/**
+				 * set local host name
+				 * @param host defines name of the host
+				 */
+				static void setLocalName(const dodoString &host);
+
+				/**
+				 * @return information about the service
+				 * @param service defices name of the service
+				 * @param protocol defines protocol of the service(tcp, udp ..)
+				 */
+				static __servInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
+
+				/**
+				 * @return information about the service
+				 * @param port defices port of the service
+				 * @param protocol defines protocol of the service(tcp, udp ..)
+				 */
+				static __servInfo getServiceInfo(int port, const dodoString &protocol);
+
+		};
 	};
-
-	/**
-	 * @struct __hostInfo defines information about host
-	 */
-	struct __hostInfo
-	{
-		dodoString name;                ///< original name of the host
-		dodoStringArray aliases;        ///< aliases of the host
-		dodoStringArray addresses;      ///< addresses of the host
-	};
-
-	/**
-	 * @struct __servInfo defines info about service
-	 */
-	struct __servInfo
-	{
-		dodoString name;            ///< original name of the service
-		dodoStringArray aliases;    ///< aliases of the service
-		int port;                   ///< port of the service
-	};
-
-	/**
-	 * @class toolsNetwork provides information about network environment
-	 */
-	class toolsNetwork
-
-	{
-
-		public:
-
-			/**
-			 * @return a list of interfaces
-			 */
-			static dodoStringArray getInterfacesNames();
-
-			/**
-			 * @return information about the interface
-			 * @param interface defines a name of the interface
-			 */
-			static __ifInfo getInterfaceInfo(const dodoString &interface);
-
-			/**
-			 * @return information about the given host
-			 * @param host defines a name of the host
-			 */
-			static __hostInfo getHostInfo(const dodoString &host);
-
-			/**
-			 * @return primary host ip
-			 * @param host defines a name of the host
-			 */
-			static dodoString getHostPrimaryIp(const dodoString &host);
-
-			/**
-			 * @return name of the local host
-			 */
-			static dodoString getLocalName();
-
-			/**
-			 * set local host name
-			 * @param host defines name of the host
-			 */
-			static void setLocalName(const dodoString &host);
-
-			/**
-			 * @return information about the service
-			 * @param service defices name of the service
-			 * @param protocol defines protocol of the service(tcp, udp ..)
-			 */
-			static __servInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
-
-			/**
-			 * @return information about the service
-			 * @param port defices port of the service
-			 * @param protocol defines protocol of the service(tcp, udp ..)
-			 */
-			static __servInfo getServiceInfo(int port, const dodoString &protocol);
-
-	};
-
 };
 
 #endif

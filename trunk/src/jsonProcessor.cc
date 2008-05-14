@@ -47,7 +47,7 @@ processor::make(const node &root)
 
 			dodoString jsonObject = "\"";
 			dodoString stringValue = root.stringValue;
-			toolsString::replace("\"", "\\\"", stringValue);
+			tools::string::replace("\"", "\\\"", stringValue);
 			jsonObject.append(stringValue);
 			jsonObject.append("\"");
 
@@ -105,7 +105,7 @@ processor::make(const node &root)
 
 		case NODE_DATATYPE_NUMERIC:
 
-			return toolsString::lToString(root.numericValue);
+			return tools::string::lToString(root.numericValue);
 
 		case NODE_DATATYPE_BOOLEAN:
 
@@ -325,7 +325,7 @@ processor::processNumeric(long &node,
 			break;
 	}
 
-	node = toolsString::stringToL(numeric);
+	node = tools::string::stringToL(numeric);
 
 	return i;
 }

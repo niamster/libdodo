@@ -59,7 +59,7 @@
 /**
  * file permissions for newly created file(pipe)
  */
-#define DEFAULT_FILE_PERM TOOLSFILESYSTEM_PERM_OWNER_ALL_ACCESS
+#define DEFAULT_FILE_PERM dodo::tools::FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS
 
 /**
  * size of string that represents numeric value during convertion

@@ -38,7 +38,7 @@ dataGuard::dataGuard(unsigned int value,
 	if (a_key == NULL)
 	{
 		key = new char[32];
-		misc::random(key, 31);
+		tools::misc::random(key, 31);
 		key[31] = '\0';
 	}
 	else

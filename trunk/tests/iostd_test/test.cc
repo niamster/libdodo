@@ -28,7 +28,7 @@ hook(void *odata,
 
 	
 		++a;
-		dodoString str = toolsString::iToString(a) + "\n";
+		dodoString str = tools::string::iToString(a) + "\n";
 
 		io->outSize = str.size();
 		st->buffer.assign(str);

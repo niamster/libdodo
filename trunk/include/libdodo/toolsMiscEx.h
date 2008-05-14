@@ -30,83 +30,84 @@
 
 namespace dodo
 {
-
-	/**
-	 * libdodo defined errors
-	 */
-	enum toolsExR
+	namespace tools
 	{
-		MISCEX_BADASCII85 = 1,
-		MISCEX_BADBZCOMPRESSION,
-		MISCEX_BADBZDECOMPRESSIONINIT,
-		MISCEX_BADBZDECOMPRESSIONFINISH,
-		MISCEX_BADBZDECOMPRESSION,
-		MISCEX_BADMAILHELO,
-		MISCEX_BADMAILAUTH,
-		MISCEX_WRONGPARAMETER,
+		/**
+		 * libdodo defined errors
+		 */
+		enum miscExR
+		{
+			MISCEX_BADASCII85 = 1,
+			MISCEX_BADBZCOMPRESSION,
+			MISCEX_BADBZDECOMPRESSIONINIT,
+			MISCEX_BADBZDECOMPRESSIONFINISH,
+			MISCEX_BADBZDECOMPRESSION,
+			MISCEX_BADMAILHELO,
+			MISCEX_BADMAILAUTH,
+			MISCEX_WRONGPARAMETER,
 
-#ifndef FAST
+	#ifndef FAST
 
-		MISCEX_DATATOOLONG,
+			MISCEX_DATATOOLONG,
 
-#endif
+	#endif
 
-		MISCEX_EMPTYARRAY,
-		MISCEX_WRONGSTRENGTH
+			MISCEX_EMPTYARRAY,
+			MISCEX_WRONGSTRENGTH
+		};
+
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define MISCEX_BADASCII85_STR "Bad character in ASCII85."
+
+	#ifdef BZIP2_EXT
+
+	#define MISCEX_BADBZCOMPRESSION_STR "Error occured during comression."
+	#define MISCEX_BADBZDECOMPRESSIONINIT_STR "Error occured during preparations for decompression."
+	#define MISCEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
+	#define MISCEX_BADBZDECOMPRESSION_STR "Error occured during decompression."
+
+	#endif
+
+	#define MISCEX_BADMAILHELO_STR "Error occurd while sending EHLO."
+	#define MISCEX_BADMAILAUTH_STR "Error during authentification."
+	#define MISCEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+	#define MISCEX_EMPTYARRAY_STR "Array is empty."
+	#define MISCEX_WRONGSTRENGTH_STR "Wrong strength argument."
+
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum miscFunctionsID
+		{
+	#ifdef ICONV_EXT
+
+			MISCEX_CODESETCONVERSION,
+
+	#endif
+
+	#ifdef ZLIB_EXT
+
+			MISCEX_ZCOMPRESS,
+			MISCEX_ZDECOMPRESS,
+
+	#endif
+
+			MISCEX_DECODEASCII85,
+
+	#ifdef BZIP2_EXT
+
+			MISCEX_BZCOMPRESS,
+			MISCEX_BZDECOMPRESS,
+
+	#endif
+
+			MISCEX_MAIL,
+			MISCEX_IMPLODE,
+			MISCEX_RANDOM
+		};
 	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define MISCEX_BADASCII85_STR "Bad character in ASCII85."
-
-#ifdef BZIP2_EXT
-
-#define MISCEX_BADBZCOMPRESSION_STR "Error occured during comression."
-#define MISCEX_BADBZDECOMPRESSIONINIT_STR "Error occured during preparations for decompression."
-#define MISCEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
-#define MISCEX_BADBZDECOMPRESSION_STR "Error occured during decompression."
-
-#endif
-
-#define MISCEX_BADMAILHELO_STR "Error occurd while sending EHLO."
-#define MISCEX_BADMAILAUTH_STR "Error during authentification."
-#define MISCEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-#define MISCEX_EMPTYARRAY_STR "Array is empty."
-#define MISCEX_WRONGSTRENGTH_STR "Wrong strength argument."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum toolsFunctionsID
-	{
-#ifdef ICONV_EXT
-
-		MISCEX_CODESETCONVERSION,
-
-#endif
-
-#ifdef ZLIB_EXT
-
-		MISCEX_ZCOMPRESS,
-		MISCEX_ZDECOMPRESS,
-
-#endif
-
-		MISCEX_DECODEASCII85,
-
-#ifdef BZIP2_EXT
-
-		MISCEX_BZCOMPRESS,
-		MISCEX_BZDECOMPRESS,
-
-#endif
-
-		MISCEX_MAIL,
-		MISCEX_IMPLODE,
-		MISCEX_RANDOM
-	};
-
 };
 
 #endif

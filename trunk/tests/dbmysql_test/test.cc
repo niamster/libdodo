@@ -31,7 +31,7 @@ using namespace db;
 
 int main(int argc, char **argv)
 {
-	long now = toolsTime::now();
+	long now = tools::time::now();
 
 #ifdef MYSQL_EXT
 
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
     	
 #endif
 
-    	now = toolsTime::now() - now;
+    	now = tools::time::now() - now;
 
     	cout << "SpentTime: " << now << endl;
     

@@ -39,7 +39,7 @@ data::data(const char   *a_key) : mdata(NULL),
 	{
 		key = new char[33];
 		key[0] = '/';
-		misc::random(key + 1, 31);
+		tools::misc::random(key + 1, 31);
 		key[31] = '\0';
 	}
 	else

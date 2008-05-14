@@ -30,13 +30,13 @@ using dodo::system::thread::shared::dataGuard;
 		(*inc)++;
 		sh.release();
 		
-		fcgi->writeStreamString("!" + toolsString::iToString(*inc) + "!<br>");
+		fcgi->writeStreamString("!" + tools::string::iToString(*inc) + "!<br>");
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["hidden"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.POST["test"] + "!<br>");
 		fcgi->writeStreamString("!" + cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
 		fcgi->writeStreamString("!" + cgit.COOKIES["test"] + "<br>");
-		fcgi->writeStreamString("!" + toolsString::iToString(cgit.FILES["file"].size) + "<br>");
+		fcgi->writeStreamString("!" + tools::string::iToString(cgit.FILES["file"].size) + "<br>");
 		
 		fcgi->writeStreamString("!!!\n\n\n");
 		
@@ -70,7 +70,7 @@ using dodo::system::thread::shared::dataGuard;
 		}
 		catch(baseEx ex)
 		{
-			fcgi->writeStreamString(ex.baseErrstr + " " + toolsString::lToString(ex.line));
+			fcgi->writeStreamString(ex.baseErrstr + " " + tools::string::lToString(ex.line));
 		}	
 		
 		fcgi->writeStreamString("\n\n\n!!!");

@@ -266,7 +266,7 @@ namespace dodo
 					regexp httpStatusRE;///< parser for HTTP response status code
 					
 					__httpResponse response;///< HTTP response data
-					__url urlComponents;///< HTTP Url
+					tools::__url urlComponents;///< HTTP Url
 					dodoString url;
 					
 					/**

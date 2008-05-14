@@ -41,7 +41,7 @@
 #endif
 
 #include <libdodo/systemJobCollection.h>
-#include <libdodo/toolsSystem.h>
+#include <libdodo/toolsOs.h>
 #include <libdodo/systemThreadCollectionEx.h>
 #include <libdodo/types.h>
 
@@ -293,7 +293,7 @@ namespace dodo
 		
 					/**
 					 * block signals to thread
-					 * @param signals defines signals to block/unblock[see toolsSystemSignalsEnum]
+					 * @param signals defines signals to block/unblock[see tools::osSignalsEnum]
 					 * @param block defines block condition
 					 */
 					static void blockSignal(int signals, bool block = true);

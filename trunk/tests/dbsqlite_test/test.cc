@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 		try
 		{
 			
-			toolsFilesystem::unlink("test.lite",true);
+			tools::filesystem::unlink("test.lite",true);
 			
 			__connectorInfo info;
 			

@@ -641,7 +641,7 @@ accumulator::limit(unsigned int a_number)
 {
 	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
 
-	pre_limit = toolsString::lToString(a_number);
+	pre_limit = tools::string::lToString(a_number);
 }
 //-------------------------------------------------------------------
 
@@ -650,7 +650,7 @@ accumulator::offset(unsigned int a_number)
 {
 	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
 
-	pre_offset = toolsString::lToString(a_number);
+	pre_offset = tools::string::lToString(a_number);
 }
 
 //-------------------------------------------------------------------

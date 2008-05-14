@@ -6,6 +6,7 @@
 
 using namespace dodo;
 using namespace io;
+using namespace tools;
 
 using namespace std;
 
@@ -13,10 +14,10 @@ int main(int argc, char **argv)
 {
 	try
 	{	
-		cout << toolsFilesystem::getFileContents("test.cc");
-		toolsFilesystem::copy("test.cc", "test.cc.copy", true);
+		cout << filesystem::getFileContents("test.cc");
+		filesystem::copy("test.cc", "test.cc.copy", true);
 
-		dodoStringArray arr = toolsFilesystem::getFileContentsArr("test.cc");		
+		dodoStringArray arr = filesystem::getFileContentsArr("test.cc");		
 		for (int i=0;i<arr.size();i++)
 		{
 			cout << arr[i];
@@ -32,19 +33,19 @@ int main(int argc, char **argv)
 	}
 	try
 	{	
-		toolsFilesystem::rm("./test.cc.copy");
+		filesystem::rm("./test.cc.copy");
 
-		toolsFilesystem::mkdir("testDir");
-		toolsFilesystem::mkdirRecursive("testDir/1/2/3/4");
+		filesystem::mkdir("testDir");
+		filesystem::mkdirRecursive("testDir/1/2/3/4");
 
-		toolsFilesystem::rm("DirTest");
-		toolsFilesystem::rename("testDir","DirTest");
+		filesystem::rm("DirTest");
+		filesystem::rename("testDir","DirTest");
 		
-		toolsFilesystem::symlink("test", "TEST");
+		filesystem::symlink("test", "TEST");
 		
-		cout << toolsFilesystem::getPermissions("Makefile") << endl;
+		cout << filesystem::getPermissions("Makefile") << endl;
 
-		dodoArray<__fileInfo> dir = toolsFilesystem::getDirInfo("./");
+		dodoArray<__fileInfo> dir = filesystem::getDirInfo("./");
 		if (dir.size() > 0)
 		{
 			cout << endl << dir.size() << endl;
@@ -52,10 +53,10 @@ int main(int argc, char **argv)
 				cout << i->size << "!" << i->name << endl; 
 		}
 		
-		toolsFilesystem::unlink("my.dat");
+		filesystem::unlink("my.dat");
 		
 		file io("my.dat", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_READ_WRITE_TRUNCATE);
-		toolsFilesystem::chmod("my.dat", TOOLSFILESYSTEM_PERM_ALL_ALL_ACCESS);
+		filesystem::chmod("my.dat", FILESYSTEM_PERMISSION_ALL_ALL_ACCESS);
 		
 		io.inSize = io.outSize = 14;
 		io.over = true;

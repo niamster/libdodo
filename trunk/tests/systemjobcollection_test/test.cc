@@ -2,7 +2,7 @@
 #include <libdodo/systemJobCollection.h>
 #include <libdodo/systemProcessCollection.h>
 #include <libdodo/systemThreadCollection.h>
-#include <libdodo/toolsSystem.h>
+#include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
 
@@ -18,12 +18,12 @@ job(void *data)
 {
 	try
 	{
-		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
+		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 		
-		toolsSystem::sleep(10);
+		tools::os::sleep(10);
 		
-		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
+		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
 	catch(baseEx ex)
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 				pr[i] = new process::collection;
 #endif
 
-			ids[i] = toolsString::lToString(i);
+			ids[i] = tools::string::lToString(i);
 			pos[i] = pr[i]->add(::job,(void *)ids[i].c_str());
 		}
 		
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 			pr[i]->run(pos[i]);
 		
 		cout << endl << endl << "STARTED" << endl;
-		cout << toolsTime::now() << endl;
+		cout << tools::time::now() << endl;
 		cout.flush();
 		
 		for (int i=0;i<amount;++i)

@@ -96,7 +96,7 @@ postgresql::connect()
 
 	pgHandle = PQsetdbLogin(
 		dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
-		toolsString::iToString(dbInfo.port).c_str(),
+		tools::string::iToString(dbInfo.port).c_str(),
 		NULL,
 		NULL,
 		dbInfo.db.size() == 0 ? NULL : dbInfo.db.c_str(),

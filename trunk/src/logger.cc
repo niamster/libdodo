@@ -110,7 +110,7 @@ logger::log(short level,
 		{
 			if (i->handler != NULL)
 			{
-				i->handler->writeStreamString(levels[level] + toolsTime::byFormat(timeFormat, toolsTime::now()) + msg + "\n");
+				i->handler->writeStreamString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
 				i->handler->flush();
 			}
 			else

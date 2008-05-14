@@ -376,9 +376,9 @@ server::makeAuth()
 {
 	dodoString &httpAuthorization = ENVIRONMENT[SERVER_ENVIRONMENT_HTTPAUTHORIZATION];
 	
-	if (toolsString::contains(httpAuthorization, "Basic"))
+	if (tools::string::contains(httpAuthorization, "Basic"))
 	{
-		dodoStringArray arr = misc::explode(misc::decodeBase64(toolsString::trim(httpAuthorization.substr(6),' ')), ":", 2);
+		dodoStringArray arr = tools::misc::explode(tools::misc::decodeBase64(tools::string::trim(httpAuthorization.substr(6),' ')), ":", 2);
 		
 		authInfo.type = SERVER_AUTHTYPE_BASIC;
 		authInfo.user = arr[0];
@@ -387,57 +387,57 @@ server::makeAuth()
 	}
 	else 
 	{
-		if (toolsString::contains(httpAuthorization, "Digest"))
+		if (tools::string::contains(httpAuthorization, "Digest"))
 		{
 			authInfo.type = SERVER_AUTHTYPE_DIGEST;
 			
-			dodoStringArray parts = misc::explode(httpAuthorization.substr(7), &trim, ",");
+			dodoStringArray parts = tools::misc::explode(httpAuthorization.substr(7), &trim, ",");
 			
 			dodoStringArray tuple;
 			
 			dodoStringArray::iterator i = parts.begin(), j = parts.end();
 			for (;i!=j;++i)
 			{
-				tuple = misc::explode(*i, "=", 2);
+				tuple = tools::misc::explode(*i, "=", 2);
 				if (tuple.size() != 2)
 					continue;
 				
 				dodoString &challengePart = tuple[0];
 				
-				if (toolsString::iequal(challengePart, "realm"))
-					authInfo.realm = toolsString::trim(tuple[1], '"');
+				if (tools::string::iequal(challengePart, "realm"))
+					authInfo.realm = tools::string::trim(tuple[1], '"');
 				else
 				{
-					if (toolsString::iequal(challengePart, "nonce"))
-						authInfo.nonce = toolsString::trim(tuple[1], '"');
+					if (tools::string::iequal(challengePart, "nonce"))
+						authInfo.nonce = tools::string::trim(tuple[1], '"');
 					else
 					{
-						if (toolsString::iequal(challengePart, "opaque"))
-							authInfo.opaque = toolsString::trim(tuple[1], '"');
+						if (tools::string::iequal(challengePart, "opaque"))
+							authInfo.opaque = tools::string::trim(tuple[1], '"');
 						else
 						{
-							if (toolsString::iequal(challengePart, "username"))
-								authInfo.user = toolsString::trim(tuple[1], '"');
+							if (tools::string::iequal(challengePart, "username"))
+								authInfo.user = tools::string::trim(tuple[1], '"');
 							else
 							{
-								if (toolsString::iequal(challengePart, "uri"))
-									authInfo.uri = toolsString::trim(tuple[1], '"');
+								if (tools::string::iequal(challengePart, "uri"))
+									authInfo.uri = tools::string::trim(tuple[1], '"');
 								else
 								{
-									if (toolsString::iequal(challengePart, "qop"))
-										authInfo.qop = toolsString::trim(tuple[1], '"');
+									if (tools::string::iequal(challengePart, "qop"))
+										authInfo.qop = tools::string::trim(tuple[1], '"');
 									else
 									{
-										if (toolsString::iequal(challengePart, "nc"))
-											authInfo.nonceCount = toolsString::trim(tuple[1], '"');
+										if (tools::string::iequal(challengePart, "nc"))
+											authInfo.nonceCount = tools::string::trim(tuple[1], '"');
 										else
 										{
-											if (toolsString::iequal(challengePart, "cnonce"))
-												authInfo.cnonce = toolsString::trim(tuple[1], '"');
+											if (tools::string::iequal(challengePart, "cnonce"))
+												authInfo.cnonce = tools::string::trim(tuple[1], '"');
 											else
 											{
-												if (toolsString::iequal(challengePart, "response"))
-													authInfo.response = toolsString::trim(tuple[1], '"');
+												if (tools::string::iequal(challengePart, "response"))
+													authInfo.response = tools::string::trim(tuple[1], '"');
 											}
 										}
 									}
@@ -468,9 +468,9 @@ server::requestAuthentification(const dodoString &realm,
 			HEADERS.insert(make_pair(SERVER_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") + 
 																					realm + 
 																					"\", qop=\"auth\", nonce=\"" + 
-																					misc::MD5Hex(misc::stringRandom(16)) + 
+																					tools::misc::MD5Hex(tools::misc::stringRandom(16)) + 
 																					"\", opaque=\"" + 
-																					misc::MD5Hex(misc::stringRandom(16)) + "\""));
+																					tools::misc::MD5Hex(tools::misc::stringRandom(16)) + "\""));
 }
 
 //-------------------------------------------------------------------
@@ -490,50 +490,50 @@ server::checkAuthentification(const dodoString &user,
 								const dodoString &password)
 {
 	if (authInfo.type == SERVER_AUTHTYPE_BASIC)
-		return (toolsString::equal(user,authInfo.user) && toolsString::equal(password,authInfo.password));
+		return (tools::string::equal(user,authInfo.user) && tools::string::equal(password,authInfo.password));
 	else
 	{
 		if (authInfo.type == SERVER_AUTHTYPE_DIGEST)
 		{
 
 			unsigned char HA[16];			
-			misc::MD5_CTX context;
+			tools::misc::MD5_CTX context;
 						
-			misc::MD5Init(&context);
-			misc::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)authInfo.realm.c_str(), authInfo.realm.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
-			misc::MD5Final(HA, &context);
+			tools::misc::MD5Init(&context);
+			tools::misc::MD5Update(&context, (unsigned char *)authInfo.user.c_str(), authInfo.user.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)authInfo.realm.c_str(), authInfo.realm.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)password.c_str(), password.size());
+			tools::misc::MD5Final(HA, &context);
 
-			dodoString HA1 = misc::binToHex(dodoString((char *)&HA, 16));
+			dodoString HA1 = tools::misc::binToHex(dodoString((char *)&HA, 16));
 			
 			dodoString &methodForAuth = ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD]; 
 			
-			misc::MD5Init(&context);
-			misc::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)authInfo.uri.c_str(), authInfo.uri.size());
-			misc::MD5Final(HA, &context);
+			tools::misc::MD5Init(&context);
+			tools::misc::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)authInfo.uri.c_str(), authInfo.uri.size());
+			tools::misc::MD5Final(HA, &context);
 
-			dodoString HA2 = misc::binToHex(dodoString((char *)&HA, 16));
+			dodoString HA2 = tools::misc::binToHex(dodoString((char *)&HA, 16));
 			
-			misc::MD5Init(&context);
-			misc::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)authInfo.nonce.c_str(), authInfo.nonce.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)authInfo.nonceCount.c_str(), authInfo.nonceCount.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)authInfo.cnonce.c_str(), authInfo.cnonce.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)authInfo.qop.c_str(), authInfo.qop.size());
-			misc::MD5Update(&context, (unsigned char *)":", 1);
-			misc::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
-			misc::MD5Final(HA, &context);
+			tools::misc::MD5Init(&context);
+			tools::misc::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)authInfo.nonce.c_str(), authInfo.nonce.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)authInfo.nonceCount.c_str(), authInfo.nonceCount.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)authInfo.cnonce.c_str(), authInfo.cnonce.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)authInfo.qop.c_str(), authInfo.qop.size());
+			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
+			tools::misc::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
+			tools::misc::MD5Final(HA, &context);
 			
-			return (toolsString::equal(misc::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
+			return (tools::string::equal(tools::misc::binToHex(dodoString((char *)&HA, 16)), authInfo.response));
 		}
 		else
 			return false;
@@ -574,11 +574,11 @@ server::cleanTmp()
 void
 server::detectMethod()
 {
-	if (toolsString::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "GET"))
+	if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "GET"))
 		method = SERVER_REQUESTMETHOD_GET;
 	else
 	{
-		if (toolsString::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD].empty())
+		if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "POST") && ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD].empty())
 			method = SERVER_REQUESTMETHOD_POST;
 		else
 			method = SERVER_REQUESTMETHOD_GET_POST;
@@ -600,7 +600,7 @@ server::make(dodoStringMap &val,
 		  const dodoString &string,
 		  const char       *delim)
 {
-	dodoStringArray getPair = misc::explode(misc::decodeUrl(string), delim);
+	dodoStringArray getPair = tools::misc::explode(tools::misc::decodeUrl(string), delim);
 
 	dodoStringArray::iterator l(getPair.begin()), m(getPair.end());
 
@@ -608,7 +608,7 @@ server::make(dodoStringMap &val,
 
 	for (; l != m; ++l)
 	{
-		temp = misc::explode(*l, "=");
+		temp = tools::misc::explode(*l, "=");
 		if (temp.size() > 1)
 			val.insert(make_pair(temp[0], temp[1]));
 	}
@@ -633,7 +633,7 @@ server::makeEnv()
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
 	
-	ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = misc::explode(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], ";", 2).front();
+	ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = tools::misc::explode(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], ";", 2).front();
 }
 
 //-------------------------------------------------------------------
@@ -707,7 +707,7 @@ server::printHeaders() const
 void
 server::makeContent()
 {
-	unsigned long inSize = toolsString::stringToUL(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTLENGTH]);
+	unsigned long inSize = tools::string::stringToUL(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTLENGTH]);
 
 	if (inSize <= 0)
 		return ;
@@ -725,10 +725,10 @@ server::makePost()
 	if (content.size() == 0)
 		return ;
 
-	if (!toolsString::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "POST"))
+	if (!tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_REQUESTMETHOD], "POST"))
 		return ;
 
-	if (toolsString::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
+	if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "application/x-www-form-urlencoded"))
 	{
 		make(POST, content);
 		
@@ -736,14 +736,14 @@ server::makePost()
 	}
 	else
 	{
-		if (toolsString::contains(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
+		if (tools::string::contains(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
 		{
-			if (toolsString::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
-				content = misc::decodeBase64(content);
+			if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
+				content = tools::misc::decodeBase64(content);
 	
 			unsigned int temp0;
 			temp0 = ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE].find("boundary=");
-			dodoStringArray postPartd = misc::explode(content, "--" + ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE].substr(temp0 + 9));
+			dodoStringArray postPartd = tools::misc::explode(content, "--" + ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE].substr(temp0 + 9));
 	
 			dodoStringArray::iterator i(postPartd.begin() + 1), j(postPartd.end());
 	
@@ -755,7 +755,7 @@ server::makePost()
 
 			for (; i != j; ++i)
 			{
-				if (toolsString::iequal(i->substr(0, 2), "--"))
+				if (tools::string::iequal(i->substr(0, 2), "--"))
 					break;
 				else
 				{
@@ -778,10 +778,10 @@ server::makePost()
 		
 						file.name = i->substr(temp0, temp1 - temp0);
 		
-						temp0 = toolsString::find(*i, "Content-Type: ", temp1, true);
+						temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
 						temp0 += 14;
 						temp1 = i->find("\n", temp0);
-						file.type = misc::explode(i->substr(temp0, temp1 - temp0), ";")[0];
+						file.type = tools::misc::explode(i->substr(temp0, temp1 - temp0), ";")[0];
 						temp1 += 3;
 		
 						file.size = i->size() - temp1 - 2;
@@ -924,7 +924,7 @@ server::setCookie(const dodoString &name,
 {
 	__serverCookie temp(secure);
 	temp.name = name;
-	temp.value = misc::encodeUrl(value);
+	temp.value = tools::misc::encodeUrl(value);
 	temp.expires = expires;
 	temp.path = path;
 	temp.domain = domain;
@@ -944,7 +944,7 @@ server::setCookie(const __serverCookie &cookie)
 dodoString 
 server::trim(const dodoString &data)
 {
-	return toolsString::trim(data, ' ');
+	return tools::string::trim(data, ' ');
 }
 
 //-------------------------------------------------------------------

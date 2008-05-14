@@ -1,5 +1,5 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/toolsSystem.h>
+#include <libdodo/toolsOs.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/toolsTime.h>
 
@@ -13,17 +13,17 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		cout << toolsTime::byFormat("%A-%Y-%H",toolsTime::now()) << endl;
+		cout << tools::time::byFormat("%A-%Y-%H",tools::time::now()) << endl;
 		
-		cout << toolsTime::now() << endl;
+		cout << tools::time::now() << endl;
 		
-		toolsSystem::sleep(3);
+		tools::os::sleep(3);
 		
-		cout << toolsTime::now() << endl;
+		cout << tools::time::now() << endl;
 		
-		cout << toolsTime::week(toolsTime::now(),"%A")[0] << endl;
+		cout << tools::time::week(tools::time::now(),"%A")[0] << endl;
 		
-		cout << toolsTime::time(toolsTime::now()).sec << endl;
+		cout << tools::time::timestamp(tools::time::now()).sec << endl;
 	}
 	catch (baseEx ex)
 	{

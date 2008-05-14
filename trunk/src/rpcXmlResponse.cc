@@ -66,7 +66,7 @@ response::xmlToRpcResponse(dodo::xml::node &node)
 
 	rpc::response resp;
 	
-	if (toolsString::iequal(i->first, "fault"))
+	if (tools::string::iequal(i->first, "fault"))
 	{
 		resp.succ = false;
 		
@@ -80,7 +80,7 @@ response::xmlToRpcResponse(dodo::xml::node &node)
 	}
 	else
 	{
-		if (toolsString::iequal(i->first, "params"))
+		if (tools::string::iequal(i->first, "params"))
 		{
 			resp.succ = true;
 			

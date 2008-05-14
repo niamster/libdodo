@@ -26,7 +26,7 @@ extern "C"
 			if (st->operType == STDIO_OPERATION_WRITE)
 			{
 				int *a = (int *)(st->buffer.c_str());
-				st->buffer.assign(toolsString::iToString(*a*3) + "\n");
+				st->buffer.assign(tools::string::iToString(*a*3) + "\n");
 			}
 		}
 		std::cout << "activation\n";

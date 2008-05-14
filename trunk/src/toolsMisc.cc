@@ -23,7 +23,7 @@
 
 #include <libdodo/toolsMisc.h>
 
-using namespace dodo;
+using namespace dodo::tools;
 
 /**
  * for MD5
@@ -345,9 +345,9 @@ misc::isInArray(const dodoStringArray &arr,
 	bool (*cmpFunc)(const dodoString &, const dodoString &);
 
 	if (icase)
-		cmpFunc = toolsString::equal;
+		cmpFunc = string::equal;
 	else
-		cmpFunc = toolsString::iequal;
+		cmpFunc = string::iequal;
 
 	dodoStringArray::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)
@@ -359,7 +359,7 @@ misc::isInArray(const dodoStringArray &arr,
 
 //-------------------------------------------------------------------
 
-dodoStringArray
+dodo::dodoStringArray
 misc::explode(const dodoString &fields,
 			   escape escapeF,
 			   const dodoString &separator,
@@ -396,7 +396,7 @@ misc::explode(const dodoString &fields,
 
 //-------------------------------------------------------------------
 
-dodoStringArray
+dodo::dodoStringArray
 misc::explode(const dodoString &fields,
 			   const dodoString &separator,
 			   int limit)
@@ -1643,21 +1643,21 @@ misc::mail(const dodoString &host,
 	dodoString mess;
 	
 	ex.readStreamString(mess);
-	ex.writeStreamString("EHLO " + toolsNetwork::getLocalName() + "\r\n");
+	ex.writeStreamString("EHLO " + network::getLocalName() + "\r\n");
 	ex.readStreamString(mess);
 
-	if (toolsString::stringToI(mess.substr(0, 3)) != 250)
+	if (string::stringToI(mess.substr(0, 3)) != 250)
 		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_LIBDODO, MISCEX_BADMAILHELO, MISCEX_BADMAILHELO_STR, __LINE__, __FILE__);
 
 	if (auth)
 	{
-		if (toolsString::contains(mess, "CRAM-MD5"))
+		if (string::contains(mess, "CRAM-MD5"))
 			addFlag(authType, SMTPAUTH_CRAMMD5);
 
-		if (toolsString::contains(mess, "LOGIN"))
+		if (string::contains(mess, "LOGIN"))
 			addFlag(authType, SMTPAUTH_LOGIN);
 
-		if (toolsString::contains(mess, "PLAIN"))
+		if (string::contains(mess, "PLAIN"))
 			addFlag(authType, SMTPAUTH_PLAIN);
 	}
 
@@ -1668,7 +1668,7 @@ misc::mail(const dodoString &host,
 			ex.writeStreamString("AUTH CRAM-MD5\r\n");
 			ex.readStreamString(mess);
 
-			if (toolsString::stringToI(mess.substr(0, 3)) != 334)
+			if (string::stringToI(mess.substr(0, 3)) != 334)
 				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 			dodoString ticket = decodeBase64(mess.substr(4));
@@ -1712,7 +1712,7 @@ misc::mail(const dodoString &host,
 			ex.writeStreamString(encodeBase64(login + " " + md5pass) + "\r\n");
 			ex.readStreamString(mess);
 
-			if (toolsString::stringToI(mess.substr(0, 3)) != 235)
+			if (string::stringToI(mess.substr(0, 3)) != 235)
 				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 		}
 		else
@@ -1722,19 +1722,19 @@ misc::mail(const dodoString &host,
 				ex.writeStreamString("AUTH LOGIN\r\n");
 				ex.readStreamString(mess);
 
-				if (toolsString::stringToI(mess.substr(0, 3)) != 334)
+				if (string::stringToI(mess.substr(0, 3)) != 334)
 					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(login) + "\r\n");
 				ex.readStreamString(mess);
 				
-				if (toolsString::stringToI(mess.substr(0, 3)) != 334)
+				if (string::stringToI(mess.substr(0, 3)) != 334)
 					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(pass) + "\r\n");
 				ex.readStreamString(mess);
 				
-				if (toolsString::stringToI(mess.substr(0, 3)) != 235)
+				if (string::stringToI(mess.substr(0, 3)) != 235)
 					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 			}
 			else
@@ -1744,7 +1744,7 @@ misc::mail(const dodoString &host,
 					ex.writeStreamString("AUTH PLAIN" + encodeBase64(login + "\0" + login + "\0" + pass) + "\r\n");
 					ex.readStreamString(mess);
 
-					if (toolsString::stringToI(mess.substr(0, 3)) != 334)
+					if (string::stringToI(mess.substr(0, 3)) != 334)
 						throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 				}
 			}

@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 	cgit.printStream( "!" + cgit.POST["text"] + "!<br>" );
 	cgit.printStream( "!" + cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>" );
 	cgit.printStream( "!" + cgit.COOKIES["test"] + "<br>" );
-	cgit.printStream( "!" + toolsString::ulToString(cgit.FILES["file"].size) + "<br>" );
+	cgit.printStream( "!" + tools::string::ulToString(cgit.FILES["file"].size) + "<br>" );
 	
 	cgit.printStream( "\n\n\n" );
 	
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cgit.printStream( (string)ex + " " + toolsString::lToString(ex.line) + " " + ex.message );
+		cgit.printStream( (string)ex + " " + tools::string::lToString(ex.line) + " " + ex.message );
 	}	
 		
 	return 0;

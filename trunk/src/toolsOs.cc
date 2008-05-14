@@ -1,5 +1,5 @@
 /***************************************************************************
- *            toolsSystem.cc
+ *            toolsOs.cc
  *
  *  Sat Nov 19 15:19:57 2005
  *  Copyright  2005  Ni@m
@@ -21,13 +21,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include <libdodo/toolsSystem.h>
+#include <libdodo/toolsOs.h>
 
-using namespace dodo;
+using namespace dodo::tools;
 
 #ifdef DL_EXT
 
-void *toolsSystem::handlesSig[] = { NULL,
+void *os::handlesSig[] = { NULL,
 									NULL,
 									NULL,
 									NULL,
@@ -49,7 +49,7 @@ void *toolsSystem::handlesSig[] = { NULL,
 
 //-------------------------------------------------------------------
 
-bool toolsSystem::handlesOpenedSig[] = { false,
+bool os::handlesOpenedSig[] = { false,
 										 false,
 										 false,
 										 false,
@@ -75,17 +75,17 @@ bool toolsSystem::handlesOpenedSig[] = { false,
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t toolsSystem::staticAtomicMutex::keeper;
+pthread_mutex_t os::staticAtomicMutex::keeper;
 
 #endif
 
 //-------------------------------------------------------------------
 
-toolsSystem::staticAtomicMutex toolsSystem::keeper;
+os::staticAtomicMutex os::keeper;
 
 //-------------------------------------------------------------------
 
-toolsSystem::staticAtomicMutex::staticAtomicMutex()
+os::staticAtomicMutex::staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 	
@@ -102,7 +102,7 @@ toolsSystem::staticAtomicMutex::staticAtomicMutex()
 
 //-------------------------------------------------------------------
 
-toolsSystem::staticAtomicMutex::~staticAtomicMutex()
+os::staticAtomicMutex::~staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 	
@@ -114,13 +114,13 @@ toolsSystem::staticAtomicMutex::~staticAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-toolsSystem::staticAtomicMutex::acquire()
+os::staticAtomicMutex::acquire()
 {
 #ifdef PTHREAD_EXT
 	
 	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
-		throw baseEx(ERRMODULE_TOOLSSYSTEMSTATICATOMICMUTEX, TOOLSSYSTEMSTATICATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOSSTATICATOMICMUTEX, SYSTEMSTATICATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	
 #endif
 }
@@ -128,27 +128,27 @@ toolsSystem::staticAtomicMutex::acquire()
 //-------------------------------------------------------------------
 
 void
-toolsSystem::staticAtomicMutex::release()
+os::staticAtomicMutex::release()
 {
 #ifdef PTHREAD_EXT
 	
 	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_TOOLSSYSTEMSTATICATOMICMUTEX, TOOLSSYSTEMSTATICATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOSSTATICATOMICMUTEX, SYSTEMSTATICATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	
 #endif
 }
 
 //-------------------------------------------------------------------
 
-toolsSystem::raceHazardGuard::raceHazardGuard()
+os::raceHazardGuard::raceHazardGuard()
 {
 	keeper.acquire();
 }
 
 //-------------------------------------------------------------------
 
-toolsSystem::raceHazardGuard::~raceHazardGuard()
+os::raceHazardGuard::~raceHazardGuard()
 {
 	keeper.release();
 }
@@ -156,12 +156,12 @@ toolsSystem::raceHazardGuard::~raceHazardGuard()
 //-------------------------------------------------------------------
 
 dodoString
-toolsSystem::getWorkingDir()
+os::getWorkingDir()
 {
 	char wd[MAXPATHLEN];
 
 	if (getcwd(wd, MAXPATHLEN) == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return wd;
 }
@@ -169,21 +169,21 @@ toolsSystem::getWorkingDir()
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setWorkingDir(const dodoString &path)
+os::setWorkingDir(const dodoString &path)
 {
 	if (chdir(path.c_str()) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETWORKINGDIR, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 
 __usage
-toolsSystem::getUsageInfo()
+os::getUsageInfo()
 {
 	rusage use;
 	if (getrusage(RUSAGE_SELF, &use) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETUSAGEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETUSAGEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__usage info;
 	info.time = use.ru_utime.tv_sec * 100 + use.ru_utime.tv_usec;
@@ -195,18 +195,18 @@ toolsSystem::getUsageInfo()
 //-------------------------------------------------------------------
 
 void
-toolsSystem::changeRoot(const dodoString &path)
+os::changeRoot(const dodoString &path)
 {
 	setWorkingDir(path);
 
 	if (chroot(path.c_str()) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_CHANGEROOT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_CHANGEROOT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
 //-------------------------------------------------------------------
 
 __limits
-toolsSystem::getLimit(short type)
+os::getLimit(short type)
 {
 	rlimit limit;
 
@@ -214,37 +214,37 @@ toolsSystem::getLimit(short type)
 
 	switch (type)
 	{
-		case TOOLSSYSTEM_CPUTIME:
+		case OS_CPUTIME:
 
 			realRes = RLIMIT_CPU;
 
 			break;
 
-		case TOOLSSYSTEM_MAXFILESIZE:
+		case OS_MAXFILESIZE:
 
 			realRes = RLIMIT_FSIZE;
 
 			break;
 
-		case TOOLSSYSTEM_MAXMEMUSAGE:
+		case OS_MAXMEMUSAGE:
 
 			realRes = RLIMIT_DATA;
 
 			break;
 
-		case TOOLSSYSTEM_MAXSTACK:
+		case OS_MAXSTACK:
 
 			realRes = RLIMIT_STACK;
 
 			break;
 
-		case TOOLSSYSTEM_MAXPROC:
+		case OS_MAXPROC:
 
 			realRes = RLIMIT_NPROC;
 
 			break;
 
-		case TOOLSSYSTEM_MAXOPENFILES:
+		case OS_MAXOPENFILES:
 
 #ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
@@ -256,11 +256,11 @@ toolsSystem::getLimit(short type)
 
 		default:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETLIMIT, ERR_LIBDODO, TOOLSSYSTEMEX_WRONGPARAMETER, TOOLSSYSTEMEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETLIMIT, ERR_LIBDODO, OSEX_WRONGPARAMETER, OSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (getrlimit(realRes, &limit) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__limits lim;
 
@@ -273,7 +273,7 @@ toolsSystem::getLimit(short type)
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setLimit(short type,
+os::setLimit(short type,
 					  const __limits &lim)
 {
 	rlimit limit;
@@ -282,37 +282,37 @@ toolsSystem::setLimit(short type,
 
 	switch (type)
 	{
-		case TOOLSSYSTEM_CPUTIME:
+		case OS_CPUTIME:
 
 			realRes = RLIMIT_CPU;
 
 			break;
 
-		case TOOLSSYSTEM_MAXFILESIZE:
+		case OS_MAXFILESIZE:
 
 			realRes = RLIMIT_FSIZE;
 
 			break;
 
-		case TOOLSSYSTEM_MAXMEMUSAGE:
+		case OS_MAXMEMUSAGE:
 
 			realRes = RLIMIT_DATA;
 
 			break;
 
-		case TOOLSSYSTEM_MAXSTACK:
+		case OS_MAXSTACK:
 
 			realRes = RLIMIT_STACK;
 
 			break;
 
-		case TOOLSSYSTEM_MAXPROC:
+		case OS_MAXPROC:
 
 			realRes = RLIMIT_NPROC;
 
 			break;
 
-		case TOOLSSYSTEM_MAXOPENFILES:
+		case OS_MAXOPENFILES:
 
 #ifdef __FreeBSD__
 			realRes = RLIMIT_NOFILE;
@@ -324,24 +324,24 @@ toolsSystem::setLimit(short type,
 
 		default:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETLIMIT, ERR_LIBDODO, TOOLSSYSTEMEX_WRONGPARAMETER, TOOLSSYSTEMEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETLIMIT, ERR_LIBDODO, OSEX_WRONGPARAMETER, OSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	limit.rlim_cur = lim.current;
 	limit.rlim_max = lim.max;
 
 	if (setrlimit(realRes, &limit) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETLIMIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-toolsSystem::getPriority(short type)
+os::getPriority(short type)
 {
 	int prio = getpriority(PRIO_PROCESS, getUID(type));
 	if (prio == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return prio;
 }
@@ -349,51 +349,51 @@ toolsSystem::getPriority(short type)
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setPriority(short type,
+os::setPriority(short type,
 						 int prio)
 {
 	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-toolsSystem::getUID(short type)
+os::getUID(short type)
 {
 	switch (type)
 	{
-		case TOOLSSYSTEM_UID:
+		case OS_UID:
 
 			return getuid();
 
-		case TOOLSSYSTEM_EUID:
+		case OS_EUID:
 
 			return geteuid();
 
 		default:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETUID, ERR_LIBDODO, TOOLSSYSTEMEX_WRONGPARAMETER, TOOLSSYSTEMEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETUID, ERR_LIBDODO, OSEX_WRONGPARAMETER, OSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setUID(short type,
+os::setUID(short type,
 					int uid)
 {
 	int res(0);
 
 	switch (type)
 	{
-		case TOOLSSYSTEM_UID:
+		case OS_UID:
 
 			res = setuid(uid);
 
 			break;
 
-		case TOOLSSYSTEM_EUID:
+		case OS_EUID:
 
 			res = seteuid(uid);
 
@@ -401,51 +401,51 @@ toolsSystem::setUID(short type,
 
 		default:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETUID, ERR_LIBDODO, TOOLSSYSTEMEX_WRONGPARAMETER, TOOLSSYSTEMEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETUID, ERR_LIBDODO, OSEX_WRONGPARAMETER, OSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETUID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETUID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-toolsSystem::getGID(short type)
+os::getGID(short type)
 {
 	switch (type)
 	{
-		case TOOLSSYSTEM_UID:
+		case OS_UID:
 
 			return getgid();
 
-		case TOOLSSYSTEM_EUID:
+		case OS_EUID:
 
 			return getegid();
 
 		default:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETGID, ERR_LIBDODO, TOOLSSYSTEMEX_WRONGPARAMETER, TOOLSSYSTEMEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETGID, ERR_LIBDODO, OSEX_WRONGPARAMETER, OSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 }
 
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setGID(short type,
+os::setGID(short type,
 					int uid)
 {
 	int res(0);
 
 	switch (type)
 	{
-		case TOOLSSYSTEM_UID:
+		case OS_UID:
 
 			res = setgid(uid);
 
 			break;
 
-		case TOOLSSYSTEM_EUID:
+		case OS_EUID:
 
 			res = setegid(uid);
 
@@ -453,21 +453,21 @@ toolsSystem::setGID(short type,
 
 		default:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETGID, ERR_LIBDODO, TOOLSSYSTEMEX_WRONGPARAMETER, TOOLSSYSTEMEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETGID, ERR_LIBDODO, OSEX_WRONGPARAMETER, OSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (res == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETGID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETGID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 __userInfo
-toolsSystem::getUserInfo(int uid)
+os::getUserInfo(int uid)
 {
 	passwd *in = getpwuid(uid);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__userInfo info;
 
@@ -477,11 +477,11 @@ toolsSystem::getUserInfo(int uid)
 //-------------------------------------------------------------------
 
 __userInfo
-toolsSystem::getUserInfo(const dodoString &uid)
+os::getUserInfo(const dodoString &uid)
 {
 	passwd *in = getpwnam(uid.c_str());
 	if (in == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETUSERINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__userInfo info;
 
@@ -491,7 +491,7 @@ toolsSystem::getUserInfo(const dodoString &uid)
 //-------------------------------------------------------------------
 
 dodoArray<__userInfo>
-toolsSystem::getUsers()
+os::getUsers()
 {
 	dodoArray<__userInfo> users;
 
@@ -509,7 +509,7 @@ toolsSystem::getUsers()
 		case ENFILE:
 		case ENOMEM:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETUSERS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETUSERS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endpwent();
@@ -520,7 +520,7 @@ toolsSystem::getUsers()
 //-------------------------------------------------------------------
 
 __userInfo &
-toolsSystem::fillUserInfo(__userInfo &info,
+os::fillUserInfo(__userInfo &info,
 						  passwd     *in)
 {
 	info.gid = in->pw_gid;
@@ -537,7 +537,7 @@ toolsSystem::fillUserInfo(__userInfo &info,
 //-------------------------------------------------------------------
 
 __groupInfo &
-toolsSystem::fillGroupInfo(__groupInfo &info,
+os::fillGroupInfo(__groupInfo &info,
 						   group       *pw)
 {
 	info.gid = pw->gr_gid;
@@ -556,11 +556,11 @@ toolsSystem::fillGroupInfo(__groupInfo &info,
 //-------------------------------------------------------------------
 
 __groupInfo
-toolsSystem::getGroupInfo(int uid)
+os::getGroupInfo(int uid)
 {
 	group *in = getgrgid(uid);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__groupInfo info;
 
@@ -570,11 +570,11 @@ toolsSystem::getGroupInfo(int uid)
 //-------------------------------------------------------------------
 
 __groupInfo
-toolsSystem::getGroupInfo(const dodoString &uid)
+os::getGroupInfo(const dodoString &uid)
 {
 	group *in = getgrnam(uid.c_str());
 	if (in == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETGROUPINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__groupInfo info;
 
@@ -584,7 +584,7 @@ toolsSystem::getGroupInfo(const dodoString &uid)
 //-------------------------------------------------------------------
 
 dodoArray<__groupInfo>
-toolsSystem::getGroups()
+os::getGroups()
 {
 	dodoArray<__groupInfo> groups;
 
@@ -603,7 +603,7 @@ toolsSystem::getGroups()
 		case EINTR:
 		case ENOMEM:
 
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETGROUPS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETGROUPS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	endgrent();
@@ -614,7 +614,7 @@ toolsSystem::getGroups()
 //-------------------------------------------------------------------
 
 void
-toolsSystem::die(const dodoString &message,
+os::die(const dodoString &message,
 				 int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
@@ -626,7 +626,7 @@ toolsSystem::die(const dodoString &message,
 //-------------------------------------------------------------------
 
 void
-toolsSystem::microSleep(unsigned long period)
+os::microSleep(unsigned long period)
 {
 	if (period < 1000000)
 		::usleep(period);
@@ -637,7 +637,7 @@ toolsSystem::microSleep(unsigned long period)
 //-------------------------------------------------------------------
 
 void
-toolsSystem::sleep(long period)
+os::sleep(long period)
 {
 	::sleep(period);
 }
@@ -645,16 +645,16 @@ toolsSystem::sleep(long period)
 //-------------------------------------------------------------------
 
 void
-toolsSystem::atExit(void (*func)())
+os::atExit(void (*func)())
 {
 	if (atexit(func) != 0)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_ATEXIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_ATEXIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 int
-toolsSystem::getPID()
+os::getPID()
 {
 	return getpid();
 }
@@ -662,7 +662,7 @@ toolsSystem::getPID()
 //-------------------------------------------------------------------
 
 int
-toolsSystem::getParentPID()
+os::getParentPID()
 {
 	return getppid();
 }
@@ -670,7 +670,7 @@ toolsSystem::getParentPID()
 //-------------------------------------------------------------------
 
 int
-toolsSystem::getGroupPID()
+os::getGroupPID()
 {
 	return getpgrp();
 }
@@ -678,11 +678,11 @@ toolsSystem::getGroupPID()
 //-------------------------------------------------------------------
 
 int
-toolsSystem::getGroupPID(int pid)
+os::getGroupPID(int pid)
 {
 	int pgid = getpgid(pid);
 	if (pgid == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return pgid;
 }
@@ -690,85 +690,85 @@ toolsSystem::getGroupPID(int pid)
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setGroupPID(int gpid)
+os::setGroupPID(int gpid)
 {
 	if (setpgid(0, gpid) == 1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setGroupPID(int pid,
+os::setGroupPID(int pid,
 						 int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-toolsSystem::sigMask(sigset_t *set,
+os::sigMask(sigset_t *set,
 					 long blockSignals)
 {
 	if (blockSignals != -1)
 	{
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_HANGUP))
+		if (isSetFlag(blockSignals, OS_SIGNAL_HANGUP))
 			sigaddset(set, SIGHUP);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_INTERRUPT))
+		if (isSetFlag(blockSignals, OS_SIGNAL_INTERRUPT))
 			sigaddset(set, SIGINT);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_QUIT))
+		if (isSetFlag(blockSignals, OS_SIGNAL_QUIT))
 			sigaddset(set, SIGQUIT);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_ILLEGAL_INSTRUCTION))
+		if (isSetFlag(blockSignals, OS_SIGNAL_ILLEGAL_INSTRUCTION))
 			sigaddset(set, SIGILL);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_ABORT))
+		if (isSetFlag(blockSignals, OS_SIGNAL_ABORT))
 			sigaddset(set, SIGABRT);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_BUS_FAULT))
+		if (isSetFlag(blockSignals, OS_SIGNAL_BUS_FAULT))
 			sigaddset(set, SIGBUS);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_FLOATINGPOINT_FAULT))
+		if (isSetFlag(blockSignals, OS_SIGNAL_FLOATINGPOINT_FAULT))
 			sigaddset(set, SIGFPE);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_USER_DEFINED1))
+		if (isSetFlag(blockSignals, OS_SIGNAL_USER_DEFINED1))
 			sigaddset(set, SIGUSR1);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_SEGMENTATION_FAULT))
+		if (isSetFlag(blockSignals, OS_SIGNAL_SEGMENTATION_FAULT))
 			sigaddset(set, SIGSEGV);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_USER_DEFINED2))
+		if (isSetFlag(blockSignals, OS_SIGNAL_USER_DEFINED2))
 			sigaddset(set, SIGUSR2);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_PIPE_FAULT))
+		if (isSetFlag(blockSignals, OS_SIGNAL_PIPE_FAULT))
 			sigaddset(set, SIGPIPE);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_ALARM))
+		if (isSetFlag(blockSignals, OS_SIGNAL_ALARM))
 			sigaddset(set, SIGALRM);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_TERMINATION))
+		if (isSetFlag(blockSignals, OS_SIGNAL_TERMINATION))
 			sigaddset(set, SIGTERM);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_CHILD_CHANGED))
+		if (isSetFlag(blockSignals, OS_SIGNAL_CHILD_CHANGED))
 			sigaddset(set, SIGCHLD);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_CONTINUE))
+		if (isSetFlag(blockSignals, OS_SIGNAL_CONTINUE))
 			sigaddset(set, SIGCONT);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_KEYBOARD_STOP))
+		if (isSetFlag(blockSignals, OS_SIGNAL_KEYBOARD_STOP))
 			sigaddset(set, SIGTSTP);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_CPULIMIT_EXCEEDED))
+		if (isSetFlag(blockSignals, OS_SIGNAL_CPULIMIT_EXCEEDED))
 			sigaddset(set, SIGXCPU);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_FILESIZE_EXCEEDED))
+		if (isSetFlag(blockSignals, OS_SIGNAL_FILESIZE_EXCEEDED))
 			sigaddset(set, SIGXFSZ);
 
-		if (isSetFlag(blockSignals, TOOLSSYSTEM_SIGNAL_BAD_SYSCALL))
+		if (isSetFlag(blockSignals, OS_SIGNAL_BAD_SYSCALL))
 			sigaddset(set, SIGSYS);
 	}
 }
@@ -776,7 +776,7 @@ toolsSystem::sigMask(sigset_t *set,
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setSignalHandler(long signal,
+os::setSignalHandler(long signal,
 							  signalHandler handler,
 							  int blockSignals)
 {
@@ -808,18 +808,18 @@ toolsSystem::setSignalHandler(long signal,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
-	if (sigaction(toolsSystem::toRealSignal(signal), &act, NULL) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (sigaction(os::toRealSignal(signal), &act, NULL) == -1)
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setMicroTimer(unsigned long timeout,
+os::setMicroTimer(unsigned long timeout,
 						   signalHandler handler,
 						   int blockSignals)
 {
@@ -829,7 +829,7 @@ toolsSystem::setMicroTimer(unsigned long timeout,
 
 	deinitSigModule deinit;
 
-	int handleSignal = toSignalNumber(TOOLSSYSTEM_SIGNAL_ALARM);
+	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
 		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
@@ -851,7 +851,7 @@ toolsSystem::setMicroTimer(unsigned long timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -870,16 +870,16 @@ toolsSystem::setMicroTimer(unsigned long timeout,
 	value.it_value.tv_usec = tMicrosec;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETMICROTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setTimer(long timeout,
+os::setTimer(long timeout,
 					  signalHandler handler,
 					  int blockSignals)
 {
@@ -889,7 +889,7 @@ toolsSystem::setTimer(long timeout,
 
 	deinitSigModule deinit;
 
-	int handleSignal = toSignalNumber(TOOLSSYSTEM_SIGNAL_ALARM);
+	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
 		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
@@ -911,7 +911,7 @@ toolsSystem::setTimer(long timeout,
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, blockSignals);
 
@@ -922,20 +922,20 @@ toolsSystem::setTimer(long timeout,
 	value.it_value.tv_usec = 0;
 
 	if (sigaction(SIGALRM, &act, NULL) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (setitimer(ITIMER_REAL, &value, NULL) != 0)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETTIMER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 bool
-toolsSystem::isSignalHandled(long signal)
+os::isSignalHandled(long signal)
 {
 	struct sigaction act;
-	if (sigaction(toolsSystem::toRealSignal(signal), NULL, &act) == 1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (sigaction(os::toRealSignal(signal), NULL, &act) == 1)
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (act.sa_sigaction != NULL || act.sa_handler != NULL)
 		return true;
@@ -946,17 +946,17 @@ toolsSystem::isSignalHandled(long signal)
 //-------------------------------------------------------------------
 
 void
-toolsSystem::sendSignal(int pid,
+os::sendSignal(int pid,
 						long signal)
 {
-	if (kill(pid, toolsSystem::toRealSignal(signal)) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (kill(pid, os::toRealSignal(signal)) == -1)
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-toolsSystem::unsetSignalHandler(long signal)
+os::unsetSignalHandler(long signal)
 {
 	raceHazardGuard tg;
 	
@@ -984,8 +984,8 @@ toolsSystem::unsetSignalHandler(long signal)
 	struct sigaction act;
 	act.sa_sigaction = NULL;
 
-	if (sigaction(toolsSystem::toRealSignal(signal), &act, NULL) == 1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_UNSETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (sigaction(os::toRealSignal(signal), &act, NULL) == 1)
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_UNSETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -993,7 +993,7 @@ toolsSystem::unsetSignalHandler(long signal)
 #ifdef DL_EXT
 
 __sigMod
-toolsSystem::getModuleInfo(const dodoString &module,
+os::getModuleInfo(const dodoString &module,
 						   void             *toInit)
 {
 #ifdef DL_FAST
@@ -1002,17 +1002,17 @@ toolsSystem::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__sigMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 
 	return mod;
@@ -1021,7 +1021,7 @@ toolsSystem::getModuleInfo(const dodoString &module,
 //-------------------------------------------------------------------
 
 void
-toolsSystem::setSignalHandler(const dodoString &path,
+os::setSignalHandler(const dodoString &path,
 							  void             *toInit)
 {
 	raceHazardGuard tg;
@@ -1032,11 +1032,11 @@ toolsSystem::setSignalHandler(const dodoString &path,
 	void *handle = dlopen(path.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	__sigMod mod = init(toInit);
 
@@ -1061,19 +1061,19 @@ toolsSystem::setSignalHandler(const dodoString &path,
 
 	signalHandler in = (signalHandler)dlsym(handlesSig[mod.signal], mod.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	struct sigaction act;
 	act.sa_sigaction = in;
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 
 	if (sigemptyset(&act.sa_mask) == -1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sigMask(&act.sa_mask, mod.blockSignals);
 
-	if (sigaction(toolsSystem::toRealSignal(mod.signal), &act, NULL) == 1)
-		throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (sigaction(os::toRealSignal(mod.signal), &act, NULL) == 1)
+		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	handlesOpenedSig[handleSignal] = true;
 }
@@ -1083,83 +1083,83 @@ toolsSystem::setSignalHandler(const dodoString &path,
 //-------------------------------------------------------------------
 
 int
-toolsSystem::toSignalNumber(long signal)
+os::toSignalNumber(long signal)
 {
 	switch (signal)
 	{
-		case TOOLSSYSTEM_SIGNAL_HANGUP:
+		case OS_SIGNAL_HANGUP:
 
 			return 0;
 
-		case TOOLSSYSTEM_SIGNAL_INTERRUPT:
+		case OS_SIGNAL_INTERRUPT:
 
 			return 1;
 
-		case TOOLSSYSTEM_SIGNAL_QUIT:
+		case OS_SIGNAL_QUIT:
 
 			return 2;
 
-		case TOOLSSYSTEM_SIGNAL_ILLEGAL_INSTRUCTION:
+		case OS_SIGNAL_ILLEGAL_INSTRUCTION:
 
 			return 3;
 
-		case TOOLSSYSTEM_SIGNAL_ABORT:
+		case OS_SIGNAL_ABORT:
 
 			return 4;
 
-		case TOOLSSYSTEM_SIGNAL_BUS_FAULT:
+		case OS_SIGNAL_BUS_FAULT:
 
 			return 5;
 
-		case TOOLSSYSTEM_SIGNAL_FLOATINGPOINT_FAULT:
+		case OS_SIGNAL_FLOATINGPOINT_FAULT:
 
 			return 6;
 
-		case TOOLSSYSTEM_SIGNAL_USER_DEFINED1:
+		case OS_SIGNAL_USER_DEFINED1:
 
 			return 7;
 
-		case TOOLSSYSTEM_SIGNAL_SEGMENTATION_FAULT:
+		case OS_SIGNAL_SEGMENTATION_FAULT:
 
 			return 8;
 
-		case TOOLSSYSTEM_SIGNAL_USER_DEFINED2:
+		case OS_SIGNAL_USER_DEFINED2:
 
 			return 9;
 
-		case TOOLSSYSTEM_SIGNAL_PIPE_FAULT:
+		case OS_SIGNAL_PIPE_FAULT:
 
 			return 10;
 
-		case TOOLSSYSTEM_SIGNAL_ALARM:
+		case OS_SIGNAL_ALARM:
 
 			return 11;
 
-		case TOOLSSYSTEM_SIGNAL_TERMINATION:
+		case OS_SIGNAL_TERMINATION:
 
 			return 12;
 
-		case TOOLSSYSTEM_SIGNAL_CHILD_CHANGED:
+		case OS_SIGNAL_CHILD_CHANGED:
 
 			return 13;
 
-		case TOOLSSYSTEM_SIGNAL_CONTINUE:
+		case OS_SIGNAL_CONTINUE:
 
 			return 14;
 
-		case TOOLSSYSTEM_SIGNAL_KEYBOARD_STOP:
+		case OS_SIGNAL_KEYBOARD_STOP:
 
 			return 15;
 
-		case TOOLSSYSTEM_SIGNAL_CPULIMIT_EXCEEDED:
+		case OS_SIGNAL_CPULIMIT_EXCEEDED:
 
 			return 16;
 
-		case TOOLSSYSTEM_SIGNAL_FILESIZE_EXCEEDED:
+		case OS_SIGNAL_FILESIZE_EXCEEDED:
 
 			return 17;
 
-		case TOOLSSYSTEM_SIGNAL_BAD_SYSCALL:
+		case OS_SIGNAL_BAD_SYSCALL:
 
 			return 18;
 
@@ -1172,83 +1172,83 @@ toolsSystem::toSignalNumber(long signal)
 //-------------------------------------------------------------------
 
 int
-toolsSystem::toRealSignal(long signal)
+os::toRealSignal(long signal)
 {
 	switch (signal)
 	{
-		case TOOLSSYSTEM_SIGNAL_HANGUP:
+		case OS_SIGNAL_HANGUP:
 
 			return SIGHUP;
 
-		case TOOLSSYSTEM_SIGNAL_INTERRUPT:
+		case OS_SIGNAL_INTERRUPT:
 
 			return SIGINT;
 
-		case TOOLSSYSTEM_SIGNAL_QUIT:
+		case OS_SIGNAL_QUIT:
 
 			return SIGQUIT;
 
-		case TOOLSSYSTEM_SIGNAL_ILLEGAL_INSTRUCTION:
+		case OS_SIGNAL_ILLEGAL_INSTRUCTION:
 
 			return SIGILL;
 
-		case TOOLSSYSTEM_SIGNAL_ABORT:
+		case OS_SIGNAL_ABORT:
 
 			return SIGABRT;
 
-		case TOOLSSYSTEM_SIGNAL_BUS_FAULT:
+		case OS_SIGNAL_BUS_FAULT:
 
 			return SIGBUS;
 
-		case TOOLSSYSTEM_SIGNAL_FLOATINGPOINT_FAULT:
+		case OS_SIGNAL_FLOATINGPOINT_FAULT:
 
 			return SIGFPE;
 
-		case TOOLSSYSTEM_SIGNAL_USER_DEFINED1:
+		case OS_SIGNAL_USER_DEFINED1:
 
 			return SIGUSR1;
 
-		case TOOLSSYSTEM_SIGNAL_SEGMENTATION_FAULT:
+		case OS_SIGNAL_SEGMENTATION_FAULT:
 
 			return SIGSEGV;
 
-		case TOOLSSYSTEM_SIGNAL_USER_DEFINED2:
+		case OS_SIGNAL_USER_DEFINED2:
 
 			return SIGUSR2;
 
-		case TOOLSSYSTEM_SIGNAL_PIPE_FAULT:
+		case OS_SIGNAL_PIPE_FAULT:
 
 			return SIGPIPE;
 
-		case TOOLSSYSTEM_SIGNAL_ALARM:
+		case OS_SIGNAL_ALARM:
 
 			return SIGALRM;
 
-		case TOOLSSYSTEM_SIGNAL_TERMINATION:
+		case OS_SIGNAL_TERMINATION:
 
 			return SIGTERM;
 
-		case TOOLSSYSTEM_SIGNAL_CHILD_CHANGED:
+		case OS_SIGNAL_CHILD_CHANGED:
 
 			return SIGCHLD;
 
-		case TOOLSSYSTEM_SIGNAL_CONTINUE:
+		case OS_SIGNAL_CONTINUE:
 
 			return SIGCONT;
 
-		case TOOLSSYSTEM_SIGNAL_KEYBOARD_STOP:
+		case OS_SIGNAL_KEYBOARD_STOP:
 
 			return SIGTSTP;
 
-		case TOOLSSYSTEM_SIGNAL_CPULIMIT_EXCEEDED:
+		case OS_SIGNAL_CPULIMIT_EXCEEDED:
 
 			return SIGXCPU;
 
-		case TOOLSSYSTEM_SIGNAL_FILESIZE_EXCEEDED:
+		case OS_SIGNAL_FILESIZE_EXCEEDED:
 
 			return SIGXFSZ;
 
-		case TOOLSSYSTEM_SIGNAL_BAD_SYSCALL:
+		case OS_SIGNAL_BAD_SYSCALL:
 
 			return SIGSYS;
 
@@ -1261,13 +1261,13 @@ toolsSystem::toRealSignal(long signal)
 //-------------------------------------------------------------------
 
 void
-toolsSystem::blockSignal(long signals,
+os::blockSignal(long signals,
 						 bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
 
-	toolsSystem::sigMask(&signal_mask, signals);
+	os::sigMask(&signal_mask, signals);
 
 	if (block)
 		sigprocmask(SIG_BLOCK, &signal_mask, NULL);
@@ -1278,7 +1278,7 @@ toolsSystem::blockSignal(long signals,
 //-------------------------------------------------------------------
 
 void
-toolsSystem::daemonize()
+os::daemonize()
 {
 	pid_t pid = fork();
 
@@ -1286,25 +1286,25 @@ toolsSystem::daemonize()
 	{
 		int tty = open("/dev/tty", O_RDWR);
 		if (tty == -1)
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		
 		if (ioctl(tty, TIOCNOTTY, (char *) 0) == -1)
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		
 		if (close(tty) == -1)
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		
 		if (close(0) == -1)
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(1) == -1)
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(2) == -1)
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
 		if (pid == -1)
-			throw baseEx(ERRMODULE_TOOLSSYSTEM, TOOLSSYSTEMEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			_exit(0);
 	}

@@ -30,14 +30,17 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum toolsTimeFunctionsID
+	namespace tools
 	{
-		TOOLSTIMEEX_GETBYFORMAT,
-		TOOLSTIMEEX_NOW,
-		TOOLSTIMEEX_MAKETIME,
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum timeFunctionsID
+		{
+			TIMEEX_GETBYFORMAT,
+			TIMEEX_NOW,
+			TIMEEX_MAKETIME,
+		};
 	};
 };
 

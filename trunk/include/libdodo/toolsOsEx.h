@@ -1,7 +1,7 @@
 /***************************************************************************
- *            toolsNetworkEx.h
+ *            toolsOsEx.h
  *
- *  Mon Feb 21 03:03:47 2005
+ *  Sat Nov 19 15:19:57 2005
  *  Copyright  2005  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _TOOLSNETWORKEX_H_
-#define _TOOLSNETWORKEX_H_
+#ifndef _TOOLSOSEX_H_
+#define _TOOLSOSEX_H_
 
 #include <libdodo/directives.h>
 
@@ -33,19 +33,51 @@ namespace dodo
 	namespace tools
 	{
 		/**
+		 * libdodo defined errors
+		 */
+		enum osExR
+		{
+			OSEX_WRONGPARAMETER,
+		};
+
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define OSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+
+		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum networkFunctionsID
+		enum osFunctionsID
 		{
-			NETWORKEX_GETHOSTINFO,
-			NETWORKEX_GETHOSTPRIMARYIP,
-			NETWORKEX_SETLOCALNAME,
-			NETWORKEX_GETLOCALNAME,
-			NETWORKEX_GETSERVICEINFO,
-			NETWORKEX_GETLOCALDOMAIN,
-			NETWORKEX_SETLOCALDOMAIN,
-			NETWORKEX_GETINTERFACEINFO,
-			NETWORKEX_GETINTERFACESNAMES,
+			SYSTEMSTATICATOMICMUTEXEX_UNLOCK,
+			SYSTEMSTATICATOMICMUTEXEX_LOCK,
+			OSEX_SETWORKINGDIR,
+			OSEX_GETWORKINGDIR,
+			OSEX_GETUSAGEINFO,
+			OSEX_GETLIMIT,
+			OSEX_SETLIMIT,
+			OSEX_GETPRIORITY,
+			OSEX_SETPRIORITY,
+			OSEX_GETUID,
+			OSEX_SETUID,
+			OSEX_GETGID,
+			OSEX_SETGID,
+			OSEX_GETUSERINFO,
+			OSEX_GETUSERS,
+			OSEX_GETGROUPINFO,
+			OSEX_GETGROUPS,
+			OSEX_CHANGEROOT,
+			OSEX_ATEXIT,
+			OSEX_GETGROUPPID,
+			OSEX_SETGROUPPID,
+			OSEX_SETSIGNALHANDLER,
+			OSEX_UNSETSIGNALHANDLER,
+			OSEX_GETMODULEINFO,
+			OSEX_SENDSIGNAL,
+			OSEX_SETTIMER,
+			OSEX_SETMICROTIMER,
+			OSEX_DAEMONIZE,
 		};
 	};
 };

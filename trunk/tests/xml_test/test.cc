@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 					
 			cout << xnode.attributes["iD"] << endl;
 			cout << xnode.name << endl;
-			cout << toolsString::trim(xnode.value," \n\t\r", 4) << endl;
+			cout << tools::string::trim(xnode.value," \n\t\r", 4) << endl;
 			cout << xnode.children.size() << endl;
 			
 			if (xnode.children.size()>0)

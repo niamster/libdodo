@@ -100,7 +100,7 @@ namespace dodo
 			
 			/**
 			 * set date/time format for log messages
-			 * @param format defines date/time format[see toolsTime]
+			 * @param format defines date/time format[see tools::time]
 			 * @note date/time format is not used for syslog
 			 */
 			virtual void setTimeFormat(const dodoString &format);

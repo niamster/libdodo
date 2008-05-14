@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 		//res =  HTTP.POST("http://localhost/libdodo/cgi_test/test.cgi", map);
 		//res =  HTTP.POST("http://localhost/libdodo/cgi_test/test.cgi", map, files);
 		
-		toolsFilesystem::writeToFile("test.dat", res.data);
+		tools::filesystem::writeToFile("test.dat", res.data);
 		
 
 		cout << res.code << "\n~~\n";

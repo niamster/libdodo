@@ -246,7 +246,7 @@ file::open(const dodoString &a_path,
 				if (exists && !S_ISFIFO(st.st_mode))
 					throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_LIBDODO, FILEEX_WRONGFILENAME, FILEEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);
 				if (!exists)
-					toolsFilesystem::mkfifo(path, DEFAULT_FILE_PERM);
+					tools::filesystem::mkfifo(path, DEFAULT_FILE_PERM);
 			}
 			else
 			{
@@ -288,7 +288,7 @@ file::open(const dodoString &a_path,
 	if (handler == NULL)
 		throw baseEx(ERRMODULE_IOFILE, FILEEX_OPEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	toolsFilesystem::chmod(path, DEFAULT_FILE_PERM);
+	tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
 
 #ifndef IOFILE_WO_XEXEC
 	performXExec(postExec);

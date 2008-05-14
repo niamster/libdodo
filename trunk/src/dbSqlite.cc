@@ -60,10 +60,10 @@ sqlite::fieldCollect(const __connectorField &row)
 	dodoString resRow(row.name + " " + sqlDataType(type));
 
 	if (preventEscaping)
-		resRow.append(!row.set_enum.empty() ? " (" + misc::implode(row.set_enum, ",") + ")" : __dodostring__);
+		resRow.append(!row.set_enum.empty() ? " (" + tools::misc::implode(row.set_enum, ",") + ")" : __dodostring__);
 	else
-		resRow.append(!row.set_enum.empty() ? " (" + misc::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
-	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + toolsString::lToString(row.length) + ") " : __dodostring__);
+		resRow.append(!row.set_enum.empty() ? " (" + tools::misc::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
+	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + tools::string::lToString(row.length) + ") " : __dodostring__);
 	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
 	resRow.append(isSetFlag(flag, CONNECTOR_FIELDFLAG_NULL) ? " null " : " not null ");
 	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
@@ -72,7 +72,7 @@ sqlite::fieldCollect(const __connectorField &row)
 	if (row.refTable.size() > 0)
 	{
 		resRow.append(" references " + row.refTable);
-		resRow.append(!row.refFields.empty() ? "(" + misc::implode(row.set_enum, ",") + " )" : __dodostring__);
+		resRow.append(!row.refFields.empty() ? "(" + tools::misc::implode(row.set_enum, ",") + " )" : __dodostring__);
 		resRow.append(row.onDelete >= 0 ? " on delete " + stringReference(row.onDelete) : __dodostring__);
 		resRow.append(row.onUpdate >= 0 ? " on update " + stringReference(row.onUpdate) : __dodostring__);
 	}
@@ -348,13 +348,13 @@ sqlite::fetchRow() const
 					{
 						case SQLITE_INTEGER:
 
-							rowsPart.push_back(toolsString::lToString(sqlite3_column_int(sqliteResult, i)));
+							rowsPart.push_back(tools::string::lToString(sqlite3_column_int(sqliteResult, i)));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowsPart.push_back(toolsString::dToString(sqlite3_column_double(sqliteResult, i)));
+							rowsPart.push_back(tools::string::dToString(sqlite3_column_double(sqliteResult, i)));
 
 							break;
 
@@ -636,13 +636,13 @@ sqlite::fetchAssoc() const
 					{
 						case SQLITE_INTEGER:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), toolsString::lToString(sqlite3_column_int(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::lToString(sqlite3_column_int(sqliteResult, i))));
 
 							break;
 
 						case SQLITE_FLOAT:
 
-							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), toolsString::dToString(sqlite3_column_double(sqliteResult, i))));
+							rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), tools::string::dToString(sqlite3_column_double(sqliteResult, i))));
 
 							break;
 
