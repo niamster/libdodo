@@ -70,14 +70,14 @@ data::map(unsigned long size)
 	unmap();
 
 	if (shm <= 0)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	ftruncate(shm, sizeof(size));
 
 	mdata = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm, 0);
 
 	if (mdata == MAP_FAILED)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	return mdata;
 }
@@ -89,7 +89,7 @@ data::unmap()
 {
 	if (mdata != NULL)
 		if (munmap(mdata, size) == -1)
-			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, DATAEX_UNMAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCSHAREDDATA, DATAEX_UNMAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	mdata = NULL;
 	size = 0;

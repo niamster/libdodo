@@ -65,12 +65,12 @@ void
 dataGuard::set(  void *a_data)
 {
 	if (sem_wait(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	data = a_data;
 
 	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -79,12 +79,12 @@ void
 dataGuard::del()
 {
 	if (sem_wait(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	data = NULL;
 
 	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -95,7 +95,7 @@ dataGuard::acquire(unsigned long microseconds)
 	if (microseconds == 0)
 	{
 		if (sem_wait(semaphore) != 0)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
@@ -107,15 +107,15 @@ dataGuard::acquire(unsigned long microseconds)
 			if (sem_trywait(semaphore) != 0)
 			{
 				if (errno != EAGAIN)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 				if (nanosleep(&timeout, NULL) == -1)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 				slept += 1;
 
 				if (slept > microseconds)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, DATAGUARDEX_CANNOTLOCK, DATAGUARDEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, DATAGUARDEX_CANNOTLOCK, DATAGUARDEX_CANNOTLOCK_STR, __LINE__, __FILE__);
 			}
 			else
 				locked = false;
@@ -131,7 +131,7 @@ void
 dataGuard::release()
 {
 	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSSHAREDDATAGUARD, DATAGUARDEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSSHAREDDATAGUARD, DATAGUARDEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

@@ -170,7 +170,7 @@ collection::addNRun(job::routine func,
 	else
 	{
 		if (pid == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		else
 			process.pid = pid;
 	}
@@ -194,11 +194,11 @@ collection::del(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -214,7 +214,7 @@ collection::del(unsigned long position,
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif				
 		}
 
@@ -223,7 +223,7 @@ collection::del(unsigned long position,
 		processes.erase(current);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -260,7 +260,7 @@ collection::_isRunning(dodoList<__processInfo>::iterator &position) const
 			return false;
 		}
 
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
 	return true;
@@ -280,11 +280,11 @@ collection::replace(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 				if (kill(current->pid, 2) == -1)
-					throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -301,7 +301,7 @@ collection::replace(unsigned long position,
 			
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);			
+				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);			
 #endif
 		}
 
@@ -313,7 +313,7 @@ collection::replace(unsigned long position,
 		current->action = action;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -328,11 +328,11 @@ collection::run(unsigned long position,
 		{
 			processes.erase(current);
 
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_SWEPT, COLLECTIONEX_SWEPT_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_SWEPT, COLLECTIONEX_SWEPT_STR, __LINE__, __FILE__);
 		}
 
 		if (_isRunning(current) && !force)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 		pid_t pid = fork();
 
@@ -345,7 +345,7 @@ collection::run(unsigned long position,
 		else
 		{
 			if (pid == -1)
-				throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			else
 				current->pid = pid;
 		}
@@ -354,7 +354,7 @@ collection::run(unsigned long position,
 		++ (current->executed);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -365,15 +365,15 @@ collection::stop(unsigned long position)
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 		if (kill(current->pid, 9) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -389,7 +389,7 @@ collection::stop()
 
 
 		if (kill(i->pid, 9) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		i->isRunning = false;
 	}
@@ -403,15 +403,15 @@ collection::wait(unsigned long position)
 	if (getProcess(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 		if (waitpid(current->pid, NULL, 0) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -426,7 +426,7 @@ collection::wait()
 			continue;
 
 		if (waitpid(i->pid, NULL, 0) == -1)
-			throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		i->isRunning = false;
 	}
@@ -440,7 +440,7 @@ collection::isRunning(unsigned long position) const
 	if (getProcess(position))
 		return _isRunning(current);
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_ISRUNNING, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_ISRUNNING, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -493,7 +493,7 @@ collection::setExecutionLimit(unsigned long position,
 	if (getProcess(position))
 		current->executeLimit = limit;
 	else
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_SETEXECUTIONLIMIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_SETEXECUTIONLIMIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -510,17 +510,17 @@ collection::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSystemProcessCollectionModule init = (initSystemProcessCollectionModule)dlsym(handle, "initSystemProcessCollectionModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__collectionMod mod = init(toInit);
 	
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif	
 	
 	return mod;
@@ -544,17 +544,17 @@ collection::add(const dodoString &module,
 	process.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (process.handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSystemProcessCollectionModule init = (initSystemProcessCollectionModule)dlsym(process.handle, "initSystemProcessCollectionModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__collectionMod temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(process.handle, temp.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	process.executeLimit = temp.executeLimit;
 	process.action = temp.action;

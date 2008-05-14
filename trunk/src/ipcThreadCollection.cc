@@ -193,14 +193,14 @@ collection::del(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 #ifdef PTHREAD_EXT
 				
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
-					throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				
 #endif
 			}
@@ -218,7 +218,7 @@ collection::del(unsigned long position,
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 		}
 
@@ -227,7 +227,7 @@ collection::del(unsigned long position,
 		threads.erase(current);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -246,14 +246,14 @@ collection::replace(unsigned long position,
 		if (_isRunning(current))
 		{
 			if (!force)
-				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 			else
 			{
 #ifdef PTHREAD_EXT
 				
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
-					throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				
 #endif
 			}
@@ -272,7 +272,7 @@ collection::replace(unsigned long position,
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 
 			current->handle = NULL;
@@ -288,7 +288,7 @@ collection::replace(unsigned long position,
 		current->action = action;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -303,11 +303,11 @@ collection::run(unsigned long position,
 		{
 			threads.erase(current);
 
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_SWEPT, COLLECTIONEX_SWEPT_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_SWEPT, COLLECTIONEX_SWEPT_STR, __LINE__, __FILE__);
 		}
 
 		if (_isRunning(current) && !force)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, COLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
 		
@@ -318,11 +318,11 @@ collection::run(unsigned long position,
 
 		errno = pthread_attr_setstacksize(&attr, current->stackSize);
 		if (errno != 0)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 		errno = pthread_create(&(current->thread), &attr, current->func, current->data);
 		if (errno != 0)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 		
@@ -330,7 +330,7 @@ collection::run(unsigned long position,
 		++ (current->executed);
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -341,23 +341,23 @@ collection::wait(unsigned long position)
 	if (getThread(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 		if (current->detached)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_ISDETACHED, COLLECTIONEX_ISDETACHED_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_ISDETACHED, COLLECTIONEX_ISDETACHED_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
 		
 		errno = pthread_join(current->thread, NULL);
 		if (errno != 0)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 		
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -375,7 +375,7 @@ collection::wait()
 		
 		errno = pthread_join(i->thread, NULL);
 		if (errno != 0)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 		
@@ -391,20 +391,20 @@ collection::stop(unsigned long position)
 	if (getThread(position))
 	{
 		if (!_isRunning(current))
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, COLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
 		
 		errno = pthread_cancel(current->thread);
 		if (errno != 0)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 		
 		current->isRunning = false;
 	}
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -422,7 +422,7 @@ collection::stop()
 		
 		errno = pthread_cancel(i->thread);
 		if (errno != 0)
-			throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 		
@@ -439,7 +439,7 @@ collection::isRunning(unsigned long position) const
 	if (getThread(position))
 		return _isRunning(current);
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_ISRUNNING, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ISRUNNING, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -462,7 +462,7 @@ collection::_isRunning(dodoList<__threadInfo>::iterator &position) const
 			return false;
 		}
 
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	
 #endif
@@ -505,7 +505,7 @@ collection::setExecutionLimit(unsigned long position,
 	if (getThread(position))
 		current->executeLimit = limit;
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_SETEXECUTIONLIMIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_SETEXECUTIONLIMIT, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, COLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -537,17 +537,17 @@ collection::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSystemThreadCollectionModule init = (initSystemThreadCollectionModule)dlsym(handle, "initSystemThreadCollectionModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__collectionMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 
 	return mod;
@@ -571,17 +571,17 @@ collection::add(const dodoString &module,
 	thread.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (thread.handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initSystemThreadCollectionModule init = (initSystemThreadCollectionModule)dlsym(thread.handle, "initSystemThreadCollectionModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__collectionMod temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(thread.handle, temp.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	thread.executeLimit = temp.executeLimit;
 	thread.detached = temp.detached;
@@ -659,11 +659,11 @@ collection::addNRun(job::routine func,
 
 	errno = pthread_attr_setstacksize(&attr, stackSize);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	errno = pthread_create(&(thread.thread), &attr, func, data);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_SYSTEMTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 	

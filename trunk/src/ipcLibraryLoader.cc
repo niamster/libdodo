@@ -63,7 +63,7 @@ libraryLoader::open(const dodoString &path)
 	handle = dlopen(path.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_OPEN, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_OPEN, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -73,7 +73,7 @@ libraryLoader::close()
 {
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_CLOSE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_CLOSE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 }
 
@@ -83,11 +83,11 @@ void *
 libraryLoader::get(const dodoString &name)
 {
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
 	
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -96,11 +96,11 @@ void *
 libraryLoader::operator[](const dodoString &name)
 {
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
 	
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -116,13 +116,13 @@ libraryLoader::getSymbols(const dodoString &path)
 	if (lib == NULL)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
     
 	if (bfd_check_format(lib, bfd_object) == FALSE)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 
 	long storageSize = bfd_get_symtab_upper_bound(lib);
@@ -130,7 +130,7 @@ libraryLoader::getSymbols(const dodoString &path)
 	if (storageSize < 0)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 	
 	if (storageSize == 0)
@@ -143,7 +143,7 @@ libraryLoader::getSymbols(const dodoString &path)
 	if (numberOfSymbols < 0)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 	
 	dodoStringArray arr;
@@ -154,7 +154,7 @@ libraryLoader::getSymbols(const dodoString &path)
 	if (bfd_close(lib) == FALSE)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_IPCLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 	
 	return arr;
