@@ -36,7 +36,7 @@ pthread_mutex_t server::accept = PTHREAD_MUTEX_INITIALIZER;
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(serverExchange *data)
+dummyStackThread(exchange *data)
 {
 }
 
@@ -105,7 +105,7 @@ server::stackThread(void *data)
 	FCGX_Request request;
 	FCGX_InitRequest(&request, 0, 0);
 
-	serverExchange cfSTD(&request);
+	exchange cfSTD(&request);
 
 	int res = 0;
 
@@ -157,7 +157,7 @@ server::listen()
 		FCGX_Request request;
 		FCGX_InitRequest(&request, 0, 0);
 
-		serverExchange cfSTD(&request);
+		exchange cfSTD(&request);
 
 		while (true)
 		{

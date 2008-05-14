@@ -317,7 +317,7 @@ namespace dodo
 				 * @param postFilesInMem defines place of POST files[disk or memory]
 				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 				 */
-				server(fast::serverExchange *cf, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+				server(fast::exchange *cf, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 	
 				/**
 				 * constructor
@@ -328,7 +328,7 @@ namespace dodo
 				 * @param postFilesInMem defines place of POST files[disk or memory]
 				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 				 */
-				server(fast::serverExchange *cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+				server(fast::exchange *cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 	
 	#endif
 	

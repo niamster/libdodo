@@ -1,5 +1,5 @@
 /***************************************************************************
- *            cgiFastServerExchangeEx.h
+ *            cgiFastExchangeEx.h
  *
  *  Mon Dec 31 01:51:55 2007
  *  Copyright  2007  Ni@m
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _CGIFASTSERVEREXCHANGEEX_H_
-#define _CGIFASTSERVEREXCHANGEEX_H_
+#ifndef _CGIFASTEXCHANGEEX_H_
+#define _CGIFASTEXCHANGEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -37,25 +37,25 @@ namespace dodo
 			/**
 			 * libdodo defined errors
 			 */
-			enum fastServerExchangeExR
+			enum fastExchangeExR
 			{
-				FASTSERVEREXCHANGEEX_FAILEDTOFLUSH,
-				FASTSERVEREXCHANGEEX_FAILEDTOPRINTSTRING,
+				FASTEXCHANGEEX_FAILEDTOFLUSH,
+				FASTEXCHANGEEX_FAILEDTOPRINTSTRING,
 			};
 		
 			/**
 			 * explanations for libdodo defined errors
 			 */
-		#define FASTSERVEREXCHANGEEX_FAILEDTOFLUSH_STR "Failed to flush."
-		#define FASTSERVEREXCHANGEEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
+		#define FASTEXCHANGEEX_FAILEDTOFLUSH_STR "Failed to flush."
+		#define FASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
 		
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum fastServerExchangeFunctionsID
+			enum fastExchangeFunctionsID
 			{
-				FASTSERVEREXCHANGEEX_FLUSH,
-				FASTSERVEREXCHANGEEX__WRITE,
+				FASTEXCHANGEEX_FLUSH,
+				FASTEXCHANGEEX__WRITE,
 			};
 		};
 	};

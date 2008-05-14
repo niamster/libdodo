@@ -271,17 +271,17 @@ fi
 		
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 
-		AC_ARG_ENABLE(cgiFastServerExchange-xexec-support,
-			AS_HELP_STRING([--disable-cgiFastServerExchange-xexec-support],[compile cgi::fast::server::exchange w/o xexec support]),
-			[CGIFASTSERVEREXCHANGE_W_XEXEC="$enableval"], [CGIFASTSERVEREXCHANGE_W_XEXEC="yes"])
+		AC_ARG_ENABLE(cgiFastExchange-xexec-support,
+			AS_HELP_STRING([--disable-cgiFastExchange-xexec-support],[compile cgi::fast::exchange w/o xexec support]),
+			[CGIFASTEXCHANGE_W_XEXEC="$enableval"], [CGIFASTEXCHANGE_W_XEXEC="yes"])
 
-		if test "$CGIFASTSERVEREXCHANGE_W_XEXEC" = "no"
+		if test "$CGIFASTEXCHANGE_W_XEXEC" = "no"
 		then
-			echo -n -e "#define CGIFASTSERVEREXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+			echo -n -e "#define CGIFASTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 			
-			RESULT="$RESULT\ncgi::fast::server::exchange xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ncgi::fast::server::exchange xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tdisabled"

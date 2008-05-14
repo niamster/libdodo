@@ -252,7 +252,7 @@ server::server(bool silent,
 
 #ifdef FASTCGI_EXT
 
-server::server(fast::serverExchange    *a_cf,
+server::server(fast::exchange    *a_cf,
 		 bool silent,
 		 bool a_autocleanFiles,
 		 bool a_postFilesInMem,
@@ -288,7 +288,7 @@ server::server(fast::serverExchange    *a_cf,
 
 //-------------------------------------------------------------------
 
-server::server(fast::serverExchange    *a_cf,
+server::server(fast::exchange    *a_cf,
 		dodoMap<short, dodoString> &headers,
 		 bool silent,
 		 bool a_autocleanFiles,
@@ -625,7 +625,7 @@ server::makeEnv()
 	{
 #ifdef FASTCGI_EXT
 		if (serverFastSet)
-			env = ((fast::serverExchange *)cgiIO)->getenv(environmentStatements[i]);
+			env = ((fast::exchange *)cgiIO)->getenv(environmentStatements[i]);
 		else
 #endif
 		env = getenv(environmentStatements[i]);

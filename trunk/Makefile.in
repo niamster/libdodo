@@ -83,7 +83,7 @@ OBJECTS:=dbAccumulator.o \
 	ipcLibraryLoader.o \
 	cgiServer.o \
 	cgiFastServer.o \
-	cgiFastServerExchange.o \
+	cgiFastExchange.o \
 	cgiPreprocessor.o \
 	cgiProcessor.o
 

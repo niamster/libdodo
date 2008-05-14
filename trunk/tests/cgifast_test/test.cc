@@ -12,13 +12,13 @@ using namespace std;
 #ifdef FASTCGI_EXT
 
 using namespace dodo;
-using cgi::fast::serverExchange;
+using cgi::fast::exchange;
 using dodo::ipc::thread::shared::dataGuard;
 
 	dataGuard sh;
 
 	void 
-	cgif(serverExchange *fcgi)
+	cgif(exchange *fcgi)
 	{
 		using namespace cgi;
 

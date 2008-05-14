@@ -1274,9 +1274,8 @@ Optional Features:
                           compile db::postgresql w/o xexec support
   --disable-dbMysql-xexec-support
                           compile db::mysql w/o xexec support
-  --disable-cgiFastServerExchange-xexec-support
-                          compile cgi::fast::server::exchange w/o xexec
-                          support
+  --disable-cgiFastExchange-xexec-support
+                          compile cgi::fast::exchange w/o xexec support
   --disable-dl-lib        disable dl as lib
   --disable-fast-dynamic-loading
                           do not unload library to produce better performance
@@ -5276,21 +5275,21 @@ fi
 
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 
-		# Check whether --enable-cgiFastServerExchange-xexec-support was given.
-if test "${enable_cgiFastServerExchange_xexec_support+set}" = set; then
-  enableval=$enable_cgiFastServerExchange_xexec_support; CGIFASTSERVEREXCHANGE_W_XEXEC="$enableval"
+		# Check whether --enable-cgiFastExchange-xexec-support was given.
+if test "${enable_cgiFastExchange_xexec_support+set}" = set; then
+  enableval=$enable_cgiFastExchange_xexec_support; CGIFASTEXCHANGE_W_XEXEC="$enableval"
 else
-  CGIFASTSERVEREXCHANGE_W_XEXEC="yes"
+  CGIFASTEXCHANGE_W_XEXEC="yes"
 fi
 
 
-		if test "$CGIFASTSERVEREXCHANGE_W_XEXEC" = "no"
+		if test "$CGIFASTEXCHANGE_W_XEXEC" = "no"
 		then
-			echo -n -e "#define CGIFASTSERVEREXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+			echo -n -e "#define CGIFASTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\ncgi::fast::server::exchange xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\ncgi::fast::server::exchange xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tdisabled"
