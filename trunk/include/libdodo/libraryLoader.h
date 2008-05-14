@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ipcLibraryLoader.h
+ *            libraryLoader.h
  *
  *  Thu Mar 13 20:50:55 2008
  *  Copyright  2008  Ni@m
@@ -34,7 +34,7 @@
 
 #endif
 
-#include <libdodo/ipcLibraryLoaderEx.h>
+#include <libdodo/libraryLoaderEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
 

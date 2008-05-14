@@ -80,7 +80,7 @@ OBJECTS:=dbAccumulator.o \
 	ipcThreadSharedDataCollectionGuard.o \
 	ipcProcessSharedDataCollectionGuard.o \
 	ipcSharedDataCollectionGuard.o \
-	ipcLibraryLoader.o \
+	libraryLoader.o \
 	cgiServer.o \
 	cgiFastServer.o \
 	cgiFastExchange.o \

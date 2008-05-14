@@ -1,5 +1,5 @@
 #include <libdodo/directives.h>
-#include <libdodo/ipcLibraryLoader.h>
+#include <libdodo/libraryLoader.h>
 #include <libdodo/baseEx.h>
 
 #include <iostream>

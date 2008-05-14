@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ipcLibraryLoaderEx.h
+ *            libraryLoaderEx.h
  *
  *  Thu Mar 13 20:50:55 2008
  *  Copyright  2008  Ni@m
