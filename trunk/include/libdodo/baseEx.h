@@ -78,7 +78,7 @@ namespace dodo
 		ERRMODULE_XEXEC,
 		ERRMODULE_TOOLSSYSTEM,
 		ERRMODULE_TOOLSTIME,
-		ERRMODULE_TOOLSSYSTEMSYSTEMATOMICMUTEX,
+		ERRMODULE_TOOLSSYSTEMSTATICATOMICMUTEX,
 		ERRMODULE_XMLPROCESSOR,
 		ERRMODULE_TOOLSMISC,
 		ERRMODULE_DBSQLITE,
@@ -278,41 +278,41 @@ namespace dodo
 					/**
 					 * lock critical section
 					 */
-					virtual void lock();
+					virtual void acquire();
 
 					/**
 					 * unlock critical section
 					 */
-					virtual void unlock();
+					virtual void release();
 
 				protected:
 
 #ifdef PTHREAD_EXT
 					
-					static pthread_mutex_t mutex; ///< mutex
+					static pthread_mutex_t keeper; ///< mutex
 					
 #endif
 			};
 
-			static staticAtomicMutex mutex;///< lock
+			static staticAtomicMutex keeper;///< lock
 			
 			/**
-			 * @class systemRaceHazardGuard provides thread safe behaviour
+			 * @class raceHazardGuard provides thread safe behaviour
 			 * @note it locks in constructor and unlocks in destructor
 			 */
-			class systemRaceHazardGuard
+			class raceHazardGuard
 			{
 				public:
 
 					/**
 					 * contructor
 					 */
-					systemRaceHazardGuard();
+					raceHazardGuard();
 
 					/**
 					 * destructor
 					 */
-					virtual ~systemRaceHazardGuard();
+					virtual ~raceHazardGuard();
 			};
 	};
 };

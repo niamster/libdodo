@@ -88,7 +88,7 @@ namespace dodo
 		 * @class stdio provides interface for stdin/stdout/stderr I/O operations
 		 */
 		class stdio : public channel,
-					  virtual public systemThreadGuardHolder
+					  virtual public system::thread::guardHolder
 		{
 			private:
 	

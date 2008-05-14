@@ -62,7 +62,7 @@ namespace dodo
 	/**
 	 * @class logger provides logging function
 	 */
-	class logger : virtual public systemThreadGuardHolder
+	class logger : virtual public system::thread::guardHolder
 	{
 		public:
 			

@@ -92,7 +92,7 @@ file::~file()
 int
 file::getInDescriptor() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	if (!opened)
 		return -1;
@@ -105,7 +105,7 @@ file::getInDescriptor() const
 int
 file::getOutDescriptor() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	if (!opened)
 		return -1;
@@ -174,7 +174,7 @@ file::addExec(const dodoString &module,
 void
 file::close()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	operType = FILE_OPERATION_CLOSE;
@@ -204,7 +204,7 @@ file::open(const dodoString &a_path,
 			 short a_fileType,
 			 short mode)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	operType = FILE_OPERATION_OPEN;
@@ -331,7 +331,7 @@ file::_read(char * const a_void)
 void
 file::read(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	operType = FILE_OPERATION_READ;
@@ -374,7 +374,7 @@ file::read(char * const a_void)
 void
 file::readString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	operType = FILE_OPERATION_READSTRING;
@@ -423,7 +423,7 @@ file::readString(dodoString &a_str)
 void
 file::writeString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	
@@ -523,7 +523,7 @@ file::_write(const char *const a_buf)
 void
 file::write(const char *const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	
@@ -562,7 +562,7 @@ file::write(const char *const a_buf)
 void
 file::erase()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	char *empty = new char[outSize];
 
@@ -578,7 +578,7 @@ file::erase()
 void
 file::flush()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	if (fflush(handler) != 0)
 		throw baseEx(ERRMODULE_IOFILE, FILEEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -589,7 +589,7 @@ file::flush()
 dodoString
 file::getPath() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	return path;
 }
@@ -652,7 +652,7 @@ file::_readStream(char * const a_void)
 void
 file::readStream(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	operType = FILE_OPERATION_READSTREAM;
@@ -680,7 +680,7 @@ file::readStream(char * const a_void)
 void
 file::readStreamString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
 	operType = FILE_OPERATION_READSTREAMSTRING;
@@ -757,7 +757,7 @@ file::_writeStream(const char *const a_buf)
 void
 file::writeStreamString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -816,7 +816,7 @@ file::writeStreamString(const dodoString &a_buf)
 void
 file::writeStream(const char *const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -875,7 +875,7 @@ file::writeStream(const char *const a_buf)
 short
 file::getFileType() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	return fileType;
 }

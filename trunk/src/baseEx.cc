@@ -251,13 +251,13 @@ void *baseEx::handlesEx[] = { NULL,
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t baseEx::staticAtomicMutex::mutex;
+pthread_mutex_t baseEx::staticAtomicMutex::keeper;
 
 #endif
 
 //-------------------------------------------------------------------
 
-baseEx::staticAtomicMutex baseEx::mutex;
+baseEx::staticAtomicMutex baseEx::keeper;
 
 //-------------------------------------------------------------------
 
@@ -269,7 +269,7 @@ baseEx::staticAtomicMutex::staticAtomicMutex()
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 
-	pthread_mutex_init(&mutex, &attr);
+	pthread_mutex_init(&keeper, &attr);
 
 	pthread_mutexattr_destroy(&attr);
 	
@@ -282,7 +282,7 @@ baseEx::staticAtomicMutex::~staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 	
-	pthread_mutex_destroy(&mutex);
+	pthread_mutex_destroy(&keeper);
 	
 #endif
 }
@@ -290,11 +290,11 @@ baseEx::staticAtomicMutex::~staticAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-baseEx::staticAtomicMutex::lock()
+baseEx::staticAtomicMutex::acquire()
 {
 #ifdef PTHREAD_EXT
 	
-	pthread_mutex_lock(&mutex);
+	pthread_mutex_lock(&keeper);
 	
 #endif
 }
@@ -302,27 +302,27 @@ baseEx::staticAtomicMutex::lock()
 //-------------------------------------------------------------------
 
 void
-baseEx::staticAtomicMutex::unlock()
+baseEx::staticAtomicMutex::release()
 {
 #ifdef PTHREAD_EXT
 	
-	pthread_mutex_unlock(&mutex);
+	pthread_mutex_unlock(&keeper);
 	
 #endif
 }
 
 //-------------------------------------------------------------------
 
-baseEx::systemRaceHazardGuard::systemRaceHazardGuard()
+baseEx::raceHazardGuard::raceHazardGuard()
 {
-	mutex.lock();
+	keeper.acquire();
 }
 
 //-------------------------------------------------------------------
 
-baseEx::systemRaceHazardGuard::~systemRaceHazardGuard()
+baseEx::raceHazardGuard::~raceHazardGuard()
 {
-	mutex.unlock();
+	keeper.release();
 }
 
 //-------------------------------------------------------------------
@@ -343,7 +343,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 											  file(a_file),
 											  message(a_message)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 	if (handlerSetEx[errModule])
 		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
@@ -353,7 +353,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 
 baseEx::~baseEx()
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -383,7 +383,7 @@ baseEx::~baseEx()
 
 baseEx::operator const dodoString & ()
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 	return baseErrstr;
 }
@@ -395,7 +395,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 						errorHandler handler,
 						void *data)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -428,7 +428,7 @@ void
 baseEx::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 	deinitExModule deinit;
@@ -465,7 +465,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 void
 baseEx::unsetErrorHandler(errorModuleEnum module)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -497,7 +497,7 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 void
 baseEx::unsetErrorHandlers()
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 	deinitExModule deinit;
@@ -538,7 +538,7 @@ baseEx::setErrorHandlers(const dodoString &path,
 						 void *data,
 						 void *toInit)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 	initExModule init;
 	errorHandler in;
@@ -595,7 +595,7 @@ baseEx::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_FAST
 	void *handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
@@ -648,7 +648,7 @@ __exMod
 baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);

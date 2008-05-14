@@ -23,22 +23,22 @@
 
 #include <libdodo/systemAtomicSemaphore.h>
 
-using namespace dodo;
+using namespace dodo::system::atomic;
 
-systemAtomicSemaphore::systemAtomicSemaphore(unsigned int value,
+semaphore::semaphore(unsigned int value,
 								 const char   *a_key)
 {
 	key = new char[strlen(a_key) + 1];
 	strcpy(key, a_key);
 
-	semaphore = sem_open(key, O_CREAT, 0660, value);
+	keeper = sem_open(key, O_CREAT, 0660, value);
 }
 
 //-------------------------------------------------------------------
 
-systemAtomicSemaphore::~systemAtomicSemaphore()
+semaphore::~semaphore()
 {
-	sem_close(semaphore);
+	sem_close(keeper);
 
 	sem_unlink(key);
 }
@@ -46,19 +46,19 @@ systemAtomicSemaphore::~systemAtomicSemaphore()
 //-------------------------------------------------------------------
 
 void
-systemAtomicSemaphore::lock()
+semaphore::acquire()
 {
-	if (sem_wait(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMATOMICSEMAPHORE, SYSTEMATOMICSEMAPHOREEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (sem_wait(keeper) != 0)
+		throw baseEx(ERRMODULE_SYSTEMATOMICSEMAPHORE, SEMAPHOREEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemAtomicSemaphore::unlock()
+semaphore::release()
 {
-	if (sem_post(semaphore) != 0)
-		throw baseEx(ERRMODULE_SYSTEMATOMICSEMAPHORE, SYSTEMATOMICSEMAPHOREEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (sem_post(keeper) != 0)
+		throw baseEx(ERRMODULE_SYSTEMATOMICSEMAPHORE, SEMAPHOREEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

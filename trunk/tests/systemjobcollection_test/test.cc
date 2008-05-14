@@ -9,10 +9,12 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace dodo::system;
+
 using namespace std;
 
 void *
-process(void *data)
+job(void *data)
 {
 	try
 	{
@@ -36,25 +38,23 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		
-
 		const int amount = 10;
 		
-		systemJobCollection *pr[amount];
+		dodo::system::job::collection *pr[amount];
 
 		int pos[amount];
 		dodoString ids[amount];
 		for (int i=0;i<amount;++i)
 		{
 			if (i%2 == 0)	
-				pr[i] = new systemProcessCollection;
+				pr[i] = new thread::collection;
 #ifdef PTHREAD_EXT
 			else
-				pr[i] = new systemThreadCollection;
+				pr[i] = new process::collection;
 #endif
 
 			ids[i] = toolsString::lToString(i);
-			pos[i] = pr[i]->add(process,(void *)ids[i].c_str());
+			pos[i] = pr[i]->add(::job,(void *)ids[i].c_str());
 		}
 		
 		for (int i=0;i<amount;++i)

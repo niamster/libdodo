@@ -30,17 +30,19 @@
 
 namespace dodo
 {
-	/**
-	 * next for systemSharedData
-	 */
-
-	/**
-	 * ID of function where exception was thrown
-	 */
-	enum systemSharedDataFunctionsID
+	namespace system
 	{
-		SYSTEMSHAREDDATAEX_MAP,
-		SYSTEMSHAREDDATAEX_UNMAP,
+		namespace shared
+		{
+			/**
+			 * ID of function where exception was thrown
+			 */
+			enum dataFunctionsID
+			{
+				DATAEX_MAP,
+				DATAEX_UNMAP,
+			};
+		};
 	};
 };
 

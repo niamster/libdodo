@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _VALUEEX_H_
-#define _VALUEEX_H_
+#ifndef _RPCVALUEEX_H_
+#define _RPCVALUEEX_H_
 
 #include <libdodo/directives.h>
 

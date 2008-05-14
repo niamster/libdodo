@@ -8,10 +8,11 @@
 
 using namespace dodo;
 using namespace io::network;
+using namespace dodo::system;
 
 using namespace std;
 
-systemThreadSharedDataGuard sh;
+thread::shared::dataGuard sh;
 
 void *
 process(void *data)
@@ -53,9 +54,9 @@ process(void *data)
 		if (rec == "exit")
 		{
 			bool *exit_st;
-			exit_st = (bool *)sh.lock();
+			exit_st = (bool *)sh.acquire();
 			*exit_st = true;
-			sh.unlock();
+			sh.release();
 		}
 	}
 	catch (baseEx ex)
@@ -106,7 +107,7 @@ int main(int argc, char **argv)
 		bool exit_st(false);
 
 #ifdef PTHREAD_EXT
-		systemThreadCollection th;
+		thread::collection th;
 		vector<int> positions;
 #endif
 		

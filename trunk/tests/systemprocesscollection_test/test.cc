@@ -10,30 +10,35 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace dodo::system;
+using namespace process;
+using namespace process::shared;
+
 using namespace std;
 
-systemProcessSharedDataGuard dg;
-systemProcessSharedDataCollectionGuard dgC;
+dataGuard dg;
+dataCollectionGuard dgC;
 unsigned long dgCI;
 
 void *
-process(void *data)
+process(void *ud)
 {
 	try
 	{
-		systemSharedData shD("dodo");
-		char *data = (char *)shD.map(100);
-		cout << data << endl;
+		dodo::system::shared::data shD("dodo");
+		char *dt = (char *)shD.map(100);
+		cout << dt << endl;
 
 		cout << (char *)dgC.get(dgCI);
-		cout << (char *)dg.lock();dg.unlock();
+		cout << (char *)dg.acquire();
+		dg.release();
 
-		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
+		cout << endl << (char *)dt << ": " << toolsTime::now() << endl;
 		cout.flush();
 		
 		toolsSystem::sleep(10);
 		
-		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
+		cout << endl << (char *)dt << ": " << toolsTime::now() << endl;
 		cout.flush();
 	}
 	catch(baseEx ex)
@@ -48,14 +53,14 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		systemSharedData shD("dodo");
+		dodo::system::shared::data shD("dodo");
 		char *data = (char *)shD.map(100);
 		strcpy(data, "test");
 
 		dgCI = dgC.add((char *)"@test@\n");
 		dg.set((char *)"!test!\n");
 
-		systemProcessCollection pr;
+		collection pr;
 
 		const int amount = 10;
 
@@ -64,7 +69,7 @@ int main(int argc, char **argv)
 		for (int i=0;i<amount;++i)
 		{
 			ids[i] = toolsString::lToString(i);
-			pos[i] = pr.add(process,(void *)ids[i].c_str());
+			pos[i] = pr.add(::process,(void *)ids[i].c_str());
 		}
 		
 		for (int i=0;i<amount;++i)

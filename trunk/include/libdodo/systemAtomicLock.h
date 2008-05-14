@@ -30,27 +30,33 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemAtomicLock performs atomic locks
-	 */
-	class systemAtomicLock
+	namespace system
 	{
-		public:
-
+		namespace atomic
+		{
 			/**
-			 * destructor
+			 * @class lock performs atomic locks
 			 */
-			virtual ~systemAtomicLock() = 0;
-
-			/**
-			 * lock critical section
-			 */
-			virtual void lock() = 0;
-
-			/**
-			 * unlock critical section
-			 */
-			virtual void unlock() = 0;
+			class lock
+			{
+				public:
+		
+					/**
+					 * destructor
+					 */
+					virtual ~lock() = 0;
+		
+					/**
+					 * lock critical section
+					 */
+					virtual void acquire() = 0;
+		
+					/**
+					 * unlock critical section
+					 */
+					virtual void release() = 0;
+			};
+		};
 	};
 };
 

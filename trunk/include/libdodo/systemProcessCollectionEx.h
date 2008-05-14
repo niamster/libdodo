@@ -30,46 +30,52 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum systemProcessCollectionExR
+	namespace system
 	{
-		SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING,
-		SYSTEMPROCESSCOLLECTIONEX_NOTFOUND,
-		SYSTEMPROCESSCOLLECTIONEX_SWEPT,
-		SYSTEMPROCESSCOLLECTIONEX_ISNOTRUNNING,
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define SYSTEMPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR "The process is currently running. Please wait."
-#define SYSTEMPROCESSCOLLECTIONEX_NOTFOUND_STR "Process not found."
-#define SYSTEMPROCESSCOLLECTIONEX_SWEPT_STR "Limit of execution exceeded. Process swept."
-#define SYSTEMPROCESSCOLLECTIONEX_ISNOTRUNNING_STR "The process is currently not running."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum systemProcessCollectionFunctionsID
-	{
-		SYSTEMPROCESSCOLLECTIONEX__ISRUNNING,
-		SYSTEMPROCESSCOLLECTIONEX_ADDNRUN,
-		SYSTEMPROCESSCOLLECTIONEX_RUN,
-		SYSTEMPROCESSCOLLECTIONEX_DEL,
-		SYSTEMPROCESSCOLLECTIONEX_REPLACE,
-		SYSTEMPROCESSCOLLECTIONEX_STOP,
-		SYSTEMPROCESSCOLLECTIONEX_WAIT,
-		SYSTEMPROCESSCOLLECTIONEX_SETEXECUTIONLIMIT,
-		SYSTEMPROCESSCOLLECTIONEX_ISRUNNING,
-
-#ifdef DL_EXT
-
-		SYSTEMPROCESSCOLLECTIONEX_GETMODULEINFO,
-		SYSTEMPROCESSCOLLECTIONEX_ADD,
-
-#endif
+		namespace process
+		{
+			/**
+			 * libdodo defined errors
+			 */
+			enum collectionExR
+			{
+				COLLECTIONEX_ISALREADYRUNNING,
+				COLLECTIONEX_NOTFOUND,
+				COLLECTIONEX_SWEPT,
+				COLLECTIONEX_ISNOTRUNNING,
+			};
+		
+			/**
+			 * explanations for libdodo defined errors
+			 */
+		#define COLLECTIONEX_ISALREADYRUNNING_STR "The process is currently running. Please wait."
+		#define COLLECTIONEX_NOTFOUND_STR "Process not found."
+		#define COLLECTIONEX_SWEPT_STR "Limit of execution exceeded. Process swept."
+		#define COLLECTIONEX_ISNOTRUNNING_STR "The process is currently not running."
+		
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum collectionFunctionsID
+			{
+				COLLECTIONEX__ISRUNNING,
+				COLLECTIONEX_ADDNRUN,
+				COLLECTIONEX_RUN,
+				COLLECTIONEX_DEL,
+				COLLECTIONEX_REPLACE,
+				COLLECTIONEX_STOP,
+				COLLECTIONEX_WAIT,
+				COLLECTIONEX_SETEXECUTIONLIMIT,
+				COLLECTIONEX_ISRUNNING,
+		
+		#ifdef DL_EXT
+		
+				COLLECTIONEX_GETMODULEINFO,
+				COLLECTIONEX_ADD,
+		
+		#endif
+			};
+		};
 	};
 };
 

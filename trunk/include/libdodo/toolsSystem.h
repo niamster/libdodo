@@ -56,7 +56,14 @@
 
 namespace dodo
 {
-
+	namespace system
+	{
+		namespace thread
+		{
+			class collection;
+		};
+	};
+	
 	/**
 	 * @struct __usage defines process information
 	 */
@@ -183,7 +190,7 @@ namespace dodo
 	 */
 	class toolsSystem
 	{
-			friend class systemThreadCollection;
+			friend class system::thread::collection;
 
 		public:
 
@@ -492,39 +499,39 @@ namespace dodo
 					/**
 					 * lock critical section
 					 */
-					virtual void lock();
+					virtual void acquire();
 
 					/**
 					 * unlock critical section
 					 */
-					virtual void unlock();
+					virtual void release();
 
 				protected:
 
 #ifdef PTHREAD_EXT
-					static pthread_mutex_t mutex; ///< mutex
+					static pthread_mutex_t keeper; ///< mutex
 #endif
 			};
 
-			static staticAtomicMutex mutex;///< lock
+			static staticAtomicMutex keeper;///< lock
 			
 			/**
-			 * @class systemRaceHazardGuard provides thread safe behaviour
+			 * @class raceHazardGuard provides thread safe behaviour
 			 * @note it locks in constructor and unlocks in destructor
 			 */
-			class systemRaceHazardGuard
+			class raceHazardGuard
 			{
 				public:
 
 					/**
 					 * contructor
 					 */
-					systemRaceHazardGuard();
+					raceHazardGuard();
 
 					/**
 					 * destructor
 					 */
-					virtual ~systemRaceHazardGuard();
+					virtual ~raceHazardGuard();
 			};	
 	};
 };

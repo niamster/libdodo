@@ -52,7 +52,7 @@ namespace dodo
 		/**
 		 * @class nonBlockedAccess provides information if in/output stream is readable/writable
 		 */
-		class nonBlockedAccess : virtual public systemThreadGuardHolder
+		class nonBlockedAccess : virtual public system::thread::guardHolder
 		{
 	
 			private:

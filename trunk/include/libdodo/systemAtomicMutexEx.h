@@ -30,13 +30,19 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum systemAtomicMutexFunctionsID
+	namespace system
 	{
-		SYSTEMATOMICMUTEXEX_LOCK,
-		SYSTEMATOMICMUTEXEX_UNLOCK,
+		namespace atomic
+		{
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum mutexFunctionsID
+			{
+				MUTEXEX_LOCK,
+				MUTEXEX_UNLOCK,
+			};
+		};
 	};
 };
 

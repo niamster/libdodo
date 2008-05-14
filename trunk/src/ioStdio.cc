@@ -80,7 +80,7 @@ stdio::~stdio()
 int
 stdio::getInDescriptor() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	return fileno(stdin);
 }
@@ -90,7 +90,7 @@ stdio::getInDescriptor() const
 int
 stdio::getOutDescriptor() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	if (err)
 		return fileno(stderr);
@@ -214,7 +214,7 @@ stdio::_read(char * const a_void)
 void
 stdio::read(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	operType = STDIO_OPERATION_READ;
@@ -253,7 +253,7 @@ stdio::read(char * const a_void)
 void
 stdio::readString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	operType = STDIO_OPERATION_READSTRING;
@@ -298,7 +298,7 @@ stdio::readString(dodoString &a_str)
 void
 stdio::writeString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	buffer = a_buf;
@@ -333,7 +333,7 @@ stdio::writeString(const dodoString &a_buf)
 void
 stdio::write(const char *const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	buffer.assign(a_buf, outSize);
@@ -421,7 +421,7 @@ stdio::_write(const char *const buf)
 void
 stdio::flush()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	if (fflush(desc) != 0)
 		throw baseEx(ERRMODULE_IOSTDIO, STDIOEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -432,7 +432,7 @@ stdio::flush()
 network::__connInfo
 stdio::inputterInfo()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	network::__connInfo info;
 
@@ -487,7 +487,7 @@ stdio::inputterInfo()
 bool
 stdio::isBlocked()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	return blocked;
 }
@@ -518,7 +518,7 @@ stdio::isRedirectedToSTDErr()
 void
 stdio::block(bool flag)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	int block[3] = { O_NONBLOCK, O_NONBLOCK, O_NONBLOCK };
 
@@ -585,7 +585,7 @@ stdio::_readStream(char * const a_void)
 void
 stdio::readStream(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	operType = STDIO_OPERATION_READSTREAM;
@@ -611,7 +611,7 @@ stdio::readStream(char * const a_void)
 void
 stdio::readStreamString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IOSTDIO_WO_XEXEC
 	operType = STDIO_OPERATION_READSTREAMSTRING;
@@ -650,7 +650,7 @@ stdio::readStreamString(dodoString &a_str)
 void
 stdio::writeStreamString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -705,7 +705,7 @@ stdio::writeStreamString(const dodoString &a_buf)
 void
 stdio::writeStream(const char *const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 

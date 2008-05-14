@@ -23,9 +23,9 @@
 
 #include <libdodo/systemAtomicLock.h>
 
-using namespace dodo;
+using namespace dodo::system::atomic;
 
-systemAtomicLock::~systemAtomicLock()
+lock::~lock()
 {
 }
 

@@ -33,26 +33,31 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemProcessGuardHolder provides concurrent lock for processes interconnection
-	 */
-	class systemProcessGuardHolder : public systemRaceHazardGuardHolder
+	namespace system
 	{
-		protected:
-
+		namespace process
+		{
 			/**
-			 * contructor
+			 * @class guardHolder provides concurrent lock for processes interconnection
 			 */
-			systemProcessGuardHolder();
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemProcessGuardHolder();
-
-			char key[32]; ///< key for the semaphore
+			class guardHolder : public raceHazardGuardHolder
+			{
+				protected:
+		
+					/**
+					 * contructor
+					 */
+					guardHolder();
+		
+					/**
+					 * destructor
+					 */
+					virtual ~guardHolder();
+		
+					char key[32]; ///< key for the semaphore
+			};
+		};
 	};
-
 };
 
 #endif 

@@ -35,68 +35,76 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemThreadSharedDataGuard provides shared data management functionality for threads
-	 */
-	class systemThreadSharedDataGuard : public systemSharedDataGuard
+	namespace system
 	{
-		private:
-
-			/**
-			 * copy constructor
-			 * to prevent copying
-			 */
-			systemThreadSharedDataGuard(systemThreadSharedDataGuard &sts);
-
-		public:
-
-			/**
-			 * constructor
-			 */
-			systemThreadSharedDataGuard();
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemThreadSharedDataGuard();
-
-			/**
-			 * set shared data
-			 * @param data defines shared data
-			 */
-			virtual void set(void *data);
-
-			/**
-			 * set shared data to NULL
-			 */
-			virtual void del();
-
-			/**
-			 * lock and return shared data
-			 * @return shared data
-			 * @param microseconds defines wait timeout for unlock
-			 * @note if microseconds is 0 it will wait infinitely
-			 */
-			virtual void *lock(unsigned long microseconds = 0);
-
-			/**
-			 * unlock shared data
-			 */
-			virtual void unlock();
-
-		protected:
-
-			void *data;             ///< shared data
+		namespace thread
+		{
+			namespace shared
+			{
+				/**
+				 * @class dataGuard provides shared data management functionality for threads
+				 */
+				class dataGuard : public system::shared::dataGuard
+				{
+					private:
 			
-#ifdef PTHREAD_EXT
+						/**
+						 * copy constructor
+						 * to prevent copying
+						 */
+						dataGuard(dataGuard &sts);
 			
-			pthread_mutex_t mutex;  ///< lock
+					public:
 			
-#endif
-
-			timespec timeout;       ///< lcok timeout
+						/**
+						 * constructor
+						 */
+						dataGuard();
+			
+						/**
+						 * destructor
+						 */
+						virtual ~dataGuard();
+			
+						/**
+						 * set shared data
+						 * @param data defines shared data
+						 */
+						virtual void set(void *data);
+			
+						/**
+						 * set shared data to NULL
+						 */
+						virtual void del();
+			
+						/**
+						 * lock and return shared data
+						 * @return shared data
+						 * @param microseconds defines wait timeout for unlock
+						 * @note if microseconds is 0 it will wait infinitely
+						 */
+						virtual void *acquire(unsigned long microseconds = 0);
+			
+						/**
+						 * unlock shared data
+						 */
+						virtual void release();
+			
+					protected:
+			
+						void *data;             ///< shared data
+						
+			#ifdef PTHREAD_EXT
+						
+						pthread_mutex_t mutex;  ///< lock
+						
+			#endif
+			
+						timespec timeout;       ///< lcok timeout
+				};
+			};
+		};
 	};
-
 };
 
 #endif

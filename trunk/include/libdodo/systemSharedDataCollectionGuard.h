@@ -31,60 +31,65 @@
 
 namespace dodo
 {
-	/**
-	 * @struct __shareInfo defines shared data
-	 */
-	struct __shareInfo
+	namespace system
 	{
-		unsigned long position; ///< shared data identificator
-		void *data;             ///< shared data
+		namespace shared
+		{
+			/**
+			 * @struct __shareInfo defines shared data
+			 */
+			struct __shareInfo
+			{
+				unsigned long position; ///< shared data identificator
+				void *data;             ///< shared data
+			};
+		
+			/**
+			 * @class dataCollectionGuard implements collection of shared data 
+			 */
+			class dataCollectionGuard
+			{
+				public:
+		
+					/**
+					 * destructor
+					 */
+					virtual ~dataCollectionGuard() = 0;
+		
+					/**
+					 * add shared data
+					 * @return shared data identificator
+					 * @param data defines shared data
+					 */
+					virtual unsigned long add(void *data) = 0;
+		
+					/**
+					 * delete data from collection
+					 * @param position defines shared data identificator
+					 */
+					virtual void del(unsigned long position) = 0;
+		
+					/**
+					 * lock, set data, unlock
+					 * @param position defines shared data identificator
+					 * @param data defines shared data
+					 */
+					virtual void set(unsigned long position, void *data) = 0;
+		
+					/**
+					 * lock, return data, unlock
+					 * @return shared data
+					 * @param position defines shared data identificator
+					 */
+					virtual const void *get(unsigned long position) = 0;
+		
+					/**
+					 * @return list of shared data in object
+					 */
+					virtual dodoList<unsigned long> getSharedDataIds() = 0;
+			};
+		};
 	};
-
-	/**
-	 * @class systemSharedDataCollectionGuard implements collection of shared data 
-	 */
-	class systemSharedDataCollectionGuard
-	{
-		public:
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemSharedDataCollectionGuard() = 0;
-
-			/**
-			 * add shared data
-			 * @return shared data identificator
-			 * @param data defines shared data
-			 */
-			virtual unsigned long add(void *data) = 0;
-
-			/**
-			 * delete data from collection
-			 * @param position defines shared data identificator
-			 */
-			virtual void del(unsigned long position) = 0;
-
-			/**
-			 * lock, set data, unlock
-			 * @param position defines shared data identificator
-			 * @param data defines shared data
-			 */
-			virtual void set(unsigned long position, void *data) = 0;
-
-			/**
-			 * lock, return data, unlock
-			 * @return shared data
-			 * @param position defines shared data identificator
-			 */
-			virtual const void *get(unsigned long position) = 0;
-
-			/**
-			 * @return list of shared data in object
-			 */
-			virtual dodoList<unsigned long> getSharedDataIds() = 0;
-	};
-
 };
 
 #endif

@@ -23,9 +23,9 @@
 
 #include <libdodo/systemJobCollection.h>
 
-using namespace dodo;
+using namespace dodo::system::job;
 
-systemJobCollection::~systemJobCollection()
+collection::~collection()
 {
 }
 

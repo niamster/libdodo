@@ -35,37 +35,43 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemAtomicSemaphore performs atomic locks using semaphores
-	 */
-	class systemAtomicSemaphore : public systemAtomicLock
+	namespace system
 	{
-		public:
-
+		namespace atomic
+		{
 			/**
-			 * consructor
+			 * @class semaphore performs atomic locks using semaphores
 			 */
-			systemAtomicSemaphore(unsigned int value, const char *key);
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemAtomicSemaphore();
-
-			/**
-			 * lock critical section
-			 */
-			virtual void lock();
-
-			/**
-			 * unlock critical section
-			 */
-			virtual void unlock();
-
-		protected:
-
-			sem_t *semaphore;   ///< semaphore
-			char *key;          ///< key for the semaphore
+			class semaphore : public lock
+			{
+				public:
+		
+					/**
+					 * consructor
+					 */
+					semaphore(unsigned int value, const char *key);
+		
+					/**
+					 * destructor
+					 */
+					virtual ~semaphore();
+		
+					/**
+					 * lock critical section
+					 */
+					virtual void acquire();
+		
+					/**
+					 * unlock critical section
+					 */
+					virtual void release();
+		
+				protected:
+		
+					sem_t *keeper;   ///< semaphore
+					char *key;          ///< key for the semaphore
+			};
+		};
 	};
 };
 

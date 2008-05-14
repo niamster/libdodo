@@ -30,31 +30,40 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum systemThreadSharedDataGuardExR
+	namespace system
 	{
-		SYSTEMTHREADSHAREDDATAGUARDEX_ISALREADYLOCKED,
-		SYSTEMTHREADSHAREDDATAGUARDEX_CANNOTLOCK
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define SYSTEMTHREADSHAREDDATAGUARDEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-#define SYSTEMTHREADSHAREDDATAGUARDEX_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum systemThreadSharedDataGuardFunctionsID
-	{
-		SYSTEMTHREADSHAREDDATAGUARDEX_DEL,
-		SYSTEMTHREADSHAREDDATAGUARDEX_SET,
-		SYSTEMTHREADSHAREDDATAGUARDEX_LOCK,
-		SYSTEMTHREADSHAREDDATAGUARDEX_UNLOCK,
-	};
+		namespace thread
+		{
+			namespace shared
+			{
+				/**
+				 * libdodo defined errors
+				 */
+				enum dataGuardExR
+				{
+					DATAGUARDEX_ISALREADYLOCKED,
+					DATAGUARDEX_CANNOTLOCK
+				};
+			
+				/**
+				 * explanations for libdodo defined errors
+				 */
+			#define DATAGUARDEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
+			#define DATAGUARDEX_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
+			
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum dataGuardFunctionsID
+				{
+					DATAGUARDEX_DEL,
+					DATAGUARDEX_SET,
+					DATAGUARDEX_LOCK,
+					DATAGUARDEX_UNLOCK,
+				};
+			};
+		};
+	}
 };
 
 #endif

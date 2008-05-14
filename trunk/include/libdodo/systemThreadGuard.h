@@ -32,22 +32,28 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemThreadGuardHolder provides mutex lock
-	 */
-	class systemThreadGuardHolder : public systemRaceHazardGuardHolder
+	namespace system
 	{
-		protected:
-
+		namespace thread
+		{
 			/**
-			 * contructor
+			 * @class guardHolder provides mutex lock
 			 */
-			systemThreadGuardHolder();
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemThreadGuardHolder();
+			class guardHolder : public raceHazardGuardHolder
+			{
+				protected:
+		
+					/**
+					 * contructor
+					 */
+					guardHolder();
+		
+					/**
+					 * destructor
+					 */
+					virtual ~guardHolder();
+			};
+		};
 	};
 };
 

@@ -30,27 +30,36 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum systemProcessSharedDataCollectionGuardExR
+	namespace system
 	{
-		SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_NOTFOUND,
-	};
-
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_NOTFOUND_STR "Share not found."
-
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum systemProcessSharedDataCollectionGuardFunctionsID
-	{
-		SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_DEL,
-		SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_SET,
-		SYSTEMPROCESSSHAREDDATACOLLECTIONGUARDEX_GET,
+		namespace process
+		{
+			namespace shared
+			{
+				/**
+				 * libdodo defined errors
+				 */
+				enum dataCollectionGuardExR
+				{
+					DATACOLLECTIONGUARDEX_NOTFOUND,
+				};
+			
+				/**
+				 * explanations for libdodo defined errors
+				 */
+			#define DATACOLLECTIONGUARDEX_NOTFOUND_STR "Share not found."
+			
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum dataCollectionGuardFunctionsID
+				{
+					DATACOLLECTIONGUARDEX_DEL,
+					DATACOLLECTIONGUARDEX_SET,
+					DATACOLLECTIONGUARDEX_GET,
+				};
+			};
+		};
 	};
 };
 

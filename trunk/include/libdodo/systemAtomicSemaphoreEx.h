@@ -30,13 +30,19 @@
 
 namespace dodo
 {
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum systemAtomicSemaphoreFunctionsID
+	namespace system
 	{
-		SYSTEMATOMICSEMAPHOREEX_LOCK,
-		SYSTEMATOMICSEMAPHOREEX_UNLOCK,
+		namespace atomic
+		{
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum semaphoreFunctionsID
+			{
+				SEMAPHOREEX_LOCK,
+				SEMAPHOREEX_UNLOCK,
+			};
+		};
 	};
 };
 

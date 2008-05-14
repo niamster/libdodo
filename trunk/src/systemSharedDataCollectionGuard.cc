@@ -24,9 +24,9 @@
 
 #include <libdodo/systemSharedDataCollectionGuard.h>
 
-using namespace dodo;
+using namespace dodo::system::shared;
 
-systemSharedDataCollectionGuard::~systemSharedDataCollectionGuard()
+dataCollectionGuard::~dataCollectionGuard()
 {
 }
 

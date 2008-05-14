@@ -66,7 +66,7 @@ unsigned long
 logger::add(short level, 
 			io::channel *handler)
 {
-	systemRaceHazardGuard tg(this);
+	raceHazardGuard tg(this);
 	
 	__logMap lm;
 	
@@ -84,7 +84,7 @@ logger::add(short level,
 void
 logger::remove(unsigned long position)
 {
-	systemRaceHazardGuard tg(this);
+	raceHazardGuard tg(this);
 	
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
 	for (;i!=j;++i)
@@ -102,7 +102,7 @@ void
 logger::log(short level, 
 			const dodoString &msg)
 {
-	systemRaceHazardGuard tg(this);
+	raceHazardGuard tg(this);
 	
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
 	for (;i!=j;++i)

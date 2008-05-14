@@ -30,28 +30,31 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum systemLibraryLoaderExR
+	namespace system
 	{
-		SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED,
-	};
-	
-	/**
-	 * explanations for libdodo defined errors
-	 */
-#define SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED_STR "Library was not opened."
-	/**
-	 * IDs of functions where exception might be thrown
-	 */
-	enum systemLibraryLoaderFunctionsID
-	{
-		SYSTEMLIBRARYLOADEREX_OPEN,
-		SYSTEMLIBRARYLOADEREX_CLOSE,
-		SYSTEMLIBRARYLOADEREX_GET,
-		SYSTEMLIBRARYLOADEREX_BROPERATORSTRING,
-		SYSTEMLIBRARYLOADEREX_GETSYMBOLS,
+		/**
+		 * libdodo defined errors
+		 */
+		enum libraryLoaderExR
+		{
+			LIBRARYLOADEREX_LIBRARYNOTOPENED,
+		};
+		
+		/**
+		 * explanations for libdodo defined errors
+		 */
+	#define LIBRARYLOADEREX_LIBRARYNOTOPENED_STR "Library was not opened."
+		/**
+		 * IDs of functions where exception might be thrown
+		 */
+		enum libraryLoaderFunctionsID
+		{
+			LIBRARYLOADEREX_OPEN,
+			LIBRARYLOADEREX_CLOSE,
+			LIBRARYLOADEREX_GET,
+			LIBRARYLOADEREX_BROPERATORSTRING,
+			LIBRARYLOADEREX_GETSYMBOLS,
+		};
 	};
 };
 

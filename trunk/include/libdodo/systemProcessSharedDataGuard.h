@@ -36,69 +36,78 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemProcessSharedDataGuard provides shared data management functionality for processes
-	 * @note you should use systemSharedData
-	 */
-	class systemProcessSharedDataGuard : public systemSharedDataGuard
+	namespace system
 	{
-		private:
-
-			/**
-			 * copy constructor
-			 * to prevent copying
-			 */
-			systemProcessSharedDataGuard(systemProcessSharedDataGuard &sts);
-
-		public:
-
-			/**
-			 * constructor
-			 * @param value defines initial value of semaphore
-			 * @param key defines semaphore key
-			 * @note if key is NULL - key will be generated
-			 * if you want to share semaphore between different instances of process - set own key,
-			 * otherwise(like fork) - it may be generated
-			 */
-			systemProcessSharedDataGuard(unsigned int value = 1, const char *key = NULL);
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemProcessSharedDataGuard();
-
-			/**
-			 * set shared data
-			 * @param data defines shared data
-			 */
-			virtual void set(void *data);
-
-			/**
-			 * set shared data to NULL
-			 */
-			virtual void del();
-
-			/**
-			 * lock and return shared data
-			 * @return shared data
-			 * @param microseconds defines wait timeout for unlock
-			 * @note if microseconds is 0 it will wait infinitely
-			 */
-			virtual void *lock(unsigned long microseconds = 0);
-
-			/**
-			 * unlock shared data
-			 */
-			virtual void unlock();
-
-		protected:
-
-			void *data;         ///< shared data
-			sem_t *semaphore;   ///< lock
-
-			timespec timeout;   ///< lock timeout
-
-			char *key;          ///< key for the semaphore
+		namespace process
+		{
+			namespace shared
+			{
+				/**
+				 * @class dataGuard provides shared data management functionality for processes
+				 * @note you should use data
+				 */
+				class dataGuard : public system::shared::dataGuard
+				{
+					private:
+			
+						/**
+						 * copy constructor
+						 * to prevent copying
+						 */
+						dataGuard(dataGuard &sts);
+			
+					public:
+			
+						/**
+						 * constructor
+						 * @param value defines initial value of semaphore
+						 * @param key defines semaphore key
+						 * @note if key is NULL - key will be generated
+						 * if you want to share semaphore between different instances of process - set own key,
+						 * otherwise(like fork) - it may be generated
+						 */
+						dataGuard(unsigned int value = 1, const char *key = NULL);
+			
+						/**
+						 * destructor
+						 */
+						virtual ~dataGuard();
+			
+						/**
+						 * set shared data
+						 * @param data defines shared data
+						 */
+						virtual void set(void *data);
+			
+						/**
+						 * set shared data to NULL
+						 */
+						virtual void del();
+			
+						/**
+						 * lock and return shared data
+						 * @return shared data
+						 * @param microseconds defines wait timeout for unlock
+						 * @note if microseconds is 0 it will wait infinitely
+						 */
+						virtual void *acquire(unsigned long microseconds = 0);
+			
+						/**
+						 * unlock shared data
+						 */
+						virtual void release();
+			
+					protected:
+			
+						void *data;         ///< shared data
+						sem_t *semaphore;   ///< lock
+			
+						timespec timeout;   ///< lock timeout
+			
+						char *key;          ///< key for the semaphore
+				};
+			};
+		};
 	};
 };
 

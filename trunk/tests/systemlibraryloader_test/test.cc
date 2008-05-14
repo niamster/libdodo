@@ -5,6 +5,8 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace dodo::system;
+
 using namespace std;
 
 #ifdef DL_EXT
@@ -20,14 +22,14 @@ int main(int argc, char **argv)
 #ifdef DL_EXT
 
 #ifdef BFD_EXT
-		dodoStringArray arr = systemLibraryLoader::getSymbols("./module");
+		dodoStringArray arr = libraryLoader::getSymbols("./module");
 		dodoStringArray::iterator i = arr.begin(), j = arr.end();
 		for (;i!=j;++i)
 			cout << *i << endl;
 		cout << endl;
 #endif
 
-		systemLibraryLoader sll("./module");
+		libraryLoader sll("./module");
 
 		print pr;
 

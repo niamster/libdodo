@@ -32,42 +32,45 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemRaceHazardGuardHolder provides mutex lock and systemThreadGuard class
-	 */
-	class systemRaceHazardGuardHolder
+	namespace system
 	{
-		protected:
-
-			systemAtomicLock *mutex; ///< lock
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemRaceHazardGuardHolder() = 0;
-
-			/**
-			 * @class systemRaceHazardGuard provides thread safe behaviour
-			 * @note it locks in constructor and unlocks in destructor
-			 */
-			class systemRaceHazardGuard
-			{
-				public:
-
-					/**
-					 * contructor
-					 */
-					systemRaceHazardGuard(const systemRaceHazardGuardHolder *parent);
-
-					/**
-					 * destructor
-					 */
-					virtual ~systemRaceHazardGuard();
-
-				protected:
-
-					systemRaceHazardGuardHolder *parent; ///< lock
-			};
+		/**
+		 * @class raceHazardGuardHolder provides mutex lock and guard class
+		 */
+		class raceHazardGuardHolder
+		{
+			protected:
+	
+				atomic::lock *keeper; ///< lock
+	
+				/**
+				 * destructor
+				 */
+				virtual ~raceHazardGuardHolder() = 0;
+	
+				/**
+				 * @class raceHazardGuard provides thread safe behaviour
+				 * @note it locks in constructor and unlocks in destructor
+				 */
+				class raceHazardGuard
+				{
+					public:
+	
+						/**
+						 * contructor
+						 */
+						raceHazardGuard(const raceHazardGuardHolder *parent);
+	
+						/**
+						 * destructor
+						 */
+						virtual ~raceHazardGuard();
+	
+					protected:
+	
+						raceHazardGuardHolder *parent; ///< lock
+				};
+		};
 	};
 };
 

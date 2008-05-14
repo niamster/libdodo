@@ -83,7 +83,7 @@ namespace dodo
 			 * @class serverExchange provides interface to fast CGI I/O functionality
 			 */
 			class serverExchange : public io::channel,
-							virtual public systemThreadGuardHolder
+							virtual public system::thread::guardHolder
 			{
 				private:
 		

@@ -13,8 +13,9 @@ using namespace std;
 
 using namespace dodo;
 using cgi::fast::serverExchange;
+using dodo::system::thread::shared::dataGuard;
 
-	systemThreadSharedDataGuard sh;
+	dataGuard sh;
 
 	void 
 	cgif(serverExchange *fcgi)
@@ -25,9 +26,9 @@ using cgi::fast::serverExchange;
 		cgit.setCookie("test","Ni@m");
 		cgit.printHeaders();
 			
-		int *inc = (int *)sh.lock();
+		int *inc = (int *)sh.acquire();
 		(*inc)++;
-		sh.unlock();
+		sh.release();
 		
 		fcgi->writeStreamString("!" + toolsString::iToString(*inc) + "!<br>");
 		fcgi->writeStreamString("!" + cgit.GET["a"] + "!<br>");

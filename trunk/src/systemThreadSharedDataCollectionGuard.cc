@@ -24,32 +24,32 @@
 
 #include <libdodo/systemThreadSharedDataCollectionGuard.h>
 
-using namespace dodo;
+using namespace dodo::system::thread::shared;
 
-systemThreadSharedDataCollectionGuard::systemThreadSharedDataCollectionGuard(systemThreadSharedDataCollectionGuard &sts)
+dataCollectionGuard::dataCollectionGuard(dataCollectionGuard &sts)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadSharedDataCollectionGuard::systemThreadSharedDataCollectionGuard() : shareNum(0)
+dataCollectionGuard::dataCollectionGuard() : shareNum(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemThreadSharedDataCollectionGuard::~systemThreadSharedDataCollectionGuard()
+dataCollectionGuard::~dataCollectionGuard()
 {
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-systemThreadSharedDataCollectionGuard::add(void *data)
+dataCollectionGuard::add(void *data)
 {
-	systemRaceHazardGuard tg(this);
+	raceHazardGuard tg(this);
 
-	__shareInfo share;
+	system::shared::__shareInfo share;
 
 	share.position = ++shareNum;
 	share.data = data;
@@ -62,53 +62,53 @@ systemThreadSharedDataCollectionGuard::add(void *data)
 //-------------------------------------------------------------------
 
 void
-systemThreadSharedDataCollectionGuard::del(unsigned long position)
+dataCollectionGuard::del(unsigned long position)
 {
-	systemRaceHazardGuard tg(this);
+	raceHazardGuard tg(this);
 
 	if (getShare(position))
 		shares.erase(current);
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_DEL, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATACOLLECTIONGUARD, DATACOLLECTIONGUARDEX_DEL, ERR_LIBDODO, DATACOLLECTIONGUARDEX_NOTFOUND, DATACOLLECTIONGUARDEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemThreadSharedDataCollectionGuard::set(unsigned long position,
+dataCollectionGuard::set(unsigned long position,
 										   void          *data)
 {
-	systemRaceHazardGuard tg(this);
+	raceHazardGuard tg(this);
 
 	if (getShare(position))
 		current->data = data;
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATACOLLECTIONGUARD, DATACOLLECTIONGUARDEX_SET, ERR_LIBDODO, DATACOLLECTIONGUARDEX_NOTFOUND, DATACOLLECTIONGUARDEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 const void *
-systemThreadSharedDataCollectionGuard::get(unsigned long position)
+dataCollectionGuard::get(unsigned long position)
 {
-	systemRaceHazardGuard tg(this);
+	raceHazardGuard tg(this);
 
 	if (getShare(position))
 		return current->data;
 	else
-		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATACOLLECTIONGUARD, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_SET, ERR_LIBDODO, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND, SYSTEMTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMTHREADSHAREDDATACOLLECTIONGUARD, DATACOLLECTIONGUARDEX_SET, ERR_LIBDODO, DATACOLLECTIONGUARDEX_NOTFOUND, DATACOLLECTIONGUARDEX_NOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 bool
-systemThreadSharedDataCollectionGuard::getShare(unsigned long position)
+dataCollectionGuard::getShare(unsigned long position)
 {
-	dodoList<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
+	dodoList<system::shared::__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((dodoList<__shareInfo>::iterator *) & i);
+			current = *((dodoList<system::shared::__shareInfo>::iterator *) & i);
 
 			return true;
 		}
@@ -120,11 +120,11 @@ systemThreadSharedDataCollectionGuard::getShare(unsigned long position)
 //-------------------------------------------------------------------
 
 dodoList<unsigned long>
-systemThreadSharedDataCollectionGuard::getSharedDataIds()
+dataCollectionGuard::getSharedDataIds()
 {
 	dodoList<unsigned long> ids;
 
-	dodoList<__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
+	dodoList<system::shared::__shareInfo>::const_iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 		ids.push_back(i->position);
 

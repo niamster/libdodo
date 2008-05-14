@@ -9,10 +9,13 @@
 #include <iostream>
 
 using namespace dodo;
+using namespace dodo::system::thread;
+using namespace shared;
+
 using namespace std;
 
-systemThreadSharedDataGuard sh;
-systemThreadSharedDataCollectionGuard shC;
+dataGuard sh;
+dataCollectionGuard shC;
 unsigned long shCI;
 
 void *
@@ -24,9 +27,9 @@ thread(void *data)
 		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
 		cout.flush();
 		
-		int timeout = *(int *)sh.lock();
+		int timeout = *(int *)sh.acquire();
 		toolsSystem::sleep(timeout);
-		sh.unlock();
+		sh.release();
 		
 		cout << endl << (char *)data << ": " << toolsTime::now() << endl;
 		cout.flush();
@@ -49,7 +52,7 @@ int main(int argc, char **argv)
 		sh.set((void *)shared);
 
 #ifdef PTHREAD_EXT
-		systemThreadCollection th;
+		collection th;
 
 		const int amount = 10;
 

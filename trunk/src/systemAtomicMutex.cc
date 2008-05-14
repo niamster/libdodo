@@ -23,9 +23,9 @@
 
 #include <libdodo/systemAtomicMutex.h>
 
-using namespace dodo;
+using namespace dodo::system::atomic;
 
-systemAtomicMutex::systemAtomicMutex()
+mutex::mutex()
 {
 #ifdef PTHREAD_EXT
 	
@@ -33,7 +33,7 @@ systemAtomicMutex::systemAtomicMutex()
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 
-	pthread_mutex_init(&mutex, &attr);
+	pthread_mutex_init(&keeper, &attr);
 
 	pthread_mutexattr_destroy(&attr);
 	
@@ -42,11 +42,11 @@ systemAtomicMutex::systemAtomicMutex()
 
 //-------------------------------------------------------------------
 
-systemAtomicMutex::~systemAtomicMutex()
+mutex::~mutex()
 {
 #ifdef PTHREAD_EXT
 	
-	pthread_mutex_destroy(&mutex);
+	pthread_mutex_destroy(&keeper);
 	
 #endif
 }
@@ -54,13 +54,13 @@ systemAtomicMutex::~systemAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-systemAtomicMutex::lock()
+mutex::acquire()
 {
 #ifdef PTHREAD_EXT
 	
-	errno = pthread_mutex_lock(&mutex);
+	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
-		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, SYSTEMATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, MUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	
 #endif
 }
@@ -68,13 +68,13 @@ systemAtomicMutex::lock()
 //-------------------------------------------------------------------
 
 void
-systemAtomicMutex::unlock()
+mutex::release()
 {
 #ifdef PTHREAD_EXT
 	
-	errno = pthread_mutex_unlock(&mutex);
+	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, SYSTEMATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMATOMICMUTEX, MUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	
 #endif
 }

@@ -25,15 +25,15 @@
 
 #ifdef DL_EXT
 
-using namespace dodo;
+using namespace dodo::system;
 
-systemLibraryLoader::systemLibraryLoader() : handle(NULL)
+libraryLoader::libraryLoader() : handle(NULL)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemLibraryLoader::systemLibraryLoader(const dodoString &path) : handle(NULL)
+libraryLoader::libraryLoader(const dodoString &path) : handle(NULL)
 {
 #ifdef DL_FAST
 	handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
@@ -44,7 +44,7 @@ systemLibraryLoader::systemLibraryLoader(const dodoString &path) : handle(NULL)
 
 //-------------------------------------------------------------------
 
-systemLibraryLoader::~systemLibraryLoader()
+libraryLoader::~libraryLoader()
 {
 #ifdef DL_FAST	
 	if (handle != NULL)
@@ -55,7 +55,7 @@ systemLibraryLoader::~systemLibraryLoader()
 //-------------------------------------------------------------------
 
 void
-systemLibraryLoader::open(const dodoString &path)
+libraryLoader::open(const dodoString &path)
 {
 #ifdef DL_FAST
 	handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
@@ -63,52 +63,52 @@ systemLibraryLoader::open(const dodoString &path)
 	handle = dlopen(path.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_OPEN, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_OPEN, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void
-systemLibraryLoader::close()
+libraryLoader::close()
 {
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_CLOSE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_CLOSE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 }
 
 //-------------------------------------------------------------------
 
 void *
-systemLibraryLoader::get(const dodoString &name)
+libraryLoader::get(const dodoString &name)
 {
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GET, ERR_LIBDODO, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
 	
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GET, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 void *
-systemLibraryLoader::operator[](const dodoString &name)
+libraryLoader::operator[](const dodoString &name)
 {
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_BROPERATORSTRING, ERR_LIBDODO, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED, SYSTEMLIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
 	
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_BROPERATORSTRING, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
 
 #ifdef BFD_EXT
 
-dodoStringArray 
-systemLibraryLoader::getSymbols(const dodoString &path)
+dodo::dodoStringArray 
+libraryLoader::getSymbols(const dodoString &path)
 {
 	bfd_init();
 	
@@ -116,13 +116,13 @@ systemLibraryLoader::getSymbols(const dodoString &path)
 	if (lib == NULL)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
     
 	if (bfd_check_format(lib, bfd_object) == FALSE)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 
 	long storageSize = bfd_get_symtab_upper_bound(lib);
@@ -130,7 +130,7 @@ systemLibraryLoader::getSymbols(const dodoString &path)
 	if (storageSize < 0)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 	
 	if (storageSize == 0)
@@ -143,7 +143,7 @@ systemLibraryLoader::getSymbols(const dodoString &path)
 	if (numberOfSymbols < 0)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 	
 	dodoStringArray arr;
@@ -154,7 +154,7 @@ systemLibraryLoader::getSymbols(const dodoString &path)
 	if (bfd_close(lib) == FALSE)
 	{
 		bfd_error_type err = bfd_get_error();
-		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, SYSTEMLIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMLIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
 	
 	return arr;

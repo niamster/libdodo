@@ -23,18 +23,18 @@
 
 #include <libdodo/systemThreadGuard.h>
 
-using namespace dodo;
+using namespace dodo::system::thread;
 
-systemThreadGuardHolder::systemThreadGuardHolder()
+guardHolder::guardHolder()
 {
-	mutex = new systemAtomicMutex;
+	keeper = new atomic::mutex;
 }
 
 //-------------------------------------------------------------------
 
-systemThreadGuardHolder::~systemThreadGuardHolder()
+guardHolder::~guardHolder()
 {
-	delete mutex;
+	delete keeper;
 }
 
 //-------------------------------------------------------------------

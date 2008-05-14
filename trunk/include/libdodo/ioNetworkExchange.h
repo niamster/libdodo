@@ -127,7 +127,7 @@ namespace dodo
 			 */
 			class exchange : public options,
 									 public channel,
-									 virtual public systemThreadGuardHolder
+									 virtual public system::thread::guardHolder
 			{
 					friend class server;
 					friend class client;

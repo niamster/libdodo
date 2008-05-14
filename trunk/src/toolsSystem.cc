@@ -75,13 +75,13 @@ bool toolsSystem::handlesOpenedSig[] = { false,
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t toolsSystem::staticAtomicMutex::mutex;
+pthread_mutex_t toolsSystem::staticAtomicMutex::keeper;
 
 #endif
 
 //-------------------------------------------------------------------
 
-toolsSystem::staticAtomicMutex toolsSystem::mutex;
+toolsSystem::staticAtomicMutex toolsSystem::keeper;
 
 //-------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ toolsSystem::staticAtomicMutex::staticAtomicMutex()
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
 
-	pthread_mutex_init(&mutex, &attr);
+	pthread_mutex_init(&keeper, &attr);
 
 	pthread_mutexattr_destroy(&attr);
 	
@@ -106,7 +106,7 @@ toolsSystem::staticAtomicMutex::~staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 	
-	pthread_mutex_destroy(&mutex);
+	pthread_mutex_destroy(&keeper);
 	
 #endif
 }
@@ -114,13 +114,13 @@ toolsSystem::staticAtomicMutex::~staticAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-toolsSystem::staticAtomicMutex::lock()
+toolsSystem::staticAtomicMutex::acquire()
 {
 #ifdef PTHREAD_EXT
 	
-	errno = pthread_mutex_lock(&mutex);
+	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
-		throw baseEx(ERRMODULE_TOOLSSYSTEMSYSTEMATOMICMUTEX, TOOLSSYSTEMSYSTEMATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSSYSTEMSTATICATOMICMUTEX, TOOLSSYSTEMSTATICATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	
 #endif
 }
@@ -128,29 +128,29 @@ toolsSystem::staticAtomicMutex::lock()
 //-------------------------------------------------------------------
 
 void
-toolsSystem::staticAtomicMutex::unlock()
+toolsSystem::staticAtomicMutex::release()
 {
 #ifdef PTHREAD_EXT
 	
-	errno = pthread_mutex_unlock(&mutex);
+	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_TOOLSSYSTEMSYSTEMATOMICMUTEX, TOOLSSYSTEMSYSTEMATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSSYSTEMSTATICATOMICMUTEX, TOOLSSYSTEMSTATICATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	
 #endif
 }
 
 //-------------------------------------------------------------------
 
-toolsSystem::systemRaceHazardGuard::systemRaceHazardGuard()
+toolsSystem::raceHazardGuard::raceHazardGuard()
 {
-	mutex.lock();
+	keeper.acquire();
 }
 
 //-------------------------------------------------------------------
 
-toolsSystem::systemRaceHazardGuard::~systemRaceHazardGuard()
+toolsSystem::raceHazardGuard::~raceHazardGuard()
 {
-	mutex.unlock();
+	keeper.release();
 }
 
 //-------------------------------------------------------------------
@@ -780,7 +780,7 @@ toolsSystem::setSignalHandler(long signal,
 							  signalHandler handler,
 							  int blockSignals)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -823,7 +823,7 @@ toolsSystem::setMicroTimer(unsigned long timeout,
 						   signalHandler handler,
 						   int blockSignals)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -883,7 +883,7 @@ toolsSystem::setTimer(long timeout,
 					  signalHandler handler,
 					  int blockSignals)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -958,7 +958,7 @@ toolsSystem::sendSignal(int pid,
 void
 toolsSystem::unsetSignalHandler(long signal)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_EXT
 
@@ -1024,7 +1024,7 @@ void
 toolsSystem::setSignalHandler(const dodoString &path,
 							  void             *toInit)
 {
-	systemRaceHazardGuard tg;
+	raceHazardGuard tg;
 	
 #ifdef DL_FAST
 	void *handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);

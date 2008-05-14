@@ -38,41 +38,47 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemAtomicMutex performs atomic locks using mutexes
-	 */
-	class systemAtomicMutex : public systemAtomicLock
+	namespace system
 	{
-		public:
-
+		namespace atomic
+		{
 			/**
-			 * consructor
+			 * @class mutex performs atomic locks using mutexes
 			 */
-			systemAtomicMutex();
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemAtomicMutex();
-
-			/**
-			 * lock critical section
-			 */
-			virtual void lock();
-
-			/**
-			 * unlock critical section
-			 */
-			virtual void unlock();
-
-		protected:
-
-#ifdef PTHREAD_EXT
-			
-			pthread_mutex_t mutex; ///< mutex
-			
-#endif
-			
+			class mutex : public lock
+			{
+				public:
+		
+					/**
+					 * consructor
+					 */
+					mutex();
+		
+					/**
+					 * destructor
+					 */
+					virtual ~mutex();
+		
+					/**
+					 * lock critical section
+					 */
+					virtual void acquire();
+		
+					/**
+					 * unlock critical section
+					 */
+					virtual void release();
+		
+				protected:
+		
+		#ifdef PTHREAD_EXT
+					
+					pthread_mutex_t keeper; ///< mutex
+					
+		#endif
+					
+			};
+		};
 	};
 };
 

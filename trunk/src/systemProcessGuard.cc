@@ -23,21 +23,21 @@
 
 #include <libdodo/systemProcessGuard.h>
 
-using namespace dodo;
+using namespace dodo::system::process;
 
-systemProcessGuardHolder::systemProcessGuardHolder()
+guardHolder::guardHolder()
 {
 	misc::random(key, 31);
 	key[31] = '\0';
 
-	mutex = new systemAtomicSemaphore(1, key);
+	keeper = new atomic::semaphore(1, key);
 }
 
 //-------------------------------------------------------------------
 
-systemProcessGuardHolder::~systemProcessGuardHolder()
+guardHolder::~guardHolder()
 {
-	delete mutex;
+	delete keeper;
 }
 
 //-------------------------------------------------------------------

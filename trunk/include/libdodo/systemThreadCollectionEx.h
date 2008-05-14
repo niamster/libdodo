@@ -30,49 +30,55 @@
 
 namespace dodo
 {
-	/**
-	 * libdodo defined errors
-	 */
-	enum systemThreadCollectionExR
+	namespace system
 	{
-		SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING,
-		SYSTEMTHREADCOLLECTIONEX_ISNOTRUNNING,
-		SYSTEMTHREADCOLLECTIONEX_NOTFOUND,
-		SYSTEMTHREADCOLLECTIONEX_ISDETACHED,
-		SYSTEMTHREADCOLLECTIONEX_SWEPT,
-	};
-
-	/**
-	 * libdodo defined errors' explanation
-	 */
-#define SYSTEMTHREADCOLLECTIONEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
-#define SYSTEMTHREADCOLLECTIONEX_ISNOTRUNNING_STR        "The thread is currently not running."
-#define SYSTEMTHREADCOLLECTIONEX_NOTFOUND_STR            "Thread not found."
-#define SYSTEMTHREADCOLLECTIONEX_ISDETACHED_STR          "Thread is detached. Cannot join."
-#define SYSTEMTHREADCOLLECTIONEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
-
-	/**
-	 * ID of function where exception was thrown
-	 */
-	enum systemThreadCollectionFunctionsID
-	{
-		SYSTEMTHREADCOLLECTIONEX_REPLACE,
-		SYSTEMTHREADCOLLECTIONEX_RUN,
-		SYSTEMTHREADCOLLECTIONEX_ADDNRUN,
-		SYSTEMTHREADCOLLECTIONEX_DEL,
-		SYSTEMTHREADCOLLECTIONEX_WAIT,
-		SYSTEMTHREADCOLLECTIONEX_STOP,
-		SYSTEMTHREADCOLLECTIONEX_ISRUNNING,
-		SYSTEMTHREADCOLLECTIONEX_CONSTRUCTOR,
-		SYSTEMTHREADCOLLECTIONEX__ISRUNNING,
-		SYSTEMTHREADCOLLECTIONEX_SETEXECUTIONLIMIT,
-
-#ifdef DL_EXT
-
-		SYSTEMTHREADCOLLECTIONEX_GETMODULEINFO,
-		SYSTEMTHREADCOLLECTIONEX_ADD,
-
-#endif
+		namespace thread
+		{
+			/**
+			 * libdodo defined errors
+			 */
+			enum collectionExR
+			{
+				COLLECTIONEX_ISALREADYRUNNING,
+				COLLECTIONEX_ISNOTRUNNING,
+				COLLECTIONEX_NOTFOUND,
+				COLLECTIONEX_ISDETACHED,
+				COLLECTIONEX_SWEPT,
+			};
+		
+			/**
+			 * libdodo defined errors' explanation
+			 */
+		#define COLLECTIONEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
+		#define COLLECTIONEX_ISNOTRUNNING_STR        "The thread is currently not running."
+		#define COLLECTIONEX_NOTFOUND_STR            "Thread not found."
+		#define COLLECTIONEX_ISDETACHED_STR          "Thread is detached. Cannot join."
+		#define COLLECTIONEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
+		
+			/**
+			 * ID of function where exception was thrown
+			 */
+			enum collectionFunctionsID
+			{
+				COLLECTIONEX_REPLACE,
+				COLLECTIONEX_RUN,
+				COLLECTIONEX_ADDNRUN,
+				COLLECTIONEX_DEL,
+				COLLECTIONEX_WAIT,
+				COLLECTIONEX_STOP,
+				COLLECTIONEX_ISRUNNING,
+				COLLECTIONEX_CONSTRUCTOR,
+				COLLECTIONEX__ISRUNNING,
+				COLLECTIONEX_SETEXECUTIONLIMIT,
+		
+		#ifdef DL_EXT
+		
+				COLLECTIONEX_GETMODULEINFO,
+				COLLECTIONEX_ADD,
+		
+		#endif
+			};
+		};
 	};
 };
 

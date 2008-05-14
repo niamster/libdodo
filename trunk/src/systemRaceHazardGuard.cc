@@ -23,26 +23,26 @@
 
 #include <libdodo/systemRaceHazardGuard.h>
 
-using namespace dodo;
+using namespace dodo::system;
 
-systemRaceHazardGuardHolder::~systemRaceHazardGuardHolder()
+raceHazardGuardHolder::~raceHazardGuardHolder()
 {
 }
 
 //-------------------------------------------------------------------
 
-systemRaceHazardGuardHolder::systemRaceHazardGuard::systemRaceHazardGuard(const systemRaceHazardGuardHolder *a_parent) : parent((systemRaceHazardGuardHolder *)a_parent)
+raceHazardGuardHolder::raceHazardGuard::raceHazardGuard(const raceHazardGuardHolder *a_parent) : parent((raceHazardGuardHolder *)a_parent)
 {
-	parent->mutex->lock();
+	parent->keeper->acquire();
 }
 
 //-------------------------------------------------------------------
 
-systemRaceHazardGuardHolder::systemRaceHazardGuard::~systemRaceHazardGuard()
+raceHazardGuardHolder::raceHazardGuard::~raceHazardGuard()
 {
 	try
 	{
-		parent->mutex->unlock();
+		parent->keeper->release();
 	}
 	catch (baseEx &ex)
 	{

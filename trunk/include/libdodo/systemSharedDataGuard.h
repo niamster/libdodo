@@ -28,43 +28,48 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemSharedDataGuard provides shared data management functionality
-	 */
-	class systemSharedDataGuard
+	namespace system
 	{
-		public:
-
+		namespace shared
+		{
 			/**
-			 * destructor
+			 * @class dataGuard provides shared data management functionality
 			 */
-			virtual ~systemSharedDataGuard() = 0;
-
-			/**
-			 * set shared data
-			 * @param data defines shared data
-			 */
-			virtual void set(void *data) = 0;
-
-			/**
-			 * set shared data to NULL
-			 */
-			virtual void del() = 0;
-
-			/**
-			 * lock and return shared data
-			 * @return shared data
-			 * @param microseconds defines wait timeout for unlock
-			 * @note if microseconds is 0 it will wait infinitely
-			 */
-			virtual void *lock(unsigned long microseconds) = 0;
-
-			/**
-			 * unlock shared data
-			 */
-			virtual void unlock() = 0;
+			class dataGuard
+			{
+				public:
+		
+					/**
+					 * destructor
+					 */
+					virtual ~dataGuard() = 0;
+		
+					/**
+					 * set shared data
+					 * @param data defines shared data
+					 */
+					virtual void set(void *data) = 0;
+		
+					/**
+					 * set shared data to NULL
+					 */
+					virtual void del() = 0;
+		
+					/**
+					 * lock and return shared data
+					 * @return shared data
+					 * @param microseconds defines wait timeout for unlock
+					 * @note if microseconds is 0 it will wait infinitely
+					 */
+					virtual void *acquire(unsigned long microseconds) = 0;
+		
+					/**
+					 * unlock shared data
+					 */
+					virtual void release() = 0;
+			};
+		};
 	};
-
 };
 
 #endif

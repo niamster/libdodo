@@ -147,7 +147,7 @@ exchange::init(__initialAccept &a_init)
 void
 exchange::close()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
@@ -174,7 +174,7 @@ void
 exchange::init(int a_socket,
 					   bool blockInherited)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	if (opened)
 	{
@@ -213,7 +213,7 @@ exchange::init(int a_socket,
 bool
 exchange::isAlive()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 	
 	if (!opened)
 		return false;
@@ -305,7 +305,7 @@ exchange::_write(const char * const data)
 void
 exchange::write(const char * const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
@@ -340,7 +340,7 @@ exchange::write(const char * const a_buf)
 void
 exchange::writeString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	buffer = a_buf;
@@ -448,7 +448,7 @@ exchange::_read(char * const data)
 void
 exchange::read(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = EXCHANGE_OPERATION_READ;
@@ -487,7 +487,7 @@ exchange::read(char * const a_void)
 void
 exchange::readString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = EXCHANGE_OPERATION_READSTRING;
@@ -588,7 +588,7 @@ exchange::addExec(const dodoString &module,
 void
 exchange::writeStream(const char * const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -643,7 +643,7 @@ exchange::writeStream(const char * const a_buf)
 void
 exchange::writeStreamString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -726,7 +726,7 @@ exchange::_readStream(char * const data)
 void
 exchange::readStream(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = EXCHANGE_OPERATION_READSTREAM;
@@ -754,7 +754,7 @@ exchange::readStream(char * const a_void)
 void
 exchange::readStreamString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	a_str.clear();
 	
@@ -800,7 +800,7 @@ exchange::readStreamString(dodoString &a_str)
 exchange *
 exchange::createCopy()
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	exchange *copy = new exchange;
 
@@ -845,7 +845,7 @@ exchange::flush()
 int
 exchange::getInDescriptor() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	return socket;
 }
@@ -855,7 +855,7 @@ exchange::getInDescriptor() const
 int
 exchange::getOutDescriptor() const
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	return socket;
 }

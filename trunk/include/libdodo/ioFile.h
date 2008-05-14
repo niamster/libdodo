@@ -112,7 +112,7 @@ namespace dodo
 		 * @class file provides disk I/O manipulations
 		 */
 		class file : public channel,
-					   virtual public systemThreadGuardHolder
+					   virtual public system::thread::guardHolder
 		{
 			private:
 	

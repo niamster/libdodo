@@ -33,81 +33,89 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemProcessSharedDataCollectionGuard implements collection of shared data for processes
-	 */
-	class systemProcessSharedDataCollectionGuard : public systemSharedDataCollectionGuard,
-												   virtual public systemProcessGuardHolder
+	namespace system
 	{
-		private:
-
-			/**
-			 * copy constructor
-			 * to prevent copying
-			 */
-			systemProcessSharedDataCollectionGuard(systemProcessSharedDataCollectionGuard &sts);
-
-		public:
-
-			/**
-			 * constructor
-			 */
-			systemProcessSharedDataCollectionGuard();
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemProcessSharedDataCollectionGuard();
-
-			/**
-			 * add shared data
-			 * @return shared data identificator
-			 * @param data defines shared data
-			 */
-			virtual unsigned long add(void *data);
-
-			/**
-			 * delete data from collection
-			 * @param position defines shared data identificator
-			 */
-			virtual void del(unsigned long position);
-
-			/**
-			 * lock, set data, unlock
-			 * @param position defines shared data identificator
-			 * @param data defines shared data
-			 */
-			virtual void set(unsigned long position, void *data);
-
-			/**
-			 * lock, return data, unlock
-			 * @return shared data
-			 * @param position defines shared data identificator
-			 */
-			virtual const void *get(unsigned long position);
-
-			/**
-			 * @return list of shared data in object
-			 */
-			virtual dodoList<unsigned long> getSharedDataIds();
-
-		protected:
-
-			/**
-			 * search shared data by identificator
-			 * @return true if found
-			 * @param position describes defines shared data identificator
-			 * @note this sets internal class parameter 'current' to found shared data
-			 */
-			virtual bool getShare(unsigned long position);
-
-			dodoList<__shareInfo> shares;               ///< identificators of shared data
-
-			unsigned long shareNum;                     ///< number of registered shares
-
-			dodoList<__shareInfo>::iterator current;    ///< iterator for list of shared data[for matched with getShare method]
+		namespace process
+		{
+			namespace shared
+			{
+				/**
+				 * @class dataCollectionGuard implements collection of shared data for processes
+				 */
+				class dataCollectionGuard : public system::shared::dataCollectionGuard,
+															   virtual public guardHolder
+				{
+					private:
+			
+						/**
+						 * copy constructor
+						 * to prevent copying
+						 */
+						dataCollectionGuard(dataCollectionGuard &sts);
+			
+					public:
+			
+						/**
+						 * constructor
+						 */
+						dataCollectionGuard();
+			
+						/**
+						 * destructor
+						 */
+						virtual ~dataCollectionGuard();
+			
+						/**
+						 * add shared data
+						 * @return shared data identificator
+						 * @param data defines shared data
+						 */
+						virtual unsigned long add(void *data);
+			
+						/**
+						 * delete data from collection
+						 * @param position defines shared data identificator
+						 */
+						virtual void del(unsigned long position);
+			
+						/**
+						 * lock, set data, unlock
+						 * @param position defines shared data identificator
+						 * @param data defines shared data
+						 */
+						virtual void set(unsigned long position, void *data);
+			
+						/**
+						 * lock, return data, unlock
+						 * @return shared data
+						 * @param position defines shared data identificator
+						 */
+						virtual const void *get(unsigned long position);
+			
+						/**
+						 * @return list of shared data in object
+						 */
+						virtual dodoList<unsigned long> getSharedDataIds();
+			
+					protected:
+			
+						/**
+						 * search shared data by identificator
+						 * @return true if found
+						 * @param position describes defines shared data identificator
+						 * @note this sets internal class parameter 'current' to found shared data
+						 */
+						virtual bool getShare(unsigned long position);
+			
+						dodoList<system::shared::__shareInfo> shares;               ///< identificators of shared data
+			
+						unsigned long shareNum;                     ///< number of registered shares
+			
+						dodoList<system::shared::__shareInfo>::iterator current;    ///< iterator for list of shared data[for matched with getShare method]
+				};
+			};
+		};
 	};
-
 };
 
 #endif

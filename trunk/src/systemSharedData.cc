@@ -24,15 +24,15 @@
 
 #include <libdodo/systemSharedData.h>
 
-using namespace dodo;
+using namespace dodo::system::shared;
 
-systemSharedData::systemSharedData(systemSharedData &sts)
+data::data(data &sts)
 {
 }
 
 //-------------------------------------------------------------------
 
-systemSharedData::systemSharedData(const char   *a_key) : data(NULL),
+data::data(const char   *a_key) : mdata(NULL),
 														  size(0)
 {
 	if (a_key == NULL)
@@ -54,10 +54,10 @@ systemSharedData::systemSharedData(const char   *a_key) : data(NULL),
 
 //-------------------------------------------------------------------
 
-systemSharedData::~systemSharedData()
+data::~data()
 {
-	if (data != NULL)
-		munmap(data, size);
+	if (mdata != NULL)
+		munmap(mdata, size);
 
 	shm_unlink(key);
 }
@@ -65,48 +65,48 @@ systemSharedData::~systemSharedData()
 //-------------------------------------------------------------------
 
 void *
-systemSharedData::map(unsigned long size)
+data::map(unsigned long size)
 {
 	unmap();
 
 	if (shm <= 0)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	ftruncate(shm, sizeof(size));
 
-	data = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm, 0);
+	mdata = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm, 0);
 
-	if (data == MAP_FAILED)
-		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (mdata == MAP_FAILED)
+		throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	return data;
+	return mdata;
 }
 
 //-------------------------------------------------------------------
 
 void
-systemSharedData::unmap()
+data::unmap()
 {
-	if (data != NULL)
-		if (munmap(data, size) == -1)
-			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, SYSTEMSHAREDDATAEX_UNMAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	if (mdata != NULL)
+		if (munmap(mdata, size) == -1)
+			throw baseEx(ERRMODULE_SYSTEMSHAREDDATA, DATAEX_UNMAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	data = NULL;
+	mdata = NULL;
 	size = 0;
 }
 
 //-------------------------------------------------------------------
 
 void *
-systemSharedData::getMapped()
+data::getMapped()
 {
-	return data;
+	return mdata;
 }
 
 //-------------------------------------------------------------------
 
 unsigned long
-systemSharedData::getSize()
+data::getSize()
 {
 	return size;
 }

@@ -35,65 +35,71 @@
 
 namespace dodo
 {
-	/**
-	 * @class systemSharedData provides shared data functionality
-	 */
-	class systemSharedData
+	namespace system
 	{
-		private:
-
+		namespace shared
+		{
 			/**
-			 * copy constructor
-			 * to prevent copying
+			 * @class data provides shared data functionality
 			 */
-			systemSharedData(systemSharedData &sts);
-
-		public:
-
-			/**
-			 * constructor
-			 * @param key defines shared memory key
-			 * @note if key is NULL - key will be generated
-			 * if you want to share semaphore between different instances of process - set own key,
-			 * otherwise(like fork) - it may be generated
-			 */
-			systemSharedData(const char *key = NULL);
-
-			/**
-			 * destructor
-			 */
-			virtual ~systemSharedData();
-
-			/**
-			 * map shared data
-			 * @return shared data
-			 * @param size defines size of shared data
-			 * @note if map is called twice - old data will be unmapped
-			 */
-			virtual void *map(unsigned long size);
-
-			/**
-			 * unmap shared data
-			 */
-			virtual void unmap();
-
-			/**
-			 * @return shared data
-			 */
-			virtual void *getMapped();
-
-			/**
-			 * @return size of shared data
-			 */
-			virtual unsigned long getSize();
-
-		protected:
-
-			int shm;            ///< shared data descriptor
-			void *data;         ///< shared data
-			unsigned long size; ///< size of shared data
-
-			char *key;          ///< key for the shared data
+			class data
+			{
+				private:
+		
+					/**
+					 * copy constructor
+					 * to prevent copying
+					 */
+					data(data &sts);
+		
+				public:
+		
+					/**
+					 * constructor
+					 * @param key defines shared memory key
+					 * @note if key is NULL - key will be generated
+					 * if you want to share semaphore between different instances of process - set own key,
+					 * otherwise(like fork) - it may be generated
+					 */
+					data(const char *key = NULL);
+		
+					/**
+					 * destructor
+					 */
+					virtual ~data();
+		
+					/**
+					 * map shared data
+					 * @return shared data
+					 * @param size defines size of shared data
+					 * @note if map is called twice - old data will be unmapped
+					 */
+					virtual void *map(unsigned long size);
+		
+					/**
+					 * unmap shared data
+					 */
+					virtual void unmap();
+		
+					/**
+					 * @return shared data
+					 */
+					virtual void *getMapped();
+		
+					/**
+					 * @return size of shared data
+					 */
+					virtual unsigned long getSize();
+		
+				protected:
+		
+					int shm;            ///< shared data descriptor
+					void *mdata;         ///< shared data
+					unsigned long size; ///< size of shared data
+		
+					char *key;          ///< key for the shared data
+			};
+		};
 	};
 };
 

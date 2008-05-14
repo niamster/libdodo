@@ -180,7 +180,7 @@ serverExchange::_read(char * const a_void)
 void
 serverExchange::read(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	operType = FASTSERVEREXCHANGE_OPERATION_READ;
@@ -219,7 +219,7 @@ serverExchange::read(char * const a_void)
 void
 serverExchange::readString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	operType = FASTSERVEREXCHANGE_OPERATION_READSTRING;
@@ -264,7 +264,7 @@ serverExchange::readString(dodoString &a_str)
 void
 serverExchange::writeString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_buf;
@@ -299,7 +299,7 @@ serverExchange::writeString(const dodoString &a_buf)
 void
 serverExchange::write(const char *const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
@@ -343,7 +343,7 @@ serverExchange::_write(const char *const buf)
 void
 serverExchange::readStream(char * const a_void)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	operType = FASTSERVEREXCHANGE_OPERATION_READSTREAM;
@@ -369,7 +369,7 @@ serverExchange::readStream(char * const a_void)
 void
 serverExchange::readStreamString(dodoString &a_str)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	operType = FASTSERVEREXCHANGE_OPERATION_READSTREAMSTRING;
@@ -408,7 +408,7 @@ serverExchange::readStreamString(dodoString &a_str)
 void
 serverExchange::writeStreamString(const dodoString &a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
@@ -463,7 +463,7 @@ serverExchange::writeStreamString(const dodoString &a_buf)
 void
 serverExchange::writeStream(const char *const a_buf)
 {
-	systemRaceHazardGuard pg(this);
+	raceHazardGuard pg(this);
 
 	unsigned long _outSize = outSize;
 
