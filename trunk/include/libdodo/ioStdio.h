@@ -38,7 +38,7 @@
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetwork.h>
-#include <libdodo/systemThreadGuard.h>
+#include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
 {
@@ -88,7 +88,7 @@ namespace dodo
 		 * @class stdio provides interface for stdin/stdout/stderr I/O operations
 		 */
 		class stdio : public channel,
-					  virtual public system::thread::guardHolder
+					  virtual public ipc::thread::guardHolder
 		{
 			private:
 	

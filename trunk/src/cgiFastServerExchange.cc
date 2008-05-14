@@ -183,7 +183,7 @@ serverExchange::read(char * const a_void)
 	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
-	operType = FASTSERVEREXCHANGE_OPERATION_READ;
+	operType = SERVEREXCHANGE_OPERATION_READ;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -222,7 +222,7 @@ serverExchange::readString(dodoString &a_str)
 	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
-	operType = FASTSERVEREXCHANGE_OPERATION_READSTRING;
+	operType = SERVEREXCHANGE_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	buffer.reserve(inSize);
@@ -269,7 +269,7 @@ serverExchange::writeString(const dodoString &a_buf)
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = FASTSERVEREXCHANGE_OPERATION_WRITESTRING;
+	operType = SERVEREXCHANGE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -304,7 +304,7 @@ serverExchange::write(const char *const a_buf)
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer.assign(a_buf, outSize);
 
-	operType = FASTSERVEREXCHANGE_OPERATION_WRITE;
+	operType = SERVEREXCHANGE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -346,7 +346,7 @@ serverExchange::readStream(char * const a_void)
 	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
-	operType = FASTSERVEREXCHANGE_OPERATION_READSTREAM;
+	operType = SERVEREXCHANGE_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
@@ -372,7 +372,7 @@ serverExchange::readStreamString(dodoString &a_str)
 	raceHazardGuard pg(this);
 
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
-	operType = FASTSERVEREXCHANGE_OPERATION_READSTREAMSTRING;
+	operType = SERVEREXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -415,7 +415,7 @@ serverExchange::writeStreamString(const dodoString &a_buf)
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = FASTSERVEREXCHANGE_OPERATION_WRITESTREAMSTRING;
+	operType = SERVEREXCHANGE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -470,7 +470,7 @@ serverExchange::writeStream(const char *const a_buf)
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
 	buffer = a_buf;
 
-	operType = FASTSERVEREXCHANGE_OPERATION_WRITESTREAM;
+	operType = SERVEREXCHANGE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try

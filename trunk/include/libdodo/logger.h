@@ -28,7 +28,7 @@
 
 #include <libdodo/ioChannel.h>
 #include <libdodo/toolsTime.h>
-#include <libdodo/systemThreadGuard.h>
+#include <libdodo/ipcThreadGuard.h>
 
 #include <syslog.h>
 
@@ -62,7 +62,7 @@ namespace dodo
 	/**
 	 * @class logger provides logging function
 	 */
-	class logger : virtual public system::thread::guardHolder
+	class logger : virtual public ipc::thread::guardHolder
 	{
 		public:
 			
@@ -114,7 +114,7 @@ namespace dodo
 			unsigned long handlersNum;///< number of registered handlers
 			
 			static const dodoString levels[8];///< log levels statements
-			static const int syslogLevels[8];///< systemlog log levels
+			static const int syslogLevels[8];///< syslog log levels
 	};
 
 };

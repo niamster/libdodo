@@ -42,7 +42,7 @@
 #include <libdodo/ioNetworkExchangeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
-#include <libdodo/systemThreadGuard.h>
+#include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
 {
@@ -127,7 +127,7 @@ namespace dodo
 			 */
 			class exchange : public options,
 									 public channel,
-									 virtual public system::thread::guardHolder
+									 virtual public ipc::thread::guardHolder
 			{
 					friend class server;
 					friend class client;

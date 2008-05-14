@@ -64,23 +64,23 @@ OBJECTS:=dbAccumulator.o \
 	rpcXmlMethod.o \
 	rpcXmlResponse.o \
 	image.o \
-	systemRaceHazardGuard.o \
-	systemAtomicLock.o \
-	systemAtomicMutex.o \
-	systemAtomicSemaphore.o \
-	systemProcessCollection.o \
-	systemThreadCollection.o \
-	systemJobCollection.o \
-	systemThreadGuard.o \
-	systemProcessGuard.o \
-	systemThreadSharedDataGuard.o \
-	systemProcessSharedDataGuard.o \
-	systemSharedDataGuard.o \
-	systemSharedData.o \
-	systemThreadSharedDataCollectionGuard.o \
-	systemProcessSharedDataCollectionGuard.o \
-	systemSharedDataCollectionGuard.o \
-	systemLibraryLoader.o \
+	ipcRaceHazardGuard.o \
+	ipcAtomicLock.o \
+	ipcAtomicMutex.o \
+	ipcAtomicSemaphore.o \
+	ipcProcessCollection.o \
+	ipcThreadCollection.o \
+	ipcJobCollection.o \
+	ipcThreadGuard.o \
+	ipcProcessGuard.o \
+	ipcThreadSharedDataGuard.o \
+	ipcProcessSharedDataGuard.o \
+	ipcSharedDataGuard.o \
+	ipcSharedData.o \
+	ipcThreadSharedDataCollectionGuard.o \
+	ipcProcessSharedDataCollectionGuard.o \
+	ipcSharedDataCollectionGuard.o \
+	ipcLibraryLoader.o \
 	cgiServer.o \
 	cgiFastServer.o \
 	cgiFastServerExchange.o \

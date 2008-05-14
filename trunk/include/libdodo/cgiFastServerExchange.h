@@ -33,7 +33,7 @@
 #include <libdodo/types.h>
 #include <libdodo/cgiFastServerExchangeEx.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/systemThreadGuard.h>
+#include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
 {
@@ -46,14 +46,14 @@ namespace dodo
 			 */
 			enum fastServerExchangeOperationTypeEnum
 			{
-				FASTSERVEREXCHANGE_OPERATION_READ,
-				FASTSERVEREXCHANGE_OPERATION_READSTRING,
-				FASTSERVEREXCHANGE_OPERATION_READSTREAM,
-				FASTSERVEREXCHANGE_OPERATION_READSTREAMSTRING,
-				FASTSERVEREXCHANGE_OPERATION_WRITE,
-				FASTSERVEREXCHANGE_OPERATION_WRITESTRING,
-				FASTSERVEREXCHANGE_OPERATION_WRITESTREAM,
-				FASTSERVEREXCHANGE_OPERATION_WRITESTREAMSTRING,
+				SERVEREXCHANGE_OPERATION_READ,
+				SERVEREXCHANGE_OPERATION_READSTRING,
+				SERVEREXCHANGE_OPERATION_READSTREAM,
+				SERVEREXCHANGE_OPERATION_READSTREAMSTRING,
+				SERVEREXCHANGE_OPERATION_WRITE,
+				SERVEREXCHANGE_OPERATION_WRITESTRING,
+				SERVEREXCHANGE_OPERATION_WRITESTREAM,
+				SERVEREXCHANGE_OPERATION_WRITESTREAMSTRING,
 			};
 			
 #ifndef CGIFASTSERVEREXCHANGE_WO_XEXEC
@@ -83,7 +83,7 @@ namespace dodo
 			 * @class serverExchange provides interface to fast CGI I/O functionality
 			 */
 			class serverExchange : public io::channel,
-							virtual public system::thread::guardHolder
+							virtual public ipc::thread::guardHolder
 			{
 				private:
 		

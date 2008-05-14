@@ -32,7 +32,7 @@
 #include <libdodo/ioNonBlockedAccessEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/systemThreadGuard.h>
+#include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
 {
@@ -52,7 +52,7 @@ namespace dodo
 		/**
 		 * @class nonBlockedAccess provides information if in/output stream is readable/writable
 		 */
-		class nonBlockedAccess : virtual public system::thread::guardHolder
+		class nonBlockedAccess : virtual public ipc::thread::guardHolder
 		{
 	
 			private:

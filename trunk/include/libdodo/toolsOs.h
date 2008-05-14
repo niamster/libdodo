@@ -56,7 +56,7 @@
 
 namespace dodo
 {
-	namespace system
+	namespace ipc
 	{
 		namespace thread
 		{
@@ -193,7 +193,7 @@ namespace dodo
 		 */
 		class os
 		{
-			friend class system::thread::collection;
+			friend class ipc::thread::collection;
 
 			public:
 

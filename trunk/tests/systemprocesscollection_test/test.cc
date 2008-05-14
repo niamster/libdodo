@@ -1,16 +1,16 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemProcessCollection.h>
+#include <libdodo/ipcProcessCollection.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/systemSharedData.h>
-#include <libdodo/systemProcessSharedDataGuard.h>
-#include <libdodo/systemProcessSharedDataCollectionGuard.h>
+#include <libdodo/ipcSharedData.h>
+#include <libdodo/ipcProcessSharedDataGuard.h>
+#include <libdodo/ipcProcessSharedDataCollectionGuard.h>
 
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::system;
+using namespace dodo::ipc;
 using namespace process;
 using namespace process::shared;
 
@@ -25,7 +25,7 @@ process(void *ud)
 {
 	try
 	{
-		dodo::system::shared::data shD("dodo");
+		dodo::ipc::shared::data shD("dodo");
 		char *dt = (char *)shD.map(100);
 		cout << dt << endl;
 
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		dodo::system::shared::data shD("dodo");
+		dodo::ipc::shared::data shD("dodo");
 		char *data = (char *)shD.map(100);
 		strcpy(data, "test");
 

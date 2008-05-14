@@ -1,11 +1,11 @@
 #include <libdodo/directives.h>
-#include <libdodo/systemLibraryLoader.h>
+#include <libdodo/ipcLibraryLoader.h>
 #include <libdodo/baseEx.h>
 
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::system;
+using namespace dodo::ipc;
 
 using namespace std;
 

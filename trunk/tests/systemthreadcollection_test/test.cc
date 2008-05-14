@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemThreadCollection.h>
-#include <libdodo/systemThreadSharedDataGuard.h>
-#include <libdodo/systemThreadSharedDataCollectionGuard.h>
+#include <libdodo/ipcThreadCollection.h>
+#include <libdodo/ipcThreadSharedDataGuard.h>
+#include <libdodo/ipcThreadSharedDataCollectionGuard.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::system::thread;
+using namespace dodo::ipc::thread;
 using namespace shared;
 
 using namespace std;

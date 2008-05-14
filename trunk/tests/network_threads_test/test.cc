@@ -1,14 +1,14 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
-#include <libdodo/systemThreadCollection.h>
-#include <libdodo/systemThreadSharedDataGuard.h>
+#include <libdodo/ipcThreadCollection.h>
+#include <libdodo/ipcThreadSharedDataGuard.h>
 
 #include <iostream>
 
 using namespace dodo;
 using namespace io::network;
-using namespace dodo::system;
+using namespace dodo::ipc;
 
 using namespace std;
 

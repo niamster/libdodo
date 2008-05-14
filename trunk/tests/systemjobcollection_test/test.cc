@@ -1,7 +1,7 @@
 #include <libdodo/baseEx.h>
-#include <libdodo/systemJobCollection.h>
-#include <libdodo/systemProcessCollection.h>
-#include <libdodo/systemThreadCollection.h>
+#include <libdodo/ipcJobCollection.h>
+#include <libdodo/ipcProcessCollection.h>
+#include <libdodo/ipcThreadCollection.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::system;
+using namespace dodo::ipc;
 
 using namespace std;
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	{
 		const int amount = 10;
 		
-		dodo::system::job::collection *pr[amount];
+		dodo::ipc::job::collection *pr[amount];
 
 		int pos[amount];
 		dodoString ids[amount];
