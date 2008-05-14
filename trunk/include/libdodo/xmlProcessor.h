@@ -65,20 +65,20 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __xmlInfo desribes info got about given XML document
+		 * @struct __info desribes info got about given XML document
 		 */
-		struct __xmlInfo
+		struct __info
 		{
 			/**
 			 * constructor
 			 */
-			__xmlInfo();
+			__info();
 
 			/**
 			 * constructor
 			 * @note initializes with user values
 			 */
-			__xmlInfo(const dodoString &version, const dodoString &encoding, const dodoString &root, int compression);
+			__info(const dodoString &version, const dodoString &encoding, const dodoString &root, int compression);
 
 			dodoString version;     ///< version of XML document
 			dodoString encoding;    ///< encoding of XML document
@@ -148,13 +148,13 @@ namespace dodo
 				 * @return XML info
 				 * @param file defines path to XML file
 				 */
-				virtual __xmlInfo getXMLFileInfo(const dodoString &file);
+				virtual __info getXMLFileInfo(const dodoString &file);
 
 				/**
 				 * @return XML info
 				 * @param buffer defines XML buffer
 				 */
-				virtual __xmlInfo getXMLBufferInfo(const dodoString &buffer);
+				virtual __info getXMLBufferInfo(const dodoString &buffer);
 
 				/**
 				 * clear parameters of the give node

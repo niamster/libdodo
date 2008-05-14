@@ -26,7 +26,7 @@
 
 using namespace dodo::xml;
 
-__xmlInfo::__xmlInfo(const dodoString &a_version,
+__info::__info(const dodoString &a_version,
 					 const dodoString &a_encoding,
 					 const dodoString &a_root,
 					 int a_compression) : version(a_version),
@@ -38,7 +38,7 @@ __xmlInfo::__xmlInfo(const dodoString &a_version,
 
 //-------------------------------------------------------------------
 
-__xmlInfo::__xmlInfo()
+__info::__info()
 {
 }
 
@@ -524,7 +524,7 @@ processor::getNodeInfo(const xmlNodePtr xnode,
 
 //-------------------------------------------------------------------
 
-__xmlInfo
+__info
 processor::getXMLFileInfo(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
@@ -540,21 +540,21 @@ processor::getXMLFileInfo(const dodoString &file)
 			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETXMLFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
-	return __xmlInfo(document->version != NULL ? (char *)document->version : __dodostring__,
+	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
 					 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
 					 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
 					 document->compression);
 
 #else
 
-	return __xmlInfo();
+	return __info();
 
 #endif
 }
 
 //-------------------------------------------------------------------
 
-__xmlInfo
+__info
 processor::getXMLBufferInfo(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
@@ -570,11 +570,11 @@ processor::getXMLBufferInfo(const dodoString &buffer)
 			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETXMLBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
-	return __xmlInfo((char *)document->version, (char *)document->encoding, (char *)document->children->name, document->compression);
+	return __info((char *)document->version, (char *)document->encoding, (char *)document->children->name, document->compression);
 
 #else
 
-	return __xmlInfo();
+	return __info();
 
 #endif
 }
