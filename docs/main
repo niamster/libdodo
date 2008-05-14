@@ -15,7 +15,7 @@ cgi::
 
 io:: 
 	input/output routines
-	files, network, stdin/stdout, HTTP requests
+	files, network(client/server, high-level protocols), stdin/stdout
 
 db::
 	database related routines
@@ -30,13 +30,19 @@ xml:
 	xml-related routines(parsing, creation)
 
 tools::
-	system, time, string, filesystem, network
+	operation system, time, string, filesystem, network, compression, ...
+
+image:
+	image manipulation routines
 
 xexec:
 	smart system of pre/post exec operations for other modules
 
-system::
+ipc::
 	job control(processes, threads), race condition control(for processes, threads), access to shared memory
+
+libraryLoader:
+	load routines and data from shared objects or archive objects
 
 logger:
 	log routines
