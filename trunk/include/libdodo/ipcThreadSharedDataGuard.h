@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADSHAREDDATAGUARD_H_
-#define _SYSTEMTHREADSHAREDDATAGUARD_H_
+#ifndef _IPCTHREADSHAREDDATAGUARD_H_
+#define _IPCTHREADSHAREDDATAGUARD_H_
 
 #include <libdodo/directives.h>
 

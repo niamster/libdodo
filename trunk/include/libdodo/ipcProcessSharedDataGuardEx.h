@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMPROCESSSHAREDDATAGUARDEX_H_
-#define _SYSTEMPROCESSSHAREDDATAGUARDEX_H_
+#ifndef _IPCPROCESSSHAREDDATAGUARDEX_H_
+#define _IPCPROCESSSHAREDDATAGUARDEX_H_
 
 #include <libdodo/directives.h>
 

@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMRACEHAZARDGUARD_H_
-#define _SYSTEMRACEHAZARDGUARD_H_
+#ifndef _IPCRACEHAZARDGUARD_H_
+#define _IPCRACEHAZARDGUARD_H_
 
 #include <libdodo/directives.h>
 

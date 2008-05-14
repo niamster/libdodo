@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMTHREADGUARD_H_
-#define _SYSTEMTHREADGUARD_H_
+#ifndef _IPCTHREADGUARD_H_
+#define _IPCTHREADGUARD_H_
 
 #include <libdodo/directives.h>
 

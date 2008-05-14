@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMPROCESSCOLLECTIONEX_H_
-#define _SYSTEMPROCESSCOLLECTIONEX_H_
+#ifndef _IPCPROCESSCOLLECTIONEX_H_
+#define _IPCPROCESSCOLLECTIONEX_H_
 
 #include <libdodo/directives.h>
 

@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _SYSTEMATOMICSEMAPHOREEX_H_
-#define _SYSTEMATOMICSEMAPHOREEX_H_
+#ifndef _IPCATOMICSEMAPHOREEX_H_
+#define _IPCATOMICSEMAPHOREEX_H_
 
 #include <libdodo/directives.h>
 
