@@ -48,10 +48,10 @@ namespace dodo
 			/**
 			 * explanations for libdodo defined errors
 			 */
-		#define COLLECTIONEX_ISALREADYRUNNING_STR "The process is currently running. Please wait."
-		#define COLLECTIONEX_NOTFOUND_STR "Process not found."
-		#define COLLECTIONEX_SWEPT_STR "Limit of execution exceeded. Process swept."
-		#define COLLECTIONEX_ISNOTRUNNING_STR "The process is currently not running."
+		#define IPCPROCESSCOLLECTIONEX_ISALREADYRUNNING_STR "The process is currently running. Please wait."
+		#define IPCPROCESSCOLLECTIONEX_NOTFOUND_STR "Process not found."
+		#define IPCPROCESSCOLLECTIONEX_SWEPT_STR "Limit of execution exceeded. Process swept."
+		#define IPCPROCESSCOLLECTIONEX_ISNOTRUNNING_STR "The process is currently not running."
 		
 			/**
 			 * IDs of functions where exception might be thrown

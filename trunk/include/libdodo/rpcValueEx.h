@@ -44,8 +44,8 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define VALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
-	#define VALUEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
+	#define RPCVALUEEX_WRONGTYPEREQUESTED_STR "Wrong type was requested. Use proper get* method."
+	#define RPCVALUEEX_ARRAYOUTOFRANGE_STR "Array key is out of range."
 	
 		/**
 		 * IDs of functions where exception might be thrown

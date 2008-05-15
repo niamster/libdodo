@@ -49,11 +49,11 @@ namespace dodo
 			/**
 			 * libdodo defined errors' explanation
 			 */
-		#define COLLECTIONEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
-		#define COLLECTIONEX_ISNOTRUNNING_STR        "The thread is currently not running."
-		#define COLLECTIONEX_NOTFOUND_STR            "Thread not found."
-		#define COLLECTIONEX_ISDETACHED_STR          "Thread is detached. Cannot join."
-		#define COLLECTIONEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
+		#define IPCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR    "The thread is currently running. Please wait."
+		#define IPCTHREADCOLLECTIONEX_ISNOTRUNNING_STR        "The thread is currently not running."
+		#define IPCTHREADCOLLECTIONEX_NOTFOUND_STR            "Thread not found."
+		#define IPCTHREADCOLLECTIONEX_ISDETACHED_STR          "Thread is detached. Cannot join."
+		#define IPCTHREADCOLLECTIONEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
 		
 			/**
 			 * ID of function where exception was thrown

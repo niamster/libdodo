@@ -48,10 +48,10 @@ namespace dodo
 			/**
 			 * explanations for libdodo defined errors
 			 */
-		#define HTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
-		#define HTTPEX_NOTAUTHORIZED_STR "Aythorization required."
-		#define HTTPEX_UNKNOWNWWWAUTHTYPE_STR "Unknown HTTP authentification type."
-		#define HTTPEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentification type."
+		#define IONETWORKHTTPEX_CANNOTCONNECT_STR "Can't connect to the host(s)."
+		#define IONETWORKHTTPEX_NOTAUTHORIZED_STR "Aythorization required."
+		#define IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR "Unknown HTTP authentification type."
+		#define IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentification type."
 		
 			/**
 			 * IDs of functions where exception might be thrown

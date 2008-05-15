@@ -117,7 +117,7 @@ preprocessor::_preProcessString(const dodoString &buffer,
 		{
 			j = buffer.find(statements[PREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], begin);
 			if (j != dodoString::npos)
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
 
 			break;
 		}
@@ -127,7 +127,7 @@ preprocessor::_preProcessString(const dodoString &buffer,
 
 			j = temp.find(statements[PREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], begin);
 			if (j != dodoString::npos)
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.c_str()));
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.c_str()));
 		}
 
 		i += 2;
@@ -143,7 +143,7 @@ preprocessor::_preProcessString(const dodoString &buffer,
 				continue;
 			}
 			else
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.c_str()));
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.c_str()));
 
 		}
 
@@ -157,23 +157,23 @@ preprocessor::_preProcessString(const dodoString &buffer,
 				continue;
 			}
 			else
-				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.c_str()));
+				throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.c_str()));
 		}
 
 		j = buffer.find(statements[PREPROCESSOR_PROCESSORSTATEMENT_CLOSE_ST], i);
 		if (j == dodoString::npos)
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.c_str()));
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.c_str()));
 
 		if (j > 0 && buffer[j - 1] == '*')
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.c_str()));
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.c_str()));
 
 		if (j > 0 && buffer[j - 1] == '<')
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.c_str()));
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.c_str()));
 
 		dodoString temp = buffer.substr(i, j - i);
 
 		if (temp.find(statements[PREPROCESSOR_PROCESSORSTATEMENT_OPEN_ST]) != dodoString::npos)
-			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, PREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
+			throw baseEx(ERRMODULE_CGIPREPROCESSOR, PREPROCESSOREX__PREPROCESSSTRING, ERR_LIBDODO, PREPROCESSOREX_NOTCLOSEDBRACKET, CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
 
 		j += 2;
 	}

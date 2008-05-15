@@ -45,8 +45,8 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define SQLCONSTRUCTOREX_EMPTYREQUEST_STR "Query is empty. Are you sure?"
-	#define SQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
+	#define DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR "Query is empty. Are you sure?"
+	#define DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
 	
 		/**
 		 * IDs of functions where exception might be thrown

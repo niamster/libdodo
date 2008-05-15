@@ -176,7 +176,7 @@ misc::random(void *data,
 				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 		else
-			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_LIBDODO, MISCEX_WRONGSTRENGTH, MISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_LIBDODO, MISCEX_WRONGSTRENGTH, TOOLSMISCEX_WRONGSTRENGTH_STR, __LINE__, __FILE__);
 	}
 	
     while (true)
@@ -414,7 +414,7 @@ misc::implode(const dodoStringArray &fields,
 			   int limit)
 {
 	if (fields.size() == 0)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, MISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 
@@ -469,7 +469,7 @@ misc::implode(const dodoStringArray &fields,
 			   int limit)
 {
 	if (fields.size() == 0)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, MISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
 
 	int k(0);
 
@@ -1009,7 +1009,7 @@ misc::decodeASCII85(const dodoString &string)
 						case 'z':
 
 							if (count != 0)
-								throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, MISCEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, TOOLSMISCEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							result.append(4, '\0');
 
@@ -1031,7 +1031,7 @@ misc::decodeASCII85(const dodoString &string)
 								break;
 							}
 
-							throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, MISCEX_BADASCII85_STR, __LINE__, __FILE__);
+							throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, TOOLSMISCEX_BADASCII85_STR, __LINE__, __FILE__);
 
 						case '\n':
 						case '\r':
@@ -1047,7 +1047,7 @@ misc::decodeASCII85(const dodoString &string)
 						default:
 
 							if (string[k] < '!' || string[k] > 'u')
-								throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, MISCEX_BADASCII85_STR, __LINE__, __FILE__);
+								throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_DECODEASCII85, ERR_LIBDODO, MISCEX_BADASCII85, TOOLSMISCEX_BADASCII85_STR, __LINE__, __FILE__);
 
 							tuple += (string[k] - '!') * powASCII85[count++];
 							if (count == 5)
@@ -1304,7 +1304,7 @@ misc::bzCompress(const dodoString &buffer,
 
 	int ret = BZ2_bzBuffToBuffCompress(dst, &len, (char *)buffer.c_str(), len, level, 0, type);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZCOMPRESS, ERR_BZIP, MISCEX_BADBZCOMPRESSION, MISCEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZCOMPRESS, ERR_BZIP, MISCEX_BADBZCOMPRESSION, TOOLSMISCEX_BADBZCOMPRESSION_STR, __LINE__, __FILE__);
 
 	return dodoString(dst, len);
 }
@@ -1321,7 +1321,7 @@ misc::bzDecompress(const dodoString &buffer)
 
 	int ret = BZ2_bzDecompressInit(&bzs, 0, 0);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSIONINIT, MISCEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSIONINIT, TOOLSMISCEX_BADBZDECOMPRESSIONINIT_STR, __LINE__, __FILE__);
 
 	int src_len = buffer.size();
 	char *src = new char[src_len + 1];
@@ -1359,12 +1359,12 @@ misc::bzDecompress(const dodoString &buffer)
 		delete [] src;
 		free(dst);
 
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSION, MISCEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSION, TOOLSMISCEX_BADBZDECOMPRESSION_STR, __LINE__, __FILE__);
 	}
 
 	ret = BZ2_bzDecompressEnd(&bzs);
 	if (ret != BZ_OK)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSIONFINISH, MISCEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_BZDECOMPRESS, ERR_BZIP, MISCEX_BADBZDECOMPRESSIONFINISH, TOOLSMISCEX_BADBZDECOMPRESSIONFINISH_STR, __LINE__, __FILE__);
 
 	return _buffer;
 }
@@ -1647,7 +1647,7 @@ misc::mail(const dodoString &host,
 	ex.readStreamString(mess);
 
 	if (string::stringToI(mess.substr(0, 3)) != 250)
-		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_LIBDODO, MISCEX_BADMAILHELO, MISCEX_BADMAILHELO_STR, __LINE__, __FILE__);
+		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_LIBDODO, MISCEX_BADMAILHELO, TOOLSMISCEX_BADMAILHELO_STR, __LINE__, __FILE__);
 
 	if (auth)
 	{
@@ -1669,7 +1669,7 @@ misc::mail(const dodoString &host,
 			ex.readStreamString(mess);
 
 			if (string::stringToI(mess.substr(0, 3)) != 334)
-				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 			dodoString ticket = decodeBase64(mess.substr(4));
 
@@ -1713,7 +1713,7 @@ misc::mail(const dodoString &host,
 			ex.readStreamString(mess);
 
 			if (string::stringToI(mess.substr(0, 3)) != 235)
-				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 		}
 		else
 		{
@@ -1723,19 +1723,19 @@ misc::mail(const dodoString &host,
 				ex.readStreamString(mess);
 
 				if (string::stringToI(mess.substr(0, 3)) != 334)
-					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(login) + "\r\n");
 				ex.readStreamString(mess);
 				
 				if (string::stringToI(mess.substr(0, 3)) != 334)
-					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 
 				ex.writeStreamString(encodeBase64(pass) + "\r\n");
 				ex.readStreamString(mess);
 				
 				if (string::stringToI(mess.substr(0, 3)) != 235)
-					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 			}
 			else
 			{
@@ -1745,7 +1745,7 @@ misc::mail(const dodoString &host,
 					ex.readStreamString(mess);
 
 					if (string::stringToI(mess.substr(0, 3)) != 334)
-						throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, MISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
+						throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_MAIL, ERR_ERRNO, MISCEX_BADMAILAUTH, TOOLSMISCEX_BADMAILAUTH_STR, __LINE__, __FILE__);
 				}
 			}
 		}

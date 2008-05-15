@@ -48,8 +48,8 @@ namespace dodo
 				/**
 				 * explanations for libdodo defined errors
 				 */
-			#define DATAGUARDEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-			#define DATAGUARDEX_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
+			#define IPCPROCESSSHAREDDATAGUARDEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
+			#define IPCPROCESSSHAREDDATAGUARDEX_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
 			
 				/**
 				 * IDs of functions where exception might be thrown

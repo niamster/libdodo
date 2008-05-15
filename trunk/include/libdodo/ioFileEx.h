@@ -45,9 +45,9 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define FILEEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
-	#define FILEEX_CANNOTOVEWRITE_STR "You set option not to overwrite, but try to do that =)"
-	#define FILEEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
+	#define IOFILEEX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
+	#define IOFILEEX_CANNOTOVEWRITE_STR "You set option not to overwrite, but try to do that =)"
+	#define IOFILEEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
 
 		/**
 		 * IDs of functions where exception might be thrown
