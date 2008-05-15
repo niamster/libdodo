@@ -18,6 +18,8 @@ extern "C"
 		xexecObjectTypeEnum type,
 		void *udata)
 	{
+#ifndef IOSTDIO_WO_XEXEC
+
 		if (type == XEXEC_OBJECT_IOSTDIO)
 		{
 			std::cout << "stdio module\t";
@@ -30,6 +32,8 @@ extern "C"
 			}
 		}
 		std::cout << "activation\n";
+
+#endif
 	}
 
 	void
