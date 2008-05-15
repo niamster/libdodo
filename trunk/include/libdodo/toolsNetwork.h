@@ -45,9 +45,9 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @struct __ifInfo defines interface information
+		 * @struct __interfaceInfo defines interface information
 		 */
-		struct __ifInfo
+		struct __interfaceInfo
 		{
 			dodoString address;     ///< ip address of the interface
 			dodoString broadcast;   ///< broadcast address of the interface
@@ -69,9 +69,9 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __servInfo defines info about service
+		 * @struct __serviceInfo defines info about service
 		 */
-		struct __servInfo
+		struct __serviceInfo
 		{
 			dodoString name;            ///< original name of the service
 			dodoStringArray aliases;    ///< aliases of the service
@@ -95,7 +95,7 @@ namespace dodo
 				 * @return information about the interface
 				 * @param interface defines a name of the interface
 				 */
-				static __ifInfo getInterfaceInfo(const dodoString &interface);
+				static __interfaceInfo getInterfaceInfo(const dodoString &interface);
 
 				/**
 				 * @return information about the given host
@@ -125,14 +125,14 @@ namespace dodo
 				 * @param service defices name of the service
 				 * @param protocol defines protocol of the service(tcp, udp ..)
 				 */
-				static __servInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
+				static __serviceInfo getServiceInfo(const dodoString &service, const dodoString &protocol);
 
 				/**
 				 * @return information about the service
 				 * @param port defices port of the service
 				 * @param protocol defines protocol of the service(tcp, udp ..)
 				 */
-				static __servInfo getServiceInfo(int port, const dodoString &protocol);
+				static __serviceInfo getServiceInfo(int port, const dodoString &protocol);
 
 		};
 	};

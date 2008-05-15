@@ -36,9 +36,9 @@ namespace dodo
 		namespace shared
 		{
 			/**
-			 * @struct __shareInfo defines shared data
+			 * @struct __info defines shared data
 			 */
-			struct __shareInfo
+			struct __info
 			{
 				unsigned long position; ///< shared data identificator
 				void *data;             ///< shared data

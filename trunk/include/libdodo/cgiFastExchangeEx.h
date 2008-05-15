@@ -37,7 +37,7 @@ namespace dodo
 			/**
 			 * libdodo defined errors
 			 */
-			enum fastExchangeExR
+			enum exchangeExR
 			{
 				FASTEXCHANGEEX_FAILEDTOFLUSH,
 				FASTEXCHANGEEX_FAILEDTOPRINTSTRING,
@@ -52,7 +52,7 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum fastExchangeFunctionsID
+			enum exchangeFunctionsID
 			{
 				FASTEXCHANGEEX_FLUSH,
 				FASTEXCHANGEEX__WRITE,

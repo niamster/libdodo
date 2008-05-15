@@ -357,14 +357,14 @@ baseEx::~baseEx()
 	
 #ifdef DL_EXT
 
-	deinitExModule deinit;
+	deinitBaseExModule deinit;
 
 	for (int i(0); i < BASEEX_MODULES; ++i)
 	{
 		if (!handlesOpenedEx[i])
 			continue;
 
-		deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
+		deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -401,9 +401,9 @@ baseEx::setErrorHandler(errorModuleEnum module,
 
 	if (handlesOpenedEx[module])
 	{
-		deinitExModule deinit;
+		deinitBaseExModule deinit;
 
-		deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
+		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
 		if (deinit != NULL)
 			deinit();
 		
@@ -431,7 +431,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 	raceHazardGuard tg;
 	
 #ifdef DL_EXT
-	deinitExModule deinit;
+	deinitBaseExModule deinit;
 #endif
 
 	for (int i(0); i < BASEEX_MODULES; ++i)
@@ -440,7 +440,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 
 		if (handlesOpenedEx[i])
 		{
-			deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
+			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -471,9 +471,9 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 
 	if (handlesOpenedEx[module])
 	{
-		deinitExModule deinit;
+		deinitBaseExModule deinit;
 
-		deinit = (deinitExModule)dlsym(handlesEx[module], "deinitExModule");
+		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
 		if (deinit != NULL)
 			deinit();
 		
@@ -500,7 +500,7 @@ baseEx::unsetErrorHandlers()
 	raceHazardGuard tg;
 	
 #ifdef DL_EXT
-	deinitExModule deinit;
+	deinitBaseExModule deinit;
 #endif
 
 	for (int i(0); i < BASEEX_MODULES; ++i)
@@ -509,7 +509,7 @@ baseEx::unsetErrorHandlers()
 
 		if (handlesOpenedEx[i])
 		{
-			deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
+			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -540,16 +540,16 @@ baseEx::setErrorHandlers(const dodoString &path,
 {
 	raceHazardGuard tg;
 	
-	initExModule init;
+	initBaseExModule init;
 	errorHandler in;
-	deinitExModule deinit;
+	deinitBaseExModule deinit;
 
 	for (int i(0); i < BASEEX_MODULES; ++i)
 	{
 
 		if (handlesOpenedEx[i])
 		{
-			deinit = (deinitExModule)dlsym(handlesEx[i], "deinitExModule");
+			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
 				deinit();
 			
@@ -569,7 +569,7 @@ baseEx::setErrorHandlers(const dodoString &path,
 		if (handlesEx[i] == NULL)
 			return false;
 
-		init = (initExModule)dlsym(handlesEx[i], "initExModule");
+		init = (initBaseExModule)dlsym(handlesEx[i], "initBaseExModule");
 		if (init == NULL)
 			return false;
 
@@ -605,17 +605,17 @@ baseEx::setErrorHandler(const dodoString &path,
 	if (handler == NULL)
 		return false;
 
-	initExModule init = (initExModule)dlsym(handler, "initExModule");
+	initBaseExModule init = (initBaseExModule)dlsym(handler, "initBaseExModule");
 	if (init == NULL)
 		return false;
 
-	__exMod mod = init(toInit);
+	__baseExMod mod = init(toInit);
 
-	deinitExModule deinit;
+	deinitBaseExModule deinit;
 
 	if (handlesOpenedEx[mod.module])
 	{
-		deinit = (deinitExModule)dlsym(handlesEx[mod.module], "deinitExModule");
+		deinit = (deinitBaseExModule)dlsym(handlesEx[mod.module], "deinitBaseExModule");
 		if (deinit != NULL)
 			deinit();
 		
@@ -644,7 +644,7 @@ baseEx::setErrorHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-__exMod
+__baseExMod
 baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
@@ -656,13 +656,13 @@ baseEx::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		return __exMod();
+		return __baseExMod();
 
-	initExModule init = (initExModule)dlsym(handle, "initExModule");
+	initBaseExModule init = (initBaseExModule)dlsym(handle, "initBaseExModule");
 	if (init == NULL)
-		return __exMod();
+		return __baseExMod();
 
-	__exMod mod = init(toInit);
+	__baseExMod mod = init(toInit);
 	
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)

@@ -51,9 +51,9 @@ namespace dodo
 			 */
 			enum collectionOnDestructEnum
 			{
-				COLLECTION_KEEP_ALIVE,
-				COLLECTION_STOP, ///< send SIGINT to process
-				COLLECTION_WAIT
+				COLLECTION_ONDESTRUCT_KEEP_ALIVE,
+				COLLECTION_ONDESTRUCT_STOP, ///< send SIGINT to process
+				COLLECTION_ONDESTRUCT_WAIT
 			};
 		
 			/**
@@ -83,9 +83,9 @@ namespace dodo
 		#ifdef DL_EXT
 		
 			/**
-			 * @struct __collectionMod defines data that is returned from initSystemProcessCollectionModule in the library
+			 * @struct __processMod defines data that is returned from initIpcProcessCollectionModule in the library
 			 */
-			struct __collectionMod
+			struct __processMod
 			{
 				char name[64];                  ///< name of module
 				char discription[256];          ///< discription of module
@@ -95,14 +95,14 @@ namespace dodo
 			};
 		
 			/**
-			 * @typedef initSystemProcessCollectionModule defines type of init function for library
+			 * @typedef initIpcProcessCollectionModule defines type of init function for library
 			 */
-			typedef __collectionMod (*initSystemProcessCollectionModule)(void *);
+			typedef __processMod (*initIpcProcessCollectionModule)(void *);
 		
 			/**
-			 * @typedef deinitSystemProcessCollectionModule defines type of deinit function for library
+			 * @typedef deinitIpcProcessCollectionModule defines type of deinit function for library
 			 */
-			typedef void (*deinitSystemProcessCollectionModule)();
+			typedef void (*deinitIpcProcessCollectionModule)();
 		
 		#endif
 		
@@ -151,7 +151,7 @@ namespace dodo
 					 * @note func must not call `exit` family call
 					 * this will immediately execute the process
 					 */
-					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit = 1, short action = COLLECTION_WAIT);
+					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit = 1, short action = COLLECTION_ONDESTRUCT_WAIT);
 					
 					/**
 					 * add function as a process
@@ -159,7 +159,7 @@ namespace dodo
 					 * @param func defines function to execute
 					 * @param data defines process data
 					 * @note func must not call `exit` family call
-					 * action = COLLECTION_WAIT
+					 * action = COLLECTION_ONDESTRUCT_WAIT
 					 */
 					virtual unsigned long add(job::routine func, void *data);
 		
@@ -170,7 +170,7 @@ namespace dodo
 					 * @param data defines process data
 					 * @note func must not call `exit` family call
 					 * this will immediately execute the process
-					 * action = COLLECTION_WAIT
+					 * action = COLLECTION_ONDESTRUCT_WAIT
 					 */
 					virtual unsigned long addNRun(job::routine func, void *data);
 		
@@ -189,7 +189,7 @@ namespace dodo
 					 * @param force defines termination condition; if true and process is running stop execution of the process 
 					 * @param action defines action on object destruction if process is running[see collectionOnDestructEnum]
 					 */
-					virtual void replace(unsigned long position, job::routine func, void *data, bool force = false, short action = COLLECTION_WAIT);
+					virtual void replace(unsigned long position, job::routine func, void *data, bool force = false, short action = COLLECTION_ONDESTRUCT_WAIT);
 		
 					/**
 					 * execute process
@@ -265,7 +265,7 @@ namespace dodo
 					 * @param module defines path to the library[if not in ldconfig db] or library name
 					 * @param toInit defines library init data
 					 */
-					static __collectionMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+					static __processMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 		
 		#endif
 		

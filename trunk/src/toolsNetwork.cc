@@ -136,13 +136,13 @@ network::getInterfacesNames()
 
 //-------------------------------------------------------------------
 
-__servInfo
+__serviceInfo
 network::getServiceInfo(const dodoString &host,
 							  const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 
-	__servInfo info;
+	__serviceInfo info;
 
 	if (ent == NULL)
 		return info;
@@ -160,13 +160,13 @@ network::getServiceInfo(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-__servInfo
+__serviceInfo
 network::getServiceInfo(int port,
 							  const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 
-	__servInfo info;
+	__serviceInfo info;
 
 	if (ent == NULL)
 		return info;
@@ -186,7 +186,7 @@ network::getServiceInfo(int port,
 
 //-------------------------------------------------------------------
 
-__ifInfo
+__interfaceInfo
 network::getInterfaceInfo(const dodoString &interface)
 {
 	int socket = ::socket(PF_INET, SOCK_DGRAM, 0);
@@ -196,7 +196,7 @@ network::getInterfaceInfo(const dodoString &interface)
 	ifreq ifr;
 	strcpy(ifr.ifr_name, interface.c_str());
 
-	__ifInfo info;
+	__interfaceInfo info;
 	char add[INET6_ADDRSTRLEN];
 
 	sockaddr_in sin;

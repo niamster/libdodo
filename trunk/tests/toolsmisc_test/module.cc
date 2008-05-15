@@ -16,10 +16,10 @@ extern "C"
 		std::cout << "baseModuleHandler: " << ex->baseErrstr << std::endl;
 	}
 	
-	__exMod 
-	initExModule(void *data)
+	__baseExMod 
+	initBaseExModule(void *data)
 	{
-		__exMod module;
+		__baseExMod module;
 		
 		strcpy(module.name,"test");
 		strcpy(module.discription,"test module");
@@ -30,7 +30,7 @@ extern "C"
 	}
 
 	void
-	deinitExModule()
+	deinitBaseExModule()
 	{
 		std::cout << "deactivation.";
 	}

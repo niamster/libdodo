@@ -165,9 +165,9 @@ namespace dodo
 	#ifdef DL_EXT
 
 		/**
-		 * @struct __sigMod is returned from initSigModule in the library
+		 * @struct __signalMod is returned from initOsSignalModule in the library
 		 */
-		struct __sigMod
+		struct __signalMod
 		{
 			char name[64];              ///< name of the library
 			char discription[256];      ///< discription of the library
@@ -177,14 +177,14 @@ namespace dodo
 		};
 
 		/**
-		 * @typedef initSigModule defines type of init function for library
+		 * @typedef initOsSignalModule defines type of init function for library
 		 */
-		typedef __sigMod (*initSigModule)(void *);
+		typedef __signalMod (*initOsSignalModule)(void *);
 
 		/**
-		 * @typedef deinitSigModule defines type of deinit function for library
+		 * @typedef deinitOsSignalModule defines type of deinit function for library
 		 */
-		typedef void (*deinitSigModule)();
+		typedef void (*deinitOsSignalModule)();
 
 	#endif
 
@@ -413,7 +413,7 @@ namespace dodo
 				 * @param path defines path to the library[if not in ldconfig db] or library name
 				 * @param toInit defines data that will be passed to the init function
 				 */
-				static __sigMod getModuleInfo(const dodoString &path, void *toInit = NULL);
+				static __signalMod getModuleInfo(const dodoString &path, void *toInit = NULL);
 
 				/**
 				 * set handler on signal from specific module

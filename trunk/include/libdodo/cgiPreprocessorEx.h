@@ -35,7 +35,7 @@ namespace dodo
 		/**
 		 * libdodo defined errors
 		 */
-		enum cgiPreprocessorExR
+		enum preprocessorExR
 		{
 			PREPROCESSOREX_NOTCLOSEDBRACKET,
 		};
@@ -48,7 +48,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum cgiPreprocessorFunctionsID
+		enum preprocessorFunctionsID
 		{
 			PREPROCESSOREX__PREPROCESSSTRING,
 		};

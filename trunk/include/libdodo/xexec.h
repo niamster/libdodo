@@ -64,9 +64,9 @@ namespace dodo
 	typedef void (*inExec)(void *, short, void *);
 
 	/**
-	 * @struct __execItem defines xexec node
+	 * @struct __xexecItem defines xexec node
 	 */
-	struct __execItem
+	struct __xexecItem
 	{
 		inExec func;    ///< function to execute
 		short type;     ///< type of object[see xexecObjectTypeEnum]
@@ -81,11 +81,11 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __execItemList defines collection of hooks
+	 * @struct __xexecItemList defines collection of hooks
 	 */
-	struct __execItemList
+	struct __xexecItemList
 	{
-		dodoList<__execItem> exec;  ///< hooks
+		dodoList<__xexecItem> exec;  ///< hooks
 		bool execDisabled;          ///< if true hooks are disabled
 	};
 
@@ -367,7 +367,7 @@ namespace dodo
 			 * @param list defines list of hooks
 			 * @param position defines XExec identificator
 			 */
-			virtual bool getXexec(dodoList<__execItem> &list, int position);
+			virtual bool getXexec(dodoList<__xexecItem> &list, int position);
 
 			/**
 			 * set hook function
@@ -378,14 +378,14 @@ namespace dodo
 			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
-			virtual int addXExec(dodoList<__execItem> &list, inExec func, void *obj, short type, void *data);
+			virtual int addXExec(dodoList<__xexecItem> &list, inExec func, void *obj, short type, void *data);
 
 			/**
 			 * delete hook from list
 			 * @param list defines list of hooks
 			 * @param position defines XExec identificator
 			 */
-			virtual void delXExec(dodoList<__execItem> &list, int position);
+			virtual void delXExec(dodoList<__xexecItem> &list, int position);
 
 			/**
 			 * replace hook with another one
@@ -394,7 +394,7 @@ namespace dodo
 			 * @param func defines function that will be called
 			 * @param data defines hook data
 			 */
-			virtual void replaceXExec(dodoList<__execItem> &list, int position, inExec func, void *data);
+			virtual void replaceXExec(dodoList<__xexecItem> &list, int position, inExec func, void *data);
 
 			/**
 			 * set state(enable/disable) for XExec
@@ -402,7 +402,7 @@ namespace dodo
 			 * @param position defines postExec identificator
 			 * @param stat defines hook enabled state
 			 */
-			virtual void setStatXExec(dodoList<__execItem> &list, int position, bool stat);
+			virtual void setStatXExec(dodoList<__xexecItem> &list, int position, bool stat);
 
 #ifdef DL_EXT
 
@@ -416,7 +416,7 @@ namespace dodo
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual int addXExecModule(dodoList<__execItem> &list, const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);
+			virtual int addXExecModule(dodoList<__xexecItem> &list, const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);
 
 #endif
 
@@ -424,14 +424,14 @@ namespace dodo
 			 * perform enabled hooks
 			 * @param list defines list of hooks
 			 */
-			virtual void performXExec(__execItemList &list) const;
+			virtual void performXExec(__xexecItemList &list) const;
 
-			mutable __execItemList preExec;             ///< preExec hooks
-			mutable __execItemList postExec;            ///< postExec hooks
+			mutable __xexecItemList preExec;             ///< preExec hooks
+			mutable __xexecItemList postExec;            ///< postExec hooks
 
 			int execs;                                  ///< hook counter
 
-			dodoList<__execItem>::iterator current;     ///< iterator for list[for matched with getXexec method]
+			dodoList<__xexecItem>::iterator current;     ///< iterator for list[for matched with getXexec method]
 
 			mutable bool collectData;                   ///< if true to collect data for xexec[true by default]
 

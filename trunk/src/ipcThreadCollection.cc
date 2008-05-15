@@ -70,7 +70,7 @@ collection::~collection()
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 
 #ifdef DL_EXT
-	deinitSystemThreadCollectionModule deinit;
+	deinitIpcThreadCollectionModule deinit;
 #endif
 
 	for (; i != j; ++i)
@@ -80,7 +80,7 @@ collection::~collection()
 
 		switch (i->action)
 		{
-			case COLLECTION_KEEP_ALIVE:
+			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
 
 #ifdef PTHREAD_EXT
 				
@@ -90,7 +90,7 @@ collection::~collection()
 
 				break;
 
-			case COLLECTION_STOP:
+			case COLLECTION_ONDESTRUCT_STOP:
 
 #ifdef PTHREAD_EXT
 				
@@ -100,7 +100,7 @@ collection::~collection()
 
 				break;
 
-			case COLLECTION_WAIT:
+			case COLLECTION_ONDESTRUCT_WAIT:
 			default:
 
 #ifdef PTHREAD_EXT
@@ -116,7 +116,7 @@ collection::~collection()
 
 		if (i->handle != NULL)
 		{
-			deinit = (deinitSystemThreadCollectionModule)dlsym(i->handle, "deinitSystemThreadCollectionModule");
+			deinit = (deinitIpcThreadCollectionModule)dlsym(i->handle, "deinitIpcThreadCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -135,7 +135,7 @@ unsigned long
 collection::add(job::routine func,
 				   void    *data)
 {
-	return add(func, data, false, COLLECTION_WAIT, 2097152);
+	return add(func, data, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
 
 //-------------------------------------------------------------------
@@ -210,9 +210,9 @@ collection::del(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemThreadCollectionModule deinit;
+			deinitIpcThreadCollectionModule deinit;
 
-			deinit = (deinitSystemThreadCollectionModule)dlsym(current->handle, "deinitSystemThreadCollectionModule");
+			deinit = (deinitIpcThreadCollectionModule)dlsym(current->handle, "deinitIpcThreadCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -264,9 +264,9 @@ collection::replace(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemThreadCollectionModule deinit;
+			deinitIpcThreadCollectionModule deinit;
 
-			deinit = (deinitSystemThreadCollectionModule)dlsym(current->handle, "deinitSystemThreadCollectionModule");
+			deinit = (deinitIpcThreadCollectionModule)dlsym(current->handle, "deinitIpcThreadCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -527,7 +527,7 @@ collection::running() const
 
 #ifdef DL_EXT
 
-__collectionMod
+__threadMod
 collection::getModuleInfo(const dodoString &module,
 							 void             *toInit)
 {
@@ -539,11 +539,11 @@ collection::getModuleInfo(const dodoString &module,
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemThreadCollectionModule init = (initSystemThreadCollectionModule)dlsym(handle, "initSystemThreadCollectionModule");
+	initIpcThreadCollectionModule init = (initIpcThreadCollectionModule)dlsym(handle, "initIpcThreadCollectionModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__collectionMod mod = init(toInit);
+	__threadMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
@@ -573,11 +573,11 @@ collection::add(const dodoString &module,
 	if (thread.handle == NULL)
 		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemThreadCollectionModule init = (initSystemThreadCollectionModule)dlsym(thread.handle, "initSystemThreadCollectionModule");
+	initIpcThreadCollectionModule init = (initIpcThreadCollectionModule)dlsym(thread.handle, "initIpcThreadCollectionModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__collectionMod temp = init(toInit);
+	__threadMod temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(thread.handle, temp.hook);
 	if (in == NULL)
@@ -623,7 +623,7 @@ unsigned long
 collection::addNRun(job::routine func,
 					   void    *data)
 {
-	return addNRun(func, data, 1, false, COLLECTION_WAIT, 2097152);
+	return addNRun(func, data, 1, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
 
 //-------------------------------------------------------------------

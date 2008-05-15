@@ -784,12 +784,12 @@ os::setSignalHandler(long signal,
 	
 #ifdef DL_EXT
 
-	deinitSigModule deinit;
+	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(signal);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
+		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -827,12 +827,12 @@ os::setMicroTimer(unsigned long timeout,
 	
 #ifdef DL_EXT
 
-	deinitSigModule deinit;
+	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
+		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -887,12 +887,12 @@ os::setTimer(long timeout,
 	
 #ifdef DL_EXT
 
-	deinitSigModule deinit;
+	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(OS_SIGNAL_ALARM);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
+		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -962,12 +962,12 @@ os::unsetSignalHandler(long signal)
 	
 #ifdef DL_EXT
 
-	deinitSigModule deinit;
+	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(signal);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
+		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 
@@ -992,7 +992,7 @@ os::unsetSignalHandler(long signal)
 
 #ifdef DL_EXT
 
-__sigMod
+__signalMod
 os::getModuleInfo(const dodoString &module,
 						   void             *toInit)
 {
@@ -1004,11 +1004,11 @@ os::getModuleInfo(const dodoString &module,
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
+	initOsSignalModule init = (initOsSignalModule)dlsym(handle, "initOsSignalModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__sigMod mod = init(toInit);
+	__signalMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
@@ -1034,18 +1034,18 @@ os::setSignalHandler(const dodoString &path,
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	initSigModule init = (initSigModule)dlsym(handle, "initSigModule");
+	initOsSignalModule init = (initOsSignalModule)dlsym(handle, "initOsSignalModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETSIGNALHANDLER, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	__sigMod mod = init(toInit);
+	__signalMod mod = init(toInit);
 
-	deinitSigModule deinit;
+	deinitOsSignalModule deinit;
 
 	int handleSignal = toSignalNumber(mod.signal);
 	if (handleSignal > 0 && handlesOpenedSig[handleSignal])
 	{
-		deinit = (deinitSigModule)dlsym(handlesSig[handleSignal], "deinitSigModule");
+		deinit = (deinitOsSignalModule)dlsym(handlesSig[handleSignal], "deinitOsSignalModule");
 		if (deinit != NULL)
 			deinit();
 

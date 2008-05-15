@@ -115,9 +115,9 @@ namespace dodo
 #ifdef DL_EXT
 
 	/**
-	 * @struct __exMod is returned from initExModule in the library
+	 * @struct __baseExMod is returned from initBaseExModule in the library
 	 */
-	struct __exMod
+	struct __baseExMod
 	{
 		char name[64];                  ///< name of the library
 		char discription[256];          ///< discription of the library
@@ -126,14 +126,14 @@ namespace dodo
 	};
 
 	/**
-	 * @typedef initExModule defines type of init function for library
+	 * @typedef initBaseExModule defines type of init function for library
 	 */
-	typedef __exMod (*initExModule)(void *);
+	typedef __baseExMod (*initBaseExModule)(void *);
 
 	/**
-	 * @typedef deinitExModule defines type of deinit function for library
+	 * @typedef deinitBaseExModule defines type of deinit function for library
 	 */
-	typedef void (*deinitExModule)();
+	typedef void (*deinitBaseExModule)();
 
 #endif
 
@@ -219,7 +219,7 @@ namespace dodo
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			static __exMod getModuleInfo(const dodoString &path, void *toInit = NULL);
+			static __baseExMod getModuleInfo(const dodoString &path, void *toInit = NULL);
 
 			/**
 			 * set handler for exceptions for specific module
@@ -227,7 +227,7 @@ namespace dodo
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param data decribes data that will be passed to the handler
 			 * @param toInit defines data that will be passed to the init function
-			 * @note module for what to set handler is taken from the library information[see __exMod]
+			 * @note module for what to set handler is taken from the library information[see __baseExMod]
 			 */
 			static bool setErrorHandler(const dodoString &path, void *data, void *toInit = NULL);
 

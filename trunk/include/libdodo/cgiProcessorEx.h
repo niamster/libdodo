@@ -35,7 +35,7 @@ namespace dodo
 		/**
 		 * libdodo defined errors
 		 */
-		enum cgiProcessorExR
+		enum processorExR
 		{
 			PROCESSOREX_WRONGIFSTATEMENT,
 			PROCESSOREX_WRONGFORSTATEMENT,
@@ -58,7 +58,7 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum cgiProcessorFunctionsID
+		enum processorFunctionsID
 		{
 			PROCESSOREX__IF,
 			PROCESSOREX_BLOCKEND,

@@ -51,7 +51,7 @@ collection::~collection()
 	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 
 #ifdef DL_EXT
-	deinitSystemProcessCollectionModule deinit;
+	deinitIpcProcessCollectionModule deinit;
 #endif
 
 	for (; i != j; ++i)
@@ -61,19 +61,19 @@ collection::~collection()
 
 		switch (i->action)
 		{
-			case COLLECTION_KEEP_ALIVE:
+			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
 
 				waitpid(i->pid, NULL, WNOHANG);
 
 				break;
 
-			case COLLECTION_STOP:
+			case COLLECTION_ONDESTRUCT_STOP:
 
 				kill(i->pid, 2);
 
 				break;
 
-			case COLLECTION_WAIT:
+			case COLLECTION_ONDESTRUCT_WAIT:
 			default:
 
 				waitpid(i->pid, NULL, 0);
@@ -83,7 +83,7 @@ collection::~collection()
 
 		if (i->handle != NULL)
 		{
-			deinit = (deinitSystemProcessCollectionModule)dlsym(i->handle, "deinitSystemProcessCollectionModule");
+			deinit = (deinitIpcProcessCollectionModule)dlsym(i->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
 			
@@ -127,7 +127,7 @@ unsigned long
 collection::add(job::routine func,
 					 void    *data)
 {
-	return add(func, data, COLLECTION_WAIT);
+	return add(func, data, COLLECTION_ONDESTRUCT_WAIT);
 }
 
 //-------------------------------------------------------------------
@@ -136,7 +136,7 @@ unsigned long
 collection::addNRun(job::routine func,
 						 void    *data)
 {
-	return addNRun(func, data, 1, COLLECTION_WAIT);
+	return addNRun(func, data, 1, COLLECTION_ONDESTRUCT_WAIT);
 }
 
 //-------------------------------------------------------------------
@@ -206,9 +206,9 @@ collection::del(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemProcessCollectionModule deinit;
+			deinitIpcProcessCollectionModule deinit;
 
-			deinit = (deinitSystemProcessCollectionModule)dlsym(current->handle, "deinitSystemProcessCollectionModule");
+			deinit = (deinitIpcProcessCollectionModule)dlsym(current->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
 
@@ -293,9 +293,9 @@ collection::replace(unsigned long position,
 
 		if (current->handle != NULL)
 		{
-			deinitSystemProcessCollectionModule deinit;
+			deinitIpcProcessCollectionModule deinit;
 
-			deinit = (deinitSystemProcessCollectionModule)dlsym(current->handle, "deinitSystemProcessCollectionModule");
+			deinit = (deinitIpcProcessCollectionModule)dlsym(current->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
 			
@@ -500,7 +500,7 @@ collection::setExecutionLimit(unsigned long position,
 
 #ifdef DL_EXT
 
-__collectionMod
+__processMod
 collection::getModuleInfo(const dodoString &module,
 							   void             *toInit)
 {
@@ -512,11 +512,11 @@ collection::getModuleInfo(const dodoString &module,
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemProcessCollectionModule init = (initSystemProcessCollectionModule)dlsym(handle, "initSystemProcessCollectionModule");
+	initIpcProcessCollectionModule init = (initIpcProcessCollectionModule)dlsym(handle, "initIpcProcessCollectionModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__collectionMod mod = init(toInit);
+	__processMod mod = init(toInit);
 	
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
@@ -546,11 +546,11 @@ collection::add(const dodoString &module,
 	if (process.handle == NULL)
 		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	initSystemProcessCollectionModule init = (initSystemProcessCollectionModule)dlsym(process.handle, "initSystemProcessCollectionModule");
+	initIpcProcessCollectionModule init = (initIpcProcessCollectionModule)dlsym(process.handle, "initIpcProcessCollectionModule");
 	if (init == NULL)
 		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_ADD, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
-	__collectionMod temp = init(toInit);
+	__processMod temp = init(toInit);
 
 	job::routine in = (job::routine)dlsym(process.handle, temp.hook);
 	if (in == NULL)

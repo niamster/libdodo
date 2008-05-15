@@ -37,10 +37,10 @@ namespace dodo
 			/**
 			 * libdodo defined errors
 			 */
-			enum fastExR
+			enum serverExR
 			{
-				FASTSERVEREX_ACCEPTFAILED,
-				FASTSERVEREX_ISCGI,
+				SERVEREX_ACCEPTFAILED,
+				SERVEREX_ISCGI,
 			};
 		
 			/**
@@ -52,10 +52,10 @@ namespace dodo
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum fastFunctionsID
+			enum serverFunctionsID
 			{
-				FASTSERVEREX_LISTEN,
-				FASTSERVEREX_STACKTHREAD,
+				SERVEREX_LISTEN,
+				SERVEREX_STACKTHREAD,
 			};
 		}
 	};

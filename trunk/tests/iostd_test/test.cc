@@ -59,6 +59,11 @@ int main(int argc, char **argv)
 		st.write((char *)&a);
 		st.flush();
 		
+#ifndef IOSTDIO_WO_XEXEC
+
+		st.disablePreExec(pos);
+
+#endif
 		dodoString o;
 		
 		st.inSize = 33;
@@ -67,16 +72,11 @@ int main(int argc, char **argv)
 		st.readString(o);
 		
 		cout << o.size() << "\n";
-		
-#ifndef IOSTDIO_WO_XEXEC
-
-		st.disablePreExec(pos);
-
-#endif
+		cout << o << "\n";
 	
 		st.outSize = 4;
 		st.writeString("1234567890");
-		st.writeString("\n");
+		st.writeStreamString("\n");
 
 		st.writeStreamString(o);
 		st.writeStreamString("\nexiting\n");

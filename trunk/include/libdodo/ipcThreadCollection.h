@@ -56,9 +56,9 @@ namespace dodo
 			 */
 			enum collectionOnDestructEnum
 			{
-				COLLECTION_KEEP_ALIVE,
-				COLLECTION_STOP,
-				COLLECTION_WAIT
+				COLLECTION_ONDESTRUCT_KEEP_ALIVE,
+				COLLECTION_ONDESTRUCT_STOP,
+				COLLECTION_ONDESTRUCT_WAIT
 			};
 		
 			/**
@@ -95,9 +95,9 @@ namespace dodo
 		#ifdef DL_EXT
 		
 			/**
-			 * @struct __collectionMod defines data that is returned from initSystemThreadCollectionModule in the library
+			 * @struct __threadMod defines data that is returned from initIpcThreadCollectionModule in the library
 			 */
-			struct __collectionMod
+			struct __threadMod
 			{
 				char name[64];                  ///< name of module
 				char discription[256];          ///< discription of module
@@ -109,14 +109,14 @@ namespace dodo
 			};
 		
 			/**
-			 * @typedef initSystemThreadCollectionModule defines type of init function for library
+			 * @typedef initIpcThreadCollectionModule defines type of init function for library
 			 */
-			typedef __collectionMod (*initSystemThreadCollectionModule)(void *);
+			typedef __threadMod (*initIpcThreadCollectionModule)(void *);
 		
 			/**
-			 * @typedef deinitSystemThreadCollectionModule defines type of deinit function for library
+			 * @typedef deinitIpcThreadCollectionModule defines type of deinit function for library
 			 */
-			typedef void (*deinitSystemThreadCollectionModule)();
+			typedef void (*deinitIpcThreadCollectionModule)();
 		
 		#endif
 		
@@ -167,7 +167,7 @@ namespace dodo
 					 * @param stackSize defines stack thread size
 					 * @note this will immediately execute the process
 					 */
-					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit = 1, bool detached = false, short action = COLLECTION_WAIT, int stackSize = 2097152);
+					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit = 1, bool detached = false, short action = COLLECTION_ONDESTRUCT_WAIT, int stackSize = 2097152);
 		
 					/**
 					 * add function to became a thread
@@ -176,7 +176,7 @@ namespace dodo
 					 * @param data defines process data
 					 * @note
 					 * detached=false
-					 * action=COLLECTION_WAIT
+					 * action=COLLECTION_ONDESTRUCT_WAIT
 					 * stackSize=2097152
 					 */
 					virtual unsigned long add(job::routine func, void *data);
@@ -189,7 +189,7 @@ namespace dodo
 					 * @note this will immediately execute the process
 					 * limit=1
 					 * detached=false
-					 * action=COLLECTION_WAIT
+					 * action=COLLECTION_ONDESTRUCT_WAIT
 					 * stackSize=2097152
 					 */
 					virtual unsigned long addNRun(job::routine func, void *data);
@@ -211,7 +211,7 @@ namespace dodo
 					 * @param action defines action on object destruction if thread is running[see collectionOnDestructEnum]
 					 * @param stackSize defines stack thread size
 					 */
-					virtual void replace(unsigned long position, job::routine func, void *data, bool force = false, bool detached = false, short action = COLLECTION_WAIT, int stackSize = 2097152);
+					virtual void replace(unsigned long position, job::routine func, void *data, bool force = false, bool detached = false, short action = COLLECTION_ONDESTRUCT_WAIT, int stackSize = 2097152);
 		
 					/**
 					 * execute thread
@@ -287,7 +287,7 @@ namespace dodo
 					 * @param module defines path to the library[if not in ldconfig db] or library name
 					 * @param toInit defines library init data
 					 */
-					static __collectionMod getModuleInfo(const dodoString &module, void *toInit = NULL);
+					static __threadMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 		
 		#endif
 		
