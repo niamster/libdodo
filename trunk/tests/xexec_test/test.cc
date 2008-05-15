@@ -19,22 +19,30 @@ int main(int argc, char **argv)
 		st.outSize = sizeof(int);
 	
 #ifdef DL_EXT
+
+#ifndef IOSTDIO_WO_XEXEC
+
 		cout << stdio::getModuleInfo("./module").name;
 		
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL)<<endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL) << endl;
+
 		st.delPreExec(1);
 		st.delPreExec(2);
-		cout << st.addPreExec("./module",NULL)<<endl;
-		cout << st.addPreExec("./module",NULL,(void *)"perform")<<endl;
+		
+		cout << st.addPreExec("./module",NULL) << endl;
+		cout << st.addPreExec("./module",NULL,(void *)"perform") << endl;
+
+#endif
+
 #endif
 	
 		int a = 10;

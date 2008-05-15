@@ -12,6 +12,8 @@ using namespace std;
 
 using namespace db;
 
+#ifndef DBMYSQL_WO_XEXEC
+
 	void 
 	hook(void *odata,
 		short int type,
@@ -29,6 +31,8 @@ using namespace db;
 
 #endif
 
+#endif
+
 int main(int argc, char **argv)
 {
 	long now = tools::time::now();
@@ -38,8 +42,12 @@ int main(int argc, char **argv)
 		mysql pp;
 		try
 		{
-			
+
+#ifndef DBMYSQL_WO_XEXEC
+
 			int pos = pp.addPreExec(hook,(void *)"id");
+
+#endif
 			
 			pp.setDbInfo("test","",3306,"root", "password");
 			pp.connect();
@@ -48,6 +56,7 @@ int main(int argc, char **argv)
 			{
 				pp.deleteTable("test");
 				pp.exec();
+
 				pp.deleteTable("test1");
 				pp.exec();
 			}
@@ -56,14 +65,14 @@ int main(int argc, char **argv)
 			}
 	
 			__connectorTable ti;
-            ti.name = "test";
+			ti.name = "test";
 
-            __connectorField fi;
+			__connectorField fi;
 
-            fi.name = "id";
-            fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-            fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
-            ti.fields.push_back(fi);
+			fi.name = "id";
+			fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+			fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
+			ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
@@ -79,12 +88,12 @@ int main(int argc, char **argv)
 			pp.exec();
 			
 			ti.fields.clear();
-            ti.name = "test1";
+			ti.name = "test1";
 			
-            fi.name = "id";
-            fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-            fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
-            ti.fields.push_back(fi);
+			fi.name = "id";
+			fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+			fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
+			ti.fields.push_back(fi);
 			
 			fi.name = "dot";
 			fi.flag = 0;
@@ -193,12 +202,11 @@ int main(int argc, char **argv)
 			pp.exec();
 			
 			storage = pp.fetch();//get result
-	
 		}
-	    catch(baseEx ex)
-	    {	
+		catch(baseEx ex)
+		{	
 			cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl << ex.message << endl;
-	    }
+		}
     
 #else
     

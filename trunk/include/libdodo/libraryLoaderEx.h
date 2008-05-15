@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IPCLIBRARYLOADEREX_H_
-#define _IPCLIBRARYLOADEREX_H_
+#ifndef _LIBRARYLOADEREX_H_
+#define _LIBRARYLOADEREX_H_
 
 #include <libdodo/directives.h>
 
@@ -30,31 +30,28 @@
 
 namespace dodo
 {
-	namespace ipc
+	/**
+	 * libdodo defined errors
+	 */
+	enum libraryLoaderExR
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum libraryLoaderExR
-		{
-			LIBRARYLOADEREX_LIBRARYNOTOPENED,
-		};
-		
-		/**
-		 * explanations for libdodo defined errors
-		 */
-	#define LIBRARYLOADEREX_LIBRARYNOTOPENED_STR "Library was not opened."
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum libraryLoaderFunctionsID
-		{
-			LIBRARYLOADEREX_OPEN,
-			LIBRARYLOADEREX_CLOSE,
-			LIBRARYLOADEREX_GET,
-			LIBRARYLOADEREX_BROPERATORSTRING,
-			LIBRARYLOADEREX_GETSYMBOLS,
-		};
+		LIBRARYLOADEREX_LIBRARYNOTOPENED,
+	};
+	
+	/**
+	 * explanations for libdodo defined errors
+	 */
+#define LIBRARYLOADEREX_LIBRARYNOTOPENED_STR "Library was not opened."
+	/**
+	 * IDs of functions where exception might be thrown
+	 */
+	enum libraryLoaderFunctionsID
+	{
+		LIBRARYLOADEREX_OPEN,
+		LIBRARYLOADEREX_CLOSE,
+		LIBRARYLOADEREX_GET,
+		LIBRARYLOADEREX_BROPERATORSTRING,
+		LIBRARYLOADEREX_GETSYMBOLS,
 	};
 };
 

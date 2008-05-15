@@ -9,3 +9,5 @@ test: test.cc
 
 clean:
 	rm -rf test my.dat TEST DirTest
+
+force: clean test

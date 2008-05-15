@@ -8,4 +8,6 @@ test: test.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@ 
 
 clean:
-	rm -rf test my.dat TEST DirTest
+	rm -rf test
+
+force: clean test

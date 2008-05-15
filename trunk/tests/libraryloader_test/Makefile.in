@@ -7,10 +7,12 @@ DEFINES:=-D_REENTRANT -D_GNU_SOURCE -D__USE_UNIX98 -D_LARGEFILE_SOURCE -D_FILE_O
 all: test module
 
 test: test.cc
-	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@
+	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -ldodo $^ -o $@ 
 
 module: module.cc
 	$(CXX) $(DEFINES) $(CPPFLAGS) $(LDFLAGS) $(CFLAGS) -Wall -shared -ldodo -fPIC $^ -o $@ 
-
+	
 clean:
-	rm -fr test module
+	rm -rf test module
+
+force: clean test module

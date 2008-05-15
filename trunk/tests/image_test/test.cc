@@ -11,6 +11,8 @@ using namespace std;
 
 #ifdef IMAGEMAGICK_EXT
 
+#ifndef IMAGE_WO_XEXEC
+
 	void 
 	hook(void *odata,
 		short int type,
@@ -35,6 +37,8 @@ using namespace std;
 	}
 
 #endif
+
+#endif
 	
 int main(int argc, char **argv)
 {	
@@ -42,8 +46,13 @@ int main(int argc, char **argv)
 	{
 #ifdef IMAGEMAGICK_EXT
 		image im;
+
+#ifndef IMAGE_WO_XEXEC
+
 		im.addPreExec(hook, NULL);
 		im.addPostExec(hook, NULL);///< revert
+
+#endif
 
 		im.read("test.png");
 		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;

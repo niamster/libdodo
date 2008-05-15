@@ -9,6 +9,8 @@ using namespace io;
 
 using namespace std;
 
+#ifndef IOSTDIO_WO_XEXEC
+
 void 
 hook(void *odata,
 	short int type, 
@@ -35,6 +37,8 @@ hook(void *odata,
 	}
 }
 
+#endif
+
 int main(int argc, char **argv)
 {
 
@@ -44,7 +48,9 @@ int main(int argc, char **argv)
 		cout << st.inputterInfo().host << endl;
 
 #ifndef IOSTDIO_WO_XEXEC
+
 		int pos = st.addPreExec(&hook, NULL);
+
 #endif
 	
 		st.outSize = sizeof(int);
@@ -63,7 +69,9 @@ int main(int argc, char **argv)
 		cout << o.size() << "\n";
 		
 #ifndef IOSTDIO_WO_XEXEC
+
 		st.disablePreExec(pos);
+
 #endif
 	
 		st.outSize = 4;

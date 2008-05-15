@@ -5,7 +5,6 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::ipc;
 
 using namespace std;
 

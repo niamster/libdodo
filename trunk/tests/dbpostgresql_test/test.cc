@@ -11,12 +11,16 @@ using namespace std;
 	
 using namespace db;
 
+#ifndef DBPOSTGRESQL_WO_XEXEC
+
 void
 hook(void *odata, short int type, void *udata)
 {
 	__xexexDbAccumulatorCollectedData *db = (__xexexDbAccumulatorCollectedData *)odata;
 	cout << ((sqlConstructor *)db->executor)->queryCollect() << endl;
 }
+
+#endif
 
 #endif
 
@@ -28,8 +32,13 @@ int main(int argc, char **argv)
 		
 		try
 		{
+#ifndef DBPOSTGRESQL_WO_XEXEC
+
 			pp.addPreExec(&hook,NULL);
 			
+#endif
+
+
 			__connectorInfo info;
 			
 			info.db = "test";

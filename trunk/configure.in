@@ -547,28 +547,28 @@ AC_CONFIG_FILES([Makefile
                  tests/Makefile
                  tests/image_test/Makefile
                  tests/json_test/Makefile
-                 tests/iostd_test/Makefile
                  tests/cgifast_test/Makefile
                  tests/cgi_test/Makefile
-                 tests/db_test/Makefile
-                 tests/iodisk_test/Makefile
-                 tests/glob_test/Makefile
                  tests/dbmysql_test/Makefile
                  tests/dbpostgresql_test/Makefile
-                 tests/regexp_test/Makefile
-                 tests/non_blocked_socket_test/Makefile
-                 tests/systemthreadcollection_test/Makefile
-                 tests/network_threads_test/Makefile
-                 tests/network_test/Makefile
                  tests/dbsqlite_test/Makefile
-                 tests/systemprocesscollection_test/Makefile
-                 tests/systemjobcollection_test/Makefile
-                 tests/systemtools_test/Makefile
-                 tests/timetools_test/Makefile
-                 tests/xexec_test/Makefile
-                 tests/systemlibraryloader_test/Makefile
-                 tests/logger_test/Makefile
+                 tests/db_test/Makefile
+                 tests/regexp_test/Makefile
+                 tests/iononblocked_ionetwork_test/Makefile
+                 tests/iostd_test/Makefile
+                 tests/iofile_toolsfilesystem_test/Makefile
+                 tests/ionetwork_ipcthreads_test/Makefile
+                 tests/ionetwork_test/Makefile
                  tests/ionetworkhttp_test/Makefile
+                 tests/ipcthreadcollection_test/Makefile
+                 tests/ipcprocesscollection_test/Makefile
+                 tests/ipcjobcollection_test/Makefile
+                 tests/toolsos_test/Makefile
+                 tests/toolstime_test/Makefile
+                 tests/toolsmisc_test/Makefile
+                 tests/xexec_test/Makefile
+                 tests/libraryloader_test/Makefile
+                 tests/logger_test/Makefile
                  tests/rpcxmlhttpclient_test/Makefile
                  tests/rpcxmlcgiserver_test/Makefile
                  tests/xml_test/Makefile])

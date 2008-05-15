@@ -9,3 +9,5 @@ test: test.cc
 
 clean:
 	rm -rf test
+
+force: clean test

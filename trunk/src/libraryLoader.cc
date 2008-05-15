@@ -25,7 +25,7 @@
 
 #ifdef DL_EXT
 
-using namespace dodo::ipc;
+using namespace dodo;
 
 libraryLoader::libraryLoader() : handle(NULL)
 {

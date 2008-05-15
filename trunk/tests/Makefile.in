@@ -1,11 +1,11 @@
 all:
-	for i in ./*; do if [ -d $$i ]; then cd $$i; make; cd ..; fi; done;
+	for i in ./*; do if [ -d $$i ]; then pushd $$i; make; popd; fi; done;
 
 test:
-	for i in ./*; do if [ -d $$i ]; then cd $$i; echo "execution of " `pwd`; ./test; cd ..; fi; done;
+	for i in ./*; do if [ -d $$i ]; then pushd $$i; echo "execution of " `pwd`; ./test; popd; fi; done;
 	
 clean:
-	for i in ./*; do if [ -d $$i ]; then cd $$i; make clean; cd ..; fi; done;\
+	for i in ./*; do if [ -d $$i ]; then pushd $$i; make clean; popd; fi; done;
 
-force: clean all
-	echo
+force: 
+	for i in ./*; do if [ -d $$i ]; then pushd $$i; make force; popd; fi; done;
