@@ -55,8 +55,8 @@ server::server(server &cf)
 #ifdef PTHREAD_EXT
 
 server::server(bool a_threading,
-				 unsigned int a_threadsNum) : threading(a_threading),
-											  threadsNum(a_threadsNum)
+			   unsigned int a_threadsNum) : threading(a_threading),
+											threadsNum(a_threadsNum)
 {
 	pthread_mutexattr_t attr;
 

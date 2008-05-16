@@ -27,19 +27,19 @@ using namespace dodo::rpc::xml;
 
 httpClient::httpClient()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 httpClient::~httpClient()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 httpClient::sendTextRequest(const dodoString &method)
 {
 	http.POST(method, "text/processor");
@@ -47,17 +47,17 @@ httpClient::sendTextRequest(const dodoString &method)
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 httpClient::receiveTextResponse()
 {
 	io::network::__httpResponse response = http.getResponse();
-	
+
 	return response.data;
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 httpClient::setUrl(const dodoString &url)
 {
 	http.setUrl(url);

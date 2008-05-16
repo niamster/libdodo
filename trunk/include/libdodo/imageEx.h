@@ -42,7 +42,7 @@ namespace dodo
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define IMAGEEX_BADINFO_STR "Bad information for image was provided."
+#define IMAGEEX_BADINFO_STR    "Bad information for image was provided."
 #define IMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
 
 	/**

@@ -45,15 +45,15 @@ namespace dodo
 			class data
 			{
 				private:
-		
+
 					/**
 					 * copy constructor
 					 * to prevent copying
 					 */
 					data(data &sts);
-		
+
 				public:
-		
+
 					/**
 					 * constructor
 					 * @param key defines shared memory key
@@ -62,12 +62,12 @@ namespace dodo
 					 * otherwise(like fork) - it may be generated
 					 */
 					data(const char *key = NULL);
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~data();
-		
+
 					/**
 					 * map shared data
 					 * @return shared data
@@ -75,29 +75,29 @@ namespace dodo
 					 * @note if map is called twice - old data will be unmapped
 					 */
 					virtual void *map(unsigned long size);
-		
+
 					/**
 					 * unmap shared data
 					 */
 					virtual void unmap();
-		
+
 					/**
 					 * @return shared data
 					 */
 					virtual void *getMapped();
-		
+
 					/**
 					 * @return size of shared data
 					 */
 					virtual unsigned long getSize();
-		
+
 				protected:
-		
-					int shm;            ///< shared data descriptor
-					void *mdata;         ///< shared data
-					unsigned long size; ///< size of shared data
-		
-					char *key;          ///< key for the shared data
+
+					int shm;                ///< shared data descriptor
+					void *mdata;            ///< shared data
+					unsigned long size;     ///< size of shared data
+
+					char *key;              ///< key for the shared data
 			};
 		};
 	};

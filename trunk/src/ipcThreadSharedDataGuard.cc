@@ -35,7 +35,7 @@ dataGuard::dataGuard(dataGuard &sts)
 dataGuard::dataGuard() : data(NULL)
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -46,7 +46,7 @@ dataGuard::dataGuard() : data(NULL)
 
 	timeout.tv_nsec = 1000;
 	timeout.tv_sec = 0;
-	
+
 #endif
 }
 
@@ -55,12 +55,12 @@ dataGuard::dataGuard() : data(NULL)
 dataGuard::~dataGuard()
 {
 #ifdef PTHREAD_EXT
-	
+
 	if (pthread_mutex_trylock(&mutex) == 0)
 		pthread_mutex_unlock(&mutex);
 
 	pthread_mutex_destroy(&mutex);
-	
+
 #endif
 }
 
@@ -70,7 +70,7 @@ void
 dataGuard::set(void *a_data)
 {
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -80,7 +80,7 @@ dataGuard::set(void *a_data)
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 #endif
 }
 
@@ -90,7 +90,7 @@ void
 dataGuard::del()
 {
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -100,7 +100,7 @@ dataGuard::del()
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 #endif
 }
 
@@ -110,7 +110,7 @@ void *
 dataGuard::acquire(unsigned long microseconds)
 {
 #ifdef PTHREAD_EXT
-	
+
 	if (microseconds == 0)
 	{
 		errno = pthread_mutex_lock(&mutex);
@@ -144,7 +144,7 @@ dataGuard::acquire(unsigned long microseconds)
 	}
 
 #endif
-	
+
 	return data;
 }
 
@@ -154,11 +154,11 @@ void
 dataGuard::release()
 {
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 #endif
 }
 

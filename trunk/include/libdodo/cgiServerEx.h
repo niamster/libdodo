@@ -39,12 +39,12 @@ namespace dodo
 		{
 			SERVEREX_WRONGSTATUSCODE,
 		};
-		
+
 		/**
 		 * explanations for libdodo defined errors
 		 */
 #define CGISERVEREX_WRONGSTATUSCODE_STR "Wrong status code."
-		
+
 		/**
 		 * IDs of functions where exception might be thrown
 		 */

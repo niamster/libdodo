@@ -85,8 +85,8 @@ namespace dodo
 	 */
 	struct __xexecItemList
 	{
-		dodoList<__xexecItem> exec;  ///< hooks
-		bool execDisabled;          ///< if true hooks are disabled
+		dodoList<__xexecItem> exec;     ///< hooks
+		bool execDisabled;              ///< if true hooks are disabled
 	};
 
 	/**
@@ -426,16 +426,16 @@ namespace dodo
 			 */
 			virtual void performXExec(__xexecItemList &list) const;
 
-			mutable __xexecItemList preExec;             ///< preExec hooks
-			mutable __xexecItemList postExec;            ///< postExec hooks
+			mutable __xexecItemList preExec;                ///< preExec hooks
+			mutable __xexecItemList postExec;               ///< postExec hooks
 
-			int execs;                                  ///< hook counter
+			int execs;                                      ///< hook counter
 
-			dodoList<__xexecItem>::iterator current;     ///< iterator for list[for matched with getXexec method]
+			dodoList<__xexecItem>::iterator current;        ///< iterator for list[for matched with getXexec method]
 
-			mutable bool collectData;                   ///< if true to collect data for xexec[true by default]
+			mutable bool collectData;                       ///< if true to collect data for xexec[true by default]
 
-			mutable int operType;                       ///< operation type set by main action
+			mutable int operType;                           ///< operation type set by main action
 	};
 
 };

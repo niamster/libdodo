@@ -348,9 +348,9 @@ namespace dodo
 
 		private:
 
-			static const char *mappingStArr[3];          ///< image mapping statements
+			static const char *mappingStArr[3];                 ///< image mapping statements
 			static const StorageType pixelSizeStArr[6];         ///< pixel type statements
-			static const char *encoderStArr[6];          ///< image encoder
+			static const char *encoderStArr[6];                 ///< image encoder
 			static const CompressionType compressionStArr[8];   ///< image compression
 	};
 

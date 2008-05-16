@@ -43,21 +43,21 @@ namespace dodo
 			class guardHolder : public raceHazardGuardHolder
 			{
 				protected:
-		
+
 					/**
 					 * contructor
 					 */
 					guardHolder();
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~guardHolder();
-		
+
 					char key[32]; ///< key for the semaphore
 			};
 		};
 	};
 };
 
-#endif 
+#endif

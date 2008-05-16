@@ -32,7 +32,7 @@
 #include <libdodo/rpcResponseEx.h>
 
 namespace dodo
-{	
+{
 	namespace rpc
 	{
 		namespace xml
@@ -45,70 +45,70 @@ namespace dodo
 		 */
 		class response
 		{
-			friend class client;
-			friend class server;
-			friend class xml::response;
-			
+				friend class client;
+				friend class server;
+				friend class xml::response;
+
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				response();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~response();
-	
+
 				/**
 				 * @return response value
 				 * @param position defines index of returned value
 				 */
 				virtual value getValue(unsigned long position = 0);
-	
+
 				/**
 				 * @return response values
 				 */
 				virtual dodoArray<value> getValues();
-	
+
 				/**
 				 * @return response values count
 				 */
 				virtual unsigned long getValuesCount();
-				
+
 				/**
-				 * @return true if request has  
+				 * @return true if request has
 				 */
 				virtual bool isSuccessful();
-				
+
 				/**
 				 * set argument for fault response
-				 * @param argument defines response argument 
+				 * @param argument defines response argument
 				 */
 				virtual void fault(const value &argument);
-				
+
 				/**
 				 * add argument for successful response
-				 * @param argument defines response argument 
+				 * @param argument defines response argument
 				 */
 				virtual void addArgument(const value &argument);
-				
+
 				/**
-				 * @return value for type casting  
+				 * @return value for type casting
 				 * @param position defines index of returned value
 				 */
-				virtual value operator[](unsigned long position); 
-	
+				virtual value operator[](unsigned long position);
+
 				/**
 				 * clear arguments information
 				 */
 				virtual void clear();
-				
+
 			private:
-				
-				dodoArray<value> values;///< response values
-				bool succ;///< true if server returned non-fail response
+
+				dodoArray<value> values;    ///< response values
+				bool succ;                  ///< true if server returned non-fail response
 		};
 	};
 };

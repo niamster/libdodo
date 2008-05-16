@@ -41,14 +41,14 @@ namespace dodo
 			PROCESSOREX_MALFORMEDJSONNULL,
 			PROCESSOREX_MALFORMEDJSONBOOLEAN,
 		};
-	
+
 		/**
 		 * explanations for libdodo defined errors
 		 */
 	#define JSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR "Malformed json object: numeric."
-	#define JSONPROCESSOREX_MALFORMEDJSONNULL_STR "Malformed json object: null."
+	#define JSONPROCESSOREX_MALFORMEDJSONNULL_STR    "Malformed json object: null."
 	#define JSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR "Malformed json object: boolean."
-	
+
 		/**
 		 * IDs of functions where exception might be thrown
 		 */

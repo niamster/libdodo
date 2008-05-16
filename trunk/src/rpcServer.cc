@@ -27,31 +27,31 @@ using namespace dodo::rpc;
 
 server::server() : defaultHandler(&rpcDefaultHandler)
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 server::~server()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
-response 
-server::rpcDefaultHandler(const dodoString &method, 
-		const dodoArray<value> &arguments)
+response
+server::rpcDefaultHandler(const dodoString &method,
+						  const dodoArray<value> &arguments)
 {
 	response response;
 	response.fault(dodoString("rpcDefaultHandler"));
-	
+
 	return response;
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 server::setDefault(handler handler)
 {
 	defaultHandler = handler;
@@ -59,16 +59,16 @@ server::setDefault(handler handler)
 
 //-------------------------------------------------------------------
 
-void 
-server::setHandler(const dodoString &method, 
-					handler handler)
+void
+server::setHandler(const dodoString &method,
+				   handler handler)
 {
 	handlers.insert(make_pair(method, handler));
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 server::removeHandler(const dodoString &method)
 {
 	handlers.erase(method);
@@ -76,17 +76,17 @@ server::removeHandler(const dodoString &method)
 
 //-------------------------------------------------------------------
 
-void 
+void
 server::serve()
 {
 	try
 	{
 		method method = processRpcCall(receiveTextResponse());
-		
+
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator end = handlers.end();
-		
+
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
-	
+
 		if (handler == end)
 			sendTextRequest(processRpcCallResult(defaultHandler(method.name, method.arguments)));
 		else
@@ -96,14 +96,14 @@ server::serve()
 	{
 		response response;
 		response.fault(ex.baseErrstr);
-		
+
 		sendTextRequest(processRpcCallResult(response));
 	}
 	catch (...)
 	{
 		response response;
 		response.fault(dodoString("An unknown error."));
-		
+
 		sendTextRequest(processRpcCallResult(response));
 	}
 }

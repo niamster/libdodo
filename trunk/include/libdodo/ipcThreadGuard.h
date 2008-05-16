@@ -42,12 +42,12 @@ namespace dodo
 			class guardHolder : public raceHazardGuardHolder
 			{
 				protected:
-		
+
 					/**
 					 * contructor
 					 */
 					guardHolder();
-		
+
 					/**
 					 * destructor
 					 */
@@ -57,4 +57,4 @@ namespace dodo
 	};
 };
 
-#endif 
+#endif

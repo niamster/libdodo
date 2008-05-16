@@ -51,7 +51,7 @@ xexec::~xexec()
 		deinit = (deinitXexecModule)dlsym(i->handle, "deinitXexecModule");
 		if (deinit != NULL)
 			deinit();
-		
+
 #ifndef DL_FAST
 		dlclose(i->handle);
 #endif
@@ -397,7 +397,7 @@ __xexecCounts::__xexecCounts() : pre(-1),
 
 int
 xexec::addXExecModule(dodoList<__xexecItem> &list,
-		  			  const dodoString &module,
+					  const dodoString &module,
 					  void                  *obj,
 					  short type,
 					  void                  *data,
@@ -411,8 +411,8 @@ xexec::addXExecModule(dodoList<__xexecItem> &list,
 	temp.enabled = true;
 	temp.type = type;
 
-#ifdef DL_FAST 
-	temp.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+#ifdef DL_FAST
+	temp.handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
@@ -465,7 +465,7 @@ xexec::getModuleInfo(const dodoString &module,
 					 void             *toInit)
 {
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
@@ -503,7 +503,7 @@ xexec::_addExec(const dodoString &module,
 	temp.type = type;
 
 #ifdef DL_FAST
-	temp.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	temp.handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif

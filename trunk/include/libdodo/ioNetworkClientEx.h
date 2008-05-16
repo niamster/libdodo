@@ -41,12 +41,12 @@ namespace dodo
 			{
 				CLIENTEX_WRONGPARAMETER,
 			};
-		
+
 			/**
 			 * explanations for libdodo defined errors
 			 */
 		#define IONETWORKCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-		
+
 			/**
 			 * IDs of functions where exception might be thrown
 			 */

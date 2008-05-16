@@ -31,7 +31,7 @@
 #include <libdodo/rpcValue.h>
 
 namespace dodo
-{	
+{
 	namespace rpc
 	{
 		namespace xml
@@ -44,43 +44,43 @@ namespace dodo
 		 */
 		class method
 		{
-			friend class client;
-			friend class server;
-			friend class xml::method;
-			
+				friend class client;
+				friend class server;
+				friend class xml::method;
+
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				method();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~method();
-	
+
 				/**
 				 * set method name
 				 * @param name defines method name
 				 */
 				virtual void setName(const dodoString &name);
-	
+
 				/**
 				 * clear arguments information
 				 */
 				virtual void clear();
-				
+
 				/**
 				 * add argument
-				 * @param argument defines method argument 
+				 * @param argument defines method argument
 				 */
 				virtual void addArgument(const value &argument);
-				
+
 			private:
-				
-				dodoArray<value> arguments;///< method arguments
-				dodoString name;///< method name
+
+				dodoArray<value> arguments; ///< method arguments
+				dodoString name;            ///< method name
 		};
 	};
 };

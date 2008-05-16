@@ -38,23 +38,23 @@ namespace dodo
 			class dataGuard
 			{
 				public:
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~dataGuard() = 0;
-		
+
 					/**
 					 * set shared data
 					 * @param data defines shared data
 					 */
 					virtual void set(void *data) = 0;
-		
+
 					/**
 					 * set shared data to NULL
 					 */
 					virtual void del() = 0;
-		
+
 					/**
 					 * lock and return shared data
 					 * @return shared data
@@ -62,7 +62,7 @@ namespace dodo
 					 * @note if microseconds is 0 it will wait infinitely
 					 */
 					virtual void *acquire(unsigned long microseconds) = 0;
-		
+
 					/**
 					 * unlock shared data
 					 */

@@ -27,7 +27,7 @@ using namespace dodo::tools;
 
 void
 filesystem::unlink(const dodoString &path,
-					bool force)
+				   bool force)
 {
 	int status(0);
 	struct stat st;
@@ -50,7 +50,7 @@ filesystem::unlink(const dodoString &path,
 
 void
 filesystem::rename(const dodoString &oldPath,
-					const dodoString &newPath)
+				   const dodoString &newPath)
 {
 	if (::rename(oldPath.c_str(), newPath.c_str()) == -1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_RENAME, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
@@ -60,8 +60,8 @@ filesystem::rename(const dodoString &oldPath,
 
 void
 filesystem::symlink(const dodoString &oldPath,
-					 const dodoString &newPath,
-					 bool force)
+					const dodoString &newPath,
+					bool force)
 {
 	if (force)
 	{
@@ -84,7 +84,7 @@ filesystem::symlink(const dodoString &oldPath,
 
 void
 filesystem::link(const dodoString &oldPath,
-				  const dodoString &newPath)
+				 const dodoString &newPath)
 {
 	if  (::link(oldPath.c_str(), newPath.c_str()) == -1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_LINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, oldPath + "->" + newPath);
@@ -94,7 +94,7 @@ filesystem::link(const dodoString &oldPath,
 
 void
 filesystem::chown(const dodoString &path,
-				   int uid)
+				  int uid)
 {
 	if (::chown(path.c_str(), uid, (unsigned int)-1) == -1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHOWN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -104,7 +104,7 @@ filesystem::chown(const dodoString &path,
 
 void
 filesystem::chgrp(const dodoString &path,
-				   int gid)
+				  int gid)
 {
 	if (::chown(path.c_str(), (unsigned int)-1, gid) == -1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_CHGRP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -138,7 +138,7 @@ filesystem::getGroupOwner(const dodoString &path)
 
 void
 filesystem::touch(const dodoString &path,
-				   int a_time)
+				  int a_time)
 {
 	if (a_time == 1)
 		a_time = time(NULL);
@@ -153,7 +153,7 @@ filesystem::touch(const dodoString &path,
 
 void
 filesystem::mkfifo(const dodoString &path,
-					int permissions)
+				   int permissions)
 {
 	if (::mkfifo(path.c_str(), toRealPermission(permissions)) == -1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_MKFIFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -163,8 +163,8 @@ filesystem::mkfifo(const dodoString &path,
 
 void
 filesystem::mkdir(const dodoString &path,
-				   int permissions,
-				   bool force)
+				  int permissions,
+				  bool force)
 {
 	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 	{
@@ -186,7 +186,7 @@ filesystem::mkdir(const dodoString &path,
 
 void
 filesystem::mkdirRecursive(const dodoString &path,
-							int permissions)
+						   int permissions)
 {
 	if (::mkdir(path.c_str(), toRealPermission(permissions)) == -1)
 	{
@@ -270,7 +270,7 @@ filesystem::toRealPermission(int permission)
 
 void
 filesystem::rm(const dodoString &path,
-				bool force)
+			   bool force)
 {
 	struct stat st;
 	if (::lstat(path.c_str(), &st) == -1)
@@ -667,8 +667,8 @@ filesystem::dirname(const dodoString &path)
 
 void
 filesystem::copy(const dodoString &from,
-				  const dodoString &a_to,
-				  bool force)
+				 const dodoString &a_to,
+				 bool force)
 {
 	dodoString to = a_to;
 
@@ -829,8 +829,8 @@ filesystem::copy(const dodoString &from,
 
 void
 filesystem::copyDir(const dodoString &from,
-					 const dodoString &a_to,
-					 bool force)
+					const dodoString &a_to,
+					bool force)
 {
 	dodoString to = a_to;
 
@@ -912,7 +912,7 @@ filesystem::exists(const dodoString &path)
 
 void
 filesystem::appendToFile(const dodoString &path,
-						const dodoString &content)
+						 const dodoString &content)
 {
 	_writeToFile(path, content, "a+");
 }
@@ -921,7 +921,7 @@ filesystem::appendToFile(const dodoString &path,
 
 void
 filesystem::appendToFile(const dodoString &path,
-						const dodoStringArray &content)
+						 const dodoStringArray &content)
 {
 	_writeToFile(path, content, "a+");
 }
@@ -948,13 +948,13 @@ filesystem::writeToFile(const dodoString &path,
 
 void
 filesystem::_writeToFile(const dodoString &path,
-                                        const dodoString &content,
-                                        const char *mode)
+						 const dodoString &content,
+						 const char *mode)
 {
 	FILE *file = fopen(path.c_str(), mode);
 	if (file == NULL)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-	
+
 	unsigned long size = content.size();
 	if (fwrite(content.c_str(), size, 1, file) != 1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -964,47 +964,47 @@ filesystem::_writeToFile(const dodoString &path,
 
 void
 filesystem::_writeToFile(const dodoString &path,
-                                        const dodoStringArray &content,
-                                        const char *mode)
+						 const dodoStringArray &content,
+						 const char *mode)
 {
 	FILE *file = fopen(path.c_str(), mode);
 	if (file == NULL)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-	
-	dodoStringArray::const_iterator i=content.begin(), j=content.end();
-	for (;i!=j;++i)
+
+	dodoStringArray::const_iterator i = content.begin(), j = content.end();
+	for (; i != j; ++i)
 	{
-	if (fputs(i->c_str(), file) < 0)
-		switch (errno)
-		{   
-			case EFBIG:
-			case EIO:
-			case EINTR:
-			case EBADF:
-			case EOVERFLOW:
-			case ENOSPC:
-			case EPIPE:
-			case ENOMEM:
-			case ENXIO:
-			
-				throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-		}   
-	
-	if (fputc('\n', file) < 0)
-		switch (errno)
-		{   
-			case EFBIG:
-			case EIO:
-			case EINTR:
-			case EBADF:
-			case EOVERFLOW:
-			case ENOSPC:
-			case EPIPE:
-			case ENOMEM:
-			case ENXIO:
-		
-				throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-		}
+		if (fputs(i->c_str(), file) < 0)
+			switch (errno)
+			{
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
+
+					throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			}
+
+		if (fputc('\n', file) < 0)
+			switch (errno)
+			{
+				case EFBIG:
+				case EIO:
+				case EINTR:
+				case EBADF:
+				case EOVERFLOW:
+				case ENOSPC:
+				case EPIPE:
+				case ENOMEM:
+				case ENXIO:
+
+					throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
+			}
 	}
 }
 

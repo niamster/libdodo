@@ -49,15 +49,15 @@ namespace dodo
 				class dataGuard : public ipc::shared::dataGuard
 				{
 					private:
-			
+
 						/**
 						 * copy constructor
 						 * to prevent copying
 						 */
 						dataGuard(dataGuard &sts);
-			
+
 					public:
-			
+
 						/**
 						 * constructor
 						 * @param value defines initial value of semaphore
@@ -67,23 +67,23 @@ namespace dodo
 						 * otherwise(like fork) - it may be generated
 						 */
 						dataGuard(unsigned int value = 1, const char *key = NULL);
-			
+
 						/**
 						 * destructor
 						 */
 						virtual ~dataGuard();
-			
+
 						/**
 						 * set shared data
 						 * @param data defines shared data
 						 */
 						virtual void set(void *data);
-			
+
 						/**
 						 * set shared data to NULL
 						 */
 						virtual void del();
-			
+
 						/**
 						 * lock and return shared data
 						 * @return shared data
@@ -91,19 +91,19 @@ namespace dodo
 						 * @note if microseconds is 0 it will wait infinitely
 						 */
 						virtual void *acquire(unsigned long microseconds = 0);
-			
+
 						/**
 						 * unlock shared data
 						 */
 						virtual void release();
-			
+
 					protected:
-			
+
 						void *data;         ///< shared data
 						sem_t *semaphore;   ///< lock
-			
+
 						timespec timeout;   ///< lock timeout
-			
+
 						char *key;          ///< key for the semaphore
 				};
 			};

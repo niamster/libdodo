@@ -33,7 +33,7 @@ dataGuard::dataGuard(dataGuard &sts)
 //-------------------------------------------------------------------
 
 dataGuard::dataGuard(unsigned int value,
-														   const char   *a_key) : data(NULL)
+					 const char   *a_key) : data(NULL)
 {
 	if (a_key == NULL)
 	{

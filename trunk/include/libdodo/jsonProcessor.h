@@ -41,43 +41,43 @@ namespace dodo
 		class processor
 		{
 			public:
-	
+
 				/**
 				 * contructor
 				 */
 				processor();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~processor();
-	
+
 				/**
 				 * @return string that contains serialized JSON object
 				 * @param root defines root of unserialized JSON object
 				 */
 				virtual dodoString make(const node &root);
-	
+
 				/**
 				 * @return root of unserialized JSON object
 				 * @param root defines string that contains serialized JSON object
 				 */
 				virtual node process(const dodoString &root);
-	
+
 				/**
 				 * @return string that contains serialized JSON object
 				 * @param root defines root of unserialized JSON object
 				 */
 				virtual dodoString fromMap(const dodoStringMap &root);
-	
+
 				/**
 				 * @return root of unserialized JSON object
 				 * @param root defines string that contains serialized JSON object
 				 */
 				virtual dodoStringMap toMap(const dodoString &root);
-	
+
 			protected:
-	
+
 				/**
 				 * process string value
 				 * @return position of last processed symbol of serialized JSON string object
@@ -86,7 +86,7 @@ namespace dodo
 				 * @param pos defines start position for parsing in serialized JSON string object
 				 */
 				virtual unsigned long processString(dodoString &node, const dodoString &root, unsigned long pos);
-	
+
 				/**
 				 * process array value
 				 * @return position of last processed symbol of serialized JSON string object
@@ -95,7 +95,7 @@ namespace dodo
 				 * @param pos defines start position for parsing in serialized JSON string object
 				 */
 				virtual unsigned long processArray(dodoArray<node> &node, const dodoString &root, unsigned long pos);
-	
+
 				/**
 				 * process object value
 				 * @return position of last processed symbol of serialized JSON string object
@@ -104,7 +104,7 @@ namespace dodo
 				 * @param pos defines start position for parsing in serialized JSON string object
 				 */
 				virtual unsigned long processObject(dodoMap<dodoString, node, dodoMapStringCompare> &node, const dodoString &root, unsigned long pos);
-	
+
 				/**
 				 * process json value
 				 * @return position of last processed symbol of serialized JSON string object
@@ -113,7 +113,7 @@ namespace dodo
 				 * @param pos defines start position for parsing in serialized JSON string object
 				 */
 				virtual unsigned long processValue(node &node, const dodoString &root, unsigned long pos);
-	
+
 				/**
 				 * process json boolean value
 				 * @return position of last processed symbol of serialized JSON string object
@@ -122,7 +122,7 @@ namespace dodo
 				 * @param pos defines start position for parsing in serialized JSON string object
 				 */
 				virtual unsigned long processBoolean(bool &node, const dodoString &root, unsigned long pos);
-	
+
 				/**
 				 * processes json numeric value
 				 * @return position of last processed symbol of serialized JSON string object
@@ -131,7 +131,7 @@ namespace dodo
 				 * @param pos defines start position for parsing in serialized JSON string object
 				 */
 				virtual unsigned long processNumeric(long &node, const dodoString &root, unsigned long pos);
-	
+
 				/**
 				 * process json null value
 				 * @return position of last processed symbol of serialized JSON string object
@@ -139,7 +139,7 @@ namespace dodo
 				 * @param pos defines start position for parsing in serialized JSON string object
 				 */
 				virtual unsigned long processNull(const dodoString &root, unsigned long pos);
-	
+
 				/**
 				 * @enum jsonStateEnum describes states for json processor
 				 */

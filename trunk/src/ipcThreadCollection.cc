@@ -27,16 +27,16 @@
 using namespace dodo::ipc::thread;
 
 __threadInfo::__threadInfo() :
-	
+
 #ifdef PTHREAD_EXT
-	
+
 	thread(0),
-	
+
 #endif
-	
-							   isRunning(false),
-							   executed(0),
-							   executeLimit(0)
+
+	isRunning(false),
+	executed(0),
+	executeLimit(0)
 {
 }
 
@@ -51,9 +51,9 @@ collection::collection(collection &st)
 collection::collection() : threadNum(0)
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_attr_init(&attr);
-	
+
 #endif
 }
 
@@ -62,9 +62,9 @@ collection::collection() : threadNum(0)
 collection::~collection()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_attr_destroy(&attr);
-	
+
 #endif
 
 	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
@@ -83,9 +83,9 @@ collection::~collection()
 			case COLLECTION_ONDESTRUCT_KEEP_ALIVE:
 
 #ifdef PTHREAD_EXT
-				
+
 				pthread_detach(i->thread);
-				
+
 #endif
 
 				break;
@@ -93,9 +93,9 @@ collection::~collection()
 			case COLLECTION_ONDESTRUCT_STOP:
 
 #ifdef PTHREAD_EXT
-				
+
 				pthread_cancel(i->thread);
-				
+
 #endif
 
 				break;
@@ -104,11 +104,11 @@ collection::~collection()
 			default:
 
 #ifdef PTHREAD_EXT
-				
+
 				pthread_join(i->thread, NULL);
-				
+
 #endif
-				
+
 				break;
 		}
 
@@ -133,7 +133,7 @@ collection::~collection()
 
 unsigned long
 collection::add(job::routine func,
-				   void    *data)
+				void    *data)
 {
 	return add(func, data, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
@@ -142,10 +142,10 @@ collection::add(job::routine func,
 
 unsigned long
 collection::add(job::routine func,
-				   void       *data,
-				   bool detached,
-				   short action,
-				   int stackSize)
+				void       *data,
+				bool detached,
+				short action,
+				int stackSize)
 {
 	__threadInfo thread;
 
@@ -186,7 +186,7 @@ collection::getThread(unsigned long position) const
 
 void
 collection::del(unsigned long position,
-				   bool force)
+				bool force)
 {
 	if (getThread(position))
 	{
@@ -197,11 +197,11 @@ collection::del(unsigned long position,
 			else
 			{
 #ifdef PTHREAD_EXT
-				
+
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
 					throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				
+
 #endif
 			}
 		}
@@ -234,12 +234,12 @@ collection::del(unsigned long position,
 
 void
 collection::replace(unsigned long position,
-					   job::routine func,
-					   void          *data,
-					   bool force,
-					   bool detached,
-					   short action,
-					   int stackSize)
+					job::routine func,
+					void          *data,
+					bool force,
+					bool detached,
+					short action,
+					int stackSize)
 {
 	if (getThread(position))
 	{
@@ -250,11 +250,11 @@ collection::replace(unsigned long position,
 			else
 			{
 #ifdef PTHREAD_EXT
-				
+
 				errno = pthread_cancel(current->thread);
 				if (errno != 0)
 					throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_REPLACE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				
+
 #endif
 			}
 		}
@@ -295,7 +295,7 @@ collection::replace(unsigned long position,
 
 void
 collection::run(unsigned long position,
-				   bool force)
+				bool force)
 {
 	if (getThread(position))
 	{
@@ -310,7 +310,7 @@ collection::run(unsigned long position,
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_ISALREADYRUNNING, IPCTHREADCOLLECTIONEX_ISALREADYRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
-		
+
 		if (current->detached)
 			pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 		else
@@ -325,9 +325,9 @@ collection::run(unsigned long position,
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
-		
+
 		current->isRunning = true;
-		++ (current->executed);
+		++(current->executed);
 	}
 	else
 		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, IPCTHREADCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
@@ -347,13 +347,13 @@ collection::wait(unsigned long position)
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_LIBDODO, COLLECTIONEX_ISDETACHED, IPCTHREADCOLLECTIONEX_ISDETACHED_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
-		
+
 		errno = pthread_join(current->thread, NULL);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
-		
+
 		current->isRunning = false;
 	}
 	else
@@ -372,13 +372,13 @@ collection::wait()
 			continue;
 
 #ifdef PTHREAD_EXT
-		
+
 		errno = pthread_join(i->thread, NULL);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_WAIT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
-		
+
 		i->isRunning = false;
 	}
 }
@@ -394,13 +394,13 @@ collection::stop(unsigned long position)
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_LIBDODO, COLLECTIONEX_ISNOTRUNNING, IPCTHREADCOLLECTIONEX_ISNOTRUNNING_STR, __LINE__, __FILE__);
 
 #ifdef PTHREAD_EXT
-		
+
 		errno = pthread_cancel(current->thread);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
-		
+
 		current->isRunning = false;
 	}
 	else
@@ -419,13 +419,13 @@ collection::stop()
 			continue;
 
 #ifdef PTHREAD_EXT
-		
+
 		errno = pthread_cancel(i->thread);
 		if (errno != 0)
 			throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_STOP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
-		
+
 		i->isRunning = false;
 	}
 }
@@ -451,7 +451,7 @@ collection::_isRunning(dodoList<__threadInfo>::iterator &position) const
 		return false;
 
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_kill(position->thread, 0);
 	if (errno != 0)
 	{
@@ -464,7 +464,7 @@ collection::_isRunning(dodoList<__threadInfo>::iterator &position) const
 
 		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX__ISRUNNING, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
-	
+
 #endif
 
 	return true;
@@ -500,7 +500,7 @@ collection::sweepTrash()
 
 void
 collection::setExecutionLimit(unsigned long position,
-								 unsigned long limit)
+							  unsigned long limit)
 {
 	if (getThread(position))
 		current->executeLimit = limit;
@@ -529,10 +529,10 @@ collection::running() const
 
 __threadMod
 collection::getModuleInfo(const dodoString &module,
-							 void             *toInit)
+						  void             *toInit)
 {
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
@@ -557,8 +557,8 @@ collection::getModuleInfo(const dodoString &module,
 
 unsigned long
 collection::add(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
+				void             *data,
+				void             *toInit)
 {
 	__threadInfo thread;
 
@@ -566,7 +566,7 @@ collection::add(const dodoString &module,
 	thread.position = ++threadNum;
 
 #ifdef DL_FAST
-	thread.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	thread.handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	thread.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
@@ -600,7 +600,7 @@ collection::add(const dodoString &module,
 
 void
 collection::blockSignal(int signals,
-						   bool block)
+						bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
@@ -608,12 +608,12 @@ collection::blockSignal(int signals,
 	tools::os::sigMask(&signal_mask, signals);
 
 #ifdef PTHREAD_EXT
-	
+
 	if (block)
 		pthread_sigmask(SIG_BLOCK, &signal_mask, NULL);
 	else
 		pthread_sigmask(SIG_UNBLOCK, &signal_mask, NULL);
-	
+
 #endif
 }
 
@@ -621,7 +621,7 @@ collection::blockSignal(int signals,
 
 unsigned long
 collection::addNRun(job::routine func,
-					   void    *data)
+					void    *data)
 {
 	return addNRun(func, data, 1, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
@@ -630,11 +630,11 @@ collection::addNRun(job::routine func,
 
 unsigned long
 collection::addNRun(job::routine func,
-					   void          *data,
-					   unsigned long limit,
-					   bool detached,
-					   short action,
-					   int stackSize)
+					void          *data,
+					unsigned long limit,
+					bool detached,
+					short action,
+					int stackSize)
 {
 	__threadInfo thread;
 
@@ -651,7 +651,7 @@ collection::addNRun(job::routine func,
 #endif
 
 #ifdef PTHREAD_EXT
-	
+
 	if (detached)
 		pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 	else
@@ -666,9 +666,9 @@ collection::addNRun(job::routine func,
 		throw baseEx(ERRMODULE_IPCTHREADCOLLECTION, COLLECTIONEX_ADDNRUN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
-	
+
 	thread.isRunning = true;
-	++ (thread.executed);
+	++(thread.executed);
 
 	threads.push_back(thread);
 

@@ -46,172 +46,172 @@ namespace dodo
 			NODE_DATATYPE_NUMERIC,
 			NODE_DATATYPE_NULL,
 		};
-	
+
 		/**
 		 * @class node defines JSON object reprasentation
 		 */
 		class node
 		{
-			friend class processor;
-	
+				friend class processor;
+
 			public:
-	
+
 				/**
 				 * constructor
 				 * @note constructs `null` object
 				 */
 				node();
-	
+
 				/**
 				 * constructor
 				 * @param value defines string value
 				 */
 				node(const dodoString &value);
-	
+
 				/**
 				 * constructor
 				 * @param value defines numeric value
 				 */
 				node(long value);
-	
+
 				/**
 				 * constructor
 				 * @param value defines boolean value
 				 */
 				node(bool value);
-	
+
 				/**
 				 * constructor
 				 * @param value defines array value
 				 */
 				node(const dodoArray<node> &value);
-	
+
 				/**
 				 * constructor
 				 * @param value defines object value
 				 */
 				node(const dodoMap<dodoString, node, dodoMapStringCompare> &value);
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~node();
-				
+
 				/**
 				 * set string, date/time, base64 value
 				 * @param value defines string value
 				 */
 				virtual void setString(const dodoString &value);
-				
+
 				/**
 				 * set boolean value
 				 * @param value defines boolean value
 				 */
 				virtual void setBoolean(bool value);
-				
+
 				/**
 				 * set integer value
 				 * @param value defines integer value
 				 */
 				virtual void setNumeric(long value);
-				
+
 				/**
 				 * set null value
 				 */
 				virtual void setNull();
-				
+
 				/**
 				 * add array value
 				 * @param value defines array member value
 				 */
 				virtual void addArrayElement(const node &value);
-				
+
 				/**
 				 * add struct value element
 				 * @param name defines struct member name
 				 * @param value defines struct member value
 				 */
 				virtual void addObjectMember(const dodoString &name, const node &value);
-				
+
 				/**
 				 * set array value member
 				 * @param value defines array value
 				 */
 				virtual void setArray(const dodoArray<node> &value);
-				
+
 				/**
 				 * set struct value
 				 * @param value defines struct value
 				 */
 				virtual void setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value);
-	
+
 				/**
 				 * @return node by string key
 				 * @param key defines key to search for node
 				 * @note throws exception if data type is not NODE_DATATYPE_OBJECT
 				 */
 				virtual node operator[](const dodoString &key);
-	
+
 				/**
 				 * @return node by numeric key
 				 * @param key defines key to search for node
 				 * @note throws exception if data type is not NODE_DATATYPE_ARRAY
 				 */
 				virtual node operator[](unsigned long key);
-	
+
 				/**
 				 * @return type of node[see jsonDataTypeEnum]
 				 */
 				virtual short getType();
-	
+
 				/**
 				 * @return true if node is `null`
 				 */
 				virtual bool isNull();
-	
+
 				/**
 				 * @return string value
 				 * @note throws exception if data type is not NODE_DATATYPE_STRING
 				 */
 				virtual dodoString getString();
-	
+
 				/**
 				 * @return boolean value
 				 * @note throws exception if data type is not NODE_DATATYPE_BOOLEAN
 				 */
 				virtual bool getBoolean();
-	
+
 				/**
 				 * @return numeric value
 				 * @note throws exception if data type is not NODE_DATATYPE_NUMERIC
 				 */
 				virtual long getNumeric();
-	
+
 				/**
 				 * @return array value
 				 * @note throws exception if data type is not NODE_DATATYPE_ARRAY
 				 */
 				virtual dodoArray<node> getArray();
-	
+
 				/**
 				 * @return object value
 				 * @note throws exception if data type is not NODE_DATATYPE_OBJECT
 				 */
 				virtual dodoMap<dodoString, node, dodoMapStringCompare> getObject();
-	
+
 				/**
 				 * clear internal data
 				 */
 				virtual void clear();
-	
+
 			private:
-	
+
 				dodoString stringValue;                                         ///< string value of node
-				dodoMap<dodoString, node, dodoMapStringCompare> objectValue;  ///< object value of node
-				dodoArray<node> arrayValue;                                 ///< array value of node
+				dodoMap<dodoString, node, dodoMapStringCompare> objectValue;    ///< object value of node
+				dodoArray<node> arrayValue;                                     ///< array value of node
 				bool booleanValue;                                              ///< boolean value of node
 				long numericValue;                                              ///< numeric value of node
-	
+
 				short valueDataType;                                            ///< data type of value
 		};
 	};

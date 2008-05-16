@@ -48,35 +48,35 @@ namespace dodo
 			class mutex : public lock
 			{
 				public:
-		
+
 					/**
 					 * consructor
 					 */
 					mutex();
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~mutex();
-		
+
 					/**
 					 * lock critical section
 					 */
 					virtual void acquire();
-		
+
 					/**
 					 * unlock critical section
 					 */
 					virtual void release();
-		
+
 				protected:
-		
+
 		#ifdef PTHREAD_EXT
-					
+
 					pthread_mutex_t keeper; ///< mutex
-					
+
 		#endif
-					
+
 			};
 		};
 	};

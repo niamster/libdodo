@@ -28,8 +28,8 @@ using namespace dodo::io::network;
 #ifndef IONETWORKSERVER_WO_XEXEC
 
 __xexexIoNetworkServerCollectedData::__xexexIoNetworkServerCollectedData(int &a_operType,
-											   void *a_executor) : operType(a_operType),
-																   executor(a_executor)
+																		 void *a_executor) : operType(a_operType),
+																							 executor(a_executor)
 {
 }
 
@@ -41,23 +41,23 @@ server::server(server &fs)
 
 #ifndef IONETWORKSERVER_WO_XEXEC
 
-: collectedData(operType,
-										 (void *) this)
+	: collectedData(operType,
+					(void *) this)
 
-#endif										 
+#endif
 {
 }
 
 //-------------------------------------------------------------------
 
 server::server(short a_family,
-				   short a_type) : options(a_family, a_type),
-								   blockInherited(false)
+			   short a_type) : options(a_family, a_type),
+							   blockInherited(false)
 #ifndef IONETWORKSERVER_WO_XEXEC
 
-								,
-								   collectedData(operType,
-												 (void *) this)
+							   ,
+							   collectedData(operType,
+											 (void *) this)
 
 #endif
 
@@ -86,7 +86,7 @@ server::~server()
 
 int
 server::addPostExec(inExec func,
-					  void   *data)
+					void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSERVER, data);
 }
@@ -95,7 +95,7 @@ server::addPostExec(inExec func,
 
 int
 server::addPreExec(inExec func,
-					 void   *data)
+				   void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSERVER, data);
 }
@@ -106,8 +106,8 @@ server::addPreExec(inExec func,
 
 int
 server::addPostExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
+					void             *data,
+					void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSERVER, data, toInit);
 }
@@ -116,8 +116,8 @@ server::addPostExec(const dodoString &module,
 
 int
 server::addPreExec(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
+				   void             *data,
+				   void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSERVER, data, toInit);
 }
@@ -126,8 +126,8 @@ server::addPreExec(const dodoString &module,
 
 dodo::__xexecCounts
 server::addExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
+				void             *data,
+				void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSERVER, data, toInit);
 }
@@ -224,14 +224,14 @@ server::makeSocket()
 
 void
 server::bindNListen(const dodoString &host,
-					  int port,
-					  int numberOfConnections)
+					int port,
+					int numberOfConnections)
 {
 #ifndef IONETWORKSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
 	performXExec(preExec);
 #endif
-	
+
 	makeSocket();
 
 	int sockFlag(1);
@@ -286,7 +286,7 @@ server::bindNListen(const dodoString &host,
 
 void
 server::bindNListen(const __connInfo &destinaton,
-					  int numberOfConnections)
+					int numberOfConnections)
 {
 	bindNListen(destinaton.host, destinaton.port, numberOfConnections);
 }
@@ -295,8 +295,8 @@ server::bindNListen(const __connInfo &destinaton,
 
 void
 server::bindNListen(const dodoString &path,
-					  int numberOfConnections,
-					  bool force)
+					int numberOfConnections,
+					bool force)
 {
 #ifndef IONETWORKSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
@@ -345,7 +345,7 @@ server::bindNListen(const dodoString &path,
 
 bool
 server::accept(__initialAccept &init,
-				 __connInfo &info)
+			   __connInfo &info)
 {
 #ifndef IONETWORKSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;

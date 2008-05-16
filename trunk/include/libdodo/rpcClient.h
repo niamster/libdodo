@@ -41,52 +41,52 @@ namespace dodo
 		class client
 		{
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				client();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~client();
-			
+
 				/**
 				 * @param method defines rpc method call
 				 */
 				virtual void sendRequest(const method &method);
-				
+
 				/**
-				 * @return rpc response result 
+				 * @return rpc response result
 				 */
 				virtual response receiveResponse();
-			
+
 			protected:
-				
+
 				/**
 				 * process RPC call
 				 * @return RPC method
 				 * @param method defines RPC method representation
 				 */
 				virtual dodoString processRpcCall(const method &method) = 0;
-				
+
 				/**
 				 * process RPC call
 				 * @return RPC response represantation
 				 * @param data defines buffer that contains RPC response
 				 */
 				virtual response processRpcCallResult(const dodoString &data) = 0;
-			
+
 				/**
 				 * send request
 				 * @param method defines rpc method call
 				 */
 				virtual void sendTextRequest(const dodoString &method) = 0;
-				
+
 				/**
 				 * get response
-				 * @return rpc response result 
+				 * @return rpc response result
 				 */
 				virtual dodoString receiveTextResponse() = 0;
 		};

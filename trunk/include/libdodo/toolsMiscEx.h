@@ -63,18 +63,18 @@ namespace dodo
 
 	#ifdef BZIP2_EXT
 
-	#define TOOLSMISCEX_BADBZCOMPRESSION_STR "Error occured during comression."
-	#define TOOLSMISCEX_BADBZDECOMPRESSIONINIT_STR "Error occured during preparations for decompression."
+	#define TOOLSMISCEX_BADBZCOMPRESSION_STR         "Error occured during comression."
+	#define TOOLSMISCEX_BADBZDECOMPRESSIONINIT_STR   "Error occured during preparations for decompression."
 	#define TOOLSMISCEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
-	#define TOOLSMISCEX_BADBZDECOMPRESSION_STR "Error occured during decompression."
+	#define TOOLSMISCEX_BADBZDECOMPRESSION_STR       "Error occured during decompression."
 
 	#endif
 
-	#define TOOLSMISCEX_BADMAILHELO_STR "Error occurd while sending EHLO."
-	#define TOOLSMISCEX_BADMAILAUTH_STR "Error during authentification."
+	#define TOOLSMISCEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
+	#define TOOLSMISCEX_BADMAILAUTH_STR    "Error during authentification."
 	#define TOOLSMISCEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-	#define TOOLSMISCEX_EMPTYARRAY_STR "Array is empty."
-	#define TOOLSMISCEX_WRONGSTRENGTH_STR "Wrong strength argument."
+	#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
+	#define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument."
 
 		/**
 		 * IDs of functions where exception might be thrown

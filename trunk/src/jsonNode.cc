@@ -33,41 +33,41 @@ node::node() : valueDataType(NODE_DATATYPE_NULL)
 //-------------------------------------------------------------------
 
 node::node(const dodoString &value) : valueDataType(NODE_DATATYPE_STRING),
-											stringValue(value)
+									  stringValue(value)
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 node::node(long value) : valueDataType(NODE_DATATYPE_NUMERIC),
-											numericValue(value)
+						 numericValue(value)
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 node::node(bool value) : valueDataType(NODE_DATATYPE_BOOLEAN),
-											booleanValue(value)
+						 booleanValue(value)
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 node::node(const dodoArray<node> &value) : valueDataType(NODE_DATATYPE_ARRAY),
-											arrayValue(value)
+										   arrayValue(value)
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : valueDataType(NODE_DATATYPE_OBJECT),
-											objectValue(value)
+																		   objectValue(value)
 {
-	
+
 }
 
 //-------------------------------------------------------------------
@@ -83,7 +83,7 @@ void
 node::setString(const dodoString &value)
 {
 	valueDataType = NODE_DATATYPE_STRING;
-	
+
 	stringValue = value;
 }
 
@@ -93,7 +93,7 @@ void
 node::setBoolean(bool value)
 {
 	valueDataType = NODE_DATATYPE_BOOLEAN;
-	
+
 	booleanValue = value;
 }
 
@@ -103,7 +103,7 @@ void
 node::setNumeric(long value)
 {
 	valueDataType = NODE_DATATYPE_NUMERIC;
-	
+
 	numericValue = value;
 }
 
@@ -121,38 +121,38 @@ void
 node::addArrayElement(const node &value)
 {
 	valueDataType = NODE_DATATYPE_ARRAY;
-	
+
 	arrayValue.push_back(value);
 }
 
 //-------------------------------------------------------------------
 
 void
-node::addObjectMember(const dodoString &name, 
-								const node &value)
+node::addObjectMember(const dodoString &name,
+					  const node &value)
 {
 	valueDataType = NODE_DATATYPE_OBJECT;
-	
+
 	objectValue.insert(make_pair(name, value));
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 node::setArray(const dodoArray<node> &value)
 {
 	valueDataType = NODE_DATATYPE_ARRAY;
-	
+
 	arrayValue = value;
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 node::setObject(const dodoMap<dodoString, node, dodoMapStringCompare> &value)
 {
 	valueDataType = NODE_DATATYPE_OBJECT;
-	
+
 	objectValue = value;
 }
 

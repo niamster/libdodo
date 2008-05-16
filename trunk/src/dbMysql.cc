@@ -48,7 +48,7 @@ __mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key,
 //-------------------------------------------------------------------
 
 mysql::mysql() : empty(true),
-					 type(CLIENT_MULTI_STATEMENTS)
+				 type(CLIENT_MULTI_STATEMENTS)
 {
 	addSQL();
 }
@@ -163,7 +163,7 @@ mysql::unsetMyAddDelSt(short statement)
 
 void
 mysql::connectSettings(unsigned long a_type,
-						 const __mysqlSSLOptions &options)
+					   const __mysqlSSLOptions &options)
 {
 	type = a_type;
 
@@ -249,7 +249,7 @@ mysql::disconnect()
 
 void
 mysql::_exec(const dodoString &query,
-			   bool result)
+			 bool result)
 {
 	if (query.size() == 0)
 	{
@@ -312,7 +312,7 @@ mysql::_exec(const dodoString &query,
 		queryCollect();
 	}
 	else
-	{	
+	{
 		request = query;
 		show = result;
 	}
@@ -484,7 +484,7 @@ mysql::affectedRowsCount() const
 
 void
 mysql::exec(const dodoString &query,
-			  bool result)
+			bool result)
 {
 #ifndef DBMYSQL_WO_XEXEC
 	operType = MYSQL_OPERATION_EXEC;
@@ -506,7 +506,7 @@ mysql::exec(const dodoString &query,
 
 int
 mysql::addPostExec(inExec func,
-					 void   *data)
+				   void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
 }
@@ -515,7 +515,7 @@ mysql::addPostExec(inExec func,
 
 int
 mysql::addPreExec(inExec func,
-					void   *data)
+				  void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
 }
@@ -526,8 +526,8 @@ mysql::addPreExec(inExec func,
 
 int
 mysql::addPostExec(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
+				   void             *data,
+				   void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
 }
@@ -536,8 +536,8 @@ mysql::addPostExec(const dodoString &module,
 
 int
 mysql::addPreExec(const dodoString &module,
-					void             *data,
-					void             *toInit)
+				  void             *data,
+				  void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
 }
@@ -546,8 +546,8 @@ mysql::addPreExec(const dodoString &module,
 
 dodo::__xexecCounts
 mysql::addExec(const dodoString &module,
-				 void             *data,
-				 void             *toInit)
+			   void             *data,
+			   void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
 }
@@ -646,16 +646,16 @@ mysql::renameFieldCollect()
 
 //-------------------------------------------------------------------
 
-void 
-mysql::renameField(const dodoString &field, 
-					const __connectorField &to_field,
-					const dodoString &table)
+void
+mysql::renameField(const dodoString &field,
+				   const __connectorField &to_field,
+				   const dodoString &table)
 {
 	qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
 	pre_tableTo = field;
 	pre_table = table;
 	pre_fieldInfo = to_field;
-	show = false;	
+	show = false;
 }
 
 #endif

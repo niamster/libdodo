@@ -54,9 +54,9 @@ namespace dodo
 	 */
 	struct __logMap
 	{
-		short level;///< log level[see loggerLogLevelEnum]
-		io::channel *handler;///< log handler
-		long position;///< log handler identificator
+		short level;            ///< log level[see loggerLogLevelEnum]
+		io::channel *handler;   ///< log handler
+		long position;          ///< log handler identificator
 	};
 
 	/**
@@ -65,17 +65,17 @@ namespace dodo
 	class logger : virtual public ipc::thread::guardHolder
 	{
 		public:
-			
+
 			/**
 			 * constructor
 			 */
 			logger();
-			
+
 			/**
 			 * destructor
 			 */
 			virtual ~logger();
-			
+
 			/**
 			 * register log handler
 			 * @return log handler identificator
@@ -84,37 +84,37 @@ namespace dodo
 			 * @note if handler is NULL logger will pass message to the syslog
 			 */
 			virtual unsigned long add(short level, io::channel *handler);
-			
+
 			/**
 			 * unregister log handler
 			 * @param position defines log handler identificator
 			 */
 			virtual void remove(unsigned long position);
-			
+
 			/**
 			 * log message
 			 * @param level defines log level[see loggerLogLevelEnum]
 			 * @param msg defines log message
 			 */
 			virtual void log(short level, const dodoString &msg);
-			
+
 			/**
 			 * set date/time format for log messages
 			 * @param format defines date/time format[see tools::time]
 			 * @note date/time format is not used for syslog
 			 */
 			virtual void setTimeFormat(const dodoString &format);
-		
+
 		private:
-			
-			dodoString timeFormat;///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
-			
-			dodoList<__logMap> handlers;///< list of log maps
-			
-			unsigned long handlersNum;///< number of registered handlers
-			
-			static const dodoString levels[8];///< log levels statements
-			static const int syslogLevels[8];///< syslog log levels
+
+			dodoString timeFormat;              ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
+
+			dodoList<__logMap> handlers;        ///< list of log maps
+
+			unsigned long handlersNum;          ///< number of registered handlers
+
+			static const dodoString levels[8];  ///< log levels statements
+			static const int syslogLevels[8];   ///< syslog log levels
 	};
 
 };

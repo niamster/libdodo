@@ -45,7 +45,7 @@ namespace dodo
 		 * explanations for libdodo defined errors
 		 */
 	#define XMLPROCESSOREX_EMPTYDOCUMENT_STR "File or buffer doesn't contain XML document."
-	#define XMLPROCESSOREX_NOROOTNODE_STR "XML document doesn't have root node."
+	#define XMLPROCESSOREX_NOROOTNODE_STR    "XML document doesn't have root node."
 
 		/**
 		 * IDs of functions where exception might be thrown

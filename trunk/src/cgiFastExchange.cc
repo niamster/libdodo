@@ -30,10 +30,10 @@ using namespace dodo::cgi::fast;
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
 __xexexCgiFastExchangeCollectedData::__xexexCgiFastExchangeCollectedData(dodoString &a_buffer,
-											   int &a_operType,
-											   void *a_executor) : buffer(a_buffer),
-																   operType(a_operType),
-																   executor(a_executor)
+																		 int &a_operType,
+																		 void *a_executor) : buffer(a_buffer),
+																							 operType(a_operType),
+																							 executor(a_executor)
 {
 }
 
@@ -45,12 +45,12 @@ exchange::exchange(exchange &cf)
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
-: collectedData(buffer,
-			 operType,
-			 (void *) this)
-			 
+	: collectedData(buffer,
+					operType,
+					(void *) this)
+
 #endif
-			 
+
 {
 }
 
@@ -60,13 +60,13 @@ exchange::exchange(FCGX_Request *a_request) : request(a_request)
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
-,
-collectedData(buffer,
-			 operType,
-			 (void *) this)
-			 
+											  ,
+											  collectedData(buffer,
+															operType,
+															(void *) this)
+
 #endif
-			 
+
 {
 }
 
@@ -115,7 +115,7 @@ exchange::getOutDescriptor() const
 
 int
 exchange::addPostExec(inExec func,
-				   void   *data)
+					  void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data);
 }
@@ -124,7 +124,7 @@ exchange::addPostExec(inExec func,
 
 int
 exchange::addPreExec(inExec func,
-				  void   *data)
+					 void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data);
 }
@@ -135,8 +135,8 @@ exchange::addPreExec(inExec func,
 
 int
 exchange::addPostExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
+					  void             *data,
+					  void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data, toInit);
 }
@@ -145,8 +145,8 @@ exchange::addPostExec(const dodoString &module,
 
 dodo::__xexecCounts
 exchange::addExec(const dodoString &module,
-			   void             *data,
-			   void             *toInit)
+				  void             *data,
+				  void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data, toInit);
 }
@@ -155,8 +155,8 @@ exchange::addExec(const dodoString &module,
 
 int
 exchange::addPreExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
+					 void             *data,
+					 void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data, toInit);
 }

@@ -33,7 +33,7 @@
 #include <libdodo/xmlProcessor.h>
 
 namespace dodo
-{	
+{
 	namespace rpc
 	{
 		namespace xml
@@ -42,38 +42,38 @@ namespace dodo
 			 * @class method defines RPC method in XML representation
 			 */
 			class method
-			{	
-				friend class client;
-				
+			{
+					friend class client;
+
 				public:
-					
+
 					/**
 					 * @return method parsed from XML
 					 * @param data defines XML string
 					 */
 					static rpc::method xmlToRpcMethod(const dodoString &data);
-					
+
 					/**
 					 * @return XML parsed from method
 					 * @param data defines method structure
 					 */
-					static dodoString methodToXml(const rpc::method &data); 
-					
+					static dodoString methodToXml(const rpc::method &data);
+
 				protected:
-					
-					static const char trimSymbols[2];///< symbols to trim in the end and in the begining of the XML node value
-					
+
+					static const char trimSymbols[2]; ///< symbols to trim in the end and in the begining of the XML node value
+
 					/**
 					 * @return method parsed from XML node
 					 * @param node defines XML node
 					 */
 					static rpc::method xmlToRpcMethod(dodo::xml::node &node);
-					
+
 					/**
 					 * @return XML node parsed from method
 					 * @param data defines method structure
 					 */
-					static dodo::xml::node methodToXmlNode(const rpc::method &data); 
+					static dodo::xml::node methodToXmlNode(const rpc::method &data);
 			};
 		};
 	};

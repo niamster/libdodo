@@ -142,21 +142,21 @@ namespace dodo
 				 * @param content defines array of strings that will be appended to the file
 				 */
 				static void appendToFile(const dodoString &path, const dodoStringArray &content);
-		    
+
 				/**
 				 * write string to file
 				 * @param path defines path to file
 				 * @param content defines string that will be written to the file
-				 */                     
+				 */
 				static void writeToFile(const dodoString &path, const dodoString &content);
-				
+
 				/**
 				 * write array of strings to file
 				 * @param path defines path to file
 				 * @param content defines array of strings that will be written to the file
-				 */                     
+				 */
 				static void writeToFile(const dodoString &path, const dodoStringArray &content);
-		    
+
 				/**
 				 * @return basename of path string
 				 * @param path defines path string
@@ -342,13 +342,13 @@ namespace dodo
 				 * @param permission defines user[libdodo] understandable permissions
 				 */
 				static int toRealPermission(int permission);
-				
+
 				/**
 				 * write string to file
 				 * @param path defines path to file
 				 * @param content defines string that will be written to the file
 				 * @param mode defines mode to open file
-				 */                     
+				 */
 				static void _writeToFile(const dodoString &path, const dodoString &content, const char *mode);
 
 				/**
@@ -356,7 +356,7 @@ namespace dodo
 				 * @param path defines path to file
 				 * @param content defines array of strings that will be written to the file
 				 * @param mode defines mode to open file
-				 */                     
+				 */
 				static void _writeToFile(const dodoString &path, const dodoStringArray &content, const char *mode);
 		};
 	};

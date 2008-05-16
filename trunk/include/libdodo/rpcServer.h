@@ -33,92 +33,92 @@
 #include <libdodo/rpcMethod.h>
 
 namespace dodo
-{	
+{
 	namespace rpc
 	{
 		/**
 		 * @typedef handler defines type of rpc method handler
 		 */
 		typedef response (*handler)(const dodoString &, const dodoArray<value> &);
-		
+
 		/**
 		 * @class server defines server-side RPC instrument
 		 */
 		class server
 		{
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				server();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~server();
-			
+
 				/**
 				 * set handler for method
 				 * @param method defines name of rpc method
 				 * @param handler defines function that will process rpc call
 				 */
 				virtual void setHandler(const dodoString &method, handler handler);
-			
+
 				/**
 				 * remove handler for method
 				 * @param method defines name of rpc method
 				 */
 				virtual void removeHandler(const dodoString &method);
-			
+
 				/**
 				 * set function that will process unregistered calls
 				 * @param handler defines function that will process rpc call
 				 */
 				virtual void setDefault(handler handler);
-				
+
 				/**
 				 * serve rpc call
 				 */
 				virtual void serve();
-			
+
 			protected:
-				
+
 				/**
 				 * process RPC call
 				 * @return RPC method represantation
 				 * @param data defines buffer that contains RPC request
 				 */
 				virtual method processRpcCall(const dodoString &data) = 0;
-				
+
 				/**
 				 * process RPC call
 				 * @return RPC response
 				 * @param response defines RPC response representation
 				 */
 				virtual dodoString processRpcCallResult(const response &response) = 0;
-				
+
 				/**
 				 * default rpc handler
 				 * @param method defines function that will process rpc call
 				 * @param arguments defines method arguments
 				 */
 				static response rpcDefaultHandler(const dodoString &method, const dodoArray<value> &arguments);
-			
+
 				/**
 				 * send request
 				 * @param method defines rpc method call
 				 */
 				virtual void sendTextRequest(const dodoString &method) = 0;
-				
+
 				/**
 				 * get response
-				 * @return rpc response result 
+				 * @return rpc response result
 				 */
 				virtual dodoString receiveTextResponse() = 0;
-				
-				dodoMap<dodoString, handler, dodoMapStringCompare> handlers;///< method handlers
-				handler defaultHandler;///< default handler
+
+				dodoMap<dodoString, handler, dodoMapStringCompare> handlers;    ///< method handlers
+				handler defaultHandler;                                         ///< default handler
 		};
 	};
 };

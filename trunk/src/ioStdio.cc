@@ -28,10 +28,10 @@ using namespace dodo::io;
 #ifndef IOSTDIO_WO_XEXEC
 
 __xexexIoStdioCollectedData::__xexexIoStdioCollectedData(dodoString &a_buffer,
-											   int &a_operType,
-											   void *a_executor) : buffer(a_buffer),
-																   operType(a_operType),
-																   executor(a_executor)
+														 int &a_operType,
+														 void *a_executor) : buffer(a_buffer),
+																			 operType(a_operType),
+																			 executor(a_executor)
 {
 }
 
@@ -44,14 +44,14 @@ stdio::stdio() : inSTDBuffer(STD_INSIZE),
 				 err(false),
 				 blocked(true),
 				 desc(stdout)
-				 
+
 #ifndef IOSTDIO_WO_XEXEC
-							 
-							 ,
-						   collectedData(buffer,
-										 operType,
-										 (void *) this)
-										 
+
+				 ,
+				 collectedData(buffer,
+							   operType,
+							   (void *) this)
+
 #endif
 {
 }
@@ -60,11 +60,11 @@ stdio::stdio() : inSTDBuffer(STD_INSIZE),
 
 stdio::stdio(stdio &fd)
 #ifndef IOSTDIO_WO_XEXEC
-							 
-						   : collectedData(buffer,
-										 operType,
-										 (void *) this)
-										 
+
+	: collectedData(buffer,
+					operType,
+					(void *) this)
+
 #endif
 {
 }

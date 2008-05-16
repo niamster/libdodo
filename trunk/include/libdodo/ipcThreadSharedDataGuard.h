@@ -47,36 +47,36 @@ namespace dodo
 				class dataGuard : public ipc::shared::dataGuard
 				{
 					private:
-			
+
 						/**
 						 * copy constructor
 						 * to prevent copying
 						 */
 						dataGuard(dataGuard &sts);
-			
+
 					public:
-			
+
 						/**
 						 * constructor
 						 */
 						dataGuard();
-			
+
 						/**
 						 * destructor
 						 */
 						virtual ~dataGuard();
-			
+
 						/**
 						 * set shared data
 						 * @param data defines shared data
 						 */
 						virtual void set(void *data);
-			
+
 						/**
 						 * set shared data to NULL
 						 */
 						virtual void del();
-			
+
 						/**
 						 * lock and return shared data
 						 * @return shared data
@@ -84,22 +84,22 @@ namespace dodo
 						 * @note if microseconds is 0 it will wait infinitely
 						 */
 						virtual void *acquire(unsigned long microseconds = 0);
-			
+
 						/**
 						 * unlock shared data
 						 */
 						virtual void release();
-			
+
 					protected:
-			
+
 						void *data;             ///< shared data
-						
+
 			#ifdef PTHREAD_EXT
-						
+
 						pthread_mutex_t mutex;  ///< lock
-						
+
 			#endif
-			
+
 						timespec timeout;       ///< lcok timeout
 				};
 			};

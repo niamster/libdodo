@@ -27,7 +27,7 @@ using namespace dodo::io;
 
 nonBlockedAccessInfo::~nonBlockedAccessInfo()
 {
-	
+
 }
 
 //-------------------------------------------------------------------

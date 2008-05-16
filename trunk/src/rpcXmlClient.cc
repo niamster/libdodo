@@ -27,29 +27,29 @@ using namespace dodo::rpc::xml;
 
 client::client()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 client::~client()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 client::processRpcCall(const rpc::method &meth)
 {
 	dodo::xml::processor xmlMethod;
-	
+
 	return xmlMethod.createXML(method::methodToXmlNode(meth));
 }
 
 //-------------------------------------------------------------------
 
-dodo::rpc::response 
+dodo::rpc::response
 client::processRpcCallResult(const dodoString &data)
 {
 	return response::xmlToRpcResponse(data);

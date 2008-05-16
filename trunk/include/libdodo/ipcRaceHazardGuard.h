@@ -40,14 +40,14 @@ namespace dodo
 		class raceHazardGuardHolder
 		{
 			protected:
-	
+
 				atomic::lock *keeper; ///< lock
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~raceHazardGuardHolder() = 0;
-	
+
 				/**
 				 * @class raceHazardGuard provides thread safe behaviour
 				 * @note it locks in constructor and unlocks in destructor
@@ -55,19 +55,19 @@ namespace dodo
 				class raceHazardGuard
 				{
 					public:
-	
+
 						/**
 						 * contructor
 						 */
 						raceHazardGuard(const raceHazardGuardHolder *parent);
-	
+
 						/**
 						 * destructor
 						 */
 						virtual ~raceHazardGuard();
-	
+
 					protected:
-	
+
 						raceHazardGuardHolder *parent; ///< lock
 				};
 		};

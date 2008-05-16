@@ -28,8 +28,8 @@ using namespace dodo::io::network;
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
 __xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_operType,
-											   void *a_executor) : operType(a_operType),
-																   executor(a_executor)
+																		 void *a_executor) : operType(a_operType),
+																							 executor(a_executor)
 {
 }
 
@@ -41,8 +41,8 @@ client::client(client &fs)
 
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
-: collectedData(operType,
-										 (void *) this)
+	: collectedData(operType,
+					(void *) this)
 
 #endif
 
@@ -52,13 +52,13 @@ client::client(client &fs)
 //-------------------------------------------------------------------
 
 client::client(short a_family,
-				   short a_type) : options(a_family, a_type),
-								   blockInherited(false)
+			   short a_type) : options(a_family, a_type),
+							   blockInherited(false)
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
-								   ,
-								   collectedData(operType,
-												 (void *) this)
+							   ,
+							   collectedData(operType,
+											 (void *) this)
 
 #endif
 
@@ -78,7 +78,7 @@ client::~client()
 
 int
 client::addPostExec(inExec func,
-					  void   *data)
+					void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKCLIENT, data);
 }
@@ -87,7 +87,7 @@ client::addPostExec(inExec func,
 
 int
 client::addPreExec(inExec func,
-					 void   *data)
+				   void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKCLIENT, data);
 }
@@ -98,8 +98,8 @@ client::addPreExec(inExec func,
 
 int
 client::addPostExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
+					void             *data,
+					void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKCLIENT, data, toInit);
 }
@@ -108,8 +108,8 @@ client::addPostExec(const dodoString &module,
 
 int
 client::addPreExec(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
+				   void             *data,
+				   void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKCLIENT, data, toInit);
 }
@@ -118,8 +118,8 @@ client::addPreExec(const dodoString &module,
 
 dodo::__xexecCounts
 client::addExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
+				void             *data,
+				void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKCLIENT, data, toInit);
 }
@@ -216,8 +216,8 @@ client::makeSocket()
 
 void
 client::connect(const dodoString &host,
-				  int port,
-				  exchange &exchange)
+				int port,
+				exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
@@ -239,7 +239,7 @@ client::connect(const dodoString &host,
 		{
 			if (::close(socket) == -1)
 				throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-			
+
 			socket = -1;
 
 			throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -277,7 +277,7 @@ client::connect(const dodoString &host,
 
 void
 client::connect(const __connInfo &destinaton,
-				  exchange &exchange)
+				exchange &exchange)
 {
 	connect(destinaton.host, destinaton.port, exchange);
 }
@@ -286,15 +286,15 @@ client::connect(const __connInfo &destinaton,
 
 void
 client::connectFrom(const dodoString &local,
-					  const dodoString &host,
-					  int port,
-					  exchange &exchange)
+					const dodoString &host,
+					int port,
+					exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
 	performXExec(preExec);
 #endif
-	
+
 	makeSocket();
 
 	int sockFlag(1);
@@ -366,8 +366,8 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connectFrom(const dodoString &local,
-					  const __connInfo &destinaton,
-					  exchange &exchange)
+					const __connInfo &destinaton,
+					exchange &exchange)
 {
 	connectFrom(local, destinaton.host, destinaton.port, exchange);
 }
@@ -376,7 +376,7 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connect(const dodoString &path,
-				  exchange &exchange)
+				exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;

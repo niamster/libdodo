@@ -38,78 +38,78 @@ namespace dodo
 		 * @class channel implements an interface for I/O operations
 		 */
 		class channel : public xexec,
-					virtual public nonBlockedAccessInfo
+						virtual public nonBlockedAccessInfo
 		{
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				channel();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~channel() = 0;
-				
+
 				/**
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
 				virtual void readString(dodoString &data) = 0;
-	
+
 				/**
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
 				virtual void read(char * const data) = 0;
-	
+
 				/**
 				 * @param data defines data that will be written
 				 */
 				virtual void writeString(const dodoString &data) = 0;
-	
+
 				/**
 				 * @param data defines data that will be written
 				 */
 				virtual void write(const char * const data) = 0;
-	
+
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
 				virtual void readStreamString(dodoString &data) = 0;
-	
+
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
 				virtual void readStream(char * const data) = 0;
-	
+
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 */
 				virtual void writeStreamString(const dodoString &data) = 0;
-	
+
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 */
 				virtual void writeStream(const char * const data) = 0;
-	
+
 				/**
 				 * flush output
 				 */
 				virtual void flush() = 0;
-	
+
 				unsigned long inSize;   ///< size of data block for read* operations
 				unsigned long outSize;  ///< size of data block for write* operations
-	
+
 			protected:
-	
+
 				bool opened; ///< true if I/O *session* is opened
 		};
 	};

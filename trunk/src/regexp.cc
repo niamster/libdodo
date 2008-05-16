@@ -45,20 +45,20 @@ regexp::regexp() : extended(true),
 //-------------------------------------------------------------------
 
 regexp::regexp(const dodoString &pattern) : extended(true),
-				   icase(false),
-				   greedy(true),
-				   multiline(false)
+											icase(false),
+											greedy(true),
+											multiline(false)
 {
 #ifdef PCRE_EXT
 #else
 	notCompiled = true;
 #endif
-	
+
 	try
 	{
 		compile(pattern);
 	}
-	catch(baseEx &ex)
+	catch (baseEx &ex)
 	{
 		if (ex.funcID != REGEXPEX_COMPILE)
 			throw;
@@ -102,7 +102,7 @@ regexp::match(const dodoString &pattern,
 
 bool
 regexp::match(const dodoString &sample,
-				dodoStringArray &pockets)
+			  dodoStringArray &pockets)
 {
 	pockets.clear();
 	if (!boundMatch(sample))
@@ -141,7 +141,7 @@ regexp::boundMatch(const dodoString &sample)
 	if (rc <= 0)
 	{
 		delete [] oVector;
-		
+
 		return false;
 	}
 
@@ -221,8 +221,8 @@ regexp::compile(const dodoString &pattern)
 		notCompiled = false;
 	else
 		regfree(&code);
-	
-	int errn = regcomp(&code, pattern.c_str(), bits);  
+
+	int errn = regcomp(&code, pattern.c_str(), bits);
 	if (errn != 0)
 	{
 #define ERROR_LEN 256
@@ -260,7 +260,7 @@ regexp::replace(const dodoString &pattern,
 
 dodoString
 regexp::replace(const dodoString &sample,
-				  const dodoStringArray &replacements)
+				const dodoStringArray &replacements)
 {
 	if (!boundMatch(sample))
 		return sample;
@@ -274,7 +274,7 @@ regexp::replace(const dodoString &sample,
 
 	long shift = 0;
 	unsigned long begin(0), end(0);
-	
+
 	for (int res = 0; res < subs && i != j; ++i, ++res, ++k)
 	{
 		if (res > 0)
@@ -284,7 +284,7 @@ regexp::replace(const dodoString &sample,
 		}
 		begin = i->begin - shift;
 		end = i->end - shift;
-		
+
 		temp.replace(begin, end - begin, *k);
 	}
 

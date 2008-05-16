@@ -36,7 +36,7 @@ namespace dodo
 	namespace tools
 	{
 		/**
-		 * @class string provides various string tools 
+		 * @class string provides various string tools
 		 */
 		class string
 		{
@@ -64,7 +64,7 @@ namespace dodo
 				 * @note string case is ignored
 				 */
 				static bool iequal(const dodoString &first, const dodoString &second);
-				
+
 				/**
 				 * @return true in needle is found
 				 * @param str defines string where to look for the needle
@@ -72,7 +72,7 @@ namespace dodo
 				 * @param icase defines case sensitivity
 				 */
 				static bool contains(const dodoString &str, const dodoString &needle, bool icase = false);
-				
+
 				/**
 				 * @return position of needle if it is found
 				 * @param str defines string where to look for the needle
@@ -80,7 +80,7 @@ namespace dodo
 				 * @param icase defines case sensitivity
 				 */
 				static unsigned long find(const dodoString &str, const dodoString &needle, bool icase = false);
-				
+
 				/**
 				 * @return position of needle if it is found
 				 * @param str defines string where to look for the needle
@@ -239,4 +239,4 @@ namespace dodo
 	};
 };
 
-#endif 
+#endif

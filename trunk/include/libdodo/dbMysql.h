@@ -52,7 +52,7 @@ namespace dodo
 			MYSQL_OPERATION_FETCHROW,
 			MYSQL_OPERATION_FETCHFIELD,
 		};
-	
+
 		/**
 		 * @enum mysqlAddSelEnum defines additional mySQL statement for `select`
 		 */
@@ -62,7 +62,7 @@ namespace dodo
 			MYSQL_ADDREQUEST_SELECT_SMALL_RESULT,
 			MYSQL_ADDREQUEST_SELECT_BIG_RESULT,
 		};
-	
+
 		/**
 		 * @enum mysqlAddDelEnum defines additional mySQL statement for `delete`
 		 */
@@ -71,7 +71,7 @@ namespace dodo
 			MYSQL_ADDREQUEST_DELETE_LOW_PRIORITY = 1,
 			MYSQL_ADDREQUEST_DELETE_QUICK
 		};
-	
+
 		/**
 		 * @enum mysqlAddUpEnum defines additional mySQL statement for `update`
 		 */
@@ -79,7 +79,7 @@ namespace dodo
 		{
 			MYSQL_REQUEST_UPDATE_LOW_PRIORITY = 1,
 		};
-	
+
 		/**
 		 * @enum mysqlAddInsEnum defines additional mySQL statement for `insert`
 		 */
@@ -89,7 +89,7 @@ namespace dodo
 			MYSQL_ADDREQUEST_INSERT_LOW_PRIORITY,
 			MYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY,
 		};
-	
+
 		/**
 		 * @struct __mysqlSSLOptions defines SSL mySQL options
 		 */
@@ -99,7 +99,7 @@ namespace dodo
 			 * constructor
 			 */
 			__mysqlSSLOptions();
-	
+
 			/**
 			 * constructor
 			 * @param key defines pathname to the key file
@@ -109,39 +109,39 @@ namespace dodo
 			 * @param cipher defines allowed SSL ciphers
 			 */
 			__mysqlSSLOptions(const dodoString &key, const dodoString &cert = __dodostring__, const dodoString &ca = __dodostring__, const dodoString &capath = __dodostring__, const dodoString &cipher = __dodostring__);
-	
+
 			dodoString key;         ///< pathname to the key file
 			dodoString cert;        ///< pathname to the certificate file
 			dodoString ca;          ///< pathname to the certificate authority file
 			dodoString capath;      ///< pathname to a directory that contains trusted SSL CA certificates in pem format
 			dodoString cipher;      ///< allowed SSL ciphers
 		};
-	
+
 		/**
 		 * @class mysql provides an interface to mySQL db
 		 */
 		class mysql : public sqlConstructor
 		{
 			private:
-	
+
 				/**
 				 * constructor
 				 * prevent copying
 				 */
 				mysql(mysql &a_mypp);
-	
+
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				mysql();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~mysql();
-				
+
 				/*
 				 * set connection settings
 				 * @param type defines type of connection[see mySQL documentation]
@@ -157,109 +157,109 @@ namespace dodo
 				 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
 				 */
 				void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions());
-	
+
 				/**
 				 * connect to the database
 				 */
 				virtual void connect();
-	
+
 				/**
 				 * disconnect from the database
 				 */
 				virtual void disconnect();
-	
+
 				/**
 				 * @return amount of affected rows from the evaluated request
 				 */
 				virtual unsigned int affectedRowsCount() const;
-	
+
 				/**
 				 * @return amount of received rows from the evaluated request
 				 */
 				virtual unsigned int rowsCount() const;
-	
+
 				/**
 				 * @return amount of received fields from the evaluated request
 				 */
 				virtual unsigned int fieldsCount() const;
-	
+
 				/**
 				 * @return received rows from the evaluated request
 				 */
 				virtual dodoArray<dodoStringArray> fetchRow() const;
-	
+
 				/**
 				 * @return received fields from the evaluated request
 				 */
 				virtual dodoStringArray fetchField() const;
-	
+
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
 				virtual __connectorStorage fetch() const;
-	
+
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
 				 */
 				virtual dodoStringMapArray fetchAssoc() const;
-	
+
 				/**
 				 * set additional mySQL specific statement for `insert`
 				 * @param statement defines additional statement[see mysqlAddInsEnum]
 				 */
 				virtual void setMyAddInsSt(short statement);
-	
+
 				/**
 				 * set additional mySQL specific statement for `update`
 				 * @param statement defines additional statement[see mysqlAddUpEnum]
 				 */
 				virtual void setMyAddUpSt(short statement);
-	
+
 				/**
 				 * set additional mySQL specific statement for `select`
 				 * @param statement defines additional statement[see mysqlAddSelEnum]
 				 */
 				virtual void setMyAddSelSt(short statement);
-	
+
 				/**
 				 * set additional mySQL specific statement for `delete`
 				 * @param statement defines additional statement[see mysqlAddDelEnum]
 				 */
 				virtual void setMyAddDelSt(short statement);
-	
+
 				/**
 				 * remove additional mySQL specific statement for `insert`
 				 * @param statement defines additional statement[see mysqlAddInsEnum]
 				 */
 				virtual void unsetMyAddInsSt(short statement);
-	
+
 				/**
 				 * remove additional mySQL specific statement for `update`
 				 * @param statement defines additional statement[see mysqlAddUpEnum]
 				 */
 				virtual void unsetMyAddUpSt(short statement);
-	
+
 				/**
 				 * remove additional mySQL specific statement for `select`
 				 * @param statement defines additional statement[see mysqlAddSelEnum]
 				 */
 				virtual void unsetMyAddSelSt(short statement);
-	
+
 				/**
 				 * remove additional mySQL specific statement for `delete`
 				 * @param statement defines additional statement[see mysqlAddDelEnum]
 				 */
 				virtual void unsetMyAddDelSt(short statement);
-	
+
 				/**
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
-	
+
 	#ifndef DBMYSQL_WO_XEXEC
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -267,7 +267,7 @@ namespace dodo
 				 * @param data defines data that will be passed to hook function
 				 */
 				virtual int addPostExec(inExec func, void *data);
-	
+
 				/**
 				 * add hook before the operation
 				 * @return id of the hook method
@@ -275,9 +275,9 @@ namespace dodo
 				 * @param data defines data that will be passed to hook function
 				 */
 				virtual int addPreExec(inExec func, void *data);
-	
+
 	#ifdef DL_EXT
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -286,7 +286,7 @@ namespace dodo
 				 * @param toInit defines data that will be passed to the init function
 				 */
 				virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -295,7 +295,7 @@ namespace dodo
 				 * @param toInit defines data that will be passed to the init function
 				 */
 				virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 				/**
 				 * set hook from the library that will be executed before/after the operation
 				 * @return number in list where function is set
@@ -306,28 +306,28 @@ namespace dodo
 				 * @note type of hook[pre/post] is defined in the library
 				 */
 				virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 	#endif
-	
+
 	#endif
-	
+
 				/**
 				 * set sessions charset
 				 * @param charset defines charset
 				 */
 				virtual void setCharset(const dodoString &charset);
-	
+
 				/**
 				 * @return current session charset
 				 */
 				virtual dodoString getCharset() const;
-	
+
 				/**
 				 * set connection timeout
 				 * @param time defines connection timeout in seconds
 				 */
 				virtual void setConnectTimeout(unsigned int time);
-				
+
 				/**
 				 * rename field
 				 * @param field defines current name of the field
@@ -335,39 +335,39 @@ namespace dodo
 				 * @param table defines table that contains the field
 				 */
 				virtual void renameField(const dodoString &field, const __connectorField &to_field, const dodoString &table);
-	
+
 			protected:
-	
+
 				/**
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
 				 */
 				virtual void _exec(const dodoString &query, bool result);
-	
+
 				/**
 				 * init additional mySQL specific statements
 				 */
 				virtual void addSQL();
-				
+
 				/**
 				 * construct `rename database` statement
 				 */
 				virtual void renameDbCollect();
-	
+
 				/**
 				 * construct `alter table` statement
 				 */
 				virtual void renameFieldCollect();
-	
+
 			private:
-	
-				bool empty;             ///< true id mysqlRes is empty
-	
-				MYSQL *mysqlHandle;           ///< DB handle
-				MYSQL_RES *mysqlResult;    ///< handle to result
-	
-				unsigned long type;    ///< connection type
+
+				bool empty;                     ///< true id mysqlRes is empty
+
+				MYSQL *mysqlHandle;             ///< DB handle
+				MYSQL_RES *mysqlResult;         ///< handle to result
+
+				unsigned long type;             ///< connection type
 		};
 	};
 };

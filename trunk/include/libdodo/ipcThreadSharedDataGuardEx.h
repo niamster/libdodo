@@ -44,13 +44,13 @@ namespace dodo
 					DATAGUARDEX_ISALREADYLOCKED,
 					DATAGUARDEX_CANNOTLOCK
 				};
-			
+
 				/**
 				 * explanations for libdodo defined errors
 				 */
 			#define IPCTHREADSHAREDDATAGUARDEX_ISALREADYLOCKED_STR "The share is currently locked. Please wait."
-			#define IPCTHREADSHAREDDATAGUARDEX_CANNOTLOCK_STR "The share is currently locked. Timeout exhousted."
-			
+			#define IPCTHREADSHAREDDATAGUARDEX_CANNOTLOCK_STR      "The share is currently locked. Timeout exhousted."
+
 				/**
 				 * IDs of functions where exception might be thrown
 				 */

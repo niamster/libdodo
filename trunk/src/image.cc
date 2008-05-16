@@ -117,10 +117,10 @@ image::image(image &a_im)
 
 #ifndef IMAGE_WO_XEXEC
 
-: collectedData(*imInfo,
-										  *im,
-										  operType,
-										  (void *) this)
+	: collectedData(*imInfo,
+					*im,
+					operType,
+					(void *) this)
 
 #endif
 
@@ -133,7 +133,7 @@ image::image() : im(NULL)
 
 #ifndef IMAGE_WO_XEXEC
 
-				,
+				 ,
 				 collectedData(*imInfo,
 							   *im,
 							   operType,
@@ -385,11 +385,11 @@ image::scale(unsigned long width,
 void
 image::scale(unsigned long size)
 {
-	
+
 	if (im == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	float mult = (float)size / (float)((im->columns > im->rows)?im->columns:im->rows);
+	float mult = (float)size / (float)((im->columns > im->rows) ? im->columns : im->rows);
 
 	Image *image = ScaleImage(im, (unsigned long)floor(im->columns * mult), (unsigned long)floor(im->rows * mult), exInfo);
 

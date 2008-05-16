@@ -31,7 +31,7 @@
 #include <libdodo/rpcXmlServer.h>
 
 namespace dodo
-{	
+{
 	namespace rpc
 	{
 		namespace xml
@@ -42,31 +42,31 @@ namespace dodo
 			class cgiServer : public server
 			{
 				public:
-		
+
 					/**
 					 * constructor
 					 */
 					cgiServer(cgi::server &provider);
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~cgiServer();
-				
+
 				protected:
-					
+
 					/**
 					 * send request
 					 * @param response defines rpc method call
 					 */
 					virtual void sendTextRequest(const dodoString &response);
-					
+
 					/**
 					 * get response
-					 * @return rpc response result 
+					 * @return rpc response result
 					 */
 					virtual dodoString receiveTextResponse();
-					
+
 					cgi::server &provider;
 			};
 		};

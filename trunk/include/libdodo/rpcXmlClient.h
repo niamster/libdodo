@@ -44,26 +44,26 @@ namespace dodo
 			class client : public rpc::client
 			{
 				public:
-		
+
 					/**
 					 * constructor
 					 */
 					client();
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~client();
-				
+
 				protected:
-					
+
 					/**
 					 * process RPC call
 					 * @return RPC method
 					 * @param meth defines RPC method representation
 					 */
 					virtual dodoString processRpcCall(const rpc::method &meth);
-					
+
 					/**
 					 * process RPC call
 					 * @return RPC response represantation

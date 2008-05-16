@@ -40,17 +40,17 @@ namespace dodo
 			class lock
 			{
 				public:
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~lock() = 0;
-		
+
 					/**
 					 * lock critical section
 					 */
 					virtual void acquire() = 0;
-		
+
 					/**
 					 * unlock critical section
 					 */

@@ -27,19 +27,19 @@ using namespace dodo::rpc::xml;
 
 server::server()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 server::~server()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
-dodo::rpc::method 
+dodo::rpc::method
 server::processRpcCall(const dodoString &data)
 {
 	return method::xmlToRpcMethod(data);
@@ -47,11 +47,11 @@ server::processRpcCall(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 server::processRpcCallResult(const rpc::response &resp)
 {
 	dodo::xml::processor xmlMethod;
-	
+
 	return xmlMethod.createXML(response::responseToXmlNode(resp));
 }
 

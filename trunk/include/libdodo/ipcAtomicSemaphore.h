@@ -45,30 +45,30 @@ namespace dodo
 			class semaphore : public lock
 			{
 				public:
-		
+
 					/**
 					 * consructor
 					 */
 					semaphore(unsigned int value, const char *key);
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~semaphore();
-		
+
 					/**
 					 * lock critical section
 					 */
 					virtual void acquire();
-		
+
 					/**
 					 * unlock critical section
 					 */
 					virtual void release();
-		
+
 				protected:
-		
-					sem_t *keeper;   ///< semaphore
+
+					sem_t *keeper;      ///< semaphore
 					char *key;          ///< key for the semaphore
 			};
 		};

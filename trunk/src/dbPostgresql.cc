@@ -28,7 +28,7 @@
 using namespace dodo::db;
 
 postgresql::postgresql() : empty(true),
-								hint(POSTGRESQL_HINT_NONE)
+						   hint(POSTGRESQL_HINT_NONE)
 {
 }
 
@@ -155,7 +155,7 @@ postgresql::setBLOBValues(const dodoStringArray &values)
 
 void
 postgresql::_exec(const dodoString &query,
-					bool result)
+				  bool result)
 {
 	bool blobHint;
 	int status;
@@ -240,7 +240,7 @@ postgresql::_exec(const dodoString &query,
 	if (isSetFlag(hint, POSTGRESQL_HINT_BLOB))
 	{
 		removeFlag(hint, POSTGRESQL_HINT_BLOB);
-		
+
 		switch (qType)
 		{
 			case ACCUMULATOR_REQUEST_UPDATE:
@@ -272,15 +272,15 @@ postgresql::_exec(const dodoString &query,
 			}
 
 				break;
-			
+
 			case ACCUMULATOR_REQUEST_SELECT:
-				
+
 				pgResult = PQexecParams(pgHandle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
-				
+
 				break;
-				
+
 			default:
-				
+
 				throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_LIBDODO, POSTGRESQLEX_WRONGHINTUSAGE, DBPOSTGRESQLEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
 		}
 	}
@@ -443,7 +443,7 @@ postgresql::affectedRowsCount() const
 
 void
 postgresql::exec(const dodoString &query,
-				   bool result)
+				 bool result)
 {
 #ifndef DBPOSTGRESQL_WO_XEXEC
 	operType = POSTGRESQL_OPERATION_EXEC;
@@ -465,7 +465,7 @@ postgresql::exec(const dodoString &query,
 
 int
 postgresql::addPostExec(inExec func,
-						  void   *data)
+						void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
 }
@@ -474,7 +474,7 @@ postgresql::addPostExec(inExec func,
 
 int
 postgresql::addPreExec(inExec func,
-						 void   *data)
+					   void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
 }
@@ -485,8 +485,8 @@ postgresql::addPreExec(inExec func,
 
 int
 postgresql::addPostExec(const dodoString &module,
-						  void             *data,
-						  void             *toInit)
+						void             *data,
+						void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
 }
@@ -495,8 +495,8 @@ postgresql::addPostExec(const dodoString &module,
 
 int
 postgresql::addPreExec(const dodoString &module,
-						 void             *data,
-						 void             *toInit)
+					   void             *data,
+					   void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
 }
@@ -505,8 +505,8 @@ postgresql::addPreExec(const dodoString &module,
 
 dodo::__xexecCounts
 postgresql::addExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
+					void             *data,
+					void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
 }

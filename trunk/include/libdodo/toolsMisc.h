@@ -105,23 +105,23 @@ namespace dodo
 		 */
 		struct __url
 		{
-			dodoString protocol; ///< scheme
-			dodoString host; ///< host name
-			dodoString path; ///< path to CGI
-			dodoString request; ///< CGI request
-			dodoString login; ///< login
-			dodoString password; ///< password
-			dodoString port; ///< port
+			dodoString protocol;    ///< scheme
+			dodoString host;        ///< host name
+			dodoString path;        ///< path to CGI
+			dodoString request;     ///< CGI request
+			dodoString login;       ///< login
+			dodoString password;    ///< password
+			dodoString port;        ///< port
 		};
-		
+
 		/**
 		 * @class misc provides misc functionality
 		 */
 		class misc
 		{
-			friend class io::network::http;
-			friend class cgi::server;
-			
+				friend class io::network::http;
+				friend class cgi::server;
+
 			public:
 
 				/**
@@ -220,13 +220,13 @@ namespace dodo
 				 * @return true if needle has been found
 				 * @param arr defines array to search in
 				 * @param needle defines string to search for
-				 * @param icase defines case sensitivity 
+				 * @param icase defines case sensitivity
 				 */
 				static bool isInArray(const dodoStringArray &arr, const dodoString &needle, bool icase);
 
 				/**
 				 * @return array of substrings
-				 * @param string defines string to explode 
+				 * @param string defines string to explode
 				 * @param separator defines separator string
 				 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 				 * @note explode will stop when amount of parts exceed limit and the rest of the buffer will be appended to the last piece
@@ -236,7 +236,7 @@ namespace dodo
 				/**
 				 * @return array of substrings
 				 * @param string defines string to explode
-				 * @param escapeF defines function which will escape every substring 
+				 * @param escapeF defines function which will escape every substring
 				 * @param separator defines separator string
 				 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 				 * @note explode will stop when amount of parts exceed limit and the rest of the buffer will be appended to the last piece
@@ -246,7 +246,7 @@ namespace dodo
 				/**
 				 * @return string of substrings, separated with separator
 				 * @param fields defines substrings to implode
-				 * @param escapeF defines function which will escape every substring  
+				 * @param escapeF defines function which will escape every substring
 				 * @param separator defines separator string
 				 * @param frame defines frame string[frame='; substring => 'substring']
 				 * @param limit defines maximum number of parts to divide string; -1 for unlimit
@@ -256,7 +256,7 @@ namespace dodo
 				/**
 				 * @return string of substrings, separated with separator
 				 * @param fields defines substrings to implode
-				 * @param escapeF defines function which will escape every substring  
+				 * @param escapeF defines function which will escape every substring
 				 * @param separator defines separator string
 				 * @param limit defines maximum number of parts to divide string; -1 for unlimit
 				 */
@@ -382,7 +382,7 @@ namespace dodo
 				 * @param string defines string to convert
 				 */
 				static dodoString MD5Hex(const dodoString &string);
-				
+
 				/**
 				 * @return binary string represented in 'hex'
 				 * @param string defines string to convert
@@ -415,7 +415,7 @@ namespace dodo
 				 * @param headers defines extra headers
 				 * @param path defines path to sendmail
 				 */
-				static void mail(const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__, const dodoString &path="/usr/sbin/sendmail");
+				static void mail(const dodoString &to, const dodoString &subject, const dodoString &message, const dodoString &headers = __dodostring__, const dodoString &path = "/usr/sbin/sendmail");
 
 				/**
 				 * send mail
@@ -485,7 +485,7 @@ namespace dodo
 				 * MD5 block update operation
 				 * @param context defines MD5 structure
 				 * @param input defines input data
-				 * @param inputLen defines size of input data 
+				 * @param inputLen defines size of input data
 				 * @note continues an MD5 message-digest operation, processing another message block, and updating the context.
 				 */
 				static void MD5Update(MD5_CTX *context, unsigned char *input, unsigned int inputLen);

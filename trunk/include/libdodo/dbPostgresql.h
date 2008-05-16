@@ -50,86 +50,86 @@ namespace dodo
 			POSTGRESQL_OPERATION_FETCHROW,
 			POSTGRESQL_OPERATION_FETCHFIELD,
 		};
-		
+
 		/**
 		 * @enum postgresqlHintEnum define DB hints
 		 */
 		enum postgresqlHintEnum
 		{
 			POSTGRESQL_HINT_NONE = 0,
-			POSTGRESQL_HINT_BLOB = 2,///< insert|update using BLOB values
+			POSTGRESQL_HINT_BLOB = 2, ///< insert|update using BLOB values
 		};
-		
+
 		/**
 		 * @class postgresql provides an interface to postgresql db
 		 */
 		class postgresql : public sqlConstructor
 		{
 			private:
-	
+
 				/**
 				 * constructor
 				 * prevent copying
 				 */
 				postgresql(postgresql &a_pgpp);
-	
+
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				postgresql();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~postgresql();
-	
+
 				/**
 				 * connect to the database
 				 */
 				virtual void connect();
-	
+
 				/**
 				 * disconnect from the database
 				 */
 				virtual void disconnect();
-	
+
 				/**
 				 * @return amount of affected rows from the evaluated request
 				 */
 				virtual unsigned int affectedRowsCount() const;
-	
+
 				/**
 				 * @return amount of received rows from the evaluated request
 				 */
 				virtual unsigned int rowsCount() const;
-	
+
 				/**
 				 * @return amount of received fields from the evaluated request
 				 */
 				virtual unsigned int fieldsCount() const;
-	
+
 				/**
 				 * @return received rows from the evaluated request
 				 */
 				virtual dodoArray<dodoStringArray> fetchRow() const;
-	
+
 				/**
 				 * @return received fields from the evaluated request
 				 */
 				virtual dodoStringArray fetchField() const;
-	
+
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
 				virtual __connectorStorage fetch() const;
-	
+
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
 				 */
 				virtual dodoStringMapArray fetchAssoc() const;
-	
+
 				/**
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
@@ -146,17 +146,17 @@ namespace dodo
 				 * 		define hint class attribute as POSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
-				
-				unsigned short hint;///< DB hint[see postgresqlHintEnum]
-	
+
+				unsigned short hint; ///< DB hint[see postgresqlHintEnum]
+
 				/**
 				 * set BLOB data for the request
 				 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
 				 */
 				virtual void setBLOBValues(const dodoStringArray &values);
-	
+
 	#ifndef DBPOSTGRESQL_WO_XEXEC
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -164,7 +164,7 @@ namespace dodo
 				 * @param data defines data that will be passed to hook function
 				 */
 				virtual int addPostExec(inExec func, void *data);
-	
+
 				/**
 				 * add hook before the operation
 				 * @return id of the hook method
@@ -172,9 +172,9 @@ namespace dodo
 				 * @param data defines data that will be passed to hook function
 				 */
 				virtual int addPreExec(inExec func, void *data);
-	
+
 	#ifdef DL_EXT
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -183,7 +183,7 @@ namespace dodo
 				 * @param toInit defines data that will be passed to the init function
 				 */
 				virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -192,7 +192,7 @@ namespace dodo
 				 * @param toInit defines data that will be passed to the init function
 				 */
 				virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 				/**
 				 * set hook from the library that will be executed before/after the operation
 				 * @return number in list where function is set
@@ -203,17 +203,17 @@ namespace dodo
 				 * @note type of hook[pre/post] is defined in the library
 				 */
 				virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 	#endif
-	
+
 	#endif
-	
+
 				/**
 				 * set sessions charset
 				 * @param charset defines charset
 				 */
 				virtual void setCharset(const dodoString &charset);
-	
+
 				/**
 				 * @return current session charset
 				 * @note return value can be
@@ -257,25 +257,25 @@ namespace dodo
 				 * PG_GB18030[GB18030]
 				 */
 				virtual int getCharset() const;
-	
+
 			protected:
-	
+
 				/**
 				 * @return SQL compliant data type
 				 * @param type defines data type
 				 */
 				virtual dodoString sqlDataType(int type);
-				
+
 				/**
 				 * construct `rename database` statement
 				 */
 				virtual void renameDbCollect();
-	
+
 				/**
 				 * construct `alter table` statement
 				 */
 				virtual void renameFieldCollect();
-	
+
 				/**
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
@@ -292,15 +292,15 @@ namespace dodo
 				 * 		define hint class attribute as POSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 				 */
 				virtual void _exec(const dodoString &query, bool result);
-	
+
 			private:
-	
-				bool empty;                 ///< true id pgResult is empty
-	
+
+				bool empty;                     ///< true id pgResult is empty
+
 				PGconn *pgHandle;               ///< DB handle
-				PGresult *pgResult;         ///< handlde to result
-	
-				dodoStringArray blobs;      ///< blob data
+				PGresult *pgResult;             ///< handlde to result
+
+				dodoStringArray blobs;          ///< blob data
 		};
 	};
 };

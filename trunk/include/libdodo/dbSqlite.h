@@ -49,18 +49,18 @@ namespace dodo
 			SQLITE_OPERATION_FETCHROW,
 			SQLITE_OPERATION_FETCHFIELD,
 		};
-		
+
 		/**
 		 * @enum sqliteHintEnum define DB hints
 		 */
 		enum sqliteHintEnum
 		{
 			SQLITE_HINT_NONE = 0,
-			SQLITE_HINT_BLOB = 2,///< insert|update using BLOB values
+			SQLITE_HINT_BLOB = 2, ///< insert|update using BLOB values
 		};
-	
+
 		class sqlite;
-	
+
 		/**
 		 * @class sqlite provides an interface to sqlite db
 		 * @note for autoFraming sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
@@ -68,70 +68,70 @@ namespace dodo
 		class sqlite : public sqlConstructor
 		{
 			private:
-	
+
 				/**
 				 * constructor
 				 * prevent copying
 				 */
 				sqlite(sqlite &a_pp);
-	
+
 			public:
-	
+
 				/**
 				 * constructor
 				 */
 				sqlite();
-	
+
 				/**
 				 * destructor
 				 */
 				virtual ~sqlite();
-	
+
 				/**
 				 * connect to the database
 				 */
 				virtual void connect();
-	
+
 				/**
 				 * disconnect from the database
 				 */
 				virtual void disconnect();
-	
+
 				/**
 				 * @return amount of affected rows from the evaluated request
 				 */
 				virtual unsigned int affectedRowsCount() const;
-	
+
 				/**
 				 * @return amount of received rows from the evaluated request
 				 */
 				virtual unsigned int rowsCount() const;
-	
+
 				/**
 				 * @return amount of received fields from the evaluated request
 				 */
 				virtual unsigned int fieldsCount() const;
-	
+
 				/**
 				 * @return received rows from the evaluated request
 				 */
 				virtual dodoArray<dodoStringArray> fetchRow() const;
-	
+
 				/**
 				 * @return received fields from the evaluated request
 				 */
 				virtual dodoStringArray fetchField() const;
-	
+
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
 				virtual __connectorStorage fetch() const;
-	
+
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
 				 */
 				virtual dodoStringMapArray fetchAssoc() const;
-	
+
 				/**
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
@@ -146,17 +146,17 @@ namespace dodo
 				 * 				by yourself escape[using sqlConstructor::unescapeFields] non-blob text data after selecting
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
-	
-				unsigned short hint;///< DB hint[see sqliteHintEnum]
-				
+
+				unsigned short hint; ///< DB hint[see sqliteHintEnum]
+
 				/**
 				 * set BLOB data for the request
 				 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
 				 */
 				virtual void setBLOBValues(const dodoStringArray &values);
-	
+
 	#ifndef DBSQLITE_WO_XEXEC
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -164,7 +164,7 @@ namespace dodo
 				 * @param data defines data that will be passed to hook function
 				 */
 				virtual int addPostExec(inExec func, void *data);
-	
+
 				/**
 				 * add hook before the operation
 				 * @return id of the hook method
@@ -172,9 +172,9 @@ namespace dodo
 				 * @param data defines data that will be passed to hook function
 				 */
 				virtual int addPreExec(inExec func, void *data);
-	
+
 	#ifdef DL_EXT
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -183,7 +183,7 @@ namespace dodo
 				 * @param toInit defines data that will be passed to the init function
 				 */
 				virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 				/**
 				 * add hook after the operation
 				 * @return id of the hook method
@@ -192,7 +192,7 @@ namespace dodo
 				 * @param toInit defines data that will be passed to the init function
 				 */
 				virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 				/**
 				 * set hook from the library that will be executed before/after the operation
 				 * @return number in list where function is set
@@ -203,18 +203,18 @@ namespace dodo
 				 * @note type of hook[pre/post] is defined in the library
 				 */
 				virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
-	
+
 	#endif
-	
+
 	#endif
-	
+
 			protected:
-	
+
 				/**
 				 * construct adaptive field info for statements
 				 */
 				virtual dodoString fieldCollect(const __connectorField &row);
-	
+
 				/**
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
@@ -229,15 +229,15 @@ namespace dodo
 				 * 				by yourself escape[using sqlConstructor::unescapeFields] non-blob text data after selecting
 				 */
 				virtual void _exec(const dodoString &query, bool result);
-	
+
 			private:
-	
+
 				sqlite3 *sqliteHandle;                  ///< DB handle
-				sqlite3_stmt *sqliteResult;         ///< handlde to result
-	
-				bool empty;                     ///< true if liteStmt is empty
-	
-				dodoStringArray blobs;          ///< blob data
+				sqlite3_stmt *sqliteResult;             ///< handlde to result
+
+				bool empty;                             ///< true if liteStmt is empty
+
+				dodoStringArray blobs;                  ///< blob data
 		};
 	};
 };

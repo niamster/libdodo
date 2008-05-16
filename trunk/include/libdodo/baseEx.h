@@ -122,7 +122,7 @@ namespace dodo
 		char name[64];                  ///< name of the library
 		char discription[256];          ///< discription of the library
 		char hook[64];                  ///< name of the function in module that will be as a hook
-		short module;         			///< for what module handler should be set[see errorModuleEnum]
+		short module;                   ///< for what module handler should be set[see errorModuleEnum]
 	};
 
 	/**
@@ -257,7 +257,7 @@ namespace dodo
 			static bool handlesOpenedEx[BASEEX_MODULES];        //< map of the opened libraries
 
 #endif
-			
+
 			/**
 			 * @class staticAtomicMutex performs atomic locks using mutexes
 			 */
@@ -288,14 +288,14 @@ namespace dodo
 				protected:
 
 #ifdef PTHREAD_EXT
-					
+
 					static pthread_mutex_t keeper; ///< mutex
-					
+
 #endif
 			};
 
-			static staticAtomicMutex keeper;///< lock
-			
+			static staticAtomicMutex keeper; ///< lock
+
 			/**
 			 * @class raceHazardGuard provides thread safe behaviour
 			 * @note it locks in constructor and unlocks in destructor

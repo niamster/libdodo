@@ -28,7 +28,7 @@ using namespace dodo::ipc::atomic;
 mutex::mutex()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -36,7 +36,7 @@ mutex::mutex()
 	pthread_mutex_init(&keeper, &attr);
 
 	pthread_mutexattr_destroy(&attr);
-	
+
 #endif
 }
 
@@ -45,9 +45,9 @@ mutex::mutex()
 mutex::~mutex()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutex_destroy(&keeper);
-	
+
 #endif
 }
 
@@ -57,11 +57,11 @@ void
 mutex::acquire()
 {
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
 		throw baseEx(ERRMODULE_IPCATOMICMUTEX, MUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 #endif
 }
 
@@ -71,11 +71,11 @@ void
 mutex::release()
 {
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_IPCATOMICMUTEX, MUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 #endif
 }
 

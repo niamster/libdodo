@@ -63,9 +63,9 @@ namespace dodo
 				SERVER_OPERATION_BINDNLISTEN_UNIX,
 				SERVER_OPERATION_ACCEPT,
 			};
-		
+
 		#ifndef IONETWORKSERVER_WO_XEXEC
-		
+
 			/**
 			 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 			 */
@@ -75,48 +75,48 @@ namespace dodo
 				 * constructor
 				 */
 				__xexexIoNetworkServerCollectedData(int &operType,
-									   		void *executor);
-		
-				int &operType;              ///< xexec operation 
-		
+													void *executor);
+
+				int &operType;              ///< xexec operation
+
 				void *executor;             ///< class that executed hook
 			};
 
 		#endif
-			
+
 			/**
 			 * @class Server provides network connection interface
 			 */
-			class server : public xexec, 
-							public options,
-							virtual public nonBlockedAccessInfo
+			class server : public xexec,
+						   public options,
+						   virtual public nonBlockedAccessInfo
 			{
 					friend class exchange;
-		
+
 				private:
-		
+
 					/**
 					 * connstructor
 					 * to prevent copying
 					 */
 					server(server &fs);
-		
+
 				public:
-		
+
 					/**
 					 * constructor
 					 * @param family defines family of the socket[see ServerOptionsProtoFamilyEnum]
 					 * @param type defines type of the socket[see ServerOptionsTransferTypeEnum]
 					 */
 					server(short family, short type);
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~server();
-		
+
 		#ifndef IONETWORKSERVER_WO_XEXEC
-		
+
 					/**
 					 * adds hook after the operation by callback
 					 * @return id of the hook method
@@ -124,7 +124,7 @@ namespace dodo
 					 * @param data defines hook data
 					 */
 					virtual int addPostExec(inExec func, void *data);
-		
+
 					/**
 					 * adds hook before the operation by callback
 					 * @return id of the hook method
@@ -132,9 +132,9 @@ namespace dodo
 					 * @param data defines hook data
 					 */
 					virtual int addPreExec(inExec func, void *data);
-		
+
 		#ifdef DL_EXT
-		
+
 					/**
 					 * set function that will be executed before/after the main action call
 					 * @return id of the hook method
@@ -144,7 +144,7 @@ namespace dodo
 					 * @note type of hook[pre/post] is defined in module
 					 */
 					virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
-		
+
 					/**
 					 * set function that will be executed after the main action call
 					 * @return id of the hook method
@@ -153,7 +153,7 @@ namespace dodo
 					 * @param toInit defines data that will be passed to the init function
 					 */
 					virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
-		
+
 					/**
 					 * set function that will be executed before the main action call
 					 * @return id of the hook method
@@ -162,11 +162,11 @@ namespace dodo
 					 * @param toInit defines data that will be passed to the init function
 					 */
 					virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
-		
+
 		#endif
-		
+
 		#endif
-		
+
 					/**
 					 * bind to address and start to listen
 					 * @param host defines local ip address to listen
@@ -175,7 +175,7 @@ namespace dodo
 					 * @note host can be '*' to specify all interfaces on the box
 					 */
 					virtual void bindNListen(const dodoString &host, int port, int numberOfConnections);
-		
+
 					/**
 					 * bind to address and start to listen
 					 * @param destinaton defines local ip address/port of host to connect
@@ -183,63 +183,63 @@ namespace dodo
 					 * @note host can be '*' to specify all interfaces on the box
 					 */
 					virtual void bindNListen(const __connInfo &destinaton, int numberOfConnections);
-		
+
 					/**
 					 * bind to unix socket and start to listen
 					 * @param path defines path to unix socket
 					 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-					 * @param force defines if unix socket should be deleted if it exists 
+					 * @param force defines if unix socket should be deleted if it exists
 					 * @note host can be '*' to specify all interfaces on the box
 					 */
 					virtual void bindNListen(const dodoString &path, int numberOfConnections, bool force = false);
-		
+
 					/**
 					 * accept incoming connections
 					 * @return true on new connection acceptance
 					 * @param init defines object that will be filled with info that may init exchange object
 					 * @param info defines info about remote host
-					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
+					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
 					 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 					 */
 					virtual bool accept(__initialAccept &init, __connInfo &info);
-		
+
 					/**
 					 * accept incoming connections
 					 * @return true on new connection acceptance
 					 * @param init defines object that will be filled with info that may init exchange object
-					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned 
+					 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
 					 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 					 */
 					virtual bool accept(__initialAccept &init);
-		
+
 					bool blockInherited; ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
-		
+
 					/**
 					 * @return descriptor of input stream
 					 */
 					virtual int getInDescriptor() const;
-		
+
 					/**
 					 * @return descriptor of output stream
 					 */
 					virtual int getOutDescriptor() const;
-		
+
 				protected:
-		
+
 					/**
 					 * restore options on connect/bind
 					 */
 					virtual void restoreOptions();
-		
+
 					/**
 					 * create socket
 					 */
 					virtual void makeSocket();
-		
+
 					dodoString unixSock;    ///< path to unix socket
-		
+
 		#ifndef IONETWORKSERVER_WO_XEXEC
-					
+
 					__xexexIoNetworkServerCollectedData collectedData;   ///< data collected for xexec
 
 		#endif

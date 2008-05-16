@@ -56,65 +56,65 @@ const unsigned int sqlConstructor::addSelEnumArr[] =
 
 const dodoString sqlConstructor::sqlQStArr[] =
 {
-	""             ,
-	" union "      ,
-	" union all "  ,
-	" minus "      ,
-	" intersect "  
+	"",
+	" union ",
+	" union all ",
+	" minus ",
+	" intersect "
 };
 
 //-------------------------------------------------------------------
 
 const dodoString sqlConstructor::sqlAddArr[] =
 {
-	""           ,
-	" where "    ,
-	" having "   ,
-	" group by " ,
-	" order by " ,
-	" limit "    ,
-	" offset "   ,
-	" as "       ,
+	"",
+	" where ",
+	" having ",
+	" group by ",
+	" order by ",
+	" limit ",
+	" offset ",
+	" as ",
 };
 
 //-------------------------------------------------------------------
 
 const dodoString sqlConstructor::sqlAddInsArr[] =
 {
-	""         ,
-	" ignore " ,
+	"",
+	" ignore ",
 };
 
 //-------------------------------------------------------------------
 
 const dodoString sqlConstructor::sqlAddUpArr[] =
 {
-	""         ,
-	" ignore " ,
+	"",
+	" ignore ",
 };
 
 //-------------------------------------------------------------------
 
 const dodoString sqlConstructor::sqlAddDelArr[] =
 {
-	""         ,
-	" ignore " ,
+	"",
+	" ignore ",
 };
 
 //-------------------------------------------------------------------
 
 const dodoString sqlConstructor::sqlAddSelArr[] =
 {
-	""           ,
-	" distinct " ,
-	" all "      ,
+	"",
+	" distinct ",
+	" all ",
 };
 
 //-------------------------------------------------------------------
 
 sqlConstructor::sqlConstructor() : preventFraming(false),
-						 preventEscaping(false),
-						 autoFraming(true)
+								   preventEscaping(false),
+								   autoFraming(true)
 {
 }
 
@@ -128,8 +128,8 @@ sqlConstructor::~sqlConstructor()
 
 dodoString
 sqlConstructor::valuesName(const dodoStringArray &values,
-						 const dodoStringArray &fields,
-						 const dodoString &frame)
+						   const dodoStringArray &fields,
+						   const dodoString &frame)
 {
 	dodoString temp;
 
@@ -180,7 +180,7 @@ sqlConstructor::notexists(const dodoString &statement)
 
 void
 sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
-							 const dodoString &collectedString)
+								  const dodoString &collectedString)
 {
 	if (qShift == ACCUMULATOR_NONE)
 		return ;
@@ -197,8 +197,8 @@ sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
 
 dodoString
 sqlConstructor::insideAddCollect(const unsigned int sqlAddEnumArr[],
-							const dodoString sqlAddArr[],
-							int qTypeShift)
+								 const dodoString sqlAddArr[],
+								 int qTypeShift)
 {
 	if (qTypeShift == ACCUMULATOR_NONE)
 		return __dodostring__;
@@ -220,7 +220,7 @@ sqlConstructor::insideAddCollect(const unsigned int sqlAddEnumArr[],
 
 dodoString
 sqlConstructor::insideAddCollect(const dodoStringArray &statements,
-							int qTypeShift)
+								 int qTypeShift)
 {
 	if (qTypeShift == ACCUMULATOR_NONE)
 		return __dodostring__;
@@ -645,59 +645,59 @@ sqlConstructor::createFieldCollect()
 
 //-------------------------------------------------------------------
 
-void 
+void
 sqlConstructor::joinCollect()
 {
 	dodoStringArray::iterator i = pre_joinTables.begin(), j = pre_joinTables.end();
 	dodoStringArray::iterator o = pre_joinConds.begin(), p = pre_joinConds.end();
 	dodoArray<int>::iterator m = pre_joinTypes.begin(), n = pre_joinTypes.end();
-	for (;i!=j;++i, ++o, ++m)
+	for (; i != j; ++i, ++o, ++m)
 	{
 		switch (*m)
 		{
 			case CONNECTOR_JOINTYPE_JOIN:
-				
+
 				request.append(" join ");
-				
+
 				break;
-			
+
 			case CONNECTOR_JOINTYPE_LEFTOUTER:
-				
+
 				request.append(" left outer join ");
-				
+
 				break;
-				
+
 			case CONNECTOR_JOINTYPE_RIGHTOUTER:
 
 				request.append(" right outer join ");
-				
+
 				break;
-				
+
 			case CONNECTOR_JOINTYPE_FULLOUTER:
 
 				request.append(" full outer join ");
-				
+
 				break;
-				
+
 			case CONNECTOR_JOINTYPE_INNER:
 
 				request.append(" inner join ");
-				
+
 				break;
-				
+
 			case CONNECTOR_JOINTYPE_CROSS:
 
 				request.append(" cross join ");
-				
+
 				break;
-				
+
 			default:
-				
+
 				throw baseEx(ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, ERR_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
 		}
-		
+
 		request.append(*i);
-		
+
 		if (o->size() > 0)
 		{
 			request.append(" on ");
@@ -720,7 +720,7 @@ sqlConstructor::queryCollect()
 
 			selectCollect();
 			selectAction = true;
-			
+
 			joinCollect();
 
 			break;

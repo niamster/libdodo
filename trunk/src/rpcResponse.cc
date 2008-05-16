@@ -27,14 +27,14 @@ using namespace dodo::rpc;
 
 response::response() : succ(false)
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 response::~response()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
@@ -44,7 +44,7 @@ response::getValue(unsigned long position)
 {
 	if (position >= values.size())
 		throw baseEx(ERRMODULE_RPCRESPONSE, RESPONSEEX_GETVALUE, ERR_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
-	
+
 	return values[position];
 }
 
@@ -62,7 +62,7 @@ void
 response::addArgument(const value &argument)
 {
 	succ = true;
-	
+
 	values.push_back(argument);
 }
 
@@ -72,7 +72,7 @@ void
 response::fault(const value &argument)
 {
 	succ = false;
-	
+
 	values.assign(1, argument);
 }
 
@@ -83,13 +83,13 @@ response::operator[](unsigned long position)
 {
 	if (position >= values.size())
 		throw baseEx(ERRMODULE_RPCRESPONSE, RESPONSEEX_BROPERATORUNSIGNEDLONG, ERR_LIBDODO, RESPONSEEX_ARRAYOUTOFBOUNDS, RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR, __LINE__, __FILE__);
-	
+
 	return values[position];
 }
 
 //-------------------------------------------------------------------
 
-unsigned long 
+unsigned long
 response::getValuesCount()
 {
 	return values.size();
@@ -97,7 +97,7 @@ response::getValuesCount()
 
 //-------------------------------------------------------------------
 
-dodoArray<value> 
+dodoArray<value>
 response::getValues()
 {
 	return values;

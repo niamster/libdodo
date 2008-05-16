@@ -28,19 +28,19 @@ using namespace dodo::rpc::xml;
 cgiServer::cgiServer(cgi::server &a_provider) : provider(a_provider)
 {
 	provider.HEADERS.insert(make_pair(cgi::SERVER_RESPONSEHEADER_CONTENTTYPE, dodoString("text/xml")));
-	
+
 	provider.printHeaders();
 }
 
 //-------------------------------------------------------------------
 
 cgiServer::~cgiServer()
-{	
+{
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 cgiServer::sendTextRequest(const dodoString &response)
 {
 	provider.print(response);
@@ -48,7 +48,7 @@ cgiServer::sendTextRequest(const dodoString &response)
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 cgiServer::receiveTextResponse()
 {
 	return provider.content;

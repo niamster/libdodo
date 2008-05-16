@@ -28,7 +28,7 @@
 using namespace dodo::db;
 
 sqlite::sqlite() : empty(true),
-						hint(SQLITE_HINT_NONE)
+				   hint(SQLITE_HINT_NONE)
 {
 }
 
@@ -159,7 +159,7 @@ sqlite::setBLOBValues(const dodoStringArray &values)
 
 void
 sqlite::_exec(const dodoString &query,
-				bool result)
+			  bool result)
 {
 	if (query.size() == 0)
 	{
@@ -253,7 +253,7 @@ sqlite::_exec(const dodoString &query,
 	if (isSetFlag(hint, SQLITE_HINT_BLOB))
 	{
 		removeFlag(hint, SQLITE_HINT_BLOB);
-		
+
 		switch (qType)
 		{
 			case ACCUMULATOR_REQUEST_UPDATE:
@@ -267,9 +267,9 @@ sqlite::_exec(const dodoString &query,
 			}
 
 				break;
-				
+
 			default:
-				
+
 				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_LIBDODO, SQLITEEX_WRONGHINTUSAGE, DBSQLITEEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
 
 		}
@@ -511,7 +511,7 @@ sqlite::affectedRowsCount() const
 
 void
 sqlite::exec(const dodoString &query,
-			   bool result)
+			 bool result)
 {
 #ifndef DBSQLITE_WO_XEXEC
 	operType = SQLITE_OPERATION_EXEC;
@@ -533,7 +533,7 @@ sqlite::exec(const dodoString &query,
 
 int
 sqlite::addPostExec(inExec func,
-					  void   *data)
+					void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data);
 }
@@ -542,7 +542,7 @@ sqlite::addPostExec(inExec func,
 
 int
 sqlite::addPreExec(inExec func,
-					 void   *data)
+				   void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data);
 }
@@ -553,8 +553,8 @@ sqlite::addPreExec(inExec func,
 
 int
 sqlite::addPostExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
+					void             *data,
+					void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
 }
@@ -563,8 +563,8 @@ sqlite::addPostExec(const dodoString &module,
 
 int
 sqlite::addPreExec(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
+				   void             *data,
+				   void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
 }
@@ -573,8 +573,8 @@ sqlite::addPreExec(const dodoString &module,
 
 dodo::__xexecCounts
 sqlite::addExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
+				void             *data,
+				void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
 }

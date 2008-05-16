@@ -26,58 +26,56 @@
 using namespace dodo::io::network;
 
 const dodoString http::requestHeaderStatements[] = { "Accept",
-		"Accept-Charset",
-		"Accept-Encoding",
-		"Accept-Language",
-		"Accept-Ranges",
-		"Authorization",
-		"Proxy-Authorization",
-		"Connection",
-		"Date",
-		"If-Modified-Since",
-		"User-Agent",
-		"Cookie",
-};
+													 "Accept-Charset",
+													 "Accept-Encoding",
+													 "Accept-Language",
+													 "Accept-Ranges",
+													 "Authorization",
+													 "Proxy-Authorization",
+													 "Connection",
+													 "Date",
+													 "If-Modified-Since",
+													 "User-Agent",
+													 "Cookie",				};
 
 //-------------------------------------------------------------------
 
 const dodoString http::responseHeaderStatements[] = { "Accept-Ranges",
-		"Age",
-		"Allow",
-		"Cache-Control",
-		"Content-Encoding",
-		"Content-Language",
-		"Content-Length",
-		"Content-Location",
-		"Content-Disposition",
-		"Content-MD5",
-		"Content-Range",
-		"Content-Type",
-		"Date",
-		"Last-Modified",
-		"Location",
-		"Server",
-		"WWW-Authenticate",
-		"Proxy-Authenticate",
-		"X-Powered-By",
-};
+													  "Age",
+													  "Allow",
+													  "Cache-Control",
+													  "Content-Encoding",
+													  "Content-Language",
+													  "Content-Length",
+													  "Content-Location",
+													  "Content-Disposition",
+													  "Content-MD5",
+													  "Content-Range",
+													  "Content-Type",
+													  "Date",
+													  "Last-Modified",
+													  "Location",
+													  "Server",
+													  "WWW-Authenticate",
+													  "Proxy-Authenticate",
+													  "X-Powered-By",        };
 
 //-------------------------------------------------------------------
 
 __httpResponse::__httpResponse() : code(0),
-								redirected(false)
+								   redirected(false)
 {
 }
 
 //-------------------------------------------------------------------
 
 http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
-								followRedirection(true),
-								authTries(0)
-{	
+			   followRedirection(true),
+			   authTries(0)
+{
 	proxyAuthInfo.enabled = false;
 	proxyAuthInfo.authRequired = false;
-	
+
 	requestHeaders[HTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
 	requestHeaders[HTTP_REQUESTHEADER_ACCEPT] = "*/*";
 	requestHeaders[HTTP_REQUESTHEADER_CONNECTION] = "Close";
@@ -97,7 +95,7 @@ http::~http()
 
 //-------------------------------------------------------------------
 
-__httpResponse 
+__httpResponse
 http::getResponse()
 {
 	return response;
@@ -105,21 +103,21 @@ http::getResponse()
 
 //-------------------------------------------------------------------
 
-void 
+void
 http::setUrl(const dodoString &a_url)
 {
 	urlComponents = tools::misc::parseUrl(a_url);
-	 
+
 	if (urlComponents.protocol.size() == 0)
 		urlComponents.protocol = "http";
-	
+
 	unsigned long portSize = urlComponents.port.size();
-	
+
 	if (portSize == 0 && tools::string::iequal(urlComponents.protocol, "http"))
 		urlComponents.port = "80";
-	
+
 	url.clear();
-	
+
 	url.append(urlComponents.protocol);
 	url.append("://" );
 	url.append(urlComponents.host);
@@ -139,15 +137,15 @@ http::setUrl(const dodoString &a_url)
 
 //-------------------------------------------------------------------
 
-void 
+void
 http::setCookies(const dodoStringMap &cookies)
 {
 	dodoString data;
-	
+
 	dodoStringMap::const_iterator i = cookies.begin(), j = cookies.end();
 	--j;
-	
-	for (;i!=j;++i)
+
+	for (; i != j; ++i)
 	{
 		data.append(i->first);
 		data.append("=");
@@ -157,7 +155,7 @@ http::setCookies(const dodoStringMap &cookies)
 	data.append(i->first);
 	data.append("=");
 	data.append(tools::misc::encodeUrl(i->second));
-	
+
 	requestHeaders[HTTP_REQUESTHEADER_COOKIE] = data;
 }
 
@@ -165,24 +163,24 @@ http::setCookies(const dodoStringMap &cookies)
 
 void
 http::GET()
-{	
+{
 	response = __httpResponse();
-	
+
 	exchange ex;
 	client net(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
-	
+
 	if (proxyAuthInfo.enabled)
 		net.connect(proxyAuthInfo.host, proxyAuthInfo.port, ex);
 	else
 	{
 		tools::__hostInfo host = tools::network::getHostInfo(urlComponents.host);
-		
+
 		dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
-		for (;o!=p;++o)
+		for (; o != p; ++o)
 			try
 			{
 				net.connect(*o, tools::string::stringToI(urlComponents.port), ex);
-				
+
 				break;
 			}
 			catch (baseEx &ex)
@@ -194,13 +192,13 @@ http::GET()
 					else
 						continue;
 				}
-				
+
 				throw;
 			}
 	}
-	
+
 	dodoString data;
-	
+
 	data.append("GET ");
 	data.append(url);
 	if (proxyAuthInfo.enabled)
@@ -208,7 +206,7 @@ http::GET()
 	else
 		data.append(" HTTP/1.0\r\n");
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		data.append(requestHeaderStatements[i->first]);
 		data.append(": ");
@@ -217,115 +215,115 @@ http::GET()
 	}
 	data.append("Host: ");
 	data.append(urlComponents.host);
-	
+
 	data.append("\r\n\r\n");
-	
+
 	ex.writeStreamString(data);
-	
+
 	switch (getContent(data, ex))
 	{
 		case GETCONTENTSTATUS_NORMAL:
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_REDIRECT:
-			
+
 			setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
-			
+
 			GET();
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_PROXYBASICAUTH:
-			
+
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
-			
+
 			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-			
+
 			GET();
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_WWWBASICAUTH:
-			
+
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
 			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-			
+
 			GET();
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_PROXYDIGESTAUTH:
 
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
 			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
-			
+
 			GET();
-		
+
 			break;
-			
+
 		case GETCONTENTSTATUS_WWWDIGESTAUTH:
 
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
-			
+
 			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
-			
+
 			GET();
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
-			
+
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
 			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-			
+
 			GET();
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
-			
+
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
 			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
 			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
-			
+
 			GET();
-			
+
 			break;
 	}
 }
@@ -337,41 +335,41 @@ __httpResponse
 http::GET(const dodoString &a_url)
 {
 	setUrl(a_url);
-	
+
 	GET();
-	
+
 	return response;
 }
 
 //-------------------------------------------------------------------
 
-__httpResponse 
-http::POST(const dodoString &a_url, 
-							const dodoStringMap &arguments, 
-							const dodoStringMap &files)
+__httpResponse
+http::POST(const dodoString &a_url,
+		   const dodoStringMap &arguments,
+		   const dodoStringMap &files)
 {
 	setUrl(a_url);
-	
+
 	POST(arguments, files);
-	
+
 	return response;
 }
 
 //-------------------------------------------------------------------
 
 void
-http::POST(const dodoStringMap &arguments, 
-							const dodoStringMap &files)
+http::POST(const dodoStringMap &arguments,
+		   const dodoStringMap &files)
 {
 	dodoString boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
 	dodoString type = "multipart/form-data; boundary=" + boundary;
 	boundary.insert(0, "--");
-	
+
 	dodoString data;
-	
+
 	dodoStringMap::const_iterator i = files.begin(), j = files.end();
-	
-	for (;i!=j;++i)
+
+	for (; i != j; ++i)
 	{
 		data.append(boundary);
 		data.append("\r\nContent-Disposition: form-data; name=\"");
@@ -379,55 +377,55 @@ http::POST(const dodoStringMap &arguments,
 		data.append("\"; filename=\"");
 		data.append(tools::filesystem::basename(i->second));
 		data.append("\"\r\n");
-		
+
 		data.append("Content-Type: application/octet-stream\r\n\r\n");
-		
+
 		data.append(tools::filesystem::getFileContents(i->second));
 		data.append("\r\n");
 	}
 
 	i = arguments.begin();
 	j = arguments.end();
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		data.append(boundary);
 		data.append("\r\nContent-Disposition: form-data; name=\"");
 		data.append(i->first);
 		data.append("\"\r\n\r\n");
-		
+
 		data.append(i->second);
 		data.append("\r\n");
 	}
 	data.append(boundary);
 	data.append("--");
-	
+
 	POST(data, type);
 }
 
 //-------------------------------------------------------------------
 
-__httpResponse 
-http::POST(const dodoString &a_url, 
-					const dodoStringMap &arguments)
+__httpResponse
+http::POST(const dodoString &a_url,
+		   const dodoStringMap &arguments)
 {
 	setUrl(a_url);
-	
+
 	POST(arguments);
-	
+
 	return response;
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 http::POST(const dodoStringMap &arguments)
 {
 	dodoString data;
-	
+
 	dodoStringMap::const_iterator i(arguments.begin()), j(arguments.end());
 	--j;
-	
-	for (;i!=j;++i)
+
+	for (; i != j; ++i)
 	{
 		data.append(tools::misc::encodeUrl(i->first));
 		data.append("=");
@@ -437,21 +435,21 @@ http::POST(const dodoStringMap &arguments)
 	data.append(tools::misc::encodeUrl(i->first));
 	data.append("=");
 	data.append(tools::misc::encodeUrl(i->second));
-	
+
 	POST(data, "application/x-www-form-urlencoded");
 }
 
 //-------------------------------------------------------------------
 
 __httpResponse
-http::POST(const dodoString &a_url, 
-					const dodoString &data,
-					const dodoString &type)
+http::POST(const dodoString &a_url,
+		   const dodoString &data,
+		   const dodoString &type)
 {
 	setUrl(a_url);
-	
+
 	POST(data, type);
-	
+
 	return response;
 }
 
@@ -459,25 +457,25 @@ http::POST(const dodoString &a_url,
 
 void
 http::POST(const dodoString &a_data,
-					const dodoString &type)
-{	
+		   const dodoString &type)
+{
 	response = __httpResponse();
-	
+
 	exchange ex;
 	client net(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
-	
+
 	if (proxyAuthInfo.enabled)
 		net.connect(proxyAuthInfo.host, proxyAuthInfo.port, ex);
 	else
-	{	
+	{
 		tools::__hostInfo host = tools::network::getHostInfo(urlComponents.host);
-		
+
 		dodoStringArray::iterator o = host.addresses.begin(), p = host.addresses.end();
-		for (;o!=p;++o)
+		for (; o != p; ++o)
 			try
-			{		
+			{
 				net.connect(*o, tools::string::stringToI(urlComponents.port), ex);
-				
+
 				break;
 			}
 			catch (baseEx &ex)
@@ -489,14 +487,14 @@ http::POST(const dodoString &a_data,
 					else
 						continue;
 				}
-				
+
 				throw;
 			}
 	}
-	
+
 	dodoString data;
 
-	
+
 	data.append("POST ");
 	data.append(url);
 	if (proxyAuthInfo.enabled)
@@ -504,7 +502,7 @@ http::POST(const dodoString &a_data,
 	else
 		data.append(" HTTP/1.0\r\n");
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		data.append(requestHeaderStatements[i->first]);
 		data.append(": ");
@@ -514,132 +512,132 @@ http::POST(const dodoString &a_data,
 	data.append("Host: ");
 	data.append(urlComponents.host);
 	data.append("\r\n");
-	
+
 	data.append("Content-length: ");
 	data.append(tools::string::ulToString(a_data.size()));
 	data.append("\r\n");
-	
+
 	data.append("Content-type: ");
 	data.append(type);
 	data.append("\r\n\r\n");
-	
+
 	ex.writeStreamString(data);
-	
+
 	ex.outSize = a_data.size();
 	ex.writeString(a_data);
-	
+
 	switch (getContent(data, ex))
 	{
 		case GETCONTENTSTATUS_NORMAL:
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_REDIRECT:
-			
+
 			setUrl(response.headers[HTTP_RESPONSEHEADER_LOCATION]);
-			
-			POST(data, type);
-			
-			break;
-			
-		case GETCONTENTSTATUS_PROXYBASICAUTH:
-			
-			if (authTries > 2)
-			{
-				authTries = 0;
-				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-			}
-			
-			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-			
-			POST(data, type);
-			
-			break;
-			
-		case GETCONTENTSTATUS_WWWBASICAUTH:
-			
-			if (authTries > 2)
-			{
-				authTries = 0;
-				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-			}
-			
-			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
-			
-			POST(data, type);
-			
-			break;
-			
-		case GETCONTENTSTATUS_PROXYDIGESTAUTH:
-			
-			if (authTries > 2)
-			{
-				authTries = 0;
-				
-				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
-			}
-			
-			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
-			
+
 			POST(data, type);
 
 			break;
-			
-		
+
+		case GETCONTENTSTATUS_PROXYBASICAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
+
+			POST(data, type);
+
+			break;
+
+		case GETCONTENTSTATUS_WWWBASICAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
+
+			POST(data, type);
+
+			break;
+
+		case GETCONTENTSTATUS_PROXYDIGESTAUTH:
+
+			if (authTries > 2)
+			{
+				authTries = 0;
+
+				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+			}
+
+			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
+
+			POST(data, type);
+
+			break;
+
+
 		case GETCONTENTSTATUS_WWWDIGESTAUTH:
 
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
-			
+
 			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
-			
+
 			POST(data, type);
 
 			break;
-			
+
 		case GETCONTENTSTATUS_WWWPROXYBASICAUTH:
-			
+
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
 			makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 			makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
-			
+
 			POST(data, type);
-			
+
 			break;
-			
+
 		case GETCONTENTSTATUS_WWWPROXYDIGESTAUTH:
-			
+
 			if (authTries > 2)
 			{
 				authTries = 0;
-				
+
 				throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 			}
 
 			makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
 			makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
-			
+
 			POST(data, type);
-			
+
 			break;
 	}
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 http::disableProxy()
 {
 	proxyAuthInfo.enabled = false;
@@ -647,11 +645,11 @@ http::disableProxy()
 
 //-------------------------------------------------------------------
 
-void 
-http::setProxyInformation(const dodoString &host, 
-									unsigned int port, 
-									const dodoString &user, 
-									const dodoString &password)
+void
+http::setProxyInformation(const dodoString &host,
+						  unsigned int port,
+						  const dodoString &user,
+						  const dodoString &password)
 {
 	proxyAuthInfo.host = host;
 	proxyAuthInfo.port = port;
@@ -662,32 +660,32 @@ http::setProxyInformation(const dodoString &host,
 
 //-------------------------------------------------------------------
 
-void 
+void
 http::getHeaders(const dodoString &headers)
 {
 	unsigned long i(0), j(0);
 	unsigned long size = headers.size();
-	
+
 	dodoStringArray arr;
 	dodoString piece;
-	
+
 	short o;
-	
+
 	bool statusCode = false;
-	
+
 	while (i < size)
 	{
 		i = headers.find("\n", i);
 		if (i == dodoString::npos)
 			return;
-		
+
 		piece = tools::string::trim(headers.substr(j, i - j), '\r');
 
 		arr = tools::misc::explode(piece, ":", 2);
 		if (arr.size() != 2)
 		{
 			if (!statusCode)
-			{ 
+			{
 				statusCode = true;
 
 				if (httpStatusRE.match(piece, arr))
@@ -696,14 +694,14 @@ http::getHeaders(const dodoString &headers)
 		}
 		else
 		{
-			for (o = 0;o<HTTP_RESPONSEHEADERSTATEMENTS;++o)
+			for (o = 0; o < HTTP_RESPONSEHEADERSTATEMENTS; ++o)
 				if (tools::string::equal(responseHeaderStatements[o], arr[0]))
 					response.headers[o] = tools::string::lTrim(arr[1], ' ');
-			
+
 			if (tools::string::equal("Set-Cookie", arr[0]))
 				response.cookies.push_back(parseCookie(tools::string::lTrim(arr[1], ' ')));
 		}
-		
+
 		++i;
 		j = i;
 	}
@@ -713,10 +711,10 @@ http::getHeaders(const dodoString &headers)
 
 bool
 http::extractHeaders(const dodoString &data,
-						dodoString &headers)
-{	
+					 dodoString &headers)
+{
 	headers.append(data);
-	
+
 	unsigned long i = headers.find("\r\n\r\n");
 	if (i == dodoString::npos)
 	{
@@ -728,79 +726,79 @@ http::extractHeaders(const dodoString &data,
 			response.data.append(headers.substr(i + 2));
 
 			headers.resize(i + 1);
-			
+
 			return true;
-		}	
+		}
 	}
 	else
 	{
 		response.data.append(headers.substr(i + 4));
-		
+
 		headers.resize(i + 2);
-		
+
 		return true;
 	}
-	
+
 	return false;
 }
 
 //-------------------------------------------------------------------
 
-short 
-http::getContent(dodoString &data, 
-						exchange &ex)
+short
+http::getContent(dodoString &data,
+				 exchange &ex)
 {
 	ex.setInBufferSize(512);
 	ex.inSize = 512;
-	
+
 	unsigned long contentSize = 0;
 	bool endOfHeaders = false;
-	
+
 	dodoString headers;
-	
+
 	while (true)
 	{
 		try
 		{
 			ex.readStreamString(data);
-			
+
 			if (data.size() == 0 && contentSize <= 0)
 			{
 				if (!endOfHeaders && headers.size() > 0)
 					response.data.assign(headers);
-				
+
 				break;
 			}
-			
+
 			if (endOfHeaders)
 				response.data.append(data);
 			else
 			{
 				endOfHeaders = extractHeaders(data, headers);
-				
+
 				if (endOfHeaders)
 				{
 					getHeaders(headers);
 					headers.clear();
-					
+
 					contentSize = tools::string::stringToUL(response.headers[HTTP_RESPONSEHEADER_CONTENTLENGTH]);
 
 					if (followRedirection && (response.code / 100) == 3 && response.code != 304)
 					{
 						response.redirected = true;
-					
+
 						return GETCONTENTSTATUS_REDIRECT;
 					}
-					
+
 					if (response.code == 401)
 					{
 						++authTries;
-						
+
 						if (proxyAuthInfo.authRequired)
 						{
 							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 								return GETCONTENTSTATUS_WWWPROXYBASICAUTH;
-							else 
+							else
 							{
 								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
@@ -812,7 +810,7 @@ http::getContent(dodoString &data,
 						{
 							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 								return GETCONTENTSTATUS_WWWBASICAUTH;
-							else 
+							else
 							{
 								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWDIGESTAUTH;
@@ -821,16 +819,16 @@ http::getContent(dodoString &data,
 							}
 						}
 					}
-					
+
 					if (response.code == 407)
 					{
 						++authTries;
-						
+
 						proxyAuthInfo.authRequired = true;
-						
+
 						if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
 							return GETCONTENTSTATUS_PROXYBASICAUTH;
-						else 
+						else
 						{
 							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
 								return GETCONTENTSTATUS_PROXYDIGESTAUTH;
@@ -838,13 +836,13 @@ http::getContent(dodoString &data,
 								throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, ERR_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
 						}
 					}
-						
-					
+
+
 					ex.setInBufferSize(16384);
 					ex.inSize = 16384;
 				}
 			}
-			
+
 			if (contentSize > 0 && response.data.size() == contentSize)
 				break;
 		}
@@ -854,22 +852,22 @@ http::getContent(dodoString &data,
 			{
 				if (!endOfHeaders && headers.size() > 0)
 					response.data.assign(headers);
-				
+
 				break;
 			}
 			else
 				throw;
 		}
 	}
-	
+
 	authTries = 0;
-	
+
 	return GETCONTENTSTATUS_NORMAL;
 }
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 http::trim(const dodoString &data)
 {
 	return tools::string::trim(data, ' ');
@@ -877,35 +875,35 @@ http::trim(const dodoString &data)
 
 //-------------------------------------------------------------------
 
-void 
-http::makeDigestAuth(short requestHeader, 
-							short responseHeader, 
-							const dodoString &method, 
-							const dodoString &user, 
-							const dodoString &password)
+void
+http::makeDigestAuth(short requestHeader,
+					 short responseHeader,
+					 const dodoString &method,
+					 const dodoString &user,
+					 const dodoString &password)
 {
 	dodoString nonce, opaque, realm;
-	
+
 	dodoStringArray parts = tools::misc::explode(response.headers[requestHeader].substr(7), &trim, ",");
 
 	dodoString HA1;
 
-	unsigned char HA[16];			
+	unsigned char HA[16];
 	tools::misc::MD5_CTX context;
-	
+
 	dodoStringArray tuple;
-	
+
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 	{
 		tuple = tools::misc::explode(*i, "=");
 		if (tuple.size() != 2)
 			continue;
-		
+
 		if (tools::string::iequal(tuple[0], "realm"))
 		{
 			realm = tools::string::trim(tuple[1], '"');
-			
+
 			tools::misc::MD5Init(&context);
 			tools::misc::MD5Update(&context, (unsigned char *)user.c_str(), user.size());
 			tools::misc::MD5Update(&context, (unsigned char *)":", 1);
@@ -927,18 +925,18 @@ http::makeDigestAuth(short requestHeader,
 			}
 		}
 	}
-	
+
 	dodoString cnonce = tools::misc::MD5Hex(tools::misc::stringRandom(5));
-	
-	dodoString methodForAuth = method + ":"; 
-	
+
+	dodoString methodForAuth = method + ":";
+
 	tools::misc::MD5Init(&context);
 	tools::misc::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
 	tools::misc::MD5Update(&context, (unsigned char *)url.c_str(), url.size());
 	tools::misc::MD5Final(HA, &context);
 
 	dodoString HA2 = tools::misc::binToHex(dodoString((char *)&HA, 16));
-	
+
 	tools::misc::MD5Init(&context);
 	tools::misc::MD5Update(&context, (unsigned char *)HA1.c_str(), HA1.size());
 	tools::misc::MD5Update(&context, (unsigned char *)":", 1);
@@ -948,53 +946,53 @@ http::makeDigestAuth(short requestHeader,
 	tools::misc::MD5Update(&context, (unsigned char *)":auth:", 6);
 	tools::misc::MD5Update(&context, (unsigned char *)HA2.c_str(), HA2.size());
 	tools::misc::MD5Final(HA, &context);
-	
+
 	dodoString response = tools::misc::binToHex(dodoString((char *)&HA, 16));
 
-	requestHeaders[responseHeader] = "Digest username=\"" + user + 
-										"\", realm=\"" + realm + 
-										 + "\", nonce=\"" + nonce + 
-										 + "\", uri=\"" + url + 
-										 + "\", qop=\"auth\", nc=00000001" + 
-										 + ", cnonce=\"" + cnonce + 
-										 + "\", response=\"" + response + 
-										 + "\", opaque=\"" + opaque + "\"";
+	requestHeaders[responseHeader] = "Digest username=\"" + user +
+									 "\", realm=\"" + realm +
+									 + "\", nonce=\"" + nonce +
+									 + "\", uri=\"" + url +
+									 + "\", qop=\"auth\", nc=00000001" +
+									 + ", cnonce=\"" + cnonce +
+									 + "\", response=\"" + response +
+									 + "\", opaque=\"" + opaque + "\"";
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 http::makeBasicAuth(short responseHeader,
-							const dodoString &user, 
-							const dodoString &password)
+					const dodoString &user,
+					const dodoString &password)
 {
 	requestHeaders[responseHeader] = "Basic " + tools::misc::encodeBase64(user + ":" + password);
 }
 
 //-------------------------------------------------------------------
 
-dodo::cgi::__serverCookie 
+dodo::cgi::__serverCookie
 http::parseCookie(const dodoString &header)
 {
 	dodoStringArray parts = tools::misc::explode(header, &trim, ";");
 	dodoStringArray tuple;
-	
+
 	dodoStringArray::iterator i = parts.begin(), j = parts.end();
-	
+
 	tuple = tools::misc::explode(*i, "=", 2);
 	if (tuple.size() != 2)
 		return cgi::__serverCookie();
-		
+
 	cgi::__serverCookie cookie;
 	cookie.name = tuple[0];
 	cookie.value = tools::misc::decodeUrl(tuple[1]);
-	
+
 	++i;
-	
-	for (;i!=j;++i)
+
+	for (; i != j; ++i)
 	{
 		tuple = tools::misc::explode(*i, "=");
-		
+
 		if (tools::string::iequal(tuple[0], "path"))
 			cookie.path = tuple[1];
 		else
@@ -1013,7 +1011,7 @@ http::parseCookie(const dodoString &header)
 			}
 		}
 	}
-	
+
 	return cookie;
 }
 

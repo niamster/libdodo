@@ -27,19 +27,19 @@ using namespace dodo::rpc;
 
 client::client()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
 client::~client()
 {
-	
+
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 client::sendRequest(const method &method)
 {
 	sendTextRequest(processRpcCall(method));
@@ -47,7 +47,7 @@ client::sendRequest(const method &method)
 
 //-------------------------------------------------------------------
 
-response 
+response
 client::receiveResponse()
 {
 	return processRpcCallResult(receiveTextResponse());

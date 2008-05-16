@@ -44,26 +44,26 @@ namespace dodo
 			class server : public rpc::server
 			{
 				public:
-		
+
 					/**
 					 * constructor
 					 */
 					server();
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~server();
-				
+
 				protected:
-					
+
 					/**
 					 * process RPC call
 					 * @return RPC method represantation
 					 * @param data defines buffer that contains RPC request
 					 */
 					virtual rpc::method processRpcCall(const dodoString &data);
-					
+
 					/**
 					 * process RPC call
 					 * @return RPC response

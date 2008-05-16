@@ -264,7 +264,7 @@ baseEx::staticAtomicMutex baseEx::keeper;
 baseEx::staticAtomicMutex::staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -272,7 +272,7 @@ baseEx::staticAtomicMutex::staticAtomicMutex()
 	pthread_mutex_init(&keeper, &attr);
 
 	pthread_mutexattr_destroy(&attr);
-	
+
 #endif
 }
 
@@ -281,9 +281,9 @@ baseEx::staticAtomicMutex::staticAtomicMutex()
 baseEx::staticAtomicMutex::~staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutex_destroy(&keeper);
-	
+
 #endif
 }
 
@@ -293,9 +293,9 @@ void
 baseEx::staticAtomicMutex::acquire()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutex_lock(&keeper);
-	
+
 #endif
 }
 
@@ -305,9 +305,9 @@ void
 baseEx::staticAtomicMutex::release()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutex_unlock(&keeper);
-	
+
 #endif
 }
 
@@ -344,7 +344,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 											  message(a_message)
 {
 	raceHazardGuard tg;
-	
+
 	if (handlerSetEx[errModule])
 		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
 }
@@ -354,7 +354,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 baseEx::~baseEx()
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 
 	deinitBaseExModule deinit;
@@ -373,7 +373,7 @@ baseEx::~baseEx()
 #ifndef DL_FAST
 		dlclose(handlesEx[i]);
 #endif
-		
+
 	}
 
 #endif
@@ -384,7 +384,7 @@ baseEx::~baseEx()
 baseEx::operator const dodoString & ()
 {
 	raceHazardGuard tg;
-	
+
 	return baseErrstr;
 }
 
@@ -396,7 +396,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 						void *data)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 
 	if (handlesOpenedEx[module])
@@ -406,7 +406,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
 		if (deinit != NULL)
 			deinit();
-		
+
 #ifndef DL_FAST
 		dlclose(handlesEx[module]);
 #endif
@@ -429,7 +429,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 	deinitBaseExModule deinit;
 #endif
@@ -466,7 +466,7 @@ void
 baseEx::unsetErrorHandler(errorModuleEnum module)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 
 	if (handlesOpenedEx[module])
@@ -476,7 +476,7 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 		deinit = (deinitBaseExModule)dlsym(handlesEx[module], "deinitBaseExModule");
 		if (deinit != NULL)
 			deinit();
-		
+
 #ifndef DL_FAST
 		dlclose(handlesEx[module]);
 #endif
@@ -498,7 +498,7 @@ void
 baseEx::unsetErrorHandlers()
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 	deinitBaseExModule deinit;
 #endif
@@ -514,7 +514,7 @@ baseEx::unsetErrorHandlers()
 				deinit();
 
 #ifndef DL_FAST
-			dlclose(handlesEx[i]);	
+			dlclose(handlesEx[i]);
 #endif
 
 			handlesOpenedEx[i] = false;
@@ -539,7 +539,7 @@ baseEx::setErrorHandlers(const dodoString &path,
 						 void *toInit)
 {
 	raceHazardGuard tg;
-	
+
 	initBaseExModule init;
 	errorHandler in;
 	deinitBaseExModule deinit;
@@ -552,7 +552,7 @@ baseEx::setErrorHandlers(const dodoString &path,
 			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
 			if (deinit != NULL)
 				deinit();
-			
+
 #ifndef DL_FAST
 			dlclose(handlesEx[i]);
 #endif
@@ -560,9 +560,9 @@ baseEx::setErrorHandlers(const dodoString &path,
 			handlesOpenedEx[i] = false;
 			handlesEx[i] = NULL;
 		}
-		
+
 #ifdef DL_FAST
-		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);	
+		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 		handlesEx[i] = dlopen(path.c_str(), RTLD_LAZY);
 #endif
@@ -596,9 +596,9 @@ baseEx::setErrorHandler(const dodoString &path,
 						void *toInit)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_FAST
-	void *handler = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	void *handler = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	void *handler = dlopen(path.c_str(), RTLD_LAZY);
 #endif
@@ -618,7 +618,7 @@ baseEx::setErrorHandler(const dodoString &path,
 		deinit = (deinitBaseExModule)dlsym(handlesEx[mod.module], "deinitBaseExModule");
 		if (deinit != NULL)
 			deinit();
-		
+
 #ifndef DL_FAST
 		dlclose(handlesEx[mod.module]);
 #endif
@@ -649,9 +649,9 @@ baseEx::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
@@ -663,7 +663,7 @@ baseEx::getModuleInfo(const dodoString &module,
 		return __baseExMod();
 
 	__baseExMod mod = init(toInit);
-	
+
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
 		return mod;

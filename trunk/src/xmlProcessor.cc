@@ -27,12 +27,12 @@
 using namespace dodo::xml;
 
 __info::__info(const dodoString &a_version,
-					 const dodoString &a_encoding,
-					 const dodoString &a_root,
-					 int a_compression) : version(a_version),
-										  encoding(a_encoding),
-										  root(a_root),
-										  compression(a_compression)
+			   const dodoString &a_encoding,
+			   const dodoString &a_root,
+			   int a_compression) : version(a_version),
+									encoding(a_encoding),
+									root(a_root),
+									compression(a_compression)
 {
 }
 
@@ -45,8 +45,8 @@ __info::__info()
 //-------------------------------------------------------------------
 
 __nodeDef::__nodeDef() : chLimit(-1),
-							   ignoreChildrenDef(false),
-							   ignoreAttributesDef(true)
+						 ignoreChildrenDef(false),
+						 ignoreAttributesDef(true)
 {
 }
 
@@ -62,8 +62,8 @@ processor::processor() : icaseNames(false)
 
 #ifdef LIBXML2_EXT
 
-,
-			 document(NULL)
+						 ,
+						 document(NULL)
 
 #endif
 
@@ -115,7 +115,7 @@ processor::isCDATA(xmlNodePtr chNode)
 
 node
 processor::parseFile(const __nodeDef &definition,
-			   const dodoString &file)
+					 const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -141,7 +141,7 @@ processor::parseFile(const __nodeDef &definition,
 
 node
 processor::parseBuffer(const __nodeDef &definition,
-				 const dodoString &buffer)
+					   const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 
@@ -151,7 +151,7 @@ processor::parseBuffer(const __nodeDef &definition,
 	if (document == NULL)
 	{
 		xmlErrorPtr error = xmlGetLastError();
-		
+
 		if (error == NULL)
 			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
 		else
@@ -195,7 +195,7 @@ processor::parse(const __nodeDef &definition)
 	if (xnode->children == NULL)
 	{
 		sample.empty = true;
-		
+
 		return sample;
 	}
 
@@ -214,7 +214,7 @@ processor::parse(const __nodeDef &definition)
 			xnode = xnode->children;
 
 			node one;
-			
+
 			dodoArray<node> children;
 			dodoArray<node>::iterator i, j;
 
@@ -231,7 +231,7 @@ processor::parse(const __nodeDef &definition)
 				getAttributes(xnode, one.attributes);
 
 				one.CDATA = isCDATA(xnode);
-				
+
 				if (xnode->children == NULL)
 					one.empty = true;
 				else
@@ -239,7 +239,7 @@ processor::parse(const __nodeDef &definition)
 					children = parse(xnode->children);
 					i = children.begin();
 					j = children.end();
-					for (;i!=j;++i)
+					for (; i != j; ++i)
 						one.children[i->name].push_back(*i);
 				}
 
@@ -267,8 +267,8 @@ processor::parse(const __nodeDef &definition)
 
 dodoArray<node>
 processor::parse(const __nodeDef &definition,
-		   const xmlNodePtr chNode,
-		   long chLimit)
+				 const xmlNodePtr chNode,
+				 long chLimit)
 {
 	xmlNodePtr xnode = chNode, subNode;
 
@@ -344,7 +344,7 @@ processor::parse(const __nodeDef &definition,
 				subNode = xnode->children;
 
 				node one;
-				
+
 				dodoArray<node> chldrn;
 				dodoArray<node>::iterator i, j;
 
@@ -359,7 +359,7 @@ processor::parse(const __nodeDef &definition,
 					getNodeInfo(subNode, one);
 
 					getAttributes(subNode, one.attributes);
-					
+
 					one.CDATA = isCDATA(subNode);
 
 					if (xnode->children == NULL)
@@ -369,7 +369,7 @@ processor::parse(const __nodeDef &definition,
 						chldrn = parse(xnode->children);
 						i = chldrn.begin();
 						j = chldrn.end();
-						for (;i!=j;++i)
+						for (; i != j; ++i)
 							one.children[i->name].push_back(*i);
 					}
 
@@ -400,7 +400,7 @@ processor::parse(const __nodeDef &definition,
 
 void
 processor::errHandler(void        *data,
-				xmlErrorPtr error)
+					  xmlErrorPtr error)
 {
 }
 
@@ -408,8 +408,8 @@ processor::errHandler(void        *data,
 
 void
 processor::getAttributes(const __nodeDef &definition,
-				   const xmlNodePtr xnode,
-				   dodoStringMap &attributes)
+						 const xmlNodePtr xnode,
+						 dodoStringMap &attributes)
 {
 	attribute = xnode->properties;
 
@@ -474,7 +474,7 @@ processor::getAttributes(const __nodeDef &definition,
 
 void
 processor::getAttributes(const xmlNodePtr xnode,
-				   dodoStringMap &attributes)
+						 dodoStringMap &attributes)
 {
 	attribute = xnode->properties;
 
@@ -495,7 +495,7 @@ processor::getAttributes(const xmlNodePtr xnode,
 
 void
 processor::getNodeInfo(const xmlNodePtr xnode,
-				 node &resNode)
+					   node &resNode)
 {
 	if (xnode->ns != NULL)
 	{
@@ -541,9 +541,9 @@ processor::getXMLFileInfo(const dodoString &file)
 	}
 
 	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
-					 document->encoding != NULL ? (char *)document->encoding : __dodostring__,
-					 (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
-					 document->compression);
+				  document->encoding != NULL ? (char *)document->encoding : __dodostring__,
+				  (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
+				  document->compression);
 
 #else
 
@@ -589,7 +589,7 @@ processor::parse(xmlNodePtr xnode)
 	dodoArray<node> sample;
 
 	node one;
-	
+
 	dodoArray<node> children;
 	dodoArray<node>::iterator i, j;
 
@@ -607,7 +607,7 @@ processor::parse(xmlNodePtr xnode)
 		getAttributes(xnode, one.attributes);
 
 		one.CDATA = isCDATA(xnode);
-		
+
 		if (xnode->children == NULL)
 			one.empty = true;
 		else
@@ -615,7 +615,7 @@ processor::parse(xmlNodePtr xnode)
 			children = parse(xnode->children);
 			i = children.begin();
 			j = children.end();
-			for (;i!=j;++i)
+			for (; i != j; ++i)
 				one.children[i->name].push_back(*i);
 		}
 
@@ -744,7 +744,7 @@ processor::initNodeDef(__nodeDef &xnode)
 
 xmlNodePtr
 processor::findNode(const __nodeDef &definition,
-			  xmlNodePtr xnode)
+					xmlNodePtr xnode)
 {
 	xmlNodePtr one;
 	bool skip;
@@ -807,8 +807,8 @@ processor::clear()
 
 dodoString
 processor::createXML(const node &root,
-			   const dodoString &encoding,
-			   const dodoString &version) const
+					 const dodoString &encoding,
+					 const dodoString &version) const
 {
 	if (root.name.empty())
 		return __dodostring__;

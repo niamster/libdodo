@@ -37,19 +37,19 @@
 
 namespace dodo
 {
-/**
- * @def addFlag add bit flag to the statement
- */
+	/**
+	 * @def addFlag add bit flag to the statement
+	 */
 #define addFlag(statement, flag)       (statement) |= (flag)
 
-/**
- * @def removeFlag remove bit flag from the statement
- */
+	/**
+	 * @def removeFlag remove bit flag from the statement
+	 */
 #define removeFlag(statement, flag)    (statement) &= (~(flag))
 
-/**
- * @def isSetFlag return true if bit flag is set
- */
+	/**
+	 * @def isSetFlag return true if bit flag is set
+	 */
 #define isSetFlag(statement, flag)     ((statement) & (flag)) != 0
 
 #define dodoString std::string
@@ -60,7 +60,7 @@ namespace dodo
 	class dodoMapStringCompare
 	{
 		public:
-			
+
 			/**
 			 * compares strings
 			 * @param first defines first string to compare
@@ -75,7 +75,7 @@ namespace dodo
 	class dodoMapICaseStringCompare
 	{
 		public:
-			
+
 			/**
 			 * compares strings
 			 * @param first defines first string to compare
@@ -83,7 +83,7 @@ namespace dodo
 			 */
 			bool operator()(const dodoString &first, const dodoString &second);
 	};
-	
+
 #define dodoMap std::map
 
 #ifdef USE_DEQUE
@@ -96,10 +96,10 @@ namespace dodo
 
 #define dodoList std::list
 
-	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;      ///< hash of strings
+	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
 	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
 
-	typedef dodoArray<dodoStringMap> dodoStringMapArray;                            ///< array of hashes of string
+	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                    ///< array of hashes of string
 
 	/**
 	 * predifined constants

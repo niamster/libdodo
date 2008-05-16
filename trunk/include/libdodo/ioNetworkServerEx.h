@@ -42,13 +42,13 @@ namespace dodo
 				SERVEREX_WRONGPARAMETER,
 				SERVEREX_WRONGFILENAME,
 			};
-			
+
 			/**
 			 * explanations for libdodo defined errors
 			 */
 			#define IONETWORKSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-			#define IONETWORKSERVEREX_WRONGFILENAME_STR "Probably wrong filename, type of file is wrong or `path` is empty!"
-			
+			#define IONETWORKSERVEREX_WRONGFILENAME_STR  "Probably wrong filename, type of file is wrong or `path` is empty!"
+
 			/**
 			 * IDs of functions where exception might be thrown
 			 */

@@ -86,11 +86,11 @@ collection::~collection()
 			deinit = (deinitIpcProcessCollectionModule)dlsym(i->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
-			
+
 #ifndef DL_FAST
-			dlclose(i->handle);	
+			dlclose(i->handle);
 #endif
-			
+
 		}
 
 #endif
@@ -101,8 +101,8 @@ collection::~collection()
 
 unsigned long
 collection::add(job::routine func,
-					 void        *data,
-					 short action)
+				void        *data,
+				short action)
 {
 	__processInfo process;
 
@@ -125,7 +125,7 @@ collection::add(job::routine func,
 
 unsigned long
 collection::add(job::routine func,
-					 void    *data)
+				void    *data)
 {
 	return add(func, data, COLLECTION_ONDESTRUCT_WAIT);
 }
@@ -134,7 +134,7 @@ collection::add(job::routine func,
 
 unsigned long
 collection::addNRun(job::routine func,
-						 void    *data)
+					void    *data)
 {
 	return addNRun(func, data, 1, COLLECTION_ONDESTRUCT_WAIT);
 }
@@ -143,9 +143,9 @@ collection::addNRun(job::routine func,
 
 unsigned long
 collection::addNRun(job::routine func,
-						 void          *data,
-						 unsigned long limit,
-						 short action)
+					void          *data,
+					unsigned long limit,
+					short action)
 {
 	__processInfo process;
 
@@ -176,7 +176,7 @@ collection::addNRun(job::routine func,
 	}
 
 	process.isRunning = true;
-	++ (process.executed);
+	++(process.executed);
 
 	processes.push_back(process);
 
@@ -187,7 +187,7 @@ collection::addNRun(job::routine func,
 
 void
 collection::del(unsigned long position,
-					 bool force)
+				bool force)
 {
 	if (getProcess(position))
 	{
@@ -215,7 +215,7 @@ collection::del(unsigned long position,
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
 				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_DEL, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-#endif				
+#endif
 		}
 
 #endif
@@ -270,10 +270,10 @@ collection::_isRunning(dodoList<__processInfo>::iterator &position) const
 
 void
 collection::replace(unsigned long position,
-						 job::routine func,
-						 void          *data,
-						 bool force,
-						 short action)
+					job::routine func,
+					void          *data,
+					bool force,
+					short action)
 {
 	if (getProcess(position))
 	{
@@ -298,10 +298,10 @@ collection::replace(unsigned long position,
 			deinit = (deinitIpcProcessCollectionModule)dlsym(current->handle, "deinitIpcProcessCollectionModule");
 			if (deinit != NULL)
 				deinit();
-			
+
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);			
+				throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_REPLACE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 		}
 
@@ -320,7 +320,7 @@ collection::replace(unsigned long position,
 
 void
 collection::run(unsigned long position,
-					 bool force)
+				bool force)
 {
 	if (getProcess(position))
 	{
@@ -351,7 +351,7 @@ collection::run(unsigned long position,
 		}
 
 		current->isRunning = true;
-		++ (current->executed);
+		++(current->executed);
 	}
 	else
 		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_RUN, ERR_LIBDODO, COLLECTIONEX_NOTFOUND, IPCPROCESSCOLLECTIONEX_NOTFOUND_STR, __LINE__, __FILE__);
@@ -488,7 +488,7 @@ collection::sweepTrash()
 
 void
 collection::setExecutionLimit(unsigned long position,
-								   unsigned long limit)
+							  unsigned long limit)
 {
 	if (getProcess(position))
 		current->executeLimit = limit;
@@ -502,10 +502,10 @@ collection::setExecutionLimit(unsigned long position,
 
 __processMod
 collection::getModuleInfo(const dodoString &module,
-							   void             *toInit)
+						  void             *toInit)
 {
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
@@ -517,12 +517,12 @@ collection::getModuleInfo(const dodoString &module,
 		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__processMod mod = init(toInit);
-	
+
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
 		throw baseEx(ERRMODULE_IPCPROCESSCOLLECTION, COLLECTIONEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
-#endif	
-	
+#endif
+
 	return mod;
 }
 
@@ -530,8 +530,8 @@ collection::getModuleInfo(const dodoString &module,
 
 unsigned long
 collection::add(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
+				void             *data,
+				void             *toInit)
 {
 	__processInfo process;
 
@@ -539,7 +539,7 @@ collection::add(const dodoString &module,
 	process.position = ++processNum;
 
 #ifdef DL_FAST
-	process.handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	process.handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	process.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif

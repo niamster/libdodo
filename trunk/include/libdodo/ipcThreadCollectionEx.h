@@ -45,7 +45,7 @@ namespace dodo
 				COLLECTIONEX_ISDETACHED,
 				COLLECTIONEX_SWEPT,
 			};
-		
+
 			/**
 			 * libdodo defined errors' explanation
 			 */
@@ -54,7 +54,7 @@ namespace dodo
 		#define IPCTHREADCOLLECTIONEX_NOTFOUND_STR            "Thread not found."
 		#define IPCTHREADCOLLECTIONEX_ISDETACHED_STR          "Thread is detached. Cannot join."
 		#define IPCTHREADCOLLECTIONEX_SWEPT_STR               "Limit of execution exceeded. Thread swept."
-		
+
 			/**
 			 * ID of function where exception was thrown
 			 */
@@ -70,12 +70,12 @@ namespace dodo
 				COLLECTIONEX_CONSTRUCTOR,
 				COLLECTIONEX__ISRUNNING,
 				COLLECTIONEX_SETEXECUTIONLIMIT,
-		
+
 		#ifdef DL_EXT
-		
+
 				COLLECTIONEX_GETMODULEINFO,
 				COLLECTIONEX_ADD,
-		
+
 		#endif
 			};
 		};

@@ -37,7 +37,7 @@ namespace dodo
 	{
 		LIBRARYLOADEREX_LIBRARYNOTOPENED,
 	};
-	
+
 	/**
 	 * explanations for libdodo defined errors
 	 */

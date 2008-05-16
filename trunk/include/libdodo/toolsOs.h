@@ -193,7 +193,7 @@ namespace dodo
 		 */
 		class os
 		{
-			friend class ipc::thread::collection;
+				friend class ipc::thread::collection;
 
 			public:
 
@@ -233,7 +233,7 @@ namespace dodo
 				 * @note automaticaly changes current directory to the new root(/)
 				 */
 				static void changeRoot(const dodoString &path);
-				
+
 				/**
 				 * @return current working directory
 				 */
@@ -335,7 +335,7 @@ namespace dodo
 				 * @return groups of the os
 				 */
 				static dodoArray<__groupInfo> getGroups();
-				
+
 				/**
 				 * @return PID of current process
 				 */
@@ -516,8 +516,8 @@ namespace dodo
 	#endif
 				};
 
-				static staticAtomicMutex keeper;///< lock
-				
+				static staticAtomicMutex keeper; ///< lock
+
 				/**
 				 * @class raceHazardGuard provides thread safe behaviour
 				 * @note it locks in constructor and unlocks in destructor
@@ -535,7 +535,7 @@ namespace dodo
 						 * destructor
 						 */
 						virtual ~raceHazardGuard();
-				};	
+				};
 		};
 	};
 };

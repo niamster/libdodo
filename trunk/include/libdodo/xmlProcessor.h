@@ -53,7 +53,7 @@ namespace dodo
 
 			dodoString name;                                    ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-			dodoMap<dodoString, __nodeDef> children;        ///< children definitions
+			dodoMap<dodoString, __nodeDef> children;            ///< children definitions
 
 			long chLimit;                                       ///< limit of children to search for[-1 for unlimit, default]
 			bool ignoreChildrenDef;                             ///< if true - parse all children tree if no children definition is given; false by default
@@ -249,7 +249,7 @@ namespace dodo
 	#ifdef LIBXML2_EXT
 
 				/**
-				 * @typedef xcharCmp defines name compare function 
+				 * @typedef xcharCmp defines name compare function
 				 */
 				typedef int (*xcharCmp)(const xmlChar *, const xmlChar *);
 

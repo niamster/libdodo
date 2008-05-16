@@ -52,79 +52,79 @@ namespace dodo
 			 * @typedef serverHandler defines type of function that will be called on new cgi request
 			 */
 			typedef void (*serverHandler)(exchange *);
-		
+
 			/**
 			 * @class fast provides fast CGI functionality
 			 */
 			class server
 			{
 				private:
-		
+
 					/**
 					 * copy constructor
 					 * to prevent copying
 					 */
 					server(server &cf);
-		
+
 				public:
-		
+
 		#ifdef PTHREAD_EXT
-		
+
 					/**
 					 * constructor
 					 * @param threading defines if to use threads on new CGI requests
 					 * @param threadsNum defines amount of threads for processing fast CGI queue
 					 */
 					server(bool threading = true, unsigned int threadsNum = 10);
-		
+
 		#else
-		
+
 					/**
 					 * constructor
 					 */
 					server();
-		
+
 		#endif
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~server();
-		
+
 					/**
 					 * set function that will be called on new CGI request
 					 * @param func define function handler
 					 */
 					virtual void setHandler(serverHandler func);
-		
+
 					/**
 					 * listen for incoming requests
 					 */
 					virtual void listen();
-		
+
 					/**
 					 * @return true if called as a fast CGI[not as a CGI]
 					 */
 					virtual bool isFastCgi();
-		
+
 				private:
-		
+
 		#ifdef PTHREAD_EXT
-		
+
 					bool threading;                 ///< true use threading
-		
+
 					unsigned int threadsNum;        ///< amount of threads
-		
+
 					/**
 					 * thread that holds one queue of CGI requests
 					 * @param data defines the data that will be passed to the thread
 					 */
 					static void *stackThread(void *data);
-		
+
 					static pthread_mutex_t accept;        ///< accept request mutex
-		
+
 		#endif
-		
+
 					static serverHandler handler;    ///< function to be called on new request
 			};
 		};

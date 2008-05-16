@@ -26,32 +26,30 @@
 using namespace dodo;
 
 const dodoString logger::levels[] = { "INFO",
-		"NOTICE",
-		"DEBUG",
-		"WARNING",
-		"ERROR",
-		"ALERT",
-		"CRITICAL",
-		"EMERGENCY"
-};
+									  "NOTICE",
+									  "DEBUG",
+									  "WARNING",
+									  "ERROR",
+									  "ALERT",
+									  "CRITICAL",
+									  "EMERGENCY" };
 
 //-------------------------------------------------------------------
 
 const int logger::syslogLevels[] = { LOG_INFO,
-		LOG_NOTICE,
-		LOG_DEBUG,
-		LOG_WARNING,
-		LOG_ERR,
-		LOG_ALERT,
-		LOG_CRIT,
-		LOG_EMERG,
-};
+									 LOG_NOTICE,
+									 LOG_DEBUG,
+									 LOG_WARNING,
+									 LOG_ERR,
+									 LOG_ALERT,
+									 LOG_CRIT,
+									 LOG_EMERG,   };
 
 //-------------------------------------------------------------------
 
 logger::logger() : handlersNum(0),
-					timeFormat(" %d/%m/%Y.%H-%M-%S: ")
-{	
+				   timeFormat(" %d/%m/%Y.%H-%M-%S: ")
+{
 }
 
 //-------------------------------------------------------------------
@@ -63,19 +61,19 @@ logger::~logger()
 //-------------------------------------------------------------------
 
 unsigned long
-logger::add(short level, 
+logger::add(short level,
 			io::channel *handler)
 {
 	raceHazardGuard tg(this);
-	
+
 	__logMap lm;
-	
+
 	lm.handler = handler;
 	lm.level = level;
 	lm.position = ++handlersNum;
-	
+
 	handlers.push_back(lm);
-	
+
 	return handlersNum;
 }
 
@@ -85,27 +83,27 @@ void
 logger::remove(unsigned long position)
 {
 	raceHazardGuard tg(this);
-	
+
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 		if (i->position == position)
 		{
 			handlers.erase(i);
-			
+
 			break;
 		}
 }
 
 //-------------------------------------------------------------------
 
-void 
-logger::log(short level, 
+void
+logger::log(short level,
 			const dodoString &msg)
 {
 	raceHazardGuard tg(this);
-	
+
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
-	for (;i!=j;++i)
+	for (; i != j; ++i)
 		if (i->level == level)
 		{
 			if (i->handler != NULL)
@@ -120,7 +118,7 @@ logger::log(short level,
 
 //-------------------------------------------------------------------
 
-void 
+void
 logger::setTimeFormat(const dodoString &format)
 {
 	timeFormat = " " + format + ": ";

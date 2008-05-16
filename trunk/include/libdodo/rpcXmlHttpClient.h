@@ -42,37 +42,37 @@ namespace dodo
 			class httpClient : public client
 			{
 				public:
-		
+
 					/**
 					 * constructor
 					 */
 					httpClient();
-		
+
 					/**
 					 * destructor
 					 */
 					virtual ~httpClient();
-					
+
 					/**
 					 * set url to XML-RPC server
-					 * @param url define url to XML-RPC server 
+					 * @param url define url to XML-RPC server
 					 */
 					virtual void setUrl(const dodoString &url);
-				
+
 				protected:
-				
+
 					/**
 					 * send request
 					 * @param method defines rpc method call
 					 */
 					virtual void sendTextRequest(const dodoString &method);
-					
+
 					/**
 					 * get response
-					 * @return rpc response result 
+					 * @return rpc response result
 					 */
 					virtual dodoString receiveTextResponse();
-					
+
 					io::network::http http;
 			};
 		};

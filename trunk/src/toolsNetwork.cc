@@ -80,7 +80,7 @@ network::getHostInfo(const dodoString &host)
 
 //-------------------------------------------------------------------
 
-dodoString 
+dodoString
 network::getHostPrimaryIp(const dodoString &host)
 {
 	hostent *ent = gethostbyname(host.c_str());
@@ -138,7 +138,7 @@ network::getInterfacesNames()
 
 __serviceInfo
 network::getServiceInfo(const dodoString &host,
-							  const dodoString &protocol)
+						const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 
@@ -162,7 +162,7 @@ network::getServiceInfo(const dodoString &host,
 
 __serviceInfo
 network::getServiceInfo(int port,
-							  const dodoString &protocol)
+						const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 

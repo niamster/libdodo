@@ -47,7 +47,7 @@ namespace dodo
 
 				dodoString name;                                                                ///< name of the node [[tag]]
 
-				dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;         ///< children
+				dodoMap<dodoString, dodoArray<node>, dodoMapStringCompare> children;            ///< children
 
 				dodoStringMap attributes;                                                       ///< attributes
 

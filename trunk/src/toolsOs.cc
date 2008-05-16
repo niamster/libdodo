@@ -28,46 +28,46 @@ using namespace dodo::tools;
 #ifdef DL_EXT
 
 void *os::handlesSig[] = { NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL,
-									NULL };
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL,
+						   NULL };
 
 //-------------------------------------------------------------------
 
 bool os::handlesOpenedSig[] = { false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false,
-										 false };
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false };
 
 #endif
 
@@ -88,7 +88,7 @@ os::staticAtomicMutex os::keeper;
 os::staticAtomicMutex::staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutexattr_t attr;
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
@@ -96,7 +96,7 @@ os::staticAtomicMutex::staticAtomicMutex()
 	pthread_mutex_init(&keeper, &attr);
 
 	pthread_mutexattr_destroy(&attr);
-	
+
 #endif
 }
 
@@ -105,9 +105,9 @@ os::staticAtomicMutex::staticAtomicMutex()
 os::staticAtomicMutex::~staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
-	
+
 	pthread_mutex_destroy(&keeper);
-	
+
 #endif
 }
 
@@ -117,11 +117,11 @@ void
 os::staticAtomicMutex::acquire()
 {
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
 		throw baseEx(ERRMODULE_TOOLSOSSTATICATOMICMUTEX, SYSTEMSTATICATOMICMUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 #endif
 }
 
@@ -131,11 +131,11 @@ void
 os::staticAtomicMutex::release()
 {
 #ifdef PTHREAD_EXT
-	
+
 	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
 		throw baseEx(ERRMODULE_TOOLSOSSTATICATOMICMUTEX, SYSTEMSTATICATOMICMUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-	
+
 #endif
 }
 
@@ -274,7 +274,7 @@ os::getLimit(short type)
 
 void
 os::setLimit(short type,
-					  const __limits &lim)
+			 const __limits &lim)
 {
 	rlimit limit;
 
@@ -350,7 +350,7 @@ os::getPriority(short type)
 
 void
 os::setPriority(short type,
-						 int prio)
+				int prio)
 {
 	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -381,7 +381,7 @@ os::getUID(short type)
 
 void
 os::setUID(short type,
-					int uid)
+		   int uid)
 {
 	int res(0);
 
@@ -433,7 +433,7 @@ os::getGID(short type)
 
 void
 os::setGID(short type,
-					int uid)
+		   int uid)
 {
 	int res(0);
 
@@ -521,7 +521,7 @@ os::getUsers()
 
 __userInfo &
 os::fillUserInfo(__userInfo &info,
-						  passwd     *in)
+				 passwd     *in)
 {
 	info.gid = in->pw_gid;
 	info.home = in->pw_dir;
@@ -538,7 +538,7 @@ os::fillUserInfo(__userInfo &info,
 
 __groupInfo &
 os::fillGroupInfo(__groupInfo &info,
-						   group       *pw)
+				  group       *pw)
 {
 	info.gid = pw->gr_gid;
 	info.name = pw->gr_name;
@@ -615,7 +615,7 @@ os::getGroups()
 
 void
 os::die(const dodoString &message,
-				 int status)
+		int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
 	fflush(stderr);
@@ -700,7 +700,7 @@ os::setGroupPID(int gpid)
 
 void
 os::setGroupPID(int pid,
-						 int gpid)
+				int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -710,7 +710,7 @@ os::setGroupPID(int pid,
 
 void
 os::sigMask(sigset_t *set,
-					 long blockSignals)
+			long blockSignals)
 {
 	if (blockSignals != -1)
 	{
@@ -777,11 +777,11 @@ os::sigMask(sigset_t *set,
 
 void
 os::setSignalHandler(long signal,
-							  signalHandler handler,
-							  int blockSignals)
+					 signalHandler handler,
+					 int blockSignals)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 
 	deinitOsSignalModule deinit;
@@ -820,11 +820,11 @@ os::setSignalHandler(long signal,
 
 void
 os::setMicroTimer(unsigned long timeout,
-						   signalHandler handler,
-						   int blockSignals)
+				  signalHandler handler,
+				  int blockSignals)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 
 	deinitOsSignalModule deinit;
@@ -880,11 +880,11 @@ os::setMicroTimer(unsigned long timeout,
 
 void
 os::setTimer(long timeout,
-					  signalHandler handler,
-					  int blockSignals)
+			 signalHandler handler,
+			 int blockSignals)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 
 	deinitOsSignalModule deinit;
@@ -947,7 +947,7 @@ os::isSignalHandled(long signal)
 
 void
 os::sendSignal(int pid,
-						long signal)
+			   long signal)
 {
 	if (kill(pid, os::toRealSignal(signal)) == -1)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -959,7 +959,7 @@ void
 os::unsetSignalHandler(long signal)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_EXT
 
 	deinitOsSignalModule deinit;
@@ -994,10 +994,10 @@ os::unsetSignalHandler(long signal)
 
 __signalMod
 os::getModuleInfo(const dodoString &module,
-						   void             *toInit)
+				  void             *toInit)
 {
 #ifdef DL_FAST
-	void *handle = dlopen(module.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
@@ -1022,12 +1022,12 @@ os::getModuleInfo(const dodoString &module,
 
 void
 os::setSignalHandler(const dodoString &path,
-							  void             *toInit)
+					 void             *toInit)
 {
 	raceHazardGuard tg;
-	
+
 #ifdef DL_FAST
-	void *handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	void *handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	void *handle = dlopen(path.c_str(), RTLD_LAZY);
 #endif
@@ -1262,7 +1262,7 @@ os::toRealSignal(long signal)
 
 void
 os::blockSignal(long signals,
-						 bool block)
+				bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
@@ -1287,13 +1287,13 @@ os::daemonize()
 		int tty = open("/dev/tty", O_RDWR);
 		if (tty == -1)
 			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
-		if (ioctl(tty, TIOCNOTTY, (char *) 0) == -1)
+
+		if (ioctl(tty, TIOCNOTTY, (char *)0) == -1)
 			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		if (close(tty) == -1)
 			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		
+
 		if (close(0) == -1)
 			throw baseEx(ERRMODULE_TOOLSOS, OSEX_DAEMONIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		if (close(1) == -1)

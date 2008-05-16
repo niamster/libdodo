@@ -42,13 +42,13 @@ namespace dodo
 				FASTEXCHANGEEX_FAILEDTOFLUSH,
 				FASTEXCHANGEEX_FAILEDTOPRINTSTRING,
 			};
-		
+
 			/**
 			 * explanations for libdodo defined errors
 			 */
-		#define CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR "Failed to flush."
+		#define CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR       "Failed to flush."
 		#define CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR "Failed to print string."
-		
+
 			/**
 			 * IDs of functions where exception might be thrown
 			 */

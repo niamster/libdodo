@@ -36,7 +36,7 @@ libraryLoader::libraryLoader() : handle(NULL)
 libraryLoader::libraryLoader(const dodoString &path) : handle(NULL)
 {
 #ifdef DL_FAST
-	handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	handle = dlopen(path.c_str(), RTLD_LAZY);
 #endif
@@ -46,7 +46,7 @@ libraryLoader::libraryLoader(const dodoString &path) : handle(NULL)
 
 libraryLoader::~libraryLoader()
 {
-#ifdef DL_FAST	
+#ifdef DL_FAST
 	if (handle != NULL)
 		dlclose(handle);
 #endif
@@ -58,7 +58,7 @@ void
 libraryLoader::open(const dodoString &path)
 {
 #ifdef DL_FAST
-	handle = dlopen(path.c_str(), RTLD_LAZY|RTLD_NODELETE);
+	handle = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);
 #else
 	handle = dlopen(path.c_str(), RTLD_LAZY);
 #endif
@@ -84,7 +84,7 @@ libraryLoader::get(const dodoString &name)
 {
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
-	
+
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_GET, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
@@ -97,7 +97,7 @@ libraryLoader::operator[](const dodoString &name)
 {
 	if (handle == NULL)
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_LIBDODO, LIBRARYLOADEREX_LIBRARYNOTOPENED, LIBRARYLOADEREX_LIBRARYNOTOPENED_STR, __LINE__, __FILE__);
-	
+
 	void *func = dlsym(handle, name.c_str());
 	if (func == NULL)
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_BROPERATORSTRING, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
@@ -107,18 +107,18 @@ libraryLoader::operator[](const dodoString &name)
 
 #ifdef BFD_EXT
 
-dodo::dodoStringArray 
+dodo::dodoStringArray
 libraryLoader::getSymbols(const dodoString &path)
 {
 	bfd_init();
-	
+
 	bfd *lib = bfd_openr(path.c_str(), NULL);
 	if (lib == NULL)
 	{
 		bfd_error_type err = bfd_get_error();
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
-    
+
 	if (bfd_check_format(lib, bfd_object) == FALSE)
 	{
 		bfd_error_type err = bfd_get_error();
@@ -126,37 +126,37 @@ libraryLoader::getSymbols(const dodoString &path)
 	}
 
 	long storageSize = bfd_get_symtab_upper_bound(lib);
-	
+
 	if (storageSize < 0)
 	{
 		bfd_error_type err = bfd_get_error();
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
-	
+
 	if (storageSize == 0)
-	   return dodoStringArray();
+		return dodoStringArray();
 
 	asymbol **symbolTable = (asymbol **)malloc(storageSize);
 
 	long numberOfSymbols = bfd_canonicalize_symtab(lib, symbolTable);
-	
+
 	if (numberOfSymbols < 0)
 	{
 		bfd_error_type err = bfd_get_error();
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
-	
+
 	dodoStringArray arr;
-	for (long i=0;i<numberOfSymbols;++i)
+	for (long i = 0; i < numberOfSymbols; ++i)
 		if (isSetFlag(symbolTable[i]->flags, BSF_FUNCTION) && isSetFlag(symbolTable[i]->flags, BSF_GLOBAL))
-		arr.push_back(symbolTable[i]->name);
-    
+			arr.push_back(symbolTable[i]->name);
+
 	if (bfd_close(lib) == FALSE)
 	{
 		bfd_error_type err = bfd_get_error();
 		throw baseEx(ERRMODULE_LIBRARYLOADER, LIBRARYLOADEREX_GETSYMBOLS, ERR_BFD, err, bfd_errmsg(err), __LINE__, __FILE__);
 	}
-	
+
 	return arr;
 }
 

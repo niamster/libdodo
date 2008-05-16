@@ -28,10 +28,10 @@ using namespace dodo::io;
 #ifndef IOFILE_WO_XEXEC
 
 __xexexIoFileCollectedData::__xexexIoFileCollectedData(dodoString &a_buffer,
-											   int &a_operType,
-											   void *a_executor) : buffer(a_buffer),
-																   operType(a_operType),
-																   executor(a_executor)
+													   int &a_operType,
+													   void *a_executor) : buffer(a_buffer),
+																		   operType(a_operType),
+																		   executor(a_executor)
 {
 }
 
@@ -40,19 +40,19 @@ __xexexIoFileCollectedData::__xexexIoFileCollectedData(dodoString &a_buffer,
 //-------------------------------------------------------------------
 
 file::file(const dodoString &a_path,
-			   short a_fileType,
-			   short mode) : over(false),
-							 append(false),
-							 path(a_path),
-							 fileType(a_fileType),
-							 pos(0)
+		   short a_fileType,
+		   short mode) : over(false),
+						 append(false),
+						 path(a_path),
+						 fileType(a_fileType),
+						 pos(0)
 #ifndef IOFILE_WO_XEXEC
-							 
-							 ,
-						   collectedData(buffer,
-										 operType,
-										 (void *) this)
-										 
+
+						 ,
+						 collectedData(buffer,
+									   operType,
+									   (void *) this)
+
 #endif
 {
 	if (path != __dodostring__)
@@ -71,10 +71,10 @@ file::file(const dodoString &a_path,
 file::file(file &fd)
 #ifndef IOFILE_WO_XEXEC
 
-									: collectedData(buffer,
-									 operType,
-									 (void *) this)
-									 
+	: collectedData(buffer,
+					operType,
+					(void *) this)
+
 #endif
 {
 }
@@ -119,7 +119,7 @@ file::getOutDescriptor() const
 
 int
 file::addPostExec(inExec func,
-					void   *data)
+				  void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data);
 }
@@ -128,7 +128,7 @@ file::addPostExec(inExec func,
 
 int
 file::addPreExec(inExec func,
-				   void   *data)
+				 void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data);
 }
@@ -139,8 +139,8 @@ file::addPreExec(inExec func,
 
 int
 file::addPostExec(const dodoString &module,
-					void             *data,
-					void             *toInit)
+				  void             *data,
+				  void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data, toInit);
 }
@@ -149,8 +149,8 @@ file::addPostExec(const dodoString &module,
 
 int
 file::addPreExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
+				 void             *data,
+				 void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data, toInit);
 }
@@ -159,8 +159,8 @@ file::addPreExec(const dodoString &module,
 
 dodo::__xexecCounts
 file::addExec(const dodoString &module,
-				void             *data,
-				void             *toInit)
+			  void             *data,
+			  void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data, toInit);
 }
@@ -201,8 +201,8 @@ file::close()
 
 void
 file::open(const dodoString &a_path,
-			 short a_fileType,
-			 short mode)
+		   short a_fileType,
+		   short mode)
 {
 	raceHazardGuard pg(this);
 
@@ -341,7 +341,7 @@ file::read(char * const a_void)
 #endif
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	try
 	{
 		_read(a_void);
@@ -352,11 +352,11 @@ file::read(char * const a_void)
 
 		throw;
 	}
-	
+
 #else
-	
+
 	_read(a_void);
-	
+
 #endif
 
 #ifndef IOFILE_WO_XEXEC
@@ -401,7 +401,7 @@ file::readString(dodoString &a_str)
 	}
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	buffer.assign(data, inSize);
 	delete [] data;
 
@@ -409,12 +409,12 @@ file::readString(dodoString &a_str)
 
 	a_str = buffer;
 	buffer.clear();
-	
+
 #else
-	
+
 	a_str.assign(data, inSize);
 	delete [] data;
-	
+
 #endif
 }
 
@@ -426,7 +426,7 @@ file::writeString(const dodoString &a_buf)
 	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	buffer = a_buf;
 
 	operType = FILE_OPERATION_WRITESTRING;
@@ -442,11 +442,11 @@ file::writeString(const dodoString &a_buf)
 
 		throw;
 	}
-	
+
 #else
-	
+
 	_write(a_buf.c_str());
-	
+
 #endif
 
 
@@ -465,7 +465,7 @@ void
 file::_write(const char *const a_buf)
 {
 	unsigned long pos = this->pos;
-	
+
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
 		pos *= outSize;
@@ -526,7 +526,7 @@ file::write(const char *const a_buf)
 	raceHazardGuard pg(this);
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	buffer.assign(a_buf, outSize);
 
 	operType = FILE_OPERATION_WRITE;
@@ -542,11 +542,11 @@ file::write(const char *const a_buf)
 
 		throw;
 	}
-	
+
 #else
-	
+
 	_write(a_buf);
-	
+
 #endif
 
 
@@ -600,7 +600,7 @@ void
 file::_readStream(char * const a_void)
 {
 	unsigned long pos = this->pos;
-	
+
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
 		if (fseek(handler, 0, SEEK_SET) == -1)
@@ -662,7 +662,7 @@ file::readStream(char * const a_void)
 	_readStream(a_void);
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	buffer = a_void;
 
 	performXExec(postExec);
@@ -671,7 +671,7 @@ file::readStream(char * const a_void)
 		buffer.resize(inSize);
 	strcpy(a_void, buffer.c_str());
 	buffer.clear();
-	
+
 #endif
 }
 
@@ -701,7 +701,7 @@ file::readStreamString(dodoString &a_str)
 	}
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	buffer = data;
 	delete [] data;
 
@@ -709,12 +709,12 @@ file::readStreamString(dodoString &a_str)
 
 	a_str = buffer;
 	buffer.clear();
-	
+
 #else
-	
+
 	a_str = data;
 	delete [] data;
-	
+
 #endif
 }
 
@@ -725,7 +725,7 @@ file::_writeStream(const char *const a_buf)
 {
 	if (fseek(handler, 0, SEEK_END) == -1)
 		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-	
+
 	unsigned long sent_received = 0;
 
 	unsigned long batch = 0, n;
@@ -751,7 +751,7 @@ file::_writeStream(const char *const a_buf)
 
 		batch += n;
 		sent_received += n;
-	}	
+	}
 }
 
 void
@@ -762,7 +762,7 @@ file::writeStreamString(const dodoString &a_buf)
 	unsigned long _outSize = outSize;
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	buffer = a_buf;
 
 	operType = FILE_OPERATION_WRITESTREAMSTRING;
@@ -784,7 +784,7 @@ file::writeStreamString(const dodoString &a_buf)
 
 		throw;
 	}
-	
+
 #else
 
 	try
@@ -801,7 +801,7 @@ file::writeStreamString(const dodoString &a_buf)
 
 		throw;
 	}
-	
+
 #endif
 
 #ifndef IOFILE_WO_XEXEC
@@ -821,7 +821,7 @@ file::writeStream(const char *const a_buf)
 	unsigned long _outSize = outSize;
 
 #ifndef IOFILE_WO_XEXEC
-	
+
 	buffer = a_buf;
 
 	operType = FILE_OPERATION_WRITESTREAM;
@@ -843,9 +843,9 @@ file::writeStream(const char *const a_buf)
 
 		throw;
 	}
-	
+
 #else
-	
+
 	try
 	{
 		outSize = strlen(a_buf);
@@ -860,7 +860,7 @@ file::writeStream(const char *const a_buf)
 
 		throw;
 	}
-	
+
 #endif
 
 #ifndef IOFILE_WO_XEXEC

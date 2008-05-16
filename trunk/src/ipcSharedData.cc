@@ -33,7 +33,7 @@ data::data(data &sts)
 //-------------------------------------------------------------------
 
 data::data(const char   *a_key) : mdata(NULL),
-														  size(0)
+								  size(0)
 {
 	if (a_key == NULL)
 	{

@@ -39,12 +39,12 @@ namespace dodo
 		{
 			SQLITEEX_WRONGHINTUSAGE,
 		};
-	
+
 		/**
 		 * explanations for libdodo defined errors
 		 */
 	#define DBSQLITEEX_WRONGHINTUSAGE_STR "Wrong hint usage. You used hint where it's not needed."
-	
+
 		/**
 		 * IDs of functions where exception might be thrown
 		 */

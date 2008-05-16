@@ -28,10 +28,10 @@ using namespace dodo::io::network;
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
 __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(dodoString &a_buffer,
-											   int &a_operType,
-											   void *a_executor) : buffer(a_buffer),
-																   operType(a_operType),
-																   executor(a_executor)
+																			 int &a_operType,
+																			 void *a_executor) : buffer(a_buffer),
+																								 operType(a_operType),
+																								 executor(a_executor)
 {
 }
 
@@ -60,12 +60,12 @@ exchange::exchange(exchange &fse)
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
-		: collectedData(buffer,
-					 operType,
-					 (void *) this)
-			 
+	: collectedData(buffer,
+					operType,
+					(void *) this)
+
 #endif
-			 
+
 {
 	socket = fse.socket;
 	opened = fse.opened;
@@ -92,12 +92,12 @@ exchange::exchange()
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
-		: collectedData(buffer,
-					 operType,
-					 (void *) this)
-			 
+	: collectedData(buffer,
+					operType,
+					(void *) this)
+
 #endif
-			 
+
 {
 }
 
@@ -107,12 +107,12 @@ exchange::exchange(__initialAccept &a_init)
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
-		: collectedData(buffer,
-					 operType,
-					 (void *) this)
-			 
+	: collectedData(buffer,
+					operType,
+					(void *) this)
+
 #endif
-			 
+
 {
 	init(a_init.socket, a_init.blockInherited);
 }
@@ -172,7 +172,7 @@ exchange::close()
 
 void
 exchange::init(int a_socket,
-					   bool blockInherited)
+			   bool blockInherited)
 {
 	raceHazardGuard pg(this);
 
@@ -214,18 +214,18 @@ bool
 exchange::isAlive()
 {
 	raceHazardGuard pg(this);
-	
+
 	if (!opened)
 		return false;
-	
+
 	pollfd fd;
 	fd.fd = socket;
 	fd.events = POLLOUT;
-	
+
 	if (poll(&fd, 1, -1) > 0)
 		if (isSetFlag(fd.revents, POLLOUT))
 			return true;
-	
+
 	options::_close(socket);
 
 	socket = -1;
@@ -533,7 +533,7 @@ exchange::readString(dodoString &a_str)
 
 int
 exchange::addPostExec(inExec func,
-							  void   *data)
+					  void   *data)
 {
 	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
 }
@@ -542,7 +542,7 @@ exchange::addPostExec(inExec func,
 
 int
 exchange::addPreExec(inExec func,
-							 void   *data)
+					 void   *data)
 {
 	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
 }
@@ -553,8 +553,8 @@ exchange::addPreExec(inExec func,
 
 int
 exchange::addPostExec(const dodoString &module,
-							  void             *data,
-							  void             *toInit)
+					  void             *data,
+					  void             *toInit)
 {
 	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
 }
@@ -563,8 +563,8 @@ exchange::addPostExec(const dodoString &module,
 
 int
 exchange::addPreExec(const dodoString &module,
-							 void             *data,
-							 void             *toInit)
+					 void             *data,
+					 void             *toInit)
 {
 	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
 }
@@ -573,8 +573,8 @@ exchange::addPreExec(const dodoString &module,
 
 dodo::__xexecCounts
 exchange::addExec(const dodoString &module,
-						  void             *data,
-						  void             *toInit)
+				  void             *data,
+				  void             *toInit)
 {
 	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
 }
@@ -701,7 +701,7 @@ exchange::_readStream(char * const data)
 	memset(data, '\0', inSize);
 
 	unsigned long n = 0;
-	
+
 	while (true)
 	{
 		if ((n = ::recv(socket, data, inSize, 0)) == -1)
@@ -717,7 +717,7 @@ exchange::_readStream(char * const data)
 
 		break;
 	}
-	
+
 	return n;
 }
 
@@ -757,7 +757,7 @@ exchange::readStreamString(dodoString &a_str)
 	raceHazardGuard pg(this);
 
 	a_str.clear();
-	
+
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = EXCHANGE_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
@@ -765,7 +765,7 @@ exchange::readStreamString(dodoString &a_str)
 
 	char *data = new char[inSize];
 	unsigned long n = 0;
-	
+
 	try
 	{
 		n = _readStream(data);
@@ -780,7 +780,7 @@ exchange::readStreamString(dodoString &a_str)
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 	if (n > 0)
 		buffer.assign(data, n);
-	
+
 	delete [] data;
 
 	performXExec(postExec);
@@ -790,7 +790,7 @@ exchange::readStreamString(dodoString &a_str)
 #else
 	if (n > 0)
 		a_str.assign(data, n);
-	
+
 	delete [] data;
 #endif
 }
