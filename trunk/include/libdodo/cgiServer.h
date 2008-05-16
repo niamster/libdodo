@@ -242,7 +242,7 @@ namespace dodo
 		};
 		
 		/**
-		 * @enum cgiAuthTypeEnum defines authentification types
+		 * @enum serverAuthTypeEnum defines authentification types
 		 */
 		enum serverAuthTypeEnum
 		{
@@ -252,7 +252,7 @@ namespace dodo
 		};
 		
 		/**
-		 * @struct __authInfo defines authenfication information
+		 * @struct __serverAuthInfo defines authenfication information
 		 */
 		struct __serverAuthInfo
 		{
@@ -295,7 +295,7 @@ namespace dodo
 				 * @param postFilesInMem defines place of POST files[disk or memory]
 				 * @param postFilesTmpDir defines directory for POST files if on they are saved on the disk
 				 */
-				server(dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanContent = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
+				server(dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 	
 	
 				/**

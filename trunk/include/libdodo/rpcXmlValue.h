@@ -65,7 +65,7 @@ namespace dodo
 					
 					/**
 					 * @return value parsed from XML node
-					 * @param data defines XML node
+					 * @param node defines XML node
 					 */
 					static rpc::value xmlToRpcValue(dodo::xml::node &node);
 					

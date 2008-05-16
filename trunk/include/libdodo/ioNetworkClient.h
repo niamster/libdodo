@@ -104,7 +104,6 @@ namespace dodo
 		
 					/**
 					 * constructor
-					 * @param server defines type of service; if true as a server
 					 * @param family defines family of the socket[see ClientOptionsProtoFamilyEnum]
 					 * @param type defines type of the socket[see ClientOptionsTransferTypeEnum]
 					 */

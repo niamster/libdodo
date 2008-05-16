@@ -172,7 +172,7 @@ namespace dodo
 	
 				/**
 				 * @return array element
-				 * @param index defines array index
+				 * @param key defines array index
 				 * @note throws exception if data type is not DATATYPE_ARRAY
 				 */
 				virtual value operator[](unsigned long key);

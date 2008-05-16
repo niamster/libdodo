@@ -67,7 +67,7 @@ namespace dodo
 				
 				/**
 				 * @return true in needle is found
-				 * @param data defines string where to look for the needle
+				 * @param str defines string where to look for the needle
 				 * @param needle defines string which to look for
 				 * @param icase defines case sensitivity
 				 */
@@ -75,7 +75,7 @@ namespace dodo
 				
 				/**
 				 * @return position of needle if it is found
-				 * @param data defines string where to look for the needle
+				 * @param str defines string where to look for the needle
 				 * @param needle defines string which to look for
 				 * @param icase defines case sensitivity
 				 */
@@ -83,7 +83,7 @@ namespace dodo
 				
 				/**
 				 * @return position of needle if it is found
-				 * @param data defines string where to look for the needle
+				 * @param str defines string where to look for the needle
 				 * @param needle defines string which to look for
 				 * @param position defines start position for search
 				 * @param icase defines case sensitivity

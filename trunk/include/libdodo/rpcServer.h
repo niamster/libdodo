@@ -100,7 +100,7 @@ namespace dodo
 				
 				/**
 				 * default rpc handler
-				 * @param handler defines function that will process rpc call
+				 * @param method defines function that will process rpc call
 				 * @param arguments defines method arguments
 				 */
 				static response rpcDefaultHandler(const dodoString &method, const dodoArray<value> &arguments);
