@@ -14,11 +14,11 @@ cgi::
 		process template using specific syntax to produce output content
 
 io:: 
-	input/output subsystem
-	support for: files, network(client/server, high-level protocols), stdin/stdout
+	input/output interaction subsystem
+	support for: files(regular, temp, fifo), network(unix, bsd sockets, client/server interaction, tcp/udp protocols, high-level HTTP protocol), stdin/stdout
 
 db::
-	database
+	database interaction subsystem
 	SQL-independent interface for communication with databases
 	support for: MySQL, PostreSQL, SQLite
 
@@ -39,7 +39,7 @@ xexec:
 	system of pre/post exec operations for the libdodo modules
 
 ipc::
-	job control(processes, threads), race condition control(for processes, threads), access to shared memory
+	job execution control(processes, threads), race condition control(for processes, threads), access to shared memory
 
 libraryLoader:
 	load routines and data from shared objects or archive objects
