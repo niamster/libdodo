@@ -21,7 +21,8 @@ variables:
 		3. hash
 		4. array of hashes
 		
-	you may itarate each with `for` loop or directly access their members
+	variable is iterative with `for` loop
+	variable member can be accessed directly with `.` operator
 	example: 
 		1. the first symbol of the string: $strVar.0
 		2. the second element of the array: $arrVar.1
@@ -87,21 +88,21 @@ blocks:
 		
 		example:
 			//c++ code:
-			cgiProcessor cgip;
+			cgi::processor cgip;
 			
-			dodoStringArr arr;
+			dodoStringArray arr;
 			arr.push_back("one");
 			arr.push_back("two");
 			arr.push_back("three");
 			cgip.assign("arr",arr);
 			
-			dodoAssocArr arr1;
+			dodoStringMap arr1;
 			arr1["one"] = "one";
 			arr1["two"] = "two";
 			arr1["three"] = "three";
 			cgip.assign("arr1",arr1);
 			
-			std::vector<dodoAssocArr> arr2;
+			dodoArray<dodoStringMap> arr2;
 			arr2.push_back(arr1);
 			arr1["one"] = "three";
 			arr2.push_back(arr1);
