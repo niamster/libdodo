@@ -88,8 +88,8 @@ namespace dodo
 				HTTP_RESPONSEHEADER_LASTMODIFIED,       ///< the last modified date for the requested object
 				HTTP_RESPONSEHEADER_LOCATION,           ///< used in redirection
 				HTTP_RESPONSEHEADER_SERVER,             ///< a name for the server
-				HTTP_RESPONSEHEADER_WWWAUTHENTICATE,    ///< authentification request
-				HTTP_RESPONSEHEADER_PROXYAUTHENTICATE,  ///< proxy authentification request
+				HTTP_RESPONSEHEADER_WWWAUTHENTICATE,    ///< authentication request
+				HTTP_RESPONSEHEADER_PROXYAUTHENTICATE,  ///< proxy authentication request
 				HTTP_RESPONSEHEADER_XPOWEREDBY,         ///< cgi provider
 			};
 
@@ -151,8 +151,8 @@ namespace dodo
 					/**
 					 * @param host defines proxy ip
 					 * @param port defines proxy port
-					 * @param user defines proxy user for authentification
-					 * @param password defines proxy password for authentification
+					 * @param user defines proxy user for authentication
+					 * @param password defines proxy password for authentication
 					 */
 					virtual void setProxyInformation(const dodoString &host, unsigned int port = 3128, const dodoString &user = __dodostring__, const dodoString &password = __dodostring__);
 
@@ -306,7 +306,7 @@ namespace dodo
 					virtual void makeDigestAuth(short requestHeader, short responseHeader, const dodoString &method, const dodoString &user, const dodoString &password);
 
 					/**
-					 * @struct __proxyAuthInfo defines proxy authentification information
+					 * @struct __proxyAuthInfo defines proxy authentication information
 					 */
 					struct __proxyAuthInfo
 					{
@@ -315,10 +315,10 @@ namespace dodo
 						dodoString host;        ///< proxy ip address
 						unsigned int port;      ///< proxy port
 						bool enabled;           ///< if true proxy settings are enabled
-						bool authRequired;      ///< if true proxy authentification is required
+						bool authRequired;      ///< if true proxy authentication is required
 					};
 
-					__proxyAuthInfo proxyAuthInfo; ///< proxy authentification information
+					__proxyAuthInfo proxyAuthInfo; ///< proxy authentication information
 			};
 		};
 	};

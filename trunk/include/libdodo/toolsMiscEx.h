@@ -71,7 +71,7 @@ namespace dodo
 	#endif
 
 	#define TOOLSMISCEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
-	#define TOOLSMISCEX_BADMAILAUTH_STR    "Error during authentification."
+	#define TOOLSMISCEX_BADMAILAUTH_STR    "Error during authentication."
 	#define TOOLSMISCEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 	#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
 	#define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument."

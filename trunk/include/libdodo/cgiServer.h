@@ -152,7 +152,7 @@ namespace dodo
 			SERVER_STATUSCODE_NOTFOUND,                         ///< 404
 			SERVER_STATUSCODE_METHODNOTALLOWED,                 ///< 405
 			SERVER_STATUSCODE_NOTACCEPTABLE,                    ///< 406
-			SERVER_STATUSCODE_PROXYAUTHENTIFICATIONREQUIRED,    ///< 407
+			SERVER_STATUSCODE_PROXYauthenticationREQUIRED,    ///< 407
 			SERVER_STATUSCODE_REQUESTTIMEOUT,                   ///< 408
 			SERVER_STATUSCODE_CONFLICT,                         ///< 409
 			SERVER_STATUSCODE_GONE,                             ///< 410
@@ -242,7 +242,7 @@ namespace dodo
 		};
 
 		/**
-		 * @enum serverAuthTypeEnum defines authentification types
+		 * @enum serverAuthTypeEnum defines authentication types
 		 */
 		enum serverAuthTypeEnum
 		{
@@ -338,23 +338,23 @@ namespace dodo
 				virtual ~server();
 
 				/**
-				 * @return authentification info
+				 * @return authentication info
 				 */
-				virtual __serverAuthInfo getAuthentificationInfo();
+				virtual __serverAuthInfo getauthenticationInfo();
 
 				/**
-				 * request the authentification
-				 * @param realm defines authentification request string
-				 * @param type defines type of authentification[see cgiAuthTypeEnum]
+				 * request the authentication
+				 * @param realm defines authentication request string
+				 * @param type defines type of authentication[see cgiAuthTypeEnum]
 				 */
-				virtual void requestAuthentification(const dodoString &realm, short type = SERVER_AUTHTYPE_DIGEST);
+				virtual void requestauthentication(const dodoString &realm, short type = SERVER_AUTHTYPE_DIGEST);
 
 				/**
-				 * check basic authentification
-				 * @param user defines user for authentification
-				 * @param password defined user's password for authentification
+				 * check basic authentication
+				 * @param user defines user for authentication
+				 * @param password defined user's password for authentication
 				 */
-				virtual bool checkAuthentification(const dodoString &user, const dodoString &password);
+				virtual bool checkauthentication(const dodoString &user, const dodoString &password);
 
 				/**
 				 * @return contents of stdin got for the POST request
@@ -537,7 +537,7 @@ namespace dodo
 				{
 					dodoString user;        ///< user name
 					dodoString password;    ///< user password
-					dodoString realm;       ///< explanation of the authentification request
+					dodoString realm;       ///< explanation of the authentication request
 					dodoString nonce;       ///< server-specified uniquely generated data
 					dodoString opaque;      ///< server-specified uniquely generated data, which should be returned by the server unchanged
 					dodoString cnonce;      ///< server-specified uniquely generated data
@@ -548,7 +548,7 @@ namespace dodo
 					short type;             ///< authenfication type[see cgiAuthTypeEnum]
 				};
 
-				__internalAuthInfo authInfo; ///< authentification information
+				__internalAuthInfo authInfo; ///< authentication information
 		};
 	};
 };
