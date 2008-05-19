@@ -1,42 +1,42 @@
 Brief overview of libdodo's modules
 
-baseEx
-	error handling through `throw` call; it's possible to set handler[also from external library]
+baseEx:
+	error handling through exception mechanism
 
 cgi::
-	HTTP server side routines present requests, headers, cookies, authentification, ...
-	
+	HTTP server side subsystem
+
 	fast::
 		support for fast-cgi
 
 	processor:
-		file contents processor module
-		parses template files using specific syntax to create output content
+		template processor
+		process template using specific syntax to produce output content
 
 io:: 
-	input/output routines
-	files, network(client/server, high-level protocols), stdin/stdout
+	input/output subsystem
+	support for: files, network(client/server, high-level protocols), stdin/stdout
 
 db::
-	database related routines
-	SQL independent interface to communicate with databases
-	supports MySQL, PostreSQL, sqlite
+	database
+	SQL-independent interface for communication with databases
+	support for: MySQL, PostreSQL, SQLite
 
 regexp:
-	regular expression routines(match, replace)
-	supports POSIX/PCRE[compile-time]
+	regular expression subsystem(match, replace)
+	support for: POSIX/PCRE[compile-time]
 
 xml:
-	xml-related routines(parsing, creation)
+	XML subsystem(parse, produce)
 
 tools::
 	operation system, time, string, filesystem, network, compression, ...
 
 image:
-	image manipulation routines
+	image manipulation subsystem
 
 xexec:
-	smart system of pre/post exec operations for other modules
+	system of pre/post exec operations for the libdodo modules
 
 ipc::
 	job control(processes, threads), race condition control(for processes, threads), access to shared memory
@@ -45,15 +45,15 @@ libraryLoader:
 	load routines and data from shared objects or archive objects
 
 logger:
-	log routines
+	log subsystem
 
 json::
-	json-related routines(parsing, creation)
+	json subsystem(parse, produce)
 
 rpc::
-	rpc client/server modules
-	supports xml-rpc
-	supports cgi-server, http-client
+	rpc client/server subsystem
+	support for: cgi-server, http-client
+	support for: xml-rpc,
 
 All libdodo methods throw exceptions on errors
 
