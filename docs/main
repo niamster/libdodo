@@ -53,7 +53,7 @@ json::
 rpc::
 	rpc client/server subsystem
 	support for: cgi-server, http-client
-	support for: xml-rpc,
+	support for: xml-rpc
 
 All libdodo methods throw exceptions on errors
 
