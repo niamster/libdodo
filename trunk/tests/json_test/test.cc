@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-    		cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
+    		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
     }
     
 	return 0;

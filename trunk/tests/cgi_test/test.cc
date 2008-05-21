@@ -14,9 +14,9 @@ int main(int argc, char **argv)
 ///first type
 //	dodoStringMap head;
 //	head[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
-//	server cgi(head, false);
+//	server cgit(head, false);
 	
-///second type									}
+///second type									
 
 	server cgit(true);
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 	{
 		cgit.setResponseStatus(SERVER_STATUSCODE_FORBIDDEN);
 
-		cgit.printStream( "<b>FORBIDDEN</b><br>" );
+		cgit.printStream( "FORBIDDEN" );
 
 		return 0;
 	}
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 	{
 		cgit.setResponseStatus(SERVER_STATUSCODE_NOTFOUND);
 
-		cgit.printStream( "<b>NOT FOUND</b><br>" );
+		cgit.printStream( "NOT FOUND" );
 
 		return 0;
 	}
@@ -66,19 +66,19 @@ int main(int argc, char **argv)
 	}
 
 	cgit.HEADERS[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
-	cgit.setCookie("test","Ni@m");
+	cgit.setCookie("test", "Ni@m");
 	cgit.printHeaders();
 	
 	cgit.printStream( "User: " + user + "<br>" );
 	
-	cgit.printStream( "!" + cgit.GET["a"] + "!<br>" );
-	cgit.printStream( "!" + cgit.POST["hidden"] + "!<br>" );
-	cgit.printStream( "!" + cgit.POST["text"] + "!<br>" );
-	cgit.printStream( "!" + cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>" );
-	cgit.printStream( "!" + cgit.COOKIES["test"] + "<br>" );
-	cgit.printStream( "!" + tools::string::ulToString(cgit.FILES["file"].size) + "<br>" );
+	cgit.printStream( cgit.GET["a"] + "<br>" );
+	cgit.printStream( cgit.POST["hidden"] + "<br>" );
+	cgit.printStream( cgit.POST["text"] + "<br>" );
+	cgit.printStream( cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>" );
+	cgit.printStream( cgit.COOKIES["test"] + "<br>" );
+	cgit.printStream( tools::string::ulToString(cgit.FILES["file"].size) + "<br>" );
 	
-	cgit.printStream( "\n\n\n" );
+	cgit.printStream( "<br>" );
 	
 	try
 	{

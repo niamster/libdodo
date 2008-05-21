@@ -28,111 +28,110 @@ int main(int argc, char **argv)
 {
 #ifdef POSTGRESQL_EXT
 	
-		postgresql pp;
-		
-		try
-		{
+	postgresql pp;
+	
+	try
+	{
 #ifndef DBPOSTGRESQL_WO_XEXEC
 
-			pp.addPreExec(&hook,NULL);
-			
+		pp.addPreExec(&hook,NULL);
+		
 #endif
 
-
-			__connectorInfo info;
-			
-			info.db = "test";
-			info.host = "localhost";
-			info.port = 5432;
-			info.user = "postgres";
-			
-			pp.setDbInfo(info);
-			pp.connect();	
-
-			try
-			{
-				pp.deleteTable("test");
-				pp.exec();
-			}
-			catch (...)
-			{
-			}
-	
-			__connectorField fi;
-			fi.name = "date";
-			fi.type = CONNECTOR_FIELDTYPE_TEXT;
-			
-			__connectorTable ti;
-			ti.name = "test";
-			ti.fields.push_back(fi);
-			
-			fi.name = "operation";
-			fi.type = CONNECTOR_FIELDTYPE_TEXT;		
-			ti.fields.push_back(fi);
-			
-			fi.name = "id";
-			fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-			fi.flag = CONNECTOR_FIELDFLAG_NULL;
-			ti.fields.push_back(fi);		
-			
-			pp.createTable(ti);
-			cout << pp.queryCollect() << endl;
-			pp.exec();
-			
-			dodoStringMap arr;
-			arr["date"] = "2005-07-08";
-			arr["operation"] = "mu";
-			
-			dodoStringArray select;
-			select.push_back("date");
-			select.push_back("operation");
-			
-			for (int i=0;i<10;i++)
-			{
-				pp.select("test",select,"id<20 or operation='um'");
-				pp.exec();
-				
-				pp.fetch();
-				
-				pp.insert("test",arr);
-				pp.exec();
-				
-				arr["operation"] = "um";
-				pp.update("test",arr);
-				arr["operation"] = "mu";
-				pp.exec();
-			}
-			
-			pp.select("test",select,"operation='um'");cout << pp.queryCollect() << endl;
-			pp.exec();
-			
-			cout << pp.fetch().rows.size() << endl;
-			
-			__connectorStorage store = pp.fetch();
-			
-			dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
-			
-			dodoStringArray::iterator m, n;
-			
-			for (;i!=j;i++)
-			{
-				m = i->begin();
-				n = i->end();
-				for (;m!=n;m++)
-					cout << *m << "\t";
-				cout << endl;	
-			}
-			
-		}
-		catch(baseEx ex)
-		{
-			cout << (string)ex << ex.line;
-		}	
-	
-#else
-	
-		cout << "No Postresql extension was compiled";
+		__connectorInfo info;
 		
+		info.db = "test";
+		info.host = "localhost";
+		info.port = 5432;
+		info.user = "postgres";
+		
+		pp.setDbInfo(info);
+		pp.connect();	
+
+		try
+		{
+			pp.deleteTable("test");
+			pp.exec();
+		}
+		catch (...)
+		{
+		}
+
+		__connectorField fi;
+		fi.name = "date";
+		fi.type = CONNECTOR_FIELDTYPE_TEXT;
+		
+		__connectorTable ti;
+		ti.name = "test";
+		ti.fields.push_back(fi);
+		
+		fi.name = "operation";
+		fi.type = CONNECTOR_FIELDTYPE_TEXT;		
+		ti.fields.push_back(fi);
+		
+		fi.name = "id";
+		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
+		fi.flag = CONNECTOR_FIELDFLAG_NULL;
+		ti.fields.push_back(fi);		
+		
+		pp.createTable(ti);
+		cout << pp.queryCollect() << endl;
+		pp.exec();
+		
+		dodoStringMap arr;
+		arr["date"] = "2005-07-08";
+		arr["operation"] = "mu";
+		
+		dodoStringArray select;
+		select.push_back("date");
+		select.push_back("operation");
+		
+		for (int i=0;i<10;i++)
+		{
+			pp.select("test",select,"id<20 or operation='um'");
+			pp.exec();
+			
+			pp.fetch();
+			
+			pp.insert("test",arr);
+			pp.exec();
+			
+			arr["operation"] = "um";
+			pp.update("test",arr);
+			arr["operation"] = "mu";
+			pp.exec();
+		}
+		
+		pp.select("test",select,"operation='um'");cout << pp.queryCollect() << endl;
+		pp.exec();
+		
+		cout << pp.fetch().rows.size() << endl;
+		
+		__connectorStorage store = pp.fetch();
+		
+		dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
+		
+		dodoStringArray::iterator m, n;
+		
+		for (;i!=j;i++)
+		{
+			m = i->begin();
+			n = i->end();
+			for (;m!=n;m++)
+				cout << *m << "\t";
+			cout << endl;	
+		}
+		
+	}
+	catch(baseEx ex)
+	{
+		cout << (string)ex << ex.line;
+	}	
+
+#else
+
+	cout << "No Postresql extension was compiled";
+	
 #endif
 	
 	return 0;

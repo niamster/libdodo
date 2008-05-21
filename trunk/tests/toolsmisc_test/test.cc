@@ -82,14 +82,14 @@ int main(int argc, char **argv)
 		//tools::misc::mail("niam", "test", "test");
 		//tools::misc::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
 	}
-    catch(baseEx ex)
-    {
-    	cout << endl << ex.baseErrno << "!!" << ex.baseErrstr  << ex.line << "!!" << "!!" << ex.file << endl;
-    }
-    catch(exception ex)
-    {
-    	cout << endl << ex.what() << endl;
-    }
+	catch(baseEx ex)
+	{
+		cout << endl << ex.baseErrno << endl << ex.baseErrstr  << ex.line << endl << ex.file << endl;
+	}
+	catch(exception ex)
+	{
+		cout << endl << ex.what() << endl;
+	}
     
 	return 0;
 }

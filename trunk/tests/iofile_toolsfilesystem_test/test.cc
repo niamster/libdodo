@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 		io.writeStreamString("!12345890@!!@\n");
 		io.writeStreamString("!12345890$!!@\n");
 		io.pos = 1;
-        io.writeString("!12345890$!~@\n");
+        	io.writeString("!12345890$!~@\n");
 		
 		dodoString str;
 	

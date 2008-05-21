@@ -13,28 +13,28 @@ using namespace std;
 
 #ifndef IMAGE_WO_XEXEC
 
-	void 
-	hook(void *odata,
-		short int type,
-		void *udata)
+void 
+hook(void *odata,
+	short int type,
+	void *udata)
+{
+	__xexexImageCollectedData *imData = (__xexexImageCollectedData *)odata;
+
+	if (imData->operType == IMAGE_OPERATION_WRITE)
 	{
-		__xexexImageCollectedData *imData = (__xexexImageCollectedData *)odata;
-	
-		if (imData->operType == IMAGE_OPERATION_WRITE)
+		try
 		{
-			try
-			{
-				image *img = (image *)imData->executor;
-				img->disableAll();
-				img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
-				img->enableAll();
-			}
-			catch(baseEx ex)
-			{
-    				cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
-			}
+			image *img = (image *)imData->executor;
+			img->disableAll();
+			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
+			img->enableAll();
+		}
+		catch(baseEx ex)
+		{
+			cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 		}
 	}
+}
 
 #endif
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-    		cout << endl << ex.baseErrstr << endl << ex.line << "!!" << ex.baseErrno << "!!" << endl;
+    		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
     	}
     
 	return 0;

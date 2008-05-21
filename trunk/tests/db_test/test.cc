@@ -21,23 +21,23 @@ int main(int argc, char **argv)
 	{
 		if (strcasecmp(argv[1],"postgresql") == 0)
 #ifdef POSTGRESQL_EXT
-				pp = new postgresql;
+			pp = new postgresql;
 #else
-				return 1;
+			return 1;
 #endif
 			
 		else if (strcasecmp(argv[1],"mysql") == 0)
 #ifdef MYSQL_EXT
-				pp = new mysql;
+			pp = new mysql;
 #else
-				return 1;
+			return 1;
 #endif
 			
 		else if (strcasecmp(argv[1],"sqlite") == 0)
 #ifdef SQLITE_EXT	
-				pp = new sqlite;
+			pp = new sqlite;
 #else
-				return 1;
+			return 1;
 #endif
 						
 		else
@@ -182,17 +182,17 @@ int main(int argc, char **argv)
 
 			if (strcasecmp(argv[1],"sqlite") == 0)
 #ifdef SQLITE_EXT
-					((sqlite *)pp)->setBLOBValues(blobs);
+				((sqlite *)pp)->setBLOBValues(blobs);
 #else
-					;
+				;
 #endif
 			else
 			{
 				if (strcasecmp(argv[1],"postgres") == 0)
 #ifdef POSTGRESQL_EXT
-						((postgresql *)pp)->setBLOBValues(blobs);
+					((postgresql *)pp)->setBLOBValues(blobs);
 #else
-						;
+					;
 #endif
 			}
                 	
