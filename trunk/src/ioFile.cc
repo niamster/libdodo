@@ -312,11 +312,11 @@ file::_read(char * const a_void)
 	{
 		if (fread(a_void, inSize, 1, handler) == 0)
 		{
+			if (feof(handler) != 0 || errno == EAGAIN)
+				break;
+			
 			if (errno == EINTR)
 				continue;
-
-			if (errno == EAGAIN)
-				break;
 
 			if (ferror(handler) != 0)
 				throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

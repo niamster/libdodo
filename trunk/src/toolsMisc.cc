@@ -183,11 +183,11 @@ misc::random(void *data,
 	{
 		if (fread(data, size, 1, file) == 0)
 		{
+			if (feof(handler) != 0 || errno == EAGAIN)
+				break;
+			
 			if (errno == EINTR)
 				continue;
-
-			if (errno == EAGAIN)
-				break;
 
 			if (ferror(file) != 0)
 				throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_RANDOM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

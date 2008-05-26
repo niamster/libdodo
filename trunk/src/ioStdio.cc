@@ -172,11 +172,11 @@ stdio::_read(char * const a_void)
 		{
 			if (fread(data, inSTDBuffer, 1, stdin) == 0)
 			{
+				if (feof(handler) != 0 || errno == EAGAIN)
+					break;
+			
 				if (errno == EINTR)
 					continue;
-
-				if (errno == EAGAIN)
-					break;
 
 				if (ferror(stdin) != 0)
 					throw baseEx(ERRMODULE_IOSTDIO, STDIOEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -194,11 +194,11 @@ stdio::_read(char * const a_void)
 		{
 			if (fread(data, rest, 1, stdin) == 0)
 			{
+				if (feof(handler) != 0 || errno == EAGAIN)
+					break;
+			
 				if (errno == EINTR)
 					continue;
-
-				if (errno == EAGAIN)
-					break;
 
 				if (ferror(stdin) != 0)
 					throw baseEx(ERRMODULE_IOSTDIO, STDIOEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
