@@ -183,7 +183,7 @@ misc::random(void *data,
 	{
 		if (fread(data, size, 1, file) == 0)
 		{
-			if (feof(handler) != 0 || errno == EAGAIN)
+			if (feof(file) != 0 || errno == EAGAIN)
 				break;
 			
 			if (errno == EINTR)

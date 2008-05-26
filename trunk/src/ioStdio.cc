@@ -172,7 +172,7 @@ stdio::_read(char * const a_void)
 		{
 			if (fread(data, inSTDBuffer, 1, stdin) == 0)
 			{
-				if (feof(handler) != 0 || errno == EAGAIN)
+				if (feof(stdin) != 0 || errno == EAGAIN)
 					break;
 			
 				if (errno == EINTR)
@@ -194,7 +194,7 @@ stdio::_read(char * const a_void)
 		{
 			if (fread(data, rest, 1, stdin) == 0)
 			{
-				if (feof(handler) != 0 || errno == EAGAIN)
+				if (feof(stdin) != 0 || errno == EAGAIN)
 					break;
 			
 				if (errno == EINTR)
