@@ -83,7 +83,7 @@ namespace dodo
 		IMAGE_MAP_CMYK
 	};
 
-	#define IMAGE_PIXESIZES 6
+	#define IMAGE_PIXELSIZES 6
 
 	/**
 	 * @enum imagePixelSizeEnum defines size of pixel
