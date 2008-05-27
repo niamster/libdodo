@@ -34,6 +34,8 @@
 
 namespace dodo
 {
+	#define LOGGER_LEVELS 8
+
 	/**
 	 * @enum loggerLogLevelEnum defines log levels
 	 */
@@ -113,8 +115,8 @@ namespace dodo
 
 			unsigned long handlersNum;          ///< number of registered handlers
 
-			static const dodoString levels[8];  ///< log levels statements
-			static const int syslogLevels[8];   ///< syslog log levels
+			static const dodoString levels[LOGGER_LEVELS];  ///< log levels statements
+			static const int syslogLevels[LOGGER_LEVELS];   ///< syslog log levels
 	};
 
 };

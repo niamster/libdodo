@@ -71,6 +71,8 @@ namespace dodo
 
 #endif
 
+	#define IMAGE_MAPPINGS 3
+
 	/**
 	 * @enum imageMappingEnum defines the order of pixels
 	 */
@@ -80,6 +82,8 @@ namespace dodo
 		IMAGE_MAP_RGBA,
 		IMAGE_MAP_CMYK
 	};
+
+	#define IMAGE_PIXESIZES 6
 
 	/**
 	 * @enum imagePixelSizeEnum defines size of pixel
@@ -93,6 +97,8 @@ namespace dodo
 		IMAGE_PIXELSIZE_FLOAT,  ///< 32 bits
 		IMAGE_PIXELSIZE_DOUBLE, ///< 64 bits
 	};
+
+	#define IMAGE_ENCODERS 6
 
 	/**
 	 * @enum imageEncoderEnum defines image encoder
@@ -118,6 +124,8 @@ namespace dodo
 		IMAGE_ROTATEDIRECTIONANGLE_270CW = -270,
 		IMAGE_ROTATEDIRECTIONANGLE_270CCW = 270,
 	};
+
+	#define IMAGE_COMPRESSIONS
 
 	/**
 	 * @enum imageCompressionEnum defines type of compression
@@ -348,10 +356,10 @@ namespace dodo
 
 		private:
 
-			static const char *mappingStArr[3];                 ///< image mapping statements
-			static const StorageType pixelSizeStArr[6];         ///< pixel type statements
-			static const char *encoderStArr[6];                 ///< image encoder
-			static const CompressionType compressionStArr[8];   ///< image compression
+			static const char *mappingStArr[IMAGE_MAPPINGS];                 ///< image mapping statements
+			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZES];         ///< pixel type statements
+			static const char *encoderStArr[IMAGE_ENCODERS];                 ///< image encoder
+			static const CompressionType compressionStArr[IMAGE_COMPRESSIONS];   ///< image compression
 	};
 
 	/**

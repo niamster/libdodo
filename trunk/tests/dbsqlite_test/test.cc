@@ -32,11 +32,12 @@ int main(int argc, char **argv)
 		pp.connect();	
 
 		__connectorField fi;
-		fi.name = "date";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
 		
 		__connectorTable ti;
 		ti.name = "test";
+		
+		fi.name = "date";
+		fi.type = CONNECTOR_FIELDTYPE_TEXT;
 		ti.fields.push_back(fi);
 		
 		fi.name = "operation";
@@ -63,7 +64,7 @@ int main(int argc, char **argv)
 		for (int i=0;i<10;i++)
 		{
 			pp.select("test",select,"`id`<20 or `operation`='um'");
-			//cout << pp.queryCollect() << endl;
+			cout << pp.queryCollect() << endl;
 			pp.exec();
 			cout << "Selected: " << pp.rowsCount() << endl;
 			cout << "Selected2: " << pp.fetch().rows.size() << endl;

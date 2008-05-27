@@ -83,11 +83,12 @@ int main(int argc, char **argv)
 		}
 
 		__connectorField fi;
-		fi.name = "date";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
 		
 		__connectorTable ti;
 		ti.name = "test";
+		
+		fi.name = "date";
+		fi.type = CONNECTOR_FIELDTYPE_TEXT;
 		ti.fields.push_back(fi);
 		
 		fi.name = "operation";
@@ -111,7 +112,28 @@ int main(int argc, char **argv)
 		
 		pp->createTable(ti);
 		pp->exec();
+	
+		#ifndef SQLITE_ENABLE_COLUMN_METADATA
+
+			#ifdef SQLITE_EXT
+
+				if (strcasecmp(argv[1],"sqlite") == 0)
+				{
+					dodoStringArray columns;
+					columns.push_back("operation");
+					columns.push_back("b");
+					columns.push_back("date");
+				
+
+					((sqlConstructor *)pp)->autoFraming = true;
+					((sqlConstructor *)pp)->framingFields.insert(make_pair(info.db + ":" + ti.name, columns));
+				}
+			#endif
+			
+		#endif
 		
+		cout << ((((sqlConstructor *)pp)->autoFraming)?"Automatic framing turned on.":"Automatic framing turned off.") << endl;
+
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";
 		arr["operation"] = "mu";

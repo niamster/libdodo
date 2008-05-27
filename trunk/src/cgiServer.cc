@@ -453,7 +453,7 @@ server::makeAuth()
 //-------------------------------------------------------------------
 
 void
-server::requestAuthentification(const dodoString &realm,
+server::requestAuthentication(const dodoString &realm,
 								short type)
 {
 	returnCode = SERVER_STATUSCODE_UNAUTHORIZED;
@@ -473,7 +473,7 @@ server::requestAuthentification(const dodoString &realm,
 //-------------------------------------------------------------------
 
 __serverAuthInfo
-server::getAuthentificationInfo()
+server::getAuthenticationInfo()
 {
 	__serverAuthInfo info = { authInfo.user, authInfo.type };
 
@@ -483,7 +483,7 @@ server::getAuthentificationInfo()
 //-------------------------------------------------------------------
 
 bool
-server::checkAuthentification(const dodoString &user,
+server::checkAuthentication(const dodoString &user,
 							  const dodoString &password)
 {
 	if (authInfo.type == SERVER_AUTHTYPE_BASIC)

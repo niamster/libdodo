@@ -78,6 +78,8 @@ namespace dodo
 
 				bool autoFraming;       ///< if true try to detect automaticaly whether to frame or not; autoFraming is omited if preventFraming is true; framed values are only escaped if preventEscaping is false[true by default]
 
+				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;   ///< hash of 'db:table' => `array of fields to frame`
+
 				dodoString request;     ///< SQL statement
 
 				/**
@@ -252,24 +254,54 @@ namespace dodo
 				 */
 				virtual dodoString stringReference(int type);
 
-				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;   ///< hash of 'db:table' => `array of fields to frame`
-
 			private:
 
-				static const dodoString sqlAddSelArr[3];    ///< additional `select` statement
-				static const dodoString sqlAddDelArr[2];    ///< additional `delete` statement
-				static const dodoString sqlAddUpArr[2];     ///< additional `update` statement
-				static const dodoString sqlAddInsArr[2];    ///< additional `insert` statement
+				static const dodoString sqlAddSelArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];    ///< additional `select` statement
+				static const dodoString sqlAddDelArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];    ///< additional `delete` statement
+				static const dodoString sqlAddUpArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];     ///< additional `update` statement
+				static const dodoString sqlAddInsArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS];    ///< additional `insert` statement
+				static const unsigned int addSelEnumArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS]; ///< positions in sqlAddSelArr additional `select` statement
+				static const unsigned int addDelEnumArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS]; ///< positions in sqlAddDelArr additional `delete` statement
+				static const unsigned int addUpEnumArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];  ///< positions in sqlAddUpArr additional `update` statement
+				static const unsigned int addInsEnumArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS]; ///< positions in sqlAddInsArr additional `insert` statement
 
-				static const dodoString sqlAddArr[8];       ///< additional statements(where, limit, ...)
+				static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];       ///< additional statements(`where`, `limit`, ...)
 
-				static const dodoString sqlQStArr[5];       ///< statements for complex queries(union, ...)
+				static const dodoString sqlQStArr[CONNECTOR_SUBREQUESTSTATEMENTS];       ///< statements for complex queries(`union`, ...)
 
-				static const unsigned int addSelEnumArr[2]; ///< positions in sqlAddSelArr additional `select` statement
-				static const unsigned int addDelEnumArr[1]; ///< positions in sqlAddDelArr additional `delete` statement
-				static const unsigned int addUpEnumArr[1];  ///< positions in sqlAddUpArr additional `update` statement
-				static const unsigned int addInsEnumArr[1]; ///< positions in sqlAddInsArr additional `insert` statement
+				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS]; ///< statements for `join` queries
 
+
+				#define SQLCONSTRUCTOR_STATEMENTS 20
+
+                                /**
+				 * @enum sqlConstructorStatementEnum defines sqlConstructor statements
+				 * @note defines positions of string representation in 'statements' class property
+				 */
+				enum sqlConstructorStatementEnum
+				{
+					SQLCONSTRUCTOR_STATEMENT_EQUAL,
+					SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE,
+					SQLCONSTRUCTOR_STATEMENT_APOSTROPHE,
+					SQLCONSTRUCTOR_STATEMENT_COMA,
+					SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET,
+					SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET,
+					SQLCONSTRUCTOR_STATEMENT_SELECT,
+					SQLCONSTRUCTOR_STATEMENT_CALL,
+					SQLCONSTRUCTOR_STATEMENT_FROM,
+					SQLCONSTRUCTOR_STATEMENT_COLON,
+					SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA,
+					SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETCOMA,
+					SQLCONSTRUCTOR_STATEMENT_INSERT,
+					SQLCONSTRUCTOR_STATEMENT_INTO,
+					SQLCONSTRUCTOR_STATEMENT_VALUES,
+					SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETSELECT,
+					SQLCONSTRUCTOR_STATEMENT_UPDATE,
+					SQLCONSTRUCTOR_STATEMENT_SET,
+					SQLCONSTRUCTOR_STATEMENT_DELETE,
+				};
+
+				static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS]; ///< sqlConstructor statements
 		};
 	};
 };

@@ -100,8 +100,10 @@ namespace dodo
 		 */
 		enum accumulatorNoneEnum
 		{
-			ACCUMULATOR_NONE = 0
+			ACCUMULATOR_NONE
 		};
+
+		#define ACCUMULATOR_ADDREQUESTSTATEMENTS 8
 
 		/**
 		 * @enum accumulatorAddRequestEnum defines additional properties for the request
@@ -123,7 +125,7 @@ namespace dodo
 		 */
 		enum accumulatorRequestEnum
 		{
-			ACCUMULATOR_REQUEST_SELECT = 5,
+			ACCUMULATOR_REQUEST_SELECT = CONNECTOR_SUBREQUESTSTATEMENTS + 1,
 			ACCUMULATOR_REQUEST_INSERT,
 			ACCUMULATOR_REQUEST_INSERT_SELECT,
 			ACCUMULATOR_REQUEST_UPDATE,
@@ -150,6 +152,8 @@ namespace dodo
 			ACCUMULATOR_REQUEST_CALL_PROCEDURE,
 		};
 
+		#define ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS 2
+
 		/**
 		 * @enum accumulatorAddSelEnum defines additional properties for the `select` request
 		 */
@@ -159,6 +163,8 @@ namespace dodo
 			ACCUMULATOR_ADDREQUEST_SELECT_ALL
 		};
 
+		#define ACCUMULATOR_ADDREQUESTDELETESTATEMENTS 1
+
 		/**
 		 * @enum accumulatorAddDelEnum defines additional properties for the `delete` request
 		 */
@@ -167,6 +173,8 @@ namespace dodo
 			ACCUMULATOR_ADDREQUEST_DELETE_IGNORE = 1,
 		};
 
+		#define ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS 1
+
 		/**
 		 * @enum accumulatorAddUpEnum defines additional properties for the `update` request
 		 */
@@ -174,6 +182,8 @@ namespace dodo
 		{
 			ACCUMULATOR_ADDREQUEST_UPDATE_IGNORE = 1,
 		};
+
+		#define ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS 1
 
 		/**
 		 * @enum accumulatorAddInsEnum defines additional properties for the `insert` request

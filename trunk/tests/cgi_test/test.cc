@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
 	server cgit(true);
 
-	dodoString user = cgit.getAuthentificationInfo().user;
+	dodoString user = cgit.getAuthenticationInfo().user;
 
 	if (cgit.GET["a"] == "forbidden")
 	{
@@ -48,18 +48,18 @@ int main(int argc, char **argv)
 	 */
 	else if (cgit.GET["a"] == "basic_auth")
 	{
-		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
+		if (user.size() == 0 || !cgit.checkAuthentication("libdodo", "password"))
 		{
-			cgit.requestAuthentification("libdodo", SERVER_AUTHTYPE_BASIC);
+			cgit.requestAuthentication("libdodo", SERVER_AUTHTYPE_BASIC);
 
 			return 0;
 		}
 	}
 	else if (cgit.GET["a"] == "digest_auth")
 	{
-		if (user.size() == 0 || !cgit.checkAuthentification("libdodo", "password"))
+		if (user.size() == 0 || !cgit.checkAuthentication("libdodo", "password"))
 		{
-			cgit.requestAuthentification("libdodo", SERVER_AUTHTYPE_DIGEST);
+			cgit.requestAuthentication("libdodo", SERVER_AUTHTYPE_DIGEST);
 
 			return 0;
 		}

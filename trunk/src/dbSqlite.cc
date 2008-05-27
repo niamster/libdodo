@@ -30,6 +30,11 @@ using namespace dodo::db;
 sqlite::sqlite() : empty(true),
 				   hint(SQLITE_HINT_NONE)
 {
+	#ifndef SQLITE_ENABLE_COLUMN_METADATA
+	   
+	autoFraming = false;
+	
+	#endif
 }
 
 //-------------------------------------------------------------------
@@ -171,7 +176,7 @@ sqlite::_exec(const dodoString &query,
 			{
 				dodoString temp = dbInfo.db + ":" + pre_table;
 
-				if (!framingFields.isset(temp))
+				if (framingFields.find(temp) == framingFields.end())
 				{
 					request = "select * from " + pre_table + " limit 1";
 
@@ -226,16 +231,11 @@ sqlite::_exec(const dodoString &query,
 						empty = true;
 					}
 
-					framingFields.insert(temp, temp1);
+					framingFields.insert(make_pair(temp, temp1));
 				}
 			}
 
-#else
-
-			autoFraming = false;
-
 #endif
-
 		}
 
 		queryCollect();

@@ -95,6 +95,8 @@ namespace dodo
 			CONNECTOR_REFERENCE_SET_DEFAULT     ///< sets default on the action of any of those parent rows indicates on set action
 		};
 
+		#define CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS 6
+
 		/**
 		 * @enum connectorJoinTypeEnum defines join types
 		 */
@@ -107,6 +109,8 @@ namespace dodo
 			CONNECTOR_JOINTYPE_INNER,
 			CONNECTOR_JOINTYPE_CROSS,
 		};
+
+		#define CONNECTOR_SUBREQUESTSTATEMENTS 4
 
 		/**
 		 * @enum connectorSubrequestEnum defines type of sub request

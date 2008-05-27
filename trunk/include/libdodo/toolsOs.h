@@ -103,6 +103,9 @@ namespace dodo
 		 */
 		typedef void (*signalHandler)(int, siginfo_t *, void *);
 
+
+		#define OS_SIGNALS 19
+
 		/**
 		 * @enum osSignalsEnum defines os signals
 		 */
@@ -478,8 +481,8 @@ namespace dodo
 
 	#ifdef DL_EXT
 
-				static void *handlesSig[19];        ///< handles to modules
-				static bool handlesOpenedSig[19];   ///< map of opened modules
+				static void *handlesSig[OS_SIGNALS];        ///< handles to modules
+				static bool handlesOpenedSig[OS_SIGNALS];   ///< map of opened modules
 
 	#endif
 				/**

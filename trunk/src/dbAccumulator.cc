@@ -467,6 +467,7 @@ accumulator::subquery(const dodoStringArray &sub,
 					  int type)
 {
 	qType = type;
+
 	pre_subQueries = sub;
 }
 
@@ -476,6 +477,7 @@ void
 accumulator::truncate(const dodoString &table)
 {
 	qType = ACCUMULATOR_REQUEST_TRUNCATE;
+
 	pre_table = table;
 	show = false;
 }
@@ -487,6 +489,7 @@ accumulator::renameDb(const dodoString &db,
 					  const dodoString &to_db)
 {
 	qType = ACCUMULATOR_REQUEST_RENAME_DB;
+
 	pre_order = db;
 	pre_having = to_db;
 	show = false;
@@ -499,6 +502,7 @@ accumulator::renameTable(const dodoString &table,
 						 const dodoString &to_table)
 {
 	qType = ACCUMULATOR_REQUEST_RENAME_TABLE;
+
 	pre_table = table;
 	pre_having = to_table;
 	show = false;
@@ -512,6 +516,7 @@ accumulator::createIndex(const dodoString &table,
 						 const dodoString &name)
 {
 	qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
+
 	pre_table = table;
 	pre_fields.push_back(field);
 	pre_having = name;
@@ -526,6 +531,7 @@ accumulator::createIndex(const dodoString &table,
 						 const dodoString &name)
 {
 	qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
+
 	pre_table = table;
 	pre_fields = fields;
 	pre_having = name;
@@ -539,6 +545,7 @@ accumulator::deleteIndex(const dodoString &table,
 						 const dodoString &field)
 {
 	qType = ACCUMULATOR_REQUEST_DELETE_INDEX;
+
 	pre_table = table;
 	pre_having = field;
 	show = false;
@@ -552,6 +559,7 @@ accumulator::renameField(const dodoString &field,
 						 const dodoString &table)
 {
 	qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
+
 	pre_tableTo = field;
 	pre_having = to_field;
 	pre_table = table;
@@ -564,6 +572,7 @@ void
 accumulator::deleteDb(const dodoString &db)
 {
 	qType = ACCUMULATOR_REQUEST_DELETE_DB;
+
 	pre_order = db;
 	show = false;
 }
@@ -574,6 +583,7 @@ void
 accumulator::deleteTable(const dodoString &table)
 {
 	qType = ACCUMULATOR_REQUEST_DELETE_TABLE;
+
 	pre_table = table;
 	show = false;
 }
@@ -585,6 +595,7 @@ accumulator::deleteField(const dodoString &field,
 						 const dodoString &table)
 {
 	qType = ACCUMULATOR_REQUEST_DELETE_FIELD;
+
 	pre_tableTo = field;
 	pre_table = table;
 	show = false;
@@ -597,6 +608,7 @@ accumulator::createDb(const dodoString &db,
 					  const dodoString &charset)
 {
 	qType = ACCUMULATOR_REQUEST_CREATE_DB;
+
 	pre_order = db;
 	pre_having = charset;
 	show = false;
@@ -608,6 +620,7 @@ void
 accumulator::createTable(const __connectorTable &tableInfo)
 {
 	qType = ACCUMULATOR_REQUEST_CREATE_TABLE;
+
 	pre_tableInfo = tableInfo;
 	show = false;
 }
@@ -619,6 +632,7 @@ accumulator::createField(const __connectorField &row,
 						 const dodoString &table)
 {
 	qType = ACCUMULATOR_REQUEST_CREATE_FIELD;
+
 	pre_fieldInfo = row;
 	pre_table = table;
 	show = false;

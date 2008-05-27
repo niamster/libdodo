@@ -340,21 +340,21 @@ namespace dodo
 				/**
 				 * @return authentication info
 				 */
-				virtual __serverAuthInfo getauthenticationInfo();
+				virtual __serverAuthInfo getAuthenticationInfo();
 
 				/**
 				 * request the authentication
 				 * @param realm defines authentication request string
 				 * @param type defines type of authentication[see cgiAuthTypeEnum]
 				 */
-				virtual void requestauthentication(const dodoString &realm, short type = SERVER_AUTHTYPE_DIGEST);
+				virtual void requestAuthentication(const dodoString &realm, short type = SERVER_AUTHTYPE_DIGEST);
 
 				/**
 				 * check basic authentication
 				 * @param user defines user for authentication
 				 * @param password defined user's password for authentication
 				 */
-				virtual bool checkauthentication(const dodoString &user, const dodoString &password);
+				virtual bool checkAuthentication(const dodoString &user, const dodoString &password);
 
 				/**
 				 * @return contents of stdin got for the POST request
