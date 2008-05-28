@@ -52,6 +52,23 @@ __nodeDef::__nodeDef() : chLimit(-1),
 
 //-------------------------------------------------------------------
 
+const dodoString processor::statements[] = 
+{
+	"<",
+	":",
+	" ",
+	"xmlns:",
+	"=\"",
+	"\" ",
+	"/>\r\n",
+	">",
+	"<![CDATA[",
+	"]]>",
+	"</",
+};
+
+//-------------------------------------------------------------------
+
 processor::processor(processor &xt)
 {
 }
@@ -828,50 +845,50 @@ processor::createNode(const node &xnode) const
 	if (xnode.name.empty())
 		return __dodostring__;
 
-	dodoString data = "<";
+	dodoString data = statements[PROCESSOR_STATEMENT_LT];
 
 	if (!xnode.ns.empty())
 	{
 		data.append(xnode.ns);
-		data.append(":");
+		data.append(statements[PROCESSOR_STATEMENT_COLON]);
 	}
 	data.append(xnode.name);
-	data.append(" ");
+	data.append(statements[PROCESSOR_STATEMENT_SPACE]);
 
 	if (!xnode.nsDef.empty())
 	{
-		data.append("xmlns:");
+		data.append(statements[PROCESSOR_STATEMENT_XMLNS]);
 		data.append(xnode.nsDef);
-		data.append("=\"");
+		data.append(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
 		data.append(xnode.nsDefHref);
-		data.append("\" ");
+		data.append(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
 	}
 
 	dodoMap<dodoString, dodoString, dodoMapStringCompare>::const_iterator i = xnode.attributes.begin(), j = xnode.attributes.end();
 	for (; i != j; ++i)
 	{
 		data.append(i->first);
-		data.append("=\"");
+		data.append(statements[PROCESSOR_STATEMENT_EQUALDQUOTE]);
 		data.append(i->second);
-		data.append("\" ");
+		data.append(statements[PROCESSOR_STATEMENT_DQUOTESPACE]);
 	}
 
 	if (xnode.empty)
 	{
-		data.append("/>\r\n");
+		data.append(statements[PROCESSOR_STATEMENT_SLASHGT]);
 
 		return data;
 	}
 
-	data.append(">");
+	data.append(statements[PROCESSOR_STATEMENT_GT]);
 
 	if (!xnode.value.empty())
 	{
 		if (xnode.CDATA)
 		{
-			data.append("<![CDATA[");
+			data.append(statements[PROCESSOR_STATEMENT_CDATAOPEN]);
 			data.append(xnode.value);
-			data.append("]]>");
+			data.append(statements[PROCESSOR_STATEMENT_CDATACLOSE]);
 		}
 		else
 		{
@@ -889,16 +906,16 @@ processor::createNode(const node &xnode) const
 			data.append(createNode(*x));
 	}
 
-	data.append("</");
+	data.append(statements[PROCESSOR_STATEMENT_LTSLASH]);
 
 	if (!xnode.ns.empty())
 	{
 		data.append(xnode.ns);
-		data.append(":");
+		data.append(statements[PROCESSOR_STATEMENT_COLON]);
 	}
 
 	data.append(xnode.name);
-	data.append(">\r\n");
+	data.append(statements[PROCESSOR_STATEMENT_GT]);
 
 	return data;
 }

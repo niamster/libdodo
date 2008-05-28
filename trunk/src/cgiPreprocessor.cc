@@ -25,7 +25,8 @@
 
 using namespace dodo::cgi;
 
-const dodoString preprocessor::statements[] = { "dodo",
+const dodoString preprocessor::statements[] = {
+	"dodo",
 												"<(",
 												")>",
 												"<(>",
@@ -60,7 +61,8 @@ const dodoString preprocessor::statements[] = { "dodo",
 												"<",
 												">",
 												"{",
-												"}" };
+												"}"
+};
 
 //-------------------------------------------------------------------
 

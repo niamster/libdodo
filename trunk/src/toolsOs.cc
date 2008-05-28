@@ -27,7 +27,8 @@ using namespace dodo::tools;
 
 #ifdef DL_EXT
 
-void *os::handlesSig[] = { NULL,
+void *os::handlesSig[] = {
+NULL,
 						   NULL,
 						   NULL,
 						   NULL,
@@ -45,11 +46,13 @@ void *os::handlesSig[] = { NULL,
 						   NULL,
 						   NULL,
 						   NULL,
-						   NULL };
+						   NULL
+};
 
 //-------------------------------------------------------------------
 
-bool os::handlesOpenedSig[] = { false,
+bool os::handlesOpenedSig[] = {
+false,
 								false,
 								false,
 								false,
@@ -67,7 +70,8 @@ bool os::handlesOpenedSig[] = { false,
 								false,
 								false,
 								false,
-								false };
+								false
+};
 
 #endif
 

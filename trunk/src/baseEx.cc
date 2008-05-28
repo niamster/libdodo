@@ -25,7 +25,8 @@
 
 using namespace dodo;
 
-bool baseEx::handlerSetEx[] = { false,
+bool baseEx::handlerSetEx[] = {
+false,
 								false,
 								false,
 								false,
@@ -65,11 +66,13 @@ bool baseEx::handlerSetEx[] = { false,
 								false,
 								false,
 								false,
-								false };
+								false
+};
 
 //-------------------------------------------------------------------
 
-errorHandler baseEx::handlersEx[] = { NULL,
+errorHandler baseEx::handlersEx[] = {
+	NULL,
 									  NULL,
 									  NULL,
 									  NULL,
@@ -109,11 +112,13 @@ errorHandler baseEx::handlersEx[] = { NULL,
 									  NULL,
 									  NULL,
 									  NULL,
-									  NULL };
+									  NULL
+};
 
 //-------------------------------------------------------------------
 
-void *baseEx::handlerDataEx[] = { NULL,
+void *baseEx::handlerDataEx[] = {
+NULL,
 								  NULL,
 								  NULL,
 								  NULL,
@@ -153,13 +158,15 @@ void *baseEx::handlerDataEx[] = { NULL,
 								  NULL,
 								  NULL,
 								  NULL,
-								  NULL };
+								  NULL
+};
 
 //-------------------------------------------------------------------
 
 #ifdef DL_EXT
 
-bool baseEx::handlesOpenedEx[] = { false,
+bool baseEx::handlesOpenedEx[] = {
+false,
 								   false,
 								   false,
 								   false,
@@ -199,11 +206,13 @@ bool baseEx::handlesOpenedEx[] = { false,
 								   false,
 								   false,
 								   false,
-								   false };
+								   false
+};
 
 //-------------------------------------------------------------------
 
-void *baseEx::handlesEx[] = { NULL,
+void *baseEx::handlesEx[] = {
+NULL,
 							  NULL,
 							  NULL,
 							  NULL,
@@ -243,7 +252,8 @@ void *baseEx::handlesEx[] = { NULL,
 							  NULL,
 							  NULL,
 							  NULL,
-							  NULL };
+							  NULL
+};
 
 #endif
 

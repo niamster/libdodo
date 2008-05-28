@@ -274,6 +274,28 @@ namespace dodo
 
 	#endif
 
+				#define PROCESSOR_STATEMENTS 11
+
+				/**
+				 * @enum processorStatementEnum defines processor statements
+				 * @note defines positions of string representation in 'statements' class property
+				 */
+				enum processorStatementEnum
+				{
+					PROCESSOR_STATEMENT_LT = 0,
+					PROCESSOR_STATEMENT_COLON,
+					PROCESSOR_STATEMENT_SPACE,
+					PROCESSOR_STATEMENT_XMLNS,
+					PROCESSOR_STATEMENT_EQUALDQUOTE,
+					PROCESSOR_STATEMENT_DQUOTESPACE,
+					PROCESSOR_STATEMENT_SLASHGT,
+					PROCESSOR_STATEMENT_GT,
+					PROCESSOR_STATEMENT_CDATAOPEN,
+					PROCESSOR_STATEMENT_CDATACLOSE,
+					PROCESSOR_STATEMENT_LTSLASH,
+				};
+
+				static const dodoString statements[PROCESSOR_STATEMENTS]; ///< processor statements
 		};
 	};
 };
