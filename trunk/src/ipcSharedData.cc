@@ -72,7 +72,8 @@ data::map(unsigned long size)
 	if (shm <= 0)
 		throw baseEx(ERRMODULE_IPCSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	ftruncate(shm, sizeof(size));
+	if (ftruncate(shm, sizeof(size)) != 0)
+		throw baseEx(ERRMODULE_IPCSHAREDDATA, DATAEX_MAP, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	mdata = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, shm, 0);
 
