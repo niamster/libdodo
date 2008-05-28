@@ -172,13 +172,13 @@ sqlite::_exec(const dodoString &query,
 		{
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
 
-			if (qType == ACCUMULATOR_REQUEST_INSERT || qType == ACCUMULATOR_REQUEST_UPDATE)
+			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
-				dodoString temp = dbInfo.db + ":" + pre_table;
+				dodoString temp = dbInfo.db + ":" + collectedData.table;
 
 				if (framingFields.find(temp) == framingFields.end())
 				{
-					request = "select * from " + pre_table + " limit 1";
+					request = "select * from " + collectedData.table + " limit 1";
 
 					if (!empty)
 					{
@@ -206,7 +206,7 @@ sqlite::_exec(const dodoString &query,
 
 						if (sqlite3_table_column_metadata(sqliteHandle,
 														  NULL,
-														  pre_table.c_str(),
+														  collectedData.table.c_str(),
 														  columnName,
 														  &columnType,
 														  NULL,
@@ -254,7 +254,7 @@ sqlite::_exec(const dodoString &query,
 	{
 		removeFlag(hint, SQLITE_HINT_BLOB);
 
-		switch (qType)
+		switch (collectedData.qType)
 		{
 			case ACCUMULATOR_REQUEST_UPDATE:
 			case ACCUMULATOR_REQUEST_INSERT:

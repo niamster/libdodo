@@ -27,10 +27,8 @@ using namespace dodo::io;
 
 #ifndef IOFILE_WO_XEXEC
 
-__xexexIoFileCollectedData::__xexexIoFileCollectedData(dodoString &a_buffer,
-													   int &a_operType,
-													   void *a_executor) : buffer(a_buffer),
-																		   operType(a_operType),
+__xexexIoFileCollectedData::__xexexIoFileCollectedData(int &a_operType,
+													   void *a_executor) : operType(a_operType),
 																		   executor(a_executor)
 {
 }
@@ -49,8 +47,7 @@ file::file(const dodoString &a_path,
 #ifndef IOFILE_WO_XEXEC
 
 						 ,
-						 collectedData(buffer,
-									   operType,
+						 collectedData(operType,
 									   (void *) this)
 
 #endif
@@ -71,8 +68,7 @@ file::file(const dodoString &a_path,
 file::file(file &fd)
 #ifndef IOFILE_WO_XEXEC
 
-	: collectedData(buffer,
-					operType,
+	: collectedData(operType,
 					(void *) this)
 
 #endif
@@ -337,7 +333,7 @@ file::read(char * const a_void)
 	operType = FILE_OPERATION_READ;
 	performXExec(preExec);
 
-	buffer.reserve(inSize);
+	collectedData.buffer.reserve(inSize);
 #endif
 
 #ifndef IOFILE_WO_XEXEC
@@ -348,7 +344,7 @@ file::read(char * const a_void)
 	}
 	catch (...)
 	{
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -360,12 +356,12 @@ file::read(char * const a_void)
 #endif
 
 #ifndef IOFILE_WO_XEXEC
-	buffer.assign(a_void, inSize);
+	collectedData.buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
 
-	strncpy(a_void, buffer.c_str(), buffer.size() > inSize ? inSize : buffer.size());
-	buffer.clear();
+	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size() > inSize ? inSize : collectedData.buffer.size());
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -380,7 +376,7 @@ file::readString(dodoString &a_str)
 	operType = FILE_OPERATION_READSTRING;
 	performXExec(preExec);
 
-	buffer.reserve(inSize);
+	collectedData.buffer.reserve(inSize);
 #endif
 
 	char *data = new char[inSize];
@@ -394,7 +390,7 @@ file::readString(dodoString &a_str)
 		delete [] data;
 
 #ifndef IOFILE_WO_XEXEC
-		buffer.clear();
+		collectedData.buffer.clear();
 #endif
 
 		throw;
@@ -402,13 +398,13 @@ file::readString(dodoString &a_str)
 
 #ifndef IOFILE_WO_XEXEC
 
-	buffer.assign(data, inSize);
+	collectedData.buffer.assign(data, inSize);
 	delete [] data;
 
 	performXExec(postExec);
 
-	a_str = buffer;
-	buffer.clear();
+	a_str = collectedData.buffer;
+	collectedData.buffer.clear();
 
 #else
 
@@ -427,18 +423,18 @@ file::writeString(const dodoString &a_buf)
 
 #ifndef IOFILE_WO_XEXEC
 
-	buffer = a_buf;
+	collectedData.buffer = a_buf;
 
 	operType = FILE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
 	{
-		_write(buffer.c_str());
+		_write(collectedData.buffer.c_str());
 	}
 	catch (...)
 	{
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -453,7 +449,7 @@ file::writeString(const dodoString &a_buf)
 #ifndef IOFILE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 
 	this->write(a_buf.c_str());
@@ -527,18 +523,18 @@ file::write(const char *const a_buf)
 
 #ifndef IOFILE_WO_XEXEC
 
-	buffer.assign(a_buf, outSize);
+	collectedData.buffer.assign(a_buf, outSize);
 
 	operType = FILE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
 	{
-		_write(buffer.c_str());
+		_write(collectedData.buffer.c_str());
 	}
 	catch (...)
 	{
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -553,7 +549,7 @@ file::write(const char *const a_buf)
 #ifndef IOFILE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -663,14 +659,14 @@ file::readStream(char * const a_void)
 
 #ifndef IOFILE_WO_XEXEC
 
-	buffer = a_void;
+	collectedData.buffer = a_void;
 
 	performXExec(postExec);
 
-	if (buffer.size() > inSize)
-		buffer.resize(inSize);
-	strcpy(a_void, buffer.c_str());
-	buffer.clear();
+	if (collectedData.buffer.size() > inSize)
+		collectedData.buffer.resize(inSize);
+	strcpy(a_void, collectedData.buffer.c_str());
+	collectedData.buffer.clear();
 
 #endif
 }
@@ -702,13 +698,13 @@ file::readStreamString(dodoString &a_str)
 
 #ifndef IOFILE_WO_XEXEC
 
-	buffer = data;
+	collectedData.buffer = data;
 	delete [] data;
 
 	performXExec(postExec);
 
-	a_str = buffer;
-	buffer.clear();
+	a_str = collectedData.buffer;
+	collectedData.buffer.clear();
 
 #else
 
@@ -763,16 +759,16 @@ file::writeStreamString(const dodoString &a_buf)
 
 #ifndef IOFILE_WO_XEXEC
 
-	buffer = a_buf;
+	collectedData.buffer = a_buf;
 
 	operType = FILE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
 	{
-		outSize = buffer.size();
+		outSize = collectedData.buffer.size();
 
-		_writeStream(buffer.c_str());
+		_writeStream(collectedData.buffer.c_str());
 
 		outSize = _outSize;
 	}
@@ -780,7 +776,7 @@ file::writeStreamString(const dodoString &a_buf)
 	{
 		outSize = _outSize;
 
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -807,7 +803,7 @@ file::writeStreamString(const dodoString &a_buf)
 #ifndef IOFILE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -822,16 +818,16 @@ file::writeStream(const char *const a_buf)
 
 #ifndef IOFILE_WO_XEXEC
 
-	buffer = a_buf;
+	collectedData.buffer = a_buf;
 
 	operType = FILE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
 	{
-		outSize = buffer.size();
+		outSize = collectedData.buffer.size();
 
-		_write(buffer.c_str());
+		_write(collectedData.buffer.c_str());
 
 		outSize = _outSize;
 	}
@@ -839,7 +835,7 @@ file::writeStream(const char *const a_buf)
 	{
 		outSize = _outSize;
 
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -866,7 +862,7 @@ file::writeStream(const char *const a_buf)
 #ifndef IOFILE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 }
 

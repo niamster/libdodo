@@ -70,12 +70,13 @@ namespace dodo
 		{
 			/**
 			 * constructor
+			 * @param operType defines xexec operation
+			 * @param executor defines class that executed hook
 			 */
-			__xexexIoStdioCollectedData(dodoString &buffer,
-										int &operType,
+			__xexexIoStdioCollectedData(int &operType,
 										void *executor);
 
-			dodoString &buffer;         ///< data buffer
+			dodoString buffer;         ///< data buffer
 
 			int &operType;              ///< xexec operation
 
@@ -285,8 +286,6 @@ namespace dodo
 				bool err;           ///< true if output stream is redirected to stderr
 
 #ifndef IOSTDIO_WO_XEXEC
-
-				dodoString buffer;                              ///< buffer
 
 				__xexexIoStdioCollectedData collectedData;      ///< data collected for xexec
 

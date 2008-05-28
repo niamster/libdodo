@@ -42,53 +42,38 @@ namespace dodo
 		{
 			/**
 			 * constructor
+			 * @param operType defines xexec operation
+			 * @param executor defines class that executed hook
 			 */
-			__xexexDbAccumulatorCollectedData(dodoString &pre_where,
-											  dodoStringArray &pre_fields,
-											  dodoArray<dodoStringArray> &pre_values,
-											  dodoString &pre_table,
-											  dodoString &pre_tableTo,
-											  dodoString &pre_order,
-											  dodoString &pre_having,
-											  dodoString &pre_group,
-											  dodoString &pre_limit,
-											  dodoString &pre_offset,
-											  dodoStringArray &pre_subQueries,
-											  dodoStringArray &pre_joinTables,
-											  dodoStringArray &pre_joinConds,
-											  dodoArray<int> &pre_joinTypes,
-											  int &qType,
-											  int &qShift,
-											  int &qSelShift,
-											  int &qInsShift,
-											  int &qUpShift,
-											  int &qDelShift,
-											  int &operType,
-											  void *executor);
+			__xexexDbAccumulatorCollectedData(int &operType, void *executor);
 
-			dodoString &pre_where;                          ///< `where` for the request(can be used as `as` for `callFunction`)
-			dodoStringArray &pre_fields;                    ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-			dodoArray<dodoStringArray> &pre_values;         ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-			dodoString &pre_table;                          ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-			dodoString &pre_tableTo;                        ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
-			dodoString &pre_order;                          ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
-			dodoString &pre_having;                         ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
-			dodoString &pre_group;                          ///< `group` for the request
-			dodoString &pre_limit;                          ///< `limit` for the result
-			dodoString &pre_offset;                         ///< `offset` for the result
-			dodoStringArray &pre_subQueries;                ///< `subquery`
-			dodoStringArray &pre_joinTables;                ///< join tables
-			dodoStringArray &pre_joinConds;                 ///< join conditions
-			dodoArray<int> &pre_joinTypes;                  ///< join types
+			dodoString where;                          ///< `where` for the request(can be used as `as` for `callFunction`)
+			dodoStringArray fields;                    ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
+			dodoArray<dodoStringArray> values;         ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
+			dodoString table;                          ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+			dodoString tableTo;                        ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
+			dodoString order;                          ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
+			dodoString having;                         ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
+			dodoString group;                          ///< `group` for the request
+			dodoString limit;                          ///< `limit` for the result
+			dodoString offset;                         ///< `offset` for the result
+			dodoStringArray subQueries;                ///< `subquery`
+			dodoStringArray joinTables;                ///< join tables
+			dodoStringArray joinConds;                 ///< join conditions
+			dodoArray<int> joinTypes;                  ///< join types
+			
+			__connectorTable tableInfo;                 ///< table structure for creation
+			__connectorField fieldInfo;                 ///< field structure for creation
 
-			int &qType;                                     ///< type of operation
 
-			int &qShift;                                    ///< additional actions[see accumulatorAddEnum]
+			int qType;                                     ///< type of operation
 
-			int &qSelShift;                                 ///< additional select statements[see accumulatorAddSelEnum]
-			int &qInsShift;                                 ///< additional insert statements[see accumulatorAddInsEnum]
-			int &qUpShift;                                  ///< additional update statements[see accumulatorAddUpEnum]
-			int &qDelShift;                                 ///< additional delete statements[see accumulatorAddDelEnum]
+			int qShift;                                    ///< additional actions[see accumulatorAddEnum]
+
+			int qSelShift;                                 ///< additional select statements[see accumulatorAddSelEnum]
+			int qInsShift;                                 ///< additional insert statements[see accumulatorAddInsEnum]
+			int qUpShift;                                  ///< additional update statements[see accumulatorAddUpEnum]
+			int qDelShift;                                 ///< additional delete statements[see accumulatorAddDelEnum]
 
 			int &operType;                                  ///< xexec operation
 
@@ -553,9 +538,6 @@ namespace dodo
 
 				bool show;                                      ///< if true try to get result from the request[select]
 
-				__connectorTable pre_tableInfo;                 ///< table structure for creation
-				__connectorField pre_fieldInfo;                 ///< field structure for creation
-
 				__connectorInfo dbInfo;                         ///< data info to connect to the server
 
 				/*
@@ -573,30 +555,6 @@ namespace dodo
 				int qDbDepInsShift;                                 ///< additional db-dependent `insert` actions[see sqlDbDepAddInsArr]
 				int qDbDepUpShift;                                  ///< additional db-dependent `update` actions[see sqlDbDepAddUpArr]
 				int qDbDepDelShift;                                 ///< additional db-dependent `delete` actions[see sqlDbDepAddDelArr]
-
-				dodoString pre_where;                               ///< `where` for the request(can be used as `as` for `callFunction`)
-				dodoStringArray pre_fields;                         ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-				dodoArray<dodoStringArray> pre_values;              ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-				dodoString pre_table;                               ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-				dodoString pre_tableTo;                             ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
-				dodoString pre_order;                               ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
-				dodoString pre_having;                              ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
-				dodoString pre_group;                               ///< `group` for the request
-				dodoString pre_limit;                               ///< `limit` for the result
-				dodoString pre_offset;                              ///< `offset` for the result
-				dodoStringArray pre_subQueries;                     ///< `subquery`
-				dodoStringArray pre_joinTables;                     ///< join tables
-				dodoStringArray pre_joinConds;                      ///< join conditions
-				dodoArray<int> pre_joinTypes;                       ///< join types
-
-				int qType;                                          ///< type of operation
-
-				int qShift;                                         ///< additional actions[see accumulatorAddEnum]
-
-				int qSelShift;                                      ///< additional select statements[see accumulatorAddSelEnum]
-				int qInsShift;                                      ///< additional insert statements[see accumulatorAddInsEnum]
-				int qUpShift;                                       ///< additional update statements[see accumulatorAddUpEnum]
-				int qDelShift;                                      ///< additional delete statements[see accumulatorAddDelEnum]
 
 				__xexexDbAccumulatorCollectedData collectedData;    ///< data collected for xexec
 		};

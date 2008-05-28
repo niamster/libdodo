@@ -23,9 +23,9 @@ hook(void *odata,
 
 	if (sql->operType == MYSQL_OPERATION_EXEC && sql->qType == ACCUMULATOR_REQUEST_SELECT)
 	{
-		cout << endl << endl << "table was " << sql->pre_table << endl << endl;
+		cout << endl << endl << "table was " << sql->table << endl << endl;
 		
-		sql->pre_limit = "70";
+		sql->limit = "70";
 	}
 }
 

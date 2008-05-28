@@ -255,13 +255,13 @@ mysql::_exec(const dodoString &query,
 	{
 		if (autoFraming)
 		{
-			if (qType == ACCUMULATOR_REQUEST_INSERT || qType == ACCUMULATOR_REQUEST_UPDATE)
+			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
-				dodoString temp = dbInfo.db + ":" + pre_table;
+				dodoString temp = dbInfo.db + ":" + collectedData.table;
 
 				if (framingFields.find(temp) == framingFields.end())
 				{
-					request = "describe " + pre_table;
+					request = "describe " + collectedData.table;
 
 					if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
 					{
@@ -633,7 +633,7 @@ mysql::fetchAssoc() const
 void
 mysql::renameDbCollect()
 {
-	request = "rename database " + pre_order + " to " + pre_having;
+	request = "rename database " + collectedData.order + " to " + collectedData.having;
 }
 
 //-------------------------------------------------------------------
@@ -641,7 +641,7 @@ mysql::renameDbCollect()
 void
 mysql::renameFieldCollect()
 {
-	request = "alter table " + pre_table + " change " + pre_tableTo + " " + fieldCollect(pre_fieldInfo);
+	request = "alter table " + collectedData.table + " change " + collectedData.tableTo + " " + fieldCollect(collectedData.fieldInfo);
 }
 
 //-------------------------------------------------------------------
@@ -651,10 +651,10 @@ mysql::renameField(const dodoString &field,
 				   const __connectorField &to_field,
 				   const dodoString &table)
 {
-	qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
-	pre_tableTo = field;
-	pre_table = table;
-	pre_fieldInfo = to_field;
+	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
+	collectedData.tableTo = field;
+	collectedData.table = table;
+	collectedData.fieldInfo = to_field;
 	show = false;
 }
 

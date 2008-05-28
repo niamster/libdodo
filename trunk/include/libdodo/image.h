@@ -46,8 +46,6 @@ namespace dodo
 		IMAGE_OPERATION_READ,
 	};
 
-#ifndef IMAGE_WO_XEXEC
-
 	/**
 	 * @struct __xexexImageCollectedData defines data that could be retrieved from the image object
 	 */
@@ -55,21 +53,19 @@ namespace dodo
 	{
 		/**
 		 * constructor
+		 * @param operType defines xexec operation
+		 * @param executor defines class that executed hook
 		 */
-		__xexexImageCollectedData(ImageInfo &imInfo,
-								  Image &im,
-								  int &operType,
+		__xexexImageCollectedData(int &operType,
 								  void *executor);
-
-		ImageInfo &imInfo;  ///< info handler
-		Image &im;          ///< image handler
+		
+		ImageInfo *imInfo;                          ///< image info handler
+		Image *imHandle;                                  ///< image handler
 
 		int &operType;      ///< xexec operation
 
 		void *executor;     ///< class that executed hook
 	};
-
-#endif
 
 	#define IMAGE_MAPPINGS 3
 
@@ -344,15 +340,9 @@ namespace dodo
 
 		protected:
 
-			ImageInfo *imInfo;                          ///< image info handler
-			Image *im;                                  ///< image handler
 			ExceptionInfo *exInfo;                      ///< exception info handler
 
-#ifndef IMAGE_WO_XEXEC
-
 			__xexexImageCollectedData collectedData;    ///< data collected for xexec
-
-#endif
 
 		private:
 

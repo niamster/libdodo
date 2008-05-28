@@ -65,12 +65,12 @@ namespace dodo
 			{
 				/**
 				 * constructor
+				 * @param operType defines xexec operation
+				 * @param executor defines class that executed hook
 				 */
-				__xexexCgiFastExchangeCollectedData(dodoString &buffer,
-													int &operType,
-													void *executor);
+				__xexexCgiFastExchangeCollectedData(int &operType, void *executor);
 
-				dodoString &buffer;         ///< data buffer
+				dodoString buffer;         ///< data buffer
 
 				int &operType;              ///< xexec operation
 
@@ -248,8 +248,6 @@ namespace dodo
 					FCGX_Request *request;    ///< fast CGI descriptor
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-
-					dodoString buffer;                                      ///< buffer
 
 					__xexexCgiFastExchangeCollectedData collectedData;      ///< data collected for xexec
 

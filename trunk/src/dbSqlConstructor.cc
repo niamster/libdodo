@@ -213,10 +213,10 @@ void
 sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
 								  const dodoString &collectedString)
 {
-	if (qShift == ACCUMULATOR_NONE)
+	if (collectedData.qShift == ACCUMULATOR_NONE)
 		return ;
 
-	if (isSetFlag(qShift, 1 << qTypeTocheck))
+	if (isSetFlag(collectedData.qShift, 1 << qTypeTocheck))
 	{
 		request.append(sqlAddArr[qTypeTocheck - 1]);
 		request.append(collectedString);
@@ -274,22 +274,22 @@ void
 sqlConstructor::callFunctionCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
-	request.append(pre_table);
+	request.append(collectedData.table);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 
 	if (preventEscaping)
 	{
 		if (preventFraming)
-			request.append(tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+			request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		else
-			request.append(tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 	}
 	else
 	{
 		if (preventFraming)
-			request.append(tools::misc::implode(pre_fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		else
-			request.append(tools::misc::implode(pre_fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 	}
 
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
@@ -301,22 +301,22 @@ void
 sqlConstructor::callProcedureCollect()
 {
 	request = statements[SQLCONSTRUCTOR_STATEMENT_CALL];
-	request.append(pre_table);
+	request.append(collectedData.table);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 
 	if (preventEscaping)
 	{
 		if (preventFraming)
-			request.append(tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+			request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		else
-			request.append(tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 	}
 	else
 	{
 		if (preventFraming)
-			request.append(tools::misc::implode(pre_fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		else
-			request.append(tools::misc::implode(pre_fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
+			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 	}
 
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
@@ -327,21 +327,21 @@ sqlConstructor::callProcedureCollect()
 void
 sqlConstructor::selectCollect()
 {
-	dodoString temp = insideAddCollect(addSelEnumArr, sqlAddSelArr, qSelShift);
+	dodoString temp = insideAddCollect(addSelEnumArr, sqlAddSelArr, collectedData.qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr, qDbDepSelShift));
 
-	if (pre_table.size() > 0)
+	if (collectedData.table.size() > 0)
 	{
-		temp.append(tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		temp.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 
 		request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
 		request.append(temp);
 		request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
-		request.append(pre_table);
+		request.append(collectedData.table);
 	}
 	else
 	{
-		temp.append(tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		temp.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		request = statements[SQLCONSTRUCTOR_STATEMENT_SELECT];
 		request.append(temp);
 	}
@@ -354,11 +354,11 @@ sqlConstructor::insertCollect()
 {
 	dodoStringArray fieldsVPart;
 
-	dodoArray<dodoStringArray>::iterator k(pre_values.begin()), l(pre_values.end());
+	dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
 
-	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + pre_table);
+	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
 
-	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fields.size() != 0)
+	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
 	{
 		dodoStringArray::iterator t;
 
@@ -368,7 +368,7 @@ sqlConstructor::insertCollect()
 		{
 			temp.clear();
 
-			t = pre_fields.begin();
+			t = collectedData.fields.begin();
 
 			dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
 			for (; i != j; ++i, ++t)
@@ -434,15 +434,15 @@ sqlConstructor::insertCollect()
 		fieldsPart.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 	}
 
-	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, qInsShift);
+	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, collectedData.qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
 
-	dodoString temp1 = pre_table;
+	dodoString temp1 = collectedData.table;
 
-	if (pre_fields.size() != 0)
+	if (collectedData.fields.size() != 0)
 	{
 		temp1.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-		temp1.append(tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		temp1.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		temp1.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 	}
 
@@ -459,13 +459,13 @@ sqlConstructor::insertCollect()
 void
 sqlConstructor::insertSelectCollect()
 {
-	dodoString fieldsPartTo = tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-	dodoString fieldsPartFrom = tools::misc::implode(pre_values.front(), statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+	dodoString fieldsPartTo = tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+	dodoString fieldsPartFrom = tools::misc::implode(collectedData.values.front(), statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
-	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, qInsShift);
+	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, collectedData.qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
 
-	dodoString tempS = insideAddCollect(addSelEnumArr, sqlAddSelArr, qSelShift);
+	dodoString tempS = insideAddCollect(addSelEnumArr, sqlAddSelArr, collectedData.qSelShift);
 	tempS.append(insideAddCollect(sqlDbDepAddSelArr, qDbDepSelShift));
 
 	tempS.append(fieldsPartFrom);
@@ -473,13 +473,13 @@ sqlConstructor::insertSelectCollect()
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
 	request.append(temp);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
-	request.append(pre_tableTo);
+	request.append(collectedData.tableTo);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 	request.append(fieldsPartTo);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKETSELECT]);
 	request.append(tempS);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
-	request.append(pre_table);
+	request.append(collectedData.table);
 }
 
 //-------------------------------------------------------------------
@@ -489,14 +489,14 @@ sqlConstructor::updateCollect()
 {
 	dodoString setPart;
 
-	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + pre_table);
+	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
 
-	if (autoFraming && !preventFraming && y != framingFields.end() && pre_fields.size() != 0)
+	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
 	{
-		unsigned int fn(pre_fields.size()), fv(pre_values.front().size());
+		unsigned int fn(collectedData.fields.size()), fv(collectedData.values.front().size());
 		unsigned int o(fn <= fv ? fn : fv);
 
-		dodoStringArray::iterator i(pre_fields.begin()), j(pre_values.front().begin());
+		dodoStringArray::iterator i(collectedData.fields.begin()), j(collectedData.values.front().begin());
 		for (unsigned int k(0); k < o - 1; ++i, ++j, ++k)
 		{
 			if (tools::misc::isInArray(y->second, *i, true))
@@ -531,15 +531,15 @@ sqlConstructor::updateCollect()
 	else
 	{
 		if (preventFraming)
-			setPart = valuesName(pre_values.front(), pre_fields, __dodostring__);
+			setPart = valuesName(collectedData.values.front(), collectedData.fields, __dodostring__);
 		else
-			setPart = valuesName(pre_values.front(), pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+			setPart = valuesName(collectedData.values.front(), collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 	}
 
-	insideAddCollect(addUpEnumArr, sqlAddUpArr, qUpShift);
+	insideAddCollect(addUpEnumArr, sqlAddUpArr, collectedData.qUpShift);
 	dodoString temp = insideAddCollect(sqlDbDepAddUpArr, qDbDepUpShift);
 
-	temp.append(pre_table);
+	temp.append(collectedData.table);
 
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
 	request.append(temp);
@@ -552,13 +552,13 @@ sqlConstructor::updateCollect()
 void
 sqlConstructor::delCollect()
 {
-	dodoString temp = insideAddCollect(addDelEnumArr, sqlAddDelArr, qDelShift);
+	dodoString temp = insideAddCollect(addDelEnumArr, sqlAddDelArr, collectedData.qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr, qDbDepDelShift));
 
 	request = statements[SQLCONSTRUCTOR_STATEMENT_DELETE];
 	request.append(temp);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_FROM]);
-	request.append(pre_table);
+	request.append(collectedData.table);
 }
 
 //-------------------------------------------------------------------
@@ -566,7 +566,7 @@ sqlConstructor::delCollect()
 void
 sqlConstructor::subCollect()
 {
-	request = tools::misc::implode(pre_subQueries, sqlQStArr[qType - 1]);
+	request = tools::misc::implode(collectedData.subQueries, sqlQStArr[collectedData.qType - 1]);
 }
 
 //-------------------------------------------------------------------
@@ -574,7 +574,7 @@ sqlConstructor::subCollect()
 void
 sqlConstructor::truncateCollect()
 {
-	request = "truncate " + pre_table;
+	request = "truncate " + collectedData.table;
 }
 
 //-------------------------------------------------------------------
@@ -582,7 +582,7 @@ sqlConstructor::truncateCollect()
 void
 sqlConstructor::delDbCollect()
 {
-	request = "drop database " + pre_order;
+	request = "drop database " + collectedData.order;
 }
 
 //-------------------------------------------------------------------
@@ -590,7 +590,7 @@ sqlConstructor::delDbCollect()
 void
 sqlConstructor::delTableCollect()
 {
-	request = "drop table " + pre_table;
+	request = "drop table " + collectedData.table;
 }
 
 //-------------------------------------------------------------------
@@ -598,7 +598,7 @@ sqlConstructor::delTableCollect()
 void
 sqlConstructor::delFieldCollect()
 {
-	request = "alter " + pre_order + " drop " + pre_table;
+	request = "alter " + collectedData.order + " drop " + collectedData.table;
 }
 
 //-------------------------------------------------------------------
@@ -614,7 +614,7 @@ sqlConstructor::renameDbCollect()
 void
 sqlConstructor::renameTableCollect()
 {
-	request = "alter table " + pre_table + " rename to " + pre_having;
+	request = "alter table " + collectedData.table + " rename to " + collectedData.having;
 }
 
 //-------------------------------------------------------------------
@@ -630,9 +630,9 @@ sqlConstructor::renameFieldCollect()
 void
 sqlConstructor::createDbCollect()
 {
-	request = "create database " + pre_order;
-	if (pre_having.size() != 0)
-		request.append(" character set " + pre_having);
+	request = "create database " + collectedData.order;
+	if (collectedData.having.size() != 0)
+		request.append(" character set " + collectedData.having);
 }
 
 //-------------------------------------------------------------------
@@ -640,7 +640,7 @@ sqlConstructor::createDbCollect()
 void
 sqlConstructor::createIndexCollect()
 {
-	request = "create index " + pre_having + " on " + pre_table + statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET] + tools::misc::implode(pre_fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]) + statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET];
+	request = "create index " + collectedData.having + " on " + collectedData.table + statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET] + tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]) + statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET];
 }
 
 //-------------------------------------------------------------------
@@ -648,7 +648,7 @@ sqlConstructor::createIndexCollect()
 void
 sqlConstructor::deleteIndexCollect()
 {
-	request = "drop index " + pre_having + " on " + pre_table;
+	request = "drop index " + collectedData.having + " on " + collectedData.table;
 }
 
 //-------------------------------------------------------------------
@@ -658,12 +658,12 @@ sqlConstructor::createTableCollect()
 {
 	request = "create table ";
 
-	request.append(pre_tableInfo.ifNotExists ? "if not exists " : __dodostring__);
+	request.append(collectedData.tableInfo.ifNotExists ? "if not exists " : __dodostring__);
 
-	request.append(pre_tableInfo.name + statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
+	request.append(collectedData.tableInfo.name + statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 
 	{
-		dodoArray<__connectorField>::iterator i(pre_tableInfo.fields.begin()), j(pre_tableInfo.fields.end());
+		dodoArray<__connectorField>::iterator i(collectedData.tableInfo.fields.begin()), j(collectedData.tableInfo.fields.end());
 		if (i != j)
 		{
 			--j;
@@ -673,8 +673,8 @@ sqlConstructor::createTableCollect()
 		}
 	}
 
-	request.append(!pre_tableInfo.primKeys.empty() ? ", primary key (" + tools::misc::implode(pre_tableInfo.primKeys, statements[SQLCONSTRUCTOR_STATEMENT_COMA]) + statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET] : __dodostring__);
-	request.append(!pre_tableInfo.uniq.empty() ? ", unique " + tools::misc::implode(pre_tableInfo.uniq, statements[SQLCONSTRUCTOR_STATEMENT_COMA]) : __dodostring__);
+	request.append(!collectedData.tableInfo.primKeys.empty() ? ", primary key (" + tools::misc::implode(collectedData.tableInfo.primKeys, statements[SQLCONSTRUCTOR_STATEMENT_COMA]) + statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET] : __dodostring__);
+	request.append(!collectedData.tableInfo.uniq.empty() ? ", unique " + tools::misc::implode(collectedData.tableInfo.uniq, statements[SQLCONSTRUCTOR_STATEMENT_COMA]) : __dodostring__);
 
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 }
@@ -684,7 +684,7 @@ sqlConstructor::createTableCollect()
 void
 sqlConstructor::createFieldCollect()
 {
-	request = "alter table " + pre_table + " add " + fieldCollect(pre_fieldInfo);
+	request = "alter table " + collectedData.table + " add " + fieldCollect(collectedData.fieldInfo);
 }
 
 //-------------------------------------------------------------------
@@ -692,9 +692,9 @@ sqlConstructor::createFieldCollect()
 void
 sqlConstructor::joinCollect()
 {
-	dodoStringArray::iterator i = pre_joinTables.begin(), j = pre_joinTables.end();
-	dodoStringArray::iterator o = pre_joinConds.begin(), p = pre_joinConds.end();
-	dodoArray<int>::iterator m = pre_joinTypes.begin(), n = pre_joinTypes.end();
+	dodoStringArray::iterator i = collectedData.joinTables.begin(), j = collectedData.joinTables.end();
+	dodoStringArray::iterator o = collectedData.joinConds.begin(), p = collectedData.joinConds.end();
+	dodoArray<int>::iterator m = collectedData.joinTypes.begin(), n = collectedData.joinTypes.end();
 	for (; i != j; ++i, ++o, ++m)
 	{
 		if (*m > 0 && *m < CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS)
@@ -720,7 +720,7 @@ sqlConstructor::queryCollect()
 	bool additionalActions = true;
 	bool selectAction = false;
 
-	switch (qType)
+	switch (collectedData.qType)
 	{
 		case ACCUMULATOR_REQUEST_SELECT:
 
@@ -878,16 +878,16 @@ sqlConstructor::queryCollect()
 
 	if (additionalActions)
 	{
-		additionalCollect(ACCUMULATOR_ADDREQUEST_AS, pre_where);
-		additionalCollect(ACCUMULATOR_ADDREQUEST_WHERE, pre_where);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_AS, collectedData.where);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_WHERE, collectedData.where);
 		if (selectAction)
 		{
-			additionalCollect(ACCUMULATOR_ADDREQUEST_GROUPBY, pre_group);
-			additionalCollect(ACCUMULATOR_ADDREQUEST_HAVING, pre_having);
+			additionalCollect(ACCUMULATOR_ADDREQUEST_GROUPBY, collectedData.group);
+			additionalCollect(ACCUMULATOR_ADDREQUEST_HAVING, collectedData.having);
 		}
-		additionalCollect(ACCUMULATOR_ADDREQUEST_ORDERBY, pre_order);
-		additionalCollect(ACCUMULATOR_ADDREQUEST_LIMIT, pre_limit);
-		additionalCollect(ACCUMULATOR_ADDREQUEST_OFFSET, pre_offset);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_ORDERBY, collectedData.order);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_LIMIT, collectedData.limit);
+		additionalCollect(ACCUMULATOR_ADDREQUEST_OFFSET, collectedData.offset);
 	}
 
 	return request;

@@ -86,50 +86,9 @@ __connectorField::operator=(const __connectorField &from)
 
 //-------------------------------------------------------------------
 
-__xexexDbAccumulatorCollectedData::__xexexDbAccumulatorCollectedData(
-	dodoString &a_pre_where,
-	dodoStringArray &a_pre_fields,
-	dodoArray<dodoStringArray> &a_pre_values,
-	dodoString &a_pre_table,
-	dodoString &a_pre_tableTo,
-	dodoString &a_pre_order,
-	dodoString &a_pre_having,
-	dodoString &a_pre_group,
-	dodoString &a_pre_limit,
-	dodoString &a_pre_offset,
-	dodoStringArray &a_pre_subQueries,
-	dodoStringArray &a_pre_joinTables,
-	dodoStringArray &a_pre_joinConds,
-	dodoArray<int> &a_pre_joinTypes,
-	int &a_qType,
-	int &a_qShift,
-	int &a_qSelShift,
-	int &a_qInsShift,
-	int &a_qUpShift,
-	int &a_qDelShift,
-	int &a_operType,
-	void *a_executor) : pre_where(a_pre_where),
-						pre_fields(a_pre_fields),
-						pre_values(a_pre_values),
-						pre_table(a_pre_table),
-						pre_tableTo(a_pre_tableTo),
-						pre_order(a_pre_order),
-						pre_having(a_pre_having),
-						pre_group(a_pre_group),
-						pre_limit(a_pre_limit),
-						pre_offset(a_pre_offset),
-						pre_subQueries(a_pre_subQueries),
-						pre_joinTables(a_pre_joinTables),
-						pre_joinConds(a_pre_joinConds),
-						pre_joinTypes(a_pre_joinTypes),
-						qType(a_qType),
-						qShift(a_qShift),
-						qSelShift(a_qSelShift),
-						qInsShift(a_qInsShift),
-						qUpShift(a_qUpShift),
-						qDelShift(a_qDelShift),
-						operType(a_operType),
-						executor(a_executor)
+__xexexDbAccumulatorCollectedData::__xexexDbAccumulatorCollectedData(int &a_operType,
+	void *a_executor) : operType(a_operType),
+			executor(a_executor)
 {
 }
 
@@ -140,35 +99,15 @@ accumulator::accumulator() : show(false),
 							 qDbDepInsShift(ACCUMULATOR_NONE),
 							 qDbDepUpShift(ACCUMULATOR_NONE),
 							 qDbDepDelShift(ACCUMULATOR_NONE),
-							 qType(-1),
-							 qShift(ACCUMULATOR_NONE),
-							 qSelShift(ACCUMULATOR_NONE),
-							 qInsShift(ACCUMULATOR_NONE),
-							 qUpShift(ACCUMULATOR_NONE),
-							 qDelShift(ACCUMULATOR_NONE),
-							 collectedData(pre_where,
-										   pre_fields,
-										   pre_values,
-										   pre_table,
-										   pre_tableTo,
-										   pre_order,
-										   pre_having,
-										   pre_group,
-										   pre_limit,
-										   pre_offset,
-										   pre_subQueries,
-										   pre_joinTables,
-										   pre_joinConds,
-										   pre_joinTypes,
-										   qType,
-										   qShift,
-										   qSelShift,
-										   qInsShift,
-										   qUpShift,
-										   qDelShift,
-										   operType,
+							 collectedData(operType,
 										   (void *) this)
 {
+	 collectedData.qType = -1;
+	 collectedData.qShift = ACCUMULATOR_NONE;
+	 collectedData.qSelShift = ACCUMULATOR_NONE;
+	 collectedData.qInsShift = ACCUMULATOR_NONE;
+	 collectedData.qUpShift = ACCUMULATOR_NONE;
+	 collectedData.qDelShift = ACCUMULATOR_NONE;
 }
 
 //-------------------------------------------------------------------
@@ -184,15 +123,15 @@ accumulator::callFunction(const dodoString &name,
 						  const dodoStringArray &arguments,
 						  const dodoString &as)
 {
-	qType = ACCUMULATOR_REQUEST_CALL_FUNCTION;
+	collectedData.qType = ACCUMULATOR_REQUEST_CALL_FUNCTION;
 
-	pre_table = name;
-	pre_fields = arguments;
+	collectedData.table = name;
+	collectedData.fields = arguments;
 
 	if (as.size() != 0)
 	{
-		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_AS);
-		pre_where = as;
+		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_AS);
+		collectedData.where = as;
 	}
 
 	show = true;
@@ -204,10 +143,10 @@ void
 accumulator::callProcedure(const dodoString &name,
 						   const dodoStringArray &arguments)
 {
-	qType = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
+	collectedData.qType = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
 
-	pre_table = name;
-	pre_fields = arguments;
+	collectedData.table = name;
+	collectedData.fields = arguments;
 
 	show = true;
 }
@@ -219,15 +158,15 @@ accumulator::select(const dodoString &a_table,
 					const dodoStringArray &a_fields,
 					const dodoString &a_where)
 {
-	qType = ACCUMULATOR_REQUEST_SELECT;
+	collectedData.qType = ACCUMULATOR_REQUEST_SELECT;
 
-	pre_table = a_table;
-	pre_fields = a_fields;
+	collectedData.table = a_table;
+	collectedData.fields = a_fields;
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
-		pre_where = a_where;
+		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.where = a_where;
 	}
 
 	show = true;
@@ -239,15 +178,15 @@ void
 accumulator::selectAll(const dodoString &a_table,
 					   const dodoString &a_where)
 {
-	qType = ACCUMULATOR_REQUEST_SELECT;
+	collectedData.qType = ACCUMULATOR_REQUEST_SELECT;
 
-	pre_table = a_table;
-	pre_fields.push_back("*");
+	collectedData.table = a_table;
+	collectedData.fields.push_back("*");
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
-		pre_where = a_where;
+		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.where = a_where;
 	}
 
 	show = true;
@@ -259,22 +198,22 @@ void
 accumulator::insert(const dodoString &a_table,
 					const dodoStringMap &a_fields)
 {
-	qType = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
-	pre_table = a_table;
+	collectedData.table = a_table;
 
-	pre_fields.clear();
-	pre_values.clear();
+	collectedData.fields.clear();
+	collectedData.values.clear();
 
 	dodoStringArray temp;
 
 	dodoStringMap::const_iterator i = (a_fields.begin()), j(a_fields.end());
 	for (; i != j; ++i)
 	{
-		pre_fields.push_back(i->first);
+		collectedData.fields.push_back(i->first);
 		temp.push_back(i->second);
 	}
-	pre_values.push_back(temp);
+	collectedData.values.push_back(temp);
 
 	show = false;
 }
@@ -285,18 +224,18 @@ void
 accumulator::insert(const dodoString &a_table,
 					const dodoArray<dodoStringMap> &a_fields)
 {
-	qType = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
-	pre_table = a_table;
+	collectedData.table = a_table;
 
 	dodoArray<dodoStringMap>::const_iterator v(a_fields.begin()), b(a_fields.end());
 
-	pre_fields.clear();
-	pre_values.clear();
+	collectedData.fields.clear();
+	collectedData.values.clear();
 
 	dodoStringMap::const_iterator i(v->begin()), j(v->end());
 	for (; i != j; ++i)
-		pre_fields.push_back(i->first);
+		collectedData.fields.push_back(i->first);
 
 	dodoStringArray temp;
 
@@ -308,7 +247,7 @@ accumulator::insert(const dodoString &a_table,
 		for (i = v->begin(); i != j; ++i)
 			temp.push_back(i->second);
 
-		pre_values.push_back(temp);
+		collectedData.values.push_back(temp);
 	}
 
 	show = false;
@@ -321,14 +260,14 @@ accumulator::insert(const dodoString &a_table,
 					const dodoStringArray &a_values,
 					const dodoStringArray &a_fields)
 {
-	qType = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
-	pre_table = a_table;
-	pre_fields = a_fields;
+	collectedData.table = a_table;
+	collectedData.fields = a_fields;
 
-	pre_values.clear();
+	collectedData.values.clear();
 
-	pre_values.push_back(a_values);
+	collectedData.values.push_back(a_values);
 
 	show = false;
 }
@@ -340,14 +279,14 @@ accumulator::insert(const dodoString &a_table,
 					const dodoArray<dodoStringArray> &a_values,
 					const dodoStringArray &a_fields)
 {
-	qType = ACCUMULATOR_REQUEST_INSERT;
+	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
-	pre_table = a_table;
-	pre_fields = a_fields;
+	collectedData.table = a_table;
+	collectedData.fields = a_fields;
 
 	dodoArray<dodoStringArray>::const_iterator k(a_values.begin()), l(a_values.end());
 	for (; k != l; ++k)
-		pre_values.push_back(*k);
+		collectedData.values.push_back(*k);
 
 	show = false;
 
@@ -362,20 +301,20 @@ accumulator::insertSelect(const dodoString &a_tableTo,
 						  const dodoStringArray &a_fieldsFrom,
 						  const dodoString &a_where)
 {
-	qType = ACCUMULATOR_REQUEST_INSERT_SELECT;
+	collectedData.qType = ACCUMULATOR_REQUEST_INSERT_SELECT;
 
-	pre_tableTo = a_tableTo;
-	pre_table = a_tableFrom;
-	pre_fields = a_fieldsTo;
+	collectedData.tableTo = a_tableTo;
+	collectedData.table = a_tableFrom;
+	collectedData.fields = a_fieldsTo;
 
-	pre_values.clear();
+	collectedData.values.clear();
 
-	pre_values.push_back(a_fieldsFrom);
+	collectedData.values.push_back(a_fieldsFrom);
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
-		pre_where = a_where;
+		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.where = a_where;
 	}
 
 	show = false;
@@ -388,28 +327,28 @@ accumulator::update(const dodoString &a_table,
 					const dodoStringMap &a_fields,
 					const dodoString &a_where)
 {
-	qType = ACCUMULATOR_REQUEST_UPDATE;
+	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
 
-	pre_table = a_table;
+	collectedData.table = a_table;
 
 	dodoStringMap::const_iterator i(a_fields.begin()), j(a_fields.end());
 
-	pre_fields.clear();
-	pre_values.clear();
+	collectedData.fields.clear();
+	collectedData.values.clear();
 
 	dodoStringArray temp;
 
 	for (; i != j; ++i)
 	{
-		pre_fields.push_back((*i).first);
+		collectedData.fields.push_back((*i).first);
 		temp.push_back((*i).second);
 	}
-	pre_values.push_back(temp);
+	collectedData.values.push_back(temp);
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
-		pre_where = a_where;
+		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.where = a_where;
 	}
 
 	show = false;
@@ -423,19 +362,19 @@ accumulator::update(const dodoString &a_table,
 					const dodoStringArray &a_fields,
 					const dodoString &a_where)
 {
-	qType = ACCUMULATOR_REQUEST_UPDATE;
+	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
 
-	pre_table = a_table;
-	pre_fields = a_fields;
+	collectedData.table = a_table;
+	collectedData.fields = a_fields;
 
-	pre_values.clear();
+	collectedData.values.clear();
 
-	pre_values.push_back(a_values);
+	collectedData.values.push_back(a_values);
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
-		pre_where = a_where;
+		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.where = a_where;
 	}
 
 	show = false;
@@ -447,14 +386,14 @@ void
 accumulator::del(const dodoString &a_table,
 				 const dodoString &a_where)
 {
-	qType = ACCUMULATOR_REQUEST_DELETE;
+	collectedData.qType = ACCUMULATOR_REQUEST_DELETE;
 
-	pre_table = a_table;
+	collectedData.table = a_table;
 
 	if (a_where.size() != 0)
 	{
-		addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
-		pre_where = a_where;
+		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.where = a_where;
 	}
 
 	show = false;
@@ -466,9 +405,9 @@ void
 accumulator::subquery(const dodoStringArray &sub,
 					  int type)
 {
-	qType = type;
+	collectedData.qType = type;
 
-	pre_subQueries = sub;
+	collectedData.subQueries = sub;
 }
 
 //-------------------------------------------------------------------
@@ -476,9 +415,9 @@ accumulator::subquery(const dodoStringArray &sub,
 void
 accumulator::truncate(const dodoString &table)
 {
-	qType = ACCUMULATOR_REQUEST_TRUNCATE;
+	collectedData.qType = ACCUMULATOR_REQUEST_TRUNCATE;
 
-	pre_table = table;
+	collectedData.table = table;
 	show = false;
 }
 
@@ -488,10 +427,10 @@ void
 accumulator::renameDb(const dodoString &db,
 					  const dodoString &to_db)
 {
-	qType = ACCUMULATOR_REQUEST_RENAME_DB;
+	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_DB;
 
-	pre_order = db;
-	pre_having = to_db;
+	collectedData.order = db;
+	collectedData.having = to_db;
 	show = false;
 }
 
@@ -501,10 +440,10 @@ void
 accumulator::renameTable(const dodoString &table,
 						 const dodoString &to_table)
 {
-	qType = ACCUMULATOR_REQUEST_RENAME_TABLE;
+	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_TABLE;
 
-	pre_table = table;
-	pre_having = to_table;
+	collectedData.table = table;
+	collectedData.having = to_table;
 	show = false;
 }
 
@@ -515,11 +454,11 @@ accumulator::createIndex(const dodoString &table,
 						 const dodoString &field,
 						 const dodoString &name)
 {
-	qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
+	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
 
-	pre_table = table;
-	pre_fields.push_back(field);
-	pre_having = name;
+	collectedData.table = table;
+	collectedData.fields.push_back(field);
+	collectedData.having = name;
 	show = false;
 }
 
@@ -530,11 +469,11 @@ accumulator::createIndex(const dodoString &table,
 						 const dodoStringArray &fields,
 						 const dodoString &name)
 {
-	qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
+	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
 
-	pre_table = table;
-	pre_fields = fields;
-	pre_having = name;
+	collectedData.table = table;
+	collectedData.fields = fields;
+	collectedData.having = name;
 	show = false;
 }
 
@@ -544,10 +483,10 @@ void
 accumulator::deleteIndex(const dodoString &table,
 						 const dodoString &field)
 {
-	qType = ACCUMULATOR_REQUEST_DELETE_INDEX;
+	collectedData.qType = ACCUMULATOR_REQUEST_DELETE_INDEX;
 
-	pre_table = table;
-	pre_having = field;
+	collectedData.table = table;
+	collectedData.having = field;
 	show = false;
 }
 
@@ -558,11 +497,11 @@ accumulator::renameField(const dodoString &field,
 						 const dodoString &to_field,
 						 const dodoString &table)
 {
-	qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
+	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
 
-	pre_tableTo = field;
-	pre_having = to_field;
-	pre_table = table;
+	collectedData.tableTo = field;
+	collectedData.having = to_field;
+	collectedData.table = table;
 	show = false;
 }
 
@@ -571,9 +510,9 @@ accumulator::renameField(const dodoString &field,
 void
 accumulator::deleteDb(const dodoString &db)
 {
-	qType = ACCUMULATOR_REQUEST_DELETE_DB;
+	collectedData.qType = ACCUMULATOR_REQUEST_DELETE_DB;
 
-	pre_order = db;
+	collectedData.order = db;
 	show = false;
 }
 
@@ -582,9 +521,9 @@ accumulator::deleteDb(const dodoString &db)
 void
 accumulator::deleteTable(const dodoString &table)
 {
-	qType = ACCUMULATOR_REQUEST_DELETE_TABLE;
+	collectedData.qType = ACCUMULATOR_REQUEST_DELETE_TABLE;
 
-	pre_table = table;
+	collectedData.table = table;
 	show = false;
 }
 
@@ -594,10 +533,10 @@ void
 accumulator::deleteField(const dodoString &field,
 						 const dodoString &table)
 {
-	qType = ACCUMULATOR_REQUEST_DELETE_FIELD;
+	collectedData.qType = ACCUMULATOR_REQUEST_DELETE_FIELD;
 
-	pre_tableTo = field;
-	pre_table = table;
+	collectedData.tableTo = field;
+	collectedData.table = table;
 	show = false;
 }
 
@@ -607,10 +546,10 @@ void
 accumulator::createDb(const dodoString &db,
 					  const dodoString &charset)
 {
-	qType = ACCUMULATOR_REQUEST_CREATE_DB;
+	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_DB;
 
-	pre_order = db;
-	pre_having = charset;
+	collectedData.order = db;
+	collectedData.having = charset;
 	show = false;
 }
 
@@ -619,9 +558,9 @@ accumulator::createDb(const dodoString &db,
 void
 accumulator::createTable(const __connectorTable &tableInfo)
 {
-	qType = ACCUMULATOR_REQUEST_CREATE_TABLE;
+	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_TABLE;
 
-	pre_tableInfo = tableInfo;
+	collectedData.tableInfo = tableInfo;
 	show = false;
 }
 
@@ -631,10 +570,10 @@ void
 accumulator::createField(const __connectorField &row,
 						 const dodoString &table)
 {
-	qType = ACCUMULATOR_REQUEST_CREATE_FIELD;
+	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_FIELD;
 
-	pre_fieldInfo = row;
-	pre_table = table;
+	collectedData.fieldInfo = row;
+	collectedData.table = table;
 	show = false;
 }
 
@@ -643,9 +582,9 @@ accumulator::createField(const __connectorField &row,
 void
 accumulator::where(const dodoString &where)
 {
-	pre_where = where;
+	collectedData.where = where;
 
-	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
@@ -653,18 +592,18 @@ accumulator::where(const dodoString &where)
 void
 accumulator::limit(unsigned int a_number)
 {
-	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
+	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
 
-	pre_limit = tools::string::lToString(a_number);
+	collectedData.limit = tools::string::lToString(a_number);
 }
 //-------------------------------------------------------------------
 
 void
 accumulator::offset(unsigned int a_number)
 {
-	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
+	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
 
-	pre_offset = tools::string::lToString(a_number);
+	collectedData.offset = tools::string::lToString(a_number);
 }
 
 //-------------------------------------------------------------------
@@ -672,9 +611,9 @@ accumulator::offset(unsigned int a_number)
 void
 accumulator::order(const dodoString &order)
 {
-	pre_order = order;
+	collectedData.order = order;
 
-	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_ORDERBY);
+	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -682,9 +621,9 @@ accumulator::order(const dodoString &order)
 void
 accumulator::group(const dodoString &group)
 {
-	pre_group = group;
+	collectedData.group = group;
 
-	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_GROUPBY);
+	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -692,9 +631,9 @@ accumulator::group(const dodoString &group)
 void
 accumulator::having(const dodoString &having)
 {
-	pre_having = having;
+	collectedData.having = having;
 
-	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_HAVING);
+	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_HAVING);
 }
 
 //-------------------------------------------------------------------
@@ -704,11 +643,11 @@ accumulator::join(const dodoString &table,
 				  int type,
 				  const dodoString &condition)
 {
-	pre_joinTables.push_back(table);
-	pre_joinConds.push_back(condition);
-	pre_joinTypes.push_back(type);
+	collectedData.joinTables.push_back(table);
+	collectedData.joinConds.push_back(condition);
+	collectedData.joinTypes.push_back(type);
 
-	addFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_JOIN);
+	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_JOIN);
 }
 
 //-------------------------------------------------------------------
@@ -716,7 +655,7 @@ accumulator::join(const dodoString &table,
 void
 accumulator::unwhere()
 {
-	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+	removeFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
 }
 
 //-------------------------------------------------------------------
@@ -724,7 +663,7 @@ accumulator::unwhere()
 void
 accumulator::unlimit()
 {
-	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
+	removeFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_LIMIT);
 }
 
 //-------------------------------------------------------------------
@@ -732,7 +671,7 @@ accumulator::unlimit()
 void
 accumulator::unoffset()
 {
-	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
+	removeFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
 }
 
 //-------------------------------------------------------------------
@@ -740,7 +679,7 @@ accumulator::unoffset()
 void
 accumulator::unorder()
 {
-	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_ORDERBY);
+	removeFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_ORDERBY);
 }
 
 //-------------------------------------------------------------------
@@ -748,7 +687,7 @@ accumulator::unorder()
 void
 accumulator::ungroup()
 {
-	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_GROUPBY);
+	removeFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_GROUPBY);
 }
 
 //-------------------------------------------------------------------
@@ -756,7 +695,7 @@ accumulator::ungroup()
 void
 accumulator::unhaving()
 {
-	removeFlag(qShift, 1 << ACCUMULATOR_ADDREQUEST_HAVING);
+	removeFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_HAVING);
 }
 
 
@@ -772,7 +711,7 @@ accumulator::setAddInsSt(unsigned int statement)
 	   		break;
 
 	   }*/
-	addFlag(qInsShift, 1 << statement);
+	addFlag(collectedData.qInsShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -785,7 +724,7 @@ accumulator::setAddUpSt(unsigned int statement)
 	   	default:
 
 	   }*/
-	addFlag(qUpShift, 1 << statement);
+	addFlag(collectedData.qUpShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -798,15 +737,15 @@ accumulator::setAddSelSt(unsigned int statement)
 		case ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT:
 		case ACCUMULATOR_ADDREQUEST_SELECT_ALL:
 
-			removeFlag(qSelShift, 1 << ACCUMULATOR_ADDREQUEST_SELECT_ALL);
-			removeFlag(qSelShift, 1 << ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
+			removeFlag(collectedData.qSelShift, 1 << ACCUMULATOR_ADDREQUEST_SELECT_ALL);
+			removeFlag(collectedData.qSelShift, 1 << ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
 
 			break;
 
 			/*default:*/
 
 	}
-	addFlag(qSelShift, 1 << statement);
+	addFlag(collectedData.qSelShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -819,7 +758,7 @@ accumulator::setAddDelSt(unsigned int statement)
 	   	default:
 
 	   }*/
-	addFlag(qDelShift, 1 << statement);
+	addFlag(collectedData.qDelShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -827,7 +766,7 @@ accumulator::setAddDelSt(unsigned int statement)
 void
 accumulator::unsetAddInsSt(unsigned int statement)
 {
-	removeFlag(qInsShift, 1 << statement);
+	removeFlag(collectedData.qInsShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -835,7 +774,7 @@ accumulator::unsetAddInsSt(unsigned int statement)
 void
 accumulator::unsetAddUpSt(unsigned int statement)
 {
-	removeFlag(qUpShift, 1 << statement);
+	removeFlag(collectedData.qUpShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -843,7 +782,7 @@ accumulator::unsetAddUpSt(unsigned int statement)
 void
 accumulator::unsetAddSelSt(unsigned int statement)
 {
-	removeFlag(qSelShift, 1 << statement);
+	removeFlag(collectedData.qSelShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -851,7 +790,7 @@ accumulator::unsetAddSelSt(unsigned int statement)
 void
 accumulator::unsetAddDelSt(unsigned int statement)
 {
-	removeFlag(qDelShift, 1 << statement);
+	removeFlag(collectedData.qDelShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -859,34 +798,34 @@ accumulator::unsetAddDelSt(unsigned int statement)
 void
 accumulator::cleanCollected()
 {
-	qType = -1;
+	collectedData.qType = -1;
 
-	qShift = ACCUMULATOR_NONE;
+	collectedData.qShift = ACCUMULATOR_NONE;
 
-	qSelShift = ACCUMULATOR_NONE;
-	qInsShift = ACCUMULATOR_NONE;
-	qUpShift = ACCUMULATOR_NONE;
-	qDelShift = ACCUMULATOR_NONE;
+	collectedData.qSelShift = ACCUMULATOR_NONE;
+	collectedData.qInsShift = ACCUMULATOR_NONE;
+	collectedData.qUpShift = ACCUMULATOR_NONE;
+	collectedData.qDelShift = ACCUMULATOR_NONE;
 
 	qDbDepSelShift = ACCUMULATOR_NONE;
 	qDbDepInsShift = ACCUMULATOR_NONE;
 	qDbDepUpShift = ACCUMULATOR_NONE;
 	qDbDepDelShift = ACCUMULATOR_NONE;
 
-	pre_where.clear();
-	pre_fields.clear();
-	pre_values.clear();
-	pre_table.clear();
-	pre_tableTo.clear();
-	pre_order.clear();
-	pre_having.clear();
-	pre_group.clear();
-	pre_limit.clear();
-	pre_offset.clear();
-	pre_subQueries.clear();
-	pre_joinTables.clear();
-	pre_joinConds.clear();
-	pre_joinTypes.clear();
+	collectedData.where.clear();
+	collectedData.fields.clear();
+	collectedData.values.clear();
+	collectedData.table.clear();
+	collectedData.tableTo.clear();
+	collectedData.order.clear();
+	collectedData.having.clear();
+	collectedData.group.clear();
+	collectedData.limit.clear();
+	collectedData.offset.clear();
+	collectedData.subQueries.clear();
+	collectedData.joinTables.clear();
+	collectedData.joinConds.clear();
+	collectedData.joinTypes.clear();
 }
 
 //-------------------------------------------------------------------

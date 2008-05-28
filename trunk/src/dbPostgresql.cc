@@ -165,13 +165,13 @@ postgresql::_exec(const dodoString &query,
 
 		if (autoFraming)
 		{
-			if (qType == ACCUMULATOR_REQUEST_INSERT || qType == ACCUMULATOR_REQUEST_UPDATE)
+			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
-				dodoString temp = dbInfo.db + ":" + pre_table;
+				dodoString temp = dbInfo.db + ":" + collectedData.table;
 
 				if (framingFields.find(temp) == framingFields.end())
 				{
-					request = "select column_name, data_type from information_schema.columns where table_name='" + pre_table + "'";
+					request = "select column_name, data_type from information_schema.columns where table_name='" + collectedData.table + "'";
 
 					if (!empty)
 					{
@@ -241,7 +241,7 @@ postgresql::_exec(const dodoString &query,
 	{
 		removeFlag(hint, POSTGRESQL_HINT_BLOB);
 
-		switch (qType)
+		switch (collectedData.qType)
 		{
 			case ACCUMULATOR_REQUEST_UPDATE:
 			case ACCUMULATOR_REQUEST_INSERT:
@@ -584,7 +584,7 @@ postgresql::getCharset() const
 void
 postgresql::renameDbCollect()
 {
-	request = "alter database " + pre_order + " rename to " + pre_having;
+	request = "alter database " + collectedData.order + " rename to " + collectedData.having;
 }
 
 //-------------------------------------------------------------------
@@ -592,7 +592,7 @@ postgresql::renameDbCollect()
 void
 postgresql::renameFieldCollect()
 {
-	request = "alter table " + pre_table + " rename column " + pre_tableTo + " to " + pre_having;
+	request = "alter table " + collectedData.table + " rename column " + collectedData.tableTo + " to " + collectedData.having;
 }
 
 #endif

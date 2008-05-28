@@ -108,12 +108,13 @@ namespace dodo
 			{
 				/**
 				 * constructor
+				 * @param operType defines xexec operation
+				 * @param executor defines class that executed hook
 				 */
-				__xexexIoNetworkExchangeCollectedData(dodoString &buffer,
-													  int &operType,
+				__xexexIoNetworkExchangeCollectedData(int &operType,
 													  void *executor);
 
-				dodoString &buffer;         ///< data buffer
+				dodoString buffer;         ///< data buffer
 
 				int &operType;              ///< xexec operation
 
@@ -329,8 +330,6 @@ namespace dodo
 					virtual void _write(const char * const data);
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
-
-					dodoString buffer;                                      ///< buffer
 
 					__xexexIoNetworkExchangeCollectedData collectedData;    ///< data collected for xexec
 

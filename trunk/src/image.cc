@@ -27,19 +27,11 @@
 
 using namespace dodo;
 
-#ifndef IMAGE_WO_XEXEC
-
-__xexexImageCollectedData::__xexexImageCollectedData(ImageInfo &a_imInfo,
-													 Image &a_im,
-													 int &a_operType,
-													 void *a_executor) : imInfo(a_imInfo),
-																		 im(a_im),
-																		 operType(a_operType),
+__xexexImageCollectedData::__xexexImageCollectedData(int &a_operType,
+													 void *a_executor) : operType(a_operType),
 																		 executor(a_executor)
 {
 }
-
-#endif
 
 //-------------------------------------------------------------------
 
@@ -113,36 +105,19 @@ const CompressionType image::compressionStArr[] =
 
 //-------------------------------------------------------------------
 
-image::image(image &a_im)
-
-#ifndef IMAGE_WO_XEXEC
-
-	: collectedData(*imInfo,
-					*im,
-					operType,
+image::image(image &a_image) : collectedData(operType,
 					(void *) this)
-
-#endif
-
 {
 }
 
 //-------------------------------------------------------------------
 
-image::image() : im(NULL)
-
-#ifndef IMAGE_WO_XEXEC
-
-				 ,
-				 collectedData(*imInfo,
-							   *im,
-							   operType,
+image::image() : collectedData(operType,
 							   (void *) this)
-
-#endif
-
 {
-	imInfo = AcquireImageInfo();
+	collectedData.imHandle = NULL;
+
+	collectedData.imInfo = AcquireImageInfo();
 	exInfo = AcquireExceptionInfo();
 }
 
@@ -150,9 +125,9 @@ image::image() : im(NULL)
 
 image::~image()
 {
-	if (im != NULL)
-		DestroyImage(im);
-	DestroyImageInfo(imInfo);
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
+	DestroyImageInfo(collectedData.imInfo);
 	DestroyExceptionInfo(exInfo);
 }
 
@@ -166,18 +141,18 @@ image::read(const dodoString &str)
 	performXExec(preExec);
 #endif
 
-	strcpy(imInfo->filename, str.c_str());
+	strcpy(collectedData.imInfo->filename, str.c_str());
 
-	if (im != NULL)
-		DestroyImage(im);
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
 
-	im = ReadImage(imInfo, exInfo);
-	if (im == NULL)
+	collectedData.imHandle = ReadImage(collectedData.imInfo, exInfo);
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-	imInfo->compression = im->compression;
-	imInfo->quality = im->quality;
-	strcpy(imInfo->magick, im->magick);
+	collectedData.imInfo->compression = collectedData.imHandle->compression;
+	collectedData.imInfo->quality = collectedData.imHandle->quality;
+	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
 #ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
@@ -195,16 +170,16 @@ image::read(const unsigned char * const data,
 	performXExec(preExec);
 #endif
 
-	if (im != NULL)
-		DestroyImage(im);
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
 
-	im = BlobToImage(imInfo, data, size, exInfo);
-	if (im == NULL)
+	collectedData.imHandle = BlobToImage(collectedData.imInfo, data, size, exInfo);
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-	imInfo->compression = im->compression;
-	imInfo->quality = im->quality;
-	strcpy(imInfo->magick, im->magick);
+	collectedData.imInfo->compression = collectedData.imHandle->compression;
+	collectedData.imInfo->quality = collectedData.imHandle->quality;
+	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
 #ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
@@ -224,16 +199,16 @@ image::read(const __imageInfo &info)
 	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr) / sizeof(char *) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr) / sizeof(StorageType))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
-	if (im != NULL)
-		DestroyImage(im);
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
 
-	im = ConstituteImage(info.width, info.height, mappingStArr[info.mapping], pixelSizeStArr[info.pixelSize], info.data, exInfo);
-	if (im == NULL)
+	collectedData.imHandle = ConstituteImage(info.width, info.height, mappingStArr[info.mapping], pixelSizeStArr[info.pixelSize], info.data, exInfo);
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-	imInfo->compression = im->compression;
-	imInfo->quality = im->quality;
-	strcpy(imInfo->magick, im->magick);
+	collectedData.imInfo->compression = collectedData.imHandle->compression;
+	collectedData.imInfo->quality = collectedData.imHandle->quality;
+	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
 #ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
@@ -245,11 +220,11 @@ image::read(const __imageInfo &info)
 void
 image::close()
 {
-	if (im != NULL)
+	if (collectedData.imHandle != NULL)
 	{
-		DestroyImage(im);
+		DestroyImage(collectedData.imHandle);
 
-		im = NULL;
+		collectedData.imHandle = NULL;
 	}
 }
 
@@ -263,13 +238,13 @@ image::write(const dodoString &str)
 	performXExec(preExec);
 #endif
 
-	if (im == NULL)
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	strcpy(im->filename, str.c_str());
+	strcpy(collectedData.imHandle->filename, str.c_str());
 
-	if (WriteImage(imInfo, im) == MagickFalse)
-		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, im->exception.error_number, exInfo->reason, __LINE__, __FILE__);
+	if (WriteImage(collectedData.imInfo, collectedData.imHandle) == MagickFalse)
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, collectedData.imHandle->exception.error_number, exInfo->reason, __LINE__, __FILE__);
 
 #ifndef IMAGE_WO_XEXEC
 	performXExec(postExec);
@@ -287,11 +262,11 @@ image::write(unsigned char **data,
 	performXExec(preExec);
 #endif
 
-	if (im == NULL)
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
 	size = 0;
-	*data = ImageToBlob(imInfo, im, &size, exInfo);
+	*data = ImageToBlob(collectedData.imInfo, collectedData.imHandle, &size, exInfo);
 	if (data == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
@@ -308,7 +283,7 @@ image::setCompression(short type)
 	if (type < 0 || type >= sizeof(compressionStArr) / sizeof(CompressionType))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
-	imInfo->compression = compressionStArr[type];
+	collectedData.imInfo->compression = compressionStArr[type];
 }
 
 //-------------------------------------------------------------------
@@ -316,7 +291,7 @@ image::setCompression(short type)
 void
 image::setQuality(short quality)
 {
-	imInfo->quality = quality;
+	collectedData.imInfo->quality = quality;
 }
 
 //-------------------------------------------------------------------
@@ -327,7 +302,7 @@ image::setEncoder(short encoder)
 	if (encoder < 0 || encoder >= sizeof(encoderStArr) / sizeof(char *))
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
-	strcpy(imInfo->magick, encoderStArr[encoder]);
+	strcpy(collectedData.imInfo->magick, encoderStArr[encoder]);
 }
 
 //-------------------------------------------------------------------
@@ -337,7 +312,7 @@ image::getCompression()
 {
 	int i = 0, j = sizeof(compressionStArr) / sizeof(CompressionType);
 	for (; i < j; ++i)
-		if (imInfo->compression == compressionStArr[i])
+		if (collectedData.imInfo->compression == compressionStArr[i])
 			return i;
 }
 
@@ -346,7 +321,7 @@ image::getCompression()
 short
 image::getQuality()
 {
-	return imInfo->quality;
+	return collectedData.imInfo->quality;
 }
 
 //-------------------------------------------------------------------
@@ -356,7 +331,7 @@ image::getEncoder()
 {
 	int i = 0, j = sizeof(encoderStArr) / sizeof(char *);
 	for (; i < j; ++i)
-		if (strcmp(imInfo->magick, encoderStArr[i]) == 0)
+		if (strcmp(collectedData.imInfo->magick, encoderStArr[i]) == 0)
 			return i;
 }
 
@@ -366,18 +341,18 @@ void
 image::scale(unsigned long width,
 			 unsigned long height)
 {
-	if (im == NULL)
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	Image *image = ScaleImage(im, width, height, exInfo);
+	Image *image = ScaleImage(collectedData.imHandle, width, height, exInfo);
 
 	if (image == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-	if (im != NULL)
-		DestroyImage(im);
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
 
-	im = image;
+	collectedData.imHandle = image;
 }
 
 //-------------------------------------------------------------------
@@ -386,20 +361,20 @@ void
 image::scale(unsigned long size)
 {
 
-	if (im == NULL)
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	float mult = (float)size / (float)((im->columns > im->rows) ? im->columns : im->rows);
+	float mult = (float)size / (float)((collectedData.imHandle->columns > collectedData.imHandle->rows) ? collectedData.imHandle->columns : collectedData.imHandle->rows);
 
-	Image *image = ScaleImage(im, (unsigned long)floor(im->columns * mult), (unsigned long)floor(im->rows * mult), exInfo);
+	Image *image = ScaleImage(collectedData.imHandle, (unsigned long)floor(collectedData.imHandle->columns * mult), (unsigned long)floor(collectedData.imHandle->rows * mult), exInfo);
 
 	if (image == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-	if (im != NULL)
-		DestroyImage(im);
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
 
-	im = image;
+	collectedData.imHandle = image;
 }
 
 //-------------------------------------------------------------------
@@ -407,13 +382,13 @@ image::scale(unsigned long size)
 __imageSize
 image::getImageSize()
 {
-	if (im == NULL)
+	if (collectedData.imHandle == NULL)
 		return __imageSize();
 
 	__imageSize info;
 
-	info.height = im->rows;
-	info.width = im->columns;
+	info.height = collectedData.imHandle->rows;
+	info.width = collectedData.imHandle->columns;
 
 	return info;
 }
@@ -423,18 +398,18 @@ image::getImageSize()
 void
 image::rotate(double angle)
 {
-	if (im == NULL)
+	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_ROTATE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	Image *image = RotateImage(im, angle, exInfo);
+	Image *image = RotateImage(collectedData.imHandle, angle, exInfo);
 
 	if (image == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_ROTATE, ERR_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-	if (im != NULL)
-		DestroyImage(im);
+	if (collectedData.imHandle != NULL)
+		DestroyImage(collectedData.imHandle);
 
-	im = image;
+	collectedData.imHandle = image;
 }
 
 //-------------------------------------------------------------------

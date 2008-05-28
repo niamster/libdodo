@@ -1,5 +1,5 @@
 all:
-	for i in ./*; do if [ -d $$i ]; then pushd $$i; make; popd; fi; done;
+	for i in ./*; do if [ -d $$i ]; then pushd $$i; make; if [[ $$? != 0 ]]; then exit $$?; fi; popd; fi; done;
 
 test:
 	for i in ./*; do if [ -d $$i ]; then pushd $$i; echo "execution of " `pwd`; ./test; popd; fi; done;
@@ -8,4 +8,4 @@ clean:
 	for i in ./*; do if [ -d $$i ]; then pushd $$i; make clean; popd; fi; done;
 
 force: 
-	for i in ./*; do if [ -d $$i ]; then pushd $$i; make force; popd; fi; done;
+	for i in ./*; do if [ -d $$i ]; then pushd $$i; make force; if [[ $$? != 0 ]]; then exit $$?; fi; popd; fi; done;

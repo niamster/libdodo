@@ -29,10 +29,8 @@ using namespace dodo::cgi::fast;
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
-__xexexCgiFastExchangeCollectedData::__xexexCgiFastExchangeCollectedData(dodoString &a_buffer,
-																		 int &a_operType,
-																		 void *a_executor) : buffer(a_buffer),
-																							 operType(a_operType),
+__xexexCgiFastExchangeCollectedData::__xexexCgiFastExchangeCollectedData(int &a_operType,
+																		 void *a_executor) : operType(a_operType),
 																							 executor(a_executor)
 {
 }
@@ -45,8 +43,7 @@ exchange::exchange(exchange &cf)
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
-	: collectedData(buffer,
-					operType,
+	: collectedData(operType,
 					(void *) this)
 
 #endif
@@ -61,8 +58,7 @@ exchange::exchange(FCGX_Request *a_request) : request(a_request)
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
 											  ,
-											  collectedData(buffer,
-															operType,
+											  collectedData(operType,
 															(void *) this)
 
 #endif
@@ -186,7 +182,7 @@ exchange::read(char * const a_void)
 	operType = EXCHANGE_OPERATION_READ;
 	performXExec(preExec);
 
-	buffer.reserve(inSize);
+	collectedData.buffer.reserve(inSize);
 #endif
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
@@ -196,7 +192,7 @@ exchange::read(char * const a_void)
 	}
 	catch (...)
 	{
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -205,12 +201,12 @@ exchange::read(char * const a_void)
 #endif
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer.assign(a_void, inSize);
+	collectedData.buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
 
-	strncpy(a_void, buffer.c_str(), buffer.size() > inSize ? inSize : buffer.size());
-	buffer.clear();
+	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size() > inSize ? inSize : collectedData.buffer.size());
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -225,7 +221,7 @@ exchange::readString(dodoString &a_str)
 	operType = EXCHANGE_OPERATION_READSTRING;
 	performXExec(preExec);
 
-	buffer.reserve(inSize);
+	collectedData.buffer.reserve(inSize);
 #endif
 
 	char *data = new char[inSize];
@@ -239,20 +235,20 @@ exchange::readString(dodoString &a_str)
 		delete [] data;
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-		buffer.clear();
+		collectedData.buffer.clear();
 #endif
 
 		throw;
 	}
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer.assign(data, inSize);
+	collectedData.buffer.assign(data, inSize);
 	delete [] data;
 
 	performXExec(postExec);
 
-	a_str = buffer;
-	buffer.clear();
+	a_str = collectedData.buffer;
+	collectedData.buffer.clear();
 #else
 	a_str.assign(data, inSize);
 	delete [] data;
@@ -267,18 +263,18 @@ exchange::writeString(const dodoString &a_buf)
 	raceHazardGuard pg(this);
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer = a_buf;
+	collectedData.buffer = a_buf;
 
 	operType = EXCHANGE_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
 	{
-		_write(buffer.c_str());
+		_write(collectedData.buffer.c_str());
 	}
 	catch (...)
 	{
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -290,7 +286,7 @@ exchange::writeString(const dodoString &a_buf)
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -302,18 +298,18 @@ exchange::write(const char *const a_buf)
 	raceHazardGuard pg(this);
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer.assign(a_buf, outSize);
+	collectedData.buffer.assign(a_buf, outSize);
 
 	operType = EXCHANGE_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
 	{
-		_write(buffer.c_str());
+		_write(collectedData.buffer.c_str());
 	}
 	catch (...)
 	{
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -325,7 +321,7 @@ exchange::write(const char *const a_buf)
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -353,14 +349,14 @@ exchange::readStream(char * const a_void)
 	_read(a_void);
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer = a_void;
+	collectedData.buffer = a_void;
 
 	performXExec(postExec);
 
-	if (buffer.size() > inSize)
-		buffer.resize(inSize);
-	strcpy(a_void, buffer.c_str());
-	buffer.clear();
+	if (collectedData.buffer.size() > inSize)
+		collectedData.buffer.resize(inSize);
+	strcpy(a_void, collectedData.buffer.c_str());
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -390,13 +386,13 @@ exchange::readStreamString(dodoString &a_str)
 	}
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer = data;
+	collectedData.buffer = data;
 	delete [] data;
 
 	performXExec(postExec);
 
-	a_str = buffer;
-	buffer.clear();
+	a_str = collectedData.buffer;
+	collectedData.buffer.clear();
 #else
 	a_str = data;
 	delete [] data;
@@ -413,16 +409,16 @@ exchange::writeStreamString(const dodoString &a_buf)
 	unsigned long _outSize = outSize;
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer = a_buf;
+	collectedData.buffer = a_buf;
 
 	operType = EXCHANGE_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
 	{
-		outSize = buffer.size();
+		outSize = collectedData.buffer.size();
 
-		_write(buffer.c_str());
+		_write(collectedData.buffer.c_str());
 
 		outSize = _outSize;
 	}
@@ -430,7 +426,7 @@ exchange::writeStreamString(const dodoString &a_buf)
 	{
 		outSize = _outSize;
 
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -454,7 +450,7 @@ exchange::writeStreamString(const dodoString &a_buf)
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 }
 
@@ -468,16 +464,16 @@ exchange::writeStream(const char *const a_buf)
 	unsigned long _outSize = outSize;
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
-	buffer = a_buf;
+	collectedData.buffer = a_buf;
 
 	operType = EXCHANGE_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
 	{
-		outSize = buffer.size();
+		outSize = collectedData.buffer.size();
 
-		_write(buffer.c_str());
+		_write(collectedData.buffer.c_str());
 
 		outSize = _outSize;
 	}
@@ -485,7 +481,7 @@ exchange::writeStream(const char *const a_buf)
 	{
 		outSize = _outSize;
 
-		buffer.clear();
+		collectedData.buffer.clear();
 
 		throw;
 	}
@@ -509,7 +505,7 @@ exchange::writeStream(const char *const a_buf)
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 
-	buffer.clear();
+	collectedData.buffer.clear();
 #endif
 }
 

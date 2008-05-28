@@ -94,12 +94,12 @@ namespace dodo
 		{
 			/**
 			 * constructor
+			 * @param operType defines xexec operation
+			 * @param executor defines class that executed hook
 			 */
-			__xexexIoFileCollectedData(dodoString &buffer,
-									   int &operType,
-									   void *executor);
+			__xexexIoFileCollectedData(int &operType, void *executor);
 
-			dodoString &buffer;         ///< data buffer
+			dodoString buffer;         ///< data buffer
 
 			int &operType;              ///< xexec operation
 
@@ -321,8 +321,6 @@ namespace dodo
 				FILE *handler;          ///< file handler
 
 #ifndef IOFILE_WO_XEXEC
-
-				dodoString buffer;                          ///< buffer
 
 				__xexexIoFileCollectedData collectedData;   ///< data collected for xexec
 
