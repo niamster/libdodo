@@ -1,6 +1,10 @@
 index
 <(include $main)>
 
-<(if a!=b)>
+<(print "a=", $a, "b=", $b)>
+
+<(if $a!=$b)>
 	a!=b
+<(else)>
+	a == b
 <(fi)>

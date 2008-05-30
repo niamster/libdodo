@@ -96,6 +96,7 @@ processor::_processString(const dodoString &buffer,
 	dodoString temp;
 
 	bool breakLoop = false;
+	bool keywordNotFound = false;
 
 	while (true)
 	{
@@ -145,17 +146,19 @@ processor::_processString(const dodoString &buffer,
 
 		j += 2;
 
+		keywordNotFound = false;
+
 		switch (temp[0])
 		{
 			case 'p':
 
 				k = temp.find(statements[PREPROCESSOR_STATEMENT_PRINT]);
 				if (k == 0)
-				{
 					j = _print(j, temp.substr(k + 5), tpl, path);
+				else
+					keywordNotFound = true;
 
-					break;
-				}
+				break;
 
 			case 'i':
 
@@ -170,18 +173,17 @@ processor::_processString(const dodoString &buffer,
 
 					--namespaceDeepness;
 
-					break;
 				}
 				else
 				{
 					k = temp.find(statements[PREPROCESSOR_STATEMENT_INCLUDE]);
 					if (k == 0)
-					{
 						j = _include(j, temp.substr(k + 8), tpl, path);
-
-						break;
-					}
+					else
+						keywordNotFound = true;
 				}
+
+				break;
 
 			case 'f':
 
@@ -197,9 +199,11 @@ processor::_processString(const dodoString &buffer,
 
 					--namespaceDeepness;
 					--loopDeepness;
-
-					break;
 				}
+				else
+					keywordNotFound = true;
+
+				break;
 
 			case 'b':
 
@@ -208,9 +212,11 @@ processor::_processString(const dodoString &buffer,
 				{
 					if (_break(j, temp.substr(k + 5), path))
 						breakLoop = true;
-
-					break;
 				}
+				else
+					keywordNotFound = true;
+
+				break;
 
 			case 'c':
 							
@@ -223,19 +229,21 @@ processor::_processString(const dodoString &buffer,
 
 						breakLoop = true;
 					}
-
-					break;
 				}
+				else
+					keywordNotFound = true;
+
+				break;
 
 			case 'a':
 
 				k = temp.find(statements[PREPROCESSOR_STATEMENT_ASSIGN]);
 				if (k == 0)
-				{
 					j = _assign(j, temp.substr(k + 6), path);
-
-					break;
-				}
+				else
+					keywordNotFound = true;
+				
+				break;
 
 			case 'n':
 				
@@ -249,14 +257,19 @@ processor::_processString(const dodoString &buffer,
 					cleanNamespace();
 
 					--namespaceDeepness;
-
-					break;
 				}
+				else
+					keywordNotFound = true;
+
+				break;
 
 			default:
-				
-				tpl.append(buffer.substr(i - 2, j - i + 2));
+
+				keywordNotFound = true;
 		}
+
+		if (keywordNotFound)
+			tpl.append(buffer.substr(i - 2, j - i + 2));
 
 		if (breakLoop)
 			break;

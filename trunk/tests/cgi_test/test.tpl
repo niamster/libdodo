@@ -1,4 +1,11 @@
+
+<(assign a = 1)>
+<(assign b = 2)>
+
 included menu.tpl: <(include "menu.tpl")>
+
+<(assign b = $a)>
+
 included $main <(include $main)>
 
 
