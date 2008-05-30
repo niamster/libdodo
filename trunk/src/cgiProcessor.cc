@@ -90,6 +90,7 @@ processor::_processString(const dodoString &buffer,
 						  const dodoString &path)
 {
 	unsigned long i(0), j(0), begin(0), k(0);
+	unsigned long stI;
 
 	dodoString tpl;
 	dodoString temp;
@@ -102,6 +103,7 @@ processor::_processString(const dodoString &buffer,
 		if (i == dodoString::npos)
 		{
 			tpl.append(buffer.substr(begin));
+
 			break;
 		}
 		else
@@ -122,7 +124,7 @@ processor::_processString(const dodoString &buffer,
 
 		if (buffer[i] == '*')
 		{
-			j = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], i);
+			j = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_COMM], i);
 
 			j += 3;
 
@@ -131,19 +133,25 @@ processor::_processString(const dodoString &buffer,
 
 		j = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], i);
 
+		for (stI=i; stI < j; ++stI)
+			if (buffer[stI] != ' ' && buffer[stI] != '\r' && buffer[stI] != '\n')
+				break;
+
+		i = stI;
+		
 		temp = buffer.substr(i, j - i);
 
 		j += 2;
 
-		k = temp.find(statements[PREPROCESSOR_STATEMENT_INCLUDE]);
-		if (k != dodoString::npos)
+		k = temp.find(statements[PREPROCESSOR_STATEMENT_PRINT]);
+		if (k == 0)
 		{
-			j = _include(j, temp.substr(k + 8), tpl, path);
+			j = _print(j, temp.substr(k + 5), tpl, path);
 		}
 		else
 		{
 			k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_IF]);
-			if (k != dodoString::npos)
+			if (k == 0)
 			{
 				++namespaceDeepness;
 
@@ -155,15 +163,15 @@ processor::_processString(const dodoString &buffer,
 			}
 			else
 			{
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_PRINT]);
-				if (k != dodoString::npos)
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_INCLUDE]);
+				if (k == 0)
 				{
-					j = _print(j, temp.substr(k + 5), tpl, path);
+					j = _include(j, temp.substr(k + 8), tpl, path);
 				}
 				else
 				{
 					k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_FOR]);
-					if (k != dodoString::npos)
+					if (k == 0)
 					{
 						++loopDeepness;
 						++namespaceDeepness;
@@ -178,7 +186,7 @@ processor::_processString(const dodoString &buffer,
 					else
 					{
 						k = temp.find(statements[PREPROCESSOR_STATEMENT_BREAK]);
-						if (k != dodoString::npos)
+						if (k == 0)
 						{
 							if (_break(j, temp.substr(k + 5), path))
 								break;
@@ -186,25 +194,26 @@ processor::_processString(const dodoString &buffer,
 						else
 						{
 							k = temp.find(statements[PREPROCESSOR_STATEMENT_CONT]);
-							if (k != dodoString::npos)
+							if (k == 0)
 							{
 								if (loopDeepness > 0)
 								{
 									continueFlag = true;
+
 									break;
 								}
 							}
 							else
 							{
 								k = temp.find(statements[PREPROCESSOR_STATEMENT_ASSIGN]);
-								if (k != dodoString::npos)
+								if (k == 0)
 								{
 									j = _assign(j, temp.substr(k + 6), path);
 								}
 								else
 								{
 									k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_NS]);
-									if (k != dodoString::npos)
+									if (k == 0)
 									{
 										++namespaceDeepness;
 
@@ -529,11 +538,17 @@ processor::_include(unsigned long start,
 {
 	dodoString temp1 = getVar(statement, start, path);
 
-	if (!tools::string::equal(temp1, path) && !recursive(temp1) && tools::filesystem::exists(tplBasePath + FILE_DELIM + temp1))
+	if (!tools::string::equal(temp1, path) && !recursive(temp1))
 	{
-		processed.push_back(path);
-		tpl.append(process(temp1));
-		processed.pop_back();
+		if (!tplBasePath.empty())
+			temp1 = tplBasePath + FILE_DELIM + temp1;
+		
+		if (tools::filesystem::exists(temp1))
+		{
+			processed.push_back(path);
+			tpl.append(process(temp1));
+			processed.pop_back();
+		}
 	}
 
 	return start;

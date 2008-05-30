@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 	}
 	catch(baseEx ex)
 	{
-		cgit.printStream( (string)ex + " " + tools::string::lToString(ex.line) + " " + ex.message );
+		cgit.printStream( (string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
 	}	
 		
 	return 0;
