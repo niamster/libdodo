@@ -95,6 +95,8 @@ processor::_processString(const dodoString &buffer,
 	dodoString tpl;
 	dodoString temp;
 
+	bool breakLoop = false;
+
 	while (true)
 	{
 		begin = j;
@@ -143,95 +145,121 @@ processor::_processString(const dodoString &buffer,
 
 		j += 2;
 
-		k = temp.find(statements[PREPROCESSOR_STATEMENT_PRINT]);
-		if (k == 0)
+		switch (temp[0])
 		{
-			j = _print(j, temp.substr(k + 5), tpl, path);
-		}
-		else
-		{
-			k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_IF]);
-			if (k == 0)
-			{
-				++namespaceDeepness;
+			case 'p':
 
-				j = _if(buffer, j, temp.substr(k + 2), tpl, path);
-
-				cleanNamespace();
-
-				--namespaceDeepness;
-			}
-			else
-			{
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_INCLUDE]);
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_PRINT]);
 				if (k == 0)
 				{
-					j = _include(j, temp.substr(k + 8), tpl, path);
+					j = _print(j, temp.substr(k + 5), tpl, path);
+
+					break;
+				}
+
+			case 'i':
+
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_IF]);
+				if (k == 0)
+				{
+					++namespaceDeepness;
+
+					j = _if(buffer, j, temp.substr(k + 2), tpl, path);
+
+					cleanNamespace();
+
+					--namespaceDeepness;
+
+					break;
 				}
 				else
 				{
-					k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_FOR]);
+					k = temp.find(statements[PREPROCESSOR_STATEMENT_INCLUDE]);
 					if (k == 0)
 					{
-						++loopDeepness;
-						++namespaceDeepness;
+						j = _include(j, temp.substr(k + 8), tpl, path);
 
-						j = _for(buffer, j, temp.substr(k + 3), tpl, path);
-
-						cleanNamespace();
-
-						--namespaceDeepness;
-						--loopDeepness;
-					}
-					else
-					{
-						k = temp.find(statements[PREPROCESSOR_STATEMENT_BREAK]);
-						if (k == 0)
-						{
-							if (_break(j, temp.substr(k + 5), path))
-								break;
-						}
-						else
-						{
-							k = temp.find(statements[PREPROCESSOR_STATEMENT_CONT]);
-							if (k == 0)
-							{
-								if (loopDeepness > 0)
-								{
-									continueFlag = true;
-
-									break;
-								}
-							}
-							else
-							{
-								k = temp.find(statements[PREPROCESSOR_STATEMENT_ASSIGN]);
-								if (k == 0)
-								{
-									j = _assign(j, temp.substr(k + 6), path);
-								}
-								else
-								{
-									k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_NS]);
-									if (k == 0)
-									{
-										++namespaceDeepness;
-
-										j = _ns(buffer, j, tpl, path);
-
-										cleanNamespace();
-
-										--namespaceDeepness;
-									}
-									else
-										tpl.append(buffer.substr(i - 2, j - i + 2));
-								}
-							}
-						}
+						break;
 					}
 				}
-			}
+
+			case 'f':
+
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_FOR]);
+				if (k == 0)
+				{
+					++loopDeepness;
+					++namespaceDeepness;
+
+					j = _for(buffer, j, temp.substr(k + 3), tpl, path);
+
+					cleanNamespace();
+
+					--namespaceDeepness;
+					--loopDeepness;
+
+					break;
+				}
+
+			case 'b':
+
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_BREAK]);
+				if (k == 0)
+				{
+					if (_break(j, temp.substr(k + 5), path))
+						breakLoop = true;
+
+					break;
+				}
+
+			case 'c':
+							
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_CONT]);
+				if (k == 0)
+				{
+					if (loopDeepness > 0)
+					{
+						continueFlag = true;
+
+						breakLoop = true;
+					}
+
+					break;
+				}
+
+			case 'a':
+
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_ASSIGN]);
+				if (k == 0)
+				{
+					j = _assign(j, temp.substr(k + 6), path);
+
+					break;
+				}
+
+			case 'n':
+				
+				k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_NS]);
+				if (k == 0)
+				{
+					++namespaceDeepness;
+
+					j = _ns(buffer, j, tpl, path);
+
+					cleanNamespace();
+
+					--namespaceDeepness;
+
+					break;
+				}
+
+			default:
+				
+				tpl.append(buffer.substr(i - 2, j - i + 2));
 		}
+
+		if (breakLoop)
+			break;
 
 		if (breakDeepness > 0)
 			break;
@@ -592,8 +620,8 @@ processor::_break(unsigned long start,
 		if (breakDeepness == 0)
 			breakDeepness = 1;
 		else
-		if (breakDeepness > loopDeepness)
-			breakDeepness = loopDeepness;
+			if (breakDeepness > loopDeepness)
+				breakDeepness = loopDeepness;
 
 		return true;
 	}
@@ -767,6 +795,7 @@ processor::_for(const dodoString &buffer,
 						if (breakDeepness > 0)
 						{
 							--breakDeepness;
+
 							break;
 						}
 						if (continueFlag)
@@ -825,6 +854,7 @@ processor::_for(const dodoString &buffer,
 						if (breakDeepness > 0)
 						{
 							--breakDeepness;
+
 							break;
 						}
 						if (continueFlag)
@@ -882,6 +912,7 @@ processor::_for(const dodoString &buffer,
 						if (breakDeepness > 0)
 						{
 							--breakDeepness;
+
 							break;
 						}
 						if (continueFlag)
@@ -940,6 +971,7 @@ processor::_for(const dodoString &buffer,
 						if (breakDeepness > 0)
 						{
 							--breakDeepness;
+
 							break;
 						}
 						if (continueFlag)
@@ -998,6 +1030,7 @@ processor::_for(const dodoString &buffer,
 						if (breakDeepness > 0)
 						{
 							--breakDeepness;
+
 							break;
 						}
 						if (continueFlag)
@@ -1057,6 +1090,7 @@ processor::_for(const dodoString &buffer,
 						if (breakDeepness > 0)
 						{
 							--breakDeepness;
+
 							break;
 						}
 						if (continueFlag)
@@ -1123,6 +1157,7 @@ processor::_for(const dodoString &buffer,
 									if (breakDeepness > 0)
 									{
 										--breakDeepness;
+
 										break;
 									}
 									if (continueFlag)
@@ -1186,6 +1221,7 @@ processor::_for(const dodoString &buffer,
 									if (breakDeepness > 0)
 									{
 										--breakDeepness;
+
 										break;
 									}
 									if (continueFlag)
@@ -1247,6 +1283,7 @@ processor::_for(const dodoString &buffer,
 								if (breakDeepness > 0)
 								{
 									--breakDeepness;
+
 									break;
 								}
 								if (continueFlag)
@@ -1309,6 +1346,7 @@ processor::_for(const dodoString &buffer,
 								if (breakDeepness > 0)
 								{
 									--breakDeepness;
+
 									break;
 								}
 								if (continueFlag)
@@ -1379,6 +1417,7 @@ processor::_for(const dodoString &buffer,
 											if (breakDeepness > 0)
 											{
 												--breakDeepness;
+
 												break;
 											}
 											if (continueFlag)
@@ -1439,6 +1478,7 @@ processor::_for(const dodoString &buffer,
 			if (breakDeepness > 0)
 			{
 				--breakDeepness;
+
 				break;
 			}
 			if (continueFlag)
