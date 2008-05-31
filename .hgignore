@@ -9,6 +9,8 @@ syntax:glob
 *.fcgi
 *.log
 *.dat
+*.jpg
+*.png
 test
 module
 directives.runtime.h
