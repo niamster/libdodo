@@ -89,9 +89,8 @@ included $main <(include $main)>
 <( print bla-bla )>
 <( print $show )>
 
-
 <(for $i in $arr)>
-	<(for $b in $arr)>
+	<(for $b in $i)>
 		<div class="test"><(print $b)></div>
 	<(rof)>
 <(rof)>

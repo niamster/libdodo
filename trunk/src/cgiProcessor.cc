@@ -140,9 +140,7 @@ processor::_processString(const dodoString &buffer,
 			if (buffer[stI] != ' ' && buffer[stI] != '\r' && buffer[stI] != '\n')
 				break;
 
-		i = stI;
-		
-		temp = buffer.substr(i, j - i);
+		temp = buffer.substr(stI, j - stI);
 
 		j += 2;
 
@@ -154,7 +152,7 @@ processor::_processString(const dodoString &buffer,
 
 				k = temp.find(statements[PREPROCESSOR_STATEMENT_PRINT]);
 				if (k == 0)
-					j = _print(j, temp.substr(k + 5), tpl, path);
+					j = _print(j, temp.substr(5), tpl, path);
 				else
 					keywordNotFound = true;
 
@@ -167,7 +165,7 @@ processor::_processString(const dodoString &buffer,
 				{
 					++namespaceDeepness;
 
-					j = _if(buffer, j, temp.substr(k + 2), tpl, path);
+					j = _if(buffer, j, temp.substr(2), tpl, path);
 
 					cleanNamespace();
 
@@ -178,7 +176,7 @@ processor::_processString(const dodoString &buffer,
 				{
 					k = temp.find(statements[PREPROCESSOR_STATEMENT_INCLUDE]);
 					if (k == 0)
-						j = _include(j, temp.substr(k + 8), tpl, path);
+						j = _include(j, temp.substr(8), tpl, path);
 					else
 						keywordNotFound = true;
 				}
@@ -193,7 +191,7 @@ processor::_processString(const dodoString &buffer,
 					++loopDeepness;
 					++namespaceDeepness;
 
-					j = _for(buffer, j, temp.substr(k + 3), tpl, path);
+					j = _for(buffer, j, temp.substr(3), tpl, path);
 
 					cleanNamespace();
 
@@ -210,7 +208,7 @@ processor::_processString(const dodoString &buffer,
 				k = temp.find(statements[PREPROCESSOR_STATEMENT_BREAK]);
 				if (k == 0)
 				{
-					if (_break(j, temp.substr(k + 5), path))
+					if (_break(j, temp.substr(5), path))
 						breakLoop = true;
 				}
 				else
@@ -239,7 +237,7 @@ processor::_processString(const dodoString &buffer,
 
 				k = temp.find(statements[PREPROCESSOR_STATEMENT_ASSIGN]);
 				if (k == 0)
-					j = _assign(j, temp.substr(k + 6), path);
+					j = _assign(j, temp.substr(6), path);
 				else
 					keywordNotFound = true;
 				
@@ -303,9 +301,6 @@ void
 processor::assign(dodoString varName,
 				  const dodoArray<dodoStringMap> &varVal)
 {
-	if (varName[0] == '$')
-		varName = varName.substr(1);
-
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
@@ -322,9 +317,6 @@ void
 processor::assign(dodoString varName,
 				  const dodoStringMap &varVal)
 {
-	if (varName[0] == '$')
-		varName = varName.substr(1);
-
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
@@ -341,9 +333,6 @@ void
 processor::assign(dodoString varName,
 				  const dodoStringArray &varVal)
 {
-	if (varName[0] == '$')
-		varName = varName.substr(1);
-
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
@@ -360,9 +349,6 @@ void
 processor::assign(dodoString varName,
 				  const dodoString &varVal)
 {
-	if (varName[0] == '$')
-		varName = varName.substr(1);
-
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
@@ -736,8 +722,9 @@ processor::_for(const dodoString &buffer,
 	for (; i < j; ++i)
 		if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
 			break;
+	--i;
 
-	dodoString varName = statement.substr(p, i - p).substr(1);
+	dodoString varName = statement.substr(p + 1, i - p);
 
 	dodoString keyVal;
 	dodoStringMap::iterator keyIter;
@@ -750,13 +737,13 @@ processor::_for(const dodoString &buffer,
 		key = true;
 		p = statement.find(statements[PREPROCESSOR_STATEMENT_DOLLAR], p + 2);
 
-		i = p;
-		for (; i < j; ++i)
+		for (i=p; i < j; ++i)
 			if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
 				break;
+		--i;
 
 		keyName = varName;
-		varName = statement.substr(p, i - p).substr(1);
+		varName = statement.substr(p + 1, i - p);
 	}
 
 	p = statement.find(statements[PREPROCESSOR_STATEMENT_IN], i + 1);
