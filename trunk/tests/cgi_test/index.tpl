@@ -1,7 +1,7 @@
 index
 <(include $main)>
 
-<(print "a=", $a, "b=", $b)>
+<(print "a=", $a, " b=", $b)>
 
 <(if $a!=$b)>
 	a != b

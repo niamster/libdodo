@@ -369,6 +369,32 @@ namespace dodo
 				 * @param path defines path of template
 				 */
 				virtual dodoString getVar(const dodoString &varName, unsigned long start, const dodoString &path);
+				
+				/**
+				 * @return interpolated name of the variable[expanded from {}]
+				 * @param varName defines name of variable
+				 * @param start defines position in file
+				 * @param path defines path of template
+				 */
+				virtual dodoString getVarName(const dodoString &varName, unsigned long start, const dodoString &path);
+
+				/**
+				 * set local variable keeping in mind about namespaces
+				 * @param varName defines variable name
+				 * @param varVal defines variable value
+				 * @param start defines position in file
+				 * @param path defines path of template
+				 */
+				virtual void setVar(const dodoString &varName, const dodoString &varVal, unsigned long start, const dodoString &path);
+
+				/**
+				 * set local variable keeping in mind about namespaces
+				 * @param varName defines variable name
+				 * @param varVal defines variable value
+				 * @param start defines position in file
+				 * @param path defines path of template
+				 */
+				virtual void setVar(const dodoString &varName, const dodoStringMap &varVal, unsigned long start, const dodoString &path);
 
 				/**
 				 * @return extracted data(e.g. removes pairs of ",',`)
@@ -383,8 +409,8 @@ namespace dodo
 				dodoMap<dodoString, dodoStringMap> globalHash;                              ///< global user-defined variables(hashes)
 				dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;             ///< global user-defined variables(array of hashes)
 
-				dodoStringMap local;                                                        ///< local variables[occur in `for` block]
-				dodoMap<dodoString, dodoStringMap> localHash;                               ///< local variables(hashes)[occur in `for` block]
+				dodoMap<unsigned int, dodoStringMap> local;                                                        ///< local variables[occur in `for` block]
+				dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;                               ///< local variables(hashes)[occur in `for` block]
 
 				dodoStringMap dodo;                                                         ///< auxillary variables[dodo defined][for dodo.*]
 
@@ -396,8 +422,6 @@ namespace dodo
 				unsigned long iterator;                                                     ///< amount of iterations of the loop
 
 				unsigned int namespaceDeepness;                                             ///< deepness of the namespace
-				dodoMap<unsigned int, dodoStringMap> localNamespace;                        ///< local variables invisible due to overwrite in deeper namespace
-				dodoMap<unsigned int, dodoStringArray> namespaceVars;                       ///< names of vars in namespaces
 
 				server &CGI;                                                                ///< cgi object through what output will be performed
 		};

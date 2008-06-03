@@ -69,10 +69,8 @@ included $main <(include $main)>
 		3!2
 	<(fi)>
 	
-	<(
-		if
-		! `false`
-	)>
+	<(if 
+		! `false`)>
 		OK!
 	<(fi)>
 	
@@ -129,10 +127,12 @@ included $main <(include $main)>
 <(rof)>
 
 <(assign a = test1)>
+<(print $a," must be test1")>
 
 <(if true )>	
 
 	<(assign a = test2)>
+	<(print $a," must be test2")>
 
 	<(for $b in $arr2)>
 		<(for $b => $c in $b)>
@@ -163,6 +163,11 @@ included $main <(include $main)>
 
 <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 
+--
+<(for $i in $arr)>
+	<(print $i)>
+<(rof)>
+--
 
 <(>
 <(print $dodo.version, " ", $dodo)>
