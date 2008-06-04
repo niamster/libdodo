@@ -94,7 +94,7 @@ namespace dodo
 
 				dodoArray< dodoArray<unsigned long> > newLinePositions; ///< stack of positions of new lines of templates
 
-				#define PREPROCESSOR_STATEMENTS 36
+				#define PREPROCESSOR_STATEMENTS 30
 
 				/**
 				 * @enum preprocessorStatementEnum defines processor statements
@@ -130,12 +130,6 @@ namespace dodo
 					PREPROCESSOR_STATEMENT_COMA,
 					PREPROCESSOR_STATEMENT_DOLLAR,
 					PREPROCESSOR_STATEMENT_FALSE,
-					PREPROCESSOR_STATEMENT_EQ,
-					PREPROCESSOR_STATEMENT_NE,
-					PREPROCESSOR_STATEMENT_LE,
-					PREPROCESSOR_STATEMENT_GE,
-					PREPROCESSOR_STATEMENT_LT,
-					PREPROCESSOR_STATEMENT_GT,
 					PREPROCESSOR_STATEMENT_OPEN_VARPART,
 					PREPROCESSOR_STATEMENT_CLOSE_VARPART,
 				};

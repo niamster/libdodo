@@ -37,7 +37,6 @@ namespace dodo
 		 */
 		enum processorExR
 		{
-			PROCESSOREX_WRONGIFSTATEMENT,
 			PROCESSOREX_WRONGFORSTATEMENT,
 			PROCESSOREX_WRONGVARSTATEMENT,
 			PROCESSOREX_DODOISRESERVEDVARNAME,
@@ -48,7 +47,6 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define CGIPROCESSOREX_WRONGIFSTATEMENT_STR      "Wrong `if` statement."
 #define CGIPROCESSOREX_WRONGFORSTATEMENT_STR     "Wrong `for` statement."
 #define CGIPROCESSOREX_WRONGVARSTATEMENT_STR     "In variable statement `}` wasn't closed."
 #define CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name."
@@ -60,7 +58,6 @@ namespace dodo
 		 */
 		enum processorFunctionsID
 		{
-			PROCESSOREX__IF,
 			PROCESSOREX_BLOCKEND,
 			PROCESSOREX__FOR,
 			PROCESSOREX_GETVAR,

@@ -35,16 +35,16 @@ included $main <(include $main)>
 <(if $test )>
 	$test
 	<(if $test==test )>
-		test
+		$test==test
 	<(fi)>
 	<(if $test==test1 )>
-		test1
+		<(print $test,"==test1")>
 	<(fi)>	
 	
 	<(if $test )>
-		test
+		<(print "is ", $test )>
 		<(if $test==test )>
-			<(print $test)>
+			$test==test
 		<(else)>
 			NULL
 		<(fi)>
@@ -55,7 +55,12 @@ included $main <(include $main)>
 		<(if false )>
 			WTF?
 		<(fi)>
-	<(fi)>	
+	<(fi)>
+	<(if !$test )>
+		<(print "not ", $test )>
+	<(else)>
+		<(print "is ", $test )>
+	<(fi)>
 	
 	<(if 3>2 )>
 		3>2
@@ -65,22 +70,22 @@ included $main <(include $main)>
 		3<2
 	<(fi)>
 	
-	<(if 3!2 )>
-		3!2
+	<(if 3!=2 )>
+		3!=2
 	<(fi)>
 	
 	<(if 
 		! `false`)>
-		OK!
+		not false
 	<(fi)>
 	
-	<(if!false)>OK!<(fi)>
+	<(if!false)>not false<(fi)>
 	
 	<(if ! 'false' )>
-		OK!
+		not false
 	<(fi)>		
 	<(if ! "false" )>
-		OK!
+		not false
 	<(fi)>	
 <(fi)>
 

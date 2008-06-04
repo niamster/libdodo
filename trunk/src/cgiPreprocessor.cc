@@ -54,12 +54,6 @@ const dodoString preprocessor::statements[] = {
 												",",
 												"$",
 												"false",
-												"==",
-												"!=",
-												"<=",
-												">=",
-												"<",
-												">",
 												"{",
 												"}"
 };

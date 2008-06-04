@@ -368,77 +368,104 @@ processor::_if(const dodoString &buffer,
 {
 	bool _float(false), invert(false);
 
-	unsigned short oper(0);
-
-	dodoArray<dodoString> temp2 = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_EQ]);
-	if (temp2.size() != 2)
+	enum operTypeEnum
 	{
-		temp2 = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_NE]);
-		if (temp2.size() != 2)
+		OPERTYPE_NONE,
+		OPERTYPE_LE,
+		OPERTYPE_GE,
+		OPERTYPE_LT,
+		OPERTYPE_GT
+	};
+
+	unsigned short oper(OPERTYPE_NONE);
+
+	dodoString temp1;
+	dodoArray<dodoString> temp2;
+	unsigned long i = 0, j = statement.size();
+
+	for (;i<j;++i)
+	{
+		if ( (j - i) > 1 )
 		{
-			temp2 = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_LE]);
-			if (temp2.size() != 2)
+			if (statement[i] == '=' && statement[i + 1] == '=')
 			{
-				temp2 = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_GE]);
-				if (temp2.size() != 2)
-				{
-					temp2 = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_LT]);
-					if (temp2.size() != 2)
-					{
-						temp2 = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_GT]);
-						if (temp2.size() == 2)
-						{
-							oper = 4;
-							_float = true;
-						}
-					}
-					else
-					{
-						oper = 3;
-						_float = true;
-					}
-				}
-				else
-				{
-					oper = 2;
-					_float = true;
-				}
+				temp2.push_back(statement.substr(0, i));
+				temp2.push_back(statement.substr(i + 2));
+
+				break;
 			}
-			else
+			if (statement[i] == '!' && statement[i + 1] == '=')
 			{
-				oper = 1;
+				invert = true;
+
+				temp2.push_back(statement.substr(0, i));
+				temp2.push_back(statement.substr(i + 2));
+
+				break;
+			}
+			if (statement[i] == '>' && statement[i + 1] == '=')
+			{
+				oper = OPERTYPE_GE;
 				_float = true;
+
+				temp2.push_back(statement.substr(0, i));
+				temp2.push_back(statement.substr(i + 2));
+
+				break;
+			}
+			if (statement[i] == '<' && statement[i + 1] == '=')
+			{
+				oper = OPERTYPE_LE;
+				_float = true;
+
+				temp2.push_back(statement.substr(0, i));
+				temp2.push_back(statement.substr(i + 2));
+
+				break;
 			}
 		}
-		else
+		if (statement[i] == '<')
+		{
+			oper = OPERTYPE_LT;
+			_float = true;
+
+			temp2.push_back(statement.substr(0, i));
+			temp2.push_back(statement.substr(i + 1));
+
+			break;
+		}
+		if (statement[i] == '>')
+		{
+			oper = OPERTYPE_GT;
+			_float = true;
+
+			temp2.push_back(statement.substr(0, i));
+			temp2.push_back(statement.substr(i + 1));
+
+			break;
+		}
+		if (statement[i] == '!')
+		{
 			invert = true;
+
+			temp1 = statement.substr(i + 1);
+
+			break;
+		}
 	}
 
 	bool accept(invert);
 
 	if (temp2.size() != 2)
 	{
-		if (temp2.size() != 1)
-			throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX__IF, ERR_LIBDODO, PROCESSOREX_WRONGIFSTATEMENT, CGIPROCESSOREX_WRONGIFSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
-
-		dodoString temp1 = tools::string::trim(temp2[0], " \t\n", 3);
-
-		if (temp1[0] == '!')
-		{
-			invert = true;
-			temp1 = temp1.substr(1);
-		}
-
-		temp1 = getVar(temp1, start, path);
-
-		if (!tools::string::equal(temp1, statements[PREPROCESSOR_STATEMENT_FALSE]) && temp1.size() != 0)
+		if (!tools::string::equal(getVar(temp1, start, path), statements[PREPROCESSOR_STATEMENT_FALSE]))
 			accept = !invert;
 		else
 			accept = invert;
 	}
 	else
 	{
-		dodoString temp1 = getVar(temp2[0], start, path);
+		temp1 = getVar(temp2[0], start, path);
 
 		dodoString temp3 = getVar(temp2[1], start, path);
 
@@ -448,25 +475,25 @@ processor::_if(const dodoString &buffer,
 
 			switch (oper)
 			{
-				case 1:
+				case OPERTYPE_LE:
 
 					accept = (first <= second);
 
 					break;
 
-				case 2:
+				case OPERTYPE_GE:
 
 					accept = (first >= second);
 
 					break;
 
-				case 3:
+				case OPERTYPE_LT:
 
 					accept = (first < second);
 
 					break;
 
-				case 4:
+				case OPERTYPE_GT:
 
 					accept = (first > second);
 
@@ -504,6 +531,7 @@ processor::_if(const dodoString &buffer,
 		if (found)
 		{
 			v = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], v) + 2;
+
 			tpl.append(_processString(buffer.substr(v, u - v), path));
 		}
 	}
@@ -533,7 +561,7 @@ processor::blockEnd(const dodoString &buffer,
 			throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_BLOCKEND, ERR_LIBDODO, PROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 		for (p = u; p < b; ++p)
-			if (buffer[p] != ' ' && buffer[p] != '\t' && buffer[p] != '\n')
+			if (buffer[p] != ' ' && buffer[p] != '\t' && buffer[p] != '\n' && buffer[p] != '\r')
 			{
 				if (tools::string::equal(buffer.substr(p, tsLen), ts))
 					--_st;
@@ -590,16 +618,13 @@ processor::_print(unsigned long start,
 				  const dodoString &path)
 {
 	dodoStringArray temp = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_COMA]);
-	if (temp.size() == 1)
+	if (temp.size() <= 1)
 		tpl.append(getVar(statement, start, path));
 	else
 	{
-		if (temp.size() > 1)
-		{
-			dodoStringArray::iterator i(temp.begin()), j(temp.end());
-			for (; i != j; ++i)
-				tpl.append(getVar(*i, start, path));
-		}
+		dodoStringArray::iterator i(temp.begin()), j(temp.end());
+		for (; i != j; ++i)
+			tpl.append(getVar(*i, start, path));
 	}
 
 	return start;
