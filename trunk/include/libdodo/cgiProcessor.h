@@ -379,24 +379,6 @@ namespace dodo
 				virtual dodoString getVarName(const dodoString &varName, unsigned long start, const dodoString &path);
 
 				/**
-				 * set local variable keeping in mind about namespaces
-				 * @param varName defines variable name
-				 * @param varVal defines variable value
-				 * @param start defines position in file
-				 * @param path defines path of template
-				 */
-				virtual void setVar(const dodoString &varName, const dodoString &varVal, unsigned long start, const dodoString &path);
-
-				/**
-				 * set local variable keeping in mind about namespaces
-				 * @param varName defines variable name
-				 * @param varVal defines variable value
-				 * @param start defines position in file
-				 * @param path defines path of template
-				 */
-				virtual void setVar(const dodoString &varName, const dodoStringMap &varVal, unsigned long start, const dodoString &path);
-
-				/**
 				 * @return extracted data(e.g. removes pairs of ",',`)
 				 * @param statement defines statement that needs extraction from the pairs of ",',`
 				 */

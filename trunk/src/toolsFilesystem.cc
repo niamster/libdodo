@@ -557,9 +557,6 @@ filesystem::getFileContents(const dodoString &path)
 	int i(0);
 	for (; i < iter; ++i)
 	{
-		if (fseek(file, i * IO_INSIZE, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-
 		if (fread(buffer, IO_INSIZE, 1, file) == 0)
 			switch (errno)
 			{
@@ -576,9 +573,6 @@ filesystem::getFileContents(const dodoString &path)
 	}
 	if (rest > 0)
 	{
-		if (fseek(file, i * IO_INSIZE, SEEK_SET) == -1)
-			throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_GETFILECONTENTS, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
-
 		if (fread(buffer, rest, 1, file) == 0)
 			switch (errno)
 			{
@@ -748,17 +742,9 @@ filesystem::copy(const dodoString &from,
 
 		char buffer[IO_INSIZE];
 
-		int i(0), j;
+		int i(0);
 		for (; i < iter; ++i)
 		{
-			j = i * IO_INSIZE;
-
-			if (fseek(fromFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-
-			if (fseek(toFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-
 			if (fread(buffer, IO_INSIZE, 1, fromFile) == 0)
 				switch (errno)
 				{
@@ -785,13 +771,6 @@ filesystem::copy(const dodoString &from,
 		}
 		if (rest > 0)
 		{
-			j = i * IO_INSIZE;
-			if (fseek(fromFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-
-			if (fseek(toFile, j, SEEK_SET) == -1)
-				throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_COPY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, from + "->" + to);
-
 			if (fread(buffer, rest, 1, fromFile) == 0)
 				switch (errno)
 				{

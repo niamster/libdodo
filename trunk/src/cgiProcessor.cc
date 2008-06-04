@@ -655,34 +655,6 @@ processor::_break(unsigned long start,
 
 //-------------------------------------------------------------------
 
-void 
-processor::setVar(const dodoString &varName, 
-		const dodoStringMap &varVal,
-		unsigned long start,
-		const dodoString &path)
-{
-	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
-		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_SETVAR, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
-
-	localHash[namespaceDeepness][varName] = varVal;
-}
-
-//-------------------------------------------------------------------
-
-void 
-processor::setVar(const dodoString &varName, 
-		const dodoString &varVal,
-		unsigned long start,
-		const dodoString &path)
-{
-	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
-		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_SETVAR, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
-
-	local[namespaceDeepness][varName] = varVal;
-}
-
-//-------------------------------------------------------------------
-
 unsigned long
 processor::_assign(unsigned long start,
 				   const dodoString &statement,
@@ -700,7 +672,10 @@ processor::_assign(unsigned long start,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	setVar(varName, getVar(temp[1], start, path), start, path);
+	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
+		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX__ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
+
+	local[namespaceDeepness][varName] = getVar(temp[1], start, path);
 
 	return start;
 }
