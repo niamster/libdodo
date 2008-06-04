@@ -201,12 +201,12 @@ mysql::connect()
 	mysqlHandle = mysql_init(NULL);
 
 	if (!mysql_real_connect(mysqlHandle,
-							dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
-							dbInfo.user.size() == 0 ? NULL : dbInfo.user.c_str(),
-							dbInfo.password.size() == 0 ? NULL : dbInfo.password.c_str(),
-							dbInfo.db.size() == 0 ? NULL : dbInfo.db.c_str(),
-							dbInfo.port,
-							dbInfo.path.size() == 0 ? NULL : dbInfo.path.c_str(),
+							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
+							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
+							collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str(),
+							collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+							collectedData.dbInfo.port,
+							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
 							type))
 		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
@@ -257,7 +257,7 @@ mysql::_exec(const dodoString &query,
 		{
 			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
-				dodoString temp = dbInfo.db + ":" + collectedData.table;
+				dodoString temp = collectedData.dbInfo.db + ":" + collectedData.table;
 
 				if (framingFields.find(temp) == framingFields.end())
 				{

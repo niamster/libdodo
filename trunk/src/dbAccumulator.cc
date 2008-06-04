@@ -838,12 +838,12 @@ accumulator::setDbInfo(const dodoString &db,
 					   const dodoString &password,
 					   const dodoString &path)
 {
-	dbInfo.port = port;
-	dbInfo.db = db;
-	dbInfo.host = host;
-	dbInfo.user = user;
-	dbInfo.password = password;
-	dbInfo.path = path;
+	collectedData.dbInfo.port = port;
+	collectedData.dbInfo.db = db;
+	collectedData.dbInfo.host = host;
+	collectedData.dbInfo.user = user;
+	collectedData.dbInfo.password = password;
+	collectedData.dbInfo.path = path;
 }
 
 //-------------------------------------------------------------------
@@ -851,12 +851,12 @@ accumulator::setDbInfo(const dodoString &db,
 void
 accumulator::setDbInfo(const __connectorInfo &info)
 {
-	dbInfo.port = info.port;
-	dbInfo.db = info.db;
-	dbInfo.host = info.host;
-	dbInfo.user = info.user;
-	dbInfo.password = info.password;
-	dbInfo.path = info.path;
+	collectedData.dbInfo.port = info.port;
+	collectedData.dbInfo.db = info.db;
+	collectedData.dbInfo.host = info.host;
+	collectedData.dbInfo.user = info.user;
+	collectedData.dbInfo.password = info.password;
+	collectedData.dbInfo.path = info.path;
 }
 
 //-------------------------------------------------------------------

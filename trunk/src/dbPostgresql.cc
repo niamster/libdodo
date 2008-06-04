@@ -95,13 +95,13 @@ postgresql::connect()
 	}
 
 	pgHandle = PQsetdbLogin(
-		dbInfo.host.size() == 0 ? NULL : dbInfo.host.c_str(),
-		tools::string::iToString(dbInfo.port).c_str(),
+		collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
+		tools::string::iToString(collectedData.dbInfo.port).c_str(),
 		NULL,
 		NULL,
-		dbInfo.db.size() == 0 ? NULL : dbInfo.db.c_str(),
-		dbInfo.user.size() == 0 ? NULL : dbInfo.user.c_str(),
-		dbInfo.password.size() == 0 ? NULL : dbInfo.password.c_str());
+		collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+		collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
+		collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str());
 
 	int status = PQstatus(pgHandle);
 

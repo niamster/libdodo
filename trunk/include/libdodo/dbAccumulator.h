@@ -65,6 +65,7 @@ namespace dodo
 			__connectorTable tableInfo;                 ///< table structure for creation
 			__connectorField fieldInfo;                 ///< field structure for creation
 
+			__connectorInfo dbInfo;                         ///< data info to connect to the server
 
 			int qType;                                     ///< type of operation
 
@@ -537,8 +538,6 @@ namespace dodo
 				virtual void cleanCollected();
 
 				bool show;                                      ///< if true try to get result from the request[select]
-
-				__connectorInfo dbInfo;                         ///< data info to connect to the server
 
 				/*
 				 * additional statements for query, db-dependent

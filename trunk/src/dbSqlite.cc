@@ -109,7 +109,7 @@ sqlite::connect()
 	performXExec(preExec);
 #endif
 
-	if (sqlite3_open(dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
+	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
 	{
 		sqlite3_close(sqliteHandle);
 

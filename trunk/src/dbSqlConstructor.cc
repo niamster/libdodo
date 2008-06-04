@@ -356,7 +356,7 @@ sqlConstructor::insertCollect()
 
 	dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
 
-	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
+	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
 
 	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
 	{
@@ -489,7 +489,7 @@ sqlConstructor::updateCollect()
 {
 	dodoString setPart;
 
-	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
+	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
 
 	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
 	{
