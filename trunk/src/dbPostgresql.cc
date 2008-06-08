@@ -167,7 +167,7 @@ postgresql::_exec(const dodoString &query,
 		{
 			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
-				dodoString temp = dbInfo.db + ":" + collectedData.table;
+				dodoString temp = collectedData.dbInfo.db + ":" + collectedData.table;
 
 				if (framingFields.find(temp) == framingFields.end())
 				{

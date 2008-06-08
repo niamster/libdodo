@@ -396,6 +396,19 @@ string::stringToD(const dodoString &data)
 //-------------------------------------------------------------------
 
 void
+string::replace(const dodoStringArray &needle,
+				const dodoStringArray &replacement,
+				dodoString &data)
+{
+	dodoStringArray::const_iterator i(needle.begin()), j(needle.end());
+	dodoStringArray::const_iterator o(replacement.begin()), p(replacement.end());
+	for (;i!=j && o!=p; ++i, ++o)
+		replace(*i, *o, data);
+}
+
+//-------------------------------------------------------------------
+
+void
 string::replace(const dodoString &needle,
 				const dodoString &replacement,
 				dodoString &data)

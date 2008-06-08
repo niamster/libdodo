@@ -51,6 +51,14 @@ namespace dodo
 				static void replace(const dodoString &needle, const dodoString &replacement, dodoString &data);
 
 				/**
+				 * replace substrings in string
+				 * @param needle defines substring which to replace
+				 * @param replacement defines string which to replace with
+				 * @param data defines string where to replace substrings
+				 */
+				static void replace(const dodoStringArray &needle, const dodoStringArray &replacement, dodoString &data);
+
+				/**
 				 * @return true if strings are equal
 				 * @param first defines string to compare
 				 * @param second defines string for compare
