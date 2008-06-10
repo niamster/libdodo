@@ -66,6 +66,9 @@ false,
 								false,
 								false,
 								false,
+								false,
+								false,
+								false,
 								false
 };
 
@@ -112,6 +115,9 @@ errorHandler baseEx::handlersEx[] = {
 									  NULL,
 									  NULL,
 									  NULL,
+									  NULL,
+									  NULL,
+									  NULL,
 									  NULL
 };
 
@@ -119,6 +125,9 @@ errorHandler baseEx::handlersEx[] = {
 
 void *baseEx::handlerDataEx[] = {
 NULL,
+								  NULL,
+								  NULL,
+								  NULL,
 								  NULL,
 								  NULL,
 								  NULL,
@@ -206,6 +215,9 @@ false,
 								   false,
 								   false,
 								   false,
+								   false,
+								   false,
+								   false,
 								   false
 };
 
@@ -213,6 +225,9 @@ false,
 
 void *baseEx::handlesEx[] = {
 NULL,
+							  NULL,
+							  NULL,
+							  NULL,
 							  NULL,
 							  NULL,
 							  NULL,

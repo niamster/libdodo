@@ -1,8 +1,8 @@
 /***************************************************************************
- *            ioNetworkServerEx.h
+ *            ioNetworkSslClientEx.h
  *
- *  Mon Feb 21 03:03:47 2005
- *  Copyright  2005  Ni@m
+ *  Tue Jun 10 16:45:47 2008
+ *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -21,8 +21,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#ifndef _IONETWORKSERVEREX_H_
-#define _IONETWORKSERVEREX_H_
+#ifndef _IONETWORKSSLCLIENTEX_H_
+#define _IONETWORKSSLCLIENTEX_H_
 
 #include <libdodo/directives.h>
 
@@ -34,29 +34,30 @@ namespace dodo
 	{
 		namespace network
 		{
-			/**
-			 * libdodo defined errors
-			 */
-			enum serverExR
+			namespace ssl
 			{
-				SERVEREX_WRONGPARAMETER,
-				SERVEREX_WRONGFILENAME,
-			};
+				/**
+				 * libdodo defined errors
+				 */
+				enum clientExR
+				{
+					CLIENTEX_WRONGPARAMETER,
+				};
 
-			/**
-			 * explanations for libdodo defined errors
-			 */
-			#define IONETWORKSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-			#define IONETWORKSERVEREX_WRONGFILENAME_STR  "Probably wrong filename, type of file is wrong or `path` is empty!"
+				/**
+				 * explanations for libdodo defined errors
+				 */
+			#define IONETWORKSSLCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 
-			/**
-			 * IDs of functions where exception might be thrown
-			 */
-			enum serverFunctionsID
-			{
-				SERVEREX_MAKESOCKET,
-				SERVEREX_BINDNLISTEN,
-				SERVEREX_ACCEPT,
+				/**
+				 * IDs of functions where exception might be thrown
+				 */
+				enum clientFunctionsID
+				{
+					CLIENTEX_MAKESOCKET,
+					CLIENTEX_CONNECT,
+					CLIENTEX_CONNECTFROM,
+				};
 			};
 		};
 	};

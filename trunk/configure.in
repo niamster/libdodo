@@ -159,6 +159,65 @@ fi
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tdisabled"
 	fi
 
+	AC_ARG_WITH([openssl],
+		AS_HELP_STRING([--with-openssl(=/path)],[use openssl]),
+		[MOD_OPENSSL_DIR="$withval"], [MOD_OPENSSL="no"])
+	if test "$MOD_OPENSSL" != "no" -a "$MOD_OPENSSL_DIR" != "no"
+	then
+		if test "$MOD_OPENSSL_DIR" = "yes"
+		then
+			MOD_OPENSSL_DIR=/usr
+		fi
+		CPPFLAGS="$CPPFLAGS -I$MOD_OPENSSL_DIR/include"
+		LDFLAGS="$LDFLAGS -L$MOD_OPENSSL_DIR/lib -lssl"
+		AC_CHECK_LIB([ssl], [SSL_library_init], [], AC_MSG_ERROR(openssl lib was not found))
+		AC_CHECK_HEADER([openssl/ssl.h], [], AC_MSG_ERROR(openssl header was not found))
+		echo -n -e "#define OPENSSL_EXT\n\n" >> include/libdodo/directives.runtime.h
+
+		RESULT="$RESULT\nOpenSSL\t\t\t\t\t\tenabled"
+
+		AC_ARG_ENABLE(ioNetworkSslExchange-xexec-support,
+			AS_HELP_STRING([--disable-ioNetworkSslExchange-xexec-support],[compile io::network::ssl::exchange w/o xexec support]),
+			[IONETWORKSSLEXCHANGE_W_XEXEC="$enableval"], [IONETWORKSSLEXCHANGE_W_XEXEC="yes"])
+
+		if test "$IONETWORKSSLEXCHANGE_W_XEXEC" = "no"
+		then
+			echo -n -e "#define IONETWORKSSLEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+			
+			RESULT="$RESULT\nio::network::ssl::exchange xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\nio::network::ssl::exchange xexec support\t\t\t\t\t\tenabled"
+		fi
+
+		AC_ARG_ENABLE(ioNetworkSslClient-xexec-support,
+			AS_HELP_STRING([--disable-ioNetworkSslClient-xexec-support],[compile io::network::ssl::client w/o xexec support]),
+			[IONETWORKSSLCLIENT_W_XEXEC="$enableval"], [IONETWORKSSLCLIENT_W_XEXEC="yes"])
+
+		if test "$IONETWORKSSLCLIENT_W_XEXEC" = "no"
+		then
+			echo -n -e "#define IONETWORKSSLCLIENT_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+			
+			RESULT="$RESULT\nio::network::ssl::client xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\nio::network::ssl::client xexec support\t\t\t\t\t\tenabled"
+		fi
+
+		AC_ARG_ENABLE(ioNetworkSslServer-xexec-support,
+			AS_HELP_STRING([--disable-ioNetworkSslServer-xexec-support],[compile io::network::ssl::server w/o xexec support]),
+			[IONETWORKSSLSERVER_W_XEXEC="$enableval"], [IONETWORKSSLSERVER_W_XEXEC="yes"])
+
+		if test "$IONETWORKSSLSERVER_W_XEXEC" = "no"
+		then
+			echo -n -e "#define IONETWORKSSLSERVER_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+			
+			RESULT="$RESULT\nio::network::ssl::server xexec support\t\t\t\t\t\tdisabled"
+		else
+			RESULT="$RESULT\nio::network::ssl::server xexec support\t\t\t\t\t\tenabled"
+		fi
+	else
+		RESULT="$RESULT\nOpenSSL\t\t\t\t\t\tdisabled"
+	fi
+
 	AC_ARG_WITH([bfd],
 		AS_HELP_STRING([--with-bfd(=/path)],[support library name resolution]),
 		[MOD_BFD_DIR="$withval"], [MOD_BFD="no"])

@@ -46,6 +46,9 @@ OBJECTS:=dbAccumulator.o \
 	ioStdio.o \
 	ioNetworkHttp.o \
 	ioNetworkOptions.o \
+	ioNetworkSslExchange.o \
+	ioNetworkSslServer.o \
+	ioNetworkSslClient.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
