@@ -45,7 +45,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-
 /**
  * size of block for zLib de/compression
  */
@@ -60,6 +59,11 @@
  * file permissions for newly created file(pipe)
  */
 #define DEFAULT_FILE_PERM dodo::tools::FILESYSTEM_PERMISSION_OWNER_ALL_ACCESS
+
+/**
+ * size of buffer for random data for openssl library
+ */
+#define OPENSSL_RAND_BUFSIZE 2048
 
 /**
  * size of string that represents numeric value during convertion
@@ -102,8 +106,8 @@
 /**
  * default values of stdin/out buffer for io operations(stdio)
  */
-#define STD_INSIZE               102400
-#define STD_OUTSIZE              102400
+#define IOSTDIO_INSIZE               102400
+#define IOSTDIO_OUTSIZE              102400
 
 /**
  * linger options

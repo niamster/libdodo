@@ -37,8 +37,8 @@ __xexexIoStdioCollectedData::__xexexIoStdioCollectedData(int &a_operType,
 
 //-------------------------------------------------------------------
 
-stdio::stdio() : inSTDBuffer(STD_INSIZE),
-				 outSTDBuffer(STD_OUTSIZE),
+stdio::stdio() : inSTDBuffer(IOSTDIO_INSIZE),
+				 outSTDBuffer(IOSTDIO_OUTSIZE),
 				 err(false),
 				 blocked(true),
 				 desc(stdout)

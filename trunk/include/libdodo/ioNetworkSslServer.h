@@ -42,6 +42,7 @@
 
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkSslServerEx.h>
+#include <libdodo/ioNetworkSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetworkSslExchange.h>

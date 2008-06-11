@@ -42,7 +42,8 @@
 
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/ioNetworkExchangeEx.h>
+#include <libdodo/ioNetworkSslExchangeEx.h>
+#include <libdodo/ioNetworkSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ipcThreadGuard.h>
