@@ -31,6 +31,10 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <openssl/rand.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <sys/time.h>
 
 #include <libdodo/toolsMisc.h>
 
@@ -58,6 +62,11 @@ namespace dodo
 						 * destructor
 						 */
 						~__openssl_init__();
+
+						/**
+						 *
+						 */
+						void addEntropy(); 
 				};
 
 				extern __openssl_init__ __openssl_init_object__;
