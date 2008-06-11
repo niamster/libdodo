@@ -43,6 +43,7 @@ namespace dodo
 	 */
 	enum xexecObjectTypeEnum
 	{
+		XEXEC_OBJECT_XEXEC,
 		XEXEC_OBJECT_DBMYSQL,
 		XEXEC_OBJECT_DBSQLITE,
 		XEXEC_OBJECT_DBPOSTGRESQL,
@@ -72,9 +73,7 @@ namespace dodo
 	struct __xexecItem
 	{
 		inExec func;    ///< function to execute
-		short type;     ///< type of object[see xexecObjectTypeEnum]
 		void *data;     ///< user data
-		void *obj;      ///< object data
 		bool enabled;   ///< if true hook is enabled
 		int position;   ///< object identificator
 
@@ -183,21 +182,17 @@ namespace dodo
 			 * set function that will be executed after the main action call
 			 * @return postExec identificator
 			 * @param func defines function that will be called
-			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
-			virtual int _addPostExec(inExec func, void *obj, short type, void *data);
+			virtual int addPostExec(inExec func, void *data);
 
 			/**
 			 * set function that will be executed before the main action call
 			 * @return preExec identificator
 			 * @param func defines function that will be called
-			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
-			virtual int _addPreExec(inExec func, void *obj, short type, void *data);
+			virtual int addPreExec(inExec func, void *data);
 
 #ifdef DL_EXT
 
@@ -205,35 +200,32 @@ namespace dodo
 			 * set function that will be executed after the main action call
 			 * @return postExec identificator
 			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
+			 * if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 			 */
-			virtual int _addPostExec(const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
 			 * set function that will be executed before the main action call
 			 * @return preExec identificator
 			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
+			 * if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 			 */
-			virtual int _addPreExec(const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
 
 			/**
 			 * set function that will be executed before/after the main action call
 			 * @return pre/postExec identificators
 			 * @param path defines path to the library[if not in ldconfig db] or library name
 			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjectTypeEnum]
-			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 * @note type of hook[pre/post] is defined in module
+			 * if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
 			 */
-			virtual __xexecCounts _addExec(const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);   ///< if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
+			virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
 
 #endif
 
@@ -381,7 +373,7 @@ namespace dodo
 			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
-			virtual int addXExec(dodoList<__xexecItem> &list, inExec func, void *obj, short type, void *data);
+			virtual int addXExec(dodoList<__xexecItem> &list, inExec func, void *data);
 
 			/**
 			 * delete hook from list
@@ -419,7 +411,7 @@ namespace dodo
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 */
-			virtual int addXExecModule(dodoList<__xexecItem> &list, const dodoString &path, void *obj, short type, void *data, void *toInit = NULL);
+			virtual int addXExecModule(dodoList<__xexecItem> &list, const dodoString &path, void *data, void *toInit = NULL);
 
 #endif
 
@@ -436,9 +428,10 @@ namespace dodo
 
 			dodoList<__xexecItem>::iterator current;        ///< iterator for list[for matched with getXexec method]
 
-			mutable bool collectData;                       ///< if true to collect data for xexec[true by default]
-
 			mutable int operType;                           ///< operation type set by main action
+		
+			short execObject;     ///< type of object[see xexecObjectTypeEnum]
+			void *execObjectData; ///< object data
 	};
 
 };

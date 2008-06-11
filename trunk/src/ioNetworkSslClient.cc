@@ -65,6 +65,12 @@ client::client(short a_family,
 #endif
 
 {
+#ifndef IONETWORKSSLCLIENT_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKSSLCLIENT;
+	execObjectData = (void *)&collectedData;
+
+#endif
 }
 
 
@@ -73,62 +79,6 @@ client::client(short a_family,
 client::~client()
 {
 }
-
-//-------------------------------------------------------------------
-
-#ifndef IONETWORKSSLCLIENT_WO_XEXEC
-
-int
-client::addPostExec(inExec func,
-					void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLCLIENT, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-client::addPreExec(inExec func,
-				   void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLCLIENT, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-client::addPostExec(const dodoString &module,
-					void             *data,
-					void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLCLIENT, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-client::addPreExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLCLIENT, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-client::addExec(const dodoString &module,
-				void             *data,
-				void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLCLIENT, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

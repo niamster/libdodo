@@ -51,6 +51,12 @@ stdio::stdio() : inSTDBuffer(IOSTDIO_INSIZE),
 
 #endif
 {
+#ifndef IOSTDIO_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IOSTDIO;
+	execObjectData = (void *)&collectedData;
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -93,62 +99,6 @@ stdio::getOutDescriptor() const
 	else
 		return fileno(stdout);
 }
-
-//-------------------------------------------------------------------
-
-#ifndef IOSTDIO_WO_XEXEC
-
-int
-stdio::addPostExec(inExec func,
-				   void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTDIO, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-stdio::addPreExec(inExec func,
-				  void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOSTDIO, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-stdio::addPostExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTDIO, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-stdio::addExec(const dodoString &module,
-			   void             *data,
-			   void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTDIO, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-stdio::addPreExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOSTDIO, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

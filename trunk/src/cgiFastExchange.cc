@@ -64,6 +64,12 @@ exchange::exchange(FCGX_Request *a_request) : request(a_request)
 #endif
 
 {
+#ifndef CGIFASTEXCHANGE_WO_XEXEC
+	
+	execObject = XEXEC_OBJECT_CGIFASTEXCHANGE;
+	execObjectData = (void *)&collectedData;
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -104,62 +110,6 @@ exchange::getOutDescriptor() const
 {
 	return -1;
 }
-
-//-------------------------------------------------------------------
-
-#ifndef CGIFASTEXCHANGE_WO_XEXEC
-
-int
-exchange::addPostExec(inExec func,
-					  void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-exchange::addPreExec(inExec func,
-					 void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-exchange::addPostExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-exchange::addExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-exchange::addPreExec(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_CGIFASTEXCHANGE, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

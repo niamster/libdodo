@@ -52,6 +52,13 @@ file::file(const dodoString &a_path,
 
 #endif
 {
+#ifndef IOFILE_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IOFILE;
+	execObjectData = (void *)&collectedData;
+
+#endif
+
 	if (path != __dodostring__)
 		try
 		{
@@ -108,62 +115,6 @@ file::getOutDescriptor() const
 
 	return fileno(handler);
 }
-
-//-------------------------------------------------------------------
-
-#ifndef IOFILE_WO_XEXEC
-
-int
-file::addPostExec(inExec func,
-				  void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-file::addPreExec(inExec func,
-				 void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-file::addPostExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-file::addPreExec(const dodoString &module,
-				 void             *data,
-				 void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-file::addExec(const dodoString &module,
-			  void             *data,
-			  void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IOFILE, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

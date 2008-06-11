@@ -106,58 +106,6 @@ namespace dodo
 					 */
 					virtual ~exchange();
 
-		#ifndef CGIFASTEXCHANGE_WO_XEXEC
-
-					/**
-					 * add hook after the operation
-					 * @return id of the hook method
-					 * @param func defines hook function
-					 * @param data defines data that will be passed to hook function
-					 */
-					virtual int addPostExec(inExec func, void *data);
-
-					/**
-					 * add hook before the operation
-					 * @return id of the hook method
-					 * @param func defines hook function
-					 * @param data defines data that will be passed to hook function
-					 */
-					virtual int addPreExec(inExec func, void *data);
-
-		#ifdef DL_EXT
-
-					/**
-					 * add hook after the operation
-					 * @return id of the hook method
-					 * @param path defines path to the library[if not in ldconfig db] or library name
-					 * @param data defines data that will be passed to hook function
-					 * @param toInit defines data that will be passed to the init function
-					 */
-					virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
-
-					/**
-					 * add hook after the operation
-					 * @return id of the hook method
-					 * @param path defines path to the library[if not in ldconfig db] or library name
-					 * @param data defines data that will be passed to hook function
-					 * @param toInit defines data that will be passed to the init function
-					 */
-					virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
-
-					/**
-					 * set hook from the library that will be executed before/after the operation
-					 * @return number in list where function is set
-					 * @return id of the hook method
-					 * @param path defines path to the library[if not in ldconfig db] or library name
-					 * @param data defines data that will be passed to hook function
-					 * @param toInit defines data that will be passed to the init function
-					 * @note type of hook[pre/post] is defined in the library
-					 */
-					virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
-
-		#endif
-
-		#endif
 					/**
 					 * @param data defines buffer that will be filled
 					 * @note not more then inSize(including '\0')

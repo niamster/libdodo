@@ -30,6 +30,12 @@ using namespace dodo::db;
 postgresql::postgresql() : empty(true),
 						   hint(POSTGRESQL_HINT_NONE)
 {
+#ifndef DBPOSTGRESQL_WO_XEXEC
+	
+	execObject = XEXEC_OBJECT_DBPOSTGRESQL;
+	execObjectData = (void *)&collectedData;
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -458,62 +464,6 @@ postgresql::exec(const dodoString &query,
 
 	cleanCollected();
 }
-
-//-------------------------------------------------------------------
-
-#ifndef DBPOSTGRESQL_WO_XEXEC
-
-int
-postgresql::addPostExec(inExec func,
-						void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-postgresql::addPreExec(inExec func,
-					   void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-postgresql::addPostExec(const dodoString &module,
-						void             *data,
-						void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-postgresql::addPreExec(const dodoString &module,
-					   void             *data,
-					   void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-postgresql::addExec(const dodoString &module,
-					void             *data,
-					void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBPOSTGRESQL, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

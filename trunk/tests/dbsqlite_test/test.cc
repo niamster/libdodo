@@ -4,15 +4,32 @@
 
 #include <iostream>
 
+using namespace std;
+
 using namespace dodo;
 
 #ifdef SQLITE_EXT
 
 using namespace db;
 
+#ifndef DBMYSQL_WO_XEXEC
+
+void 
+hook(void *odata,
+	short int type,
+	void *udata)
+{
+	__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
+
+	if (sql->operType == SQLITE_OPERATION_EXEC && sql->qType == ACCUMULATOR_REQUEST_SELECT)
+	{
+		cout << endl << endl << "table: " << sql->table << endl << endl;
+	}
+}
+
 #endif
 
-using namespace std;
+#endif
 
 int main(int argc, char **argv)
 {
@@ -21,6 +38,11 @@ int main(int argc, char **argv)
 	sqlite pp;	
 	try
 	{
+#ifndef DBMYSQL_WO_XEXEC
+
+		int pos = pp.addPreExec(hook,(void *)"id");
+
+#endif
 		
 		tools::filesystem::unlink("test.lite",true);
 		

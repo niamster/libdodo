@@ -115,6 +115,13 @@ image::image(image &a_image) : collectedData(operType,
 image::image() : collectedData(operType,
 							   (void *) this)
 {
+#ifndef IMAGE_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IMAGE;
+	execObjectData = (void *)&collectedData;
+
+#endif
+
 	collectedData.imHandle = NULL;
 
 	collectedData.imInfo = AcquireImageInfo();
@@ -419,62 +426,6 @@ image::destroyImageData(unsigned char **data)
 {
 	free(*data);
 }
-
-//-------------------------------------------------------------------
-
-#ifndef IMAGE_WO_XEXEC
-
-int
-image::addPostExec(inExec func,
-				   void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-image::addPreExec(inExec func,
-				  void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-image::addPostExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-image::addPreExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-__xexecCounts
-image::addExec(const dodoString &module,
-			   void             *data,
-			   void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IMAGE, data, toInit);
-}
-
-#endif
-
-#endif
 
 #endif
 

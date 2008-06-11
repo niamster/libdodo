@@ -87,9 +87,12 @@ namespace dodo
 			/**
 			 * @class Server provides network connection interface
 			 */
-			class server : public xexec,
-						   public options,
+			class server : public options,
 						   virtual public nonBlockedAccessInfo
+		#ifndef IONETWORKSERVER_WO_XEXEC
+					,
+					public xexec
+		#endif
 			{
 					friend class exchange;
 
@@ -114,58 +117,6 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~server();
-
-		#ifndef IONETWORKSERVER_WO_XEXEC
-
-					/**
-					 * adds hook after the operation by callback
-					 * @return id of the hook method
-					 * @param func defines function that will be called
-					 * @param data defines hook data
-					 */
-					virtual int addPostExec(inExec func, void *data);
-
-					/**
-					 * adds hook before the operation by callback
-					 * @return id of the hook method
-					 * @param func defines function that will be called
-					 * @param data defines hook data
-					 */
-					virtual int addPreExec(inExec func, void *data);
-
-		#ifdef DL_EXT
-
-					/**
-					 * set function that will be executed before/after the main action call
-					 * @return id of the hook method
-					 * @param path defines path to the library[if not in ldconfig db] or library name
-					 * @param data defines hook data
-					 * @param toInit defines data that will be passed to the init function
-					 * @note type of hook[pre/post] is defined in module
-					 */
-					virtual __xexecCounts addExec(const dodoString &path, void *data, void *toInit = NULL);
-
-					/**
-					 * set function that will be executed after the main action call
-					 * @return id of the hook method
-					 * @param path defines path to the library[if not in ldconfig db] or library name
-					 * @param data defines hook data
-					 * @param toInit defines data that will be passed to the init function
-					 */
-					virtual int addPostExec(const dodoString &path, void *data, void *toInit = NULL);
-
-					/**
-					 * set function that will be executed before the main action call
-					 * @return id of the hook method
-					 * @param path defines path to the library[if not in ldconfig db] or library name
-					 * @param data defines hook data
-					 * @param toInit defines data that will be passed to the init function
-					 */
-					virtual int addPreExec(const dodoString &path, void *data, void *toInit = NULL);
-
-		#endif
-
-		#endif
 
 					/**
 					 * bind to address and start to listen

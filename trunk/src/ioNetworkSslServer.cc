@@ -62,8 +62,13 @@ server::server(short a_family,
 											 (void *) this)
 
 #endif
-
 {
+#ifndef IONETWORKSSLSERVER_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKSSLSERVER;
+	execObjectData = (void *)&collectedData;
+
+#endif
 }
 
 
@@ -81,62 +86,6 @@ server::~server()
 	if (unixSock.size() != 0)
 		::unlink(unixSock.c_str());
 }
-
-//-------------------------------------------------------------------
-
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-
-int
-server::addPostExec(inExec func,
-					void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLSERVER, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-server::addPreExec(inExec func,
-				   void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLSERVER, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-server::addPostExec(const dodoString &module,
-					void             *data,
-					void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLSERVER, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-server::addPreExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLSERVER, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-server::addExec(const dodoString &module,
-				void             *data,
-				void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKSSLSERVER, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

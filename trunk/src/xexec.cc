@@ -28,7 +28,8 @@ using namespace dodo;
 xexec::xexec() : safeHooks(true),
 				 operType(XEXEC_OPERTYPE_NONE),
 				 execs(0),
-				 collectData(true)
+				execObject(XEXEC_OBJECT_XEXEC),
+				execObjectData(NULL)
 {
 	preExec.execDisabled = false;
 	postExec.execDisabled = false;
@@ -81,18 +82,14 @@ xexec::~xexec()
 int
 xexec::addXExec(dodoList<__xexecItem> &list,
 				inExec func,
-				void                  *obj,
-				short type,
 				void                  *data)
 {
 	__xexecItem temp;
 
 	temp.data = data;
-	temp.obj = obj;
 	temp.func = func;
 	temp.position = ++execs;
 	temp.enabled = true;
-	temp.type = type;
 
 #ifdef DL_EXT
 	temp.handle = NULL;
@@ -147,12 +144,10 @@ xexec::delXExec(dodoList<__xexecItem> &list,
 //-------------------------------------------------------------------
 
 int
-xexec::_addPreExec(inExec func,
-				   void   *obj,
-				   short type,
+xexec::addPreExec(inExec func,
 				   void   *data)
 {
-	return addXExec(preExec.exec, func, obj, type, data);
+	return addXExec(preExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -182,12 +177,10 @@ xexec::enablePreExec(int position)
 //-------------------------------------------------------------------
 
 int
-xexec::_addPostExec(inExec func,
-					void   *obj,
-					short type,
+xexec::addPostExec(inExec func,
 					void   *data)
 {
-	return addXExec(postExec.exec, func, obj, type, data);
+	return addXExec(postExec.exec, func, data);
 }
 
 //-------------------------------------------------------------------
@@ -375,7 +368,7 @@ xexec::performXExec(__xexecItemList &list) const
 				disableAllPostExec();
 				disableAllPreExec();
 			}
-			i->func(i->obj, i->type, i->data);
+			i->func(execObjectData, execObject, i->data);
 			if (safeHooks)
 			{
 				enableAllPostExec();
@@ -398,18 +391,14 @@ __xexecCounts::__xexecCounts() : pre(-1),
 int
 xexec::addXExecModule(dodoList<__xexecItem> &list,
 					  const dodoString &module,
-					  void                  *obj,
-					  short type,
 					  void                  *data,
 					  void                  *toInit)
 {
 	__xexecItem temp;
 
 	temp.data = data;
-	temp.obj = obj;
 	temp.position = ++execs;
 	temp.enabled = true;
-	temp.type = type;
 
 #ifdef DL_FAST
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -437,25 +426,21 @@ xexec::addXExecModule(dodoList<__xexecItem> &list,
 //-------------------------------------------------------------------
 
 int
-xexec::_addPostExec(const dodoString &module,
-					void             *obj,
-					short type,
+xexec::addPostExec(const dodoString &module,
 					void             *data,
 					void             *toInit)
 {
-	return addXExecModule(postExec.exec, module, obj, type, data, toInit);
+	return addXExecModule(postExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
 
 int
-xexec::_addPreExec(const dodoString &module,
-				   void             *obj,
-				   short type,
+xexec::addPreExec(const dodoString &module,
 				   void             *data,
 				   void             *toInit)
 {
-	return addXExecModule(preExec.exec, module, obj, type, data, toInit);
+	return addXExecModule(preExec.exec, module, data, toInit);
 }
 
 //-------------------------------------------------------------------
@@ -489,18 +474,14 @@ xexec::getModuleInfo(const dodoString &module,
 //-------------------------------------------------------------------
 
 __xexecCounts
-xexec::_addExec(const dodoString &module,
-				void             *obj,
-				short type,
+xexec::addExec(const dodoString &module,
 				void             *data,
 				void             *toInit)
 {
 	__xexecItem temp;
 
 	temp.data = data;
-	temp.obj = obj;
 	temp.enabled = true;
-	temp.type = type;
 
 #ifdef DL_FAST
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);

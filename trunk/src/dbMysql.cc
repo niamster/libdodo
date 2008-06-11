@@ -49,7 +49,15 @@ __mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key,
 
 mysql::mysql() : empty(true),
 				 type(CLIENT_MULTI_STATEMENTS)
+
 {
+#ifndef DBMYSQL_WO_XEXEC
+	
+	execObject = XEXEC_OBJECT_DBMYSQL;
+	execObjectData = (void *)&collectedData;
+
+#endif
+
 	addSQL();
 }
 
@@ -499,62 +507,6 @@ mysql::exec(const dodoString &query,
 
 	cleanCollected();
 }
-
-//-------------------------------------------------------------------
-
-#ifndef DBMYSQL_WO_XEXEC
-
-int
-mysql::addPostExec(inExec func,
-				   void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-mysql::addPreExec(inExec func,
-				  void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-mysql::addPostExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-mysql::addPreExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-mysql::addExec(const dodoString &module,
-			   void             *data,
-			   void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBMYSQL, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

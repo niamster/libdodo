@@ -29,7 +29,15 @@ using namespace dodo::db;
 
 sqlite::sqlite() : empty(true),
 				   hint(SQLITE_HINT_NONE)
+
 {
+#ifndef DBSQLITE_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_DBSQLITE;
+	execObjectData = (void *)&collectedData;
+
+#endif
+
 	#ifndef SQLITE_ENABLE_COLUMN_METADATA
 	   
 	autoFraming = false;
@@ -526,62 +534,6 @@ sqlite::exec(const dodoString &query,
 
 	cleanCollected();
 }
-
-//-------------------------------------------------------------------
-
-#ifndef DBSQLITE_WO_XEXEC
-
-int
-sqlite::addPostExec(inExec func,
-					void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-sqlite::addPreExec(inExec func,
-				   void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-sqlite::addPostExec(const dodoString &module,
-					void             *data,
-					void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-sqlite::addPreExec(const dodoString &module,
-				   void             *data,
-				   void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-sqlite::addExec(const dodoString &module,
-				void             *data,
-				void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_DBSQLITE, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 

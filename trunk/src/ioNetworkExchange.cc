@@ -64,6 +64,12 @@ exchange::exchange(exchange &fse)
 #endif
 
 {
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
+	execObjectData = (void *)&collectedData;
+
+#endif
 	socket = fse.socket;
 	opened = fse.opened;
 
@@ -95,6 +101,12 @@ exchange::exchange()
 #endif
 
 {
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
+	execObjectData = (void *)&collectedData;
+
+#endif
 }
 
 //-------------------------------------------------------------------
@@ -109,6 +121,13 @@ exchange::exchange(__initialAccept &a_init)
 #endif
 
 {
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
+	execObjectData = (void *)&collectedData;
+
+#endif
+
 	init(a_init.socket, a_init.blockInherited);
 }
 
@@ -521,62 +540,6 @@ exchange::readString(dodoString &a_str)
 	delete [] data;
 #endif
 }
-
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
-
-//-------------------------------------------------------------------
-
-int
-exchange::addPostExec(inExec func,
-					  void   *data)
-{
-	return _addPostExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
-}
-
-//-------------------------------------------------------------------
-
-int
-exchange::addPreExec(inExec func,
-					 void   *data)
-{
-	return _addPreExec(func, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef DL_EXT
-
-int
-exchange::addPostExec(const dodoString &module,
-					  void             *data,
-					  void             *toInit)
-{
-	return _addPostExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-int
-exchange::addPreExec(const dodoString &module,
-					 void             *data,
-					 void             *toInit)
-{
-	return _addPreExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
-}
-
-//-------------------------------------------------------------------
-
-dodo::__xexecCounts
-exchange::addExec(const dodoString &module,
-				  void             *data,
-				  void             *toInit)
-{
-	return _addExec(module, (void *)&collectedData, XEXEC_OBJECT_IONETWORKEXCHANGE, data, toInit);
-}
-
-#endif
-
-#endif
 
 //-------------------------------------------------------------------
 
