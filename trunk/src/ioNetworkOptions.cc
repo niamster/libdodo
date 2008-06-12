@@ -26,13 +26,13 @@
 using namespace dodo::io::network;
 
 options::options() : lingerOpts(IONETWORKOPTIONS_SOCKET_LINGER_OPTION),
-					 lingerSeconds(IONETWORKOPTIONS_SOCKET_LINGER_PERIOD),
-					 inTimeout(IONETWORK_RECIEVE_TIMEOUT),
-					 outTimeout(IONETWORK_SEND_TIMEOUT),
-					 inSocketBuffer(IONETWORKOPTIONS_SOCKET_INSIZE),
-					 outSocketBuffer(IONETWORKOPTIONS_SOCKET_OUTSIZE),
-					 socket(-1),
-					 blocked(true)
+		     lingerSeconds(IONETWORKOPTIONS_SOCKET_LINGER_PERIOD),
+		     inTimeout(IONETWORK_RECIEVE_TIMEOUT),
+		     outTimeout(IONETWORK_SEND_TIMEOUT),
+		     inSocketBuffer(IONETWORKOPTIONS_SOCKET_INSIZE),
+		     outSocketBuffer(IONETWORKOPTIONS_SOCKET_OUTSIZE),
+		     socket(-1),
+		     blocked(true)
 {
 }
 
@@ -181,7 +181,7 @@ options::getOption(int option) const
 
 void
 options::setOption(short option,
-				   bool flag)
+		   bool flag)
 {
 	if (socket == -1)
 		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
@@ -253,7 +253,7 @@ options::setOption(short option,
 
 void
 options::setLingerOption(short option,
-						 int seconds)
+			 int seconds)
 {
 	if (socket == -1)
 		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);

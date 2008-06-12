@@ -79,10 +79,10 @@ namespace dodo
 		 */
 		enum fileFiletypeEnum
 		{
-			FILE_FILETYPE_REG_FILE,     ///< regular file
-			FILE_FILETYPE_TMP_FILE,     ///< temporary file[will be deleted after exit(or close)]
-			FILE_FILETYPE_FIFO_FILE,    ///< FIFO file
-			FILE_FILETYPE_CHAR_FILE     ///< CHAR file
+			FILE_FILETYPE_REG_FILE,         ///< regular file
+			FILE_FILETYPE_TMP_FILE,         ///< temporary file[will be deleted after exit(or close)]
+			FILE_FILETYPE_FIFO_FILE,        ///< FIFO file
+			FILE_FILETYPE_CHAR_FILE         ///< CHAR file
 		};
 
 #ifndef IOFILE_WO_XEXEC
@@ -99,11 +99,11 @@ namespace dodo
 			 */
 			__xexexIoFileCollectedData(int &operType, void *executor);
 
-			dodoString buffer;         ///< data buffer
+			dodoString buffer;              ///< data buffer
 
-			int &operType;              ///< xexec operation
+			int &operType;                  ///< xexec operation
 
-			void *executor;             ///< class that executed hook
+			void *executor;                 ///< class that executed hook
 		};
 
 #endif
@@ -112,7 +112,7 @@ namespace dodo
 		 * @class file provides disk I/O manipulations
 		 */
 		class file : public channel,
-					 virtual public ipc::thread::guardHolder
+			     virtual public ipc::thread::guardHolder
 		{
 			private:
 
@@ -210,10 +210,10 @@ namespace dodo
 				 */
 				virtual void erase();
 
-				unsigned long pos;  ///< read/write/erase position[0 by default]
+				unsigned long pos;      ///< read/write/erase position[0 by default]
 
-				bool over;          ///< if true block will be overwritten; for regular and temp files only
-				bool append;        ///< if true, will append to the end of the file, even if pos is set
+				bool over;              ///< if true block will be overwritten; for regular and temp files only
+				bool append;            ///< if true, will append to the end of the file, even if pos is set
 
 				/**
 				 * @return path of the opened file

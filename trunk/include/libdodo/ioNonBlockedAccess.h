@@ -121,9 +121,9 @@ namespace dodo
 
 			protected:
 
-				dodoArray<__inOutDescriptors> desc; ///< stream pairs
+				dodoArray<__inOutDescriptors> desc;     ///< stream pairs
 
-				int descs;                          ///< descriptors counter
+				int descs;                              ///< descriptors counter
 		};
 	};
 };

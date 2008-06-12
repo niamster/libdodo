@@ -43,7 +43,7 @@ namespace dodo
 			 */
 			class response
 			{
-					friend class server;
+				friend class server;
 
 				public:
 

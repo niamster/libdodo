@@ -47,7 +47,7 @@ namespace dodo
 				/**
 				 * explanations for libdodo defined errors
 				 */
-			#define IPCTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND_STR "Share not found."
+#define IPCTHREADSHAREDDATACOLLECTIONGUARDEX_NOTFOUND_STR "Share not found."
 
 				/**
 				 * IDs of functions where exception might be thrown

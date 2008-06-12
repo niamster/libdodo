@@ -43,7 +43,7 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR "Array index out of bounds."
+#define RPCRESPONSEEX_ARRAYOUTOFBOUNDS_STR "Array index out of bounds."
 
 		/**
 		 * IDs of functions where exception might be thrown

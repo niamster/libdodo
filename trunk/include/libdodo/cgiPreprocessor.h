@@ -94,7 +94,7 @@ namespace dodo
 
 				dodoArray< dodoArray<unsigned long> > newLinePositions; ///< stack of positions of new lines of templates
 
-				#define PREPROCESSOR_STATEMENTS 30
+#define PREPROCESSOR_STATEMENTS 30
 
 				/**
 				 * @enum preprocessorStatementEnum defines processor statements

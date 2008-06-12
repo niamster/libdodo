@@ -95,80 +95,80 @@ namespace dodo
 			SERVER_ENVIRONMENT_SCRIPTNAME,
 		};
 
-	#define SERVER_RESPONSEHEADERSTATEMENTS 18
+#define SERVER_RESPONSEHEADERSTATEMENTS 18
 
 		/**
 		 * @enum serverResponseHeaderEnum defines HTTP response headers
 		 */
 		enum serverResponseHeaderEnum
 		{
-			SERVER_RESPONSEHEADER_ACCEPTRANGES,         ///< what partial content range types this server supports
-			SERVER_RESPONSEHEADER_AGE,                  ///< the age the object has been in a proxy cache in seconds
-			SERVER_RESPONSEHEADER_ALLOW,                ///< valid actions for a specified resource. To be used for a 405 Method not allowed
-			SERVER_RESPONSEHEADER_CACHECONTROL,         ///< tells all caching mechanisms from server to server whether they may cache this object
-			SERVER_RESPONSEHEADER_CONTENTENCODING,      ///< the type of encoding used on the data
-			SERVER_RESPONSEHEADER_CONTENTLANGUAGE,      ///< the language the content is in
-			SERVER_RESPONSEHEADER_CONTENTLENGTH,        ///< the length of the content in bytes
-			SERVER_RESPONSEHEADER_CONTENTLOCATION,      ///< an alternate location for the returned data
-			SERVER_RESPONSEHEADER_CONTENTDISPOSITION,   ///< an opportunity to raise a "File Download" dialog box for a known MIME type
-			SERVER_RESPONSEHEADER_CONTENTMD5,           ///< an MD5 sum of the content of the response
-			SERVER_RESPONSEHEADER_CONTENTRANGE,         ///< where in a full body message this partial message belongs
-			SERVER_RESPONSEHEADER_CONTENTTYPE,          ///< the mime type of this content
-			SERVER_RESPONSEHEADER_DATE,                 ///< the date and time that the message was sent
-			SERVER_RESPONSEHEADER_LASTMODIFIED,         ///< the last modified date for the requested object
-			SERVER_RESPONSEHEADER_LOCATION,             ///< used in redirection
-			SERVER_RESPONSEHEADER_SERVER,               ///< a name for the server
-			SERVER_RESPONSEHEADER_WWWAUTHENTICATE,      ///< auuthentification request
-			SERVER_RESPONSEHEADER_XPOWEREDBY,           ///< cgi provider
+			SERVER_RESPONSEHEADER_ACCEPTRANGES,             ///< what partial content range types this server supports
+			SERVER_RESPONSEHEADER_AGE,                      ///< the age the object has been in a proxy cache in seconds
+			SERVER_RESPONSEHEADER_ALLOW,                    ///< valid actions for a specified resource. To be used for a 405 Method not allowed
+			SERVER_RESPONSEHEADER_CACHECONTROL,             ///< tells all caching mechanisms from server to server whether they may cache this object
+			SERVER_RESPONSEHEADER_CONTENTENCODING,          ///< the type of encoding used on the data
+			SERVER_RESPONSEHEADER_CONTENTLANGUAGE,          ///< the language the content is in
+			SERVER_RESPONSEHEADER_CONTENTLENGTH,            ///< the length of the content in bytes
+			SERVER_RESPONSEHEADER_CONTENTLOCATION,          ///< an alternate location for the returned data
+			SERVER_RESPONSEHEADER_CONTENTDISPOSITION,       ///< an opportunity to raise a "File Download" dialog box for a known MIME type
+			SERVER_RESPONSEHEADER_CONTENTMD5,               ///< an MD5 sum of the content of the response
+			SERVER_RESPONSEHEADER_CONTENTRANGE,             ///< where in a full body message this partial message belongs
+			SERVER_RESPONSEHEADER_CONTENTTYPE,              ///< the mime type of this content
+			SERVER_RESPONSEHEADER_DATE,                     ///< the date and time that the message was sent
+			SERVER_RESPONSEHEADER_LASTMODIFIED,             ///< the last modified date for the requested object
+			SERVER_RESPONSEHEADER_LOCATION,                 ///< used in redirection
+			SERVER_RESPONSEHEADER_SERVER,                   ///< a name for the server
+			SERVER_RESPONSEHEADER_WWWAUTHENTICATE,          ///< auuthentification request
+			SERVER_RESPONSEHEADER_XPOWEREDBY,               ///< cgi provider
 		};
 
-	#define SERVER_STATUSSTATEMENTS 40
+#define SERVER_STATUSSTATEMENTS 40
 
 		/**
 		 * @enum serverStatusCodeEnum defines HTTP response status code
 		 */
 		enum serverStatusCodeEnum
 		{
-			SERVER_STATUSCODE_CONTINUE,                         ///< 100
-			SERVER_STATUSCODE_SWITCHINGPROTOCOLS,               ///< 101
-			SERVER_STATUSCODE_OK,                               ///< 200
-			SERVER_STATUSCODE_CREATED,                          ///< 201
-			SERVER_STATUSCODE_ACCEPTED,                         ///< 202
-			SERVER_STATUSCODE_NONAUTHORITATIVE,                 ///< 203
-			SERVER_STATUSCODE_NOCONTENT,                        ///< 204
-			SERVER_STATUSCODE_RESETCONTENT,                     ///< 205
-			SERVER_STATUSCODE_PARTIALCONTENT,                   ///< 206
-			SERVER_STATUSCODE_MULTIPLECHOISES,                  ///< 300
-			SERVER_STATUSCODE_MOVEDPERMANENTLY,                 ///< 301
-			SERVER_STATUSCODE_FOUND,                            ///< 302
-			SERVER_STATUSCODE_SEEOTHER,                         ///< 303
-			SERVER_STATUSCODE_NOTMODIFIED,                      ///< 304
-			SERVER_STATUSCODE_USEPROXY,                         ///< 305
-			SERVER_STATUSCODE_TEMPORARYREDIRECT,                ///< 307
-			SERVER_STATUSCODE_BADREQUEST,                       ///< 400
-			SERVER_STATUSCODE_UNAUTHORIZED,                     ///< 401
-			SERVER_STATUSCODE_PAYMENTREQUIRED,                  ///< 402
-			SERVER_STATUSCODE_FORBIDDEN,                        ///< 403
-			SERVER_STATUSCODE_NOTFOUND,                         ///< 404
-			SERVER_STATUSCODE_METHODNOTALLOWED,                 ///< 405
-			SERVER_STATUSCODE_NOTACCEPTABLE,                    ///< 406
-			SERVER_STATUSCODE_PROXYauthenticationREQUIRED,    ///< 407
-			SERVER_STATUSCODE_REQUESTTIMEOUT,                   ///< 408
-			SERVER_STATUSCODE_CONFLICT,                         ///< 409
-			SERVER_STATUSCODE_GONE,                             ///< 410
-			SERVER_STATUSCODE_LENGTHREQUIRED,                   ///< 411
-			SERVER_STATUSCODE_PRECONDITIONFAILED,               ///< 412
-			SERVER_STATUSCODE_REQUESTENTITYTOOLARGE,            ///< 413
-			SERVER_STATUSCODE_REQUESTURITOOLONG,                ///< 414
-			SERVER_STATUSCODE_UNSUPPORTEDMEDIATYPE,             ///< 415
-			SERVER_STATUSCODE_REQUESTRANGENOTSATISFIABLE,       ///< 416
-			SERVER_STATUSCODE_EXPECTATIONFAILED,                ///< 417
-			SERVER_STATUSCODE_INTERNALSERVERERROR,              ///< 500
-			SERVER_STATUSCODE_NOTIMPLEMENTED,                   ///< 501
-			SERVER_STATUSCODE_BADGATEWAY,                       ///< 502
-			SERVER_STATUSCODE_SERVICEUNAVAILABLE,               ///< 503
-			SERVER_STATUSCODE_GATEWAYTIMEOUT,                   ///< 504
-			SERVER_STATUSCODE_HTTPVERSIONNOTSUPPORTED,          ///< 505
+			SERVER_STATUSCODE_CONTINUE,                             ///< 100
+			SERVER_STATUSCODE_SWITCHINGPROTOCOLS,                   ///< 101
+			SERVER_STATUSCODE_OK,                                   ///< 200
+			SERVER_STATUSCODE_CREATED,                              ///< 201
+			SERVER_STATUSCODE_ACCEPTED,                             ///< 202
+			SERVER_STATUSCODE_NONAUTHORITATIVE,                     ///< 203
+			SERVER_STATUSCODE_NOCONTENT,                            ///< 204
+			SERVER_STATUSCODE_RESETCONTENT,                         ///< 205
+			SERVER_STATUSCODE_PARTIALCONTENT,                       ///< 206
+			SERVER_STATUSCODE_MULTIPLECHOISES,                      ///< 300
+			SERVER_STATUSCODE_MOVEDPERMANENTLY,                     ///< 301
+			SERVER_STATUSCODE_FOUND,                                ///< 302
+			SERVER_STATUSCODE_SEEOTHER,                             ///< 303
+			SERVER_STATUSCODE_NOTMODIFIED,                          ///< 304
+			SERVER_STATUSCODE_USEPROXY,                             ///< 305
+			SERVER_STATUSCODE_TEMPORARYREDIRECT,                    ///< 307
+			SERVER_STATUSCODE_BADREQUEST,                           ///< 400
+			SERVER_STATUSCODE_UNAUTHORIZED,                         ///< 401
+			SERVER_STATUSCODE_PAYMENTREQUIRED,                      ///< 402
+			SERVER_STATUSCODE_FORBIDDEN,                            ///< 403
+			SERVER_STATUSCODE_NOTFOUND,                             ///< 404
+			SERVER_STATUSCODE_METHODNOTALLOWED,                     ///< 405
+			SERVER_STATUSCODE_NOTACCEPTABLE,                        ///< 406
+			SERVER_STATUSCODE_PROXYauthenticationREQUIRED,          ///< 407
+			SERVER_STATUSCODE_REQUESTTIMEOUT,                       ///< 408
+			SERVER_STATUSCODE_CONFLICT,                             ///< 409
+			SERVER_STATUSCODE_GONE,                                 ///< 410
+			SERVER_STATUSCODE_LENGTHREQUIRED,                       ///< 411
+			SERVER_STATUSCODE_PRECONDITIONFAILED,                   ///< 412
+			SERVER_STATUSCODE_REQUESTENTITYTOOLARGE,                ///< 413
+			SERVER_STATUSCODE_REQUESTURITOOLONG,                    ///< 414
+			SERVER_STATUSCODE_UNSUPPORTEDMEDIATYPE,                 ///< 415
+			SERVER_STATUSCODE_REQUESTRANGENOTSATISFIABLE,           ///< 416
+			SERVER_STATUSCODE_EXPECTATIONFAILED,                    ///< 417
+			SERVER_STATUSCODE_INTERNALSERVERERROR,                  ///< 500
+			SERVER_STATUSCODE_NOTIMPLEMENTED,                       ///< 501
+			SERVER_STATUSCODE_BADGATEWAY,                           ///< 502
+			SERVER_STATUSCODE_SERVICEUNAVAILABLE,                   ///< 503
+			SERVER_STATUSCODE_GATEWAYTIMEOUT,                       ///< 504
+			SERVER_STATUSCODE_HTTPVERSIONNOTSUPPORTED,              ///< 505
 		};
 
 		/**
@@ -176,11 +176,11 @@ namespace dodo
 		 */
 		enum serverPostFileErrEnum
 		{
-			SERVER_POSTFILEERR_NONE,            ///< everything is OK
-			SERVER_POSTFILEERR_ACCESS_DENY,     ///< permissions error
-			SERVER_POSTFILEERR_BAD_FILE_NAME,   ///< filename is too long
-			SERVER_POSTFILEERR_NO_SPACE,        ///< not enough space to save the file
-			SERVER_POSTFILEERR_NO_FILE,         ///< file with such name not found
+			SERVER_POSTFILEERR_NONE,                ///< everything is OK
+			SERVER_POSTFILEERR_ACCESS_DENY,         ///< permissions error
+			SERVER_POSTFILEERR_BAD_FILE_NAME,       ///< filename is too long
+			SERVER_POSTFILEERR_NO_SPACE,            ///< not enough space to save the file
+			SERVER_POSTFILEERR_NO_FILE,             ///< file with such name not found
 		};
 
 		/**
@@ -193,12 +193,12 @@ namespace dodo
 			 */
 			__serverFile();
 
-			dodoString name;                    ///< real name of the file
-			dodoString type;                    ///< MIME type
-			dodoString tmp_name;                ///< path where it was temporary saved[empty, if file is stored in the memory]
-			unsigned long size;                 ///< size of the file
-			short error;                        ///< error code[see serverPostFileErrEnum]
-			dodoString data;                    ///< contains file data[if file is stored in the memory]
+			dodoString name;                        ///< real name of the file
+			dodoString type;                        ///< MIME type
+			dodoString tmp_name;                    ///< path where it was temporary saved[empty, if file is stored in the memory]
+			unsigned long size;                     ///< size of the file
+			short error;                            ///< error code[see serverPostFileErrEnum]
+			dodoString data;                        ///< contains file data[if file is stored in the memory]
 		};
 
 		/**
@@ -256,8 +256,8 @@ namespace dodo
 		 */
 		struct __serverAuthInfo
 		{
-			dodoString user;    ///< user name
-			short type;         ///< authenfication type[see cgiAuthTypeEnum]
+			dodoString user;        ///< user name
+			short type;             ///< authenfication type[see cgiAuthTypeEnum]
 		};
 
 		/**
@@ -275,7 +275,7 @@ namespace dodo
 		 */
 		class server
 		{
-				friend class rpc::xml::cgiServer;
+			friend class rpc::xml::cgiServer;
 
 			private:
 
@@ -307,7 +307,7 @@ namespace dodo
 				 */
 				server(bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
-	#ifdef FASTCGI_EXT
+#ifdef FASTCGI_EXT
 
 				/**
 				 * constructor
@@ -330,7 +330,7 @@ namespace dodo
 				 */
 				server(fast::exchange *cf, dodoMap<short, dodoString> &headers, bool silent = false, bool autocleanFiles = true, bool postFilesInMem = true, dodoString postFilesTmpDir = "/tmp/");
 
-	#endif
+#endif
 
 				/**
 				 * destructor
@@ -516,19 +516,19 @@ namespace dodo
 				 */
 				static dodoString trim(const dodoString &data);
 
-	#ifdef FASTCGI_EXT
+#ifdef FASTCGI_EXT
 
 				bool serverFastSet;    ///< true if use ioSERVERFast
 
-	#endif
+#endif
 
-				io::channel *cgiIO;                                                                 ///< SERVER I/O instance
+				io::channel *cgiIO;                                                                     ///< SERVER I/O instance
 
-				mutable bool headersPrinted;                                                        ///< true if headers have been printed
+				mutable bool headersPrinted;                                                            ///< true if headers have been printed
 
-				static const char *environmentStatements[SERVER_ENVIRONMENTSTATEMENTS];             ///< names of environment variables[see cgiEnvironmentEnum]
-				static const dodoString responseHeaderStatements[SERVER_RESPONSEHEADERSTATEMENTS];  ///< HTTP response headers[see cgiResponseHeaderEnum]
-				static const dodoString responseStatusStatements[SERVER_STATUSSTATEMENTS];          ///< HTTP response headers[see cgiStatusCodeEnum]
+				static const char *environmentStatements[SERVER_ENVIRONMENTSTATEMENTS];                 ///< names of environment variables[see cgiEnvironmentEnum]
+				static const dodoString responseHeaderStatements[SERVER_RESPONSEHEADERSTATEMENTS];      ///< HTTP response headers[see cgiResponseHeaderEnum]
+				static const dodoString responseStatusStatements[SERVER_STATUSSTATEMENTS];              ///< HTTP response headers[see cgiStatusCodeEnum]
 
 				/**
 				 * @struct __authInfo defines authenfication information

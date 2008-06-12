@@ -34,7 +34,7 @@
 
 namespace dodo
 {
-	#define LOGGER_LEVELS 8
+#define LOGGER_LEVELS 8
 
 	/**
 	 * @enum loggerLogLevelEnum defines log levels
@@ -109,11 +109,11 @@ namespace dodo
 
 		private:
 
-			dodoString timeFormat;              ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
+			dodoString timeFormat;                          ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
 
-			dodoList<__logMap> handlers;        ///< list of log maps
+			dodoList<__logMap> handlers;                    ///< list of log maps
 
-			unsigned long handlersNum;          ///< number of registered handlers
+			unsigned long handlersNum;                      ///< number of registered handlers
 
 			static const dodoString levels[LOGGER_LEVELS];  ///< log levels statements
 			static const int syslogLevels[LOGGER_LEVELS];   ///< syslog log levels

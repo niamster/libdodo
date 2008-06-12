@@ -57,17 +57,17 @@ namespace dodo
 		 * @param executor defines class that executed hook
 		 */
 		__xexexImageCollectedData(int &operType,
-								  void *executor);
-		
-		ImageInfo *imInfo;                          ///< image info handler
-		Image *imHandle;                                  ///< image handler
+					  void *executor);
 
-		int &operType;      ///< xexec operation
+		ImageInfo *imInfo;                                      ///< image info handler
+		Image *imHandle;                                        ///< image handler
 
-		void *executor;     ///< class that executed hook
+		int &operType;                                          ///< xexec operation
+
+		void *executor;                                         ///< class that executed hook
 	};
 
-	#define IMAGE_MAPPINGS 3
+#define IMAGE_MAPPINGS 3
 
 	/**
 	 * @enum imageMappingEnum defines the order of pixels
@@ -79,7 +79,7 @@ namespace dodo
 		IMAGE_MAP_CMYK
 	};
 
-	#define IMAGE_PIXELSIZES 6
+#define IMAGE_PIXELSIZES 6
 
 	/**
 	 * @enum imagePixelSizeEnum defines size of pixel
@@ -94,7 +94,7 @@ namespace dodo
 		IMAGE_PIXELSIZE_DOUBLE, ///< 64 bits
 	};
 
-	#define IMAGE_ENCODERS 6
+#define IMAGE_ENCODERS 6
 
 	/**
 	 * @enum imageEncoderEnum defines image encoder
@@ -121,7 +121,7 @@ namespace dodo
 		IMAGE_ROTATEDIRECTIONANGLE_270CCW = 270,
 	};
 
-	#define IMAGE_COMPRESSIONS
+#define IMAGE_COMPRESSIONS
 
 	/**
 	 * @enum imageCompressionEnum defines type of compression
@@ -287,16 +287,16 @@ namespace dodo
 
 		protected:
 
-			ExceptionInfo *exInfo;                      ///< exception info handler
+			ExceptionInfo *exInfo;                          ///< exception info handler
 
-			__xexexImageCollectedData collectedData;    ///< data collected for xexec
+			__xexexImageCollectedData collectedData;        ///< data collected for xexec
 
 		private:
 
-			static const char *mappingStArr[IMAGE_MAPPINGS];                 ///< image mapping statements
-			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZES];         ///< pixel type statements
-			static const char *encoderStArr[IMAGE_ENCODERS];                 ///< image encoder
-			static const CompressionType compressionStArr[IMAGE_COMPRESSIONS];   ///< image compression
+			static const char *mappingStArr[IMAGE_MAPPINGS];                        ///< image mapping statements
+			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZES];              ///< pixel type statements
+			static const char *encoderStArr[IMAGE_ENCODERS];                        ///< image encoder
+			static const CompressionType compressionStArr[IMAGE_COMPRESSIONS];      ///< image compression
 	};
 
 	/**

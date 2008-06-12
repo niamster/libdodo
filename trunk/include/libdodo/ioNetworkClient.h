@@ -64,7 +64,7 @@ namespace dodo
 				CLIENT_OPERATION_ACCEPT,
 			};
 
-		#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IONETWORKCLIENT_WO_XEXEC
 
 			/**
 			 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
@@ -75,25 +75,25 @@ namespace dodo
 				 * constructor
 				 */
 				__xexexIoNetworkClientCollectedData(int &operType,
-													void *executor);
+								    void *executor);
 
-				int &operType;              ///< xexec operation
+				int &operType;                  ///< xexec operation
 
-				void *executor;             ///< class that executed hook
+				void *executor;                 ///< class that executed hook
 			};
 
-		#endif
+#endif
 
 			/**
 			 * @class client provides network connection interface
 			 */
 			class client : public options
-		#ifndef IONETWORKCLIENT_WO_XEXEC
-					,
-					public xexec
-		#endif
+#ifndef IONETWORKCLIENT_WO_XEXEC
+				       ,
+				       public xexec
+#endif
 			{
-					friend class exchange;
+				friend class exchange;
 
 				private:
 
@@ -175,11 +175,11 @@ namespace dodo
 
 					dodoString unixSock;    ///< path to unix socket
 
-		#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IONETWORKCLIENT_WO_XEXEC
 
 					__xexexIoNetworkClientCollectedData collectedData;   ///< data collected for xexec
 
-		#endif
+#endif
 			};
 		};
 	};

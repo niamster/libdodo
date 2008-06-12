@@ -46,11 +46,11 @@ namespace dodo
 			MISCEX_BADMAILAUTH,
 			MISCEX_WRONGPARAMETER,
 
-	#ifndef FAST
+#ifndef FAST
 
 			MISCEX_DATATOOLONG,
 
-	#endif
+#endif
 
 			MISCEX_EMPTYARRAY,
 			MISCEX_WRONGSTRENGTH
@@ -59,49 +59,49 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define TOOLSMISCEX_BADASCII85_STR "Bad character in ASCII85."
+#define TOOLSMISCEX_BADASCII85_STR "Bad character in ASCII85."
 
-	#ifdef BZIP2_EXT
+#ifdef BZIP2_EXT
 
-	#define TOOLSMISCEX_BADBZCOMPRESSION_STR         "Error occured during comression."
-	#define TOOLSMISCEX_BADBZDECOMPRESSIONINIT_STR   "Error occured during preparations for decompression."
-	#define TOOLSMISCEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
-	#define TOOLSMISCEX_BADBZDECOMPRESSION_STR       "Error occured during decompression."
+#define TOOLSMISCEX_BADBZCOMPRESSION_STR         "Error occured during comression."
+#define TOOLSMISCEX_BADBZDECOMPRESSIONINIT_STR   "Error occured during preparations for decompression."
+#define TOOLSMISCEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
+#define TOOLSMISCEX_BADBZDECOMPRESSION_STR       "Error occured during decompression."
 
-	#endif
+#endif
 
-	#define TOOLSMISCEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
-	#define TOOLSMISCEX_BADMAILAUTH_STR    "Error during authentication."
-	#define TOOLSMISCEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
-	#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
-	#define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument."
+#define TOOLSMISCEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
+#define TOOLSMISCEX_BADMAILAUTH_STR    "Error during authentication."
+#define TOOLSMISCEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
+#define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument."
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
 		enum miscFunctionsID
 		{
-	#ifdef ICONV_EXT
+#ifdef ICONV_EXT
 
 			MISCEX_CODESETCONVERSION,
 
-	#endif
+#endif
 
-	#ifdef ZLIB_EXT
+#ifdef ZLIB_EXT
 
 			MISCEX_ZCOMPRESS,
 			MISCEX_ZDECOMPRESS,
 
-	#endif
+#endif
 
 			MISCEX_DECODEASCII85,
 
-	#ifdef BZIP2_EXT
+#ifdef BZIP2_EXT
 
 			MISCEX_BZCOMPRESS,
 			MISCEX_BZDECOMPRESS,
 
-	#endif
+#endif
 
 			MISCEX_MAIL,
 			MISCEX_IMPLODE,

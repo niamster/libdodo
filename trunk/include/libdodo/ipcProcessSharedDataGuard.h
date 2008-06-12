@@ -99,12 +99,12 @@ namespace dodo
 
 					protected:
 
-						void *data;         ///< shared data
-						sem_t *semaphore;   ///< lock
+						void *data;             ///< shared data
+						sem_t *semaphore;       ///< lock
 
-						timespec timeout;   ///< lock timeout
+						timespec timeout;       ///< lock timeout
 
-						char *key;          ///< key for the semaphore
+						char *key;              ///< key for the semaphore
 				};
 			};
 		};

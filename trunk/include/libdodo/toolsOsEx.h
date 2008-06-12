@@ -43,7 +43,7 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define TOOLSOSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+#define TOOLSOSEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 
 		/**
 		 * IDs of functions where exception might be thrown

@@ -33,7 +33,7 @@ node::node() : valueDataType(NODE_DATATYPE_NULL)
 //-------------------------------------------------------------------
 
 node::node(const dodoString &value) : valueDataType(NODE_DATATYPE_STRING),
-									  stringValue(value)
+				      stringValue(value)
 {
 
 }
@@ -41,7 +41,7 @@ node::node(const dodoString &value) : valueDataType(NODE_DATATYPE_STRING),
 //-------------------------------------------------------------------
 
 node::node(long value) : valueDataType(NODE_DATATYPE_NUMERIC),
-						 numericValue(value)
+			 numericValue(value)
 {
 
 }
@@ -49,7 +49,7 @@ node::node(long value) : valueDataType(NODE_DATATYPE_NUMERIC),
 //-------------------------------------------------------------------
 
 node::node(bool value) : valueDataType(NODE_DATATYPE_BOOLEAN),
-						 booleanValue(value)
+			 booleanValue(value)
 {
 
 }
@@ -57,7 +57,7 @@ node::node(bool value) : valueDataType(NODE_DATATYPE_BOOLEAN),
 //-------------------------------------------------------------------
 
 node::node(const dodoArray<node> &value) : valueDataType(NODE_DATATYPE_ARRAY),
-										   arrayValue(value)
+					   arrayValue(value)
 {
 
 }
@@ -65,7 +65,7 @@ node::node(const dodoArray<node> &value) : valueDataType(NODE_DATATYPE_ARRAY),
 //-------------------------------------------------------------------
 
 node::node(const dodoMap<dodoString, node, dodoMapStringCompare> &value) : valueDataType(NODE_DATATYPE_OBJECT),
-																		   objectValue(value)
+									   objectValue(value)
 {
 
 }
@@ -129,7 +129,7 @@ node::addArrayElement(const node &value)
 
 void
 node::addObjectMember(const dodoString &name,
-					  const node &value)
+		      const node &value)
 {
 	valueDataType = NODE_DATATYPE_OBJECT;
 

@@ -28,10 +28,10 @@
 using namespace dodo::db;
 
 postgresql::postgresql() : empty(true),
-						   hint(POSTGRESQL_HINT_NONE)
+			   hint(POSTGRESQL_HINT_NONE)
 {
 #ifndef DBPOSTGRESQL_WO_XEXEC
-	
+
 	execObject = XEXEC_OBJECT_DBPOSTGRESQL;
 	execObjectData = (void *)&collectedData;
 
@@ -161,7 +161,7 @@ postgresql::setBLOBValues(const dodoStringArray &values)
 
 void
 postgresql::_exec(const dodoString &query,
-				  bool result)
+		  bool result)
 {
 	bool blobHint;
 	int status;
@@ -213,13 +213,13 @@ postgresql::_exec(const dodoString &query,
 						fieldType = PQgetvalue(pgResult, i, 1);
 
 						if (strcasestr(fieldType, "char") != NULL ||
-							strcasestr(fieldType, "date") != NULL ||
-							strcasestr(fieldType, "bytea") != NULL ||
-							strcasestr(fieldType, "array") != NULL ||
-							strcasestr(fieldType, "text") != NULL ||
-							strcasestr(fieldType, "cidr") != NULL ||
-							strcasestr(fieldType, "macaddrcd ") != NULL ||
-							strcasestr(fieldType, "inet") != NULL)
+						    strcasestr(fieldType, "date") != NULL ||
+						    strcasestr(fieldType, "bytea") != NULL ||
+						    strcasestr(fieldType, "array") != NULL ||
+						    strcasestr(fieldType, "text") != NULL ||
+						    strcasestr(fieldType, "cidr") != NULL ||
+						    strcasestr(fieldType, "macaddrcd ") != NULL ||
+						    strcasestr(fieldType, "inet") != NULL)
 							rowsPart.push_back(PQgetvalue(pgResult, i, 0));
 					}
 
@@ -277,7 +277,7 @@ postgresql::_exec(const dodoString &query,
 					throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX__EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 			}
 
-				break;
+			break;
 
 			case ACCUMULATOR_REQUEST_SELECT:
 
@@ -449,7 +449,7 @@ postgresql::affectedRowsCount() const
 
 void
 postgresql::exec(const dodoString &query,
-				 bool result)
+		 bool result)
 {
 #ifndef DBPOSTGRESQL_WO_XEXEC
 	operType = POSTGRESQL_OPERATION_EXEC;

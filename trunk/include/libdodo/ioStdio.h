@@ -74,13 +74,13 @@ namespace dodo
 			 * @param executor defines class that executed hook
 			 */
 			__xexexIoStdioCollectedData(int &operType,
-										void *executor);
+						    void *executor);
 
-			dodoString buffer;         ///< data buffer
+			dodoString buffer;              ///< data buffer
 
-			int &operType;              ///< xexec operation
+			int &operType;                  ///< xexec operation
 
-			void *executor;             ///< class that executed hook
+			void *executor;                 ///< class that executed hook
 		};
 
 #endif
@@ -89,7 +89,7 @@ namespace dodo
 		 * @class stdio provides interface for stdin/stdout/stderr I/O operations
 		 */
 		class stdio : public channel,
-					  virtual public ipc::thread::guardHolder
+			      virtual public ipc::thread::guardHolder
 		{
 			private:
 
@@ -192,8 +192,8 @@ namespace dodo
 				 */
 				virtual bool isRedirectedToSTDErr();
 
-				int inSTDBuffer;    ///< input buffer
-				int outSTDBuffer;   ///< output buffer
+				int inSTDBuffer;        ///< input buffer
+				int outSTDBuffer;       ///< output buffer
 
 			protected:
 
@@ -227,11 +227,11 @@ namespace dodo
 
 			private:
 
-				FILE *desc;         ///< stream descriptor
+				FILE *desc;             ///< stream descriptor
 
-				bool blocked;       ///< true if stream is blocked
+				bool blocked;           ///< true if stream is blocked
 
-				bool err;           ///< true if output stream is redirected to stderr
+				bool err;               ///< true if output stream is redirected to stderr
 
 #ifndef IOSTDIO_WO_XEXEC
 

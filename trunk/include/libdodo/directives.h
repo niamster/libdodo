@@ -63,7 +63,7 @@
 /**
  * size of buffer for random data for openssl library
  */
-#define OPENSSL_RAND_BUFSIZE 512 
+#define OPENSSL_RAND_BUFSIZE 512
 
 /**
  * size of string that represents numeric value during convertion

@@ -47,7 +47,7 @@ __openssl_init__::__openssl_init__()
 {
 	SSL_load_error_strings();
 	SSL_library_init();
-	
+
 	struct stat randstat;
 
 	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1)
@@ -59,15 +59,15 @@ __openssl_init__::__openssl_init__()
 		{
 			if (RAND_status() == 1)
 				break;
-		
+
 			gettimeofday(&tv, NULL);
-			
+
 			buf[0] = tv.tv_usec & 0xF;
 			buf[2] = (tv.tv_usec & 0xF0) >> 4;
 			buf[3] = (tv.tv_usec & 0xF00) >> 8;
 			buf[1] = (tv.tv_usec & 0xF000) >> 12;
-			
-			RAND_add(buf, sizeof (buf), 0.1);
+
+			RAND_add(buf, sizeof(buf), 0.1);
 		}
 	}
 }
@@ -81,11 +81,11 @@ __openssl_init__::~__openssl_init__()
 	RAND_cleanup();
 }
 
-void 
+void
 __openssl_init__::addEntropy()
 {
 	struct stat randstat;
-	
+
 	if (stat("/dev/random", &randstat) == -1 && stat("/dev/random", &randstat) == -1)
 	{
 		char buf[4];
@@ -95,14 +95,14 @@ __openssl_init__::addEntropy()
 		{
 			if (RAND_status() == 1)
 				break;
-			
+
 			gettimeofday(&tv, NULL);
-			
+
 			buf[0] = tv.tv_usec & 0xF;
 			buf[2] = (tv.tv_usec & 0xF0) >> 4;
 			buf[3] = (tv.tv_usec & 0xF00) >> 8;
 			buf[1] = (tv.tv_usec & 0xF000) >> 12;
-			
+
 			RAND_add(buf, sizeof(buf), 0.1);
 		}
 	}

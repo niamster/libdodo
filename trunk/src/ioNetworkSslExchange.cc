@@ -29,8 +29,8 @@ using namespace dodo::io::network::ssl;
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
 __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int &a_operType,
-									 void *a_executor) : operType(a_operType),
-									 executor(a_executor)
+									     void *a_executor) : operType(a_operType),
+												 executor(a_executor)
 {
 }
 
@@ -39,14 +39,14 @@ __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept() : socket(-1),
-					sslHandle(NULL)
+				     sslHandle(NULL)
 {
 }
 
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
-							sslHandle(init.sslHandle)
+							  sslHandle(init.sslHandle)
 {
 	init.socket = -1;
 	init.sslHandle = NULL;
@@ -58,7 +58,7 @@ exchange::exchange(exchange &fse)
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-					(void *) this)
+			(void *) this)
 
 #endif
 {
@@ -92,9 +92,9 @@ exchange::exchange(exchange &fse)
 exchange::exchange() : sslHandle(NULL)
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
-	,
-	collectedData(operType,
-					(void *) this)
+		       ,
+		       collectedData(operType,
+				     (void *) this)
 
 #endif
 {
@@ -112,7 +112,7 @@ exchange::exchange(__initialAccept &a_init)
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-					(void *) this)
+			(void *) this)
 
 #endif
 {
@@ -152,7 +152,7 @@ void
 exchange::init(__initialAccept &a_init)
 {
 	init(a_init.socket, a_init.sslHandle, a_init.blocked, a_init.blockInherited);
-	
+
 	a_init.socket = -1;
 	a_init.sslHandle = NULL;
 }
@@ -161,10 +161,10 @@ exchange::init(__initialAccept &a_init)
 
 void
 exchange::_close(int socket,
-	SSL *sslHandle)
+		 SSL *sslHandle)
 {
 	options::_close(socket);
-		
+
 	int err = SSL_shutdown(sslHandle);
 	if (err < 0)
 	{
@@ -213,9 +213,9 @@ exchange::close()
 
 void
 exchange::init(int a_socket,
-		SSL *a_sslHandle,
-		bool a_blocked,
-			   bool blockInherited)
+	       SSL *a_sslHandle,
+	       bool a_blocked,
+	       bool blockInherited)
 {
 	raceHazardGuard pg(this);
 
@@ -303,15 +303,15 @@ exchange::_write(const char * const data)
 			while (true)
 			{
 				/*if ((n = ::send(socket, data + sent_received, outSocketBuffer, 0)) == -1)
-				{
-					if (errno == EINTR)
-						continue;
+				   {
+				        if (errno == EINTR)
+				                continue;
 
-					if (errno == EAGAIN)
-						break;
+				        if (errno == EAGAIN)
+				                break;
 
-					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}*/
+				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				   }*/
 
 				break;
 			}
@@ -329,15 +329,15 @@ exchange::_write(const char * const data)
 			while (true)
 			{
 				/*if ((n = ::send(socket, data + sent_received, rest, 0)) == -1)
-				{
-					if (errno == EINTR)
-						continue;
+				   {
+				        if (errno == EINTR)
+				                continue;
 
-					if (errno == EAGAIN)
-						break;
+				        if (errno == EAGAIN)
+				                break;
 
-					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}*/
+				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				   }*/
 
 				break;
 			}
@@ -440,15 +440,15 @@ exchange::_read(char * const data)
 			while (true)
 			{
 				/*if ((n = ::recv(socket, data + sent_received, inSocketBuffer, 0)) == -1)
-				{
-					if (errno == EINTR)
-						continue;
+				   {
+				        if (errno == EINTR)
+				                continue;
 
-					if (errno == EAGAIN)
-						break;
+				        if (errno == EAGAIN)
+				                break;
 
-					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}*/
+				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				   }*/
 
 				break;
 			}
@@ -469,15 +469,15 @@ exchange::_read(char * const data)
 			while (true)
 			{
 				/*if ((n = ::recv(socket, data + sent_received, rest, 0)) == -1)
-				{
-					if (errno == EINTR)
-						continue;
+				   {
+				        if (errno == EINTR)
+				                continue;
 
-					if (errno == EAGAIN)
-						break;
+				        if (errno == EAGAIN)
+				                break;
 
-					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}*/
+				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				   }*/
 
 				break;
 			}
@@ -697,15 +697,15 @@ exchange::_readStream(char * const data)
 	while (true)
 	{
 		/*if ((n = ::recv(socket, data, inSize, 0)) == -1)
-		{
-			if (errno == EINTR)
-				continue;
+		   {
+		        if (errno == EINTR)
+		                continue;
 
-			if (errno == EAGAIN)
-				break;
+		        if (errno == EAGAIN)
+		                break;
 
-			throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}*/
+		        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		   }*/
 
 		break;
 	}

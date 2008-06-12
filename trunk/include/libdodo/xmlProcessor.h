@@ -51,17 +51,17 @@ namespace dodo
 			 */
 			__nodeDef();
 
-			dodoString name;                                    ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
+			dodoString name;                                        ///< name of the node [[tag]]; if empty - for first - gets root, for children - all[but if children do not have in definition own children]
 
-			dodoMap<dodoString, __nodeDef> children;            ///< children definitions
+			dodoMap<dodoString, __nodeDef> children;                ///< children definitions
 
-			long chLimit;                                       ///< limit of children to search for[-1 for unlimit, default]
-			bool ignoreChildrenDef;                             ///< if true - parse all children tree if no children definition is given; false by default
+			long chLimit;                                           ///< limit of children to search for[-1 for unlimit, default]
+			bool ignoreChildrenDef;                                 ///< if true - parse all children tree if no children definition is given; false by default
 
-			dodoStringArray attributes;                         ///< node attrributes; if empty - take all
-			bool ignoreAttributesDef;                           ///< if true - parse all attributes if no attributes definition is given; true by default
+			dodoStringArray attributes;                             ///< node attrributes; if empty - take all
+			bool ignoreAttributesDef;                               ///< if true - parse all attributes if no attributes definition is given; true by default
 
-			dodoString ns;                                      ///< node namespace; if empty parser skips namespace specification
+			dodoString ns;                                          ///< node namespace; if empty parser skips namespace specification
 		};
 
 		/**
@@ -196,7 +196,7 @@ namespace dodo
 				 */
 				virtual node parse(const __nodeDef &definition);
 
-	#ifdef LIBXML2_EXT
+#ifdef LIBXML2_EXT
 
 				/**
 				 * @return true if content is in CDATA
@@ -242,11 +242,11 @@ namespace dodo
 				 */
 				virtual void getNodeInfo(const xmlNodePtr xnode, node &sample);
 
-	#endif
+#endif
 
 			private:
 
-	#ifdef LIBXML2_EXT
+#ifdef LIBXML2_EXT
 
 				/**
 				 * @typedef xcharCmp defines name compare function
@@ -272,9 +272,9 @@ namespace dodo
 				 */
 				static void errHandler(void *data, xmlErrorPtr error);
 
-	#endif
+#endif
 
-				#define PROCESSOR_STATEMENTS 11
+#define PROCESSOR_STATEMENTS 11
 
 				/**
 				 * @enum processorStatementEnum defines processor statements

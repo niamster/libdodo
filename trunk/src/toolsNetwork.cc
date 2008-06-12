@@ -138,7 +138,7 @@ network::getInterfacesNames()
 
 __serviceInfo
 network::getServiceInfo(const dodoString &host,
-						const dodoString &protocol)
+			const dodoString &protocol)
 {
 	servent *ent = getservbyname(host.c_str(), protocol.c_str());
 
@@ -162,7 +162,7 @@ network::getServiceInfo(const dodoString &host,
 
 __serviceInfo
 network::getServiceInfo(int port,
-						const dodoString &protocol)
+			const dodoString &protocol)
 {
 	servent *ent = getservbyport(port, protocol.c_str());
 
@@ -241,11 +241,11 @@ network::getInterfaceInfo(const dodoString &interface)
 		throw baseEx(ERRMODULE_TOOLSNETWORK, NETWORKEX_GETINTERFACEINFO, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	sprintf(add, "%.2X:%.2X:%.2X:%.2X:%.2X:%.2X", ifr.ifr_ifru.ifru_hwaddr.sa_data[0] & 0xff,
-			ifr.ifr_ifru.ifru_hwaddr.sa_data[1] & 0xff,
-			ifr.ifr_ifru.ifru_hwaddr.sa_data[2] & 0xff,
-			ifr.ifr_ifru.ifru_hwaddr.sa_data[3] & 0xff,
-			ifr.ifr_ifru.ifru_hwaddr.sa_data[4] & 0xff,
-			ifr.ifr_ifru.ifru_hwaddr.sa_data[5] & 0xff);
+		ifr.ifr_ifru.ifru_hwaddr.sa_data[1] & 0xff,
+		ifr.ifr_ifru.ifru_hwaddr.sa_data[2] & 0xff,
+		ifr.ifr_ifru.ifru_hwaddr.sa_data[3] & 0xff,
+		ifr.ifr_ifru.ifru_hwaddr.sa_data[4] & 0xff,
+		ifr.ifr_ifru.ifru_hwaddr.sa_data[5] & 0xff);
 
 #endif
 

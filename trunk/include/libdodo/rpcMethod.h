@@ -44,9 +44,9 @@ namespace dodo
 		 */
 		class method
 		{
-				friend class client;
-				friend class server;
-				friend class xml::method;
+			friend class client;
+			friend class server;
+			friend class xml::method;
 
 			public:
 
@@ -79,8 +79,8 @@ namespace dodo
 
 			private:
 
-				dodoArray<value> arguments; ///< method arguments
-				dodoString name;            ///< method name
+				dodoArray<value> arguments;     ///< method arguments
+				dodoString name;                ///< method name
 		};
 	};
 };

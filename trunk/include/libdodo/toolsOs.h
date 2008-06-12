@@ -72,8 +72,8 @@ namespace dodo
 		 */
 		struct __usage
 		{
-			long time;  ///< processor time of execution in miliseconds
-			long mem;   ///< memory usage in bytes
+			long time;      ///< processor time of execution in miliseconds
+			long mem;       ///< memory usage in bytes
 		};
 
 		/**
@@ -104,7 +104,7 @@ namespace dodo
 		typedef void (*signalHandler)(int, siginfo_t *, void *);
 
 
-		#define OS_SIGNALS 19
+#define OS_SIGNALS 19
 
 		/**
 		 * @enum osSignalsEnum defines os signals
@@ -160,23 +160,23 @@ namespace dodo
 		 */
 		struct __groupInfo
 		{
-			dodoString name;            ///< group name
-			int gid;                    ///< group id
-			dodoStringArray members;    ///< group members
+			dodoString name;                ///< group name
+			int gid;                        ///< group id
+			dodoStringArray members;        ///< group members
 		};
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 		/**
 		 * @struct __signalMod is returned from initOsSignalModule in the library
 		 */
 		struct __signalMod
 		{
-			char name[64];              ///< name of the library
-			char discription[256];      ///< discription of the library
-			char hook[64];              ///< name of function in module that will be as a hook
-			long signal;                ///< signal to set handler
-			int blockSignals;           ///< signals to block during signal handling; -1 to ignore
+			char name[64];                  ///< name of the library
+			char discription[256];          ///< discription of the library
+			char hook[64];                  ///< name of function in module that will be as a hook
+			long signal;                    ///< signal to set handler
+			int blockSignals;               ///< signals to block during signal handling; -1 to ignore
 		};
 
 		/**
@@ -189,14 +189,14 @@ namespace dodo
 		 */
 		typedef void (*deinitOsSignalModule)();
 
-	#endif
+#endif
 
 		/**
 		 * @class os provides os operations
 		 */
 		class os
 		{
-				friend class ipc::thread::collection;
+			friend class ipc::thread::collection;
 
 			public:
 
@@ -409,7 +409,7 @@ namespace dodo
 				 */
 				static void unsetSignalHandler(long signal);
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
 				/**
 				 * @return information about module
@@ -425,7 +425,7 @@ namespace dodo
 				 */
 				static void setSignalHandler(const dodoString &path, void *toInit = NULL);
 
-	#endif
+#endif
 
 				/**
 				 * send signal to process
@@ -479,12 +479,12 @@ namespace dodo
 				 */
 				static void sigMask(sigset_t *set, long signal);
 
-	#ifdef DL_EXT
+#ifdef DL_EXT
 
-				static void *handlesSig[OS_SIGNALS];        ///< handles to modules
-				static bool handlesOpenedSig[OS_SIGNALS];   ///< map of opened modules
+				static void *handlesSig[OS_SIGNALS];            ///< handles to modules
+				static bool handlesOpenedSig[OS_SIGNALS];       ///< map of opened modules
 
-	#endif
+#endif
 				/**
 				 * @class staticAtomicMutex performs atomic locks using mutexes
 				 */
@@ -514,9 +514,9 @@ namespace dodo
 
 					protected:
 
-	#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 						static pthread_mutex_t keeper; ///< mutex
-	#endif
+#endif
 				};
 
 				static staticAtomicMutex keeper; ///< lock

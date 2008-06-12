@@ -75,12 +75,12 @@ namespace dodo
 				unsigned long executed;         ///< amount of times process was executed
 				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 				void *handle;    ///< handle to library
-		#endif
+#endif
 			};
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * @struct __processMod defines data that is returned from initIpcProcessCollectionModule in the library
@@ -104,7 +104,7 @@ namespace dodo
 			 */
 			typedef void (*deinitIpcProcessCollectionModule)();
 
-		#endif
+#endif
 
 			/**
 			 * @class collection provides processes management functionality
@@ -249,7 +249,7 @@ namespace dodo
 					 */
 					virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 					/**
 					 * add function as a process from library
@@ -267,7 +267,7 @@ namespace dodo
 					 */
 					static __processMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
-		#endif
+#endif
 
 				protected:
 
@@ -285,11 +285,11 @@ namespace dodo
 					 */
 					virtual bool getProcess(unsigned long position) const;
 
-					unsigned long processNum;                           ///< number of registered processes
+					unsigned long processNum;                               ///< number of registered processes
 
-					dodoList<__processInfo> processes;                  ///< identificators of processes
+					dodoList<__processInfo> processes;                      ///< identificators of processes
 
-					mutable dodoList<__processInfo>::iterator current;  ///< iterator for list of processes[for matched with getProcess method]
+					mutable dodoList<__processInfo>::iterator current;      ///< iterator for list of processes[for matched with getProcess method]
 			};
 		};
 	};

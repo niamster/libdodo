@@ -26,30 +26,30 @@
 using namespace dodo;
 
 tools::__time::__time() : sec(0),
-						  min(0),
-						  hour(0),
-						  day(1),
-						  month(1),
-						  year(1990),
-						  daylight(true)
+			  min(0),
+			  hour(0),
+			  day(1),
+			  month(1),
+			  year(1990),
+			  daylight(true)
 {
 }
 
 //-------------------------------------------------------------------
 
 tools::__time::__time(unsigned int a_sec,
-					  unsigned int a_min,
-					  unsigned int a_hour,
-					  unsigned int a_day,
-					  unsigned int a_month,
-					  unsigned int a_year,
-					  bool a_daylight) : sec(a_sec),
-										 min(a_min),
-										 hour(a_hour),
-										 day(a_day),
-										 month(a_month),
-										 year(a_year),
-										 daylight(a_daylight)
+		      unsigned int a_min,
+		      unsigned int a_hour,
+		      unsigned int a_day,
+		      unsigned int a_month,
+		      unsigned int a_year,
+		      bool a_daylight) : sec(a_sec),
+					 min(a_min),
+					 hour(a_hour),
+					 day(a_day),
+					 month(a_month),
+					 year(a_year),
+					 daylight(a_daylight)
 {
 }
 
@@ -57,8 +57,8 @@ tools::__time::__time(unsigned int a_sec,
 
 dodoString
 tools::time::byFormat(const dodoString &format,
-					  long timestamp,
-					  bool local)
+		      long timestamp,
+		      bool local)
 {
 	tm *tTime;
 
@@ -93,8 +93,8 @@ tools::time::now()
 
 dodoStringArray
 tools::time::week(long date,
-				  const dodoString &format,
-				  bool local)
+		  const dodoString &format,
+		  bool local)
 {
 	long daynum = string::stringToL(tools::time::byFormat("%w", date, local));
 	if (daynum == 0)
@@ -113,9 +113,9 @@ tools::time::week(long date,
 
 dodoStringArray
 tools::time::dates(long dateFrom,
-				   long dateTo,
-				   const dodoString &format,
-				   bool local)
+		   long dateTo,
+		   const dodoString &format,
+		   bool local)
 {
 	dodoStringArray result;
 
@@ -164,7 +164,7 @@ tools::time::timestamp(const __time &timeInfo)
 
 tools::__time
 tools::time::timestamp(long seconds,
-					   bool local)
+		       bool local)
 {
 	tm *tTime;
 
@@ -193,7 +193,7 @@ tools::time::timestamp(long seconds,
 
 unsigned short int
 tools::time::daysInMonth(unsigned int year,
-						 unsigned short int month)
+			 unsigned short int month)
 {
 	unsigned short int day(0);
 
@@ -244,7 +244,7 @@ tools::time::daysInMonth(unsigned int year,
 
 long
 tools::time::byFormat(const dodoString &format,
-					  const dodoString &dt)
+		      const dodoString &dt)
 {
 	tm tTime;
 	strptime(dt.c_str(), format.c_str(), &tTime);

@@ -71,41 +71,41 @@ namespace dodo
 				 */
 				__threadInfo();
 
-		#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 				pthread_t thread;               ///< thread descriptor
 
-		#endif
+#endif
 
-				void *data;                         ///< thread data
-				bool isRunning;                     ///< true if thread is running
-				bool detached;                      ///< true if thread is detached
-				unsigned long position;             ///< identificator
-				job::routine func;                  ///< function to execute
-				int stackSize;                      ///< size of stack for thread[in bytes]
-				short action;                       ///< action on object destruction[see collectionOnDestructEnum]
-				unsigned long executed;             ///< amount of times thread was executed
-				unsigned long executeLimit;         ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
+				void *data;                             ///< thread data
+				bool isRunning;                         ///< true if thread is running
+				bool detached;                          ///< true if thread is detached
+				unsigned long position;                 ///< identificator
+				job::routine func;                      ///< function to execute
+				int stackSize;                          ///< size of stack for thread[in bytes]
+				short action;                           ///< action on object destruction[see collectionOnDestructEnum]
+				unsigned long executed;                 ///< amount of times thread was executed
+				unsigned long executeLimit;             ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 				void *handle;        ///< handle to library
-		#endif
+#endif
 			};
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 			/**
 			 * @struct __threadMod defines data that is returned from initIpcThreadCollectionModule in the library
 			 */
 			struct __threadMod
 			{
-				char name[64];                      ///< name of module
-				char discription[256];              ///< discription of module
-				char hook[64];                      ///< name of function in module that will be a hook
-				unsigned long executeLimit;         ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
-				bool detached;                      ///< true if thread is detached
-				int stackSize;                      ///< size of stack for thread[in bytes]
-				short action;                       ///< action on object destruction[see collectionOnDestructEnum]
+				char name[64];                          ///< name of module
+				char discription[256];                  ///< discription of module
+				char hook[64];                          ///< name of function in module that will be a hook
+				unsigned long executeLimit;             ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
+				bool detached;                          ///< true if thread is detached
+				int stackSize;                          ///< size of stack for thread[in bytes]
+				short action;                           ///< action on object destruction[see collectionOnDestructEnum]
 			};
 
 			/**
@@ -118,7 +118,7 @@ namespace dodo
 			 */
 			typedef void (*deinitIpcThreadCollectionModule)();
 
-		#endif
+#endif
 
 			/**
 			 * @class collection provides threads management functionality
@@ -271,7 +271,7 @@ namespace dodo
 					virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1);
 
 
-		#ifdef DL_EXT
+#ifdef DL_EXT
 
 					/**
 					 * add function as a thread from library
@@ -289,7 +289,7 @@ namespace dodo
 					 */
 					static __threadMod getModuleInfo(const dodoString &module, void *toInit = NULL);
 
-		#endif
+#endif
 
 					/**
 					 * block signals to thread
@@ -318,11 +318,11 @@ namespace dodo
 
 					unsigned long threadNum;                                        ///< number of registered threads
 
-		#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 					pthread_attr_t attr;                                            ///< thread join attribute
 
-		#endif
+#endif
 
 					mutable dodoList<__threadInfo>::iterator current;               ///< iterator for list of threads[for matched with getThread method]
 			};

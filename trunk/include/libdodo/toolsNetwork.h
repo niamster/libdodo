@@ -73,9 +73,9 @@ namespace dodo
 		 */
 		struct __serviceInfo
 		{
-			dodoString name;            ///< original name of the service
-			dodoStringArray aliases;    ///< aliases of the service
-			int port;                   ///< port of the service
+			dodoString name;                ///< original name of the service
+			dodoStringArray aliases;        ///< aliases of the service
+			int port;                       ///< port of the service
 		};
 
 		/**

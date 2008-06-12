@@ -70,7 +70,7 @@ namespace dodo
 					SERVER_OPERATION_ACCEPT,
 				};
 
-			#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSSLSERVER_WO_XEXEC
 
 				/**
 				 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
@@ -81,26 +81,26 @@ namespace dodo
 					 * constructor
 					 */
 					__xexexIoNetworkServerCollectedData(int &operType,
-														void *executor);
+									    void *executor);
 
-					int &operType;              ///< xexec operation
+					int &operType;                  ///< xexec operation
 
-					void *executor;             ///< class that executed hook
+					void *executor;                 ///< class that executed hook
 				};
 
-			#endif
+#endif
 
 				/**
 				 * @class Server provides network connection interface
 				 */
 				class server : public options,
-							   virtual public nonBlockedAccessInfo
-			#ifndef IONETWORKSSLSERVER_WO_XEXEC
-							,
-							public xexec
-			#endif
+					       virtual public nonBlockedAccessInfo
+#ifndef IONETWORKSSLSERVER_WO_XEXEC
+					       ,
+					       public xexec
+#endif
 				{
-						friend class exchange;
+					friend class exchange;
 
 					private:
 
@@ -195,7 +195,7 @@ namespace dodo
 						 * create socket
 						 */
 						virtual void makeSocket();
-						
+
 						/**
 						 * initialize SSL objects
 						 */
@@ -207,16 +207,16 @@ namespace dodo
 						virtual void acceptSsl();
 
 						dodoString unixSock;    ///< path to unix socket
-						SSL_CTX *sslCtx;///< SSL context
-						SSL *sslHandle;///< SSL connection handle
+						SSL_CTX *sslCtx;        ///< SSL context
+						SSL *sslHandle;         ///< SSL connection handle
 
-						bool sslConnected;///< true if SSL connection established
+						bool sslConnected;      ///< true if SSL connection established
 
-			#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSSLSERVER_WO_XEXEC
 
 						__xexexIoNetworkServerCollectedData collectedData;   ///< data collected for xexec
 
-			#endif
+#endif
 				};
 			};
 		};

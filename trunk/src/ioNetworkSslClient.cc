@@ -30,8 +30,8 @@ using namespace dodo::io::network::ssl;
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 
 __xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_operType,
-																		 void *a_executor) : operType(a_operType),
-																							 executor(a_executor)
+									 void *a_executor) : operType(a_operType),
+											     executor(a_executor)
 {
 }
 
@@ -44,7 +44,7 @@ client::client(client &fs)
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 
 	: collectedData(operType,
-					(void *) this)
+			(void *) this)
 
 #endif
 
@@ -54,17 +54,17 @@ client::client(client &fs)
 //-------------------------------------------------------------------
 
 client::client(short a_family,
-			   short a_type) : family(a_family),
-			   		type(a_type),
-							   blockInherited(false),
-							   sslCtx(NULL),
-							   sslHandle(NULL),
-							   sslConnected(false)
+	       short a_type) : family(a_family),
+			       type(a_type),
+			       blockInherited(false),
+			       sslCtx(NULL),
+			       sslHandle(NULL),
+			       sslConnected(false)
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 
-							   ,
-							   collectedData(operType,
-											 (void *) this)
+			       ,
+			       collectedData(operType,
+					     (void *) this)
 
 #endif
 
@@ -103,7 +103,7 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void 
+void
 client::initSsl()
 {
 	if (sslCtx == NULL)
@@ -154,7 +154,7 @@ client::connectSsl()
 		unsigned long nerr = ERR_get_error();
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
-	
+
 	if (SSL_set_fd(sslHandle, socket) == 0)
 	{
 		unsigned long nerr = ERR_get_error();
@@ -172,7 +172,7 @@ client::connectSsl()
 			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
 
-		case -1:
+		case - 1:
 		{
 			unsigned long nerr = ERR_get_error();
 			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE)
@@ -198,8 +198,8 @@ client::connectSsl()
 					throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 				}
 			}
-			
-				
+
+
 			nerr = ERR_get_error();
 			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
@@ -296,8 +296,8 @@ client::makeSocket()
 
 void
 client::connect(const dodoString &host,
-				int port,
-				exchange &exchange)
+		int port,
+		exchange &exchange)
 {
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
@@ -360,7 +360,7 @@ client::connect(const dodoString &host,
 
 void
 client::connect(const __connInfo &destinaton,
-				exchange &exchange)
+		exchange &exchange)
 {
 	connect(destinaton.host, destinaton.port, exchange);
 }
@@ -369,9 +369,9 @@ client::connect(const __connInfo &destinaton,
 
 void
 client::connectFrom(const dodoString &local,
-					const dodoString &host,
-					int port,
-					exchange &exchange)
+		    const dodoString &host,
+		    int port,
+		    exchange &exchange)
 {
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
@@ -452,8 +452,8 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connectFrom(const dodoString &local,
-					const __connInfo &destinaton,
-					exchange &exchange)
+		    const __connInfo &destinaton,
+		    exchange &exchange)
 {
 	connectFrom(local, destinaton.host, destinaton.port, exchange);
 }
@@ -462,7 +462,7 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connect(const dodoString &path,
-				exchange &exchange)
+		exchange &exchange)
 {
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;

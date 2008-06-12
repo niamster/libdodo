@@ -44,7 +44,7 @@ namespace dodo
 	{
 		namespace network
 		{
-		#define HTTP_REQUESTHEADERSTATEMENTS 12
+#define HTTP_REQUESTHEADERSTATEMENTS 12
 
 			/**
 			 * @enum httpRequestHeaderEnum defines HTTP request headers
@@ -65,7 +65,7 @@ namespace dodo
 				HTTP_REQUESTHEADER_COOKIE,              ///< the user agent string of the user agent
 			};
 
-		#define HTTP_RESPONSEHEADERSTATEMENTS 19
+#define HTTP_RESPONSEHEADERSTATEMENTS 19
 
 			/**
 			 * @enum httpResponseHeaderEnum defines HTTP response headers
@@ -258,15 +258,15 @@ namespace dodo
 					 */
 					virtual short getContent(dodoString &data, exchange &ex);
 
-					unsigned short authTries;                                                           ///< autherization request counter
+					unsigned short authTries;                                                               ///< autherization request counter
 
-					static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];      ///< HTTP request headers[see httpRequestHeaderEnum]
-					static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];    ///< HTTP response headers[see httpResponseHeaderEnum]
+					static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];          ///< HTTP request headers[see httpRequestHeaderEnum]
+					static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];        ///< HTTP response headers[see httpResponseHeaderEnum]
 
-					regexp httpStatusRE;                                                                ///< parser for HTTP response status code
+					regexp httpStatusRE;                                                                    ///< parser for HTTP response status code
 
-					__httpResponse response;                                                            ///< HTTP response data
-					tools::__url urlComponents;                                                         ///< HTTP Url
+					__httpResponse response;                                                                ///< HTTP response data
+					tools::__url urlComponents;                                                             ///< HTTP Url
 					dodoString url;
 
 					/**

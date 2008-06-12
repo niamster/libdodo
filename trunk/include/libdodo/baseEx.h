@@ -248,17 +248,17 @@ namespace dodo
 
 		protected:
 
-			static errorHandler handlersEx[BASEEX_MODULES];     ///< exception handlers
+			static errorHandler handlersEx[BASEEX_MODULES];         ///< exception handlers
 
-			static bool handlerSetEx[BASEEX_MODULES];           ///< map of set handlers
+			static bool handlerSetEx[BASEEX_MODULES];               ///< map of set handlers
 
-			static void *handlerDataEx[BASEEX_MODULES];         ///< data that will be passed to the handler
+			static void *handlerDataEx[BASEEX_MODULES];             ///< data that will be passed to the handler
 
 #ifdef DL_EXT
 
-			static void *handlesEx[BASEEX_MODULES];             ///< handles to the libraries
+			static void *handlesEx[BASEEX_MODULES];                 ///< handles to the libraries
 
-			static bool handlesOpenedEx[BASEEX_MODULES];        //< map of the opened libraries
+			static bool handlesOpenedEx[BASEEX_MODULES];            //< map of the opened libraries
 
 #endif
 

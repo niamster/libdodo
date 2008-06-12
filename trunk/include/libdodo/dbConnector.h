@@ -40,38 +40,38 @@ namespace dodo
 		 */
 		enum connectorFieldTypeEnum
 		{
-			CONNECTOR_FIELDTYPE_TINYINT,                                ///< *The signed range is -128 to 127. The unsigned range is 0 to 255
-			CONNECTOR_FIELDTYPE_SMALLINT,                               ///< *The signed range is -32768 to 32767. The unsigned range is 0 to 65535
-			CONNECTOR_FIELDTYPE_MEDIUMINT,                              ///< *The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215
-			CONNECTOR_FIELDTYPE_INTEGER, CONNECTOR_FIELDTYPE_INT,       ///< *The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295
-			CONNECTOR_FIELDTYPE_BIGINT,                                 ///< *The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615
-			CONNECTOR_FIELDTYPE_FLOAT,                                  ///< *Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38
-			CONNECTOR_FIELDTYPE_REAL, CONNECTOR_FIELDTYPE_DOUBLE,       ///< *[DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308
-			CONNECTOR_FIELDTYPE_DECIMAL,                                ///< **An unpacked(the number is stored as a string) fixed-point number
-			CONNECTOR_FIELDTYPE_DATE,                                   ///< The supported range is '1000-01-01' to '9999-12-31'
-			CONNECTOR_FIELDTYPE_TIME,                                   ///< The range is '-838:59:59' to '838:59:59'
-			CONNECTOR_FIELDTYPE_TIMESTAMP,                              ///< *The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself
+			CONNECTOR_FIELDTYPE_TINYINT,                                    ///< *The signed range is -128 to 127. The unsigned range is 0 to 255
+			CONNECTOR_FIELDTYPE_SMALLINT,                                   ///< *The signed range is -32768 to 32767. The unsigned range is 0 to 65535
+			CONNECTOR_FIELDTYPE_MEDIUMINT,                                  ///< *The signed range is -8388608 to 8388607. The unsigned range is 0 to 16777215
+			CONNECTOR_FIELDTYPE_INTEGER, CONNECTOR_FIELDTYPE_INT,           ///< *The signed range is -2147483648 to 2147483647. The unsigned range is 0 to 4294967295
+			CONNECTOR_FIELDTYPE_BIGINT,                                     ///< *The signed range is -9223372036854775808 to 9223372036854775807. The unsigned range is 0 to 18446744073709551615
+			CONNECTOR_FIELDTYPE_FLOAT,                                      ///< *Allowable values are -3.402823466E+38 to -1.175494351E-38, 0, and 1.175494351E-38 to 3.402823466E+38
+			CONNECTOR_FIELDTYPE_REAL, CONNECTOR_FIELDTYPE_DOUBLE,           ///< *[DOUBLE in some systems] Allowable values are -1.7976931348623157E+308 to -2.2250738585072014E-308, 0, and 2.2250738585072014E-308 to 1.7976931348623157E+308
+			CONNECTOR_FIELDTYPE_DECIMAL,                                    ///< **An unpacked(the number is stored as a string) fixed-point number
+			CONNECTOR_FIELDTYPE_DATE,                                       ///< The supported range is '1000-01-01' to '9999-12-31'
+			CONNECTOR_FIELDTYPE_TIME,                                       ///< The range is '-838:59:59' to '838:59:59'
+			CONNECTOR_FIELDTYPE_TIMESTAMP,                                  ///< *The range is '1970-01-01 00:00:00' to partway through the year 2037. The first TIMESTAMP column in a table is automatically set to the date and time of the most recent operation if you don't assign it a value yourself
 			/**
-			 * TIMESTAMP(14) 	YYYYMMDDHHMMSS
-			 * TIMESTAMP(12) 	YYMMDDHHMMSS
-			 * TIMESTAMP(10) 	YYMMDDHHMM
-			 * TIMESTAMP(8) 		YYYYMMDD
-			 * TIMESTAMP(6) 		YYMMDD
-			 * TIMESTAMP(4) 		YYMM
-			 * TIMESTAMP(2) 		YY
+			 * TIMESTAMP(14)        YYYYMMDDHHMMSS
+			 * TIMESTAMP(12)        YYMMDDHHMMSS
+			 * TIMESTAMP(10)        YYMMDDHHMM
+			 * TIMESTAMP(8)                 YYYYMMDD
+			 * TIMESTAMP(6)                 YYMMDD
+			 * TIMESTAMP(4)                 YYMM
+			 * TIMESTAMP(2)                 YY
 			 */
-			CONNECTOR_FIELDTYPE_CHAR,                                   ///< **The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored
-			CONNECTOR_FIELDTYPE_VARCHAR,                                ///< **The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length
-			CONNECTOR_FIELDTYPE_TINYBLOB,                               ///< A column with a maximum length of 255 (2^8 - 1) characters
-			CONNECTOR_FIELDTYPE_BLOB,                                   ///< A column with a maximum length of 65, 535 (2^16 -1) characters
-			CONNECTOR_FIELDTYPE_MEDIUMBLOB,                             ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
-			CONNECTOR_FIELDTYPE_LONGBLOB,                               ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
-			CONNECTOR_FIELDTYPE_TINYTEXT,                               ///< A column with a maximum length of 255 (2^8 - 1) characters
-			CONNECTOR_FIELDTYPE_TEXT,                                   ///< A column with a maximum length of 65, 535 (2^16 -1) characters
-			CONNECTOR_FIELDTYPE_MEDIUMTEXT,                             ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
-			CONNECTOR_FIELDTYPE_LONGTEXT,                               ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
-			CONNECTOR_FIELDTYPE_ENUM,                                   ///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values
-			CONNECTOR_FIELDTYPE_SET,                                    ///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members
+			CONNECTOR_FIELDTYPE_CHAR,                                       ///< **The range of M is 0 to 255 characters; A fixed-length string that is always right-padded with spaces to the specified length when stored
+			CONNECTOR_FIELDTYPE_VARCHAR,                                    ///< **The range of M is 0 to 255 characters. A variable-length string. Range represents the maximum column length
+			CONNECTOR_FIELDTYPE_TINYBLOB,                                   ///< A column with a maximum length of 255 (2^8 - 1) characters
+			CONNECTOR_FIELDTYPE_BLOB,                                       ///< A column with a maximum length of 65, 535 (2^16 -1) characters
+			CONNECTOR_FIELDTYPE_MEDIUMBLOB,                                 ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
+			CONNECTOR_FIELDTYPE_LONGBLOB,                                   ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
+			CONNECTOR_FIELDTYPE_TINYTEXT,                                   ///< A column with a maximum length of 255 (2^8 - 1) characters
+			CONNECTOR_FIELDTYPE_TEXT,                                       ///< A column with a maximum length of 65, 535 (2^16 -1) characters
+			CONNECTOR_FIELDTYPE_MEDIUMTEXT,                                 ///< A column with a maximum length of 16, 777, 215 (2^24 - 1) characters
+			CONNECTOR_FIELDTYPE_LONGTEXT,                                   ///< A column with a maximum length of 4, 294, 967, 295 or 4GB (2^32 - 1) characters
+			CONNECTOR_FIELDTYPE_ENUM,                                       ///< An enumeration. A string object that can have only one value, chosen from the list of values 'value1', 'value2', ..., NULL or the special '' error value. An column can have a maximum of 65, 535 distinct values
+			CONNECTOR_FIELDTYPE_SET,                                        ///< A string object that can have zero or more values, each of which must be chosen from the list of values 'value1', 'value2', ... A column can have a maximum of 64 members
 		};
 
 		/**
@@ -79,8 +79,8 @@ namespace dodo
 		 */
 		enum connectorFieldFlagEnum
 		{
-			CONNECTOR_FIELDFLAG_NULL = 2,               ///< may be NULL
-			CONNECTOR_FIELDFLAG_AUTO_INCREMENT = 4,     ///< if is not set by request, will be incremented relatevly to previous
+			CONNECTOR_FIELDFLAG_NULL = 2,                   ///< may be NULL
+			CONNECTOR_FIELDFLAG_AUTO_INCREMENT = 4,         ///< if is not set by request, will be incremented relatevly to previous
 		};
 
 		/**
@@ -88,14 +88,14 @@ namespace dodo
 		 */
 		enum connectorReferenceEnum
 		{
-			CONNECTOR_REFERENCE_RESTRICT = 1,   ///< does not allow the action of any of those parent rows
-			CONNECTOR_REFERENCE_CASCADE,        ///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
-			CONNECTOR_REFERENCE_SET_NULL,       ///< sets NULL on the action of any of those parent rows indicates on set action
-			CONNECTOR_REFERENCE_NO_ACTION,      ///< noacton on the action of any of those parent rows indicates on set action
-			CONNECTOR_REFERENCE_SET_DEFAULT     ///< sets default on the action of any of those parent rows indicates on set action
+			CONNECTOR_REFERENCE_RESTRICT = 1,       ///< does not allow the action of any of those parent rows
+			CONNECTOR_REFERENCE_CASCADE,            ///< a row in the parent table is deleted, automatically deletes also all those rows in the child table whose foreign key values are equal to the referenced key value in the parent row
+			CONNECTOR_REFERENCE_SET_NULL,           ///< sets NULL on the action of any of those parent rows indicates on set action
+			CONNECTOR_REFERENCE_NO_ACTION,          ///< noacton on the action of any of those parent rows indicates on set action
+			CONNECTOR_REFERENCE_SET_DEFAULT         ///< sets default on the action of any of those parent rows indicates on set action
 		};
 
-		#define CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS 6
+#define CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS 6
 
 		/**
 		 * @enum connectorJoinTypeEnum defines join types
@@ -110,7 +110,7 @@ namespace dodo
 			CONNECTOR_JOINTYPE_CROSS,
 		};
 
-		#define CONNECTOR_SUBREQUESTSTATEMENTS 4
+#define CONNECTOR_SUBREQUESTSTATEMENTS 4
 
 		/**
 		 * @enum connectorSubrequestEnum defines type of sub request
@@ -171,13 +171,13 @@ namespace dodo
 			 */
 			const __connectorTable &operator=(const __connectorTable &from);
 
-			dodoString name;                            ///< name of the table
-			dodoArray<__connectorField> fields;         ///< fields[see __connectorField]
+			dodoString name;                                ///< name of the table
+			dodoArray<__connectorField> fields;             ///< fields[see __connectorField]
 
-			dodoStringArray primKeys;                   ///< primary keys of the table
-			dodoStringArray uniq;                       ///< fields of the table that may contain only unique values
+			dodoStringArray primKeys;                       ///< primary keys of the table
+			dodoStringArray uniq;                           ///< fields of the table that may contain only unique values
 
-			bool ifNotExists;                           ///< do not throw exception if table already exists[false by default]
+			bool ifNotExists;                               ///< do not throw exception if table already exists[false by default]
 		};
 
 		/**
@@ -197,8 +197,8 @@ namespace dodo
 			 */
 			__connectorStorage();
 
-			dodoArray<dodoStringArray> rows;    ///< rows of data
-			dodoStringArray fields;             ///< names of fields
+			dodoArray<dodoStringArray> rows;        ///< rows of data
+			dodoStringArray fields;                 ///< names of fields
 		};
 
 		/**

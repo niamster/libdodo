@@ -55,7 +55,7 @@ using namespace dodo;
 
 bool
 dodoMapStringCompare::operator()(const dodoString &first,
-								 const dodoString &second)
+				 const dodoString &second)
 {
 	return strcmp(first.c_str(), second.c_str()) < 0 ? true : false;
 }
@@ -64,7 +64,7 @@ dodoMapStringCompare::operator()(const dodoString &first,
 
 bool
 dodoMapICaseStringCompare::operator()(const dodoString &first,
-									  const dodoString &second)
+				      const dodoString &second)
 {
 	return strcasecmp(first.c_str(), second.c_str()) < 0 ? true : false;
 }

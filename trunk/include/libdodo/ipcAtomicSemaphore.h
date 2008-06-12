@@ -68,8 +68,8 @@ namespace dodo
 
 				protected:
 
-					sem_t *keeper;      ///< semaphore
-					char *key;          ///< key for the semaphore
+					sem_t *keeper;          ///< semaphore
+					char *key;              ///< key for the semaphore
 			};
 		};
 	};

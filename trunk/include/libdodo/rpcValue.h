@@ -57,8 +57,8 @@ namespace dodo
 		 */
 		class value
 		{
-				friend class client;
-				friend class xml::value;
+			friend class client;
+			friend class xml::value;
 
 			public:
 

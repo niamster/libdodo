@@ -52,7 +52,7 @@ namespace dodo
 		 */
 		class node
 		{
-				friend class processor;
+			friend class processor;
 
 			public:
 

@@ -94,11 +94,11 @@ namespace dodo
 
 						void *data;             ///< shared data
 
-			#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 						pthread_mutex_t mutex;  ///< lock
 
-			#endif
+#endif
 
 						timespec timeout;       ///< lcok timeout
 				};

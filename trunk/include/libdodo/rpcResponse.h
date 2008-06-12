@@ -45,9 +45,9 @@ namespace dodo
 		 */
 		class response
 		{
-				friend class client;
-				friend class server;
-				friend class xml::response;
+			friend class client;
+			friend class server;
+			friend class xml::response;
 
 			public:
 
@@ -107,8 +107,8 @@ namespace dodo
 
 			private:
 
-				dodoArray<value> values;    ///< response values
-				bool succ;                  ///< true if server returned non-fail response
+				dodoArray<value> values;        ///< response values
+				bool succ;                      ///< true if server returned non-fail response
 		};
 	};
 };

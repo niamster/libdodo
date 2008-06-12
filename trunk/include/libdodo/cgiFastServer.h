@@ -68,7 +68,7 @@ namespace dodo
 
 				public:
 
-		#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 					/**
 					 * constructor
@@ -77,14 +77,14 @@ namespace dodo
 					 */
 					server(bool threading = true, unsigned int threadsNum = 10);
 
-		#else
+#else
 
 					/**
 					 * constructor
 					 */
 					server();
 
-		#endif
+#endif
 
 					/**
 					 * destructor
@@ -109,7 +109,7 @@ namespace dodo
 
 				private:
 
-		#ifdef PTHREAD_EXT
+#ifdef PTHREAD_EXT
 
 					bool threading;                 ///< true use threading
 
@@ -123,7 +123,7 @@ namespace dodo
 
 					static pthread_mutex_t accept;        ///< accept request mutex
 
-		#endif
+#endif
 
 					static serverHandler handler;    ///< function to be called on new request
 			};

@@ -32,9 +32,9 @@ regexp::regexp(regexp &rt)
 //-------------------------------------------------------------------
 
 regexp::regexp() : extended(true),
-				   icase(false),
-				   greedy(true),
-				   multiline(false)
+		   icase(false),
+		   greedy(true),
+		   multiline(false)
 {
 #ifdef PCRE_EXT
 #else
@@ -45,9 +45,9 @@ regexp::regexp() : extended(true),
 //-------------------------------------------------------------------
 
 regexp::regexp(const dodoString &pattern) : extended(true),
-											icase(false),
-											greedy(true),
-											multiline(false)
+					    icase(false),
+					    greedy(true),
+					    multiline(false)
 {
 #ifdef PCRE_EXT
 #else
@@ -80,8 +80,8 @@ regexp::~regexp()
 
 bool
 regexp::match(const dodoString &pattern,
-			  const dodoString &sample,
-			  dodoStringArray &pockets)
+	      const dodoString &sample,
+	      dodoStringArray &pockets)
 {
 	try
 	{
@@ -102,7 +102,7 @@ regexp::match(const dodoString &pattern,
 
 bool
 regexp::match(const dodoString &sample,
-			  dodoStringArray &pockets)
+	      dodoStringArray &pockets)
 {
 	pockets.clear();
 	if (!boundMatch(sample))
@@ -238,8 +238,8 @@ regexp::compile(const dodoString &pattern)
 
 dodoString
 regexp::replace(const dodoString &pattern,
-				const dodoString &sample,
-				const dodoStringArray &replacements)
+		const dodoString &sample,
+		const dodoStringArray &replacements)
 {
 	try
 	{
@@ -260,7 +260,7 @@ regexp::replace(const dodoString &pattern,
 
 dodoString
 regexp::replace(const dodoString &sample,
-				const dodoStringArray &replacements)
+		const dodoStringArray &replacements)
 {
 	if (!boundMatch(sample))
 		return sample;

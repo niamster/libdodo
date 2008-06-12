@@ -26,126 +26,126 @@
 using namespace dodo::cgi;
 
 const char *server::environmentStatements[] = { "REQUEST_METHOD",
-												"REQUEST_URI",
-												"QUERY_STRING",
-												"CONTENT_TYPE",
-												"CONTENT_LENGTH",
-												"CONTENT_TRANSFER_ENCODING",
-												"HTTP_AUTHORIZATION",
-												"HTTP_HOST",
-												"HTTP_USER_AGENT",
-												"HTTP_COOKIE",
-												"HTTP_DATE",
-												"HTTP_IF_MODIFIED_SINCE",
-												"HTTP_ACCEPT",
-												"HTTP_ACCEPT_LANGUAGE",
-												"HTTP_ACCEPT_ENCODING",
-												"HTTP_ACCEPT_CHARSET",
-												"HTTP_ACCEPT_RANGES",
-												"HTTP_KEEP_ALIVE",
-												"HTTP_CONNECTION",
-												"HTTP_REFERER",
-												"HTTP_VIA",
-												"HTTP_X_FORWARDED_FOR",
-												"REMOTE_ADDR",
-												"REMOTE_PORT",
-												"REDIRECT_STATUS",
-												"REDIRECT_QUERY_STRING",
-												"REDIRECT_URL",
-												"GATEWAY_INTERFACE",
-												"PATH",
-												"SERVER_SIGNATURE",
-												"SERVER_SOFTWARE",
-												"SERVER_NAME",
-												"SERVER_ADDR",
-												"SERVER_PORT",
-												"SERVER_ADMIN",
-												"SERVER_PROTOCOL",
-												"SCRIPT_FILENAME",
-												"SCRIPT_NAME",               };
+						"REQUEST_URI",
+						"QUERY_STRING",
+						"CONTENT_TYPE",
+						"CONTENT_LENGTH",
+						"CONTENT_TRANSFER_ENCODING",
+						"HTTP_AUTHORIZATION",
+						"HTTP_HOST",
+						"HTTP_USER_AGENT",
+						"HTTP_COOKIE",
+						"HTTP_DATE",
+						"HTTP_IF_MODIFIED_SINCE",
+						"HTTP_ACCEPT",
+						"HTTP_ACCEPT_LANGUAGE",
+						"HTTP_ACCEPT_ENCODING",
+						"HTTP_ACCEPT_CHARSET",
+						"HTTP_ACCEPT_RANGES",
+						"HTTP_KEEP_ALIVE",
+						"HTTP_CONNECTION",
+						"HTTP_REFERER",
+						"HTTP_VIA",
+						"HTTP_X_FORWARDED_FOR",
+						"REMOTE_ADDR",
+						"REMOTE_PORT",
+						"REDIRECT_STATUS",
+						"REDIRECT_QUERY_STRING",
+						"REDIRECT_URL",
+						"GATEWAY_INTERFACE",
+						"PATH",
+						"SERVER_SIGNATURE",
+						"SERVER_SOFTWARE",
+						"SERVER_NAME",
+						"SERVER_ADDR",
+						"SERVER_PORT",
+						"SERVER_ADMIN",
+						"SERVER_PROTOCOL",
+						"SCRIPT_FILENAME",
+						"SCRIPT_NAME",               };
 
 //-------------------------------------------------------------------
 
 const dodoString server::responseHeaderStatements[] = { "Accept-Ranges",
-														"Age",
-														"Allow",
-														"Cache-Control",
-														"Content-Encoding",
-														"Content-Language",
-														"Content-Length",
-														"Content-Location",
-														"Content-Disposition",
-														"Content-MD5",
-														"Content-Range",
-														"Content-Type",
-														"Date",
-														"Last-Modified",
-														"Location",
-														"Server",
-														"WWW-Authenticate",
-														"X-Powered-By",        };
+							"Age",
+							"Allow",
+							"Cache-Control",
+							"Content-Encoding",
+							"Content-Language",
+							"Content-Length",
+							"Content-Location",
+							"Content-Disposition",
+							"Content-MD5",
+							"Content-Range",
+							"Content-Type",
+							"Date",
+							"Last-Modified",
+							"Location",
+							"Server",
+							"WWW-Authenticate",
+							"X-Powered-By",        };
 
 const dodoString server::responseStatusStatements[] = { "Status: 100 Continue\r\n",
-														"Status: 101 Switching Protocols\r\n",
-														"Status: 200 OK\r\n",
-														"Status: 201 Created\r\n",
-														"Status: 202 Accepted\r\n",
-														"Status: 203 Non-Authoritative Information\r\n",
-														"Status: 204 No Content\r\n",
-														"Status: 205 Reset Content\r\n",
-														"Status: 206 Partial Content\r\n",
-														"Status: 300 Multiple Choices\r\n",
-														"Status: 301 Moved Permanently\r\n",
-														"Status: 302 Found\r\n",
-														"Status: 303 See Other\r\n",
-														"Status: 304 Not Modified\r\n",
-														"Status: 305 Use Proxy\r\n",
-														"Status: 307 Temporary Redirect\r\n",
-														"Status: 400 Bad Request\r\n",
-														"Status: 401 Unauthorized\r\n",
-														"Status: 402 Payment Required\r\n",
-														"Status: 403 Forbidden\r\n",
-														"Status: 404 Not Found\r\n",
-														"Status: 405 Method Not Allowed\r\n",
-														"Status: 406 Not Acceptable\r\n",
-														"Status: 407 Proxy Authentication Required\r\n",
-														"Status: 408 Request Timeout\r\n",
-														"Status: 409 Conflict\r\n",
-														"Status: 410 Gone\r\n",
-														"Status: 411 Length Required\r\n",
-														"Status: 412 Precondition Failed\r\n",
-														"Status: 413 Request Entity Too Large\r\n",
-														"Status: 414 Request-URI Too Long\r\n",
-														"Status: 415 Unsupported Media Type\r\n",
-														"Status: 416 Requested Range Not Satisfiable\r\n",
-														"Status: 417 Expectation Failed\r\n",
-														"Status: 500 Internal Server Error\r\n",
-														"Status: 501 Not Implemented\r\n",
-														"Status: 502 Bad Gateway\r\n",
-														"Status: 503 Service Unavailable\r\n",
-														"Status: 504 Gateway Timeout\r\n",
-														"Status: 505 HTTP Version Not Supported\r\n",      };
+							"Status: 101 Switching Protocols\r\n",
+							"Status: 200 OK\r\n",
+							"Status: 201 Created\r\n",
+							"Status: 202 Accepted\r\n",
+							"Status: 203 Non-Authoritative Information\r\n",
+							"Status: 204 No Content\r\n",
+							"Status: 205 Reset Content\r\n",
+							"Status: 206 Partial Content\r\n",
+							"Status: 300 Multiple Choices\r\n",
+							"Status: 301 Moved Permanently\r\n",
+							"Status: 302 Found\r\n",
+							"Status: 303 See Other\r\n",
+							"Status: 304 Not Modified\r\n",
+							"Status: 305 Use Proxy\r\n",
+							"Status: 307 Temporary Redirect\r\n",
+							"Status: 400 Bad Request\r\n",
+							"Status: 401 Unauthorized\r\n",
+							"Status: 402 Payment Required\r\n",
+							"Status: 403 Forbidden\r\n",
+							"Status: 404 Not Found\r\n",
+							"Status: 405 Method Not Allowed\r\n",
+							"Status: 406 Not Acceptable\r\n",
+							"Status: 407 Proxy Authentication Required\r\n",
+							"Status: 408 Request Timeout\r\n",
+							"Status: 409 Conflict\r\n",
+							"Status: 410 Gone\r\n",
+							"Status: 411 Length Required\r\n",
+							"Status: 412 Precondition Failed\r\n",
+							"Status: 413 Request Entity Too Large\r\n",
+							"Status: 414 Request-URI Too Long\r\n",
+							"Status: 415 Unsupported Media Type\r\n",
+							"Status: 416 Requested Range Not Satisfiable\r\n",
+							"Status: 417 Expectation Failed\r\n",
+							"Status: 500 Internal Server Error\r\n",
+							"Status: 501 Not Implemented\r\n",
+							"Status: 502 Bad Gateway\r\n",
+							"Status: 503 Service Unavailable\r\n",
+							"Status: 504 Gateway Timeout\r\n",
+							"Status: 505 HTTP Version Not Supported\r\n",      };
 
 //-------------------------------------------------------------------
 
 __serverFile::__serverFile() : size(0),
-							   error(SERVER_POSTFILEERR_NO_FILE)
+			       error(SERVER_POSTFILEERR_NO_FILE)
 {
 }
 
 //-------------------------------------------------------------------
 
 __serverCookie::__serverCookie(const dodoString &a_name,
-							   const dodoString &a_value,
-							   const dodoString &a_expires,
-							   const dodoString &a_path,
-							   const dodoString &a_domain,
-							   bool a_secure) : name(a_name),
-												value(a_value),
-												expires(a_expires),
-												path(a_path),
-												domain(a_domain),
-												secure(a_secure)
+			       const dodoString &a_value,
+			       const dodoString &a_expires,
+			       const dodoString &a_path,
+			       const dodoString &a_domain,
+			       bool a_secure) : name(a_name),
+						value(a_value),
+						expires(a_expires),
+						path(a_path),
+						domain(a_domain),
+						secure(a_secure)
 {
 }
 
@@ -170,17 +170,17 @@ server::server(server &ct)
 //-------------------------------------------------------------------
 
 server::server(dodoMap<short, dodoString> &headers,
-			   bool silent,
-			   bool a_autocleanFiles,
-			   bool a_postFilesInMem,
-			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-											   postFilesTmpDir(a_postFilesTmpDir),
-											   autocleanFiles(a_autocleanFiles),
-											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
+	       bool silent,
+	       bool a_autocleanFiles,
+	       bool a_postFilesInMem,
+	       dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+					       postFilesTmpDir(a_postFilesTmpDir),
+					       autocleanFiles(a_autocleanFiles),
+					       headersPrinted(false),
+					       returnCode(SERVER_STATUSCODE_OK)
 #ifdef FASTCGI_EXT
-											   ,
-											   serverFastSet(false)
+					       ,
+					       serverFastSet(false)
 #endif
 
 {
@@ -209,16 +209,16 @@ server::server(dodoMap<short, dodoString> &headers,
 //-------------------------------------------------------------------
 
 server::server(bool silent,
-			   bool a_autocleanFiles,
-			   bool a_postFilesInMem,
-			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-											   postFilesTmpDir(a_postFilesTmpDir),
-											   autocleanFiles(a_autocleanFiles),
-											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
+	       bool a_autocleanFiles,
+	       bool a_postFilesInMem,
+	       dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+					       postFilesTmpDir(a_postFilesTmpDir),
+					       autocleanFiles(a_autocleanFiles),
+					       headersPrinted(false),
+					       returnCode(SERVER_STATUSCODE_OK)
 #ifdef FASTCGI_EXT
-											   ,
-											   serverFastSet(false)
+					       ,
+					       serverFastSet(false)
 #endif
 
 {
@@ -250,16 +250,16 @@ server::server(bool silent,
 #ifdef FASTCGI_EXT
 
 server::server(fast::exchange    *a_cf,
-			   bool silent,
-			   bool a_autocleanFiles,
-			   bool a_postFilesInMem,
-			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-											   postFilesTmpDir(a_postFilesTmpDir),
-											   serverFastSet(true),
-											   cgiIO(a_cf),
-											   autocleanFiles(a_autocleanFiles),
-											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
+	       bool silent,
+	       bool a_autocleanFiles,
+	       bool a_postFilesInMem,
+	       dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+					       postFilesTmpDir(a_postFilesTmpDir),
+					       serverFastSet(true),
+					       cgiIO(a_cf),
+					       autocleanFiles(a_autocleanFiles),
+					       headersPrinted(false),
+					       returnCode(SERVER_STATUSCODE_OK)
 
 {
 	authInfo.type = SERVER_AUTHTYPE_NONE;
@@ -286,17 +286,17 @@ server::server(fast::exchange    *a_cf,
 //-------------------------------------------------------------------
 
 server::server(fast::exchange    *a_cf,
-			   dodoMap<short, dodoString> &headers,
-			   bool silent,
-			   bool a_autocleanFiles,
-			   bool a_postFilesInMem,
-			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-											   postFilesTmpDir(a_postFilesTmpDir),
-											   serverFastSet(true),
-											   cgiIO(a_cf),
-											   autocleanFiles(a_autocleanFiles),
-											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
+	       dodoMap<short, dodoString> &headers,
+	       bool silent,
+	       bool a_autocleanFiles,
+	       bool a_postFilesInMem,
+	       dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
+					       postFilesTmpDir(a_postFilesTmpDir),
+					       serverFastSet(true),
+					       cgiIO(a_cf),
+					       autocleanFiles(a_autocleanFiles),
+					       headersPrinted(false),
+					       returnCode(SERVER_STATUSCODE_OK)
 
 {
 	authInfo.type = SERVER_AUTHTYPE_NONE;
@@ -454,7 +454,7 @@ server::makeAuth()
 
 void
 server::requestAuthentication(const dodoString &realm,
-								short type)
+			      short type)
 {
 	returnCode = SERVER_STATUSCODE_UNAUTHORIZED;
 
@@ -463,11 +463,11 @@ server::requestAuthentication(const dodoString &realm,
 	else
 	if (type == SERVER_AUTHTYPE_DIGEST)
 		HEADERS.insert(make_pair(SERVER_RESPONSEHEADER_WWWAUTHENTICATE, dodoString("Digest realm=\"") +
-								 realm +
-								 "\", qop=\"auth\", nonce=\"" +
-								 tools::misc::MD5Hex(tools::misc::stringRandom(16)) +
-								 "\", opaque=\"" +
-								 tools::misc::MD5Hex(tools::misc::stringRandom(16)) + "\""));
+					 realm +
+					 "\", qop=\"auth\", nonce=\"" +
+					 tools::misc::MD5Hex(tools::misc::stringRandom(16)) +
+					 "\", opaque=\"" +
+					 tools::misc::MD5Hex(tools::misc::stringRandom(16)) + "\""));
 }
 
 //-------------------------------------------------------------------
@@ -484,7 +484,7 @@ server::getAuthenticationInfo()
 
 bool
 server::checkAuthentication(const dodoString &user,
-							  const dodoString &password)
+			    const dodoString &password)
 {
 	if (authInfo.type == SERVER_AUTHTYPE_BASIC)
 		return(tools::string::equal(user, authInfo.user) && tools::string::equal(password, authInfo.password));
@@ -594,8 +594,8 @@ server::getMethod() const
 
 void
 server::make(dodoStringMap &val,
-			 const dodoString &string,
-			 const char       *delim)
+	     const dodoString &string,
+	     const char       *delim)
 {
 	dodoStringArray getPair = tools::misc::explode(tools::misc::decodeUrl(string), delim);
 
@@ -891,7 +891,7 @@ server::operator[](short method)
 
 dodoString
 server::request(const dodoString &varName,
-				short first)
+		short first)
 {
 	dodoString met0 = GET[varName];
 	dodoString met1 = POST[varName];
@@ -913,11 +913,11 @@ server::request(const dodoString &varName,
 
 void
 server::setCookie(const dodoString &name,
-				  const dodoString &value,
-				  const dodoString &expires,
-				  const dodoString &path,
-				  const dodoString &domain,
-				  bool secure)
+		  const dodoString &value,
+		  const dodoString &expires,
+		  const dodoString &path,
+		  const dodoString &domain,
+		  bool secure)
 {
 	__serverCookie temp(secure);
 	temp.name = name;

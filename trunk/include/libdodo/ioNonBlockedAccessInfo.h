@@ -36,7 +36,7 @@ namespace dodo
 		 */
 		class nonBlockedAccessInfo
 		{
-				friend class nonBlockedAccess;
+			friend class nonBlockedAccess;
 
 			public:
 

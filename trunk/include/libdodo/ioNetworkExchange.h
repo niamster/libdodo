@@ -71,9 +71,9 @@ namespace dodo
 			 */
 			class __initialAccept
 			{
-					friend class exchange;
-					friend class client;
-					friend class server;
+				friend class exchange;
+				friend class client;
+				friend class server;
 
 				public:
 
@@ -109,13 +109,13 @@ namespace dodo
 				 * @param executor defines class that executed hook
 				 */
 				__xexexIoNetworkExchangeCollectedData(int &operType,
-													  void *executor);
+								      void *executor);
 
-				dodoString buffer;         ///< data buffer
+				dodoString buffer;              ///< data buffer
 
-				int &operType;              ///< xexec operation
+				int &operType;                  ///< xexec operation
 
-				void *executor;             ///< class that executed hook
+				void *executor;                 ///< class that executed hook
 			};
 
 #endif
@@ -124,11 +124,11 @@ namespace dodo
 			 * @class exchange provides communication interface[send/receive data]
 			 */
 			class exchange : public options,
-							 public channel,
-							 virtual public ipc::thread::guardHolder
+					 public channel,
+					 virtual public ipc::thread::guardHolder
 			{
-					friend class server;
-					friend class client;
+				friend class server;
+				friend class client;
 
 				public:
 

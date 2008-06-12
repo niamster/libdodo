@@ -77,7 +77,7 @@ namespace dodo
 		 */
 		typedef dodoString (*escape)(const dodoString &);
 
-	#ifdef ZLIB_EXT
+#ifdef ZLIB_EXT
 
 		/**
 		 * @enum miscZlibCompressionStrategyEnum defines type of compression for zlib
@@ -90,7 +90,7 @@ namespace dodo
 			MISC_ZLIB_FIXED_COMRESSION
 		};
 
-	#endif
+#endif
 
 		/**
 		 * @enum miscRandomStrengthEnum defines type of randomness
@@ -120,8 +120,8 @@ namespace dodo
 		 */
 		class misc
 		{
-				friend class io::network::http;
-				friend class cgi::server;
+			friend class io::network::http;
+			friend class cgi::server;
 
 			public:
 
@@ -280,7 +280,7 @@ namespace dodo
 				 */
 				static dodoString implode(const dodoStringArray &fields, const dodoString &separator, const dodoString &frame, int limit = -1);
 
-	#ifdef ICONV_EXT
+#ifdef ICONV_EXT
 
 				/**
 				 * convert from one codeset to another
@@ -291,9 +291,9 @@ namespace dodo
 				 */
 				static dodoString codesetConversion(const dodoString &buffer, const dodoString &toCode, const dodoString &fromCode);
 
-	#endif
+#endif
 
-	#ifdef ZLIB_EXT
+#ifdef ZLIB_EXT
 
 				/**
 				 * @return compressed buffer
@@ -309,7 +309,7 @@ namespace dodo
 				 */
 				static dodoString zDecompress(const dodoString &buffer);
 
-	#endif
+#endif
 
 				/**
 				 * @return decoded Url
@@ -390,7 +390,7 @@ namespace dodo
 				 */
 				static dodoString binToHex(const dodoString &string);
 
-	#ifdef BZIP2_EXT
+#ifdef BZIP2_EXT
 
 				/**
 				 * @return compressed buffer
@@ -406,7 +406,7 @@ namespace dodo
 				 */
 				static dodoString bzDecompress(const dodoString &buffer);
 
-	#endif
+#endif
 
 				/**
 				 * send mail using sendmail external program
@@ -471,9 +471,9 @@ namespace dodo
 				 */
 				struct MD5_CTX
 				{
-					unsigned int state[4];      ///< state[A,B,C,D]
-					unsigned int count[2];      ///< number of bits, modulo 2^64 (lsb first)
-					unsigned char buffer[64];   ///< input buffer
+					unsigned int state[4];          ///< state[A,B,C,D]
+					unsigned int count[2];          ///< number of bits, modulo 2^64 (lsb first)
+					unsigned char buffer[64];       ///< input buffer
 				};
 
 				/**

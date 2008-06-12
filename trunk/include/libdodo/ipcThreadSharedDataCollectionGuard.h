@@ -43,7 +43,7 @@ namespace dodo
 				 * @class dataCollectionGuard implements collection of shared data for threads
 				 */
 				class dataCollectionGuard : public ipc::shared::dataCollectionGuard,
-											virtual public guardHolder
+							    virtual public guardHolder
 				{
 					private:
 
@@ -107,11 +107,11 @@ namespace dodo
 						 */
 						virtual bool getShare(unsigned long position);
 
-						dodoList<ipc::shared::__info> shares;               ///< identificators of shared data
+						dodoList<ipc::shared::__info> shares;                   ///< identificators of shared data
 
-						unsigned long shareNum;                             ///< number of registered shares
+						unsigned long shareNum;                                 ///< number of registered shares
 
-						dodoList<ipc::shared::__info>::iterator current;    ///< iterator for list of shared data[for matched with getShare method]
+						dodoList<ipc::shared::__info>::iterator current;        ///< iterator for list of shared data[for matched with getShare method]
 				};
 			};
 		};

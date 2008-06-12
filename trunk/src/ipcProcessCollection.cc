@@ -27,8 +27,8 @@
 using namespace dodo::ipc::process;
 
 __processInfo::__processInfo() : isRunning(false),
-								 executed(0),
-								 executeLimit(0)
+				 executed(0),
+				 executeLimit(0)
 {
 }
 
@@ -101,8 +101,8 @@ collection::~collection()
 
 unsigned long
 collection::add(job::routine func,
-				void        *data,
-				short action)
+		void        *data,
+		short action)
 {
 	__processInfo process;
 
@@ -125,7 +125,7 @@ collection::add(job::routine func,
 
 unsigned long
 collection::add(job::routine func,
-				void    *data)
+		void    *data)
 {
 	return add(func, data, COLLECTION_ONDESTRUCT_WAIT);
 }
@@ -134,7 +134,7 @@ collection::add(job::routine func,
 
 unsigned long
 collection::addNRun(job::routine func,
-					void    *data)
+		    void    *data)
 {
 	return addNRun(func, data, 1, COLLECTION_ONDESTRUCT_WAIT);
 }
@@ -143,9 +143,9 @@ collection::addNRun(job::routine func,
 
 unsigned long
 collection::addNRun(job::routine func,
-					void          *data,
-					unsigned long limit,
-					short action)
+		    void          *data,
+		    unsigned long limit,
+		    short action)
 {
 	__processInfo process;
 
@@ -187,7 +187,7 @@ collection::addNRun(job::routine func,
 
 void
 collection::del(unsigned long position,
-				bool force)
+		bool force)
 {
 	if (getProcess(position))
 	{
@@ -270,10 +270,10 @@ collection::_isRunning(dodoList<__processInfo>::iterator &position) const
 
 void
 collection::replace(unsigned long position,
-					job::routine func,
-					void          *data,
-					bool force,
-					short action)
+		    job::routine func,
+		    void          *data,
+		    bool force,
+		    short action)
 {
 	if (getProcess(position))
 	{
@@ -320,7 +320,7 @@ collection::replace(unsigned long position,
 
 void
 collection::run(unsigned long position,
-				bool force)
+		bool force)
 {
 	if (getProcess(position))
 	{
@@ -488,7 +488,7 @@ collection::sweepTrash()
 
 void
 collection::setExecutionLimit(unsigned long position,
-							  unsigned long limit)
+			      unsigned long limit)
 {
 	if (getProcess(position))
 		current->executeLimit = limit;
@@ -502,7 +502,7 @@ collection::setExecutionLimit(unsigned long position,
 
 __processMod
 collection::getModuleInfo(const dodoString &module,
-						  void             *toInit)
+			  void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -530,8 +530,8 @@ collection::getModuleInfo(const dodoString &module,
 
 unsigned long
 collection::add(const dodoString &module,
-				void             *data,
-				void             *toInit)
+		void             *data,
+		void             *toInit)
 {
 	__processInfo process;
 

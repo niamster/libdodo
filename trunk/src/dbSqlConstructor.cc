@@ -144,8 +144,8 @@ const dodoString sqlConstructor::statements[] =
 //-------------------------------------------------------------------
 
 sqlConstructor::sqlConstructor() : preventFraming(false),
-								   preventEscaping(false),
-								   autoFraming(true)
+				   preventEscaping(false),
+				   autoFraming(true)
 {
 }
 
@@ -159,8 +159,8 @@ sqlConstructor::~sqlConstructor()
 
 dodoString
 sqlConstructor::valuesName(const dodoStringArray &values,
-						   const dodoStringArray &fields,
-						   const dodoString &frame)
+			   const dodoStringArray &fields,
+			   const dodoString &frame)
 {
 	dodoString temp;
 
@@ -211,7 +211,7 @@ sqlConstructor::notexists(const dodoString &statement)
 
 void
 sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
-								  const dodoString &collectedString)
+				  const dodoString &collectedString)
 {
 	if (collectedData.qShift == ACCUMULATOR_NONE)
 		return ;
@@ -227,8 +227,8 @@ sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
 
 dodoString
 sqlConstructor::insideAddCollect(const unsigned int sqlAddEnumArr[],
-								 const dodoString sqlAddArr[],
-								 int qTypeShift)
+				 const dodoString sqlAddArr[],
+				 int qTypeShift)
 {
 	if (qTypeShift == ACCUMULATOR_NONE)
 		return __dodostring__;
@@ -248,7 +248,7 @@ sqlConstructor::insideAddCollect(const unsigned int sqlAddEnumArr[],
 
 dodoString
 sqlConstructor::insideAddCollect(const dodoStringArray &statements,
-								 int qTypeShift)
+				 int qTypeShift)
 {
 	if (qTypeShift == ACCUMULATOR_NONE)
 		return __dodostring__;

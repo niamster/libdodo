@@ -147,14 +147,14 @@ namespace dodo
 				 * @param type defines type of connection[see mySQL documentation]
 				 * @param options defines options of ssl connection[see __mysqlSSLOptions]
 				 * @note type can be:
-				 * 	CLIENT_COMPRESS 	Use compression protocol.
-				 *	CLIENT_FOUND_ROWS 	Return the number of found (matched) rows, not the number of affected rows.
-				 *	CLIENT_IGNORE_SPACE 	Allow spaces after function names. Makes all functions names reserved words.
-				 *	CLIENT_INTERACTIVE 	Allow interactive_timeout seconds (instead of wait_timeout seconds) of inactivity before closing the connection. The client's session wait_timeout variable is set to the value of the session interactive_timeout variable.
-				 *	CLIENT_LOCAL_FILES 	Enable LOAD DATA LOCAL handling.
-				 *	CLIENT_MULTI_STATEMENTS 	Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
-				 *	CLIENT_MULTI_RESULTS 	Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
-				 *	CLIENT_SSL 	Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
+				 *      CLIENT_COMPRESS         Use compression protocol.
+				 *	CLIENT_FOUND_ROWS       Return the number of found (matched) rows, not the number of affected rows.
+				 *	CLIENT_IGNORE_SPACE     Allow spaces after function names. Makes all functions names reserved words.
+				 *	CLIENT_INTERACTIVE      Allow interactive_timeout seconds (instead of wait_timeout seconds) of inactivity before closing the connection. The client's session wait_timeout variable is set to the value of the session interactive_timeout variable.
+				 *	CLIENT_LOCAL_FILES      Enable LOAD DATA LOCAL handling.
+				 *	CLIENT_MULTI_STATEMENTS         Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
+				 *	CLIENT_MULTI_RESULTS    Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
+				 *	CLIENT_SSL      Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
 				 */
 				void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions());
 

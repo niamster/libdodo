@@ -65,14 +65,14 @@ namespace dodo
 			 */
 			enum optionsOptionEnum
 			{
-				OPTIONS_OPTION_KEEP_ALIVE = 1,      ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
-				OPTIONS_OPTION_REUSE_ADDRESS,       ///< Should allow reuse of local addresses[it's accepted by default].
-				OPTIONS_OPTION_DONOT_USE_GATEWAY,   ///< Requests  that outgoing messages bypass the standard routing facilities.
-				OPTIONS_OPTION_BROADCAST,           ///< Permits  sending of broadcast messages, if this is supported by the protocol.
-				OPTIONS_OPTION_OOB_INLINE,          ///< Out-of-band(marked urgent) data keep inline in recieve operation.
-		#ifdef SO_REUSEPORT
-				OPTIONS_OPTION_REUSE_PORT,          ///< Should allow reuse of local port.
-		#endif
+				OPTIONS_OPTION_KEEP_ALIVE = 1,          ///< Keeps  connections  active by enabling the periodic transmission of messages, if this is supported by the protocol.
+				OPTIONS_OPTION_REUSE_ADDRESS,           ///< Should allow reuse of local addresses[it's accepted by default].
+				OPTIONS_OPTION_DONOT_USE_GATEWAY,       ///< Requests  that outgoing messages bypass the standard routing facilities.
+				OPTIONS_OPTION_BROADCAST,               ///< Permits  sending of broadcast messages, if this is supported by the protocol.
+				OPTIONS_OPTION_OOB_INLINE,              ///< Out-of-band(marked urgent) data keep inline in recieve operation.
+#ifdef SO_REUSEPORT
+				OPTIONS_OPTION_REUSE_PORT,              ///< Should allow reuse of local port.
+#endif
 			};
 
 			/**
@@ -90,8 +90,8 @@ namespace dodo
 			 */
 			struct __connInfo
 			{
-				dodoString host;    ///< host of the box
-				int port;           ///< port of the box
+				dodoString host;        ///< host of the box
+				int port;               ///< port of the box
 			};
 
 			/**

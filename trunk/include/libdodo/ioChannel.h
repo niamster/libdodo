@@ -38,7 +38,7 @@ namespace dodo
 		 * @class channel implements an interface for I/O operations
 		 */
 		class channel : public xexec,
-						virtual public nonBlockedAccessInfo
+				virtual public nonBlockedAccessInfo
 		{
 			public:
 

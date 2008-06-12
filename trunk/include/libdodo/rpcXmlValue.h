@@ -42,8 +42,8 @@ namespace dodo
 			 */
 			class value
 			{
-					friend class method;
-					friend class response;
+				friend class method;
+				friend class response;
 
 				public:
 

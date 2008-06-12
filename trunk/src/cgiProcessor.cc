@@ -26,11 +26,11 @@
 using namespace dodo::cgi;
 
 processor::processor(server &a_cgi) : continueFlag(false),
-									  breakDeepness(0),
-									  loopDeepness(0),
-									  iterator(1),
-									  namespaceDeepness(1),
-									  CGI(a_cgi)
+				      breakDeepness(0),
+				      loopDeepness(0),
+				      iterator(1),
+				      namespaceDeepness(1),
+				      CGI(a_cgi)
 {
 	dodo[statements[PREPROCESSOR_STATEMENT_VERSION]] = PACKAGE_STRING;
 	dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = "1";
@@ -85,7 +85,7 @@ processor::clear()
 
 dodoString
 processor::_processString(const dodoString &buffer,
-						  const dodoString &path)
+			  const dodoString &path)
 {
 	unsigned long i(0), j(0), begin(0), k(0);
 	unsigned long stI;
@@ -134,7 +134,7 @@ processor::_processString(const dodoString &buffer,
 
 		j = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], i);
 
-		for (stI=i; stI < j; ++stI)
+		for (stI = i; stI < j; ++stI)
 			if (buffer[stI] != '\t' && buffer[stI] != ' ' && buffer[stI] != '\r' && buffer[stI] != '\n')
 				break;
 
@@ -215,7 +215,7 @@ processor::_processString(const dodoString &buffer,
 				break;
 
 			case 'c':
-							
+
 				k = temp.find(statements[PREPROCESSOR_STATEMENT_CONT]);
 				if (k == 0)
 				{
@@ -238,11 +238,11 @@ processor::_processString(const dodoString &buffer,
 					j = _assign(j, temp.substr(6), path);
 				else
 					keywordNotFound = true;
-				
+
 				break;
 
 			case 'n':
-				
+
 				k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_NS]);
 				if (k == 0)
 				{
@@ -297,7 +297,7 @@ processor::recursive(const dodoString &path)
 
 void
 processor::assign(dodoString varName,
-				  const dodoArray<dodoStringMap> &varVal)
+		  const dodoArray<dodoStringMap> &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -313,7 +313,7 @@ processor::assign(dodoString varName,
 
 void
 processor::assign(dodoString varName,
-				  const dodoStringMap &varVal)
+		  const dodoStringMap &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -329,7 +329,7 @@ processor::assign(dodoString varName,
 
 void
 processor::assign(dodoString varName,
-				  const dodoStringArray &varVal)
+		  const dodoStringArray &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -345,7 +345,7 @@ processor::assign(dodoString varName,
 
 void
 processor::assign(dodoString varName,
-				  const dodoString &varVal)
+		  const dodoString &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -361,10 +361,10 @@ processor::assign(dodoString varName,
 
 unsigned long
 processor::_if(const dodoString &buffer,
-			   unsigned long start,
-			   const dodoString &statement,
-			   dodoString &tpl,
-			   const dodoString &path)
+	       unsigned long start,
+	       const dodoString &statement,
+	       dodoString &tpl,
+	       const dodoString &path)
 {
 	bool _float(false), invert(false);
 
@@ -383,9 +383,9 @@ processor::_if(const dodoString &buffer,
 	dodoArray<dodoString> temp2;
 	unsigned long i = 0, j = statement.size();
 
-	for (;i<j;++i)
+	for (; i < j; ++i)
 	{
-		if ( (j - i) > 1 )
+		if ((j - i) > 1)
 		{
 			if (statement[i] == '=' && statement[i + 1] == '=')
 			{
@@ -543,10 +543,10 @@ processor::_if(const dodoString &buffer,
 
 unsigned long
 processor::blockEnd(const dodoString &buffer,
-					unsigned long start,
-					const dodoString &st,
-					const dodoString &ts,
-					const dodoString &path)
+		    unsigned long start,
+		    const dodoString &st,
+		    const dodoString &ts,
+		    const dodoString &path)
 {
 	unsigned long u, m(start), _st(1), b, p, stLen(st.size()), tsLen(ts.size());
 
@@ -585,9 +585,9 @@ processor::blockEnd(const dodoString &buffer,
 
 unsigned long
 processor::_include(unsigned long start,
-					const dodoString &statement,
-					dodoString &tpl,
-					const dodoString &path)
+		    const dodoString &statement,
+		    dodoString &tpl,
+		    const dodoString &path)
 {
 	dodoString temp1 = getVar(statement, start, path);
 
@@ -595,7 +595,7 @@ processor::_include(unsigned long start,
 	{
 		if (!tplBasePath.empty())
 			temp1 = tplBasePath + FILE_DELIM + temp1;
-		
+
 		if (tools::filesystem::exists(temp1))
 		{
 			processed.push_back(path);
@@ -613,9 +613,9 @@ processor::_include(unsigned long start,
 
 unsigned long
 processor::_print(unsigned long start,
-				  const dodoString &statement,
-				  dodoString &tpl,
-				  const dodoString &path)
+		  const dodoString &statement,
+		  dodoString &tpl,
+		  const dodoString &path)
 {
 	dodoStringArray temp = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_COMA]);
 	if (temp.size() <= 1)
@@ -634,8 +634,8 @@ processor::_print(unsigned long start,
 
 bool
 processor::_break(unsigned long start,
-				  const dodoString &statement,
-				  const dodoString &path)
+		  const dodoString &statement,
+		  const dodoString &path)
 {
 	if (loopDeepness > 0)
 	{
@@ -644,8 +644,8 @@ processor::_break(unsigned long start,
 		if (breakDeepness == 0)
 			breakDeepness = 1;
 		else
-			if (breakDeepness > loopDeepness)
-				breakDeepness = loopDeepness;
+		if (breakDeepness > loopDeepness)
+			breakDeepness = loopDeepness;
 
 		return true;
 	}
@@ -657,8 +657,8 @@ processor::_break(unsigned long start,
 
 unsigned long
 processor::_assign(unsigned long start,
-				   const dodoString &statement,
-				   const dodoString &path)
+		   const dodoString &statement,
+		   const dodoString &path)
 {
 	dodoStringArray temp = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_ASSIGN_OP], 2);
 
@@ -693,9 +693,9 @@ processor::cleanNamespace()
 
 unsigned long
 processor::_ns(const dodoString &buffer,
-			   unsigned long start,
-			   dodoString &tpl,
-			   const dodoString &path)
+	       unsigned long start,
+	       dodoString &tpl,
+	       const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_NS], statements[PREPROCESSOR_STATEMENT_CLOSE_NS], path));
 
@@ -708,10 +708,10 @@ processor::_ns(const dodoString &buffer,
 
 unsigned long
 processor::_for(const dodoString &buffer,
-				unsigned long start,
-				const dodoString &statement,
-				dodoString &tpl,
-				const dodoString &path)
+		unsigned long start,
+		const dodoString &statement,
+		dodoString &tpl,
+		const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_FOR], statements[PREPROCESSOR_STATEMENT_CLOSE_FOR], path));
 
@@ -734,7 +734,7 @@ processor::_for(const dodoString &buffer,
 		key = true;
 		p = statement.find(statements[PREPROCESSOR_STATEMENT_DOLLAR], p + 2);
 
-		for (i=p; i < j; ++i)
+		for (i = p; i < j; ++i)
 			if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
 				break;
 		--i;
@@ -762,13 +762,13 @@ processor::_for(const dodoString &buffer,
 		{
 			dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> >::reverse_iterator lhpnsi = localHash.rbegin();
 			dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> >::reverse_iterator lhpnsj = localHash.rend();
-			for (;lhpnsi!=lhpnsj;++lhpnsi)
+			for (; lhpnsi != lhpnsj; ++lhpnsi)
 			{
 				dodoMap<dodoString, dodoStringMap>::iterator g = lhpnsi->second.find(targetVar);
 				if (g != lhpnsi->second.end())
 				{
 					dodoStringMap &lns = local[namespaceDeepness];
-					
+
 					unsigned long iteratorPrev = iterator;
 					iterator = 1;
 
@@ -781,7 +781,7 @@ processor::_for(const dodoString &buffer,
 						if (key)
 							lns[keyName] = k->first;
 						lns[varName] = k->second;
-						
+
 						tpl.append(_processString(forSpace, path));
 
 						if (breakDeepness > 0)
@@ -800,16 +800,16 @@ processor::_for(const dodoString &buffer,
 					return u;
 				}
 			}
-			
+
 			dodoMap<unsigned int, dodoStringMap>::reverse_iterator lpnsi = local.rbegin();
 			dodoMap<unsigned int, dodoStringMap>::reverse_iterator lpnsj = local.rend();
-			for (;lpnsi!=lpnsj;++lpnsi)
+			for (; lpnsi != lpnsj; ++lpnsi)
 			{
 				dodoStringMap::iterator k = lpnsi->second.find(targetVar);
 				if (k != lpnsi->second.end())
 				{
 					dodoStringMap &lns = local[namespaceDeepness];
-					
+
 					unsigned long iteratorPrev = iterator;
 					iterator = 1;
 
@@ -821,7 +821,7 @@ processor::_for(const dodoString &buffer,
 						if (key)
 							lns[keyName] = tools::string::lToString(i);
 						lns[varName] = dodoString(1, k->second[i]);
-						
+
 						tpl.append(_processString(forSpace, path));
 
 						if (breakDeepness > 0)
@@ -836,7 +836,7 @@ processor::_for(const dodoString &buffer,
 
 					iterator =  iteratorPrev;
 					dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
-					
+
 					return u;
 				}
 			}
@@ -845,7 +845,7 @@ processor::_for(const dodoString &buffer,
 			if (k != global.end())
 			{
 				dodoStringMap &lns = local[namespaceDeepness];
-				
+
 				unsigned long iteratorPrev = iterator;
 				iterator = 1;
 
@@ -857,7 +857,7 @@ processor::_for(const dodoString &buffer,
 					if (key)
 						lns[keyName] = tools::string::lToString(i);
 					lns[varName] = dodoString(1, k->second[i]);
-					
+
 					tpl.append(_processString(forSpace, path));
 
 					if (breakDeepness > 0)
@@ -880,10 +880,10 @@ processor::_for(const dodoString &buffer,
 			if (g != globalHash.end())
 			{
 				dodoStringMap &lns = local[namespaceDeepness];
-			
+
 				unsigned long iteratorPrev = iterator;
 				iterator = 1;
-				
+
 				dodoStringMap::iterator k = g->second.begin();
 				dodoStringMap::iterator l = g->second.end();
 				for (; k != l; ++k, ++iterator)
@@ -916,10 +916,10 @@ processor::_for(const dodoString &buffer,
 			if (o != globalArray.end())
 			{
 				dodoStringMap &lns = local[namespaceDeepness];
-		
+
 				unsigned long iteratorPrev = iterator;
 				iterator = 1;
-				
+
 				dodoStringArray::iterator k = o->second.begin();
 				dodoStringArray::iterator l = o->second.end();
 				for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
@@ -953,7 +953,7 @@ processor::_for(const dodoString &buffer,
 			{
 				dodoStringMap &lns = local[namespaceDeepness];
 				dodoMap<dodoString, dodoStringMap> &lnsh = localHash[namespaceDeepness];
-				
+
 				unsigned long iteratorPrev = iterator;
 				iterator = 1;
 
@@ -991,7 +991,7 @@ processor::_for(const dodoString &buffer,
 			{
 				dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> >::reverse_iterator lhpnsi = localHash.rbegin();
 				dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> >::reverse_iterator lhpnsj = localHash.rend();
-				for (;lhpnsi!=lhpnsj;++lhpnsi)
+				for (; lhpnsi != lhpnsj; ++lhpnsi)
 				{
 					dodoMap<dodoString, dodoStringMap>::iterator g = lhpnsi->second.find(targetVar);
 					if (g != lhpnsi->second.end())
@@ -1000,7 +1000,7 @@ processor::_for(const dodoString &buffer,
 						if (k != g->second.end())
 						{
 							dodoStringMap &lns = local[namespaceDeepness];
-							
+
 							unsigned long iteratorPrev = iterator;
 							iterator = 1;
 
@@ -1012,7 +1012,7 @@ processor::_for(const dodoString &buffer,
 								if (key)
 									lns[keyName] = tools::string::lToString(i);
 								lns[varName] = dodoString(1, k->second[i]);
-						
+
 								tpl.append(_processString(forSpace, path));
 
 								if (breakDeepness > 0)
@@ -1040,7 +1040,7 @@ processor::_for(const dodoString &buffer,
 					if (k != g->second.end())
 					{
 						dodoStringMap &lns = local[namespaceDeepness];
-						
+
 						unsigned long iteratorPrev = iterator;
 						iterator = 1;
 
@@ -1052,7 +1052,7 @@ processor::_for(const dodoString &buffer,
 							if (key)
 								lns[keyName] = tools::string::lToString(i);
 							lns[varName] = dodoString(1, k->second[i]);
-							
+
 							tpl.append(_processString(forSpace, path));
 
 							if (breakDeepness > 0)
@@ -1079,7 +1079,7 @@ processor::_for(const dodoString &buffer,
 					if (pos >= 0 && pos <= o->second.size())
 					{
 						dodoStringMap &lns = local[namespaceDeepness];
-						
+
 						unsigned long iteratorPrev = iterator;
 						iterator = 1;
 
@@ -1091,7 +1091,7 @@ processor::_for(const dodoString &buffer,
 							if (key)
 								lns[keyName] = tools::string::lToString(i);
 							lns[varName] = dodoString(1, o->second[pos][i]);
-							
+
 							tpl.append(_processString(forSpace, path));
 
 							if (breakDeepness > 0)
@@ -1118,7 +1118,7 @@ processor::_for(const dodoString &buffer,
 					if (pos >= 0 && pos <= d->second.size())
 					{
 						dodoStringMap &lns = local[namespaceDeepness];
-						
+
 						unsigned long iteratorPrev = iterator;
 						iterator = 1;
 
@@ -1168,7 +1168,7 @@ processor::_for(const dodoString &buffer,
 
 								unsigned long iteratorPrev = iterator;
 								iterator = 1;
-								
+
 								unsigned long i(0), j(k->second.size());
 								for (; i < j; ++i, ++iterator)
 								{
@@ -1177,7 +1177,7 @@ processor::_for(const dodoString &buffer,
 									if (key)
 										lns[keyName] = tools::string::lToString(i);
 									lns[varName] = dodoString(1, k->second[i]);
-									
+
 									tpl.append(_processString(forSpace, path));
 
 									if (breakDeepness > 0)
@@ -1204,7 +1204,7 @@ processor::_for(const dodoString &buffer,
 	else
 	{
 		dodoStringMap &lns = local[namespaceDeepness];
-		
+
 		unsigned long iteratorPrev = iterator;
 		iterator = 1;
 
@@ -1216,7 +1216,7 @@ processor::_for(const dodoString &buffer,
 			if (key)
 				lns[keyName] = tools::string::lToString(i);
 			lns[varName] = dodoString(1, targetVar[i]);
-			
+
 			tpl.append(_processString(forSpace, path));
 
 			if (breakDeepness > 0)
@@ -1242,8 +1242,8 @@ processor::_for(const dodoString &buffer,
 
 dodoString
 processor::getVarName(const dodoString &a_varName,
-				  unsigned long start,
-				  const dodoString &path)
+		      unsigned long start,
+		      const dodoString &path)
 {
 	dodoString varName = trim(a_varName), tempVar;
 
@@ -1293,8 +1293,8 @@ processor::getVarName(const dodoString &a_varName,
 
 dodoString
 processor::getVar(const dodoString &a_varName,
-				  unsigned long start,
-				  const dodoString &path)
+		  unsigned long start,
+		  const dodoString &path)
 {
 	dodoString varName = getVarName(a_varName, start, path);
 
@@ -1314,7 +1314,7 @@ processor::getVar(const dodoString &a_varName,
 
 		dodoMap<unsigned int, dodoStringMap>::reverse_iterator lpnsi = local.rbegin();
 		dodoMap<unsigned int, dodoStringMap>::reverse_iterator lpnsj = local.rend();
-		for (;lpnsi!=lpnsj;++lpnsi)
+		for (; lpnsi != lpnsj; ++lpnsi)
 		{
 			k = lpnsi->second.find(varName);
 			if (k != lpnsi->second.end())
@@ -1351,7 +1351,7 @@ processor::getVar(const dodoString &a_varName,
 
 		dodoMap<unsigned int, dodoStringMap>::reverse_iterator lpnsi = local.rbegin();
 		dodoMap<unsigned int, dodoStringMap>::reverse_iterator lpnsj = local.rend();
-		for (;lpnsi!=lpnsj;++lpnsi)
+		for (; lpnsi != lpnsj; ++lpnsi)
 		{
 			dodoStringMap::iterator k = lpnsi->second.find(temp[0]);
 			if (k != lpnsi->second.end())
@@ -1366,7 +1366,7 @@ processor::getVar(const dodoString &a_varName,
 
 		dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> >::reverse_iterator lhpnsi = localHash.rbegin();
 		dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> >::reverse_iterator lhpnsj = localHash.rend();
-		for (;lhpnsi!=lhpnsj;++lhpnsi)
+		for (; lhpnsi != lhpnsj; ++lhpnsi)
 		{
 			dodoMap<dodoString, dodoStringMap>::iterator g = lhpnsi->second.find(temp[0]);
 			if (g != lhpnsi->second.end())

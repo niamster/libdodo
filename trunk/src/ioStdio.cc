@@ -28,8 +28,8 @@ using namespace dodo::io;
 #ifndef IOSTDIO_WO_XEXEC
 
 __xexexIoStdioCollectedData::__xexexIoStdioCollectedData(int &a_operType,
-														 void *a_executor) : operType(a_operType),
-																			 executor(a_executor)
+							 void *a_executor) : operType(a_operType),
+									     executor(a_executor)
 {
 }
 
@@ -38,16 +38,16 @@ __xexexIoStdioCollectedData::__xexexIoStdioCollectedData(int &a_operType,
 //-------------------------------------------------------------------
 
 stdio::stdio() : inSTDBuffer(IOSTDIO_INSIZE),
-				 outSTDBuffer(IOSTDIO_OUTSIZE),
-				 err(false),
-				 blocked(true),
-				 desc(stdout)
+		 outSTDBuffer(IOSTDIO_OUTSIZE),
+		 err(false),
+		 blocked(true),
+		 desc(stdout)
 
 #ifndef IOSTDIO_WO_XEXEC
 
-				 ,
-				 collectedData(operType,
-							   (void *) this)
+		 ,
+		 collectedData(operType,
+			       (void *) this)
 
 #endif
 {
@@ -65,7 +65,7 @@ stdio::stdio(stdio &fd)
 #ifndef IOSTDIO_WO_XEXEC
 
 	: collectedData(operType,
-					(void *) this)
+			(void *) this)
 
 #endif
 {
@@ -120,7 +120,7 @@ stdio::_read(char * const a_void)
 			{
 				if (feof(stdin) != 0 || errno == EAGAIN)
 					break;
-			
+
 				if (errno == EINTR)
 					continue;
 
@@ -142,7 +142,7 @@ stdio::_read(char * const a_void)
 			{
 				if (feof(stdin) != 0 || errno == EAGAIN)
 					break;
-			
+
 				if (errno == EINTR)
 					continue;
 

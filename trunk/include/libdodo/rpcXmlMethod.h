@@ -43,7 +43,7 @@ namespace dodo
 			 */
 			class method
 			{
-					friend class client;
+				friend class client;
 
 				public:
 

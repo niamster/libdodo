@@ -46,10 +46,10 @@ namespace dodo
 		/**
 		 * explanations for libdodo defined errors
 		 */
-	#define TOOLSFILESYSTEMEX_WRONGFILENAME_STR     "Probably wrong filename, type of file is wrong or `path` is empty!"
-	#define TOOLSFILESYSTEMEX_DESTINATIONEXISTS_STR "Destination file/dir/etc. exists. Won't overvrite"
-	#define TOOLSFILESYSTEMEX_NOTADIR_STR           "There is not a dir with given path."
-	#define TOOLSFILESYSTEMEX_TOOLONGPATH_STR       "Too long path."
+#define TOOLSFILESYSTEMEX_WRONGFILENAME_STR     "Probably wrong filename, type of file is wrong or `path` is empty!"
+#define TOOLSFILESYSTEMEX_DESTINATIONEXISTS_STR "Destination file/dir/etc. exists. Won't overvrite"
+#define TOOLSFILESYSTEMEX_NOTADIR_STR           "There is not a dir with given path."
+#define TOOLSFILESYSTEMEX_TOOLONGPATH_STR       "Too long path."
 
 		/**
 		 * IDs of functions where exception might be thrown

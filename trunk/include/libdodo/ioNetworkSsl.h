@@ -66,7 +66,7 @@ namespace dodo
 						/**
 						 *
 						 */
-						void addEntropy(); 
+						void addEntropy();
 				};
 
 				extern __openssl_init__ __openssl_init_object__;

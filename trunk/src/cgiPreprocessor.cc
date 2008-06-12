@@ -27,35 +27,35 @@ using namespace dodo::cgi;
 
 const dodoString preprocessor::statements[] = {
 	"dodo",
-												"<(",
-												")>",
-												"<(>",
-												"<)>",
-												"<(*",
-												"*)>",
-												"if",
-												"else",
-												"fi",
-												"for",
-												"in",
-												"=>",
-												"rof",
-												"print",
-												"break",
-												"continue",
-												"assign",
-												"=",
-												"ns",
-												"sn",
-												"include",
-												"iterator",
-												"version",
-												".",
-												",",
-												"$",
-												"false",
-												"{",
-												"}"
+	"<(",
+	")>",
+	"<(>",
+	"<)>",
+	"<(*",
+	"*)>",
+	"if",
+	"else",
+	"fi",
+	"for",
+	"in",
+	"=>",
+	"rof",
+	"print",
+	"break",
+	"continue",
+	"assign",
+	"=",
+	"ns",
+	"sn",
+	"include",
+	"iterator",
+	"version",
+	".",
+	",",
+	"$",
+	"false",
+	"{",
+	"}"
 };
 
 //-------------------------------------------------------------------
@@ -98,7 +98,7 @@ preprocessor::preProcessString(const dodoString &buffer)
 
 dodoString
 preprocessor::_preProcessString(const dodoString &buffer,
-								const dodoString &path)
+				const dodoString &path)
 {
 	dodoArray<unsigned long> newLinePos = detectNewLines(buffer);
 
@@ -194,7 +194,7 @@ preprocessor::preProcess(const dodoString &path)
 
 unsigned long
 preprocessor::getLineNumber(const dodoArray<unsigned long> &newLinePos,
-							unsigned long pos)
+			    unsigned long pos)
 {
 	dodoArray<unsigned long>::const_iterator o(newLinePos.begin()), p(newLinePos.end());
 

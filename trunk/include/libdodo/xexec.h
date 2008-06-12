@@ -116,10 +116,10 @@ namespace dodo
 	 */
 	struct __xexecMod
 	{
-		char name[64];              ///< name of the library
-		char discription[256];      ///< discription of the library
-		char hook[64];              ///< name of function in module that will be a hook
-		short execType;             ///< type of hook[see xexecModuleActionTypeEnum]
+		char name[64];                  ///< name of the library
+		char discription[256];          ///< discription of the library
+		char hook[64];                  ///< name of function in module that will be a hook
+		short execType;                 ///< type of hook[see xexecModuleActionTypeEnum]
 	};
 
 	/**
@@ -429,9 +429,9 @@ namespace dodo
 			dodoList<__xexecItem>::iterator current;        ///< iterator for list[for matched with getXexec method]
 
 			mutable int operType;                           ///< operation type set by main action
-		
-			short execObject;     ///< type of object[see xexecObjectTypeEnum]
-			void *execObjectData; ///< object data
+
+			short execObject;                               ///< type of object[see xexecObjectTypeEnum]
+			void *execObjectData;                           ///< object data
 	};
 
 };

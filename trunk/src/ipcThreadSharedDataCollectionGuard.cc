@@ -76,7 +76,7 @@ dataCollectionGuard::del(unsigned long position)
 
 void
 dataCollectionGuard::set(unsigned long position,
-						 void          *data)
+			 void          *data)
 {
 	raceHazardGuard tg(this);
 

@@ -28,7 +28,7 @@ using namespace dodo::tools;
 
 bool
 string::equal(const dodoString &first,
-			  const dodoString &second)
+	      const dodoString &second)
 {
 	unsigned long firstSize = first.size();
 
@@ -49,7 +49,7 @@ string::equal(const dodoString &first,
 
 bool
 string::iequal(const dodoString &first,
-			   const dodoString &second)
+	       const dodoString &second)
 {
 	unsigned long firstSize = first.size();
 
@@ -70,8 +70,8 @@ string::iequal(const dodoString &first,
 
 bool
 string::contains(const dodoString &str,
-				 const dodoString &needle,
-				 bool icase)
+		 const dodoString &needle,
+		 bool icase)
 {
 	if (icase)
 	{
@@ -91,9 +91,9 @@ string::contains(const dodoString &str,
 
 unsigned long
 string::find(const dodoString &str,
-			 const dodoString &needle,
-			 unsigned long position,
-			 bool icase)
+	     const dodoString &needle,
+	     unsigned long position,
+	     bool icase)
 {
 	if (position > str.size())
 		return dodoString::npos;
@@ -122,8 +122,8 @@ string::find(const dodoString &str,
 
 unsigned long
 string::find(const dodoString &str,
-			 const dodoString &needle,
-			 bool icase)
+	     const dodoString &needle,
+	     bool icase)
 {
 	return find(str, needle, 0, icase);
 }
@@ -242,7 +242,7 @@ string::dToString(double number)
 
 dodoString
 string::lTrim(const dodoString &data,
-			  char symbol)
+	      char symbol)
 {
 	int size = data.size(), i(0);
 
@@ -257,7 +257,7 @@ string::lTrim(const dodoString &data,
 
 dodoString
 string::rTrim(const dodoString &data,
-			  char symbol)
+	      char symbol)
 {
 	int i(data.size() - 1);
 
@@ -272,8 +272,8 @@ string::rTrim(const dodoString &data,
 
 dodoString
 string::rTrim(const dodoString &data,
-			  const char symbols[],
-			  int symCount)
+	      const char symbols[],
+	      int symCount)
 {
 	int i(data.size() - 1), j, empty;
 
@@ -293,8 +293,8 @@ string::rTrim(const dodoString &data,
 
 dodoString
 string::lTrim(const dodoString &data,
-			  const char symbols[],
-			  int symCount)
+	      const char symbols[],
+	      int symCount)
 {
 	int size = data.size(), i(0), empty, j;
 
@@ -314,8 +314,8 @@ string::lTrim(const dodoString &data,
 
 dodoString
 string::trim(const dodoString &data,
-			 const char symbols[],
-			 int symCount)
+	     const char symbols[],
+	     int symCount)
 {
 	return rTrim(lTrim(data, symbols, symCount), symbols, symCount);
 }
@@ -324,7 +324,7 @@ string::trim(const dodoString &data,
 
 dodoString
 string::trim(const dodoString &data,
-			 char symbol)
+	     char symbol)
 {
 	return rTrim(lTrim(data, symbol), symbol);
 }
@@ -397,12 +397,12 @@ string::stringToD(const dodoString &data)
 
 void
 string::replace(const dodoStringArray &needle,
-				const dodoStringArray &replacement,
-				dodoString &data)
+		const dodoStringArray &replacement,
+		dodoString &data)
 {
 	dodoStringArray::const_iterator i(needle.begin()), j(needle.end());
 	dodoStringArray::const_iterator o(replacement.begin()), p(replacement.end());
-	for (;i!=j && o!=p; ++i, ++o)
+	for (; i != j && o != p; ++i, ++o)
 		replace(*i, *o, data);
 }
 
@@ -410,8 +410,8 @@ string::replace(const dodoStringArray &needle,
 
 void
 string::replace(const dodoString &needle,
-				const dodoString &replacement,
-				dodoString &data)
+		const dodoString &replacement,
+		dodoString &data)
 {
 	unsigned long i(0), j(needle.size()), k(replacement.size());
 
