@@ -59,9 +59,9 @@ namespace dodo
 				enum clientFunctionsID
 				{
 					CLIENTEX_INITSSL,
+					CLIENTEX_CONNECTSSL,
 					CLIENTEX_MAKESOCKET,
 					CLIENTEX_CONNECT,
-					CLIENTEX_CONNECTSSL,
 					CLIENTEX_CONNECTFROM,
 				};
 			};

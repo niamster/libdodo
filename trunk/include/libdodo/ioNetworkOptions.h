@@ -206,7 +206,7 @@ namespace dodo
 					 * close socket connection
 					 * @param socket defines socket descriptor
 					 */
-					static void _close(int socket);
+					virtual void _close(int socket);
 
 					int socketOpts;                 ///< socket options
 

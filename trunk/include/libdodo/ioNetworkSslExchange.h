@@ -249,6 +249,13 @@ namespace dodo
 					protected:
 						
 						SSL *sslHandle;///< SSL connection handle
+					
+						/**
+						 * close socket connection
+						 * @param socket defines socket descriptor
+						 * @param sslHandle defines SSL handle
+						 */
+						virtual void _close(int socket, SSL *sslHandle);
 
 						/**
 						 * @return descriptor of input stream

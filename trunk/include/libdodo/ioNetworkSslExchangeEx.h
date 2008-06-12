@@ -44,6 +44,7 @@ namespace dodo
 					EXCHANGEEX__WRITE,
 					EXCHANGEEX__READ,
 					EXCHANGEEX__READSTREAM,
+					EXCHANGEEX__CLOSE,
 				};
 			};
 		};

@@ -122,8 +122,6 @@ exchange::exchange(__initialAccept &a_init)
 #endif
 
 	init(a_init);
-	
-	a_init.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -163,7 +161,7 @@ exchange::close()
 	if (!opened)
 		return ;
 
-	options::_close(socket);
+	_close(socket);
 
 	socket = -1;
 
@@ -185,7 +183,7 @@ exchange::init(int a_socket,
 
 	if (opened)
 	{
-		options::_close(socket);
+		_close(socket);
 
 		socket = -1;
 
@@ -234,7 +232,7 @@ exchange::isAlive()
 		if (isSetFlag(fd.revents, POLLOUT))
 			return true;
 
-	options::_close(socket);
+	_close(socket);
 
 	socket = -1;
 	opened = false;

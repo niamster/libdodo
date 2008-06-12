@@ -25,6 +25,13 @@
 
 #ifdef IMAGEMAGICK_EXT
 
+namespace dodo
+{
+	__image_init__ __image_init_object__;
+};
+
+//-------------------------------------------------------------------
+
 using namespace dodo;
 
 __xexexImageCollectedData::__xexexImageCollectedData(int &a_operType,
@@ -51,10 +58,6 @@ __image_init__::~__image_init__()
 	if (initialized)
 		MagickCoreTerminus();
 }
-
-//-------------------------------------------------------------------
-
-__image_init__ __image_init_object__;
 
 //-------------------------------------------------------------------
 

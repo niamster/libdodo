@@ -43,6 +43,8 @@ namespace dodo
 				{
 					SERVEREX_WRONGPARAMETER,
 					SERVEREX_WRONGFILENAME,
+					SERVEREX_UNABLETOINITCONTEXT,
+					SERVEREX_UNABLETOINITSSL,
 				};
 
 				/**
@@ -50,12 +52,16 @@ namespace dodo
 				 */
 				#define IONETWORKSSLSERVEREX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 				#define IONETWORKSSLSERVEREX_WRONGFILENAME_STR  "Probably wrong filename, type of file is wrong or `path` is empty!"
+				#define IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
+				#define IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
 
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
 				enum serverFunctionsID
 				{
+					SERVEREX_INITSSL,
+					SERVEREX_ACCEPTSSL,
 					SERVEREX_MAKESOCKET,
 					SERVEREX_BINDNLISTEN,
 					SERVEREX_ACCEPT,

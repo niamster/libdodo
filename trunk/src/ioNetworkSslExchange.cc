@@ -124,9 +124,6 @@ exchange::exchange(__initialAccept &a_init)
 #endif
 
 	init(a_init);
-	
-	a_init.socket = -1;
-	a_init.sslHandle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -135,6 +132,14 @@ exchange::~exchange()
 {
 	if (opened)
 	{
+		if (sslHandle != NULL)
+		{
+			if (SSL_shutdown(sslHandle) == 0)
+				SSL_shutdown(sslHandle);
+
+			SSL_free(sslHandle);
+		}
+
 		::shutdown(socket, SHUT_RDWR);
 
 		::close(socket);
@@ -155,6 +160,31 @@ exchange::init(__initialAccept &a_init)
 //-------------------------------------------------------------------
 
 void
+exchange::_close(int socket,
+	SSL *sslHandle)
+{
+	options::_close(socket);
+		
+	int err = SSL_shutdown(sslHandle);
+	if (err < 0)
+	{
+		unsigned long nerr = ERR_get_error();
+		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
+	if (err == 0)
+	{
+		err = SSL_shutdown(sslHandle);
+		if (err < 0)
+		{
+			unsigned long nerr = ERR_get_error();
+			throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+		}
+	}
+}
+
+//-------------------------------------------------------------------
+
+void
 exchange::close()
 {
 	raceHazardGuard pg(this);
@@ -167,9 +197,10 @@ exchange::close()
 	if (!opened)
 		return ;
 
-	options::_close(socket);
+	_close(socket, sslHandle);
 
 	socket = -1;
+	sslHandle = NULL;
 
 	opened = false;
 
@@ -190,9 +221,10 @@ exchange::init(int a_socket,
 
 	if (opened)
 	{
-		options::_close(socket);
+		_close(socket, sslHandle);
 
 		socket = -1;
+		sslHandle = NULL;
 
 		opened = false;
 	}
@@ -240,9 +272,11 @@ exchange::isAlive()
 		if (isSetFlag(fd.revents, POLLOUT))
 			return true;
 
-	options::_close(socket);
+	_close(socket, sslHandle);
 
 	socket = -1;
+	sslHandle = NULL;
+
 	opened = false;
 
 	return false;
@@ -268,7 +302,7 @@ exchange::_write(const char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, data + sent_received, outSocketBuffer, 0)) == -1)
+				/*if ((n = ::send(socket, data + sent_received, outSocketBuffer, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -277,7 +311,7 @@ exchange::_write(const char * const data)
 						break;
 
 					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
+				}*/
 
 				break;
 			}
@@ -294,7 +328,7 @@ exchange::_write(const char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::send(socket, data + sent_received, rest, 0)) == -1)
+				/*if ((n = ::send(socket, data + sent_received, rest, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -303,7 +337,7 @@ exchange::_write(const char * const data)
 						break;
 
 					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
+				}*/
 
 				break;
 			}
@@ -405,7 +439,7 @@ exchange::_read(char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::recv(socket, data + sent_received, inSocketBuffer, 0)) == -1)
+				/*if ((n = ::recv(socket, data + sent_received, inSocketBuffer, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -414,7 +448,7 @@ exchange::_read(char * const data)
 						break;
 
 					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
+				}*/
 
 				break;
 			}
@@ -434,7 +468,7 @@ exchange::_read(char * const data)
 		{
 			while (true)
 			{
-				if ((n = ::recv(socket, data + sent_received, rest, 0)) == -1)
+				/*if ((n = ::recv(socket, data + sent_received, rest, 0)) == -1)
 				{
 					if (errno == EINTR)
 						continue;
@@ -443,7 +477,7 @@ exchange::_read(char * const data)
 						break;
 
 					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				}
+				}*/
 
 				break;
 			}
@@ -662,7 +696,7 @@ exchange::_readStream(char * const data)
 
 	while (true)
 	{
-		if ((n = ::recv(socket, data, inSize, 0)) == -1)
+		/*if ((n = ::recv(socket, data, inSize, 0)) == -1)
 		{
 			if (errno == EINTR)
 				continue;
@@ -671,7 +705,7 @@ exchange::_readStream(char * const data)
 				break;
 
 			throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		}
+		}*/
 
 		break;
 	}

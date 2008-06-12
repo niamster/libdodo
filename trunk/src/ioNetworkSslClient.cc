@@ -58,6 +58,7 @@ client::client(short a_family,
 			   		type(a_type),
 							   blockInherited(false),
 							   sslCtx(NULL),
+							   sslHandle(NULL),
 							   sslConnected(false)
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 
@@ -160,35 +161,48 @@ client::connectSsl()
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	int err = SSL_connect(sslHandle);
-	if (err == 0)
+	switch (SSL_connect(sslHandle))
 	{
-		unsigned long nerr = ERR_get_error();
-		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-	}
-	if (err < 0)
-	{
-		unsigned long nerr;
+		case 1:
+			break;
 
-		int err = SSL_shutdown(sslHandle);
-		if (err < 0)
+		case 0:
 		{
-			nerr = ERR_get_error();
+			unsigned long nerr = ERR_get_error();
 			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
-		if (err == 0)
+
+		case -1:
 		{
-			err = SSL_shutdown(sslHandle);
+			unsigned long nerr = ERR_get_error();
+			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE)
+				break;
+		}
+
+		default:
+		{
+			unsigned long nerr;
+
+			int err = SSL_shutdown(sslHandle);
 			if (err < 0)
 			{
 				nerr = ERR_get_error();
 				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-		}
-		
+			if (err == 0)
+			{
+				err = SSL_shutdown(sslHandle);
+				if (err < 0)
+				{
+					nerr = ERR_get_error();
+					throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
+			}
 			
-		nerr = ERR_get_error();
-		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				
+			nerr = ERR_get_error();
+			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+		}
 	}
 
 	sslConnected = true;

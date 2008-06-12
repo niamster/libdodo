@@ -333,9 +333,9 @@ server::accept(__initialAccept &init,
 			if (inet_ntop(AF_INET, &(sa.sin_addr), temp, INET_ADDRSTRLEN) != NULL)
 				info.host.assign(temp);
 			info.port = ntohs(sa.sin_port);
-		}
 
 			break;
+		}
 
 		case OPTIONS_PROTO_FAMILY_IPV6:
 		{
@@ -356,10 +356,12 @@ server::accept(__initialAccept &init,
 			if (inet_ntop(AF_INET6, &(sa.sin6_addr), temp, INET6_ADDRSTRLEN) != NULL)
 				info.host.assign(temp);
 			info.port = ntohs(sa.sin6_port);
-		}
+
 			break;
+		}
 
 		case OPTIONS_PROTO_FAMILY_UNIX_SOCKET:
+
 			sock = ::accept(socket, NULL, NULL);
 			if (sock == -1)
 			{
@@ -368,9 +370,11 @@ server::accept(__initialAccept &init,
 				else
 					throw baseEx(ERRMODULE_IONETWORKSERVER, SERVEREX_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
+
 			break;
 
 		default:
+
 			throw baseEx(ERRMODULE_IONETWORKSERVER, SERVEREX_ACCEPT, ERR_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 

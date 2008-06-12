@@ -25,6 +25,22 @@
 
 #ifdef OPENSSL_EXT
 
+namespace dodo
+{
+	namespace io
+	{
+		namespace network
+		{
+			namespace ssl
+			{
+				__openssl_init__ __openssl_init_object__;
+			};
+		};
+	};
+};
+
+//-------------------------------------------------------------------
+
 using namespace dodo::io::network::ssl;
 
 __openssl_init__::__openssl_init__()
@@ -91,10 +107,6 @@ __openssl_init__::addEntropy()
 		}
 	}
 }
-
-//-------------------------------------------------------------------
-
-__openssl_init__ __openssl_init_object__;
 
 //-------------------------------------------------------------------
 
