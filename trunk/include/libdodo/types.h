@@ -28,10 +28,9 @@
 #include <list>
 #include <deque>
 #include <map>
-
 #include <iostream>
-
 #include <errno.h>
+#include <string.h>
 
 #include <libdodo/directives.h>
 

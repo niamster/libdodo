@@ -26,6 +26,7 @@
 
 #include <libdodo/directives.h>
 
+#include <string.h>
 #include <time.h>
 #include <stdlib.h>
 

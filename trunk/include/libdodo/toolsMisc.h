@@ -47,6 +47,7 @@
 #include <net/if.h>
 #include <sys/ioctl.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 #include <libdodo/types.h>
 #include <libdodo/ioNetwork.h>
