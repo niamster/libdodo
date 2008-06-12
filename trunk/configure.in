@@ -618,6 +618,7 @@ AC_CONFIG_FILES([Makefile
                  tests/iofile_toolsfilesystem_test/Makefile
                  tests/ionetwork_ipcthreads_test/Makefile
                  tests/ionetwork_test/Makefile
+                 tests/ionetworksslclient_test/Makefile
                  tests/ionetworkhttp_test/Makefile
                  tests/ipcthreadcollection_test/Makefile
                  tests/ipcprocesscollection_test/Makefile
