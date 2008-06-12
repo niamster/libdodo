@@ -42,20 +42,26 @@ namespace dodo
 				enum clientExR
 				{
 					CLIENTEX_WRONGPARAMETER,
+					CLIENTEX_UNABLETOINITCONTEXT,
+					CLIENTEX_UNABLETOINITSSL,
 				};
 
 				/**
 				 * explanations for libdodo defined errors
 				 */
 			#define IONETWORKSSLCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
+			#define IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
+			#define IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
 
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
 				enum clientFunctionsID
 				{
+					CLIENTEX_INITSSL,
 					CLIENTEX_MAKESOCKET,
 					CLIENTEX_CONNECT,
+					CLIENTEX_CONNECTSSL,
 					CLIENTEX_CONNECTFROM,
 				};
 			};

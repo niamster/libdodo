@@ -75,6 +75,12 @@ client::client(short a_family,
 
 client::~client()
 {
+	if (socket != -1)
+	{
+		::shutdown(socket, SHUT_RDWR);
+
+		::close(socket);
+	}
 }
 
 //-------------------------------------------------------------------

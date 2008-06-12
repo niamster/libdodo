@@ -55,7 +55,9 @@ client::client(client &fs)
 
 client::client(short a_family,
 			   short a_type) : options(a_family, a_type),
-							   blockInherited(false)
+							   blockInherited(false),
+							   sslCtx(NULL),
+							   sslConnected(false)
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 
 							   ,
@@ -71,13 +73,124 @@ client::client(short a_family,
 	execObjectData = (void *)&collectedData;
 
 #endif
-}
 
+}
 
 //-------------------------------------------------------------------
 
 client::~client()
 {
+	if (sslHandle != NULL)
+	{
+		if (sslConnected && SSL_shutdown(sslHandle) == 0)
+			SSL_shutdown(sslHandle);
+
+		SSL_free(sslHandle);
+	}
+
+	if (sslCtx != NULL)
+		SSL_CTX_free(sslCtx);
+
+	if (socket != -1)
+	{
+		::shutdown(socket, SHUT_RDWR);
+
+		::close(socket);
+	}
+}
+
+//-------------------------------------------------------------------
+
+void 
+client::initSsl()
+{
+	if (sslCtx == NULL)
+	{
+		sslCtx = SSL_CTX_new(SSLv23_client_method());
+		if (sslCtx == NULL)
+			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_INITSSL, ERR_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+	}
+
+	if (sslHandle == NULL)
+	{
+		sslHandle = SSL_new(sslCtx);
+		if (sslHandle == NULL)
+			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_INITSSL, ERR_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
+	}
+}
+
+//-------------------------------------------------------------------
+
+void
+client::connectSsl()
+{
+	__openssl_init_object__.addEntropy();
+
+	if (sslConnected)
+	{
+		int err = SSL_shutdown(sslHandle);
+		if (err < 0)
+		{
+			unsigned long nerr = ERR_get_error();
+			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+		}
+		if (err == 0)
+		{
+			err = SSL_shutdown(sslHandle);
+			if (err < 0)
+			{
+				unsigned long nerr = ERR_get_error();
+				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
+		}
+
+		sslConnected = false;
+	}
+
+	if (SSL_clear(sslHandle) == 0)
+	{
+		unsigned long nerr = ERR_get_error();
+		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
+	
+	if (SSL_set_fd(sslHandle, socket) == 0)
+	{
+		unsigned long nerr = ERR_get_error();
+		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
+
+	int err = SSL_connect(sslHandle);
+	if (err == 0)
+	{
+		unsigned long nerr = ERR_get_error();
+		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
+	if (err < 0)
+	{
+		unsigned long nerr;
+
+		int err = SSL_shutdown(sslHandle);
+		if (err < 0)
+		{
+			nerr = ERR_get_error();
+			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+		}
+		if (err == 0)
+		{
+			err = SSL_shutdown(sslHandle);
+			if (err < 0)
+			{
+				nerr = ERR_get_error();
+				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
+		}
+		
+			
+		nerr = ERR_get_error();
+		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+	}
+
+	sslConnected = true;
 }
 
 //-------------------------------------------------------------------
@@ -176,6 +289,7 @@ client::connect(const dodoString &host,
 	performXExec(preExec);
 #endif
 
+	initSsl();
 	makeSocket();
 
 	if (family == OPTIONS_PROTO_FAMILY_IPV6)
@@ -215,6 +329,8 @@ client::connect(const dodoString &host,
 		}
 	}
 
+	connectSsl();
+
 	exchange.blocked = blocked;
 	exchange.init(socket, blockInherited);
 
@@ -247,6 +363,7 @@ client::connectFrom(const dodoString &local,
 	performXExec(preExec);
 #endif
 
+	initSsl();
 	makeSocket();
 
 	int sockFlag(1);
@@ -304,6 +421,8 @@ client::connectFrom(const dodoString &local,
 		}
 	}
 
+	connectSsl();
+
 	exchange.blocked = blocked;
 	exchange.init(socket, blockInherited);
 
@@ -335,6 +454,7 @@ client::connect(const dodoString &path,
 	performXExec(preExec);
 #endif
 
+	initSsl();
 	makeSocket();
 
 	struct sockaddr_un sa;
@@ -351,6 +471,8 @@ client::connect(const dodoString &path,
 
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
+
+	connectSsl();
 
 	exchange.blocked = blocked;
 	exchange.init(socket, blockInherited);

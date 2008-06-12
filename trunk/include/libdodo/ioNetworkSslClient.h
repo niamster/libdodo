@@ -172,8 +172,24 @@ namespace dodo
 						 * create socket
 						 */
 						virtual void makeSocket();
+						
+						/**
+						 * initialize SSL objects
+						 */
+						virtual void initSsl();
+
+						/**
+						 * establish SSL connection
+						 */
+						virtual void connectSsl();
+
 
 						dodoString unixSock;    ///< path to unix socket
+
+						SSL_CTX *sslCtx;///< SSL context
+						SSL *sslHandle;///< SSL connection handle
+
+						bool sslConnected;///< true if SSL connection established
 
 			#ifndef IONETWORKSSLCLIENT_WO_XEXEC
 
