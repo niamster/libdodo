@@ -293,7 +293,8 @@ exchange::_write(const char * const data)
 
 	unsigned long sent_received = 0;
 
-	unsigned long batch, n;
+	unsigned long batch;
+	long n;
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
@@ -450,7 +451,8 @@ exchange::_read(char * const data)
 
 	unsigned long sent_received = 0;
 
-	unsigned long batch, n;
+	unsigned long batch;
+	long n;
 
 	for (unsigned long i = 0; i < iter; ++i)
 	{
@@ -732,7 +734,7 @@ exchange::_readStream(char * const data)
 {
 	memset(data, '\0', inSize);
 
-	unsigned long n = 0;
+	long n = 0;
 
 	while (true)
 	{
@@ -760,7 +762,7 @@ exchange::_readStream(char * const data)
 		break;
 	}
 
-	return n;
+	return (unsigned long)n;
 }
 
 //-------------------------------------------------------------------
@@ -820,6 +822,7 @@ exchange::readStreamString(dodoString &a_str)
 	}
 
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
+	
 	if (n > 0)
 		collectedData.buffer.assign(data, n);
 
