@@ -37,17 +37,13 @@ __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int
 
 //-------------------------------------------------------------------
 
-__initialAccept::__initialAccept() : socket(-1),
-									 family(-1),
-									 type(-1)
+__initialAccept::__initialAccept() : socket(-1)
 {
 }
 
 //-------------------------------------------------------------------
 
-__initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
-														  family(init.family),
-														  type(init.type)
+__initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket)
 {
 	init.socket = -1;
 }
@@ -75,9 +71,6 @@ exchange::exchange(exchange &fse)
 
 	fse.opened = false;
 	fse.socket = -1;
-
-	family = fse.family;
-	type = fse.type;
 
 	socketOpts = fse.socketOpts;
 	inTimeout = fse.inTimeout;
@@ -128,7 +121,9 @@ exchange::exchange(__initialAccept &a_init)
 
 #endif
 
-	init(a_init.socket, a_init.blockInherited);
+	init(a_init);
+	
+	a_init.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -148,12 +143,9 @@ exchange::~exchange()
 void
 exchange::init(__initialAccept &a_init)
 {
-	family = a_init.family;
-	type = a_init.type;
-
-	blocked = a_init.blocked;
-
-	init(a_init.socket, a_init.blockInherited);
+	init(a_init.socket, a_init.blocked, a_init.blockInherited);
+	
+	a_init.socket = -1;
 }
 
 //-------------------------------------------------------------------
@@ -186,6 +178,7 @@ exchange::close()
 
 void
 exchange::init(int a_socket,
+		bool a_blocked,
 			   bool blockInherited)
 {
 	raceHazardGuard pg(this);
@@ -199,6 +192,7 @@ exchange::init(int a_socket,
 		opened = false;
 	}
 
+	blocked = a_blocked;
 	socket = a_socket;
 
 	setInBufferSize(inSocketBuffer);
@@ -767,9 +761,6 @@ exchange::createCopy()
 
 	opened = false;
 	socket = -1;
-
-	copy->family = family;
-	copy->type = type;
 
 	copy->socketOpts = socketOpts;
 	copy->inTimeout = inTimeout;

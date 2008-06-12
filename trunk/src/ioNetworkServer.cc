@@ -51,7 +51,8 @@ server::server(server &fs)
 //-------------------------------------------------------------------
 
 server::server(short a_family,
-			   short a_type) : options(a_family, a_type),
+			   short a_type) : family(a_family),
+			   		type(a_type),
 							   blockInherited(false)
 #ifndef IONETWORKSERVER_WO_XEXEC
 
@@ -303,8 +304,6 @@ server::accept(__initialAccept &init,
 	if (type != OPTIONS_TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
-		init.type = type;
-		init.family = family;
 		init.blocked = blocked;
 		init.blockInherited = blockInherited;
 
@@ -376,8 +375,6 @@ server::accept(__initialAccept &init,
 	}
 
 	init.socket = sock;
-	init.type = type;
-	init.family = family;
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
@@ -401,8 +398,6 @@ server::accept(__initialAccept &init)
 	if (type != OPTIONS_TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
-		init.type = type;
-		init.family = family;
 		init.blocked = blocked;
 		init.blockInherited = blockInherited;
 
@@ -419,8 +414,6 @@ server::accept(__initialAccept &init)
 	}
 
 	init.socket = sock;
-	init.type = type;
-	init.family = family;
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 

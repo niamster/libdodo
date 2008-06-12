@@ -52,7 +52,8 @@ client::client(client &fs)
 //-------------------------------------------------------------------
 
 client::client(short a_family,
-			   short a_type) : options(a_family, a_type),
+			   short a_type) : family(a_family), 
+			   		type(a_type),
 							   blockInherited(false)
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
@@ -218,8 +219,7 @@ client::connect(const dodoString &host,
 		}
 	}
 
-	exchange.blocked = blocked;
-	exchange.init(socket, blockInherited);
+	exchange.init(socket, blocked, blockInherited);
 
 	socket = -1;
 
@@ -307,8 +307,7 @@ client::connectFrom(const dodoString &local,
 		}
 	}
 
-	exchange.blocked = blocked;
-	exchange.init(socket, blockInherited);
+	exchange.init(socket, blocked, blockInherited);
 
 	socket = -1;
 
@@ -355,8 +354,7 @@ client::connect(const dodoString &path,
 		throw baseEx(ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	exchange.blocked = blocked;
-	exchange.init(socket, blockInherited);
+	exchange.init(socket, blocked, blockInherited);
 
 	socket = -1;
 

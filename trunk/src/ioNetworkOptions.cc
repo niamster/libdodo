@@ -25,22 +25,6 @@
 
 using namespace dodo::io::network;
 
-options::options(short a_family,
-				 short a_type) : family(a_family),
-								 type(a_type),
-								 lingerOpts(IONETWORKOPTIONS_SOCKET_LINGER_OPTION),
-								 lingerSeconds(IONETWORKOPTIONS_SOCKET_LINGER_PERIOD),
-								 inTimeout(IONETWORK_RECIEVE_TIMEOUT),
-								 outTimeout(IONETWORK_SEND_TIMEOUT),
-								 inSocketBuffer(IONETWORKOPTIONS_SOCKET_INSIZE),
-								 outSocketBuffer(IONETWORKOPTIONS_SOCKET_OUTSIZE),
-								 socket(-1),
-								 blocked(true)
-{
-}
-
-//-------------------------------------------------------------------
-
 options::options() : lingerOpts(IONETWORKOPTIONS_SOCKET_LINGER_OPTION),
 					 lingerSeconds(IONETWORKOPTIONS_SOCKET_LINGER_PERIOD),
 					 inTimeout(IONETWORK_RECIEVE_TIMEOUT),

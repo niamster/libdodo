@@ -104,13 +104,6 @@ namespace dodo
 
 					/**
 					 * constructor
-					 * @param family defines transfer type of domain of the socket[see OptionsProtoFamilyEnum]
-					 * @param type defines type of the socket[see OptionsProtoFamilyEnum]
-					 */
-					options(short family, short type);
-
-					/**
-					 * constructor
 					 */
 					options();
 
@@ -214,9 +207,6 @@ namespace dodo
 					 * @param socket defines socket descriptor
 					 */
 					static void _close(int socket);
-
-					short family;                   ///< socket family
-					short type;                     ///< socket type
 
 					int socketOpts;                 ///< socket options
 

@@ -54,7 +54,8 @@ client::client(client &fs)
 //-------------------------------------------------------------------
 
 client::client(short a_family,
-			   short a_type) : options(a_family, a_type),
+			   short a_type) : family(a_family),
+			   		type(a_type),
 							   blockInherited(false),
 							   sslCtx(NULL),
 							   sslConnected(false)
@@ -331,10 +332,10 @@ client::connect(const dodoString &host,
 
 	connectSsl();
 
-	exchange.blocked = blocked;
-	exchange.init(socket, blockInherited);
+	exchange.init(socket, sslHandle, blocked, blockInherited);
 
 	socket = -1;
+	sslHandle = NULL;
 
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 	performXExec(postExec);
@@ -423,10 +424,10 @@ client::connectFrom(const dodoString &local,
 
 	connectSsl();
 
-	exchange.blocked = blocked;
-	exchange.init(socket, blockInherited);
+	exchange.init(socket, sslHandle, blocked, blockInherited);
 
 	socket = -1;
+	sslHandle = NULL;
 
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 	performXExec(postExec);
@@ -474,10 +475,10 @@ client::connect(const dodoString &path,
 
 	connectSsl();
 
-	exchange.blocked = blocked;
-	exchange.init(socket, blockInherited);
+	exchange.init(socket, sslHandle, blocked, blockInherited);
 
 	socket = -1;
+	sslHandle = NULL;
 
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 	performXExec(postExec);

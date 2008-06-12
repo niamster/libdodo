@@ -160,6 +160,9 @@ namespace dodo
 
 				protected:
 
+					short family;                   ///< socket family
+					short type;                     ///< socket type
+
 					/**
 					 * restore options on connect/bind
 					 */

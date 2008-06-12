@@ -39,18 +39,17 @@ __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept() : socket(-1),
-									 family(-1),
-									 type(-1)
+					sslHandle(NULL)
 {
 }
 
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
-														  family(init.family),
-														  type(init.type)
+							sslHandle(init.sslHandle)
 {
 	init.socket = -1;
+	init.sslHandle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -72,12 +71,11 @@ exchange::exchange(exchange &fse)
 
 	socket = fse.socket;
 	opened = fse.opened;
+	sslHandle = fse.sslHandle;
 
 	fse.opened = false;
 	fse.socket = -1;
-
-	family = fse.family;
-	type = fse.type;
+	fse.sslHandle = NULL;
 
 	socketOpts = fse.socketOpts;
 	inTimeout = fse.inTimeout;
@@ -91,10 +89,11 @@ exchange::exchange(exchange &fse)
 
 //-------------------------------------------------------------------
 
-exchange::exchange()
+exchange::exchange() : sslHandle(NULL)
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
-	: collectedData(operType,
+	,
+	collectedData(operType,
 					(void *) this)
 
 #endif
@@ -124,7 +123,10 @@ exchange::exchange(__initialAccept &a_init)
 
 #endif
 
-	init(a_init.socket, a_init.blockInherited);
+	init(a_init);
+	
+	a_init.socket = -1;
+	a_init.sslHandle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -144,12 +146,10 @@ exchange::~exchange()
 void
 exchange::init(__initialAccept &a_init)
 {
-	family = a_init.family;
-	type = a_init.type;
-
-	blocked = a_init.blocked;
-
-	init(a_init.socket, a_init.blockInherited);
+	init(a_init.socket, a_init.sslHandle, a_init.blocked, a_init.blockInherited);
+	
+	a_init.socket = -1;
+	a_init.sslHandle = NULL;
 }
 
 //-------------------------------------------------------------------
@@ -182,6 +182,8 @@ exchange::close()
 
 void
 exchange::init(int a_socket,
+		SSL *a_sslHandle,
+		bool a_blocked,
 			   bool blockInherited)
 {
 	raceHazardGuard pg(this);
@@ -195,7 +197,9 @@ exchange::init(int a_socket,
 		opened = false;
 	}
 
+	blocked = a_blocked;
 	socket = a_socket;
+	sslHandle = a_sslHandle;
 
 	setInBufferSize(inSocketBuffer);
 	setOutBufferSize(outSocketBuffer);
@@ -763,9 +767,6 @@ exchange::createCopy()
 
 	opened = false;
 	socket = -1;
-
-	copy->family = family;
-	copy->type = type;
 
 	copy->socketOpts = socketOpts;
 	copy->inTimeout = inTimeout;

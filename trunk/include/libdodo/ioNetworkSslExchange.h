@@ -97,9 +97,8 @@ namespace dodo
 					private:
 
 						int socket;             ///< socket
-
-						short family;           ///< socket family[see socketProtoFamilyEnum]
-						short type;             ///< socket type[see socketTransferTypeEnum]
+						
+						SSL *sslHandle;///< SSL connection handle
 
 						bool blocked;           ///< true if blocked
 						bool blockInherited;    ///< true if block flag is inherited
@@ -248,6 +247,8 @@ namespace dodo
 						virtual void close();
 
 					protected:
+						
+						SSL *sslHandle;///< SSL connection handle
 
 						/**
 						 * @return descriptor of input stream
@@ -262,9 +263,11 @@ namespace dodo
 						/**
 						 * init current instance
 						 * @param socket defines socket
+						 * @param handle defines SSL handle
+						 * @param blocked defines the connection block status
 						 * @param blockInherited defines block flag inheritance
 						 */
-						virtual void init(int socket, bool blockInherited);
+						virtual void init(int socket, SSL *handle, bool blocked, bool blockInherited);
 
 						/**
 						 * @param data defines buffer that will be filled
