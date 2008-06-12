@@ -161,8 +161,9 @@ server::acceptSsl()
 		unsigned long nerr = ERR_get_error();
 		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
-
-	switch (SSL_accept(sslHandle))
+	
+	int res = SSL_accept(sslHandle);
+	switch (res)
 	{
 		case 1:
 			break;
@@ -175,8 +176,8 @@ server::acceptSsl()
 
 		case - 1:
 		{
-			unsigned long nerr = ERR_get_error();
-			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE)
+			int nerr = SSL_get_error(sslHandle, res);
+			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
 				break;
 		}
 

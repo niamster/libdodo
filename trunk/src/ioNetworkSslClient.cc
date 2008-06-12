@@ -161,7 +161,8 @@ client::connectSsl()
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	switch (SSL_connect(sslHandle))
+	int res = SSL_connect(sslHandle);
+	switch (res)
 	{
 		case 1:
 			break;
@@ -174,8 +175,8 @@ client::connectSsl()
 
 		case - 1:
 		{
-			unsigned long nerr = ERR_get_error();
-			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE)
+			int nerr = SSL_get_error(sslHandle, res);
+			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
 				break;
 		}
 

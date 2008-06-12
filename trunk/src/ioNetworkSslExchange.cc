@@ -302,16 +302,26 @@ exchange::_write(const char * const data)
 		{
 			while (true)
 			{
-				/*if ((n = ::send(socket, data + sent_received, outSocketBuffer, 0)) == -1)
-				   {
-				        if (errno == EINTR)
-				                continue;
-
-				        if (errno == EAGAIN)
-				                break;
-
-				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				   }*/
+				if ((n = SSL_write(sslHandle, data + sent_received, outSocketBuffer)) <= 0)
+				{
+					switch (SSL_get_error(sslHandle, n))
+					{
+						case SSL_ERROR_WANT_READ:
+						case SSL_ERROR_WANT_WRITE:
+						case SSL_ERROR_WANT_X509_LOOKUP:
+							
+							n = 0;
+							
+							break;
+							
+						default:
+						{
+							unsigned long nerr = ERR_get_error();							
+							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						}
+							
+					}
+				}
 
 				break;
 			}
@@ -328,16 +338,26 @@ exchange::_write(const char * const data)
 		{
 			while (true)
 			{
-				/*if ((n = ::send(socket, data + sent_received, rest, 0)) == -1)
-				   {
-				        if (errno == EINTR)
-				                continue;
-
-				        if (errno == EAGAIN)
-				                break;
-
-				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				   }*/
+				if ((n = SSL_write(sslHandle, data + sent_received, rest)) <= 0)
+				{
+					switch (SSL_get_error(sslHandle, n))
+					{
+						case SSL_ERROR_WANT_READ:
+						case SSL_ERROR_WANT_WRITE:
+						case SSL_ERROR_WANT_X509_LOOKUP:
+							
+							n = 0;
+							
+							break;
+							
+						default:
+						{
+							unsigned long nerr = ERR_get_error();							
+							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						}
+							
+					}
+				}
 
 				break;
 			}
@@ -439,16 +459,26 @@ exchange::_read(char * const data)
 		{
 			while (true)
 			{
-				/*if ((n = ::recv(socket, data + sent_received, inSocketBuffer, 0)) == -1)
-				   {
-				        if (errno == EINTR)
-				                continue;
-
-				        if (errno == EAGAIN)
-				                break;
-
-				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				   }*/
+				if ((n = SSL_read(sslHandle, data + sent_received, inSocketBuffer)) <= 0)
+				{
+					switch (SSL_get_error(sslHandle, n))
+					{
+						case SSL_ERROR_WANT_READ:
+						case SSL_ERROR_WANT_WRITE:
+						case SSL_ERROR_WANT_X509_LOOKUP:
+							
+							n = 0;
+							
+							break;
+							
+						default:
+						{
+							unsigned long nerr = ERR_get_error();							
+							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						}
+							
+					}
+				}
 
 				break;
 			}
@@ -468,16 +498,26 @@ exchange::_read(char * const data)
 		{
 			while (true)
 			{
-				/*if ((n = ::recv(socket, data + sent_received, rest, 0)) == -1)
-				   {
-				        if (errno == EINTR)
-				                continue;
-
-				        if (errno == EAGAIN)
-				                break;
-
-				        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-				   }*/
+				if ((n = SSL_read(sslHandle, data + sent_received, rest)) <= 0)
+				{
+					switch (SSL_get_error(sslHandle, n))
+					{
+						case SSL_ERROR_WANT_READ:
+						case SSL_ERROR_WANT_WRITE:
+						case SSL_ERROR_WANT_X509_LOOKUP:
+							
+							n = 0;
+							
+							break;
+							
+						default:
+						{
+							unsigned long nerr = ERR_get_error();							
+							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+						}
+							
+					}
+				}
 
 				break;
 			}
@@ -696,16 +736,26 @@ exchange::_readStream(char * const data)
 
 	while (true)
 	{
-		/*if ((n = ::recv(socket, data, inSize, 0)) == -1)
-		   {
-		        if (errno == EINTR)
-		                continue;
+		if ((n = SSL_read(sslHandle, data, inSize)) <= 0)
+		{
+			switch (SSL_get_error(sslHandle, n))
+			{
+				case SSL_ERROR_WANT_READ:
+				case SSL_ERROR_WANT_WRITE:
+				case SSL_ERROR_WANT_X509_LOOKUP:
+				case SSL_ERROR_ZERO_RETURN:
 
-		        if (errno == EAGAIN)
-		                break;
-
-		        throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-		   }*/
+					n = 0;
+					
+					break;
+					
+				default:
+				{
+					unsigned long nerr = ERR_get_error();							
+					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
+			}
+		}
 
 		break;
 	}
