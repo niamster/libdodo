@@ -38,7 +38,7 @@ namespace dodo
 		 * @class channel implements an interface for I/O operations
 		 */
 		class channel : public xexec,
-				virtual public nonBlockedAccessInfo
+						virtual public nonBlockedAccessInfo
 		{
 			public:
 
@@ -105,12 +105,12 @@ namespace dodo
 				 */
 				virtual void flush() = 0;
 
-				unsigned long inSize;   ///< size of data block for read* operations
-				unsigned long outSize;  ///< size of data block for write* operations
+				unsigned long inSize;                   ///< size of data block for read* operations
+				unsigned long outSize;                  ///< size of data block for write* operations
 
 			protected:
 
-				bool opened; ///< true if I/O *session* is opened
+				bool opened;                 ///< true if I/O *session* is opened
 		};
 	};
 };

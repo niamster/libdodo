@@ -33,7 +33,7 @@ value::value() : valueDataType(DATATYPE_STRING)
 //-------------------------------------------------------------------
 
 value::value(const dodoString &value) : valueDataType(DATATYPE_STRING),
-					stringValue(value)
+										stringValue(value)
 {
 
 }
@@ -41,7 +41,7 @@ value::value(const dodoString &value) : valueDataType(DATATYPE_STRING),
 //-------------------------------------------------------------------
 
 value::value(long value) : valueDataType(DATATYPE_INTEGER),
-			   integerValue(value)
+						   integerValue(value)
 {
 
 }
@@ -49,7 +49,7 @@ value::value(long value) : valueDataType(DATATYPE_INTEGER),
 //-------------------------------------------------------------------
 
 value::value(double value) : valueDataType(DATATYPE_DOUBLE),
-			     doubleValue(value)
+							 doubleValue(value)
 {
 
 }
@@ -57,7 +57,7 @@ value::value(double value) : valueDataType(DATATYPE_DOUBLE),
 //-------------------------------------------------------------------
 
 value::value(bool value) : valueDataType(DATATYPE_BOOLEAN),
-			   booleanValue(value)
+						   booleanValue(value)
 {
 
 }
@@ -65,7 +65,7 @@ value::value(bool value) : valueDataType(DATATYPE_BOOLEAN),
 //-------------------------------------------------------------------
 
 value::value(const dodoArray<value> &value) : valueDataType(DATATYPE_ARRAY),
-					      arrayValue(value)
+											  arrayValue(value)
 {
 
 }
@@ -73,7 +73,7 @@ value::value(const dodoArray<value> &value) : valueDataType(DATATYPE_ARRAY),
 //-------------------------------------------------------------------
 
 value::value(const dodoMap<dodoString, value, dodoMapStringCompare> &value) : valueDataType(DATATYPE_STRUCT),
-									      structValue(value)
+																			  structValue(value)
 {
 
 }
@@ -149,7 +149,7 @@ value::addArrayElement(const value &value)
 
 void
 value::addStructMember(const dodoString &name,
-		       const value &value)
+					   const value &value)
 {
 	valueDataType = DATATYPE_STRUCT;
 

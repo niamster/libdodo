@@ -28,8 +28,8 @@ using namespace dodo::io::network;
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
 __xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_operType,
-									 void *a_executor) : operType(a_operType),
-											     executor(a_executor)
+																		 void *a_executor) : operType(a_operType),
+																							 executor(a_executor)
 {
 }
 
@@ -42,7 +42,7 @@ client::client(client &fs)
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 
@@ -52,14 +52,14 @@ client::client(client &fs)
 //-------------------------------------------------------------------
 
 client::client(short a_family,
-	       short a_type) : family(a_family),
-			       type(a_type),
-			       blockInherited(false)
+			   short a_type) : family(a_family),
+							   type(a_type),
+							   blockInherited(false)
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
-			       ,
-			       collectedData(operType,
-					     (void *) this)
+							   ,
+							   collectedData(operType,
+											 (void *) this)
 
 #endif
 {
@@ -172,8 +172,8 @@ client::makeSocket()
 
 void
 client::connect(const dodoString &host,
-		int port,
-		exchange &exchange)
+				int port,
+				exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
@@ -232,7 +232,7 @@ client::connect(const dodoString &host,
 
 void
 client::connect(const __connInfo &destinaton,
-		exchange &exchange)
+				exchange &exchange)
 {
 	connect(destinaton.host, destinaton.port, exchange);
 }
@@ -241,9 +241,9 @@ client::connect(const __connInfo &destinaton,
 
 void
 client::connectFrom(const dodoString &local,
-		    const dodoString &host,
-		    int port,
-		    exchange &exchange)
+					const dodoString &host,
+					int port,
+					exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
@@ -320,8 +320,8 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connectFrom(const dodoString &local,
-		    const __connInfo &destinaton,
-		    exchange &exchange)
+					const __connInfo &destinaton,
+					exchange &exchange)
 {
 	connectFrom(local, destinaton.host, destinaton.port, exchange);
 }
@@ -330,7 +330,7 @@ client::connectFrom(const dodoString &local,
 
 void
 client::connect(const dodoString &path,
-		exchange &exchange)
+				exchange &exchange)
 {
 #ifndef IONETWORKCLIENT_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;

@@ -81,11 +81,11 @@ namespace dodo
 					 * constructor
 					 */
 					__xexexIoNetworkClientCollectedData(int &operType,
-									    void *executor);
+														void *executor);
 
-					int &operType;                  ///< xexec operation
+					int &operType;                                      ///< xexec operation
 
-					void *executor;                 ///< class that executed hook
+					void *executor;                                     ///< class that executed hook
 				};
 
 #endif
@@ -94,7 +94,7 @@ namespace dodo
 				 * @class client provides network connection interface
 				 */
 				class client : public xexec,
-					       public options
+							   public options
 				{
 					friend class exchange;
 
@@ -159,12 +159,12 @@ namespace dodo
 						 */
 						virtual void connect(const dodoString &path, exchange &exchange);
 
-						bool blockInherited; ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
+						bool blockInherited;                         ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
 
 					protected:
 
-						short family;                   ///< socket family
-						short type;                     ///< socket type
+						short family;                                           ///< socket family
+						short type;                                             ///< socket type
 
 						/**
 						 * restore options on connect/bind
@@ -187,16 +187,16 @@ namespace dodo
 						virtual void connectSsl();
 
 
-						dodoString unixSock;    ///< path to unix socket
+						dodoString unixSock;                            ///< path to unix socket
 
-						SSL_CTX *sslCtx;        ///< SSL context
-						SSL *sslHandle;         ///< SSL connection handle
+						SSL_CTX *sslCtx;                                ///< SSL context
+						SSL *sslHandle;                                 ///< SSL connection handle
 
-						bool sslConnected;      ///< true if SSL connection established
+						bool sslConnected;                              ///< true if SSL connection established
 
 #ifndef IONETWORKSSLCLIENT_WO_XEXEC
 
-						__xexexIoNetworkClientCollectedData collectedData;   ///< data collected for xexec
+						__xexexIoNetworkClientCollectedData collectedData;                           ///< data collected for xexec
 
 #endif
 				};

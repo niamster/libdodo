@@ -26,11 +26,11 @@
 using namespace dodo::cgi;
 
 processor::processor(server &a_cgi) : continueFlag(false),
-				      breakDeepness(0),
-				      loopDeepness(0),
-				      iterator(1),
-				      namespaceDeepness(1),
-				      CGI(a_cgi)
+									  breakDeepness(0),
+									  loopDeepness(0),
+									  iterator(1),
+									  namespaceDeepness(1),
+									  CGI(a_cgi)
 {
 	dodo[statements[PREPROCESSOR_STATEMENT_VERSION]] = PACKAGE_STRING;
 	dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = "1";
@@ -85,7 +85,7 @@ processor::clear()
 
 dodoString
 processor::_processString(const dodoString &buffer,
-			  const dodoString &path)
+						  const dodoString &path)
 {
 	unsigned long i(0), j(0), begin(0), k(0);
 	unsigned long stI;
@@ -297,7 +297,7 @@ processor::recursive(const dodoString &path)
 
 void
 processor::assign(dodoString varName,
-		  const dodoArray<dodoStringMap> &varVal)
+				  const dodoArray<dodoStringMap> &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -313,7 +313,7 @@ processor::assign(dodoString varName,
 
 void
 processor::assign(dodoString varName,
-		  const dodoStringMap &varVal)
+				  const dodoStringMap &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -329,7 +329,7 @@ processor::assign(dodoString varName,
 
 void
 processor::assign(dodoString varName,
-		  const dodoStringArray &varVal)
+				  const dodoStringArray &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -345,7 +345,7 @@ processor::assign(dodoString varName,
 
 void
 processor::assign(dodoString varName,
-		  const dodoString &varVal)
+				  const dodoString &varVal)
 {
 	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
 		throw baseEx(ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, ERR_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
@@ -361,10 +361,10 @@ processor::assign(dodoString varName,
 
 unsigned long
 processor::_if(const dodoString &buffer,
-	       unsigned long start,
-	       const dodoString &statement,
-	       dodoString &tpl,
-	       const dodoString &path)
+			   unsigned long start,
+			   const dodoString &statement,
+			   dodoString &tpl,
+			   const dodoString &path)
 {
 	bool _float(false), invert(false);
 
@@ -543,10 +543,10 @@ processor::_if(const dodoString &buffer,
 
 unsigned long
 processor::blockEnd(const dodoString &buffer,
-		    unsigned long start,
-		    const dodoString &st,
-		    const dodoString &ts,
-		    const dodoString &path)
+					unsigned long start,
+					const dodoString &st,
+					const dodoString &ts,
+					const dodoString &path)
 {
 	unsigned long u, m(start), _st(1), b, p, stLen(st.size()), tsLen(ts.size());
 
@@ -585,9 +585,9 @@ processor::blockEnd(const dodoString &buffer,
 
 unsigned long
 processor::_include(unsigned long start,
-		    const dodoString &statement,
-		    dodoString &tpl,
-		    const dodoString &path)
+					const dodoString &statement,
+					dodoString &tpl,
+					const dodoString &path)
 {
 	dodoString temp1 = getVar(statement, start, path);
 
@@ -613,9 +613,9 @@ processor::_include(unsigned long start,
 
 unsigned long
 processor::_print(unsigned long start,
-		  const dodoString &statement,
-		  dodoString &tpl,
-		  const dodoString &path)
+				  const dodoString &statement,
+				  dodoString &tpl,
+				  const dodoString &path)
 {
 	dodoStringArray temp = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_COMA]);
 	if (temp.size() <= 1)
@@ -634,8 +634,8 @@ processor::_print(unsigned long start,
 
 bool
 processor::_break(unsigned long start,
-		  const dodoString &statement,
-		  const dodoString &path)
+				  const dodoString &statement,
+				  const dodoString &path)
 {
 	if (loopDeepness > 0)
 	{
@@ -657,8 +657,8 @@ processor::_break(unsigned long start,
 
 unsigned long
 processor::_assign(unsigned long start,
-		   const dodoString &statement,
-		   const dodoString &path)
+				   const dodoString &statement,
+				   const dodoString &path)
 {
 	dodoStringArray temp = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_ASSIGN_OP], 2);
 
@@ -693,9 +693,9 @@ processor::cleanNamespace()
 
 unsigned long
 processor::_ns(const dodoString &buffer,
-	       unsigned long start,
-	       dodoString &tpl,
-	       const dodoString &path)
+			   unsigned long start,
+			   dodoString &tpl,
+			   const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_NS], statements[PREPROCESSOR_STATEMENT_CLOSE_NS], path));
 
@@ -708,10 +708,10 @@ processor::_ns(const dodoString &buffer,
 
 unsigned long
 processor::_for(const dodoString &buffer,
-		unsigned long start,
-		const dodoString &statement,
-		dodoString &tpl,
-		const dodoString &path)
+				unsigned long start,
+				const dodoString &statement,
+				dodoString &tpl,
+				const dodoString &path)
 {
 	unsigned long u(blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_FOR], statements[PREPROCESSOR_STATEMENT_CLOSE_FOR], path));
 
@@ -1242,8 +1242,8 @@ processor::_for(const dodoString &buffer,
 
 dodoString
 processor::getVarName(const dodoString &a_varName,
-		      unsigned long start,
-		      const dodoString &path)
+					  unsigned long start,
+					  const dodoString &path)
 {
 	dodoString varName = trim(a_varName), tempVar;
 
@@ -1293,8 +1293,8 @@ processor::getVarName(const dodoString &a_varName,
 
 dodoString
 processor::getVar(const dodoString &a_varName,
-		  unsigned long start,
-		  const dodoString &path)
+				  unsigned long start,
+				  const dodoString &path)
 {
 	dodoString varName = getVarName(a_varName, start, path);
 

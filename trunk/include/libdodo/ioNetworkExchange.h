@@ -90,10 +90,10 @@ namespace dodo
 
 				private:
 
-					int socket;             ///< socket
+					int socket;                                 ///< socket
 
-					bool blocked;           ///< true if blocked
-					bool blockInherited;    ///< true if block flag is inherited
+					bool blocked;                               ///< true if blocked
+					bool blockInherited;                        ///< true if block flag is inherited
 			};
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
@@ -109,13 +109,13 @@ namespace dodo
 				 * @param executor defines class that executed hook
 				 */
 				__xexexIoNetworkExchangeCollectedData(int &operType,
-								      void *executor);
+													  void *executor);
 
-				dodoString buffer;              ///< data buffer
+				dodoString buffer;                              ///< data buffer
 
-				int &operType;                  ///< xexec operation
+				int &operType;                                  ///< xexec operation
 
-				void *executor;                 ///< class that executed hook
+				void *executor;                                 ///< class that executed hook
 			};
 
 #endif
@@ -124,8 +124,8 @@ namespace dodo
 			 * @class exchange provides communication interface[send/receive data]
 			 */
 			class exchange : public options,
-					 public channel,
-					 virtual public ipc::thread::guardHolder
+							 public channel,
+							 virtual public ipc::thread::guardHolder
 			{
 				friend class server;
 				friend class client;
@@ -277,7 +277,7 @@ namespace dodo
 
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
-					__xexexIoNetworkExchangeCollectedData collectedData;    ///< data collected for xexec
+					__xexexIoNetworkExchangeCollectedData collectedData;                        ///< data collected for xexec
 
 #endif
 

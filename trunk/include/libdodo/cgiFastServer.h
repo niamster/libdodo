@@ -111,9 +111,9 @@ namespace dodo
 
 #ifdef PTHREAD_EXT
 
-					bool threading;                 ///< true use threading
+					bool threading;                                     ///< true use threading
 
-					unsigned int threadsNum;        ///< amount of threads
+					unsigned int threadsNum;                            ///< amount of threads
 
 					/**
 					 * thread that holds one queue of CGI requests
@@ -121,11 +121,11 @@ namespace dodo
 					 */
 					static void *stackThread(void *data);
 
-					static pthread_mutex_t accept;        ///< accept request mutex
+					static pthread_mutex_t accept;                            ///< accept request mutex
 
 #endif
 
-					static serverHandler handler;    ///< function to be called on new request
+					static serverHandler handler;                        ///< function to be called on new request
 			};
 		};
 	};

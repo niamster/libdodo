@@ -79,8 +79,8 @@ namespace dodo
 
 			private:
 
-				dodoArray<value> arguments;     ///< method arguments
-				dodoString name;                ///< method name
+				dodoArray<value> arguments;                     ///< method arguments
+				dodoString name;                                ///< method name
 		};
 	};
 };

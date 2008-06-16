@@ -28,7 +28,7 @@
 using namespace dodo::db;
 
 sqlite::sqlite() : empty(true),
-		   hint(SQLITE_HINT_NONE)
+				   hint(SQLITE_HINT_NONE)
 
 {
 #ifndef DBSQLITE_WO_XEXEC
@@ -172,7 +172,7 @@ sqlite::setBLOBValues(const dodoStringArray &values)
 
 void
 sqlite::_exec(const dodoString &query,
-	      bool result)
+			  bool result)
 {
 	if (query.size() == 0)
 	{
@@ -213,23 +213,23 @@ sqlite::_exec(const dodoString &query,
 						columnName = sqlite3_column_name(sqliteResult, i);
 
 						if (sqlite3_table_column_metadata(sqliteHandle,
-										  NULL,
-										  collectedData.table.c_str(),
-										  columnName,
-										  &columnType,
-										  NULL,
-										  NULL,
-										  NULL,
-										  NULL) != SQLITE_OK)
+														  NULL,
+														  collectedData.table.c_str(),
+														  columnName,
+														  &columnType,
+														  NULL,
+														  NULL,
+														  NULL,
+														  NULL) != SQLITE_OK)
 							throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
 
 						if (strcasestr(columnType, "char") != NULL ||
-						    strcasestr(columnType, "date") != NULL ||
-						    strcasestr(columnType, "time") != NULL ||
-						    strcasestr(columnType, "blob") != NULL ||
-						    strcasestr(columnType, "text") != NULL ||
-						    strcasestr(columnType, "enum") != NULL ||
-						    strcasestr(columnType, "set") != NULL)
+							strcasestr(columnType, "date") != NULL ||
+							strcasestr(columnType, "time") != NULL ||
+							strcasestr(columnType, "blob") != NULL ||
+							strcasestr(columnType, "text") != NULL ||
+							strcasestr(columnType, "enum") != NULL ||
+							strcasestr(columnType, "set") != NULL)
 							temp1.push_back(columnName);
 					}
 
@@ -519,7 +519,7 @@ sqlite::affectedRowsCount() const
 
 void
 sqlite::exec(const dodoString &query,
-	     bool result)
+			 bool result)
 {
 #ifndef DBSQLITE_WO_XEXEC
 	operType = SQLITE_OPERATION_EXEC;

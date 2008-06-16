@@ -83,14 +83,14 @@ namespace dodo
 			 */
 			__time(unsigned int sec, unsigned int min, unsigned int hour, unsigned int day, unsigned int month, unsigned int year, bool daylight = true);
 
-			unsigned int sec;       ///< seconds [0, 60]
-			unsigned int min;       ///< minutes [0, 59]
-			unsigned int hour;      ///< hours [0, 23]
-			unsigned int day;       ///< day of month [1, 31]
-			unsigned int month;     ///< month [1, 12]
-			unsigned int year;      ///< year [since 1900]
+			unsigned int sec;                   ///< seconds [0, 60]
+			unsigned int min;                   ///< minutes [0, 59]
+			unsigned int hour;                  ///< hours [0, 23]
+			unsigned int day;                   ///< day of month [1, 31]
+			unsigned int month;                 ///< month [1, 12]
+			unsigned int year;                  ///< year [since 1900]
 
-			bool daylight;          ///< daylight saving flag; true by default
+			bool daylight;                      ///< daylight saving flag; true by default
 		};
 
 		/**

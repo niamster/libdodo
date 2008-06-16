@@ -56,7 +56,7 @@ namespace dodo
 		enum sqliteHintEnum
 		{
 			SQLITE_HINT_NONE = 0,
-			SQLITE_HINT_BLOB = 2, ///< insert|update using BLOB values
+			SQLITE_HINT_BLOB = 2,             ///< insert|update using BLOB values
 		};
 
 		class sqlite;
@@ -147,7 +147,7 @@ namespace dodo
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
-				unsigned short hint; ///< DB hint[see sqliteHintEnum]
+				unsigned short hint;                 ///< DB hint[see sqliteHintEnum]
 
 				/**
 				 * set BLOB data for the request
@@ -179,12 +179,12 @@ namespace dodo
 
 			private:
 
-				sqlite3 *sqliteHandle;                  ///< DB handle
-				sqlite3_stmt *sqliteResult;             ///< handlde to result
+				sqlite3 *sqliteHandle;                                  ///< DB handle
+				sqlite3_stmt *sqliteResult;                             ///< handlde to result
 
-				bool empty;                             ///< true if liteStmt is empty
+				bool empty;                                             ///< true if liteStmt is empty
 
-				dodoStringArray blobs;                  ///< blob data
+				dodoStringArray blobs;                                  ///< blob data
 		};
 	};
 };

@@ -100,7 +100,7 @@ namespace dodo
 
 		protected:
 
-			void *handle;    ///< handle to library
+			void *handle;                ///< handle to library
 	};
 };
 

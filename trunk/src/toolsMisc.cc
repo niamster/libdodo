@@ -52,9 +52,9 @@ using namespace dodo::tools;
 //-------------------------------------------------------------------
 
 static unsigned char PADDING[] = {
-	0x80, 0,    0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,    0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0,    0,    0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0,    0,        0, 0, 0, 0, 0
+	0x80, 0,	0,    0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0, 0, 0, 0, 0, 0, 0, 0,
+	0,    0,	0,    0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0,	0,        0, 0, 0, 0
 };
 
 /**
@@ -83,38 +83,38 @@ static unsigned char PADDING[] = {
  * FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
  * Rotation is separate from addition to prevent recomputation.
  */
-#define FF(a, b, c, d, x, s, ac)				    \
-	{							    \
-		(a) += F((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));			    \
-		(a) += (b);					    \
+#define FF(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += F((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
 
-#define GG(a, b, c, d, x, s, ac)				    \
-	{							    \
-		(a) += G((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));			    \
-		(a) += (b);					    \
+#define GG(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += G((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
 
-#define HH(a, b, c, d, x, s, ac)				    \
-	{							    \
-		(a) += H((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));			    \
-		(a) += (b);					    \
+#define HH(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += H((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
 
-#define II(a, b, c, d, x, s, ac)				    \
-	{							    \
-		(a) += I((b), (c), (d)) + (x) + (unsigned int)(ac); \
-		(a) = ROTATE_LEFT((a), (s));			    \
-		(a) += (b);					    \
+#define II(a, b, c, d, x, s, ac)							\
+	{														\
+		(a) += I((b), (c), (d)) + (x) + (unsigned int)(ac);	\
+		(a) = ROTATE_LEFT((a), (s));						\
+		(a) += (b);											\
 	}
 
 //-------------------------------------------------------------------
@@ -156,8 +156,8 @@ misc::dummyTools(const dodoString &data)
 
 void
 misc::random(void *data,
-	     unsigned long size,
-	     short strength)
+			 unsigned long size,
+			 short strength)
 {
 	FILE *file;
 
@@ -204,7 +204,7 @@ misc::random(void *data,
 
 dodoString
 misc::stringRandom(unsigned long size,
-		   short strength)
+				   short strength)
 {
 	char *data = new char[size + 1];
 	try
@@ -339,8 +339,8 @@ misc::dRandom(short strength)
 
 bool
 misc::isInArray(const dodoStringArray &arr,
-		const dodoString &needle,
-		bool icase)
+				const dodoString &needle,
+				bool icase)
 {
 	bool (*cmpFunc)(const dodoString &, const dodoString &);
 
@@ -361,9 +361,9 @@ misc::isInArray(const dodoStringArray &arr,
 
 dodo::dodoStringArray
 misc::explode(const dodoString &fields,
-	      escape escapeF,
-	      const dodoString &separator,
-	      int limit)
+			  escape escapeF,
+			  const dodoString &separator,
+			  int limit)
 {
 	unsigned long i(0), j(0), sep_size(separator.size());
 	int k(1);
@@ -398,8 +398,8 @@ misc::explode(const dodoString &fields,
 
 dodo::dodoStringArray
 misc::explode(const dodoString &fields,
-	      const dodoString &separator,
-	      int limit)
+			  const dodoString &separator,
+			  int limit)
 {
 	return explode(fields, &dummyTools, separator, limit);
 }
@@ -408,10 +408,10 @@ misc::explode(const dodoString &fields,
 
 dodoString
 misc::implode(const dodoStringArray &fields,
-	      escape escapeF,
-	      const dodoString &separator,
-	      const dodoString &frame,
-	      int limit)
+			  escape escapeF,
+			  const dodoString &separator,
+			  const dodoString &frame,
+			  int limit)
 {
 	if (fields.size() == 0)
 		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
@@ -443,9 +443,9 @@ misc::implode(const dodoStringArray &fields,
 
 dodoString
 misc::implode(const dodoStringArray &fields,
-	      const dodoString &separator,
-	      const dodoString &frame,
-	      int limit)
+			  const dodoString &separator,
+			  const dodoString &frame,
+			  int limit)
 {
 	return implode(fields, &dummyTools, separator, frame, limit);
 }
@@ -454,8 +454,8 @@ misc::implode(const dodoStringArray &fields,
 
 dodoString
 misc::implode(const dodoStringArray &fields,
-	      const dodoString &separator,
-	      int limit)
+			  const dodoString &separator,
+			  int limit)
 {
 	return implode(fields, &dummyTools, separator, limit);
 }
@@ -464,9 +464,9 @@ misc::implode(const dodoStringArray &fields,
 
 dodoString
 misc::implode(const dodoStringArray &fields,
-	      escape escapeF,
-	      const dodoString &separator,
-	      int limit)
+			  escape escapeF,
+			  const dodoString &separator,
+			  int limit)
 {
 	if (fields.size() == 0)
 		throw baseEx(ERRMODULE_TOOLSMISC, MISCEX_IMPLODE, ERR_LIBDODO, MISCEX_EMPTYARRAY, TOOLSMISCEX_EMPTYARRAY_STR, __LINE__, __FILE__);
@@ -500,8 +500,8 @@ misc::implode(const dodoStringArray &fields,
 
 dodoString
 misc::codesetConversion(const dodoString &buffer,
-			const dodoString &toCode,
-			const dodoString &fromCode)
+						const dodoString &toCode,
+						const dodoString &fromCode)
 {
 	iconv_t conv = iconv_open(toCode.c_str(), fromCode.c_str());
 	if (conv == (iconv_t)(-1))
@@ -544,8 +544,8 @@ misc::codesetConversion(const dodoString &buffer,
 
 dodoString
 misc::zCompress(const dodoString &buffer,
-		unsigned short level,
-		short type)
+				unsigned short level,
+				short type)
 {
 	z_stream strm;
 	int ret;
@@ -642,7 +642,7 @@ misc::zDecompress(const dodoString &buffer)
 
 char
 misc::hexToChar(char first,
-		char second)
+				char second)
 {
 	int val = 0;
 
@@ -703,7 +703,7 @@ misc::hexToChar(char first,
 
 void
 misc::charToHex(char result[3],
-		char first)
+				char first)
 {
 	unsigned char j;
 
@@ -867,8 +867,8 @@ misc::encodeUrl(const dodoString &string)
 
 void
 misc::_encodeASCII85(dodoString &result,
-		     unsigned long tuple,
-		     int count)
+					 unsigned long tuple,
+					 int count)
 {
 	short int i(5);
 	char buf[5], *s = buf;
@@ -949,8 +949,8 @@ misc::encodeASCII85(const dodoString &string)
 
 void
 misc::_decodeASCII85(dodoString &result,
-		     unsigned long tuple,
-		     int count)
+					 unsigned long tuple,
+					 int count)
 {
 	switch (count)
 	{
@@ -1077,8 +1077,8 @@ misc::decodeASCII85(const dodoString &string)
 
 void
 misc::_encodeBase64(unsigned char in[3],
-		    unsigned char out[4],
-		    int len)
+					unsigned char out[4],
+					int len)
 {
 	out[0] = base64EncodeTr[in[0] >> 2];
 	out[1] = base64EncodeTr[((in[0] & 0x03) << 4) | ((in[1] & 0xf0) >> 4)];
@@ -1126,7 +1126,7 @@ misc::encodeBase64(const dodoString &string)
 
 void
 misc::_decodeBase64(unsigned char in[4],
-		    unsigned char out[3])
+					unsigned char out[3])
 {
 	out[0] = (unsigned char )(in[0] << 2 | in[1] >> 4);
 	out[1] = (unsigned char )(in[1] << 4 | in[2] >> 2);
@@ -1296,8 +1296,8 @@ misc::makeUrl(const __url &url)
 
 dodoString
 misc::bzCompress(const dodoString &buffer,
-		 unsigned short level,
-		 unsigned short type)
+				 unsigned short level,
+				 unsigned short type)
 {
 	unsigned int len = buffer.size();
 	char *dst = new char[len + 1];
@@ -1375,10 +1375,10 @@ misc::bzDecompress(const dodoString &buffer)
 
 void
 misc::mail(const dodoString &to,
-	   const dodoString &subject,
-	   const dodoString &message,
-	   const dodoString &headers,
-	   const dodoString &path)
+		   const dodoString &subject,
+		   const dodoString &message,
+		   const dodoString &headers,
+		   const dodoString &path)
 {
 	FILE *sendmail = popen((path + " " + to).c_str(), "w");
 
@@ -1412,7 +1412,7 @@ misc::MD5Init(MD5_CTX *context)
 
 void
 misc::MD5Transform(unsigned int state[4],
-		   unsigned char block[64])
+				   unsigned char block[64])
 {
 	unsigned int a = state[0], b = state[1], c = state[2], d = state[3], x[16];
 
@@ -1497,7 +1497,7 @@ misc::MD5Transform(unsigned int state[4],
 
 void
 misc::MD5Final(unsigned char digest[16],
-	       MD5_CTX       *context)
+			   MD5_CTX       *context)
 {
 	unsigned char bits[8];
 	unsigned int index, padLen;
@@ -1533,8 +1533,8 @@ misc::MD5Final(unsigned char digest[16],
 
 void
 misc::MD5Update(MD5_CTX       *context,
-		unsigned char *input,
-		unsigned int inputLen)
+				unsigned char *input,
+				unsigned int inputLen)
 {
 	unsigned int i, index, partLen;
 
@@ -1609,14 +1609,14 @@ misc::binToHex(const dodoString &string)
 
 void
 misc::mail(const dodoString &host,
-	   int port,
-	   const dodoString &to,
-	   const dodoString &from,
-	   const dodoString &subject,
-	   const dodoString &message,
-	   const dodoString &login,
-	   const dodoString &pass,
-	   const dodoString &headers)
+		   int port,
+		   const dodoString &to,
+		   const dodoString &from,
+		   const dodoString &subject,
+		   const dodoString &message,
+		   const dodoString &login,
+		   const dodoString &pass,
+		   const dodoString &headers)
 {
 	using namespace io::network;
 

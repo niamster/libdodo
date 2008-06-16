@@ -41,7 +41,7 @@ server::~server()
 
 response
 server::rpcDefaultHandler(const dodoString &method,
-			  const dodoArray<value> &arguments)
+						  const dodoArray<value> &arguments)
 {
 	response response;
 	response.fault(dodoString("rpcDefaultHandler"));
@@ -61,7 +61,7 @@ server::setDefault(handler handler)
 
 void
 server::setHandler(const dodoString &method,
-		   handler handler)
+				   handler handler)
 {
 	handlers.insert(make_pair(method, handler));
 }

@@ -87,20 +87,20 @@ __connectorField::operator=(const __connectorField &from)
 //-------------------------------------------------------------------
 
 __xexexDbAccumulatorCollectedData::__xexexDbAccumulatorCollectedData(int &a_operType,
-								     void *a_executor) : operType(a_operType),
-											 executor(a_executor)
+																	 void *a_executor) : operType(a_operType),
+																						 executor(a_executor)
 {
 }
 
 //-------------------------------------------------------------------
 
 accumulator::accumulator() : show(false),
-			     qDbDepSelShift(ACCUMULATOR_NONE),
-			     qDbDepInsShift(ACCUMULATOR_NONE),
-			     qDbDepUpShift(ACCUMULATOR_NONE),
-			     qDbDepDelShift(ACCUMULATOR_NONE),
-			     collectedData(operType,
-					   (void *) this)
+							 qDbDepSelShift(ACCUMULATOR_NONE),
+							 qDbDepInsShift(ACCUMULATOR_NONE),
+							 qDbDepUpShift(ACCUMULATOR_NONE),
+							 qDbDepDelShift(ACCUMULATOR_NONE),
+							 collectedData(operType,
+										   (void *) this)
 {
 	collectedData.qType = -1;
 	collectedData.qShift = ACCUMULATOR_NONE;
@@ -120,8 +120,8 @@ accumulator::~accumulator()
 
 void
 accumulator::callFunction(const dodoString &name,
-			  const dodoStringArray &arguments,
-			  const dodoString &as)
+						  const dodoStringArray &arguments,
+						  const dodoString &as)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CALL_FUNCTION;
 
@@ -141,7 +141,7 @@ accumulator::callFunction(const dodoString &name,
 
 void
 accumulator::callProcedure(const dodoString &name,
-			   const dodoStringArray &arguments)
+						   const dodoStringArray &arguments)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
 
@@ -155,8 +155,8 @@ accumulator::callProcedure(const dodoString &name,
 
 void
 accumulator::select(const dodoString &a_table,
-		    const dodoStringArray &a_fields,
-		    const dodoString &a_where)
+					const dodoStringArray &a_fields,
+					const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_SELECT;
 
@@ -176,7 +176,7 @@ accumulator::select(const dodoString &a_table,
 
 void
 accumulator::selectAll(const dodoString &a_table,
-		       const dodoString &a_where)
+					   const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_SELECT;
 
@@ -196,7 +196,7 @@ accumulator::selectAll(const dodoString &a_table,
 
 void
 accumulator::insert(const dodoString &a_table,
-		    const dodoStringMap &a_fields)
+					const dodoStringMap &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -222,7 +222,7 @@ accumulator::insert(const dodoString &a_table,
 
 void
 accumulator::insert(const dodoString &a_table,
-		    const dodoArray<dodoStringMap> &a_fields)
+					const dodoArray<dodoStringMap> &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -257,8 +257,8 @@ accumulator::insert(const dodoString &a_table,
 
 void
 accumulator::insert(const dodoString &a_table,
-		    const dodoStringArray &a_values,
-		    const dodoStringArray &a_fields)
+					const dodoStringArray &a_values,
+					const dodoStringArray &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -276,8 +276,8 @@ accumulator::insert(const dodoString &a_table,
 
 void
 accumulator::insert(const dodoString &a_table,
-		    const dodoArray<dodoStringArray> &a_values,
-		    const dodoStringArray &a_fields)
+					const dodoArray<dodoStringArray> &a_values,
+					const dodoStringArray &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
 
@@ -296,10 +296,10 @@ accumulator::insert(const dodoString &a_table,
 
 void
 accumulator::insertSelect(const dodoString &a_tableTo,
-			  const dodoString &a_tableFrom,
-			  const dodoStringArray &a_fieldsTo,
-			  const dodoStringArray &a_fieldsFrom,
-			  const dodoString &a_where)
+						  const dodoString &a_tableFrom,
+						  const dodoStringArray &a_fieldsTo,
+						  const dodoStringArray &a_fieldsFrom,
+						  const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT_SELECT;
 
@@ -324,8 +324,8 @@ accumulator::insertSelect(const dodoString &a_tableTo,
 
 void
 accumulator::update(const dodoString &a_table,
-		    const dodoStringMap &a_fields,
-		    const dodoString &a_where)
+					const dodoStringMap &a_fields,
+					const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
 
@@ -358,9 +358,9 @@ accumulator::update(const dodoString &a_table,
 
 void
 accumulator::update(const dodoString &a_table,
-		    const dodoStringArray &a_values,
-		    const dodoStringArray &a_fields,
-		    const dodoString &a_where)
+					const dodoStringArray &a_values,
+					const dodoStringArray &a_fields,
+					const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
 
@@ -384,7 +384,7 @@ accumulator::update(const dodoString &a_table,
 
 void
 accumulator::del(const dodoString &a_table,
-		 const dodoString &a_where)
+				 const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_DELETE;
 
@@ -403,7 +403,7 @@ accumulator::del(const dodoString &a_table,
 
 void
 accumulator::subquery(const dodoStringArray &sub,
-		      int type)
+					  int type)
 {
 	collectedData.qType = type;
 
@@ -425,7 +425,7 @@ accumulator::truncate(const dodoString &table)
 
 void
 accumulator::renameDb(const dodoString &db,
-		      const dodoString &to_db)
+					  const dodoString &to_db)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_DB;
 
@@ -438,7 +438,7 @@ accumulator::renameDb(const dodoString &db,
 
 void
 accumulator::renameTable(const dodoString &table,
-			 const dodoString &to_table)
+						 const dodoString &to_table)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_TABLE;
 
@@ -451,8 +451,8 @@ accumulator::renameTable(const dodoString &table,
 
 void
 accumulator::createIndex(const dodoString &table,
-			 const dodoString &field,
-			 const dodoString &name)
+						 const dodoString &field,
+						 const dodoString &name)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
 
@@ -466,8 +466,8 @@ accumulator::createIndex(const dodoString &table,
 
 void
 accumulator::createIndex(const dodoString &table,
-			 const dodoStringArray &fields,
-			 const dodoString &name)
+						 const dodoStringArray &fields,
+						 const dodoString &name)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_INDEX;
 
@@ -481,7 +481,7 @@ accumulator::createIndex(const dodoString &table,
 
 void
 accumulator::deleteIndex(const dodoString &table,
-			 const dodoString &field)
+						 const dodoString &field)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_DELETE_INDEX;
 
@@ -494,8 +494,8 @@ accumulator::deleteIndex(const dodoString &table,
 
 void
 accumulator::renameField(const dodoString &field,
-			 const dodoString &to_field,
-			 const dodoString &table)
+						 const dodoString &to_field,
+						 const dodoString &table)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
 
@@ -531,7 +531,7 @@ accumulator::deleteTable(const dodoString &table)
 
 void
 accumulator::deleteField(const dodoString &field,
-			 const dodoString &table)
+						 const dodoString &table)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_DELETE_FIELD;
 
@@ -544,7 +544,7 @@ accumulator::deleteField(const dodoString &field,
 
 void
 accumulator::createDb(const dodoString &db,
-		      const dodoString &charset)
+					  const dodoString &charset)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_DB;
 
@@ -568,7 +568,7 @@ accumulator::createTable(const __connectorTable &tableInfo)
 
 void
 accumulator::createField(const __connectorField &row,
-			 const dodoString &table)
+						 const dodoString &table)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CREATE_FIELD;
 
@@ -640,8 +640,8 @@ accumulator::having(const dodoString &having)
 
 void
 accumulator::join(const dodoString &table,
-		  int type,
-		  const dodoString &condition)
+				  int type,
+				  const dodoString &condition)
 {
 	collectedData.joinTables.push_back(table);
 	collectedData.joinConds.push_back(condition);
@@ -832,11 +832,11 @@ accumulator::cleanCollected()
 
 void
 accumulator::setDbInfo(const dodoString &db,
-		       const dodoString &host,
-		       unsigned int port,
-		       const dodoString &user,
-		       const dodoString &password,
-		       const dodoString &path)
+					   const dodoString &host,
+					   unsigned int port,
+					   const dodoString &user,
+					   const dodoString &password,
+					   const dodoString &path)
 {
 	collectedData.dbInfo.port = port;
 	collectedData.dbInfo.db = db;

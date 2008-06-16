@@ -122,13 +122,13 @@ namespace dodo
 			 */
 			void compile(const dodoString &pattern);
 
-			bool extended;  ///< if true use extended regext support[true by default]
+			bool extended;              ///< if true use extended regext support[true by default]
 
-			bool icase;     ///< if true ignore case[false by default]
+			bool icase;                 ///< if true ignore case[false by default]
 
-			bool greedy;    ///< if true REGEXPs are greedy[true by default]
+			bool greedy;                ///< if true REGEXPs are greedy[true by default]
 
-			bool multiline; ///< if true match strings are treated as multiline[false by default]
+			bool multiline;             ///< if true match strings are treated as multiline[false by default]
 
 		protected:
 
@@ -151,13 +151,13 @@ namespace dodo
 		private:
 
 #ifdef PCRE_EXT
-			pcre * code;            ///< compiled pattern
+			pcre * code;                        ///< compiled pattern
 #else
-			regex_t code;           ///< compiled pattern
-			bool notCompiled;       ///< true if not compiled
+			regex_t code;                       ///< compiled pattern
+			bool notCompiled;                   ///< true if not compiled
 #endif
 
-			dodoArray<__regexMatch> boundaries; ///< list of boundaries matched in match string by pattern
+			dodoArray<__regexMatch> boundaries;             ///< list of boundaries matched in match string by pattern
 	};
 
 };

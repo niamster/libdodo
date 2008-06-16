@@ -133,7 +133,7 @@ collection::~collection()
 
 unsigned long
 collection::add(job::routine func,
-		void    *data)
+				void    *data)
 {
 	return add(func, data, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
@@ -142,10 +142,10 @@ collection::add(job::routine func,
 
 unsigned long
 collection::add(job::routine func,
-		void       *data,
-		bool detached,
-		short action,
-		int stackSize)
+				void       *data,
+				bool detached,
+				short action,
+				int stackSize)
 {
 	__threadInfo thread;
 
@@ -186,7 +186,7 @@ collection::getThread(unsigned long position) const
 
 void
 collection::del(unsigned long position,
-		bool force)
+				bool force)
 {
 	if (getThread(position))
 	{
@@ -234,12 +234,12 @@ collection::del(unsigned long position,
 
 void
 collection::replace(unsigned long position,
-		    job::routine func,
-		    void          *data,
-		    bool force,
-		    bool detached,
-		    short action,
-		    int stackSize)
+					job::routine func,
+					void          *data,
+					bool force,
+					bool detached,
+					short action,
+					int stackSize)
 {
 	if (getThread(position))
 	{
@@ -295,7 +295,7 @@ collection::replace(unsigned long position,
 
 void
 collection::run(unsigned long position,
-		bool force)
+				bool force)
 {
 	if (getThread(position))
 	{
@@ -500,7 +500,7 @@ collection::sweepTrash()
 
 void
 collection::setExecutionLimit(unsigned long position,
-			      unsigned long limit)
+							  unsigned long limit)
 {
 	if (getThread(position))
 		current->executeLimit = limit;
@@ -529,7 +529,7 @@ collection::running() const
 
 __threadMod
 collection::getModuleInfo(const dodoString &module,
-			  void             *toInit)
+						  void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -557,8 +557,8 @@ collection::getModuleInfo(const dodoString &module,
 
 unsigned long
 collection::add(const dodoString &module,
-		void             *data,
-		void             *toInit)
+				void             *data,
+				void             *toInit)
 {
 	__threadInfo thread;
 
@@ -600,7 +600,7 @@ collection::add(const dodoString &module,
 
 void
 collection::blockSignal(int signals,
-			bool block)
+						bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);
@@ -621,7 +621,7 @@ collection::blockSignal(int signals,
 
 unsigned long
 collection::addNRun(job::routine func,
-		    void    *data)
+					void    *data)
 {
 	return addNRun(func, data, 1, false, COLLECTION_ONDESTRUCT_WAIT, 2097152);
 }
@@ -630,11 +630,11 @@ collection::addNRun(job::routine func,
 
 unsigned long
 collection::addNRun(job::routine func,
-		    void          *data,
-		    unsigned long limit,
-		    bool detached,
-		    short action,
-		    int stackSize)
+					void          *data,
+					unsigned long limit,
+					bool detached,
+					short action,
+					int stackSize)
 {
 	__threadInfo thread;
 

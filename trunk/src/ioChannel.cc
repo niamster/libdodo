@@ -26,8 +26,8 @@
 using namespace dodo::io;
 
 channel::channel() : inSize(IO_INSIZE),
-		     outSize(IO_OUTSIZE),
-		     opened(false)
+					 outSize(IO_OUTSIZE),
+					 opened(false)
 {
 }
 

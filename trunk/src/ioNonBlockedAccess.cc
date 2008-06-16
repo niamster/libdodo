@@ -65,7 +65,7 @@ nonBlockedAccess::addFlush(const nonBlockedAccessInfo &fl)
 
 dodoArray<bool>
 nonBlockedAccess::isReadable(const dodoArray<int> &pos,
-			     int timeout) const
+							 int timeout) const
 {
 	raceHazardGuard pg(this);
 
@@ -143,7 +143,7 @@ nonBlockedAccess::isReadable(const dodoArray<int> &pos,
 
 dodoArray<bool>
 nonBlockedAccess::isWritable(const dodoArray<int> &pos,
-			     int timeout) const
+							 int timeout) const
 {
 	raceHazardGuard pg(this);
 
@@ -221,7 +221,7 @@ nonBlockedAccess::isWritable(const dodoArray<int> &pos,
 
 bool
 nonBlockedAccess::isReadable(int pos,
-			     int timeout) const
+							 int timeout) const
 {
 	raceHazardGuard pg(this);
 
@@ -276,7 +276,7 @@ nonBlockedAccess::delFlush(int pos)
 
 bool
 nonBlockedAccess::isWritable(int pos,
-			     int timeout) const
+							 int timeout) const
 {
 	raceHazardGuard pg(this);
 

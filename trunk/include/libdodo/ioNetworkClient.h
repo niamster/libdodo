@@ -75,11 +75,11 @@ namespace dodo
 				 * constructor
 				 */
 				__xexexIoNetworkClientCollectedData(int &operType,
-								    void *executor);
+													void *executor);
 
-				int &operType;                  ///< xexec operation
+				int &operType;                                  ///< xexec operation
 
-				void *executor;                 ///< class that executed hook
+				void *executor;                                 ///< class that executed hook
 			};
 
 #endif
@@ -89,8 +89,8 @@ namespace dodo
 			 */
 			class client : public options
 #ifndef IONETWORKCLIENT_WO_XEXEC
-				       ,
-				       public xexec
+						   ,
+						   public xexec
 #endif
 			{
 				friend class exchange;
@@ -156,12 +156,12 @@ namespace dodo
 					 */
 					virtual void connect(const dodoString &path, exchange &exchange);
 
-					bool blockInherited; ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
+					bool blockInherited;                     ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
 
 				protected:
 
-					short family;                   ///< socket family
-					short type;                     ///< socket type
+					short family;                                       ///< socket family
+					short type;                                         ///< socket type
 
 					/**
 					 * restore options on connect/bind
@@ -173,11 +173,11 @@ namespace dodo
 					 */
 					virtual void makeSocket();
 
-					dodoString unixSock;    ///< path to unix socket
+					dodoString unixSock;                        ///< path to unix socket
 
 #ifndef IONETWORKCLIENT_WO_XEXEC
 
-					__xexexIoNetworkClientCollectedData collectedData;   ///< data collected for xexec
+					__xexexIoNetworkClientCollectedData collectedData;                       ///< data collected for xexec
 
 #endif
 			};

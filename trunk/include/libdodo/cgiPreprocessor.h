@@ -68,7 +68,7 @@ namespace dodo
 				 */
 				virtual dodoString preProcessString(const dodoString &buffer);
 
-				dodoString tplBasePath; ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
+				dodoString tplBasePath;                 ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
 
 			protected:
 
@@ -92,7 +92,7 @@ namespace dodo
 				 */
 				virtual dodoArray<unsigned long> detectNewLines(const dodoString &buffer);
 
-				dodoArray< dodoArray<unsigned long> > newLinePositions; ///< stack of positions of new lines of templates
+				dodoArray< dodoArray<unsigned long> > newLinePositions;                 ///< stack of positions of new lines of templates
 
 #define PREPROCESSOR_STATEMENTS 30
 
@@ -134,7 +134,7 @@ namespace dodo
 					PREPROCESSOR_STATEMENT_CLOSE_VARPART,
 				};
 
-				static const dodoString statements[PREPROCESSOR_STATEMENTS]; ///< processor statements[for dodo.*, ...]
+				static const dodoString statements[PREPROCESSOR_STATEMENTS];                 ///< processor statements[for dodo.*, ...]
 		};
 	};
 };

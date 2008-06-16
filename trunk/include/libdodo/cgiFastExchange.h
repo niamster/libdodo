@@ -70,11 +70,11 @@ namespace dodo
 				 */
 				__xexexCgiFastExchangeCollectedData(int &operType, void *executor);
 
-				dodoString buffer;              ///< data buffer
+				dodoString buffer;                              ///< data buffer
 
-				int &operType;                  ///< xexec operation
+				int &operType;                                  ///< xexec operation
 
-				void *executor;                 ///< class that executed hook
+				void *executor;                                 ///< class that executed hook
 			};
 
 #endif
@@ -83,7 +83,7 @@ namespace dodo
 			 * @class exchange provides interface to fast CGI I/O functionality
 			 */
 			class exchange : public io::channel,
-					 virtual public ipc::thread::guardHolder
+							 virtual public ipc::thread::guardHolder
 			{
 				private:
 
@@ -193,11 +193,11 @@ namespace dodo
 
 				private:
 
-					FCGX_Request *request;    ///< fast CGI descriptor
+					FCGX_Request *request;                        ///< fast CGI descriptor
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
-					__xexexCgiFastExchangeCollectedData collectedData;      ///< data collected for xexec
+					__xexexCgiFastExchangeCollectedData collectedData;                          ///< data collected for xexec
 
 #endif
 			};

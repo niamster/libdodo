@@ -54,7 +54,7 @@ namespace dodo
 					 */
 					virtual ~guardHolder();
 
-					char key[32]; ///< key for the semaphore
+					char key[32];                     ///< key for the semaphore
 			};
 		};
 	};

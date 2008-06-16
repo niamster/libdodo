@@ -117,8 +117,8 @@ namespace dodo
 				 */
 				virtual dodoString receiveTextResponse() = 0;
 
-				dodoMap<dodoString, handler, dodoMapStringCompare> handlers;    ///< method handlers
-				handler defaultHandler;                                         ///< default handler
+				dodoMap<dodoString, handler, dodoMapStringCompare> handlers;                    ///< method handlers
+				handler defaultHandler;                                                         ///< default handler
 		};
 	};
 };

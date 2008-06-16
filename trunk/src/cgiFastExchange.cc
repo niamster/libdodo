@@ -30,8 +30,8 @@ using namespace dodo::cgi::fast;
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
 __xexexCgiFastExchangeCollectedData::__xexexCgiFastExchangeCollectedData(int &a_operType,
-									 void *a_executor) : operType(a_operType),
-											     executor(a_executor)
+																		 void *a_executor) : operType(a_operType),
+																							 executor(a_executor)
 {
 }
 
@@ -44,7 +44,7 @@ exchange::exchange(exchange &cf)
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 
@@ -57,9 +57,9 @@ exchange::exchange(FCGX_Request *a_request) : request(a_request)
 
 #ifndef CGIFASTEXCHANGE_WO_XEXEC
 
-					      ,
-					      collectedData(operType,
-							    (void *) this)
+											  ,
+											  collectedData(operType,
+															(void *) this)
 
 #endif
 

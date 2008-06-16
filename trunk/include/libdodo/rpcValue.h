@@ -220,14 +220,14 @@ namespace dodo
 
 			protected:
 
-				short valueDataType;                                            ///< argument type[see dataTypeEnum]
+				short valueDataType;                                                            ///< argument type[see dataTypeEnum]
 
-				dodoString stringValue;                                         ///< string, datetime, base64 value
-				long integerValue;                                              ///< integer value
-				bool booleanValue;                                              ///< boolean value
-				double doubleValue;                                             ///< double value
-				dodoArray<value> arrayValue;                                    ///< array value
-				dodoMap<dodoString, value, dodoMapStringCompare> structValue;   ///< struct value
+				dodoString stringValue;                                                         ///< string, datetime, base64 value
+				long integerValue;                                                              ///< integer value
+				bool booleanValue;                                                              ///< boolean value
+				double doubleValue;                                                             ///< double value
+				dodoArray<value> arrayValue;                                                    ///< array value
+				dodoMap<dodoString, value, dodoMapStringCompare> structValue;                   ///< struct value
 		};
 	};
 };

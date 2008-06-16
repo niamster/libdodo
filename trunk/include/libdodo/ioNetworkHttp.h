@@ -51,18 +51,18 @@ namespace dodo
 			 */
 			enum httpRequestHeaderEnum
 			{
-				HTTP_REQUESTHEADER_ACCEPT,              ///< content-types that are acceptable
-				HTTP_REQUESTHEADER_ACCEPTCHARSET,       ///< character sets that are acceptable
-				HTTP_REQUESTHEADER_ACCEPTENCODING,      ///< acceptable encodings
-				HTTP_REQUESTHEADER_ACCEPTLANGUAGE,      ///< acceptable languages for response
-				HTTP_REQUESTHEADER_ACCEPTRANGES,        ///< allows the server to indicate its acceptance of range requests for a resource
-				HTTP_REQUESTHEADER_AUTHORIZATION,       ///< authentication credentials for HTTP authentication
-				HTTP_REQUESTHEADER_PROXYAUTHORIZATION,  ///< authentication credentials for HTTP proxy authentication
-				HTTP_REQUESTHEADER_CONNECTION,          ///< what type of connection the user-agent would prefer
-				HTTP_REQUESTHEADER_DATE,                ///< the date and time that the message was sent
-				HTTP_REQUESTHEADER_IFMODIFIEDSINCE,     ///< allows a 304 Not Modified to be returned
-				HTTP_REQUESTHEADER_USERAGENT,           ///< the user agent string of the user agent
-				HTTP_REQUESTHEADER_COOKIE,              ///< the user agent string of the user agent
+				HTTP_REQUESTHEADER_ACCEPT,                              ///< content-types that are acceptable
+				HTTP_REQUESTHEADER_ACCEPTCHARSET,                       ///< character sets that are acceptable
+				HTTP_REQUESTHEADER_ACCEPTENCODING,                      ///< acceptable encodings
+				HTTP_REQUESTHEADER_ACCEPTLANGUAGE,                      ///< acceptable languages for response
+				HTTP_REQUESTHEADER_ACCEPTRANGES,                        ///< allows the server to indicate its acceptance of range requests for a resource
+				HTTP_REQUESTHEADER_AUTHORIZATION,                       ///< authentication credentials for HTTP authentication
+				HTTP_REQUESTHEADER_PROXYAUTHORIZATION,                  ///< authentication credentials for HTTP proxy authentication
+				HTTP_REQUESTHEADER_CONNECTION,                          ///< what type of connection the user-agent would prefer
+				HTTP_REQUESTHEADER_DATE,                                ///< the date and time that the message was sent
+				HTTP_REQUESTHEADER_IFMODIFIEDSINCE,                     ///< allows a 304 Not Modified to be returned
+				HTTP_REQUESTHEADER_USERAGENT,                           ///< the user agent string of the user agent
+				HTTP_REQUESTHEADER_COOKIE,                              ///< the user agent string of the user agent
 			};
 
 #define HTTP_RESPONSEHEADERSTATEMENTS 19
@@ -72,25 +72,25 @@ namespace dodo
 			 */
 			enum httpResponseHeaderEnum
 			{
-				HTTP_RESPONSEHEADER_ACCEPTRANGES,       ///< what partial content range types this server supports
-				HTTP_RESPONSEHEADER_AGE,                ///< the age the object has been in a proxy cache in seconds
-				HTTP_RESPONSEHEADER_ALLOW,              ///< valid actions for a specified resource. To be used for a 405 Method not allowed
-				HTTP_RESPONSEHEADER_CACHECONTROL,       ///< tells all caching mechanisms from server to client whether they may cache this object
-				HTTP_RESPONSEHEADER_CONTENTENCODING,    ///< the type of encoding used on the data
-				HTTP_RESPONSEHEADER_CONTENTLANGUAGE,    ///< the language the content is in
-				HTTP_RESPONSEHEADER_CONTENTLENGTH,      ///< the length of the content in bytes
-				HTTP_RESPONSEHEADER_CONTENTLOCATION,    ///< an alternate location for the returned data
-				HTTP_RESPONSEHEADER_CONTENTDISPOSITION, ///< an opportunity to raise a "File Download" dialog box for a known MIME type
-				HTTP_RESPONSEHEADER_CONTENTMD5,         ///< an MD5 sum of the content of the response
-				HTTP_RESPONSEHEADER_CONTENTRANGE,       ///< where in a full body message this partial message belongs
-				HTTP_RESPONSEHEADER_CONTENTTYPE,        ///< the mime type of this content
-				HTTP_RESPONSEHEADER_DATE,               ///< the date and time that the message was sent
-				HTTP_RESPONSEHEADER_LASTMODIFIED,       ///< the last modified date for the requested object
-				HTTP_RESPONSEHEADER_LOCATION,           ///< used in redirection
-				HTTP_RESPONSEHEADER_SERVER,             ///< a name for the server
-				HTTP_RESPONSEHEADER_WWWAUTHENTICATE,    ///< authentication request
-				HTTP_RESPONSEHEADER_PROXYAUTHENTICATE,  ///< proxy authentication request
-				HTTP_RESPONSEHEADER_XPOWEREDBY,         ///< cgi provider
+				HTTP_RESPONSEHEADER_ACCEPTRANGES,                       ///< what partial content range types this server supports
+				HTTP_RESPONSEHEADER_AGE,                                ///< the age the object has been in a proxy cache in seconds
+				HTTP_RESPONSEHEADER_ALLOW,                              ///< valid actions for a specified resource. To be used for a 405 Method not allowed
+				HTTP_RESPONSEHEADER_CACHECONTROL,                       ///< tells all caching mechanisms from server to client whether they may cache this object
+				HTTP_RESPONSEHEADER_CONTENTENCODING,                    ///< the type of encoding used on the data
+				HTTP_RESPONSEHEADER_CONTENTLANGUAGE,                    ///< the language the content is in
+				HTTP_RESPONSEHEADER_CONTENTLENGTH,                      ///< the length of the content in bytes
+				HTTP_RESPONSEHEADER_CONTENTLOCATION,                    ///< an alternate location for the returned data
+				HTTP_RESPONSEHEADER_CONTENTDISPOSITION,                 ///< an opportunity to raise a "File Download" dialog box for a known MIME type
+				HTTP_RESPONSEHEADER_CONTENTMD5,                         ///< an MD5 sum of the content of the response
+				HTTP_RESPONSEHEADER_CONTENTRANGE,                       ///< where in a full body message this partial message belongs
+				HTTP_RESPONSEHEADER_CONTENTTYPE,                        ///< the mime type of this content
+				HTTP_RESPONSEHEADER_DATE,                               ///< the date and time that the message was sent
+				HTTP_RESPONSEHEADER_LASTMODIFIED,                       ///< the last modified date for the requested object
+				HTTP_RESPONSEHEADER_LOCATION,                           ///< used in redirection
+				HTTP_RESPONSEHEADER_SERVER,                             ///< a name for the server
+				HTTP_RESPONSEHEADER_WWWAUTHENTICATE,                    ///< authentication request
+				HTTP_RESPONSEHEADER_PROXYAUTHENTICATE,                  ///< proxy authentication request
+				HTTP_RESPONSEHEADER_XPOWEREDBY,                         ///< cgi provider
 			};
 
 			/**
@@ -103,11 +103,11 @@ namespace dodo
 				 */
 				__httpResponse();
 
-				dodoMap<short, dodoString> headers;     ///< response headers[see httpResponseHeaderEnum]
-				dodoArray<cgi::__serverCookie> cookies; ///< cookies from the server
-				dodoString data;                        ///< response data
-				short code;                             ///< response code
-				bool redirected;                        ///< true if redirection was performeed
+				dodoMap<short, dodoString> headers;                     ///< response headers[see httpResponseHeaderEnum]
+				dodoArray<cgi::__serverCookie> cookies;                 ///< cookies from the server
+				dodoString data;                                        ///< response data
+				short code;                                             ///< response code
+				bool redirected;                                        ///< true if redirection was performeed
 			};
 
 			/**
@@ -136,7 +136,7 @@ namespace dodo
 					 */
 					virtual ~http();
 
-					dodoMap<short, dodoString> requestHeaders; ///< headers that will be sent with request[see httpRequestHeaderEnum]
+					dodoMap<short, dodoString> requestHeaders;                     ///< headers that will be sent with request[see httpRequestHeaderEnum]
 
 					/**
 					 * @return server response
@@ -225,7 +225,7 @@ namespace dodo
 					 */
 					virtual void POST(const dodoStringMap &arguments, const dodoStringMap &files);
 
-					bool followRedirection; ///< if true follow the `Location` header; true by default
+					bool followRedirection;                     ///< if true follow the `Location` header; true by default
 
 				private:
 
@@ -258,15 +258,15 @@ namespace dodo
 					 */
 					virtual short getContent(dodoString &data, exchange &ex);
 
-					unsigned short authTries;                                                               ///< autherization request counter
+					unsigned short authTries;                                                                                   ///< autherization request counter
 
-					static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];          ///< HTTP request headers[see httpRequestHeaderEnum]
-					static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];        ///< HTTP response headers[see httpResponseHeaderEnum]
+					static const dodoString requestHeaderStatements[HTTP_REQUESTHEADERSTATEMENTS];                              ///< HTTP request headers[see httpRequestHeaderEnum]
+					static const dodoString responseHeaderStatements[HTTP_RESPONSEHEADERSTATEMENTS];                            ///< HTTP response headers[see httpResponseHeaderEnum]
 
-					regexp httpStatusRE;                                                                    ///< parser for HTTP response status code
+					regexp httpStatusRE;                                                                                        ///< parser for HTTP response status code
 
-					__httpResponse response;                                                                ///< HTTP response data
-					tools::__url urlComponents;                                                             ///< HTTP Url
+					__httpResponse response;                                                                                    ///< HTTP response data
+					tools::__url urlComponents;                                                                                 ///< HTTP Url
 					dodoString url;
 
 					/**
@@ -310,15 +310,15 @@ namespace dodo
 					 */
 					struct __proxyAuthInfo
 					{
-						dodoString user;        ///< user name
-						dodoString password;    ///< user password
-						dodoString host;        ///< proxy ip address
-						unsigned int port;      ///< proxy port
-						bool enabled;           ///< if true proxy settings are enabled
-						bool authRequired;      ///< if true proxy authentication is required
+						dodoString user;                                ///< user name
+						dodoString password;                            ///< user password
+						dodoString host;                                ///< proxy ip address
+						unsigned int port;                              ///< proxy port
+						bool enabled;                                   ///< if true proxy settings are enabled
+						bool authRequired;                              ///< if true proxy authentication is required
 					};
 
-					__proxyAuthInfo proxyAuthInfo; ///< proxy authentication information
+					__proxyAuthInfo proxyAuthInfo;                     ///< proxy authentication information
 			};
 		};
 	};

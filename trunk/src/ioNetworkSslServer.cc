@@ -30,8 +30,8 @@ using namespace dodo::io::network::ssl;
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 
 __xexexIoNetworkServerCollectedData::__xexexIoNetworkServerCollectedData(int &a_operType,
-									 void *a_executor) : operType(a_operType),
-											     executor(a_executor)
+																		 void *a_executor) : operType(a_operType),
+																							 executor(a_executor)
 {
 }
 
@@ -44,7 +44,7 @@ server::server(server &fs)
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 {
@@ -53,17 +53,17 @@ server::server(server &fs)
 //-------------------------------------------------------------------
 
 server::server(short a_family,
-	       short a_type) : family(a_family),
-			       type(a_type),
-			       blockInherited(false),
-			       sslCtx(NULL),
-			       sslHandle(NULL),
-			       sslConnected(false)
+			   short a_type) : family(a_family),
+							   type(a_type),
+							   blockInherited(false),
+							   sslCtx(NULL),
+							   sslHandle(NULL),
+							   sslConnected(false)
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 
-			       ,
-			       collectedData(operType,
-					     (void *) this)
+							   ,
+							   collectedData(operType,
+											 (void *) this)
 
 #endif
 {
@@ -161,7 +161,7 @@ server::acceptSsl()
 		unsigned long nerr = ERR_get_error();
 		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
-	
+
 	int res = SSL_accept(sslHandle);
 	switch (res)
 	{
@@ -298,8 +298,8 @@ server::makeSocket()
 
 void
 server::bindNListen(const dodoString &host,
-		    int port,
-		    int numberOfConnections)
+					int port,
+					int numberOfConnections)
 {
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
@@ -361,7 +361,7 @@ server::bindNListen(const dodoString &host,
 
 void
 server::bindNListen(const __connInfo &destinaton,
-		    int numberOfConnections)
+					int numberOfConnections)
 {
 	bindNListen(destinaton.host, destinaton.port, numberOfConnections);
 }
@@ -370,8 +370,8 @@ server::bindNListen(const __connInfo &destinaton,
 
 void
 server::bindNListen(const dodoString &path,
-		    int numberOfConnections,
-		    bool force)
+					int numberOfConnections,
+					bool force)
 {
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
@@ -421,7 +421,7 @@ server::bindNListen(const dodoString &path,
 
 bool
 server::accept(__initialAccept &init,
-	       __connInfo &info)
+			   __connInfo &info)
 {
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;

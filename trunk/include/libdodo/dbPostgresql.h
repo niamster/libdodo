@@ -58,7 +58,7 @@ namespace dodo
 		enum postgresqlHintEnum
 		{
 			POSTGRESQL_HINT_NONE = 0,
-			POSTGRESQL_HINT_BLOB = 2, ///< insert|update using BLOB values
+			POSTGRESQL_HINT_BLOB = 2,             ///< insert|update using BLOB values
 		};
 
 		/**
@@ -148,7 +148,7 @@ namespace dodo
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
-				unsigned short hint; ///< DB hint[see postgresqlHintEnum]
+				unsigned short hint;                 ///< DB hint[see postgresqlHintEnum]
 
 				/**
 				 * set BLOB data for the request
@@ -243,12 +243,12 @@ namespace dodo
 
 			private:
 
-				bool empty;                     ///< true id pgResult is empty
+				bool empty;                                     ///< true id pgResult is empty
 
-				PGconn *pgHandle;               ///< DB handle
-				PGresult *pgResult;             ///< handlde to result
+				PGconn *pgHandle;                               ///< DB handle
+				PGresult *pgResult;                             ///< handlde to result
 
-				dodoStringArray blobs;          ///< blob data
+				dodoStringArray blobs;                          ///< blob data
 		};
 	};
 };

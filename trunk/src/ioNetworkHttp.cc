@@ -26,52 +26,52 @@
 using namespace dodo::io::network;
 
 const dodoString http::requestHeaderStatements[] = { "Accept",
-						     "Accept-Charset",
-						     "Accept-Encoding",
-						     "Accept-Language",
-						     "Accept-Ranges",
-						     "Authorization",
-						     "Proxy-Authorization",
-						     "Connection",
-						     "Date",
-						     "If-Modified-Since",
-						     "User-Agent",
-						     "Cookie",              };
+													 "Accept-Charset",
+													 "Accept-Encoding",
+													 "Accept-Language",
+													 "Accept-Ranges",
+													 "Authorization",
+													 "Proxy-Authorization",
+													 "Connection",
+													 "Date",
+													 "If-Modified-Since",
+													 "User-Agent",
+													 "Cookie",				};
 
 //-------------------------------------------------------------------
 
 const dodoString http::responseHeaderStatements[] = { "Accept-Ranges",
-						      "Age",
-						      "Allow",
-						      "Cache-Control",
-						      "Content-Encoding",
-						      "Content-Language",
-						      "Content-Length",
-						      "Content-Location",
-						      "Content-Disposition",
-						      "Content-MD5",
-						      "Content-Range",
-						      "Content-Type",
-						      "Date",
-						      "Last-Modified",
-						      "Location",
-						      "Server",
-						      "WWW-Authenticate",
-						      "Proxy-Authenticate",
-						      "X-Powered-By",        };
+													  "Age",
+													  "Allow",
+													  "Cache-Control",
+													  "Content-Encoding",
+													  "Content-Language",
+													  "Content-Length",
+													  "Content-Location",
+													  "Content-Disposition",
+													  "Content-MD5",
+													  "Content-Range",
+													  "Content-Type",
+													  "Date",
+													  "Last-Modified",
+													  "Location",
+													  "Server",
+													  "WWW-Authenticate",
+													  "Proxy-Authenticate",
+													  "X-Powered-By",        };
 
 //-------------------------------------------------------------------
 
 __httpResponse::__httpResponse() : code(0),
-				   redirected(false)
+								   redirected(false)
 {
 }
 
 //-------------------------------------------------------------------
 
 http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
-	       followRedirection(true),
-	       authTries(0)
+			   followRedirection(true),
+			   authTries(0)
 {
 	proxyAuthInfo.enabled = false;
 	proxyAuthInfo.authRequired = false;
@@ -345,8 +345,8 @@ http::GET(const dodoString &a_url)
 
 __httpResponse
 http::POST(const dodoString &a_url,
-	   const dodoStringMap &arguments,
-	   const dodoStringMap &files)
+		   const dodoStringMap &arguments,
+		   const dodoStringMap &files)
 {
 	setUrl(a_url);
 
@@ -359,7 +359,7 @@ http::POST(const dodoString &a_url,
 
 void
 http::POST(const dodoStringMap &arguments,
-	   const dodoStringMap &files)
+		   const dodoStringMap &files)
 {
 	dodoString boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
 	dodoString type = "multipart/form-data; boundary=" + boundary;
@@ -406,7 +406,7 @@ http::POST(const dodoStringMap &arguments,
 
 __httpResponse
 http::POST(const dodoString &a_url,
-	   const dodoStringMap &arguments)
+		   const dodoStringMap &arguments)
 {
 	setUrl(a_url);
 
@@ -443,8 +443,8 @@ http::POST(const dodoStringMap &arguments)
 
 __httpResponse
 http::POST(const dodoString &a_url,
-	   const dodoString &data,
-	   const dodoString &type)
+		   const dodoString &data,
+		   const dodoString &type)
 {
 	setUrl(a_url);
 
@@ -457,7 +457,7 @@ http::POST(const dodoString &a_url,
 
 void
 http::POST(const dodoString &a_data,
-	   const dodoString &type)
+		   const dodoString &type)
 {
 	response = __httpResponse();
 
@@ -647,9 +647,9 @@ http::disableProxy()
 
 void
 http::setProxyInformation(const dodoString &host,
-			  unsigned int port,
-			  const dodoString &user,
-			  const dodoString &password)
+						  unsigned int port,
+						  const dodoString &user,
+						  const dodoString &password)
 {
 	proxyAuthInfo.host = host;
 	proxyAuthInfo.port = port;
@@ -711,7 +711,7 @@ http::getHeaders(const dodoString &headers)
 
 bool
 http::extractHeaders(const dodoString &data,
-		     dodoString &headers)
+					 dodoString &headers)
 {
 	headers.append(data);
 
@@ -746,7 +746,7 @@ http::extractHeaders(const dodoString &data,
 
 short
 http::getContent(dodoString &data,
-		 exchange &ex)
+				 exchange &ex)
 {
 	ex.setInBufferSize(512);
 	ex.inSize = 512;
@@ -877,10 +877,10 @@ http::trim(const dodoString &data)
 
 void
 http::makeDigestAuth(short requestHeader,
-		     short responseHeader,
-		     const dodoString &method,
-		     const dodoString &user,
-		     const dodoString &password)
+					 short responseHeader,
+					 const dodoString &method,
+					 const dodoString &user,
+					 const dodoString &password)
 {
 	dodoString nonce, opaque, realm;
 
@@ -950,21 +950,21 @@ http::makeDigestAuth(short requestHeader,
 	dodoString response = tools::misc::binToHex(dodoString((char *)&HA, 16));
 
 	requestHeaders[responseHeader] = "Digest username=\"" + user +
-					 "\", realm=\"" + realm +
-					 + "\", nonce=\"" + nonce +
-					 + "\", uri=\"" + url +
-					 + "\", qop=\"auth\", nc=00000001" +
-					 + ", cnonce=\"" + cnonce +
-					 + "\", response=\"" + response +
-					 + "\", opaque=\"" + opaque + "\"";
+									 "\", realm=\"" + realm +
+									 + "\", nonce=\"" + nonce +
+									 + "\", uri=\"" + url +
+									 + "\", qop=\"auth\", nc=00000001" +
+									 + ", cnonce=\"" + cnonce +
+									 + "\", response=\"" + response +
+									 + "\", opaque=\"" + opaque + "\"";
 }
 
 //-------------------------------------------------------------------
 
 void
 http::makeBasicAuth(short responseHeader,
-		    const dodoString &user,
-		    const dodoString &password)
+					const dodoString &user,
+					const dodoString &password)
 {
 	requestHeaders[responseHeader] = "Basic " + tools::misc::encodeBase64(user + ":" + password);
 }

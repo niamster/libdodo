@@ -73,22 +73,22 @@ namespace dodo
 
 #ifdef PTHREAD_EXT
 
-				pthread_t thread;               ///< thread descriptor
+				pthread_t thread;                               ///< thread descriptor
 
 #endif
 
-				void *data;                             ///< thread data
-				bool isRunning;                         ///< true if thread is running
-				bool detached;                          ///< true if thread is detached
-				unsigned long position;                 ///< identificator
-				job::routine func;                      ///< function to execute
-				int stackSize;                          ///< size of stack for thread[in bytes]
-				short action;                           ///< action on object destruction[see collectionOnDestructEnum]
-				unsigned long executed;                 ///< amount of times thread was executed
-				unsigned long executeLimit;             ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
+				void *data;                                             ///< thread data
+				bool isRunning;                                         ///< true if thread is running
+				bool detached;                                          ///< true if thread is detached
+				unsigned long position;                                 ///< identificator
+				job::routine func;                                      ///< function to execute
+				int stackSize;                                          ///< size of stack for thread[in bytes]
+				short action;                                           ///< action on object destruction[see collectionOnDestructEnum]
+				unsigned long executed;                                 ///< amount of times thread was executed
+				unsigned long executeLimit;                             ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
 
 #ifdef DL_EXT
-				void *handle;        ///< handle to library
+				void *handle;                        ///< handle to library
 #endif
 			};
 
@@ -99,13 +99,13 @@ namespace dodo
 			 */
 			struct __threadMod
 			{
-				char name[64];                          ///< name of module
-				char discription[256];                  ///< discription of module
-				char hook[64];                          ///< name of function in module that will be a hook
-				unsigned long executeLimit;             ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
-				bool detached;                          ///< true if thread is detached
-				int stackSize;                          ///< size of stack for thread[in bytes]
-				short action;                           ///< action on object destruction[see collectionOnDestructEnum]
+				char name[64];                                          ///< name of module
+				char discription[256];                                  ///< discription of module
+				char hook[64];                                          ///< name of function in module that will be a hook
+				unsigned long executeLimit;                             ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
+				bool detached;                                          ///< true if thread is detached
+				int stackSize;                                          ///< size of stack for thread[in bytes]
+				short action;                                           ///< action on object destruction[see collectionOnDestructEnum]
 			};
 
 			/**
@@ -314,17 +314,17 @@ namespace dodo
 					 */
 					virtual bool getThread(unsigned long position) const;
 
-					mutable dodoList<__threadInfo> threads;                         ///< identificators of threads
+					mutable dodoList<__threadInfo> threads;                                             ///< identificators of threads
 
-					unsigned long threadNum;                                        ///< number of registered threads
+					unsigned long threadNum;                                                            ///< number of registered threads
 
 #ifdef PTHREAD_EXT
 
-					pthread_attr_t attr;                                            ///< thread join attribute
+					pthread_attr_t attr;                                                                ///< thread join attribute
 
 #endif
 
-					mutable dodoList<__threadInfo>::iterator current;               ///< iterator for list of threads[for matched with getThread method]
+					mutable dodoList<__threadInfo>::iterator current;                                   ///< iterator for list of threads[for matched with getThread method]
 			};
 		};
 	};

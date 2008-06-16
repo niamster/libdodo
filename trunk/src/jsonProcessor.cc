@@ -124,8 +124,8 @@ processor::make(const node &root)
 
 unsigned long
 processor::processArray(dodoArray<node> &jnode,
-			const dodoString &root,
-			unsigned long pos)
+						const dodoString &root,
+						unsigned long pos)
 {
 	jnode.clear();
 
@@ -181,8 +181,8 @@ processor::processArray(dodoArray<node> &jnode,
 
 unsigned long
 processor::processValue(node &node,
-			const dodoString &root,
-			unsigned long pos)
+						const dodoString &root,
+						unsigned long pos)
 {
 	node.clear();
 
@@ -229,8 +229,8 @@ processor::processValue(node &node,
 
 unsigned long
 processor::processBoolean(bool &node,
-			  const dodoString &root,
-			  unsigned long pos)
+						  const dodoString &root,
+						  unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
 		throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSBOOLEAN, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONBOOLEAN, JSONPROCESSOREX_MALFORMEDJSONBOOLEAN_STR, __LINE__, __FILE__);
@@ -260,7 +260,7 @@ processor::processBoolean(bool &node,
 
 unsigned long
 processor::processNull(const dodoString &root,
-		       unsigned long pos)
+					   unsigned long pos)
 {
 	if ((root.size() - pos) < 4)
 		throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNULL, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONNULL, JSONPROCESSOREX_MALFORMEDJSONNULL_STR, __LINE__, __FILE__);
@@ -278,8 +278,8 @@ processor::processNull(const dodoString &root,
 
 unsigned long
 processor::processNumeric(long &node,
-			  const dodoString &root,
-			  unsigned long pos)
+						  const dodoString &root,
+						  unsigned long pos)
 {
 	dodoString numeric;
 
@@ -334,8 +334,8 @@ processor::processNumeric(long &node,
 
 unsigned long
 processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
-			 const dodoString &root,
-			 unsigned long pos)
+						 const dodoString &root,
+						 unsigned long pos)
 {
 	jnode.clear();
 
@@ -476,8 +476,8 @@ processor::toMap(const dodoString &jnode)
 
 unsigned long
 processor::processString(dodoString &jnode,
-			 const dodoString &root,
-			 unsigned long pos)
+						 const dodoString &root,
+						 unsigned long pos)
 {
 	jnode.clear();
 

@@ -40,8 +40,8 @@ namespace dodo
 			 */
 			struct __info
 			{
-				unsigned long position; ///< shared data identificator
-				void *data;             ///< shared data
+				unsigned long position;                 ///< shared data identificator
+				void *data;                             ///< shared data
 			};
 
 			/**

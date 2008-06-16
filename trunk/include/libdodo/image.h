@@ -57,14 +57,14 @@ namespace dodo
 		 * @param executor defines class that executed hook
 		 */
 		__xexexImageCollectedData(int &operType,
-					  void *executor);
+								  void *executor);
 
-		ImageInfo *imInfo;                                      ///< image info handler
-		Image *imHandle;                                        ///< image handler
+		ImageInfo *imInfo;                                              ///< image info handler
+		Image *imHandle;                                                ///< image handler
 
-		int &operType;                                          ///< xexec operation
+		int &operType;                                                  ///< xexec operation
 
-		void *executor;                                         ///< class that executed hook
+		void *executor;                                                 ///< class that executed hook
 	};
 
 #define IMAGE_MAPPINGS 3
@@ -86,12 +86,12 @@ namespace dodo
 	 */
 	enum imagePixelSizeEnum
 	{
-		IMAGE_PIXELSIZE_CHAR,   ///< 8 bits
-		IMAGE_PIXELSIZE_SHORT,  ///< 16 bits
-		IMAGE_PIXELSIZE_INT,    ///< 32(16 on some CPUs) bits
-		IMAGE_PIXELSIZE_LONG,   ///< 32(32 on some CPUs) bits
-		IMAGE_PIXELSIZE_FLOAT,  ///< 32 bits
-		IMAGE_PIXELSIZE_DOUBLE, ///< 64 bits
+		IMAGE_PIXELSIZE_CHAR,           ///< 8 bits
+		IMAGE_PIXELSIZE_SHORT,          ///< 16 bits
+		IMAGE_PIXELSIZE_INT,            ///< 32(16 on some CPUs) bits
+		IMAGE_PIXELSIZE_LONG,           ///< 32(32 on some CPUs) bits
+		IMAGE_PIXELSIZE_FLOAT,          ///< 32 bits
+		IMAGE_PIXELSIZE_DOUBLE,         ///< 64 bits
 	};
 
 #define IMAGE_ENCODERS 6
@@ -133,9 +133,9 @@ namespace dodo
 		IMAGE_COMPRESSION_LZW,
 		IMAGE_COMPRESSION_RLE,
 		IMAGE_COMPRESSION_ZIP,
-		IMAGE_COMPRESSION_JPEG,         ///< only for JPEG
-		IMAGE_COMPRESSION_LOSSLESSJPEG, ///< only for JPEG
-		IMAGE_COMPRESSION_JPEG2000,     ///< only for JPEG
+		IMAGE_COMPRESSION_JPEG,                 ///< only for JPEG
+		IMAGE_COMPRESSION_LOSSLESSJPEG,         ///< only for JPEG
+		IMAGE_COMPRESSION_JPEG2000,             ///< only for JPEG
 	};
 
 	/**
@@ -143,11 +143,11 @@ namespace dodo
 	 */
 	struct __imageInfo
 	{
-		void *data;             ///< 2D array of pixels
-		unsigned long width;    ///< width of the image
-		unsigned long height;   ///< height of the image
-		short mapping;          ///< type of mapping[see imageMappingEnum]
-		short pixelSize;        ///< type of pixel
+		void *data;                     ///< 2D array of pixels
+		unsigned long width;            ///< width of the image
+		unsigned long height;           ///< height of the image
+		short mapping;                  ///< type of mapping[see imageMappingEnum]
+		short pixelSize;                ///< type of pixel
 	};
 
 	/**
@@ -155,8 +155,8 @@ namespace dodo
 	 */
 	struct __imageSize
 	{
-		unsigned long width;    ///< width of the image
-		unsigned long height;   ///< height of the image
+		unsigned long width;            ///< width of the image
+		unsigned long height;           ///< height of the image
 	};
 
 	/**
@@ -287,16 +287,16 @@ namespace dodo
 
 		protected:
 
-			ExceptionInfo *exInfo;                          ///< exception info handler
+			ExceptionInfo *exInfo;                                      ///< exception info handler
 
-			__xexexImageCollectedData collectedData;        ///< data collected for xexec
+			__xexexImageCollectedData collectedData;                    ///< data collected for xexec
 
 		private:
 
-			static const char *mappingStArr[IMAGE_MAPPINGS];                        ///< image mapping statements
-			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZES];              ///< pixel type statements
-			static const char *encoderStArr[IMAGE_ENCODERS];                        ///< image encoder
-			static const CompressionType compressionStArr[IMAGE_COMPRESSIONS];      ///< image compression
+			static const char *mappingStArr[IMAGE_MAPPINGS];                                    ///< image mapping statements
+			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZES];                          ///< pixel type statements
+			static const char *encoderStArr[IMAGE_ENCODERS];                                    ///< image encoder
+			static const CompressionType compressionStArr[IMAGE_COMPRESSIONS];                  ///< image compression
 	};
 
 	/**
@@ -318,7 +318,7 @@ namespace dodo
 
 		private:
 
-			bool initialized; ///< true if environment was initialized in the object
+			bool initialized;             ///< true if environment was initialized in the object
 	};
 
 	extern __image_init__ __image_init_object__;

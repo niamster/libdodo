@@ -36,7 +36,7 @@
 <setting id="org.eclipse.cdt.core.formatter.alignment_for_expressions_in_array_initializer" value="50"/>
 <setting id="org.eclipse.cdt.core.formatter.insert_space_before_question_in_conditional" value="insert"/>
 <setting id="org.eclipse.cdt.core.formatter.insert_space_before_closing_paren_in_for" value="do not insert"/>
-<setting id="org.eclipse.cdt.core.formatter.tabulation.size" value="8"/>
+<setting id="org.eclipse.cdt.core.formatter.tabulation.size" value="4"/>
 <setting id="org.eclipse.cdt.core.formatter.insert_space_before_comma_in_method_invocation_arguments" value="do not insert"/>
 <setting id="org.eclipse.cdt.core.formatter.insert_new_line_before_else_in_if_statement" value="insert"/>
 <setting id="org.eclipse.cdt.core.formatter.insert_space_before_opening_paren_in_switch" value="insert"/>

@@ -41,7 +41,7 @@ namespace dodo
 		{
 			protected:
 
-				atomic::lock *keeper; ///< lock
+				atomic::lock *keeper;                 ///< lock
 
 				/**
 				 * destructor
@@ -68,7 +68,7 @@ namespace dodo
 
 					protected:
 
-						raceHazardGuardHolder *parent; ///< lock
+						raceHazardGuardHolder *parent;                         ///< lock
 				};
 		};
 	};

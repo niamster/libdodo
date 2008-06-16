@@ -43,10 +43,10 @@ namespace dodo
 		 */
 		struct __inOutDescriptors
 		{
-			int position;   ///< identificator of the pair
+			int position;               ///< identificator of the pair
 
-			int in;         ///< input stream
-			int out;        ///< output stream
+			int in;                     ///< input stream
+			int out;                    ///< output stream
 		};
 
 		/**
@@ -121,9 +121,9 @@ namespace dodo
 
 			protected:
 
-				dodoArray<__inOutDescriptors> desc;     ///< stream pairs
+				dodoArray<__inOutDescriptors> desc;                     ///< stream pairs
 
-				int descs;                              ///< descriptors counter
+				int descs;                                              ///< descriptors counter
 		};
 	};
 };

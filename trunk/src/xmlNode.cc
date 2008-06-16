@@ -27,7 +27,7 @@
 using namespace dodo::xml;
 
 node::node() : CDATA(false),
-	       empty(false)
+			   empty(false)
 {
 }
 

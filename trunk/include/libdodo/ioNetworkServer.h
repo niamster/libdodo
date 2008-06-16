@@ -75,11 +75,11 @@ namespace dodo
 				 * constructor
 				 */
 				__xexexIoNetworkServerCollectedData(int &operType,
-								    void *executor);
+													void *executor);
 
-				int &operType;                  ///< xexec operation
+				int &operType;                                  ///< xexec operation
 
-				void *executor;                 ///< class that executed hook
+				void *executor;                                 ///< class that executed hook
 			};
 
 #endif
@@ -88,10 +88,10 @@ namespace dodo
 			 * @class Server provides network connection interface
 			 */
 			class server : public options,
-				       virtual public nonBlockedAccessInfo
+						   virtual public nonBlockedAccessInfo
 #ifndef IONETWORKSERVER_WO_XEXEC
-				       ,
-				       public xexec
+						   ,
+						   public xexec
 #endif
 			{
 				friend class exchange;
@@ -163,7 +163,7 @@ namespace dodo
 					 */
 					virtual bool accept(__initialAccept &init);
 
-					bool blockInherited; ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
+					bool blockInherited;                     ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
 
 					/**
 					 * @return descriptor of input stream
@@ -177,8 +177,8 @@ namespace dodo
 
 				protected:
 
-					short family;                   ///< socket family
-					short type;                     ///< socket type
+					short family;                                       ///< socket family
+					short type;                                         ///< socket type
 
 					/**
 					 * restore options on connect/bind
@@ -190,11 +190,11 @@ namespace dodo
 					 */
 					virtual void makeSocket();
 
-					dodoString unixSock;    ///< path to unix socket
+					dodoString unixSock;                        ///< path to unix socket
 
 #ifndef IONETWORKSERVER_WO_XEXEC
 
-					__xexexIoNetworkServerCollectedData collectedData;   ///< data collected for xexec
+					__xexexIoNetworkServerCollectedData collectedData;                       ///< data collected for xexec
 
 #endif
 			};

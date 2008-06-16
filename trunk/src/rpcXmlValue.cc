@@ -26,7 +26,7 @@
 using namespace dodo::rpc::xml;
 
 const char value::trimSymbols[] = { ' ',
-				    '\r' };
+									'\r' };
 
 //-------------------------------------------------------------------
 

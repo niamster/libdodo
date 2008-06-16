@@ -47,38 +47,38 @@ namespace dodo
 			 */
 			__xexexDbAccumulatorCollectedData(int &operType, void *executor);
 
-			dodoString where;                               ///< `where` for the request(can be used as `as` for `callFunction`)
-			dodoStringArray fields;                         ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
-			dodoArray<dodoStringArray> values;              ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
-			dodoString table;                               ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-			dodoString tableTo;                             ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
-			dodoString order;                               ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
-			dodoString having;                              ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
-			dodoString group;                               ///< `group` for the request
-			dodoString limit;                               ///< `limit` for the result
-			dodoString offset;                              ///< `offset` for the result
-			dodoStringArray subQueries;                     ///< `subquery`
-			dodoStringArray joinTables;                     ///< join tables
-			dodoStringArray joinConds;                      ///< join conditions
-			dodoArray<int> joinTypes;                       ///< join types
+			dodoString where;                                           ///< `where` for the request(can be used as `as` for `callFunction`)
+			dodoStringArray fields;                                     ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
+			dodoArray<dodoStringArray> values;                          ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
+			dodoString table;                                           ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
+			dodoString tableTo;                                         ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
+			dodoString order;                                           ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
+			dodoString having;                                          ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
+			dodoString group;                                           ///< `group` for the request
+			dodoString limit;                                           ///< `limit` for the result
+			dodoString offset;                                          ///< `offset` for the result
+			dodoStringArray subQueries;                                 ///< `subquery`
+			dodoStringArray joinTables;                                 ///< join tables
+			dodoStringArray joinConds;                                  ///< join conditions
+			dodoArray<int> joinTypes;                                   ///< join types
 
-			__connectorTable tableInfo;                     ///< table structure for creation
-			__connectorField fieldInfo;                     ///< field structure for creation
+			__connectorTable tableInfo;                                 ///< table structure for creation
+			__connectorField fieldInfo;                                 ///< field structure for creation
 
-			__connectorInfo dbInfo;                         ///< data info to connect to the server
+			__connectorInfo dbInfo;                                     ///< data info to connect to the server
 
-			int qType;                                      ///< type of operation
+			int qType;                                                  ///< type of operation
 
-			int qShift;                                     ///< additional actions[see accumulatorAddEnum]
+			int qShift;                                                 ///< additional actions[see accumulatorAddEnum]
 
-			int qSelShift;                                  ///< additional select statements[see accumulatorAddSelEnum]
-			int qInsShift;                                  ///< additional insert statements[see accumulatorAddInsEnum]
-			int qUpShift;                                   ///< additional update statements[see accumulatorAddUpEnum]
-			int qDelShift;                                  ///< additional delete statements[see accumulatorAddDelEnum]
+			int qSelShift;                                              ///< additional select statements[see accumulatorAddSelEnum]
+			int qInsShift;                                              ///< additional insert statements[see accumulatorAddInsEnum]
+			int qUpShift;                                               ///< additional update statements[see accumulatorAddUpEnum]
+			int qDelShift;                                              ///< additional delete statements[see accumulatorAddDelEnum]
 
-			int &operType;                                  ///< xexec operation
+			int &operType;                                              ///< xexec operation
 
-			void *executor;                                 ///< class that executed hook
+			void *executor;                                             ///< class that executed hook
 		};
 
 		/**
@@ -537,7 +537,7 @@ namespace dodo
 				 */
 				virtual void cleanCollected();
 
-				bool show;                                      ///< if true try to get result from the request[select]
+				bool show;                                                      ///< if true try to get result from the request[select]
 
 				/*
 				 * additional statements for query, db-dependent
@@ -545,17 +545,17 @@ namespace dodo
 				 * these arrays take part after generalSQL statements
 				 * every of these objects has one empty("") element
 				 */
-				dodoStringArray sqlDbDepAddSelArr;                      ///< additional `select` statement
-				dodoStringArray sqlDbDepAddInsArr;                      ///< additional `insert` statement
-				dodoStringArray sqlDbDepAddUpArr;                       ///< additional `update` statement
-				dodoStringArray sqlDbDepAddDelArr;                      ///< additional `delete` statement
+				dodoStringArray sqlDbDepAddSelArr;                                      ///< additional `select` statement
+				dodoStringArray sqlDbDepAddInsArr;                                      ///< additional `insert` statement
+				dodoStringArray sqlDbDepAddUpArr;                                       ///< additional `update` statement
+				dodoStringArray sqlDbDepAddDelArr;                                      ///< additional `delete` statement
 
-				int qDbDepSelShift;                                     ///< additional db-dependent `select` actions[see sqlDbDepAddSelArr]
-				int qDbDepInsShift;                                     ///< additional db-dependent `insert` actions[see sqlDbDepAddInsArr]
-				int qDbDepUpShift;                                      ///< additional db-dependent `update` actions[see sqlDbDepAddUpArr]
-				int qDbDepDelShift;                                     ///< additional db-dependent `delete` actions[see sqlDbDepAddDelArr]
+				int qDbDepSelShift;                                                     ///< additional db-dependent `select` actions[see sqlDbDepAddSelArr]
+				int qDbDepInsShift;                                                     ///< additional db-dependent `insert` actions[see sqlDbDepAddInsArr]
+				int qDbDepUpShift;                                                      ///< additional db-dependent `update` actions[see sqlDbDepAddUpArr]
+				int qDbDepDelShift;                                                     ///< additional db-dependent `delete` actions[see sqlDbDepAddDelArr]
 
-				__xexexDbAccumulatorCollectedData collectedData;        ///< data collected for xexec
+				__xexexDbAccumulatorCollectedData collectedData;                        ///< data collected for xexec
 		};
 	};
 };

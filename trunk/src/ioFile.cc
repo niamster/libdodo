@@ -28,8 +28,8 @@ using namespace dodo::io;
 #ifndef IOFILE_WO_XEXEC
 
 __xexexIoFileCollectedData::__xexexIoFileCollectedData(int &a_operType,
-						       void *a_executor) : operType(a_operType),
-									   executor(a_executor)
+													   void *a_executor) : operType(a_operType),
+																		   executor(a_executor)
 {
 }
 
@@ -38,17 +38,17 @@ __xexexIoFileCollectedData::__xexexIoFileCollectedData(int &a_operType,
 //-------------------------------------------------------------------
 
 file::file(const dodoString &a_path,
-	   short a_fileType,
-	   short mode) : over(false),
-			 append(false),
-			 path(a_path),
-			 fileType(a_fileType),
-			 pos(0)
+		   short a_fileType,
+		   short mode) : over(false),
+						 append(false),
+						 path(a_path),
+						 fileType(a_fileType),
+						 pos(0)
 #ifndef IOFILE_WO_XEXEC
 
-			 ,
-			 collectedData(operType,
-				       (void *) this)
+						 ,
+						 collectedData(operType,
+									   (void *) this)
 
 #endif
 {
@@ -76,7 +76,7 @@ file::file(file &fd)
 #ifndef IOFILE_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 {
@@ -148,8 +148,8 @@ file::close()
 
 void
 file::open(const dodoString &a_path,
-	   short a_fileType,
-	   short mode)
+		   short a_fileType,
+		   short mode)
 {
 	raceHazardGuard pg(this);
 

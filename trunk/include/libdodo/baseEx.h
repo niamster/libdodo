@@ -123,10 +123,10 @@ namespace dodo
 	 */
 	struct __baseExMod
 	{
-		char name[64];                  ///< name of the library
-		char discription[256];          ///< discription of the library
-		char hook[64];                  ///< name of the function in module that will be as a hook
-		short module;                   ///< for what module handler should be set[see errorModuleEnum]
+		char name[64];                          ///< name of the library
+		char discription[256];                  ///< discription of the library
+		char hook[64];                          ///< name of the function in module that will be as a hook
+		short module;                           ///< for what module handler should be set[see errorModuleEnum]
 	};
 
 	/**
@@ -178,17 +178,17 @@ namespace dodo
 			 */
 			operator const dodoString &();
 
-			errorModuleEnum errModule;      ///< module where exception has been thrown
-			unsigned long funcID;           ///< function where exception has been thrown[see *Ex.h headers for IDs]
-			errnoSourceEnum errnoSource;    ///< the source of the error code and of the error string
+			errorModuleEnum errModule;                  ///< module where exception has been thrown
+			unsigned long funcID;                       ///< function where exception has been thrown[see *Ex.h headers for IDs]
+			errnoSourceEnum errnoSource;                ///< the source of the error code and of the error string
 
-			int baseErrno;                  ///< error code
-			dodoString baseErrstr;          ///< error string
+			int baseErrno;                              ///< error code
+			dodoString baseErrstr;                      ///< error string
 
-			unsigned long line;             ///< line where exception has been thrown
-			dodoString file;                ///< file where exception has been thrown
+			unsigned long line;                         ///< line where exception has been thrown
+			dodoString file;                            ///< file where exception has been thrown
 
-			dodoString message;             ///< custom message that might clarify the exception
+			dodoString message;                         ///< custom message that might clarify the exception
 
 			/**
 			 * set handler for exceptions for specific module
@@ -248,17 +248,17 @@ namespace dodo
 
 		protected:
 
-			static errorHandler handlersEx[BASEEX_MODULES];         ///< exception handlers
+			static errorHandler handlersEx[BASEEX_MODULES];                     ///< exception handlers
 
-			static bool handlerSetEx[BASEEX_MODULES];               ///< map of set handlers
+			static bool handlerSetEx[BASEEX_MODULES];                           ///< map of set handlers
 
-			static void *handlerDataEx[BASEEX_MODULES];             ///< data that will be passed to the handler
+			static void *handlerDataEx[BASEEX_MODULES];                         ///< data that will be passed to the handler
 
 #ifdef DL_EXT
 
-			static void *handlesEx[BASEEX_MODULES];                 ///< handles to the libraries
+			static void *handlesEx[BASEEX_MODULES];                             ///< handles to the libraries
 
-			static bool handlesOpenedEx[BASEEX_MODULES];            //< map of the opened libraries
+			static bool handlesOpenedEx[BASEEX_MODULES];                        //< map of the opened libraries
 
 #endif
 
@@ -293,12 +293,12 @@ namespace dodo
 
 #ifdef PTHREAD_EXT
 
-					static pthread_mutex_t keeper; ///< mutex
+					static pthread_mutex_t keeper;                     ///< mutex
 
 #endif
 			};
 
-			static staticAtomicMutex keeper; ///< lock
+			static staticAtomicMutex keeper;             ///< lock
 
 			/**
 			 * @class raceHazardGuard provides thread safe behaviour

@@ -35,8 +35,8 @@ namespace dodo
 using namespace dodo;
 
 __xexexImageCollectedData::__xexexImageCollectedData(int &a_operType,
-						     void *a_executor) : operType(a_operType),
-									 executor(a_executor)
+													 void *a_executor) : operType(a_operType),
+																		 executor(a_executor)
 {
 }
 
@@ -109,14 +109,14 @@ const CompressionType image::compressionStArr[] =
 //-------------------------------------------------------------------
 
 image::image(image &a_image) : collectedData(operType,
-					     (void *) this)
+											 (void *) this)
 {
 }
 
 //-------------------------------------------------------------------
 
 image::image() : collectedData(operType,
-			       (void *) this)
+							   (void *) this)
 {
 #ifndef IMAGE_WO_XEXEC
 
@@ -173,7 +173,7 @@ image::read(const dodoString &str)
 
 void
 image::read(const unsigned char * const data,
-	    unsigned long size)
+			unsigned long size)
 {
 #ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
@@ -265,7 +265,7 @@ image::write(const dodoString &str)
 
 void
 image::write(unsigned char **data,
-	     unsigned int &size)
+			 unsigned int &size)
 {
 #ifndef IMAGE_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
@@ -349,7 +349,7 @@ image::getEncoder()
 
 void
 image::scale(unsigned long width,
-	     unsigned long height)
+			 unsigned long height)
 {
 	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SCALE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);

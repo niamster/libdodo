@@ -278,7 +278,7 @@ os::getLimit(short type)
 
 void
 os::setLimit(short type,
-	     const __limits &lim)
+			 const __limits &lim)
 {
 	rlimit limit;
 
@@ -354,7 +354,7 @@ os::getPriority(short type)
 
 void
 os::setPriority(short type,
-		int prio)
+				int prio)
 {
 	if (setpriority(PRIO_PROCESS, getUID(type), prio) == -1)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETPRIORITY, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -385,7 +385,7 @@ os::getUID(short type)
 
 void
 os::setUID(short type,
-	   int uid)
+		   int uid)
 {
 	int res(0);
 
@@ -437,7 +437,7 @@ os::getGID(short type)
 
 void
 os::setGID(short type,
-	   int uid)
+		   int uid)
 {
 	int res(0);
 
@@ -525,7 +525,7 @@ os::getUsers()
 
 __userInfo &
 os::fillUserInfo(__userInfo &info,
-		 passwd     *in)
+				 passwd     *in)
 {
 	info.gid = in->pw_gid;
 	info.home = in->pw_dir;
@@ -542,7 +542,7 @@ os::fillUserInfo(__userInfo &info,
 
 __groupInfo &
 os::fillGroupInfo(__groupInfo &info,
-		  group       *pw)
+				  group       *pw)
 {
 	info.gid = pw->gr_gid;
 	info.name = pw->gr_name;
@@ -619,7 +619,7 @@ os::getGroups()
 
 void
 os::die(const dodoString &message,
-	int status)
+		int status)
 {
 	fwrite(message.c_str(), message.size(), 1, stderr);
 	fflush(stderr);
@@ -704,7 +704,7 @@ os::setGroupPID(int gpid)
 
 void
 os::setGroupPID(int pid,
-		int gpid)
+				int gpid)
 {
 	if (setpgid(pid, gpid) == 1)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SETGROUPPID, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -714,7 +714,7 @@ os::setGroupPID(int pid,
 
 void
 os::sigMask(sigset_t *set,
-	    long blockSignals)
+			long blockSignals)
 {
 	if (blockSignals != -1)
 	{
@@ -781,8 +781,8 @@ os::sigMask(sigset_t *set,
 
 void
 os::setSignalHandler(long signal,
-		     signalHandler handler,
-		     int blockSignals)
+					 signalHandler handler,
+					 int blockSignals)
 {
 	raceHazardGuard tg;
 
@@ -824,8 +824,8 @@ os::setSignalHandler(long signal,
 
 void
 os::setMicroTimer(unsigned long timeout,
-		  signalHandler handler,
-		  int blockSignals)
+				  signalHandler handler,
+				  int blockSignals)
 {
 	raceHazardGuard tg;
 
@@ -884,8 +884,8 @@ os::setMicroTimer(unsigned long timeout,
 
 void
 os::setTimer(long timeout,
-	     signalHandler handler,
-	     int blockSignals)
+			 signalHandler handler,
+			 int blockSignals)
 {
 	raceHazardGuard tg;
 
@@ -951,7 +951,7 @@ os::isSignalHandled(long signal)
 
 void
 os::sendSignal(int pid,
-	       long signal)
+			   long signal)
 {
 	if (kill(pid, os::toRealSignal(signal)) == -1)
 		throw baseEx(ERRMODULE_TOOLSOS, OSEX_SENDSIGNAL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
@@ -998,7 +998,7 @@ os::unsetSignalHandler(long signal)
 
 __signalMod
 os::getModuleInfo(const dodoString &module,
-		  void             *toInit)
+				  void             *toInit)
 {
 #ifdef DL_FAST
 	void *handle = dlopen(module.c_str(), RTLD_LAZY | RTLD_NODELETE);
@@ -1026,7 +1026,7 @@ os::getModuleInfo(const dodoString &module,
 
 void
 os::setSignalHandler(const dodoString &path,
-		     void             *toInit)
+					 void             *toInit)
 {
 	raceHazardGuard tg;
 
@@ -1266,7 +1266,7 @@ os::toRealSignal(long signal)
 
 void
 os::blockSignal(long signals,
-		bool block)
+				bool block)
 {
 	sigset_t signal_mask;
 	sigemptyset(&signal_mask);

@@ -27,12 +27,12 @@
 using namespace dodo::xml;
 
 __info::__info(const dodoString &a_version,
-	       const dodoString &a_encoding,
-	       const dodoString &a_root,
-	       int a_compression) : version(a_version),
-				    encoding(a_encoding),
-				    root(a_root),
-				    compression(a_compression)
+			   const dodoString &a_encoding,
+			   const dodoString &a_root,
+			   int a_compression) : version(a_version),
+									encoding(a_encoding),
+									root(a_root),
+									compression(a_compression)
 {
 }
 
@@ -45,8 +45,8 @@ __info::__info()
 //-------------------------------------------------------------------
 
 __nodeDef::__nodeDef() : chLimit(-1),
-			 ignoreChildrenDef(false),
-			 ignoreAttributesDef(true)
+						 ignoreChildrenDef(false),
+						 ignoreAttributesDef(true)
 {
 }
 
@@ -79,8 +79,8 @@ processor::processor() : icaseNames(false)
 
 #ifdef LIBXML2_EXT
 
-			 ,
-			 document(NULL)
+						 ,
+						 document(NULL)
 
 #endif
 
@@ -132,7 +132,7 @@ processor::isCDATA(xmlNodePtr chNode)
 
 node
 processor::parseFile(const __nodeDef &definition,
-		     const dodoString &file)
+					 const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -158,7 +158,7 @@ processor::parseFile(const __nodeDef &definition,
 
 node
 processor::parseBuffer(const __nodeDef &definition,
-		       const dodoString &buffer)
+					   const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 
@@ -284,8 +284,8 @@ processor::parse(const __nodeDef &definition)
 
 dodoArray<node>
 processor::parse(const __nodeDef &definition,
-		 const xmlNodePtr chNode,
-		 long chLimit)
+				 const xmlNodePtr chNode,
+				 long chLimit)
 {
 	xmlNodePtr xnode = chNode, subNode;
 
@@ -417,7 +417,7 @@ processor::parse(const __nodeDef &definition,
 
 void
 processor::errHandler(void        *data,
-		      xmlErrorPtr error)
+					  xmlErrorPtr error)
 {
 }
 
@@ -425,8 +425,8 @@ processor::errHandler(void        *data,
 
 void
 processor::getAttributes(const __nodeDef &definition,
-			 const xmlNodePtr xnode,
-			 dodoStringMap &attributes)
+						 const xmlNodePtr xnode,
+						 dodoStringMap &attributes)
 {
 	attribute = xnode->properties;
 
@@ -491,7 +491,7 @@ processor::getAttributes(const __nodeDef &definition,
 
 void
 processor::getAttributes(const xmlNodePtr xnode,
-			 dodoStringMap &attributes)
+						 dodoStringMap &attributes)
 {
 	attribute = xnode->properties;
 
@@ -512,7 +512,7 @@ processor::getAttributes(const xmlNodePtr xnode,
 
 void
 processor::getNodeInfo(const xmlNodePtr xnode,
-		       node &resNode)
+					   node &resNode)
 {
 	if (xnode->ns != NULL)
 	{
@@ -558,9 +558,9 @@ processor::getXMLFileInfo(const dodoString &file)
 	}
 
 	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
-		      document->encoding != NULL ? (char *)document->encoding : __dodostring__,
-		      (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
-		      document->compression);
+				  document->encoding != NULL ? (char *)document->encoding : __dodostring__,
+				  (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
+				  document->compression);
 
 #else
 
@@ -761,7 +761,7 @@ processor::initNodeDef(__nodeDef &xnode)
 
 xmlNodePtr
 processor::findNode(const __nodeDef &definition,
-		    xmlNodePtr xnode)
+					xmlNodePtr xnode)
 {
 	xmlNodePtr one;
 	bool skip;
@@ -824,8 +824,8 @@ processor::clear()
 
 dodoString
 processor::createXML(const node &root,
-		     const dodoString &encoding,
-		     const dodoString &version) const
+					 const dodoString &encoding,
+					 const dodoString &version) const
 {
 	if (root.name.empty())
 		return __dodostring__;

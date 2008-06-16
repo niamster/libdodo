@@ -29,8 +29,8 @@ using namespace dodo::io::network::ssl;
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
 __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int &a_operType,
-									     void *a_executor) : operType(a_operType),
-												 executor(a_executor)
+																			 void *a_executor) : operType(a_operType),
+																								 executor(a_executor)
 {
 }
 
@@ -39,14 +39,14 @@ __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept() : socket(-1),
-				     sslHandle(NULL)
+									 sslHandle(NULL)
 {
 }
 
 //-------------------------------------------------------------------
 
 __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
-							  sslHandle(init.sslHandle)
+														  sslHandle(init.sslHandle)
 {
 	init.socket = -1;
 	init.sslHandle = NULL;
@@ -58,7 +58,7 @@ exchange::exchange(exchange &fse)
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 {
@@ -92,9 +92,9 @@ exchange::exchange(exchange &fse)
 exchange::exchange() : sslHandle(NULL)
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
-		       ,
-		       collectedData(operType,
-				     (void *) this)
+					   ,
+					   collectedData(operType,
+									 (void *) this)
 
 #endif
 {
@@ -112,7 +112,7 @@ exchange::exchange(__initialAccept &a_init)
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 {
@@ -161,7 +161,7 @@ exchange::init(__initialAccept &a_init)
 
 void
 exchange::_close(int socket,
-		 SSL *sslHandle)
+				 SSL *sslHandle)
 {
 	options::_close(socket);
 
@@ -213,9 +213,9 @@ exchange::close()
 
 void
 exchange::init(int a_socket,
-	       SSL *a_sslHandle,
-	       bool a_blocked,
-	       bool blockInherited)
+			   SSL *a_sslHandle,
+			   bool a_blocked,
+			   bool blockInherited)
 {
 	raceHazardGuard pg(this);
 
@@ -310,17 +310,17 @@ exchange::_write(const char * const data)
 						case SSL_ERROR_WANT_READ:
 						case SSL_ERROR_WANT_WRITE:
 						case SSL_ERROR_WANT_X509_LOOKUP:
-							
+
 							n = 0;
-							
+
 							break;
-							
+
 						default:
 						{
-							unsigned long nerr = ERR_get_error();							
+							unsigned long nerr = ERR_get_error();
 							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
-							
+
 					}
 				}
 
@@ -346,17 +346,17 @@ exchange::_write(const char * const data)
 						case SSL_ERROR_WANT_READ:
 						case SSL_ERROR_WANT_WRITE:
 						case SSL_ERROR_WANT_X509_LOOKUP:
-							
+
 							n = 0;
-							
+
 							break;
-							
+
 						default:
 						{
-							unsigned long nerr = ERR_get_error();							
+							unsigned long nerr = ERR_get_error();
 							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
-							
+
 					}
 				}
 
@@ -468,17 +468,17 @@ exchange::_read(char * const data)
 						case SSL_ERROR_WANT_READ:
 						case SSL_ERROR_WANT_WRITE:
 						case SSL_ERROR_WANT_X509_LOOKUP:
-							
+
 							n = 0;
-							
+
 							break;
-							
+
 						default:
 						{
-							unsigned long nerr = ERR_get_error();							
+							unsigned long nerr = ERR_get_error();
 							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
-							
+
 					}
 				}
 
@@ -507,17 +507,17 @@ exchange::_read(char * const data)
 						case SSL_ERROR_WANT_READ:
 						case SSL_ERROR_WANT_WRITE:
 						case SSL_ERROR_WANT_X509_LOOKUP:
-							
+
 							n = 0;
-							
+
 							break;
-							
+
 						default:
 						{
-							unsigned long nerr = ERR_get_error();							
+							unsigned long nerr = ERR_get_error();
 							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
-							
+
 					}
 				}
 
@@ -748,12 +748,12 @@ exchange::_readStream(char * const data)
 				case SSL_ERROR_ZERO_RETURN:
 
 					n = 0;
-					
+
 					break;
-					
+
 				default:
 				{
-					unsigned long nerr = ERR_get_error();							
+					unsigned long nerr = ERR_get_error();
 					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 				}
 			}
@@ -822,7 +822,7 @@ exchange::readStreamString(dodoString &a_str)
 	}
 
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	
+
 	if (n > 0)
 		collectedData.buffer.assign(data, n);
 

@@ -72,15 +72,15 @@ namespace dodo
 				 */
 				static dodoString notexists(const dodoString &statement);
 
-				bool preventFraming;                                                                    ///< if true values of fields will be framed with ' in `insert` and `update` statements[false by default]
+				bool preventFraming;                                                                                    ///< if true values of fields will be framed with ' in `insert` and `update` statements[false by default]
 
-				bool preventEscaping;                                                                   ///< if true values of fields {\,'} will be escaped in `insert` and `update` statements[false by default]
+				bool preventEscaping;                                                                                   ///< if true values of fields {\,'} will be escaped in `insert` and `update` statements[false by default]
 
-				bool autoFraming;                                                                       ///< if true try to detect automaticaly whether to frame or not; autoFraming is omited if preventFraming is true; framed values are only escaped if preventEscaping is false[true by default]
+				bool autoFraming;                                                                                       ///< if true try to detect automaticaly whether to frame or not; autoFraming is omited if preventFraming is true; framed values are only escaped if preventEscaping is false[true by default]
 
-				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;          ///< hash of 'db:table' => `array of fields to frame`
+				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;                          ///< hash of 'db:table' => `array of fields to frame`
 
-				dodoString request;                                                                     ///< SQL statement
+				dodoString request;                                                                                     ///< SQL statement
 
 				/**
 				 * @return escaped string
@@ -256,20 +256,20 @@ namespace dodo
 
 			private:
 
-				static const dodoString sqlAddSelArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];           ///< additional `select` statement
-				static const dodoString sqlAddDelArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];           ///< additional `delete` statement
-				static const dodoString sqlAddUpArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];            ///< additional `update` statement
-				static const dodoString sqlAddInsArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS];           ///< additional `insert` statement
-				static const unsigned int addSelEnumArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];        ///< positions in sqlAddSelArr additional `select` statement
-				static const unsigned int addDelEnumArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];        ///< positions in sqlAddDelArr additional `delete` statement
-				static const unsigned int addUpEnumArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];         ///< positions in sqlAddUpArr additional `update` statement
-				static const unsigned int addInsEnumArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS];        ///< positions in sqlAddInsArr additional `insert` statement
+				static const dodoString sqlAddSelArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];                           ///< additional `select` statement
+				static const dodoString sqlAddDelArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];                           ///< additional `delete` statement
+				static const dodoString sqlAddUpArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];                            ///< additional `update` statement
+				static const dodoString sqlAddInsArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS];                           ///< additional `insert` statement
+				static const unsigned int addSelEnumArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];                        ///< positions in sqlAddSelArr additional `select` statement
+				static const unsigned int addDelEnumArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];                        ///< positions in sqlAddDelArr additional `delete` statement
+				static const unsigned int addUpEnumArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];                         ///< positions in sqlAddUpArr additional `update` statement
+				static const unsigned int addInsEnumArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS];                        ///< positions in sqlAddInsArr additional `insert` statement
 
-				static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];                    ///< additional statements(`where`, `limit`, ...)
+				static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];                                    ///< additional statements(`where`, `limit`, ...)
 
-				static const dodoString sqlQStArr[CONNECTOR_SUBREQUESTSTATEMENTS];                      ///< statements for complex queries(`union`, ...)
+				static const dodoString sqlQStArr[CONNECTOR_SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
 
-				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS];              ///< statements for `join` queries
+				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS];                              ///< statements for `join` queries
 
 
 #define SQLCONSTRUCTOR_STATEMENTS 20
@@ -301,7 +301,7 @@ namespace dodo
 					SQLCONSTRUCTOR_STATEMENT_DELETE,
 				};
 
-				static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS]; ///< sqlConstructor statements
+				static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS];                 ///< sqlConstructor statements
 		};
 	};
 };

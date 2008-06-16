@@ -28,8 +28,8 @@ using namespace dodo::io::network;
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
 __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int &a_operType,
-									     void *a_executor) : operType(a_operType),
-												 executor(a_executor)
+																			 void *a_executor) : operType(a_operType),
+																								 executor(a_executor)
 {
 }
 
@@ -55,7 +55,7 @@ exchange::exchange(exchange &fse)
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 
@@ -89,7 +89,7 @@ exchange::exchange()
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 
@@ -109,7 +109,7 @@ exchange::exchange(__initialAccept &a_init)
 #ifndef IONETWORKEXCHANGE_WO_XEXEC
 
 	: collectedData(operType,
-			(void *) this)
+					(void *) this)
 
 #endif
 
@@ -176,8 +176,8 @@ exchange::close()
 
 void
 exchange::init(int a_socket,
-	       bool a_blocked,
-	       bool blockInherited)
+			   bool a_blocked,
+			   bool blockInherited)
 {
 	raceHazardGuard pg(this);
 

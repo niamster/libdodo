@@ -26,29 +26,29 @@
 using namespace dodo;
 
 const dodoString logger::levels[] = { "INFO",
-				      "NOTICE",
-				      "DEBUG",
-				      "WARNING",
-				      "ERROR",
-				      "ALERT",
-				      "CRITICAL",
-				      "EMERGENCY" };
+									  "NOTICE",
+									  "DEBUG",
+									  "WARNING",
+									  "ERROR",
+									  "ALERT",
+									  "CRITICAL",
+									  "EMERGENCY" };
 
 //-------------------------------------------------------------------
 
 const int logger::syslogLevels[] = { LOG_INFO,
-				     LOG_NOTICE,
-				     LOG_DEBUG,
-				     LOG_WARNING,
-				     LOG_ERR,
-				     LOG_ALERT,
-				     LOG_CRIT,
-				     LOG_EMERG,   };
+									 LOG_NOTICE,
+									 LOG_DEBUG,
+									 LOG_WARNING,
+									 LOG_ERR,
+									 LOG_ALERT,
+									 LOG_CRIT,
+									 LOG_EMERG,   };
 
 //-------------------------------------------------------------------
 
 logger::logger() : handlersNum(0),
-		   timeFormat(" %d/%m/%Y.%H-%M-%S: ")
+				   timeFormat(" %d/%m/%Y.%H-%M-%S: ")
 {
 }
 
@@ -62,7 +62,7 @@ logger::~logger()
 
 unsigned long
 logger::add(short level,
-	    io::channel *handler)
+			io::channel *handler)
 {
 	raceHazardGuard tg(this);
 
@@ -98,7 +98,7 @@ logger::remove(unsigned long position)
 
 void
 logger::log(short level,
-	    const dodoString &msg)
+			const dodoString &msg)
 {
 	raceHazardGuard tg(this);
 

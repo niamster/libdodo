@@ -52,7 +52,7 @@ namespace dodo
 			enum collectionOnDestructEnum
 			{
 				COLLECTION_ONDESTRUCT_KEEP_ALIVE,
-				COLLECTION_ONDESTRUCT_STOP, ///< send SIGINT to process
+				COLLECTION_ONDESTRUCT_STOP,                 ///< send SIGINT to process
 				COLLECTION_ONDESTRUCT_WAIT
 			};
 
@@ -66,17 +66,17 @@ namespace dodo
 				 */
 				__processInfo();
 
-				pid_t pid;                      ///< process pid
-				void *data;                     ///< process data
-				bool isRunning;                 ///< true process is running
-				unsigned long position;         ///< identificator
-				job::routine func;              ///< function to execute
-				short action;                   ///< action on object destruction[see collectionOnDestructEnum]
-				unsigned long executed;         ///< amount of times process was executed
-				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
+				pid_t pid;                                      ///< process pid
+				void *data;                                     ///< process data
+				bool isRunning;                                 ///< true process is running
+				unsigned long position;                         ///< identificator
+				job::routine func;                              ///< function to execute
+				short action;                                   ///< action on object destruction[see collectionOnDestructEnum]
+				unsigned long executed;                         ///< amount of times process was executed
+				unsigned long executeLimit;                     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method; default is 0(unlimit);
 
 #ifdef DL_EXT
-				void *handle;    ///< handle to library
+				void *handle;                    ///< handle to library
 #endif
 			};
 
@@ -87,11 +87,11 @@ namespace dodo
 			 */
 			struct __processMod
 			{
-				char name[64];                  ///< name of module
-				char discription[256];          ///< discription of module
-				char hook[64];                  ///< name of function in module that will be a hook
-				unsigned long executeLimit;     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
-				short action;                   ///< action on object destruction[see collectionOnDestructEnum]
+				char name[64];                                  ///< name of module
+				char discription[256];                          ///< discription of module
+				char hook[64];                                  ///< name of function in module that will be a hook
+				unsigned long executeLimit;                     ///< if greater than one will be a atomatically deleted or deleted with `sweepTrash` method
+				short action;                                   ///< action on object destruction[see collectionOnDestructEnum]
 			};
 
 			/**
@@ -285,11 +285,11 @@ namespace dodo
 					 */
 					virtual bool getProcess(unsigned long position) const;
 
-					unsigned long processNum;                               ///< number of registered processes
+					unsigned long processNum;                                                   ///< number of registered processes
 
-					dodoList<__processInfo> processes;                      ///< identificators of processes
+					dodoList<__processInfo> processes;                                          ///< identificators of processes
 
-					mutable dodoList<__processInfo>::iterator current;      ///< iterator for list of processes[for matched with getProcess method]
+					mutable dodoList<__processInfo>::iterator current;                          ///< iterator for list of processes[for matched with getProcess method]
 			};
 		};
 	};

@@ -91,14 +91,14 @@ namespace dodo
 #define dodoArray    std::vector
 #endif
 
-	typedef dodoArray<dodoString> dodoStringArray;                                ///< array of strings
+	typedef dodoArray<dodoString> dodoStringArray;                                    ///< array of strings
 
 #define dodoList std::list
 
-	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;            ///< hash of strings
-	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;  ///< hash of strings[case insensitive]
+	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;                ///< hash of strings
+	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;      ///< hash of strings[case insensitive]
 
-	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                    ///< array of hashes of string
+	typedef dodoArray<dodoStringMap> dodoStringMapArray;                                        ///< array of hashes of string
 
 	/**
 	 * predifined constants

@@ -384,28 +384,28 @@ namespace dodo
 				 */
 				virtual dodoString trim(const dodoString &statement);
 
-				dodoList<dodoString> processed;                                                                         ///< files that will be skipped due to the recursion
+				dodoList<dodoString> processed;                                                                                         ///< files that will be skipped due to the recursion
 
-				dodoStringMap global;                                                                                   ///< set of global variables[user-set]
-				dodoMap<dodoString, dodoStringArray> globalArray;                                                       ///< global user-defined variables(arrays)
-				dodoMap<dodoString, dodoStringMap> globalHash;                                                          ///< global user-defined variables(hashes)
-				dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;                                         ///< global user-defined variables(array of hashes)
+				dodoStringMap global;                                                                                                   ///< set of global variables[user-set]
+				dodoMap<dodoString, dodoStringArray> globalArray;                                                                       ///< global user-defined variables(arrays)
+				dodoMap<dodoString, dodoStringMap> globalHash;                                                                          ///< global user-defined variables(hashes)
+				dodoMap<dodoString, dodoArray<dodoStringMap> > globalArrayHash;                                                         ///< global user-defined variables(array of hashes)
 
-				dodoMap<unsigned int, dodoStringMap> local;                                                             ///< local variables[occur in `for` block]
-				dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;                                   ///< local variables(hashes)[occur in `for` block]
+				dodoMap<unsigned int, dodoStringMap> local;                                                                             ///< local variables[occur in `for` block]
+				dodoMap<unsigned int, dodoMap<dodoString, dodoStringMap> > localHash;                                                   ///< local variables(hashes)[occur in `for` block]
 
-				dodoStringMap dodo;                                                                                     ///< auxillary variables[dodo defined][for dodo.*]
+				dodoStringMap dodo;                                                                                                     ///< auxillary variables[dodo defined][for dodo.*]
 
-				bool continueFlag;                                                                                      ///< indicates `continue` state
+				bool continueFlag;                                                                                                      ///< indicates `continue` state
 
-				unsigned int breakDeepness;                                                                             ///< deepness of the break
-				unsigned int loopDeepness;                                                                              ///< deepness of the loop
+				unsigned int breakDeepness;                                                                                             ///< deepness of the break
+				unsigned int loopDeepness;                                                                                              ///< deepness of the loop
 
-				unsigned long iterator;                                                                                 ///< amount of iterations of the loop
+				unsigned long iterator;                                                                                                 ///< amount of iterations of the loop
 
-				unsigned int namespaceDeepness;                                                                         ///< deepness of the namespace
+				unsigned int namespaceDeepness;                                                                                         ///< deepness of the namespace
 
-				server &CGI;                                                                                            ///< cgi object through what output will be performed
+				server &CGI;                                                                                                            ///< cgi object through what output will be performed
 		};
 	};
 };

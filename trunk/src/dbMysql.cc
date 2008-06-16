@@ -34,21 +34,21 @@ __mysqlSSLOptions::__mysqlSSLOptions()
 //-------------------------------------------------------------------
 
 __mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key,
-				     const dodoString &a_cert,
-				     const dodoString &a_ca,
-				     const dodoString &a_capath,
-				     const dodoString &a_cipher) : key(a_key),
-								   cert(a_cert),
-								   ca(a_ca),
-								   capath(a_capath),
-								   cipher(a_cipher)
+									 const dodoString &a_cert,
+									 const dodoString &a_ca,
+									 const dodoString &a_capath,
+									 const dodoString &a_cipher) : key(a_key),
+																   cert(a_cert),
+																   ca(a_ca),
+																   capath(a_capath),
+																   cipher(a_cipher)
 {
 }
 
 //-------------------------------------------------------------------
 
 mysql::mysql() : empty(true),
-		 type(CLIENT_MULTI_STATEMENTS)
+				 type(CLIENT_MULTI_STATEMENTS)
 
 {
 #ifndef DBMYSQL_WO_XEXEC
@@ -171,16 +171,16 @@ mysql::unsetMyAddDelSt(short statement)
 
 void
 mysql::connectSettings(unsigned long a_type,
-		       const __mysqlSSLOptions &options)
+					   const __mysqlSSLOptions &options)
 {
 	type = a_type;
 
 	mysql_ssl_set(mysqlHandle,
-		      options.key.size() == 0 ? NULL : options.key.c_str(),
-		      options.cert.size() == 0 ? NULL : options.cert.c_str(),
-		      options.ca.size() == 0 ? NULL : options.ca.c_str(),
-		      options.capath.size() == 0 ? NULL : options.capath.c_str(),
-		      options.cipher.size() == 0 ? NULL : options.cipher.c_str());
+				  options.key.size() == 0 ? NULL : options.key.c_str(),
+				  options.cert.size() == 0 ? NULL : options.cert.c_str(),
+				  options.ca.size() == 0 ? NULL : options.ca.c_str(),
+				  options.capath.size() == 0 ? NULL : options.capath.c_str(),
+				  options.cipher.size() == 0 ? NULL : options.cipher.c_str());
 }
 
 //-------------------------------------------------------------------
@@ -209,13 +209,13 @@ mysql::connect()
 	mysqlHandle = mysql_init(NULL);
 
 	if (!mysql_real_connect(mysqlHandle,
-				collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
-				collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
-				collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str(),
-				collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
-				collectedData.dbInfo.port,
-				collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
-				type))
+							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
+							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
+							collectedData.dbInfo.password.size() == 0 ? NULL : collectedData.dbInfo.password.c_str(),
+							collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
+							collectedData.dbInfo.port,
+							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
+							type))
 		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 #ifndef DBMYSQL_WO_XEXEC
@@ -257,7 +257,7 @@ mysql::disconnect()
 
 void
 mysql::_exec(const dodoString &query,
-	     bool result)
+			 bool result)
 {
 	if (query.size() == 0)
 	{
@@ -299,12 +299,12 @@ mysql::_exec(const dodoString &query,
 					while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 					{
 						if (strcasestr(mysqlRow[1], "char") != NULL ||
-						    strcasestr(mysqlRow[1], "date") != NULL ||
-						    strcasestr(mysqlRow[1], "time") != NULL ||
-						    strcasestr(mysqlRow[1], "blob") != NULL ||
-						    strcasestr(mysqlRow[1], "text") != NULL ||
-						    strcasestr(mysqlRow[1], "enum") != NULL ||
-						    strcasestr(mysqlRow[1], "set") != NULL)
+							strcasestr(mysqlRow[1], "date") != NULL ||
+							strcasestr(mysqlRow[1], "time") != NULL ||
+							strcasestr(mysqlRow[1], "blob") != NULL ||
+							strcasestr(mysqlRow[1], "text") != NULL ||
+							strcasestr(mysqlRow[1], "enum") != NULL ||
+							strcasestr(mysqlRow[1], "set") != NULL)
 							rowsPart.push_back(mysqlRow[0]);
 					}
 
@@ -492,7 +492,7 @@ mysql::affectedRowsCount() const
 
 void
 mysql::exec(const dodoString &query,
-	    bool result)
+			bool result)
 {
 #ifndef DBMYSQL_WO_XEXEC
 	operType = MYSQL_OPERATION_EXEC;
@@ -600,8 +600,8 @@ mysql::renameFieldCollect()
 
 void
 mysql::renameField(const dodoString &field,
-		   const __connectorField &to_field,
-		   const dodoString &table)
+				   const __connectorField &to_field,
+				   const dodoString &table)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
 	collectedData.tableTo = field;
