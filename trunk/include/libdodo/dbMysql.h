@@ -101,21 +101,6 @@ namespace dodo
 		 */
 		struct __mysqlSslOptions
 		{
-			/**
-			 * constructor
-			 */
-			__mysqlSslOptions();
-
-			/**
-			 * constructor
-			 * @param key defines pathname to the key file
-			 * @param cert defines pathname to the certificate file
-			 * @param ca defines pathname to the certificate authority file
-			 * @param capath defines pathname to the directory that contains trusted SSL CA certificates in pem format
-			 * @param cipher defines allowed SSL ciphers
-			 */
-			__mysqlSslOptions(const dodoString &key, const dodoString &cert = __dodostring__, const dodoString &ca = __dodostring__, const dodoString &capath = __dodostring__, const dodoString &cipher = __dodostring__);
-
 			dodoString key;                     ///< pathname to the key file
 			dodoString cert;                    ///< pathname to the certificate file
 			dodoString ca;                      ///< pathname to the certificate authority file

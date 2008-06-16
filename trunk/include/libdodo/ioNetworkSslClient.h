@@ -125,6 +125,12 @@ namespace dodo
 						 * destructor
 						 */
 						virtual ~client();
+						
+						/**
+						 * set certificates information
+						 * @param certs defines certificates information 
+						 */
+						virtual void setSertificates(const __certificates &certs);
 
 						/**
 						 * connect from specific address

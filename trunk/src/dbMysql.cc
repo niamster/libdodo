@@ -33,26 +33,6 @@
 
 using namespace dodo::db;
 
-__mysqlSslOptions::__mysqlSslOptions()
-{
-}
-
-//-------------------------------------------------------------------
-
-__mysqlSslOptions::__mysqlSslOptions(const dodoString &a_key,
-									 const dodoString &a_cert,
-									 const dodoString &a_ca,
-									 const dodoString &a_capath,
-									 const dodoString &a_cipher) : key(a_key),
-																   cert(a_cert),
-																   ca(a_ca),
-																   capath(a_capath),
-																   cipher(a_cipher)
-{
-}
-
-//-------------------------------------------------------------------
-
 mysql::mysql() : empty(true),
 				 type(CLIENT_MULTI_STATEMENTS)
 

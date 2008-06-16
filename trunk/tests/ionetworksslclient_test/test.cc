@@ -25,6 +25,18 @@ int main(int argc, char **argv)
 		cout << tools::network::getHostPrimaryIp(host) << endl;
 
 		client st(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
+		
+		__certificates certs;
+		certs.ca = "host.pem";
+		
+		//certs.cert = "host.cert";
+		//certs.key = "host.key";
+		//certs.keyType = KEYTYPE_PKEY;
+	
+		//certs.caPath = "./";
+
+		st.setSertificates(certs);
+
 		exchange exch;
 		dodoString str;
 

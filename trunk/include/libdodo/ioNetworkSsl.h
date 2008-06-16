@@ -52,8 +52,28 @@ namespace dodo
 		{
 			namespace ssl
 			{
+				enum keyTypeEnum
+				{
+					KEYTYPE_PKEY,
+					KEYTYPE_RSA,
+				};
+				
 				/**
 				 * @struct __certificates defines SSL options
+				 * @note key, certificate or CA should be in PEM format
+				 * allowed ciphers you can list by `openssl ciphers -v` command
+				 * ciphers should be separated with ':'
+				 * some of them:
+				 * RC4-MD5
+				 * RC4-SHA
+				 * AES256-SHA
+				 * DES-CBC3-SHA
+				 * DES-CBC3-MD5
+				 * DHE-RSA-AES128-SHA
+				 * DHE-DSS-AES128-SHA
+				 * AES128-SHA
+				 * DES-CBC-SHA
+				 * DES-CBC-MD5
 				 */
 				struct __certificates
 				{
@@ -61,21 +81,13 @@ namespace dodo
 					 * constructor
 					 */
 					__certificates();
-
-					/**
-					 * constructor
-					 * @param key defines pathname to the key file
-					 * @param cert defines pathname to the certificate file
-					 * @param ca defines pathname to the certificate authority file
-					 * @param capath defines pathname to the directory that contains trusted SSL CA certificates in pem format
-					 * @param cipher defines allowed SSL ciphers
-					 */
-					__certificates(const dodoString &key, const dodoString &cert = __dodostring__, const dodoString &ca = __dodostring__, const dodoString &capath = __dodostring__, const dodoString &cipher = __dodostring__);
-
+					
 					dodoString key;                     ///< pathname to the key file
+					dodoString keyPassword;             ///< password for the key file
+					short keyType;						///< type of the key[see keyTypeEnum]
 					dodoString cert;                    ///< pathname to the certificate file
 					dodoString ca;                      ///< pathname to the certificate authority file
-					dodoString capath;                  ///< pathname to a directory that contains trusted SSL CA certificates in pem format
+					dodoString caPath;                  ///< pathname to a directory that contains trusted SSL CA certificates in PEM format or to a file of CA certificates in PEM format
 					dodoString cipher;                  ///< allowed SSL ciphers
 				};
 				

@@ -129,6 +129,12 @@ namespace dodo
 						 * destructor
 						 */
 						virtual ~server();
+						
+						/**
+						 * set certificates information
+						 * @param certs defines certificates information 
+						 */
+						virtual void setSertificates(const __certificates &certs);
 
 						/**
 						 * bind to address and start to listen

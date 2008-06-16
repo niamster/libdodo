@@ -51,6 +51,7 @@ namespace dodo
 					SERVEREX_WRONGFILENAME,
 					SERVEREX_UNABLETOINITCONTEXT,
 					SERVEREX_UNABLETOINITSSL,
+					SERVEREX_UNKNOWNKEYTYPE,
 				};
 
 				/**
@@ -60,7 +61,7 @@ namespace dodo
 #define IONETWORKSSLSERVEREX_WRONGFILENAME_STR  "Probably wrong filename, type of file is wrong or `path` is empty!"
 #define IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
 #define IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
-
+#define IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR "Unknown key type."
 				/**
 				 * IDs of functions where exception might be thrown
 				 */
@@ -71,6 +72,7 @@ namespace dodo
 					SERVEREX_MAKESOCKET,
 					SERVEREX_BINDNLISTEN,
 					SERVEREX_ACCEPT,
+					SERVEREX_SETSERTIFICATES,
 				};
 			};
 		};
