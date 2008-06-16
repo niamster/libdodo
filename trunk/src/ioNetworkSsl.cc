@@ -49,6 +49,26 @@ namespace dodo
 
 using namespace dodo::io::network::ssl;
 
+__certificates::__certificates()
+{
+}
+
+//-------------------------------------------------------------------
+
+__certificates::__certificates(const dodoString &a_key,
+							   const dodoString &a_cert,
+							   const dodoString &a_ca,
+							   const dodoString &a_capath,
+							   const dodoString &a_cipher) : key(a_key),
+															 cert(a_cert),
+															 ca(a_ca),
+															 capath(a_capath),
+															 cipher(a_cipher)
+{
+}
+
+//-------------------------------------------------------------------
+
 __openssl_init__::__openssl_init__()
 {
 	SSL_load_error_strings();

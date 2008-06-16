@@ -33,13 +33,13 @@
 
 using namespace dodo::db;
 
-__mysqlSSLOptions::__mysqlSSLOptions()
+__mysqlSslOptions::__mysqlSslOptions()
 {
 }
 
 //-------------------------------------------------------------------
 
-__mysqlSSLOptions::__mysqlSSLOptions(const dodoString &a_key,
+__mysqlSslOptions::__mysqlSslOptions(const dodoString &a_key,
 									 const dodoString &a_cert,
 									 const dodoString &a_ca,
 									 const dodoString &a_capath,
@@ -177,7 +177,7 @@ mysql::unsetMyAddDelSt(short statement)
 
 void
 mysql::connectSettings(unsigned long a_type,
-					   const __mysqlSSLOptions &options)
+					   const __mysqlSslOptions &options)
 {
 	type = a_type;
 

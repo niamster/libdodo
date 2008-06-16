@@ -97,14 +97,14 @@ namespace dodo
 		};
 
 		/**
-		 * @struct __mysqlSSLOptions defines SSL mySQL options
+		 * @struct __mysqlSslOptions defines SSL mySQL options
 		 */
-		struct __mysqlSSLOptions
+		struct __mysqlSslOptions
 		{
 			/**
 			 * constructor
 			 */
-			__mysqlSSLOptions();
+			__mysqlSslOptions();
 
 			/**
 			 * constructor
@@ -114,7 +114,7 @@ namespace dodo
 			 * @param capath defines pathname to the directory that contains trusted SSL CA certificates in pem format
 			 * @param cipher defines allowed SSL ciphers
 			 */
-			__mysqlSSLOptions(const dodoString &key, const dodoString &cert = __dodostring__, const dodoString &ca = __dodostring__, const dodoString &capath = __dodostring__, const dodoString &cipher = __dodostring__);
+			__mysqlSslOptions(const dodoString &key, const dodoString &cert = __dodostring__, const dodoString &ca = __dodostring__, const dodoString &capath = __dodostring__, const dodoString &cipher = __dodostring__);
 
 			dodoString key;                     ///< pathname to the key file
 			dodoString cert;                    ///< pathname to the certificate file
@@ -151,9 +151,9 @@ namespace dodo
 				/*
 				 * set connection settings
 				 * @param type defines type of connection[see mySQL documentation]
-				 * @param options defines options of ssl connection[see __mysqlSSLOptions]
+				 * @param options defines options of ssl connection[see __mysqlSslOptions]
 				 * @note type can be:
-				 *      CLIENT_COMPRESS         Use compression protocol.
+				 *  CLIENT_COMPRESS         Use compression protocol.
 				 *	CLIENT_FOUND_ROWS       Return the number of found (matched) rows, not the number of affected rows.
 				 *	CLIENT_IGNORE_SPACE     Allow spaces after function names. Makes all functions names reserved words.
 				 *	CLIENT_INTERACTIVE      Allow interactive_timeout seconds (instead of wait_timeout seconds) of inactivity before closing the connection. The client's session wait_timeout variable is set to the value of the session interactive_timeout variable.
@@ -162,7 +162,7 @@ namespace dodo
 				 *	CLIENT_MULTI_RESULTS    Tell the server that the client can handle multiple result sets from multiple-statement executions or stored procedures. This is automatically set if CLIENT_MULTI_STATEMENTS is set. New in 4.1.
 				 *	CLIENT_SSL      Use SSL (encrypted protocol). This option should not be set by application programs; it is set internally in the client library.
 				 */
-				void connectSettings(unsigned long type, const __mysqlSSLOptions &options = __mysqlSSLOptions());
+				void connectSettings(unsigned long type, const __mysqlSslOptions &options = __mysqlSslOptions());
 
 				/**
 				 * connect to the database
