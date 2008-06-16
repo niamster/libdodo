@@ -21,6 +21,12 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+/**
+ * vim indentation settings
+ * set tabstop=4
+ * set shiftwidth=4
+ */
+
 #ifndef _IPCTHREADCOLLECTION_H_
 #define _IPCTHREADCOLLECTION_H_
 

@@ -1,3 +1,9 @@
+/**
+ * vim indentation settings
+ * set tabstop=4
+ * set shiftwidth=4
+ */
+
 #include <libdodo/toolsMisc.h>
 #include <libdodo/ioFile.h>
 #include <libdodo/baseEx.h>

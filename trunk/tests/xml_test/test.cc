@@ -1,3 +1,9 @@
+/**
+ * vim indentation settings
+ * set tabstop=4
+ * set shiftwidth=4
+ */
+
 #include <libdodo/baseEx.h>
 #include <libdodo/xmlProcessor.h>
 #include <libdodo/toolsMisc.h>

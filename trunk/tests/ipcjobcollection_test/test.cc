@@ -1,3 +1,9 @@
+/**
+ * vim indentation settings
+ * set tabstop=4
+ * set shiftwidth=4
+ */
+
 #include <libdodo/baseEx.h>
 #include <libdodo/ipcJobCollection.h>
 #include <libdodo/ipcProcessCollection.h>

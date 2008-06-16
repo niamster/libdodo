@@ -1,5 +1,6 @@
 /***************************************************************************
  *            ioNetworkSslExchange.cc
+ *
  *  Tue Jun 10 17:00:47 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
@@ -18,6 +19,12 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ */
+
+/**
+ * vim indentation settings
+ * set tabstop=4
+ * set shiftwidth=4
  */
 
 #include <libdodo/ioNetworkSslExchange.h>
