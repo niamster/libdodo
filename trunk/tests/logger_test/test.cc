@@ -13,7 +13,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
 	try
-	{	
+	{
 		logger log;
 
 		file *disk = new file("./test.log", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_APPEND);
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 		delete disk;
 		delete std;
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
 		cout << ex.baseErrstr << "\t" << ex.line << "\t" << ex.file << endl;
 	}

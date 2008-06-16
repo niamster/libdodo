@@ -9,7 +9,7 @@ using namespace dodo;
 using namespace std;
 
 #ifdef DL_EXT
-	typedef void (* print)(const dodoString &data);
+typedef void (*print)(const dodoString &data);
 #endif
 
 int main(int argc, char **argv)
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 #ifdef BFD_EXT
 		dodoStringArray arr = libraryLoader::getSymbols("./module");
 		dodoStringArray::iterator i = arr.begin(), j = arr.end();
-		for (;i!=j;++i)
+		for (; i != j; ++i)
 			cout << *i << endl;
 		cout << endl;
 #endif
@@ -37,11 +37,11 @@ int main(int argc, char **argv)
 
 		pr = (print)sll.get("print");
 		pr("get");
-		
+
 #endif
-	
+
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.line << endl;
 	}

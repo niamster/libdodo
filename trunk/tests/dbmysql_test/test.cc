@@ -14,17 +14,17 @@ using namespace db;
 
 #ifndef DBMYSQL_WO_XEXEC
 
-void 
+void
 hook(void *odata,
-	short int type,
-	void *udata)
+	 short int type,
+	 void *udata)
 {
 	__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
 
 	if (sql->operType == MYSQL_OPERATION_EXEC && sql->qType == ACCUMULATOR_REQUEST_SELECT)
 	{
 		cout << endl << endl << "table was " << sql->table << endl << endl;
-		
+
 		sql->limit = "70";
 	}
 }
@@ -45,11 +45,11 @@ int main(int argc, char **argv)
 
 #ifndef DBMYSQL_WO_XEXEC
 
-		int pos = pp.addPreExec(hook,(void *)"id");
+		int pos = pp.addPreExec(hook, (void *)"id");
 
 #endif
-		
-		pp.setDbInfo("test","",3306,"root", "password");
+
+		pp.setDbInfo("test", "", 3306, "root", "password");
 		pp.connect();
 
 		try
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 			pp.deleteTable("test1");
 			pp.exec();
 		}
-		catch(...)
+		catch (...)
 		{
 		}
 
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
 		fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
 		ti.fields.push_back(fi);
-		
+
 		fi.name = "dot";
 		fi.flag = 0;
 		fi.type = CONNECTOR_FIELDTYPE_TEXT;
@@ -86,15 +86,15 @@ int main(int argc, char **argv)
 		pp.createTable(ti);
 		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
-		
+
 		ti.fields.clear();
 		ti.name = "test1";
-		
+
 		fi.name = "id";
 		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
 		fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
 		ti.fields.push_back(fi);
-		
+
 		fi.name = "dot";
 		fi.flag = 0;
 		fi.type = CONNECTOR_FIELDTYPE_TEXT;
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
-		pp.createIndex("test","id","id");
+		pp.createIndex("test", "id", "id");
 		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
@@ -116,31 +116,31 @@ int main(int argc, char **argv)
 		fi.name = "foo";
 		fi.type = CONNECTOR_FIELDTYPE_CHAR;
 		fi.length = 10;
-		
-		pp.createField(fi,"test");
+
+		pp.createField(fi, "test");
 		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
-		fi.name = "bar";	
+		fi.name = "bar";
 		pp.renameField("foo", fi, "test");
 		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
-		
+
 		dodoStringArray fields;
 		__connectorStorage storage;
-		
+
 		/* select*/
 		pp.selectAll("test");
 		pp.join("test1", CONNECTOR_JOINTYPE_JOIN, "test.operation = test1.operation");
 		pp.limit(10);
 		cout << pp.queryCollect() << endl;
 		pp.exec();
-		storage = pp.fetch();//get result
-		dodoStringArray::iterator i=storage.fields.begin(), j=storage.fields.end();
-		for (;i!=j;++i)
+		storage = pp.fetch();        //get result
+		dodoStringArray::iterator i = storage.fields.begin(), j = storage.fields.end();
+		for (; i != j; ++i)
 			cout << *i << "\t";
 		cout << endl;
-		
+
 		dodoStringArray values;
 		values.push_back("20\"05`''-'07-08");
 		values.push_back("mu");
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 		pp.limit(10);
 		pp.offset(23);
 		pp.offset(3);
-				
+
 		dodoStringMap arr;
 		dodoArray<dodoStringMap> assA;
 		arr["dot"] = "20\"05`''-'07-08";
@@ -157,66 +157,66 @@ int main(int argc, char **argv)
 		arr["dot"] = "20\"05`''-'07-08";
 		arr["operation"] = "n\nu";
 		assA.push_back(arr);
-		
+
 		/*additional statement*/
-		pp.setAddInsSt(ACCUMULATOR_ADDREQUEST_INSERT_IGNORE);//base SQL
-		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);//base SQL
-		pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);//mySQL features; defined only in this class
-				
-		pp.insert("test",assA);//multiply insert
+		pp.setAddInsSt(ACCUMULATOR_ADDREQUEST_INSERT_IGNORE);           //base SQL
+		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);         //base SQL
+		pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);           //mySQL features; defined only in this class
+
+		pp.insert("test", assA);                                        //multiply insert
 		cout << pp.queryCollect() << endl;
 		pp.exec();
-		
+
 		fields.clear();
 		fields.push_back("dot");
 		fields.push_back("operation");
-		
-		pp.insert("test",values,fields);//simple insert
+
+		pp.insert("test", values, fields);     //simple insert
 		cout << pp.queryCollect() << endl;
 		pp.exec();
-		
-		for (int o=0;o<100000;o++)
+
+		for (int o = 0; o < 100000; o++)
 		{
-			pp.insert("test",values,fields);
+			pp.insert("test", values, fields);
 			//cout << pp.queryCollect() << endl;//show query
 			pp.exec();
 		}
-		
-		pp.selectAll("test","id>1");
+
+		pp.selectAll("test", "id>1");
 
 		/* creatin' union with sqlStatement that compiles from  'pp.select("log",fields,"id>1");'*/
 		dodoStringArray uni;
 		uni.push_back(pp.queryCollect());
 		uni.push_back(pp.queryCollect());
 		pp.subquery(uni);
-		
+
 		dodoStringArray uni_all;
 		uni_all.push_back(pp.queryCollect());
 		uni_all.push_back(pp.queryCollect());
-		pp.subquery(uni_all,CONNECTOR_SUBREQUEST_UNION_ALL);
-		
+		pp.subquery(uni_all, CONNECTOR_SUBREQUEST_UNION_ALL);
+
 		pp.order("id desc");
 		pp.limit(5);
 		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
-		cout << pp.queryCollect() << endl;//show query
+		cout << pp.queryCollect() << endl;        //show query
 		pp.exec();
-		
-		storage = pp.fetch();//get result
+
+		storage = pp.fetch();        //get result
 	}
-	catch(baseEx ex)
-	{	
+	catch (baseEx ex)
+	{
 		cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl << ex.message << endl;
 	}
-    
+
 #else
-    
-    	cout << "No MySQL extension was compiled!";
-    	
+
+	cout << "No MySQL extension was compiled!";
+
 #endif
 
-    	now = tools::time::now() - now;
+	now = tools::time::now() - now;
 
-    	cout << "SpentTime: " << now << endl;
-    
+	cout << "SpentTime: " << now << endl;
+
 	return 0;
 }

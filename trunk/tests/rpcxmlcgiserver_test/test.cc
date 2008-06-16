@@ -8,7 +8,7 @@ using namespace rpc;
 
 using namespace std;
 
-response 
+response
 handler(const dodoString &method, const dodoArray<value> &values)
 {
 	response resp;
@@ -19,20 +19,20 @@ handler(const dodoString &method, const dodoArray<value> &values)
 }
 
 int main(int argc, char **argv)
-{		
+{
 	cgi::server provider(false);
 	rpc::xml::cgiServer srv(provider);
-	
+
 	try
 	{
 		srv.setHandler("callTest", ::handler);
 
 		srv.serve();
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
 		cout << ex.message << "\t" << ex.baseErrstr << endl;
-	}	
-		
+	}
+
 	return 0;
 }

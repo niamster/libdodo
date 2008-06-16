@@ -13,10 +13,10 @@ using namespace std;
 
 #ifndef IMAGE_WO_XEXEC
 
-void 
+void
 hook(void *odata,
-	short int type,
-	void *udata)
+	 short int type,
+	 void *udata)
 {
 	__xexexImageCollectedData *imData = (__xexexImageCollectedData *)odata;
 
@@ -29,7 +29,7 @@ hook(void *odata,
 			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
 			img->enableAll();
 		}
-		catch(baseEx ex)
+		catch (baseEx ex)
 		{
 			cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 		}
@@ -39,9 +39,9 @@ hook(void *odata,
 #endif
 
 #endif
-	
+
 int main(int argc, char **argv)
-{	
+{
 	try
 	{
 #ifdef IMAGEMAGICK_EXT
@@ -50,37 +50,37 @@ int main(int argc, char **argv)
 #ifndef IMAGE_WO_XEXEC
 
 		im.addPreExec(hook, NULL);
-		im.addPostExec(hook, NULL);///< revert
+		im.addPostExec(hook, NULL);        ///< revert
 
 #endif
 
 		im.read("test.png");
 		cout << im.getCompression() << " " << im.getEncoder() << " " << im.getQuality() << endl;
-	
+
 		im.scale(1000, 1000);
-		
+
 		im.write("test.jpg");
-		
+
 		unsigned char *img; unsigned int size;
 		im.setEncoder(IMAGE_ENCODER_PNG);
 		im.setCompression(IMAGE_COMPRESSION_ZIP);
 		im.setQuality(4);
 		im.write(&img, size);
-		
+
 		file io;
 		io.open("my.png", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_READ_WRITE_TRUNCATE);
 		io.outSize = size;
 		io.write((char *)img);
 		im.destroyImageData(&img);
-		
+
 		cout << size << endl;
 #endif
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
-    		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
-    	}
-    
+		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
+	}
+
 	return 0;
 }
 

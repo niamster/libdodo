@@ -13,7 +13,7 @@ static bool cought = false;
 static bool run = true;
 static int number = 1;
 
-void 
+void
 signaler(int, siginfo_t *, void *)
 {
 	cout << "\nTEST\n";
@@ -22,7 +22,7 @@ signaler(int, siginfo_t *, void *)
 	number++;
 }
 
-void 
+void
 exit(int, siginfo_t *, void *)
 {
 	run = false;
@@ -30,17 +30,17 @@ exit(int, siginfo_t *, void *)
 
 int main(int argc, char **argv)
 {
-	
+
 	cout << os::getPID() << endl;
-	
-	os::setSignalHandler(OS_SIGNAL_HANGUP,exit);
-	os::setSignalHandler(OS_SIGNAL_INTERRUPT,signaler);
-	
+
+	os::setSignalHandler(OS_SIGNAL_HANGUP, exit);
+	os::setSignalHandler(OS_SIGNAL_INTERRUPT, signaler);
+
 	if (os::isSignalHandled(OS_SIGNAL_HANGUP))
 		cout << "OS_SIGNAL_HANGUP IS SET ... !\n";
 	else
 		cout << "OS_SIGNAL_HANGUP IS NOT SET ... !\n";
-		
+
 	while (run)
 	{
 		cout << "\r" << number;
@@ -49,37 +49,37 @@ int main(int argc, char **argv)
 			cought = false;
 			cout << "\nOS_SIGNAL_HANGUP =)\n";
 			cout.flush();
-			
+
 			os::unsetSignalHandler(OS_SIGNAL_INTERRUPT);
 		}
-		
+
 	}
-	
+
 	os::setWorkingDir("/");
-	
+
 	cout << os::getWorkingDir() << endl;
-	
+
 	{
 		dodoArray<__userInfo> info = os::getUsers();
-		
-		for (int i(0);i<info.size();i++)
+
+		for (int i(0); i < info.size(); i++)
 			cout << info[i].name << endl;
 	}
-	
+
 	cout << endl << endl;
-	
-	{	
+
+	{
 		dodoArray<__groupInfo> info = os::getGroups();
-		
-		for (int i(0);i<info.size();i++)
-			cout << info[i].name << endl;	
+
+		for (int i(0); i < info.size(); i++)
+			cout << info[i].name << endl;
 	}
-		
-	cout << os::getWorkingDir() << endl;	
+
+	cout << os::getWorkingDir() << endl;
 
 	os::die(tools::string::rTrim("    rTrim    "));
 
 	cout << os::getWorkingDir();
-		
+
 	return 0;
 }

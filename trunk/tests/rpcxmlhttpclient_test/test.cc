@@ -44,11 +44,11 @@ int main(int argc, char **argv)
 
 		cout << resp.getValue().getString() << endl;
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 		cout.flush();
 	}
-	
+
 	return 0;
 }

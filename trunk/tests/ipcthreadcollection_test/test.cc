@@ -26,19 +26,19 @@ thread(void *data)
 		cout << (char *)shC.get(shCI);
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
-		
+
 		int timeout = *(int *)sh.acquire();
 		tools::os::sleep(timeout);
 		sh.release();
-		
+
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
 		cout << (string)ex << ex.line << endl;
-	}	
-	
+	}
+
 	return NULL;
 }
 
@@ -47,8 +47,8 @@ int main(int argc, char **argv)
 	shCI = shC.add((char *)"@test@\n");
 	try
 	{
-		int *shared = new int(1);
-		
+		int *shared = new int (1);
+
 		sh.set((void *)shared);
 
 #ifdef PTHREAD_EXT
@@ -58,28 +58,28 @@ int main(int argc, char **argv)
 
 		int pos[amount];
 		dodoString ids[amount];
-		for (int i=0;i<amount;++i)
+		for (int i = 0; i < amount; ++i)
 		{
 			ids[i] = tools::string::lToString(i);
-			pos[i] = th.add(thread,(void *)ids[i].c_str());
+			pos[i] = th.add(thread, (void *)ids[i].c_str());
 		}
-		
-		for (int i=0;i<amount;++i)
+
+		for (int i = 0; i < amount; ++i)
 			th.run(pos[i]);
-		
+
 		cout << endl << endl << "STARTED" << endl;
 		cout << tools::time::now() << endl;
 		cout.flush();
-		
+
 		th.wait();
 #endif
-		
+
 		delete shared;
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
 		cout << (string)ex << endl;
 	}
-		
+
 	return 0;
 }

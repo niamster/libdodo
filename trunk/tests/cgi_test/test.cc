@@ -10,13 +10,13 @@ using namespace cgi;
 using namespace std;
 
 int main(int argc, char **argv)
-{		
-///first type
-//	dodoStringMap head;
-//	head[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
-//	server cgit(head, false);
-	
-///second type									
+{
+	///first type
+	//	dodoStringMap head;
+	//	head[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
+	//	server cgit(head, false);
+
+	///second type
 
 	server cgit(true);
 
@@ -39,9 +39,9 @@ int main(int argc, char **argv)
 		return 0;
 	}
 	/**
- 	 * A workaround for apache web server to get auth headers:
- 	 *
-	 * RewriteEngine on 
+	 * A workaround for apache web server to get auth headers:
+	 *
+	 * RewriteEngine on
 	 * RewriteBase /
 	 * RewriteCond %{HTTP:Authorization}  ^(.*)
 	 * RewriteRule ^(.*)$ $1 [e=HTTP_AUTHORIZATION:%1
@@ -68,51 +68,51 @@ int main(int argc, char **argv)
 	cgit.HEADERS[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
 	cgit.setCookie("test", "Ni@m");
 	cgit.printHeaders();
-	
+
 	cgit.printStream( "User: " + user + "<br>" );
-	
+
 	cgit.printStream( cgit.GET["a"] + "<br>" );
 	cgit.printStream( cgit.POST["hidden"] + "<br>" );
 	cgit.printStream( cgit.POST["text"] + "<br>" );
 	cgit.printStream( cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>" );
 	cgit.printStream( cgit.COOKIES["test"] + "<br>" );
 	cgit.printStream( tools::string::ulToString(cgit.FILES["file"].size) + "<br>" );
-	
+
 	cgit.printStream( "<br>" );
-	
+
 	try
 	{
 		processor cgip(cgit);
-		cgip.assign("main","index.tpl");
-		cgip.assign("test","test");
-		cgip.assign("show","show");
-		
+		cgip.assign("main", "index.tpl");
+		cgip.assign("test", "test");
+		cgip.assign("show", "show");
+
 		dodoStringArray arr;
 		arr.push_back("one");
 		arr.push_back("two");
 		arr.push_back("three");
-		cgip.assign("arr",arr);
-		
+		cgip.assign("arr", arr);
+
 		dodoStringMap arr1;
 		arr1["one"] = "one";
 		arr1["two"] = "two";
 		arr1["three"] = "three";
-		cgip.assign("arr1",arr1);
-		
+		cgip.assign("arr1", arr1);
+
 		dodoArray<dodoStringMap> arr2;
 		arr2.push_back(arr1);
 		arr1["one"] = "three";
 		arr2.push_back(arr1);
-		cgip.assign("arr2",arr2);
-	
-		cgip.assign("one","one");
-	
+		cgip.assign("arr2", arr2);
+
+		cgip.assign("one", "one");
+
 		cgip.display("test.tpl");
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
-		cgit.printStream( (string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
-	}	
-		
+		cgit.printStream((string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
+	}
+
 	return 0;
 }

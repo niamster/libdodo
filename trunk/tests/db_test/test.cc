@@ -14,174 +14,174 @@ using namespace db;
 using namespace std;
 
 int main(int argc, char **argv)
-{	
-	connector *pp;	
-	
+{
+	connector *pp;
+
 	if (argc == 2)
 	{
-		if (strcasecmp(argv[1],"postgresql") == 0)
+		if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef POSTGRESQL_EXT
 			pp = new postgresql;
 #else
 			return 1;
 #endif
-			
-		else if (strcasecmp(argv[1],"mysql") == 0)
+
+		else if (strcasecmp(argv[1], "mysql") == 0)
 #ifdef MYSQL_EXT
 			pp = new mysql;
 #else
 			return 1;
 #endif
-			
-		else if (strcasecmp(argv[1],"sqlite") == 0)
-#ifdef SQLITE_EXT	
+
+		else if (strcasecmp(argv[1], "sqlite") == 0)
+#ifdef SQLITE_EXT
 			pp = new sqlite;
 #else
 			return 1;
 #endif
-						
+
 		else
 			return 1;
 	}
 	else
 		return 1;
-	
+
 	try
 	{
 		__connectorInfo info;
-		
+
 		info.db = "test";
 		info.host = "localhost";
-		
-		if (strcasecmp(argv[1],"postgres") == 0)
+
+		if (strcasecmp(argv[1], "postgres") == 0)
 		{
 			info.port = 5432;
 			info.user = "postgres";
 		}
-		else if (strcasecmp(argv[1],"mysql") == 0)
+		else if (strcasecmp(argv[1], "mysql") == 0)
 		{
 			info.path = "/var/run/mysqld/mysqld.sock";
 			info.user = "root";
 			info.password = "password";
 		}
-		else if (strcasecmp(argv[1],"sqlite") == 0)
+		else if (strcasecmp(argv[1], "sqlite") == 0)
 		{
 			info.path = "test.lite";
-		}				
-		
+		}
+
 		pp->setDbInfo(info);
-		pp->connect();	
+		pp->connect();
 
 		pp->deleteTable("test");
-		
+
 		try
 		{
 			pp->exec();
 		}
-		catch(...)
+		catch (...)
 		{
 		}
 
 		__connectorField fi;
-		
+
 		__connectorTable ti;
 		ti.name = "test";
-		
+
 		fi.name = "date";
 		fi.type = CONNECTOR_FIELDTYPE_TEXT;
 		ti.fields.push_back(fi);
-		
+
 		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;		
+		fi.type = CONNECTOR_FIELDTYPE_TEXT;
 		ti.fields.push_back(fi);
-		
+
 		fi.name = "id";
 		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
 		fi.flag = CONNECTOR_FIELDFLAG_NULL;
-		ti.fields.push_back(fi);		
-		
+		ti.fields.push_back(fi);
+
 		fi.name = "d";
 		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
 		fi.flag = CONNECTOR_FIELDFLAG_NULL;
-		ti.fields.push_back(fi);		
-		
+		ti.fields.push_back(fi);
+
 		fi.name = "b";
 		fi.type = CONNECTOR_FIELDTYPE_LONGBLOB;
 		fi.flag = CONNECTOR_FIELDFLAG_NULL;
-		ti.fields.push_back(fi);		
-		
+		ti.fields.push_back(fi);
+
 		pp->createTable(ti);
 		pp->exec();
-	
-		#ifndef SQLITE_ENABLE_COLUMN_METADATA
 
-			#ifdef SQLITE_EXT
+#ifndef SQLITE_ENABLE_COLUMN_METADATA
 
-				if (strcasecmp(argv[1],"sqlite") == 0)
-				{
-					dodoStringArray columns;
-					columns.push_back("operation");
-					columns.push_back("b");
-					columns.push_back("date");
-				
+#ifdef SQLITE_EXT
 
-					((sqlConstructor *)pp)->autoFraming = true;
-					((sqlConstructor *)pp)->framingFields.insert(make_pair(info.db + ":" + ti.name, columns));
-				}
-			#endif
-			
-		#endif
-		
-		cout << ((((sqlConstructor *)pp)->autoFraming)?"Automatic framing turned on.":"Automatic framing turned off.") << endl;
+		if (strcasecmp(argv[1], "sqlite") == 0)
+		{
+			dodoStringArray columns;
+			columns.push_back("operation");
+			columns.push_back("b");
+			columns.push_back("date");
+
+
+			((sqlConstructor *)pp)->autoFraming = true;
+			((sqlConstructor *)pp)->framingFields.insert(make_pair(info.db + ":" + ti.name, columns));
+		}
+#endif
+
+#endif
+
+		cout << ((((sqlConstructor *)pp)->autoFraming) ? "Automatic framing turned on." : "Automatic framing turned off.") << endl;
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";
 		arr["operation"] = "mu";
 		arr["d"] = "1";
-		
+
 		dodoArray<dodoString> select;
 		select.push_back("date");
 		select.push_back("operation");
 		select.push_back("b");
-		
-		for (int i=0;i<10;i++)
+
+		for (int i = 0; i < 10; i++)
 		{
-			pp->select("test",select,"id<20 or operation='um'");
+			pp->select("test", select, "id<20 or operation='um'");
 			pp->exec();
-			
+
 			pp->fetch();
-			
-			pp->insert("test",arr);
+
+			pp->insert("test", arr);
 			cout << ((sqlConstructor *)pp)->queryCollect() << endl;
 			pp->exec();
-			
+
 			arr["d"] = "d+1";
 			arr["operation"] = "um";
-			pp->update("test",arr);
+			pp->update("test", arr);
 			cout << ((sqlConstructor *)pp)->queryCollect() << endl;
 			arr["operation"] = "mu";
 			arr["d"] = "1";
 			pp->exec();
 		}
-		
-		pp->select("test",select,"operation='um'");
+
+		pp->select("test", select, "operation='um'");
 		pp->exec();
-		
+
 		__connectorStorage store = pp->fetch();
-		
+
 		cout << store.rows.size() << endl;
-		
+
 		dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
-		
+
 		dodoStringArray::iterator m, n;
-		
-		for (;i!=j;i++)
+
+		for (; i != j; i++)
 		{
 			m = i->begin();
 			n = i->end();
-			for (;m!=n;m++)
+			for (; m != n; m++)
 				cout << *m << "\t";
-			cout << endl;	
+			cout << endl;
 		}
 
 		arr.clear();
@@ -192,17 +192,17 @@ int main(int argc, char **argv)
 		dodoString dt = tools::filesystem::getFileContents("test");
 		tools::filesystem::writeToFile("test.1", dt);
 
-		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
+		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgres") == 0)
 			arr["b"] = "$1";
 		else
 			arr["b"] = dt;
 
-		if (strcasecmp(argv[1],"sqlite") == 0 || strcasecmp(argv[1],"postgres") == 0)
+		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgres") == 0)
 		{
 			dodoStringArray blobs;
 			blobs.push_back(dt);
 
-			if (strcasecmp(argv[1],"sqlite") == 0)
+			if (strcasecmp(argv[1], "sqlite") == 0)
 #ifdef SQLITE_EXT
 				((sqlite *)pp)->setBLOBValues(blobs);
 #else
@@ -210,17 +210,17 @@ int main(int argc, char **argv)
 #endif
 			else
 			{
-				if (strcasecmp(argv[1],"postgres") == 0)
+				if (strcasecmp(argv[1], "postgres") == 0)
 #ifdef POSTGRESQL_EXT
 					((postgresql *)pp)->setBLOBValues(blobs);
 #else
 					;
 #endif
 			}
-                	
+
 			((sqlConstructor *)pp)->preventFraming = true;
-            		((sqlConstructor *)pp)->preventEscaping = true;
-		
+			((sqlConstructor *)pp)->preventEscaping = true;
+
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";
 		}
@@ -230,26 +230,26 @@ int main(int argc, char **argv)
 			arr["operation"] = "ma";
 		}
 
-		pp->insert("test",arr);
+		pp->insert("test", arr);
 
-		if (strcasecmp(argv[1],"sqlite") == 0)
+		if (strcasecmp(argv[1], "sqlite") == 0)
 #ifdef SQLITE_EXT
 			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
 #else
 			;
 #endif
-		else 
-			if (strcasecmp(argv[1],"postgres") == 0)
+		else
+		if (strcasecmp(argv[1], "postgres") == 0)
 #ifdef POSTGRESQL_EXT
-				addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
+			addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
 #else
-				;
+			;
 #endif
-		
+
 		pp->exec();
 
-		pp->select("test",select,"operation='ma'");
-		if (strcasecmp(argv[1],"postgres") == 0)
+		pp->select("test", select, "operation='ma'");
+		if (strcasecmp(argv[1], "postgres") == 0)
 #ifdef SQLITE_EXT
 			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
 #else
@@ -261,9 +261,9 @@ int main(int argc, char **argv)
 		store = pp->fetch();
 
 		if (store.fields.size() == 3 && store.rows.size() > 0)
-			tools::filesystem::writeToFile("test.2",(*store.rows.begin())[2]);	
+			tools::filesystem::writeToFile("test.2", (*store.rows.begin())[2]);
 	}
-	catch(baseEx ex)
+	catch (baseEx ex)
 	{
 		cout << (string)ex << endl << ex.message << endl << ex.line << endl << endl;
 	}
