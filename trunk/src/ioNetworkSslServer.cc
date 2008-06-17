@@ -62,9 +62,7 @@ server::server(short a_family,
 			   short a_type) : family(a_family),
 							   type(a_type),
 							   blockInherited(false),
-							   sslCtx(NULL),
-							   sslHandle(NULL),
-							   sslConnected(false)
+							   sslCtx(NULL)
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 
 							   ,
@@ -86,14 +84,6 @@ server::server(short a_family,
 
 server::~server()
 {
-	if (sslHandle != NULL)
-	{
-		if (sslConnected && SSL_shutdown(sslHandle) == 0)
-			SSL_shutdown(sslHandle);
-
-		SSL_free(sslHandle);
-	}
-
 	if (sslCtx != NULL)
 		SSL_CTX_free(sslCtx);
 
@@ -113,32 +103,6 @@ server::~server()
 void 
 server::setSertificates(const __certificates &certs)
 {
-	if (sslHandle != NULL)
-	{
-		if (sslConnected)
-		{
-			int err = SSL_shutdown(sslHandle);
-			if (err < 0)
-			{
-				unsigned long nerr = ERR_get_error();
-				throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-			}
-			if (err == 0)
-			{
-				err = SSL_shutdown(sslHandle);
-				if (err < 0)
-				{
-					unsigned long nerr = ERR_get_error();
-					throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}
-			}
-
-			sslConnected = false;
-		}
-
-		SSL_free(sslHandle);
-	}
-
 	if (sslCtx != NULL)
 		SSL_CTX_free(sslCtx);
 	
@@ -239,10 +203,6 @@ server::setSertificates(const __certificates &certs)
 		unsigned long nerr = ERR_get_error();
 		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
-	
-	sslHandle = SSL_new(sslCtx);
-	if (sslHandle == NULL)
-		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, ERR_LIBDODO, SERVEREX_UNABLETOINITSSL, IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR, __LINE__, __FILE__);	
 }
 
 //-------------------------------------------------------------------
@@ -256,56 +216,26 @@ server::initSsl()
 		if (sslCtx == NULL)
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_INITSSL, ERR_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
 	}
-
-	if (sslHandle == NULL)
-	{
-		sslHandle = SSL_new(sslCtx);
-		if (sslHandle == NULL)
-			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_INITSSL, ERR_LIBDODO, SERVEREX_UNABLETOINITSSL, IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
-	}
 }
 
 //-------------------------------------------------------------------
 
 void
-server::acceptSsl()
+server::acceptSsl(__initialAccept &init)
 {
 	__openssl_init_object__.addEntropy();
 
-	if (sslConnected)
-	{
-		int err = SSL_shutdown(sslHandle);
-		if (err < 0)
-		{
-			unsigned long nerr = ERR_get_error();
-			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-		}
-		if (err == 0)
-		{
-			err = SSL_shutdown(sslHandle);
-			if (err < 0)
-			{
-				unsigned long nerr = ERR_get_error();
-				throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-			}
-		}
+	init.sslHandle = SSL_new(sslCtx);
+	if (init.sslHandle == NULL)
+		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_INITSSL, ERR_LIBDODO, SERVEREX_UNABLETOINITSSL, IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
 
-		sslConnected = false;
-	}
-
-	if (SSL_clear(sslHandle) == 0)
+	if (SSL_set_fd(init.sslHandle, init.socket) == 0)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 
-	if (SSL_set_fd(sslHandle, socket) == 0)
-	{
-		unsigned long nerr = ERR_get_error();
-		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-	}
-
-	int res = SSL_accept(sslHandle);
+	int res = SSL_accept(init.sslHandle);
 	switch (res)
 	{
 		case 1:
@@ -319,7 +249,7 @@ server::acceptSsl()
 
 		case - 1:
 		{
-			int nerr = SSL_get_error(sslHandle, res);
+			int nerr = SSL_get_error(init.sslHandle, res);
 			if (nerr == SSL_ERROR_WANT_READ || nerr == SSL_ERROR_WANT_WRITE || nerr == SSL_ERROR_WANT_X509_LOOKUP)
 				break;
 		}
@@ -328,7 +258,7 @@ server::acceptSsl()
 		{
 			unsigned long nerr;
 
-			int err = SSL_shutdown(sslHandle);
+			int err = SSL_shutdown(init.sslHandle);
 			if (err < 0)
 			{
 				nerr = ERR_get_error();
@@ -336,7 +266,7 @@ server::acceptSsl()
 			}
 			if (err == 0)
 			{
-				err = SSL_shutdown(sslHandle);
+				err = SSL_shutdown(init.sslHandle);
 				if (err < 0)
 				{
 					nerr = ERR_get_error();
@@ -349,8 +279,6 @@ server::acceptSsl()
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
 	}
-
-	sslConnected = true;
 }
 
 //-------------------------------------------------------------------
@@ -648,11 +576,11 @@ server::accept(__initialAccept &init,
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, ERR_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSSLSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
-	acceptSsl();
-
 	init.socket = sock;
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
+
+	acceptSsl(init);
 
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 	performXExec(postExec);
@@ -689,11 +617,11 @@ server::accept(__initialAccept &init)
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	acceptSsl();
-
 	init.socket = sock;
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
+
+	acceptSsl(init);
 
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 	performXExec(postExec);

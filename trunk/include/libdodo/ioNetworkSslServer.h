@@ -215,14 +215,12 @@ namespace dodo
 
 						/**
 						 * accept SSL connection
+						 * @param init defines object that will be filled with info that may init exchange object
 						 */
-						virtual void acceptSsl();
+						virtual void acceptSsl(__initialAccept &init);
 
 						dodoString unixSock;                            ///< path to unix socket
-						SSL_CTX *sslCtx;                                ///< SSL context
-						SSL *sslHandle;                                 ///< SSL connection handle
-
-						bool sslConnected;                              ///< true if SSL connection established
+						SSL_CTX *sslCtx;                                ///< SSL context 
 
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 
