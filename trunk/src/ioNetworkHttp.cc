@@ -101,6 +101,14 @@ http::~http()
 
 //-------------------------------------------------------------------
 
+void 
+http::setSertificates(const ssl::__certificates &a_certs)
+{
+	certs = a_certs;
+}
+
+//-------------------------------------------------------------------
+
 __httpResponse
 http::getResponse()
 {
@@ -119,8 +127,15 @@ http::setUrl(const dodoString &a_url)
 
 	unsigned long portSize = urlComponents.port.size();
 
-	if (portSize == 0 && tools::string::iequal(urlComponents.protocol, "http"))
-		urlComponents.port = "80";
+	if (portSize == 0)
+	{
+		if (tools::string::iequal(urlComponents.protocol, "http"))
+			urlComponents.port = "80";
+		else
+			if (tools::string::iequal(urlComponents.protocol, "https"))
+				urlComponents.port = "443";
+	}
+	
 
 	url.clear();
 

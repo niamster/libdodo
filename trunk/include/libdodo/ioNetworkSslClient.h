@@ -198,7 +198,6 @@ namespace dodo
 						 */
 						virtual void connectSsl();
 
-
 						dodoString unixSock;                            ///< path to unix socket
 
 						SSL_CTX *sslCtx;                                ///< SSL context

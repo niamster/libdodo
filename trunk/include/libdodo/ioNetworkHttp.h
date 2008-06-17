@@ -38,6 +38,7 @@
 
 #include <libdodo/toolsMisc.h>
 #include <libdodo/ioNetworkClient.h>
+#include <libdodo/ioNetworkSslClient.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/ioNetworkHttpEx.h>
 #include <libdodo/types.h>
@@ -141,6 +142,12 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~http();
+					
+					/**
+					 * set certificates information
+					 * @param certs defines certificates information 
+					 */
+					virtual void setSertificates(const ssl::__certificates &certs);
 
 					dodoMap<short, dodoString> requestHeaders;                     ///< headers that will be sent with request[see httpRequestHeaderEnum]
 
@@ -325,6 +332,8 @@ namespace dodo
 					};
 
 					__proxyAuthInfo proxyAuthInfo;                     ///< proxy authentication information
+					
+					ssl::__certificates certs;///< SSL certificates
 			};
 		};
 	};
