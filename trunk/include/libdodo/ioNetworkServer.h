@@ -73,7 +73,7 @@ namespace dodo
 #ifndef IONETWORKSERVER_WO_XEXEC
 
 			/**
-			 * @struct __xexexIoCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+			 * @struct __xexexIoNetworkServerCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 			 */
 			struct __xexexIoNetworkServerCollectedData
 			{

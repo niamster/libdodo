@@ -35,7 +35,7 @@ using namespace dodo::io::network::ssl;
 
 #ifndef IONETWORKSSLSERVER_WO_XEXEC
 
-__xexexIoNetworkServerCollectedData::__xexexIoNetworkServerCollectedData(int &a_operType,
+__xexexIoNetworkSslServerCollectedData::__xexexIoNetworkSslServerCollectedData(int &a_operType,
 																		 void *a_executor) : operType(a_operType),
 																							 executor(a_executor)
 {

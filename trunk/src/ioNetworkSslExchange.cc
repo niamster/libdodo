@@ -35,7 +35,7 @@ using namespace dodo::io::network::ssl;
 
 #ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
 
-__xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int &a_operType,
+__xexexIoNetworkSslExchangeCollectedData::__xexexIoNetworkSslExchangeCollectedData(int &a_operType,
 																			 void *a_executor) : operType(a_operType),
 																								 executor(a_executor)
 {
@@ -858,9 +858,11 @@ exchange::createCopy()
 
 	copy->socket = socket;
 	copy->opened = opened;
+	copy->sslHandle = sslHandle;
 
 	opened = false;
 	socket = -1;
+	sslHandle = NULL;
 
 	copy->socketOpts = socketOpts;
 	copy->inTimeout = inTimeout;
