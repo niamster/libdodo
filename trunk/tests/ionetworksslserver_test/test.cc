@@ -17,15 +17,41 @@ using namespace io::network::ssl;
 
 using namespace std;
 
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+void
+hook(void *odata,
+	 short int type,
+	 void *udata)
+{
+	using io::network::__xexexIoNetworkExchangeCollectedData;
+
+	__xexexIoNetworkExchangeCollectedData *st = (__xexexIoNetworkExchangeCollectedData *)odata;
+
+	cout << st->buffer << endl;
+}
+
+#endif
+
 void
 process(exchange fse)
 {
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
+
+		fse.addPreExec(&hook, NULL);
+		fse.addPostExec(&hook, NULL);
+
+#endif
+
 	fse.inSize = 4;
 	fse.setInBufferSize(1);
 	fse.setOutBufferSize(1);
 
 	fse.outSize = 7;
 	fse.writeString("session");
+
+	if (fse.isAlive())
+		fse.writeStreamString("Alive!");
 
 	dodoString rec = "";
 	try
@@ -36,6 +62,8 @@ process(exchange fse)
 		cout.flush();
 		if (rec.compare("exit") == 0)
 		{
+			fse.close();
+			
 			exit(0);
 		}
 	}

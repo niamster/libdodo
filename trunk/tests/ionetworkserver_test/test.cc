@@ -48,6 +48,8 @@ process(exchange fse)
 		cout.flush();
 		if (rec.compare("exit") == 0)
 		{
+			fse.close();
+
 			exit(0);
 		}
 	}

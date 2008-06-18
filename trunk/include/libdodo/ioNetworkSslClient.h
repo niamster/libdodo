@@ -48,6 +48,7 @@
 
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkSslClientEx.h>
+#include <libdodo/ioNetworkClient.h>
 #include <libdodo/ioNetworkSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkOptions.h>
@@ -64,43 +65,9 @@ namespace dodo
 			namespace ssl
 			{
 				/**
-				 * @enum clientOperationTypeEnum defines type of operation for hook
-				 */
-				enum clientOperationTypeEnum
-				{
-					CLIENT_OPERATION_CONNECT,
-					CLIENT_OPERATION_CONNECTFROM,
-					CLIENT_OPERATION_CONNECT_UNIX,
-					CLIENT_OPERATION_BINDNLISTEN,
-					CLIENT_OPERATION_BINDNLISTEN_UNIX,
-					CLIENT_OPERATION_ACCEPT,
-				};
-
-#ifndef IONETWORKSSLCLIENT_WO_XEXEC
-
-				/**
-				 * @struct __xexexIoNetworkSslClientCollectedData defines data that could be retrieved from class(to modificate)[contains references]
-				 */
-				struct __xexexIoNetworkSslClientCollectedData
-				{
-					/**
-					 * constructor
-					 */
-					__xexexIoNetworkSslClientCollectedData(int &operType,
-														void *executor);
-
-					int &operType;                                      ///< xexec operation
-
-					void *executor;                                     ///< class that executed hook
-				};
-
-#endif
-
-				/**
 				 * @class client provides network connection interface
 				 */
-				class client : public xexec,
-							   public options
+				class client : public network::client
 				{
 					friend class exchange;
 
@@ -142,14 +109,6 @@ namespace dodo
 						virtual void connectFrom(const dodoString &local, const dodoString &host, int port, exchange &exchange);
 
 						/**
-						 * connect from specific address
-						 * @param local defines ip address to bind
-						 * @param destinaton defines destinaton ip address/port of host to connect
-						 * @param exchange defines an oject that will perform I/O operations
-						 */
-						virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, exchange &exchange);
-
-						/**
 						 * connect
 						 * @param host defines ip address of host to connect
 						 * @param port defines port of host to connect
@@ -159,34 +118,12 @@ namespace dodo
 
 						/**
 						 * connect
-						 * @param destinaton defines destinaton ip address/port of host to connect
-						 * @param exchange defines an oject that will perform I/O operations
-						 */
-						virtual void connect(const __connInfo &destinaton, exchange &exchange);
-
-						/**
-						 * connect
 						 * @param path defines path to unix socket
 						 * @param exchange defines an oject that will perform I/O operations
 						 */
 						virtual void connect(const dodoString &path, exchange &exchange);
 
-						bool blockInherited;                         ///< if true - children(exchange objects) become unblocked, if parent(Client) in unblocked; false by default
-
 					protected:
-
-						short family;                                           ///< socket family
-						short type;                                             ///< socket type
-
-						/**
-						 * restore options on connect/bind
-						 */
-						virtual void restoreOptions();
-
-						/**
-						 * create socket
-						 */
-						virtual void makeSocket();
 
 						/**
 						 * initialize SSL objects
@@ -198,18 +135,10 @@ namespace dodo
 						 */
 						virtual void connectSsl();
 
-						dodoString unixSock;                            ///< path to unix socket
-
 						SSL_CTX *sslCtx;                                ///< SSL context
 						SSL *sslHandle;                                 ///< SSL connection handle
 
 						bool sslConnected;                              ///< true if SSL connection established
-
-#ifndef IONETWORKSSLCLIENT_WO_XEXEC
-
-						__xexexIoNetworkSslClientCollectedData collectedData;                           ///< data collected for xexec
-
-#endif
 				};
 			};
 		};

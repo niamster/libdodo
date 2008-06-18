@@ -48,6 +48,7 @@
 
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkSslServerEx.h>
+#include <libdodo/ioNetworkServer.h>
 #include <libdodo/ioNetworkSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkOptions.h>
@@ -64,47 +65,9 @@ namespace dodo
 			namespace ssl
 			{
 				/**
-				 * @enum ServerOperationTypeEnum defines type of operation for hook
-				 */
-				enum serverOperationTypeEnum
-				{
-					SERVER_OPERATION_CONNECT,
-					SERVER_OPERATION_CONNECTFROM,
-					SERVER_OPERATION_CONNECT_UNIX,
-					SERVER_OPERATION_BINDNLISTEN,
-					SERVER_OPERATION_BINDNLISTEN_UNIX,
-					SERVER_OPERATION_ACCEPT,
-				};
-
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-
-				/**
-				 * @struct __xexexIoNetworkSslServerCollectedData defines data that could be retrieved from class(to modificate)[contains references]
-				 */
-				struct __xexexIoNetworkSslServerCollectedData
-				{
-					/**
-					 * constructor
-					 */
-					__xexexIoNetworkSslServerCollectedData(int &operType,
-														void *executor);
-
-					int &operType;                                      ///< xexec operation
-
-					void *executor;                                     ///< class that executed hook
-				};
-
-#endif
-
-				/**
 				 * @class Server provides network connection interface
 				 */
-				class server : public options,
-							   virtual public nonBlockedAccessInfo
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-							   ,
-							   public xexec
-#endif
+				class server : public network::server
 				{
 					friend class exchange;
 
@@ -146,14 +109,6 @@ namespace dodo
 						virtual void bindNListen(const dodoString &host, int port, int numberOfConnections);
 
 						/**
-						 * bind to address and start to listen
-						 * @param destinaton defines local ip address/port of host to connect
-						 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-						 * @note host can be '*' to specify all interfaces on the box
-						 */
-						virtual void bindNListen(const __connInfo &destinaton, int numberOfConnections);
-
-						/**
 						 * bind to unix socket and start to listen
 						 * @param path defines path to unix socket
 						 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
@@ -181,32 +136,7 @@ namespace dodo
 						 */
 						virtual bool accept(__initialAccept &init);
 
-						bool blockInherited;                         ///< if true - children(exchange objects) become unblocked, if parent(Server) in unblocked; false by default
-
-						/**
-						 * @return descriptor of input stream
-						 */
-						virtual int getInDescriptor() const;
-
-						/**
-						 * @return descriptor of output stream
-						 */
-						virtual int getOutDescriptor() const;
-
 					protected:
-
-						short family;                                           ///< socket family
-						short type;                                             ///< socket type
-
-						/**
-						 * restore options on connect/bind
-						 */
-						virtual void restoreOptions();
-
-						/**
-						 * create socket
-						 */
-						virtual void makeSocket();
 
 						/**
 						 * initialize SSL objects
@@ -219,14 +149,7 @@ namespace dodo
 						 */
 						virtual void acceptSsl(__initialAccept &init);
 
-						dodoString unixSock;                            ///< path to unix socket
 						SSL_CTX *sslCtx;                                ///< SSL context 
-
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-
-						__xexexIoNetworkSslServerCollectedData collectedData;                           ///< data collected for xexec
-
-#endif
 				};
 			};
 		};

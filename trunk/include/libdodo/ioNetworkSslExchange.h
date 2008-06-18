@@ -49,6 +49,7 @@
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetworkSslExchangeEx.h>
+#include <libdodo/ioNetworkExchange.h>
 #include <libdodo/ioNetworkSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
@@ -62,22 +63,6 @@ namespace dodo
 		{
 			namespace ssl
 			{
-				/**
-				 * @enum exchangeOperationTypeEnum defines type of operation for hook
-				 */
-				enum exchangeOperationTypeEnum
-				{
-					EXCHANGE_OPERATION_READ,
-					EXCHANGE_OPERATION_READSTRING,
-					EXCHANGE_OPERATION_READSTREAM,
-					EXCHANGE_OPERATION_READSTREAMSTRING,
-					EXCHANGE_OPERATION_WRITE,
-					EXCHANGE_OPERATION_WRITESTRING,
-					EXCHANGE_OPERATION_WRITESTREAM,
-					EXCHANGE_OPERATION_WRITESTREAMSTRING,
-					EXCHANGE_OPERATION_CLOSE,
-				};
-
 				/**
 				 * @class __initialAccept holds info that passes to accept call, and then inits exchange;
 				 */
@@ -110,37 +95,10 @@ namespace dodo
 						bool blockInherited;                            ///< true if block flag is inherited
 				};
 
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-				/**
-				 * @struct __xexexIoNetworkSslExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
-				 */
-				struct __xexexIoNetworkSslExchangeCollectedData
-				{
-					/**
-					 * constructor
-					 * @param operType defines xexec operation
-					 * @param executor defines class that executed hook
-					 */
-					__xexexIoNetworkSslExchangeCollectedData(int &operType,
-														  void *executor);
-
-					dodoString buffer;                                  ///< data buffer
-
-					int &operType;                                      ///< xexec operation
-
-					void *executor;                                     ///< class that executed hook
-				};
-
-#endif
-
 				/**
 				 * @class exchange provides communication interface[send/receive data]
 				 */
-				class exchange : public options,
-								 public channel,
-								 virtual public ipc::thread::guardHolder
-
+				class exchange : public network::exchange
 				{
 					friend class server;
 					friend class client;
@@ -177,12 +135,6 @@ namespace dodo
 						virtual exchange *createCopy();
 
 						/**
-						 * delete a copy of an object
-						 * @param copy defines an instance of an object
-						 */
-						static void deleteCopy(exchange *copy);
-
-						/**
 						 * init object
 						 * @param init defines initial data[got from ::accept method]
 						 */
@@ -192,60 +144,6 @@ namespace dodo
 						 * @return true if connection is alive
 						 */
 						virtual bool isAlive();
-
-						/**
-						 * @param data defines buffer that will be filled
-						 * @note not more then inSize(including '\0')
-						 */
-						virtual void readString(dodoString &data);
-
-						/**
-						 * @param data defines buffer that will be filled
-						 * @note not more then inSize(including '\0')
-						 */
-						virtual void read(char * const data);
-
-						/**
-						 * @param data defines data that will be written
-						 */
-						virtual void writeString(const dodoString &data);
-
-						/**
-						 * @param data defines data that will be written
-						 */
-						virtual void write(const char * const data);
-
-						/**
-						 * read from stream - '\0' or '\n' - terminated string
-						 * @param data defines buffer that will be filled
-						 * @note not more then inSize(including '\0')
-						 * if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
-						 */
-						virtual void readStreamString(dodoString &data);
-
-						/**
-						 * read from stream - '\0' or '\n' - terminated string
-						 * @param data defines buffer that will be filled
-						 * @note not more then inSize(including '\0')
-						 */
-						virtual void readStream(char * const data);
-
-						/**
-						 * write to stream - '\0' - terminated string
-						 * @param data defines data that will be written
-						 */
-						virtual void writeStreamString(const dodoString &data);
-
-						/**
-						 * write to stream - '\0' - terminated string
-						 * @param data defines data that will be written
-						 */
-						virtual void writeStream(const char * const data);
-
-						/**
-						 * flush output
-						 */
-						virtual void flush();
 
 						/**
 						 * close connection
@@ -262,16 +160,6 @@ namespace dodo
 						 * @param sslHandle defines SSL handle
 						 */
 						virtual void _close(int socket, SSL *sslHandle);
-
-						/**
-						 * @return descriptor of input stream
-						 */
-						virtual int getInDescriptor() const;
-
-						/**
-						 * @return descriptor of output stream
-						 */
-						virtual int getOutDescriptor() const;
 
 						/**
 						 * init current instance
@@ -299,13 +187,6 @@ namespace dodo
 						 * @param data defines data that will be written
 						 */
 						virtual void _write(const char * const data);
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-						__xexexIoNetworkSslExchangeCollectedData collectedData;                            ///< data collected for xexec
-
-#endif
-
 				};
 			};
 		};

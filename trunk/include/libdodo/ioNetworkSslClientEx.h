@@ -47,7 +47,6 @@ namespace dodo
 				 */
 				enum clientExR
 				{
-					CLIENTEX_WRONGPARAMETER,
 					CLIENTEX_UNABLETOINITCONTEXT,
 					CLIENTEX_UNABLETOINITSSL,
 					CLIENTEX_UNKNOWNKEYTYPE,
@@ -56,7 +55,6 @@ namespace dodo
 				/**
 				 * explanations for libdodo defined errors
 				 */
-#define IONETWORKSSLCLIENTEX_WRONGPARAMETER_STR "Wrong paramather passed to function."
 #define IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
 #define IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
 #define IONETWORKSSLCLIENTEX_UNKNOWNKEYTYPE_STR "Unknown key type."
@@ -68,7 +66,6 @@ namespace dodo
 				{
 					CLIENTEX_INITSSL,
 					CLIENTEX_CONNECTSSL,
-					CLIENTEX_MAKESOCKET,
 					CLIENTEX_CONNECT,
 					CLIENTEX_CONNECTFROM,
 					CLIENTEX_SETSERTIFICATES,

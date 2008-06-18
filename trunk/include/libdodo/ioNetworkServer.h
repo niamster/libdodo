@@ -57,6 +57,11 @@ namespace dodo
 	{
 		namespace network
 		{
+			namespace ssl
+			{
+				class server;
+			};
+
 			/**
 			 * @enum ServerOperationTypeEnum defines type of operation for hook
 			 */
@@ -101,6 +106,7 @@ namespace dodo
 #endif
 			{
 				friend class exchange;
+				friend class ssl::server;
 
 				private:
 

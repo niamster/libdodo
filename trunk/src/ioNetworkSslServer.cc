@@ -33,50 +33,17 @@
 
 using namespace dodo::io::network::ssl;
 
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-
-__xexexIoNetworkSslServerCollectedData::__xexexIoNetworkSslServerCollectedData(int &a_operType,
-																		 void *a_executor) : operType(a_operType),
-																							 executor(a_executor)
-{
-}
-
-#endif
-
-//-------------------------------------------------------------------
-
-server::server(server &fs)
-
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-
-	: collectedData(operType,
-					(void *) this)
-
-#endif
+server::server(server &fs) : network::server(fs)
 {
 }
 
 //-------------------------------------------------------------------
 
 server::server(short a_family,
-			   short a_type) : family(a_family),
-							   type(a_type),
-							   blockInherited(false),
+			   short a_type) : network::server(a_family,
+			   								   a_type),
 							   sslCtx(NULL)
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-
-							   ,
-							   collectedData(operType,
-											 (void *) this)
-
-#endif
 {
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
-
-	execObject = XEXEC_OBJECT_IONETWORKSSLSERVER;
-	execObjectData = (void *)&collectedData;
-
-#endif
 }
 
 
@@ -86,16 +53,6 @@ server::~server()
 {
 	if (sslCtx != NULL)
 		SSL_CTX_free(sslCtx);
-
-	if (socket != -1)
-	{
-		::shutdown(socket, SHUT_RDWR);
-
-		::close(socket);
-	}
-
-	if (unixSock.size() != 0)
-		::unlink(unixSock.c_str());
 }
 
 //-------------------------------------------------------------------
@@ -284,95 +241,11 @@ server::acceptSsl(__initialAccept &init)
 //-------------------------------------------------------------------
 
 void
-server::restoreOptions()
-{
-	setInBufferSize(inSocketBuffer);
-	setOutBufferSize(outSocketBuffer);
-
-	setInTimeout(inTimeout);
-	setOutTimeout(outTimeout);
-
-	setLingerOption(lingerOpts, lingerSeconds);
-
-	block(blocked);
-}
-
-//-------------------------------------------------------------------
-
-void
-server::makeSocket()
-{
-	if (socket != -1)
-	{
-		::shutdown(socket, SHUT_RDWR);
-
-		if (::close(socket) == -1)
-			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-		socket = -1;
-	}
-
-	int real_domain(PF_INET), real_type(SOCK_STREAM);
-
-	switch (family)
-	{
-		case OPTIONS_PROTO_FAMILY_IPV4:
-
-			real_domain = PF_INET;
-
-			break;
-
-		case OPTIONS_PROTO_FAMILY_IPV6:
-
-			real_domain = PF_INET6;
-
-			break;
-
-		case OPTIONS_PROTO_FAMILY_UNIX_SOCKET:
-
-			real_domain = PF_UNIX;
-
-			break;
-
-		default:
-
-			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_MAKESOCKET, ERR_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSSLSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
-	}
-
-	switch (type)
-	{
-		case OPTIONS_TRANSFER_TYPE_STREAM:
-
-			real_type = SOCK_STREAM;
-
-			break;
-
-		case OPTIONS_TRANSFER_TYPE_DATAGRAM:
-
-			real_type = SOCK_DGRAM;
-
-			break;
-
-		default:
-
-			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_MAKESOCKET, ERR_LIBDODO, SERVEREX_WRONGPARAMETER, IONETWORKSSLSERVEREX_WRONGPARAMETER_STR, __LINE__, __FILE__);
-	}
-
-	socket = ::socket(real_domain, real_type, 0);
-	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_MAKESOCKET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-	restoreOptions();
-}
-
-//-------------------------------------------------------------------
-
-void
 server::bindNListen(const dodoString &host,
 					int port,
 					int numberOfConnections)
 {
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
 	performXExec(preExec);
 #endif
@@ -422,19 +295,10 @@ server::bindNListen(const dodoString &host,
 		if (::listen(socket, numberOfConnections) == -1)
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	performXExec(postExec);
 #endif
 
-}
-
-//-------------------------------------------------------------------
-
-void
-server::bindNListen(const __connInfo &destinaton,
-					int numberOfConnections)
-{
-	bindNListen(destinaton.host, destinaton.port, numberOfConnections);
 }
 
 //-------------------------------------------------------------------
@@ -444,7 +308,7 @@ server::bindNListen(const dodoString &path,
 					int numberOfConnections,
 					bool force)
 {
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
 	performXExec(preExec);
 #endif
@@ -483,7 +347,7 @@ server::bindNListen(const dodoString &path,
 
 	unixSock = path;
 
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -494,7 +358,7 @@ bool
 server::accept(__initialAccept &init,
 			   __connInfo &info)
 {
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
 	performXExec(preExec);
 #endif
@@ -582,7 +446,7 @@ server::accept(__initialAccept &init,
 
 	acceptSsl(init);
 
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -594,7 +458,7 @@ server::accept(__initialAccept &init,
 bool
 server::accept(__initialAccept &init)
 {
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
 	performXExec(preExec);
 #endif
@@ -623,27 +487,11 @@ server::accept(__initialAccept &init)
 
 	acceptSsl(init);
 
-#ifndef IONETWORKSSLSERVER_WO_XEXEC
+#ifndef IONETWORKSERVER_WO_XEXEC
 	performXExec(postExec);
 #endif
 
 	return true;
-}
-
-//-------------------------------------------------------------------
-
-int
-server::getInDescriptor() const
-{
-	return socket;
-}
-
-//-------------------------------------------------------------------
-
-int
-server::getOutDescriptor() const
-{
-	return socket;
 }
 
 //-------------------------------------------------------------------

@@ -33,18 +33,6 @@
 
 using namespace dodo::io::network::ssl;
 
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-__xexexIoNetworkSslExchangeCollectedData::__xexexIoNetworkSslExchangeCollectedData(int &a_operType,
-																			 void *a_executor) : operType(a_operType),
-																								 executor(a_executor)
-{
-}
-
-#endif
-
-//-------------------------------------------------------------------
-
 __initialAccept::__initialAccept() : socket(-1),
 									 sslHandle(NULL)
 {
@@ -61,75 +49,23 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
 
 //-------------------------------------------------------------------
 
-exchange::exchange(exchange &fse)
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-	: collectedData(operType,
-					(void *) this)
-
-#endif
+exchange::exchange(exchange &fse) : network::exchange(fse)
 {
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
-	execObjectData = (void *)&collectedData;
-
-#endif
-
-	socket = fse.socket;
-	opened = fse.opened;
 	sslHandle = fse.sslHandle;
 
-	fse.opened = false;
-	fse.socket = -1;
 	fse.sslHandle = NULL;
-
-	socketOpts = fse.socketOpts;
-	inTimeout = fse.inTimeout;
-	outTimeout = fse.outTimeout;
-	inSocketBuffer = fse.inSocketBuffer;
-	outSocketBuffer = fse.outSocketBuffer;
-	lingerOpts = fse.lingerOpts;
-	lingerSeconds = fse.lingerSeconds;
-	blocked = fse.blocked;
 }
 
 //-------------------------------------------------------------------
 
 exchange::exchange() : sslHandle(NULL)
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-					   ,
-					   collectedData(operType,
-									 (void *) this)
-
-#endif
 {
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
-	execObjectData = (void *)&collectedData;
-
-#endif
 }
 
 //-------------------------------------------------------------------
 
 exchange::exchange(__initialAccept &a_init)
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-	: collectedData(operType,
-					(void *) this)
-
-#endif
 {
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
-	execObjectData = (void *)&collectedData;
-
-#endif
-
 	init(a_init);
 }
 
@@ -137,19 +73,12 @@ exchange::exchange(__initialAccept &a_init)
 
 exchange::~exchange()
 {
-	if (opened)
+	if (sslHandle != NULL)
 	{
-		if (sslHandle != NULL)
-		{
-			if (SSL_shutdown(sslHandle) == 0)
-				SSL_shutdown(sslHandle);
+		if (SSL_shutdown(sslHandle) == 0)
+			SSL_shutdown(sslHandle);
 
-			SSL_free(sslHandle);
-		}
-
-		::shutdown(socket, SHUT_RDWR);
-
-		::close(socket);
+		SSL_free(sslHandle);
 	}
 }
 
@@ -170,8 +99,6 @@ void
 exchange::_close(int socket,
 				 SSL *sslHandle)
 {
-	options::_close(socket);
-
 	int err = SSL_shutdown(sslHandle);
 	if (err < 0)
 	{
@@ -187,6 +114,8 @@ exchange::_close(int socket,
 			throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
 	}
+	
+	options::_close(socket);
 }
 
 //-------------------------------------------------------------------
@@ -196,7 +125,7 @@ exchange::close()
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
 #endif
@@ -211,7 +140,7 @@ exchange::close()
 
 	opened = false;
 
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
+#ifndef IONETWORKEXCHANGE_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -268,27 +197,13 @@ exchange::isAlive()
 {
 	raceHazardGuard pg(this);
 
-	if (!opened)
-		return false;
+	if (network::exchange::isAlive())
+		return true;
 
-	pollfd fd;
-	fd.fd = socket;
-	fd.events = POLLOUT;
-
-	if (poll(&fd, 1, -1) > 0)
-		if (isSetFlag(fd.revents, POLLOUT))
-			return true;
-
-	_close(socket, sslHandle);
-
-	socket = -1;
 	sslHandle = NULL;
-
-	opened = false;
 
 	return false;
 }
-
 
 //-------------------------------------------------------------------
 
@@ -374,76 +289,6 @@ exchange::_write(const char * const data)
 			sent_received += n;
 		}
 	}
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::write(const char * const a_buf)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	collectedData.buffer.assign(a_buf, outSize);
-
-	operType = EXCHANGE_OPERATION_WRITE;
-	performXExec(preExec);
-
-	try
-	{
-		_write(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	_write(a_buf);
-#endif
-
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::writeString(const dodoString &a_buf)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	collectedData.buffer = a_buf;
-
-	operType = EXCHANGE_OPERATION_WRITESTRING;
-	performXExec(preExec);
-
-	try
-	{
-		_write(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	_write(a_buf.c_str());
-#endif
-
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
 }
 
 //-------------------------------------------------------------------
@@ -542,200 +387,6 @@ exchange::_read(char * const data)
 
 //-------------------------------------------------------------------
 
-void
-exchange::read(char * const a_void)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READ;
-	performXExec(preExec);
-
-	collectedData.buffer.reserve(inSize);
-#endif
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	try
-	{
-		_read(a_void);
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	_read(a_void);
-#endif
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	collectedData.buffer.assign(a_void, inSize);
-
-	performXExec(postExec);
-
-	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size() > inSize ? inSize : collectedData.buffer.size());
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::readString(dodoString &a_str)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READSTRING;
-	performXExec(preExec);
-
-	collectedData.buffer.reserve(inSize);
-#endif
-
-	char *data = new char[inSize];
-
-	try
-	{
-		_read(data);
-	}
-	catch (...)
-	{
-		delete [] data;
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-		collectedData.buffer.clear();
-#endif
-
-		throw;
-	}
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	collectedData.buffer.assign(data, inSize);
-	delete [] data;
-
-	performXExec(postExec);
-
-	a_str = collectedData.buffer;
-	collectedData.buffer.clear();
-#else
-	a_str.assign(data, inSize);
-	delete [] data;
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::writeStream(const char * const a_buf)
-{
-	raceHazardGuard pg(this);
-
-	unsigned long _outSize = outSize;
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	collectedData.buffer = a_buf;
-
-	operType = EXCHANGE_OPERATION_WRITESTREAM;
-	performXExec(preExec);
-
-	try
-	{
-		outSize = collectedData.buffer.size();
-
-		_write(collectedData.buffer.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	try
-	{
-		outSize = strlen(a_buf);
-
-		_write(a_buf);
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
-	}
-#endif
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::writeStreamString(const dodoString &a_buf)
-{
-	raceHazardGuard pg(this);
-
-	unsigned long _outSize = outSize;
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	collectedData.buffer = a_buf;
-
-	operType = EXCHANGE_OPERATION_WRITESTREAMSTRING;
-	performXExec(preExec);
-
-	try
-	{
-		outSize = collectedData.buffer.size();
-
-		_write(collectedData.buffer.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	try
-	{
-		outSize = a_buf.size();
-
-		_write(a_buf.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
-	}
-#endif
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
 unsigned long
 exchange::_readStream(char * const data)
 {
@@ -774,81 +425,6 @@ exchange::_readStream(char * const data)
 
 //-------------------------------------------------------------------
 
-void
-exchange::readStream(char * const a_void)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READSTREAM;
-	performXExec(preExec);
-#endif
-
-	unsigned long n = _readStream(a_void);
-	if (n == inSize)
-		a_void[n] = '\0';
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	collectedData.buffer = a_void;
-
-	performXExec(postExec);
-
-	if (collectedData.buffer.size() > inSize)
-		collectedData.buffer.resize(inSize);
-	strcpy(a_void, collectedData.buffer.c_str());
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::readStreamString(dodoString &a_str)
-{
-	raceHazardGuard pg(this);
-
-	a_str.clear();
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READSTREAMSTRING;
-	performXExec(preExec);
-#endif
-
-	char *data = new char[inSize];
-	unsigned long n = 0;
-
-	try
-	{
-		n = _readStream(data);
-	}
-	catch (...)
-	{
-		delete [] data;
-
-		throw;
-	}
-
-#ifndef IONETWORKSSLEXCHANGE_WO_XEXEC
-
-	if (n > 0)
-		collectedData.buffer.assign(data, n);
-
-	delete [] data;
-
-	performXExec(postExec);
-
-	a_str = collectedData.buffer;
-	collectedData.buffer.clear();
-#else
-	if (n > 0)
-		a_str.assign(data, n);
-
-	delete [] data;
-#endif
-}
-
-//-------------------------------------------------------------------
-
 exchange *
 exchange::createCopy()
 {
@@ -874,41 +450,6 @@ exchange::createCopy()
 	copy->blocked = blocked;
 
 	return copy;
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::deleteCopy(exchange *copy)
-{
-	delete copy;
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::flush()
-{
-}
-
-//-------------------------------------------------------------------
-
-int
-exchange::getInDescriptor() const
-{
-	raceHazardGuard pg(this);
-
-	return socket;
-}
-
-//-------------------------------------------------------------------
-
-int
-exchange::getOutDescriptor() const
-{
-	raceHazardGuard pg(this);
-
-	return socket;
 }
 
 //-------------------------------------------------------------------
