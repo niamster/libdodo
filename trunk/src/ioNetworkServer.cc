@@ -240,15 +240,6 @@ server::bindNListen(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-server::bindNListen(const __connInfo &destinaton,
-					int numberOfConnections)
-{
-	bindNListen(destinaton.host, destinaton.port, numberOfConnections);
-}
-
-//-------------------------------------------------------------------
-
-void
 server::bindNListen(const dodoString &path,
 					int numberOfConnections,
 					bool force)

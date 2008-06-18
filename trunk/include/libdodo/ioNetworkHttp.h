@@ -319,6 +319,17 @@ namespace dodo
 					virtual void makeDigestAuth(short requestHeader, short responseHeader, const dodoString &method, const dodoString &user, const dodoString &password);
 
 					/**
+					 * @enum schemeEnum defines URI scheme of connection
+					 */
+					enum schemeEnum
+					{
+						SCHEME_HTTP,
+						SCHEME_HTTPS
+					};
+
+					short scheme;///< URI scheme of connection
+
+					/**
 					 * @struct __proxyAuthInfo defines proxy authentication information
 					 */
 					struct __proxyAuthInfo

@@ -49,6 +49,7 @@ namespace dodo
 				HTTPEX_NOTAUTHORIZED,
 				HTTPEX_UNKNOWNWWWAUTHTYPE,
 				HTTPEX_UNKNOWNPROXYAUTHTYPE,
+				HTTPEX_UNSUPPORTEDSURICHEME,
 			};
 
 			/**
@@ -58,6 +59,7 @@ namespace dodo
 #define IONETWORKHTTPEX_NOTAUTHORIZED_STR        "Aythorization required."
 #define IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR   "Unknown HTTP authentication type."
 #define IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR "Unknown proxy authentication type."
+#define IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR "Unsupported URI scheme."
 
 			/**
 			 * IDs of functions where exception might be thrown
@@ -67,6 +69,7 @@ namespace dodo
 				HTTPEX_POST,
 				HTTPEX_GET,
 				HTTPEX_GETCONTENT,
+				HTTPEX_SETURL,
 			};
 		};
 	};

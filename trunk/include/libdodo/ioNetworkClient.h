@@ -139,27 +139,12 @@ namespace dodo
 					virtual void connectFrom(const dodoString &local, const dodoString &host, int port, exchange &exchange);
 
 					/**
-					 * connect from specific address
-					 * @param local defines ip address to bind
-					 * @param destinaton defines destinaton ip address/port of host to connect
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connectFrom(const dodoString &local, const __connInfo &destinaton, exchange &exchange);
-
-					/**
 					 * connect
 					 * @param host defines ip address of host to connect
 					 * @param port defines port of host to connect
 					 * @param exchange defines an oject that will perform I/O operations
 					 */
 					virtual void connect(const dodoString &host, int port, exchange &exchange);
-
-					/**
-					 * connect
-					 * @param destinaton defines destinaton ip address/port of host to connect
-					 * @param exchange defines an oject that will perform I/O operations
-					 */
-					virtual void connect(const __connInfo &destinaton, exchange &exchange);
 
 					/**
 					 * connect

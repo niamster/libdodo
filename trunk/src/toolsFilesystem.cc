@@ -941,7 +941,7 @@ filesystem::_writeToFile(const dodoString &path,
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
 	unsigned long size = content.size();
-	if (fwrite(content.c_str(), size, 1, file) != 1)
+	if (size > 0 && fwrite(content.c_str(), size, 1, file) != 1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX__WRITETOFILE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 }
 
@@ -959,7 +959,7 @@ filesystem::_writeToFile(const dodoString &path,
 	dodoStringArray::const_iterator i = content.begin(), j = content.end();
 	for (; i != j; ++i)
 	{
-		if (fputs(i->c_str(), file) < 0)
+		if (i->size() > 0 && fputs(i->c_str(), file) < 0)
 			switch (errno)
 			{
 				case EFBIG:

@@ -237,15 +237,6 @@ client::connect(const dodoString &host,
 //-------------------------------------------------------------------
 
 void
-client::connect(const __connInfo &destinaton,
-				exchange &exchange)
-{
-	connect(destinaton.host, destinaton.port, exchange);
-}
-
-//-------------------------------------------------------------------
-
-void
 client::connectFrom(const dodoString &local,
 					const dodoString &host,
 					int port,
@@ -320,16 +311,6 @@ client::connectFrom(const dodoString &local,
 #ifndef IONETWORKCLIENT_WO_XEXEC
 	performXExec(postExec);
 #endif
-}
-
-//-------------------------------------------------------------------
-
-void
-client::connectFrom(const dodoString &local,
-					const __connInfo &destinaton,
-					exchange &exchange)
-{
-	connectFrom(local, destinaton.host, destinaton.port, exchange);
 }
 
 //-------------------------------------------------------------------

@@ -140,14 +140,6 @@ namespace dodo
 					virtual void bindNListen(const dodoString &host, int port, int numberOfConnections);
 
 					/**
-					 * bind to address and start to listen
-					 * @param destinaton defines local ip address/port of host to connect
-					 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to
-					 * @note host can be '*' to specify all interfaces on the box
-					 */
-					virtual void bindNListen(const __connInfo &destinaton, int numberOfConnections);
-
-					/**
 					 * bind to unix socket and start to listen
 					 * @param path defines path to unix socket
 					 * @param numberOfConnections defines the maximum length the queue of pending connections may grow to

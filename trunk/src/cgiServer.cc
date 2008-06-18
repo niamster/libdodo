@@ -744,13 +744,13 @@ server::makePost()
 			if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
 				content = tools::misc::decodeBase64(content);
 
-			unsigned int temp0;
+			unsigned long temp0;
 			temp0 = ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE].find("boundary=");
 			dodoStringArray postPartd = tools::misc::explode(content, "--" + ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE].substr(temp0 + 9));
 
 			dodoStringArray::iterator i(postPartd.begin() + 1), j(postPartd.end());
 
-			unsigned int temp1;
+			unsigned long temp1;
 			char *ptr;
 			int fd;
 			unsigned short pathLength = postFilesTmpDir.size() + 18;
