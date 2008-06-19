@@ -13,9 +13,11 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace io::network::ssl;
-
 using namespace std;
+
+#ifdef OPENSSL_EXT
+
+using namespace io::network::ssl;
 
 #ifndef IO_WO_XEXEC
 
@@ -79,10 +81,13 @@ process(exchange fse)
 	}
 }
 
+#endif
+
 int main(int argc, char **argv)
 {
 	try
 	{
+#ifdef OPENSSL_EXT
 
 		server sock(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
 
@@ -114,12 +119,11 @@ int main(int argc, char **argv)
 					process(conn);
 			}
 		}
-
+#endif
 	}
 	catch (baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-		cout.flush();
 	}
 
 	return 0;

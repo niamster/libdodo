@@ -70,7 +70,6 @@ int main(int argc, char **argv)
 	catch (baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.file << "\t" << ex.line << endl;
-		cout.flush();
 	}
 
 	return 0;

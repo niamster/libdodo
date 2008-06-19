@@ -12,7 +12,12 @@
 #include <iostream>
 
 using namespace dodo;
+
+#ifdef OPENSSL_EXT
+
 using namespace io::network::ssl;
+
+#endif
 
 using namespace std;
 
@@ -20,6 +25,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
+#ifdef OPENSSL_EXT
+
 		dodoString host = "sourceforge.net";
 
 		cout << tools::network::getHostPrimaryIp(host) << endl;
@@ -53,11 +60,12 @@ int main(int argc, char **argv)
 				break;
 			cout << str;
 		}
+
+#endif
 	}
 	catch (baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-		cout.flush();
 	}
 
 	return 0;

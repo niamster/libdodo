@@ -168,7 +168,6 @@ int main(int argc, char **argv)
 	catch (baseEx ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-		cout.flush();
 	}
 
 	return 0;
