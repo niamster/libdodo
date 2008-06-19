@@ -92,11 +92,15 @@ __connectorField::operator=(const __connectorField &from)
 
 //-------------------------------------------------------------------
 
-__xexexDbAccumulatorCollectedData::__xexexDbAccumulatorCollectedData(int &a_operType,
+#ifndef DB_WO_XEXEC
+
+__xexecDbAccumulatorCollectedData::__xexecDbAccumulatorCollectedData(int &a_operType,
 																	 void *a_executor) : operType(a_operType),
 																						 executor(a_executor)
 {
 }
+
+#endif
 
 //-------------------------------------------------------------------
 
@@ -104,9 +108,14 @@ accumulator::accumulator() : show(false),
 							 qDbDepSelShift(ACCUMULATOR_NONE),
 							 qDbDepInsShift(ACCUMULATOR_NONE),
 							 qDbDepUpShift(ACCUMULATOR_NONE),
-							 qDbDepDelShift(ACCUMULATOR_NONE),
+							 qDbDepDelShift(ACCUMULATOR_NONE)
+#ifndef DB_WO_XEXEC
+
+							 ,
 							 collectedData(operType,
 										   (void *) this)
+
+#endif
 {
 #ifndef DB_WO_XEXEC
 

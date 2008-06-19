@@ -33,7 +33,7 @@ using namespace dodo::io::network;
 
 #ifndef IO_WO_XEXEC
 
-__xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_operType,
+__xexecIoNetworkClientCollectedData::__xexecIoNetworkClientCollectedData(int &a_operType,
 																		 void *a_executor) : operType(a_operType),
 																							 executor(a_executor)
 {

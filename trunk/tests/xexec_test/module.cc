@@ -30,7 +30,7 @@ hook(void *odata,
 	{
 		std::cout << "stdio module\t";
 
-		__xexexIoStdioCollectedData *st = (__xexexIoStdioCollectedData *)odata;
+		__xexecIoStdioCollectedData *st = (__xexecIoStdioCollectedData *)odata;
 		if (st->operType == IO_OPERATION_WRITE)
 		{
 			int *a = (int *)(st->buffer.c_str());

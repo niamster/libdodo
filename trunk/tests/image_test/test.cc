@@ -24,7 +24,7 @@ hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexexImageCollectedData *imData = (__xexexImageCollectedData *)odata;
+	__xexecImageCollectedData *imData = (__xexecImageCollectedData *)odata;
 
 	if (imData->operType == IMAGE_OPERATION_WRITE)
 	{

@@ -22,7 +22,7 @@ hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexexIoStdioCollectedData *st = (__xexexIoStdioCollectedData *)odata;
+	__xexecIoStdioCollectedData *st = (__xexecIoStdioCollectedData *)odata;
 	if (st->operType == IO_OPERATION_WRITE)
 	{
 		int a = *(int *)(st->buffer.c_str());

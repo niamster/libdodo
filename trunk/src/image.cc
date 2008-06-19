@@ -40,7 +40,7 @@ namespace dodo
 
 using namespace dodo;
 
-__xexexImageCollectedData::__xexexImageCollectedData(int &a_operType,
+__xexecImageCollectedData::__xexecImageCollectedData(int &a_operType,
 													 void *a_executor) : operType(a_operType),
 																		 executor(a_executor)
 {

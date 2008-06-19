@@ -42,16 +42,21 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @struct __xexexDbAccumulatorCollectedData defines data that could be retrieved from the db object
+		 * @struct __xexecDbAccumulatorCollectedData defines data that could be retrieved from the db object
 		 */
-		struct __xexexDbAccumulatorCollectedData
+		struct __xexecDbAccumulatorCollectedData
 		{
+
+#ifndef DB_WO_XEXEC
+
 			/**
 			 * constructor
 			 * @param operType defines xexec operation
 			 * @param executor defines class that executed hook
 			 */
-			__xexexDbAccumulatorCollectedData(int &operType, void *executor);
+			__xexecDbAccumulatorCollectedData(int &operType, void *executor);
+
+#endif
 
 			dodoString where;                                           ///< `where` for the request(can be used as `as` for `callFunction`)
 			dodoStringArray fields;                                     ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
@@ -82,9 +87,13 @@ namespace dodo
 			int qUpShift;                                               ///< additional update statements[see accumulatorAddUpEnum]
 			int qDelShift;                                              ///< additional delete statements[see accumulatorAddDelEnum]
 
+#ifndef DB_WO_XEXEC
+
 			int &operType;                                              ///< xexec operation
 
 			void *executor;                                             ///< class that executed hook
+
+#endif
 		};
 
 		/**
@@ -561,7 +570,7 @@ namespace dodo
 				int qDbDepUpShift;                                                      ///< additional db-dependent `update` actions[see sqlDbDepAddUpArr]
 				int qDbDepDelShift;                                                     ///< additional db-dependent `delete` actions[see sqlDbDepAddDelArr]
 
-				__xexexDbAccumulatorCollectedData collectedData;                        ///< data collected for xexec
+				__xexecDbAccumulatorCollectedData collectedData;                        ///< data collected for xexec
 		};
 	};
 };

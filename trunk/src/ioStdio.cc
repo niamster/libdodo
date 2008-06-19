@@ -33,7 +33,7 @@ using namespace dodo::io;
 
 #ifndef IO_WO_XEXEC
 
-__xexexIoStdioCollectedData::__xexexIoStdioCollectedData(int &a_operType,
+__xexecIoStdioCollectedData::__xexecIoStdioCollectedData(int &a_operType,
 														 void *a_executor) : operType(a_operType),
 																			 executor(a_executor)
 {

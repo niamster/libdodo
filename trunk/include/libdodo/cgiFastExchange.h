@@ -50,16 +50,16 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 			/**
-			 * @struct __xexexCgiFastExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+			 * @struct __xexecCgiFastExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			struct __xexexCgiFastExchangeCollectedData
+			struct __xexecCgiFastExchangeCollectedData
 			{
 				/**
 				 * constructor
 				 * @param operType defines xexec operation
 				 * @param executor defines class that executed hook
 				 */
-				__xexexCgiFastExchangeCollectedData(int &operType, void *executor);
+				__xexecCgiFastExchangeCollectedData(int &operType, void *executor);
 
 				dodoString buffer;                              ///< data buffer
 
@@ -188,7 +188,7 @@ namespace dodo
 
 #ifndef IO_WO_XEXEC
 
-					__xexexCgiFastExchangeCollectedData collectedData;                          ///< data collected for xexec
+					__xexecCgiFastExchangeCollectedData collectedData;                          ///< data collected for xexec
 
 #endif
 			};

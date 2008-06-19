@@ -53,16 +53,16 @@ namespace dodo
 	};
 
 	/**
-	 * @struct __xexexImageCollectedData defines data that could be retrieved from the image object
+	 * @struct __xexecImageCollectedData defines data that could be retrieved from the image object
 	 */
-	struct __xexexImageCollectedData
+	struct __xexecImageCollectedData
 	{
 		/**
 		 * constructor
 		 * @param operType defines xexec operation
 		 * @param executor defines class that executed hook
 		 */
-		__xexexImageCollectedData(int &operType,
+		__xexecImageCollectedData(int &operType,
 								  void *executor);
 
 		ImageInfo *imInfo;                                              ///< image info handler
@@ -295,7 +295,7 @@ namespace dodo
 
 			ExceptionInfo *exInfo;                                      ///< exception info handler
 
-			__xexexImageCollectedData collectedData;                    ///< data collected for xexec
+			__xexecImageCollectedData collectedData;                    ///< data collected for xexec
 
 		private:
 

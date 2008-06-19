@@ -22,7 +22,7 @@ using namespace db;
 void
 hook(void *odata, short int type, void *udata)
 {
-	__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
+	__xexecDbAccumulatorCollectedData *sql = (__xexecDbAccumulatorCollectedData *)odata;
 
 	if (sql->operType == DB_OPERATION_EXEC)
 	{

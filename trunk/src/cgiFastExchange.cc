@@ -35,7 +35,7 @@ using namespace dodo::cgi::fast;
 
 #ifndef IO_WO_XEXEC
 
-__xexexCgiFastExchangeCollectedData::__xexexCgiFastExchangeCollectedData(int &a_operType,
+__xexecCgiFastExchangeCollectedData::__xexecCgiFastExchangeCollectedData(int &a_operType,
 																		 void *a_executor) : operType(a_operType),
 																							 executor(a_executor)
 {
@@ -135,7 +135,7 @@ exchange::read(char * const a_void)
 	raceHazardGuard pg(this);
 
 #ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READ;
+	operType = dodo::io::IO_OPERATION_READ;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
@@ -174,7 +174,7 @@ exchange::readString(dodoString &a_str)
 	raceHazardGuard pg(this);
 
 #ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTRING;
+	operType = dodo::io::IO_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
@@ -221,7 +221,7 @@ exchange::writeString(const dodoString &a_buf)
 #ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = IO_OPERATION_WRITESTRING;
+	operType = dodo::io::IO_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -256,7 +256,7 @@ exchange::write(const char *const a_buf)
 #ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_buf, outSize);
 
-	operType = IO_OPERATION_WRITE;
+	operType = dodo::io::IO_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -298,7 +298,7 @@ exchange::readStream(char * const a_void)
 	raceHazardGuard pg(this);
 
 #ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTREAM;
+	operType = dodo::io::IO_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
@@ -324,7 +324,7 @@ exchange::readStreamString(dodoString &a_str)
 	raceHazardGuard pg(this);
 
 #ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTREAMSTRING;
+	operType = dodo::io::IO_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -367,7 +367,7 @@ exchange::writeStreamString(const dodoString &a_buf)
 #ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = IO_OPERATION_WRITESTREAMSTRING;
+	operType = dodo::io::IO_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -422,7 +422,7 @@ exchange::writeStream(const char *const a_buf)
 #ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = IO_OPERATION_WRITESTREAM;
+	operType = dodo::io::IO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try

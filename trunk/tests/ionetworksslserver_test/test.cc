@@ -26,9 +26,9 @@ hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	using io::network::__xexexIoNetworkExchangeCollectedData;
+	using io::network::__xexecIoNetworkExchangeCollectedData;
 
-	__xexexIoNetworkExchangeCollectedData *st = (__xexexIoNetworkExchangeCollectedData *)odata;
+	__xexecIoNetworkExchangeCollectedData *st = (__xexecIoNetworkExchangeCollectedData *)odata;
 
 	cout << st->buffer << endl;
 }

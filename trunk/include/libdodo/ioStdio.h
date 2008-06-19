@@ -62,16 +62,16 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 		/**
-		 * @struct __xexexIoStdioCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+		 * @struct __xexecIoStdioCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 		 */
-		struct __xexexIoStdioCollectedData
+		struct __xexecIoStdioCollectedData
 		{
 			/**
 			 * constructor
 			 * @param operType defines xexec operation
 			 * @param executor defines class that executed hook
 			 */
-			__xexexIoStdioCollectedData(int &operType,
+			__xexecIoStdioCollectedData(int &operType,
 										void *executor);
 
 			dodoString buffer;                          ///< data buffer
@@ -233,7 +233,7 @@ namespace dodo
 
 #ifndef IO_WO_XEXEC
 
-				__xexexIoStdioCollectedData collectedData;                      ///< data collected for xexec
+				__xexecIoStdioCollectedData collectedData;                      ///< data collected for xexec
 
 #endif
 		};

@@ -78,14 +78,14 @@ namespace dodo
 #ifndef IO_WO_XEXEC
 
 			/**
-			 * @struct __xexexIoNetworkServerCollectedData defines data that could be retrieved from class(to modificate)[contains references]
+			 * @struct __xexecIoNetworkServerCollectedData defines data that could be retrieved from class(to modificate)[contains references]
 			 */
-			struct __xexexIoNetworkServerCollectedData
+			struct __xexecIoNetworkServerCollectedData
 			{
 				/**
 				 * constructor
 				 */
-				__xexexIoNetworkServerCollectedData(int &operType,
+				__xexecIoNetworkServerCollectedData(int &operType,
 													void *executor);
 
 				int &operType;                                  ///< xexec operation
@@ -198,7 +198,7 @@ namespace dodo
 
 #ifndef IO_WO_XEXEC
 
-					__xexexIoNetworkServerCollectedData collectedData;                       ///< data collected for xexec
+					__xexecIoNetworkServerCollectedData collectedData;                       ///< data collected for xexec
 
 #endif
 			};
