@@ -73,7 +73,7 @@ namespace dodo
 		void *executor;                                                 ///< class that executed hook
 	};
 
-#define IMAGE_MAPPINGS 3
+#define IMAGE_MAPPINGSTATEMENTS 3
 
 	/**
 	 * @enum imageMappingEnum defines the order of pixels
@@ -85,7 +85,7 @@ namespace dodo
 		IMAGE_MAP_CMYK
 	};
 
-#define IMAGE_PIXELSIZES 6
+#define IMAGE_PIXELSIZESTATEMENTS 6
 
 	/**
 	 * @enum imagePixelSizeEnum defines size of pixel
@@ -100,7 +100,7 @@ namespace dodo
 		IMAGE_PIXELSIZE_DOUBLE,         ///< 64 bits
 	};
 
-#define IMAGE_ENCODERS 6
+#define IMAGE_ENCODERSTATEMENTS 6
 
 	/**
 	 * @enum imageEncoderEnum defines image encoder
@@ -127,7 +127,7 @@ namespace dodo
 		IMAGE_ROTATEDIRECTIONANGLE_270CCW = 270,
 	};
 
-#define IMAGE_COMPRESSIONS 8
+#define IMAGE_COMPRESSIONSTATEMENTS 8
 
 	/**
 	 * @enum imageCompressionEnum defines type of compression
@@ -299,10 +299,10 @@ namespace dodo
 
 		private:
 
-			static const char *mappingStArr[IMAGE_MAPPINGS];                                    ///< image mapping statements
-			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZES];                          ///< pixel type statements
-			static const char *encoderStArr[IMAGE_ENCODERS];                                    ///< image encoder
-			static const CompressionType compressionStArr[IMAGE_COMPRESSIONS];                  ///< image compression
+			static const char *mappingStArr[IMAGE_MAPPINGSTATEMENTS];                                    ///< image mapping statements
+			static const StorageType pixelSizeStArr[IMAGE_PIXELSIZESTATEMENTS];                          ///< pixel type statements
+			static const char *encoderStArr[IMAGE_ENCODERSTATEMENTS];                                    ///< image encoder
+			static const CompressionType compressionStArr[IMAGE_COMPRESSIONSTATEMENTS];                  ///< image compression
 	};
 
 	/**
