@@ -47,18 +47,6 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @enum postgresqlOperationTypeEnum defines type of operation for hook
-		 */
-		enum postgresqlOperationTypeEnum
-		{
-			POSTGRESQL_OPERATION_CONNECT,
-			POSTGRESQL_OPERATION_EXEC,
-			POSTGRESQL_OPERATION_DISCONNECT,
-			POSTGRESQL_OPERATION_FETCHROW,
-			POSTGRESQL_OPERATION_FETCHFIELD,
-		};
-
-		/**
 		 * @enum postgresqlHintEnum define DB hints
 		 */
 		enum postgresqlHintEnum

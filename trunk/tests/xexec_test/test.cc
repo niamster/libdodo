@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
 #ifdef DL_EXT
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 		cout << stdio::getModuleInfo("./module").name;
 

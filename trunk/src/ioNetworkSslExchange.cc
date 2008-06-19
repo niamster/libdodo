@@ -51,6 +51,12 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket),
 
 exchange::exchange(exchange &fse) : network::exchange(fse)
 {
+#ifndef IO_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
+
+#endif
+
 	sslHandle = fse.sslHandle;
 
 	fse.sslHandle = NULL;
@@ -60,12 +66,24 @@ exchange::exchange(exchange &fse) : network::exchange(fse)
 
 exchange::exchange() : sslHandle(NULL)
 {
+#ifndef IO_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
+
+#endif
+
 }
 
 //-------------------------------------------------------------------
 
 exchange::exchange(__initialAccept &a_init)
 {
+#ifndef IO_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKSSLEXCHANGE;
+
+#endif
+
 	init(a_init);
 }
 
@@ -125,7 +143,7 @@ exchange::close()
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
 #endif
@@ -140,7 +158,7 @@ exchange::close()
 
 	opened = false;
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }

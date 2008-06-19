@@ -212,7 +212,7 @@ image::read(const __imageInfo &info)
 	performXExec(preExec);
 #endif
 
-	if (info.mapping < 0 || info.mapping >= sizeof(mappingStArr) / sizeof(char *) || info.pixelSize < 0 || info.pixelSize >= sizeof(pixelSizeStArr) / sizeof(StorageType))
+	if (info.mapping < 0 || info.mapping >= IMAGE_MAPPINGS || info.pixelSize < 0 || info.pixelSize >= IMAGE_PIXELSIZES)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
 	if (collectedData.imHandle != NULL)
@@ -296,7 +296,7 @@ image::write(unsigned char **data,
 void
 image::setCompression(short type)
 {
-	if (type < 0 || type >= sizeof(compressionStArr) / sizeof(CompressionType))
+	if (type < 0 || type >= IMAGE_COMPRESSIONS)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
 	collectedData.imInfo->compression = compressionStArr[type];
@@ -315,7 +315,7 @@ image::setQuality(short quality)
 void
 image::setEncoder(short encoder)
 {
-	if (encoder < 0 || encoder >= sizeof(encoderStArr) / sizeof(char *))
+	if (encoder < 0 || encoder >= IMAGE_ENCODERS)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_SETENCODER, ERR_LIBDODO, IMAGEEX_BADINFO, IMAGEEX_BADINFO_STR, __LINE__, __FILE__);
 
 	strcpy(collectedData.imInfo->magick, encoderStArr[encoder]);
@@ -326,8 +326,7 @@ image::setEncoder(short encoder)
 short
 image::getCompression()
 {
-	int i = 0, j = sizeof(compressionStArr) / sizeof(CompressionType);
-	for (; i < j; ++i)
+	for (int i = 0; i < IMAGE_COMPRESSIONS; ++i)
 		if (collectedData.imInfo->compression == compressionStArr[i])
 			return i;
 }
@@ -345,8 +344,7 @@ image::getQuality()
 short
 image::getEncoder()
 {
-	int i = 0, j = sizeof(encoderStArr) / sizeof(char *);
-	for (; i < j; ++i)
+	for (int i = 0; i < IMAGE_ENCODERS; ++i)
 		if (strcmp(collectedData.imInfo->magick, encoderStArr[i]) == 0)
 			return i;
 }

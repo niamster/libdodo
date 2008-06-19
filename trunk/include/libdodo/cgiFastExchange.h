@@ -47,22 +47,7 @@ namespace dodo
 	{
 		namespace fast
 		{
-			/**
-			 * @enum exchangeOperationTypeEnum describes type of operation for hook
-			 */
-			enum exchangeOperationTypeEnum
-			{
-				EXCHANGE_OPERATION_READ,
-				EXCHANGE_OPERATION_READSTRING,
-				EXCHANGE_OPERATION_READSTREAM,
-				EXCHANGE_OPERATION_READSTREAMSTRING,
-				EXCHANGE_OPERATION_WRITE,
-				EXCHANGE_OPERATION_WRITESTRING,
-				EXCHANGE_OPERATION_WRITESTREAM,
-				EXCHANGE_OPERATION_WRITESTREAMSTRING,
-			};
-
-#ifndef CGIFASTEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 			/**
 			 * @struct __xexexCgiFastExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
@@ -201,7 +186,7 @@ namespace dodo
 
 					FCGX_Request *request;                        ///< fast CGI descriptor
 
-#ifndef CGIFASTEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 					__xexexCgiFastExchangeCollectedData collectedData;                          ///< data collected for xexec
 

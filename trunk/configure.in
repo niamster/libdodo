@@ -59,69 +59,33 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_ENABLE(ioStdio-xexec-support,
-        AS_HELP_STRING([--disable-ioStdio-xexec-support],[compile io::stdio w/o xexec support]),
-        [IOSTDIO_W_XEXEC="$enableval"], [IOSTDIO_W_XEXEC="yes"])
+AC_ARG_ENABLE(io-xexec-support,
+        AS_HELP_STRING([--disable-io-xexec-support],[compile io:: w/o xexec support]),
+        [IO_W_XEXEC="$enableval"], [IO_W_XEXEC="yes"])
 
-if test "$IOSTDIO_W_XEXEC" = "no"
+if test "$IO_W_XEXEC" = "no"
 then
-	echo -n -e "#define IOSTDIO_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-	
+	echo -n -e "#define IO_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tenabled"
-fi
-
-AC_ARG_ENABLE(ioNetworkExchange-xexec-support,
-        AS_HELP_STRING([--disable-ioNetworkExchange-xexec-support],[compile io::network::exchange w/o xexec support]),
-        [IONETWORKEXCHANGE_W_XEXEC="$enableval"], [IONETWORKEXCHANGE_W_XEXEC="yes"])
-
-if test "$IONETWORKEXCHANGE_W_XEXEC" = "no"
-then
-	echo -n -e "#define IONETWORKEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-	
 	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\t\t\tenabled"
-fi
-
-AC_ARG_ENABLE(ioNetworkClient-xexec-support,
-        AS_HELP_STRING([--disable-ioNetworkClient-xexec-support],[compile io::network::client w/o xexec support]),
-        [IONETWORKCLIENT_W_XEXEC="$enableval"], [IONETWORKCLIENT_W_XEXEC="yes"])
-
-if test "$IONETWORKCLIENT_W_XEXEC" = "no"
-then
-	echo -n -e "#define IONETWORKCLIENT_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-	
 	RESULT="$RESULT\nio::network::client xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\nio::network::client xexec support\t\t\t\t\t\tenabled"
-fi
-
-AC_ARG_ENABLE(ioNetworkServer-xexec-support,
-        AS_HELP_STRING([--disable-ioNetworkServer-xexec-support],[compile io::network::server w/o xexec support]),
-        [IONETWORKSERVER_W_XEXEC="$enableval"], [IONETWORKSERVER_W_XEXEC="yes"])
-
-if test "$IONETWORKSERVER_W_XEXEC" = "no"
-then
-	echo -n -e "#define IONETWORKSERVER_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-	
 	RESULT="$RESULT\nio::network::server xexec support\t\t\t\t\t\tdisabled"
-else
-	RESULT="$RESULT\nio::network::server xexec support\t\t\t\t\t\tenabled"
-fi
-
-AC_ARG_ENABLE(ioFile-xexec-support,
-        AS_HELP_STRING([--disable-ioFile-xexec-support],[compile io::file w/o xexec support]),
-        [IOFILE_W_XEXEC="$enableval"], [IOFILE_W_XEXEC="yes"])
-
-if test "$IOFILE_W_XEXEC" = "no"
-then
-	echo -n -e "#define IOFILE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-	
 	RESULT="$RESULT\nio::file xexec support\t\t\t\t\t\tdisabled"
 else
+	RESULT="$RESULT\nio::stdio xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::exchange xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::client xexec support\t\t\t\t\t\tenabled"
+	RESULT="$RESULT\nio::network::server xexec support\t\t\t\t\t\tenabled"
 	RESULT="$RESULT\nio::file xexec support\t\t\t\t\t\tenabled"
+fi
+
+AC_ARG_ENABLE(db-xexec-support,
+	AS_HELP_STRING([--disable-db-xexec-support],[compile db:: w/o xexec support]),
+	[DB_W_XEXEC="$enableval"], [DB_W_XEXEC="yes"])
+
+if test "$DB_W_XEXEC" = "no"
+then
+	echo -n -e "#define DB_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 fi
 
 # Check for libraries.
@@ -143,14 +107,8 @@ fi
 		
 		RESULT="$RESULT\nSQLite\t\t\t\t\t\tenabled"
 
-		AC_ARG_ENABLE(dbSqlite-xexec-support,
-			AS_HELP_STRING([--disable-dbSqlite-xexec-support],[compile db::sqlite w/o xexec support]),
-			[DBSQLITE_W_XEXEC="$enableval"], [DBSQLITE_W_XEXEC="yes"])
-
-		if test "$DBSQLITE_W_XEXEC" = "no"
+		if test "$DB_W_XEXEC" = "no"
 		then
-			echo -n -e "#define DBSQLITE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-			
 			RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\t\tdisabled"
 		else
 			RESULT="$RESULT\ndb::sqlite xexec support\t\t\t\t\t\tenabled"
@@ -237,14 +195,8 @@ fi
 
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
 
-		AC_ARG_ENABLE(dbPostgresql-xexec-support,
-			AS_HELP_STRING([--disable-dbPostgresql-xexec-support],[compile db::postgresql w/o xexec support]),
-			[DBPOSTGRESQL_W_XEXEC="$enableval"], [DBPOSTGRESQL_W_XEXEC="yes"])
-
-		if test "$DBPOSTGRESQL_W_XEXEC" = "no"
+		if test "$DB_W_XEXEC" = "no"
 		then
-			echo -n -e "#define DBPOSTGRESQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-			
 			RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\t\tdisabled"
 		else
 			RESULT="$RESULT\ndb::postgresql xexec support\t\t\t\t\t\tenabled"
@@ -279,14 +231,8 @@ fi
 		
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
 
-		AC_ARG_ENABLE(dbMysql-xexec-support,
-			AS_HELP_STRING([--disable-dbMysql-xexec-support],[compile db::mysql w/o xexec support]),
-			[DBMYSQL_W_XEXEC="$enableval"], [DBMYSQL_W_XEXEC="yes"])
-
-		if test "$DBMYSQL_W_XEXEC" = "no"
+		if test "$DB_W_XEXEC" = "no"
 		then
-			echo -n -e "#define DBMYSQL_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-			
 			RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tdisabled"
 		else
 			RESULT="$RESULT\ndb::mysql xexec support\t\t\t\t\t\tenabled"
@@ -312,14 +258,8 @@ fi
 		
 		RESULT="$RESULT\nFastCGI\t\t\t\t\t\tenabled"
 
-		AC_ARG_ENABLE(cgiFastExchange-xexec-support,
-			AS_HELP_STRING([--disable-cgiFastExchange-xexec-support],[compile cgi::fast::exchange w/o xexec support]),
-			[CGIFASTEXCHANGE_W_XEXEC="$enableval"], [CGIFASTEXCHANGE_W_XEXEC="yes"])
-
-		if test "$CGIFASTEXCHANGE_W_XEXEC" = "no"
+		if test "$IO_W_XEXEC" = "no"
 		then
-			echo -n -e "#define CGIFASTEXCHANGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
-			
 			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\t\t\tdisabled"
 		else
 			RESULT="$RESULT\ncgi::fast::exchange xexec support\t\t\t\t\t\tenabled"

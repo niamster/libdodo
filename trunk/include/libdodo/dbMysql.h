@@ -48,18 +48,6 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @enum mysqlOperationTypeEnum defines type of operation for hook
-		 */
-		enum mysqlOperationTypeEnum
-		{
-			MYSQL_OPERATION_CONNECT,
-			MYSQL_OPERATION_EXEC,
-			MYSQL_OPERATION_DISCONNECT,
-			MYSQL_OPERATION_FETCHROW,
-			MYSQL_OPERATION_FETCHFIELD,
-		};
-
-		/**
 		 * @enum mysqlAddSelEnum defines additional mySQL statement for `select`
 		 */
 		enum mysqlAddSelEnum

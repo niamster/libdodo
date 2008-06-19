@@ -48,22 +48,14 @@ namespace dodo
 	namespace io
 	{
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 		/**
 		 * @enum fileOperationTypeEnum defines type of operation for hook
 		 */
 		enum fileOperationTypeEnum
 		{
-			FILE_OPERATION_READ,
-			FILE_OPERATION_READSTRING,
-			FILE_OPERATION_READSTREAM,
-			FILE_OPERATION_READSTREAMSTRING,
-			FILE_OPERATION_WRITE,
-			FILE_OPERATION_WRITESTRING,
-			FILE_OPERATION_WRITESTREAM,
-			FILE_OPERATION_WRITESTREAMSTRING,
-			FILE_OPERATION_OPEN,
+			FILE_OPERATION_OPEN = 128,
 			FILE_OPERATION_CLOSE
 		};
 
@@ -91,7 +83,7 @@ namespace dodo
 			FILE_FILETYPE_CHAR_FILE                     ///< CHAR file
 		};
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 		/**
 		 * @struct __xexexIoFileCollectedData defines data that could be retrieved from io::file(to modificate)[contains references]
@@ -274,7 +266,7 @@ namespace dodo
 
 				FILE *handler;                          ///< file handler
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 				__xexexIoFileCollectedData collectedData;                   ///< data collected for xexec
 

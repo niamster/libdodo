@@ -108,6 +108,12 @@ accumulator::accumulator() : show(false),
 							 collectedData(operType,
 										   (void *) this)
 {
+#ifndef DB_WO_XEXEC
+
+	execObjectData = (void *)&collectedData;
+
+#endif
+
 	collectedData.qType = -1;
 	collectedData.qShift = ACCUMULATOR_NONE;
 	collectedData.qSelShift = ACCUMULATOR_NONE;

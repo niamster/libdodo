@@ -61,15 +61,7 @@ namespace dodo
 			 */
 			enum exchangeOperationTypeEnum
 			{
-				EXCHANGE_OPERATION_READ,
-				EXCHANGE_OPERATION_READSTRING,
-				EXCHANGE_OPERATION_READSTREAM,
-				EXCHANGE_OPERATION_READSTREAMSTRING,
-				EXCHANGE_OPERATION_WRITE,
-				EXCHANGE_OPERATION_WRITESTRING,
-				EXCHANGE_OPERATION_WRITESTREAM,
-				EXCHANGE_OPERATION_WRITESTREAMSTRING,
-				EXCHANGE_OPERATION_CLOSE,
+				EXCHANGE_OPERATION_CLOSE = 128,
 			};
 
 			/**
@@ -102,7 +94,7 @@ namespace dodo
 					bool blockInherited;                        ///< true if block flag is inherited
 			};
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 			/**
 			 * @struct __xexexIoNetworkExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
@@ -281,7 +273,7 @@ namespace dodo
 					 */
 					virtual void _write(const char * const data);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 					__xexexIoNetworkExchangeCollectedData collectedData;                        ///< data collected for xexec
 

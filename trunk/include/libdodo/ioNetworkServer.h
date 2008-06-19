@@ -67,7 +67,7 @@ namespace dodo
 			 */
 			enum serverOperationTypeEnum
 			{
-				SERVER_OPERATION_CONNECT,
+				SERVER_OPERATION_CONNECT = 128,
 				SERVER_OPERATION_CONNECTFROM,
 				SERVER_OPERATION_CONNECT_UNIX,
 				SERVER_OPERATION_BINDNLISTEN,
@@ -75,7 +75,7 @@ namespace dodo
 				SERVER_OPERATION_ACCEPT,
 			};
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 			/**
 			 * @struct __xexexIoNetworkServerCollectedData defines data that could be retrieved from class(to modificate)[contains references]
@@ -100,7 +100,7 @@ namespace dodo
 			 */
 			class server : public options,
 						   virtual public nonBlockedAccessInfo
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 						   ,
 						   public xexec
 #endif
@@ -196,7 +196,7 @@ namespace dodo
 
 					dodoString unixSock;                        ///< path to unix socket
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 					__xexexIoNetworkServerCollectedData collectedData;                       ///< data collected for xexec
 

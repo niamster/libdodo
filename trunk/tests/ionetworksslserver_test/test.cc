@@ -17,7 +17,7 @@ using namespace io::network::ssl;
 
 using namespace std;
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 void
 hook(void *odata,
@@ -36,7 +36,7 @@ hook(void *odata,
 void
 process(exchange fse)
 {
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 		fse.addPreExec(&hook, NULL);
 		fse.addPostExec(&hook, NULL);

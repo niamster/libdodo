@@ -46,18 +46,6 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @enum sqliteOperationTypeEnum defines type of operation for hook
-		 */
-		enum sqliteOperationTypeEnum
-		{
-			SQLITE_OPERATION_CONNECT,
-			SQLITE_OPERATION_EXEC,
-			SQLITE_OPERATION_DISCONNECT,
-			SQLITE_OPERATION_FETCHROW,
-			SQLITE_OPERATION_FETCHFIELD,
-		};
-
-		/**
 		 * @enum sqliteHintEnum define DB hints
 		 */
 		enum sqliteHintEnum

@@ -101,7 +101,7 @@ namespace dodo
 			CONNECTOR_REFERENCE_SET_DEFAULT                     ///< sets default on the action of any of those parent rows indicates on set action
 		};
 
-#define CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS 6
+#define CONNECTOR_JOINTYPESTSTATEMENTS 6
 
 		/**
 		 * @enum connectorJoinTypeEnum defines join types
@@ -236,11 +236,26 @@ namespace dodo
 			dodoString path;                    ///< path to db or unix socket
 			unsigned int port;                  ///< port
 		};
+		
+		/**
+		 * @enum dbOperationTypeEnum defines type of operation for hook
+		 */
+		enum mysqlOperationTypeEnum
+		{
+			DB_OPERATION_CONNECT,
+			DB_OPERATION_EXEC,
+			DB_OPERATION_DISCONNECT,
+			DB_OPERATION_FETCHROW,
+			DB_OPERATION_FETCHFIELD,
+		};
 
 		/**
 		 * @class connector implements an interface to db through sql and database independent interfaces
 		 */
-		class connector : public xexec
+		class connector
+#ifndef DB_WO_XEXEC
+						: public xexec
+#endif
 		{
 			public:
 

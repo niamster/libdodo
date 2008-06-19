@@ -46,6 +46,12 @@ client::client(short a_family,
 							   sslHandle(NULL),
 							   sslConnected(false)
 {
+#ifndef IO_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKSSLCLIENT;
+
+#endif
+
 }
 
 //-------------------------------------------------------------------
@@ -316,7 +322,7 @@ client::connect(const dodoString &host,
 				int port,
 				exchange &exchange)
 {
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
@@ -368,7 +374,7 @@ client::connect(const dodoString &host,
 	socket = -1;
 	sslHandle = NULL;
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -381,7 +387,7 @@ client::connectFrom(const dodoString &local,
 					int port,
 					exchange &exchange)
 {
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
 	performXExec(preExec);
 #endif
@@ -451,7 +457,7 @@ client::connectFrom(const dodoString &local,
 	socket = -1;
 	sslHandle = NULL;
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -462,7 +468,7 @@ void
 client::connect(const dodoString &path,
 				exchange &exchange)
 {
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;
 	performXExec(preExec);
 #endif
@@ -492,7 +498,7 @@ client::connect(const dodoString &path,
 	socket = -1;
 	sslHandle = NULL;
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }

@@ -31,7 +31,7 @@
 
 using namespace dodo::io;
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 __xexexIoStdioCollectedData::__xexexIoStdioCollectedData(int &a_operType,
 														 void *a_executor) : operType(a_operType),
@@ -49,7 +49,7 @@ stdio::stdio() : inSTDBuffer(IOSTDIO_INSIZE),
 				 blocked(true),
 				 desc(stdout)
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 				 ,
 				 collectedData(operType,
@@ -57,7 +57,7 @@ stdio::stdio() : inSTDBuffer(IOSTDIO_INSIZE),
 
 #endif
 {
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IOSTDIO;
 	execObjectData = (void *)&collectedData;
@@ -68,7 +68,7 @@ stdio::stdio() : inSTDBuffer(IOSTDIO_INSIZE),
 //-------------------------------------------------------------------
 
 stdio::stdio(stdio &fd)
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	: collectedData(operType,
 					(void *) this)
@@ -168,14 +168,14 @@ stdio::read(char * const a_void)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOSTDIO_WO_XEXEC
-	operType = STDIO_OPERATION_READ;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READ;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
 #endif
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	try
 	{
 		_read(a_void);
@@ -190,7 +190,7 @@ stdio::read(char * const a_void)
 	_read(a_void);
 #endif
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
@@ -207,8 +207,8 @@ stdio::readString(dodoString &a_str)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOSTDIO_WO_XEXEC
-	operType = STDIO_OPERATION_READSTRING;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
@@ -224,14 +224,14 @@ stdio::readString(dodoString &a_str)
 	{
 		delete [] data;
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 		collectedData.buffer.clear();
 #endif
 
 		throw;
 	}
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(data, inSize);
 	delete [] data;
 
@@ -252,10 +252,10 @@ stdio::writeString(const dodoString &a_buf)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = STDIO_OPERATION_WRITESTRING;
+	operType = IO_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -273,7 +273,7 @@ stdio::writeString(const dodoString &a_buf)
 #endif
 
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -287,10 +287,10 @@ stdio::write(const char *const a_buf)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_buf, outSize);
 
-	operType = STDIO_OPERATION_WRITE;
+	operType = IO_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -308,7 +308,7 @@ stdio::write(const char *const a_buf)
 #endif
 
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -539,14 +539,14 @@ stdio::readStream(char * const a_void)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOSTDIO_WO_XEXEC
-	operType = STDIO_OPERATION_READSTREAM;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
 	_readStream(a_void);
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_void;
 
 	performXExec(postExec);
@@ -565,8 +565,8 @@ stdio::readStreamString(dodoString &a_str)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOSTDIO_WO_XEXEC
-	operType = STDIO_OPERATION_READSTREAMSTRING;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -583,7 +583,7 @@ stdio::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = data;
 	delete [] data;
 
@@ -606,10 +606,10 @@ stdio::writeStreamString(const dodoString &a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = STDIO_OPERATION_WRITESTREAMSTRING;
+	operType = IO_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -645,7 +645,7 @@ stdio::writeStreamString(const dodoString &a_buf)
 	}
 #endif
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -661,10 +661,10 @@ stdio::writeStream(const char *const a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = STDIO_OPERATION_WRITESTREAM;
+	operType = IO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -700,7 +700,7 @@ stdio::writeStream(const char *const a_buf)
 	}
 #endif
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();

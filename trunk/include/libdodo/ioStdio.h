@@ -55,19 +55,11 @@ namespace dodo
 		 */
 		enum stdioOperationTypeEnum
 		{
-			STDIO_OPERATION_READ,
-			STDIO_OPERATION_READSTRING,
-			STDIO_OPERATION_READSTREAM,
-			STDIO_OPERATION_READSTREAMSTRING,
-			STDIO_OPERATION_WRITE,
-			STDIO_OPERATION_WRITESTRING,
-			STDIO_OPERATION_WRITESTREAM,
-			STDIO_OPERATION_WRITESTREAMSTRING,
-			STDIO_OPERATION_OPEN,
+			STDIO_OPERATION_OPEN = 128,
 			STDIO_OPERATION_CLOSE
 		};
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 		/**
 		 * @struct __xexexIoStdioCollectedData defines data that could be retrieved from class(to modificate)[contains references]
@@ -239,7 +231,7 @@ namespace dodo
 
 				bool err;                               ///< true if output stream is redirected to stderr
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 				__xexexIoStdioCollectedData collectedData;                      ///< data collected for xexec
 

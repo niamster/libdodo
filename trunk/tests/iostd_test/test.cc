@@ -15,7 +15,7 @@ using namespace io;
 
 using namespace std;
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 void
 hook(void *odata,
@@ -23,7 +23,7 @@ hook(void *odata,
 	 void *udata)
 {
 	__xexexIoStdioCollectedData *st = (__xexexIoStdioCollectedData *)odata;
-	if (st->operType == STDIO_OPERATION_WRITE)
+	if (st->operType == IO_OPERATION_WRITE)
 	{
 		int a = *(int *)(st->buffer.c_str());
 
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 		stdio st;
 		cout << st.inputterInfo().host << endl;
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 		int pos = st.addPreExec(&hook, NULL);
 
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 		st.write((char *)&a);
 		st.flush();
 
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 		st.disablePreExec(pos);
 

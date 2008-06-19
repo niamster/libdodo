@@ -37,10 +37,9 @@ mysql::mysql() : empty(true),
 				 type(CLIENT_MULTI_STATEMENTS)
 
 {
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_DBMYSQL;
-	execObjectData = (void *)&collectedData;
 
 #endif
 
@@ -174,8 +173,8 @@ mysql::connectSettings(unsigned long a_type,
 void
 mysql::connect()
 {
-#ifndef DBMYSQL_WO_XEXEC
-	operType = MYSQL_OPERATION_CONNECT;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
@@ -204,7 +203,7 @@ mysql::connect()
 							type))
 		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -218,8 +217,8 @@ mysql::disconnect()
 {
 	if (connected)
 	{
-#ifndef DBMYSQL_WO_XEXEC
-		operType = MYSQL_OPERATION_DISCONNECT;
+#ifndef DB_WO_XEXEC
+		operType = DB_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
@@ -231,7 +230,7 @@ mysql::disconnect()
 
 		mysql_close(mysqlHandle);
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 		performXExec(postExec);
 #endif
 
@@ -345,8 +344,8 @@ mysql::_exec(const dodoString &query,
 dodoArray<dodo::dodoStringArray>
 mysql::fetchRow() const
 {
-#ifndef DBMYSQL_WO_XEXEC
-	operType = MYSQL_OPERATION_FETCHROW;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_FETCHROW;
 	performXExec(preExec);
 #endif
 
@@ -393,7 +392,7 @@ mysql::fetchRow() const
 		rows.push_back(rowsPart);
 	}
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -405,8 +404,8 @@ mysql::fetchRow() const
 dodo::dodoStringArray
 mysql::fetchField() const
 {
-#ifndef DBMYSQL_WO_XEXEC
-	operType = MYSQL_OPERATION_FETCHFIELD;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 #endif
 
@@ -425,7 +424,7 @@ mysql::fetchField() const
 	for (unsigned int i(0); i < numFields; ++i)
 		fields.push_back(mysqlFields[i].name);
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -480,14 +479,14 @@ void
 mysql::exec(const dodoString &query,
 			bool result)
 {
-#ifndef DBMYSQL_WO_XEXEC
-	operType = MYSQL_OPERATION_EXEC;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_EXEC;
 	performXExec(preExec);
 #endif
 
 	_exec(query, result);
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 

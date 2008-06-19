@@ -17,13 +17,17 @@ using namespace std;
 
 using namespace db;
 
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 void
 hook(void *odata, short int type, void *udata)
 {
-	__xexexDbAccumulatorCollectedData *db = (__xexexDbAccumulatorCollectedData *)odata;
-	cout << ((sqlConstructor *)db->executor)->queryCollect() << endl;
+	__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
+
+	if (sql->operType == DB_OPERATION_EXEC)
+	{
+		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
+	}
 }
 
 #endif
@@ -38,7 +42,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 		pp.addPreExec(&hook, NULL);
 

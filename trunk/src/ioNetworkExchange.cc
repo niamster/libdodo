@@ -31,7 +31,7 @@
 
 using namespace dodo::io::network;
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 __xexexIoNetworkExchangeCollectedData::__xexexIoNetworkExchangeCollectedData(int &a_operType,
 																			 void *a_executor) : operType(a_operType),
@@ -58,7 +58,7 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket)
 
 exchange::exchange(exchange &fse)
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	: collectedData(operType,
 					(void *) this)
@@ -66,7 +66,7 @@ exchange::exchange(exchange &fse)
 #endif
 
 {
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
 	execObjectData = (void *)&collectedData;
@@ -92,7 +92,7 @@ exchange::exchange(exchange &fse)
 
 exchange::exchange()
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	: collectedData(operType,
 					(void *) this)
@@ -100,7 +100,7 @@ exchange::exchange()
 #endif
 
 {
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
 	execObjectData = (void *)&collectedData;
@@ -112,7 +112,7 @@ exchange::exchange()
 
 exchange::exchange(__initialAccept &a_init)
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	: collectedData(operType,
 					(void *) this)
@@ -120,7 +120,7 @@ exchange::exchange(__initialAccept &a_init)
 #endif
 
 {
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IONETWORKEXCHANGE;
 	execObjectData = (void *)&collectedData;
@@ -159,7 +159,7 @@ exchange::close()
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = EXCHANGE_OPERATION_CLOSE;
 	performXExec(preExec);
 #endif
@@ -173,7 +173,7 @@ exchange::close()
 
 	opened = false;
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -319,10 +319,10 @@ exchange::write(const char * const a_buf)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_buf, outSize);
 
-	operType = EXCHANGE_OPERATION_WRITE;
+	operType = IO_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -340,7 +340,7 @@ exchange::write(const char * const a_buf)
 #endif
 
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -354,10 +354,10 @@ exchange::writeString(const dodoString &a_buf)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = EXCHANGE_OPERATION_WRITESTRING;
+	operType = IO_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -375,7 +375,7 @@ exchange::writeString(const dodoString &a_buf)
 #endif
 
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -462,14 +462,14 @@ exchange::read(char * const a_void)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READ;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READ;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
 #endif
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	try
 	{
 		_read(a_void);
@@ -484,7 +484,7 @@ exchange::read(char * const a_void)
 	_read(a_void);
 #endif
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
@@ -501,8 +501,8 @@ exchange::readString(dodoString &a_str)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READSTRING;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
@@ -518,14 +518,14 @@ exchange::readString(dodoString &a_str)
 	{
 		delete [] data;
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 		collectedData.buffer.clear();
 #endif
 
 		throw;
 	}
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(data, inSize);
 	delete [] data;
 
@@ -548,10 +548,10 @@ exchange::writeStream(const char * const a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = EXCHANGE_OPERATION_WRITESTREAM;
+	operType = IO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -587,7 +587,7 @@ exchange::writeStream(const char * const a_buf)
 	}
 #endif
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -603,10 +603,10 @@ exchange::writeStreamString(const dodoString &a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_buf;
 
-	operType = EXCHANGE_OPERATION_WRITESTREAMSTRING;
+	operType = IO_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -642,7 +642,7 @@ exchange::writeStreamString(const dodoString &a_buf)
 	}
 #endif
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -684,8 +684,8 @@ exchange::readStream(char * const a_void)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READSTREAM;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
@@ -693,7 +693,7 @@ exchange::readStream(char * const a_void)
 	if (n == inSize)
 		a_void[n] = '\0';
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer = a_void;
 
 	performXExec(postExec);
@@ -714,8 +714,8 @@ exchange::readStreamString(dodoString &a_str)
 
 	a_str.clear();
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
-	operType = EXCHANGE_OPERATION_READSTREAMSTRING;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -733,7 +733,7 @@ exchange::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-#ifndef IONETWORKEXCHANGE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	if (n > 0)
 		collectedData.buffer.assign(data, n);
 

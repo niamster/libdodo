@@ -31,7 +31,7 @@
 
 using namespace dodo::io::network;
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 __xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_operType,
 																		 void *a_executor) : operType(a_operType),
@@ -45,7 +45,7 @@ __xexexIoNetworkClientCollectedData::__xexexIoNetworkClientCollectedData(int &a_
 
 client::client(client &fs)
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	: collectedData(operType,
 					(void *) this)
@@ -61,7 +61,7 @@ client::client(short a_family,
 			   short a_type) : family(a_family),
 							   type(a_type),
 							   blockInherited(false)
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 							   ,
 							   collectedData(operType,
@@ -69,7 +69,7 @@ client::client(short a_family,
 
 #endif
 {
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IONETWORKCLIENT;
 	execObjectData = (void *)&collectedData;
@@ -181,7 +181,7 @@ client::connect(const dodoString &host,
 				int port,
 				exchange &exchange)
 {
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
@@ -229,7 +229,7 @@ client::connect(const dodoString &host,
 
 	socket = -1;
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -242,7 +242,7 @@ client::connectFrom(const dodoString &local,
 					int port,
 					exchange &exchange)
 {
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECTFROM;
 	performXExec(preExec);
 #endif
@@ -308,7 +308,7 @@ client::connectFrom(const dodoString &local,
 
 	socket = -1;
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -319,7 +319,7 @@ void
 client::connect(const dodoString &path,
 				exchange &exchange)
 {
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = CLIENT_OPERATION_CONNECT_UNIX;
 	performXExec(preExec);
 #endif
@@ -345,7 +345,7 @@ client::connect(const dodoString &path,
 
 	socket = -1;
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }

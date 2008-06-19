@@ -36,10 +36,9 @@ using namespace dodo::db;
 postgresql::postgresql() : empty(true),
 						   hint(POSTGRESQL_HINT_NONE)
 {
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_DBPOSTGRESQL;
-	execObjectData = (void *)&collectedData;
 
 #endif
 }
@@ -88,8 +87,8 @@ postgresql::sqlDataType(int type)
 void
 postgresql::connect()
 {
-#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = POSTGRESQL_OPERATION_CONNECT;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
@@ -120,7 +119,7 @@ postgresql::connect()
 	if (status != CONNECTION_OK)
 		throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_CONNECT, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -134,8 +133,8 @@ postgresql::disconnect()
 {
 	if (connected)
 	{
-#ifndef DBPOSTGRESQL_WO_XEXEC
-		operType = POSTGRESQL_OPERATION_DISCONNECT;
+#ifndef DB_WO_XEXEC
+		operType = DB_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
@@ -147,7 +146,7 @@ postgresql::disconnect()
 
 		PQfinish(pgHandle);
 
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 		performXExec(postExec);
 #endif
 
@@ -324,8 +323,8 @@ dodoArray<dodo::dodoStringArray>
 postgresql::fetchRow() const
 {
 
-#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = POSTGRESQL_OPERATION_FETCHROW;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_FETCHROW;
 	performXExec(preExec);
 #endif
 
@@ -372,7 +371,7 @@ postgresql::fetchRow() const
 		rows.push_back(rowsPart);
 	}
 
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -384,8 +383,8 @@ postgresql::fetchRow() const
 dodo::dodoStringArray
 postgresql::fetchField() const
 {
-#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = POSTGRESQL_OPERATION_FETCHFIELD;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 #endif
 
@@ -403,7 +402,7 @@ postgresql::fetchField() const
 	for (int i(0); i < fieldsNum; ++i)
 		fields.push_back(PQfname(pgResult, i));
 
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -457,14 +456,14 @@ void
 postgresql::exec(const dodoString &query,
 				 bool result)
 {
-#ifndef DBPOSTGRESQL_WO_XEXEC
-	operType = POSTGRESQL_OPERATION_EXEC;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_EXEC;
 	performXExec(preExec);
 #endif
 
 	_exec(query, result);
 
-#ifndef DBPOSTGRESQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 

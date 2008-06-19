@@ -24,14 +24,14 @@ hook(void *odata,
 	 xexecObjectTypeEnum type,
 	 void *udata)
 {
-#ifndef IOSTDIO_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	if (type == XEXEC_OBJECT_IOSTDIO)
 	{
 		std::cout << "stdio module\t";
 
 		__xexexIoStdioCollectedData *st = (__xexexIoStdioCollectedData *)odata;
-		if (st->operType == STDIO_OPERATION_WRITE)
+		if (st->operType == IO_OPERATION_WRITE)
 		{
 			int *a = (int *)(st->buffer.c_str());
 			st->buffer.assign(tools::string::iToString(*a * 3) + "\n");

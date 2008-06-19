@@ -127,7 +127,7 @@ namespace dodo
 		IMAGE_ROTATEDIRECTIONANGLE_270CCW = 270,
 	};
 
-#define IMAGE_COMPRESSIONS
+#define IMAGE_COMPRESSIONS 8
 
 	/**
 	 * @enum imageCompressionEnum defines type of compression

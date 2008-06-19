@@ -67,7 +67,7 @@ namespace dodo
 			 */
 			enum clientOperationTypeEnum
 			{
-				CLIENT_OPERATION_CONNECT,
+				CLIENT_OPERATION_CONNECT = 128,
 				CLIENT_OPERATION_CONNECTFROM,
 				CLIENT_OPERATION_CONNECT_UNIX,
 				CLIENT_OPERATION_BINDNLISTEN,
@@ -75,7 +75,7 @@ namespace dodo
 				CLIENT_OPERATION_ACCEPT,
 			};
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 			/**
 			 * @struct __xexexIoNetworkClientCollectedData defines data that could be retrieved from class(to modificate)[contains references]
@@ -99,7 +99,7 @@ namespace dodo
 			 * @class client provides network connection interface
 			 */
 			class client : public options
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 						   ,
 						   public xexec
 #endif
@@ -172,7 +172,7 @@ namespace dodo
 
 					dodoString unixSock;                        ///< path to unix socket
 
-#ifndef IONETWORKCLIENT_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 					__xexexIoNetworkClientCollectedData collectedData;                       ///< data collected for xexec
 

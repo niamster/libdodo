@@ -234,6 +234,7 @@ sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
 dodoString
 sqlConstructor::insideAddCollect(const unsigned int sqlAddEnumArr[],
 								 const dodoString sqlAddArr[],
+								 int arrSize,
 								 int qTypeShift)
 {
 	if (qTypeShift == ACCUMULATOR_NONE)
@@ -241,7 +242,7 @@ sqlConstructor::insideAddCollect(const unsigned int sqlAddEnumArr[],
 
 	dodoString temp;
 
-	for (unsigned int i = 0; i < sizeof(sqlAddEnumArr) / sizeof(unsigned int); ++i)
+	for (unsigned int i = 0; i < arrSize; ++i)
 	{
 		if (isSetFlag(qTypeShift, 1 << sqlAddEnumArr[i]))
 			temp.append(sqlAddArr[sqlAddEnumArr[i] - 1]);
@@ -333,7 +334,7 @@ sqlConstructor::callProcedureCollect()
 void
 sqlConstructor::selectCollect()
 {
-	dodoString temp = insideAddCollect(addSelEnumArr, sqlAddSelArr, collectedData.qSelShift);
+	dodoString temp = insideAddCollect(addSelEnumArr, sqlAddSelArr, ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS, collectedData.qSelShift);
 	temp.append(insideAddCollect(sqlDbDepAddSelArr, qDbDepSelShift));
 
 	if (collectedData.table.size() > 0)
@@ -440,7 +441,7 @@ sqlConstructor::insertCollect()
 		fieldsPart.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 	}
 
-	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, collectedData.qInsShift);
+	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS, collectedData.qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
 
 	dodoString temp1 = collectedData.table;
@@ -468,10 +469,10 @@ sqlConstructor::insertSelectCollect()
 	dodoString fieldsPartTo = tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 	dodoString fieldsPartFrom = tools::misc::implode(collectedData.values.front(), statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
-	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, collectedData.qInsShift);
+	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS, collectedData.qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
 
-	dodoString tempS = insideAddCollect(addSelEnumArr, sqlAddSelArr, collectedData.qSelShift);
+	dodoString tempS = insideAddCollect(addSelEnumArr, sqlAddSelArr, ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS, collectedData.qSelShift);
 	tempS.append(insideAddCollect(sqlDbDepAddSelArr, qDbDepSelShift));
 
 	tempS.append(fieldsPartFrom);
@@ -542,7 +543,7 @@ sqlConstructor::updateCollect()
 			setPart = valuesName(collectedData.values.front(), collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 	}
 
-	insideAddCollect(addUpEnumArr, sqlAddUpArr, collectedData.qUpShift);
+	insideAddCollect(addUpEnumArr, sqlAddUpArr, ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS, collectedData.qUpShift);
 	dodoString temp = insideAddCollect(sqlDbDepAddUpArr, qDbDepUpShift);
 
 	temp.append(collectedData.table);
@@ -558,7 +559,7 @@ sqlConstructor::updateCollect()
 void
 sqlConstructor::delCollect()
 {
-	dodoString temp = insideAddCollect(addDelEnumArr, sqlAddDelArr, collectedData.qDelShift);
+	dodoString temp = insideAddCollect(addDelEnumArr, sqlAddDelArr, ACCUMULATOR_ADDREQUESTDELETESTATEMENTS, collectedData.qDelShift);
 	temp.append(insideAddCollect(sqlDbDepAddDelArr, qDbDepDelShift));
 
 	request = statements[SQLCONSTRUCTOR_STATEMENT_DELETE];
@@ -703,7 +704,7 @@ sqlConstructor::joinCollect()
 	dodoArray<int>::iterator m = collectedData.joinTypes.begin(), n = collectedData.joinTypes.end();
 	for (; i != j; ++i, ++o, ++m)
 	{
-		if (*m > 0 && *m < CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS)
+		if (*m >= 0 && *m < CONNECTOR_JOINTYPESTSTATEMENTS)
 			request.append(sqlJoinArr[*m]);
 		else
 			throw baseEx(ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, ERR_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
@@ -732,8 +733,6 @@ sqlConstructor::queryCollect()
 
 			selectCollect();
 			selectAction = true;
-
-			joinCollect();
 
 			break;
 
@@ -884,6 +883,8 @@ sqlConstructor::queryCollect()
 
 	if (additionalActions)
 	{
+		if (selectAction && isSetFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_JOIN))
+			joinCollect();
 		additionalCollect(ACCUMULATOR_ADDREQUEST_AS, collectedData.where);
 		additionalCollect(ACCUMULATOR_ADDREQUEST_WHERE, collectedData.where);
 		if (selectAction)

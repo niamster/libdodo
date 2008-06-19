@@ -31,7 +31,7 @@
 
 using namespace dodo::io::network;
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 __xexexIoNetworkServerCollectedData::__xexexIoNetworkServerCollectedData(int &a_operType,
 																		 void *a_executor) : operType(a_operType),
@@ -45,7 +45,7 @@ __xexexIoNetworkServerCollectedData::__xexexIoNetworkServerCollectedData(int &a_
 
 server::server(server &fs)
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	: collectedData(operType,
 					(void *) this)
@@ -60,7 +60,7 @@ server::server(short a_family,
 			   short a_type) : family(a_family),
 							   type(a_type),
 							   blockInherited(false)
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 							   ,
 							   collectedData(operType,
@@ -68,7 +68,7 @@ server::server(short a_family,
 
 #endif
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IONETWORKSERVER;
 	execObjectData = (void *)&collectedData;
@@ -182,7 +182,7 @@ server::bindNListen(const dodoString &host,
 					int port,
 					int numberOfConnections)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
 	performXExec(preExec);
 #endif
@@ -231,7 +231,7 @@ server::bindNListen(const dodoString &host,
 		if (::listen(socket, numberOfConnections) == -1)
 			throw baseEx(ERRMODULE_IONETWORKSERVER, SERVEREX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -244,7 +244,7 @@ server::bindNListen(const dodoString &path,
 					int numberOfConnections,
 					bool force)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
 	performXExec(preExec);
 #endif
@@ -282,7 +282,7 @@ server::bindNListen(const dodoString &path,
 
 	unixSock = path;
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -293,7 +293,7 @@ bool
 server::accept(__initialAccept &init,
 			   __connInfo &info)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
 	performXExec(preExec);
 #endif
@@ -379,7 +379,7 @@ server::accept(__initialAccept &init,
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -391,7 +391,7 @@ server::accept(__initialAccept &init,
 bool
 server::accept(__initialAccept &init)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
 	performXExec(preExec);
 #endif
@@ -418,7 +418,7 @@ server::accept(__initialAccept &init)
 	init.blocked = blocked;
 	init.blockInherited = blockInherited;
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 

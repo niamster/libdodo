@@ -41,10 +41,28 @@ namespace dodo
 	namespace io
 	{
 		/**
+		 * @enum exchangeOperationTypeEnum describes type of operation for hook
+		 */
+		enum exchangeOperationTypeEnum
+		{
+			IO_OPERATION_READ,
+			IO_OPERATION_READSTRING,
+			IO_OPERATION_READSTREAM,
+			IO_OPERATION_READSTREAMSTRING,
+			IO_OPERATION_WRITE,
+			IO_OPERATION_WRITESTRING,
+			IO_OPERATION_WRITESTREAM,
+			IO_OPERATION_WRITESTREAMSTRING,
+		};
+
+		/**
 		 * @class channel implements an interface for I/O operations
 		 */
-		class channel : public xexec,
-						virtual public nonBlockedAccessInfo
+		class channel : virtual public nonBlockedAccessInfo
+#ifndef DB_WO_XEXEC
+						,
+						public xexec
+#endif
 		{
 			public:
 

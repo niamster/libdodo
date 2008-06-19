@@ -37,10 +37,9 @@ sqlite::sqlite() : empty(true),
 				   hint(SQLITE_HINT_NONE)
 
 {
-#ifndef DBSQLITE_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_DBSQLITE;
-	execObjectData = (void *)&collectedData;
 
 #endif
 
@@ -118,8 +117,8 @@ sqlite::connect()
 		connected = false;
 	}
 
-#ifndef DBSQLITE_WO_XEXEC
-	operType = SQLITE_OPERATION_CONNECT;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
 
@@ -130,7 +129,7 @@ sqlite::connect()
 		throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_CONNECT, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 	}
 
-#ifndef DBSQLITE_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -144,8 +143,8 @@ sqlite::disconnect()
 {
 	if (connected)
 	{
-#ifndef DBSQLITE_WO_XEXEC
-		operType = SQLITE_OPERATION_DISCONNECT;
+#ifndef DB_WO_XEXEC
+		operType = DB_OPERATION_DISCONNECT;
 		performXExec(preExec);
 #endif
 
@@ -158,7 +157,7 @@ sqlite::disconnect()
 		if (sqlite3_close(sqliteHandle) != SQLITE_OK)
 			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_DISCONNECT, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
-#ifndef DBSQLITE_WO_XEXEC
+#ifndef DB_WO_XEXEC
 		performXExec(postExec);
 #endif
 
@@ -304,8 +303,8 @@ sqlite::_exec(const dodoString &query,
 dodoArray<dodo::dodoStringArray>
 sqlite::fetchRow() const
 {
-#ifndef DBSQLITE_WO_XEXEC
-	operType = SQLITE_OPERATION_FETCHROW;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_FETCHROW;
 	performXExec(preExec);
 #endif
 
@@ -406,7 +405,7 @@ sqlite::fetchRow() const
 		}
 	}
 
-#ifndef DBSQLITE_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -418,8 +417,8 @@ sqlite::fetchRow() const
 dodo::dodoStringArray
 sqlite::fetchField() const
 {
-#ifndef DBSQLITE_WO_XEXEC
-	operType = SQLITE_OPERATION_FETCHFIELD;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_FETCHFIELD;
 	performXExec(preExec);
 #endif
 
@@ -437,7 +436,7 @@ sqlite::fetchField() const
 	for (unsigned int i(0); i < numFields; ++i)
 		fields.push_back(sqlite3_column_name(sqliteResult, i));
 
-#ifndef DBSQLITE_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -527,14 +526,14 @@ void
 sqlite::exec(const dodoString &query,
 			 bool result)
 {
-#ifndef DBSQLITE_WO_XEXEC
-	operType = SQLITE_OPERATION_EXEC;
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_EXEC;
 	performXExec(preExec);
 #endif
 
 	_exec(query, result);
 
-#ifndef DBSQLITE_WO_XEXEC
+#ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
 

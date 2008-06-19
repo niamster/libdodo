@@ -223,9 +223,10 @@ namespace dodo
 				 * @return string constructed from additional statements
 				 * @param sqlAddEnumArr defines statements[see sqlAddEnumArr]
 				 * @param sqlAddArr defines statements[see sqlAddArr]
+				 * @param arrSize defines size of sqlAddEnumArr and sqlAddArr[they should have same sizes]
 				 * @param qTypeShift defines additional statements that has been set
 				 */
-				virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const dodoString sqlAddArr[], int qTypeShift);
+				virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const dodoString sqlAddArr[], int arrSize, int qTypeShift);
 
 				/**
 				 * @return string constructed from additional statements(DB-dependent)
@@ -275,7 +276,7 @@ namespace dodo
 
 				static const dodoString sqlQStArr[CONNECTOR_SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
 
-				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPEUBREQUESTSTATEMENTS];                              ///< statements for `join` queries
+				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPESTSTATEMENTS];                              ///< statements for `join` queries
 
 
 #define SQLCONSTRUCTOR_STATEMENTS 20

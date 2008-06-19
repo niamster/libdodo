@@ -19,6 +19,23 @@ using namespace db;
 
 using namespace std;
 
+#ifndef DB_WO_XEXEC
+
+void
+hook(void *odata,
+	 short int type,
+	 void *udata)
+{
+	__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
+
+	if (sql->operType == DB_OPERATION_EXEC)
+	{
+		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
+	}
+}
+
+#endif
+
 int main(int argc, char **argv)
 {
 	connector *pp;
@@ -54,6 +71,12 @@ int main(int argc, char **argv)
 
 	try
 	{
+
+#ifndef DB_WO_XEXEC
+
+		int pos = pp->addPreExec(hook, (void *)"id");
+
+#endif
 		__connectorInfo info;
 
 		info.db = "test";

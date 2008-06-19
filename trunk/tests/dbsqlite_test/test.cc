@@ -18,7 +18,7 @@ using namespace dodo;
 
 using namespace db;
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 void
 hook(void *odata,
@@ -27,9 +27,9 @@ hook(void *odata,
 {
 	__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
 
-	if (sql->operType == SQLITE_OPERATION_EXEC && sql->qType == ACCUMULATOR_REQUEST_SELECT)
+	if (sql->operType == DB_OPERATION_EXEC)
 	{
-		cout << endl << endl << "table: " << sql->table << endl << endl;
+		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	sqlite pp;
 	try
 	{
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 		int pos = pp.addPreExec(hook, (void *)"id");
 

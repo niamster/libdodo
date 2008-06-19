@@ -44,6 +44,11 @@ server::server(short a_family,
 			   								   a_type),
 							   sslCtx(NULL)
 {
+#ifndef IO_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IONETWORKSSLSERVER;
+
+#endif
 }
 
 
@@ -245,7 +250,7 @@ server::bindNListen(const dodoString &host,
 					int port,
 					int numberOfConnections)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN;
 	performXExec(preExec);
 #endif
@@ -295,7 +300,7 @@ server::bindNListen(const dodoString &host,
 		if (::listen(socket, numberOfConnections) == -1)
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -308,7 +313,7 @@ server::bindNListen(const dodoString &path,
 					int numberOfConnections,
 					bool force)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_BINDNLISTEN_UNIX;
 	performXExec(preExec);
 #endif
@@ -347,7 +352,7 @@ server::bindNListen(const dodoString &path,
 
 	unixSock = path;
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -358,7 +363,7 @@ bool
 server::accept(__initialAccept &init,
 			   __connInfo &info)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
 	performXExec(preExec);
 #endif
@@ -446,7 +451,7 @@ server::accept(__initialAccept &init,
 
 	acceptSsl(init);
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -458,7 +463,7 @@ server::accept(__initialAccept &init,
 bool
 server::accept(__initialAccept &init)
 {
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;
 	performXExec(preExec);
 #endif
@@ -487,7 +492,7 @@ server::accept(__initialAccept &init)
 
 	acceptSsl(init);
 
-#ifndef IONETWORKSERVER_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 

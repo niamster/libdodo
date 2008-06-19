@@ -31,7 +31,7 @@
 
 using namespace dodo::io;
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 __xexexIoFileCollectedData::__xexexIoFileCollectedData(int &a_operType,
 													   void *a_executor) : operType(a_operType),
@@ -50,7 +50,7 @@ file::file(const dodoString &a_path,
 						 path(a_path),
 						 fileType(a_fileType),
 						 pos(0)
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 						 ,
 						 collectedData(operType,
@@ -58,7 +58,7 @@ file::file(const dodoString &a_path,
 
 #endif
 {
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IOFILE;
 	execObjectData = (void *)&collectedData;
@@ -79,7 +79,7 @@ file::file(const dodoString &a_path,
 //-------------------------------------------------------------------
 
 file::file(file &fd)
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	: collectedData(operType,
 					(void *) this)
@@ -129,11 +129,11 @@ file::close()
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = FILE_OPERATION_CLOSE;
 #endif
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(preExec);
 #endif
 
@@ -145,7 +145,7 @@ file::close()
 		opened = false;
 	}
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -159,7 +159,7 @@ file::open(const dodoString &a_path,
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	operType = FILE_OPERATION_OPEN;
 	performXExec(preExec);
 #endif
@@ -243,7 +243,7 @@ file::open(const dodoString &a_path,
 
 	tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
 
@@ -286,14 +286,14 @@ file::read(char * const a_void)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
-	operType = FILE_OPERATION_READ;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READ;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
 #endif
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	try
 	{
@@ -312,7 +312,7 @@ file::read(char * const a_void)
 
 #endif
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	collectedData.buffer.assign(a_void, inSize);
 
 	performXExec(postExec);
@@ -329,8 +329,8 @@ file::readString(dodoString &a_str)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
-	operType = FILE_OPERATION_READSTRING;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTRING;
 	performXExec(preExec);
 
 	collectedData.buffer.reserve(inSize);
@@ -346,14 +346,14 @@ file::readString(dodoString &a_str)
 	{
 		delete [] data;
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 		collectedData.buffer.clear();
 #endif
 
 		throw;
 	}
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	collectedData.buffer.assign(data, inSize);
 	delete [] data;
@@ -378,11 +378,11 @@ file::writeString(const dodoString &a_buf)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	collectedData.buffer = a_buf;
 
-	operType = FILE_OPERATION_WRITESTRING;
+	operType = IO_OPERATION_WRITESTRING;
 	performXExec(preExec);
 
 	try
@@ -403,7 +403,7 @@ file::writeString(const dodoString &a_buf)
 #endif
 
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -478,11 +478,11 @@ file::write(const char *const a_buf)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	collectedData.buffer.assign(a_buf, outSize);
 
-	operType = FILE_OPERATION_WRITE;
+	operType = IO_OPERATION_WRITE;
 	performXExec(preExec);
 
 	try
@@ -503,7 +503,7 @@ file::write(const char *const a_buf)
 #endif
 
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -607,14 +607,14 @@ file::readStream(char * const a_void)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
-	operType = FILE_OPERATION_READSTREAM;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAM;
 	performXExec(preExec);
 #endif
 
 	_readStream(a_void);
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	collectedData.buffer = a_void;
 
@@ -635,8 +635,8 @@ file::readStreamString(dodoString &a_str)
 {
 	raceHazardGuard pg(this);
 
-#ifndef IOFILE_WO_XEXEC
-	operType = FILE_OPERATION_READSTREAMSTRING;
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAMSTRING;
 	performXExec(preExec);
 #endif
 
@@ -653,7 +653,7 @@ file::readStreamString(dodoString &a_str)
 		throw;
 	}
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	collectedData.buffer = data;
 	delete [] data;
@@ -714,11 +714,11 @@ file::writeStreamString(const dodoString &a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	collectedData.buffer = a_buf;
 
-	operType = FILE_OPERATION_WRITESTREAMSTRING;
+	operType = IO_OPERATION_WRITESTREAMSTRING;
 	performXExec(preExec);
 
 	try
@@ -757,7 +757,7 @@ file::writeStreamString(const dodoString &a_buf)
 
 #endif
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();
@@ -773,11 +773,11 @@ file::writeStream(const char *const a_buf)
 
 	unsigned long _outSize = outSize;
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 
 	collectedData.buffer = a_buf;
 
-	operType = FILE_OPERATION_WRITESTREAM;
+	operType = IO_OPERATION_WRITESTREAM;
 	performXExec(preExec);
 
 	try
@@ -816,7 +816,7 @@ file::writeStream(const char *const a_buf)
 
 #endif
 
-#ifndef IOFILE_WO_XEXEC
+#ifndef IO_WO_XEXEC
 	performXExec(postExec);
 
 	collectedData.buffer.clear();

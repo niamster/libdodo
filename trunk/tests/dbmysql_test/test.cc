@@ -18,7 +18,7 @@ using namespace std;
 
 using namespace db;
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 void
 hook(void *odata,
@@ -27,11 +27,9 @@ hook(void *odata,
 {
 	__xexexDbAccumulatorCollectedData *sql = (__xexexDbAccumulatorCollectedData *)odata;
 
-	if (sql->operType == MYSQL_OPERATION_EXEC && sql->qType == ACCUMULATOR_REQUEST_SELECT)
+	if (sql->operType == DB_OPERATION_EXEC)
 	{
-		cout << endl << endl << "table was " << sql->table << endl << endl;
-
-		sql->limit = "70";
+		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
 
@@ -49,7 +47,7 @@ int main(int argc, char **argv)
 	try
 	{
 
-#ifndef DBMYSQL_WO_XEXEC
+#ifndef DB_WO_XEXEC
 
 		int pos = pp.addPreExec(hook, (void *)"id");
 
@@ -90,7 +88,6 @@ int main(int argc, char **argv)
 		ti.fields.push_back(fi);
 
 		pp.createTable(ti);
-		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
 		ti.fields.clear();
@@ -111,11 +108,9 @@ int main(int argc, char **argv)
 		ti.fields.push_back(fi);
 
 		pp.createTable(ti);
-		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
 		pp.createIndex("test", "id", "id");
-		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
 		/*create field*/
@@ -124,12 +119,10 @@ int main(int argc, char **argv)
 		fi.length = 10;
 
 		pp.createField(fi, "test");
-		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
 		fi.name = "bar";
 		pp.renameField("foo", fi, "test");
-		cout << endl << endl << "Query: " << pp.queryCollect() << endl << endl;
 		pp.exec();
 
 		dodoStringArray fields;
@@ -139,7 +132,6 @@ int main(int argc, char **argv)
 		pp.selectAll("test");
 		pp.join("test1", CONNECTOR_JOINTYPE_JOIN, "test.operation = test1.operation");
 		pp.limit(10);
-		cout << pp.queryCollect() << endl;
 		pp.exec();
 		storage = pp.fetch();        //get result
 		dodoStringArray::iterator i = storage.fields.begin(), j = storage.fields.end();
@@ -170,7 +162,6 @@ int main(int argc, char **argv)
 		pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);           //mySQL features; defined only in this class
 
 		pp.insert("test", assA);                                        //multiply insert
-		cout << pp.queryCollect() << endl;
 		pp.exec();
 
 		fields.clear();
@@ -178,15 +169,25 @@ int main(int argc, char **argv)
 		fields.push_back("operation");
 
 		pp.insert("test", values, fields);     //simple insert
-		cout << pp.queryCollect() << endl;
 		pp.exec();
+
+#ifndef DB_WO_XEXEC
+		
+		pp.disablePreExec(pos);
+
+#endif
 
 		for (int o = 0; o < 100000; o++)
 		{
 			pp.insert("test", values, fields);
-			//cout << pp.queryCollect() << endl;//show query
 			pp.exec();
 		}
+
+#ifndef DB_WO_XEXEC
+		
+		pp.enablePreExec(pos);
+
+#endif
 
 		pp.selectAll("test", "id>1");
 
@@ -204,7 +205,6 @@ int main(int argc, char **argv)
 		pp.order("id desc");
 		pp.limit(5);
 		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
-		cout << pp.queryCollect() << endl;        //show query
 		pp.exec();
 
 		storage = pp.fetch();        //get result
