@@ -102,11 +102,15 @@ http::~http()
 
 //-------------------------------------------------------------------
 
+#ifdef OPENSSL_EXT
+
 void 
 http::setSertificates(const ssl::__certificates &a_certs)
 {
 	certs = a_certs;
 }
+
+#endif
 
 //-------------------------------------------------------------------
 
@@ -130,9 +134,15 @@ http::setUrl(const dodoString &a_url)
 	}
 	else
 	{
+
+#ifdef OPENSSL_EXT
+
 		if (tools::string::iequal(urlComponents.protocol, "https"))
 			scheme = SCHEME_HTTPS;
 		else
+
+#endif
+
 			throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_SETURL, ERR_LIBDODO, HTTPEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
 	}
 
@@ -142,9 +152,15 @@ http::setUrl(const dodoString &a_url)
 	{
 		if (scheme = SCHEME_HTTP)
 			urlComponents.port = "80";
+
+#ifdef OPENSSL_EXT
+
 		else
 			if (scheme = SCHEME_HTTPS)
 				urlComponents.port = "443";
+
+#endif
+
 	}
 	
 
@@ -201,16 +217,21 @@ http::GET()
 	exchange *ex;
 	client *net;
 	
-	if (scheme = SCHEME_HTTPS)
-	{
-		net = new ssl::client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
-		ex = new ssl::exchange;
-	}
-	else
+	if (scheme = SCHEME_HTTP)
 	{
 		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
 		ex = new exchange;
 	}
+
+#ifdef OPENSSL_EXT
+
+	else
+	{
+		net = new ssl::client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		ex = new ssl::exchange;
+	}
+
+#endif
 
 	if (proxyAuthInfo.enabled)
 		net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
@@ -222,11 +243,16 @@ http::GET()
 		for (; o != p; ++o)
 			try
 			{
-				if (scheme = SCHEME_HTTPS)
-					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
-				else
+				if (scheme = SCHEME_HTTP)
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
+
+#ifdef OPENSSL_EXT
+
+				else
+					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
 				
+#endif
+
 				break;
 			}
 			catch (baseEx &exp)
@@ -531,16 +557,21 @@ http::POST(const dodoString &a_data,
 	exchange *ex;
 	client *net;
 	
-	if (scheme = SCHEME_HTTPS)
-	{
-		net = new ssl::client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
-		ex = new ssl::exchange;
-	}
-	else
+	if (scheme = SCHEME_HTTP)
 	{
 		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
 		ex = new exchange;
 	}
+
+#ifdef OPENSSL_EXT
+
+	else
+	{
+		net = new ssl::client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		ex = new ssl::exchange;
+	}
+
+#endif
 
 	if (proxyAuthInfo.enabled)
 		net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
@@ -552,10 +583,15 @@ http::POST(const dodoString &a_data,
 		for (; o != p; ++o)
 			try
 			{
-				if (scheme = SCHEME_HTTPS)
-					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
-				else
+				if (scheme = SCHEME_HTTP)
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
+
+#ifdef OPENSSL_EXT
+
+				else
+					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
+
+#endif
 
 				break;
 			}

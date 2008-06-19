@@ -142,12 +142,16 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~http();
-					
+				
+#ifdef OPENSSL_EXT
+
 					/**
 					 * set certificates information
 					 * @param certs defines certificates information 
 					 */
 					virtual void setSertificates(const ssl::__certificates &certs);
+
+#endif
 
 					dodoMap<short, dodoString> requestHeaders;                     ///< headers that will be sent with request[see httpRequestHeaderEnum]
 
@@ -324,7 +328,12 @@ namespace dodo
 					enum schemeEnum
 					{
 						SCHEME_HTTP,
-						SCHEME_HTTPS
+
+#ifdef OPENSSL_EXT
+
+						SCHEME_HTTPS,
+
+#endif
 					};
 
 					short scheme;///< URI scheme of connection
@@ -343,8 +352,12 @@ namespace dodo
 					};
 
 					__proxyAuthInfo proxyAuthInfo;                     ///< proxy authentication information
-					
+
+#ifdef OPENSSL_EXT
+
 					ssl::__certificates certs;///< SSL certificates
+
+#endif
 			};
 		};
 	};
