@@ -64,7 +64,8 @@ exchange::exchange(exchange &fse) : network::exchange(fse)
 
 //-------------------------------------------------------------------
 
-exchange::exchange() : sslHandle(NULL)
+exchange::exchange() : network::exchange(),
+					   sslHandle(NULL)
 {
 #ifndef IO_WO_XEXEC
 
@@ -215,10 +216,23 @@ exchange::isAlive()
 {
 	raceHazardGuard pg(this);
 
-	if (network::exchange::isAlive())
-		return true;
+	if (!opened)
+		return false;
 
+	pollfd fd;
+	fd.fd = socket;
+	fd.events = POLLOUT;
+
+	if (poll(&fd, 1, -1) > 0)
+		if (isSetFlag(fd.revents, POLLOUT))
+			return true;
+
+	_close(socket, sslHandle);
+
+	socket = -1;
 	sslHandle = NULL;
+	
+	opened = false;
 
 	return false;
 }
@@ -228,6 +242,9 @@ exchange::isAlive()
 void
 exchange::_write(const char * const data)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
 
@@ -314,6 +331,9 @@ exchange::_write(const char * const data)
 void
 exchange::_read(char * const data)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	
 	memset(data, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
@@ -408,6 +428,9 @@ exchange::_read(char * const data)
 unsigned long
 exchange::_readStream(char * const data)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	
 	memset(data, '\0', inSize);
 
 	long n = 0;

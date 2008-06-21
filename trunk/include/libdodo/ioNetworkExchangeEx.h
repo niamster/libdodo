@@ -41,6 +41,19 @@ namespace dodo
 		namespace network
 		{
 			/**
+			 * libdodo defined errors
+			 */
+			enum exchangeExR
+			{
+				EXCHANGEEX_NOCONNECTION,
+			};
+
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define IONETWORKEXCHANGEEX_NOCONNECTION_STR "No connection."
+
+			/**
 			 * IDs of functions where exception might be thrown
 			 */
 			enum exchangeFunctionsID

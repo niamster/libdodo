@@ -79,6 +79,13 @@ http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
 			   followRedirection(true),
 			   authTries(0),
 			   scheme(SCHEME_HTTP)
+			   
+#ifdef OPENSSL_EXT
+			   
+			   ,
+			   certsSet(false)
+			   
+#endif
 {
 	proxyAuthInfo.enabled = false;
 	proxyAuthInfo.authRequired = false;
@@ -108,6 +115,18 @@ void
 http::setSertificates(const ssl::__certificates &a_certs)
 {
 	certs = a_certs;
+	
+	certsSet = true;
+}
+
+//-------------------------------------------------------------------
+
+void 
+http::removeSertificates()
+{
+	certs = ssl::__certificates();
+	
+	certsSet = false;
 }
 
 #endif
@@ -249,7 +268,12 @@ http::GET()
 #ifdef OPENSSL_EXT
 
 				else
+				{
 					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
+					
+					if (certsSet)
+						((ssl::client *)net)->setSertificates(certs);
+				}
 				
 #endif
 
@@ -589,7 +613,12 @@ http::POST(const dodoString &a_data,
 #ifdef OPENSSL_EXT
 
 				else
+				{
 					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
+					
+					if (certsSet)
+						((ssl::client *)net)->setSertificates(certs);
+				}
 
 #endif
 

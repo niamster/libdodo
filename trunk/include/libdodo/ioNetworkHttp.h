@@ -151,6 +151,11 @@ namespace dodo
 					 */
 					virtual void setSertificates(const ssl::__certificates &certs);
 
+					/**
+					 * remove certificates information 
+					 */
+					virtual void removeSertificates();
+
 #endif
 
 					dodoMap<short, dodoString> requestHeaders;                     ///< headers that will be sent with request[see httpRequestHeaderEnum]
@@ -356,6 +361,7 @@ namespace dodo
 #ifdef OPENSSL_EXT
 
 					ssl::__certificates certs;///< SSL certificates
+					bool certsSet;
 
 #endif
 			};

@@ -60,6 +60,24 @@ server::~server()
 		SSL_CTX_free(sslCtx);
 }
 
+
+//-------------------------------------------------------------------
+
+void 
+server::removeSertificates()
+{
+	if (sslCtx != NULL)
+	{
+		SSL_CTX_free(sslCtx);
+		
+		sslCtx = NULL;
+	}
+	
+	sslCtx = SSL_CTX_new(SSLv23_server_method());
+	if (sslCtx == NULL)
+		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_REMOVESERTIFICATES, ERR_LIBDODO, SERVEREX_UNABLETOINITCONTEXT, IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+}
+
 //-------------------------------------------------------------------
 
 void 

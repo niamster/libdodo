@@ -252,6 +252,9 @@ exchange::isAlive()
 void
 exchange::_write(const char * const data)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
 
@@ -387,6 +390,9 @@ exchange::writeString(const dodoString &a_buf)
 void
 exchange::_read(char * const data)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	
 	memset(data, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
@@ -654,6 +660,9 @@ exchange::writeStreamString(const dodoString &a_buf)
 unsigned long
 exchange::_readStream(char * const data)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+	
 	memset(data, '\0', inSize);
 
 	unsigned long n = 0;

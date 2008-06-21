@@ -43,6 +43,19 @@ namespace dodo
 			namespace ssl
 			{
 				/**
+				 * libdodo defined errors
+				 */
+				enum exchangeExR
+				{
+					EXCHANGEEX_NOCONNECTION,
+				};
+
+				/**
+				 * explanations for libdodo defined errors
+				 */
+#define IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR "No connection."
+				
+				/**
 				 * IDs of functions where exception might be thrown
 				 */
 				enum exchangeFunctionsID

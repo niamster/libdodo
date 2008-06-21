@@ -98,6 +98,11 @@ namespace dodo
 						 * @param certs defines certificates information 
 						 */
 						virtual void setSertificates(const __certificates &certs);
+						
+						/**
+						 * remove certificates information 
+						 */
+						virtual void removeSertificates();
 
 						/**
 						 * connect from specific address

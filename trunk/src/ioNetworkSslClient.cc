@@ -73,6 +73,55 @@ client::~client()
 //-------------------------------------------------------------------
 
 void 
+client::removeSertificates()
+{
+	if (sslHandle != NULL)
+	{
+		if (sslConnected)
+		{
+			int err = SSL_shutdown(sslHandle);
+			if (err < 0)
+			{
+				unsigned long nerr = ERR_get_error();
+				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			}
+			if (err == 0)
+			{
+				err = SSL_shutdown(sslHandle);
+				if (err < 0)
+				{
+					unsigned long nerr = ERR_get_error();
+					throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+				}
+			}
+
+			sslConnected = false;
+		}
+
+		SSL_free(sslHandle);
+		
+		sslHandle = NULL;
+	}
+
+	if (sslCtx != NULL)
+	{
+		SSL_CTX_free(sslCtx);
+		
+		sslCtx = NULL;
+	}
+	
+	sslCtx = SSL_CTX_new(SSLv23_client_method());
+	if (sslCtx == NULL)
+		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, ERR_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
+	
+	sslHandle = SSL_new(sslCtx);
+	if (sslHandle == NULL)
+		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, ERR_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
+}
+
+//-------------------------------------------------------------------
+
+void 
 client::setSertificates(const __certificates &certs)
 {
 	if (sslHandle != NULL)
@@ -99,10 +148,16 @@ client::setSertificates(const __certificates &certs)
 		}
 
 		SSL_free(sslHandle);
+		
+		sslHandle = NULL;
 	}
 
 	if (sslCtx != NULL)
+	{
 		SSL_CTX_free(sslCtx);
+		
+		sslCtx = NULL;
+	}
 	
 	sslCtx = SSL_CTX_new(SSLv23_client_method());
 	if (sslCtx == NULL)
