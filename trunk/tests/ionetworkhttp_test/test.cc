@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
 		HTTP.setCookies(cookies);
 
-		//HTTP.setProxyInformation("127.0.0.1");
+		HTTP.setProxyInformation("127.0.0.1");
 
 		//res =  HTTP.GET("http://google.com");
 		res =  HTTP.GET("https://sourceforge.net");

@@ -235,8 +235,10 @@ http::GET()
 
 	exchange *ex;
 	client *net;
+
+	dodoString data;
 	
-	if (scheme = SCHEME_HTTP)
+	if (scheme == SCHEME_HTTP)
 	{
 		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
 		ex = new exchange;
@@ -253,7 +255,45 @@ http::GET()
 #endif
 
 	if (proxyAuthInfo.enabled)
-		net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
+	{
+		if (scheme == SCHEME_HTTP)
+			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
+
+#ifdef OPENSSL_EXT
+
+			else
+			{
+				if (certsSet)
+					((ssl::client *)net)->setSertificates(certs);
+				
+				((ssl::client *)net)->initSsl();
+				
+				net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
+				data.append("CONNECT ");
+				data.append(urlComponents.host);
+				data.append(":");
+				data.append(urlComponents.port);
+				data.append(" HTTP/1.0\r\n\r\n");
+				
+				ex->outSize = data.size();
+				ex->exchange::_write(data.c_str());
+				
+				char inData[512];
+				ex->setInBufferSize(512);
+				ex->inSize = 512;
+				ex->exchange::_readStream(inData);
+				
+				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket; 
+				((ssl::client *)net)->connectSsl();
+ 
+				((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
+
+				((ssl::client *)net)->socket = -1;
+				((ssl::client *)net)->sslHandle = NULL;
+			}
+
+#endif		
+	}
 	else
 	{
 		tools::__hostInfo host = tools::network::getHostInfo(urlComponents.host);
@@ -262,17 +302,17 @@ http::GET()
 		for (; o != p; ++o)
 			try
 			{
-				if (scheme = SCHEME_HTTP)
+				if (scheme == SCHEME_HTTP)
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 
 #ifdef OPENSSL_EXT
 
 				else
 				{
-					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
-					
 					if (certsSet)
 						((ssl::client *)net)->setSertificates(certs);
+					
+					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
 				}
 				
 #endif
@@ -303,8 +343,8 @@ http::GET()
 
 	delete net;
 
-	dodoString data;
-
+	data.clear();
+	
 	data.append("GET ");
 	data.append(url);
 	if (proxyAuthInfo.enabled)
@@ -580,8 +620,10 @@ http::POST(const dodoString &a_data,
 
 	exchange *ex;
 	client *net;
+
+	dodoString data;
 	
-	if (scheme = SCHEME_HTTP)
+	if (scheme == SCHEME_HTTP)
 	{
 		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
 		ex = new exchange;
@@ -598,7 +640,45 @@ http::POST(const dodoString &a_data,
 #endif
 
 	if (proxyAuthInfo.enabled)
-		net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
+	{
+		if (scheme == SCHEME_HTTP)
+			net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *ex);
+
+#ifdef OPENSSL_EXT
+
+			else
+			{
+				if (certsSet)
+					((ssl::client *)net)->setSertificates(certs);
+				
+				((ssl::client *)net)->initSsl();
+				
+				net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
+				data.append("CONNECT ");
+				data.append(urlComponents.host);
+				data.append(":");
+				data.append(urlComponents.port);
+				data.append(" HTTP/1.0\r\n\r\n");
+				
+				ex->outSize = data.size();
+				ex->exchange::_write(data.c_str());
+
+				char inData[512];
+				ex->setInBufferSize(512);
+				ex->inSize = 512;
+				ex->exchange::_readStream(inData);
+				
+				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket; 
+				((ssl::client *)net)->connectSsl();
+ 
+				((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
+
+				((ssl::client *)net)->socket = -1;
+				((ssl::client *)net)->sslHandle = NULL;
+			}
+
+#endif		
+	}
 	else
 	{
 		tools::__hostInfo host = tools::network::getHostInfo(urlComponents.host);
@@ -607,17 +687,17 @@ http::POST(const dodoString &a_data,
 		for (; o != p; ++o)
 			try
 			{
-				if (scheme = SCHEME_HTTP)
+				if (scheme == SCHEME_HTTP)
 					net->connect(*o, tools::string::stringToI(urlComponents.port), *ex);
 
 #ifdef OPENSSL_EXT
 
 				else
 				{
-					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
-					
 					if (certsSet)
 						((ssl::client *)net)->setSertificates(certs);
+					
+					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
 				}
 
 #endif
@@ -647,9 +727,6 @@ http::POST(const dodoString &a_data,
 	}
 
 	delete net;
-
-	dodoString data;
-
 
 	data.append("POST ");
 	data.append(url);

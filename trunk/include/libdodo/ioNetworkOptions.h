@@ -105,6 +105,7 @@ namespace dodo
 			 */
 			class options
 			{
+				friend class http;
 
 				protected:
 

@@ -127,6 +127,7 @@ namespace dodo
 			{
 				friend class server;
 				friend class client;
+				friend class http;
 
 				public:
 

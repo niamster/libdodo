@@ -102,6 +102,7 @@ namespace dodo
 				{
 					friend class server;
 					friend class client;
+					friend class network::http;
 
 					public:
 

@@ -70,6 +70,7 @@ namespace dodo
 				class client : public network::client
 				{
 					friend class exchange;
+					friend class network::http;
 
 					private:
 
