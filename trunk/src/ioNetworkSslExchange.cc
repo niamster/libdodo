@@ -64,8 +64,7 @@ exchange::exchange(exchange &fse) : network::exchange(fse)
 
 //-------------------------------------------------------------------
 
-exchange::exchange() : network::exchange(),
-					   sslHandle(NULL)
+exchange::exchange() : sslHandle(NULL)
 {
 #ifndef IO_WO_XEXEC
 

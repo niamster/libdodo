@@ -57,7 +57,7 @@ namespace dodo
 		enum postgresqlFunctionsID
 		{
 			POSTGRESQLEX_CONNECT,
-			POSTGRESQLEX__EXEC,
+			POSTGRESQLEX_EXEC,
 			POSTGRESQLEX_SETCHARSET,
 		};
 	};

@@ -175,131 +175,6 @@ sqlite::setBLOBValues(const dodoStringArray &values)
 
 //-------------------------------------------------------------------
 
-void
-sqlite::_exec(const dodoString &query,
-			  bool result)
-{
-	if (query.size() == 0)
-	{
-		if (autoFraming)
-		{
-#ifdef SQLITE_ENABLE_COLUMN_METADATA
-
-			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
-			{
-				dodoString temp = dbInfo.db + ":" + collectedData.table;
-
-				if (framingFields.find(temp) == framingFields.end())
-				{
-					request = "select * from " + collectedData.table + " limit 1";
-
-					if (!empty)
-					{
-						sqlite3_finalize(sqliteResult);
-						empty = true;
-					}
-
-					if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
-						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
-
-					if (sqliteResult == NULL)
-						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
-
-					empty = false;
-
-					unsigned int numFields = sqlite3_column_count(sqliteResult);
-
-					const char *columnType, *columnName;
-
-					dodoStringArray temp1;
-
-					for (unsigned int i(0); i < numFields; ++i)
-					{
-						columnName = sqlite3_column_name(sqliteResult, i);
-
-						if (sqlite3_table_column_metadata(sqliteHandle,
-														  NULL,
-														  collectedData.table.c_str(),
-														  columnName,
-														  &columnType,
-														  NULL,
-														  NULL,
-														  NULL,
-														  NULL) != SQLITE_OK)
-							throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
-
-						if (strcasestr(columnType, "char") != NULL ||
-							strcasestr(columnType, "date") != NULL ||
-							strcasestr(columnType, "time") != NULL ||
-							strcasestr(columnType, "blob") != NULL ||
-							strcasestr(columnType, "text") != NULL ||
-							strcasestr(columnType, "enum") != NULL ||
-							strcasestr(columnType, "set") != NULL)
-							temp1.push_back(columnName);
-					}
-
-					if (!empty)
-					{
-						sqlite3_finalize(sqliteResult);
-						empty = true;
-					}
-
-					framingFields.insert(make_pair(temp, temp1));
-				}
-			}
-
-#endif
-		}
-
-		queryCollect();
-	}
-
-	if (!empty)
-	{
-		sqlite3_finalize(sqliteResult);
-		empty = true;
-	}
-
-	if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
-		throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
-
-	if (isSetFlag(hint, SQLITE_HINT_BLOB))
-	{
-		removeFlag(hint, SQLITE_HINT_BLOB);
-
-		switch (collectedData.qType)
-		{
-			case ACCUMULATOR_REQUEST_UPDATE:
-			case ACCUMULATOR_REQUEST_INSERT:
-
-			{
-				dodoStringArray::iterator i(blobs.begin()), j(blobs.end());
-				for (int o = 1; i != j; ++i, ++o)
-					if (sqlite3_bind_blob(sqliteResult, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
-						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
-			}
-
-			break;
-
-			default:
-
-				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_LIBDODO, SQLITEEX_WRONGHINTUSAGE, DBSQLITEEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
-
-		}
-	}
-
-	if (sqliteResult == NULL)
-		throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX__EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
-
-	empty = false;
-
-	if (!show)
-		if (sqlite3_step(sqliteResult) != SQLITE_DONE)
-			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
-}
-
-//-------------------------------------------------------------------
-
 dodoArray<dodo::dodoStringArray>
 sqlite::fetchRow() const
 {
@@ -531,7 +406,123 @@ sqlite::exec(const dodoString &query,
 	performXExec(preExec);
 #endif
 
-	_exec(query, result);
+	if (query.size() == 0)
+	{
+		if (autoFraming)
+		{
+#ifdef SQLITE_ENABLE_COLUMN_METADATA
+
+			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
+			{
+				dodoString temp = dbInfo.db + ":" + collectedData.table;
+
+				if (framingFields.find(temp) == framingFields.end())
+				{
+					request = "select * from " + collectedData.table + " limit 1";
+
+					if (!empty)
+					{
+						sqlite3_finalize(sqliteResult);
+						empty = true;
+					}
+
+					if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
+						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+
+					if (sqliteResult == NULL)
+						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+
+					empty = false;
+
+					unsigned int numFields = sqlite3_column_count(sqliteResult);
+
+					const char *columnType, *columnName;
+
+					dodoStringArray temp1;
+
+					for (unsigned int i(0); i < numFields; ++i)
+					{
+						columnName = sqlite3_column_name(sqliteResult, i);
+
+						if (sqlite3_table_column_metadata(sqliteHandle,
+														  NULL,
+														  collectedData.table.c_str(),
+														  columnName,
+														  &columnType,
+														  NULL,
+														  NULL,
+														  NULL,
+														  NULL) != SQLITE_OK)
+							throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+
+						if (strcasestr(columnType, "char") != NULL ||
+							strcasestr(columnType, "date") != NULL ||
+							strcasestr(columnType, "time") != NULL ||
+							strcasestr(columnType, "blob") != NULL ||
+							strcasestr(columnType, "text") != NULL ||
+							strcasestr(columnType, "enum") != NULL ||
+							strcasestr(columnType, "set") != NULL)
+							temp1.push_back(columnName);
+					}
+
+					if (!empty)
+					{
+						sqlite3_finalize(sqliteResult);
+						empty = true;
+					}
+
+					framingFields.insert(make_pair(temp, temp1));
+				}
+			}
+
+#endif
+		}
+
+		queryCollect();
+	}
+
+	if (!empty)
+	{
+		sqlite3_finalize(sqliteResult);
+		empty = true;
+	}
+
+	if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
+		throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
+
+	if (isSetFlag(hint, SQLITE_HINT_BLOB))
+	{
+		removeFlag(hint, SQLITE_HINT_BLOB);
+
+		switch (collectedData.qType)
+		{
+			case ACCUMULATOR_REQUEST_UPDATE:
+			case ACCUMULATOR_REQUEST_INSERT:
+
+			{
+				dodoStringArray::iterator i(blobs.begin()), j(blobs.end());
+				for (int o = 1; i != j; ++i, ++o)
+					if (sqlite3_bind_blob(sqliteResult, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
+						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+			}
+
+			break;
+
+			default:
+
+				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_WRONGHINTUSAGE, DBSQLITEEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
+
+		}
+	}
+
+	if (sqliteResult == NULL)
+		throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+
+	empty = false;
+
+	if (!show)
+		if (sqlite3_step(sqliteResult) != SQLITE_DONE)
+			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);

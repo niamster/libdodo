@@ -114,6 +114,7 @@ server::setSertificates(const __certificates &certs)
 	bool keySet = false;
 	
 	if (certs.key.size() > 0)
+	{
 		switch (certs.keyType)
 		{
 			case KEYTYPE_PKEY:
@@ -144,6 +145,7 @@ server::setSertificates(const __certificates &certs)
 				
 				throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_SETSERTIFICATES, ERR_LIBDODO, SERVEREX_UNKNOWNKEYTYPE, IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
 		}
+	}
 	else
 	{
 		if (certs.ca.size() > 0)
@@ -253,7 +255,6 @@ server::acceptSsl(__initialAccept &init)
 					throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 				}
 			}
-
 
 			nerr = ERR_get_error();
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);

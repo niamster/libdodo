@@ -131,9 +131,6 @@ file::close()
 
 #ifndef IO_WO_XEXEC
 	operType = FILE_OPERATION_CLOSE;
-#endif
-
-#ifndef IO_WO_XEXEC
 	performXExec(preExec);
 #endif
 

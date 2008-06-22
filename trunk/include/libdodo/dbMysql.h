@@ -265,13 +265,6 @@ namespace dodo
 			protected:
 
 				/**
-				 * execute request
-				 * @param query defines query; you may define it if you don't use db methods like select, update
-				 * @param result defines type of result; if true query return the result
-				 */
-				virtual void _exec(const dodoString &query, bool result);
-
-				/**
 				 * init additional mySQL specific statements
 				 */
 				virtual void addSQL();

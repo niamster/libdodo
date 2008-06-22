@@ -385,14 +385,12 @@ client::connect(const dodoString &host,
 	initSsl();
 	makeSocket();
 
-	if (family == OPTIONS_PROTO_FAMILY_IPV6)
+	if (family == OPTIONS_PROTO_FAMILY_IPV4)
 	{
-		struct sockaddr_in6 sa;
-		sa.sin6_family = AF_INET6;
-		sa.sin6_port = htons(port);
-		sa.sin6_flowinfo = 0;
-		sa.sin6_scope_id = 0;
-		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
+		struct sockaddr_in sa;
+		sa.sin_family = AF_INET;
+		sa.sin_port = htons(port);
+		inet_aton(host.c_str(), &sa.sin_addr);
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
@@ -406,10 +404,12 @@ client::connect(const dodoString &host,
 	}
 	else
 	{
-		struct sockaddr_in sa;
-		sa.sin_family = AF_INET;
-		sa.sin_port = htons(port);
-		inet_aton(host.c_str(), &sa.sin_addr);
+		struct sockaddr_in6 sa;
+		sa.sin6_family = AF_INET6;
+		sa.sin6_port = htons(port);
+		sa.sin6_flowinfo = 0;
+		sa.sin6_scope_id = 0;
+		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
@@ -456,20 +456,18 @@ client::connectFrom(const dodoString &local,
 
 	addFlag(socketOpts, 1 << OPTIONS_OPTION_REUSE_ADDRESS);
 
-	if (family == OPTIONS_PROTO_FAMILY_IPV6)
+	if (family == OPTIONS_PROTO_FAMILY_IPV4)
 	{
-		struct sockaddr_in6 sa;
-		sa.sin6_family = AF_INET6;
-		sa.sin6_flowinfo = 0;
-		sa.sin6_scope_id = 0;
-		sa.sin6_port = htons(0);
-		inet_pton(AF_INET6, local.c_str(), &sa.sin6_addr);
+		struct sockaddr_in sa;
+		sa.sin_family = AF_INET;
+		sa.sin_port = htons(0);
+		inet_aton(local.c_str(), &sa.sin_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		sa.sin6_port = htons(port);
-		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
+		sa.sin_port = htons(port);
+		inet_aton(host.c_str(), &sa.sin_addr);
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{
@@ -483,16 +481,18 @@ client::connectFrom(const dodoString &local,
 	}
 	else
 	{
-		struct sockaddr_in sa;
-		sa.sin_family = AF_INET;
-		sa.sin_port = htons(0);
-		inet_aton(local.c_str(), &sa.sin_addr);
+		struct sockaddr_in6 sa;
+		sa.sin6_family = AF_INET6;
+		sa.sin6_flowinfo = 0;
+		sa.sin6_scope_id = 0;
+		sa.sin6_port = htons(0);
+		inet_pton(AF_INET6, local.c_str(), &sa.sin6_addr);
 
 		if (::bind(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-		sa.sin_port = htons(port);
-		inet_aton(host.c_str(), &sa.sin_addr);
+		sa.sin6_port = htons(port);
+		inet_pton(AF_INET6, host.c_str(), &sa.sin6_addr);
 
 		if (::connect(socket, (struct sockaddr *)&sa, sizeof(sa)) == -1)
 		{

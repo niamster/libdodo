@@ -240,107 +240,6 @@ mysql::disconnect()
 
 //-------------------------------------------------------------------
 
-void
-mysql::_exec(const dodoString &query,
-			 bool result)
-{
-	if (query.size() == 0)
-	{
-		if (autoFraming)
-		{
-			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
-			{
-				dodoString temp = collectedData.dbInfo.db + ":" + collectedData.table;
-
-				if (framingFields.find(temp) == framingFields.end())
-				{
-					request = "describe " + collectedData.table;
-
-					if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-					{
-						int mysqlErrno = mysql_errno(mysqlHandle);
-						if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
-						{
-							connect();
-							if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-								throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
-						}
-						else
-							throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
-					}
-
-					mysqlResult = mysql_store_result(mysqlHandle);
-					if (mysqlResult == NULL)
-						throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
-
-					empty = false;
-
-					mysql_field_seek(mysqlResult, 0);
-
-					dodoStringArray rowsPart;
-
-					MYSQL_ROW mysqlRow;
-
-					while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
-					{
-						if (strcasestr(mysqlRow[1], "char") != NULL ||
-							strcasestr(mysqlRow[1], "date") != NULL ||
-							strcasestr(mysqlRow[1], "time") != NULL ||
-							strcasestr(mysqlRow[1], "blob") != NULL ||
-							strcasestr(mysqlRow[1], "text") != NULL ||
-							strcasestr(mysqlRow[1], "enum") != NULL ||
-							strcasestr(mysqlRow[1], "set") != NULL)
-							rowsPart.push_back(mysqlRow[0]);
-					}
-
-					mysql_free_result(mysqlResult);
-
-					empty = true;
-
-					framingFields.insert(make_pair(temp, rowsPart));
-				}
-			}
-		}
-
-		queryCollect();
-	}
-	else
-	{
-		request = query;
-		show = result;
-	}
-
-	if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-	{
-		int mysqlErrno = mysql_errno(mysqlHandle);
-		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
-		{
-			connect();
-			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
-		}
-		else
-			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
-	}
-
-	if (!show)
-		return ;
-
-	if (!empty)
-	{
-		mysql_free_result(mysqlResult);
-		empty = true;
-	}
-
-	mysqlResult = mysql_store_result(mysqlHandle);
-	if (mysqlResult == NULL)
-		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX__EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
-
-	empty = false;
-}
-
-//-------------------------------------------------------------------
-
 dodoArray<dodo::dodoStringArray>
 mysql::fetchRow() const
 {
@@ -484,7 +383,99 @@ mysql::exec(const dodoString &query,
 	performXExec(preExec);
 #endif
 
-	_exec(query, result);
+	if (query.size() == 0)
+	{
+		if (autoFraming)
+		{
+			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
+			{
+				dodoString temp = collectedData.dbInfo.db + ":" + collectedData.table;
+
+				if (framingFields.find(temp) == framingFields.end())
+				{
+					request = "describe " + collectedData.table;
+
+					if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+					{
+						int mysqlErrno = mysql_errno(mysqlHandle);
+						if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
+						{
+							connect();
+							if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+								throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+						}
+						else
+							throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+					}
+
+					mysqlResult = mysql_store_result(mysqlHandle);
+					if (mysqlResult == NULL)
+						throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+
+					empty = false;
+
+					mysql_field_seek(mysqlResult, 0);
+
+					dodoStringArray rowsPart;
+
+					MYSQL_ROW mysqlRow;
+
+					while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
+					{
+						if (strcasestr(mysqlRow[1], "char") != NULL ||
+							strcasestr(mysqlRow[1], "date") != NULL ||
+							strcasestr(mysqlRow[1], "time") != NULL ||
+							strcasestr(mysqlRow[1], "blob") != NULL ||
+							strcasestr(mysqlRow[1], "text") != NULL ||
+							strcasestr(mysqlRow[1], "enum") != NULL ||
+							strcasestr(mysqlRow[1], "set") != NULL)
+							rowsPart.push_back(mysqlRow[0]);
+					}
+
+					mysql_free_result(mysqlResult);
+
+					empty = true;
+
+					framingFields.insert(make_pair(temp, rowsPart));
+				}
+			}
+		}
+
+		queryCollect();
+	}
+	else
+	{
+		request = query;
+		show = result;
+	}
+
+	if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+	{
+		int mysqlErrno = mysql_errno(mysqlHandle);
+		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
+		{
+			connect();
+			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+		}
+		else
+			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+	}
+
+	if (!show)
+		return ;
+
+	if (!empty)
+	{
+		mysql_free_result(mysqlResult);
+		empty = true;
+	}
+
+	mysqlResult = mysql_store_result(mysqlHandle);
+	if (mysqlResult == NULL)
+		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+
+	empty = false;
 
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);

@@ -42,7 +42,7 @@ namespace dodo
 	enum mysqlFunctionsID
 	{
 		MYSQLEX_CONNECT,
-		MYSQLEX__EXEC,
+		MYSQLEX_EXEC,
 	};
 };
 
