@@ -111,8 +111,8 @@ namespace dodo
 				private:
 
 					/**
-					 * connstructor
-					 * to prevent copying
+					 * copy constructor
+					 * @note to prevent copying
 					 */
 					server(server &fs);
 

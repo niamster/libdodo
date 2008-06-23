@@ -63,8 +63,8 @@ namespace dodo
 			private:
 
 				/**
-				 * constructor
-				 * prevent copying
+				 * copy constructor
+				 * @note to prevent copying
 				 */
 				postgresql(postgresql &a_pgpp);
 

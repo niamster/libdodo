@@ -172,6 +172,14 @@ namespace dodo
 	 */
 	class xexec
 	{
+		private:
+			
+			/*
+			 * copy constructor
+			 * @note to prevent copying
+			 */
+			xexec(const xexec &exec);
+
 		public:
 
 			/*

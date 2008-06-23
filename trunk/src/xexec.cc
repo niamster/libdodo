@@ -31,6 +31,12 @@
 
 using namespace dodo;
 
+xexec::xexec(const xexec &exec)
+{
+}
+
+//-------------------------------------------------------------------
+
 xexec::xexec() : safeHooks(true),
 				 operType(XEXEC_OPERTYPE_NONE),
 				 execs(0),

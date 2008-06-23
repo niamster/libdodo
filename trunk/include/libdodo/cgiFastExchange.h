@@ -80,7 +80,7 @@ namespace dodo
 
 					/**
 					 * copy constructor
-					 * to prevent copying
+					 * @note to prevent copying
 					 */
 					exchange(exchange &cf);
 

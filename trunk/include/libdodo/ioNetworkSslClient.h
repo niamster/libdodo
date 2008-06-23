@@ -75,8 +75,8 @@ namespace dodo
 					private:
 
 						/**
-						 * connstructor
-						 * to prevent copying
+						 * copy constructor
+						 * @note to prevent copying
 						 */
 						client(client &fs);
 

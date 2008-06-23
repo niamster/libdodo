@@ -92,8 +92,8 @@ namespace dodo
 			private:
 
 				/**
-				 * constructor
-				 * to prevent from copying
+				 * copy constructor
+				 * @note to prevent copying
 				 */
 				stdio(stdio &fd);
 
