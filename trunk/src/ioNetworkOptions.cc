@@ -176,10 +176,11 @@ options::getOutTimeout() const
 //-------------------------------------------------------------------
 
 bool
-options::getOption(int option) const
+options::isSetOption(int option) const
 {
 	if  ((option & socketOpts) == option)
 		return true;
+
 	return false;
 }
 

@@ -131,7 +131,7 @@ namespace dodo
 					/**
 					 * @return true if socket option is set[see OptionsOptionEnum]
 					 */
-					virtual bool getOption(int option) const;
+					virtual bool isSetOption(int option) const;
 
 					/**
 					 * set linger option

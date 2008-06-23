@@ -489,8 +489,8 @@ server::getAuthenticationInfo()
 //-------------------------------------------------------------------
 
 bool
-server::checkAuthentication(const dodoString &user,
-							const dodoString &password)
+server::isAuthenticated(const dodoString &user,
+						const dodoString &password)
 {
 	if (authInfo.type == SERVER_AUTHTYPE_BASIC)
 		return(tools::string::equal(user, authInfo.user) && tools::string::equal(password, authInfo.password));

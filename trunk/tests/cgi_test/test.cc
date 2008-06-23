@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 	 */
 	else if (cgit.GET["a"] == "basic_auth")
 	{
-		if (user.size() == 0 || !cgit.checkAuthentication("libdodo", "password"))
+		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
 		{
 			cgit.requestAuthentication("libdodo", SERVER_AUTHTYPE_BASIC);
 
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 	}
 	else if (cgit.GET["a"] == "digest_auth")
 	{
-		if (user.size() == 0 || !cgit.checkAuthentication("libdodo", "password"))
+		if (user.size() == 0 || !cgit.isAuthenticated("libdodo", "password"))
 		{
 			cgit.requestAuthentication("libdodo", SERVER_AUTHTYPE_DIGEST);
 

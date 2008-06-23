@@ -356,11 +356,12 @@ namespace dodo
 				virtual void requestAuthentication(const dodoString &realm, short type = SERVER_AUTHTYPE_DIGEST);
 
 				/**
-				 * check basic authentication
+				 * check authentication
+				 * @return true if authentication successfull
 				 * @param user defines user for authentication
 				 * @param password defined user's password for authentication
 				 */
-				virtual bool checkAuthentication(const dodoString &user, const dodoString &password);
+				virtual bool isAuthenticated(const dodoString &user, const dodoString &password);
 
 				/**
 				 * @return contents of stdin got for the POST request
