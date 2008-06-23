@@ -343,7 +343,7 @@ client::connectSsl()
 
 		default:
 		{
-			unsigned long nerr;
+			unsigned long nerr = ERR_get_error();
 
 			int err = SSL_shutdown(sslHandle);
 			if (err < 0)
@@ -361,8 +361,6 @@ client::connectSsl()
 				}
 			}
 
-
-			nerr = ERR_get_error();
 			throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
 	}

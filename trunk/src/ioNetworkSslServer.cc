@@ -238,7 +238,7 @@ server::acceptSsl(__initialAccept &init)
 
 		default:
 		{
-			unsigned long nerr;
+			unsigned long nerr = ERR_get_error();
 
 			int err = SSL_shutdown(init.sslHandle);
 			if (err < 0)
@@ -256,7 +256,6 @@ server::acceptSsl(__initialAccept &init)
 				}
 			}
 
-			nerr = ERR_get_error();
 			throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_ACCEPTSSL, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
 	}

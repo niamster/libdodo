@@ -70,6 +70,7 @@ namespace dodo
 				HTTPEX_GET,
 				HTTPEX_GETCONTENT,
 				HTTPEX_SETURL,
+				HTTPEX_GETPROXYCONNECTRESPONSE,
 			};
 		};
 	};

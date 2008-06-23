@@ -274,11 +274,19 @@ namespace dodo
 
 					/**
 					 * get response data and fetch headers
-					 * @return true if redirection is going to be performed
+					 * @return flag of redirection/authentification status
 					 * @param data defines buffer to store response
 					 * @param ex defines network connection
 					 */
-					virtual short getContent(dodoString &data, exchange &ex);
+					virtual short getContent(dodoString &data, exchange *ex);
+
+					/**
+					 * get proxy CONNECT response data
+					 * @return flag of authentification status
+					 * @param data defines buffer to store response
+					 * @param ex defines network connection
+					 */
+					virtual short getProxyConnectResponse(char *data, exchange *ex);
 
 					unsigned short authTries;                                                                                   ///< autherization request counter
 
@@ -328,6 +336,11 @@ namespace dodo
 					virtual void makeDigestAuth(short requestHeader, short responseHeader, const dodoString &method, const dodoString &user, const dodoString &password);
 
 					/**
+					 * clear authentification/cookies information
+					 */
+					virtual void clear();
+
+					/**
 					 * @enum schemeEnum defines URI scheme of connection
 					 */
 					enum schemeEnum
@@ -344,6 +357,16 @@ namespace dodo
 					short scheme;///< URI scheme of connection
 
 					/**
+					 * @enum proxyAuthTypeEnum defines of proxy authentification type
+					 */
+					enum proxyAuthTypeEnum
+					{
+						PROXYAUTH_NONE,
+						PROXYAUTH_BASIC,
+						PROXYAUTH_DIGEST
+					};
+
+					/**
 					 * @struct __proxyAuthInfo defines proxy authentication information
 					 */
 					struct __proxyAuthInfo
@@ -353,7 +376,7 @@ namespace dodo
 						dodoString host;                                ///< proxy ip address
 						unsigned int port;                              ///< proxy port
 						bool enabled;                                   ///< if true proxy settings are enabled
-						bool authRequired;                              ///< if true proxy authentication is required
+						short authType;                              ///< type of proxy authentication[see proxyAuthTypeEnum]
 					};
 
 					__proxyAuthInfo proxyAuthInfo;                     ///< proxy authentication information
