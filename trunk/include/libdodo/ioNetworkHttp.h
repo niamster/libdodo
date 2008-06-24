@@ -176,12 +176,12 @@ namespace dodo
 					 * @param user defines proxy user for authentication
 					 * @param password defines proxy password for authentication
 					 */
-					virtual void setProxyInformation(const dodoString &host, unsigned int port = 3128, const dodoString &user = __dodostring__, const dodoString &password = __dodostring__);
+					virtual void setProxy(const dodoString &host, unsigned int port = 3128, const dodoString &user = __dodostring__, const dodoString &password = __dodostring__);
 
 					/**
 					 * disable proxy usage
 					 */
-					virtual void disableProxy();
+					virtual void removeProxy();
 
 					/**
 					 * set cookies for the request
@@ -248,6 +248,8 @@ namespace dodo
 					virtual void POST(const dodoStringMap &arguments, const dodoStringMap &files);
 
 					bool followRedirection;                     ///< if true follow the `Location` header; true by default
+
+					bool cacheAuthentification;					///< if true cache authentification HTTP and proxy info; true by default
 
 				private:
 
@@ -357,13 +359,13 @@ namespace dodo
 					short scheme;///< URI scheme of connection
 
 					/**
-					 * @enum proxyAuthTypeEnum defines of proxy authentification type
+					 * @enum proxyAuthTypeEnum defines proxy authentification type
 					 */
-					enum proxyAuthTypeEnum
+					enum proxyAuthEnum
 					{
-						PROXYAUTH_NONE,
-						PROXYAUTH_BASIC,
-						PROXYAUTH_DIGEST
+						PROXYAUTHTYPE_NONE,
+						PROXYAUTHTYPE_BASIC,
+						PROXYAUTHTYPE_DIGEST
 					};
 
 					/**
@@ -371,15 +373,31 @@ namespace dodo
 					 */
 					struct __proxyAuthInfo
 					{
+						/**
+						 * constructor
+						 */
+						__proxyAuthInfo();
+
 						dodoString user;                                ///< user name
 						dodoString password;                            ///< user password
 						dodoString host;                                ///< proxy ip address
 						unsigned int port;                              ///< proxy port
 						bool enabled;                                   ///< if true proxy settings are enabled
-						short authType;                              ///< type of proxy authentication[see proxyAuthTypeEnum]
+						short authType;                              	///< type of proxy authentication[see proxyAuthTypeEnum]
 					};
 
 					__proxyAuthInfo proxyAuthInfo;                     ///< proxy authentication information
+
+					/**
+					 * @enum httpAuthTypeEnum HTTP authentification type
+					 */
+					enum httpAuthTypeEnum
+					{
+						HTTPAUTHTYPE_BASIC,
+						HTTPAUTHTYPE_DIGEST
+					};
+
+					dodoMap<dodoString, short, dodoMapStringCompare> httpAuth; ///< cached HTTP auth info
 
 #ifdef OPENSSL_EXT
 

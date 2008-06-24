@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		cout << tools::misc::decodeBase64(tools::misc::encodeBase64("HEY, that's working!")) << endl;
 		cout << "size of test base64-encoded : " <<  tools::misc::encodeBase64(tools::filesystem::getFileContents("test")).size() << endl;
 
-		dodoString tt = "ftp://user:pass@localhost.domain:32/init.cgi?net=true&work=true";
+		dodoString tt = "ftp://user:pass@localhost.domain:32/path/init.cgi?net=true&work=true";
 		cout << endl << tt << endl;
 		cout << tools::misc::parseUrl(tt).host << endl;
 		cout << tools::misc::parseUrl(tt).login << endl;

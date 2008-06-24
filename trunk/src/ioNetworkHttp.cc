@@ -75,8 +75,16 @@ __httpResponse::__httpResponse() : code(0),
 
 //-------------------------------------------------------------------
 
+http::__proxyAuthInfo::__proxyAuthInfo() : enabled(false),
+												 authType(PROXYAUTHTYPE_NONE)
+{
+}
+
+//-------------------------------------------------------------------
+
 http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
 			   followRedirection(true),
+			   cacheAuthentification(true),
 			   authTries(0),
 			   scheme(SCHEME_HTTP)
 			   
@@ -87,9 +95,6 @@ http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
 			   
 #endif
 {
-	proxyAuthInfo.enabled = false;
-	proxyAuthInfo.authType = PROXYAUTH_NONE;
-
 	requestHeaders[HTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
 	requestHeaders[HTTP_REQUESTHEADER_ACCEPT] = "*/*";
 	requestHeaders[HTTP_REQUESTHEADER_CONNECTION] = "Close";
@@ -294,7 +299,7 @@ http::GET()
 							break;
 
 						case GETCONTENTSTATUS_PROXYBASICAUTH:
-
+							
 							if (authTries > 2)
 							{
 								authTries = 0;
@@ -361,7 +366,6 @@ http::GET()
 				((ssl::client *)net)->socket = -1;
 				((ssl::client *)net)->sslHandle = NULL;
 			}
-
 #endif		
 	}
 	else
@@ -438,6 +442,13 @@ http::GET()
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (; i != j; ++i)
 	{
+#ifdef OPENSSL_EXT
+
+		if (proxyAuthInfo.enabled && scheme == SCHEME_HTTPS && i->first == HTTP_REQUESTHEADER_PROXYAUTHORIZATION)
+			continue;
+
+#endif
+
 		data.append(requestHeaderStatements[i->first]);
 		data.append(": ");
 		data.append(i->second);
@@ -537,7 +548,7 @@ http::GET()
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 
-				if (proxyAuthInfo.authType == PROXYAUTH_BASIC)
+				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
 					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -557,7 +568,7 @@ http::GET()
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
 
-				if (proxyAuthInfo.authType == PROXYAUTH_BASIC)
+				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
 					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -582,7 +593,6 @@ http::GET()
 }
 
 //-------------------------------------------------------------------
-
 
 __httpResponse
 http::GET(const dodoString &a_url)
@@ -917,6 +927,13 @@ http::POST(const dodoString &a_data,
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (; i != j; ++i)
 	{
+#ifdef OPENSSL_EXT
+
+		if (proxyAuthInfo.enabled && scheme == SCHEME_HTTPS && i->first == HTTP_REQUESTHEADER_PROXYAUTHORIZATION)
+			continue;
+
+#endif
+
 		data.append(requestHeaderStatements[i->first]);
 		data.append(": ");
 		data.append(i->second);
@@ -1026,7 +1043,7 @@ http::POST(const dodoString &a_data,
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
 
-				if (proxyAuthInfo.authType == PROXYAUTH_BASIC)
+				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
 					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -1046,7 +1063,7 @@ http::POST(const dodoString &a_data,
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
 
-				if (proxyAuthInfo.authType == PROXYAUTH_BASIC)
+				if (proxyAuthInfo.authType == PROXYAUTHTYPE_BASIC)
 					makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
 				else
 					makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -1073,24 +1090,29 @@ http::POST(const dodoString &a_data,
 //-------------------------------------------------------------------
 
 void
-http::disableProxy()
+http::removeProxy()
 {
-	proxyAuthInfo.enabled = false;
+	proxyAuthInfo = __proxyAuthInfo();
+
+	requestHeaders.erase(HTTP_REQUESTHEADER_PROXYAUTHORIZATION);
 }
 
 //-------------------------------------------------------------------
 
 void
-http::setProxyInformation(const dodoString &host,
-						  unsigned int port,
-						  const dodoString &user,
-						  const dodoString &password)
+http::setProxy(const dodoString &host,
+			   unsigned int port,
+			   const dodoString &user,
+			   const dodoString &password)
 {
 	proxyAuthInfo.host = host;
 	proxyAuthInfo.port = port;
 	proxyAuthInfo.user = user;
 	proxyAuthInfo.password = password;
 	proxyAuthInfo.enabled = true;
+	proxyAuthInfo.authType = PROXYAUTHTYPE_NONE;
+
+	requestHeaders.erase(HTTP_REQUESTHEADER_PROXYAUTHORIZATION);
 }
 
 //-------------------------------------------------------------------
@@ -1227,7 +1249,7 @@ http::getProxyConnectResponse(char *data,
 
 					if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
 					{
-						proxyAuthInfo.authType = PROXYAUTH_BASIC;
+						proxyAuthInfo.authType = PROXYAUTHTYPE_BASIC;
 							
 						return GETCONTENTSTATUS_PROXYBASICAUTH;
 					}
@@ -1235,7 +1257,7 @@ http::getProxyConnectResponse(char *data,
 					{
 						if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
 						{
-							proxyAuthInfo.authType = PROXYAUTH_DIGEST;
+							proxyAuthInfo.authType = PROXYAUTHTYPE_DIGEST;
 							
 							return GETCONTENTSTATUS_PROXYDIGESTAUTH;
 						}
@@ -1312,7 +1334,7 @@ http::getContent(dodoString &data,
 					{
 						++authTries;
 
-						if (proxyAuthInfo.authType != PROXYAUTH_NONE)
+						if (proxyAuthInfo.authType != PROXYAUTHTYPE_NONE)
 						{
 							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Basic"))
 								return GETCONTENTSTATUS_WWWPROXYBASICAUTH;
@@ -1344,7 +1366,7 @@ http::getContent(dodoString &data,
 
 						if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
 						{
-							proxyAuthInfo.authType = PROXYAUTH_BASIC;
+							proxyAuthInfo.authType = PROXYAUTHTYPE_BASIC;
 
 							return GETCONTENTSTATUS_PROXYBASICAUTH;
 						}
@@ -1352,7 +1374,7 @@ http::getContent(dodoString &data,
 						{
 							if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
 							{
-								proxyAuthInfo.authType = PROXYAUTH_DIGEST;
+								proxyAuthInfo.authType = PROXYAUTHTYPE_DIGEST;
 
 								return GETCONTENTSTATUS_PROXYDIGESTAUTH;
 							}
@@ -1507,10 +1529,13 @@ void
 http::clear()
 {
 	requestHeaders.erase(HTTP_REQUESTHEADER_COOKIE);
-	requestHeaders.erase(HTTP_REQUESTHEADER_PROXYAUTHORIZATION);
 	requestHeaders.erase(HTTP_REQUESTHEADER_AUTHORIZATION);
 
-	proxyAuthInfo.authType = PROXYAUTH_NONE;
+	if (!cacheAuthentification)
+	{
+		requestHeaders.erase(HTTP_REQUESTHEADER_PROXYAUTHORIZATION);
+		proxyAuthInfo.authType = PROXYAUTHTYPE_NONE;
+	}
 }
 
 //-------------------------------------------------------------------
