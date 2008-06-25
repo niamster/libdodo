@@ -351,11 +351,33 @@ misc::isInArray(const dodoStringArray &arr,
 	bool (*cmpFunc)(const dodoString &, const dodoString &);
 
 	if (icase)
-		cmpFunc = string::equal;
-	else
 		cmpFunc = string::iequal;
+	else
+		cmpFunc = string::equal;
 
 	dodoStringArray::const_iterator i(arr.begin()), j(arr.end());
+	for (; i != j; ++i)
+		if (cmpFunc(*i, needle))
+			return true;
+
+	return false;
+}
+
+//-------------------------------------------------------------------
+
+bool
+misc::isInList(const dodoStringList &arr,
+				const dodoString &needle,
+				bool icase)
+{
+	bool (*cmpFunc)(const dodoString &, const dodoString &);
+
+	if (icase)
+		cmpFunc = string::iequal;
+	else
+		cmpFunc = string::equal;
+
+	dodoStringList::const_iterator i(arr.begin()), j(arr.end());
 	for (; i != j; ++i)
 		if (cmpFunc(*i, needle))
 			return true;

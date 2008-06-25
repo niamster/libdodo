@@ -101,6 +101,8 @@ namespace dodo
 
 #define dodoList std::list
 
+	typedef dodoList<dodoString> dodoStringList;                                    ///< array of strings
+
 	typedef dodoMap<dodoString, dodoString, dodoMapStringCompare> dodoStringMap;                ///< hash of strings
 	typedef dodoMap<dodoString, dodoString, dodoMapICaseStringCompare> dodoICaseStringMap;      ///< hash of strings[case insensitive]
 

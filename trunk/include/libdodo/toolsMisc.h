@@ -225,11 +225,19 @@ namespace dodo
 
 				/**
 				 * @return true if needle has been found
+				 * @param arr defines list to search in
+				 * @param needle defines string to search for
+				 * @param icase defines case sensitivity
+				 */
+				static bool isInList(const dodoStringList &arr, const dodoString &needle, bool icase = false);
+
+				/**
+				 * @return true if needle has been found
 				 * @param arr defines array to search in
 				 * @param needle defines string to search for
 				 * @param icase defines case sensitivity
 				 */
-				static bool isInArray(const dodoStringArray &arr, const dodoString &needle, bool icase);
+				static bool isInArray(const dodoStringArray &arr, const dodoString &needle, bool icase = false);
 
 				/**
 				 * @return array of substrings

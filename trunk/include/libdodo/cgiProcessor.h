@@ -363,12 +363,6 @@ namespace dodo
 				virtual unsigned long blockEnd(const dodoString &buffer, unsigned long start, const dodoString &st, const dodoString &ts, const dodoString &path);
 
 				/**
-				 * @return true if path is in `processed` list
-				 * @param path defines path that might cause resursive include
-				 */
-				virtual bool recursive(const dodoString &path);
-
-				/**
 				 * @return value of the variable
 				 * @param varName defines name of variable
 				 * @param start defines position in file
@@ -390,7 +384,7 @@ namespace dodo
 				 */
 				virtual dodoString trim(const dodoString &statement);
 
-				dodoList<dodoString> processed;                                                                                         ///< files that will be skipped due to the recursion
+				dodoStringList processed;                                                                                         ///< files that will be skipped due to the recursion
 
 				dodoStringMap global;                                                                                                   ///< set of global variables[user-set]
 				dodoMap<dodoString, dodoStringArray> globalArray;                                                                       ///< global user-defined variables(arrays)

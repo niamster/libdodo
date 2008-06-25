@@ -288,19 +288,6 @@ processor::_processString(const dodoString &buffer,
 
 //-------------------------------------------------------------------
 
-bool
-processor::recursive(const dodoString &path)
-{
-	dodoList<dodoString>::iterator i(processed.begin()), j(processed.end());
-	for (; i != j; ++i)
-		if (tools::string::equal(*i, path))
-			return true;
-
-	return false;
-}
-
-//-------------------------------------------------------------------
-
 void
 processor::assign(dodoString varName,
 				  const dodoArray<dodoStringMap> &varVal)
@@ -597,7 +584,7 @@ processor::_include(unsigned long start,
 {
 	dodoString temp1 = getVar(statement, start, path);
 
-	if (!tools::string::equal(temp1, path) && !recursive(temp1))
+	if (!tools::string::equal(temp1, path) && !tools::misc::isInList(processed, temp1, false))
 	{
 		if (!tplBasePath.empty())
 			temp1 = tplBasePath + FILE_DELIM + temp1;
