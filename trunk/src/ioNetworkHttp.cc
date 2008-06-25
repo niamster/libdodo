@@ -187,23 +187,24 @@ http::setUrl(const dodoString &a_url)
 
 	}
 	
+	urlBasePath.clear();
+	urlQuery.clear();
 
-	url.clear();
-
-	url.append(urlComponents.protocol);
-	url.append("://" );
-	url.append(urlComponents.host);
+	urlBasePath.append(urlComponents.protocol);
+	urlBasePath.append("://" );
+	urlBasePath.append(urlComponents.host);
 	if (portSize > 0)
 	{
-		url.append(":");
-		url.append(urlComponents.port);
+		urlBasePath.append(":");
+		urlBasePath.append(urlComponents.port);
 	}
-	url.append("/");
-	url.append(urlComponents.path);
+	urlBasePath.append("/");
+	urlBasePath.append(urlComponents.path);
+
 	if (urlComponents.request.size() > 0)
 	{
-		url.append("?");
-		url.append(tools::misc::encodeUrl(urlComponents.request));
+		urlQuery.append("?");
+		urlQuery.append(tools::misc::encodeUrl(urlComponents.request));
 	}
 }
 
@@ -434,11 +435,20 @@ http::GET()
 	data.clear();
 	
 	data.append("GET ");
-	data.append(url);
+	data.append(urlBasePath);
+	data.append(urlQuery);
 	if (proxyAuthInfo.enabled)
 		data.append(" HTTP/1.1\r\n");
 	else
 		data.append(" HTTP/1.0\r\n");
+	
+	if (cacheAuthentification)
+	{
+		dodoStringMap::iterator header = httpAuth.find(urlBasePath);
+		if (header != httpAuth.end())
+			requestHeaders[HTTP_REQUESTHEADER_AUTHORIZATION] = header->second;
+	}
+
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (; i != j; ++i)
 	{
@@ -919,11 +929,20 @@ http::POST(const dodoString &a_data,
 	delete net;
 
 	data.append("POST ");
-	data.append(url);
+	data.append(urlBasePath);
+	data.append(urlQuery);
 	if (proxyAuthInfo.enabled)
 		data.append(" HTTP/1.1\r\n");
 	else
 		data.append(" HTTP/1.0\r\n");
+	
+	if (cacheAuthentification)
+	{
+		dodoStringMap::iterator header = httpAuth.find(urlBasePath);
+		if (header != httpAuth.end())
+			requestHeaders[HTTP_REQUESTHEADER_AUTHORIZATION] = header->second;
+	}
+
 	dodoMap<short, dodoString>::iterator i(requestHeaders.begin()), j(requestHeaders.end());
 	for (; i != j; ++i)
 	{
@@ -1484,6 +1503,9 @@ http::makeDigestAuth(short requestHeader,
 
 	dodoString methodForAuth = method + ":";
 
+	dodoString url = urlBasePath;
+	url.append(urlQuery);
+
 	tools::misc::MD5Init(&context);
 	tools::misc::MD5Update(&context, (unsigned char *)methodForAuth.c_str(), methodForAuth.size());
 	tools::misc::MD5Update(&context, (unsigned char *)url.c_str(), url.size());
@@ -1529,13 +1551,20 @@ void
 http::clear()
 {
 	requestHeaders.erase(HTTP_REQUESTHEADER_COOKIE);
-	requestHeaders.erase(HTTP_REQUESTHEADER_AUTHORIZATION);
 
 	if (!cacheAuthentification)
 	{
 		requestHeaders.erase(HTTP_REQUESTHEADER_PROXYAUTHORIZATION);
 		proxyAuthInfo.authType = PROXYAUTHTYPE_NONE;
 	}
+	else
+	{
+		dodoMap<short, dodoString>::iterator header = requestHeaders.find(HTTP_REQUESTHEADER_AUTHORIZATION);
+		if (header != requestHeaders.end())
+			httpAuth[urlBasePath] = header->second;
+	}
+	
+	requestHeaders.erase(HTTP_REQUESTHEADER_AUTHORIZATION);
 }
 
 //-------------------------------------------------------------------

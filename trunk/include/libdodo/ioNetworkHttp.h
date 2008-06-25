@@ -298,8 +298,9 @@ namespace dodo
 					regexp httpStatusRE;                                                                                        ///< parser for HTTP response status code
 
 					__httpResponse response;                                                                                    ///< HTTP response data
-					tools::__url urlComponents;                                                                                 ///< HTTP Url
-					dodoString url;
+					tools::__url urlComponents;                                                                                 ///< HTTP URL components
+					dodoString urlQuery;																						///< HTTP URL query
+					dodoString urlBasePath;																						///< HTTP URL base path
 
 					/**
 					 * @return true if no more headers should be processed
@@ -388,16 +389,7 @@ namespace dodo
 
 					__proxyAuthInfo proxyAuthInfo;                     ///< proxy authentication information
 
-					/**
-					 * @enum httpAuthTypeEnum HTTP authentification type
-					 */
-					enum httpAuthTypeEnum
-					{
-						HTTPAUTHTYPE_BASIC,
-						HTTPAUTHTYPE_DIGEST
-					};
-
-					dodoMap<dodoString, short, dodoMapStringCompare> httpAuth; ///< cached HTTP auth info
+					dodoStringMap httpAuth; ///< cached HTTP auth info
 
 #ifdef OPENSSL_EXT
 
