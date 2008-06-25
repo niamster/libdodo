@@ -87,12 +87,12 @@ http::http() : httpStatusRE("^HTTP/[0-9].[0-9]\\s([0-9]+)\\s.*$"),
 			   cacheAuthentification(true),
 			   authTries(0),
 			   scheme(SCHEME_HTTP)
-			   
+
 #ifdef OPENSSL_EXT
-			   
+
 			   ,
 			   certsSet(false)
-			   
+
 #endif
 {
 	requestHeaders[HTTP_REQUESTHEADER_USERAGENT] = PACKAGE_NAME "/" PACKAGE_VERSION;
@@ -116,21 +116,21 @@ http::~http()
 
 #ifdef OPENSSL_EXT
 
-void 
+void
 http::setSertificates(const ssl::__certificates &a_certs)
 {
 	certs = a_certs;
-	
+
 	certsSet = true;
 }
 
 //-------------------------------------------------------------------
 
-void 
+void
 http::removeSertificates()
 {
 	certs = ssl::__certificates();
-	
+
 	certsSet = false;
 }
 
@@ -186,7 +186,7 @@ http::setUrl(const dodoString &a_url)
 #endif
 
 	}
-	
+
 	urlBasePath.clear();
 	urlQuery.clear();
 
@@ -243,7 +243,7 @@ http::GET()
 	client *net;
 
 	dodoString data;
-	
+
 	if (scheme == SCHEME_HTTP)
 	{
 		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
@@ -268,7 +268,7 @@ http::GET()
 #ifdef OPENSSL_EXT
 
 			else
-			{	
+			{
 				net->connect(proxyAuthInfo.host, proxyAuthInfo.port, *(exchange *)ex);
 				data.append("CONNECT ");
 				data.append(urlComponents.host);
@@ -283,10 +283,10 @@ http::GET()
 					data.append("\r\n");
 				}
 				data.append("\r\n");
-				
+
 				ex->outSize = data.size();
 				ex->exchange::_write(data.c_str());
-				
+
 				char proxyData[512];
 				ex->setInBufferSize(512);
 				ex->inSize = 512;
@@ -300,7 +300,7 @@ http::GET()
 							break;
 
 						case GETCONTENTSTATUS_PROXYBASICAUTH:
-							
+
 							if (authTries > 2)
 							{
 								authTries = 0;
@@ -314,9 +314,9 @@ http::GET()
 							delete net;
 							ex = NULL;
 							net = NULL;
-				
+
 							GET();
-							
+
 							clear();
 
 							return;
@@ -336,9 +336,9 @@ http::GET()
 							delete net;
 							ex = NULL;
 							net = NULL;
-				
+
 							GET();
-							
+
 							clear();
 
 							return;
@@ -353,21 +353,21 @@ http::GET()
 
 					throw;
 				}
-				
+
 				if (certsSet)
 					((ssl::client *)net)->setSertificates(certs);
-				else	
+				else
 					((ssl::client *)net)->initSsl();
-			
-				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket; 
+
+				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
 				((ssl::client *)net)->connectSsl();
- 
+
 				((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
 
 				((ssl::client *)net)->socket = -1;
 				((ssl::client *)net)->sslHandle = NULL;
 			}
-#endif		
+#endif
 	}
 	else
 	{
@@ -390,12 +390,12 @@ http::GET()
 				{
 					if (certsSet)
 						((ssl::client *)net)->setSertificates(certs);
-					
+
 					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
 					ex->setInBufferSize(512);
 					ex->inSize = 512;
 				}
-				
+
 #endif
 
 				break;
@@ -433,7 +433,7 @@ http::GET()
 	delete net;
 
 	data.clear();
-	
+
 	data.append("GET ");
 	data.append(urlBasePath);
 	data.append(urlQuery);
@@ -441,7 +441,7 @@ http::GET()
 		data.append(" HTTP/1.1\r\n");
 	else
 		data.append(" HTTP/1.0\r\n");
-	
+
 	if (cacheAuthentification)
 	{
 		dodoStringMap::iterator header = httpAuth.find(urlBasePath);
@@ -738,7 +738,7 @@ http::POST(const dodoString &a_data,
 	client *net;
 
 	dodoString data;
-	
+
 	if (scheme == SCHEME_HTTP)
 	{
 		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
@@ -778,7 +778,7 @@ http::POST(const dodoString &a_data,
 					data.append("\r\n");
 				}
 				data.append("\r\n");
-				
+
 				ex->outSize = data.size();
 				ex->exchange::_write(data.c_str());
 
@@ -809,9 +809,9 @@ http::POST(const dodoString &a_data,
 							delete net;
 							ex = NULL;
 							net = NULL;
-				
+
 							POST(data, type);
-							
+
 							clear();
 
 							return;
@@ -831,7 +831,7 @@ http::POST(const dodoString &a_data,
 							delete net;
 							ex = NULL;
 							net = NULL;
-				
+
 							POST(data, type);
 
 							clear();
@@ -843,27 +843,27 @@ http::POST(const dodoString &a_data,
 				{
 					delete ex;
 					delete net;
-				
+
 					clear();
 
 					throw;
 				}
-				
+
 				if (certsSet)
 					((ssl::client *)net)->setSertificates(certs);
-				else	
+				else
 					((ssl::client *)net)->initSsl();
-				
-				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket; 
+
+				((ssl::client *)net)->socket = ((ssl::exchange *)ex)->socket;
 				((ssl::client *)net)->connectSsl();
- 
+
 				((ssl::exchange *)ex)->sslHandle = ((ssl::client *)net)->sslHandle;
 
 				((ssl::client *)net)->socket = -1;
 				((ssl::client *)net)->sslHandle = NULL;
 			}
 
-#endif		
+#endif
 	}
 	else
 	{
@@ -886,7 +886,7 @@ http::POST(const dodoString &a_data,
 				{
 					if (certsSet)
 						((ssl::client *)net)->setSertificates(certs);
-					
+
 					((ssl::client *)net)->connect(*o, tools::string::stringToI(urlComponents.port), *(ssl::exchange *)ex);
 					ex->setInBufferSize(512);
 					ex->inSize = 512;
@@ -921,7 +921,7 @@ http::POST(const dodoString &a_data,
 
 				delete net;
 				delete ex;
-			
+
 				throw;
 			}
 	}
@@ -935,7 +935,7 @@ http::POST(const dodoString &a_data,
 		data.append(" HTTP/1.1\r\n");
 	else
 		data.append(" HTTP/1.0\r\n");
-	
+
 	if (cacheAuthentification)
 	{
 		dodoStringMap::iterator header = httpAuth.find(urlBasePath);
@@ -1095,14 +1095,14 @@ http::POST(const dodoString &a_data,
 	catch (...)
 	{
 		delete ex;
-	
+
 		clear();
 
 		throw;
 	}
 
 	delete ex;
-	
+
 	clear();
 }
 
@@ -1269,7 +1269,7 @@ http::getProxyConnectResponse(char *data,
 					if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Basic"))
 					{
 						proxyAuthInfo.authType = PROXYAUTHTYPE_BASIC;
-							
+
 						return GETCONTENTSTATUS_PROXYBASICAUTH;
 					}
 					else
@@ -1277,7 +1277,7 @@ http::getProxyConnectResponse(char *data,
 						if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_PROXYAUTHENTICATE], "Digest"))
 						{
 							proxyAuthInfo.authType = PROXYAUTHTYPE_DIGEST;
-							
+
 							return GETCONTENTSTATUS_PROXYDIGESTAUTH;
 						}
 						else
@@ -1563,8 +1563,18 @@ http::clear()
 		if (header != requestHeaders.end())
 			httpAuth[urlBasePath] = header->second;
 	}
-	
+
 	requestHeaders.erase(HTTP_REQUESTHEADER_AUTHORIZATION);
+}
+
+//-------------------------------------------------------------------
+
+void
+http::setAuthInfo(const dodoString &user,
+                  const dodoString &password)
+{
+	urlComponents.login = user;
+	urlComponents.password = password;
 }
 
 //-------------------------------------------------------------------

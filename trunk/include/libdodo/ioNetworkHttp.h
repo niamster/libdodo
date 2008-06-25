@@ -142,17 +142,17 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~http();
-				
+
 #ifdef OPENSSL_EXT
 
 					/**
 					 * set certificates information
-					 * @param certs defines certificates information 
+					 * @param certs defines certificates information
 					 */
 					virtual void setSertificates(const ssl::__certificates &certs);
 
 					/**
-					 * remove certificates information 
+					 * remove certificates information
 					 */
 					virtual void removeSertificates();
 
@@ -167,6 +167,7 @@ namespace dodo
 
 					/**
 					 * @param url defines Url
+					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
 					virtual void setUrl(const dodoString &url);
 
@@ -193,6 +194,7 @@ namespace dodo
 					 * perform GET request
 					 * @return server response
 					 * @param url defines Url
+					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
 					virtual __httpResponse GET(const dodoString &url);
 
@@ -207,6 +209,7 @@ namespace dodo
 					 * @param url defines Url
 					 * @param data defines POST data
 					 * @param type defines content type of the POST request
+					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
 					virtual __httpResponse POST(const dodoString &url, const dodoString &data, const dodoString &type);
 
@@ -222,6 +225,7 @@ namespace dodo
 					 * @return server response
 					 * @param url defines Url
 					 * @param arguments defines request arguments
+					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
 					virtual __httpResponse POST(const dodoString &url, const dodoStringMap &arguments);
 
@@ -237,6 +241,7 @@ namespace dodo
 					 * @param url defines Url
 					 * @param arguments defines request arguments
 					 * @param files defines path to files
+					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
 					virtual __httpResponse POST(const dodoString &url, const dodoStringMap &arguments, const dodoStringMap &files);
 
@@ -246,6 +251,13 @@ namespace dodo
 					 * @param files defines path to files
 					 */
 					virtual void POST(const dodoStringMap &arguments, const dodoStringMap &files);
+
+					/**
+					 * set HTTP authentification information
+					 * @param user defines user name for HTTP authentification
+					 * @param password defines password for HTTP authentification
+					 */
+					virtual void setAuthInfo(const dodoString &user, const dodoString &password);
 
 					bool followRedirection;                     ///< if true follow the `Location` header; true by default
 
