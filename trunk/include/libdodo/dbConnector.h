@@ -90,7 +90,7 @@ namespace dodo
 		};
 
 		/**
-		 * @enum accumulatorReferenceEnum defines reference type assigned to the field
+		 * @enum connectorReferenceEnum defines reference type assigned to the field
 		 */
 		enum connectorReferenceEnum
 		{
@@ -236,11 +236,11 @@ namespace dodo
 			dodoString path;                    ///< path to db or unix socket
 			unsigned int port;                  ///< port
 		};
-		
+
 		/**
 		 * @enum dbOperationTypeEnum defines type of operation for hook
 		 */
-		enum mysqlOperationTypeEnum
+		enum dbOperationTypeEnum
 		{
 			DB_OPERATION_CONNECT,
 			DB_OPERATION_EXEC,

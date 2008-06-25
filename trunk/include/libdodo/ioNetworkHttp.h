@@ -272,7 +272,7 @@ namespace dodo
 					virtual cgi::__serverCookie parseCookie(const dodoString &header);
 
 					/**
-					 * @enum getContentStatus defines status of getContent routine
+					 * @enum getContentStatusEnum defines status of getContent routine
 					 */
 					enum getContentStatusEnum
 					{
@@ -374,7 +374,7 @@ namespace dodo
 					/**
 					 * @enum proxyAuthTypeEnum defines proxy authentification type
 					 */
-					enum proxyAuthEnum
+					enum proxyAuthTypeEnum
 					{
 						PROXYAUTHTYPE_NONE,
 						PROXYAUTHTYPE_BASIC,

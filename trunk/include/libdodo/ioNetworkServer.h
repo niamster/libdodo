@@ -63,7 +63,7 @@ namespace dodo
 			};
 
 			/**
-			 * @enum ServerOperationTypeEnum defines type of operation for hook
+			 * @enum serverOperationTypeEnum defines type of operation for hook
 			 */
 			enum serverOperationTypeEnum
 			{

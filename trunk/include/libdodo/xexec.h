@@ -173,7 +173,7 @@ namespace dodo
 	class xexec
 	{
 		private:
-			
+
 			/*
 			 * copy constructor
 			 * @note to prevent copying
@@ -234,7 +234,7 @@ namespace dodo
 			 * set function that will be executed before/after the main action call
 			 * @return pre/postExec identificators
 			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param obj defines object that called the hook
+			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 * @note type of hook[pre/post] is defined in module
 			 * if applied modules more than XEXEC_MAXMODULES, will return -1[see directives.h]
@@ -383,8 +383,6 @@ namespace dodo
 			 * @return postExec identificator
 			 * @param list defines list of hooks
 			 * @param func defines function that will be called
-			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 */
 			virtual int addXExec(dodoList<__xexecItem> &list, inExec func, void *data);
@@ -420,8 +418,6 @@ namespace dodo
 			 * @return XExec identificator
 			 * @param list defines list of hooks
 			 * @param path defines path to the library[if not in ldconfig db] or library name
-			 * @param obj defines object that called the hook
-			 * @param type defines hook type[see xexecObjectTypeEnum]
 			 * @param data defines hook data
 			 * @param toInit defines data that will be passed to the init function
 			 */
