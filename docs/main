@@ -15,7 +15,7 @@ cgi::
 
 io:: 
 	input/output interaction subsystem
-	support for: files(regular, temp, fifo), network(unix, bsd sockets, client/server interaction, tcp/udp protocols, high-level HTTP protocol), stdin/stdout
+	support for: files(regular, temp, fifo), network(unix, bsd sockets, client/server interaction, tcp/udp protocols, SSL protocol, high-level HTTP(S) protocol), stdin/stdout
 
 db::
 	database interaction subsystem
