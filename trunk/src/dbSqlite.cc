@@ -474,6 +474,9 @@ sqlite::exec(const dodoString &query,
 					framingFields.insert(make_pair(temp, temp1));
 				}
 			}
+#else
+
+			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_SQLITEWOMETADATA, DBSQLITEEX_SQLITEWOMETADATA_STR, __LINE__, __FILE__);
 
 #endif
 		}
