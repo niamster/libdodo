@@ -158,47 +158,8 @@ namespace dodo
 
 				/**
 				 * @return current session charset
-				 * @note return value can be
-				 * PG_SQL_ASCII[SQL/ASCII]
-				 * PG_EUC_JP[EUC for Japanese]
-				 * PG_EUC_CN[EUC for Chinese]
-				 * PG_EUC_KR[EUC for Korean]
-				 * PG_EUC_TW[EUC for Taiwan]
-				 * PG_JOHAB[EUC for Korean JOHAB]
-				 * PG_UTF8[Unicode UTF8]
-				 * PG_LATIN1[ISO-8859-1 Latin 1]
-				 * PG_LATIN2[ISO-8859-2 Latin 2]
-				 * PG_LATIN3[ISO-8859-3 Latin 3]
-				 * PG_LATIN4[ISO-8859-4 Latin 4]
-				 * PG_LATIN5[ISO-8859-5 Latin 5]
-				 * PG_LATIN6[ISO-8859-10 Latin 6]
-				 * PG_LATIN7[ISO-8859-13 Latin 7]
-				 * PG_LATIN8[ISO-8859-14 Latin 8]
-				 * PG_LATIN9[ISO-8859-15 Latin 9]
-				 * PG_LATIN10[ISO-8859-16 Latin 10]
-				 * PG_WIN1256[windows-1256]
-				 * PG_WIN1258[windows-1258]
-				 * PG_WIN866[CP866]
-				 * PG_WIN874[windows-874]
-				 * PG_WIN1251[windows-1251]
-				 * PG_WIN1252[windows-1252]
-				 * PG_WIN1250[windows-1250]
-				 * PG_WIN1253[windows-1253]
-				 * PG_WIN1254[windows-1254]
-				 * PG_WIN1255[windows-1255]
-				 * PG_WIN1257[windows-1257]
-				 * PG_KOI8R[KOI8-R]
-				 * PG_ISO_8859_5[ISO-8859-5]
-				 * PG_ISO_8859_6[ISO-8859-6]
-				 * PG_ISO_8859_7[ISO-8859-7]
-				 * PG_ISO_8859_8[ISO-8859-8]
-				 * PG_SJIS[Shift JIS (Windows-932)]
-				 * PG_BIG5[Big5 (Windows-950)]
-				 * PG_GBK[GBK (Windows-936)]
-				 * PG_UHC[UHC (Windows-949)]
-				 * PG_GB18030[GB18030]
 				 */
-				virtual int getCharset() const;
+				virtual dodoString getCharset() const;
 
 			protected:
 
