@@ -523,7 +523,7 @@ postgresql::setCharset(const dodoString &charset)
 dodoString
 postgresql::getCharset() const
 {
-	return pg_char_to_encoding(PQclientEncoding(pgHandle));
+	return pg_encoding_to_char(PQclientEncoding(pgHandle));
 }
 
 //-------------------------------------------------------------------
