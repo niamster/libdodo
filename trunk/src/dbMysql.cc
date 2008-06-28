@@ -385,6 +385,8 @@ mysql::exec(const dodoString &query,
 
 	if (query.size() == 0)
 	{
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 		if (autoFraming)
 		{
 			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
@@ -440,6 +442,8 @@ mysql::exec(const dodoString &query,
 				}
 			}
 		}
+
+#endif
 
 		queryCollect();
 	}

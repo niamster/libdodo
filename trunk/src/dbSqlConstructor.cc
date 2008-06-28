@@ -150,8 +150,14 @@ const dodoString sqlConstructor::statements[] =
 //-------------------------------------------------------------------
 
 sqlConstructor::sqlConstructor() : preventFraming(false),
-								   preventEscaping(false),
+								   preventEscaping(false)
+
+#ifdef ENABLE_SQL_AUTOFRAMING
+
+								   ,
 								   autoFraming(true)
+
+#endif
 {
 }
 
@@ -365,6 +371,8 @@ sqlConstructor::insertCollect()
 
 	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
 
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
 	{
 		dodoStringArray::iterator t;
@@ -404,6 +412,9 @@ sqlConstructor::insertCollect()
 		}
 	}
 	else
+
+#endif
+
 	{
 		for (; k != l; ++k)
 		{
@@ -498,6 +509,8 @@ sqlConstructor::updateCollect()
 
 	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
 
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
 	{
 		unsigned int fn(collectedData.fields.size()), fv(collectedData.values.front().size());
@@ -536,6 +549,9 @@ sqlConstructor::updateCollect()
 		}
 	}
 	else
+
+#endif
+
 	{
 		if (preventFraming)
 			setPart = valuesName(collectedData.values.front(), collectedData.fields, __dodostring__);

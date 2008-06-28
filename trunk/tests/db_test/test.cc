@@ -142,6 +142,8 @@ int main(int argc, char **argv)
 		pp->createTable(ti);
 		pp->exec();
 
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 #ifndef SQLITE_ENABLE_COLUMN_METADATA
 
 #ifdef SQLITE_EXT
@@ -162,6 +164,8 @@ int main(int argc, char **argv)
 #endif
 
 		cout << ((((sqlConstructor *)pp)->autoFraming) ? "Automatic framing turned on." : "Automatic framing turned off.") << endl;
+
+#endif
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";

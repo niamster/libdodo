@@ -700,6 +700,7 @@ enable_option_checking
 enable_debug
 enable_profiling
 enable_deque
+enable_sql_autoframing
 enable_io_xexec_support
 enable_db_xexec_support
 with_sqlite3
@@ -1359,6 +1360,8 @@ Optional Features:
   --enable-debug          enable debug info
   --enable-profiling      enable profiling
   --disable-deque         use std::vector instead of std::deque
+  --disable-sql-autoframing
+                          enable support of autoframing in db::
   --disable-io-xexec-support
                           compile io:: w/o xexec support
   --disable-db-xexec-support
@@ -3618,6 +3621,23 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
+# Check whether --enable-sql-autoframing was given.
+if test "${enable_sql_autoframing+set}" = set; then
+  enableval=$enable_sql_autoframing; SQL_AUTOFRAMING="$enableval"
+else
+  SQL_AUTOFRAMING="yes"
+fi
+
+
+if test "$SQL_AUTOFRAMING" = "yes"
+then
+	echo -n -e "#define ENABLE_SQL_AUTOFRAMING\n\n" >> include/libdodo/directives.runtime.h
+
+	RESULT="$RESULT\nsupport of autoframing in db::\t\t\t\t\t\tenabled"
+else
+	RESULT="$RESULT\nsupport of autoframing in db::\t\t\t\t\t\tdisabled"
+fi
+
 # Check whether --enable-io-xexec-support was given.
 if test "${enable_io_xexec_support+set}" = set; then
   enableval=$enable_io_xexec_support; IO_W_XEXEC="$enableval"
@@ -3672,6 +3692,8 @@ fi
 		fi
 		CPPFLAGS="$CPPFLAGS -I$MOD_SQLITE_DIR/include"
 		LDFLAGS="$LDFLAGS -L$MOD_SQLITE_DIR/lib -lsqlite3"
+		if test "$SQL_AUTOFRAMING" == "yes"
+		then
 
 { $as_echo "$as_me:$LINENO: checking for sqlite3_table_column_metadata in -lsqlite3" >&5
 $as_echo_n "checking for sqlite3_table_column_metadata in -lsqlite3... " >&6; }
@@ -3744,6 +3766,9 @@ else
   RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled"
 fi
 
+		else
+			RESULT="$RESULT\nSQLite auto-framing\t\t\t\t\t\tdisabled"
+		fi
 
 { $as_echo "$as_me:$LINENO: checking for sqlite3_exec in -lsqlite3" >&5
 $as_echo_n "checking for sqlite3_exec in -lsqlite3... " >&6; }

@@ -43,9 +43,13 @@ sqlite::sqlite() : empty(true),
 
 #endif
 
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 #ifndef SQLITE_ENABLE_COLUMN_METADATA
 
 	autoFraming = false;
+
+#endif
 
 #endif
 }
@@ -408,6 +412,9 @@ sqlite::exec(const dodoString &query,
 
 	if (query.size() == 0)
 	{
+
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 		if (autoFraming)
 		{
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
@@ -480,6 +487,8 @@ sqlite::exec(const dodoString &query,
 
 #endif
 		}
+
+#endif
 
 		queryCollect();
 	}
