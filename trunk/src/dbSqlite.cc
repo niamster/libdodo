@@ -43,9 +43,13 @@ sqlite::sqlite() : empty(true),
 
 #endif
 
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 #ifndef SQLITE_ENABLE_COLUMN_METADATA
 
 	autoFraming = false;
+
+#endif
 
 #endif
 }
@@ -408,6 +412,9 @@ sqlite::exec(const dodoString &query,
 
 	if (query.size() == 0)
 	{
+
+#ifdef ENABLE_SQL_AUTOFRAMING
+
 		if (autoFraming)
 		{
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
@@ -474,9 +481,14 @@ sqlite::exec(const dodoString &query,
 					framingFields.insert(make_pair(temp, temp1));
 				}
 			}
+#else
+
+			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_SQLITEWOMETADATA, DBSQLITEEX_SQLITEWOMETADATA_STR, __LINE__, __FILE__);
 
 #endif
 		}
+
+#endif
 
 		queryCollect();
 	}
