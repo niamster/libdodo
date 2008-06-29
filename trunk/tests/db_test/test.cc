@@ -80,10 +80,10 @@ int main(int argc, char **argv)
 		__connectorInfo info;
 
 		info.db = "test";
-		info.host = "localhost";
 
-		if (strcasecmp(argv[1], "postgres") == 0)
+		if (strcasecmp(argv[1], "postgresql") == 0)
 		{
+			info.host = "127.0.0.1";	
 			info.port = 5432;
 			info.user = "postgres";
 		}
@@ -100,6 +100,26 @@ int main(int argc, char **argv)
 
 		pp->setDbInfo(info);
 		pp->connect();
+		if (strcasecmp(argv[1], "postgresql") == 0)
+		{
+			#ifdef POSTGRESQL_EXT
+
+				((postgresql *)pp)->setCharset("UTF-8");
+
+				cout << "Encoding: " << ((postgresql *)pp)->getCharset() << endl;
+
+			#endif
+		}
+		else if (strcasecmp(argv[1], "mysql") == 0)
+		{
+			#ifdef MYSQL_EXT
+				
+				((postgresql *)pp)->setCharset("UTF-8");
+
+				cout << "Encoding: " << ((mysql *)pp)->getCharset() << endl;
+
+			#endif
+		}
 
 		pp->deleteTable("test");
 
@@ -157,6 +177,7 @@ int main(int argc, char **argv)
 
 
 			((sqlConstructor *)pp)->autoFraming = true;
+			((sqlite *)pp)->manualAutoFraming = true;
 			((sqlConstructor *)pp)->framingFields.insert(make_pair(info.db + ":" + ti.name, columns));
 		}
 #endif
@@ -185,13 +206,11 @@ int main(int argc, char **argv)
 			pp->fetch();
 
 			pp->insert("test", arr);
-			cout << ((sqlConstructor *)pp)->queryCollect() << endl;
 			pp->exec();
 
 			arr["d"] = "d+1";
 			arr["operation"] = "um";
 			pp->update("test", arr);
-			cout << ((sqlConstructor *)pp)->queryCollect() << endl;
 			arr["operation"] = "mu";
 			arr["d"] = "1";
 			pp->exec();
@@ -222,15 +241,21 @@ int main(int argc, char **argv)
 		tools::filesystem::unlink("test.1");
 		tools::filesystem::unlink("test.2");
 
+#ifndef DB_WO_XEXEC
+
+		pp->disablePreExec(pos);
+
+#endif
+
 		dodoString dt = tools::filesystem::getFileContents("test");
 		tools::filesystem::writeToFile("test.1", dt);
 
-		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgres") == 0)
+		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgresql") == 0)
 			arr["b"] = "$1";
 		else
 			arr["b"] = dt;
 
-		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgres") == 0)
+		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgresql") == 0)
 		{
 			dodoStringArray blobs;
 			blobs.push_back(dt);
@@ -243,7 +268,7 @@ int main(int argc, char **argv)
 #endif
 			else
 			{
-				if (strcasecmp(argv[1], "postgres") == 0)
+				if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef POSTGRESQL_EXT
 					((postgresql *)pp)->setBLOBValues(blobs);
 #else
@@ -272,7 +297,7 @@ int main(int argc, char **argv)
 			;
 #endif
 		else
-		if (strcasecmp(argv[1], "postgres") == 0)
+		if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef POSTGRESQL_EXT
 			addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
 #else
@@ -282,7 +307,7 @@ int main(int argc, char **argv)
 		pp->exec();
 
 		pp->select("test", select, "operation='ma'");
-		if (strcasecmp(argv[1], "postgres") == 0)
+		if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef SQLITE_EXT
 			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
 #else

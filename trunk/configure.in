@@ -203,11 +203,24 @@ fi
 	then
 		if test "$MOD_POSTGRESQL_DIR" = "yes"
 		then
-			MOD_POSTGRESQL_DIR=/usr
+			if test "$(which pg_config 2>/dev/null)" != ""
+			then
+				CPPFLAGS="$CPPFLAGS -I$(pg_config --includedir) -I$(pg_config --includedir-server)"
+				LDFLAGS="$LDFLAGS -L$(pg_config --libdir) -lpq"
+			else
+				MOD_POSTGRESQL_DIR=/usr
+				CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
+				LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
+			fi
+		else
+			CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include -I$MOD_POSTGRESQL_DIR/include/postgresql/server -I$MOD_POSTGRESQL_DIR/include/postgresql/libpq"
+			LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 		fi
-		CPPFLAGS="$CPPFLAGS -I$MOD_POSTGRESQL_DIR/include"
-		LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 		AC_CHECK_LIB([pq], [PQclear], [], AC_MSG_ERROR(postgresql lib was not found))
+		AC_LANG_PUSH(C++)
+		AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <libpq-fe.h>]],[[pg_encoding_to_char(0);]]), [echo "!!!"], [echo -n -e "#define POSTGRESQL_NO_ENCODINGTOCHAR\n\n" >> include/libdodo/directives.runtime.h])
+		AC_LANG_POP()
+
 		AC_CHECK_HEADER([libpq-fe.h], [], AC_MSG_ERROR(postgresql header was not found))
 		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 

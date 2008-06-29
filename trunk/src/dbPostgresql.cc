@@ -33,6 +33,54 @@
 
 using namespace dodo::db;
 
+#ifdef POSTGRESQL_NO_ENCODINGTOCHAR
+
+const dodoString postgresql::encodingStatements[] = {
+	"SQL_ASCII",
+	"EUC_JP",
+	"EUC_CN",
+	"EUC_KR",
+	"EUC_TW",
+	"JOHAB",
+	"UTF8",
+	"MULE_INTERNAL",
+	"LATIN1",
+	"LATIN2",
+	"LATIN3",
+	"LATIN4",
+	"LATIN5",
+	"LATIN6",
+	"LATIN7",
+	"LATIN8",
+	"LATIN9",
+	"LATIN10",
+	"WIN1256",
+	"WIN1258",
+	"WIN866",
+	"WIN874",
+	"KOI8",
+	"WIN1251",
+	"WIN1252",
+	"ISO_8859_5",
+	"ISO_8859_6",
+	"ISO_8859_7",
+	"ISO_8859_8",
+	"WIN1250",
+	"WIN1253",
+	"WIN1254",
+	"WIN1255",
+	"WIN1257",
+	"SJIS",
+	"BIG5",
+	"GBK",
+	"UHC",
+	"GB18030"
+};
+
+#endif
+
+//-------------------------------------------------------------------
+
 postgresql::postgresql() : empty(true),
 						   hint(POSTGRESQL_HINT_NONE)
 {
@@ -107,7 +155,7 @@ postgresql::connect()
 
 	pgHandle = PQsetdbLogin(
 		collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
-		tools::string::iToString(collectedData.dbInfo.port).c_str(),
+		tools::string::uiToString(collectedData.dbInfo.port).c_str(),
 		NULL,
 		NULL,
 		collectedData.dbInfo.db.size() == 0 ? NULL : collectedData.dbInfo.db.c_str(),
@@ -527,7 +575,20 @@ postgresql::setCharset(const dodoString &charset)
 dodoString
 postgresql::getCharset() const
 {
+#ifdef POSTGRESQL_NO_ENCODINGTOCHAR
+
+	int encoding = PQclientEncoding(pgHandle);
+
+	if (encoding >= 0 && encoding < _PG_LAST_ENCODING_)
+		return encodingStatements[encoding];
+
+	return __dodostring__;
+
+#else
+
 	return pg_encoding_to_char(PQclientEncoding(pgHandle));
+
+#endif
 }
 
 //-------------------------------------------------------------------

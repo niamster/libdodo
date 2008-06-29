@@ -137,19 +137,19 @@ namespace dodo
 		 *                      //c++ code:
 		 *                      cgiProcessor cgip;
 		 *
-		 *                      dodoStringArr arr;
+		 *                      dodoStringArray arr;
 		 *                      arr.push_back("one");
 		 *                      arr.push_back("two");
 		 *                      arr.push_back("three");
 		 *                      cgip.assign("arr",arr);
 		 *
-		 *                      dodoAssocArr arr1;
+		 *                      dodoStringMap arr1;
 		 *                      arr1["one"] = "one";
 		 *                      arr1["two"] = "two";
 		 *                      arr1["three"] = "three";
 		 *                      cgip.assign("arr1",arr1);
 		 *
-		 *                      std::vector<dodoAssocArr> arr2;
+		 *                      dodoArray<dodoStringMap> arr2;
 		 *                      arr2.push_back(arr1);
 		 *                      arr1["one"] = "three";
 		 *                      arr2.push_back(arr1);

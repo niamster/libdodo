@@ -48,6 +48,7 @@ sqlite::sqlite() : empty(true),
 #ifndef SQLITE_ENABLE_COLUMN_METADATA
 
 	autoFraming = false;
+	manualAutoFraming = false;
 
 #endif
 
@@ -482,8 +483,8 @@ sqlite::exec(const dodoString &query,
 				}
 			}
 #else
-
-			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_SQLITEWOMETADATA, DBSQLITEEX_SQLITEWOMETADATA_STR, __LINE__, __FILE__);
+			if (!manualAutoFraming)
+				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_SQLITEWOMETADATA, DBSQLITEEX_SQLITEWOMETADATA_STR, __LINE__, __FILE__);
 
 #endif
 		}
