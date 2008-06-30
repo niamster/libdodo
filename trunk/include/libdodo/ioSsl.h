@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkSsl.h
+ *            ioSsl.h
  *
  *  Wed Jun 11 11:10:47 2008
  *  Copyright  2008  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IONETWORKSSL_H_
-#define _IONETWORKSSL_H_
+#ifndef _IOSSL_H_
+#define _IOSSL_H_
 
 #include <libdodo/directives.h>
 
