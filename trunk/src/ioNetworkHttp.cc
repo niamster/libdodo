@@ -117,7 +117,7 @@ http::~http()
 #ifdef OPENSSL_EXT
 
 void
-http::setSertificates(const ssl::__certificates &a_certs)
+http::setSertificates(const io::ssl::__certificates &a_certs)
 {
 	certs = a_certs;
 
@@ -129,7 +129,7 @@ http::setSertificates(const ssl::__certificates &a_certs)
 void
 http::removeSertificates()
 {
-	certs = ssl::__certificates();
+	certs = io::ssl::__certificates();
 
 	certsSet = false;
 }

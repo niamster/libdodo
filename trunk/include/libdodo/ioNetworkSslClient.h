@@ -49,7 +49,7 @@
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetworkSslClientEx.h>
 #include <libdodo/ioNetworkClient.h>
-#include <libdodo/ioNetworkSsl.h>
+#include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetworkSslExchange.h>
@@ -93,15 +93,15 @@ namespace dodo
 						 * destructor
 						 */
 						virtual ~client();
-						
+
 						/**
 						 * set certificates information
-						 * @param certs defines certificates information 
+						 * @param certs defines certificates information
 						 */
-						virtual void setSertificates(const __certificates &certs);
-						
+						virtual void setSertificates(const io::ssl::__certificates &certs);
+
 						/**
-						 * remove certificates information 
+						 * remove certificates information
 						 */
 						virtual void removeSertificates();
 

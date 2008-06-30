@@ -72,7 +72,7 @@ client::~client()
 
 //-------------------------------------------------------------------
 
-void 
+void
 client::removeSertificates()
 {
 	if (sslHandle != NULL)
@@ -99,21 +99,21 @@ client::removeSertificates()
 		}
 
 		SSL_free(sslHandle);
-		
+
 		sslHandle = NULL;
 	}
 
 	if (sslCtx != NULL)
 	{
 		SSL_CTX_free(sslCtx);
-		
+
 		sslCtx = NULL;
 	}
-	
+
 	sslCtx = SSL_CTX_new(SSLv23_client_method());
 	if (sslCtx == NULL)
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, ERR_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
-	
+
 	sslHandle = SSL_new(sslCtx);
 	if (sslHandle == NULL)
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_REMOVESERTIFICATES, ERR_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
@@ -121,8 +121,8 @@ client::removeSertificates()
 
 //-------------------------------------------------------------------
 
-void 
-client::setSertificates(const __certificates &certs)
+void
+client::setSertificates(const io::ssl::__certificates &certs)
 {
 	if (sslHandle != NULL)
 	{
@@ -148,21 +148,21 @@ client::setSertificates(const __certificates &certs)
 		}
 
 		SSL_free(sslHandle);
-		
+
 		sslHandle = NULL;
 	}
 
 	if (sslCtx != NULL)
 	{
 		SSL_CTX_free(sslCtx);
-		
+
 		sslCtx = NULL;
 	}
-	
+
 	sslCtx = SSL_CTX_new(SSLv23_client_method());
 	if (sslCtx == NULL)
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_LIBDODO, CLIENTEX_UNABLETOINITCONTEXT, IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR, __LINE__, __FILE__);
-	
+
 	if (certs.cipher.size() > 0 && SSL_CTX_set_cipher_list(sslCtx, certs.cipher.c_str()) != 1)
 	{
 		unsigned long nerr = ERR_get_error();
@@ -179,42 +179,42 @@ client::setSertificates(const __certificates &certs)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-	}	
+	}
 
 	if (certs.keyPassword.size() > 0)
 		SSL_CTX_set_default_passwd_cb_userdata(sslCtx, (void *)certs.keyPassword.c_str());
-	
+
 	bool keySet = false;
-	
+
 	if (certs.key.size() > 0)
 		switch (certs.keyType)
 		{
-			case KEYTYPE_PKEY:
-				
+			case io::ssl::KEYTYPE_PKEY:
+
 				if (SSL_CTX_use_PrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
 				{
 					unsigned long nerr = ERR_get_error();
 					throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}		
-				
+				}
+
 				keySet = true;
-				
+
 				break;
-				
-			case KEYTYPE_RSA:
-				
+
+			case io::ssl::KEYTYPE_RSA:
+
 				if (SSL_CTX_use_RSAPrivateKey_file(sslCtx, certs.key.c_str(), SSL_FILETYPE_PEM) != 1)
 				{
 					unsigned long nerr = ERR_get_error();
 					throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-				}				
-				
-				keySet = true;		
-				
+				}
+
+				keySet = true;
+
 				break;
-				
+
 			default:
-				
+
 				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_LIBDODO, CLIENTEX_UNKNOWNKEYTYPE, IONETWORKSSLCLIENTEX_UNKNOWNKEYTYPE_STR, __LINE__, __FILE__);
 		}
 	else
@@ -225,8 +225,8 @@ client::setSertificates(const __certificates &certs)
 			{
 				unsigned long nerr = ERR_get_error();
 				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
-			}			
-			
+			}
+
 			keySet = true;
 		}
 	}
@@ -240,7 +240,7 @@ client::setSertificates(const __certificates &certs)
 				unsigned long nerr = ERR_get_error();
 				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-		}	
+		}
 		else
 		{
 			if (SSL_CTX_load_verify_locations(sslCtx, certs.caPath.c_str(), NULL) != 1)
@@ -248,15 +248,15 @@ client::setSertificates(const __certificates &certs)
 				unsigned long nerr = ERR_get_error();
 				throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 			}
-		}	
-	}	
+		}
+	}
 
 	if (keySet && SSL_CTX_check_private_key(sslCtx) != 1)
 	{
 		unsigned long nerr = ERR_get_error();
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
-	
+
 	sslHandle = SSL_new(sslCtx);
 	if (sslHandle == NULL)
 		throw baseEx(ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_SETSERTIFICATES, ERR_LIBDODO, CLIENTEX_UNABLETOINITSSL, IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR, __LINE__, __FILE__);
@@ -287,7 +287,7 @@ client::initSsl()
 void
 client::connectSsl()
 {
-	__openssl_init_object__.addEntropy();
+	io::ssl::__openssl_init_object__.addEntropy();
 
 	if (sslConnected)
 	{

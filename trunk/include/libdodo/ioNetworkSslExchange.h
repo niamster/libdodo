@@ -50,7 +50,7 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetworkSslExchangeEx.h>
 #include <libdodo/ioNetworkExchange.h>
-#include <libdodo/ioNetworkSsl.h>
+#include <libdodo/ioSsl.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
 #include <libdodo/ipcThreadGuard.h>

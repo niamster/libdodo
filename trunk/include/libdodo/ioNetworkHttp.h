@@ -149,7 +149,7 @@ namespace dodo
 					 * set certificates information
 					 * @param certs defines certificates information
 					 */
-					virtual void setSertificates(const ssl::__certificates &certs);
+					virtual void setSertificates(const io::ssl::__certificates &certs);
 
 					/**
 					 * remove certificates information
@@ -405,7 +405,7 @@ namespace dodo
 
 #ifdef OPENSSL_EXT
 
-					ssl::__certificates certs;///< SSL certificates
+					io::ssl::__certificates certs;///< SSL certificates
 					bool certsSet;
 
 #endif

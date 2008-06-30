@@ -44,10 +44,10 @@ OBJECTS:=dbAccumulator.o \
 	ioNonBlockedAccess.o \
 	ioNonBlockedAccessInfo.o \
 	ioStdio.o \
+	ioSsl.o \
 	ioNetworkHttp.o \
 	ioNetworkOptions.o \
 	ioNetworkSslExchange.o \
-	ioNetworkSsl.o \
 	ioNetworkSslServer.o \
 	ioNetworkSslClient.o \
 	ioNetworkExchange.o \

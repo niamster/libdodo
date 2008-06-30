@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 
 		sock.bindNListen("127.0.0.1",7778,3);
 		
-		__certificates certs;
+		io::ssl::__certificates certs;
 		certs.ca = "host.pem";
 		certs.cipher = "RC4-MD5";
 

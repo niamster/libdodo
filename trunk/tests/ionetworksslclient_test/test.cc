@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 
 		client st(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
 		
-		__certificates certs;
+		io::ssl::__certificates certs;
 		certs.ca = "host.pem";
 		
 		//certs.cert = "host.cert";

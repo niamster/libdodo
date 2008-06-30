@@ -27,7 +27,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/ioNetworkSsl.h>
+#include <libdodo/ioSsl.h>
 
 #ifdef OPENSSL_EXT
 
@@ -35,19 +35,16 @@ namespace dodo
 {
 	namespace io
 	{
-		namespace network
+		namespace ssl
 		{
-			namespace ssl
-			{
-				__openssl_init__ __openssl_init_object__;
-			};
+			__openssl_init__ __openssl_init_object__;
 		};
 	};
 };
 
 //-------------------------------------------------------------------
 
-using namespace dodo::io::network::ssl;
+using namespace dodo::io::ssl;
 
 __certificates::__certificates() : keyType(-1)
 {
