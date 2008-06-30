@@ -22,13 +22,14 @@ hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	__xexecIoStdioCollectedData *st = (__xexecIoStdioCollectedData *)odata;
+	__xexecIoChannelCollectedData *st = (__xexecIoChannelCollectedData *)odata;
 	if (st->operType == IO_OPERATION_WRITE)
 	{
 		int a = *(int *)(st->buffer.c_str());
 
 		stdio *io = (stdio *)st->executor;
 		io->disableAll();
+		io->outSize = 100;
 		io->writeStreamString("\nhook\n");
 		io->enableAll();
 

@@ -41,7 +41,6 @@
 #include <libdodo/ioFileEx.h>
 #include <libdodo/types.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
 {
@@ -83,34 +82,10 @@ namespace dodo
 			FILE_FILETYPE_CHAR_FILE                     ///< CHAR file
 		};
 
-#ifndef IO_WO_XEXEC
-
-		/**
-		 * @struct __xexecIoFileCollectedData defines data that could be retrieved from io::file(to modificate)[contains references]
-		 */
-		struct __xexecIoFileCollectedData
-		{
-			/**
-			 * constructor
-			 * @param operType defines xexec operation
-			 * @param executor defines class that executed hook
-			 */
-			__xexecIoFileCollectedData(int &operType, void *executor);
-
-			dodoString buffer;                          ///< data buffer
-
-			int &operType;                              ///< xexec operation
-
-			void *executor;                             ///< class that executed hook
-		};
-
-#endif
-
 		/**
 		 * @class file provides disk I/O manipulations
 		 */
-		class file : public channel,
-					 virtual public ipc::thread::guardHolder
+		class file : virtual public channel
 		{
 			private:
 
@@ -149,54 +124,6 @@ namespace dodo
 				 * close file
 				 */
 				virtual void close();
-
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void readString(dodoString &data);
-
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void read(char * const data);
-
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void writeString(const dodoString &data);
-
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void write(const char * const data);
-
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void readStreamString(dodoString &data);
-
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void readStream(char * const data);
-
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 */
-				virtual void writeStreamString(const dodoString &data);
-
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 */
-				virtual void writeStream(const char * const data);
 
 				/**
 				 * flush output
@@ -246,7 +173,7 @@ namespace dodo
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual void _readStream(char * const data);
+				virtual unsigned long _readStream(char * const data);
 
 				/**
 				 * @param data defines data that will be written
@@ -265,12 +192,6 @@ namespace dodo
 				short fileType;                         ///< type of file
 
 				FILE *handler;                          ///< file handler
-
-#ifndef IO_WO_XEXEC
-
-				__xexecIoFileCollectedData collectedData;                   ///< data collected for xexec
-
-#endif
 		};
 	};
 };

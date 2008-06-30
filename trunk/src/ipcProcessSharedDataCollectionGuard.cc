@@ -110,11 +110,11 @@ dataCollectionGuard::get(unsigned long position)
 bool
 dataCollectionGuard::getShare(unsigned long position)
 {
-	dodoList<ipc::shared::__info>::const_iterator i(shares.begin()), j(shares.end());
+	dodoList<ipc::shared::__info>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((dodoList<ipc::shared::__info>::iterator *) & i);
+			current = i;
 
 			return true;
 		}
@@ -129,7 +129,7 @@ dataCollectionGuard::getSharedDataIds()
 {
 	dodoList<unsigned long> ids;
 
-	dodoList<ipc::shared::__info>::const_iterator i(shares.begin()), j(shares.end());
+	dodoList<ipc::shared::__info>::iterator i(shares.begin()), j(shares.end());
 	for (; i != j; ++i)
 		ids.push_back(i->position);
 

@@ -293,7 +293,7 @@ namespace dodo
 
 					unsigned long processNum;                                                   ///< number of registered processes
 
-					dodoList<__processInfo> processes;                                          ///< identificators of processes
+					mutable dodoList<__processInfo> processes;                                          ///< identificators of processes
 
 					mutable dodoList<__processInfo>::iterator current;                          ///< iterator for list of processes[for matched with getProcess method]
 			};

@@ -47,34 +47,10 @@ namespace dodo
 	{
 		namespace fast
 		{
-#ifndef IO_WO_XEXEC
-
-			/**
-			 * @struct __xexecCgiFastExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
-			 */
-			struct __xexecCgiFastExchangeCollectedData
-			{
-				/**
-				 * constructor
-				 * @param operType defines xexec operation
-				 * @param executor defines class that executed hook
-				 */
-				__xexecCgiFastExchangeCollectedData(int &operType, void *executor);
-
-				dodoString buffer;                              ///< data buffer
-
-				int &operType;                                  ///< xexec operation
-
-				void *executor;                                 ///< class that executed hook
-			};
-
-#endif
-
 			/**
 			 * @class exchange provides interface to fast CGI I/O functionality
 			 */
-			class exchange : public io::channel,
-							 virtual public ipc::thread::guardHolder
+			class exchange : public io::channel
 			{
 				private:
 
@@ -96,54 +72,6 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~exchange();
-
-					/**
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void readString(dodoString &data);
-
-					/**
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void read(char * const data);
-
-					/**
-					 * @param data defines data that will be written
-					 */
-					virtual void writeString(const dodoString &data);
-
-					/**
-					 * @param data defines data that will be written
-					 */
-					virtual void write(const char * const data);
-
-					/**
-					 * read from stream - '\0' or '\n' - terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void readStreamString(dodoString &data);
-
-					/**
-					 * read from stream - '\0' or '\n' - terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void readStream(char * const data);
-
-					/**
-					 * write to stream - '\0' - terminated string
-					 * @param data defines data that will be written
-					 */
-					virtual void writeStreamString(const dodoString &data);
-
-					/**
-					 * write to stream - '\0' - terminated string
-					 * @param data defines data that will be written
-					 */
-					virtual void writeStream(const char * const data);
 
 					/**
 					 * flush output
@@ -176,21 +104,28 @@ namespace dodo
 					virtual void _read(char * const data);
 
 					/**
+					 * read from stream - '\0' or '\n' - terminated string
+					 * @param data defines buffer that will be filled
+					 * @note not more then inSize(including '\0')
+					 */
+					virtual unsigned long _readStream(char * const data);
+
+					/**
 					 * write
 					 * @param data is data that will be written
 					 * if outSize bigger than buffer size - writes with few iterations
 					 */
 					virtual void _write(const char * const data);
 
+					/**
+					 * write to stream - '\0' - terminated string
+					 * @param data defines data that will be written
+					 */
+					virtual void _writeStream(const char * const data);
+
 				private:
 
 					FCGX_Request *request;                        ///< fast CGI descriptor
-
-#ifndef IO_WO_XEXEC
-
-					__xexecCgiFastExchangeCollectedData collectedData;                          ///< data collected for xexec
-
-#endif
 			};
 		};
 	};

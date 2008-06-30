@@ -137,7 +137,6 @@ namespace dodo
 					 */
 					virtual void setExecutionLimit(unsigned long position, unsigned long limit = 1) = 0;
 
-
 #ifdef DL_EXT
 
 					/**

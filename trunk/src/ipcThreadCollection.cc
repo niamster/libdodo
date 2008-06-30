@@ -177,11 +177,12 @@ collection::add(job::routine func,
 bool
 collection::getThread(unsigned long position) const
 {
-	dodoList<__threadInfo>::const_iterator i(threads.begin()), j(threads.end());
+	dodoList<__threadInfo>::iterator i(threads.begin()), j(threads.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((dodoList<__threadInfo>::iterator *) & i);
+			current = i;
+
 			return true;
 		}
 

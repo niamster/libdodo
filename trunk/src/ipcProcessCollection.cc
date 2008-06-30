@@ -237,11 +237,11 @@ collection::del(unsigned long position,
 bool
 collection::getProcess(unsigned long position) const
 {
-	dodoList<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
 		if (i->position == position)
 		{
-			current = *((dodoList<__processInfo>::iterator *) & i);
+			current = i;
 			return true;
 		}
 
@@ -456,9 +456,9 @@ collection::running() const
 {
 	unsigned long amount(0);
 
-	dodoList<__processInfo>::const_iterator i(processes.begin()), j(processes.end());
+	dodoList<__processInfo>::iterator i(processes.begin()), j(processes.end());
 	for (; i != j; ++i)
-		if (_isRunning(*((dodoList<__processInfo>::iterator *) & i)))
+		if (_isRunning(i))
 			++amount;
 
 	return amount;

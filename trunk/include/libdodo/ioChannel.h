@@ -35,6 +35,7 @@
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
 #include <libdodo/ioNonBlockedAccessInfo.h>
+#include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
 {
@@ -55,11 +56,35 @@ namespace dodo
 			IO_OPERATION_WRITESTREAMSTRING,
 		};
 
+#ifndef IO_WO_XEXEC
+
+		/**
+		 * @struct __xexecIoChannelCollectedData defines data that could be retrieved from io::channel(to modificate)
+		 */
+		struct __xexecIoChannelCollectedData
+		{
+			/**
+			 * constructor
+			 * @param operType defines xexec operation
+			 * @param executor defines class that executed hook
+			 */
+			__xexecIoChannelCollectedData(int &operType, void *executor);
+
+			dodoString buffer;                          ///< data buffer
+
+			int &operType;                              ///< xexec operation
+
+			void *executor;                             ///< class that executed hook
+		};
+
+#endif
+
 		/**
 		 * @class channel implements an interface for I/O operations
 		 */
-		class channel : virtual public nonBlockedAccessInfo
-#ifndef DB_WO_XEXEC
+		class channel : virtual public nonBlockedAccessInfo,
+						virtual public ipc::thread::guardHolder
+#ifndef IO_WO_XEXEC
 						,
 						public xexec
 #endif
@@ -74,55 +99,55 @@ namespace dodo
 				/**
 				 * destructor
 				 */
-				virtual ~channel() = 0;
+				virtual ~channel();
 
 				/**
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual void readString(dodoString &data) = 0;
+				virtual void readString(dodoString &data);
 
 				/**
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual void read(char * const data) = 0;
-
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void writeString(const dodoString &data) = 0;
-
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void write(const char * const data) = 0;
+				virtual void read(char * const data);
 
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual void readStreamString(dodoString &data) = 0;
+				virtual void readStreamString(dodoString &data);
 
 				/**
 				 * read from stream - '\0' or '\n' - terminated string
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual void readStream(char * const data) = 0;
+				virtual void readStream(char * const data);
+
+				/**
+				 * @param data defines data that will be written
+				 */
+				virtual void writeString(const dodoString &data);
+
+				/**
+				 * @param data defines data that will be written
+				 */
+				virtual void write(const char * const data);
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 */
-				virtual void writeStreamString(const dodoString &data) = 0;
+				virtual void writeStreamString(const dodoString &data);
 
 				/**
 				 * write to stream - '\0' - terminated string
 				 * @param data defines data that will be written
 				 */
-				virtual void writeStream(const char * const data) = 0;
+				virtual void writeStream(const char * const data);
 
 				/**
 				 * flush output
@@ -134,7 +159,37 @@ namespace dodo
 
 			protected:
 
+				/**
+				 * @param data defines buffer that will be filled
+				 * @note not more then inSize(including '\0')
+				 */
+				virtual void _read(char * const data) = 0;
+
+				/**
+				 * read from stream - '\0' or '\n' - terminated string
+				 * @param data defines buffer that will be filled
+				 * @note not more then inSize(including '\0')
+				 */
+				virtual unsigned long _readStream(char * const data) = 0;
+
+				/**
+				 * @param data defines data that will be written
+				 */
+				virtual void _write(const char * const data) = 0;
+
+				/**
+				 * write to stream - '\0' - terminated string
+				 * @param data defines data that will be written
+				 */
+				virtual void _writeStream(const char * const data) = 0;
+
 				bool opened;                 ///< true if I/O *session* is opened
+
+#ifndef IO_WO_XEXEC
+
+				__xexecIoChannelCollectedData collectedData;                   ///< data collected for xexec
+
+#endif
 		};
 	};
 };

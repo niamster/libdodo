@@ -76,6 +76,13 @@ int main(int argc, char **argv)
 		io.writeStreamString("!12345890$!!@\n");
 		io.pos = 1;
 		io.writeString("!12345890$!~@\n");
+		/**
+		 * my.dat should contain
+		 !12345890#!!@
+		 !12345890$!~@
+		 !12345890@!!@
+		 !12345890$!!@
+		 */
 
 		dodoString str;
 

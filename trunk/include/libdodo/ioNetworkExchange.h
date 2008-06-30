@@ -94,36 +94,12 @@ namespace dodo
 					bool blockInherited;                        ///< true if block flag is inherited
 			};
 
-#ifndef IO_WO_XEXEC
-
-			/**
-			 * @struct __xexecIoNetworkExchangeCollectedData defines data that could be retrieved from class(to modificate)[contains references]
-			 */
-			struct __xexecIoNetworkExchangeCollectedData
-			{
-				/**
-				 * constructor
-				 * @param operType defines xexec operation
-				 * @param executor defines class that executed hook
-				 */
-				__xexecIoNetworkExchangeCollectedData(int &operType,
-													  void *executor);
-
-				dodoString buffer;                              ///< data buffer
-
-				int &operType;                                  ///< xexec operation
-
-				void *executor;                                 ///< class that executed hook
-			};
-
-#endif
-
 			/**
 			 * @class exchange provides communication interface[send/receive data]
+			 * @note readStreamString: if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
 			 */
 			class exchange : public options,
-							 public channel,
-							 virtual public ipc::thread::guardHolder
+							 virtual public channel
 			{
 				friend class server;
 				friend class client;
@@ -178,55 +154,6 @@ namespace dodo
 					virtual bool isAlive();
 
 					/**
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void readString(dodoString &data);
-
-					/**
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void read(char * const data);
-
-					/**
-					 * @param data defines data that will be written
-					 */
-					virtual void writeString(const dodoString &data);
-
-					/**
-					 * @param data defines data that will be written
-					 */
-					virtual void write(const char * const data);
-
-					/**
-					 * read from stream - '\0' or '\n' - terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 * if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
-					 */
-					virtual void readStreamString(dodoString &data);
-
-					/**
-					 * read from stream - '\0' or '\n' - terminated string
-					 * @param data defines buffer that will be filled
-					 * @note not more then inSize(including '\0')
-					 */
-					virtual void readStream(char * const data);
-
-					/**
-					 * write to stream - '\0' - terminated string
-					 * @param data defines data that will be written
-					 */
-					virtual void writeStreamString(const dodoString &data);
-
-					/**
-					 * write to stream - '\0' - terminated string
-					 * @param data defines data that will be written
-					 */
-					virtual void writeStream(const char * const data);
-
-					/**
 					 * flush output
 					 */
 					virtual void flush();
@@ -274,12 +201,11 @@ namespace dodo
 					 */
 					virtual void _write(const char * const data);
 
-#ifndef IO_WO_XEXEC
-
-					__xexecIoNetworkExchangeCollectedData collectedData;                        ///< data collected for xexec
-
-#endif
-
+					/**
+					 * write to stream - '\0' - terminated string
+					 * @param data defines data that will be written
+					 */
+					virtual void _writeStream(const char * const data);
 			};
 		};
 	};

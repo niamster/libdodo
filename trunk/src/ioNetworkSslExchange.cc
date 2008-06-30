@@ -132,7 +132,7 @@ exchange::_close(int socket,
 			throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
 	}
-	
+
 	options::_close(socket);
 }
 
@@ -230,7 +230,7 @@ exchange::isAlive()
 
 	socket = -1;
 	sslHandle = NULL;
-	
+
 	opened = false;
 
 	return false;
@@ -243,7 +243,7 @@ exchange::_write(const char * const data)
 {
 	if (!opened)
 		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	
+
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
 
@@ -270,6 +270,11 @@ exchange::_write(const char * const data)
 							n = 0;
 
 							break;
+
+						case SSL_ERROR_SYSCALL:
+
+							if (errno == 0)
+								break;
 
 						default:
 						{
@@ -307,6 +312,11 @@ exchange::_write(const char * const data)
 
 							break;
 
+						case SSL_ERROR_SYSCALL:
+
+							if (errno == 0)
+								break;
+
 						default:
 						{
 							unsigned long nerr = ERR_get_error();
@@ -332,7 +342,7 @@ exchange::_read(char * const data)
 {
 	if (!opened)
 		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	
+
 	memset(data, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
@@ -361,6 +371,11 @@ exchange::_read(char * const data)
 							n = 0;
 
 							break;
+
+						case SSL_ERROR_SYSCALL:
+
+							if (errno == 0)
+								break;
 
 						default:
 						{
@@ -401,6 +416,11 @@ exchange::_read(char * const data)
 
 							break;
 
+						case SSL_ERROR_SYSCALL:
+
+							if (errno == 0)
+								break;
+
 						default:
 						{
 							unsigned long nerr = ERR_get_error();
@@ -429,7 +449,7 @@ exchange::_readStream(char * const data)
 {
 	if (!opened)
 		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	
+
 	memset(data, '\0', inSize);
 
 	long n = 0;
@@ -448,6 +468,11 @@ exchange::_readStream(char * const data)
 					n = 0;
 
 					break;
+
+				case SSL_ERROR_SYSCALL:
+
+					if (errno == 0)
+						break;
 
 				default:
 				{

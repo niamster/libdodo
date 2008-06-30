@@ -31,9 +31,29 @@
 
 using namespace dodo::io;
 
+#ifndef IO_WO_XEXEC
+
+__xexecIoChannelCollectedData::__xexecIoChannelCollectedData(int &a_operType,
+                                                             void *a_executor) : operType(a_operType),
+																				 executor(a_executor)
+{
+}
+
+#endif
+
+//-------------------------------------------------------------------
+
 channel::channel() : inSize(IO_INSIZE),
 					 outSize(IO_OUTSIZE),
 					 opened(false)
+
+#ifndef IO_WO_XEXEC
+
+					 ,
+					 collectedData(operType,
+								   (void *) this)
+
+#endif
 {
 }
 
@@ -41,6 +61,406 @@ channel::channel() : inSize(IO_INSIZE),
 
 channel::~channel()
 {
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::read(char * const a_void)
+{
+	raceHazardGuard pg(this);
+
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READ;
+	performXExec(preExec);
+
+	collectedData.buffer.reserve(inSize);
+#endif
+
+#ifndef IO_WO_XEXEC
+
+	try
+	{
+		_read(a_void);
+	}
+	catch (...)
+	{
+		collectedData.buffer.clear();
+
+		throw;
+	}
+
+#else
+
+	_read(a_void);
+
+#endif
+
+#ifndef IO_WO_XEXEC
+	collectedData.buffer.assign(a_void, inSize);
+
+	performXExec(postExec);
+
+	if (collectedData.buffer.size() > inSize)
+		collectedData.buffer.resize(inSize);
+
+	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size());
+
+	collectedData.buffer.clear();
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::readString(dodoString &a_str)
+{
+	raceHazardGuard pg(this);
+
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTRING;
+	performXExec(preExec);
+
+	collectedData.buffer.reserve(inSize);
+#endif
+
+	char *data = new char[inSize];
+
+	try
+	{
+		_read(data);
+	}
+	catch (...)
+	{
+		delete [] data;
+
+#ifndef IO_WO_XEXEC
+		collectedData.buffer.clear();
+#endif
+
+		throw;
+	}
+
+#ifndef IO_WO_XEXEC
+
+	collectedData.buffer.assign(data, inSize);
+	delete [] data;
+
+	performXExec(postExec);
+
+	if (collectedData.buffer.size() > inSize)
+		collectedData.buffer.resize(inSize);
+
+	a_str = collectedData.buffer;
+
+	collectedData.buffer.clear();
+
+#else
+
+	a_str.assign(data, inSize);
+	delete [] data;
+
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::readStream(char * const a_void)
+{
+	raceHazardGuard pg(this);
+
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAM;
+	performXExec(preExec);
+#endif
+
+	unsigned long n = _readStream(a_void);
+
+#ifndef IO_WO_XEXEC
+
+	if (n > 0)
+		collectedData.buffer.assign(a_void, n);
+
+	performXExec(postExec);
+
+	if (collectedData.buffer.size() > inSize)
+		collectedData.buffer.resize(inSize);
+
+	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size());
+
+	collectedData.buffer.clear();
+
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::readStreamString(dodoString &a_str)
+{
+	raceHazardGuard pg(this);
+
+	a_str.clear();
+
+#ifndef IO_WO_XEXEC
+	operType = IO_OPERATION_READSTREAMSTRING;
+	performXExec(preExec);
+#endif
+
+	char *data = new char[inSize];
+	unsigned long n = 0;
+
+	try
+	{
+		n = _readStream(data);
+	}
+	catch (...)
+	{
+		delete [] data;
+
+		throw;
+	}
+
+#ifndef IO_WO_XEXEC
+
+	if (n > 0)
+		collectedData.buffer.assign(data, n);
+
+	delete [] data;
+
+	performXExec(postExec);
+
+	if (collectedData.buffer.size() > inSize)
+		collectedData.buffer.resize(inSize);
+
+	a_str = collectedData.buffer;
+
+	collectedData.buffer.clear();
+
+#else
+
+	if (n > 0)
+		a_str.assign(data, n);
+
+	delete [] data;
+
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::writeString(const dodoString &a_buf)
+{
+	raceHazardGuard pg(this);
+
+#ifndef IO_WO_XEXEC
+
+	collectedData.buffer.assign(a_buf, 0, outSize);
+
+	operType = IO_OPERATION_WRITESTREAM;
+	performXExec(preExec);
+
+	try
+	{
+		_write(collectedData.buffer.c_str());
+	}
+	catch (...)
+	{
+		collectedData.buffer.clear();
+
+		throw;
+	}
+
+#else
+
+	_write(a_buf.c_str());
+
+#endif
+
+#ifndef IO_WO_XEXEC
+	performXExec(postExec);
+
+	collectedData.buffer.clear();
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::write(const char *const a_buf)
+{
+	raceHazardGuard pg(this);
+
+#ifndef IO_WO_XEXEC
+
+	collectedData.buffer.assign(a_buf, outSize);
+
+	operType = IO_OPERATION_WRITE;
+	performXExec(preExec);
+
+	try
+	{
+		_write(collectedData.buffer.c_str());
+	}
+	catch (...)
+	{
+		collectedData.buffer.clear();
+
+		throw;
+	}
+
+#else
+
+	_write(a_buf);
+
+#endif
+
+
+#ifndef IO_WO_XEXEC
+	performXExec(postExec);
+
+	collectedData.buffer.clear();
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::writeStreamString(const dodoString &a_buf)
+{
+	raceHazardGuard pg(this);
+
+	unsigned long _outSize = outSize;
+
+#ifndef IO_WO_XEXEC
+
+	if (a_buf.size() > outSize)
+		collectedData.buffer.assign(a_buf, 0, outSize);
+	else
+		collectedData.buffer = a_buf;
+
+	operType = IO_OPERATION_WRITESTREAMSTRING;
+	performXExec(preExec);
+
+	try
+	{
+		outSize = collectedData.buffer.size();
+
+		_writeStream(collectedData.buffer.c_str());
+
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+
+		collectedData.buffer.clear();
+
+		throw;
+	}
+
+#else
+
+	try
+	{
+		dodoString buffer;
+
+		if (a_buf.size() > outSize)
+			buffer.assign(a_buf, 0, outSize);
+		else
+			buffer = a_buf;
+
+		outSize = buffer.size();
+
+		_writeStream(buffer.c_str());
+
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+
+		throw;
+	}
+
+#endif
+
+#ifndef IO_WO_XEXEC
+	performXExec(postExec);
+
+	collectedData.buffer.clear();
+#endif
+}
+
+//-------------------------------------------------------------------
+
+void
+channel::writeStream(const char *const a_buf)
+{
+	raceHazardGuard pg(this);
+
+	unsigned long _outSize = outSize;
+
+#ifndef IO_WO_XEXEC
+
+	if (strlen(a_buf) > outSize)
+		collectedData.buffer.assign(a_buf, outSize);
+	else
+		collectedData.buffer = a_buf;
+
+	operType = IO_OPERATION_WRITESTREAM;
+	performXExec(preExec);
+
+	try
+	{
+		outSize = collectedData.buffer.size();
+
+		_writeStream(collectedData.buffer.c_str());
+
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+
+		collectedData.buffer.clear();
+
+		throw;
+	}
+
+#else
+
+	try
+	{
+		dodoString buffer;
+
+		if (strlen(a_buf) > outSize)
+			buffer.assign(a_buf, outSize);
+		else
+			buffer = a_buf;
+
+		outSize = buffer.size();
+
+		_writeStream(buffer.c_str());
+
+		outSize = _outSize;
+	}
+	catch (...)
+	{
+		outSize = _outSize;
+
+		throw;
+	}
+
+#endif
+
+#ifndef IO_WO_XEXEC
+	performXExec(postExec);
+
+	collectedData.buffer.clear();
+#endif
 }
 
 //-------------------------------------------------------------------

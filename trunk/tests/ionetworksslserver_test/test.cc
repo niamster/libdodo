@@ -8,6 +8,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/ioNetworkSslServer.h>
 #include <libdodo/toolsNetwork.h>
+#include <libdodo/toolsOs.h>
 #include <libdodo/types.h>
 
 #include <iostream>
@@ -26,9 +27,9 @@ hook(void *odata,
 	 short int type,
 	 void *udata)
 {
-	using io::network::__xexecIoNetworkExchangeCollectedData;
+	using io::__xexecIoChannelCollectedData;
 
-	__xexecIoNetworkExchangeCollectedData *st = (__xexecIoNetworkExchangeCollectedData *)odata;
+	__xexecIoChannelCollectedData *st = (__xexecIoChannelCollectedData *)odata;
 
 	cout << st->buffer << endl;
 }
@@ -58,7 +59,15 @@ process(exchange fse)
 	dodoString rec = "";
 	try
 	{
-		fse.readString(rec);
+		while (true)
+		{
+			fse.readString(rec);
+
+			if (rec.size() == 0)
+				tools::os::sleep(2);
+
+			break;
+		}
 
 		cout << rec << rec.size() << endl;
 		cout.flush();

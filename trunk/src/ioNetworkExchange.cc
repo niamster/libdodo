@@ -31,18 +31,6 @@
 
 using namespace dodo::io::network;
 
-#ifndef IO_WO_XEXEC
-
-__xexecIoNetworkExchangeCollectedData::__xexecIoNetworkExchangeCollectedData(int &a_operType,
-																			 void *a_executor) : operType(a_operType),
-																								 executor(a_executor)
-{
-}
-
-#endif
-
-//-------------------------------------------------------------------
-
 __initialAccept::__initialAccept() : socket(-1)
 {
 }
@@ -57,14 +45,6 @@ __initialAccept::__initialAccept(__initialAccept &init) : socket(init.socket)
 //-------------------------------------------------------------------
 
 exchange::exchange(exchange &fse)
-
-#ifndef IO_WO_XEXEC
-
-	: collectedData(operType,
-					(void *) this)
-
-#endif
-
 {
 #ifndef IO_WO_XEXEC
 
@@ -91,14 +71,6 @@ exchange::exchange(exchange &fse)
 //-------------------------------------------------------------------
 
 exchange::exchange()
-
-#ifndef IO_WO_XEXEC
-
-	: collectedData(operType,
-					(void *) this)
-
-#endif
-
 {
 #ifndef IO_WO_XEXEC
 
@@ -111,14 +83,6 @@ exchange::exchange()
 //-------------------------------------------------------------------
 
 exchange::exchange(__initialAccept &a_init)
-
-#ifndef IO_WO_XEXEC
-
-	: collectedData(operType,
-					(void *) this)
-
-#endif
-
 {
 #ifndef IO_WO_XEXEC
 
@@ -318,81 +282,11 @@ exchange::_write(const char * const data)
 //-------------------------------------------------------------------
 
 void
-exchange::write(const char * const a_buf)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(a_buf, outSize);
-
-	operType = IO_OPERATION_WRITE;
-	performXExec(preExec);
-
-	try
-	{
-		_write(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	_write(a_buf);
-#endif
-
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::writeString(const dodoString &a_buf)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer = a_buf;
-
-	operType = IO_OPERATION_WRITESTRING;
-	performXExec(preExec);
-
-	try
-	{
-		_write(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	_write(a_buf.c_str());
-#endif
-
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
 exchange::_read(char * const data)
 {
 	if (!opened)
 		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	
+
 	memset(data, '\0', inSize);
 
 	unsigned long iter = inSize / inSocketBuffer;
@@ -464,195 +358,9 @@ exchange::_read(char * const data)
 //-------------------------------------------------------------------
 
 void
-exchange::read(char * const a_void)
+exchange::_writeStream(const char * const data)
 {
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READ;
-	performXExec(preExec);
-
-	collectedData.buffer.reserve(inSize);
-#endif
-
-#ifndef IO_WO_XEXEC
-	try
-	{
-		_read(a_void);
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	_read(a_void);
-#endif
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(a_void, inSize);
-
-	performXExec(postExec);
-
-	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size() > inSize ? inSize : collectedData.buffer.size());
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::readString(dodoString &a_str)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTRING;
-	performXExec(preExec);
-
-	collectedData.buffer.reserve(inSize);
-#endif
-
-	char *data = new char[inSize];
-
-	try
-	{
-		_read(data);
-	}
-	catch (...)
-	{
-		delete [] data;
-
-#ifndef IO_WO_XEXEC
-		collectedData.buffer.clear();
-#endif
-
-		throw;
-	}
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(data, inSize);
-	delete [] data;
-
-	performXExec(postExec);
-
-	a_str = collectedData.buffer;
-	collectedData.buffer.clear();
-#else
-	a_str.assign(data, inSize);
-	delete [] data;
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::writeStream(const char * const a_buf)
-{
-	raceHazardGuard pg(this);
-
-	unsigned long _outSize = outSize;
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer = a_buf;
-
-	operType = IO_OPERATION_WRITESTREAM;
-	performXExec(preExec);
-
-	try
-	{
-		outSize = collectedData.buffer.size();
-
-		_write(collectedData.buffer.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	try
-	{
-		outSize = strlen(a_buf);
-
-		_write(a_buf);
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
-	}
-#endif
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::writeStreamString(const dodoString &a_buf)
-{
-	raceHazardGuard pg(this);
-
-	unsigned long _outSize = outSize;
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer = a_buf;
-
-	operType = IO_OPERATION_WRITESTREAMSTRING;
-	performXExec(preExec);
-
-	try
-	{
-		outSize = collectedData.buffer.size();
-
-		_write(collectedData.buffer.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		collectedData.buffer.clear();
-
-		throw;
-	}
-#else
-	try
-	{
-		outSize = a_buf.size();
-
-		_write(a_buf.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
-	}
-#endif
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
+	_write(data);
 }
 
 //-------------------------------------------------------------------
@@ -662,7 +370,7 @@ exchange::_readStream(char * const data)
 {
 	if (!opened)
 		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
-	
+
 	memset(data, '\0', inSize);
 
 	unsigned long n = 0;
@@ -684,80 +392,6 @@ exchange::_readStream(char * const data)
 	}
 
 	return n;
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::readStream(char * const a_void)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTREAM;
-	performXExec(preExec);
-#endif
-
-	unsigned long n = _readStream(a_void);
-	if (n == inSize)
-		a_void[n] = '\0';
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer = a_void;
-
-	performXExec(postExec);
-
-	if (collectedData.buffer.size() > inSize)
-		collectedData.buffer.resize(inSize);
-	strcpy(a_void, collectedData.buffer.c_str());
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::readStreamString(dodoString &a_str)
-{
-	raceHazardGuard pg(this);
-
-	a_str.clear();
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTREAMSTRING;
-	performXExec(preExec);
-#endif
-
-	char *data = new char[inSize];
-	unsigned long n = 0;
-
-	try
-	{
-		n = _readStream(data);
-	}
-	catch (...)
-	{
-		delete [] data;
-
-		throw;
-	}
-
-#ifndef IO_WO_XEXEC
-	if (n > 0)
-		collectedData.buffer.assign(data, n);
-
-	delete [] data;
-
-	performXExec(postExec);
-
-	a_str = collectedData.buffer;
-	collectedData.buffer.clear();
-#else
-	if (n > 0)
-		a_str.assign(data, n);
-
-	delete [] data;
-#endif
 }
 
 //-------------------------------------------------------------------

@@ -59,35 +59,10 @@ namespace dodo
 			STDIO_OPERATION_CLOSE
 		};
 
-#ifndef IO_WO_XEXEC
-
-		/**
-		 * @struct __xexecIoStdioCollectedData defines data that could be retrieved from class(to modificate)[contains references]
-		 */
-		struct __xexecIoStdioCollectedData
-		{
-			/**
-			 * constructor
-			 * @param operType defines xexec operation
-			 * @param executor defines class that executed hook
-			 */
-			__xexecIoStdioCollectedData(int &operType,
-										void *executor);
-
-			dodoString buffer;                          ///< data buffer
-
-			int &operType;                              ///< xexec operation
-
-			void *executor;                             ///< class that executed hook
-		};
-
-#endif
-
 		/**
 		 * @class stdio provides interface for stdin/stdout/stderr I/O operations
 		 */
-		class stdio : public channel,
-					  virtual public ipc::thread::guardHolder
+		class stdio : virtual public channel
 		{
 			private:
 
@@ -114,54 +89,6 @@ namespace dodo
 				 * @note it can be used to get info foreign 'inputter' if you ar using inetd
 				 */
 				network::__connInfo inputterInfo();
-
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void readString(dodoString &data);
-
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void read(char * const data);
-
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void writeString(const dodoString &data);
-
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void write(const char * const data);
-
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void readStreamString(dodoString &data);
-
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void readStream(char * const data);
-
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 */
-				virtual void writeStreamString(const dodoString &data);
-
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 */
-				virtual void writeStream(const char * const data);
 
 				/**
 				 * flush output
@@ -216,12 +143,18 @@ namespace dodo
 				 * @param data defines buffer that will be filled
 				 * @note not more then inSize(including '\0')
 				 */
-				virtual void _readStream(char * const data);
+				virtual unsigned long _readStream(char * const data);
 
 				/**
 				 * @param data defines data that will be written
 				 */
 				virtual void _write(const char * const data);
+
+				/**
+				 * write to stream - '\0' - terminated string
+				 * @param data defines data that will be written
+				 */
+				virtual void _writeStream(const char * const data);
 
 			private:
 
@@ -230,12 +163,6 @@ namespace dodo
 				bool blocked;                           ///< true if stream is blocked
 
 				bool err;                               ///< true if output stream is redirected to stderr
-
-#ifndef IO_WO_XEXEC
-
-				__xexecIoStdioCollectedData collectedData;                      ///< data collected for xexec
-
-#endif
 		};
 	};
 };

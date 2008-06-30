@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
 #ifndef IO_WO_XEXEC
 
-		cout << stdio::getModuleInfo("./module").name;
+		cout << stdio::getModuleInfo("./module").name << endl;
 
 		cout << st.addPreExec("./module", NULL) << endl;
 		cout << st.addPreExec("./module", NULL) << endl;

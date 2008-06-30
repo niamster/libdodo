@@ -31,18 +31,6 @@
 
 using namespace dodo::io;
 
-#ifndef IO_WO_XEXEC
-
-__xexecIoFileCollectedData::__xexecIoFileCollectedData(int &a_operType,
-													   void *a_executor) : operType(a_operType),
-																		   executor(a_executor)
-{
-}
-
-#endif
-
-//-------------------------------------------------------------------
-
 file::file(const dodoString &a_path,
 		   short a_fileType,
 		   short mode) : over(false),
@@ -50,13 +38,6 @@ file::file(const dodoString &a_path,
 						 path(a_path),
 						 fileType(a_fileType),
 						 pos(0)
-#ifndef IO_WO_XEXEC
-
-						 ,
-						 collectedData(operType,
-									   (void *) this)
-
-#endif
 {
 #ifndef IO_WO_XEXEC
 
@@ -79,12 +60,6 @@ file::file(const dodoString &a_path,
 //-------------------------------------------------------------------
 
 file::file(file &fd)
-#ifndef IO_WO_XEXEC
-
-	: collectedData(operType,
-					(void *) this)
-
-#endif
 {
 }
 
@@ -279,149 +254,14 @@ file::_read(char * const a_void)
 //-------------------------------------------------------------------
 
 void
-file::read(char * const a_void)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READ;
-	performXExec(preExec);
-
-	collectedData.buffer.reserve(inSize);
-#endif
-
-#ifndef IO_WO_XEXEC
-
-	try
-	{
-		_read(a_void);
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-
-#else
-
-	_read(a_void);
-
-#endif
-
-#ifndef IO_WO_XEXEC
-	collectedData.buffer.assign(a_void, inSize);
-
-	performXExec(postExec);
-
-	strncpy(a_void, collectedData.buffer.c_str(), collectedData.buffer.size() > inSize ? inSize : collectedData.buffer.size());
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-file::readString(dodoString &a_str)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTRING;
-	performXExec(preExec);
-
-	collectedData.buffer.reserve(inSize);
-#endif
-
-	char *data = new char[inSize];
-
-	try
-	{
-		_read(data);
-	}
-	catch (...)
-	{
-		delete [] data;
-
-#ifndef IO_WO_XEXEC
-		collectedData.buffer.clear();
-#endif
-
-		throw;
-	}
-
-#ifndef IO_WO_XEXEC
-
-	collectedData.buffer.assign(data, inSize);
-	delete [] data;
-
-	performXExec(postExec);
-
-	a_str = collectedData.buffer;
-	collectedData.buffer.clear();
-
-#else
-
-	a_str.assign(data, inSize);
-	delete [] data;
-
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-file::writeString(const dodoString &a_buf)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-
-	collectedData.buffer = a_buf;
-
-	operType = IO_OPERATION_WRITESTRING;
-	performXExec(preExec);
-
-	try
-	{
-		_write(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-
-#else
-
-	_write(a_buf.c_str());
-
-#endif
-
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-
-	this->write(a_buf.c_str());
-}
-
-//-------------------------------------------------------------------
-
-void
 file::_write(const char *const a_buf)
 {
-	unsigned long pos = this->pos;
 
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
-		pos *= outSize;
-
 		if (!append)
 		{
+			unsigned long pos = this->pos * outSize;
 			if (!over)
 			{
 				size_t read = 0;
@@ -471,45 +311,6 @@ file::_write(const char *const a_buf)
 //-------------------------------------------------------------------
 
 void
-file::write(const char *const a_buf)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-
-	collectedData.buffer.assign(a_buf, outSize);
-
-	operType = IO_OPERATION_WRITE;
-	performXExec(preExec);
-
-	try
-	{
-		_write(collectedData.buffer.c_str());
-	}
-	catch (...)
-	{
-		collectedData.buffer.clear();
-
-		throw;
-	}
-
-#else
-
-	_write(a_buf);
-
-#endif
-
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
 file::erase()
 {
 	raceHazardGuard pg(this);
@@ -546,11 +347,9 @@ file::getPath() const
 
 //-------------------------------------------------------------------
 
-void
+unsigned long
 file::_readStream(char * const a_void)
 {
-	unsigned long pos = this->pos;
-
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
 		if (fseek(handler, 0, SEEK_SET) == -1)
@@ -595,77 +394,8 @@ file::_readStream(char * const a_void)
 
 		break;
 	}
-}
 
-//-------------------------------------------------------------------
-
-void
-file::readStream(char * const a_void)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTREAM;
-	performXExec(preExec);
-#endif
-
-	_readStream(a_void);
-
-#ifndef IO_WO_XEXEC
-
-	collectedData.buffer = a_void;
-
-	performXExec(postExec);
-
-	if (collectedData.buffer.size() > inSize)
-		collectedData.buffer.resize(inSize);
-	strcpy(a_void, collectedData.buffer.c_str());
-	collectedData.buffer.clear();
-
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-file::readStreamString(dodoString &a_str)
-{
-	raceHazardGuard pg(this);
-
-#ifndef IO_WO_XEXEC
-	operType = IO_OPERATION_READSTREAMSTRING;
-	performXExec(preExec);
-#endif
-
-	char *data = new char[inSize];
-
-	try
-	{
-		_readStream(data);
-	}
-	catch (...)
-	{
-		delete [] data;
-
-		throw;
-	}
-
-#ifndef IO_WO_XEXEC
-
-	collectedData.buffer = data;
-	delete [] data;
-
-	performXExec(postExec);
-
-	a_str = collectedData.buffer;
-	collectedData.buffer.clear();
-
-#else
-
-	a_str = data;
-	delete [] data;
-
-#endif
+	return strlen(a_void);
 }
 
 //-------------------------------------------------------------------
@@ -702,122 +432,6 @@ file::_writeStream(const char *const a_buf)
 		batch += n;
 		sent_received += n;
 	}
-}
-
-void
-file::writeStreamString(const dodoString &a_buf)
-{
-	raceHazardGuard pg(this);
-
-	unsigned long _outSize = outSize;
-
-#ifndef IO_WO_XEXEC
-
-	collectedData.buffer = a_buf;
-
-	operType = IO_OPERATION_WRITESTREAMSTRING;
-	performXExec(preExec);
-
-	try
-	{
-		outSize = collectedData.buffer.size();
-
-		_writeStream(collectedData.buffer.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		collectedData.buffer.clear();
-
-		throw;
-	}
-
-#else
-
-	try
-	{
-		outSize = a_buf.size();
-
-		_writeStream(a_buf.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
-	}
-
-#endif
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
-}
-
-//-------------------------------------------------------------------
-
-void
-file::writeStream(const char *const a_buf)
-{
-	raceHazardGuard pg(this);
-
-	unsigned long _outSize = outSize;
-
-#ifndef IO_WO_XEXEC
-
-	collectedData.buffer = a_buf;
-
-	operType = IO_OPERATION_WRITESTREAM;
-	performXExec(preExec);
-
-	try
-	{
-		outSize = collectedData.buffer.size();
-
-		_write(collectedData.buffer.c_str());
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		collectedData.buffer.clear();
-
-		throw;
-	}
-
-#else
-
-	try
-	{
-		outSize = strlen(a_buf);
-
-		_write(a_buf);
-
-		outSize = _outSize;
-	}
-	catch (...)
-	{
-		outSize = _outSize;
-
-		throw;
-	}
-
-#endif
-
-#ifndef IO_WO_XEXEC
-	performXExec(postExec);
-
-	collectedData.buffer.clear();
-#endif
 }
 
 //-------------------------------------------------------------------
