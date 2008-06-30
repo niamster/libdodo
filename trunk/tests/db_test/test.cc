@@ -1,4 +1,4 @@
-/**
+	/**
  * vim indentation settings
  * set tabstop=4
  * set shiftwidth=4
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
 		if (strcasecmp(argv[1], "postgresql") == 0)
 		{
-			info.host = "127.0.0.1";	
+			info.host = "127.0.0.1";
 			info.port = 5432;
 			info.user = "postgres";
 		}
@@ -113,7 +113,7 @@ int main(int argc, char **argv)
 		else if (strcasecmp(argv[1], "mysql") == 0)
 		{
 			#ifdef MYSQL_EXT
-				
+
 				((postgresql *)pp)->setCharset("UTF-8");
 
 				cout << "Encoding: " << ((mysql *)pp)->getCharset() << endl;
@@ -177,8 +177,9 @@ int main(int argc, char **argv)
 
 
 			((sqlConstructor *)pp)->autoFraming = true;
-			((sqlite *)pp)->manualAutoFraming = true;
-			((sqlConstructor *)pp)->framingFields.insert(make_pair(info.db + ":" + ti.name, columns));
+			((sqlConstructor *)pp)->manualAutoFraming = true;
+
+			((sqlConstructor *)pp)->setAutoFramingRule(info.db, ti.name, columns);
 		}
 #endif
 

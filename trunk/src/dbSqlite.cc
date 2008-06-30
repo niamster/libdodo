@@ -416,13 +416,13 @@ sqlite::exec(const dodoString &query,
 
 #ifdef ENABLE_SQL_AUTOFRAMING
 
-		if (autoFraming)
+		if (autoFraming && !manualAutoFraming)
 		{
 #ifdef SQLITE_ENABLE_COLUMN_METADATA
 
 			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
 			{
-				dodoString temp = dbInfo.db + ":" + collectedData.table;
+				dodoString temp = collectedData.dbInfo.db + ":" + collectedData.table;
 
 				if (framingFields.find(temp) == framingFields.end())
 				{
@@ -483,8 +483,8 @@ sqlite::exec(const dodoString &query,
 				}
 			}
 #else
-			if (!manualAutoFraming)
-				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_SQLITEWOMETADATA, DBSQLITEEX_SQLITEWOMETADATA_STR, __LINE__, __FILE__);
+
+			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_SQLITEWOMETADATA, DBSQLITEEX_SQLITEWOMETADATA_STR, __LINE__, __FILE__);
 
 #endif
 		}

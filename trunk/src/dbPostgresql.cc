@@ -362,7 +362,7 @@ postgresql::exec(const dodoString &query,
 
 #ifdef ENABLE_SQL_AUTOFRAMING
 
-		if (autoFraming)
+		if (autoFraming && !manualAutoFraming)
 		{
 			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
 			{

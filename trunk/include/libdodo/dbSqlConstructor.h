@@ -86,6 +86,28 @@ namespace dodo
 
 				bool autoFraming;                                                                                       ///< if true try to detect automaticaly whether to frame or not; autoFraming is omited if preventFraming is true; framed values are only escaped if preventEscaping is false[true by default]
 
+				bool manualAutoFraming;///< define autoframing rules manually; false by default
+
+				/**
+				 * set rule for manual automatic framing
+				 * @param db defines database for which rules will be applied
+				 * @param table defines database for which rules will be applied
+				 * @param fields defines table fields that must be framed
+				 */
+				void setAutoFramingRule(const dodoString &db, const dodoString &table, const dodoStringArray &fields);
+
+				/**
+				 * remove rule for manual automatic framing
+				 * @param db defines database for which rules will be applied
+				 * @param table defines database for which rules will be applied
+				 */
+				void removeAutoFramingRule(const dodoString &db, const dodoString &table);
+
+				/**
+				 * remove all rules for manual automatic framing
+				 */
+				void removeAutoFramingRules();
+
 #endif
 
 				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;                          ///< hash of 'db:table' => `array of fields to frame`

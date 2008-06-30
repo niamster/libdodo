@@ -155,7 +155,8 @@ sqlConstructor::sqlConstructor() : preventFraming(false),
 #ifdef ENABLE_SQL_AUTOFRAMING
 
 								   ,
-								   autoFraming(true)
+								   autoFraming(true),
+								   manualAutoFraming(false)
 
 #endif
 {
@@ -165,6 +166,33 @@ sqlConstructor::sqlConstructor() : preventFraming(false),
 
 sqlConstructor::~sqlConstructor()
 {
+}
+
+//-------------------------------------------------------------------
+
+void
+sqlConstructor::setAutoFramingRule(const dodoString &db,
+                                   const dodoString &table,
+                                   const dodoStringArray &fields)
+{
+	framingFields[db + ":" + table] = fields;
+}
+
+//-------------------------------------------------------------------
+
+void
+sqlConstructor::removeAutoFramingRule(const dodoString &db,
+                                      const dodoString &table)
+{
+	framingFields.erase(db + ":" + table);
+}
+
+//-------------------------------------------------------------------
+
+void
+sqlConstructor::removeAutoFramingRules()
+{
+	framingFields.clear();
 }
 
 //-------------------------------------------------------------------

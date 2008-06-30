@@ -150,16 +150,6 @@ namespace dodo
 				 */
 				virtual void setBLOBValues(const dodoStringArray &values);
 
-#ifdef ENABLE_SQL_AUTOFRAMING
-
-#ifndef SQLITE_ENABLE_COLUMN_METADATA
-
-				bool manualAutoFraming;///< define autoframing rules manually if not defined SQLITE_ENABLE_COLUMN_METADATA; false by default
-
-#endif
-
-#endif
-
 			protected:
 
 				/**
