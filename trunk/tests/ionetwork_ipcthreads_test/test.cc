@@ -100,7 +100,7 @@ int main(int argc, char **argv)
 	{
 		server sock(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
 
-		__connInfo info;
+		__peerInfo info;
 		__initialAccept fake;
 
 		sock.bindNListen("127.0.0.1", 7778, 3);

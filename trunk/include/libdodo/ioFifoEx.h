@@ -1,8 +1,8 @@
 /***************************************************************************
- *            ioStdio.h
+ *            ioFifo.h
  *
- *  Tue Nov 15 21:19:57 2005
- *  Copyright  2005  Ni@m
+ *  Tue Jul 1 15:34:57 2008
+ *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IOSTDIOEX_H_
-#define _IOSTDIOEX_H_
+#ifndef _IOFIFOEX_H_
+#define _IOFIFOEX_H_
 
 #include <libdodo/directives.h>
 
@@ -39,20 +39,33 @@ namespace dodo
 	namespace io
 	{
 		/**
+		 * libdodo defined errors
+		 */
+		enum fifoExR
+		{
+			FIFOEX_FIFONOTOPENED,
+		};
+
+		/**
+		 * explanations for libdodo defined errors
+		 */
+#define IOFIFOEX_FIFONOTOPENED_STR                  "FIFO was not opened or assigned."
+
+		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum stdioFunctionsID
+		enum fifoFunctionsID
 		{
-			STDIOEX_CLOSE,
-			STDIOEX_OPEN,
-			STDIOEX__READ,
-			STDIOEX__WRITE,
-			STDIOEX__READSTREAM,
-			STDIOEX_FLUSH,
-			STDIOEX_LOCKOUT,
-			STDIOEX_LOCKIN,
-			STDIOEX_INPUTTERINFO,
-			STDIOEX_BLOCK
+			FIFOEX_CLOSE,
+			FIFOEX_OPEN,
+			FIFOEX__READ,
+			FIFOEX__WRITE,
+			FIFOEX__READSTREAM,
+			FIFOEX_FLUSH,
+			FIFOEX_PEERINFO,
+			FIFOEX_BLOCK,
+			FIFOEX_GETINDESCRIPTOR,
+			FIFOEX_GETOUTDESCRIPTOR,
 		};
 	};
 };

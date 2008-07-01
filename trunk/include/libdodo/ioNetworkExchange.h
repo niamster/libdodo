@@ -114,7 +114,7 @@ namespace dodo
 
 					/**
 					 * copy constructor
-					 * @note the object that has inited the object of current instance can be used for another connections
+					 * @note the object that has inited the object of current instance is unusable anymore and can be used for another connections
 					 */
 					exchange(exchange &fse);
 

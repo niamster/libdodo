@@ -173,7 +173,7 @@ namespace dodo
 					 * @param stackSize defines stack thread size
 					 * @note this will immediately execute the process
 					 */
-					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit = 1, bool detached = false, short action = COLLECTION_ONDESTRUCT_WAIT, int stackSize = 2097152);
+					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit, bool detached, short action, int stackSize = 2097152);
 
 					/**
 					 * add function to became a thread

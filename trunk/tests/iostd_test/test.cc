@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 	try
 	{
 		stdio st;
-		cout << st.inputterInfo().host << endl;
+		cout << st.peerInfo().host << endl;
 
 #ifndef IO_WO_XEXEC
 
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 		dodoString o;
 
 		st.inSize = 33;
-		st.inSTDBuffer = 20;
+		st.inFifoBuffer = 20;
 
 		st.readString(o);
 
@@ -85,6 +85,7 @@ int main(int argc, char **argv)
 		st.writeString("1234567890");
 		st.writeStreamString("\n");
 
+		st.outSize = 40;
 		st.writeStreamString(o);
 		st.writeStreamString("\nexiting\n");
 	}

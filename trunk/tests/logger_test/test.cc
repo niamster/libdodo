@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 
 		file *disk = new file("./test.log", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_APPEND);
 		stdio *std = new stdio;
-		std->redirectToSTDErr(true);
+		std->redirectToStderr(true);
 
 		log.add(LOGGER_ERROR, disk);
 		log.add(LOGGER_ERROR, NULL);

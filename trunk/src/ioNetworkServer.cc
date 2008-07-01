@@ -291,7 +291,7 @@ server::bindNListen(const dodoString &path,
 
 bool
 server::accept(__initialAccept &init,
-			   __connInfo &info)
+			   __peerInfo &info)
 {
 #ifndef IO_WO_XEXEC
 	operType = SERVER_OPERATION_ACCEPT;

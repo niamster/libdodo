@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 		{
 			#ifdef MYSQL_EXT
 
-				((postgresql *)pp)->setCharset("UTF-8");
+				((mysql *)pp)->setCharset("UTF-8");
 
 				cout << "Encoding: " << ((mysql *)pp)->getCharset() << endl;
 

@@ -52,6 +52,7 @@ exchange::exchange(exchange &fse)
 	execObjectData = (void *)&collectedData;
 
 #endif
+
 	socket = fse.socket;
 	opened = fse.opened;
 

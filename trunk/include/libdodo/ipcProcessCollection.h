@@ -157,7 +157,7 @@ namespace dodo
 					 * @note func must not call `exit` family call
 					 * this will immediately execute the process
 					 */
-					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit = 1, short action = COLLECTION_ONDESTRUCT_WAIT);
+					virtual unsigned long addNRun(job::routine func, void *data, unsigned long limit, short action);
 
 					/**
 					 * add function as a process

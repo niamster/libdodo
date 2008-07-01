@@ -112,8 +112,8 @@
 /**
  * default values of stdin/out buffer for io operations(stdio)
  */
-#define IOSTDIO_INSIZE               102400
-#define IOSTDIO_OUTSIZE              102400
+#define IOFIFO_INSIZE               102400
+#define IOFIFO_OUTSIZE              102400
 
 /**
  * linger options

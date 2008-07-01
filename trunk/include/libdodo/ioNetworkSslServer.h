@@ -130,7 +130,7 @@ namespace dodo
 						 * @note for OPTIONS_TRANSFER_TYPE_DATAGRAM true is always returned
 						 * for OPTIONS_PROTO_FAMILY_UNIX_SOCKET `info` will be always empty
 						 */
-						virtual bool accept(__initialAccept &init, __connInfo &info);
+						virtual bool accept(__initialAccept &init, __peerInfo &info);
 
 						/**
 						 * accept incoming connections

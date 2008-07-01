@@ -37,7 +37,8 @@ file::file(const dodoString &a_path,
 						 append(false),
 						 path(a_path),
 						 fileType(a_fileType),
-						 pos(0)
+						 pos(0),
+						 handler(NULL)
 {
 #ifndef IO_WO_XEXEC
 
@@ -79,7 +80,7 @@ file::getInDescriptor() const
 	raceHazardGuard pg(this);
 
 	if (!opened)
-		return -1;
+		throw baseEx(ERRMODULE_IOFILE, FILEEX_GETINDESCRIPTOR, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
 }
@@ -92,7 +93,7 @@ file::getOutDescriptor() const
 	raceHazardGuard pg(this);
 
 	if (!opened)
-		return -1;
+		throw baseEx(ERRMODULE_IOFILE, FILEEX_GETOUTDESCRIPTOR, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	return fileno(handler);
 }
@@ -215,11 +216,11 @@ file::open(const dodoString &a_path,
 
 	tools::filesystem::chmod(path, DEFAULT_FILE_PERM);
 
+	opened = true;
+
 #ifndef IO_WO_XEXEC
 	performXExec(postExec);
 #endif
-
-	opened = true;
 }
 
 //-------------------------------------------------------------------
@@ -227,6 +228,9 @@ file::open(const dodoString &a_path,
 void
 file::_read(char * const a_void)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 		if (fseek(handler, pos * inSize, SEEK_SET) == -1)
 			throw baseEx(ERRMODULE_IOFILE, FILEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -256,6 +260,8 @@ file::_read(char * const a_void)
 void
 file::_write(const char *const a_buf)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITE, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
@@ -319,7 +325,17 @@ file::erase()
 
 	memset(empty, 0, outSize);
 
-	_write(empty);
+	try
+	{
+
+		_write(empty);
+	}
+	catch (...)
+	{
+		delete [] empty;
+
+		throw;
+	}
 
 	delete [] empty;
 }
@@ -330,6 +346,9 @@ void
 file::flush()
 {
 	raceHazardGuard pg(this);
+
+	if (!opened)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX_FLUSH, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
 
 	if (fflush(handler) != 0)
 		throw baseEx(ERRMODULE_IOFILE, FILEEX_FLUSH, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
@@ -350,6 +369,9 @@ file::getPath() const
 unsigned long
 file::_readStream(char * const a_void)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX__READSTREAM, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+
 	if (fileType == FILE_FILETYPE_REG_FILE || fileType == FILE_FILETYPE_TMP_FILE)
 	{
 		if (fseek(handler, 0, SEEK_SET) == -1)
@@ -403,6 +425,9 @@ file::_readStream(char * const a_void)
 void
 file::_writeStream(const char *const a_buf)
 {
+	if (!opened)
+		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_LIBDODO, FILEEX_FILENOTOPENED, IOFILEEX_FILENOTOPENED_STR, __LINE__, __FILE__, path);
+
 	if (fseek(handler, 0, SEEK_END) == -1)
 		throw baseEx(ERRMODULE_IOFILE, FILEEX__WRITESTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
@@ -445,3 +470,4 @@ file::getFileType() const
 }
 
 //-------------------------------------------------------------------
+

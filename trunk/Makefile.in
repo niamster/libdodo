@@ -44,6 +44,7 @@ OBJECTS:=dbAccumulator.o \
 	ioNonBlockedAccess.o \
 	ioNonBlockedAccessInfo.o \
 	ioStdio.o \
+	ioFifo.o \
 	ioSsl.o \
 	ioNetworkHttp.o \
 	ioNetworkOptions.o \

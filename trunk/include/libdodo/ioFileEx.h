@@ -46,6 +46,7 @@ namespace dodo
 			FILEEX_WRONGFILENAME,
 			FILEEX_CANNOTOVEWRITE,
 			FILEEX_FILEISSHORTERTHANGIVENPOSITION,
+			FILEEX_FILENOTOPENED
 		};
 
 		/**
@@ -54,6 +55,7 @@ namespace dodo
 #define IOFILEEX_WRONGFILENAME_STR                  "Probably wrong filename, type of file is wrong or `path` is empty!"
 #define IOFILEEX_CANNOTOVEWRITE_STR                 "You set option not to overwrite, but try to do that =)"
 #define IOFILEEX_FILEISSHORTERTHANGIVENPOSITION_STR "Given file couldn't reach given position. File is short."
+#define IOFILEEX_FILENOTOPENED_STR "File was not opened."
 
 		/**
 		 * IDs of functions where exception might be thrown
@@ -67,6 +69,8 @@ namespace dodo
 			FILEEX__READSTREAM,
 			FILEEX__WRITESTREAM,
 			FILEEX_FLUSH,
+			FILEEX_GETINDESCRIPTOR,
+			FILEEX_GETOUTDESCRIPTOR,
 		};
 	};
 };

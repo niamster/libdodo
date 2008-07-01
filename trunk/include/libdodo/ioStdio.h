@@ -39,11 +39,8 @@
 
 #include <libdodo/directives.h>
 
-#include <libdodo/toolsMisc.h>
-#include <libdodo/ioStdioEx.h>
 #include <libdodo/types.h>
-#include <libdodo/ioChannel.h>
-#include <libdodo/ioNetwork.h>
+#include <libdodo/ioFifo.h>
 #include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
@@ -51,18 +48,9 @@ namespace dodo
 	namespace io
 	{
 		/**
-		 * @enum stdioOperationTypeEnum defines type of operation for hook
-		 */
-		enum stdioOperationTypeEnum
-		{
-			STDIO_OPERATION_OPEN = 128,
-			STDIO_OPERATION_CLOSE
-		};
-
-		/**
 		 * @class stdio provides interface for stdin/stdout/stderr I/O operations
 		 */
-		class stdio : virtual public channel
+		class stdio : virtual public fifo
 		{
 			private:
 
@@ -85,82 +73,29 @@ namespace dodo
 				virtual ~stdio();
 
 				/**
-				 * @return info about source of inputting
-				 * @note it can be used to get info foreign 'inputter' if you ar using inetd
-				 */
-				network::__connInfo inputterInfo();
-
-				/**
-				 * flush output
-				 */
-				virtual void flush();
-
-				/**
-				 * @return true if stream is blocked
-				 */
-				virtual bool isBlocked();
-
-				/**
-				 * blocks/unblocks stream
-				 * @param flag indicates whether to block or unblock stream
-				 */
-				virtual void block(bool flag);
-
-				/**
 				 * redirect output stream to stderr or stdout
-				 * @param toSTDErr defines to redirect stream to stderr if true
+				 * @param toStderr defines to redirect stream to stderr if true
 				 */
-				virtual void redirectToSTDErr(bool toSTDErr);
+				virtual void redirectToStderr(bool toStderr);
 
 				/**
 				 * @return true if output stream is redirected to stderr
 				 */
-				virtual bool isRedirectedToSTDErr();
-
-				int inSTDBuffer;                        ///< input buffer
-				int outSTDBuffer;                       ///< output buffer
-
-			protected:
-
-				/**
-				 * @return descriptor of the input stream
-				 */
-				virtual int getInDescriptor() const;
-
-				/**
-				 * @return descriptor of the output stream
-				 */
-				virtual int getOutDescriptor() const;
-
-				/**
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual void _read(char * const data);
-
-				/**
-				 * read from stream - '\0' or '\n' - terminated string
-				 * @param data defines buffer that will be filled
-				 * @note not more then inSize(including '\0')
-				 */
-				virtual unsigned long _readStream(char * const data);
-
-				/**
-				 * @param data defines data that will be written
-				 */
-				virtual void _write(const char * const data);
-
-				/**
-				 * write to stream - '\0' - terminated string
-				 * @param data defines data that will be written
-				 */
-				virtual void _writeStream(const char * const data);
+				virtual bool isRedirectedToStderr();
 
 			private:
+				
+				/**
+				 * do nothing
+				 * @note stdin/stdout/stderr are already available for I/O
+				 */
+				virtual void open();
 
-				FILE *desc;                             ///< stream descriptor
-
-				bool blocked;                           ///< true if stream is blocked
+				/**
+				 * do nothing
+				 * @note stdin/stdout/stderr shouldn't be closed 
+				 */
+				virtual void close();
 
 				bool err;                               ///< true if output stream is redirected to stderr
 		};
