@@ -628,7 +628,7 @@ server::makeEnv()
 	{
 #ifdef FASTCGI_EXT
 		if (serverFastSet)
-			env = ((fast::exchange *)cgiIO)->getenv(environmentStatements[i]);
+			env = (dynamic_cast<fast::exchange *>(cgiIO))->getenv(environmentStatements[i]);
 		else
 #endif
 		env = getenv(environmentStatements[i]);
