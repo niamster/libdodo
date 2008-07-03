@@ -84,6 +84,7 @@ int main(int argc, char **argv)
 	cgit.printStream(cgit.COOKIES["test"] + "<br>");
 	cgit.printStream(tools::string::ulToString(cgit.FILES["file"].size) + "<br>");
 	cgit.printStream(cgit.FILES["file"].mime + "<br>");
+	cgit.printStream(cgit.getCharset() + "<br>");
 
 	cgit.printStream( "<br>" );
 

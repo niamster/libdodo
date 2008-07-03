@@ -363,6 +363,24 @@ server::printStream(const dodoString &buf)
 
 //-------------------------------------------------------------------
 
+dodoString
+server::getCharset()
+{
+	unsigned long temp;
+
+	dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
+	for (;b!=e;++b)
+	{
+		temp = tools::string::find(*b, "charset=", true);
+		if (temp == dodoString::npos)
+			continue;
+
+		return b->substr(temp + 8);
+	}
+
+	return __dodostring__;
+}
+
 void
 server::print(const dodoString &buf)
 {

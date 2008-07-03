@@ -428,7 +428,7 @@ namespace dodo
 				virtual void printStream(const dodoString &data);
 
 				/**
-				 * flushe output
+				 * flush output
 				 */
 				virtual void flush();
 
@@ -450,6 +450,11 @@ namespace dodo
 				 * @note cookies are printed with printHeaders method
 				 */
 				virtual void setCookie(const __serverCookie &cookie);
+
+				/**
+				 * @return charset of the request
+				 */
+				virtual dodoString getCharset();
 
 			protected:
 
