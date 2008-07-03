@@ -75,6 +75,20 @@ __httpResponse::__httpResponse() : code(0),
 
 //-------------------------------------------------------------------
 
+__httpPostFile::__httpPostFile(const dodoString path,
+							   const dodoString mime) : path(path),
+							   							mime(mime)
+{
+}
+
+//-------------------------------------------------------------------
+
+__httpPostFile::__httpPostFile()
+{
+}
+
+//-------------------------------------------------------------------
+
 http::__proxyAuthInfo::__proxyAuthInfo() : enabled(false),
 												 authType(PROXYAUTHTYPE_NONE)
 {
@@ -619,7 +633,7 @@ http::GET(const dodoString &a_url)
 __httpResponse
 http::POST(const dodoString &a_url,
 		   const dodoStringMap &arguments,
-		   const dodoStringMap &files)
+		   const dodoMap<dodoString, __httpPostFile> &files)
 {
 	setUrl(a_url);
 
@@ -632,7 +646,7 @@ http::POST(const dodoString &a_url,
 
 void
 http::POST(const dodoStringMap &arguments,
-		   const dodoStringMap &files)
+		   const dodoMap<dodoString, __httpPostFile> &files)
 {
 	dodoString boundary = "---------------------------" + tools::string::ulToString(tools::misc::ulRandom()) + tools::string::ulToString(tools::misc::ulRandom());
 	dodoString type = "multipart/form-data; boundary=" + boundary;
@@ -640,33 +654,33 @@ http::POST(const dodoStringMap &arguments,
 
 	dodoString data;
 
-	dodoStringMap::const_iterator i = files.begin(), j = files.end();
-
+	dodoMap<dodoString, __httpPostFile>::const_iterator i = files.begin(), j = files.end();
 	for (; i != j; ++i)
 	{
 		data.append(boundary);
 		data.append("\r\nContent-Disposition: form-data; name=\"");
 		data.append(i->first);
 		data.append("\"; filename=\"");
-		data.append(tools::filesystem::basename(i->second));
+		data.append(tools::filesystem::basename(i->second.path));
 		data.append("\"\r\n");
 
-		data.append("Content-Type: application/octet-stream\r\n\r\n");
+		data.append("Content-Type: ");
+		data.append(i->second.mime);
+		data.append("\r\n\r\n");
 
-		data.append(tools::filesystem::getFileContents(i->second));
+		data.append(tools::filesystem::getFileContents(i->second.path));
 		data.append("\r\n");
 	}
 
-	i = arguments.begin();
-	j = arguments.end();
-	for (; i != j; ++i)
+	dodoStringMap::const_iterator o = arguments.begin(), p = arguments.end();
+	for (; o != p; ++o)
 	{
 		data.append(boundary);
 		data.append("\r\nContent-Disposition: form-data; name=\"");
-		data.append(i->first);
+		data.append(o->first);
 		data.append("\"\r\n\r\n");
 
-		data.append(i->second);
+		data.append(o->second);
 		data.append("\r\n");
 	}
 	data.append(boundary);

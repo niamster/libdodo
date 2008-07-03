@@ -636,7 +636,30 @@ server::makeEnv()
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
 
-	ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = tools::misc::explode(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], ";", 2).front();
+	dodoStringArray contentTypeParts = tools::misc::explode(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], &trim, ";");
+	unsigned long size = contentTypeParts.size();
+	if (size > 0)
+	{
+		dodoStringArray::iterator first = contentTypeParts.begin();
+
+		ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = *first;
+		
+		if (size > 1)
+			contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
+	}
+	else
+	{
+		contentTypeParts = tools::misc::explode(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], &trim, ",");
+		if (size > 0)
+		{
+			dodoStringArray::iterator first = contentTypeParts.begin();
+
+			ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE] = *first;
+			
+			if (size > 1)
+				contenTypeExtensions.insert(contenTypeExtensions.begin(), first + 1, contentTypeParts.end());
+		}
+	}
 }
 
 //-------------------------------------------------------------------
@@ -739,140 +762,152 @@ server::makePost()
 	}
 	else
 	{
-		if (tools::string::contains(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
+		if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE], "multipart/form-data"))
 		{
 			if (tools::string::iequal(ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTRANSFERENCODING], "base64"))
 				content = tools::misc::decodeBase64(content);
 
 			unsigned long temp0;
-			temp0 = ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE].find("boundary=");
-			dodoStringArray postPartd = tools::misc::explode(content, "--" + ENVIRONMENT[SERVER_ENVIRONMENT_CONTENTTYPE].substr(temp0 + 9));
+			dodoStringArray postParts;
 
-			dodoStringArray::iterator i(postPartd.begin() + 1), j(postPartd.end());
-
-			unsigned long temp1;
-			char *ptr;
-			int fd;
-			unsigned short pathLength = postFilesTmpDir.size() + 18;
-			FILE *fp;
-
-			for (; i != j; ++i)
+			dodoStringArray::iterator b = contenTypeExtensions.begin(), e = contenTypeExtensions.end();
+			for (;b!=e;++b)
 			{
-				if (tools::string::iequal(i->substr(0, 2), "--"))
-					break;
-				else
+				temp0 = tools::string::find(*b, "boundary=", true);
+				if (temp0 == dodoString::npos)
+					continue;
+
+				postParts = tools::misc::explode(content, "--" + b->substr(temp0 + 9));
+			}
+
+			if (postParts.size() > 0)
+			{
+				dodoStringArray::iterator i(postParts.begin() + 1), j(postParts.end());
+
+				unsigned long temp1;
+				char *ptr;
+				int fd;
+				unsigned short pathLength = postFilesTmpDir.size() + 18;
+				FILE *fp;
+
+				for (; i != j; ++i)
 				{
-					if (i->find("filename") != dodoString::npos)
-					{
-						if ((temp0 = i->find("name=\"")) == dodoString::npos)
-							continue;
-						temp0 += 6;
-						temp1 = i->find("\"", temp0);
-
-						dodoString post_name = i->substr(temp0, temp1 - temp0);
-
-						__serverFile file;
-
-						temp0 = i->find("filename=\"", temp1);
-						temp0 += 10;
-						temp1 = i->find("\"", temp0);
-						if (temp0 == temp1)
-							continue;
-
-						file.name = i->substr(temp0, temp1 - temp0);
-
-						temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
-						temp0 += 14;
-						temp1 = i->find("\n", temp0);
-						file.type = tools::misc::explode(i->substr(temp0, temp1 - temp0), ";")[0];
-						temp1 += 3;
-
-						file.size = i->size() - temp1 - 2;
-
-						if (postFilesInMem)
-							file.data.assign(i->c_str() + temp1, file.size);
-						else
-						{
-							file.error = SERVER_POSTFILEERR_NONE;
-
-							ptr = new char[pathLength];
-							strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
-							fd = mkstemp(ptr);
-							if (fd == -1)
-							{
-								delete [] ptr;
-
-								file.error = SERVER_POSTFILEERR_BAD_FILE_NAME;
-								FILES.insert(make_pair(post_name, file));
-
-								continue;
-							}
-
-							file.tmp_name = ptr;
-
-							delete [] ptr;
-
-							fp = fdopen(fd, "w+");
-							if (fp == NULL)
-							{
-								switch (errno)
-								{
-									case EACCES:
-									case EISDIR:
-
-										file.error = SERVER_POSTFILEERR_ACCESS_DENY;
-
-										break;
-
-									case ENAMETOOLONG:
-									case ENOTDIR:
-
-										file.error = SERVER_POSTFILEERR_BAD_FILE_NAME;
-
-										break;
-
-									case ENOMEM:
-
-										file.error = SERVER_POSTFILEERR_NO_SPACE;
-
-										break;
-
-									default:
-
-										throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-								}
-							}
-							else
-							{
-								if (fwrite(i->c_str() + temp1, file.size, 1, fp) == 0)
-								{
-									if (errno == ENOMEM)
-										file.error = SERVER_POSTFILEERR_NO_SPACE;
-									else
-									{
-										if (fclose(fp) != 0)
-											throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-
-										throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-									}
-								}
-
-								if (fclose(fp) != 0)
-									throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
-							}
-						}
-
-						FILES.insert(make_pair(post_name, file));
-					}
+					if (tools::string::iequal(i->substr(0, 2), "--"))
+						break;
 					else
 					{
-						if ((temp0 = i->find("name=\"")) == dodoString::npos)
-							continue;
+						if (i->find("filename") != dodoString::npos)
+						{
+							if ((temp0 = i->find("name=\"")) == dodoString::npos)
+								continue;
+							temp0 += 6;
+							temp1 = i->find("\"", temp0);
 
-						temp0 += 6;
-						temp1 = i->find("\"", temp0);
+							dodoString post_name = i->substr(temp0, temp1 - temp0);
 
-						POST.insert(make_pair(i->substr(temp0, temp1 - temp0), i->substr(temp1 + 5, i->size() - temp1 - 7)));
+							__serverFile file;
+
+							temp0 = i->find("filename=\"", temp1);
+							temp0 += 10;
+							temp1 = i->find("\"", temp0);
+							if (temp0 == temp1)
+								continue;
+
+							file.name = i->substr(temp0, temp1 - temp0);
+
+							temp0 = tools::string::find(*i, "Content-Type: ", temp1, true);
+							temp0 += 14;
+							temp1 = i->find("\n", temp0);
+							file.mime = tools::misc::explode(i->substr(temp0, temp1 - temp0), ";")[0];
+							temp1 += 3;
+
+							file.size = i->size() - temp1 - 2;
+
+							if (postFilesInMem)
+								file.data.assign(i->c_str() + temp1, file.size);
+							else
+							{
+								file.error = SERVER_POSTFILEERR_NONE;
+
+								ptr = new char[pathLength];
+								strncpy(ptr, dodoString(postFilesTmpDir + FILE_DELIM + dodoString("dodo_post_XXXXXX")).c_str(), pathLength);
+								fd = mkstemp(ptr);
+								if (fd == -1)
+								{
+									delete [] ptr;
+
+									file.error = SERVER_POSTFILEERR_BAD_FILE_NAME;
+									FILES.insert(make_pair(post_name, file));
+
+									continue;
+								}
+
+								file.tmp_name = ptr;
+
+								delete [] ptr;
+
+								fp = fdopen(fd, "w+");
+								if (fp == NULL)
+								{
+									switch (errno)
+									{
+										case EACCES:
+										case EISDIR:
+
+											file.error = SERVER_POSTFILEERR_ACCESS_DENY;
+
+											break;
+
+										case ENAMETOOLONG:
+										case ENOTDIR:
+
+											file.error = SERVER_POSTFILEERR_BAD_FILE_NAME;
+
+											break;
+
+										case ENOMEM:
+
+											file.error = SERVER_POSTFILEERR_NO_SPACE;
+
+											break;
+
+										default:
+
+											throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+									}
+								}
+								else
+								{
+									if (fwrite(i->c_str() + temp1, file.size, 1, fp) == 0)
+									{
+										if (errno == ENOMEM)
+											file.error = SERVER_POSTFILEERR_NO_SPACE;
+										else
+										{
+											if (fclose(fp) != 0)
+												throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+											throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+										}
+									}
+
+									if (fclose(fp) != 0)
+										throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+								}
+							}
+
+							FILES.insert(make_pair(post_name, file));
+						}
+						else
+						{
+							if ((temp0 = i->find("name=\"")) == dodoString::npos)
+								continue;
+
+							temp0 += 6;
+							temp1 = i->find("\"", temp0);
+
+							POST.insert(make_pair(i->substr(temp0, temp1 - temp0), i->substr(temp1 + 5, i->size() - temp1 - 7)));
+						}
 					}
 				}
 			}

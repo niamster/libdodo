@@ -200,7 +200,7 @@ namespace dodo
 			__serverFile();
 
 			dodoString name;                                    ///< real name of the file
-			dodoString type;                                    ///< MIME type
+			dodoString mime;                                    ///< mimetype of the file
 			dodoString tmp_name;                                ///< path where it was temporary saved[empty, if file is stored in the memory]
 			unsigned long size;                                 ///< size of the file
 			short error;                                        ///< error code[see serverPostFileErrEnum]
@@ -510,6 +510,8 @@ namespace dodo
 				int method;                                             ///< request method
 
 				dodoString content;                                     ///< contents of the stdin for the POST request
+
+				dodoStringArray contenTypeExtensions;							///< contains contentype extension[boundary, modification-date, etc]
 
 				/**
 				 * delete temp POST files that have been created

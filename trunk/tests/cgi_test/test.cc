@@ -75,14 +75,15 @@ int main(int argc, char **argv)
 	cgit.setCookie("test", "Ni@m");
 	cgit.printHeaders();
 
-	cgit.printStream( "User: " + user + "<br>" );
+	cgit.printStream("User: " + user + "<br>");
 
-	cgit.printStream( cgit.GET["a"] + "<br>" );
-	cgit.printStream( cgit.POST["hidden"] + "<br>" );
-	cgit.printStream( cgit.POST["text"] + "<br>" );
-	cgit.printStream( cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>" );
-	cgit.printStream( cgit.COOKIES["test"] + "<br>" );
-	cgit.printStream( tools::string::ulToString(cgit.FILES["file"].size) + "<br>" );
+	cgit.printStream(cgit.GET["a"] + "<br>");
+	cgit.printStream(cgit.POST["hidden"] + "<br>");
+	cgit.printStream(cgit.POST["text"] + "<br>");
+	cgit.printStream(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
+	cgit.printStream(cgit.COOKIES["test"] + "<br>");
+	cgit.printStream(tools::string::ulToString(cgit.FILES["file"].size) + "<br>");
+	cgit.printStream(cgit.FILES["file"].mime + "<br>");
 
 	cgit.printStream( "<br>" );
 

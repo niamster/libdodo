@@ -29,9 +29,9 @@ int main(int argc, char **argv)
 		map["hidden"] = "hidden";
 		map["text"] = "text";
 
-		dodoStringMap files;
+		dodoMap<dodoString, __httpPostFile> files;
 
-		files["file"] = "./test.cc";
+		files["file"] = __httpPostFile("./test.cc", "text/plain");
 
 		http HTTP;
 		__httpResponse res;

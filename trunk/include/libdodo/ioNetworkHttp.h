@@ -118,6 +118,27 @@ namespace dodo
 			};
 
 			/**
+			 * @struct __httpPostFile defines file for POST request
+			 */
+			struct __httpPostFile
+			{
+				/**
+				 * constructor
+				 * @param path defines path to file
+				 * @param mime defines mimetype of the file
+				 */
+				__httpPostFile(const dodoString path, const dodoString mime);
+
+				/**
+				 * constructor
+				 */
+				__httpPostFile();
+				
+				dodoString path;										///< path to file
+				dodoString mime;										///<  mimetype of the file
+			};
+
+			/**
 			 * @class http provides disk I/O manipulations
 			 * FIXME: fetch with HTTP/1.1 for non-proxy mode and correctly parse chanked requests
 			 */
@@ -240,17 +261,17 @@ namespace dodo
 					 * @return server response
 					 * @param url defines Url
 					 * @param arguments defines request arguments
-					 * @param files defines path to files
+					 * @param files defines files for POST request
 					 * @note authentification may be as a part of URL or defined by setHttpAuthentification method
 					 */
-					virtual __httpResponse POST(const dodoString &url, const dodoStringMap &arguments, const dodoStringMap &files);
+					virtual __httpResponse POST(const dodoString &url, const dodoStringMap &arguments, const dodoMap<dodoString, __httpPostFile> &files);
 
 					/**
 					 * perform POST request
 					 * @param arguments defines request arguments
-					 * @param files defines path to files
+					 * @param files defines files for POST request
 					 */
-					virtual void POST(const dodoStringMap &arguments, const dodoStringMap &files);
+					virtual void POST(const dodoStringMap &arguments, const dodoMap<dodoString, __httpPostFile> &files);
 
 					/**
 					 * set HTTP authentification information
