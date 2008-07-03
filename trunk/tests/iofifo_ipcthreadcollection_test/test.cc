@@ -90,6 +90,7 @@ int main(int argc, char **argv)
 		j.wait();
 
 		io::fifo fifo2 = fifo1;
+		//fifo2.clone(fifo1);
 
 		///< use a copy, so no need to keep an order
 		j.addNRun(&threadRead, (void *)&fifo1);
@@ -101,7 +102,7 @@ int main(int argc, char **argv)
 	}
 	catch (baseEx ex)
 	{
-		cout << (string)ex << endl;
+		cout << (string)ex << ex.line << endl;
 	}
 
 	return 0;

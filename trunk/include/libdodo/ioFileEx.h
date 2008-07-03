@@ -63,6 +63,7 @@ namespace dodo
 		enum fileFunctionsID
 		{
 			FILEEX_CLOSE,
+			FILEEX_CLONE,
 			FILEEX_OPEN,
 			FILEEX__READ,
 			FILEEX__WRITE,

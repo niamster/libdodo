@@ -490,34 +490,5 @@ exchange::_readStream(char * const data)
 
 //-------------------------------------------------------------------
 
-exchange *
-exchange::createCopy()
-{
-	raceHazardGuard pg(this);
-
-	exchange *copy = new exchange;
-
-	copy->socket = socket;
-	copy->opened = opened;
-	copy->sslHandle = sslHandle;
-
-	opened = false;
-	socket = -1;
-	sslHandle = NULL;
-
-	copy->socketOpts = socketOpts;
-	copy->inTimeout = inTimeout;
-	copy->outTimeout = outTimeout;
-	copy->inSocketBuffer = inSocketBuffer;
-	copy->outSocketBuffer = outSocketBuffer;
-	copy->lingerOpts = lingerOpts;
-	copy->lingerSeconds = lingerSeconds;
-	copy->blocked = blocked;
-
-	return copy;
-}
-
-//-------------------------------------------------------------------
-
 #endif
 

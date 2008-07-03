@@ -68,8 +68,9 @@ namespace dodo
 				
 				/**
 				 * copy constructor
+				 * @note xexec object is not copied
 				 */
-				fifo(fifo &fd);
+				fifo(const fifo &fd);
 
 				/**
 				 * constructor
@@ -80,6 +81,13 @@ namespace dodo
 				 * destructor
 				 */
 				virtual ~fifo();
+				
+				/**
+				 * clone fifo object
+				 * @param fd defines object to clone
+				 * @note xexec object is not copied
+				 */
+				virtual void clone(const fifo &fd);
 
 				/**
 				 * @return info about source of inputting

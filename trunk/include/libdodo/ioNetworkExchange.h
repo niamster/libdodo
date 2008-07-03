@@ -115,6 +115,7 @@ namespace dodo
 					/**
 					 * copy constructor
 					 * @note the object that has inited the object of current instance is unusable anymore and can be used for another connections
+					 * xexec object is not copied
 					 */
 					exchange(exchange &fse);
 
@@ -129,19 +130,7 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~exchange();
-
-					/**
-					 * @return copy of the instance
-					 * @note current instance can't be used any more
-					 */
-					virtual exchange *createCopy();
-
-					/**
-					 * delete a copy of an object
-					 * @param copy defines an instance of an object
-					 */
-					static void deleteCopy(exchange *copy);
-
+				
 					/**
 					 * init object
 					 * @param init defines initial data[got from ::accept method]
@@ -152,11 +141,6 @@ namespace dodo
 					 * @return true if connection is alive
 					 */
 					virtual bool isAlive();
-
-					/**
-					 * flush output
-					 */
-					virtual void flush();
 
 					/**
 					 * close connection
@@ -182,6 +166,12 @@ namespace dodo
 					 * @param blockInherited defines block flag inheritance
 					 */
 					virtual void init(int socket, bool blocked, bool blockInherited);
+					
+					/**
+					 * flush output
+					 * @note does nothing for network connections
+					 */
+					virtual void flush();
 
 					/**
 					 * @param data defines buffer that will be filled

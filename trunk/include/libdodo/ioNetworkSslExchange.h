@@ -114,6 +114,7 @@ namespace dodo
 						/**
 						 * copy constructor
 						 * @note the object that has inited the object of current instance is unusable anymore and can be used for another connections
+						 * xexec object is not copied
 						 */
 						exchange(exchange &fse);
 
@@ -128,12 +129,6 @@ namespace dodo
 						 * destructor
 						 */
 						virtual ~exchange();
-
-						/**
-						 * @return copy of the instance
-						 * @note current instance can't be used any more
-						 */
-						virtual exchange *createCopy();
 
 						/**
 						 * init object

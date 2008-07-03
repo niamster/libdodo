@@ -57,6 +57,7 @@ namespace dodo
 		enum fifoFunctionsID
 		{
 			FIFOEX_CLOSE,
+			FIFOEX_CLONE,
 			FIFOEX_OPEN,
 			FIFOEX__READ,
 			FIFOEX__WRITE,

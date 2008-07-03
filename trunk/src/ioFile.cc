@@ -38,7 +38,8 @@ file::file(const dodoString &a_path,
 						 path(a_path),
 						 fileType(a_fileType),
 						 pos(0),
-						 handler(NULL)
+						 handler(NULL),
+						 mode(-1)
 {
 #ifndef IO_WO_XEXEC
 
@@ -60,8 +61,57 @@ file::file(const dodoString &a_path,
 
 //-------------------------------------------------------------------
 
-file::file(file &fd)
+file::file(const file &fd) : over(fd.over),
+							 append(fd.append),
+							 path(fd.path),
+							 fileType(fd.fileType),
+							 pos(fd.pos),
+							 mode(fd.mode),
+							 handler(NULL)
+
 {
+#ifndef IO_WO_XEXEC
+
+	execObject = XEXEC_OBJECT_IOFILE;
+	execObjectData = (void *)&collectedData;
+
+#endif
+	
+	inSize = fd.inSize;
+	outSize = fd.outSize;
+
+	if (fd.opened)
+	{
+		int oldDesc, newDesc;
+
+		oldDesc = fileno(fd.handler);
+	
+		newDesc = dup(oldDesc);
+		
+		switch (mode)
+		{
+			case FILE_OPENMODE_READ_WRITE:
+			case FILE_OPENMODE_READ_WRITE_TRUNCATE:
+
+				handler = fdopen(newDesc, "r+");
+
+				break;
+
+			case FILE_OPENMODE_APPEND:
+
+				handler = fdopen(newDesc, "a+");
+
+				break;
+
+			case FILE_OPENMODE_READ_ONLY:
+			default:
+
+				handler = fdopen(newDesc, "r");
+		}
+
+		if (handler != NULL)
+			opened = true;
+	}
 }
 
 //-------------------------------------------------------------------
@@ -101,6 +151,72 @@ file::getOutDescriptor() const
 //-------------------------------------------------------------------
 
 void
+file::clone(const file &fd)
+{
+	raceHazardGuard pg(this);
+
+	if (opened)
+	{
+		if (fclose(handler) != 0)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		handler = NULL;
+
+		opened = false;
+	}
+	
+	over = fd.over;
+	append = fd.append;
+	path = fd.path;
+	fileType = fd.fileType;
+	mode = fd.mode;
+	pos = fd.pos;
+	inSize = fd.inSize;
+	outSize = fd.outSize;
+
+	if (fd.opened)
+	{
+		int oldDesc, newDesc;
+
+		oldDesc = fileno(fd.handler);
+		if (oldDesc == -1)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+	
+		newDesc = dup(oldDesc);
+		if (newDesc == -1)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		
+		switch (mode)
+		{
+			case FILE_OPENMODE_READ_WRITE:
+			case FILE_OPENMODE_READ_WRITE_TRUNCATE:
+
+				handler = fdopen(newDesc, "r+");
+
+				break;
+
+			case FILE_OPENMODE_APPEND:
+
+				handler = fdopen(newDesc, "a+");
+
+				break;
+
+			case FILE_OPENMODE_READ_ONLY:
+			default:
+
+				handler = fdopen(newDesc, "r");
+		}
+
+		if (handler == NULL)
+			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLONE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+
+		opened = true;
+	}
+}
+
+//-------------------------------------------------------------------
+
+void
 file::close()
 {
 	raceHazardGuard pg(this);
@@ -115,6 +231,8 @@ file::close()
 		if (fclose(handler) != 0)
 			throw baseEx(ERRMODULE_IOFILE, FILEEX_CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
+		handler = NULL;
+
 		opened = false;
 	}
 
@@ -128,7 +246,7 @@ file::close()
 void
 file::open(const dodoString &a_path,
 		   short a_fileType,
-		   short mode)
+		   short a_mode)
 {
 	raceHazardGuard pg(this);
 
@@ -139,6 +257,7 @@ file::open(const dodoString &a_path,
 
 	path = a_path;
 	fileType = a_fileType;
+	mode = a_mode;
 
 	if (opened)
 	{

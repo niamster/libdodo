@@ -24,72 +24,78 @@ void *
 process(void *data)
 {
 	exchange *fse = (exchange *)data;
-
-	if (fse->isBlocked())
-	{
-		cout << "CHILD BLOCKED\n";
-		cout.flush();
-	}
-	else
-	{
-		cout << "CHILD UNBLOCKED\n";
-		cout.flush();
-	}
-
-	if (fse->isAlive())
-	{
-		cout << "IT'S ALIVE!\n";
-		cout.flush();
-	}
-
-
-	fse->inSize = 4;
-	fse->setInBufferSize(1);
-	fse->setOutBufferSize(1);
-
-	fse->outSize = 7;
-	fse->writeString("test");
-
-	dodoString rec = "";
+	
 	try
 	{
-		fse->readString(rec);
-
-		cout << rec << rec.size() << endl;
-		cout.flush();
-		if (rec == "exit")
+		if (fse->isBlocked())
 		{
-			bool *exit_st;
-			exit_st = (bool *)sh.acquire();
-			*exit_st = true;
-			sh.release();
+			cout << "CHILD BLOCKED\n";
+			cout.flush();
+		}
+		else
+		{
+			cout << "CHILD UNBLOCKED\n";
+			cout.flush();
+		}
+
+		if (fse->isAlive())
+		{
+			cout << "IT'S ALIVE!\n";
+			cout.flush();
+		}
+
+		fse->inSize = 4;
+		fse->setInBufferSize(1);
+		fse->setOutBufferSize(1);
+
+		fse->outSize = 7;
+		fse->writeString("test");
+
+		dodoString rec = "";
+		try
+		{
+			fse->readString(rec);
+
+			cout << rec << rec.size() << endl;
+			cout.flush();
+			if (rec == "exit")
+			{
+				bool *exit_st;
+				exit_st = (bool *)sh.acquire();
+				*exit_st = true;
+				sh.release();
+			}
+		}
+		catch (baseEx ex)
+		{
+			cout << "Smth happened!" << (string)ex << endl;
+			cout.flush();
+		}
+		catch (...)
+		{
+			cout << "Smth happened!" << endl;
+			cout.flush();
+		}
+
+		fse->close();
+
+		if (fse->isAlive())
+		{
+			cout << "IT'S ALIVE?????\n";
+			cout.flush();
+		}
+		else
+		{
+			cout << "CLOSED!\n";
+			cout.flush();
 		}
 	}
 	catch (baseEx ex)
 	{
-		cout << "Smth happened!" << (string)ex << endl;
-		cout.flush();
-	}
-	catch (...)
-	{
-		cout << "Smth happened!" << endl;
-		cout.flush();
+		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
-	fse->close();
-
-	if (fse->isAlive())
-	{
-		cout << "IT'S ALIVE?????\n";
-		cout.flush();
-	}
-	else
-	{
-		cout << "CLOSED!\n";
-		cout.flush();
-	}
-
-	exchange::deleteCopy(fse);
+	delete fse;
 
 	return NULL;
 }
@@ -135,12 +141,13 @@ int main(int argc, char **argv)
 
 				conn.init(fake);
 #ifdef PTHREAD_EXT
-				positions.push_back(th.add(process, (void *)conn.createCopy()));
+				positions.push_back(th.add(process, (void *)(new exchange(conn))));
 				th.run(positions.back());
 				th.setExecutionLimit(positions.back(), 1);
 #else
-				process((void *)conn.createCopy());
+				process((void *)(new exchange(conn)));
 #endif
+				conn.close();
 
 #ifdef PTHREAD_EXT
 				try
@@ -151,10 +158,8 @@ int main(int argc, char **argv)
 						cout.flush();
 					}
 				}
-				catch (baseEx ex)
+				catch (...)
 				{
-					cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
-					cout.flush();
 				}
 #endif
 			}

@@ -61,6 +61,9 @@ options::isBlocked() const
 void
 options::block(bool flag)
 {
+	if (socket == -1)
+		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+
 	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
 		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);

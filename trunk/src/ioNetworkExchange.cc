@@ -52,13 +52,9 @@ exchange::exchange(exchange &fse)
 	execObjectData = (void *)&collectedData;
 
 #endif
-
-	socket = fse.socket;
-	opened = fse.opened;
-
-	fse.opened = false;
-	fse.socket = -1;
-
+	
+	inSize = fse.inSize;
+	outSize = fse.outSize;
 	socketOpts = fse.socketOpts;
 	inTimeout = fse.inTimeout;
 	outTimeout = fse.outTimeout;
@@ -67,6 +63,11 @@ exchange::exchange(exchange &fse)
 	lingerOpts = fse.lingerOpts;
 	lingerSeconds = fse.lingerSeconds;
 	blocked = fse.blocked;
+	socket = fse.socket;
+	opened = fse.opened;
+
+	fse.socket = -1;
+	fse.opened = false;
 }
 
 //-------------------------------------------------------------------
@@ -393,41 +394,6 @@ exchange::_readStream(char * const data)
 	}
 
 	return n;
-}
-
-//-------------------------------------------------------------------
-
-exchange *
-exchange::createCopy()
-{
-	raceHazardGuard pg(this);
-
-	exchange *copy = new exchange;
-
-	copy->socket = socket;
-	copy->opened = opened;
-
-	opened = false;
-	socket = -1;
-
-	copy->socketOpts = socketOpts;
-	copy->inTimeout = inTimeout;
-	copy->outTimeout = outTimeout;
-	copy->inSocketBuffer = inSocketBuffer;
-	copy->outSocketBuffer = outSocketBuffer;
-	copy->lingerOpts = lingerOpts;
-	copy->lingerSeconds = lingerSeconds;
-	copy->blocked = blocked;
-
-	return copy;
-}
-
-//-------------------------------------------------------------------
-
-void
-exchange::deleteCopy(exchange *copy)
-{
-	delete copy;
 }
 
 //-------------------------------------------------------------------

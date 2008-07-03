@@ -87,14 +87,6 @@ namespace dodo
 		 */
 		class file : virtual public channel
 		{
-			private:
-
-				/**
-				 * copy constructor
-				 * @note to prevent copying
-				 */
-				file(file &fd);
-
 			public:
 
 				/**
@@ -105,11 +97,24 @@ namespace dodo
 				 * @note if type is TMP_FILE path is ignored
 				 */
 				file(const dodoString &path = __dodostring__, short fileType = FILE_FILETYPE_REG_FILE, short mode = FILE_OPENMODE_READ_WRITE);
+				
+				/**
+				 * copy constructor
+				 * @note xexec object is not copied
+				 */
+				file(const file &fd);
 
 				/**
 				 * destructor
 				 */
 				virtual ~file();
+				
+				/**
+				 * clone file object
+				 * @param fd defines object to clone
+				 * @note xexec object is not copied
+				 */
+				virtual void clone(const file &fd);
 
 				/**
 				 * open file
@@ -190,6 +195,7 @@ namespace dodo
 
 				dodoString path;                        ///< file path
 				short fileType;                         ///< type of file
+				short mode;								///< file open mode[see fileOpenmodeEnum]
 
 				FILE *handler;                          ///< file handler
 		};

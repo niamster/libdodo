@@ -75,7 +75,11 @@ int main(int argc, char **argv)
 		io.writeStreamString("!12345890@!!@\n");
 		io.writeStreamString("!12345890$!!@\n");
 		io.pos = 1;
-		io.writeString("!12345890$!~@\n");
+
+		file io2 = io;
+		io.close();
+
+		io2.writeString("!12345890$!~@\n");
 		/**
 		 * my.dat should contain
 		 !12345890#!!@
@@ -86,12 +90,12 @@ int main(int argc, char **argv)
 
 		dodoString str;
 
-		io.pos = 0;
-		io.readStreamString(str);
+		io2.pos = 0;
+		io2.readStreamString(str);
 		cout << "\n\n" << str << "\n\n";
 
-		io.pos = 0;
-		io.readString(str);
+		io2.pos = 0;
+		io2.readString(str);
 		cout << "\n\n" << str << "\n\n";
 	}
 	catch (baseEx ex)
