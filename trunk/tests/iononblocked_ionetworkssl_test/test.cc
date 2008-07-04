@@ -7,7 +7,7 @@
 #include <libdodo/baseEx.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/ioNetworkSslServer.h>
-#include <libdodo/ioNonBlockedAccess.h>
+#include <libdodo/ioEvent.h>
 
 #include <iostream>
 
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
 		exchange conn;
 
-		io::nonBlockedAccess nb;
+		io::event nb;
 
 		char trimSym[] = { '\r', '\n' };
 
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 				else
 					cout << "is not Blocked" << endl;
 
-				int pos = nb.addFlush(conn);
+				int pos = nb.addChannel(conn);
 
 				dodoString data;
 

@@ -34,7 +34,7 @@
 
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
-#include <libdodo/ioNonBlockedAccessInfo.h>
+#include <libdodo/ioEventInfo.h>
 #include <libdodo/ipcThreadGuard.h>
 
 namespace dodo
@@ -82,7 +82,7 @@ namespace dodo
 		/**
 		 * @class channel implements an interface for I/O operations
 		 */
-		class channel : virtual public nonBlockedAccessInfo,
+		class channel : virtual public eventInfo,
 						virtual public ipc::thread::guardHolder
 #ifndef IO_WO_XEXEC
 						,

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNonBlockedAccess.h
+ *            ioEvent.h
  *
  *  Thu Sep 09 03:21:24 2006
  *  Copyright  2006  Ni@m
@@ -28,14 +28,14 @@
  */
 
 
-#ifndef _IONONBLOCKEDACCESS_H_
-#define _IONONBLOCKEDACCESS_H_
+#ifndef _IOEVENT_H_
+#define _IOEVENT_H_
 
 #include <libdodo/directives.h>
 
 #include <poll.h>
 
-#include <libdodo/ioNonBlockedAccessEx.h>
+#include <libdodo/ioEventEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/ipcThreadGuard.h>
@@ -45,9 +45,9 @@ namespace dodo
 	namespace io
 	{
 		/**
-		 * @struct __inOutDescriptors defines input and output descriptors of the io* classes
+		 * @struct __eventInOutDescriptors defines input and output descriptors of the io::* classes
 		 */
-		struct __inOutDescriptors
+		struct __eventInOutDescriptors
 		{
 			int position;               ///< identificator of the pair
 
@@ -56,9 +56,9 @@ namespace dodo
 		};
 
 		/**
-		 * @class nonBlockedAccess provides information if in/output stream is readable/writable
+		 * @class event provides information if in/output stream is readable/writable
 		 */
-		class nonBlockedAccess : virtual public ipc::thread::guardHolder
+		class event : virtual public ipc::thread::guardHolder
 		{
 
 			private:
@@ -67,31 +67,31 @@ namespace dodo
 				 * copy constructor
 				 * @note to prevent copying
 				 */
-				nonBlockedAccess(nonBlockedAccess &rt);
+				event(event &rt);
 
 			public:
 
 				/**
 				 * constructor
 				 */
-				nonBlockedAccess();
+				event();
 
 				/**
 				 * destructor
 				 */
-				virtual ~nonBlockedAccess();
+				virtual ~event();
 
 				/**
 				 * @return identificator of stream pair
 				 * @param fl defines a stream[file, stdio, exchange, ...]
 				 */
-				virtual int addFlush(const nonBlockedAccessInfo &fl);
+				virtual int addChannel(const eventInfo &fl);
 
 				/**
 				 * delete stream pair from watchers
 				 * @param pos defines identificator of stream pair
 				 */
-				virtual void delFlush(int pos);
+				virtual void delChannel(int pos);
 
 				/**
 				 * @return true if io* is readable
@@ -127,7 +127,7 @@ namespace dodo
 
 			protected:
 
-				dodoArray<__inOutDescriptors> desc;                     ///< stream pairs
+				dodoArray<__eventInOutDescriptors> desc;                     ///< stream pairs
 
 				int descs;                                              ///< descriptors counter
 		};

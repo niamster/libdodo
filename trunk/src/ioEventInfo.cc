@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNonBlockedAccessInfo.h
+ *            ioEventInfo.cc
  *
  *  Fri Jan 18 02:51:24 2008
  *  Copyright  2008  Ni@m
@@ -27,41 +27,14 @@
  * set shiftwidth=4
  */
 
+#include <libdodo/ioEventInfo.h>
 
-#ifndef _IONONBLOCKEDACCESSINFO_H_
-#define _IONONBLOCKEDACCESSINFO_H_
+using namespace dodo::io;
 
-#include <libdodo/directives.h>
-
-namespace dodo
+eventInfo::~eventInfo()
 {
-	namespace io
-	{
-		/**
-		 * @class nonBlockedAccessInfo provides interface for nonBlockedAccess
-		 */
-		class nonBlockedAccessInfo
-		{
-			friend class nonBlockedAccess;
 
-			public:
+}
 
-				/**
-				 * destructor
-				 */
-				virtual ~nonBlockedAccessInfo() = 0;
+//-------------------------------------------------------------------
 
-				/**
-				 * @return descriptor of input stream
-				 */
-				virtual int getInDescriptor() const = 0;
-
-				/**
-				 * @return descriptor of output stream
-				 */
-				virtual int getOutDescriptor() const = 0;
-		};
-	};
-};
-
-#endif

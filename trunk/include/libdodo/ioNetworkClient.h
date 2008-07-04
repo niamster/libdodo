@@ -49,7 +49,7 @@
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ioNonBlockedAccessInfo.h>
+#include <libdodo/ioEventInfo.h>
 
 namespace dodo
 {

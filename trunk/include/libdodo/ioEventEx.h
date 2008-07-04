@@ -1,5 +1,5 @@
 /***************************************************************************
- *            nonBlockedAccessEx.h
+ *            eventEx.h
  *
  *  Thu Sep 09 03:41:24 2006
  *  Copyright  2006  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IONONBLOCKEDACCESSEX_H_
-#define _IONONBLOCKEDACCESSEX_H_
+#ifndef _IOEVENTEX_H_
+#define _IOEVENTEX_H_
 
 #include <libdodo/directives.h>
 
@@ -41,10 +41,10 @@ namespace dodo
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum nonBlockedAccessFunctionsID
+		enum eventFunctionsID
 		{
-			NONBLOCKEDACCESSEX_ISREADABLE,
-			NONBLOCKEDACCESSEX_ISWRITABLE,
+			EVENTEX_ISREADABLE,
+			EVENTEX_ISWRITABLE,
 		};
 	};
 };

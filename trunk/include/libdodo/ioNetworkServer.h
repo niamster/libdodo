@@ -49,7 +49,7 @@
 #include <libdodo/ioNetworkOptions.h>
 #include <libdodo/ioNetworkExchange.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ioNonBlockedAccessInfo.h>
+#include <libdodo/ioEventInfo.h>
 
 namespace dodo
 {
@@ -99,7 +99,7 @@ namespace dodo
 			 * @class Server provides network connection interface
 			 */
 			class server : public options,
-						   virtual public nonBlockedAccessInfo
+						   virtual public eventInfo
 #ifndef IO_WO_XEXEC
 						   ,
 						   public xexec

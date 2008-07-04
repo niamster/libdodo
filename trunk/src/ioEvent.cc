@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNonBlockedAccess.cc
+ *            ioEvent.cc
  *
  *  Thu Sep 09 03:21:24 2006
  *  Copyright  2006  Ni@m
@@ -27,36 +27,36 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/ioNonBlockedAccess.h>
+#include <libdodo/ioEvent.h>
 
 using namespace dodo::io;
 
 //-------------------------------------------------------------------
 
-nonBlockedAccess::nonBlockedAccess(nonBlockedAccess &rt)
+event::event(event &rt)
 {
 }
 
 //-------------------------------------------------------------------
 
-nonBlockedAccess::nonBlockedAccess() : descs(0)
+event::event() : descs(0)
 {
 }
 
 //-------------------------------------------------------------------
 
-nonBlockedAccess::~nonBlockedAccess()
+event::~event()
 {
 }
 
 //-------------------------------------------------------------------
 
 int
-nonBlockedAccess::addFlush(const nonBlockedAccessInfo &fl)
+event::addChannel(const eventInfo &fl)
 {
 	raceHazardGuard pg(this);
 
-	__inOutDescriptors tempD;
+	__eventInOutDescriptors tempD;
 
 	tempD.position = ++descs;
 	tempD.in = fl.getInDescriptor();
@@ -70,7 +70,7 @@ nonBlockedAccess::addFlush(const nonBlockedAccessInfo &fl)
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-nonBlockedAccess::isReadable(const dodoArray<int> &pos,
+event::isReadable(const dodoArray<int> &pos,
 							 int timeout) const
 {
 	raceHazardGuard pg(this);
@@ -79,7 +79,7 @@ nonBlockedAccess::isReadable(const dodoArray<int> &pos,
 
 	pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
@@ -132,7 +132,7 @@ nonBlockedAccess::isReadable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -148,7 +148,7 @@ nonBlockedAccess::isReadable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 dodoArray<bool>
-nonBlockedAccess::isWritable(const dodoArray<int> &pos,
+event::isWritable(const dodoArray<int> &pos,
 							 int timeout) const
 {
 	raceHazardGuard pg(this);
@@ -157,7 +157,7 @@ nonBlockedAccess::isWritable(const dodoArray<int> &pos,
 
 	pollfd *fds = new pollfd[pos.size()];
 
-	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 	{
 		dodoArray<int>::const_iterator m(pos.begin()), n(pos.end());
@@ -210,7 +210,7 @@ nonBlockedAccess::isWritable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -226,14 +226,14 @@ nonBlockedAccess::isWritable(const dodoArray<int> &pos,
 //-------------------------------------------------------------------
 
 bool
-nonBlockedAccess::isReadable(int pos,
+event::isReadable(int pos,
 							 int timeout) const
 {
 	raceHazardGuard pg(this);
 
 	pollfd fd;
 
-	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 		if (i->position == pos)
 		{
@@ -254,7 +254,7 @@ nonBlockedAccess::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -264,11 +264,11 @@ nonBlockedAccess::isReadable(int pos,
 //-------------------------------------------------------------------
 
 void
-nonBlockedAccess::delFlush(int pos)
+event::delChannel(int pos)
 {
 	raceHazardGuard pg(this);
 
-	dodoArray<__inOutDescriptors>::iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors>::iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 		if (i->position == pos)
 		{
@@ -281,14 +281,14 @@ nonBlockedAccess::delFlush(int pos)
 //-------------------------------------------------------------------
 
 bool
-nonBlockedAccess::isWritable(int pos,
+event::isWritable(int pos,
 							 int timeout) const
 {
 	raceHazardGuard pg(this);
 
 	pollfd fd;
 
-	dodoArray<__inOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
+	dodoArray<__eventInOutDescriptors>::const_iterator i(desc.begin()), j(desc.end());
 	for (; i != j; ++i)
 		if (i->position == pos)
 		{
@@ -309,7 +309,7 @@ nonBlockedAccess::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IONONBLOCKEDACCESS, NONBLOCKEDACCESSEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 

@@ -41,8 +41,8 @@ OBJECTS:=dbAccumulator.o \
 	logger.o \
 	ioChannel.o \
 	ioFile.o \
-	ioNonBlockedAccess.o \
-	ioNonBlockedAccessInfo.o \
+	ioEvent.o \
+	ioEventInfo.o \
 	ioStdio.o \
 	ioFifo.o \
 	ioSsl.o \
