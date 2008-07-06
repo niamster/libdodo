@@ -526,7 +526,7 @@ filesystem::followSymlink(const dodoString &path)
 	if (::lstat(path.c_str(), &st) == -1)
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_FOLLOWSYMLINK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__, path);
 
-	char buffer[MAXPATHLEN];
+	char buffer[MAXPATHLEN + 1];
 
 	if (!S_ISLNK(st.st_mode))
 		throw baseEx(ERRMODULE_TOOLSFILESYSTEM, FILESYSTEMEX_SYMLINK, ERR_LIBDODO, FILESYSTEMEX_WRONGFILENAME, TOOLSFILESYSTEMEX_WRONGFILENAME_STR, __LINE__, __FILE__, path);

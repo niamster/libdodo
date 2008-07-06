@@ -52,6 +52,7 @@ namespace dodo
 					SERVEREX_UNABLETOINITCONTEXT,
 					SERVEREX_UNABLETOINITSSL,
 					SERVEREX_UNKNOWNKEYTYPE,
+					SERVEREX_LONGPATH,
 				};
 
 				/**
@@ -62,6 +63,7 @@ namespace dodo
 #define IONETWORKSSLSERVEREX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
 #define IONETWORKSSLSERVEREX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
 #define IONETWORKSSLSERVEREX_UNKNOWNKEYTYPE_STR "Unknown key type."
+#define IONETWORKSSLSERVEREX_LONGPATH_STR "Path to socket is too long."
 				/**
 				 * IDs of functions where exception might be thrown
 				 */

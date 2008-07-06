@@ -157,7 +157,12 @@ image::read(const dodoString &str)
 	performXExec(preExec);
 #endif
 
-	strcpy(collectedData.imInfo->filename, str.c_str());
+	unsigned long size = str.size();
+
+	if (size >= MaxTextExtent)
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_READ, ERR_LIBDODO, IMAGEEX_LONGPATH, IMAGEEX_LONGPATH_STR, __LINE__, __FILE__);
+
+	strncpy(collectedData.imInfo->filename, str.c_str(), size);
 
 	if (collectedData.imHandle != NULL)
 		DestroyImage(collectedData.imHandle);
@@ -168,6 +173,7 @@ image::read(const dodoString &str)
 
 	collectedData.imInfo->compression = collectedData.imHandle->compression;
 	collectedData.imInfo->quality = collectedData.imHandle->quality;
+
 	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
 #ifndef IMAGE_WO_XEXEC
@@ -195,6 +201,7 @@ image::read(const unsigned char * const data,
 
 	collectedData.imInfo->compression = collectedData.imHandle->compression;
 	collectedData.imInfo->quality = collectedData.imHandle->quality;
+
 	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
 #ifndef IMAGE_WO_XEXEC
@@ -224,6 +231,7 @@ image::read(const __imageInfo &info)
 
 	collectedData.imInfo->compression = collectedData.imHandle->compression;
 	collectedData.imInfo->quality = collectedData.imHandle->quality;
+
 	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
 #ifndef IMAGE_WO_XEXEC
@@ -257,7 +265,12 @@ image::write(const dodoString &str)
 	if (collectedData.imHandle == NULL)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 
-	strcpy(collectedData.imHandle->filename, str.c_str());
+	unsigned long size = str.size();
+
+	if (size >= MaxTextExtent)
+		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_LIBDODO, IMAGEEX_LONGPATH, IMAGEEX_LONGPATH_STR, __LINE__, __FILE__);
+
+	strncpy(collectedData.imHandle->filename, str.c_str(), size);
 
 	if (WriteImage(collectedData.imInfo, collectedData.imHandle) == MagickFalse)
 		throw baseEx(ERRMODULE_IMAGE, IMAGEEX_WRITE, ERR_IMAGEMAGICK, collectedData.imHandle->exception.error_number, exInfo->reason, __LINE__, __FILE__);

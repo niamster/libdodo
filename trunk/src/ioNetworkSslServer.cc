@@ -359,7 +359,12 @@ server::bindNListen(const dodoString &path,
 
 	struct sockaddr_un sa;
 
-	strcpy(sa.sun_path, path.c_str());
+	unsigned long size = path.size();
+
+	if (size >= 108)
+		throw baseEx(ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, ERR_LIBDODO, SERVEREX_LONGPATH, IONETWORKSSLSERVEREX_LONGPATH_STR, __LINE__, __FILE__);
+
+	strncpy(sa.sun_path, path.c_str(), size);
 	sa.sun_family = AF_UNIX;
 
 	if (::bind(socket, (struct sockaddr *)&sa, path.size() + sizeof(sa.sun_family)) == -1)

@@ -42,7 +42,8 @@ namespace dodo
 	enum imageExR
 	{
 		IMAGEEX_BADINFO,
-		IMAGEEX_EMPTYIMAGE
+		IMAGEEX_EMPTYIMAGE,
+		IMAGEEX_LONGPATH
 	};
 
 	/**
@@ -50,6 +51,7 @@ namespace dodo
 	 */
 #define IMAGEEX_BADINFO_STR    "Bad information for image was provided."
 #define IMAGEEX_EMPTYIMAGE_STR "The image is empty. It was either closed or not opened."
+#define IMAGEEX_LONGPATH_STR "Path to image is too long."
 
 	/**
 	 * IDs of functions where exception might be thrown

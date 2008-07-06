@@ -50,6 +50,7 @@ namespace dodo
 					CLIENTEX_UNABLETOINITCONTEXT,
 					CLIENTEX_UNABLETOINITSSL,
 					CLIENTEX_UNKNOWNKEYTYPE,
+					CLIENTEX_LONGPATH,
 				};
 
 				/**
@@ -58,6 +59,7 @@ namespace dodo
 #define IONETWORKSSLCLIENTEX_UNABLETOINITCONTEXT_STR "Unable to initialize context for SSL connection."
 #define IONETWORKSSLCLIENTEX_UNABLETOINITSSL_STR "Unable to initialize SSL object."
 #define IONETWORKSSLCLIENTEX_UNKNOWNKEYTYPE_STR "Unknown key type."
+#define IONETWORKSSLCLIENTEX_LONGPATH_STR "Path to socket is too long."
 
 				/**
 				 * IDs of functions where exception might be thrown
