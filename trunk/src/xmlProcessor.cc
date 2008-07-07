@@ -137,7 +137,7 @@ processor::isCDATA(xmlNodePtr chNode)
 //-------------------------------------------------------------------
 
 node
-processor::parseFile(const __nodeDef &definition,
+processor::processFile(const __nodeDef &definition,
 					 const dodoString &file)
 {
 #ifdef LIBXML2_EXT
@@ -163,7 +163,7 @@ processor::parseFile(const __nodeDef &definition,
 //-------------------------------------------------------------------
 
 node
-processor::parseBuffer(const __nodeDef &definition,
+processor::processBuffer(const __nodeDef &definition,
 					   const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
@@ -672,7 +672,7 @@ processor::initNode(node &xnode)
 //-------------------------------------------------------------------
 
 node
-processor::parseFile(const dodoString &file)
+processor::processFile(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -712,7 +712,7 @@ processor::parseFile(const dodoString &file)
 //-------------------------------------------------------------------
 
 node
-processor::parseBuffer(const dodoString &buffer)
+processor::processBuffer(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 

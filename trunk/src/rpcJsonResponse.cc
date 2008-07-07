@@ -40,7 +40,7 @@ response::jsonToRpcResponse(const dodoString &data)
 
 	dodo::json::processor jsonValue;
 
-	dodo::json::node node = jsonValue.parseBuffer(jsonMethodResponse, data);
+	dodo::json::node node = jsonValue.processBuffer(jsonMethodResponse, data);
 
 	return jsonToRpcResponse(node);*/
 }

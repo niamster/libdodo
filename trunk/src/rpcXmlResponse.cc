@@ -40,7 +40,7 @@ response::xmlToRpcResponse(const dodoString &data)
 
 	dodo::xml::processor xmlValue;
 
-	dodo::xml::node node = xmlValue.parseBuffer(xmlMethodResponse, data);
+	dodo::xml::node node = xmlValue.processBuffer(xmlMethodResponse, data);
 
 	return xmlToRpcResponse(node);
 }

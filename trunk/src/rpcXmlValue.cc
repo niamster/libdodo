@@ -150,7 +150,7 @@ value::xmlToRpcValue(const dodoString &data)
 
 	dodo::xml::processor xmlValue;
 
-	dodo::xml::node node = xmlValue.parseBuffer(xmlValueNode, data);
+	dodo::xml::node node = xmlValue.processBuffer(xmlValueNode, data);
 
 	return xmlToRpcValue(node);
 }

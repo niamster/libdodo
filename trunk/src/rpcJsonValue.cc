@@ -145,7 +145,7 @@ value::jsonToRpcValue(const dodoString &data)
 
 	dodo::json::processor jsonValue;
 
-	dodo::json::node node = jsonValue.parseBuffer(jsonValueNode, data);
+	dodo::json::node node = jsonValue.processBuffer(jsonValueNode, data);
 
 	return jsonToRpcValue(node);*/
 }
