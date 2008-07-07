@@ -20,6 +20,9 @@ using namespace db;
 
 #ifndef DB_WO_XEXEC
 
+/**
+ * db hook
+ */
 void
 hook(void *odata,
 	 short int type,
@@ -29,6 +32,7 @@ hook(void *odata,
 
 	if (sql->operType == DB_OPERATION_EXEC)
 	{
+		///print the resulting query
 		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
@@ -49,7 +53,8 @@ int main(int argc, char **argv)
 
 #ifndef DB_WO_XEXEC
 
-		int pos = pp.addPreExec(hook, (void *)"id");
+		///add db hook	
+		int pos = pp.addPreExec(hook, NULL);
 
 #endif
 
@@ -113,11 +118,9 @@ int main(int argc, char **argv)
 		pp.createIndex("test", "id", "id");
 		pp.exec();
 
-		/*create field*/
 		fi.name = "foo";
 		fi.type = CONNECTOR_FIELDTYPE_CHAR;
 		fi.length = 10;
-
 		pp.createField(fi, "test");
 		pp.exec();
 
@@ -128,12 +131,13 @@ int main(int argc, char **argv)
 		dodoStringArray fields;
 		__connectorStorage storage;
 
-		/* select*/
 		pp.selectAll("test");
 		pp.join("test1", CONNECTOR_JOINTYPE_JOIN, "test.operation = test1.operation");
 		pp.limit(10);
 		pp.exec();
-		storage = pp.fetch();        //get result
+
+		storage = pp.fetch();
+
 		dodoStringArray::iterator i = storage.fields.begin(), j = storage.fields.end();
 		for (; i != j; ++i)
 			cout << *i << "\t";
@@ -145,7 +149,6 @@ int main(int argc, char **argv)
 
 		pp.limit(10);
 		pp.offset(23);
-		pp.offset(3);
 
 		dodoStringMap arr;
 		dodoArray<dodoStringMap> assA;
@@ -156,19 +159,18 @@ int main(int argc, char **argv)
 		arr["operation"] = "n\nu";
 		assA.push_back(arr);
 
-		/*additional statement*/
-		pp.setAddInsSt(ACCUMULATOR_ADDREQUEST_INSERT_IGNORE);           //base SQL
-		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);         //base SQL
-		pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);           //mySQL features; defined only in this class
+		pp.setAddInsSt(ACCUMULATOR_ADDREQUEST_INSERT_IGNORE);
+		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
+		pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);
 
-		pp.insert("test", assA);                                        //multiply insert
+		pp.insert("test", assA);
 		pp.exec();
 
 		fields.clear();
 		fields.push_back("dot");
 		fields.push_back("operation");
 
-		pp.insert("test", values, fields);     //simple insert
+		pp.insert("test", values, fields);
 		pp.exec();
 
 #ifndef DB_WO_XEXEC
@@ -185,29 +187,27 @@ int main(int argc, char **argv)
 
 #ifndef DB_WO_XEXEC
 		
+		///enable db hook
 		pp.enablePreExec(pos);
 
 #endif
 
 		pp.selectAll("test", "id>1");
 
-		/* creatin' union with sqlStatement that compiles from  'pp.select("log",fields,"id>1");'*/
 		dodoStringArray uni;
+		dodoStringArray uni_all;
 		uni.push_back(pp.queryCollect());
 		uni.push_back(pp.queryCollect());
 		pp.subquery(uni);
-
-		dodoStringArray uni_all;
 		uni_all.push_back(pp.queryCollect());
 		uni_all.push_back(pp.queryCollect());
 		pp.subquery(uni_all, CONNECTOR_SUBREQUEST_UNION_ALL);
-
 		pp.order("id desc");
 		pp.limit(5);
 		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
 		pp.exec();
 
-		storage = pp.fetch();        //get result
+		storage = pp.fetch();
 	}
 	catch (baseEx ex)
 	{

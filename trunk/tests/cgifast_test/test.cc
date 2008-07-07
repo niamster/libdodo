@@ -29,13 +29,19 @@ cgif(exchange *fcgi)
 	using namespace cgi;
 
 	server cgit(fcgi, true);
+
+	///set cookie
 	cgit.setCookie("test", "Ni@m");
+
+	///print headers
 	cgit.printHeaders();
 
+	///increment counter in shared memory
 	int *inc = (int *)sh.acquire();
 	(*inc)++;
 	sh.release();
 
+	///print output
 	fcgi->writeStreamString(tools::string::iToString(*inc) + "<br>");
 	fcgi->writeStreamString(cgit.GET["a"] + "<br>");
 	fcgi->writeStreamString(cgit.POST["hidden"] + "<br>");
@@ -43,35 +49,40 @@ cgif(exchange *fcgi)
 	fcgi->writeStreamString(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
 	fcgi->writeStreamString(cgit.COOKIES["test"] + "<br>");
 	fcgi->writeStreamString(tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-
 	fcgi->writeStreamString("<br>");
 
 	try
 	{
+		///use cgi::processor
 		processor cgip(cgit);
+
+		///assing string variables
 		cgip.assign("test", "hoho");
 		cgip.assign("show", "That's works!");
+		cgip.assign("one", "one");
 
+		///assign array variable
 		dodoStringArray arr;
 		arr.push_back("one");
 		arr.push_back("two");
 		arr.push_back("three");
 		cgip.assign("arr", arr);
 
+		///assign hash variable
 		dodoStringMap arr1;
 		arr1["one"] = "one";
 		arr1["two"] = "two";
 		arr1["three"] = "three";
 		cgip.assign("arr1", arr1);
 
+		//assign array-of-hashes variable
 		dodoArray<dodoStringMap> arr2;
 		arr2.push_back(arr1);
 		arr1["one"] = "three";
 		arr2.push_back(arr1);
 		cgip.assign("arr2", arr2);
 
-		cgip.assign("one", "one");
-
+		///define the 'root' template for processing and print the output
 		cgip.display("test.tpl");
 	}
 	catch (baseEx ex)

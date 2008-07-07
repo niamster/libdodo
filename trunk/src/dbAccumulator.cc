@@ -202,6 +202,7 @@ accumulator::selectAll(const dodoString &a_table,
 	collectedData.qType = ACCUMULATOR_REQUEST_SELECT;
 
 	collectedData.table = a_table;
+	collectedData.fields.clear();
 	collectedData.fields.push_back("*");
 
 	if (a_where.size() != 0)

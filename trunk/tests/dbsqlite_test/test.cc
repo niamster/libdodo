@@ -20,6 +20,9 @@ using namespace db;
 
 #ifndef DB_WO_XEXEC
 
+/**
+ * db hook
+ */
 void
 hook(void *odata,
 	 short int type,
@@ -29,6 +32,7 @@ hook(void *odata,
 
 	if (sql->operType == DB_OPERATION_EXEC)
 	{
+		///print the resulting query
 		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
@@ -46,6 +50,7 @@ int main(int argc, char **argv)
 	{
 #ifndef DB_WO_XEXEC
 
+		///add db hook
 		int pos = pp.addPreExec(hook, (void *)"id");
 
 #endif
@@ -53,9 +58,7 @@ int main(int argc, char **argv)
 		tools::filesystem::unlink("test.lite", true);
 
 		__connectorInfo info;
-
 		info.path = "test.lite";
-
 		pp.setDbInfo(info);
 		pp.connect();
 
@@ -78,7 +81,6 @@ int main(int argc, char **argv)
 		ti.fields.push_back(fi);
 
 		pp.createTable(ti);
-		cout << pp.queryCollect() << endl;
 		pp.exec();
 
 		dodoStringMap arr;
@@ -92,25 +94,24 @@ int main(int argc, char **argv)
 		for (int i = 0; i < 10; i++)
 		{
 			pp.select("test", select, "`id`<20 or `operation`='um'");
-			cout << pp.queryCollect() << endl;
 			pp.exec();
+			
 			cout << "Selected: " << pp.rowsCount() << endl;
 			cout << "Selected2: " << pp.fetch().rows.size() << endl;
 			cout << "Selected3: " << pp.fetch().rows.size() << endl;
 			cout << "Fields: " << pp.fieldsCount() << endl;
 			cout << "Fields2: " << pp.fetch().fields.size() << endl;
 
-			pp.fetch();
-
 			pp.insert("test", arr);
 			pp.exec();
 
 			arr["operation"] = "um";
 			pp.update("test", arr);
-			arr["operation"] = "mu";
 			pp.exec();
 
 			cout << "Updated: " << pp.affectedRowsCount() << endl;
+			
+			arr["operation"] = "mu";
 		}
 
 		pp.select("test", select, "`id`<20 or `operation`='um'");
