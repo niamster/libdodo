@@ -568,7 +568,7 @@ AC_CONFIG_FILES([Makefile
                  tests/regexp_test/Makefile
                  tests/iononblocked_ionetwork_test/Makefile
                  tests/iononblocked_ionetworkssl_test/Makefile
-                 tests/iostd_test/Makefile
+                 tests/iostdio_test/Makefile
                  tests/iofile_toolsfilesystem_test/Makefile
 				 tests/iofifo_ipcthreadcollection_test/Makefile
                  tests/ionetwork_ipcthreads_test/Makefile
