@@ -31,18 +31,8 @@ int main(int argc, char **argv)
 		cout << stdio::getModuleInfo("./module").name << endl;
 
 		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
-		cout << st.addPreExec("./module", NULL) << endl;
 
 		st.delPreExec(1);
-		st.delPreExec(2);
 
 		cout << st.addPreExec("./module", NULL) << endl;
 		cout << st.addPreExec("./module", NULL, (void *)"perform") << endl;

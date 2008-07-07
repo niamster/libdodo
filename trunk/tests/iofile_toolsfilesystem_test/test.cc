@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 	{
 		cout << "not exists\n";
 	}
+
 	try
 	{
 		filesystem::rm("./test.cc.copy");
@@ -102,5 +103,6 @@ int main(int argc, char **argv)
 	{
 		cout << ex.baseErrstr << "\t" << ex.line << "\t" << ex.file << endl;
 	}
+
 	return 0;
 }

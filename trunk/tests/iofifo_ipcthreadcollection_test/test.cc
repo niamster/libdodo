@@ -90,6 +90,7 @@ int main(int argc, char **argv)
 		j.wait();
 
 		io::fifo fifo2 = fifo1;
+		//or clone
 		//fifo2.clone(fifo1);
 
 		///< use a copy, so no need to keep an order
