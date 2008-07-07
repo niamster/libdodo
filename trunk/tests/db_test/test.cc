@@ -21,9 +21,6 @@ using namespace std;
 
 #ifndef DB_WO_XEXEC
 
-/**
- * db hook
- */
 void
 hook(void *odata,
 	 short int type,
@@ -33,7 +30,6 @@ hook(void *odata,
 
 	if (sql->operType == DB_OPERATION_EXEC)
 	{
-		///print the resulting query
 		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
@@ -79,7 +75,6 @@ int main(int argc, char **argv)
 
 #ifndef DB_WO_XEXEC
 
-		///add db hook
 		int pos = pp->addPreExec(hook, (void *)"id");
 
 #endif
@@ -245,7 +240,6 @@ int main(int argc, char **argv)
 
 #ifndef DB_WO_XEXEC
 
-		///disable hook
 		pp->disablePreExec(pos);
 
 #endif
@@ -311,7 +305,6 @@ int main(int argc, char **argv)
 			;
 #endif
 
-		///insert binary data
 		pp->insert("test", arr);
 		pp->exec();
 

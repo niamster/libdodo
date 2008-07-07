@@ -56,7 +56,9 @@ int main(int argc, char **argv)
 #ifndef IMAGE_WO_XEXEC
 
 		im.addPreExec(hook, NULL);
-		im.addPostExec(hook, NULL);        ///< revert
+
+		///another one to revert
+		im.addPostExec(hook, NULL);
 
 #endif
 

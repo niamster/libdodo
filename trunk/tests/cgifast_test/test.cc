@@ -30,10 +30,10 @@ cgif(exchange *fcgi)
 
 	server cgit(fcgi, true);
 
-	///set cookie
 	cgit.setCookie("test", "Ni@m");
 
-	///print headers
+	/// will print headers if they haven't been printed before
+	/// headers are printed also if print was called but headers hadn't been called before
 	cgit.printHeaders();
 
 	///increment counter in shared memory
@@ -41,7 +41,6 @@ cgif(exchange *fcgi)
 	(*inc)++;
 	sh.release();
 
-	///print output
 	fcgi->writeStreamString(tools::string::iToString(*inc) + "<br>");
 	fcgi->writeStreamString(cgit.GET["a"] + "<br>");
 	fcgi->writeStreamString(cgit.POST["hidden"] + "<br>");
@@ -53,36 +52,30 @@ cgif(exchange *fcgi)
 
 	try
 	{
-		///use cgi::processor
 		processor cgip(cgit);
 
-		///assing string variables
 		cgip.assign("test", "hoho");
 		cgip.assign("show", "That's works!");
 		cgip.assign("one", "one");
 
-		///assign array variable
 		dodoStringArray arr;
 		arr.push_back("one");
 		arr.push_back("two");
 		arr.push_back("three");
 		cgip.assign("arr", arr);
 
-		///assign hash variable
 		dodoStringMap arr1;
 		arr1["one"] = "one";
 		arr1["two"] = "two";
 		arr1["three"] = "three";
 		cgip.assign("arr1", arr1);
 
-		//assign array-of-hashes variable
 		dodoArray<dodoStringMap> arr2;
 		arr2.push_back(arr1);
 		arr1["one"] = "three";
 		arr2.push_back(arr1);
 		cgip.assign("arr2", arr2);
 
-		///define the 'root' template for processing and print the output
 		cgip.display("test.tpl");
 	}
 	catch (baseEx ex)
