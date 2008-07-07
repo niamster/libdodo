@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlClient.h
+ *            rpcJsonServer.h
  *
- *  Wed Apr 09 23:30:55 2008
+ *  Mon Jul 07 11:29:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,57 +27,55 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLCLIENT_H_
-#define _RPCXMLCLIENT_H_
+#ifndef _RPCJSONSERVER_H_
+#define _RPCJSONSERVER_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
-#include <libdodo/rpcClient.h>
-#include <libdodo/rpcXmlMethod.h>
-#include <libdodo/rpcXmlResponse.h>
+#include <libdodo/rpcServer.h>
+#include <libdodo/rpcJsonMethod.h>
+#include <libdodo/rpcJsonResponse.h>
 
 namespace dodo
 {
 	namespace rpc
 	{
-		namespace xml
+		namespace json
 		{
 			/**
-			 * @class client defines client-side XML-RPC instrument
+			 * @class server defines server-side JSON-RPC instrument
 			 */
-			class client : public rpc::client
+			class server : public rpc::server
 			{
 				public:
 
 					/**
 					 * constructor
 					 */
-					client();
+					server();
 
 					/**
 					 * destructor
 					 */
-					virtual ~client();
-
-					dodoString encoding; ///< encoding of the messages['UTF-8' by default]
+					virtual ~server();
 
 				protected:
 
 					/**
 					 * process RPC call
-					 * @return RPC method
-					 * @param meth defines RPC method representation
+					 * @return RPC method represantation
+					 * @param data defines buffer that contains RPC request
 					 */
-					virtual dodoString processRpcCall(const rpc::method &meth);
+					virtual rpc::method processRpcCall(const dodoString &data);
 
 					/**
 					 * process RPC call
-					 * @return RPC response represantation
-					 * @param data defines buffer that contains RPC response
+					 * @return RPC response
+					 * @param response defines RPC response representation
 					 */
-					virtual rpc::response processRpcCallResult(const dodoString &data);
+					virtual dodoString processRpcCallResult(const rpc::response &response);
 			};
 		};
 	};

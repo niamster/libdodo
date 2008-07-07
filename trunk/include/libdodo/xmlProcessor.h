@@ -154,13 +154,13 @@ namespace dodo
 				 * @return XML info
 				 * @param file defines path to XML file
 				 */
-				virtual __info getXMLFileInfo(const dodoString &file);
+				virtual __info getFileInfo(const dodoString &file);
 
 				/**
 				 * @return XML info
 				 * @param buffer defines XML buffer
 				 */
-				virtual __info getXMLBufferInfo(const dodoString &buffer);
+				virtual __info getBufferInfo(const dodoString &buffer);
 
 				/**
 				 * clear parameters of the give node
@@ -185,13 +185,13 @@ namespace dodo
 				 * @param encoding defines XML encoding
 				 * @param version defines XML version
 				 */
-				virtual dodoString createXML(const node &root, const dodoString &encoding = "UTF-8", const dodoString &version = "1.0")  const;
+				virtual dodoString make(const node &root, const dodoString &encoding, const dodoString &version = "1.0")  const;
 
 				/**
 				 * @return XML string
 				 * @param xnode defines root node of XML document
 				 */
-				virtual dodoString createNode(const node &xnode) const;
+				virtual dodoString make(const node &xnode) const;
 
 			protected:
 

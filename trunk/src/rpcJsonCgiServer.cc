@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlHttpClient.cc
+ *            rpcJsonCgiServer.cc
  *
- *  Sat Apr 12 16:49:55 2008
+ *  Mon Jul 07 11:29:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,46 +27,37 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/rpcXmlHttpClient.h>
+#include <libdodo/rpcJsonCgiServer.h>
 
-using namespace dodo::rpc::xml;
+using namespace dodo::rpc::json;
 
-httpClient::httpClient()
+cgiServer::cgiServer(cgi::server &a_provider) : provider(a_provider)
 {
+	provider.HEADERS.insert(make_pair(cgi::SERVER_RESPONSEHEADER_CONTENTTYPE, dodoString("text/json")));
 
+	provider.printHeaders();
 }
 
 //-------------------------------------------------------------------
 
-httpClient::~httpClient()
+cgiServer::~cgiServer()
 {
-
 }
 
 //-------------------------------------------------------------------
 
 void
-httpClient::sendTextRequest(const dodoString &method)
+cgiServer::sendTextRequest(const dodoString &response)
 {
-	http.POST(method, "text/xml");
+	provider.print(response);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-httpClient::receiveTextResponse()
+cgiServer::receiveTextResponse()
 {
-	io::network::__httpResponse response = http.getResponse();
-
-	return response.data;
-}
-
-//-------------------------------------------------------------------
-
-void
-httpClient::setUrl(const dodoString &url)
-{
-	http.setUrl(url);
+	return provider.content;
 }
 
 //-------------------------------------------------------------------

@@ -67,8 +67,6 @@ namespace dodo
 
 				protected:
 
-					static const char trimSymbols[2];                     ///< symbols to trim in the end and in the begining of the XML node value
-
 					/**
 					 * @return response parsed from XML node
 					 * @param node defines XML node

@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlClient.h
+ *            rpcJsonClient.h
  *
- *  Wed Apr 09 23:30:55 2008
+ *  Mon Jul 07 11:29:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,25 +27,25 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLCLIENT_H_
-#define _RPCXMLCLIENT_H_
+#ifndef _RPCJSONCLIENT_H_
+#define _RPCJSONCLIENT_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcClient.h>
-#include <libdodo/rpcXmlMethod.h>
-#include <libdodo/rpcXmlResponse.h>
+#include <libdodo/rpcJsonMethod.h>
+#include <libdodo/rpcJsonResponse.h>
 
 namespace dodo
 {
 	namespace rpc
 	{
-		namespace xml
+		namespace json
 		{
 			/**
-			 * @class client defines client-side XML-RPC instrument
+			 * @class client defines client-side JSON-RPC instrument
 			 */
 			class client : public rpc::client
 			{
@@ -60,8 +60,6 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~client();
-
-					dodoString encoding; ///< encoding of the messages['UTF-8' by default]
 
 				protected:
 

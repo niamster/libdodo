@@ -50,6 +50,11 @@ namespace dodo
 		{
 			class cgiServer;
 		};
+
+		namespace json
+		{
+			class cgiServer;
+		};
 	};
 
 	namespace cgi
@@ -282,6 +287,7 @@ namespace dodo
 		class server
 		{
 			friend class rpc::xml::cgiServer;
+			friend class rpc::json::cgiServer;
 
 			private:
 

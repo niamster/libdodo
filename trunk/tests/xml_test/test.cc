@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 		processor xmlp;
 		xmlp.icaseNames = true;
 
-		cout << xmlp.getXMLFileInfo("./test.xml").version;
+		cout << xmlp.getFileInfo("./test.xml").version;
 
 		__nodeDef def;
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 		def.children["span"] = def1;
 
 		node xnode = xmlp.parseFile(def, "./test.xml");
-		//node node = tool.parseFile("./test.xml");
+		//node xnode = xmlp.parseFile("./test.xml");
 
 		cout << xnode.attributes["iD"] << endl;
 		cout << xnode.name << endl;
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
 		cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << endl;
 
-		cout  << endl << xmlp.createXML(xmlp.parseFile("./test.xml")) << endl << endl;
+		cout  << endl << xmlp.make(xmlp.parseFile("./test.xml"), xmlp.getFileInfo("./test.xml").encoding) << endl << endl;
 
 	}
 	catch (baseEx ex)

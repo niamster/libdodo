@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlHttpClient.cc
+ *            rpcJsonHttpClient.cc
  *
- *  Sat Apr 12 16:49:55 2008
+ *  Mon Jul 07 11:29:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/rpcXmlHttpClient.h>
+#include <libdodo/rpcJsonHttpClient.h>
 
-using namespace dodo::rpc::xml;
+using namespace dodo::rpc::json;
 
 httpClient::httpClient()
 {
@@ -48,7 +48,7 @@ httpClient::~httpClient()
 void
 httpClient::sendTextRequest(const dodoString &method)
 {
-	http.POST(method, "text/xml");
+	http.POST(method, "text/json");
 }
 
 //-------------------------------------------------------------------

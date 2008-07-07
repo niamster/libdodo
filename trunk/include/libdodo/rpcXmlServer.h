@@ -60,6 +60,8 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~server();
+					
+					dodoString encoding; ///< encoding of the messages['UTF-8' by default]
 
 				protected:
 

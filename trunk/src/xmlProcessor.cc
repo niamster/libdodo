@@ -548,7 +548,7 @@ processor::getNodeInfo(const xmlNodePtr xnode,
 //-------------------------------------------------------------------
 
 __info
-processor::getXMLFileInfo(const dodoString &file)
+processor::getFileInfo(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
 
@@ -558,9 +558,9 @@ processor::getXMLFileInfo(const dodoString &file)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETXMLFILEINFO, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETFILEINFO, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETXMLFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
@@ -578,7 +578,7 @@ processor::getXMLFileInfo(const dodoString &file)
 //-------------------------------------------------------------------
 
 __info
-processor::getXMLBufferInfo(const dodoString &buffer)
+processor::getBufferInfo(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
 
@@ -588,9 +588,9 @@ processor::getXMLBufferInfo(const dodoString &buffer)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETXMLBUFFERINFO, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETXMLBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	return __info((char *)document->version, (char *)document->encoding, (char *)document->children->name, document->compression);
@@ -829,7 +829,7 @@ processor::clear()
 //-------------------------------------------------------------------
 
 dodoString
-processor::createXML(const node &root,
+processor::make(const node &root,
 					 const dodoString &encoding,
 					 const dodoString &version) const
 {
@@ -838,7 +838,7 @@ processor::createXML(const node &root,
 
 	dodoString processor = "<?processor version=\"" + version + "\" encoding=\"" + encoding + "\"?>\r\n";
 
-	processor.append(createNode(root));
+	processor.append(make(root));
 
 	return processor;
 }
@@ -846,7 +846,7 @@ processor::createXML(const node &root,
 //-------------------------------------------------------------------
 
 dodoString
-processor::createNode(const node &xnode) const
+processor::make(const node &xnode) const
 {
 	if (xnode.name.empty())
 		return __dodostring__;
@@ -909,7 +909,7 @@ processor::createNode(const node &xnode) const
 		x = o->second.begin();
 		y = o->second.end();
 		for (; x != y; ++x)
-			data.append(createNode(*x));
+			data.append(make(*x));
 	}
 
 	data.append(statements[PROCESSOR_STATEMENT_LTSLASH]);

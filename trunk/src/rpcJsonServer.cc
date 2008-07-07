@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlHttpClient.cc
+ *            rpcJsonServer.cc
  *
- *  Sat Apr 12 16:49:55 2008
+ *  Mon Jul 07 11:29:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,46 +27,38 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/rpcXmlHttpClient.h>
+#include <libdodo/rpcJsonServer.h>
 
-using namespace dodo::rpc::xml;
+using namespace dodo::rpc::json;
 
-httpClient::httpClient()
+server::server()
 {
 
 }
 
 //-------------------------------------------------------------------
 
-httpClient::~httpClient()
+server::~server()
 {
 
 }
 
 //-------------------------------------------------------------------
 
-void
-httpClient::sendTextRequest(const dodoString &method)
+dodo::rpc::method
+server::processRpcCall(const dodoString &data)
 {
-	http.POST(method, "text/xml");
+	return method::jsonToRpcMethod(data);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-httpClient::receiveTextResponse()
+server::processRpcCallResult(const rpc::response &resp)
 {
-	io::network::__httpResponse response = http.getResponse();
+	dodo::json::processor jsonMethod;
 
-	return response.data;
-}
-
-//-------------------------------------------------------------------
-
-void
-httpClient::setUrl(const dodoString &url)
-{
-	http.setUrl(url);
+	return jsonMethod.make(response::responseToJsonNode(resp));
 }
 
 //-------------------------------------------------------------------

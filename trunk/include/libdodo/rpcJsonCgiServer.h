@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlHttpClient.cc
+ *            rpcJsonCgiServer.h
  *
- *  Sat Apr 12 16:49:55 2008
+ *  Mon Jul 07 11:29:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,46 +27,56 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/rpcXmlHttpClient.h>
+#ifndef _RPCJSONCGISERVER_H_
+#define _RPCJSONCGISERVER_H_
 
-using namespace dodo::rpc::xml;
+#include <libdodo/directives.h>
 
-httpClient::httpClient()
+#include <libdodo/types.h>
+#include <libdodo/cgiServer.h>
+#include <libdodo/rpcJsonServer.h>
+
+namespace dodo
 {
+	namespace rpc
+	{
+		namespace json
+		{
+			/**
+			 * @class server defines server-side RPC instrument
+			 */
+			class cgiServer : public server
+			{
+				public:
 
-}
+					/**
+					 * constructor
+					 */
+					cgiServer(cgi::server &provider);
 
-//-------------------------------------------------------------------
+					/**
+					 * destructor
+					 */
+					virtual ~cgiServer();
 
-httpClient::~httpClient()
-{
+				protected:
 
-}
+					/**
+					 * send request
+					 * @param response defines rpc method call
+					 */
+					virtual void sendTextRequest(const dodoString &response);
 
-//-------------------------------------------------------------------
+					/**
+					 * get response
+					 * @return rpc response result
+					 */
+					virtual dodoString receiveTextResponse();
 
-void
-httpClient::sendTextRequest(const dodoString &method)
-{
-	http.POST(method, "text/xml");
-}
+					cgi::server &provider;
+			};
+		};
+	};
+};
 
-//-------------------------------------------------------------------
-
-dodoString
-httpClient::receiveTextResponse()
-{
-	io::network::__httpResponse response = http.getResponse();
-
-	return response.data;
-}
-
-//-------------------------------------------------------------------
-
-void
-httpClient::setUrl(const dodoString &url)
-{
-	http.setUrl(url);
-}
-
-//-------------------------------------------------------------------
+#endif

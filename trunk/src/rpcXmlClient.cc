@@ -31,16 +31,14 @@
 
 using namespace dodo::rpc::xml;
 
-client::client()
+client::client() : encoding("UTF-8")
 {
-
 }
 
 //-------------------------------------------------------------------
 
 client::~client()
 {
-
 }
 
 //-------------------------------------------------------------------
@@ -50,7 +48,7 @@ client::processRpcCall(const rpc::method &meth)
 {
 	dodo::xml::processor xmlMethod;
 
-	return xmlMethod.createXML(method::methodToXmlNode(meth));
+	return xmlMethod.make(method::methodToXmlNode(meth), encoding);
 }
 
 //-------------------------------------------------------------------

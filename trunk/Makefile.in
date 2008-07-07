@@ -68,6 +68,13 @@ OBJECTS:=dbAccumulator.o \
 	rpcXmlValue.o \
 	rpcXmlMethod.o \
 	rpcXmlResponse.o \
+	rpcJsonCgiServer.o \
+	rpcJsonClient.o \
+	rpcJsonHttpClient.o \
+	rpcJsonMethod.o \
+	rpcJsonResponse.o \
+	rpcJsonServer.o \
+	rpcJsonValue.o \
 	image.o \
 	ipcRaceHazardGuard.o \
 	ipcAtomicLock.o \

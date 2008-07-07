@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlClient.h
+ *            rpcJsonMethod.h
  *
- *  Wed Apr 09 23:30:55 2008
+ *  Mon Jul 07 11:29:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,57 +27,57 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLCLIENT_H_
-#define _RPCXMLCLIENT_H_
+#ifndef _RPCJSONMETHOD_H_
+#define _RPCJSONMETHOD_H_
 
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
-#include <libdodo/rpcClient.h>
-#include <libdodo/rpcXmlMethod.h>
-#include <libdodo/rpcXmlResponse.h>
+#include <libdodo/rpcMethod.h>
+#include <libdodo/rpcJsonValue.h>
+#include <libdodo/jsonProcessor.h>
 
 namespace dodo
 {
 	namespace rpc
 	{
-		namespace xml
+		namespace json
 		{
 			/**
-			 * @class client defines client-side XML-RPC instrument
+			 * @class method defines RPC method in JSON representation
 			 */
-			class client : public rpc::client
+			class method
 			{
+				friend class client;
+
 				public:
 
 					/**
-					 * constructor
+					 * @return method parsed from JSON
+					 * @param data defines JSON string
 					 */
-					client();
+					static rpc::method jsonToRpcMethod(const dodoString &data);
 
 					/**
-					 * destructor
+					 * @return JSON parsed from method
+					 * @param data defines method structure
 					 */
-					virtual ~client();
-
-					dodoString encoding; ///< encoding of the messages['UTF-8' by default]
+					static dodoString methodToJson(const rpc::method &data);
 
 				protected:
 
 					/**
-					 * process RPC call
-					 * @return RPC method
-					 * @param meth defines RPC method representation
+					 * @return method parsed from JSON node
+					 * @param node defines JSON node
 					 */
-					virtual dodoString processRpcCall(const rpc::method &meth);
+					static rpc::method jsonToRpcMethod(dodo::json::node &node);
 
 					/**
-					 * process RPC call
-					 * @return RPC response represantation
-					 * @param data defines buffer that contains RPC response
+					 * @return JSON node parsed from method
+					 * @param data defines method structure
 					 */
-					virtual rpc::response processRpcCallResult(const dodoString &data);
+					static dodo::json::node methodToJsonNode(const rpc::method &data);
 			};
 		};
 	};
