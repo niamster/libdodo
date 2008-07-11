@@ -44,6 +44,11 @@ namespace dodo
 		{
 			class value;
 		};
+		
+		namespace json
+		{
+			class value;
+		};
 
 		/**
 		 * @enum dataTypeEnum defines RPC data types
@@ -65,6 +70,7 @@ namespace dodo
 		{
 			friend class client;
 			friend class xml::value;
+			friend class json::value;
 
 			public:
 

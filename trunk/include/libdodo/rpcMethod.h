@@ -44,6 +44,11 @@ namespace dodo
 		{
 			class method;
 		};
+		
+		namespace json
+		{
+			class method;
+		};
 
 		/**
 		 * @class method defines RPC method reprasentation
@@ -53,6 +58,7 @@ namespace dodo
 			friend class client;
 			friend class server;
 			friend class xml::method;
+			friend class json::method;
 
 			public:
 

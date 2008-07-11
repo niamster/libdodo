@@ -34,15 +34,11 @@ using namespace dodo::rpc::json;
 dodo::rpc::method
 method::jsonToRpcMethod(const dodoString &data)
 {
-	/*dodo::json::__nodeDef jsonMethodCall;
-	jsonMethodCall.name = "methodCall";
-	jsonMethodCall.ignoreChildrenDef = true;
-
 	dodo::json::processor jsonValue;
 
-	dodo::json::node node = jsonValue.processBuffer(jsonMethodCall, data);
+	dodo::json::node node = jsonValue.process(data);
 
-	return jsonToRpcMethod(node);*/
+	return jsonToRpcMethod(node);
 }
 
 //-------------------------------------------------------------------
@@ -61,41 +57,19 @@ method::methodToJson(const rpc::method &data)
 dodo::rpc::method
 method::jsonToRpcMethod(dodo::json::node &node)
 {
-	/*dodoMap<dodoString, dodoArray<dodo::json::node>, dodoMapStringCompare>::iterator i = node.children.begin();
-	if (i == node.children.end())
-		return rpc::method();
-
+	dodoMap<dodoString, dodo::json::node, dodoMapStringCompare> obj = node.getObject();
+	
 	rpc::method meth;
 
-	if (tools::string::iequal(i->first, "methodName"))
-	{
-		dodoArray<dodo::json::node> &arr0 = i->second;
-		if (arr0.size() > 0)
-			meth.name = tools::string::trim(arr0[0].value, trimSymbols, 2);
-		else
-			meth.name = __dodostring__;
-	}
-	else
-	{
-		if (tools::string::iequal(i->first, "params"))
-		{
-			dodoArray<dodo::json::node> &arr0 = i->second;
-			if (arr0.size() == 0)
-				return meth;
+	meth.name = obj["method"].getString();
 
-			dodoArray<dodo::json::node> &nodeArray = arr0[0].children["param"];
+	dodoArray<dodo::json::node> nodes = obj["params"].getArray();
+	
+	dodoArray<dodo::json::node>::iterator i = nodes.begin(), j = nodes.end();
+	for (;i!=j;++i)
+		meth.arguments.push_back(value::jsonToRpcValue(*i));
 
-			dodoArray<dodo::json::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
-			for (; o != p; ++o)
-			{
-				dodoArray<dodo::json::node> &arr1 = o->children["value"];
-				if (arr0.size() > 0)
-					meth.arguments.push_back(value::jsonToRpcValue(arr1[0]));
-			}
-		}
-	}
-
-	return meth;*/
+	return meth;
 }
 
 //-------------------------------------------------------------------
