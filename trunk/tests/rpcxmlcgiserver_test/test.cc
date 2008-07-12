@@ -19,8 +19,9 @@ handler(const dodoString &method, const dodoArray<value> &values)
 {
 	response resp;
 
-	resp.addArgument(dodoString("Got method: ") + method);
-	resp.addArgument(dodoString("Amount of values: ") + tools::string::ulToString(values.size()));
+
+	resp.addArgument(dodoString("Got method: ") + method + "\n");
+	resp.addArgument(dodoString("Amount of values: ") + tools::string::ulToString(values.size()) + "\n");
 
 	return resp;
 }

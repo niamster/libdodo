@@ -48,7 +48,9 @@ int main(int argc, char **argv)
 
 		response resp = client.receiveResponse();
 
-		cout << resp.getValue().getString() << endl;
+		cout << "Amount of values: " << resp.getValues().size() << endl;
+		cout << "First value: " << resp.getValue().getString() << endl;
+		cout << "Second value: " << resp.getValue(1).getString() << endl;
 	}
 	catch (baseEx ex)
 	{
