@@ -592,8 +592,11 @@ processor::getBufferInfo(const dodoString &buffer)
 		else
 			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
-
-	return __info((char *)document->version, (char *)document->encoding, (char *)document->children->name, document->compression);
+	
+	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
+				  document->encoding != NULL ? (char *)document->encoding : __dodostring__,
+				  (document->children != NULL && document->children->name != NULL) ? (char *)document->children->name : __dodostring__,
+				  document->compression);
 
 #else
 
