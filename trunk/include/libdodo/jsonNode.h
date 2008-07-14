@@ -40,6 +40,14 @@ namespace dodo
 {
 	namespace json
 	{
+		namespace rpc
+		{
+			namespace json
+			{
+				class method;
+			};
+		};
+
 		/**
 		 * @enum nodeDataTypeEnum defines JSON data types
 		 */
@@ -59,6 +67,7 @@ namespace dodo
 		class node
 		{
 			friend class processor;
+			friend class rpc::json::method;
 
 			public:
 

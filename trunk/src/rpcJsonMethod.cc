@@ -57,15 +57,21 @@ method::methodToJson(const rpc::method &data)
 dodo::rpc::method
 method::jsonToRpcMethod(dodo::json::node &node)
 {
-	dodoMap<dodoString, dodo::json::node, dodoMapStringCompare> obj = node.getObject();
+	if (node.valueDataType != dodo::json::DATATYPE_OBJECT)
+		throw baseEx(ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTORPCMETHOD, ERR_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
 	
+	dodoMap<dodoString, dodo::json::node, dodoMapStringCompare> &obj = node.objectValue;
+		
 	rpc::method meth;
 
 	meth.name = obj["method"].getString();
 
-	dodoArray<dodo::json::node> nodes = obj["params"].getArray();
+	dodo::json::node &params = obj["params"];
 	
-	dodoArray<dodo::json::node>::iterator i = nodes.begin(), j = nodes.end();
+	if (params != dodo::json::DATATYPE_ARRAY)
+		throw baseEx(ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTORPCMETHOD, ERR_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
+
+	dodoArray<dodo::json::node>::iterator i = params.arrayValue.begin(), j = params.arrayValue.end();
 	for (;i!=j;++i)
 		meth.arguments.push_back(value::jsonToRpcValue(*i));
 
