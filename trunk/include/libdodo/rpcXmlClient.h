@@ -61,7 +61,15 @@ namespace dodo
 					 */
 					virtual ~client();
 
-					dodoString encoding; ///< encoding of the messages['UTF-8' by default]
+					/**
+					 * @param encoding defines request encoding
+					 */
+					virtual void setRequestEncoding(const dodoString &encoding);
+
+					/**
+					 * @return response encoding
+					 */
+					virtual dodoString getResponseEncoding();
 
 				protected:
 
@@ -70,14 +78,18 @@ namespace dodo
 					 * @return RPC method
 					 * @param meth defines RPC method representation
 					 */
-					virtual dodoString processRpcCall(const rpc::method &meth);
+					virtual dodoString processCall(const rpc::method &meth);
 
 					/**
 					 * process RPC call
 					 * @return RPC response represantation
 					 * @param data defines buffer that contains RPC response
 					 */
-					virtual rpc::response processRpcCallResult(const dodoString &data);
+					virtual rpc::response processCallResult(const dodoString &data);
+					
+					dodoString rpEncoding; ///< encoding of the messages['UTF-8' by default]
+					dodoString rqEncoding; ///< encoding of the messages['UTF-8' by default]
+
 			};
 		};
 	};

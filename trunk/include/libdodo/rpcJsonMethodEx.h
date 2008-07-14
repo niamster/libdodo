@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcXmlValue.h
+ *            rpcJsonMethodEx.h
  *
- *  Wed Apr 09 23:30:55 2008
+ *  Mon Jul 14 12:06:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,44 +27,40 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCXMLVALUE_H_
-#define _RPCXMLVALUE_H_
+#ifndef _RPCJSONMETHODEX_H_
+#define _RPCJSONMETHODEX_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcValue.h>
-#include <libdodo/xmlProcessor.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {
 	namespace rpc
 	{
-		namespace xml
+		namespace json
 		{
 			/**
-			 * @class value defines RPC value in XML representation
+			 * libdodo defined errors
 			 */
-			class value
+			enum methodExR
 			{
-				public:
+				METHODEX_ROOTNOTANOBJECT,
+				METHODEX_PARAMSNOTANARRAY,
+			};
 
-					/**
-					 * @return value parsed from XML node
-					 * @param node defines XML node
-					 */
-					static rpc::value xmlToValue(dodo::xml::node &node);
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define RPCJSONMETHODEX_ROOTNOTANOBJECT_STR "Root node is not an object."
+#define RPCJSONMETHODEX_PARAMSNOTANARRAY_STR "Params is not an array."
 
-					/**
-					 * @return XML node from value
-					 * @param data defines value structure
-					 */
-					static dodo::xml::node valueToXml(const rpc::value &data);
-
-				protected:
-
-					static const char trimSymbols[2];                     ///< symbols to trim in the end and in the begining of the XML node value
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum methodFunctionsID
+			{
+				METHODEX_JSONTOMETHOD,
 			};
 		};
 	};

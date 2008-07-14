@@ -36,35 +36,9 @@ const char method::trimSymbols[] = { ' ',
 
 //-------------------------------------------------------------------
 
-dodo::rpc::method
-method::xmlToRpcMethod(const dodoString &data)
-{
-	dodo::xml::__nodeDef xmlMethodCall;
-	xmlMethodCall.name = "methodCall";
-	xmlMethodCall.ignoreChildrenDef = true;
-
-	dodo::xml::processor xmlValue;
-
-	dodo::xml::node node = xmlValue.processBuffer(xmlMethodCall, data);
-
-	return xmlToRpcMethod(node);
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-method::methodToXml(const rpc::method &data)
-{
-	dodo::xml::processor xmlValue;
-
-	return xmlValue.make(methodToXmlNode(data));
-}
-
-//-------------------------------------------------------------------
-
 
 dodo::rpc::method
-method::xmlToRpcMethod(dodo::xml::node &node)
+method::xmlToMethod(dodo::xml::node &node)
 {
 	rpc::method meth;
 
@@ -94,7 +68,7 @@ method::xmlToRpcMethod(dodo::xml::node &node)
 				{
 					dodoArray<dodo::xml::node> &arr1 = o->children["value"];
 					if (arr0.size() > 0)
-						meth.arguments.push_back(value::xmlToRpcValue(arr1[0]));
+						meth.arguments.push_back(value::xmlToValue(arr1[0]));
 				}
 			}
 		}
@@ -106,7 +80,7 @@ method::xmlToRpcMethod(dodo::xml::node &node)
 //-------------------------------------------------------------------
 
 dodo::xml::node
-method::methodToXmlNode(const rpc::method &data)
+method::methodToXml(const rpc::method &data)
 {
 	dodoArray<dodo::xml::node> nodeArr;
 
@@ -135,7 +109,7 @@ method::methodToXmlNode(const rpc::method &data)
 		{
 			param.children.clear();
 
-			nodeArr.assign(1, value::valueToXmlNode(*i));
+			nodeArr.assign(1, value::valueToXml(*i));
 			param.children.insert(make_pair("value", nodeArr));
 
 			subNodeArr.push_back(param);

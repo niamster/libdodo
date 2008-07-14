@@ -35,6 +35,7 @@
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcResponse.h>
+#include <libdodo/rpcJsonResponseEx.h>
 #include <libdodo/rpcJsonValue.h>
 #include <libdodo/jsonProcessor.h>
 
@@ -49,35 +50,21 @@ namespace dodo
 			 */
 			class response
 			{
-				friend class server;
-
 				public:
-
-					/**
-					 * @return response parsed from JSON
-					 * @param data defines JSON string
-					 */
-					static rpc::response jsonToRpcResponse(const dodoString &data);
-
-					/**
-					 * @return JSON parsed from response
-					 * @param data defines response structure
-					 */
-					static dodoString responseToJson(const rpc::response &data);
-
-				protected:
 
 					/**
 					 * @return response parsed from JSON node
 					 * @param node defines JSON node
+					 * @param version defines version of JSON-RPC response
 					 */
-					static rpc::response jsonToRpcResponse(dodo::json::node &node);
+					static rpc::response jsonToResponse(dodo::json::node &node, dodoString &version);
 
 					/**
 					 * @return JSON node parsed from response
 					 * @param data defines response structure
+					 * @param version defines version of JSON-RPC request
 					 */
-					static dodo::json::node responseToJsonNode(const rpc::response &data);
+					static dodo::json::node responseToJson(const rpc::response &data, const dodoString &version);
 			};
 		};
 	};

@@ -32,33 +32,7 @@
 using namespace dodo::rpc::xml;
 
 dodo::rpc::response
-response::xmlToRpcResponse(const dodoString &data)
-{
-	dodo::xml::__nodeDef xmlMethodResponse;
-	xmlMethodResponse.name = "methodResponse";
-	xmlMethodResponse.ignoreChildrenDef = true;
-
-	dodo::xml::processor xmlValue;
-
-	dodo::xml::node node = xmlValue.processBuffer(xmlMethodResponse, data);
-
-	return xmlToRpcResponse(node);
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-response::responseToXml(const rpc::response &data)
-{
-	dodo::xml::processor xmlValue;
-
-	return xmlValue.make(responseToXmlNode(data));
-}
-
-//-------------------------------------------------------------------
-
-dodo::rpc::response
-response::xmlToRpcResponse(dodo::xml::node &node)
+response::xmlToResponse(dodo::xml::node &node)
 {
 	dodoMap<dodoString, dodoArray<dodo::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
@@ -75,7 +49,7 @@ response::xmlToRpcResponse(dodo::xml::node &node)
 		{
 			dodoArray<dodo::xml::node> &arr1 = arr0[0].children["value"];
 			if (arr1.size() > 0)
-				resp.values.assign(1, value::xmlToRpcValue(arr1[0]));
+				resp.values.assign(1, value::xmlToValue(arr1[0]));
 		}
 	}
 	else
@@ -95,7 +69,7 @@ response::xmlToRpcResponse(dodo::xml::node &node)
 			{
 				dodoArray<dodo::xml::node> &arr1 = o->children["value"];
 				if (arr1.size() > 0)
-					resp.values.push_back(value::xmlToRpcValue(arr1[0]));
+					resp.values.push_back(value::xmlToValue(arr1[0]));
 			}
 		}
 	}
@@ -106,7 +80,7 @@ response::xmlToRpcResponse(dodo::xml::node &node)
 //-------------------------------------------------------------------
 
 dodo::xml::node
-response::responseToXmlNode(const rpc::response &data)
+response::responseToXml(const rpc::response &data)
 {
 	dodoArray<dodo::xml::node> nodeArr;
 
@@ -128,7 +102,7 @@ response::responseToXmlNode(const rpc::response &data)
 		{
 			param.children.clear();
 
-			nodeArr.assign(1, value::valueToXmlNode(*i));
+			nodeArr.assign(1, value::valueToXml(*i));
 			param.children.insert(make_pair("value", nodeArr));
 
 			subNodeArr.push_back(param);
@@ -143,7 +117,7 @@ response::responseToXmlNode(const rpc::response &data)
 		dodo::xml::node fault;
 		fault.name = "fault";
 
-		nodeArr.assign(1, value::valueToXmlNode(data.values.front()));
+		nodeArr.assign(1, value::valueToXml(data.values.front()));
 		fault.children.insert(make_pair("value", nodeArr));
 
 		nodeArr.assign(1, fault);

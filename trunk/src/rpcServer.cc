@@ -87,30 +87,30 @@ server::serve()
 {
 	try
 	{
-		method method = processRpcCall(receiveTextResponse());
+		method method = processCall(receiveTextResponse());
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator end = handlers.end();
 
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
 
 		if (handler == end)
-			sendTextRequest(processRpcCallResult(defaultHandler(method.name, method.arguments)));
+			sendTextRequest(processCallResult(defaultHandler(method.name, method.arguments)));
 		else
-			sendTextRequest(processRpcCallResult(handler->second(method.name, method.arguments)));
+			sendTextRequest(processCallResult(handler->second(method.name, method.arguments)));
 	}
 	catch (baseEx ex)
 	{
 		response response;
 		response.fault(ex.baseErrstr);
 
-		sendTextRequest(processRpcCallResult(response));
+		sendTextRequest(processCallResult(response));
 	}
 	catch (...)
 	{
 		response response;
 		response.fault(dodoString("An unknown error."));
 
-		sendTextRequest(processRpcCallResult(response));
+		sendTextRequest(processCallResult(response));
 	}
 }
 

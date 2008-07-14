@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 
 		switch (jsN.getType())
 		{
-			case NODE_DATATYPE_OBJECT:
+			case DATATYPE_OBJECT:
 
 				dodoMap<dodoString, node, dodoMapStringCompare> objectValue = jsN.getObject();
 				cout << "size: " << objectValue.size() << endl;
@@ -65,37 +65,37 @@ int main(int argc, char **argv)
 					cout << i->first << ": ";
 					switch (i->second.getType())
 					{
-						case NODE_DATATYPE_STRING:
+						case DATATYPE_STRING:
 
 							cout << "[string]: " << i->second.getString() << endl;
 
 							break;
 
-						case NODE_DATATYPE_OBJECT:
+						case DATATYPE_OBJECT:
 
 							cout << "[object]: " << endl;
 
 							break;
 
-						case NODE_DATATYPE_NULL:
+						case DATATYPE_NULL:
 
 							cout << "[null]: null" << endl;
 
 							break;
 
-						case NODE_DATATYPE_NUMERIC:
+						case DATATYPE_NUMERIC:
 
 							cout << "[numeric]: " << i->second.getNumeric() << endl;
 
 							break;
 
-						case NODE_DATATYPE_BOOLEAN:
+						case DATATYPE_BOOLEAN:
 
 							cout << "[boolean]: " << (i->second.getBoolean() ? "true" : "false") << endl;
 
 							break;
 
-						case NODE_DATATYPE_ARRAY:
+						case DATATYPE_ARRAY:
 						{
 							dodoArray<node> objectValue = i->second.getArray();
 							dodoArray<node>::iterator o = objectValue.begin(), p = objectValue.end();
@@ -104,37 +104,37 @@ int main(int argc, char **argv)
 							for (; o != p; ++o)
 								switch (o->getType())
 								{
-									case NODE_DATATYPE_STRING:
+									case DATATYPE_STRING:
 
 										cout << "\t[string]: " << o->getString() << endl;
 
 										break;
 
-									case NODE_DATATYPE_ARRAY:
+									case DATATYPE_ARRAY:
 
 										cout << "\t[array]: " << endl;
 
 										break;
 
-									case NODE_DATATYPE_OBJECT:
+									case DATATYPE_OBJECT:
 
 										cout << "\t[object]: " << endl;
 
 										break;
 
-									case NODE_DATATYPE_NULL:
+									case DATATYPE_NULL:
 
 										cout << "\t[null]: null" << endl;
 
 										break;
 
-									case NODE_DATATYPE_NUMERIC:
+									case DATATYPE_NUMERIC:
 
 										cout << "\t[numeric]: " << o->getNumeric() << endl;
 
 										break;
 
-									case NODE_DATATYPE_BOOLEAN:
+									case DATATYPE_BOOLEAN:
 
 										cout << "\t[boolean]: " << (o->getBoolean() ? "true" : "false") << endl;
 

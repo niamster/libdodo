@@ -32,125 +32,69 @@
 using namespace dodo::rpc::json;
 
 dodo::rpc::response
-response::jsonToRpcResponse(const dodoString &data)
+response::jsonToResponse(dodo::json::node &node,
+						 dodoString &version)
 {
-	/*dodo::json::__nodeDef jsonMethodResponse;
-	jsonMethodResponse.name = "methodResponse";
-	jsonMethodResponse.ignoreChildrenDef = true;
-
-	dodo::json::processor jsonValue;
-
-	dodo::json::node node = jsonValue.processBuffer(jsonMethodResponse, data);
-
-	return jsonToRpcResponse(node);*/
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-response::responseToJson(const rpc::response &data)
-{
-	dodo::json::processor jsonValue;
-
-	return jsonValue.make(responseToJsonNode(data));
-}
-
-//-------------------------------------------------------------------
-
-dodo::rpc::response
-response::jsonToRpcResponse(dodo::json::node &node)
-{
-	/*dodoMap<dodoString, dodoArray<dodo::json::node>, dodoMapStringCompare>::iterator i = node.children.begin();
-	if (i == node.children.end())
-		return rpc::response();
+	if (node.valueDataType != dodo::json::DATATYPE_OBJECT)
+		throw baseEx(ERRMODULE_RPCJSONRESPONSE, RESPONSEEX_JSONTORESPONSE, ERR_LIBDODO, RESPONSEEX_ROOTNOTANOBJECT, RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
+	
+	dodoMap<dodoString, dodo::json::node, dodoMapStringCompare> &obj = node.objectValue;
 
 	rpc::response resp;
 
-	if (tools::string::iequal(i->first, "fault"))
-	{
-		resp.succ = false;
+	version = obj["version"].getString();
 
-		dodoArray<dodo::json::node> &arr0 = i->second;
-		if (arr0.size() > 0)
-		{
-			dodoArray<dodo::json::node> &arr1 = arr0[0].children["value"];
-			if (arr1.size() > 0)
-				resp.values.assign(1, value::jsonToRpcValue(arr1[0]));
-		}
+	dodo::json::node &error = obj["error"];
+
+	if (!error.isNull())
+	{
+		resp.values.push_back(value::jsonToValue(error));
 	}
 	else
 	{
-		if (tools::string::iequal(i->first, "params"))
+		resp.succ = true;
+
+		dodo::json::node &result = obj["result"];
+
+		if (result.valueDataType == dodo::json::DATATYPE_ARRAY)
 		{
-			resp.succ = true;
-
-			dodoArray<dodo::json::node> &arr0 = i->second;
-			if (arr0.size() == 0)
-				return resp;
-
-			dodoArray<dodo::json::node> &nodeArray = arr0[0].children["param"];
-
-			dodoArray<dodo::json::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
-			for (; o != p; ++o)
-			{
-				dodoArray<dodo::json::node> &arr1 = o->children["value"];
-				if (arr1.size() > 0)
-					resp.values.push_back(value::jsonToRpcValue(arr1[0]));
-			}
+			dodoArray<dodo::json::node>::iterator i = result.arrayValue.begin(), j = result.arrayValue.end();
+			for (;i!=j;++i)
+				resp.values.push_back(value::jsonToValue(*i));
 		}
+		else
+			resp.values.push_back(value::jsonToValue(result));
 	}
 
-	return resp;*/
+	return resp;
 }
 
 //-------------------------------------------------------------------
 
 dodo::json::node
-response::responseToJsonNode(const rpc::response &data)
+response::responseToJson(const rpc::response &data,
+						 const dodoString &version)
 {
-	/*dodoArray<dodo::json::node> nodeArr;
-
 	dodo::json::node resp;
-	resp.name = "methodResponse";
 
-	if (data.succ)
+	resp.valueDataType = dodo::json::DATATYPE_OBJECT;
+
+	dodo::json::node node;
+
+	node.valueDataType = dodo::json::DATATYPE_STRING;
+	node.stringValue = version;
+	meth.objectValue.insert(make_pair(dodoString("version"), node));
+
+	node.stringValue.clear();
+
+	if (!data.succ)
 	{
-		dodo::json::node params;
-		params.name = "params";
-
-		dodo::json::node param;
-		param.name = "param";
-
-		dodoArray<dodo::json::node> subNodeArr;
-
-		dodoArray<rpc::value>::const_iterator i = data.values.begin(), j = data.values.end();
-		for (; i != j; ++i)
-		{
-			param.children.clear();
-
-			nodeArr.assign(1, value::valueToJsonNode(*i));
-			param.children.insert(make_pair("value", nodeArr));
-
-			subNodeArr.push_back(param);
-		}
-		params.children.insert(make_pair("param", subNodeArr));
-
-		nodeArr.assign(1, params);
-		resp.children.insert(make_pair(params.name, nodeArr));
 	}
 	else
 	{
-		dodo::json::node fault;
-		fault.name = "fault";
-
-		nodeArr.assign(1, value::valueToJsonNode(data.values.front()));
-		fault.children.insert(make_pair("value", nodeArr));
-
-		nodeArr.assign(1, fault);
-		resp.children.insert(make_pair(fault.name, nodeArr));
 	}
 
-	return resp;*/
+	return resp;
 }
 
 //-------------------------------------------------------------------

@@ -37,7 +37,7 @@ const char value::trimSymbols[] = { ' ',
 //-------------------------------------------------------------------
 
 dodo::rpc::value
-value::xmlToRpcValue(dodo::xml::node &node)
+value::xmlToValue(dodo::xml::node &node)
 {
 	dodoMap<dodoString, dodoArray<dodo::xml::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
@@ -107,7 +107,7 @@ value::xmlToRpcValue(dodo::xml::node &node)
 							dodoArray<dodo::xml::node> &arr1 = o->children["name"];
 							dodoArray<dodo::xml::node> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
-								val.structValue.insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), xmlToRpcValue(arr2[0])));
+								val.structValue.insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), xmlToValue(arr2[0])));
 						}
 					}
 					else
@@ -128,7 +128,7 @@ value::xmlToRpcValue(dodo::xml::node &node)
 
 							dodoArray<dodo::xml::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 							for (; o != p; ++o)
-								val.arrayValue.push_back(xmlToRpcValue(*o));
+								val.arrayValue.push_back(xmlToValue(*o));
 						}
 					}
 				}
@@ -141,24 +141,8 @@ value::xmlToRpcValue(dodo::xml::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::rpc::value
-value::xmlToRpcValue(const dodoString &data)
-{
-	dodo::xml::__nodeDef xmlValueNode;
-	xmlValueNode.name = "value";
-	xmlValueNode.ignoreChildrenDef = true;
-
-	dodo::xml::processor xmlValue;
-
-	dodo::xml::node node = xmlValue.processBuffer(xmlValueNode, data);
-
-	return xmlToRpcValue(node);
-}
-
-//-------------------------------------------------------------------
-
 dodo::xml::node
-value::valueToXmlNode(const rpc::value &data)
+value::valueToXml(const rpc::value &data)
 {
 	dodoArray<dodo::xml::node> nodeArr;
 
@@ -218,7 +202,7 @@ value::valueToXmlNode(const rpc::value &data)
 
 			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
 			for (; i != j; ++i)
-				nodeArr.push_back(valueToXmlNode(*i));
+				nodeArr.push_back(valueToXml(*i));
 			dataNode.children.insert(make_pair("value", nodeArr));
 
 			nodeArr.assign(1, dataNode);
@@ -251,7 +235,7 @@ value::valueToXmlNode(const rpc::value &data)
 				nodeArr.assign(1, memberNameNode);
 				memberNode.children.insert(make_pair(memberNameNode.name, nodeArr));
 
-				nodeArr.assign(1, valueToXmlNode(i->second));
+				nodeArr.assign(1, valueToXml(i->second));
 				memberNode.children.insert(make_pair(memberValueNode.name, nodeArr));
 
 				subNodeArr.push_back(memberNode);
@@ -266,16 +250,6 @@ value::valueToXmlNode(const rpc::value &data)
 	}
 
 	return node;
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-value::valueToXml(const rpc::value &data)
-{
-	dodo::xml::processor xmlValue;
-
-	return xmlValue.make(valueToXmlNode(data));
 }
 
 //-------------------------------------------------------------------

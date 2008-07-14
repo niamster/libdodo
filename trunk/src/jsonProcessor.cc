@@ -48,7 +48,7 @@ processor::make(const node &root)
 {
 	switch (root.valueDataType)
 	{
-		case NODE_DATATYPE_STRING:
+		case DATATYPE_STRING:
 		{
 
 			dodoString jsonObject = "\"";
@@ -60,7 +60,7 @@ processor::make(const node &root)
 			return jsonObject;
 		}
 
-		case NODE_DATATYPE_OBJECT:
+		case DATATYPE_OBJECT:
 		{
 			dodoString jsonObject = "{";
 
@@ -88,7 +88,7 @@ processor::make(const node &root)
 			return jsonObject;
 		}
 
-		case NODE_DATATYPE_ARRAY:
+		case DATATYPE_ARRAY:
 		{
 			dodoString jsonObject = "[";
 
@@ -109,15 +109,15 @@ processor::make(const node &root)
 			return jsonObject;
 		}
 
-		case NODE_DATATYPE_NUMERIC:
+		case DATATYPE_NUMERIC:
 
 			return tools::string::lToString(root.numericValue);
 
-		case NODE_DATATYPE_BOOLEAN:
+		case DATATYPE_BOOLEAN:
 
 			return root.booleanValue ? "true" : "false";
 
-		case NODE_DATATYPE_NULL:
+		case DATATYPE_NULL:
 		default:
 
 			return "null";
@@ -199,33 +199,33 @@ processor::processValue(node &node,
 		{
 			case '"':
 
-				node.valueDataType = NODE_DATATYPE_STRING;
+				node.valueDataType = DATATYPE_STRING;
 				return processString(node.stringValue, root, i);
 
 			case '{':
 
-				node.valueDataType = NODE_DATATYPE_OBJECT;
+				node.valueDataType = DATATYPE_OBJECT;
 				return processObject(node.objectValue, root, i);
 
 			case '[':
 
-				node.valueDataType = NODE_DATATYPE_ARRAY;
+				node.valueDataType = DATATYPE_ARRAY;
 				return processArray(node.arrayValue, root, i);
 
 			case 't':
 			case 'f':
 
-				node.valueDataType = NODE_DATATYPE_BOOLEAN;
+				node.valueDataType = DATATYPE_BOOLEAN;
 				return processBoolean(node.booleanValue, root, i);
 
 			case 'n':
 
-				node.valueDataType = NODE_DATATYPE_NULL;
+				node.valueDataType = DATATYPE_NULL;
 				return processNull(root, i);
 
 			default:
 
-				node.valueDataType = NODE_DATATYPE_NUMERIC;
+				node.valueDataType = DATATYPE_NUMERIC;
 				return processNumeric(node.numericValue, root, i);
 		}
 	}
@@ -435,7 +435,7 @@ processor::process(const dodoString &root)
 {
 	node node;
 
-	node.valueDataType = NODE_DATATYPE_OBJECT;
+	node.valueDataType = DATATYPE_OBJECT;
 	processObject(node.objectValue, root, 0);
 
 	return node;
@@ -449,8 +449,8 @@ processor::fromMap(const dodoStringMap &root)
 	node nodeDef;
 	node subNodeDef;
 
-	nodeDef.valueDataType = NODE_DATATYPE_OBJECT;
-	subNodeDef.valueDataType = NODE_DATATYPE_STRING;
+	nodeDef.valueDataType = DATATYPE_OBJECT;
+	subNodeDef.valueDataType = DATATYPE_STRING;
 
 	dodoStringMap::const_iterator i = root.begin(), j = root.end();
 	for (; i != j; ++i)

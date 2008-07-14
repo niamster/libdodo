@@ -45,6 +45,11 @@ namespace dodo
 		{
 			class response;
 		};
+		
+		namespace json
+		{
+			class response;
+		};
 
 		/**
 		 * @class response defines RPC response reprasentation
@@ -54,6 +59,7 @@ namespace dodo
 			friend class client;
 			friend class server;
 			friend class xml::response;
+			friend class json::response;
 
 			public:
 
