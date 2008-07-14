@@ -60,7 +60,7 @@ namespace dodo
 			 */
 			enum methodFunctionsID
 			{
-				METHODEX_JSONTORPCMETHOD,
+				METHODEX_JSONTOMETHOD,
 			};
 		};
 	};

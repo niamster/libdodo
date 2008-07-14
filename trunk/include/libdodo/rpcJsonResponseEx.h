@@ -58,7 +58,7 @@ namespace dodo
 			 */
 			enum responseFunctionsID
 			{
-				RESPONSEEX_JSONTORPCRESPONSE,
+				RESPONSEEX_JSONTORESPONSE,
 			};
 		};
 	};
