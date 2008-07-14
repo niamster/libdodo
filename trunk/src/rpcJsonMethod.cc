@@ -32,7 +32,8 @@
 using namespace dodo::rpc::json;
 
 dodo::rpc::method
-method::jsonToMethod(dodo::json::node &node)
+method::jsonToMethod(dodo::json::node &node,
+					 dodoString &version)
 {
 	if (node.valueDataType != dodo::json::DATATYPE_OBJECT)
 		throw baseEx(ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTORPCMETHOD, ERR_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
@@ -42,6 +43,8 @@ method::jsonToMethod(dodo::json::node &node)
 	rpc::method meth;
 
 	meth.name = obj["method"].getString();
+
+	version = obj["version"].getString();
 
 	dodo::json::node &params = obj["params"];
 	
@@ -68,6 +71,7 @@ method::methodToJson(const rpc::method &data,
 	dodo::json::node node;
 	
 	node.valueDataType = dodo::json::DATATYPE_STRING;	
+
 	node.stringValue = data.name;
 	meth.objectValue.insert(make_pair(dodoString("method"), node));
 	

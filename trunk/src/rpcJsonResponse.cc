@@ -85,7 +85,8 @@ response::jsonToResponse(dodo::json::node &node,
 //-------------------------------------------------------------------
 
 dodo::json::node
-response::responseToJson(const rpc::response &data)
+response::responseToJson(const rpc::response &data,
+						 const dodoString &version)
 {
 	dodo::json::node resp;
 

@@ -62,8 +62,9 @@ namespace dodo
 					/**
 					 * @return JSON node parsed from response
 					 * @param data defines response structure
+					 * @param version defines version of JSON-RPC request
 					 */
-					static dodo::json::node responseToJson(const rpc::response &data);
+					static dodo::json::node responseToJson(const rpc::response &data, const dodoString &version);
 			};
 		};
 	};

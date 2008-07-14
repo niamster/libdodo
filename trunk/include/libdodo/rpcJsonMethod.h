@@ -55,8 +55,9 @@ namespace dodo
 					/**
 					 * @return method parsed from JSON node
 					 * @param node defines JSON node
+					 * @param version defines version of JSON-RPC response
 					 */
-					static rpc::method jsonToMethod(dodo::json::node &node);
+					static rpc::method jsonToMethod(dodo::json::node &node, dodoString &version);
 
 					/**
 					 * @return JSON node parsed from method

@@ -60,6 +60,16 @@ namespace dodo
 					 * destructor
 					 */
 					virtual ~server();
+					
+					/**
+					 * set version of JSON-RPC response
+					 */
+					virtual void setResponseVersion(const dodoString &version);
+
+					/**
+					 * get version of JSON-RPC request
+					 */
+					virtual dodoString getRequestVersion();
 
 				protected:
 
@@ -76,6 +86,9 @@ namespace dodo
 					 * @param response defines RPC response representation
 					 */
 					virtual dodoString processCallResult(const rpc::response &response);
+					
+					dodoString rqVersion; ///< request version
+					dodoString rpVersion; ///< response version['1.1' by default]
 			};
 		};
 	};

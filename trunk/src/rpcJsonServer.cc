@@ -31,7 +31,7 @@
 
 using namespace dodo::rpc::json;
 
-server::server()
+server::server()  : rpVersion("1.1")
 {
 }
 
@@ -50,7 +50,7 @@ server::processCall(const dodoString &data)
 
 	dodo::json::node node = jsonValue.process(data);
 
-	return method::jsonToMethod(node);
+	return method::jsonToMethod(node, rqVersion);
 }
 
 //-------------------------------------------------------------------
@@ -60,7 +60,23 @@ server::processCallResult(const rpc::response &resp)
 {
 	dodo::json::processor jsonValue;
 
-	return jsonValue.make(response::responseToJson(resp));
+	return jsonValue.make(response::responseToJson(resp, rpVersion));
+}
+
+//-------------------------------------------------------------------
+
+void 
+server::setResponseVersion(const dodoString &version)
+{
+	rpVersion = version;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+server::getRequestVersion()
+{
+	return rqVersion;
 }
 
 //-------------------------------------------------------------------
