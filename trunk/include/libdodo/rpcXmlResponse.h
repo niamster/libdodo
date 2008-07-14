@@ -49,35 +49,19 @@ namespace dodo
 			 */
 			class response
 			{
-				friend class server;
-
 				public:
-
-					/**
-					 * @return response parsed from XML
-					 * @param data defines XML string
-					 */
-					static rpc::response xmlToRpcResponse(const dodoString &data);
-
-					/**
-					 * @return XML parsed from response
-					 * @param data defines response structure
-					 */
-					static dodoString responseToXml(const rpc::response &data);
-
-				protected:
 
 					/**
 					 * @return response parsed from XML node
 					 * @param node defines XML node
 					 */
-					static rpc::response xmlToRpcResponse(dodo::xml::node &node);
+					static rpc::response xmlToResponse(dodo::xml::node &node);
 
 					/**
 					 * @return XML node parsed from response
 					 * @param data defines response structure
 					 */
-					static dodo::xml::node responseToXmlNode(const rpc::response &data);
+					static dodo::xml::node responseToXml(const rpc::response &data);
 			};
 		};
 	};

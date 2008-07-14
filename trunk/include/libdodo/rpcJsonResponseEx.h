@@ -1,7 +1,7 @@
 /***************************************************************************
- *            rpcJsonServer.h
+ *            rpcJsonResponseEx.h
  *
- *  Mon Jul 07 11:29:55 2008
+ *  Mon Jul 14 12:06:55 2008
  *  Copyright  2008  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
@@ -27,16 +27,12 @@
  * set shiftwidth=4
  */
 
-#ifndef _RPCJSONSERVER_H_
-#define _RPCJSONSERVER_H_
+#ifndef _RPCJSONRESPONSEEX_H_
+#define _RPCJSONRESPONSEEX_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/types.h>
-#include <libdodo/toolsString.h>
-#include <libdodo/rpcServer.h>
-#include <libdodo/rpcJsonMethod.h>
-#include <libdodo/rpcJsonResponse.h>
+#include <libdodo/baseEx.h>
 
 namespace dodo
 {
@@ -45,37 +41,24 @@ namespace dodo
 		namespace json
 		{
 			/**
-			 * @class server defines server-side JSON-RPC instrument
+			 * libdodo defined errors
 			 */
-			class server : public rpc::server
+			enum responseExR
 			{
-				public:
+				RESPONSEEX_ROOTNOTANOBJECT,
+			};
 
-					/**
-					 * constructor
-					 */
-					server();
+			/**
+			 * explanations for libdodo defined errors
+			 */
+#define RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR "Root node is not an object."
 
-					/**
-					 * destructor
-					 */
-					virtual ~server();
-
-				protected:
-
-					/**
-					 * process RPC call
-					 * @return RPC method represantation
-					 * @param data defines buffer that contains RPC request
-					 */
-					virtual rpc::method processCall(const dodoString &data);
-
-					/**
-					 * process RPC call
-					 * @return RPC response
-					 * @param response defines RPC response representation
-					 */
-					virtual dodoString processCallResult(const rpc::response &response);
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum responseFunctionsID
+			{
+				RESPONSEEX_JSONTORPCRESPONSE,
 			};
 		};
 	};

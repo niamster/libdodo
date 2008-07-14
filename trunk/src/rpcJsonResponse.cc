@@ -32,34 +32,13 @@
 using namespace dodo::rpc::json;
 
 dodo::rpc::response
-response::jsonToRpcResponse(const dodoString &data)
+response::jsonToResponse(dodo::json::node &node,
+						 dodoString &version)
 {
-	/*dodo::json::__nodeDef jsonMethodResponse;
-	jsonMethodResponse.name = "methodResponse";
-	jsonMethodResponse.ignoreChildrenDef = true;
+	rpc::response resp;
 
-	dodo::json::processor jsonValue;
+	
 
-	dodo::json::node node = jsonValue.processBuffer(jsonMethodResponse, data);
-
-	return jsonToRpcResponse(node);*/
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-response::responseToJson(const rpc::response &data)
-{
-	dodo::json::processor jsonValue;
-
-	return jsonValue.make(responseToJsonNode(data));
-}
-
-//-------------------------------------------------------------------
-
-dodo::rpc::response
-response::jsonToRpcResponse(dodo::json::node &node)
-{
 	/*dodoMap<dodoString, dodoArray<dodo::json::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
 		return rpc::response();
@@ -75,7 +54,7 @@ response::jsonToRpcResponse(dodo::json::node &node)
 		{
 			dodoArray<dodo::json::node> &arr1 = arr0[0].children["value"];
 			if (arr1.size() > 0)
-				resp.values.assign(1, value::jsonToRpcValue(arr1[0]));
+				resp.values.assign(1, value::jsonToValue(arr1[0]));
 		}
 	}
 	else
@@ -95,22 +74,23 @@ response::jsonToRpcResponse(dodo::json::node &node)
 			{
 				dodoArray<dodo::json::node> &arr1 = o->children["value"];
 				if (arr1.size() > 0)
-					resp.values.push_back(value::jsonToRpcValue(arr1[0]));
+					resp.values.push_back(value::jsonToValue(arr1[0]));
 			}
 		}
-	}
+	}*/
 
-	return resp;*/
+	return resp;
 }
 
 //-------------------------------------------------------------------
 
 dodo::json::node
-response::responseToJsonNode(const rpc::response &data)
+response::responseToJson(const rpc::response &data)
 {
+	dodo::json::node resp;
+
 	/*dodoArray<dodo::json::node> nodeArr;
 
-	dodo::json::node resp;
 	resp.name = "methodResponse";
 
 	if (data.succ)
@@ -128,7 +108,7 @@ response::responseToJsonNode(const rpc::response &data)
 		{
 			param.children.clear();
 
-			nodeArr.assign(1, value::valueToJsonNode(*i));
+			nodeArr.assign(1, value::valueToJson(*i));
 			param.children.insert(make_pair("value", nodeArr));
 
 			subNodeArr.push_back(param);
@@ -143,14 +123,14 @@ response::responseToJsonNode(const rpc::response &data)
 		dodo::json::node fault;
 		fault.name = "fault";
 
-		nodeArr.assign(1, value::valueToJsonNode(data.values.front()));
+		nodeArr.assign(1, value::valueToJson(data.values.front()));
 		fault.children.insert(make_pair("value", nodeArr));
 
 		nodeArr.assign(1, fault);
 		resp.children.insert(make_pair(fault.name, nodeArr));
-	}
+	}*/
 
-	return resp;*/
+	return resp;
 }
 
 //-------------------------------------------------------------------

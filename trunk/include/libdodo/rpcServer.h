@@ -95,14 +95,14 @@ namespace dodo
 				 * @return RPC method represantation
 				 * @param data defines buffer that contains RPC request
 				 */
-				virtual method processRpcCall(const dodoString &data) = 0;
+				virtual method processCall(const dodoString &data) = 0;
 
 				/**
 				 * process RPC call
 				 * @return RPC response
 				 * @param response defines RPC response representation
 				 */
-				virtual dodoString processRpcCallResult(const response &response) = 0;
+				virtual dodoString processCallResult(const response &response) = 0;
 
 				/**
 				 * default rpc handler

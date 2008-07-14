@@ -33,32 +33,34 @@ using namespace dodo::rpc::json;
 
 server::server()
 {
-
 }
 
 //-------------------------------------------------------------------
 
 server::~server()
 {
-
 }
 
 //-------------------------------------------------------------------
 
 dodo::rpc::method
-server::processRpcCall(const dodoString &data)
+server::processCall(const dodoString &data)
 {
-	return method::jsonToRpcMethod(data);
+	dodo::json::processor jsonValue;
+
+	dodo::json::node node = jsonValue.process(data);
+
+	return method::jsonToMethod(node);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-server::processRpcCallResult(const rpc::response &resp)
+server::processCallResult(const rpc::response &resp)
 {
-	dodo::json::processor jsonMethod;
+	dodo::json::processor jsonValue;
 
-	return jsonMethod.make(response::responseToJsonNode(resp));
+	return jsonValue.make(response::responseToJson(resp));
 }
 
 //-------------------------------------------------------------------

@@ -32,7 +32,7 @@
 using namespace dodo::rpc::json;
 
 dodo::rpc::value
-value::jsonToRpcValue(dodo::json::node &node)
+value::jsonToValue(dodo::json::node &node)
 {
 	/*dodoMap<dodoString, dodoArray<dodo::json::node>, dodoMapStringCompare>::iterator i = node.children.begin();
 	if (i == node.children.end())
@@ -102,7 +102,7 @@ value::jsonToRpcValue(dodo::json::node &node)
 							dodoArray<dodo::json::node> &arr1 = o->children["name"];
 							dodoArray<dodo::json::node> &arr2 = o->children["value"];
 							if (arr1.size() > 0 && arr2.size() > 0)
-								val.structValue.insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), jsonToRpcValue(arr2[0])));
+								val.structValue.insert(make_pair(tools::string::trim(arr1[0].value, trimSymbols, 2), jsonToValue(arr2[0])));
 						}
 					}
 					else
@@ -123,7 +123,7 @@ value::jsonToRpcValue(dodo::json::node &node)
 
 							dodoArray<dodo::json::node>::iterator o = nodeArray.begin(), p = nodeArray.end();
 							for (; o != p; ++o)
-								val.arrayValue.push_back(jsonToRpcValue(*o));
+								val.arrayValue.push_back(jsonToValue(*o));
 						}
 					}
 				}
@@ -136,24 +136,8 @@ value::jsonToRpcValue(dodo::json::node &node)
 
 //-------------------------------------------------------------------
 
-dodo::rpc::value
-value::jsonToRpcValue(const dodoString &data)
-{
-	/*dodo::json::__nodeDef jsonValueNode;
-	jsonValueNode.name = "value";
-	jsonValueNode.ignoreChildrenDef = true;
-
-	dodo::json::processor jsonValue;
-
-	dodo::json::node node = jsonValue.processBuffer(jsonValueNode, data);
-
-	return jsonToRpcValue(node);*/
-}
-
-//-------------------------------------------------------------------
-
 dodo::json::node
-value::valueToJsonNode(const rpc::value &data)
+value::valueToJson(const rpc::value &data)
 {
 	/*dodoArray<dodo::json::node> nodeArr;
 
@@ -213,7 +197,7 @@ value::valueToJsonNode(const rpc::value &data)
 
 			dodoArray<rpc::value>::const_iterator i = data.arrayValue.begin(), j = data.arrayValue.end();
 			for (; i != j; ++i)
-				nodeArr.push_back(valueToJsonNode(*i));
+				nodeArr.push_back(valueToJson(*i));
 			dataNode.children.insert(make_pair("value", nodeArr));
 
 			nodeArr.assign(1, dataNode);
@@ -246,7 +230,7 @@ value::valueToJsonNode(const rpc::value &data)
 				nodeArr.assign(1, memberNameNode);
 				memberNode.children.insert(make_pair(memberNameNode.name, nodeArr));
 
-				nodeArr.assign(1, valueToJsonNode(i->second));
+				nodeArr.assign(1, valueToJson(i->second));
 				memberNode.children.insert(make_pair(memberValueNode.name, nodeArr));
 
 				subNodeArr.push_back(memberNode);
@@ -261,16 +245,6 @@ value::valueToJsonNode(const rpc::value &data)
 	}
 
 	return node;*/
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-value::valueToJson(const rpc::value &data)
-{
-	dodo::json::processor jsonValue;
-
-	return jsonValue.make(valueToJsonNode(data));
 }
 
 //-------------------------------------------------------------------

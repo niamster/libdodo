@@ -48,38 +48,23 @@ namespace dodo
 			 */
 			class value
 			{
-				friend class method;
-				friend class response;
-
 				public:
-
-					/**
-					 * @return value parsed from XML
-					 * @param data defines XML string
-					 */
-					static rpc::value xmlToRpcValue(const dodoString &data);
-
-					/**
-					 * @return XML parsed from value
-					 * @param data defines value structure
-					 */
-					static dodoString valueToXml(const rpc::value &data);
-
-				protected:
-
-					static const char trimSymbols[2];                     ///< symbols to trim in the end and in the begining of the XML node value
 
 					/**
 					 * @return value parsed from XML node
 					 * @param node defines XML node
 					 */
-					static rpc::value xmlToRpcValue(dodo::xml::node &node);
+					static rpc::value xmlToValue(dodo::xml::node &node);
 
 					/**
 					 * @return XML node from value
 					 * @param data defines value structure
 					 */
-					static dodo::xml::node valueToXmlNode(const rpc::value &data);
+					static dodo::xml::node valueToXml(const rpc::value &data);
+
+				protected:
+
+					static const char trimSymbols[2];                     ///< symbols to trim in the end and in the begining of the XML node value
 			};
 		};
 	};

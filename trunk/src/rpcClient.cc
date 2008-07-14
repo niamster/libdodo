@@ -48,7 +48,7 @@ client::~client()
 void
 client::sendRequest(const method &method)
 {
-	sendTextRequest(processRpcCall(method));
+	sendTextRequest(processCall(method));
 }
 
 //-------------------------------------------------------------------
@@ -56,7 +56,7 @@ client::sendRequest(const method &method)
 response
 client::receiveResponse()
 {
-	return processRpcCallResult(receiveTextResponse());
+	return processCallResult(receiveTextResponse());
 }
 
 //-------------------------------------------------------------------

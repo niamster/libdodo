@@ -43,20 +43,36 @@ server::~server()
 
 //-------------------------------------------------------------------
 
-dodo::rpc::method
-server::processRpcCall(const dodoString &data)
+void 
+server::setEncoding(const dodoString &a_encoding)
 {
-	return method::xmlToRpcMethod(data);
+	encoding = a_encoding;
+}
+
+//-------------------------------------------------------------------
+
+dodo::rpc::method
+server::processCall(const dodoString &data)
+{
+	dodo::xml::__nodeDef xmlMethodCall;
+	xmlMethodCall.name = "methodCall";
+	xmlMethodCall.ignoreChildrenDef = true;
+
+	dodo::xml::processor xmlValue;
+
+	dodo::xml::node node = xmlValue.processBuffer(xmlMethodCall, data);
+
+	return method::xmlToMethod(node);
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-server::processRpcCallResult(const rpc::response &resp)
+server::processCallResult(const rpc::response &resp)
 {
-	dodo::xml::processor xmlMethod;
+	dodo::xml::processor xmlValue;
 
-	return xmlMethod.make(response::responseToXmlNode(resp), encoding);
+	return xmlValue.make(response::responseToXml(resp), encoding);
 }
 
 //-------------------------------------------------------------------

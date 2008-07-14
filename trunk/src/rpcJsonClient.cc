@@ -31,34 +31,53 @@
 
 using namespace dodo::rpc::json;
 
-client::client()
+client::client() : rqVersion("1.1")
 {
-
 }
 
 //-------------------------------------------------------------------
 
 client::~client()
 {
-
 }
 
 //-------------------------------------------------------------------
 
 dodoString
-client::processRpcCall(const rpc::method &meth)
+client::processCall(const rpc::method &meth)
 {
-	dodo::json::processor jsonMethod;
+	dodo::json::processor jsonValue;
 
-	return jsonMethod.make(method::methodToJsonNode(meth));
+	return jsonValue.make(method::methodToJson(meth, rqVersion));
 }
 
 //-------------------------------------------------------------------
 
 dodo::rpc::response
-client::processRpcCallResult(const dodoString &data)
+client::processCallResult(const dodoString &data)
 {
-	return response::jsonToRpcResponse(data);
+	dodo::json::processor jsonValue;
+
+	dodo::json::node node = jsonValue.process(data);
+
+	return response::jsonToResponse(node, rpVersion);
 }
 
 //-------------------------------------------------------------------
+
+void 
+client::setRequestVersion(const dodoString &version)
+{
+	rqVersion = version;
+}
+
+//-------------------------------------------------------------------
+
+dodoString 
+client::getResponseVersion()
+{
+	return rpVersion;
+}
+
+//-------------------------------------------------------------------
+//

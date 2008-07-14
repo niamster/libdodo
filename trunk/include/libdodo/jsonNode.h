@@ -43,6 +43,7 @@ namespace dodo
 		namespace json
 		{
 			class method;
+			class response;
 		};
 	};
 
@@ -68,6 +69,7 @@ namespace dodo
 		{
 			friend class processor;
 			friend class rpc::json::method;
+			friend class rpc::json::response;
 
 			public:
 

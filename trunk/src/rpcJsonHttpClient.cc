@@ -48,7 +48,7 @@ httpClient::~httpClient()
 void
 httpClient::sendTextRequest(const dodoString &method)
 {
-	http.POST(method, "text/json");
+	http.POST(method, "application/json");
 }
 
 //-------------------------------------------------------------------

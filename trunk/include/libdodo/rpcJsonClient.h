@@ -61,6 +61,16 @@ namespace dodo
 					 */
 					virtual ~client();
 
+					/**
+					 * set version of JSON-RPC request
+					 */
+					virtual void setRequestVersion(const dodoString &version);
+
+					/**
+					 * get version of JSON-RPC response
+					 */
+					virtual dodoString getResponseVersion();
+
 				protected:
 
 					/**
@@ -68,14 +78,17 @@ namespace dodo
 					 * @return RPC method
 					 * @param meth defines RPC method representation
 					 */
-					virtual dodoString processRpcCall(const rpc::method &meth);
+					virtual dodoString processCall(const rpc::method &meth);
 
 					/**
 					 * process RPC call
 					 * @return RPC response represantation
 					 * @param data defines buffer that contains RPC response
 					 */
-					virtual rpc::response processRpcCallResult(const dodoString &data);
+					virtual rpc::response processCallResult(const dodoString &data);
+
+					dodoString rqVersion; ///< request version['1.1' by default]
+					dodoString rpVersion; ///< response version
 			};
 		};
 	};

@@ -50,35 +50,20 @@ namespace dodo
 			 */
 			class method
 			{
-				friend class client;
-
 				public:
-
-					/**
-					 * @return method parsed from JSON
-					 * @param data defines JSON string
-					 */
-					static rpc::method jsonToRpcMethod(const dodoString &data);
-
-					/**
-					 * @return JSON parsed from method
-					 * @param data defines method structure
-					 */
-					static dodoString methodToJson(const rpc::method &data);
-
-				protected:
 
 					/**
 					 * @return method parsed from JSON node
 					 * @param node defines JSON node
 					 */
-					static rpc::method jsonToRpcMethod(dodo::json::node &node);
+					static rpc::method jsonToMethod(dodo::json::node &node);
 
 					/**
 					 * @return JSON node parsed from method
 					 * @param data defines method structure
+					 * @param version defines version of JSON-RPC request
 					 */
-					static dodo::json::node methodToJsonNode(const rpc::method &data);
+					static dodo::json::node methodToJson(const rpc::method &data, const dodoString &version);
 			};
 		};
 	};
