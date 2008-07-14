@@ -45,12 +45,12 @@ namespace dodo
 		 */
 		enum nodeDataTypeEnum
 		{
-			NODE_DATATYPE_STRING,
-			NODE_DATATYPE_OBJECT,
-			NODE_DATATYPE_ARRAY,
-			NODE_DATATYPE_BOOLEAN,
-			NODE_DATATYPE_NUMERIC,
-			NODE_DATATYPE_NULL,
+			DATATYPE_STRING,
+			DATATYPE_OBJECT,
+			DATATYPE_ARRAY,
+			DATATYPE_BOOLEAN,
+			DATATYPE_NUMERIC,
+			DATATYPE_NULL,
 		};
 
 		/**
@@ -154,14 +154,14 @@ namespace dodo
 				/**
 				 * @return node by string key
 				 * @param key defines key to search for node
-				 * @note throws exception if data type is not NODE_DATATYPE_OBJECT
+				 * @note throws exception if data type is not DATATYPE_OBJECT
 				 */
 				virtual node operator[](const dodoString &key);
 
 				/**
 				 * @return node by numeric key
 				 * @param key defines key to search for node
-				 * @note throws exception if data type is not NODE_DATATYPE_ARRAY
+				 * @note throws exception if data type is not DATATYPE_ARRAY
 				 */
 				virtual node operator[](unsigned long key);
 
@@ -177,31 +177,31 @@ namespace dodo
 
 				/**
 				 * @return string value
-				 * @note throws exception if data type is not NODE_DATATYPE_STRING
+				 * @note throws exception if data type is not DATATYPE_STRING
 				 */
 				virtual dodoString getString();
 
 				/**
 				 * @return boolean value
-				 * @note throws exception if data type is not NODE_DATATYPE_BOOLEAN
+				 * @note throws exception if data type is not DATATYPE_BOOLEAN
 				 */
 				virtual bool getBoolean();
 
 				/**
 				 * @return numeric value
-				 * @note throws exception if data type is not NODE_DATATYPE_NUMERIC
+				 * @note throws exception if data type is not DATATYPE_NUMERIC
 				 */
 				virtual long getNumeric();
 
 				/**
 				 * @return array value
-				 * @note throws exception if data type is not NODE_DATATYPE_ARRAY
+				 * @note throws exception if data type is not DATATYPE_ARRAY
 				 */
 				virtual dodoArray<node> getArray();
 
 				/**
 				 * @return object value
-				 * @note throws exception if data type is not NODE_DATATYPE_OBJECT
+				 * @note throws exception if data type is not DATATYPE_OBJECT
 				 */
 				virtual dodoMap<dodoString, node, dodoMapStringCompare> getObject();
 
