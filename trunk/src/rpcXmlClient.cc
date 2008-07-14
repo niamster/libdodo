@@ -31,7 +31,7 @@
 
 using namespace dodo::rpc::xml;
 
-client::client() : encoding("UTF-8")
+client::client() : rqEncoding("UTF-8")
 {
 }
 
@@ -44,9 +44,17 @@ client::~client()
 //-------------------------------------------------------------------
 
 void 
-client::setEncoding(const dodoString &a_encoding)
+client::setRequestEncoding(const dodoString &a_encoding)
 {
-	encoding = a_encoding;
+	rqEncoding = a_encoding;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+client::getResponseEncoding()
+{
+	return rpEncoding;
 }
 
 //-------------------------------------------------------------------
@@ -56,7 +64,7 @@ client::processCall(const rpc::method &meth)
 {
 	dodo::xml::processor xmlValue;
 
-	return xmlValue.make(method::methodToXml(meth), encoding);
+	return xmlValue.make(method::methodToXml(meth), rqEncoding);
 }
 
 //-------------------------------------------------------------------
@@ -64,11 +72,13 @@ client::processCall(const rpc::method &meth)
 dodo::rpc::response
 client::processCallResult(const dodoString &data)
 {
+	dodo::xml::processor xmlValue;
+	
+	rpEncoding = xmlValue.getBufferInfo(data).encoding;
+
 	dodo::xml::__nodeDef xmlMethodResponse;
 	xmlMethodResponse.name = "methodResponse";
 	xmlMethodResponse.ignoreChildrenDef = true;
-
-	dodo::xml::processor xmlValue;
 
 	dodo::xml::node node = xmlValue.processBuffer(xmlMethodResponse, data);
 
