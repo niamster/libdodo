@@ -83,7 +83,7 @@ response::responseToJson(const rpc::response &data,
 
 	node.valueDataType = dodo::json::DATATYPE_STRING;
 	node.stringValue = version;
-	meth.objectValue.insert(make_pair(dodoString("version"), node));
+	resp.objectValue.insert(make_pair(dodoString("version"), node));
 
 	node.stringValue.clear();
 
