@@ -68,7 +68,7 @@ method::jsonToRpcMethod(dodo::json::node &node)
 
 	dodo::json::node &params = obj["params"];
 	
-	if (params != dodo::json::DATATYPE_ARRAY)
+	if (params.valueDataType != dodo::json::DATATYPE_ARRAY)
 		throw baseEx(ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTORPCMETHOD, ERR_LIBDODO, METHODEX_PARAMSNOTANARRAY, RPCJSONMETHODEX_PARAMSNOTANARRAY_STR, __LINE__, __FILE__);
 
 	dodoArray<dodo::json::node>::iterator i = params.arrayValue.begin(), j = params.arrayValue.end();
@@ -83,45 +83,27 @@ method::jsonToRpcMethod(dodo::json::node &node)
 dodo::json::node
 method::methodToJsonNode(const rpc::method &data)
 {
-	/*dodoArray<dodo::json::node> nodeArr;
-
 	dodo::json::node meth;
-	meth.name = "methodCall";
 
-	dodo::json::node methodName;
-	methodName.name = "methodName";
-	methodName.value = data.name;
+	meth.valueDataType = dodo::json::DATATYPE_OBJECT;
 
-	nodeArr.assign(1, methodName);
-	meth.children.insert(make_pair(methodName.name, nodeArr));
+	dodo::json::node node;
+	
+	node.valueDataType = dodo::json::DATATYPE_STRING;	
+	node.stringValue = data.name;
+	meth.objectValue.insert(make_pair(dodoString("method"), node));
+
+	node.stringValue.clear();
+	
+	node.valueDataType = dodo::json::DATATYPE_ARRAY;
 
 	dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
-	if (i != j)
-	{
-		dodo::json::node params;
-		params.name = "params";
+	for (; i != j; ++i)
+		node.arrayValue.push_back(value::valueToJsonNode(*i));	
+	
+	meth.objectValue.insert(make_pair(dodoString("params"), node));
 
-		dodo::json::node param;
-		param.name = "param";
-
-		dodoArray<dodo::json::node> subNodeArr;
-
-		for (; i != j; ++i)
-		{
-			param.children.clear();
-
-			nodeArr.assign(1, value::valueToJsonNode(*i));
-			param.children.insert(make_pair("value", nodeArr));
-
-			subNodeArr.push_back(param);
-		}
-		params.children.insert(make_pair("param", subNodeArr));
-
-		nodeArr.assign(1, params);
-		meth.children.insert(make_pair(params.name, nodeArr));
-	}
-
-	return meth;*/
+	return meth;
 }
 
 //-------------------------------------------------------------------

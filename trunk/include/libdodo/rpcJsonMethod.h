@@ -35,6 +35,7 @@
 #include <libdodo/types.h>
 #include <libdodo/toolsString.h>
 #include <libdodo/rpcMethod.h>
+#include <libdodo/rpcJsonMethodEx.h>
 #include <libdodo/rpcJsonValue.h>
 #include <libdodo/jsonProcessor.h>
 
