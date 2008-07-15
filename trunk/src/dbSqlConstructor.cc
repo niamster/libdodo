@@ -506,7 +506,12 @@ void
 sqlConstructor::insertSelectCollect()
 {
 	dodoString fieldsPartTo = tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-	dodoString fieldsPartFrom = tools::misc::implode(collectedData.values.front(), statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+
+	dodoString fieldsPartFrom;
+
+	dodoArray<dodoStringArray>::iterator i = collectedData.values.begin();
+	if (i != collectedData.values.end())
+		fieldsPartFrom = tools::misc::implode(*i, statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 
 	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS, collectedData.qInsShift);
 	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
@@ -541,39 +546,44 @@ sqlConstructor::updateCollect()
 
 	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
 	{
-		unsigned int fn(collectedData.fields.size()), fv(collectedData.values.front().size());
-		unsigned int o(fn <= fv ? fn : fv);
 
-		dodoStringArray::iterator i(collectedData.fields.begin()), j(collectedData.values.front().begin());
-		for (unsigned int k(0); k < o - 1; ++i, ++j, ++k)
+		dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
+		if (v != collectedData.values.end())
 		{
+			unsigned int fn(collectedData.fields.size()), fv(v->size());
+			unsigned int o(fn <= fv ? fn : fv);
+
+			dodoStringArray::iterator i(collectedData.fields.begin()), j(v->begin());
+			for (unsigned int k(0); k < o - 1; ++i, ++j, ++k)
+			{
+				if (tools::misc::isInArray(y->second, *i, true))
+				{
+					setPart.append(*i);
+					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+					setPart.append(preventEscaping ? *j : escapeFields(*j));
+					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+				}
+				else
+				{
+					setPart.append(*i);
+					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
+					setPart.append(preventEscaping ? *j : escapeFields(*j));
+					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+				}
+			}
 			if (tools::misc::isInArray(y->second, *i, true))
 			{
 				setPart.append(*i);
 				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 				setPart.append(preventEscaping ? *j : escapeFields(*j));
-				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 			}
 			else
 			{
 				setPart.append(*i);
 				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 				setPart.append(preventEscaping ? *j : escapeFields(*j));
-				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
 			}
-		}
-		if (tools::misc::isInArray(y->second, *i, true))
-		{
-			setPart.append(*i);
-			setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
-			setPart.append(preventEscaping ? *j : escapeFields(*j));
-			setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-		}
-		else
-		{
-			setPart.append(*i);
-			setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
-			setPart.append(preventEscaping ? *j : escapeFields(*j));
 		}
 	}
 	else
@@ -581,10 +591,14 @@ sqlConstructor::updateCollect()
 #endif
 
 	{
-		if (preventFraming)
-			setPart = valuesName(collectedData.values.front(), collectedData.fields, __dodostring__);
-		else
-			setPart = valuesName(collectedData.values.front(), collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+		dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
+		if (v != collectedData.values.end())
+		{
+			if (preventFraming)
+				setPart = valuesName(*v, collectedData.fields, __dodostring__);
+			else
+				setPart = valuesName(*v, collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+		}
 	}
 
 	insideAddCollect(addUpEnumArr, sqlAddUpArr, ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS, collectedData.qUpShift);

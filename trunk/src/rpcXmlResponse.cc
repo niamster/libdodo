@@ -117,8 +117,12 @@ response::responseToXml(const rpc::response &data)
 		dodo::xml::node fault;
 		fault.name = "fault";
 
-		nodeArr.assign(1, value::valueToXml(data.values.front()));
-		fault.children.insert(make_pair("value", nodeArr));
+		dodoArray<rpc::value>::const_iterator i = data.values.begin();
+		if (i != data.values.end())
+		{
+			nodeArr.assign(1, value::valueToXml(*i));
+			fault.children.insert(make_pair("value", nodeArr));
+		}
 
 		nodeArr.assign(1, fault);
 		resp.children.insert(make_pair(fault.name, nodeArr));

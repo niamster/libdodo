@@ -87,14 +87,19 @@ response::responseToJson(const rpc::response &data,
 
 	node.stringValue.clear();
 
+	dodoArray<rpc::value>::const_iterator i = data.values.begin(), j = data.values.end();
+
 	if (!data.succ)
 	{
+		if (i != j)
+			resp.objectValue.insert(make_pair(dodoString("error"), value::valueToJson(*i)));
 	}
 	else
-	{
-	}
+		for (;i!=j;++i)
+			resp.objectValue.insert(make_pair(dodoString("result"), value::valueToJson(*i)));
 
 	return resp;
 }
 
 //-------------------------------------------------------------------
+
