@@ -35,9 +35,19 @@ using namespace dodo::cgi::fast;
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t server::accept = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t server::acceptM = PTHREAD_MUTEX_INITIALIZER;
+
+pthread_mutex_t server::requestsM = PTHREAD_MUTEX_INITIALIZER;
 
 #endif
+
+//-------------------------------------------------------------------
+
+unsigned long server::limit = 0;
+
+//-------------------------------------------------------------------
+
+unsigned long server::requests = 0;
 
 //-------------------------------------------------------------------
 
@@ -68,7 +78,9 @@ server::server(bool a_threading,
 
 	pthread_mutexattr_init(&attr);
 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK);
-	pthread_mutex_init(&accept, &attr);
+
+	pthread_mutex_init(&acceptM, &attr);
+	pthread_mutex_init(&requestsM, &attr);
 
 	pthread_mutexattr_destroy(&attr);
 
@@ -114,12 +126,12 @@ server::stackThread(void *data)
 	exchange cfSTD(&request);
 
 	int res = 0;
-
+	
 	while (true)
 	{
-		pthread_mutex_lock(&accept);
+		pthread_mutex_lock(&acceptM);
 		res = FCGX_Accept_r(&request);
-		pthread_mutex_unlock(&accept);
+		pthread_mutex_unlock(&acceptM);
 
 		if (res == -1)
 			throw baseEx(ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, ERR_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
@@ -127,6 +139,22 @@ server::stackThread(void *data)
 		handler(&cfSTD);
 
 		FCGX_Finish_r(&request);
+		
+		if (limit != 0)
+		{
+			pthread_mutex_lock(&requestsM);
+
+			++requests;
+
+			if (requests >= limit)
+			{
+				pthread_mutex_unlock(&requestsM);
+
+				break;
+			}
+			
+			pthread_mutex_lock(&requestsM);
+		}
 	}
 
 	return NULL;
@@ -137,10 +165,13 @@ server::stackThread(void *data)
 //-------------------------------------------------------------------
 
 void
-server::listen()
+server::listen(unsigned long a_limit)
 {
 	if (!isFastCgi())
 		throw baseEx(ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, ERR_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
+
+	limit = a_limit;
+	requests = 0;
 
 #ifdef PTHREAD_EXT
 	if (threading)
@@ -164,7 +195,7 @@ server::listen()
 		FCGX_InitRequest(&request, 0, 0);
 
 		exchange cfSTD(&request);
-
+	
 		while (true)
 		{
 			if (FCGX_Accept_r(&request) == -1)
@@ -173,6 +204,14 @@ server::listen()
 			handler(&cfSTD);
 
 			FCGX_Finish_r(&request);
+
+			if (limit != 0)
+			{
+				++requests;
+
+				if (requests >= limit)
+					break;
+			}
 		}
 	}
 }

@@ -85,6 +85,8 @@ namespace dodo
 
 				/**
 				 * serve rpc call
+				 * @note processes only one call
+				 * should be called again to process next
 				 */
 				virtual void serve();
 

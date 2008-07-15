@@ -323,7 +323,7 @@ namespace dodo
 
 				/**
 				 * constructor
-				 * @param cf defines ioSERVERFast output interface
+				 * @param cf defines cgi::fast::exchange I/O interface
 				 * @param silent defines whether to print headers in constructor or not
 				 * @param autocleanFiles defines whether to clean POST files in destructor
 				 * @param postFilesInMem defines place of POST files[disk or memory]
@@ -333,7 +333,7 @@ namespace dodo
 
 				/**
 				 * constructor
-				 * @param cf defines ioSERVERFast output interface
+				 * @param cf defines cgi::fast::exchange I/O interface
 				 * @param headers defines headers that will be printed
 				 * @param silent defines whether to print headers in constructor or not
 				 * @param autocleanFiles defines whether to clean POST files in destructor
