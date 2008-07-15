@@ -87,21 +87,19 @@ server::serve()
 {
 	try
 	{
-		method method = processCall(receiveTextResponse());
+		method meth = processCall(receiveTextResponse());
 
-		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator end = handlers.end();
+		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
-		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(method.name);
-
-		if (handler == end)
-			sendTextRequest(processCallResult(defaultHandler(method.name, method.arguments)));
+		if (handler == handlers.end())
+			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments)));
 		else
-			sendTextRequest(processCallResult(handler->second(method.name, method.arguments)));
+			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments)));
 	}
-	catch (baseEx ex)
+	catch (baseEx &ex)
 	{
 		response response;
-		response.fault(ex.baseErrstr);
+		response.fault(ex.baseErrstr + ex.file + tools::string::ulToString(ex.line));
 
 		sendTextRequest(processCallResult(response));
 	}

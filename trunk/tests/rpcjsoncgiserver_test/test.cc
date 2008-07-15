@@ -19,7 +19,6 @@ handler(const dodoString &method, const dodoArray<value> &values)
 {
 	response resp;
 
-
 	resp.addArgument(dodoString("Got method: ") + method + "\n");
 	resp.addArgument(dodoString("Amount of values: ") + tools::string::ulToString(values.size()) + "\n");
 
@@ -28,7 +27,8 @@ handler(const dodoString &method, const dodoArray<value> &values)
 
 int main(int argc, char **argv)
 {
-	cgi::server provider(false);
+	cgi::server provider(true);
+
 	rpc::json::cgiServer srv(provider);
 
 	try

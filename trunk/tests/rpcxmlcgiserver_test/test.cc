@@ -28,7 +28,7 @@ handler(const dodoString &method, const dodoArray<value> &values)
 
 int main(int argc, char **argv)
 {
-	cgi::server provider(false);
+	cgi::server provider(true);
 	rpc::xml::cgiServer srv(provider);
 
 	try

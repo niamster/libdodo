@@ -197,35 +197,48 @@ processor::processValue(node &node,
 	{
 		switch (root[i])
 		{
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
+
+				break;
+				
 			case '"':
 
 				node.valueDataType = DATATYPE_STRING;
+
 				return processString(node.stringValue, root, i);
 
 			case '{':
 
 				node.valueDataType = DATATYPE_OBJECT;
+
 				return processObject(node.objectValue, root, i);
 
 			case '[':
 
 				node.valueDataType = DATATYPE_ARRAY;
+
 				return processArray(node.arrayValue, root, i);
 
 			case 't':
 			case 'f':
 
 				node.valueDataType = DATATYPE_BOOLEAN;
+
 				return processBoolean(node.booleanValue, root, i);
 
 			case 'n':
 
 				node.valueDataType = DATATYPE_NULL;
+
 				return processNull(root, i);
 
 			default:
 
 				node.valueDataType = DATATYPE_NUMERIC;
+
 				return processNumeric(node.numericValue, root, i);
 		}
 	}
@@ -289,13 +302,18 @@ processor::processNumeric(long &node,
 {
 	dodoString numeric;
 
-	bool endOfNumeric = false;
-
 	unsigned long i(pos), j(root.size());
 	for (; i < j; ++i)
 	{
 		switch (root[i])
 		{
+			case ' ':
+			case '\r':
+			case '\n':
+			case '\t':
+				
+				break;
+
 			case '1':
 			case '2':
 			case '3':
@@ -310,28 +328,25 @@ processor::processNumeric(long &node,
 			case '-':
 			case 'e':
 			case 'E':
-			case ' ':
 
 				numeric.append(1, root[i]);
 
 				break;
 
 			case ',':
+			case ']':
+			case '}':
 
-				endOfNumeric = true;
-
-				break;
+				node = tools::string::stringToL(numeric);
+				
+				return i - 1;
 
 			default:
 
-				throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNUMERIC, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONNUMERIC, numeric, __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_JSONPROCESSOR, PROCESSOREX_PROCESSNUMERIC, ERR_LIBDODO, PROCESSOREX_MALFORMEDJSONNUMERIC, JSONPROCESSOREX_MALFORMEDJSONNUMERIC_STR, __LINE__, __FILE__);
 		}
-
-		if (endOfNumeric)
-			break;
 	}
 
-	node = tools::string::stringToL(numeric);
 
 	return i;
 }
@@ -353,44 +368,45 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 	unsigned long i(pos), j(root.size());
 	for (; i < j; ++i)
 	{
-		int o = 0;
 		switch (root[i])
 		{
 			case ' ':
 			case '\r':
 			case '\n':
 			case '\t':
+			case ':':
+			case ',':
 
 				break;
 
 			case '{':
 
 				if (state == JSON_STATE_OBJECT_INITIAL)
+				{
 					state = JSON_STATE_OBJECT_OBJECTNAME;
+
+					break;
+				}
 				else
 				{
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
-						i = processValue(subNodeValue, root, i);
+						subNodeValue.clear();
+						
+						subNodeValue.valueDataType = DATATYPE_OBJECT;
+
+						i = processObject(subNodeValue.objectValue, root, i);
 						jnode.insert(make_pair(subNodeName, subNodeValue));
 
 						state = JSON_STATE_OBJECT_OBJECTNAME;
+
+						break;
 					}
 				}
-
-				break;
 
 			case '}':
 
 				return i;
-
-			case ':':
-
-				break;
-
-			case ',':
-
-				break;
 
 			case '"':
 
@@ -406,10 +422,16 @@ processor::processObject(dodoMap<dodoString, node, dodoMapStringCompare> &jnode,
 				{
 					if (state == JSON_STATE_OBJECT_OBJECTVALUE)
 					{
-						i = processValue(subNodeValue, root, i);
+						subNodeValue.clear();
+						
+						subNodeValue.valueDataType = DATATYPE_STRING;
+
+						i = processString(subNodeValue.stringValue, root, i);
 						jnode.insert(make_pair(subNodeName, subNodeValue));
 
 						state = JSON_STATE_OBJECT_OBJECTNAME;
+
+						break;
 					}
 				}
 

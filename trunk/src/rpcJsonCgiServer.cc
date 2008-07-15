@@ -33,7 +33,7 @@ using namespace dodo::rpc::json;
 
 cgiServer::cgiServer(cgi::server &a_provider) : provider(a_provider)
 {
-	provider.HEADERS.insert(make_pair(cgi::SERVER_RESPONSEHEADER_CONTENTTYPE, dodoString("application/json")));
+	provider.HEADERS[cgi::SERVER_RESPONSEHEADER_CONTENTTYPE] = "application/json";
 
 	provider.printHeaders();
 }
@@ -50,6 +50,7 @@ void
 cgiServer::sendTextRequest(const dodoString &response)
 {
 	provider.print(response);
+	provider.flush();
 }
 
 //-------------------------------------------------------------------

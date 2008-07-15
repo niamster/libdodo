@@ -48,6 +48,8 @@ namespace dodo
 		namespace json
 		{
 			class value;
+			class method;
+			class response;
 		};
 
 		/**
@@ -71,6 +73,8 @@ namespace dodo
 			friend class client;
 			friend class xml::value;
 			friend class json::value;
+			friend class json::method;
+			friend class json::response;
 
 			public:
 
