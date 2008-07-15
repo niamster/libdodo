@@ -12,7 +12,12 @@
 #include <iostream>
 
 using namespace dodo;
+
+#ifdef OPENSSL_EXT
+
 using namespace io::network::ssl;
+
+#endif
 
 using namespace std;
 
@@ -20,6 +25,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
+#ifdef OPENSSL_EXT
+
 		server sock(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
 
 		__initialAccept fake;
@@ -74,7 +81,7 @@ int main(int argc, char **argv)
 				}
 			}
 		}
-
+#endif
 	}
 	catch (baseEx ex)
 	{
