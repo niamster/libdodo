@@ -551,6 +551,8 @@ __info
 processor::getFileInfo(const dodoString &file)
 {
 #ifdef LIBXML2_EXT
+	
+	xmlFreeDoc(document);
 
 	document = xmlParseFile(file.c_str());
 	if (document == NULL)
@@ -581,6 +583,8 @@ __info
 processor::getBufferInfo(const dodoString &buffer)
 {
 #ifdef LIBXML2_EXT
+	
+	xmlFreeDoc(document);
 
 	document = xmlParseMemory(buffer.c_str(), buffer.size());
 	if (document == NULL)
