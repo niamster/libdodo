@@ -589,6 +589,8 @@ AC_CONFIG_FILES([Makefile
                  tests/logger_test/Makefile
                  tests/rpcxmlhttpclient_test/Makefile
                  tests/rpcxmlcgiserver_test/Makefile
+				 tests/rpcjsonhttpclient_test/Makefile
+				 tests/rpcjsoncgiserver_test/Makefile
                  tests/xml_test/Makefile])
 
 AC_OUTPUT
