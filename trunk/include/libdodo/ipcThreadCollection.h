@@ -116,8 +116,9 @@ namespace dodo
 
 			/**
 			 * @typedef initIpcThreadCollectionModule defines type of init function for library
+			 * @param data defines user data
 			 */
-			typedef __threadMod (*initIpcThreadCollectionModule)(void *);
+			typedef __threadMod (*initIpcThreadCollectionModule)(void *data);
 
 			/**
 			 * @typedef deinitIpcThreadCollectionModule defines type of deinit function for library

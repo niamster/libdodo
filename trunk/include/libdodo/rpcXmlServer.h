@@ -45,6 +45,19 @@ namespace dodo
 		namespace xml
 		{
 			/**
+			 * @struct __additionalData defines response/request additional data
+			 */
+			struct __additionalData
+			{
+				/**
+				 * constructor
+				 * @param encoding defines response/request encoding
+				 */
+				__additionalData(dodoString &encoding);
+
+				dodoString &encoding; ///< response/request encoding
+			};
+			/**
 			 * @class server defines server-side XML-RPC instrument
 			 */
 			class server : public rpc::server
@@ -67,9 +80,12 @@ namespace dodo
 					virtual void setResponseEncoding(const dodoString &encoding);
 
 					/**
-					 * @return request encoding
+					 * serve rpc call
+					 * @note processes only one call
+					 * should be called again to process next
+					 * default values of odata for handler are set by setResponseEncoding method
 					 */
-					virtual dodoString getRequestEncoding();
+					virtual void serve();
 
 				protected:
 

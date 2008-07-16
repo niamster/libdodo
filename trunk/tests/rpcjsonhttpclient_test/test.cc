@@ -44,11 +44,21 @@ int main(int argc, char **argv)
 		argument.addArrayElement((double)10.0);
 		method.addArgument(argument);
 
-		client.sendRequest(method);
+		response resp;
 
-		response resp = client.receiveResponse();
+		client.sendRequest(method);
+		resp = client.receiveResponse();
 
 		cout << "Amount of values: " << resp.getValues().size() << endl;
+		cout << "Response ID: " << client.getResponseId() << endl;
+		cout << "First value: " << resp.getValue().getString() << endl;
+		cout << "Second value: " << resp.getValue(1).getString() << endl;
+		
+		client.sendRequest(method);
+		resp = client.receiveResponse();
+
+		cout << "Amount of values: " << resp.getValues().size() << endl;
+		cout << "Response ID: " << client.getResponseId() << endl;
 		cout << "First value: " << resp.getValue().getString() << endl;
 		cout << "Second value: " << resp.getValue(1).getString() << endl;
 	}

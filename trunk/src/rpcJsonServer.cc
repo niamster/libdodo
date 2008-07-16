@@ -31,7 +31,17 @@
 
 using namespace dodo::rpc::json;
 
-server::server()  : rpVersion("1.1")
+__additionalData::__additionalData(dodoString &version,
+								   long &id) : version(version),
+								   			   id(id)
+{
+}
+
+//-------------------------------------------------------------------
+
+server::server() : rpVersion("1.1"),
+				   rpId(0),
+				   rqId(0)
 {
 }
 
@@ -50,7 +60,7 @@ server::processCall(const dodoString &data)
 
 	dodo::json::node node = jsonValue.process(data);
 
-	return method::jsonToMethod(node, rqVersion);
+	return method::jsonToMethod(node, rqVersion, rqId);
 }
 
 //-------------------------------------------------------------------
@@ -60,7 +70,7 @@ server::processCallResult(const rpc::response &resp)
 {
 	dodo::json::processor jsonValue;
 
-	return jsonValue.make(response::responseToJson(resp, rpVersion));
+	return jsonValue.make(response::responseToJson(resp, rpVersion, rpId));
 }
 
 //-------------------------------------------------------------------
@@ -73,10 +83,48 @@ server::setResponseVersion(const dodoString &version)
 
 //-------------------------------------------------------------------
 
-dodoString 
-server::getRequestVersion()
+void
+server::serve()
 {
-	return rqVersion;
+	try
+	{
+		rpc::method meth = processCall(receiveTextResponse());
+
+		dodoString version = rqVersion;
+
+		__additionalData idata(rqVersion, rqId);
+
+		rpId = rqId;
+		__additionalData odata(rpVersion, rpId);
+
+		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+
+		if (handler == handlers.end())
+			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+		else
+			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+
+		rpVersion = version;
+	}
+	catch (baseEx &ex)
+	{
+		rpc::response response;
+		response.fault(ex.baseErrstr);
+
+		rpId = rqId;
+
+		sendTextRequest(processCallResult(response));
+	}
+	catch (...)
+	{
+		rpc::response response;
+		response.fault(dodoString("An unknown error."));
+		
+		rpId = rqId;
+
+		sendTextRequest(processCallResult(response));
+	}
 }
 
 //-------------------------------------------------------------------
+

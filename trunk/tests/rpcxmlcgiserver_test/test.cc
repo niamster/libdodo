@@ -15,7 +15,7 @@ using namespace rpc;
 using namespace std;
 
 response
-handler(const dodoString &method, const dodoArray<value> &values)
+handler(const dodoString &method, const dodoArray<value> &values, const void *idata, void *odata)
 {
 	response resp;
 

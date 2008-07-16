@@ -63,13 +63,19 @@ namespace dodo
 
 					/**
 					 * set version of JSON-RPC request
+					 * @param version defines version of JSON-RPC request
 					 */
 					virtual void setRequestVersion(const dodoString &version);
 
 					/**
-					 * get version of JSON-RPC response
+					 * @return version of JSON-RPC response
 					 */
 					virtual dodoString getResponseVersion();
+
+					/**
+					 * @return ID of JSON-RPC response
+					 */
+					virtual long getResponseId();
 
 				protected:
 
@@ -89,6 +95,9 @@ namespace dodo
 
 					dodoString rqVersion; ///< request version['1.1' by default]
 					dodoString rpVersion; ///< response version
+
+					long rqId; ///< request ID
+					long rpId; ///< response ID
 			};
 		};
 	};

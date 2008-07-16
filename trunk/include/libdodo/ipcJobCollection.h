@@ -41,8 +41,9 @@ namespace dodo
 		{
 			/**
 			 * @typedef func defines job function
+			 * @param data defines user data
 			 */
-			typedef void *(*routine)(void *);
+			typedef void *(*routine)(void *data);
 
 			/**
 			 * @class collection provides interface for jobs management

@@ -106,8 +106,33 @@ namespace dodo
 
 		/**
 		 * @typedef signalHandler defines handler function on signal
+		 * @param signal defines received signal
+		 * @param info defines signal info
+		 * @param context defines signal context
+		 * @note info fields:
+		 * int si_signo;// Signal number
+		 * int si_errno;// An errno value
+		 * int si_code;// Signal code
+		 * pid_t si_pid;// Sending process ID
+		 * uid_t si_uid;// Real user ID of sending process
+		 * int  si_status;// Exit value or signal
+		 * clock_t si_utime;// User time consumed
+		 * clock_t si_stime;// System time consumed
+		 * sigval_t si_value;// Signal value
+		 * int si_int;// POSIX.1b signal
+		 * void *si_ptr;// POSIX.1b signal
+		 * void *si_addr;// Memory location which caused fault
+		 * int si_band;// Band event
+		 * int si_fd;// File descriptor
+		 *
+		 * context fields:
+		 * int __sc_onstack;// Sigstack state to restore
+		 * __sigset_t uc_sigmask;// The set of signals that are blocked when this context is active
+		 * mcontext_t uc_mcontext;// Machine-specific image of saved context
+		 * struct ucontext_t *uc_link;// Context resumed after this one returns
+		 * stack_t uc_stack;// Stack used by context
 		 */
-		typedef void (*signalHandler)(int, siginfo_t *, void *);
+		typedef void (*signalHandler)(int signal, siginfo_t *info, void *context);
 
 
 #define OS_SIGNALS 19
@@ -187,8 +212,9 @@ namespace dodo
 
 		/**
 		 * @typedef initOsSignalModule defines type of init function for library
+		 * @param data defines user data
 		 */
-		typedef __signalMod (*initOsSignalModule)(void *);
+		typedef __signalMod (*initOsSignalModule)(void *data);
 
 		/**
 		 * @typedef deinitOsSignalModule defines type of deinit function for library

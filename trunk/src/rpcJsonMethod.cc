@@ -33,7 +33,8 @@ using namespace dodo::rpc::json;
 
 dodo::rpc::method
 method::jsonToMethod(dodo::json::node &node,
-					 dodoString &version)
+					 dodoString &version,
+					 long &id)
 {
 	if (node.valueDataType != dodo::json::DATATYPE_OBJECT)
 		throw baseEx(ERRMODULE_RPCJSONMETHOD, METHODEX_JSONTOMETHOD, ERR_LIBDODO, METHODEX_ROOTNOTANOBJECT, RPCJSONMETHODEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
@@ -45,6 +46,8 @@ method::jsonToMethod(dodo::json::node &node,
 	meth.name = obj["method"].getString();
 
 	version = obj["version"].getString();
+
+	id = obj["id"].getNumeric();
 
 	dodo::json::node &params = obj["params"];
 
@@ -68,7 +71,8 @@ method::jsonToMethod(dodo::json::node &node,
 
 dodo::json::node
 method::methodToJson(const rpc::method &data,
-					 const dodoString &version)
+					 const dodoString &version,
+					 long id)
 {
 	dodo::json::node meth;
 
@@ -83,6 +87,12 @@ method::methodToJson(const rpc::method &data,
 	
 	node.stringValue = version;
 	meth.objectValue.insert(make_pair(dodoString("version"), node));
+	
+	node.stringValue.clear();
+
+	node.valueDataType = dodo::json::DATATYPE_NUMERIC;
+	node.numericValue = id;
+	meth.objectValue.insert(make_pair(dodoString("id"), node));
 
 	dodoArray<rpc::value>::const_iterator i = data.arguments.begin(), j = data.arguments.end();
 	if (i != j)
@@ -91,8 +101,6 @@ method::methodToJson(const rpc::method &data,
 			meth.objectValue.insert(make_pair(dodoString("params"), value::valueToJson(*i)));
 		else
 		{
-			node.stringValue.clear();
-
 			node.valueDataType = dodo::json::DATATYPE_ARRAY;
 
 			for (;i!=j;++i)

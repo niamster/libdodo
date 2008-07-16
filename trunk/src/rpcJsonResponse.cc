@@ -33,7 +33,8 @@ using namespace dodo::rpc::json;
 
 dodo::rpc::response
 response::jsonToResponse(dodo::json::node &node,
-						 dodoString &version)
+						 dodoString &version,
+						 long &id)
 {
 	if (node.valueDataType != dodo::json::DATATYPE_OBJECT)
 		throw baseEx(ERRMODULE_RPCJSONRESPONSE, RESPONSEEX_JSONTORESPONSE, ERR_LIBDODO, RESPONSEEX_ROOTNOTANOBJECT, RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
@@ -43,6 +44,8 @@ response::jsonToResponse(dodo::json::node &node,
 	rpc::response resp;
 
 	version = obj["version"].getString();
+	
+	id = obj["id"].getNumeric();
 
 	dodo::json::node &error = obj["error"];
 
@@ -73,7 +76,8 @@ response::jsonToResponse(dodo::json::node &node,
 
 dodo::json::node
 response::responseToJson(const rpc::response &data,
-						 const dodoString &version)
+						 const dodoString &version,
+						 long id)
 {
 	dodo::json::node resp;
 
@@ -86,6 +90,10 @@ response::responseToJson(const rpc::response &data,
 	resp.objectValue.insert(make_pair(dodoString("version"), node));
 
 	node.stringValue.clear();
+
+	node.valueDataType = dodo::json::DATATYPE_NUMERIC;
+	node.numericValue = id;
+	resp.objectValue.insert(make_pair(dodoString("id"), node));
 
 	dodoArray<rpc::value>::const_iterator i = data.values.begin(), j = data.values.end();
 	if (i != j)

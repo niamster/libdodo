@@ -47,7 +47,9 @@ server::~server()
 
 response
 server::rpcDefaultHandler(const dodoString &method,
-						  const dodoArray<value> &arguments)
+						  const dodoArray<value> &arguments,
+						  const void *idata,
+						  void *odata)
 {
 	response response;
 	response.fault(dodoString("rpcDefaultHandler"));
@@ -92,14 +94,14 @@ server::serve()
 		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
 
 		if (handler == handlers.end())
-			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments)));
+			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, NULL, NULL)));
 		else
-			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments)));
+			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, NULL, NULL)));
 	}
 	catch (baseEx &ex)
 	{
 		response response;
-		response.fault(ex.baseErrstr + ex.file + tools::string::ulToString(ex.line));
+		response.fault(ex.baseErrstr);
 
 		sendTextRequest(processCallResult(response));
 	}

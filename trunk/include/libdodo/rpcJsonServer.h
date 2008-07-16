@@ -45,6 +45,22 @@ namespace dodo
 		namespace json
 		{
 			/**
+			 * @struct __additionalData defines response/request additional data
+			 */
+			struct __additionalData
+			{
+				/**
+				 * constructor
+				 * @param version defines response/request version
+				 * @param id defines response/request ID
+				 */
+				__additionalData(dodoString &version, long &id);
+
+				dodoString &version; ///< response/request version
+				long &id; ///< response/request ID
+			};
+
+			/**
 			 * @class server defines server-side JSON-RPC instrument
 			 */
 			class server : public rpc::server
@@ -63,13 +79,17 @@ namespace dodo
 					
 					/**
 					 * set version of JSON-RPC response
+					 * @param version defines version of JSON-RPC response
 					 */
 					virtual void setResponseVersion(const dodoString &version);
 
 					/**
-					 * get version of JSON-RPC request
+					 * serve rpc call
+					 * @note processes only one call
+					 * should be called again to process next
+					 * default values of odata for handler are set by setResponseVersion method and request ID
 					 */
-					virtual dodoString getRequestVersion();
+					virtual void serve();
 
 				protected:
 
@@ -89,9 +109,13 @@ namespace dodo
 					
 					dodoString rqVersion; ///< request version
 					dodoString rpVersion; ///< response version['1.1' by default]
+					
+					long rqId; ///< request ID
+					long rpId; ///< response ID
 			};
 		};
 	};
 };
 
 #endif
+

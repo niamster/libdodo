@@ -102,8 +102,9 @@ namespace dodo
 
 			/**
 			 * @typedef initIpcProcessCollectionModule defines type of init function for library
+			 * @param data defines user data
 			 */
-			typedef __processMod (*initIpcProcessCollectionModule)(void *);
+			typedef __processMod (*initIpcProcessCollectionModule)(void *data);
 
 			/**
 			 * @typedef deinitIpcProcessCollectionModule defines type of deinit function for library

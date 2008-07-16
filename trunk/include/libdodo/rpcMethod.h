@@ -43,11 +43,13 @@ namespace dodo
 		namespace xml
 		{
 			class method;
+			class server;
 		};
 		
 		namespace json
 		{
 			class method;
+			class server;
 		};
 
 		/**
@@ -58,7 +60,9 @@ namespace dodo
 			friend class client;
 			friend class server;
 			friend class xml::method;
+			friend class xml::server;
 			friend class json::method;
+			friend class json::server;
 
 			public:
 

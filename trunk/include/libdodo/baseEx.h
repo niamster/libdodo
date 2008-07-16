@@ -140,8 +140,9 @@ namespace dodo
 
 	/**
 	 * @typedef initBaseExModule defines type of init function for library
+	 * @param data defines user data
 	 */
-	typedef __baseExMod (*initBaseExModule)(void *);
+	typedef __baseExMod (*initBaseExModule)(void *data);
 
 	/**
 	 * @typedef deinitBaseExModule defines type of deinit function for library
@@ -154,8 +155,11 @@ namespace dodo
 
 	/**
 	 * @typedef errorHandler defines type of hook function
+	 * @param module defines module where exception occured
+	 * @param ex defines pointer to baseEx object with exception information
+	 * @param data defines user data
 	 */
-	typedef void (*errorHandler)(errorModuleEnum, baseEx *, void *);
+	typedef void (*errorHandler)(errorModuleEnum module, baseEx *ex, void *data);
 
 	/**
 	 * @class baseEx describes exception that has been thrown

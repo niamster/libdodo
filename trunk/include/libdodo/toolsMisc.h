@@ -80,8 +80,9 @@ namespace dodo
 	{
 		/**
 		 * @typedef escape defines escape function for explode/implode
+		 * @param dta defines data to escape
 		 */
-		typedef dodoString (*escape)(const dodoString &);
+		typedef dodoString (*escape)(const dodoString &data);
 
 #ifdef ZLIB_EXT
 

@@ -256,8 +256,10 @@ namespace dodo
 
 				/**
 				 * @typedef xcharCmp defines name compare function
+				 * @param one defines string to compare
+				 * @param two defines string to compare
 				 */
-				typedef int (*xcharCmp)(const xmlChar *, const xmlChar *);
+				typedef int (*xcharCmp)(const xmlChar *one, const xmlChar *two);
 
 				xcharCmp cmpFunc;                    ///< name compare function
 

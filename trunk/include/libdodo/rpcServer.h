@@ -44,8 +44,12 @@ namespace dodo
 	{
 		/**
 		 * @typedef handler defines type of rpc method handler
+		 * @param method defines method name
+		 * @param arguments defines arguments of the method
+		 * @param idata defines additional incoming data
+		 * @param odata defines additional outgoing data
 		 */
-		typedef response (*handler)(const dodoString &, const dodoArray<value> &);
+		typedef response (*handler)(const dodoString &method, const dodoArray<value> &arguments, const void *idata, void *odata);
 
 		/**
 		 * @class server defines server-side RPC instrument
@@ -87,6 +91,7 @@ namespace dodo
 				 * serve rpc call
 				 * @note processes only one call
 				 * should be called again to process next
+				 * values of idata and odata for handler are NULL
 				 */
 				virtual void serve();
 
@@ -110,8 +115,10 @@ namespace dodo
 				 * default rpc handler
 				 * @param method defines function that will process rpc call
 				 * @param arguments defines method arguments
+				 * @param idata defines additional incoming data
+				 * @param odata defines additional outgoing data
 				 */
-				static response rpcDefaultHandler(const dodoString &method, const dodoArray<value> &arguments);
+				static response rpcDefaultHandler(const dodoString &method, const dodoArray<value> &arguments, const void *idata, void *odata);
 
 				/**
 				 * send request
@@ -132,3 +139,4 @@ namespace dodo
 };
 
 #endif
+

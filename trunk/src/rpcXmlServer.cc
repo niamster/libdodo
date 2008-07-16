@@ -31,6 +31,12 @@
 
 using namespace dodo::rpc::xml;
 
+__additionalData::__additionalData(dodoString &encoding) : encoding(encoding)
+{
+}
+
+//-------------------------------------------------------------------
+
 server::server() : rpEncoding("UTF-8")
 {
 }
@@ -47,14 +53,6 @@ void
 server::setResponseEncoding(const dodoString &a_encoding)
 {
 	rpEncoding = a_encoding;
-}
-
-//-------------------------------------------------------------------
-
-dodoString
-server::getRequestEncoding()
-{
-	return rqEncoding;
 }
 
 //-------------------------------------------------------------------
@@ -86,3 +84,44 @@ server::processCallResult(const rpc::response &resp)
 }
 
 //-------------------------------------------------------------------
+
+void
+server::serve()
+{
+	try
+	{
+		rpc::method meth = processCall(receiveTextResponse());
+		
+		dodoString encoding = rpEncoding;
+
+		__additionalData idata(rqEncoding);
+		
+		__additionalData odata(rpEncoding);
+
+		dodoMap<dodoString, handler, dodoMapStringCompare>::iterator handler = handlers.find(meth.name);
+
+		if (handler == handlers.end())
+			sendTextRequest(processCallResult(defaultHandler(meth.name, meth.arguments, &idata, &odata)));
+		else
+			sendTextRequest(processCallResult(handler->second(meth.name, meth.arguments, &idata, &odata)));
+
+		rpEncoding = encoding;
+	}
+	catch (baseEx &ex)
+	{
+		rpc::response response;
+		response.fault(ex.baseErrstr);
+
+		sendTextRequest(processCallResult(response));
+	}
+	catch (...)
+	{
+		rpc::response response;
+		response.fault(dodoString("An unknown error."));
+
+		sendTextRequest(processCallResult(response));
+	}
+}
+
+//-------------------------------------------------------------------
+

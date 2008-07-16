@@ -43,7 +43,6 @@
 
 namespace dodo
 {
-
 	/**
 	 * @enum xexecObjectTypeEnum defines objects that access xexec
 	 */
@@ -68,11 +67,11 @@ namespace dodo
 
 	/**
 	 * @typedef inExec defines function that will be called as hook
-	 * @param first defines object data
-	 * @param second defines type of object that called hook[see xexecObjectTypeEnum]
-	 * @param third defines user data
+	 * @param odata defines object data
+	 * @param object defines type of object that called hook[see xexecObjectTypeEnum]
+	 * @param udata defines user data
 	 */
-	typedef void (*inExec)(void *, short, void *);
+	typedef void (*inExec)(void *odata, short object, void *udata);
 
 	/**
 	 * @struct __xexecItem defines xexec node
@@ -131,8 +130,9 @@ namespace dodo
 
 	/**
 	 * @typedef initXexecModule defines type of init function for library
+	 * @param data defines user data
 	 */
-	typedef __xexecMod (*initXexecModule)(void *);
+	typedef __xexecMod (*initXexecModule)(void *data);
 
 	/**
 	 * @typedef deinitXexecModule defines type of deinit function for library
