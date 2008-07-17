@@ -241,7 +241,7 @@ mysql::disconnect()
 //-------------------------------------------------------------------
 
 dodoArray<dodo::dodoStringArray>
-mysql::fetchRow() const
+mysql::fetchRows() const
 {
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_FETCHROW;
@@ -301,7 +301,7 @@ mysql::fetchRow() const
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-mysql::fetchField() const
+mysql::fetchFields() const
 {
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_FETCHFIELD;
@@ -335,7 +335,7 @@ mysql::fetchField() const
 __connectorStorage
 mysql::fetch() const
 {
-	return __connectorStorage(fetchRow(), fetchField());
+	return __connectorStorage(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
@@ -515,7 +515,7 @@ mysql::getCharset() const
 //-------------------------------------------------------------------
 
 dodo::dodoStringMapArray
-mysql::fetchAssoc() const
+mysql::fetchFieldsToRows() const
 {
 	if (empty || !show)
 		return __dodostringmaparray__;

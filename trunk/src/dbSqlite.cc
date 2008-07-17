@@ -181,7 +181,7 @@ sqlite::setBLOBValues(const dodoStringArray &values)
 //-------------------------------------------------------------------
 
 dodoArray<dodo::dodoStringArray>
-sqlite::fetchRow() const
+sqlite::fetchRows() const
 {
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_FETCHROW;
@@ -295,7 +295,7 @@ sqlite::fetchRow() const
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-sqlite::fetchField() const
+sqlite::fetchFields() const
 {
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_FETCHFIELD;
@@ -328,7 +328,7 @@ sqlite::fetchField() const
 __connectorStorage
 sqlite::fetch() const
 {
-	return __connectorStorage(fetchRow(), fetchField());
+	return __connectorStorage(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
@@ -547,7 +547,7 @@ sqlite::exec(const dodoString &query,
 //-------------------------------------------------------------------
 
 dodo::dodoStringMapArray
-sqlite::fetchAssoc() const
+sqlite::fetchFieldsToRows() const
 {
 	if (!show)
 		return __dodostringmaparray__;

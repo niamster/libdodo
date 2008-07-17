@@ -165,12 +165,12 @@ namespace dodo
 				/**
 				 * @return received rows from the evaluated request
 				 */
-				virtual dodoArray<dodoStringArray> fetchRow() const;
+				virtual dodoArray<dodoStringArray> fetchRows() const;
 
 				/**
 				 * @return received fields from the evaluated request
 				 */
-				virtual dodoStringArray fetchField() const;
+				virtual dodoStringArray fetchFields() const;
 
 				/**
 				 * @return structure received rows and fields from the evaluated request
@@ -180,7 +180,7 @@ namespace dodo
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
 				 */
-				virtual dodoStringMapArray fetchAssoc() const;
+				virtual dodoStringMapArray fetchFieldsToRows() const;
 
 				/**
 				 * set additional mySQL specific statement for `insert`
