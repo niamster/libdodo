@@ -193,17 +193,6 @@ mysql::connect()
 
 	mysqlHandle = mysql_init(NULL);
 
-#ifdef HAVE_MYSQL_OPT_RECONNECT
-
-	if (reconnect)
-	{
-		my_bool rc = 1;
-
-		mysql_options(mysqlHandle, MYSQL_OPT_RECONNECT, &rc);
-	}
-
-#endif
-
 	if (!mysql_real_connect(mysqlHandle,
 							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
 							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
@@ -213,6 +202,17 @@ mysql::connect()
 							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
 							type))
 		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+
+#ifndef MYSQL_NO_OPT_RECONNECT 
+
+	if (reconnect)
+	{
+		my_bool rc = 1;
+
+		mysql_options(mysqlHandle, MYSQL_OPT_RECONNECT, &rc);
+	}
+
+#endif
 
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);

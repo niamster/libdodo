@@ -217,11 +217,12 @@ fi
 			LDFLAGS="$LDFLAGS -L$MOD_POSTGRESQL_DIR/lib -lpq"
 		fi
 		AC_CHECK_LIB([pq], [PQclear], [], AC_MSG_ERROR(postgresql lib was not found))
+		AC_CHECK_HEADER([libpq-fe.h], [], AC_MSG_ERROR(postgresql header was not found))
+		
 		AC_LANG_PUSH(C++)
-		AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <libpq-fe.h>]],[[pg_encoding_to_char(0);]]), [echo "!!!"], [echo -n -e "#define POSTGRESQL_NO_ENCODINGTOCHAR\n\n" >> include/libdodo/directives.runtime.h])
+		AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <libpq-fe.h>]],[[pg_encoding_to_char(0);]]), [], [echo -n -e "#define POSTGRESQL_NO_ENCODINGTOCHAR\n\n" >> include/libdodo/directives.runtime.h])
 		AC_LANG_POP()
 
-		AC_CHECK_HEADER([libpq-fe.h], [], AC_MSG_ERROR(postgresql header was not found))
 		echo -n -e "#define POSTGRESQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 
 		RESULT="$RESULT\nPostgresql\t\t\t\t\t\tenabled"
@@ -258,6 +259,11 @@ fi
 		fi
 		AC_CHECK_LIB([mysqlclient], [mysql_init], [], AC_MSG_ERROR(mySQL lib was not found))
 		AC_CHECK_HEADER([mysql.h], [], AC_MSG_ERROR(mySQL header was not found))
+		
+		AC_LANG_PUSH(C++)
+		AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <mysql.h>]],[[my_bool rc = 1; mysql_options(NULL, MYSQL_OPT_RECONNECT, &rc);]]), [], [echo -n -e "#define MYSQL_NO_OPT_RECONNECT\n\n" >> include/libdodo/directives.runtime.h])
+		AC_LANG_POP()
+		
 		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
 		
 		RESULT="$RESULT\nMySQL\t\t\t\t\t\tenabled"
