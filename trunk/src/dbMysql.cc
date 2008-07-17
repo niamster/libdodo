@@ -251,7 +251,7 @@ mysql::fetchRows() const
 	if (empty || !show)
 		return __dodostringarrayarray__;
 
-	mysql_row_seek(mysqlResult, 0);
+	mysql_data_seek(mysqlResult, 0);
 
 	unsigned int numFields = mysql_num_fields(mysqlResult);
 
