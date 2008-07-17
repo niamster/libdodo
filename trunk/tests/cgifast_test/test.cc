@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 
 		cf.setHandler(&cgif);
 
-		cf.listen();
+		cf.listen(5);
 
 		delete shared;
 	}
