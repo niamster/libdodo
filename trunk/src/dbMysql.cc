@@ -193,6 +193,17 @@ mysql::connect()
 
 	mysqlHandle = mysql_init(NULL);
 
+#ifdef HAVE_MYSQL_OPT_RECONNECT
+
+	if (reconnect)
+	{
+		my_bool rc = 1;
+
+		mysql_options(mysqlHandle, MYSQL_OPT_RECONNECT, &rc);
+	}
+
+#endif
+
 	if (!mysql_real_connect(mysqlHandle,
 							collectedData.dbInfo.host.size() == 0 ? NULL : collectedData.dbInfo.host.c_str(),
 							collectedData.dbInfo.user.size() == 0 ? NULL : collectedData.dbInfo.user.c_str(),
@@ -493,7 +504,7 @@ mysql::exec(const dodoString &query,
 void
 mysql::setCharset(const dodoString &charset)
 {
-	mysql_options(mysqlHandle, MYSQL_READ_DEFAULT_FILE, charset.c_str());
+	mysql_options(mysqlHandle, MYSQL_SET_CHARSET_NAME, charset.c_str());
 }
 
 //-------------------------------------------------------------------
