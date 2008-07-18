@@ -41,7 +41,7 @@
 
 namespace dodo
 {
-#define LOGGER_LEVELS 8
+#define LOGGER_LEVELS 9
 
 	/**
 	 * @enum loggerLogLevelEnum defines log levels
@@ -56,6 +56,7 @@ namespace dodo
 		LOGGER_ALERT,
 		LOGGER_CRITICAL,
 		LOGGER_EMERGENCY,
+		LOGGER_USER
 	};
 
 	/**

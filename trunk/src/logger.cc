@@ -38,18 +38,20 @@ const dodoString logger::levels[] = { "INFO",
 									  "ERROR",
 									  "ALERT",
 									  "CRITICAL",
-									  "EMERGENCY" };
+									  "EMERGENCY",
+									  "USER"};
 
 //-------------------------------------------------------------------
 
-const int logger::syslogLevels[] = { LOG_INFO,
-									 LOG_NOTICE,
-									 LOG_DEBUG,
-									 LOG_WARNING,
-									 LOG_ERR,
+const int logger::syslogLevels[] = { LOG_EMERG,
 									 LOG_ALERT,
 									 LOG_CRIT,
-									 LOG_EMERG,   };
+									 LOG_ERR,
+									 LOG_WARNING,
+									 LOG_NOTICE,
+									 LOG_INFO,
+									 LOG_DEBUG,
+									 LOG_USER};
 
 //-------------------------------------------------------------------
 
@@ -108,6 +110,9 @@ logger::log(short level,
 			const dodoString &msg)
 {
 	raceHazardGuard tg(this);
+
+	if (level < 0 && level >= LOGGER_LEVELS)
+		return;
 
 	dodoList<__logMap>::iterator i(handlers.begin()), j(handlers.end());
 	for (; i != j; ++i)
