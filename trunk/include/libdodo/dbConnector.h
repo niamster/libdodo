@@ -571,12 +571,12 @@ namespace dodo
 				/**
 				 * @return rows got from the request
 				 */
-				virtual dodoArray<dodoStringArray> fetchRow() const = 0;
+				virtual dodoArray<dodoStringArray> fetchRows() const = 0;
 
 				/**
 				 * @return fields got from the request
 				 */
-				virtual dodoStringArray fetchField() const = 0;
+				virtual dodoStringArray fetchFields() const = 0;
 
 				/**
 				 * @return result got from the request
@@ -586,7 +586,7 @@ namespace dodo
 				/**
 				 * @return set of hashes of field=>value
 				 */
-				virtual dodoStringMapArray fetchAssoc() const = 0;
+				virtual dodoStringMapArray fetchFieldsToRows() const = 0;
 
 				/**
 				 * execute collected request

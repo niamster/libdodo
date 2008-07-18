@@ -203,6 +203,17 @@ mysql::connect()
 							type))
 		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
+#ifndef MYSQL_NO_OPT_RECONNECT 
+
+	if (reconnect)
+	{
+		my_bool rc = 1;
+
+		mysql_options(mysqlHandle, MYSQL_OPT_RECONNECT, &rc);
+	}
+
+#endif
+
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);
 #endif
@@ -241,7 +252,7 @@ mysql::disconnect()
 //-------------------------------------------------------------------
 
 dodoArray<dodo::dodoStringArray>
-mysql::fetchRow() const
+mysql::fetchRows() const
 {
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_FETCHROW;
@@ -251,7 +262,7 @@ mysql::fetchRow() const
 	if (empty || !show)
 		return __dodostringarrayarray__;
 
-	mysql_field_seek(mysqlResult, 0);
+	mysql_data_seek(mysqlResult, 0);
 
 	unsigned int numFields = mysql_num_fields(mysqlResult);
 
@@ -301,7 +312,7 @@ mysql::fetchRow() const
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-mysql::fetchField() const
+mysql::fetchFields() const
 {
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_FETCHFIELD;
@@ -335,7 +346,7 @@ mysql::fetchField() const
 __connectorStorage
 mysql::fetch() const
 {
-	return __connectorStorage(fetchRow(), fetchField());
+	return __connectorStorage(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
@@ -493,7 +504,7 @@ mysql::exec(const dodoString &query,
 void
 mysql::setCharset(const dodoString &charset)
 {
-	mysql_options(mysqlHandle, MYSQL_READ_DEFAULT_FILE, charset.c_str());
+	mysql_options(mysqlHandle, MYSQL_SET_CHARSET_NAME, charset.c_str());
 }
 
 //-------------------------------------------------------------------
@@ -515,7 +526,7 @@ mysql::getCharset() const
 //-------------------------------------------------------------------
 
 dodo::dodoStringMapArray
-mysql::fetchAssoc() const
+mysql::fetchFieldsToRows() const
 {
 	if (empty || !show)
 		return __dodostringmaparray__;

@@ -213,7 +213,7 @@ postgresql::setBLOBValues(const dodoStringArray &values)
 //-------------------------------------------------------------------
 
 dodoArray<dodo::dodoStringArray>
-postgresql::fetchRow() const
+postgresql::fetchRows() const
 {
 
 #ifndef DB_WO_XEXEC
@@ -274,7 +274,7 @@ postgresql::fetchRow() const
 //-------------------------------------------------------------------
 
 dodo::dodoStringArray
-postgresql::fetchField() const
+postgresql::fetchFields() const
 {
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_FETCHFIELD;
@@ -307,7 +307,7 @@ postgresql::fetchField() const
 __connectorStorage
 postgresql::fetch() const
 {
-	return __connectorStorage(fetchRow(), fetchField());
+	return __connectorStorage(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
@@ -516,7 +516,7 @@ postgresql::exec(const dodoString &query,
 //-------------------------------------------------------------------
 
 dodo::dodoStringMapArray
-postgresql::fetchAssoc() const
+postgresql::fetchFieldsToRows() const
 {
 	if (empty || !show)
 		return __dodostringmaparray__;
