@@ -54,7 +54,8 @@ const int logger::syslogLevels[] = { LOG_INFO,
 //-------------------------------------------------------------------
 
 logger::logger() : handlersNum(0),
-				   timeFormat(" %d/%m/%Y.%H-%M-%S: ")
+				   timeFormat(" %d/%m/%Y.%H-%M-%S: "),
+				   forward(false)
 {
 }
 
@@ -120,6 +121,23 @@ logger::log(short level,
 			else
 				syslog(syslogLevels[level], msg.c_str());
 		}
+
+	if (forward)
+	{
+		i = getInstance().handlers.begin();
+		j = getInstance().handlers.end();
+		for (; i != j; ++i)
+			if (i->level == level)
+			{
+				if (i->handler != NULL)
+				{
+					i->handler->writeStreamString(levels[level] + tools::time::byFormat(timeFormat, tools::time::now()) + msg + "\n");
+					i->handler->flush();
+				}
+				else
+					syslog(syslogLevels[level], msg.c_str());
+			}
+	}
 }
 
 //-------------------------------------------------------------------

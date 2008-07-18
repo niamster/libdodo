@@ -33,7 +33,7 @@ using namespace dodo::io;
 
 file::file(const dodoString &a_path,
 		   short a_fileType,
-		   short mode) : over(false),
+		   short mode) : overwrite(false),
 						 append(false),
 						 path(a_path),
 						 fileType(a_fileType),
@@ -61,7 +61,7 @@ file::file(const dodoString &a_path,
 
 //-------------------------------------------------------------------
 
-file::file(const file &fd) : over(fd.over),
+file::file(const file &fd) : overwrite(fd.overwrite),
 							 append(fd.append),
 							 path(fd.path),
 							 fileType(fd.fileType),
@@ -100,6 +100,7 @@ file::file(const file &fd) : over(fd.over),
 			case FILE_OPENMODE_APPEND:
 
 				handler = fdopen(newDesc, "a+");
+				append = true;
 
 				break;
 
@@ -165,7 +166,7 @@ file::clone(const file &fd)
 		opened = false;
 	}
 	
-	over = fd.over;
+	overwrite = fd.overwrite;
 	append = fd.append;
 	path = fd.path;
 	fileType = fd.fileType;
@@ -198,6 +199,7 @@ file::clone(const file &fd)
 			case FILE_OPENMODE_APPEND:
 
 				handler = fdopen(newDesc, "a+");
+				append = true;
 
 				break;
 
@@ -387,7 +389,7 @@ file::_write(const char *const a_buf)
 		if (!append)
 		{
 			unsigned long pos = this->pos * outSize;
-			if (!over)
+			if (!overwrite)
 			{
 				size_t read = 0;
 				char *t_buf = new char[outSize];

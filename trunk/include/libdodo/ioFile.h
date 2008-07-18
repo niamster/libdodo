@@ -142,8 +142,8 @@ namespace dodo
 
 				unsigned long pos;                      ///< read/write/erase position[0 by default]
 
-				bool over;                              ///< if true block will be overwritten; for regular and temp files only
-				bool append;                            ///< if true, will append to the end of the file, even if pos is set
+				bool overwrite;                              ///< if true block will be overwritten; for regular and temp files only[false by default]
+				bool append;                            ///< if true, will append to the end of the file, even if pos is set[false by default]
 
 				/**
 				 * @return path of the opened file

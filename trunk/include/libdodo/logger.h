@@ -35,6 +35,7 @@
 #include <libdodo/ioChannel.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/ipcThreadGuard.h>
+#include <libdodo/types.h>
 
 #include <syslog.h>
 
@@ -70,7 +71,8 @@ namespace dodo
 	/**
 	 * @class logger provides logging function
 	 */
-	class logger : virtual public ipc::thread::guardHolder
+	class logger : virtual public ipc::thread::guardHolder,
+				   public singleton<logger>
 	{
 		public:
 
@@ -113,6 +115,8 @@ namespace dodo
 			 */
 			virtual void setTimeFormat(const dodoString &format);
 
+			bool forward;///< forward message to global log instance[false by default]
+
 		private:
 
 			dodoString timeFormat;                                      ///< date/time format for log messages; "%d/%m/%Y.%H-%M-%S" by default
@@ -124,7 +128,6 @@ namespace dodo
 			static const dodoString levels[LOGGER_LEVELS];              ///< log levels statements
 			static const int syslogLevels[LOGGER_LEVELS];               ///< syslog log levels
 	};
-
 };
 
 #endif

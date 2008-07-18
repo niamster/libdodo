@@ -89,6 +89,27 @@ namespace dodo
 			bool operator()(const dodoString &first, const dodoString &second);
 	};
 
+	/**
+	 * @class singleton defines singleton base class for derived class
+	 * @note not threadsafe
+	 */
+	template<typename T>
+	class singleton
+	{
+		public:
+
+			/**
+			 * @return logger instance which can be used globally
+			 */
+			static T &
+			getInstance()
+			{
+				static T t;
+
+				return t;
+			}
+	};
+
 #define dodoMap std::map
 
 #ifdef USE_DEQUE
