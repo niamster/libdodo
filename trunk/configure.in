@@ -261,7 +261,7 @@ fi
 		AC_CHECK_HEADER([mysql.h], [], AC_MSG_ERROR(mySQL header was not found))
 		
 		AC_LANG_PUSH(C++)
-		AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <mysql.h>]],[[my_bool rc = 1; mysql_options(NULL, MYSQL_OPT_RECONNECT, &rc);]]), [], [echo -n -e "#define MYSQL_NO_OPT_RECONNECT\n\n" >> include/libdodo/directives.runtime.h])
+		AC_COMPILE_IFELSE(AC_LANG_PROGRAM([[#include <mysql.h>]],[[my_bool rc = 1; mysql_options(0, MYSQL_OPT_RECONNECT, &rc);]]), [], [echo -n -e "#define MYSQL_NO_OPT_RECONNECT\n\n" >> include/libdodo/directives.runtime.h])
 		AC_LANG_POP()
 		
 		echo -n -e "#define MYSQL_EXT\n\n" >> include/libdodo/directives.runtime.h
