@@ -41,6 +41,22 @@ int main(int argc, char **argv)
 			cout << "WTF";
 #endif
 
+		try
+		{
+			tools::filesystem::unlink("some.file", false);
+		}
+		catch(...)
+		{
+		}
+		
+		try
+		{
+			tools::filesystem::unlink("some.file", false);
+		}
+		catch(...)
+		{
+		}
+
 #ifdef ICONV_EXT
 		tools::misc::codesetConversion(tools::filesystem::getFileContents("test.cc"), "cp1251", "utf-8");
 #endif

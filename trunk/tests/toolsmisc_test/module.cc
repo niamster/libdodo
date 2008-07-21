@@ -20,6 +20,7 @@ baseHandler(errorModuleEnum module,
 			void *data)
 {
 	std::cout << "baseModuleHandler: " << ex->baseErrstr << std::endl;
+	std::cout << ex->message << std::endl;
 }
 
 __baseExMod
@@ -30,7 +31,7 @@ initBaseExModule(void *data)
 	strcpy(module.name, "test");
 	strcpy(module.discription, "test module");
 	strcpy(module.hook, "baseHandler");
-	module.module = ERRMODULE_IOFILE;
+	module.module = ERRMODULE_TOOLSFILESYSTEM;
 
 	return module;
 }

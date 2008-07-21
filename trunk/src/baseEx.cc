@@ -31,6 +31,10 @@
 
 using namespace dodo;
 
+unsigned long baseEx::instances = 0;
+
+//-------------------------------------------------------------------
+
 bool baseEx::handlerSetEx[] = {
 	false,
 	false,
@@ -373,6 +377,13 @@ baseEx::raceHazardGuard::~raceHazardGuard()
 
 //-------------------------------------------------------------------
 
+baseEx::baseEx() throw()
+{
+	instances = 1;
+}
+
+//-------------------------------------------------------------------
+
 baseEx::baseEx(errorModuleEnum a_errModule,
 			   unsigned long functionID,
 			   errnoSourceEnum errnoSource,
@@ -380,16 +391,20 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 			   const dodoString &a_errstr,
 			   unsigned long a_line,
 			   const dodoString &a_file,
-			   const dodoString &a_message) : errModule(a_errModule),
-											  funcID(functionID),
-											  errnoSource(errnoSource),
-											  baseErrno(a_errno),
-											  baseErrstr(a_errstr),
-											  line(a_line),
-											  file(a_file),
-											  message(a_message)
+			   const dodoString &a_message) throw() : errModule(a_errModule),
+													  funcID(functionID),
+													  errnoSource(errnoSource),
+													  baseErrno(a_errno),
+													  baseErrstr(a_errstr),
+													  line(a_line),
+													  file(a_file),
+													  message(a_message)
 {
 	raceHazardGuard tg;
+
+	getInstance();
+	
+	++instances;
 
 	if (handlerSetEx[errModule])
 		handlersEx[errModule](errModule, this, handlerDataEx[errModule]);
@@ -397,32 +412,36 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 
 //-------------------------------------------------------------------
 
-baseEx::~baseEx()
+baseEx::~baseEx() throw()
 {
 	raceHazardGuard tg;
 
+	--instances;
+
+	if (instances == 0)
+	{
 #ifdef DL_EXT
 
-	deinitBaseExModule deinit;
+		deinitBaseExModule deinit;
 
-	for (int i(0); i < BASEEX_MODULES; ++i)
-	{
-		if (!handlesOpenedEx[i])
-			continue;
+		for (int i(0); i < BASEEX_MODULES; ++i)
+		{
+			if (!handlesOpenedEx[i])
+				continue;
 
-		deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
-		if (deinit != NULL)
-			deinit();
+			deinit = (deinitBaseExModule)dlsym(handlesEx[i], "deinitBaseExModule");
+			if (deinit != NULL)
+				deinit();
 
-		handlesOpenedEx[i] = false;
+			handlesOpenedEx[i] = false;
 
 #ifndef DL_FAST
-		dlclose(handlesEx[i]);
+			dlclose(handlesEx[i]);
 #endif
+		}
 
+#endif
 	}
-
-#endif
 }
 
 //-------------------------------------------------------------------
@@ -436,12 +455,24 @@ baseEx::operator const dodoString & ()
 
 //-------------------------------------------------------------------
 
+const char *
+baseEx::what() const throw()
+{
+	raceHazardGuard tg;
+
+	return baseErrstr.c_str();
+}
+
+//-------------------------------------------------------------------
+
 void
 baseEx::setErrorHandler(errorModuleEnum module,
 						errorHandler handler,
 						void *data)
 {
 	raceHazardGuard tg;
+
+	getInstance();
 
 #ifdef DL_EXT
 
@@ -475,6 +506,8 @@ baseEx::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
 	raceHazardGuard tg;
+
+	getInstance();
 
 #ifdef DL_EXT
 	deinitBaseExModule deinit;
@@ -586,6 +619,8 @@ baseEx::setErrorHandlers(const dodoString &path,
 {
 	raceHazardGuard tg;
 
+	getInstance();
+
 	initBaseExModule init;
 	errorHandler in;
 	deinitBaseExModule deinit;
@@ -642,6 +677,8 @@ baseEx::setErrorHandler(const dodoString &path,
 						void *toInit)
 {
 	raceHazardGuard tg;
+
+	getInstance();
 
 #ifdef DL_FAST
 	void *handler = dlopen(path.c_str(), RTLD_LAZY | RTLD_NODELETE);

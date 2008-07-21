@@ -34,6 +34,8 @@
 
 #include <libdodo/types.h>
 
+#include <exception>
+
 #ifdef DL_EXT
 
 #include <dlfcn.h>
@@ -164,8 +166,18 @@ namespace dodo
 	/**
 	 * @class baseEx describes exception that has been thrown
 	 */
-	class baseEx
+	class baseEx : public std::exception,
+				   public singleton<baseEx>
 	{
+		friend class singleton<baseEx>;
+
+		private:
+			
+			/**
+			 * constructor
+			 */
+			baseEx() throw();
+
 		public:
 
 			/**
@@ -179,17 +191,22 @@ namespace dodo
 			 * @param file defines file where exception has been thrown
 			 * @param message defines custom message that might clarify the exception
 			 */
-			baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, const dodoString &baseErrstr, unsigned long line, const dodoString &file, const dodoString &message = __dodostring__);
+			baseEx(errorModuleEnum errModule, unsigned long functionID, errnoSourceEnum errnoSource, int baseErrno, const dodoString &baseErrstr, unsigned long line, const dodoString &file, const dodoString &message = __dodostring__) throw();
 
 			/**
 			 * destructor
 			 */
-			~baseEx();
+			~baseEx() throw();
 
 			/**
 			 * @return error string
 			 */
 			operator const dodoString &();
+
+			/**
+			 * return error string
+			 */
+			virtual const char *what() const throw();
 
 			errorModuleEnum errModule;                  ///< module where exception has been thrown
 			unsigned long funcID;                       ///< function where exception has been thrown[see *Ex.h headers for IDs]
@@ -331,6 +348,8 @@ namespace dodo
 					 */
 					virtual ~raceHazardGuard();
 			};
+
+			static unsigned long instances;
 	};
 };
 
