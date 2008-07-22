@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 		
 		try
 		{
-			tools::filesystem::unlink("some.file", false);
+			file f("some.file", FILE_FILETYPE_REG_FILE, FILE_OPENMODE_READ_ONLY);
 		}
 		catch(...)
 		{
