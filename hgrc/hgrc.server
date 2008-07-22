@@ -1,10 +1,10 @@
 [ui]
-username = libdodo
+username = <server user>
 
 [web]
 allow_archive = zip gz bz2
 style = gitweb
-baseurl = http://libdodo.sourceforge.net/hg/libdodo/
+baseurl = <repository>
 
 [extensions]
 hgext.notify =
@@ -14,12 +14,12 @@ changegroup.notify = python:hgext.notify.hook
 
 [email]
 method = /usr/sbin/sendmail
-from = libdodo@users.sourceforge.net
+from = <from>
 
 [notify]
 sources = serve push pull bundle
 test = False
-config = /home/groups/l/li/libdodo/hg/libdodo/.hg/notify.conf
+config = <path to config>
 template = \ndetails:   {baseurl}{webroot}/rev/{node|short}\nchangeset: {rev}:{node|short}\nuser:      {author}\ndate:
   {date|date}\ndescription:\n{desc}\n\nDo not forget to update meta and docs!\n
   maxdiff = 300
