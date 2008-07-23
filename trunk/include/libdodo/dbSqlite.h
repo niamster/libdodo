@@ -54,8 +54,6 @@ namespace dodo
 			SQLITE_HINT_BLOB = 2,             ///< insert|update using BLOB values
 		};
 
-		class sqlite;
-
 		/**
 		 * @class sqlite provides an interface to sqlite db
 		 * @note for autoFraming sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
@@ -149,13 +147,6 @@ namespace dodo
 				 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
 				 */
 				virtual void setBLOBValues(const dodoStringArray &values);
-
-			protected:
-
-				/**
-				 * construct adaptive field info for statements
-				 */
-				virtual dodoString fieldCollect(const __connectorField &row);
 
 			private:
 

@@ -48,43 +48,6 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @enum mysqlAddSelEnum defines additional mySQL statement for `select`
-		 */
-		enum mysqlAddSelEnum
-		{
-			MYSQL_ADDREQUEST_SELECT_STRAIGHT_JOIN = 1,
-			MYSQL_ADDREQUEST_SELECT_SMALL_RESULT,
-			MYSQL_ADDREQUEST_SELECT_BIG_RESULT,
-		};
-
-		/**
-		 * @enum mysqlAddDelEnum defines additional mySQL statement for `delete`
-		 */
-		enum mysqlAddDelEnum
-		{
-			MYSQL_ADDREQUEST_DELETE_LOW_PRIORITY = 1,
-			MYSQL_ADDREQUEST_DELETE_QUICK
-		};
-
-		/**
-		 * @enum mysqlAddUpEnum defines additional mySQL statement for `update`
-		 */
-		enum mysqlAddUpEnum
-		{
-			MYSQL_REQUEST_UPDATE_LOW_PRIORITY = 1,
-		};
-
-		/**
-		 * @enum mysqlAddInsEnum defines additional mySQL statement for `insert`
-		 */
-		enum mysqlAddInsEnum
-		{
-			MYSQL_ADDREQUEST_INSERT_DELAYED = 1,
-			MYSQL_ADDREQUEST_INSERT_LOW_PRIORITY,
-			MYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY,
-		};
-
-		/**
 		 * @struct __mysqlSslOptions defines SSL mySQL options
 		 */
 		struct __mysqlSslOptions
@@ -183,54 +146,6 @@ namespace dodo
 				virtual dodoStringMapArray fetchFieldsToRows() const;
 
 				/**
-				 * set additional mySQL specific statement for `insert`
-				 * @param statement defines additional statement[see mysqlAddInsEnum]
-				 */
-				virtual void setMyAddInsSt(short statement);
-
-				/**
-				 * set additional mySQL specific statement for `update`
-				 * @param statement defines additional statement[see mysqlAddUpEnum]
-				 */
-				virtual void setMyAddUpSt(short statement);
-
-				/**
-				 * set additional mySQL specific statement for `select`
-				 * @param statement defines additional statement[see mysqlAddSelEnum]
-				 */
-				virtual void setMyAddSelSt(short statement);
-
-				/**
-				 * set additional mySQL specific statement for `delete`
-				 * @param statement defines additional statement[see mysqlAddDelEnum]
-				 */
-				virtual void setMyAddDelSt(short statement);
-
-				/**
-				 * remove additional mySQL specific statement for `insert`
-				 * @param statement defines additional statement[see mysqlAddInsEnum]
-				 */
-				virtual void unsetMyAddInsSt(short statement);
-
-				/**
-				 * remove additional mySQL specific statement for `update`
-				 * @param statement defines additional statement[see mysqlAddUpEnum]
-				 */
-				virtual void unsetMyAddUpSt(short statement);
-
-				/**
-				 * remove additional mySQL specific statement for `select`
-				 * @param statement defines additional statement[see mysqlAddSelEnum]
-				 */
-				virtual void unsetMyAddSelSt(short statement);
-
-				/**
-				 * remove additional mySQL specific statement for `delete`
-				 * @param statement defines additional statement[see mysqlAddDelEnum]
-				 */
-				virtual void unsetMyAddDelSt(short statement);
-
-				/**
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
@@ -253,31 +168,6 @@ namespace dodo
 				 * @param time defines connection timeout in seconds
 				 */
 				virtual void setConnectTimeout(unsigned int time);
-
-				/**
-				 * rename field
-				 * @param field defines current name of the field
-				 * @param to_field defines new name of the field
-				 * @param table defines table that contains the field
-				 */
-				virtual void renameField(const dodoString &field, const __connectorField &to_field, const dodoString &table);
-
-			protected:
-
-				/**
-				 * init additional mySQL specific statements
-				 */
-				virtual void addSQL();
-
-				/**
-				 * construct `rename database` statement
-				 */
-				virtual void renameDbCollect();
-
-				/**
-				 * construct `alter table` statement
-				 */
-				virtual void renameFieldCollect();
 
 			private:
 

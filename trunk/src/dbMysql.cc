@@ -42,8 +42,6 @@ mysql::mysql() : empty(true),
 	execObject = XEXEC_OBJECT_DBMYSQL;
 
 #endif
-
-	addSQL();
 }
 
 //-------------------------------------------------------------------
@@ -63,93 +61,6 @@ mysql::~mysql()
 
 		mysql_close(mysqlHandle);
 	}
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::addSQL()
-{
-	sqlDbDepAddInsArr.push_back(" delayed ");
-	sqlDbDepAddInsArr.push_back(" low_priority ");
-	sqlDbDepAddInsArr.push_back(" high_priority ");
-
-	sqlDbDepAddSelArr.push_back(" straight_join ");
-	sqlDbDepAddSelArr.push_back(" sql_small_result ");
-	sqlDbDepAddSelArr.push_back(" sql_big_result ");
-
-	sqlDbDepAddUpArr.push_back(" low_priority ");
-
-	sqlDbDepAddDelArr.push_back(" low_priority ");
-	sqlDbDepAddDelArr.push_back(" quick ");
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddInsSt(short statement)
-{
-	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_DELAYED);
-	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_LOW_PRIORITY);
-	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY);
-
-	addFlag(qDbDepInsShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddUpSt(short statement)
-{
-	addFlag(qDbDepUpShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddSelSt(short statement)
-{
-	addFlag(qDbDepSelShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddDelSt(short statement)
-{
-	addFlag(qDbDepDelShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddInsSt(short statement)
-{
-	removeFlag(qDbDepInsShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddUpSt(short statement)
-{
-	removeFlag(qDbDepUpShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddSelSt(short statement)
-{
-	removeFlag(qDbDepSelShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddDelSt(short statement)
-{
-	removeFlag(qDbDepDelShift, 1 << statement);
 }
 
 //-------------------------------------------------------------------
@@ -569,36 +480,6 @@ mysql::fetchFieldsToRows() const
 	}
 
 	return rowsFields;
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::renameDbCollect()
-{
-	request = "rename database " + collectedData.order + " to " + collectedData.having;
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::renameFieldCollect()
-{
-	request = "alter table " + collectedData.table + " change " + collectedData.tableTo + " " + fieldCollect(collectedData.fieldInfo);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::renameField(const dodoString &field,
-				   const __connectorField &to_field,
-				   const dodoString &table)
-{
-	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
-	collectedData.tableTo = field;
-	collectedData.table = table;
-	collectedData.fieldInfo = to_field;
-	show = false;
 }
 
 #endif

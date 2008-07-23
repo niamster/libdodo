@@ -137,22 +137,6 @@ namespace dodo
 			protected:
 
 				/**
-				 * @return SQL compliant data type
-				 * @param type defines data type
-				 */
-				virtual dodoString sqlDataType(int type);
-
-				/**
-				 * construct `rename database` statement
-				 */
-				virtual void renameDbCollect();
-
-				/**
-				 * construct `alter table` statement
-				 */
-				virtual void renameFieldCollect();
-				
-				/**
 				 * construct `insert` statement
 				 */
 				virtual void insertCollect();

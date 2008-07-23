@@ -76,35 +76,6 @@ sqlite::~sqlite()
 
 //-------------------------------------------------------------------
 
-dodoString
-sqlite::fieldCollect(const __connectorField &row)
-{
-	int type = row.type, flag = row.flag;
-	dodoString resRow(row.name + " " + sqlDataType(type));
-
-	if (preventEscaping)
-		resRow.append(!row.set_enum.empty() ? " (" + tools::misc::implode(row.set_enum, ",") + ")" : __dodostring__);
-	else
-		resRow.append(!row.set_enum.empty() ? " (" + tools::misc::implode(row.set_enum, escapeFields, ",") + ")" : __dodostring__);
-	resRow.append((chkRange(type) > 0 && row.length > 0) ? " (" + tools::string::lToString(row.length) + ") " : __dodostring__);
-	resRow.append(row.charset.size() > 0 ? " collate " + row.charset : " ");
-	resRow.append(isSetFlag(flag, CONNECTOR_FIELDFLAG_NULL) ? " null " : " not null ");
-	resRow.append(row.defaultVal.size() > 0 ? "default '" + row.defaultVal + "' " : __dodostring__);
-	resRow.append(isSetFlag(flag, CONNECTOR_FIELDFLAG_AUTO_INCREMENT) ? " primary key autoincrement" : __dodostring__);
-
-	if (row.refTable.size() > 0)
-	{
-		resRow.append(" references " + row.refTable);
-		resRow.append(!row.refFields.empty() ? "(" + tools::misc::implode(row.set_enum, ",") + " )" : __dodostring__);
-		resRow.append(row.onDelete >= 0 ? " on delete " + stringReference(row.onDelete) : __dodostring__);
-		resRow.append(row.onUpdate >= 0 ? " on update " + stringReference(row.onUpdate) : __dodostring__);
-	}
-
-	return resRow;
-}
-
-//-------------------------------------------------------------------
-
 void
 sqlite::connect()
 {
@@ -226,7 +197,7 @@ sqlite::fetchRows() const
 
 			case SQLITE_ERROR:
 
-				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHROWS, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
 			case SQLITE_ROW:
 
@@ -361,7 +332,7 @@ sqlite::rowsCount() const
 
 				case SQLITE_ERROR:
 
-					throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+					throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHROWS, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
 				case SQLITE_ROW:
 
@@ -585,7 +556,7 @@ sqlite::fetchFieldsToRows() const
 
 			case SQLITE_ERROR:
 
-				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHASSOC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHFIELDSTOROWS, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
 			case SQLITE_ROW:
 

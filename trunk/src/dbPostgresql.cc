@@ -111,26 +111,6 @@ postgresql::~postgresql()
 
 //-------------------------------------------------------------------
 
-dodoString
-postgresql::sqlDataType(int type)
-{
-	switch (type)
-	{
-		case CONNECTOR_FIELDTYPE_TINYBLOB:
-		case CONNECTOR_FIELDTYPE_BLOB:
-		case CONNECTOR_FIELDTYPE_MEDIUMBLOB:
-		case CONNECTOR_FIELDTYPE_LONGBLOB:
-
-			return dodoString("BYTEA");
-
-		default:
-
-			return sqlConstructor::sqlDataType(type);
-	}
-}
-
-//-------------------------------------------------------------------
-
 void
 postgresql::connect()
 {
@@ -503,22 +483,6 @@ postgresql::getCharset() const
 	return pg_encoding_to_char(PQclientEncoding(pgHandle));
 
 #endif
-}
-
-//-------------------------------------------------------------------
-
-void
-postgresql::renameDbCollect()
-{
-	request = "alter database " + collectedData.order + " rename to " + collectedData.having;
-}
-
-//-------------------------------------------------------------------
-
-void
-postgresql::renameFieldCollect()
-{
-	request = "alter table " + collectedData.table + " rename column " + collectedData.tableTo + " to " + collectedData.having;
 }
 
 //-------------------------------------------------------------------

@@ -62,9 +62,9 @@ namespace dodo
 			dodoStringArray fields;                                     ///< `fields` for request(can be used as `fieldsTo` for `insert_select`; as `arguments` for `callFunction`; as `arguments` for `callProcedure`; as `fields`/`field` `createIndex`)
 			dodoArray<dodoStringArray> values;                          ///< `values` for the request(can be used as `fieldsFrom` for `insert_select`)
 			dodoString table;                                           ///< `table` for the request(can be used `tableTo` for `insert_select`; as `name` for `callFunction`; as `name` for `callProcedure`)
-			dodoString tableTo;                                         ///< `tableTo` for the request(can be used as `field` for `deleteField`/`renameField`)
-			dodoString order;                                           ///< `order` for the request(can be used as `db` for `deleteField`/`renameField`/`deleteTable`/`renameTable`)
-			dodoString having;                                          ///< `having` for the request(can be used as `charset` for 'createDb'; as `to_db` for `renameDb`; as `to_table` for `renameTable`; as `name` for `createIndex`; as `field` for `deleteIndex`; as `to_field` for `renameField`)
+			dodoString tableTo;                                         ///< `tableTo` for the request
+			dodoString order;                                           ///< `order` for the request
+			dodoString having;                                          ///< `having` for the request
 			dodoString group;                                           ///< `group` for the request
 			dodoString limit;                                           ///< `limit` for the result
 			dodoString offset;                                          ///< `offset` for the result
@@ -73,19 +73,10 @@ namespace dodo
 			dodoStringArray joinConds;                                  ///< join conditions
 			dodoArray<int> joinTypes;                                   ///< join types
 
-			__connectorTable tableInfo;                                 ///< table structure for creation
-			__connectorField fieldInfo;                                 ///< field structure for creation
-
 			__connectorInfo dbInfo;                                     ///< data info to connect to the server
 
 			int qType;                                                  ///< type of operation
-
 			int qShift;                                                 ///< additional actions[see accumulatorAddEnum]
-
-			int qSelShift;                                              ///< additional select statements[see accumulatorAddSelEnum]
-			int qInsShift;                                              ///< additional insert statements[see accumulatorAddInsEnum]
-			int qUpShift;                                               ///< additional update statements[see accumulatorAddUpEnum]
-			int qDelShift;                                              ///< additional delete statements[see accumulatorAddDelEnum]
 
 #ifndef DB_WO_XEXEC
 
@@ -132,66 +123,8 @@ namespace dodo
 			ACCUMULATOR_REQUEST_UPDATE,
 			ACCUMULATOR_REQUEST_DELETE,
 
-			ACCUMULATOR_REQUEST_TRUNCATE,
-
-			ACCUMULATOR_REQUEST_RENAME_DB,
-			ACCUMULATOR_REQUEST_RENAME_TABLE,
-			ACCUMULATOR_REQUEST_RENAME_FIELD,
-
-			ACCUMULATOR_REQUEST_DELETE_DB,
-			ACCUMULATOR_REQUEST_DELETE_TABLE,
-			ACCUMULATOR_REQUEST_DELETE_FIELD,
-
-			ACCUMULATOR_REQUEST_CREATE_DB,
-			ACCUMULATOR_REQUEST_CREATE_TABLE,
-			ACCUMULATOR_REQUEST_CREATE_FIELD,
-
-			ACCUMULATOR_REQUEST_CREATE_INDEX,
-			ACCUMULATOR_REQUEST_DELETE_INDEX,
-
 			ACCUMULATOR_REQUEST_CALL_FUNCTION,
 			ACCUMULATOR_REQUEST_CALL_PROCEDURE,
-		};
-
-#define ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS 2
-
-		/**
-		 * @enum accumulatorAddSelEnum defines additional properties for the `select` request
-		 */
-		enum accumulatorAddSelEnum
-		{
-			ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT = 1,
-			ACCUMULATOR_ADDREQUEST_SELECT_ALL
-		};
-
-#define ACCUMULATOR_ADDREQUESTDELETESTATEMENTS 1
-
-		/**
-		 * @enum accumulatorAddDelEnum defines additional properties for the `delete` request
-		 */
-		enum accumulatorAddDelEnum
-		{
-			ACCUMULATOR_ADDREQUEST_DELETE_IGNORE = 1,
-		};
-
-#define ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS 1
-
-		/**
-		 * @enum accumulatorAddUpEnum defines additional properties for the `update` request
-		 */
-		enum accumulatorAddUpEnum
-		{
-			ACCUMULATOR_ADDREQUEST_UPDATE_IGNORE = 1,
-		};
-
-#define ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS 1
-
-		/**
-		 * @enum accumulatorAddInsEnum defines additional properties for the `insert` request
-		 */
-		enum accumulatorAddInsEnum
-		{
-			ACCUMULATOR_ADDREQUEST_INSERT_IGNORE = 1,
 		};
 
 		/**
@@ -210,17 +143,6 @@ namespace dodo
 				 * destructor
 				 */
 				virtual ~accumulator();
-
-				/**
-				 * set connection information for database
-				 * @param db defines name of db
-				 * @param host defines host
-				 * @param user defines user
-				 * @param password defines password
-				 * @param path defines path to db or unix socket
-				 * @param port defines port
-				 */
-				virtual void setDbInfo(const dodoString &db, const dodoString &host, unsigned int port, const dodoString &user, const dodoString &password, const dodoString &path = __dodostring__);
 
 				/**
 				 * set connection information for database
@@ -321,103 +243,6 @@ namespace dodo
 				virtual void subquery(const dodoStringArray &subqueries, int type = CONNECTOR_SUBREQUEST_UNION);
 
 				/**
-				 * create index in the table
-				 * @param table defines table where create index
-				 * @param field defines field that would be index
-				 * @param name defines name of the index
-				 */
-				virtual void createIndex(const dodoString &table, const dodoString &field, const dodoString &name);
-
-				/**
-				 * create index in the table
-				 * @param table defines table where create index
-				 * @param fields defines fields that would be index
-				 * @param name defines name of the index
-				 */
-				virtual void createIndex(const dodoString &table, const dodoStringArray &fields, const dodoString &name);
-
-				/**
-				 * delete index in the table
-				 * @param table defines table where delete index
-				 * @param name defines name of the index
-				 */
-				virtual void deleteIndex(const dodoString &table, const dodoString &name);
-
-				/**
-				 * rename database
-				 * @param db defines current name of the database
-				 * @param to_db defines new name of the database
-				 */
-				virtual void renameDb(const dodoString &db, const dodoString &to_db);
-
-				/**
-				 * rename table
-				 * @param table defines current name of the table
-				 * @param to_table defines new name of the table
-				 */
-				virtual void renameTable(const dodoString &table, const dodoString &to_table);
-
-				/**
-				 * rename field
-				 * @param field defines current name of the field
-				 * @param to_field defines new name of the field
-				 * @param table defines table that contains the field
-				 */
-				virtual void renameField(const dodoString &field, const dodoString &to_field, const dodoString &table);
-
-				/**
-				 * delete database
-				 * @param db defines the database
-				 */
-				virtual void deleteDb(const dodoString &db);
-
-				/**
-				 * delete table
-				 * @param table defines the table
-				 */
-				virtual void deleteTable(const dodoString &table);
-
-				/**
-				 * delete field
-				 * @param field defines field that will be deleted
-				 * @param table defines table that contains the field
-				 */
-				virtual void deleteField(const dodoString &field, const dodoString &table);
-
-				/**
-				 * create database
-				 * @param db the name of the new database
-				 * @param charset defines charset of the database
-				 */
-				virtual void createDb(const dodoString &db, const dodoString &charset = __dodostring__);
-
-				/**
-				 * create table
-				 * @param tableInfo defines table definition[see __connectorTable]
-				 */
-				virtual void createTable(const __connectorTable &tableInfo);
-
-				/**
-				 * create field
-				 * @param fieldInfo defines field definition[see __connectorField]
-				 * @param table defines table that will contain the field
-				 */
-				virtual void createField(const __connectorField &fieldInfo, const dodoString &table);
-
-				/**
-				 * truncate table
-				 * @param table is name name of table to truncate
-				 */
-				virtual void truncate(const dodoString &table);
-
-				/**
-				 * set `where` statement
-				 * @param where defines `where` statement
-				 * @note overwrites previous definition[from methods that may define it]
-				 */
-				virtual void where(const dodoString &where);
-
-				/**
 				 * set `limit` property
 				 * @param number defines `limit` value
 				 */
@@ -455,96 +280,6 @@ namespace dodo
 				 */
 				virtual void join(const dodoString &table, int type, const dodoString &condition);
 
-				/**
-				 * remove `where` statement
-				 */
-				virtual void unwhere();
-
-				/**
-				 * remove `limit` property
-				 */
-				virtual void unlimit();
-
-				/**
-				 * remove `offset` property
-				 */
-				virtual void unoffset();
-
-				/**
-				 * remove `order` property
-				 */
-				virtual void unorder();
-
-				/**
-				 * remove `group` property
-				 */
-				virtual void ungroup();
-
-				/**
-				 * remove `having` property
-				 */
-				virtual void unhaving();
-
-				/**
-				 * set additional parameters for `insert` request
-				 * @param statement defines additional parameters of the statement; may be combined with '|'[see accumulatorAddInsEnum]
-				 */
-				virtual void setAddInsSt(unsigned int statement);
-
-				/**
-				 * set additional parameters for `update` request
-				 * @param statement defines additional parameters of the statement; may be combined with '|'[see accumulatorAddUpEnum]
-				 */
-				virtual void setAddUpSt(unsigned int statement);
-
-				/**
-				 * sets additional parameters for `select` request
-				 * @param statement defines additional parameters of the statement; may be combined with '|'[see accumulatorAddSelEnum]
-				 */
-				virtual void setAddSelSt(unsigned int statement);
-
-				/**
-				 * sets additional parameters for `delete` request
-				 * @param statement defines additional parameters of the statement; may be combined with '|'[see accumulatorAddDelEnum]
-				 */
-				virtual void setAddDelSt(unsigned int statement);
-
-				/**
-				 * remove additional parameters from `insert` request
-				 * @param statement defines additional parameters of the statemente; may be combined with '|'[see accumulatorAddInsEnum]
-				 */
-				virtual void unsetAddInsSt(unsigned int statement);
-
-				/**
-				 * remove additional parameters from `update` request
-				 * @param statement defines additional parameters of the statement; may be combined with '|'[see accumulatorAddUpEnum]
-				 */
-				virtual void unsetAddUpSt(unsigned int statement);
-
-				/**
-				 * remove additional parameters from `select` request
-				 * @param statement defines additional parameters of the statement; may be combined with '|'[see accumulatorAddSelEnum]
-				 */
-				virtual void unsetAddSelSt(unsigned int statement);
-
-				/**
-				 * remove additional parameters from `delete` request
-				 * @param statement defines additional parameters of the statement; may be combined with '|'[see accumulatorAddDelEnum]
-				 */
-				virtual void unsetAddDelSt(unsigned int statement);
-
-				/**
-				 * set default values for table
-				 * @param table defines table structure that will be initialized
-				 */
-				static void initTableInfo(__connectorTable &table);
-
-				/**
-				 * set default values for field
-				 * @param field defines field structure that will be initialized
-				 */
-				static void initFieldInfo(__connectorField &field);
-
 			protected:
 
 				/**
@@ -553,22 +288,6 @@ namespace dodo
 				virtual void cleanCollected();
 
 				bool show;                                                      ///< if true try to get result from the request[select]
-
-				/*
-				 * additional statements for query, db-dependent
-				 * can be implemented in derived class
-				 * these arrays take part after generalSQL statements
-				 * every of these objects has one empty("") element
-				 */
-				dodoStringArray sqlDbDepAddSelArr;                                      ///< additional `select` statement
-				dodoStringArray sqlDbDepAddInsArr;                                      ///< additional `insert` statement
-				dodoStringArray sqlDbDepAddUpArr;                                       ///< additional `update` statement
-				dodoStringArray sqlDbDepAddDelArr;                                      ///< additional `delete` statement
-
-				int qDbDepSelShift;                                                     ///< additional db-dependent `select` actions[see sqlDbDepAddSelArr]
-				int qDbDepInsShift;                                                     ///< additional db-dependent `insert` actions[see sqlDbDepAddInsArr]
-				int qDbDepUpShift;                                                      ///< additional db-dependent `update` actions[see sqlDbDepAddUpArr]
-				int qDbDepDelShift;                                                     ///< additional db-dependent `delete` actions[see sqlDbDepAddDelArr]
 
 				__xexecDbAccumulatorCollectedData collectedData;                        ///< data collected for xexec
 		};

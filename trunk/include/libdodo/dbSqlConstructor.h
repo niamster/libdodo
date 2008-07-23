@@ -66,18 +66,6 @@ namespace dodo
 				 */
 				virtual dodoString queryCollect();
 
-				/**
-				 * @return string in `exist()` statement
-				 * @param statement defines an SQL statement that will be covered with `exist()` statement
-				 */
-				static dodoString exists(const dodoString &statement);
-
-				/**
-				 * @return string in `exist()` statement
-				 * @param statement defines an SQL statement that will be covered with `exist()` statement
-				 */
-				static dodoString notexists(const dodoString &statement);
-
 				bool preventFraming;                                                                                    ///< if true values of fields will be framed with ' in `insert` and `update` statements[false by default]
 
 				bool preventEscaping;                                                                                   ///< if true values of fields {\,'} will be escaped in `insert` and `update` statements[false by default]
@@ -110,10 +98,6 @@ namespace dodo
 
 #endif
 
-				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;                          ///< hash of 'db:table' => `array of fields to frame`
-
-				dodoString request;                                                                                     ///< SQL statement
-
 				/**
 				 * @return escaped string
 				 * @param data defines a string to escape
@@ -127,6 +111,10 @@ namespace dodo
 				static dodoString unescapeFields(const dodoString &data);
 
 			protected:
+				
+				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;                          ///< hash of 'db:table' => `array of fields to frame`
+
+				dodoString request;                                                                                     ///< SQL statement
 
 				/**
 				 * construct `SELECT function` statement
@@ -174,92 +162,11 @@ namespace dodo
 				virtual void subCollect();
 
 				/**
-				 * construct `truncate` statement
-				 */
-				virtual void truncateCollect();
-
-				/**
-				 * construct `drop database` statement
-				 */
-				virtual void delDbCollect();
-
-				/**
-				 * construct `drop table` statement
-				 */
-				virtual void delTableCollect();
-
-				/**
-				 * construct `alter ... drop` statement
-				 */
-				virtual void delFieldCollect();
-
-				/**
-				 * construct `rename database` statement
-				 */
-				virtual void renameDbCollect();
-
-				/**
-				 * construct `alter table` statement
-				 */
-				virtual void renameTableCollect();
-
-				/**
-				 * construct `alter table` statement
-				 */
-				virtual void renameFieldCollect();
-
-				/**
-				 * construct `create database` statement
-				 */
-				virtual void createDbCollect();
-
-				/**
-				 * construct `create table` statement
-				 */
-				virtual void createTableCollect();
-
-				/**
-				 * construct `create index` statement
-				 */
-				virtual void createIndexCollect();
-
-				/**
-				 * construct `drop index` statement
-				 */
-				virtual void deleteIndexCollect();
-
-				/**
-				 * construct `alter table ... add` statement
-				 */
-				virtual void createFieldCollect();
-
-				/**
-				 * construct adaptive field info for statements
-				 */
-				virtual dodoString fieldCollect(const __connectorField &row);
-
-				/**
 				 * add additional statements for query
 				 * @param qTypeToCheck defines type of additional info to check
 				 * @param collectedString defines string that defines additional statement
 				 */
 				virtual void additionalCollect(unsigned int qTypeToCheck, const dodoString &collectedString);
-
-				/**
-				 * @return string constructed from additional statements
-				 * @param sqlAddEnumArr defines statements[see sqlAddEnumArr]
-				 * @param sqlAddArr defines statements[see sqlAddArr]
-				 * @param arrSize defines size of sqlAddEnumArr and sqlAddArr[they should have same sizes]
-				 * @param qTypeShift defines additional statements that has been set
-				 */
-				virtual dodoString insideAddCollect(const unsigned int sqlAddEnumArr[], const dodoString sqlAddArr[], int arrSize, int qTypeShift);
-
-				/**
-				 * @return string constructed from additional statements(DB-dependent)
-				 * @param statements defines statements
-				 * @param qTypeShift defines additional statements that has been set
-				 */
-				virtual dodoString insideAddCollect(const dodoStringArray &statements, int qTypeShift);
 
 				/**
 				 * @return SQL adaptive statements of `field name`=`value` tuples separated with coma
@@ -268,40 +175,6 @@ namespace dodo
 				 * @param frame defines frame of values
 				 */
 				virtual dodoString valuesName(const dodoStringArray &values, const dodoStringArray &fields, const dodoString &frame = "'");
-
-				/**
-				 * @return SQL compliant data type
-				 * @param type defines data type
-				 */
-				virtual dodoString sqlDataType(int type);
-
-				/**
-				 * @return 1 data-type must have range, 0 if may have, -1 if mustn't have;
-				 * @param type defines data type
-				 */
-				virtual int chkRange(int type);
-
-				/**
-				 * @return SQL adaptive statements of references to fields
-				 * @param type defines type of reference
-				 */
-				virtual dodoString stringReference(int type);
-
-				static const dodoString sqlAddSelArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];                           ///< additional `select` statement
-				static const dodoString sqlAddDelArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];                           ///< additional `delete` statement
-				static const dodoString sqlAddUpArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];                            ///< additional `update` statement
-				static const dodoString sqlAddInsArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS];                           ///< additional `insert` statement
-				static const unsigned int addSelEnumArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];                        ///< positions in sqlAddSelArr additional `select` statement
-				static const unsigned int addDelEnumArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];                        ///< positions in sqlAddDelArr additional `delete` statement
-				static const unsigned int addUpEnumArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];                         ///< positions in sqlAddUpArr additional `update` statement
-				static const unsigned int addInsEnumArr[ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS];                        ///< positions in sqlAddInsArr additional `insert` statement
-
-				static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];                                    ///< additional statements(`where`, `limit`, ...)
-
-				static const dodoString sqlQStArr[CONNECTOR_SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
-
-				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPESTSTATEMENTS];                              ///< statements for `join` queries
-
 
 #define SQLCONSTRUCTOR_STATEMENTS 20
 
@@ -333,6 +206,13 @@ namespace dodo
 				};
 
 				static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS];                 ///< sqlConstructor statements
+
+				static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];                                    ///< additional statements(`where`, `limit`, ...)
+
+				static const dodoString sqlQStArr[CONNECTOR_SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
+
+				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPESTSTATEMENTS];                              ///< statements for `join` queries
+
 		};
 	};
 };
