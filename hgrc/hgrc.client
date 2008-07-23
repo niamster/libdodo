@@ -1,0 +1,17 @@
+[ui]
+username = <name>
+
+[paths]
+default = <repository>
+
+[defaults]
+cdiff = -q
+
+[extensions]
+hgext.extdiff =
+hgext.graphlog = 
+color =
+
+[extdiff]
+cdiff = colordiff -Npru
+
