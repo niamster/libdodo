@@ -287,8 +287,6 @@ namespace dodo
 				 */
 				virtual dodoString stringReference(int type);
 
-			private:
-
 				static const dodoString sqlAddSelArr[ACCUMULATOR_ADDREQUESTSELECTSTATEMENTS];                           ///< additional `select` statement
 				static const dodoString sqlAddDelArr[ACCUMULATOR_ADDREQUESTDELETESTATEMENTS];                           ///< additional `delete` statement
 				static const dodoString sqlAddUpArr[ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS];                            ///< additional `update` statement

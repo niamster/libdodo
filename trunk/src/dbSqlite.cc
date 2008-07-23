@@ -511,7 +511,6 @@ sqlite::exec(const dodoString &query,
 		{
 			case ACCUMULATOR_REQUEST_UPDATE:
 			case ACCUMULATOR_REQUEST_INSERT:
-
 			{
 				dodoStringArray::iterator i(blobs.begin()), j(blobs.end());
 				for (int o = 1; i != j; ++i, ++o)
