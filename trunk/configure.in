@@ -590,6 +590,7 @@ AC_CONFIG_FILES([Makefile
                  tests/toolsos_test/Makefile
                  tests/toolstime_test/Makefile
                  tests/toolsmisc_test/Makefile
+                 tests/toolscode_test/Makefile
                  tests/xexec_test/Makefile
                  tests/libraryloader_test/Makefile
                  tests/logger_test/Makefile

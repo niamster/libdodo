@@ -1,5 +1,5 @@
 /***************************************************************************
- *            toolsMiscEx.h
+ *            toolsCodeEx.h
  *
  *  Wed Oct 5 16:25:14 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _TOOLSMISCEX_H_
-#define _TOOLSMISCEX_H_
+#ifndef _TOOLSCODEEX_H_
+#define _TOOLSCODEEX_H_
 
 #include <libdodo/directives.h>
 
@@ -41,30 +41,57 @@ namespace dodo
 		/**
 		 * libdodo defined errors
 		 */
-		enum miscExR
+		enum codeExR
 		{
-			MISCEX_BADMAILHELO,
-			MISCEX_BADMAILAUTH,
-			MISCEX_EMPTYARRAY,
-			MISCEX_WRONGSTRENGTH
+			CODEEX_BADASCII85,
+			CODEEX_BADBZCOMPRESSION,
+			CODEEX_BADBZDECOMPRESSIONINIT,
+			CODEEX_BADBZDECOMPRESSIONFINISH,
+			CODEEX_BADBZDECOMPRESSION,
 		};
 
 		/**
 		 * explanations for libdodo defined errors
 		 */
-#define TOOLSMISCEX_BADMAILHELO_STR    "Error occurd while sending EHLO."
-#define TOOLSMISCEX_BADMAILAUTH_STR    "Error during authentication."
-#define TOOLSMISCEX_EMPTYARRAY_STR     "Array is empty."
-#define TOOLSMISCEX_WRONGSTRENGTH_STR  "Wrong strength argument."
+#define TOOLSCODEEX_BADASCII85_STR "Bad character in ASCII85."
+
+#ifdef BZIP2_EXT
+
+#define TOOLSCODEEX_BADBZCOMPRESSION_STR         "Error occured during comression."
+#define TOOLSCODEEX_BADBZDECOMPRESSIONINIT_STR   "Error occured during preparations for decompression."
+#define TOOLSCODEEX_BADBZDECOMPRESSIONFINISH_STR "Error occured during finishing decompression."
+#define TOOLSCODEEX_BADBZDECOMPRESSION_STR       "Error occured during decompression."
+
+#endif
+
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
-		enum miscFunctionsID
+		enum codeFunctionsID
 		{
-			MISCEX_MAIL,
-			MISCEX_IMPLODE,
-			MISCEX_RANDOM
+#ifdef ICONV_EXT
+
+			CODEEX_CODESETCONVERSION,
+
+#endif
+
+#ifdef ZLIB_EXT
+
+			CODEEX_ZCOMPRESS,
+			CODEEX_ZDECOMPRESS,
+
+#endif
+
+			CODEEX_DECODEASCII85,
+
+#ifdef BZIP2_EXT
+
+			CODEEX_BZCOMPRESS,
+			CODEEX_BZDECOMPRESS,
+
+#endif
+
 		};
 	};
 };
