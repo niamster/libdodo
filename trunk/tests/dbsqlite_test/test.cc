@@ -54,29 +54,19 @@ int main(int argc, char **argv)
 
 		__connectionInfo info;
 		info.path = "test.lite";
+		
 		pp.setDbInfo(info);
 		pp.connect();
+		
+		try
+		{
+			pp.exec("DROP TABLE test");
+		}
+		catch (...)
+		{
+		}
 
-		__connectorField fi;
-
-		__connectorTable ti;
-		ti.name = "test";
-
-		fi.name = "date";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "id";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
-		ti.fields.push_back(fi);
-
-		pp.createTable(ti);
-		pp.exec();
+		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, d int(11) default NULL, d int(11) default NULL, b longblob)");
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";

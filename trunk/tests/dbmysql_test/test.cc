@@ -53,75 +53,20 @@ int main(int argc, char **argv)
 
 #endif
 
-		pp.setDbInfo("test", "", 3306, "root", "password");
+		pp.setDbInfo(__connectionInfo("test", "localhost", "root", "password", "", 3306));
 		pp.connect();
 
 		try
 		{
-			pp.deleteTable("test");
-			pp.exec();
-
-			pp.deleteTable("test1");
-			pp.exec();
+			pp.exec("DROP TABLE test");
+			pp.exec("DROP TABLE test1");
 		}
 		catch (...)
 		{
 		}
 
-		__connectorTable ti;
-		ti.name = "test";
-
-		__connectorField fi;
-
-		fi.name = "id";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
-		ti.fields.push_back(fi);
-
-		fi.name = "dot";
-		fi.flag = 0;
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		pp.createTable(ti);
-		pp.exec();
-
-		ti.fields.clear();
-		ti.name = "test1";
-
-		fi.name = "id";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
-		ti.fields.push_back(fi);
-
-		fi.name = "dot";
-		fi.flag = 0;
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		pp.createTable(ti);
-		pp.exec();
-
-		pp.createIndex("test", "id", "id");
-		pp.exec();
-
-		fi.name = "foo";
-		fi.type = CONNECTOR_FIELDTYPE_CHAR;
-		fi.length = 10;
-		pp.createField(fi, "test");
-		pp.exec();
-
-		fi.name = "bar";
-		pp.renameField("foo", fi, "test");
-		pp.exec();
+		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, d int(11) default NULL, d int(11) default NULL, b longblob)");
+		pp.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
 
 		dodoStringArray fields;
 		__tuples storage;
@@ -153,10 +98,6 @@ int main(int argc, char **argv)
 		arr["dot"] = "20\"05`''-'07-08";
 		arr["operation"] = "n\nu";
 		assA.push_back(arr);
-
-		pp.setAddInsSt(ACCUMULATOR_ADDREQUEST_INSERT_IGNORE);
-		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
-		pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);
 
 		pp.insert("test", assA);
 		pp.exec();
@@ -198,7 +139,6 @@ int main(int argc, char **argv)
 		pp.subquery(uni_all, SUBREQUEST_UNION_ALL);
 		pp.order("id desc");
 		pp.limit(5);
-		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
 		pp.exec();
 
 		storage = pp.fetch();

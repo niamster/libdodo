@@ -121,46 +121,16 @@ int main(int argc, char **argv)
 
 			#endif
 		}
-
-		pp->deleteTable("test");
+		
 		try
 		{
-			pp->exec();
+			pp->exec("DROP TABLE test");
 		}
 		catch (...)
 		{
 		}
 
-		__connectorField fi;
-
-		__connectorTable ti;
-		ti.name = "test";
-
-		fi.name = "date";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "id";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL;
-		ti.fields.push_back(fi);
-
-		fi.name = "d";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL;
-		ti.fields.push_back(fi);
-
-		fi.name = "b";
-		fi.type = CONNECTOR_FIELDTYPE_LONGBLOB;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL;
-		ti.fields.push_back(fi);
-
-		pp->createTable(ti);
-		pp->exec();
+		pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, d int(11) default NULL, d int(11) default NULL, b longblob)");
 
 #ifdef ENABLE_SQL_AUTOFRAMING
 
@@ -179,7 +149,7 @@ int main(int argc, char **argv)
 			((sqlConstructor *)pp)->autoFraming = true;
 			((sqlConstructor *)pp)->manualAutoFraming = true;
 
-			((sqlConstructor *)pp)->setAutoFramingRule(info.db, ti.name, columns);
+			((sqlConstructor *)pp)->setAutoFramingRule(info.db, "test", columns);
 		}
 #endif
 
