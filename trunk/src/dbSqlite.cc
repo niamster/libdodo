@@ -505,7 +505,7 @@ sqlite::exec(const dodoString &query,
 
 	if (!show)
 		if (sqlite3_step(sqliteResult) != SQLITE_DONE)
-			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_FETCHROW, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+			throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
 
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);

@@ -490,7 +490,7 @@ postgresql::getCharset() const
 void
 postgresql::updateCollect()
 {
-	dodoString setPart; 
+	dodoString setPart;
 
 	dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
 	if (v != collectedData.values.end())
@@ -505,13 +505,8 @@ postgresql::updateCollect()
 		setPart = valuesName(refs, collectedData.fields, __dodostring__);
 	}
 
-	insideAddCollect(addUpEnumArr, sqlAddUpArr, ACCUMULATOR_ADDREQUESTUPDATESTATEMENTS, collectedData.qUpShift);
-	dodoString temp = insideAddCollect(sqlDbDepAddUpArr, qDbDepUpShift);
-
-	temp.append(collectedData.table);
-
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
-	request.append(temp);
+	request.append(collectedData.table);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_SET]);
 	request.append(setPart);
 }
@@ -524,9 +519,9 @@ postgresql::insertCollect()
 	dodoStringArray fieldsVPart;
 
 	dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
-	
+
 	dodoString refs;
-	
+
 	static dodoString ref = "$";
 
 	unsigned long vals = 1;
@@ -545,7 +540,7 @@ postgresql::insertCollect()
 		refs.append(tools::string::ulToString(r));
 
 		fieldsVPart.push_back(refs);
-		
+
 		vals += k->size();
 	}
 
@@ -566,22 +561,18 @@ postgresql::insertCollect()
 		fieldsPart.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 	}
 
-	dodoString temp = insideAddCollect(addInsEnumArr, sqlAddInsArr, ACCUMULATOR_ADDREQUESTINSERTSTATEMENTS, collectedData.qInsShift);
-	temp.append(insideAddCollect(sqlDbDepAddInsArr, qDbDepInsShift));
-
-	dodoString temp1 = collectedData.table;
+	dodoString temp = collectedData.table;
 
 	if (collectedData.fields.size() != 0)
 	{
-		temp1.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
-		temp1.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
-		temp1.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
+		temp.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
+		temp.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
+		temp.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 	}
 
 	request = statements[SQLCONSTRUCTOR_STATEMENT_INSERT];
-	request.append(temp);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_INTO]);
-	request.append(temp1);
+	request.append(temp);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_VALUES]);
 	request.append(fieldsPart);
 }
