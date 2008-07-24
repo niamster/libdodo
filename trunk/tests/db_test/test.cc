@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 
 			#endif
 		}
-		
+
 		try
 		{
 			pp->exec("DROP TABLE test");
@@ -220,13 +220,13 @@ int main(int argc, char **argv)
 		arr.clear();
 
 		///define links to field values for sqlite or postgresql or put binary data for others
-		if (strcasecmp(argv[1], "sqlite") == 0)
+		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgresql") == 0)
 			arr["b"] = "$1";
 		else
 			arr["b"] = dt;
 
 		///define BLOB values for sqlite or postgresql to satisfy fields links
-		if (strcasecmp(argv[1], "sqlite") == 0)
+		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgresql") == 0)
 		{
 			dodoStringArray blobs;
 			blobs.push_back(dt);
@@ -237,6 +237,15 @@ int main(int argc, char **argv)
 #else
 				;
 #endif
+			else
+			{
+				if (strcasecmp(argv[1], "postgresql") == 0)
+#ifdef POSTGRESQL_EXT
+					((postgresql *)pp)->setBLOBValues(blobs);
+#else
+					;
+#endif
+			}
 
 			///disable escaping and framing
 			((sqlConstructor *)pp)->preventFraming = true;
@@ -258,10 +267,32 @@ int main(int argc, char **argv)
 #else
 			;
 #endif
+		else
+		if (strcasecmp(argv[1], "postgresql") == 0)
+#ifdef POSTGRESQL_EXT
+			addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
+#else
+			;
+#endif
 
 		pp->insert("test", arr);
 		pp->exec();
 
+		///use a hint to notify sqlite or postgresql to use field links
+		if (strcasecmp(argv[1], "sqlite") == 0)
+#ifdef SQLITE_EXT
+			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
+#else
+			;
+#endif
+		else
+		if (strcasecmp(argv[1], "postgresql") == 0)
+#ifdef POSTGRESQL_EXT
+			addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
+#else
+			;
+#endif
+		
 		pp->select("test", select, "operation='ma'");
 		pp->exec();
 
