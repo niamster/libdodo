@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 		{
 		}
 
-		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, d int(11) default NULL, d int(11) default NULL, b longblob)");
+		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
 
 		__tuples store;
 

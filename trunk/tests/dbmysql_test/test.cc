@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 		{
 		}
 
-		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, d int(11) default NULL, d int(11) default NULL, b longblob)");
+		pp.exec("CREATE TABLE test (id int(11) NOT NULL auto_increment, dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
 		pp.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
 
 		dodoStringArray fields;

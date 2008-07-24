@@ -130,7 +130,11 @@ int main(int argc, char **argv)
 		{
 		}
 
-		pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, d int(11) default NULL, d int(11) default NULL, b longblob)");
+		if (strcasecmp(argv[1], "postgresql") == 0)
+			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
+
+		else
+			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b longblob)");
 
 #ifdef ENABLE_SQL_AUTOFRAMING
 
@@ -279,13 +283,6 @@ int main(int argc, char **argv)
 		pp->exec();
 
 		///use a hint to notify sqlite or postgresql to use field links
-		if (strcasecmp(argv[1], "sqlite") == 0)
-#ifdef SQLITE_EXT
-			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
-#else
-			;
-#endif
-		else
 		if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef POSTGRESQL_EXT
 			addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
@@ -304,7 +301,7 @@ int main(int argc, char **argv)
 	}
 	catch (baseEx ex)
 	{
-		cout << (string)ex << endl << ex.message << endl << ex.line << endl << endl;
+		cout << (string)ex << endl << ex.file << ex.message << endl << ex.line << endl << endl;
 	}
 
 	delete pp;

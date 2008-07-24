@@ -464,6 +464,11 @@ sqlite::exec(const dodoString &query,
 
 		queryCollect();
 	}
+	else
+	{
+		request = query;
+		show = result;
+	}
 
 	if (!empty)
 	{

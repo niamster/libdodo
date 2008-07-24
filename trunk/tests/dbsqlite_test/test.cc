@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 		{
 		}
 
-		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, d int(11) default NULL, d int(11) default NULL, b longblob)");
+		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id int default NULL, d int default NULL, b longblob)");
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";
