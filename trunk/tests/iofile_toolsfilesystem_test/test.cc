@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 		filesystem::chmod("my.dat", FILESYSTEM_PERMISSION_ALL_ALL_ACCESS);
 
 		io.inSize = io.outSize = 14;
-		io.over = true;
+		io.overwrite = true;
 
 		io.writeStreamString("!12345890#!!@\n");
 		io.writeStreamString("!12345890-!!@\n");
