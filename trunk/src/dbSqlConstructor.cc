@@ -496,7 +496,7 @@ sqlConstructor::joinCollect()
 	dodoArray<int>::iterator m = collectedData.joinTypes.begin(), n = collectedData.joinTypes.end();
 	for (; i != j; ++i, ++o, ++m)
 	{
-		if (*m >= 0 && *m < CONNECTOR_JOINTYPESTSTATEMENTS)
+		if (*m >= 0 && *m < JOINTYPESTSTATEMENTS)
 			request.append(sqlJoinArr[*m]);
 		else
 			throw baseEx(ERRMODULE_DBSQLCONSTRUCTOR, SQLCONSTRUCTOREX_JOINCOLLECT, ERR_LIBDODO, SQLCONSTRUCTOREX_UNKNOWNJOINTYPE, DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR, __LINE__, __FILE__);
@@ -554,10 +554,10 @@ sqlConstructor::queryCollect()
 
 			break;
 
-		case CONNECTOR_SUBREQUEST_UNION:
-		case CONNECTOR_SUBREQUEST_UNION_ALL:
-		case CONNECTOR_SUBREQUEST_MINUS:
-		case CONNECTOR_SUBREQUEST_INTERSECT:
+		case SUBREQUEST_UNION:
+		case SUBREQUEST_UNION_ALL:
+		case SUBREQUEST_MINUS:
+		case SUBREQUEST_INTERSECT:
 
 			subCollect();
 			additionalActions = false;

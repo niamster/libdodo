@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
 #endif
 
-		__connectorInfo info;
+		__connectionInfo info;
 		info.db = "test";
 		info.host = "localhost";
 		info.port = 5432;
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 		pp.createTable(ti);
 		pp.exec();
 
-		__connectorStorage store;
+		__tuples store;
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";

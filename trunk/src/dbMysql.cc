@@ -254,10 +254,10 @@ mysql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__connectorStorage
+__tuples
 mysql::fetch() const
 {
-	return __connectorStorage(fetchRows(), fetchFields());
+	return __tuples(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------

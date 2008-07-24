@@ -73,7 +73,7 @@ namespace dodo
 			dodoStringArray joinConds;                                  ///< join conditions
 			dodoArray<int> joinTypes;                                   ///< join types
 
-			__connectorInfo dbInfo;                                     ///< data info to connect to the server
+			__connectionInfo dbInfo;                                     ///< data info to connect to the server
 
 			int qType;                                                  ///< type of operation
 			int qShift;                                                 ///< additional actions[see accumulatorAddEnum]
@@ -85,46 +85,6 @@ namespace dodo
 			void *executor;                                             ///< class that executed hook
 
 #endif
-		};
-
-		/**
-		 * @enum accumulatorNoneEnum defines empty state of the db object
-		 */
-		enum accumulatorNoneEnum
-		{
-			ACCUMULATOR_NONE
-		};
-
-#define ACCUMULATOR_ADDREQUESTSTATEMENTS 8
-
-		/**
-		 * @enum accumulatorAddRequestEnum defines additional properties for the request
-		 */
-		enum accumulatorAddRequestEnum
-		{
-			ACCUMULATOR_ADDREQUEST_WHERE = 1,
-			ACCUMULATOR_ADDREQUEST_HAVING,
-			ACCUMULATOR_ADDREQUEST_GROUPBY,
-			ACCUMULATOR_ADDREQUEST_ORDERBY,
-			ACCUMULATOR_ADDREQUEST_LIMIT,
-			ACCUMULATOR_ADDREQUEST_OFFSET,
-			ACCUMULATOR_ADDREQUEST_AS,
-			ACCUMULATOR_ADDREQUEST_JOIN,
-		};
-
-		/**
-		 * @enum accumulatorRequestEnum defines type of request
-		 */
-		enum accumulatorRequestEnum
-		{
-			ACCUMULATOR_REQUEST_SELECT = CONNECTOR_SUBREQUESTSTATEMENTS + 1,
-			ACCUMULATOR_REQUEST_INSERT,
-			ACCUMULATOR_REQUEST_INSERT_SELECT,
-			ACCUMULATOR_REQUEST_UPDATE,
-			ACCUMULATOR_REQUEST_DELETE,
-
-			ACCUMULATOR_REQUEST_CALL_FUNCTION,
-			ACCUMULATOR_REQUEST_CALL_PROCEDURE,
 		};
 
 		/**
@@ -148,7 +108,7 @@ namespace dodo
 				 * set connection information for database
 				 * @param dbInfo defines connection information
 				 */
-				virtual void setDbInfo(const __connectorInfo &dbInfo);
+				virtual void setDbInfo(const __connectionInfo &dbInfo);
 
 				/**
 				 * call stored function
@@ -238,9 +198,9 @@ namespace dodo
 				/**
 				 * store query, made from subquery with requested method
 				 * @param subqueries defines subqueries
-				 * @param type defines type of combining subqueries[see connectorSubrequestEnum]
+				 * @param type defines type of combining subqueries[see subrequestEnum]
 				 */
-				virtual void subquery(const dodoStringArray &subqueries, int type = CONNECTOR_SUBREQUEST_UNION);
+				virtual void subquery(const dodoStringArray &subqueries, int type = SUBREQUEST_UNION);
 
 				/**
 				 * set `limit` property
@@ -279,6 +239,46 @@ namespace dodo
 				 * @param type defines join type[see accumulatorJoinTypeEnum]
 				 */
 				virtual void join(const dodoString &table, int type, const dodoString &condition);
+
+				/**
+				 * @enum accumulatorNoneEnum defines empty state of the db object
+				 */
+				enum accumulatorNoneEnum
+				{
+					ACCUMULATOR_NONE
+				};
+
+		#define ACCUMULATOR_ADDREQUESTSTATEMENTS 8
+
+				/**
+				 * @enum accumulatorAddRequestEnum defines additional properties for the request
+				 */
+				enum accumulatorAddRequestEnum
+				{
+					ACCUMULATOR_ADDREQUEST_WHERE = 1,
+					ACCUMULATOR_ADDREQUEST_HAVING,
+					ACCUMULATOR_ADDREQUEST_GROUPBY,
+					ACCUMULATOR_ADDREQUEST_ORDERBY,
+					ACCUMULATOR_ADDREQUEST_LIMIT,
+					ACCUMULATOR_ADDREQUEST_OFFSET,
+					ACCUMULATOR_ADDREQUEST_AS,
+					ACCUMULATOR_ADDREQUEST_JOIN,
+				};
+
+				/**
+				 * @enum accumulatorRequestEnum defines type of request
+				 */
+				enum accumulatorRequestEnum
+				{
+					ACCUMULATOR_REQUEST_SELECT = SUBREQUESTSTATEMENTS + 1,
+					ACCUMULATOR_REQUEST_INSERT,
+					ACCUMULATOR_REQUEST_INSERT_SELECT,
+					ACCUMULATOR_REQUEST_UPDATE,
+					ACCUMULATOR_REQUEST_DELETE,
+
+					ACCUMULATOR_REQUEST_CALL_FUNCTION,
+					ACCUMULATOR_REQUEST_CALL_PROCEDURE,
+				};
 
 			protected:
 

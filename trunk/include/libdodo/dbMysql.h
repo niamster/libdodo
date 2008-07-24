@@ -138,7 +138,7 @@ namespace dodo
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
-				virtual __connectorStorage fetch() const;
+				virtual __tuples fetch() const;
 
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`

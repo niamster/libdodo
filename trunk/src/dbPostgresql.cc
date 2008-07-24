@@ -270,10 +270,10 @@ postgresql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__connectorStorage
+__tuples
 postgresql::fetch() const
 {
-	return __connectorStorage(fetchRows(), fetchFields());
+	return __tuples(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------

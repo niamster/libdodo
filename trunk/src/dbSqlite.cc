@@ -296,10 +296,10 @@ sqlite::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__connectorStorage
+__tuples
 sqlite::fetch() const
 {
-	return __connectorStorage(fetchRows(), fetchFields());
+	return __tuples(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------

@@ -455,7 +455,7 @@ accumulator::cleanCollected()
 //-------------------------------------------------------------------
 
 void
-accumulator::setDbInfo(const __connectorInfo &info)
+accumulator::setDbInfo(const __connectionInfo &info)
 {
 	collectedData.dbInfo.port = info.port;
 	collectedData.dbInfo.db = info.db;

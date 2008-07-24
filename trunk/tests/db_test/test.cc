@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 
 #endif
 
-		__connectorInfo info;
+		__connectionInfo info;
 		info.db = "test";
 		if (strcasecmp(argv[1], "postgresql") == 0)
 		{
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
 		select.push_back("operation");
 		select.push_back("b");
 
-		__connectorStorage store;
+		__tuples store;
 
 		for (int i = 0; i < 10; i++)
 		{

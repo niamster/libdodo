@@ -209,9 +209,9 @@ namespace dodo
 
 				static const dodoString sqlAddArr[ACCUMULATOR_ADDREQUESTSTATEMENTS];                                    ///< additional statements(`where`, `limit`, ...)
 
-				static const dodoString sqlQStArr[CONNECTOR_SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
+				static const dodoString sqlQStArr[SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
 
-				static const dodoString sqlJoinArr[CONNECTOR_JOINTYPESTSTATEMENTS];                              ///< statements for `join` queries
+				static const dodoString sqlJoinArr[JOINTYPESTSTATEMENTS];                              ///< statements for `join` queries
 
 		};
 	};

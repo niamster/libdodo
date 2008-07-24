@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
 		tools::filesystem::unlink("test.lite", true);
 
-		__connectorInfo info;
+		__connectionInfo info;
 		info.path = "test.lite";
 		pp.setDbInfo(info);
 		pp.connect();
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 
 		cout << pp.fetch().rows.size() << endl;
 
-		__connectorStorage store = pp.fetch();
+		__tuples store = pp.fetch();
 
 		dodoArray<dodoStringArray>::iterator i(store.rows.begin()), j(store.rows.end());
 

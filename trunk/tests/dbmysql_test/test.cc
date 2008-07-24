@@ -124,10 +124,10 @@ int main(int argc, char **argv)
 		pp.exec();
 
 		dodoStringArray fields;
-		__connectorStorage storage;
+		__tuples storage;
 
 		pp.selectAll("test");
-		pp.join("test1", CONNECTOR_JOINTYPE_JOIN, "test.operation = test1.operation");
+		pp.join("test1", JOINTYPE_JOIN, "test.operation = test1.operation");
 		pp.limit(10);
 		pp.exec();
 
@@ -195,7 +195,7 @@ int main(int argc, char **argv)
 		pp.subquery(uni);
 		uni_all.push_back(pp.queryCollect());
 		uni_all.push_back(pp.queryCollect());
-		pp.subquery(uni_all, CONNECTOR_SUBREQUEST_UNION_ALL);
+		pp.subquery(uni_all, SUBREQUEST_UNION_ALL);
 		pp.order("id desc");
 		pp.limit(5);
 		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);

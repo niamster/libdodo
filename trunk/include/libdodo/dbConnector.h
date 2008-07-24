@@ -39,65 +39,64 @@ namespace dodo
 {
 	namespace db
 	{
-#define CONNECTOR_JOINTYPESTSTATEMENTS 6
+#define JOINTYPESTSTATEMENTS 6
 
 		/**
-		 * @enum connectorJoinTypeEnum defines join types
+		 * @enum joinTypeEnum defines join types
 		 */
-		enum connectorJoinTypeEnum
+		enum joinTypeEnum
 		{
-			CONNECTOR_JOINTYPE_JOIN,
-			CONNECTOR_JOINTYPE_LEFTOUTER,
-			CONNECTOR_JOINTYPE_RIGHTOUTER,
-			CONNECTOR_JOINTYPE_FULLOUTER,
-			CONNECTOR_JOINTYPE_INNER,
-			CONNECTOR_JOINTYPE_CROSS,
+			JOINTYPE_JOIN,
+			JOINTYPE_LEFTOUTER,
+			JOINTYPE_RIGHTOUTER,
+			JOINTYPE_FULLOUTER,
+			JOINTYPE_INNER,
+			JOINTYPE_CROSS,
 		};
 
-#define CONNECTOR_SUBREQUESTSTATEMENTS 4
+#define SUBREQUESTSTATEMENTS 4
 
 		/**
-		 * @enum connectorSubrequestEnum defines type of sub request
+		 * @enum subrequestEnum defines type of sub request
 		 */
-		enum connectorSubrequestEnum
+		enum subrequestEnum
 		{
-			CONNECTOR_SUBREQUEST_UNION = 1,
-			CONNECTOR_SUBREQUEST_UNION_ALL,
-			CONNECTOR_SUBREQUEST_MINUS,
-			CONNECTOR_SUBREQUEST_INTERSECT,
+			SUBREQUEST_UNION = 1,
+			SUBREQUEST_UNION_ALL,
+			SUBREQUEST_MINUS,
+			SUBREQUEST_INTERSECT,
 		};
 
 		/**
-		 * @struct __connectorStorage defines fetched data from db
+		 * @struct __tuples defines fetched data from db
 		 */
-		struct __connectorStorage
+		struct __tuples
 		{
 			/**
 			 * constructor
 			 * @param rows defines rows of data
 			 * @param fields defines names of fields
 			 */
-			__connectorStorage(dodoArray<dodoStringArray> rows, dodoStringArray fields);
+			__tuples(dodoArray<dodoStringArray> rows, dodoStringArray fields);
 
 			/**
 			 * constructor
 			 */
-			__connectorStorage();
+			__tuples();
 
 			dodoArray<dodoStringArray> rows;                    ///< rows of data
 			dodoStringArray fields;                             ///< names of fields
 		};
 
 		/**
-		 * @struct __sqlInfo defines connection options for the server
+		 * @struct __connectionInfo defines connection options for the server
 		 */
-		struct __connectorInfo
+		struct __connectionInfo
 		{
-
 			/**
 			 * constructor
 			 */
-			__connectorInfo();
+			__connectionInfo();
 
 			/**
 			 * constructor
@@ -108,7 +107,7 @@ namespace dodo
 			 * @param path defines path to db or unix socket
 			 * @param port defines port
 			 */
-			__connectorInfo(const dodoString &db, const dodoString &host, const dodoString &user, const dodoString &password, const dodoString &path, int port);
+			__connectionInfo(const dodoString &db, const dodoString &host, const dodoString &user, const dodoString &password, const dodoString &path, int port);
 
 			dodoString db;                      ///< database name
 			dodoString host;                    ///< hostname
@@ -164,7 +163,7 @@ namespace dodo
 				 * set connection information for database
 				 * @param dbInfo defines connection information
 				 */
-				virtual void setDbInfo(const __connectorInfo &dbInfo) = 0;
+				virtual void setDbInfo(const __connectionInfo &dbInfo) = 0;
 
 				/**
 				 * call stored function
@@ -254,9 +253,9 @@ namespace dodo
 				/**
 				 * store query, made from subquery with requested method
 				 * @param subqueries defines subqueries
-				 * @param type defines type of combining subqueries[see connectorSubrequestEnum]
+				 * @param type defines type of combining subqueries[see subrequestEnum]
 				 */
-				virtual void subquery(const dodoStringArray &subqueries, int type = CONNECTOR_SUBREQUEST_UNION) = 0;
+				virtual void subquery(const dodoStringArray &subqueries, int type = SUBREQUEST_UNION) = 0;
 
 				/**
 				 * set `limit` property
@@ -292,7 +291,7 @@ namespace dodo
 				 * append join statement
 				 * @param table defines table to join
 				 * @param condition defines condition for joining
-				 * @param type defines join type[see connectorJoinTypeEnum]
+				 * @param type defines join type[see joinTypeEnum]
 				 */
 				virtual void join(const dodoString &table, int type, const dodoString &condition) = 0;
 
@@ -324,7 +323,7 @@ namespace dodo
 				/**
 				 * @return result got from the request
 				 */
-				virtual __connectorStorage fetch() const = 0;
+				virtual __tuples fetch() const = 0;
 
 				/**
 				 * @return set of hashes of field=>value
