@@ -27,6 +27,7 @@ OBJECTS:=dbAccumulator.o \
 	dbMysql.o \
 	dbSqlite.o \
 	toolsMisc.o \
+	toolsCode.o \
 	toolsFilesystem.o \
 	toolsOs.o \
 	toolsTime.o \
