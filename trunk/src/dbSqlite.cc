@@ -468,8 +468,19 @@ sqlite::exec(const dodoString &query,
 		}
 
 #endif
+	
+		if (isSetFlag(hint, SQLITE_HINT_BLOB))
+		{
+			bool preventFraming = this->preventFraming;
 
-		queryCollect();
+			this->preventFraming = true;
+			
+			queryCollect();
+			
+			this->preventFraming = preventFraming;
+		}
+		else
+			queryCollect();
 	}
 	else
 	{
@@ -498,15 +509,20 @@ sqlite::exec(const dodoString &query,
 				dodoStringArray::iterator i(blobs.begin()), j(blobs.end());
 				for (int o = 1; i != j; ++i, ++o)
 					if (sqlite3_bind_blob(sqliteResult, o, i->c_str(), i->size(), SQLITE_TRANSIENT) != SQLITE_OK)
-						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
-			}
+					{
+						blobs.clear();
 
-			break;
+						throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
+					}
+
+				blobs.clear();
+	
+				break;
+			}
 
 			default:
 
 				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_WRONGHINTUSAGE, DBSQLITEEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
-
 		}
 	}
 

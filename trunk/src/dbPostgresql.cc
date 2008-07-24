@@ -398,7 +398,7 @@ postgresql::exec(const dodoString &query,
 							strcasestr(fieldType, "array") != NULL ||
 							strcasestr(fieldType, "text") != NULL ||
 							strcasestr(fieldType, "cidr") != NULL ||
-							strcasestr(fieldType, "macaddrcd ") != NULL ||
+							strcasestr(fieldType, "macaddrcd") != NULL ||
 							strcasestr(fieldType, "inet") != NULL)
 							rowsPart.push_back(PQgetvalue(pgResult, i, 0));
 					}
@@ -415,8 +415,19 @@ postgresql::exec(const dodoString &query,
 		}
 
 #endif
+	
+		if (isSetFlag(hint, SQLITE_HINT_BLOB))
+		{
+			bool preventFraming = this->preventFraming;
 
-		queryCollect();
+			this->preventFraming = true;
+			
+			queryCollect();
+			
+			this->preventFraming = preventFraming;
+		}
+		else
+			queryCollect();
 	}
 	else
 	{
@@ -438,7 +449,6 @@ postgresql::exec(const dodoString &query,
 		{
 			case ACCUMULATOR_REQUEST_UPDATE:
 			case ACCUMULATOR_REQUEST_INSERT:
-
 			{
 				long size = blobs.size();
 
@@ -460,11 +470,13 @@ postgresql::exec(const dodoString &query,
 				delete [] lengths;
 				delete [] formats;
 
+				blobs.clear();
+
 				if (pgResult == NULL)
 					throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__);
-			}
 
-			break;
+				break;
+			}
 
 			case ACCUMULATOR_REQUEST_SELECT:
 

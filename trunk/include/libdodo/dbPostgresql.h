@@ -129,14 +129,14 @@ namespace dodo
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
-				 * @note to insert|update using BLOB values use hint:
+				 * @note to insert|update|select blob data you might want to define preventEscaping as true 
+				 * 		to insert|update using BLOB values use hint:
 				 *              make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
 				 *              call setBLOBValues method to set blob values according to id
 				 *              define hint class attribute as POSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 				 *              YOU MUST
-				 *                              define preventFraming and preventEscaping as true
 				 *                              by yourself escape[using sqlConstructor::escapeFields] and frame with '' non-blob text data before inserting/updating
-				 *                              by yourself escape[using sqlConstructor::unescapeFields] non-blob text data after selecting
+				 *                              by yourself unescape[using sqlConstructor::unescapeFields] non-blob text data after selecting
 				 * to select BLOB values use hint:
 				 *              define hint class attribute as POSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 				 */

@@ -229,6 +229,7 @@ int main(int argc, char **argv)
 			arr["b"] = dt;
 
 		///define BLOB values for sqlite or postgresql to satisfy fields links
+		///and use a hint to notify sqlite or postgresql to use field links
 		if (strcasecmp(argv[1], "sqlite") == 0 || strcasecmp(argv[1], "postgresql") == 0)
 		{
 			dodoStringArray blobs;
@@ -236,7 +237,11 @@ int main(int argc, char **argv)
 
 			if (strcasecmp(argv[1], "sqlite") == 0)
 #ifdef SQLITE_EXT
+			{
+				addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
+			
 				((sqlite *)pp)->setBLOBValues(blobs);
+			}
 #else
 				;
 #endif
@@ -244,15 +249,15 @@ int main(int argc, char **argv)
 			{
 				if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef POSTGRESQL_EXT
+				{
+					addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
+
 					((postgresql *)pp)->setBLOBValues(blobs);
+				}
 #else
 					;
 #endif
 			}
-
-			///disable escaping and framing
-			((sqlConstructor *)pp)->preventFraming = true;
-			((sqlConstructor *)pp)->preventEscaping = true;
 
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";
@@ -263,25 +268,12 @@ int main(int argc, char **argv)
 			arr["operation"] = "ma";
 		}
 
-		///use a hint to notify sqlite or postgresql to use field links
-		if (strcasecmp(argv[1], "sqlite") == 0)
-#ifdef SQLITE_EXT
-			addFlag(((sqlite *)pp)->hint, SQLITE_HINT_BLOB);
-#else
-			;
-#endif
-		else
-		if (strcasecmp(argv[1], "postgresql") == 0)
-#ifdef POSTGRESQL_EXT
-			addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);
-#else
-			;
-#endif
+		((sqlConstructor *)pp)->preventEscaping = true;
 
 		pp->insert("test", arr);
 		pp->exec();
 
-		///use a hint to notify sqlite or postgresql to use field links
+		///use a hint to notify postgresql to fetch binary data
 		if (strcasecmp(argv[1], "postgresql") == 0)
 #ifdef POSTGRESQL_EXT
 			addFlag(((postgresql *)pp)->hint, POSTGRESQL_HINT_BLOB);

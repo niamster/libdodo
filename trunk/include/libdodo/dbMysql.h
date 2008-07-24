@@ -149,6 +149,7 @@ namespace dodo
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
+				 * @note to insert|update|select blob data you might want to define preventEscaping as true
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 

@@ -242,7 +242,7 @@ namespace dodo
 					ACCUMULATOR_NONE
 				};
 
-		#define ACCUMULATOR_ADDREQUESTSTATEMENTS 8
+#define ACCUMULATOR_ADDREQUESTSTATEMENTS 8
 
 				/**
 				 * @enum accumulatorAddRequestEnum defines additional properties for the request

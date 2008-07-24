@@ -66,15 +66,15 @@ namespace dodo
 				 */
 				virtual dodoString queryCollect();
 
-				bool preventFraming;                                                                                    ///< if true values of fields will be framed with ' in `insert` and `update` statements[false by default]
+				bool preventFraming;                                                                                    ///< if false values of fields will be framed with ' in `insert` and `update` statements[false by default]
 
-				bool preventEscaping;                                                                                   ///< if true values of fields {\,'} will be escaped in `insert` and `update` statements[false by default]
+				bool preventEscaping;                                                                                   ///< if false values of fields {\,'} will be escaped in `insert` and `update` statements[false by default]
 
 #ifdef ENABLE_SQL_AUTOFRAMING
 
 				bool autoFraming;                                                                                       ///< if true try to detect automaticaly whether to frame or not; autoFraming is omited if preventFraming is true; framed values are only escaped if preventEscaping is false[true by default]
 
-				bool manualAutoFraming;///< define autoframing rules manually; false by default
+				bool manualAutoFraming;///< define autoframing rules manually[false by default]
 
 				/**
 				 * set rule for manual automatic framing
