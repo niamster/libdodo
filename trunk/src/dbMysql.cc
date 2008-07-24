@@ -477,20 +477,21 @@ mysql::exec(const dodoString &query,
 			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 	}
 
-	if (!show)
-		return ;
-
-	if (!empty)
+	if (show)
 	{
-		mysql_free_result(mysqlResult);
-		empty = true;
+
+		if (!empty)
+		{
+			mysql_free_result(mysqlResult);
+			empty = true;
+		}
+
+		mysqlResult = mysql_store_result(mysqlHandle);
+		if (mysqlResult == NULL)
+			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+
+		empty = false;
 	}
-
-	mysqlResult = mysql_store_result(mysqlHandle);
-	if (mysqlResult == NULL)
-		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
-
-	empty = false;
 
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);
