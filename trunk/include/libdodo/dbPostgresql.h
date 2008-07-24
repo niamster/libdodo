@@ -83,7 +83,7 @@ namespace dodo
 				/**
 				 * connect to the database
 				 */
-				virtual void connect();
+				virtual void connect(const __connectionInfo &dbInfo);
 
 				/**
 				 * disconnect from the database

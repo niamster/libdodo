@@ -454,16 +454,3 @@ accumulator::cleanCollected()
 
 //-------------------------------------------------------------------
 
-void
-accumulator::setDbInfo(const __connectionInfo &info)
-{
-	collectedData.dbInfo.port = info.port;
-	collectedData.dbInfo.db = info.db;
-	collectedData.dbInfo.host = info.host;
-	collectedData.dbInfo.user = info.user;
-	collectedData.dbInfo.password = info.password;
-	collectedData.dbInfo.path = info.path;
-}
-
-//-------------------------------------------------------------------
-

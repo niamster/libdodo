@@ -55,8 +55,7 @@ int main(int argc, char **argv)
 		__connectionInfo info;
 		info.path = "test.lite";
 		
-		pp.setDbInfo(info);
-		pp.connect();
+		pp.connect(info);
 		
 		try
 		{

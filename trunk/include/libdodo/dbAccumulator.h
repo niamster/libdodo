@@ -105,12 +105,6 @@ namespace dodo
 				virtual ~accumulator();
 
 				/**
-				 * set connection information for database
-				 * @param dbInfo defines connection information
-				 */
-				virtual void setDbInfo(const __connectionInfo &dbInfo);
-
-				/**
 				 * call stored function
 				 * @param name defines function name
 				 * @param arguments defines arguments

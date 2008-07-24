@@ -97,8 +97,7 @@ int main(int argc, char **argv)
 		{
 			info.path = "test.lite";
 		}
-		pp->setDbInfo(info);
-		pp->connect();
+		pp->connect(info);
 
 		///define session charset
 		if (strcasecmp(argv[1], "postgresql") == 0)

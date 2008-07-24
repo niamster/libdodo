@@ -77,8 +77,20 @@ sqlite::~sqlite()
 //-------------------------------------------------------------------
 
 void
-sqlite::connect()
+sqlite::connect(const __connectionInfo &info)
 {
+	collectedData.dbInfo.port = info.port;
+	collectedData.dbInfo.db = info.db;
+	collectedData.dbInfo.host = info.host;
+	collectedData.dbInfo.user = info.user;
+	collectedData.dbInfo.password = info.password;
+	collectedData.dbInfo.path = info.path;
+
+#ifndef DB_WO_XEXEC
+	operType = DB_OPERATION_CONNECT;
+	performXExec(preExec);
+#endif
+	
 	if (connected)
 	{
 		if (!empty)
@@ -92,11 +104,6 @@ sqlite::connect()
 
 		connected = false;
 	}
-
-#ifndef DB_WO_XEXEC
-	operType = DB_OPERATION_CONNECT;
-	performXExec(preExec);
-#endif
 
 	if (sqlite3_open(collectedData.dbInfo.path.c_str(), &sqliteHandle) != SQLITE_OK)
 	{

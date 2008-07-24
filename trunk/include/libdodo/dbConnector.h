@@ -151,19 +151,14 @@ namespace dodo
 
 				/**
 				 * connect to the database
+				 * @param dbInfo defines connection information
 				 */
-				virtual void connect() = 0;
+				virtual void connect(const __connectionInfo &dbInfo) = 0;
 
 				/**
 				 * disconnect from the database
 				 */
 				virtual void disconnect() = 0;
-
-				/**
-				 * set connection information for database
-				 * @param dbInfo defines connection information
-				 */
-				virtual void setDbInfo(const __connectionInfo &dbInfo) = 0;
 
 				/**
 				 * call stored function

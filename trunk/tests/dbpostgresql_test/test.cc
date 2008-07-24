@@ -54,8 +54,7 @@ int main(int argc, char **argv)
 		info.port = 5432;
 		info.user = "postgres";
 		
-		pp.setDbInfo(info);
-		pp.connect();
+		pp.connect(info);
 
 		try
 		{

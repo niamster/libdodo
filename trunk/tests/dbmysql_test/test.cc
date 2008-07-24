@@ -53,8 +53,7 @@ int main(int argc, char **argv)
 
 #endif
 
-		pp.setDbInfo(__connectionInfo("test", "localhost", "root", "password", "", 3306));
-		pp.connect();
+		pp.connect(__connectionInfo("test", "localhost", "root", "password", "", 3306));
 
 		try
 		{

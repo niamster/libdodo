@@ -113,8 +113,15 @@ postgresql::~postgresql()
 //-------------------------------------------------------------------
 
 void
-postgresql::connect()
+postgresql::connect(const __connectionInfo &info)
 {
+	collectedData.dbInfo.port = info.port;
+	collectedData.dbInfo.db = info.db;
+	collectedData.dbInfo.host = info.host;
+	collectedData.dbInfo.user = info.user;
+	collectedData.dbInfo.password = info.password;
+	collectedData.dbInfo.path = info.path;
+
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_CONNECT;
 	performXExec(preExec);

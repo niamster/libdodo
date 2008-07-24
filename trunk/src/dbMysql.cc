@@ -82,8 +82,15 @@ mysql::connectSettings(unsigned long a_type,
 //-------------------------------------------------------------------
 
 void
-mysql::connect()
+mysql::connect(const __connectionInfo &info)
 {
+	collectedData.dbInfo.port = info.port;
+	collectedData.dbInfo.db = info.db;
+	collectedData.dbInfo.host = info.host;
+	collectedData.dbInfo.user = info.user;
+	collectedData.dbInfo.password = info.password;
+	collectedData.dbInfo.path = info.path;
+
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_CONNECT;
 	performXExec(preExec);
@@ -324,7 +331,7 @@ mysql::exec(const dodoString &query,
 						int mysqlErrno = mysql_errno(mysqlHandle);
 						if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
 						{
-							connect();
+							connect(collectedData.dbInfo);
 							if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
 								throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 						}
@@ -380,7 +387,7 @@ mysql::exec(const dodoString &query,
 		int mysqlErrno = mysql_errno(mysqlHandle);
 		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
 		{
-			connect();
+			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
 				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 		}
