@@ -54,8 +54,6 @@ namespace dodo
 			SQLITE_HINT_BLOB = 2,             ///< insert|update using BLOB values
 		};
 
-		class sqlite;
-
 		/**
 		 * @class sqlite provides an interface to sqlite db
 		 * @note for autoFraming sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
