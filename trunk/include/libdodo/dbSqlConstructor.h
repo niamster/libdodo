@@ -96,12 +96,6 @@ namespace dodo
 				 */
 				static dodoString escapeFields(const dodoString &data);
 
-				/**
-				 * @return unescaped string
-				 * @param data defines a string to unescape
-				 */
-				static dodoString unescapeFields(const dodoString &data);
-
 			protected:
 
 				dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare> fieldTypes;    ///< hash of 'db:table' => 'field => 'type''

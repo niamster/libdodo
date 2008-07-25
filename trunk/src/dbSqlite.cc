@@ -354,6 +354,12 @@ sqlite::affectedRowsCount() const
 
 //-------------------------------------------------------------------
 
+void
+sqlite::getFieldsTypes(const dodoString &table)
+{
+}
+
+//-------------------------------------------------------------------
 
 void
 sqlite::exec(const dodoString &query,

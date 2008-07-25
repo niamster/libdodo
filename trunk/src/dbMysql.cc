@@ -177,10 +177,8 @@ mysql::fetchRows() const
 		return __dodostringarrayarray__;
 
 	mysql_data_seek(mysqlResult, 0);
-	mysql_field_seek(mysqlResult, 0);
 
 	unsigned int numFields = mysql_num_fields(mysqlResult);
-	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlResult);
 
 	dodoArray<dodoStringArray> rows;
 
@@ -191,30 +189,32 @@ mysql::fetchRows() const
 	unsigned long *length, j;
 
 	dodoStringArray rowsPart;
+	dodoString rowPart;
 
 	MYSQL_ROW mysqlRow;
 
-	dodoString rowPart;
-
+#ifndef USE_DEQUE
+	rowsPart.reserve(numFields);
+#endif
+	
 	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 	{
 		length = mysql_fetch_lengths(mysqlResult);
 
 		rowsPart.clear();
 
-#ifndef USE_DEQUE
-		rowsPart.reserve(numFields);
-#endif
-
 		for (j = 0; j < numFields; ++j)
 		{
-			rowPart.assign(mysqlRow[j] != NULL ? mysqlRow[j] : "NULL", mysqlRow[j] ? length[j] : 4);
-
-			//mysqlFields[j].name
-			/*if (preventEscaping)
+			if (mysqlRow[j] != NULL)
+			{
+				rowPart.assign(mysqlRow[j], length[j]);
 				rowsPart.push_back(rowPart);
+			}
 			else
-				rowsPart.push_back(unescapeFields(rowPart));*/
+			{
+				rowPart.assign("NULL", 4);
+				rowsPart.push_back(rowPart);
+			}
 		}
 
 		rows.push_back(rowsPart);
@@ -484,30 +484,32 @@ mysql::fetchFieldsToRows() const
 #endif
 
 	dodoStringMap rowFieldsPart;
-
 	dodoString rowPart;
 
 	unsigned long *length, j;
 
 	MYSQL_ROW mysqlRow;
-
+	
 	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 	{
 		length = mysql_fetch_lengths(mysqlResult);
-
-		rowFieldsPart.clear();
-
+		
 		for (j = 0; j < numFields; ++j)
 		{
-			rowPart.assign(mysqlRow[j] != NULL ? mysqlRow[j] : "NULL", mysqlRow[j] ? length[j] : 4);
-			/*if (preventEscaping)
+			if (mysqlRow[j] != NULL)
+			{
+				rowPart.assign(mysqlRow[j], length[j]);
 				rowFieldsPart.insert(make_pair(mysqlFields[j].name, rowPart));
+			}
 			else
-				rowFieldsPart.insert(make_pair(mysqlFields[j].name, unescapeFields(rowPart)));*/
+			{
+				rowPart.assign("NULL", 4);
+				rowFieldsPart.insert(make_pair(mysqlFields[j].name, rowPart));
+			}
 		}
-
-		rowsFields.push_back(rowFieldsPart);
 	}
+
+	rowsFields.push_back(rowFieldsPart);
 
 	return rowsFields;
 }

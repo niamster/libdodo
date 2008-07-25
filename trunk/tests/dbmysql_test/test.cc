@@ -155,7 +155,22 @@ int main(int argc, char **argv)
 		pp.limit(5);
 		pp.exec();
 
+		pp.selectAll("test");
+		pp.limit(10);
+		pp.exec();
+		
 		storage = pp.fetch();
+		
+		dodoArray<dodoStringArray>::iterator o(storage.rows.begin()), p(storage.rows.end());
+		dodoStringArray::iterator m, n;
+		for (; o != p; o++)
+		{
+			m = o->begin();
+			n = o->end();
+			for (; m != n; m++)
+				cout << *m << "\t";
+			cout << endl;
+		}
 	}
 	catch (baseEx ex)
 	{

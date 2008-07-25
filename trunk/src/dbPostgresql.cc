@@ -319,6 +319,13 @@ postgresql::affectedRowsCount() const
 //-------------------------------------------------------------------
 
 void
+postgresql::getFieldsTypes(const dodoString &table)
+{
+}
+
+//-------------------------------------------------------------------
+
+void
 postgresql::exec(const dodoString &query,
 				 bool result)
 {

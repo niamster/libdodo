@@ -215,7 +215,7 @@ sqlConstructor::valuesName(const dodoStringArray &values,
 			temp.append(*i);
 			temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 			temp.append(escapeFields(*j));
-			temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+			temp.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 		}
 	}
 
@@ -323,7 +323,6 @@ sqlConstructor::insertCollect()
 				
 				temp.clear();
 			}
-
 			t = collectedData.fields.begin();
 
 			dodoStringArray::const_iterator i(k->begin()), j(k->end() - 1);
@@ -567,25 +566,24 @@ sqlConstructor::queryCollect()
 //-------------------------------------------------------------------
 
 dodoString
-sqlConstructor::unescapeFields(const dodoString &data)
-{
-	dodoString temp = data;
-
-	tools::string::replace("\\'", statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE], temp);
-	tools::string::replace("\\\\", "\\", temp);
-
-	return temp;
-}
-
-//-------------------------------------------------------------------
-
-dodoString
 sqlConstructor::escapeFields(const dodoString &data)
 {
-	dodoString temp = data;
+	dodoString temp;
 
-	tools::string::replace("\\", "\\\\", temp);
-	tools::string::replace(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE], "\\'", temp);
+	unsigned long size = data.size();
+
+	for (unsigned long i=0;i<size;++i)
+	{
+		if (data[i] == '\\')
+			temp.append("\\\\");
+		else
+		{
+			if (data[i] == '\'')
+				temp.append("\\'");
+			else
+				temp.append(1, data[i]);
+		}
+	}
 
 	return temp;
 }

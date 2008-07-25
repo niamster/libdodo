@@ -82,6 +82,12 @@ namespace dodo
 				virtual void disconnect();
 
 				/**
+				 * automaticaly detect fields types
+				 * @param table defines table for which rules will be applied
+				 */
+				void getFieldsTypes(const dodoString &table);
+
+				/**
 				 * @return amount of affected rows from the evaluated request
 				 */
 				virtual unsigned int affectedRowsCount() const;
