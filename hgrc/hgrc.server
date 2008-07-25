@@ -22,5 +22,5 @@ test = False
 config = <path to config>
 template = \ndetails:   {baseurl}{webroot}/rev/{node|short}\nchangeset: {rev}:{node|short}\nuser:      {author}\ndate:
   {date|date}\ndescription:\n{desc}\n\nDo not forget to update meta and docs!\n
-  maxdiff = 300
+maxdiff = -1
 
