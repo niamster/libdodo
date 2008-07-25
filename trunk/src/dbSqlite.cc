@@ -33,24 +33,12 @@
 
 using namespace dodo::db;
 
-sqlite::sqlite() : empty(true),
-				   hint(SQLITE_HINT_NONE)
+sqlite::sqlite() : empty(true)
 
 {
 #ifndef DB_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_DBSQLITE;
-
-#endif
-
-#ifdef ENABLE_SQL_AUTOFRAMING
-
-#ifndef SQLITE_ENABLE_COLUMN_METADATA
-
-	autoFraming = false;
-	manualAutoFraming = false;
-
-#endif
 
 #endif
 }
@@ -90,7 +78,7 @@ sqlite::connect(const __connectionInfo &info)
 	operType = DB_OPERATION_CONNECT;
 	performXExec(preExec);
 #endif
-	
+
 	if (connected)
 	{
 		if (!empty)
@@ -146,14 +134,6 @@ sqlite::disconnect()
 
 		connected = false;
 	}
-}
-
-//-------------------------------------------------------------------
-
-void
-sqlite::setBLOBValues(const dodoStringArray &values)
-{
-	blobs = values;
 }
 
 //-------------------------------------------------------------------
@@ -232,20 +212,20 @@ sqlite::fetchRows() const
 						case SQLITE_TEXT:
 
 							rowPart = (const char *)sqlite3_column_text(sqliteResult, i);
-							if (preventEscaping)
+							/*if (preventEscaping)
 								rowsPart.push_back(rowPart);
 							else
-								rowsPart.push_back(unescapeFields(rowPart));
+								rowsPart.push_back(unescapeFields(rowPart));*/
 
 							break;
 
 						case SQLITE_BLOB:
 
 							rowPart.assign((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i));
-							if (preventEscaping)
+							/*if (preventEscaping)
 								rowsPart.push_back(rowPart);
 							else
-								rowsPart.push_back(unescapeFields(rowPart));
+								rowsPart.push_back(unescapeFields(rowPart));*/
 
 							break;
 
@@ -391,7 +371,7 @@ sqlite::exec(const dodoString &query,
 
 	if (query.size() == 0)
 	{
-
+/*
 #ifdef ENABLE_SQL_AUTOFRAMING
 
 		if (autoFraming && !manualAutoFraming)
@@ -468,19 +448,19 @@ sqlite::exec(const dodoString &query,
 		}
 
 #endif
-	
+
 		if (isSetFlag(hint, SQLITE_HINT_BLOB))
 		{
 			bool preventFraming = this->preventFraming;
 
 			this->preventFraming = true;
-			
+
 			queryCollect();
-			
+
 			this->preventFraming = preventFraming;
 		}
 		else
-			queryCollect();
+			queryCollect();*/
 	}
 	else
 	{
@@ -497,7 +477,7 @@ sqlite::exec(const dodoString &query,
 	if (sqlite3_prepare(sqliteHandle, request.c_str(), request.size(), &sqliteResult, NULL) != SQLITE_OK)
 		throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__, request);
 
-	if (isSetFlag(hint, SQLITE_HINT_BLOB))
+	/*if (isSetFlag(hint, SQLITE_HINT_BLOB))
 	{
 		removeFlag(hint, SQLITE_HINT_BLOB);
 
@@ -516,7 +496,7 @@ sqlite::exec(const dodoString &query,
 					}
 
 				blobs.clear();
-	
+
 				break;
 			}
 
@@ -524,7 +504,7 @@ sqlite::exec(const dodoString &query,
 
 				throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_LIBDODO, SQLITEEX_WRONGHINTUSAGE, DBSQLITEEX_WRONGHINTUSAGE_STR, __LINE__, __FILE__);
 		}
-	}
+	}*/
 
 	if (sqliteResult == NULL)
 		throw baseEx(ERRMODULE_DBSQLITE, SQLITEEX_EXEC, ERR_SQLITE, sqlite3_errcode(sqliteHandle), sqlite3_errmsg(sqliteHandle), __LINE__, __FILE__);
@@ -608,20 +588,20 @@ sqlite::fetchFieldsToRows() const
 						case SQLITE_TEXT:
 
 							rowPart = (const char *)sqlite3_column_text(sqliteResult, i);
-							if (preventEscaping)
+							/*if (preventEscaping)
 								rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), rowPart));
 							else
-								rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), unescapeFields(rowPart)));
+								rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), unescapeFields(rowPart)));*/
 
 							break;
 
 						case SQLITE_BLOB:
 
 							rowPart.assign((const char *)sqlite3_column_blob(sqliteResult, i), sqlite3_column_bytes(sqliteResult, i));
-							if (preventEscaping)
+							/*if (preventEscaping)
 								rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), rowPart));
 							else
-								rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), unescapeFields(rowPart)));
+								rowFieldsPart.insert(make_pair(sqlite3_column_name(sqliteResult, i), unescapeFields(rowPart)));*/
 
 							break;
 

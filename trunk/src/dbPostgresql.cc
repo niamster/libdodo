@@ -81,8 +81,7 @@ const dodoString postgresql::encodingStatements[] = {
 
 //-------------------------------------------------------------------
 
-postgresql::postgresql() : empty(true),
-						   hint(POSTGRESQL_HINT_NONE)
+postgresql::postgresql() : empty(true)
 {
 #ifndef DB_WO_XEXEC
 
@@ -191,14 +190,6 @@ postgresql::disconnect()
 
 //-------------------------------------------------------------------
 
-void
-postgresql::setBLOBValues(const dodoStringArray &values)
-{
-	blobs = values;
-}
-
-//-------------------------------------------------------------------
-
 dodoArray<dodo::dodoStringArray>
 postgresql::fetchRows() const
 {
@@ -239,10 +230,10 @@ postgresql::fetchRows() const
 				rowPart.assign("NULL");
 			else
 			{
-				if (preventEscaping)
+				/*if (preventEscaping)
 					rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
 				else
-					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
+					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));*/
 			}
 
 			rowsPart.push_back(rowPart);
@@ -347,7 +338,7 @@ postgresql::exec(const dodoString &query,
 	if (query.size() == 0)
 	{
 
-#ifdef ENABLE_SQL_AUTOFRAMING
+/*#ifdef ENABLE_SQL_AUTOFRAMING
 
 		if (autoFraming && !manualAutoFraming)
 		{
@@ -415,19 +406,19 @@ postgresql::exec(const dodoString &query,
 		}
 
 #endif
-	
-		if (isSetFlag(hint, SQLITE_HINT_BLOB))
+
+		if (isSetFlag(hint, POSTGRESQL_HINT_BLOB))
 		{
 			bool preventFraming = this->preventFraming;
 
 			this->preventFraming = true;
-			
+
 			queryCollect();
-			
+
 			this->preventFraming = preventFraming;
 		}
 		else
-			queryCollect();
+			queryCollect();*/
 	}
 	else
 	{
@@ -441,7 +432,7 @@ postgresql::exec(const dodoString &query,
 		empty = true;
 	}
 
-	if (isSetFlag(hint, POSTGRESQL_HINT_BLOB))
+	/*if (isSetFlag(hint, POSTGRESQL_HINT_BLOB))
 	{
 		removeFlag(hint, POSTGRESQL_HINT_BLOB);
 
@@ -494,7 +485,7 @@ postgresql::exec(const dodoString &query,
 		pgResult = PQexec(pgHandle, request.c_str());
 		if (pgResult == NULL)
 			throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__, request);
-	}
+	}*/
 
 	status = PQresultStatus(pgResult);
 
@@ -549,10 +540,10 @@ postgresql::fetchFieldsToRows() const
 				rowPart.assign("NULL");
 			else
 			{
-				if (preventEscaping)
+				/*if (preventEscaping)
 					rowPart.assign(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j));
 				else
-					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));
+					rowPart.assign(unescapeFields(dodoString(PQgetvalue(pgResult, i, j), PQgetlength(pgResult, i, j))));*/
 			}
 
 			rowFieldsPart.insert(make_pair(PQfname(pgResult, j), rowPart));

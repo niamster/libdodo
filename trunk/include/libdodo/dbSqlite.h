@@ -46,17 +46,8 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @enum sqliteHintEnum define DB hints
-		 */
-		enum sqliteHintEnum
-		{
-			SQLITE_HINT_NONE = 0,
-			SQLITE_HINT_BLOB = 2,             ///< insert|update using BLOB values
-		};
-
-		/**
 		 * @class sqlite provides an interface to sqlite db
-		 * @note for autoFraming sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
+		 * @note for field type autodetection sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
 		 */
 		class sqlite : public sqlConstructor
 		{
@@ -129,25 +120,8 @@ namespace dodo
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
-				 * @note to insert|update|select blob data you might want to define preventEscaping as true 
-				 * 		to insert|update using BLOB values use hint:
-				 *              make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
-				 *              call setBLOBValues method to set blob values according to id
-				 *              define hint class attribute as SQLITE_HINT_BLOB[you have to define it each time before this call]
-				 *              YOU MUST
-				 *              				define preventEscaping as true
-				 *                              by yourself escape[using sqlConstructor::escapeFields] and frame with '' non-blob text data before inserting/updating
-				 *                              by yourself unescape[using sqlConstructor::unescapeFields] non-blob text data after selecting
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
-
-				unsigned short hint;                 ///< DB hint[see sqliteHintEnum]
-
-				/**
-				 * set BLOB data for the request
-				 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
-				 */
-				virtual void setBLOBValues(const dodoStringArray &values);
 
 			private:
 

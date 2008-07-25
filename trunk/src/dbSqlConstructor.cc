@@ -91,16 +91,7 @@ const dodoString sqlConstructor::statements[] =
 
 //-------------------------------------------------------------------
 
-sqlConstructor::sqlConstructor() : preventFraming(false),
-								   preventEscaping(false)
-
-#ifdef ENABLE_SQL_AUTOFRAMING
-
-								   ,
-								   autoFraming(true),
-								   manualAutoFraming(false)
-
-#endif
+sqlConstructor::sqlConstructor()
 {
 }
 
@@ -113,28 +104,11 @@ sqlConstructor::~sqlConstructor()
 //-------------------------------------------------------------------
 
 void
-sqlConstructor::setAutoFramingRule(const dodoString &db,
-                                   const dodoString &table,
-                                   const dodoStringArray &fields)
+sqlConstructor::setFieldType(const dodoString &table,
+                             const dodoString &field,
+                             short type)
 {
-	framingFields[db + ":" + table] = fields;
-}
-
-//-------------------------------------------------------------------
-
-void
-sqlConstructor::removeAutoFramingRule(const dodoString &db,
-                                      const dodoString &table)
-{
-	framingFields.erase(db + ":" + table);
-}
-
-//-------------------------------------------------------------------
-
-void
-sqlConstructor::removeAutoFramingRules()
-{
-	framingFields.clear();
+	fieldTypes[collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table][field] = type;
 }
 
 //-------------------------------------------------------------------
@@ -157,8 +131,7 @@ sqlConstructor::additionalCollect(unsigned int qTypeTocheck,
 
 dodoString
 sqlConstructor::valuesName(const dodoStringArray &values,
-						   const dodoStringArray &fields,
-						   const dodoString &frame)
+						   const dodoStringArray &fields)
 {
 	dodoString temp;
 
@@ -167,23 +140,83 @@ sqlConstructor::valuesName(const dodoStringArray &values,
 	unsigned int o(fn <= fv ? fn : fv);
 
 	dodoStringArray::const_iterator i(fields.begin()), j(values.begin());
+
 	if (i != j)
 	{
-		--o;
-		for (unsigned int k(0); k < o; ++i, ++k, ++j)
+		dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
+
+		if (types != fieldTypes.end())
 		{
+			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator type;
+			dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator typesEnd = types->second.end();
+
+			--o;
+			for (unsigned int k(0); k < o; ++i, ++k, ++j)
+			{
+				temp.append(*i);
+
+				type = types->second.find(*i);
+				if (type != typesEnd)
+				{
+					if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
+					{
+						temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+						temp.append(escapeFields(*j));
+						temp.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+					}
+					else
+					{
+						temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
+						temp.append(*j);
+						temp.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+					}
+				}
+				else
+				{
+					temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+					temp.append(escapeFields(*j));
+					temp.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+				}
+			}
 			temp.append(*i);
-			temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
-			temp.append(frame);
-			temp.append(preventEscaping ? *j : escapeFields(*j));
-			temp.append(frame);
-			temp.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
+
+			type = types->second.find(*i);
+			if (type != typesEnd)
+			{
+				if (type->second == FIELDTYPE_TEXT || type->second == FIELDTYPE_BINARY)
+				{
+					temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+					temp.append(escapeFields(*j));
+					temp.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+				}
+				else
+				{
+					temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
+					temp.append(*j);
+				}
+			}
+			else
+			{
+				temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+				temp.append(escapeFields(*j));
+				temp.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
+			}
 		}
-		temp.append(*i);
-		temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
-		temp.append(frame);
-		temp.append(preventEscaping ? *j : escapeFields(*j));
-		temp.append(frame);
+		else
+		{
+			--o;
+			for (unsigned int k(0); k < o; ++i, ++k, ++j)
+			{
+				temp.append(*i);
+				temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+				temp.append(escapeFields(*j));
+				temp.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
+			}
+			temp.append(*i);
+			temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+			temp.append(escapeFields(*j));
+			temp.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
+		}
 	}
 
 	return temp;
@@ -198,7 +231,7 @@ sqlConstructor::callFunctionCollect()
 	request.append(collectedData.table);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 
-	if (preventEscaping)
+	/*if (preventEscaping)
 	{
 		if (preventFraming)
 			request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
@@ -211,7 +244,7 @@ sqlConstructor::callFunctionCollect()
 			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		else
 			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
-	}
+	}*/
 
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 }
@@ -225,7 +258,7 @@ sqlConstructor::callProcedureCollect()
 	request.append(collectedData.table);
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_LEFTBRACKET]);
 
-	if (preventEscaping)
+	/*if (preventEscaping)
 	{
 		if (preventFraming)
 			request.append(tools::misc::implode(collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
@@ -238,7 +271,7 @@ sqlConstructor::callProcedureCollect()
 			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA]));
 		else
 			request.append(tools::misc::implode(collectedData.fields, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
-	}
+	}*/
 
 	request.append(statements[SQLCONSTRUCTOR_STATEMENT_RIGHTBRACKET]);
 }
@@ -271,7 +304,7 @@ sqlConstructor::insertCollect()
 
 	dodoArray<dodoStringArray>::iterator k(collectedData.values.begin()), l(collectedData.values.end());
 
-	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
+/*	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
 
 #ifdef ENABLE_SQL_AUTOFRAMING
 
@@ -335,7 +368,7 @@ sqlConstructor::insertCollect()
 					fieldsVPart.push_back(tools::misc::implode(*k, escapeFields, statements[SQLCONSTRUCTOR_STATEMENT_COMA], statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]));
 			}
 		}
-	}
+	}*/
 
 	dodoString fieldsPart;
 
@@ -401,66 +434,9 @@ sqlConstructor::updateCollect()
 {
 	dodoString setPart;
 
-	dodoMap<dodoString, dodoStringArray>::iterator y = framingFields.find(collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + collectedData.table);
-
-#ifdef ENABLE_SQL_AUTOFRAMING
-
-	if (autoFraming && !preventFraming && y != framingFields.end() && collectedData.fields.size() != 0)
-	{
-
-		dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
-		if (v != collectedData.values.end())
-		{
-			unsigned int fn(collectedData.fields.size()), fv(v->size());
-			unsigned int o(fn <= fv ? fn : fv);
-
-			dodoStringArray::iterator i(collectedData.fields.begin()), j(v->begin());
-			for (unsigned int k(0); k < o - 1; ++i, ++j, ++k)
-			{
-				if (tools::misc::isInArray(y->second, *i, true))
-				{
-					setPart.append(*i);
-					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
-					setPart.append(preventEscaping ? *j : escapeFields(*j));
-					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
-				}
-				else
-				{
-					setPart.append(*i);
-					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
-					setPart.append(preventEscaping ? *j : escapeFields(*j));
-					setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_COMA]);
-				}
-			}
-			if (tools::misc::isInArray(y->second, *i, true))
-			{
-				setPart.append(*i);
-				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
-				setPart.append(preventEscaping ? *j : escapeFields(*j));
-				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-			}
-			else
-			{
-				setPart.append(*i);
-				setPart.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
-				setPart.append(preventEscaping ? *j : escapeFields(*j));
-			}
-		}
-	}
-	else
-
-#endif
-
-	{
-		dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
-		if (v != collectedData.values.end())
-		{
-			if (preventFraming)
-				setPart = valuesName(*v, collectedData.fields, __dodostring__);
-			else
-				setPart = valuesName(*v, collectedData.fields, statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
-		}
-	}
+	dodoArray<dodoStringArray>::iterator v = collectedData.values.begin();
+	if (v != collectedData.values.end())
+		setPart = valuesName(*v, collectedData.fields);
 
 	request = statements[SQLCONSTRUCTOR_STATEMENT_UPDATE];
 	request.append(collectedData.table);

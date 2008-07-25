@@ -258,6 +258,8 @@ int main(int argc, char **argv)
 					;
 #endif
 			}
+	
+			((sqlConstructor *)pp)->preventEscaping = true;
 
 			arr["date"] = "'2005-07-08'";
 			arr["operation"] = "'ma'";
@@ -267,8 +269,6 @@ int main(int argc, char **argv)
 			arr["date"] = "2005-07-08";
 			arr["operation"] = "ma";
 		}
-
-		((sqlConstructor *)pp)->preventEscaping = true;
 
 		pp->insert("test", arr);
 		pp->exec();
@@ -292,7 +292,7 @@ int main(int argc, char **argv)
 	}
 	catch (baseEx ex)
 	{
-		cout << (string)ex << endl << ex.file << ex.message << endl << ex.line << endl << endl;
+		cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 	}
 
 	delete pp;

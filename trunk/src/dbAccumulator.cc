@@ -301,7 +301,7 @@ accumulator::update(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
 
@@ -327,7 +327,7 @@ accumulator::update(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
 
@@ -346,7 +346,7 @@ accumulator::del(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
 

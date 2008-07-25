@@ -42,6 +42,16 @@ namespace dodo
 	namespace db
 	{
 		/**
+		 * @enum fieldTypeEnum defines field type
+		 */
+		enum fieldTypeEnum
+		{
+			FIELDTYPE_TEXT,
+			FIELDTYPE_BINARY,
+			FIELDTYPE_NUMERIC,
+		};
+
+		/**
 		 * @class sqlConstructor provide construction of SQL request
 		 * @note all data become escaped and framed with '. Names of fields are not framed with ` to prevent cases as `count(*)`, etc.
 		 * If you want to prevent data framing define preventFraming sqlConstructor class propertie as true but remember
@@ -66,53 +76,35 @@ namespace dodo
 				 */
 				virtual dodoString queryCollect();
 
-				bool preventFraming;                                                                                    ///< if false values of fields will be framed with ' in `insert` and `update` statements[false by default]
-
-				bool preventEscaping;                                                                                   ///< if false values of fields {\,'} will be escaped in `insert` and `update` statements[false by default]
-
-#ifdef ENABLE_SQL_AUTOFRAMING
-
-				bool autoFraming;                                                                                       ///< if true try to detect automaticaly whether to frame or not; autoFraming is omited if preventFraming is true; framed values are only escaped if preventEscaping is false[true by default]
-
-				bool manualAutoFraming;///< define autoframing rules manually[false by default]
+				/**
+				 * automaticaly detect fields types
+				 * @param table defines table for which rules will be applied
+				 */
+				virtual void getFieldsTypes(const dodoString &table) = 0;
 
 				/**
-				 * set rule for manual automatic framing
-				 * @param db defines database for which rules will be applied
-				 * @param table defines database for which rules will be applied
-				 * @param fields defines table fields that must be framed
+				 * set field type
+				 * @param table defines table for which rules will be applied
+				 * @param field defines field name
+				 * @param type defines field type[see fieldTypeEnum]
 				 */
-				void setAutoFramingRule(const dodoString &db, const dodoString &table, const dodoStringArray &fields);
-
-				/**
-				 * remove rule for manual automatic framing
-				 * @param db defines database for which rules will be applied
-				 * @param table defines database for which rules will be applied
-				 */
-				void removeAutoFramingRule(const dodoString &db, const dodoString &table);
-
-				/**
-				 * remove all rules for manual automatic framing
-				 */
-				void removeAutoFramingRules();
-
-#endif
+				void setFieldType(const dodoString &table, const dodoString &field, short type);
 
 				/**
 				 * @return escaped string
 				 * @param data defines a string to escape
 				 */
-				static dodoString escapeFields(const dodoString &data);
+				virtual dodoString escapeFields(const dodoString &data);
 
 				/**
 				 * @return unescaped string
 				 * @param data defines a string to unescape
 				 */
-				static dodoString unescapeFields(const dodoString &data);
+				virtual dodoString unescapeFields(const dodoString &data);
 
 			protected:
-				
-				dodoMap<dodoString, dodoStringArray, dodoMapICaseStringCompare> framingFields;                          ///< hash of 'db:table' => `array of fields to frame`
+
+				dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare> fieldTypes;    ///< hash of 'db:table' => 'field => 'type''
 
 				dodoString request;                                                                                     ///< SQL statement
 
@@ -172,9 +164,8 @@ namespace dodo
 				 * @return SQL adaptive statements of `field name`=`value` tuples separated with coma
 				 * @param values defines fields
 				 * @param fields defines names
-				 * @param frame defines frame of values
 				 */
-				virtual dodoString valuesName(const dodoStringArray &values, const dodoStringArray &fields, const dodoString &frame = "'");
+				virtual dodoString valuesName(const dodoStringArray &values, const dodoStringArray &fields);
 
 #define SQLCONSTRUCTOR_STATEMENTS 20
 

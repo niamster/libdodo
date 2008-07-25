@@ -59,19 +59,6 @@ else
 	RESULT="$RESULT\nDeque\t\t\t\t\t\tdisabled"
 fi
 
-AC_ARG_ENABLE(sql-autoframing,
-        AS_HELP_STRING([--disable-sql-autoframing],[enable support of autoframing in db::]),
-        [SQL_AUTOFRAMING="$enableval"], [SQL_AUTOFRAMING="yes"])
-
-if test "$SQL_AUTOFRAMING" = "yes"
-then
-	echo -n -e "#define ENABLE_SQL_AUTOFRAMING\n\n" >> include/libdodo/directives.runtime.h        
-	
-	RESULT="$RESULT\nsupport of autoframing in db::\t\t\t\t\t\tenabled"
-else
-	RESULT="$RESULT\nsupport of autoframing in db::\t\t\t\t\t\tdisabled"
-fi
-
 AC_ARG_ENABLE(io-xexec-support,
         AS_HELP_STRING([--disable-io-xexec-support],[compile io:: w/o xexec support]),
         [IO_W_XEXEC="$enableval"], [IO_W_XEXEC="yes"])

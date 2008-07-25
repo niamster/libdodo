@@ -64,8 +64,11 @@ int main(int argc, char **argv)
 		{
 		}
 
-		pp.exec("CREATE TABLE test (id int(11) NOT NULL auto_increment, dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
-		pp.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
+		pp.exec("CREATE TABLE test (id int(11) NOT NULL auto_increment, d int(11), dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
+		pp.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, d int(11), dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
+
+		pp.getFieldsTypes("test");
+		pp.getFieldsTypes("test1");
 
 		dodoStringArray fields;
 		__tuples storage;
@@ -86,9 +89,6 @@ int main(int argc, char **argv)
 		values.push_back("20\"05`''-'07-08");
 		values.push_back("mu");
 
-		pp.limit(10);
-		pp.offset(23);
-
 		dodoStringMap arr;
 		dodoArray<dodoStringMap> assA;
 		arr["dot"] = "20\"05`''-'07-08";
@@ -99,6 +99,12 @@ int main(int argc, char **argv)
 		assA.push_back(arr);
 
 		pp.insert("test", assA);
+		pp.exec();
+
+		arr.clear();
+
+		arr["d"] = "100000";
+		pp.update("test", arr);
 		pp.exec();
 
 		fields.clear();
@@ -127,6 +133,9 @@ int main(int argc, char **argv)
 #endif
 
 		pp.selectAll("test", "id>1");
+		
+		pp.limit(10);
+		pp.offset(23);
 
 		dodoStringArray uni;
 		dodoStringArray uni_all;
