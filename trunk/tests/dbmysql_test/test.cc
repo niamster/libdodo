@@ -131,20 +131,26 @@ int main(int argc, char **argv)
 		pp.enablePreExec(pos);
 
 #endif
+		
+		dodoStringArray uni;
 
 		pp.selectAll("test", "id>1");
-		
 		pp.limit(10);
 		pp.offset(23);
 
-		dodoStringArray uni;
-		dodoStringArray uni_all;
-		uni.push_back(pp.queryCollect());
-		uni.push_back(pp.queryCollect());
+		dodoString sub = pp.queryCollect();
+		uni.push_back(sub);
+		uni.push_back(sub);
 		pp.subquery(uni);
-		uni_all.push_back(pp.queryCollect());
-		uni_all.push_back(pp.queryCollect());
-		pp.subquery(uni_all, SUBREQUEST_UNION_ALL);
+		sub = pp.queryCollect();
+		
+		pp.selectAll("test", "id<100");
+
+		uni.clear();
+		uni.push_back(sub);
+		uni.push_back(pp.queryCollect());
+		pp.subquery(uni, SUBREQUEST_UNION_ALL);
+
 		pp.order("id desc");
 		pp.limit(5);
 		pp.exec();

@@ -94,13 +94,13 @@ namespace dodo
 				 * @return escaped string
 				 * @param data defines a string to escape
 				 */
-				virtual dodoString escapeFields(const dodoString &data);
+				static dodoString escapeFields(const dodoString &data);
 
 				/**
 				 * @return unescaped string
 				 * @param data defines a string to unescape
 				 */
-				virtual dodoString unescapeFields(const dodoString &data);
+				static dodoString unescapeFields(const dodoString &data);
 
 			protected:
 

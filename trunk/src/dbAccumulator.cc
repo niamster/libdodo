@@ -83,9 +83,11 @@ accumulator::callFunction(const dodoString &name,
 
 	if (as.size() != 0)
 	{
-		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_AS);
+		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_AS;
 		collectedData.where = as;
 	}
+	else
+		collectedData.qShift = ACCUMULATOR_NONE;
 
 	show = true;
 }
@@ -97,6 +99,8 @@ accumulator::callProcedure(const dodoString &name,
 						   const dodoStringArray &arguments)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_CALL_PROCEDURE;
+	
+	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = name;
 	collectedData.fields = arguments;
@@ -118,9 +122,11 @@ accumulator::select(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
+	else
+		collectedData.qShift = ACCUMULATOR_NONE;
 
 	show = true;
 }
@@ -139,9 +145,11 @@ accumulator::selectAll(const dodoString &a_table,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
+	else
+		collectedData.qShift = ACCUMULATOR_NONE;
 
 	show = true;
 }
@@ -153,6 +161,8 @@ accumulator::insert(const dodoString &a_table,
 					const dodoStringMap &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
+	
+	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
 
@@ -179,6 +189,8 @@ accumulator::insert(const dodoString &a_table,
 					const dodoArray<dodoStringMap> &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
+	
+	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
 
@@ -215,6 +227,8 @@ accumulator::insert(const dodoString &a_table,
 					const dodoStringArray &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
+	
+	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
@@ -234,6 +248,8 @@ accumulator::insert(const dodoString &a_table,
 					const dodoStringArray &a_fields)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_INSERT;
+	
+	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
@@ -267,9 +283,11 @@ accumulator::insertSelect(const dodoString &a_tableTo,
 
 	if (a_where.size() != 0)
 	{
-		addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_WHERE);
+		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
+	else
+		collectedData.qShift = ACCUMULATOR_NONE;
 
 	show = false;
 }
@@ -304,6 +322,8 @@ accumulator::update(const dodoString &a_table,
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
+	else
+		collectedData.qShift = ACCUMULATOR_NONE;
 
 	show = false;
 }
@@ -317,7 +337,7 @@ accumulator::update(const dodoString &a_table,
 					const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_UPDATE;
-
+	
 	collectedData.table = a_table;
 	collectedData.fields = a_fields;
 
@@ -330,6 +350,8 @@ accumulator::update(const dodoString &a_table,
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
+	else
+		collectedData.qShift = ACCUMULATOR_NONE;
 
 	show = false;
 }
@@ -341,6 +363,8 @@ accumulator::del(const dodoString &a_table,
 				 const dodoString &a_where)
 {
 	collectedData.qType = ACCUMULATOR_REQUEST_DELETE;
+	
+	collectedData.qShift = ACCUMULATOR_NONE;
 
 	collectedData.table = a_table;
 
@@ -349,6 +373,8 @@ accumulator::del(const dodoString &a_table,
 		collectedData.qShift = 1 << ACCUMULATOR_ADDREQUEST_WHERE;
 		collectedData.where = a_where;
 	}
+	else
+		collectedData.qShift = ACCUMULATOR_NONE;
 
 	show = false;
 }
@@ -380,7 +406,7 @@ accumulator::offset(unsigned int a_number)
 {
 	addFlag(collectedData.qShift, 1 << ACCUMULATOR_ADDREQUEST_OFFSET);
 
-	collectedData.offset = tools::string::lToString(a_number);
+	collectedData.offset = tools::string::ulToString(a_number);
 }
 
 //-------------------------------------------------------------------
