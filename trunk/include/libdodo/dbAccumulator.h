@@ -110,14 +110,14 @@ namespace dodo
 				 * @param arguments defines arguments
 				 * @param as defines name of the result row
 				 */
-				void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__);
+				virtual void callFunction(const dodoString &name, const dodoStringArray &arguments, const dodoString &as = __dodostring__);
 
 				/**
 				 * call stored procedure
 				 * @param name is procedure name
 				 * @param arguments is array of arguments
 				 */
-				void callProcedure(const dodoString &name, const dodoStringArray &arguments);
+				virtual void callProcedure(const dodoString &name, const dodoStringArray &arguments);
 
 				/**
 				 * @param table defines table name

@@ -92,7 +92,7 @@ namespace dodo
 			 * @param pockets defines array that will be filled with matched substrings in '()'
 			 * @note first in pocket is a first match
 			 */
-			bool match(const dodoString &pattern, const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
+			virtual bool match(const dodoString &pattern, const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
 
 			/**
 			 * match with pattern previously given for match/compile method
@@ -101,7 +101,7 @@ namespace dodo
 			 * @param pockets defines array that will be filled with matched substrings in '()'
 			 * @note first in pocket is a first match
 			 */
-			bool match(const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
+			virtual bool match(const dodoString &sample, dodoStringArray &pockets = __dodostringarray__);
 
 			/**
 			 * replace substrings in match string
@@ -111,7 +111,7 @@ namespace dodo
 			 * @param replacements defines array that will be filled with matched substrings in '()'
 			 * @note if pattern is not matched - the sample will be returned
 			 */
-			dodoString replace(const dodoString &pattern, const dodoString &sample, const dodoStringArray &replacements);
+			virtual dodoString replace(const dodoString &pattern, const dodoString &sample, const dodoStringArray &replacements);
 
 			/**
 			 * replace substrings in match string with pattern previously given for match/compile method
@@ -120,13 +120,13 @@ namespace dodo
 			 * @param replacements defines array that will be filled with matched substrings in '()'
 			 * @note if pattern is not matched - the sample will be returned
 			 */
-			dodoString replace(const dodoString &sample, const dodoStringArray &replacements);
+			virtual dodoString replace(const dodoString &sample, const dodoStringArray &replacements);
 
 			/**
 			 * compile pattern
 			 * @param pattern defines regex pattern
 			 */
-			void compile(const dodoString &pattern);
+			virtual void compile(const dodoString &pattern);
 
 			bool extended;              ///< if true use extended regext support[true by default]
 
@@ -152,7 +152,7 @@ namespace dodo
 			 * @return true if match string has matched substrings
 			 * @param sample defines a match string
 			 */
-			bool boundMatch(const dodoString &sample);
+			virtual bool boundMatch(const dodoString &sample);
 
 		private:
 

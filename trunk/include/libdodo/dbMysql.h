@@ -92,7 +92,7 @@ namespace dodo
 				 *  CLIENT_COMPRESS         Use compression protocol
 				 *	CLIENT_MULTI_STATEMENTS Tell the server that the client may send multiple statements in a single string (separated by ?;?). If this flag is not set, multiple-statement execution is disabled. New in 4.1.
 				 */
-				void connectSettings(unsigned long type, const __mysqlSslOptions &options = __mysqlSslOptions());
+				virtual void connectSettings(unsigned long type, const __mysqlSslOptions &options = __mysqlSslOptions());
 
 				/**
 				 * connect to the database
@@ -108,7 +108,7 @@ namespace dodo
 				 * automaticaly detect fields types
 				 * @param table defines table for which rules will be applied
 				 */
-				void getFieldsTypes(const dodoString &table);
+				virtual void getFieldsTypes(const dodoString &table);
 
 				/**
 				 * @return amount of affected rows from the evaluated request

@@ -88,7 +88,7 @@ namespace dodo
 				 * @param field defines field name
 				 * @param type defines field type[see fieldTypeEnum]
 				 */
-				void setFieldType(const dodoString &table, const dodoString &field, short type);
+				virtual void setFieldType(const dodoString &table, const dodoString &field, short type);
 
 				/**
 				 * @return escaped string
@@ -191,7 +191,6 @@ namespace dodo
 				static const dodoString sqlQStArr[SUBREQUESTSTATEMENTS];                                      ///< statements for complex queries(`union`, ...)
 
 				static const dodoString sqlJoinArr[JOINTYPESTSTATEMENTS];                              ///< statements for `join` queries
-
 		};
 	};
 };
