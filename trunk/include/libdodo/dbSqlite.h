@@ -129,14 +129,35 @@ namespace dodo
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
 
+			protected:
+
+				/**
+				 * construct `insert` statement
+				 */
+				virtual void insertCollect();
+
+				/**
+				 * construct `update` statement
+				 */
+				virtual void updateCollect();
+
+				/**
+				 * @struct __blob defines blob value
+				 */
+				struct __blob
+				{
+					unsigned int reference; ///< reference in request
+					const dodoString *value; ///< pointer to blob value
+				};
+
+				dodoList<__blob> blobs; ///< references to blob data
+
 			private:
 
 				sqlite3 *sqliteHandle;                                  ///< DB handle
 				sqlite3_stmt *sqliteResult;                             ///< handlde to result
 
 				bool empty;                                             ///< true if liteStmt is empty
-
-				dodoStringArray blobs;                                  ///< blob data
 		};
 	};
 };

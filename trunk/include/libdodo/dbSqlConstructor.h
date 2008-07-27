@@ -154,14 +154,7 @@ namespace dodo
 				 */
 				virtual void additionalCollect(unsigned int qTypeToCheck, const dodoString &collectedString);
 
-				/**
-				 * @return SQL adaptive statements of `field name`=`value` tuples separated with coma
-				 * @param values defines fields
-				 * @param fields defines names
-				 */
-				virtual dodoString valuesName(const dodoStringArray &values, const dodoStringArray &fields);
-
-#define SQLCONSTRUCTOR_STATEMENTS 20
+#define SQLCONSTRUCTOR_STATEMENTS 21
 
 				/**
 				 * @enum sqlConstructorStatementEnum defines sqlConstructor statements
@@ -188,6 +181,7 @@ namespace dodo
 					SQLCONSTRUCTOR_STATEMENT_UPDATE,
 					SQLCONSTRUCTOR_STATEMENT_SET,
 					SQLCONSTRUCTOR_STATEMENT_DELETE,
+					SQLCONSTRUCTOR_STATEMENT_NULL,
 				};
 
 				static const dodoString statements[SQLCONSTRUCTOR_STATEMENTS];                 ///< sqlConstructor statements

@@ -134,25 +134,22 @@ int main(int argc, char **argv)
 
 		else
 			pp->exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b longblob)");
-	
-		((sqlConstructor *)pp)->getFieldsTypes("test");
 
-#ifndef SQLITE_ENABLE_COLUMN_METADATA
-
-#ifdef SQLITE_EXT
-
-		///manually define which fields to escape if db is sqlite and it was compiled w/o SQLITE_ENABLE_COLUMN_METADATA and autoFraming is turned on
-		if (strcasecmp(argv[1], "sqlite") == 0)
+		
+		try
 		{
+			((sqlConstructor *)pp)->getFieldsTypes("test");
+		}
+		catch(baseEx &ex)
+		{
+			cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+
 			((sqlConstructor *)pp)->setFieldType("test", "date", FIELDTYPE_TEXT);
 			((sqlConstructor *)pp)->setFieldType("test", "operation", FIELDTYPE_TEXT);
 			((sqlConstructor *)pp)->setFieldType("test", "id", FIELDTYPE_NUMERIC);
 			((sqlConstructor *)pp)->setFieldType("test", "d", FIELDTYPE_NUMERIC);
 			((sqlConstructor *)pp)->setFieldType("test", "b", FIELDTYPE_BINARY);
 		}
-#endif
-
-#endif
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";

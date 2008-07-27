@@ -196,7 +196,7 @@ mysql::fetchRows() const
 #ifndef USE_DEQUE
 	rowsPart.reserve(numFields);
 #endif
-	
+
 	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 	{
 		length = mysql_fetch_lengths(mysqlResult);
@@ -211,10 +211,7 @@ mysql::fetchRows() const
 				rowsPart.push_back(rowPart);
 			}
 			else
-			{
-				rowPart.assign("NULL", 4);
-				rowsPart.push_back(rowPart);
-			}
+				rowsPart.push_back(statements[SQLCONSTRUCTOR_STATEMENT_NULL]);
 		}
 
 		rows.push_back(rowsPart);
@@ -416,20 +413,20 @@ mysql::exec(const dodoString &query,
 			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 	}
 
-	if (!show)
-		return ;
-
-	if (!empty)
+	if (show)
 	{
-		mysql_free_result(mysqlResult);
-		empty = true;
-	}
+		if (!empty)
+		{
+			mysql_free_result(mysqlResult);
+			empty = true;
+		}
 
-	mysqlResult = mysql_store_result(mysqlHandle);
-	if (mysqlResult == NULL)
-		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+		mysqlResult = mysql_store_result(mysqlHandle);
+		if (mysqlResult == NULL)
+			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
-	empty = false;
+		empty = false;
+		}
 
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);
@@ -489,11 +486,11 @@ mysql::fetchFieldsToRows() const
 	unsigned long *length, j;
 
 	MYSQL_ROW mysqlRow;
-	
+
 	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 	{
 		length = mysql_fetch_lengths(mysqlResult);
-		
+
 		for (j = 0; j < numFields; ++j)
 		{
 			if (mysqlRow[j] != NULL)
@@ -502,10 +499,7 @@ mysql::fetchFieldsToRows() const
 				rowFieldsPart.insert(make_pair(mysqlFields[j].name, rowPart));
 			}
 			else
-			{
-				rowPart.assign("NULL", 4);
-				rowFieldsPart.insert(make_pair(mysqlFields[j].name, rowPart));
-			}
+				rowFieldsPart.insert(make_pair(mysqlFields[j].name, statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
 		}
 	}
 

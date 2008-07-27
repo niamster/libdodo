@@ -142,6 +142,16 @@ namespace dodo
 
 			protected:
 
+				/**
+				 * construct `insert` statement
+				 */
+				virtual void insertCollect();
+
+				/**
+				 * construct `update` statement
+				 */
+				virtual void updateCollect();
+
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
 
 #define POSTGRESQL_ENCODINGSTATEMENTS 39
@@ -201,14 +211,23 @@ namespace dodo
 				const static dodoString encodingStatements[POSTGRESQL_ENCODINGSTATEMENTS]; ///< encoding string representation according to encodingIdentefiersEnum
 #endif
 
+				/**
+				 * @struct __blob defines blob value
+				 */
+				struct __blob
+				{
+					unsigned int reference; ///< reference in request
+					const dodoString *value; ///< pointer to blob value
+				};
+
+				dodoList<__blob> blobs; ///< references to blob data
+
 			private:
 
 				bool empty;                                     ///< true id pgResult is empty
 
 				PGconn *pgHandle;                               ///< DB handle
 				PGresult *pgResult;                             ///< handlde to result
-
-				dodoStringArray blobs;                          ///< blob data
 		};
 	};
 };
