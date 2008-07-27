@@ -46,17 +46,8 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @enum sqliteHintEnum define DB hints
-		 */
-		enum sqliteHintEnum
-		{
-			SQLITE_HINT_NONE = 0,
-			SQLITE_HINT_BLOB = 2,             ///< insert|update using BLOB values
-		};
-
-		/**
 		 * @class sqlite provides an interface to sqlite db
-		 * @note for autoFraming sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
+		 * @note for field type autodetection sqlite must be compiled with defined SQLITE_ENABLE_COLUMN_METADATA directive
 		 */
 		class sqlite : public sqlConstructor
 		{
@@ -83,12 +74,18 @@ namespace dodo
 				/**
 				 * connect to the database
 				 */
-				virtual void connect();
+				virtual void connect(const __connectionInfo &dbInfo);
 
 				/**
 				 * disconnect from the database
 				 */
 				virtual void disconnect();
+
+				/**
+				 * automaticaly detect fields types
+				 * @param table defines table for which rules will be applied
+				 */
+				virtual void getFieldsTypes(const dodoString &table);
 
 				/**
 				 * @return amount of affected rows from the evaluated request
@@ -118,7 +115,7 @@ namespace dodo
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
-				virtual __connectorStorage fetch() const;
+				virtual __tuples fetch() const;
 
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
@@ -129,31 +126,31 @@ namespace dodo
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
-				 * @note to insert|update using BLOB values use hint:
-				 *              make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
-				 *              call setBLOBValues method to set blob values according to id
-				 *              define hint class attribute as SQLITE_HINT_BLOB[you have to define it each time before this call]
-				 *              YOU MUST
-				 *                              define preventFraming and preventEscaping as true
-				 *                              by yourself escape[using sqlConstructor::escapeFields] and frame with '' non-blob text data before inserting/updating
-				 *                              by yourself escape[using sqlConstructor::unescapeFields] non-blob text data after selecting
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
-
-				unsigned short hint;                 ///< DB hint[see sqliteHintEnum]
-
-				/**
-				 * set BLOB data for the request
-				 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
-				 */
-				virtual void setBLOBValues(const dodoStringArray &values);
 
 			protected:
 
 				/**
-				 * construct adaptive field info for statements
+				 * construct `insert` statement
 				 */
-				virtual dodoString fieldCollect(const __connectorField &row);
+				virtual void insertCollect();
+
+				/**
+				 * construct `update` statement
+				 */
+				virtual void updateCollect();
+
+				/**
+				 * @struct __blob defines blob value
+				 */
+				struct __blob
+				{
+					unsigned int reference; ///< reference in request
+					const dodoString *value; ///< pointer to blob value
+				};
+
+				dodoList<__blob> blobs; ///< references to blob data
 
 			private:
 
@@ -161,8 +158,6 @@ namespace dodo
 				sqlite3_stmt *sqliteResult;                             ///< handlde to result
 
 				bool empty;                                             ///< true if liteStmt is empty
-
-				dodoStringArray blobs;                                  ///< blob data
 		};
 	};
 };

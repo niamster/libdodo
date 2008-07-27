@@ -43,6 +43,7 @@ namespace dodo
 	{
 		MYSQLEX_CONNECT,
 		MYSQLEX_EXEC,
+		MYSQLEX_GETFIELDSTYPES,
 	};
 };
 

@@ -53,81 +53,28 @@ int main(int argc, char **argv)
 
 #endif
 
-		pp.setDbInfo("test", "", 3306, "root", "password");
-		pp.connect();
+		pp.connect(__connectionInfo("test", "localhost", "root", "password", "", 3306));
 
 		try
 		{
-			pp.deleteTable("test");
-			pp.exec();
-
-			pp.deleteTable("test1");
-			pp.exec();
+			pp.exec("DROP TABLE test");
+			pp.exec("DROP TABLE test1");
 		}
 		catch (...)
 		{
 		}
 
-		__connectorTable ti;
-		ti.name = "test";
+		pp.exec("CREATE TABLE test (id int(11) NOT NULL auto_increment, d int(11), dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
+		pp.exec("CREATE TABLE test1 (id int(11) NOT NULL auto_increment, d int(11), dot text NOT NULL, operation text NOT NULL, PRIMARY KEY  (id))");
 
-		__connectorField fi;
-
-		fi.name = "id";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
-		ti.fields.push_back(fi);
-
-		fi.name = "dot";
-		fi.flag = 0;
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		pp.createTable(ti);
-		pp.exec();
-
-		ti.fields.clear();
-		ti.name = "test1";
-
-		fi.name = "id";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL | CONNECTOR_FIELDFLAG_AUTO_INCREMENT;
-		ti.fields.push_back(fi);
-
-		fi.name = "dot";
-		fi.flag = 0;
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		pp.createTable(ti);
-		pp.exec();
-
-		pp.createIndex("test", "id", "id");
-		pp.exec();
-
-		fi.name = "foo";
-		fi.type = CONNECTOR_FIELDTYPE_CHAR;
-		fi.length = 10;
-		pp.createField(fi, "test");
-		pp.exec();
-
-		fi.name = "bar";
-		pp.renameField("foo", fi, "test");
-		pp.exec();
+		pp.getFieldsTypes("test");
+		pp.getFieldsTypes("test1");
 
 		dodoStringArray fields;
-		__connectorStorage storage;
+		__tuples storage;
 
 		pp.selectAll("test");
-		pp.join("test1", CONNECTOR_JOINTYPE_JOIN, "test.operation = test1.operation");
+		pp.join("test1", JOINTYPE_JOIN, "test.operation = test1.operation");
 		pp.limit(10);
 		pp.exec();
 
@@ -142,9 +89,6 @@ int main(int argc, char **argv)
 		values.push_back("20\"05`''-'07-08");
 		values.push_back("mu");
 
-		pp.limit(10);
-		pp.offset(23);
-
 		dodoStringMap arr;
 		dodoArray<dodoStringMap> assA;
 		arr["dot"] = "20\"05`''-'07-08";
@@ -154,11 +98,13 @@ int main(int argc, char **argv)
 		arr["operation"] = "n\nu";
 		assA.push_back(arr);
 
-		pp.setAddInsSt(ACCUMULATOR_ADDREQUEST_INSERT_IGNORE);
-		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
-		pp.setMyAddSelSt(MYSQL_ADDREQUEST_SELECT_BIG_RESULT);
-
 		pp.insert("test", assA);
+		pp.exec();
+
+		arr.clear();
+
+		arr["d"] = "100000";
+		pp.update("test", arr);
 		pp.exec();
 
 		fields.clear();
@@ -185,23 +131,46 @@ int main(int argc, char **argv)
 		pp.enablePreExec(pos);
 
 #endif
+		
+		dodoStringArray uni;
 
 		pp.selectAll("test", "id>1");
+		pp.limit(10);
+		pp.offset(23);
 
-		dodoStringArray uni;
-		dodoStringArray uni_all;
-		uni.push_back(pp.queryCollect());
-		uni.push_back(pp.queryCollect());
+		dodoString sub = pp.queryCollect();
+		uni.push_back(sub);
+		uni.push_back(sub);
 		pp.subquery(uni);
-		uni_all.push_back(pp.queryCollect());
-		uni_all.push_back(pp.queryCollect());
-		pp.subquery(uni_all, CONNECTOR_SUBREQUEST_UNION_ALL);
+		sub = pp.queryCollect();
+		
+		pp.selectAll("test", "id<100");
+
+		uni.clear();
+		uni.push_back(sub);
+		uni.push_back(pp.queryCollect());
+		pp.subquery(uni, SUBREQUEST_UNION_ALL);
+
 		pp.order("id desc");
 		pp.limit(5);
-		pp.setAddSelSt(ACCUMULATOR_ADDREQUEST_SELECT_DISTINCT);
 		pp.exec();
 
+		pp.selectAll("test");
+		pp.limit(10);
+		pp.exec();
+		
 		storage = pp.fetch();
+		
+		dodoArray<dodoStringArray>::iterator o(storage.rows.begin()), p(storage.rows.end());
+		dodoStringArray::iterator m, n;
+		for (; o != p; o++)
+		{
+			m = o->begin();
+			n = o->end();
+			for (; m != n; m++)
+				cout << *m << "\t";
+			cout << endl;
+		}
 	}
 	catch (baseEx ex)
 	{

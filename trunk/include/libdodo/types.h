@@ -72,6 +72,13 @@ namespace dodo
 			 * @param second defines second string to compare
 			 */
 			bool operator()(const dodoString &first, const dodoString &second);
+			
+			/**
+			 * compares strings
+			 * @param first defines first string to compare
+			 * @param second defines second string to compare
+			 */
+			bool operator()(const dodoString &first, const dodoString &second) const;
 	};
 
 	/**
@@ -87,6 +94,13 @@ namespace dodo
 			 * @param second defines second string to compare
 			 */
 			bool operator()(const dodoString &first, const dodoString &second);
+			
+			/**
+			 * compares strings
+			 * @param first defines first string to compare
+			 * @param second defines second string to compare
+			 */
+			bool operator()(const dodoString &first, const dodoString &second) const;
 	};
 
 	/**

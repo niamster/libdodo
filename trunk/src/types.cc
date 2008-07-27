@@ -77,3 +77,21 @@ dodoMapICaseStringCompare::operator()(const dodoString &first,
 
 //-------------------------------------------------------------------
 
+bool
+dodoMapStringCompare::operator()(const dodoString &first,
+								 const dodoString &second) const
+{
+	return strcmp(first.c_str(), second.c_str()) < 0 ? true : false;
+}
+
+//-------------------------------------------------------------------
+
+bool
+dodoMapICaseStringCompare::operator()(const dodoString &first,
+									  const dodoString &second) const
+{
+	return strcasecmp(first.c_str(), second.c_str()) < 0 ? true : false;
+}
+
+//-------------------------------------------------------------------
+

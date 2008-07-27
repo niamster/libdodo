@@ -47,15 +47,6 @@ namespace dodo
 	namespace db
 	{
 		/**
-		 * @enum postgresqlHintEnum define DB hints
-		 */
-		enum postgresqlHintEnum
-		{
-			POSTGRESQL_HINT_NONE = 0,
-			POSTGRESQL_HINT_BLOB = 2,             ///< insert|update using BLOB values
-		};
-
-		/**
 		 * @class postgresql provides an interface to postgresql db
 		 */
 		class postgresql : public sqlConstructor
@@ -83,12 +74,18 @@ namespace dodo
 				/**
 				 * connect to the database
 				 */
-				virtual void connect();
+				virtual void connect(const __connectionInfo &dbInfo);
 
 				/**
 				 * disconnect from the database
 				 */
 				virtual void disconnect();
+
+				/**
+				 * automaticaly detect fields types
+				 * @param table defines table for which rules will be applied
+				 */
+				virtual void getFieldsTypes(const dodoString &table);
 
 				/**
 				 * @return amount of affected rows from the evaluated request
@@ -118,7 +115,7 @@ namespace dodo
 				/**
 				 * @return structure received rows and fields from the evaluated request
 				 */
-				virtual __connectorStorage fetch() const;
+				virtual __tuples fetch() const;
 
 				/**
 				 * @return received rows and fields from the evaluated request using hash `key`=>`value`
@@ -129,26 +126,8 @@ namespace dodo
 				 * execute request
 				 * @param query defines query; you may define it if you don't use db methods like select, update
 				 * @param result defines type of result; if true query return the result
-				 * @note to insert|update using BLOB values use hint:
-				 *              make standart method calls to collect query, but instead of blob-values place $1 .. $n [identificators]
-				 *              call setBLOBValues method to set blob values according to id
-				 *              define hint class attribute as POSTGRESQL_HINT_BLOB[you have to define it each time before this call]
-				 *              YOU MUST
-				 *                              define preventFraming and preventEscaping as true
-				 *                              by yourself escape[using sqlConstructor::escapeFields] and frame with '' non-blob text data before inserting/updating
-				 *                              by yourself escape[using sqlConstructor::unescapeFields] non-blob text data after selecting
-				 * to select BLOB values use hint:
-				 *              define hint class attribute as POSTGRESQL_HINT_BLOB[you have to define it each time before this call]
 				 */
 				virtual void exec(const dodoString &query = __dodostring__, bool result = false);
-
-				unsigned short hint;                 ///< DB hint[see postgresqlHintEnum]
-
-				/**
-				 * set BLOB data for the request
-				 * @param values defines blob-type values that will be applied for dodo:hint:db:blob instead of identificators
-				 */
-				virtual void setBLOBValues(const dodoStringArray &values);
 
 				/**
 				 * set sessions charset
@@ -164,20 +143,14 @@ namespace dodo
 			protected:
 
 				/**
-				 * @return SQL compliant data type
-				 * @param type defines data type
+				 * construct `insert` statement
 				 */
-				virtual dodoString sqlDataType(int type);
+				virtual void insertCollect();
 
 				/**
-				 * construct `rename database` statement
+				 * construct `update` statement
 				 */
-				virtual void renameDbCollect();
-
-				/**
-				 * construct `alter table` statement
-				 */
-				virtual void renameFieldCollect();
+				virtual void updateCollect();
 
 #ifdef POSTGRESQL_NO_ENCODINGTOCHAR
 
@@ -238,14 +211,23 @@ namespace dodo
 				const static dodoString encodingStatements[POSTGRESQL_ENCODINGSTATEMENTS]; ///< encoding string representation according to encodingIdentefiersEnum
 #endif
 
+				/**
+				 * @struct __blob defines blob value
+				 */
+				struct __blob
+				{
+					unsigned int reference; ///< reference in request
+					const dodoString *value; ///< pointer to blob value
+				};
+
+				dodoList<__blob> blobs; ///< references to blob data
+
 			private:
 
 				bool empty;                                     ///< true id pgResult is empty
 
 				PGconn *pgHandle;                               ///< DB handle
 				PGresult *pgResult;                             ///< handlde to result
-
-				dodoStringArray blobs;                          ///< blob data
 		};
 	};
 };

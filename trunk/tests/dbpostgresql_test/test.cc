@@ -48,44 +48,25 @@ int main(int argc, char **argv)
 
 #endif
 
-		__connectorInfo info;
+		__connectionInfo info;
 		info.db = "test";
 		info.host = "localhost";
 		info.port = 5432;
 		info.user = "postgres";
-		pp.setDbInfo(info);
-		pp.connect();
+		
+		pp.connect(info);
 
 		try
 		{
-			pp.deleteTable("test");
-			pp.exec();
+			pp.exec("DROP TABLE test");
 		}
 		catch (...)
 		{
 		}
 
-		__connectorField fi;
-		fi.name = "date";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
+		pp.exec("CREATE TABLE test (date text NOT NULL, operation text NOT NULL, id integer default NULL, d integer default NULL, b bytea)");
 
-		__connectorTable ti;
-		ti.name = "test";
-		ti.fields.push_back(fi);
-
-		fi.name = "operation";
-		fi.type = CONNECTOR_FIELDTYPE_TEXT;
-		ti.fields.push_back(fi);
-
-		fi.name = "id";
-		fi.type = CONNECTOR_FIELDTYPE_INTEGER;
-		fi.flag = CONNECTOR_FIELDFLAG_NULL;
-		ti.fields.push_back(fi);
-
-		pp.createTable(ti);
-		pp.exec();
-
-		__connectorStorage store;
+		__tuples store;
 
 		dodoStringMap arr;
 		arr["date"] = "2005-07-08";

@@ -42,8 +42,6 @@ mysql::mysql() : empty(true),
 	execObject = XEXEC_OBJECT_DBMYSQL;
 
 #endif
-
-	addSQL();
 }
 
 //-------------------------------------------------------------------
@@ -68,111 +66,27 @@ mysql::~mysql()
 //-------------------------------------------------------------------
 
 void
-mysql::addSQL()
-{
-	sqlDbDepAddInsArr.push_back(" delayed ");
-	sqlDbDepAddInsArr.push_back(" low_priority ");
-	sqlDbDepAddInsArr.push_back(" high_priority ");
-
-	sqlDbDepAddSelArr.push_back(" straight_join ");
-	sqlDbDepAddSelArr.push_back(" sql_small_result ");
-	sqlDbDepAddSelArr.push_back(" sql_big_result ");
-
-	sqlDbDepAddUpArr.push_back(" low_priority ");
-
-	sqlDbDepAddDelArr.push_back(" low_priority ");
-	sqlDbDepAddDelArr.push_back(" quick ");
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddInsSt(short statement)
-{
-	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_DELAYED);
-	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_LOW_PRIORITY);
-	removeFlag(qDbDepInsShift, 1 << MYSQL_ADDREQUEST_INSERT_HIGH_PRIORITY);
-
-	addFlag(qDbDepInsShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddUpSt(short statement)
-{
-	addFlag(qDbDepUpShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddSelSt(short statement)
-{
-	addFlag(qDbDepSelShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::setMyAddDelSt(short statement)
-{
-	addFlag(qDbDepDelShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddInsSt(short statement)
-{
-	removeFlag(qDbDepInsShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddUpSt(short statement)
-{
-	removeFlag(qDbDepUpShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddSelSt(short statement)
-{
-	removeFlag(qDbDepSelShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::unsetMyAddDelSt(short statement)
-{
-	removeFlag(qDbDepDelShift, 1 << statement);
-}
-
-//-------------------------------------------------------------------
-
-void
 mysql::connectSettings(unsigned long a_type,
 					   const __mysqlSslOptions &options)
 {
 	type = a_type;
 
-	mysql_ssl_set(mysqlHandle,
+	if (mysql_ssl_set(mysqlHandle,
 				  options.key.size() == 0 ? NULL : options.key.c_str(),
 				  options.cert.size() == 0 ? NULL : options.cert.c_str(),
 				  options.ca.size() == 0 ? NULL : options.ca.c_str(),
 				  options.capath.size() == 0 ? NULL : options.capath.c_str(),
-				  options.cipher.size() == 0 ? NULL : options.cipher.c_str());
+				  options.cipher.size() == 0 ? NULL : options.cipher.c_str()) == 0)
+		type |= CLIENT_SSL;
 }
 
 //-------------------------------------------------------------------
 
 void
-mysql::connect()
+mysql::connect(const __connectionInfo &info)
 {
+	collectedData.dbInfo = info;
+
 #ifndef DB_WO_XEXEC
 	operType = DB_OPERATION_CONNECT;
 	performXExec(preExec);
@@ -203,7 +117,7 @@ mysql::connect()
 							type))
 		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
-#ifndef MYSQL_NO_OPT_RECONNECT 
+#ifndef MYSQL_NO_OPT_RECONNECT
 
 	if (reconnect)
 	{
@@ -278,7 +192,9 @@ mysql::fetchRows() const
 
 	MYSQL_ROW mysqlRow;
 
-	dodoString rowPart;
+#ifndef USE_DEQUE
+	rowsPart.reserve(numFields);
+#endif
 
 	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
 	{
@@ -286,17 +202,12 @@ mysql::fetchRows() const
 
 		rowsPart.clear();
 
-#ifndef USE_DEQUE
-		rowsPart.reserve(numFields);
-#endif
-
 		for (j = 0; j < numFields; ++j)
 		{
-			rowPart.assign(mysqlRow[j] != NULL ? mysqlRow[j] : "NULL", mysqlRow[j] ? length[j] : 4);
-			if (preventEscaping)
-				rowsPart.push_back(rowPart);
+			if (mysqlRow[j] != NULL)
+				rowsPart.push_back(dodoString(mysqlRow[j], length[j]));
 			else
-				rowsPart.push_back(unescapeFields(rowPart));
+				rowsPart.push_back(statements[SQLCONSTRUCTOR_STATEMENT_NULL]);
 		}
 
 		rows.push_back(rowsPart);
@@ -322,6 +233,8 @@ mysql::fetchFields() const
 	if (empty || !show)
 		return __dodostringarray__;
 
+	mysql_field_seek(mysqlResult, 0);
+
 	unsigned int numFields = mysql_num_fields(mysqlResult);
 	MYSQL_FIELD *mysqlFields = mysql_fetch_fields(mysqlResult);
 
@@ -343,10 +256,10 @@ mysql::fetchFields() const
 
 //-------------------------------------------------------------------
 
-__connectorStorage
+__tuples
 mysql::fetch() const
 {
-	return __connectorStorage(fetchRows(), fetchFields());
+	return __tuples(fetchRows(), fetchFields());
 }
 
 //-------------------------------------------------------------------
@@ -384,6 +297,87 @@ mysql::affectedRowsCount() const
 
 //-------------------------------------------------------------------
 
+void
+mysql::getFieldsTypes(const dodoString &table)
+{
+	dodoString temp = collectedData.dbInfo.db + statements[SQLCONSTRUCTOR_STATEMENT_COLON] + table;
+
+	dodoMap<dodoString, dodoMap<dodoString, short, dodoMapICaseStringCompare>, dodoMapICaseStringCompare>::iterator types = fieldTypes.find(temp);
+
+	if (types == fieldTypes.end())
+		types = fieldTypes.insert(make_pair(temp, dodoMap<dodoString, short, dodoMapICaseStringCompare>())).first;
+
+	request = "describe " + table;
+
+	if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+	{
+		int mysqlErrno = mysql_errno(mysqlHandle);
+		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
+		{
+			connect(collectedData.dbInfo);
+			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
+				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+		}
+		else
+			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+	}
+
+	mysqlResult = mysql_store_result(mysqlHandle);
+	if (mysqlResult == NULL)
+		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+
+	empty = false;
+
+	MYSQL_ROW mysqlRow;
+
+	dodoMap<dodoString, short, dodoMapICaseStringCompare>::iterator field, fieldsEnd = types->second.end();
+
+	while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
+	{
+		field = types->second.find(mysqlRow[0]);
+
+		if (field == fieldsEnd)
+		{
+			if (strcasestr(mysqlRow[1], "char") != NULL ||
+				strcasestr(mysqlRow[1], "date") != NULL ||
+				strcasestr(mysqlRow[1], "time") != NULL ||
+				strcasestr(mysqlRow[1], "text") != NULL ||
+				strcasestr(mysqlRow[1], "enum") != NULL ||
+				strcasestr(mysqlRow[1], "set") != NULL)
+				types->second.insert(make_pair(dodoString(mysqlRow[0]), FIELDTYPE_TEXT));
+			else
+			{
+				if (strcasestr(mysqlRow[1], "blob") != NULL)
+					types->second.insert(make_pair(dodoString(mysqlRow[0]), FIELDTYPE_BINARY));
+				else
+					types->second.insert(make_pair(dodoString(mysqlRow[0]), FIELDTYPE_NUMERIC));
+			}
+		}
+		else
+		{
+			if (strcasestr(mysqlRow[1], "char") != NULL ||
+				strcasestr(mysqlRow[1], "date") != NULL ||
+				strcasestr(mysqlRow[1], "time") != NULL ||
+				strcasestr(mysqlRow[1], "text") != NULL ||
+				strcasestr(mysqlRow[1], "enum") != NULL ||
+				strcasestr(mysqlRow[1], "set") != NULL)
+				field->second = FIELDTYPE_TEXT;
+			else
+			{
+				if (strcasestr(mysqlRow[1], "blob") != NULL)
+					field->second = FIELDTYPE_BINARY;
+				else
+					field->second = FIELDTYPE_NUMERIC;
+			}
+		}
+	}
+
+	mysql_free_result(mysqlResult);
+
+	empty = true;
+}
+
+//-------------------------------------------------------------------
 
 void
 mysql::exec(const dodoString &query,
@@ -395,69 +389,7 @@ mysql::exec(const dodoString &query,
 #endif
 
 	if (query.size() == 0)
-	{
-#ifdef ENABLE_SQL_AUTOFRAMING
-
-		if (autoFraming && !manualAutoFraming)
-		{
-			if (collectedData.qType == ACCUMULATOR_REQUEST_INSERT || collectedData.qType == ACCUMULATOR_REQUEST_UPDATE)
-			{
-				dodoString temp = collectedData.dbInfo.db + ":" + collectedData.table;
-
-				if (framingFields.find(temp) == framingFields.end())
-				{
-					request = "describe " + collectedData.table;
-
-					if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-					{
-						int mysqlErrno = mysql_errno(mysqlHandle);
-						if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
-						{
-							connect();
-							if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-								throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
-						}
-						else
-							throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
-					}
-
-					mysqlResult = mysql_store_result(mysqlHandle);
-					if (mysqlResult == NULL)
-						throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
-
-					empty = false;
-
-					mysql_field_seek(mysqlResult, 0);
-
-					dodoStringArray rowsPart;
-
-					MYSQL_ROW mysqlRow;
-
-					while ((mysqlRow = mysql_fetch_row(mysqlResult)) != NULL)
-					{
-						if (strcasestr(mysqlRow[1], "char") != NULL ||
-							strcasestr(mysqlRow[1], "date") != NULL ||
-							strcasestr(mysqlRow[1], "time") != NULL ||
-							strcasestr(mysqlRow[1], "blob") != NULL ||
-							strcasestr(mysqlRow[1], "text") != NULL ||
-							strcasestr(mysqlRow[1], "enum") != NULL ||
-							strcasestr(mysqlRow[1], "set") != NULL)
-							rowsPart.push_back(mysqlRow[0]);
-					}
-
-					mysql_free_result(mysqlResult);
-
-					empty = true;
-
-					framingFields.insert(make_pair(temp, rowsPart));
-				}
-			}
-		}
-
-#endif
-
 		queryCollect();
-	}
 	else
 	{
 		request = query;
@@ -469,7 +401,7 @@ mysql::exec(const dodoString &query,
 		int mysqlErrno = mysql_errno(mysqlHandle);
 		if (reconnect && (mysqlErrno == CR_SERVER_GONE_ERROR || mysqlErrno == CR_SERVER_LOST))
 		{
-			connect();
+			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
 				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 		}
@@ -479,7 +411,6 @@ mysql::exec(const dodoString &query,
 
 	if (show)
 	{
-
 		if (!empty)
 		{
 			mysql_free_result(mysqlResult);
@@ -498,6 +429,7 @@ mysql::exec(const dodoString &query,
 #endif
 
 	cleanCollected();
+	request.clear();
 }
 
 //-------------------------------------------------------------------
@@ -532,6 +464,7 @@ mysql::fetchFieldsToRows() const
 	if (empty || !show)
 		return __dodostringmaparray__;
 
+	mysql_data_seek(mysqlResult, 0);
 	mysql_field_seek(mysqlResult, 0);
 
 	unsigned int numFields = mysql_num_fields(mysqlResult);
@@ -544,7 +477,6 @@ mysql::fetchFieldsToRows() const
 #endif
 
 	dodoStringMap rowFieldsPart;
-
 	dodoString rowPart;
 
 	unsigned long *length, j;
@@ -555,51 +487,18 @@ mysql::fetchFieldsToRows() const
 	{
 		length = mysql_fetch_lengths(mysqlResult);
 
-		rowFieldsPart.clear();
-
 		for (j = 0; j < numFields; ++j)
 		{
-			rowPart.assign(mysqlRow[j] != NULL ? mysqlRow[j] : "NULL", mysqlRow[j] ? length[j] : 4);
-			if (preventEscaping)
-				rowFieldsPart.insert(make_pair(mysqlFields[j].name, rowPart));
+			if (mysqlRow[j] != NULL)
+				rowFieldsPart.insert(make_pair(mysqlFields[j].name, dodoString(mysqlRow[j], length[j])));
 			else
-				rowFieldsPart.insert(make_pair(mysqlFields[j].name, unescapeFields(rowPart)));
+				rowFieldsPart.insert(make_pair(mysqlFields[j].name, statements[SQLCONSTRUCTOR_STATEMENT_NULL]));
 		}
-
-		rowsFields.push_back(rowFieldsPart);
 	}
 
+	rowsFields.push_back(rowFieldsPart);
+
 	return rowsFields;
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::renameDbCollect()
-{
-	request = "rename database " + collectedData.order + " to " + collectedData.having;
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::renameFieldCollect()
-{
-	request = "alter table " + collectedData.table + " change " + collectedData.tableTo + " " + fieldCollect(collectedData.fieldInfo);
-}
-
-//-------------------------------------------------------------------
-
-void
-mysql::renameField(const dodoString &field,
-				   const __connectorField &to_field,
-				   const dodoString &table)
-{
-	collectedData.qType = ACCUMULATOR_REQUEST_RENAME_FIELD;
-	collectedData.tableTo = field;
-	collectedData.table = table;
-	collectedData.fieldInfo = to_field;
-	show = false;
 }
 
 #endif
