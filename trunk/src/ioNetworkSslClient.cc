@@ -383,7 +383,7 @@ client::connect(const dodoString &host,
 	initSsl();
 	makeSocket();
 
-	if (family == OPTIONS_PROTO_FAMILY_IPV4)
+	if (family == CONNECTION_PROTO_FAMILY_IPV4)
 	{
 		struct sockaddr_in sa;
 		sa.sin_family = AF_INET;
@@ -452,9 +452,9 @@ client::connectFrom(const dodoString &local,
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << OPTIONS_OPTION_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
-	if (family == OPTIONS_PROTO_FAMILY_IPV4)
+	if (family == CONNECTION_PROTO_FAMILY_IPV4)
 	{
 		struct sockaddr_in sa;
 		sa.sin_family = AF_INET;

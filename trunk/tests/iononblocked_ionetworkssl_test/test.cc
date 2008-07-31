@@ -27,13 +27,13 @@ int main(int argc, char **argv)
 	{
 #ifdef OPENSSL_EXT
 
-		server sock(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 
 		__initialAccept fake;
 
 		sock.bindNListen("127.0.0.1", 7778, 1);
-		sock.setOption(io::network::OPTIONS_OPTION_REUSE_ADDRESS, true);
-		sock.setLingerOption(io::network::OPTIONS_LINGEROPTION_HARD_CLOSE);
+		sock.setOption(io::network::CONNECTION_OPTION_REUSE_ADDRESS, true);
+		sock.setLingerOption(io::network::CONNECTION_LINGEROPTION_HARD_CLOSE);
 		sock.blockInherited = true;
 		sock.block(false);
 		

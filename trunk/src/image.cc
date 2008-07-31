@@ -387,7 +387,6 @@ image::scale(unsigned long width,
 void
 image::scale(unsigned long size)
 {
-
 	if (collectedData.imHandle == NULL)
 		throw exception::basic(exception::ERRMODULE_IMAGE, IMAGEEX_SCALE, exception::ERRNO_IMAGEMAGICK, IMAGEEX_EMPTYIMAGE, IMAGEEX_EMPTYIMAGE_STR, __LINE__, __FILE__);
 

@@ -451,12 +451,12 @@ misc::mail(const dodoString &host,
 
 	bool auth = login.size() > 0 ? true : false;
 
-	short family = OPTIONS_PROTO_FAMILY_IPV4;
+	short family = CONNECTION_PROTO_FAMILY_IPV4;
 	if (host.find(":") != dodoString::npos)
-		family = OPTIONS_PROTO_FAMILY_IPV6;
+		family = CONNECTION_PROTO_FAMILY_IPV6;
 
 	exchange ex;
-	client net(family, OPTIONS_TRANSFER_TYPE_STREAM);
+	client net(family, CONNECTION_TRANSFER_TYPE_STREAM);
 
 	net.connect(host, port, ex);
 

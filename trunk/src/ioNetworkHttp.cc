@@ -260,7 +260,7 @@ http::GET()
 
 	if (scheme == SCHEME_HTTP)
 	{
-		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		net = new client(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 		ex = new exchange;
 	}
 
@@ -268,7 +268,7 @@ http::GET()
 
 	else
 	{
-		net = new ssl::client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		net = new ssl::client(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 		ex = new ssl::exchange;
 	}
 
@@ -755,7 +755,7 @@ http::POST(const dodoString &a_data,
 
 	if (scheme == SCHEME_HTTP)
 	{
-		net = new client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		net = new client(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 		ex = new exchange;
 	}
 
@@ -763,7 +763,7 @@ http::POST(const dodoString &a_data,
 
 	else
 	{
-		net = new ssl::client(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		net = new ssl::client(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 		ex = new ssl::exchange;
 	}
 

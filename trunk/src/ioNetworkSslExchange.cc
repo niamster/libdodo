@@ -133,7 +133,7 @@ exchange::_close(int socket,
 		}
 	}
 
-	options::_close(socket);
+	connection::_close(socket);
 }
 
 //-------------------------------------------------------------------

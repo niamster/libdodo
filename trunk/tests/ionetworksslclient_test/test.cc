@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
 		cout << tools::network::getHostPrimaryIp(host) << endl;
 
-		client st(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
+		client st(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 		
 		io::ssl::__certificates certs;
 		certs.ca = "host.pem";

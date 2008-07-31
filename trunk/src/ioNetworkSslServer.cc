@@ -280,11 +280,11 @@ server::bindNListen(const dodoString &host,
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == 1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << OPTIONS_OPTION_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
-	setLingerOption(IONETWORKOPTIONS_SOCKET_LINGER_OPTION, IONETWORKOPTIONS_SOCKET_LINGER_PERIOD);
+	setLingerOption(IONETWORKCONNECTION_SOCKET_LINGER_OPTION, IONETWORKCONNECTION_SOCKET_LINGER_PERIOD);
 
-	if (family == OPTIONS_PROTO_FAMILY_IPV6)
+	if (family == CONNECTION_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
@@ -314,7 +314,7 @@ server::bindNListen(const dodoString &host,
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 
-	if (type == OPTIONS_TRANSFER_TYPE_STREAM)
+	if (type == CONNECTION_TRANSFER_TYPE_STREAM)
 		if (::listen(socket, numberOfConnections) == -1)
 			throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
@@ -353,9 +353,9 @@ server::bindNListen(const dodoString &path,
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKSSLSERVER, SERVEREX_BINDNLISTEN, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << OPTIONS_OPTION_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
-	setLingerOption(IONETWORKOPTIONS_SOCKET_LINGER_OPTION, IONETWORKOPTIONS_SOCKET_LINGER_PERIOD);
+	setLingerOption(IONETWORKCONNECTION_SOCKET_LINGER_OPTION, IONETWORKCONNECTION_SOCKET_LINGER_PERIOD);
 
 	struct sockaddr_un sa;
 
@@ -391,7 +391,7 @@ server::accept(__initialAccept &init,
 	performXExec(preExec);
 #endif
 
-	if (type != OPTIONS_TRANSFER_TYPE_STREAM)
+	if (type != CONNECTION_TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
 		init.blocked = blocked;
@@ -405,7 +405,7 @@ server::accept(__initialAccept &init,
 
 	switch (family)
 	{
-		case OPTIONS_PROTO_FAMILY_IPV4:
+		case CONNECTION_PROTO_FAMILY_IPV4:
 		{
 			struct sockaddr_in sa;
 			socklen_t len = sizeof(sockaddr_in);
@@ -427,7 +427,7 @@ server::accept(__initialAccept &init,
 			break;
 		}
 
-		case OPTIONS_PROTO_FAMILY_IPV6:
+		case CONNECTION_PROTO_FAMILY_IPV6:
 		{
 			struct sockaddr_in6 sa;
 			socklen_t len = sizeof(sockaddr_in6);
@@ -450,7 +450,7 @@ server::accept(__initialAccept &init,
 			break;
 		}
 
-		case OPTIONS_PROTO_FAMILY_UNIX_SOCKET:
+		case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
 
 			sock = ::accept(socket, NULL, NULL);
 			if (sock == -1)
@@ -491,7 +491,7 @@ server::accept(__initialAccept &init)
 	performXExec(preExec);
 #endif
 
-	if (type != OPTIONS_TRANSFER_TYPE_STREAM)
+	if (type != CONNECTION_TRANSFER_TYPE_STREAM)
 	{
 		init.socket = socket;
 		init.blocked = blocked;

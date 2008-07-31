@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	{
 		try
 		{
-			client st(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+			client st(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 			exchange exch;
 			dodoString str;
 

@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 	{
 #ifdef OPENSSL_EXT
 
-		server sock(io::network::OPTIONS_PROTO_FAMILY_IPV4, io::network::OPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(io::network::CONNECTION_PROTO_FAMILY_IPV4, io::network::CONNECTION_TRANSFER_TYPE_STREAM);
 
 		io::network::__peerInfo info;
 		__initialAccept fake;

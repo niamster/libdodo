@@ -104,13 +104,13 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		server sock(OPTIONS_PROTO_FAMILY_IPV4, OPTIONS_TRANSFER_TYPE_STREAM);
+		server sock(CONNECTION_PROTO_FAMILY_IPV4, CONNECTION_TRANSFER_TYPE_STREAM);
 
 		__peerInfo info;
 		__initialAccept fake;
 
 		sock.bindNListen("127.0.0.1", 7778, 3);
-		sock.setLingerOption(OPTIONS_LINGEROPTION_HARD_CLOSE);
+		sock.setLingerOption(CONNECTION_LINGEROPTION_HARD_CLOSE);
 		sock.blockInherited = false;
 		sock.block(false);
 

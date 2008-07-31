@@ -125,19 +125,19 @@ client::makeSocket()
 
 	switch (family)
 	{
-		case OPTIONS_PROTO_FAMILY_IPV4:
+		case CONNECTION_PROTO_FAMILY_IPV4:
 
 			real_domain = PF_INET;
 
 			break;
 
-		case OPTIONS_PROTO_FAMILY_IPV6:
+		case CONNECTION_PROTO_FAMILY_IPV6:
 
 			real_domain = PF_INET6;
 
 			break;
 
-		case OPTIONS_PROTO_FAMILY_UNIX_SOCKET:
+		case CONNECTION_PROTO_FAMILY_UNIX_SOCKET:
 
 			real_domain = PF_UNIX;
 
@@ -150,13 +150,13 @@ client::makeSocket()
 
 	switch (type)
 	{
-		case OPTIONS_TRANSFER_TYPE_STREAM:
+		case CONNECTION_TRANSFER_TYPE_STREAM:
 
 			real_type = SOCK_STREAM;
 
 			break;
 
-		case OPTIONS_TRANSFER_TYPE_DATAGRAM:
+		case CONNECTION_TRANSFER_TYPE_DATAGRAM:
 
 			real_type = SOCK_DGRAM;
 
@@ -188,7 +188,7 @@ client::connect(const dodoString &host,
 
 	makeSocket();
 
-	if (family == OPTIONS_PROTO_FAMILY_IPV6)
+	if (family == CONNECTION_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;
@@ -253,9 +253,9 @@ client::connectFrom(const dodoString &local,
 	if (setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, &sockFlag, sizeof(int)) == -1)
 		throw exception::basic(exception::ERRMODULE_IONETWORKCLIENT, CLIENTEX_CONNECTFROM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-	addFlag(socketOpts, 1 << OPTIONS_OPTION_REUSE_ADDRESS);
+	addFlag(socketOpts, 1 << CONNECTION_OPTION_REUSE_ADDRESS);
 
-	if (family == OPTIONS_PROTO_FAMILY_IPV6)
+	if (family == CONNECTION_PROTO_FAMILY_IPV6)
 	{
 		struct sockaddr_in6 sa;
 		sa.sin6_family = AF_INET6;

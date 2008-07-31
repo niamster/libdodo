@@ -43,7 +43,7 @@
 #include <fcntl.h>
 #include <poll.h>
 
-#include <libdodo/ioNetworkOptions.h>
+#include <libdodo/ioNetworkConnection.h>
 #include <libdodo/ioChannel.h>
 #include <libdodo/ioNetworkExchangeEx.h>
 #include <libdodo/types.h>
@@ -98,7 +98,7 @@ namespace dodo
 			 * @class exchange provides communication interface[send/receive data]
 			 * @note readStreamString: if length of read data is inSize, data will contain exact inSize, no '\0' will be set in the end - this is specific only for network sessions
 			 */
-			class exchange : public options,
+			class exchange : public connection,
 							 virtual public channel
 			{
 				friend class server;

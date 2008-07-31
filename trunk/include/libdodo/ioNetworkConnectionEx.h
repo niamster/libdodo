@@ -1,5 +1,5 @@
 /***************************************************************************
- *            ioNetworkOptionsEx.h
+ *            ioNetworkConnectionEx.h
  *
  *  Mon Feb 21 03:03:47 2005
  *  Copyright  2005  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _IONETWORKOPTIONSEX_H_
-#define _IONETWORKOPTIONSEX_H_
+#ifndef _IONETWORKCONNECTIONEX_H_
+#define _IONETWORKCONNECTIONEX_H_
 
 #include <libdodo/directives.h>
 
@@ -43,31 +43,31 @@ namespace dodo
 			/**
 			 * libdodo defined errors
 			 */
-			enum optionsExR
+			enum connectionExR
 			{
-				OPTIONSEX_NOSOCKETCREATED,
-				OPTIONSEX_WRONGPARAMETER,
+				CONNECTIONEX_NOSOCKETCREATED,
+				CONNECTIONEX_WRONGPARAMETER,
 			};
 
 			/**
 			 * explanations for libdodo defined errors
 			 */
-#define IONETWORKOPTIONSEX_NOSOCKETCREATED_STR "No socket was created =(."
-#define IONETWORKOPTIONSEX_WRONGPARAMETER_STR  "Wrong paramather passed to function."
+#define IONETWORKCONNECTIONEX_NOSOCKETCREATED_STR "No socket was created =(."
+#define IONETWORKCONNECTIONEX_WRONGPARAMETER_STR  "Wrong paramather passed to function."
 
 			/**
 			 * IDs of functions where exception might be thrown
 			 */
-			enum optionsFunctionsID
+			enum connectionFunctionsID
 			{
-				OPTIONSEX_SETINBUFFERSIZE,
-				OPTIONSEX_SETOUTBUFFERSIZE,
-				OPTIONSEX_SETINTIMEOUT,
-				OPTIONSEX_SETOUTTIMEOUT,
-				OPTIONSEX_SETSOCKOPT,
-				OPTIONSEX_SETLINGERSOCKOPT,
-				OPTIONSEX_BLOCK,
-				OPTIONSEX__CLOSE,
+				CONNECTIONEX_SETINBUFFERSIZE,
+				CONNECTIONEX_SETOUTBUFFERSIZE,
+				CONNECTIONEX_SETINTIMEOUT,
+				CONNECTIONEX_SETOUTTIMEOUT,
+				CONNECTIONEX_SETSOCKOPT,
+				CONNECTIONEX_SETLINGERSOCKOPT,
+				CONNECTIONEX_BLOCK,
+				CONNECTIONEX__CLOSE,
 			};
 		};
 	};
