@@ -99,7 +99,6 @@ OBJECTS:=dbAccumulator.o \
 	cgiBasicExchange.o \
 	cgiFastServer.o \
 	cgiFastExchange.o \
-	cgiPreprocessor.o \
 	cgiProcessor.o
 
 ###########################################################

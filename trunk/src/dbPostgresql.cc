@@ -366,7 +366,7 @@ postgresql::getFieldsTypes(const dodoString &table)
 			if (strcasestr(columnType, "char") != NULL ||
 				strcasestr(columnType, "date") != NULL ||
 				strcasestr(columnType, "text") != NULL)
-				types->second.insert(make_pair(dodoString(columnName), FIELDTYPE_TEXT));
+				types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
 			else
 			{
 				if (strcasestr(columnType, "bytea") != NULL ||
@@ -374,9 +374,9 @@ postgresql::getFieldsTypes(const dodoString &table)
 					strcasestr(columnType, "cidr") != NULL ||
 					strcasestr(columnType, "macaddrcd") != NULL ||
 					strcasestr(columnType, "inet") != NULL)
-					types->second.insert(make_pair(dodoString(columnName), FIELDTYPE_BINARY));
+					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
 				else
-					types->second.insert(make_pair(dodoString(columnName), FIELDTYPE_NUMERIC));
+					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
 			}
 		}
 		else
@@ -384,7 +384,7 @@ postgresql::getFieldsTypes(const dodoString &table)
 			if (strcasestr(columnType, "char") != NULL ||
 				strcasestr(columnType, "date") != NULL ||
 				strcasestr(columnType, "text") != NULL)
-				field->second = FIELDTYPE_TEXT;
+				field->second = sql::FIELDTYPE_TEXT;
 			else
 			{
 				if (strcasestr(columnType, "bytea") != NULL ||
@@ -392,9 +392,9 @@ postgresql::getFieldsTypes(const dodoString &table)
 					strcasestr(columnType, "cidr") != NULL ||
 					strcasestr(columnType, "macaddrcd") != NULL ||
 					strcasestr(columnType, "inet") != NULL)
-					field->second = FIELDTYPE_BINARY;
+					field->second = sql::FIELDTYPE_BINARY;
 				else
-					field->second = FIELDTYPE_NUMERIC;
+					field->second = sql::FIELDTYPE_NUMERIC;
 			}
 		}
 	}
@@ -515,7 +515,7 @@ postgresql::updateCollect()
 					type = types->second.find(*i);
 					if (type != typesEnd)
 					{
-						if (type->second == FIELDTYPE_TEXT)
+						if (type->second == sql::FIELDTYPE_TEXT)
 						{
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 							request.append(escapeFields(*j));
@@ -523,7 +523,7 @@ postgresql::updateCollect()
 						}
 						else
 						{
-							if (type->second == FIELDTYPE_BINARY)
+							if (type->second == sql::FIELDTYPE_BINARY)
 							{
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 								request.append("$" + tools::string::uiToString(k));
@@ -554,7 +554,7 @@ postgresql::updateCollect()
 				type = types->second.find(*i);
 				if (type != typesEnd)
 				{
-					if (type->second == FIELDTYPE_TEXT)
+					if (type->second == sql::FIELDTYPE_TEXT)
 					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
@@ -562,7 +562,7 @@ postgresql::updateCollect()
 					}
 					else
 					{
-						if (type->second == FIELDTYPE_BINARY)
+						if (type->second == sql::FIELDTYPE_BINARY)
 						{
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 							request.append("$" + tools::string::uiToString(k));
@@ -650,11 +650,11 @@ postgresql::insertCollect()
 					type = types->second.find(*t);
 					if (type != typesEnd)
 					{
-						if (type->second == FIELDTYPE_TEXT)
+						if (type->second == sql::FIELDTYPE_TEXT)
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
 						else
 						{
-							if (type->second == FIELDTYPE_BINARY)
+							if (type->second == sql::FIELDTYPE_BINARY)
 							{
 								++o;
 
@@ -677,11 +677,11 @@ postgresql::insertCollect()
 				type = types->second.find(*t);
 				if (type != typesEnd)
 				{
-					if (type->second == FIELDTYPE_TEXT)
+					if (type->second == sql::FIELDTYPE_TEXT)
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 					else
 					{
-						if (type->second == FIELDTYPE_BINARY)
+						if (type->second == sql::FIELDTYPE_BINARY)
 						{
 							++o;
 
@@ -712,11 +712,11 @@ postgresql::insertCollect()
 				type = types->second.find(*t);
 				if (type != typesEnd)
 				{
-					if (type->second == FIELDTYPE_TEXT)
+					if (type->second == sql::FIELDTYPE_TEXT)
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
 					else
 					{
-						if (type->second == FIELDTYPE_BINARY)
+						if (type->second == sql::FIELDTYPE_BINARY)
 						{
 							++o;
 
@@ -739,11 +739,11 @@ postgresql::insertCollect()
 			type = types->second.find(*t);
 			if (type != typesEnd)
 			{
-				if (type->second == FIELDTYPE_TEXT)
+				if (type->second == sql::FIELDTYPE_TEXT)
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 				else
 				{
-					if (type->second == FIELDTYPE_BINARY)
+					if (type->second == sql::FIELDTYPE_BINARY)
 					{
 						++o;
 

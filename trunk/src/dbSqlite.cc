@@ -409,13 +409,13 @@ sqlite::getFieldsTypes(const dodoString &table)
 				strcasestr(columnType, "text") != NULL ||
 				strcasestr(columnType, "enum") != NULL ||
 				strcasestr(columnType, "set") != NULL)
-				types->second.insert(make_pair(dodoString(columnName), FIELDTYPE_TEXT));
+				types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_TEXT));
 			else
 			{
 				if (strcasestr(columnType, "blob") != NULL)
-					types->second.insert(make_pair(dodoString(columnName), FIELDTYPE_BINARY));
+					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_BINARY));
 				else
-					types->second.insert(make_pair(dodoString(columnName), FIELDTYPE_NUMERIC));
+					types->second.insert(make_pair(dodoString(columnName), sql::FIELDTYPE_NUMERIC));
 			}
 		}
 		else
@@ -426,13 +426,13 @@ sqlite::getFieldsTypes(const dodoString &table)
 				strcasestr(columnType, "text") != NULL ||
 				strcasestr(columnType, "enum") != NULL ||
 				strcasestr(columnType, "set") != NULL)
-				field->second = FIELDTYPE_TEXT;
+				field->second = sql::FIELDTYPE_TEXT;
 			else
 			{
 				if (strcasestr(columnType, "blob") != NULL)
-					field->second = FIELDTYPE_BINARY;
+					field->second = sql::FIELDTYPE_BINARY;
 				else
-					field->second = FIELDTYPE_NUMERIC;
+					field->second = sql::FIELDTYPE_NUMERIC;
 			}
 		}
 	}
@@ -543,7 +543,7 @@ sqlite::updateCollect()
 					type = types->second.find(*i);
 					if (type != typesEnd)
 					{
-						if (type->second == FIELDTYPE_TEXT)
+						if (type->second == sql::FIELDTYPE_TEXT)
 						{
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 							request.append(escapeFields(*j));
@@ -551,7 +551,7 @@ sqlite::updateCollect()
 						}
 						else
 						{
-							if (type->second == FIELDTYPE_BINARY)
+							if (type->second == sql::FIELDTYPE_BINARY)
 							{
 								request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 								request.append("$" + tools::string::uiToString(k));
@@ -582,7 +582,7 @@ sqlite::updateCollect()
 				type = types->second.find(*i);
 				if (type != typesEnd)
 				{
-					if (type->second == FIELDTYPE_TEXT)
+					if (type->second == sql::FIELDTYPE_TEXT)
 					{
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUALAPOSTROPHE]);
 						request.append(escapeFields(*j));
@@ -590,7 +590,7 @@ sqlite::updateCollect()
 					}
 					else
 					{
-						if (type->second == FIELDTYPE_BINARY)
+						if (type->second == sql::FIELDTYPE_BINARY)
 						{
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_EQUAL]);
 							request.append("$" + tools::string::uiToString(k));
@@ -678,11 +678,11 @@ sqlite::insertCollect()
 					type = types->second.find(*t);
 					if (type != typesEnd)
 					{
-						if (type->second == FIELDTYPE_TEXT)
+						if (type->second == sql::FIELDTYPE_TEXT)
 							request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
 						else
 						{
-							if (type->second == FIELDTYPE_BINARY)
+							if (type->second == sql::FIELDTYPE_BINARY)
 							{
 								++o;
 
@@ -705,11 +705,11 @@ sqlite::insertCollect()
 				type = types->second.find(*t);
 				if (type != typesEnd)
 				{
-					if (type->second == FIELDTYPE_TEXT)
+					if (type->second == sql::FIELDTYPE_TEXT)
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 					else
 					{
-						if (type->second == FIELDTYPE_BINARY)
+						if (type->second == sql::FIELDTYPE_BINARY)
 						{
 							++o;
 
@@ -740,11 +740,11 @@ sqlite::insertCollect()
 				type = types->second.find(*t);
 				if (type != typesEnd)
 				{
-					if (type->second == FIELDTYPE_TEXT)
+					if (type->second == sql::FIELDTYPE_TEXT)
 						request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHECOMA]);
 					else
 					{
-						if (type->second == FIELDTYPE_BINARY)
+						if (type->second == sql::FIELDTYPE_BINARY)
 						{
 							++o;
 
@@ -767,11 +767,11 @@ sqlite::insertCollect()
 			type = types->second.find(*t);
 			if (type != typesEnd)
 			{
-				if (type->second == FIELDTYPE_TEXT)
+				if (type->second == sql::FIELDTYPE_TEXT)
 					request.append(statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE] + escapeFields(*i) + statements[SQLCONSTRUCTOR_STATEMENT_APOSTROPHE]);
 				else
 				{
-					if (type->second == FIELDTYPE_BINARY)
+					if (type->second == sql::FIELDTYPE_BINARY)
 					{
 						++o;
 

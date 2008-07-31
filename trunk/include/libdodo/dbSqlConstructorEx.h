@@ -39,28 +39,31 @@ namespace dodo
 {
 	namespace db
 	{
-		/**
-		 * libdodo defined errors
-		 */
-		enum sqlConstructorExR
+		namespace sql
 		{
-			SQLCONSTRUCTOREX_EMPTYREQUEST,
-			SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
-		};
+			/**
+			 * libdodo defined errors
+			 */
+			enum sqlConstructorExR
+			{
+				SQLCONSTRUCTOREX_EMPTYREQUEST,
+				SQLCONSTRUCTOREX_UNKNOWNJOINTYPE,
+			};
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR    "Query is empty. Are you sure?"
-#define DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
+			/**
+			 * explanations for libdodo defined errors
+			 */
+	#define DBSQLCONSTRUCTOREX_EMPTYREQUEST_STR    "Query is empty. Are you sure?"
+	#define DBSQLCONSTRUCTOREX_UNKNOWNJOINTYPE_STR "Unknown join type."
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum sqlConstructorFunctionsID
-		{
-			SQLCONSTRUCTOREX_QUERYCOLLECT,
-			SQLCONSTRUCTOREX_JOINCOLLECT,
+			/**
+			 * IDs of functions where exception might be thrown
+			 */
+			enum sqlConstructorFunctionsID
+			{
+				SQLCONSTRUCTOREX_QUERYCOLLECT,
+				SQLCONSTRUCTOREX_JOINCOLLECT,
+			};
 		};
 	};
 };

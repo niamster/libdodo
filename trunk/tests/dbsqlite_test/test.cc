@@ -29,7 +29,7 @@ hook(void *odata,
 
 	if (sql->operType == DB_OPERATION_EXEC)
 	{
-		cout << endl << endl << "request: " << ((sqlConstructor *)(sql->executor))->queryCollect() << endl << endl;
+		cout << endl << endl << "request: " << ((sql::constructor *)(sql->executor))->queryCollect() << endl << endl;
 	}
 }
 

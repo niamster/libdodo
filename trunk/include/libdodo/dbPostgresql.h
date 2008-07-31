@@ -49,7 +49,7 @@ namespace dodo
 		/**
 		 * @class postgresql provides an interface to postgresql db
 		 */
-		class postgresql : public sqlConstructor
+		class postgresql : public sql::constructor
 		{
 			private:
 

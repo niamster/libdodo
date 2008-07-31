@@ -62,7 +62,7 @@ namespace dodo
 		/**
 		 * @class mysql provides an interface to mySQL db
 		 */
-		class mysql : public sqlConstructor
+		class mysql : public sql::constructor
 		{
 			private:
 

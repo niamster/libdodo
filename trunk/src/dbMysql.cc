@@ -344,13 +344,13 @@ mysql::getFieldsTypes(const dodoString &table)
 				strcasestr(mysqlRow[1], "text") != NULL ||
 				strcasestr(mysqlRow[1], "enum") != NULL ||
 				strcasestr(mysqlRow[1], "set") != NULL)
-				types->second.insert(make_pair(dodoString(mysqlRow[0]), FIELDTYPE_TEXT));
+				types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_TEXT));
 			else
 			{
 				if (strcasestr(mysqlRow[1], "blob") != NULL)
-					types->second.insert(make_pair(dodoString(mysqlRow[0]), FIELDTYPE_BINARY));
+					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_BINARY));
 				else
-					types->second.insert(make_pair(dodoString(mysqlRow[0]), FIELDTYPE_NUMERIC));
+					types->second.insert(make_pair(dodoString(mysqlRow[0]), sql::FIELDTYPE_NUMERIC));
 			}
 		}
 		else
@@ -361,13 +361,13 @@ mysql::getFieldsTypes(const dodoString &table)
 				strcasestr(mysqlRow[1], "text") != NULL ||
 				strcasestr(mysqlRow[1], "enum") != NULL ||
 				strcasestr(mysqlRow[1], "set") != NULL)
-				field->second = FIELDTYPE_TEXT;
+				field->second = sql::FIELDTYPE_TEXT;
 			else
 			{
 				if (strcasestr(mysqlRow[1], "blob") != NULL)
-					field->second = FIELDTYPE_BINARY;
+					field->second = sql::FIELDTYPE_BINARY;
 				else
-					field->second = FIELDTYPE_NUMERIC;
+					field->second = sql::FIELDTYPE_NUMERIC;
 			}
 		}
 	}
