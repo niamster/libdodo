@@ -50,7 +50,7 @@ namespace dodo
 			/**
 			 * @class exchange provides interface to fast CGI I/O functionality
 			 */
-			class exchange : virtual public io::channel
+			class exchange : virtual public cgi::exchange
 			{
 				private:
 

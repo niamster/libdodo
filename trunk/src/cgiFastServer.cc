@@ -136,7 +136,7 @@ server::stackThread(void *data)
 		if (res == -1)
 			throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
-		handler(&cfSTD);
+		handler(cfSTD);
 
 		FCGX_Finish_r(&request);
 		
@@ -201,7 +201,7 @@ server::listen(unsigned long a_limit)
 			if (FCGX_Accept_r(&request) == -1)
 				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
-			handler(&cfSTD);
+			handler(cfSTD);
 
 			FCGX_Finish_r(&request);
 

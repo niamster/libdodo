@@ -31,6 +31,41 @@
 
 using namespace dodo::cgi;
 
+const dodoString processor::statements[] = {
+	"dodo",
+	"<(",
+	")>",
+	"<(>",
+	"<)>",
+	"<(*",
+	"*)>",
+	"if",
+	"else",
+	"fi",
+	"for",
+	"in",
+	"=>",
+	"rof",
+	"print",
+	"break",
+	"continue",
+	"assign",
+	"=",
+	"ns",
+	"sn",
+	"include",
+	"iterator",
+	"version",
+	".",
+	",",
+	"$",
+	"false",
+	"{",
+	"}"
+};
+
+//-------------------------------------------------------------------
+
 processor::processor(server &a_cgi) : continueFlag(false),
 									  breakDeepness(0),
 									  loopDeepness(0),
@@ -38,14 +73,151 @@ processor::processor(server &a_cgi) : continueFlag(false),
 									  namespaceDeepness(1),
 									  CGI(a_cgi)
 {
-	dodo[statements[PREPROCESSOR_STATEMENT_VERSION]] = PACKAGE_STRING;
-	dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = "1";
+	dodo[statements[PROCESSOR_STATEMENT_VERSION]] = PACKAGE_STRING;
+	dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = "1";
 }
 
 //-------------------------------------------------------------------
 
 processor::~processor()
 {
+}
+
+//-------------------------------------------------------------------
+
+dodoArray<unsigned long>
+processor::detectNewLines(const dodoString &tpl)
+{
+	dodoArray<unsigned long> newLinePos;
+
+	long i(0), j(tpl.size());
+	for (; i < j; ++i)
+		if (tpl[i] == '\n')
+			newLinePos.push_back(i);
+	newLinePos.push_back(i);
+
+	return newLinePos;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+processor::preProcessString(const dodoString &buffer)
+{
+	_preProcessString(buffer, "memory");
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+processor::_preProcessString(const dodoString &buffer,
+								const dodoString &path)
+{
+	dodoArray<unsigned long> newLinePos = detectNewLines(buffer);
+
+	unsigned long i(0), j(0), begin(0);
+
+	while (true)
+	{
+		begin = j;
+
+		i = buffer.find(statements[PROCESSOR_STATEMENT_OPEN_ST], begin);
+		if (i == dodoString::npos)
+		{
+			j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], begin);
+			if (j != dodoString::npos)
+				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
+
+			break;
+		}
+		else
+		{
+			dodoString temp = buffer.substr(begin, i - begin);
+
+			j = temp.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], begin);
+			if (j != dodoString::npos)
+				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, i), path.c_str()));
+		}
+
+		i += 2;
+
+		if (buffer[i] == '>')
+		{
+			j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_NP], i);
+			if (j != dodoString::npos)
+			{
+				j += 3;
+
+
+				continue;
+			}
+			else
+				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>`", getLineNumber(newLinePos, j), path.c_str()));
+
+		}
+
+		if (buffer[i] == '*')
+		{
+			j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_COMM], i);
+			if (j != dodoString::npos)
+			{
+				j += 3;
+
+				continue;
+			}
+			else
+				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>`", getLineNumber(newLinePos, j), path.c_str()));
+		}
+
+		j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], i);
+		if (j == dodoString::npos)
+			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `)>`", getLineNumber(newLinePos, j), path.c_str()));
+
+		if (j > 0 && buffer[j - 1] == '*')
+			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `*)>", getLineNumber(newLinePos, j), path.c_str()));
+
+		if (j > 0 && buffer[j - 1] == '<')
+			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<)>", getLineNumber(newLinePos, j), path.c_str()));
+
+		dodoString temp = buffer.substr(i, j - i);
+
+		if (temp.find(statements[PROCESSOR_STATEMENT_OPEN_ST]) != dodoString::npos)
+			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__PREPROCESSSTRING, exception::ERRNO_LIBDODO, PROCESSOREX_NOTCLOSEDBRACKET, CGIPROCESSOREX_NOTCLOSEDBRACKET_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s Bracket `<(`", getLineNumber(newLinePos, j), path.c_str()));
+
+		j += 2;
+	}
+
+	newLinePositions.push_back(newLinePos);
+
+	return buffer;
+}
+
+//-------------------------------------------------------------------
+
+dodoString
+processor::preProcess(const dodoString &path)
+{
+	if (tplBasePath.empty())
+		return _preProcessString(tools::filesystem::getFileContents(path), path);
+	else
+		return _preProcessString(tools::filesystem::getFileContents(tplBasePath + FILE_DELIM + path), path);
+}
+
+//-------------------------------------------------------------------
+
+unsigned long
+processor::getLineNumber(const dodoArray<unsigned long> &newLinePos,
+							unsigned long pos)
+{
+	dodoArray<unsigned long>::const_iterator o(newLinePos.begin()), p(newLinePos.end());
+
+	unsigned long i(1);
+
+	for (; o != p; ++o, ++i)
+		if (pos <= *o)
+			return i;
+
+	return i - 1;
 }
 
 //-------------------------------------------------------------------
@@ -106,7 +278,7 @@ processor::_processString(const dodoString &buffer,
 	{
 		begin = j;
 
-		i = buffer.find(statements[PREPROCESSOR_STATEMENT_OPEN_ST], begin);
+		i = buffer.find(statements[PROCESSOR_STATEMENT_OPEN_ST], begin);
 		if (i == dodoString::npos)
 		{
 			tpl.append(buffer.substr(begin));
@@ -120,7 +292,7 @@ processor::_processString(const dodoString &buffer,
 
 		if (buffer[i] == '>')
 		{
-			j = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_NP], i);
+			j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_NP], i);
 
 			++i;
 			tpl.append(buffer.substr(i, j - i));
@@ -131,14 +303,14 @@ processor::_processString(const dodoString &buffer,
 
 		if (buffer[i] == '*')
 		{
-			j = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_COMM], i);
+			j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_COMM], i);
 
 			j += 3;
 
 			continue;
 		}
 
-		j = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], i);
+		j = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], i);
 
 		for (stI = i; stI < j; ++stI)
 			if (buffer[stI] != '\t' && buffer[stI] != ' ' && buffer[stI] != '\r' && buffer[stI] != '\n')
@@ -154,7 +326,7 @@ processor::_processString(const dodoString &buffer,
 		{
 			case 'p':
 
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_PRINT]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_PRINT]);
 				if (k == 0)
 					j = _print(j, temp.substr(5), tpl, path);
 				else
@@ -164,7 +336,7 @@ processor::_processString(const dodoString &buffer,
 
 			case 'i':
 
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_IF]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_IF]);
 				if (k == 0)
 				{
 					++namespaceDeepness;
@@ -178,7 +350,7 @@ processor::_processString(const dodoString &buffer,
 				}
 				else
 				{
-					k = temp.find(statements[PREPROCESSOR_STATEMENT_INCLUDE]);
+					k = temp.find(statements[PROCESSOR_STATEMENT_INCLUDE]);
 					if (k == 0)
 						j = _include(j, temp.substr(8), tpl, path);
 					else
@@ -189,7 +361,7 @@ processor::_processString(const dodoString &buffer,
 
 			case 'f':
 
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_FOR]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_FOR]);
 				if (k == 0)
 				{
 					++loopDeepness;
@@ -209,7 +381,7 @@ processor::_processString(const dodoString &buffer,
 
 			case 'b':
 
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_BREAK]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_BREAK]);
 				if (k == 0)
 				{
 					if (_break(j, temp.substr(5), path))
@@ -222,7 +394,7 @@ processor::_processString(const dodoString &buffer,
 
 			case 'c':
 
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_CONT]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_CONT]);
 				if (k == 0)
 				{
 					if (loopDeepness > 0)
@@ -239,7 +411,7 @@ processor::_processString(const dodoString &buffer,
 
 			case 'a':
 
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_ASSIGN]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_ASSIGN]);
 				if (k == 0)
 					j = _assign(j, temp.substr(6), path);
 				else
@@ -249,7 +421,7 @@ processor::_processString(const dodoString &buffer,
 
 			case 'n':
 
-				k = temp.find(statements[PREPROCESSOR_STATEMENT_OPEN_NS]);
+				k = temp.find(statements[PROCESSOR_STATEMENT_OPEN_NS]);
 				if (k == 0)
 				{
 					++namespaceDeepness;
@@ -292,7 +464,7 @@ void
 processor::assign(dodoString varName,
 				  const dodoArray<dodoStringMap> &varVal)
 {
-	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
+	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
 		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -308,7 +480,7 @@ void
 processor::assign(dodoString varName,
 				  const dodoStringMap &varVal)
 {
-	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
+	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
 		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -324,7 +496,7 @@ void
 processor::assign(dodoString varName,
 				  const dodoStringArray &varVal)
 {
-	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
+	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
 		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	global.erase(varName);
@@ -340,7 +512,7 @@ void
 processor::assign(dodoString varName,
 				  const dodoString &varVal)
 {
-	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
+	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
 		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__);
 
 	globalArray.erase(varName);
@@ -451,7 +623,7 @@ processor::_if(const dodoString &buffer,
 
 	if (temp2.size() != 2)
 	{
-		if (!tools::string::equal(getVar(temp1, start, path), statements[PREPROCESSOR_STATEMENT_FALSE]))
+		if (!tools::string::equal(getVar(temp1, start, path), statements[PROCESSOR_STATEMENT_FALSE]))
 			accept = !invert;
 		else
 			accept = invert;
@@ -500,12 +672,12 @@ processor::_if(const dodoString &buffer,
 		}
 	}
 
-	unsigned long u(blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_IF], statements[PREPROCESSOR_STATEMENT_CLOSE_IF], path)), v(0);
+	unsigned long u(blockEnd(buffer, start, statements[PROCESSOR_STATEMENT_OPEN_IF], statements[PROCESSOR_STATEMENT_CLOSE_IF], path)), v(0);
 	bool found(true);
 
 	try
 	{
-		v = blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_IF], statements[PREPROCESSOR_STATEMENT_ELSE], path);
+		v = blockEnd(buffer, start, statements[PROCESSOR_STATEMENT_OPEN_IF], statements[PROCESSOR_STATEMENT_ELSE], path);
 	}
 	catch (...)
 	{
@@ -523,13 +695,13 @@ processor::_if(const dodoString &buffer,
 	{
 		if (found)
 		{
-			v = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], v) + 2;
+			v = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], v) + 2;
 
 			tpl.append(_processString(buffer.substr(v, u - v), path));
 		}
 	}
 
-	return buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], u) + 2;
+	return buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], u) + 2;
 }
 
 //-------------------------------------------------------------------
@@ -545,11 +717,11 @@ processor::blockEnd(const dodoString &buffer,
 
 	while (true)
 	{
-		u = buffer.find(statements[PREPROCESSOR_STATEMENT_OPEN_ST], m);
+		u = buffer.find(statements[PROCESSOR_STATEMENT_OPEN_ST], m);
 		if (u == dodoString::npos)
 			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
-		b = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], u + 2);
+		b = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], u + 2);
 		if (b == dodoString::npos)
 			throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_BLOCKEND, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGBLOCK, CGIPROCESSOREX_WRONGBLOCK_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
@@ -610,7 +782,7 @@ processor::_print(unsigned long start,
 				  dodoString &tpl,
 				  const dodoString &path)
 {
-	dodoStringArray temp = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_COMA]);
+	dodoStringArray temp = tools::misc::explode(statement, statements[PROCESSOR_STATEMENT_COMA]);
 	if (temp.size() <= 1)
 		tpl.append(getVar(statement, start, path));
 	else
@@ -653,7 +825,7 @@ processor::_assign(unsigned long start,
 				   const dodoString &statement,
 				   const dodoString &path)
 {
-	dodoStringArray temp = tools::misc::explode(statement, statements[PREPROCESSOR_STATEMENT_ASSIGN_OP], 2);
+	dodoStringArray temp = tools::misc::explode(statement, statements[PROCESSOR_STATEMENT_ASSIGN_OP], 2);
 
 	if (temp.size() == 0)
 		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGASSIGNSTATEMENT, CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
@@ -665,7 +837,7 @@ processor::_assign(unsigned long start,
 	if (varName[0] == '$')
 		varName = varName.substr(1);
 
-	if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
+	if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
 		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__ASSIGN, exception::ERRNO_LIBDODO, PROCESSOREX_DODOISRESERVEDVARNAME, CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	local[namespaceDeepness][varName] = getVar(temp[1], start, path);
@@ -690,11 +862,11 @@ processor::_ns(const dodoString &buffer,
 			   dodoString &tpl,
 			   const dodoString &path)
 {
-	unsigned long u(blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_NS], statements[PREPROCESSOR_STATEMENT_CLOSE_NS], path));
+	unsigned long u(blockEnd(buffer, start, statements[PROCESSOR_STATEMENT_OPEN_NS], statements[PROCESSOR_STATEMENT_CLOSE_NS], path));
 
 	tpl.append(_processString(buffer.substr(start, u - start), path));
 
-	return buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], u) + 2;
+	return buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], u) + 2;
 }
 
 //-------------------------------------------------------------------
@@ -706,9 +878,9 @@ processor::_for(const dodoString &buffer,
 				dodoString &tpl,
 				const dodoString &path)
 {
-	unsigned long u(blockEnd(buffer, start, statements[PREPROCESSOR_STATEMENT_OPEN_FOR], statements[PREPROCESSOR_STATEMENT_CLOSE_FOR], path));
+	unsigned long u(blockEnd(buffer, start, statements[PROCESSOR_STATEMENT_OPEN_FOR], statements[PROCESSOR_STATEMENT_CLOSE_FOR], path));
 
-	unsigned long p = statement.find(statements[PREPROCESSOR_STATEMENT_DOLLAR]);
+	unsigned long p = statement.find(statements[PROCESSOR_STATEMENT_DOLLAR]);
 	unsigned long i(p), j(statement.size());
 
 	for (; i < j; ++i)
@@ -721,11 +893,11 @@ processor::_for(const dodoString &buffer,
 	bool key(false);
 	dodoString keyName;
 
-	p = statement.find(statements[PREPROCESSOR_STATEMENT_KEY_VALUE], i + 1);
+	p = statement.find(statements[PROCESSOR_STATEMENT_KEY_VALUE], i + 1);
 	if (p != dodoString::npos)
 	{
 		key = true;
-		p = statement.find(statements[PREPROCESSOR_STATEMENT_DOLLAR], p + 2);
+		p = statement.find(statements[PROCESSOR_STATEMENT_DOLLAR], p + 2);
 
 		for (i = p; i < j; ++i)
 			if (statement[i] == ' ' || statement[i] == '\t' || statement[i] == '\n')
@@ -736,20 +908,20 @@ processor::_for(const dodoString &buffer,
 		varName = statement.substr(p + 1, i - p);
 	}
 
-	p = statement.find(statements[PREPROCESSOR_STATEMENT_IN], i + 1);
+	p = statement.find(statements[PROCESSOR_STATEMENT_IN], i + 1);
 	if (p == dodoString::npos)
 		throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX__FOR, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGFORSTATEMENT, CGIPROCESSOREX_WRONGFORSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
 	dodoString targetVar = getVarName(statement.substr(p + 2), start, path);
 	dodoString forSpace = buffer.substr(start, u - start);
 
-	u = buffer.find(statements[PREPROCESSOR_STATEMENT_CLOSE_ST], u) + 2;
+	u = buffer.find(statements[PROCESSOR_STATEMENT_CLOSE_ST], u) + 2;
 
 	if (targetVar[0] == '$')
 	{
 		targetVar = targetVar.substr(1);
 
-		dodoStringArray temp = tools::misc::explode(targetVar, statements[PREPROCESSOR_STATEMENT_DOT]);
+		dodoStringArray temp = tools::misc::explode(targetVar, statements[PROCESSOR_STATEMENT_DOT]);
 
 		if (temp.size() == 1)
 		{
@@ -769,7 +941,7 @@ processor::_for(const dodoString &buffer,
 					dodoStringMap::iterator l = g->second.end();
 					for (; k != l; ++k, ++iterator)
 					{
-						dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+						dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 						if (key)
 							lns[keyName] = k->first;
@@ -788,7 +960,7 @@ processor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+					dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 					return u;
 				}
@@ -809,7 +981,7 @@ processor::_for(const dodoString &buffer,
 					unsigned long i(0), j(k->second.size());
 					for (; i < j; ++i, ++iterator)
 					{
-						dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+						dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 						if (key)
 							lns[keyName] = tools::string::lToString(i);
@@ -828,7 +1000,7 @@ processor::_for(const dodoString &buffer,
 					}
 
 					iterator =  iteratorPrev;
-					dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+					dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 					return u;
 				}
@@ -845,7 +1017,7 @@ processor::_for(const dodoString &buffer,
 				unsigned long i(0), j(k->second.size());
 				for (; i < j; ++i, ++iterator)
 				{
-					dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+					dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 					if (key)
 						lns[keyName] = tools::string::lToString(i);
@@ -864,7 +1036,7 @@ processor::_for(const dodoString &buffer,
 				}
 
 				iterator =  iteratorPrev;
-				dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+				dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 				return u;
 			}
@@ -881,7 +1053,7 @@ processor::_for(const dodoString &buffer,
 				dodoStringMap::iterator l = g->second.end();
 				for (; k != l; ++k, ++iterator)
 				{
-					dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+					dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 					if (key)
 						lns[keyName] = k->first;
@@ -900,7 +1072,7 @@ processor::_for(const dodoString &buffer,
 				}
 
 				iterator =  iteratorPrev;
-				dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+				dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 				return u;
 			}
@@ -917,7 +1089,7 @@ processor::_for(const dodoString &buffer,
 				dodoStringArray::iterator l = o->second.end();
 				for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
 				{
-					dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+					dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 					if (key)
 						lns[keyName] = tools::string::lToString(keyNIter);
@@ -936,7 +1108,7 @@ processor::_for(const dodoString &buffer,
 				}
 
 				iterator =  iteratorPrev;
-				dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+				dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 				return u;
 			}
@@ -954,7 +1126,7 @@ processor::_for(const dodoString &buffer,
 				dodoArray<dodoStringMap>::iterator l = d->second.end();
 				for (unsigned long keyNIter(0); k != l; ++k, ++keyNIter, ++iterator)
 				{
-					dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+					dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 					if (key)
 						lns[keyName] = tools::string::lToString(keyNIter);
@@ -973,7 +1145,7 @@ processor::_for(const dodoString &buffer,
 				}
 
 				iterator =  iteratorPrev;
-				dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+				dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 				return u;
 			}
@@ -1000,7 +1172,7 @@ processor::_for(const dodoString &buffer,
 							unsigned long i(0), j(k->second.size());
 							for (; i < j; ++i, ++iterator)
 							{
-								dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+								dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 								if (key)
 									lns[keyName] = tools::string::lToString(i);
@@ -1019,7 +1191,7 @@ processor::_for(const dodoString &buffer,
 							}
 
 							iterator =  iteratorPrev;
-							dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+							dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 							return u;
 						}
@@ -1040,7 +1212,7 @@ processor::_for(const dodoString &buffer,
 						unsigned long i(0), j(k->second.size());
 						for (; i < j; ++i, ++iterator)
 						{
-							dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+							dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 							if (key)
 								lns[keyName] = tools::string::lToString(i);
@@ -1059,7 +1231,7 @@ processor::_for(const dodoString &buffer,
 						}
 
 						iterator =  iteratorPrev;
-						dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+						dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 						return u;
 					}
@@ -1079,7 +1251,7 @@ processor::_for(const dodoString &buffer,
 						unsigned long i(0), j(o->second[pos].size());
 						for (; i < j; ++i, ++iterator)
 						{
-							dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+							dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 							if (key)
 								lns[keyName] = tools::string::lToString(i);
@@ -1098,7 +1270,7 @@ processor::_for(const dodoString &buffer,
 						}
 
 						iterator =  iteratorPrev;
-						dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+						dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 						return u;
 					}
@@ -1119,7 +1291,7 @@ processor::_for(const dodoString &buffer,
 						dodoStringMap::iterator l = d->second[pos].end();
 						for (; k != l; ++k, ++iterator)
 						{
-							dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+							dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 							if (key)
 								lns[keyName] = k->first;
@@ -1138,7 +1310,7 @@ processor::_for(const dodoString &buffer,
 						}
 
 						iterator =  iteratorPrev;
-						dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+						dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 						return u;
 					}
@@ -1165,7 +1337,7 @@ processor::_for(const dodoString &buffer,
 								unsigned long i(0), j(k->second.size());
 								for (; i < j; ++i, ++iterator)
 								{
-									dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+									dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 									if (key)
 										lns[keyName] = tools::string::lToString(i);
@@ -1184,7 +1356,7 @@ processor::_for(const dodoString &buffer,
 								}
 
 								iterator =  iteratorPrev;
-								dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+								dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 								return u;
 							}
@@ -1204,7 +1376,7 @@ processor::_for(const dodoString &buffer,
 		unsigned long i(0), j(targetVar.size());
 		for (; i < j; ++i, ++iterator)
 		{
-			dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
+			dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iterator);
 
 			if (key)
 				lns[keyName] = tools::string::lToString(i);
@@ -1223,7 +1395,7 @@ processor::_for(const dodoString &buffer,
 		}
 
 		iterator =  iteratorPrev;
-		dodo[statements[PREPROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
+		dodo[statements[PROCESSOR_STATEMENT_ITERATOR]] = tools::string::lToString(iteratorPrev);
 
 		return u;
 	}
@@ -1247,14 +1419,14 @@ processor::getVarName(const dodoString &a_varName,
 		ob = 1;
 		cb = 0;
 
-		u = varName.find(statements[PREPROCESSOR_STATEMENT_OPEN_VARPART], m);
+		u = varName.find(statements[PROCESSOR_STATEMENT_OPEN_VARPART], m);
 		if (u == dodoString::npos)
 			break;
 
 		c = u;
 		while (true)
 		{
-			b = varName.find(statements[PREPROCESSOR_STATEMENT_CLOSE_VARPART], c + 1);
+			b = varName.find(statements[PROCESSOR_STATEMENT_CLOSE_VARPART], c + 1);
 			if (b == dodoString::npos)
 				throw exception::basic(exception::ERRMODULE_CGIPROCESSOR, PROCESSOREX_GETVARNAME, exception::ERRNO_LIBDODO, PROCESSOREX_WRONGVARSTATEMENT, CGIPROCESSOREX_WRONGVARSTATEMENT_STR, __LINE__, __FILE__, tools::string::format(" Line: %li File: %s", getLineNumber(newLinePositions.back(), start), path.c_str()));
 
@@ -1296,11 +1468,11 @@ processor::getVar(const dodoString &a_varName,
 	else
 		varName.erase(0, 1);
 
-	dodoStringArray temp = tools::misc::explode(varName, statements[PREPROCESSOR_STATEMENT_DOT]);
+	dodoStringArray temp = tools::misc::explode(varName, statements[PROCESSOR_STATEMENT_DOT]);
 
 	if (temp.size() == 1)
 	{
-		if (tools::string::equal(varName, statements[PREPROCESSOR_STATEMENT_DODO]))
+		if (tools::string::equal(varName, statements[PROCESSOR_STATEMENT_DODO]))
 			return "cgi framework libdodo";
 
 		dodoStringMap::iterator k;
@@ -1322,7 +1494,7 @@ processor::getVar(const dodoString &a_varName,
 	}
 	else
 	{
-		if (tools::string::equal(temp[0], statements[PREPROCESSOR_STATEMENT_DODO]))
+		if (tools::string::equal(temp[0], statements[PROCESSOR_STATEMENT_DODO]))
 		{
 			dodoStringMap::iterator k = dodo.find(temp[1]);
 			if (k != dodo.end())

@@ -24,7 +24,7 @@ using dodo::ipc::thread::shared::dataGuard;
 dataGuard sh;
 
 void
-cgif(exchange *fcgi)
+cgif(exchange &fcgi)
 {
 	using namespace cgi;
 
@@ -41,14 +41,14 @@ cgif(exchange *fcgi)
 	(*inc)++;
 	sh.release();
 
-	fcgi->writeStreamString(tools::string::iToString(*inc) + "<br>");
-	fcgi->writeStreamString(cgit.GET["a"] + "<br>");
-	fcgi->writeStreamString(cgit.POST["hidden"] + "<br>");
-	fcgi->writeStreamString(cgit.POST["test"] + "<br>");
-	fcgi->writeStreamString(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
-	fcgi->writeStreamString(cgit.COOKIES["test"] + "<br>");
-	fcgi->writeStreamString(tools::string::iToString(cgit.FILES["file"].size) + "<br>");
-	fcgi->writeStreamString("<br>");
+	fcgi.writeStreamString(tools::string::iToString(*inc) + "<br>");
+	fcgi.writeStreamString(cgit.GET["a"] + "<br>");
+	fcgi.writeStreamString(cgit.POST["hidden"] + "<br>");
+	fcgi.writeStreamString(cgit.POST["test"] + "<br>");
+	fcgi.writeStreamString(cgit.ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING] + "<br>");
+	fcgi.writeStreamString(cgit.COOKIES["test"] + "<br>");
+	fcgi.writeStreamString(tools::string::iToString(cgit.FILES["file"].size) + "<br>");
+	fcgi.writeStreamString("<br>");
 
 	try
 	{
@@ -80,10 +80,10 @@ cgif(exchange *fcgi)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		fcgi->writeStreamString(ex.baseErrstr + " " + tools::string::lToString(ex.line));
+		fcgi.writeStreamString(ex.baseErrstr + " " + tools::string::lToString(ex.line));
 	}
 
-	fcgi->writeStreamString("<br>");
+	fcgi.writeStreamString("<br>");
 }
 
 #endif

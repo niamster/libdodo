@@ -47,7 +47,8 @@ namespace dodo
 			PROCESSOREX_WRONGVARSTATEMENT,
 			PROCESSOREX_DODOISRESERVEDVARNAME,
 			PROCESSOREX_WRONGASSIGNSTATEMENT,
-			PROCESSOREX_WRONGBLOCK
+			PROCESSOREX_WRONGBLOCK,
+			PROCESSOREX_NOTCLOSEDBRACKET,
 		};
 
 		/**
@@ -58,12 +59,14 @@ namespace dodo
 #define CGIPROCESSOREX_DODOISRESERVEDVARNAME_STR "dodo.* is reserved variable name."
 #define CGIPROCESSOREX_WRONGASSIGNSTATEMENT_STR  "Wrong `assing` statement."
 #define CGIPROCESSOREX_WRONGBLOCK_STR            "Wrong block construction."
+#define CGIPROCESSOREX_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)."
 
 		/**
 		 * IDs of functions where exception might be thrown
 		 */
 		enum processorFunctionsID
 		{
+			PROCESSOREX__PREPROCESSSTRING,
 			PROCESSOREX_BLOCKEND,
 			PROCESSOREX__FOR,
 			PROCESSOREX_GETVAR,

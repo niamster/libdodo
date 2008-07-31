@@ -95,6 +95,8 @@ OBJECTS:=dbAccumulator.o \
 	ipcSharedDataCollectionGuard.o \
 	libraryLoader.o \
 	cgiServer.o \
+	cgiExchange.o \
+	cgiBasicExchange.o \
 	cgiFastServer.o \
 	cgiFastExchange.o \
 	cgiPreprocessor.o \

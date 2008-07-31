@@ -35,7 +35,6 @@
 #include <libdodo/cgiProcessorEx.h>
 #include <libdodo/types.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/cgiPreprocessor.h>
 #include <libdodo/cgiFastServer.h>
 #include <libdodo/cgiServer.h>
 
@@ -202,7 +201,7 @@ namespace dodo
 		 *
 		 *                      <(print $arr2.1.{$arr1.{$one}} , !!!! , {$arr2.{0}.{$one}})>
 		 */
-		class processor : public preprocessor
+		class processor
 		{
 			public:
 
@@ -268,10 +267,24 @@ namespace dodo
 				 */
 				virtual void clear();
 
+				dodoString tplBasePath;                 ///< base path for templates[if empty - full/relative path must be defined in preProcess/include]
+
 			protected:
+				
+				/**
+				 * @return preprocessed template
+				 * @param path defines path of template
+				 */
+				virtual dodoString preProcess(const dodoString &path);
 
 				/**
-				 * @return parsed template from preprocessored buffer
+				 * @return preprocessed template
+				 * @param buffer defines buffer where template is stored
+				 */
+				virtual dodoString preProcessString(const dodoString &buffer);
+
+				/**
+				 * @return parsed template from processored buffer
 				 * @param buffer defines buffer where template is stored
 				 * @param path defines path of template
 				 */
@@ -383,6 +396,28 @@ namespace dodo
 				 * @param statement defines statement that needs extraction from the pairs of ",',`
 				 */
 				virtual dodoString trim(const dodoString &statement);
+				
+				/**
+				 * @return preprocessed template
+				 * @param buffer defines buffer where template is stored
+				 * @param path defines path of template
+				 */
+				virtual dodoString _preProcessString(const dodoString &buffer, const dodoString &path);
+
+				/**
+				 * @return line number in file
+				 * @param newlines defines positions of new lines if template
+				 * @param pos defines position of symbol in template
+				 */
+				virtual unsigned long getLineNumber(const dodoArray<unsigned long> &newlines, unsigned long pos);
+
+				/**
+				 * @return positions of new lines
+				 * @param buffer defines buffer where template is stored
+				 */
+				virtual dodoArray<unsigned long> detectNewLines(const dodoString &buffer);
+
+				dodoArray< dodoArray<unsigned long> > newLinePositions;                 ///< stack of positions of new lines of templates
 
 				dodoStringList processed;                                                                                         ///< files that will be skipped due to the recursion
 
@@ -406,6 +441,48 @@ namespace dodo
 				unsigned int namespaceDeepness;                                                                                         ///< deepness of the namespace
 
 				server &CGI;                                                                                                            ///< cgi object through what output will be performed
+
+#define PROCESSOR_STATEMENTS 30
+
+				/**
+				 * @enum processorStatementEnum defines processor statements
+				 * @note defines positions of string representation in 'statements' class property
+				 */
+				enum processorStatementEnum
+				{
+					PROCESSOR_STATEMENT_DODO = 0,
+					PROCESSOR_STATEMENT_OPEN_ST,
+					PROCESSOR_STATEMENT_CLOSE_ST,
+					PROCESSOR_STATEMENT_OPEN_NP,
+					PROCESSOR_STATEMENT_CLOSE_NP,
+					PROCESSOR_STATEMENT_OPEN_COMM,
+					PROCESSOR_STATEMENT_CLOSE_COMM,
+					PROCESSOR_STATEMENT_OPEN_IF,
+					PROCESSOR_STATEMENT_ELSE,
+					PROCESSOR_STATEMENT_CLOSE_IF,
+					PROCESSOR_STATEMENT_OPEN_FOR,
+					PROCESSOR_STATEMENT_IN,
+					PROCESSOR_STATEMENT_KEY_VALUE,
+					PROCESSOR_STATEMENT_CLOSE_FOR,
+					PROCESSOR_STATEMENT_PRINT,
+					PROCESSOR_STATEMENT_BREAK,
+					PROCESSOR_STATEMENT_CONT,
+					PROCESSOR_STATEMENT_ASSIGN,
+					PROCESSOR_STATEMENT_ASSIGN_OP,
+					PROCESSOR_STATEMENT_OPEN_NS,
+					PROCESSOR_STATEMENT_CLOSE_NS,
+					PROCESSOR_STATEMENT_INCLUDE,
+					PROCESSOR_STATEMENT_ITERATOR,
+					PROCESSOR_STATEMENT_VERSION,
+					PROCESSOR_STATEMENT_DOT,
+					PROCESSOR_STATEMENT_COMA,
+					PROCESSOR_STATEMENT_DOLLAR,
+					PROCESSOR_STATEMENT_FALSE,
+					PROCESSOR_STATEMENT_OPEN_VARPART,
+					PROCESSOR_STATEMENT_CLOSE_VARPART,
+				};
+
+				static const dodoString statements[PROCESSOR_STATEMENTS];                 ///< processor statements[for dodo.*, ...]
 		};
 	};
 };

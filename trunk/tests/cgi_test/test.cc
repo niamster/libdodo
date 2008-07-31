@@ -6,6 +6,7 @@
 
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/cgiServer.h>
+#include <libdodo/cgiBasicExchange.h>
 #include <libdodo/cgiProcessor.h>
 
 #include <iostream>
@@ -17,13 +18,15 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+	basic::exchange cgiio;
+
 	///first type: pass headers and print them immediately
 	//	dodoStringMap head;
 	//	head[SERVER_RESPONSEHEADER_CONTENTTYPE] = "text/html";
-	//	server cgit(head, false);
+	//	server cgit(&cgiio, head, false);
 
 	///second type: use default headers and do not print them immediately
-	server cgit(true);
+	server cgit(cgiio, true);
 
 	dodoString user = cgit.getAuthenticationInfo().user;
 

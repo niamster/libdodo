@@ -169,99 +169,18 @@ __serverCookie::__serverCookie(bool a_secure) : secure(a_secure)
 
 //-------------------------------------------------------------------
 
-server::server(server &ct)
+server::server(server &ct) : cgiIO(ct.cgiIO)
 {
 }
 
 //-------------------------------------------------------------------
 
-server::server(dodoMap<short, dodoString> &headers,
+server::server(exchange    &a_cf,
 			   bool silent,
 			   bool a_autocleanFiles,
 			   bool a_postFilesInMem,
 			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 											   postFilesTmpDir(a_postFilesTmpDir),
-											   autocleanFiles(a_autocleanFiles),
-											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
-#ifdef FASTCGI_EXT
-											   ,
-											   serverFastSet(false)
-#endif
-
-{
-	authInfo.type = SERVER_AUTHTYPE_NONE;
-
-	cgiIO = new dodo::io::stdio;
-
-	initHeaders(headers);
-
-	if (!silent)
-		printHeaders();
-
-	makeEnv();
-
-	makeAuth();
-
-	detectMethod();
-
-	makeContent();
-	makePost();
-
-	make(COOKIES, ENVIRONMENT[SERVER_ENVIRONMENT_HTTPCOOKIE], "; ");
-	make(GET, ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING]);
-}
-
-//-------------------------------------------------------------------
-
-server::server(bool silent,
-			   bool a_autocleanFiles,
-			   bool a_postFilesInMem,
-			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-											   postFilesTmpDir(a_postFilesTmpDir),
-											   autocleanFiles(a_autocleanFiles),
-											   headersPrinted(false),
-											   returnCode(SERVER_STATUSCODE_OK)
-#ifdef FASTCGI_EXT
-											   ,
-											   serverFastSet(false)
-#endif
-
-{
-	authInfo.type = SERVER_AUTHTYPE_NONE;
-
-	cgiIO = new dodo::io::stdio;
-
-	dodoMap<short, dodoString> headers;
-	initHeaders(headers);
-
-	if (!silent)
-		printHeaders();
-
-	makeEnv();
-
-	makeAuth();
-
-	detectMethod();
-
-	makeContent();
-	makePost();
-
-	make(COOKIES, ENVIRONMENT[SERVER_ENVIRONMENT_HTTPCOOKIE], "; ");
-	make(GET, ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING]);
-}
-
-//-------------------------------------------------------------------
-
-#ifdef FASTCGI_EXT
-
-server::server(fast::exchange    *a_cf,
-			   bool silent,
-			   bool a_autocleanFiles,
-			   bool a_postFilesInMem,
-			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
-											   postFilesTmpDir(a_postFilesTmpDir),
-											   serverFastSet(true),
 											   cgiIO(a_cf),
 											   autocleanFiles(a_autocleanFiles),
 											   headersPrinted(false),
@@ -291,14 +210,13 @@ server::server(fast::exchange    *a_cf,
 
 //-------------------------------------------------------------------
 
-server::server(fast::exchange    *a_cf,
+server::server(exchange    &a_cf,
 			   dodoMap<short, dodoString> &headers,
 			   bool silent,
 			   bool a_autocleanFiles,
 			   bool a_postFilesInMem,
 			   dodoString a_postFilesTmpDir) : postFilesInMem(a_postFilesInMem),
 											   postFilesTmpDir(a_postFilesTmpDir),
-											   serverFastSet(true),
 											   cgiIO(a_cf),
 											   autocleanFiles(a_autocleanFiles),
 											   headersPrinted(false),
@@ -324,9 +242,6 @@ server::server(fast::exchange    *a_cf,
 	make(COOKIES, ENVIRONMENT[SERVER_ENVIRONMENT_HTTPCOOKIE], "; ");
 	make(GET, ENVIRONMENT[SERVER_ENVIRONMENT_QUERYSTRING]);
 }
-
-
-#endif
 
 //-------------------------------------------------------------------
 
@@ -336,11 +251,6 @@ server::~server()
 
 	if (autocleanFiles)
 		cleanTmp();
-
-#ifdef FASTCGI_EXT
-	if (!serverFastSet)
-		delete cgiIO;
-#endif
 }
 
 //-------------------------------------------------------------------
@@ -348,7 +258,7 @@ server::~server()
 void
 server::flush()
 {
-	cgiIO->flush();
+	cgiIO.flush();
 }
 
 //-------------------------------------------------------------------
@@ -358,7 +268,7 @@ server::printStream(const dodoString &buf)
 {
 	printHeaders();
 
-	cgiIO->writeStreamString(buf);
+	cgiIO.writeStreamString(buf);
 }
 
 //-------------------------------------------------------------------
@@ -386,8 +296,8 @@ server::print(const dodoString &buf)
 {
 	printHeaders();
 
-	cgiIO->outSize = buf.size();
-	cgiIO->writeString(buf);
+	cgiIO.outSize = buf.size();
+	cgiIO.writeString(buf);
 }
 
 //-------------------------------------------------------------------
@@ -644,12 +554,7 @@ server::makeEnv()
 
 	for (int i = 0; i < SERVER_ENVIRONMENTSTATEMENTS; ++i)
 	{
-#ifdef FASTCGI_EXT
-		if (serverFastSet)
-			env = (dynamic_cast<fast::exchange *>(cgiIO))->getenv(environmentStatements[i]);
-		else
-#endif
-		env = getenv(environmentStatements[i]);
+		env = cgiIO.getenv(environmentStatements[i]);
 
 		ENVIRONMENT[i] = env == NULL ? "NULL" : env;
 	}
@@ -717,33 +622,33 @@ server::printHeaders() const
 
 	headersPrinted = true;
 
-	cgiIO->writeStreamString(responseStatusStatements[returnCode]);
+	cgiIO.writeStreamString(responseStatusStatements[returnCode]);
 
 	dodoMap<short, dodoString>::const_iterator i(HEADERS.begin()), j(HEADERS.end());
 	for (; i != j; ++i)
-		cgiIO->writeStreamString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
+		cgiIO.writeStreamString(responseHeaderStatements[i->first] + ": " + i->second + "\r\n");
 
 	if (cookies.size() > 0)
 	{
 		dodoList<__serverCookie>::const_iterator i(cookies.begin()), j(cookies.end());
 		for (; i != j; ++i)
 		{
-			cgiIO->writeStreamString("Set-Cookie: ");
-			cgiIO->writeStreamString(i->name + "=" + i->value + "; ");
+			cgiIO.writeStreamString("Set-Cookie: ");
+			cgiIO.writeStreamString(i->name + "=" + i->value + "; ");
 			if (i->path.size() > 0)
-				cgiIO->writeStreamString("path=" + i->path + "; ");
+				cgiIO.writeStreamString("path=" + i->path + "; ");
 			if (i->expires.size() > 0)
-				cgiIO->writeStreamString("expires=" + i->expires + "; ");
+				cgiIO.writeStreamString("expires=" + i->expires + "; ");
 			if (i->domain.size() > 0)
-				cgiIO->writeStreamString("domain=" + i->domain + "; ");
+				cgiIO.writeStreamString("domain=" + i->domain + "; ");
 			if (i->secure)
-				cgiIO->writeStreamString("secure");
-			cgiIO->writeStreamString("\r\n");
+				cgiIO.writeStreamString("secure");
+			cgiIO.writeStreamString("\r\n");
 		}
 	}
 
-	cgiIO->writeStreamString("\r\n");
-	cgiIO->flush();
+	cgiIO.writeStreamString("\r\n");
+	cgiIO.flush();
 }
 
 //-------------------------------------------------------------------
@@ -756,9 +661,9 @@ server::makeContent()
 	if (inSize <= 0)
 		return ;
 
-	cgiIO->inSize = inSize;
+	cgiIO.inSize = inSize;
 
-	cgiIO->readString(content);
+	cgiIO.readString(content);
 }
 
 //-------------------------------------------------------------------

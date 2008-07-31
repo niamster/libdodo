@@ -1,8 +1,8 @@
 /***************************************************************************
- *            cgiPreprocessorEx.h
+ *            cgiExchange.h
  *
- * Sun Jan 22 19:05:57 2006
- *  Copyright  2005  Ni@m
+ *  Sat Aug  5 03:31:19 2006
+ *  Copyright  2006  Ni@m
  *  niam.niam@gmail.com
  ****************************************************************************/
 
@@ -27,36 +27,35 @@
  * set shiftwidth=4
  */
 
-#ifndef _CGIPREPROCESSOREX_H_
-#define _CGIPREPROCESSOREX_H_
+#ifndef _CGIEXCHANGE_H_
+#define _CGIEXCHANGE_H_
 
 #include <libdodo/directives.h>
 
-#include <libdodo/exceptionBasic.h>
+#include <libdodo/types.h>
+#include <libdodo/ioChannel.h>
 
 namespace dodo
 {
 	namespace cgi
 	{
 		/**
-		 * libdodo defined errors
+		 * @class exchange provides interface to  CGI I/O functionality
 		 */
-		enum preprocessorExR
+		class exchange : virtual public io::channel
 		{
-			PREPROCESSOREX_NOTCLOSEDBRACKET,
-		};
+			public:
 
-		/**
-		 * explanations for libdodo defined errors
-		 */
-#define CGIPREPROCESSOREX_NOTCLOSEDBRACKET_STR "Bracket was opened(closed) but not closed(opened)."
+				/**
+				 * destructor
+				 */
+				virtual ~exchange() = 0;
 
-		/**
-		 * IDs of functions where exception might be thrown
-		 */
-		enum preprocessorFunctionsID
-		{
-			PREPROCESSOREX__PREPROCESSSTRING,
+				/**
+				 * @return environment variable
+				 * @param data defines name of environment variable
+				 */
+				virtual char *getenv(const char *data) = 0;
 		};
 	};
 };
