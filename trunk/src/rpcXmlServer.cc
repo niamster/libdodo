@@ -107,7 +107,7 @@ server::serve()
 
 		rpEncoding = encoding;
 	}
-	catch (baseEx &ex)
+	catch (exception::basic &ex)
 	{
 		rpc::response response;
 		response.fault(ex.baseErrstr);

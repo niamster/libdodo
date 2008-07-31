@@ -181,7 +181,7 @@ http::setUrl(const dodoString &a_url)
 
 #endif
 
-			throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_SETURL, ERR_LIBDODO, HTTPEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_SETURL, exception::ERRNO_LIBDODO, HTTPEX_UNSUPPORTEDSURICHEME, IONETWORKHTTPEX_UNSUPPORTEDSURICHEME_STR, __LINE__, __FILE__);
 	}
 
 	unsigned long portSize = urlComponents.port.size();
@@ -319,7 +319,7 @@ http::GET()
 							{
 								authTries = 0;
 
-								throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 							}
 
 							makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -341,7 +341,7 @@ http::GET()
 							{
 								authTries = 0;
 
-								throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 							}
 
 							makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -414,7 +414,7 @@ http::GET()
 
 				break;
 			}
-			catch (baseEx &exp)
+			catch (exception::basic &exp)
 			{
 #ifdef OPENSSL_EXT
 
@@ -431,7 +431,7 @@ http::GET()
 						delete net;
 						delete ex;
 
-						throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
 					}
 					else
 						continue;
@@ -507,7 +507,7 @@ http::GET()
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -522,7 +522,7 @@ http::GET()
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -537,7 +537,7 @@ http::GET()
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "GET", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -552,7 +552,7 @@ http::GET()
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
@@ -567,7 +567,7 @@ http::GET()
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -587,7 +587,7 @@ http::GET()
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GET, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GET, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "GET", urlComponents.login, urlComponents.password);
@@ -814,7 +814,7 @@ http::POST(const dodoString &a_data,
 							{
 								authTries = 0;
 
-								throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 							}
 
 							makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -836,7 +836,7 @@ http::POST(const dodoString &a_data,
 							{
 								authTries = 0;
 
-								throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 							}
 
 							makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -910,7 +910,7 @@ http::POST(const dodoString &a_data,
 
 				break;
 			}
-			catch (baseEx &exp)
+			catch (exception::basic &exp)
 			{
 #ifdef OPENSSL_EXT
 
@@ -927,7 +927,7 @@ http::POST(const dodoString &a_data,
 						delete net;
 						delete ex;
 
-						throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
+						throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_CANNOTCONNECT, IONETWORKHTTPEX_CANNOTCONNECT_STR, __LINE__, __FILE__);
 					}
 					else
 						continue;
@@ -1011,7 +1011,7 @@ http::POST(const dodoString &a_data,
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeBasicAuth(HTTP_REQUESTHEADER_PROXYAUTHORIZATION, proxyAuthInfo.user, proxyAuthInfo.password);
@@ -1026,7 +1026,7 @@ http::POST(const dodoString &a_data,
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -1041,7 +1041,7 @@ http::POST(const dodoString &a_data,
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_PROXYAUTHENTICATE, HTTP_REQUESTHEADER_PROXYAUTHORIZATION, "POST", proxyAuthInfo.user, proxyAuthInfo.password);
@@ -1056,7 +1056,7 @@ http::POST(const dodoString &a_data,
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
@@ -1071,7 +1071,7 @@ http::POST(const dodoString &a_data,
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeBasicAuth(HTTP_REQUESTHEADER_AUTHORIZATION, urlComponents.login, urlComponents.password);
@@ -1091,7 +1091,7 @@ http::POST(const dodoString &a_data,
 				{
 					authTries = 0;
 
-					throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_POST, ERR_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_POST, exception::ERRNO_LIBDODO, HTTPEX_NOTAUTHORIZED, IONETWORKHTTPEX_NOTAUTHORIZED_STR, __LINE__, __FILE__);
 				}
 
 				makeDigestAuth(HTTP_RESPONSEHEADER_WWWAUTHENTICATE, HTTP_REQUESTHEADER_AUTHORIZATION, "POST", urlComponents.login, urlComponents.password);
@@ -1295,14 +1295,14 @@ http::getProxyConnectResponse(char *data,
 							return GETCONTENTSTATUS_PROXYDIGESTAUTH;
 						}
 						else
-							throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETPROXYCONNECTRESPONSE, ERR_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
+							throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETPROXYCONNECTRESPONSE, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
 					}
 				}
 
 				break;
 			}
 		}
-		catch (baseEx &ex)
+		catch (exception::basic &ex)
 		{
 			if (ex.funcID == EXCHANGEEX__READSTREAM)
 				break;
@@ -1376,7 +1376,7 @@ http::getContent(dodoString &data,
 								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWPROXYDIGESTAUTH;
 								else
-									throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, ERR_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
+									throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
 							}
 						}
 						else
@@ -1388,7 +1388,7 @@ http::getContent(dodoString &data,
 								if (tools::string::contains(response.headers[HTTP_RESPONSEHEADER_WWWAUTHENTICATE], "Digest"))
 									return GETCONTENTSTATUS_WWWDIGESTAUTH;
 								else
-									throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, ERR_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
+									throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNWWWAUTHTYPE, IONETWORKHTTPEX_UNKNOWNWWWAUTHTYPE_STR, __LINE__, __FILE__);
 							}
 						}
 					}
@@ -1412,7 +1412,7 @@ http::getContent(dodoString &data,
 								return GETCONTENTSTATUS_PROXYDIGESTAUTH;
 							}
 							else
-								throw baseEx(ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, ERR_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
+								throw exception::basic(exception::ERRMODULE_IONETWORKHTTP, HTTPEX_GETCONTENT, exception::ERRNO_LIBDODO, HTTPEX_UNKNOWNPROXYAUTHTYPE, IONETWORKHTTPEX_UNKNOWNPROXYAUTHTYPE_STR, __LINE__, __FILE__);
 						}
 					}
 
@@ -1425,7 +1425,7 @@ http::getContent(dodoString &data,
 			if (contentSize > 0 && response.data.size() == contentSize)
 				break;
 		}
-		catch (baseEx &ex)
+		catch (exception::basic &ex)
 		{
 #ifdef OPENSSL_EXT
 

@@ -35,7 +35,7 @@ hook(void *odata,
 			img->rotate(IMAGE_ROTATEDIRECTIONANGLE_180);
 			img->enableAll();
 		}
-		catch (baseEx ex)
+		catch (dodo::exception::basic ex)
 		{
 			cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 		}
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 		cout << size << endl;
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 	}

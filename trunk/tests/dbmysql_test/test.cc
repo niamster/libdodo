@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/dbMysql.h>
 #include <libdodo/toolsTime.h>
 
@@ -172,7 +172,7 @@ int main(int argc, char **argv)
 			cout << endl;
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << ex.file << endl << ex.baseErrstr << endl << ex.line << endl << ex.message << endl;
 	}

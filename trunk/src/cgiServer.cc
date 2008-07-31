@@ -704,7 +704,7 @@ server::setResponseStatus(short code)
 	if (code <= SERVER_STATUSCODE_HTTPVERSIONNOTSUPPORTED)
 		returnCode = code;
 	else
-		throw baseEx(ERRMODULE_CGISERVER, SERVEREX_SETRESPONSESTATUS, ERR_LIBDODO, SERVEREX_WRONGSTATUSCODE, CGISERVEREX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_SETRESPONSESTATUS, exception::ERRNO_LIBDODO, SERVEREX_WRONGSTATUSCODE, CGISERVEREX_WRONGSTATUSCODE_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -891,7 +891,7 @@ server::makePost()
 
 										default:
 
-											throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+											throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 									}
 								}
 								else
@@ -903,14 +903,14 @@ server::makePost()
 										else
 										{
 											if (fclose(fp) != 0)
-												throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+												throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
-											throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+											throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 										}
 									}
 
 									if (fclose(fp) != 0)
-										throw baseEx(ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+										throw exception::basic(exception::ERRMODULE_CGISERVER, SERVEREX_MAKEPOST, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 								}
 							}
 

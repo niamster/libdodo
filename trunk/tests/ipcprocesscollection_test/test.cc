@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ipcProcessCollection.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
@@ -47,7 +47,7 @@ process(void *ud)
 		cout << endl << (char *)dt << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << ex.line << endl;
 	}
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
 		pr.wait();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" <<  ex.file << "\t" << ex.line << endl;
 	}

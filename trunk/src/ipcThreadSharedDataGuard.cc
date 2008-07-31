@@ -79,13 +79,13 @@ dataGuard::set(void *a_data)
 
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	data = a_data;
 
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_SET, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_SET, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -99,13 +99,13 @@ dataGuard::del()
 
 	errno = pthread_mutex_lock(&mutex);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	data = NULL;
 
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_DEL, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_DEL, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -121,7 +121,7 @@ dataGuard::acquire(unsigned long microseconds)
 	{
 		errno = pthread_mutex_lock(&mutex);
 		if (errno != 0)
-			throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 	}
 	else
 	{
@@ -134,15 +134,15 @@ dataGuard::acquire(unsigned long microseconds)
 			if (errno != 0)
 			{
 				if (errno != EBUSY)
-					throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 				if (nanosleep(&timeout, NULL) == -1)
-					throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 				slept += 1;
 
 				if (slept > microseconds)
-					throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, ERR_ERRNO, DATAGUARDEX_CANNOTLOCK, IPCTHREADSHAREDDATAGUARDEX_CANNOTLOCK_STR, __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_LOCK, exception::ERRNO_ERRNO, DATAGUARDEX_CANNOTLOCK, IPCTHREADSHAREDDATAGUARDEX_CANNOTLOCK_STR, __LINE__, __FILE__);
 			}
 			else
 				locked = false;
@@ -163,7 +163,7 @@ dataGuard::release()
 
 	errno = pthread_mutex_unlock(&mutex);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCTHREADSHAREDDATAGUARD, DATAGUARDEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }

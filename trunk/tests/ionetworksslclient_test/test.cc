@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetworkSslClient.h>
 #include <libdodo/types.h>
 
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

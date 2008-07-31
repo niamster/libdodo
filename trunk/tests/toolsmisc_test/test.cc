@@ -7,7 +7,7 @@
 #include <libdodo/toolsMisc.h>
 #include <libdodo/toolsCode.h>
 #include <libdodo/ioFile.h>
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/toolsFilesystem.h>
 #include <libdodo/ioNetwork.h>
 
@@ -19,7 +19,7 @@ using namespace std;
 using namespace io;
 
 void
-baseHandler(errorModuleEnum module, baseEx *ex, void *data)
+baseHandler(int module, dodo::exception::basic *ex, void *data)
 {
 	cout << "baseHandler: " << ex->baseErrstr << endl;
 }
@@ -28,9 +28,9 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		baseEx::setErrorHandler(ERRMODULE_IOFILE, &baseHandler, NULL);
+		dodo::exception::basic::setErrorHandler(dodo::exception::ERRMODULE_IOFILE, &baseHandler, NULL);
 #ifdef DL_EXT
-		if (!baseEx::setErrorHandler("./module", NULL))
+		if (!dodo::exception::basic::setErrorHandler("./module", NULL))
 			cout << "WTF";
 #endif
 
@@ -60,11 +60,11 @@ int main(int argc, char **argv)
 		//tools::misc::mail("niam", "test", "test");
 		//tools::misc::mail("127.0.0.1", 25, "niam@niam.mu", "niam@niam.mu", "test", "test", "niam", "niam");
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << endl << ex.baseErrno << endl << ex.baseErrstr  << ex.line << endl << ex.file << endl;
 	}
-	catch (exception ex)
+	catch (std::exception &ex)
 	{
 		cout << endl << ex.what() << endl;
 	}

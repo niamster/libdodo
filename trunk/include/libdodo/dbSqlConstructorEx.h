@@ -33,7 +33,7 @@
 #include <libdodo/directives.h>
 
 #include <libdodo/types.h>
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 
 namespace dodo
 {

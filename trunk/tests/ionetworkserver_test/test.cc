@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/types.h>
@@ -53,7 +53,7 @@ process(exchange fse)
 			exit(0);
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << "Smth happened!" << (string)ex << endl;
 		cout.flush();
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 			}
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

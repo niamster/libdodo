@@ -146,7 +146,7 @@ postgresql::connect(const __connectionInfo &info)
 	int status = PQstatus(pgHandle);
 
 	if (status != CONNECTION_OK)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_CONNECT, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_CONNECT, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 
 #ifndef DB_WO_XEXEC
 	performXExec(postExec);
@@ -330,7 +330,7 @@ postgresql::getFieldsTypes(const dodoString &table)
 
 	pgResult = PQexecParams(pgHandle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 	if (pgResult == NULL)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__, request);
+		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__, request);
 
 	int status = PQresultStatus(pgResult);
 
@@ -341,7 +341,7 @@ postgresql::getFieldsTypes(const dodoString &table)
 		case PGRES_NONFATAL_ERROR:
 		case PGRES_FATAL_ERROR:
 
-			throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -457,7 +457,7 @@ postgresql::exec(const dodoString &query,
 		pgResult = PQexecParams(pgHandle, request.c_str(), 0, NULL, NULL, NULL, NULL, 1);
 
 	if (pgResult == NULL)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, ERR_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, PGRES_FATAL_ERROR, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 
 	status = PQresultStatus(pgResult);
 	switch (status)
@@ -467,7 +467,7 @@ postgresql::exec(const dodoString &query,
 		case PGRES_NONFATAL_ERROR:
 		case PGRES_FATAL_ERROR:
 
-			throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_EXEC, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 	}
 
 	empty = false;
@@ -825,7 +825,7 @@ postgresql::setCharset(const dodoString &charset)
 {
 	int status = PQsetClientEncoding(pgHandle, charset.c_str());
 	if (status == -1)
-		throw baseEx(ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_SETCHARSET, ERR_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DBPOSTGRESQL, POSTGRESQLEX_SETCHARSET, exception::ERRNO_MYSQL, status, PQerrorMessage(pgHandle), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

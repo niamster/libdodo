@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/types.h>
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 				cout << ifaces[i] << ":\t" << network::getInterfaceInfo(ifaces[i]).broadcast << endl;
 				cout << ifaces[i] << ":\t" << network::getInterfaceInfo(ifaces[i]).netmask << endl;
 			}
-			catch (baseEx ex)
+			catch (dodo::exception::basic ex)
 			{
 				cout << ifaces[i] << ":\t" << (std::string)ex << endl;
 			}
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 			cout << *i << endl;
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (std::string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

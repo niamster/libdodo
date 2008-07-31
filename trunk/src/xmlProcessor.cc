@@ -150,9 +150,9 @@ processor::processFile(const __nodeDef &definition,
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 #endif
@@ -176,9 +176,9 @@ processor::processBuffer(const __nodeDef &definition,
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 #endif
@@ -199,9 +199,9 @@ processor::parse(const __nodeDef &definition)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSE, ERR_LIBDODO, PROCESSOREX_NOROOTNODE, XMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, XMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	xnode = findNode(definition, xnode);
@@ -560,9 +560,9 @@ processor::getFileInfo(const dodoString &file)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETFILEINFO, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETFILEINFO, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETFILEINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETFILEINFO, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
@@ -592,9 +592,9 @@ processor::getBufferInfo(const dodoString &buffer)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_GETBUFFERINFO, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 	
 	return __info(document->version != NULL ? (char *)document->version : __dodostring__,
@@ -691,9 +691,9 @@ processor::processFile(const dodoString &file)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__, file);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	xmlNodePtr xnode = xmlDocGetRootElement(document);
@@ -702,9 +702,9 @@ processor::processFile(const dodoString &file)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, ERR_LIBDODO, PROCESSOREX_NOROOTNODE, XMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, XMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__, file);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEFILE, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__, file);
 	}
 
 	return *(parse(xnode).begin());
@@ -731,9 +731,9 @@ processor::processBuffer(const dodoString &buffer)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, ERR_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_EMPTYDOCUMENT, XMLPROCESSOREX_EMPTYDOCUMENT_STR, __LINE__, __FILE__);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	xmlNodePtr xnode = xmlDocGetRootElement(document);
@@ -742,9 +742,9 @@ processor::processBuffer(const dodoString &buffer)
 		xmlErrorPtr error = xmlGetLastError();
 
 		if (error == NULL)
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, ERR_LIBDODO, PROCESSOREX_NOROOTNODE, XMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBDODO, PROCESSOREX_NOROOTNODE, XMLPROCESSOREX_NOROOTNODE_STR, __LINE__, __FILE__);
 		else
-			throw baseEx(ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, ERR_LIBXML2, error->code, error->message, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_XMLPROCESSOR, PROCESSOREX_PARSEBUFFER, exception::ERRNO_LIBXML2, error->code, error->message, __LINE__, __FILE__);
 	}
 
 	return *(parse(xnode).begin());

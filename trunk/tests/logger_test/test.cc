@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/logger.h>
 #include <libdodo/ioFile.h>
 #include <libdodo/ioStdio.h>
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
 		delete disk;
 		delete std;
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << ex.baseErrstr << "\t" << ex.line << "\t" << ex.file << endl;
 	}

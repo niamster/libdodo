@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsMisc.h>
 

@@ -143,7 +143,7 @@ xexec::delXExec(dodoList<__xexecItem> &list,
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_XEXEC, XEXECEX_DELXEXEC, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_DELXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 		}
 
@@ -343,7 +343,7 @@ xexec::replaceXExec(dodoList<__xexecItem> &list,
 
 #ifndef DL_FAST
 			if (dlclose(current->handle) != 0)
-				throw baseEx(ERRMODULE_XEXEC, XEXECEX_DELXEXEC, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_DELXEXEC, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 
 			current->handle = NULL;
@@ -360,7 +360,7 @@ xexec::replaceXExec(dodoList<__xexecItem> &list,
 #endif
 	}
 	else
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_REPLACEXEXEC, ERR_LIBDODO, XEXECEX_EXECNOTFOUND, XEXECEX_EXECNOTFOUND_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_REPLACEXEXEC, exception::ERRNO_LIBDODO, XEXECEX_EXECNOTFOUND, XEXECEX_EXECNOTFOUND_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -418,15 +418,15 @@ xexec::addXExecModule(dodoList<__xexecItem> &list,
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (temp.handle == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	inExec in = (inExec)dlsym(temp.handle, init(toInit).hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	temp.func = in;
 
@@ -467,17 +467,17 @@ xexec::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initXexecModule init = (initXexecModule)dlsym(handle, "initXexecModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__xexecMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_GETMODULEINFO, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 #endif
 
 	return mod;
@@ -501,17 +501,17 @@ xexec::addExec(const dodoString &module,
 	temp.handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (temp.handle == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	initXexecModule init = (initXexecModule)dlsym(temp.handle, "initXexecModule");
 	if (init == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	__xexecMod info = init(toInit);
 
 	inExec in = (inExec)dlsym(temp.handle, info.hook);
 	if (in == NULL)
-		throw baseEx(ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, ERR_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_XEXEC, XEXECEX_ADDXEXECMODULE, exception::ERRNO_DYNLOAD, 0, dlerror(), __LINE__, __FILE__);
 
 	temp.func = in;
 

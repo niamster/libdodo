@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/ipcThreadCollection.h>
@@ -66,7 +66,7 @@ process(void *data)
 				sh.release();
 			}
 		}
-		catch (baseEx ex)
+		catch (dodo::exception::basic ex)
 		{
 			cout << "Smth happened!" << (string)ex << endl;
 			cout.flush();
@@ -90,7 +90,7 @@ process(void *data)
 			cout.flush();
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
@@ -170,7 +170,7 @@ int main(int argc, char **argv)
 #endif
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

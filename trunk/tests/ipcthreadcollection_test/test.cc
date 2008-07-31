@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ipcThreadCollection.h>
 #include <libdodo/ipcThreadSharedDataGuard.h>
 #include <libdodo/ipcThreadSharedDataCollectionGuard.h>
@@ -40,7 +40,7 @@ thread(void *data)
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << ex.line << endl;
 	}
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 
 		delete shared;
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << endl;
 	}

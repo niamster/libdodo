@@ -34,7 +34,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/ipcAtomicLock.h>
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 
 namespace dodo
 {

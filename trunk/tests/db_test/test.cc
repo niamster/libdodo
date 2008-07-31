@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/dbConnector.h>
 #include <libdodo/dbSqlConstructor.h>
 #include <libdodo/dbPostgresql.h>
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 		{
 			((sqlConstructor *)pp)->getFieldsTypes("test");
 		}
-		catch(baseEx &ex)
+		catch(dodo::exception::basic &ex)
 		{
 			cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 
@@ -227,7 +227,7 @@ int main(int argc, char **argv)
 		if (store.fields.size() == 3 && store.rows.size() > 0)
 			tools::filesystem::writeToFile("test.db", (*store.rows.begin())[2]);
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 	}

@@ -6,7 +6,7 @@
 
 #include <libdodo/directives.h>
 #include <libdodo/libraryLoader.h>
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 
 #include <iostream>
 
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 #endif
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << endl;
 	}

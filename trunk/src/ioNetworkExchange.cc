@@ -219,7 +219,7 @@ void
 exchange::_write(const char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -243,7 +243,7 @@ exchange::_write(const char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -269,7 +269,7 @@ exchange::_write(const char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -287,7 +287,7 @@ void
 exchange::_read(char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);
 
@@ -313,7 +313,7 @@ exchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -342,7 +342,7 @@ exchange::_read(char * const data)
 					if (errno == EAGAIN)
 						break;
 
-					throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 				}
 
 				break;
@@ -371,7 +371,7 @@ unsigned long
 exchange::_readStream(char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);
 
@@ -387,7 +387,7 @@ exchange::_readStream(char * const data)
 			if (errno == EAGAIN)
 				break;
 
-			throw baseEx(ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 		}
 
 		break;

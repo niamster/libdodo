@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/dbSqlite.h>
 #include <libdodo/toolsFilesystem.h>
 
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 		}
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << endl << endl;
 	}

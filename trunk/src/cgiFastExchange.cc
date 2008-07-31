@@ -61,7 +61,7 @@ void
 exchange::flush()
 {
 	if (FCGX_FFlush(request->out) == -1)
-		throw baseEx(ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_FLUSH, ERR_LIBDODO, FASTEXCHANGEEX_FAILEDTOFLUSH, CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX_FLUSH, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOFLUSH, CGIFASTEXCHANGEEX_FAILEDTOFLUSH_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -104,7 +104,7 @@ void
 exchange::_write(const char *const buf)
 {
 	if (FCGX_PutStr(buf, outSize, request->out) == -1)
-		throw baseEx(ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, ERR_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_CGIFASTEXCHANGE, FASTEXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, FASTEXCHANGEEX_FAILEDTOPRINTSTRING, CGIFASTEXCHANGEEX_FAILEDTOPRINTSTRING_STR, __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

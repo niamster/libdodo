@@ -55,7 +55,7 @@ void
 semaphore::acquire()
 {
 	if (sem_wait(keeper) != 0)
-		throw baseEx(ERRMODULE_IPCATOMICSEMAPHORE, SEMAPHOREEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCATOMICSEMAPHORE, SEMAPHOREEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -64,7 +64,7 @@ void
 semaphore::release()
 {
 	if (sem_post(keeper) != 0)
-		throw baseEx(ERRMODULE_IPCATOMICSEMAPHORE, SEMAPHOREEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCATOMICSEMAPHORE, SEMAPHOREEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

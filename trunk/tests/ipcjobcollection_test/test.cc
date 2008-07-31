@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ipcJobCollection.h>
 #include <libdodo/ipcProcessCollection.h>
 #include <libdodo/ipcThreadCollection.h>
@@ -32,7 +32,7 @@ job(void *data)
 		cout << endl << (char *)data << ": " << tools::time::now() << endl;
 		cout.flush();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << ex.line << endl;
 	}
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 		for (int i = 0; i < amount; ++i)
 			delete pr[i];
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << endl;
 	}

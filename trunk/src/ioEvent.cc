@@ -132,7 +132,7 @@ event::isReadable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ event::isWritable(const dodoArray<int> &pos,
 			{
 				delete [] fds;
 
-				throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 	}
@@ -254,7 +254,7 @@ event::isReadable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISREADABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 
@@ -309,7 +309,7 @@ event::isWritable(int pos,
 				if (res == 0)
 					return false;
 				else
-					throw baseEx(ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IOEVENT, EVENTEX_ISWRITABLE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 			}
 		}
 

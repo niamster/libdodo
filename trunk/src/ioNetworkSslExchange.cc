@@ -121,7 +121,7 @@ exchange::_close(int socket,
 	if (err < 0)
 	{
 		unsigned long nerr = ERR_get_error();
-		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 	}
 	if (err == 0)
 	{
@@ -129,7 +129,7 @@ exchange::_close(int socket,
 		if (err < 0)
 		{
 			unsigned long nerr = ERR_get_error();
-			throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__CLOSE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 		}
 	}
 
@@ -242,7 +242,7 @@ void
 exchange::_write(const char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	unsigned long iter = outSize / outSocketBuffer;
 	unsigned long rest = outSize % outSocketBuffer;
@@ -279,7 +279,7 @@ exchange::_write(const char * const data)
 						default:
 						{
 							unsigned long nerr = ERR_get_error();
-							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
 
 					}
@@ -320,7 +320,7 @@ exchange::_write(const char * const data)
 						default:
 						{
 							unsigned long nerr = ERR_get_error();
-							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__WRITE, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
 
 					}
@@ -341,7 +341,7 @@ void
 exchange::_read(char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);
 
@@ -380,7 +380,7 @@ exchange::_read(char * const data)
 						default:
 						{
 							unsigned long nerr = ERR_get_error();
-							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
 
 					}
@@ -424,7 +424,7 @@ exchange::_read(char * const data)
 						default:
 						{
 							unsigned long nerr = ERR_get_error();
-							throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+							throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READ, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 						}
 
 					}
@@ -448,7 +448,7 @@ unsigned long
 exchange::_readStream(char * const data)
 {
 	if (!opened)
-		throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_LIBDODO, EXCHANGEEX_NOCONNECTION, IONETWORKSSLEXCHANGEEX_NOCONNECTION_STR, __LINE__, __FILE__);
 
 	memset(data, '\0', inSize);
 
@@ -477,7 +477,7 @@ exchange::_readStream(char * const data)
 				default:
 				{
 					unsigned long nerr = ERR_get_error();
-					throw baseEx(ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, ERR_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
+					throw exception::basic(exception::ERRMODULE_IONETWORKSSLEXCHANGE, EXCHANGEEX__READSTREAM, exception::ERRNO_OPENSSL, nerr, ERR_error_string(nerr, NULL), __LINE__, __FILE__);
 				}
 			}
 		}

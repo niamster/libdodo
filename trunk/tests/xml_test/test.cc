@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/xmlProcessor.h>
 #include <libdodo/toolsMisc.h>
 
@@ -72,11 +72,11 @@ int main(int argc, char **argv)
 		cout  << endl << xmlp.make(xmlp.processFile("./test.xml"), xmlp.getFileInfo("./test.xml").encoding) << endl << endl;
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << endl;
 	}
-	catch (exception ex)
+	catch (std::exception &ex)
 	{
 		cout << ex.what();
 	}

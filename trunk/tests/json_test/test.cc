@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 
 		cout << endl << js.fromMap(map) << endl;
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << endl << ex.baseErrstr << endl << ex.line << endl << ex.baseErrno << endl;
 	}

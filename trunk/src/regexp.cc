@@ -64,7 +64,7 @@ regexp::regexp(const dodoString &pattern) : extended(true),
 	{
 		compile(pattern);
 	}
-	catch (baseEx &ex)
+	catch (exception::basic &ex)
 	{
 		if (ex.funcID != REGEXPEX_COMPILE)
 			throw;
@@ -93,7 +93,7 @@ regexp::match(const dodoString &pattern,
 	{
 		compile(pattern);
 	}
-	catch (baseEx &ex)
+	catch (exception::basic &ex)
 	{
 		if (ex.funcID == REGEXPEX_COMPILE)
 			return false;
@@ -214,7 +214,7 @@ regexp::compile(const dodoString &pattern)
 	const char *error;
 	code = pcre_compile2(pattern.c_str(), bits, &errn, &error, &errOffset, NULL);
 	if (code == NULL)
-		throw baseEx(ERRMODULE_REGEXP, REGEXPEX_COMPILE, ERR_PCRE, errn, error, __LINE__, __FILE__, pattern);
+		throw exception::basic(exception::ERRMODULE_REGEXP, REGEXPEX_COMPILE, exception::ERRNO_PCRE, errn, error, __LINE__, __FILE__, pattern);
 
 #else
 
@@ -234,7 +234,7 @@ regexp::compile(const dodoString &pattern)
 #define ERROR_LEN 256
 		char error[ERROR_LEN];
 		regerror(errn, &code, error, ERROR_LEN);
-		throw baseEx(ERRMODULE_REGEXP, REGEXPEX_COMPILE, ERR_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
+		throw exception::basic(exception::ERRMODULE_REGEXP, REGEXPEX_COMPILE, exception::ERRNO_POSIXREGEX, errn, error, __LINE__, __FILE__, pattern);
 	}
 
 #endif
@@ -251,7 +251,7 @@ regexp::replace(const dodoString &pattern,
 	{
 		compile(pattern);
 	}
-	catch (baseEx &ex)
+	catch (exception::basic &ex)
 	{
 		if (ex.funcID == REGEXPEX_COMPILE)
 			return sample;

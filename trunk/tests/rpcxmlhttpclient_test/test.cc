@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/rpcXmlHttpClient.h>
 #include <libdodo/types.h>
 
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 		cout << "First value: " << resp.getValue().getString() << endl;
 		cout << "Second value: " << resp.getValue(1).getString() << endl;
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

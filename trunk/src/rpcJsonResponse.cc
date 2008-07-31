@@ -37,7 +37,7 @@ response::jsonToResponse(dodo::json::node &node,
 						 long &id)
 {
 	if (node.valueDataType != dodo::json::DATATYPE_OBJECT)
-		throw baseEx(ERRMODULE_RPCJSONRESPONSE, RESPONSEEX_JSONTORESPONSE, ERR_LIBDODO, RESPONSEEX_ROOTNOTANOBJECT, RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_RPCJSONRESPONSE, RESPONSEEX_JSONTORESPONSE, exception::ERRNO_LIBDODO, RESPONSEEX_ROOTNOTANOBJECT, RPCJSONRESPONSEEX_ROOTNOTANOBJECT_STR, __LINE__, __FILE__);
 	
 	dodoMap<dodoString, dodo::json::node, dodoMapStringCompare> &obj = node.objectValue;
 

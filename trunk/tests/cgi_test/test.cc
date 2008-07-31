@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/cgiServer.h>
 #include <libdodo/cgiProcessor.h>
 
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 
 		cgip.display("test.tpl");
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cgit.printStream((string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
 	}

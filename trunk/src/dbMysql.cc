@@ -115,7 +115,7 @@ mysql::connect(const __connectionInfo &info)
 							collectedData.dbInfo.port,
 							collectedData.dbInfo.path.size() == 0 ? NULL : collectedData.dbInfo.path.c_str(),
 							type))
-		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_CONNECT, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 #ifndef MYSQL_NO_OPT_RECONNECT
 
@@ -316,15 +316,15 @@ mysql::getFieldsTypes(const dodoString &table)
 		{
 			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+				throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 		}
 		else
-			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+			throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 	}
 
 	mysqlResult = mysql_store_result(mysqlHandle);
 	if (mysqlResult == NULL)
-		throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_GETFIELDSTYPES, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 	empty = false;
 
@@ -403,10 +403,10 @@ mysql::exec(const dodoString &query,
 		{
 			connect(collectedData.dbInfo);
 			if (mysql_real_query(mysqlHandle, request.c_str(), request.size()) != 0)
-				throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+				throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 		}
 		else
-			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
+			throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysqlErrno, mysql_error(mysqlHandle), __LINE__, __FILE__, request);
 	}
 
 	if (show)
@@ -419,7 +419,7 @@ mysql::exec(const dodoString &query,
 
 		mysqlResult = mysql_store_result(mysqlHandle);
 		if (mysqlResult == NULL)
-			throw baseEx(ERRMODULE_DBMYSQL, MYSQLEX_EXEC, ERR_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_DBMYSQL, MYSQLEX_EXEC, exception::ERRNO_MYSQL, mysql_errno(mysqlHandle), mysql_error(mysqlHandle), __LINE__, __FILE__);
 
 		empty = false;
 	}

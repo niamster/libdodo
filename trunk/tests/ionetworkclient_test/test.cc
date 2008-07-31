@@ -5,7 +5,7 @@
  */
 
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
 #include <libdodo/types.h>
@@ -34,17 +34,17 @@ int main(int argc, char **argv)
 				exch.readStreamString(str);
 				cout << "\ngot:\n" << str << "\n";
 			}
-			catch (baseEx ex)
+			catch (dodo::exception::basic ex)
 			{
 				cout << (string)ex << "\t" << ex.line << endl;
 			}
 		}
-		catch (baseEx ex)
+		catch (dodo::exception::basic ex)
 		{
 			cout << (string)ex << "\t" << ex.line << endl;
 		}
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}

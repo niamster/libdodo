@@ -66,7 +66,7 @@ mutex::acquire()
 
 	errno = pthread_mutex_lock(&keeper);
 	if (errno != 0 && errno != EDEADLK)
-		throw baseEx(ERRMODULE_IPCATOMICMUTEX, MUTEXEX_LOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCATOMICMUTEX, MUTEXEX_LOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }
@@ -80,7 +80,7 @@ mutex::release()
 
 	errno = pthread_mutex_unlock(&keeper);
 	if (errno != 0)
-		throw baseEx(ERRMODULE_IPCATOMICMUTEX, MUTEXEX_UNLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IPCATOMICMUTEX, MUTEXEX_UNLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 #endif
 }

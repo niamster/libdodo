@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/ipcThreadCollection.h>
 #include <libdodo/ioFifo.h>
 #include <libdodo/toolsTime.h>
@@ -34,7 +34,7 @@ threadRead(void *data)
 		cout << str;
 		cout.flush();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << ex.line << endl;
 	}
@@ -60,7 +60,7 @@ threadWrite(void *data)
 		fifo->flush();
 
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << ex.line << endl;
 	}
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << ex.line << endl;
 	}

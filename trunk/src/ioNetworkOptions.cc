@@ -62,11 +62,11 @@ void
 options::block(bool flag)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, exception::ERRNO_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	int block = fcntl(socket, F_GETFL);
 	if (block == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (flag)
 		block &= ~O_NONBLOCK;
@@ -74,7 +74,7 @@ options::block(bool flag)
 		block |= O_NONBLOCK;
 
 	if (fcntl(socket, F_SETFL, block) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_BLOCK, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	blocked = flag;
 }
@@ -85,12 +85,12 @@ void
 options::setInBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINBUFFERSIZE, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINBUFFERSIZE, exception::ERRNO_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	inSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, &inSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINBUFFERSIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -107,12 +107,12 @@ void
 options::setOutBufferSize(unsigned long bytes)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTBUFFERSIZE, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTBUFFERSIZE, exception::ERRNO_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	outSocketBuffer = bytes;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, &outSocketBuffer, sizeof(long)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTBUFFERSIZE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTBUFFERSIZE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -129,7 +129,7 @@ void
 options::setInTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINTIMEOUT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINTIMEOUT, exception::ERRNO_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	inTimeout = microseconds;
 
@@ -138,7 +138,7 @@ options::setInTimeout(unsigned long microseconds)
 	val.tv_usec = inTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETINTIMEOUT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------
@@ -155,7 +155,7 @@ void
 options::setOutTimeout(unsigned long microseconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTTIMEOUT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTTIMEOUT, exception::ERRNO_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	outTimeout = microseconds;
 
@@ -164,7 +164,7 @@ options::setOutTimeout(unsigned long microseconds)
 	val.tv_usec = outTimeout % 100;
 
 	if (setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &val, sizeof(val)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTTIMEOUT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETOUTTIMEOUT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 
@@ -194,7 +194,7 @@ options::setOption(short option,
 				   bool flag)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, exception::ERRNO_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	int sockFlag(1);
 
@@ -247,11 +247,11 @@ options::setOption(short option,
 
 		default:
 
-			throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, ERR_LIBDODO, OPTIONSEX_WRONGPARAMETER, IONETWORKOPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, exception::ERRNO_LIBDODO, OPTIONSEX_WRONGPARAMETER, IONETWORKOPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, real_option, &sockFlag, sizeof(int)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETSOCKOPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (!flag)
 		removeFlag(socketOpts, 1 << option);
@@ -266,7 +266,7 @@ options::setLingerOption(short option,
 						 int seconds)
 {
 	if (socket == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, OPTIONSEX_NOSOCKETCREATED, IONETWORKOPTIONSEX_NOSOCKETCREATED_STR, __LINE__, __FILE__);
 
 	linger lin;
 
@@ -294,11 +294,11 @@ options::setLingerOption(short option,
 
 		default:
 
-			throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, ERR_LIBDODO, OPTIONSEX_WRONGPARAMETER, IONETWORKOPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, exception::ERRNO_LIBDODO, OPTIONSEX_WRONGPARAMETER, IONETWORKOPTIONSEX_WRONGPARAMETER_STR, __LINE__, __FILE__);
 	}
 
 	if (setsockopt(socket, SOL_SOCKET, SO_LINGER, &lin, sizeof(linger)) == 1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX_SETLINGERSOCKOPT, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	lingerOpts = option;
 	lingerSeconds = seconds;
@@ -326,10 +326,10 @@ void
 options::_close(int socket)
 {
 	if (::shutdown(socket, SHUT_RDWR) == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX__CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 
 	if (::close(socket) == -1)
-		throw baseEx(ERRMODULE_IONETWORKOPTIONS, OPTIONSEX__CLOSE, ERR_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_IONETWORKOPTIONS, OPTIONSEX__CLOSE, exception::ERRNO_ERRNO, errno, strerror(errno), __LINE__, __FILE__);
 }
 
 //-------------------------------------------------------------------

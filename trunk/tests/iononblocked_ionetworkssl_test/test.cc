@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/ioNetworkSslServer.h>
 #include <libdodo/ioEvent.h>
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 		}
 #endif
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << (string)ex << "\t" << ex.file << "\t" << ex.line << endl;
 	}

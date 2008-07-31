@@ -134,7 +134,7 @@ server::stackThread(void *data)
 		pthread_mutex_unlock(&acceptM);
 
 		if (res == -1)
-			throw baseEx(ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, ERR_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+			throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_STACKTHREAD, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
 		handler(&cfSTD);
 
@@ -168,7 +168,7 @@ void
 server::listen(unsigned long a_limit)
 {
 	if (!isFastCgi())
-		throw baseEx(ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, ERR_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
+		throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ISCGI, CGIFASTSERVEREX_ISCGI_STR, __LINE__, __FILE__);
 
 	limit = a_limit;
 	requests = 0;
@@ -199,7 +199,7 @@ server::listen(unsigned long a_limit)
 		while (true)
 		{
 			if (FCGX_Accept_r(&request) == -1)
-				throw baseEx(ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, ERR_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
+				throw exception::basic(exception::ERRMODULE_CGIFASTSERVER, SERVEREX_LISTEN, exception::ERRNO_LIBDODO, SERVEREX_ACCEPTFAILED, CGIFASTSERVEREX_ACCEPTFAILED_STR, __LINE__, __FILE__);
 
 			handler(&cfSTD);
 

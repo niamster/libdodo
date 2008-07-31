@@ -1,5 +1,5 @@
 /***************************************************************************
- *            baseEx.cc
+ *            exceptionBasic.cc
  *
  *  Sun Jul 17 17:38:02 2005
  *  Copyright  2005  Ni@m
@@ -27,15 +27,15 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 
-using namespace dodo;
+using namespace dodo::exception;
 
-unsigned long baseEx::instances = 0;
+unsigned long basic::instances = 0;
 
 //-------------------------------------------------------------------
 
-bool baseEx::handlerSetEx[] = {
+bool basic::handlerSetEx[] = {
 	false,
 	false,
 	false,
@@ -88,7 +88,7 @@ bool baseEx::handlerSetEx[] = {
 
 //-------------------------------------------------------------------
 
-errorHandler baseEx::handlersEx[] = {
+errorHandler basic::handlersEx[] = {
 	NULL,
 	NULL,
 	NULL,
@@ -141,7 +141,7 @@ errorHandler baseEx::handlersEx[] = {
 
 //-------------------------------------------------------------------
 
-void *baseEx::handlerDataEx[] = {
+void *basic::handlerDataEx[] = {
 	NULL,
 	NULL,
 	NULL,
@@ -196,7 +196,7 @@ void *baseEx::handlerDataEx[] = {
 
 #ifdef DL_EXT
 
-bool baseEx::handlesOpenedEx[] = {
+bool basic::handlesOpenedEx[] = {
 	false,
 	false,
 	false,
@@ -249,7 +249,7 @@ bool baseEx::handlesOpenedEx[] = {
 
 //-------------------------------------------------------------------
 
-void *baseEx::handlesEx[] = {
+void *basic::handlesEx[] = {
 	NULL,
 	NULL,
 	NULL,
@@ -306,17 +306,17 @@ void *baseEx::handlesEx[] = {
 
 #ifdef PTHREAD_EXT
 
-pthread_mutex_t baseEx::staticAtomicMutex::keeper;
+pthread_mutex_t basic::staticAtomicMutex::keeper;
 
 #endif
 
 //-------------------------------------------------------------------
 
-baseEx::staticAtomicMutex baseEx::keeper;
+basic::staticAtomicMutex basic::keeper;
 
 //-------------------------------------------------------------------
 
-baseEx::staticAtomicMutex::staticAtomicMutex()
+basic::staticAtomicMutex::staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 
@@ -333,7 +333,7 @@ baseEx::staticAtomicMutex::staticAtomicMutex()
 
 //-------------------------------------------------------------------
 
-baseEx::staticAtomicMutex::~staticAtomicMutex()
+basic::staticAtomicMutex::~staticAtomicMutex()
 {
 #ifdef PTHREAD_EXT
 
@@ -345,7 +345,7 @@ baseEx::staticAtomicMutex::~staticAtomicMutex()
 //-------------------------------------------------------------------
 
 void
-baseEx::staticAtomicMutex::acquire()
+basic::staticAtomicMutex::acquire()
 {
 #ifdef PTHREAD_EXT
 
@@ -357,7 +357,7 @@ baseEx::staticAtomicMutex::acquire()
 //-------------------------------------------------------------------
 
 void
-baseEx::staticAtomicMutex::release()
+basic::staticAtomicMutex::release()
 {
 #ifdef PTHREAD_EXT
 
@@ -368,30 +368,30 @@ baseEx::staticAtomicMutex::release()
 
 //-------------------------------------------------------------------
 
-baseEx::raceHazardGuard::raceHazardGuard()
+basic::raceHazardGuard::raceHazardGuard()
 {
 	keeper.acquire();
 }
 
 //-------------------------------------------------------------------
 
-baseEx::raceHazardGuard::~raceHazardGuard()
+basic::raceHazardGuard::~raceHazardGuard()
 {
 	keeper.release();
 }
 
 //-------------------------------------------------------------------
 
-baseEx::baseEx() throw()
+basic::basic() throw()
 {
 	instances = 1;
 }
 
 //-------------------------------------------------------------------
 
-baseEx::baseEx(errorModuleEnum a_errModule,
-			   unsigned long functionID,
-			   errnoSourceEnum errnoSource,
+basic::basic(int a_errModule,
+			   int functionID,
+			   int errnoSource,
 			   int a_errno,
 			   const dodoString &a_errstr,
 			   unsigned long a_line,
@@ -417,7 +417,7 @@ baseEx::baseEx(errorModuleEnum a_errModule,
 
 //-------------------------------------------------------------------
 
-baseEx::~baseEx() throw()
+basic::~basic() throw()
 {
 	raceHazardGuard tg;
 
@@ -451,7 +451,7 @@ baseEx::~baseEx() throw()
 
 //-------------------------------------------------------------------
 
-baseEx::operator const dodoString & ()
+basic::operator const dodoString & ()
 {
 	raceHazardGuard tg;
 
@@ -461,7 +461,7 @@ baseEx::operator const dodoString & ()
 //-------------------------------------------------------------------
 
 const char *
-baseEx::what() const throw()
+basic::what() const throw()
 {
 	raceHazardGuard tg;
 
@@ -471,7 +471,7 @@ baseEx::what() const throw()
 //-------------------------------------------------------------------
 
 void
-baseEx::setErrorHandler(errorModuleEnum module,
+basic::setErrorHandler(errorModuleEnum module,
 						errorHandler handler,
 						void *data)
 {
@@ -507,7 +507,7 @@ baseEx::setErrorHandler(errorModuleEnum module,
 //-------------------------------------------------------------------
 
 void
-baseEx::setErrorHandlers(errorHandler handler,
+basic::setErrorHandlers(errorHandler handler,
 						 void *data)
 {
 	raceHazardGuard tg;
@@ -547,7 +547,7 @@ baseEx::setErrorHandlers(errorHandler handler,
 //-------------------------------------------------------------------
 
 void
-baseEx::unsetErrorHandler(errorModuleEnum module)
+basic::unsetErrorHandler(errorModuleEnum module)
 {
 	raceHazardGuard tg;
 
@@ -579,7 +579,7 @@ baseEx::unsetErrorHandler(errorModuleEnum module)
 //-------------------------------------------------------------------
 
 void
-baseEx::unsetErrorHandlers()
+basic::unsetErrorHandlers()
 {
 	raceHazardGuard tg;
 
@@ -618,7 +618,7 @@ baseEx::unsetErrorHandlers()
 #ifdef DL_EXT
 
 bool
-baseEx::setErrorHandlers(const dodoString &path,
+basic::setErrorHandlers(const dodoString &path,
 						 void *data,
 						 void *toInit)
 {
@@ -677,7 +677,7 @@ baseEx::setErrorHandlers(const dodoString &path,
 //-------------------------------------------------------------------
 
 bool
-baseEx::setErrorHandler(const dodoString &path,
+basic::setErrorHandler(const dodoString &path,
 						void *data,
 						void *toInit)
 {
@@ -697,7 +697,7 @@ baseEx::setErrorHandler(const dodoString &path,
 	if (init == NULL)
 		return false;
 
-	__baseExMod mod = init(toInit);
+	__basicMod mod = init(toInit);
 
 	deinitBaseExModule deinit;
 
@@ -732,8 +732,8 @@ baseEx::setErrorHandler(const dodoString &path,
 
 //-------------------------------------------------------------------
 
-__baseExMod
-baseEx::getModuleInfo(const dodoString &module,
+__basicMod
+basic::getModuleInfo(const dodoString &module,
 					  void *toInit)
 {
 	raceHazardGuard tg;
@@ -744,13 +744,13 @@ baseEx::getModuleInfo(const dodoString &module,
 	void *handle = dlopen(module.c_str(), RTLD_LAZY);
 #endif
 	if (handle == NULL)
-		return __baseExMod();
+		return __basicMod();
 
 	initBaseExModule init = (initBaseExModule)dlsym(handle, "initBaseExModule");
 	if (init == NULL)
-		return __baseExMod();
+		return __basicMod();
 
-	__baseExMod mod = init(toInit);
+	__basicMod mod = init(toInit);
 
 #ifndef DL_FAST
 	if (dlclose(handle) != 0)

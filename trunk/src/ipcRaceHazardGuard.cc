@@ -50,7 +50,7 @@ raceHazardGuardHolder::raceHazardGuard::~raceHazardGuard()
 	{
 		parent->keeper->release();
 	}
-	catch (baseEx &ex)
+	catch (exception::basic &ex)
 	{
 
 	}

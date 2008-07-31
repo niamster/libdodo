@@ -4,7 +4,7 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/baseEx.h>
+#include <libdodo/exceptionBasic.h>
 #include <libdodo/rpcXmlCgiServer.h>
 
 #include <iostream>
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
 		srv.serve();
 	}
-	catch (baseEx ex)
+	catch (dodo::exception::basic ex)
 	{
 		cout << ex.message << "\t" << ex.baseErrstr << endl;
 	}
