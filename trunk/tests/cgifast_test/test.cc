@@ -9,7 +9,7 @@
 #include <libdodo/cgiProcessor.h>
 #include <libdodo/toolsMisc.h>
 #include <libdodo/cgiFastServer.h>
-#include <libdodo/ipcThreadSharedDataGuard.h>
+#include <libdodo/pcThreadSharedDataGuard.h>
 
 #include <iostream>
 
@@ -19,7 +19,7 @@ using namespace std;
 
 using namespace dodo;
 using cgi::fast::exchange;
-using dodo::ipc::thread::shared::dataGuard;
+using dodo::pc::thread::shared::dataGuard;
 
 dataGuard sh;
 

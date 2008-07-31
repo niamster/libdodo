@@ -33,8 +33,6 @@ OBJECTS:=dbAccumulator.o \
 	toolsTime.o \
 	toolsNetwork.o \
 	toolsString.o \
-	jsonProcessor.o \
-	jsonNode.o \
 	types.o \
 	xexec.o \
 	exceptionBasic.o \
@@ -55,8 +53,11 @@ OBJECTS:=dbAccumulator.o \
 	ioNetworkExchange.o \
 	ioNetworkServer.o \
 	ioNetworkClient.o \
+	jsonProcessor.o \
+	jsonNode.o \
 	xmlProcessor.o \
 	xmlNode.o \
+	dataShared.o \
 	rpcValue.o \
 	rpcMethod.o \
 	rpcResponse.o \
@@ -77,22 +78,21 @@ OBJECTS:=dbAccumulator.o \
 	rpcJsonServer.o \
 	rpcJsonValue.o \
 	image.o \
-	ipcRaceHazardGuard.o \
-	ipcAtomicLock.o \
-	ipcAtomicMutex.o \
-	ipcAtomicSemaphore.o \
-	ipcProcessCollection.o \
-	ipcThreadCollection.o \
-	ipcJobCollection.o \
-	ipcThreadGuard.o \
-	ipcProcessGuard.o \
-	ipcThreadSharedDataGuard.o \
-	ipcProcessSharedDataGuard.o \
-	ipcSharedDataGuard.o \
-	ipcSharedData.o \
-	ipcThreadSharedDataCollectionGuard.o \
-	ipcProcessSharedDataCollectionGuard.o \
-	ipcSharedDataCollectionGuard.o \
+	pcRaceHazardGuard.o \
+	pcAtomicLock.o \
+	pcAtomicMutex.o \
+	pcAtomicSemaphore.o \
+	pcProcessCollection.o \
+	pcThreadCollection.o \
+	pcJobCollection.o \
+	pcThreadGuard.o \
+	pcProcessGuard.o \
+	pcThreadSharedDataGuard.o \
+	pcProcessSharedDataGuard.o \
+	pcSharedDataGuard.o \
+	pcThreadSharedDataCollectionGuard.o \
+	pcProcessSharedDataCollectionGuard.o \
+	pcSharedDataCollectionGuard.o \
 	libraryLoader.o \
 	cgiServer.o \
 	cgiExchange.o \

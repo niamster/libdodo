@@ -48,7 +48,7 @@
 #include <libdodo/ioNetworkExchangeEx.h>
 #include <libdodo/types.h>
 #include <libdodo/xexec.h>
-#include <libdodo/ipcThreadGuard.h>
+#include <libdodo/pcThreadGuard.h>
 
 namespace dodo
 {

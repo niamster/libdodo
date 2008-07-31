@@ -5,9 +5,9 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/ipcThreadCollection.h>
-#include <libdodo/ipcThreadSharedDataGuard.h>
-#include <libdodo/ipcThreadSharedDataCollectionGuard.h>
+#include <libdodo/pcThreadCollection.h>
+#include <libdodo/pcThreadSharedDataGuard.h>
+#include <libdodo/pcThreadSharedDataCollectionGuard.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
@@ -15,7 +15,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::ipc::thread;
+using namespace dodo::pc::thread;
 using namespace shared;
 
 using namespace std;

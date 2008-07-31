@@ -46,7 +46,7 @@
 #include <libdodo/cgiFastServerEx.h>
 #include <libdodo/cgiFastExchange.h>
 #include <libdodo/ioChannel.h>
-#include <libdodo/ipcThreadGuard.h>
+#include <libdodo/pcThreadGuard.h>
 
 namespace dodo
 {

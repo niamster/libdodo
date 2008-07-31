@@ -5,18 +5,18 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/ipcProcessCollection.h>
+#include <libdodo/pcProcessCollection.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
-#include <libdodo/ipcSharedData.h>
-#include <libdodo/ipcProcessSharedDataGuard.h>
-#include <libdodo/ipcProcessSharedDataCollectionGuard.h>
+#include <libdodo/dataShared.h>
+#include <libdodo/pcProcessSharedDataGuard.h>
+#include <libdodo/pcProcessSharedDataCollectionGuard.h>
 
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::ipc;
+using namespace dodo::pc;
 using namespace process;
 using namespace process::shared;
 
@@ -31,7 +31,7 @@ process(void *ud)
 {
 	try
 	{
-		dodo::ipc::shared::data shD("dodo");
+		dodo::data::shared shD("dodo");
 		char *dt = (char *)shD.map(100);
 		cout << dt << endl;
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		dodo::ipc::shared::data shD("dodo");
+		dodo::data::shared shD("dodo");
 		char *data = (char *)shD.map(100);
 		strcpy(data, "test");
 

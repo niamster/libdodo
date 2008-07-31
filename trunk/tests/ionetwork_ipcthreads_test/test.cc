@@ -7,14 +7,14 @@
 #include <libdodo/exceptionBasic.h>
 #include <libdodo/ioNetwork.h>
 #include <libdodo/toolsNetwork.h>
-#include <libdodo/ipcThreadCollection.h>
-#include <libdodo/ipcThreadSharedDataGuard.h>
+#include <libdodo/pcThreadCollection.h>
+#include <libdodo/pcThreadSharedDataGuard.h>
 
 #include <iostream>
 
 using namespace dodo;
 using namespace io::network;
-using namespace dodo::ipc;
+using namespace dodo::pc;
 
 using namespace std;
 

@@ -5,7 +5,7 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/ipcThreadCollection.h>
+#include <libdodo/pcThreadCollection.h>
 #include <libdodo/ioFifo.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsOs.h>
@@ -14,7 +14,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::ipc::thread;
+using namespace dodo::pc::thread;
 
 using namespace std;
 

@@ -35,7 +35,7 @@
 #include <libdodo/xexec.h>
 #include <libdodo/types.h>
 #include <libdodo/ioEventInfo.h>
-#include <libdodo/ipcThreadGuard.h>
+#include <libdodo/pcThreadGuard.h>
 
 namespace dodo
 {
@@ -83,7 +83,7 @@ namespace dodo
 		 * @class channel implements an interface for I/O operations
 		 */
 		class channel : virtual public eventInfo,
-						virtual public ipc::thread::guardHolder
+						virtual public pc::thread::guardHolder
 #ifndef IO_WO_XEXEC
 						,
 						public xexec

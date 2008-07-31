@@ -5,9 +5,9 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/ipcJobCollection.h>
-#include <libdodo/ipcProcessCollection.h>
-#include <libdodo/ipcThreadCollection.h>
+#include <libdodo/pcJobCollection.h>
+#include <libdodo/pcProcessCollection.h>
+#include <libdodo/pcThreadCollection.h>
 #include <libdodo/toolsOs.h>
 #include <libdodo/toolsTime.h>
 #include <libdodo/toolsMisc.h>
@@ -15,7 +15,7 @@
 #include <iostream>
 
 using namespace dodo;
-using namespace dodo::ipc;
+using namespace dodo::pc;
 
 using namespace std;
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	{
 		const int amount = 10;
 
-		dodo::ipc::job::collection *pr[amount];
+		dodo::pc::job::collection *pr[amount];
 
 		int pos[amount];
 		dodoString ids[amount];

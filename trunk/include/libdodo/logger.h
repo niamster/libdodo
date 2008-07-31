@@ -34,7 +34,7 @@
 
 #include <libdodo/ioChannel.h>
 #include <libdodo/toolsTime.h>
-#include <libdodo/ipcThreadGuard.h>
+#include <libdodo/pcThreadGuard.h>
 #include <libdodo/types.h>
 
 #include <syslog.h>
@@ -72,7 +72,7 @@ namespace dodo
 	/**
 	 * @class logger provides logging function
 	 */
-	class logger : virtual public ipc::thread::guardHolder,
+	class logger : virtual public pc::thread::guardHolder,
 				   public singleton<logger>
 	{
 		public:

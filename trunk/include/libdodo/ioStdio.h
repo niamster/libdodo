@@ -41,7 +41,7 @@
 
 #include <libdodo/types.h>
 #include <libdodo/ioFifo.h>
-#include <libdodo/ipcThreadGuard.h>
+#include <libdodo/pcThreadGuard.h>
 
 namespace dodo
 {
