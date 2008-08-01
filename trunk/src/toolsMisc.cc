@@ -31,8 +31,8 @@
 
 using namespace dodo::tools;
 
-inline dodoString
-misc::dummyTools(const dodoString &data)
+dodoString
+dummyEscape(const dodoString &data)
 {
 	return data;
 }
@@ -308,7 +308,7 @@ misc::explode(const dodoString &fields,
 			  const dodoString &separator,
 			  int limit)
 {
-	return explode(fields, &dummyTools, separator, limit);
+	return explode(fields, &dummyEscape, separator, limit);
 }
 
 //-------------------------------------------------------------------
@@ -354,7 +354,7 @@ misc::implode(const dodoStringArray &fields,
 			  const dodoString &frame,
 			  int limit)
 {
-	return implode(fields, &dummyTools, separator, frame, limit);
+	return implode(fields, &dummyEscape, separator, frame, limit);
 }
 
 //-------------------------------------------------------------------
@@ -364,7 +364,7 @@ misc::implode(const dodoStringArray &fields,
 			  const dodoString &separator,
 			  int limit)
 {
-	return implode(fields, &dummyTools, separator, limit);
+	return implode(fields, &dummyEscape, separator, limit);
 }
 
 //-------------------------------------------------------------------

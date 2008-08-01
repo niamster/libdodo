@@ -52,7 +52,7 @@ unsigned long server::requests = 0;
 //-------------------------------------------------------------------
 
 void
-dummyStackThread(exchange *data)
+dummyStackThread(exchange &data)
 {
 }
 

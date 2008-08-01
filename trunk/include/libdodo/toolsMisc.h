@@ -263,16 +263,6 @@ namespace dodo
 				 * @note if login is emty no auth is performed
 				 */
 				static void mail(const dodoString &host, int port, const dodoString &to, const dodoString &from, const dodoString &subject, const dodoString &message, const dodoString &login = __dodostring__, const dodoString &pass = __dodostring__, const dodoString &headers = __dodostring__);
-
-			private:
-
-				/**
-				 * dummy callback function for implode/explode
-				 * @return result string
-				 * @param data defines data to process
-				 * @note nothing does with passed data
-				 */
-				inline static dodoString dummyTools(const dodoString &data);
 		};
 	};
 };
