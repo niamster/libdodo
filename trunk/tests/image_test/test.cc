@@ -20,7 +20,7 @@ using namespace std;
 
 using namespace graphics;
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 
 void
 hook(void *odata,
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 		image im;
 		graphics::transform tr(&im);
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 
 		im.addPreExec(hook, NULL);
 

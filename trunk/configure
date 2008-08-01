@@ -1267,8 +1267,8 @@ Optional Features:
                           do not unload library to produce better performance
   --enable-zlib-lib       enable zlib as lib
   --enable-iconv-lib      enable iconv as lib
-  --disable-image-xexec-support
-                          compile image w/o xexec support
+  --disable-graphics-xexec-support
+                          compile graphics w/o xexec support
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -7602,20 +7602,20 @@ fi
 
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
 
-		# Check whether --enable-image-xexec-support was given.
-if test "${enable_image_xexec_support+set}" = set; then
-  enableval=$enable_image_xexec_support; IMAGE_W_XEXEC="$enableval"
+		# Check whether --enable-graphics-xexec-support was given.
+if test "${enable_graphics_xexec_support+set}" = set; then
+  enableval=$enable_graphics_xexec_support; GRAPHICS_W_XEXEC="$enableval"
 else
-  IMAGE_W_XEXEC="yes"
+  GRAPHICS_W_XEXEC="yes"
 fi
 
-		if test "$IMAGE_W_XEXEC" = "no"
+		if test "$GRAPHICS_W_XEXEC" = "no"
 		then
-			echo -n -e "#define IMAGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
+			echo -n -e "#define GRAPHICS_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h
 
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"

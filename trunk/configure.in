@@ -511,16 +511,16 @@ fi
 		
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tenabled"
 
-		AC_ARG_ENABLE(image-xexec-support,
-			AS_HELP_STRING([--disable-image-xexec-support],[compile image w/o xexec support]),
-			[IMAGE_W_XEXEC="$enableval"], [IMAGE_W_XEXEC="yes"])
-		if test "$IMAGE_W_XEXEC" = "no"
+		AC_ARG_ENABLE(graphics-xexec-support,
+			AS_HELP_STRING([--disable-graphics-xexec-support],[compile graphics w/o xexec support]),
+			[GRAPHICS_W_XEXEC="$enableval"], [GRAPHICS_W_XEXEC="yes"])
+		if test "$GRAPHICS_W_XEXEC" = "no"
 		then
-			echo -n -e "#define IMAGE_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
+			echo -n -e "#define GRAPHICS_WO_XEXEC\n\n" >> include/libdodo/directives.runtime.h        
 			
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tdisabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tdisabled"
 		else
-			RESULT="$RESULT\nimage xexec support\t\t\t\t\t\tenabled"
+			RESULT="$RESULT\ngraphics xexec support\t\t\t\t\t\tenabled"
 		fi
 	else
 		RESULT="$RESULT\nImageMagick\t\t\t\t\t\tdisabled"

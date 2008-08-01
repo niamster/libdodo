@@ -127,7 +127,7 @@ image::image(image &a_image) : collectedData(operType,
 image::image() : collectedData(operType,
 							   (void *) this)
 {
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 
 	execObject = XEXEC_OBJECT_IMAGE;
 	execObjectData = (void *)&collectedData;
@@ -155,7 +155,7 @@ image::~image()
 void
 image::read(const dodoString &str)
 {
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
 	performXExec(preExec);
 #endif
@@ -179,7 +179,7 @@ image::read(const dodoString &str)
 
 	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -190,7 +190,7 @@ void
 image::read(const unsigned char * const data,
 			unsigned long size)
 {
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
 	performXExec(preExec);
 #endif
@@ -207,7 +207,7 @@ image::read(const unsigned char * const data,
 
 	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -217,7 +217,7 @@ image::read(const unsigned char * const data,
 void
 image::read(const __imageInfo &info)
 {
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_READ;
 	performXExec(preExec);
 #endif
@@ -237,7 +237,7 @@ image::read(const __imageInfo &info)
 
 	strcpy(collectedData.imInfo->magick, collectedData.imHandle->magick);
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -260,7 +260,7 @@ image::close()
 void
 image::write(const dodoString &str)
 {
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
 	performXExec(preExec);
 #endif
@@ -278,7 +278,7 @@ image::write(const dodoString &str)
 	if (WriteImage(collectedData.imInfo, collectedData.imHandle) == MagickFalse)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, collectedData.imHandle->exception.error_number, exInfo->reason, __LINE__, __FILE__);
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
@@ -289,7 +289,7 @@ void
 image::write(unsigned char **data,
 			 unsigned int &size)
 {
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	operType = IMAGE_OPERATION_WRITE;
 	performXExec(preExec);
 #endif
@@ -302,7 +302,7 @@ image::write(unsigned char **data,
 	if (data == NULL)
 		throw exception::basic(exception::ERRMODULE_GRAPHICSIMAGE, IMAGEEX_WRITE, exception::ERRNO_IMAGEMAGICK, exInfo->error_number, exInfo->reason, __LINE__, __FILE__);
 
-#ifndef IMAGE_WO_XEXEC
+#ifndef GRAPHICS_WO_XEXEC
 	performXExec(postExec);
 #endif
 }
