@@ -13,11 +13,12 @@
 
 using namespace dodo;
 using namespace io;
-using namespace graphics;
 
 using namespace std;
 
 #ifdef IMAGEMAGICK_EXT
+
+using namespace graphics;
 
 #ifndef IMAGE_WO_XEXEC
 

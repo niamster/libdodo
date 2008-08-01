@@ -36,17 +36,17 @@ int main(int argc, char **argv)
 			}
 			catch (dodo::exception::basic ex)
 			{
-				cout << (string)ex << "\t" << ex.line << endl;
+				cout << (dodoString)ex << "\t" << ex.line << endl;
 			}
 		}
 		catch (dodo::exception::basic ex)
 		{
-			cout << (string)ex << "\t" << ex.line << endl;
+			cout << (dodoString)ex << "\t" << ex.line << endl;
 		}
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

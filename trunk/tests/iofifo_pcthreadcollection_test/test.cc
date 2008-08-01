@@ -36,7 +36,7 @@ threadRead(void *data)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << ex.line << endl;
+		cout << (dodoString)ex << ex.line << endl;
 	}
 	
 	cout << "<-READER\n";
@@ -62,7 +62,7 @@ threadWrite(void *data)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << ex.line << endl;
+		cout << (dodoString)ex << ex.line << endl;
 	}
 	
 	cout << "<-WRITER\n";
@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << ex.line << endl;
+		cout << (dodoString)ex << ex.line << endl;
 	}
 
 	return 0;

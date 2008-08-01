@@ -142,7 +142,7 @@ int main(int argc, char **argv)
 		}
 		catch(dodo::exception::basic &ex)
 		{
-			cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+			cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 
 			((sql::constructor *)pp)->setFieldType("test", "date", sql::FIELDTYPE_TEXT);
 			((sql::constructor *)pp)->setFieldType("test", "operation", sql::FIELDTYPE_TEXT);
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
+		cout << (dodoString)ex << endl << ex.file << endl << ex.message << endl << ex.line << endl << endl;
 	}
 
 	delete pp;

@@ -5,12 +5,13 @@
  */
 
 #include <libdodo/directives.h>
-#include <libdodo/libraryLoader.h>
+#include <libdodo/toolsLibrary.h>
 #include <libdodo/exceptionBasic.h>
 
 #include <iostream>
 
 using namespace dodo;
+using namespace tools;
 
 using namespace std;
 
@@ -27,14 +28,14 @@ int main(int argc, char **argv)
 #ifdef DL_EXT
 
 #ifdef BFD_EXT
-		dodoStringArray arr = libraryLoader::getSymbols("./module");
+		dodoStringArray arr = library::getSymbols("./module");
 		dodoStringArray::iterator i = arr.begin(), j = arr.end();
 		for (; i != j; ++i)
 			cout << *i << endl;
 		cout << endl;
 #endif
 
-		libraryLoader sll("./module");
+		library sll("./module");
 
 		print pr;
 
@@ -49,7 +50,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << endl;
+		cout << (dodoString)ex << "\t" << ex.line << endl;
 	}
 	return 0;
 }

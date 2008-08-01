@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cgit.printStream((string)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
+		cgit.printStream((dodoString)ex + " " + tools::string::lToString(ex.line) + " " + ex.file + " " + ex.message );
 	}
 
 	return 0;

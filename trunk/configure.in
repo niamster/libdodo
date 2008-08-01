@@ -575,9 +575,9 @@ AC_CONFIG_FILES([Makefile
                  tests/toolstime_test/Makefile
                  tests/toolsmisc_test/Makefile
                  tests/toolscode_test/Makefile
+                 tests/toolslogger_test/Makefile
+                 tests/toolslibrary_test/Makefile
                  tests/xexec_test/Makefile
-                 tests/libraryloader_test/Makefile
-                 tests/logger_test/Makefile
                  tests/rpcxmlhttpclient_test/Makefile
                  tests/rpcxmlcgiserver_test/Makefile
 				 tests/rpcjsonhttpclient_test/Makefile

@@ -1,5 +1,5 @@
 /***************************************************************************
- *            libraryLoaderEx.h
+ *            toolsLibraryEx.h
  *
  *  Thu Mar 13 20:50:55 2008
  *  Copyright  2008  Ni@m
@@ -27,8 +27,8 @@
  * set shiftwidth=4
  */
 
-#ifndef _LIBRARYLOADEREX_H_
-#define _LIBRARYLOADEREX_H_
+#ifndef _TOOLSLIBRARYEX_H_
+#define _TOOLSLIBRARYEX_H_
 
 #include <libdodo/directives.h>
 
@@ -39,25 +39,25 @@ namespace dodo
 	/**
 	 * libdodo defined errors
 	 */
-	enum libraryLoaderExR
+	enum libraryExR
 	{
-		LIBRARYLOADEREX_LIBRARYNOTOPENED,
+		LIBRARYEX_LIBRARYNOTOPENED,
 	};
 
 	/**
 	 * explanations for libdodo defined errors
 	 */
-#define LIBRARYLOADEREX_LIBRARYNOTOPENED_STR "Library was not opened."
+#define TOOLSLIBRARYEX_LIBRARYNOTOPENED_STR "Library was not opened."
 	/**
 	 * IDs of functions where exception might be thrown
 	 */
-	enum libraryLoaderFunctionsID
+	enum libraryFunctionsID
 	{
-		LIBRARYLOADEREX_OPEN,
-		LIBRARYLOADEREX_CLOSE,
-		LIBRARYLOADEREX_GET,
-		LIBRARYLOADEREX_BROPERATORSTRING,
-		LIBRARYLOADEREX_GETSYMBOLS,
+		LIBRARYEX_OPEN,
+		LIBRARYEX_CLOSE,
+		LIBRARYEX_GET,
+		LIBRARYEX_BROPERATORSTRING,
+		LIBRARYEX_GETSYMBOLS,
 	};
 };
 

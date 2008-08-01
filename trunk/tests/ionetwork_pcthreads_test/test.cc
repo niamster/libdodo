@@ -69,7 +69,7 @@ process(void *data)
 		}
 		catch (dodo::exception::basic ex)
 		{
-			cout << "Smth happened!" << (string)ex << endl;
+			cout << "Smth happened!" << (dodoString)ex << endl;
 			cout.flush();
 		}
 		catch (...)
@@ -93,7 +93,7 @@ process(void *data)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	delete fse;
@@ -173,7 +173,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << "\t" << ex.line << "\t" << ex.file << endl;
+		cout << (dodoString)ex << "\t" << ex.line << "\t" << ex.file << endl;
 	}
 
 	return 0;

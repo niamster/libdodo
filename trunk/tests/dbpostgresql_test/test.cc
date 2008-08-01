@@ -114,7 +114,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << ex.line;
+		cout << (dodoString)ex << ex.line;
 	}
 
 #else

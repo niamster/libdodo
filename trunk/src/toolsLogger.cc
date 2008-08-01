@@ -1,5 +1,5 @@
 /***************************************************************************
- *            logger.cc
+ *            toolsLogger.cc
  *
  *  Fri Mar 21 00:57:57 2008
  *  Copyright  2008  Ni@m
@@ -27,9 +27,9 @@
  * set shiftwidth=4
  */
 
-#include <libdodo/logger.h>
+#include <libdodo/toolsLogger.h>
 
-using namespace dodo;
+using namespace dodo::tools;
 
 const dodoString logger::levels[] = { "INFO",
 									  "NOTICE",

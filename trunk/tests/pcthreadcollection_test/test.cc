@@ -43,7 +43,7 @@ thread(void *data)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << ex.line << endl;
+		cout << (dodoString)ex << ex.line << endl;
 	}
 
 	return NULL;
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 	}
 	catch (dodo::exception::basic ex)
 	{
-		cout << (string)ex << endl;
+		cout << (dodoString)ex << endl;
 	}
 
 	return 0;

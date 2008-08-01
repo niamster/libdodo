@@ -33,11 +33,12 @@ OBJECTS:=dbAccumulator.o \
 	toolsTime.o \
 	toolsNetwork.o \
 	toolsString.o \
+	toolsLogger.o \
+	toolsLibrary.o \
 	types.o \
 	xexec.o \
 	exceptionBasic.o \
 	regexp.o \
-	logger.o \
 	ioChannel.o \
 	ioFile.o \
 	ioEvent.o \
@@ -94,7 +95,6 @@ OBJECTS:=dbAccumulator.o \
 	pcSyncThreadDataCollection.o \
 	pcSyncProcessDataCollection.o \
 	pcSyncDataCollection.o \
-	libraryLoader.o \
 	cgiServer.o \
 	cgiExchange.o \
 	cgiBasicExchange.o \

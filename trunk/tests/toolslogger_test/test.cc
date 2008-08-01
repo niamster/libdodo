@@ -5,7 +5,7 @@
  */
 
 #include <libdodo/exceptionBasic.h>
-#include <libdodo/logger.h>
+#include <libdodo/toolsLogger.h>
 #include <libdodo/ioFile.h>
 #include <libdodo/ioStdio.h>
 
@@ -13,6 +13,7 @@
 
 using namespace dodo;
 using namespace io;
+using namespace tools;
 
 using namespace std;
 
